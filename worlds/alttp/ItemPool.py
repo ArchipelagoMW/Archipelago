@@ -12,6 +12,7 @@ from .EntranceShuffle import connect_entrance
 from .Items import ItemFactory, GetBeemizerItem
 from .Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, LTTPBosses
 from .StateHelpers import has_triforce_pieces, has_melee_weapon
+from .Regions import key_drop_data
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -80,7 +81,7 @@ difficulties = {
         basicglove=basicgloves,
         alwaysitems=alwaysitems,
         legacyinsanity=legacyinsanity,
-        universal_keys=['Small Key (Universal)'] * 28,
+        universal_keys=['Small Key (Universal)'] * 29,
         extras=[easyfirst15extra, easysecond15extra, easythird10extra, easyfourth5extra, easyfinal25extra],
         progressive_sword_limit=8,
         progressive_shield_limit=6,
@@ -112,7 +113,7 @@ difficulties = {
         basicglove=basicgloves,
         alwaysitems=alwaysitems,
         legacyinsanity=legacyinsanity,
-        universal_keys=['Small Key (Universal)'] * 18 + ['Rupees (20)'] * 10,
+        universal_keys=['Small Key (Universal)'] * 19 + ['Rupees (20)'] * 10,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=4,
         progressive_shield_limit=3,
@@ -144,7 +145,7 @@ difficulties = {
         basicglove=basicgloves,
         alwaysitems=alwaysitems,
         legacyinsanity=legacyinsanity,
-        universal_keys=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
+        universal_keys=['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 16,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=3,
         progressive_shield_limit=2,
@@ -176,7 +177,7 @@ difficulties = {
         basicglove=basicgloves,
         alwaysitems=alwaysitems,
         legacyinsanity=legacyinsanity,
-        universal_keys=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
+        universal_keys=['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 16,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=2,
         progressive_shield_limit=1,
@@ -212,7 +213,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
         basicglove=['Nothing'] * 2,
         alwaysitems=['Ice Rod'] + ['Nothing'] * 19,
         legacyinsanity=['Nothing'] * 2,
-        universal_keys=['Nothing'] * 28,
+        universal_keys=['Nothing'] * 29,
         extras=[['Nothing'] * 15, ['Nothing'] * 15, ['Nothing'] * 10, ['Nothing'] * 5, ['Nothing'] * 25],
         progressive_sword_limit=difficulties[diff].progressive_sword_limit,
         progressive_shield_limit=difficulties[diff].progressive_shield_limit,
@@ -281,7 +282,6 @@ def generate_itempool(world):
         itempool.extend(['Arrows (10)'] * 7)
         if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             itempool.extend(itemdiff.universal_keys)
-            itempool.append('Small Key (Universal)')
 
         for item in itempool:
             multiworld.push_precollected(ItemFactory(item, player))
@@ -374,11 +374,38 @@ def generate_itempool(world):
 
     dungeon_items = [item for item in get_dungeon_item_pool_player(world)
                      if item.name not in multiworld.worlds[player].dungeon_local_item_names]
-    dungeon_item_replacements = difficulties[multiworld.difficulty[player]].extras[0]\
-                                + difficulties[multiworld.difficulty[player]].extras[1]\
-                                + difficulties[multiworld.difficulty[player]].extras[2]\
-                                + difficulties[multiworld.difficulty[player]].extras[3]\
-                                + difficulties[multiworld.difficulty[player]].extras[4]
+
+    for key_loc in key_drop_data:
+        key_data = key_drop_data[key_loc]
+        drop_item = ItemFactory(key_data[3], player)
+        if multiworld.goal[player] == 'icerodhunt' or not multiworld.key_drop_shuffle[player]:
+            if drop_item in dungeon_items:
+                dungeon_items.remove(drop_item)
+            else:
+                dungeon = drop_item.name.split("(")[1].split(")")[0]
+                if multiworld.mode[player] == 'inverted':
+                    if dungeon == "Agahnims Tower":
+                        dungeon = "Inverted Agahnims Tower"
+                    if dungeon == "Ganons Tower":
+                        dungeon = "Inverted Ganons Tower"
+                if drop_item in world.dungeons[dungeon].small_keys:
+                    world.dungeons[dungeon].small_keys.remove(drop_item)
+                elif world.dungeons[dungeon].big_key is not None and world.dungeons[dungeon].big_key == drop_item:
+                    world.dungeons[dungeon].big_key = None
+        if not multiworld.key_drop_shuffle[player]:
+            # key drop item was removed from the pool because key drop shuffle is off
+            # and it will now place the removed key into its original location
+            loc = multiworld.get_location(key_loc, player)
+            loc.place_locked_item(drop_item)
+            loc.address = None
+        elif multiworld.goal[player] == 'icerodhunt':
+            # key drop item removed because of icerodhunt
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
+            multiworld.push_precollected(drop_item)
+        elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
+    dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
     multiworld.random.shuffle(dungeon_item_replacements)
     if multiworld.goal[player] == 'icerodhunt':
         for item in dungeon_items:
@@ -391,7 +418,7 @@ def generate_itempool(world):
                     or (multiworld.bigkey_shuffle[player] == bigkey_shuffle.option_start_with and item.type == 'BigKey')
                     or (multiworld.compass_shuffle[player] == compass_shuffle.option_start_with and item.type == 'Compass')
                     or (multiworld.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
-                dungeon_items.remove(item)
+                dungeon_items.pop(x)
                 multiworld.push_precollected(item)
                 multiworld.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
         multiworld.itempool.extend([item for item in dungeon_items])
@@ -639,14 +666,27 @@ def get_pool_core(world, player: int):
         pool = ['Rupees (5)' if item in replace else item for item in pool]
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         pool.extend(diff.universal_keys)
-        item_to_place = 'Small Key (Universal)' if goal != 'icerodhunt' else 'Nothing'
         if mode == 'standard':
-            key_location = world.random.choice(
-                ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
-                 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
-            place_item(key_location, item_to_place)
-        else:
-            pool.extend([item_to_place])
+            if world.key_drop_shuffle[player] and world.goal[player] != 'icerodhunt':
+                key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
+                key_location = world.random.choice(key_locations)
+                key_locations.remove(key_location)
+                place_item(key_location, "Small Key (Universal)")
+                key_locations += ['Hyrule Castle - Boomerang Guard Key Drop', 'Hyrule Castle - Boomerang Chest',
+                                  'Hyrule Castle - Map Chest']
+                key_location = world.random.choice(key_locations)
+                key_locations.remove(key_location)
+                place_item(key_location, "Small Key (Universal)")
+                key_locations += ['Hyrule Castle - Big Key Drop', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross']
+                key_location = world.random.choice(key_locations)
+                key_locations.remove(key_location)
+                place_item(key_location, "Small Key (Universal)")
+                key_locations += ['Sewers - Key Rat Key Drop']
+                key_location = world.random.choice(key_locations)
+                place_item(key_location, "Small Key (Universal)")
+                pool = pool[:-3]
+        if world.key_drop_shuffle[player]:
+            pass # pool.extend([item_to_place] * (len(key_drop_data) - 1))
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
             additional_pieces_to_place)
@@ -799,7 +839,9 @@ def make_custom_item_pool(world, player):
         pool.extend(['Moon Pearl'] * customitemarray[28])
 
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in universal mode
+        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in universal Mode
+        if world.key_drop_shuffle[player]:
+            itemtotal = itemtotal - (len(key_drop_data) - 1)
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
         logging.warning(f"Pool was filled up with {total_items_to_place - itemtotal} Nothing's for player {player}")

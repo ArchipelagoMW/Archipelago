@@ -101,6 +101,11 @@ class map_shuffle(DungeonItem):
     display_name = "Map Shuffle"
 
 
+class key_drop_shuffle(Toggle):
+    """Shuffle keys found in pots and dropped from killed enemies."""
+    display_name = "Key Drop Shuffle"
+    default = False
+
 class Crystals(Range):
     range_start = 0
     range_end = 7
@@ -432,6 +437,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "open_pyramid": OpenPyramid,
     "bigkey_shuffle": bigkey_shuffle,
     "smallkey_shuffle": smallkey_shuffle,
+    "key_drop_shuffle": key_drop_shuffle,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
     "progressive": Progressive,

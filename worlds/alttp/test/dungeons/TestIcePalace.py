@@ -72,8 +72,9 @@ class TestIcePalace(TestDungeon):
             ["Ice Palace - Boss", False, [], ['Big Key (Ice Palace)']],
             ["Ice Palace - Boss", False, [], ['Fire Rod', 'Bombos']],
             ["Ice Palace - Boss", False, [], ['Fire Rod', 'Progressive Sword']],
-            ["Ice Palace - Boss", True, ['Progressive Glove', 'Big Key (Ice Palace)', 'Fire Rod', 'Hammer', 'Small Key (Ice Palace)', 'Small Key (Ice Palace)']],
-            ["Ice Palace - Boss", True, ['Progressive Glove', 'Big Key (Ice Palace)', 'Fire Rod', 'Hammer', 'Cane of Somaria', 'Small Key (Ice Palace)']],
-            ["Ice Palace - Boss", True, ['Progressive Glove', 'Big Key (Ice Palace)', 'Bombos', 'Progressive Sword', 'Hammer', 'Small Key (Ice Palace)', 'Small Key (Ice Palace)']],
-            ["Ice Palace - Boss", True, ['Progressive Glove', 'Big Key (Ice Palace)', 'Bombos', 'Progressive Sword', 'Hammer', 'Cane of Somaria', 'Small Key (Ice Palace)']],
+            # need hookshot now to reach the right side for the 6th key
+            ["Ice Palace - Boss", True, ['Progressive Glove', 'Big Key (Ice Palace)', 'Fire Rod', 'Hammer', 'Small Key (Ice Palace)', 'Small Key (Ice Palace)', 'Hookshot']],
+            ["Ice Palace - Boss", True, ['Progressive Glove', 'Big Key (Ice Palace)', 'Fire Rod', 'Hammer', 'Cane of Somaria', 'Small Key (Ice Palace)', 'Hookshot']],
+            ["Ice Palace - Boss", True, ['Progressive Glove', 'Big Key (Ice Palace)', 'Bombos', 'Progressive Sword', 'Hammer', 'Small Key (Ice Palace)', 'Small Key (Ice Palace)', 'Hookshot']],
+            ["Ice Palace - Boss", True, ['Progressive Glove', 'Big Key (Ice Palace)', 'Bombos', 'Progressive Sword', 'Hammer', 'Cane of Somaria', 'Small Key (Ice Palace)', 'Hookshot']],
         ])
