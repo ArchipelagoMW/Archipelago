@@ -1,0 +1,3 @@
+# Pokemon Emerald's connector lua is maintained in `worlds/pokemon_emerald/data`
+# It gets copied here on import for use by the player
+connector_pkmn_emerald.lua
