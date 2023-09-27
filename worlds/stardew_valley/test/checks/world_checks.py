@@ -20,7 +20,9 @@ def assert_victory_exists(tester: unittest.TestCase, multiworld: MultiWorld):
 def collect_all_then_assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):
     for item in multiworld.get_items():
         multiworld.state.collect(item)
-    tester.assertTrue(multiworld.find_item("Victory", 1).can_reach(multiworld.state))
+    victory = multiworld.find_item("Victory", 1)
+    can_win = victory.can_reach(multiworld.state)
+    tester.assertTrue(can_win)
 
 
 def assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):

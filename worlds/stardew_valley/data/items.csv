@@ -406,7 +406,7 @@ id,name,classification,groups,mod_name
 430,Rustic Plank Floor Recipe,progression,"CRAFTSANITY",
 431,Straw Floor Recipe,progression,"CRAFTSANITY",
 432,Weathered Floor Recipe,progression,"CRAFTSANITY",
-433,Crystal Floor Recipe,progression,"CRAFTSANITY,REQUIRES_MUSEUM",
+433,Crystal Floor Recipe,progression,"CRAFTSANITY",
 434,Stone Floor Recipe,progression,"CRAFTSANITY",
 435,Stone Walkway Floor Recipe,progression,"CRAFTSANITY",
 436,Brick Floor Recipe,progression,"CRAFTSANITY",

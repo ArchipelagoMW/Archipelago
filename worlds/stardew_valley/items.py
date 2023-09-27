@@ -74,7 +74,6 @@ class Group(enum.Enum):
     CHEFSANITY_FRIENDSHIP = enum.auto()
     CHEFSANITY_SKILL = enum.auto()
     CRAFTSANITY = enum.auto()
-    REQUIRES_MUSEUM = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
 
@@ -270,15 +269,11 @@ def create_tools(item_factory: StardewItemFactory, world_options: StardewOptions
 
 
 def create_skills(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
-    needs_level_10 = world_is_perfection(world_options) or world_options[options.SpecialOrderLocations] != options.SpecialOrderLocations.option_disabled
     if world_options[options.SkillProgression] == options.SkillProgression.option_progressive:
         for item in items_by_group[Group.SKILL_LEVEL_UP]:
             if item.mod_name not in options.mods and item.mod_name is not None:
                 continue
-            level_progression = 10 if needs_level_10 else 9
-            level_useful = 10 - level_progression
-            items.extend(item_factory(item) for item in [item.name] * level_progression)
-            items.extend(item_factory(item, ItemClassification.useful) for item in [item.name] * level_useful)
+            items.extend(item_factory(item) for item in [item.name] * 10)
 
 
 def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -650,8 +645,6 @@ def remove_excluded_items(packs, exclude_ginger_island: bool):
     included_packs = [pack for pack in packs if Group.DEPRECATED not in pack.groups]
     if exclude_ginger_island:
         included_packs = [pack for pack in included_packs if Group.GINGER_ISLAND not in pack.groups]
-    if world_options[options.Museumsanity] == options.Museumsanity.option_none:
-        included_packs = [pack for pack in included_packs if Group.REQUIRES_MUSEUM not in pack.groups]
     return included_packs
 
 
