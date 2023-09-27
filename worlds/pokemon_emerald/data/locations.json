@@ -119,23 +119,23 @@
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY": {
-    "label": "Abandoned Ship HF - Hidden Item in Room 1",
+    "label": "Abandoned Ship HF - Room 4 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY": {
-    "label": "Abandoned Ship HF - Hidden Item in Room 3",
+    "label": "Abandoned Ship HF - Room 1 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY": {
-    "label": "Abandoned Ship HF - Hidden Item in Room 4",
+    "label": "Abandoned Ship HF - Room 6 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY": {
-    "label": "Abandoned Ship HF - Hidden Item in Room 5",
+    "label": "Abandoned Ship HF - Room 2 Key",
     "tags": ["KeyItem"]
   },
   "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_2_SCANNER": {
-    "label": "Abandoned Ship HF - Item in Room 2",
+    "label": "Abandoned Ship HF - Scanner",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_POKEBLOCK_CASE": {
