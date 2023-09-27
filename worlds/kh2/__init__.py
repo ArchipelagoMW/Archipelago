@@ -60,8 +60,7 @@ class KH2World(World):
     filler_items: List[str]
     item_quantity_dict: Dict[str, int]
     local_items: Dict[int, int]
-    sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
-                         dic.items()}
+
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -69,6 +68,7 @@ class KH2World(World):
         # random_super_boss_list:List[str)
         # growth_list:List[str)
         # total_location:int
+        self.sora_ability_dict = None
         self.goofy_ability_dict = None
         self.donald_ability_dict = None
         self.slot_data_duping = set()
@@ -93,7 +93,6 @@ class KH2World(World):
             if ability in self.goofy_ability_dict.keys():
                 if self.goofy_ability_dict[ability] >= 1:
                     self.goofy_ability_dict[ability] -= 1
-
         return {
             "hitlist":                [],
             "Goal":                   self.multiworld.Goal[self.player].value,
@@ -184,11 +183,13 @@ class KH2World(World):
         # Item: Quantity Map
         # Example. Quick Run: 4
         self.item_quantity_dict = {item: data.quantity for item, data in item_dictionary_table.items()}
+        self.sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
+                             dic.items()}
         # Dictionary to mark locations with their plandoed item
         # Example. Final Xemnas: Victory
         # 3 random support abilities because there are left over slots
 
-        for _ in range(3):
+        for _ in range(6):
             support_abilities = list(SupportAbility_Table.keys())
             random_support_ability = self.random.choice(support_abilities)
             self.item_quantity_dict[random_support_ability] += 1
@@ -312,7 +313,7 @@ class KH2World(World):
             self.donald_weapon_abilities += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
             self.total_locations -= 1
-        self.slot_data_donald_weapon = tuple([item_name.name for item_name in self.donald_weapon_abilities])
+        self.slot_data_donald_weapon = [item_name.name for item_name in self.donald_weapon_abilities]
         if not self.multiworld.DonaldGoofyStatsanity[self.player]:
             # pre plando donald get bonuses
             self.donald_get_bonus_abilities += [self.create_item(random_prog_ability)]
@@ -335,7 +336,7 @@ class KH2World(World):
             self.goofy_weapon_abilities += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
             self.total_locations -= 1
-        self.slot_data_goofy_weapon = tuple([item_name.name for item_name in self.goofy_weapon_abilities])
+        self.slot_data_goofy_weapon = [item_name.name for item_name in self.goofy_weapon_abilities]
         if not self.multiworld.DonaldGoofyStatsanity[self.player]:
             # pre plando goofy get bonuses
             self.goofy_get_bonus_abilities += [self.create_item(random_prog_ability)]
@@ -358,7 +359,7 @@ class KH2World(World):
             self.keyblade_ability_pool += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
             self.total_locations -= 1
-        self.slot_data_sora_weapon = tuple([item_name.name for item_name in self.keyblade_ability_pool])
+        self.slot_data_sora_weapon = [item_name.name for item_name in self.keyblade_ability_pool]
 
     def goofy_pre_fill(self):
         """
@@ -408,7 +409,8 @@ class KH2World(World):
         """
         keyblade_locations = [self.multiworld.get_location(location, self.player) for location in Keyblade_Slots.keys()]
         state = self.multiworld.get_all_state(False)
-        fill_restrictive(self.multiworld, state, keyblade_locations, self.keyblade_ability_pool, True, True)
+        keyblade_ability_pool_copy=self.keyblade_ability_pool.copy()
+        fill_restrictive(self.multiworld, state, keyblade_locations, keyblade_ability_pool_copy, True, True)
 
     def starting_invo_verify(self):
         """
