@@ -3,8 +3,8 @@ from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet
 
 
 class AllowJustAsPlannedDLCSongs(Toggle):
-    """Whether 'Just as Planned DLC' songs, and all the DLCs along with it, will be included in the randomizer."""
-    display_name = "Allow Just As Planned DLC Songs"
+    """Whether [Just as Planned]/[Muse Plus] DLC Songs, and all the DLCs along with it, will be included in the randomizer."""
+    display_name = "Allow [Just as Planned]/[Muse Plus] DLC Songs"
 
 
 class StreamerModeEnabled(Toggle):
@@ -125,7 +125,7 @@ class TrapTypes(Choice):
     - VFX Traps consist of visual effects that play over the song. (i.e. Grayscale.)
     - SFX Traps consist of changing your sfx setting to one possibly more annoying sfx.
     Traps last the length of a song, or until you die.
-    Note: SFX traps are only available with Just As Planned dlc songs.
+    Note: SFX traps are only available if [Just as Planned] DLC songs are enabled.
     """
     display_name = "Available Trap Types"
     option_None = 0
