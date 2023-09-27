@@ -74,6 +74,7 @@ class Group(enum.Enum):
     CHEFSANITY_FRIENDSHIP = enum.auto()
     CHEFSANITY_SKILL = enum.auto()
     CRAFTSANITY = enum.auto()
+    REQUIRES_MUSEUM = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
 
@@ -649,6 +650,8 @@ def remove_excluded_items(packs, exclude_ginger_island: bool):
     included_packs = [pack for pack in packs if Group.DEPRECATED not in pack.groups]
     if exclude_ginger_island:
         included_packs = [pack for pack in included_packs if Group.GINGER_ISLAND not in pack.groups]
+    if world_options[options.Museumsanity] == options.Museumsanity.option_none:
+        included_packs = [pack for pack in included_packs if Group.REQUIRES_MUSEUM not in pack.groups]
     return included_packs
 
 

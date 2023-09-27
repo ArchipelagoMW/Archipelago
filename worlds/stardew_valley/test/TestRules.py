@@ -507,6 +507,7 @@ class TestCraftsanityWithFestivalsLogic(SVTestBase):
 class TestNoCraftsanityLogic(SVTestBase):
     options = {
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
         options.Craftsanity.internal_name: options.Craftsanity.option_none,
@@ -522,9 +523,10 @@ class TestNoCraftsanityLogic(SVTestBase):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
         self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
         rule = self.world.logic.crafting.can_craft(recipe)
-        self.assertFalse(rule(self.multiworld.state))
+        result = rule(self.multiworld.state)
+        self.assertFalse(result)
 
-        self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
+        self.collect([self.world.create_item("Progressive Season")] * 2)
         self.assertTrue(rule(self.multiworld.state))
 
 
