@@ -14,8 +14,8 @@ class Trap(Toggle):
 
 class Goal(Choice):
     """Defines the goal to accomplish in order to complete the randomizer.
-    All Acts + Epilogue (In Order): Complete each act and the epilogue in order. You can also return to previous acts.
-    All Acts (Any Order): Complete each act in any order. They are all available from the start.
+    Full Story In Order: Complete each act and the epilogue in order. You can return to previously completed acts.
+    Full Story Any Order: Complete each act in any order, then the epilogue. All acts are available from the start.
     Act 1: Complete Act 1 by finding the New Game button. Great for a smaller scale randomizer."""
     auto_display_name = True
     display_name = "Goal"
@@ -25,8 +25,8 @@ class Goal(Choice):
 
     def get_event_name(self) -> str:
         return {
-            self.option_all_in_order: "All Acts + Epilogue (In Order)",
-            self.option_all_any_order: "All Acts (Any Order)",
+            self.option_all_in_order: "Full Story In Order",
+            self.option_all_any_order: "Full Story Any Order",
             self.option_first_act: "Act 1",
         }[self.value]
 
