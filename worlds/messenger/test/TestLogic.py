@@ -1,5 +1,8 @@
+from typing import cast
+
 from BaseClasses import ItemClassification
 from . import MessengerTestBase
+from .. import Logic, MessengerWorld, PowerSeals
 
 
 class HardLogicTest(MessengerTestBase):
@@ -94,3 +97,17 @@ class NoLogicTest(MessengerTestBase):
             with self.subTest("Default unreachables", location=loc):
                 self.assertFalse(self.can_reach_location(loc))
         self.assertBeatable(True)
+
+
+class LimitedMovementTest(MessengerTestBase):
+    options = {
+        "limited_movement": "true",
+        "shuffle_seals": "false",
+        "shuffle_shards": "true",
+    }
+    
+    def testOptions(self) -> None:
+        """Tests that options were correctly changed."""
+        world = cast(MessengerWorld, self.multiworld.worlds[self.player])
+        self.assertEqual(PowerSeals.option_true, world.options.shuffle_seals)
+        self.assertEqual(Logic.option_hard, world.options.logic_level)

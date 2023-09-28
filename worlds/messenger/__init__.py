@@ -1,13 +1,14 @@
 import logging
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, cast
 
 from BaseClasses import Tutorial, ItemClassification, CollectionState, Item, MultiWorld
+from Options import Accessibility
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER
 from .Options import MessengerOptions, NotesNeeded, Goal, PowerSeals, Logic
 from .Regions import REGIONS, REGION_CONNECTIONS, SEALS, MEGA_SHARDS
 from .Shop import SHOP_ITEMS, shuffle_shop_prices, FIGURINES
-from .SubClasses import MessengerRegion, MessengerItem
+from .SubClasses import MessengerLocation, MessengerRegion, MessengerItem
 from . import Rules
 
 
@@ -69,19 +70,24 @@ class MessengerWorld(World):
 
     total_seals: int = 0
     required_seals: int = 0
-    total_shards: int
+    total_shards: int = 0
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]
     _filler_items: List[str]
-
-    def __init__(self, multiworld: MultiWorld, player: int):
+    unreachable_locs: List[MessengerLocation]
+    
+    def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
-        self.total_shards = 0
+        self.unreachable_locs = []
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
             self.options.shuffle_seals.value = PowerSeals.option_true
             self.total_seals = self.options.total_seals.value
+        
+        if self.options.limited_movement:
+            self.options.shuffle_seals.value = PowerSeals.option_true
+            self.options.logic_level.value = Logic.option_hard
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
@@ -92,15 +98,21 @@ class MessengerWorld(World):
 
     def create_items(self) -> None:
         # create items that are always in the item pool
+        main_movement_items = ["Rope Dart", "Wingsuit"]
         itempool: List[MessengerItem] = [
             self.create_item(item)
             for item in self.item_name_to_id
             if item not in
             {
-                "Power Seal", *NOTES, *FIGURINES,
+                "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
                 *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
             } and "Time Shard" not in item
         ]
+        
+        if self.options.limited_movement:
+            itempool.append(self.create_item(self.random.choice(main_movement_items)))
+        else:
+            itempool += [self.create_item(move_item) for move_item in main_movement_items]
 
         if self.options.goal == Goal.option_open_music_box:
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
@@ -130,16 +142,26 @@ class MessengerWorld(World):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
 
-        remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
+        self.multiworld.itempool += itempool
+        if self.options.limited_movement and not self.options.accessibility == Accessibility.option_minimal:
+            # hardcoding these until i figure out a better solution
+            # need to figure out which locations are inaccessible with the missing item, and create filler based on
+            # that count
+            if self.options.shuffle_shards:
+                remaining_fill = 96 - len(self.multiworld.get_filled_locations(self.player))
+            else:
+                remaining_fill = 66 - len(self.multiworld.get_filled_locations(self.player))
+        else:
+            remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
         if remaining_fill < 10:
             self._filler_items = self.random.choices(
                                       list(FILLER)[2:],
                                       weights=list(FILLER.values())[2:],
                                       k=remaining_fill
             )
-        itempool += [self.create_filler() for _ in range(remaining_fill)]
+        filler = [self.create_filler() for _ in range(remaining_fill)]
 
-        self.multiworld.itempool += itempool
+        self.multiworld.itempool += filler
 
     def set_rules(self) -> None:
         logic = self.options.logic_level
@@ -149,6 +171,15 @@ class MessengerWorld(World):
             Rules.MessengerHardRules(self).set_messenger_rules()
         else:
             Rules.MessengerOOBRules(self).set_messenger_rules()
+    
+    def generate_basic(self) -> None:
+        if self.options.limited_movement and not self.options.accessibility == Accessibility.option_minimal:
+            all_state = self.multiworld.get_all_state(False)
+            reachable_locs = self.multiworld.get_reachable_locations(all_state, self.player)
+            unreachable_locs = list(set(self.multiworld.get_locations(self.player)) - set(reachable_locs))
+            for loc in unreachable_locs:
+                loc.place_locked_item(self.create_item("Time Shard"))
+                loc.access_rule = lambda state: True
 
     def fill_slot_data(self) -> Dict[str, Any]:
         shop_prices = {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()}

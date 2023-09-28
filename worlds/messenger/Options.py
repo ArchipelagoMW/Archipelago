@@ -38,6 +38,11 @@ class MegaShards(Toggle):
     display_name = "Shuffle Mega Time Shards"
 
 
+class LimitedMovement(Toggle):
+    """Removes either rope dart or wingsuit from the itempool. Forces seals to be shuffled, and logic to hard."""
+    display_name = "Limited Movement"
+
+
 class Goal(Choice):
     """Requirement to finish the game. Power Seal Hunt will force power seal locations to be shuffled."""
     display_name = "Goal"
@@ -139,6 +144,7 @@ class MessengerOptions(PerGameCommonOptions):
     logic_level: Logic
     shuffle_seals: PowerSeals
     shuffle_shards: MegaShards
+    limited_movement: LimitedMovement
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded

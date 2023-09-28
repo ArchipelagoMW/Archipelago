@@ -174,6 +174,7 @@ class MessengerHardRules(MessengerRules):
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) or
                                                 self.has_windmill(state) or
                                                 self.has_dart(state),
+            "Music Box": self.has_vertical,
         })
 
         self.location_rules.update({
