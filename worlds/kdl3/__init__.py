@@ -133,7 +133,6 @@ class KDL3World(World):
                 self.copy_abilities[enemy] = self.random \
                     .choice(valid_abilities)
 
-
     def pre_fill(self) -> None:
         for enemy in enemy_mapping:
             self.multiworld.get_location(enemy, self.player) \
@@ -235,7 +234,10 @@ class KDL3World(World):
         goal_location = self.multiworld.get_location(LocationName.goals[goal], self.player)
         goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
         for level in range(1, 6):
-            self.multiworld.get_location(f"Level {level} Boss", self.player) \
+            self.multiworld.get_location(f"Level {level} Boss - Defeated", self.player) \
+                .place_locked_item(
+                KDL3Item(f"Level {level} Boss Defeated", ItemClassification.progression, None, self.player))
+            self.multiworld.get_location(f"Level {level} Boss - Purified", self.player) \
                 .place_locked_item(
                 KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)

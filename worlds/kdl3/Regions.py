@@ -9,6 +9,7 @@ from .Locations import KDL3Location, location_table
 from .Names import LocationName
 from .Options import BossShuffle
 from .Room import Room
+from .Rules import can_reach_stage
 
 if typing.TYPE_CHECKING:
     from . import KDL3World
@@ -89,13 +90,13 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
     for level in world.player_levels:
         for stage in range(6):
             proper_stage = world.player_levels[level][stage]
-            level_regions[level].add_exits([first_rooms[proper_stage].name],
-                                           {first_rooms[proper_stage].name:
-                                            (lambda state: True) if world.multiworld.open_world[world.player] or
-                                            stage == 0 else lambda state, level=level, stage=stage: state.can_reach(
-                                                   world.multiworld.get_location(
-                                                       location_table[world.player_levels[level][stage-1]], world.player),
-                                                    world.player)})
+            if world.multiworld.open_world[world.player] or stage == 0:
+                level_regions[level].add_exits([first_rooms[proper_stage].name])
+            else:
+                previous_stage = first_rooms[world.player_levels[level][stage - 1]]
+                world.multiworld.get_location(f"{level_names[previous_stage.level]} {previous_stage.stage}"
+                                              f" - Complete", world.player)\
+                    .parent_region.add_exits([first_rooms[proper_stage].name])
         else:
             level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
 
