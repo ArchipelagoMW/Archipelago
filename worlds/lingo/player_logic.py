@@ -52,7 +52,7 @@ class LingoPlayerLogic:
             self.set_door_item(room_name, door_data.name, door_data.item_name)
 
     def __init__(self, world: World, static_logic: StaticLingoLogic, static_items: StaticLingoItems,
-                 static_locat: StaticLingoLocations, test_options: LingoTestOptions):
+                 static_locat: StaticLingoLocations):
         self.ITEM_BY_DOOR = {}
         self.LOCATIONS_BY_ROOM = {}
         self.REAL_LOCATIONS = []
@@ -173,7 +173,7 @@ class LingoPlayerLogic:
                                 "kind of logic error.")
 
         if door_shuffle > 0 and location_classification != LocationClassification.insanity\
-                and test_options.disable_forced_good_item is False:
+                and LingoTestOptions.disable_forced_good_item is False:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
             # but you the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded
             # right now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there

@@ -49,12 +49,8 @@ class LingoWorld(World):
         name: data.code for name, data in static_locat.ALL_LOCATION_TABLE.items()
     }
 
-    # This is just used for unit testing. It should remain at the default values for actual play.
-    test_options: LingoTestOptions = LingoTestOptions()
-
     def generate_early(self):
-        self.player_logic = LingoPlayerLogic(self, self.static_logic, self.static_items, self.static_locat,
-                                             self.test_options)
+        self.player_logic = LingoPlayerLogic(self, self.static_logic, self.static_items, self.static_locat)
 
     def create_regions(self):
         create_regions(self, self.static_logic, self.player_logic)
