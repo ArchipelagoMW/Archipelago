@@ -10,7 +10,7 @@ class TestAccess(TunicTestBase):
         self.assertEqual(self.can_reach_location("Sealed Temple - Page Pickup"), True)
 
     def test_wells(self):
-        # test whether you can get into the temple without laurels
+        # test that the wells function properly. Since fairies is written the same way, that should succeed too
         locations = ["Coins in the Well - 3 Coins", "Coins in the Well - 6 Coins", "Coins in the Well - 10 Coins",
                      "Coins in the Well - 15 Coins"]
         items = [["Golden Coin"]]
@@ -20,6 +20,7 @@ class TestAccess(TunicTestBase):
 class TestHexQuest(TunicTestBase):
     options = {"hexagon_quest": "true"}
 
+    # test that you need the gold hexes to reach the Heir in Hex Quest
     def test_hexquest_victory(self):
         location = ["The Heir"]
         item = [["Gold Questagon"]]
@@ -29,6 +30,7 @@ class TestHexQuest(TunicTestBase):
 class TestNormalGoal(TunicTestBase):
     options = {"hexagon_quest": "false"}
 
+    # test that you need the three colored hexes to reach the Heir in standard
     def test_normal_goal(self):
         location = ["The Heir"]
         items = [["Red Questagon", "Blue Questagon", "Green Questagon"]]
