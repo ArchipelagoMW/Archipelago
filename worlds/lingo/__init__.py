@@ -78,8 +78,9 @@ class LingoWorld(World):
                 skips = int(non_traps * skip_percentage / 100.0)
                 non_skips = non_traps - skips
 
+                filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
                 for i in range(0, non_skips):
-                    pool.append(self.create_item("Nothing"))
+                    pool.append(self.create_item(filler_list[i % len(filler_list)]))
 
                 for i in range(0, skips):
                     pool.append(self.create_item("Puzzle Skip"))

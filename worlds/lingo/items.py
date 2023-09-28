@@ -84,7 +84,10 @@ class StaticLingoItems:
                                               ItemClassification.progression, "door group", group_door_ids, [])
 
         special_items: Dict[str, ItemClassification] = {
-            "Nothing": ItemClassification.filler,
+            ":)": ItemClassification.filler,
+            "The Feeling of Being Lost": ItemClassification.filler,
+            "Wanderlust": ItemClassification.filler,
+            "Empty White Hallways": ItemClassification.filler,
             "Slowness Trap": ItemClassification.trap,
             "Iceland Trap": ItemClassification.trap,
             "Atbash Trap": ItemClassification.trap,
