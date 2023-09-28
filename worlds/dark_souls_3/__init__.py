@@ -46,7 +46,7 @@ class DarkSouls3World(World):
     option_definitions = dark_souls_options
     topology_present: bool = True
     web = DarkSouls3Web()
-    data_version = 7
+    data_version = 8
     base_id = 100000
     enabled_location_categories: Set[DS3LocationCategory]
     required_client_version = (0, 4, 2)
@@ -89,7 +89,7 @@ class DarkSouls3World(World):
 
     def create_regions(self):
         progressive_location_table = []
-        if self.multiworld.enable_progressive_locations[self.player].value:
+        if self.multiworld.enable_progressive_locations[self.player]:
             progressive_location_table = [] + \
                 location_tables["Progressive Items 1"] + \
                 location_tables["Progressive Items 2"] + \
@@ -98,6 +98,9 @@ class DarkSouls3World(World):
 
             if self.multiworld.enable_dlc[self.player].value:
                 progressive_location_table += location_tables["Progressive Items DLC"]
+
+        if self.multiworld.enable_health_upgrade_locations[self.player]:
+            progressive_location_table += location_tables["Progressive Items Health"]
 
         # Create Vanilla Regions
         regions: Dict[str, Region] = {}

@@ -10,6 +10,7 @@ import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
+from .config import detect_test
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionStartChar, zillion_options, validate
@@ -145,8 +146,7 @@ class ZillionWorld(World):
 
         self._item_counts = item_counts
 
-        import __main__
-        rom_dir_name = "" if "test" in __main__.__file__ else os.path.dirname(get_base_rom_path())
+        rom_dir_name = "" if detect_test() else os.path.dirname(get_base_rom_path())
         with redirect_stdout(self.lsi):  # type: ignore
             self.zz_system.make_patcher(rom_dir_name)
             self.zz_system.make_randomizer(zz_op)
