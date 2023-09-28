@@ -1,4 +1,5 @@
 from typing import Dict, NamedTuple, List
+from types import MappingProxyType
 from BaseClasses import Location
 from .static_logic import StaticLingoLogic, RoomAndPanel
 from enum import Flag, auto
@@ -40,20 +41,11 @@ class StaticLingoLocations:
     Defines the locations that can be included in a Lingo world
     """
 
-    ALL_LOCATION_TABLE: Dict[str, LocationData] = {}
-
-    def create_or_update_location(self, code: int, name: str, room: str, panels: List[RoomAndPanel],
-                                  classification: LocationClassification):
-        if name in self.ALL_LOCATION_TABLE:
-            new_id = self.ALL_LOCATION_TABLE[name].code
-            classification |= self.ALL_LOCATION_TABLE[name].classification
-        else:
-            new_id = code
-
-        new_locat = LocationData(new_id, room, panels, classification)
-        self.ALL_LOCATION_TABLE[name] = new_locat
+    ALL_LOCATION_TABLE: MappingProxyType[str, LocationData]
 
     def __init__(self, static_logic: StaticLingoLogic):
+        temp_location_table: Dict[str, LocationData] = {}
+
         for room_name, panels in static_logic.PANELS_BY_ROOM.items():
             for panel_name, panel in panels.items():
                 locat_name = f"{room_name} - {panel_name}"
@@ -65,8 +57,9 @@ class StaticLingoLocations:
                     if not panel.exclude_reduce:
                         classification |= LocationClassification.reduced
 
-                self.create_or_update_location(static_logic.get_panel_location_id(room_name, panel_name), locat_name,
-                                               room_name, [RoomAndPanel(None, panel_name)], classification)
+                temp_location_table[locat_name] =\
+                    LocationData(static_logic.get_panel_location_id(room_name, panel_name), room_name,
+                                 [RoomAndPanel(None, panel_name)], classification)
 
         for room_name, doors in static_logic.DOORS_BY_ROOM.items():
             for door_name, door in doors.items():
@@ -77,5 +70,13 @@ class StaticLingoLocations:
                 classification = LocationClassification.normal
                 if door.include_reduce:
                     classification |= LocationClassification.reduced
-                self.create_or_update_location(static_logic.get_door_location_id(room_name, door_name), locat_name,
-                                               room_name, door.panels, classification)
+
+                if locat_name in temp_location_table:
+                    new_id = temp_location_table[locat_name].code
+                    classification |= temp_location_table[locat_name].classification
+                else:
+                    new_id = static_logic.get_door_location_id(room_name, door_name)
+
+                temp_location_table[locat_name] = LocationData(new_id, room_name, door.panels, classification)
+
+        self.ALL_LOCATION_TABLE = MappingProxyType(temp_location_table)

@@ -71,31 +71,105 @@ class Progression(NamedTuple):
 
 
 class StaticLingoLogic:
-    ROOMS: Dict[str, Room] = {}
-    PANELS: Dict[str, Panel] = {}
-    DOORS: Dict[str, Door] = {}
-    PAINTINGS: Dict[str, Painting] = {}
+    ROOMS: Dict[str, Room]
+    PANELS: Dict[str, Panel]
+    DOORS: Dict[str, Door]
+    PAINTINGS: Dict[str, Painting]
 
-    ALL_ROOMS: List[Room] = []
-    DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
-    PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
-    PAINTINGS_BY_ROOM: Dict[str, List[Painting]] = {}
+    ALL_ROOMS: List[Room]
+    DOORS_BY_ROOM: Dict[str, Dict[str, Door]]
+    PANELS_BY_ROOM: Dict[str, Dict[str, Panel]]
+    PAINTINGS_BY_ROOM: Dict[str, List[Painting]]
 
-    PROGRESSIVE_ITEMS: List[str] = []
-    PROGRESSION_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
+    PROGRESSIVE_ITEMS: List[str]
+    PROGRESSION_BY_ROOM: Dict[str, Dict[str, Progression]]
 
-    PAINTING_ENTRANCES: int = 0
-    PAINTING_EXIT_ROOMS: Set[str] = set()
-    PAINTING_EXITS: int = 0
-    REQUIRED_PAINTING_ROOMS: List[str] = []
-    REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
+    PAINTING_ENTRANCES: int
+    PAINTING_EXIT_ROOMS: Set[str]
+    PAINTING_EXITS: int
+    REQUIRED_PAINTING_ROOMS: List[str]
+    REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str]
 
-    SPECIAL_ITEM_IDS: Dict[str, int] = {}
-    PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
-    DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
-    DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
-    DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
-    PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
+    SPECIAL_ITEM_IDS: Dict[str, int]
+    PANEL_LOCATION_IDS: Dict[str, Dict[str, int]]
+    DOOR_LOCATION_IDS: Dict[str, Dict[str, int]]
+    DOOR_ITEM_IDS: Dict[str, Dict[str, int]]
+    DOOR_GROUP_ITEM_IDS: Dict[str, int]
+    PROGRESSIVE_ITEM_IDS: Dict[str, int]
+
+    def __init__(self):
+        self.ROOMS = {}
+        self.PANELS = {}
+        self.DOORS = {}
+        self.PAINTINGS = {}
+
+        self.ALL_ROOMS = []
+        self.DOORS_BY_ROOM = {}
+        self.PANELS_BY_ROOM = {}
+        self.PAINTINGS_BY_ROOM = {}
+
+        self.PROGRESSIVE_ITEMS = []
+        self.PROGRESSION_BY_ROOM = {}
+
+        self.PAINTING_ENTRANCES = 0
+        self.PAINTING_EXIT_ROOMS = set()
+        self.PAINTING_EXITS = 0
+        self.REQUIRED_PAINTING_ROOMS = []
+        self.REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS = []
+
+        self.SPECIAL_ITEM_IDS = {}
+        self.PANEL_LOCATION_IDS = {}
+        self.DOOR_LOCATION_IDS = {}
+        self.DOOR_ITEM_IDS = {}
+        self.DOOR_GROUP_ITEM_IDS = {}
+        self.PROGRESSIVE_ITEM_IDS = {}
+
+        try:
+            from importlib.resources import files
+        except ImportError:
+            from importlib_resources import files
+
+        with files("worlds.lingo").joinpath("ids.yaml").open() as file:
+            config = yaml.load(file, Loader=yaml.Loader)
+
+            if "special_items" in config:
+                for item_name, item_id in config["special_items"].items():
+                    self.SPECIAL_ITEM_IDS[item_name] = item_id
+
+            if "panels" in config:
+                for room_name in config["panels"].keys():
+                    self.PANEL_LOCATION_IDS[room_name] = {}
+
+                    for panel_name, location_id in config["panels"][room_name].items():
+                        self.PANEL_LOCATION_IDS[room_name][panel_name] = location_id
+
+            if "doors" in config:
+                for room_name in config["doors"].keys():
+                    self.DOOR_LOCATION_IDS[room_name] = {}
+                    self.DOOR_ITEM_IDS[room_name] = {}
+
+                    for door_name, door_data in config["doors"][room_name].items():
+                        if "location" in door_data:
+                            self.DOOR_LOCATION_IDS[room_name][door_name] = door_data["location"]
+
+                        if "item" in door_data:
+                            self.DOOR_ITEM_IDS[room_name][door_name] = door_data["item"]
+
+            if "door_groups" in config:
+                for item_name, item_id in config["door_groups"].items():
+                    self.DOOR_GROUP_ITEM_IDS[item_name] = item_id
+
+            if "progression" in config:
+                for item_name, item_id in config["progression"].items():
+                    self.PROGRESSIVE_ITEM_IDS[item_name] = item_id
+
+        with files("worlds.lingo").joinpath("LL1.yaml").open() as file:
+            config = yaml.load(file, Loader=yaml.Loader)
+
+            for room_name, room_data in config.items():
+                self.process_room(room_name, room_data)
+
+            self.PAINTING_EXITS = len(self.PAINTING_EXIT_ROOMS)
 
     def get_special_item_id(self, name: str):
         if name not in self.SPECIAL_ITEM_IDS:
@@ -436,51 +510,3 @@ class StaticLingoLogic:
 
         self.ROOMS[room_name] = room_obj
         self.ALL_ROOMS.append(room_obj)
-
-    def __init__(self):
-        try:
-            from importlib.resources import files
-        except ImportError:
-            from importlib_resources import files
-
-        with files("worlds.lingo").joinpath("ids.yaml").open() as file:
-            config = yaml.load(file, Loader=yaml.Loader)
-
-            if "special_items" in config:
-                for item_name, item_id in config["special_items"].items():
-                    self.SPECIAL_ITEM_IDS[item_name] = item_id
-
-            if "panels" in config:
-                for room_name in config["panels"].keys():
-                    self.PANEL_LOCATION_IDS[room_name] = {}
-
-                    for panel_name, location_id in config["panels"][room_name].items():
-                        self.PANEL_LOCATION_IDS[room_name][panel_name] = location_id
-
-            if "doors" in config:
-                for room_name in config["doors"].keys():
-                    self.DOOR_LOCATION_IDS[room_name] = {}
-                    self.DOOR_ITEM_IDS[room_name] = {}
-
-                    for door_name, door_data in config["doors"][room_name].items():
-                        if "location" in door_data:
-                            self.DOOR_LOCATION_IDS[room_name][door_name] = door_data["location"]
-
-                        if "item" in door_data:
-                            self.DOOR_ITEM_IDS[room_name][door_name] = door_data["item"]
-
-            if "door_groups" in config:
-                for item_name, item_id in config["door_groups"].items():
-                    self.DOOR_GROUP_ITEM_IDS[item_name] = item_id
-
-            if "progression" in config:
-                for item_name, item_id in config["progression"].items():
-                    self.PROGRESSIVE_ITEM_IDS[item_name] = item_id
-
-        with files("worlds.lingo").joinpath("LL1.yaml").open() as file:
-            config = yaml.load(file, Loader=yaml.Loader)
-
-            for room_name, room_data in config.items():
-                self.process_room(room_name, room_data)
-
-            self.PAINTING_EXITS = len(self.PAINTING_EXIT_ROOMS)

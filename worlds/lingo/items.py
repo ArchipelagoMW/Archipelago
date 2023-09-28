@@ -1,4 +1,5 @@
 from typing import Dict, NamedTuple, Optional, List
+from types import MappingProxyType
 from BaseClasses import Item, ItemClassification
 from worlds.AutoWorld import World
 from .static_logic import StaticLingoLogic
@@ -45,17 +46,14 @@ class StaticLingoItems:
     Defines the items that can be included in a Lingo world
     """
 
-    ALL_ITEM_TABLE: Dict[str, ItemData] = {}
-
-    def create_item(self, code: int, name: str, classification: ItemClassification, mode: Optional[str] = None,
-                    door_ids: Optional[List[str]] = None, painting_ids: Optional[List[str]] = None):
-        new_item = ItemData(code, classification, mode, [] if door_ids is None else door_ids,
-                            [] if painting_ids is None else painting_ids)
-        self.ALL_ITEM_TABLE[name] = new_item
+    ALL_ITEM_TABLE: MappingProxyType[str, ItemData]
 
     def __init__(self, static_logic: StaticLingoLogic):
+        temp_item_table: Dict[str, ItemData] = {}
+
         for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
-            self.create_item(static_logic.get_special_item_id(color), color, ItemClassification.progression, "colors")
+            temp_item_table[color] = ItemData(static_logic.get_special_item_id(color), ItemClassification.progression,
+                                              "colors", [], [])
 
         door_groups: Dict[str, List[str]] = {}
         for room_name, doors in static_logic.DOORS_BY_ROOM.items():
@@ -76,13 +74,14 @@ class StaticLingoItems:
                     else:
                         door_mode = "special"
 
-                self.create_item(static_logic.get_door_item_id(room_name, door_name), door.item_name,
-                                 ItemClassification.filler if door.junk_item else ItemClassification.progression,
-                                 door_mode, door.door_ids, door.painting_ids)
+                temp_item_table[door.item_name] =\
+                    ItemData(static_logic.get_door_item_id(room_name, door_name),
+                             ItemClassification.filler if door.junk_item else ItemClassification.progression, door_mode,
+                             door.door_ids, door.painting_ids)
 
         for group, group_door_ids in door_groups.items():
-            self.create_item(static_logic.get_door_group_item_id(group), group, ItemClassification.progression,
-                             "door group", group_door_ids, [])
+            temp_item_table[group] = ItemData(static_logic.get_door_group_item_id(group),
+                                              ItemClassification.progression, "door group", group_door_ids, [])
 
         special_items: Dict[str, ItemClassification] = {
             "Nothing": ItemClassification.filler,
@@ -93,8 +92,11 @@ class StaticLingoItems:
         }
 
         for item_name, classification in special_items.items():
-            self.create_item(static_logic.get_special_item_id(item_name), item_name, classification, "special")
+            temp_item_table[item_name] = ItemData(static_logic.get_special_item_id(item_name), classification,
+                                                  "special", [], [])
 
-        for item_name in StaticLingoLogic.PROGRESSIVE_ITEMS:
-            self.create_item(static_logic.get_progressive_item_id(item_name), item_name, ItemClassification.progression,
-                             "special")
+        for item_name in static_logic.PROGRESSIVE_ITEMS:
+            temp_item_table[item_name] = ItemData(static_logic.get_progressive_item_id(item_name),
+                                                  ItemClassification.progression, "special", [], [])
+
+        self.ALL_ITEM_TABLE = MappingProxyType(temp_item_table)

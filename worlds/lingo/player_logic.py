@@ -51,7 +51,8 @@ class LingoPlayerLogic:
         else:
             self.set_door_item(room_name, door_data.name, door_data.item_name)
 
-    def __init__(self, world: World, static_logic: StaticLingoLogic, test_options: LingoTestOptions):
+    def __init__(self, world: World, static_logic: StaticLingoLogic, static_items: StaticLingoItems,
+                 static_locat: StaticLingoLocations, test_options: LingoTestOptions):
         self.ITEM_BY_DOOR = {}
         self.LOCATIONS_BY_ROOM = {}
         self.REAL_LOCATIONS = []
@@ -69,14 +70,14 @@ class LingoPlayerLogic:
         victory_condition = getattr(world.multiworld, "victory_condition")[world.player]
 
         # Create an event for every room that represents being able to reach that room.
-        for room_name in StaticLingoLogic.ROOMS.keys():
+        for room_name in static_logic.ROOMS.keys():
             roomloc_name = f"{room_name} (Reached)"
             self.add_location(room_name, PlayerLocation(roomloc_name, None, []))
             self.EVENT_LOC_TO_ITEM[roomloc_name] = roomloc_name
 
         # Create an event for every door, representing whether that door has been opened. Also create event items for
         # doors that are event-only.
-        for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
+        for room_name, room_data in static_logic.DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():
                 if door_shuffle == 0:  # no door shuffle
                     itemloc_name = f"{room_name} - {door_name} (Opened)"
@@ -99,7 +100,7 @@ class LingoPlayerLogic:
 
         # Create events for each achievement panel, so that we can determine when THE MASTER is accessible. We also
         # create events for each counting panel, so that we can determine when LEVEL 2 is accessible.
-        for room_name, room_data in StaticLingoLogic.PANELS_BY_ROOM.items():
+        for room_name, room_data in static_logic.PANELS_BY_ROOM.items():
             for panel_name, panel_data in room_data.items():
                 if panel_data.achievement:
                     event_name = room_name + " - " + panel_name + " (Achieved)"
@@ -143,7 +144,7 @@ class LingoPlayerLogic:
         elif getattr(world.multiworld, "location_checks")[world.player] == 2:
             location_classification = LocationClassification.insanity
 
-        for location_name, location_data in StaticLingoLocations.ALL_LOCATION_TABLE.items():
+        for location_name, location_data in static_locat.ALL_LOCATION_TABLE.items():
             if location_name != self.VICTORY_CONDITION:
                 if location_classification not in location_data.classification:
                     continue
@@ -153,7 +154,7 @@ class LingoPlayerLogic:
                 self.REAL_LOCATIONS.append(location_name)
 
         # Instantiate all real items.
-        for name, item in StaticLingoItems.ALL_ITEM_TABLE.items():
+        for name, item in static_items.ALL_ITEM_TABLE.items():
             if item.should_include(world):
                 self.REAL_ITEMS.append(name)
 
@@ -234,16 +235,16 @@ class LingoPlayerLogic:
         # required-when-no-doors paintings if door shuffle is off. We then fill the set with random other paintings.
         chosen_exits = []
         if door_shuffle == 0:
-            chosen_exits = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+            chosen_exits = [painting_id for painting_id, painting in static_logic.PAINTINGS.items()
                             if painting.required_when_no_doors]
-        chosen_exits += [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+        chosen_exits += [painting_id for painting_id, painting in static_logic.PAINTINGS.items()
                          if painting.exit_only and painting.required]
-        exitable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+        exitable = [painting_id for painting_id, painting in static_logic.PAINTINGS.items()
                     if not painting.enter_only and not painting.disable and not painting.required]
         chosen_exits += world.random.sample(exitable, static_logic.PAINTING_EXITS - len(chosen_exits))
 
         # Determine the set of entrance paintings.
-        enterable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
+        enterable = [painting_id for painting_id, painting in static_logic.PAINTINGS.items()
                      if not painting.exit_only and not painting.disable and painting_id not in chosen_exits]
         chosen_entrances = world.random.sample(enterable, static_logic.PAINTING_ENTRANCES)
 

@@ -53,7 +53,8 @@ class LingoWorld(World):
     test_options: LingoTestOptions = LingoTestOptions()
 
     def generate_early(self):
-        self.player_logic = LingoPlayerLogic(self, self.static_logic, self.test_options)
+        self.player_logic = LingoPlayerLogic(self, self.static_logic, self.static_items, self.static_locat,
+                                             self.test_options)
 
     def create_regions(self):
         create_regions(self, self.static_logic, self.player_logic)
@@ -92,7 +93,7 @@ class LingoWorld(World):
         self.multiworld.itempool += pool
 
     def create_item(self, name: str) -> Item:
-        item = StaticLingoItems.ALL_ITEM_TABLE[name]
+        item = self.static_items.ALL_ITEM_TABLE[name]
         return LingoItem(name, item.classification, item.code, player=self.player)
 
     def set_rules(self):
