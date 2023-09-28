@@ -25,8 +25,9 @@ class TestBase(unittest.TestCase):
         state = CollectionState(self.multiworld)
         for item in items:
             item.classification = ItemClassification.progression
-            state.collect(item)
+            state.collect(item, event=True)
         state.sweep_for_events()
+        state.update_reachable_regions(1)
         self._state_cache[self.multiworld, tuple(items)] = state
         return state
 
@@ -53,7 +54,8 @@ class TestBase(unittest.TestCase):
             with self.subTest(msg="Reach Location", location=location, access=access, items=items,
                               all_except=all_except, path=path, entry=i):
 
-                self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), access)
+                self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), access,
+                                 f"failed {self.multiworld.get_location(location, 1)} with: {item_pool}")
 
             # check for partial solution
             if not all_except and access:  # we are not supposed to be able to reach location with partial inventory
@@ -61,7 +63,10 @@ class TestBase(unittest.TestCase):
                     with self.subTest(msg="Location reachable without required item", location=location,
                                       items=item_pool[0], missing_item=missing_item, entry=i):
                         state = self._get_items_partial(item_pool, missing_item)
-                        self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), False)
+
+                        self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), False,
+                                         f"failed {self.multiworld.get_location(location, 1)}: succeeded with "
+                                         f"{missing_item} removed from: {item_pool}")
 
     def run_entrance_tests(self, access_pool):
         for i, (entrance, access, *item_pool) in enumerate(access_pool):
@@ -80,7 +85,8 @@ class TestBase(unittest.TestCase):
                     with self.subTest(msg="Entrance reachable without required item", entrance=entrance,
                                       items=item_pool[0], missing_item=missing_item, entry=i):
                         state = self._get_items_partial(item_pool, missing_item)
-                        self.assertEqual(self.multiworld.get_entrance(entrance, 1).can_reach(state), False)
+                        self.assertEqual(self.multiworld.get_entrance(entrance, 1).can_reach(state), False,
+                                         f"failed {self.multiworld.get_entrance(entrance, 1)} with: {item_pool}")
 
     def _get_items(self, item_pool, all_except):
         if all_except and len(all_except) > 0:
@@ -237,7 +243,8 @@ class WorldTestBase(unittest.TestCase):
             for location in self.multiworld.get_locations():
                 if location.name not in excluded:
                     with self.subTest("Location should be reached", location=location):
-                        self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+                        reachable = location.can_reach(state)
+                        self.assertTrue(reachable, f"{location.name} unreachable")
             with self.subTest("Beatable"):
                 self.multiworld.state = state
                 self.assertBeatable(True)

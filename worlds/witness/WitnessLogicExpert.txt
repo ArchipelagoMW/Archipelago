@@ -14,7 +14,7 @@ Tutorial (Tutorial) - Outside Tutorial - True:
 158005 - 0x0A3B5 (Back Left) - True - Dots & Full Dots
 158006 - 0x0A3B2 (Back Right) - True - Dots & Full Dots
 158007 - 0x03629 (Gate Open) - 0x002C2 - Symmetry & Dots
-158008 - 0x03505 (Gate Close) - 0x2FAF6 & 0x03629 - False
+158008 - 0x03505 (Gate Close) - 0x2FAF6 & 0x03629 - True
 158009 - 0x0C335 (Pillar) - True - Triangles
 158010 - 0x0C373 (Patio Floor) - 0x0C335 - Dots
 159512 - 0x33530 (Cloud EP) - True - True
@@ -243,7 +243,7 @@ Door - 0x275FF (Side Exit) - 0x275ED
 Door - 0x17CE8 (Roof Exit) - 0x17CAC
 
 Quarry Stoneworks Middle Floor (Quarry Stoneworks) - Quarry Stoneworks Ground Floor - 0x03675 - Quarry Stoneworks Upper Floor - 0x03679:
-158125 - 0x00E0C (Lower Row 1) - True - Dots & Eraser
+158125 - 0x00E0C (Lower Row 1) - True - Triangles & Eraser
 158126 - 0x01489 (Lower Row 2) - 0x00E0C - Triangles & Eraser
 158127 - 0x0148A (Lower Row 3) - 0x01489 - Triangles & Eraser
 158128 - 0x014D9 (Lower Row 4) - 0x0148A - Triangles & Eraser
@@ -703,7 +703,7 @@ Swamp Between Bridges Far (Swamp) - Swamp Red Underwater - 0x183F2 - Swamp Rotat
 158322 - 0x0000A (Between Bridges Far Row 4) - 0x00009 - Rotated Shapers & Shapers & Dots & Full Dots
 Door - 0x183F2 (Red Water Pump) - 0x00596
 
-Swamp Red Underwater (Swamp) - Swamp Maze - 0x014D1:
+Swamp Red Underwater (Swamp) - Swamp Maze - 0x305D5:
 158323 - 0x00001 (Red Underwater 1) - True - Shapers & Negative Shapers & Dots & Full Dots
 158324 - 0x014D2 (Red Underwater 2) - True - Shapers & Negative Shapers & Dots & Full Dots
 158325 - 0x014D4 (Red Underwater 3) - True - Shapers & Negative Shapers & Dots & Full Dots

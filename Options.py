@@ -1,13 +1,15 @@
 from __future__ import annotations
+
 import abc
 import logging
-from copy import deepcopy
 import math
 import numbers
-import typing
 import random
+import typing
+from copy import deepcopy
 
-from schema import Schema, And, Or, Optional
+from schema import And, Optional, Or, Schema
+
 from Utils import get_fuzzy_results
 
 if typing.TYPE_CHECKING:
@@ -769,7 +771,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
 
-class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
+class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default: typing.Dict[str, typing.Any] = {}
     supports_weighting = False
 
@@ -787,8 +789,14 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     def get_option_name(self, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
 
-    def __contains__(self, item):
-        return item in self.value
+    def __getitem__(self, item: str) -> typing.Any:
+        return self.value.__getitem__(item)
+
+    def __iter__(self) -> typing.Iterator[str]:
+        return self.value.__iter__()
+
+    def __len__(self) -> int:
+        return self.value.__len__()
 
 
 class ItemDict(OptionDict):
@@ -949,6 +957,7 @@ class DeathLink(Toggle):
 
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
+    display_name = "Item Links"
     default = []
     schema = Schema([
         {

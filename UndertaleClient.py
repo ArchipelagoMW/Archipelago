@@ -1,5 +1,6 @@
 from __future__ import annotations
 import os
+import sys
 import asyncio
 import typing
 import bsdiff4
@@ -11,7 +12,7 @@ from NetUtils import NetworkItem, ClientStatus
 from worlds import undertale
 from MultiServer import mark_raw
 from CommonClient import CommonContext, server_loop, \
-    gui_enabled, ClientCommandProcessor, get_base_parser
+    gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from Utils import async_start
 
 
@@ -28,25 +29,31 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_patch(self):
         """Patch the game."""
         if isinstance(self.ctx, UndertaleContext):
-            os.makedirs(name=os.getcwd() + "\\Undertale", exist_ok=True)
+            os.makedirs(name=os.path.join(os.getcwd(), "Undertale"), exist_ok=True)
             self.ctx.patch_game()
             self.output("Patched.")
+
+    def _cmd_savepath(self, directory: str):
+        """Redirect to proper save data folder. (Use before connecting!)"""
+        if isinstance(self.ctx, UndertaleContext):
+            self.ctx.save_game_folder = directory
+            self.output("Changed to the following directory: " + self.ctx.save_game_folder)
 
     @mark_raw
     def _cmd_auto_patch(self, steaminstall: typing.Optional[str] = None):
         """Patch the game automatically."""
         if isinstance(self.ctx, UndertaleContext):
-            os.makedirs(name=os.getcwd() + "\\Undertale", exist_ok=True)
+            os.makedirs(name=os.path.join(os.getcwd(), "Undertale"), exist_ok=True)
             tempInstall = steaminstall
             if not os.path.isfile(os.path.join(tempInstall, "data.win")):
                 tempInstall = None
             if tempInstall is None:
                 tempInstall = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"
-                if not os.path.exists("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"):
+                if not os.path.exists(tempInstall):
                     tempInstall = "C:\\Program Files\\Steam\\steamapps\\common\\Undertale"
             elif not os.path.exists(tempInstall):
                 tempInstall = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"
-                if not os.path.exists("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"):
+                if not os.path.exists(tempInstall):
                     tempInstall = "C:\\Program Files\\Steam\\steamapps\\common\\Undertale"
             if not os.path.exists(tempInstall) or not os.path.exists(tempInstall) or not os.path.isfile(os.path.join(tempInstall, "data.win")):
                 self.output("ERROR: Cannot find Undertale. Please rerun the command with the correct folder."
@@ -54,8 +61,8 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             else:
                 for file_name in os.listdir(tempInstall):
                     if file_name != "steam_api.dll":
-                        shutil.copy(tempInstall+"\\"+file_name,
-                               os.getcwd() + "\\Undertale\\" + file_name)
+                        shutil.copy(os.path.join(tempInstall, file_name),
+                               os.path.join(os.getcwd(), "Undertale", file_name))
                 self.ctx.patch_game()
                 self.output("Patching successful!")
 
@@ -92,6 +99,7 @@ class UndertaleContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.pieces_needed = 0
+        self.finished_game = False
         self.game = "Undertale"
         self.got_deathlink = False
         self.syncing = False
@@ -99,15 +107,17 @@ class UndertaleContext(CommonContext):
         self.tem_armor = False
         self.completed_count = 0
         self.completed_routes = {"pacifist": 0, "genocide": 0, "neutral": 0}
+        # self.save_game_folder: files go in this path to pass data between us and the actual game
+        self.save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
 
     def patch_game(self):
-        with open(os.getcwd() + "/Undertale/data.win", "rb") as f:
+        with open(os.path.join(os.getcwd(), "Undertale", "data.win"), "rb") as f:
             patchedFile = bsdiff4.patch(f.read(), undertale.data_path("patch.bsdiff"))
-        with open(os.getcwd() + "/Undertale/data.win", "wb") as f:
+        with open(os.path.join(os.getcwd(), "Undertale", "data.win"), "wb") as f:
             f.write(patchedFile)
-        os.makedirs(name=os.getcwd() + "\\Undertale\\" + "Custom Sprites", exist_ok=True)
-        with open(os.path.expandvars(os.getcwd() + "\\Undertale\\" + "Custom Sprites\\" +
-                                     "Which Character.txt"), "w") as f:
+        os.makedirs(name=os.path.join(os.getcwd(), "Undertale", "Custom Sprites"), exist_ok=True)
+        with open(os.path.expandvars(os.path.join(os.getcwd(), "Undertale", "Custom Sprites",
+                                     "Which Character.txt")), "w") as f:
             f.writelines(["// Put the folder name of the sprites you want to play as, make sure it is the only "
                           "line other than this one.\n", "frisk"])
             f.close()
@@ -227,7 +237,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             f.close()
         filename = f"check.spot"
         with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
-            for ss in ctx.checked_locations:
+            for ss in set(args["checked_locations"]):
                 f.write(str(ss-12000)+"\n")
             f.close()
     elif cmd == "LocationInfo":
@@ -353,14 +363,14 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if "checked_locations" in args:
             filename = f"check.spot"
             with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
-                for ss in ctx.checked_locations:
+                for ss in set(args["checked_locations"]):
                     f.write(str(ss-12000)+"\n")
                 f.close()
 
     elif cmd == "Bounced":
         tags = args.get("tags", [])
         if "Online" in tags:
-            data = args.get("worlds/undertale/data", {})
+            data = args.get("data", {})
             if data["player"] != ctx.slot and data["player"] is not None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
                 with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
@@ -375,7 +385,7 @@ async def multi_watcher(ctx: UndertaleContext):
         for root, dirs, files in os.walk(path):
             for file in files:
                 if "spots.mine" in file and "Online" in ctx.tags:
-                    with open(root + "/" + file, "r") as mine:
+                    with open(os.path.join(root, file), "r") as mine:
                         this_x = mine.readline()
                         this_y = mine.readline()
                         this_room = mine.readline()
@@ -398,7 +408,7 @@ async def game_watcher(ctx: UndertaleContext):
             for root, dirs, files in os.walk(path):
                 for file in files:
                     if ".item" in file:
-                        os.remove(root+"/"+file)
+                        os.remove(os.path.join(root, file))
             sync_msg = [{"cmd": "Sync"}]
             if ctx.locations_checked:
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
@@ -406,38 +416,42 @@ async def game_watcher(ctx: UndertaleContext):
             ctx.syncing = False
         if ctx.got_deathlink:
             ctx.got_deathlink = False
-            with open(os.path.join(ctx.save_game_folder, "/WelcomeToTheDead.youDied"), "w") as f:
+            with open(os.path.join(ctx.save_game_folder, "WelcomeToTheDead.youDied"), "w") as f:
                 f.close()
         sending = []
         victory = False
         found_routes = 0
         for root, dirs, files in os.walk(path):
             for file in files:
-                if "DontBeMad.mad" in file and "DeathLink" in ctx.tags:
-                    os.remove(root+"/"+file)
-                    await ctx.send_death()
+                if "DontBeMad.mad" in file:
+                    os.remove(os.path.join(root, file))
+                    if "DeathLink" in ctx.tags:
+                        await ctx.send_death()
                 if "scout" == file:
                     sending = []
-                    with open(root+"/"+file, "r") as f:
-                        lines = f.readlines()
+                    try:
+                        with open(os.path.join(root, file), "r") as f:
+                            lines = f.readlines()
                         for l in lines:
                             if ctx.server_locations.__contains__(int(l)+12000):
-                                sending = sending + [int(l)+12000]
-                    await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
-                                                      "create_as_hint": int(2)}])
-                    os.remove(root+"/"+file)
+                                sending = sending + [int(l.rstrip('\n'))+12000]
+                    finally:
+                        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
+                                                          "create_as_hint": int(2)}])
+                        os.remove(os.path.join(root, file))
                 if "check.spot" in file:
                     sending = []
-                    with open(root+"/"+file, "r") as f:
-                        lines = f.readlines()
+                    try:
+                        with open(os.path.join(root, file), "r") as f:
+                            lines = f.readlines()
                         for l in lines:
-                            sending = sending+[(int(l))+12000]
-                    message = [{"cmd": "LocationChecks", "locations": sending}]
-                    await ctx.send_msgs(message)
+                            sending = sending+[(int(l.rstrip('\n')))+12000]
+                    finally:
+                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sending}])
                 if "victory" in file and str(ctx.route) in file:
                     victory = True
                 if ".playerspot" in file and "Online" not in ctx.tags:
-                    os.remove(root+"/"+file)
+                    os.remove(os.path.join(root, file))
                 if "victory" in file:
                     if str(ctx.route) == "all_routes":
                         if "neutral" in file and ctx.completed_routes["neutral"] != 1:
