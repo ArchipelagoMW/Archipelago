@@ -13,7 +13,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
 from .config import detect_test
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
-from .options import ZillionStartChar, zillion_options, validate
+from .options import ZillionOptions, ZillionStartChar, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
@@ -70,7 +70,9 @@ class ZillionWorld(World):
     game = "Zillion"
     web = ZillionWebWorld()
 
-    option_definitions = zillion_options
+    options_dataclass = ZillionOptions
+    options: ZillionOptions
+
     settings: typing.ClassVar[ZillionSettings]
     topology_present = True  # indicate if world type has any meaningful layout/pathing
 
@@ -142,7 +144,10 @@ class ZillionWorld(World):
         if not hasattr(self.multiworld, "zillion_logic_cache"):
             setattr(self.multiworld, "zillion_logic_cache", {})
 
-        zz_op, item_counts = validate(self.multiworld, self.player)
+        zz_op, item_counts = validate(self.options, self.player)
+
+        if zz_op.early_scope:
+            self.multiworld.early_items[self.player]["Scope"] = 1
 
         self._item_counts = item_counts
 
@@ -299,7 +304,8 @@ class ZillionWorld(World):
                     elif start_char_counts["Champ"] > start_char_counts["Apple"]:
                         to_stay = "Champ"
                     else:  # equal
-                        to_stay = multiworld.random.choice(("Apple", "Champ"))
+                        choices: Tuple[Literal['Apple', 'Champ', 'JJ'], ...] = ("Apple", "Champ")
+                        to_stay = multiworld.random.choice(choices)
 
                     for p, sc in players_start_chars:
                         if sc != to_stay:
