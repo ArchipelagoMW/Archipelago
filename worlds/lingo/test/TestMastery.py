@@ -9,21 +9,15 @@ class TestMasteryWhenVictoryIsTheEnd(LingoTestBase):
     }
 
     def test_requirement(self):
-        assert not self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player)
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player))
 
-        self.collect_by_name("Red")
-        self.collect_by_name("Blue")
-        self.collect_by_name("Black")
-        self.collect_by_name("Purple")
-        self.collect_by_name("Orange")
-        assert self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player)
-        assert self.multiworld.state.can_reach("The End (Solved)", "Location", self.player)
-        assert not self.multiworld.state.can_reach("Orange Tower Seventh Floor - THE MASTER", "Location", self.player)
+        self.collect_by_name(["Red", "Blue", "Black", "Purple", "Orange"])
+        self.assertTrue(self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player))
+        self.assertTrue(self.can_reach_location("The End (Solved)"))
+        self.assertFalse(self.can_reach_location("Orange Tower Seventh Floor - THE MASTER"))
 
-        self.collect_by_name("Green")
-        self.collect_by_name("Brown")
-        self.collect_by_name("Yellow")
-        assert self.multiworld.state.can_reach("Orange Tower Seventh Floor - THE MASTER", "Location", self.player)
+        self.collect_by_name(["Green", "Brown", "Yellow"])
+        self.assertTrue(self.can_reach_location("Orange Tower Seventh Floor - THE MASTER"))
 
 
 class TestMasteryWhenVictoryIsTheMaster(LingoTestBase):
@@ -34,21 +28,12 @@ class TestMasteryWhenVictoryIsTheMaster(LingoTestBase):
     }
 
     def test_requirement(self):
-        assert not self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player)
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player))
 
-        self.collect_by_name("Red")
-        self.collect_by_name("Blue")
-        self.collect_by_name("Black")
-        self.collect_by_name("Purple")
-        self.collect_by_name("Orange")
-        assert self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player)
-        assert self.multiworld.state.can_reach("Orange Tower Seventh Floor - THE END", "Location", self.player)
-        assert not self.multiworld.state.can_reach("Orange Tower Seventh Floor - Mastery Achievements", "Location",
-                                                   self.player)
+        self.collect_by_name(["Red", "Blue", "Black", "Purple", "Orange"])
+        self.assertTrue(self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player))
+        self.assertTrue(self.can_reach_location("Orange Tower Seventh Floor - THE END"))
+        self.assertFalse(self.can_reach_location("Orange Tower Seventh Floor - Mastery Achievements"))
 
-        self.collect_by_name("Green")
-        self.collect_by_name("Gray")
-        self.collect_by_name("Brown")
-        self.collect_by_name("Yellow")
-        assert self.multiworld.state.can_reach("Orange Tower Seventh Floor - Mastery Achievements", "Location",
-                                               self.player)
+        self.collect_by_name(["Green", "Gray", "Brown", "Yellow"])
+        self.assertTrue(self.can_reach_location("Orange Tower Seventh Floor - Mastery Achievements"))
