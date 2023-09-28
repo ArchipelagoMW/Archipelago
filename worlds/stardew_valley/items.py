@@ -359,10 +359,6 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
     exclude_ginger_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
     mods = world_options[options.Mods]
     heart_size = world_options[options.FriendsanityHeartSize]
-    need_all_hearts_up_to_date = world_is_perfection(world_options)
-    government_assigned_bachelor = random.choice([villager.name for villager in all_villagers if villager.bachelor and
-                                                  (villager.mod_name is None or villager.mod_name in mods)])
-    need_recipes = world_options[options.Shipsanity] == options.Shipsanity.option_everything
     for villager in all_villagers:
         if villager.mod_name not in mods and villager.mod_name is not None:
             continue
@@ -381,29 +377,11 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
                 break
             if heart % heart_size == 0 or heart == heart_cap:
                 items.append(item_factory(f"{villager.name} <3", classification))
-                if should_next_hearts_be_useful(need_all_hearts_up_to_date, government_assigned_bachelor, need_recipes,
-                                                villager, heart, heart_size, heart_cap):
-                    classification = ItemClassification.useful
     if not exclude_non_bachelors:
         need_pet = world_options[options.Goal] == options.Goal.option_grandpa_evaluation
         for heart in range(1, 6):
             if heart % heart_size == 0 or heart == 5:
                 items.append(item_factory(f"Pet <3", ItemClassification.progression_skip_balancing if need_pet else ItemClassification.useful))
-
-
-def should_next_hearts_be_useful(need_all_hearts_up_to_date: bool, government_assigned_bachelor: str, need_recipes: bool, villager, heart: int,
-                                 heart_size: int, heart_cap: int) -> bool:
-    if heart + heart_size < heart_cap:  # If the next heart isn't the last one, it has to be progression
-        return False
-    if villager.name == government_assigned_bachelor:
-        return False
-    if need_all_hearts_up_to_date and (heart <= 8 or (heart <= 10 and not villager.bachelor)):
-        return False
-    if need_recipes and heart <= 7:
-        return False
-    if need_recipes and villager.name == "Willy":
-        return False
-    return True
 
 
 def create_babies(item_factory: StardewItemFactory, items: List[Item], random: Random):

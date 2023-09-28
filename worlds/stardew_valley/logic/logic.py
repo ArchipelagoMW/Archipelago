@@ -192,10 +192,9 @@ class StardewLogic:
         self.seed_rules.update({seed.name: self.can_buy_seed(seed) for seed in all_purchasable_seeds})
         self.crop_rules.update({crop.name: self.crop.can_grow(crop) for crop in all_crops})
         self.crop_rules.update({
-            Seed.coffee: (self.season.has(Season.spring) | self.season.has(
-                Season.summer)) & self.can_buy_seed(crops_by_name[Seed.coffee].seed),
+            Seed.coffee: (self.season.has(Season.spring) | self.season.has(Season.summer)) & self.can_buy_seed(crops_by_name[Seed.coffee].seed),
             Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
-                             self.region.can_reach(Region.greenhouse) & self.has(Machine.seed_maker),
+                                  self.region.can_reach(Region.greenhouse) & self.has(Machine.seed_maker),
         })
 
         self.item_rules.update({
