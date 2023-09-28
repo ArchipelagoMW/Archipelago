@@ -129,11 +129,11 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     CurWorld = 1
     CurLev = 1
     for i in range(47):
+        multiworld.get_region(f'World {CurWorld}', player).add_exits([gamevar.level_location_list[i]])
         if CurLev > 7:
             CurLev = 1
             CurWorld += 1
         else: CurLev += 1
-        multiworld.get_region(f'World {CurWorld}', player).add_exits([gamevar.level_location_list[i]])
 
     multiworld.get_region('1-4', player).add_exits([gamevar.boss_order[0]],{gamevar.boss_order[0]: lambda state: logic._14Clear(state)})
     multiworld.get_region('1-8', player).add_exits([gamevar.boss_order[1]],{gamevar.boss_order[1]: lambda state: logic._18Clear(state)})
