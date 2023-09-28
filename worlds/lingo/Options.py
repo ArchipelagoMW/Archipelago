@@ -81,6 +81,12 @@ class Level2Requirement(Range):
     default = 223
 
 
+class EarlyColorHallways(Toggle):
+    """When on, a painting warp to the color hallways area will appear in the starting room.
+    This lets you avoid being trapped in the starting room for long periods of time when door shuffle is on."""
+    display_name = "Early Color Hallways"
+
+
 class TrapPercentage(Range):
     """Replaces junk items with traps, at the specified rate."""
     display_name = "Trap Percentage"
@@ -112,6 +118,7 @@ lingo_options: Dict[str, type] = {
     "victory_condition": VictoryCondition,
     "mastery_achievements": MasteryAchievements,
     "level_2_requirement": Level2Requirement,
+    "early_color_hallways": EarlyColorHallways,
     "trap_percentage": TrapPercentage,
     "puzzle_skip_percentage": PuzzleSkipPercentage,
     "death_link": DeathLink

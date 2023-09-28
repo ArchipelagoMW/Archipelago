@@ -67,6 +67,7 @@ def create_regions(world: World, static_logic: StaticLingoLogic, player_logic: L
         create_region(room, world, static_logic, player_logic)
 
     painting_shuffle = bool(getattr(world.multiworld, "shuffle_paintings")[world.player])
+    early_color_hallways = bool(getattr(world.multiworld, "early_color_hallways")[world.player])
 
     for room in static_logic.ALL_ROOMS:
         for entrance in room.entrances:
@@ -77,6 +78,10 @@ def create_regions(world: World, static_logic: StaticLingoLogic, player_logic: L
             connect(room, entrance, world, static_logic, player_logic)
 
     handle_pilgrim_room(world, player_logic)
+
+    if early_color_hallways:
+        world.multiworld.get_region("Starting Room", world.player)\
+            .connect(world.multiworld.get_region("Outside The Undeterred", world.player), "Early Color Hallways")
 
     if painting_shuffle:
         for warp_enter, warp_exit in player_logic.PAINTING_MAPPING.items():

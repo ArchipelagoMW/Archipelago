@@ -101,7 +101,8 @@ class LingoWorld(World):
         slot_data = {"seed": self.random.randint(0, 1000000)}
 
         for option_name in ["death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings",
-                            "shuffle_panels", "mastery_achievements", "level_2_requirement", "location_checks"]:
+                            "shuffle_panels", "mastery_achievements", "level_2_requirement", "location_checks",
+                            "early_color_hallways"]:
             slot_data[option_name] = int(getattr(self.multiworld, option_name)[self.player])
 
         if getattr(self.multiworld, "shuffle_paintings")[self.player]:
