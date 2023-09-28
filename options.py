@@ -1,6 +1,6 @@
 from typing import Dict, Type
 
-from Options import Choice, Option, DefaultOnToggle, DeathLink
+from Options import Choice, Option, DefaultOnToggle, DeathLink, Range
 
 
 class Difficulty(Choice):
@@ -23,6 +23,18 @@ class EarlyEntryJewels(DefaultOnToggle):
     display_name = 'Early Entry Passage Jewels'
 
 
+class RequiredJewels(Range):
+    '''
+    Number of jewels required to fight the bosses.
+    The Entry Passage and Golden Pyramid always require 1 unless this option is
+    set to 0.
+    '''
+    range_start = 0
+    range_end = 4
+    default = 4
+    display_name = 'Required Jewels'
+
+
 class MusicShuffle(Choice):
     '''
     Music shuffle type
@@ -40,6 +52,7 @@ class MusicShuffle(Choice):
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
     'early_entry_jewels': EarlyEntryJewels,
+    'required_jewels': RequiredJewels,
     'death_link': DeathLink,
     #'music_shuffle': MusicShuffle,
 }

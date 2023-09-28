@@ -98,13 +98,20 @@ class WL4World(World):
 
         itempool = []
 
+        required_jewels = self.multiworld.required_jewels[self.player]
+        required_jewels_entry = min(1, required_jewels)
         for name, item in filter_items(type=ItemType.JEWEL):
             if item.passage() in (Passage.ENTRY, Passage.GOLDEN):
-                copies = 1
+                copies = required_jewels_entry
+                start = 1 - required_jewels_entry
             else:
-                copies = 4
+                copies = required_jewels
+                start = 4 - required_jewels
+
             for _ in range(copies):
                 itempool.append(self.create_item(name))
+            for _ in range(start):
+                self.multiworld.push_precollected(self.create_item(name))
 
         for name in filter_item_names(type=ItemType.CD):
             itempool.append(self.create_item(name))
@@ -113,7 +120,10 @@ class WL4World(World):
             itempool.append(self.create_item('Full Health Item'))
 
         junk_count = total_required_locations - len(itempool)
-        assert junk_count == 0, f'Mismatched location counts: {junk_count} empty checks'
+        junk_item_pool = tuple(filter_item_names(type=ItemType.ITEM))
+        for _ in range(junk_count):
+            item_name = self.multiworld.random.choice(junk_item_pool)
+            itempool.append(self.create_item(item_name))
 
         self.multiworld.itempool += itempool
 
