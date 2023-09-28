@@ -144,7 +144,7 @@ class ZillionWorld(World):
         if not hasattr(self.multiworld, "zillion_logic_cache"):
             setattr(self.multiworld, "zillion_logic_cache", {})
 
-        zz_op, item_counts = validate(self.options, self.player)
+        zz_op, item_counts = validate(self.options)
 
         if zz_op.early_scope:
             self.multiworld.early_items[self.player]["Scope"] = 1

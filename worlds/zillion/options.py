@@ -268,12 +268,11 @@ def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
     return tr
 
 
-def validate(options: ZillionOptions, p: int) -> "Tuple[ZzOptions, Counter[str]]":
+def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
     """
     adjusts options to make game completion possible
 
     `options` parameter is ZillionOptions object that was put on my world by the core
-    `p` is my player id
     """
 
     skill = options.skill.value

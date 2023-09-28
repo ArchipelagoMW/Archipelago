@@ -11,7 +11,7 @@ class OptionsTest(ZillionTestBase):
         self.world_setup()
         options = self.multiworld.worlds[1].options
         assert isinstance(options, ZillionOptions)
-        validate(options, 1)
+        validate(options)
 
     def test_vblr_ap_to_zz(self) -> None:
         """ all of the valid values for the AP options map to valid values for ZZ options """
@@ -24,7 +24,7 @@ class OptionsTest(ZillionTestBase):
                 self.world_setup()
                 options = self.multiworld.worlds[1].options
                 assert isinstance(options, ZillionOptions)
-                zz_options, _item_counts = validate(options, 1)
+                zz_options, _item_counts = validate(options)
                 assert getattr(zz_options, option_name) in VBLR_CHOICES
 
     # TODO: test validate with invalid combinations of options
