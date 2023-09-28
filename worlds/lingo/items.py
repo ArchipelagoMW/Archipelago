@@ -1,5 +1,6 @@
 from typing import Dict, NamedTuple, Optional, List
-from BaseClasses import Item, MultiWorld, ItemClassification
+from BaseClasses import Item, ItemClassification
+from worlds.AutoWorld import World
 from .static_logic import StaticLingoLogic
 
 
@@ -13,19 +14,19 @@ class ItemData(NamedTuple):
     door_ids: List[str]
     painting_ids: List[str]
 
-    def should_include(self, multiworld: MultiWorld, player: int) -> bool:
+    def should_include(self, world: World) -> bool:
         if self.mode == "colors":
-            return getattr(multiworld, "shuffle_colors")[player] > 0
+            return getattr(world.multiworld, "shuffle_colors")[world.player] > 0
         elif self.mode == "doors":
-            return getattr(multiworld, "shuffle_doors")[player] > 0
+            return getattr(world.multiworld, "shuffle_doors")[world.player] > 0
         elif self.mode == "orange tower":
             # door shuffle is on and tower isn't progressive
-            return getattr(multiworld, "shuffle_doors")[player] > 0\
-                and not getattr(multiworld, "progressive_orange_tower")[player]
+            return getattr(world.multiworld, "shuffle_doors")[world.player] > 0\
+                and not getattr(world.multiworld, "progressive_orange_tower")[world.player]
         elif self.mode == "complex door":
-            return getattr(multiworld, "shuffle_doors")[player] == 2  # complex doors
+            return getattr(world.multiworld, "shuffle_doors")[world.player] == 2  # complex doors
         elif self.mode == "door group":
-            return getattr(multiworld, "shuffle_doors")[player] == 1  # simple doors
+            return getattr(world.multiworld, "shuffle_doors")[world.player] == 1  # simple doors
         elif self.mode == "special":
             return False
         else:

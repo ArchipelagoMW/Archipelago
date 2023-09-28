@@ -1,8 +1,5 @@
-from typing import Optional, List
-from BaseClasses import MultiWorld
 from .static_logic import StaticLingoLogic, RoomAndDoor
-from worlds.AutoWorld import LogicMixin
-from .locations import StaticLingoLocations, LocationData
+from worlds.AutoWorld import LogicMixin, World
 from .player_logic import LingoPlayerLogic, PlayerLocation
 
 
@@ -37,16 +34,17 @@ class LingoLogic(LogicMixin):
                 break
         return viable_option
 
-    def lingo_can_use_location(self, location: PlayerLocation, room_name: str, multiworld: MultiWorld, player: int,
+    def lingo_can_use_location(self, location: PlayerLocation, room_name: str, world: World,
                                player_logic: LingoPlayerLogic):
         for panel in location.panels:
             panel_room = room_name if panel.room is None else panel.room
-            if not self._lingo_can_solve_panel(room_name, panel_room, panel.panel, multiworld, player, player_logic):
+            if not self._lingo_can_solve_panel(room_name, panel_room, panel.panel, world, player_logic):
                 return False
         return True
 
-    def lingo_can_use_mastery_location(self, multiworld: MultiWorld, player: int):
-        return self.has("Mastery Achievement", player, getattr(multiworld, "mastery_achievements")[player])
+    def lingo_can_use_mastery_location(self, world: World):
+        return self.has("Mastery Achievement", world.player,
+                        getattr(world.multiworld, "mastery_achievements")[world.player])
 
     def _lingo_can_open_door(self, start_room: str, room: str, door: str, player: int, player_logic: LingoPlayerLogic):
         """
@@ -59,39 +57,39 @@ class LingoLogic(LogicMixin):
         else:
             return self.has(item_name, player)
 
-    def _lingo_can_solve_panel(self, start_room: str, room: str, panel: str, multiworld: MultiWorld, player: int,
+    def _lingo_can_solve_panel(self, start_room: str, room: str, panel: str, world: World,
                                player_logic: LingoPlayerLogic):
         """
         Determines whether a panel can be solved
         """
-        if start_room != room and not self.has(f"{room} (Reached)", player):
+        if start_room != room and not self.has(f"{room} (Reached)", world.player):
             return False
-        if room == "Second Room" and panel == "ANOTHER TRY" and getattr(multiworld, "victory_condition")[player] == 2\
-                and not self.has("Counting Panel Solved", player,
-                                 getattr(multiworld, "level_2_requirement")[player] - 1):
+        if room == "Second Room" and panel == "ANOTHER TRY"\
+                and getattr(world.multiworld, "victory_condition")[world.player] == 2\
+                and not self.has("Counting Panel Solved", world.player,
+                                 getattr(world.multiworld, "level_2_requirement")[world.player] - 1):
             return False
         panel_object = StaticLingoLogic.PANELS_BY_ROOM[room][panel]
         for req_room in panel_object.required_rooms:
-            if not self.has(f"{req_room} (Reached)", player):
+            if not self.has(f"{req_room} (Reached)", world.player):
                 return False
         for req_door in panel_object.required_doors:
             if not self._lingo_can_open_door(start_room, room if req_door.room is None else req_door.room,
-                                             req_door.door, player, player_logic):
+                                             req_door.door, world.player, player_logic):
                 return False
         for req_panel in panel_object.required_panels:
             if not self._lingo_can_solve_panel(start_room, room if req_panel.room is None else req_panel.room,
-                                               req_panel.panel, multiworld, player, player_logic):
+                                               req_panel.panel, world, player_logic):
                 return False
-        if len(panel_object.colors) > 0 and getattr(multiworld, "shuffle_colors")[player]:
+        if len(panel_object.colors) > 0 and getattr(world.multiworld, "shuffle_colors")[world.player]:
             for color in panel_object.colors:
-                if not self.has(color.capitalize(), player):
+                if not self.has(color.capitalize(), world.player):
                     return False
         return True
 
 
-def make_location_lambda(location: PlayerLocation, room_name: str, multiworld: MultiWorld, player: int,
-                         player_logic: LingoPlayerLogic):
+def make_location_lambda(location: PlayerLocation, room_name: str, world: World, player_logic: LingoPlayerLogic):
     if location.name == player_logic.MASTERY_LOCATION:
-        return lambda state: state.lingo_can_use_mastery_location(multiworld, player)
+        return lambda state: state.lingo_can_use_mastery_location(world)
     else:
-        return lambda state: state.lingo_can_use_location(location, room_name, multiworld, player, player_logic)
+        return lambda state: state.lingo_can_use_location(location, room_name, world, player_logic)

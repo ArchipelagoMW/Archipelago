@@ -1,6 +1,5 @@
-from typing import Dict, Union
-from BaseClasses import MultiWorld
-from Options import Toggle, Option, Choice, DefaultOnToggle, Range
+from typing import Dict
+from Options import Toggle, Choice, DefaultOnToggle, Range
 
 
 class ShuffleDoors(Choice):

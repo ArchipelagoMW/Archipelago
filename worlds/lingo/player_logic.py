@@ -1,9 +1,9 @@
 from typing import Dict, List, Optional, NamedTuple
-from BaseClasses import MultiWorld
+from worlds.AutoWorld import World
 from .testing import LingoTestOptions
-from .locations import LocationData, StaticLingoLocations, LocationClassification
+from .locations import StaticLingoLocations, LocationClassification
 from .static_logic import RoomAndPanel, StaticLingoLogic, Door
-from .items import ItemData, StaticLingoItems
+from .items import StaticLingoItems
 
 
 class PlayerLocation(NamedTuple):
@@ -39,11 +39,10 @@ class LingoPlayerLogic:
     def set_door_item(self, room: str, door: str, item: str):
         self.ITEM_BY_DOOR.setdefault(room, {})[door] = item
 
-    def handle_non_grouped_door(self, room_name: str, door_data: Door, multiworld: MultiWorld, player: int,
-                                static_logic: StaticLingoLogic):
+    def handle_non_grouped_door(self, room_name: str, door_data: Door, world: World, static_logic: StaticLingoLogic):
         if room_name in static_logic.PROGRESSION_BY_ROOM \
                 and door_data.name in static_logic.PROGRESSION_BY_ROOM[room_name]:
-            if room_name == "Orange Tower" and not getattr(multiworld, "progressive_orange_tower")[player]:
+            if room_name == "Orange Tower" and not getattr(world.multiworld, "progressive_orange_tower")[world.player]:
                 self.set_door_item(room_name, door_data.name, door_data.item_name)
             else:
                 progressive_item_name = static_logic.PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
@@ -52,8 +51,7 @@ class LingoPlayerLogic:
         else:
             self.set_door_item(room_name, door_data.name, door_data.item_name)
 
-    def __init__(self, multiworld: MultiWorld, player: int, static_logic: StaticLingoLogic,
-                 test_options: LingoTestOptions):
+    def __init__(self, world: World, static_logic: StaticLingoLogic, test_options: LingoTestOptions):
         self.ITEM_BY_DOOR = {}
         self.LOCATIONS_BY_ROOM = {}
         self.REAL_LOCATIONS = []
@@ -65,10 +63,10 @@ class LingoPlayerLogic:
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
 
-        door_shuffle = getattr(multiworld, "shuffle_doors")[player]
-        color_shuffle = getattr(multiworld, "shuffle_colors")[player]
-        painting_shuffle = getattr(multiworld, "shuffle_paintings")[player]
-        victory_condition = getattr(multiworld, "victory_condition")[player]
+        door_shuffle = getattr(world.multiworld, "shuffle_doors")[world.player]
+        color_shuffle = getattr(world.multiworld, "shuffle_colors")[world.player]
+        painting_shuffle = getattr(world.multiworld, "shuffle_paintings")[world.player]
+        victory_condition = getattr(world.multiworld, "victory_condition")[world.player]
 
         # Create an event for every room that represents being able to reach that room.
         for room_name in StaticLingoLogic.ROOMS.keys():
@@ -92,7 +90,7 @@ class LingoPlayerLogic:
                             # Grouped doors are handled differently if shuffle doors is on simple.
                             self.set_door_item(room_name, door_name, door_data.group)
                         else:
-                            self.handle_non_grouped_door(room_name, door_data, multiworld, player, static_logic)
+                            self.handle_non_grouped_door(room_name, door_data, world, static_logic)
 
                 if door_data.event:
                     self.add_location(room_name, PlayerLocation(door_data.item_name, None, door_data.panels))
@@ -109,7 +107,7 @@ class LingoPlayerLogic:
                                                                 [RoomAndPanel(room_name, panel_name)]))
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
-                if not panel_data.non_counting and victory_condition == 2: # LEVEL 2
+                if not panel_data.non_counting and victory_condition == 2:  # LEVEL 2
                     event_name = room_name + " - " + panel_name + " (Counted)"
                     self.add_location(room_name, PlayerLocation(event_name, None,
                                                                 [RoomAndPanel(room_name, panel_name)]))
@@ -140,9 +138,9 @@ class LingoPlayerLogic:
 
         # Instantiate all real locations.
         location_classification = LocationClassification.normal
-        if getattr(multiworld, "location_checks")[player] == 1:
+        if getattr(world.multiworld, "location_checks")[world.player] == 1:
             location_classification = LocationClassification.reduced
-        elif getattr(multiworld, "location_checks")[player] == 2:
+        elif getattr(world.multiworld, "location_checks")[world.player] == 2:
             location_classification = LocationClassification.insanity
 
         for location_name, location_data in StaticLingoLocations.ALL_LOCATION_TABLE.items():
@@ -156,7 +154,7 @@ class LingoPlayerLogic:
 
         # Instantiate all real items.
         for name, item in StaticLingoItems.ALL_ITEM_TABLE.items():
-            if item.should_include(multiworld, player):
+            if item.should_include(world):
                 self.REAL_ITEMS.append(name)
 
         # Create the paintings mapping, if painting shuffle is on.
@@ -164,7 +162,7 @@ class LingoPlayerLogic:
             # Shuffle paintings until we get something workable.
             workable_paintings = False
             for i in range(0, 20):
-                workable_paintings = self.randomize_paintings(multiworld, player, static_logic)
+                workable_paintings = self.randomize_paintings(world, static_logic)
                 if workable_paintings:
                     break
 
@@ -205,7 +203,7 @@ class LingoPlayerLogic:
                 good_item_options.append(pdoor.item_name)
 
             # Copied from The Witness -- remove any plandoed items from the possible good items set.
-            for v in multiworld.plando_items[player]:
+            for v in world.multiworld.plando_items[world.player]:
                 if v.get("from_pool", True):
                     for item_key in {"item", "items"}:
                         if item_key in v:
@@ -223,14 +221,14 @@ class LingoPlayerLogic:
                                         good_item_options.remove(item)
 
             if len(good_item_options) > 0:
-                self.FORCED_GOOD_ITEM = multiworld.per_slot_randoms[player].choice(good_item_options)
+                self.FORCED_GOOD_ITEM = world.random.choice(good_item_options)
                 self.REAL_ITEMS.remove(self.FORCED_GOOD_ITEM)
                 self.REAL_LOCATIONS.remove("Starting Room - HI")
 
-    def randomize_paintings(self, multiworld: MultiWorld, player: int, static_logic: StaticLingoLogic) -> bool:
+    def randomize_paintings(self, world: World, static_logic: StaticLingoLogic) -> bool:
         self.PAINTING_MAPPING.clear()
 
-        door_shuffle = getattr(multiworld, "shuffle_doors")[player]
+        door_shuffle = getattr(world.multiworld, "shuffle_doors")[world.player]
 
         # Determine the set of exit paintings. All required-exit paintings are included, as are all
         # required-when-no-doors paintings if door shuffle is off. We then fill the set with random other paintings.
@@ -242,17 +240,16 @@ class LingoPlayerLogic:
                          if painting.exit_only and painting.required]
         exitable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
                     if not painting.enter_only and not painting.disable and not painting.required]
-        chosen_exits += multiworld.per_slot_randoms[player].sample(exitable,
-                                                                   static_logic.PAINTING_EXITS - len(chosen_exits))
+        chosen_exits += world.random.sample(exitable, static_logic.PAINTING_EXITS - len(chosen_exits))
 
         # Determine the set of entrance paintings.
         enterable = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
                      if not painting.exit_only and not painting.disable and painting_id not in chosen_exits]
-        chosen_entrances = multiworld.per_slot_randoms[player].sample(enterable, static_logic.PAINTING_ENTRANCES)
+        chosen_entrances = world.random.sample(enterable, static_logic.PAINTING_ENTRANCES)
 
         # Create a mapping from entrances to exits.
         for warp_exit in chosen_exits:
-            warp_enter = multiworld.per_slot_randoms[player].choice(chosen_entrances)
+            warp_enter = world.random.choice(chosen_entrances)
 
             # Check whether this is a warp from a required painting room to another (or the same) required painting
             # room. This could cause a cycle that would make certain regions inaccessible.
@@ -271,7 +268,7 @@ class LingoPlayerLogic:
             self.PAINTING_MAPPING[warp_enter] = warp_exit
 
         for warp_enter in chosen_entrances:
-            warp_exit = multiworld.per_slot_randoms[player].choice(chosen_exits)
+            warp_exit = world.random.choice(chosen_exits)
             self.PAINTING_MAPPING[warp_enter] = warp_exit
 
         # The Eye Wall painting is unique in that it is both double-sided and also enter only (because it moves).

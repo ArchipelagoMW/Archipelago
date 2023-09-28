@@ -1,4 +1,3 @@
-import os
 import yaml
 
 from typing import Dict, NamedTuple, Optional, List, Set

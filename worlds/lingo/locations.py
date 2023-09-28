@@ -1,6 +1,6 @@
-from typing import Dict, NamedTuple, Optional, List
+from typing import Dict, NamedTuple, List
 from BaseClasses import Location
-from .static_logic import StaticLingoLogic, RoomAndPanel, Room
+from .static_logic import StaticLingoLogic, RoomAndPanel
 from enum import Flag, auto
 
 

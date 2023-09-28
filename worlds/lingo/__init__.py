@@ -1,19 +1,16 @@
 """
 Archipelago init file for Lingo
 """
-import typing
 
-from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
+from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from .static_logic import StaticLingoLogic, Room, RoomEntrance
 from .items import LingoItem, StaticLingoItems
 from .locations import LingoLocation, StaticLingoLocations
 from .Options import lingo_options
 from .testing import LingoTestOptions
-from worlds.generic.Rules import set_rule
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
-from math import floor
 
 
 class LingoWebWorld(WebWorld):
@@ -56,10 +53,10 @@ class LingoWorld(World):
     test_options: LingoTestOptions = LingoTestOptions()
 
     def generate_early(self):
-        self.player_logic = LingoPlayerLogic(self.multiworld, self.player, self.static_logic, self.test_options)
+        self.player_logic = LingoPlayerLogic(self, self.static_logic, self.test_options)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.static_logic, self.player_logic)
+        create_regions(self, self.static_logic, self.player_logic)
 
     def create_items(self):
         pool = [self.create_item(name) for name in self.player_logic.REAL_ITEMS]
@@ -103,7 +100,7 @@ class LingoWorld(World):
             lambda state: state.has("Victory", self.player)
 
     def fill_slot_data(self):
-        slot_data = {"seed": self.multiworld.per_slot_randoms[self.player].randint(0, 1000000)}
+        slot_data = {"seed": self.random.randint(0, 1000000)}
 
         for option_name in ["death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings",
                             "shuffle_panels", "mastery_achievements", "level_2_requirement", "location_checks"]:
