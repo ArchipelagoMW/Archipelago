@@ -77,7 +77,7 @@ class SA2BWorld(World):
 
     def fill_slot_data(self) -> dict:
         return {
-            "ModVersion": 202,
+            "ModVersion": 203,
             "Goal": self.multiworld.goal[self.player].value,
             "MusicMap": self.generate_music_data(),
             "VoiceMap": self.generate_voice_data(),
