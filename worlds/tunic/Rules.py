@@ -125,7 +125,8 @@ def set_location_rules(multiworld: MultiWorld, player: int, ability_unlocks: Dic
                      and has_ability(state, player, holy_cross, multiworld, ability_unlocks))
     set_rule(multiworld.get_location("Sealed Temple - Page Pickup", player),
              lambda state: state.has(laurels, player) or (
-                     state.has(lantern, player) and state.has_group("melee weapons", player, 2)))
+                     state.has(lantern, player) and (state.has_group("melee weapons", player, 2) or
+                                                     state.has(fire_wand, player))))
     set_rule(multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", player),
              lambda state: state.has(fairies, player, 10))
     set_rule(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player),
