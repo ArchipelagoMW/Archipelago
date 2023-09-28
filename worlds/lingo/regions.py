@@ -30,23 +30,18 @@ def connect(target: Room, entrance: RoomEntrance, world: World, static_logic: St
             player_logic: LingoPlayerLogic):
     target_region = world.multiworld.get_region(target.name, world.player)
     source_region = world.multiworld.get_region(entrance.room, world.player)
-    connection = Entrance(world.player, f"{entrance.room} to {target.name}", source_region)
-    connection.access_rule = lambda state: state.lingo_can_use_entrance(
-        target.name, entrance.door, world.player, static_logic, player_logic)
 
-    source_region.exits.append(connection)
-    connection.connect(target_region)
+    source_region.connect(target_region, f"{entrance.room} to {target.name}",
+                          lambda state: state.lingo_can_use_entrance(target.name, entrance.door, world.player,
+                                                                     static_logic, player_logic))
 
 
 def handle_pilgrim_room(world: World, player_logic: LingoPlayerLogic):
     target_region = world.multiworld.get_region("Pilgrim Antechamber", world.player)
     source_region = world.multiworld.get_region("Outside The Agreeable", world.player)
-    connection = Entrance(world.player, f"Pilgrimage", source_region)
-    connection.access_rule = lambda state: state.lingo_can_use_pilgrimage(
-        world.player, player_logic)
 
-    source_region.exits.append(connection)
-    connection.connect(target_region)
+    source_region.connect(target_region, "Pilgrimage", lambda state: state.lingo_can_use_pilgrimage(world.player,
+                                                                                                    player_logic))
 
 
 def connect_painting(warp_enter: str, warp_exit: str, world: World, static_logic: StaticLingoLogic,
@@ -56,12 +51,11 @@ def connect_painting(warp_enter: str, warp_exit: str, world: World, static_logic
 
     target_region = world.multiworld.get_region(target_painting.room, world.player)
     source_region = world.multiworld.get_region(source_painting.room, world.player)
-    connection = Entrance(world.player, f"{source_painting.room} to {target_painting.room} (Painting)", source_region)
-    connection.access_rule = lambda state: state.lingo_can_use_entrance(
-        target_painting.room, source_painting.required_door, world.player, static_logic, player_logic)
 
-    source_region.exits.append(connection)
-    connection.connect(target_region)
+    source_region.connect(target_region, f"{source_painting.room} to {target_painting.room} (Painting)",
+                          lambda state: state.lingo_can_use_entrance(target_painting.room,
+                                                                     source_painting.required_door, world.player,
+                                                                     static_logic, player_logic))
 
 
 def create_regions(world: World, static_logic: StaticLingoLogic, player_logic: LingoPlayerLogic):
