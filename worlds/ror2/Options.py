@@ -19,6 +19,21 @@ class Goal(Choice):
     default = 0
 
 
+class Victory(Choice):
+    """
+    Mithrix: Defeat Mithrix in Commencement
+    Voiling: Default Voidling in The Planetarium
+    Limbo: Defeat the Scavenger in Hidden Realm: A Moment, Whole
+    Any: Any victory in the game will count. See Final Stage Death for additional ways.
+    """
+    display_name = "Victory Condition"
+    option_any = "Any"
+    option_mithrix = "mithrix"
+    option_voidling = "voidling"
+    option_limbo = "limbo"
+    default = "any"
+
+
 class TotalLocations(Range):
     """Classic Mode: Number of location checks which are added to the Risk of Rain playthrough."""
     display_name = "Total Locations"

@@ -33,7 +33,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         "Sulfur Pools":                         RoRRegionData([], ["OrderedStage_3"])
     }
     other_regions: Dict[str, RoRRegionData] = {
-        "Commencement":                         RoRRegionData(None, ["Victory", "Petrichor V"]),
+        "Commencement":                         RoRRegionData(None, ["Victory"]),
         "OrderedStage_5":                       RoRRegionData(None, ["Hidden Realm: A Moment, Fractured", "Commencement"]),
         "OrderedStage_1":                       RoRRegionData(None, ["Hidden Realm: Bazaar Between Time",
                                                 "Hidden Realm: Gilded Coast", "Abandoned Aqueduct", "Wetland Aspect"]),
@@ -44,7 +44,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         "Hidden Realm: A Moment, Whole":        RoRRegionData(None, ["Victory"]),
         "Void Fields":                          RoRRegionData(None, []),
         "Victory":                              RoRRegionData(None, None),
-        "Petrichor V":                          RoRRegionData(None, ["Victory"]),
+        "Petrichor V":                          RoRRegionData(None, []),
         "Hidden Realm: Bulwark's Ambry":        RoRRegionData(None, None),
         "Hidden Realm: Bazaar Between Time":    RoRRegionData(None, ["Void Fields"]),
         "Hidden Realm: Gilded Coast":           RoRRegionData(None, None)
@@ -93,7 +93,20 @@ def create_regions(multiworld: MultiWorld, player: int):
         other_regions["OrderedStage_1"].region_exits.append("Aphelian Sanctuary")
         other_regions["OrderedStage_2"].region_exits.append("Sulfur Pools")
         other_regions["Void Fields"].region_exits.append("Void Locus")
+        other_regions["Commencement"].region_exits.append("The Planetarium")
         regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_other_regions}
+
+    # Check to see if Victory needs to be removed from regions
+    if multiworld.victory[player] == "mithrix":
+        other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
+        dlc_other_regions["The Planetarium"].region_exits.pop(0)
+    elif multiworld.victory[player] == "voidling":
+        other_regions["Commencement"].region_exits.pop(0)
+        other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
+    elif multiworld.victory[player] == "limbo":
+        other_regions["Commencement"].region_exits.pop(0)
+        dlc_other_regions["The Planetarium"].region_exits.pop(0)
+
 
     # Create all the regions
     for name, data in regions_pool.items():

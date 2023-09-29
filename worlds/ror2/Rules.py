@@ -3,12 +3,18 @@ from worlds.generic.Rules import set_rule, add_rule
 from .Locations import orderedstage_location
 from .RoR2Environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table, \
     environment_orderedstages_table
+from typing import Set
 
 
 # Rule to see if it has access to the previous stage
 def has_entrance_access_rule(multiworld: MultiWorld, stage: str, entrance: str, player: int):
     multiworld.get_entrance(entrance, player).access_rule = \
         lambda state: state.has(entrance, player) and state.has(stage, player)
+
+
+def has_all_items(multiworld: MultiWorld, items: Set, entrance: str, player: int):
+    multiworld.get_entrance(entrance, player).access_rule = \
+        lambda state: state.has_all(items, player) and state.has(entrance, player)
 
 
 # Checks to see if chest/shrine are accessible
@@ -18,7 +24,7 @@ def has_location_access_rule(multiworld: MultiWorld, environment: str, player: i
             lambda state: state.has(environment, player)
         if item_type == "Scavenger":
             multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
-                lambda state: state.has(environment, player) and state.has("Stage_4", player)
+                lambda state: state.has(environment, player) and state.has("Stage_5", player)
     else:
         multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
             lambda state: check_location(state, environment, player, item_number, item_type)
@@ -96,10 +102,6 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
         #   a long enough run to have enough director credits for scavengers and
         #   help prevent being stuck in the same stages until that point.)
 
-        for location in multiworld.get_locations():
-            if location.player != player: continue  # ignore all checks that don't belong to this player
-            if "Scavenger" in location.name:
-                add_rule(location, lambda state: state.has("Stage_5", player))
         # Regions
         chests = multiworld.chests_per_stage[player]
         shrines = multiworld.shrines_per_stage[player]
@@ -149,7 +151,8 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
         has_entrance_access_rule(multiworld, f"Stage_5", "Hidden Realm: A Moment, Fractured", player)
         has_entrance_access_rule(multiworld, "Beads of Fealty", "Hidden Realm: A Moment, Whole", player)
         if multiworld.dlc_sotv[player]:
-            has_entrance_access_rule(multiworld, f"Stage_5", "Void Locus", player)
-            has_entrance_access_rule(multiworld, f"Void Locus", "The Planetarium", player)
+            if multiworld.victory[player] == "voidling":
+                has_all_items(multiworld, {"Stage_5", "The Planetarium"}, "Commencement", player)
+            has_all_items(multiworld, {"Stage_5", "The Planetarium"}, "Void Locus", player)
     # Win Condition
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
