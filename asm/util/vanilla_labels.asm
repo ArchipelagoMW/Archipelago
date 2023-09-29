@@ -6,6 +6,7 @@
 .definelabel CurrentRoomId, 0x3000024
 .definelabel ucFlashLoop, 0x3000044
 .definelabel ucTimeUp, 0x3000047
+.definelabel CurrentEntityInfoList_TEbuf, 0x3000104
 .definelabel EntityLeftOverStateList, 0x3000564
 .definelabel CurrentEnemyData, 0x3000A24
 .definelabel LevelStatusTable, 0x3000A68
@@ -26,6 +27,8 @@
 .definelabel Wario_ucReact, 0x3001898
 .definelabel Wario_ucMiss, 0x300189C
 .definelabel WarioHeart, 0x3001910
+.definelabel WHit, 0x3001918
+.definelabel WarioLift, 0x3001940
 .definelabel usWarStopFlg, 0x30019F6
 .definelabel ucSeldemoSeq, 0x3003C39
 .definelabel usMojiCount, 0x3004A30  ; ???
@@ -44,6 +47,7 @@
 .definelabel m4aSongNumStart, 0x8001DA4
 .definelabel WarioHitMain, 0x801009c
 .definelabel GmWarioCreate, 0x801C5D8
+.definelabel WarChng_Flying, 0x8012CC8
 .definelabel EnemyDisplayMain, 0x801D8C4
 .definelabel EnemyChildSet, 0x801E328
 .definelabel ChangeWarioReact_Fire, 0x801EA3C
@@ -55,6 +59,7 @@
 .definelabel EntityAI_Q_K5_Hip_COM_takarabako, 0x80292BC
 .definelabel EntityAI_INITIAL_takara_kakera, 0x802932C
 .definelabel GmapSceneCreate, 0x806C794
+.definelabel PanelPartWork_Broken_Main, 0x806EE98
 .definelabel AutoSave_EXRead_Work, 0x8073A18
 .definelabel TOptObjSet, 0x80766E8
 .definelabel WarioCoinSet, 0x80768B8

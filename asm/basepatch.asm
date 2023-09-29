@@ -27,6 +27,7 @@ UnusedRomStart equ 0x0878F97C
 .include "asm/items/collect_junk.asm"
 .include "asm/boxes/randomize_boxes.asm"
 .include "asm/boxes/save_full_health.asm"
+.include "asm/move_shuffle.asm"
 .include "asm/routines.asm"
 .include "asm/patches.asm"
 .include "asm/graphics.asm"

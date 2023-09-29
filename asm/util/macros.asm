@@ -1,5 +1,17 @@
 .gba
 
+; Replaces some code with a call to a mod function.
+; Unlike the other two hook macros, this doesn't set the link register, so this
+; is cheaper to use if the hook ends with a branch.
+.macro hook_manual, Start, End, HackFunction
+    .org Start
+    .area End-.
+        ldr r0, =HackFunction
+        mov pc, r0
+    .pool
+    .endarea
+.endmacro
+
 ; Replaces a branch with a call to a mod function.
 ; This is for when the replaced code ends with an unconditional jump so that the
 ; pool afterward in the original code can also be replaced.
