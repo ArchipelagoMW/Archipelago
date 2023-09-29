@@ -18,6 +18,26 @@ def get_stardew_options(multiworld: MultiWorld) -> options.StardewValleyOptions:
     return get_stardew_world(multiworld).options
 
 
+def assert_has_item(tester: SVTestBase, multiworld: MultiWorld, item: str):
+    all_item_names = set(get_all_item_names(multiworld))
+    tester.assertIn(item, all_item_names)
+
+
+def assert_has_not_item(tester: SVTestBase, multiworld: MultiWorld, item: str):
+    all_item_names = set(get_all_item_names(multiworld))
+    tester.assertNotIn(item, all_item_names)
+
+
+def assert_has_location(tester: SVTestBase, multiworld: MultiWorld, item: str):
+    all_location_names = set(get_all_location_names(multiworld))
+    tester.assertIn(item, all_location_names)
+
+
+def assert_has_not_location(tester: SVTestBase, multiworld: MultiWorld, item: str):
+    all_location_names = set(get_all_location_names(multiworld))
+    tester.assertNotIn(item, all_location_names)
+
+
 def assert_can_reach_island(tester: SVTestBase, multiworld: MultiWorld):
     all_item_names = get_all_item_names(multiworld)
     tester.assertIn(Transportation.boat_repair, all_item_names)
@@ -58,8 +78,7 @@ def assert_all_rarecrows_exist(tester: SVTestBase, multiworld: MultiWorld):
 
 
 def assert_has_deluxe_scarecrow_recipe(tester: SVTestBase, multiworld: MultiWorld):
-    all_item_names = set(get_all_item_names(multiworld))
-    tester.assertIn(f"Deluxe Scarecrow Recipe", all_item_names)
+    assert_has_item(tester, multiworld, "Deluxe Scarecrow Recipe")
 
 
 def assert_festivals_give_access_to_deluxe_scarecrow(tester: SVTestBase, multiworld: MultiWorld):
@@ -70,3 +89,16 @@ def assert_festivals_give_access_to_deluxe_scarecrow(tester: SVTestBase, multiwo
 
     assert_all_rarecrows_exist(tester, multiworld)
     assert_has_deluxe_scarecrow_recipe(tester, multiworld)
+
+
+def assert_has_festival_recipes(tester: SVTestBase, multiworld: MultiWorld):
+    has_festivals = is_not_setting(multiworld, options.FestivalLocations.internal_name, options.FestivalLocations.option_disabled)
+    festival_items = ["Tub o' Flowers Recipe", "Jack-O-Lantern Recipe", "Moonlight Jellies Banner", "Starport Decal"]
+    for festival_item in festival_items:
+        if has_festivals:
+            assert_has_item(tester, multiworld, festival_item)
+            assert_has_location(tester, multiworld, festival_item)
+        else:
+            assert_has_not_item(tester, multiworld, festival_item)
+            assert_has_not_location(tester, multiworld, festival_item)
+
