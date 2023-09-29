@@ -255,7 +255,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                 if all_state_base.has("Triforce", player):
                     all_state_base.remove(multiworld.worlds[player].create_item("Triforce"))
 
-            for (player, key_drop_shuffle) in enumerate(multiworld.key_drop_shuffle.values(), start=1):
+            for (player, key_drop_shuffle) in multiworld.key_drop_shuffle.items():
                 if not key_drop_shuffle and player not in multiworld.groups:
                     for key_loc in key_drop_data:
                         key_data = key_drop_data[key_loc]
