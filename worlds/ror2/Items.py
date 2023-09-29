@@ -12,26 +12,53 @@ class RiskOfRainItemData(NamedTuple):
     category: str
     code: Optional[int] = None
     item_type: ItemClassification = ItemClassification.filler
+    weight: Optional[int] = None
+
+
+def get_items_by_category(category: str) -> Dict[str, RiskOfRainItemData]:
+    item_dict: Dict[str, RiskOfRainItemData] = {}
+    for name, data in item_table.items():
+        if data.category == category:
+            item_dict.setdefault(name, data)
+
+    return item_dict
 
 
 offset: int = 37000
+filler_offset: int = offset + 300
+trap_offset: int = offset + 400
 # 37000 - 37499, 38000
-item_table: Dict[str, RiskOfRainItemData] = {
-    "Dio's Best Friend":    RiskOfRainItemData("Upgrade", 1 + offset, ItemClassification.filler),
-    "Common Item":          RiskOfRainItemData("Upgrade", 2 + offset, ItemClassification.filler),
-    "Uncommon Item":        RiskOfRainItemData("Upgrade", 3 + offset, ItemClassification.filler),
-    "Legendary Item":       RiskOfRainItemData("Upgrade", 4 + offset, ItemClassification.useful),
-    "Boss Item":            RiskOfRainItemData("Upgrade", 5 + offset, ItemClassification.useful),
-    "Lunar Item":           RiskOfRainItemData("Upgrade", 6 + offset, ItemClassification.trap),
-    "Equipment":            RiskOfRainItemData("Upgrade", 7 + offset, ItemClassification.filler),
-    "Item Scrap, White":    RiskOfRainItemData("Upgrade", 8 + offset, ItemClassification.filler),
-    "Item Scrap, Green":    RiskOfRainItemData("Upgrade", 9 + offset, ItemClassification.filler),
-    "Item Scrap, Red":      RiskOfRainItemData("Upgrade", 10 + offset, ItemClassification.filler),
-    "Item Scrap, Yellow":   RiskOfRainItemData("Upgrade", 11 + offset, ItemClassification.filler),
-    "Void Item":            RiskOfRainItemData("Upgrade", 12 + offset, ItemClassification.filler),
-    "Beads of Fealty":      RiskOfRainItemData("Beads", 13 + offset, ItemClassification.progression)
+upgrade_table: Dict[str, RiskOfRainItemData] = {
+    "Common Item":          RiskOfRainItemData("Upgrade", 2 + offset, ItemClassification.filler, 64),
+    "Uncommon Item":        RiskOfRainItemData("Upgrade", 3 + offset, ItemClassification.filler, 32),
+    "Legendary Item":       RiskOfRainItemData("Upgrade", 4 + offset, ItemClassification.useful, 8),
+    "Boss Item":            RiskOfRainItemData("Upgrade", 5 + offset, ItemClassification.useful, 4),
+    "Equipment":            RiskOfRainItemData("Upgrade", 7 + offset, ItemClassification.filler, 32),
+    "Item Scrap, White":    RiskOfRainItemData("Upgrade", 8 + offset, ItemClassification.filler, 32),
+    "Item Scrap, Green":    RiskOfRainItemData("Upgrade", 9 + offset, ItemClassification.filler, 16),
+    "Item Scrap, Red":      RiskOfRainItemData("Upgrade", 10 + offset, ItemClassification.filler, 4),
+    "Item Scrap, Yellow":   RiskOfRainItemData("Upgrade", 11 + offset, ItemClassification.filler, 1),
+    "Void Item":            RiskOfRainItemData("Upgrade", 12 + offset, ItemClassification.filler, 16),
+}
+other_table: Dict[str, RiskOfRainItemData] = {
+    "Dio's Best Friend":    RiskOfRainItemData("ExtraLife", 1 + offset, ItemClassification.filler),
+    "Beads of Fealty":      RiskOfRainItemData("Beads", 13 + offset, ItemClassification.progression),
+    "Radar Scanner":        RiskOfRainItemData("Radar", 14 + offset, ItemClassification.progression)
+}
+filler_table: Dict[str, RiskOfRainItemData] = {
+    "Money":                RiskOfRainItemData("Filler", 1 + filler_offset, ItemClassification.filler, 50),
+    "Lunar Coin":           RiskOfRainItemData("Filler", 2 + filler_offset, ItemClassification.filler, 30),
+    "1000 Exp":             RiskOfRainItemData("Filler", 3 + filler_offset, ItemClassification.filler, 50)
+}
+trap_table: Dict[str, RiskOfRainItemData] = {
+    "Lunar Item": RiskOfRainItemData("Trap", 6 + offset, ItemClassification.trap, 16),
+    "Mountain Trap":        RiskOfRainItemData("Trap", 1 + trap_offset, ItemClassification.trap, 20),
+    "Time Warp Trap":       RiskOfRainItemData("Trap", 2 + trap_offset, ItemClassification.trap, 20),
+    "Combat Trap":          RiskOfRainItemData("Trap", 3 + trap_offset, ItemClassification.trap, 40),
+    "Teleport Trap":        RiskOfRainItemData("Trap", 4 + trap_offset, ItemClassification.trap, 30)
 }
 
+item_table = {**upgrade_table, **other_table, **filler_table, **trap_table}
 # 37700 - 37699
 ##################################################
 # environments
@@ -66,7 +93,6 @@ default_weights: Dict[str, int] = {
     "Uncommon Item":        32,
     "Legendary Item":       8,
     "Boss Item":            4,
-    "Lunar Item":           16,
     "Void Item":            16,
     "Equipment":            32
 }
@@ -80,7 +106,6 @@ new_weights: Dict[str, int] = {
     "Uncommon Item":        40,
     "Legendary Item":       10,
     "Boss Item":            5,
-    "Lunar Item":           10,
     "Void Item":            16,
     "Equipment":            20
 }
@@ -94,7 +119,6 @@ uncommon_weights: Dict[str, int] = {
     "Uncommon Item":        100,
     "Legendary Item":       10,
     "Boss Item":            5,
-    "Lunar Item":           15,
     "Void Item":            16,
     "Equipment":            20
 }
@@ -108,23 +132,8 @@ legendary_weights: Dict[str, int] = {
     "Uncommon Item":        25,
     "Legendary Item":       100,
     "Boss Item":            5,
-    "Lunar Item":           15,
     "Void Item":            16,
     "Equipment":            20
-}
-
-lunartic_weights: Dict[str, int] = {
-    "Item Scrap, Green":    0,
-    "Item Scrap, Red":      0,
-    "Item Scrap, Yellow":   0,
-    "Item Scrap, White":    0,
-    "Common Item":          0,
-    "Uncommon Item":        0,
-    "Legendary Item":       0,
-    "Boss Item":            0,
-    "Lunar Item":           100,
-    "Void Item":            0,
-    "Equipment":            0
 }
 
 chaos_weights: Dict[str, int] = {
@@ -136,7 +145,6 @@ chaos_weights: Dict[str, int] = {
     "Uncommon Item":        70,
     "Legendary Item":       30,
     "Boss Item":            20,
-    "Lunar Item":           60,
     "Void Item":            60,
     "Equipment":            40
 }
@@ -150,7 +158,6 @@ no_scraps_weights: Dict[str, int] = {
     "Uncommon Item":        40,
     "Legendary Item":       15,
     "Boss Item":            5,
-    "Lunar Item":           10,
     "Void Item":            16,
     "Equipment":            25
 }
@@ -164,7 +171,6 @@ even_weights: Dict[str, int] = {
     "Uncommon Item":        1,
     "Legendary Item":       1,
     "Boss Item":            1,
-    "Lunar Item":           1,
     "Void Item":            1,
     "Equipment":            1
 }
@@ -178,7 +184,6 @@ scraps_only: Dict[str, int] = {
     "Uncommon Item":        0,
     "Legendary Item":       0,
     "Boss Item":            0,
-    "Lunar Item":           0,
     "Void Item":            0,
     "Equipment":            0
 }
@@ -192,7 +197,6 @@ void_weights: Dict[str, int] = {
     "Uncommon Item":        0,
     "Legendary Item":       0,
     "Boss Item":            0,
-    "Lunar Item":           0,
     "Void Item":            100,
     "Equipment":            0
 }
@@ -202,7 +206,6 @@ item_pool_weights: Dict[int, Dict[str, int]] = {
     ItemWeights.option_new:         new_weights,
     ItemWeights.option_uncommon:    uncommon_weights,
     ItemWeights.option_legendary:   legendary_weights,
-    ItemWeights.option_lunartic:    lunartic_weights,
     ItemWeights.option_chaos:       chaos_weights,
     ItemWeights.option_no_scraps:   no_scraps_weights,
     ItemWeights.option_even:        even_weights,

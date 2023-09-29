@@ -83,6 +83,7 @@ class ItemPickupStep(Range):
     range_end = 5
     default = 1
 
+
 class ShrineUseStep(Range):
     """
     Explore Mode:
@@ -94,6 +95,11 @@ class ShrineUseStep(Range):
     range_start = 0
     range_end = 3
     default = 0
+
+
+class AllowTrapItems(Toggle):
+    """Allows Trap items in the item pool."""
+    display_name = "Enable Trap Items"
 
 
 class AllowLunarItems(DefaultOnToggle):
@@ -266,12 +272,11 @@ class ItemWeights(Choice):
     option_new = 1
     option_uncommon = 2
     option_legendary = 3
-    option_lunartic = 4
-    option_chaos = 5
-    option_no_scraps = 6
-    option_even = 7
-    option_scraps_only = 8
-    option_void = 9
+    option_chaos = 4
+    option_no_scraps = 5
+    option_even = 6
+    option_scraps_only = 7
+    option_void = 8
 
 
 # define a dictionary for the weights of the generated item pool.
@@ -291,6 +296,7 @@ ror2_weights: Dict[str, type(Option)] = {
 
 ror2_options: Dict[str, type(Option)] = {
     "goal":                     Goal,
+    "victory":                  Victory,
     "total_locations":          TotalLocations,
     "chests_per_stage":         ChestsPerEnvironment,
     "shrines_per_stage":        ShrinesPerEnvironment,
@@ -305,6 +311,7 @@ ror2_options: Dict[str, type(Option)] = {
     "death_link":               DeathLink,
     "item_pickup_step":         ItemPickupStep,
     "shrine_use_step":          ShrineUseStep,
+    "enable_trap":              AllowTrapItems,
     "enable_lunar":             AllowLunarItems,
     "item_weights":             ItemWeights,
     "item_pool_presets":        ItemPoolPresetToggle,

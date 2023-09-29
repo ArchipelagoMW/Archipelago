@@ -1,6 +1,6 @@
 import string
 
-from .Items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset
+from .Items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, get_items_by_category
 from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
 from .Rules import set_rules
 from .RoR2Environments import *
@@ -99,6 +99,7 @@ class RiskOfRainWorld(World):
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.total_revivals
         itempool += ["Beads of Fealty"]
+        itempool += ["Radar Scanner"]
 
         for env_name, _ in environments_pool.items():
             itempool += [env_name]
@@ -165,8 +166,16 @@ class RiskOfRainWorld(World):
                 "Equipment": self.multiworld.equipment[self.player].value
             }
 
+        # add filler/trap items to the junk pool
+        filler_items = get_items_by_category("Filler")
+        for name, data in filler_items.items():
+            junk_pool[name] = data.weight
+        if self.multiworld.enable_trap[self.player]:
+            trap_items = get_items_by_category("Trap")
+            for name, data in trap_items.items():
+                junk_pool[name] = data.weight
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not (self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic):
+        if not self.multiworld.enable_lunar[self.player]:
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
         if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
@@ -252,7 +261,7 @@ def create_events(world: MultiWorld, player: int) -> None:
     victory_region = world.get_region("Victory", player)
     victory_event = RiskOfRainLocation(player, "Victory", None, victory_region)
     victory_event.place_locked_item(RiskOfRainItem("Victory", ItemClassification.progression, None, player))
-    world_region.locations.append(victory_event)
+    victory_region.locations.append(victory_event)
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations: Dict[str, int] = {}) -> Region:
