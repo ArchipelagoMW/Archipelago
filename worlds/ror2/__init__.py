@@ -174,9 +174,9 @@ class RiskOfRainWorld(World):
             trap_items = get_items_by_category("Trap")
             for name, data in trap_items.items():
                 junk_pool[name] = data.weight
-        # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not self.multiworld.enable_lunar[self.player]:
-            junk_pool.pop("Lunar Item")
+            # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
+            if not self.multiworld.enable_lunar[self.player]:
+                junk_pool.pop("Lunar Item")
         # remove void items from the pool
         if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
             junk_pool.pop("Void Item")

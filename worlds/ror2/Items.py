@@ -51,7 +51,7 @@ filler_table: Dict[str, RiskOfRainItemData] = {
     "1000 Exp":             RiskOfRainItemData("Filler", 3 + filler_offset, ItemClassification.filler, 50)
 }
 trap_table: Dict[str, RiskOfRainItemData] = {
-    "Lunar Item": RiskOfRainItemData("Trap", 6 + offset, ItemClassification.trap, 16),
+    "Lunar Item":           RiskOfRainItemData("Trap", 6 + offset, ItemClassification.trap, 16),
     "Mountain Trap":        RiskOfRainItemData("Trap", 1 + trap_offset, ItemClassification.trap, 20),
     "Time Warp Trap":       RiskOfRainItemData("Trap", 2 + trap_offset, ItemClassification.trap, 20),
     "Combat Trap":          RiskOfRainItemData("Trap", 3 + trap_offset, ItemClassification.trap, 40),
