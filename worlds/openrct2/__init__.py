@@ -304,7 +304,7 @@ class OpenRCT2World(World):
         self.multiworld.get_location("Victory", self.player).place_locked_item(OpenRCT2Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def fill_slot_data(self) -> None:
+    def fill_slot_data(self):
         #archipelago_objectives = {Guests: [300, false], ParkValue: [0, false], RollerCoasters: [5,2,2,2,0,false], RideIncome: [0, false], ShopIncome: [8000, false], ParkRating: [700, false], LoanPaidOff: [true, false], Monopoly: [true, false]};
         guests = self.multiworld.guest_objective[self.player].value
         park_value = self.multiworld.park_value_objective[self.player].value
@@ -326,7 +326,8 @@ class OpenRCT2World(World):
             "randomization_range": self.multiworld.randomization_range[self.player].value,
             "stat_rerolls": self.multiworld.stat_rerolls[self.player].value,
             "randomize_park_values": self.multiworld.randomize_park_values[self.player].value,
-            "visibility": self.multiworld.visibility[self.player].value
+            "visibility": self.multiworld.visibility[self.player].value,
+            "objectives": objectives
         }
 
     def create_item(self, item:str) -> OpenRCT2Item:
