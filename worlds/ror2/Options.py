@@ -27,7 +27,7 @@ class Victory(Choice):
     Any: Any victory in the game will count. See Final Stage Death for additional ways.
     """
     display_name = "Victory Condition"
-    option_any = "Any"
+    option_any = "any"
     option_mithrix = "mithrix"
     option_voidling = "voidling"
     option_limbo = "limbo"
@@ -65,6 +65,7 @@ class ScavengersPerEnvironment(Range):
     range_end = 1
     default = 1
 
+
 class ScannersPerEnvironment(Range):
     """Explore Mode: The number of scanners locations per environment."""
     display_name = "Radio Scanners per Environment"
@@ -72,12 +73,14 @@ class ScannersPerEnvironment(Range):
     range_end = 1
     default = 1
 
+
 class AltarsPerEnvironment(Range):
     """Explore Mode: The number of altars locations per environment."""
     display_name = "Newts Per Environment"
     range_start = 0
     range_end = 2
     default = 1
+
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""
@@ -150,7 +153,6 @@ class DLC_SOTV(Toggle):
      Adds Void Items into the item pool
      """
     display_name = "Enable DLC - SOTV"
-
 
 
 class GreenScrap(Range):
