@@ -286,6 +286,8 @@ class SC2Context(CommonContext):
             await super(SC2Context, self).server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
+        if self.ui:
+            self.ui.first_check = True
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
