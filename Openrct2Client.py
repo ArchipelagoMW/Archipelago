@@ -28,6 +28,8 @@ class OpenRCT2Socket:
     def __init__(self, ctx):
         self.ctx = ctx
         self.maintask = asyncio.create_task(self.main(), name="GameListen")
+        self.connected_to_game = asyncio.Event()
+        self.initial_connection = True
     
     async def main(self):
         while True:
@@ -82,6 +84,10 @@ class OpenRCT2Socket:
                     self.disconnectgame()
                     self.game = newgame
                     print("Connected to game at", self.game, addr)
+                    if self.initial_connection:
+                        logger.info("Connection to OpenRCT2 Established!")
+                        self.initial_connection = False
+                    self.connected_to_game.set()
                     self.game.setblocking(0)
                     #break
             except socket.timeout as e:
@@ -125,8 +131,11 @@ class OpenRCT2Socket:
         time.sleep(0.2)
         try:
             if data:
+                print("DATA")
                 sock = self.game
+                print(sock)
                 if sock:
+                    print("SOCK")
                     sock.sendall(data)
                     print('sent', len(data), 'bytes to', sock.getsockname(), '->', sock.getpeername(),':\n', data)
         except socket.timeout as e:
@@ -161,7 +170,7 @@ class OpenRCT2Socket:
 
 
 class OpenRCT2Context(CommonContext):
-    tags = {"AP", "TextOnly", "DeathLink"}
+    tags = {"AP", "DeathLink"}
     game = "OpenRCT2"
     items_handling = 0b111  # receive all items for /received
     want_slot_data = True 
@@ -169,20 +178,30 @@ class OpenRCT2Context(CommonContext):
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
         super().__init__(server_address, password)
         self.gamesock = OpenRCT2Socket(self)
+        self.game_connection_established = False
 
     async def server_auth(self, password_requested: bool = False):
+        if not self.game_connection_established:
+            logger.info('Awaiting connection to OpenRCT2')
+            await self.gamesock.connected_to_game.wait()
+            
+        
         if password_requested and not self.password:
             await super(OpenRCT2Context, self).server_auth(password_requested)
+
+
         await self.get_username()
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
-            self.game = self.slot_info[self.slot].game
+        # if cmd == "Connected":
+        #     self.game = self.game#slot_info[self.slot].game
+        print("PACKAGE!!!")
+        print(args)
         self.gamesock.sendobj(args)
 
     async def disconnect(self, allow_autoreconnect: bool = False):
-        self.game = ""
+        # self.game = ""
         await super().disconnect(allow_autoreconnect)
     
     async def shutdown(self):
