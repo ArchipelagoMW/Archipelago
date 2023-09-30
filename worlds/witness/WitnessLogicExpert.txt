@@ -882,7 +882,7 @@ Laser - 0x028A4 (Laser) - 0x03613
 Mountainside (Mountainside) - Main Island - True - Mountaintop - True - Mountainside Vault - 0x00085:
 158612 - 0x17C42 (Discard) - True - Arrows
 158665 - 0x002A6 (Vault Panel) - True - Symmetry & Colored Squares & Triangles & Stars & Stars + Same Colored Symbol
-Door - 0x00085 (Vault Box - 0x002A6
+Door - 0x00085 (Vault Door) - 0x002A6
 159301 - 0x335AE (Cloud Cycle EP) - True - True
 159325 - 0x33505 (Bush EP) - True - True
 159335 - 0x03C07 (Apparent River EP) - True - True
