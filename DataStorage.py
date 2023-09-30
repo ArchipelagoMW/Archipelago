@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 import operator
 import copy
 
@@ -50,27 +50,44 @@ class DataStorage:
     def __init__(self, stored_data: Dict[str, object]):
         self.stored_data = stored_data
 
-    def is_set_cmd_valid(set_cmd: Dict[str, object]) -> bool:
+    def is_valid_set_cmd(set_cmd: Dict[str, object]) -> bool:
         return "key" in set_cmd and type(set_cmd["key"]) == str and not set_cmd["key"].startswith("_read_") \
             and "operations" in set_cmd and not type(set_cmd["operations"]) == list
 
-    def apply_set_cmd(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
+    def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
         response: Dict[str, object] = {
             "cmd": "SetReply",
             "key": set_cmd["key"]
         }
 
         value = self.stored_data.get(set_cmd["key"], set_cmd.get("default", 0))
-
         response["original_value"] = copy.copy(value)
+        on_error =  set_cmd.get("on_error", "raise")
 
-        for operation in set_cmd["operations"]:
-            func = modify_functions[operation["operation"]]
-            value = func(value, operation["value"])
+        try:
+            for operation in set_cmd["operations"]:
+                try:
+                    func = modify_functions[operation["operation"]]
+                    value = func(value, operation["value"])
+                except:
+                    if on_error != "ignore":
+                        raise
+        except:
+            if (on_error == "set_default"):
+                value = set_cmd.get("default", 0)
+            elif (on_error == "undo"):
+                value =  response["original_value"]
+            elif (on_error == "abort"):
+                pass # dont process further operations
+            else:
+                raise
 
         self.stored_data[set_cmd["key"]] = response["value"] = value
 
         return response
+
+
+
 
 
 

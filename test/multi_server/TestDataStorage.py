@@ -24,7 +24,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "add", "value": 12}] 
         }
 
-        result: Dict[str, object] = self.storage.apply_set_cmd(set_cmd)
+        result: Dict[str, object] = self.storage.set(set_cmd)
 
         self.assert_result(result, "BasicAdd", 22, 10)
 
@@ -37,7 +37,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "add", "value": 6}]
         }
 
-        result: Dict[str, object] = self.storage.apply_set_cmd(set_cmd)
+        result: Dict[str, object] = self.storage.set(set_cmd)
 
         self.assert_result(result, "AddWithDefault", 41, 35)
 
@@ -53,7 +53,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "default", "value": None}]
         }
 
-        result: Dict[str, object] = self.storage.apply_set_cmd(set_cmd)
+        result: Dict[str, object] = self.storage.set(set_cmd)
 
         self.assert_result(result, "Default", "Hello", "Hello")
 
@@ -66,6 +66,93 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "default", "value": "Ignored"}]
         }
 
-        result: Dict[str, object] = self.storage.apply_set_cmd(set_cmd)
+        result: Dict[str, object] = self.storage.set(set_cmd)
 
         self.assert_result(result, "DefaultWithExistingValue", "ExistingValue", "ExistingValue")
+
+    def test_should_raise_error_on_failure_if_no_error_handling_is_specified(self):
+        self.setup_storage({ "RaiseOnPopWithNonExistingKey": {} })
+
+        set_cmd: Dict[str, object] = { 
+            "key": "RaiseOnPopWithNonExistingKey", 
+            "operations": [{"operation": "pop", "value": "non_existing_key"}]
+        }
+
+        with self.assertRaises(KeyError):
+            self.storage.set(set_cmd)
+
+    def test_should_raise_error_on_failure_if_handling_is_specified_as_raise(self):
+        self.setup_storage({ "RaiseOnPopWithNonExistingKeyAndOnErrorRaise": {} })
+
+        set_cmd: Dict[str, object] = { 
+            "key": "RaiseOnPopWithNonExistingKeyAndOnErrorRaise", 
+            "on_error": "raise",
+            "operations": [{"operation": "pop", "value": "non_existing_key"}]
+        }
+
+        with self.assertRaises(KeyError):
+            self.storage.set(set_cmd)
+
+    def test_should_set_key_to_default_if_on_error_is_set_default(self):
+        self.setup_storage({ "DoNotRaiseOnPopWithNonExistingKeyAndOnErrorSetDefault": {} })
+
+        set_cmd: Dict[str, object] = { 
+            "key": "DoNotRaiseOnPopWithNonExistingKeyAndOnErrorSetDefault", 
+            "default": "Something",
+            "on_error": "set_default",
+            "operations": [{"operation": "pop", "value": "non_existing_key"}]
+        }
+
+        result: Dict[str, object] = self.storage.set(set_cmd)
+
+        self.assert_result(result, "DoNotRaiseOnPopWithNonExistingKeyAndOnErrorSetDefault", "Something", {})
+
+    def test_should_undo_any_operations_on_key_if_on_error_is_undo(self):
+        self.setup_storage({ "UndoOperationsWithOnErrorUndo": 10 })
+
+        set_cmd: Dict[str, object] = { 
+            "key": "UndoOperationsWithOnErrorUndo", 
+            "on_error": "undo",
+            "operations": [
+                {"operation": "add", "value": 9},
+                {"operation": "pop", "value": "not_a_dict"}
+            ]
+        }
+
+        result: Dict[str, object] = self.storage.set(set_cmd)
+
+        self.assert_result(result, "UndoOperationsWithOnErrorUndo", 10, 10)
+
+    def test_should_abort_any_further_operations_on_key_if_on_error_abort(self):
+        self.setup_storage({ "AbortOperationsWithOnErrorAbort": 10 })
+
+        set_cmd: Dict[str, object] = { 
+            "key": "AbortOperationsWithOnErrorAbort", 
+            "on_error": "abort",
+            "operations": [
+                {"operation": "add", "value": 9},
+                {"operation": "pop", "value": "not_a_dict"},
+                {"operation": "add", "value": 10}
+            ]
+        }
+
+        result: Dict[str, object] = self.storage.set(set_cmd)
+
+        self.assert_result(result, "AbortOperationsWithOnErrorAbort", 19, 10)
+
+    def test_should_ignore_any_errors_on_operations_on_if_on_error_ignore(self):
+        self.setup_storage({ "IgnoreErrorsOnOperationsWithOnErrorIgnore": 10 })
+
+        set_cmd: Dict[str, object] = { 
+            "key": "IgnoreErrorsOnOperationsWithOnErrorIgnore", 
+            "on_error": "ignore",
+            "operations": [
+                {"operation": "add", "value": 9},
+                {"operation": "pop", "value": "not_a_dict"},
+                {"operation": "add", "value": 10}
+            ]
+        }
+
+        result: Dict[str, object] = self.storage.set(set_cmd)
+
+        self.assert_result(result, "IgnoreErrorsOnOperationsWithOnErrorIgnore", 29, 10)

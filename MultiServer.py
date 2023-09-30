@@ -1738,12 +1738,12 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if not ctx.data_storage.is_set_cmd_valid(args):
+            if not ctx.data_storage.is_valid_set_cmd(args):
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Set', "original_cmd": cmd}])
                 return
             
-            ctx.data_storage.apply_set_cmd(args)
+            ctx.data_storage.set(args)
 
             targets = set(ctx.stored_data_notification_clients[args["key"]])
             if args.get("want_reply", True):
