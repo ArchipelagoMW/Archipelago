@@ -12,3 +12,6 @@ Disabled Locations:
 0x036CE (Rotating Bridge CW EP)
 0x03B25 (Shipwreck CCW Underside EP)
 0x28B2A (Shipwreck CW Underside EP)
+0x09D63 (Mountain Pink Bridge EP)
+0x09D5E (Mountain Blue Bridge EP)
+0x09D5D (Mountain Yellow Bridge EP)
