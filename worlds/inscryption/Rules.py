@@ -54,7 +54,7 @@ class InscryptionRules:
             "Act 2 - Bone Lord Femur": self.has_obol,
             "Act 2 - Bone Lord Horn": self.has_obol,
             "Act 2 - Bone Lord Holo Key": self.has_obol,
-            "Act 2 - Mycologists Holo Key": self.has_epitaphs_and_forest_items,
+            "Act 2 - Mycologists Holo Key": self.has_tower_requirements,  # Could need money
             "Act 2 - Ancient Obol": self.has_tower_requirements,  # Need money for the pieces? Use the tower mannequin.
             "Act 3 - Boss Photographer": self.has_inspectometer_battery,
             "Act 3 - Boss Archivist": self.has_battery_and_quill,

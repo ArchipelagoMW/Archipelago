@@ -48,7 +48,7 @@ act2_locations: List[str] = [
     "Act 2 - Battle Dredger",
     "Act 2 - Dock Chest",
     "Act 2 - Forest Cabin Chest",
-    "Act 2 - Forest Meadow Chest"
+    "Act 2 - Forest Meadow Chest",
     "Act 2 - Cabin Wardrobe Drawer",
     "Act 2 - Cabin Safe",
     "Act 2 - Crypt Casket 1",

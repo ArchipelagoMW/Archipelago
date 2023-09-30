@@ -92,4 +92,5 @@ class InscryptionWorld(World):
             "randomize_deck": self.multiworld.randomize_deck[self.player].value,
             "randomize_abilities": self.multiworld.randomize_abilities[self.player].value,
             "optional_death_card": self.multiworld.optional_death_card[self.player].value,
+            "skip_tutorial": self.multiworld.skip_tutorial[self.player].value
         }

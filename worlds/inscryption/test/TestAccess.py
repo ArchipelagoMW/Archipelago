@@ -130,7 +130,7 @@ class AccessTestOrdered(InscryptionTestBase):
 
     def test_epitaphs(self) -> None:
         self.assertAccessDependency(
-            ["Act 2 - Boss Grimora", "Act 2 - Mycologists Holo Key",
+            ["Act 2 - Boss Grimora",
              "Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly",
              "Act 3 - Boss Mycologists", "Act 3 - Bone Lord Room", "Act 3 - Shop Holo Pelt", "Act 3 - Middle Holo Pelt",
              "Act 3 - Forest Holo Pelt", "Act 3 - Crypt Holo Pelt", "Act 3 - Tower Holo Pelt", "Act 3 - Trader 1",
@@ -146,7 +146,7 @@ class AccessTestOrdered(InscryptionTestBase):
     def test_forest_items(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Battle Prospector", "Act 2 - Battle Angler", "Act 2 - Battle Trapper",
-             "Act 2 - Boss Leshy", "Act 2 - Mycologists Holo Key", "Act 2 - Forest Meadow Chest",
+             "Act 2 - Boss Leshy", "Act 2 - Forest Meadow Chest",
              "Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly",
              "Act 3 - Boss Mycologists", "Act 3 - Bone Lord Room", "Act 3 - Shop Holo Pelt", "Act 3 - Middle Holo Pelt",
              "Act 3 - Forest Holo Pelt", "Act 3 - Crypt Holo Pelt", "Act 3 - Tower Holo Pelt", "Act 3 - Trader 1",
@@ -162,7 +162,7 @@ class AccessTestOrdered(InscryptionTestBase):
         self.assertAccessDependency(
             ["Act 2 - Battle Goobert", "Act 2 - Battle Pike Mage", "Act 2 - Battle Lonely Wizard",
              "Act 2 - Boss Magnificus", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3",
-             "Act 2 - Tentacle", "Act 2 - Ancient Obol",
+             "Act 2 - Tentacle", "Act 2 - Ancient Obol", "Act 2 - Mycologists Holo Key",
              "Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly",
              "Act 3 - Boss Mycologists", "Act 3 - Bone Lord Room", "Act 3 - Shop Holo Pelt", "Act 3 - Middle Holo Pelt",
              "Act 3 - Forest Holo Pelt", "Act 3 - Crypt Holo Pelt", "Act 3 - Tower Holo Pelt", "Act 3 - Trader 1",
@@ -197,7 +197,7 @@ class AccessTestUnordered(InscryptionTestBase):
 
     def test_epitaphs(self) -> None:
         self.assertAccessDependency(
-            ["Act 2 - Boss Grimora", "Act 2 - Mycologists Holo Key"],
+            ["Act 2 - Boss Grimora"],
             [["Epitaph Piece 1", "Epitaph Piece 2", "Epitaph Piece 3", "Epitaph Piece 4",
               "Epitaph Piece 5", "Epitaph Piece 6", "Epitaph Piece 7", "Epitaph Piece 8", "Epitaph Piece 9"]]
         )
@@ -205,7 +205,7 @@ class AccessTestUnordered(InscryptionTestBase):
     def test_forest_items(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Battle Prospector", "Act 2 - Battle Angler", "Act 2 - Battle Trapper",
-             "Act 2 - Boss Leshy", "Act 2 - Mycologists Holo Key", "Act 2 - Forest Meadow Chest"],
+             "Act 2 - Boss Leshy", "Act 2 - Forest Meadow Chest"],
             [["Camera Replica", "Pile Of Meat"]]
         )
 
@@ -213,6 +213,6 @@ class AccessTestUnordered(InscryptionTestBase):
         self.assertAccessDependency(
             ["Act 2 - Battle Goobert", "Act 2 - Battle Pike Mage", "Act 2 - Battle Lonely Wizard",
              "Act 2 - Boss Magnificus", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3",
-             "Act 2 - Tentacle", "Act 2 - Ancient Obol"],
+             "Act 2 - Tentacle", "Act 2 - Ancient Obol", "Act 2 - Mycologists Holo Key"],
             [["Monocle"]]
         )
