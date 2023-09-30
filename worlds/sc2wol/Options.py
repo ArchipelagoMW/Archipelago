@@ -41,6 +41,9 @@ class FinalMap(Choice):
 
     Vanilla mission order always ends with All in mission!
 
+    Warning: Using All-in with a short mission order (7 or fewer missions) is not recommended,
+        as there might not be enough locations to place all the required items.
+
     This option is short-lived. It may be changed in the future
     """
     display_name = "Final Map"
