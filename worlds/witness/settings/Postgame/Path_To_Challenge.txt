@@ -1,5 +1,6 @@
 Disabled Locations:
 0x0356B (Vault Box)
+0x04D75 (Vault Door)
 0x17F33 (Rock Open Door)
 0x00FF8 (Caves Entry Panel)
 0x334E1 (Rock Control)
