@@ -182,6 +182,8 @@ class OSRSWorld(World):
         general_tasks = [task for task in self.locations_by_category["General"]]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(general_tasks)
+        else:
+            general_tasks.reverse()
         for i in range(0, self.multiworld.minimum_general_tasks[self.player]):
             task = general_tasks.pop()
             self.add_location(task)
@@ -199,6 +201,8 @@ class OSRSWorld(World):
                         if task.skills[0].level <= int(self.multiworld.max_prayer_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(prayer_tasks)
+        else:
+            prayer_tasks.reverse()
         prayer_tasks = prayer_tasks[0:self.multiworld.max_prayer_tasks[self.player]]
         prayer_weight = self.multiworld.prayer_task_weight[self.player] if len(prayer_tasks) > 0 else 0
 
@@ -206,6 +210,8 @@ class OSRSWorld(World):
                        if task.skills[0].level <= int(self.multiworld.max_magic_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(magic_tasks)
+        else:
+            magic_tasks.reverse()
         magic_tasks = magic_tasks[0:self.multiworld.max_magic_tasks[self.player]]
         magic_weight = self.multiworld.magic_task_weight[self.player] if len(magic_tasks) > 0 else 0
 
@@ -213,6 +219,8 @@ class OSRSWorld(World):
                            if task.skills[0].level <= int(self.multiworld.max_runecraft_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(runecraft_tasks)
+        else:
+            runecraft_tasks.reverse()
         runecraft_tasks = runecraft_tasks[0:self.multiworld.max_runecraft_tasks[self.player]]
         runecraft_weight = self.multiworld.runecraft_task_weight[self.player] if len(runecraft_tasks) > 0 else 0
 
@@ -220,6 +228,8 @@ class OSRSWorld(World):
                           if task.skills[0].level <= int(self.multiworld.max_crafting_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(crafting_tasks)
+        else:
+            crafting_tasks.reverse()
         crafting_tasks = crafting_tasks[0:self.multiworld.max_crafting_tasks[self.player]]
         crafting_weight = self.multiworld.crafting_task_weight[self.player] if len(crafting_tasks) > 0 else 0
 
@@ -227,6 +237,8 @@ class OSRSWorld(World):
                         if task.skills[0].level <= int(self.multiworld.max_mining_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(mining_tasks)
+        else:
+            mining_tasks.reverse()
         mining_tasks = mining_tasks[0:self.multiworld.max_mining_tasks[self.player]]
         mining_weight = self.multiworld.mining_task_weight[self.player] if len(mining_tasks) > 0 else 0
 
@@ -234,6 +246,8 @@ class OSRSWorld(World):
                           if task.skills[0].level <= int(self.multiworld.max_smithing_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(smithing_tasks)
+        else:
+            smithing_tasks.reverse()
         smithing_tasks = smithing_tasks[0:self.multiworld.max_smithing_tasks[self.player]]
         smithing_weight = self.multiworld.smithing_task_weight[self.player] if len(smithing_tasks) > 0 else 0
 
@@ -241,6 +255,8 @@ class OSRSWorld(World):
                          if task.skills[0].level <= int(self.multiworld.max_fishing_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(fishing_tasks)
+        else:
+            fishing_tasks.reverse()
         fishing_tasks = fishing_tasks[0:self.multiworld.max_fishing_tasks[self.player]]
         fishing_weight = self.multiworld.fishing_task_weight[self.player] if len(fishing_tasks) > 0 else 0
 
@@ -248,6 +264,8 @@ class OSRSWorld(World):
                          if task.skills[0].level <= int(self.multiworld.max_cooking_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(cooking_tasks)
+        else:
+            cooking_tasks.reverse()
         cooking_tasks = cooking_tasks[0:self.multiworld.max_cooking_tasks[self.player]]
         cooking_weight = self.multiworld.cooking_task_weight[self.player] if len(cooking_tasks) > 0 else 0
 
@@ -255,6 +273,8 @@ class OSRSWorld(World):
                             if task.skills[0].level <= int(self.multiworld.max_firemaking_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(firemaking_tasks)
+        else:
+            firemaking_tasks.reverse()
         firemaking_tasks = firemaking_tasks[0:self.multiworld.max_firemaking_tasks[self.player]]
         firemaking_weight = self.multiworld.firemaking_task_weight[self.player] if len(firemaking_tasks) > 0 else 0
 
@@ -262,6 +282,8 @@ class OSRSWorld(World):
                              if task.skills[0].level <= int(self.multiworld.max_woodcutting_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(woodcutting_tasks)
+        else:
+            woodcutting_tasks.reverse()
         woodcutting_tasks = woodcutting_tasks[0:self.multiworld.max_woodcutting_tasks[self.player]]
         woodcutting_weight = self.multiworld.woodcutting_task_weight[self.player] if len(woodcutting_tasks) > 0 else 0
 
