@@ -2,7 +2,7 @@ import collections
 import itertools
 import logging
 import typing
-from collections import Counter, deque
+from collections import Counter, defaultdict, deque
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from worlds.AutoWorld import call_all
@@ -300,23 +300,42 @@ def distribute_early_items(world: MultiWorld,
     """ returns new fill_locations and itempool """
     early_items_count: typing.Dict[typing.Tuple[str, int], typing.List[int]] = {}
     for player in world.player_ids:
-        items = itertools.chain(world.early_items[player], world.local_early_items[player])
-        for item in items:
-            early_items_count[item, player] = [world.early_items[player].get(item, 0),
-                                               world.local_early_items[player].get(item, 0)]
+        item_names = itertools.chain(world.early_items[player], world.local_early_items[player])
+        for item_name in item_names:
+            early_items_count[item_name, player] = [world.early_items[player].get(item_name, 0),
+                                                    world.local_early_items[player].get(item_name, 0)]
     if early_items_count:
-        early_locations: typing.List[Location] = []
-        early_priority_locations: typing.List[Location] = []
-        loc_indexes_to_remove: typing.Set[int] = set()
+        early_locations_by_player: typing.Dict[int, typing.List[Location]] = defaultdict(list)
+        indexes_in_fill_locations: typing.Dict[typing.Tuple[str, int], int] = {}
+
         base_state = world.state.copy()
         base_state.sweep_for_events(locations=(loc for loc in world.get_filled_locations() if loc.address is None))
         for i, loc in enumerate(fill_locations):
             if loc.can_reach(base_state):
-                if loc.progress_type == LocationProgressType.PRIORITY:
-                    early_priority_locations.append(loc)
-                else:
-                    early_locations.append(loc)
-                loc_indexes_to_remove.add(i)
+                early_locations_by_player[loc.player].append(loc)
+                indexes_in_fill_locations[loc.name, loc.player] = i
+
+        early_locations: typing.List[Location] = []
+        early_priority_locations: typing.List[Location] = []
+        loc_indexes_to_remove: typing.Set[int] = set()
+
+        for player, loc_list in early_locations_by_player.items():
+            # allow world to filter these locations
+            keeps = world.worlds[player].filter_early_locations(loc_list[:])  # copy to make sure they don't mutate
+            assert len(keeps) == len(loc_list), (
+                f"{world.worlds[player].game} gave incorrect number of filter values - "
+                "give 1 bool for each location, that signifies that this is an early location"
+            )
+            for keep, loc in zip(keeps, loc_list):
+                if keep:
+                    if loc.progress_type == LocationProgressType.PRIORITY:
+                        early_priority_locations.append(loc)
+                    else:
+                        early_locations.append(loc)
+                    assert fill_locations[indexes_in_fill_locations[loc.name, loc.player]].name == loc.name, \
+                        "location indexes got mixed up"
+                    loc_indexes_to_remove.add(indexes_in_fill_locations[loc.name, loc.player])
+
         fill_locations = [loc for i, loc in enumerate(fill_locations) if i not in loc_indexes_to_remove]
 
         early_prog_items: typing.List[Item] = []
