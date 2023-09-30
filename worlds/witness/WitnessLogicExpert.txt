@@ -21,9 +21,9 @@ Tutorial (Tutorial) - Outside Tutorial - True:
 159513 - 0x33600 (Patio Flowers EP) - 0x0C373 - True
 159517 - 0x3352F (Gate EP) - 0x03505 - True
 
-Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2:
-158650 - 0x033D4 (Vault) - True - Dots & Full Dots & Squares & Black/White Squares
-158651 - 0x03481 (Vault Box) - 0x033D4 - True
+Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2 - Outside Tutorial Vault - 0x033D0:
+158650 - 0x033D4 (Vault Panel) - True - Dots & Full Dots & Squares & Black/White Squares
+Door - 0x033D0 (Vault Door) - 0x033D4
 158013 - 0x0005D (Shed Row 1) - True - Dots & Full Dots
 158014 - 0x0005E (Shed Row 2) - 0x0005D - Dots & Full Dots
 158015 - 0x0005F (Shed Row 3) - 0x0005E - Dots & Full Dots
@@ -43,6 +43,9 @@ Door - 0x03BA2 (Outpost Path) - 0x0A3B5
 159514 - 0x28A2F (Town Sewer EP) - True - True
 159516 - 0x334A3 (Path EP) - True - True
 159500 - 0x035C7 (Tractor EP) - True - True
+
+Outside Tutorial Vault (Outside Tutorial):
+158651 - 0x03481 (Vault Box) - True - True
 
 Outside Tutorial Path To Outpost (Outside Tutorial) - Outside Tutorial Outpost - 0x0A170:
 158011 - 0x0A171 (Outpost Entry Panel) - True - Dots & Full Dots & Triangles
@@ -136,9 +139,9 @@ Door - 0x03313 (Second Gate) - 0x032FF
 
 Orchard End (Orchard):
 
-Desert Outside (Desert) - Main Island - True - Desert Floodlight Room - 0x09FEE:
-158652 - 0x0CC7B (Vault) - True - Dots & Full Dots & Stars & Stars + Same Colored Symbol & Eraser & Triangles & Shapers & Negative Shapers & Colored Squares
-158653 - 0x0339E (Vault Box) - 0x0CC7B - True
+Desert Outside (Desert) - Main Island - True - Desert Floodlight Room - 0x09FEE - Desert Vault - 0x03444:
+158652 - 0x0CC7B (Vault Panel) - True - Dots & Full Dots & Stars & Stars + Same Colored Symbol & Eraser & Triangles & Shapers & Negative Shapers & Colored Squares
+Door - 0x03444 (Vault Door) - 0x0CC7B
 158602 - 0x17CE7 (Discard) - True - Arrows
 158076 - 0x00698 (Surface 1) - True - True
 158077 - 0x0048F (Surface 2) - 0x00698 - True
@@ -163,6 +166,9 @@ Laser - 0x012FB (Laser) - 0x03608
 159037 - 0x220E5 (Broken Wall Bend EP) - True - True
 159040 - 0x334B9 (Shore EP) - True - True
 159041 - 0x334BC (Island EP) - True - True
+
+Desert Vault (Desert):
+158653 - 0x0339E (Vault Box) - True - True
 
 Desert Floodlight Room (Desert) - Desert Pond Room - 0x0C2C3:
 158087 - 0x09FAA (Light Control) - True - True
@@ -399,9 +405,9 @@ Door - 0x01D40 (Pressure Plates 4 Exit) - 0x01D3F
 158205 - 0x09E49 (Shadows Shortcut Panel) - True - True
 Door - 0x09E3D (Shadows Shortcut) - 0x09E49
 
-Shipwreck (Shipwreck) - Keep 3rd Pressure Plate - True:
-158654 - 0x00AFB (Vault) - True - Symmetry & Sound Dots & Colored Dots
-158655 - 0x03535 (Vault Box) - 0x00AFB - True
+Shipwreck (Shipwreck) - Keep 3rd Pressure Plate - True - Shipwreck Vault - 0x17BB4:
+158654 - 0x00AFB (Vault Panel) - True - Symmetry & Sound Dots & Colored Dots
+Door - 0x03444 (Vault Door) - 0x0CC7B
 158605 - 0x17D28 (Discard) - True - Arrows
 159220 - 0x03B22 (Circle Far EP) - True - True
 159221 - 0x03B23 (Circle Left EP) - True - True
@@ -410,6 +416,9 @@ Shipwreck (Shipwreck) - Keep 3rd Pressure Plate - True:
 159225 - 0x28ABD (Rope Inner EP) - True - True
 159226 - 0x28ABE (Rope Outer EP) - True - True
 159230 - 0x3388F (Couch EP) - 0x17CDF | 0x0A054 - True
+
+Shipwreck Vault (Shipwreck):
+158655 - 0x03535 (Vault Box) - True - True
 
 Keep Tower (Keep) - Keep - 0x04F8F:
 158206 - 0x0361B (Tower Shortcut Panel) - True - True
@@ -592,15 +601,18 @@ Door - 0x3873B (Laser Shortcut) - 0x337FA
 159350 - 0x035CB (Bamboo CCW EP) - True - True
 159351 - 0x035CF (Bamboo CW EP) - True - True
 
-Outside Jungle River (River) - Main Island - True - Monastery Garden - 0x0CF2A:
+Outside Jungle River (River) - Main Island - True - Monastery Garden - 0x0CF2A - River Vault - 0x15287:
 158267 - 0x17CAA (Monastery Garden Shortcut Panel) - True - True
 Door - 0x0CF2A (Monastery Garden Shortcut) - 0x17CAA
-158663 - 0x15ADD (Vault) - True - Black/White Squares & Dots
-158664 - 0x03702 (Vault Box) - 0x15ADD - True
+158663 - 0x15ADD (Vault Panel) - True - Black/White Squares & Dots
+Door - 0x15287 (Vault Door) - 0x15ADD
 159110 - 0x03AC5 (Green Leaf Moss EP) - True - True
 159120 - 0x03BE2 (Monastery Garden Left EP) - 0x03750 - True
 159121 - 0x03BE3 (Monastery Garden Right EP) - True - True
 159122 - 0x0A409 (Monastery Wall EP) - True - True
+
+River Vault (River):
+158664 - 0x03702 (Vault Box) - True - True
 
 Outside Bunker (Bunker) - Main Island - True - Bunker - 0x0C2A4:
 158268 - 0x17C2E (Entry Panel) - True - Squares & Black/White Squares & Colored Squares
@@ -867,13 +879,16 @@ Treehouse Laser Room (Treehouse):
 158403 - 0x17CBC (Laser House Door Timer Inside) - True - True
 Laser - 0x028A4 (Laser) - 0x03613
 
-Mountainside (Mountainside) - Main Island - True - Mountaintop - True:
+Mountainside (Mountainside) - Main Island - True - Mountaintop - True - Mountainside Vault - 0x00085:
 158612 - 0x17C42 (Discard) - True - Arrows
-158665 - 0x002A6 (Vault) - True - Symmetry & Colored Squares & Triangles & Stars & Stars + Same Colored Symbol
-158666 - 0x03542 (Vault Box) - 0x002A6 - True
+158665 - 0x002A6 (Vault Panel) - True - Symmetry & Colored Squares & Triangles & Stars & Stars + Same Colored Symbol
+Door - 0x00085 (Vault Box - 0x002A6
 159301 - 0x335AE (Cloud Cycle EP) - True - True
 159325 - 0x33505 (Bush EP) - True - True
 159335 - 0x03C07 (Apparent River EP) - True - True
+
+Mountainside Vault (Mountainside):
+158666 - 0x03542 (Vault Box) - 0x002A6 - True
 
 Mountaintop (Mountaintop) - Mountain Top Layer - 0x17C34:
 158405 - 0x0042D (River Shape) - True - True
@@ -1028,30 +1043,33 @@ Path to Challenge (Caves) - Challenge - 0x0A19A:
 158477 - 0x0A16E (Challenge Entry Panel) - True - Stars & Arrows & Stars + Same Colored Symbol
 Door - 0x0A19A (Challenge Entry) - 0x0A16E
 
-Challenge (Challenge) - Tunnels - 0x0348A:
+Challenge (Challenge) - Tunnels - 0x0348A - Challenge Vault - 0x04D75:
 158499 - 0x0A332 (Start Timer) - 11 Lasers - True
 158500 - 0x0088E (Small Basic) - 0x0A332 - True
 158501 - 0x00BAF (Big Basic) - 0x0088E - True
-158502 - 0x00BF3 (Square) - 0x00BAF - Squares & Black/White Squares
+158502 - 0x00BF3 (Square) - 0x00BAF - Black/White Squares
 158503 - 0x00C09 (Maze Map) - 0x00BF3 - Dots
 158504 - 0x00CDB (Stars and Dots) - 0x00C09 - Stars & Dots
 158505 - 0x0051F (Symmetry) - 0x00CDB - Symmetry & Colored Dots & Dots
 158506 - 0x00524 (Stars and Shapers) - 0x0051F - Stars & Shapers
 158507 - 0x00CD4 (Big Basic 2) - 0x00524 - True
-158508 - 0x00CB9 (Choice Squares Right) - 0x00CD4 - Squares & Black/White Squares
-158509 - 0x00CA1 (Choice Squares Middle) - 0x00CD4 - Squares & Black/White Squares
-158510 - 0x00C80 (Choice Squares Left) - 0x00CD4 - Squares & Black/White Squares
-158511 - 0x00C68 (Choice Squares 2 Right) - 0x00CB9 | 0x00CA1 | 0x00C80 - Squares & Black/White Squares & Colored Squares
-158512 - 0x00C59 (Choice Squares 2 Middle) - 0x00CB9 | 0x00CA1 | 0x00C80 - Squares & Black/White Squares & Colored Squares
-158513 - 0x00C22 (Choice Squares 2 Left) - 0x00CB9 | 0x00CA1 | 0x00C80 - Squares & Black/White Squares & Colored Squares
+158508 - 0x00CB9 (Choice Squares Right) - 0x00CD4 - Black/White Squares
+158509 - 0x00CA1 (Choice Squares Middle) - 0x00CD4 - Black/White Squares
+158510 - 0x00C80 (Choice Squares Left) - 0x00CD4 - Black/White Squares
+158511 - 0x00C68 (Choice Squares 2 Right) - 0x00CB9 | 0x00CA1 | 0x00C80 - Black/White Squares & Colored Squares
+158512 - 0x00C59 (Choice Squares 2 Middle) - 0x00CB9 | 0x00CA1 | 0x00C80 - Black/White Squares & Colored Squares
+158513 - 0x00C22 (Choice Squares 2 Left) - 0x00CB9 | 0x00CA1 | 0x00C80 - Black/White Squares & Colored Squares
 158514 - 0x034F4 (Maze Hidden 1) - 0x00C68 | 0x00C59 | 0x00C22 - Triangles
 158515 - 0x034EC (Maze Hidden 2) - 0x00C68 | 0x00C59 | 0x00C22 - Triangles
 158516 - 0x1C31A (Dots Pillar) - 0x034F4 & 0x034EC - Dots & Symmetry
-158517 - 0x1C319 (Squares Pillar) - 0x034F4 & 0x034EC - Squares & Black/White Squares & Symmetry
-158667 - 0x0356B (Vault Box) - 0x1C31A & 0x1C319 - True
+158517 - 0x1C319 (Squares Pillar) - 0x034F4 & 0x034EC - Black/White Squares & Symmetry
+Door - 0x04D75 (Vault Door) - 0x1C31A & 0x1C319
 158518 - 0x039B4 (Tunnels Entry Panel) - True - Arrows
 Door - 0x0348A (Tunnels Entry) - 0x039B4
 159530 - 0x28B30 (Water EP) - True - True
+
+Challenge Vault (Challenge):
+158667 - 0x0356B (Vault Box) - True - True
 
 Tunnels (Tunnels) - Windmill Interior - 0x27739 - Desert Lowest Level Inbetween Shortcuts - 0x27263 - Town - 0x09E87:
 158668 - 0x2FAF6 (Vault Box) - True - True
