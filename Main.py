@@ -139,7 +139,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         exclusion_rules(world, player, world.exclude_locations[player].value)
         world.priority_locations[player].value -= world.exclude_locations[player].value
         for location_name in world.priority_locations[player].value:
-            world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
+            try:
+                location = world.get_location(location_name, player)
+            except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
+                if location_name not in world.worlds[player].location_name_to_id:
+                    raise Exception(f"Unable to prioritize location {location_name} in player {player}'s world.") from e
+            else:
+                location.progress_type = LocationProgressType.PRIORITY
 
     # Set local and non-local item rules.
     if world.players > 1:
@@ -159,7 +165,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for player, items in depletion_pool.items():
             player_world: AutoWorld.World = world.worlds[player]
             for count in items.values():
-                new_items.append(player_world.create_filler())
+                for _ in range(count):
+                    new_items.append(player_world.create_filler())
         target: int = sum(sum(items.values()) for items in depletion_pool.values())
         for i, item in enumerate(world.itempool):
             if depletion_pool[item.player].get(item.name, 0):
@@ -179,6 +186,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 if remaining_items:
                     raise Exception(f"{world.get_player_name(player)}"
                                     f" is trying to remove items from their pool that don't exist: {remaining_items}")
+        assert len(world.itempool) == len(new_items), "Item Pool amounts should not change."
         world.itempool[:] = new_items
 
     # temporary home for item links, should be moved out of Main
