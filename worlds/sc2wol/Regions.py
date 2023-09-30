@@ -110,8 +110,11 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                 connect(multiworld, player, names, 'Echoes of the Future', 'In Utter Darkness',
                         lambda state: state.has("Beat Echoes of the Future", player))
 
+        goal_location = get_goal_location(final_mission)
+        setup_final_location(goal_location, location_cache)
+
         return ({campaign: missions for campaign, missions in vanilla_mission_req_table.items() if campaign in enabled_campaigns},
-                final_mission.id, get_goal_location(final_mission))
+                final_mission.id, goal_location)
 
     else:
         mission_slots: List[SC2MissionSlot] = []
@@ -314,15 +317,20 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         final_mission_id = final_mission.id
         # Changing the completion condition for alternate final missions into an event
         final_location = get_goal_location(final_mission)
-        # Final location should be near the end of the cache
-        for i in range(len(location_cache) - 1, -1, -1):
-            if location_cache[i].name == final_location:
-                location_cache[i].locked = True
-                location_cache[i].event = True
-                location_cache[i].address = None
-                break
+        setup_final_location(final_location, location_cache)
 
         return mission_req_table, final_mission_id, final_location
+
+
+def setup_final_location(final_location, location_cache):
+    # Final location should be near the end of the cache
+    for i in range(len(location_cache) - 1, -1, -1):
+        if location_cache[i].name == final_location:
+            location_cache[i].locked = True
+            location_cache[i].event = True
+            location_cache[i].address = None
+            break
+
 
 def create_location(player: int, location_data: LocationData, region: Region,
                     location_cache: List[Location]) -> Location:
