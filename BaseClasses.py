@@ -202,14 +202,7 @@ class MultiWorld():
         self.player_types[new_id] = NetUtils.SlotType.group
         self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
-        for option_key, option in world_type.option_definitions.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-        for option_key, option in Options.common_options.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-        for option_key, option in Options.per_game_common_options.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-
-        self.worlds[new_id] = world_type(self, new_id)
+        self.worlds[new_id] = world_type.create_group(self, new_id, players)
         self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
         self.player_name[new_id] = name
 
@@ -852,14 +845,6 @@ class Region:
         if state.stale[self.player]:
             state.update_reachable_regions(self.player)
         return self in state.reachable_regions[self.player]
-
-    def can_reach_private(self, state: CollectionState) -> bool:
-        for entrance in self.entrances:
-            if entrance.can_reach(state):
-                if not self in state.path:
-                    state.path[self] = (self.name, state.path.get(entrance, None))
-                return True
-        return False
 
     @property
     def hint_text(self) -> str:
