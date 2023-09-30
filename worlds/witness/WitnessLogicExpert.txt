@@ -703,7 +703,7 @@ Swamp Between Bridges Far (Swamp) - Swamp Red Underwater - 0x183F2 - Swamp Rotat
 158322 - 0x0000A (Between Bridges Far Row 4) - 0x00009 - Rotated Shapers & Shapers & Dots & Full Dots
 Door - 0x183F2 (Red Water Pump) - 0x00596
 
-Swamp Red Underwater (Swamp) - Swamp Maze - 0x014D1:
+Swamp Red Underwater (Swamp) - Swamp Maze - 0x305D5:
 158323 - 0x00001 (Red Underwater 1) - True - Shapers & Negative Shapers & Dots & Full Dots
 158324 - 0x014D2 (Red Underwater 2) - True - Shapers & Negative Shapers & Dots & Full Dots
 158325 - 0x014D4 (Red Underwater 3) - True - Shapers & Negative Shapers & Dots & Full Dots
