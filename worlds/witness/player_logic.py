@@ -609,6 +609,8 @@ class WitnessPlayerLogic:
             "0x03C0C": "RGB Flowers EP requirement",
             "0x01CD5": "Pressure Plates 3 EP requirement",
             "0x3865F": "Ramp EPs access requirement",
+            "0x1C31A": "Challenge Completion Requirement 1",
+            "0x1C319": "Challenge Completion Requirement 2",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {

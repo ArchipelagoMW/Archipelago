@@ -888,7 +888,7 @@ Door - 0x00085 (Vault Door) - 0x002A6
 159335 - 0x03C07 (Apparent River EP) - True - True
 
 Mountainside Vault (Mountainside):
-158666 - 0x03542 (Vault Box) - 0x002A6 - True
+158666 - 0x03542 (Vault Box) - True - True
 
 Mountaintop (Mountaintop) - Mountain Top Layer - 0x17C34:
 158405 - 0x0042D (River Shape) - True - True
@@ -1069,7 +1069,7 @@ Door - 0x0348A (Tunnels Entry) - 0x039B4
 159530 - 0x28B30 (Water EP) - True - True
 
 Challenge Vault (Challenge):
-158667 - 0x0356B (Vault Box) - True - True
+158667 - 0x0356B (Vault Box) - 0x1C31A & 0x1C319 - True
 
 Tunnels (Tunnels) - Windmill Interior - 0x27739 - Desert Lowest Level Inbetween Shortcuts - 0x27263 - Town - 0x09E87:
 158668 - 0x2FAF6 (Vault Box) - True - True
