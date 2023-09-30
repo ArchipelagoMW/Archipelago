@@ -1,6 +1,6 @@
 # Serverside Data Storage
 
-This document covers some of the patterns and tips and tricks used to communicate with data storage, communication with the data storage is don't through the `Get\Received`, `Set\SetReply` and `SetNotify` commands described inside the [Network Protocol](network%20protocol.md). The data storage is meant to preserve some date on the server that spans across the lifecycle of the server and is shared with all clients (on any team). 
+This document covers some of the patterns and tips and tricks used to communicate with data storage, communication with the data storage is don't through the [`Get`](network%20protocol.md#Get)\[`Retrieved`](network%20protocol.md#Retrieved), [`Set`](network%20protocol.md#Set)\[`SetReply`](network%20protocol.md#SetReply) and [`SetNotify`](network%20protocol.md#SetNotify) commands described inside the [Network Protocol](network%20protocol.md). The data storage is meant to preserve some date on the server that spans across the lifecycle of the server and is shared with all clients (on any team). 
 
 ### Keys
 The data storage works by keys and is internally stored as a dictionary. note that the whole data storage is accessible by all clients so if you want to store data specifically for your team, game or slot you will have to make your key unique, this is often done by add the team number, game name or slot id to the key. Some examples:
