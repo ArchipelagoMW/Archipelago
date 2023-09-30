@@ -942,7 +942,7 @@ Mountain Floor 2 Elevator Room (Mountain Floor 2) - Mountain Floor 2 Elevator - 
 Mountain Floor 2 Elevator (Mountain Floor 2) - Mountain Floor 2 Elevator Room - 0x09EEB - Mountain Third Layer - 0x09EEB:
 158439 - 0x09EEB (Elevator Control Panel) - True - Dots
 
-Mountain Third Layer (Mountain Bottom Floor) - Mountain Floor 2 Elevator - TrueOneWay - Mountain Bottom Floor - 0x09F89:
+Mountain Third Layer (Mountain Bottom Floor) - Mountain Floor 2 Elevator - TrueOneWay - Mountain Bottom Floor - 0x09F89 - Mountain Pink Bridge EP - TrueOneWay:
 158440 - 0x09FC1 (Giant Puzzle Bottom Left) - True - Shapers & Eraser & Negative Shapers
 158441 - 0x09F8E (Giant Puzzle Bottom Right) - True - Shapers & Eraser & Negative Shapers
 158442 - 0x09F01 (Giant Puzzle Top Right) - True - Shapers & Eraser & Negative Shapers
@@ -950,7 +950,7 @@ Mountain Third Layer (Mountain Bottom Floor) - Mountain Floor 2 Elevator - TrueO
 158444 - 0x09FDA (Giant Puzzle) - 0x09FC1 & 0x09F8E & 0x09F01 & 0x09EFF - Shapers & Symmetry
 Door - 0x09F89 (Exit) - 0x09FDA
 
-Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Bottom Floor Rock - 0x17FA2 - Final Room - 0x0C141 - Mountain Pink Bridge EP - TrueOneWay:
+Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Bottom Floor Rock - 0x17FA2 - Final Room - 0x0C141:
 158614 - 0x17FA2 (Discard) - 0xFFF00 - Arrows
 158445 - 0x01983 (Final Room Entry Left) - True - Shapers & Stars
 158446 - 0x01987 (Final Room Entry Right) - True - Squares & Colored Squares & Dots
