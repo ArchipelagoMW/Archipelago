@@ -52,6 +52,14 @@ class DarkSouls3World(World):
     required_client_version = (0, 4, 2)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
     location_name_to_id = DarkSouls3Location.get_name_to_id()
+    item_name_groups = {
+        "Cinders": {
+            "Cinders of a Lord - Abyss Watcher",
+            "Cinders of a Lord - Aldrich",
+            "Cinders of a Lord - Yhorm the Giant",
+            "Cinders of a Lord - Lothric Prince"
+        }
+    }
 
 
     def __init__(self, multiworld: MultiWorld, player: int):
