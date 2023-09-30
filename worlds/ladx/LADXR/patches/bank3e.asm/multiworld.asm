@@ -29,6 +29,25 @@ MainLoop:
     and  a
     ret  nz
 
+    ; Check if any checks should be collected
+    ; Load the or mask into a
+    ld  a, [wLinkCollectCheckValue]
+    ; Test if the mask is 0
+    or  a
+    jr  z, .spawnDelay
+    ld  b, a
+    ; Load the current state of the check into a
+    ld  hl, wLinkCollectCheckHigh
+    ld  a, [wLinkCollectCheckLow]
+    or  [hl]
+    ; Bitwise or the accumulator and load it back into the check
+    or  a, b
+    ld  [hl], a
+    ; Reset the check value
+    xor a
+    ld  [wLinkCollectCheckValue], a
+
+.spawnDelay:
     ld   a, [wLinkSpawnDelay]
     and  a
     jr   z, .allowSpawn
@@ -68,10 +87,10 @@ MainLoop:
     ; Paste the item text
     call BuildItemMessage
     ; Paste " from "
-    ld hl, SpaceFrom
+    ld   hl, SpaceFrom
     call MessageCopyString
     ; Paste the player name
-    ld  a, [wLinkGiveItemFrom]
+    ld   a, [wLinkGiveItemFrom]
     call MessageAddPlayerName
     ld   a, $C9
     ; hl = $wLinkStatusBits

@@ -1,4 +1,5 @@
 import ModuleUpdate
+
 ModuleUpdate.update()
 
 import Utils
@@ -80,32 +81,32 @@ class LAClientConstants:
     wGameplayType = 0xDB95
     # RO: Starts at 0, increases every time an item is received from the server and processed
     wLinkSyncSequenceNumber = 0xDDF6
-    wLinkStatusBits = 0xDDF7          # RW:
+    wLinkStatusBits = 0xDDF7  # RW:
     #      Bit0: wLinkGive* contains valid data, set from script cleared from ROM.
     wLinkHealth = 0xDB5A
     wLinkGiveItem = 0xDDF8  # RW
     wLinkGiveItemFrom = 0xDDF9  # RW
-    # All of these six bytes are unused, we can repurpose
-    # wLinkSendItemRoomHigh = 0xDDFA  # RO
-    # wLinkSendItemRoomLow = 0xDDFB  # RO
-    # wLinkSendItemTarget = 0xDDFC  # RO
+    # Store the memory location of a check to be collected, as well as the mask to write.
+    wLinkCollectCheckHigh = 0xDDFA  # RW
+    wLinkCollectCheckLow = 0xDDFB  # RW
+    wLinkCollectCheckValue = 0xDDFC  # RW
+    # All of these three bytes are unused, we can repurpose
     # wLinkSendItemItem = 0xDDFD  # RO
     # wLinkSendShopItem = 0xDDFE # RO, which item to send (1 based, order of the shop items)
     # RO, which player to send to, but it's just the X position of the NPC used, so 0x18 is player 0
     # wLinkSendShopTarget = 0xDDFF
 
-
-    wRecvIndex = 0xDDFD # Two bytes
+    wRecvIndex = 0xDDFD  # Two bytes
     wCheckAddress = 0xC0FF - 0x4
     WRamCheckSize = 0x4
-    WRamSafetyValue = bytearray([0]*WRamCheckSize)
+    WRamSafetyValue = bytearray([0] * WRamCheckSize)
 
     MinGameplayValue = 0x06
     MaxGameplayValue = 0x1A
     VictoryGameplayAndSub = 0x0102
 
 
-class RAGameboy():
+class RAGameboy:
     cache = []
     cache_start = 0
     cache_size = 0
@@ -116,7 +117,7 @@ class RAGameboy():
         self.address = address
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        assert (self.socket)
+        assert self.socket
         self.socket.setblocking(False)
 
     async def send_command(self, command, timeout=1.0):
@@ -151,7 +152,8 @@ class RAGameboy():
 
     async def check_safe_gameplay(self, throw=True):
         async def check_wram():
-            check_values = await self.async_read_memory(LAClientConstants.wCheckAddress, LAClientConstants.WRamCheckSize)
+            check_values = await self.async_read_memory(LAClientConstants.wCheckAddress,
+                                                        LAClientConstants.WRamCheckSize)
 
             if check_values != LAClientConstants.WRamSafetyValue:
                 if throw:
@@ -167,7 +169,8 @@ class RAGameboy():
         gameplay_value = await self.async_read_memory(LAClientConstants.wGameplayType)
         gameplay_value = gameplay_value[0]
         # In gameplay or credits
-        if not (LAClientConstants.MinGameplayValue <= gameplay_value <= LAClientConstants.MaxGameplayValue) and gameplay_value != 0x1:
+        if not (
+                LAClientConstants.MinGameplayValue <= gameplay_value <= LAClientConstants.MaxGameplayValue) and gameplay_value != 0x1:
             if throw:
                 logger.info("invalid emu state")
                 raise InvalidEmulatorStateError()
@@ -386,7 +389,7 @@ class LinksAwakeningClient():
 
         next_index += 1
         self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
-                                  item_id, from_player])
+            item_id, from_player])
         status |= 1
         status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
         self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
@@ -401,14 +404,17 @@ class LinksAwakeningClient():
         logger.info("Game connection ready!")
 
     async def is_victory(self):
-        return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
+        return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[
+            LAClientConstants.wGameplayType] == 1
 
-    async def main_tick(self, item_get_cb, win_cb, deathlink_cb):
+    async def main_tick(self, item_get_cb, win_cb, deathlink_cb, collect_cb):
         await self.tracker.readChecks(item_get_cb)
         await self.item_tracker.readItems()
         await self.gps_tracker.read_location()
+        await collect_cb()
 
-        current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
+        current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[
+            LAClientConstants.wLinkHealth]
         if self.deathlink_debounce and current_health != 0:
             self.deathlink_debounce = False
         elif not self.deathlink_debounce and current_health == 0:
@@ -435,6 +441,7 @@ class LinksAwakeningClient():
 
 all_tasks = set()
 
+
 def create_task_log_exception(awaitable) -> asyncio.Task:
     async def _log_exception(awaitable):
         try:
@@ -444,11 +451,33 @@ def create_task_log_exception(awaitable) -> asyncio.Task:
             pass
         finally:
             all_tasks.remove(task)
+
     task = asyncio.create_task(_log_exception(awaitable))
     all_tasks.add(task)
 
 
 class LinksAwakeningContext(CommonContext):
+    collected_blacklist = {
+        # The game gets upset if Tarin's Gift isn't collected before
+        # any memory-adjusting things happen
+        "Tarin's Gift (Mabe Village)",
+        # The game uses heart container checks (Boss victory items)
+        # to determine whether to spawn the boss. No free instruments!
+        'Moldorm Heart Container (Tail Cave)',
+        'Genie Heart Container (Bottle Grotto)',
+        'Slime Eye Heart Container (Key Cavern)',
+        "Angler Fish Heart Container (Angler's Tunnel)",
+        "Slime Eel Heart Container (Catfish's Maw)",
+        'Facade Heart Container (Face Shrine)',
+        "Evil Eagle Heart Container (Eagle's Tower)",
+        'Hot Head Heart Container (Turtle Rock)',
+        # The kiki check determines if the bridge is built. On trading mode,
+        # you need the item to give to kiki even if kiki is collected.
+        'Kiki (Ukuku Prairie)',
+        # The color dungeon acts differently than the main, there is no heart
+        # container check.
+        'Tunic Fairy Item 1 (Color Dungeon)',
+        'Tunic Fairy Item 2 (Color Dungeon)'}
     tags = {"AP"}
     game = "Links Awakening DX"
     items_handling = 0b101
@@ -464,16 +493,24 @@ class LinksAwakeningContext(CommonContext):
     magpie_task = None
     won = False
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
+    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str],
+                 magpie: typing.Optional[bool], collect: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
         if magpie:
             self.magpie_enabled = True
             self.magpie = MagpieBridge()
+        if collect:
+            self.collect_enabled = True
+        else:
+            self.collect_enabled = False
+        # The set of check names to iternal meta ids
+        self.check_name_to_metadata_map = {str(v): k for k, v in checkMetadataTable.items()}
+        # When this is set to True, the main loop will attempt to send collected checks to the game
+        self.examine_collected_checks = True
         super().__init__(server_address, password)
 
     def run_gui(self) -> None:
         import webbrowser
-        import kvui
         from kvui import Button, GameManager
         from kivy.uix.image import Image
 
@@ -489,12 +526,14 @@ class LinksAwakeningContext(CommonContext):
 
                 if self.ctx.magpie_enabled:
                     button = Button(text="", size=(30, 30), size_hint_x=None,
-                                    on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                                    on_press=lambda _: webbrowser.open(
+                                        'https://magpietracker.us/?enable_autotracker=1'))
                     image = Image(size=(16, 16), texture=magpie_logo())
                     button.add_widget(image)
 
                     def set_center(_, center):
                         image.center = center
+
                     button.bind(center=set_center)
 
                     self.connect_layout.add_widget(button)
@@ -517,6 +556,7 @@ class LinksAwakeningContext(CommonContext):
         CommonContext.event_invalid_slot(self)
 
     ENABLE_DEATHLINK = False
+
     async def send_deathlink(self):
         if self.ENABLE_DEATHLINK:
             message = [{"cmd": 'Deathlink',
@@ -563,16 +603,87 @@ class LinksAwakeningContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
+            self.examine_collected_checks = True
         # TODO - use watcher_event
-        if cmd == "ReceivedItems":
+        elif cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
                 self.client.recvd_checks[index] = item
+        elif cmd == "RoomUpdate":
+            if "checked_locations" in args:
+                if len(args["checked_locations"]) > 0:
+                    self.examine_collected_checks = True
+
+    async def mark_locations_as_checked(self):
+        # Don't allow collecting an item until you've got your first check
+        if not self.client.tracker.has_start_item() or not self.examine_collected_checks or not self.collect_enabled:
+            return
+        checks = list(self.checked_locations)
+        await self.get_location_checks_from_server(checks=checks)
+        # A bunch of checks to make sure things are initialized
+        if self.client.tracker is not None and self.locations_info is not None and self.client.gameboy is not None \
+                and len(self.locations_info) > 0:
+            for check in checks:
+                if check in self.locations_info:
+                    player = self.locations_info[check].player
+                    # Make sure the item isn't a local item. Don't want to soft-lock the player.
+                    if player != self.slot:
+                        name = self.location_names[check]
+                        meta = self.check_name_to_metadata_map[name]
+                        check = self.client.tracker.get_check_from_meta(meta=meta)
+                        # If the check hasn't been collected yet, and should be
+                        if check is not None and check.id in self.client.tracker.remaining_checks \
+                                and name not in self.collected_blacklist:
+                            # Read to make sure the game has finished processing the last sent collection
+                            status = (await self.client.gameboy.async_read_memory_safe(
+                                LAClientConstants.wLinkCollectCheckValue))[0]
+                            # If not spin until either it has, or the game is won
+                            while (not (await self.client.is_victory())) and status != 0:
+                                time.sleep(0.1)
+                                status = (await self.client.gameboy.async_read_memory_safe(
+                                    LAClientConstants.wLinkCollectCheckValue))[0]
+                            # Split the check's memory address into high and low bytes, and send it to the game along
+                            # with the mask to apply
+                            high, low = divmod(check.address, 0x100)
+                            self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
+                                                             bytes=[high, low, check.mask])
+                            logger.info("Collecting check " + name)
+
+            self.examine_collected_checks = False
+
+    async def get_location_checks_from_server(self, checks: typing.List[int]):
+        return await self.send_msgs([{"cmd": "LocationScouts", "locations": checks}])
 
     async def sync(self):
         sync_msg = [{'cmd': 'Sync'}]
         await self.send_msgs(sync_msg)
 
     item_id_lookup = get_locations_to_id()
+
+    async def reset_game_loop(self):
+        """
+        Reset anything needed for the game loop to begin again.
+        """
+        # TODO: cancel all client tasks
+        if not self.client.stop_bizhawk_spam:
+            logger.info("(Re)Starting game loop")
+        self.found_checks.clear()
+        # On restart of game loop, clear all checks, just in case we swapped ROMs
+        # this isn't totally neccessary, but is extra safety against cross-ROM contamination
+        self.client.recvd_checks.clear()
+        await self.client.wait_for_retroarch_connection()
+        await self.client.reset_auth()
+        # If we find ourselves with new auth after the reset, reconnect
+        if self.auth and self.client.auth != self.auth:
+            # It would be neat to reconnect here, but connection needs this loop to be running
+            logger.info("Detected new ROM, disconnecting...")
+            await self.disconnect()
+            continue
+
+        if not self.client.recvd_checks:
+            await self.sync()
+
+        await self.client.wait_and_init_tracker()
+        self.examine_collected_checks = True
 
     async def run_game_loop(self):
         def on_item_get(ladxr_checks):
@@ -586,6 +697,9 @@ class LinksAwakeningContext(CommonContext):
         async def deathlink():
             await self.send_deathlink()
 
+        async def collect():
+            await self.mark_locations_as_checked()
+
         if self.magpie_enabled:
             self.magpie_task = asyncio.create_task(self.magpie.serve())
 
@@ -594,29 +708,10 @@ class LinksAwakeningContext(CommonContext):
 
         while True:
             try:
-                # TODO: cancel all client tasks
-                if not self.client.stop_bizhawk_spam:
-                    logger.info("(Re)Starting game loop")
-                self.found_checks.clear()
-                # On restart of game loop, clear all checks, just in case we swapped ROMs
-                # this isn't totally neccessary, but is extra safety against cross-ROM contamination
-                self.client.recvd_checks.clear()
-                await self.client.wait_for_retroarch_connection()
-                await self.client.reset_auth()
-                # If we find ourselves with new auth after the reset, reconnect
-                if self.auth and self.client.auth != self.auth:
-                    # It would be neat to reconnect here, but connection needs this loop to be running
-                    logger.info("Detected new ROM, disconnecting...")
-                    await self.disconnect()
-                    continue
-
-                if not self.client.recvd_checks:
-                    await self.sync()
-
-                await self.client.wait_and_init_tracker()
+                await self.reset_game_loop()
 
                 while True:
-                    await self.client.main_tick(on_item_get, victory, deathlink)
+                    await self.client.main_tick(on_item_get, victory, deathlink, collect)
                     await asyncio.sleep(0.1)
                     now = time.time()
                     if self.last_resend + 5.0 < now:
@@ -663,6 +758,8 @@ async def main():
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
     parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
+    parser.add_argument("--no-collect", dest='collect', default=True, action='store_false',
+                        help="Disable check collection")
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
 
@@ -677,7 +774,7 @@ async def main():
         logger.info(f"wrote rom file to {rom_file}")
 
 
-    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
+    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie, args.collect)
 
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
@@ -693,6 +790,7 @@ async def main():
 
     await ctx.exit_event.wait()
     await ctx.shutdown()
+
 
 if __name__ == '__main__':
     colorama.init()
