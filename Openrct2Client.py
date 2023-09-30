@@ -30,6 +30,8 @@ class OpenRCT2Socket:
         self.maintask = asyncio.create_task(self.main(), name="GameListen")
         self.connected_to_game = asyncio.Event()
         self.initial_connection = True
+        self.package_queue = []
+
     
     async def main(self):
         while True:
@@ -89,6 +91,9 @@ class OpenRCT2Socket:
                         self.initial_connection = False
                     self.connected_to_game.set()
                     self.game.setblocking(0)
+                    while self.package_queue:
+                        self._send(self.package_queue[0])
+                        self.package_queue.pop()
                     #break
             except socket.timeout as e:
                 #print('error connecting to game', e)
@@ -138,6 +143,12 @@ class OpenRCT2Socket:
                     print("SOCK")
                     sock.sendall(data)
                     print('sent', len(data), 'bytes to', sock.getsockname(), '->', sock.getpeername(),':\n', data)
+                else:
+                    self.package_queue.append(data)
+                    print(self.package_queue)
+                    # raise Exception("Socket not connected")
+                    # asynchio.run(self.connectgame())
+                    # self._send(data)
         except socket.timeout as e:
             print(e)
         except BlockingIOError as e:
@@ -152,7 +163,8 @@ class OpenRCT2Socket:
         except Exception as e:
             print('error sending to game', e)
             self.disconnectgame()
-            asyncio.run(self.connectgame())
+            self.connectgame()
+            # asyncio.get_event_loop().run_until_complete(connectgame())
             self._send(data)
 
     async def tick(self):
@@ -230,7 +242,7 @@ async def main(args):
 def run_as_textclient():
     import colorama
 
-    parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
+    parser = get_base_parser(description="Client to connect OpenRCT2 to Archipelago")
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
     args = parser.parse_args()
