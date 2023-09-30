@@ -384,6 +384,7 @@ class OOTWorld(World):
             self.mq_dungeons_mode = 'count'
             self.mq_dungeons_count = 0
         self.dungeon_mq = {item['name']: (item['name'] in mq_dungeons) for item in dungeon_table}
+        self.dungeon_mq['Thieves Hideout'] = False  # fix for bug in SaveContext:287
 
         # Empty dungeon placeholder for the moment
         self.empty_dungeons = {name: False for name in self.dungeon_mq}
