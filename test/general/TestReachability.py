@@ -44,7 +44,7 @@ class TestBase(unittest.TestCase):
             "Challenge Vault",
             "Tunnels",
             "Outside Tutorial Vault",
-            "Desert Vault"
+            "Desert Vault",
             "River Vault",
             "Shipwreck Vault",
             "Mountainside Vault",
