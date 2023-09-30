@@ -633,16 +633,18 @@ class OOTWorld(World):
             self.multiworld.itempool.remove(item)
             self.hinted_dungeon_reward_locations[item.name] = loc
 
-    def create_item(self, name: str):
+    def create_item(self, name: str, allow_arbitrary_name: bool = False):
         if name in item_table:
             return OOTItem(name, self.player, item_table[name], False,
                            (name in self.nonadvancement_items if getattr(self, 'nonadvancement_items',
                                                                          None) else False))
-        return OOTItem(name, self.player, ('Event', True, None, None), True, False)
+        if allow_arbitrary_name:
+            return OOTItem(name, self.player, ('Event', True, None, None), True, False)
+        raise Exception(f"Invalid item name: {name}")
 
     def make_event_item(self, name, location, item=None):
         if item is None:
-            item = self.create_item(name)
+            item = self.create_item(name, allow_arbitrary_name=True)
         self.multiworld.push_item(location, item, collect=False)
         location.locked = True
         location.event = True
