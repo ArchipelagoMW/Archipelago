@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import copy
 import collections
 import datetime
 import functools
@@ -18,6 +17,7 @@ import time
 import typing
 import weakref
 import zlib
+from DataStorage import DataStorage
 
 import ModuleUpdate
 
@@ -42,50 +42,6 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
 
 min_client_version = Version(0, 1, 6)
 colorama.init()
-
-
-def remove_from_list(container, value):
-    try:
-        container.remove(value)
-    except ValueError:
-        pass
-    return container
-
-
-def pop_from_container(container, value):
-    try:
-        container.pop(value)
-    except ValueError:
-        pass
-    return container
-
-
-def update_dict(dictionary, entries):
-    dictionary.update(entries)
-    return dictionary
-
-
-# functions callable on storable data on the server by clients
-modify_functions = {
-    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
-    "mul": operator.mul,
-    "mod": operator.mod,
-    "max": max,
-    "min": min,
-    "replace": lambda old, new: new,
-    "default": lambda old, new: old,
-    "pow": operator.pow,
-    # bitwise:
-    "xor": operator.xor,
-    "or": operator.or_,
-    "and": operator.and_,
-    "left_shift": operator.lshift,
-    "right_shift": operator.rshift,
-    # lists/dicts
-    "remove": remove_from_list,
-    "pop": pop_from_container,
-    "update": update_dict,
-}
 
 
 def get_saving_second(seed_name: str, interval: int = 60) -> int:
@@ -160,6 +116,7 @@ class Context:
     stored_data: typing.Dict[str, object]
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
+    data_storage: DataStorage
     slot_info: typing.Dict[int, NetworkSlot]
     generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
@@ -231,6 +188,7 @@ class Context:
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
+        self.data_storage = DataStorage(self.stored_data)
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -590,6 +548,7 @@ class Context:
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
+            self.data_storage = DataStorage(self.stored_data)
         # count items and slots from lists for items_handling = remote
         logging.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
@@ -1779,18 +1738,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if "key" not in args or args["key"].startswith("_read_") or \
-                    "operations" not in args or not type(args["operations"]) == list:
+            if not ctx.data_storage.is_set_cmd_valid(args):
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Set', "original_cmd": cmd}])
                 return
-            args["cmd"] = "SetReply"
-            value = ctx.stored_data.get(args["key"], args.get("default", 0))
-            args["original_value"] = copy.copy(value)
-            for operation in args["operations"]:
-                func = modify_functions[operation["operation"]]
-                value = func(value, operation["value"])
-            ctx.stored_data[args["key"]] = args["value"] = value
+            
+            ctx.data_storage.apply_set_cmd(args)
+
             targets = set(ctx.stored_data_notification_clients[args["key"]])
             if args.get("want_reply", True):
                 targets.add(client)
