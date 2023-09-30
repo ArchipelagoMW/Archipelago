@@ -396,6 +396,7 @@ Keys that start with `_read_` cannot be set.
 | default    | any                                                   | The default value to use in case the key has no value on the server.                                                   |
 | want_reply | bool                                                  | If true, the server will send a [SetReply](#SetReply) response back to the client.                                     |
 | operations | list\[[DataStorageOperation](#DataStorageOperation)\] | Operations to apply to the value, multiple operations can be present and they will be executed in order of appearance. |
+| on_error   | str                                                   | Optional (defaults to `raise`). When provided, should contain any of the [DataStorageErrorHandlingOptions](#DataStorageErrorHandlingOptions)
 
 Additional arguments sent in this package will also be added to the [SetReply](#SetReply) package it triggers.
 
@@ -423,8 +424,18 @@ The following operations can be applied to a datastorage key
 | left_shift | Applies a bitwise left-shift to the current value of the key by `value`. |
 | right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
 | remove | List only: removes the first instance of `value` found in the list. |
-| pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. |
+| pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. will error in index or key does not exist |
 | update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
+
+#### DataStorageErrorHandlingOptions
+What should be done when an data storage operation fails, for example when an `pow` operation is attempted on a string value. Only with the option `raise` an stack trace will be preserved, with all other options the error is invisible
+
+| Option      | On Error Effect |
+| raise       | An error is raised on the server, causing a stacktrace to be logged and the client to be kicked |
+| set_default | Sets the value of the key to `default` of the [Set](#Set)'s package |
+| undo        | Undo's any modifications done to the key's value by previous `operations` part of this [Set](#Set)'s package |
+| abort       | Stops further processing of `operations` part of this [Set](#Set)'s package |
+| ignore      | Ignore errors and continue processing of remaining `operations` part of this [Set](#Set)'s package |
 
 ### SetNotify
 Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.

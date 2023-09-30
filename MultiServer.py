@@ -1743,13 +1743,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                               "text": 'Set', "original_cmd": cmd}])
                 return
             
-            ctx.data_storage.set(args)
-
+            result: typing.Dict[str, object] = ctx.data_storage.set(args)
+            
             targets = set(ctx.stored_data_notification_clients[args["key"]])
             if args.get("want_reply", True):
                 targets.add(client)
             if targets:
-                ctx.broadcast(targets, [args])
+                ctx.broadcast(targets, [result])
             ctx.save()
 
         elif cmd == "SetNotify":

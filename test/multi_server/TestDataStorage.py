@@ -57,6 +57,40 @@ class TestDataStorage(unittest.TestCase):
 
         self.assert_result(result, "Default", "Hello", "Hello")
 
+    def test_energy_link_depletion_pattern(self):
+        self.setup_storage({ "EnergyLink1": 20 })
+
+        set_cmd: Dict[str, object] = { 
+            "key": "EnergyLink1", 
+            "default": 0,
+            "operations": [
+                {"operation": "add", "value": -50},
+                {"operation": "max", "value": 0}
+            ]
+        }
+
+        result: Dict[str, object] = self.storage.set(set_cmd)
+
+        self.assert_result(result, "EnergyLink1", 0, 20)
+
+    def test_should_preserve_fields_from_set(self):
+        self.setup_storage({})
+
+        set_cmd: Dict[str, object] = { 
+            "key": "NewKey", 
+            "default": 100,
+            "want_reply": True,
+            "operations": [{"operation": "replace", "value": 10}],
+            "10GbMovieData": "MTBHYk1vdmllRGF0YQ=="
+        }
+
+        result: Dict[str, object] = self.storage.set(set_cmd)
+
+        self.assert_result(result, "NewKey", 10, 100)
+        self.assertEqual(result["default"], 100)
+        self.assertEqual(result["want_reply"], True)
+        self.assertEqual(result["10GbMovieData"], "MTBHYk1vdmllRGF0YQ==")
+
     def test_default_should_not_override_existing_value(self):
         self.setup_storage({ "DefaultWithExistingValue": "ExistingValue" })
 

@@ -55,14 +55,13 @@ class DataStorage:
             and "operations" in set_cmd and not type(set_cmd["operations"]) == list
 
     def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
-        response: Dict[str, object] = {
-            "cmd": "SetReply",
-            "key": set_cmd["key"]
-        }
-
         value = self.stored_data.get(set_cmd["key"], set_cmd.get("default", 0))
-        response["original_value"] = copy.copy(value)
         on_error =  set_cmd.get("on_error", "raise")
+
+        set_cmd.update({
+            "cmd": "SetReply",
+            "original_value": copy.copy(value)
+        })
 
         try:
             for operation in set_cmd["operations"]:
@@ -76,15 +75,15 @@ class DataStorage:
             if (on_error == "set_default"):
                 value = set_cmd.get("default", 0)
             elif (on_error == "undo"):
-                value =  response["original_value"]
+                value = set_cmd["original_value"]
             elif (on_error == "abort"):
                 pass # dont process further operations
             else:
                 raise
 
-        self.stored_data[set_cmd["key"]] = response["value"] = value
+        self.stored_data[set_cmd["key"]] = set_cmd["value"] = value
 
-        return response
+        return set_cmd
 
 
 
