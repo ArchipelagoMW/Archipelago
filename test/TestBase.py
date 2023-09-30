@@ -179,7 +179,7 @@ class WorldTestBase(unittest.TestCase):
             self.multiworld.state.collect(item)
     
     def remove_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
-        """Remove all of the items in the item pool with the given names"""
+        """Remove all of the items in the item pool with the given names from state"""
         items = self.get_items_by_name(item_names)
         self.remove(items)
         return items
