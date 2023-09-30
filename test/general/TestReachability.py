@@ -1,8 +1,9 @@
 import unittest
 
 from BaseClasses import CollectionState
+from Fill import distribute_early_items
 from worlds.AutoWorld import AutoWorldRegister
-from . import setup_solo_multiworld
+from . import setup_duo_multiworld, setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
@@ -67,3 +68,18 @@ class TestBase(unittest.TestCase):
                             locations.add(location)
                     self.assertGreater(len(locations), 0,
                                        msg="Need to be able to reach at least one location to get started.")
+
+    def testEarlyItemsFilterDoesNotCrash(self) -> None:
+        """
+        This makes sure `filter_early_locations` is run in every world (within `distribute_early_items`).
+
+        That function has an assert in it to ensure the correct length of filter.
+        """
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_duo_multiworld(world_type)
+                multiworld.early_items[2]["Feeling of Satisfaction"] = 1  # to make sure the early_items code is run
+                fill_locations = multiworld.get_unfilled_locations()
+                itempool = multiworld.itempool
+
+                fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
