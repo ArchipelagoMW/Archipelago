@@ -370,7 +370,7 @@ the server will forward the message to all those targets to which any one requir
 | data | dict | Any data you want to send |
 
 ### Get
-Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.
+Used to request a single or multiple values from the [server's data storage](server%20datastorage.md), see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
@@ -387,7 +387,7 @@ Some special keys exist with specific return data, all of them have the prefix `
 | item_name_groups_{game_name}  | dict\[str, list\[str\]\] | item_name_groups belonging to the requested game. |
 
 ### Set
-Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
+Used to write data to the [server's data storage](server%20datastorage.md), that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
 Keys that start with `_read_` cannot be set.
 #### Arguments
 | Name       | Type                                                  | Notes                                                                                                                  |
@@ -407,7 +407,7 @@ DataStorageOperations consist of an object containing both the operation to be a
 {"operation": "add", "value": 12}
 ```
 
-The following operations can be applied to a datastorage key
+The following operations can be applied to a data storage key
 | Operation | Effect |
 | ------ | ----- |
 | replace | Sets the current value of the key to `value`. |

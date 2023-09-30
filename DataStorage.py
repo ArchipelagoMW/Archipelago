@@ -50,9 +50,9 @@ class DataStorage:
     def __init__(self, stored_data: Dict[str, object]):
         self.stored_data = stored_data
 
-    def is_valid_set_cmd(set_cmd: Dict[str, object]) -> bool:
+    def is_valid_set_cmd(self, set_cmd: Dict[str, object]) -> bool:
         return "key" in set_cmd and type(set_cmd["key"]) == str and not set_cmd["key"].startswith("_read_") \
-            and "operations" in set_cmd and not type(set_cmd["operations"]) == list
+            and "operations" in set_cmd and type(set_cmd["operations"]) == list
 
     def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
         value = self.stored_data.get(set_cmd["key"], set_cmd.get("default", 0))
