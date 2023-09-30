@@ -1,6 +1,6 @@
 import asyncio
 from argparse import Namespace
-import json
+import orjson
 import os
 import subprocess
 from typing import Optional, Dict, Set, Tuple, Any
@@ -151,7 +151,7 @@ class GBAContext(CommonContext):
 
 
 def create_payload(ctx: GBAContext) -> str:
-    payload = json.dumps({
+    payload = orjson.dumps({
         "items": [[item.item - BASE_OFFSET, item.flags & 1] for item in ctx.items_received]
     })
 
@@ -280,7 +280,7 @@ async def gba_send_receive_task(ctx: GBAContext) -> None:
             # Read
             try:
                 data_bytes = await asyncio.wait_for(reader.readline(), timeout=5)
-                data_decoded = json.loads(data_bytes.decode("utf-8"))
+                data_decoded = orjson.loads(data_bytes.decode("utf-8"))
 
                 if data_decoded["script_version"] != EXPECTED_SCRIPT_VERSION:
                     logger.warning(f"Your connector script is incompatible with this client. Expected version "
