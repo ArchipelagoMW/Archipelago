@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import collections
 import logging
+import settings
 import typing
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
@@ -25,6 +26,29 @@ def launch_client():
 
 
 components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
+
+
+class FactorioSettings(settings.Group):
+    class Executable(settings.UserFilePath):
+        is_exe = True
+
+    class ServerSettings(settings.OptionalUserFilePath):
+        """
+        by default, no settings are loaded if this file does not exist. \
+If this file does exist, then it will be used.
+        server_settings: "factorio\\\\data\\\\server-settings.json"
+        """
+
+    class FilterItemSends(settings.Bool):
+        """Whether to filter item send messages displayed in-game to only those that involve you."""
+
+    class BridgeChatOut(settings.Bool):
+        """Whether to send chat messages from players on the Factorio server to Archipelago."""
+
+    executable: Executable = Executable("factorio/bin/x64/factorio")
+    server_settings: typing.Optional[FactorioSettings.ServerSettings] = None
+    filter_item_sends: typing.Union[FilterItemSends, bool] = False
+    bridge_chat_out: typing.Union[BridgeChatOut, bool] = True
 
 
 class FactorioWeb(WebWorld):
@@ -72,13 +96,15 @@ class Factorio(World):
         "Progressive": set(progressive_tech_table.keys()),
     }
     data_version = 8
-    required_client_version = (0, 4, 0)
+    required_client_version = (0, 4, 2)
 
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
     tech_mix: int = 0
     skip_silo: bool = False
     science_locations: typing.List[FactorioScienceLocation]
+
+    settings: typing.ClassVar[FactorioSettings]
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)

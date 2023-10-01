@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Dict, Union, Protocol, runtime_checkable, ClassVar
 
-from Options import Option, Range, DeathLink, SpecialRange, Toggle, Choice
-
+from Options import Option, Range, DeathLink, SpecialRange, Toggle, Choice, OptionSet
+from .mods.mod_data import ModNames
 
 @runtime_checkable
 class StardewOption(Protocol):
@@ -11,13 +11,18 @@ class StardewOption(Protocol):
 
 @dataclass
 class StardewOptions:
-    options: Dict[str, Union[bool, int]]
+    options: Dict[str, Union[bool, int, str]]
 
-    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int]:
+    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int, str]:
         if isinstance(item, StardewOption):
             item = item.internal_name
 
         return self.options.get(item, None)
+
+    def __setitem__(self, key: Union[str, StardewOption], value: Union[bool, int, str]):
+        if isinstance(key, StardewOption):
+            key = key.internal_name
+        self.options[key] = value
 
 
 class Goal(Choice):
@@ -29,6 +34,8 @@ class Goal(Choice):
     Master Angler: The world will be completed once you have caught every fish in the game. Pairs well with Fishsanity.
     Complete Collection: The world will be completed once you have completed the museum by donating every possible item. Pairs well with Museumsanity.
     Full House: The world will be completed once you get married and have two kids. Pairs well with Friendsanity.
+    Greatest Walnut Hunter: The world will be completed once you find all 130 Golden Walnuts
+    Perfection: The world will be completed once you attain Perfection, based on the vanilla definition.
     """
     internal_name = "goal"
     display_name = "Goal"
@@ -40,6 +47,18 @@ class Goal(Choice):
     option_master_angler = 4
     option_complete_collection = 5
     option_full_house = 6
+    option_greatest_walnut_hunter = 7
+    # option_junimo_kart =
+    # option_prairie_king =
+    # option_fector_challenge =
+    # option_craft_master =
+    # option_mystery_of_the_stardrops =
+    # option_protector_of_the_valley =
+    # option_full_shipment =
+    # option_legend =
+    # option_beloved_farmer =
+    # option_master_of_the_five_ways =
+    option_perfection = 25
 
     @classmethod
     def get_option_name(cls, value) -> str:
@@ -68,21 +87,22 @@ class StartingMoney(SpecialRange):
     }
 
 
-class ResourcePackMultiplier(SpecialRange):
-    """How many items will be in the resource packs. A lower setting mean fewer resources in each pack.
-    A higher setting means more resources in each pack. Easy (200) doubles the default quantity"""
-    internal_name = "resource_pack_multiplier"
-    default = 100
-    range_start = 0
-    range_end = 200
+class ProfitMargin(SpecialRange):
+    """Multiplier over all gold earned in-game by the player."""
+    internal_name = "profit_margin"
+    display_name = "Profit Margin"
+    range_start = 25
+    range_end = 400
     # step = 25
-    display_name = "Resource Pack Multiplier"
+    default = 100
 
     special_range_names = {
-        "resource packs disabled": 0,
-        "half packs": 50,
-        "normal packs": 100,
-        "double packs": 200,
+        "quarter": 25,
+        "half": 50,
+        "normal": 100,
+        "double": 200,
+        "triple": 300,
+        "quadruple": 400,
     }
 
 
@@ -119,8 +139,9 @@ class EntranceRandomization(Choice):
     Disabled: No entrance randomization is done
     Pelican Town: Only buildings in the main town area are randomized among each other
     Non Progression: Only buildings that are always available are randomized with each other
+    Buildings: All Entrances that Allow you to enter a building using a door are randomized with each other
+    Chaos: Same as above, but the entrances get reshuffled every single day!
     """
-    # Buildings: All buildings in the world are randomized with each other
     # Everything: All buildings and areas are randomized with each other
     # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
     # Buildings One-way: Entrance pairs are disconnected, they aren't two-way!
@@ -133,12 +154,12 @@ class EntranceRandomization(Choice):
     option_disabled = 0
     option_pelican_town = 1
     option_non_progression = 2
-    # option_buildings = 3
+    option_buildings = 3
     # option_everything = 4
-    # option_chaos = 4
-    # option_buildings_one_way = 5
-    # option_everything_one_way = 6
-    # option_chaos_one_way = 7
+    option_chaos = 5
+    # option_buildings_one_way = 6
+    # option_everything_one_way = 7
+    # option_chaos_one_way = 8
 
 
 class SeasonRandomization(Choice):
@@ -158,14 +179,14 @@ class SeasonRandomization(Choice):
     option_progressive = 3
 
 
-class SeedShuffle(Choice):
-    """Should seeds be randomized?
+class Cropsanity(Choice):
+    """Formerly named "Seed Shuffle"
     Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
-    Disabled: All the seeds will be unlocked from the start.
-    Shuffled: The seeds will be unlocked as Archipelago items
+    Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
+    Shuffled: Seeds are unlocked as archipelago item, for each seed there is a location check for growing and harvesting that crop
     """
-    internal_name = "seed_shuffle"
-    display_name = "Seed Shuffle"
+    internal_name = "cropsanity"
+    display_name = "Cropsanity"
     default = 1
     option_disabled = 0
     option_shuffled = 1
@@ -196,13 +217,13 @@ class ToolProgression(Choice):
     option_progressive = 1
 
 
-class TheMinesElevatorsProgression(Choice):
-    """How is The Mines' Elevator progression handled?
-    Vanilla: You will unlock a new elevator floor every 5 floor in the mine.
-    Progressive: You will randomly find Progressive Mine Elevator to go deeper. Location are sent for reaching
-        every level multiple of 5.
-    Progressive from previous floor: Locations are sent for taking the ladder or stairs to every 5
-        levels, taking the elevator does not count."""
+class ElevatorProgression(Choice):
+    """How is Elevator progression handled?
+    Vanilla: You will unlock new elevator floors for yourself.
+    Progressive: You will randomly find Progressive Mine Elevators to go deeper. Locations are sent for reaching
+        every elevator level.
+    Progressive from previous floor: Same as progressive, but you must reach elevator floors on your own,
+        you cannot use the elevator to check elevator locations"""
     internal_name = "elevator_progression"
     display_name = "Elevator Progression"
     default = 2
@@ -238,9 +259,23 @@ class BuildingProgression(Choice):
     option_progressive_early_shipping_bin = 2
 
 
+class FestivalLocations(Choice):
+    """Locations for attending and participating in festivals
+    With Disabled, you do not need to attend festivals
+    With Easy, there are checks for participating in festivals
+    With Hard, the festival checks are only granted when the player performs well in the festival
+    """
+    internal_name = "festival_locations"
+    display_name = "Festival Locations"
+    default = 1
+    option_disabled = 0
+    option_easy = 1
+    option_hard = 2
+
+
 class ArcadeMachineLocations(Choice):
     """How are the Arcade Machines handled?
-    Vanilla: The arcade machines are not included in the Archipelago shuffling.
+    Disabled: The arcade machines are not included in the Archipelago shuffling.
     Victories: Each Arcade Machine will contain one check on victory
     Victories Easy: The arcade machines are both made considerably easier to be more accessible for the average
         player.
@@ -255,6 +290,20 @@ class ArcadeMachineLocations(Choice):
     option_victories = 1
     option_victories_easy = 2
     option_full_shuffling = 3
+
+
+class SpecialOrderLocations(Choice):
+    """How are the Special Orders handled?
+    Disabled: The special orders are not included in the Archipelago shuffling.
+    Board Only: The Special Orders on the board in town are location checks
+    Board and Qi: The Special Orders from Qi's walnut room are checks, as well as the board in town
+    """
+    internal_name = "special_order_locations"
+    display_name = "Special Order Locations"
+    default = 1
+    option_disabled = 0
+    option_board_only = 1
+    option_board_qi = 2
 
 
 class HelpWantedLocations(SpecialRange):
@@ -284,6 +333,9 @@ class Fishsanity(Choice):
     Special: A curated selection of strong fish are checks
     Randomized: A random selection of fish are checks
     All: Every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal
+    Exclude Legendaries: Every fish except legendaries
+    Exclude Hard Fish: Every fish under difficulty 80
+    Only Easy Fish: Every fish under difficulty 50
     """
     internal_name = "fishsanity"
     display_name = "Fishsanity"
@@ -294,6 +346,9 @@ class Fishsanity(Choice):
     option_randomized = 3
     alias_random_selection = option_randomized
     option_all = 4
+    option_exclude_legendaries = 5
+    option_exclude_hard_fish = 6
+    option_only_easy_fish = 7
 
 
 class Museumsanity(Choice):
@@ -331,16 +386,62 @@ class Friendsanity(Choice):
     option_all_with_marriage = 5
 
 
-class NumberOfPlayerBuffs(Range):
-    """Number of buffs to the player of each type that exist as items in the pool.
-    Buffs include movement speed (+25% multiplier, stacks additively)
-    and daily luck bonus (0.025 flat value per buff)"""
-    internal_name = "player_buff_number"
-    display_name = "Number of Player Buffs"
+# Conditional Setting - Friendsanity not None
+class FriendsanityHeartSize(Range):
+    """If using friendsanity, how many hearts are received per item, and how many hearts must be earned to send a check
+    A higher value will lead to fewer heart items in the item pool, reducing bloat"""
+    internal_name = "friendsanity_heart_size"
+    display_name = "Friendsanity Heart Size"
+    range_start = 1
+    range_end = 8
+    default = 4
+    # step = 1
+
+
+class NumberOfMovementBuffs(Range):
+    """Number of movement speed buffs to the player that exist as items in the pool.
+    Each movement speed buff is a +25% multiplier that stacks additively"""
+    internal_name = "movement_buff_number"
+    display_name = "Number of Movement Buffs"
     range_start = 0
     range_end = 12
     default = 4
     # step = 1
+
+
+class NumberOfLuckBuffs(Range):
+    """Number of luck buffs to the player that exist as items in the pool.
+    Each luck buff is a bonus to daily luck of 0.025"""
+    internal_name = "luck_buff_number"
+    display_name = "Number of Luck Buffs"
+    range_start = 0
+    range_end = 12
+    default = 4
+    # step = 1
+
+
+class ExcludeGingerIsland(Toggle):
+    """Exclude Ginger Island?
+    This option will forcefully exclude everything related to Ginger Island from the slot.
+    If you pick a goal that requires Ginger Island, you cannot exclude it and it will get included anyway"""
+    internal_name = "exclude_ginger_island"
+    display_name = "Exclude Ginger Island"
+    default = 0
+
+
+class TrapItems(Choice):
+    """When rolling filler items, including resource packs, the game can also roll trap items.
+    This setting is for choosing if traps will be in the item pool, and if so, how punishing they will be.
+    """
+    internal_name = "trap_items"
+    display_name = "Trap Items"
+    default = 2
+    option_no_traps = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    option_hell = 4
+    option_nightmare = 5
 
 
 class MultipleDaySleepEnabled(Toggle):
@@ -372,7 +473,7 @@ class ExperienceMultiplier(SpecialRange):
     internal_name = "experience_multiplier"
     display_name = "Experience Multiplier"
     range_start = 25
-    range_end = 400
+    range_end = 800
     # step = 25
     default = 200
 
@@ -392,7 +493,7 @@ class FriendshipMultiplier(SpecialRange):
     internal_name = "friendship_multiplier"
     display_name = "Friendship Multiplier"
     range_start = 25
-    range_end = 400
+    range_end = 800
     # step = 25
     default = 200
 
@@ -438,46 +539,46 @@ class Gifting(Toggle):
     default = 1
 
 
-class GiftTax(SpecialRange):
-    """Joja Prime will deliver gifts within one business day, for a price!
-    Sending a gift will cost a percentage of the item's monetary value as a tax on the sender"""
-    internal_name = "gift_tax"
-    display_name = "Gift Tax"
-    range_start = 0
-    range_end = 400
-    # step = 20
-    default = 20
-
-    special_range_names = {
-        "no tax": 0,
-        "soft tax": 20,
-        "rough tax": 40,
-        "full tax": 100,
-        "oppressive tax": 200,
-        "nightmare tax": 400,
+class Mods(OptionSet):
+    """List of mods that will be considered for shuffling."""
+    internal_name = "mods"
+    display_name = "Mods"
+    valid_keys = {
+        ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+        ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+        ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+        ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+        ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+        ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator
     }
 
 
 stardew_valley_option_classes = [
     Goal,
     StartingMoney,
-    ResourcePackMultiplier,
+    ProfitMargin,
     BundleRandomization,
     BundlePrice,
     EntranceRandomization,
     SeasonRandomization,
-    SeedShuffle,
+    Cropsanity,
     BackpackProgression,
     ToolProgression,
     SkillProgression,
     BuildingProgression,
-    TheMinesElevatorsProgression,
+    FestivalLocations,
+    ElevatorProgression,
     ArcadeMachineLocations,
+    SpecialOrderLocations,
     HelpWantedLocations,
     Fishsanity,
     Museumsanity,
     Friendsanity,
-    NumberOfPlayerBuffs,
+    FriendsanityHeartSize,
+    NumberOfMovementBuffs,
+    NumberOfLuckBuffs,
+    ExcludeGingerIsland,
+    TrapItems,
     MultipleDaySleepEnabled,
     MultipleDaySleepCost,
     ExperienceMultiplier,
@@ -485,7 +586,7 @@ stardew_valley_option_classes = [
     DebrisMultiplier,
     QuickStart,
     Gifting,
-    GiftTax,
+    Mods,
 ]
 stardew_valley_options: Dict[str, type(Option)] = {option.internal_name: option for option in
                                                    stardew_valley_option_classes}

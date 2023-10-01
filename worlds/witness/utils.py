@@ -1,80 +1,36 @@
 from functools import lru_cache
-from itertools import accumulate
-from typing import *
-from fractions import Fraction
+from math import floor
+from typing import List, Collection
 from pkgutil import get_data
 
 
-def make_warning_string(any_j: bool, any_u: bool, any_d: bool, all_j: bool, all_u: bool, all_d: bool) -> str:
-    warning_string = ""
-
-    if any_j:
-        if all_j:
-            warning_string += "all "
-        else:
-            warning_string += "some "
-
-        warning_string += "junk"
-
-    if any_u or any_d:
-        if warning_string:
-            warning_string += " and "
-
-        if all_u:
-            warning_string += "all "
-        else:
-            warning_string += "some "
-
-        warning_string += "usefuls"
-
-    if any_d:
-        warning_string += ", including "
-
-        if all_d:
-            warning_string += "all "
-        else:
-            warning_string += "some "
-
-        warning_string += "non-essential door items"
-
-    return warning_string
-
-
-def best_junk_to_add_based_on_weights(weights: Dict[Any, Fraction], created_junk: Dict[Any, int]):
-    min_error = ("", 2)
-
-    for junk_name, instances in created_junk.items():
-        new_dist = created_junk.copy()
-        new_dist[junk_name] += 1
-        new_dist_length = sum(new_dist.values())
-        new_dist = {key: Fraction(value/1)/new_dist_length for key, value in new_dist.items()}
-
-        errors = {key: abs(new_dist[key] - weights[key]) for key in created_junk.keys()}
-
-        new_min_error = max(errors.values())
-
-        if min_error[1] > new_min_error:
-            min_error = (junk_name, new_min_error)
-
-    return min_error[0]
-
-
-def weighted_list(weights: Dict[Any, Fraction], length):
+def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
     """
-    Example:
-        weights = {A: 0.3, B: 0.3, C: 0.4}
-        length = 10
-
-        returns: [A, A, A, B, B, B, C, C, C, C]
-
-    Makes sure to match length *exactly*, might approximate as a result
+    Converts a list of floats to a list of ints of a given length, using the Largest Remainder Method.
     """
-    vals = accumulate(map(lambda x: x * length, weights.values()), lambda x, y: x + y)
-    output_list = []
-    for k, v in zip(weights.keys(), vals):
-        while len(output_list) < v:
-            output_list.append(k)
-    return output_list
+
+    # Scale the inputs to sum to the desired total.
+    scale_factor: float = total / sum(inputs)
+    scaled_input = [x * scale_factor for x in inputs]
+
+    # Generate whole number counts, always rounding down.
+    rounded_output: List[int] = [floor(x) for x in scaled_input]
+    rounded_sum = sum(rounded_output)
+
+    # If the output's total is insufficient, increment the value that has the largest remainder until we meet our goal.
+    remainders: List[float] = [real - rounded for real, rounded in zip(scaled_input, rounded_output)]
+    while rounded_sum < total:
+        max_remainder = max(remainders)
+        if max_remainder == 0:
+            break
+
+        # Consume the remainder and increment the total for the given target.
+        max_remainder_index = remainders.index(max_remainder)
+        remainders[max_remainder_index] = 0
+        rounded_output[max_remainder_index] += 1
+        rounded_sum += 1
+
+    return rounded_output
 
 
 def define_new_region(region_string):

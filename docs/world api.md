@@ -22,8 +22,8 @@ allows using WebSockets.
 
 ## Coding style
 
-AP follows all the PEPs. When in doubt use an IDE with coding style
-linter, for example PyCharm Community Edition.
+AP follows [style.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/style.md).
+When in doubt use an IDE with coding style linter, for example PyCharm Community Edition.
 
 
 ## Docstrings
@@ -44,7 +44,7 @@ class MyGameWorld(World):
 ## Definitions
 
 This section will cover various classes and objects you can use for your world.
-While some of the attributes and methods are mentioned here not all of them are,
+While some of the attributes and methods are mentioned here, not all of them are,
 but you can find them in `BaseClasses.py`.
 
 ### World Class
@@ -56,11 +56,12 @@ game.
 ### WebWorld Class
 
 A `WebWorld` class contains specific attributes and methods that can be modified
-for your world specifically on the webhost.
+for your world specifically on the webhost:
 
-`settings_page` which can be changed to a link instead of an AP generated settings page.
+`settings_page`, which can be changed to a link instead of an AP generated settings page.
 
 `theme` to be used for your game specific AP pages. Available themes:
+
 | dirt  | grass (default) | grassFlowers | ice  | jungle  | ocean | partyTime | stone |
 |---|---|---|---|---|---|---|---|
 | <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> | <img src="img/theme_stone.JPG" width="100"> |
@@ -75,26 +76,30 @@ prefixed with the same string as defined here. Default already has 'en'.
 ### MultiWorld Object
 
 The `MultiWorld` object references the whole multiworld (all items and locations
-for all players) and is accessible through `self.world` inside a `World` object.
+for all players) and is accessible through `self.multiworld` inside a `World` object.
 
 ### Player
 
 The player is just an integer in AP and is accessible through `self.player`
-inside a World object.
+inside a `World` object.
 
 ### Player Options
 
 Players provide customized settings for their World in the form of yamls.
-Those are accessible through `self.world.<option_name>[self.player]`. A dict
+Those are accessible through `self.multiworld.<option_name>[self.player]`. A dict
 of valid options has to be provided in `self.option_definitions`. Options are automatically
 added to the `World` object for easy access.
 
-### World Options
+### World Settings
 
-Any AP installation can provide settings for a world, for example a ROM file,
-accessible through `Utils.get_options()['<world>_options']['<option>']`.
+Any AP installation can provide settings for a world, for example a ROM file, accessible through
+`self.settings.<setting_name>` or `cls.settings.<setting_name>` (new API)
+or `Utils.get_options()["<world>_options"]["<setting_name>"]` (deprecated).
 
-Users can set those in their `host.yaml` file.
+Users can set those in their `host.yaml` file. Some settings may automatically open a file browser if a file is missing.
+
+Refer to [settings api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/settings%20api.md)
+for details.
 
 ### Locations
 
@@ -132,10 +137,13 @@ same ID. Name must not be numeric (has to contain at least 1 letter or symbol).
 Special items with ID `None` can mark events (read below).
 
 Other classifications include
-* filler: a regular item or trash item
-* useful: generally quite useful, but not required for anything logical
-* trap: negative impact on the player
-* skip_balancing: add to progression to skip balancing; e.g. currency or tokens
+* `filler`: a regular item or trash item
+* `useful`: generally quite useful, but not required for anything logical
+* `trap`: negative impact on the player
+* `skip_balancing`: denotes that an item should not be moved to an earlier sphere for the purpose of balancing (to be
+  combined with `progression`; see below)
+* `progression_skip_balancing`: the combination of `progression` and `skip_balancing`, i.e., a progression item that
+  will not be moved around by progression balancing; used, e.g., for currency or tokens
 
 ### Events
 
@@ -159,10 +167,10 @@ or more event locations based on player options.
 
 Regions are logical groups of locations that share some common access rules. If
 location logic is written from scratch, using regions greatly simplifies the
-definition and allow to somewhat easily implement things like entrance
+definition and allows to somewhat easily implement things like entrance
 randomizer in logic.
 
-Regions have a list called `exits` which are `Entrance` objects representing
+Regions have a list called `exits`, which are `Entrance` objects representing
 transitions to other regions.
 
 There has to be one special region "Menu" from which the logic unfolds. AP
@@ -179,7 +187,7 @@ They can be static (regular logic) or be defined/connected during generation
 ### Access Rules
 
 An access rule is a function that returns `True` or `False` for a `Location` or
-`Entrance` based on the the current `state` (items that can be collected).
+`Entrance` based on the current `state` (items that can be collected).
 
 ### Item Rules
 
@@ -196,14 +204,14 @@ the `/worlds` directory. The starting point for the package is `__init__.py`.
 Conventionally, your world class is placed in that file.
 
 World classes must inherit from the `World` class in `/worlds/AutoWorld.py`,
-which can be imported as `worlds.AutoWorld.World` from your package.
+which can be imported as `from worlds.AutoWorld import World` from your package.
 
 AP will pick up your world automatically due to the `AutoWorld` implementation.
 
 ### Requirements
 
 If your world needs specific python packages, they can be listed in
-`world/[world_name]/requirements.txt`. ModuleUpdate.py will automatically
+`worlds/<world_name>/requirements.txt`. ModuleUpdate.py will automatically
 pick up and install them.
 
 See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format).
@@ -214,7 +222,7 @@ AP will only import the `__init__.py`. Depending on code size it makes sense to
 use multiple files and use relative imports to access them.
 
 e.g. `from .Options import mygame_options` from your `__init__.py` will load
-`world/[world_name]/Options.py` and make its `mygame_options` accesible.
+`worlds/<world_name>/Options.py` and make its `mygame_options` accessible.
 
 When imported names pile up it may be easier to use `from . import Options`
 and access the variable as `Options.mygame_options`.
@@ -225,12 +233,12 @@ function, see [apworld specification.md](apworld%20specification.md).
 
 ### Your Item Type
 
-Each world uses its own subclass of `BaseClasses.Item`. The constuctor can be
+Each world uses its own subclass of `BaseClasses.Item`. The constructor can be
 overridden to attach additional data to it, e.g. "price in shop".
 Since the constructor is only ever called from your code, you can add whatever
 arguments you like to the constructor.
 
-In its simplest form we only set the game name and use the default constuctor
+In its simplest form we only set the game name and use the default constructor
 ```python
 from BaseClasses import Item
 
@@ -265,7 +273,7 @@ Each option has its own class, inherits from a base option type, has a docstring
 to describe it and a `display_name` property for display on the website and in
 spoiler logs.
 
-The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
+The actual name as used in the yaml is defined in a `Dict[str, AssembleOptions]`, that is
 assigned to the world under `self.option_definitions`.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`.
@@ -326,10 +334,10 @@ class FixXYZGlitch(Toggle):
     display_name = "Fix XYZ Glitch"
 
 # By convention we call the options dict variable `<world>_options`.
-mygame_options: typing.Dict[str, type(Option)] = {
+mygame_options: typing.Dict[str, AssembleOptions] = {
     "difficulty": Difficulty,
     "final_boss_hp": FinalBossHP,
-    "fix_xyz_glitch": FixXYZGlitch
+    "fix_xyz_glitch": FixXYZGlitch,
 }
 ```
 ```python
@@ -349,27 +357,39 @@ class MyGameWorld(World):
 ```python
 # world/mygame/__init__.py
 
+import settings
+import typing
 from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
 from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
-from Utils import get_options, output_path
+
 
 class MyGameItem(Item):  # or from Items import MyGameItem
     game = "My Game"  # name of the game/world this item is from
 
+
 class MyGameLocation(Location):  # or from Locations import MyGameLocation
     game = "My Game"  # name of the game/world this location is in
+
+
+class MyGameSettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """Insert help text for host.yaml here."""
+
+    rom_file: RomFile = RomFile("MyGame.sfc")
+
 
 class MyGameWorld(World):
     """Insert description of the world/game here."""
     game = "My Game"  # name of the game/world
     option_definitions = mygame_options  # options the player can set
+    settings: typing.ClassVar[MyGameSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
 
     # ID of first item and location, could be hard-coded but code may be easier
-    # to read with this as a propery.
+    # to read with this as a property.
     base_id = 1234
     # Instead of dynamic numbering, IDs could be part of data.
 
@@ -384,7 +404,7 @@ class MyGameWorld(World):
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
     item_name_groups = {
-        "weapons": {"sword", "lance"}
+        "weapons": {"sword", "lance"},
     }
 ```
 
@@ -398,7 +418,7 @@ The world has to provide the following things for generation
 * locations placed inside those regions
 * a `def create_item(self, item: str) -> MyGameItem` to create any item on demand
 * applying `self.multiworld.push_precollected` for start inventory
-* `required_client_version: Tuple(int, int, int)`
+* `required_client_version: Tuple[int, int, int]`
   Optional client version as tuple of 3 ints to make sure the client is compatible to
   this world (e.g. implements all required features) when connecting.
 
@@ -496,30 +516,28 @@ def create_items(self) -> None:
 def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
     # Arguments to Region() are name, player, world, and optionally hint_text
-    r = Region("Menu", self.player, self.multiworld)
-    # Set Region.exits to a list of entrances that are reachable from region
-    r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
-    # Append region to MultiWorld's regions
-    self.multiworld.regions.append(r)  # or use += [r...]
+    menu_region = Region("Menu", self.player, self.multiworld)
+    self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
     
-    r = Region("Main Area", self.player, self.multiworld)
+    main_region = Region("Main Area", self.player, self.multiworld)
     # Add main area's locations to main area (all but final boss)
-    r.locations = [MyGameLocation(self.player, location.name,
-                   self.location_name_to_id[location.name], r)]
-    r.exits = [Entrance(self.player, "Boss Door", r)]
-    self.multiworld.regions.append(r)
+    main_region.add_locations(main_region_locations, MyGameLocation)
+    # or 
+    # main_region.locations = \
+    #   [MyGameLocation(self.player, location_name, self.location_name_to_id[location_name], main_region]
+    self.multiworld.regions.append(main_region)
     
-    r = Region("Boss Room", self.player, self.multiworld)
-    # add event to Boss Room
-    r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
-    self.multiworld.regions.append(r)
-    
-    # If entrances are not randomized, they should be connected here, otherwise
-    # they can also be connected at a later stage.
-    self.multiworld.get_entrance("New Game", self.player)
-        .connect(self.multiworld.get_region("Main Area", self.player))
-    self.multiworld.get_entrance("Boss Door", self.player)
-        .connect(self.multiworld.get_region("Boss Room", self.player))
+    boss_region = Region("Boss Room", self.player, self.multiworld)
+    # Add event to Boss Room
+    boss_region.locations.append(MyGameLocation(self.player, "Final Boss", None, boss_region))
+
+    # If entrances are not randomized, they should be connected here,
+    # otherwise they can also be connected at a later stage.
+    # Create Entrances and connect the Regions
+    menu_region.connect(main_region)  # connects the "Menu" and "Main Area", can also pass a rule
+    # or
+    main_region.add_exits({"Boss Room": "Boss Door"}, {"Boss Room": lambda state: state.has("Sword", self.player)})
+    # Connects the "Main Area" and "Boss Room" regions, and places a rule requiring the "Sword" item to traverse
     
     # If setting location access rules from data is easier here, set_rules can
     # possibly omitted.
@@ -579,7 +597,7 @@ def set_rules(self) -> None:
     # require one item from an item group
     add_rule(self.multiworld.get_location("Chest3", self.player),
              lambda state: state.has_group("weapons", self.player))
-    # state also has .item_count() for items, .has_any() and.has_all() for sets
+    # state also has .item_count() for items, .has_any() and .has_all() for sets
     # and .count_group() for groups
     # set_rule is likely to be a bit faster than add_rule
 
@@ -617,7 +635,7 @@ public members with `mygame_`.
 More advanced uses could be to add additional variables to the state object,
 override `World.collect(self, state, item)` and `remove(self, state, item)`
 to update the state object, and check those added variables in added methods.
-Please do this with caution and only when neccessary.
+Please do this with caution and only when necessary.
 
 #### Sample
 
@@ -629,7 +647,7 @@ from worlds.AutoWorld import LogicMixin
 class MyGameLogic(LogicMixin):
     def mygame_has_key(self, player: int):
         # Arguments above are free to choose
-        # MultiWorld can be accessed through self.world, explicitly passing in
+        # MultiWorld can be accessed through self.multiworld, explicitly passing in
         # MyGameWorld instance for easy options access is also a valid approach
         return self.has("key", player)  # or whatever
 ```
@@ -642,8 +660,8 @@ import .Logic  # apply the mixin by importing its file
 class MyGameWorld(World):
     # ...
     def set_rules(self):
-        set_rule(self.world.get_location("A Door", self.player),
-                 lamda state: state.mygame_has_key(self.player))
+        set_rule(self.multiworld.get_location("A Door", self.player),
+                 lambda state: state.mygame_has_key(self.player))
 ```
 
 ### Generate Output
@@ -671,14 +689,14 @@ def generate_output(self, output_directory: str):
         # store option name "easy", "normal" or "hard" for difficuly
         "difficulty": self.multiworld.difficulty[self.player].current_key,
         # store option value True or False for fixing a glitch
-        "fix_xyz_glitch": self.multiworld.fix_xyz_glitch[self.player].value
+        "fix_xyz_glitch": self.multiworld.fix_xyz_glitch[self.player].value,
     }
     # point to a ROM specified by the installation
-    src = Utils.get_options()["mygame_options"]["rom_file"]
+    src = self.settings.rom_file
     # or point to worlds/mygame/data/mod_template
     src = os.path.join(os.path.dirname(__file__), "data", "mod_template")
     # generate output path
-    mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}"
+    mod_name = self.multiworld.get_out_file_name_base(self.player)
     out_file = os.path.join(output_directory, mod_name + ".zip")
     # generate the file
     generate_mod(src, out_file, data)
@@ -727,14 +745,14 @@ from . import MyGameTestBase
 
 
 class TestChestAccess(MyGameTestBase):
-    def testSwordChests(self):
+    def test_sword_chests(self):
         """Test locations that require a sword"""
         locations = ["Chest1", "Chest2"]
         items = [["Sword"]]
         # this will test that each location can't be accessed without the "Sword", but can be accessed once obtained.
         self.assertAccessDependency(locations, items)
-    
-    def testAnyWeaponChests(self):
+
+    def test_any_weapon_chests(self):
         """Test locations that require any weapon"""
         locations = [f"Chest{i}" for i in range(3, 6)]
         items = [["Sword"], ["Axe"], ["Spear"]]

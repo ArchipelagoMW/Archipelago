@@ -72,6 +72,7 @@ for it. The groups you can use for The Messenger are:
   player. This may also cause a softlock.
 * Text entry menus don't accept controller input
 * Opening the shop chest in power seal hunt mode from the tower of time HQ will softlock the game.
+* If you are unable to reset file slots, load into a save slot, let the game save, and close it.
 
 ## What do I do if I have a problem?
 

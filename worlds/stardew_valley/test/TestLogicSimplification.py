@@ -55,11 +55,3 @@ def test_simplify_true_in_or():
 def test_simplify_false_in_and():
     rule = And(False_(), Received('Summer', 0, 1))
     assert rule.simplify() == False_()
-
-
-def test_simplify_coffee():
-    logic = StardewLogic(1, StardewOptions(default_options))
-
-    simplified_coffee = logic.has("Coffee").simplify()
-
-    assert simplified_coffee == True_()

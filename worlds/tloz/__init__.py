@@ -1,11 +1,13 @@
 import os
 import threading
 from pkgutil import get_data
-from typing import Dict, Any
 
 import bsdiff4
-
 import Utils
+import settings
+import typing
+
+from typing import NamedTuple, Union, Dict, Any
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
 from .Items import item_table, item_prices, item_game_ids
@@ -16,6 +18,28 @@ from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_ea
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
+
+
+class TLoZSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Zelda 1"""
+        description = "The Legend of Zelda (U) ROM File"
+        copy_to = "Legend of Zelda, The (U) (PRG0) [!].nes"
+        md5s = [TLoZDeltaPatch.hash]
+
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching)
+                    true  for operating system default program
+        Alternatively, a path to a program to open the .nes file with
+        """
+
+    class DisplayMsgs(settings.Bool):
+        """Display message inside of Bizhawk"""
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = True
+    display_msgs: typing.Union[DisplayMsgs, bool] = True
 
 
 class TLoZWeb(WebWorld):
@@ -40,6 +64,7 @@ class TLoZWorld(World):
     every time.
     """
     option_definitions = tloz_options
+    settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
     data_version = 1
@@ -167,7 +192,7 @@ class TLoZWorld(World):
         # Remove map/compass check so they're always on
         # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon items.
-        base_patch = get_data(__name__, os.path.join(os.path.dirname(__file__), "z1_base_patch.bsdiff4"))
+        base_patch = get_data(__name__, "z1_base_patch.bsdiff4")
         rom_data = bsdiff4.patch(rom.read(), base_patch)
         rom_data = bytearray(rom_data)
         # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should

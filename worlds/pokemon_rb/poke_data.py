@@ -1204,28 +1204,17 @@ tm_moves = [
     'Selfdestruct', 'Egg Bomb', 'Fire Blast', 'Swift', 'Skull Bash', 'Softboiled', 'Dream Eater', 'Sky Attack', 'Rest',
     'Thunder Wave', 'Psywave', 'Explosion', 'Rock Slide', 'Tri Attack', 'Substitute'
 ]
-#['No Move', 'Pound', 'Karate Chop', 'Doubleslap', 'Comet Punch', 'Fire Punch', 'Ice Punch', 'Thunderpunch', 'Scratch',
-# 'Vicegrip', 'Guillotine', 'Cut', 'Gust', 'Wing Attack', 'Fly', 'Bind', 'Slam', 'Vine Whip', 'Stomp', 'Double Kick', 'Jump Kick',
-# 'Rolling Kick', 'Sand Attack', 'Headbutt', 'Horn Attack', 'Fury Attack', 'Tackle', 'Wrap', 'Thrash', 'Tail Whip', 'Poison Sting',
-# 'Twineedle', 'Pin Missile', 'Leer', 'Bite', 'Growl', 'Roar', 'Sing', 'Supersonic', 'Sonicboom', 'Disable', 'Acid', 'Ember', 'Flamethrower',
-# 'Mist', 'Hydro Pump', 'Surf', 'Psybeam', 'Aurora Beam', 'Peck', 'Drill Peck', 'Low Kick', 'Strength', 'Absorb', 'Leech Seed', 'Growth',
-# 'Razor Leaf', 'Poisonpowder', 'Stun Spore', 'Sleep Powder', 'Petal Dance', 'String Shot', 'Fire Spin', 'Thundershock', 'Rock Throw', 'Confusion',
-# 'Hypnosis', 'Meditate', 'Agility', 'Quick Attack', 'Night Shade', 'Screech', 'Recover', 'Harden', 'Minimize', 'Smokescreen', 'Confuse Ray', 'Withdraw',
-# 'Defense Curl', 'Barrier', 'Light Screen', 'Haze', 'Focus Energy', 'Mirror Move', 'Lick', 'Smog', 'Sludge', 'Bone Club', 'Waterfall', 'Clamp', 'Spike Cannon',
-# 'Constrict', 'Amnesia', 'Kinesis', 'Hi Jump Kick', 'Glare', 'Poison Gas', 'Barrage', 'Leech Life', 'Lovely Kiss', 'Transform', 'Bubble', 'Dizzy Punch', 'Spore', 'Flash',
-# 'Splash', 'Acid Armor', 'Crabhammer', 'Fury Swipes', 'Bonemerang', 'Hyper Fang', 'Sharpen', 'Conversion', 'Super Fang', 'Slash']
 
-# print([i for i in list(moves.keys()) if i not in tm_moves])
-# filler_moves = [
-#     "Razor Wind", "Whirlwind", "Counter", "Teleport", "Bide", "Skull Bash", "Sky Attack", "Psywave",
-#     "Pound", "Karate Chop", "Doubleslap", "Comet Punch", "Scratch", "Vicegrip", "Gust", "Wing Attack", "Bind",
-#     "Vine Whip", "Sand Attack", "Fury Attack", "Tackle", "Wrap", "Tail Whip", "Poison Sting", "Twineedle",
-#     "Leer", "Growl", "Roar", "Sing", "Supersonic", "Sonicboom", "Disable", "Acid", "Ember", "Mist", "Peck", "Absorb",
-#     "Growth", "Poisonpowder", "String Shot", "Meditate", "Agility", "Screech", "Double Team", "Harden", "Minimize",
-#     "Smokescreen", "Confuse Ray", "Withdraw", "Defense Curl", "Barrier", "Light Screen", "Haze", "Reflect",
-#     "Focus Energy", "Lick", "Smog", "Clamp", "Spike Cannon", "Constrict"
-#
-# ]
+evolution_levels = {
+    'Bulbasaur': 16, 'Ivysaur': 32, 'Charmander': 16, 'Charmeleon': 36, 'Squirtle': 16, 'Wartortle': 36, 'Caterpie': 7,
+    'Metapod': 10, 'Weedle': 7, 'Kakuna': 10, 'Pidgey': 18, 'Pidgeotto': 36, 'Rattata': 20, 'Spearow': 20, 'Ekans': 22,
+    'Sandshrew': 22, 'Nidoran F': 16, 'Nidoran M': 16, 'Zubat': 22, 'Oddish': 21, 'Paras': 24, 'Venonat': 31,
+    'Diglett': 26, 'Meowth': 28, 'Psyduck': 33, 'Mankey': 28, 'Poliwag': 25, 'Abra': 16, 'Kadabra': 35, 'Machop': 28,
+    'Machoke': 35, 'Bellsprout': 21, 'Tentacool': 30, 'Geodude': 25, 'Graveler': 35, 'Ponyta': 40, 'Slowpoke': 37,
+    'Magnemite': 30, 'Doduo': 31, 'Seel': 34, 'Grimer': 38, 'Gastly': 25, 'Haunter': 35, 'Drowzee': 26, 'Krabby': 28,
+    'Voltorb': 30, 'Cubone': 28, 'Koffing': 35, 'Rhyhorn': 42, 'Horsea': 32, 'Goldeen': 33, 'Magikarp': 33,
+    'Omanyte': 40, 'Kabuto': 40, 'Dratini': 30, 'Dragonair': 55
+}
 
 
 first_stage_pokemon = [pokemon for pokemon in pokemon_data.keys() if pokemon not in evolves_from]

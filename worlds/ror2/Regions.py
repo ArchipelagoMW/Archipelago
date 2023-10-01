@@ -90,8 +90,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     # DLC Locations
     if multiworld.dlc_sotv[player]:
         non_dlc_regions["Menu"].region_exits.append("Siphoned Forest")
-        other_regions["OrderedStage_2"].region_exits.append("Aphelian Sanctuary")
-        other_regions["OrderedStage_3"].region_exits.append("Sulfur Pools")
+        other_regions["OrderedStage_1"].region_exits.append("Aphelian Sanctuary")
+        other_regions["OrderedStage_2"].region_exits.append("Sulfur Pools")
         other_regions["Void Fields"].region_exits.append("Void Locus")
         regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_other_regions}
 

@@ -5,6 +5,8 @@ import copy
 import os
 import threading
 import base64
+import settings
+import typing
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
@@ -32,6 +34,16 @@ from .variaRandomizer.randomizer import VariaRandomizer
 from .variaRandomizer.utils.doorsmanager import DoorsManager
 from .variaRandomizer.rom.rom_patches import RomPatches
 from .variaRandomizer.graph.graph_utils import GraphUtils
+
+
+class SMSettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the v1.0 J rom"""
+        description = "Super Metroid (JU) ROM"
+        copy_to = "Super Metroid (JU).sfc"
+        md5s = [SMDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class SMCollectionState(metaclass=AutoLogicRegister):
@@ -78,6 +90,7 @@ class ByteEdit(TypedDict):
 locations_start_id = 82000
 items_start_id = 83000
 
+
 class SMWorld(World):
     """
      This is Very Adaptive Randomizer of Items and Areas for Super Metroid (VARIA SM). It supports
@@ -89,6 +102,7 @@ class SMWorld(World):
     topology_present = True
     data_version = 3
     option_definitions = sm_options
+    settings: typing.ClassVar[SMSettings]
 
     item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}
     location_name_to_id = {key: locations_start_id + value.Id for key, value in locationsDict.items() if value.Id != None}
@@ -119,7 +133,8 @@ class SMWorld(World):
     def generate_early(self):
         Logic.factory('vanilla')
 
-        self.variaRando = VariaRandomizer(self.multiworld, get_base_rom_path(), self.player)
+        dummy_rom_file = Utils.user_path(SMSettings.RomFile.copy_to)  # actual rom set in generate_output
+        self.variaRando = VariaRandomizer(self.multiworld, dummy_rom_file, self.player)
         self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
 
         # keeps Nothing items local so no player will ever pickup Nothing
@@ -750,7 +765,7 @@ class SMWorld(World):
         romPatcher.writeObjectives(itemLocs, romPatcher.settings["tourian"])
         romPatcher.writeItemsLocs(self.itemLocs)
 
-        # romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, itemLocs, progItemLocs)
+        romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, self.itemLocs, None) #progItemLocs)
         romPatcher.writeItemsNumber()
         if not romPatcher.settings["isPlando"]:
             romPatcher.writeSeed(romPatcher.settings["seed"]) # lol if race mode
@@ -777,6 +792,7 @@ class SMWorld(World):
         romPatcher.end()
 
     def generate_output(self, output_directory: str):
+        self.variaRando.args.rom = get_base_rom_path()
         outfilebase = self.multiworld.get_out_file_name_base(self.player)
         outputFilename = os.path.join(output_directory, f"{outfilebase}.sfc")
 

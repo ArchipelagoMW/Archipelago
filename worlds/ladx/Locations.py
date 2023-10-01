@@ -88,12 +88,6 @@ def can_farm_rupees(state: CollectionState, player: int) -> bool:
     return has_free_weapon(state, player) and (state.has("Can Play Trendy Game", player=player) or state.has("RAFT", player=player))
 
 
-def get_credits(state: CollectionState, player: int):
-    if can_farm_rupees(state, player):
-        return 999999999
-    return state.prog_items["RUPEES", player]
-
-
 class LinksAwakeningRegion(Region):
     dungeon_index = None
     ladxr_region = None
@@ -127,8 +121,11 @@ class GameStateAdapater:
         return self.state.has(item, self.player)
 
     def get(self, item, default):
+        # Don't allow any money usage if you can't get back wasted rupees
         if item == "RUPEES":
-            return get_credits(self.state, self.player)
+            if can_farm_rupees(self.state, self.player):
+                return self.state.prog_items["RUPEES", self.player]
+            return 0
         elif item.endswith("_USED"):
             return 0
         else:
