@@ -32,11 +32,14 @@ setups
 build
 bundle/components.wxs
 dist
+/prof/
 README.html
 .vs/
 EnemizerCLI/
 /Players/
 /SNI/
+/sni-*/
+/appimagetool*
 /host.yaml
 /options.yaml
 /config.yaml
@@ -139,6 +142,7 @@ ipython_config.py
 .venv*
 env/
 venv/
+/venv*/
 ENV/
 env.bak/
 venv.bak/
