@@ -47,16 +47,16 @@ other_table: Dict[str, RiskOfRainItemData] = {
     "Radar Scanner":        RiskOfRainItemData("Radar", 14 + offset, ItemClassification.progression)
 }
 filler_table: Dict[str, RiskOfRainItemData] = {
-    "Money":                RiskOfRainItemData("Filler", 1 + filler_offset, ItemClassification.filler, 50),
-    "Lunar Coin":           RiskOfRainItemData("Filler", 2 + filler_offset, ItemClassification.filler, 30),
-    "1000 Exp":             RiskOfRainItemData("Filler", 3 + filler_offset, ItemClassification.filler, 50)
+    "Money":                RiskOfRainItemData("Filler", 1 + filler_offset, ItemClassification.filler, 70),
+    "Lunar Coin":           RiskOfRainItemData("Filler", 2 + filler_offset, ItemClassification.filler, 20),
+    "1000 Exp":             RiskOfRainItemData("Filler", 3 + filler_offset, ItemClassification.filler, 40)
 }
 trap_table: Dict[str, RiskOfRainItemData] = {
     "Lunar Item":           RiskOfRainItemData("Trap", 6 + offset, ItemClassification.trap, 16),
-    "Mountain Trap":        RiskOfRainItemData("Trap", 1 + trap_offset, ItemClassification.trap, 20),
-    "Time Warp Trap":       RiskOfRainItemData("Trap", 2 + trap_offset, ItemClassification.trap, 20),
-    "Combat Trap":          RiskOfRainItemData("Trap", 3 + trap_offset, ItemClassification.trap, 40),
-    "Teleport Trap":        RiskOfRainItemData("Trap", 4 + trap_offset, ItemClassification.trap, 30)
+    "Mountain Trap":        RiskOfRainItemData("Trap", 1 + trap_offset, ItemClassification.trap, 10),
+    "Time Warp Trap":       RiskOfRainItemData("Trap", 2 + trap_offset, ItemClassification.trap, 30),
+    "Combat Trap":          RiskOfRainItemData("Trap", 3 + trap_offset, ItemClassification.trap, 20),
+    "Teleport Trap":        RiskOfRainItemData("Trap", 4 + trap_offset, ItemClassification.trap, 10)
 }
 stage_table: Dict[str, RiskOfRainItemData] = {
     "Stage 1":              RiskOfRainItemData("Stage", 1 + stage_offset, ItemClassification.progression),

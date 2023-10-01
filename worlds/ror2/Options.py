@@ -22,7 +22,7 @@ class Goal(Choice):
 class Victory(Choice):
     """
     Mithrix: Defeat Mithrix in Commencement
-    Voiling: Default Voidling in The Planetarium
+    Voiling: Default the Voidling in The Planetarium (DLC required! Will select any if not enabled.)
     Limbo: Defeat the Scavenger in Hidden Realm: A Moment, Whole
     Any: Any victory in the game will count. See Final Stage Death for additional ways.
     """

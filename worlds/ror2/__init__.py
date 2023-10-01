@@ -63,6 +63,8 @@ class RiskOfRainWorld(World):
         # self.total_revivals = self.multiworld.total_revivals[self.player].value
         if self.multiworld.start_with_revive[self.player].value:
             self.total_revivals -= 1
+        if self.multiworld.victory[self.player] == "voidling" and not self.multiworld.dlc_sotv[self.player]:
+            self.multiworld.victory[self.player].value = "any"
 
     def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
