@@ -2,7 +2,7 @@
 
 This document covers some of the patterns and tips and tricks used to communicate with data storage, communication with the data storage is don't through the [`Get`](network%20protocol.md#Get) \ [`Retrieved`](network%20protocol.md#Retrieved), [`Set`](network%20protocol.md#Set) \ [`SetReply`](network%20protocol.md#SetReply) and [`SetNotify`](network%20protocol.md#SetNotify) commands described inside the [Network Protocol](network%20protocol.md). The data storage is meant to preserve some date on the server that spans across the lifecycle of the server and is shared with all clients (on any team). 
 
-### Keys
+## Keys
 The data storage works by keys and is internally stored as a dictionary. note that the whole data storage is accessible by all clients so if you want to store data specifically for your team, game or slot you will have to make your key unique, this is often done by add the team number, game name or slot id to the key. Some examples:
 | EneryLink{team} |                   |
 | ---             | ---               |
@@ -19,7 +19,7 @@ The data storage works by keys and is internally stored as a dictionary. note th
 | `GiftBox;0;1`         | Slot specific giftbox for slot 1 on team 0  |
 | `GiftBox;5;13`        | Slot specific giftbox for slot 13 on team 5 |
 
-### Thread Safety
+## Thread Safety
 Because any client can read and write to the data storage at any time you can never assume that value you read is still the same 1 second later. So an 
 easy mistake is for example retrieving a value using a `Get` command, then processing the value, altering it, and then writing it back to the store with an `Set`-`replace` command. The `Set`-`replace` command will simply override the value discarding any possible changes by any other clients.
 
@@ -32,8 +32,8 @@ Key `Fruit`: `{ "Apple": 3, "Cherry": 7 }` it will be a lot more easy to safely 
 
 Lets look at a few examples:
 
-#### EnergyLink
-Energylink lets you share you excess energy with across multiple clients and games, it uses a team specific key of `EneryLink{team}`. The Energy value is a numeric value and its important that games can add and take energy from it in a thread safe way.
+### EnergyLink
+Energylink lets you share you excess energy with across multiple clients and games, it uses a team specific key of `EneryLink{team}`. The Energy value is a numeric value and its important that games can add and take energy from it in a thread safe way. A little side note, over the course of a long game, many clients can contribute to the energy value making it larger then an int64, while python and json have no issues with this, some programming languages might need to take extra care.
 
 Adding is easy, just a `Set`-`add` operation, for example to add 20:
 ```json
@@ -47,7 +47,7 @@ Adding is easy, just a `Set`-`add` operation, for example to add 20:
 }
 ```
 Depleting, however is more complicated, in this scenario we use both the fact that multiple operations are executed together aswel as tagging the Set.
-First we subtract our value, them we set the value back to 0 if it went below 0. Lastly we will look for the corresponding `SetReply` command with the tag we specified, inside the `SetReply` we compare the `original_value` to the `value` to know how much energy we where actually able to subtract.
+First we subtract our value 50, then we set the value back to 0 if it went below 0. Lastly we will look for the corresponding `SetReply` command with the tag we specified, inside the `SetReply` we compare the `original_value` to the `value` to know how much energy we where actually able to subtract.
 ```json
 {
     "cmd": "Set",
@@ -80,7 +80,7 @@ Response:
 ```
 So we only where able to subtract `original_value` - `value` = 20 Energy.
 
-#### Gifting
+### Gifting
 Gifting allows players to gift items they don't need to other games, like if you get a health potion but you are at no risk of dieing someone else might have more use for it. Gifting works by slot specific giftboxes, any client can add a gift to the giftbox, and only the client of the slot the giftbox belongs to is supposed to remove gifts from it. Now it might seem easy with an array of gift objects however while appending to an array is thread safe, removing entries from an array cannot be done thread safe. Therefor giftboxes are implemented as dictionaries where each gift has its own unique key. new gifts can safely be added using the `update` operation and removal of specific gifts can be done using their unique keys with the `pop` operation. (for more imformation visit the [gifting api documentation](https://github.com/agilbert1412/Archipelago.Gifting.Net/blob/main/Documentation/Gifting%20API.md)).
 
 Adding gifts:
@@ -111,7 +111,7 @@ Removing gifts, note we are ignoring the errors here as pop-ing an non existing 
 }
 ```
 
-#### Locking
+### Locking
 This is not an actual used example but if you want an even more complex thread safe way you can implement using the techniques aboves. it is possible to use a `pop` operation on specific dictionary keys along with a tagging your `Set` command to see if you client can obtain a lock, for example:
 ```json
 {
