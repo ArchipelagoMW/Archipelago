@@ -20,6 +20,7 @@ from .StructureDeck import get_deck_content_locations
 from .RomValues import structure_deck_selection, banlist_ids
 from .Client_bh import YuGiOh2006Client
 
+
 class Yugioh06Web(WebWorld):
     theme = "stone"
     setup = Tutorial(

@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Optional, Dict, Set, List
 
 from worlds.yugioh06 import item_to_index
 
-# TODO: REMOVE ASAP
 # This imports the bizhawk apworld if it's not already imported. This code block should be removed for a PR.
 if "worlds._bizhawk" not in sys.modules:
     import importlib
@@ -22,7 +21,7 @@ if "worlds._bizhawk" not in sys.modules:
         sys.modules[mod.__name__] = mod
         importer.exec_module(mod)
     elif not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
-        logging.error("Did not find _bizhawk.apworld required to play Pokemon Emerald.")
+        raise Exception("Did not find _bizhawk.apworld required to play Yu-Gi-Oh! 2006.")
 
 
 from worlds.LauncherComponents import SuffixIdentifier, components
@@ -35,7 +34,7 @@ if TYPE_CHECKING:
 else:
     BizHawkClientContext = object
 
-# Add .apemerald suffix to bizhawk client
+# Add .apygo06 suffix to bizhawk client
 for component in components:
     if component.script_name == "BizHawkClient":
         component.file_identifier = SuffixIdentifier((*component.file_identifier.suffixes, ".apygo06"))
