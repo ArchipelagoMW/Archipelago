@@ -82,66 +82,64 @@ def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> N
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
-    "Snowy Wasteland": {"Forest"},
+    "Snowy Wasteland": set(),
     "Frozen Vault": {"The Vault"},
-    "Lake": {"The Laboratory"},
-    "Desert": {"Forest"},
-    "Floating Island": {"Forest"},
-    "Pyramid": {"Hiisi Base"},
-    "Overgrown Cavern": {"Sandcave", "Undeground Jungle"},
-    "Sandcave": {"Overgrown Cavern"},
+    "Lake": set(),
+    "Desert": set(),
+    "Floating Island": set(),
+    "Pyramid": set(),
+    "Overgrown Cavern": {"Sandcave"},
+    "Sandcave": set(),
 
     ###
-    "Mines": {"Collapsed Mines", "Coal Pits Holy Mountain", "Lava Lake", "Forest"},
-    "Collapsed Mines": {"Mines", "Dark Cave"},
-    "Lava Lake": {"Mines", "Abyss Orb Room"},
-    "Abyss Orb Room": {"Lava Lake"},
-    "Below Lava Lake": {"Snowy Depths"},
-    "Dark Cave": {"Collapsed Mines"},
-    "Ancient Laboratory": {"Coal Pits"},
+    "Mines": {"Collapsed Mines", "Coal Pits Holy Mountain", "Lava Lake"},
+    "Collapsed Mines": set(),
+    "Lava Lake": {"Abyss Orb Room"},
+    "Abyss Orb Room": set(),
+    "Below Lava Lake": set(),
+    # "Dark Cave": set(),
+    "Ancient Laboratory": set(),
 
     ###
     "Coal Pits Holy Mountain": {"Coal Pits"},
-    "Coal Pits": {"Coal Pits Holy Mountain", "Fungal Caverns", "Snowy Depths Holy Mountain", "Ancient Laboratory"},
-    "Fungal Caverns": {"Coal Pits"},
+    "Coal Pits": {"Fungal Caverns", "Snowy Depths Holy Mountain", "Ancient Laboratory"},
+    "Fungal Caverns": set(),
 
     ###
     "Snowy Depths Holy Mountain": {"Snowy Depths"},
-    "Snowy Depths": {"Snowy Depths Holy Mountain", "Hiisi Base Holy Mountain", "Magical Temple", "Below Lava Lake"},
-    "Magical Temple": {"Snowy Depths"},
+    "Snowy Depths": {"Hiisi Base Holy Mountain", "Magical Temple", "Below Lava Lake"},
+    "Magical Temple": set(),
 
     ###
     "Hiisi Base Holy Mountain": {"Hiisi Base"},
-    "Hiisi Base": {"Hiisi Base Holy Mountain", "Secret Shop", "Pyramid", "Underground Jungle Holy Mountain"},
-    "Secret Shop": {"Hiisi Base"},
+    "Hiisi Base": {"Secret Shop", "Pyramid", "Underground Jungle Holy Mountain"},
+    "Secret Shop": set(),
 
     ###
     "Underground Jungle Holy Mountain": {"Underground Jungle"},
-    "Underground Jungle": {"Underground Jungle Holy Mountain", "Dragoncave", "Overgrown Cavern", "Vault Holy Mountain",
-                           "Lukki Lair"},
-    "Dragoncave": {"Underground Jungle"},
-    "Lukki Lair": {"Underground Jungle", "Snow Chasm", "Frozen Vault"},
-    "Snow Chasm": {},
+    "Underground Jungle": {"Dragoncave", "Overgrown Cavern", "Vault Holy Mountain", "Lukki Lair", "Snow Chasm"},
+    "Dragoncave": set(),
+    "Lukki Lair": set(),
+    "Snow Chasm": set(),
 
     ###
     "Vault Holy Mountain": {"The Vault"},
-    "The Vault": {"Vault Holy Mountain", "Frozen Vault", "Temple of the Art Holy Mountain"},
+    "The Vault": {"Frozen Vault", "Temple of the Art Holy Mountain"},
 
     ###
     "Temple of the Art Holy Mountain": {"Temple of the Art"},
-    "Temple of the Art": {"Temple of the Art Holy Mountain", "Laboratory Holy Mountain", "The Tower",
-                          "Wizards' Den"},
-    "Wizards' Den": {"Temple of the Art", "Powerplant"},
-    "Powerplant": {"Wizards' Den", "Deep Underground"},
-    "The Tower": {"Forest"},
-    "Deep Underground": {},
+    "Temple of the Art": {"Laboratory Holy Mountain", "The Tower", "Wizards' Den"},
+    "Wizards' Den": {"Powerplant"},
+    "Powerplant": {"Deep Underground"},
+    "The Tower": set(),
+    "Deep Underground": set(),
 
     ###
     "Laboratory Holy Mountain": {"The Laboratory"},
-    "The Laboratory": {"Laboratory Holy Mountain", "The Work", "Friend Cave", "The Work (Hell)", "Lake"},
-    "Friend Cave": {},
-    "The Work": {},
-    "The Work (Hell)": {},
+    "The Laboratory": {"The Work", "Friend Cave", "The Work (Hell)", "Lake"},
+    "Friend Cave": set(),
+    "The Work": set(),
+    "The Work (Hell)": set(),
     ###
 }
 
