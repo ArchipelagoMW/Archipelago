@@ -1,6 +1,7 @@
 from collections import Counter
 from dataclasses import dataclass
 from typing import Dict, Tuple
+from typing_extensions import TypeGuard  # remove when Python >= 3.10
 
 from Options import DefaultOnToggle, PerGameCommonOptions, Range, SpecialRange, Toggle, Choice
 
@@ -42,10 +43,17 @@ class VBLR(Choice):
     default = 1
 
     def to_zz_vblr(self) -> ZzVBLR:
+        def is_vblr(o: str) -> TypeGuard[ZzVBLR]:
+            """
+            This function is because mypy doesn't support narrowing with `in`,
+            https://github.com/python/mypy/issues/12535
+            so this is the only way I see to get type narrowing to `Literal`.
+            """
+            return o in ("vanilla", "balanced", "low", "restrictive")
+
         key = self.current_key
-        assert key in ("vanilla", "balanced", "low", "restrictive"), f"{key=}"
-        return key  # type: ignore
-        # mypy can't do type narrowing to literals
+        assert is_vblr(key), f"{key=}"
+        return key
 
 
 class ZillionGunLevels(VBLR):
