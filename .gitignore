@@ -27,6 +27,7 @@
 *.archipelago
 *.apsave
 *.BIN
+*.puml
 
 setups
 build
