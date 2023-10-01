@@ -100,6 +100,10 @@ class RiskOfRainWorld(World):
         itempool += ["Dio's Best Friend"] * self.total_revivals
         itempool += ["Beads of Fealty"]
         itempool += ["Radar Scanner"]
+        itempool += ["Stage 1"]
+        itempool += ["Stage 2"]
+        itempool += ["Stage 3"]
+        itempool += ["Stage 4"]
 
         for env_name, _ in environments_pool.items():
             itempool += [env_name]
@@ -251,13 +255,13 @@ def create_events(world: MultiWorld, player: int) -> None:
                 lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", "Location", player)
             world_region.locations.append(event_loc)
     elif world.goal[player] == "explore":
-        for n in range(1, 6):
-
-            event_region = world.get_region(f"OrderedStage_{n}", player)
-            event_loc = RiskOfRainLocation(player, f"Stage_{n}", None, event_region)
-            event_loc.place_locked_item(RiskOfRainItem(f"Stage_{n}", ItemClassification.progression, None, player))
-            event_loc.show_in_spoiler = False
-            event_region.locations.append(event_loc)
+        event_region = world.get_region("OrderedStage_5", player)
+        event_loc = RiskOfRainLocation(player, f"Stage_5", None, event_region)
+        event_loc.place_locked_item(RiskOfRainItem(f"Stage 5", ItemClassification.progression, None, player))
+        event_loc.show_in_spoiler = False
+        event_region.locations.append(event_loc)
+        world.get_location(f"Stage_5", player).access_rule = \
+            lambda state: state.has("Sky Meadow", player)
 
     victory_region = world.get_region("Victory", player)
     victory_event = RiskOfRainLocation(player, "Victory", None, victory_region)

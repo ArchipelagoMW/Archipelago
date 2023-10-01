@@ -27,7 +27,7 @@ def has_location_access_rule(world, environment: str, player: int, item_number: 
             lambda state: state.has(environment, player)
         if item_type == "Scavenger":
             world.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
-                lambda state: state.has(environment, player) and state.has("Stage_5", player)
+                lambda state: state.has(environment, player) and state.has("Stage 5", player)
     else:
         world.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
             lambda state: check_location(state, environment, player, item_number, item_type)
@@ -39,17 +39,10 @@ def check_location(state, environment: str, player: int, item_number: int, item_
 
 # unlock event to next set of stages
 def get_stage_event(world, player: int, stage_number: int):
-    if not world.dlc_sotv[player]:
-        environment_name = world.random.choices(list(environment_vanilla_orderedstages_table[stage_number].keys()),
-                                                     k=1)
-    else:
-        environment_name = world.random.choices(list(environment_orderedstages_table[stage_number].keys()), k=1)
-    world.get_location(f"Stage_{stage_number + 1}", player).access_rule = \
-        lambda state: get_one_of_the_stages(state, environment_name[0], player)
-
-
-def get_one_of_the_stages(state: CollectionState, stage: str, player: int):
-    return state.has(stage, player)
+    if stage_number == 4:
+        return
+    world.get_entrance(f"OrderedStage_{stage_number + 1}", player).access_rule = \
+        lambda state: state.has(f"Stage {stage_number + 1}", player)
 
 
 def set_rules(ror2_world: "RiskOfRainWorld") -> None:
@@ -128,7 +121,7 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                     for newt in range(1, newts + 1):
                         has_location_access_rule(world, environment_name, player, newt, "Newt Altar")
                 if i > 0:
-                    has_entrance_access_rule(world, f"Stage_{i}", environment_name, player)
+                    has_entrance_access_rule(world, f"Stage {i}", environment_name, player)
             get_stage_event(world, player, i)
 
         if world.dlc_sotv[player]:
@@ -147,17 +140,17 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                         for newt in range(1, newts + 1):
                             has_location_access_rule(world, environment_name, player, newt, "Newt Altar")
                     if i > 0:
-                        has_entrance_access_rule(world, f"Stage_{i}", environment_name, player)
-        has_entrance_access_rule(world, f"Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole",
+                        has_entrance_access_rule(world, f"Stage {i}", environment_name, player)
+        has_entrance_access_rule(world, "Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole",
                                  player)
-        has_entrance_access_rule(world, f"Stage_1", "Hidden Realm: Bazaar Between Time", player)
-        has_entrance_access_rule(world, f"Hidden Realm: Bazaar Between Time", "Void Fields", player)
-        has_entrance_access_rule(world, f"Stage_5", "Commencement", player)
-        has_entrance_access_rule(world, f"Stage_5", "Hidden Realm: A Moment, Fractured", player)
+        has_entrance_access_rule(world, "Stage 1", "Hidden Realm: Bazaar Between Time", player)
+        has_entrance_access_rule(world, "Hidden Realm: Bazaar Between Time", "Void Fields", player)
+        has_entrance_access_rule(world, "Stage 5", "Commencement", player)
+        has_entrance_access_rule(world, "Stage 5", "Hidden Realm: A Moment, Fractured", player)
         has_entrance_access_rule(world, "Beads of Fealty", "Hidden Realm: A Moment, Whole", player)
         if world.dlc_sotv[player]:
             if world.victory[player] == "voidling":
-                has_all_items(world, {"Stage_5", "The Planetarium"}, "Commencement", player)
-            has_all_items(world, {"Stage_5", "The Planetarium"}, "Void Locus", player)
+                has_all_items(world, {"Stage 5", "The Planetarium"}, "Commencement", player)
+            has_all_items(world, {"Stage 5", "The Planetarium"}, "Void Locus", player)
     # Win Condition
     world.completion_condition[player] = lambda state: state.has("Victory", player)

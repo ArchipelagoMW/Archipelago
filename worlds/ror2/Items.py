@@ -27,6 +27,7 @@ def get_items_by_category(category: str) -> Dict[str, RiskOfRainItemData]:
 offset: int = 37000
 filler_offset: int = offset + 300
 trap_offset: int = offset + 400
+stage_offset: int = offset + 500
 # 37000 - 37499, 38000
 upgrade_table: Dict[str, RiskOfRainItemData] = {
     "Common Item":          RiskOfRainItemData("Upgrade", 2 + offset, ItemClassification.filler, 64),
@@ -57,8 +58,15 @@ trap_table: Dict[str, RiskOfRainItemData] = {
     "Combat Trap":          RiskOfRainItemData("Trap", 3 + trap_offset, ItemClassification.trap, 40),
     "Teleport Trap":        RiskOfRainItemData("Trap", 4 + trap_offset, ItemClassification.trap, 30)
 }
+stage_table: Dict[str, RiskOfRainItemData] = {
+    "Stage 1":              RiskOfRainItemData("Stage", 1 + stage_offset, ItemClassification.progression),
+    "Stage 2":              RiskOfRainItemData("Stage", 2 + stage_offset, ItemClassification.progression),
+    "Stage 3":              RiskOfRainItemData("Stage", 3 + stage_offset, ItemClassification.progression),
+    "Stage 4":              RiskOfRainItemData("Stage", 4 + stage_offset, ItemClassification.progression),
 
-item_table = {**upgrade_table, **other_table, **filler_table, **trap_table}
+}
+
+item_table = {**upgrade_table, **other_table, **filler_table, **trap_table, **stage_table}
 # 37700 - 37699
 ##################################################
 # environments
@@ -67,7 +75,7 @@ item_table = {**upgrade_table, **other_table, **filler_table, **trap_table}
 # add ALL environments into the item table
 def create_environment_table(name: str, environment_id: int, environment_classification: ItemClassification) \
         -> Dict[str, RiskOfRainItemData]:
-    return {name: RiskOfRainItemData("Stage", 700 + offset + environment_id, environment_classification)}
+    return {name: RiskOfRainItemData("Environment", 700 + offset + environment_id, environment_classification)}
 
 
 environment_table: Dict[str, RiskOfRainItemData] = {}
