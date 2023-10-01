@@ -51,6 +51,20 @@ class RandomPickups(Choice):
     default = 1
 
 
+class RandomMusic(Choice):
+    """
+    Level musics will be randomized.
+    vanilla: No randomization
+    shuffle_selected: Selected episodes' levels will be shuffled
+    shuffle_game: All the music will be shuffled
+    """
+    display_name = "Random Music"
+    option_vanilla = 0
+    option_shuffle_selected = 1
+    option_shuffle_game = 2
+    default = 0
+
+
 class FlipLevels(Choice):
     """
     Flip levels on one axis.
@@ -119,6 +133,7 @@ options: typing.Dict[str, AssembleOptions] = {
     "difficulty": Difficulty,
     "random_monsters": RandomMonsters,
     "random_pickups": RandomPickups,
+    "random_music": RandomMusic,
     "flip_levels": FlipLevels,
     "allow_death_logic": AllowDeathLogic,
     "pro": Pro,

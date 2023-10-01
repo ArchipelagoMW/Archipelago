@@ -571,10 +571,6 @@ regions:List[RegionDict] = [
     {"name":"Against Thee Wickedly (E4M6) Main",
      "connects_to_hub":True,
      "episode":4,
-     "connections":["Against Thee Wickedly (E4M6) Blue"]},
-    {"name":"Against Thee Wickedly (E4M6) Red",
-     "connects_to_hub":False,
-     "episode":4,
      "connections":[
         {"target":"Against Thee Wickedly (E4M6) Blue","pro":False},
         {"target":"Against Thee Wickedly (E4M6) Pink","pro":True}]},
