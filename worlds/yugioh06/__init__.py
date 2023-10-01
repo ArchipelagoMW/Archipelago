@@ -196,7 +196,7 @@ class Yugioh06World(World):
                                    booster, get_booster_locations(booster))
             entrance = Entrance(self.player, booster, card_shop)
             entrance.access_rule = (lambda unlock: lambda state: state.has(unlock, self.player))(booster)
-            campaign.exits.append(entrance)
+            card_shop.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
 
@@ -205,7 +205,7 @@ class Yugioh06World(World):
         for challenge, lid in (Limited_Duels | Theme_Duels).items():
             region = create_region(self,
                                    challenge, {challenge: lid, challenge + " Complete": None})
-            entrance = Entrance(self.player, challenge, card_shop)
+            entrance = Entrance(self.player, challenge, challenges)
             entrance.access_rule = (lambda unlock: lambda state:
                                     state.has(unlock + " Unlock", self.player))(challenge)
             challenges.exits.append(entrance)
@@ -214,11 +214,11 @@ class Yugioh06World(World):
 
     def generate_early(self):
         starting_opponent = self.multiworld.random.choice(tier_1_opponents)
-        self.multiworld.start_inventory[self.player].value[starting_opponent] = 1
+        self.multiworld.push_precollected(self.create_item(starting_opponent))
         starting_pack = self.multiworld.random.choice(booster_packs)
-        self.multiworld.start_inventory[self.player].value[starting_pack] = 1
+        self.multiworld.push_precollected(self.create_item(starting_pack))
         banlist = self.multiworld.Banlist[self.player]
-        self.multiworld.start_inventory[self.player].value[Banlist_Items.get(banlist)] = 1
+        self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
 
     def apply_base_path(self, rom):
         base_patch_location = "/".join((os.path.dirname(self.__file__), "patch.bsdiff4"))
@@ -313,8 +313,8 @@ def create_region(self, name: str, locations=None, exits=None):
 
 
 class Yugioh2006Item(Item):
-    game = "Yu-Gi-Oh 2006"
+    game = "Yu-Gi-Oh! 2006"
 
 
 class Yugioh2006Location(Location):
-    game: str = "Yu-Gi-Oh 2006"
+    game: str = "Yu-Gi-Oh! 2006"

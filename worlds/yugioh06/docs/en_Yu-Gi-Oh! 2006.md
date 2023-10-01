@@ -9,6 +9,7 @@ export a config file.
 
 Unlocking Booster Packs, Campaign, Limited and Theme Duel Opponents has been changed.
 You only need to beat each Campaign Opponent once.
+Logic expects you to have access to the boosters necessary to get the locations at a reasonable pace and consistency. 
 Logic remains, so the game is always able to be completed, but because of the shuffle, the player may need to defeat certain opponents before they
 would in the vanilla game.
 
@@ -30,6 +31,7 @@ Items that are shuffled:
 - Unlocking Booster Packs ("ALL" Booster Packs are excluded)
 - Unlocking Campaign Opponents
 - Unlocking Limited/Theme Duels
+- Banlists
 
 ## What items are _not_ randomized?
 Certain Key Items are kept in their original locations:
