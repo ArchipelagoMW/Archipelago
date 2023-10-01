@@ -1,7 +1,10 @@
-from typing import Dict, List, NamedTuple, Optional
+from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import Region, Entrance
 from .Locations import location_table, RiskOfRainLocation
+
+if TYPE_CHECKING:
+    from . import RiskOfRainWorld
 
 
 class RoRRegionData(NamedTuple):
@@ -9,7 +12,9 @@ class RoRRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int):
+def create_regions(ror2_world: "RiskOfRainWorld"):
+    world = ror2_world.multiworld
+    player = ror2_world.player
     # Default Locations
     non_dlc_regions: Dict[str, RoRRegionData] = {
         "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)", "Titanic Plains", "Titanic Plains (2)"]),
@@ -54,13 +59,13 @@ def create_regions(multiworld: MultiWorld, player: int):
         "Void Locus":                           RoRRegionData(None, ["The Planetarium"])
     }
     # Totals of each item
-    chests = int(multiworld.chests_per_stage[player])
-    shrines = int(multiworld.shrines_per_stage[player])
-    scavengers = int(multiworld.scavengers_per_stage[player])
-    scanners = int(multiworld.scanner_per_stage[player])
-    newt = int(multiworld.altars_per_stage[player])
+    chests = int(world.chests_per_stage[player])
+    shrines = int(world.shrines_per_stage[player])
+    scavengers = int(world.scavengers_per_stage[player])
+    scanners = int(world.scanner_per_stage[player])
+    newt = int(world.altars_per_stage[player])
     all_location_regions = {**non_dlc_regions}
-    if multiworld.dlc_sotv[player]:
+    if world.dlc_sotv[player]:
         all_location_regions = {**non_dlc_regions, **dlc_regions}
 
     # Locations
@@ -88,7 +93,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions_pool: Dict = {**all_location_regions, **other_regions}
 
     # DLC Locations
-    if multiworld.dlc_sotv[player]:
+    if world.dlc_sotv[player]:
         non_dlc_regions["Menu"].region_exits.append("Siphoned Forest")
         other_regions["OrderedStage_1"].region_exits.append("Aphelian Sanctuary")
         other_regions["OrderedStage_2"].region_exits.append("Sulfur Pools")
@@ -97,28 +102,28 @@ def create_regions(multiworld: MultiWorld, player: int):
         regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_other_regions}
 
     # Check to see if Victory needs to be removed from regions
-    if multiworld.victory[player] == "mithrix":
+    if world.victory[player] == "mithrix":
         other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
         dlc_other_regions["The Planetarium"].region_exits.pop(0)
-    elif multiworld.victory[player] == "voidling":
+    elif world.victory[player] == "voidling":
         other_regions["Commencement"].region_exits.pop(0)
         other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
-    elif multiworld.victory[player] == "limbo":
+    elif world.victory[player] == "limbo":
         other_regions["Commencement"].region_exits.pop(0)
         dlc_other_regions["The Planetarium"].region_exits.pop(0)
 
 
     # Create all the regions
     for name, data in regions_pool.items():
-        multiworld.regions.append(create_region(multiworld, player, name, data))
+        world.regions.append(create_region(world, player, name, data))
 
     # Connect all the regions to their exits
     for name, data in regions_pool.items():
-        create_connections_in_regions(multiworld, player, name, data)
+        create_connections_in_regions(world, player, name, data)
 
 
-def create_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData):
-    region = Region(name, player, multiworld)
+def create_region(world, player: int, name: str, data: RoRRegionData):
+    region = Region(name, player, world)
     if data.locations:
         for location_name in data.locations:
             location_data = location_table.get(location_name)
@@ -128,11 +133,11 @@ def create_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegio
     return region
 
 
-def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData):
-    region = multiworld.get_region(name, player)
+def create_connections_in_regions(world, player: int, name: str, data: RoRRegionData):
+    region = world.get_region(name, player)
     if data.region_exits:
         for region_exit in data.region_exits:
             r_exit_stage = Entrance(player, region_exit, region)
-            exit_region = multiworld.get_region(region_exit, player)
+            exit_region = world.get_region(region_exit, player)
             r_exit_stage.connect(exit_region)
             region.exits.append(r_exit_stage)

@@ -130,7 +130,7 @@ class RiskOfRainWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        set_rules(self.multiworld, self.player)
+        set_rules(self)
 
     def get_filler_item_name(self) -> str:
         if not self.junk_pool:
@@ -207,7 +207,7 @@ class RiskOfRainWorld(World):
             connection.connect(petrichor)
         else:
             # explore mode
-            create_regions(self.multiworld, self.player)
+            create_regions(self)
 
         create_events(self.multiworld, self.player)
 
