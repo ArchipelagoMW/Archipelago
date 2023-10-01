@@ -313,8 +313,8 @@ def create_region(self, name: str, locations=None, exits=None):
 
 
 class Yugioh2006Item(Item):
-    game = "Yu-Gi-Oh! 2006"
+    game = "Yu-Gi-Oh 2006"
 
 
 class Yugioh2006Location(Location):
-    game: str = "Yu-Gi-Oh! 2006"
+    game: str = "Yu-Gi-Oh 2006"
