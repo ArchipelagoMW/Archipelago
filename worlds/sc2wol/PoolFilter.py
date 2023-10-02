@@ -335,8 +335,8 @@ class ValidInventory:
            "Spawn Banelings (Kerrigan Tier 4)" in self.logical_inventory:
             inventory = [item for item in inventory if item.name != "Baneling"]
         if "Mutalisk" not in self.logical_inventory:
-            inventory = [item for item in inventory if not item.name.startswith("Progressive Flyer")]
-            locked_items = [item for item in locked_items if not item.name.startswith("Progressive Flyer")]
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Zerg Flyer")]
+            locked_items = [item for item in locked_items if not item.name.startswith("Progressive Zerg Flyer")]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items

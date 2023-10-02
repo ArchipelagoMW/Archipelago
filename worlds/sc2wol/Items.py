@@ -414,7 +414,8 @@ for item, data in get_full_item_list().items():
         short_name = item[:item.find(' (')]
         item_name_groups[short_name] = [item]
 item_name_groups["Missions"] = ["Beat " + mission.mission_name for mission in SC2Mission]
-item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.WOL]]
+item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.WOL]] + \
+                                   ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.PROPHECY]]
 
 
 # Items that can be placed before resources if not already in

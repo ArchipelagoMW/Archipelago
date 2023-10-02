@@ -242,8 +242,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             else:
                 # Pick a mission from required campaign
                 slot_campaign = mission_slots[slot].campaign
-                candidate_missions = [mission_name for mission_name in missions_to_add]
-                campaign_mission_candidates = [mission for mission in candidate_missions if mission.campaign == slot_campaign]
+                campaign_mission_candidates = [mission for mission in missions_to_add if mission.campaign == slot_campaign]
                 mission = multiworld.random.choice(campaign_mission_candidates)
                 missions_to_add.remove(mission)
                 mission_slots[slot] = SC2MissionSlot(slot_campaign, mission)
@@ -346,7 +345,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                         connect(multiworld, player, names, "Menu", mission.slot.mission_name)
                     else:
                         required_mission = campaign_mission_slots[connection.campaign][connection.connect_to]
-                        if (required_mission is None or required_mission.slot is None
+                        if ((required_mission is None or required_mission.slot is None)
                                 and not mission_order[campaign][i].completion_critical):  # Drop non-critical null slots
                             continue
                         while required_mission is None or required_mission.slot is None:  # Substituting null slot with prior slot
