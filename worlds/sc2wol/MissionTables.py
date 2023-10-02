@@ -504,7 +504,7 @@ class SC2CampaignGoal(NamedTuple):
 campaign_final_mission_locations: Dict[SC2Campaign, SC2CampaignGoal] = {
     SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
     SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),
-    SC2Campaign.HOTS: SC2CampaignGoal(SC2Mission.THE_RECKONING, "The Reckoning: Victory")
+    SC2Campaign.HOTS: None,
 }
 
 campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] = {
@@ -517,6 +517,7 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
     },
     SC2Campaign.PROPHECY: None,
     SC2Campaign.HOTS: {
+        SC2Mission.THE_RECKONING: "The Reckoning: Victory",
         SC2Mission.THE_CRUCIBLE: "The Crucible: Victory",
         SC2Mission.HAND_OF_DARKNESS: "Hand of Darkness: Victory",
         SC2Mission.PHANTOMS_OF_THE_VOID: "Phantoms of the Void: Victory",

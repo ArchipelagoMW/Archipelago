@@ -410,7 +410,7 @@ def get_basic_units(multiworld: MultiWorld, player: int, race: SC2Race) -> typin
 item_name_groups = {}
 for item, data in get_full_item_list().items():
     item_name_groups.setdefault(data.type, []).append(item)
-    if data.type in ("Armory 1", "Armory 2", "Armory 3", "Armory 4", "Laboratory", "Progressive Upgrade") and '(' in item:
+    if data.type in ("Armory 1", "Armory 2", "Armory 3", "Armory 4", "Laboratory", "Progressive Upgrade", "Ability", "Strain", "Mutation") and '(' in item:
         short_name = item[:item.find(' (')]
         item_name_groups[short_name] = [item]
 item_name_groups["Missions"] = ["Beat " + mission.mission_name for mission in SC2Mission]

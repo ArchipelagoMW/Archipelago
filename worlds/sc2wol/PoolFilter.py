@@ -52,7 +52,10 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         goal_level = max(goal_priorities.values())
         candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
         goal_campaign = multiworld.random.choice(candidate_campaigns)
-        mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
+        if campaign_final_mission_locations[goal_campaign] is not None:
+            mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
+        else:
+            mission_pools[MissionPools.FINAL] = [campaign_alt_final_mission_locations[goal_campaign].keys()[0]]
         remove_final_mission_from_other_pools(mission_pools)
         return mission_pools
     # Omitting No-Build missions if not shuffling no-build
