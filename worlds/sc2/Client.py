@@ -21,7 +21,7 @@ from kivy.uix.scrollview import ScrollView
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
-from worlds.sc2wol.Options import MissionOrder
+from worlds.sc2.Options import MissionOrder
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -34,12 +34,12 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2wol import SC2World
-from worlds.sc2wol.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
-from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
-from worlds.sc2wol.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
+from worlds.sc2 import SC2World
+from worlds.sc2.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
+from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race, get_no_build_missions
-from worlds.sc2wol.Regions import MissionInfo
+from worlds.sc2.Regions import MissionInfo
 
 import colorama
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
