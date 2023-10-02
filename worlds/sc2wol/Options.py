@@ -84,9 +84,9 @@ class ColorChoice(Choice):
     default = option_default
 
 
-class PlayerColorTerran(ColorChoice):
-    """Determines in-game team color for playable Terran factions."""
-    display_name = "Terran Player Color"
+class PlayerColorTerranRaynor(ColorChoice):
+    """Determines in-game team color for playable Raynor's Raiders (Terran) factions."""
+    display_name = "Terran Player Color (Raynor)"
 
 
 class PlayerColorProtoss(ColorChoice):
@@ -482,7 +482,7 @@ sc2wol_options: Dict[str, Option] = {
     "game_speed": GameSpeed,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
-    "player_color_terran": PlayerColorTerran,
+    "player_color_terran_raynor": PlayerColorTerranRaynor,
     "player_color_protoss": PlayerColorProtoss,
     "player_color_zerg": PlayerColorZerg,
     "player_color_zerg_primal": PlayerColorZergPrimal,

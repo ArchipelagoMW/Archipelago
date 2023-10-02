@@ -327,7 +327,7 @@ class SC2Context(CommonContext):
 
             self.mission_order = args["slot_data"].get("mission_order", 0)
             self.final_mission = args["slot_data"].get("final_mission", 29)
-            self.player_color = args["slot_data"].get("player_color_terran", 2)
+            self.player_color = args["slot_data"].get("player_color_terran_raynor", 2)
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", 0)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", 0)
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", 0)
@@ -704,7 +704,6 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
 
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
-        # TODO should this count missions per race?
         for race in SC2Race:
             upgrade_flaggroup = type_flaggroups[race]["Upgrade"]
             num_missions = ctx.generic_upgrade_missions * len(ctx.mission_req_table)
@@ -767,7 +766,6 @@ def kerrigan_primal(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int
             return items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]] >= 35
     elif ctx.kerrigan_primal_status == 4: # Half Completion
         total_missions = len(ctx.mission_id_to_location_ids)
-        # TODO should this only count zerg?
         completed = len([(mission_id * victory_modulo + SC2WOL_LOC_ID_OFFSET) in ctx.checked_locations
             for mission_id in ctx.mission_id_to_location_ids])
         return completed >= (total_missions / 2)

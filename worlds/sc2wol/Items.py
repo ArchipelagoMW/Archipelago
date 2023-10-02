@@ -238,15 +238,15 @@ item_table = {
     "Hive Mind Emulator": ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18, SC2Race.TERRAN, ItemClassification.progression),
     "Psi Disrupter": ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, SC2Race.TERRAN, classification=ItemClassification.progression),
 
-    "Zealot": ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 0, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Stalker": ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 1, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "High Templar": ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 2, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Dark Templar": ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 3, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Immortal": ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 4, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Colossus": ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 5, SC2Race.PROTOSS),
-    "Phoenix": ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 6, SC2Race.PROTOSS, classification=ItemClassification.filler),
-    "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Zealot": ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Stalker": ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "High Templar": ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Dark Templar": ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Immortal": ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Colossus": ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.PROTOSS),
+    "Phoenix": ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.PROTOSS, classification=ItemClassification.filler),
+    "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.PROTOSS, classification=ItemClassification.progression),
 
     # Filler items to fill remaining spots
     "+15 Starting Minerals": ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, SC2Race.ANY, quantity=0, classification=ItemClassification.filler),
@@ -394,7 +394,9 @@ advanced_basic_units = {
         'Infestor',
         'Aberration'
     }),
-    SC2Race.PROTOSS: basic_units[SC2Race.PROTOSS]
+    SC2Race.PROTOSS: basic_units[SC2Race.PROTOSS].union({
+        'Dark Templar',
+    })
 }
 
 
@@ -592,15 +594,9 @@ type_flaggroups: typing.Dict[SC2Race, typing.Dict[str, int]] = {
         "Building": 4,
         "Mercenary": 5,
         "Laboratory": 6,
-        #"Protoss": 7,
-        # "Minerals": 8,
-        # "Vespene": 9,
-        # "Supply": 10,
-        # "Goal": 11,
         "Armory 3": 7,  # Unit upgrades
         "Armory 4": 8,  # Unit upgrades
         "Progressive Upgrade": 9,  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
-        # "Nothing Group": 15
     },
     SC2Race.ZERG: {
         "Unit": 0,
@@ -611,6 +607,6 @@ type_flaggroups: typing.Dict[SC2Race, typing.Dict[str, int]] = {
         "Level": 5,
     },
     SC2Race.PROTOSS: {
-        "Protoss": 0,
+        "Unit": 0,
     }
 }

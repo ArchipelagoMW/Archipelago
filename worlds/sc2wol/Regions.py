@@ -113,7 +113,6 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                     lambda state: state.has("Beat Echoes of the Future", player))
 
         if SC2Campaign.HOTS in enabled_campaigns:
-            # TODO should this connect to All-In?
             connect(multiworld, player, names, 'Menu', 'Lab Rat'),
             connect(multiworld, player, names, 'Lab Rat', 'Back in the Saddle',
                     lambda state: state.has("Beat Lab Rat", player)),

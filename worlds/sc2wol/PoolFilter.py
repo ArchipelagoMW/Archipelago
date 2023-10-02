@@ -267,7 +267,6 @@ class ValidInventory:
                         if item in existing_items:
                             existing_items.remove(item)
 
-        # TODO should this only count terran?
         if self.min_units_per_structure > 0 and self.has_units_per_structure():
             requirements.append(lambda state: state.has_units_per_structure())
 
@@ -325,10 +324,16 @@ class ValidInventory:
         if not STARPORT_UNITS & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.startswith("Progressive Ship")]
         # HotS
+        # Baneling without sources => remove Baneling and upgrades
         if "Baneling" in self.logical_inventory and\
            "Zergling" not in self.logical_inventory and\
            "Spawn Banelings (Kerrigan Tier 4)" not in self.logical_inventory:
             inventory = [item for item in inventory if "Baneling" not in item.name]
+        # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades
+        if "Baneling" in self.logical_inventory and\
+           "Zergling" not in self.logical_inventory and\
+           "Spawn Banelings (Kerrigan Tier 4)" in self.logical_inventory:
+            inventory = [item for item in inventory if item.name != "Baneling"]
         if "Mutalisk" not in self.logical_inventory:
             inventory = [item for item in inventory if not item.name.startswith("Progressive Flyer")]
             locked_items = [item for item in locked_items if not item.name.startswith("Progressive Flyer")]
@@ -401,7 +406,6 @@ class ValidInventory:
         # Inventory restrictiveness based on number of missions with checks
         mission_order_type = get_option_value(self.multiworld, self.player, "mission_order")
         mission_count = len(mission_orders[mission_order_type]) - 1
-        # TODO should this only count WoL missions?
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
