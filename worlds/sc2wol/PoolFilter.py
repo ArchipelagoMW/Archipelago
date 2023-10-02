@@ -11,10 +11,13 @@ from .LogicMixin import SC2WoLLogic
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = [
+    # WoL
     "Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre",
     "Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine", "Cyclone",
     "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Raven", "Science Vessel", "Liberator", "Valkyrie",
-    "Bunker", "Missile Turret"
+    "Bunker", "Missile Turret",
+    # HotS
+    "Zergling", "Roach", "Hydralisk", "Baneling", "Mutalisk", "Swarm Host", "Ultralisk"
 ]
 
 BARRACKS_UNITS = {"Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre"}
@@ -80,12 +83,14 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]
     mission_pools[MissionPools.FINAL] = [goal_mission]
 
-    # Mission pool changes on Build-Only
+    # Mission pool changes
+    logic_level = get_option_value(multiworld, player, "required_tactics")
+    def move_mission(mission: SC2Mission, current_pool, new_pool):
+        if mission in mission_pools[current_pool]:
+            mission_pools[current_pool].remove(mission)
+            mission_pools[new_pool].append(mission)
+    # WoL
     if not get_option_value(multiworld, player, 'shuffle_no_build'):
-        def move_mission(mission: SC2Mission, current_pool, new_pool):
-            if mission in mission_pools[current_pool]:
-                mission_pools[current_pool].remove(mission)
-                mission_pools[new_pool].append(mission)
         # Replacing No Build missions with Easy missions
         move_mission(SC2Mission.ZERO_HOUR, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.EVACUATION, MissionPools.EASY, MissionPools.STARTER)
@@ -97,12 +102,30 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         move_mission(SC2Mission.ECHOES_OF_THE_FUTURE, MissionPools.MEDIUM, MissionPools.EASY)
         move_mission(SC2Mission.CUTTHROAT, MissionPools.MEDIUM, MissionPools.EASY)
         # Additional changes on Advanced Tactics
-        if get_option_value(multiworld, player, "required_tactics") > 0:
+        if logic_level > 0:
             move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.EASY, MissionPools.STARTER)
             move_mission(SC2Mission.SMASH_AND_GRAB, MissionPools.EASY, MissionPools.STARTER)
             move_mission(SC2Mission.THE_MOEBIUS_FACTOR, MissionPools.MEDIUM, MissionPools.EASY)
             move_mission(SC2Mission.WELCOME_TO_THE_JUNGLE, MissionPools.MEDIUM, MissionPools.EASY)
             move_mission(SC2Mission.ENGINE_OF_DESTRUCTION, MissionPools.HARD, MissionPools.MEDIUM)
+    # Prophecy needs to be adjusted on tiny grid
+    if enabled_campaigns == {SC2Campaign.PROPHECY} and mission_order_type == MissionOrder.option_tiny_grid:
+        move_mission(SC2Mission.A_SINISTER_TURN, MissionPools.MEDIUM, MissionPools.EASY)
+    # HotS
+    kerriganless = get_option_value(multiworld, player, "kerriganless") > 0
+    if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or logic_level > 0:
+        # Conditionally moving Easy missions to Starter
+        move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.DOMINATION, MissionPools.EASY, MissionPools.STARTER)
+    if logic_level > 0:
+        # Medium -> Easy
+        for mission in (SC2Mission.FIRE_IN_THE_SKY, SC2Mission.WAKING_THE_ANCIENT, SC2Mission.CONVICTION):
+            move_mission(mission, MissionPools.MEDIUM, MissionPools.EASY)
+        # Hard -> Medium
+        move_mission(SC2Mission.PHANTOMS_OF_THE_VOID, MissionPools.HARD, MissionPools.MEDIUM)
+        if not kerriganless:
+            # Additional starter mission assuming player starts with minimal anti-air
+            move_mission(SC2Mission.WAKING_THE_ANCIENT, MissionPools.EASY, MissionPools.STARTER)
 
     remove_final_mission_from_other_pools(mission_pools)
     return mission_pools
@@ -244,6 +267,7 @@ class ValidInventory:
                         if item in existing_items:
                             existing_items.remove(item)
 
+        # TODO should this only count terran?
         if self.min_units_per_structure > 0 and self.has_units_per_structure():
             requirements.append(lambda state: state.has_units_per_structure())
 
@@ -289,6 +313,8 @@ class ValidInventory:
             else:
                 attempt_removal(item)
 
+        # Removing extra dependencies
+        # WoL
         if not spider_mine_sources & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
         if not BARRACKS_UNITS & self.logical_inventory:
@@ -298,6 +324,14 @@ class ValidInventory:
             inventory = [item for item in inventory if not item.name.startswith("Progressive Vehicle")]
         if not STARPORT_UNITS & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.startswith("Progressive Ship")]
+        # HotS
+        if "Baneling" in self.logical_inventory and\
+           "Zergling" not in self.logical_inventory and\
+           "Spawn Banelings (Kerrigan Tier 4)" not in self.logical_inventory:
+            inventory = [item for item in inventory if "Baneling" not in item.name]
+        if "Mutalisk" not in self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Flyer")]
+            locked_items = [item for item in locked_items if not item.name.startswith("Progressive Flyer")]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items
@@ -315,6 +349,9 @@ class ValidInventory:
         return inventory
 
     def _read_logic(self):
+        # General
+        self._sc2_cleared_missions = lambda world, player: SC2WoLLogic._sc2_cleared_missions(self, world, player)
+        # WoL
         self._sc2wol_has_common_unit = lambda world, player: SC2WoLLogic._sc2wol_has_common_unit(self, world, player)
         self._sc2wol_has_air = lambda world, player: SC2WoLLogic._sc2wol_has_air(self, world, player)
         self._sc2wol_has_air_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_air_anti_air(self, world, player)
@@ -333,6 +370,21 @@ class ValidInventory:
         self._sc2wol_welcome_to_the_jungle_requirement = lambda world, player: SC2WoLLogic._sc2wol_welcome_to_the_jungle_requirement(self, world, player)
         self._sc2wol_can_respond_to_colony_infestations = lambda world, player: SC2WoLLogic._sc2wol_can_respond_to_colony_infestations(self, world, player)
         self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
+        self._sc2wol_cleared_missions = lambda world, player: SC2WoLLogic._sc2wol_cleared_missions(self, world, player)
+        # HotS
+        self._sc2_hots_has_common_unit = lambda world, player: SC2WoLLogic._sc2_hots_has_common_unit(self, world, player)
+        self._sc2_hots_has_good_antiair = lambda world, player: SC2WoLLogic._sc2_hots_has_good_antiair(self, world, player)
+        self._sc2_hots_has_minimal_antiair = lambda world, player: SC2WoLLogic._sc2_hots_has_minimal_antiair(self, world, player)
+        self._sc2_hots_has_brood_lord = lambda world, player: SC2WoLLogic._sc2_hots_has_brood_lord(self, world, player)
+        self._sc2_hots_has_viper = lambda world, player: SC2WoLLogic._sc2_hots_has_viper(self, world, player)
+        self._sc2_hots_has_impaler_or_lurker = lambda world, player: SC2WoLLogic._sc2_hots_has_impaler_or_lurker(self, world, player)
+        self._sc2_hots_has_competent_comp = lambda world, player: SC2WoLLogic._sc2_hots_has_competent_comp(self, world, player)
+        self._sc2_hots_has_basic_comp = lambda world, player: SC2WoLLogic._sc2_hots_has_basic_comp(self, world, player)
+        self._sc2_hots_can_spread_creep = lambda world, player: SC2WoLLogic._sc2_hots_can_spread_creep(self, world, player)
+        self._sc2_hots_has_competent_defense = lambda world, player: SC2WoLLogic._sc2_hots_has_competent_defense(self, world, player)
+        self._sc2_hots_has_basic_kerrigan = lambda world, player: SC2WoLLogic._sc2_hots_has_basic_kerrigan(self, world, player)
+        self._sc2_hots_has_two_kerrigan_actives = lambda world, player: SC2WoLLogic._sc2_hots_has_two_kerrigan_actives(self, world, player)
+        self._sc2_hots_has_low_tech = lambda world, player: SC2WoLLogic._sc2_hots_has_low_tech(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
@@ -349,6 +401,7 @@ class ValidInventory:
         # Inventory restrictiveness based on number of missions with checks
         mission_order_type = get_option_value(self.multiworld, self.player, "mission_order")
         mission_count = len(mission_orders[mission_order_type]) - 1
+        # TODO should this only count WoL missions?
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
