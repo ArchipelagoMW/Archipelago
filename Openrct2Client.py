@@ -10,6 +10,8 @@ from CommonClient import CommonContext, get_base_parser, server_loop
 import Utils
 import socket
 import json
+import re
+
 
 print("\n\n\n\n\n\n==================================\n")
 
@@ -209,6 +211,11 @@ class OpenRCT2Context(CommonContext):
         # if cmd == "Connected":
         #     self.game = self.game#slot_info[self.slot].game
         print("PACKAGE!!!")
+        if cmd == "PrintJSON":
+            for index, item in enumerate(args['data']):
+                match = re.search(r'\[color=[^\]]+\](.*?)\[/color\]', args['data'][index]['text'])
+                if match:
+                    args['data'][index]['text'] = match.group(1) 
         print(args)
         self.gamesock.sendobj(args)
 

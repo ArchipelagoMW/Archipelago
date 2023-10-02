@@ -247,8 +247,7 @@ class OpenRCT2World(World):
                 # print(unlock["Price"])
             else:# Everything else will cost lives. The Elder Gods will be pleased
                 unlock["Lives"] = random.randint(50,1000)
-                print(unlock["Lives"])
-            if number != 0: #We'll never have a prereq on the first item
+            if number != 0 and unlock["Lives"] == 0: #We'll never have a prereq on the first item or on blood prices
                 if random.random() < length_modifier: #Determines if we have a prereq
                     if random.random() < difficulty_modifier: #Determines if the prereq is a specific ride
                         chosen_prereq = random.choice(possible_prereqs)
@@ -318,6 +317,27 @@ class OpenRCT2World(World):
         objectives = {"Guests": [guests, False], "ParkValue":[park_value, False], "RollerCoasters": [roller_coasters,excitement,intensity,nausea,0,False], "RideIncome": [0,False], "ShopIncome": [0,False], "ParkRating": [park_rating, False], "LoanPaidOff": [pay_off_loan, False], "Monopoly": [monopoly, False]}
         print(objectives)
         print(self.item_id_to_name)
+
+        #Fixes Location Prices for OpenRCT2
+        for index, location in enumerate(self.location_prices):
+            print("Here's the category! Maybe.")
+            if self.location_prices[index]["RidePrereq"]:
+                category = self.location_prices[index]["RidePrereq"][1]
+                print(self.location_prices[index]["RidePrereq"][1])
+            else: 
+                category = None
+            if category in item_info["ride_types"]:
+                if category == "roller_coasters":
+                    self.location_prices[index]["RidePrereq"][1] = "rollercoaster"
+                elif category == "transport_rides":
+                    self.location_prices[index]["RidePrereq"][1] = "transport"
+                elif category == "gentle_rides":
+                    self.location_prices[index]["RidePrereq"][1] = "gentle"
+                elif category == "thrill_rides":
+                    self.location_prices[index]["RidePrereq"][1] = "thrill"
+                else:
+                    self.location_prices[index]["RidePrereq"][1] = "water"
+
         return {
             "difficulty": self.multiworld.difficulty[self.player].value,
             "scenario_length": self.multiworld.scenario_length[self.player].value,
@@ -327,7 +347,8 @@ class OpenRCT2World(World):
             "stat_rerolls": self.multiworld.stat_rerolls[self.player].value,
             "randomize_park_values": self.multiworld.randomize_park_values[self.player].value,
             "visibility": self.multiworld.visibility[self.player].value,
-            "objectives": objectives
+            "objectives": objectives,
+            "location_prices": self.location_prices
         }
 
     def create_item(self, item:str) -> OpenRCT2Item:
