@@ -477,7 +477,7 @@ class OptionalBossLocations(LocationInclusion):
 
 
 # noinspection PyTypeChecker
-sc2wol_options: Dict[str, Option] = {
+sc2_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
     "game_speed": GameSpeed,
     "all_in_map": AllInMap,
@@ -523,7 +523,7 @@ sc2wol_options: Dict[str, Option] = {
 
 def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
     if multiworld is None:
-        return sc2wol_options[name].default
+        return sc2_options[name].default
 
     player_option = getattr(multiworld, name)[player]
 

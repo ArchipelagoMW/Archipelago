@@ -16,8 +16,8 @@ class ItemData(typing.NamedTuple):
     origin: typing.Set[str] = {"wol"}
 
 
-class StarcraftWoLItem(Item):
-    game: str = "Starcraft 2 Wings of Liberty"
+class StarcraftItem(Item):
+    game: str = "Starcraft 2"
 
 
 def get_full_item_list():

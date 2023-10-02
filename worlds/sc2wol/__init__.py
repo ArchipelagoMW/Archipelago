@@ -4,17 +4,18 @@ from typing import List, Set, Tuple, Dict
 from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from .Items import StarcraftWoLItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
+from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, kerrigan_only_passives
 from .Locations import get_locations, LocationType
 from .Regions import create_regions
-from .Options import sc2wol_options, get_option_value, LocationInclusion
-from .LogicMixin import SC2WoLLogic
+from .Options import sc2_options, get_option_value, LocationInclusion
+from .LogicMixin import SC2Logic
 from .PoolFilter import filter_missions, filter_items, get_item_upgrades, UPGRADABLE_ITEMS
 from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission
 
 
-class Starcraft2WoLWebWorld(WebWorld):
+class Starcraft2WebWorld(WebWorld):
+    # TODO update the guide
     setup = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Starcraft 2 randomizer connected to an Archipelago Multiworld",
@@ -27,19 +28,20 @@ class Starcraft2WoLWebWorld(WebWorld):
     tutorials = [setup]
 
 
-class SC2WoLWorld(World):
+class SC2World(World):
+    # TODO update this description
     """
     StarCraft II: Wings of Liberty is a science fiction real-time strategy video game developed and published by Blizzard Entertainment.
     Command Raynor's Raiders in collecting pieces of the Keystone in order to stop the zerg threat posed by the Queen of Blades.
     """
 
-    game = "Starcraft 2 Wings of Liberty"
-    web = Starcraft2WoLWebWorld()
+    game = "Starcraft 2"
+    web = Starcraft2WebWorld()
     data_version = 4
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
-    option_definitions = sc2wol_options
+    option_definitions = sc2_options
 
     item_name_groups = item_name_groups
     locked_locations: typing.List[str]
@@ -50,13 +52,13 @@ class SC2WoLWorld(World):
     required_client_version = 0, 3, 6
 
     def __init__(self, multiworld: MultiWorld, player: int):
-        super(SC2WoLWorld, self).__init__(multiworld, player)
+        super(SC2World, self).__init__(multiworld, player)
         self.location_cache = []
         self.locked_locations = []
 
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
-        return StarcraftWoLItem(name, data.classification, data.code, self.player)
+        return StarcraftItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
         self.mission_req_table, self.final_mission_id, self.victory_item = create_regions(
@@ -86,7 +88,7 @@ class SC2WoLWorld(World):
 
     def fill_slot_data(self):
         slot_data = {}
-        for option_name in sc2wol_options:
+        for option_name in sc2_options:
             option = getattr(self.multiworld, option_name)[self.player]
             if type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
@@ -282,8 +284,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
     include_upgrades = get_option_value(multiworld, player, 'generic_upgrade_missions') == 0
     upgrade_items = get_option_value(multiworld, player, 'generic_upgrade_items')
 
-    # Include items from outside Wings of Liberty
-    # TODO should this be more sophisticated?
+    # Include items from outside main campaigns
     item_sets = {'wol', 'hots'}
     if get_option_value(multiworld, player, 'nco_items'):
         item_sets.add('nco')
@@ -329,7 +330,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
     return filtered_pool
 
 
-def fill_item_pool_with_dummy_items(self: SC2WoLWorld, multiworld: MultiWorld, player: int, locked_locations: List[str],
+def fill_item_pool_with_dummy_items(self: SC2World, multiworld: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
         item = create_item_with_correct_settings(player, self.get_filler_item_name())

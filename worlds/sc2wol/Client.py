@@ -34,7 +34,7 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2wol import SC2WoLWorld
+from worlds.sc2wol import SC2World
 from worlds.sc2wol.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
@@ -259,7 +259,7 @@ class SC2JSONtoTextParser(JSONtoTextParser):
 
 class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
-    game = "Starcraft 2 Wings of Liberty"
+    game = "Starcraft 2"
     items_handling = 0b111
     difficulty = -1
     game_speed = -1
@@ -603,7 +603,7 @@ class SC2Context(CommonContext):
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
         import pkgutil
-        data = pkgutil.get_data(SC2WoLWorld.__module__, "Starcraft2.kv").decode()
+        data = pkgutil.get_data(SC2World.__module__, "Starcraft2.kv").decode()
         Builder.load_string(data)
 
     async def shutdown(self):
