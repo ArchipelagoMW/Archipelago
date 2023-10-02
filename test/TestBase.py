@@ -1,15 +1,10 @@
-import pathlib
 import typing
 import unittest
 from argparse import Namespace
 
-import Utils
 from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
-
-file_path = pathlib.Path(__file__).parent.parent
-Utils.local_path.cached_path = file_path
 
 from BaseClasses import MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
