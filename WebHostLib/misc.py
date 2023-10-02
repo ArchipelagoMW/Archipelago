@@ -32,29 +32,34 @@ def page_not_found(err):
 
 # Start Playing Page
 @app.route('/start-playing')
+@cache.cached()
 def start_playing():
     return render_template(f"startPlaying.html")
 
 
 @app.route('/weighted-settings')
+@cache.cached()
 def weighted_settings():
     return render_template(f"weighted-settings.html")
 
 
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
+@cache.cached()
 def player_settings(game):
     return render_template(f"player-settings.html", game=game, theme=get_world_theme(game))
 
 
 # Game Info Pages
 @app.route('/games/<string:game>/info/<string:lang>')
+@cache.cached()
 def game_info(game, lang):
     return render_template('gameInfo.html', game=game, lang=lang, theme=get_world_theme(game))
 
 
 # List of supported games
 @app.route('/games')
+@cache.cached()
 def games():
     worlds = {}
     for game, world in AutoWorldRegister.world_types.items():
@@ -64,21 +69,25 @@ def games():
 
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
+@cache.cached()
 def tutorial(game, file, lang):
     return render_template("tutorial.html", game=game, file=file, lang=lang, theme=get_world_theme(game))
 
 
 @app.route('/tutorial/')
+@cache.cached()
 def tutorial_landing():
     return render_template("tutorialLanding.html")
 
 
 @app.route('/faq/<string:lang>/')
+@cache.cached()
 def faq(lang):
     return render_template("faq.html", lang=lang)
 
 
 @app.route('/glossary/<string:lang>/')
+@cache.cached()
 def terms(lang):
     return render_template("glossary.html", lang=lang)
 
@@ -147,7 +156,7 @@ def host_room(room: UUID):
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static/static'),
+    return send_from_directory(os.path.join(app.root_path, "static", "static"),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
@@ -167,6 +176,7 @@ def get_datapackage():
 
 @app.route('/index')
 @app.route('/sitemap')
+@cache.cached()
 def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
     for game, world in AutoWorldRegister.world_types.items():
