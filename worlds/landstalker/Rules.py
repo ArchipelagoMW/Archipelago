@@ -63,10 +63,15 @@ def add_path_requirements(multiworld: MultiWorld, player: int, regions_table: Di
 def add_specific_path_requirements(multiworld: MultiWorld, player: int):
     # Make the jewels required to reach Kazalt
     jewel_count = multiworld.jewel_count[player].value
-    required_jewels = ["Red Jewel", "Purple Jewel", "Green Jewel", "Blue Jewel", "Yellow Jewel"]
-    del required_jewels[jewel_count:]
     path_to_kazalt = multiworld.get_entrance("king_nole_cave -> kazalt", player)
-    path_to_kazalt.access_rule = make_path_requirement_lambda(player, required_jewels, [])
+    if jewel_count < 6:
+        # 5- jewels => the player needs to find as many uniquely named jewel items
+        required_jewels = ["Red Jewel", "Purple Jewel", "Green Jewel", "Blue Jewel", "Yellow Jewel"]
+        del required_jewels[jewel_count:]
+        path_to_kazalt.access_rule = make_path_requirement_lambda(player, required_jewels, [])
+    else:
+        # 6+ jewels => the player needs to find as many "Kazalt Jewel" items
+        path_to_kazalt.access_rule = lambda state: state.has("Kazalt Jewel", player, jewel_count)
 
     # If enemy jumping is enabled, Mir Tower sector first tree can be bypassed to reach the elevated ledge
     if multiworld.handle_enemy_jumping_in_logic[player].value == 1:

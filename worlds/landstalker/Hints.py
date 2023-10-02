@@ -26,16 +26,20 @@ def generate_lithograph_hint(multiworld: MultiWorld, player: int):
     my_jewel_items = [item for item in multiworld.itempool if item.player == player and " Jewel" in item.name]
     for item in my_jewel_items:
         # Jewel hints are composed of 4 'words' shuffled randomly:
-        # - the name of the player whose world contains said jewel
-        # - the color of the jewel
+        # - the name of the player whose world contains said jewel (if not ours)
+        # - the color of the jewel (if relevant)
         # - two random words from the location name
         words = generate_blurry_location_hint(item.location, multiworld.per_slot_randoms[player])
         words[0] = words[0].upper()
         words[1] = words[1].upper()
-        words.append(item.name.split(' ')[0].upper())
-        words.append(multiworld.get_player_name(item.location.player).upper())
+        if len(my_jewel_items) < 6:
+            # Add jewel color if we are not using generic jewels because jewel count is 6 or more
+            words.append(item.name.split(' ')[0].upper())
+        if item.location.player != player:
+            # Add player name if it's not in our own world
+            words.append(multiworld.get_player_name(item.location.player).upper())
         multiworld.per_slot_randoms[player].shuffle(words)
-        hint_text += f"{words[0]} {words[1]} {words[2]} {words[3]}\n"
+        hint_text += " ".join(words) + "\n"
     return hint_text.rstrip('\n')
 
 

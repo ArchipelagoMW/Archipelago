@@ -121,9 +121,7 @@ class LandstalkerWorld(World):
         item_pool += [self.create_item("Life Stock") for _ in range(lifestock_count)]
 
         # Add jewels to the item pool depending on the number of jewels set in generation settings
-        required_jewels = ["Red Jewel", "Purple Jewel", "Green Jewel", "Blue Jewel", "Yellow Jewel"]
-        del required_jewels[self.get_setting('jewel_count'):]
-        item_pool += [self.create_item(name) for name in required_jewels]
+        item_pool += [self.create_item(name) for name in self.get_required_jewels_names(self.get_setting('jewel_count'))]
 
         # Add a pre-placed fake win condition item
         win_condition_item = LandstalkerItem("King Nole's Treasure", ItemClassification.progression, None, self.player)
@@ -235,3 +233,12 @@ class LandstalkerWorld(World):
                 price = max(price, 5)
                 location.price = int(price)
             sphere_id += 1
+
+    @staticmethod
+    def get_required_jewels_names(count):
+        if count < 6:
+            required_jewels = ["Red Jewel", "Purple Jewel", "Green Jewel", "Blue Jewel", "Yellow Jewel"]
+            del required_jewels[count:]
+            return required_jewels
+        else:
+            return ["Kazalt Jewel"] * count

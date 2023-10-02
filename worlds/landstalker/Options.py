@@ -25,8 +25,8 @@ class JewelCount(Range):
     """
     display_name = "Jewel count"
     range_start = 0
-    range_end = 5
-    default = 2
+    range_end = 9
+    default = 5
 
 
 class ProgressiveArmors(DefaultOnToggle):

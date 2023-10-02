@@ -87,7 +87,8 @@ item_table: Dict[str, LandstalkerItemData] = {
     "100 Golds":            LandstalkerItemData(67, ItemClassification.filler,      100,    5),
     "200 Golds":            LandstalkerItemData(68, ItemClassification.useful,      200,    2),
 
-    "Progressive Armor":    LandstalkerItemData(69, ItemClassification.useful,      250,    0)
+    "Progressive Armor":    LandstalkerItemData(69, ItemClassification.useful,      250,    0),
+    "Kazalt Jewel":         LandstalkerItemData(70, ItemClassification.progression, 500,    0)
 }
 
 
