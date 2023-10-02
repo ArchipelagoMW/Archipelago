@@ -378,7 +378,20 @@ class Palette(Choice):
     option_greyscale = 3
     option_pink = 4
     option_inverted = 5
-    
+
+class WarpImprovements(DefaultOffToggle):
+    """
+    [On] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
+    [Off] No change
+    """
+
+class AdditionalWarpPoints(DefaultOffToggle):
+    """
+    [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
+    [Off] No change
+    """
+     
+
 links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'logic': Logic,
     # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
@@ -400,6 +413,8 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     # 'bowwow': Bowwow,
     # 'overworld': Overworld,
     'link_palette': LinkPalette,
+    'warp_improvements': WarpImprovements,
+    'additional_warp_points': AdditionalWarpPoints,
     'trendy_game': TrendyGame,
     'gfxmod': GfxMod,
     'palette': Palette,
