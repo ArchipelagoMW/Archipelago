@@ -1017,7 +1017,7 @@ ITEM_SOURCES_JSON = [
     {
         "name": "Greenmaze: chest on path to Cutter",
         "type": "chest",
-        "nodeId": "greenmaze_pre_whistle",
+        "nodeId": "greenmaze_cutter",
         "chestId": 168
     },
     {
@@ -1950,7 +1950,7 @@ ITEM_SOURCES_JSON = [
     {
         "name": "Greenmaze: Cutter reward for saving Einstein",
         "type": "reward",
-        "nodeId": "greenmaze_pre_whistle",
+        "nodeId": "greenmaze_cutter",
         "address": 166021,
         "flag": {"byte": "0x1024", "bit": 4},
         "rewardId": 2

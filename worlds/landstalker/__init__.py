@@ -108,9 +108,11 @@ class LandstalkerWorld(World):
             for location_name in SHOPS_TO_FILL:
                 self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item("EkeEke"))
 
-        # Add a fixed amount of "progression" Life Stock for a specific requirement
+        # Add a fixed amount of progression Life Stock for a specific requirement (Fahl)
         FAHL_LIFESTOCK_REQ = 15
         item_pool += [self.create_item("Life Stock", ItemClassification.progression) for _ in range(FAHL_LIFESTOCK_REQ)]
+        # Add a unique progression EkeEke for a specific requirement (Cutter)
+        item_pool += [self.create_item("EkeEke", ItemClassification.progression)]
 
         # Add a variable amount of "useful" Life Stock to the pool, depending on the amount of starting Life Stock
         # (i.e. on the starting location)

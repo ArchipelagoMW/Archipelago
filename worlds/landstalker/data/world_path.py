@@ -204,6 +204,14 @@ WORLD_PATHS_JSON = [
         ]
     },
     {
+        "fromId": "greenmaze_pre_whistle",
+        "toId": "greenmaze_cutter",
+        "requiredItems": [
+            "EkeEke"
+        ],
+        "twoWay": True
+    },
+    {
         "fromId": "greenmaze_post_whistle",
         "toId": "route_massan_gumi"
     },

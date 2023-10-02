@@ -209,6 +209,13 @@ WORLD_NODES_JSON = {
             "in the infamous Greenmaze"
         ]
     },
+    "greenmaze_cutter": {
+        "name": "Greenmaze (Cutter hidden sector)",
+        "hints": [
+            "among the trees",
+            "in the infamous Greenmaze"
+        ]
+    },
     "greenmaze_post_whistle": {
         "name": "Greenmaze (post-whistle)",
         "hints": [
