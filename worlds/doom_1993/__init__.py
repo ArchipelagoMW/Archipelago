@@ -56,6 +56,13 @@ class DOOM1993World(World):
         "Hell Beneath (E4M1)"
     ]
 
+    boss_level_for_espidoes: List[str] = [
+        "Phobos Anomaly (E1M8)",
+        "Tower of Babel (E2M8)",
+        "Dis (E3M8)",
+        "Unto the Cruel (E4M8)"
+    ]
+
     # Item ratio that scales depending on episode count. These are the ratio for 3 episode.
     items_ratio: Dict[str, float] = {
         "Armor": 41,
@@ -140,7 +147,11 @@ class DOOM1993World(World):
         self.location_count = len(self.multiworld.get_locations(self.player))
 
     def completion_rule(self, state: CollectionState):
-        for map_name in Maps.map_names:
+        goal_levels = Maps.map_names
+        if getattr(self.multiworld, "goal")[self.player].value:
+            goal_levels = self.boss_level_for_espidoes
+
+        for map_name in goal_levels:
             if map_name + " - Exit" not in self.location_name_to_id:
                 continue
             

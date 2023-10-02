@@ -3,6 +3,18 @@ import typing
 from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
 
 
+class Goal(Choice):
+    """
+    Choose the main goal.
+    complete_all_levels: All levels of the selected episodes
+    complete_boss_levels: Boss levels (E#M8) of selected episodes
+    """
+    display_name = "Goal"
+    option_complete_all_levels = 0
+    option_complete_boss_levels = 1
+    default = 0
+
+
 class Difficulty(Choice):
     """
     Choose the difficulty option. Those match DOOM's difficulty options.
@@ -130,6 +142,7 @@ class Episode4(Toggle):
 
 options: typing.Dict[str, AssembleOptions] = {
     "start_inventory_from_pool": StartInventoryPool,
+    "goal": Goal,
     "difficulty": Difficulty,
     "random_monsters": RandomMonsters,
     "random_pickups": RandomPickups,
