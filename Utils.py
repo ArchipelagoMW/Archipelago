@@ -13,6 +13,7 @@ import io
 import collections
 import importlib
 import logging
+import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
@@ -216,7 +217,13 @@ def get_cert_none_ssl_context():
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
-    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        # if hostname or resolvconf is not set up properly, this may fail
+        warnings.warn("Could not resolve own hostname, falling back to 127.0.0.1")
+        ip = "127.0.0.1"
+
     ctx = get_cert_none_ssl_context()
     try:
         ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx, timeout=10).read().decode("utf8").strip()
@@ -234,7 +241,13 @@ def get_public_ipv4() -> str:
 def get_public_ipv6() -> str:
     import socket
     import urllib.request
-    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        # if hostname or resolvconf is not set up properly, this may fail
+        warnings.warn("Could not resolve own hostname, falling back to ::1")
+        ip = "::1"
+
     ctx = get_cert_none_ssl_context()
     try:
         ip = urllib.request.urlopen("https://v6.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
