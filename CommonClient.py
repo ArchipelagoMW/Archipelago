@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import copy
 import logging
 import asyncio
 import urllib.parse
@@ -377,10 +379,9 @@ class CommonContext:
 
     def on_print_json(self, args: dict):
         if self.ui:
-            self.ui.print_json(args["data"])
-        else:
-            text = self.jsontotextparser(args["data"])
-            logger.info(text)
+            self.ui.print_json(copy.deepcopy(args["data"]))
+        text = self.jsontotextparser(args["data"])
+        logger.info(text)
 
     def on_package(self, cmd: str, args: dict):
         """For custom package handling in subclasses."""
