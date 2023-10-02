@@ -50,17 +50,22 @@ def open_host_yaml():
 def open_patch():
     suffixes = []
     for c in components:
-        if isfile(get_exe(c)[-1]):
-            suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
-                                                      isinstance(c.file_identifier, SuffixIdentifier) else []
+        if c.type == Type.CLIENT and \
+                isinstance(c.file_identifier, SuffixIdentifier) and \
+                (c.script_name is None or isfile(get_exe(c)[-1])):
+            suffixes += c.file_identifier.suffixes
     try:
-        filename = open_filename('Select patch', (('Patches', suffixes),))
+        filename = open_filename("Select patch", (("Patches", suffixes),))
     except Exception as e:
-        messagebox('Error', str(e), error=True)
+        messagebox("Error", str(e), error=True)
     else:
         file, component = identify(filename)
         if file and component:
-            launch([*get_exe(component), file], component.cli)
+            exe = get_exe(component)
+            if exe is None or not isfile(exe[-1]):
+                exe = get_exe("Launcher")
+
+            launch([*exe, file], component.cli)
 
 
 def generate_yamls():
@@ -107,7 +112,7 @@ def identify(path: Union[None, str]):
         return None, None
     for component in components:
         if component.handles_file(path):
-            return path,  component
+            return path, component
         elif path == component.display_name or path == component.script_name:
             return None, component
     return None, None
@@ -117,25 +122,25 @@ def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
     if isinstance(component, str):
         name = component
         component = None
-        if name.startswith('Archipelago'):
+        if name.startswith("Archipelago"):
             name = name[11:]
-        if name.endswith('.exe'):
+        if name.endswith(".exe"):
             name = name[:-4]
-        if name.endswith('.py'):
+        if name.endswith(".py"):
             name = name[:-3]
         if not name:
             return None
         for c in components:
-            if c.script_name == name or c.frozen_name == f'Archipelago{name}':
+            if c.script_name == name or c.frozen_name == f"Archipelago{name}":
                 component = c
                 break
         if not component:
             return None
     if is_frozen():
-        suffix = '.exe' if is_windows else ''
-        return [local_path(f'{component.frozen_name}{suffix}')]
+        suffix = ".exe" if is_windows else ""
+        return [local_path(f"{component.frozen_name}{suffix}")] if component.frozen_name else None
     else:
-        return [sys.executable, local_path(f'{component.script_name}.py')]
+        return [sys.executable, local_path(f"{component.script_name}.py")] if component.script_name else None
 
 
 def launch(exe, in_terminal=False):
