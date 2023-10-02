@@ -34,6 +34,18 @@ We recommend having Archipelago's Text Client open on the side to keep track of 
 APDOOM has in-game messages,
 but they disappear quickly and there's no reasonable way to check your message history in-game.
 
+### Hinting
+
+To hint from in-game, use the chat (Default key: 'T'). Hinting from DOOM can be difficult because names are rather long and contain special characters. For example:
+```
+!hint Toxin Refinery (E1M3) - Computer area map
+```
+The game has a hint helper implemented, where you can simply type this:
+```
+!hint e1m3 map
+```
+For this to work, include the map short name (`E1M1`), followed by one of the keywords: `map`, `blue`, `yellow`, `red`.
+
 ## Auto-Tracking
 
 APDOOM has a functional map tracker integrated into the level select screen.
