@@ -119,10 +119,10 @@ class BumpStikWorld(World):
         forbid_item(self.multiworld.get_location("Bonus Booster 5", self.player),
                     "Booster Bumper", self.player)
         for x in range(1, 33):
-            self.multiworld.get_location(f"Treasure Bumper {x}").access_rule = \
+            self.multiworld.get_location(f"Treasure Bumper {x}", self.player).access_rule = \
                 lambda state, x = x: state.has("Treasure Bumper", self.player, x)
         for x in range(1, 6):
-            self.multiworld.get_location(f"Bonus Booster {x}").access_rule = \
+            self.multiworld.get_location(f"Bonus Booster {x}", self.player).access_rule = \
                 lambda state, x = x: state.has("Booster Bumper", self.player, x)
 
 
