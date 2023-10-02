@@ -338,7 +338,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                     if connection.campaign not in campaign_mission_slots:
                         connection.connect_to = -1
                         continue
-                    while campaign_mission_slots[connection.campaign][connection.connect_to] is None:
+                    while campaign_mission_slots[connection.campaign][connection.connect_to].slot is None:
                         connection.connect_to -= 1
                     all_connections.append(campaign_mission_slots[connection.campaign][connection.connect_to])
                 for connection in mission_order[campaign][i].connect_to:
