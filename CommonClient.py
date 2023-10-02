@@ -244,6 +244,7 @@ class CommonContext:
         self.watcher_event = asyncio.Event()
 
         self.jsontotextparser = JSONtoTextParser(self)
+        self.rawjsontotextparser = RawJSONtoTextParser(self)
         self.update_data_package(network_data_package)
 
         # execution
@@ -379,9 +380,13 @@ class CommonContext:
 
     def on_print_json(self, args: dict):
         if self.ui:
+            # send copy to UI
             self.ui.print_json(copy.deepcopy(args["data"]))
-        text = self.jsontotextparser(args["data"])
-        logger.info(text)
+
+        logging.getLogger("FileLog").info(self.rawjsontotextparser(copy.deepcopy(args["data"])),
+                                          extra={"NoStream": True})
+        logging.getLogger("StreamLog").info(self.jsontotextparser(copy.deepcopy(args["data"])),
+                                            extra={"NoFile": True})
 
     def on_package(self, cmd: str, args: dict):
         """For custom package handling in subclasses."""
