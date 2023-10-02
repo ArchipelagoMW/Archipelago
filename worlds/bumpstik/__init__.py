@@ -118,6 +118,13 @@ class BumpStikWorld(World):
     def set_rules(self):
         forbid_item(self.multiworld.get_location("Bonus Booster 5", self.player),
                     "Booster Bumper", self.player)
+        for x in range(1, 33):
+            self.multiworld.get_location(f"Treasure Bumper {x}").access_rule = \
+                lambda state, x = x: state.has("Treasure Bumper", self.player, x)
+        for x in range(1, 6):
+            self.multiworld.get_location(f"Bonus Booster {x}").access_rule = \
+                lambda state, x = x: state.has("Booster Bumper", self.player, x)
+
 
     def generate_basic(self):
         self.multiworld.get_location("Level 5 - Cleared all Hazards", self.player).place_locked_item(
