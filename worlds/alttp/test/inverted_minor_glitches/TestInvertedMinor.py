@@ -16,6 +16,7 @@ from worlds import AutoWorld
 class TestInvertedMinor(TestBase):
     def setUp(self):
         self.multiworld = MultiWorld(1)
+        self.multiworld.set_seed(None)
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
@@ -25,7 +26,7 @@ class TestInvertedMinor(TestBase):
         self.multiworld.logic[1] = "minorglitches"
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.multiworld, 1)
-        create_dungeons(self.multiworld, 1)
+        self.multiworld.worlds[1].create_dungeons()
         create_shops(self.multiworld, 1)
         link_inverted_entrances(self.multiworld, 1)
         self.multiworld.worlds[1].create_items()

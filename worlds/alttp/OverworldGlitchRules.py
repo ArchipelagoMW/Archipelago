@@ -6,17 +6,20 @@ from BaseClasses import Entrance
 
 from .StateHelpers import can_lift_heavy_rocks, can_boots_clip_lw, can_boots_clip_dw, can_get_glitched_speed_dw
 
+
 def get_sword_required_superbunny_mirror_regions():
     """
     Cave regions that superbunny can get through - but only with a sword.
     """
     yield 'Spiral Cave (Top)'
 
+
 def get_boots_required_superbunny_mirror_regions():
     """
     Cave regions that superbunny can get through - but only with boots.
     """
     yield 'Two Brothers House'
+
 
 def get_boots_required_superbunny_mirror_locations():
     """
@@ -207,7 +210,6 @@ def get_mirror_offset_spots_lw(player):
     yield ('Death Mountain Offset Mirror (Houlihan Exit)', 'Death Mountain', 'Hyrule Castle Ledge', lambda state: state.has('Magic Mirror', player) and can_boots_clip_dw(state, player) and state.has('Moon Pearl', player))
 
 
-
 def get_invalid_bunny_revival_dungeons():
     """
     Dungeon regions that can't be bunny revived from without superbunny state.
@@ -300,6 +302,7 @@ def create_no_logic_connections(player, world, connections):
         parent.exits.append(connection)
         connection.connect(target)
 
+
 def create_owg_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
@@ -307,6 +310,7 @@ def create_owg_connections(player, world, connections):
         connection = Entrance(player, entrance, parent)
         parent.exits.append(connection)
         connection.connect(target)
+
 
 def set_owg_connection_rules(player, world, connections, default_rule):
     for entrance, _, _, *rule_override in connections:

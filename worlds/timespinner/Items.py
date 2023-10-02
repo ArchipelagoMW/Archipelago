@@ -239,6 +239,22 @@ starter_spells: Tuple[str, ...] = (
     'Corruption'
 )
 
+# weighted
+starter_progression_items: Tuple[str, ...] = (
+    'Talaria Attachment',
+    'Talaria Attachment',
+    'Succubus Hairpin',
+    'Succubus Hairpin',
+    'Timespinner Wheel',
+    'Timespinner Wheel',
+    'Twin Pyramid Key',
+    'Celestial Sash',
+    'Lightwall',
+    'Modern Warp Beacon',
+    'Timeworn Warp Beacon',
+    'Mysterious Warp Beacon'
+)
+
 filler_items: Tuple[str, ...] = (
     'Potion',
     'Ether',

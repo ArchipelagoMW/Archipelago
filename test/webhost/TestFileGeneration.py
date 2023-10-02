@@ -14,7 +14,8 @@ class TestFileGeneration(unittest.TestCase):
         cls.incorrect_path = os.path.join(os.path.split(os.path.dirname(__file__))[0], "WebHostLib")
 
     def testOptions(self):
-        WebHost.create_options_files()
+        from WebHostLib.options import create as create_options_files
+        create_options_files()
         target = os.path.join(self.correct_path, "static", "generated", "configs")
         self.assertTrue(os.path.exists(target))
         self.assertFalse(os.path.exists(os.path.join(self.incorrect_path, "static", "generated", "configs")))
@@ -25,7 +26,7 @@ class TestFileGeneration(unittest.TestCase):
         for file in os.scandir(target):
             if file.is_file() and file.name.endswith(".yaml"):
                 with self.subTest(file=file.name):
-                    with open(file) as f:
+                    with open(file, encoding="utf-8-sig") as f:
                         for value in roll_options({file.name: f.read()})[0].values():
                             self.assertTrue(value is True, f"Default Options for template {file.name} cannot be run.")
 

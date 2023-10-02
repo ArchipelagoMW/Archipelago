@@ -26,9 +26,9 @@ item_table: Dict[str, ItemData] = {
 
 item_pool: Dict[str, int] = {
     'Card Draw': 15,
-    'Rare Card Draw': 3,
+    'Rare Card Draw': 2,
     'Relic': 10,
-    'Boss Relic': 3
+    'Boss Relic': 2
 }
 
 event_item_pairs: Dict[str, str] = {

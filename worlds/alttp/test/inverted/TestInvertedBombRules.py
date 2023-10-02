@@ -15,6 +15,7 @@ class TestInvertedBombRules(unittest.TestCase):
 
     def setUp(self):
         self.multiworld = MultiWorld(1)
+        self.multiworld.set_seed(None)
         self.multiworld.mode[1] = "inverted"
         args = Namespace
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
@@ -23,7 +24,7 @@ class TestInvertedBombRules(unittest.TestCase):
         self.multiworld.set_default_common_options()
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.multiworld, 1)
-        create_dungeons(self.multiworld, 1)
+        self.multiworld.worlds[1].create_dungeons()
 
     #TODO: Just making sure I haven't missed an entrance.  It would be good to test the rules make sense as well.
     def testInvertedBombRulesAreComplete(self):

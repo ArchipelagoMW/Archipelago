@@ -55,16 +55,16 @@ table.dataTable thead{
     font-family: LexendDeca-Regular, sans-serif;
 }
 
-table.dataTable tbody{
+table.dataTable tbody, table.dataTable tfoot{
     background-color: #dce2bd;
     font-family: LexendDeca-Light, sans-serif;
 }
 
-table.dataTable tbody tr:hover{
+table.dataTable tbody tr:hover, table.dataTable tfoot tr:hover{
     background-color: #e2eabb;
 }
 
-table.dataTable tbody td{
+table.dataTable tbody td, table.dataTable tfoot td{
     padding: 4px 6px;
 }
 
@@ -97,8 +97,12 @@ table.dataTable thead th.lower-row{
     top: 46px;
 }
 
-table.dataTable tbody td{
+table.dataTable tbody td, table.dataTable tfoot td{
     border: 1px solid #bba967;
+}
+
+table.dataTable tfoot td{
+    font-weight: bold;
 }
 
 div.dataTables_scrollBody{
@@ -117,6 +121,33 @@ img.alttp-sprite {
 
 .item-acquired{
     background-color: #d3c97d;
+}
+
+#tracker-navigation {
+    display: inline-flex;
+    background-color: #b0a77d;
+    margin: 0.5rem;
+    border-radius: 4px;
+}
+
+.tracker-navigation-button {
+    display: block;
+    margin: 4px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+    color: #000;
+    font-weight: lighter;
+}
+
+.tracker-navigation-button:hover {
+    background-color: #e2eabb !important;
+}
+
+.tracker-navigation-button.selected {
+    background-color: rgb(220, 226, 189);
 }
 
 @media all and (max-width: 1700px) {

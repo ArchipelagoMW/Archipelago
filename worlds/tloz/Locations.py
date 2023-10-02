@@ -87,16 +87,9 @@ level_locations = [
     ]
 ]
 
-all_level_locations = []
-for level in level_locations:
-    for location in level:
-        all_level_locations.append(location)
+all_level_locations = [location for level in level_locations for location in level]
 
-standard_level_locations = []
-for level in level_locations:
-    for location in level:
-        if "Drop" not in location:
-            standard_level_locations.append(location)
+standard_level_locations = [location for level in level_locations for location in level if "Drop" not in location]
 
 shop_locations = [
     "Arrow Shop Item Left", "Arrow Shop Item Middle", "Arrow Shop Item Right",
@@ -190,7 +183,6 @@ floor_location_game_offsets_early = {
 }
 
 floor_location_game_ids_early = {}
-floor_location_game_ids_late = {}
 for key, value in floor_location_game_offsets_early.items():
     floor_location_game_ids_early[key] = value + Rom.first_quest_dungeon_items_early
 
@@ -254,6 +246,7 @@ floor_location_game_offsets_late = {
     "Level 9 Rupee Drop (Gels East)": 0x26
 }
 
+floor_location_game_ids_late = {}
 for key, value in floor_location_game_offsets_late.items():
     floor_location_game_ids_late[key] = value + Rom.first_quest_dungeon_items_late
 

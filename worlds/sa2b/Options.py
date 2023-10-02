@@ -9,12 +9,29 @@ class Goal(Choice):
     Biolizard: Finish Cannon's Core and defeat the Biolizard and Finalhazard
     Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone
     Finalhazard Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone, then defeat Finalhazard
+    Grand Prix: Win every race in Kart Race Mode (all standard levels are disabled)
+    Boss Rush: Beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Cannon's Core Boss Rush: Beat Cannon's Core, then beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Boss Rush Chaos Emerald Hunt: Find the Seven Chaos Emeralds, then beat all of the bosses in the Boss Rush, ending with Finalhazard
     """
     display_name = "Goal"
     option_biolizard = 0
     option_chaos_emerald_hunt = 1
     option_finalhazard_chaos_emerald_hunt = 2
+    option_grand_prix = 3
+    option_boss_rush = 4
+    option_cannons_core_boss_rush = 5
+    option_boss_rush_chaos_emerald_hunt = 6
     default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name and value == 5:
+            return "Cannon's Core Boss Rush"
+        elif cls.auto_display_name:
+            return cls.name_lookup[value].replace("_", " ").title()
+        else:
+            return cls.name_lookup[value]
 
 
 class MissionShuffle(Toggle):
@@ -22,6 +39,22 @@ class MissionShuffle(Toggle):
     Determines whether missions order will be shuffled per level
     """
     display_name = "Mission Shuffle"
+
+
+class BossRushShuffle(Choice):
+    """
+    Determines how bosses in Boss Rush Mode are shuffled
+    Vanilla: Bosses appear in the Vanilla ordering
+    Shuffled: The same bosses appear, but in a random order
+    Chaos: Each boss is randomly chosen separately (one will always be King Boom Boo)
+    Singularity: One boss is chosen and placed in every slot (one will always be replaced with King Boom Boo)
+    """
+    display_name = "Boss Rush Shuffle"
+    option_vanilla = 0
+    option_shuffled = 1
+    option_chaos = 2
+    option_singularity = 3
+    default = 0
 
 
 class BaseTrapWeight(Choice):
@@ -84,6 +117,45 @@ class DarknessTrapWeight(BaseTrapWeight):
     display_name = "Darkness Trap Weight"
 
 
+class IceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes the world slippery
+    """
+    display_name = "Ice Trap Weight"
+
+
+class SlowTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes you gotta go slow
+    """
+    display_name = "Slow Trap Weight"
+
+
+class CutsceneTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes you watch an unskippable cutscene
+    """
+    display_name = "Cutscene Trap Weight"
+
+
+class PongTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Pong minigame
+    """
+    display_name = "Pong Trap Weight"
+
+
+class MinigameTrapDifficulty(Choice):
+    """
+    How difficult any Minigame-style traps are
+    """
+    display_name = "Minigame Trap Difficulty"
+    option_easy = 0
+    option_medium = 1
+    option_hard = 2
+    default = 1
+
+
 class JunkFillPercentage(Range):
     """
     Replace a percentage of non-required emblems in the item pool with random junk items
@@ -104,25 +176,10 @@ class TrapFillPercentage(Range):
     default = 0
 
 
-class IncludeMissions(Range):
-    """
-    Allows logic to place items in a range of Missions for each level
-    Each mission setting includes lower settings
-    1: Base Story Missions
-    2: 100 Ring Missions
-    3: Lost Chao Missions
-    4: Timer Missions
-    5: Hard Mode Missions
-    """
-    display_name = "Include Missions"
-    range_start = 1
-    range_end = 5
-    default = 2
-
-
 class Keysanity(Toggle):
     """
     Determines whether picking up Chao Keys grants checks
+    (86 Locations)
     """
     display_name = "Keysanity"
 
@@ -131,9 +188,9 @@ class Whistlesanity(Choice):
     """
     Determines whether whistling at various spots grants checks
     None: No Whistle Spots grant checks
-    Pipes: Whistling at Pipes grants checks
-    Hidden: Whistling at Hidden Whistle Spots grants checks
-    Both: Whistling at both Pipes and Hidden Whistle Spots grants checks
+    Pipes: Whistling at Pipes grants checks (97 Locations)
+    Hidden: Whistling at Hidden Whistle Spots grants checks (32 Locations)
+    Both: Whistling at both Pipes and Hidden Whistle Spots grants checks (129 Locations)
     """
     display_name = "Whistlesanity"
     option_none = 0
@@ -146,8 +203,39 @@ class Whistlesanity(Choice):
 class Beetlesanity(Toggle):
     """
     Determines whether destroying Gold Beetles grants checks
+    (27 Locations)
     """
     display_name = "Beetlesanity"
+
+
+class Omosanity(Toggle):
+    """
+    Determines whether activating Omochao grants checks
+    (192 Locations)
+    """
+    display_name = "Omosanity"
+
+
+class Animalsanity(Toggle):
+    """
+    Determines whether picking up counted small animals grants checks
+    (420 Locations)
+    """
+    display_name = "Animalsanity"
+
+
+class KartRaceChecks(Choice):
+    """
+    Determines whether Kart Race Mode grants checks
+    None: No Kart Races grant checks
+    Mini: Each Kart Race difficulty must be beaten only once
+    Full: Every Character must separately beat each Kart Race difficulty
+    """
+    display_name = "Kart Race Checks"
+    option_none = 0
+    option_mini = 1
+    option_full = 2
+    default = 0
 
 
 class EmblemPercentageForCannonsCore(Range):
@@ -195,6 +283,18 @@ class LevelGateCosts(Choice):
     default = 2
 
 
+class MaximumEmblemCap(Range):
+    """
+    Determines the maximum number of emblems that can be in the item pool.
+    If fewer available locations exist in the pool than this number, the number of available locations will be used instead.
+    Gate and Cannon's Core costs will be calculated based off of that number.
+    """
+    display_name = "Max Emblem Cap"
+    range_start = 50
+    range_end = 500
+    default = 180
+
+
 class RequiredRank(Choice):
     """
     Determines what minimum Rank is required to send a check for a mission
@@ -213,8 +313,8 @@ class ChaoGardenDifficulty(Choice):
     Determines the number of chao garden difficulty levels included. Easier difficulty settings means fewer chao garden checks
     None: No Chao Garden Activities have checks
     Beginner: Beginner Races
-    Intermediate: Beginner and Jewel Races
-    Expert: Beginner, Jewel, Challenge, Hero, and Dark Races
+    Intermediate: Beginner, Challenge, Hero, and Dark Races
+    Expert: Beginner, Challenge, Hero, Dark and Jewel Races
     """
     display_name = "Chao Garden Difficulty"
     option_none = 0
@@ -246,7 +346,7 @@ class ChaoRaceChecks(Choice):
 
 class RequiredCannonsCoreMissions(Choice):
     """
-    Determines how many Cannon's Core missions must be completed to unlock the Biolizard (for the "Biolizard" goal)
+    Determines how many Cannon's Core missions must be completed (for Biolizard or Cannon's Core goals)
     First: Only the first mission must be completed
     All Active: All active Cannon's Core missions must be completed
     """
@@ -440,6 +540,34 @@ class CannonsCoreMission5(DefaultOnToggle):
     display_name = "Cannon's Core Mission 5"
 
 
+class RingLoss(Choice):
+    """
+    How taking damage is handled
+    Classic: You lose all of your rings when hit
+    Modern: You lose 20 rings when hit
+    OHKO: You die immediately when hit (NOTE: Some Hard Logic tricks may require damage boosts!)
+    """
+    display_name = "Ring Loss"
+    option_classic = 0
+    option_modern = 1
+    option_ohko = 2
+    default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name and value == 2:
+            return cls.name_lookup[value].upper()
+        else:
+            return cls.name_lookup[value]
+
+
+class RingLink(Toggle):
+    """
+    Whether your in-level ring gain/loss is linked to other players
+    """
+    display_name = "Ring Link"
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -465,7 +593,7 @@ class SADXMusic(Choice):
 class MusicShuffle(Choice):
     """
     What type of Music Shuffle is used
-    Off: No music is shuffled.
+    None: No music is shuffled.
     Levels: Level music is shuffled.
     Full: Level, Menu, and Additional music is shuffled.
     Singularity: Level, Menu, and Additional music is all replaced with a single random song.
@@ -475,6 +603,24 @@ class MusicShuffle(Choice):
     option_levels = 1
     option_full = 2
     option_singularity = 3
+    default = 0
+
+
+class VoiceShuffle(Choice):
+    """
+    What type of Voice Shuffle is used
+    None: No voices are shuffled.
+    Shuffled: Voices are shuffled.
+    Rude: Voices are shuffled, but some are replaced with rude words.
+    Chao: All voices are replaced with chao sounds.
+    Singularity: All voices are replaced with a single random voice.
+    """
+    display_name = "Voice Shuffle Type"
+    option_none = 0
+    option_shuffled = 1
+    option_rude = 2
+    option_chao = 3
+    option_singularity = 4
     default = 0
 
 
@@ -512,15 +658,20 @@ class LogicDifficulty(Choice):
 sa2b_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
     "mission_shuffle": MissionShuffle,
+    "boss_rush_shuffle": BossRushShuffle,
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
+    "omosanity": Omosanity,
+    "animalsanity": Animalsanity,
+    "kart_race_checks": KartRaceChecks,
     "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "required_cannons_core_missions": RequiredCannonsCoreMissions,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
     "level_gate_costs": LevelGateCosts,
+    "max_emblem_cap": MaximumEmblemCap,
     "chao_garden_difficulty": ChaoGardenDifficulty,
     "include_chao_karate": IncludeChaoKarate,
     "chao_race_checks": ChaoRaceChecks,
@@ -533,8 +684,16 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "gravity_trap_weight": GravityTrapWeight,
     "exposition_trap_weight": ExpositionTrapWeight,
     #"darkness_trap_weight": DarknessTrapWeight,
+    "ice_trap_weight": IceTrapWeight,
+    "slow_trap_weight": SlowTrapWeight,
+    "cutscene_trap_weight": CutsceneTrapWeight,
+    "pong_trap_weight": PongTrapWeight,
+    "minigame_trap_difficulty": MinigameTrapDifficulty,
+    "ring_loss": RingLoss,
+    "ring_link": RingLink,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
+    "voice_shuffle": VoiceShuffle,
     "narrator": Narrator,
     "logic_difficulty": LogicDifficulty,
     "speed_mission_count": SpeedMissionCount,

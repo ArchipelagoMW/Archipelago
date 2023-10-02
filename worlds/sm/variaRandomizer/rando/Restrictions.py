@@ -1,24 +1,22 @@
-import copy, random, utils.log
-
-from graph.graph_utils import getAccessPoint
-from rando.ItemLocContainer import getLocListStr
+import copy, random
+from ..utils import log
+from ..graph.graph_utils import getAccessPoint
+from ..rando.ItemLocContainer import getLocListStr
 
 # Holds settings related to item placement restrictions.
 # canPlaceAtLocation is the main entry point here
 class Restrictions(object):
     def __init__(self, settings):
-        self.log = utils.log.get('Restrictions')
+        self.log = log.get('Restrictions')
         self.settings = settings
         # Item split : Major, Chozo, Full, Scavenger
         self.split = settings.restrictions['MajorMinor']
         self.suitsRestrictions = settings.restrictions['Suits']
         self.scavLocs = None
         self.scavIsVanilla = False
-        self.scavEscape = False
         self.restrictionDictChecker = None
         if self.split == 'Scavenger':
             self.scavIsVanilla = settings.restrictions['ScavengerParams']['vanillaItems']
-            self.scavEscape = settings.restrictions['ScavengerParams']['escape']
         # checker function chain used by canPlaceAtLocation
         self.checkers = self.getCheckers()
         self.static = {}
@@ -84,7 +82,7 @@ class Restrictions(object):
         self.checkers.append(self.restrictionDictChecker)
 
     def isLocMajor(self, loc):
-        return not loc.isBoss() and (self.split == "Full" or loc.isClass(self.split))
+        return (not loc.isBoss() and self.split == "Full") or loc.isClass(self.split)
 
     def isLocMinor(self, loc):
         return not loc.isBoss() and (self.split == "Full" or not loc.isClass(self.split))
@@ -93,7 +91,7 @@ class Restrictions(object):
         if self.split == "Full":
             return True
         elif self.split == 'Scavenger':
-            return not self.isItemMinor(item)
+            return not self.isItemMinor(item) or item.Type == "Ridley"
         else:
             return item.Class == self.split
 
@@ -135,7 +133,7 @@ class Restrictions(object):
     def getCheckers(self):
         checkers = []
         self.log.debug("add bosses restriction")
-        checkers.append(lambda item, loc, cont: (item.Category != 'Boss' and not loc.isBoss()) or (item.Category == 'Boss' and item.Name == loc.Name))
+        checkers.append(lambda item, loc, cont: (item.Category not in ['Boss', 'MiniBoss'] and not loc.isBoss()) or (item.Category in ['Boss', 'MiniBoss'] and item.Type == loc.BossItemType))
         if self.split != 'Full':
             if self.split != 'Scavenger':
                 self.log.debug("add majorsSplit restriction")

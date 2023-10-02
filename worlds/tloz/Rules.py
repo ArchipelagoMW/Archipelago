@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 
-from ..generic.Rules import add_rule
+from worlds.generic.Rules import add_rule
 from .Locations import food_locations, shop_locations
 from .ItemPool import dangerous_weapon_locations
+from .Options import StartingPosition
 
 if TYPE_CHECKING:
     from . import TLoZWorld
@@ -22,7 +23,8 @@ def set_rules(tloz_world: "TLoZWorld"):
     # No dungeons without weapons except for the dangerous weapon locations if we're dangerous, no unsafe dungeons
     for i, level in enumerate(tloz_world.levels[1:10]):
         for location in level.locations:
-            if world.StartingPosition[player] < 1 or location.name not in dangerous_weapon_locations:
+            if world.StartingPosition[player] < StartingPosition.option_dangerous \
+                    or location.name not in dangerous_weapon_locations:
                 add_rule(world.get_location(location.name, player),
                          lambda state: state.has_group("weapons", player))
             if i > 0:  # Don't need an extra heart for Level 1
@@ -31,9 +33,11 @@ def set_rules(tloz_world: "TLoZWorld"):
                                        (state.has("Blue Ring", player) and
                                         state.has("Heart Container", player, int(hearts / 2))) or
                                        (state.has("Red Ring", player) and
-                                        state.has("Heart Container", player, int(hearts / 4)))
+                                        state.has("Heart Container", player, int(hearts / 4))))
+            if "Pols Voice" in location.name:  # This enemy needs specific weapons
+                add_rule(world.get_location(location.name, player),
+                         lambda state: state.has_group("swords", player) or state.has("Bow", player))
 
-                         )
     # No requiring anything in a shop until we can farm for money
     for location in shop_locations:
         add_rule(world.get_location(location, player),
@@ -107,18 +111,17 @@ def set_rules(tloz_world: "TLoZWorld"):
             add_rule(world.get_location(location, player),
                      lambda state: state.has("Stepladder", player))
 
-    if world.StartingPosition[player] != 2:
-        # Don't allow Take Any Items until we can actually get in one
-        if world.ExpandedPool[player]:
-            add_rule(world.get_location("Take Any Item Left", player),
-                     lambda state: state.has_group("candles", player) or
-                                   state.has("Raft", player))
-            add_rule(world.get_location("Take Any Item Middle", player),
-                     lambda state: state.has_group("candles", player) or
-                                   state.has("Raft", player))
-            add_rule(world.get_location("Take Any Item Right", player),
-                     lambda state: state.has_group("candles", player) or
-                                   state.has("Raft", player))
+    # Don't allow Take Any Items until we can actually get in one
+    if world.ExpandedPool[player]:
+        add_rule(world.get_location("Take Any Item Left", player),
+                 lambda state: state.has_group("candles", player) or
+                               state.has("Raft", player))
+        add_rule(world.get_location("Take Any Item Middle", player),
+                 lambda state: state.has_group("candles", player) or
+                               state.has("Raft", player))
+        add_rule(world.get_location("Take Any Item Right", player),
+                 lambda state: state.has_group("candles", player) or
+                               state.has("Raft", player))
     for location in tloz_world.levels[4].locations:
         add_rule(world.get_location(location.name, player),
                  lambda state: state.has("Raft", player) or state.has("Recorder", player))

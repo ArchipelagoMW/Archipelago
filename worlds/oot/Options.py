@@ -1037,13 +1037,18 @@ class AdultTradeStart(OptionSet):
         "Pocket Cucco",
         "Cojiro",
         "Odd Mushroom",
-        "Poacher's Saw",
+        "Poachers Saw",
         "Broken Sword",
         "Prescription",
         "Eyeball Frog",
         "Eyedrops",
         "Claim Check",
     }
+
+    def __init__(self, value: typing.Iterable[str]):
+        if not value:
+            value = self.default
+        super().__init__(value)
 
 
 itempool_options: typing.Dict[str, type(Option)] = {

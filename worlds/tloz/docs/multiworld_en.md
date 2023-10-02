@@ -4,20 +4,30 @@
 
 - The Zelda1Client
     - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-- The BizHawk emulator. Versions 2.3.1 and higher are supported. Version 2.7 is recommended
-    - [BizHawk Official Website](http://tasvideos.org/BizHawk.html)
+- The BizHawk emulator. Versions 2.3.1 and higher are supported.
+    - [BizHawk at TASVideos](https://tasvideos.org/BizHawk)
+
+## Optional Software
+
+- [Map Tracker](https://github.com/Br00ty/tloz_brooty/releases/latest)
+    - Used alongside [Poptracker](https://github.com/black-sliver/PopTracker) to keep track of what items/checks you've gotten. Uses auto-tracking by connecting to the Archipelago server. 
 
 ## Installation Procedures
 
 1. Download and install the latest version of Archipelago.
     - On Windows, download Setup.Archipelago.<HighestVersion\>.exe and run it.
-2. Assign Bizhawk version 2.3.1 or higher as your default program for launching `.nes` files.
-    - Extract your Bizhawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
+2. Assign EmuHawk version 2.3.1 or higher as your default program for launching `.nes` files.
+    - Extract your BizHawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
        for loading ROMs more conveniently.
         1. Right-click on a ROM file and select **Open with...**
         2. Check the box next to **Always use this app to open .nes files**.
         3. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**.
-        4. Browse for `EmuHawk.exe` located inside your Bizhawk folder (from step 1) and click **Open**.
+        4. Browse for `EmuHawk.exe` located inside your BizHawk folder (from step 1) and click **Open**.
+3. (EmuHawk version ≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
+  "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
+  **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
+  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
+  **"NLua+KopiLua" until this step is done.**
 
 ## Create a Config (.yaml) File
 
@@ -29,7 +39,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 ### Where do I get a config file?
 
 The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legen%20of%20Zelda/player-settings)
+them. Player settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
 
 ### Verifying your config file
 
@@ -39,7 +49,7 @@ validator page: [YAML Validation page](/mysterycheck)
 ## Generating a Single-Player Game
 
 1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legen%20of%20Zelda/player-settings)
+    - Player Settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
@@ -71,14 +81,15 @@ Once the Archipelago server has been hosted:
 
 ### Running Your Game and Connecting to the Client Program
 
-1. Open Bizhawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
+1. Open EmuHawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
    extension `*.nes`.
-2. Click on the Tools menu and click on **Lua Console**.
-3. Click the folder button to open a new Lua script. (CTL-O or **Script** -> **Open Script**)
-4. Navigate to the location you installed Archipelago to. Open `data/lua/TLOZ/tloz_connector.lua`.
-    1. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
+2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_tloz.lua` script onto
+   the main EmuHawk window.
+    1. You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to
+       `connector_tloz.lua` with the file picker.
+    2. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
        close your emulator entirely, restart it and re-run these steps.
-    2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking **
+    3. If it says `Must use a version of BizHawk 2.3.1 or higher`, double-check your BizHawk version by clicking **
        Help** -> **About**.
 
 ## Play the game

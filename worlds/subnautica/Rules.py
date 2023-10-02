@@ -221,6 +221,11 @@ def get_max_depth(state: "CollectionState", player: int):
     )
 
 
+def is_radiated(x: float, y: float, z: float) -> bool:
+    aurora_dist = math.sqrt((x - 1038.0) ** 2 + y ** 2 + (z - -163.1) ** 2)
+    return aurora_dist < 950
+
+
 def can_access_location(state: "CollectionState", player: int, loc: LocationDict) -> bool:
     need_laser_cutter = loc.get("need_laser_cutter", False)
     if need_laser_cutter and not has_laser_cutter(state, player):
@@ -235,8 +240,7 @@ def can_access_location(state: "CollectionState", player: int, loc: LocationDict
     pos_y = pos["y"]
     pos_z = pos["z"]
 
-    aurora_dist = math.sqrt((pos_x - 1038.0) ** 2 + (pos_y - -3.4) ** 2 + (pos_z - -163.1) ** 2)
-    need_radiation_suit = aurora_dist < 950
+    need_radiation_suit = is_radiated(pos_x, pos_y, pos_z)
     if need_radiation_suit and not state.has("Radiation Suit", player):
         return False
 

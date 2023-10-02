@@ -1,8 +1,8 @@
 ﻿from enum import Enum
 from typing import List, Callable
-from worlds.smz3.TotalSMZ3.Item import Progression
-import worlds.smz3.TotalSMZ3.Region as Region
-import worlds.smz3.TotalSMZ3.World as World
+from .Item import Progression
+from . import Region
+from . import World
 
 class LocationType(Enum):
     Regular = 0

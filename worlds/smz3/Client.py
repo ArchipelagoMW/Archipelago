@@ -86,8 +86,8 @@ class SMZ3SNIClient(SNIClient):
             recv_index += 1
             snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
-            from worlds.smz3.TotalSMZ3.Location import locations_start_id
-            from worlds.smz3 import convertLocSMZ3IDToAPID
+            from .TotalSMZ3.Location import locations_start_id
+            from . import convertLocSMZ3IDToAPID
             location_id = locations_start_id + convertLocSMZ3IDToAPID(item_index)
 
             ctx.locations_checked.add(location_id)
@@ -101,7 +101,7 @@ class SMZ3SNIClient(SNIClient):
 
         item_out_ptr = data[2] | (data[3] << 8)
 
-        from worlds.smz3.TotalSMZ3.Item import items_start_id
+        from .TotalSMZ3.Item import items_start_id
         if item_out_ptr < len(ctx.items_received):
             item = ctx.items_received[item_out_ptr]
             item_id = item.item - items_start_id

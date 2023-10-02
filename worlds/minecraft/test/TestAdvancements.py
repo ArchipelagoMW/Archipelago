@@ -1,10 +1,14 @@
-from .TestMinecraft import TestMinecraft
+from . import MCTestBase
 
 
 # Format:
 # [location, expected_result, given_items, [excluded_items]]
 # Every advancement has its own test, named by its internal ID number. 
-class TestAdvancements(TestMinecraft):
+class TestAdvancements(MCTestBase):
+    options = {
+        "shuffle_structures": False,
+        "structure_compasses": False
+    }
 
     def test_42000(self):
         self.run_location_tests([
@@ -1277,4 +1281,130 @@ class TestAdvancements(TestMinecraft):
             ["Whatever Floats Your Goat!", False, [], ["Progressive Resource Crafting", "Campfire"]],
             ["Whatever Floats Your Goat!", True, ["Progressive Weapons", "Progressive Resource Crafting"]],
             ["Whatever Floats Your Goat!", True, ["Progressive Weapons", "Campfire"]],
+            ])
+
+    # bucket, iron pick
+    def test_42103(self):
+        self.run_location_tests([
+            ["Caves & Cliffs", False, []],
+            ["Caves & Cliffs", False, [], ["Bucket"]],
+            ["Caves & Cliffs", False, [], ["Progressive Tools"]],
+            ["Caves & Cliffs", False, [], ["Progressive Resource Crafting"]],
+            ["Caves & Cliffs", True, ["Progressive Resource Crafting", "Progressive Tools", "Progressive Tools", "Bucket"]],
+            ])
+
+    # bucket, fishing rod, saddle, combat
+    def test_42104(self):
+        self.run_location_tests([
+            ["Feels like home", False, []],
+            ["Feels like home", False, [], ['Progressive Resource Crafting']],
+            ["Feels like home", False, [], ['Progressive Tools']],
+            ["Feels like home", False, [], ['Progressive Weapons']],
+            ["Feels like home", False, [], ['Progressive Armor', 'Shield']],
+            ["Feels like home", False, [], ['Fishing Rod']],
+            ["Feels like home", False, [], ['Saddle']],
+            ["Feels like home", False, [], ['Bucket']],
+            ["Feels like home", False, [], ['Flint and Steel']],
+            ["Feels like home", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']],
+            ["Feels like home", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield', 'Fishing Rod']],
+            ])
+
+    # iron pick, combat
+    def test_42105(self):
+        self.run_location_tests([
+            ["Sound of Music", False, []],
+            ["Sound of Music", False, [], ["Progressive Tools"]],
+            ["Sound of Music", False, [], ["Progressive Resource Crafting"]],
+            ["Sound of Music", False, [], ["Progressive Weapons"]],
+            ["Sound of Music", False, [], ["Progressive Armor", "Shield"]],
+            ["Sound of Music", True, ["Progressive Tools", "Progressive Tools", "Progressive Resource Crafting", "Progressive Weapons", "Progressive Armor"]],
+            ["Sound of Music", True, ["Progressive Tools", "Progressive Tools", "Progressive Resource Crafting", "Progressive Weapons", "Shield"]],
+            ])
+
+    # bucket, nether, villager
+    def test_42106(self):
+        self.run_location_tests([
+            ["Star Trader", False, []],
+            ["Star Trader", False, [], ["Bucket"]],
+            ["Star Trader", False, [], ["Flint and Steel"]],
+            ["Star Trader", False, [], ["Progressive Tools"]],
+            ["Star Trader", False, [], ["Progressive Resource Crafting"]],
+            ["Star Trader", False, [], ["Progressive Weapons"]],
+            ["Star Trader", True, ["Bucket", "Flint and Steel", "Progressive Tools", "Progressive Resource Crafting", "Progressive Weapons"]],
+            ])
+
+    # bucket, redstone -> iron pick, pillager outpost -> adventure
+    def test_42107(self):
+        self.run_location_tests([
+            ["Birthday Song", False, []],
+            ["Birthday Song", False, [], ["Bucket"]],
+            ["Birthday Song", False, [], ["Progressive Tools"]],
+            ["Birthday Song", False, [], ["Progressive Weapons"]],
+            ["Birthday Song", False, [], ["Progressive Resource Crafting"]],
+            ["Birthday Song", True, ["Progressive Resource Crafting", "Progressive Tools", "Progressive Tools", "Progressive Weapons", "Bucket"]],
+            ])
+
+    # bucket, adventure
+    def test_42108(self):
+        self.run_location_tests([
+            ["Bukkit Bukkit", False, []],
+            ["Bukkit Bukkit", False, [], ["Bucket"]],
+            ["Bukkit Bukkit", False, [], ["Progressive Tools"]],
+            ["Bukkit Bukkit", False, [], ["Progressive Weapons"]],
+            ["Bukkit Bukkit", False, [], ["Progressive Resource Crafting"]],
+            ["Bukkit Bukkit", True, ["Bucket", "Progressive Tools", "Progressive Weapons", "Progressive Resource Crafting"]],
+            ])
+
+    # iron pick, adventure
+    def test_42109(self):
+        self.run_location_tests([
+            ["It Spreads", False, []],
+            ["It Spreads", False, [], ["Progressive Tools"]],
+            ["It Spreads", False, [], ["Progressive Weapons"]],
+            ["It Spreads", False, [], ["Progressive Resource Crafting"]],
+            ["It Spreads", True, ["Progressive Tools", "Progressive Tools", "Progressive Weapons", "Progressive Resource Crafting"]],
+            ])
+
+    # iron pick, adventure
+    def test_42110(self):
+        self.run_location_tests([
+            ["Sneak 100", False, []],
+            ["Sneak 100", False, [], ["Progressive Tools"]],
+            ["Sneak 100", False, [], ["Progressive Weapons"]],
+            ["Sneak 100", False, [], ["Progressive Resource Crafting"]],
+            ["Sneak 100", True, ["Progressive Tools", "Progressive Tools", "Progressive Weapons", "Progressive Resource Crafting"]],
+            ])
+
+    # adventure, lead
+    def test_42111(self):
+        self.run_location_tests([
+            ["When the Squad Hops into Town", False, []],
+            ["When the Squad Hops into Town", False, [], ["Progressive Weapons"]],
+            ["When the Squad Hops into Town", False, [], ["Campfire", "Progressive Resource Crafting"]],
+            ["When the Squad Hops into Town", False, [], ["Lead"]],
+            ["When the Squad Hops into Town", True, ["Progressive Weapons", "Lead", "Campfire"]],
+            ["When the Squad Hops into Town", True, ["Progressive Weapons", "Lead", "Progressive Resource Crafting"]],
+            ])
+
+    # adventure, lead, nether
+    def test_42112(self):
+        self.run_location_tests([
+            ["With Our Powers Combined!", False, []],
+            ["With Our Powers Combined!", False, [], ["Lead"]],
+            ["With Our Powers Combined!", False, [], ["Bucket", "Progressive Tools"]],
+            ["With Our Powers Combined!", False, [], ["Flint and Steel"]],
+            ["With Our Powers Combined!", False, [], ["Progressive Weapons"]],
+            ["With Our Powers Combined!", False, [], ["Progressive Resource Crafting"]],
+            ["With Our Powers Combined!", True, ["Lead", "Progressive Weapons", "Progressive Resource Crafting", "Flint and Steel", "Progressive Tools", "Bucket"]],
+            ["With Our Powers Combined!", True, ["Lead", "Progressive Weapons", "Progressive Resource Crafting", "Flint and Steel", "Progressive Tools", "Progressive Tools", "Progressive Tools"]],
+            ])
+
+    # pillager outpost -> adventure
+    def test_42113(self):
+        self.run_location_tests([
+            ["You've Got a Friend in Me", False, []],
+            ["You've Got a Friend in Me", False, [], ["Progressive Weapons"]],
+            ["You've Got a Friend in Me", False, [], ["Campfire", "Progressive Resource Crafting"]],
+            ["You've Got a Friend in Me", True, ["Progressive Weapons", "Campfire"]],
+            ["You've Got a Friend in Me", True, ["Progressive Weapons", "Progressive Resource Crafting"]],
             ])
