@@ -169,20 +169,23 @@ class RiskOfRainWorld(World):
                 "Boss Item": self.multiworld.boss_item[self.player].value,
                 "Lunar Item": self.multiworld.lunar_item[self.player].value,
                 "Void Item": self.multiworld.void_item[self.player].value,
-                "Equipment": self.multiworld.equipment[self.player].value
+                "Equipment": self.multiworld.equipment[self.player].value,
+                "Money": self.multiworld.money[self.player].value,
+                "Lunar Coin": self.multiworld.lunar_coin[self.player].value,
+                "1000 Exp": self.multiworld.experience[self.player].value,
+                "Mountain Trap": self.multiworld.mountain_trap[self.player].value,
+                "Time Warp Trap": self.multiworld.time_warp_trap[self.player].value,
+                "Combat Trap": self.multiworld.combat_trap[self.player].value,
+                "Teleport Trap": self.multiworld.teleport_trap[self.player].value,
             }
-
-        # add filler/trap items to the junk pool
-        filler_items = get_items_by_category("Filler")
-        for name, data in filler_items.items():
-            junk_pool[name] = data.weight
-        if self.multiworld.enable_trap[self.player]:
-            trap_items = get_items_by_category("Trap")
-            for name, data in trap_items.items():
-                junk_pool[name] = data.weight
-            # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-            if not self.multiworld.enable_lunar[self.player]:
-                junk_pool.pop("Lunar Item")
+        if not self.multiworld.enable_trap[self.player]:
+            junk_pool.pop("Mountain Trap")
+            junk_pool.pop("Time Warp Trap")
+            junk_pool.pop("Combat Trap")
+            junk_pool.pop("Teleport Trap")
+        # remove lunar items from the pool
+        if not self.multiworld.enable_lunar[self.player]:
+            junk_pool.pop("Lunar Item")
         # remove void items from the pool
         if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
             junk_pool.pop("Void Item")

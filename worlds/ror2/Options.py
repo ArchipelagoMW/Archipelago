@@ -267,6 +267,76 @@ class Equipment(Range):
     default = 32
 
 
+class Money(Range):
+    """Weight of money items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Money"
+    range_start = 0
+    range_end = 100
+    default = 64
+
+
+class LunarCoin(Range):
+    """Weight of money items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Lunar Coins"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class Experience(Range):
+    """Weight of money items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "1000 Exp"
+    range_start = 0
+    range_end = 100
+    default = 40
+
+
+class MountainTrap(Range):
+    """Weight of money items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Mountain Trap"
+    range_start = 0
+    range_end = 100
+    default = 5
+
+
+class TimeWarpTrap(Range):
+    """Weight of money items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Time Warp Trap"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class CombatTrap(Range):
+    """Weight of money items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Combat Trap"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class TeleportTrap(Range):
+    """Weight of money items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Teleport Trap"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
 class ItemPoolPresetToggle(Toggle):
     """Will use the item weight presets when set to true, otherwise will use the custom set item pool weights."""
     display_name = "Use Item Weight Presets"
@@ -308,7 +378,14 @@ ror2_weights: Dict[str, type(Option)] = {
     "boss_item":            BossItem,
     "lunar_item":           LunarItem,
     "void_item":            VoidItem,
-    "equipment":            Equipment
+    "equipment":            Equipment,
+    "money":                Money,
+    "lunar_coin":           LunarCoin,
+    "experience":           Experience,
+    "mountain_trap":        MountainTrap,
+    "time_warp_trap":       TimeWarpTrap,
+    "combat_trap":          CombatTrap,
+    "teleport_trap":        TeleportTrap
 }
 
 ror2_options: Dict[str, type(Option)] = {

@@ -47,14 +47,14 @@ other_table: Dict[str, RiskOfRainItemData] = {
     "Radar Scanner":        RiskOfRainItemData("Radar", 14 + offset, ItemClassification.progression)
 }
 filler_table: Dict[str, RiskOfRainItemData] = {
-    "Money":                RiskOfRainItemData("Filler", 1 + filler_offset, ItemClassification.filler, 70),
+    "Money":                RiskOfRainItemData("Filler", 1 + filler_offset, ItemClassification.filler, 64),
     "Lunar Coin":           RiskOfRainItemData("Filler", 2 + filler_offset, ItemClassification.filler, 20),
     "1000 Exp":             RiskOfRainItemData("Filler", 3 + filler_offset, ItemClassification.filler, 40)
 }
 trap_table: Dict[str, RiskOfRainItemData] = {
     "Lunar Item":           RiskOfRainItemData("Trap", 6 + offset, ItemClassification.trap, 16),
-    "Mountain Trap":        RiskOfRainItemData("Trap", 1 + trap_offset, ItemClassification.trap, 10),
-    "Time Warp Trap":       RiskOfRainItemData("Trap", 2 + trap_offset, ItemClassification.trap, 30),
+    "Mountain Trap":        RiskOfRainItemData("Trap", 1 + trap_offset, ItemClassification.trap, 5),
+    "Time Warp Trap":       RiskOfRainItemData("Trap", 2 + trap_offset, ItemClassification.trap, 20),
     "Combat Trap":          RiskOfRainItemData("Trap", 3 + trap_offset, ItemClassification.trap, 20),
     "Teleport Trap":        RiskOfRainItemData("Trap", 4 + trap_offset, ItemClassification.trap, 10)
 }
@@ -102,7 +102,15 @@ default_weights: Dict[str, int] = {
     "Legendary Item":       8,
     "Boss Item":            4,
     "Void Item":            16,
-    "Equipment":            32
+    "Equipment":            32,
+    "Money":                64,
+    "Lunar Coin":           20,
+    "1000 Exp":             40,
+    "Lunar Item":           10,
+    "Mountain Trap":        4,
+    "Time Warp Trap":       20,
+    "Combat Trap":          20,
+    "Teleport Trap":        20
 }
 
 new_weights: Dict[str, int] = {
@@ -115,7 +123,15 @@ new_weights: Dict[str, int] = {
     "Legendary Item":       10,
     "Boss Item":            5,
     "Void Item":            16,
-    "Equipment":            20
+    "Equipment":            20,
+    "Money":                64,
+    "Lunar Coin":           20,
+    "1000 Exp":             40,
+    "Lunar Item":           10,
+    "Mountain Trap":        4,
+    "Time Warp Trap":       20,
+    "Combat Trap":          20,
+    "Teleport Trap":        20
 }
 
 uncommon_weights: Dict[str, int] = {
@@ -128,7 +144,15 @@ uncommon_weights: Dict[str, int] = {
     "Legendary Item":       10,
     "Boss Item":            5,
     "Void Item":            16,
-    "Equipment":            20
+    "Equipment":            20,
+    "Money":                64,
+    "Lunar Coin":           20,
+    "1000 Exp":             40,
+    "Lunar Item":           10,
+    "Mountain Trap":        4,
+    "Time Warp Trap":       20,
+    "Combat Trap":          20,
+    "Teleport Trap":        20
 }
 
 legendary_weights: Dict[str, int] = {
@@ -141,7 +165,15 @@ legendary_weights: Dict[str, int] = {
     "Legendary Item":       100,
     "Boss Item":            5,
     "Void Item":            16,
-    "Equipment":            20
+    "Equipment":            20,
+    "Money":                64,
+    "Lunar Coin":           20,
+    "1000 Exp":             40,
+    "Lunar Item":           10,
+    "Mountain Trap":        4,
+    "Time Warp Trap":       20,
+    "Combat Trap":          20,
+    "Teleport Trap":        20
 }
 
 chaos_weights: Dict[str, int] = {
@@ -154,7 +186,15 @@ chaos_weights: Dict[str, int] = {
     "Legendary Item":       30,
     "Boss Item":            20,
     "Void Item":            60,
-    "Equipment":            40
+    "Equipment":            40,
+    "Money":                64,
+    "Lunar Coin":           20,
+    "1000 Exp":             40,
+    "Lunar Item":           10,
+    "Mountain Trap":        4,
+    "Time Warp Trap":       20,
+    "Combat Trap":          20,
+    "Teleport Trap":        20
 }
 
 no_scraps_weights: Dict[str, int] = {
@@ -167,7 +207,15 @@ no_scraps_weights: Dict[str, int] = {
     "Legendary Item":       15,
     "Boss Item":            5,
     "Void Item":            16,
-    "Equipment":            25
+    "Equipment":            25,
+    "Money":                64,
+    "Lunar Coin":           20,
+    "1000 Exp":             40,
+    "Lunar Item":           10,
+    "Mountain Trap":        4,
+    "Time Warp Trap":       20,
+    "Combat Trap":          20,
+    "Teleport Trap":        20
 }
 
 even_weights: Dict[str, int] = {
@@ -180,7 +228,15 @@ even_weights: Dict[str, int] = {
     "Legendary Item":       1,
     "Boss Item":            1,
     "Void Item":            1,
-    "Equipment":            1
+    "Equipment":            1,
+    "Money":                1,
+    "Lunar Coin":           1,
+    "1000 Exp":             1,
+    "Lunar Item":           1,
+    "Mountain Trap":        1,
+    "Time Warp Trap":       1,
+    "Combat Trap":          1,
+    "Teleport Trap":        1
 }
 
 scraps_only: Dict[str, int] = {
@@ -193,7 +249,15 @@ scraps_only: Dict[str, int] = {
     "Legendary Item":       0,
     "Boss Item":            0,
     "Void Item":            0,
-    "Equipment":            0
+    "Equipment":            0,
+    "Money":                20,
+    "Lunar Coin":           10,
+    "1000 Exp":             10,
+    "Lunar Item":           0,
+    "Mountain Trap":        5,
+    "Time Warp Trap":       10,
+    "Combat Trap":          10,
+    "Teleport Trap":        10
 }
 
 void_weights: Dict[str, int] = {
@@ -206,7 +270,15 @@ void_weights: Dict[str, int] = {
     "Legendary Item":       0,
     "Boss Item":            0,
     "Void Item":            100,
-    "Equipment":            0
+    "Equipment":            0,
+    "Money":                20,
+    "Lunar Coin":           10,
+    "1000 Exp":             10,
+    "Lunar Item":           0,
+    "Mountain Trap":        5,
+    "Time Warp Trap":       10,
+    "Combat Trap":          10,
+    "Teleport Trap":        10
 }
 
 item_pool_weights: Dict[int, Dict[str, int]] = {
