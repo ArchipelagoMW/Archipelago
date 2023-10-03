@@ -295,7 +295,7 @@ Nuclear Rod;                        Calamity | Minions(1);                      
 Acid Rain Tier 2;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & Aquatic Scourge;
 
 // The Twins
-Soul of Sight;                      ;                                           The Twins;
+Soul of Sight;                      ;                                           #The Twins;
 Steampunker;                        Npc;                                        @mech_boss(1);
 Hammush;                            ;                                           Truffle & @mech_boss(1);
 Rainbow Rod;                        ;                                           Hardmode Anvil & Crystal Shard & Unicorn Horn & Pixie Dust & Soul of Light & Soul of Sight;

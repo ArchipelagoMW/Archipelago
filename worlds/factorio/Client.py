@@ -446,6 +446,10 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
                         logger.warning("It appears your mods are loaded from Appdata, "
                                        "this can lead to problems with multiple Factorio instances. "
                                        "If this is the case, you will get a file locked error running Factorio.")
+                elif "Couldn't create lock file" in msg:
+                    raise Exception(f"This Factorio (at {executable}) is either already running, "
+                                    "or a Factorio sharing data directories is already running. "
+                                    "Server could not start up.")
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     if ctx.mod_version == ctx.__class__.mod_version:

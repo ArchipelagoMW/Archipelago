@@ -33,8 +33,8 @@ class UndertaleWeb(WebWorld):
         "A guide to setting up the Archipelago Undertale software on your computer. This guide covers "
         "single-player, multiworld, and related software.",
         "English",
-        "undertale_en.md",
-        "undertale/en",
+        "setup_en.md",
+        "setup/en",
         ["Mewlif"]
     )]
 
