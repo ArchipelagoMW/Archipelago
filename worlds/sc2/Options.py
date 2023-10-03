@@ -555,3 +555,6 @@ campaign_depending_orders = [
     MissionOrder.option_mini_campaign
 ]
 
+kerrigan_unit_available = [
+    Kerriganless.option_off,
+]

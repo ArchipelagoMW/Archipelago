@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
-from .Options import get_option_value, Kerriganless, RequiredTactics
+from .Options import get_option_value, kerrigan_unit_available, RequiredTactics
 
 from BaseClasses import Location
 
@@ -32,7 +32,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
     logic_level = get_option_value(multiworld, player, 'required_tactics')
     adv_tactics = logic_level != RequiredTactics.option_standard
-    kerriganless = get_option_value(multiworld, player, 'kerriganless') != Kerriganless.option_off
+    kerriganless = get_option_value(multiworld, player, 'kerriganless') not in kerrigan_unit_available
     location_table: List[LocationData] = [
         # WoL
         LocationData("Liberation Day", "Liberation Day: Victory", SC2WOL_LOC_ID_OFFSET + 100, LocationType.VICTORY),

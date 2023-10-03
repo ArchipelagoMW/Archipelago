@@ -21,7 +21,7 @@ from kivy.uix.scrollview import ScrollView
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
-from worlds.sc2.Options import MissionOrder, Kerriganless, KerriganPrimalStatus
+from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -746,7 +746,7 @@ def calculate_kerrigan_options(ctx: SC2Context, items: typing.Dict[SC2Race, typi
     options = 0
 
     # Bit 0
-    if ctx.kerriganless != Kerriganless.option_off:
+    if ctx.kerriganless not in kerrigan_unit_available:
         options |= 1 << 0
     
     # Bits 1, 2

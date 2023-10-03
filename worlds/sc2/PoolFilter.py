@@ -6,7 +6,7 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
     campaign_mission_table
 from .Options import get_option_value, MissionOrder, \
-    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, Kerriganless
+    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available
 from .LogicMixin import SC2Logic
 
 # Items with associated upgrades
@@ -115,7 +115,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     if enabled_campaigns == {SC2Campaign.PROPHECY} and mission_order_type == MissionOrder.option_tiny_grid:
         move_mission(SC2Mission.A_SINISTER_TURN, MissionPools.MEDIUM, MissionPools.EASY)
     # HotS
-    kerriganless = get_option_value(multiworld, player, "kerriganless") > Kerriganless.option_off
+    kerriganless = get_option_value(multiworld, player, "kerriganless") not in kerrigan_unit_available
     if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
         # Conditionally moving Easy missions to Starter
         move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)

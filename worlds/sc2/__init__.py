@@ -8,7 +8,8 @@ from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, kerrigan_only_passives
 from .Locations import get_locations, LocationType
 from .Regions import create_regions
-from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, Kerriganless, KerriganPrimalStatus, RequiredTactics
+from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
+    Kerriganless, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available
 from .LogicMixin import SC2Logic
 from .PoolFilter import filter_missions, filter_items, get_item_upgrades, UPGRADABLE_ITEMS
 from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission
@@ -185,7 +186,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
         if not get_option_value(multiworld, player, "include_all_kerrigan_abilities"):
             for tier in range(7):
                 # ignore active abilities if Kerrigan is off
-                if kerriganless == 1:
+                if kerriganless == Kerriganless.option_on:
                     smart_exclude(kerrigan_passives[tier], 0)
                 else:
                     smart_exclude(kerrigan_actives[tier].union(kerrigan_passives[tier]), 1)
@@ -439,7 +440,7 @@ def get_plando_locations(multiworld: MultiWorld, player) -> List[str]:
 
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
     total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
-    if get_option_value(multiworld, player, "kerriganless") > Kerriganless.option_off \
+    if get_option_value(multiworld, player, "kerriganless") in kerrigan_unit_available \
         or total_levels == 0:
         return
     
@@ -452,11 +453,11 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
 
     sizes = [70, 35, 14, 10, 7, 5, 2, 1]
     option = get_option_value(multiworld, player, "kerrigan_level_item_distribution")
-    if option < KerriganLevelItemDistribution.option_size_70:
+    if option in (KerriganLevelItemDistribution.option_vanilla, KerriganLevelItemDistribution.option_smooth):
         distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if option == KerriganLevelItemDistribution.option_vanilla:
             distribution = [32, 0, 0, 1, 3, 0, 0, 0, 1, 1]
-        elif option == KerriganLevelItemDistribution.option_smooth:
+        else: # Smooth
             distribution = [0, 0, 0, 1, 1, 2, 2, 2, 1, 1]
         for tier in range(len(distribution)):
             add_kerrigan_level_items(tier + 1, distribution[tier])

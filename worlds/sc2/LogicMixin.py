@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
-from .Options import get_option_value, RequiredTactics, Kerriganless, AllInMap, GameDifficulty
+from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, GameDifficulty
 from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives
 from .MissionTables import SC2Race
 
@@ -166,7 +166,7 @@ class SC2Logic(LogicMixin):
             (self._sc2_advanced_tactics(multiworld, player) and self.has('Infestor', player))
 
     def _sc2hots_has_minimal_antiair(self, multiworld: MultiWorld, player: int) -> bool:
-        return self._sc2hots_has_good_antiair(multiworld, player) or get_option_value(multiworld, player, 'kerriganless') == Kerriganless.option_off or \
+        return self._sc2hots_has_good_antiair(multiworld, player) or get_option_value(multiworld, player, 'kerriganless') in kerrigan_unit_available or \
             self.has('Swarm Queen', player) or (self._sc2_advanced_tactics(multiworld, player) and self.has('Spore Crawler', player))
     
     def _sc2hots_has_brood_lord(self, multiworld: MultiWorld, player: int) -> bool:
