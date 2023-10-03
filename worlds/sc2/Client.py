@@ -21,7 +21,7 @@ from kivy.uix.scrollview import ScrollView
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
-from worlds.sc2.Options import MissionOrder
+from worlds.sc2.Options import MissionOrder, Kerriganless, KerriganPrimalStatus
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -746,11 +746,11 @@ def calculate_kerrigan_options(ctx: SC2Context, items: typing.Dict[SC2Race, typi
     options = 0
 
     # Bit 0
-    if ctx.kerriganless > 0:
+    if ctx.kerriganless != Kerriganless.option_off:
         options |= 1 << 0
     
     # Bits 1, 2
-    if ctx.kerrigan_primal_status > 0:
+    if ctx.kerrigan_primal_status != KerriganPrimalStatus.option_vanilla:
         options |= 1 << 1
         if kerrigan_primal(ctx, items):
             options |= 1 << 2
@@ -758,18 +758,18 @@ def calculate_kerrigan_options(ctx: SC2Context, items: typing.Dict[SC2Race, typi
     return options
 
 def kerrigan_primal(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]]) -> bool:
-    if ctx.kerrigan_primal_status == 1: # Always Zerg
+    if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_always_zerg:
         return True
-    elif ctx.kerrigan_primal_status == 2: # Always Human
+    elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_always_human:
         return False
-    elif ctx.kerrigan_primal_status == 3: # Level 35
+    elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_level_35:
             return items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]] >= 35
-    elif ctx.kerrigan_primal_status == 4: # Half Completion
+    elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_half_completion:
         total_missions = len(ctx.mission_id_to_location_ids)
         completed = len([(mission_id * victory_modulo + SC2WOL_LOC_ID_OFFSET) in ctx.checked_locations
             for mission_id in ctx.mission_id_to_location_ids])
         return completed >= (total_missions / 2)
-    elif ctx.kerrigan_primal_status == 5: # Item
+    elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
         codes = [item.item for item in ctx.items_received]
         return get_full_item_list()["Primal Form (Kerrigan)"].code in codes
     return False

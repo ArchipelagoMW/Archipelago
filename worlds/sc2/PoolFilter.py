@@ -6,7 +6,7 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
     campaign_mission_table
 from .Options import get_option_value, MissionOrder, \
-    get_enabled_campaigns, get_disabled_campaigns
+    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, Kerriganless
 from .LogicMixin import SC2Logic
 
 # Items with associated upgrades
@@ -87,7 +87,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     mission_pools[MissionPools.FINAL] = [goal_mission]
 
     # Mission pool changes
-    logic_level = get_option_value(multiworld, player, "required_tactics")
+    adv_tactics = get_option_value(multiworld, player, "required_tactics") != RequiredTactics.option_standard
     def move_mission(mission: SC2Mission, current_pool, new_pool):
         if mission in mission_pools[current_pool]:
             mission_pools[current_pool].remove(mission)
@@ -105,7 +105,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         move_mission(SC2Mission.ECHOES_OF_THE_FUTURE, MissionPools.MEDIUM, MissionPools.EASY)
         move_mission(SC2Mission.CUTTHROAT, MissionPools.MEDIUM, MissionPools.EASY)
         # Additional changes on Advanced Tactics
-        if logic_level > 0:
+        if adv_tactics:
             move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.EASY, MissionPools.STARTER)
             move_mission(SC2Mission.SMASH_AND_GRAB, MissionPools.EASY, MissionPools.STARTER)
             move_mission(SC2Mission.THE_MOEBIUS_FACTOR, MissionPools.MEDIUM, MissionPools.EASY)
@@ -115,12 +115,12 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     if enabled_campaigns == {SC2Campaign.PROPHECY} and mission_order_type == MissionOrder.option_tiny_grid:
         move_mission(SC2Mission.A_SINISTER_TURN, MissionPools.MEDIUM, MissionPools.EASY)
     # HotS
-    kerriganless = get_option_value(multiworld, player, "kerriganless") > 0
-    if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or logic_level > 0:
+    kerriganless = get_option_value(multiworld, player, "kerriganless") > Kerriganless.option_off
+    if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
         # Conditionally moving Easy missions to Starter
         move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.DOMINATION, MissionPools.EASY, MissionPools.STARTER)
-    if logic_level > 0:
+    if adv_tactics:
         # Medium -> Easy
         for mission in (SC2Mission.FIRE_IN_THE_SKY, SC2Mission.WAKING_THE_ANCIENT, SC2Mission.CONVICTION):
             move_mission(mission, MissionPools.MEDIUM, MissionPools.EASY)
@@ -359,6 +359,7 @@ class ValidInventory:
     def _read_logic(self):
         # General
         self._sc2_cleared_missions = lambda world, player: SC2Logic._sc2_cleared_missions(self, world, player)
+        self._sc2_advanced_tactics = lambda world, player: SC2Logic._sc2_advanced_tactics(self, world, player)
         # WoL
         self._sc2wol_has_common_unit = lambda world, player: SC2Logic._sc2wol_has_common_unit(self, world, player)
         self._sc2wol_has_air = lambda world, player: SC2Logic._sc2wol_has_air(self, world, player)

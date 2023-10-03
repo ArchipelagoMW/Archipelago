@@ -1,7 +1,7 @@
 from BaseClasses import Item, ItemClassification, MultiWorld
 import typing
 
-from .Options import get_option_value
+from .Options import get_option_value, RequiredTactics
 from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 
 
@@ -401,16 +401,23 @@ advanced_basic_units = {
 
 
 def get_basic_units(multiworld: MultiWorld, player: int, race: SC2Race) -> typing.Set[str]:
-    if get_option_value(multiworld, player, 'required_tactics') > 0:
+    if get_option_value(multiworld, player, 'required_tactics') != RequiredTactics.option_standard:
         return advanced_basic_units[race]
     else:
         return basic_units[race]
 
 
+item_name_group_names = {
+    # WoL
+    "Armory 1", "Armory 2", "Armory 3",
+    "Armory 4", "Laboratory", "Progressive Upgrade",
+    # HotS
+    "Ability", "Strain", "Mutation"
+}
 item_name_groups = {}
 for item, data in get_full_item_list().items():
     item_name_groups.setdefault(data.type, []).append(item)
-    if data.type in ("Armory 1", "Armory 2", "Armory 3", "Armory 4", "Laboratory", "Progressive Upgrade", "Ability", "Strain", "Mutation") and '(' in item:
+    if data.type in item_name_group_names and '(' in item:
         short_name = item[:item.find(' (')]
         item_name_groups[short_name] = [item]
 item_name_groups["Missions"] = ["Beat " + mission.mission_name for mission in SC2Mission]
