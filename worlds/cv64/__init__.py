@@ -486,14 +486,16 @@ class CV64World(World):
                     else:
                         offsets_to_ids[loc.cv64_rom_offset] = item_table[loc.item.name]
                 else:
-                    if loc.item.advancement:
-                        offsets_to_ids[loc.cv64_rom_offset] = 0x11  # Wooden stakes are majors
-                    else:
-                        offsets_to_ids[loc.cv64_rom_offset] = 0x12  # Roses are minors
+                    offsets_to_ids[loc.cv64_rom_offset] = 0x11  # Make the item the Wooden Stake - our multiworld item
 
-                    # If it's another CV64 player's item, change the multiworld item's model to match what it is.
-                    if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "npc":
-                        offsets_to_ids[loc.cv64_rom_offset - 1] = item_table[loc.item.name]
+                # Figure out the item's appearance. If it's a CV64 player's item, change the multiworld item's model to
+                # match what it is. Otherwise, change it to an Archipelago progress or not progress icon.
+                if loc.item.game == "Castlevania 64":
+                    offsets_to_ids[loc.cv64_rom_offset - 1] = item_table[loc.item.name]
+                elif loc.item.advancement:
+                    offsets_to_ids[loc.cv64_rom_offset - 1] = 0x11  # Wooden stakes are majors
+                else:
+                    offsets_to_ids[loc.cv64_rom_offset - 1] = 0x12  # Roses are minors
 
                 # If it's a PermaUp, change the item's model to a big PowerUp no matter what.
                 if loc.item.game == "Castlevania 64" and loc.item.code == 0xC6410C:
@@ -502,11 +504,11 @@ class CV64World(World):
                 # Apply the invisibility variable depending on the "invisible items" setting.
                 if (inv_setting == 0 and loc.cv64_loc_type == "inv") or \
                         (inv_setting == 2 and loc.cv64_loc_type not in ["npc", "shop"]):
-                    offsets_to_ids[loc.cv64_rom_offset - 1] = 0xC0
+                    offsets_to_ids[loc.cv64_rom_offset - 1] += 0x80
                 elif inv_setting == 3 and loc.cv64_loc_type not in ["npc", "shop"]:
                     invisible = self.random.randint(0, 1)
                     if invisible:
-                        offsets_to_ids[loc.cv64_rom_offset - 1] = 0xC0
+                        offsets_to_ids[loc.cv64_rom_offset - 1] += 0x80
 
                 # If it's an Axe or Cross in a higher freestanding location, lower it into grab range.
                 # KCEK made these spawn 3.2 units higher for some reason.

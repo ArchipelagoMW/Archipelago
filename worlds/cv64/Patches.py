@@ -310,7 +310,7 @@ npc_item_hack = [
     0x3C098039,  # LUI   T1, 0x8039
     0x001F5602,  # SRL   T2, RA, 24
     0x240B0080,  # ADDIU T3, R0, 0x0080
-    0x114B001D,  # BEQ   T2, T3, [forward 0x1D]
+    0x114B001F,  # BEQ   T2, T3, [forward 0x1F]
     0x240A001A,  # ADDIU T2, R0, 0x001A
     0x27BD0020,  # ADDIU SP, SP, 0x20
     0x15440004,  # BNE   T2, A0, [forward 0x04]
@@ -322,6 +322,8 @@ npc_item_hack = [
     0x240B0002,  # ADDIU T3, R0, 0x0002
     0x240C000E,  # ADDIU T4, R0, 0x000E
     0x012C7021,  # ADDU  T6, T1, T4
+    0x316C00FF,  # ANDI  T4, T3, 0x00FF
+    0x000B5A02,  # SRL   T3, T3, 8
     0x91CA9CA4,  # LBU   T2, 0x9CA4 (T6)
     0x3C0D8040,  # LUI   T5, 0x8040
     0x256FFFFF,  # ADDIU T7, T3, 0xFFFF
@@ -333,7 +335,7 @@ npc_item_hack = [
     0x13000002,  # BEQZ  T8,     [forward 0x02]
     0x254AFFFF,  # ADDIU T2, T2, 0xFFFF
     0xA1CA9CA4,  # SB    T2, 0x9CA4 (T6)
-    0xA12B9BDF,  # SB    T3, 0x9BDF (T1)
+    0xA12C9BDF,  # SB    T4, 0x9BDF (T1)
     0x3C0400BB,  # LUI   A0, 0x00BB
     0x00992025,  # OR    A0, A0, T9
     0x3C058019,  # LUI   A1, 0x8019
@@ -1292,6 +1294,9 @@ item_customizer = [
     # for the below three functions to then utilize.
     0x03205825,  # OR    T3, T9, R0
     0x000B5A02,  # SRL   T3, T3, 8
+    0x316C0080,  # ANDI  T4, T3, 0x0080
+    0xA0CC0041,  # SB    T4, 0x0041 (A2)
+    0x016C5823,  # SUBU  T3, T3, T4
     0xA0CB0040,  # SB    T3, 0x0040 (A2)
     0x333900FF,  # ANDI  T9, T9, 0x00FF
     0xA4D90038,  # SH    T9, 0x0038 (A2)
@@ -1315,12 +1320,9 @@ item_customizer = [
 
 item_appearance_switcher = [
     # Determines an item's model appearance by checking to see if a different item appearance ID was written in a
-    # specific spot in the actor's data; if one wasn't (or it is C0 since that is for invisibility), then the appearance
-    # value will be grabbed from the item's entry in the item property table like normal instead.
+    # specific spot in the actor's data; if one wasn't, then the appearance value will be grabbed from the item's entry
+    # in the item property table like normal instead.
     0x92080040,  # LBU   T0, 0x0040 (S0)
-    0x240900C0,  # ADDIU T1, R0, 0x00C0
-    0x11090003,  # BEQ   T0, T1, [forward 0x03]
-    0x00000000,  # NOP
     0x55000001,  # BNEZL T0, T1, [forward 0x01]
     0x01002025,  # OR    A0, T0, R0
     0x03E00008,  # JR    RA
@@ -1328,11 +1330,12 @@ item_appearance_switcher = [
 ]
 
 item_model_visibility_switcher = [
-    # If C0 is written in the appearance switch value in the item's actor data, parse 0C00 to the function that checks
-    # if an item should be invisible or not. Otherwise, grab that setting from the item property table like normal.
-    0x920B0040,  # LBU   T3, 0x0040 (S0)
-    0x240E00C0,  # ADDIU T6, R0, 0x00C0
-    0x156E0003,  # BNE   T3, T6, [forward 0x03]
+    # If 80 is written one byte ahead of the appearance switch value in the item's actor data, parse 0C00 to the
+    # function that checks if an item should be invisible or not. Otherwise, grab that setting from the item property
+    # table like normal.
+    0x920B0041,  # LBU   T3, 0x0041 (S0)
+    0x316E0080,  # ANDI  T6, T3, 0x0080
+    0x11C00003,  # BEQZ  T6,     [forward 0x03]
     0x240D0C00,  # ADDIU T5, R0, 0x0C00
     0x03E00008,  # JR    RA
     0x00000000,  # NOP
@@ -1342,9 +1345,9 @@ item_model_visibility_switcher = [
 
 item_shine_visibility_switcher = [
     # Same as the above, but for item shines instead of the model.
-    0x920B0040,  # LBU   T3, 0x0040 (S0)
-    0x240900C0,  # ADDIU T1, R0, 0x00C0
-    0x15690003,  # BNE   T3, T1, [forward 0x03]
+    0x920B0041,  # LBU   T3, 0x0041 (S0)
+    0x31690080,  # ANDI  T1, T3, 0x0080
+    0x11200003,  # BEQZ  T1,     [forward 0x03]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     0x240C0C00,  # ADDIU T4, R0, 0x0C00
@@ -1904,15 +1907,19 @@ countdown_number_updater = [
     0x00000000,
     0x01000000,
     0x01010000,
-    0x00000000,
+    0x00010101,
     0x01010101,
     0x01010101,
-    0x01010101,
-    0x01000000,  # Table end
+    0x01010000,
+    0x00000000,  # Table end
     0x90E80039,  # LBU   T0, 0x0039 (A3)
+    0x240B0011,  # ADDIU T3, R0, 0x0011
+    0x110B0002,  # BEQ   T0, T3, [forward 0x02]
+    0x90EA0040,  # LBU   T2, 0x0040 (A3)
+    0x25480000,  # ADDIU T0, T2, 0x0000
     0x3C098040,  # LUI   T1, 0x8040
     0x01284821,  # ADDIU T1, T1, T0
-    0x9129D71C,  # LBU   T1, 0xD71C (T1)
+    0x9129D71B,  # LBU   T1, 0xD71B (T1)
     0x11200009,  # BEQZ  T1,     [forward 0x09]
     0x3C088039,  # LUI   T0, 0x8039
     0x91099EE1,  # LBU   T1, 0x9EE1 (T0)
@@ -2582,6 +2589,7 @@ multiworld_item_name_loader = [
     0x8D1FE33C,  # LW    RA, 0xE33C (T0)
     0x0804EDCE,  # J     0x8013B738
     0x9104E338,  # LBU   A0, 0xE338 (T0)
+    0x00000000,  # NOP
     # Neuters the multiworld item text buffer if giving a non-multiworld item through the in-game remote item rewarder
     # byte before then jumping to item_prepareTextbox.
     0x24080011,  # ADDIU T0, R0, 0x0011

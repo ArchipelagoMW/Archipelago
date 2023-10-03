@@ -657,9 +657,9 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int32s(0xBFC264, Patches.warp_menu_opener)
 
     # NPC item textbox hack
-    rom.write_int32(0xBF1DC, 0x080FF067)  # J 0x803FC19C
+    rom.write_int32(0xBF1DC, 0x080FF904)  # J 0x803FE410
     rom.write_int32(0xBF1E0, 0x27BDFFE0)  # ADDIU SP, SP, -0x20
-    rom.write_int32s(0xBFC19C, Patches.npc_item_hack)
+    rom.write_int32s(0xBFE410, Patches.npc_item_hack)
 
     # Sub-weapon check function hook
     rom.write_int32(0xBF32C, 0x00000000)  # NOP
@@ -954,24 +954,6 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         rom.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
         rom.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
 
-    # Remove the flags from the Carrie-only and lizard locker checks if they are not in. This means they can be farmed
-    # infinitely, but now they won't decrease the Countdown.
-    if not multiworld.carrie_logic[player].value:
-        rom.write_byte(0x10CB0D, 0x00)
-        rom.write_byte(0x10CB15, 0x00)
-
-    if not multiworld.lizard_locker_items[player].value:
-        rom.write_int16(0xBFC9D2, 0x0000)
-        rom.write_int16(0xBFC9D6, 0x0000)
-        rom.write_int16(0xBFC9DA, 0x0000)
-        rom.write_int16(0xBFC9DE, 0x0000)
-        rom.write_int16(0xBFC9E2, 0x0000)
-        rom.write_int16(0xBFC9E6, 0x0000)
-
-    # Take the Clock Toewr bone pillar chasm sub-weapon off its flag if sub-weapons aren't reandomized anywhere.
-    if multiworld.sub_weapon_shuffle[player].value != 2:
-        rom.write_byte(0x99BC5B, 0x00)
-
     # Once-per-frame gameplay checks
     rom.write_int32(0x6C848, 0x080FF40D)   # J 0x803FD034
     rom.write_int32(0xBFD058, 0x0801AEB5)  # J 0x8006BAD4
@@ -991,18 +973,19 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         rom.write_int32s(0xBFD3B0, Patches.countdown_number_displayer)
         rom.write_int32s(0xBFD6DC, Patches.countdown_number_updater)
         rom.write_int32(0xBFCE2C, 0x080FF5D2)    # J 0x803FD748
-        rom.write_int32s(0xBB168, [0x080FF5F0,   # J 0x803FD7C0
+        rom.write_int32s(0xBB168, [0x080FF5F4,   # J 0x803FD7D0
                                    0x8E020028])  # LW	V0, 0x0028 (S0)
-        rom.write_int32s(0xBB1D0, [0x080FF5F7,   # J 0x803FD7DC
+        rom.write_int32s(0xBB1D0, [0x080FF5FB,   # J 0x803FD7EC
                                    0x8E020028])  # LW	V0, 0x0028 (S0)
-        rom.write_int32(0xBC4A0, 0x080FF5E2)     # J 0x803FD788
-        rom.write_int32(0xBC4C4, 0x080FF5E2)     # J 0x803FD788
-        rom.write_int32(0x19844, 0x080FF5FE)     # J 0x803FD7F8
+        rom.write_int32(0xBC4A0, 0x080FF5E6)     # J 0x803FD798
+        rom.write_int32(0xBC4C4, 0x080FF5E6)     # J 0x803FD798
+        rom.write_int32(0x19844, 0x080FF603)     # J 0x803FD808
         # If the option is set to "all locations", count it down no matter what the item is.
         if multiworld.countdown[player].value == 2:
             rom.write_int32s(0xBFD71C, [0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101,
                              0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101])
         rom.write_bytes(0xBFD818, countdown_list)
+        rom.write_int32(0xA9ECC, 0x00000000)  # NOP the pointless overwrite of the item actor appearance custom value.
 
     # Initial Countdown numbers
     rom.write_int32(0xAD6A8, 0x080FF60A)  # J	0x803FD828
