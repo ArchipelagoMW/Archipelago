@@ -4,6 +4,8 @@ Contributions are welcome. We have a few requests of any new contributors.
 * Ensure that all changes which affect logic are covered by unit tests. 
 * Do not introduce any unit test failures/regressions.
 * Follow styling as designated in our [styling documentation](/docs/style.md).
+* Turn on automated github actions to run all unit tests. 
+![Github actions example](./img/github-actions-example.png)
 
 Otherwise, we tend to judge code on a case to case basis.
 
