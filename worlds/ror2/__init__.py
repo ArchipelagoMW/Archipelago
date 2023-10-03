@@ -78,7 +78,9 @@ class RiskOfRainWorld(World):
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
             if self.multiworld.dlc_sotv[self.player]:
-                environment_available_orderedstages_table = collapse_dict_list_vertical(environment_available_orderedstages_table, environment_sotv_orderedstages_table)
+                environment_available_orderedstages_table = \
+                    collapse_dict_list_vertical(environment_available_orderedstages_table,
+                                                environment_sotv_orderedstages_table)
 
             environments_pool = shift_by_offset(environment_vanilla_table, offset + 700)
 
@@ -255,7 +257,8 @@ def create_events(world: MultiWorld, player: int) -> None:
         # only setup Pickups when using classic_mode
         for i in range(num_of_events):
             event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
-            event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
+            event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None,
+                                                       player))
             event_loc.access_rule = \
                 lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", "Location", player)
             world_region.locations.append(event_loc)

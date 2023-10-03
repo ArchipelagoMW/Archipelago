@@ -17,7 +17,8 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
     player = ror2_world.player
     # Default Locations
     non_dlc_regions: Dict[str, RoRRegionData] = {
-        "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)", "Titanic Plains", "Titanic Plains (2)"]),
+        "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)",
+                                                                     "Titanic Plains", "Titanic Plains (2)"]),
         "Distant Roost":                        RoRRegionData([], ["OrderedStage_1"]),
         "Distant Roost (2)":                    RoRRegionData([], ["OrderedStage_1"]),
         "Titanic Plains":                       RoRRegionData([], ["OrderedStage_1"]),
@@ -39,11 +40,14 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
     }
     other_regions: Dict[str, RoRRegionData] = {
         "Commencement":                         RoRRegionData(None, ["Victory", "Petrichor V"]),
-        "OrderedStage_5":                       RoRRegionData(None, ["Hidden Realm: A Moment, Fractured", "Commencement"]),
+        "OrderedStage_5":                       RoRRegionData(None, ["Hidden Realm: A Moment, Fractured",
+                                                                     "Commencement"]),
         "OrderedStage_1":                       RoRRegionData(None, ["Hidden Realm: Bazaar Between Time",
-                                                "Hidden Realm: Gilded Coast", "Abandoned Aqueduct", "Wetland Aspect"]),
+                                                                     "Hidden Realm: Gilded Coast", "Abandoned Aqueduct",
+                                                                     "Wetland Aspect"]),
         "OrderedStage_2":                       RoRRegionData(None, ["Rallypoint Delta", "Scorched Acres"]),
-        "OrderedStage_3":                       RoRRegionData(None, ["Abyssal Depths", "Siren's Call", "Sundered Grove"]),
+        "OrderedStage_3":                       RoRRegionData(None, ["Abyssal Depths", "Siren's Call",
+                                                                     "Sundered Grove"]),
         "OrderedStage_4":                       RoRRegionData(None, ["Sky Meadow"]),
         "Hidden Realm: A Moment, Fractured":    RoRRegionData(None, ["Hidden Realm: A Moment, Whole"]),
         "Hidden Realm: A Moment, Whole":        RoRRegionData(None, ["Victory", "Petrichor V"]),

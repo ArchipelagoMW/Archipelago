@@ -75,7 +75,8 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                 if i * event_location_step != total_locations:
                     event_loc = world.get_location(f"Pickup{i * event_location_step}", player)
                     set_rule(event_loc,
-                            lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}", "Location", player))
+                            lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}",
+                                                               "Location", player))
                     # we want to create a rule for each of the 25 locations per division
                 for n in range(i * event_location_step, (i + 1) * event_location_step + 1):
                     if n > total_locations:
