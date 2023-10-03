@@ -1199,20 +1199,6 @@ class StardewLogic:
         if tier >= 3:
             return self.has(Fertilizer.deluxe)
 
-    def can_complete_field_office(self) -> StardewRule:
-        field_office = self.can_reach_region(Region.field_office)
-        professor_snail = self.received("Open Professor Snail Cave")
-        dig_site = self.can_reach_region(Region.dig_site)
-        tools = self.has_tool(Tool.pickaxe) & self.has_tool(Tool.hoe) & self.has_tool(Tool.scythe)
-        leg_and_snake_skull = dig_site
-        ribs_and_spine = self.can_reach_region(Region.island_south)
-        skull = self.can_open_geode(Geode.golden_coconut)
-        tail = self.can_do_panning() & dig_site
-        frog = self.can_reach_region(Region.island_east)
-        bat = self.can_reach_region(Region.volcano_floor_5)
-        snake_vertebrae = self.can_reach_region(Region.island_west)
-        return field_office & professor_snail & tools & leg_and_snake_skull & ribs_and_spine & skull & tail & frog & bat & snake_vertebrae
-
     def can_complete_community_center(self) -> StardewRule:
         return (self.can_reach_location("Complete Crafts Room") &
                 self.can_reach_location("Complete Pantry") &
@@ -1531,6 +1517,20 @@ class StardewLogic:
             return False_()
         return self.can_reach_region(Region.island_trader)
 
+    def can_complete_field_office(self) -> StardewRule:
+        field_office = self.can_reach_region(Region.field_office)
+        professor_snail = self.received("Open Professor Snail Cave")
+        dig_site = self.can_reach_region(Region.dig_site)
+        tools = self.has_tool(Tool.pickaxe) & self.has_tool(Tool.hoe) & self.has_tool(Tool.scythe)
+        leg_and_snake_skull = dig_site
+        ribs_and_spine = self.can_reach_region(Region.island_south)
+        skull = self.can_open_geode(Geode.golden_coconut)
+        tail = self.can_do_panning() & dig_site
+        frog = self.can_reach_region(Region.island_east)
+        bat = self.can_reach_region(Region.volcano_floor_5)
+        snake_vertebrae = self.can_reach_region(Region.island_west)
+        return field_office & professor_snail & tools & leg_and_snake_skull & ribs_and_spine & skull & tail & frog & bat & snake_vertebrae
+
     def has_walnut(self, number: int) -> StardewRule:
         if self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
             return False_()
@@ -1542,6 +1542,7 @@ class StardewLogic:
         reach_west = self.can_reach_region(Region.island_west)
         reach_hut = self.can_reach_region(Region.leo_hut)
         reach_southeast = self.can_reach_region(Region.island_south_east)
+        reach_field_office = self.can_reach_region(Region.field_office)
         reach_pirate_cove = self.can_reach_region(Region.pirate_cove)
         reach_outside_areas = And(reach_south, reach_north, reach_west, reach_hut)
         reach_volcano_regions = [self.can_reach_region(Region.volcano),
@@ -1550,12 +1551,12 @@ class StardewLogic:
                                  self.can_reach_region(Region.volcano_floor_10)]
         reach_volcano = Or(reach_volcano_regions)
         reach_all_volcano = And(reach_volcano_regions)
-        reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano]
+        reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano, reach_field_office]
         reach_caves = And(self.can_reach_region(Region.qi_walnut_room), self.can_reach_region(Region.dig_site),
                           self.can_reach_region(Region.gourmand_frog_cave),
                           self.can_reach_region(Region.colored_crystals_cave),
                           self.can_reach_region(Region.shipwreck), self.has(Weapon.any_slingshot))
-        reach_entire_island = And(reach_outside_areas, reach_all_volcano,
+        reach_entire_island = And(reach_outside_areas, reach_field_office, reach_all_volcano,
                                   reach_caves, reach_southeast, reach_pirate_cove)
         if number <= 5:
             return Or(reach_south, reach_north, reach_west, reach_volcano)
@@ -1569,7 +1570,8 @@ class StardewLogic:
             return reach_entire_island
         gems = [Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz]
         return reach_entire_island & self.has(Fruit.banana) & self.has(gems) & self.can_mine_perfectly() & \
-               self.can_fish_perfectly() & self.has(Craftable.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic)
+               self.can_fish_perfectly() & self.has(Craftable.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic) & \
+               self.can_complete_field_office()
 
     def has_everything(self, all_progression_items: Set[str]) -> StardewRule:
         all_regions = [region.name for region in vanilla_regions]
