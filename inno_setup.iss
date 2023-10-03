@@ -116,6 +116,7 @@ Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; 
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
 
 Source: "{#source_path}\ArchipelagoLauncher.exe"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "{#source_path}\ArchipelagoLauncher(DEBUG).exe"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "{#source_path}\ArchipelagoGenerate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: generator
 Source: "{#source_path}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: server
 Source: "{#source_path}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
@@ -142,7 +143,7 @@ Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 [Icons]
 Name: "{group}\{#MyAppName} Folder"; Filename: "{app}";
 Name: "{group}\{#MyAppName} Launcher"; Filename: "{app}\ArchipelagoLauncher.exe"
-Name: "{group}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Components: server
+Name: "{group}\{#MyAppName} Server"; Filename: "{app}\ArchipelagoServer"; Components: server
 Name: "{group}\{#MyAppName} Text Client"; Filename: "{app}\ArchipelagoTextClient.exe"; Components: client/text
 Name: "{group}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Components: client/sni
 Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Components: client/factorio
@@ -163,7 +164,7 @@ Name: "{group}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUnder
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Launcher"; Filename: "{app}\ArchipelagoLauncher.exe"; Tasks: desktopicon
-Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
+Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\ArchipelagoServer"; Tasks: desktopicon; Components: server
 Name: "{commondesktop}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Tasks: desktopicon; Components: client/sni
 Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Tasks: desktopicon; Components: client/factorio
 Name: "{commondesktop}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Tasks: desktopicon; Components: client/minecraft
