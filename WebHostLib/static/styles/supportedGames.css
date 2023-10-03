@@ -24,6 +24,10 @@
     cursor: pointer;
 }
 
+#games h2 .game-name{
+    cursor: pointer;
+}
+
 #games p.collapsed{
     display: none;
 }
@@ -50,4 +54,8 @@
 
 #games #page-controls button{
     margin-left: 0.5rem;
+}
+
+#games #js-enabled{
+    display: none;
 }

@@ -1,4 +1,5 @@
 window.addEventListener('load', () => {
+  document.getElementById('js-enabled').style.display = 'block';
   const gameHeaders = document.getElementsByClassName('collapse-toggle');
   Array.from(gameHeaders).forEach((header) => {
     const gameName = header.getAttribute('data-game');
