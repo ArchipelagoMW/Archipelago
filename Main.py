@@ -36,7 +36,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger = logging.getLogger()
     world.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
     world.plando_options = args.plando_options
-
+    world.spoiler.level = args.spoiler
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
     world.mode = args.mode.copy()

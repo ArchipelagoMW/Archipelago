@@ -1087,14 +1087,16 @@ class Spoiler:
     playthrough: Dict[str, Union[List[str], Dict[str, str]]]  # sphere "0" is list, others are dict
     unreachables: Set[Location]
     paths: Dict[str, List[Union[Tuple[str, str], Tuple[str, None]]]]  # last step takes no further exits
+    level: int
 
-    def __init__(self, multiworld: MultiWorld) -> None:
+    def __init__(self, multiworld: MultiWorld, level: int = 0) -> None:
         self.multiworld = multiworld
         self.hashes = {}
         self.entrances = {}
         self.playthrough = {}
         self.unreachables = set()
         self.paths = {}
+        self.level = level
 
     def set_entrance(self, entrance: str, exit_: str, direction: str, player: int) -> None:
         if self.multiworld.players == 1:
@@ -1296,11 +1298,13 @@ class Spoiler:
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
                 ['%s: %s' % (location, item) for location, item in locations]))
-
-            outfile.write('\n\nPlaythrough:\n\n')
-            outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(
-                [f"  {location}: {item}" for (location, item) in sphere.items()] if isinstance(sphere, dict) else
-                [f"  {item}" for item in sphere])) for (sphere_nr, sphere) in self.playthrough.items()]))
+            if self.level > 1:
+                outfile.write('\n\nPlaythrough:\n\n')
+                outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(
+                    [f"  {location}: {item}" for (location, item) in sphere.items()] if isinstance(sphere, dict) else
+                    [f"  {item}" for item in sphere])) for (sphere_nr, sphere) in self.playthrough.items()]))
+            else:
+                outfile.write('\n\nPlaythrough is disabled.\n\n')
             if self.unreachables:
                 outfile.write('\n\nUnreachable Items:\n\n')
                 outfile.write(
