@@ -1757,7 +1757,7 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "A Link to the Past": __renderAlttpTracker,
     "ChecksFinder": __renderChecksfinder,
     "Super Metroid": __renderSuperMetroidTracker,
-    "Starcraft 2 Wings of Liberty": __renderSC2WoLTracker
+    "Starcraft 2": __renderSC2WoLTracker
 }
 
 multi_trackers: typing.Dict[str, typing.Callable] = {
