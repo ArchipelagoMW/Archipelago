@@ -89,6 +89,9 @@ components: List[Component] = [
     Component('SNI Client', 'SNIClient',
               file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3',
                                                '.apsmw', '.apl2ac')),
+    # BizHawk
+    Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT,
+              file_identifier=SuffixIdentifier()),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),
