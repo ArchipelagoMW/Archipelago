@@ -2,7 +2,6 @@ import typing
 import unittest
 from argparse import Namespace
 
-from Fill import distribute_items_restrictive
 from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
@@ -278,6 +277,7 @@ class WorldTestBase(unittest.TestCase):
         # don't run this test if accessibility is set manually
         if not (self.run_default_tests and self.constructed):
             return
+        from Fill import distribute_items_restrictive
 
         # basically a shortened reimplementation of this method from core, in order to force the check is done
         def fulfills_accessibility():
