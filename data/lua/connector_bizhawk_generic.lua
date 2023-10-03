@@ -1,4 +1,28 @@
 --[[
+Copyright (c) 2023 Zunawe
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+]]
+
+local SCRIPT_VERSION = 1
+
+--[[
 This script expects to receive JSON and will send JSON back. A message should
 be a list of 1 or more requests which will be executed in order. Each request
 will have a corresponding response in the same order.
@@ -7,7 +31,7 @@ Every individual request and response is a JSON object with at minimum one
 field `type`. The value of `type` determines what other fields may exist.
 
 To get the script version, instead of JSON, send "VERSION" to get the script
-version directly (e.g. "1.2.0").
+version directly (e.g. "2").
 
 #### Ex. 1
 
@@ -102,9 +126,10 @@ Response:
     Expected Response Type: `GUARD_RESPONSE`
 
     Additional Fields:
-    - `address`: The address of the memory to check
-    - `expected_data`: A base64 string of contiguous data
-    - `domain`: The name of the memory domain the address corresponds to
+    - `address` (`int`): The address of the memory to check
+    - `expected_data` (string): A base64 string of contiguous data
+    - `domain` (`string`): The name of the memory domain the address
+    corresponds to
 
 - `LOCK`  
     Halts emulation and blocks on incoming requests until an `UNLOCK` request
@@ -125,9 +150,10 @@ Response:
     Expected Response Type: `READ_RESPONSE`
 
     Additional Fields:
-    - `address`: The address of the memory to read
-    - `size`: The number of bytes to read
-    - `domain`: The name of the memory domain the address corresponds to
+    - `address` (`int`): The address of the memory to read
+    - `size` (`int`): The number of bytes to read
+    - `domain` (`string`): The name of the memory domain the address
+    corresponds to
 
 - `WRITE`  
     Writes an array of bytes to the provided address.
@@ -135,9 +161,10 @@ Response:
     Expected Response Type: `WRITE_RESPONSE`
 
     Additional Fields:
-    - `address`: The address of the memory to write to
-    - `value`: A base64 string representing the data to write
-    - `domain`: The name of the memory domain the address corresponds to
+    - `address` (`int`): The address of the memory to write to
+    - `value` (`string`): A base64 string representing the data to write
+    - `domain` (`string`): The name of the memory domain the address
+    corresponds to
 
 - `DISPLAY_MESSAGE`  
     Adds a message to the message queue which will be displayed using
@@ -146,7 +173,7 @@ Response:
     Expected Response Type: `DISPLAY_MESSAGE_RESPONSE`
 
     Additional Fields:
-    - `message`: The string to display
+    - `message` (`string`): The string to display
 
 - `SET_MESSAGE_INTERVAL`  
     Sets the minimum amount of time to wait between displaying messages.
@@ -156,7 +183,7 @@ Response:
     Expected Response Type: `SET_MESSAGE_INTERVAL_RESPONSE`
 
     Additional Fields:
-    - `value`: The number of seconds to set the interval to
+    - `value` (`number`): The number of seconds to set the interval to
 
 
 ### Response Types
@@ -168,7 +195,7 @@ Response:
     Contains the name of the system for currently running ROM.
 
     Additional Fields:
-    - `value`: The returned system name
+    - `value` (`string`): The returned system name
 
 - `PREFERRED_CORES_RESPONSE`  
     Contains the user's preferred cores for systems with multiple supported
@@ -176,21 +203,23 @@ Response:
     SGX.
 
     Additional Fields:
-    - `value`: A dictionary map from system name to core name
+    - `value` (`{[string]: [string]}`): A dictionary map from system name to
+    core name
 
 - `HASH_RESPONSE`  
     Contains the hash of the currently loaded ROM calculated by BizHawk.
 
     Additional Fields:
-    - `value`: The returned hash
+    - `value` (`string`): The returned hash
 
 - `GUARD_RESPONSE`  
     The result of an attempted `GUARD` request.
 
     Additional Fields:
-    - `value`: true if the memory was validated, false if not
-    - `address`: The address of the memory that was invalid (the same address
-    provided by the `GUARD`, not the address of the individual invalid byte)
+    - `value` (`boolean`): true if the memory was validated, false if not
+    - `address` (`int`): The address of the memory that was invalid (the same
+    address provided by the `GUARD`, not the address of the individual invalid
+    byte)
 
 - `LOCKED`  
     Acknowledges `LOCK`.
@@ -202,7 +231,7 @@ Response:
     Contains the result of a `READ` request.
 
     Additional Fields:
-    - `value`: A base64 string representing the read data
+    - `value` (`string`): A base64 string representing the read data
 
 - `WRITE_RESPONSE`  
     Acknowledges `WRITE`.
@@ -217,7 +246,7 @@ Response:
     Signifies that something has gone wrong while processing a request.
 
     Additional Fields:
-    - `err`: A description of the problem
+    - `err` (`string`): A description of the problem
 ]]
 
 local base64 = require("base64")
@@ -227,8 +256,6 @@ local json = require("json")
 -- Set to log incoming requests
 -- Will cause lag due to large console output
 local DEBUG = false
-
-local SCRIPT_VERSION = 1
 
 local SOCKET_PORT = 43055
 
