@@ -139,7 +139,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         exclusion_rules(world, player, world.exclude_locations[player].value)
         world.priority_locations[player].value -= world.exclude_locations[player].value
         for location_name in world.priority_locations[player].value:
-            world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
+            try:
+                location = world.get_location(location_name, player)
+            except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
+                if location_name not in world.worlds[player].location_name_to_id:
+                    raise Exception(f"Unable to prioritize location {location_name} in player {player}'s world.") from e
+            else:
+                location.progress_type = LocationProgressType.PRIORITY
 
     # Set local and non-local item rules.
     if world.players > 1:
