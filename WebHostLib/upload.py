@@ -107,7 +107,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             try:
                 _, _, slot_id, *_ = file.filename.split('_')[0].split('-', 3)
             except Exception:
-                flash("Error: Unexpected file found in .zip.")
+                flash("Error: Unexpected file found in .zip: " + file.filename)
                 return
             data = zfile.open(file, "r").read()
             files[int(slot_id[1:])] = data
@@ -117,7 +117,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             try:
                 _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
             except Exception:
-                flash("Error: Unexpected file found in .zip.")
+                flash("Error: Unexpected file found in .zip: " + file.filename)
                 return
             data = zfile.open(file, "r").read()
             files[int(slot_id[1:])] = data
