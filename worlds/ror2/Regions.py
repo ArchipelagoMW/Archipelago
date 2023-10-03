@@ -38,7 +38,7 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
         "Sulfur Pools":                         RoRRegionData([], ["OrderedStage_3"])
     }
     other_regions: Dict[str, RoRRegionData] = {
-        "Commencement":                         RoRRegionData(None, ["Victory"]),
+        "Commencement":                         RoRRegionData(None, ["Victory", "Petrichor V"]),
         "OrderedStage_5":                       RoRRegionData(None, ["Hidden Realm: A Moment, Fractured", "Commencement"]),
         "OrderedStage_1":                       RoRRegionData(None, ["Hidden Realm: Bazaar Between Time",
                                                 "Hidden Realm: Gilded Coast", "Abandoned Aqueduct", "Wetland Aspect"]),
@@ -46,7 +46,7 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
         "OrderedStage_3":                       RoRRegionData(None, ["Abyssal Depths", "Siren's Call", "Sundered Grove"]),
         "OrderedStage_4":                       RoRRegionData(None, ["Sky Meadow"]),
         "Hidden Realm: A Moment, Fractured":    RoRRegionData(None, ["Hidden Realm: A Moment, Whole"]),
-        "Hidden Realm: A Moment, Whole":        RoRRegionData(None, ["Victory"]),
+        "Hidden Realm: A Moment, Whole":        RoRRegionData(None, ["Victory", "Petrichor V"]),
         "Void Fields":                          RoRRegionData(None, []),
         "Victory":                              RoRRegionData(None, None),
         "Petrichor V":                          RoRRegionData(None, []),
@@ -55,7 +55,7 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
         "Hidden Realm: Gilded Coast":           RoRRegionData(None, None)
     }
     dlc_other_regions: Dict[str, RoRRegionData] = {
-        "The Planetarium":                      RoRRegionData(None, ["Victory"]),
+        "The Planetarium":                      RoRRegionData(None, ["Victory", "Petrichor V"]),
         "Void Locus":                           RoRRegionData(None, ["The Planetarium"])
     }
     # Totals of each item
