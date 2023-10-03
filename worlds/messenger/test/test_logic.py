@@ -10,7 +10,7 @@ class HardLogicTest(MessengerTestBase):
         "shuffle_shards": "true",
     }
 
-    def testVertical(self) -> None:
+    def test_vertical(self) -> None:
         """Test the locations that still require wingsuit or rope dart."""
         locations = [
             # tower of time
@@ -54,7 +54,7 @@ class HardLogicTest(MessengerTestBase):
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
 
-    def testWindmill(self) -> None:
+    def test_windmill(self) -> None:
         """Windmill Shuriken isn't progression on normal difficulty, so test it's marked correctly and required."""
         self.assertEqual(ItemClassification.progression, self.get_item_by_name("Windmill Shuriken").classification)
         windmill_locs = [
@@ -82,7 +82,7 @@ class HardLogicTest(MessengerTestBase):
         self.collect(item)
         self.assertTrue(self.can_reach_location(special_loc))
     
-    def testGlacial(self) -> None:
+    def test_glacial(self) -> None:
         """Test Glacial Peak locations."""
         self.assertAccessDependency(["Glacial Peak Seal - Ice Climbers"],
                                     [["Second Wind", "Meditation"], ["Rope Dart"], ["Wingsuit"]],
@@ -100,7 +100,7 @@ class NoLogicTest(MessengerTestBase):
         "logic_level": "oob",
     }
 
-    def testAccess(self) -> None:
+    def test_access(self) -> None:
         """Test the locations with rules still require things."""
         all_locations = [
             "Bamboo Creek - Claustro", "Searing Crags - Key of Strength", "Elemental Skylands - Key of Symbiosis",

@@ -2,9 +2,9 @@ from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, allow_self_locking_items, add_rule
-from .Options import MessengerAccessibility, Goal
-from .Constants import NOTES, PHOBEKINS
-from .SubClasses import MessengerShopLocation
+from .options import MessengerAccessibility, Goal
+from .constants import NOTES, PHOBEKINS
+from .subclasses import MessengerShopLocation
 
 if TYPE_CHECKING:
     from . import MessengerWorld
