@@ -2,11 +2,12 @@ import typing
 import unittest
 from argparse import Namespace
 
+from Fill import distribute_items_restrictive
 from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
 
-from BaseClasses import MultiWorld, CollectionState, ItemClassification, Item
+from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
 
 
@@ -280,6 +281,8 @@ class WorldTestBase(unittest.TestCase):
 
         # basically a shortened reimplementation of this method from core, in order to force the check is done
         def fulfills_accessibility():
+            locations = self.multiworld.get_locations(1).copy()
+            state = CollectionState(self.multiworld)
             while locations:
                 sphere: typing.List[Location] = []
                 for n in range(len(locations) - 1, -1, -1):
