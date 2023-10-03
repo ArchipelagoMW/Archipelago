@@ -10,7 +10,6 @@ import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
-from .config import detect_test
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionStartChar, zillion_options, validate
@@ -25,6 +24,7 @@ from zilliandomizer.system import System
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
 from zilliandomizer.options import Chars
+from zilliandomizer.patch import detect_test
 
 from ..AutoWorld import World, WebWorld
 
