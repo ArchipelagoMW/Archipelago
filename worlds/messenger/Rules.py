@@ -182,8 +182,10 @@ class MessengerHardRules(MessengerRules):
             "Searing Crags Seal - Raining Rocks": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
             "Searing Crags Seal - Rhythm Rocks": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
             "Searing Crags - Power Thistle": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
-            "Glacial Peak Seal - Ice Climbers": self.has_vertical,
+            "Glacial Peak Seal - Ice Climbers": lambda state: self.has_vertical(state) or self.can_dboost(state),
             "Glacial Peak Seal - Projectile Spike Pit": self.true,
+            "Glacial Peak Seal - Glacial Air Swag": lambda state: self.has_windmill(state) or self.has_vertical(state),
+            "Glacial Peak Mega Shard": lambda state: self.has_windmill(state) or self.has_vertical(state),
             "Cloud Ruins Seal - Ghost Pit": self.true,
             "Bamboo Creek - Claustro": self.has_wingsuit,
             "Tower of Time Seal - Lantern Climb": self.has_wingsuit,
@@ -201,10 +203,7 @@ class MessengerHardRules(MessengerRules):
             "Elemental Skylands - Key of Symbiosis": lambda state: self.has_windmill(state) or self.can_dboost(state),
             "Autumn Hills Seal - Spike Ball Darts": lambda state: (self.has_dart(state) and self.has_windmill(state))
                                                                   or self.has_wingsuit(state),
-            "Glacial Peak Seal - Glacial Air Swag": self.has_windmill,
-            "Glacial Peak Seal - Ice Climbers": lambda state: self.has_wingsuit(state) or self.can_dboost(state),
-            "Underworld Seal - Fireball Wave": lambda state: state.has_all({"Lightfoot Tabi", "Windmill Shuriken"},
-                                                                           self.player),
+            "Underworld Seal - Fireball Wave": self.has_windmill,
         }
 
     def has_windmill(self, state: CollectionState) -> bool:
