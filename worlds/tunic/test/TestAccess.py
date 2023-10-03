@@ -5,9 +5,9 @@ class TestAccess(TunicTestBase):
     def test_temple_access(self):
         # test whether you can get into the temple without laurels
         self.collect_all_but(["Hero's Laurels", "Lantern"])
-        self.assertEqual(self.can_reach_location("Sealed Temple - Page Pickup"), False)
+        self.assertFalse(self.can_reach_location("Sealed Temple - Page Pickup"))
         self.collect_by_name(["Lantern"])
-        self.assertEqual(self.can_reach_location("Sealed Temple - Page Pickup"), True)
+        self.assertTrue(self.can_reach_location("Sealed Temple - Page Pickup"))
 
     def test_wells(self):
         # test that the wells function properly. Since fairies is written the same way, that should succeed too

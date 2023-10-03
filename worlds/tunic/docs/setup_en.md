@@ -16,7 +16,8 @@
 
 Find your TUNIC game installation directory:
 
-- **Steam**: Right click TUNIC in your Steam Library, then *Manage → Browse local files*<br>
+- **Steam**: Right click TUNIC in your Steam Library, then *Manage → Browse local files*.<br>
+  - **Steam Deck**: Hold down the power button, tap "Switch to Desktop", then launch Steam from Desktop Mode to access the above option.
 - **PC Game Pass**: In the Xbox PC app, go to the TUNIC game page from your library, click the [...] button next to "Play", then 
 *Manage → Files → Browse...*<br>
 - **Other platforms**: Follow a similar pattern of steps as above to locate your specific game directory.
@@ -54,12 +55,13 @@ Launch the game, and if everything was installed correctly you should see `Rando
 Visit the [TUNIC settings page](/games/Tunic/player-settings) to generate a YAML with your selected settings.
 
 ### Configure Your Mod Settings
-In the `Tunic Archipelago` folder you extracted earlier, there will be a file called `ArchipelagoSettings.json`. 
-Open this file in a text editor and look for `ConnectionSettings` at the top. Fill in *Player*, *Hostname*, *Port*, and *Password* (if required) with the correct
-information for your room. The rest of the settings in this file can be viewed and toggled through the in-game options menu.
+Launch the game and click the button labeled `Open Settings File` on the Title Screen. 
+This will open the settings file in your default text editor, allowing you to edit your connection info.
+At the top of the file, fill in *Player*, *Hostname*, *Port*, and *Password* (if required) with the correct information for your room. 
+The rest of the settings that appear in this file can be changed in the `Randomizer Settings` submenu of the in-game options menu.
 
-Once your player settings have been saved, launch the game. The game should automatically connect to the room when you reach the title screen 
-(or, if the game is already running, just press *Connect* on the title screen). An error message will display if
-the game fails to connect to the server.
+Once your player settings have been saved, press `Connect`. If everything was configured properly, you should see `Status: Connected!` and your chosen game options will be shown under `World Settings`.
+
+An error message will display if the game fails to connect to the server.
 
 Be sure to also look at the in-game options menu for a variety of additional settings, such as enemy randomization!

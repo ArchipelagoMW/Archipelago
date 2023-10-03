@@ -17,7 +17,7 @@ class TunicWeb(WebWorld):
             description="A guide to setting up the TUNIC Randomizer for Archipelago multiworld games.",
             language="English",
             file_name="setup_en.md",
-            link="guide/en",
+            link="setup/en",
             authors=["SilentDestroyer"]
         )
     ]
