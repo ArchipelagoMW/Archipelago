@@ -4,7 +4,7 @@ from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 
 # NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
 # Be careful when changing the range_end values not to go into another game's IDs
-# NOTE that these changes to range_end must also be reflected in the RoR2 client so it understands the same ids.
+# NOTE that these changes to range_end must also be reflected in the RoR2 client, so it understands the same ids.
 
 class Goal(Choice):
     """
@@ -16,7 +16,7 @@ class Goal(Choice):
     display_name = "Game Mode"
     option_classic = 0
     option_explore = 1
-    default = 0
+    default = 1
 
 
 class Victory(Choice):
@@ -63,7 +63,7 @@ class ScavengersPerEnvironment(Range):
     display_name = "Scavenger per Environment"
     range_start = 0
     range_end = 1
-    default = 1
+    default = 0
 
 
 class ScannersPerEnvironment(Range):
@@ -121,7 +121,7 @@ class AllowTrapItems(Toggle):
 
 
 class AllowLunarItems(DefaultOnToggle):
-    """Allows Lunar items in the item pool."""
+    """Allows Lunar items in the item pool. (Trap items need to be on to be included)"""
     display_name = "Enable Lunar Item Shuffling"
 
 
