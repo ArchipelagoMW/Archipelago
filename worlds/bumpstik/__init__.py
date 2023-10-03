@@ -124,9 +124,8 @@ class BumpStikWorld(World):
                 lambda state, x = x: state.has("Booster Bumper", self.player, x)
         self.multiworld.get_location("Level 5 - Cleared all Hazards", self.player).access_rule = \
             lambda state: state.has("Hazard Bumper", self.player, 25)
-
-
-    def generate_basic(self):
+            
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Booster Bumper", self.player, 5) and \
             state.has("Treasure Bumper", self.player, 32)
+
