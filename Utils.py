@@ -13,7 +13,9 @@ import io
 import collections
 import importlib
 import logging
+import warnings
 
+from argparse import Namespace
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from yaml import load, load_all, dump, SafeLoader
@@ -28,6 +30,7 @@ except ImportError:
 if typing.TYPE_CHECKING:
     import tkinter
     import pathlib
+    from BaseClasses import Region
 
 
 def tuplize_version(version: str) -> Version:
@@ -43,7 +46,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -214,7 +217,13 @@ def get_cert_none_ssl_context():
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
-    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        # if hostname or resolvconf is not set up properly, this may fail
+        warnings.warn("Could not resolve own hostname, falling back to 127.0.0.1")
+        ip = "127.0.0.1"
+
     ctx = get_cert_none_ssl_context()
     try:
         ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx, timeout=10).read().decode("utf8").strip()
@@ -232,7 +241,13 @@ def get_public_ipv4() -> str:
 def get_public_ipv6() -> str:
     import socket
     import urllib.request
-    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        # if hostname or resolvconf is not set up properly, this may fail
+        warnings.warn("Could not resolve own hostname, falling back to ::1")
+        ip = "::1"
+
     ctx = get_cert_none_ssl_context()
     try:
         ip = urllib.request.urlopen("https://v6.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
@@ -318,10 +333,25 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
 
+def get_default_adjuster_settings(game_name: str) -> Namespace:
+    import LttPAdjuster
+    adjuster_settings = Namespace()
+    if game_name == LttPAdjuster.GAME_ALTTP:
+        return LttPAdjuster.get_argparser().parse_known_args(args=[])[0]
 
-def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
-    adjuster_settings = persistent_load().get("adjuster", {}).get(game_name, {})
     return adjuster_settings
+
+
+def get_adjuster_settings_no_defaults(game_name: str) -> Namespace:
+    return persistent_load().get("adjuster", {}).get(game_name, Namespace())
+
+
+def get_adjuster_settings(game_name: str) -> Namespace:
+    adjuster_settings = get_adjuster_settings_no_defaults(game_name)
+    default_settings = get_default_adjuster_settings(game_name)
+
+    # Fill in any arguments from the argparser that we haven't seen before
+    return Namespace(**vars(adjuster_settings), **{k:v for k,v in vars(default_settings).items() if k not in vars(adjuster_settings)})
 
 
 @cache_argsless
@@ -343,11 +373,13 @@ safe_builtins = frozenset((
 
 
 class RestrictedUnpickler(pickle.Unpickler):
+    generic_properties_module: Optional[object]
+
     def __init__(self, *args, **kwargs):
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
-        self.generic_properties_module = importlib.import_module("worlds.generic")
+        self.generic_properties_module = None
 
     def find_class(self, module, name):
         if module == "builtins" and name in safe_builtins:
@@ -357,6 +389,8 @@ class RestrictedUnpickler(pickle.Unpickler):
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
+            if not self.generic_properties_module:
+                self.generic_properties_module = importlib.import_module("worlds.generic")
             return getattr(self.generic_properties_module, name)
         # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
         if module.lower().endswith("options"):
@@ -556,7 +590,7 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
-            selection = (f'--filename="{suggest}',) if suggest else ()
+            selection = (f"--filename={suggest}",) if suggest else ()
             return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
@@ -568,7 +602,10 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
-        root = tkinter.Tk()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
@@ -581,13 +618,14 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
     if is_linux:
         # prefer native dialog
         from shutil import which
-        kdialog = None#which("kdialog")
+        kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--getexistingdirectory", suggest or ".")
-        zenity = None#which("zenity")
+            return run(kdialog, f"--title={title}", "--getexistingdirectory",
+                       os.path.abspath(suggest) if suggest else ".")
+        zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
-            selection = (f'--filename="{suggest}',) if suggest else ()
+            selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
             return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
@@ -599,7 +637,10 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
-        root = tkinter.Tk()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.askdirectory(title=title, mustexist=True, initialdir=suggest or None)
 
@@ -739,3 +780,113 @@ def freeze_support() -> None:
     import multiprocessing
     _extend_freeze_support()
     multiprocessing.freeze_support()
+
+
+def visualize_regions(root_region: Region, file_name: str, *,
+                      show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
+                      linetype_ortho: bool = True) -> None:
+    """Visualize the layout of a world as a PlantUML diagram.
+
+    :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
+    :param file_name: The name of the destination .puml file.
+    :param show_entrance_names: (default False) If enabled, the name of the entrance will be shown near each connection.
+    :param show_locations: (default True) If enabled, the locations will be listed inside each region.
+            Priority locations will be shown in bold.
+            Excluded locations will be stricken out.
+            Locations without ID will be shown in italics.
+            Locked locations will be shown with a padlock icon.
+            For filled locations, the item name will be shown after the location name.
+            Progression items will be shown in bold.
+            Items without ID will be shown in italics.
+    :param show_other_regions: (default True) If enabled, regions that can't be reached by traversing exits are shown.
+    :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
+
+    Example usage in World code:
+    from Utils import visualize_regions
+    visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
+
+    Example usage in Main code:
+    from Utils import visualize_regions
+    for player in world.player_ids:
+        visualize_regions(world.get_region("Menu", player), f"{world.get_out_file_name_base(player)}.puml")
+    """
+    assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
+    from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
+    from collections import deque
+    import re
+
+    uml: typing.List[str] = list()
+    seen: typing.Set[Region] = set()
+    regions: typing.Deque[Region] = deque((root_region,))
+    multiworld: MultiWorld = root_region.multiworld
+
+    def fmt(obj: Union[Entrance, Item, Location, Region]) -> str:
+        name = obj.name
+        if isinstance(obj, Item):
+            name = multiworld.get_name_string_for_object(obj)
+            if obj.advancement:
+                name = f"**{name}**"
+            if obj.code is None:
+                name = f"//{name}//"
+        if isinstance(obj, Location):
+            if obj.progress_type == LocationProgressType.PRIORITY:
+                name = f"**{name}**"
+            elif obj.progress_type == LocationProgressType.EXCLUDED:
+                name = f"--{name}--"
+            if obj.address is None:
+                name = f"//{name}//"
+        return re.sub("[\".:]", "", name)
+
+    def visualize_exits(region: Region) -> None:
+        for exit_ in region.exits:
+            if exit_.connected_region:
+                if show_entrance_names:
+                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"")
+                else:
+                    try:
+                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"")
+                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"")
+                    except ValueError:
+                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"")
+            else:
+                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\"")
+                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"")
+
+    def visualize_locations(region: Region) -> None:
+        any_lock = any(location.locked for location in region.locations)
+        for location in region.locations:
+            lock = "<&lock-locked> " if location.locked else "<&lock-unlocked,color=transparent> " if any_lock else ""
+            if location.item:
+                uml.append(f"\"{fmt(region)}\" : {{method}} {lock}{fmt(location)}: {fmt(location.item)}")
+            else:
+                uml.append(f"\"{fmt(region)}\" : {{field}} {lock}{fmt(location)}")
+
+    def visualize_region(region: Region) -> None:
+        uml.append(f"class \"{fmt(region)}\"")
+        if show_locations:
+            visualize_locations(region)
+        visualize_exits(region)
+
+    def visualize_other_regions() -> None:
+        if other_regions := [region for region in multiworld.get_regions(root_region.player) if region not in seen]:
+            uml.append("package \"other regions\" <<Cloud>> {")
+            for region in other_regions:
+                uml.append(f"class \"{fmt(region)}\"")
+            uml.append("}")
+
+    uml.append("@startuml")
+    uml.append("hide circle")
+    uml.append("hide empty members")
+    if linetype_ortho:
+        uml.append("skinparam linetype ortho")
+    while regions:
+        if (current_region := regions.popleft()) not in seen:
+            seen.add(current_region)
+            visualize_region(current_region)
+            regions.extend(exit_.connected_region for exit_ in current_region.exits if exit_.connected_region)
+    if show_other_regions:
+        visualize_other_regions()
+    uml.append("@enduml")
+
+    with open(file_name, "wt", encoding="utf-8") as f:
+        f.write("\n".join(uml))
