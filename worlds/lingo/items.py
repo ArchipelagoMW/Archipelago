@@ -1,5 +1,4 @@
 from typing import Dict, NamedTuple, Optional, List
-from types import MappingProxyType
 from BaseClasses import Item, ItemClassification
 from worlds.AutoWorld import World
 from .static_logic import StaticLingoLogic
@@ -46,7 +45,7 @@ class StaticLingoItems:
     Defines the items that can be included in a Lingo world
     """
 
-    ALL_ITEM_TABLE: MappingProxyType[str, ItemData]
+    ALL_ITEM_TABLE: Dict[str, ItemData]
 
     def __init__(self, static_logic: StaticLingoLogic):
         temp_item_table: Dict[str, ItemData] = {}
@@ -102,4 +101,4 @@ class StaticLingoItems:
             temp_item_table[item_name] = ItemData(static_logic.get_progressive_item_id(item_name),
                                                   ItemClassification.progression, "special", [], [])
 
-        self.ALL_ITEM_TABLE = MappingProxyType(temp_item_table)
+        self.ALL_ITEM_TABLE = temp_item_table

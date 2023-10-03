@@ -1,5 +1,4 @@
 from typing import Dict, NamedTuple, List
-from types import MappingProxyType
 from BaseClasses import Location
 from .static_logic import StaticLingoLogic, RoomAndPanel
 from enum import Flag, auto
@@ -41,7 +40,7 @@ class StaticLingoLocations:
     Defines the locations that can be included in a Lingo world
     """
 
-    ALL_LOCATION_TABLE: MappingProxyType[str, LocationData]
+    ALL_LOCATION_TABLE: Dict[str, LocationData]
 
     def __init__(self, static_logic: StaticLingoLogic):
         temp_location_table: Dict[str, LocationData] = {}
@@ -79,4 +78,4 @@ class StaticLingoLocations:
 
                 temp_location_table[locat_name] = LocationData(new_id, room_name, door.panels, classification)
 
-        self.ALL_LOCATION_TABLE = MappingProxyType(temp_location_table)
+        self.ALL_LOCATION_TABLE = temp_location_table
