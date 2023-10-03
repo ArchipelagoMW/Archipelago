@@ -4,10 +4,10 @@ from typing import Dict, FrozenSet, Tuple, Any, ClassVar
 
 from BaseClasses import MultiWorld
 from test.TestBase import WorldTestBase
-from test.general import gen_steps
+from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from .. import StardewValleyWorld, options
 from ..mods.mod_data import ModNames
-from ...AutoWorld import call_all
+from worlds.AutoWorld import call_all
 
 
 class SVTestBase(WorldTestBase):
@@ -106,9 +106,7 @@ def setup_solo_multiworld(test_options=None, seed=None,
     if frozen_options in _cache:
         return _cache[frozen_options]
 
-    multiworld = MultiWorld(1)
-    multiworld.game[1] = StardewValleyWorld.game
-    multiworld.player_name = {1: "Tester"}
+    multiworld = setup_base_solo_multiworld(StardewValleyWorld, ())
     multiworld.set_seed(seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
     args = Namespace()
@@ -116,7 +114,6 @@ def setup_solo_multiworld(test_options=None, seed=None,
         value = option(test_options[name]) if name in test_options else option.from_any(option.default)
         setattr(args, name, {1: value})
     multiworld.set_options(args)
-    multiworld.set_default_common_options()
     for step in gen_steps:
         call_all(multiworld, step)
 

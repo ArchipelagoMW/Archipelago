@@ -16,6 +16,14 @@ from libc.stdint cimport int64_t, uint32_t
 from libcpp.set cimport set as std_set
 from collections import defaultdict
 
+cdef extern from *:
+    """
+    // avoid warning from cython-generated code with MSVC + pyximport
+    #ifdef _MSC_VER
+    #pragma warning( disable: 4551 )
+    #endif
+    """
+
 ctypedef uint32_t ap_player_t  # on AMD64 this is faster (and smaller) than 64bit ints
 ctypedef uint32_t ap_flags_t
 ctypedef int64_t ap_id_t

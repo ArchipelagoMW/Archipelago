@@ -42,6 +42,13 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     """
     ladxr_name = "tradequest"
 
+class Rooster(DefaultOnToggle, LADXROption):
+    """
+    [On] Adds the rooster to the item pool. 
+    [Off] The rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.
+    """
+    ladxr_name = "rooster"
+
 class Boomerang(Choice):
     """
     [Normal] requires Magnifying Lens to get the boomerang.
@@ -371,7 +378,20 @@ class Palette(Choice):
     option_greyscale = 3
     option_pink = 4
     option_inverted = 5
-    
+
+class WarpImprovements(DefaultOffToggle):
+    """
+    [On] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
+    [Off] No change
+    """
+
+class AdditionalWarpPoints(DefaultOffToggle):
+    """
+    [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
+    [Off] No change
+    """
+     
+
 links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'logic': Logic,
     # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
@@ -380,7 +400,7 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
     'tradequest': TradeQuest, # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),                
     # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
-    # 'rooster': DefaultOnToggle, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
+    'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
     'experimental_dungeon_shuffle': DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
@@ -393,6 +413,8 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     # 'bowwow': Bowwow,
     # 'overworld': Overworld,
     'link_palette': LinkPalette,
+    'warp_improvements': WarpImprovements,
+    'additional_warp_points': AdditionalWarpPoints,
     'trendy_game': TrendyGame,
     'gfxmod': GfxMod,
     'palette': Palette,
