@@ -3,12 +3,12 @@
 ## Required Software
 
 - [Lingo](https://store.steampowered.com/app/1814170/Lingo/)
-- [Lingo Archipelago Randomizer](https://github.com/hatkirby/lingo-archipelago/releases)
+- [Lingo Archipelago Randomizer](https://code.fourisland.com/lingo-archipelago/about/CHANGELOG.md)
 
 ## Optional Software
 
 - [Archipelago Text Client](https://github.com/ArchipelagoMW/Archipelago/releases)
-- [Lingo AP Tracker](https://github.com/hatkirby/lingo-ap-tracker/releases)
+- [Lingo AP Tracker](https://code.fourisland.com/lingo-ap-tracker/about/CHANGELOG.md)
 
 ## Installation
 
