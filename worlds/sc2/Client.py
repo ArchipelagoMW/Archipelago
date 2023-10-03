@@ -775,7 +775,7 @@ def kerrigan_primal(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int
     return False
 
 async def starcraft_launch(ctx: SC2Context, mission_id: int):
-    sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
+    sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id].mission_name}. If game does not launch check log file for errors.")
 
     with DllDirectory(None):
         run_game(bot.maps.get(lookup_id_to_mission[mission_id].map_file), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
