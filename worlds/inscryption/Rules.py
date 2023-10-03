@@ -60,6 +60,8 @@ class InscryptionRules:
             "Act 3 - Boss Archivist": self.has_battery_and_quill,
             "Act 3 - Boss Unfinished": self.has_drone_and_battery,
             "Act 3 - Boss G0lly": self.has_drone_and_battery,
+            "Act 3 - Extra Battery": self.has_inspectometer_battery,  # Hard to miss but soft lock still possible.
+            "Act 3 - Nano Armor Generator": self.has_drone_and_battery,  # Costs money, so can need multiple battles.
             "Act 3 - Shop Holo Pelt": self.has_drone_and_battery,  # Costs money, so can need multiple battles.
             "Act 3 - Middle Holo Pelt": self.has_inspectometer_battery,  # Can be reached without but possible soft lock
             "Act 3 - Forest Holo Pelt": self.has_inspectometer_battery,
@@ -70,6 +72,7 @@ class InscryptionRules:
             "Act 3 - Trader 3": self.has_three_pelt,
             "Act 3 - Trader 4": self.has_four_pelt,
             "Act 3 - Trader 5": self.has_five_pelt,
+            "Act 3 - Goobert's Painting": self.has_drone_and_battery,
             "Act 3 - The Great Transcendence": self.has_transcendence_requirements,
             "Act 3 - Boss Mycologists": self.has_mycologists_boss_requirements,
             "Act 3 - Bone Lord Room": self.has_bone_lord_room_requirements,
