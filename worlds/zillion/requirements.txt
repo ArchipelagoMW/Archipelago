@@ -1,1 +1,1 @@
-zilliandomizer @ git+https://github.com/beauxq/zilliandomizer@4b27d115269db25fe73b0471b73495f41df1323c#0.5.3
+zilliandomizer @ git+https://github.com/beauxq/zilliandomizer@d7122bcbeda40da5db26d60fad06246a1331706f#0.5.4
