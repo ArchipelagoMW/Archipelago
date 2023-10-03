@@ -13,7 +13,7 @@ else:
     BizHawkClientContext = object
 
 
-EXPECTED_ROM_NAME = "pokemon emerald version / AP 1"
+EXPECTED_ROM_NAME = "pokemon emerald version / AP 2"
 
 IS_CHAMPION_FLAG = data.constants["FLAG_IS_CHAMPION"]
 DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
