@@ -1,7 +1,6 @@
 {% extends "multiTracker.html" %}
-{% block custom_table_headers %}
 {# establish the to be tracked data. Display Name, factorio/AP internal name, display image #}
-{% set science_packs = [
+{%- set science_packs = [
     ("Logistic Science Pack", "logistic-science-pack",
     "https://wiki.factorio.com/images/thumb/Logistic_science_pack.png/32px-Logistic_science_pack.png"),
     ("Military Science Pack", "military-science-pack",
@@ -14,32 +13,30 @@
     "https://wiki.factorio.com/images/thumb/Utility_science_pack.png/32px-Utility_science_pack.png"),
     ("Space Science Pack", "space-science-pack",
     "https://wiki.factorio.com/images/thumb/Space_science_pack.png/32px-Space_science_pack.png"),
-] %}
-{# macro that creates a table header with display name and image #}
-{% macro make_header(name, img_src) %}
+] -%}
+{%- block custom_table_headers %}
+{#- macro that creates a table header with display name and image -#}
+{%- macro make_header(name, img_src) %}
 <th class="center-column">
     <img src="{{ img_src}}"
          alt="{{ name }}">
 </th>
-{% endmacro %}
-{# call the macro to build the table header #}
-{% for name, internal_name, img_src in science_packs %}
-    {% call make_header(name, img_src) %}
-{% endfor %}
+{% endmacro -%}
+{#- call the macro to build the table header -#}
+{%- for name, internal_name, img_src in science_packs %}
+    {{ make_header(name, img_src) }}
+{% endfor -%}
 {% endblock %}
 {% block custom_table_row scoped  %}
 {% if games[player] == "Factorio" %}
-{% set player_inventory = named_inventory[team][player] %}
-{% set prog_science = player_inventory["progressive-science-pack"] %}
-{% for name, internal_name, img_src in science_packs %}
-    <td class="center-column">{% if player_inventory[internal_name] or prog_science > loop.index0 %}✔{% endif %}</td>
-{% endfor %}
+    {%- set player_inventory = named_inventory[team][player] -%}
+    {%- set prog_science = player_inventory["progressive-science-pack"] -%}
+    {%- for name, internal_name, img_src in science_packs %}
+        <td class="center-column">{% if player_inventory[internal_name] or prog_science > loop.index0 %}✔{% endif %}</td>
+    {% endfor -%}
 {% else %}
-<td class="center-column">❌</td>
-<td class="center-column">❌</td>
-<td class="center-column">❌</td>
-<td class="center-column">❌</td>
-<td class="center-column">❌</td>
-<td class="center-column">❌</td>
+    {%- for _ in science_packs %}
+        <td class="center-column">❌</td>
+    {% endfor -%}
 {% endif %}
 {% endblock%}
