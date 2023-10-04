@@ -1,17 +1,16 @@
 # Contributing
 Contributions are welcome. We have a few requests of any new contributors.
 
-### Ensure that all changes which affect logic are covered by unit tests. 
+* **Ensure that all changes which affect logic are covered by unit tests.** 
 It is strongly recommended that unit tests are used to avoid regression and confirm that the logic is working.
 To implement them, please take a look at [their documentation](/docs/world%20api.md#tests).
-### Do not introduce any unit test failures/regressions.
+* **Do not introduce any unit test failures/regressions.**
 To do so, it is recommended that Github actions are turned on to automatically run all unit tests when pushing.
 You can turn this setting on here. (insert image)
 
-### Follow styling guidelines.
+* **Follow styling guidelines.**
 We have designated styling guideline to ensure uniformity and ease of communication. Please take a look at 
 our [styling documentation](/docs/style.md).
-
 
 Other than these requests, we tend to judge code on a case to case basis.
 
