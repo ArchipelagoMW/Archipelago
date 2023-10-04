@@ -4,7 +4,7 @@ Contributions are welcome. We have a few requests of any new contributors.
 * **Ensure that all changes are covered by unit tests.** 
 It is strongly recommended that unit tests are used to avoid regression and to ensure everything is still working.
 If you wish to contribute by adding a new game, please take a look at the [logic unit test documentation](/docs/world%20api.md#tests).
-If you wish to contribute to the website, please take a look at these [following tests](/tree/main/test/webhost).
+If you wish to contribute to the website, please take a look at these [following tests](/test/webhost).
 * **Do not introduce any unit test failures/regressions.**
 To do so, it is recommended that Github actions are turned on to automatically run all unit tests when pushing.
 You can turn this setting on here. (insert image)
