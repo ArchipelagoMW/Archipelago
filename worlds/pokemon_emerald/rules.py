@@ -667,6 +667,10 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("REGION_ROUTE123/EAST -> REGION_ROUTE122/SEA", player),
         can_surf
     )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE123/EAST -> REGION_ROUTE123/EAST_BEHIND_TREE", player),
+        can_cut
+    )
 
     # Lilycove City
     set_rule(
