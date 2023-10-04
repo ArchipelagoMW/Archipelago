@@ -87,8 +87,9 @@ class ShiversWorld(World):
 
         #Add Filler
         filler = []
-        filler += [self.create_item("Easier Lyre") for i in range(49 - len(self.removed_locations))]
+        filler += [self.create_item("Easier Lyre") for i in range(10)]
         filler += [self.create_item(name) for name, data in item_table.items() if data.type == 'filler2']
+        filler += [self.create_item("Heal") for i in range(39 - len(self.removed_locations))]
 
         #Place library escape items. Choose a location to place the escape item
         library_region = self.multiworld.get_region("Library", self.player)
@@ -120,7 +121,7 @@ class ShiversWorld(World):
             lobby_access_keys = library_random = self.random.randint(1, 2)
             keys += [self.create_item("Key for Front Door")]
         else:
-            filler += [self.create_item("Easier Lyre")]
+            filler += [self.create_item("Heal")]
 
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys

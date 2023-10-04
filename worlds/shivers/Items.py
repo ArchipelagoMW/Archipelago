@@ -107,6 +107,6 @@ item_table = {
     "Metal Always Available in Projector Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 109, "filler2", ItemClassification.filler),
     "Metal Always Available in Bedroom": ItemData(SHIVERS_ITEM_ID_OFFSET + 110, "filler2", ItemClassification.filler),
     "Metal Always Available in Prehistoric": ItemData(SHIVERS_ITEM_ID_OFFSET + 111, "filler2", ItemClassification.filler),
-    "Filler Item": ItemData(SHIVERS_ITEM_ID_OFFSET + 112, "filler3", ItemClassification.filler)
+    "Heal": ItemData(SHIVERS_ITEM_ID_OFFSET + 112, "filler3", ItemClassification.filler)
 
 }
