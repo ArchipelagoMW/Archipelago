@@ -578,11 +578,12 @@ def rules(blasphemousworld):
             or state.has("Purified Hand of the Nun", player)
             or state.has("D01Z02S03[NW]", player) 
             and (
-                can_cross_gap(state, logic, player, 1)
+                can_cross_gap(state, logic, player, 2)
                 or state.has("Lorquiana", player)
                 or aubade(state, player)
                 or state.has("Cantina of the Blue Rose", player)
                 or charge_beam(state, player)
+                or state.has("Ranged Skill", player)
             )
         ))
     set_rule(world.get_location("Albero: Lvdovico's 1st reward", player),
@@ -702,10 +703,11 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("WotBC: Cliffside Child of Moonlight", player),
         lambda state: (
-            can_cross_gap(state, logic, player, 1)
+            can_cross_gap(state, logic, player, 2)
             or aubade(state, player)
             or charge_beam(state, player)
-            or state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", "Cloistered Ruby"}, player)
+            or state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", \
+                              "Cloistered Ruby", "Ranged Skill"}, player)
             or precise_skips_allowed(logic)
         ))
     # Doors
