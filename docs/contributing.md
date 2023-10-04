@@ -12,6 +12,7 @@ You can turn this setting on here. (insert image)
 We have designated styling guideline to ensure uniformity and ease of communication. Please take a look at 
 our [styling documentation](/docs/style.md).
 
+
 Other than these requests, we tend to judge code on a case to case basis.
 
 If you want to add a new game to Archipelago, please take a look at this [document](/docs/adding%20games.md) detailing what is required 
