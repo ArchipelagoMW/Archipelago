@@ -50,8 +50,9 @@ Name: "minimal"; Description: "Minimal installation"
 Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 [Components]
-Name: "lttp_sprites";     Types: full; Description: "Download A Link to the Past player sprites."
-Name: "client_minecraft"; Types: full; Description: "Minecraft Forge Server Setup"; ExtraDiskSpaceRequired: 226894278
+Name: "core";             Description: "Archipelago"; Types: full minimal custom; Flags: fixed
+Name: "lttp_sprites";     Description: "Download ""A Link to the Past"" player sprites"; Types: full;
+Name: "client_minecraft"; Description: "Setup ""Minecraft"" Forge Server"; Types: full; ExtraDiskSpaceRequired: 226894278;
 
 [Dirs]
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
