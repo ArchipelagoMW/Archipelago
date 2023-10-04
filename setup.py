@@ -371,7 +371,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: typing.List[str] = []
         disabled_worlds_folder = "worlds_disabled"
-        for entry in os.listdir("worlds_disabled"):
+        for entry in os.listdir(disabled_worlds_folder):
             if os.path.isdir(os.path.join(disabled_worlds_folder, entry)):
                 folders_to_remove.append(entry)
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
