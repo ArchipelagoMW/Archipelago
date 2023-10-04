@@ -5,13 +5,38 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/supportedGames.css") }}" />
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/supportedGames.js") }}"></script>
+    <noscript>
+    <style>
+        /* always un-collapse all and hide arrow and search bar */
+        /* TODO: make collapsing a common thing with a common css/js and move this to another common file.
+                 Selectors need to be way too specific to work around markdown.
+                 Use a specific class instead of #games or separate style from function.
+         */
+
+        .js-only{
+          display: none;
+        }
+
+        #games p.collapsed{
+          display: block;
+        }
+
+        #games h2 .collapse-arrow{
+          display: none;
+        }
+
+        #games .collapse-toggle{
+          cursor: unset;
+        }
+    </style>
+    </noscript>
 {% endblock %}
 
 {% block body %}
     {% include 'header/oceanHeader.html' %}
     <div id="games" class="markdown">
         <h1>Currently Supported Games</h1>
-        <div>
+        <div class="js-only">
             <label for="game-search">Search for your game below!</label><br />
             <div id="page-controls">
                 <input id="game-search" placeholder="Search by title..." autofocus />
@@ -22,7 +47,7 @@
         {% for game_name in worlds | title_sorted %}
         {% set world = worlds[game_name] %}
         <h2 class="collapse-toggle" data-game="{{ game_name }}">
-            <span id="{{ game_name }}-arrow" class="collapse-arrow">▶</span>&nbsp;{{ game_name }}
+            <span id="{{ game_name }}-arrow" class="collapse-arrow">▶</span>{{ game_name }}
         </h2>
         <p id="{{ game_name }}" class="collapsed">
             {{ world.__doc__ | default("No description provided.", true) }}<br />
