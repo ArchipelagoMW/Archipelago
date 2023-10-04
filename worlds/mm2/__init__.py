@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import typing
 
@@ -8,7 +9,8 @@ from .Names import *
 from .Items import item_table, item_names, MM2Item, filler_item_table, filler_item_weights, robot_master_weapon_table, \
     stage_access_table, item_item_table
 from .Locations import location_table, MM2Location, mm2_regions
-from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, MM2LCHASH, MM2DeltaPatch
+from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, MM2LCHASH, PROTEUSHASH, MM2DeltaPatch, \
+    extract_mm2
 from .Options import mm2_options
 from .Client import MegaMan2Client
 from .Rules import set_rules
@@ -16,15 +18,45 @@ import os
 import threading
 import base64
 import settings
-
+from worlds.LauncherComponents import components, SuffixIdentifier
 logger = logging.getLogger("Mega Man 2")
+
+for component in components:
+    if component.script_name == "BizHawkClient":
+        component.file_identifier = SuffixIdentifier(*(*component.file_identifier.suffixes, ".apmm2"))
+        break
+
 
 class MM2Settings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the MM2 EN rom"""
         description = "Mega Man 2 ROM File"
         copy_to = "Mega Man 2 (USA).nes"
-        md5s = [MM2LCHASH]
+        md5s = [MM2LCHASH, PROTEUSHASH]
+
+        def browse(self: settings.T,
+                   filetypes: typing.Optional[typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]] = None,
+                   **kwargs: typing.Any) -> typing.Optional[settings.T]:
+            if not filetypes:
+                from Utils import is_windows
+                file_types = [("NES", [".nes"]), ("Program", [".exe"] if is_windows else [""])]
+                return super().browse(file_types, **kwargs)
+            else:
+                return super().browse(filetypes, **kwargs)
+
+        def validate(self, path: str) -> None:
+            """Try to open and validate file against hashes"""
+            with open(path, "rb", buffering=0) as f:
+                try:
+                    self._validate_stream_hashes(f)
+                    base_rom_bytes = f.read()
+                    basemd5 = hashlib.md5()
+                    basemd5.update(base_rom_bytes)
+                    if basemd5.hexdigest() == PROTEUSHASH:
+                        # we need special behavior here
+                        self.copy_to = None
+                except ValueError:
+                    raise ValueError(f"File hash does not match for {path}")
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -126,15 +158,16 @@ class MM2World(World):
     def generate_early(self) -> None:
         if (not self.multiworld.yoku_jumps[self.player]
             and self.multiworld.starting_robot_master[self.player].current_key == "heat_man") or \
-            (not self.multiworld.enable_lasers[self.player]
-             and self.multiworld.starting_robot_master[self.player].current_key == "quick_man"):
+                (not self.multiworld.enable_lasers[self.player]
+                 and self.multiworld.starting_robot_master[self.player].current_key == "quick_man"):
             robot_master_pool = [1, 2, 3, 5, 6, 7, ]
             if self.multiworld.yoku_jumps[self.player]:
                 robot_master_pool.append(0)
             if self.multiworld.enable_lasers[self.player]:
                 robot_master_pool.append(4)
             self.multiworld.starting_robot_master[self.player].value = self.random.choice(robot_master_pool)
-            logger.warning(f"Incompatible starting Robot Master, changing to {self.multiworld.starting_robot_master[self.player].current_key.replace('_',' ').title()}")
+            logger.warning(
+                f"Incompatible starting Robot Master, changing to {self.multiworld.starting_robot_master[self.player].current_key.replace('_', ' ').title()}")
 
     def generate_basic(self) -> None:
         goal_location = self.multiworld.get_location(Names.dr_wily, self.player)
@@ -147,15 +180,15 @@ class MM2World(World):
             world = self.multiworld
             player = self.player
 
-            rom = RomData(get_base_rom_path())
-            patch_rom(self.multiworld, self.player, rom, self.multiworld.starting_robot_master[self.player].value)
+            rom = RomData(get_base_rom_bytes())
+            patch_rom(self.multiworld, self.player, rom)
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.nes")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
             patch = MM2DeltaPatch(os.path.splitext(rompath)[0] + MM2DeltaPatch.patch_file_ending, player=player,
-                                   player_name=world.player_name[player], patched_path=rompath)
+                                  player_name=world.player_name[player], patched_path=rompath)
             patch.write()
         except Exception:
             raise

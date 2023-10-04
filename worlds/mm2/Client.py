@@ -3,12 +3,32 @@ import time
 import typing
 from base64 import b64encode
 from typing import TYPE_CHECKING, Any, Dict, Tuple
-
+import sys
 from NetUtils import ClientStatus, color
-from worlds.AutoBizHawkClient import BizHawkClient
+
+# TODO: REMOVE ASAP
+# This imports the bizhawk apworld if it's not already imported. This code block should be removed for a PR.
+if "worlds._bizhawk" not in sys.modules:
+    import importlib
+    import os
+    import zipimport
+
+    bh_apworld_path = os.path.join(os.path.dirname(sys.modules["worlds"].__file__), "_bizhawk.apworld")
+    if os.path.isfile(bh_apworld_path):
+        importer = zipimport.zipimporter(bh_apworld_path)
+        spec = importer.find_spec(os.path.basename(bh_apworld_path).rsplit(".", 1)[0])
+        mod = importlib.util.module_from_spec(spec)
+        mod.__package__ = f"worlds.{mod.__package__}"
+        mod.__name__ = f"worlds.{mod.__name__}"
+        sys.modules[mod.__name__] = mod
+        importer.exec_module(mod)
+    elif not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
+        logging.error("Did not find _bizhawk.apworld required to play Mega Man 2.")
+
+from worlds._bizhawk.client import BizHawkClient
 
 if TYPE_CHECKING:
-    from BizHawkClient import BizHawkClientContext
+    from worlds._bizhawk.context import BizHawkClientContext
 else:
     BizHawkClientContext = Any
 
@@ -81,10 +101,10 @@ class MegaMan2Client(BizHawkClient):
     rom: typing.Optional[bytes] = None
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
-        from BizHawkClient import RequestFailedError, bizhawk_read
+        from worlds._bizhawk import RequestFailedError, read
 
         try:
-            game_name = ((await bizhawk_read(ctx, [(0x3FFB0, 21, "PRG ROM")]))[0])
+            game_name = ((await read(ctx.bizhawk_ctx, [(0x3FFB0, 21, "PRG ROM")]))[0])
             if game_name[:3] != b"MM2":
                 return False
         except UnicodeDecodeError:
@@ -118,7 +138,7 @@ class MegaMan2Client(BizHawkClient):
         self.pending_death_link = True
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
-        from BizHawkClient import bizhawk_read, bizhawk_write
+        from worlds._bizhawk import read, write
 
         if ctx.server is None:
             return
@@ -133,7 +153,7 @@ class MegaMan2Client(BizHawkClient):
         robot_masters_unlocked, robot_masters_defeated, items_acquired, \
             weapons_unlocked, items_unlocked, items_received, \
             completed_stages, consumable_checks,\
-            e_tanks, lives, weapon_energy, health = await bizhawk_read(ctx, [
+            e_tanks, lives, weapon_energy, health = await read(ctx.bizhawk_ctx, [
                 (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
                 (MM2_ITEMS_ACQUIRED, 1, "RAM"),
@@ -252,7 +272,7 @@ class MegaMan2Client(BizHawkClient):
                 else:
                     self.item_queue.append(item)
 
-        await bizhawk_write(ctx, writes)
+        await write(ctx.bizhawk_ctx, writes)
 
         new_checks = []
         # check for locations
