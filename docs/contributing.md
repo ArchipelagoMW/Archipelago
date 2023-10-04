@@ -1,11 +1,11 @@
 # Contributing
 Contributions are welcome. We have a few requests of any new contributors.
 
-## Ensure that all changes which affect logic are covered by unit tests. 
+### Ensure that all changes which affect logic are covered by unit tests. 
 Something something please take a look at [this document](/docs/world%20api.md#tests) about how to implement them.
-## Do not introduce any unit test failures/regressions.
+### Do not introduce any unit test failures/regressions.
 
-## Follow styling guidelines.
+### Follow styling guidelines.
 To [styling documentation](/docs/style.md).
 
 Otherwise, we tend to judge code on a case to case basis.
