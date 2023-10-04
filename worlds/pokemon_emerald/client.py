@@ -43,7 +43,7 @@ TRACKER_EVENT_FLAGS = [
     "FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA",                # Rayquaza departs for Sootopolis
     "FLAG_OMIT_DIVE_FROM_STEVEN_LETTER",                # Steven gives Dive HM (clears seafloor cavern grunt)
     "FLAG_IS_CHAMPION",
-    # TODO: Add Harbor Mail event here
+    "FLAG_PURCHASED_HARBOR_MAIL"
 ]
 EVENT_FLAG_MAP = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
 
@@ -116,16 +116,6 @@ class PokemonEmeraldClient(BizHawkClient):
                             "this client. Double check your client version against the version being "
                             "used by the generator.")
                 return False
-
-            # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
-            # validating a ROM where there's no slot name to read.
-            try:
-                slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["gArchipelagoInfo"], 64, "ROM")]))[0]
-                self.rom_slot_name = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
-            except UnicodeDecodeError:
-                logger.info("Could not read slot name from ROM. This indicates a problem with the "
-                            "base patch and should be reported.")
-                return False
         except UnicodeDecodeError:
             return False
         except bizhawk.RequestFailedError:
@@ -137,7 +127,8 @@ class PokemonEmeraldClient(BizHawkClient):
         return True
 
     async def set_auth(self, ctx: BizHawkClientContext) -> None:
-        ctx.auth = self.rom_slot_name
+        slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["gArchipelagoInfo"], 64, "ROM")]))[0]
+        ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
         if ctx.slot_data is not None:
@@ -166,11 +157,10 @@ class PokemonEmeraldClient(BizHawkClient):
 
             save_block_address = int.from_bytes(read_result[0], "little")
 
-            # Read from save block and received item struct
+            # Handle giving the player items
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
                 [
-                    (save_block_address + 0x1450, 0x12C, "System Bus"),                    # Flags
                     (save_block_address + 0x3778, 2, "System Bus"),                        # Number of received items
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 4, 1, "System Bus")  # Received item struct full?
                 ],
@@ -179,9 +169,8 @@ class PokemonEmeraldClient(BizHawkClient):
             if read_result is None:  # Not in overworld, or save block moved
                 return
 
-            flag_bytes = read_result[0]
-            num_received_items = int.from_bytes(read_result[1], "little")
-            received_item_is_empty = read_result[2][0] == 0
+            num_received_items = int.from_bytes(read_result[0], "little")
+            received_item_is_empty = read_result[1][0] == 0
 
             # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
             # fill it with the next item
@@ -190,9 +179,28 @@ class PokemonEmeraldClient(BizHawkClient):
                 await bizhawk.write(ctx.bizhawk_ctx, [
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 0, (next_item.item - BASE_OFFSET).to_bytes(2, "little"), "System Bus"),
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 2, (num_received_items + 1).to_bytes(2, "little"), "System Bus"),
-                    (data.ram_addresses["gArchipelagoReceivedItem"] + 4, [1], "System Bus"),
+                    (data.ram_addresses["gArchipelagoReceivedItem"] + 4, [1], "System Bus"),  # Mark struct full
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 5, [next_item.flags & 1], "System Bus"),
                 ])
+
+            # Read flags in 2 chunks
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx,
+                [(save_block_address + 0x1450, 0x96, "System Bus")],  # Flags
+                [overworld_guard, save_block_address_guard]
+            )
+            if read_result is None:  # Not in overworld, or save block moved
+                return
+
+            flag_bytes = read_result[0]
+
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx,
+                [(save_block_address + 0x14E6, 0x96, "System Bus")],  # Flags
+                [overworld_guard, save_block_address_guard]
+            )
+            if read_result is not None:
+                flag_bytes += read_result[0]
 
             game_clear = False
             local_checked_locations = set()
