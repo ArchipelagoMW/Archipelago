@@ -53,6 +53,10 @@ class TunicWorld(World):
     ability_unlocks: Dict[str, int]
     slot_data_items: List[TunicItem]
 
+    def generate_early(self):
+        if self.multiworld.start_with_sword[self.player].value and "Sword" not in self.multiworld.start_inventory[self.player]:
+            self.multiworld.start_inventory[self.player].value["Sword"] = 1
+
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
