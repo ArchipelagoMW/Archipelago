@@ -1,5 +1,5 @@
 import logging
-from typing import List, Tuple
+from typing import List
 
 from BaseClasses import Tutorial, ItemClassification
 from Fill import fill_restrictive
@@ -60,7 +60,6 @@ class KH2World(World):
     filler_items: List[str]
     item_quantity_dict: Dict[str, int]
     local_items: Dict[int, int]
-
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -184,7 +183,7 @@ class KH2World(World):
         # Example. Quick Run: 4
         self.item_quantity_dict = {item: data.quantity for item, data in item_dictionary_table.items()}
         self.sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
-                             dic.items()}
+                                  dic.items()}
         # Dictionary to mark locations with their plandoed item
         # Example. Final Xemnas: Victory
         # 3 random support abilities because there are left over slots
@@ -409,7 +408,7 @@ class KH2World(World):
         """
         keyblade_locations = [self.multiworld.get_location(location, self.player) for location in Keyblade_Slots.keys()]
         state = self.multiworld.get_all_state(False)
-        keyblade_ability_pool_copy=self.keyblade_ability_pool.copy()
+        keyblade_ability_pool_copy = self.keyblade_ability_pool.copy()
         fill_restrictive(self.multiworld, state, keyblade_locations, keyblade_ability_pool_copy, True, True)
 
     def starting_invo_verify(self):

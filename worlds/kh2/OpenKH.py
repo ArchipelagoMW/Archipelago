@@ -82,11 +82,13 @@ def patch_kh2(self, output_directory):
             data = all_locations[location.name]
         else:
             continue
-
-        if location.item.player == self.player:
-            itemcode = item_dictionary_table[location.item.name].kh2id
+        if location.item:
+            if location.item.player == self.player:
+                itemcode = item_dictionary_table[location.item.name].kh2id
+            else:
+                itemcode = 90  # castle map
         else:
-            itemcode = 90  # castle map
+            itemcode = 90
 
         if data.yml == "Chest":
             self.formattedTrsr[data.locid] = {"ItemId": itemcode}
@@ -165,7 +167,7 @@ def patch_kh2(self, output_directory):
                 "GrowthAbilityLevel": 0,
             })
 
-    # Summons have no acutal locations so done down here.
+    # Summons have no actual locations so done down here.
     self.formattedFmlv["Summon"] = []
     for x in range(1, 7):
         self.formattedFmlv["Summon"].append({
@@ -181,10 +183,11 @@ def patch_kh2(self, output_directory):
         increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
         if location in levelsetting:
             data = self.multiworld.get_location(location, self.player)
-            if data.item.player == self.player:
-                itemcode = item_dictionary_table[data.item.name].kh2id
-            else:
-                itemcode = 90  # castle map
+            if data.item:
+                if data.item.player == self.player:
+                    itemcode = item_dictionary_table[data.item.name].kh2id
+                else:
+                    itemcode = 90  # castle map
         else:
             increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
             itemcode = 0

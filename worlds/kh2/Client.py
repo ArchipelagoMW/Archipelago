@@ -128,7 +128,6 @@ class KH2Context(CommonContext):
         self.Slot1 = 0x2A20C98
 
         self.chest_set = set(exclusion_table["Chests"])
-
         self.keyblade_set = set(CheckDupingItems["Weapons"]["Keyblades"])
         self.staff_set = set(CheckDupingItems["Weapons"]["Staffs"])
         self.shield_set = set(CheckDupingItems["Weapons"]["Shields"])
@@ -276,9 +275,9 @@ class KH2Context(CommonContext):
                     "itemIndex":  -1,
                     # back of soras invo is 0x25E2. Growth should be moved there
                     #  Character: [back of invo, front of invo]
-                    "SoraInvo":   [0x25D8, 0x25D8],
-                    "DonaldInvo": [0x26F4, 0x26F4],
-                    "GoofyInvo":  [0x2808, 0x2808],
+                    "SoraInvo":   [0x25D8, 0x2546],
+                    "DonaldInvo": [0x26F4, 0x2658],
+                    "GoofyInvo":  [0x2808, 0x276A],
                     "AmountInvo": {
                         "Ability":      {},
                         "Amount":       {
@@ -412,15 +411,14 @@ class KH2Context(CommonContext):
             for i in range(6):
                 for location, data in formDict[i][1].items():
                     formlevel = self.kh2_read_byte(self.Save + data.addrObtained)
-                    if location not in self.kh2_loc_name_to_id.keys():
-                        return
-                    # if current form level is above other form level
-                    locationId = self.kh2_loc_name_to_id[location]
-                    if locationId not in self.locations_checked \
-                            and formlevel >= data.bitIndex:
-                        if formlevel > self.kh2_seed_save["Levels"][formDict[i][0]]:
-                            self.kh2_seed_save["Levels"][formDict[i][0]] = formlevel
-                        self.sending = self.sending + [(int(locationId))]
+                    if location in self.kh2_loc_name_to_id.keys():
+                        # if current form level is above other form level
+                        locationId = self.kh2_loc_name_to_id[location]
+                        if locationId not in self.locations_checked \
+                                and formlevel >= data.bitIndex:
+                            if formlevel > self.kh2_seed_save["Levels"][formDict[i][0]]:
+                                self.kh2_seed_save["Levels"][formDict[i][0]] = formlevel
+                            self.sending = self.sending + [(int(locationId))]
         except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
@@ -487,51 +485,42 @@ class KH2Context(CommonContext):
                 if itemname in {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}:
                     self.kh2_seed_save_cache["AmountInvo"]["Growth"][itemname] += 1
                     return
-                # if AbilityOrder == "FrontOf":
-                #    back_or_front = 1
-                #    twilight_zone = -2
-                # else:
-                #    back_or_front = 0
-                #    twilight_zone = 2
 
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Ability"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname] = []
                     #  appending the slot that the ability should be in
                 # for non beta. remove after 4.3
-                if self.kh2slotdata["PoptrackerVersionCheck"] < 4.3:
-                    if (itemname in self.sora_ability_set
-                        and len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < self.item_name_to_data[itemname].quantity) \
-                            and self.kh2_seed_save_cache["SoraInvo"][1] > 0x254C:
-                        ability_slot = self.kh2_seed_save_cache["SoraInvo"][1]
-                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                        self.kh2_seed_save_cache["SoraInvo"][1] -= 2
-                    elif itemname in self.donald_ability_set:
-                        ability_slot = self.kh2_seed_save_cache["DonaldInvo"][1]
-                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                        self.kh2_seed_save_cache["DonaldInvo"][1] -= 2
-                    else:
-                        ability_slot = self.kh2_seed_save_cache["GoofyInvo"][1]
-                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                        self.kh2_seed_save_cache["GoofyInvo"][1] -= 2
-                    return
-                
-                if len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
+                if "PoptrackerVersion" in self.kh2slotdata:
+                    if self.kh2slotdata["PoptrackerVersionCheck"] < 4.3:
+                        if (itemname in self.sora_ability_set
+                            and len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < self.item_name_to_data[itemname].quantity) \
+                                and self.kh2_seed_save_cache["SoraInvo"][1] > 0x254C:
+                            ability_slot = self.kh2_seed_save_cache["SoraInvo"][1]
+                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                            self.kh2_seed_save_cache["SoraInvo"][1] -= 2
+                        elif itemname in self.donald_ability_set:
+                            ability_slot = self.kh2_seed_save_cache["DonaldInvo"][1]
+                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                            self.kh2_seed_save_cache["DonaldInvo"][1] -= 2
+                        else:
+                            ability_slot = self.kh2_seed_save_cache["GoofyInvo"][1]
+                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                            self.kh2_seed_save_cache["GoofyInvo"][1] -= 2
+
+                elif len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
-                    if itemname in self.sora_ability_set and itemname in self.sora_ability_to_slot.keys():
-                        if len(self.sora_ability_to_slot[itemname]) > 0:
-                            ability_slot = self.sora_ability_to_slot[itemname][0]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.sora_ability_to_slot[itemname].remove(ability_slot)
-                    elif itemname in self.donald_ability_set and itemname in self.donald_ability_to_slot.keys():
-                        if len(self.donald_ability_to_slot[itemname]) > 0:
-                            ability_slot = self.donald_ability_to_slot[itemname][0]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.donald_ability_to_slot[itemname].remove(ability_slot)
-                    elif itemname in self.goofy_ability_set and itemname in self.goofy_ability_to_slot.keys():
-                        if len(self.goofy_ability_to_slot[itemname]) > 0:
-                            ability_slot = self.goofy_ability_to_slot[itemname][0]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.goofy_ability_to_slot[itemname].remove(ability_slot)
+                    if itemname in self.sora_ability_set:
+                        ability_slot = self.kh2_seed_save_cache["SoraInvo"][0]
+                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                        self.kh2_seed_save_cache["SoraInvo"][0] -= 2
+                    elif itemname in self.donald_ability_set:
+                        ability_slot = self.kh2_seed_save_cache["DonaldInvo"][0]
+                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                        self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
+                    elif itemname in self.goofy_ability_set:
+                        ability_slot = self.kh2_seed_save_cache["GoofyInvo"][0]
+                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                        self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
 
             elif itemdata.memaddr in {0x36C4, 0x36C5, 0x36C6, 0x36C0, 0x36CA}:
                 # if memaddr is in a bitmask location in memory
@@ -685,6 +674,7 @@ class KH2Context(CommonContext):
 
             for charInvo in {"Sora", "Donald", "Goofy"}:
                 if self.kh2_read_short(self.Save + self.front_of_inventory[charInvo]) != 0:
+                    print(f"removed {self.Save + self.front_of_inventory[charInvo]} from {charInvo}")
                     self.kh2_write_short(self.Save + self.front_of_inventory[charInvo], 0)
 
             # remove the dummy level 1 growths if they are in these invo slots.
@@ -758,9 +748,9 @@ class KH2Context(CommonContext):
                         and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
                         self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
-
-            if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.3
-                self.kh2_write_byte(self.Save + 0x3607, 1)
+            if "PoptrackerVersionCheck" in self.kh2slotdata:
+                if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.3
+                    self.kh2_write_byte(self.Save + 0x3607, 1)
 
         except Exception as e:
             if self.kh2connected:
