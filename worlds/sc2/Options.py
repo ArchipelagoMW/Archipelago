@@ -290,8 +290,7 @@ class Kerriganless(Choice):
 
 
 class KerriganChecksPerLevelPack(Range):
-    """Determines how many locations need to be checked for a level pack to be received.  Missions have between 4 and 5 locations each.  
-    Kerrigan's maximum level is always 70."""
+    """Determines how many locations need to be checked for a level pack to be received.  Missions have between 4 and 5 locations each."""
     display_name = "Checks Per Kerrigan Level Pack"
     range_start = 1
     range_end = 10
@@ -299,7 +298,7 @@ class KerriganChecksPerLevelPack(Range):
 
 
 class KerriganCheckLevelPackSize(Range):
-    """Determines how many levels Kerrigan gains when enough locations are checked.  Kerrigan's maximum level is always 70."""
+    """Determines how many levels Kerrigan gains when enough locations are checked."""
     display_name = "Check Level Pack Size"
     range_start = 0
     range_end = 5
@@ -307,8 +306,7 @@ class KerriganCheckLevelPackSize(Range):
 
 
 class KerriganLevelItemSum(Range):
-    """Determines the sum of the level items in the seed.  This does not affect levels gained from checks.  
-    Kerrigan's maximum level is always 70."""
+    """Determines the sum of the level items in the seed.  This does not affect levels gained from checks."""
     display_name = "Kerrigan Level Item Sum"
     range_start = 0
     range_end = 140
@@ -316,7 +314,7 @@ class KerriganLevelItemSum(Range):
 
 
 class KerriganLevelItemDistribution(Choice):
-    """Determines the amount and size of Kerrigan level items.  Kerrigan's maximum level is always 70.
+    """Determines the amount and size of Kerrigan level items.
 
     Vanilla:  Uses the distribution in the vanilla campaign.
     This entails 32 individual levels and 6 packs of varying sizes.

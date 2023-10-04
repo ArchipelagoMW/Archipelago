@@ -21,7 +21,8 @@ from kivy.uix.scrollview import ScrollView
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
-from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available
+from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, Kerriganless, GameSpeed, \
+    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, KerriganChecksPerLevelPack
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -300,10 +301,7 @@ class SC2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
-            if "game_speed" in args["slot_data"]:
-                self.game_speed = args["slot_data"]["game_speed"]
-            else:
-                self.game_speed = 0
+            self.game_speed = args["slot_data"].get("game_speed", GameSpeed.option_default)
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
 
@@ -325,17 +323,16 @@ class SC2Context(CommonContext):
                     }
                 }
 
-            self.mission_order = args["slot_data"].get("mission_order", 0)
-            self.final_mission = args["slot_data"].get("final_mission", 29)
-            self.player_color = args["slot_data"].get("player_color_terran_raynor", 2)
-            self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", 0)
-            self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", 0)
-            self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", 0)
-            if args["slot_data"].get("kerriganless", 0) > 0:
-                self.kerriganless = 1
-            self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", 0)
-            self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", 0)
-            self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", 1)
+            self.mission_order = args["slot_data"].get("mission_order", MissionOrder.option_vanilla)
+            self.final_mission = args["slot_data"].get("final_mission", SC2Mission.ALL_IN.id)
+            self.player_color = args["slot_data"].get("player_color_terran_raynor", ColorChoice.option_blue)
+            self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", GenericUpgradeMissions.default)
+            self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", GenericUpgradeItems.option_individual_items)
+            self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", GenericUpgradeResearch.option_vanilla)
+            self.kerriganless = args["slot_data"].get("kerriganless", Kerriganless.option_off)
+            self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", KerriganPrimalStatus.option_vanilla)
+            self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", KerriganCheckLevelPackSize.default)
+            self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", KerriganChecksPerLevelPack.default)
 
             self.build_location_to_mission_mapping()
 
