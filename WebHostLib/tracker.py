@@ -1532,7 +1532,7 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
             continue
         player_locations = locations[player]
         checks_done[team][player]["Total"] = len(locations_checked)
-        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
+        percent_total_checks_done[team][player] = round(checks_done[team][player]["Total"] /
                                                       len(player_locations) * 100) \
             if player_locations else 100
 
@@ -1691,7 +1691,7 @@ def get_LttP_multiworld_tracker(tracker: UUID):
                 attribute_item(team, recipient, item)
                 checks_done[team][player][player_location_to_area[player][location]] += 1
                 checks_done[team][player]["Total"] += 1
-        percent_total_checks_done[team][player] = int(
+        percent_total_checks_done[team][player] = round(
             checks_done[team][player]["Total"] / len(player_locations) * 100) if \
         player_locations else 100
 
