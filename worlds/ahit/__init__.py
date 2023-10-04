@@ -98,11 +98,6 @@ class HatInTimeWorld(World):
         if self.multiworld.ShuffleActContracts[self.player].value == 0:
             for name in contract_locations.keys():
                 self.multiworld.get_location(name, self.player).place_locked_item(create_item(self, name))
-        else:
-            # The bag trap contract check needs to be excluded, because if the player has the Subcon Well contract,
-            # the trap will not activate, locking the player out of the check permanently
-            self.multiworld.get_location("Snatcher's Contract - The Subcon Well",
-                                         self.player).progress_type = LocationProgressType.EXCLUDED
 
     def create_items(self):
         hat_yarn_costs[self.player] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,

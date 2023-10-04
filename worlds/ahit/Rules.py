@@ -1,8 +1,8 @@
 from worlds.AutoWorld import World, CollectionState
 from worlds.generic.Rules import add_rule, set_rule
-from .Locations import location_table, tihs_locations, zipline_unlocks, is_location_valid, contract_locations, \
+from .Locations import location_table, zipline_unlocks, is_location_valid, contract_locations, \
     shop_locations, event_locs
-from .Types import HatType, ChapterIndex, hat_type_to_item
+from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty
 from BaseClasses import Location, Entrance, Region
 import typing
 
@@ -57,13 +57,9 @@ def painting_logic(world: World) -> bool:
     return world.multiworld.ShuffleSubconPaintings[world.player].value > 0
 
 
-def is_player_knowledgeable(world: World) -> bool:
-    return world.multiworld.KnowledgeChecks[world.player].value > 0
-
-
-# 0 = Normal, 1 = Hard, 2 = Expert
-def get_difficulty(world: World) -> int:
-    return world.multiworld.LogicDifficulty[world.player].value
+# -1 = Normal, 0 = Moderate, 1 = Hard, 2 = Expert
+def get_difficulty(world: World) -> Difficulty:
+    return Difficulty(world.multiworld.LogicDifficulty[world.player].value)
 
 
 def has_paintings(state: CollectionState, world: World, count: int) -> bool:
@@ -71,18 +67,17 @@ def has_paintings(state: CollectionState, world: World, count: int) -> bool:
         return True
 
     # Cherry Hover
-    if get_difficulty(world) == 2:
+    if get_difficulty(world) >= Difficulty.EXPERT:
         return True
 
     # All paintings can be skipped with No Bonk, very easily, if the player knows
-    if is_player_knowledgeable(world) and can_surf(state, world):
+    if get_difficulty(world) >= Difficulty.MODERATE and can_surf(state, world):
         return True
 
     paintings: int = state.count("Progressive Painting Unlock", world.player)
-
-    if is_player_knowledgeable(world):
-        # Green paintings can also be skipped very easily without No Bonk
-        if paintings >= 1 and count == 3:
+    if get_difficulty(world) >= Difficulty.MODERATE:
+        # Green+Yellow paintings can also be skipped easily
+        if count == 1 or paintings >= 1 and count == 3:
             return True
 
     return paintings >= count
@@ -96,11 +91,11 @@ def can_use_hookshot(state: CollectionState, world: World):
     return state.has("Hookshot Badge", world.player)
 
 
-def can_hit(state: CollectionState, world: World):
+def can_hit(state: CollectionState, world: World, umbrella_only: bool = False):
     if world.multiworld.UmbrellaLogic[world.player].value == 0:
         return True
 
-    return state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING)
+    return state.has("Umbrella", world.player) or not umbrella_only and can_use_hat(state, world, HatType.BREWING)
 
 
 def can_surf(state: CollectionState, world: World):
@@ -271,18 +266,6 @@ def set_rules(world: World):
 
         location = world.multiworld.get_location(key, world.player)
 
-        # Not all locations in Alpine can be reached from The Illness has Spread
-        # as many of the ziplines are blocked off
-        if data.region == "Alpine Skyline Area":
-            if key not in tihs_locations:
-                add_rule(location, lambda state: state.can_reach("Alpine Free Roam", "Region", world.player), "and")
-            else:
-                add_rule(location, lambda state: can_use_hookshot(state, world))
-
-        if data.region == "The Birdhouse" or data.region == "The Lava Cake" \
-           or data.region == "The Windmill" or data.region == "The Twilight Bell":
-            add_rule(location, lambda state: state.can_reach("Alpine Free Roam", "Region", world.player), "and")
-
         for hat in data.required_hats:
             if hat is not HatType.NONE:
                 add_rule(location, lambda state, h=hat: can_use_hat(state, world, h))
@@ -305,10 +288,43 @@ def set_rules(world: World):
         for misc in data.misc_required:
             add_rule(location, lambda state, item=misc: state.has(item, world.player))
 
-    if get_difficulty(world) >= 1:
-        world.multiworld.KnowledgeChecks[world.player].value = 1
-
     set_specific_rules(world)
+
+    # Putting all of this here, so it doesn't get overridden by anything
+    # Illness starts the player past the intro
+    alpine_entrance = world.multiworld.get_entrance("AFR -> Alpine Skyline Area", world.player)
+    add_rule(alpine_entrance, lambda state: can_use_hookshot(state, world))
+    if world.multiworld.UmbrellaLogic[world.player].value > 0:
+        add_rule(alpine_entrance, lambda state: state.has("Umbrella", world.player))
+
+    if zipline_logic(world):
+        add_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
+                 lambda state: state.has("Zipline Unlock - The Birdhouse Path", world.player))
+
+        add_rule(world.multiworld.get_entrance("-> The Lava Cake", world.player),
+                 lambda state: state.has("Zipline Unlock - The Lava Cake Path", world.player))
+
+        add_rule(world.multiworld.get_entrance("-> The Windmill", world.player),
+                 lambda state: state.has("Zipline Unlock - The Windmill Path", world.player))
+
+        add_rule(world.multiworld.get_entrance("-> The Twilight Bell", world.player),
+                 lambda state: state.has("Zipline Unlock - The Twilight Bell Path", world.player))
+
+        add_rule(world.multiworld.get_location("Act Completion (The Illness has Spread)", world.player),
+                 lambda state: state.has("Zipline Unlock - The Birdhouse Path", world.player)
+                 and state.has("Zipline Unlock - The Lava Cake Path", world.player)
+                 and state.has("Zipline Unlock - The Windmill Path", world.player))
+
+    if zipline_logic(world):
+        for (loc, zipline) in zipline_unlocks.items():
+            add_rule(world.multiworld.get_location(loc, world.player),
+                     lambda state, z=zipline: state.has(z, world.player))
+
+    for loc in world.multiworld.get_region("Alpine Skyline Area (TIHS)", world.player).locations:
+        if "Goat Village" in loc.name:
+            continue
+
+        add_rule(loc, lambda state: can_use_hookshot(state, world))
 
     for (key, acts) in act_connections.items():
         if "Arctic Cruise" in key and not world.is_dlc1():
@@ -346,11 +362,6 @@ def set_rules(world: World):
 
     set_event_rules(world)
 
-    for entrance in world.multiworld.get_region("Alpine Free Roam", world.player).entrances:
-        add_rule(entrance, lambda state: can_use_hookshot(state, world))
-        if world.multiworld.UmbrellaLogic[world.player].value > 0:
-            add_rule(entrance, lambda state: state.has("Umbrella", world.player))
-
     if world.multiworld.EndGoal[world.player].value == 1:
         world.multiworld.completion_condition[world.player] = lambda state: state.has("Time Piece Cluster", world.player)
     elif world.multiworld.EndGoal[world.player].value == 2:
@@ -375,48 +386,85 @@ def set_specific_rules(world: World):
     if world.is_dlc2():
         set_dlc2_rules(world)
 
-    difficulty: int = get_difficulty(world)
-    if is_player_knowledgeable(world) or difficulty >= 1:
-        set_knowledge_rules(world)
+    difficulty: Difficulty = get_difficulty(world)
 
-    if difficulty == 0:
-        set_normal_rules(world)
+    if difficulty >= Difficulty.MODERATE:
+        set_moderate_rules(world)
 
-    if difficulty >= 1:
+    if difficulty >= Difficulty.HARD:
         set_hard_rules(world)
 
     if difficulty >= 2:
         set_expert_rules(world)
 
 
-def set_normal_rules(world: World):
-    # Hard: get to Birdhouse without Brewing Hat
-    add_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
-             lambda state: can_use_hat(state, world, HatType.BREWING))
+def set_moderate_rules(world: World):
+    # Moderate: Gallery without Brewing Hat
+    set_rule(world.multiworld.get_location("Act Completion (Time Rift - Gallery)", world.player), lambda state: True)
 
-    add_rule(world.multiworld.get_location("Alpine Skyline - Yellow Band Hills", world.player),
-             lambda state: can_use_hat(state, world, HatType.BREWING))
+    # Moderate: Clock Tower Chest + Ruined Tower with nothing
+    add_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player), lambda state: True)
+    add_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player), lambda state: True)
 
-    # Hard: gallery without Brewing Hat
-    add_rule(world.multiworld.get_location("Act Completion (Time Rift - Gallery)", world.player),
-             lambda state: can_use_hat(state, world, HatType.BREWING))
+    # Moderate: hitting the bell is not required to enter Subcon Well, however hookshot is still expected to clear
+    set_rule(world.multiworld.get_location("Subcon Well - Hookshot Badge Chest", world.player),
+             lambda state: has_paintings(state, world, 1))
+    set_rule(world.multiworld.get_location("Subcon Well - Above Chest", world.player),
+             lambda state: has_paintings(state, world, 1))
+    set_rule(world.multiworld.get_location("Subcon Well - Mushroom", world.player),
+             lambda state: has_paintings(state, world, 1))
+
+    # Moderate: Vanessa Manor with nothing
+    for loc in world.multiworld.get_region("Queen Vanessa's Manor", world.player).locations:
+        set_rule(loc, lambda state: True)
+
+    set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player), lambda state: True)
+
+    # Moderate: get to Birdhouse/Yellow Band Hills without Brewing Hat
+    set_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
+             lambda state: can_use_hookshot(state, world))
+    set_rule(world.multiworld.get_location("Alpine Skyline - Yellow Band Hills", world.player),
+             lambda state: can_use_hookshot(state, world))
+
+    # Moderate: The Birdhouse - Dweller Platforms Relic with only Birdhouse access
+    set_rule(world.multiworld.get_location("Alpine Skyline - The Birdhouse: Dweller Platforms Relic", world.player),
+             lambda state: True)
 
     if world.is_dlc1():
-        # Hard: clear Deep Sea without Dweller Mask
-        add_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", world.player),
-                 lambda state: can_use_hat(state, world, HatType.DWELLER))
+        # Moderate: clear Rock the Boat without Ice Hat
+        add_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", world.player), lambda state: True)
+        add_rule(world.multiworld.get_location("Act Completion (Rock the Boat)", world.player), lambda state: True)
 
-        # Hard: clear Rock the Boat without Ice Hat
-        add_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", world.player),
-                 lambda state: can_use_hat(state, world, HatType.ICE))
+        # Moderate: clear Deep Sea without Ice Hat
+        set_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", world.player),
+                 lambda state: can_use_hookshot(state, world) and can_use_hat(state, world, HatType.DWELLER))
 
-        add_rule(world.multiworld.get_location("Act Completion (Rock the Boat)", world.player),
-                 lambda state: can_use_hat(state, world, HatType.ICE))
-
+    # There is a glitched fall damage volume near the Yellow Overpass time piece that warps the player to Pink Paw.
+    # Yellow Overpass time piece can also be reached without Hookshot quite easily.
     if world.is_dlc2():
-        # Hard: clear Green Clean Manhole without Dweller Mask
-        add_rule(world.multiworld.get_location("Act Completion (Green Clean Manhole)", world.player),
-                 lambda state: can_use_hat(state, world, HatType.DWELLER))
+        set_rule(world.multiworld.get_entrance("-> Pink Paw Station", world.player), lambda state: True)
+        set_rule(world.multiworld.get_location("Act Completion (Yellow Overpass Station)", world.player),
+                 lambda state: True)
+
+        set_rule(world.multiworld.get_location("Pink Paw Station - Cat Vacuum", world.player), lambda state: True)
+
+        # The player can quite literally walk past the fan from the side without Time Stop.
+        set_rule(world.multiworld.get_location("Pink Paw Station - Behind Fan", world.player), lambda state: True)
+
+        # The player can't jump back down to the manhole due to a fall damage volume preventing them from doing so
+        set_rule(world.multiworld.get_location("Act Completion (Pink Paw Manhole)", world.player),
+                 lambda state: (state.has("Metro Ticket - Pink", world.player)
+                 or state.has("Metro Ticket - Yellow", world.player)
+                 and state.has("Metro Ticket - Blue", world.player))
+                 and can_use_hat(state, world, HatType.ICE))
+
+        # Moderate: clear Rush Hour without Hookshot
+        set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
+                 lambda state: state.has("Metro Ticket - Pink", world.player)
+                 and state.has("Metro Ticket - Yellow", world.player)
+                 and state.has("Metro Ticket - Blue", world.player)
+                 and can_use_hat(state, world, HatType.ICE)
+                 and can_use_hat(state, world, HatType.BREWING))
 
 
 def set_hard_rules(world: World):
@@ -425,95 +473,105 @@ def set_hard_rules(world: World):
              lambda state: can_use_hat(state, world, HatType.SPRINT)
              and state.has("Scooter Badge", world.player), "or")
 
-    # Hard: Cross Subcon boss arena gap with No Bonk + SDJ,
-    # allowing access to the boss arena chest, and Toilet of Doom without Hookshot
+    # Hard: Cross Subcon boss arena gap with No Bonk + SDJ, allowing access to the boss arena chest
     # Doing this in reverse from YCHE is expert logic, which expects you to cherry hover
-    add_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
-             lambda state: can_surf(state, world) and can_sdj(state, world) and can_hit(state, world), "or")
-
     add_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
              lambda state: can_surf(state, world) and can_sdj(state, world), "or")
 
+    set_rule(world.multiworld.get_location("Subcon Forest - Dweller Floating Rocks", world.player),
+             lambda state: has_paintings(state, world, 3))
+
+    # SDJ
     add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
              lambda state: can_sdj(state, world)
              and has_paintings(state, world, 2), "or")
 
-    add_rule(world.multiworld.get_location("Alpine Skyline - The Birdhouse: Dweller Platforms Relic", world.player),
-             lambda state: can_sdj(state, world), "or")
+    add_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
+             lambda state: has_paintings(state, world, 3) and can_sdj(state, world), "or")
 
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
              lambda state: can_sdj(state, world), "or")
 
+    add_rule(world.multiworld.get_location("Act Completion (The Finale)", world.player),
+             lambda state: can_use_hat(state, world, HatType.DWELLER) and can_sdj(state, world), "or")
+
+    # Hard: Mystifying Time Mesa time trial without hats
+    set_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
+             lambda state: can_use_hookshot(state, world))
+
+    if world.is_dlc1():
+        # Hard: clear Deep Sea without Dweller Mask
+        set_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", world.player),
+                 lambda state: can_use_hookshot(state, world))
+
+    if world.is_dlc2():
+        # Hard: clear Green Clean Manhole without Dweller Mask
+        set_rule(world.multiworld.get_location("Act Completion (Green Clean Manhole)", world.player),
+                 lambda state: can_use_hat(state, world, HatType.ICE))
+
+        # Hard: clear Rush Hour with Brewing Hat only
+        set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
+                 lambda state: can_use_hat(state, world, HatType.BREWING))
+
 
 def set_expert_rules(world: World):
-    # Expert: get to and clear Twilight Bell without Dweller Mask using SDJ. Brewing Hat required to complete act.
-    add_rule(world.multiworld.get_location("Alpine Skyline - The Twilight Path", world.player),
-             lambda state: can_sdj(state, world)
-             and (not zipline_logic(world) or state.has("Zipline Unlock - The Twilight Bell Path", world.player)), "or")
+    # Expert: Mafia Town - Above Boats with nothing
+    set_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player), lambda state: True)
+
+    # Expert: Clear Dead Bird Studio with nothing
+    for loc in world.multiworld.get_region("Dead Bird Studio - Post Elevator Area", world.player).locations:
+        set_rule(loc, lambda state: True)
+
+    set_rule(world.multiworld.get_location("Act Completion (Dead Bird Studio)", world.player), lambda state: True)
+
+    # Expert: get to and clear Twilight Bell without Dweller Mask.
+    # Dweller Mask OR Sprint Hat OR Brewing Hat OR Time Stop + Umbrella required to complete act.
+    set_rule(world.multiworld.get_location("Alpine Skyline - The Twilight Path", world.player), lambda state: True)
 
     add_rule(world.multiworld.get_entrance("-> The Twilight Bell", world.player),
-             lambda state: can_sdj(state, world) and can_use_hookshot(state, world)
-             and (not zipline_logic(world) or state.has("Zipline Unlock - The Twilight Bell Path", world.player)), "or")
+             lambda state: can_use_hookshot(state, world), "or")
 
     add_rule(world.multiworld.get_location("Act Completion (The Twilight Bell)", world.player),
-             lambda state: can_sdj(state, world) and can_use_hat(state, world, HatType.BREWING), "or")
+             lambda state: can_use_hat(state, world, HatType.BREWING)
+             or can_use_hat(state, world, HatType.DWELLER)
+             or can_use_hat(state, world, HatType.SPRINT)
+             or (can_use_hat(state, world, HatType.TIME_STOP) and state.has("Umbrella", world.player)))
 
-    # Expert: enter and clear The Subcon Well with No Bonk Badge only
+    # Expert: Time Rift - Curly Tail Trail with nothing
+    # Time Rift - Twilight Bell and Time Rift - Village with nothing
+    set_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
+             lambda state: True)
+
+    set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Act Completion (Time Rift - The Twilight Bell)", world.player),
+             lambda state: True)
+
+    # Expert: enter and clear The Subcon Well with nothing
     for loc in world.multiworld.get_region("The Subcon Well", world.player).locations:
-        add_rule(loc, lambda state: can_surf(state, world), "or")
+        set_rule(loc, lambda state: True)
 
     # Expert: Cherry Hovering
     connect_regions(world.multiworld.get_region("Your Contract has Expired", world.player),
                     world.multiworld.get_region("Subcon Forest Area", world.player),
                     "Subcon Forest Entrance YCHE", world.player)
 
-    set_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
-             lambda state: can_hit(state, world))
-
     set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Subcon Forest - Tall Tree Hookshot Swing", world.player), lambda state: True)
 
-    # Manor hover with 1 painting unlock
-    for loc in world.multiworld.get_region("Queen Vanessa's Manor", world.player).locations:
-        set_rule(loc, lambda state: not painting_logic(world)
-                 or state.count("Progressive Painting Unlock", world.player) >= 1)
+    # You can cherry hover to Snatcher's post-fight cutscene, which completes the level without having to fight him
+    connect_regions(world.multiworld.get_region("Subcon Forest Area", world.player),
+                    world.multiworld.get_region("Your Contract has Expired", world.player),
+                    "Snatcher Hover", world.player)
+    set_rule(world.multiworld.get_location("Act Completion (Your Contract has Expired)", world.player),
+             lambda state: True)
 
-    set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player),
-             lambda state: not painting_logic(world)
-             or state.count("Progressive Painting Unlock", world.player) >= 1)
-
-
-def set_knowledge_rules(world: World):
-    # Can jump down from HQ to get these
-    add_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player),
-             lambda state: state.can_reach("Act Completion (Heating Up Mafia Town)", "Location", world.player)
-             or state.can_reach("Cheating the Race", "Region", world.player)
-             or state.can_reach("The Golden Vault", "Region", world.player), "or")
-
-    add_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player),
-             lambda state: state.can_reach("Act Completion (Heating Up Mafia Town)", "Location", world.player)
-             or state.can_reach("Cheating the Race", "Region", world.player)
-             or state.can_reach("The Golden Vault", "Region", world.player), "or")
-
-    # Dweller Mask requirement in Pink Paw can also be skipped by jumping on lamp post.
-    # The item behind the Time Stop fan can be walked past without Time Stop hat as well.
-    # (just set hookshot rule, because dweller requirement is skipped, but hookshot is still necessary)
     if world.is_dlc2():
-        # There is a glitched fall damage volume near the Yellow Overpass time piece that warps the player to Pink Paw
-        add_rule(world.multiworld.get_entrance("-> Pink Paw Station", world.player),
-                 lambda state: can_use_hookshot(state, world), "or")
-
-        for loc in world.multiworld.get_region("Pink Paw Station", world.player).locations:
-
-            # Can't jump back down to the manhole due to a fall damage trigger.
-            if loc.name == "Act Completion (Pink Paw Manhole)":
-                set_rule(loc, lambda state: (state.has("Metro Ticket - Pink", world.player)
-                         or state.has("Metro Ticket - Yellow", world.player)
-                         and state.has("Metro Ticket - Blue", world.player))
-                         and can_use_hat(state, world, HatType.ICE))
-
-                continue
-
-            set_rule(loc, lambda state: can_use_hookshot(state, world))
+        # Expert: clear Rush Hour with nothing
+        set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player), lambda state: True)
 
 
 def set_mafia_town_rules(world: World):
@@ -564,9 +622,16 @@ def set_mafia_town_rules(world: World):
     add_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player),
              lambda state: state.has("HUMT Access", world.player), "or")
 
-    set_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", world.player),
-             lambda state: can_use_hat(state, world, HatType.TIME_STOP)
-             or world.multiworld.CTRWithSprint[world.player].value > 0 and can_use_hat(state, world, HatType.SPRINT))
+    ctr_logic: int = world.multiworld.CTRLogic[world.player].value
+    if ctr_logic == 3:
+        set_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", world.player), lambda state: True)
+    elif ctr_logic == 2:
+        add_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", world.player),
+                 lambda state: can_use_hat(state, world, HatType.SPRINT), "or")
+    elif ctr_logic == 1:
+        add_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", world.player),
+                 lambda state: can_use_hat(state, world, HatType.SPRINT)
+                 and state.has("Scooter Badge", world.player), "or")
 
 
 def set_subcon_rules(world: World):
@@ -608,42 +673,22 @@ def set_subcon_rules(world: World):
 
 def set_alps_rules(world: World):
     add_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
-             lambda state: can_use_hookshot(state, world))
+             lambda state: can_use_hookshot(state, world) and can_use_hat(state, world, HatType.BREWING))
+
     add_rule(world.multiworld.get_entrance("-> The Lava Cake", world.player),
              lambda state: can_use_hookshot(state, world))
+
     add_rule(world.multiworld.get_entrance("-> The Windmill", world.player),
              lambda state: can_use_hookshot(state, world))
 
     add_rule(world.multiworld.get_entrance("-> The Twilight Bell", world.player),
-             lambda state: can_use_hat(state, world, HatType.DWELLER) and can_use_hookshot(state, world))
+             lambda state: can_use_hookshot(state, world) and can_use_hat(state, world, HatType.DWELLER))
 
     add_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
              lambda state: can_use_hat(state, world, HatType.SPRINT) or can_use_hat(state, world, HatType.TIME_STOP))
 
     add_rule(world.multiworld.get_entrance("Alpine Skyline - Finale", world.player),
              lambda state: can_clear_alpine(state, world))
-
-    if zipline_logic(world):
-        add_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
-                 lambda state: state.has("Zipline Unlock - The Birdhouse Path", world.player))
-
-        add_rule(world.multiworld.get_entrance("-> The Lava Cake", world.player),
-                 lambda state: state.has("Zipline Unlock - The Lava Cake Path", world.player))
-
-        add_rule(world.multiworld.get_entrance("-> The Windmill", world.player),
-                 lambda state: state.has("Zipline Unlock - The Windmill Path", world.player))
-
-        add_rule(world.multiworld.get_entrance("-> The Twilight Bell", world.player),
-                 lambda state: state.has("Zipline Unlock - The Twilight Bell Path", world.player))
-
-        add_rule(world.multiworld.get_location("Act Completion (The Illness has Spread)", world.player),
-                 lambda state: state.has("Zipline Unlock - The Birdhouse Path", world.player)
-                 and state.has("Zipline Unlock - The Lava Cake Path", world.player)
-                 and state.has("Zipline Unlock - The Windmill Path", world.player))
-
-        for (loc, zipline) in zipline_unlocks.items():
-            add_rule(world.multiworld.get_location(loc, world.player),
-                     lambda state, z=zipline: state.has(z, world.player))
 
 
 def set_dlc1_rules(world: World):

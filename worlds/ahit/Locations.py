@@ -170,10 +170,10 @@ ahit_locations = {
     "Dead Bird Studio - Red Building Top": LocData(305024, "Dead Bird Studio - Elevator Area"),
     "Dead Bird Studio - Behind Water Tower": LocData(305248, "Dead Bird Studio - Elevator Area"),
     "Dead Bird Studio - Side of House": LocData(305247, "Dead Bird Studio - Elevator Area"),
-    "Dead Bird Studio - DJ Grooves Sign Chest": LocData(303901, "Dead Bird Studio", hit_requirement=1),
-    "Dead Bird Studio - Tightrope Chest": LocData(303898, "Dead Bird Studio", hit_requirement=1),
-    "Dead Bird Studio - Tepee Chest": LocData(303899, "Dead Bird Studio", hit_requirement=1),
-    "Dead Bird Studio - Conductor Chest": LocData(303900, "Dead Bird Studio", hit_requirement=1),
+    "Dead Bird Studio - DJ Grooves Sign Chest": LocData(303901, "Dead Bird Studio - Post Elevator Area", hit_requirement=1),
+    "Dead Bird Studio - Tightrope Chest": LocData(303898, "Dead Bird Studio - Post Elevator Area", hit_requirement=1),
+    "Dead Bird Studio - Tepee Chest": LocData(303899, "Dead Bird Studio - Post Elevator Area", hit_requirement=1),
+    "Dead Bird Studio - Conductor Chest": LocData(303900, "Dead Bird Studio - Post Elevator Area", hit_requirement=1),
 
     "Murder on the Owl Express - Cafeteria": LocData(305313, "Murder on the Owl Express"),
     "Murder on the Owl Express - Luggage Room Top": LocData(305090, "Murder on the Owl Express"),
@@ -276,11 +276,11 @@ ahit_locations = {
     "Queen Vanessa's Manor - Chandelier": LocData(325546, "Queen Vanessa's Manor", hit_requirement=2, paintings=1),
 
     # Alpine Skyline
-    "Alpine Skyline - Goat Village: Below Hookpoint": LocData(334856, "Goat Village"),
-    "Alpine Skyline - Goat Village: Hidden Branch": LocData(334855, "Goat Village"),
+    "Alpine Skyline - Goat Village: Below Hookpoint": LocData(334856, "Alpine Skyline Area (TIHS)"),
+    "Alpine Skyline - Goat Village: Hidden Branch": LocData(334855, "Alpine Skyline Area (TIHS)"),
     "Alpine Skyline - Goat Refinery": LocData(333635, "Alpine Skyline Area"),
-    "Alpine Skyline - Bird Pass Fork": LocData(335911, "Alpine Skyline Area"),
-    "Alpine Skyline - Yellow Band Hills": LocData(335756, "Alpine Skyline Area", required_hats=[HatType.BREWING]),
+    "Alpine Skyline - Bird Pass Fork": LocData(335911, "Alpine Skyline Area (TIHS)"),
+    "Alpine Skyline - Yellow Band Hills": LocData(335756, "Alpine Skyline Area (TIHS)", required_hats=[HatType.BREWING]),
     "Alpine Skyline - The Purrloined Village: Horned Stone": LocData(335561, "Alpine Skyline Area"),
     "Alpine Skyline - The Purrloined Village: Chest Reward": LocData(334831, "Alpine Skyline Area"),
     "Alpine Skyline - The Birdhouse: Triple Crow Chest": LocData(334758, "The Birdhouse"),
@@ -295,7 +295,7 @@ ahit_locations = {
 
     "Alpine Skyline - Mystifying Time Mesa: Zipline": LocData(337058, "Alpine Skyline Area"),
     "Alpine Skyline - Mystifying Time Mesa: Gate Puzzle": LocData(336052, "Alpine Skyline Area"),
-    "Alpine Skyline - Ember Summit": LocData(336311, "Alpine Skyline Area"),
+    "Alpine Skyline - Ember Summit": LocData(336311, "Alpine Skyline Area (TIHS)"),
     "Alpine Skyline - The Lava Cake: Center Fence Cage": LocData(335448, "The Lava Cake"),
     "Alpine Skyline - The Lava Cake: Outer Island Chest": LocData(334291, "The Lava Cake"),
     "Alpine Skyline - The Lava Cake: Dweller Pillars": LocData(335417, "The Lava Cake"),
@@ -304,7 +304,7 @@ ahit_locations = {
     "Alpine Skyline - The Twilight Bell: Wide Purple Platform": LocData(336478, "The Twilight Bell"),
     "Alpine Skyline - The Twilight Bell: Ice Platform": LocData(335826, "The Twilight Bell"),
     "Alpine Skyline - Goat Outpost Horn": LocData(334760, "Alpine Skyline Area"),
-    "Alpine Skyline - Windy Passage": LocData(334776, "Alpine Skyline Area"),
+    "Alpine Skyline - Windy Passage": LocData(334776, "Alpine Skyline Area (TIHS)"),
     "Alpine Skyline - The Windmill: Inside Pon Cluster": LocData(336395, "The Windmill"),
     "Alpine Skyline - The Windmill: Entrance": LocData(335783, "The Windmill"),
     "Alpine Skyline - The Windmill: Dropdown": LocData(335815, "The Windmill"),
@@ -327,7 +327,8 @@ ahit_locations = {
     "Rock the Boat - Reception Room - Under Desk": LocData(304047, "Rock the Boat", dlc_flags=HatDLC.dlc1),
     "Rock the Boat - Lamp Post": LocData(304048, "Rock the Boat", dlc_flags=HatDLC.dlc1),
     "Rock the Boat - Iceberg Top": LocData(304046, "Rock the Boat", dlc_flags=HatDLC.dlc1),
-    "Rock the Boat - Post Captain Rescue": LocData(304049, "Rock the Boat", dlc_flags=HatDLC.dlc1),
+    "Rock the Boat - Post Captain Rescue": LocData(304049, "Rock the Boat", dlc_flags=HatDLC.dlc1,
+                                                   required_hats=[HatType.ICE]),
 
     "Nyakuza Metro - Main Station Dining Area": LocData(304105, "Nyakuza Free Roam", dlc_flags=HatDLC.dlc2),
     "Nyakuza Metro - Top of Ramen Shop": LocData(304104, "Nyakuza Free Roam", dlc_flags=HatDLC.dlc2),
@@ -350,14 +351,14 @@ ahit_locations = {
 }
 
 act_completions = {
-    "Act Completion (Time Rift - Gallery)": LocData(312758, "Time Rift - Gallery"),
+    "Act Completion (Time Rift - Gallery)": LocData(312758, "Time Rift - Gallery", required_hats=[HatType.BREWING]),
     "Act Completion (Time Rift - The Lab)": LocData(312838, "Time Rift - The Lab"),
 
     "Act Completion (Welcome to Mafia Town)": LocData(311771, "Welcome to Mafia Town"),
     "Act Completion (Barrel Battle)": LocData(311958, "Barrel Battle"),
     "Act Completion (She Came from Outer Space)": LocData(312262, "She Came from Outer Space"),
     "Act Completion (Down with the Mafia!)": LocData(311326, "Down with the Mafia!"),
-    "Act Completion (Cheating the Race)": LocData(312318, "Cheating the Race"),
+    "Act Completion (Cheating the Race)": LocData(312318, "Cheating the Race", required_hats=[HatType.TIME_STOP]),
     "Act Completion (Heating Up Mafia Town)": LocData(311481, "Heating Up Mafia Town", umbrella=True),
     "Act Completion (The Golden Vault)": LocData(312250, "The Golden Vault"),
     "Act Completion (Time Rift - Bazaar)": LocData(312465, "Time Rift - Bazaar"),
@@ -404,9 +405,10 @@ act_completions = {
 
     "Act Completion (Bon Voyage!)": LocData(311520, "Bon Voyage!", dlc_flags=HatDLC.dlc1, hookshot=True),
     "Act Completion (Ship Shape)": LocData(311451, "Ship Shape", dlc_flags=HatDLC.dlc1),
-    "Act Completion (Rock the Boat)": LocData(311437, "Rock the Boat", dlc_flags=HatDLC.dlc1),
+    "Act Completion (Rock the Boat)": LocData(311437, "Rock the Boat", dlc_flags=HatDLC.dlc1, required_hats=[HatType.ICE]),
     "Act Completion (Time Rift - Balcony)": LocData(312226, "Time Rift - Balcony", dlc_flags=HatDLC.dlc1, hookshot=True),
-    "Act Completion (Time Rift - Deep Sea)": LocData(312434, "Time Rift - Deep Sea", dlc_flags=HatDLC.dlc1, hookshot=True),
+    "Act Completion (Time Rift - Deep Sea)": LocData(312434, "Time Rift - Deep Sea", dlc_flags=HatDLC.dlc1,
+                                                     hookshot=True, required_hats=[HatType.DWELLER, HatType.ICE]),
 
     "Act Completion (Nyakuza Metro Intro)": LocData(311138, "Nyakuza Free Roam", dlc_flags=HatDLC.dlc2),
 
@@ -422,7 +424,7 @@ act_completions = {
 
     "Act Completion (Green Clean Manhole)": LocData(311388, "Green Clean Manhole",
                                                     dlc_flags=HatDLC.dlc2,
-                                                    required_hats=[HatType.ICE]),
+                                                    required_hats=[HatType.ICE, HatType.DWELLER]),
 
     "Act Completion (Bluefin Tunnel)": LocData(311208, "Bluefin Tunnel", dlc_flags=HatDLC.dlc2),
 
@@ -668,16 +670,6 @@ zipline_unlocks = {
 
     "Alpine Skyline - The Twilight Path":   "Zipline Unlock - The Twilight Bell Path",
 }
-
-# Locations in Alpine that are available in The Illness has Spread
-# Goat Village locations don't need to be put here
-tihs_locations = [
-    "Alpine Skyline - Bird Pass Fork",
-    "Alpine Skyline - Yellow Band Hills",
-    "Alpine Skyline - Ember Summit",
-    "Alpine Skyline - Goat Outpost Horn",
-    "Alpine Skyline - Windy Passage",
-]
 
 event_locs = {
     "HUMT Access": LocData(0, "Heating Up Mafia Town", act_complete_event=False),

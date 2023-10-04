@@ -1,8 +1,8 @@
 from BaseClasses import Item, ItemClassification
 from worlds.AutoWorld import World
-from .Types import HatDLC, HatType, hat_type_to_item
+from .Types import HatDLC, HatType, hat_type_to_item, Difficulty
 from .Locations import get_total_locations
-from .Rules import get_difficulty, is_player_knowledgeable
+from .Rules import get_difficulty
 from typing import Optional, NamedTuple, List, Dict
 
 
@@ -45,10 +45,13 @@ def create_itempool(world: World) -> List[Item]:
             if item_type is ItemClassification.progression \
                or item_type is ItemClassification.progression_skip_balancing:
                 continue
-
-        if get_difficulty(world) >= 1 or is_player_knowledgeable(world) \
-           and (name == "Scooter Badge" or name == "No Bonk Badge") and not world.is_dw_only():
-            item_type = ItemClassification.progression
+        else:
+            if name == "Scooter Badge":
+                if world.multiworld.CTRLogic[world.player].value >= 1 or get_difficulty(world) >= Difficulty.MODERATE:
+                    item_type = ItemClassification.progression
+            elif name == "No Bonk Badge":
+                if get_difficulty(world) >= Difficulty.MODERATE:
+                    item_type = ItemClassification.progression
 
         # some death wish bonuses require one hit hero + hookshot
         if world.is_dw() and name == "Badge Pin" and not world.is_dw_only():

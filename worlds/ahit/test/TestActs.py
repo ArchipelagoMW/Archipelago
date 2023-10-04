@@ -7,6 +7,7 @@ class TestActs(HatInTimeTestBase):
         "ActRandomizer": 2,
         "EnableDLC1": 1,
         "EnableDLC2": 1,
+        "ShuffleActContracts": 0,
     }
 
     def test_act_shuffle(self):

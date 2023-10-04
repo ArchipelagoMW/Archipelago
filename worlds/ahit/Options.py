@@ -60,7 +60,7 @@ def adjust_options(world: World):
         world.multiworld.ShuffleStorybookPages[world.player].value = 0
         world.multiworld.ShuffleActContracts[world.player].value = 0
         world.multiworld.EnableDLC1[world.player].value = 0
-        world.multiworld.LogicDifficulty[world.player].value = 0
+        world.multiworld.LogicDifficulty[world.player].value = -1
         world.multiworld.KnowledgeChecks[world.player].value = 0
         world.multiworld.DWTimePieceRequirement[world.player].value = 0
 
@@ -118,17 +118,20 @@ class FinaleShuffle(Toggle):
 class LogicDifficulty(Choice):
     """Choose the difficulty setting for logic."""
     display_name = "Logic Difficulty"
-    option_normal = 0
+    option_normal = -1
+    option_moderate = 0
     option_hard = 1
     option_expert = 2
-    default = 0
+    default = -1
 
 
-class KnowledgeChecks(Toggle):
-    """Put tricks into logic that are not necessarily difficult,
-     but require knowledge that is not obvious or commonly known. Can include glitches such as No Bonk Surfing.
-     This option will be forced on if logic difficulty is at least hard."""
-    display_name = "Knowledge Checks"
+class CTRLogic(Choice):
+    """Choose how you want to logically clear Cheating the Race."""
+    display_name = "Cheating the Race Logic"
+    option_time_stop_only = 0
+    option_scooter = 1
+    option_sprint = 2
+    option_nothing = 3
     default = 0
 
 
@@ -350,12 +353,6 @@ class BadgeSellerMaxItems(Range):
     default = 8
 
 
-class CTRWithSprint(Toggle):
-    """If enabled, clearing Cheating the Race with just Sprint Hat can be in logic."""
-    display_name = "Cheating the Race with Sprint Hat"
-    default = 0
-
-
 class EnableDLC1(Toggle):
     """Shuffle content from The Arctic Cruise (Chapter 6) into the game. This also includes the Tour time rift.
     DO NOT ENABLE THIS OPTION IF YOU DO NOT HAVE SEAL THE DEAL DLC INSTALLED!!!"""
@@ -396,7 +393,7 @@ class ExcludeTour(Toggle):
 class ShipShapeCustomTaskGoal(Range):
     """Change the amount of tasks required to complete Ship Shape. This will not affect Cruisin' for a Bruisin'."""
     display_name = "Ship Shape Custom Task Goal"
-    range_start = 5
+    range_start = 1
     range_end = 30
     default = 18
 
@@ -602,7 +599,6 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "ShuffleAlpineZiplines":    ShuffleAlpineZiplines,
     "FinaleShuffle":            FinaleShuffle,
     "LogicDifficulty":          LogicDifficulty,
-    "KnowledgeChecks":          KnowledgeChecks,
     "YarnBalancePercent":       YarnBalancePercent,
     "TimePieceBalancePercent":  TimePieceBalancePercent,
     "RandomizeHatOrder":        RandomizeHatOrder,
@@ -613,7 +609,7 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "ShuffleActContracts":      ShuffleActContracts,
     "ShuffleSubconPaintings":   ShuffleSubconPaintings,
     "StartingChapter":          StartingChapter,
-    "CTRWithSprint":            CTRWithSprint,
+    "CTRLogic":                 CTRLogic,
 
     "EnableDLC1":               EnableDLC1,
     "Tasksanity":               Tasksanity,
@@ -675,7 +671,7 @@ slot_data_options: typing.Dict[str, type(Option)] = {
     "ActRandomizer":                ActRandomizer,
     "ShuffleAlpineZiplines":        ShuffleAlpineZiplines,
     "LogicDifficulty":              LogicDifficulty,
-    "KnowledgeChecks":              KnowledgeChecks,
+    "CTRLogic":                     CTRLogic,
     "RandomizeHatOrder":            RandomizeHatOrder,
     "UmbrellaLogic":                UmbrellaLogic,
     "CompassBadgeMode":             CompassBadgeMode,

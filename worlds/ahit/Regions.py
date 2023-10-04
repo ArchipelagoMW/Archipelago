@@ -3,7 +3,7 @@ from BaseClasses import Region, Entrance, ItemClassification, Location
 from .Locations import HatInTimeLocation, location_table, storybook_pages, event_locs, is_location_valid, \
     shop_locations, get_tasksanity_start_id
 from .Items import HatInTimeItem
-from .Types import ChapterIndex
+from .Types import ChapterIndex, Difficulty
 import typing
 from .Rules import set_rift_rules
 
@@ -308,9 +308,13 @@ def create_regions(world: World):
     create_rift_connections(w, create_region(w, "Time Rift - The Owl Express"))
     create_rift_connections(w, create_region(w, "Time Rift - The Moon"))
 
-    # Items near the Dead Bird Studio elevator can be reached from the basement act
+    # Items near the Dead Bird Studio elevator can be reached from the basement act, and beyond in Expert
     ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
-    connect_regions(mw.get_region("Dead Bird Studio Basement", p), ev_area, "DBS Basement -> Elevator Area", p)
+    post_ev_area = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
+    basement = mw.get_region("Dead Bird Studio Basement", p)
+    connect_regions(basement, ev_area, "DBS Basement -> Elevator Area", p)
+    if world.multiworld.LogicDifficulty[world.player].value >= int(Difficulty.EXPERT):
+        connect_regions(basement, post_ev_area, "DBS Basement -> Post Elevator Area", p)
 
     # ------------------------------------------- SUBCON FOREST --------------------------------------- #
     subcon_forest = create_region_and_connect(w, "Subcon Forest", "Telescope -> Subcon Forest", spaceship)
@@ -325,7 +329,9 @@ def create_regions(world: World):
     alpine_skyline = create_region_and_connect(w, "Alpine Skyline",  "Telescope -> Alpine Skyline", spaceship)
     alpine_freeroam = create_region_and_connect(w, "Alpine Free Roam", "Alpine Skyline - Free Roam", alpine_skyline)
     alpine_area = create_region_and_connect(w, "Alpine Skyline Area", "AFR -> Alpine Skyline Area", alpine_freeroam)
-    goat_village = create_region_and_connect(w, "Goat Village", "ASA -> Goat Village", alpine_area)
+
+    # Needs to be separate because there are a lot of locations in Alpine that can't be accessed from Illness
+    alpine_area_tihs = create_region_and_connect(w, "Alpine Skyline Area (TIHS)", "-> Alpine Skyline Area (TIHS)", alpine_area)
 
     create_region_and_connect(w, "The Birdhouse", "-> The Birdhouse", alpine_area)
     create_region_and_connect(w, "The Lava Cake", "-> The Lava Cake", alpine_area)
@@ -333,8 +339,7 @@ def create_regions(world: World):
     create_region_and_connect(w, "The Twilight Bell", "-> The Twilight Bell", alpine_area)
 
     illness = create_region_and_connect(w, "The Illness has Spread", "Alpine Skyline - Finale", alpine_skyline)
-    connect_regions(illness, alpine_area, "TIHS -> Alpine Skyline Area", p)
-    connect_regions(illness, goat_village, "TIHS -> Goat Village", p)
+    connect_regions(illness, alpine_area_tihs, "TIHS -> Alpine Skyline Area (TIHS)", p)
     create_rift_connections(w, create_region(w, "Time Rift - Alpine Skyline"))
     create_rift_connections(w, create_region(w, "Time Rift - The Twilight Bell"))
     create_rift_connections(w, create_region(w, "Time Rift - Curly Tail Trail"))
@@ -373,7 +378,7 @@ def create_regions(world: World):
     connect_regions(mw.get_region("Dead Bird Studio", p), badge_seller, "DBS -> Badge Seller", p)
     connect_regions(mw.get_region("Picture Perfect", p), badge_seller, "PP -> Badge Seller", p)
     connect_regions(mw.get_region("Train Rush", p), badge_seller, "TR -> Badge Seller", p)
-    connect_regions(mw.get_region("Goat Village", p), badge_seller, "GV -> Badge Seller", p)
+    connect_regions(mw.get_region("Alpine Skyline Area (TIHS)", p), badge_seller, "ASA -> Badge Seller", p)
 
     times_end = create_region_and_connect(w, "Time's End", "Telescope -> Time's End", spaceship)
     create_region_and_connect(w, "The Finale", "Time's End - Act 1", times_end)

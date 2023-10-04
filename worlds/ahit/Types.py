@@ -28,6 +28,13 @@ class ChapterIndex(IntEnum):
     METRO = 7
 
 
+class Difficulty(IntEnum):
+    NORMAL = -1
+    MODERATE = 0
+    HARD = 1
+    EXPERT = 2
+
+
 hat_type_to_item = {
     HatType.SPRINT:     "Sprint Hat",
     HatType.BREWING:    "Brewing Hat",

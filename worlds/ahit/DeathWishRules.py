@@ -1,11 +1,11 @@
 from worlds.AutoWorld import World, CollectionState
 from .Locations import LocData, death_wishes, HatInTimeLocation
-from .Rules import can_use_hat, can_use_hookshot, can_hit, zipline_logic, has_paintings
-from .Types import HatType
+from .Rules import can_use_hat, can_use_hookshot, can_hit, zipline_logic, has_paintings, get_difficulty
+from .Types import HatType, Difficulty
 from .DeathWishLocations import dw_prereqs, dw_candles
 from .Items import HatInTimeItem
 from BaseClasses import Entrance, Location, ItemClassification
-from worlds.generic.Rules import add_rule
+from worlds.generic.Rules import add_rule, set_rule
 from typing import List, Callable
 
 # Any speedruns expect the player to have Sprint Hat
@@ -21,18 +21,18 @@ dw_requirements = {
     "Community Rift: Rhythm Jump Studio": LocData(required_hats=[HatType.ICE]),
 
     "Speedrun Well": LocData(hookshot=True, hit_requirement=1, required_hats=[HatType.SPRINT]),
-    "Boss Rush": LocData(hit_requirement=1, umbrella=True),
+    "Boss Rush": LocData(umbrella=True, hookshot=True),
     "Community Rift: Twilight Travels": LocData(hookshot=True, required_hats=[HatType.DWELLER]),
 
     "Bird Sanctuary": LocData(hookshot=True),
     "Wound-Up Windmill": LocData(hookshot=True),
-    "The Illness has Speedrun": LocData(hookshot=True, required_hats=[HatType.SPRINT]),
+    "The Illness has Speedrun": LocData(hookshot=True),
     "Community Rift: The Mountain Rift": LocData(hookshot=True, required_hats=[HatType.DWELLER]),
     "Camera Tourist": LocData(misc_required=["Camera Badge"]),
 
     "The Mustache Gauntlet": LocData(hookshot=True, required_hats=[HatType.DWELLER]),
 
-    "Rift Collapse - Deep Sea": LocData(hookshot=True, required_hats=[HatType.DWELLER]),
+    "Rift Collapse - Deep Sea": LocData(hookshot=True),
 }
 
 # Includes main objective requirements
@@ -43,15 +43,16 @@ dw_bonus_requirements = {
 
     "10 Seconds until Self-Destruct": LocData(misc_required=["One-Hit Hero Badge", "Badge Pin"]),
 
-    "Boss Rush": LocData(misc_required=["One-Hit Hero Badge"]),
+    "Boss Rush": LocData(misc_required=["One-Hit Hero Badge", "Badge Pin"]),
     "Community Rift: Twilight Travels": LocData(required_hats=[HatType.BREWING]),
 
     "Bird Sanctuary": LocData(misc_required=["One-Hit Hero Badge", "Badge Pin"], required_hats=[HatType.DWELLER]),
     "Wound-Up Windmill": LocData(misc_required=["One-Hit Hero Badge", "Badge Pin"]),
+    "The Illness has Speedrun": LocData(required_hats=[HatType.SPRINT]),
 
     "The Mustache Gauntlet": LocData(required_hats=[HatType.ICE]),
 
-    "Rift Collapse - Deep Sea": LocData(required_hats=[HatType.SPRINT]),
+    "Rift Collapse - Deep Sea": LocData(required_hats=[HatType.DWELLER]),
 }
 
 dw_stamp_costs = {
@@ -122,21 +123,9 @@ def set_dw_rules(world: World):
             continue
 
         # Specific Rules
-        if name == "The Illness has Speedrun":
-            # killing the flowers without the umbrella is way too slow
-            add_rule(main_objective, lambda state: state.has("Umbrella", world.player))
-        elif name == "The Mustache Gauntlet":
-            # don't get burned bonus requires a way to kill fire crows without being burned
-            add_rule(full_clear, lambda state: state.has("Umbrella", world.player)
-                     or can_use_hat(state, world, HatType.ICE))
-        elif name == "Vault Codes in the Wind":
-            add_rule(main_objective, lambda state: can_use_hat(state, world, HatType.TIME_STOP), "or")
-
-        if name in dw_candles:
-            set_candle_dw_rules(name, world)
+        modify_dw_rules(world, name)
 
         main_rule: Callable[[CollectionState], bool]
-
         for i in range(len(temp_list)):
             loc = temp_list[i]
             data: LocData
@@ -217,13 +206,55 @@ def set_dw_rules(world: World):
                                                                                       world.player)
 
 
+def modify_dw_rules(world: World, name: str):
+    difficulty: Difficulty = get_difficulty(world)
+    main_objective = world.multiworld.get_location(f"{name} - Main Objective", world.player)
+    full_clear = world.multiworld.get_location(f"{name} - All Clear", world.player)
+
+    if name == "The Illness has Speedrun":
+        # All stamps with hookshot only in Expert
+        if difficulty >= Difficulty.EXPERT:
+            set_rule(full_clear, lambda state: True)
+        else:
+            add_rule(main_objective, lambda state: state.has("Umbrella", world.player))
+
+    elif name == "The Mustache Gauntlet":
+        # Need a way to kill fire crows without being burned.
+        add_rule(main_objective, lambda state: state.has("Umbrella", world.player)
+                 or can_use_hat(state, world, HatType.ICE) or can_use_hat(state, world, HatType.BREWING))
+        add_rule(full_clear, lambda state: state.has("Umbrella", world.player)
+                 or can_use_hat(state, world, HatType.ICE))
+
+    elif name == "Vault Codes in the Wind":
+        # Sprint is normally expected here
+        if difficulty >= Difficulty.HARD:
+            set_rule(main_objective, lambda state: True)
+
+    elif name == "Speedrun Well":
+        # All stamps with nothing :)
+        if difficulty >= Difficulty.EXPERT:
+            set_rule(main_objective, lambda state: True)
+
+    elif name == "Mafia's Jumps":
+        # Main objective without Ice, still expected for bonuses
+        if difficulty >= Difficulty.HARD:
+            set_rule(main_objective, lambda state: True)
+            set_rule(full_clear, lambda state: can_use_hat(state, world, HatType.ICE))
+
+    elif name == "So You're Back from Outer Space":
+        # Without Hookshot
+        if difficulty >= Difficulty.HARD:
+            set_rule(main_objective, lambda state: True)
+
+    if name in dw_candles:
+        set_candle_dw_rules(name, world)
+
+
 def get_total_dw_stamps(state: CollectionState, world: World) -> int:
     if world.multiworld.DWShuffle[world.player].value > 0:
         return 999  # no stamp costs in death wish shuffle
 
     count: int = 0
-    peace_and_tranquility: bool = world.multiworld.DWEnableBonus[world.player].value == 0 \
-        and world.multiworld.DWAutoCompleteBonuses[world.player].value == 0
 
     for name in death_wishes:
         if name == "Snatcher Coins in Nyakuza Metro" and not world.is_dlc2():
@@ -232,12 +263,6 @@ def get_total_dw_stamps(state: CollectionState, world: World) -> int:
         if state.has(f"1 Stamp - {name}", world.player):
             count += 1
         else:
-            continue
-
-        # If bonus rewards and auto bonus completion is off, obtaining stamps via P&T is in logic
-        # Candles don't have P&T
-        if peace_and_tranquility and name not in dw_candles:
-            count += 2
             continue
 
         if state.has(f"2 Stamps - {name}", world.player):
@@ -272,7 +297,7 @@ def set_candle_dw_rules(name: str, world: World):
 
         add_rule(full_clear, lambda state: state.has("CTR Access", world.player)
                  or state.has("HUMT Access", world.player)
-                 and (world.multiworld.UmbrellaLogic[world.player].value == 0 or state.has("Umbrella", world.player))
+                 and can_hit(state, world, True)
                  or state.has("DWTM Access", world.player)
                  or state.has("TGV Access", world.player))
 
@@ -424,8 +449,10 @@ def set_enemy_rules(world: World):
 
             elif enemy == "Snatcher" or enemy == "Mustache Girl":
                 if area == "Boss Rush":
-                    # need to be able to kill toilet
-                    add_rule(event, lambda state: can_hit(state, world))
+                    # need to be able to kill toilet and snatcher
+                    add_rule(event, lambda state: can_hit(state, world) and can_use_hookshot(state, world))
+                    if enemy == "Mustache Girl":
+                        add_rule(event, lambda state: can_hit(state, world, True) and can_use_hookshot(state, world))
 
                 elif area == "The Finale" and enemy == "Mustache Girl":
                     add_rule(event, lambda state: can_use_hookshot(state, world)
