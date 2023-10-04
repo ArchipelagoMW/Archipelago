@@ -88,7 +88,6 @@ class PokemonEmeraldClient(BizHawkClient):
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
     goal_flag: int
-    rom_slot_name: Optional[str]
 
     def __init__(self) -> None:
         super().__init__()
@@ -96,7 +95,6 @@ class PokemonEmeraldClient(BizHawkClient):
         self.local_set_events = {}
         self.local_found_key_items = {}
         self.goal_flag = IS_CHAMPION_FLAG
-        self.rom_slot_name = None
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -124,6 +122,8 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = 0b001
         ctx.want_slot_data = True
+        ctx.watcher_timeout = 0.125
+
         return True
 
     async def set_auth(self, ctx: BizHawkClientContext) -> None:
