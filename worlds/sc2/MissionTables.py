@@ -46,6 +46,7 @@ class SC2Campaign(Enum):
     GLOBAL = 0, "Global", SC2CampaignGoalPriority.NONE, SC2Race.ANY
     WOL = 1, "Wings of Liberty", SC2CampaignGoalPriority.VERY_HARD, SC2Race.TERRAN
     PROPHECY = 2, "Prophecy", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
+    HOTS = 3, "Heart of the Swarm", SC2CampaignGoalPriority.HARD, SC2Race.ZERG
 
 
 class SC2Mission(Enum):
@@ -99,6 +100,27 @@ class SC2Mission(Enum):
     ECHOES_OF_THE_FUTURE = 24, "Echoes of the Future", SC2Campaign.PROPHECY, "_3", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_echoes_of_the_future"
     IN_UTTER_DARKNESS = 25, "In Utter Darkness", SC2Campaign.PROPHECY, "_4", SC2Race.PROTOSS, MissionPools.HARD, "ap_in_utter_darkness"
 
+    # Heart of the Swarm
+    LAB_RAT = 30, "Lab Rat", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.STARTER, "ap_lab_rat"
+    BACK_IN_THE_SADDLE = 31, "Back in the Saddle", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.STARTER, "ap_back_in_the_saddle", False
+    RENDEZVOUS = 32, "Rendezvous", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.EASY, "ap_rendezvous"
+    HARVEST_OF_SCREAMS = 33, "Harvest of Screams", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.EASY, "ap_harvest_of_screams"
+    SHOOT_THE_MESSENGER = 34, "Shoot the Messenger", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.EASY, "ap_shoot_the_messenger"
+    ENEMY_WITHIN = 35, "Enemy Within", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.STARTER, "ap_enemy_within", False
+    DOMINATION = 36, "Domination", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.EASY, "ap_domination"
+    FIRE_IN_THE_SKY = 37, "Fire in the Sky", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_fire_in_the_sky"
+    OLD_SOLDIERS = 38, "Old Soldiers", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_old_soldiers"
+    WAKING_THE_ANCIENT = 39, "Waking the Ancient", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_waking_the_ancient"
+    THE_CRUCIBLE = 40, "The Crucible", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_crucible"
+    SUPREME = 41, "Supreme", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_supreme", False
+    INFESTED = 42, "Infested", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.MEDIUM, "ap_infested"
+    HAND_OF_DARKNESS = 43, "Hand of Darkness", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.HARD, "ap_hand_of_darkness"
+    PHANTOMS_OF_THE_VOID = 44, "Phantoms of the Void", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.HARD, "ap_phantoms_of_the_void"
+    WITH_FRIENDS_LIKE_THESE = 45, "With Friends Like These", SC2Campaign.HOTS, "Dominion Space", SC2Race.ZERG, MissionPools.STARTER, "ap_with_friends_like_these", False
+    CONVICTION = 46, "Conviction", SC2Campaign.HOTS, "Dominion Space", SC2Race.ZERG, MissionPools.MEDIUM, "ap_conviction", False
+    PLANETFALL = 47, "Planetfall", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_planetfall"
+    DEATH_FROM_ABOVE = 48, "Death From Above", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_death_from_above"
+    THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_the_reckoning"
 
 class MissionConnection:
     campaign: SC2Campaign
@@ -166,6 +188,28 @@ vanilla_shuffle_order: Dict[SC2Campaign, List[FillMission]] = {
         FillMission(MissionPools.HARD, [MissionConnection(0, SC2Campaign.PROPHECY)], "_2", removal_priority=2),
         FillMission(MissionPools.HARD, [MissionConnection(1, SC2Campaign.PROPHECY)], "_3", removal_priority=1),
         FillMission(MissionPools.FINAL, [MissionConnection(2, SC2Campaign.PROPHECY)], "_4"),
+    ],
+    SC2Campaign.HOTS: [
+        FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.HOTS)], "Umoja", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.HOTS)], "Umoja", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(1, SC2Campaign.HOTS)], "Umoja", completion_critical=True, removal_priority=1),
+        FillMission(MissionPools.EASY, [MissionConnection(2, SC2Campaign.HOTS)], "Kaldir", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(3, SC2Campaign.HOTS)], "Kaldir", completion_critical=True, removal_priority=2),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(4, SC2Campaign.HOTS)], "Kaldir", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(2, SC2Campaign.HOTS)], "Char", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(6, SC2Campaign.HOTS)], "Char", completion_critical=True, removal_priority=3),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(7, SC2Campaign.HOTS)], "Char", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(5, SC2Campaign.HOTS), MissionConnection(8, SC2Campaign.HOTS)], "Zerus", completion_critical=True, or_requirements=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(9, SC2Campaign.HOTS)], "Zerus", completion_critical=True, removal_priority=4),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(10, SC2Campaign.HOTS)], "Zerus", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(5, SC2Campaign.HOTS), MissionConnection(8, SC2Campaign.HOTS), MissionConnection(11, SC2Campaign.HOTS)], "Skygeirr Station", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(12, SC2Campaign.HOTS)], "Skygeirr Station", completion_critical=True, removal_priority=5),
+        FillMission(MissionPools.HARD, [MissionConnection(13, SC2Campaign.HOTS)], "Skygeirr Station", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(5, SC2Campaign.HOTS), MissionConnection(8, SC2Campaign.HOTS), MissionConnection(11, SC2Campaign.HOTS)], "Dominion Space", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(15, SC2Campaign.HOTS)], "Dominion Space", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(14, SC2Campaign.HOTS), MissionConnection(16, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(17, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(18, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
     ]
 }
 
@@ -188,6 +232,21 @@ mini_campaign_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.PROPHECY: [
         FillMission(MissionPools.MEDIUM, [MissionConnection(4, SC2Campaign.WOL)], "_1"),
         FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.PROPHECY)], "_2"),
+    ],
+    SC2Campaign.HOTS: [
+        FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.HOTS)], "Umoja", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.HOTS)], "Kaldir"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1, SC2Campaign.HOTS)], "Kaldir"),
+        FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.HOTS)], "Char"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(3, SC2Campaign.HOTS)], "Char"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.HOTS)], "Zerus", number=3),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(5, SC2Campaign.HOTS)], "Zerus"),
+        FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.HOTS)], "Skygeirr Station", number=5),
+        FillMission(MissionPools.HARD, [MissionConnection(7, SC2Campaign.HOTS)], "Skygeirr Station"),
+        FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.HOTS)], "Dominion Space", number=5),
+        FillMission(MissionPools.HARD, [MissionConnection(9, SC2Campaign.HOTS)], "Dominion Space"),
+        FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.HOTS)], "Korhal", completion_critical=True, number=8),
+        FillMission(MissionPools.FINAL, [MissionConnection(11, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
     ]
 }
 
@@ -252,7 +311,7 @@ tiny_grid_order: Dict[SC2Campaign, List[FillMission]] = {
         FillMission(MissionPools.STARTER, [MissionConnection(-1)], "_1"),
         FillMission(MissionPools.MEDIUM, [MissionConnection(0)], "_1"),
         FillMission(MissionPools.EASY, [MissionConnection(0)], "_2"),
-        FillMission(MissionPools.HARD, [MissionConnection(1), MissionConnection(2)], "_2", or_requirements=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(1), MissionConnection(2)], "_2", or_requirements=True),
     ]
 }
 
@@ -269,7 +328,7 @@ blitz_order: Dict[SC2Campaign, List[FillMission]] = {
         FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "V", number=4, or_requirements=True),
         FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "V", number=4, or_requirements=True),
         FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "Final", number=5, or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "Final", number=5, or_requirements=True)
+        FillMission(MissionPools.FINAL, [MissionConnection(0), MissionConnection(1)], "Final", number=5, or_requirements=True)
     ]
 }
 
@@ -320,7 +379,29 @@ vanilla_mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {
         SC2Mission.A_SINISTER_TURN.mission_name: MissionInfo(SC2Mission.A_SINISTER_TURN, [MissionConnection(1, SC2Campaign.PROPHECY)], SC2Mission.A_SINISTER_TURN.area),
         SC2Mission.ECHOES_OF_THE_FUTURE.mission_name: MissionInfo(SC2Mission.ECHOES_OF_THE_FUTURE, [MissionConnection(2, SC2Campaign.PROPHECY)], SC2Mission.A_SINISTER_TURN.area),
         SC2Mission.IN_UTTER_DARKNESS.mission_name: MissionInfo(SC2Mission.IN_UTTER_DARKNESS, [MissionConnection(3, SC2Campaign.PROPHECY)], SC2Mission.IN_UTTER_DARKNESS.area)
-    }
+    },
+    SC2Campaign.HOTS: {
+        SC2Mission.LAB_RAT.mission_name: MissionInfo(SC2Mission.LAB_RAT, [], SC2Mission.LAB_RAT.area, completion_critical=True),
+        SC2Mission.BACK_IN_THE_SADDLE.mission_name: MissionInfo(SC2Mission.BACK_IN_THE_SADDLE, [MissionConnection(1, SC2Campaign.HOTS)], SC2Mission.BACK_IN_THE_SADDLE.area, completion_critical=True),
+        SC2Mission.RENDEZVOUS.mission_name: MissionInfo(SC2Mission.RENDEZVOUS, [MissionConnection(2, SC2Campaign.HOTS)], SC2Mission.RENDEZVOUS.area, completion_critical=True),
+        SC2Mission.HARVEST_OF_SCREAMS.mission_name: MissionInfo(SC2Mission.HARVEST_OF_SCREAMS, [MissionConnection(3, SC2Campaign.HOTS)], SC2Mission.HARVEST_OF_SCREAMS.area),
+        SC2Mission.SHOOT_THE_MESSENGER.mission_name: MissionInfo(SC2Mission.SHOOT_THE_MESSENGER, [MissionConnection(4, SC2Campaign.HOTS)], SC2Mission.SHOOT_THE_MESSENGER.area),
+        SC2Mission.ENEMY_WITHIN.mission_name: MissionInfo(SC2Mission.ENEMY_WITHIN, [MissionConnection(5, SC2Campaign.HOTS)], SC2Mission.ENEMY_WITHIN.area),
+        SC2Mission.DOMINATION.mission_name: MissionInfo(SC2Mission.DOMINATION, [MissionConnection(3, SC2Campaign.HOTS)], SC2Mission.DOMINATION.area),
+        SC2Mission.FIRE_IN_THE_SKY.mission_name: MissionInfo(SC2Mission.FIRE_IN_THE_SKY, [MissionConnection(7, SC2Campaign.HOTS)], SC2Mission.FIRE_IN_THE_SKY.area),
+        SC2Mission.OLD_SOLDIERS.mission_name: MissionInfo(SC2Mission.OLD_SOLDIERS, [MissionConnection(8, SC2Campaign.HOTS)], SC2Mission.OLD_SOLDIERS.area),
+        SC2Mission.WAKING_THE_ANCIENT.mission_name: MissionInfo(SC2Mission.WAKING_THE_ANCIENT, [MissionConnection(6, SC2Campaign.HOTS), MissionConnection(9, SC2Campaign.HOTS)], SC2Mission.WAKING_THE_ANCIENT.area, completion_critical=True, or_requirements=True),
+        SC2Mission.THE_CRUCIBLE.mission_name: MissionInfo(SC2Mission.THE_CRUCIBLE, [MissionConnection(10, SC2Campaign.HOTS)], SC2Mission.THE_CRUCIBLE.area, completion_critical=True),
+        SC2Mission.SUPREME.mission_name: MissionInfo(SC2Mission.SUPREME, [MissionConnection(11, SC2Campaign.HOTS)], SC2Mission.SUPREME.area, completion_critical=True),
+        SC2Mission.INFESTED.mission_name: MissionInfo(SC2Mission.INFESTED, [MissionConnection(6, SC2Campaign.HOTS), MissionConnection(9, SC2Campaign.HOTS), MissionConnection(12, SC2Campaign.HOTS)], SC2Mission.INFESTED.area),
+        SC2Mission.HAND_OF_DARKNESS.mission_name: MissionInfo(SC2Mission.HAND_OF_DARKNESS, [MissionConnection(13, SC2Campaign.HOTS)], SC2Mission.HAND_OF_DARKNESS.area),
+        SC2Mission.PHANTOMS_OF_THE_VOID.mission_name: MissionInfo(SC2Mission.PHANTOMS_OF_THE_VOID, [MissionConnection(14, SC2Campaign.HOTS)], SC2Mission.PHANTOMS_OF_THE_VOID.area),
+        SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name: MissionInfo(SC2Mission.WITH_FRIENDS_LIKE_THESE, [MissionConnection(6, SC2Campaign.HOTS), MissionConnection(9, SC2Campaign.HOTS), MissionConnection(12, SC2Campaign.HOTS)], SC2Mission.WITH_FRIENDS_LIKE_THESE.area),
+        SC2Mission.CONVICTION.mission_name: MissionInfo(SC2Mission.CONVICTION, [MissionConnection(16, SC2Campaign.HOTS)], SC2Mission.CONVICTION.area),
+        SC2Mission.PLANETFALL.mission_name: MissionInfo(SC2Mission.PLANETFALL, [MissionConnection(15, SC2Campaign.HOTS), MissionConnection(17, SC2Campaign.HOTS)], SC2Mission.PLANETFALL.area, completion_critical=True),
+        SC2Mission.DEATH_FROM_ABOVE.mission_name: MissionInfo(SC2Mission.DEATH_FROM_ABOVE, [MissionConnection(18, SC2Campaign.HOTS)], SC2Mission.DEATH_FROM_ABOVE.area, completion_critical=True),
+        SC2Mission.THE_RECKONING.mission_name: MissionInfo(SC2Mission.THE_RECKONING, [MissionConnection(19, SC2Campaign.HOTS)], SC2Mission.THE_RECKONING.area, completion_critical=True),
+    },
 }
 
 lookup_id_to_mission: Dict[int, SC2Mission] = {
@@ -387,6 +468,7 @@ def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: Set[SC2
 
 
 starting_mission_locations = {
+    # WoL
     "Liberation Day": "Liberation Day: Victory",
     "Breakout": "Breakout: Victory",
     "Ghost of a Chance": "Ghost of a Chance: Victory",
@@ -397,7 +479,20 @@ starting_mission_locations = {
     "Evacuation": "Evacuation: Reach Hanson",
     "Devil's Playground": "Devil's Playground: Tosh's Miners",
     "Smash and Grab": "Smash and Grab: First Relic",
-    "The Great Train Robbery": "The Great Train Robbery: North Defiler"
+    "The Great Train Robbery": "The Great Train Robbery: North Defiler",
+    # HotS
+    "Lab Rat": "Lab Rat: Gather Minerals",
+    "Back in the Saddle": "Back in the Saddle: Victory",
+    "Harvest of Screams": "Harvest of Screams: First Ursadon Matriarch",
+    "Shoot the Messenger": "Shoot the Messenger: Center Stasis Chamber",
+    "Domination": "Domination: Repel Zagara",
+    "Fire in the Sky": "Fire in the Sky: West Biomass",
+    "Old Soldiers": "Old Soldiers: Get Nuked",
+    "Enemy Within": "Enemy Within: Victory",
+    "Waking the Ancient": "Waking the Ancient: Center Essence Pool",
+    "Supreme": "Supreme: Victory",
+    "With Friends Like These": "With Friends Like These: Victory",
+    "Conviction": "Conviction: Victory",
 }
 
 
@@ -408,7 +503,8 @@ class SC2CampaignGoal(NamedTuple):
 
 campaign_final_mission_locations: Dict[SC2Campaign, SC2CampaignGoal] = {
     SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
-    SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills")
+    SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),
+    SC2Campaign.HOTS: None,
 }
 
 campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] = {
@@ -419,7 +515,15 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
         SC2Mission.GATES_OF_HELL: "Gates of Hell: Victory",
         SC2Mission.SHATTER_THE_SKY: "Shatter the Sky: Victory"
     },
-    SC2Campaign.PROPHECY: None
+    SC2Campaign.PROPHECY: None,
+    SC2Campaign.HOTS: {
+        SC2Mission.THE_RECKONING: "The Reckoning: Victory",
+        SC2Mission.THE_CRUCIBLE: "The Crucible: Victory",
+        SC2Mission.HAND_OF_DARKNESS: "Hand of Darkness: Victory",
+        SC2Mission.PHANTOMS_OF_THE_VOID: "Phantoms of the Void: Victory",
+        SC2Mission.PLANETFALL: "Planetfall: Victory",
+        SC2Mission.DEATH_FROM_ABOVE: "Death From Above: Victory"
+    },
 }
 
 

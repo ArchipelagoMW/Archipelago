@@ -6,15 +6,18 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
     campaign_mission_table
 from .Options import get_option_value, MissionOrder, \
-    get_enabled_campaigns, get_disabled_campaigns
-from .LogicMixin import SC2WoLLogic
+    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available
+from .LogicMixin import SC2Logic
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = [
+    # WoL
     "Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre",
     "Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine", "Cyclone",
     "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Raven", "Science Vessel", "Liberator", "Valkyrie",
-    "Bunker", "Missile Turret"
+    "Bunker", "Missile Turret",
+    # HotS
+    "Zergling", "Roach", "Hydralisk", "Baneling", "Mutalisk", "Swarm Host", "Ultralisk"
 ]
 
 BARRACKS_UNITS = {"Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre"}
@@ -49,7 +52,10 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         goal_level = max(goal_priorities.values())
         candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
         goal_campaign = multiworld.random.choice(candidate_campaigns)
-        mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
+        if campaign_final_mission_locations[goal_campaign] is not None:
+            mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
+        else:
+            mission_pools[MissionPools.FINAL] = [campaign_alt_final_mission_locations[goal_campaign].keys()[0]]
         remove_final_mission_from_other_pools(mission_pools)
         return mission_pools
     # Omitting No-Build missions if not shuffling no-build
@@ -80,12 +86,14 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]
     mission_pools[MissionPools.FINAL] = [goal_mission]
 
-    # Mission pool changes on Build-Only
+    # Mission pool changes
+    adv_tactics = get_option_value(multiworld, player, "required_tactics") != RequiredTactics.option_standard
+    def move_mission(mission: SC2Mission, current_pool, new_pool):
+        if mission in mission_pools[current_pool]:
+            mission_pools[current_pool].remove(mission)
+            mission_pools[new_pool].append(mission)
+    # WoL
     if not get_option_value(multiworld, player, 'shuffle_no_build'):
-        def move_mission(mission: SC2Mission, current_pool, new_pool):
-            if mission in mission_pools[current_pool]:
-                mission_pools[current_pool].remove(mission)
-                mission_pools[new_pool].append(mission)
         # Replacing No Build missions with Easy missions
         move_mission(SC2Mission.ZERO_HOUR, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.EVACUATION, MissionPools.EASY, MissionPools.STARTER)
@@ -97,12 +105,30 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         move_mission(SC2Mission.ECHOES_OF_THE_FUTURE, MissionPools.MEDIUM, MissionPools.EASY)
         move_mission(SC2Mission.CUTTHROAT, MissionPools.MEDIUM, MissionPools.EASY)
         # Additional changes on Advanced Tactics
-        if get_option_value(multiworld, player, "required_tactics") > 0:
+        if adv_tactics:
             move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.EASY, MissionPools.STARTER)
             move_mission(SC2Mission.SMASH_AND_GRAB, MissionPools.EASY, MissionPools.STARTER)
             move_mission(SC2Mission.THE_MOEBIUS_FACTOR, MissionPools.MEDIUM, MissionPools.EASY)
             move_mission(SC2Mission.WELCOME_TO_THE_JUNGLE, MissionPools.MEDIUM, MissionPools.EASY)
             move_mission(SC2Mission.ENGINE_OF_DESTRUCTION, MissionPools.HARD, MissionPools.MEDIUM)
+    # Prophecy needs to be adjusted on tiny grid
+    if enabled_campaigns == {SC2Campaign.PROPHECY} and mission_order_type == MissionOrder.option_tiny_grid:
+        move_mission(SC2Mission.A_SINISTER_TURN, MissionPools.MEDIUM, MissionPools.EASY)
+    # HotS
+    kerriganless = get_option_value(multiworld, player, "kerriganless") not in kerrigan_unit_available
+    if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
+        # Conditionally moving Easy missions to Starter
+        move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.DOMINATION, MissionPools.EASY, MissionPools.STARTER)
+    if adv_tactics:
+        # Medium -> Easy
+        for mission in (SC2Mission.FIRE_IN_THE_SKY, SC2Mission.WAKING_THE_ANCIENT, SC2Mission.CONVICTION):
+            move_mission(mission, MissionPools.MEDIUM, MissionPools.EASY)
+        # Hard -> Medium
+        move_mission(SC2Mission.PHANTOMS_OF_THE_VOID, MissionPools.HARD, MissionPools.MEDIUM)
+        if not kerriganless:
+            # Additional starter mission assuming player starts with minimal anti-air
+            move_mission(SC2Mission.WAKING_THE_ANCIENT, MissionPools.EASY, MissionPools.STARTER)
 
     remove_final_mission_from_other_pools(mission_pools)
     return mission_pools
@@ -289,6 +315,8 @@ class ValidInventory:
             else:
                 attempt_removal(item)
 
+        # Removing extra dependencies
+        # WoL
         if not spider_mine_sources & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
         if not BARRACKS_UNITS & self.logical_inventory:
@@ -298,6 +326,20 @@ class ValidInventory:
             inventory = [item for item in inventory if not item.name.startswith("Progressive Vehicle")]
         if not STARPORT_UNITS & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.startswith("Progressive Ship")]
+        # HotS
+        # Baneling without sources => remove Baneling and upgrades
+        if "Baneling" in self.logical_inventory and\
+           "Zergling" not in self.logical_inventory and\
+           "Spawn Banelings (Kerrigan Tier 4)" not in self.logical_inventory:
+            inventory = [item for item in inventory if "Baneling" not in item.name]
+        # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades
+        if "Baneling" in self.logical_inventory and\
+           "Zergling" not in self.logical_inventory and\
+           "Spawn Banelings (Kerrigan Tier 4)" in self.logical_inventory:
+            inventory = [item for item in inventory if item.name != "Baneling"]
+        if "Mutalisk" not in self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Zerg Flyer")]
+            locked_items = [item for item in locked_items if not item.name.startswith("Progressive Zerg Flyer")]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items
@@ -315,24 +357,43 @@ class ValidInventory:
         return inventory
 
     def _read_logic(self):
-        self._sc2wol_has_common_unit = lambda world, player: SC2WoLLogic._sc2wol_has_common_unit(self, world, player)
-        self._sc2wol_has_air = lambda world, player: SC2WoLLogic._sc2wol_has_air(self, world, player)
-        self._sc2wol_has_air_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_air_anti_air(self, world, player)
-        self._sc2wol_has_competent_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_competent_anti_air(self, world, player)
-        self._sc2wol_has_competent_ground_to_air = lambda world, player: SC2WoLLogic._sc2wol_has_competent_ground_to_air(self, world, player)
-        self._sc2wol_has_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_anti_air(self, world, player)
-        self._sc2wol_defense_rating = lambda world, player, zerg_enemy, air_enemy=False: SC2WoLLogic._sc2wol_defense_rating(self, world, player, zerg_enemy, air_enemy)
-        self._sc2wol_has_competent_comp = lambda world, player: SC2WoLLogic._sc2wol_has_competent_comp(self, world, player)
-        self._sc2wol_has_train_killers = lambda world, player: SC2WoLLogic._sc2wol_has_train_killers(self, world, player)
-        self._sc2wol_able_to_rescue = lambda world, player: SC2WoLLogic._sc2wol_able_to_rescue(self, world, player)
-        self._sc2wol_beats_protoss_deathball = lambda world, player: SC2WoLLogic._sc2wol_beats_protoss_deathball(self, world, player)
-        self._sc2wol_survives_rip_field = lambda world, player: SC2WoLLogic._sc2wol_survives_rip_field(self, world, player)
-        self._sc2wol_has_protoss_common_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_common_units(self, world, player)
-        self._sc2wol_has_protoss_medium_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_medium_units(self, world, player)
-        self._sc2wol_has_mm_upgrade = lambda world, player: SC2WoLLogic._sc2wol_has_mm_upgrade(self, world, player)
-        self._sc2wol_welcome_to_the_jungle_requirement = lambda world, player: SC2WoLLogic._sc2wol_welcome_to_the_jungle_requirement(self, world, player)
-        self._sc2wol_can_respond_to_colony_infestations = lambda world, player: SC2WoLLogic._sc2wol_can_respond_to_colony_infestations(self, world, player)
-        self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
+        # General
+        self._sc2_cleared_missions = lambda world, player: SC2Logic._sc2_cleared_missions(self, world, player)
+        self._sc2_advanced_tactics = lambda world, player: SC2Logic._sc2_advanced_tactics(self, world, player)
+        # WoL
+        self._sc2wol_has_common_unit = lambda world, player: SC2Logic._sc2wol_has_common_unit(self, world, player)
+        self._sc2wol_has_air = lambda world, player: SC2Logic._sc2wol_has_air(self, world, player)
+        self._sc2wol_has_air_anti_air = lambda world, player: SC2Logic._sc2wol_has_air_anti_air(self, world, player)
+        self._sc2wol_has_competent_anti_air = lambda world, player: SC2Logic._sc2wol_has_competent_anti_air(self, world, player)
+        self._sc2wol_has_competent_ground_to_air = lambda world, player: SC2Logic._sc2wol_has_competent_ground_to_air(self, world, player)
+        self._sc2wol_has_anti_air = lambda world, player: SC2Logic._sc2wol_has_anti_air(self, world, player)
+        self._sc2wol_defense_rating = lambda world, player, zerg_enemy, air_enemy=False: SC2Logic._sc2wol_defense_rating(self, world, player, zerg_enemy, air_enemy)
+        self._sc2wol_has_competent_comp = lambda world, player: SC2Logic._sc2wol_has_competent_comp(self, world, player)
+        self._sc2wol_has_train_killers = lambda world, player: SC2Logic._sc2wol_has_train_killers(self, world, player)
+        self._sc2wol_able_to_rescue = lambda world, player: SC2Logic._sc2wol_able_to_rescue(self, world, player)
+        self._sc2wol_beats_protoss_deathball = lambda world, player: SC2Logic._sc2wol_beats_protoss_deathball(self, world, player)
+        self._sc2wol_survives_rip_field = lambda world, player: SC2Logic._sc2wol_survives_rip_field(self, world, player)
+        self._sc2wol_has_protoss_common_units = lambda world, player: SC2Logic._sc2wol_has_protoss_common_units(self, world, player)
+        self._sc2wol_has_protoss_medium_units = lambda world, player: SC2Logic._sc2wol_has_protoss_medium_units(self, world, player)
+        self._sc2wol_has_mm_upgrade = lambda world, player: SC2Logic._sc2wol_has_mm_upgrade(self, world, player)
+        self._sc2wol_welcome_to_the_jungle_requirement = lambda world, player: SC2Logic._sc2wol_welcome_to_the_jungle_requirement(self, world, player)
+        self._sc2wol_can_respond_to_colony_infestations = lambda world, player: SC2Logic._sc2wol_can_respond_to_colony_infestations(self, world, player)
+        self._sc2wol_final_mission_requirements = lambda world, player: SC2Logic._sc2wol_final_mission_requirements(self, world, player)
+        self._sc2wol_cleared_missions = lambda world, player: SC2Logic._sc2wol_cleared_missions(self, world, player)
+        # HotS
+        self._sc2hots_has_common_unit = lambda world, player: SC2Logic._sc2hots_has_common_unit(self, world, player)
+        self._sc2hots_has_good_antiair = lambda world, player: SC2Logic._sc2hots_has_good_antiair(self, world, player)
+        self._sc2hots_has_minimal_antiair = lambda world, player: SC2Logic._sc2hots_has_minimal_antiair(self, world, player)
+        self._sc2hots_has_brood_lord = lambda world, player: SC2Logic._sc2hots_has_brood_lord(self, world, player)
+        self._sc2hots_has_viper = lambda world, player: SC2Logic._sc2hots_has_viper(self, world, player)
+        self._sc2hots_has_impaler_or_lurker = lambda world, player: SC2Logic._sc2hots_has_impaler_or_lurker(self, world, player)
+        self._sc2hots_has_competent_comp = lambda world, player: SC2Logic._sc2hots_has_competent_comp(self, world, player)
+        self._sc2hots_has_basic_comp = lambda world, player: SC2Logic._sc2hots_has_basic_comp(self, world, player)
+        self._sc2hots_can_spread_creep = lambda world, player: SC2Logic._sc2hots_can_spread_creep(self, world, player)
+        self._sc2hots_has_competent_defense = lambda world, player: SC2Logic._sc2hots_has_competent_defense(self, world, player)
+        self._sc2hots_has_basic_kerrigan = lambda world, player: SC2Logic._sc2hots_has_basic_kerrigan(self, world, player)
+        self._sc2hots_has_two_kerrigan_actives = lambda world, player: SC2Logic._sc2hots_has_two_kerrigan_actives(self, world, player)
+        self._sc2hots_has_low_tech = lambda world, player: SC2Logic._sc2hots_has_low_tech(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],

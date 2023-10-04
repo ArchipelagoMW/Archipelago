@@ -1,19 +1,22 @@
 import typing
 
 from typing import List, Set, Tuple, Dict
+from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from .Items import StarcraftWoLItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
-    get_basic_units, ItemData, upgrade_included_names, progressive_if_nco
+from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
+    get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, kerrigan_only_passives
 from .Locations import get_locations, LocationType
 from .Regions import create_regions
-from .Options import sc2wol_options, get_option_value, LocationInclusion
-from .LogicMixin import SC2WoLLogic
-from .PoolFilter import filter_missions, filter_items, get_item_upgrades
-from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign
+from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
+    Kerriganless, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available
+from .LogicMixin import SC2Logic
+from .PoolFilter import filter_missions, filter_items, get_item_upgrades, UPGRADABLE_ITEMS
+from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission
 
 
-class Starcraft2WoLWebWorld(WebWorld):
+class Starcraft2WebWorld(WebWorld):
+    # TODO update the guide
     setup = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Starcraft 2 randomizer connected to an Archipelago Multiworld",
@@ -26,19 +29,20 @@ class Starcraft2WoLWebWorld(WebWorld):
     tutorials = [setup]
 
 
-class SC2WoLWorld(World):
+class SC2World(World):
+    # TODO update this description
     """
     StarCraft II: Wings of Liberty is a science fiction real-time strategy video game developed and published by Blizzard Entertainment.
     Command Raynor's Raiders in collecting pieces of the Keystone in order to stop the zerg threat posed by the Queen of Blades.
     """
 
-    game = "Starcraft 2 Wings of Liberty"
-    web = Starcraft2WoLWebWorld()
+    game = "Starcraft 2"
+    web = Starcraft2WebWorld()
     data_version = 4
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
-    option_definitions = sc2wol_options
+    option_definitions = sc2_options
 
     item_name_groups = item_name_groups
     locked_locations: typing.List[str]
@@ -49,13 +53,13 @@ class SC2WoLWorld(World):
     required_client_version = 0, 3, 6
 
     def __init__(self, multiworld: MultiWorld, player: int):
-        super(SC2WoLWorld, self).__init__(multiworld, player)
+        super(SC2World, self).__init__(multiworld, player)
         self.location_cache = []
         self.locked_locations = []
 
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
-        return StarcraftWoLItem(name, data.classification, data.code, self.player)
+        return StarcraftItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
         self.mission_req_table, self.final_mission_id, self.victory_item = create_regions(
@@ -85,7 +89,7 @@ class SC2WoLWorld(World):
 
     def fill_slot_data(self):
         slot_data = {}
-        for option_name in sc2wol_options:
+        for option_name in sc2_options:
             option = getattr(self.multiworld, option_name)[self.player]
             if type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
@@ -100,7 +104,10 @@ class SC2WoLWorld(World):
                 slot_req_table[campaign.id][mission]["mission"] = slot_req_table[campaign.id][mission]["mission"].id
 
                 for index in range(len(slot_req_table[campaign.id][mission]["required_world"])):
-                    slot_req_table[campaign.id][mission]["required_world"][index] = slot_req_table[campaign.id][mission]["required_world"][index]._asdict()
+                    # TODO this is a band-aid, sometimes the mission_req_table already contains dicts
+                    # as far as I can tell it's related to having multiple vanilla mission orders
+                    if not isinstance(slot_req_table[campaign.id][mission]["required_world"][index], dict):
+                        slot_req_table[campaign.id][mission]["required_world"][index] = slot_req_table[campaign.id][mission]["required_world"][index]._asdict()
 
         slot_data["mission_req"] = slot_req_table
         slot_data["final_mission"] = self.final_mission_id
@@ -119,30 +126,103 @@ def setup_events(player: int, locked_locations: typing.List[str], location_cache
 
 
 def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
-    excluded_items: Set[str] = set()
-
+    excluded_items: Set[str] = set(get_option_value(multiworld, player, 'excluded_items'))
     for item in multiworld.precollected_items[player]:
         excluded_items.add(item.name)
+    locked_items: Set[str] = set(get_option_value(multiworld, player, 'locked_items'))
+    # Starter items are also excluded items
+    starter_items: Set[str] = set(get_option_value(multiworld, player, 'start_inventory'))
+    item_table = get_full_item_list()
+    mutation_count = get_option_value(multiworld, player, "include_mutations")
+    strain_count = get_option_value(multiworld, player, "include_strains")
 
-    excluded_items_option = getattr(multiworld, 'excluded_items', [])
+    # Exclude Primal Form item if option is not set
+    if get_option_value(multiworld, player, "kerrigan_primal_status") != KerriganPrimalStatus.option_item:
+        excluded_items.add("Primal Form (Kerrigan)")
 
-    excluded_items.update(excluded_items_option[player].value)
+    # Ensure no item is both guaranteed and excluded
+    invalid_items = excluded_items.intersection(locked_items)
+    invalid_count = len(invalid_items)
+    # Don't count starter items that can appear multiple times
+    invalid_count -= len([item for item in starter_items.intersection(locked_items) if item_table[item].quantity != 1])
+    if invalid_count > 0:
+        raise Exception(f"{invalid_count} item{'s are' if invalid_count > 1 else ' is'} both locked and excluded from generation.  Please adjust your excluded items and locked items.")
+
+    def smart_exclude(item_choices: Set[str], choices_to_keep: int):
+        expected_choices = len(item_choices)
+        if expected_choices == 0:
+            return
+        item_choices = set(item_choices)
+        starter_choices = item_choices.intersection(starter_items)
+        excluded_choices = item_choices.intersection(excluded_items)
+        item_choices.difference_update(excluded_choices)
+        item_choices.difference_update(locked_items)
+        candidates = sorted(item_choices)
+        exclude_amount = min(expected_choices - choices_to_keep - len(excluded_choices) + len(starter_choices), len(candidates))
+        if exclude_amount > 0:
+            excluded_items.update(multiworld.random.sample(candidates, exclude_amount))
+
+    # pick a random mutation & strain for each unit and exclude the rest
+    for name in UPGRADABLE_ITEMS:
+        mutations = {child_name for child_name, item in item_table.items()
+                   if item.parent_item == name and item.type == "Mutation"}
+        smart_exclude(mutations, mutation_count)
+        strains = {child_name for child_name, item in item_table.items()
+                   if item.parent_item == name and item.type == "Strain" and child_name not in excluded_items}
+        smart_exclude(strains, strain_count)
+
+    kerriganless = get_option_value(multiworld, player, "kerriganless")
+    # no Kerrigan & remove all passives => remove all abilities
+    if kerriganless == Kerriganless.option_on_without_passives:
+        for tier in range(7):
+            smart_exclude(kerrigan_actives[tier].union(kerrigan_passives[tier]), 0)
+    else:
+        # no Kerrigan, but keep non-Kerrigan passives
+        if kerriganless == Kerriganless.option_on:
+            smart_exclude(kerrigan_only_passives, 0)
+            for tier in range(7):
+                smart_exclude(kerrigan_actives[tier], 0)
+        # pick a random ability per tier and remove all others
+        if not get_option_value(multiworld, player, "include_all_kerrigan_abilities"):
+            for tier in range(7):
+                # ignore active abilities if Kerrigan is off
+                if kerriganless == Kerriganless.option_on:
+                    smart_exclude(kerrigan_passives[tier], 0)
+                else:
+                    smart_exclude(kerrigan_actives[tier].union(kerrigan_passives[tier]), 1)
+            # ensure Kerrigan has an active T1 or T2 ability for no-build missions on Standard
+            if get_option_value(multiworld, player, "required_tactics") == RequiredTactics.option_standard and \
+               get_option_value(multiworld, player, "shuffle_no_build"):
+                active_t1_t2 = kerrigan_actives[0].union(kerrigan_actives[1])
+                if active_t1_t2.issubset(excluded_items):
+                    # all T1 and T2 actives were excluded
+                    tier = multiworld.random.choice([0, 1])
+                    excluded_items.update(kerrigan_passives[tier])
+                    active_ability = multiworld.random.choice(sorted(kerrigan_actives[tier]))
+                    excluded_items.remove(active_ability)
+    # if Kerrigan exists and all abilities are included,
+    # no ability needs to be excluded
 
     return excluded_items
 
 
 def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
+    starter_items = []
     non_local_items = multiworld.non_local_items[player].value
     if get_option_value(multiworld, player, "early_unit"):
-        local_basic_unit = sorted(item for item in get_basic_units(multiworld, player) if item not in non_local_items and item not in excluded_items)
-        if not local_basic_unit:
-            raise Exception("At least one basic unit must be local")
-
         # The first world should also be the starting world
         campaigns = multiworld.worlds[player].mission_req_table.keys()
         lowest_id = min([campaign.id for campaign in campaigns])
         first_campaign = [campaign for campaign in campaigns if campaign.id == lowest_id][0]
         first_mission = list(multiworld.worlds[player].mission_req_table[first_campaign])[0]
+        first_race = lookup_name_to_mission[first_mission].race
+
+        local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in non_local_items and item not in excluded_items)
+        if not local_basic_unit:
+            local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in excluded_items)
+            if not local_basic_unit:
+                raise Exception("Early Unit: At least one basic unit must be included")
+
         if first_mission in starting_mission_locations:
             first_location = starting_mission_locations[first_mission]
         elif first_mission == "In Utter Darkness":
@@ -150,9 +230,30 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
         else:
             first_location = first_mission + ": Victory"
 
-        return [assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit)]
-    else:
-        return []
+        starter_items.append(assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit))
+    
+    starter_abilities = get_option_value(multiworld, player, 'start_primary_abilities')
+    if starter_abilities:
+        ability_count = starter_abilities
+        ability_tiers = [0, 1, 3]
+        multiworld.random.shuffle(ability_tiers)
+        if ability_count > 3:
+            ability_tiers.append(6)
+        for tier in ability_tiers:
+            abilities = kerrigan_actives[tier].union(kerrigan_passives[tier]).difference(excluded_items, non_local_items)
+            if not abilities:
+                abilities = kerrigan_actives[tier].union(kerrigan_passives[tier]).difference(excluded_items)
+            if abilities:
+                ability_count -= 1
+                ability = multiworld.random.choice(sorted(abilities))
+                ability_item = create_item_with_correct_settings(player, ability)
+                multiworld.push_precollected(ability_item)
+                excluded_items.add(ability)
+                starter_items.append(ability_item)
+                if ability_count == 0:
+                    break
+
+    return starter_items
 
 
 def assign_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
@@ -185,8 +286,8 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
     include_upgrades = get_option_value(multiworld, player, 'generic_upgrade_missions') == 0
     upgrade_items = get_option_value(multiworld, player, 'generic_upgrade_items')
 
-    # Include items from outside Wings of Liberty
-    item_sets = {'wol'}
+    # Include items from outside main campaigns
+    item_sets = {'wol', 'hots'}
     if get_option_value(multiworld, player, 'nco_items'):
         item_sets.add('nco')
     if get_option_value(multiworld, player, 'bw_items'):
@@ -226,11 +327,12 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
         for invalid_upgrade in invalid_upgrades:
             pool.remove(invalid_upgrade)
 
+    fill_pool_with_kerrigan_levels(multiworld, player, pool)
     filtered_pool = filter_items(multiworld, player, mission_req_table, location_cache, pool, existing_items, locked_items)
     return filtered_pool
 
 
-def fill_item_pool_with_dummy_items(self: SC2WoLWorld, multiworld: MultiWorld, player: int, locked_locations: List[str],
+def fill_item_pool_with_dummy_items(self: SC2World, multiworld: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
         item = create_item_with_correct_settings(player, self.get_filler_item_name())
@@ -315,8 +417,8 @@ def get_exclusion_item(multiworld: MultiWorld, option) -> str:
     if option == LocationInclusion.option_nothing:
         return "Nothing"
     elif option == LocationInclusion.option_trash:
-        index = multiworld.random.randint(0, len(filler_items) - 1)
-        return filler_items[index]
+        item = multiworld.random.choice(filler_items)
+        return item
     raise Exception(f"Unsupported option type: {option}")
 
 
@@ -335,3 +437,35 @@ def get_plando_locations(multiworld: MultiWorld, player) -> List[str]:
             plando_locations.append(plando_setting_location)
 
     return plando_locations
+
+def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
+    total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
+    if get_option_value(multiworld, player, "kerriganless") in kerrigan_unit_available \
+        or total_levels == 0:
+        return
+    
+    def add_kerrigan_level_items(level_amount: int, item_amount: int):
+        name = f"{level_amount} Kerrigan Level"
+        if level_amount > 1:
+            name += "s"
+        for _ in range(item_amount):
+            item_pool.append(create_item_with_correct_settings(player, name))
+
+    sizes = [70, 35, 14, 10, 7, 5, 2, 1]
+    option = get_option_value(multiworld, player, "kerrigan_level_item_distribution")
+    if option in (KerriganLevelItemDistribution.option_vanilla, KerriganLevelItemDistribution.option_smooth):
+        distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        if option == KerriganLevelItemDistribution.option_vanilla:
+            distribution = [32, 0, 0, 1, 3, 0, 0, 0, 1, 1]
+        else: # Smooth
+            distribution = [0, 0, 0, 1, 1, 2, 2, 2, 1, 1]
+        for tier in range(len(distribution)):
+            add_kerrigan_level_items(tier + 1, distribution[tier])
+    else:
+        size = sizes[option - 2]
+        round_func = round
+        if total_levels > 70:
+            round_func = floor
+        else:
+            round_func = ceil
+        add_kerrigan_level_items(size, round_func(float(total_levels) / size))

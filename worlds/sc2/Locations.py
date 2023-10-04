@@ -1,15 +1,16 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
-from .Options import get_option_value
+from .Options import get_option_value, kerrigan_unit_available, RequiredTactics
 
 from BaseClasses import Location
 
 SC2WOL_LOC_ID_OFFSET = 1000
+SC2HOTS_LOC_ID_OFFSET = SC2WOL_LOC_ID_OFFSET + 2900
 
 
-class SC2WoLLocation(Location):
-    game: str = "Starcraft2WoL"
+class SC2Location(Location):
+    game: str = "Starcraft2"
 
 
 class LocationType(IntEnum):
@@ -30,7 +31,10 @@ class LocationData(NamedTuple):
 def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
     logic_level = get_option_value(multiworld, player, 'required_tactics')
+    adv_tactics = logic_level != RequiredTactics.option_standard
+    kerriganless = get_option_value(multiworld, player, 'kerriganless') not in kerrigan_unit_available
     location_table: List[LocationData] = [
+        # WoL
         LocationData("Liberation Day", "Liberation Day: Victory", SC2WOL_LOC_ID_OFFSET + 100, LocationType.VICTORY),
         LocationData("Liberation Day", "Liberation Day: First Statue", SC2WOL_LOC_ID_OFFSET + 101, LocationType.BONUS),
         LocationData("Liberation Day", "Liberation Day: Second Statue", SC2WOL_LOC_ID_OFFSET + 102, LocationType.BONUS),
@@ -49,7 +53,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Zero Hour", "Zero Hour: Victory", SC2WOL_LOC_ID_OFFSET + 300, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
                                    state._sc2wol_defense_rating(multiworld, player, True) >= 2 and
-                                   (logic_level > 0 or state._sc2wol_has_anti_air(multiworld, player))),
+                                   (adv_tactics or state._sc2wol_has_anti_air(multiworld, player))),
         LocationData("Zero Hour", "Zero Hour: First Group Rescued", SC2WOL_LOC_ID_OFFSET + 301, LocationType.BONUS),
         LocationData("Zero Hour", "Zero Hour: Second Group Rescued", SC2WOL_LOC_ID_OFFSET + 302, LocationType.BONUS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player)),
@@ -66,7 +70,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Evacuation", "Evacuation: Victory", SC2WOL_LOC_ID_OFFSET + 400, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                   (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Evacuation", "Evacuation: First Chrysalis", SC2WOL_LOC_ID_OFFSET + 401, LocationType.BONUS),
         LocationData("Evacuation", "Evacuation: Second Chrysalis", SC2WOL_LOC_ID_OFFSET + 402, LocationType.BONUS,
@@ -78,7 +82,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Evacuation", "Evacuation: Flawless", SC2WOL_LOC_ID_OFFSET + 406, LocationType.CHALLENGE,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
                                    state._sc2wol_defense_rating(multiworld, player, True, False) >= 2 and
-                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                   (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Outbreak", "Outbreak: Victory", SC2WOL_LOC_ID_OFFSET + 500, LocationType.VICTORY,
                      lambda state: state._sc2wol_defense_rating(multiworld, player, True, False) >= 4 and
@@ -153,25 +157,25 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_can_respond_to_colony_infestations),
         LocationData("Smash and Grab", "Smash and Grab: Victory", SC2WOL_LOC_ID_OFFSET + 800, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                   (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Smash and Grab", "Smash and Grab: First Relic", SC2WOL_LOC_ID_OFFSET + 801, LocationType.BONUS),
         LocationData("Smash and Grab", "Smash and Grab: Second Relic", SC2WOL_LOC_ID_OFFSET + 802, LocationType.BONUS),
         LocationData("Smash and Grab", "Smash and Grab: Third Relic", SC2WOL_LOC_ID_OFFSET + 803, LocationType.BONUS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                   (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Smash and Grab", "Smash and Grab: Fourth Relic", SC2WOL_LOC_ID_OFFSET + 804, LocationType.BONUS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                   (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Smash and Grab", "Smash and Grab: First Forcefield Area Busted", SC2WOL_LOC_ID_OFFSET + 805, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                   (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Smash and Grab", "Smash and Grab: Second Forcefield Area Busted", SC2WOL_LOC_ID_OFFSET + 806, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                   (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("The Dig", "The Dig: Victory", SC2WOL_LOC_ID_OFFSET + 900, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_anti_air(multiworld, player) and
@@ -230,9 +234,9 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: Landing Zone Cleared", SC2WOL_LOC_ID_OFFSET + 1201, LocationType.MISSION_PROGRESS),
         LocationData("Maw of the Void", "Maw of the Void: Expansion Prisoners", SC2WOL_LOC_ID_OFFSET + 1202, LocationType.BONUS,
-                     lambda state: logic_level > 0 or state._sc2wol_survives_rip_field(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: South Close Prisoners", SC2WOL_LOC_ID_OFFSET + 1203, LocationType.BONUS,
-                     lambda state: logic_level > 0 or state._sc2wol_survives_rip_field(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: South Far Prisoners", SC2WOL_LOC_ID_OFFSET + 1204, LocationType.BONUS,
                      lambda state: state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: North Prisoners", SC2WOL_LOC_ID_OFFSET + 1205, LocationType.BONUS,
@@ -240,7 +244,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Maw of the Void", "Maw of the Void: Mothership", SC2WOL_LOC_ID_OFFSET + 1206, LocationType.OPTIONAL_BOSS,
                      lambda state: state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: Expansion Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 1207, LocationType.MISSION_PROGRESS,
-                     lambda state: logic_level > 0 or state._sc2wol_survives_rip_field(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: Middle Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 1208, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: Southeast Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 1209, LocationType.MISSION_PROGRESS,
@@ -254,24 +258,24 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Maw of the Void", "Maw of the Void: Southwest Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 1213, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Devil's Playground", "Devil's Playground: Victory", SC2WOL_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
-                     lambda state: logic_level > 0 or
+                     lambda state: adv_tactics or
                                    state._sc2wol_has_anti_air(multiworld, player) and (
                                            state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
         LocationData("Devil's Playground", "Devil's Playground: Tosh's Miners", SC2WOL_LOC_ID_OFFSET + 1301, LocationType.BONUS),
         LocationData("Devil's Playground", "Devil's Playground: Brutalisk", SC2WOL_LOC_ID_OFFSET + 1302, LocationType.OPTIONAL_BOSS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player)),
+                     lambda state: adv_tactics or state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player)),
         LocationData("Devil's Playground", "Devil's Playground: North Reapers", SC2WOL_LOC_ID_OFFSET + 1303, LocationType.BONUS),
         LocationData("Devil's Playground", "Devil's Playground: Middle Reapers", SC2WOL_LOC_ID_OFFSET + 1304, LocationType.BONUS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player)),
+                     lambda state: adv_tactics or state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player)),
         LocationData("Devil's Playground", "Devil's Playground: Southwest Reapers", SC2WOL_LOC_ID_OFFSET + 1305, LocationType.BONUS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player)),
+                     lambda state: adv_tactics or state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player)),
         LocationData("Devil's Playground", "Devil's Playground: Southeast Reapers", SC2WOL_LOC_ID_OFFSET + 1306, LocationType.BONUS,
-                     lambda state: logic_level > 0 or
+                     lambda state: adv_tactics or
                                    state._sc2wol_has_anti_air(multiworld, player) and (
                                            state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
         LocationData("Devil's Playground", "Devil's Playground: East Reapers", SC2WOL_LOC_ID_OFFSET + 1307, LocationType.BONUS,
                      lambda state: state._sc2wol_has_anti_air(multiworld, player) and
-                                    (logic_level > 0 or
+                                    (adv_tactics or
                                            state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Victory", SC2WOL_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
                      lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)),
@@ -327,12 +331,12 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Great Train Robbery", "The Great Train Robbery: Southwest Diamondback", SC2WOL_LOC_ID_OFFSET + 1708, LocationType.BONUS),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Southeast Diamondback", SC2WOL_LOC_ID_OFFSET + 1709, LocationType.BONUS),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Kill Team", SC2WOL_LOC_ID_OFFSET + 1710, LocationType.CHALLENGE,
-                     lambda state: (logic_level > 0 or state._sc2wol_has_common_unit(multiworld, player)) and
+                     lambda state: (adv_tactics or state._sc2wol_has_common_unit(multiworld, player)) and
                                    state._sc2wol_has_train_killers(multiworld, player) and
                                    state._sc2wol_has_anti_air(multiworld, player)),
         LocationData("Cutthroat", "Cutthroat: Victory", SC2WOL_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   (logic_level > 0 or state._sc2wol_has_anti_air)),
+                                   (adv_tactics or state._sc2wol_has_anti_air)),
         LocationData("Cutthroat", "Cutthroat: Mira Han", SC2WOL_LOC_ID_OFFSET + 1801, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player)),
         LocationData("Cutthroat", "Cutthroat: North Relic", SC2WOL_LOC_ID_OFFSET + 1802, LocationType.BONUS,
@@ -386,7 +390,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Media Blitz", "Media Blitz: All Factories", SC2WOL_LOC_ID_OFFSET + 2006, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Media Blitz", "Media Blitz: All Starports", SC2WOL_LOC_ID_OFFSET + 2007, LocationType.MISSION_PROGRESS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_competent_comp(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Media Blitz", "Media Blitz: Odin Not Trashed", SC2WOL_LOC_ID_OFFSET + 2008, LocationType.CHALLENGE,
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Victory", SC2WOL_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
@@ -412,9 +416,9 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("A Sinister Turn", "A Sinister Turn: Victory", SC2WOL_LOC_ID_OFFSET + 2300, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Robotics Facility", SC2WOL_LOC_ID_OFFSET + 2301, LocationType.BONUS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_protoss_common_units(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_protoss_common_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Dark Shrine", SC2WOL_LOC_ID_OFFSET + 2302, LocationType.BONUS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_protoss_common_units(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_protoss_common_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Templar Archives", SC2WOL_LOC_ID_OFFSET + 2303, LocationType.BONUS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Northeast Base", SC2WOL_LOC_ID_OFFSET + 2304, LocationType.MISSION_PROGRESS,
@@ -422,7 +426,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("A Sinister Turn", "A Sinister Turn: Southeast Base", SC2WOL_LOC_ID_OFFSET + 2305, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Maar", SC2WOL_LOC_ID_OFFSET + 2306, LocationType.MISSION_PROGRESS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_protoss_medium_units(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Northwest Preserver", SC2WOL_LOC_ID_OFFSET + 2307, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Southwest Preserver", SC2WOL_LOC_ID_OFFSET + 2308, LocationType.MISSION_PROGRESS,
@@ -430,18 +434,18 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("A Sinister Turn", "A Sinister Turn: East Preserver", SC2WOL_LOC_ID_OFFSET + 2309, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("Echoes of the Future", "Echoes of the Future: Victory", SC2WOL_LOC_ID_OFFSET + 2400, LocationType.VICTORY,
-                     lambda state: logic_level > 0 or state._sc2wol_has_protoss_medium_units(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("Echoes of the Future", "Echoes of the Future: Close Obelisk", SC2WOL_LOC_ID_OFFSET + 2401, LocationType.BONUS),
         LocationData("Echoes of the Future", "Echoes of the Future: West Obelisk", SC2WOL_LOC_ID_OFFSET + 2402, LocationType.BONUS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_protoss_common_units(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_protoss_common_units(multiworld, player)),
         LocationData("Echoes of the Future", "Echoes of the Future: Base", SC2WOL_LOC_ID_OFFSET + 2403, LocationType.MISSION_PROGRESS),
         LocationData("Echoes of the Future", "Echoes of the Future: Southwest Tendril", SC2WOL_LOC_ID_OFFSET + 2404, LocationType.MISSION_PROGRESS),
         LocationData("Echoes of the Future", "Echoes of the Future: Southeast Tendril", SC2WOL_LOC_ID_OFFSET + 2405, LocationType.MISSION_PROGRESS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_protoss_common_units(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_protoss_common_units(multiworld, player)),
         LocationData("Echoes of the Future", "Echoes of the Future: Northeast Tendril", SC2WOL_LOC_ID_OFFSET + 2406, LocationType.MISSION_PROGRESS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_protoss_common_units(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_protoss_common_units(multiworld, player)),
         LocationData("Echoes of the Future", "Echoes of the Future: Northwest Tendril", SC2WOL_LOC_ID_OFFSET + 2407, LocationType.MISSION_PROGRESS,
-                     lambda state: logic_level > 0 or state._sc2wol_has_protoss_common_units(multiworld, player)),
+                     lambda state: adv_tactics or state._sc2wol_has_protoss_common_units(multiworld, player)),
         LocationData("In Utter Darkness", "In Utter Darkness: Defeat", SC2WOL_LOC_ID_OFFSET + 2500, LocationType.VICTORY),
         LocationData("In Utter Darkness", "In Utter Darkness: Protoss Archive", SC2WOL_LOC_ID_OFFSET + 2501, LocationType.BONUS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
@@ -498,14 +502,222 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Shatter the Sky", "Shatter the Sky: Mid Hatchery", SC2WOL_LOC_ID_OFFSET + 2808, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("All-In", "All-In: Victory", SC2WOL_LOC_ID_OFFSET + 2900, LocationType.VICTORY,
-                     lambda state: state._sc2wol_final_mission_requirements(multiworld, player))
+                     lambda state: state._sc2wol_final_mission_requirements(multiworld, player)),
+
+        # HotS
+        LocationData("Lab Rat", "Lab Rat: Victory", SC2HOTS_LOC_ID_OFFSET + 100, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Lab Rat", "Lab Rat: Gather Minerals", SC2HOTS_LOC_ID_OFFSET + 101, LocationType.MISSION_PROGRESS),
+        LocationData("Lab Rat", "Lab Rat: South Zergling Group", SC2HOTS_LOC_ID_OFFSET + 102, LocationType.BONUS,
+                     lambda state: adv_tactics or state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Lab Rat", "Lab Rat: East Zergling Group", SC2HOTS_LOC_ID_OFFSET + 103, LocationType.BONUS,
+                     lambda state: adv_tactics or state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Lab Rat", "Lab Rat: West Zergling Group", SC2HOTS_LOC_ID_OFFSET + 104, LocationType.BONUS,
+                     lambda state: adv_tactics or state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Back in the Saddle", "Back in the Saddle: Victory", SC2HOTS_LOC_ID_OFFSET + 200, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
+        LocationData("Back in the Saddle", "Back in the Saddle: Kinetic Blast", SC2HOTS_LOC_ID_OFFSET + 202, LocationType.MISSION_PROGRESS),
+        LocationData("Back in the Saddle", "Back in the Saddle: Crushing Grip", SC2HOTS_LOC_ID_OFFSET + 203, LocationType.MISSION_PROGRESS),
+        LocationData("Back in the Saddle", "Back in the Saddle: Reach the Sublevel", SC2HOTS_LOC_ID_OFFSET + 204, LocationType.MISSION_PROGRESS),
+        LocationData("Back in the Saddle", "Back in the Saddle: Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
+        LocationData("Rendezvous", "Rendezvous: Victory", SC2HOTS_LOC_ID_OFFSET + 300, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Rendezvous", "Rendezvous: Right Queen", SC2HOTS_LOC_ID_OFFSET + 301, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Rendezvous", "Rendezvous: Center Queen", SC2HOTS_LOC_ID_OFFSET + 302, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Rendezvous", "Rendezvous: Left Queen", SC2HOTS_LOC_ID_OFFSET + 303, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_low_tech(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Harvest of Screams", "Harvest of Screams: Victory", SC2HOTS_LOC_ID_OFFSET + 400, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Harvest of Screams", "Harvest of Screams: First Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 401, LocationType.MISSION_PROGRESS),
+        LocationData("Harvest of Screams", "Harvest of Screams: North Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 402, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Harvest of Screams", "Harvest of Screams: West Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 403, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: Victory", SC2HOTS_LOC_ID_OFFSET + 500, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: East Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 501, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: Center Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 502, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) or adv_tactics),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: West Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 503, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: Destroy 4 Shuttles", SC2HOTS_LOC_ID_OFFSET + 504, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Enemy Within", "Enemy Within: Victory", SC2HOTS_LOC_ID_OFFSET + 600, LocationType.VICTORY),
+        LocationData("Enemy Within", "Enemy Within: First Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 602, LocationType.MISSION_PROGRESS),
+        LocationData("Enemy Within", "Enemy Within: Second Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 603, LocationType.MISSION_PROGRESS),
+        LocationData("Enemy Within", "Enemy Within: Third Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 604, LocationType.MISSION_PROGRESS),
+        LocationData("Enemy Within", "Enemy Within: Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601, LocationType.BONUS),
+        LocationData("Domination", "Domination: Victory", SC2HOTS_LOC_ID_OFFSET + 700, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Domination", "Domination: Repel Zagara", SC2HOTS_LOC_ID_OFFSET + 703, LocationType.MISSION_PROGRESS),
+        LocationData("Domination", "Domination: Center Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 701, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Domination", "Domination: North Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 702, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player)),
+        LocationData("Fire in the Sky", "Fire in the Sky: Victory", SC2HOTS_LOC_ID_OFFSET + 800, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player) and
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
+        LocationData("Fire in the Sky", "Fire in the Sky: West Biomass", SC2HOTS_LOC_ID_OFFSET + 801, LocationType.BONUS),
+        LocationData("Fire in the Sky", "Fire in the Sky: North Biomass", SC2HOTS_LOC_ID_OFFSET + 802, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player) and
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
+        LocationData("Fire in the Sky", "Fire in the Sky: South Biomass", SC2HOTS_LOC_ID_OFFSET + 803, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player) and
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
+        LocationData("Fire in the Sky", "Fire in the Sky: Destroy 3 Gorgons", SC2HOTS_LOC_ID_OFFSET + 804, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_basic_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player) and
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
+        LocationData("Old Soldiers", "Old Soldiers: Victory", SC2HOTS_LOC_ID_OFFSET + 900, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Old Soldiers", "Old Soldiers: East Science Lab", SC2HOTS_LOC_ID_OFFSET + 901, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Old Soldiers", "Old Soldiers: North Science Lab", SC2HOTS_LOC_ID_OFFSET + 902, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Old Soldiers", "Old Soldiers: Get Nuked", SC2HOTS_LOC_ID_OFFSET + 903, LocationType.MISSION_PROGRESS),
+        LocationData("Waking the Ancient", "Waking the Ancient: Victory", SC2HOTS_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Waking the Ancient", "Waking the Ancient: Center Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1001, LocationType.BONUS),
+        LocationData("Waking the Ancient", "Waking the Ancient: East Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1002, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   (adv_tactics and state._sc2hots_has_minimal_antiair(multiworld, player)
+                                    or state._sc2hots_has_good_antiair(multiworld, player))),
+        LocationData("Waking the Ancient", "Waking the Ancient: South Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1003, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   (adv_tactics and state._sc2hots_has_minimal_antiair(multiworld, player)
+                                    or state._sc2hots_has_good_antiair(multiworld, player))),
+        LocationData("Waking the Ancient", "Waking the Ancient: Finish Feeding", SC2HOTS_LOC_ID_OFFSET + 1004, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Crucible", "The Crucible: Victory", SC2HOTS_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Crucible", "The Crucible: Reach the Pool", SC2HOTS_LOC_ID_OFFSET + 1102, LocationType.MISSION_PROGRESS),
+        LocationData("The Crucible", "The Crucible: 15 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1103, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Crucible", "The Crucible: 5 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1104, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Crucible", "The Crucible: Tyrannozor", SC2HOTS_LOC_ID_OFFSET + 1101, LocationType.OPTIONAL_BOSS,
+                     lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Supreme", "Supreme: Victory", SC2HOTS_LOC_ID_OFFSET + 1200, LocationType.VICTORY),
+        LocationData("Supreme", "Supreme: First Relic", SC2HOTS_LOC_ID_OFFSET + 1201, LocationType.BONUS),
+        LocationData("Supreme", "Supreme: Second Relic", SC2HOTS_LOC_ID_OFFSET + 1202, LocationType.BONUS),
+        LocationData("Supreme", "Supreme: Third Relic", SC2HOTS_LOC_ID_OFFSET + 1203, LocationType.BONUS),
+        LocationData("Supreme", "Supreme: Fourth Relic", SC2HOTS_LOC_ID_OFFSET + 1204, LocationType.BONUS),
+        LocationData("Infested", "Infested: Victory", SC2HOTS_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   ((state._sc2hots_has_good_antiair(multiworld, player) and state.has('Infestor', player)) or
+                                   (adv_tactics and state._sc2hots_has_minimal_antiair(multiworld, player)))),
+        LocationData("Infested", "Infested: East Science Facility", SC2HOTS_LOC_ID_OFFSET + 1301, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player) and
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
+        LocationData("Infested", "Infested: Center Science Facility", SC2HOTS_LOC_ID_OFFSET + 1302, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player) and
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
+        LocationData("Infested", "Infested: West Science Facility", SC2HOTS_LOC_ID_OFFSET + 1303, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_common_unit(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player) and
+                                   state._sc2hots_can_spread_creep(multiworld, player)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Victory", SC2HOTS_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Hand of Darkness", "Hand of Darkness: North Brutalisk", SC2HOTS_LOC_ID_OFFSET + 1401, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Hand of Darkness", "Hand of Darkness: South Brutalisk", SC2HOTS_LOC_ID_OFFSET + 1402, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 4 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1403, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_minimal_antiair(multiworld, player)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Victory", SC2HOTS_LOC_ID_OFFSET + 1500, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   (state._sc2hots_has_good_antiair(multiworld, player) or adv_tactics)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Northwest Crystal", SC2HOTS_LOC_ID_OFFSET + 1501, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   (state._sc2hots_has_good_antiair(multiworld, player) or adv_tactics)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Northeast Crystal", SC2HOTS_LOC_ID_OFFSET + 1502, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   (state._sc2hots_has_good_antiair(multiworld, player) or adv_tactics)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: South Crystal", SC2HOTS_LOC_ID_OFFSET + 1503, LocationType.BONUS),
+        LocationData("With Friends Like These", "With Friends Like These: Victory", SC2HOTS_LOC_ID_OFFSET + 1600, LocationType.VICTORY),
+        LocationData("With Friends Like These", "With Friends Like These: Pirate Capital Ship", SC2HOTS_LOC_ID_OFFSET + 1601, LocationType.OPTIONAL_BOSS),
+        LocationData("With Friends Like These", "With Friends Like These: First Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1602, LocationType.BONUS),
+        LocationData("With Friends Like These", "With Friends Like These: Second Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1603, LocationType.BONUS),
+        LocationData("With Friends Like These", "With Friends Like These: Third Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1604, LocationType.BONUS),
+        LocationData("Conviction", "Conviction: Victory", SC2HOTS_LOC_ID_OFFSET + 1700, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) and
+                                   state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
+        LocationData("Conviction", "Conviction: First Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1701, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
+        LocationData("Conviction", "Conviction: Power Coupling", SC2HOTS_LOC_ID_OFFSET + 1703, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) or kerriganless),
+        LocationData("Conviction", "Conviction: Second Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1702, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_two_kerrigan_actives(multiworld, player) and
+                                   state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
+        LocationData("Planetfall", "Planetfall: Victory", SC2HOTS_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Planetfall", "Planetfall: East Gate", SC2HOTS_LOC_ID_OFFSET + 1801, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Planetfall", "Planetfall: Northeast Gate", SC2HOTS_LOC_ID_OFFSET + 1802, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Planetfall", "Planetfall: North Gate", SC2HOTS_LOC_ID_OFFSET + 1803, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Death From Above", "Death From Above: Victory", SC2HOTS_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Death From Above", "Death From Above: First Power Link", SC2HOTS_LOC_ID_OFFSET + 1901, LocationType.MISSION_PROGRESS),
+        LocationData("Death From Above", "Death From Above: Second Power Link", SC2HOTS_LOC_ID_OFFSET + 1902, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("Death From Above", "Death From Above: Third Power Link", SC2HOTS_LOC_ID_OFFSET + 1903, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Reckoning", "The Reckoning: Victory", SC2HOTS_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Reckoning", "The Reckoning: South Lane", SC2HOTS_LOC_ID_OFFSET + 2001, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Reckoning", "The Reckoning: North Lane", SC2HOTS_LOC_ID_OFFSET + 2002, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
+        LocationData("The Reckoning", "The Reckoning: East Lane", SC2HOTS_LOC_ID_OFFSET + 2003, LocationType.BONUS,
+                     lambda state: state._sc2hots_has_competent_comp(multiworld, player) and
+                                   state._sc2hots_has_good_antiair(multiworld, player)),
     ]
 
     beat_events = []
 
     for i, location_data in enumerate(location_table):
         # Removing all item-based logic on No Logic
-        if logic_level == 2:
+        if logic_level == RequiredTactics.option_no_logic:
             location_data = location_data._replace(rule=Location.access_rule)
             location_table[i] = location_data
         # Generating Beat event locations

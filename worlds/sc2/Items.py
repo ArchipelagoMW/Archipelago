@@ -1,8 +1,8 @@
 from BaseClasses import Item, ItemClassification, MultiWorld
 import typing
 
-from .Options import get_option_value
-from .MissionTables import SC2Mission, SC2Race
+from .Options import get_option_value, RequiredTactics
+from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 
 
 class ItemData(typing.NamedTuple):
@@ -16,8 +16,8 @@ class ItemData(typing.NamedTuple):
     origin: typing.Set[str] = {"wol"}
 
 
-class StarcraftWoLItem(Item):
-    game: str = "Starcraft 2 Wings of Liberty"
+class StarcraftItem(Item):
+    game: str = "Starcraft 2"
 
 
 def get_full_item_list():
@@ -25,8 +25,10 @@ def get_full_item_list():
 
 
 SC2WOL_ITEM_ID_OFFSET = 1000
+SC2HOTS_ITEM_ID_OFFSET = SC2WOL_ITEM_ID_OFFSET + 900
 
 item_table = {
+    # WoL
     "Marine": ItemData(0 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.TERRAN, classification=ItemClassification.progression),
     "Medic": ItemData(1 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.TERRAN, classification=ItemClassification.progression),
     "Firebat": ItemData(2 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.TERRAN, classification=ItemClassification.progression),
@@ -52,19 +54,19 @@ item_table = {
     "Cyclone": ItemData(21 + SC2WOL_ITEM_ID_OFFSET, "Unit", 21, SC2Race.TERRAN, classification=ItemClassification.progression, origin={"ext"}),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
-    "Progressive Infantry Weapon": ItemData(100 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.TERRAN, quantity=3),
-    "Progressive Infantry Armor": ItemData(102 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.TERRAN, quantity=3),
-    "Progressive Vehicle Weapon": ItemData(103 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.TERRAN, quantity=3),
-    "Progressive Vehicle Armor": ItemData(104 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 6, SC2Race.TERRAN, quantity=3),
-    "Progressive Ship Weapon": ItemData(105 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 8, SC2Race.TERRAN, quantity=3),
-    "Progressive Ship Armor": ItemData(106 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 10, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Infantry Weapon": ItemData(100 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Infantry Armor": ItemData(102 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Vehicle Weapon": ItemData(103 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Vehicle Armor": ItemData(104 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 6, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Ship Weapon": ItemData(105 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 8, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Ship Armor": ItemData(106 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 10, SC2Race.TERRAN, quantity=3),
     # Upgrade bundle 'number' values are used as indices to get affected 'number's
-    "Progressive Weapon Upgrade": ItemData(107 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.TERRAN, quantity=3),
-    "Progressive Armor Upgrade": ItemData(108 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 1, SC2Race.TERRAN, quantity=3),
-    "Progressive Infantry Upgrade": ItemData(109 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.TERRAN, quantity=3),
-    "Progressive Vehicle Upgrade": ItemData(110 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 3, SC2Race.TERRAN, quantity=3),
-    "Progressive Ship Upgrade": ItemData(111 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.TERRAN, quantity=3),
-    "Progressive Weapon/Armor Upgrade": ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Weapon Upgrade": ItemData(107 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Armor Upgrade": ItemData(108 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 1, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Infantry Upgrade": ItemData(109 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Vehicle Upgrade": ItemData(110 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 3, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Ship Upgrade": ItemData(111 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.TERRAN, quantity=3),
+    "Progressive Terran Weapon/Armor Upgrade": ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, SC2Race.TERRAN, quantity=3),
 
     "Projectile Accelerator (Bunker)": ItemData(200 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 0, SC2Race.TERRAN, parent_item="Bunker"),
     "Neosteel Bunker (Bunker)": ItemData(201 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 1, SC2Race.TERRAN, parent_item="Bunker"),
@@ -236,15 +238,15 @@ item_table = {
     "Hive Mind Emulator": ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18, SC2Race.TERRAN, ItemClassification.progression),
     "Psi Disrupter": ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, SC2Race.TERRAN, classification=ItemClassification.progression),
 
-    "Zealot": ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 0, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Stalker": ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 1, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "High Templar": ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 2, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Dark Templar": ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 3, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Immortal": ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 4, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Colossus": ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 5, SC2Race.PROTOSS),
-    "Phoenix": ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 6, SC2Race.PROTOSS, classification=ItemClassification.filler),
-    "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, SC2Race.PROTOSS, classification=ItemClassification.progression),
-    "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Zealot": ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Stalker": ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "High Templar": ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Dark Templar": ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Immortal": ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Colossus": ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.PROTOSS),
+    "Phoenix": ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.PROTOSS, classification=ItemClassification.filler),
+    "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.PROTOSS, classification=ItemClassification.progression),
+    "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.PROTOSS, classification=ItemClassification.progression),
 
     # Filler items to fill remaining spots
     "+15 Starting Minerals": ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, SC2Race.ANY, quantity=0, classification=ItemClassification.filler),
@@ -255,44 +257,177 @@ item_table = {
     "Nothing": ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, SC2Race.ANY, quantity=0, classification=ItemClassification.trap),
 
     # "Keystone Piece": ItemData(850 + SC2WOL_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
+
+    # HotS
+    "Zergling": ItemData(0 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 0, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Swarm Queen": ItemData(1 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 1, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Roach": ItemData(2 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 2, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Hydralisk": ItemData(3 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 3, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Baneling": ItemData(4 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 4, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Aberration": ItemData(5 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 5, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Mutalisk": ItemData(6 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 6, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Swarm Host": ItemData(7 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 7, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Infestor": ItemData(8 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 8, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Ultralisk": ItemData(9 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 9, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Spore Crawler": ItemData(10 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 10, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    "Spine Crawler": ItemData(11 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 11, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    
+    "Progressive Zerg Melee Attack": ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    "Progressive Zerg Missile Attack": ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    "Progressive Zerg Ground Carapace": ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    "Progressive Zerg Flyer Attack": ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 6, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    "Progressive Zerg Flyer Carapace": ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 8, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    # Upgrade bundle 'number' values are used as indices to get affected 'number's
+    "Progressive Zerg Weapon Upgrade": ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 6, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    "Progressive Zerg Armor Upgrade": ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 7, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    "Progressive Zerg Ground Upgrade": ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 8, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    "Progressive Zerg Flyer Upgrade": ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 9, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    "Progressive Zerg Weapon/Armor Upgrade": ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 10, SC2Race.ZERG, quantity=3, origin={"hots"}),
+
+    "Hardened Carapace (Zergling)": ItemData(200 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 0, SC2Race.ZERG, parent_item="Zergling", origin={"hots"}),
+    "Adrenal Overload (Zergling)": ItemData(201 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 1, SC2Race.ZERG, parent_item="Zergling", origin={"hots"}),
+    "Metabolic Boost (Zergling)": ItemData(202 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 2, SC2Race.ZERG, parent_item="Zergling", origin={"hots"}, classification=ItemClassification.filler),
+    "Hydriodic Bile (Roach)": ItemData(203 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 3, SC2Race.ZERG, parent_item="Roach", origin={"hots"}),
+    "Adaptive Plating (Roach)": ItemData(204 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 4, SC2Race.ZERG, parent_item="Roach", origin={"hots"}),
+    "Tunneling Claws (Roach)": ItemData(205 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 5, SC2Race.ZERG, parent_item="Roach", origin={"hots"}, classification=ItemClassification.filler),
+    "Frenzy (Hydralisk)": ItemData(206 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 6, SC2Race.ZERG, parent_item="Hydralisk", origin={"hots"}),
+    "Ancillary Carapace (Hydralisk)": ItemData(207 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 7, SC2Race.ZERG, parent_item="Hydralisk", origin={"hots"}, classification=ItemClassification.filler),
+    "Grooved Spines (Hydralisk)": ItemData(208 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 8, SC2Race.ZERG, parent_item="Hydralisk", origin={"hots"}),
+    "Corrosive Acid (Baneling)": ItemData(209 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 9, SC2Race.ZERG, parent_item="Baneling", origin={"hots"}),
+    "Rupture (Baneling)": ItemData(210 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 10, SC2Race.ZERG, parent_item="Baneling", origin={"hots"}, classification=ItemClassification.filler),
+    "Regenerative Acid (Baneling)": ItemData(211 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 11, SC2Race.ZERG, parent_item="Baneling", origin={"hots"}, classification=ItemClassification.filler),
+    "Vicious Glave (Mutalisk)": ItemData(212 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 12, SC2Race.ZERG, parent_item="Mutalisk", origin={"hots"}),
+    "Rapid Regeneration (Mutalisk)": ItemData(213 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 13, SC2Race.ZERG, parent_item="Mutalisk", origin={"hots"}),
+    "Sundering Glave (Mutalisk)": ItemData(214 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 14, SC2Race.ZERG, parent_item="Mutalisk", origin={"hots"}),
+    "Burrow (Swarm Host)": ItemData(215 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 15, SC2Race.ZERG, parent_item="Swarm Host", origin={"hots"}, classification=ItemClassification.filler),
+    "Rapid Incubation (Swarm Host)": ItemData(216 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 16, SC2Race.ZERG, parent_item="Swarm Host", origin={"hots"}),
+    "Pressurized Glands (Swarm Host)": ItemData(217 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 17, SC2Race.ZERG, parent_item="Swarm Host", origin={"hots"}, classification=ItemClassification.progression),
+    "Burrow Charge (Ultralisk)": ItemData(218 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 18, SC2Race.ZERG, parent_item="Ultralisk", origin={"hots"}),
+    "Tissue Animation (Ultralisk)": ItemData(219 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 19, SC2Race.ZERG, parent_item="Ultralisk", origin={"hots"}),
+    "Monarch Blades (Ultralisk)": ItemData(220 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 20, SC2Race.ZERG, parent_item="Ultralisk", origin={"hots"}),
+    
+    "Raptor Strain (Zergling)": ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 0, SC2Race.ZERG, parent_item="Zergling", origin={"hots"}),
+    "Swarmling Strain (Zergling)": ItemData(301 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 1, SC2Race.ZERG, parent_item="Zergling", origin={"hots"}),
+    "Vile Strain (Roach)": ItemData(302 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 2, SC2Race.ZERG, parent_item="Roach", origin={"hots"}),
+    "Corpser Strain (Roach)": ItemData(303 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 3, SC2Race.ZERG, parent_item="Roach", origin={"hots"}),
+    "Impaler Strain (Hydralisk)": ItemData(304 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 4, SC2Race.ZERG, parent_item="Hydralisk", origin={"hots"}, classification=ItemClassification.progression),
+    "Lurker Strain (Hydralisk)": ItemData(305 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 5, SC2Race.ZERG, parent_item="Hydralisk", origin={"hots"}, classification=ItemClassification.progression),
+    "Splitter Strain (Baneling)": ItemData(306 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 6, SC2Race.ZERG, parent_item="Baneling", origin={"hots"}),
+    "Hunter Strain (Baneling)": ItemData(307 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 7, SC2Race.ZERG, parent_item="Baneling", origin={"hots"}),
+    "Brood Lord Strain (Mutalisk)": ItemData(308 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 8, SC2Race.ZERG, parent_item="Mutalisk", origin={"hots"}, classification=ItemClassification.progression),
+    "Viper Strain (Mutalisk)": ItemData(309 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 9, SC2Race.ZERG, parent_item="Mutalisk", origin={"hots"}, classification=ItemClassification.progression),
+    "Carrion Strain (Swarm Host)": ItemData(310 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 10, SC2Race.ZERG, parent_item="Swarm Host", origin={"hots"}),
+    "Creeper Strain (Swarm Host)": ItemData(311 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 11, SC2Race.ZERG, parent_item="Swarm Host", origin={"hots"}, classification=ItemClassification.filler),
+    "Noxious Strain (Ultralisk)": ItemData(312 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 12, SC2Race.ZERG, parent_item="Ultralisk", origin={"hots"}, classification=ItemClassification.filler),
+    "Torrasque Strain (Ultralisk)": ItemData(313 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 13, SC2Race.ZERG, parent_item="Ultralisk", origin={"hots"}),
+    
+    "Kinetic Blast (Kerrigan Tier 1)": ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Heroic Fortitude (Kerrigan Tier 1)": ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Leaping Strike (Kerrigan Tier 1)": ItemData(402 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 2, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Crushing Grip (Kerrigan Tier 2)": ItemData(403 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 3, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Chain Reaction (Kerrigan Tier 2)": ItemData(404 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 4, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Psionic Shift (Kerrigan Tier 2)": ItemData(405 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 5, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Zergling Reconstitution (Kerrigan Tier 3)": ItemData(406 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 6, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.filler),
+    "Improved Overlords (Kerrigan Tier 3)": ItemData(407 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 7, SC2Race.ZERG, origin={"hots"}),
+    "Automated Extractors (Kerrigan Tier 3)": ItemData(408 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 8, SC2Race.ZERG, origin={"hots"}),
+    "Wild Mutation (Kerrigan Tier 4)": ItemData(409 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 9, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Spawn Banelings (Kerrigan Tier 4)": ItemData(410 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 10, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Mend (Kerrigan Tier 4)": ItemData(411 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 11, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Twin Drones (Kerrigan Tier 5)": ItemData(412 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 12, SC2Race.ZERG, origin={"hots"}),
+    "Malignant Creep (Kerrigan Tier 5)": ItemData(413 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 13, SC2Race.ZERG, origin={"hots"}),
+    "Vespene Efficiency (Kerrigan Tier 5)": ItemData(414 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 14, SC2Race.ZERG, origin={"hots"}),
+    "Infest Broodlings (Kerrigan Tier 6)": ItemData(415 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 15, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Fury (Kerrigan Tier 6)": ItemData(416 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 16, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Ability Efficiency (Kerrigan Tier 6)": ItemData(417 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 17, SC2Race.ZERG, origin={"hots"}),
+    "Apocalypse (Kerrigan Tier 7)": ItemData(418 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 18, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Spawn Leviathan (Kerrigan Tier 7)": ItemData(419 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 19, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    "Drop-Pods (Kerrigan Tier 7)": ItemData(420 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 20, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    # Handled separately from other abilities
+    "Primal Form (Kerrigan)": ItemData(421 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 0, SC2Race.ZERG, origin={"hots"}),
+    
+    "10 Kerrigan Levels": ItemData(500 + SC2HOTS_ITEM_ID_OFFSET, "Level", 10, SC2Race.ZERG, origin={"hots"}, quantity=0),
+    "9 Kerrigan Levels": ItemData(501 + SC2HOTS_ITEM_ID_OFFSET, "Level", 9, SC2Race.ZERG, origin={"hots"}, quantity=0),
+    "8 Kerrigan Levels": ItemData(502 + SC2HOTS_ITEM_ID_OFFSET, "Level", 8, SC2Race.ZERG, origin={"hots"}, quantity=0),
+    "7 Kerrigan Levels": ItemData(503 + SC2HOTS_ITEM_ID_OFFSET, "Level", 7, SC2Race.ZERG, origin={"hots"}, quantity=0),
+    "6 Kerrigan Levels": ItemData(504 + SC2HOTS_ITEM_ID_OFFSET, "Level", 6, SC2Race.ZERG, origin={"hots"}, quantity=0),
+    "5 Kerrigan Levels": ItemData(505 + SC2HOTS_ITEM_ID_OFFSET, "Level", 5, SC2Race.ZERG, origin={"hots"}, quantity=0),
+    "4 Kerrigan Levels": ItemData(506 + SC2HOTS_ITEM_ID_OFFSET, "Level", 4, SC2Race.ZERG, origin={"hots"}, quantity=0, classification=ItemClassification.filler),
+    "3 Kerrigan Levels": ItemData(507 + SC2HOTS_ITEM_ID_OFFSET, "Level", 3, SC2Race.ZERG, origin={"hots"}, quantity=0, classification=ItemClassification.filler),
+    "2 Kerrigan Levels": ItemData(508 + SC2HOTS_ITEM_ID_OFFSET, "Level", 2, SC2Race.ZERG, origin={"hots"}, quantity=0, classification=ItemClassification.filler),
+    "1 Kerrigan Level": ItemData(509 + SC2HOTS_ITEM_ID_OFFSET, "Level", 1, SC2Race.ZERG, origin={"hots"}, quantity=0, classification=ItemClassification.filler),
+    "14 Kerrigan Levels": ItemData(510 + SC2HOTS_ITEM_ID_OFFSET, "Level", 14, SC2Race.ZERG, origin={"hots"}, quantity=0),
+    "35 Kerrigan Levels": ItemData(511 + SC2HOTS_ITEM_ID_OFFSET, "Level", 35, SC2Race.ZERG, origin={"hots"}, quantity=0),
+    "70 Kerrigan Levels": ItemData(512 + SC2HOTS_ITEM_ID_OFFSET, "Level", 70, SC2Race.ZERG, origin={"hots"}, quantity=0),
 }
 
 def get_item_table(multiworld: MultiWorld, player: int):
     return item_table
 
 basic_units = {
-    'Marine',
-    'Marauder',
-    'Goliath',
-    'Hellion',
-    'Vulture'
+    SC2Race.TERRAN: {
+        'Marine',
+        'Marauder',
+        'Goliath',
+        'Hellion',
+        'Vulture'
+    },
+    SC2Race.ZERG: {
+        'Zergling',
+        'Swarm Queen',
+        'Roach',
+        'Hydralisk'
+    },
+    # TODO Placeholder for Prophecy
+    SC2Race.PROTOSS: {
+        'Zealot',
+        'Stalker'
+    }
 }
 
-advanced_basic_units = basic_units.union({
-    'Reaper',
-    'Diamondback',
-    'Viking'
-})
+advanced_basic_units = {
+    SC2Race.TERRAN: basic_units[SC2Race.TERRAN].union({
+        'Reaper',
+        'Diamondback',
+        'Viking'
+    }),
+    SC2Race.ZERG: basic_units[SC2Race.ZERG].union({
+        'Infestor',
+        'Aberration'
+    }),
+    SC2Race.PROTOSS: basic_units[SC2Race.PROTOSS].union({
+        'Dark Templar',
+    })
+}
 
 
-def get_basic_units(multiworld: MultiWorld, player: int) -> typing.Set[str]:
-    if get_option_value(multiworld, player, 'required_tactics') > 0:
-        return advanced_basic_units
+def get_basic_units(multiworld: MultiWorld, player: int, race: SC2Race) -> typing.Set[str]:
+    if get_option_value(multiworld, player, 'required_tactics') != RequiredTactics.option_standard:
+        return advanced_basic_units[race]
     else:
-        return basic_units
+        return basic_units[race]
 
 
+item_name_group_names = {
+    # WoL
+    "Armory 1", "Armory 2", "Armory 3",
+    "Armory 4", "Laboratory", "Progressive Upgrade",
+    # HotS
+    "Ability", "Strain", "Mutation"
+}
 item_name_groups = {}
 for item, data in get_full_item_list().items():
     item_name_groups.setdefault(data.type, []).append(item)
-    if data.type in ("Armory 1", "Armory 2", "Armory 3", "Armory 4", "Laboratory", "Progressive Upgrade") and '(' in item:
+    if data.type in item_name_group_names and '(' in item:
         short_name = item[:item.find(' (')]
         item_name_groups[short_name] = [item]
 item_name_groups["Missions"] = ["Beat " + mission.mission_name for mission in SC2Mission]
+item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.WOL]] + \
+                                   ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.PROPHECY]]
 
 
 # Items that can be placed before resources if not already in
 # General upgrades and Mercs
+# TODO needs zerg items
 second_pass_placeable_items: typing.Tuple[str, ...] = (
     # Buildings without upgrades
     "Sensor Tower",
@@ -366,57 +501,120 @@ progressive_if_nco = {
     "Progressive Regenerative Bio-Steel"
 }
 
+kerrigan_actives = [
+    {'Kinetic Blast (Kerrigan Tier 1)', 'Leaping Strike (Kerrigan Tier 1)'},
+    {'Crushing Grip (Kerrigan Tier 2)', 'Psionic Shift (Kerrigan Tier 2)'},
+    set(),
+    {'Wild Mutation (Kerrigan Tier 4)', 'Spawn Banelings (Kerrigan Tier 4)', 'Mend (Kerrigan Tier 4)'},
+    set(),
+    set(),
+    {'Apocalypse (Kerrigan Tier 7)', 'Spawn Leviathan (Kerrigan Tier 7)', 'Drop-Pods (Kerrigan Tier 7)'},
+]
+
+kerrigan_passives = [
+    {"Heroic Fortitude (Kerrigan Tier 1)"},
+    {"Chain Reaction (Kerrigan Tier 2)"},
+    {"Zergling Reconstitution (Kerrigan Tier 3)", "Improved Overlords (Kerrigan Tier 3)", "Automated Extractors (Kerrigan Tier 3)"},
+    set(),
+    {"Twin Drones (Kerrigan Tier 5)", "Malignant Creep (Kerrigan Tier 5)", "Vespene Efficiency (Kerrigan Tier 5)"},
+    {"Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)", "Ability Efficiency (Kerrigan Tier 6)"},
+    set(),
+]
+
+kerrigan_only_passives = {
+    "Heroic Fortitude (Kerrigan Tier 1)", "Chain Reaction (Kerrigan Tier 2)",
+    "Infest Broodlings (Kerrigan Tier 6)", "Fury (Kerrigan Tier 6)", "Ability Efficiency (Kerrigan Tier 6)"
+}
+
 # 'number' values of upgrades for upgrade bundle items
 upgrade_numbers = [
+    # Terran
     {0, 4, 8}, # Weapon
     {2, 6, 10}, # Armor
     {0, 2}, # Infantry
     {4, 6}, # Vehicle
     {8, 10}, # Starship
-    {0, 2, 4, 6, 8, 10} # All
+    {0, 2, 4, 6, 8, 10}, # All
+    # Zerg
+    {0, 2, 6}, # Weapon
+    {4, 8}, # Armor
+    {0, 2, 4}, # Ground
+    {6, 8}, # Flyer
+    {0, 2, 4, 6, 8}, # All
 ]
+# 'upgrade_numbers' indices for all upgrades
+upgrade_numbers_all = {
+    SC2Race.TERRAN: 5,
+    SC2Race.ZERG: 10,
+}
+
 # Names of upgrades to be included for different options
 upgrade_included_names = [
     { # Individual Items
-        "Progressive Infantry Weapon",
-        "Progressive Infantry Armor",
-        "Progressive Vehicle Weapon",
-        "Progressive Vehicle Armor",
-        "Progressive Ship Weapon",
-        "Progressive Ship Armor"
+        "Progressive Terran Infantry Weapon",
+        "Progressive Terran Infantry Armor",
+        "Progressive Terran Vehicle Weapon",
+        "Progressive Terran Vehicle Armor",
+        "Progressive Terran Ship Weapon",
+        "Progressive Terran Ship Armor",
+        "Progressive Zerg Melee Attack",
+        "Progressive Zerg Missile Attack",
+        "Progressive Zerg Ground Carapace",
+        "Progressive Zerg Flyer Attack",
+        "Progressive Zerg Flyer Carapace"
     },
     { # Bundle Weapon And Armor
-        "Progressive Weapon Upgrade",
-        "Progressive Armor Upgrade"
+        "Progressive Terran Weapon Upgrade",
+        "Progressive Terran Armor Upgrade",
+        "Progressive Zerg Weapon Upgrade",
+        "Progressive Zerg Armor Upgrade"
     },
     { # Bundle Unit Class
-        "Progressive Infantry Upgrade",
-        "Progressive Vehicle Upgrade",
-        "Progressive Starship Upgrade"
+        "Progressive Terran Infantry Upgrade",
+        "Progressive Terran Vehicle Upgrade",
+        "Progressive Terran Starship Upgrade",
+        "Progressive Zerg Ground Upgrade",
+        "Progressive Zerg Flyer Upgrade"
     },
     { # Bundle All
-        "Progressive Weapon/Armor Upgrade"
+        "Progressive Terran Weapon/Armor Upgrade",
+        "Progressive Zerg Weapon/Armor Upgrade"
     }
 ]
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if
                                             data.code}
+
 # Map type to expected int
-type_flaggroups: typing.Dict[str, int] = {
-    "Unit": 0,
-    "Upgrade": 1,  # Weapon / Armor upgrades
-    "Armory 1": 2,  # Unit upgrades
-    "Armory 2": 3,  # Unit upgrades
-    "Building": 4,
-    "Mercenary": 5,
-    "Laboratory": 6,
-    "Protoss": 7,
-    "Minerals": 8,
-    "Vespene": 9,
-    "Supply": 10,
-    "Goal": 11,
-    "Armory 3": 12,  # Unit upgrades
-    "Armory 4": 13,  # Unit upgrades
-    "Progressive Upgrade": 14,  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
-    "Nothing Group": 15
+type_flaggroups: typing.Dict[SC2Race, typing.Dict[str, int]] = {
+    SC2Race.ANY: {
+        "Minerals": 0,
+        "Vespene": 1,
+        "Supply": 2,
+        "Goal": 3,
+        "Nothing Group": 4,
+    },
+    SC2Race.TERRAN: {
+        "Unit": 0,
+        "Upgrade": 1,  # Weapon / Armor upgrades
+        "Armory 1": 2,  # Unit upgrades
+        "Armory 2": 3,  # Unit upgrades
+        "Building": 4,
+        "Mercenary": 5,
+        "Laboratory": 6,
+        "Armory 3": 7,  # Unit upgrades
+        "Armory 4": 8,  # Unit upgrades
+        "Progressive Upgrade": 9,  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
+    },
+    SC2Race.ZERG: {
+        "Unit": 0,
+        "Upgrade": 1,
+        "Mutation": 2,
+        "Strain": 3,
+        "Ability": 4,
+        "Level": 5,
+    },
+    SC2Race.PROTOSS: {
+        "Unit": 0,
+    }
 }

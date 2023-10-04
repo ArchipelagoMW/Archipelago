@@ -62,9 +62,7 @@ class MissionOrder(Choice):
     option_tiny_grid = 8
 
 
-class PlayerColor(Choice):
-    """Determines in-game team color."""
-    display_name = "Player Color"
+class ColorChoice(Choice):
     option_white = 0
     option_red = 1
     option_blue = 2
@@ -86,6 +84,26 @@ class PlayerColor(Choice):
     default = option_default
 
 
+class PlayerColorTerranRaynor(ColorChoice):
+    """Determines in-game team color for playable Raynor's Raiders (Terran) factions."""
+    display_name = "Terran Player Color (Raynor)"
+
+
+class PlayerColorProtoss(ColorChoice):
+    """Determines in-game team color for playable Protoss factions."""
+    display_name = "Protoss Player Color"
+
+
+class PlayerColorZerg(ColorChoice):
+    """Determines in-game team color for playable Zerg factions before Kerrigan becomes Primal Kerrigan."""
+    display_name = "Zerg Player Color"
+
+
+class PlayerColorZergPrimal(ColorChoice):
+    """Determines in-game team color for playable Zerg factions after Kerrigan becomes Primal Kerrigan."""
+    display_name = "Zerg Player Color (Primal)"
+
+
 class EnableWolMissions(DefaultOnToggle):
     """
     Enables missions from main Wings of Liberty campaign.
@@ -98,6 +116,13 @@ class EnableProphecyMissions(DefaultOnToggle):
     Enables missions from Prophecy mini-campaign.
     """
     display_name = "Enable Prophecy missions"
+
+
+class EnableHotsMissions(DefaultOnToggle):
+    """
+    Enables missions from Heart of the Swarm campaign.
+    """
+    display_name = "Enable Heart of the Swarm missions"
 
 
 class ShuffleCampaigns(DefaultOnToggle):
@@ -181,15 +206,17 @@ class GenericUpgradeItems(Choice):
     Does nothing if upgrades are unlocked by completed mission counts.
 
     Individual Items:  All weapon and armor upgrades are each an item,
-    resulting in 18 total upgrade items.
-    Bundle Weapon And Armor:  All types of weapon upgrades are one item,
-    and all types of armor upgrades are one item,
-    resulting in 6 total items.
+    resulting in 18 total upgrade items for Terran and 15 total items for Zerg.
+    Bundle Weapon And Armor:  All types of weapon upgrades are one item per race,
+    and all types of armor upgrades are one item per race,
+    resulting in 12 total items.
     Bundle Unit Class:  Weapon and armor upgrades are merged,
-    but Infantry, Vehicle, and Starship upgrades are bundled separately,
-    resulting in 9 total items.
-    Bundle All:  All weapon and armor upgrades are one item,
-    resulting in 3 total items."""
+    but upgrades are bundled separately for each race:
+    Infantry, Vehicle, and Starship upgrades for Terran (9 items),
+    Ground and Flyer upgrades for Zerg (6 items),
+    resulting in 15 total items.
+    Bundle All:  All weapon and armor upgrades are one item per race,
+    resulting in 6 total items."""
     display_name = "Generic Upgrade Items"
     option_individual_items = 0
     option_bundle_weapon_and_armor = 1
@@ -229,6 +256,129 @@ class MaxNumberOfUpgrades(Range):
     # Do not know the maximum, but it is less than 123!
     range_end = 123
     default = -1
+
+
+
+class IncludeMutations(Range):
+    """Determines how many of the 3 mutations for the 7 units that have them can appear."""
+    display_name = "Include Mutations"
+    range_start = 0
+    range_end = 3
+    default = 1
+
+
+class IncludeStrains(Range):
+    """Determines how many of the 2 strains for the 7 units that have them can appear."""
+    display_name = "Include Strains"
+    range_start = 0
+    range_end = 2
+    default = 1
+
+
+class Kerriganless(Choice):
+    """Determines whether Kerrigan is playable outside of missions that require her.
+
+    Off:  Kerrigan is playable as normal.
+    On:  Kerrigan is not playable.  Other hero units stay playable,
+    and locations normally requiring Kerrigan can be checked by any unit.
+    Kerrigan level items, active abilities and passive abilities affecting her will not appear.
+    On Without Passives:  In addition to the above, Kerrigan's passive abilities affecting other units (such as Twin Drones) will not appear."""
+    display_name = "Kerriganless"
+    option_off = 0
+    option_on = 1
+    option_on_without_passives = 2
+
+
+class KerriganChecksPerLevelPack(Range):
+    """Determines how many locations need to be checked for a level pack to be received.  Missions have between 4 and 5 locations each."""
+    display_name = "Checks Per Kerrigan Level Pack"
+    range_start = 1
+    range_end = 10
+    default = 1
+
+
+class KerriganCheckLevelPackSize(Range):
+    """Determines how many levels Kerrigan gains when enough locations are checked."""
+    display_name = "Check Level Pack Size"
+    range_start = 0
+    range_end = 5
+    default = 0
+
+
+class KerriganLevelItemSum(Range):
+    """Determines the sum of the level items in the seed.  This does not affect levels gained from checks."""
+    display_name = "Kerrigan Level Item Sum"
+    range_start = 0
+    range_end = 140
+    default = 70
+
+
+class KerriganLevelItemDistribution(Choice):
+    """Determines the amount and size of Kerrigan level items.
+
+    Vanilla:  Uses the distribution in the vanilla campaign.
+    This entails 32 individual levels and 6 packs of varying sizes.
+    This distribution always adds up to 70, ignoring the Level Item Sum setting.
+    Smooth:  Uses a custom, condensed distribution of items between sizes 4 and 10,
+    intended to fit more levels into settings with little room for filler while keeping some variance in level gains.
+    This distribution always adds up to 70, ignoring the Level Item Sum setting.
+    Size 70:  Uses items worth 70 levels each.
+    Size 35:  Uses items worth 35 levels each.
+    Size 14:  Uses items worth 14 levels each.
+    Size 10:  Uses items worth 10 levels each.
+    Size 7:  Uses items worth 7 levels each.
+    Size 5:  Uses items worth 5 levels each.
+    Size 2:  Uses items worth 2 level eachs.
+    Size 1:  Uses individual levels.  As there are not enough locations in the game for this distribution,
+    this will result in a greatly reduced total level, and is likely to remove many other items."""
+    display_name = "Kerrigan Level Item Distribution"
+    option_vanilla = 0
+    option_smooth = 1
+    option_size_70 = 2
+    option_size_35 = 3
+    option_size_14 = 4
+    option_size_10 = 5
+    option_size_7 = 6
+    option_size_5 = 7
+    option_size_2 = 8
+    option_size_1 = 9
+    default = option_smooth
+
+
+class IncludeAllKerriganAbilities(Toggle):
+    """If turned on, all abilities from every Kerrigan ability tier will be able to appear.
+    If turned off, one random passive or active ability per tier will be included."""
+    display_name = "Include All Kerrigan Abilities"
+
+
+class StartPrimaryAbilities(Range):
+    """Number of Primary Abilities (Kerrigan Tier 1, 2, and 4) to start the game with.
+    If set to 4, a Tier 7 ability is also included."""
+    display_name = "Starting Primary Abilities"
+    range_start = 0
+    range_end = 4
+    default = 0
+
+
+class KerriganPrimalStatus(Choice):
+    """Determines when Kerrigan appears in her Primal Zerg form.  
+    This halves her maximum energy, but greatly increases her energy regeneration.
+    
+    Vanilla:  Kerrigan is human in missions that canonically appear before The Crucible, 
+    and zerg thereafter.
+    Always Zerg:  Kerrigan is always zerg.
+    Always Human:  Kerrigan is always human.
+    Level 35:  Kerrigan is human until reaching level 35, and zerg thereafter.
+    Half Completion:  Kerrigan is human until half of the missions in the seed are completed, 
+    and zerg thereafter.
+    Item:  Kerrigan's Primal Form is an item. She is human until it is found, and zerg thereafter."""
+    display_name = "Kerrigan Primal Status"
+    option_vanilla = 0
+    option_always_zerg = 1
+    option_always_human = 2
+    option_level_35 = 3
+    option_half_completion = 4
+    option_item = 5
 
 
 class LockedItems(ItemSet):
@@ -325,14 +475,18 @@ class OptionalBossLocations(LocationInclusion):
 
 
 # noinspection PyTypeChecker
-sc2wol_options: Dict[str, Option] = {
+sc2_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
     "game_speed": GameSpeed,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
-    "player_color": PlayerColor,
+    "player_color_terran_raynor": PlayerColorTerranRaynor,
+    "player_color_protoss": PlayerColorProtoss,
+    "player_color_zerg": PlayerColorZerg,
+    "player_color_zerg_primal": PlayerColorZergPrimal,
     "enable_wol_missions": EnableWolMissions,
     "enable_prophecy_missions": EnableProphecyMissions,
+    "enable_hots_missions": EnableHotsMissions,
     "shuffle_campaigns": ShuffleCampaigns,
     "shuffle_no_build": ShuffleNoBuild,
     "early_unit": EarlyUnit,
@@ -342,6 +496,16 @@ sc2wol_options: Dict[str, Option] = {
     "generic_upgrade_missions": GenericUpgradeMissions,
     "generic_upgrade_research": GenericUpgradeResearch,
     "generic_upgrade_items": GenericUpgradeItems,
+    "include_mutations": IncludeMutations,
+    "include_strains": IncludeStrains,
+    "kerriganless": Kerriganless,
+    "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPack,
+    "kerrigan_check_level_pack_size": KerriganCheckLevelPackSize,
+    "kerrigan_level_item_sum": KerriganLevelItemSum,
+    "kerrigan_level_item_distribution": KerriganLevelItemDistribution,
+    "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
+    "start_primary_abilities": StartPrimaryAbilities,
+    "kerrigan_primal_status": KerriganPrimalStatus,
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,
     "excluded_missions": ExcludedMissions,
@@ -357,7 +521,7 @@ sc2wol_options: Dict[str, Option] = {
 
 def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
     if multiworld is None:
-        return sc2wol_options[name].default
+        return sc2_options[name].default
 
     player_option = getattr(multiworld, name)[player]
 
@@ -370,6 +534,8 @@ def get_enabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaig
         enabled_campaigns.add(SC2Campaign.WOL)
     if get_option_value(multiworld, player, "enable_prophecy_missions"):
         enabled_campaigns.add(SC2Campaign.PROPHECY)
+    if get_option_value(multiworld, player, "enable_hots_missions"):
+        enabled_campaigns.add(SC2Campaign.HOTS)
     return enabled_campaigns
 
 
@@ -387,3 +553,6 @@ campaign_depending_orders = [
     MissionOrder.option_mini_campaign
 ]
 
+kerrigan_unit_available = [
+    Kerriganless.option_off,
+]
