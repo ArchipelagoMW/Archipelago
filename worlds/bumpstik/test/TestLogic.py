@@ -14,7 +14,7 @@ class TestRuleLogic(BumpStikTestBase):
         self.assertAccessDependency(locations, items)
 
     def testLevels(self):
-        landmarks = [f"Level {x} - Combo 5" for _ in range(2, 5)] + \
+        landmarks = [f"Level {x} - Combo 5" for x in range(2, 5)] + \
             ["Level 5 - Cleared all Hazards"]
         for x, landmark in enumerate(landmarks):
             locations = [landmark]
