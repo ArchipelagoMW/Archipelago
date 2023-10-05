@@ -903,7 +903,7 @@ Mountaintop (Mountaintop) - Mountain Top Layer - 0x17C34:
 Mountain Top Layer (Mountain Floor 1) - Mountain Top Layer Bridge - 0x09E39:
 158408 - 0x09E39 (Light Bridge Controller) - True - Black/White Squares & Rotated Shapers
 
-Mountain Top Layer Bridge (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
+Mountain Top Layer Bridge (Mountain Floor 1) - Mountain Top Layer At Door - TrueOneWay:
 158409 - 0x09E7A (Right Row 1) - True - Black/White Squares & Dots
 158410 - 0x09E71 (Right Row 2) - 0x09E7A - Black/White Squares & Dots
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers
@@ -921,6 +921,8 @@ Mountain Top Layer Bridge (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 158423 - 0x09F6E (Back Row 3) - 0x33AF7 - Symmetry & Dots
 158424 - 0x09EAD (Trash Pillar 1) - True - Black/White Squares & Shapers
 158425 - 0x09EAF (Trash Pillar 2) - 0x09EAD - Black/White Squares & Shapers
+
+Mountain Top Layer At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 Door - 0x09E54 (Exit) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
 
 Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 0x09FFB - Mountain Floor 2 Blue Bridge - 0x09E86 - Mountain Pink Bridge EP - TrueOneWay:

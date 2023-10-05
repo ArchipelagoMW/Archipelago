@@ -611,6 +611,10 @@ class WitnessPlayerLogic:
             "0x3865F": "Ramp EPs access requirement",
             "0x1C31A": "Challenge Completion Requirement 1",
             "0x1C319": "Challenge Completion Requirement 2",
+            "0x09E7B": "Mountain Floor 1 Exit Door Requirement 1",
+            "0x09E6B": "Mountain Floor 1 Exit Door Requirement 2",
+            "0x09F6E": "Mountain Floor 1 Exit Door Requirement 3",
+            "0x09EAF": "Mountain Floor 1 Exit Door Requirement 4",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
