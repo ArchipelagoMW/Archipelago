@@ -507,6 +507,8 @@ def flood_items(world: MultiWorld) -> None:
             if candidate_item_to_place is not None:
                 item_to_place = candidate_item_to_place
             else:
+                for subworld in world.worlds.values():
+                    subworld.fill_error()
                 raise FillError('No more progress items left to place.')
 
         # find item to replace with progress item
