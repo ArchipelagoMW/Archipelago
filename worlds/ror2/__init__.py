@@ -1,6 +1,7 @@
 import string
 
-from .Items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, get_items_by_category
+from .Items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, get_items_by_category, \
+    filler_table
 from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
 from .Rules import set_rules
 from .RoR2Environments import *
@@ -39,10 +40,6 @@ class RiskOfRainWorld(World):
     web = RiskOfWeb()
     total_revivals: int
 
-    def __init__(self, multiworld: "MultiWorld", player: int):
-        super().__init__(multiworld, player)
-        self.junk_pool: Dict[str, int] = {}
-
     def generate_early(self) -> None:
         # figure out how many revivals should exist in the pool
         if self.multiworld.goal[self.player] == "classic":
@@ -65,6 +62,34 @@ class RiskOfRainWorld(World):
             self.total_revivals -= 1
         if self.multiworld.victory[self.player] == "voidling" and not self.multiworld.dlc_sotv[self.player]:
             self.multiworld.victory[self.player].value = "any"
+
+    def create_regions(self) -> None:
+
+        if self.multiworld.goal[self.player] == "classic":
+            # classic mode
+            menu = create_region(self.multiworld, self.player, "Menu")
+            self.multiworld.regions.append(menu)
+            # By using a victory region, we can define it as being connected to by several regions
+            #   which can then determine the availability of the victory.
+            victory_region = create_region(self.multiworld, self.player, "Victory")
+            self.multiworld.regions.append(victory_region)
+            petrichor = create_region(self.multiworld, self.player, "Petrichor V",
+                                      get_classic_item_pickups(self.multiworld.total_locations[self.player].value))
+            self.multiworld.regions.append(petrichor)
+
+            # classic mode can get to victory from the beginning of the game
+            to_victory = Entrance(self.player, "beating game", petrichor)
+            petrichor.exits.append(to_victory)
+            to_victory.connect(victory_region)
+
+            connection = Entrance(self.player, "Lobby", menu)
+            menu.exits.append(connection)
+            connection.connect(petrichor)
+        else:
+            # explore mode
+            create_regions(self)
+
+        create_events(self.multiworld, self.player)
 
     def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
@@ -128,25 +153,17 @@ class RiskOfRainWorld(World):
                 )
             )
         # Create junk items
-        self.junk_pool = self.create_junk_pool()
+        junk_pool = self.create_junk_pool()
         # Fill remaining items with randomly generated junk
         while len(itempool) < total_locations:
-            itempool.append(self.get_filler_item_name())
+            weights = [data for data in junk_pool.values()]
+            filler = self.multiworld.random.choices([filler for filler in junk_pool.keys()], weights,
+                                                    k=1)[0]
+            itempool.append(filler)
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))
         self.multiworld.itempool += itempool
-
-    def set_rules(self) -> None:
-        set_rules(self)
-
-    def get_filler_item_name(self) -> str:
-        if not self.junk_pool:
-            self.junk_pool = self.create_junk_pool()
-        weights = [data for data in self.junk_pool.values()]
-        filler = self.multiworld.random.choices([filler for filler in self.junk_pool.keys()], weights,
-                                                k=1)[0]
-        return filler
 
     def create_junk_pool(self) -> Dict:
         # if presets are enabled generate junk_pool from the selected preset
@@ -194,33 +211,18 @@ class RiskOfRainWorld(World):
 
         return junk_pool
 
-    def create_regions(self) -> None:
+    def create_item(self, name: str) -> Item:
+        data = item_table[name]
+        return RiskOfRainItem(name, data.item_type, data.code, self.player)
 
-        if self.multiworld.goal[self.player] == "classic":
-            # classic mode
-            menu = create_region(self.multiworld, self.player, "Menu")
-            self.multiworld.regions.append(menu)
-            # By using a victory region, we can define it as being connected to by several regions
-            #   which can then determine the availability of the victory.
-            victory_region = create_region(self.multiworld, self.player, "Victory")
-            self.multiworld.regions.append(victory_region)
-            petrichor = create_region(self.multiworld, self.player, "Petrichor V",
-                                      get_classic_item_pickups(self.multiworld.total_locations[self.player].value))
-            self.multiworld.regions.append(petrichor)
+    def set_rules(self) -> None:
+        set_rules(self)
 
-            # classic mode can get to victory from the beginning of the game
-            to_victory = Entrance(self.player, "beating game", petrichor)
-            petrichor.exits.append(to_victory)
-            to_victory.connect(victory_region)
-
-            connection = Entrance(self.player, "Lobby", menu)
-            menu.exits.append(connection)
-            connection.connect(petrichor)
-        else:
-            # explore mode
-            create_regions(self)
-
-        create_events(self.multiworld, self.player)
+    def get_filler_item_name(self) -> str:
+        weights = [data.weight for data in filler_table.values()]
+        filler = self.multiworld.random.choices([filler for filler in filler_table.keys()], weights,
+                                                k=1)[0]
+        return filler
 
     def fill_slot_data(self):
         return {
@@ -241,10 +243,6 @@ class RiskOfRainWorld(World):
             "deathLink": self.multiworld.death_link[self.player].value,
             "offset": offset
         }
-
-    def create_item(self, name: str) -> Item:
-        data = item_table[name]
-        return RiskOfRainItem(name, data.item_type, data.code, self.player)
 
 
 def create_events(world: MultiWorld, player: int) -> None:
