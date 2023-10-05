@@ -1,6 +1,6 @@
 import typing
 
-from typing import List, Set, Tuple, Dict
+from typing import List, Set, Iterable, Sequence, Dict, Callable
 from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
@@ -10,8 +10,7 @@ from .Locations import get_locations, LocationType
 from .Regions import create_regions
 from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
     Kerriganless, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available
-from .LogicMixin import SC2Logic
-from .PoolFilter import filter_missions, filter_items, get_item_upgrades, UPGRADABLE_ITEMS
+from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS
 from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission
 
 
@@ -136,6 +135,9 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     mutation_count = get_option_value(multiworld, player, "include_mutations")
     strain_count = get_option_value(multiworld, player, "include_strains")
 
+    assert isinstance(mutation_count, int)
+    assert isinstance(strain_count, int)
+
     # Exclude Primal Form item if option is not set
     if get_option_value(multiworld, player, "kerrigan_primal_status") != KerriganPrimalStatus.option_item:
         excluded_items.add("Primal Form (Kerrigan)")
@@ -207,7 +209,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
 
 def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
-    starter_items = []
+    starter_items: List[Item] = []
     non_local_items = multiworld.non_local_items[player].value
     if get_option_value(multiworld, player, "early_unit"):
         # The first world should also be the starting world
@@ -233,6 +235,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
         starter_items.append(assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit))
     
     starter_abilities = get_option_value(multiworld, player, 'start_primary_abilities')
+    assert isinstance(starter_abilities, int)
     if starter_abilities:
         ability_count = starter_abilities
         ability_tiers = [0, 1, 3]
@@ -257,7 +260,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
 
 def assign_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
-                        location: str, item_list: Tuple[str, ...]) -> Item:
+                        location: str, item_list: Sequence[str]) -> Item:
 
     item_name = multiworld.random.choice(item_list)
 
@@ -281,10 +284,12 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
 
     # YAML items
     yaml_locked_items = get_option_value(multiworld, player, 'locked_items')
+    assert not isinstance(yaml_locked_items, int)
 
     # Adjust generic upgrade availability based on options
     include_upgrades = get_option_value(multiworld, player, 'generic_upgrade_missions') == 0
     upgrade_items = get_option_value(multiworld, player, 'generic_upgrade_items')
+    assert isinstance(upgrade_items, int)
 
     # Include items from outside main campaigns
     item_sets = {'wol', 'hots'}
@@ -306,7 +311,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
             return data.quantity
 
     for name, data in get_item_table(multiworld, player).items():
-        for i in range(allowed_quantity(name, data)):
+        for _ in range(allowed_quantity(name, data)):
             item = create_item_with_correct_settings(player, name)
             if name in yaml_locked_items:
                 locked_items.append(item)
@@ -347,7 +352,7 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
     return item
 
 
-def pool_contains_parent(item: Item, pool: [Item]):
+def pool_contains_parent(item: Item, pool: Iterable[Item]):
     item_data = get_full_item_list().get(item.name)
     if item_data.parent_item is None:
         # The item has not associated parent, the item is valid
@@ -453,6 +458,10 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
 
     sizes = [70, 35, 14, 10, 7, 5, 2, 1]
     option = get_option_value(multiworld, player, "kerrigan_level_item_distribution")
+
+    assert isinstance(option, int)
+    assert isinstance(total_levels, int)
+
     if option in (KerriganLevelItemDistribution.option_vanilla, KerriganLevelItemDistribution.option_smooth):
         distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if option == KerriganLevelItemDistribution.option_vanilla:
@@ -463,7 +472,7 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
             add_kerrigan_level_items(tier + 1, distribution[tier])
     else:
         size = sizes[option - 2]
-        round_func = round
+        round_func: Callable[[float], int] = round
         if total_levels > 70:
             round_func = floor
         else:

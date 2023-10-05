@@ -7,12 +7,12 @@ from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_ta
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
-    type: typing.Optional[str]
-    number: typing.Optional[int]
+    type: str
+    number: int
     race: SC2Race
     classification: ItemClassification = ItemClassification.useful
     quantity: int = 1
-    parent_item: str = None
+    parent_item: typing.Optional[str] = None
     origin: typing.Set[str] = {"wol"}
 
 
@@ -414,7 +414,7 @@ item_name_group_names = {
     # HotS
     "Ability", "Strain", "Mutation"
 }
-item_name_groups = {}
+item_name_groups: typing.Dict[str, typing.List[str]] = {}
 for item, data in get_full_item_list().items():
     item_name_groups.setdefault(data.type, []).append(item)
     if data.type in item_name_group_names and '(' in item:
@@ -501,7 +501,7 @@ progressive_if_nco = {
     "Progressive Regenerative Bio-Steel"
 }
 
-kerrigan_actives = [
+kerrigan_actives: typing.List[typing.Set[str]] = [
     {'Kinetic Blast (Kerrigan Tier 1)', 'Leaping Strike (Kerrigan Tier 1)'},
     {'Crushing Grip (Kerrigan Tier 2)', 'Psionic Shift (Kerrigan Tier 2)'},
     set(),
@@ -511,7 +511,7 @@ kerrigan_actives = [
     {'Apocalypse (Kerrigan Tier 7)', 'Spawn Leviathan (Kerrigan Tier 7)', 'Drop-Pods (Kerrigan Tier 7)'},
 ]
 
-kerrigan_passives = [
+kerrigan_passives: typing.List[typing.Set[str]] = [
     {"Heroic Fortitude (Kerrigan Tier 1)"},
     {"Chain Reaction (Kerrigan Tier 2)"},
     {"Zergling Reconstitution (Kerrigan Tier 3)", "Improved Overlords (Kerrigan Tier 3)", "Automated Extractors (Kerrigan Tier 3)"},
