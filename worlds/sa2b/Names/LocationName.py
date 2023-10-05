@@ -1215,6 +1215,7 @@ chao_seal_tail     = "Chao - Seal Tail"
 
 chao_otter_arms = "Chao - Otter Arms"
 chao_otter_ears = "Chao - Otter Ears"
+chao_otter_face = "Chao - Otter Face"
 chao_otter_legs = "Chao - Otter Legs"
 chao_otter_tail = "Chao - Otter Tail"
 

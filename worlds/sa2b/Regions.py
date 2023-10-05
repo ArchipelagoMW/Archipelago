@@ -1459,6 +1459,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
             LocationName.animal_otter,
             LocationName.chao_otter_arms,
             LocationName.chao_otter_ears,
+            LocationName.chao_otter_face,
             LocationName.chao_otter_legs,
             LocationName.chao_otter_tail,
         ]

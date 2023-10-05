@@ -1389,6 +1389,7 @@ chao_animal_part_location_table = {
 
     LocationName.chao_otter_arms: 0xFF1230,
     LocationName.chao_otter_ears: 0xFF1231,
+    LocationName.chao_otter_face: 0xFF1233,
     LocationName.chao_otter_legs: 0xFF1234,
     LocationName.chao_otter_tail: 0xFF1236,
 
