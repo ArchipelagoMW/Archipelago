@@ -32,6 +32,10 @@ randomizer. Here are some of the more important ones:
 - When a Repel runs out, you will be prompted to use another
 - Many more minor improvements…
 
+## Where is my starting inventory?
+
+Except for badges, your starting inventory will be in the PC.
+
 ## What does another world's item look like in Pokémon Emerald?
 
 When you find an item that is not your own, you will instead receive an "ARCHIPELAGO ITEM" which will *not* be added to
@@ -53,19 +57,22 @@ you're playing a multiworld game, the client will sync your game with the server
 
 This is something we'd love to see, but it's unlikely. We don't want to force new mechanics on players who would prefer
 to play with the classic mechanics, but trying to switch between old and new mechanics based on an option would be a
-monumental task, and probably best solved some other way.
+monumental task, and is probably best solved some other way.
 
 ## Is this randomizer compatible with other mods?
 
 No, other mods cannot be applied. It would be impossible to generalize this implementation's changes in a way that is
-compatible with any other mod. Other mods could be added as their own games, but they would have to be implemented
-separately. Check out [Archipelago's Discord server](https://discord.gg/8Z65BR2) if you want to make a suggestion or
-contribute.
+compatible with any other mod or romhack. Romhacks could be added as their own games, but they would have to be
+implemented separately. Check out [Archipelago's Discord server](https://discord.gg/8Z65BR2) if you want to make a
+suggestion or contribute.
 
 ## Can I use tools like the Universal Pokémon Randomizer?
 
 No, those tools expect data to be in certain locations and in a certain format, but this randomizer has to shift it
 around. Using tools to try to modify the game would only corrupt the ROM.
+
+We realize this means breaking from established habits when it comes to randomizing Pokémon games, but this randomizer
+would be many times more complex to develop if it were constrained by something like UPR.
 
 The one exception might be PKHeX. You may be able to extract pokémon from your save using PKHeX, but this isn't a
 guarantee, and we make no effort to keep our saves compatible with PKHeX.

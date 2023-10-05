@@ -1,6 +1,6 @@
 # Pokemon Emerald
 
-Version 1.1.0
+Version 1.2.0
 
 This README contains general info useful for understanding the world. Pretty much all the long lists of locations,
 regions, and items are stored in `data/` and (mostly) loaded in by `data.py`. Access rules are in `rules.py`. Check

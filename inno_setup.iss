@@ -51,50 +51,50 @@ Name: "playing"; Description: "Installation for playing purposes"
 Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 [Components]
-Name: "core";             Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
-Name: "generator";        Description: "Generator"; Types: full hosting
-Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/l2ac";   Description: "Lufia II Ancient Cave ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 2621440; Flags: disablenouninstallwarning
-Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
-Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
-Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
-Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full hosting
-Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
-Name: "generator/pkmn_e"; Description: "Pokemon Emerald ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 16777216; Flags: disablenouninstallwarning
-Name: "generator/mmbn3";  Description: "MegaMan Battle Network 3"; Types: full hosting; ExtraDiskSpaceRequired: 8388608; Flags: disablenouninstallwarning
-Name: "generator/ladx";   Description: "Link's Awakening DX ROM Setup"; Types: full hosting
-Name: "generator/tloz";   Description: "The Legend of Zelda ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 135168; Flags: disablenouninstallwarning
-Name: "server";           Description: "Server"; Types: full hosting
-Name: "client";           Description: "Clients"; Types: full playing
-Name: "client/sni";       Description: "SNI Client"; Types: full playing
-Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/sni/smw";   Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/sni/l2ac";  Description: "SNI Client - Lufia II Ancient Cave Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/bizhawk";   Description: "BizHawk Client"; Types: full playing
-Name: "client/bizhawk/pkmn_e"; Description: "BizHawk Client - Pokemon Emerald Client Setup"; Types: full playing; ExtraDiskSpaceRequired: 16777216; Flags: disablenouninstallwarning
-Name: "client/factorio";  Description: "Factorio"; Types: full playing
-Name: "client/kh2";       Description: "Kingdom Hearts 2"; Types: full playing
-Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
-Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
-Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
-Name: "client/pkmn";      Description: "Pokemon Client"
-Name: "client/pkmn/red";  Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
-Name: "client/pkmn/blue"; Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
-Name: "client/mmbn3";     Description: "MegaMan Battle Network 3 Client"; Types: full playing;
-Name: "client/ladx";      Description: "Link's Awakening Client"; Types: full playing; ExtraDiskSpaceRequired: 1048576
-Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
-Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
-Name: "client/wargroove"; Description: "Wargroove"; Types: full playing
-Name: "client/zl";        Description: "Zillion"; Types: full playing
-Name: "client/tloz";      Description: "The Legend of Zelda"; Types: full playing
-Name: "client/advn";      Description: "Adventure"; Types: full playing
-Name: "client/ut";        Description: "Undertale"; Types: full playing
-Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
+Name: "core";                  Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
+Name: "generator";             Description: "Generator"; Types: full hosting
+Name: "generator/sm";          Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/dkc3";        Description: "Donkey Kong Country 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/smw";         Description: "Super Mario World ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/soe";         Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/l2ac";        Description: "Lufia II Ancient Cave ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 2621440; Flags: disablenouninstallwarning
+Name: "generator/lttp";        Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
+Name: "generator/oot";         Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
+Name: "generator/zl";          Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
+Name: "generator/pkmn_r";      Description: "Pokemon Red ROM Setup"; Types: full hosting
+Name: "generator/pkmn_b";      Description: "Pokemon Blue ROM Setup"; Types: full hosting
+Name: "generator/pkmn_e";      Description: "Pokemon Emerald ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 16777216; Flags: disablenouninstallwarning
+Name: "generator/mmbn3";       Description: "MegaMan Battle Network 3"; Types: full hosting; ExtraDiskSpaceRequired: 8388608; Flags: disablenouninstallwarning
+Name: "generator/ladx";        Description: "Link's Awakening DX ROM Setup"; Types: full hosting
+Name: "generator/tloz";        Description: "The Legend of Zelda ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 135168; Flags: disablenouninstallwarning
+Name: "server";                Description: "Server"; Types: full hosting
+Name: "client";                Description: "Clients"; Types: full playing
+Name: "client/sni";            Description: "SNI Client"; Types: full playing
+Name: "client/sni/lttp";       Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/sm";         Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/dkc3";       Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/smw";        Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/l2ac";       Description: "SNI Client - Lufia II Ancient Cave Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/bizhawk";        Description: "BizHawk Client"; Types: full playing
+Name: "client/bizhawk/pkmn_e"; Description: "BizHawk Client - Pokemon Emerald Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/factorio";       Description: "Factorio"; Types: full playing
+Name: "client/kh2";            Description: "Kingdom Hearts 2"; Types: full playing
+Name: "client/minecraft";      Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
+Name: "client/oot";            Description: "Ocarina of Time"; Types: full playing
+Name: "client/ff1";            Description: "Final Fantasy 1"; Types: full playing
+Name: "client/pkmn";           Description: "Pokemon Client"
+Name: "client/pkmn/red";       Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
+Name: "client/pkmn/blue";      Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
+Name: "client/mmbn3";          Description: "MegaMan Battle Network 3 Client"; Types: full playing;
+Name: "client/ladx";           Description: "Link's Awakening Client"; Types: full playing; ExtraDiskSpaceRequired: 1048576
+Name: "client/cf";             Description: "ChecksFinder"; Types: full playing
+Name: "client/sc2";            Description: "Starcraft 2"; Types: full playing
+Name: "client/wargroove";      Description: "Wargroove"; Types: full playing
+Name: "client/zl";             Description: "Zillion"; Types: full playing
+Name: "client/tloz";           Description: "The Legend of Zelda"; Types: full playing
+Name: "client/advn";           Description: "Adventure"; Types: full playing
+Name: "client/ut";             Description: "Undertale"; Types: full playing
+Name: "client/text";           Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
@@ -110,7 +110,7 @@ Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda
 Source: "{code:GetZlROMPath}"; DestDir: "{app}"; DestName: "Zillion (UE) [!].sms"; Flags: external; Components: client/zl or generator/zl
 Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S][!].gb"; Flags: external; Components: client/pkmn/red or generator/pkmn_r
 Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) [S][!].gb"; Flags: external; Components: client/pkmn/blue or generator/pkmn_b
-Source: "{code:GetPokemonEmeraldROMPath}"; DestDir: "{app}"; DestName: "Pokemon - Emerald Version (USA, Europe).gba"; Flags: external; Components: client/pkmn_e or generator/pkmn_e
+Source: "{code:GetPokemonEmeraldROMPath}"; DestDir: "{app}"; DestName: "Pokemon - Emerald Version (USA, Europe).gba"; Flags: external; Components: client/bizhawk/pkmn_e or generator/pkmn_e
 Source: "{code:GetBN3ROMPath}"; DestDir: "{app}"; DestName: "Mega Man Battle Network 3 - Blue Version (USA).gba"; Flags: external; Components: client/mmbn3
 Source: "{code:GetLADXROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"; Flags: external; Components: client/ladx or generator/ladx
 Source: "{code:GetTLoZROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The (U) (PRG0) [!].nes"; Flags: external; Components: client/tloz or generator/tloz

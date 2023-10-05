@@ -13,6 +13,7 @@ from Options import Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
 
+from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
 from .data import (PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
                    data as emerald_data)
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
@@ -29,10 +30,6 @@ from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item
                     add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import validate_regions
 from .util import int_to_bool_array, bool_array_to_int, get_easter_egg
-
-
-# Import required to register with BizHawkClient
-from .client import PokemonEmeraldClient
 
 
 class PokemonEmeraldWebWorld(WebWorld):
@@ -81,7 +78,7 @@ class PokemonEmeraldWorld(World):
     item_name_groups = ITEM_GROUPS
 
     data_version = 1
-    required_client_version = (0, 4, 2)
+    required_client_version = (0, 4, 4)
 
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]

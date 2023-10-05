@@ -1,29 +1,7 @@
 import asyncio
 import copy
-import logging
-import sys
 import time
 from typing import TYPE_CHECKING, Optional, Dict, Set
-
-
-# TODO: REMOVE ASAP
-# This imports the bizhawk apworld if it's not already imported. This code block should be removed for a PR.
-if "worlds._bizhawk" not in sys.modules:
-    import importlib
-    import os
-    import zipimport
-
-    bh_apworld_path = os.path.join(os.path.dirname(sys.modules["worlds"].__file__), "_bizhawk.apworld")
-    if os.path.isfile(bh_apworld_path):
-        importer = zipimport.zipimporter(bh_apworld_path)
-        spec = importer.find_spec(os.path.basename(bh_apworld_path).rsplit(".", 1)[0])
-        mod = importlib.util.module_from_spec(spec)
-        mod.__package__ = f"worlds.{mod.__package__}"
-        mod.__name__ = f"worlds.{mod.__name__}"
-        sys.modules[mod.__name__] = mod
-        importer.exec_module(mod)
-    elif not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
-        logging.error("Did not find _bizhawk.apworld required to play Pokemon Emerald.")
 
 
 from NetUtils import ClientStatus
@@ -42,13 +20,13 @@ if TYPE_CHECKING:
 else:
     BizHawkClientContext = object
 
+if TYPE_CHECKING:
+    from worlds._bizhawk.context import BizHawkClientContext
+else:
+    BizHawkClientContext = object
 
-# Add .apemerald suffix to bizhawk client
-for component in components:
-    if component.script_name == "BizHawkClient":
-        component.file_identifier = SuffixIdentifier(*(*component.file_identifier.suffixes, ".apemerald"))
-        break
 
+EXPECTED_ROM_NAME = "pokemon emerald version / AP 2"
 
 IS_CHAMPION_FLAG = data.constants["FLAG_IS_CHAMPION"]
 DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
@@ -141,7 +119,7 @@ class PokemonEmeraldClient(BizHawkClient):
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
     goal_flag: Optional[int]
-    rom_slot_name: Optional[str]
+
     wonder_trade_update_event: asyncio.Event
     latest_wonder_trades: dict
     latest_wonder_trade_reply: dict
@@ -155,7 +133,6 @@ class PokemonEmeraldClient(BizHawkClient):
         self.local_set_events = {}
         self.local_found_key_items = {}
         self.goal_flag = None
-        self.rom_slot_name = None
         self.wonder_trade_update_event = asyncio.Event()
         self.latest_wonder_trades = {}
         self.wonder_trade_task = None
@@ -166,18 +143,19 @@ class PokemonEmeraldClient(BizHawkClient):
         from CommonClient import logger
 
         try:
-            # Check if ROM is some version of Pokemon Emerald
-            game_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(0x108, 23, "ROM")]))[0]).decode("ascii")
-            if game_name != "pokemon emerald version":
+            # Check ROM name/patch version
+            rom_name_bytes = ((await bizhawk.read(ctx.bizhawk_ctx, [(0x108, 32, "ROM")]))[0])
+            rom_name = bytes([byte for byte in rom_name_bytes if byte != 0]).decode("ascii")
+            if not rom_name.startswith("pokemon emerald version"):
                 return False
-            
-            # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
-            # validating a ROM where there's no slot name to read.
-            try:
-                slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["gArchipelagoInfo"], 64, "ROM")]))[0]
-                self.rom_slot_name = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
-            except UnicodeDecodeError:
-                logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
+            if rom_name == "pokemon emerald version":
+                logger.info("ERROR: You appear to be running an unpatched version of Pokemon Emerald. "
+                            "You need to generate a patch file and use it to create a patched ROM.")
+                return False
+            if rom_name != EXPECTED_ROM_NAME:
+                logger.info("ERROR: The patch file used to create this ROM is not compatible with "
+                            "this client. Double check your client version against the version being "
+                            "used by the generator.")
                 return False
         except UnicodeDecodeError:
             return False
@@ -187,10 +165,13 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = 0b001
         ctx.want_slot_data = True
+        ctx.watcher_timeout = 0.125
+
         return True
 
     async def set_auth(self, ctx: BizHawkClientContext) -> None:
-        ctx.auth = self.rom_slot_name
+        slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["gArchipelagoInfo"], 64, "ROM")]))[0]
+        ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
         if ctx.slot_data is not None:
@@ -228,11 +209,10 @@ class PokemonEmeraldClient(BizHawkClient):
 
             save_block_address = int.from_bytes(read_result[0], "little")
 
-            # Read from save block and received item struct
+            # Handle giving the player items
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
                 [
-                    (save_block_address + 0x1450, 0x12C, "System Bus"),                    # Flags
                     (save_block_address + 0x3778, 2, "System Bus"),                        # Number of received items
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 4, 1, "System Bus")  # Received item struct full?
                 ],
@@ -241,9 +221,8 @@ class PokemonEmeraldClient(BizHawkClient):
             if read_result is None:  # Not in overworld, or save block moved
                 return
 
-            flag_bytes = read_result[0]
-            num_received_items = int.from_bytes(read_result[1], "little")
-            received_item_is_empty = read_result[2][0] == 0
+            num_received_items = int.from_bytes(read_result[0], "little")
+            received_item_is_empty = read_result[1][0] == 0
 
             # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
             # fill it with the next item
@@ -255,6 +234,25 @@ class PokemonEmeraldClient(BizHawkClient):
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 4, [1], "System Bus"),
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 5, [next_item.flags & 1], "System Bus"),
                 ])
+
+            # Read flags in 2 chunks
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx,
+                [(save_block_address + 0x1450, 0x96, "System Bus")],  # Flags
+                [overworld_guard, save_block_address_guard]
+            )
+            if read_result is None:  # Not in overworld, or save block moved
+                return
+
+            flag_bytes = read_result[0]
+
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx,
+                [(save_block_address + 0x14E6, 0x96, "System Bus")],  # Flags continued
+                [overworld_guard, save_block_address_guard]
+            )
+            if read_result is not None:
+                flag_bytes += read_result[0]
 
             # Wonder Trades (only when connected to the server)
             if ctx.server is not None:

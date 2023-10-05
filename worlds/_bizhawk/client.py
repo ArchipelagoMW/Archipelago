@@ -6,69 +6,45 @@ A module containing the BizHawkClient base class and metaclass
 from __future__ import annotations
 
 import abc
-import hashlib
-import logging
-import os
-import pkgutil
-from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, Optional, Tuple, Union
 
-from Utils import user_path
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 if TYPE_CHECKING:
     from .context import BizHawkClientContext
 else:
     BizHawkClientContext = object
-    
-    
-try:
-    for script_name in ("connector_bizhawk_generic.lua", "base64.lua"):
-        script_path = os.path.join(user_path("data", "lua"), script_name)
-
-        if not os.path.exists(script_path):
-            with open(script_path, "wb") as script_file:
-                script_file.write(pkgutil.get_data(__name__, "data/" + script_name))
-        else:
-            with open(script_path, "rb+") as script_file:
-                expected_script = pkgutil.get_data(__name__, "data/" + script_name)
-
-                expected_hash = hashlib.md5(expected_script).digest()
-                existing_hash = hashlib.md5(script_file.read()).digest()
-
-                if existing_hash != expected_hash:
-                    script_file.seek(0)
-                    script_file.truncate()
-                    script_file.write(expected_script)
-except IOError:
-    logging.warning("Unable to copy generic bizhawk connector scripts to /data/lua in your Archipelago install.")
 
 
 class AutoBizHawkClientRegister(abc.ABCMeta):
-    game_handlers: ClassVar[Dict[str, Dict[str, BizHawkClient]]] = {}
+    game_handlers: ClassVar[Dict[Tuple[str, ...], Dict[str, BizHawkClient]]] = {}
 
     def __new__(cls, name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> AutoBizHawkClientRegister:
         new_class = super().__new__(cls, name, bases, namespace)
+
         if "system" in namespace:
-            if namespace["system"] not in AutoBizHawkClientRegister.game_handlers:
-                AutoBizHawkClientRegister.game_handlers[namespace["system"]] = {}
+            systems = (namespace["system"],) if type(namespace["system"]) is str else tuple(sorted(namespace["system"]))
+            if systems not in AutoBizHawkClientRegister.game_handlers:
+                AutoBizHawkClientRegister.game_handlers[systems] = {}
 
             if "game" in namespace:
-                AutoBizHawkClientRegister.game_handlers[namespace["system"]][namespace["game"]] = new_class()
+                AutoBizHawkClientRegister.game_handlers[systems][namespace["game"]] = new_class()
 
         return new_class
 
     @staticmethod
     async def get_handler(ctx: BizHawkClientContext, system: str) -> Optional[BizHawkClient]:
-        if system in AutoBizHawkClientRegister.game_handlers:
-            for handler in AutoBizHawkClientRegister.game_handlers[system].values():
-                if await handler.validate_rom(ctx):
-                    return handler
+        for systems, handlers in AutoBizHawkClientRegister.game_handlers.items():
+            if system in systems:
+                for handler in handlers.values():
+                    if await handler.validate_rom(ctx):
+                        return handler
 
         return None
 
 
 class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
-    system: ClassVar[str]
+    system: ClassVar[Union[str, Tuple[str, ...]]]
     """The system that the game this client is for runs on"""
 
     game: ClassVar[str]

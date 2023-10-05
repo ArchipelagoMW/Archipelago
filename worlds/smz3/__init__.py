@@ -221,7 +221,9 @@ class SMZ3World(World):
         if (self.smz3World.Config.Keysanity):
             progressionItems = self.progression + self.dungeon + self.keyCardsItems + self.SmMapsItems
         else:
-            progressionItems = self.progression 
+            progressionItems = self.progression
+            # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
+            self.multiworld.non_local_items[self.player].value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
             for item in self.keyCardsItems:
                 self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
@@ -548,11 +550,8 @@ class SMZ3World(World):
 
     def JunkFillGT(self, factor):
         poolLength = len(self.multiworld.itempool)
-        playerGroups = self.multiworld.get_player_groups(self.player)
-        playerGroups.add(self.player)
         junkPoolIdx = [i for i in range(0, poolLength)
-                    if self.multiworld.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
-                    self.multiworld.itempool[i].player in playerGroups]
+                    if self.multiworld.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap)]
         toRemove = []
         for loc in self.locations.values():
             # commenting this for now since doing a partial GT pre fill would allow for non SMZ3 progression in GT
@@ -563,6 +562,7 @@ class SMZ3World(World):
                 poolLength = len(junkPoolIdx)
                 # start looking at a random starting index and loop at start if no match found
                 start = self.multiworld.random.randint(0, poolLength)
+                itemFromPool = None
                 for off in range(0, poolLength):
                     i = (start + off) % poolLength
                     candidate = self.multiworld.itempool[junkPoolIdx[i]]
@@ -570,6 +570,7 @@ class SMZ3World(World):
                         itemFromPool = candidate
                         toRemove.append(junkPoolIdx[i])
                         break
+                assert itemFromPool is not None, "Can't find anymore item(s) to pre fill GT"
                 self.multiworld.push_item(loc, itemFromPool, False)
                 loc.event = False
         toRemove.sort(reverse = True)
