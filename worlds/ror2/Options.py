@@ -348,11 +348,11 @@ class ItemWeights(Choice):
     - New is a test for a potential adjustment to the default weights.
     - Uncommon puts a large number of uncommon items in the pool.
     - Legendary puts a large number of legendary items in the pool.
-    - Lunartic makes everything a lunar item.
     - Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.
     - No Scraps removes all scrap items from the item pool.
     - Even generates the item pool with every item having an even weight.
     - Scraps Only will be only scrap items in the item pool.
+    - Lunartic makes everything a lunar item.
     - Void makes everything a void item."""
     display_name = "Item Weights"
     option_default = 0
@@ -363,7 +363,8 @@ class ItemWeights(Choice):
     option_no_scraps = 5
     option_even = 6
     option_scraps_only = 7
-    option_void = 8
+    option_lunartic = 8
+    option_void = 9
 
 
 # define a dictionary for the weights of the generated item pool.

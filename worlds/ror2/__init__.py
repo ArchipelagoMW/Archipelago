@@ -186,7 +186,7 @@ class RiskOfRainWorld(World):
             junk_pool.pop("Combat Trap")
             junk_pool.pop("Teleport Trap")
         # remove lunar items from the pool
-        if not self.multiworld.enable_lunar[self.player]:
+        if not (self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic):
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
         if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):

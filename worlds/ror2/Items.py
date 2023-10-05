@@ -259,7 +259,26 @@ scraps_only: Dict[str, int] = {
     "Combat Trap":          10,
     "Teleport Trap":        10
 }
-
+lunartic_only: Dict[str, int] = {
+    "Item Scrap, Green": 0,
+    "Item Scrap, Red": 0,
+    "Item Scrap, Yellow": 0,
+    "Item Scrap, White": 0,
+    "Common Item": 0,
+    "Uncommon Item": 0,
+    "Legendary Item": 0,
+    "Boss Item": 0,
+    "Void Item": 0,
+    "Equipment": 0,
+    "Money": 20,
+    "Lunar Coin": 10,
+    "1000 Exp": 10,
+    "Lunar Item": 100,
+    "Mountain Trap": 5,
+    "Time Warp Trap": 10,
+    "Combat Trap": 10,
+    "Teleport Trap": 10
+}
 void_weights: Dict[str, int] = {
     "Item Scrap, Green":    0,
     "Item Scrap, Red":      0,
@@ -290,6 +309,7 @@ item_pool_weights: Dict[int, Dict[str, int]] = {
     ItemWeights.option_no_scraps:   no_scraps_weights,
     ItemWeights.option_even:        even_weights,
     ItemWeights.option_scraps_only: scraps_only,
+    ItemWeights.option_lunartic:    lunartic_only,
     ItemWeights.option_void:        void_weights,
 }
 
