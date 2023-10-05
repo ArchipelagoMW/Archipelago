@@ -439,15 +439,15 @@ class BlackMarketUnlockCosts(Choice):
     default = 1
 
 
-class BlackMarketRingCosts(Choice):
+class BlackMarketPriceMultiplier(Range):
     """
     Determines how many rings the Black Market items cost
+    The base ring costs of items in the Black Market range from 50-100,
+    and are then multiplied by this value
     """
-    display_name = "Black Market Ring Costs"
-    option_free = 0
-    option_low = 1
-    option_medium = 2
-    option_high = 3
+    display_name = "Black Market Price Multiplier"
+    range_start = 0
+    range_end = 40
     default = 1
 
 
@@ -810,7 +810,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "chao_kindergarten": ChaoKindergarten,
     "black_market_slots": BlackMarketSlots,
     "black_market_unlock_costs": BlackMarketUnlockCosts,
-    "black_market_ring_costs": BlackMarketRingCosts,
+    "black_market_price_multiplier": BlackMarketPriceMultiplier,
     "shuffle_starting_chao_eggs": ShuffleStartingChaoEggs,
     "chao_entrance_randomization": ChaoEntranceRandomization,
 

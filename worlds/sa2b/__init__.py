@@ -629,7 +629,7 @@ class SA2BWorld(World):
         if self.multiworld.black_market_slots[self.player].value == 0:
             return {}
 
-        ring_costs = [[0, 0, 0], [50, 75, 100], [500, 750, 1000], [5000, 7500, 10000]]
+        ring_costs = [50, 75, 100]
 
         market_data = {}
         item_names = []
@@ -660,7 +660,7 @@ class SA2BWorld(World):
             for chr_idx in range(len(player_names[item_idx][:16])):
                 market_data[(item_idx * 46) + 26 + chr_idx] = ord(player_names[item_idx][chr_idx])
 
-            market_data[(item_idx * 46) + 42] = ring_costs[self.multiworld.black_market_ring_costs[self.player].value][progression_flags[item_idx]]
+            market_data[(item_idx * 46) + 42] = ring_costs[progression_flags[item_idx]] * self.multiworld.black_market_price_multiplier[self.player].value
 
         return market_data
 
