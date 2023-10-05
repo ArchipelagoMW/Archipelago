@@ -11,7 +11,7 @@ If you wish to contribute by adding a new game, please take a look at the [logic
 If you wish to contribute to the website, please take a look at these [following tests](/test/webhost).
 
 * **Do not introduce any unit test failures/regressions.**
-To note, Archipelago supports multiple versions of Python. You may need to download other Python versions to fully test
+To note, Archipelago supports multiple versions of Python. You may need to download older Python versions to fully test
 your changes. Currently, the oldest supported version is [Python 3.8](https://www.python.org/downloads/release/python-380/). 
 It is recommended that automated github actions are turned on in your fork to have github run all the unit tests after pushing. 
 You can turn them on here:
