@@ -149,7 +149,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if color:
             if color.lower() not in match_colors:
                 self.output(color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
-                return False
             if color.lower() == "random":
                 color = random.choice(player_colors[:16])
             self.ctx.player_color = match_colors.index(color.lower())
@@ -226,8 +225,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             try:
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
                 sc2_logger.info(f"Download complete. Package installed.")
-                with open(get_metadata_file(), "w") as f:
-                    f.write(metadata)
+                if metadata is not None:
+                    with open(get_metadata_file(), "w") as f:
+                        f.write(metadata)
             finally:
                 os.remove(tempzip)
         else:
@@ -269,7 +269,7 @@ class SC2Context(CommonContext):
     checks_per_level = 1
     mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
     final_mission: int = 29
-    announcements = queue.Queue()
+    announcements: queue.Queue = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
     generic_upgrade_missions = 0
@@ -834,10 +834,12 @@ def calc_available_missions(ctx: SC2Context, unlocks: typing.Optional[dict] = No
     return available_missions
 
 
-def parse_unlock(unlock: typing.Union[typing.Dict[str, typing.Any], int]) -> MissionConnection:
+def parse_unlock(unlock: typing.Union[typing.Dict[typing.Literal["connect_to", "campaign"], int], MissionConnection, int]) -> MissionConnection:
     if isinstance(unlock, int):
         # Legacy
         return MissionConnection(unlock)
+    elif isinstance(unlock, MissionConnection):
+        return unlock
     else:
         # Multi-campaign
         return MissionConnection(unlock["connect_to"], lookup_id_to_campaign[unlock["campaign"]])

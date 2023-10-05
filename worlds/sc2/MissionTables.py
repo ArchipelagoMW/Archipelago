@@ -1,4 +1,4 @@
-from typing import NamedTuple, Dict, List, Set
+from typing import NamedTuple, Dict, List, Set, Union, Literal, Iterable
 from enum import IntEnum, Enum
 
 
@@ -138,7 +138,7 @@ class MissionConnection:
 
 class MissionInfo(NamedTuple):
     mission: SC2Mission
-    required_world: List[MissionConnection]
+    required_world: List[Union[MissionConnection, Dict[Literal["campaign", "connect_to"], int]]]
     category: str
     number: int = 0  # number of worlds need beaten
     completion_critical: bool = False  # missions needed to beat game
@@ -424,21 +424,19 @@ for mission in SC2Mission:
     campaign_mission_table[mission.campaign].add(mission)
 
 
-def get_campaign_difficulty(campaign: SC2Campaign, excluded_missions: Set[SC2Mission] = None) -> MissionPools:
+def get_campaign_difficulty(campaign: SC2Campaign, excluded_missions: Iterable[SC2Mission] = ()) -> MissionPools:
     """
 
     :param campaign:
     :param excluded_missions:
     :return: Campaign's the most difficult non-excluded mission
     """
-    if excluded_missions is None:
-        excluded_missions = []
     excluded_mission_set = set(excluded_missions)
     included_missions = campaign_mission_table[campaign].difference(excluded_mission_set)
     return max([mission.pool for mission in included_missions])
 
 
-def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: Set[SC2Mission] | frozenset[SC2Mission] = None) -> SC2CampaignGoalPriority:
+def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: Iterable[SC2Mission] = ()) -> SC2CampaignGoalPriority:
     """
     Gets a modified campaign goal priority.
     If all the campaign's goal missions are excluded, it's ineligible to have the goal
