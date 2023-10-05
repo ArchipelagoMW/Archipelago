@@ -46,7 +46,7 @@ class SC2WoLWorld(World):
     mission_req_table = {}
     final_mission_id: int
     victory_item: str
-    required_client_version = 0, 3, 6
+    required_client_version = 0, 4, 3
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super(SC2WoLWorld, self).__init__(multiworld, player)
