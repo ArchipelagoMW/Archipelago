@@ -361,15 +361,15 @@ class StartPrimaryAbilities(Range):
 
 
 class KerriganPrimalStatus(Choice):
-    """Determines when Kerrigan appears in her Primal Zerg form.  
+    """Determines when Kerrigan appears in her Primal Zerg form.
     This halves her maximum energy, but greatly increases her energy regeneration.
-    
-    Vanilla:  Kerrigan is human in missions that canonically appear before The Crucible, 
+
+    Vanilla:  Kerrigan is human in missions that canonically appear before The Crucible,
     and zerg thereafter.
     Always Zerg:  Kerrigan is always zerg.
     Always Human:  Kerrigan is always human.
     Level 35:  Kerrigan is human until reaching level 35, and zerg thereafter.
-    Half Completion:  Kerrigan is human until half of the missions in the seed are completed, 
+    Half Completion:  Kerrigan is human until half of the missions in the seed are completed,
     and zerg thereafter.
     Item:  Kerrigan's Primal Form is an item. She is human until it is found, and zerg thereafter."""
     display_name = "Kerrigan Primal Status"
@@ -416,7 +416,6 @@ class MissionProgressLocations(LocationInclusion):
     Nothing: No rewards for this type of tasks, effectively disabling such locations
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
-    Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Mission Progress Locations"
@@ -433,7 +432,6 @@ class BonusLocations(LocationInclusion):
     Nothing: No rewards for this type of tasks, effectively disabling such locations
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
-    Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Bonus Locations"
@@ -451,7 +449,6 @@ class ChallengeLocations(LocationInclusion):
     Nothing: No rewards for this type of tasks, effectively disabling such locations
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
-    Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Challenge Locations"
@@ -468,7 +465,6 @@ class OptionalBossLocations(LocationInclusion):
     Nothing: No rewards for this type of tasks, effectively disabling such locations
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
-    Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Challenge Locations"
