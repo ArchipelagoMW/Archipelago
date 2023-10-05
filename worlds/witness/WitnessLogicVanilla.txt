@@ -407,7 +407,7 @@ Door - 0x09E3D (Shadows Shortcut) - 0x09E49
 
 Shipwreck (Shipwreck) - Keep 3rd Pressure Plate - True - Shipwreck Vault - 0x17BB4:
 158654 - 0x00AFB (Vault Panel) - True - Symmetry & Sound Dots & Colored Dots
-Door - 0x17BB4 (Vault Door) - 0x0CC7B
+Door - 0x17BB4 (Vault Door) - 0x00AFB
 158605 - 0x17D28 (Discard) - True - Triangles
 159220 - 0x03B22 (Circle Far EP) - True - True
 159221 - 0x03B23 (Circle Left EP) - True - True
