@@ -50,7 +50,7 @@ def generate_random_hints(multiworld: MultiWorld, this_player: int):
 
     # Exclude Life Stock from the hints as some of them are considered as progression for Fahl, but isn't really
     # exciting when hinted
-    excluded_items = ["Life Stock"]
+    excluded_items = ["Life Stock", "EkeEke"]
 
     progression_items = [item for item in multiworld.itempool if item.advancement and
                          item.name not in excluded_items]
