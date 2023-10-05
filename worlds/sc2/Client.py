@@ -149,6 +149,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if color:
             if color.lower() not in match_colors:
                 self.output(color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
+                return
             if color.lower() == "random":
                 color = random.choice(player_colors[:16])
             self.ctx.player_color = match_colors.index(color.lower())

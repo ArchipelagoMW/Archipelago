@@ -25,7 +25,7 @@ class HoverableButton(HoverBehavior, Button):
 
 class MissionButton(HoverableButton):
     tooltip_text = StringProperty("Test")
-    ctx: SC2Context
+    # ctx: SC2Context
 
     def __init__(self, *args, **kwargs):
         super(HoverableButton, self).__init__(*args, **kwargs)
@@ -49,7 +49,7 @@ class MissionButton(HoverableButton):
         self.ctx.ui.clear_tooltip()
 
     @property
-    def ctx(self) -> CommonContext:
+    def ctx(self) -> SC2Context:
         return App.get_running_app().ctx
 
 class CampaignScroll(ScrollView):
@@ -74,9 +74,9 @@ class SC2Manager(GameManager):
     ]
     base_title = "Archipelago Starcraft 2 Client"
 
-    campaign_panel = None
-    last_checked_locations = {}
-    mission_id_to_button = {}
+    campaign_panel: Optional[CampaignLayout] = None
+    last_checked_locations: Set[int] = set()
+    mission_id_to_button: Dict[int, MissionButton] = {}
     launching: Union[bool, int] = False  # if int -> mission ID
     refresh_from_launching = True
     first_check = True
@@ -105,9 +105,10 @@ class SC2Manager(GameManager):
 
         return container
 
-    def build_mission_table(self, dt):
+    def build_mission_table(self, dt) -> None:
         if (not self.launching and (not self.last_checked_locations == self.ctx.checked_locations or
                                     not self.refresh_from_launching)) or self.first_check:
+            assert self.campaign_panel is not None
             self.refresh_from_launching = True
 
             self.campaign_panel.clear_widgets()
@@ -122,15 +123,15 @@ class SC2Manager(GameManager):
                 multi_campaign_layout_height = 0
 
                 for campaign, missions in self.ctx.mission_req_table.items():
-                    categories = {}
+                    categories: Dict[str, List[str]] = {}
 
                     # separate missions into categories
                     for mission_index in missions:
-                        mission = self.ctx.mission_req_table[campaign][mission_index]
-                        if mission.category not in categories:
-                            categories[mission.category] = []
+                        mission_info = self.ctx.mission_req_table[campaign][mission_index]
+                        if mission_info.category not in categories:
+                            categories[mission_info.category] = []
 
-                        categories[mission.category].append(mission_index)
+                        categories[mission_info.category].append(mission_index)
 
                     max_mission_count = max(len(categories[category]) for category in categories)
                     campaign_layout_height = (max_mission_count + 2) * 50
@@ -205,6 +206,7 @@ class SC2Manager(GameManager):
                 self.campaign_panel.height = multi_campaign_layout_height
 
         elif self.launching:
+            assert self.campaign_panel is not None
             self.refresh_from_launching = False
 
             self.campaign_panel.clear_widgets()
@@ -213,7 +215,7 @@ class SC2Manager(GameManager):
             if self.ctx.ui:
                 self.ctx.ui.clear_tooltip()
 
-    def mission_callback(self, button):
+    def mission_callback(self, button: MissionButton) -> None:
         if not self.launching:
             mission_id: int = next(k for k, v in self.mission_id_to_button.items() if v == button)
             if self.ctx.play_mission(mission_id):
