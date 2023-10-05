@@ -731,7 +731,7 @@ Swamp Rotating Bridge (Swamp) - Swamp Between Bridges Far - 0x181F5 - Swamp Near
 159331 - 0x016B2 (Rotating Bridge CCW EP) - 0x181F5 - True
 159334 - 0x036CE (Rotating Bridge CW EP) - 0x181F5 - True
 
-Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482 - Swamp Long Bridge - 0xFFD00 & 0xFFD02:
+Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482 - Swamp Long Bridge - 0xFFD00 & 0xFFD02 - Boat - 0x09DB8:
 158903 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
 158328 - 0x09DB8 (Boat Spawn) - True - Boat
 158329 - 0x003B2 (Beyond Rotating Bridge 1) - 0x0000A - Shapers & Dots & Full Dots
@@ -771,7 +771,7 @@ Laser - 0x00BF6 (Laser) - 0x03615
 158342 - 0x17C02 (Laser Shortcut Right Panel) - 0x17C05 - Shapers & Negative Shapers & Stars & Stars + Same Colored Symbol
 Door - 0x2D880 (Laser Shortcut) - 0x17C02
 
-Treehouse Entry Area (Treehouse) - Treehouse Between Doors - 0x0C309:
+Treehouse Entry Area (Treehouse) - Treehouse Between Doors - 0x0C309 - Boat - 0x17C95:
 158343 - 0x17C95 (Boat Spawn) - True - Boat
 158344 - 0x0288C (First Door Panel) - True - Stars & Stars + Same Colored Symbol & Triangles
 Door - 0x0C309 (First Door) - 0x0288C
