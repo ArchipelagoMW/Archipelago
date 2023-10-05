@@ -25,7 +25,6 @@ class HoverableButton(HoverBehavior, Button):
 
 class MissionButton(HoverableButton):
     tooltip_text = StringProperty("Test")
-    # ctx: SC2Context
 
     def __init__(self, *args, **kwargs):
         super(HoverableButton, self).__init__(*args, **kwargs)
