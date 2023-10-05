@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -51,6 +51,32 @@ async def read_single_sequence(ctx: BizHawkContext, address: int, length: int) -
     return (await bizhawk.read(ctx, [read(address, length)]))[0]
 
 
+# class WL4CommandProcessor(BizHawkClientCommandProcessor):
+#     def _cmd_deathlink(self):
+#         '''Toggle death link from client. Overrides default setting.'''
+#
+#         from BizHawkClient import BizHawkClientContext
+#         if isinstance(self.ctx, BizHawkClientContext):
+#             self.ctx.death_link.client_override = True
+#             self.ctx.death_link.enabled = not self.ctx.death_link.enabled
+#             Utils.async_start(
+#                 self.ctx.update_death_link(self.ctx.death_link.enabled),
+#                 name='Update Death Link'
+#             )
+
+
+class DeathLinkCtx:
+    enabled: bool = False
+    client_override: bool = False
+    pending: bool = False
+    received_this_death: bool = False
+
+
+def client_on_deathlink(ctx: BizHawkClientContext, data: Dict[str, Any]) -> None:
+    ctx.death_link.pending = True
+    type(ctx).on_deathlink(ctx, data)
+
+
 class WL4Client(BizHawkClient):
     game = 'Wario Land 4'
     system = 'GBA'
@@ -86,6 +112,13 @@ class WL4Client(BizHawkClient):
         client_ctx.game = self.game
         client_ctx.items_handling = 0b101
         client_ctx.want_slot_data = True
+
+        # bizhawk_ctx.command_processor = WL4CommandProcessor(client_ctx)
+        client_ctx.death_link = DeathLinkCtx()
+
+        bound_method = client_on_deathlink.__get__(client_ctx, client_ctx.__class__)
+        setattr(client_ctx, "on_deathlink", bound_method)
+
         return True
 
     async def set_auth(self, client_ctx: BizHawkClientContext) -> None:
@@ -102,6 +135,8 @@ class WL4Client(BizHawkClient):
             multiworld_state_address = get_symbol('MultiworldState')
             incoming_item_address = get_symbol('IncomingItemID')
             item_sender_address = get_symbol('IncomingItemSender')
+            death_link_address = get_symbol('DeathLinkEnabled')
+            wario_health_address = get_symbol('WarioHeart')
 
             read_result = await bizhawk.read(bizhawk_ctx, [
                 read8(game_mode_address),
@@ -110,6 +145,8 @@ class WL4Client(BizHawkClient):
                 read(level_status_address, 6 * 6 * 4),
                 read8(multiworld_state_address),
                 read16(received_item_count_address),
+                read8(death_link_address),
+                read8(wario_health_address),
             ])
             game_mode = read_result[0][0]
             game_state = read_result[1][0]
@@ -118,6 +155,8 @@ class WL4Client(BizHawkClient):
                            for i in range(0, 36*4, 4)]
             multiworld_state = read_result[4][0]
             received_item_count = int.from_bytes(read_result[5], 'little')
+            death_link_flag = read_result[6][0]
+            wario_health = read_result[7][0]
 
             # Ensure safe state
             gameplay_state = (game_mode, game_state)
@@ -127,6 +166,13 @@ class WL4Client(BizHawkClient):
             ]
             if gameplay_state not in safe_states:
                 return
+
+            # Turn on death link if it is on, and if the client hasn't overriden it
+            if (death_link_flag
+                    and not client_ctx.death_link.enabled
+                    and not client_ctx.death_link.client_override):
+                await client_ctx.update_death_link(True)
+                client_ctx.death_link.enabled = True
 
             locations = []
             game_clear = False
@@ -163,7 +209,15 @@ class WL4Client(BizHawkClient):
 
             # TODO: Send tracker event flags
 
-            # TODO: Send deathlink
+            # Send death link
+            if client_ctx.death_link.enabled:
+                if gameplay_state == (2, 2) and wario_health == 0:
+                    client_ctx.death_link.pending = False
+                    if not client_ctx.death_link.sent_this_death:
+                        client_ctx.death_link.sent_this_death = True
+                        await client_ctx.send_death()
+                else:
+                    client_ctx.death_link.sent_this_death = False
 
             write_list = []
             guard_list = [
@@ -177,7 +231,10 @@ class WL4Client(BizHawkClient):
                     return
                 guard_list.append(guard16(wario_stop_flag_address, 0))
 
-            # TODO: Receive deathlink
+            # Receive death link
+            if client_ctx.death_link.enabled and client_ctx.death_link.pending:
+                client_ctx.death_link.sent_this_death = True
+                write_list.append(write8(wario_health_address, 0))
 
             # If the game hasn't received all items yet and the game isn't showing the player
             # another item, then set up the next item message
