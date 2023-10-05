@@ -408,7 +408,7 @@ class World(metaclass=AutoWorldRegister):
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
     
-    def fill_error(self) -> None:
+    def fill_error(self, remaining_items: List["Item"]) -> None:
         pass
 
     @classmethod
