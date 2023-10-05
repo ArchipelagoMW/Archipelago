@@ -941,7 +941,7 @@ Door - 0x09EDD (Elevator Room Entry) - 0x09ED8 & 0x09E86
 Mountain Floor 2 Light Bridge Room Near (Mountain Floor 2):
 158431 - 0x09E86 (Light Bridge Controller Near) - True - Shapers & Dots
 
-Mountain Floor 2 Beyond Bridge (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Far - 0x09E07 - Mountain Pink Bridge EP - TrueOneWay:
+Mountain Floor 2 Beyond Bridge (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Far - 0x09E07 - Mountain Pink Bridge EP - TrueOneWay - Mountain Floor 2 - 0x09ED8:
 158432 - 0x09FCC (Far Row 1) - True - Triangles
 158433 - 0x09FCE (Far Row 2) - 0x09FCC - Black/White Squares & Stars & Stars + Same Colored Symbol
 158434 - 0x09FCF (Far Row 3) - 0x09FCE - Stars & Triangles & Stars + Same Colored Symbol
