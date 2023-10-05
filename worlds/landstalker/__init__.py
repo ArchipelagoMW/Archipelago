@@ -1,5 +1,4 @@
 import threading
-from typing import List
 from BaseClasses import Tutorial, LocationProgressType
 from worlds.AutoWorld import WebWorld, World
 from .Options import ls_options, ProgressiveArmors, LandstalkerGoal, TeleportTreeRequirements
@@ -49,6 +48,7 @@ class LandstalkerWorld(World):
         self.dark_region_ids = []
         self.teleport_tree_pairs = []
         self.can_fill_slot_data = threading.Event()
+        self.jewel_items = []
         self.hints = {}
 
     def get_setting(self, name: str):
@@ -121,7 +121,8 @@ class LandstalkerWorld(World):
         item_pool += [self.create_item("Life Stock") for _ in range(lifestock_count)]
 
         # Add jewels to the item pool depending on the number of jewels set in generation settings
-        item_pool += [self.create_item(name) for name in self.get_required_jewels_names(self.get_setting('jewel_count'))]
+        self.jewel_items = [self.create_item(name) for name in self.get_jewel_names(self.get_setting('jewel_count'))]
+        item_pool += self.jewel_items
 
         # Add a pre-placed fake win condition item
         win_condition_item = LandstalkerItem("King Nole's Treasure", ItemClassification.progression, None, self.player)
@@ -202,7 +203,7 @@ class LandstalkerWorld(World):
         self.adjust_shop_prices()
 
         self.hints = Hints.generate_random_hints(self.multiworld, self.player)
-        self.hints["Lithograph"] = Hints.generate_lithograph_hint(self.multiworld, self.player)
+        self.hints["Lithograph"] = Hints.generate_lithograph_hint(self.multiworld, self.player, self.jewel_items)
         self.hints["Oracle Stone"] = f"It shows {self.dark_dungeon_id}\nenshrouded in darkness."
 
         self.can_fill_slot_data.set()
@@ -235,7 +236,7 @@ class LandstalkerWorld(World):
             sphere_id += 1
 
     @staticmethod
-    def get_required_jewels_names(count):
+    def get_jewel_names(count):
         if count < 6:
             required_jewels = ["Red Jewel", "Purple Jewel", "Green Jewel", "Blue Jewel", "Yellow Jewel"]
             del required_jewels[count:]

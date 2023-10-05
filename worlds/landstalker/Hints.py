@@ -1,5 +1,7 @@
 import random
+from typing import List
 from BaseClasses import MultiWorld, Location
+from . import LandstalkerItem
 from .data.hint_source import HINT_SOURCES_JSON
 
 
@@ -20,11 +22,10 @@ def generate_blurry_location_hint(location: Location, random: random.Random):
     return [random_word_1, random_word_2]
 
 
-def generate_lithograph_hint(multiworld: MultiWorld, player: int):
+def generate_lithograph_hint(multiworld: MultiWorld, player: int, jewel_items: List[LandstalkerItem]):
     hint_text = "It's barely readable:\n"
 
-    my_jewel_items = [item for item in multiworld.itempool if item.player == player and " Jewel" in item.name]
-    for item in my_jewel_items:
+    for item in jewel_items:
         # Jewel hints are composed of 4 'words' shuffled randomly:
         # - the name of the player whose world contains said jewel (if not ours)
         # - the color of the jewel (if relevant)
@@ -32,7 +33,7 @@ def generate_lithograph_hint(multiworld: MultiWorld, player: int):
         words = generate_blurry_location_hint(item.location, multiworld.per_slot_randoms[player])
         words[0] = words[0].upper()
         words[1] = words[1].upper()
-        if len(my_jewel_items) < 6:
+        if len(jewel_items) < 6:
             # Add jewel color if we are not using generic jewels because jewel count is 6 or more
             words.append(item.name.split(' ')[0].upper())
         if item.location.player != player:
