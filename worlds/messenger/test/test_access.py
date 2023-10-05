@@ -163,6 +163,8 @@ class ItemsAccessTest(MessengerTestBase):
             "Forlorn Temple - Demon King": PHOBEKINS
         }
 
+        self.multiworld.state = self.multiworld.get_all_state(True)
+        self.remove_by_name(location_lock_pairs.values())
         for loc in location_lock_pairs:
             for item_name in location_lock_pairs[loc]:
                 item = self.get_item_by_name(item_name)
