@@ -279,7 +279,13 @@ class ValidInventory:
 
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
-                raise Exception("Reduced item pool generation failed - not enough locations available to place items.")
+                # There are more items than locations and all of them are already locked due to YAML or logic.
+                # Random items from locked ones will go to starting items
+                self.multiworld.random.shuffle(locked_items)
+                while len(locked_items) > inventory_size:
+                    item: Item = locked_items.pop()
+                    self.multiworld.push_precollected(item)
+                break
             # Select random item from removable items
             item = self.multiworld.random.choice(inventory)
             # Cascade removals to associated items
