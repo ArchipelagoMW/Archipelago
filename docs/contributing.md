@@ -1,5 +1,5 @@
 # Contributing
-Contributions are welcome. We have a few requests of any new contributors.
+Contributions are welcome. We have a few requests for new contributors:
 
 * **Ensure that all changes are covered by unit tests.** 
 It is strongly recommended that unit tests are used to avoid regression and to ensure everything is still working.
@@ -17,11 +17,11 @@ Other than these requests, we tend to judge code on a case to case basis. For co
 this [document](/WebHostLib/README.md).
 
 If you want to contribute to the core, you will be subject to stricter review on your pull requests. It is also recommended
-that you get in touch with other core mainteners via our [Discord](https://archipelago.gg/discord).
+that you get in touch with other core maintainers via our [Discord](https://archipelago.gg/discord).
 
-If you want to add a new game to Archipelago, please take a look at this [document](/docs/adding%20games.md) detailing what is required 
-for implementing a game (as well as tips for how to get started).
-If you want to merge a new game, please make sure to read the responsibilities as
+If you want to add Archipelago support for a new game, please take a look at the [adding games documentation](/docs/adding%20games.md) detailing what is required 
+for implementing a game, as well as tips for how to get started.
+If you want to merge a new game into the main Archipelago repo, please make sure to read the responsibilities as a 
 [world maintainer](/docs/world%20maintainer.md).
 
 For any other questions, feel free to explore the [main documentation folder](/docs/) and ask us questions in the #archipelago-dev channel 
