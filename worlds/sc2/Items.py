@@ -7,12 +7,12 @@ from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_ta
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
-    type: typing.Optional[str]
-    number: typing.Optional[int]
+    type: str
+    number: int
     race: SC2Race
     classification: ItemClassification = ItemClassification.useful
     quantity: int = 1
-    parent_item: str = None
+    parent_item: typing.Optional[str] = None
     origin: typing.Set[str] = {"wol"}
 
 
@@ -414,7 +414,7 @@ item_name_group_names = {
     # HotS
     "Ability", "Strain", "Mutation"
 }
-item_name_groups = {}
+item_name_groups: typing.Dict[str, typing.List[str]] = {}
 for item, data in get_full_item_list().items():
     item_name_groups.setdefault(data.type, []).append(item)
     if data.type in item_name_group_names and '(' in item:

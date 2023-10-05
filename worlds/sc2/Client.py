@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import copy
 import ctypes
-import json
 import logging
 import multiprocessing
 import os.path
@@ -15,8 +14,6 @@ import zipfile
 import io
 import random
 from pathlib import Path
-
-from kivy.uix.scrollview import ScrollView
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
@@ -35,7 +32,6 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2 import SC2World
 from worlds.sc2.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
 from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
@@ -60,7 +56,7 @@ DATA_API_VERSION = "API2"
 # Data version file path.
 # This file is used to tell if the downloaded data are outdated
 # Associated with /download_data command
-def get_metadata_file():
+def get_metadata_file() -> str:
     return os.environ["SC2PATH"] + os.sep + "ArchipelagoSC2Metadata.txt"
 
 
@@ -141,7 +137,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         " or Default to select based on difficulty.")
             return False
 
-    def _cmd_color(self, color: str = "") -> bool:
+    def _cmd_color(self, color: str = "") -> None:
         player_colors = [
             "White", "Red", "Blue", "Teal",
             "Purple", "Yellow", "Orange", "Green",
@@ -223,10 +219,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             metadata = None
 
-        tempzip, metadata = download_latest_release_zip(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION,
-                                                       metadata=metadata, force_download=True)
+        tempzip, metadata = download_latest_release_zip(
+            DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION, metadata=metadata, force_download=True)
 
-        if tempzip != '':
+        if tempzip:
             try:
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
                 sc2_logger.info(f"Download complete. Package installed.")
@@ -241,7 +237,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
 
 class SC2JSONtoTextParser(JSONtoTextParser):
-    def __init__(self, ctx):
+    def __init__(self, ctx) -> None:
         self.handlers = {
             "ItemSend": self._handle_color,
             "ItemCheat": self._handle_color,
@@ -249,12 +245,12 @@ class SC2JSONtoTextParser(JSONtoTextParser):
         }
         super().__init__(ctx)
 
-    def _handle_color(self, node: JSONMessagePart):
+    def _handle_color(self, node: JSONMessagePart) -> str:
         codes = node["color"].split(";")
         buffer = "".join(self.color_code(code) for code in codes if code in self.color_codes)
         return buffer + self._handle_text(node) + '</c>'
 
-    def color_code(self, code: str):
+    def color_code(self, code: str) -> str:
         return '<c val="' + self.color_codes[code] + '">'
 
 
@@ -286,11 +282,11 @@ class SC2Context(CommonContext):
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super(SC2Context, self).__init__(*args, **kwargs)
         self.raw_text_parser = SC2JSONtoTextParser(self)
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False) -> None:
         if password_requested and not self.password:
             await super(SC2Context, self).server_auth(password_requested)
         await self.get_username()
@@ -298,12 +294,12 @@ class SC2Context(CommonContext):
         if self.ui:
             self.ui.first_check = True
 
-    def on_package(self, cmd: str, args: dict):
-        if cmd in {"Connected"}:
+    def on_package(self, cmd: str, args: dict) -> None:
+        if cmd == "Connected":
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.game_speed = args["slot_data"].get("game_speed", GameSpeed.option_default)
             self.all_in_choice = args["slot_data"]["all_in_map"]
-            slot_req_table = args["slot_data"]["mission_req"]
+            slot_req_table: dict = args["slot_data"]["mission_req"]
 
             first_item = list(slot_req_table.keys())[0]
             # Maintaining backwards compatibility with older slot data
@@ -349,7 +345,7 @@ class SC2Context(CommonContext):
                                    "Run /download_data to update them.")
 
     @staticmethod
-    def parse_mission_info(mission_info):
+    def parse_mission_info(mission_info: dict[str, typing.Any]) -> MissionInfo:
         if mission_info.get("id") is not None:
             mission_info["mission"] = lookup_id_to_mission[mission_info["id"]]
         elif isinstance(mission_info["mission"], int):
@@ -359,14 +355,17 @@ class SC2Context(CommonContext):
             **{field: value for field, value in mission_info.items() if field in MissionInfo._fields}
         )
 
-    def find_campaign(self, mission_name):
+    def find_campaign(self, mission_name: str) -> SC2Campaign:
         data = self.mission_req_table
         for campaign in data.keys():
             if mission_name in data[campaign].keys():
                 return campaign
+        sc2_logger.info(f"Attempted to find campaign of unknown mission '{mission_name}'; defaulting to GLOBAL")
+        return SC2Campaign.GLOBAL
 
 
-    def on_print_json(self, args: dict):
+
+    def on_print_json(self, args: dict) -> None:
         # goes to this world
         if "receiving" in args and self.slot_concerns_self(args["receiving"]):
             relevant = True
@@ -382,228 +381,12 @@ class SC2Context(CommonContext):
 
         super(SC2Context, self).on_print_json(args)
 
-    def run_gui(self):
-        from kvui import GameManager, HoverBehavior, ServerToolTip
-        from kivy.app import App
-        from kivy.clock import Clock
-        from kivy.uix.tabbedpanel import TabbedPanelItem
-        from kivy.uix.gridlayout import GridLayout
-        from kivy.lang import Builder
-        from kivy.uix.label import Label
-        from kivy.uix.button import Button
-        from kivy.uix.floatlayout import FloatLayout
-        from kivy.properties import StringProperty
+    def run_gui(self) -> None:
+        from .ClientGui import start_gui
+        start_gui(self)
+        
 
-        class HoverableButton(HoverBehavior, Button):
-            pass
-
-        class MissionButton(HoverableButton):
-            tooltip_text = StringProperty("Test")
-            ctx: SC2Context
-
-            def __init__(self, *args, **kwargs):
-                super(HoverableButton, self).__init__(*args, **kwargs)
-                self.layout = FloatLayout()
-                self.popuplabel = ServerToolTip(text=self.text)
-                self.layout.add_widget(self.popuplabel)
-
-            def on_enter(self):
-                self.popuplabel.text = self.tooltip_text
-
-                if self.ctx.current_tooltip:
-                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
-
-                if self.tooltip_text == "":
-                    self.ctx.current_tooltip = None
-                else:
-                    App.get_running_app().root.add_widget(self.layout)
-                    self.ctx.current_tooltip = self.layout
-
-            def on_leave(self):
-                self.ctx.ui.clear_tooltip()
-
-            @property
-            def ctx(self) -> CommonContext:
-                return App.get_running_app().ctx
-
-        class CampaignScroll(ScrollView):
-            pass
-
-        class MultiCampaignLayout(GridLayout):
-            pass
-
-        class CampaignLayout(GridLayout):
-            pass
-
-        class MissionLayout(GridLayout):
-            pass
-
-        class MissionCategory(GridLayout):
-            pass
-
-        class SC2Manager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago"),
-                ("Starcraft2", "Starcraft2"),
-            ]
-            base_title = "Archipelago Starcraft 2 Client"
-
-            campaign_panel = None
-            last_checked_locations = {}
-            mission_id_to_button = {}
-            launching: typing.Union[bool, int] = False  # if int -> mission ID
-            refresh_from_launching = True
-            first_check = True
-            ctx: SC2Context
-
-            def __init__(self, ctx):
-                super().__init__(ctx)
-
-            def clear_tooltip(self):
-                if self.ctx.current_tooltip:
-                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
-
-                self.ctx.current_tooltip = None
-
-            def build(self):
-                container = super().build()
-
-                panel = TabbedPanelItem(text="Starcraft 2 Launcher")
-                panel.content = CampaignScroll()
-                self.campaign_panel = MultiCampaignLayout()
-                panel.content.add_widget(self.campaign_panel)
-
-                self.tabs.add_widget(panel)
-
-                Clock.schedule_interval(self.build_mission_table, 0.5)
-
-                return container
-
-            def build_mission_table(self, dt):
-                if (not self.launching and (not self.last_checked_locations == self.ctx.checked_locations or
-                                            not self.refresh_from_launching)) or self.first_check:
-                    self.refresh_from_launching = True
-
-                    self.campaign_panel.clear_widgets()
-                    if self.ctx.mission_req_table:
-                        self.last_checked_locations = self.ctx.checked_locations.copy()
-                        self.first_check = False
-
-                        self.mission_id_to_button = {}
-
-                        available_missions, unfinished_missions = calc_unfinished_missions(self.ctx)
-
-                        multi_campaign_layout_height = 0
-
-                        for campaign, missions in self.ctx.mission_req_table.items():
-                            categories = {}
-
-                            # separate missions into categories
-                            for mission_index in missions:
-                                mission = self.ctx.mission_req_table[campaign][mission_index]
-                                if mission.category not in categories:
-                                    categories[mission.category] = []
-
-                                categories[mission.category].append(mission_index)
-
-                            max_mission_count = max(len(categories[category]) for category in categories)
-                            campaign_layout_height = (max_mission_count + 2) * 50
-                            multi_campaign_layout_height += campaign_layout_height
-                            campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
-                            campaign_layout.add_widget(
-                                Label(text=campaign.campaign_name, size_hint_y=None, height=25, outline_width=1)
-                            )
-                            mission_layout = MissionLayout()
-
-                            for category in categories:
-                                category_panel = MissionCategory()
-                                if category.startswith('_'):
-                                    category_display_name = ''
-                                else:
-                                    category_display_name = category
-                                category_panel.add_widget(
-                                    Label(text=category_display_name, size_hint_y=None, height=25, outline_width=1))
-
-                                for mission in categories[category]:
-                                    text: str = mission
-                                    tooltip: str = ""
-                                    mission_id: int = lookup_name_to_mission[mission].id
-                                    mission_data = self.ctx.mission_req_table[campaign][mission]
-                                    # Map has uncollected locations
-                                    if mission in unfinished_missions:
-                                        text = f"[color=6495ED]{text}[/color]"
-                                    elif mission in available_missions:
-                                        text = f"[color=FFFFFF]{text}[/color]"
-                                    # Map requirements not met
-                                    else:
-                                        text = f"[color=a9a9a9]{text}[/color]"
-                                        tooltip = f"Requires: "
-                                        if mission_data.required_world:
-                                            tooltip += ", ".join(list(self.ctx.mission_req_table[parse_unlock(req_mission).campaign])[parse_unlock(req_mission).connect_to - 1] for
-                                                                 req_mission in
-                                                                 mission_data.required_world)
-
-                                            if mission_data.number:
-                                                tooltip += " and "
-                                        if mission_data.number:
-                                            tooltip += f"{self.ctx.mission_req_table[campaign][mission].number} missions completed"
-                                    remaining_location_names: typing.List[str] = [
-                                        self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
-                                        if loc in self.ctx.missing_locations]
-
-                                    if mission_id == self.ctx.final_mission:
-                                        if mission in available_missions:
-                                            text = f"[color=FFBC95]{mission}[/color]"
-                                        else:
-                                            text = f"[color=D0C0BE]{mission}[/color]"
-                                        if tooltip:
-                                            tooltip += "\n"
-                                        tooltip += "Final Mission"
-
-                                    if remaining_location_names:
-                                        if tooltip:
-                                            tooltip += "\n"
-                                        tooltip += f"Uncollected locations:\n"
-                                        tooltip += "\n".join(remaining_location_names)
-
-                                    mission_button = MissionButton(text=text, size_hint_y=None, height=50)
-                                    mission_button.tooltip_text = tooltip
-                                    mission_button.bind(on_press=self.mission_callback)
-                                    self.mission_id_to_button[mission_id] = mission_button
-                                    category_panel.add_widget(mission_button)
-
-                                category_panel.add_widget(Label(text=""))
-                                mission_layout.add_widget(category_panel)
-                            campaign_layout.add_widget(mission_layout)
-                            self.campaign_panel.add_widget(campaign_layout)
-                        self.campaign_panel.height = multi_campaign_layout_height
-
-                elif self.launching:
-                    self.refresh_from_launching = False
-
-                    self.campaign_panel.clear_widgets()
-                    self.campaign_panel.add_widget(Label(text="Launching Mission: " +
-                                                              lookup_id_to_mission[self.launching].mission_name))
-                    if self.ctx.ui:
-                        self.ctx.ui.clear_tooltip()
-
-            def mission_callback(self, button):
-                if not self.launching:
-                    mission_id: int = next(k for k, v in self.mission_id_to_button.items() if v == button)
-                    if self.ctx.play_mission(mission_id):
-                        self.launching = mission_id
-                        Clock.schedule_once(self.finish_launching, 10)
-
-            def finish_launching(self, dt):
-                self.launching = False
-
-        self.ui = SC2Manager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-        import pkgutil
-        data = pkgutil.get_data(SC2World.__module__, "Starcraft2.kv").decode()
-        Builder.load_string(data)
-
-    async def shutdown(self):
+    async def shutdown(self) -> None:
         await super(SC2Context, self).shutdown()
         if self.last_bot:
             self.last_bot.want_close = True
@@ -611,8 +394,7 @@ class SC2Context(CommonContext):
             self.sc2_run_task.cancel()
 
     def play_mission(self, mission_id: int) -> bool:
-        if self.missions_unlocked or \
-                is_mission_available(self, mission_id):
+        if self.missions_unlocked or is_mission_available(self, mission_id):
             if self.sc2_run_task:
                 if not self.sc2_run_task.done():
                     sc2_logger.warning("Starcraft 2 Client is still running!")
@@ -629,7 +411,7 @@ class SC2Context(CommonContext):
                 f"Use /unfinished or /available to see what is available.")
             return False
 
-    def build_location_to_mission_mapping(self):
+    def build_location_to_mission_mapping(self) -> None:
         mission_id_to_location_ids: typing.Dict[int, typing.Set[int]] = {
             mission_info.mission.id: set() for campaign_mission in self.mission_req_table.values() for mission_info in campaign_mission.values()
         }
@@ -721,7 +503,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     return accumulators
 
 
-def calc_difficulty(difficulty):
+def calc_difficulty(difficulty: int):
     if difficulty == 0:
         return 'C'
     elif difficulty == 1:
@@ -905,7 +687,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
 
-def request_unfinished_missions(ctx: SC2Context):
+def request_unfinished_missions(ctx: SC2Context) -> None:
     if ctx.mission_req_table:
         message = "Unfinished Missions: "
         unlocks = initialize_blank_mission_dict(ctx.mission_req_table)
@@ -936,9 +718,9 @@ def request_unfinished_missions(ctx: SC2Context):
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_unfinished_missions(ctx: SC2Context, unlocks=None):
-    unfinished_missions = []
-    locations_completed = []
+def calc_unfinished_missions(ctx: SC2Context, unlocks: typing.Optional[typing.Dict] = None):
+    unfinished_missions: typing.List[str] = []
+    locations_completed: typing.List[typing.Union[typing.Set[int], typing.Literal[-1]]] = []
 
     if not unlocks:
         unlocks = initialize_blank_mission_dict(ctx.mission_req_table)
@@ -960,13 +742,13 @@ def calc_unfinished_missions(ctx: SC2Context, unlocks=None):
     return available_missions, dict(zip(unfinished_missions, locations_completed))
 
 
-def is_mission_available(ctx: SC2Context, mission_id_to_check):
+def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool:
     unfinished_missions = calc_available_missions(ctx)
 
     return any(mission_id_to_check == ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id for mission in unfinished_missions)
 
 
-def mark_up_mission_name(ctx: SC2Context, mission, unlock_table):
+def mark_up_mission_name(ctx: SC2Context, mission: str, unlock_table: typing.Dict) -> str:
     """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
 
     if ctx.mission_req_table[ctx.find_campaign(mission)][mission].completion_critical:
@@ -1025,8 +807,8 @@ def request_available_missions(ctx: SC2Context):
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_available_missions(ctx: SC2Context, unlocks=None):
-    available_missions = []
+def calc_available_missions(ctx: SC2Context, unlocks: typing.Optional[dict] = None) -> typing.List[str]:
+    available_missions: typing.List[str] = []
     missions_complete = 0
 
     # Get number of missions completed
@@ -1052,7 +834,7 @@ def calc_available_missions(ctx: SC2Context, unlocks=None):
     return available_missions
 
 
-def parse_unlock(unlock) -> MissionConnection:
+def parse_unlock(unlock: typing.Union[typing.Dict[str, typing.Any], int]) -> MissionConnection:
     if isinstance(unlock, int):
         # Legacy
         return MissionConnection(unlock)
@@ -1061,7 +843,7 @@ def parse_unlock(unlock) -> MissionConnection:
         return MissionConnection(unlock["connect_to"], lookup_id_to_campaign[unlock["campaign"]])
 
 
-def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int):
+def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int) -> bool:
     """Returns a bool signifying if the mission has all requirements complete and can be done
 
     Arguments:
@@ -1069,7 +851,7 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
     locations_to_check -- the mission string name to check
     missions_complete -- an int of how many missions have been completed
     mission_path -- a list of missions that have already been checked
-"""
+    """
     campaign = ctx.find_campaign(mission_name)
 
     if len(ctx.mission_req_table[campaign][mission_name].required_world) >= 1:
@@ -1125,8 +907,8 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
         return True
 
 
-def initialize_blank_mission_dict(location_table):
-    unlocks = {}
+def initialize_blank_mission_dict(location_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]]):
+    unlocks: typing.Dict[SC2Campaign, list] = {}
 
     for mission in list(location_table):
         unlocks[mission] = []
@@ -1146,7 +928,7 @@ def check_game_install_path() -> bool:
 
         buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
         ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
-        documentspath = buf.value
+        documentspath: str = buf.value
         einfo = str(documentspath / Path("StarCraft II\\ExecuteInfo.txt"))
     else:
         einfo = str(bot.paths.get_home() / Path(bot.paths.USERPATH[bot.paths.PF]))
@@ -1158,12 +940,13 @@ def check_game_install_path() -> bool:
         with open(einfo) as f:
             content = f.read()
         if content:
-            try:
-                base = re.search(r" = (.*)Versions", content).group(1)
-            except AttributeError:
-                sc2_logger.warning(f"Found {einfo}, but it was empty. Run SC2 through the Blizzard launcher, then "
-                                   f"try again.")
+            search_result = re.search(r" = (.*)Versions", content)
+            if not search_result:
+                sc2_logger.warning(f"Found {einfo}, but it was empty. Run SC2 through the Blizzard launcher, "
+                                    "then try again.")
                 return False
+            base = search_result.group(1)
+                
             if os.path.exists(base):
                 executable = bot.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
@@ -1189,18 +972,18 @@ def is_mod_installed_correctly() -> bool:
     """Searches for all required files."""
     if "SC2PATH" not in os.environ:
         check_game_install_path()
-
-    mapdir = os.environ['SC2PATH'] / Path('Maps/ArchipelagoCampaign')
+    sc2_path: str = os.environ["SC2PATH"]
+    mapdir = sc2_path / Path('Maps/ArchipelagoCampaign')
     mods = ["ArchipelagoCore", "ArchipelagoPlayer", "ArchipelagoPlayerWoL", "ArchipelagoTriggers"]
-    modfiles = [os.environ["SC2PATH"] / Path("Mods/" + mod + ".SC2Mod") for mod in mods]
-    wol_required_maps = ["WoL" + os.sep + mission.map_file + ".SC2Map" for mission in SC2Mission
+    modfiles = [sc2_path / Path("Mods/" + mod + ".SC2Mod") for mod in mods]
+    wol_required_maps: typing.List[str] = ["WoL" + os.sep + mission.map_file + ".SC2Map" for mission in SC2Mission
                          if mission.campaign in (SC2Campaign.WOL, SC2Campaign.PROPHECY)]
-    hots_required_maps = ["HotS" + os.sep + mission.map_file + ".SC2Map" for mission in campaign_mission_table[SC2Campaign.HOTS]]
+    hots_required_maps: typing.List[str] = ["HotS" + os.sep + mission.map_file + ".SC2Map" for mission in campaign_mission_table[SC2Campaign.HOTS]]
     required_maps = wol_required_maps + hots_required_maps
     needs_files = False
 
     # Check for maps.
-    missing_maps = []
+    missing_maps: typing.List[str] = []
     for mapfile in required_maps:
         if not os.path.isfile(mapdir / mapfile):
             missing_maps.append(mapfile)
@@ -1210,7 +993,7 @@ def is_mod_installed_correctly() -> bool:
     elif len(missing_maps) > 0:
         for map in missing_maps:
             sc2_logger.debug(f"Missing {map} from {mapdir}.")
-            sc2_logger.warning(f"Missing {len(missing_maps)} map files.")
+        sc2_logger.warning(f"Missing {len(missing_maps)} map files.")
         needs_files = True
     else:  # Must be no maps missing
         sc2_logger.info(f"All maps found in {mapdir}.")
@@ -1268,7 +1051,13 @@ class DllDirectory:
         return False
 
 
-def download_latest_release_zip(owner: str, repo: str, api_version: str, metadata: str = None, force_download=False) -> (str, str):
+def download_latest_release_zip(
+    owner: str,
+    repo: str,
+    api_version: str,
+    metadata: typing.Optional[str] = None,
+    force_download=False
+) -> typing.Tuple[str, typing.Optional[str]]:
     """Downloads the latest release of a GitHub repo to the current directory as a .zip file."""
     import requests
 
@@ -1307,7 +1096,7 @@ def download_latest_release_zip(owner: str, repo: str, api_version: str, metadat
         return "", metadata
 
 
-def cleanup_downloaded_metadata(medatada_json):
+def cleanup_downloaded_metadata(medatada_json: dict) -> None:
     for asset in medatada_json['assets']:
         del asset['download_count']
 

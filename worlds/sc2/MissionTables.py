@@ -41,7 +41,7 @@ class SC2Campaign(Enum):
         self.id = campaign_id
         self.campaign_name = name
         self.goal_priority = goal_priority
-        race: race
+        self.race = race
 
     GLOBAL = 0, "Global", SC2CampaignGoalPriority.NONE, SC2Race.ANY
     WOL = 1, "Wings of Liberty", SC2CampaignGoalPriority.VERY_HARD, SC2Race.TERRAN
