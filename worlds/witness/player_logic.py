@@ -248,7 +248,9 @@ class WitnessPlayerLogic:
                     self.CONNECTIONS_BY_REGION_NAME[source_region].remove(connection)
 
                     if panel_set_string == "TrueOneWay":
-                        self.CONNECTIONS_BY_REGION_NAME[source_region].add((target_region, frozenset({frozenset()})))
+                        self.CONNECTIONS_BY_REGION_NAME[source_region].add(
+                            (target_region, frozenset({frozenset(["TrueOneWay"])}))
+                        )
                     else:
                         new_lambda = connection[1] | parse_lambda(panel_set_string)
                         self.CONNECTIONS_BY_REGION_NAME[source_region].add((target_region, new_lambda))
