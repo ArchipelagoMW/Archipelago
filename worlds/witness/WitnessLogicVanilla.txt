@@ -745,7 +745,7 @@ Door - 0x18482 (Blue Water Pump) - 0x00E3A
 Swamp Long Bridge (Swamp) - Swamp Near Boat - 0x17E2B - Outside Swamp - 0x17E2B:
 158339 - 0x17E2B (Long Bridge Control) - True - Rotated Shapers & Shapers
 
-Swamp Purple Area (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Purple Underwater - 0x0A1D6:
+Swamp Purple Area (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Purple Underwater - 0x0A1D6 - Swamp Near Boat - TrueOneWay:
 Door - 0x0A1D6 (Purple Water Pump) - 0x00E3A
 
 Swamp Purple Underwater (Swamp):
