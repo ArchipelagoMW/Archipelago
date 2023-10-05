@@ -501,7 +501,7 @@ progressive_if_nco = {
     "Progressive Regenerative Bio-Steel"
 }
 
-kerrigan_actives = [
+kerrigan_actives: typing.List[typing.Set[str]] = [
     {'Kinetic Blast (Kerrigan Tier 1)', 'Leaping Strike (Kerrigan Tier 1)'},
     {'Crushing Grip (Kerrigan Tier 2)', 'Psionic Shift (Kerrigan Tier 2)'},
     set(),
@@ -511,7 +511,7 @@ kerrigan_actives = [
     {'Apocalypse (Kerrigan Tier 7)', 'Spawn Leviathan (Kerrigan Tier 7)', 'Drop-Pods (Kerrigan Tier 7)'},
 ]
 
-kerrigan_passives = [
+kerrigan_passives: typing.List[typing.Set[str]] = [
     {"Heroic Fortitude (Kerrigan Tier 1)"},
     {"Chain Reaction (Kerrigan Tier 2)"},
     {"Zergling Reconstitution (Kerrigan Tier 3)", "Improved Overlords (Kerrigan Tier 3)", "Automated Extractors (Kerrigan Tier 3)"},
