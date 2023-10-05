@@ -320,7 +320,7 @@ class OptionalBossLocations(LocationInclusion):
     Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-    display_name = "Challenge Locations"
+    display_name = "Optional Boss Locations"
 
 
 # noinspection PyTypeChecker

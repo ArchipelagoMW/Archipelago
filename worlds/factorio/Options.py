@@ -390,8 +390,8 @@ class FactorioWorldGen(OptionDict):
     def __init__(self, value: typing.Dict[str, typing.Any]):
         advanced = {"pollution", "enemy_evolution", "enemy_expansion"}
         self.value = {
-            "basic": {key: value[key] for key in value.keys() - advanced},
-            "advanced": {key: value[key] for key in value.keys() & advanced}
+            "basic": {k: v for k, v in value.items() if k not in advanced},
+            "advanced": {k: v for k, v in value.items() if k in advanced}
         }
 
         # verify min_values <= max_values
