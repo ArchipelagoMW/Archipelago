@@ -178,7 +178,9 @@ class WitnessWorld(World):
             self.locat.add_location_late(loc)
             self.multiworld.get_region(region, self.player).add_locations({loc: self.location_name_to_id[loc]})
 
-            warning(f"""Location "{loc}" had to be added due to insufficient sphere 1 size.""")
+            player = self.multiworld.get_player_name(self.player)
+            
+            warning(f"""Location "{loc}" had to be added to {player}'s world due to insufficient sphere 1 size.""")
 
     def create_items(self):
         # Determine pool size.
