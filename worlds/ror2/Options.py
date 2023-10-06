@@ -121,7 +121,7 @@ class AllowTrapItems(Toggle):
 
 
 class AllowLunarItems(DefaultOnToggle):
-    """Allows Lunar items in the item pool. (Trap items need to be on to be included)"""
+    """Allows Lunar items in the item pool."""
     display_name = "Enable Lunar Item Shuffling"
 
 
@@ -131,10 +131,14 @@ class StartWithRevive(DefaultOnToggle):
 
 
 class FinalStageDeath(Toggle):
-    """The following will count as a win if set to true:
+    """The following will count as a win if set to "true", and victory is set to "any":
     Dying in Commencement.
     Dying in The Planetarium.
-    Obliterating yourself"""
+    Obliterating yourself
+    If not use the following to tell if final stage death will count:
+    Victory: mithrix - only dying in Commencement will count.
+    Victory: voidling - only dying in The Planetarium will count.
+    Victory: limbo - Obliterating yourself will count."""
     display_name = "Final Stage Death is Win"
 
 
@@ -278,7 +282,7 @@ class Money(Range):
 
 
 class LunarCoin(Range):
-    """Weight of money items in the item pool.
+    """Weight of lunar coin items in the item pool.
 
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Lunar Coins"
@@ -288,7 +292,7 @@ class LunarCoin(Range):
 
 
 class Experience(Range):
-    """Weight of money items in the item pool.
+    """Weight of 1000 exp items in the item pool.
 
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "1000 Exp"
@@ -298,7 +302,7 @@ class Experience(Range):
 
 
 class MountainTrap(Range):
-    """Weight of money items in the item pool.
+    """Weight of mountain trap items in the item pool.
 
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Mountain Trap"
@@ -308,7 +312,7 @@ class MountainTrap(Range):
 
 
 class TimeWarpTrap(Range):
-    """Weight of money items in the item pool.
+    """Weight of time warp trap items in the item pool.
 
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Time Warp Trap"
@@ -318,7 +322,7 @@ class TimeWarpTrap(Range):
 
 
 class CombatTrap(Range):
-    """Weight of money items in the item pool.
+    """Weight of combat trap items in the item pool.
 
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Combat Trap"
@@ -328,7 +332,7 @@ class CombatTrap(Range):
 
 
 class TeleportTrap(Range):
-    """Weight of money items in the item pool.
+    """Weight of teleport trap items in the item pool.
 
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Teleport Trap"
