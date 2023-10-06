@@ -102,8 +102,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
                   lambda state: state.has(ItemName.knuckles_shovel_claws, player) and
                                 state.has(ItemName.knuckles_hammer_gloves, player))
     add_rule_safe(multiworld, LocationName.eternal_engine_2, player,
-                  lambda state: state.has(ItemName.tails_booster, player) and
-                                state.has(ItemName.tails_bazooka, player))
+                  lambda state: state.has(ItemName.tails_booster, player))
     add_rule_safe(multiworld, LocationName.crazy_gadget_2, player,
                   lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
@@ -1371,11 +1370,8 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, player: int):
     add_rule_safe(multiworld, LocationName.death_chamber_2, player,
                   lambda state: state.has(ItemName.knuckles_hammer_gloves, player))
     add_rule_safe(multiworld, LocationName.eternal_engine_2, player,
-                  lambda state: state.has(ItemName.tails_booster, player) and
-                                state.has(ItemName.tails_bazooka, player))
+                  lambda state: state.has(ItemName.tails_booster, player))
 
-    add_rule_safe(multiworld, LocationName.lost_colony_2, player,
-                  lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(multiworld, LocationName.weapons_bed_2, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player) and
                                 state.has(ItemName.eggman_large_cannon, player))
