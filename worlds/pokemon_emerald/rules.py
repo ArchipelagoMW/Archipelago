@@ -369,12 +369,12 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Route 105
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE105/MAIN -> REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1", player),
+        multiworld.get_entrance("REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN", player),
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_105_1", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE105/MAIN -> REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2", player),
+        multiworld.get_entrance("REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN", player),
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_105_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
@@ -1047,12 +1047,12 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Route 125
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE125/SEA -> REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1", player),
+        multiworld.get_entrance("REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN", player),
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_125_1", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE125/SEA -> REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2", player),
+        multiworld.get_entrance("REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN", player),
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_125_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
@@ -1185,12 +1185,12 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         can_dive
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1", player),
+        multiworld.get_entrance("REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN", player),
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_127_1", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2", player),
+        multiworld.get_entrance("REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN", player),
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_127_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
@@ -1298,12 +1298,12 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Route 129
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE129/MAIN -> REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1", player),
+        multiworld.get_entrance("REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN", player),
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_129_1", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE129/MAIN -> REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2", player),
+        multiworld.get_entrance("REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN", player),
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_129_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
