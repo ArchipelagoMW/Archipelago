@@ -398,7 +398,7 @@ class ChaoStatsHidden(Toggle):
 class ChaoAnimalParts(Toggle):
     """
     Determines whether giving Chao various animal parts grants checks
-    (72 Locations)
+    (73 Locations)
     """
     display_name = "Chao Animal Parts"
 
