@@ -925,6 +925,10 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_byte(0x18700B, 10)  # Thieves Town
         rom.write_byte(0x18700C, 14)  # Turtle Rock
         rom.write_byte(0x18700D, 31)  # Ganons Tower
+        # update credits GT Big Key counter
+        gt_bigkey_top, gt_bigkey_bottom = credits_digit(5)
+        rom.write_byte(0x118B6A, gt_bigkey_top)
+        rom.write_byte(0x118B88, gt_bigkey_bottom)
 
 
 
