@@ -33,6 +33,13 @@ class RiskOfRainWorld(World):
     option_definitions = ror2_options
     topology_present = False
     item_name_to_id = {name: data.code for name, data in item_table.items()}
+    item_name_groups = {
+        "Stage": get_items_by_category("Stage"),
+        "Environment": get_items_by_category("Environment"),
+        "Upgrade": get_items_by_category("Upgrade"),
+        "Filler": get_items_by_category("Filler"),
+        "Trap": get_items_by_category("Trap")
+    }
     location_name_to_id = item_pickups
 
     data_version = 7
