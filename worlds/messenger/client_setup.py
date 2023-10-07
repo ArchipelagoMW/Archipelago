@@ -8,7 +8,6 @@ from zipfile import ZipFile
 
 import requests
 
-from Launcher import launch
 from Utils import messagebox, tuplize_version
 
 path: str
@@ -131,4 +130,4 @@ def launch_game() -> None:
     else:
         if update_mod() is None:
             return
-    launch(path)
+    subprocess.Popen(path)
