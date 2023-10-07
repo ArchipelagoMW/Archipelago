@@ -6,7 +6,7 @@ from worlds.AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, Overcooked2GenericLevel
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
-from .Options import overcooked_options, OC2Options, OC2OnToggle, LocationBalancingMode, DeathLinkMode
+from .Options import OC2Options, OC2OnToggle, LocationBalancingMode, DeathLinkMode
 from .Items import item_table, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, dlc_exclusives
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access, level_shuffle_factory, is_item_progression, is_useful
 
@@ -155,7 +155,7 @@ class Overcooked2World(World):
         for level in Overcooked2Level():
             if level.level_id == 36:
                 continue
-            elif not self.options["KevinLevels"] and level.level_id > 36:
+            elif not self.options.kevin_levels and level.level_id > 36:
                 break
 
             levels.append(level.level_id)
@@ -238,7 +238,7 @@ class Overcooked2World(World):
         self.level_unlock_counts = level_unlock_requirement_factory(self.options.stars_to_win.value)
 
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
-        if self.options["ShuffleLevelOrder"]:
+        if self.options.shuffle_level_order:
             self.level_mapping = \
                 level_shuffle_factory(
                     self.multiworld.random,
@@ -271,7 +271,7 @@ class Overcooked2World(World):
 
         # Create and populate "regions" (a.k.a. levels)
         for level in Overcooked2Level():
-            if not self.options["KevinLevels"] and level.level_id > 36:
+            if not self.options.kevin_levels and level.level_id > 36:
                 break
 
             # Create Region (e.g. "1-1")
@@ -330,7 +330,7 @@ class Overcooked2World(World):
 
             level_access_rule: Callable[[CollectionState], bool] = \
                 lambda state, level_name=level.level_name, previous_level_completed_event_name=previous_level_completed_event_name, required_star_count=required_star_count: \
-                has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.options["RampTricks"], self.player)
+                has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.options.ramp_tricks.result, self.player)
             self.connect_regions("Overworld", level.level_name, level_access_rule)
 
             # Level --> Overworld
@@ -398,7 +398,7 @@ class Overcooked2World(World):
 
         # Fill any free space with filler
         pool_count = len(oc2_location_name_to_id)
-        if not self.options["KevinLevels"]:
+        if not self.options.kevin_levels:
             pool_count -= 8
 
         while len(self.itempool) < pool_count:
@@ -475,7 +475,7 @@ class Overcooked2World(World):
                 level_unlock_requirements[str(level_id)] = level_id - 1
 
         # Set Kevin Unlock Requirements
-        if self.options["KevinLevels"]:
+        if self.options.kevin_levels:
             def kevin_level_to_keyholder_level_id(level_id: int) -> Optional[int]:
                 location = self.multiworld.find_item(f"Kevin-{level_id-36}", self.player)
                 if location.player != self.player:
