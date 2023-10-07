@@ -24,7 +24,7 @@ class ShopCostTest(MessengerTestBase):
                 self.assertTrue(loc in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
 
-    def test_d_boost(self) -> None:
+    def test_dboost(self) -> None:
         locations = [
             "Riviere Turquoise Seal - Bounces and Balls",
             "Forlorn Temple - Demon King", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
@@ -59,7 +59,7 @@ class ShopCostMinTest(ShopCostTest):
                 with self.subTest("has cost", loc=loc):
                     self.assertTrue(self.can_reach_location(loc))
 
-    def test_d_boost(self) -> None:
+    def test_dboost(self) -> None:
         pass
 
     def test_currents(self) -> None:

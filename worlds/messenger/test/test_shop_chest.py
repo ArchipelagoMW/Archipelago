@@ -50,7 +50,7 @@ class HalfSealsRequired(MessengerTestBase):
         self.assertEqual(len(required_seals), 22)
 
 
-class ThirtyThirtySeals(HalfSealsRequired):
+class ThirtyThirtySeals(MessengerTestBase):
     options = {
         "goal": "power_seal_hunt",
         "total_seals": 30,
@@ -69,7 +69,7 @@ class ThirtyThirtySeals(HalfSealsRequired):
         self.assertEqual(len(required_seals), 10)
 
 
-class MaxSealsNoShards(HalfSealsRequired):
+class MaxSealsNoShards(MessengerTestBase):
     options = {
         "goal": "power_seal_hunt",
         "total_seals": 85,
@@ -81,7 +81,7 @@ class MaxSealsNoShards(HalfSealsRequired):
         self.assertEqual(self.multiworld.worlds[self.player].total_seals, 70)
 
 
-class MaxSealsWithShards(HalfSealsRequired):
+class MaxSealsWithShards(MessengerTestBase):
     options = {
         "goal": "power_seal_hunt",
         "total_seals": 85,
