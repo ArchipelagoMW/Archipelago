@@ -480,6 +480,8 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_REGIONS)
 
+        self.EVENT_PANELS -= self.COMPLETELY_DISABLED_ENTITIES
+
         for always_hex, always_item in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
             if always_hex in self.COMPLETELY_DISABLED_ENTITIES:
                 continue
@@ -488,8 +490,6 @@ class WitnessPlayerLogic:
             self.EVENT_ITEM_NAMES[always_hex] = always_item
 
         for panel in self.EVENT_PANELS:
-            if panel in self.COMPLETELY_DISABLED_ENTITIES:
-                continue
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
