@@ -27,31 +27,31 @@ Una vez que Bizhawk se haya instalado, abre Emuhawk y cambia las siguientes conf
 - (≤ 2.8) Abrir EmuHawk e ir a Config > Customize. Abrir la pestaña Advanced, y en la opción de Lua Core cambiar desde
   "NLua+KopiLua" a "Lua+LuaInterface". Luego reinicia EmuHawk. Esto es fundamental para que el script de Lua funcione
   correctamente.
-  **NOTA: Incluso si "Lua+LuaInterface" ya estaba seleccionado, cambia entre las opciones y vuelvelo a seleccionar.
-  **Algunas instalaciones de versiones nuevas de EmuHawk tienen una tendencia a mostrar "Lua+LuaInterface" por defecto
-  **pero siguen cargando "NLua+KopiLua" hasta completar este paso.**
-- Aun en la pestaña Advanced, asegurate que la casilla de AutoSaveRAM este marcada, y selecciona también la casilla 5s.
+  **NOTA: Incluso si "Lua+LuaInterface" ya estaba seleccionado, cambia entre las opciones y vuélvelo a seleccionar.
+  Algunas instalaciones de versiones nuevas de EmuHawk tienen una tendencia a mostrar "Lua+LuaInterface" por defecto
+  pero siguen cargando "NLua+KopiLua" hasta completar este paso.**
+- Aun en la pestaña Advanced, asegurate que la casilla de AutoSaveRAM esté marcada, y selecciona también la casilla 5s.
   Esto reduce la posibilidad de que se pierdan datos guardados en el caso de que el emulador deje de funcionar (crash).
 - En Config > Customize, pestaña General, marcar la casilla "Run in background". Esto evitará que te desconectes del
-  cliente mientras EmuHawk se esta ejecutando en segundo plano.
+  cliente mientras EmuHawk se está ejecutando en segundo plano.
 
 Es muy recomendado asociar los archivos GB (\*.gb) al emulador EmuHawk que se acaba de instalar.
-Para hacerlo, simplemente busca uno de los ROMs de gameboy, presiona con el click derecho sobre el y selecciona
-"Abrir con...", despliega la lista que aparece y selecciona la opción al final de la lista "Buscar otra aplicación en"
-"el equipo", luego navega a la carpeta de Bizhawk y selecciona EmuHawk.exe.
+Para hacerlo, simplemente busca uno de los ROMs de gameboy, presiona con el clic derecho sobre él y selecciona
+"Abrir con...", despliega la lista que aparece y selecciona la opción al final de la lista "Buscar otra aplicación en
+el equipo", luego navega a la carpeta de Bizhawk y selecciona EmuHawk.exe.
 
 ## Configura tu archivo YAML
 
-### Que es un archivo YAML y por qué necesito uno?
+### ¿Qué es un archivo YAML y por qué necesito uno?
 
 Tu archivo YAML contiene un número de opciones que proveen al generador con información sobre como debe generar tu
-juego. Cada jugador de un multiworld entregara su propio archivo YAML. Esto permite que cada jugador disfrute de una
+juego. Cada jugador de un multiworld entregará su propio archivo YAML. Esto permite que cada jugador disfrute de una
 experiencia personalizada a su manera, y que diferentes jugadores dentro del mismo multiworld pueden tener diferentes
 opciones.
 
-### Donde puedo obtener un archivo YAML?
+### ¿Dónde puedo obtener un archivo YAML?
 
-Puedes generar un archivo YAML or descargar su plantilla en la [pagina de configuración de jugador de Pokemon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-settings)
+Puedes generar un archivo YAML or descargar su plantilla en la [página de configuración de jugador de Pokémon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-settings)
 
 Es importante tener en cuenta que la opción `game_version` determina el ROM que será parcheado.
 Tanto el jugador como la persona que genera (si está generando localmente) necesitarán el archivo del ROM
@@ -61,7 +61,7 @@ Para las opciones `trainer_name` y `rival_name`, los siguientes caracteres norma
 
 * `‘’“”·… ABCDEFGHIJKLMNOPQRSTUVWXYZ():;[]abcdefghijklmnopqrstuvwxyzé'-?!.♂$×/,♀0123456789`
 
-Y los siguientes caracteres especiales (cada uno ocupa un caracter):
+Y los siguientes caracteres especiales (cada uno ocupa un carácter):
 * `<'d>`
 * `<'l>`
 * `<'t>`
@@ -77,12 +77,12 @@ Y los siguientes caracteres especiales (cada uno ocupa un caracter):
 
 ### Obtener tu parche de Pokémon
 
-Cuando te unes a un juego multiworld, se te pedirá que entregues tu archivo YAML a quien lo este organizando.
+Cuando te unes a un juego multiworld, se te pedirá que entregues tu archivo YAML a quien lo esté organizando.
 Una vez que la generación acabe, el anfitrión te dará un enlace a tu archivo, o un .zip con los archivos de
 todos. Tu archivo tiene una extensión `.apred` o `.apblue`.
 
-Haz doble click en tu archivo `.apred` o `.apblue` para que se ejecute el cliente y realize el parcheado de la ROM.
-Una vez acabe ese proceso (esto puede tardar un poco), el cliente y el emulador se abrirán automaticamente (si es que se
+Haz doble clic en tu archivo `.apred` o `.apblue` para que se ejecute el cliente y realice el parcheado del ROM.
+Una vez acabe ese proceso (esto puede tardar un poco), el cliente y el emulador se abrirán automáticamente (si es que se
 ha asociado la extensión al emulador tal como fue recomendado)
 
 ### Conectarse al multiserver
@@ -103,8 +103,8 @@ Pokémon Red and Blue tiene un mapa completamente funcional que soporta seguimie
 
 1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/j-imbo/pkmnrb_jim/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases). 
 2. Abre PopTracker, y carga el pack de Pokémon Red and Blue.
-3. Haz click en el símbolo "AP" en la parte superior.
+3. Haz clic en el símbolo "AP" en la parte superior.
 4. Ingresa la dirección de AP, nombre del slot y contraseña (si es que hay).
 
-Y ya, el resto debería hacerse solo! Los items y checks seran marcados automaticamente, e incluso reconocerá tus
-configuraciones - Ocultará checks y ajustará la logica segun corresponda.
+¡Y ya, el resto debería hacerse solo! Los items y checks serán marcados automáticamente, e incluso reconocerá tus
+configuraciones - Ocultará checks y ajustará la lógica según corresponda.
