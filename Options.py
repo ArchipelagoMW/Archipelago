@@ -214,6 +214,12 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
         else:
             return self.value > other
 
+    def __ge__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value >= other.value
+        else:
+            return self.value >= other
+
     def __bool__(self) -> bool:
         return bool(self.value)
 
