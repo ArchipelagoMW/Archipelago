@@ -1004,6 +1004,7 @@ class SpriteSelector():
                 self.add_to_sprite_pool(sprite)
 
     def icon_section(self, frame_label, path, no_results_label):
+        os.makedirs(path, exist_ok=True)
         frame = LabelFrame(self.window, labelwidget=frame_label, padx=5, pady=5)
         frame.pack(side=TOP, fill=X)
 
