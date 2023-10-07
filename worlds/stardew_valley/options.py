@@ -1,28 +1,7 @@
 from dataclasses import dataclass
-from typing import Dict, Union, Protocol, runtime_checkable, ClassVar
 
-from Options import Option, Range, DeathLink, SpecialRange, Toggle, Choice, OptionSet
+from Options import Range, SpecialRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink
 from .mods.mod_data import ModNames
-
-@runtime_checkable
-class StardewOption(Protocol):
-    internal_name: ClassVar[str]
-
-
-@dataclass
-class StardewOptions:
-    options: Dict[str, Union[bool, int, str]]
-
-    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int, str]:
-        if isinstance(item, StardewOption):
-            item = item.internal_name
-
-        return self.options.get(item, None)
-
-    def __setitem__(self, key: Union[str, StardewOption], value: Union[bool, int, str]):
-        if isinstance(key, StardewOption):
-            key = key.internal_name
-        self.options[key] = value
 
 
 class Goal(Choice):
@@ -553,7 +532,46 @@ class Mods(OptionSet):
     }
 
 
-stardew_valley_option_classes = [
+@dataclass
+class StardewValleyOptions(PerGameCommonOptions):
+    goal: Goal = Goal.default
+    starting_money: StartingMoney = StartingMoney.default
+    profit_margin: ProfitMargin = ProfitMargin.default
+    bundle_randomization: BundleRandomization = BundleRandomization.default
+    bundle_price: BundlePrice = BundlePrice.default
+    entrance_randomization: EntranceRandomization = EntranceRandomization.default
+    season_randomization: SeasonRandomization = SeasonRandomization.default
+    cropsanity: Cropsanity = Cropsanity.default
+    backpack_progression: BackpackProgression = BackpackProgression.default
+    tool_progression: ToolProgression = ToolProgression.default
+    skill_progression: SkillProgression = SkillProgression.default
+    building_progression: BuildingProgression = BuildingProgression.default
+    festival_locations: FestivalLocations = FestivalLocations.default
+    elevator_progression: ElevatorProgression = ElevatorProgression.default
+    arcade_machine_locations: ArcadeMachineLocations = ArcadeMachineLocations.default
+    special_order_locations: SpecialOrderLocations = SpecialOrderLocations.default
+    help_wanted_locations: HelpWantedLocations = HelpWantedLocations.default
+    fishsanity: Fishsanity = Fishsanity.default
+    museumsanity: Museumsanity = Museumsanity.default
+    friendsanity: Friendsanity = Friendsanity.default
+    friendsanity_heart_size: FriendsanityHeartSize = FriendsanityHeartSize.default
+    number_of_movement_buffs: NumberOfMovementBuffs = NumberOfMovementBuffs.default
+    number_of_luck_buffs: NumberOfLuckBuffs = NumberOfLuckBuffs.default
+    exclude_ginger_island: ExcludeGingerIsland = ExcludeGingerIsland.default
+    trap_items: TrapItems = TrapItems.default
+    multiple_day_sleep_enabled: MultipleDaySleepEnabled = MultipleDaySleepEnabled.default
+    multiple_day_sleep_cost: MultipleDaySleepCost = MultipleDaySleepCost.default
+    experience_multiplier: ExperienceMultiplier = ExperienceMultiplier.default
+    friendship_multiplier: FriendshipMultiplier = FriendshipMultiplier.default
+    debris_multiplier: DebrisMultiplier = DebrisMultiplier.default
+    quick_start: QuickStart = QuickStart.default
+    gifting: Gifting = Gifting.default
+    mods: Mods = Mods.default
+    death_link: DeathLink = DeathLink.default
+
+
+
+stardew_valley_option_classes = {
     Goal,
     StartingMoney,
     ProfitMargin,
@@ -587,22 +605,6 @@ stardew_valley_option_classes = [
     QuickStart,
     Gifting,
     Mods,
-]
-stardew_valley_options: Dict[str, type(Option)] = {option.internal_name: option for option in
-                                                   stardew_valley_option_classes}
-default_options = {option.internal_name: option.default for option in stardew_valley_options.values()}
-stardew_valley_options["death_link"] = DeathLink
+}
 
-
-def fetch_options(world, player: int) -> StardewOptions:
-    return StardewOptions({option: get_option_value(world, player, option) for option in stardew_valley_options})
-
-
-def get_option_value(world, player: int, name: str) -> Union[bool, int]:
-    assert name in stardew_valley_options, f"{name} is not a valid option for Stardew Valley."
-
-    value = getattr(world, name)
-
-    if issubclass(stardew_valley_options[name], Toggle):
-        return bool(value[player].value)
-    return value[player].value
+stardew_valley_option_names = {option.internal_name for option in stardew_valley_option_classes}

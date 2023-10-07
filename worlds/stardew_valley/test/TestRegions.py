@@ -3,7 +3,7 @@ import sys
 import unittest
 
 from . import SVTestBase, setup_solo_multiworld
-from .. import StardewOptions, options, StardewValleyWorld
+from .. import options, StardewValleyWorld, StardewValleyOptions
 from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag
 
 connections_by_name = {connection.name for connection in vanilla_connections}
@@ -37,8 +37,9 @@ class TestEntranceRando(unittest.TestCase):
             seed = random.randrange(sys.maxsize)
             with self.subTest(flag=flag, msg=f"Seed: {seed}"):
                 rand = random.Random(seed)
-                world_options = StardewOptions({options.EntranceRandomization.internal_name: option,
-                                                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false})
+                world_options = StardewValleyOptions()
+                world_options.entrance_randomization = option
+                world_options.exclude_ginger_island = options.ExcludeGingerIsland.option_false
                 regions_by_name = {region.name: region for region in vanilla_regions}
 
                 _, randomized_connections = randomize_connections(rand, world_options, regions_by_name)
@@ -62,8 +63,9 @@ class TestEntranceRando(unittest.TestCase):
             with self.subTest(option=option, flag=flag):
                 seed = random.randrange(sys.maxsize)
                 rand = random.Random(seed)
-                world_options = StardewOptions({options.EntranceRandomization.internal_name: option,
-                                                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
+                world_options = StardewValleyOptions()
+                world_options.entrance_randomization = option
+                world_options.exclude_ginger_island = options.ExcludeGingerIsland.option_true
                 regions_by_name = {region.name: region for region in vanilla_regions}
 
                 _, randomized_connections = randomize_connections(rand, world_options, regions_by_name)
