@@ -408,7 +408,13 @@ class World(metaclass=AutoWorldRegister):
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
     
-    def fill_error(self, remaining_items: List["Item"]) -> None:
+    def fill_error(self, remaining_items: List["Item"], unfilled_locations: List["Location"]) -> None:
+        """
+        Called if this world has any unplaced items or unfilled locations in the available pool during a fill step
+        and there is a FillError
+        :param remaining_items: The player's unplaced items
+        :param unfilled_locations: The player's unfilled locations
+        """
         pass
 
     @classmethod
