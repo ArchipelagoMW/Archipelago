@@ -180,6 +180,11 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
     if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
+        players = set([item.player for item in unplaced_items]) | set([loc.player for loc in locations])
+        for player in sorted(players):
+            items = [item for item in unplaced_items if item.player == player]
+            locs = [loc for loc in locations if loc.player == player]
+            world.worlds[player].fill_error(items, locs)
         if world.can_beat_game():
             logging.warning(
                 f'Not all items placed. Game beatable anyway. (Could not place {unplaced_items})')
@@ -428,6 +433,10 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         # "progression fill"
         fill_restrictive(world, world.state, defaultlocations, progitempool)
         if progitempool:
+            players = set([item.player for item in progitempool])
+            for player in sorted(players):
+                items = [item for item in progitempool if item.player == player]
+                world.worlds[player].fill_error(items, [])
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
         accessibility_corrections(world, world.state, defaultlocations)
@@ -507,8 +516,6 @@ def flood_items(world: MultiWorld) -> None:
             if candidate_item_to_place is not None:
                 item_to_place = candidate_item_to_place
             else:
-                for subworld in world.worlds.values():
-                    subworld.fill_error(itempool)
                 raise FillError('No more progress items left to place.')
 
         # find item to replace with progress item
