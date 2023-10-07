@@ -14,7 +14,7 @@ from .SubClasses import MessengerItem, MessengerRegion
 from .client_setup import launch_game
 
 components.append(
-    Component("The Messenger", cli=True, component_type=Type.CLIENT, func=launch_game)
+    Component("The Messenger", component_type=Type.CLIENT, func=launch_game)
 )
 
 

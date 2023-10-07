@@ -2,7 +2,6 @@ import logging
 import os.path
 import subprocess
 import sys
-import tomllib
 from tkinter.messagebox import askyesnocancel
 from typing import Any, Optional
 from zipfile import ZipFile
@@ -79,11 +78,12 @@ def request_data(url: str) -> Any:
 def update_mod() -> Optional[bool]:
     """Check if the mod needs to be updated, and update if so"""
     url = "https://raw.githubusercontent.com/alwaysintreble/TheMessengerRandomizerModAP/archipelago/courier.toml"
-    latest_version = tomllib.loads(requests.get(url).text).get("version")
+    remote_data = requests.get(url).text
+    latest_version = remote_data.splitlines()[1].strip("version = \"")
 
     toml_path = os.path.join(folder, "Mods", "TheMessengerRandomizerAP", "courier.toml")
-    with open(toml_path, "rb") as f:
-        installed_version = tomllib.load(f).get("version")
+    with open(toml_path, "r") as f:
+        installed_version = f.read().splitlines()[1].strip("version = \"")
 
     should_update = tuplize_version(latest_version) > tuplize_version(installed_version)
     if should_update:
