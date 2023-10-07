@@ -174,8 +174,7 @@ class WitnessPlayerLogic:
             hex_set = line_split[1].split(",")
 
             for hex_code in hex_set:
-                if hex_code not in self.COMPLETELY_DISABLED_ENTITIES:
-                    self.ALWAYS_EVENT_NAMES_BY_HEX[hex_code] = line_split[0]
+                self.ALWAYS_EVENT_NAMES_BY_HEX[hex_code] = line_split[0]
 
             to_remove = set()
 
@@ -482,11 +481,15 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_REGIONS)
 
         for always_hex, always_item in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
+            if always_hex in self.COMPLETELY_DISABLED_ENTITIES:
+                continue
             self.ALWAYS_EVENT_HEX_CODES.add(always_hex)
             self.EVENT_PANELS.add(always_hex)
             self.EVENT_ITEM_NAMES[always_hex] = always_item
 
         for panel in self.EVENT_PANELS:
+            if panel in self.COMPLETELY_DISABLED_ENTITIES:
+                continue
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
