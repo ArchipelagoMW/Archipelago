@@ -45,7 +45,7 @@ class ChecksFinderWorld(World):
             'race': self.multiworld.is_race,
         }
 
-    def generate_basic(self):
+    def create_items(self):
 
         # Generate item pool
         itempool = []
