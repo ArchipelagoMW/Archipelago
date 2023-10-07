@@ -14,7 +14,7 @@ If you wish to contribute to the website, please take a look at [these tests](/t
 Archipelago supports multiple versions of Python. You may need to download older Python versions to fully test
 your changes. Currently, the oldest supported version is [Python 3.8](https://www.python.org/downloads/release/python-380/). 
 It is recommended that automated github actions are turned on in your fork to have github run all of the unit tests after pushing.
-You can turn them on here:
+You can turn them on here:  
 ![Github actions example](./img/github-actions-example.png)
 
 Other than these requests, we tend to judge code on a case by case basis. For contribution to the website, please refer to
