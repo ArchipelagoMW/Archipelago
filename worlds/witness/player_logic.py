@@ -174,13 +174,8 @@ class WitnessPlayerLogic:
             hex_set = line_split[1].split(",")
 
             for hex_code in hex_set:
-                self.ALWAYS_EVENT_NAMES_BY_HEX[hex_code] = line_split[0]
-
-            """
-            Should probably do this differently...
-            Events right now depend on a panel.
-            That seems bad.
-            """
+                if hex_code not in self.COMPLETELY_DISABLED_ENTITIES:
+                    self.ALWAYS_EVENT_NAMES_BY_HEX[hex_code] = line_split[0]
 
             to_remove = set()
 
@@ -271,6 +266,7 @@ class WitnessPlayerLogic:
         # Postgame
 
         doors = get_option_value(world, player, "shuffle_doors") >= 2
+        lasers = is_option_enabled(world, player, "shuffle_lasers")
         early_caves = get_option_value(world, player, "early_caves") > 0
         victory = get_option_value(world, player, "victory_condition")
         mnt_lasers = get_option_value(world, player, "mountain_lasers")
@@ -306,7 +302,9 @@ class WitnessPlayerLogic:
         # Exclude Discards / Vaults
 
         if not is_option_enabled(world, player, "shuffle_discarded_panels"):
-            if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
+            # In disable_non_randomized, the discards are needed for alternate activation triggers, UNLESS both
+            # (remote) doors and lasers are shuffled.
+            if not is_option_enabled(world, player, "disable_non_randomized_puzzles") or (doors and lasers):
                 adjustment_linesets_in_order.append(get_discard_exclusion_list())
 
             if doors:
