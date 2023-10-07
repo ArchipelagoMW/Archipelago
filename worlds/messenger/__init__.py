@@ -1,14 +1,29 @@
 import logging
-from typing import Dict, Any, List, Optional
+from typing import Any, ClassVar, Dict, List, Optional
 
-from BaseClasses import Tutorial, ItemClassification, CollectionState, Item, MultiWorld
-from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER
-from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
-from .Regions import REGIONS, REGION_CONNECTIONS, SEALS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS, shuffle_shop_prices, FIGURINES
-from .SubClasses import MessengerRegion, MessengerItem
+from BaseClasses import CollectionState, Item, ItemClassification, MultiWorld, Tutorial
+from settings import FilePath, Group
+from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, Type, components
 from . import Rules
+from .Constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
+from .Options import Goal, Logic, NotesNeeded, PowerSeals, messenger_options
+from .Regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
+from .Shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
+from .SubClasses import MessengerItem, MessengerRegion
+from .client_setup import launch_game
+
+components.append(
+    Component("The Messenger", cli=True, component_type=Type.CLIENT, func=launch_game)
+)
+
+
+class MessengerSettings(Group):
+    class GamePath(FilePath):
+        description = "The Messenger game executable"
+        is_exe = True
+
+    game_path: GamePath = GamePath("TheMessenger.exe")
 
 
 class MessengerWeb(WebWorld):
@@ -35,16 +50,9 @@ class MessengerWorld(World):
     adventure full of thrills, surprises, and humor.
     """
     game = "The Messenger"
-
-    item_name_groups = {
-        "Notes": set(NOTES),
-        "Keys": set(NOTES),
-        "Crest": {"Sun Crest", "Moon Crest"},
-        "Phobe": set(PHOBEKINS),
-        "Phobekin": set(PHOBEKINS),
-    }
-
     option_definitions = messenger_options
+    settings_key = "messenger_settings"
+    settings: ClassVar[MessengerSettings]
 
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
@@ -60,6 +68,13 @@ class MessengerWorld(World):
                                *FIGURINES,
                                "Money Wrench",
                            ], base_offset)}
+    item_name_groups = {
+        "Notes": set(NOTES),
+        "Keys": set(NOTES),
+        "Crest": {"Sun Crest", "Moon Crest"},
+        "Phobe": set(PHOBEKINS),
+        "Phobekin": set(PHOBEKINS),
+    }
 
     data_version = 3
     required_client_version = (0, 4, 0)
