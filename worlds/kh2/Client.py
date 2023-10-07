@@ -48,7 +48,7 @@ class KH2Context(CommonContext):
             #  Character: [back of invo, front of invo]
             "SoraInvo":   [0x25D8, 0x2546],
             "DonaldInvo": [0x26F4, 0x2658],
-            "GoofyInvo":  [0x2808, 0x276A],
+            "GoofyInvo":  [0x2808, 0x276C],
             "AmountInvo": {
                 "Ability":      {},
                 "Amount":       {
@@ -82,7 +82,7 @@ class KH2Context(CommonContext):
         self.front_of_inventory = {
             "Sora":   0x2546,
             "Donald": 0x2658,
-            "Goofy":  0x276A,
+            "Goofy":  0x276C,
         }
         self.kh2seedname = None
         self.kh2slotdata = None
@@ -277,7 +277,7 @@ class KH2Context(CommonContext):
                     #  Character: [back of invo, front of invo]
                     "SoraInvo":   [0x25D8, 0x2546],
                     "DonaldInvo": [0x26F4, 0x2658],
-                    "GoofyInvo":  [0x2808, 0x276A],
+                    "GoofyInvo":  [0x2808, 0x276C],
                     "AmountInvo": {
                         "Ability":      {},
                         "Amount":       {
