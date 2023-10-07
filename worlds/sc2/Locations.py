@@ -423,7 +423,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Northeast Base", SC2WOL_LOC_ID_OFFSET + 2304, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
-        LocationData("A Sinister Turn", "A Sinister Turn: Southeast Base", SC2WOL_LOC_ID_OFFSET + 2305, LocationType.MISSION_PROGRESS,
+        LocationData("A Sinister Turn", "A Sinister Turn: Southwest Base", SC2WOL_LOC_ID_OFFSET + 2305, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Maar", SC2WOL_LOC_ID_OFFSET + 2306, LocationType.MISSION_PROGRESS,
                      lambda state: adv_tactics or state._sc2wol_has_protoss_medium_units(multiworld, player)),
