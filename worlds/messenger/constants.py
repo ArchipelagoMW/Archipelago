@@ -1,6 +1,6 @@
 # items
 # listing individual groups first for easy lookup
-from .Shop import SHOP_ITEMS, FIGURINES
+from .shop import SHOP_ITEMS, FIGURINES
 
 NOTES = [
     "Key of Hope",
