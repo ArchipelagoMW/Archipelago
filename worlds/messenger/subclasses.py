@@ -2,10 +2,10 @@ from functools import cached_property
 from typing import Optional, TYPE_CHECKING, cast
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
-from .Constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
-from .Options import Goal
-from .Regions import MEGA_SHARDS, REGIONS, SEALS
-from .Shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
+from .constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
+from .options import Goal
+from .regions import MEGA_SHARDS, REGIONS, SEALS
+from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
