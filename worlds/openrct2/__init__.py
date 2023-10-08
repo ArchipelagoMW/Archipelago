@@ -52,13 +52,14 @@ class OpenRCT2World(World):
 
     def generate_early(self) -> None:
         #Grabs options for item generation
+        scenario = self.multiworld.scenario[self.player].value
         monopoly_mode = self.multiworld.monopoly_mode[self.player].value
         furry_convention_traps = self.multiworld.furry_convention_traps[self.player].value
         spam_traps = self.multiworld.spam_traps[self.player].value
         bathroom_traps = self.multiworld.bathroom_traps[self.player].value
         rules = self.multiworld.include_park_rules[self.player].value
         filler = self.multiworld.filler[self.player].value
-        items = set_openRCT2_items(monopoly_mode,furry_convention_traps,spam_traps,bathroom_traps,rules,filler)
+        items = set_openRCT2_items(scenario,monopoly_mode,furry_convention_traps,spam_traps,bathroom_traps,rules,filler)
 
         self.item_table = items[0]
         self.item_frequency = items[1]
@@ -347,6 +348,7 @@ class OpenRCT2World(World):
             "stat_rerolls": self.multiworld.stat_rerolls[self.player].value,
             "randomize_park_values": self.multiworld.randomize_park_values[self.player].value,
             "visibility": self.multiworld.visibility[self.player].value,
+            "rules": self.multiworld.include_park_rules[self.player].value,
             "objectives": objectives,
             "location_prices": self.location_prices
         }

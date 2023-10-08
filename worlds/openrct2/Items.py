@@ -10,8 +10,12 @@ class OpenRCT2Item(Item):
 
 
 
-def set_openRCT2_items(monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps, park_rules, filler):
-    openRCT2_items = ForestFrontiers
+def set_openRCT2_items(scenario, monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps, park_rules, filler):
+    print("\nThis is the selected scenario:")
+    print(scenario)
+    print("And these items will be randomized:")
+    print(Scenario_Items[scenario])
+    openRCT2_items = Scenario_Items[scenario]
     
     if monopoly_mode:
         count = 0

@@ -95,7 +95,8 @@ class OpenRCT2Socket:
                     self.game.setblocking(0)
                     while self.package_queue:
                         self._send(self.package_queue[0])
-                        self.package_queue.pop()
+                        self.package_queue.pop(0)
+                        time.sleep(0.3)
                     #break
             except socket.timeout as e:
                 #print('error connecting to game', e)
@@ -131,11 +132,13 @@ class OpenRCT2Socket:
         except Exception as e:
             print("Error in recv", e)
             raise
+            self.disconnectgame()
+            self.connectgame()
         return None
 
 
     def _send(self, data):
-        time.sleep(0.2)
+        time.sleep(0.3)
         try:
             if data:
                 print("DATA")
@@ -147,6 +150,7 @@ class OpenRCT2Socket:
                     print('sent', len(data), 'bytes to', sock.getsockname(), '->', sock.getpeername(),':\n', data)
                 else:
                     self.package_queue.append(data)
+                    print("Unable to send. Appending package to queue")
                     print(self.package_queue)
                     # raise Exception("Socket not connected")
                     # asynchio.run(self.connectgame())
@@ -158,7 +162,7 @@ class OpenRCT2Socket:
 
     def sendobj(self, obj):
         # asyncio.run(self.connectgame())
-        data = json.dumps(obj)
+        data = json.dumps(obj) + "\0"
         data = data.encode()
         try:
             self._send(data)
