@@ -537,6 +537,7 @@ progression_set = {
             ItemName.AutoMaster,
             ItemName.AutoFinal,
             ItemName.TrinityLimit,
+            ItemName.DriveConverter,
             # Party Limits
             ItemName.FlareForce,
             ItemName.Fantasia,

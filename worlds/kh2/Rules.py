@@ -394,7 +394,11 @@ class KH2Rules:
     def drive_form_unlock(self, state: CollectionState, parent_drive_form, level_required, fight_logic=False) -> bool:
         form_access = {parent_drive_form}
         if self.world.multiworld.AutoFormLogic[self.player] and state.has(ItemName.SecondChance, self.player) and not fight_logic:
-            form_access.add(self.auto_form_dict[parent_drive_form])
+            if parent_drive_form == ItemName.MasterForm:
+                if state.has(ItemName.DriveConverter, self.player):
+                    form_access.add(self.auto_form_dict[parent_drive_form])
+            else:
+                form_access.add(self.auto_form_dict[parent_drive_form])
         return state.has_any(form_access, self.player) \
             and self.get_form_level_requirement(state, level_required)
 

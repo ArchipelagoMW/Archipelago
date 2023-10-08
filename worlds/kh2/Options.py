@@ -173,7 +173,7 @@ class Cups(Choice):
     option_no_cups = 0
     option_cups = 1
     option_cups_and_hades_paradox = 2
-    default = 1
+    default = 0
 
 
 class LevelDepth(Choice):
@@ -295,7 +295,7 @@ class BountyStartHint(Toggle):
 class WeaponSlotStartHint(Toggle):
     """Start with Weapon Slots' Hinted"""
     display_name = "Start with Weapon Slots Hinted"
-    default = True
+    default = False
 
 
 class CorSkipToggle(Toggle):
@@ -319,7 +319,7 @@ class CustomItemPoolQuantity(ItemDict):
 
 
 class FillerItemsLocal(Toggle):
-    """Make all filler classified items local. Recommended when playing with games with fewer locations than kh2"""
+    """Make all dynamic filler classified items local. Recommended when playing with games with fewer locations than kh2"""
     display_name = "Local Filler Items"
     default = True
 
