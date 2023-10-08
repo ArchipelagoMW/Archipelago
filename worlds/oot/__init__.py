@@ -410,6 +410,9 @@ class OOTWorld(World):
         self.starting_tod = self.starting_tod.replace('_', '-')
         self.shuffle_scrubs = self.shuffle_scrubs.replace('_prices', '')
 
+        # Convert adult trade option to expected Set
+        self.adult_trade_start = {self.adult_trade_start.title()}
+
         # Get hint distribution
         self.hint_dist_user = read_json(data_path('Hints', f'{self.hint_dist}.json'))
 
