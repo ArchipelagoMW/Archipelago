@@ -459,11 +459,21 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         write_mode,
         encoding="utf-8-sig")
     file_handler.setFormatter(logging.Formatter(log_format))
+
+    class Filter(logging.Filter):
+        def __init__(self, filter_name, condition):
+            super().__init__(filter_name)
+            self.condition = condition
+
+        def filter(self, record: logging.LogRecord) -> bool:
+            return self.condition(record)
+
+    file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
     root_logger.addHandler(file_handler)
     if sys.stdout:
-        root_logger.addHandler(
-            logging.StreamHandler(sys.stdout)
-        )
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
+        root_logger.addHandler(stream_handler)
 
     # Relay unhandled exceptions to logger.
     if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
