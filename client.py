@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, List
+import functools
+import itertools
+from typing import TYPE_CHECKING, Any, Dict, Iterable, Iterator, List
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -49,6 +51,21 @@ guard16 = write16
 
 async def read_single_sequence(ctx: BizHawkContext, address: int, length: int) -> bytes:
     return (await bizhawk.read(ctx, [read(address, length)]))[0]
+
+
+def next_int(iterator: Iterator[bytes]) -> int:
+    return int.from_bytes(next(iterator), 'little')
+
+
+# https://docs.python.org/3.11/library/itertools.html#itertools-recipes
+def batches(iterable: Iterable, n: int):
+    '''Batch data into tuples of length n. The last batch may be shorter.'''
+
+    if n < 1:
+        raise ValueError('n must be at least 1')
+    it = iter(iterable)
+    while batch := tuple(itertools.islice(it, n)):
+        yield batch
 
 
 # class WL4CommandProcessor(BizHawkClientCommandProcessor):
@@ -125,7 +142,9 @@ class WL4Client(BizHawkClient):
         client_ctx.auth = self.rom_slot_name
 
     async def game_watcher(self, client_ctx: BizHawkClientContext) -> None:
+        get_int = functools.partial(int.from_bytes, byteorder='little')
         bizhawk_ctx = client_ctx.bizhawk_ctx
+
         try:
             game_mode_address = get_symbol('GlobalGameMode')
             game_state_address = get_symbol('sGameSeq')
@@ -138,7 +157,7 @@ class WL4Client(BizHawkClient):
             death_link_address = get_symbol('DeathLinkEnabled')
             wario_health_address = get_symbol('WarioHeart')
 
-            read_result = await bizhawk.read(bizhawk_ctx, [
+            read_result = iter(await bizhawk.read(bizhawk_ctx, [
                 read8(game_mode_address),
                 read8(game_state_address),
                 read16(wario_stop_flag_address),
@@ -147,16 +166,15 @@ class WL4Client(BizHawkClient):
                 read16(received_item_count_address),
                 read8(death_link_address),
                 read8(wario_health_address),
-            ])
-            game_mode = read_result[0][0]
-            game_state = read_result[1][0]
-            wario_stop_flag = int.from_bytes(read_result[2], 'little')
-            item_status = [int.from_bytes(read_result[3][i:i+4], 'little')
-                           for i in range(0, 36*4, 4)]
-            multiworld_state = read_result[4][0]
-            received_item_count = int.from_bytes(read_result[5], 'little')
-            death_link_flag = read_result[6][0]
-            wario_health = read_result[7][0]
+            ]))
+            game_mode = next_int(read_result)
+            game_state = next_int(read_result)
+            wario_stop_flag = next_int(read_result)
+            item_status = tuple(map(get_int, batches(next(read_result), 4)))
+            multiworld_state = next_int(read_result)
+            received_item_count = next_int(read_result)
+            death_link_flag = next_int(read_result)
+            wario_health = next_int(read_result)
 
             # Ensure safe state
             gameplay_state = (game_mode, game_state)
