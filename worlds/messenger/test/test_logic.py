@@ -1,5 +1,3 @@
-from typing import Iterable, List
-
 from BaseClasses import ItemClassification
 from . import MessengerTestBase
 
@@ -81,7 +79,7 @@ class HardLogicTest(MessengerTestBase):
         item = self.get_item_by_name("Rope Dart")
         self.collect(item)
         self.assertTrue(self.can_reach_location(special_loc))
-    
+
     def test_glacial(self) -> None:
         """Test Glacial Peak locations."""
         self.assertAccessDependency(["Glacial Peak Seal - Ice Climbers"],

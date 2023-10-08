@@ -119,7 +119,7 @@ class MessengerRules:
     def can_dboost(self, state: CollectionState) -> bool:
         return state.has_any({"Path of Resilience", "Meditation"}, self.player) and \
             state.has("Second Wind", self.player)
-    
+
     def is_aerobatic(self, state: CollectionState) -> bool:
         return self.has_wingsuit(state) and state.has("Aerobatics Warrior", self.player)
 
