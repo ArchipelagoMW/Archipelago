@@ -14,12 +14,12 @@ from worlds.stardew_valley.locations import location_table
 from worlds.stardew_valley.options import stardew_valley_option_classes, Mods, EntranceRandomization, Friendsanity, SeasonRandomization, SpecialOrderLocations, \
     ExcludeGingerIsland, TrapItems
 
-mod_list = (ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-            ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-            ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-            ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-            ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-            ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator)
+all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+                      ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+                      ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+                      ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+                      ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+                      ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator})
 
 
 def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: SVTestBase, multiworld: MultiWorld):
@@ -38,7 +38,7 @@ def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: SVTestBase
 class TestGenerateModsOptions(SVTestBase):
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
-        for mod in mod_list:
+        for mod in all_mods:
             with self.subTest(f"Mod: {mod}"):
                 multi_world = setup_solo_multiworld({Mods: mod})
                 basic_checks(self, multi_world)
@@ -47,11 +47,11 @@ class TestGenerateModsOptions(SVTestBase):
     def test_given_mod_pairs_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
             return
-        num_mods = len(mod_list)
+        num_mods = len(all_mods)
         for mod1_index in range(0, num_mods):
             for mod2_index in range(mod1_index + 1, num_mods):
-                mod1 = mod_list[mod1_index]
-                mod2 = mod_list[mod2_index]
+                mod1 = all_mods[mod1_index]
+                mod2 = all_mods[mod2_index]
                 mods = (mod1, mod2)
                 with self.subTest(f"Mods: {mods}"):
                     multiworld = setup_solo_multiworld({Mods: mods})
@@ -60,7 +60,7 @@ class TestGenerateModsOptions(SVTestBase):
 
     def test_given_mod_names_when_generate_paired_with_entrance_randomizer_then_basic_checks(self):
         for option in EntranceRandomization.options:
-            for mod in mod_list:
+            for mod in all_mods:
                 with self.subTest(f"entrance_randomization: {option}, Mod: {mod}"):
                     multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: option, Mods: mod})
                     basic_checks(self, multiworld)
@@ -73,7 +73,7 @@ class TestGenerateModsOptions(SVTestBase):
             if not option.options:
                 continue
             for value in option.options:
-                for mod in mod_list:
+                for mod in all_mods:
                     with self.subTest(f"{option.internal_name}: {value}, Mod: {mod}"):
                         multiworld = setup_solo_multiworld({option.internal_name: option.options[value], Mods: mod})
                         basic_checks(self, multiworld)
@@ -85,7 +85,7 @@ class TestBaseItemGeneration(SVTestBase):
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-        Mods.internal_name: mod_list
+        Mods.internal_name: all_mods
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -109,7 +109,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
-        Mods.internal_name: mod_list
+        Mods.internal_name: all_mods
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
@@ -143,7 +143,7 @@ class TestModEntranceRando(unittest.TestCase):
                 rand = random.Random(seed)
                 world_options = {EntranceRandomization.internal_name: option,
                                  ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
-                                 Mods.internal_name: mod_list}
+                                 Mods.internal_name: all_mods}
                 multiworld = setup_solo_multiworld(world_options)
                 world = multiworld.worlds[1]
                 final_regions = create_final_regions(world.options)
@@ -157,9 +157,9 @@ class TestModEntranceRando(unittest.TestCase):
                         connection_in_randomized = connection.name in randomized_connections
                         reverse_in_randomized = connection.reverse in randomized_connections
                         self.assertTrue(connection_in_randomized,
-                                      f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
+                                        f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
                         self.assertTrue(reverse_in_randomized,
-                                      f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
+                                        f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
                                  f"Connections are duplicated in randomization. Seed = {seed}")
