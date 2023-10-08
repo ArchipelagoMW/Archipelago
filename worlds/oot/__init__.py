@@ -163,7 +163,7 @@ class OOTWorld(World):
             "Bottle with Big Poe", "Bottle with Red Potion", "Bottle with Green Potion",
             "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish",
             "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
-        "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Odd Mushroom",
+        "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Cojiro", "Odd Mushroom",
             "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
             "Eyeball Frog", "Eyedrops", "Claim Check"}
     }
