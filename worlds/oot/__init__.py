@@ -806,7 +806,7 @@ class OOTWorld(World):
                         self.multiworld.itempool.remove(item)
                     self.multiworld.random.shuffle(locations)
                     fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations, stage_items,
-                        single_player_placement=True, lock=True)
+                        single_player_placement=True, lock=True, allow_excluded=True)
             else:
                 for dungeon_info in dungeon_table:
                     dungeon_name = dungeon_info['name']
@@ -817,7 +817,7 @@ class OOTWorld(World):
                             self.multiworld.itempool.remove(item)
                         self.multiworld.random.shuffle(locations)
                         fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations, dungeon_items,
-                            single_player_placement=True, lock=True)
+                            single_player_placement=True, lock=True, allow_excluded=True)
 
         # Place songs
         # 5 built-in retries because this section can fail sometimes
@@ -858,7 +858,7 @@ class OOTWorld(World):
                 try:
                     self.multiworld.random.shuffle(song_locations)
                     fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), song_locations[:], songs[:],
-                                     True, True)
+                                     single_player_placement=True, lock=True, allow_excluded=True)
                     logger.debug(f"Successfully placed songs for player {self.player} after {6 - tries} attempt(s)")
                 except FillError as e:
                     tries -= 1
@@ -894,7 +894,8 @@ class OOTWorld(World):
             self.multiworld.random.shuffle(shop_locations)
             for item in shop_prog + shop_junk:
                 self.multiworld.itempool.remove(item)
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), shop_locations, shop_prog, True, True)
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), shop_locations, shop_prog,
+                single_player_placement=True, lock=True, allow_excluded=True)
             fast_fill(self.multiworld, shop_junk, shop_locations)
             for loc in shop_locations:
                 loc.locked = True
@@ -969,7 +970,7 @@ class OOTWorld(World):
                             multiworld.itempool.remove(item)
                         multiworld.random.shuffle(locations)
                         fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_stage_items,
-                            single_player_placement=False, lock=True)
+                            single_player_placement=False, lock=True, allow_excluded=True)
                         if fill_stage == 'Song':
                             # We don't want song locations to contain progression unless it's a song
                             # or it was marked as priority.
@@ -990,7 +991,7 @@ class OOTWorld(World):
                                 multiworld.itempool.remove(item)
                             multiworld.random.shuffle(locations)
                             fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_dungeon_items,
-                                single_player_placement=False, lock=True)
+                                single_player_placement=False, lock=True, allow_excluded=True)
 
     def generate_output(self, output_directory: str):
         if self.hints != 'none':
