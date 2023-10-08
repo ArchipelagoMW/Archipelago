@@ -748,6 +748,8 @@ def distribute_planned(world: MultiWorld) -> None:
     early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
     non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
     for loc in world.get_unfilled_locations():
+        if loc.address is None:  # handles edge case with randomized event locations
+            continue
         if loc in reachable:
             early_locations[loc.player].append(loc.name)
         else:  # not reachable with swept state
