@@ -29,3 +29,4 @@ emulator will display what was found external to the in-game text box.
 The following command is only available when using the FF1Client for the Final Fantasy Randomizer.
 
 - `/nes` Shows the current status of the NES connection.
+- `/toggle_msgs` Toggle displaying messages in EmuHawk
