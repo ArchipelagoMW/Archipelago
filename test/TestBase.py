@@ -6,7 +6,7 @@ from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
 
-from BaseClasses import MultiWorld, CollectionState, ItemClassification, Item
+from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
 
 
@@ -275,3 +275,37 @@ class WorldTestBase(unittest.TestCase):
             locations = self.multiworld.get_reachable_locations(state, 1)
             self.assertGreater(len(locations), 0,
                                "Need to be able to reach at least one location to get started.")
+
+    def testFill(self):
+        """Generates a multiworld and validates placements with the defined options"""
+        # don't run this test if accessibility is set manually
+        if not (self.run_default_tests and self.constructed):
+            return
+        from Fill import distribute_items_restrictive
+
+        # basically a shortened reimplementation of this method from core, in order to force the check is done
+        def fulfills_accessibility():
+            locations = self.multiworld.get_locations(1).copy()
+            state = CollectionState(self.multiworld)
+            while locations:
+                sphere: typing.List[Location] = []
+                for n in range(len(locations) - 1, -1, -1):
+                    if locations[n].can_reach(state):
+                        sphere.append(locations.pop(n))
+                self.assertTrue(sphere or self.multiworld.accessibility[1] == "minimal",
+                                f"Unreachable locations: {locations}")
+                if not sphere:
+                    break
+                for location in sphere:
+                    if location.item:
+                        state.collect(location.item, True, location)
+                
+            return self.multiworld.has_beaten_game(state, 1)
+        
+        with self.subTest("Game", game=self.game):
+            distribute_items_restrictive(self.multiworld)
+            call_all(self.multiworld, "post_fill")
+            self.assertTrue(fulfills_accessibility(), "Collected all locations, but can't beat the game.")
+            placed_items = [loc.item for loc in self.multiworld.get_locations() if loc.item and loc.item.code]
+            self.assertLessEqual(len(self.multiworld.itempool), len(placed_items),
+                                 "Unplaced Items remaining in itempool")
