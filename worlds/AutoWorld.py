@@ -358,6 +358,21 @@ class World(metaclass=AutoWorldRegister):
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
+    @classmethod
+    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+        """Creates a group, which is an instance of World that is responsible for multiple others.
+        An example case is ItemLinks creating these."""
+        import Options
+
+        for option_key, option in cls.option_definitions.items():
+            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+        for option_key, option in Options.common_options.items():
+            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+        for option_key, option in Options.per_game_common_options.items():
+            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+
+        return cls(multiworld, new_player_id)
+
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
