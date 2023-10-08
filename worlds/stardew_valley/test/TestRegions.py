@@ -4,6 +4,7 @@ import unittest
 
 from . import SVTestBase, setup_solo_multiworld
 from .. import options, StardewValleyWorld, StardewValleyOptions
+from ..options import EntranceRandomization, ExcludeGingerIsland
 from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag
 
 connections_by_name = {connection.name for connection in vanilla_connections}
@@ -37,12 +38,12 @@ class TestEntranceRando(unittest.TestCase):
             seed = random.randrange(sys.maxsize)
             with self.subTest(flag=flag, msg=f"Seed: {seed}"):
                 rand = random.Random(seed)
-                world_options = StardewValleyOptions()
-                world_options.entrance_randomization = option
-                world_options.exclude_ginger_island = options.ExcludeGingerIsland.option_false
+                world_options = {EntranceRandomization.internal_name: option,
+                                 ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false}
+                multiworld = setup_solo_multiworld(world_options)
                 regions_by_name = {region.name: region for region in vanilla_regions}
 
-                _, randomized_connections = randomize_connections(rand, world_options, regions_by_name)
+                _, randomized_connections = randomize_connections(rand, multiworld.worlds[1].options, regions_by_name)
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:
@@ -63,12 +64,12 @@ class TestEntranceRando(unittest.TestCase):
             with self.subTest(option=option, flag=flag):
                 seed = random.randrange(sys.maxsize)
                 rand = random.Random(seed)
-                world_options = StardewValleyOptions()
-                world_options.entrance_randomization = option
-                world_options.exclude_ginger_island = options.ExcludeGingerIsland.option_true
+                world_options = {EntranceRandomization.internal_name: option,
+                                 ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true}
+                multiworld = setup_solo_multiworld(world_options)
                 regions_by_name = {region.name: region for region in vanilla_regions}
 
-                _, randomized_connections = randomize_connections(rand, world_options, regions_by_name)
+                _, randomized_connections = randomize_connections(rand, multiworld.worlds[1].options, regions_by_name)
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:

@@ -4,21 +4,22 @@ import random
 import sys
 
 from BaseClasses import MultiWorld
+from worlds.stardew_valley.mods.mod_data import ModNames
 from worlds.stardew_valley.test import setup_solo_multiworld
 from worlds.stardew_valley.test.TestOptions import basic_checks, SVTestBase
-from worlds.stardew_valley import options, locations, items, Group, ItemClassification, StardewOptions
-from worlds.stardew_valley.mods.mod_data import ModNames
+from worlds.stardew_valley import items, Group, ItemClassification
 from worlds.stardew_valley.regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
 from worlds.stardew_valley.items import item_table, items_by_group
-from worlds.stardew_valley.locations import location_table, LocationTags
-from worlds.stardew_valley.options import stardew_valley_option_classes, Mods, EntranceRandomization
+from worlds.stardew_valley.locations import location_table
+from worlds.stardew_valley.options import stardew_valley_option_classes, Mods, EntranceRandomization, Friendsanity, SeasonRandomization, SpecialOrderLocations, \
+    ExcludeGingerIsland, TrapItems
 
-mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
-            "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
-            "Cooking Skill", "Binning Skill", "Juna - Roommate NPC",
-            "Professor Jasper Thomas", "Alec Revisited", "Custom NPC - Yoba", "Custom NPC Eugene",
-            "'Prophet' Wellwick", "Mister Ginger (cat npc)", "Shiko - New Custom NPC", "Delores - Custom NPC",
-            "Ayeisha - The Postal Worker (Custom NPC)", "Custom NPC - Riley", "Skull Cavern Elevator"]
+mod_list = (ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+            ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+            ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+            ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+            ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+            ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator)
 
 
 def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: SVTestBase, multiworld: MultiWorld):
@@ -81,10 +82,10 @@ class TestGenerateModsOptions(SVTestBase):
 
 class TestBaseItemGeneration(SVTestBase):
     options = {
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
-        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
-        options.Mods.internal_name: mod_list
+        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
+        SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        Mods.internal_name: mod_list
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -105,10 +106,10 @@ class TestBaseItemGeneration(SVTestBase):
 
 class TestNoGingerIslandModItemGeneration(SVTestBase):
     options = {
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
-        options.Mods.internal_name: mod_list
+        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
+        SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        Mods.internal_name: mod_list
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
@@ -134,20 +135,22 @@ class TestModEntranceRando(unittest.TestCase):
 
     def test_mod_entrance_randomization(self):
 
-        for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
-                             (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
-                             (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
+        for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
+                             (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+                             (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
             with self.subTest(option=option, flag=flag):
                 seed = random.randrange(sys.maxsize)
                 rand = random.Random(seed)
-                world_options = StardewOptions({options.EntranceRandomization.internal_name: option,
-                                                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
-                                                options.Mods.internal_name: mod_list})
-                final_regions = create_final_regions(world_options)
-                final_connections = create_final_connections(world_options)
+                world_options = {EntranceRandomization.internal_name: option,
+                                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+                                 Mods.internal_name: mod_list}
+                multiworld = setup_solo_multiworld(world_options)
+                world = multiworld.worlds[1]
+                final_regions = create_final_regions(world.options)
+                final_connections = create_final_connections(world.options)
 
                 regions_by_name = {region.name: region for region in final_regions}
-                _, randomized_connections = randomize_connections(rand, world_options, regions_by_name)
+                _, randomized_connections = randomize_connections(rand, world.options, regions_by_name)
 
                 for connection in final_connections:
                     if flag in connection.flag:
@@ -164,12 +167,11 @@ class TestModEntranceRando(unittest.TestCase):
 
 class TestModTraps(SVTestBase):
     def test_given_traps_when_generate_then_all_traps_in_pool(self):
-        trap_option = options.TrapItems
-        for value in trap_option.options:
+        for value in TrapItems.options:
             if value == "no_traps":
                 continue
             world_options = self.allsanity_options_without_mods()
-            world_options.update({options.TrapItems.internal_name: trap_option.options[value], Mods: "Magic"})
+            world_options.update({TrapItems.internal_name: TrapItems.options[value], Mods: "Magic"})
             multi_world = setup_solo_multiworld(world_options)
             trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups]
             multiworld_items = [item.name for item in multi_world.get_items()]

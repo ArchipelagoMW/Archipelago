@@ -1076,14 +1076,14 @@ class ItemLinks(OptionList):
 
 @dataclass
 class PerGameCommonOptions(CommonOptions):
-    local_items: LocalItems = LocalItems.default
-    non_local_items: NonLocalItems = NonLocalItems.default
-    start_inventory: StartInventory = field(default_factory=StartInventory)
-    start_hints: StartHints = StartHints.default
-    start_location_hints: StartLocationHints = StartLocationHints.default
-    exclude_locations: ExcludeLocations = ExcludeLocations.default
-    priority_locations: PriorityLocations = PriorityLocations.default
-    item_links: ItemLinks = field(default_factory=ItemLinks)
+    local_items: LocalItems
+    non_local_items: NonLocalItems
+    start_inventory: StartInventory
+    start_hints: StartHints
+    start_location_hints: StartLocationHints
+    exclude_locations: ExcludeLocations
+    priority_locations: PriorityLocations
+    item_links: ItemLinks
 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
