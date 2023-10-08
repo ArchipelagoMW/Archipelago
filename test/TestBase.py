@@ -189,12 +189,16 @@ class WorldTestBase(unittest.TestCase):
             self.multiworld.state.remove(item)
 
     def can_reach_location(self, location: str) -> bool:
-        """Determines if the current state can reach the provide location name"""
+        """Determines if the current state can reach the provided location name"""
         return self.multiworld.state.can_reach(location, "Location", 1)
 
     def can_reach_entrance(self, entrance: str) -> bool:
         """Determines if the current state can reach the provided entrance name"""
         return self.multiworld.state.can_reach(entrance, "Entrance", 1)
+    
+    def can_reach_region(self, region: str) -> bool:
+        """Determines if the current state can reach the provided region name"""
+        return self.multiworld.state.can_reach(region, "Region", 1)
 
     def count(self, item_name: str) -> int:
         """Returns the amount of an item currently in state"""
