@@ -27,11 +27,16 @@ class FrontDoorUsable(Toggle):
     """Adds a key to unlock the front door of the museum."""
     display_name = "Front Door Usable"
 
+class ElevatorsStaySolved(DefaultOnToggle):
+    """Adds elevators as checks and will remain open upon solving them."""
+    display_name = "Elevators Stay Solved"
+
 Shivers_options: Dict[str, Option] = {
     "lobby_access": LobbyAccess,
     "puzzle_hints_required": PuzzleHintsRequired,
     "include_information_plaques": InformationPlaques,
-    "front_door_usable": FrontDoorUsable
+    "front_door_usable": FrontDoorUsable,
+    "elevators_stay_solved": ElevatorsStaySolved
 }
 
 def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:

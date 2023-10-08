@@ -40,5 +40,10 @@
 		"Information Plaque: Astronomical Construction (UFO)",
 		"Information Plaque: Guillotine (Torture)",
 		"Information Plaque: Aliens (UFO)"
+	],
+	"elevators": [
+		"Puzzle Solved Underground Elevator",
+		"Puzzle Solved Bedroom Elevator",
+		"Puzzle Solved Three Floor Elevator"
 	]
 }

@@ -109,7 +109,10 @@
     "Information Plaque: Planets (UFO)",
     "Information Plaque: Astronomical Construction (UFO)",
     "Information Plaque: Guillotine (Torture)",
-    "Information Plaque: Aliens (UFO)"
+    "Information Plaque: Aliens (UFO)",
+    "Puzzle Solved Underground Elevator",
+    "Puzzle Solved Bedroom Elevator",
+    "Puzzle Solved Three Floor Elevator"
   ],
   "locations_by_region": {
     "Outside": [
@@ -124,6 +127,8 @@
       "Ixupi Captured Crystal",
       "Ixupi Captured Sand",
       "Ixupi Captured Metal",
+      "Puzzle Solved Underground Elevator",
+      "Puzzle Solved Three Floor Elevator",
       "Puzzle Hint Found: Combo Lock in Mailbox",
       "Puzzle Hint Found: Orange Symbol",
       "Puzzle Hint Found: Silver Symbol",
@@ -140,7 +145,8 @@
       "Flashback Memory Obtained Scrapbook",
       "Accessible: Storage: Desk Drawer",
       "Puzzle Hint Found: Atlantis Map",
-      "Puzzle Hint Found: Tape Recorder Heard"
+      "Puzzle Hint Found: Tape Recorder Heard",
+      "Puzzle Solved Bedroom Elevator"
     ],
     "Workshop": [
       "Puzzle Solved Workshop Drawers",

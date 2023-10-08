@@ -64,6 +64,8 @@ class ShiversWorld(World):
         self.removed_locations = set()
         if not self.multiworld.include_information_plaques[self.player]:
             self.removed_locations.update(Constants.exclusion_info["plaques"])
+        if not self.multiworld.elevators_stay_solved[self.player]:
+            self.removed_locations.update(Constants.exclusion_info["elevators"])
 
         # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
@@ -89,7 +91,7 @@ class ShiversWorld(World):
         filler = []
         filler += [self.create_item("Easier Lyre") for i in range(10)]
         filler += [self.create_item(name) for name, data in item_table.items() if data.type == 'filler2']
-        filler += [self.create_item("Heal") for i in range(39 - len(self.removed_locations))]
+        filler += [self.create_item("Heal") for i in range(42 - len(self.removed_locations))]
 
         #Place library escape items. Choose a location to place the escape item
         library_region = self.multiworld.get_region("Library", self.player)
@@ -129,7 +131,6 @@ class ShiversWorld(World):
         self.multiworld.itempool += filler
 
         #Lobby acess:
-        print(lobby_access_keys)
         if get_option_value(self.multiworld, self.player, "lobby_access") == 1:
             if lobby_access_keys == 1:
                 self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
@@ -180,7 +181,8 @@ class ShiversWorld(World):
     def _get_slot_data(self):
         return {
             'storageplacements': self.storage_placements,
-            'excludedlocations': {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()}
+            'excludedlocations': {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
+            'elevatorsstaysolved': {self.multiworld.elevators_stay_solved[self.player].value}
         }
 
     def fill_slot_data(self) -> dict:
