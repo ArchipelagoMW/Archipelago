@@ -575,7 +575,7 @@ class Overcooked2World(World):
         bugs = ["FixDoubleServing", "FixSinkBug", "FixControlStickThrowBug", "FixEmptyBurnerThrow"]
         for bug in bugs:
             base_data[bug] = self.options.fix_bugs.result
-        base_data["PreserveCookingProgress"] = self.options.always_preserver_cooking_progress.result
+        base_data["PreserveCookingProgress"] = self.options.always_preserve_cooking_progress.result
         base_data["TimerAlwaysStarts"] = self.options.prep_levels == PrepLevelMode.ayce
         base_data["LevelTimerScale"] = 0.666 if self.options.shorter_level_duration else 1.0
         base_data["LeaderboardScoreScale"] = {

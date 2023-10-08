@@ -188,7 +188,7 @@ class OC2Options(PerGameCommonOptions):
     fix_bugs: FixBugs
     shorter_level_duration: ShorterLevelDuration
     short_horde_levels: ShortHordeLevels
-    always_preserver_cooking_progress: AlwaysPreserveCookingProgress
+    always_preserve_cooking_progress: AlwaysPreserveCookingProgress
     always_serve_oldest_order: AlwaysServeOldestOrder
     display_leaderboard_scores: DisplayLeaderboardScores
     
