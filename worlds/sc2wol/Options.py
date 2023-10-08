@@ -43,7 +43,7 @@ class FinalMap(Choice):
 
     Warning: Using All-in with a short mission order (7 or fewer missions) is not recommended,
         as there might not be enough locations to place all the required items,
-        any excess required items will be placed into starting inventory!
+        any excess required items will be placed into the player's starting inventory!
 
     This option is short-lived. It may be changed in the future
     """
