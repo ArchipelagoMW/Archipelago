@@ -2,9 +2,9 @@ from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, allow_self_locking_items, add_rule
-from .Options import MessengerAccessibility, Goal
-from .Constants import NOTES, PHOBEKINS
-from .SubClasses import MessengerShopLocation
+from .options import MessengerAccessibility, Goal
+from .constants import NOTES, PHOBEKINS
+from .subclasses import MessengerShopLocation
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -119,7 +119,7 @@ class MessengerRules:
     def can_dboost(self, state: CollectionState) -> bool:
         return state.has_any({"Path of Resilience", "Meditation"}, self.player) and \
             state.has("Second Wind", self.player)
-    
+
     def is_aerobatic(self, state: CollectionState) -> bool:
         return self.has_wingsuit(state) and state.has("Aerobatics Warrior", self.player)
 
