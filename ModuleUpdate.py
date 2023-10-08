@@ -67,14 +67,23 @@ def update(yes=False, force=False):
         install_pkg_resources(yes=yes)
         import pkg_resources
 
+        prev = ""  # if a line ends in \ we store here and merge later
         for req_file in requirements_files:
             path = os.path.join(os.path.dirname(sys.argv[0]), req_file)
             if not os.path.exists(path):
                 path = os.path.join(os.path.dirname(__file__), req_file)
             with open(path) as requirementsfile:
                 for line in requirementsfile:
-                    if not line or line[0] == "#":
-                        continue  # ignore comments
+                    if not line or line.lstrip(" \t")[0] == "#":
+                        if not prev:
+                            continue  # ignore comments
+                        line = ""
+                    elif line.rstrip("\r\n").endswith("\\"):
+                        prev = prev + line.rstrip("\r\n")[:-1] + " "  # continue on next line
+                        continue
+                    line = prev + line
+                    line = line.split("--hash=")[0]  # remove hashes from requirement for version checking
+                    prev = ""
                     if line.startswith(("https://", "git+https://")):
                         # extract name and version for url
                         rest = line.split('/')[-1]
