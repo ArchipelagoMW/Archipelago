@@ -4,11 +4,11 @@ import functools
 import settings
 import threading
 import typing
-from typing import Any, Dict, List, Literal, Set, Tuple, Optional, cast
+from typing import Any, Dict, List, Literal, Sequence, Set, Tuple, Optional, cast
 import os
 import logging
 
-from BaseClasses import ItemClassification, LocationProgressType, \
+from BaseClasses import ItemClassification, Location, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
@@ -461,3 +461,7 @@ class ZillionWorld(World):
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
         return "Empty"
+
+    def filter_early_locations(self, loc_list: Sequence[Location]) -> Sequence[bool]:
+        # the first 4 rows of the base
+        return [loc.name[0] in {"A", "B", "C", "D"} for loc in loc_list]

@@ -4,8 +4,8 @@ import hashlib
 import logging
 import pathlib
 import sys
-from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
-    Union
+from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, \
+    Sequence, Set, TYPE_CHECKING, TextIO, Tuple, Type, Union
 
 from BaseClasses import CollectionState
 from Options import AssembleOptions
@@ -387,6 +387,19 @@ class World(metaclass=AutoWorldRegister):
     # called to create all_state, return Items that are created during pre_fill
     def get_pre_fill_items(self) -> List["Item"]:
         return []
+
+    def filter_early_locations(self, loc_list: Sequence[Location]) -> Sequence[bool]:
+        """
+        `loc_list` is a sequence (`list`) of `Location`s for your game
+        that our algorithms have guessed are "early" locations.
+
+        Return a sequence of `bool` for whether each location should be considered an early location.
+
+        The default includes all of these locations.
+        You should only need to override this
+        if someone is complaining about where early items are placed in your world.
+        """
+        return [True for _ in loc_list]
 
     # following methods should not need to be overridden.
     def collect(self, state: "CollectionState", item: "Item") -> bool:
