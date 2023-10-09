@@ -19,7 +19,8 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
 from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, Kerriganless, GameSpeed, \
-    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, KerriganChecksPerLevelPack
+    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, KerriganChecksPerLevelPack, \
+    LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -33,7 +34,7 @@ from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from worlds.sc2.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
-from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType
 from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race, get_no_build_missions
 from worlds.sc2.Regions import MissionInfo
@@ -276,6 +277,7 @@ class SC2Context(CommonContext):
     generic_upgrade_missions = 0
     generic_upgrade_research = 0
     generic_upgrade_items = 0
+    location_inclusions: typing.Dict[LocationType, LocationInclusion] = {}
     current_tooltip = None
     last_loc_list = None
     difficulty_override = -1
@@ -330,6 +332,14 @@ class SC2Context(CommonContext):
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", KerriganPrimalStatus.option_vanilla)
             self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", KerriganCheckLevelPackSize.default)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", KerriganChecksPerLevelPack.default)
+
+            self.location_inclusions = {
+                LocationType.VICTORY: LocationInclusion.option_enabled, # Victory checks are always enabled
+                LocationType.MISSION_PROGRESS: args["slot_data"].get("mission_progress_locations", MissionProgressLocations.default),
+                LocationType.BONUS: args["slot_data"].get("bonus_locations", BonusLocations.default),
+                LocationType.CHALLENGE: args["slot_data"].get("challenge_locations", ChallengeLocations.default),
+                LocationType.OPTIONAL_BOSS: args["slot_data"].get("optional_boss_locations", OptionalBossLocations.default),
+            }
 
             self.build_location_to_mission_mapping()
 

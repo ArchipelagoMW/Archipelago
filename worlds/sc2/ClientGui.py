@@ -15,7 +15,9 @@ from kivy.properties import StringProperty
 
 from CommonClient import CommonContext
 from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
-from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission
+from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, SC2Mission
+from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
+from worlds.sc2.Options import LocationInclusion
 from worlds.sc2 import SC2World
 
 
@@ -30,6 +32,7 @@ class MissionButton(HoverableButton):
         super(HoverableButton, self).__init__(*args, **kwargs)
         self.layout = FloatLayout()
         self.popuplabel = ServerToolTip(text=self.text)
+        self.popuplabel.padding = [5, 2, 5, 2]
         self.layout.add_widget(self.popuplabel)
 
     def on_enter(self):
@@ -153,11 +156,16 @@ class SC2Manager(GameManager):
                         for mission in categories[category]:
                             text: str = mission
                             tooltip: str = ""
-                            mission_id: int = lookup_name_to_mission[mission].id
+                            mission_obj: SC2Mission = lookup_name_to_mission[mission]
+                            mission_id: int = mission_obj.id
                             mission_data = self.ctx.mission_req_table[campaign][mission]
+                            remaining_locations, remaining_count = self.sort_unfinished_locations(mission)
                             # Map has uncollected locations
                             if mission in unfinished_missions:
-                                text = f"[color=6495ED]{text}[/color]"
+                                if self.any_valuable_locations(remaining_locations):
+                                    text = f"[color=6495ED]{text}[/color]"
+                                else:
+                                    text = f"[color=A0BEF4]{text}[/color]"
                             elif mission in available_missions:
                                 text = f"[color=FFFFFF]{text}[/color]"
                             # Map requirements not met
@@ -173,9 +181,6 @@ class SC2Manager(GameManager):
                                         tooltip += " and "
                                 if mission_data.number:
                                     tooltip += f"{self.ctx.mission_req_table[campaign][mission].number} missions completed"
-                            remaining_location_names: List[str] = [
-                                self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
-                                if loc in self.ctx.missing_locations]
 
                             if mission_id == self.ctx.final_mission:
                                 if mission in available_missions:
@@ -186,11 +191,17 @@ class SC2Manager(GameManager):
                                     tooltip += "\n"
                                 tooltip += "Final Mission"
 
-                            if remaining_location_names:
+                            if remaining_count > 0:
                                 if tooltip:
-                                    tooltip += "\n"
-                                tooltip += f"Uncollected locations:\n"
-                                tooltip += "\n".join(remaining_location_names)
+                                    tooltip += "\n\n"
+                                tooltip += f"-- Uncollected locations --"
+                                for loctype in LocationType:
+                                    if len(remaining_locations[loctype]) > 0:
+                                        if loctype == LocationType.VICTORY:
+                                            tooltip += f"\n- {remaining_locations[loctype][0]}"
+                                        else:
+                                            tooltip += f"\n{self.get_location_type_title(loctype)}:\n- "
+                                            tooltip += "\n- ".join(remaining_locations[loctype])
 
                             mission_button = MissionButton(text=text, size_hint_y=None, height=50)
                             mission_button.tooltip_text = tooltip
@@ -223,6 +234,31 @@ class SC2Manager(GameManager):
 
     def finish_launching(self, dt):
         self.launching = False
+    
+    def sort_unfinished_locations(self, mission_name: str) -> (Dict[LocationType, List[str]], int):
+        locations: Dict[LocationType, List[str]] = {loctype: [] for loctype in LocationType}
+        count = 0
+        for loc in self.ctx.locations_for_mission(mission_name):
+            if loc in self.ctx.missing_locations:
+                count += 1
+                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names[loc])
+        return locations, count
+
+    def any_valuable_locations(self, locations: Dict[LocationType, List[str]]) -> bool:
+        for loctype in LocationType:
+            if len(locations[loctype]) > 0 and self.ctx.location_inclusions[loctype] == LocationInclusion.option_enabled:
+                return True
+        return False
+
+    def get_location_type_title(self, location_type: LocationType) -> str:
+        title = location_type.name.title().replace("_", " ")
+        if self.ctx.location_inclusions[location_type] == LocationInclusion.option_nothing:
+            title += " (Nothing)"
+        elif self.ctx.location_inclusions[location_type] == LocationInclusion.option_trash:
+            title += " (Trash)"
+        else:
+            title += ""
+        return title
 
 def start_gui(context: SC2Context):
     context.ui = SC2Manager(context)
