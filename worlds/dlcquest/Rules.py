@@ -1,10 +1,10 @@
 import math
 import re
-from .Locations import DLCQuestLocation
-from ..generic.Rules import add_rule, set_rule, item_name_in_locations
-from .Items import DLCQuestItem
+
 from BaseClasses import ItemClassification
+from worlds.generic.Rules import add_rule, item_name_in_locations, set_rule
 from . import Options
+from .Items import DLCQuestItem
 
 
 def create_event(player, event: str):

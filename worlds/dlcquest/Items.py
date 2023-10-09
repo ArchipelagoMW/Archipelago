@@ -1,11 +1,12 @@
 import csv
 import enum
 import math
-from typing import Protocol, Union, Dict, List, Set
-from BaseClasses import Item, ItemClassification
-from . import Options, data
 from dataclasses import dataclass, field
 from random import Random
+from typing import Dict, List, Set
+
+from BaseClasses import Item, ItemClassification
+from . import Options, data
 
 
 class DLCQuestItem(Item):

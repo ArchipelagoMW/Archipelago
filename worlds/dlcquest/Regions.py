@@ -1,8 +1,9 @@
 import math
-from BaseClasses import MultiWorld, Region, Location, Entrance, ItemClassification
+
+from BaseClasses import Entrance, MultiWorld, Region
+from . import Options
 from .Locations import DLCQuestLocation, location_table
 from .Rules import create_event
-from . import Options
 
 DLCQuestRegion = ["Movement Pack", "Behind Tree", "Psychological Warfare", "Double Jump Left",
                   "Double Jump Behind the Tree", "The Forest", "Final Room"]

@@ -1,12 +1,13 @@
-from typing import Dict, Any, Iterable, Optional, Union
+from typing import Union
+
 from BaseClasses import Tutorial
-from worlds.AutoWorld import World, WebWorld
-from .Items import DLCQuestItem, item_table, ItemData, create_items
-from .Locations import location_table, DLCQuestLocation
-from .Options import DLCQuest_options, DLCQuestOptions, fetch_options
-from .Rules import set_rules
-from .Regions import create_regions
+from worlds.AutoWorld import WebWorld, World
 from . import Options
+from .Items import DLCQuestItem, ItemData, create_items, item_table
+from .Locations import DLCQuestLocation, location_table
+from .Options import DLCQuestOptions
+from .Regions import create_regions
+from .Rules import set_rules
 
 client_version = 0
 
