@@ -90,9 +90,9 @@ def check_multiworld_is_valid(tester: SVTestBase, multiworld_id: int, multiworld
 
 class TestGenerateManyWorlds(SVTestBase):
     def test_generate_many_worlds_then_check_results(self):
-        # if self.skip_long_tests:
-        #     return
-        number_worlds = 100
+        if self.skip_long_tests:
+            return
+        number_worlds = 1000
         start_index = random.Random().randint(0, 9999999999)
         multiworlds = generate_many_worlds(number_worlds, start_index)
         check_every_multiworld_is_valid(self, multiworlds)

@@ -24,12 +24,9 @@ class TestGenerateDynamicOptions(SVTestBase):
     def test_given_option_pair_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
             return
-        counter = 0
         num_options = len(options_to_include)
         for option1_index in range(0, num_options):
             for option2_index in range(option1_index + 1, num_options):
-                if counter > 100:
-                    return
                 option1 = options_to_include[option1_index]
                 option2 = options_to_include[option2_index]
                 option1_choices = get_option_choices(option1)
@@ -41,4 +38,3 @@ class TestGenerateDynamicOptions(SVTestBase):
                                        option2.internal_name: option2_choices[key2]}
                             multiworld = setup_solo_multiworld(choices)
                             basic_checks(self, multiworld)
-                            counter = counter + 1
