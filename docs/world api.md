@@ -712,6 +712,17 @@ def generate_output(self, output_directory: str):
     generate_mod(src, out_file, data)
 ```
 
+### Slot Data
+
+```python
+def fill_slot_data(self):
+    # in order for our game client to handle the generated seed correctly we need to know what the user selected
+    # for their difficulty and final boss HP
+    # a dictionary returned from this method gets set as the slot_data and will be sent to the client after connecting
+    # the options dataclass has a method to return a `Dict[str, Any]` of each option name provided and the option's value
+    return self.options.as_dict("difficulty", "final_boss_hp")
+```
+
 ### Documentation
 
 Each world implementation should have a tutorial and a game info page. These are both rendered on the website by reading
