@@ -15,10 +15,10 @@ from kivy.properties import StringProperty
 
 from CommonClient import CommonContext
 from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
-from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, SC2Mission
+from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, SC2Mission, starting_mission_locations
 from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
 from worlds.sc2.Options import LocationInclusion
-from worlds.sc2 import SC2World
+from worlds.sc2 import SC2World, get_first_mission, get_early_unit_location_name
 
 
 class HoverableButton(HoverBehavior, Button):
@@ -82,6 +82,7 @@ class SC2Manager(GameManager):
     launching: Union[bool, int] = False  # if int -> mission ID
     refresh_from_launching = True
     first_check = True
+    first_mission = ""
     ctx: SC2Context
 
     def __init__(self, ctx) -> None:
@@ -117,6 +118,7 @@ class SC2Manager(GameManager):
             if self.ctx.mission_req_table:
                 self.last_checked_locations = self.ctx.checked_locations.copy()
                 self.first_check = False
+                self.first_mission = get_first_mission(self.ctx.mission_req_table)
 
                 self.mission_id_to_button = {}
 
@@ -159,7 +161,7 @@ class SC2Manager(GameManager):
                             mission_obj: SC2Mission = lookup_name_to_mission[mission]
                             mission_id: int = mission_obj.id
                             mission_data = self.ctx.mission_req_table[campaign][mission]
-                            remaining_locations, remaining_count = self.sort_unfinished_locations(mission)
+                            remaining_locations, plando_locations, early_unit, remaining_count = self.sort_unfinished_locations(mission)
                             # Map has uncollected locations
                             if mission in unfinished_missions:
                                 if self.any_valuable_locations(remaining_locations):
@@ -202,6 +204,11 @@ class SC2Manager(GameManager):
                                         else:
                                             tooltip += f"\n{self.get_location_type_title(loctype)}:\n- "
                                             tooltip += "\n- ".join(remaining_locations[loctype])
+                                if early_unit:
+                                    tooltip += f"\nEarly Unit:\n- {early_unit}"
+                                if len(plando_locations) > 0:
+                                    tooltip += f"\nPlando:\n- "
+                                    tooltip += "\n- ".join(plando_locations)
 
                             mission_button = MissionButton(text=text, size_hint_y=None, height=50)
                             mission_button.tooltip_text = tooltip
@@ -235,14 +242,29 @@ class SC2Manager(GameManager):
     def finish_launching(self, dt):
         self.launching = False
     
-    def sort_unfinished_locations(self, mission_name: str) -> (Dict[LocationType, List[str]], int):
+    def sort_unfinished_locations(self, mission_name: str) -> (Dict[LocationType, List[str]], List[str], str | None, int):
         locations: Dict[LocationType, List[str]] = {loctype: [] for loctype in LocationType}
         count = 0
         for loc in self.ctx.locations_for_mission(mission_name):
             if loc in self.ctx.missing_locations:
                 count += 1
                 locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names[loc])
-        return locations, count
+
+        early_unit = None
+        if self.ctx.early_unit and mission_name == self.first_mission:
+            early_unit = get_early_unit_location_name(mission_name)
+            for loctype in LocationType:
+                if early_unit in locations[loctype]:
+                    locations[loctype].remove(early_unit)
+
+        plando_locations = []
+        for plando_loc in self.ctx.plando_locations:
+            for loctype in LocationType:
+                if plando_loc in locations[loctype]:
+                    locations[loctype].remove(plando_loc)
+                    plando_locations.append(plando_loc)
+
+        return locations, plando_locations, early_unit, count
 
     def any_valuable_locations(self, locations: Dict[LocationType, List[str]]) -> bool:
         for loctype in LocationType:
