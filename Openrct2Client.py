@@ -118,10 +118,11 @@ class OpenRCT2Socket:
             data = sock.recv(16384)
             if data:
                 print('received', len(data), 'bytes from', sock.getpeername(), '->', sock.getsockname(),':\n', data)
-                data = data.rstrip(b'\x00')#Strip the terminator from string
-                data = data.decode('UTF-8')
                 # data = json.dumps(data)
-                data = [json.loads(data)]
+                data = []
+                for packet in data.split(b'\0'):
+                    packet = packet.decode('UTF-8')
+                    data.append(json.loads(packet))
                 print(data)
                 self.disconnectgame()
             return data
