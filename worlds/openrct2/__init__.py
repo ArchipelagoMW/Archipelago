@@ -32,6 +32,13 @@ class OpenRCT2World(World):
     topology_present = True  # show path to required location checks in spoiler
     item_name_to_id = {name: id for id, name in enumerate(item_info["all_items"], base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_info["all_locations"], base_id)}
+    item_name_groups = {
+            "roller_coasters": item_info["roller_coasters"],
+            "transport_rides": item_info["transport_rides"],
+            "gentle_rides": item_info["gentle_rides"],
+            "thrill_rides": item_info["thrill_rides"],
+            "water_rides": item_info["water_rides"]
+        }
     
     def __init__(self, multiworld, player: int):
         super().__init__(multiworld, player)
@@ -41,13 +48,6 @@ class OpenRCT2World(World):
         self.item_table = {}
         self.item_frequency = {}
         self.location_prices = []#This list is passed to OpenRCT2 to create the unlock shop
-        self.item_name_groups = {
-            "roller_coasters": item_info["roller_coasters"],
-            "transport_rides": item_info["transport_rides"],
-            "gentle_rides": item_info["gentle_rides"],
-            "thrill_rides": item_info["thrill_rides"],
-            "water_rides": item_info["water_rides"]
-        }
 
     #Okay future Colby, listen up. Here's the plan. We're going to take the item_table and shuffle it in the next section. We'll generate the 
     #unlock shop with the item locations and apply our logic to it. Prereqs can only be items one level lower on the tree. We then will set 
