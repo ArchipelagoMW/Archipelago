@@ -119,13 +119,13 @@ class OpenRCT2Socket:
             if data:
                 print('received', len(data), 'bytes from', sock.getpeername(), '->', sock.getsockname(),':\n', data)
                 # data = json.dumps(data)
-                data = []
+                packets = []
                 for packet in data.split(b'\0'):
                     packet = packet.decode('UTF-8')
-                    data.append(json.loads(packet))
-                print(data)
+                    packets.append(json.loads(packet))
+                print(packets)
                 self.disconnectgame()
-            return data
+                return packets
         except socket.timeout as e:
             pass
         except BlockingIOError as e:
