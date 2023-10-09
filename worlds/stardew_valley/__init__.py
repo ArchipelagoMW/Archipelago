@@ -86,7 +86,7 @@ class StardewValleyWorld(World):
         goal_is_island_related = goal_is_walnut_hunter or goal_is_perfection
         exclude_ginger_island = self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
         if goal_is_island_related and exclude_ginger_island:
-            self.options.exclude_ginger_island = options.ExcludeGingerIsland.option_false
+            self.options.exclude_ginger_island.value = options.ExcludeGingerIsland.option_false
             goal_name = self.options.goal.current_key
             player_name = self.multiworld.player_name[self.player]
             logging.warning(f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")

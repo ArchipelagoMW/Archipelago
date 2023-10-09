@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+from typing import Dict
 
-from Options import Range, SpecialRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink
+from Options import Range, SpecialRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option
 from .mods.mod_data import ModNames
 
 
@@ -569,41 +570,41 @@ class StardewValleyOptions(PerGameCommonOptions):
     mods: Mods
     death_link: DeathLink
 
+    def get_option_value(self, name: str) -> int:
+        return self.get_options_by_name()[name].value
 
-stardew_valley_option_classes = {
-    Goal,
-    StartingMoney,
-    ProfitMargin,
-    BundleRandomization,
-    BundlePrice,
-    EntranceRandomization,
-    SeasonRandomization,
-    Cropsanity,
-    BackpackProgression,
-    ToolProgression,
-    SkillProgression,
-    BuildingProgression,
-    FestivalLocations,
-    ElevatorProgression,
-    ArcadeMachineLocations,
-    SpecialOrderLocations,
-    HelpWantedLocations,
-    Fishsanity,
-    Museumsanity,
-    Friendsanity,
-    FriendsanityHeartSize,
-    NumberOfMovementBuffs,
-    NumberOfLuckBuffs,
-    ExcludeGingerIsland,
-    TrapItems,
-    MultipleDaySleepEnabled,
-    MultipleDaySleepCost,
-    ExperienceMultiplier,
-    FriendshipMultiplier,
-    DebrisMultiplier,
-    QuickStart,
-    Gifting,
-    Mods,
-}
-
-stardew_valley_option_names = {option.internal_name for option in stardew_valley_option_classes}
+    def get_options_by_name(self):
+        return {
+            self.goal.internal_name: self.goal,
+            self.starting_money.internal_name: self.starting_money,
+            self.profit_margin.internal_name: self.profit_margin,
+            self.bundle_randomization.internal_name: self.bundle_randomization,
+            self.bundle_price.internal_name: self.bundle_price,
+            self.entrance_randomization.internal_name: self.entrance_randomization,
+            self.season_randomization.internal_name: self.season_randomization,
+            self.cropsanity.internal_name: self.cropsanity,
+            self.backpack_progression.internal_name: self.backpack_progression,
+            self.tool_progression.internal_name: self.tool_progression,
+            self.skill_progression.internal_name: self.skill_progression,
+            self.building_progression.internal_name: self.building_progression,
+            self.festival_locations.internal_name: self.festival_locations,
+            self.elevator_progression.internal_name: self.elevator_progression,
+            self.arcade_machine_locations.internal_name: self.arcade_machine_locations,
+            self.special_order_locations.internal_name: self.special_order_locations,
+            self.help_wanted_locations.internal_name: self.help_wanted_locations,
+            self.fishsanity.internal_name: self.fishsanity,
+            self.museumsanity.internal_name: self.museumsanity,
+            self.friendsanity.internal_name: self.friendsanity,
+            self.friendsanity_heart_size.internal_name: self.friendsanity_heart_size,
+            self.number_of_movement_buffs.internal_name: self.number_of_movement_buffs,
+            self.number_of_luck_buffs.internal_name: self.number_of_luck_buffs,
+            self.exclude_ginger_island.internal_name: self.exclude_ginger_island,
+            self.trap_items.internal_name: self.trap_items,
+            self.multiple_day_sleep_enabled.internal_name: self.multiple_day_sleep_enabled,
+            self.multiple_day_sleep_cost.internal_name: self.multiple_day_sleep_cost,
+            self.experience_multiplier.internal_name: self.experience_multiplier,
+            self.friendship_multiplier.internal_name: self.friendship_multiplier,
+            self.debris_multiplier.internal_name: self.debris_multiplier,
+            self.quick_start.internal_name: self.quick_start,
+            self.gifting.internal_name: self.gifting,
+        }

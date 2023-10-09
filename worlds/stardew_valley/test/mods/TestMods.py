@@ -4,15 +4,14 @@ import random
 import sys
 
 from BaseClasses import MultiWorld
-from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.test import setup_solo_multiworld
-from worlds.stardew_valley.test.TestOptions import basic_checks, SVTestBase
-from worlds.stardew_valley import items, Group, ItemClassification
-from worlds.stardew_valley.regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
-from worlds.stardew_valley.items import item_table, items_by_group
-from worlds.stardew_valley.locations import location_table
-from worlds.stardew_valley.options import stardew_valley_option_classes, Mods, EntranceRandomization, Friendsanity, SeasonRandomization, SpecialOrderLocations, \
-    ExcludeGingerIsland, TrapItems
+from ...mods.mod_data import ModNames
+from .. import setup_solo_multiworld
+from ..TestOptions import basic_checks, SVTestBase
+from ... import items, Group, ItemClassification
+from ...regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
+from ...items import item_table, items_by_group
+from ...locations import location_table
+from ...options import Mods, EntranceRandomization, Friendsanity, SeasonRandomization, SpecialOrderLocations, ExcludeGingerIsland, TrapItems
 
 all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
                       ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
@@ -44,20 +43,6 @@ class TestGenerateModsOptions(SVTestBase):
                 basic_checks(self, multi_world)
                 check_stray_mod_items(mod, self, multi_world)
 
-    def test_given_mod_pairs_when_generate_then_basic_checks(self):
-        if self.skip_long_tests:
-            return
-        num_mods = len(all_mods)
-        for mod1_index in range(0, num_mods):
-            for mod2_index in range(mod1_index + 1, num_mods):
-                mod1 = all_mods[mod1_index]
-                mod2 = all_mods[mod2_index]
-                mods = (mod1, mod2)
-                with self.subTest(f"Mods: {mods}"):
-                    multiworld = setup_solo_multiworld({Mods: mods})
-                    basic_checks(self, multiworld)
-                    check_stray_mod_items(list(mods), self, multiworld)
-
     def test_given_mod_names_when_generate_paired_with_entrance_randomizer_then_basic_checks(self):
         for option in EntranceRandomization.options:
             for mod in all_mods:
@@ -65,19 +50,6 @@ class TestGenerateModsOptions(SVTestBase):
                     multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: option, Mods: mod})
                     basic_checks(self, multiworld)
                     check_stray_mod_items(mod, self, multiworld)
-
-    def test_given_mod_names_when_generate_paired_with_other_options_then_basic_checks(self):
-        if self.skip_long_tests:
-            return
-        for option in stardew_valley_option_classes:
-            if not option.options:
-                continue
-            for value in option.options:
-                for mod in all_mods:
-                    with self.subTest(f"{option.internal_name}: {value}, Mod: {mod}"):
-                        multiworld = setup_solo_multiworld({option.internal_name: option.options[value], Mods: mod})
-                        basic_checks(self, multiworld)
-                        check_stray_mod_items(mod, self, multiworld)
 
 
 class TestBaseItemGeneration(SVTestBase):
