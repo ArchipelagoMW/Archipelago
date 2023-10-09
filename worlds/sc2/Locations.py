@@ -726,3 +726,5 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                 location_data._replace(name="Beat " + location_data.name.rsplit(": ", 1)[0], code=None)
             )
     return tuple(location_table + beat_events)
+
+lookup_location_id_to_type = {loc.code: loc.type for loc in get_locations(None, None) if loc.code is not None}

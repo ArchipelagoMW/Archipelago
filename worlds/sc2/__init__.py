@@ -108,6 +108,7 @@ class SC2World(World):
                     if not isinstance(slot_req_table[campaign.id][mission]["required_world"][index], dict):
                         slot_req_table[campaign.id][mission]["required_world"][index] = slot_req_table[campaign.id][mission]["required_world"][index]._asdict()
 
+        slot_data["plando_locations"] = get_plando_locations(self.multiworld, self.player)
         slot_data["mission_req"] = slot_req_table
         slot_data["final_mission"] = self.final_mission_id
         slot_data["version"] = 3
@@ -212,11 +213,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
     starter_items: List[Item] = []
     non_local_items = multiworld.non_local_items[player].value
     if get_option_value(multiworld, player, "early_unit"):
-        # The first world should also be the starting world
-        campaigns = multiworld.worlds[player].mission_req_table.keys()
-        lowest_id = min([campaign.id for campaign in campaigns])
-        first_campaign = [campaign for campaign in campaigns if campaign.id == lowest_id][0]
-        first_mission = list(multiworld.worlds[player].mission_req_table[first_campaign])[0]
+        first_mission = get_first_mission(multiworld.worlds[player].mission_req_table)
         first_race = lookup_name_to_mission[first_mission].race
 
         local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in non_local_items and item not in excluded_items)
@@ -225,12 +222,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
             if not local_basic_unit:
                 raise Exception("Early Unit: At least one basic unit must be included")
 
-        if first_mission in starting_mission_locations:
-            first_location = starting_mission_locations[first_mission]
-        elif first_mission == "In Utter Darkness":
-            first_location = first_mission + ": Defeat"
-        else:
-            first_location = first_mission + ": Victory"
+        first_location = get_early_unit_location_name(first_mission)
 
         starter_items.append(assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit))
     
@@ -258,6 +250,22 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
     return starter_items
 
+def get_first_mission(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> str:
+    # The first world should also be the starting world
+    campaigns = mission_req_table.keys()
+    lowest_id = min([campaign.id for campaign in campaigns])
+    first_campaign = [campaign for campaign in campaigns if campaign.id == lowest_id][0]
+    first_mission = list(mission_req_table[first_campaign])[0]
+    return first_mission
+
+def get_early_unit_location_name(first_mission: str) -> str:
+    if first_mission in starting_mission_locations:
+        first_location = starting_mission_locations[first_mission]
+    elif first_mission == "In Utter Darkness":
+        first_location = first_mission + ": Defeat"
+    else:
+        first_location = first_mission + ": Victory"
+    return first_location
 
 def assign_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
                         location: str, item_list: Sequence[str]) -> Item:
