@@ -33,7 +33,7 @@ is taken in game.
 
 The goal is to beat the level titled `The End` by finding the `Final Bridges`, `Final Walls`, and `Final Sickle`.
 
-## Local Unique Commands
+## Unique Local Commands
 
 The following commands are only available when using the WargrooveClient to play with Archipelago.
 

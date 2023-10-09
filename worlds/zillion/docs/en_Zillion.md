@@ -74,7 +74,7 @@ collected.
 
 The item collect sound is played. You can see in the client log what item was received.
 
-## Local Unique Commands
+## Unique Local Commands
 
 The following commands are only available when using the ZillionClient to play with Archipelago.
 

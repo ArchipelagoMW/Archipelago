@@ -51,7 +51,7 @@ Waterfall if you have seen them at Waterfall at least once.
 
 If you press `W` while in the save menu, you will teleport back to the flower room, for quick access to the other areas.
 
-## Local Unique Commands
+## Unique Local Commands
 
 The following commands are only available when using the UndertaleClient to play with Archipelago.
 

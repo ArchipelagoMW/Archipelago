@@ -32,7 +32,7 @@ Items belonging to other worlds are represented by the Zelda's Letter item.
 When the player receives an item, Link will hold the item above his head and display it to the world. It's good for
 business!
 
-## Local Unique Commands
+## Unique Local Commands
 
 The following commands are only available when using the OoTClient to play with Archipelago.
 

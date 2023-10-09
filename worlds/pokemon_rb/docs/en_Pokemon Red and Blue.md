@@ -81,7 +81,7 @@ A "received item" sound effect will play. Currently, there is no in-game message
 If you are in battle, have menus or text boxes opened, or scripted events are occurring, the items will not be given to
 you until these have ended.
 
-## Local Unique Commands
+## Unique Local Commands
 
 The following command is only available when using the PokemonClient to play with Archipelago.
 
