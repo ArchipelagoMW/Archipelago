@@ -83,3 +83,54 @@ def LocationFactory(locations, player: int):
     return ret
 
 
+def build_location_name_groups() -> dict:
+
+    def fix_sing(t) -> tuple:
+        if isinstance(t, str):
+            return (t,)
+        return t
+
+    def rename(d, k1, k2) -> None:
+        d[k2] = d[k1]
+        del d[k1]
+
+    # whoever wrote the location table didn't realize they need to add a comma to mark a singleton as a tuple
+    # so we have to check types unfortunately
+    tags = set()
+    for v in location_table.values():
+        if v[5] is not None:
+            tags.update(fix_sing(v[5]))
+
+    sorted_tags = sorted(list(tags))
+
+    ret = {
+        tag: {k for k, v in location_table.items() if v[5] is not None and tag in fix_sing(v[5])}
+        for tag in sorted_tags
+    }
+
+    # Delete tags which are a combination of other tags
+    del ret['Death Mountain']
+    del ret['Forest']
+    del ret['Gerudo']
+    del ret['Kakariko']
+    del ret['Market']
+
+    # Delete Vanilla and MQ tags because they are just way too broad
+    del ret['Vanilla']
+    del ret['Master Quest']
+
+    rename(ret, 'Beehive', 'Beehives')
+    rename(ret, 'Cow', 'Cows')
+    rename(ret, 'Crate', 'Crates')
+    rename(ret, 'Deku Scrub', 'Deku Scrubs')
+    rename(ret, 'FlyingPot', 'Flying Pots')
+    rename(ret, 'Freestanding', 'Freestanding Items')
+    rename(ret, 'Pot', 'Pots')
+    rename(ret, 'RupeeTower', 'Rupee Groups')
+    rename(ret, 'SmallCrate', 'Small Crates')
+    rename(ret, 'the Market', 'Market')
+    rename(ret, 'the Graveyard', 'Graveyard')
+    rename(ret, 'the Lost Woods', 'Lost Woods')
+
+    return ret
+

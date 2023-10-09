@@ -10,7 +10,7 @@ from string import printable
 
 logger = logging.getLogger("Ocarina of Time")
 
-from .Location import OOTLocation, LocationFactory, location_name_to_id
+from .Location import OOTLocation, LocationFactory, location_name_to_id, build_location_name_groups
 from .Entrance import OOTEntrance
 from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table, EntranceShuffleError
 from .HintList import getRequiredHints
@@ -165,8 +165,10 @@ class OOTWorld(World):
             "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
         "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Cojiro", "Odd Mushroom",
             "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
-            "Eyeball Frog", "Eyedrops", "Claim Check"}
+            "Eyeball Frog", "Eyedrops", "Claim Check"},
     }
+
+    location_name_groups = build_location_name_groups()
 
     def __init__(self, world, player):
         self.hint_data_available = threading.Event()
@@ -411,7 +413,7 @@ class OOTWorld(World):
         self.shuffle_scrubs = self.shuffle_scrubs.replace('_prices', '')
 
         # Convert adult trade option to expected Set
-        self.adult_trade_start = {self.adult_trade_start.title()}
+        self.adult_trade_start = {self.adult_trade_start.title().replace('_', ' ')}
 
         # Get hint distribution
         self.hint_dist_user = read_json(data_path('Hints', f'{self.hint_dist}.json'))
