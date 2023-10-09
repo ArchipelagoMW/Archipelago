@@ -29,82 +29,82 @@ sequence either by skipping it or watching hit play out.
 ## Which recipes are locked?
 
 * Archery
-  * Bow
-  * Arrow
-  * Crossbow
+    * Bow
+    * Arrow
+    * Crossbow
 * Brewing
-  * Blaze Powder
-  * Brewing Stand
+    * Blaze Powder
+    * Brewing Stand
 * Enchanting
-  * Enchanting Table
-  * Bookshelf
+    * Enchanting Table
+    * Bookshelf
 * Bucket
 * Flint & Steel
 * All Beds
 * Bottles
 * Shield
 * Fishing Rod
-  * Fishing Rod
-  * Carrot on a Stick
-  * Warped Fungus on a Stick
+    * Fishing Rod
+    * Carrot on a Stick
+    * Warped Fungus on a Stick
 * Campfire
-  * Campfire
-  * Soul Campfire
+    * Campfire
+    * Soul Campfire
 * Spyglass
 * Lead
 * Progressive Weapons
-  * Tier I
-    * Stone Sword
-    * Stone Axe
-  * Tier II
-    * Iron Sword
-    * Iron Axe
-  * Tier III
-    * Diamond Sword
-    * Diamond Axe
+    * Tier I
+        * Stone Sword
+        * Stone Axe
+    * Tier II
+        * Iron Sword
+        * Iron Axe
+    * Tier III
+        * Diamond Sword
+        * Diamond Axe
 * Progessive Tools
-  * Tier I
-    * Stone Shovel
-    * Stone Hoe
-  * Tier II
-    * Iron Shovel
-    * Iron Hoe
-  * Tier III
-    * Diamond Shovel
-    * Diamond Hoe
-    * Netherite Ingot
+    * Tier I
+        * Stone Shovel
+        * Stone Hoe
+    * Tier II
+        * Iron Shovel
+        * Iron Hoe
+    * Tier III
+        * Diamond Shovel
+        * Diamond Hoe
+        * Netherite Ingot
 * Progressive Armor
-  * Tier I
-    * Iron Helmet
-    * Iron Chestplate
-    * Iron Leggings
-    * Iron Boots
-  * Tier II
-    * Diamond Helmet
-    * Diamond Chestplate
-    * Diamond Leggings
-    * Diamond Boots
+    * Tier I
+        * Iron Helmet
+        * Iron Chestplate
+        * Iron Leggings
+        * Iron Boots
+    * Tier II
+        * Diamond Helmet
+        * Diamond Chestplate
+        * Diamond Leggings
+        * Diamond Boots
 * Progressive Resource Crafting
-  * Tier I
-    * Iron Ingot from Nuggets
-    * Iron Nugget
-    * Gold Ingot from Nuggets
-    * Gold Nugget
-    * Furnace
-    * Blast Furnace
-  * Tier II
-    * Redstone
-    * Redstone Block
-    * Glowstone
-    * Iron Ingot from Iron Block
-    * Iron Block
-    * Gold Ingot from Gold Block
-    * Gold Block
-    * Diamond
-    * Diamond Block
-    * Netherite Block
-    * Netherite Ingot from Netherite Block
-    * Anvil
-    * Emerald
-    * Emerald Block
-    * Copper Block
+    * Tier I
+        * Iron Ingot from Nuggets
+        * Iron Nugget
+        * Gold Ingot from Nuggets
+        * Gold Nugget
+        * Furnace
+        * Blast Furnace
+    * Tier II
+        * Redstone
+        * Redstone Block
+        * Glowstone
+        * Iron Ingot from Iron Block
+        * Iron Block
+        * Gold Ingot from Gold Block
+        * Gold Block
+        * Diamond
+        * Diamond Block
+        * Netherite Block
+        * Netherite Ingot from Netherite Block
+        * Anvil
+        * Emerald
+        * Emerald Block
+        * Copper Block

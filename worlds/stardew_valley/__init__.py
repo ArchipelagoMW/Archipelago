@@ -12,7 +12,6 @@ from .options import stardew_valley_options, StardewOptions, fetch_options
 from .regions import create_regions
 from .rules import set_rules
 from worlds.generic.Rules import set_rule
-from .mods.mod_data import mod_versions
 from .strings.goal_names import Goal
 
 client_version = 0
@@ -34,14 +33,15 @@ class StardewWebWorld(WebWorld):
     theme = "dirt"
     bug_report_page = "https://github.com/agilbert1412/StardewArchipelago/issues/new?labels=bug&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
 
-    tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to playing Stardew Valley with Archipelago.",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
-    )]
+    tutorials = [
+        Tutorial(
+            "Multiworld Setup Guide",
+            "A guide to playing Stardew Valley with Archipelago.",
+            "English",
+            "setup_en.md",
+            "setup/en",
+            ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
+        )]
 
 
 class StardewValleyWorld(World):
@@ -276,13 +276,8 @@ class StardewValleyWorld(World):
             key, value = self.modified_bundles[bundle_key].to_pair()
             modified_bundles[key] = value
 
-        instance_mod_versions = {}
-        for mod in mod_versions:
-            if mod in self.options[options.Mods]:
-                instance_mod_versions[mod] = mod_versions[mod]
-
         excluded_options = [options.BundleRandomization, options.BundlePrice,
-                            options.NumberOfMovementBuffs, options.NumberOfLuckBuffs, options.Mods]
+                            options.NumberOfMovementBuffs, options.NumberOfLuckBuffs]
         slot_data = dict(self.options.options)
         for option in excluded_options:
             slot_data.pop(option.internal_name)
@@ -291,7 +286,6 @@ class StardewValleyWorld(World):
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": modified_bundles,
             "client_version": "4.0.0",
-            "mod_versions": instance_mod_versions,
         })
 
         return slot_data

@@ -100,6 +100,9 @@ class DOOM1993World(World):
         main_regions = []
         connections = []
         for region_dict in Regions.regions:
+            if not self.included_episodes[region_dict["episode"] - 1]:
+                continue
+
             region_name = region_dict["name"]
             if region_dict["connects_to_hub"]:
                 main_regions.append(region_name)
@@ -148,7 +151,7 @@ class DOOM1993World(World):
         return True
 
     def set_rules(self):
-        Rules.set_rules(self)
+        Rules.set_rules(self, self.included_episodes)
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
 
         # Forbid progression items to locations that can be missed and can't be picked up. (e.g. One-time timed

@@ -24,6 +24,7 @@ from zilliandomizer.system import System
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
 from zilliandomizer.options import Chars
+from zilliandomizer.patch import detect_test
 
 from ..AutoWorld import World, WebWorld
 
@@ -145,8 +146,7 @@ class ZillionWorld(World):
 
         self._item_counts = item_counts
 
-        import __main__
-        rom_dir_name = "" if "test" in __main__.__file__ else os.path.dirname(get_base_rom_path())
+        rom_dir_name = "" if detect_test() else os.path.dirname(get_base_rom_path())
         with redirect_stdout(self.lsi):  # type: ignore
             self.zz_system.make_patcher(rom_dir_name)
             self.zz_system.make_randomizer(zz_op)

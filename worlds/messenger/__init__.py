@@ -1,14 +1,14 @@
 import logging
-from typing import Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
-from BaseClasses import Tutorial, ItemClassification, CollectionState, Item, MultiWorld
-from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER
-from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
-from .Regions import REGIONS, REGION_CONNECTIONS, SEALS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS, shuffle_shop_prices, FIGURINES
-from .SubClasses import MessengerRegion, MessengerItem
-from . import Rules
+from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
+from worlds.AutoWorld import WebWorld, World
+from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
+from .options import Goal, Logic, NotesNeeded, PowerSeals, messenger_options
+from .regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
+from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
+from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
+from .subclasses import MessengerItem, MessengerRegion
 
 
 class MessengerWeb(WebWorld):
@@ -68,13 +68,10 @@ class MessengerWorld(World):
 
     total_seals: int = 0
     required_seals: int = 0
-    total_shards: int
+    total_shards: int = 0
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]
-
-    def __init__(self, multiworld: MultiWorld, player: int):
-        super().__init__(multiworld, player)
-        self.total_shards = 0
+    _filler_items: List[str]
 
     def generate_early(self) -> None:
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
@@ -130,25 +127,24 @@ class MessengerWorld(World):
             itempool += seals
 
         remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
-        filler_pool = dict(list(FILLER.items())[2:]) if remaining_fill < 10 else FILLER
-        itempool += [self.create_item(filler_item)
-                     for filler_item in
-                     self.random.choices(
-                         list(filler_pool),
-                         weights=list(filler_pool.values()),
-                         k=remaining_fill
-                     )]
+        if remaining_fill < 10:
+            self._filler_items = self.random.choices(
+                                      list(FILLER)[2:],
+                                      weights=list(FILLER.values())[2:],
+                                      k=remaining_fill
+            )
+        itempool += [self.create_filler() for _ in range(remaining_fill)]
 
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
         logic = self.multiworld.logic_level[self.player]
         if logic == Logic.option_normal:
-            Rules.MessengerRules(self).set_messenger_rules()
+            MessengerRules(self).set_messenger_rules()
         elif logic == Logic.option_hard:
-            Rules.MessengerHardRules(self).set_messenger_rules()
+            MessengerHardRules(self).set_messenger_rules()
         else:
-            Rules.MessengerOOBRules(self).set_messenger_rules()
+            MessengerOOBRules(self).set_messenger_rules()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         shop_prices = {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()}
@@ -167,7 +163,13 @@ class MessengerWorld(World):
         }
 
     def get_filler_item_name(self) -> str:
-        return "Time Shard"
+        if not getattr(self, "_filler_items", None):
+            self._filler_items = [name for name in self.random.choices(
+                list(FILLER),
+                weights=list(FILLER.values()),
+                k=20
+            )]
+        return self._filler_items.pop(0)
 
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
