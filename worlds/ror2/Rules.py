@@ -152,6 +152,8 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
         if world.dlc_sotv[player]:
             if world.victory[player] == "voidling":
                 has_all_items(world, {"Stage 5", "The Planetarium"}, "Commencement", player)
-            has_all_items(world, {"Stage 5", "The Planetarium"}, "Void Locus", player)
+            has_entrance_access_rule(world, "Stage 5", "The Planetarium", player)
+            has_entrance_access_rule(world, "Stage 5", "Void Locus", player)
+            # has_all_items(world, {"Stage 5", "The Planetarium"}, "Void Locus", player)
     # Win Condition
     world.completion_condition[player] = lambda state: state.has("Victory", player)

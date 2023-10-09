@@ -269,11 +269,11 @@ def create_events(world: MultiWorld, player: int) -> None:
             world_region.locations.append(event_loc)
     elif world.goal[player] == "explore":
         event_region = world.get_region("OrderedStage_5", player)
-        event_loc = RiskOfRainLocation(player, f"Stage_5", None, event_region)
+        event_loc = RiskOfRainLocation(player, f"Stage 5", None, event_region)
         event_loc.place_locked_item(RiskOfRainItem(f"Stage 5", ItemClassification.progression, None, player))
         event_loc.show_in_spoiler = False
         event_region.locations.append(event_loc)
-        world.get_location(f"Stage_5", player).access_rule = \
+        world.get_location(f"Stage 5", player).access_rule = \
             lambda state: state.has("Sky Meadow", player)
 
     victory_region = world.get_region("Victory", player)
