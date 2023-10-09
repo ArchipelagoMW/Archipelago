@@ -1200,6 +1200,15 @@ class OOTWorld(World):
                             er_hint_data[self.player][location.address] = main_entrance.name
                             logger.debug(f"Set {location.name} hint data to {main_entrance.name}")
 
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        required_trials_str = ", ".join(t for t in self.skipped_trials if not self.skipped_trials[t])
+        spoiler_handle.write(f"\n\nTrials ({self.multiworld.get_player_name(self.player)}): {required_trials_str}\n")
+
+        if self.shopsanity != 'off':
+            spoiler_handle.write(f"\nShop Prices ({self.multiworld.get_player_name(self.player)}):\n")
+            for k, v in self.shop_prices.items():
+                spoiler_handle.write(f"{k}: {v} Rupees\n")
+
     # Key ring handling:
     # Key rings are multiple items glued together into one, so we need to give
     # the appropriate number of keys in the collection state when they are
