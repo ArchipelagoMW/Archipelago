@@ -2,22 +2,23 @@ from . import BumpStikTestBase
 
 
 class TestRuleLogic(BumpStikTestBase):
-    def testTreasures(self):
-        locations = ["Treasure Bumper 4"]
-        items = [["Treasure Bumper" for _ in range(4)]]
-        self.assertAccessDependency(locations, items)
+    def testLogic(self):
+        for x in range(1, 33):
+            if x == 32:
+                self.assertFalse(self.can_reach_location("Level 5 - Cleared all Hazards"))
 
-    def testTreasuresLv2(self):
-        locations = ["Treasure Bumper 12"]
-        items = [["Treasure Bumper" for _ in range(12)] + 
-            ["Bonus Booster" for _ in range(2)]]
-        self.assertAccessDependency(locations, items)
+            self.collect(self.get_item_by_name("Treasure Bumper"))
+            if x % 8 == 0:
+                self.assertFalse(self.can_reach_location(f"Treasure Bumper {x + 1}"))
+                for y in range(self.count("Bonus Booster"), round(x / 8) + 1):
+                    self.collect(self.get_item_by_name("Bonus Booster"))
+                    self.assertTrue(self.can_reach_location(f"Booster Bumper {y + 1}"))
+                    if y < 4:
+                        self.assertFalse(self.can_reach_location(f"Booster Bumper {y + 2}"))
 
-    def testLevels(self):
-        landmarks = [f"Level {x} - Combo 5" for x in range(2, 5)] + \
-            ["Level 5 - Cleared all Hazards"]
-        for x, landmark in enumerate(landmarks):
-            locations = [landmark]
-            items = [["Treasure Bumper" for _ in range(x * 8)] + 
-                ["Bonus Booster" for _ in range(x + 1)]]
-            self.assertAccessDependency(locations, items)
+            if x == 32:
+                self.assertTrue(self.can_reach_location("Level 5 - Cleared all Hazards"))
+            self.assertTrue(self.can_reach_location(f"Treasure Bumper {x + 1}"))
+            if x < 31:
+                self.assertFalse(self.can_reach_location(f"Treasure Bumper {x + 2}"))
+
