@@ -1,4 +1,4 @@
-from .Shop import FIGURINES, SHOP_ITEMS
+from .shop import FIGURINES, SHOP_ITEMS
 
 # items
 # listing individual groups first for easy lookup
