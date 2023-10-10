@@ -4,13 +4,14 @@ Archipelago init file for Lingo
 
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import World, WebWorld
-from .static_logic import StaticLingoLogic, Room, RoomEntrance
-from .items import LingoItem, StaticLingoItems
-from .locations import LingoLocation, StaticLingoLocations
-from .Options import lingo_options
-from .testing import LingoTestOptions
+
+from .items import LingoItem, ALL_ITEM_TABLE
+from .locations import ALL_LOCATION_TABLE
+from .options import lingo_options
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
+from .static_logic import Room, RoomEntrance
+from .testing import LingoTestOptions
 
 
 class LingoWebWorld(WebWorld):
@@ -37,23 +38,20 @@ class LingoWorld(World):
     topology_present = True
     data_version = 1
 
-    static_logic = StaticLingoLogic()
-    static_items = StaticLingoItems(static_logic)
-    static_locat = StaticLingoLocations(static_logic)
     option_definitions = lingo_options
 
     item_name_to_id = {
-        name: data.code for name, data in static_items.ALL_ITEM_TABLE.items()
+        name: data.code for name, data in ALL_ITEM_TABLE.items()
     }
     location_name_to_id = {
-        name: data.code for name, data in static_locat.ALL_LOCATION_TABLE.items()
+        name: data.code for name, data in ALL_LOCATION_TABLE.items()
     }
 
     def generate_early(self):
-        self.player_logic = LingoPlayerLogic(self, self.static_logic, self.static_items, self.static_locat)
+        self.player_logic = LingoPlayerLogic(self)
 
     def create_regions(self):
-        create_regions(self, self.static_logic, self.player_logic)
+        create_regions(self, self.player_logic)
 
     def create_items(self):
         pool = [self.create_item(name) for name in self.player_logic.REAL_ITEMS]
@@ -90,7 +88,7 @@ class LingoWorld(World):
         self.multiworld.itempool += pool
 
     def create_item(self, name: str) -> Item:
-        item = self.static_items.ALL_ITEM_TABLE[name]
+        item = ALL_ITEM_TABLE[name]
         return LingoItem(name, item.classification, item.code, player=self.player)
 
     def set_rules(self):

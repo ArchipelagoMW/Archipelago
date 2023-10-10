@@ -70,443 +70,474 @@ class Progression(NamedTuple):
     index: int
 
 
-class StaticLingoLogic:
-    ROOMS: Dict[str, Room]
-    PANELS: Dict[str, Panel]
-    DOORS: Dict[str, Door]
-    PAINTINGS: Dict[str, Painting]
+ROOMS: Dict[str, Room] = {}
+PANELS: Dict[str, Panel] = {}
+DOORS: Dict[str, Door] = {}
+PAINTINGS: Dict[str, Painting] = {}
 
-    ALL_ROOMS: List[Room]
-    DOORS_BY_ROOM: Dict[str, Dict[str, Door]]
-    PANELS_BY_ROOM: Dict[str, Dict[str, Panel]]
-    PAINTINGS_BY_ROOM: Dict[str, List[Painting]]
+ALL_ROOMS: List[Room] = []
+DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
+PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
+PAINTINGS_BY_ROOM: Dict[str, List[Painting]] = {}
 
-    PROGRESSIVE_ITEMS: List[str]
-    PROGRESSION_BY_ROOM: Dict[str, Dict[str, Progression]]
+PROGRESSIVE_ITEMS: List[str] = []
+PROGRESSION_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
 
-    PAINTING_ENTRANCES: int
-    PAINTING_EXIT_ROOMS: Set[str]
-    PAINTING_EXITS: int
-    REQUIRED_PAINTING_ROOMS: List[str]
-    REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str]
+PAINTING_ENTRANCES: int = 0
+PAINTING_EXIT_ROOMS: Set[str] = set()
+PAINTING_EXITS: int = 0
+REQUIRED_PAINTING_ROOMS: List[str] = []
+REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
 
-    SPECIAL_ITEM_IDS: Dict[str, int]
-    PANEL_LOCATION_IDS: Dict[str, Dict[str, int]]
-    DOOR_LOCATION_IDS: Dict[str, Dict[str, int]]
-    DOOR_ITEM_IDS: Dict[str, Dict[str, int]]
-    DOOR_GROUP_ITEM_IDS: Dict[str, int]
-    PROGRESSIVE_ITEM_IDS: Dict[str, int]
+SPECIAL_ITEM_IDS: Dict[str, int] = {}
+PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
+DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
+DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
+DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
+PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
 
-    def __init__(self):
-        self.ROOMS = {}
-        self.PANELS = {}
-        self.DOORS = {}
-        self.PAINTINGS = {}
 
-        self.ALL_ROOMS = []
-        self.DOORS_BY_ROOM = {}
-        self.PANELS_BY_ROOM = {}
-        self.PAINTINGS_BY_ROOM = {}
+def load_static_data():
+    global PAINTING_EXITS
 
-        self.PROGRESSIVE_ITEMS = []
-        self.PROGRESSION_BY_ROOM = {}
+    try:
+        from importlib.resources import files
+    except ImportError:
+        from importlib_resources import files
 
-        self.PAINTING_ENTRANCES = 0
-        self.PAINTING_EXIT_ROOMS = set()
-        self.PAINTING_EXITS = 0
-        self.REQUIRED_PAINTING_ROOMS = []
-        self.REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS = []
+    # Load in all item and location IDs. These are broken up into groups based on the type of item/location.
+    with files("worlds.lingo").joinpath("ids.yaml").open() as file:
+        config = yaml.load(file, Loader=yaml.Loader)
 
-        self.SPECIAL_ITEM_IDS = {}
-        self.PANEL_LOCATION_IDS = {}
-        self.DOOR_LOCATION_IDS = {}
-        self.DOOR_ITEM_IDS = {}
-        self.DOOR_GROUP_ITEM_IDS = {}
-        self.PROGRESSIVE_ITEM_IDS = {}
+        if "special_items" in config:
+            for item_name, item_id in config["special_items"].items():
+                SPECIAL_ITEM_IDS[item_name] = item_id
 
-        try:
-            from importlib.resources import files
-        except ImportError:
-            from importlib_resources import files
+        if "panels" in config:
+            for room_name in config["panels"].keys():
+                PANEL_LOCATION_IDS[room_name] = {}
 
-        with files("worlds.lingo").joinpath("ids.yaml").open() as file:
-            config = yaml.load(file, Loader=yaml.Loader)
+                for panel_name, location_id in config["panels"][room_name].items():
+                    PANEL_LOCATION_IDS[room_name][panel_name] = location_id
 
-            if "special_items" in config:
-                for item_name, item_id in config["special_items"].items():
-                    self.SPECIAL_ITEM_IDS[item_name] = item_id
+        if "doors" in config:
+            for room_name in config["doors"].keys():
+                DOOR_LOCATION_IDS[room_name] = {}
+                DOOR_ITEM_IDS[room_name] = {}
 
-            if "panels" in config:
-                for room_name in config["panels"].keys():
-                    self.PANEL_LOCATION_IDS[room_name] = {}
+                for door_name, door_data in config["doors"][room_name].items():
+                    if "location" in door_data:
+                        DOOR_LOCATION_IDS[room_name][door_name] = door_data["location"]
 
-                    for panel_name, location_id in config["panels"][room_name].items():
-                        self.PANEL_LOCATION_IDS[room_name][panel_name] = location_id
+                    if "item" in door_data:
+                        DOOR_ITEM_IDS[room_name][door_name] = door_data["item"]
 
-            if "doors" in config:
-                for room_name in config["doors"].keys():
-                    self.DOOR_LOCATION_IDS[room_name] = {}
-                    self.DOOR_ITEM_IDS[room_name] = {}
+        if "door_groups" in config:
+            for item_name, item_id in config["door_groups"].items():
+                DOOR_GROUP_ITEM_IDS[item_name] = item_id
 
-                    for door_name, door_data in config["doors"][room_name].items():
-                        if "location" in door_data:
-                            self.DOOR_LOCATION_IDS[room_name][door_name] = door_data["location"]
+        if "progression" in config:
+            for item_name, item_id in config["progression"].items():
+                PROGRESSIVE_ITEM_IDS[item_name] = item_id
 
-                        if "item" in door_data:
-                            self.DOOR_ITEM_IDS[room_name][door_name] = door_data["item"]
+    # Process the main world file.
+    with files("worlds.lingo").joinpath("LL1.yaml").open() as file:
+        config = yaml.load(file, Loader=yaml.Loader)
 
-            if "door_groups" in config:
-                for item_name, item_id in config["door_groups"].items():
-                    self.DOOR_GROUP_ITEM_IDS[item_name] = item_id
+        for room_name, room_data in config.items():
+            process_room(room_name, room_data)
 
-            if "progression" in config:
-                for item_name, item_id in config["progression"].items():
-                    self.PROGRESSIVE_ITEM_IDS[item_name] = item_id
+        PAINTING_EXITS = len(PAINTING_EXIT_ROOMS)
 
-        with files("worlds.lingo").joinpath("LL1.yaml").open() as file:
-            config = yaml.load(file, Loader=yaml.Loader)
 
-            for room_name, room_data in config.items():
-                self.process_room(room_name, room_data)
+def get_special_item_id(name: str):
+    if name not in SPECIAL_ITEM_IDS:
+        raise Exception(f"Item ID for special item {name} not found in ids.yaml.")
 
-            self.PAINTING_EXITS = len(self.PAINTING_EXIT_ROOMS)
+    return SPECIAL_ITEM_IDS[name]
 
-    def get_special_item_id(self, name: str):
-        if name not in self.SPECIAL_ITEM_IDS:
-            raise Exception(f'Item ID for special item {name} not found in ids.yaml.')
 
-        return self.SPECIAL_ITEM_IDS[name]
+def get_panel_location_id(room: str, name: str):
+    if room not in PANEL_LOCATION_IDS or name not in PANEL_LOCATION_IDS[room]:
+        raise Exception(f"Location ID for panel {room} - {name} not found in ids.yaml.")
 
-    def get_panel_location_id(self, room: str, name: str):
-        if room not in self.PANEL_LOCATION_IDS or name not in self.PANEL_LOCATION_IDS[room]:
-            raise Exception(f'Location ID for panel {room} - {name} not found in ids.yaml.')
+    return PANEL_LOCATION_IDS[room][name]
 
-        return self.PANEL_LOCATION_IDS[room][name]
 
-    def get_door_location_id(self, room: str, name: str):
-        if room not in self.DOOR_LOCATION_IDS or name not in self.DOOR_LOCATION_IDS[room]:
-            raise Exception(f'Location ID for door {room} - {name} not found in ids.yaml.')
+def get_door_location_id(room: str, name: str):
+    if room not in DOOR_LOCATION_IDS or name not in DOOR_LOCATION_IDS[room]:
+        raise Exception(f"Location ID for door {room} - {name} not found in ids.yaml.")
 
-        return self.DOOR_LOCATION_IDS[room][name]
+    return DOOR_LOCATION_IDS[room][name]
 
-    def get_door_item_id(self, room: str, name: str):
-        if room not in self.DOOR_ITEM_IDS or name not in self.DOOR_ITEM_IDS[room]:
-            raise Exception(f'Item ID for door {room} - {name} not found in ids.yaml.')
 
-        return self.DOOR_ITEM_IDS[room][name]
+def get_door_item_id(room: str, name: str):
+    if room not in DOOR_ITEM_IDS or name not in DOOR_ITEM_IDS[room]:
+        raise Exception(f"Item ID for door {room} - {name} not found in ids.yaml.")
 
-    def get_door_group_item_id(self, name: str):
-        if name not in self.DOOR_GROUP_ITEM_IDS:
-            raise Exception(f'Item ID for door group {name} not found in ids.yaml.')
+    return DOOR_ITEM_IDS[room][name]
 
-        return self.DOOR_GROUP_ITEM_IDS[name]
 
-    def get_progressive_item_id(self, name: str):
-        if name not in self.PROGRESSIVE_ITEM_IDS:
-            raise Exception(f'Item ID for progressive item {name} not found in ids.yaml.')
+def get_door_group_item_id(name: str):
+    if name not in DOOR_GROUP_ITEM_IDS:
+        raise Exception(f"Item ID for door group {name} not found in ids.yaml.")
 
-        return self.PROGRESSIVE_ITEM_IDS[name]
+    return DOOR_GROUP_ITEM_IDS[name]
 
-    def process_entrance(self, source_room, doors, room_obj):
-        if doors is True:
-            room_obj.entrances.append(RoomEntrance(source_room, None, False))
-        elif isinstance(doors, Dict):
-            if "painting" in doors and "door" not in doors:
-                self.PAINTING_EXIT_ROOMS.add(room_obj.name)
-                self.PAINTING_ENTRANCES += 1
 
-                room_obj.entrances.append(RoomEntrance(source_room, None, True))
-            else:
-                if "painting" in doors and doors["painting"]:
-                    self.PAINTING_EXIT_ROOMS.add(room_obj.name)
-                    self.PAINTING_ENTRANCES += 1
+def get_progressive_item_id(name: str):
+    if name not in PROGRESSIVE_ITEM_IDS:
+        raise Exception(f"Item ID for progressive item {name} not found in ids.yaml.")
 
-                room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
-                    doors["room"] if "room" in doors else None,
-                    doors["door"]
-                ), doors["painting"] if "painting" in doors else False))
+    return PROGRESSIVE_ITEM_IDS[name]
+
+
+def process_entrance(source_room, doors, room_obj):
+    global PAINTING_ENTRANCES, PAINTING_EXIT_ROOMS
+
+    # If the value of an entrance is just True, that means that the entrance is always accessible.
+    if doors is True:
+        room_obj.entrances.append(RoomEntrance(source_room, None, False))
+    elif isinstance(doors, dict):
+        # If the value of an entrance is a dictionary, that means the entrance requires a door to be accessible, is a
+        # painting-based entrance, or both.
+        if "painting" in doors and "door" not in doors:
+            PAINTING_EXIT_ROOMS.add(room_obj.name)
+            PAINTING_ENTRANCES += 1
+
+            room_obj.entrances.append(RoomEntrance(source_room, None, True))
         else:
-            for door in doors:
-                if "painting" in door and door["painting"]:
-                    self.PAINTING_EXIT_ROOMS.add(room_obj.name)
-                    self.PAINTING_ENTRANCES += 1
+            if "painting" in doors and doors["painting"]:
+                PAINTING_EXIT_ROOMS.add(room_obj.name)
+                PAINTING_ENTRANCES += 1
 
-                room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
-                    door["room"] if "room" in door else None,
-                    door["door"]
-                ), door["painting"] if "painting" in door else False))
+            room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
+                doors["room"] if "room" in doors else None,
+                doors["door"]
+            ), doors["painting"] if "painting" in doors else False))
+    else:
+        # If the value of an entrance is a list, then there are multiple possible doors that can give access to the
+        # entrance.
+        for door in doors:
+            if "painting" in door and door["painting"]:
+                PAINTING_EXIT_ROOMS.add(room_obj.name)
+                PAINTING_ENTRANCES += 1
 
-    def process_panel(self, room_name, panel_name, panel_data):
-        full_name = f"{room_name} - {panel_name}"
+            room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
+                door["room"] if "room" in door else None,
+                door["door"]
+            ), door["painting"] if "painting" in door else False))
 
-        if "required_room" in panel_data:
-            if isinstance(panel_data["required_room"], List):
-                required_rooms = panel_data["required_room"]
-            else:
-                required_rooms = [panel_data["required_room"]]
+
+def process_panel(room_name, panel_name, panel_data):
+    global PANELS, PANELS_BY_ROOM
+
+    full_name = f"{room_name} - {panel_name}"
+
+    # required_room can either be a single room or a list of rooms.
+    if "required_room" in panel_data:
+        if isinstance(panel_data["required_room"], list):
+            required_rooms = panel_data["required_room"]
         else:
-            required_rooms = []
+            required_rooms = [panel_data["required_room"]]
+    else:
+        required_rooms = []
 
-        required_doors = list()
-        if "required_door" in panel_data:
-            if isinstance(panel_data["required_door"], Dict):
-                door = panel_data["required_door"]
+    # required_door can either be a single door or a list of doors. For convenience, the room key for each door does not
+    # need to be specified if the door is in this room.
+    required_doors = list()
+    if "required_door" in panel_data:
+        if isinstance(panel_data["required_door"], dict):
+            door = panel_data["required_door"]
+            required_doors.append(RoomAndDoor(
+                door["room"] if "room" in door else None,
+                door["door"]
+            ))
+        else:
+            for door in panel_data["required_door"]:
                 required_doors.append(RoomAndDoor(
                     door["room"] if "room" in door else None,
                     door["door"]
                 ))
-            else:
-                for door in panel_data["required_door"]:
-                    required_doors.append(RoomAndDoor(
-                        door["room"] if "room" in door else None,
-                        door["door"]
-                    ))
 
-        required_panels = list()
-        if "required_panel" in panel_data:
-            if isinstance(panel_data["required_panel"], Dict):
-                other_panel = panel_data["required_panel"]
+    # required_panel can either be a single panel or a list of panels. For convenience, the room key for each panel does
+    # not need to be specified if the panel is in this room.
+    required_panels = list()
+    if "required_panel" in panel_data:
+        if isinstance(panel_data["required_panel"], dict):
+            other_panel = panel_data["required_panel"]
+            required_panels.append(RoomAndPanel(
+                other_panel["room"] if "room" in other_panel else None,
+                other_panel["panel"]
+            ))
+        else:
+            for other_panel in panel_data["required_panel"]:
                 required_panels.append(RoomAndPanel(
                     other_panel["room"] if "room" in other_panel else None,
                     other_panel["panel"]
                 ))
+
+    # colors can either be a single color or a list of colors.
+    if "colors" in panel_data:
+        if isinstance(panel_data["colors"], list):
+            colors = panel_data["colors"]
+        else:
+            colors = [panel_data["colors"]]
+    else:
+        colors = []
+
+    if "check" in panel_data:
+        check = panel_data["check"]
+    else:
+        check = False
+
+    if "event" in panel_data:
+        event = panel_data["event"]
+    else:
+        event = False
+
+    if "achievement" in panel_data:
+        achievement = True
+    else:
+        achievement = False
+
+    if "exclude_reduce" in panel_data:
+        exclude_reduce = panel_data["exclude_reduce"]
+    else:
+        exclude_reduce = False
+
+    if "non_counting" in panel_data:
+        non_counting = panel_data["non_counting"]
+    else:
+        non_counting = False
+
+    if "id" in panel_data:
+        if isinstance(panel_data["id"], list):
+            internal_ids = panel_data["id"]
+        else:
+            internal_ids = [panel_data["id"]]
+    else:
+        internal_ids = []
+
+    panel_obj = Panel(required_rooms, required_doors, required_panels, colors, check, event, internal_ids,
+                      exclude_reduce, achievement, non_counting)
+    PANELS[full_name] = panel_obj
+    PANELS_BY_ROOM[room_name][panel_name] = panel_obj
+
+
+def process_door(room_name, door_name, door_data):
+    global DOORS, DOORS_BY_ROOM
+
+    # The item name associated with a door can be explicitly specified in the configuration. If it is not, it is
+    # generated from the room and door name.
+    if "item_name" in door_data:
+        item_name = door_data["item_name"]
+    else:
+        item_name = f"{room_name} - {door_name}"
+
+    if "skip_location" in door_data:
+        skip_location = door_data["skip_location"]
+    else:
+        skip_location = False
+
+    if "skip_item" in door_data:
+        skip_item = door_data["skip_item"]
+    else:
+        skip_item = False
+
+    if "event" in door_data:
+        event = door_data["event"]
+    else:
+        event = False
+
+    if "include_reduce" in door_data:
+        include_reduce = door_data["include_reduce"]
+    else:
+        include_reduce = False
+
+    if "junk_item" in door_data:
+        junk_item = door_data["junk_item"]
+    else:
+        junk_item = False
+
+    if "group" in door_data:
+        group = door_data["group"]
+    else:
+        group = None
+
+    # panels is a list of panels. Each panel can either be a simple string (the name of a panel in the current room) or
+    # a dictionary specifying a panel in a different room.
+    if "panels" in door_data:
+        panels = list()
+        for panel in door_data["panels"]:
+            if isinstance(panel, dict):
+                panels.append(RoomAndPanel(panel["room"], panel["panel"]))
             else:
-                for other_panel in panel_data["required_panel"]:
-                    required_panels.append(RoomAndPanel(
-                        other_panel["room"] if "room" in other_panel else None,
-                        other_panel["panel"]
-                    ))
+                panels.append(RoomAndPanel(None, panel))
+    else:
+        skip_location = True
+        panels = None
 
-        if "colors" in panel_data:
-            if isinstance(panel_data["colors"], List):
-                colors = panel_data["colors"]
-            else:
-                colors = [panel_data["colors"]]
+    # The location name associated with a door can be explicitly specified in the configuration. If it is not, then the
+    # name is generated using a combination of all of the panels that would ordinarily open the door. This can get quite
+    # messy if there are a lot of panels, especially if panels from multiple rooms are involved, so in these cases it
+    # would be better to specify a name.
+    if "location_name" in door_data:
+        location_name = door_data["location_name"]
+    elif skip_location is False:
+        panel_per_room = dict()
+        for panel in panels:
+            panel_room_name = room_name if panel.room is None else panel.room
+            panel_per_room.setdefault(panel_room_name, []).append(panel.panel)
+
+        room_strs = list()
+        for door_room_str, door_panels_str in panel_per_room.items():
+            room_strs.append(door_room_str + " - " + ", ".join(door_panels_str))
+
+        location_name = " and ".join(room_strs)
+    else:
+        location_name = None
+
+    # The id field can be a single item, or a list of door IDs, in the event that the item for this logical door should
+    # open more than one actual in-game door.
+    if "id" in door_data:
+        if isinstance(door_data["id"], list):
+            door_ids = door_data["id"]
         else:
-            colors = []
+            door_ids = [door_data["id"]]
+    else:
+        door_ids = []
 
-        if "check" in panel_data:
-            check = panel_data["check"]
+    # The painting_id field can be a single item, or a list of painting IDs, in the event that the item for this logical
+    # door should move more than one actual in-game painting.
+    if "painting_id" in door_data:
+        if isinstance(door_data["painting_id"], list):
+            painting_ids = door_data["painting_id"]
         else:
-            check = False
+            painting_ids = [door_data["painting_id"]]
+    else:
+        painting_ids = []
 
-        if "event" in panel_data:
-            event = panel_data["event"]
+    door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, door_ids,
+                    painting_ids, event, group, include_reduce, junk_item)
+
+    DOORS[door_obj.item_name] = door_obj
+    DOORS_BY_ROOM[room_name][door_name] = door_obj
+
+
+def process_painting(room_name, painting_data):
+    global PAINTINGS, PAINTINGS_BY_ROOM
+
+    # Read in information about this painting and store it in an object.
+    painting_id = painting_data["id"]
+
+    if "orientation" in painting_data:
+        orientation = painting_data["orientation"]
+    else:
+        orientation = ""
+
+    if "disable" in painting_data:
+        disable_painting = painting_data["disable"]
+    else:
+        disable_painting = False
+
+    if "required" in painting_data:
+        required_painting = painting_data["required"]
+        if required_painting:
+            REQUIRED_PAINTING_ROOMS.append(room_name)
+    else:
+        required_painting = False
+
+    if "move" in painting_data:
+        move_painting = painting_data["move"]
+    else:
+        move_painting = False
+
+    if "required_when_no_doors" in painting_data:
+        rwnd = painting_data["required_when_no_doors"]
+        if rwnd:
+            REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS.append(room_name)
+    else:
+        rwnd = False
+
+    if "exit_only" in painting_data:
+        exit_only = painting_data["exit_only"]
+    else:
+        exit_only = False
+
+    if "enter_only" in painting_data:
+        enter_only = painting_data["enter_only"]
+    else:
+        enter_only = False
+
+    required_door = None
+    if "required_door" in painting_data:
+        door = painting_data["required_door"]
+        required_door = RoomAndDoor(
+            door["room"] if "room" in door else room_name,
+            door["door"]
+        )
+
+    painting_obj = Painting(painting_id, room_name, enter_only, exit_only, orientation,
+                            required_painting, rwnd, required_door, disable_painting, move_painting)
+    PAINTINGS[painting_id] = painting_obj
+    PAINTINGS_BY_ROOM[room_name].append(painting_obj)
+
+
+def process_progression(room_name, progression_name, progression_doors):
+    global PROGRESSIVE_ITEMS, PROGRESSION_BY_ROOM
+
+    # Progressive items are configured as a list of doors.
+    PROGRESSIVE_ITEMS.append(progression_name)
+
+    progression_index = 1
+    for door in progression_doors:
+        if isinstance(door, Dict):
+            door_room = door["room"]
+            door_door = door["door"]
         else:
-            event = False
+            door_room = room_name
+            door_door = door
 
-        if "achievement" in panel_data:
-            achievement = True
-        else:
-            achievement = False
+        room_progressions = PROGRESSION_BY_ROOM.setdefault(door_room, {})
+        room_progressions[door_door] = Progression(progression_name, progression_index)
+        progression_index += 1
 
-        if "exclude_reduce" in panel_data:
-            exclude_reduce = panel_data["exclude_reduce"]
-        else:
-            exclude_reduce = False
 
-        if "non_counting" in panel_data:
-            non_counting = panel_data["non_counting"]
-        else:
-            non_counting = False
+def process_room(room_name, room_data):
+    global ROOMS, ALL_ROOMS
 
-        if "id" in panel_data:
-            if isinstance(panel_data["id"], List):
-                internal_ids = panel_data["id"]
-            else:
-                internal_ids = [panel_data["id"]]
-        else:
-            internal_ids = []
+    room_obj = Room(room_name, [])
 
-        panel_obj = Panel(required_rooms, required_doors, required_panels, colors, check, event, internal_ids,
-                          exclude_reduce, achievement, non_counting)
-        self.PANELS[full_name] = panel_obj
-        self.PANELS_BY_ROOM[room_name][panel_name] = panel_obj
+    if "entrances" in room_data:
+        for source_room, doors in room_data["entrances"].items():
+            process_entrance(source_room, doors, room_obj)
 
-    def process_door(self, room_name, door_name, door_data):
-        if "item_name" in door_data:
-            item_name = door_data["item_name"]
-        else:
-            item_name = f"{room_name} - {door_name}"
+    if "panels" in room_data:
+        PANELS_BY_ROOM[room_name] = dict()
 
-        if "skip_location" in door_data:
-            skip_location = door_data["skip_location"]
-        else:
-            skip_location = False
+        for panel_name, panel_data in room_data["panels"].items():
+            process_panel(room_name, panel_name, panel_data)
 
-        if "skip_item" in door_data:
-            skip_item = door_data["skip_item"]
-        else:
-            skip_item = False
+    if "doors" in room_data:
+        DOORS_BY_ROOM[room_name] = dict()
 
-        if "event" in door_data:
-            event = door_data["event"]
-        else:
-            event = False
+        for door_name, door_data in room_data["doors"].items():
+            process_door(room_name, door_name, door_data)
 
-        if "include_reduce" in door_data:
-            include_reduce = door_data["include_reduce"]
-        else:
-            include_reduce = False
+    if "paintings" in room_data:
+        PAINTINGS_BY_ROOM[room_name] = []
 
-        if "junk_item" in door_data:
-            junk_item = door_data["junk_item"]
-        else:
-            junk_item = False
+        for painting_data in room_data["paintings"]:
+            process_painting(room_name, painting_data)
 
-        if "group" in door_data:
-            group = door_data["group"]
-        else:
-            group = None
+    if "progression" in room_data:
+        for progression_name, progression_doors in room_data["progression"].items():
+            process_progression(room_name, progression_name, progression_doors)
 
-        if "panels" in door_data:
-            panels = list()
-            for panel in door_data["panels"]:
-                if isinstance(panel, Dict):
-                    panels.append(RoomAndPanel(panel["room"], panel["panel"]))
-                else:
-                    panels.append(RoomAndPanel(None, panel))
-        else:
-            skip_location = True
-            panels = None
+    ROOMS[room_name] = room_obj
+    ALL_ROOMS.append(room_obj)
 
-        if "location_name" in door_data:
-            location_name = door_data["location_name"]
-        elif skip_location is False:
-            panel_per_room = dict()
-            for panel in panels:
-                panel_room_name = room_name if panel.room is None else panel.room
-                panel_per_room.setdefault(panel_room_name, []).append(panel.panel)
 
-            room_strs = list()
-            for door_room_str, door_panels_str in panel_per_room.items():
-                room_strs.append(door_room_str + " - " + ", ".join(door_panels_str))
-
-            location_name = " and ".join(room_strs)
-        else:
-            location_name = None
-
-        if "id" in door_data:
-            if isinstance(door_data["id"], List):
-                door_ids = door_data["id"]
-            else:
-                door_ids = [door_data["id"]]
-        else:
-            door_ids = []
-
-        if "painting_id" in door_data:
-            if isinstance(door_data["painting_id"], List):
-                painting_ids = door_data["painting_id"]
-            else:
-                painting_ids = [door_data["painting_id"]]
-        else:
-            painting_ids = []
-
-        door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, door_ids,
-                        painting_ids, event, group, include_reduce, junk_item)
-
-        self.DOORS[door_obj.item_name] = door_obj
-        self.DOORS_BY_ROOM[room_name][door_name] = door_obj
-
-    def process_painting(self, room_name, painting_data):
-        painting_id = painting_data["id"]
-
-        if "orientation" in painting_data:
-            orientation = painting_data["orientation"]
-        else:
-            orientation = ""
-
-        if "disable" in painting_data:
-            disable_painting = painting_data["disable"]
-        else:
-            disable_painting = False
-
-        if "required" in painting_data:
-            required_painting = painting_data["required"]
-            if required_painting:
-                self.REQUIRED_PAINTING_ROOMS.append(room_name)
-        else:
-            required_painting = False
-
-        if "move" in painting_data:
-            move_painting = painting_data["move"]
-        else:
-            move_painting = False
-
-        if "required_when_no_doors" in painting_data:
-            rwnd = painting_data["required_when_no_doors"]
-            if rwnd:
-                self.REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS.append(room_name)
-        else:
-            rwnd = False
-
-        if "exit_only" in painting_data:
-            exit_only = painting_data["exit_only"]
-        else:
-            exit_only = False
-
-        if "enter_only" in painting_data:
-            enter_only = painting_data["enter_only"]
-        else:
-            enter_only = False
-
-        required_door = None
-        if "required_door" in painting_data:
-            door = painting_data["required_door"]
-            required_door = RoomAndDoor(
-                door["room"] if "room" in door else room_name,
-                door["door"]
-            )
-
-        painting_obj = Painting(painting_id, room_name, enter_only, exit_only, orientation,
-                                required_painting, rwnd, required_door, disable_painting, move_painting)
-        self.PAINTINGS[painting_id] = painting_obj
-        self.PAINTINGS_BY_ROOM[room_name].append(painting_obj)
-
-    def process_progression(self, room_name, progression_name, progression_doors):
-        self.PROGRESSIVE_ITEMS.append(progression_name)
-
-        progression_index = 1
-        for door in progression_doors:
-            if isinstance(door, Dict):
-                door_room = door["room"]
-                door_door = door["door"]
-            else:
-                door_room = room_name
-                door_door = door
-
-            room_progressions = self.PROGRESSION_BY_ROOM.setdefault(door_room, {})
-            room_progressions[door_door] = Progression(progression_name, progression_index)
-            progression_index += 1
-
-    def process_room(self, room_name, room_data):
-        room_obj = Room(room_name, [])
-
-        if "entrances" in room_data:
-            for source_room, doors in room_data["entrances"].items():
-                self.process_entrance(source_room, doors, room_obj)
-
-        if "panels" in room_data:
-            self.PANELS_BY_ROOM[room_name] = dict()
-
-            for panel_name, panel_data in room_data["panels"].items():
-                self.process_panel(room_name, panel_name, panel_data)
-
-        if "doors" in room_data:
-            self.DOORS_BY_ROOM[room_name] = dict()
-
-            for door_name, door_data in room_data["doors"].items():
-                self.process_door(room_name, door_name, door_data)
-
-        if "paintings" in room_data:
-            self.PAINTINGS_BY_ROOM[room_name] = []
-
-            for painting_data in room_data["paintings"]:
-                self.process_painting(room_name, painting_data)
-
-        if "progression" in room_data:
-            for progression_name, progression_doors in room_data["progression"].items():
-                self.process_progression(room_name, progression_name, progression_doors)
-
-        self.ROOMS[room_name] = room_obj
-        self.ALL_ROOMS.append(room_obj)
+# Initialize the static data at module scope.
+load_static_data()

@@ -1,7 +1,9 @@
-from typing import Dict, NamedTuple, List
-from BaseClasses import Location
-from .static_logic import StaticLingoLogic, RoomAndPanel
 from enum import Flag, auto
+from typing import Dict, NamedTuple, List
+
+from BaseClasses import Location
+
+from .static_logic import RoomAndPanel, PANELS_BY_ROOM, get_panel_location_id, DOORS_BY_ROOM, get_door_location_id
 
 
 class LocationClassification(Flag):
@@ -23,7 +25,7 @@ class LocationData(NamedTuple):
         ids = set()
         for panel in self.panels:
             effective_room = self.room if panel.room is None else panel.room
-            panel_data = StaticLingoLogic.PANELS_BY_ROOM[effective_room][panel.panel]
+            panel_data = PANELS_BY_ROOM[effective_room][panel.panel]
             ids = ids | set(panel_data.internal_ids)
         return ids
 
@@ -35,47 +37,44 @@ class LingoLocation(Location):
     game: str = "Lingo"
 
 
-class StaticLingoLocations:
-    """
-    Defines the locations that can be included in a Lingo world
-    """
+ALL_LOCATION_TABLE: Dict[str, LocationData] = {}
 
-    ALL_LOCATION_TABLE: Dict[str, LocationData]
+def load_location_data():
+    global ALL_LOCATION_TABLE
 
-    def __init__(self, static_logic: StaticLingoLogic):
-        temp_location_table: Dict[str, LocationData] = {}
+    for room_name, panels in PANELS_BY_ROOM.items():
+        for panel_name, panel in panels.items():
+            locat_name = f"{room_name} - {panel_name}"
 
-        for room_name, panels in static_logic.PANELS_BY_ROOM.items():
-            for panel_name, panel in panels.items():
-                locat_name = f"{room_name} - {panel_name}"
+            classification = LocationClassification.insanity
+            if panel.check:
+                classification |= LocationClassification.normal
 
-                classification = LocationClassification.insanity
-                if panel.check:
-                    classification |= LocationClassification.normal
-
-                    if not panel.exclude_reduce:
-                        classification |= LocationClassification.reduced
-
-                temp_location_table[locat_name] =\
-                    LocationData(static_logic.get_panel_location_id(room_name, panel_name), room_name,
-                                 [RoomAndPanel(None, panel_name)], classification)
-
-        for room_name, doors in static_logic.DOORS_BY_ROOM.items():
-            for door_name, door in doors.items():
-                if door.skip_location or door.event or door.panels is None:
-                    continue
-                
-                locat_name = door.location_name
-                classification = LocationClassification.normal
-                if door.include_reduce:
+                if not panel.exclude_reduce:
                     classification |= LocationClassification.reduced
 
-                if locat_name in temp_location_table:
-                    new_id = temp_location_table[locat_name].code
-                    classification |= temp_location_table[locat_name].classification
-                else:
-                    new_id = static_logic.get_door_location_id(room_name, door_name)
+            ALL_LOCATION_TABLE[locat_name] =\
+                LocationData(get_panel_location_id(room_name, panel_name), room_name,
+                             [RoomAndPanel(None, panel_name)], classification)
 
-                temp_location_table[locat_name] = LocationData(new_id, room_name, door.panels, classification)
+    for room_name, doors in DOORS_BY_ROOM.items():
+        for door_name, door in doors.items():
+            if door.skip_location or door.event or door.panels is None:
+                continue
 
-        self.ALL_LOCATION_TABLE = temp_location_table
+            locat_name = door.location_name
+            classification = LocationClassification.normal
+            if door.include_reduce:
+                classification |= LocationClassification.reduced
+
+            if locat_name in ALL_LOCATION_TABLE:
+                new_id = ALL_LOCATION_TABLE[locat_name].code
+                classification |= ALL_LOCATION_TABLE[locat_name].classification
+            else:
+                new_id = get_door_location_id(room_name, door_name)
+
+            ALL_LOCATION_TABLE[locat_name] = LocationData(new_id, room_name, door.panels, classification)
+
+
+# Initialize location data on the module scope.
+load_location_data()
