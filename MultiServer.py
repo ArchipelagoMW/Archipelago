@@ -1549,7 +1549,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         cost = self.ctx.get_hint_cost(self.client.slot)
         can_pay = int(points_available // cost > 0)
         if can_pay:
-            recipient, usable, response = get_intended_text(recipient, self.ctx.player_names.values())
+            recipient, usable, response = get_intended_text(recipient, self.ctx.connect_names.values())
             if not usable:
                 self.output(response)
                 return False
@@ -2134,14 +2134,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
     
     def _cmd_hint_gift(self, gifting_player: str, recipient: str) -> bool:
         """Gift a player's points for a full hint to another player"""
-        gifting_player, usable, response = get_intended_text(gifting_player, self.ctx.player_names.values())
+        gifting_player, usable, response = get_intended_text(gifting_player, self.ctx.connect_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[gifting_player]
             points_available = get_slot_points(self.ctx, team, slot)
             cost = self.ctx.get_hint_cost(slot)
             can_pay = int(points_available // cost > 0)
             if can_pay:
-                recipient, usable, response = get_intended_text(recipient, self.ctx.player_names.values())
+                recipient, usable, response = get_intended_text(recipient, self.ctx.connect_names.values())
                 if not usable:
                     self.output(response)
                     return False
@@ -2176,6 +2176,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     if input_text.lower() in {"null", "none", '""', "''"}:
                         return None
                     return input_text
+            if option_name == "location_check_points":
+                self.ctx.hint_points = {(team, slot): points / self.ctx.location_check_points * int(option)
+                                        for (team, slot), points in self.ctx.hint_points.items()}
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
             if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
