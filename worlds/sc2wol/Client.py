@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import copy
 import ctypes
+import json
 import logging
 import multiprocessing
 import os.path
@@ -1146,7 +1147,9 @@ def download_latest_release_zip(owner: str, repo: str, api_version: str, metadat
 
     r1 = requests.get(url, headers=headers)
     if r1.status_code == 200:
-        latest_metadata = str(r1.json())
+        latest_metadata = r1.json()
+        cleanup_downloaded_metadata(latest_metadata)
+        latest_metadata = str(latest_metadata)
         # sc2_logger.info(f"Latest version: {latest_metadata}.")
     else:
         sc2_logger.warning(f"Status code: {r1.status_code}")
@@ -1174,6 +1177,11 @@ def download_latest_release_zip(owner: str, repo: str, api_version: str, metadat
         return "", metadata
 
 
+def cleanup_downloaded_metadata(medatada_json):
+    for asset in medatada_json['assets']:
+        del asset['download_count']
+
+
 def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: str) -> bool:
     import requests
 
@@ -1182,7 +1190,9 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
 
     r1 = requests.get(url, headers=headers)
     if r1.status_code == 200:
-        latest_metadata = str(r1.json())
+        latest_metadata = r1.json()
+        cleanup_downloaded_metadata(latest_metadata)
+        latest_metadata = str(latest_metadata)
         if metadata != latest_metadata:
             return True
         else:

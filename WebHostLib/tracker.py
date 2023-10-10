@@ -1683,7 +1683,7 @@ def get_LttP_multiworld_tracker(tracker: UUID):
             for item_id in precollected:
                 attribute_item(team, player, item_id)
         for location in locations_checked:
-            if location not in player_locations or location not in player_location_to_area[player]:
+            if location not in player_locations or location not in player_location_to_area.get(player, {}):
                 continue
             item, recipient, flags = player_locations[location]
             recipients = groups.get(recipient, [recipient])
