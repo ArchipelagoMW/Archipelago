@@ -32,7 +32,7 @@ from .Cosmetics import patch_cosmetics
 
 from Utils import get_options
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
-from Options import Range, Toggle, VerifyKeys
+from Options import Range, Toggle, VerifyKeys, Accessibility
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
@@ -286,7 +286,7 @@ class OOTWorld(World):
         # No Logic forces all tricks on, prog balancing off and beatable-only
         elif self.logic_rules == 'no_logic':
             self.multiworld.progression_balancing[self.player].value = False
-            self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("minimal")
+            self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
             for trick in normalized_name_tricks.values():
                 setattr(self, trick['name'], True)
 

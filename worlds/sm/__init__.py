@@ -148,7 +148,7 @@ class SMWorld(World):
         self.remote_items = self.multiworld.remote_items[self.player]
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
-            self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("minimal")
+            self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
             logger.warning(f"accessibility forced to 'minimal' for player {self.multiworld.get_player_name(self.player)} because of 'fun' settings")
     
     def create_items(self):

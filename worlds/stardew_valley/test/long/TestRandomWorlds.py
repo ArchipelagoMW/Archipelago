@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict
 import random
 
 from BaseClasses import MultiWorld
@@ -9,7 +9,6 @@ from ..checks.goal_checks import assert_perfection_world_is_valid, assert_goal_w
 from ..checks.option_checks import assert_can_reach_island_if_should, assert_cropsanity_same_number_items_and_locations, \
     assert_festivals_give_access_to_deluxe_scarecrow
 from ..checks.world_checks import assert_same_number_items_locations, assert_victory_exists
-from ... import options
 
 
 def get_option_choices(option) -> Dict[str, int]:

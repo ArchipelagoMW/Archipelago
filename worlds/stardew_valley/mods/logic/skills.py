@@ -29,17 +29,17 @@ def append_mod_skill_level(skills_items: List[str], active_mods):
 
 
 def can_earn_mod_skill_level(logic, skill: str, level: int) -> StardewRule:
-    if ModNames.luck_skill in logic.options[options.Mods] and skill == ModSkill.luck:
+    if ModNames.luck_skill in logic.options.mods and skill == ModSkill.luck:
         return can_earn_luck_skill_level(logic, level)
-    if ModNames.magic in logic.options[options.Mods] and skill == ModSkill.magic:
+    if ModNames.magic in logic.options.mods and skill == ModSkill.magic:
         return can_earn_magic_skill_level(logic, level)
-    if ModNames.socializing_skill in logic.options[options.Mods] and skill == ModSkill.socializing:
+    if ModNames.socializing_skill in logic.options.mods and skill == ModSkill.socializing:
         return can_earn_socializing_skill_level(logic, level)
-    if ModNames.archaeology in logic.options[options.Mods] and skill == ModSkill.archaeology:
+    if ModNames.archaeology in logic.options.mods and skill == ModSkill.archaeology:
         return can_earn_archaeology_skill_level(logic, level)
-    if ModNames.cooking_skill in logic.options[options.Mods] and skill == ModSkill.cooking:
+    if ModNames.cooking_skill in logic.options.mods and skill == ModSkill.cooking:
         return can_earn_cooking_skill_level(logic, level)
-    if ModNames.binning_skill in logic.options[options.Mods] and skill == ModSkill.binning:
+    if ModNames.binning_skill in logic.options.mods and skill == ModSkill.binning:
         return can_earn_binning_skill_level(logic, level)
     return False_()
 
@@ -65,7 +65,7 @@ def can_earn_magic_skill_level(vanilla_logic, level: int) -> StardewRule:
 def can_earn_socializing_skill_level(vanilla_logic, level: int) -> StardewRule:
     villager_count = []
     for villager in all_villagers:
-        if villager.mod_name in vanilla_logic.options[options.Mods] or villager.mod_name is None:
+        if villager.mod_name in vanilla_logic.options.mods or villager.mod_name is None:
             villager_count.append(vanilla_logic.can_earn_relationship(villager.name, level))
     return Count(level * 2, villager_count)
 

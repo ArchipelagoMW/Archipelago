@@ -36,10 +36,7 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options: typing.Dict[str, Options.AssembleOptions] = {
-            **Options.per_game_common_options,
-            **world.option_definitions
-        }
+        all_options: typing.Dict[str, Options.AssembleOptions] = world.options_dataclass.type_hints
 
         # Generate JSON files for player-settings pages
         player_settings = {

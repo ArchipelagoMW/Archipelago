@@ -1,13 +1,14 @@
 from collections import Counter
-# import logging
-from typing import TYPE_CHECKING, Any, Dict, Tuple, cast
-from Options import AssembleOptions, DefaultOnToggle, Range, SpecialRange, Toggle, Choice
+from dataclasses import dataclass
+from typing import Dict, Tuple
+from typing_extensions import TypeGuard  # remove when Python >= 3.10
+
+from Options import DefaultOnToggle, PerGameCommonOptions, Range, SpecialRange, Toggle, Choice
+
 from zilliandomizer.options import \
     Options as ZzOptions, char_to_gun, char_to_jump, ID, \
     VBLR as ZzVBLR, chars, Chars, ItemCounts as ZzItemCounts
 from zilliandomizer.options.parsing import validate as zz_validate
-if TYPE_CHECKING:
-    from BaseClasses import MultiWorld
 
 
 class ZillionContinues(SpecialRange):
@@ -40,6 +41,19 @@ class VBLR(Choice):
     option_low = 2
     option_restrictive = 3
     default = 1
+
+    def to_zz_vblr(self) -> ZzVBLR:
+        def is_vblr(o: str) -> TypeGuard[ZzVBLR]:
+            """
+            This function is because mypy doesn't support narrowing with `in`,
+            https://github.com/python/mypy/issues/12535
+            so this is the only way I see to get type narrowing to `Literal`.
+            """
+            return o in ("vanilla", "balanced", "low", "restrictive")
+
+        key = self.current_key
+        assert is_vblr(key), f"{key=}"
+        return key
 
 
 class ZillionGunLevels(VBLR):
@@ -225,27 +239,27 @@ class ZillionRoomGen(Toggle):
     display_name = "room generation"
 
 
-zillion_options: Dict[str, AssembleOptions] = {
-    "continues": ZillionContinues,
-    "floppy_req": ZillionFloppyReq,
-    "gun_levels": ZillionGunLevels,
-    "jump_levels": ZillionJumpLevels,
-    "randomize_alarms": ZillionRandomizeAlarms,
-    "max_level": ZillionMaxLevel,
-    "start_char": ZillionStartChar,
-    "opas_per_level": ZillionOpasPerLevel,
-    "id_card_count": ZillionIDCardCount,
-    "bread_count": ZillionBreadCount,
-    "opa_opa_count": ZillionOpaOpaCount,
-    "zillion_count": ZillionZillionCount,
-    "floppy_disk_count": ZillionFloppyDiskCount,
-    "scope_count": ZillionScopeCount,
-    "red_id_card_count": ZillionRedIDCardCount,
-    "early_scope": ZillionEarlyScope,
-    "skill": ZillionSkill,
-    "starting_cards": ZillionStartingCards,
-    "room_gen": ZillionRoomGen,
-}
+@dataclass
+class ZillionOptions(PerGameCommonOptions):
+    continues: ZillionContinues
+    floppy_req: ZillionFloppyReq
+    gun_levels: ZillionGunLevels
+    jump_levels: ZillionJumpLevels
+    randomize_alarms: ZillionRandomizeAlarms
+    max_level: ZillionMaxLevel
+    start_char: ZillionStartChar
+    opas_per_level: ZillionOpasPerLevel
+    id_card_count: ZillionIDCardCount
+    bread_count: ZillionBreadCount
+    opa_opa_count: ZillionOpaOpaCount
+    zillion_count: ZillionZillionCount
+    floppy_disk_count: ZillionFloppyDiskCount
+    scope_count: ZillionScopeCount
+    red_id_card_count: ZillionRedIDCardCount
+    early_scope: ZillionEarlyScope
+    skill: ZillionSkill
+    starting_cards: ZillionStartingCards
+    room_gen: ZillionRoomGen
 
 
 def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
@@ -262,47 +276,34 @@ def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
     return tr
 
 
-def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
+def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
     """
     adjusts options to make game completion possible
 
-    `world` parameter is MultiWorld object that has my options on it
-    `p` is my player id
+    `options` parameter is ZillionOptions object that was put on my world by the core
     """
-    for option_name in zillion_options:
-        assert hasattr(world, option_name), f"Zillion option {option_name} didn't get put in world object"
-    wo = cast(Any, world)  # so I don't need getattr on all the options
 
-    skill = wo.skill[p].value
+    skill = options.skill.value
 
-    jump_levels = cast(ZillionJumpLevels, wo.jump_levels[p])
-    jump_option = jump_levels.current_key
-    required_level = char_to_jump["Apple"][cast(ZzVBLR, jump_option)].index(3) + 1
+    jump_option = options.jump_levels.to_zz_vblr()
+    required_level = char_to_jump["Apple"][jump_option].index(3) + 1
     if skill == 0:
         # because of hp logic on final boss
         required_level = 8
 
-    gun_levels = cast(ZillionGunLevels, wo.gun_levels[p])
-    gun_option = gun_levels.current_key
-    guns_required = char_to_gun["Champ"][cast(ZzVBLR, gun_option)].index(3)
+    gun_option = options.gun_levels.to_zz_vblr()
+    guns_required = char_to_gun["Champ"][gun_option].index(3)
 
-    floppy_req = cast(ZillionFloppyReq, wo.floppy_req[p])
+    floppy_req = options.floppy_req
 
-    card = cast(ZillionIDCardCount, wo.id_card_count[p])
-    bread = cast(ZillionBreadCount, wo.bread_count[p])
-    opa = cast(ZillionOpaOpaCount, wo.opa_opa_count[p])
-    gun = cast(ZillionZillionCount, wo.zillion_count[p])
-    floppy = cast(ZillionFloppyDiskCount, wo.floppy_disk_count[p])
-    scope = cast(ZillionScopeCount, wo.scope_count[p])
-    red = cast(ZillionRedIDCardCount, wo.red_id_card_count[p])
     item_counts = Counter({
-        "ID Card": card,
-        "Bread": bread,
-        "Opa-Opa": opa,
-        "Zillion": gun,
-        "Floppy Disk": floppy,
-        "Scope": scope,
-        "Red ID Card": red
+        "ID Card": options.id_card_count,
+        "Bread": options.bread_count,
+        "Opa-Opa": options.opa_opa_count,
+        "Zillion": options.zillion_count,
+        "Floppy Disk": options.floppy_disk_count,
+        "Scope": options.scope_count,
+        "Red ID Card": options.red_id_card_count
     })
     minimums = Counter({
         "ID Card": 0,
@@ -335,10 +336,10 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
     item_counts["Empty"] += diff
     assert sum(item_counts.values()) == 144
 
-    max_level = cast(ZillionMaxLevel, wo.max_level[p])
+    max_level = options.max_level
     max_level.value = max(required_level, max_level.value)
 
-    opas_per_level = cast(ZillionOpasPerLevel, wo.opas_per_level[p])
+    opas_per_level = options.opas_per_level
     while (opas_per_level.value > 1) and (1 + item_counts["Opa-Opa"] // opas_per_level.value < max_level.value):
         # logging.warning(
         #     "zillion options validate: option opas_per_level incompatible with options max_level and opa_opa_count"
@@ -347,39 +348,34 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
 
     # that should be all of the level requirements met
 
-    name_capitalization = {
+    name_capitalization: Dict[str, Chars] = {
         "jj": "JJ",
         "apple": "Apple",
         "champ": "Champ",
     }
 
-    start_char = cast(ZillionStartChar, wo.start_char[p])
+    start_char = options.start_char
     start_char_name = name_capitalization[start_char.current_key]
     assert start_char_name in chars
-    start_char_name = cast(Chars, start_char_name)
 
-    starting_cards = cast(ZillionStartingCards, wo.starting_cards[p])
+    starting_cards = options.starting_cards
 
-    room_gen = cast(ZillionRoomGen, wo.room_gen[p])
-
-    early_scope = cast(ZillionEarlyScope, wo.early_scope[p])
-    if early_scope:
-        world.early_items[p]["Scope"] = 1
+    room_gen = options.room_gen
 
     zz_item_counts = convert_item_counts(item_counts)
     zz_op = ZzOptions(
         zz_item_counts,
-        cast(ZzVBLR, jump_option),
-        cast(ZzVBLR, gun_option),
+        jump_option,
+        gun_option,
         opas_per_level.value,
         max_level.value,
         False,  # tutorial
         skill,
         start_char_name,
         floppy_req.value,
-        wo.continues[p].value,
-        wo.randomize_alarms[p].value,
-        False,  # early scope is done with AP early_items API
+        options.continues.value,
+        bool(options.randomize_alarms.value),
+        bool(options.early_scope.value),
         True,  # balance defense
         starting_cards.value,
         bool(room_gen.value)

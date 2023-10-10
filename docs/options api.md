@@ -28,19 +28,23 @@ Choice, and defining `alias_true = option_full`.
 and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
 
 As an example, suppose we want an option that lets the user start their game with a sword in their inventory. Let's
-create our option class (with a docstring), give it a `display_name`, and add it to a dictionary that keeps track of our
-options:
+create our option class (with a docstring), give it a `display_name`, and add it to our game's options dataclass:
 
 ```python
 # Options.py
+from dataclasses import dataclass
+
+from Options import Toggle, PerGameCommonOptions
+
+
 class StartingSword(Toggle):
     """Adds a sword to your starting inventory."""
     display_name = "Start With Sword"
 
 
-example_options = {
-    "starting_sword": StartingSword
-}
+@dataclass
+class ExampleGameOptions(PerGameCommonOptions):
+    starting_sword: StartingSword
 ```
 
 This will create a `Toggle` option, internally called `starting_sword`. To then submit this to the multiworld, we add it
@@ -48,27 +52,30 @@ to our world's `__init__.py`:
 
 ```python
 from worlds.AutoWorld import World
-from .Options import options
+from .Options import ExampleGameOptions
 
 
 class ExampleWorld(World):
-    option_definitions = options
+    # this gives the generator all the definitions for our options
+    options_dataclass = ExampleGameOptions
+    # this gives us typing hints for all the options we defined
+    options: ExampleGameOptions
 ```
 
 ### Option Checking
 Options are parsed by `Generate.py` before the worlds are created, and then the option classes are created shortly after
 world instantiation. These are created as attributes on the MultiWorld and can be accessed with
-`self.multiworld.my_option_name[self.player]`. This is the option class, which supports direct comparison methods to
+`self.options.my_option_name`. This is an instance of the option class, which supports direct comparison methods to
 relevant objects (like comparing a Toggle class to a `bool`). If you need to access the option result directly, this is
 the option class's `value` attribute. For our example above we can do a simple check:
 ```python
-if self.multiworld.starting_sword[self.player]:
+if self.options.starting_sword:
     do_some_things()
 ```
 
 or if I need a boolean object, such as in my slot_data I can access it as:
 ```python
-start_with_sword = bool(self.multiworld.starting_sword[self.player].value)
+start_with_sword = bool(self.options.starting_sword.value)
 ```
 
 ## Generic Option Classes
@@ -120,7 +127,7 @@ Like Toggle, but 1 (true) is the default value.
 A numeric option allowing you to define different sub options. Values are stored as integers, but you can also do
 comparison methods with the class and strings, so if you have an `option_early_sword`, this can be compared with:
 ```python
-if self.multiworld.sword_availability[self.player] == "early_sword":
+if self.options.sword_availability == "early_sword":
     do_early_sword_things()
 ```
 
@@ -128,7 +135,7 @@ or:
 ```python
 from .Options import SwordAvailability
 
-if self.multiworld.sword_availability[self.player] == SwordAvailability.option_early_sword:
+if self.options.sword_availability == SwordAvailability.option_early_sword:
     do_early_sword_things()
 ```
 
@@ -160,7 +167,7 @@ within the world.
 Like choice allows you to predetermine options and has all of the same comparison methods and handling. Also accepts any
 user defined string as a valid option, so will either need to be validated by adding a validation step to the option
 class or within world, if necessary. Value for this class is `Union[str, int]` so if you need the value at a specified
-point, `self.multiworld.my_option[self.player].current_key` will always return a string.
+point, `self.options.my_option.current_key` will always return a string.
 
 ### PlandoBosses
 An option specifically built for handling boss rando, if your game can use it. Is a subclass of TextChoice so supports

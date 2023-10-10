@@ -1,8 +1,9 @@
 import math
-from BaseClasses import MultiWorld, Region, Location, Entrance, ItemClassification
+
+from BaseClasses import Entrance, MultiWorld, Region
+from . import Options
 from .Locations import DLCQuestLocation, location_table
 from .Rules import create_event
-from . import Options
 
 DLCQuestRegion = ["Movement Pack", "Behind Tree", "Psychological Warfare", "Double Jump Left",
                   "Double Jump Behind the Tree", "The Forest", "Final Room"]
@@ -26,16 +27,16 @@ def add_coin_dlcquest(region: Region, Coin: int, player: int):
 
 def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQuestOptions):
     Regmenu = Region("Menu", player, world)
-    if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[
-        Options.Campaign] == Options.Campaign.option_both:
+    if (World_Options.campaign == Options.Campaign.option_basic or World_Options.campaign
+            == Options.Campaign.option_both):
         Regmenu.exits += [Entrance(player, "DLC Quest Basic", Regmenu)]
-    if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[
-        Options.Campaign] == Options.Campaign.option_both:
+    if (World_Options.campaign == Options.Campaign.option_live_freemium_or_die or World_Options.campaign
+            == Options.Campaign.option_both):
         Regmenu.exits += [Entrance(player, "Live Freemium or Die", Regmenu)]
     world.regions.append(Regmenu)
 
-    if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[
-        Options.Campaign] == Options.Campaign.option_both:
+    if (World_Options.campaign == Options.Campaign.option_basic or World_Options.campaign
+            == Options.Campaign.option_both):
 
         Regmoveright = Region("Move Right", player, world, "Start of the basic game")
         Locmoveright_name = ["Movement Pack", "Animation Pack", "Audio Pack", "Pause Menu Pack"]
@@ -43,13 +44,13 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regmoveright.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regmoveright) for
                                    loc_name in Locmoveright_name]
         add_coin_dlcquest(Regmoveright, 4, player)
-        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
-            coin_bundle_needed = math.floor(825 / World_Options[Options.CoinSanityRange])
+        if World_Options.coinsanity == Options.CoinSanity.option_coin:
+            coin_bundle_needed = math.floor(825 / World_Options.coinbundlequantity)
             for i in range(coin_bundle_needed):
-                item_coin = f"DLC Quest: {World_Options[Options.CoinSanityRange] * (i + 1)} Coin"
+                item_coin = f"DLC Quest: {World_Options.coinbundlequantity * (i + 1)} Coin"
                 Regmoveright.locations += [
                     DLCQuestLocation(player, item_coin, location_table[item_coin], Regmoveright)]
-            if 825 % World_Options[Options.CoinSanityRange] != 0:
+            if 825 % World_Options.coinbundlequantity != 0:
                 Regmoveright.locations += [
                     DLCQuestLocation(player, "DLC Quest: 825 Coin", location_table["DLC Quest: 825 Coin"],
                                      Regmoveright)]
@@ -58,7 +59,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
         Regmovpack = Region("Movement Pack", player, world)
         Locmovpack_name = ["Time is Money Pack", "Psychological Warfare Pack", "Armor for your Horse Pack",
                            "Shepherd Sheep"]
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+        if World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
             Locmovpack_name += ["Sword"]
         Regmovpack.exits = [Entrance(player, "Tree", Regmovpack), Entrance(player, "Cloud", Regmovpack)]
         Regmovpack.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regmovpack) for loc_name
@@ -68,7 +69,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regbtree = Region("Behind Tree", player, world)
         Locbtree_name = ["Double Jump Pack", "Map Pack", "Between Trees Sheep", "Hole in the Wall Sheep"]
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+        if World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
             Locbtree_name += ["Gun"]
         Regbtree.exits = [Entrance(player, "Behind Tree Double Jump", Regbtree),
                           Entrance(player, "Forest Entrance", Regbtree)]
@@ -191,27 +192,27 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         world.get_entrance("True Double Jump", player).connect(world.get_region("True Double Jump Behind Tree", player))
 
-    if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[
-        Options.Campaign] == Options.Campaign.option_both:
+    if (World_Options.campaign == Options.Campaign.option_live_freemium_or_die or World_Options.campaign
+            == Options.Campaign.option_both):
 
         Regfreemiumstart = Region("Freemium Start", player, world)
         Locfreemiumstart_name = ["Particles Pack", "Day One Patch Pack", "Checkpoint Pack", "Incredibly Important Pack",
                                  "Nice Try", "Story is Important", "I Get That Reference!"]
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+        if World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
             Locfreemiumstart_name += ["Wooden Sword"]
         Regfreemiumstart.exits = [Entrance(player, "Vines", Regfreemiumstart)]
         Regfreemiumstart.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regfreemiumstart)
                                        for loc_name in
                                        Locfreemiumstart_name]
         add_coin_freemium(Regfreemiumstart, 50, player)
-        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
-            coin_bundle_needed = math.floor(889 / World_Options[Options.CoinSanityRange])
+        if World_Options.coinsanity == Options.CoinSanity.option_coin:
+            coin_bundle_needed = math.floor(889 / World_Options.coinbundlequantity)
             for i in range(coin_bundle_needed):
-                item_coin_freemium = f"Live Freemium or Die: {World_Options[Options.CoinSanityRange] * (i + 1)} Coin"
+                item_coin_freemium = f"Live Freemium or Die: {World_Options.coinbundlequantity * (i + 1)} Coin"
                 Regfreemiumstart.locations += [
                     DLCQuestLocation(player, item_coin_freemium, location_table[item_coin_freemium],
                                      Regfreemiumstart)]
-            if 889 % World_Options[Options.CoinSanityRange] != 0:
+            if 889 % World_Options.coinbundlequantity != 0:
                 Regfreemiumstart.locations += [
                     DLCQuestLocation(player, "Live Freemium or Die: 889 Coin",
                                      location_table["Live Freemium or Die: 889 Coin"],
@@ -220,7 +221,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regbehindvine = Region("Behind the Vines", player, world)
         Locbehindvine_name = ["Wall Jump Pack", "Health Bar Pack", "Parallax Pack"]
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+        if World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
             Locbehindvine_name += ["Pickaxe"]
         Regbehindvine.exits = [Entrance(player, "Wall Jump Entrance", Regbehindvine)]
         Regbehindvine.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regbehindvine) for
@@ -260,7 +261,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regcutcontent = Region("Cut Content", player, world)
         Loccutcontent_name = []
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+        if World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
             Loccutcontent_name += ["Humble Indie Bindle"]
         Regcutcontent.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regcutcontent) for
                                     loc_name in Loccutcontent_name]
@@ -269,7 +270,7 @@ def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQue
 
         Regnamechange = Region("Name Change", player, world)
         Locnamechange_name = []
-        if World_Options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+        if World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
             Locnamechange_name += ["Box of Various Supplies"]
         Regnamechange.exits = [Entrance(player, "Behind Rocks", Regnamechange)]
         Regnamechange.locations += [DLCQuestLocation(player, loc_name, location_table[loc_name], Regnamechange) for

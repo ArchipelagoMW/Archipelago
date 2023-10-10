@@ -24,7 +24,6 @@ class TestGenerateDynamicOptions(SVTestBase):
     def test_given_option_pair_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
             return
-
         num_options = len(options_to_include)
         for option1_index in range(0, num_options):
             for option2_index in range(option1_index + 1, num_options):

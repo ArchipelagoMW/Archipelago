@@ -1,12 +1,13 @@
-from typing import Dict, Any, Iterable, Optional, Union
+from typing import Union
+
 from BaseClasses import Tutorial
-from worlds.AutoWorld import World, WebWorld
-from .Items import DLCQuestItem, item_table, ItemData, create_items
-from .Locations import location_table, DLCQuestLocation
-from .Options import DLCQuest_options, DLCQuestOptions, fetch_options
-from .Rules import set_rules
-from .Regions import create_regions
+from worlds.AutoWorld import WebWorld, World
 from . import Options
+from .Items import DLCQuestItem, ItemData, create_items, item_table
+from .Locations import DLCQuestLocation, location_table
+from .Options import DLCQuestOptions
+from .Regions import create_regions
+from .Rules import set_rules
 
 client_version = 0
 
@@ -35,10 +36,8 @@ class DLCqworld(World):
 
     data_version = 1
 
-    option_definitions = DLCQuest_options
-
-    def generate_early(self):
-        self.options = fetch_options(self.multiworld, self.player)
+    options_dataclass = DLCQuestOptions
+    options: DLCQuestOptions
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
@@ -68,8 +67,8 @@ class DLCqworld(World):
                 self.multiworld.itempool.remove(item)
 
     def precollect_coinsanity(self):
-        if self.options[Options.Campaign] == Options.Campaign.option_basic:
-            if self.options[Options.CoinSanity] == Options.CoinSanity.option_coin and self.options[Options.CoinSanityRange] >= 5:
+        if self.options.campaign == Options.Campaign.option_basic:
+            if self.options.coinsanity == Options.CoinSanity.option_coin and self.options.coinbundlequantity >= 5:
                 self.multiworld.push_precollected(self.create_item("Movement Pack"))
 
 
@@ -80,12 +79,11 @@ class DLCqworld(World):
         return DLCQuestItem(item.name, item.classification, item.code, self.player)
 
     def fill_slot_data(self):
-        return {
-            "death_link": self.multiworld.death_link[self.player].value,
-            "ending_choice": self.multiworld.ending_choice[self.player].value,
-            "campaign": self.multiworld.campaign[self.player].value,
-            "coinsanity": self.multiworld.coinsanity[self.player].value,
-            "coinbundlerange": self.multiworld.coinbundlequantity[self.player].value,
-            "item_shuffle": self.multiworld.item_shuffle[self.player].value,
-            "seed": self.multiworld.per_slot_randoms[self.player].randrange(99999999)
-        }
+        options_dict = self.options.as_dict(
+            "death_link", "ending_choice", "campaign", "coinsanity", "item_shuffle"
+        )
+        options_dict.update({
+            "coinbundlerange": self.options.coinbundlequantity.value,
+            "seed": self.random.randrange(99999999)
+        })
+        return options_dict

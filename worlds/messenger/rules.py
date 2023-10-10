@@ -1,9 +1,9 @@
-from typing import Dict, Callable, TYPE_CHECKING
+from typing import Callable, Dict, TYPE_CHECKING
 
-from BaseClasses import CollectionState, MultiWorld
-from worlds.generic.Rules import set_rule, allow_self_locking_items, add_rule
-from .options import MessengerAccessibility, Goal
+from BaseClasses import CollectionState
+from worlds.generic.Rules import add_rule, allow_self_locking_items, set_rule
 from .constants import NOTES, PHOBEKINS
+from .options import Goal, MessengerAccessibility
 from .subclasses import MessengerShopLocation
 
 if TYPE_CHECKING:
@@ -145,13 +145,13 @@ class MessengerRules:
             if region.name == "The Shop":
                 for loc in [location for location in region.locations if isinstance(location, MessengerShopLocation)]:
                     loc.access_rule = loc.can_afford
-        if multiworld.goal[self.player] == Goal.option_power_seal_hunt:
+        if self.world.options.goal == Goal.option_power_seal_hunt:
             set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
                      lambda state: state.has("Shop Chest", self.player))
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
         if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
-            set_self_locking_items(multiworld, self.player)
+            set_self_locking_items(self.world, self.player)
 
 
 class MessengerHardRules(MessengerRules):
@@ -212,9 +212,9 @@ class MessengerHardRules(MessengerRules):
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
         for loc, rule in self.extra_rules.items():
-            if not self.world.multiworld.shuffle_seals[self.player] and "Seal" in loc:
+            if not self.world.options.shuffle_seals and "Seal" in loc:
                 continue
-            if not self.world.multiworld.shuffle_shards[self.player] and "Shard" in loc:
+            if not self.world.options.shuffle_shards and "Shard" in loc:
                 continue
             add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
 
@@ -249,20 +249,22 @@ class MessengerOOBRules(MessengerRules):
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
         self.world.multiworld.completion_condition[self.player] = lambda state: True
-        self.world.multiworld.accessibility[self.player].value = MessengerAccessibility.option_minimal
+        self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
-def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
+def set_self_locking_items(world: MessengerWorld, player: int) -> None:
+    multiworld = world.multiworld
+
     # do the ones for seal shuffle on and off first
     allow_self_locking_items(multiworld.get_location("Searing Crags - Key of Strength", player), "Power Thistle")
     allow_self_locking_items(multiworld.get_location("Sunken Shrine - Key of Love", player), "Sun Crest", "Moon Crest")
     allow_self_locking_items(multiworld.get_location("Corrupted Future - Key of Courage", player), "Demon King Crown")
 
     # add these locations when seals are shuffled
-    if multiworld.shuffle_seals[player]:
+    if world.options.shuffle_seals:
         allow_self_locking_items(multiworld.get_location("Elemental Skylands Seal - Water", player), "Currents Master")
     # add these locations when seals and shards aren't shuffled
-    elif not multiworld.shuffle_shards[player]:
+    elif not world.options.shuffle_shards:
         for entrance in multiworld.get_region("Cloud Ruins", player).entrances:
             entrance.access_rule = lambda state: state.has("Wingsuit", player) or state.has("Rope Dart", player)
         allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), *PHOBEKINS)

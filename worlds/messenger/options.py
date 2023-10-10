@@ -1,7 +1,10 @@
+from dataclasses import dataclass
 from typing import Dict
-from schema import Schema, Or, And, Optional
 
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, OptionDict, StartInventoryPool
+from schema import And, Optional, Or, Schema
+
+from Options import Accessibility, Choice, DeathLink, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
+    StartInventoryPool, Toggle
 
 
 class MessengerAccessibility(Accessibility):
@@ -129,18 +132,19 @@ class PlannedShopPrices(OptionDict):
     })
 
 
-messenger_options = {
-    "accessibility": MessengerAccessibility,
-    "start_inventory": StartInventoryPool,
-    "logic_level": Logic,
-    "shuffle_seals": PowerSeals,
-    "shuffle_shards": MegaShards,
-    "goal": Goal,
-    "music_box": MusicBox,
-    "notes_needed": NotesNeeded,
-    "total_seals": AmountSeals,
-    "percent_seals_required": RequiredSeals,
-    "shop_price": ShopPrices,
-    "shop_price_plan": PlannedShopPrices,
-    "death_link": DeathLink,
-}
+@dataclass
+class MessengerOptions(PerGameCommonOptions):
+    accessibility: MessengerAccessibility
+    start_inventory: StartInventoryPool
+    logic_level: Logic
+    shuffle_seals: PowerSeals
+    shuffle_shards: MegaShards
+    goal: Goal
+    music_box: MusicBox
+    notes_needed: NotesNeeded
+    total_seals: AmountSeals
+    percent_seals_required: RequiredSeals
+    shop_price: ShopPrices
+    shop_price_plan: PlannedShopPrices
+    death_link: DeathLink
+
