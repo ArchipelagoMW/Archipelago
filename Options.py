@@ -955,14 +955,6 @@ class CommonOptions(metaclass=OptionsMetaProperty):
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
         return option_results
 
-    def get_value(self, option_name: str) -> typing.Any:
-        """
-        Returns the value of a given option
-
-        :param option_name: names of the option to return the value of
-        """
-        return getattr(self, option_name).value
-
 
 class LocalItems(ItemSet):
     """Forces these items to be in their native world."""
