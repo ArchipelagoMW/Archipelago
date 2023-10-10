@@ -246,9 +246,8 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.multiworld = multiworld
         self.player = player
-        if multiworld:  # this can be None for some unit tests
-            self.random = random.Random(multiworld.random.getrandbits(64))
-            multiworld.per_slot_randoms[player] = self.random
+        self.random = random.Random(multiworld.random.getrandbits(64))
+        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
