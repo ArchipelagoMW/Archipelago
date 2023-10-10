@@ -56,6 +56,55 @@ class OpenRCT2World(World):
     def generate_early(self) -> None:
         #Grabs options for item generation
         scenario = self.multiworld.scenario[self.player].value
+        #If the scenario is random, pick which random scenario it will be
+        if scenario == 143:#RCT1
+            new_scenario = random.randint(0,21)
+            scenario = new_scenario
+            self.multiworld.scenario[self.player].value = new_scenario
+        elif scenario == 144:#Corkscrew Follies
+            new_scenario = random.randint(22,51)
+            scenario = new_scenario
+            self.multiworld.scenario[self.player].value = new_scenario
+        elif scenario == 145:#Loopy Landscapes
+            new_scenario = random.randint(52,81)
+            scenario = new_scenario
+            self.multiworld.scenario[self.player].value = new_scenario
+        elif scenario == 146:#RCT2
+            new_scenario = random.randint(82,107)
+            if new_scenario > 96:#Throw extras in to capture the real parks later in the list
+                new_scenario += 35
+                if new_scenario == 136:#Except ignore Fort Anachronism
+                    new_scenario = 142
+            scenario = new_scenario
+            self.multiworld.scenario[self.player].value = new_scenario
+        elif scenario == 147:#Wacky Worlds
+            new_scenario = random.randint(97,113)
+            scenario = new_scenario
+            self.multiworld.scenario[self.player].value = new_scenario
+        elif scenario == 148:#Time Twister
+            new_scenario = random.randint(114,127)
+            scenario = new_scenario
+            self.multiworld.scenario[self.player].value = new_scenario
+        elif scenario == 149:#Random RCT1 + Expansions
+            new_scenario = random.randint(0,84)
+            if new_scenario == 82: #Include the out of place numbers in the IntEnum
+                new_scenario = 128
+            elif new_scenario == 83:
+                new_scenario = 129
+            elif new_scenario == 84:
+                new_scenario = 130
+            elif new_scenario == 85:
+                new_scenario = 136
+            scenario = new_scenario
+            self.multiworld.scenario[self.player].value = new_scenario
+        elif scenario == 150:#Random RCT2 + Expansions
+            new_scenario = random.randint(82,142)
+            while new_scenario == 128 or new_scenario == 129 or \
+            new_scenario == 130 or new_scenario == 136:#Probably should have restructured the list, but too late now! :D
+                new_scenario = random.randint(82,142)
+            scenario = new_scenario
+            self.multiworld.scenario[self.player].value = new_scenario
+
         monopoly_mode = self.multiworld.monopoly_mode[self.player].value
         furry_convention_traps = self.multiworld.furry_convention_traps[self.player].value
         spam_traps = self.multiworld.spam_traps[self.player].value
