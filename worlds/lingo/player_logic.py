@@ -84,12 +84,12 @@ class LingoPlayerLogic:
         # doors that are event-only.
         for room_name, room_data in DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():
-                if door_shuffle == ShuffleDoors.option_none:  # no door shuffle
+                if door_shuffle == ShuffleDoors.option_none:
                     itemloc_name = f"{room_name} - {door_name} (Opened)"
                     self.add_location(room_name, PlayerLocation(itemloc_name, None, door_data.panels))
                     self.EVENT_LOC_TO_ITEM[itemloc_name] = itemloc_name
                     self.set_door_item(room_name, door_name, itemloc_name)
-                else:  # door shuffle
+                else:
                     # This line is duplicated from StaticLingoItems
                     if door_data.skip_item is False and door_data.event is False:
                         if door_data.group is not None and door_shuffle == ShuffleDoors.option_simple:
@@ -113,7 +113,7 @@ class LingoPlayerLogic:
                                                                 [RoomAndPanel(room_name, panel_name)]))
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
-                if not panel_data.non_counting and victory_condition == 2:  # LEVEL 2
+                if not panel_data.non_counting and victory_condition == 2:
                     event_name = room_name + " - " + panel_name + " (Counted)"
                     self.add_location(room_name, PlayerLocation(event_name, None,
                                                                 [RoomAndPanel(room_name, panel_name)]))
