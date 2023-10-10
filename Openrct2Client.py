@@ -122,7 +122,8 @@ class OpenRCT2Socket:
                 packets = []
                 for packet in data.split(b'\0'):
                     packet = packet.decode('UTF-8')
-                    packets.append(json.loads(packet))
+                    if packet:
+                        packets.append(json.loads(packet))
                 print(packets)
                 self.disconnectgame()
                 return packets
@@ -223,6 +224,7 @@ class OpenRCT2Context(CommonContext):
                     args['data'][index]['text'] = match.group(1) 
         print(args)
         self.gamesock.sendobj(args)
+        time.sleep(0.00000272727*len(args))
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         # self.game = ""
