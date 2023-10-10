@@ -20,7 +20,7 @@ def is_setting(multiworld: MultiWorld, setting_name: str, setting_value: int) ->
     stardew_world = get_stardew_world(multiworld)
     if not stardew_world:
         return False
-    current_value = stardew_world.options.as_dict(setting_name)[setting_name]
+    current_value = stardew_world.options.get_value(setting_name)
     return current_value == setting_value
 
 
@@ -32,7 +32,7 @@ def assert_is_setting(tester: SVTestBase, multiworld: MultiWorld, setting_name: 
     stardew_world = get_stardew_world(multiworld)
     if not stardew_world:
         return False
-    current_value = stardew_world.options.as_dict(setting_name)[setting_name]
+    current_value = stardew_world.options.get_value(setting_name)
     tester.assertEqual(current_value, setting_value)
 
 

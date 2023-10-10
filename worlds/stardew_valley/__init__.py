@@ -276,12 +276,10 @@ class StardewValleyWorld(World):
             key, value = self.modified_bundles[bundle_key].to_pair()
             modified_bundles[key] = value
 
-        excluded_options = [BundleRandomization, BundlePrice,
-                            NumberOfMovementBuffs, NumberOfLuckBuffs]
-        included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_options]
+        excluded_options = [BundleRandomization, BundlePrice, NumberOfMovementBuffs, NumberOfLuckBuffs]
+        excluded_option_names = [option.internal_name for option in excluded_options]
+        included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
         slot_data = self.options.as_dict(*included_option_names)
-        for option in excluded_options:
-            slot_data.pop(option.internal_name)
         slot_data.update({
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,

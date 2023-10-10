@@ -51,8 +51,7 @@ def get_option_choices(option) -> Dict[str, int]:
 class TestGenerateDynamicOptions(SVTestBase):
     def test_given_special_range_when_generate_then_basic_checks(self):
         options = self.world.options_dataclass.type_hints
-        for option_name in options:
-            option = options[option_name]
+        for option_name, option in options.items():
             if not isinstance(option, SpecialRange):
                 continue
             for value in option.special_range_names:
@@ -64,8 +63,7 @@ class TestGenerateDynamicOptions(SVTestBase):
     def test_given_choice_when_generate_then_basic_checks(self):
         seed = int(random() * pow(10, 18) - 1)
         options = self.world.options_dataclass.type_hints
-        for option_name in options:
-            option = options[option_name]
+        for option_name, option in options.items():
             if not option.options:
                 continue
             for value in option.options:
@@ -152,8 +150,7 @@ class TestToolProgression(SVTestBase):
 class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
     def test_given_special_range_when_generate_exclude_ginger_island(self):
         options = self.world.options_dataclass.type_hints
-        for option_name in options:
-            option = options[option_name]
+        for option_name, option in options.items():
             if not isinstance(option, SpecialRange) or option_name == ExcludeGingerIsland.internal_name:
                 continue
             for value in option.special_range_names:
@@ -166,8 +163,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
     def test_given_choice_when_generate_exclude_ginger_island(self):
         seed = int(random() * pow(10, 18) - 1)
         options = self.world.options_dataclass.type_hints
-        for option_name in options:
-            option = options[option_name]
+        for option_name, option in options.items():
             if not option.options or option_name == ExcludeGingerIsland.internal_name:
                 continue
             for value in option.options:
