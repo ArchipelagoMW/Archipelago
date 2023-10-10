@@ -1562,6 +1562,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.ctx.on_new_hint(recipient_team, recipient_slot)
             self.ctx.hint_points[self.client.team, self.client.slot] -= cost
             self.ctx.on_new_hint(self.client.team, self.client.slot)
+            self.output(f"Gave {recipient} {recipient_cost} points. Deducted {cost} from own points.")
+            for client in self.ctx.clients[recipient_team][recipient_slot]:
+                self.ctx.notify_client(client, f"Received {recipient_cost} hint points from {self.client.name}.")
             return True
         self.output(f"Unable to gift hint. You have {points_available} points and need at least {cost}.")
         return False
@@ -2151,6 +2154,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 self.ctx.on_new_hint(recipient_team, recipient_slot)
                 self.ctx.hint_points[team, slot] -= cost
                 self.ctx.on_new_hint(self.client.team, self.client.slot)
+                self.output(f"Gave {recipient} {recipient_cost} points. Deducted {cost} from own points.")
+                for client in self.ctx.clients[recipient_team][recipient_slot]:
+                    self.ctx.notify_client(client, f"Received {recipient_cost} hint points from {self.client.name}.")
                 return True
             self.output(f"Unable to gift hint. You have {points_available} points and need at least {cost}.")
             return False
