@@ -1,5 +1,4 @@
-from BaseClasses import Location, MultiWorld
-from . import Options
+from BaseClasses import Location
 
 
 class DLCQuestLocation(Location):
