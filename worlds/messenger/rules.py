@@ -2,9 +2,9 @@ from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, allow_self_locking_items, add_rule
-from .Options import MessengerAccessibility, Goal
-from .Constants import NOTES, PHOBEKINS
-from .SubClasses import MessengerShopLocation
+from .options import MessengerAccessibility, Goal
+from .constants import NOTES, PHOBEKINS
+from .subclasses import MessengerShopLocation
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -119,7 +119,7 @@ class MessengerRules:
     def can_dboost(self, state: CollectionState) -> bool:
         return state.has_any({"Path of Resilience", "Meditation"}, self.player) and \
             state.has("Second Wind", self.player)
-    
+
     def is_aerobatic(self, state: CollectionState) -> bool:
         return self.has_wingsuit(state) and state.has("Aerobatics Warrior", self.player)
 
@@ -263,5 +263,6 @@ def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
         allow_self_locking_items(multiworld.get_location("Elemental Skylands Seal - Water", player), "Currents Master")
     # add these locations when seals and shards aren't shuffled
     elif not multiworld.shuffle_shards[player]:
-        allow_self_locking_items(multiworld.get_region("Cloud Ruins Right", player), "Ruxxtin's Amulet")
+        for entrance in multiworld.get_region("Cloud Ruins", player).entrances:
+            entrance.access_rule = lambda state: state.has("Wingsuit", player) or state.has("Rope Dart", player)
         allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), *PHOBEKINS)
