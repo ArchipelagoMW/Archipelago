@@ -714,6 +714,15 @@ def generate_output(self, output_directory: str):
 
 ### Slot Data
 
+If the game client needs to know information about the generated seed, a preferred method of transferring the data
+is through the slot data. This can be filled in the `fill_slot_data` method on your world. This can be used to fill any
+data you need to know client side, and should return a `Dict[Any]`, but should be limited to only data that is
+absolutely necessary to not waste data. Slot data is sent to your client once it has successfully
+[connected.](network%20protocol.md#connected) If you need to know information about locations in your world, instead
+of propagating the slot data, it is preferable to use [LocationScouts](network%20protocol.md#locationscouts) since that
+data already exists on the server. The most common usage of slot data is to send option results that the client needs
+to be aware of.
+
 ```python
 def fill_slot_data(self):
     # in order for our game client to handle the generated seed correctly we need to know what the user selected
