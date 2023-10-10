@@ -562,7 +562,7 @@ class Context:
         if savedata["version"] > self.save_version:
             raise Exception("This savegame is newer than the server.")
         self.received_items = savedata["received_items"]
-        self.hints_used.update(savedata.get("hints_used", None))
+        self.hints_used.update(savedata.get("hints_used", {}))
         self.hint_points.update(savedata.get("hint_points", {}))
         self.hints.update(savedata["hints"])
 
@@ -580,7 +580,7 @@ class Context:
         if "game_options" in savedata:
             self.hint_cost = savedata["game_options"]["hint_cost"]
             self.location_check_points = savedata["game_options"]["location_check_points"]
-            if not self.hint_points and self.hints_used:  # TODO remove ~0.4.5
+            if not self.hint_points:  # TODO remove ~0.4.5
                 self.hint_points.update({(team, slot): len(self.location_checks[team, slot]) * self.location_check_points
                                          - self.hint_cost * self.hints_used[team, slot]
                                          for team, slot in self.hints})
@@ -962,6 +962,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             ctx.broadcast_team(team, [info_text])
 
         ctx.location_checks[team, slot] |= new_locations
+        ctx.hint_points[team, slot] += len(new_locations)
         send_new_items(ctx)
         ctx.broadcast(ctx.clients[team][slot], [{
             "cmd": "RoomUpdate",
@@ -1552,6 +1553,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
             if not usable:
                 self.output(response)
                 return False
+            if recipient == self.client.name:
+                self.output("Unable to give points to yourself!")
+                return False
             recipient_team, recipient_slot = self.ctx.player_name_lookup[recipient]
             recipient_cost = self.ctx.get_hint_cost(recipient_slot)
             self.ctx.hint_points[recipient_team, recipient_slot] += recipient_cost
@@ -2137,6 +2141,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 recipient, usable, response = get_intended_text(recipient, self.ctx.player_names.values())
                 if not usable:
                     self.output(response)
+                    return False
+                if recipient == gifting_player:
+                    self.output("Unable to give points to owner!")
                     return False
                 recipient_team, recipient_slot = self.ctx.player_name_lookup[recipient]
                 recipient_cost = self.ctx.get_hint_cost(recipient_slot)
