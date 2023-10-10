@@ -199,6 +199,7 @@ class OpenRCT2Context(CommonContext):
         super().__init__(server_address, password)
         self.gamesock = OpenRCT2Socket(self)
         self.game_connection_established = False
+        #kivy.set_title("OpenRCT2 Client")
 
     async def server_auth(self, password_requested: bool = False):
         if not self.game_connection_established:
@@ -240,6 +241,18 @@ class OpenRCT2Context(CommonContext):
         super().on_deathlink(data)
         self.gamesock.sendobj({'cmd': 'DeathLink'})
 
+    def run_gui(self): #Sets the title of the client
+        """Import kivy UI system and start running it as self.ui_task."""
+        from kvui import GameManager
+
+        class TextManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago")
+            ]
+            base_title = "OpenRCT2 Client"
+
+        self.ui = TextManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 async def main(args):
     ctx = OpenRCT2Context(args.connect, args.password)
