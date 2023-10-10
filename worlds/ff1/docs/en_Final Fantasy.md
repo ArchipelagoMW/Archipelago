@@ -24,3 +24,8 @@ All items can appear in other players worlds, including consumables, shards, wea
 
 All local and remote items appear the same. Final Fantasy will say that you received an item, then BOTH the client log and the
 emulator will display what was found external to the in-game text box.
+
+## Unique Local Commands
+The following command is only available when using the FF1Client for the Final Fantasy Randomizer.
+
+- `/nes` Shows the current status of the NES connection.

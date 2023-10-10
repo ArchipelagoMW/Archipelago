@@ -1,5 +1,5 @@
 from . import MessengerTestBase
-from ..Constants import NOTES, PHOBEKINS
+from ..constants import NOTES, PHOBEKINS
 
 
 class AccessTest(MessengerTestBase):
@@ -7,7 +7,7 @@ class AccessTest(MessengerTestBase):
         "shuffle_shards": "true",
     }
 
-    def testTabi(self) -> None:
+    def test_tabi(self) -> None:
         """locations that hard require the Lightfoot Tabi"""
         locations = [
             "Searing Crags - Pyro", "Underworld - Key of Chaos", "Underworld Seal - Sharp and Windy Climb",
@@ -19,7 +19,7 @@ class AccessTest(MessengerTestBase):
         items = [["Lightfoot Tabi"]]
         self.assertAccessDependency(locations, items)
 
-    def testDart(self) -> None:
+    def test_dart(self) -> None:
         """locations that hard require the Rope Dart"""
         locations = [
             "Ninja Village Seal - Tree House", "Autumn Hills - Key of Hope", "Howling Grotto Seal - Crushing Pits",
@@ -31,7 +31,7 @@ class AccessTest(MessengerTestBase):
         items = [["Rope Dart"]]
         self.assertAccessDependency(locations, items)
 
-    def testWingsuit(self) -> None:
+    def test_wingsuit(self) -> None:
         """locations that hard require the Wingsuit"""
         locations = [
             "Ninja Village - Candle", "Ninja Village Seal - Tree House", "Autumn Hills - Climbing Claws",
@@ -57,7 +57,7 @@ class AccessTest(MessengerTestBase):
         items = [["Wingsuit"]]
         self.assertAccessDependency(locations, items)
 
-    def testVertical(self) -> None:
+    def test_vertical(self) -> None:
         """locations that require either the Rope Dart or the Wingsuit"""
         locations = [
             "Ninja Village Seal - Tree House", "Howling Grotto Seal - Crushing Pits",
@@ -92,7 +92,7 @@ class AccessTest(MessengerTestBase):
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
 
-    def testAmulet(self) -> None:
+    def test_amulet(self) -> None:
         """Locations that require Ruxxtin's Amulet"""
         locations = [
             "Cloud Ruins - Acro", "Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley",
@@ -103,7 +103,7 @@ class AccessTest(MessengerTestBase):
         items = [["Ruxxtin's Amulet"]]
         self.assertAccessDependency(locations, items)
 
-    def testFirefly(self) -> None:
+    def test_firefly(self) -> None:
         """Elemental Skylands and Corrupted Future require the Magic Firefly"""
         locations = [
             "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Fire",
@@ -113,7 +113,7 @@ class AccessTest(MessengerTestBase):
         items = [["Magic Firefly"]]
         self.assertAccessDependency(locations, items)
 
-    def testCrests(self) -> None:
+    def test_crests(self) -> None:
         """Test Key of Love nonsense"""
         locations = ["Sunken Shrine - Key of Love"]
         items = [["Sun Crest", "Moon Crest"]]
@@ -124,19 +124,19 @@ class AccessTest(MessengerTestBase):
         self.collect_by_name("Sun Crest")
         self.assertEqual(self.can_reach_location("Sunken Shrine - Key of Love"), False)
 
-    def testThistle(self) -> None:
+    def test_thistle(self) -> None:
         """I'm a chuckster!"""
         locations = ["Searing Crags - Key of Strength"]
         items = [["Power Thistle"]]
         self.assertAccessDependency(locations, items)
 
-    def testCrown(self) -> None:
+    def test_crown(self) -> None:
         """Crocomire but not"""
         locations = ["Corrupted Future - Key of Courage"]
         items = [["Demon King Crown"]]
         self.assertAccessDependency(locations, items)
 
-    def testGoal(self) -> None:
+    def test_goal(self) -> None:
         """Test some different states to verify goal requires the correct items"""
         self.collect_all_but([*NOTES, "Rescue Phantom"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
@@ -153,7 +153,7 @@ class ItemsAccessTest(MessengerTestBase):
         "accessibility": "items",
     }
 
-    def testSelfLockingItems(self) -> None:
+    def test_self_locking_items(self) -> None:
         """Force items that can be self locked to ensure it's valid placement."""
         location_lock_pairs = {
             "Searing Crags - Key of Strength": ["Power Thistle"],
@@ -163,6 +163,8 @@ class ItemsAccessTest(MessengerTestBase):
             "Forlorn Temple - Demon King": PHOBEKINS
         }
 
+        self.multiworld.state = self.multiworld.get_all_state(True)
+        self.remove_by_name(location_lock_pairs.values())
         for loc in location_lock_pairs:
             for item_name in location_lock_pairs[loc]:
                 item = self.get_item_by_name(item_name)
