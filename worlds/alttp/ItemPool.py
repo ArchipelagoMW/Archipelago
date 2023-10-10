@@ -516,7 +516,7 @@ def set_up_take_anys(world, player):
     if swords:
         sword = world.random.choice(swords)
         world.itempool.remove(sword)
-        world.itempool.append(ItemFactory('Rupees (20)', world))
+        world.itempool.append(ItemFactory('Rupees (20)', world.worlds[player]))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
     else:
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0, create_location=True)

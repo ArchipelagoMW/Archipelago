@@ -1778,12 +1778,12 @@ def write_custom_shops(rom, world, player):
             if item['player'] and world.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']])
             else:
-                item_code = ItemFactory(item['item'], world).code
+                item_code = ItemFactory(item['item'], world.worlds[player]).code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
             item_data = [shop_id, item_code] + price_data + \
-                        [item['max'], ItemFactory(item['replacement'], world).code if item['replacement'] else 0xFF] + \
+                        [item['max'], ItemFactory(item['replacement'], world.worlds[player]).code if item['replacement'] else 0xFF] + \
                         replacement_price_data + [0 if item['player'] == player else min(ROM_PLAYER_LIMIT, item['player'])]
             items_data.extend(item_data)
 
