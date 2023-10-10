@@ -522,8 +522,8 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
                               0xAD, 0xD0, 0x36,  # LDA $36D0
                               0xC9, 0xFF, 0xFF,  # CMP #$FFFF - are we in menus?
                               0xF0, 0x34,  # BEQ $079B4E - return if we are
-                              0xAD, 0xD3, 0x39,  # LDA $39D3 - gooey hp
-                              0xD0, 0x0F,  # BNE $079B2E - gooey is already spawned
+                              0xAD, 0x41, 0x55,  # LDA $5541 - gooey status
+                              0x10, 0x0F,  # BPL $079B2E - gooey is already spawned
                               0xAD, 0x80, 0x80,  # LDA $8080
                               0xC9, 0x00, 0x00,  # CMP #$0000 - did we get a gooey trap
                               0xF0, 0x07,  # BEQ $079B2E - branch if we did not
