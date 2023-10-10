@@ -155,6 +155,7 @@ class Context:
     locations: LocationStore  # typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
     location_checks: typing.Dict[typing.Tuple[int, int], typing.Set[int]]
     hints_used: typing.Dict[typing.Tuple[int, int], int]
+    hint_points: typing.Dict[typing.Tuple[int, int], int]
     groups: typing.Dict[int, typing.Set[int]]
     save_version = 2
     stored_data: typing.Dict[str, object]
@@ -202,6 +203,7 @@ class Context:
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
+        self.hint_points = collections.defaultdict(int)
         self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
         self.release_mode: str = release_mode
         self.remaining_mode: str = remaining_mode
@@ -532,7 +534,7 @@ class Context:
             "version": self.save_version,
             "connect_names": self.connect_names,
             "received_items": self.received_items,
-            "hints_used": dict(self.hints_used),
+            "hint_points": dict(self.hint_points),
             "hints": dict(self.hints),
             "location_checks": dict(self.location_checks),
             "name_aliases": self.name_aliases,
@@ -560,7 +562,8 @@ class Context:
         if savedata["version"] > self.save_version:
             raise Exception("This savegame is newer than the server.")
         self.received_items = savedata["received_items"]
-        self.hints_used.update(savedata["hints_used"])
+        self.hints_used.update(savedata.get("hints_used", None))
+        self.hint_points.update(savedata.get("hint_points", 0))
         self.hints.update(savedata["hints"])
 
         self.name_aliases.update(savedata["name_aliases"])
@@ -577,6 +580,11 @@ class Context:
         if "game_options" in savedata:
             self.hint_cost = savedata["game_options"]["hint_cost"]
             self.location_check_points = savedata["game_options"]["location_check_points"]
+            if not self.hint_points and self.hints_used:  # TODO remove ~0.4.5
+                self.hint_points.update({len(self.location_checks[team, slot]) * self.location_check_points
+                                         - self.hint_cost * self.hints_used[team, slot]
+                                         for team, slot in self.hints})
+                del self.hints_used
             self.server_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
             self.release_mode = savedata["game_options"].get("release_mode", savedata["game_options"].get("forfeit_mode", "goal"))
@@ -1409,7 +1417,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return False
 
     def get_hints(self, input_text: str, for_location: bool = False) -> bool:
-        points_available = get_client_points(self.ctx, self.client)
+        points_available = self.ctx.hint_points.get((self.client.team, self.client.slot),
+                                                    get_client_points(self.ctx, self.client))
         cost = self.ctx.get_hint_cost(self.client.slot)
 
         if not input_text:
@@ -1499,7 +1508,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hint = not_found_hints.pop()
                     hints.append(hint)
                     can_pay -= 1
-                    self.ctx.hints_used[self.client.team, self.client.slot] += 1
+                    self.ctx.hint_points[self.client.team, self.client.slot] -= cost
                     points_available = get_client_points(self.ctx, self.client)
 
                 if not_found_hints:
@@ -1532,6 +1541,24 @@ class ClientMessageProcessor(CommonCommandProcessor):
                             f"You have {points_available} points and need at least "
                             f"{self.ctx.get_hint_cost(self.client.slot)}.")
             return False
+    
+    def give_hint(self, recipient: str) -> bool:
+        """Converts gifting player's hint points into an equivalent amount of points for one hint for the recipient."""
+        points_available = get_client_points(self.ctx, self.client)
+        cost = self.ctx.get_hint_cost(self.client.slot)
+        can_pay = int(points_available // cost > 0)
+        if can_pay:
+            recipient, usable, response = get_intended_text(recipient, self.ctx.player_names.values())
+            if not usable:
+                self.output(response)
+                return False
+            recipient_team, recipient_slot = self.ctx.player_name_lookup[recipient]
+            recipient_cost = self.ctx.get_hint_cost(recipient_slot)
+            self.ctx.hint_points[recipient_team, recipient_slot] += recipient_cost
+            self.ctx.hint_points[self.client.team, self.client.slot] -= cost
+            return True
+        self.output(f"Unable to gift hint. You have {points_available} points and need at least {cost}.")
+        return False
 
     @mark_raw
     def _cmd_hint(self, item_name: str = "") -> bool:
@@ -1546,6 +1573,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """Use !hint_location {location_name},
         for example !hint_location atomic-bomb to get a spoiler peek for that location."""
         return self.get_hints(location, True)
+    
+    @mark_raw
+    def _cmd_hint_gift(self, recipient: str = "") -> bool:
+        """Use !hint_gift {player_name},
+        for example !hint_gift Berserker to give one of your hints to that player."""
+        return self.give_hint(recipient)
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
@@ -1557,13 +1590,15 @@ def get_missing_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 
 def get_client_points(ctx: Context, client: Client) -> int:
-    return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
-            ctx.get_hint_cost(client.slot) * ctx.hints_used[client.team, client.slot])
+    return ctx.hint_points[client.team, client.slot] if ctx.hint_points else\
+        (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
+            ctx.get_hint_cost(client.slot) * ctx.hints_used[client.team, client.slot])  # TODO remove ~0.4.5
 
 
 def get_slot_points(ctx: Context, team: int, slot: int) -> int:
-    return (ctx.location_check_points * len(ctx.location_checks[team, slot]) -
-            ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
+    return ctx.hint_points[team, slot] if ctx.hint_points else\
+        (ctx.location_check_points * len(ctx.location_checks[team, slot]) -
+            ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])  # TODO remove ~0.4.5
 
 
 async def process_client_cmd(ctx: Context, client: Client, args: dict):
@@ -2087,6 +2122,29 @@ class ServerCommandProcessor(CommonCommandProcessor):
         else:
             self.output(response)
             return False
+    
+    def _cmd_hint_gift(self, gifting_player: str, recipient: str) -> bool:
+        """Gift a player's points for a full hint to another player"""
+        gifting_player, usable, response = get_intended_text(gifting_player, self.ctx.player_names.values())
+        if usable:
+            team, slot = self.ctx.player_name_lookup[gifting_player]
+            points_available = get_slot_points(self.ctx, team, slot)
+            cost = self.ctx.get_hint_cost(slot)
+            can_pay = int(points_available // cost > 0)
+            if can_pay:
+                recipient, usable, response = get_intended_text(recipient, self.ctx.player_names.values())
+                if not usable:
+                    self.output(response)
+                    return False
+                recipient_team, recipient_slot = self.ctx.player_name_lookup[recipient]
+                recipient_cost = self.ctx.get_hint_cost(recipient_slot)
+                self.ctx.hint_points[recipient_team, recipient_slot] += recipient_cost
+                self.ctx.hint_points[team, slot] -= cost
+                return True
+            self.output(f"Unable to gift hint. You have {points_available} points and need at least {cost}.")
+            return False
+        self.output(response)
+        return False
 
     def _cmd_option(self, option_name: str, option: str):
         """Set options for the server."""
