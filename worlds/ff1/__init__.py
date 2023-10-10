@@ -61,7 +61,7 @@ class FF1World(World):
             options = get_options(multiworld, 'items', player)
             if not options:
                 raise FileNotFoundError(
-                    "FFR settings submitted with no key items ({multiworld.get_player_name(player)}). Please ensure you "
+                    f"FFR settings submitted with no key items ({multiworld.get_player_name(player)}). Please ensure you "
                     "generated the settings using finalfantasyrandomizer.com AND enabled the AP flag"
                 )
 
