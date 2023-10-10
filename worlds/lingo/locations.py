@@ -39,6 +39,7 @@ class LingoLocation(Location):
 
 ALL_LOCATION_TABLE: Dict[str, LocationData] = {}
 
+
 def load_location_data():
     global ALL_LOCATION_TABLE
 
@@ -53,7 +54,7 @@ def load_location_data():
                 if not panel.exclude_reduce:
                     classification |= LocationClassification.reduced
 
-            ALL_LOCATION_TABLE[locat_name] =\
+            ALL_LOCATION_TABLE[locat_name] = \
                 LocationData(get_panel_location_id(room_name, panel_name), room_name,
                              [RoomAndPanel(None, panel_name)], classification)
 
