@@ -311,8 +311,7 @@ const toggleRandomize = (event, inputElement, optionalSelectElement = null) => {
       optionalSelectElement.disabled = true;
     }
   }
-
-  updateGameOption(randomButton);
+    updateGameOption(active ? inputElement : randomButton);
 };
 
 const updateBaseOption = (event) => {
@@ -324,7 +323,6 @@ const updateBaseOption = (event) => {
 
 const updateGameOption = (optionElement) => {
   const options = JSON.parse(localStorage.getItem(gameName));
-
   if (optionElement.classList.contains('randomize-button')) {
     // If the event passed in is the randomize button, then we know what we must do.
     options[gameName][optionElement.getAttribute('data-key')] = 'random';
