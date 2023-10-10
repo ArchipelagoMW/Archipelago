@@ -5,11 +5,10 @@ from pkgutil import get_data
 
 from BaseClasses import Region
 from worlds.generic.Rules import add_item_rule
-from .Locations import KDL3Location, location_table
+from .Locations import KDL3Location
 from .Names import LocationName
 from .Options import BossShuffle
 from .Room import Room
-from .Rules import can_reach_stage
 
 if typing.TYPE_CHECKING:
     from . import KDL3World
@@ -47,7 +46,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                     room_entry["animal_pointers"], room_entry["enemies"], room_entry["entity_load"],
                     room_entry["consumables"], room_entry["consumables_pointer"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
-                            None for location in room_entry["locations"]
+        None for location in room_entry["locations"]
                             if not any([x in location for x in ["1-Up", "Maxim"]]) or
                             world.multiworld.consumables[world.player]}, KDL3Location)
         rooms[room.name] = room
@@ -95,7 +94,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
             else:
                 previous_stage = first_rooms[world.player_levels[level][stage - 1]]
                 world.multiworld.get_location(f"{level_names[previous_stage.level]} {previous_stage.stage}"
-                                              f" - Complete", world.player)\
+                                              f" - Complete", world.player) \
                     .parent_region.add_exits([first_rooms[proper_stage].name])
         else:
             level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])

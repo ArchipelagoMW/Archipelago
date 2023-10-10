@@ -13,24 +13,7 @@ def can_reach_boss(state: "CollectionState", player: int, level: int, open_world
     if open_world:
         return state.has(f"{LocationName.level_names_inverse[level]} - Stage Completion", player, ow_boss_req)
     else:
-        return can_reach_stage(state, player, level, player_levels[level][6], player_levels)
-
-
-def can_reach_stage(state: "CollectionState", player: int, level: int, stage: int,
-                    player_levels: typing.Dict[int, typing.Dict[int, int]]):
-    for j in range(7):
-        if player_levels[level][j] == stage:
-            return True
-        elif player_levels[level][j] == 0x77000B:
-            if not can_reach_kine(state, player):
-                return False
-        elif player_levels[level][j] == 0x770011:
-            if not can_reach_cutter(state, player):
-                return False
-        elif player_levels[level][j] == 0x77001C:
-            if not can_reach_burning(state, player):
-                return False
-    return False
+        return state.can_reach(location_table[player_levels[level][5]], "Location", player)
 
 
 def can_reach_rick(state: "CollectionState", player: int) -> bool:
