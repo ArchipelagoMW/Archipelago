@@ -4,7 +4,7 @@ from argparse import Namespace
 
 from test.general import gen_steps
 from worlds import AutoWorld
-from worlds.AutoWorld import call_all
+from worlds.AutoWorld import World, call_all
 
 from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
@@ -88,21 +88,22 @@ class TestBase(unittest.TestCase):
             items = self.multiworld.itempool[:]
             items = [item for item in items if
                      item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
-            items.extend(ItemFactory(item_pool[0], 1))
+            items.extend(ItemFactory(item_pool[0], self.multiworld.worlds[1]))
         else:
-            items = ItemFactory(item_pool[0], 1)
+            items = ItemFactory(item_pool[0], self.multiworld.worlds[1])
         return self.get_state(items)
 
     def _get_items_partial(self, item_pool, missing_item):
         new_items = item_pool[0].copy()
         new_items.remove(missing_item)
-        items = ItemFactory(new_items, 1)
+        items = ItemFactory(new_items, self.multiworld.worlds[1])
         return self.get_state(items)
 
 
 class WorldTestBase(unittest.TestCase):
     options: typing.Dict[str, typing.Any] = {}
     multiworld: MultiWorld
+    world: World
 
     game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
     auto_construct: typing.ClassVar[bool] = True
@@ -132,6 +133,7 @@ class WorldTestBase(unittest.TestCase):
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })
         self.multiworld.set_options(args)
+        self.world = self.multiworld.worlds[1]
         for step in gen_steps:
             call_all(self.multiworld, step)
 

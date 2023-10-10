@@ -22,10 +22,10 @@ class TestDungeon(LTTPTestBase):
         connect_simple(self.multiworld, 'Big Bomb Shop', 'Big Bomb Shop', 1)
         self.multiworld.get_region('Menu', 1).exits = []
         self.multiworld.swamp_patch_required[1] = True
-        self.multiworld.worlds[1].set_rules()
-        self.multiworld.worlds[1].create_items()
+        self.world.set_rules()
+        self.world.create_items()
         self.multiworld.itempool.extend(get_dungeon_item_pool(self.multiworld))
-        self.multiworld.itempool.extend(ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'], 1))
+        self.multiworld.itempool.extend(ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'], self.world))
 
     def run_tests(self, access_pool):
         for exit in self.remove_exits:
@@ -38,9 +38,9 @@ class TestDungeon(LTTPTestBase):
                 if all_except and len(all_except) > 0:
                     items = self.multiworld.itempool[:]
                     items = [item for item in items if item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
-                    items.extend(ItemFactory(item_pool[0], 1))
+                    items.extend(ItemFactory(item_pool[0], self.world))
                 else:
-                    items = ItemFactory(items, 1)
+                    items = ItemFactory(items, self.world)
                 state = CollectionState(self.multiworld)
                 state.reachable_regions[1].add(self.multiworld.get_region('Menu', 1))
                 for region_name in self.starting_regions:

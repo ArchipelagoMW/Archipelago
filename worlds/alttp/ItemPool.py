@@ -242,14 +242,14 @@ def generate_itempool(world):
     if multiworld.timer[player] in ['ohko', 'timed-ohko']:
         multiworld.can_take_damage[player] = False
     if multiworld.goal[player] in ['pedestal', 'triforcehunt', 'localtriforcehunt', 'icerodhunt']:
-        multiworld.push_item(multiworld.get_location('Ganon', player), ItemFactory('Nothing', player), False)
+        multiworld.push_item(multiworld.get_location('Ganon', player), ItemFactory('Nothing', world), False)
     else:
-        multiworld.push_item(multiworld.get_location('Ganon', player), ItemFactory('Triforce', player), False)
+        multiworld.push_item(multiworld.get_location('Ganon', player), ItemFactory('Triforce', world), False)
 
     if multiworld.goal[player] == 'icerodhunt':
         multiworld.progression_balancing[player].value = 0
         loc = multiworld.get_location('Turtle Rock - Boss', player)
-        multiworld.push_item(loc, ItemFactory('Triforce Piece', player), False)
+        multiworld.push_item(loc, ItemFactory('Triforce Piece', world), False)
         multiworld.treasure_hunt_count[player] = 1
         if multiworld.boss_shuffle[player] != 'none':
             if isinstance(multiworld.boss_shuffle[player].value, str) and 'turtle rock-' not in multiworld.boss_shuffle[player].value:
@@ -284,7 +284,7 @@ def generate_itempool(world):
             itempool.extend(itemdiff.universal_keys)
 
         for item in itempool:
-            multiworld.push_precollected(ItemFactory(item, player))
+            multiworld.push_precollected(ItemFactory(item, world))
 
     if multiworld.goal[player] in ['triforcehunt', 'localtriforcehunt', 'icerodhunt']:
         region = multiworld.get_region('Light World', player)
@@ -295,7 +295,7 @@ def generate_itempool(world):
         region.locations.append(loc)
         multiworld.clear_location_cache()
 
-        multiworld.push_item(loc, ItemFactory('Triforce', player), False)
+        multiworld.push_item(loc, ItemFactory('Triforce', world), False)
         loc.event = True
         loc.locked = True
 
@@ -313,7 +313,7 @@ def generate_itempool(world):
     ]
     for location_name, event_name in event_pairs:
         location = multiworld.get_location(location_name, player)
-        event = ItemFactory(event_name, player)
+        event = ItemFactory(event_name, world)
         multiworld.push_item(location, event, False)
         location.event = location.locked = True
 
@@ -329,7 +329,7 @@ def generate_itempool(world):
         treasure_hunt_icon, additional_triforce_pieces = get_pool_core(multiworld, player)
 
     for item in precollected_items:
-        multiworld.push_precollected(ItemFactory(item, player))
+        multiworld.push_precollected(ItemFactory(item, world))
 
     if multiworld.mode[player] == 'standard' and not has_melee_weapon(multiworld.state, player):
         if "Link's Uncle" not in placed_items:
@@ -354,9 +354,9 @@ def generate_itempool(world):
             multiworld.escape_assist[player].append('bombs')
 
     for (location, item) in placed_items.items():
-        multiworld.get_location(location, player).place_locked_item(ItemFactory(item, player))
+        multiworld.get_location(location, player).place_locked_item(ItemFactory(item, world))
 
-    items = ItemFactory(pool, player)
+    items = ItemFactory(pool, world)
     # convert one Progressive Bow into Progressive Bow (Alt), in ID only, for ganon silvers hint text
     if multiworld.worlds[player].has_progressive_bows:
         for item in items:
@@ -377,7 +377,7 @@ def generate_itempool(world):
 
     for key_loc in key_drop_data:
         key_data = key_drop_data[key_loc]
-        drop_item = ItemFactory(key_data[3], player)
+        drop_item = ItemFactory(key_data[3], world)
         if multiworld.goal[player] == 'icerodhunt' or not multiworld.key_drop_shuffle[player]:
             if drop_item in dungeon_items:
                 dungeon_items.remove(drop_item)
@@ -400,16 +400,16 @@ def generate_itempool(world):
             loc.address = None
         elif multiworld.goal[player] == 'icerodhunt':
             # key drop item removed because of icerodhunt
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), world))
             multiworld.push_precollected(drop_item)
         elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), world))
     dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
     multiworld.random.shuffle(dungeon_item_replacements)
     if multiworld.goal[player] == 'icerodhunt':
         for item in dungeon_items:
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), world))
             multiworld.push_precollected(item)
     else:
         for x in range(len(dungeon_items)-1, -1, -1):
@@ -420,7 +420,7 @@ def generate_itempool(world):
                     or (multiworld.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
                 dungeon_items.pop(x)
                 multiworld.push_precollected(item)
-                multiworld.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
+                multiworld.itempool.append(ItemFactory(dungeon_item_replacements.pop(), world))
         multiworld.itempool.extend([item for item in dungeon_items])
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
@@ -446,7 +446,7 @@ def generate_itempool(world):
         if additional_triforce_pieces > len(nonprogressionitems):
             raise FillError(f"Not enough non-progression items to replace with Triforce pieces found for player "
                             f"{multiworld.get_player_name(player)}.")
-        progressionitems += [ItemFactory("Triforce Piece", player) for _ in range(additional_triforce_pieces)]
+        progressionitems += [ItemFactory("Triforce Piece", world) for _ in range(additional_triforce_pieces)]
         nonprogressionitems.sort(key=lambda item: int("Heart" in item.name))  # try to keep hearts in the pool
         nonprogressionitems = nonprogressionitems[additional_triforce_pieces:]
         multiworld.random.shuffle(nonprogressionitems)
@@ -516,7 +516,7 @@ def set_up_take_anys(world, player):
     if swords:
         sword = world.random.choice(swords)
         world.itempool.remove(sword)
-        world.itempool.append(ItemFactory('Rupees (20)', player))
+        world.itempool.append(ItemFactory('Rupees (20)', world))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
     else:
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0, create_location=True)
