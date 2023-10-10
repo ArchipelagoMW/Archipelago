@@ -17,14 +17,14 @@ def can_reach_woods_depth(vanilla_logic, depth: int) -> StardewRule:
     if depth > 50:
         rules.append(vanilla_logic.can_do_combat_at_level(Performance.great) & vanilla_logic.can_cook() &
                      vanilla_logic.received(ModTransportation.woods_obelisk))
-    if vanilla_logic.options[options.SkillProgression] == options.SkillProgression.option_progressive:
+    if vanilla_logic.options.skill_progression == options.SkillProgression.option_progressive:
         combat_tier = min(10, max(0, tier + 5))
         rules.append(vanilla_logic.has_skill_level(Skill.combat, combat_tier))
     return And(rules)
 
 
 def has_woods_rune_to_depth(vanilla_logic, floor: int) -> StardewRule:
-    if vanilla_logic.options[options.ElevatorProgression] == options.ElevatorProgression.option_vanilla:
+    if vanilla_logic.options.elevator_progression == options.ElevatorProgression.option_vanilla:
         return True_()
     return vanilla_logic.received("Progressive Woods Obelisk Sigils", count=int(floor / 10))
 

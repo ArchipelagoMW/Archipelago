@@ -1,28 +1,8 @@
 from dataclasses import dataclass
-from typing import Dict, Union, Protocol, runtime_checkable, ClassVar
+from typing import Dict
 
-from Options import Option, Range, DeathLink, SpecialRange, Toggle, Choice, OptionSet
+from Options import Range, SpecialRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option
 from .mods.mod_data import ModNames
-
-@runtime_checkable
-class StardewOption(Protocol):
-    internal_name: ClassVar[str]
-
-
-@dataclass
-class StardewOptions:
-    options: Dict[str, Union[bool, int, str]]
-
-    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int, str]:
-        if isinstance(item, StardewOption):
-            item = item.internal_name
-
-        return self.options.get(item, None)
-
-    def __setitem__(self, key: Union[str, StardewOption], value: Union[bool, int, str]):
-        if isinstance(key, StardewOption):
-            key = key.internal_name
-        self.options[key] = value
 
 
 class Goal(Choice):
@@ -553,56 +533,39 @@ class Mods(OptionSet):
     }
 
 
-stardew_valley_option_classes = [
-    Goal,
-    StartingMoney,
-    ProfitMargin,
-    BundleRandomization,
-    BundlePrice,
-    EntranceRandomization,
-    SeasonRandomization,
-    Cropsanity,
-    BackpackProgression,
-    ToolProgression,
-    SkillProgression,
-    BuildingProgression,
-    FestivalLocations,
-    ElevatorProgression,
-    ArcadeMachineLocations,
-    SpecialOrderLocations,
-    HelpWantedLocations,
-    Fishsanity,
-    Museumsanity,
-    Friendsanity,
-    FriendsanityHeartSize,
-    NumberOfMovementBuffs,
-    NumberOfLuckBuffs,
-    ExcludeGingerIsland,
-    TrapItems,
-    MultipleDaySleepEnabled,
-    MultipleDaySleepCost,
-    ExperienceMultiplier,
-    FriendshipMultiplier,
-    DebrisMultiplier,
-    QuickStart,
-    Gifting,
-    Mods,
-]
-stardew_valley_options: Dict[str, type(Option)] = {option.internal_name: option for option in
-                                                   stardew_valley_option_classes}
-default_options = {option.internal_name: option.default for option in stardew_valley_options.values()}
-stardew_valley_options["death_link"] = DeathLink
-
-
-def fetch_options(world, player: int) -> StardewOptions:
-    return StardewOptions({option: get_option_value(world, player, option) for option in stardew_valley_options})
-
-
-def get_option_value(world, player: int, name: str) -> Union[bool, int]:
-    assert name in stardew_valley_options, f"{name} is not a valid option for Stardew Valley."
-
-    value = getattr(world, name)
-
-    if issubclass(stardew_valley_options[name], Toggle):
-        return bool(value[player].value)
-    return value[player].value
+@dataclass
+class StardewValleyOptions(PerGameCommonOptions):
+    goal: Goal
+    starting_money: StartingMoney
+    profit_margin: ProfitMargin
+    bundle_randomization: BundleRandomization
+    bundle_price: BundlePrice
+    entrance_randomization: EntranceRandomization
+    season_randomization: SeasonRandomization
+    cropsanity: Cropsanity
+    backpack_progression: BackpackProgression
+    tool_progression: ToolProgression
+    skill_progression: SkillProgression
+    building_progression: BuildingProgression
+    festival_locations: FestivalLocations
+    elevator_progression: ElevatorProgression
+    arcade_machine_locations: ArcadeMachineLocations
+    special_order_locations: SpecialOrderLocations
+    help_wanted_locations: HelpWantedLocations
+    fishsanity: Fishsanity
+    museumsanity: Museumsanity
+    friendsanity: Friendsanity
+    friendsanity_heart_size: FriendsanityHeartSize
+    number_of_movement_buffs: NumberOfMovementBuffs
+    number_of_luck_buffs: NumberOfLuckBuffs
+    exclude_ginger_island: ExcludeGingerIsland
+    trap_items: TrapItems
+    multiple_day_sleep_enabled: MultipleDaySleepEnabled
+    multiple_day_sleep_cost: MultipleDaySleepCost
+    experience_multiplier: ExperienceMultiplier
+    friendship_multiplier: FriendshipMultiplier
+    debris_multiplier: DebrisMultiplier
+    quick_start: QuickStart
+    gifting: Gifting
+    mods: Mods
+    death_link: DeathLink
