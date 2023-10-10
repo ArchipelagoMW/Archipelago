@@ -2,6 +2,7 @@ import logging
 from typing import Dict, Any, Iterable, Optional, Union, Set, List
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification, MultiWorld
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
 from .bundles import get_all_bundles, Bundle
@@ -278,6 +279,8 @@ class StardewValleyWorld(World):
 
         excluded_options = [BundleRandomization, BundlePrice, NumberOfMovementBuffs, NumberOfLuckBuffs]
         excluded_option_names = [option.internal_name for option in excluded_options]
+        generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
+        excluded_option_names.extend(generic_option_names)
         included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
         slot_data = self.options.as_dict(*included_option_names)
         slot_data.update({
