@@ -1,7 +1,8 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, DeathLink, DefaultOnToggle, ItemsAccessibility, Option, PlandoBosses, Range, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, ItemsAccessibility, Option, PlandoBosses, Range, \
+    StartInventoryPool, Toggle
 
 
 class Logic(Choice):

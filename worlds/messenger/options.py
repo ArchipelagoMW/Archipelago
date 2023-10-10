@@ -3,14 +3,14 @@ from typing import Dict
 
 from schema import And, Optional, Or, Schema
 
-from Options import Accessibility, Choice, DeathLink, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
+from Options import Choice, DeathLink, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, Range, \
     StartInventoryPool, Toggle
 
 
-class MessengerAccessibility(Accessibility):
-    default = Accessibility.option_locations
+class MessengerAccessibility(ItemsAccessibility):
     # defaulting to locations accessibility since items makes certain items self-locking
-    __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
+    default = ItemsAccessibility.option_full
+    __doc__ = ItemsAccessibility.__doc__
 
 
 class Logic(Choice):

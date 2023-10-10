@@ -150,7 +150,7 @@ class MessengerRules:
                      lambda state: state.has("Shop Chest", self.player))
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
-        if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
+        if multiworld.accessibility[self.player] > MessengerAccessibility.option_full:
             set_self_locking_items(self.world, self.player)
 
 

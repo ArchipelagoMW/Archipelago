@@ -1,4 +1,4 @@
-from Options import Choice, DeathLink, Range, SpecialRange, TextChoice, Toggle
+from Options import Choice, DeathLink, ItemsAccessibility, Range, SpecialRange, TextChoice, Toggle
 
 
 class GameVersion(Choice):

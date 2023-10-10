@@ -323,12 +323,12 @@ def process_pokemon_data(self):
                 mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))
 
     hm_verify = ["Surf", "Strength"]
-    if self.multiworld.accessibility[self.player] == "locations" or ((not
+    if self.multiworld.accessibility[self.player] == "full" or ((not
             self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_badges_condition[self.player],
             self.multiworld.route_22_gate_condition[self.player], self.multiworld.victory_road_condition[self.player])
             > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")):
         hm_verify += ["Cut"]
-    if self.multiworld.accessibility[self.player] == "locations" or (not
+    if self.multiworld.accessibility[self.player] == "full" or (not
             self.multiworld.dark_rock_tunnel_logic[self.player]) and ((self.multiworld.trainersanity[self.player] or
                                                                        self.multiworld.extra_key_items[self.player])
                                                                       or self.multiworld.door_shuffle[self.player]):

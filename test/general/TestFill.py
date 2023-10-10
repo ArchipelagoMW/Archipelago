@@ -221,7 +221,7 @@ class TestFillRestrictive(unittest.TestCase):
         player2 = generate_player_data(multi_world, 2, 3, 3)
 
         multi_world.accessibility[player1.id].value = multi_world.accessibility[player1.id].option_minimal
-        multi_world.accessibility[player2.id].value = multi_world.accessibility[player2.id].option_locations
+        multi_world.accessibility[player2.id].value = multi_world.accessibility[player2.id].option_full
 
         multi_world.completion_condition[player1.id] = lambda state: True
         multi_world.completion_condition[player2.id] = lambda state: state.has(player2.prog_items[2].name, player2.id)
