@@ -24,7 +24,6 @@ from zilliandomizer.system import System
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
 from zilliandomizer.options import Chars
-from zilliandomizer.patch import detect_test
 
 from ..AutoWorld import World, WebWorld
 
@@ -151,9 +150,7 @@ class ZillionWorld(World):
 
         self._item_counts = item_counts
 
-        rom_dir_name = "" if detect_test() else os.path.dirname(get_base_rom_path())
         with redirect_stdout(self.lsi):  # type: ignore
-            self.zz_system.make_patcher(rom_dir_name)
             self.zz_system.make_randomizer(zz_op)
 
             self.zz_system.seed(self.multiworld.seed)
@@ -323,6 +320,8 @@ class ZillionWorld(World):
         """
         sync zilliandomizer item locations with AP item locations
         """
+        rom_dir_name = os.path.dirname(get_base_rom_path())
+        self.zz_system.make_patcher(rom_dir_name)
         assert self.zz_system.randomizer and self.zz_system.patcher, "generate_early hasn't been called"
         zz_options = self.zz_system.randomizer.options
 
@@ -373,7 +372,9 @@ class ZillionWorld(World):
                                    zz_options.start_char,
                                    self.zz_system.randomizer.loc_name_2_pretty)
         self.slot_data_ready.set()
-        zz_patcher.all_fixes_and_options(zz_options)
+        rm = self.zz_system.resource_managers
+        assert rm, "missing resource_managers from generate_early"
+        zz_patcher.all_fixes_and_options(zz_options, rm)
         zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         zz_patcher.set_multiworld_items(multi_items)
         game_id = self.multiworld.player_name[self.player].encode() + b'\x00' + self.multiworld.seed_name[-6:].encode()
@@ -384,7 +385,7 @@ class ZillionWorld(World):
         If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
         self.finalize_item_locations()
 
-        assert self.zz_system.patcher, "didn't get patcher from generate_early"
+        assert self.zz_system.patcher, "didn't get patcher from finalize_item_locations"
         # original_rom_bytes = self.zz_patcher.rom
         patched_rom_bytes = self.zz_system.patcher.get_patched_bytes()
 
@@ -415,12 +416,12 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        zz_patcher = self.zz_system.patcher
-        assert zz_patcher, "didn't get patcher from generate_early"
         assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
 
         rescues: Dict[str, Any] = {}
         self.slot_data_ready.wait()
+        zz_patcher = self.zz_system.patcher
+        assert zz_patcher, "didn't get patcher from generate_output"
         for i in (0, 1):
             if i in zz_patcher.rescue_locations:
                 ri = zz_patcher.rescue_locations[i]
