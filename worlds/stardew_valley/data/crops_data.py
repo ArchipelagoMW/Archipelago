@@ -45,3 +45,4 @@ def load_crop_csv():
 
 # TODO Those two should probably be split to we can include rest of seeds
 all_crops, all_purchasable_seeds = load_crop_csv()
+crops_by_name = {crop.name: crop for crop in all_crops}

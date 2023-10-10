@@ -90,7 +90,7 @@ def main(args=None, callback=ERmain):
         try:
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
         except Exception as e:
-            raise ValueError(f"File {args.weights_file_path} is destroyed. Please fix your yaml.") from e
+            raise ValueError(f"File {args.weights_file_path} is invalid. Please fix your yaml.") from e
         logging.info(f"Weights: {args.weights_file_path} >> "
                      f"{get_choice('description', weights_cache[args.weights_file_path][-1], 'No description specified')}")
 
@@ -98,7 +98,7 @@ def main(args=None, callback=ERmain):
         try:
             meta_weights = read_weights_yamls(args.meta_file_path)[-1]
         except Exception as e:
-            raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
+            raise ValueError(f"File {args.meta_file_path} is invalid. Please fix your yaml.") from e
         logging.info(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
         try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
             del(meta_weights["meta_description"])
@@ -118,7 +118,7 @@ def main(args=None, callback=ERmain):
             try:
                 weights_cache[fname] = read_weights_yamls(path)
             except Exception as e:
-                raise ValueError(f"File {fname} is destroyed. Please fix your yaml.") from e
+                raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items())}
@@ -161,7 +161,8 @@ def main(args=None, callback=ERmain):
                         for yaml in weights_cache[path]:
                             if category_name is None:
                                 for category in yaml:
-                                    if category in AutoWorldRegister.world_types and key in Options.common_options:
+                                    if category in AutoWorldRegister.world_types and \
+                                            key in Options.CommonOptions.type_hints:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
@@ -199,7 +200,7 @@ def main(args=None, callback=ERmain):
 
                     player += 1
             except Exception as e:
-                raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
+                raise ValueError(f"File {path} is invalid. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
@@ -346,7 +347,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         return get_choice(option_key, category_dict)
     if game in AutoWorldRegister.world_types:
         game_world = AutoWorldRegister.world_types[game]
-        options = ChainMap(game_world.option_definitions, Options.per_game_common_options)
+        options = game_world.options_dataclass.type_hints
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
@@ -380,7 +381,7 @@ def roll_linked_options(weights: dict) -> dict:
             else:
                 logging.debug(f"linked option {option_set['name']} skipped.")
         except Exception as e:
-            raise ValueError(f"Linked option {option_set['name']} is destroyed. "
+            raise ValueError(f"Linked option {option_set['name']} is invalid. "
                              f"Please fix your linked option.") from e
     return weights
 
@@ -410,7 +411,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
 
         except Exception as e:
-            raise ValueError(f"Your trigger number {i + 1} is destroyed. "
+            raise ValueError(f"Your trigger number {i + 1} is invalid. "
                              f"Please fix your triggers.") from e
     return weights
 
@@ -451,8 +452,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                                 f"which is not enabled.")
 
     ret = argparse.Namespace()
-    for option_key in Options.per_game_common_options:
-        if option_key in weights and option_key not in Options.common_options:
+    for option_key in Options.PerGameCommonOptions.type_hints:
+        if option_key in weights and option_key not in Options.CommonOptions.type_hints:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
     ret.game = get_choice("game", weights)
@@ -472,16 +473,11 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
-    for option_key, option in Options.common_options.items():
+    for option_key, option in Options.CommonOptions.type_hints.items():
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
-    for option_key, option in world_type.option_definitions.items():
+    for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
-    for option_key, option in Options.per_game_common_options.items():
-        # skip setting this option if already set from common_options, defaulting to root option
-        if option_key not in world_type.option_definitions and \
-                (option_key not in Options.common_options or option_key in game_weights):
-            handle_option(ret, game_weights, option_key, option, plando_options)
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "Minecraft" or ret.game == "Ocarina of Time":

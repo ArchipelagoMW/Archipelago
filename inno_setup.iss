@@ -2,10 +2,10 @@
 #define min_windows ReadIni(SourcePath + "\setup.ini", "Data", "min_windows")
 
 #define MyAppName "Archipelago"
-#define MyAppExeName "ArchipelagoServer.exe"
+#define MyAppExeName "ArchipelagoLauncher.exe"
 #define MyAppIcon "data/icon.ico"
 #dim VersionTuple[4]
-#define MyAppVersion GetVersionComponents(source_path + '\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
+#define MyAppVersion GetVersionComponents(source_path + '\ArchipelagoLauncher.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
 #define MyAppVersionText Str(VersionTuple[0])+"."+Str(VersionTuple[1])+"."+Str(VersionTuple[2])
 
 
@@ -74,6 +74,7 @@ Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup";
 Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/smw";   Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/l2ac";  Description: "SNI Client - Lufia II Ancient Cave Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/bizhawk";   Description: "BizHawk Client"; Types: full playing
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/kh2";       Description: "Kingdom Hearts 2"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
@@ -116,11 +117,13 @@ Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; 
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
 
 Source: "{#source_path}\ArchipelagoLauncher.exe"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "{#source_path}\ArchipelagoLauncher(DEBUG).exe"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "{#source_path}\ArchipelagoGenerate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: generator
 Source: "{#source_path}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: server
 Source: "{#source_path}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
 Source: "{#source_path}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/text
 Source: "{#source_path}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni
+Source: "{#source_path}\ArchipelagoBizHawkClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/bizhawk
 Source: "{#source_path}\ArchipelagoLinksAwakeningClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ladx
 Source: "{#source_path}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
 Source: "{#source_path}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
@@ -141,9 +144,11 @@ Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
 Name: "{group}\{#MyAppName} Folder"; Filename: "{app}";
-Name: "{group}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Components: server
+Name: "{group}\{#MyAppName} Launcher"; Filename: "{app}\ArchipelagoLauncher.exe"
+Name: "{group}\{#MyAppName} Server"; Filename: "{app}\ArchipelagoServer"; Components: server
 Name: "{group}\{#MyAppName} Text Client"; Filename: "{app}\ArchipelagoTextClient.exe"; Components: client/text
 Name: "{group}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Components: client/sni
+Name: "{group}\{#MyAppName} BizHawk Client"; Filename: "{app}\ArchipelagoBizHawkClient.exe"; Components: client/bizhawk
 Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Components: client/factorio
 Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Components: client/minecraft
 Name: "{group}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Components: client/oot
@@ -155,13 +160,16 @@ Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoSta
 Name: "{group}\{#MyAppName} MegaMan Battle Network 3 Client"; Filename: "{app}\ArchipelagoMMBN3Client.exe"; Components: client/mmbn3
 Name: "{group}\{#MyAppName} The Legend of Zelda Client"; Filename: "{app}\ArchipelagoZelda1Client.exe"; Components: client/tloz
 Name: "{group}\{#MyAppName} Kingdom Hearts 2 Client"; Filename: "{app}\ArchipelagoKH2Client.exe"; Components: client/kh2
+Name: "{group}\{#MyAppName} Link's Awakening Client"; Filename: "{app}\ArchipelagoLinksAwakeningClient.exe"; Components: client/ladx
 Name: "{group}\{#MyAppName} Adventure Client"; Filename: "{app}\ArchipelagoAdventureClient.exe"; Components: client/advn
 Name: "{group}\{#MyAppName} Wargroove Client"; Filename: "{app}\ArchipelagoWargrooveClient.exe"; Components: client/wargroove
 Name: "{group}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUndertaleClient.exe"; Components: client/ut
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
-Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
+Name: "{commondesktop}\{#MyAppName} Launcher"; Filename: "{app}\ArchipelagoLauncher.exe"; Tasks: desktopicon
+Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\ArchipelagoServer"; Tasks: desktopicon; Components: server
 Name: "{commondesktop}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Tasks: desktopicon; Components: client/sni
+Name: "{commondesktop}\{#MyAppName} BizHawk Client"; Filename: "{app}\ArchipelagoBizHawkClient.exe"; Tasks: desktopicon; Components: client/bizhawk
 Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Tasks: desktopicon; Components: client/factorio
 Name: "{commondesktop}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Tasks: desktopicon; Components: client/minecraft
 Name: "{commondesktop}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Tasks: desktopicon; Components: client/oot
@@ -174,6 +182,7 @@ Name: "{commondesktop}\{#MyAppName} MegaMan Battle Network 3 Client"; Filename: 
 Name: "{commondesktop}\{#MyAppName} The Legend of Zelda Client"; Filename: "{app}\ArchipelagoZelda1Client.exe"; Tasks: desktopicon; Components: client/tloz
 Name: "{commondesktop}\{#MyAppName} Wargroove Client"; Filename: "{app}\ArchipelagoWargrooveClient.exe"; Tasks: desktopicon; Components: client/wargroove
 Name: "{commondesktop}\{#MyAppName} Kingdom Hearts 2 Client"; Filename: "{app}\ArchipelagoKH2Client.exe"; Tasks: desktopicon; Components: client/kh2
+Name: "{commondesktop}\{#MyAppName} Link's Awakening Client"; Filename: "{app}\ArchipelagoLinksAwakeningClient.exe"; Tasks: desktopicon; Components: client/ladx
 Name: "{commondesktop}\{#MyAppName} Adventure Client"; Filename: "{app}\ArchipelagoAdventureClient.exe"; Tasks: desktopicon; Components: client/advn
 Name: "{commondesktop}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUndertaleClient.exe"; Tasks: desktopicon; Components: client/ut
 
@@ -183,6 +192,7 @@ Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: I
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/sni/lttp or generator/lttp
 Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client/minecraft
 Filename: "{app}\ArchipelagoLauncher"; Parameters: "--update_settings"; StatusMsg: "Updating host.yaml..."; Flags: runasoriginaluser runhidden
+Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringChange('Launcher', '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"

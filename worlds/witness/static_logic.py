@@ -1,5 +1,52 @@
+from dataclasses import dataclass
+from enum import Enum
+from typing import Dict, List
+
 from .utils import define_new_region, parse_lambda, lazy, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
     get_vanilla_logic
+
+
+class ItemCategory(Enum):
+    SYMBOL = 0
+    DOOR = 1
+    LASER = 2
+    USEFUL = 3
+    FILLER = 4
+    TRAP = 5
+    JOKE = 6
+    EVENT = 7
+
+
+CATEGORY_NAME_MAPPINGS: Dict[str, ItemCategory] = {
+    "Symbols:": ItemCategory.SYMBOL,
+    "Doors:": ItemCategory.DOOR,
+    "Lasers:": ItemCategory.LASER,
+    "Useful:": ItemCategory.USEFUL,
+    "Filler:": ItemCategory.FILLER,
+    "Traps:": ItemCategory.TRAP,
+    "Jokes:": ItemCategory.JOKE
+}
+
+
+@dataclass(frozen=True)
+class ItemDefinition:
+    local_code: int
+    category: ItemCategory
+
+
+@dataclass(frozen=True)
+class ProgressiveItemDefinition(ItemDefinition):
+    child_item_names: List[str]
+
+
+@dataclass(frozen=True)
+class DoorItemDefinition(ItemDefinition):
+    panel_id_hexes: List[str]
+
+
+@dataclass(frozen=True)
+class WeightedItemDefinition(ItemDefinition):
+    weight: int
 
 
 class StaticWitnessLogicObj:
@@ -11,7 +58,7 @@ class StaticWitnessLogicObj:
         current_region = dict()
 
         for line in lines:
-            if line == "":
+            if line == "" or line[0] == "#":
                 continue
 
             if line[-1] == ":":
@@ -131,15 +178,9 @@ class StaticWitnessLogicObj:
 
 
 class StaticWitnessLogic:
-    ALL_SYMBOL_ITEMS = set()
-    ITEMS_TO_PROGRESSIVE = dict()
-    PROGRESSIVE_TO_ITEMS = dict()
-    ALL_DOOR_ITEMS = set()
-    ALL_DOOR_ITEMS_AS_DICT = dict()
-    ALL_USEFULS = set()
-    ALL_TRAPS = set()
-    ALL_BOOSTS = set()
-    CONNECTIONS_TO_SEVER_BY_DOOR_HEX = dict()
+    # Item data parsed from WitnessItems.txt
+    all_items: Dict[str, ItemDefinition] = {}
+    _progressive_lookup: Dict[str, str] = {}
 
     ALL_REGIONS_BY_NAME = dict()
     STATIC_CONNECTIONS_BY_REGION_NAME = dict()
@@ -154,50 +195,54 @@ class StaticWitnessLogic:
 
     ENTITY_ID_TO_NAME = dict()
 
-    def parse_items(self):
+    @staticmethod
+    def parse_items():
         """
         Parses currently defined items from WitnessItems.txt
         """
 
-        lines = get_items()
-        current_set = self.ALL_SYMBOL_ITEMS
+        lines: List[str] = get_items()
+        current_category: ItemCategory = ItemCategory.SYMBOL
 
         for line in lines:
-            if line == "Progression:":
-                current_set = self.ALL_SYMBOL_ITEMS
+            # Skip empty lines and comments.
+            if line == "" or line[0] == "#":
                 continue
-            if line == "Boosts:":
-                current_set = self.ALL_BOOSTS
-                continue
-            if line == "Traps:":
-                current_set = self.ALL_TRAPS
-                continue
-            if line == "Usefuls:":
-                current_set = self.ALL_USEFULS
-                continue
-            if line == "Doors:":
-                current_set = self.ALL_DOOR_ITEMS
-                continue
-            if line == "":
+
+            # If this line is a category header, update our cached category.
+            if line in CATEGORY_NAME_MAPPINGS.keys():
+                current_category = CATEGORY_NAME_MAPPINGS[line]
                 continue
 
             line_split = line.split(" - ")
 
-            if current_set is self.ALL_USEFULS:
-                current_set.add((line_split[1], int(line_split[0]), line_split[2] == "True"))
-            elif current_set is self.ALL_DOOR_ITEMS:
-                new_door = (line_split[1], int(line_split[0]), frozenset(line_split[2].split(",")))
-                current_set.add(new_door)
-                self.ALL_DOOR_ITEMS_AS_DICT[line_split[1]] = new_door
+            item_code = int(line_split[0])
+            item_name = line_split[1]
+            arguments: List[str] = line_split[2].split(",") if len(line_split) >= 3 else []
+
+            if current_category in [ItemCategory.DOOR, ItemCategory.LASER]:
+                # Map doors to IDs.
+                StaticWitnessLogic.all_items[item_name] = DoorItemDefinition(item_code, current_category,
+                                                                             arguments)
+            elif current_category == ItemCategory.TRAP or current_category == ItemCategory.FILLER:
+                # Read filler weights.
+                weight = int(arguments[0]) if len(arguments) >= 1 else 1
+                StaticWitnessLogic.all_items[item_name] = WeightedItemDefinition(item_code, current_category, weight)
+            elif arguments:
+                # Progressive items.
+                StaticWitnessLogic.all_items[item_name] = ProgressiveItemDefinition(item_code, current_category,
+                                                                                    arguments)
+                for child_item in arguments:
+                    StaticWitnessLogic._progressive_lookup[child_item] = item_name
             else:
-                if len(line_split) > 2:
-                    progressive_items = line_split[2].split(",")
-                    for i, value in enumerate(progressive_items):
-                        self.ITEMS_TO_PROGRESSIVE[value] = line_split[1]
-                    self.PROGRESSIVE_TO_ITEMS[line_split[1]] = progressive_items
-                    current_set.add((line_split[1], int(line_split[0])))
-                    continue
-                current_set.add((line_split[1], int(line_split[0])))
+                StaticWitnessLogic.all_items[item_name] = ItemDefinition(item_code, current_category)
+
+    @staticmethod
+    def get_parent_progressive_item(item_name: str):
+        """
+        Returns the name of the item's progressive parent, if there is one, or the item's name if not.
+        """
+        return StaticWitnessLogic._progressive_lookup.get(item_name, item_name)
 
     @lazy
     def sigma_expert(self) -> StaticWitnessLogicObj:

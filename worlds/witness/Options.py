@@ -1,6 +1,6 @@
 from typing import Dict, Union
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice
+from Options import Toggle, DefaultOnToggle, Range, Choice
 
 
 # class HardMode(Toggle):

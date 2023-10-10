@@ -4,15 +4,17 @@
 
 - Stardew Valley on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
 - SMAPI ([Mod loader for Stardew Valley](https://smapi.io/))
-- [StardewArchipelago Mod Release 3.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
-    - It is important to use a mod release of version 3.x.x to play seeds that have been generated here. Later releases can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
+- [StardewArchipelago Mod Release 4.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
+    - It is important to use a mod release of version 4.x.x to play seeds that have been generated here. Later releases can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
 
 ## Optional Software
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     - (Only for the TextClient)
 - Other Stardew Valley Mods [Nexus Mods](https://www.nexusmods.com/stardewvalley)
-    - It is **not** recommended to further mod Stardew Valley, altough it is possible to do so. Mod interactions can be unpredictable, and no support will be offered for related bugs.
-    - The more mods you have, and the bigger they are, the more likely things are to break.
+    - There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md) that you can add to your yaml to include them with the Archipelago randomization
+
+    - It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. Mod interactions can be unpredictable, and no support will be offered for related bugs.
+    - The more unsupported mods you have, and the bigger they are, the more likely things are to break.
 
 ## Configuring your YAML file
 
@@ -76,6 +78,10 @@ Lastly, you can also run Archipelago commands `!help` from the in game chat box,
 It is important to note that the Stardew Valley chat is fairly limited in its capabilities. For example, it doesn't allow scrolling up to see history that has been pushed off screen. The SMAPI console running alonside your game will have the full history as well and may be better suited to read older messages.
 For a better chat experience, you can also use the official Archipelago Text Client, altough it will not allow you to run Stardew-exclusive commands.
 
+### Playing with supported mods
+
+See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md)
+
 ### Multiplayer
 
-You cannot play an Archipelago Slot in multiplayer at the moment. There is no short-terms plans to support that feature.
+You cannot play an Archipelago Slot in multiplayer at the moment. There are no short-terms plans to support that feature.

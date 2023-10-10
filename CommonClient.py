@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import copy
 import logging
 import asyncio
 import urllib.parse
@@ -242,6 +244,7 @@ class CommonContext:
         self.watcher_event = asyncio.Event()
 
         self.jsontotextparser = JSONtoTextParser(self)
+        self.rawjsontotextparser = RawJSONtoTextParser(self)
         self.update_data_package(network_data_package)
 
         # execution
@@ -377,10 +380,13 @@ class CommonContext:
 
     def on_print_json(self, args: dict):
         if self.ui:
-            self.ui.print_json(args["data"])
-        else:
-            text = self.jsontotextparser(args["data"])
-            logger.info(text)
+            # send copy to UI
+            self.ui.print_json(copy.deepcopy(args["data"]))
+
+        logging.getLogger("FileLog").info(self.rawjsontotextparser(copy.deepcopy(args["data"])),
+                                          extra={"NoStream": True})
+        logging.getLogger("StreamLog").info(self.jsontotextparser(copy.deepcopy(args["data"])),
+                                            extra={"NoFile": True})
 
     def on_package(self, cmd: str, args: dict):
         """For custom package handling in subclasses."""
@@ -833,7 +839,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "SetReply":
         ctx.stored_data[args["key"]] = args["value"]
-        if args["key"] == "EnergyLink":
+        if args["key"].startswith("EnergyLink"):
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
                 ctx.ui.set_new_energy_link_value()

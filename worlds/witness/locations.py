@@ -7,11 +7,13 @@ from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
 
 
+ID_START = 158000
+
+
 class StaticWitnessLocations:
     """
     Witness Location Constants that stay consistent across worlds
     """
-    ID_START = 158000
 
     GENERAL_LOCATIONS = {
         "Tutorial Front Left",
@@ -468,7 +470,7 @@ class WitnessPlayerLocations:
         victory = get_option_value(world, player, "victory_condition")
         mount_lasers = get_option_value(world, player, "mountain_lasers")
         chal_lasers = get_option_value(world, player, "challenge_lasers")
-        laser_shuffle = get_option_value(world, player, "shuffle_lasers")
+        # laser_shuffle = get_option_value(world, player, "shuffle_lasers")
 
         postgame = set()
         postgame = postgame | StaticWitnessLocations.CAVES_LOCATIONS

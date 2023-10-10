@@ -1,13 +1,13 @@
 import itertools
 from collections import Counter
-from typing import Dict, List, NamedTuple, Optional, Set
+from typing import Dict, List, NamedTuple, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
-from .Options import BossesAsChecks, VictoryCondition
+from .Options import BossesAsChecks, VictoryCondition, ExtraOrbs
 
 
 class ItemData(NamedTuple):
-    code: Optional[int]
+    code: int
     group: str
     classification: ItemClassification = ItemClassification.progression
     required_num: int = 0
@@ -27,12 +27,12 @@ def create_fixed_item_pool() -> List[str]:
     return list(Counter(required_items).elements())
 
 
-def create_orb_items(victory_condition: VictoryCondition) -> List[str]:
-    orb_count = 0
+def create_orb_items(victory_condition: VictoryCondition, extra_orbs: ExtraOrbs) -> List[str]:
+    orb_count = extra_orbs.value
     if victory_condition == VictoryCondition.option_pure_ending:
-        orb_count = 11
+        orb_count = orb_count + 11
     elif victory_condition == VictoryCondition.option_peaceful_ending:
-        orb_count = 33
+        orb_count = orb_count + 33
     return ["Orb" for _ in range(orb_count)]
 
 
@@ -61,7 +61,7 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
 
     itempool = (
         create_fixed_item_pool()
-        + create_orb_items(multiworld.victory_condition[player])
+        + create_orb_items(multiworld.victory_condition[player], multiworld.extra_orbs[player])
         + create_spatial_awareness_item(multiworld.bosses_as_checks[player])
         + create_kantele(multiworld.victory_condition[player])
     )

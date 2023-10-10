@@ -71,18 +71,15 @@ non_apworlds: set = {
     "Clique",
     "DLCQuest",
     "Final Fantasy",
-    "Hollow Knight",
     "Hylics 2",
     "Kingdom Hearts 2",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",
     "Overcooked! 2",
-    "Pokemon Red and Blue",
     "Raft",
     "Secret of Evermore",
     "Slay the Spire",
-    "Starcraft 2 Wings of Liberty",
     "Sudoku",
     "Super Mario 64",
     "VVVVVV",
@@ -90,6 +87,10 @@ non_apworlds: set = {
     "Zillion",
 }
 
+# LogicMixin is broken before 3.10 import revamp
+if sys.version_info < (3,10):
+    non_apworlds.add("Hollow Knight")
+    non_apworlds.add("Starcraft 2 Wings of Liberty")
 
 def download_SNI():
     print("Updating SNI")
@@ -184,12 +185,21 @@ def resolve_icon(icon_name: str):
 
 exes = [
     cx_Freeze.Executable(
-        script=f'{c.script_name}.py',
+        script=f"{c.script_name}.py",
         target_name=c.frozen_name + (".exe" if is_windows else ""),
         icon=resolve_icon(c.icon),
         base="Win32GUI" if is_windows and not c.cli else None
     ) for c in components if c.script_name and c.frozen_name
 ]
+
+if is_windows:
+    # create a duplicate Launcher for Windows, which has a working stdout/stderr, for debugging and --help
+    c = next(component for component in components if component.script_name == "Launcher")
+    exes.append(cx_Freeze.Executable(
+        script=f"{c.script_name}.py",
+        target_name=f"{c.frozen_name}(DEBUG).exe",
+        icon=resolve_icon(c.icon),
+    ))
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "SNI"]
 extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
@@ -360,6 +370,10 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: typing.List[str] = []
+        disabled_worlds_folder = "worlds_disabled"
+        for entry in os.listdir(disabled_worlds_folder):
+            if os.path.isdir(os.path.join(disabled_worlds_folder, entry)):
+                folders_to_remove.append(entry)
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
             if worldname not in non_apworlds:
@@ -602,7 +616,7 @@ cx_Freeze.setup(
     ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["worlds", "kivy", "cymem"],
+            "packages": ["worlds", "kivy", "cymem", "websockets"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],

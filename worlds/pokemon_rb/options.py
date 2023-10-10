@@ -1,4 +1,3 @@
-
 from Options import Toggle, Choice, Range, SpecialRange, TextChoice, DeathLink
 
 
@@ -35,21 +34,49 @@ class Goal(Choice):
     default = 0
 
 
-class EliteFourCondition(Range):
+class EliteFourBadgesCondition(Range):
     """Number of badges required to challenge the Elite Four once the Indigo Plateau has been reached.
     Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel)."""
-    display_name = "Elite Four Condition"
+    display_name = "Elite Four Badges Condition"
     range_start = 0
     range_end = 8
     default = 8
+
+
+class EliteFourKeyItemsCondition(Range):
+    """Percentage of available key items (not counting items you can lose) required to challenge the Elite Four. Does
+    not count HMs. Evolution stones and Exp. All are key items in Archipelago."""
+    display_name = "Elite Four Key Items Condition"
+    range_start = 0
+    range_end = 100
+    default = 0
+    total = 0
+
+
+class EliteFourPokedexCondition(Range):
+    """Percentage of logically-reachable Pokemon that must be registered as "owned" in the Pokedex in order to
+    challenge the Elite Four."""
+    display_name = "Elite Four Pokedex Condition"
+    range_start = 0
+    range_end = 100
+    default = 0
+    total = 0
 
 
 class VictoryRoadCondition(Range):
-    """Number of badges required to reach Victory Road."""
-    display_name = "Victory Road Condition"
+    """Number of badges required to reach the front entrance of Victory Road."""
+    display_name = "Route 23 Condition"
     range_start = 0
     range_end = 8
-    default = 8
+    default = 7
+
+
+class Route22GateCondition(Range):
+    """Number of badges required to pass through the Route 22 Gate"""
+    display_name = "Route 22 Gate Condition"
+    range_start = 0
+    range_end = 7
+    default = 7
 
 
 class ViridianGymCondition(Range):
@@ -60,13 +87,40 @@ class ViridianGymCondition(Range):
     default = 7
 
 
-class CeruleanCaveCondition(Range):
-    """Number of badges, HMs, and key items (not counting items you can lose) required to access Cerulean Cave.
-    If extra_key_items is turned on, the number chosen will be increased by 4."""
-    display_name = "Cerulean Cave Condition"
+class CeruleanCaveBadgesCondition(Range):
+    """Number of badges needed to access the Cerulean Cave entrance in addition to the required Key Items."""
+    display_name = "Cerulean Cave Badges Condition"
     range_start = 0
-    range_end = 26
-    default = 20
+    range_end = 8
+    default = 4
+
+
+class CeruleanCaveKeyItemsCondition(Range):
+    """Percentage of available key items (not counting items you can lose) required to access the Cerulean Cave
+    entrance in addition to the required badges. Does not count HMs.
+    Evolution stones and Exp. All are key items in Archipelago."""
+    display_name = "Cerulean Cave Key Items Condition"
+    range_start = 0
+    range_end = 100
+    default = 50
+    total = 0
+
+
+class Route3Condition(Choice):
+    """Set a condition to pass through from Pewter City to Route 3."""
+    display_name = "Route 3 Condition"
+    option_open = 0
+    option_defeat_brock = 1
+    option_defeat_any_gym = 2
+    option_boulder_badge = 3
+    option_any_badge = 4
+    default = 1
+
+
+class RobbedHouseOfficer(Toggle):
+    """You can disable to remove the requirement to help Bill before you can enter the robbed house in Cerulean City."""
+    display_name = "Robbed House Officer"
+    default = 1
 
 
 class SecondFossilCheckCondition(Range):
@@ -76,6 +130,18 @@ class SecondFossilCheckCondition(Range):
     range_start = 0
     range_end = 3
     default = 3
+
+
+class FossilCheckItemTypes(Choice):
+    """The two fossil checks always contain items for your own game. Here, you can choose what types of items can
+    appear. Key Items means only advancement items can appear. Unique means key items or TMs may appear. No Key Items
+    means no advancement items may appear."""
+    display_name = "Fossil Check Item Types"
+    option_any = 0
+    option_key_items = 1
+    option_unique_items = 2
+    option_no_key_items = 3
+    default = 0
 
 
 class BadgeSanity(Toggle):
@@ -108,12 +174,30 @@ class OldMan(Choice):
     default = 1
 
 
+class ExpAll(Choice):
+    """Choose how the Exp. All item is handled. It can be removed entirely, shuffled into the item pool, or you can
+    start with it."""
+    display_name = "Exp. All"
+    option_remove = 0
+    option_randomize = 1
+    option_start_with = 2
+    default = 1
+
+
 class RandomizePokedex(Choice):
-    """Randomize the location of the Pokedex, or start with it. It is required to receive items from Oak's Aides."""
+    """Randomize the location of the Pokedex, or start with it."""
     display_name = "Randomize Pokedex"
     option_vanilla = 0
     option_randomize = 1
     option_start_with = 2
+    default = 0
+
+
+class KeyItemsOnly(Toggle):
+    """Shuffle only Key Items. This overrides Randomize Hidden Items, Trainersanity, and Dexsanity.
+    Sets all non-excluded locations in your game to Priority Locations.
+    May have high generation failure rates for solo games or small multiworlds, especially with Door Shuffle."""
+    display_name = "Key Items Only"
     default = 0
 
 
@@ -129,6 +213,24 @@ class ExtraKeyItems(Toggle):
     Adds four item pickups to Rock Tunnel B1F."""
     display_name = "Extra Key Items"
     default = 0
+
+
+class SplitCardKey(Choice):
+    """Splits the Card Key item into 10 different Keys, one for each Silph Co floor 2F through 11F.
+    Adds location checks to 9 NPCs in Silph Co.
+    With Progressive, you will always obtain the keys in order from 2F to 11F."""
+    display_name = "Split Card Key"
+    option_off = 0
+    option_on = 1
+    option_progressive = 2
+    default = 0
+
+
+class AllElevatorsLocked(Toggle):
+    """Adds requirements to the Celadon Department Store elevator and Silph Co elevators to have the Lift Key.
+    No logical implications normally, but may have a significant impact on Insanity Door Shuffle."""
+    display_name = "All Elevators Locked"
+    default = 1
 
 
 class ExtraStrengthBoulders(Toggle):
@@ -177,42 +279,95 @@ class RequirePokedex(Toggle):
 
 class AllPokemonSeen(Toggle):
     """Start with all Pokemon "seen" in your Pokedex. This allows you to see where Pokemon can be encountered in the
-    wild. Pokemon found by fishing or in the Cerulean Cave are not displayed."""
+    wild. Pokemon found by fishing or in the Cerulean Cave are not displayed.
+    The Pokedex also shows which HMs can be learned by Pokemon registered as seen."""
     default = 0
     display_name = "All Pokemon Seen"
 
 
-class DexSanity(Toggle):
-    """Adds a location check for each Pokemon flagged "Owned" on your Pokedex. If accessibility is set to `locations`
-    and randomize_wild_pokemon is off, catch_em_all is not `all_pokemon` or randomize_legendary_pokemon is not `any`,
-    accessibility will be forced to `items` instead, as not all Dexsanity locations can be guaranteed to be considered
-    reachable in logic.
+class DexSanity(SpecialRange):
+    """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify a percentage of Pokemon to
+    have checks added. If Accessibility is set to locations, this will be the percentage of all logically reachable
+    Pokemon that will get a location check added to it. With items or minimal Accessibility, it will be the percentage
+    of all 151 Pokemon.
     If Pokedex is required, the items for Pokemon acquired before acquiring the Pokedex can be found by talking to
     Professor Oak or evaluating the Pokedex via Oak's PC."""
     display_name = "Dexsanity"
     default = 0
+    range_start = 0
+    range_end = 100
+    special_range_names = {
+        "disabled": 0,
+        "full": 100
+    }
 
 
 class FreeFlyLocation(Toggle):
-    """One random fly destination will be unlocked by default."""
+    """One random Fly destination will be unlocked by default."""
     display_name = "Free Fly Location"
     default = 1
 
 
+class TownMapFlyLocation(Toggle):
+    """One random Fly destination will be unlocked when you obtain the Town Map."""
+    display_name = "Town Map Fly Location"
+    default = 0
+
+
+class DoorShuffle(Choice):
+    """Simple: entrances are randomized together in groups: Pokemarts, Gyms, single exit dungeons, dual exit dungeons,
+    single exit misc interiors, dual exit misc interiors are all shuffled separately. Safari Zone is not shuffled.
+    Full: Any outdoor entrance may lead to any interior.
+    Insanity: All rooms in the game are shuffled."""
+    display_name = "Door Shuffle"
+    option_off = 0
+    option_simple = 1
+    option_full = 2
+    option_insanity = 3
+    # Disabled for now, has issues with elevators that need to be resolved
+    # option_decoupled = 4
+    default = 0
+
+    # remove assertions that blow up checks for decoupled
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            return other == self.current_key
+        elif isinstance(other, int):
+            return other == self.value
+        elif isinstance(other, bool):
+            return other == bool(self.value)
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+
+class WarpTileShuffle(Toggle):
+    """Shuffle the warp tiles in Silph Co and Sabrina's Gym among themselves, separately.
+    On Insanity, turning this off means they are mixed into the general door shuffle instead of only being shuffled
+    among themselves."""
+    display_name = "Warp Tile Shuffle"
+    default = 0
+
+
 class RandomizeRockTunnel(Toggle):
-    """Randomize the layout of Rock Tunnel. This is highly experimental, if you encounter any issues (items or trainers
-     unreachable, trainers walking over walls, inability to reach end of tunnel, anything looking strange) to
-     Alchav#8826 in the Archipelago Discord (directly or in #pkmn-red-blue) along with the seed number found on the
-     signs outside the tunnel."""
+    """Randomize the layout of Rock Tunnel.
+    If Insanity Door Shuffle is on, this will cause only the main entrances to Rock Tunnel to be shuffled."""
     display_name = "Randomize Rock Tunnel"
     default = 0
+
+
+class DarkRockTunnelLogic(Toggle):
+    """Logically require Flash to traverse the Rock Tunnel, so you are never forced to traverse it in the dark."""
+    display_name = "Dark Rock Tunnel Logic"
+    default = 1
 
 
 class OaksAidRt2(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2.
     Vanilla is 10."""
     display_name = "Oak's Aide Route 2"
-    range_start = 0
+    range_start = 1
     range_end = 80
     default = 10
 
@@ -221,7 +376,7 @@ class OaksAidRt11(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 11.
     Vanilla is 30."""
     display_name = "Oak's Aide Route 11"
-    range_start = 0
+    range_start = 1
     range_end = 80
     default = 20
 
@@ -230,17 +385,39 @@ class OaksAidRt15(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 15.
     Vanilla is 50."""
     display_name = "Oak's Aide Route 15"
-    range_start = 0
+    range_start = 1
     range_end = 80
     default = 30
+
+
+class Stonesanity(Toggle):
+    """Removes the four evolution stones from the Celadon Department Store and replaces four of the five Moon Stones
+    in the item pool with the four shop stones. If randomize_hidden_items is off, this will cause the two hidden
+    Moon Stone locations to be randomized anyway. These are in Pokemon Mansion 1F and Mt Moon B2F."""
+    display_name = "Stonesanity"
+    default = 0
+
+
+class LevelScaling(Choice):
+    """Off: Encounters use vanilla game levels.
+    By Spheres: Levels are scaled by access sphere. Areas reachable in later spheres will have higher levels.
+    Spheres and Distance: Levels are scaled by access spheres as well as distance from Pallet Town, measured by number
+    of internal region connections. This is a much more severe curving of levels and may lead to much less variation in
+    levels found in a particular map. However, it may make the higher door shuffle settings significantly more bearable,
+    as these options more often result in a smaller number of larger access spheres."""
+    display_name = "Level Scaling"
+    option_off = 0
+    option_by_spheres = 1
+    option_by_spheres_and_distance = 2
+    default = 1
 
 
 class ExpModifier(SpecialRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
-    range_start = 0
-    range_end = 255
     default = 16
+    range_start = default / 4
+    range_end = 255
     special_range_names = {
         "half": default / 2,
         "normal": default,
@@ -351,7 +528,7 @@ class MinimumStepsBetweenEncounters(Range):
     """Minimum number of steps between wild Pokemon encounters."""
     display_name = "Minimum Steps Between Encounters"
     default = 3
-    range_start = 0
+    range_start = 1
     range_end = 255
 
 
@@ -387,6 +564,14 @@ class MoveBalancing(Toggle):
     default = 0
 
 
+class FixCombatBugs(Toggle):
+    """Fixes a variety of combat-related bugs. Note that this fixes the Focus Energy bug. The Focus Energy bug causes
+    critical strike chances to be doubled when Focus Energy has not been used and halved when it is used.
+    Fixing this bug means critical strike chances outside the use of Focus Energy are quartered from the vanilla rate."""
+    display_name = "Fix Combat Bugs"
+    default = 1
+
+
 class RandomizePokemonMovesets(Choice):
     """Randomize the moves learned by Pokemon. prefer_types will prefer moves that match the type of the Pokemon."""
     display_name = "Randomize Pokemon Movesets"
@@ -401,6 +586,7 @@ class ConfineTranstormToDitto(Toggle):
     If an enemy Pokemon uses transform before you catch it, it will permanently change to Ditto after capture."""
     display_name = "Confine Transform to Ditto"
     default = 1
+
 
 class StartWithFourMoves(Toggle):
     """If movesets are randomized, this will give all Pokemon 4 starting moves."""
@@ -483,6 +669,12 @@ class RandomizePokemonTypes(Choice):
     default = 0
 
 
+class RandomizeMoveTypes(Toggle):
+    """Randomize the types of each move."""
+    display_name = "Randomize Move Types"
+    default = 0
+
+
 class SecondaryTypeChance(SpecialRange):
     """If randomize_pokemon_types is on, this is the chance each Pokemon will have a secondary type. If follow_evolutions
     is selected, it is the chance a second type will be added at each evolution stage. vanilla will give secondary types
@@ -511,7 +703,7 @@ class RandomizeTypeChart(Choice):
 
 
 class NormalMatchups(Range):
-    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for neutral matchups.
+    """If 'randomize' is chosen for Randomize Type Chart, this will be the weight for neutral matchups.
     No effect if 'chaos' is chosen"""
     display_name = "Normal Matchups"
     default = 143
@@ -520,7 +712,7 @@ class NormalMatchups(Range):
 
 
 class SuperEffectiveMatchups(Range):
-    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for super effective matchups.
+    """If 'randomize' is chosen for Randomize Type Chart, this will be the weight for super effective matchups.
     No effect if 'chaos' is chosen"""
     display_name = "Super Effective Matchups"
     default = 38
@@ -529,7 +721,7 @@ class SuperEffectiveMatchups(Range):
 
 
 class NotVeryEffectiveMatchups(Range):
-    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for not very effective matchups.
+    """If 'randomize' is chosen for Randomize Type Chart, this will be the weight for not very effective matchups.
     No effect if 'chaos' is chosen"""
     display_name = "Not Very Effective Matchups"
     default = 38
@@ -538,7 +730,7 @@ class NotVeryEffectiveMatchups(Range):
 
 
 class ImmunityMatchups(Range):
-    """If 'randomize' is chosen for randomize_type_chart, this will be the exact number of immunities.
+    """If 'randomize' is chosen for Randomize Type Chart, this will be the exact number of immunities.
     No effect if 'chaos' is chosen"""
     display_name = "Immunity Matchups"
     default = 6
@@ -547,7 +739,7 @@ class ImmunityMatchups(Range):
 
 
 class SafariZoneNormalBattles(Toggle):
-    """Change the Safari Zone to have standard wild pokemon battles."""
+    """Change the Safari Zone to have standard wild Pokemon battles."""
     display_name = "Safari Zone Normal Battles"
     default = 0
 
@@ -576,7 +768,7 @@ class BetterShops(Choice):
 
 
 class MasterBallPrice(Range):
-    """Price for Master Balls. Can only be bought if better_shops is set to add_master_ball, but this will affect the
+    """Price for Master Balls. Can only be bought if Better Shops is set to Add Master Ball, but this will affect the
     sell price regardless. Vanilla is 0"""
     display_name = "Master Ball Price"
     range_end = 999999
@@ -628,9 +820,30 @@ class ParalyzeTrapWeight(TrapWeight):
     display_name = "Paralyze Trap Weight"
 
 
+class SleepTrapWeight(TrapWeight):
+    """Weights for Sleep Traps. These apply the Sleep status to all your party members, for randomly between 1 and 7 turns."""
+    display_name = "Sleep Trap Weight"
+
+
 class IceTrapWeight(TrapWeight):
     """Weights for Ice Traps. These apply the Ice status to all your party members. Don't forget to buy Ice Heals!"""
     display_name = "Ice Trap Weight"
+    default = 0
+
+
+class PokeDollSkip(Choice):
+    """Patch out the Pokemon Tower Poke Doll skip or have this skip considered in logic."""
+    display_name = "Poke Doll Skip"
+    option_patched = 0
+    option_in_logic = 1
+    default = 0
+
+
+class BicycleGateSkips(Choice):
+    """Patch out the Route 16/18 Bicycle Gate skips or have these skips considered in logic."""
+    display_name = "Bicycle Gate Skips"
+    option_patched = 0
+    option_in_logic = 1
     default = 0
 
 
@@ -650,32 +863,49 @@ pokemon_rb_options = {
     "trainer_name": TrainerName,
     "rival_name": RivalName,
     #"goal": Goal,
-    "elite_four_condition": EliteFourCondition,
+    "elite_four_badges_condition": EliteFourBadgesCondition,
+    "elite_four_key_items_condition": EliteFourKeyItemsCondition,
+    "elite_four_pokedex_condition": EliteFourPokedexCondition,
     "victory_road_condition": VictoryRoadCondition,
+    "route_22_gate_condition": Route22GateCondition,
     "viridian_gym_condition": ViridianGymCondition,
-    "cerulean_cave_condition": CeruleanCaveCondition,
+    "cerulean_cave_badges_condition": CeruleanCaveBadgesCondition,
+    "cerulean_cave_key_items_condition": CeruleanCaveKeyItemsCondition,
+    "route_3_condition": Route3Condition,
+    "robbed_house_officer": RobbedHouseOfficer,
     "second_fossil_check_condition": SecondFossilCheckCondition,
-    "badgesanity": BadgeSanity,
+    "fossil_check_item_types": FossilCheckItemTypes,
+    "exp_all": ExpAll,
     "old_man": OldMan,
-    "randomize_pokedex": RandomizePokedex,
+    "badgesanity": BadgeSanity,
+    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
+    "key_items_only": KeyItemsOnly,
     "tea": Tea,
     "extra_key_items": ExtraKeyItems,
+    "split_card_key": SplitCardKey,
+    "all_elevators_locked": AllElevatorsLocked,
     "extra_strength_boulders": ExtraStrengthBoulders,
     "require_item_finder": RequireItemFinder,
     "randomize_hidden_items": RandomizeHiddenItems,
     "prizesanity": PrizeSanity,
     "trainersanity": TrainerSanity,
+    "dexsanity": DexSanity,
+    "randomize_pokedex": RandomizePokedex,
     "require_pokedex": RequirePokedex,
     "all_pokemon_seen": AllPokemonSeen,
-    "dexsanity": DexSanity,
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,
     "oaks_aide_rt_15": OaksAidRt15,
-    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
-    "free_fly_location": FreeFlyLocation,
+    "stonesanity": Stonesanity,
+    "door_shuffle": DoorShuffle,
+    "warp_tile_shuffle": WarpTileShuffle,
     "randomize_rock_tunnel": RandomizeRockTunnel,
+    "dark_rock_tunnel_logic": DarkRockTunnelLogic,
+    "free_fly_location": FreeFlyLocation,
+    "town_map_fly_location": TownMapFlyLocation,
     "blind_trainers": BlindTrainers,
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
+    "level_scaling": LevelScaling,
     "exp_modifier": ExpModifier,
     "randomize_wild_pokemon": RandomizeWildPokemon,
     "area_1_to_1_mapping": Area1To1Mapping,
@@ -689,6 +919,7 @@ pokemon_rb_options = {
     "randomize_trainer_parties": RandomizeTrainerParties,
     "trainer_legendaries": TrainerLegendaries,
     "move_balancing": MoveBalancing,
+    "fix_combat_bugs": FixCombatBugs,
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
     "confine_transform_to_ditto": ConfineTranstormToDitto,
     "start_with_four_moves": StartWithFourMoves,
@@ -701,6 +932,7 @@ pokemon_rb_options = {
     "hm_normal_type_compatibility": HMNormalTypeCompatibility,
     "hm_other_type_compatibility": HMOtherTypeCompatibility,
     "inherit_tm_hm_compatibility": InheritTMHMCompatibility,
+    "randomize_move_types": RandomizeMoveTypes,
     "randomize_pokemon_types": RandomizePokemonTypes,
     "secondary_type_chance": SecondaryTypeChance,
     "randomize_type_chart": RandomizeTypeChart,
@@ -715,10 +947,13 @@ pokemon_rb_options = {
     "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
     "lose_money_on_blackout": LoseMoneyOnBlackout,
+    "poke_doll_skip": PokeDollSkip,
+    "bicycle_gate_skips": BicycleGateSkips,
     "trap_percentage": TrapPercentage,
     "poison_trap_weight": PoisonTrapWeight,
     "fire_trap_weight": FireTrapWeight,
     "paralyze_trap_weight": ParalyzeTrapWeight,
+    "sleep_trap_weight": SleepTrapWeight,
     "ice_trap_weight": IceTrapWeight,
     "randomize_pokemon_palettes": RandomizePokemonPalettes,
     "death_link": DeathLink

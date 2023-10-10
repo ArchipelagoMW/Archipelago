@@ -377,7 +377,7 @@ Door - 0x0199A (Hedge Maze 4 Shortcut) - 0x019E7
 158196 - 0x01A0F (Hedge Maze 4) - True - True
 Door - 0x01A0E (Hedge Maze 4 Exit) - 0x01A0F
 
-Keep 2nd Pressure Plate (Keep) - Keep 3rd Pressure Plate - 0x01BEA:
+Keep 2nd Pressure Plate (Keep) - Keep 3rd Pressure Plate - True:
 158199 - 0x0A3B9 (Reset Pressure Plates 2) - True - True
 158200 - 0x01BE9 (Pressure Plates 2) - 0x0A3B9 - Stars & Stars + Same Colored Symbol & Black/White Squares
 Door - 0x01BEA (Pressure Plates 2 Exit) - 0x01BE9

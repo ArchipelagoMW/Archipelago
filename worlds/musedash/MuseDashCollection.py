@@ -1,5 +1,6 @@
 from .Items import SongData, AlbumData
 from typing import Dict, List, Optional
+from collections import ChainMap
 
 
 def load_text_file(name: str) -> str:
@@ -9,20 +10,22 @@ def load_text_file(name: str) -> str:
 
 class MuseDashCollections:
     """Contains all the data of Muse Dash, loaded from MuseDashData.txt."""
+    STARTING_CODE = 2900000
 
-    MUSIC_SHEET_CODE: int
+    MUSIC_SHEET_NAME: str = "Music Sheet"
+    MUSIC_SHEET_CODE: int = STARTING_CODE
 
     FREE_ALBUMS = [
         "Default Music",
         "Budget Is Burning: Nano Core",
-        "Budget is Burning Vol.1"
+        "Budget Is Burning Vol.1",
     ]
 
     DIFF_OVERRIDES = [
         "MuseDash ka nanika hi",
         "Rush-Hour",
         "Find this Month's Featured Playlist",
-        "PeroPero in the Universe"
+        "PeroPero in the Universe",
     ]
 
     album_items: Dict[str, AlbumData] = {}
@@ -31,43 +34,43 @@ class MuseDashCollections:
     song_locations: Dict[str, int] = {}
 
     vfx_trap_items: Dict[str, int] = {
-        "Bad Apple Trap": 1,
-        "Pixelate Trap": 2,
-        "Random Wave Trap": 3,
-        "Shadow Edge Trap": 4,
-        "Chromatic Aberration Trap": 5,
-        "Background Freeze Trap": 6,
-        "Gray Scale Trap": 7,
+        "Bad Apple Trap": STARTING_CODE + 1,
+        "Pixelate Trap": STARTING_CODE + 2,
+        "Random Wave Trap": STARTING_CODE + 3,
+        "Shadow Edge Trap": STARTING_CODE + 4,
+        "Chromatic Aberration Trap": STARTING_CODE + 5,
+        "Background Freeze Trap": STARTING_CODE + 6,
+        "Gray Scale Trap": STARTING_CODE + 7,
     }
 
     sfx_trap_items: Dict[str, int] = {
-        "Nyaa SFX Trap": 8,
-        "Error SFX Trap": 9,
+        "Nyaa SFX Trap": STARTING_CODE + 8,
+        "Error SFX Trap": STARTING_CODE + 9,
     }
 
-    def __init__(self, start_item_id: int, items_per_location: int):
-        self.MUSIC_SHEET_CODE = start_item_id
+    item_names_to_id = ChainMap({}, sfx_trap_items, vfx_trap_items)
+    location_names_to_id = ChainMap(song_locations, album_locations)
 
-        self.vfx_trap_items = {k: (v + start_item_id) for (k, v) in self.vfx_trap_items.items()}
-        self.sfx_trap_items = {k: (v + start_item_id) for (k, v) in self.sfx_trap_items.items()}
+    def __init__(self) -> None:
+        self.item_names_to_id[self.MUSIC_SHEET_NAME] = self.MUSIC_SHEET_CODE
 
-        item_id_index = start_item_id + 50
-        location_id_index = start_item_id
-
+        item_id_index = self.STARTING_CODE + 50
         full_file = load_text_file("MuseDashData.txt")
-
+        seen_albums = set()
         for line in full_file.splitlines():
             line = line.strip()
             sections = line.split("|")
 
-            if sections[2] not in self.album_items:
-                self.album_items[sections[2]] = AlbumData(item_id_index)
+            album = sections[2]
+            if album not in seen_albums:
+                seen_albums.add(album)
+                self.album_items[album] = AlbumData(item_id_index)
                 item_id_index += 1
 
             # Data is in the format 'Song|UID|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
             song_name = sections[0]
             # [1] is used in the client copy to make sure item id's match.
-            song_is_free = sections[2] in self.FREE_ALBUMS
+            song_is_free = album in self.FREE_ALBUMS
             steamer_mode = sections[3] == "True"
 
             if song_name in self.DIFF_OVERRIDES:
@@ -85,17 +88,19 @@ class MuseDashCollections:
                                                   diff_of_easy, diff_of_hard, diff_of_master)
             item_id_index += 1
 
+        self.item_names_to_id.update({name: data.code for name, data in self.song_items.items()})
+        self.item_names_to_id.update({name: data.code for name, data in self.album_items.items()})
+
+        location_id_index = self.STARTING_CODE
         for name in self.album_items.keys():
-            for i in range(0, items_per_location):
-                new_name = f"{name}-{i}"
-                self.album_locations[new_name] = location_id_index
-                location_id_index += 1
+            self.album_locations[f"{name}-0"] = location_id_index
+            self.album_locations[f"{name}-1"] = location_id_index + 1
+            location_id_index += 2
 
         for name in self.song_items.keys():
-            for i in range(0, items_per_location):
-                new_name = f"{name}-{i}"
-                self.song_locations[new_name] = location_id_index
-                location_id_index += 1
+            self.song_locations[f"{name}-0"] = location_id_index
+            self.song_locations[f"{name}-1"] = location_id_index + 1
+            location_id_index += 2
 
     def get_songs_with_settings(self, dlc_songs: bool, streamer_mode_active: bool,
                                 diff_lower: int, diff_higher: int) -> List[str]:
