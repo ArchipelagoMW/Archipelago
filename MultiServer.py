@@ -563,7 +563,7 @@ class Context:
             raise Exception("This savegame is newer than the server.")
         self.received_items = savedata["received_items"]
         self.hints_used.update(savedata.get("hints_used", None))
-        self.hint_points.update(savedata.get("hint_points", 0))
+        self.hint_points.update(savedata.get("hint_points", {}))
         self.hints.update(savedata["hints"])
 
         self.name_aliases.update(savedata["name_aliases"])
@@ -581,7 +581,7 @@ class Context:
             self.hint_cost = savedata["game_options"]["hint_cost"]
             self.location_check_points = savedata["game_options"]["location_check_points"]
             if not self.hint_points and self.hints_used:  # TODO remove ~0.4.5
-                self.hint_points.update({len(self.location_checks[team, slot]) * self.location_check_points
+                self.hint_points.update({(team, slot): len(self.location_checks[team, slot]) * self.location_check_points
                                          - self.hint_cost * self.hints_used[team, slot]
                                          for team, slot in self.hints})
                 del self.hints_used
@@ -1555,7 +1555,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
             recipient_team, recipient_slot = self.ctx.player_name_lookup[recipient]
             recipient_cost = self.ctx.get_hint_cost(recipient_slot)
             self.ctx.hint_points[recipient_team, recipient_slot] += recipient_cost
+            self.ctx.on_new_hint(recipient_team, recipient_slot)
             self.ctx.hint_points[self.client.team, self.client.slot] -= cost
+            self.ctx.on_new_hint(self.client.team, self.client.slot)
             return True
         self.output(f"Unable to gift hint. You have {points_available} points and need at least {cost}.")
         return False
@@ -2139,7 +2141,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 recipient_team, recipient_slot = self.ctx.player_name_lookup[recipient]
                 recipient_cost = self.ctx.get_hint_cost(recipient_slot)
                 self.ctx.hint_points[recipient_team, recipient_slot] += recipient_cost
+                self.ctx.on_new_hint(recipient_team, recipient_slot)
                 self.ctx.hint_points[team, slot] -= cost
+                self.ctx.on_new_hint(self.client.team, self.client.slot)
                 return True
             self.output(f"Unable to gift hint. You have {points_available} points and need at least {cost}.")
             return False
