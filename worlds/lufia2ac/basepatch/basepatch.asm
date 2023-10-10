@@ -45,8 +45,8 @@ org $8EA721  ; skip master fight dialogue
     DB $1C,$45,$01          ; L2SASM JMP $8EA5FA+$0145
 org $8EA74B  ; skip master victory dialogue
     DB $1C,$AC,$01          ; L2SASM JMP $8EA5FA+$01AC
-org $8EA7AA  ; skip master key dialogue
-    DB $1C,$CA,$01          ; L2SASM JMP $8EA5FA+$01CA
+org $8EA7AA  ; skip master key dialogue and animation
+    DB $1C,$EE,$01          ; L2SASM JMP $8EA5FA+$01EE
 org $8EA7F4  ; skip master goodbye dialogue
     DB $1C,$05,$02          ; L2SASM JMP $8EA5FA+$0205
 org $8EA807  ; skip master not fight dialogue
@@ -126,7 +126,7 @@ Init:
 
 
 
-; transmit checks
+; transmit checks from chests
 pushpc
 org $8EC1EB
     JML TX                  ; overwrites JSL $83F559
@@ -136,11 +136,17 @@ TX:
     JSL $83F559             ; (overwritten instruction) chest opening animation
     REP #$20
     LDA $7FD4EF             ; read chest item ID
-    BIT.w #$4000            ; test for blue chest flag
+    BIT.w #$0200            ; test for iris item flag
     BEQ +
-    LDA $F02040             ; load check counter
+    JSR ReportLocationCheck
+    SEP #$20
+    JML $8EC331             ; skip item get process
++:  BIT.w #$4200            ; test for blue chest flag
+    BEQ +
+    LDA $F02048             ; load total blue chests checked
     CMP $D08010             ; compare against max AP item number
     BPL +
+    LDA $F02040             ; load check counter
     INC                     ; increment check counter
     STA $F02040             ; store check counter
     SEP #$20
@@ -150,39 +156,54 @@ TX:
 
 
 
-; report event flag based goal completion
+; transmit checks from script events
 pushpc
-org $D09000
-    DB $00,$01,$01,$02,$01,$02,$02,$03,$01,$02,$02,$03,$02,$03,$03,$04, \
-       $01,$02,$02,$03,$02,$03,$03,$04,$02,$03,$03,$04,$03,$04,$04,$05, \
-       $01,$02,$02,$03,$02,$03,$03,$04,$02,$03,$03,$04,$03,$04,$04,$05, \
-       $02,$03,$03,$04,$03,$04,$04,$05,$03,$04,$04,$05,$04,$05,$05,$06, \
-       $01,$02,$02,$03,$02,$03,$03,$04,$02,$03,$03,$04,$03,$04,$04,$05, \
-       $02,$03,$03,$04,$03,$04,$04,$05,$03,$04,$04,$05,$04,$05,$05,$06, \
-       $02,$03,$03,$04,$03,$04,$04,$05,$03,$04,$04,$05,$04,$05,$05,$06, \
-       $03,$04,$04,$05,$04,$05,$05,$06,$04,$05,$05,$06,$05,$06,$06,$07, \
-       $01,$02,$02,$03,$02,$03,$03,$04,$02,$03,$03,$04,$03,$04,$04,$05, \
-       $02,$03,$03,$04,$03,$04,$04,$05,$03,$04,$04,$05,$04,$05,$05,$06, \
-       $02,$03,$03,$04,$03,$04,$04,$05,$03,$04,$04,$05,$04,$05,$05,$06, \
-       $03,$04,$04,$05,$04,$05,$05,$06,$04,$05,$05,$06,$05,$06,$06,$07, \
-       $02,$03,$03,$04,$03,$04,$04,$05,$03,$04,$04,$05,$04,$05,$05,$06, \
-       $03,$04,$04,$05,$04,$05,$05,$06,$04,$05,$05,$06,$05,$06,$06,$07, \
-       $03,$04,$04,$05,$04,$05,$05,$06,$04,$05,$05,$06,$05,$06,$06,$07, \
-       $04,$05,$05,$06,$05,$06,$06,$07,$05,$06,$06,$07,$06,$07,$07,$08
+org $80A435
+    ; DB=$8E, x=0, m=1
+    JML ScriptTX            ; overwrites STA $7FD4F1
 pullpc
 
+ScriptTX:
+    STA $7FD4F1             ; (overwritten instruction)
+    REP #$20
+    LDA $7FD4EF             ; read script item id
+    CMP.w #$01C2            ; test for ancient key
+    BNE +
+    JSR ReportLocationCheck
+    SEP #$20
+    JML $80A47F             ; skip item get process
++:  SEP #$20
+    JML $80A439             ; continue item get process
+
+
+
+ReportLocationCheck:
+    PHA                     ; remember item id
+    LDA $F0204A             ; load other locations count
+    INC                     ; increment check counter
+    STA $F0204A             ; store other locations count
+    DEC
+    ASL
+    TAX
+    PLA
+    STA $F02060,X           ; store item id in checked locations list
+    RTS
+
+
+
+; report event flag based goal completion
 Goal:
     TDC
-    LDA $0797               ; load some event flags (iris sword, iris shield, ..., iris pot)
+    LDA $0797               ; load EV flags $C8-$CF (iris sword, iris shield, ..., iris pot)
     TAX
-    LDA $0798               ; load some event flags (iris tiara, boss, others...)
+    LDA $0798               ; load EV flags $D0-$D7 (iris tiara, boss, others...)
     TAY
     AND.b #$02              ; test boss victory
     LSR
     STA $F02031             ; report boss victory goal
     TYA
     AND.b #$01              ; test iris tiara
-    ADC $D09000,X           ; test remaining iris items via lookup table
+    ADC $97B418,X           ; test remaining iris items via predefined lookup table for number of bits set in a byte
     CMP $D08017             ; compare with number of treasures required
     BMI +
     LDA.b #$01
@@ -223,16 +244,32 @@ RX:
 SpecialItemGet:
     BPL +                   ; spells have high bit set
     JSR LearnSpell
++:  BIT.w #$0200            ; iris items
+    BEQ +
+    SEC
+    SBC.w #$039C
+    ASL
+    TAX
+    LDA $8ED8C3,X           ; load predefined bitmask with a single bit set
+    ORA $0797
+    STA $0797               ; set iris item EV flag ($C8-$D0)
+    BRA ++
++:  CMP.w #$01C2            ; ancient key
+    BNE +
+    LDA.w #$0200
+    ORA $0797
+    STA $0797               ; set boss item EV flag ($D1)
+    BRA ++
 +:  CMP.w #$01BF            ; capsule monster items range from $01B8 to $01BE
-    BPL +
+    BPL ++
     SBC.w #$01B1            ; party member items range from $01B2 to $01B7
-    BMI +
+    BMI ++
     ASL
     TAX
     LDA $8ED8C7,X           ; load predefined bitmask with a single bit set
     ORA $F02018             ; set unlock bit for party member/capsule monster
     STA $F02018
-+:  RTS
+++: RTS
 
 LearnSpell:
     STA $0A0B
@@ -634,7 +671,7 @@ StartInventory:
     PHX
     JSR LearnSpell
     PLX
-+:  BIT.w #$C000            ; ignore blue chest items (and spells)
++:  BIT.w #$C200            ; ignore spells, blue chest items, and iris items
     BNE +
     PHX
     STA $09CF               ; specify item ID
@@ -1025,12 +1062,16 @@ pullpc
 ; $F0203D   1   death link enabled
 ; $F0203E   1   death link sent (monster id + 1)
 ; $F0203F   1   death link received
-; $F02040   2   check counter (snes_items_sent)
-; $F02042   2   check counter (client_items_sent)
+; $F02040   2   check counter for this save file (snes_blue_chests_checked)
+; $F02042   2   RESERVED
 ; $F02044   2   check counter (client_ap_items_found)
 ; $F02046   2   check counter (snes_ap_items_found)
+; $F02048   2   check counter for the slot (total_blue_chests_checked)
+; $F0204A   2   check counter for this save file (snes_other_locations_checked)
+; $F02050   16  coop uuid
+; $F02060   var list of checked locations
 ; $F027E0   16  saved RX counters
 ; $F02800   2   received counter
 ; $F02802   2   processed counter
-; $F02804   inf list of received items
-; $F06000   inf architect mode RNG state backups
+; $F02804   var list of received items
+; $F06000   var architect mode RNG state backups

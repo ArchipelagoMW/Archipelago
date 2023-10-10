@@ -16,11 +16,11 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
-from typing import Set, Dict
+from typing import Set, Dict, cast, List
 from logging import warning
 
 from BaseClasses import MultiWorld
-from .static_logic import StaticWitnessLogic
+from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
     get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list, get_doors_max_list, \
     get_doors_simple_list, get_laser_shuffle, get_ep_all_individual, get_ep_obelisks, get_ep_easy, get_ep_no_eclipse, \
@@ -124,31 +124,41 @@ class WitnessPlayerLogic:
 
         if adj_type == "Items":
             line_split = line.split(" - ")
-            item = line_split[0]
+            item_name = line_split[0]
 
-            if item not in StaticWitnessItems.ALL_ITEM_TABLE:
-                raise RuntimeError("Item \"" + item + "\" does not exit.")
+            if item_name not in StaticWitnessItems.item_data:
+                raise RuntimeError("Item \"" + item_name + "\" does not exist.")
 
-            self.THEORETICAL_ITEMS.add(item)
-            self.THEORETICAL_ITEMS_NO_MULTI.update(StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.get(item, [item]))
+            self.THEORETICAL_ITEMS.add(item_name)
+            if isinstance(StaticWitnessLogic.all_items[item_name], ProgressiveItemDefinition):
+                self.THEORETICAL_ITEMS_NO_MULTI.update(cast(ProgressiveItemDefinition,
+                                                            StaticWitnessLogic.all_items[item_name]).child_item_names)
+            else:
+                self.THEORETICAL_ITEMS_NO_MULTI.add(item_name)
 
-            if item in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
-                panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[item][2]
+            if StaticWitnessLogic.all_items[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
+                panel_hexes = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name]).panel_id_hexes
                 for panel_hex in panel_hexes:
-                    self.DOOR_ITEMS_BY_ID.setdefault(panel_hex, set()).add(item)
+                    self.DOOR_ITEMS_BY_ID.setdefault(panel_hex, []).append(item_name)
 
             return
 
         if adj_type == "Remove Items":
-            self.THEORETICAL_ITEMS.discard(line)
-            for i in StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.get(line, [line]):
-                self.THEORETICAL_ITEMS_NO_MULTI.discard(i)
+            item_name = line
 
-            if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
-                panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
+            self.THEORETICAL_ITEMS.discard(item_name)
+            if isinstance(StaticWitnessLogic.all_items[item_name], ProgressiveItemDefinition):
+                self.THEORETICAL_ITEMS_NO_MULTI\
+                    .difference_update(cast(ProgressiveItemDefinition,
+                                            StaticWitnessLogic.all_items[item_name]).child_item_names)
+            else:
+                self.THEORETICAL_ITEMS_NO_MULTI.discard(item_name)
+
+            if StaticWitnessLogic.all_items[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
+                panel_hexes = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name]).panel_id_hexes
                 for panel_hex in panel_hexes:
-                    if panel_hex in self.DOOR_ITEMS_BY_ID:
-                        self.DOOR_ITEMS_BY_ID[panel_hex].discard(line)
+                    if panel_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[panel_hex]:
+                        self.DOOR_ITEMS_BY_ID[panel_hex].remove(item_name)
 
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
@@ -186,7 +196,9 @@ class WitnessPlayerLogic:
 
             if len(line_split) > 2:
                 required_items = parse_lambda(line_split[2])
-                items_actually_in_the_game = {item[0] for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS}
+                items_actually_in_the_game = [item_name for item_name, item_definition
+                                              in StaticWitnessLogic.all_items.items()
+                                              if item_definition.category is ItemCategory.SYMBOL]
                 required_items = frozenset(
                     subset.intersection(items_actually_in_the_game)
                     for subset in required_items
@@ -296,21 +308,21 @@ class WitnessPlayerLogic:
         elif get_option_value(world, player, "shuffle_EPs") == 1:  # Individual EPs
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
-        else:  # Obelisk Sides
-            yaml_disabled_eps = []
+        yaml_disabled_eps = []
 
-            for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
-                if yaml_disabled_location not in StaticWitnessLogic.CHECKS_BY_NAME:
-                    continue
+        for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
+            if yaml_disabled_location not in StaticWitnessLogic.CHECKS_BY_NAME:
+                continue
 
-                loc_obj = StaticWitnessLogic.CHECKS_BY_NAME[yaml_disabled_location]
+            loc_obj = StaticWitnessLogic.CHECKS_BY_NAME[yaml_disabled_location]
 
-                if loc_obj["panelType"] != "EP":
-                    continue
-
+            if loc_obj["panelType"] == "EP" and get_option_value(world, player, "shuffle_EPs") == 2:
                 yaml_disabled_eps.append(loc_obj["checkHex"])
 
-            adjustment_linesets_in_order.append(["Precompleted Locations:"] + yaml_disabled_eps)
+            if loc_obj["panelType"] in {"EP", "General"}:
+                self.EXCLUDED_LOCATIONS.add(loc_obj["checkHex"])
+
+        adjustment_linesets_in_order.append(["Precompleted Locations:"] + yaml_disabled_eps)
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
@@ -337,12 +349,14 @@ class WitnessPlayerLogic:
 
         for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
             if item not in self.THEORETICAL_ITEMS:
-                corresponding_multi = StaticWitnessLogic.ITEMS_TO_PROGRESSIVE[item]
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(corresponding_multi)
-                multi_list = StaticWitnessLogic.PROGRESSIVE_TO_ITEMS[StaticWitnessLogic.ITEMS_TO_PROGRESSIVE[item]]
-                multi_list = [item for item in multi_list if item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
+                progressive_item_name = StaticWitnessLogic.get_parent_progressive_item(item)
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
+                child_items = cast(ProgressiveItemDefinition,
+                                   StaticWitnessLogic.all_items[progressive_item_name]).child_item_names
+                multi_list = [child_item for child_item in child_items
+                              if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
                 self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
-                self.MULTI_LISTS[corresponding_multi] = multi_list
+                self.MULTI_LISTS[progressive_item_name] = multi_list
             else:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
@@ -407,7 +421,7 @@ class WitnessPlayerLogic:
         self.MULTI_LISTS = dict()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
-        self.DOOR_ITEMS_BY_ID = dict()
+        self.DOOR_ITEMS_BY_ID: Dict[str, List[int]] = {}
         self.STARTING_INVENTORY = set()
 
         self.DIFFICULTY = get_option_value(world, player, "puzzle_randomization")
@@ -430,6 +444,7 @@ class WitnessPlayerLogic:
         self.ALWAYS_EVENT_HEX_CODES = set()
         self.COMPLETELY_DISABLED_CHECKS = set()
         self.PRECOMPLETED_LOCATIONS = set()
+        self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
         self.EVENT_ITEM_NAMES = {

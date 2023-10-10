@@ -59,3 +59,13 @@ class TestBase(unittest.TestCase):
                                  f"{game_name} modified region count during pre_fill")
                 self.assertGreaterEqual(location_count, len(multiworld.get_locations()),
                                         f"{game_name} modified locations count during pre_fill")
+    
+    def testLocationGroup(self):
+        """Test that all location name groups contain valid locations and don't share names."""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest(game_name, game_name=game_name):
+                for group_name, locations in world_type.location_name_groups.items():
+                    with self.subTest(group_name, group_name=group_name):
+                        for location in locations:
+                            self.assertIn(location, world_type.location_name_to_id)
+                        self.assertNotIn(group_name, world_type.location_name_to_id)

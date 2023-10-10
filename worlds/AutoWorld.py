@@ -4,21 +4,34 @@ import hashlib
 import logging
 import pathlib
 import sys
-from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
+from dataclasses import make_dataclass
+from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
     Union
 
+from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
-from Options import AssembleOptions
 
 if TYPE_CHECKING:
+    import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
+    from settings import Group
 
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
     __file__: str
     zip_path: Optional[str]
+    settings_key: str
+    __settings: Any
+
+    @property
+    def settings(cls) -> Any:  # actual type is defined in World
+        # lazy loading + caching to minimize runtime cost
+        if cls.__settings is None:
+            from settings import get_settings
+            cls.__settings = get_settings()[cls.settings_key]
+        return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -51,6 +64,12 @@ class AutoWorldRegister(type):
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
 
+        # create missing options_dataclass from legacy option_definitions
+        # TODO - remove this once all worlds use options dataclasses
+        if "options_dataclass" not in dct and "option_definitions" in dct:
+            dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
+                                                      bases=(PerGameCommonOptions,))
+
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
@@ -60,6 +79,11 @@ class AutoWorldRegister(type):
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
+        if "settings_key" not in dct:
+            mod_name = new_class.__module__
+            world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
+            new_class.settings_key = world_folder_name + "_options"
+        new_class.__settings = None
         return new_class
 
 
@@ -81,7 +105,17 @@ class AutoLogicRegister(type):
 
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
-    return method(*args)
+    try:
+        ret = method(*args)
+    except Exception as e:
+        message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
+        if sys.version_info >= (3, 11, 0):
+            e.add_note(message)  # PEP 678
+        else:
+            logging.error(message)
+        raise e
+    else:
+        return ret
 
 
 def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
@@ -98,9 +132,7 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
                         f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
                         f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
-    # TODO: investigate: Iterating through a set is not a deterministic order.
-    # If any random is used, this could make unreproducible seed.
-    for world_type in world_types:
+    for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
             stage_callable(multiworld, *args)
@@ -138,8 +170,11 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: ClassVar[Dict[str, AssembleOptions]] = {}
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
     """link your Options mapping"""
+    options: PerGameCommonOptions
+    """resulting options for the player of this world"""
+
     game: ClassVar[str]
     """name the game"""
     topology_present: ClassVar[bool] = False
@@ -205,6 +240,14 @@ class World(metaclass=AutoWorldRegister):
     location_names: ClassVar[Set[str]]
     """set of all potential location names"""
 
+    random: random.Random
+    """This world's random object. Should be used for any randomization needed in world for this player slot."""
+
+    settings_key: ClassVar[str]
+    """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
+    settings: ClassVar[Optional["Group"]]
+    """loaded settings from host.yaml"""
+
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
@@ -213,6 +256,11 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.multiworld = multiworld
         self.player = player
+
+    def __getattr__(self, item: str) -> Any:
+        if item == "settings":
+            return self.__class__.settings
+        raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
@@ -271,8 +319,8 @@ class World(metaclass=AutoWorldRegister):
         This happens before progression balancing, so the items may not be in their final locations yet."""
 
     def generate_output(self, output_directory: str) -> None:
-        """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
+        """This method gets called from a threadpool, do not use multiworld.random here.
+        If you need any last-second randomization, use self.random instead."""
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
@@ -319,6 +367,19 @@ class World(metaclass=AutoWorldRegister):
         """Called when the item pool needs to be filled with additional items to match location count."""
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
+
+    @classmethod
+    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+        """Creates a group, which is an instance of World that is responsible for multiple others.
+        An example case is ItemLinks creating these."""
+        # TODO remove loop when worlds use options dataclass
+        for option_key, option in cls.options_dataclass.type_hints.items():
+            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+        group = cls(multiworld, new_player_id)
+        group.options = cls.options_dataclass(**{option_key: option(option.default)
+                                                 for option_key, option in cls.options_dataclass.type_hints.items()})
+
+        return group
 
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:

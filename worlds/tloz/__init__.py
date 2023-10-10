@@ -1,12 +1,13 @@
-import logging
 import os
 import threading
-import pkgutil
-from typing import NamedTuple, Union, Dict, Any
+from pkgutil import get_data
 
 import bsdiff4
-
 import Utils
+import settings
+import typing
+
+from typing import NamedTuple, Union, Dict, Any
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
 from .Items import item_table, item_prices, item_game_ids
@@ -17,6 +18,28 @@ from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_ea
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
+
+
+class TLoZSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Zelda 1"""
+        description = "The Legend of Zelda (U) ROM File"
+        copy_to = "Legend of Zelda, The (U) (PRG0) [!].nes"
+        md5s = [TLoZDeltaPatch.hash]
+
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching)
+                    true  for operating system default program
+        Alternatively, a path to a program to open the .nes file with
+        """
+
+    class DisplayMsgs(settings.Bool):
+        """Display message inside of Bizhawk"""
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = True
+    display_msgs: typing.Union[DisplayMsgs, bool] = True
 
 
 class TLoZWeb(WebWorld):
@@ -41,6 +64,7 @@ class TLoZWorld(World):
     every time.
     """
     option_definitions = tloz_options
+    settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
     data_version = 1
@@ -76,6 +100,12 @@ class TLoZWorld(World):
         self.rom_name_available_event = threading.Event()
         self.levels = None
         self.filler_items = None
+
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def create_item(self, name: str):
         return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
@@ -162,9 +192,8 @@ class TLoZWorld(World):
         # Remove map/compass check so they're always on
         # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon items.
-        base_patch_location = os.path.dirname(__file__) + "/z1_base_patch.bsdiff4"
-        with open(base_patch_location, "rb") as base_patch:
-            rom_data = bsdiff4.patch(rom.read(), base_patch.read())
+        base_patch = get_data(__name__, "z1_base_patch.bsdiff4")
+        rom_data = bsdiff4.patch(rom.read(), base_patch)
         rom_data = bytearray(rom_data)
         # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should
         # become type 1 boss roars, so we at least keep the sound of roaring where it should be.
@@ -269,8 +298,10 @@ class TLoZWorld(World):
     def modify_multidata(self, multidata: dict):
         import base64
         self.rom_name_available_event.wait()
-        new_name = base64.b64encode(bytes(self.rom_name)).decode()
-        multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+        rom_name = getattr(self, "rom_name", None)
+        if rom_name:
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def get_filler_item_name(self) -> str:
         if self.filler_items is None:

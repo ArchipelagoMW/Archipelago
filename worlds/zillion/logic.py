@@ -28,7 +28,7 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
             if isinstance(z_loc.item, ZillionItem) and z_loc.item.player == p \
             else zz_empty
         zz_r.locations[zz_name].item = zz_item
-        _hash += hash(zz_name) ^ hash(zz_item)
+        _hash += (hash(zz_name) * (z_loc.zz_loc.req.gun + 2)) ^ hash(zz_item)
     return _hash
 
 

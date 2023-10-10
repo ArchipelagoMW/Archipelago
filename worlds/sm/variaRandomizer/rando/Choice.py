@@ -1,7 +1,7 @@
 import random
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.utils.utils import getRangeDict, chooseFromRange
-from worlds.sm.variaRandomizer.rando.ItemLocContainer import ItemLocation
+from ..utils import log
+from ..utils.utils import getRangeDict, chooseFromRange
+from ..rando.ItemLocContainer import ItemLocation
 
 # helper object to choose item/loc
 class Choice(object):

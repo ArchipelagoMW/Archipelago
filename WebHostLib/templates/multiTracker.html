@@ -31,13 +31,13 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Game</th>
+                                <th>Status</th>
                                 {% block custom_table_headers %}
                                 {# implement this block in game-specific multi trackers #}
                                 {% endblock %}
                                 <th class="center-column">Checks</th>
                                 <th class="center-column">&percnt;</th>
-                                <th class="center-column">Status</th>
-                                <th class="center-column hours">Last<br>Activity</th>
+                                <th class="center-column hours last-activity">Last<br>Activity</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,13 +47,15 @@
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     <td>{{ games[player] }}</td>
+                                    <td>{{ {0: "Disconnected", 5: "Connected", 10: "Ready", 20: "Playing",
+                                            30: "Goal Completed"}.get(states[team, player], "Unknown State") }}</td>
                                     {% block custom_table_row scoped %}
                                     {# implement this block in game-specific multi trackers #}
                                     {% endblock %}
-                                    <td class="center-column">{{ checks["Total"] }}/{{ checks_in_area[player]["Total"] }}</td>
+                                    <td class="center-column" data-sort="{{ checks["Total"] }}">
+                                      {{ checks["Total"] }}/{{ locations[player] | length }}
+                                    </td>
                                     <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
-                                    <td>{{ {0: "Disconnected", 5: "Connected", 10: "Ready", 20: "Playing",
-                                            30: "Goal Completed"}.get(states[team, player], "Unknown State") }}</td>
                                     {%- if activity_timers[team, player] -%}
                                         <td class="center-column">{{ activity_timers[team, player].total_seconds() }}</td>
                                     {%- else -%}
@@ -62,37 +64,23 @@
                                 </tr>
                             {%- endfor -%}
                         </tbody>
+                        {% if not self.custom_table_headers() | trim %}
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td>Total</td>
+                                    <td>All Games</td>
+                                    <td>{{ completed_worlds }}/{{ players|length }} Complete</td>
+                                    <td class="center-column">{{ players.values()|sum(attribute='Total') }}/{{ total_locations[team] }}</td>
+                                    <td class="center-column">{{ (players.values()|sum(attribute='Total') / total_locations[team] * 100) | int }}</td>
+                                    <td class="center-column last-activity"></td>
+                                </tr>
+                            </tfoot>
+                        {% endif %}
                     </table>
                 </div>
             {% endfor %}
-            {% for team, hints in hints.items() %}
-                <div class="table-wrapper">
-                    <table id="hints-table" class="table non-unique-item-table" data-order='[[5, "asc"], [0, "asc"]]'>
-                        <thead>
-                        <tr>
-                            <th>Finder</th>
-                            <th>Receiver</th>
-                            <th>Item</th>
-                            <th>Location</th>
-                            <th>Entrance</th>
-                            <th>Found</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {%- for hint in hints -%}
-                            <tr>
-                                <td>{{ long_player_names[team, hint.finding_player] }}</td>
-                                <td>{{ long_player_names[team, hint.receiving_player] }}</td>
-                                <td>{{ hint.item|item_name }}</td>
-                                <td>{{ hint.location|location_name }}</td>
-                                <td>{% if hint.entrance %}{{ hint.entrance }}{% else %}Vanilla{% endif %}</td>
-                                <td>{% if hint.found %}✔{% endif %}</td>
-                            </tr>
-                        {%- endfor -%}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
+            {% include "hintTable.html" with context %}
         </div>
     </div>
 {% endblock %}

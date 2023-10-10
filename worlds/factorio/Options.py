@@ -2,7 +2,8 @@ from __future__ import annotations
 import typing
 import datetime
 
-from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle
+from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
+    StartInventoryPool
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -145,8 +146,8 @@ class TechTreeLayout(Choice):
 
 class TechTreeInformation(Choice):
     """How much information should be displayed in the tech tree.
-    None: No indication what a research unlocks
-    Advancement: Indicators which researches unlock items that are considered logical advancements
+    None: No indication of what a research unlocks.
+    Advancement: Indicates if a research unlocks an item that is considered logical advancement, but not who it is for.
     Full: Labels with exact names and recipients of unlocked items; all researches are prefilled into the !hint command.
     """
     display_name = "Technology Tree Information"
@@ -389,8 +390,8 @@ class FactorioWorldGen(OptionDict):
     def __init__(self, value: typing.Dict[str, typing.Any]):
         advanced = {"pollution", "enemy_evolution", "enemy_expansion"}
         self.value = {
-            "basic": {key: value[key] for key in value.keys() - advanced},
-            "advanced": {key: value[key] for key in value.keys() & advanced}
+            "basic": {k: v for k, v in value.items() if k not in advanced},
+            "advanced": {k: v for k, v in value.items() if k in advanced}
         }
 
         # verify min_values <= max_values
@@ -454,6 +455,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "evolution_trap_increase": EvolutionTrapIncrease,
     "death_link": DeathLink,
     "energy_link": EnergyLink,
+    "start_inventory_from_pool": StartInventoryPool,
 }
 
 # spoilers below. If you spoil it for yourself, please at least don't spoil it for anyone else.

@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import multiprocessing
 import warnings
 
 local_dir = os.path.dirname(__file__)
@@ -9,7 +10,8 @@ requirements_files = {os.path.join(local_dir, 'requirements.txt')}
 if sys.version_info < (3, 8, 6):
     raise RuntimeError("Incompatible Python Version. 3.8.7+ is supported.")
 
-update_ran = getattr(sys, "frozen", False)  # don't run update if environment is frozen/compiled
+# don't run update if environment is frozen/compiled or if not the parent process (skip in subprocess)
+update_ran = getattr(sys, "frozen", False) or multiprocessing.parent_process()
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):

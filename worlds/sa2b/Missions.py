@@ -190,7 +190,7 @@ stage_name_prefixes: typing.List[str] = [
     "Mad Space - ",
     "Cosmic Wall - ",
     "Final Chase - ",
-    "Cannon Core - ",
+    "Cannon's Core - ",
 ]
 
 def get_mission_count_table(multiworld: MultiWorld, player: int):
@@ -290,9 +290,13 @@ def get_mission_table(multiworld: MultiWorld, player: int):
 
             # The first mission must be M1, M2, M3, or M4
             first_mission = 1
+            first_mission_options = [1, 2, 3]
+
+            if not multiworld.animalsanity[player]:
+                first_mission_options.append(4)
 
             if multiworld.mission_shuffle[player]:
-                first_mission = multiworld.random.choice([mission for mission in level_active_missions if mission in [1, 2, 3, 4]])
+                first_mission = multiworld.random.choice([mission for mission in level_active_missions if mission in first_mission_options])
 
             level_active_missions.remove(first_mission)
 

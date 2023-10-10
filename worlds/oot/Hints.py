@@ -15,7 +15,7 @@ from .Items import OOTItem
 from .HintList import getHint, getHintGroup, Hint, hintExclusions, \
     misc_item_hint_table, misc_location_hint_table
 from .Messages import COLOR_MAP, update_message_by_id
-from .TextBox import line_wrap
+from .TextBox import line_wrap, character_table, rom_safe_text
 from .Utils import data_path, read_json
 
 
@@ -149,11 +149,11 @@ def isRestrictedDungeonItem(dungeon, item):
 
 # Attach a player name to the item or location text.
 # If the associated player of the item/location and the world are the same, does nothing.
-# Otherwise, attaches the object's player's name to the string.
+# Otherwise, attaches the object's player's name to the string, calling rom_safe_text for foreign items/locations.
 def attach_name(text, hinted_object, world):
     if hinted_object.player == world.player:
         return text
-    return f"{text} for {world.multiworld.get_player_name(hinted_object.player)}"
+    return rom_safe_text(f"{world.multiworld.get_player_name(hinted_object.player)}'s {text}")
 
 
 def add_hint(world, groups, gossip_text, count, location=None, force_reachable=False):
@@ -474,7 +474,8 @@ def get_woth_hint(world, checked):
     locations = world.required_locations
     locations = list(filter(lambda location:
         location.name not in checked[location.player]
-        and not (world.woth_dungeon >= world.hint_dist_user['dungeons_woth_limit'] and location.parent_region.dungeon)
+        and not (world.woth_dungeon >= world.hint_dist_user['dungeons_woth_limit']
+                 and getattr(location.parent_region, "dungeon", None))
         and location.name not in world.hint_exclusions
         and location.name not in world.hint_type_overrides['woth']
         and location.item.name not in world.item_hint_type_overrides['woth'],
@@ -486,7 +487,7 @@ def get_woth_hint(world, checked):
     location = world.hint_rng.choice(locations)
     checked[location.player].add(location.name)
 
-    if location.parent_region.dungeon:
+    if getattr(location.parent_region, "dungeon", None):
         world.woth_dungeon += 1
         location_text = getHint(location.parent_region.dungeon.name, world.clearer_hints).text
     else:
@@ -570,7 +571,7 @@ def get_good_item_hint(world, checked):
     checked[location.player].add(location.name)
 
     item_text = getHint(getItemGenericName(location.item), world.clearer_hints).text
-    if location.parent_region.dungeon:
+    if getattr(location.parent_region, "dungeon", None):
         location_text = getHint(location.parent_region.dungeon.name, world.clearer_hints).text
         return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
             ['Green', 'Red']), location)
@@ -613,8 +614,8 @@ def get_specific_item_hint(world, checked):
     location = world.hint_rng.choice(locations)
     checked[location.player].add(location.name)
     item_text = getHint(getItemGenericName(location.item), world.clearer_hints).text
-    
-    if location.parent_region.dungeon:
+
+    if getattr(location.parent_region, "dungeon", None):
         location_text = getHint(location.parent_region.dungeon.name, world.clearer_hints).text
         if world.hint_dist_user.get('vague_named_items', False):
             return (GossipText('#%s# may be on the hero\'s path.' % (location_text), ['Green']), location)
@@ -1144,7 +1145,7 @@ def buildMiscItemHints(world, messages):
                     area = HintArea.at(location, use_alt_hint=data['use_alt_hint']).text(world.clearer_hints, world=None)
                 else:
                     area = location.name
-                text = data['default_item_text'].format(area=(player_text + area))
+                text = data['default_item_text'].format(area=rom_safe_text(player_text + area))
             elif 'default_item_fallback' in data:
                 text = data['default_item_fallback']
             else:
@@ -1167,7 +1168,7 @@ def buildMiscLocationHints(world, messages):
             item_text = getHint(getItemGenericName(item), world.clearer_hints).text
             if item.player != world.player:
                 item_text += f' for {world.multiworld.get_player_name(item.player)}'
-            text = data['location_text'].format(item=item_text)
+            text = data['location_text'].format(item=rom_safe_text(item_text))
 
         update_message_by_id(messages, data['id'], str(GossipText(text, ['Green'], prefix='')), 0x23)
 

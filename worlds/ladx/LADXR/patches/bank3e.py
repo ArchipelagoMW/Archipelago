@@ -3,6 +3,7 @@ import binascii
 from ..assembler import ASM
 from ..utils import formatText
 
+import pkgutil
 
 def hasBank3E(rom):
     return rom.banks[0x3E][0] != 0x00
@@ -54,7 +55,9 @@ def addBank3E(rom, seed, player_id, player_name_list):
         ret
     """))
 
-    my_path = os.path.dirname(__file__)
+    def get_asm(name):
+        return pkgutil.get_data(__name__, os.path.join("bank3e.asm", name)).decode().replace("\r", "")
+
     rom.patch(0x3E, 0x0000, 0x2F00, ASM("""
         call MainJumpTable
         pop af
@@ -204,15 +207,15 @@ LocalOnlyItemAndMessage:
         call GiveItemFromChest
         call ItemMessage
         ret
-    """ + open(os.path.join(my_path, "bank3e.asm/multiworld.asm"), "rt").read()
-        + open(os.path.join(my_path, "bank3e.asm/link.asm"), "rt").read()
-        + open(os.path.join(my_path, "bank3e.asm/chest.asm"), "rt").read()
-        + open(os.path.join(my_path, "bank3e.asm/bowwow.asm"), "rt").read()
-        + open(os.path.join(my_path, "bank3e.asm/message.asm"), "rt").read()
-        + open(os.path.join(my_path, "bank3e.asm/itemnames.asm"), "rt").read()
+    """ + get_asm("multiworld.asm")
+        + get_asm("link.asm")
+        + get_asm("chest.asm")
+        + get_asm("bowwow.asm")
+        + get_asm("message.asm")
+        + get_asm("itemnames.asm")
         + "".join(generate_name(["The Server"] + player_name_list, i ) for i in range(100)) # allocate
         + 'db "another world", $ff\n'
-        + open(os.path.join(my_path, "bank3e.asm/owl.asm"), "rt").read(), 0x4000), fill_nop=True)
+        + get_asm("owl.asm"), 0x4000), fill_nop=True)
     # 3E:3300-3616: Multiworld flags per room (for both chests and dropped keys)
     # 3E:3800-3B16: DroppedKey item types
     # 3E:3B16-3E2C: Owl statue or trade quest items

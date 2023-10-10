@@ -1,7 +1,7 @@
 from random import Random
 from typing import List, Dict, Union
 
-from .bundle_data import *
+from .data.bundle_data import *
 from .logic import StardewLogic
 from .options import BundleRandomization, BundlePrice
 
@@ -152,7 +152,7 @@ class Bundle:
     # shuffle_vault_amongst_themselves(random, bundles)
 
 
-def get_all_bundles(random: Random, logic: StardewLogic, randomization: int, price: int) -> Dict[str, Bundle]:
+def get_all_bundles(random: Random, logic: StardewLogic, randomization: BundleRandomization, price: BundlePrice) -> Dict[str, Bundle]:
     bundles = {}
     for bundle_key in vanilla_bundles:
         bundle_value = vanilla_bundles[bundle_key]

@@ -1,5 +1,5 @@
-from worlds.sm.variaRandomizer.utils.utils import randGaussBounds, getRangeDict, chooseFromRange
-from worlds.sm.variaRandomizer.utils import log
+from ..utils.utils import randGaussBounds, getRangeDict, chooseFromRange
+from ..utils import log
 import logging, copy, random
 
 class Item:
@@ -40,7 +40,7 @@ class ItemManager:
         'ETank': Item(
             Category='Energy',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Energy Tank",
             Type='ETank',
             Id=0
@@ -48,7 +48,7 @@ class ItemManager:
         'Missile': Item(
             Category='Ammo',
             Class='Minor',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Missile",
             Type='Missile',
             Id=1
@@ -56,7 +56,7 @@ class ItemManager:
         'Super': Item(
             Category='Ammo',
             Class='Minor',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Super Missile",
             Type='Super',
             Id=2
@@ -64,7 +64,7 @@ class ItemManager:
         'PowerBomb': Item(
             Category='Ammo',
             Class='Minor',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Power Bomb",
             Type='PowerBomb',
             Id=3
@@ -72,7 +72,7 @@ class ItemManager:
         'Bomb': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Bomb",
             Type='Bomb',
             ItemBits=0x1000,
@@ -81,7 +81,7 @@ class ItemManager:
         'Charge': Item(
             Category='Beam',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Charge Beam",
             Type='Charge',
             BeamBits=0x1000,
@@ -90,7 +90,7 @@ class ItemManager:
         'Ice': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Ice Beam",
             Type='Ice',
             BeamBits=0x2,
@@ -99,7 +99,7 @@ class ItemManager:
         'HiJump': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Hi-Jump Boots",
             Type='HiJump',
             ItemBits=0x100,
@@ -108,7 +108,7 @@ class ItemManager:
         'SpeedBooster': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Speed Booster",
             Type='SpeedBooster',
             ItemBits=0x2000,
@@ -117,7 +117,7 @@ class ItemManager:
         'Wave': Item(
             Category='Beam',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Wave Beam",
             Type='Wave',
             BeamBits=0x1,
@@ -126,7 +126,7 @@ class ItemManager:
         'Spazer': Item(
             Category='Beam',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Spazer",
             Type='Spazer',
             BeamBits=0x4,
@@ -135,7 +135,7 @@ class ItemManager:
         'SpringBall': Item(
             Category='Misc',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Spring Ball",
             Type='SpringBall',
             ItemBits=0x2,
@@ -144,7 +144,7 @@ class ItemManager:
         'Varia': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Varia Suit",
             Type='Varia',
             ItemBits=0x1,
@@ -153,7 +153,7 @@ class ItemManager:
         'Plasma': Item(
             Category='Beam',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Plasma Beam",
             Type='Plasma',
             BeamBits=0x8,
@@ -162,7 +162,7 @@ class ItemManager:
         'Grapple': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Grappling Beam",
             Type='Grapple',
             ItemBits=0x4000,
@@ -171,7 +171,7 @@ class ItemManager:
         'Morph': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Morph Ball",
             Type='Morph',
             ItemBits=0x4,
@@ -180,7 +180,7 @@ class ItemManager:
         'Reserve': Item(
             Category='Energy',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Reserve Tank",
             Type='Reserve',
             Id=20
@@ -188,7 +188,7 @@ class ItemManager:
         'Gravity': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Gravity Suit",
             Type='Gravity',
             ItemBits=0x20,
@@ -197,7 +197,7 @@ class ItemManager:
         'XRayScope': Item(
             Category='Misc',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="X-Ray Scope",
             Type='XRayScope',
             ItemBits=0x8000,
@@ -206,7 +206,7 @@ class ItemManager:
         'SpaceJump': Item(
             Category='Progression',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Space Jump",
             Type='SpaceJump',
             ItemBits=0x200,
@@ -215,7 +215,7 @@ class ItemManager:
         'ScrewAttack': Item(
             Category='Misc',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Screw Attack",
             Type='ScrewAttack',
             ItemBits= 0x8,
@@ -247,7 +247,7 @@ class ItemManager:
             Category='Boss',
             Class='Boss',
             Name="Phantoon",
-            Type='Phantoon'
+            Type='Phantoon',
         ),
         'Draygon': Item(
             Category='Boss',
@@ -267,6 +267,30 @@ class ItemManager:
             Name="Mother Brain",
             Type='MotherBrain',
         ),
+        'SporeSpawn': Item(
+            Category='MiniBoss',
+            Class='Boss',
+            Name="Spore Spawn",
+            Type='SporeSpawn',
+        ),
+        'Crocomire': Item(
+            Category='MiniBoss',
+            Class='Boss',
+            Name="Crocomire",
+            Type='Crocomire',
+        ),
+        'Botwoon': Item(
+            Category='MiniBoss',
+            Class='Boss',
+            Name="Botwoon",
+            Type='Botwoon',
+        ),
+        'GoldenTorizo': Item(
+            Category='MiniBoss',
+            Class='Boss',
+            Name="Golden Torizo",
+            Type='GoldenTorizo',
+        ),
         # used only during escape path check
         'Hyper': Item(
             Category='Beam',
@@ -278,7 +302,7 @@ class ItemManager:
         'ArchipelagoItem': Item(
             Category='ArchipelagoItem',
             Class='Major',
-            Code=0xf870,
+            Code=0xfc20,
             Name="Generic",
             Type='ArchipelagoItem',
             Id=21
@@ -311,11 +335,12 @@ class ItemManager:
         itemCode = item.Code + modifier
         return itemCode
 
-    def __init__(self, majorsSplit, qty, sm, nLocs, maxDiff):
+    def __init__(self, majorsSplit, qty, sm, nLocs, bossesItems, maxDiff):
         self.qty = qty
         self.sm = sm
         self.majorsSplit = majorsSplit
         self.nLocs = nLocs
+        self.bossesItems = bossesItems
         self.maxDiff = maxDiff
         self.majorClass = 'Chozo' if majorsSplit == 'Chozo' else 'Major'
         self.itemPool = []
@@ -324,7 +349,7 @@ class ItemManager:
         self.itemPool = []
         if addBosses == True:
             # for the bosses
-            for boss in ['Kraid', 'Phantoon', 'Draygon', 'Ridley', 'MotherBrain']:
+            for boss in self.bossesItems:
                 self.addMinor(boss)
 
     def getItemPool(self):
@@ -372,13 +397,17 @@ class ItemManager:
         return len([item for item in self.itemPool if item.Type == itemName]) >= count
 
 class ItemPoolGenerator(object):
+    # 100 item locs, 5 bosses, 4 mini bosses
+    maxLocs = 109
+    nbBosses = 9
+
     @staticmethod
     def factory(majorsSplit, itemManager, qty, sm, exclude, nLocs, maxDiff):
         if majorsSplit == 'Chozo':
             return ItemPoolGeneratorChozo(itemManager, qty, sm, maxDiff)
         elif majorsSplit == 'Plando':
             return ItemPoolGeneratorPlando(itemManager, qty, sm, exclude, nLocs, maxDiff)
-        elif nLocs == 105:
+        elif nLocs == ItemPoolGenerator.maxLocs:
             if majorsSplit == "Scavenger":
                 return ItemPoolGeneratorScavenger(itemManager, qty, sm, maxDiff)
             else:
@@ -390,7 +419,7 @@ class ItemPoolGenerator(object):
         self.itemManager = itemManager
         self.qty = qty
         self.sm = sm
-        self.maxItems = 105 # 100 item locs and 5 bosses
+        self.maxItems = ItemPoolGenerator.maxLocs
         self.maxEnergy = 18 # 14E, 4R
         self.maxDiff = maxDiff
         self.log = log.get('ItemPool')
@@ -405,7 +434,7 @@ class ItemPoolGenerator(object):
         pool = self.itemManager.getItemPool()
         energy = [item for item in pool if item.Category == 'Energy']
         if len(energy) == 0:
-            self.maxMinors = 0.66*(self.maxItems - 5) # 5 for bosses
+            self.maxMinors = 0.66*(self.maxItems - ItemPoolGenerator.nbBosses)
         else:
             # if energy has been placed, we can be as accurate as possible
             self.maxMinors = self.maxItems - len(pool) + self.nbMinorsAlready
@@ -675,7 +704,8 @@ class ItemPoolGeneratorMinimizer(ItemPoolGeneratorMajors):
             else:
                 self.maxEnergy = 8 + int(float(nLocs - 55)/50.0 * 8)
             self.log.debug("maxEnergy: "+str(self.maxEnergy))
-            maxItems = self.maxItems - 10 # remove bosses and minimal minore
+            # remove bosses and minimal minors
+            maxItems = self.maxItems - (self.nbMinorsAlready + len(self.itemManager.bossesItems))
             self.maxEnergy = int(max(self.maxEnergy, maxItems - nMajors - self.minorLocations))
             if self.maxEnergy > 18:
                 self.maxEnergy = 18
@@ -707,7 +737,7 @@ class ItemPoolGeneratorPlando(ItemPoolGenerator):
             if item == 'total':
                 continue
             itemClass = 'Major'
-            if item in ['Missile', 'Super', 'PowerBomb', 'Kraid', 'Phantoon', 'Draygon', 'Ridley', 'MotherBrain']:
+            if item in ['Missile', 'Super', 'PowerBomb', 'Kraid', 'Phantoon', 'Draygon', 'Ridley', 'MotherBrain', 'SporeSpawn', 'Crocomire', 'Botwoon', 'GoldenTorizo']:
                 itemClass = 'Minor'
             for i in range(count):
                 self.itemManager.addItem(item, itemClass)
@@ -716,7 +746,7 @@ class ItemPoolGeneratorPlando(ItemPoolGenerator):
         self.log.debug("Plando: remain start: {}".format(remain))
         if remain > 0:
             # add missing bosses
-            for boss in ['Kraid', 'Phantoon', 'Draygon', 'Ridley', 'MotherBrain']:
+            for boss in self.itemManager.bossesItems:
                 if self.exclude['alreadyPlacedItems'][boss] == 0:
                     self.itemManager.addItem(boss, 'Minor')
                     self.exclude['alreadyPlacedItems'][boss] = 1

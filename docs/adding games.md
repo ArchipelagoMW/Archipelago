@@ -341,3 +341,4 @@ The various methods and attributes are documented in `/worlds/AutoWorld.py[World
 [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md),
 though it is also recommended to look at existing implementations to see how all this works first-hand. 
 Once you get all that, all that remains to do is test the game and publish your work.
+Make sure to check out [world maintainer.md](./world%20maintainer.md) before publishing.

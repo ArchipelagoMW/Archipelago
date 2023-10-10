@@ -1,6 +1,6 @@
 from BaseClasses import CollectionState
 from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc, Overcooked2Level, OverworldRegion, overworld_region_by_level
-from typing import Dict
+from typing import Dict, Set
 from random import Random
 
 def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_completed_event_name: str,
@@ -132,11 +132,18 @@ def level_shuffle_factory(
     rng: Random,
     shuffle_prep_levels: bool,
     shuffle_horde_levels: bool,
+    kevin_levels: bool,
+    enabled_dlc: Set[Overcooked2Dlc],
+    player_name: str,
 ) -> Dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
+
     # Create a list of all valid levels for selection
     # (excludes tutorial, throne and sometimes horde/prep levels)
     pool = list()
     for dlc in Overcooked2Dlc:
+        if dlc not in enabled_dlc:
+            continue
+
         for level_id in range(dlc.start_level_id, dlc.end_level_id):
             if level_id in dlc.excluded_levels():
                 continue
@@ -151,25 +158,55 @@ def level_shuffle_factory(
                 Overcooked2GenericLevel(level_id, dlc)
             )
 
+    if kevin_levels:
+        level_count = 43
+    else:
+        level_count = 35
+
+    if len(pool) < level_count:
+        if shuffle_prep_levels:
+            prep_text = ""
+        else:
+            prep_text = " NON-PREP"
+
+        raise Exception(f"Invalid OC2 settings({player_name}): OC2 needs at least {level_count}{prep_text} levels in the level pool (currently has {len(pool)})")
+
     # Sort the pool to eliminate risk
     pool.sort(key=lambda x: int(x.dlc)*1000 + x.level_id)
 
     result: Dict[int, Overcooked2GenericLevel] = dict()
     story = Overcooked2Dlc.STORY
 
+    attempts = 0
+
     while len(result) == 0 or not meets_minimum_sphere_one_requirements(result):
+        if attempts >= 15:
+            raise Exception("Failed to create valid Overcooked2 level shuffle permutation in a reasonable amount of attempts")
+
         result.clear()
 
         # Shuffle the pool, using the provided RNG
         rng.shuffle(pool)
 
-        # Return the first 44 levels and assign those to each level
-        for level_id in range(story.start_level_id, story.end_level_id):
-            if level_id not in story.excluded_levels():
-                result[level_id] = pool[level_id-1]
-            elif level_id == 36:
-                # Level 6-6 is exempt from shuffling
-                result[level_id] = Overcooked2GenericLevel(level_id)
+        # Handle level assignment
+
+        level_id = 0
+        placed = 0
+        for level in pool:
+            level_id += 1
+            while level_id in story.excluded_levels():
+                level_id += 1
+
+            result[level_id] = level
+            placed += 1
+
+            if placed >= level_count:
+                break
+
+        # Level 6-6 is exempt from shuffling
+        result[36] = Overcooked2GenericLevel(36)
+
+        attempts += 1
 
     return result
 
@@ -178,12 +215,12 @@ def meets_minimum_sphere_one_requirements(
     levels: Dict[int, Overcooked2GenericLevel],
 ) -> bool:
 
-    # 1-1, 2-1, and 4-1 are garunteed to be accessible on
+    # 1-1, 2-1, and 4-1 are guaranteed to be accessible on
     # the overworld without requiring a ramp or additional stars
     sphere_one = [1, 7, 19]
 
-    # 1-2, 2-2, 3-1 and 5-1 are almost always the next thing unlocked
-    sphere_twoish = [2, 8, 13, 25]
+    # 1-2, 2-2, 3-1, 5-1 and 6-1 are almost always the next thing unlocked
+    sphere_twoish = [2, 8, 13, 25, 31]
 
     # Peek the logic for sphere one and see how many are possible
     # with no items
@@ -199,7 +236,7 @@ def meets_minimum_sphere_one_requirements(
 
     return sphere_one_count >= 2 and \
         sphere_twoish_count >= 2 and \
-        sphere_one_count + sphere_twoish_count >= 6
+        sphere_one_count + sphere_twoish_count >= 5
 
 
 def is_completable_no_items(level: Overcooked2GenericLevel) -> bool:

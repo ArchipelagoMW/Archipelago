@@ -1,17 +1,18 @@
 
 import copy
-from worlds.sm.variaRandomizer.utils import log
-from worlds.sm.variaRandomizer.logic.smbool import SMBool, smboolFalse
-from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
+from ..utils import log
+from ..logic.smbool import SMBool, smboolFalse
+from ..logic.smboolmanager import SMBoolManager
 from collections import Counter
 
 class ItemLocation(object):
-    __slots__ = ( 'Item', 'Location', 'Accessible' )
+    __slots__ = ( 'Item', 'Location', 'Accessible', 'player' )
 
-    def __init__(self, Item=None, Location=None, accessible=True):
+    def __init__(self, Item=None, Location=None, player=0, accessible=True):
         self.Item = Item
         self.Location = Location
         self.Accessible = accessible
+        self.player = player
 
     def json(self):
         return {'Item': self.Item.json(), 'Location': self.Location.json()}

@@ -6,7 +6,7 @@ import tempfile
 import zipfile
 import concurrent.futures
 from collections import Counter
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, Union, List
 
 from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import commit, db_session
@@ -22,7 +22,7 @@ from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
 
 
-def get_meta(options_source: dict) -> dict:
+def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[str], Dict[str, Any]]]:
     plando_options = {
         options_source.get("plando_bosses", ""),
         options_source.get("plando_items", ""),
@@ -39,7 +39,21 @@ def get_meta(options_source: dict) -> dict:
         "item_cheat": bool(int(options_source.get("item_cheat", 1))),
         "server_password": options_source.get("server_password", None),
     }
-    return {"server_options": server_options, "plando_options": list(plando_options)}
+    generator_options = {
+        "spoiler": int(options_source.get("spoiler", 0)),
+        "race": race
+    }
+
+    if race:
+        server_options["item_cheat"] = False
+        server_options["remaining_mode"] = "disabled"
+        generator_options["spoiler"] = 0
+
+    return {
+        "server_options": server_options,
+        "plando_options": list(plando_options),
+        "generator_options": generator_options,
+    }
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -50,18 +64,13 @@ def generate(race=False):
         if 'file' not in request.files:
             flash('No file part')
         else:
-            file = request.files['file']
-            options = get_yaml_data(file)
+            files = request.files.getlist('file')
+            options = get_yaml_data(files)
             if isinstance(options, str):
                 flash(options)
             else:
-                meta = get_meta(request.form)
-                meta["race"] = race
-                results, gen_options = roll_options(options, meta["plando_options"])
-
-                if race:
-                    meta["server_options"]["item_cheat"] = False
-                    meta["server_options"]["remaining_mode"] = "disabled"
+                meta = get_meta(request.form, race)
+                results, gen_options = roll_options(options, set(meta["plando_options"]))
 
                 if any(type(result) == str for result in results.values()):
                     return render_template("checkResult.html", results=results)
@@ -97,7 +106,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
         meta: Dict[str, Any] = {}
 
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
-    race = meta.setdefault("race", False)
+    race = meta.setdefault("generator_options", {}).setdefault("race", False)
 
     def task():
         target = tempfile.TemporaryDirectory()
@@ -114,13 +123,14 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
         erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = 0 if race else 3
+        erargs.spoiler = meta["generator_options"].get("spoiler", 0)
         erargs.race = race
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
         erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
-                                                                        {"bosses", "items", "connections", "texts"}))
+                                                                       {"bosses", "items", "connections", "texts"}))
+        erargs.skip_prog_balancing = False
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):

@@ -3,8 +3,6 @@ from __future__ import annotations
 import json
 import logging
 import multiprocessing
-import os
-import sys
 import threading
 import time
 import typing
@@ -13,55 +11,7 @@ from datetime import timedelta, datetime
 from pony.orm import db_session, select, commit
 
 from Utils import restricted_loads
-
-
-class CommonLocker():
-    """Uses a file lock to signal that something is already running"""
-    lock_folder = "file_locks"
-
-    def __init__(self, lockname: str, folder=None):
-        if folder:
-            self.lock_folder = folder
-        os.makedirs(self.lock_folder, exist_ok=True)
-        self.lockname = lockname
-        self.lockfile = os.path.join(self.lock_folder, f"{self.lockname}.lck")
-
-
-class AlreadyRunningException(Exception):
-    pass
-
-
-if sys.platform == 'win32':
-    class Locker(CommonLocker):
-        def __enter__(self):
-            try:
-                if os.path.exists(self.lockfile):
-                    os.unlink(self.lockfile)
-                self.fp = os.open(
-                    self.lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
-            except OSError as e:
-                raise AlreadyRunningException() from e
-
-        def __exit__(self, _type, value, tb):
-            fp = getattr(self, "fp", None)
-            if fp:
-                os.close(self.fp)
-                os.unlink(self.lockfile)
-else:  # unix
-    import fcntl
-
-
-    class Locker(CommonLocker):
-        def __enter__(self):
-            try:
-                self.fp = open(self.lockfile, "wb")
-                fcntl.flock(self.fp.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except OSError as e:
-                raise AlreadyRunningException() from e
-
-        def __exit__(self, _type, value, tb):
-            fcntl.flock(self.fp.fileno(), fcntl.LOCK_UN)
-            self.fp.close()
+from .locker import Locker, AlreadyRunningException
 
 
 def launch_room(room: Room, config: dict):
@@ -135,7 +85,7 @@ def autogen(config: dict):
             with Locker("autogen"):
 
                 with multiprocessing.Pool(config["GENERATORS"], initializer=init_db,
-                                          initargs=(config["PONY"],)) as generator_pool:
+                                          initargs=(config["PONY"],), maxtasksperchild=10) as generator_pool:
                     with db_session:
                         to_start = select(generation for generation in Generation if generation.state == STATE_STARTED)
 

@@ -2,6 +2,8 @@ import logging
 import threading
 import copy
 import functools
+import settings
+import typing
 from typing import Optional, List, AbstractSet, Union  # remove when 3.8 support is dropped
 from collections import Counter, deque
 from string import printable
@@ -30,7 +32,7 @@ from .Cosmetics import patch_cosmetics
 
 from Utils import get_options
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
-from Options import Range, Toggle, VerifyKeys
+from Options import Range, Toggle, VerifyKeys, Accessibility
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
@@ -64,6 +66,28 @@ class OOTCollectionState(metaclass=AutoLogicRegister):
         ret.dampe_reachable_regions = {player: copy.copy(self.adult_reachable_regions[player]) for player in
                                        self.dampe_reachable_regions}
         return ret
+
+
+class OOTSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the OoT v1.0 ROM"""
+        description = "Ocarina of Time ROM File"
+        copy_to = "The Legend of Zelda - Ocarina of Time.z64"
+        md5s = [
+            "5bd1fe107bf8106b2ab6650abecd54d6",  # normal
+            "6697768a7a7df2dd27a692a2638ea90b",  # byte-swapped
+            "05f0f3ebacbc8df9243b6148ffe4792f",  # decompressed
+        ]
+
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching),
+                    true  for operating system default program
+        Alternatively, a path to a program to open the .z64 file with
+        """
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = True
 
 
 class OOTWeb(WebWorld):
@@ -105,6 +129,7 @@ class OOTWorld(World):
     """
     game: str = "Ocarina of Time"
     option_definitions: dict = oot_options
+    settings: typing.ClassVar[OOTSettings]
     topology_present: bool = True
     item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if
                        data[2] is not None and item_name not in {
@@ -118,7 +143,7 @@ class OOTWorld(World):
 
     data_version = 3
 
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 4, 0)
 
     item_name_groups = {
         # internal groups
@@ -261,7 +286,7 @@ class OOTWorld(World):
         # No Logic forces all tricks on, prog balancing off and beatable-only
         elif self.logic_rules == 'no_logic':
             self.multiworld.progression_balancing[self.player].value = False
-            self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("minimal")
+            self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
             for trick in normalized_name_tricks.values():
                 setattr(self, trick['name'], True)
 

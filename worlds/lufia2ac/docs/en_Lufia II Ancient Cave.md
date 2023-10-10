@@ -39,9 +39,9 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 ###### Customization options:
 
 - Choose a goal for your world. Possible goals are: 1) Reach the final floor; 2) Defeat the boss on the final floor; 3)
-  Retrieve a (customizable) number of iris treasures from the cave; 4) Retrieve the iris treasures *and* defeat the boss
+  Retrieve a (customizable) number of Iris treasures from the cave; 4) Retrieve the Iris treasures *and* defeat the boss
 - You can also randomize the goal; The blue-haired NPC in front of the cafe can tell you about the selected objective
-- Customize the chances of encountering blue chests, healing tiles, iris treasures, etc.
+- Customize the chances of encountering blue chests, healing tiles, Iris treasures, etc.
 - Customize the default party lineup and capsule monster
 - Customize the party starting level as well as capsule monster level and form
 - Customize the initial and final floor numbers
@@ -61,6 +61,7 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - You can elect to lock the cave layout for the next run, giving you exactly the same floors and red chest contents as
   on your previous attempt. This functionality is accessed via the bald NPC behind the counter at the Ancient Cave
   Entrance
+- Multiple people can connect to the same slot and collaboratively search for Iris treasures and blue chests
 - Always start with Providence already in your inventory. (It is no longer obtained from red chests)
 - (optional) Run button that allows you to move at faster than normal speed
 

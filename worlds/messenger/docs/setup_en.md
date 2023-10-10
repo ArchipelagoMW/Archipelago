@@ -38,10 +38,11 @@
    * This will set up all of your save slots with new randomizer save files. You can have up to 3 randomizer files at a
      time, but must do this step again to start new runs afterward.
 4. Enter connection info using the relevant option buttons
-   * **The game is limited to alphanumerical characters and `-` so when entering the host name replace `.` with ` `.
-     Ensure that your player name when generating a settings file follows these constrictions**
+   * **The game is limited to alphanumerical characters, `.`, and `-`.**
    * This defaults to `archipelago.gg` and does not need to be manually changed if connecting to a game hosted on the
      website.
+   * If using a name that cannot be entered in the in game menus, there is a config file (APConfig.toml) in the game
+     directory. When using this, all connection information must be entered in the file. 
 5. Select the `Connect to Archipelago` button
 6. Navigate to save file selection
 7. Select a new valid randomizer save
@@ -55,11 +56,3 @@ MultiWorld.
 If the reconnection fails, the message on screen will state you are disconnected. If this happens, you can return to the
 main menu and connect to the server as in [Joining a Multiworld Game](#joining-a-multiworld-game), then load the correct
 save file.
-
-## Troubleshooting
-
-If you launch the game, and it hangs on the splash screen for more than 30 seconds try these steps:
-1. Close the game and remove `TheMessengerRandomizerAP` from the `Mods` folder.
-2. Launch The Messenger
-3. Delete any save slot
-4. Reinstall the randomizer mod following step 2 of the installation.

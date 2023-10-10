@@ -7,7 +7,7 @@
 - Hardware oder Software zum Laden und Abspielen von SNES Rom-Dateien fähig zu einer Internetverbindung
     - Ein Emulator, der mit SNI verbinden kann
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-      [BizHawk](http://tasvideos.org/BizHawk.html))
+      [BizHawk](https://tasvideos.org/BizHawk))
     - Ein SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), oder andere kompatible Hardware
 - Die Japanische Zelda 1.0 ROM-Datei, mit folgendem Namen: `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
 
@@ -106,7 +106,7 @@ kommunizieren darf.
 
 ##### BizHawk
 
-1. Stelle sicher, dass der BSNES-Core in Bizhawk geladen wird. Dazu musst du auf das Tools-Menü in Bizhawk klicken und
+1. Stelle sicher, dass der BSNES-Core in BizHawk geladen wird. Dazu musst du auf das Tools-Menü in BizHawk klicken und
    folgende Optionen wählen:
    `Config --> Cores --> SNES --> BSNES`
 2. Lade die entsprechende ROM-Datei, wenn sie nicht schon automatisch geladen wurde.

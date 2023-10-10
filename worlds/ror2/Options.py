@@ -1,5 +1,5 @@
-from typing import Dict
-from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
+from dataclasses import dataclass
+from Options import Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCommonOptions
 
 
 # NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
@@ -66,7 +66,7 @@ class AltarsPerEnvironment(Range):
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""
-    display_name = "Total Revives"
+    display_name = "Total Revives as percentage"
     range_start = 0
     range_end = 10
     default = 4
@@ -107,7 +107,10 @@ class StartWithRevive(DefaultOnToggle):
 
 
 class FinalStageDeath(Toggle):
-    """Death on the final boss stage counts as a win."""
+    """The following will count as a win if set to true:
+    Dying in Commencement.
+    Dying in The Planetarium.
+    Obliterating yourself"""
     display_name = "Final Stage Death is Win"
 
 
@@ -271,39 +274,40 @@ class ItemWeights(Choice):
     option_void = 9
 
 
-# define a dictionary for the weights of the generated item pool.
-ror2_weights: Dict[str, type(Option)] = {
-    "green_scrap":          GreenScrap,
-    "red_scrap":            RedScrap,
-    "yellow_scrap":         YellowScrap,
-    "white_scrap":          WhiteScrap,
-    "common_item":          CommonItem,
-    "uncommon_item":        UncommonItem,
-    "legendary_item":       LegendaryItem,
-    "boss_item":            BossItem,
-    "lunar_item":           LunarItem,
-    "void_item":            VoidItem,
-    "equipment":            Equipment
-}
 
-ror2_options: Dict[str, type(Option)] = {
-    "goal":                     Goal,
-    "total_locations":          TotalLocations,
-    "chests_per_stage":         ChestsPerEnvironment,
-    "shrines_per_stage":        ShrinesPerEnvironment,
-    "scavengers_per_stage":     ScavengersPerEnvironment,
-    "scanner_per_stage":        ScannersPerEnvironment,
-    "altars_per_stage":         AltarsPerEnvironment,
-    "total_revivals":           TotalRevivals,
-    "start_with_revive":        StartWithRevive,
-    "final_stage_death":        FinalStageDeath,
-    "begin_with_loop":          BeginWithLoop,
-    "dlc_sotv":                 DLC_SOTV,
-    "death_link":               DeathLink,
-    "item_pickup_step":         ItemPickupStep,
-    "shrine_use_step":          ShrineUseStep,
-    "enable_lunar":             AllowLunarItems,
-    "item_weights":             ItemWeights,
-    "item_pool_presets":        ItemPoolPresetToggle,
-    **ror2_weights
-}
+
+# define a class for the weights of the generated item pool.
+@dataclass
+class ROR2Weights:
+    green_scrap: GreenScrap
+    red_scrap: RedScrap
+    yellow_scrap: YellowScrap
+    white_scrap: WhiteScrap
+    common_item: CommonItem
+    uncommon_item: UncommonItem
+    legendary_item: LegendaryItem
+    boss_item: BossItem
+    lunar_item: LunarItem
+    void_item: VoidItem
+    equipment: Equipment
+
+@dataclass
+class ROR2Options(PerGameCommonOptions, ROR2Weights):
+    goal: Goal
+    total_locations: TotalLocations
+    chests_per_stage: ChestsPerEnvironment
+    shrines_per_stage: ShrinesPerEnvironment
+    scavengers_per_stage: ScavengersPerEnvironment
+    scanner_per_stage: ScannersPerEnvironment
+    altars_per_stage: AltarsPerEnvironment
+    total_revivals: TotalRevivals
+    start_with_revive: StartWithRevive
+    final_stage_death: FinalStageDeath
+    begin_with_loop: BeginWithLoop
+    dlc_sotv: DLC_SOTV
+    death_link: DeathLink
+    item_pickup_step: ItemPickupStep
+    shrine_use_step: ShrineUseStep
+    enable_lunar: AllowLunarItems
+    item_weights: ItemWeights
+    item_pool_presets: ItemPoolPresetToggle

@@ -1,16 +1,20 @@
 from typing import List, Iterable
 import unittest
+
+import Options
+from Options import Accessibility
 from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
     distribute_early_items, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
-    ItemClassification
+    ItemClassification, CollectionState
 from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
 
 
 def generate_multi_world(players: int = 1) -> MultiWorld:
     multi_world = MultiWorld(players)
     multi_world.player_name = {}
+    multi_world.state = CollectionState(multi_world)
     for i in range(players):
         player_id = i+1
         world = World(multi_world, player_id)
@@ -19,9 +23,16 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
         multi_world.player_name[player_id] = "Test Player " + str(player_id)
         region = Region("Menu", player_id, multi_world, "Menu Region Hint")
         multi_world.regions.append(region)
+        for option_key, option in Options.PerGameCommonOptions.type_hints.items():
+            if hasattr(multi_world, option_key):
+                getattr(multi_world, option_key).setdefault(player_id, option.from_any(getattr(option, "default")))
+            else:
+                setattr(multi_world, option_key, {player_id: option.from_any(getattr(option, "default"))})
+        # TODO - remove this loop once all worlds use options dataclasses
+        world.options = world.options_dataclass(**{option_key: getattr(multi_world, option_key)[player_id]
+                                                   for option_key in world.options_dataclass.type_hints})
 
     multi_world.set_seed(0)
-    multi_world.set_default_common_options()
 
     return multi_world
 
@@ -186,7 +197,7 @@ class TestFillRestrictive(unittest.TestCase):
         items = player1.prog_items
         locations = player1.locations
 
-        multi_world.accessibility[player1.id].value = multi_world.accessibility[player1.id].option_minimal
+        multi_world.worlds[player1.id].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
         multi_world.completion_condition[player1.id] = lambda state: state.has(
             items[1].name, player1.id)
         set_rule(locations[1], lambda state: state.has(
@@ -198,6 +209,41 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertEqual(locations[0].item, items[1])
         # Unnecessary unreachable Item
         self.assertEqual(locations[1].item, items[0])
+
+    def test_minimal_mixed_fill(self):
+        """
+        Test that fill for 1 minimal and 1 non-minimal player will correctly place items in a way that lets
+        the non-minimal player get all items.
+        """
+
+        multi_world = generate_multi_world(2)
+        player1 = generate_player_data(multi_world, 1, 3, 3)
+        player2 = generate_player_data(multi_world, 2, 3, 3)
+
+        multi_world.accessibility[player1.id].value = multi_world.accessibility[player1.id].option_minimal
+        multi_world.accessibility[player2.id].value = multi_world.accessibility[player2.id].option_locations
+
+        multi_world.completion_condition[player1.id] = lambda state: True
+        multi_world.completion_condition[player2.id] = lambda state: state.has(player2.prog_items[2].name, player2.id)
+
+        set_rule(player1.locations[1], lambda state: state.has(player1.prog_items[0].name, player1.id))
+        set_rule(player1.locations[2], lambda state: state.has(player1.prog_items[1].name, player1.id))
+        set_rule(player2.locations[1], lambda state: state.has(player2.prog_items[0].name, player2.id))
+        set_rule(player2.locations[2], lambda state: state.has(player2.prog_items[1].name, player2.id))
+
+        # force-place an item that makes it impossible to have all locations accessible
+        player1.locations[0].place_locked_item(player1.prog_items[2])
+
+        # fill remaining locations with remaining items
+        location_pool = player1.locations[1:] + player2.locations
+        item_pool = player1.prog_items[:-1] + player2.prog_items
+        fill_restrictive(multi_world, multi_world.state, location_pool, item_pool)
+        multi_world.state.sweep_for_events()  # collect everything
+
+        # all of player2's locations and items should be accessible (not all of player1's)
+        for item in player2.prog_items:
+            self.assertTrue(multi_world.state.has(item.name, player2.id),
+                            f'{item} is unreachable in {item.location}')
 
     def test_reversed_fill(self):
         multi_world = generate_multi_world()
@@ -397,6 +443,20 @@ class TestFillRestrictive(unittest.TestCase):
         multi_world.state.sweep_for_events()
         self.assertTrue(multi_world.state.prog_items[item.name, item.player], "Sweep did not collect - Test flawed")
         self.assertEqual(multi_world.state.prog_items[item.name, item.player], 1, "Sweep collected multiple times")
+
+    def test_correct_item_instance_removed_from_pool(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(multi_world, 1, 2, 2)
+
+        player1.prog_items[0].name = "Different_item_instance_but_same_item_name"
+        player1.prog_items[1].name = "Different_item_instance_but_same_item_name"
+        loc0 = player1.locations[0]
+
+        fill_restrictive(multi_world, multi_world.state,
+                         [loc0], player1.prog_items)
+
+        self.assertEqual(1, len(player1.prog_items))
+        self.assertIsNot(loc0.item, player1.prog_items[0], "Filled item was still present in item pool")
 
 
 class TestDistributeItemsRestrictive(unittest.TestCase):

@@ -8,7 +8,7 @@ config file.
 ## What does randomization do to this game?
 
 Risk of Rain is already a random game, by virtue of being a roguelite. The Archipelago mod implements pure multiworld
-functionality in which certain chests (made clear via a location check progress bar) will send an item out to the
+functionality in which certain chests will send an item out to the
 multiworld. The items that _would have been_ in those chests will be returned to the Risk of Rain player via grants by
 other players in other worlds.
 
@@ -16,26 +16,30 @@ There are two modes in risk of rain. Classic Mode and Explore Mode
 
 Classic Mode:
 
-  - Classic mode implements pure multiworld
-functionality in which certain chests (made clear via a location check progress bar) will send an item out to the
-multiworld. The items that _would have been_ in those chests will be returned to the Risk of Rain player via grants by
-other players in other worlds.
+  - Certain chests (made clear via a location check progress bar) will send an item out to the
+    multiworld. The location of these chests do not matter, since all environments share a unified location pool.
 
 Explore Mode:
 
-  - Just like in Classic mode chests will send out an item to the multiworld. The difference is that each environment
-  will have a set amount that can be sent out and shrines along with other things that will need to be checked.
-  Also, each environment is an item and, you'll need it to be able to access it.
+  - Chests will continue to work as they did in Classic Mode, the difference being that each environment
+  will have a set amount of items that can be sent out. In addition, shrines, radio scanners, newt altars, 
+  and scavenger bags will need to be checked, depending on your settings.
+  This mode also makes each environment an item. In order to access a particular stage, you'll need it to be 
+  sent in the multiworld.
 
 ## What is the goal of Risk of Rain 2 in Archipelago?
 
-Just like in the original game, any way to "beat the game or obliterate" counts as a win. There is a setting that
-if you die while on a final boss stage, that also counts as a win.(You can turn this on in your player settings.)
+Just like in the original game, any way to "beat the game" counts as a win. This means beating one of the bosses 
+on Commencement, The Planetarium, or A Moment, Whole. Alternatively, if you are new to the game and 
+aren't very confident in being able to "beat the game", you can set **Final Stage Death is Win** to true
+(You can turn this on in your player settings.) This will make it so dying on either Commencement or The Planetarium,
+or **obliterating yourself in A Moment, Fractured** will count as your goal.
 **You do not need to complete all the location checks** to win; any item you don't collect may be released if the 
 server options allow.
 
 If you die before you accomplish your goal, you can start a new run. You will start the run with any items that you
-received from other players. Any items that you picked up the "normal" way will be lost.
+received from other players. However, these items will be randomized within their rarity at the start of each run. 
+Any items that you picked up the "normal" way will be lost.
 
 Note, you can play Simulacrum mode as part of an Archipelago, but you can't achieve any of the victory conditions in
 Simulacrum. So you could, for example, collect most of your items through a Simulacrum run(only works in classic mode),
@@ -70,10 +74,10 @@ The Risk of Rain items are:
 
 Each item grants you a random in-game item from the category it belongs to.
 
-When an item is granted by another world to the Risk of Rain player (one of the items listed above) then a random
+When an item is granted by another world to the Risk of Rain player then a random
 in-game item of that tier will appear in the Risk of Rain player's inventory. If the item grant is an `Equipment` and
-the player already has an equipment item equipped then the _item that was equipped_ will be dropped on the ground and _
-the new equipment_ will take it's place. (If you want the old one back, pick it up.)
+the player already has an equipment item equipped then the _item that was equipped_ will be dropped on the ground and 
+_the new equipment_ will take it's place.
 
 Explore Mode items are:
 
@@ -91,10 +95,10 @@ Dlc_Sotv items
 * `Sulfur Pools`
 * `Void Locus`
 
-When a explore item is granted it will unlock that environment and will now be accessible to progress to victory! The 
-game will still pick randomly which environment is next but it will first check to see if they are available. If you have
-them unlocked it will weight the game to have a ***higher chance*** to go to one you have checks versus one you have 
-already completed. You will still not be able to goto a stage 3 environment from a stage 1 environment.
+When an explore item is granted, it will unlock that environment and will now be accessible! The 
+game will still pick randomly which environment is next, but it will first check to see if they are available. If you have
+multiple of the next environments unlocked, it will weight the game to have a ***higher chance*** to go to one you 
+have checks in versus one you have already completed. You will still be unable to go to a stage 3 environment from a stage 1 environment.
 
 
 
@@ -106,9 +110,9 @@ to 250** items. The number of items will be randomized between all players, so y
 item pickup step based on how many items the other players in the multiworld have. (Around 100 seems to be a good
 ballpark if you want to have a similar number of items to most other games.)
 
-In explore mode the amount of checks base on how many **chests, shrines, scavengers, radio scanners and, newt altars**
-are in the pool. With just the base game the numbers are **52 to 516** and with the dlc its **60 to 660** with 
-everything on default being **216**
+In explore mode, the amount of checks are based on how many **chests, shrines, scavengers, radio scanners, and newt altars**
+are in the pool. With just the base game, checks can range from **52 to 516**, with the DLC expanding it to **60 to 660**. 
+Leaving everything on default, the total number of checks comes out to **216** locations.
 
 After you have completed the specified number of checks, you won't send anything else to the multiworld. You can
 receive up to the specified number of randomized items from the multiworld as the players find them. In either case,
@@ -118,12 +122,15 @@ you can continue to collect items as normal in Risk of Rain 2 if you've already 
 
 When the Risk of Rain player fills up their location check bar then the next spawned item will become an item grant for
 another player's world (or possibly get sent back to yourself). The item in Risk of Rain will disappear in a poof of
-smoke and the grant will automatically go out to the multiworld.
+smoke and the grant will automatically go out to the multiworld. Additionally, you will see a message in the chat saying
+what item you sent out. If the message does not appear, this likely means that another game has collected their items from you.
 
 ## What is the item pickup step?
 
-The item pickup step is a YAML setting which allows you to set how many items you need to spawn before the _next_ item
-that is spawned disappears (in a poof of smoke) and goes out to the multiworld.
+The item pickup step is a setting in the YAML which allows you to set how many items you need to spawn before the _next_ item
+that is spawned disappears (in a poof of smoke) and goes out to the multiworld. For instance, an item step of **1** means that 
+every other chest will send an item to the multiworld. An item step of **2** means that every third chest sends out an item 
+just as an item step of **0** would send an item on **each chest.**
 
 ## Is Archipelago compatible with other Risk of Rain 2 mods?
 

@@ -1037,7 +1037,7 @@ class AdultTradeStart(OptionSet):
         "Pocket Cucco",
         "Cojiro",
         "Odd Mushroom",
-        "Poacher's Saw",
+        "Poachers Saw",
         "Broken Sword",
         "Prescription",
         "Eyeball Frog",
