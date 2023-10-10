@@ -60,7 +60,7 @@ class BossRando(Toggle):
 
 
 class BossScaling(DefaultOnToggle):
-    "When Boss Rando is enabled, scales the bosses' HP, XP, and ATK to the stats of the location they replace (Reccomended)"
+    "When Boss Rando is enabled, scales the bosses' HP, XP, and ATK to the stats of the location they replace (Recommended)"
     display_name = "Scale Random Boss Stats"
 
 

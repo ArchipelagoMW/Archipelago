@@ -295,7 +295,7 @@ Nuclear Rod;                        Calamity | Minions(1);                      
 Acid Rain Tier 2;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & Aquatic Scourge;
 
 // The Twins
-Soul of Sight;                      ;                                           The Twins;
+Soul of Sight;                      ;                                           #The Twins;
 Steampunker;                        Npc;                                        @mech_boss(1);
 Hammush;                            ;                                           Truffle & @mech_boss(1);
 Rainbow Rod;                        ;                                           Hardmode Anvil & Crystal Shard & Unicorn Horn & Pixie Dust & Soul of Light & Soul of Sight;
@@ -428,7 +428,7 @@ Duke Fishron;                       Location | Item;                            
 Pumpkin Moon;                       ;                                           Hardmode Anvil & Pumpkin & Ectoplasm & (@calamity | Hallowed Bar);
 Spooky Armor;                       ArmorMinions(4);                            Pumpkin Moon;
 Mourning Wood;                      Location | Item;                            Pumpkin Moon;
-Necromantic Scroll;                 Minions(1);                                 Mourning Wood;
+Necromantic Scroll;                 Minions(1);                                 #Mourning Wood;
 Papyrus Scarab;                     Minions(1);                                 Tinkerer's Workshop & Hercules Beetle & Necromantic Scroll;
 Pumpking;                           Location | Item;                            Pumpkin Moon;
 The Horseman's Blade;               ;                                           #Pumpking;

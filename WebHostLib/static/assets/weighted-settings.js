@@ -160,6 +160,7 @@ const buildUI = (settingData) => {
       weightedSettingsDiv.classList.add('invisible');
       itemPoolDiv.classList.add('invisible');
       hintsDiv.classList.add('invisible');
+      locationsDiv.classList.add('invisible');
       expandButton.classList.remove('invisible');
     });
 
@@ -168,6 +169,7 @@ const buildUI = (settingData) => {
       weightedSettingsDiv.classList.remove('invisible');
       itemPoolDiv.classList.remove('invisible');
       hintsDiv.classList.remove('invisible');
+      locationsDiv.classList.remove('invisible');
       expandButton.classList.add('invisible');
     });
   });
@@ -1134,8 +1136,8 @@ const validateSettings = () => {
       return;
     }
 
-    // Remove any disabled options
     Object.keys(settings[game]).forEach((setting) => {
+      // Remove any disabled options
       Object.keys(settings[game][setting]).forEach((option) => {
         if (settings[game][setting][option] === 0) {
           delete settings[game][setting][option];
@@ -1149,11 +1151,42 @@ const validateSettings = () => {
       ) {
         errorMessage = `${game} // ${setting} has no values above zero!`;
       }
+
+      // Remove weights from options with only one possibility
+      if (
+        Object.keys(settings[game][setting]).length === 1 &&
+        !Array.isArray(settings[game][setting]) &&
+        setting !== 'start_inventory'
+      ) {
+        settings[game][setting] = Object.keys(settings[game][setting])[0];
+      }
+
+      // Remove empty arrays
+      else if (
+        ['exclude_locations', 'priority_locations', 'local_items', 
+        'non_local_items', 'start_hints', 'start_location_hints'].includes(setting) &&
+        settings[game][setting].length === 0
+      ) {
+        delete settings[game][setting];
+      }
+
+      // Remove empty start inventory
+      else if (
+        setting === 'start_inventory' &&
+        Object.keys(settings[game]['start_inventory']).length === 0
+      ) {
+        delete settings[game]['start_inventory'];
+      }
     });
   });
 
   if (Object.keys(settings.game).length === 0) {
     errorMessage = 'You have not chosen a game to play!';
+  }
+
+  // Remove weights if there is only one game
+  else if (Object.keys(settings.game).length === 1) {
+    settings.game = Object.keys(settings.game)[0];
   }
 
   // If an error occurred, alert the user and do not export the file
