@@ -37,7 +37,7 @@ class MessengerRules:
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player) and self.can_dboost(state),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_dart(state),
+            "Music Box": self.has_dart,
         }
 
         self.location_rules = {
@@ -145,9 +145,10 @@ class MessengerRules:
             if region.name == "The Shop":
                 for loc in [location for location in region.locations if isinstance(location, MessengerShopLocation)]:
                     loc.access_rule = loc.can_afford
-        if self.world.options.goal == Goal.option_power_seal_hunt:
-            set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
-                     lambda state: state.has("Shop Chest", self.player))
+        add_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
+                 lambda state: state.has("Shop Chest", self.player)
+                 if self.world.options.goal == Goal.option_power_seal_hunt
+                 else state.has_all(NOTES, self.player))
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
         if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:

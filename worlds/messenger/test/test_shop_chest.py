@@ -24,11 +24,13 @@ class AllSealsRequired(MessengerTestBase):
 
         self.assertEqual(self.can_reach_location("Shop Chest"), False)
         self.assertBeatable(False)
-        self.collect_all_but(["Power Seal", "Shop Chest", "Rescue Phantom"])
+        self.collect_all_but(["Power Seal", "Rope Dart", "Shop Chest", "Rescue Phantom"])
         self.assertEqual(self.can_reach_location("Shop Chest"), False)
         self.assertBeatable(False)
         self.collect_by_name("Power Seal")
         self.assertEqual(self.can_reach_location("Shop Chest"), True)
+        self.assertBeatable(False)
+        self.collect_by_name("Rope Dart")
         self.assertBeatable(True)
 
 
