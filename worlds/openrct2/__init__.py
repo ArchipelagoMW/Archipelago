@@ -352,6 +352,7 @@ class OpenRCT2World(World):
             "randomize_park_values": self.multiworld.randomize_park_values[self.player].value,
             "visibility": self.multiworld.visibility[self.player].value,
             "rules": self.multiworld.include_park_rules[self.player].value,
+            "preferred_intensity": self.multiworld.preferred_intensity[self.player].value,
             "objectives": objectives,
             "location_prices": self.location_prices
         }

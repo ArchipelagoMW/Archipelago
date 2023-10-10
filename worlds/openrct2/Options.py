@@ -177,6 +177,11 @@ class Difficulty(IntEnum):
     hard = 3
     extreme = 4
 
+class Preferred_Intensity(IntEnum):
+    less_intense = 0
+    normal = 1
+    more_intense = 2
+
 class Randomization_Range(IntEnum):
     low = 0
     medium = 1
@@ -426,6 +431,15 @@ class Difficulty(Choice):
     option_extreme = Difficulty.extreme.value
     default = Difficulty.medium.value
 
+class Preferred_Intensity(Choice):
+    """Choose a prefered intensity for your guests. Less intense will limit guests to a maximum of 4 intensity, and more intense will limit guests
+    to a minimum of 8 intensity in most circumstances. Normal is reccommended for most players.
+    """
+    option_less_intense = Preferred_Intensity.less_intense.value
+    option_normal = Preferred_Intensity.normal.value
+    option_more_intense = Preferred_Intensity.more_intense.value
+    default = Preferred_Intensity.normal.value
+
 class Randomization_Range(Choice):
     """Choose the spread for randomized values.
     """
@@ -594,6 +608,7 @@ openRCT2_options = {
     "include_park_rules": Include_Park_Rules,
     "randomize_park_values": Randomize_Park_Values,
     "visibility": Visibility,
+    "preferred_intensity": Preferred_Intensity,
     # "include_guest_objective": Include_Guest_Objective,
     "guest_objective": Guest_Objective,
     # "include_park_value_objective": Include_Park_Value_Objective,
