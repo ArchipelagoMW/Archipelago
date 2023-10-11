@@ -360,7 +360,7 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
 class Toggle(NumericOption):
     option_false = 0
     option_true = 1
-    default = 0
+    default: typing.ClassVar[typing.Union[int, typing.Literal["random"]]] = 0
 
     def __init__(self, value: int):
         assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
@@ -390,7 +390,7 @@ class Toggle(NumericOption):
 
 
 class DefaultOnToggle(Toggle):
-    default = 1
+    default: typing.ClassVar[typing.Union[int, typing.Literal["random"]]] = 1
 
 
 class Choice(NumericOption):
@@ -787,8 +787,8 @@ class VerifyKeys(metaclass=FreezeValidKeys):
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
 
-class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
-    default: typing.ClassVar[typing.Dict[str, typing.Any]] = {}
+class OptionDict(Option[typing.Mapping[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
+    default: typing.ClassVar[typing.Union[typing.Mapping[str, typing.Any], typing.Literal["random"]]] = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
@@ -829,7 +829,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
     # Not a docstring so it doesn't get grabbed by the options system.
 
-    default: typing.ClassVar[typing.List[typing.Any]] = []
+    default: typing.ClassVar[typing.Union[typing.List[typing.Any], typing.Literal["random"]]] = []
     supports_weighting = False
 
     def __init__(self, value: typing.List[typing.Any]):
@@ -854,8 +854,8 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
         return item in self.value
 
 
-class OptionSet(Option[typing.AbstractSet[str]], VerifyKeys):
-    default: typing.ClassVar[typing.AbstractSet[str]] = frozenset()
+class OptionSet(Option[typing.Set[str]], VerifyKeys):
+    default: typing.ClassVar[typing.Union[typing.Set[str], typing.Literal["random"]]] = frozenset()  # type: ignore
     supports_weighting = False
 
     def __init__(self, value: typing.Iterable[str]):
@@ -895,7 +895,7 @@ class Accessibility(Choice):
     option_items = 1
     option_minimal = 2
     alias_none = 2
-    default = 1
+    default: typing.ClassVar[typing.Union[int, typing.Literal["random"]]] = 1
 
 
 class ProgressionBalancing(SpecialRange):
