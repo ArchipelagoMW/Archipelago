@@ -48,12 +48,12 @@
     margin-bottom: 7px;
 }
 
-#games #page-controls{
+#games .page-controls{
     display: flex;
     flex-direction: row;
     margin-top: 0.25rem;
 }
 
-#games #page-controls button{
+#games .page-controls button{
     margin-left: 0.5rem;
 }
