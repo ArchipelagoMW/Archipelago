@@ -158,7 +158,7 @@ LevelScreen:
         bl ReceiveNextItem  ; a1
 
         cmp r0, #0xFF
-        beq @@Return
+        beq @@CollectJunk
         ; Set text timer
         ldr r1, =TextTimer
         mov r2, #120
