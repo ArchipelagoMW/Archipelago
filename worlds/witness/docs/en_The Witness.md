@@ -10,13 +10,13 @@ config file.
 Puzzles are randomly generated using the popular [Sigma Rando](https://github.com/sigma144/witness-randomizer).
 They are made to be similar to the original game, but with different solutions.
 
-Ontop of that, each puzzle symbol (Squares, Stars, Dots, etc.) is now an item.
+On top of that, each puzzle symbol (Squares, Stars, Dots, etc.) is now an item.
 Panels with puzzle symbols on them are now locked initially.
 
 ## What is a "check" in The Witness?
 
 Solving the last panel in a row of panels or an important standalone panel will count as a check, and send out an item.
-It is also possible to add Environmental Puzzles into the location pool via a setting.
+It is also possible to add Environmental Puzzles into the location pool via the "Shuffle Environmental Puzzles" setting.
 
 ## What "items" can you unlock in The Witness?
 
