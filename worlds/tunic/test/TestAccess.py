@@ -1,5 +1,5 @@
 from . import TunicTestBase
-
+from .. import Options
 
 class TestAccess(TunicTestBase):
     def test_temple_access(self):
@@ -18,7 +18,7 @@ class TestAccess(TunicTestBase):
 
 
 class TestHexQuest(TunicTestBase):
-    options = {"hexagon_quest": "true"}
+    options = {Options.HexagonQuest.internal_name: Options.HexagonQuest.option_true}
 
     # test that you need the gold hexes to reach the Heir in Hex Quest
     def test_hexquest_victory(self):
@@ -28,7 +28,7 @@ class TestHexQuest(TunicTestBase):
 
 
 class TestNormalGoal(TunicTestBase):
-    options = {"hexagon_quest": "false"}
+    options = {Options.HexagonQuest.internal_name: Options.HexagonQuest.option_false}
 
     # test that you need the three colored hexes to reach the Heir in standard
     def test_normal_goal(self):

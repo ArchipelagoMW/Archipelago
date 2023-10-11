@@ -6,16 +6,19 @@ from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, 
 class SwordProgression(DefaultOnToggle):
     """Adds four sword upgrades to the item pool that will progressively grant stronger melee weapons, including two new
     swords with increased range and attack power."""
+    internal_name = "sword_progression"
     display_name = "Sword Progression"
 
 
 class StartWithSword(Toggle):
     """Start with a sword in the player's inventory. Does not count towards Sword Progression."""
+    internal_name = "start_with_sword"
     display_name = "Start With Sword"
 
 
 class KeysBehindBosses(Toggle):
     """Places the three hexagon keys behind their respective boss fight in your world."""
+    internal_name = "keys_behind_bosses"
     display_name = "Keys Behind Bosses"
 
 
@@ -24,12 +27,14 @@ class AbilityShuffling(Toggle):
         If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
         *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
     """
+    internal_name = "ability_shuffling"
     display_name = "Ability Shuffling"
 
 
 class FoolTraps(Choice):
     """Replaces low-to-medium value money rewards in the item pool with fool traps, which cause random negative
     effects to the player."""
+    internal_name = "fool_traps"
     display_name = "Fool Traps"
     option_off = 0
     option_normal = 1
@@ -41,11 +46,13 @@ class FoolTraps(Choice):
 class HexagonQuest(Toggle):
     """An alternate goal that shuffles Gold "Questagon" items into the item pool and allows the game to be completed after
     collecting the required number of them."""
+    internal_name = "hexagon_quest"
     display_name = "Hexagon Quest"
 
 
 class HexagonGoal(Range):
     """How many Gold Questagons are required to complete the game on Hexagon Quest."""
+    internal_name = "hexagon_goal"
     display_name = "Gold Hexagons Required"
     range_start = 15
     range_end = 50
@@ -54,6 +61,7 @@ class HexagonGoal(Range):
 
 class ExtraHexagonPercentage(Range):
     """How many extra Gold Questagons are shuffled into the item pool, taken as a percentage of the goal amount."""
+    internal_name = "extra_hexagon_percentage"
     display_name = "Percentage of Extra Gold Hexagons"
     range_start = 0
     range_end = 100
