@@ -4,7 +4,7 @@ from ... import options
 
 
 def has_skull_cavern_elevator_to_floor(self, floor: int) -> StardewRule:
-    if self.options[options.ElevatorProgression] != options.ElevatorProgression.option_vanilla and \
-            ModNames.skull_cavern_elevator in self.options[options.Mods]:
+    if self.options.elevator_progression != options.ElevatorProgression.option_vanilla and \
+            ModNames.skull_cavern_elevator in self.options.mods:
         return self.received("Progressive Skull Cavern Elevator", floor // 25)
     return True_()
