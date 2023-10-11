@@ -4,7 +4,7 @@ import logging
 import itertools
 from typing import List, Dict, Any, cast
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import items
 from . import locations
