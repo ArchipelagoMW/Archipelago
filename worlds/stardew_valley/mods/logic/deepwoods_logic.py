@@ -4,19 +4,19 @@ from ...logic.has_logic import HasLogic
 from ...logic.received_logic import ReceivedLogic
 from ...logic.skill_logic import SkillLogic
 from ...logic.tool_logic import ToolLogic
+from ...options import SkillProgression, ElevatorProgression
 from ...strings.craftable_names import Bomb
 from ...strings.performance_names import Performance
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.ap_names.transport_names import ModTransportation
 from ...stardew_rule import StardewRule, True_, And
-from ... import options
 
 
 class DeepWoodsLogic:
     player: int
-    skill_option: int
-    elevator_option: int
+    skill_option: SkillProgression
+    elevator_option: ElevatorProgression
     received: ReceivedLogic
     has: HasLogic
     combat: CombatLogic
@@ -24,7 +24,7 @@ class DeepWoodsLogic:
     skill: SkillLogic
     cooking: CookingLogic
 
-    def __init__(self, player: int, skill_option: int, elevator_option: int, received: ReceivedLogic, has: HasLogic, combat: CombatLogic, tool: ToolLogic,
+    def __init__(self, player: int, skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogic, has: HasLogic, combat: CombatLogic, tool: ToolLogic,
                  skill: SkillLogic, cooking: CookingLogic):
         self.player = player
         self.skill_option = skill_option
@@ -46,13 +46,13 @@ class DeepWoodsLogic:
         if depth > 50:
             rules.append(self.combat.can_fight_at_level(Performance.great) & self.cooking.can_cook() &
                          self.received(ModTransportation.woods_obelisk))
-        if self.skill_option == options.SkillProgression.option_progressive:
+        if self.skill_option == SkillProgression.option_progressive:
             combat_tier = min(10, max(0, tier + 5))
             rules.append(self.skill.has_level(Skill.combat, combat_tier))
         return And(rules)
 
     def has_woods_rune_to_depth(self, floor: int) -> StardewRule:
-        if self.elevator_option == options.ElevatorProgression.option_vanilla:
+        if self.elevator_option == ElevatorProgression.option_vanilla:
             return True_()
         return self.received("Progressive Woods Obelisk Sigils", int(floor / 10))
 

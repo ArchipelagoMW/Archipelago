@@ -1,10 +1,10 @@
-from typing import Iterable, Dict
+from typing import Dict
 
 from .has_logic import HasLogic
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
-from .. import options
+from ..options import BuildingProgression
 from ..stardew_rule import StardewRule, True_, False_, Has
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.ap_names.event_names import Event
@@ -17,22 +17,20 @@ from ..strings.region_names import Region
 
 class BuildingLogic:
     player: int
-    building_option: int
+    building_option: BuildingProgression
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
     money: MoneyLogic
     building_rules: Dict[str, StardewRule]
-    mods_option: Iterable[str]
 
-    def __init__(self, player: int, building_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic, mods_option: Iterable[str]):
+    def __init__(self, player: int, building_option: BuildingProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
         self.player = player
         self.building_option = building_option
         self.received = received
         self.has = has
         self.region = region
         self.money = money
-        self.mods_option = mods_option
         self.building_rules = dict()
 
     def initialize_rules(self):
@@ -62,7 +60,7 @@ class BuildingLogic:
 
     def has_building(self, building: str) -> StardewRule:
         carpenter_rule = self.received(Event.can_construct_buildings)
-        if not self.building_option & options.BuildingProgression.option_progressive:
+        if not self.building_option & BuildingProgression.option_progressive:
             return Has(building, self.building_rules) & carpenter_rule
 
         count = 1
@@ -83,7 +81,7 @@ class BuildingLogic:
         if upgrade_level > 3:
             return False_()
 
-        if self.building_option & options.BuildingProgression.option_progressive:
+        if self.building_option & BuildingProgression.option_progressive:
             return self.received(f"Progressive House", upgrade_level) & self.region.can_reach(Region.carpenter)
 
         if upgrade_level == 1:

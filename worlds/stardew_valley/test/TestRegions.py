@@ -39,7 +39,7 @@ class TestEntranceRando(unittest.TestCase):
             with self.subTest(flag=flag, msg=f"Seed: {seed}"):
                 rand = random.Random(seed)
                 world_options = {EntranceRandomization.internal_name: option,
-                                 ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false}
+                                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false}
                 multiworld = setup_solo_multiworld(world_options)
                 regions_by_name = {region.name: region for region in vanilla_regions}
 
@@ -65,7 +65,7 @@ class TestEntranceRando(unittest.TestCase):
                 seed = random.randrange(sys.maxsize)
                 rand = random.Random(seed)
                 world_options = {EntranceRandomization.internal_name: option,
-                                 ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true}
+                                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true}
                 multiworld = setup_solo_multiworld(world_options)
                 regions_by_name = {region.name: region for region in vanilla_regions}
 

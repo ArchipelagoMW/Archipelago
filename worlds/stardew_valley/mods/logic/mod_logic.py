@@ -23,6 +23,7 @@ from ...logic.season_logic import SeasonLogic
 from ...logic.skill_logic import SkillLogic
 from ...logic.tool_logic import ToolLogic
 from ...logic.wallet_logic import WalletLogic
+from ...options import SkillProgression, ElevatorProgression, Mods
 
 
 class ModLogic:
@@ -34,7 +35,7 @@ class ModLogic:
     deepwoods: DeepWoodsLogic
     skill: ModSkillLogic
 
-    def __init__(self, player: int, skill_option: int, elevator_option: int, mods: Iterable[str], received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+    def __init__(self, player: int, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  action: ActionLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, building: BuildingLogic, wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic):
         self.magic = MagicLogic(player, mods, received, region)

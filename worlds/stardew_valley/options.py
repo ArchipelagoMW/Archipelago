@@ -670,11 +670,11 @@ class StardewValleyOptions(PerGameCommonOptions):
     help_wanted_locations: HelpWantedLocations
     fishsanity: Fishsanity
     museumsanity: Museumsanity
-    Monstersanity,
-    Shipsanity,
-    Cooksanity,
-    Chefsanity,
-    Craftsanity,
+    monstersanity: Monstersanity
+    shipsanity: Shipsanity
+    cooksanity: Cooksanity
+    chefsanity: Chefsanity
+    craftsanity: Craftsanity
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
     movement_buff_number: NumberOfMovementBuffs

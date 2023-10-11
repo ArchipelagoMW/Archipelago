@@ -2,6 +2,7 @@ from typing import Iterable
 
 from ...logic.received_logic import ReceivedLogic
 from ...logic.region_logic import RegionLogic
+from ...options import Mods
 from ...strings.region_names import MagicRegion
 from ...mods.mod_data import ModNames
 from ...strings.spells import MagicSpell
@@ -11,11 +12,11 @@ from ...stardew_rule import Count, StardewRule, False_
 
 class MagicLogic:
     player: int
-    mods: Iterable[str]
+    mods: Mods
     received: ReceivedLogic
     region: RegionLogic
 
-    def __init__(self, player: int, mods: Iterable[str], received: ReceivedLogic, region: RegionLogic):
+    def __init__(self, player: int, mods: Mods, received: ReceivedLogic, region: RegionLogic):
         self.player = player
         self.mods = mods
         self.received = received

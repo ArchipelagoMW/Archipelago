@@ -1,10 +1,9 @@
-from typing import Iterable
-
 from .has_logic import HasLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .time_logic import TimeLogic
-from ..stardew_rule import StardewRule, And, Or, Reach, Count, True_
+from ..options import StartingMoney
+from ..stardew_rule import StardewRule, True_
 from ..strings.currency_names import Currency
 
 MONEY_PER_MONTH = 15000
@@ -15,13 +14,13 @@ qi_gem_rewards = ["100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Q
 
 class MoneyLogic:
     player: int
-    starting_money_option: int
+    starting_money_option: StartingMoney
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
     time: TimeLogic
 
-    def __init__(self, player: int, starting_money_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, time: TimeLogic):
+    def __init__(self, player: int, starting_money_option: StartingMoney, received: ReceivedLogic, has: HasLogic, region: RegionLogic, time: TimeLogic):
         self.player = player
         self.starting_money_option = starting_money_option
         self.received = received

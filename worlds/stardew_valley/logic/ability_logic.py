@@ -3,6 +3,7 @@ from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
+from ..options import NumberOfMovementBuffs, NumberOfLuckBuffs
 from ..mods.logic.magic_logic import MagicLogic
 from ..mods.logic.skills_logic import ModSkillLogic
 from ..stardew_rule import StardewRule
@@ -14,8 +15,8 @@ from ..strings.tool_names import ToolMaterial, Tool
 
 class AbilityLogic:
     player: int
-    movement_buff_option: int
-    luck_buff_option: int
+    movement_buff_option: NumberOfMovementBuffs
+    luck_buff_option: NumberOfLuckBuffs
     received: ReceivedLogic
     region: RegionLogic
     tool: ToolLogic
@@ -24,7 +25,7 @@ class AbilityLogic:
     magic: MagicLogic
     mod_skill: ModSkillLogic
 
-    def __init__(self, player: int, movement_buff_option: int, luck_buff_option: int, received: ReceivedLogic, region: RegionLogic, tool: ToolLogic,
+    def __init__(self, player: int, movement_buff_option: NumberOfMovementBuffs, luck_buff_option: NumberOfLuckBuffs, received: ReceivedLogic, region: RegionLogic, tool: ToolLogic,
                  skill: SkillLogic, mine: MineLogic):
         self.player = player
         self.movement_buff_option = movement_buff_option
@@ -65,4 +66,4 @@ class AbilityLogic:
         return region_rule & ((tool_rule & foraging_rule) | magic_rule)
 
     def has_max_buffs(self) -> StardewRule:
-        return self.received(Buff.movement, self.movement_buff_option) & self.received(Buff.luck, self.luck_buff_option)
+        return self.received(Buff.movement, self.movement_buff_option.value) & self.received(Buff.luck, self.luck_buff_option.value)

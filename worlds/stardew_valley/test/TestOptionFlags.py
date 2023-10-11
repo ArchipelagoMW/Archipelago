@@ -1,15 +1,17 @@
 from . import SVTestBase
-from .. import options
+from .checks.option_checks import get_stardew_world
+from .. import BuildingProgression
+from ..options import ToolProgression
 
 
 class TestBitFlagsVanilla(SVTestBase):
-    options = {options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-               options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla}
+    options = {ToolProgression.internal_name: ToolProgression.option_vanilla,
+               BuildingProgression.internal_name: BuildingProgression.option_vanilla}
 
     def test_options_are_not_detected_as_progressive(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_progressive
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
+        world_options = get_stardew_world(self.multiworld).options
+        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        building_progressive = world_options.building_progression & BuildingProgression.option_progressive
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
 
@@ -20,13 +22,13 @@ class TestBitFlagsVanilla(SVTestBase):
 
 
 class TestBitFlagsVanillaCheap(SVTestBase):
-    options = {options.ToolProgression.internal_name: options.ToolProgression.option_vanilla_cheap,
-               options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla_cheap}
+    options = {ToolProgression.internal_name: ToolProgression.option_vanilla_cheap,
+               BuildingProgression.internal_name: BuildingProgression.option_vanilla_cheap}
 
     def test_options_are_not_detected_as_progressive(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_progressive
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
+        world_options = get_stardew_world(self.multiworld).options
+        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        building_progressive = world_options.building_progression & BuildingProgression.option_progressive
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
 
@@ -37,13 +39,13 @@ class TestBitFlagsVanillaCheap(SVTestBase):
 
 
 class TestBitFlagsVanillaVeryCheap(SVTestBase):
-    options = {options.ToolProgression.internal_name: options.ToolProgression.option_vanilla_very_cheap,
-               options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla_very_cheap}
+    options = {ToolProgression.internal_name: ToolProgression.option_vanilla_very_cheap,
+               BuildingProgression.internal_name: BuildingProgression.option_vanilla_very_cheap}
 
     def test_options_are_not_detected_as_progressive(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_progressive
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
+        world_options = get_stardew_world(self.multiworld).options
+        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        building_progressive = world_options.building_progression & BuildingProgression.option_progressive
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
 
@@ -54,13 +56,13 @@ class TestBitFlagsVanillaVeryCheap(SVTestBase):
 
 
 class TestBitFlagsProgressive(SVTestBase):
-    options = {options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-               options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive}
+    options = {ToolProgression.internal_name: ToolProgression.option_progressive,
+               BuildingProgression.internal_name: BuildingProgression.option_progressive}
 
     def test_options_are_detected_as_progressive(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_progressive
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
+        world_options = get_stardew_world(self.multiworld).options
+        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        building_progressive = world_options.building_progression & BuildingProgression.option_progressive
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
 
@@ -71,13 +73,13 @@ class TestBitFlagsProgressive(SVTestBase):
 
 
 class TestBitFlagsProgressiveCheap(SVTestBase):
-    options = {options.ToolProgression.internal_name: options.ToolProgression.option_progressive_cheap,
-               options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive_cheap}
+    options = {ToolProgression.internal_name: ToolProgression.option_progressive_cheap,
+               BuildingProgression.internal_name: BuildingProgression.option_progressive_cheap}
 
     def test_options_are_detected_as_progressive(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_progressive
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
+        world_options = get_stardew_world(self.multiworld).options
+        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        building_progressive = world_options.building_progression & BuildingProgression.option_progressive
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
 
@@ -88,13 +90,13 @@ class TestBitFlagsProgressiveCheap(SVTestBase):
 
 
 class TestBitFlagsProgressiveVeryCheap(SVTestBase):
-    options = {options.ToolProgression.internal_name: options.ToolProgression.option_progressive_very_cheap,
-               options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive_very_cheap}
+    options = {ToolProgression.internal_name: ToolProgression.option_progressive_very_cheap,
+               BuildingProgression.internal_name: BuildingProgression.option_progressive_very_cheap}
 
     def test_options_are_detected_as_progressive(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_progressive
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
+        world_options = get_stardew_world(self.multiworld).options
+        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        building_progressive = world_options.building_progression & BuildingProgression.option_progressive
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
 

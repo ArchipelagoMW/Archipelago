@@ -18,7 +18,7 @@ from .rules import set_rules
 from worlds.generic.Rules import set_rule
 from .stardew_rule import True_, StardewRule
 from .strings.ap_names.event_names import Event
-from .strings.goal_names import Goal
+from .strings.goal_names import Goal as GoalName
 
 client_version = 0
 
@@ -216,20 +216,20 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table[GoalName.greatest_walnut_hunter],
                                        self.logic.has_walnut(130).simplify(),
                                        Event.victory)
-        elif self.options[options.Goal] == options.Goal.option_protector_of_the_valley:
-            self.create_event_location(location_table[Goal.protector_of_the_valley],
+        elif self.options.goal == options.Goal.option_protector_of_the_valley:
+            self.create_event_location(location_table[GoalName.protector_of_the_valley],
                                        self.logic.can_complete_all_monster_slaying_goals().simplify(),
                                        Event.victory)
-        elif self.options[options.Goal] == options.Goal.option_full_shipment:
-            self.create_event_location(location_table[Goal.full_shipment],
+        elif self.options.goal == options.Goal.option_full_shipment:
+            self.create_event_location(location_table[GoalName.full_shipment],
                                        self.logic.shipping.can_ship_everything().simplify(),
                                        Event.victory)
-        elif self.options[options.Goal] == options.Goal.option_gourmet_chef:
-            self.create_event_location(location_table[Goal.gourmet_chef],
+        elif self.options.goal == options.Goal.option_gourmet_chef:
+            self.create_event_location(location_table[GoalName.gourmet_chef],
                                        self.logic.cooking.can_cook_everything().simplify(),
                                        Event.victory)
-        elif self.options[options.Goal] == options.Goal.option_perfection:
-            self.create_event_location(location_table[Goal.perfection],
+        elif self.options.goal == options.Goal.option_perfection:
+            self.create_event_location(location_table[GoalName.perfection],
                                        self.logic.has_everything(self.all_progression_items).simplify(),
                                        Event.victory)
 

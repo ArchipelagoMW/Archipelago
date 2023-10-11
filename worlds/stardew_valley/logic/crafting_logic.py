@@ -10,15 +10,16 @@ from .. import options
 from ..data.craftable_data import CraftingRecipe
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource
 from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource
+from ..options import Craftsanity, FestivalLocations, SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.region_names import Region
 
 
 class CraftingLogic:
     player: int
-    craftsanity_option: int
-    festivals_option: int
-    special_orders_option: int
+    craftsanity_option: Craftsanity
+    festivals_option: FestivalLocations
+    special_orders_option: SpecialOrderLocations
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
@@ -28,7 +29,7 @@ class CraftingLogic:
     skill: SkillLogic
     special_orders: SpecialOrderLogic
 
-    def __init__(self, player: int, craftsanity_option: int, festivals_option: int, special_orders_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+    def __init__(self, player: int, craftsanity_option: Craftsanity, festivals_option: FestivalLocations, special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  time: TimeLogic, money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
         self.player = player
         self.craftsanity_option = craftsanity_option
@@ -62,11 +63,11 @@ class CraftingLogic:
                 return self.can_learn_recipe(recipe)
             else:
                 return self.received_recipe(recipe.item)
-        if self.craftsanity_option == options.Craftsanity.option_none:
+        if self.craftsanity_option == Craftsanity.option_none:
             return self.can_learn_recipe(recipe)
         if isinstance(recipe.source, StarterSource) or isinstance(recipe.source, ShopTradeSource) or isinstance(recipe.source, ShopSource):
             return self.received_recipe(recipe.item)
-        if isinstance(recipe.source, SpecialOrderSource) and self.special_orders_option != options.SpecialOrderLocations.option_disabled:
+        if isinstance(recipe.source, SpecialOrderSource) and self.special_orders_option != SpecialOrderLocations.option_disabled:
             return self.received_recipe(recipe.item)
         return self.can_learn_recipe(recipe)
 
@@ -86,7 +87,7 @@ class CraftingLogic:
         if isinstance(recipe.source, FriendshipSource):
             return self.relationship.has_hearts(recipe.source.friend, recipe.source.hearts)
         if isinstance(recipe.source, SpecialOrderSource):
-            if self.special_orders_option == options.SpecialOrderLocations.option_disabled:
+            if self.special_orders_option == SpecialOrderLocations.option_disabled:
                 return self.special_orders.can_complete_special_order(recipe.source.special_order)
             return self.received_recipe(recipe.item)
         if isinstance(recipe.source, LogicSource):

@@ -1,9 +1,10 @@
-from typing import Iterable, Dict
+from typing import Dict
 
 from ...logic.has_logic import HasLogic
 from ...logic.region_logic import RegionLogic
 from ...logic.relationship_logic import RelationshipLogic
 from ...logic.season_logic import SeasonLogic
+from ...options import Mods
 from ...strings.quest_names import ModQuest
 from ..mod_data import ModNames
 from ...strings.food_names import Meal, Beverage
@@ -15,13 +16,13 @@ from ...stardew_rule import StardewRule
 
 
 class QuestLogic:
-    mods: Iterable[str]
+    mods: Mods
     has: HasLogic
     region: RegionLogic
     season: SeasonLogic
     relationship: RelationshipLogic
 
-    def __init__(self, mods: Iterable[str], has: HasLogic, region: RegionLogic, season: SeasonLogic, relationship: RelationshipLogic):
+    def __init__(self, mods: Mods, has: HasLogic, region: RegionLogic, season: SeasonLogic, relationship: RelationshipLogic):
         self.mods = mods
         self.has = has
         self.region = region

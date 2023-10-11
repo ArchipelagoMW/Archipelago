@@ -2,7 +2,7 @@ from typing import Iterable
 
 from .received_logic import ReceivedLogic
 from .time_logic import TimeLogic
-from .. import options
+from ..options import SeasonRandomization
 from ..stardew_rule import StardewRule, True_, And, Or
 from ..strings.generic_names import Generic
 from ..strings.season_names import Season
@@ -10,11 +10,11 @@ from ..strings.season_names import Season
 
 class SeasonLogic:
     player: int
-    season_option: int
+    season_option: SeasonRandomization
     received: ReceivedLogic
     time: TimeLogic
 
-    def __init__(self, player: int, season_option: int, received_logic: ReceivedLogic, time: TimeLogic):
+    def __init__(self, player: int, season_option: SeasonRandomization, received_logic: ReceivedLogic, time: TimeLogic):
         self.player = player
         self.season_option = season_option
         self.received = received_logic
@@ -30,9 +30,9 @@ class SeasonLogic:
         if season in self.has_season_rules:
             return self.has_season_rules[season]
         seasons_order = [Season.spring, Season.summer, Season.fall, Season.winter]
-        if self.season_option == options.SeasonRandomization.option_progressive:
+        if self.season_option == SeasonRandomization.option_progressive:
             self.has_season_rules[season] = self.received(Season.progressive, seasons_order.index(season))
-        elif self.season_option == options.SeasonRandomization.option_disabled:
+        elif self.season_option == SeasonRandomization.option_disabled:
             if season == Season.spring:
                 self.has_season_rules[season] = True_()
             else:

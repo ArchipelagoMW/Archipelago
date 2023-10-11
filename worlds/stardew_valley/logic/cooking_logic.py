@@ -8,11 +8,12 @@ from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
 from .skill_logic import SkillLogic
 from .time_logic import TimeLogic
-from .. import options
+from ..options import ExcludeGingerIsland
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, QueenOfSauceSource, CookingRecipe, \
     all_cooking_recipes_by_name
-from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource
+from ..data.recipe_source import CutsceneSource, ShopTradeSource
 from ..locations import locations_by_tag, LocationTags
+from ..options import Chefsanity
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
@@ -21,8 +22,8 @@ from ..strings.tv_channel_names import Channel
 
 class CookingLogic:
     player: int
-    chefsanity_option: int
-    exclude_ginger_island: int
+    chefsanity_option: Chefsanity
+    exclude_ginger_island: ExcludeGingerIsland
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
@@ -34,7 +35,7 @@ class CookingLogic:
     relationship: RelationshipLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, chefsanity_option: int, exclude_ginger_island: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
+    def __init__(self, player: int, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
                  action: ActionLogic, buildings: BuildingLogic, relationship: RelationshipLogic, skill: SkillLogic):
         self.player = player
         self.chefsanity_option = chefsanity_option
@@ -65,21 +66,21 @@ class CookingLogic:
         return cook_rule & recipe_rule & ingredients_rule & time_rule
 
     def knows_recipe(self, source: RecipeSource, meal_name: str) -> StardewRule:
-        if self.chefsanity_option == options.Chefsanity.option_none:
+        if self.chefsanity_option == Chefsanity.option_none:
             return self.can_learn_recipe(source)
         if isinstance(source, StarterSource):
             return self.received_recipe(meal_name)
-        if isinstance(source, ShopTradeSource) and self.chefsanity_option & options.Chefsanity.option_purchases:
+        if isinstance(source, ShopTradeSource) and self.chefsanity_option & Chefsanity.option_purchases:
             return self.received_recipe(meal_name)
-        if isinstance(source, ShopSource) and self.chefsanity_option & options.Chefsanity.option_purchases:
+        if isinstance(source, ShopSource) and self.chefsanity_option & Chefsanity.option_purchases:
             return self.received_recipe(meal_name)
-        if isinstance(source, SkillSource) and self.chefsanity_option & options.Chefsanity.option_skills:
+        if isinstance(source, SkillSource) and self.chefsanity_option & Chefsanity.option_skills:
             return self.received_recipe(meal_name)
-        if isinstance(source, CutsceneSource) and self.chefsanity_option & options.Chefsanity.option_friendship:
+        if isinstance(source, CutsceneSource) and self.chefsanity_option & Chefsanity.option_friendship:
             return self.received_recipe(meal_name)
-        if isinstance(source, FriendshipSource) and self.chefsanity_option & options.Chefsanity.option_friendship:
+        if isinstance(source, FriendshipSource) and self.chefsanity_option & Chefsanity.option_friendship:
             return self.received_recipe(meal_name)
-        if isinstance(source, QueenOfSauceSource) and self.chefsanity_option & options.Chefsanity.option_queen_of_sauce:
+        if isinstance(source, QueenOfSauceSource) and self.chefsanity_option & Chefsanity.option_queen_of_sauce:
             return self.received_recipe(meal_name)
         return self.can_learn_recipe(source)
 
@@ -107,7 +108,7 @@ class CookingLogic:
     def can_cook_everything(self) -> StardewRule:
         cooksanity_prefix = "Cook "
         all_recipes_to_cook = []
-        include_island = self.exclude_ginger_island == options.ExcludeGingerIsland.option_false
+        include_island = self.exclude_ginger_island == ExcludeGingerIsland.option_false
         for location in locations_by_tag[LocationTags.COOKSANITY]:
             if include_island or LocationTags.GINGER_ISLAND not in location.tags:
                 all_recipes_to_cook.append(location.name[len(cooksanity_prefix):])

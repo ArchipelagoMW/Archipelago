@@ -5,6 +5,7 @@ from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
 from .. import options
 from ..mods.logic.elevator_logic import ModElevatorLogic
+from ..options import ToolProgression, SkillProgression, ElevatorProgression
 from ..stardew_rule import StardewRule, And, True_
 from ..strings.performance_names import Performance
 from ..strings.region_names import Region
@@ -14,9 +15,9 @@ from ..strings.tool_names import Tool, ToolMaterial
 
 class MineLogic:
     player: int
-    tool_option = int
-    skill_option = int
-    elevator_option = int
+    tool_option: ToolProgression
+    skill_option: SkillProgression
+    elevator_option: ElevatorProgression
     received: ReceivedLogic
     region: RegionLogic
     combat: CombatLogic
@@ -24,7 +25,7 @@ class MineLogic:
     skill: SkillLogic
     mod_elevator: ModElevatorLogic
 
-    def __init__(self, player: int, tool_option: int, skill_option: int, elevator_option: int, received: ReceivedLogic, region: RegionLogic,
+    def __init__(self, player: int, tool_option: ToolProgression, skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogic, region: RegionLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic):
         self.player = player
         self.tool_option = tool_option
@@ -69,7 +70,7 @@ class MineLogic:
         rules = []
         weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
         rules.append(weapon_rule)
-        if self.tool_option & options.ToolProgression.option_progressive:
+        if self.tool_option & ToolProgression.option_progressive:
             rules.append(self.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
         if self.skill_option == options.SkillProgression.option_progressive:
             combat_tier = min(10, max(0, tier * 2))
@@ -82,7 +83,7 @@ class MineLogic:
         rules = []
         weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
         rules.append(weapon_rule)
-        if self.tool_option & options.ToolProgression.option_progressive:
+        if self.tool_option & ToolProgression.option_progressive:
             rules.append(self.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
         if self.skill_option == options.SkillProgression.option_progressive:
             combat_tier = min(10, max(0, tier * 2))
@@ -108,7 +109,7 @@ class MineLogic:
         rules = []
         weapon_rule = self.combat.has_great_weapon()
         rules.append(weapon_rule)
-        if self.tool_option & options.ToolProgression.option_progressive:
+        if self.tool_option & ToolProgression.option_progressive:
             rules.append(self.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
         if self.skill_option == options.SkillProgression.option_progressive:
             skill_tier = min(10, max(0, tier * 2 + 6))

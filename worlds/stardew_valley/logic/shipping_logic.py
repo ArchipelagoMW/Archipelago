@@ -2,8 +2,9 @@
 from .building_logic import BuildingLogic
 from .has_logic import HasLogic
 from .region_logic import RegionLogic
-from .. import options
+from ..options import ExcludeGingerIsland
 from ..locations import LocationTags, locations_by_tag
+from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, And
 from ..strings.building_names import Building
 from ..strings.region_names import Region
@@ -11,13 +12,13 @@ from ..strings.region_names import Region
 
 class ShippingLogic:
     player: int
-    exclude_ginger_island: int
-    special_orders_option: int
+    exclude_ginger_island: ExcludeGingerIsland
+    special_orders_option: SpecialOrderLocations
     has: HasLogic
     region: RegionLogic
     buildings: BuildingLogic
 
-    def __init__(self, player: int, exclude_ginger_island: int, special_orders_option: int, has: HasLogic, region: RegionLogic, buildings: BuildingLogic):
+    def __init__(self, player: int, exclude_ginger_island: ExcludeGingerIsland, special_orders_option: SpecialOrderLocations, has: HasLogic, region: RegionLogic, buildings: BuildingLogic):
         self.player = player
         self.exclude_ginger_island = exclude_ginger_island
         self.special_orders_option = special_orders_option
@@ -37,8 +38,8 @@ class ShippingLogic:
     def can_ship_everything(self) -> StardewRule:
         shipsanity_prefix = "Shipsanity: "
         all_items_to_ship = []
-        include_island = self.exclude_ginger_island == options.ExcludeGingerIsland.option_false
-        include_qi = self.special_orders_option == options.SpecialOrderLocations.option_board_qi
+        include_island = self.exclude_ginger_island == ExcludeGingerIsland.option_false
+        include_qi = self.special_orders_option == SpecialOrderLocations.option_board_qi
         for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
             if (include_island or LocationTags.GINGER_ISLAND not in location.tags) and \
                (include_qi or LocationTags.REQUIRES_QI_ORDERS not in location.tags):

@@ -52,7 +52,7 @@ def assert_cannot_reach_island(tester: SVTestBase, multiworld: MultiWorld):
 
 def assert_can_reach_island_if_should(tester: SVTestBase, multiworld: MultiWorld):
     stardew_options = get_stardew_options(multiworld)
-    include_island = stardew_options.exclude_ginger_island.value == options.ExcludeGingerIsland.option_false
+    include_island = stardew_options.exclude_ginger_island.value == ExcludeGingerIsland.option_false
     if include_island:
         assert_can_reach_island(tester, multiworld)
     else:

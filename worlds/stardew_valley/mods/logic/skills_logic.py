@@ -1,4 +1,3 @@
-from typing import Iterable
 from .magic_logic import MagicLogic
 from ... import options
 from ...logic.action_logic import ActionLogic
@@ -10,6 +9,7 @@ from ...logic.received_logic import ReceivedLogic
 from ...logic.region_logic import RegionLogic
 from ...logic.relationship_logic import RelationshipLogic
 from ...logic.tool_logic import ToolLogic
+from ...options import SkillProgression, Mods
 from ...strings.building_names import Building
 from ...strings.geode_names import Geode
 from ...strings.region_names import Region
@@ -24,7 +24,7 @@ from ...stardew_rule import Count, StardewRule, False_, True_
 
 class ModSkillLogic:
     player: int
-    skill_option: int
+    skill_option: SkillProgression
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
@@ -35,11 +35,11 @@ class ModSkillLogic:
     fishing: FishingLogic
     cooking: CookingLogic
     magic: MagicLogic
-    mods_option: Iterable[str]
+    mods_option: Mods
 
-    def __init__(self, player: int, skill_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, action: ActionLogic,
+    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, action: ActionLogic,
                  relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
-                 magic: MagicLogic, mods_option: Iterable[str]):
+                 magic: MagicLogic, mods_option: Mods):
         self.player = player
         self.skill_option = skill_option
         self.received = received

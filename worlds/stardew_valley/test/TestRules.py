@@ -4,79 +4,73 @@ from . import SVTestBase
 from .. import options
 from ..data.craftable_data import all_crafting_recipes_by_name
 from ..locations import locations_by_tag, LocationTags, location_table
-from ..strings.animal_names import Animal
-from ..strings.animal_product_names import AnimalProduct
-from ..strings.artisan_good_names import ArtisanGood
-from ..strings.crop_names import Vegetable
+from ..options import ToolProgression, BuildingProgression, ExcludeGingerIsland, Chefsanity, Craftsanity, Shipsanity, SeasonRandomization, Friendsanity, \
+    FriendsanityHeartSize
 from ..strings.entrance_names import Entrance
-from ..strings.food_names import Meal
-from ..strings.ingredient_names import Ingredient
-from ..strings.machine_names import Machine
 from ..strings.region_names import Region
-from ..strings.season_names import Season
-from ..strings.seed_names import Seed
 
 
 class TestProgressiveToolsLogic(SVTestBase):
     options = {
-        options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
+        SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
     }
 
-    def setUp(self):
-        super().setUp()
+    def test_sturgeon(self):
         self.multiworld.state.prog_items = {1: Counter()}
 
-    def test_sturgeon(self):
-        self.assertFalse(self.world.logic.has("Sturgeon")(self.multiworld.state))
+        sturgeon_rule = self.world.logic.has("Sturgeon")
+        self.assertFalse(sturgeon_rule(self.multiworld.state))
 
         summer = self.world.create_item("Summer")
-        self.multiworld.state.collect(summer, event=True)
-        self.assertFalse(self.world.logic.has("Sturgeon")(self.multiworld.state))
+        self.multiworld.state.collect(summer, event=False)
+        self.assertFalse(sturgeon_rule(self.multiworld.state))
 
         fishing_rod = self.world.create_item("Progressive Fishing Rod")
-        self.multiworld.state.collect(fishing_rod, event=True)
-        self.multiworld.state.collect(fishing_rod, event=True)
-        self.assertFalse(self.world.logic.has("Sturgeon")(self.multiworld.state))
+        self.multiworld.state.collect(fishing_rod, event=False)
+        self.multiworld.state.collect(fishing_rod, event=False)
+        self.assertFalse(sturgeon_rule(self.multiworld.state))
 
         fishing_level = self.world.create_item("Fishing Level")
-        self.multiworld.state.collect(fishing_level, event=True)
-        self.assertFalse(self.world.logic.has("Sturgeon")(self.multiworld.state))
+        self.multiworld.state.collect(fishing_level, event=False)
+        self.assertFalse(sturgeon_rule(self.multiworld.state))
 
-        self.multiworld.state.collect(fishing_level, event=True)
-        self.multiworld.state.collect(fishing_level, event=True)
-        self.multiworld.state.collect(fishing_level, event=True)
-        self.multiworld.state.collect(fishing_level, event=True)
-        self.multiworld.state.collect(fishing_level, event=True)
-        self.assertTrue(self.world.logic.has("Sturgeon")(self.multiworld.state))
+        self.multiworld.state.collect(fishing_level, event=False)
+        self.multiworld.state.collect(fishing_level, event=False)
+        self.multiworld.state.collect(fishing_level, event=False)
+        self.multiworld.state.collect(fishing_level, event=False)
+        self.multiworld.state.collect(fishing_level, event=False)
+        self.assertTrue(sturgeon_rule(self.multiworld.state))
 
         self.remove(summer)
-        self.assertFalse(self.world.logic.has("Sturgeon")(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state))
 
         winter = self.world.create_item("Winter")
-        self.multiworld.state.collect(winter, event=True)
-        self.assertTrue(self.world.logic.has("Sturgeon")(self.multiworld.state))
+        self.multiworld.state.collect(winter, event=False)
+        self.assertTrue(sturgeon_rule(self.multiworld.state))
 
         self.remove(fishing_rod)
-        self.assertFalse(self.world.logic.has("Sturgeon")(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state))
 
     def test_old_master_cannoli(self):
-        self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Summer"), event=True)
+        self.multiworld.state.prog_items = Counter()
+
+        self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Summer"), event=False)
 
         self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         fall = self.world.create_item("Fall")
-        self.multiworld.state.collect(fall, event=True)
+        self.multiworld.state.collect(fall, event=False)
         self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         tuesday = self.world.create_item("Traveling Merchant: Tuesday")
-        self.multiworld.state.collect(tuesday, event=True)
+        self.multiworld.state.collect(tuesday, event=False)
         self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         rare_seed = self.world.create_item("Rare Seed")
-        self.multiworld.state.collect(rare_seed, event=True)
+        self.multiworld.state.collect(rare_seed, event=False)
         self.assertTrue(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         self.remove(fall)
@@ -84,11 +78,11 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.remove(tuesday)
 
         green_house = self.world.create_item("Greenhouse")
-        self.multiworld.state.collect(green_house, event=True)
+        self.multiworld.state.collect(green_house, event=False)
         self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         friday = self.world.create_item("Traveling Merchant: Friday")
-        self.multiworld.state.collect(friday, event=True)
+        self.multiworld.state.collect(friday, event=False)
         self.assertTrue(self.multiworld.get_location("Old Master Cannoli", 1).access_rule(self.multiworld.state))
 
         self.remove(green_house)
@@ -106,7 +100,7 @@ class TestBundlesLogic(SVTestBase):
 
 class TestBuildingLogic(SVTestBase):
     options = {
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive_early_shipping_bin
+        BuildingProgression.internal_name: BuildingProgression.option_progressive_early_shipping_bin
     }
 
     def test_coop_blueprint(self):
@@ -265,7 +259,7 @@ class TestArcadeMachinesLogic(SVTestBase):
 
 class TestWeaponsLogic(SVTestBase):
     options = {
-        options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
     }
 
@@ -356,11 +350,11 @@ class TestMonstersanitySplitRules(SVTestBase):
 
 class TestRecipeLearnLogic(SVTestBase):
     options = {
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
-        options.Chefsanity.internal_name: options.Chefsanity.option_none,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        Chefsanity.internal_name: Chefsanity.option_none,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
     }
 
     def test_can_learn_qos_recipe(self):
@@ -381,11 +375,11 @@ class TestRecipeLearnLogic(SVTestBase):
 
 class TestRecipeReceiveLogic(SVTestBase):
     options = {
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
-        options.Chefsanity.internal_name: options.Chefsanity.option_all,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        Chefsanity.internal_name: Chefsanity.option_all,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
     }
 
     def test_can_learn_qos_recipe(self):
@@ -436,10 +430,10 @@ class TestRecipeReceiveLogic(SVTestBase):
 
 class TestCraftsanityLogic(SVTestBase):
     options = {
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
-        options.Craftsanity.internal_name: options.Craftsanity.option_all,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        Craftsanity.internal_name: Craftsanity.option_all,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_recipe(self):
@@ -483,11 +477,11 @@ class TestCraftsanityLogic(SVTestBase):
 
 class TestCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
-        options.Craftsanity.internal_name: options.Craftsanity.option_all,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        Craftsanity.internal_name: Craftsanity.option_all,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_festival_recipe(self):
@@ -506,12 +500,12 @@ class TestCraftsanityWithFestivalsLogic(SVTestBase):
 
 class TestNoCraftsanityLogic(SVTestBase):
     options = {
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
-        options.Craftsanity.internal_name: options.Craftsanity.option_none,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        Craftsanity.internal_name: Craftsanity.option_none,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_recipe(self):
@@ -532,11 +526,11 @@ class TestNoCraftsanityLogic(SVTestBase):
 
 class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
-        options.Craftsanity.internal_name: options.Craftsanity.option_none,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        Craftsanity.internal_name: Craftsanity.option_none,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_festival_recipe(self):
@@ -625,149 +619,9 @@ def collect_all_except(multiworld, item_to_not_collect: str):
 
 class TestFriendsanityDatingRules(SVTestBase):
     options = {
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized_not_winter,
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.FriendsanityHeartSize.internal_name: 3
-    }
-
-    def test_earning_dating_heart_requires_dating(self):
-        month_name = "Month End"
-        for i in range(12):
-            month_item = self.world.create_item(month_name)
-            self.multiworld.state.collect(month_item, event=True)
-        self.multiworld.state.collect(self.world.create_item("Beach Bridge"), event=False)
-        self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)
-        self.multiworld.state.collect(self.world.create_item("Adventurer's Guild"), event=False)
-        self.multiworld.state.collect(self.world.create_item("Galaxy Hammer"), event=False)
-        for i in range(3):
-            self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=False)
-            self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=False)
-            self.multiworld.state.collect(self.world.create_item("Progressive Barn"), event=False)
-        for i in range(10):
-            self.multiworld.state.collect(self.world.create_item("Foraging Level"), event=False)
-            self.multiworld.state.collect(self.world.create_item("Farming Level"), event=False)
-            self.multiworld.state.collect(self.world.create_item("Mining Level"), event=False)
-            self.multiworld.state.collect(self.world.create_item("Combat Level"), event=False)
-            self.multiworld.state.collect(self.world.create_item("Progressive Mine Elevator"), event=False)
-            self.multiworld.state.collect(self.world.create_item("Progressive Mine Elevator"), event=False)
-
-        npc = "Abigail"
-        heart_name = f"{npc} <3"
-        step = 3
-
-        self.assert_can_reach_heart_up_to(npc, 3, step)
-        self.multiworld.state.collect(self.world.create_item(heart_name), event=False)
-        self.assert_can_reach_heart_up_to(npc, 6, step)
-        self.multiworld.state.collect(self.world.create_item(heart_name), event=False)
-        self.assert_can_reach_heart_up_to(npc, 8, step)
-        self.multiworld.state.collect(self.world.create_item(heart_name), event=False)
-        self.assert_can_reach_heart_up_to(npc, 10, step)
-        self.multiworld.state.collect(self.world.create_item(heart_name), event=False)
-        self.assert_can_reach_heart_up_to(npc, 14, step)
-
-    def assert_can_reach_heart_up_to(self, npc: str, max_reachable: int, step: int):
-        prefix = "Friendsanity: "
-        suffix = " <3"
-        for i in range(1, max_reachable + 1):
-            if i % step != 0 and i != 14:
-                continue
-            location = f"{prefix}{npc} {i}{suffix}"
-            can_reach = self.world.logic.can_reach_location(location)(self.multiworld.state)
-            self.assertTrue(can_reach, f"Should be able to earn relationship up to {i} hearts")
-        for i in range(max_reachable + 1, 14 + 1):
-            if i % step != 0 and i != 14:
-                continue
-            location = f"{prefix}{npc} {i}{suffix}"
-            can_reach = self.world.logic.can_reach_location(location)(self.multiworld.state)
-            self.assertFalse(can_reach, f"Should not be able to earn relationship up to {i} hearts")
-
-
-
-class TestShipsanityNone(SVTestBase):
-    options = {
-        options.Shipsanity.internal_name: options.Shipsanity.option_none
-    }
-
-    def test_no_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event:
-                self.assertFalse("Shipsanity" in location.name)
-                self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
-
-
-class TestShipsanityCrops(SVTestBase):
-    options = {
-        options.Shipsanity.internal_name: options.Shipsanity.option_crops
-    }
-
-    def test_only_crop_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
-                self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
-
-
-class TestShipsanityFish(SVTestBase):
-    options = {
-        options.Shipsanity.internal_name: options.Shipsanity.option_fish
-    }
-
-    def test_only_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
-                self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
-
-
-class TestShipsanityFullShipment(SVTestBase):
-    options = {
-        options.Shipsanity.internal_name: options.Shipsanity.option_full_shipment
-    }
-
-    def test_only_full_shipment_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
-                self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
-                self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
-
-
-class TestShipsanityFullShipmentWithFish(SVTestBase):
-    options = {
-        options.Shipsanity.internal_name: options.Shipsanity.option_full_shipment_with_fish
-    }
-
-    def test_only_full_shipment_and_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
-                self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
-                                LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
-
-
-class TestShipsanityEverything(SVTestBase):
-    options = {
-        options.Shipsanity.internal_name: options.Shipsanity.option_everything,
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive
-    }
-
-    def test_all_shipsanity_locations_require_shipping_bin(self):
-        bin_name = "Shipping Bin"
-        collect_all_except(self.multiworld, bin_name)
-        shipsanity_locations = [location for location in self.multiworld.get_locations() if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags]
-        bin_item = self.world.create_item(bin_name)
-        for location in shipsanity_locations:
-            with self.subTest(location.name):
-                self.remove(bin_item)
-                self.assertFalse(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
-                self.multiworld.state.collect(bin_item, event=False)
-                shipsanity_rule = self.world.logic.region.can_reach_location(location.name)
-                can_reach_shipsanity_location = shipsanity_rule(self.multiworld.state)
-                self.assertTrue(can_reach_shipsanity_location)
-                self.remove(bin_item)
-
-
-class TestFriendsanityDatingRules(SVTestBase):
-    options = {
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized_not_winter,
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.FriendsanityHeartSize.internal_name: 3
+        SeasonRandomization.internal_name: SeasonRandomization.option_randomized_not_winter,
+        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
+        FriendsanityHeartSize.internal_name: 3
     }
 
     def test_earning_dating_heart_requires_dating(self):
@@ -820,4 +674,84 @@ class TestFriendsanityDatingRules(SVTestBase):
             location = f"{prefix}{npc} {i}{suffix}"
             can_reach = self.world.logic.region.can_reach_location(location)(self.multiworld.state)
             self.assertFalse(can_reach, f"Should not be able to earn relationship up to {i} hearts")
+
+
+class TestShipsanityNone(SVTestBase):
+    options = {
+        Shipsanity.internal_name: Shipsanity.option_none
+    }
+
+    def test_no_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event:
+                self.assertFalse("Shipsanity" in location.name)
+                self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
+
+
+class TestShipsanityCrops(SVTestBase):
+    options = {
+        Shipsanity.internal_name: Shipsanity.option_crops
+    }
+
+    def test_only_crop_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
+
+
+class TestShipsanityFish(SVTestBase):
+    options = {
+        Shipsanity.internal_name: Shipsanity.option_fish
+    }
+
+    def test_only_fish_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
+
+
+class TestShipsanityFullShipment(SVTestBase):
+    options = {
+        Shipsanity.internal_name: Shipsanity.option_full_shipment
+    }
+
+    def test_only_full_shipment_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
+                self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
+
+
+class TestShipsanityFullShipmentWithFish(SVTestBase):
+    options = {
+        Shipsanity.internal_name: Shipsanity.option_full_shipment_with_fish
+    }
+
+    def test_only_full_shipment_and_fish_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
+                                LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
+
+
+class TestShipsanityEverything(SVTestBase):
+    options = {
+        Shipsanity.internal_name: Shipsanity.option_everything,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive
+    }
+
+    def test_all_shipsanity_locations_require_shipping_bin(self):
+        bin_name = "Shipping Bin"
+        collect_all_except(self.multiworld, bin_name)
+        shipsanity_locations = [location for location in self.multiworld.get_locations() if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags]
+        bin_item = self.world.create_item(bin_name)
+        for location in shipsanity_locations:
+            with self.subTest(location.name):
+                self.remove(bin_item)
+                self.assertFalse(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
+                self.multiworld.state.collect(bin_item, event=False)
+                shipsanity_rule = self.world.logic.region.can_reach_location(location.name)
+                can_reach_shipsanity_location = shipsanity_rule(self.multiworld.state)
+                self.assertTrue(can_reach_shipsanity_location)
+                self.remove(bin_item)
 

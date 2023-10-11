@@ -4,6 +4,7 @@ from ...logic.has_logic import HasLogic
 from ...logic.region_logic import RegionLogic
 from ...logic.relationship_logic import RelationshipLogic
 from ...logic.wallet_logic import WalletLogic
+from ...options import Mods
 from ...strings.craftable_names import Consumable, Edible
 from ...strings.food_names import Meal
 from ...strings.material_names import Material
@@ -20,9 +21,9 @@ class ModSpecialOrderLogic:
     region: RegionLogic
     relationship: RelationshipLogic
     wallet: WalletLogic
-    mods_option: Iterable[str]
+    mods_option: Mods
 
-    def __init__(self, player: int, has: HasLogic, region: RegionLogic, relationship: RelationshipLogic, wallet: WalletLogic, mods_option: Iterable[str]):
+    def __init__(self, player: int, has: HasLogic, region: RegionLogic, relationship: RelationshipLogic, wallet: WalletLogic, mods_option: Mods):
         self.player = player
         self.has = has
         self.region = region

@@ -1,8 +1,9 @@
 from typing import List, Iterable
 from ...mods.mod_data import ModNames
+from ...options import Mods
 
 
-def get_mod_skill_levels(mods: Iterable[str]) -> List[str]:
+def get_mod_skill_levels(mods: Mods) -> List[str]:
     skills_items = []
     if ModNames.luck_skill in mods:
         skills_items.append("Luck Level")

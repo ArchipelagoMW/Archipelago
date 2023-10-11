@@ -33,7 +33,7 @@ def is_not_perfection(multiworld: MultiWorld) -> bool:
 
 
 def assert_ginger_island_is_included(tester: SVTestBase, multiworld: MultiWorld):
-    tester.assertEqual(get_stardew_options(multiworld).exclude_ginger_island, options.ExcludeGingerIsland.option_false)
+    tester.assertEqual(get_stardew_options(multiworld).exclude_ginger_island, ExcludeGingerIsland.option_false)
 
 
 def assert_walnut_hunter_world_is_valid(tester: SVTestBase, multiworld: MultiWorld):

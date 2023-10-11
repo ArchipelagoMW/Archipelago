@@ -2,6 +2,7 @@ from typing import Iterable
 
 from ...logic.has_logic import HasLogic
 from ...logic.money_logic import MoneyLogic
+from ...options import Mods
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.building_names import ModBuilding
 from ..mod_data import ModNames
@@ -13,9 +14,9 @@ class ModBuildingLogic:
     player: int
     has: HasLogic
     money: MoneyLogic
-    mods_option: Iterable[str]
+    mods_option: Mods
 
-    def __init__(self, player: int, has: HasLogic, money: MoneyLogic, mods_option: Iterable[str]):
+    def __init__(self, player: int, has: HasLogic, money: MoneyLogic, mods_option: Mods):
         self.player = player
         self.has = has
         self.money = money

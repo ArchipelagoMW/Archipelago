@@ -12,6 +12,7 @@ from .. import options
 from ..data import all_crops
 from ..mods.logic.magic_logic import MagicLogic
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
+from ..options import SkillProgression, Mods
 from ..stardew_rule import StardewRule, True_, Or
 from worlds.stardew_valley.strings.craftable_names import Craftable, Fishing
 from ..strings.generic_names import Generic
@@ -26,7 +27,7 @@ fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Re
 
 class SkillLogic:
     player: int
-    skill_option: int
+    skill_option: SkillProgression
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
@@ -36,9 +37,9 @@ class SkillLogic:
     combat: CombatLogic
     crop: CropLogic
     magic: MagicLogic
-    mods: Iterable[str]
+    mods: Mods
 
-    def __init__(self, player: int, skill_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic,
+    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic,
                  tool: ToolLogic, combat: CombatLogic, crop: CropLogic):
         self.player = player
         self.skill_option = skill_option
@@ -51,7 +52,7 @@ class SkillLogic:
         self.combat = combat
         self.crop = crop
 
-    def set_mod_logic(self, magic: MagicLogic, mods: Iterable[str]):
+    def set_mod_logic(self, magic: MagicLogic, mods: Mods):
         self.magic = magic
         self.mods = mods
 

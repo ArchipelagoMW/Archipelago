@@ -4,6 +4,7 @@ from .action_logic import ActionLogic
 from .has_logic import HasLogic
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
+from ..options import Museumsanity
 from ..stardew_rule import StardewRule, And, False_, Count
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -12,13 +13,13 @@ from ..strings.region_names import Region
 
 class MuseumLogic:
     player: int
-    museum_option: int
+    museum_option: Museumsanity
     received = ReceivedLogic
     has: HasLogic
     region: RegionLogic
     action: ActionLogic
 
-    def __init__(self, player: int, museum_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, action: ActionLogic):
+    def __init__(self, player: int, museum_option: Museumsanity, received: ReceivedLogic, has: HasLogic, region: RegionLogic, action: ActionLogic):
         self.player = player
         self.museum_option = museum_option
         self.received = received

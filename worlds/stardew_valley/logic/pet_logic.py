@@ -8,6 +8,7 @@ from .time_logic import TimeLogic
 from .tool_logic import ToolLogic
 from .. import options
 from ..data.villagers_data import Villager
+from ..options import Friendsanity, FriendsanityHeartSize
 from ..stardew_rule import StardewRule, True_
 from ..strings.region_names import Region
 from ..strings.villager_names import NPC
@@ -15,14 +16,14 @@ from ..strings.villager_names import NPC
 
 class PetLogic:
     player: int
-    friendsanity_option: int
-    heart_size_option: int
+    friendsanity_option: Friendsanity
+    heart_size_option: FriendsanityHeartSize
     received: ReceivedLogic
     region: RegionLogic
     time: TimeLogic
     tool: ToolLogic
 
-    def __init__(self, player: int, friendsanity_option: int, heart_size_option: int, received_logic: ReceivedLogic, region: RegionLogic,
+    def __init__(self, player: int, friendsanity_option: Friendsanity, heart_size_option: FriendsanityHeartSize, received_logic: ReceivedLogic, region: RegionLogic,
                  time: TimeLogic, tool: ToolLogic):
         self.player = player
         self.friendsanity_option = friendsanity_option
@@ -35,7 +36,7 @@ class PetLogic:
     def has_hearts(self, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
             return True_()
-        if self.friendsanity_option == options.Friendsanity.option_none or self.friendsanity_option == options.Friendsanity.option_bachelors:
+        if self.friendsanity_option == Friendsanity.option_none or self.friendsanity_option == Friendsanity.option_bachelors:
             return self.can_befriend_pet(hearts)
         return self.received_hearts(NPC.pet, hearts)
 

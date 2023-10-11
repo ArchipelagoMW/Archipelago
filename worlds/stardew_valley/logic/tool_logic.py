@@ -5,6 +5,7 @@ from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
 from .. import options
 from ..mods.logic.magic_logic import MagicLogic
+from ..options import ToolProgression
 from ..stardew_rule import StardewRule, True_
 from ..strings.region_names import Region
 from ..strings.skill_names import ModSkill
@@ -29,7 +30,7 @@ tool_upgrade_prices = {
 
 class ToolLogic:
     player: int
-    tool_option = int
+    tool_option = ToolProgression
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
@@ -37,7 +38,7 @@ class ToolLogic:
     money: MoneyLogic
     magic: MagicLogic
 
-    def __init__(self, player: int, tool_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+    def __init__(self, player: int, tool_option: ToolProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  season: SeasonLogic, money: MoneyLogic):
         self.player = player
         self.tool_option = tool_option
@@ -54,13 +55,13 @@ class ToolLogic:
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
 
-        if self.tool_option & options.ToolProgression.option_progressive:
+        if self.tool_option & ToolProgression.option_progressive:
             return self.received(f"Progressive {tool}", tool_materials[material])
 
         return self.has(f"{material} Bar") & self.money.can_spend(tool_upgrade_prices[material])
 
     def has_fishing_rod(self, level: int) -> StardewRule:
-        if self.tool_option & options.ToolProgression.option_progressive:
+        if self.tool_option & ToolProgression.option_progressive:
             return self.received(f"Progressive {Tool.fishing_rod}", level)
 
         if level <= 1:

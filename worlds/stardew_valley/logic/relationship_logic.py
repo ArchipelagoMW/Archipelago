@@ -11,6 +11,7 @@ from .season_logic import SeasonLogic
 from .time_logic import TimeLogic
 from .. import options
 from ..data.villagers_data import all_villagers_by_name, Villager
+from ..options import Friendsanity, FriendsanityHeartSize, Mods
 from ..stardew_rule import StardewRule, True_, And, Or, Count
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
@@ -19,8 +20,8 @@ from ..strings.villager_names import NPC
 
 class RelationshipLogic:
     player: int
-    friendsanity_option: int
-    heart_size_option: int
+    friendsanity_option: Friendsanity
+    heart_size_option: FriendsanityHeartSize
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
@@ -28,10 +29,10 @@ class RelationshipLogic:
     season: SeasonLogic
     gifts: GiftLogic
     buildings: BuildingLogic
-    mods_option: Iterable[str]
+    mods_option: Mods
 
-    def __init__(self, player: int, friendsanity_option: int, heart_size_option: int, received_logic: ReceivedLogic, has: HasLogic, region: RegionLogic,
-                 time: TimeLogic, season: SeasonLogic, gifts: GiftLogic, buildings: BuildingLogic, mods_option: Iterable[str]):
+    def __init__(self, player: int, friendsanity_option: Friendsanity, heart_size_option: FriendsanityHeartSize, received_logic: ReceivedLogic, has: HasLogic, region: RegionLogic,
+                 time: TimeLogic, season: SeasonLogic, gifts: GiftLogic, buildings: BuildingLogic, mods_option: Mods):
         self.player = player
         self.friendsanity_option = friendsanity_option
         self.heart_size_option = heart_size_option
@@ -68,7 +69,7 @@ class RelationshipLogic:
     def has_hearts(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
             return True_()
-        if self.friendsanity_option == options.Friendsanity.option_none:
+        if self.friendsanity_option == Friendsanity.option_none:
             return self.can_earn_relationship(npc, hearts)
         if npc not in all_villagers_by_name:
             if npc == Generic.any or npc == Generic.bachelor:
@@ -98,11 +99,11 @@ class RelationshipLogic:
         if not self.npc_is_in_current_slot(npc):
             return True_()
         villager = all_villagers_by_name[npc]
-        if self.friendsanity_option == options.Friendsanity.option_bachelors and not villager.bachelor:
+        if self.friendsanity_option == Friendsanity.option_bachelors and not villager.bachelor:
             return self.can_earn_relationship(npc, hearts)
-        if self.friendsanity_option == options.Friendsanity.option_starting_npcs and not villager.available:
+        if self.friendsanity_option == Friendsanity.option_starting_npcs and not villager.available:
             return self.can_earn_relationship(npc, hearts)
-        is_capped_at_8 = villager.bachelor and self.friendsanity_option != options.Friendsanity.option_all_with_marriage
+        is_capped_at_8 = villager.bachelor and self.friendsanity_option != Friendsanity.option_all_with_marriage
         if is_capped_at_8 and hearts > 8:
             return self.received_hearts(villager, 8) & self.can_earn_relationship(npc, hearts)
         return self.received_hearts(villager, hearts)
@@ -143,7 +144,7 @@ class RelationshipLogic:
         previous_heart = hearts - self.heart_size_option
         previous_heart_rule = self.has_hearts(npc, previous_heart)
 
-        # if npc == NPC.wizard and ModNames.magic in self.options[options.Mods]:
+        # if npc == NPC.wizard and ModNames.magic in self.options.mods:
         #     earn_rule = self.can_meet(npc) & self.time.has_lived_months(hearts)
         if npc in all_villagers_by_name:
             if not self.npc_is_in_current_slot(npc):

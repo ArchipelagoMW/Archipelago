@@ -1,6 +1,5 @@
-from typing import Iterable
-
 from ...logic.received_logic import ReceivedLogic
+from ...options import ElevatorProgression, Mods
 from ...stardew_rule import StardewRule, True_
 from ...mods.mod_data import ModNames
 from ... import options
@@ -8,11 +7,11 @@ from ... import options
 
 class ModElevatorLogic:
     player: int
-    elevator_option: int
-    mods: Iterable[str]
+    elevator_option: ElevatorProgression
+    mods: Mods
     received: ReceivedLogic
 
-    def __init__(self, player: int, elevator_option: int, mods: Iterable[str], received: ReceivedLogic):
+    def __init__(self, player: int, elevator_option: ElevatorProgression, mods: Mods, received: ReceivedLogic):
         self.player = player
         self.elevator_option = elevator_option
         self.mods = mods
