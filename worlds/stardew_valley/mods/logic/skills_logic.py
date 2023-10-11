@@ -1,5 +1,4 @@
 from .magic_logic import MagicLogic
-from ... import options
 from ...logic.action_logic import ActionLogic
 from ...logic.building_logic import BuildingLogic
 from ...logic.cooking_logic import CookingLogic
@@ -58,7 +57,7 @@ class ModSkillLogic:
         if level <= 0:
             return True_()
 
-        if self.skill_option == options.SkillProgression.option_progressive:
+        if self.skill_option == SkillProgression.option_progressive:
             return self.received(f"{skill} Level", level)
 
         return self.can_earn_mod_skill_level(skill, level)

@@ -1,5 +1,3 @@
-from typing import Iterable
-
 from ...logic.received_logic import ReceivedLogic
 from ...logic.region_logic import RegionLogic
 from ...options import Mods
