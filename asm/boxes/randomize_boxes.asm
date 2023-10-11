@@ -152,6 +152,7 @@ LoadRandomItemAnimation:
         add r0, r1, r0
         ldrb r0, [r0]
         mov r6, r0
+        mov r5, #0
 
     ; AP items
         cmp r6, #0xF0
@@ -185,15 +186,27 @@ LoadRandomItemAnimation:
     @@JunkItem:
         cmp r6, #0x40
         beq @@FullHealthItem
+        cmp r6, #0x42
+        beq @@Heart
+        b @@GiveImmediately  ; 0x41, 0x43
 
     @@FullHealthItem:
         mov r6, #0x05
+        b @@SetAnimation
+
+    @@Heart:
+        mov r6, #0x07
         b @@SetAnimation
 
     @@APItem:
         mov r0, #6
         bl SetTreasurePalette
         mov r6, #0x06
+        b @@SetAnimation
+
+    @@GiveImmediately:
+        mov r5, #1
+        mov r6, #0x08
 
     @@SetAnimation:
         ldr r0, =@@ItemAnimationTable
@@ -203,6 +216,11 @@ LoadRandomItemAnimation:
         str r0, [r4, @oam_animation_pointer]
         call_using r0, EntityAI_INITIAL_takara_kakera
 
+        cmp r5, #1
+        bne @@Return
+        bl CollectRandomItem
+
+    @@Return:
         pop r4-r6, pc
 
     .pool
@@ -216,6 +234,8 @@ LoadRandomItemAnimation:
         .word takara_Anm_00  ; CD
         .word takara_Anm_01  ; Full health item
         .word APLogoAnm      ; Archipelago item
+        .word HeartAnm       ; Single heart
+        .word EmptyAnm       ; Nothing
 
 
 ; Collect this item. If it's your own junk item, it gets immediately given.
@@ -319,11 +339,30 @@ CollectRandomItem:
 
     @@JunkItem:
         cmp r5, #0x40
-        bne @@SetCheckLocation
+        beq @@FullHealthItem
+        cmp r5, #0x41
+        beq @@Transform
+        cmp r5, #0x42
+        beq @@Heart
+        cmp r5, #0x43
+        beq @@Damage
 
-    ; Full health item
+    @@FullHealthItem:
         mov r0, #8
         bl GiveWarioHearts
+        b @@SetCheckLocation
+
+    @@Transform:
+        bl GiveTransformTrap
+        b @@SetCheckLocation
+
+    @@Heart:
+        mov r0, #1
+        bl GiveWarioHearts
+        b @@SetCheckLocation
+
+    @@Damage:
+        bl GiveLightningTrap
 
     @@SetCheckLocation:
         mov r0, #1
