@@ -1,7 +1,10 @@
-from typing import Dict, List, NamedTuple, Optional
+from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import Region, Entrance
 from .Locations import location_table, RiskOfRainLocation
+
+if TYPE_CHECKING:
+    from . import RiskOfRainWorld
 
 
 class RoRRegionData(NamedTuple):
@@ -9,10 +12,13 @@ class RoRRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int):
+def create_regions(ror2_world: "RiskOfRainWorld"):
+    world = ror2_world.multiworld
+    player = ror2_world.player
     # Default Locations
     non_dlc_regions: Dict[str, RoRRegionData] = {
-        "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)", "Titanic Plains", "Titanic Plains (2)"]),
+        "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)",
+                                                                     "Titanic Plains", "Titanic Plains (2)"]),
         "Distant Roost":                        RoRRegionData([], ["OrderedStage_1"]),
         "Distant Roost (2)":                    RoRRegionData([], ["OrderedStage_1"]),
         "Titanic Plains":                       RoRRegionData([], ["OrderedStage_1"]),
@@ -34,33 +40,36 @@ def create_regions(multiworld: MultiWorld, player: int):
     }
     other_regions: Dict[str, RoRRegionData] = {
         "Commencement":                         RoRRegionData(None, ["Victory", "Petrichor V"]),
-        "OrderedStage_5":                       RoRRegionData(None, ["Hidden Realm: A Moment, Fractured", "Commencement"]),
+        "OrderedStage_5":                       RoRRegionData(None, ["Hidden Realm: A Moment, Fractured",
+                                                                     "Commencement"]),
         "OrderedStage_1":                       RoRRegionData(None, ["Hidden Realm: Bazaar Between Time",
-                                                "Hidden Realm: Gilded Coast", "Abandoned Aqueduct", "Wetland Aspect"]),
+                                                                     "Hidden Realm: Gilded Coast", "Abandoned Aqueduct",
+                                                                     "Wetland Aspect"]),
         "OrderedStage_2":                       RoRRegionData(None, ["Rallypoint Delta", "Scorched Acres"]),
-        "OrderedStage_3":                       RoRRegionData(None, ["Abyssal Depths", "Siren's Call", "Sundered Grove"]),
+        "OrderedStage_3":                       RoRRegionData(None, ["Abyssal Depths", "Siren's Call",
+                                                                     "Sundered Grove"]),
         "OrderedStage_4":                       RoRRegionData(None, ["Sky Meadow"]),
         "Hidden Realm: A Moment, Fractured":    RoRRegionData(None, ["Hidden Realm: A Moment, Whole"]),
-        "Hidden Realm: A Moment, Whole":        RoRRegionData(None, ["Victory"]),
+        "Hidden Realm: A Moment, Whole":        RoRRegionData(None, ["Victory", "Petrichor V"]),
         "Void Fields":                          RoRRegionData(None, []),
         "Victory":                              RoRRegionData(None, None),
-        "Petrichor V":                          RoRRegionData(None, ["Victory"]),
+        "Petrichor V":                          RoRRegionData(None, []),
         "Hidden Realm: Bulwark's Ambry":        RoRRegionData(None, None),
         "Hidden Realm: Bazaar Between Time":    RoRRegionData(None, ["Void Fields"]),
         "Hidden Realm: Gilded Coast":           RoRRegionData(None, None)
     }
     dlc_other_regions: Dict[str, RoRRegionData] = {
-        "The Planetarium":                      RoRRegionData(None, ["Victory"]),
+        "The Planetarium":                      RoRRegionData(None, ["Victory", "Petrichor V"]),
         "Void Locus":                           RoRRegionData(None, ["The Planetarium"])
     }
     # Totals of each item
-    chests = int(multiworld.chests_per_stage[player])
-    shrines = int(multiworld.shrines_per_stage[player])
-    scavengers = int(multiworld.scavengers_per_stage[player])
-    scanners = int(multiworld.scanner_per_stage[player])
-    newt = int(multiworld.altars_per_stage[player])
+    chests = int(world.chests_per_stage[player])
+    shrines = int(world.shrines_per_stage[player])
+    scavengers = int(world.scavengers_per_stage[player])
+    scanners = int(world.scanner_per_stage[player])
+    newt = int(world.altars_per_stage[player])
     all_location_regions = {**non_dlc_regions}
-    if multiworld.dlc_sotv[player]:
+    if world.dlc_sotv[player]:
         all_location_regions = {**non_dlc_regions, **dlc_regions}
 
     # Locations
@@ -88,24 +97,37 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions_pool: Dict = {**all_location_regions, **other_regions}
 
     # DLC Locations
-    if multiworld.dlc_sotv[player]:
+    if world.dlc_sotv[player]:
         non_dlc_regions["Menu"].region_exits.append("Siphoned Forest")
         other_regions["OrderedStage_1"].region_exits.append("Aphelian Sanctuary")
         other_regions["OrderedStage_2"].region_exits.append("Sulfur Pools")
         other_regions["Void Fields"].region_exits.append("Void Locus")
+        other_regions["Commencement"].region_exits.append("The Planetarium")
         regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_other_regions}
+
+    # Check to see if Victory needs to be removed from regions
+    if world.victory[player] == "mithrix":
+        other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
+        dlc_other_regions["The Planetarium"].region_exits.pop(0)
+    elif world.victory[player] == "voidling":
+        other_regions["Commencement"].region_exits.pop(0)
+        other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
+    elif world.victory[player] == "limbo":
+        other_regions["Commencement"].region_exits.pop(0)
+        dlc_other_regions["The Planetarium"].region_exits.pop(0)
+
 
     # Create all the regions
     for name, data in regions_pool.items():
-        multiworld.regions.append(create_region(multiworld, player, name, data))
+        world.regions.append(create_region(world, player, name, data))
 
     # Connect all the regions to their exits
     for name, data in regions_pool.items():
-        create_connections_in_regions(multiworld, player, name, data)
+        create_connections_in_regions(world, player, name, data)
 
 
-def create_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData):
-    region = Region(name, player, multiworld)
+def create_region(world, player: int, name: str, data: RoRRegionData):
+    region = Region(name, player, world)
     if data.locations:
         for location_name in data.locations:
             location_data = location_table.get(location_name)
@@ -115,11 +137,11 @@ def create_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegio
     return region
 
 
-def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData):
-    region = multiworld.get_region(name, player)
+def create_connections_in_regions(world, player: int, name: str, data: RoRRegionData):
+    region = world.get_region(name, player)
     if data.region_exits:
         for region_exit in data.region_exits:
             r_exit_stage = Entrance(player, region_exit, region)
-            exit_region = multiworld.get_region(region_exit, player)
+            exit_region = world.get_region(region_exit, player)
             r_exit_stage.connect(exit_region)
             region.exits.append(r_exit_stage)
