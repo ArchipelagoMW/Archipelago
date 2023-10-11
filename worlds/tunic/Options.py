@@ -1,6 +1,6 @@
-import typing
+from dataclasses import dataclass
 
-from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, AssembleOptions, Range
+from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, PerGameCommonOptions
 
 
 class SwordProgression(DefaultOnToggle):
@@ -60,14 +60,14 @@ class ExtraHexagonPercentage(Range):
     default = 50
 
 
-tunic_options: typing.Dict[str, AssembleOptions] = {
-    "sword_progression": SwordProgression,
-    "start_with_sword": StartWithSword,
-    "keys_behind_bosses": KeysBehindBosses,
-    "ability_shuffling": AbilityShuffling,
-    "fool_traps": FoolTraps,
-    "hexagon_quest": HexagonQuest,
-    "hexagon_goal": HexagonGoal,
-    "extra_hexagon_percentage": ExtraHexagonPercentage,
-    "start_inventory_from_pool": StartInventoryPool,
-}
+@dataclass
+class TunicOptions(PerGameCommonOptions):
+    sword_progression: SwordProgression
+    start_with_sword: StartWithSword
+    keys_behind_bosses: KeysBehindBosses
+    ability_shuffling: AbilityShuffling
+    fool_traps: FoolTraps
+    hexagon_quest: HexagonQuest
+    hexagon_goal: HexagonGoal
+    extra_hexagon_percentage: ExtraHexagonPercentage
+    start_inventory_from_pool: StartInventoryPool

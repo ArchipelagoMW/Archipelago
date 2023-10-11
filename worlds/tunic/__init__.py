@@ -5,7 +5,7 @@ from .Items import item_name_to_id, item_table, item_name_groups, fool_tiers, fi
 from .Locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
 from .Rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .Regions import tunic_regions
-from .Options import tunic_options
+from .Options import TunicOptions
 from worlds.AutoWorld import WebWorld, World
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -43,7 +43,8 @@ class TunicWorld(World):
     web = TunicWeb()
 
     data_version = 1
-    option_definitions = tunic_options
+    options: TunicOptions
+    options_dataclass = TunicOptions
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
 
@@ -54,24 +55,24 @@ class TunicWorld(World):
     slot_data_items: List[TunicItem]
 
     def generate_early(self) -> None:
-        if self.multiworld.start_with_sword[self.player].value and "Sword" not in self.multiworld.start_inventory[self.player]:
-            self.multiworld.start_inventory[self.player].value["Sword"] = 1
+        if self.options.start_with_sword.value and "Sword" not in self.options.start_inventory:
+            self.options.start_inventory.value["Sword"] = 1
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-        keys_behind_bosses = self.multiworld.keys_behind_bosses[self.player].value
-        hexagon_quest = self.multiworld.hexagon_quest[self.player].value
-        sword_progression = self.multiworld.sword_progression[self.player].value
+        keys_behind_bosses = self.options.keys_behind_bosses.value
+        hexagon_quest = self.options.hexagon_quest.value
+        sword_progression = self.options.sword_progression.value
 
         items: List[TunicItem] = []
         self.slot_data_items = []
 
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
 
-        for money_fool in fool_tiers[self.multiworld.fool_traps[self.player].value]:
+        for money_fool in fool_tiers[self.options.fool_traps.value]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
 
@@ -91,8 +92,8 @@ class TunicWorld(World):
 
         if hexagon_quest:
             # Calculate number of hexagons in item pool
-            hexagon_goal = self.multiworld.hexagon_goal[self.player].value
-            extra_hexagons = self.multiworld.extra_hexagon_percentage[self.player].value
+            hexagon_goal = self.options.hexagon_goal.value
+            extra_hexagons = self.options.extra_hexagon_percentage.value
             items_to_create[gold_hexagon] += int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP))
 
             # Replace pages and normal hexagons with filler
@@ -141,9 +142,9 @@ class TunicWorld(World):
         victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        self.ability_unlocks = randomize_ability_unlocks(self.random, self.multiworld.hexagon_quest[self.player].value, self.multiworld.hexagon_goal[self.player].value)
-        set_region_rules(self.multiworld, self.player, self.ability_unlocks)
-        set_location_rules(self.multiworld, self.player, self.ability_unlocks)
+        self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
+        set_region_rules(self.multiworld, self.player, self.options, self.ability_unlocks)
+        set_location_rules(self.multiworld, self.player, self.options, self.ability_unlocks)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
@@ -151,16 +152,16 @@ class TunicWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
             "seed": self.random.randint(0, 2147483647),
-            "start_with_sword": self.multiworld.start_with_sword[self.player].value,
-            "keys_behind_bosses": self.multiworld.keys_behind_bosses[self.player].value,
-            "sword_progression": self.multiworld.sword_progression[self.player].value,
-            "ability_shuffling": self.multiworld.ability_shuffling[self.player].value,
-            "hexagon_quest": self.multiworld.hexagon_quest[self.player].value,
-            "fool_traps": self.multiworld.fool_traps[self.player].value,
+            "start_with_sword": self.options.start_with_sword.value,
+            "keys_behind_bosses": self.options.keys_behind_bosses.value,
+            "sword_progression": self.options.sword_progression.value,
+            "ability_shuffling": self.options.ability_shuffling.value,
+            "hexagon_quest": self.options.hexagon_quest.value,
+            "fool_traps": self.options.fool_traps.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Ice Rod": self.ability_unlocks["Pages 52-53 (Ice Rod)"],
-            "Hexagon Quest Goal": self.multiworld.hexagon_goal[self.player].value,
+            "Hexagon Quest Goal": self.options.hexagon_goal.value,
         }
 
         for tunic_item in filter(lambda item: item.location is not None, self.slot_data_items):
@@ -170,11 +171,11 @@ class TunicWorld(World):
                 continue
             slot_data[tunic_item.name].extend([tunic_item.location.name, tunic_item.location.player])
 
-        for start_item in self.multiworld.start_inventory_from_pool[self.player]:
+        for start_item in self.options.start_inventory_from_pool:
             if start_item in slot_data_item_names:
                 if start_item not in slot_data:
                     slot_data[start_item] = []
-                for i in range(0, self.multiworld.start_inventory_from_pool[self.player][start_item]):
+                for i in range(0, self.options.start_inventory_from_pool[start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
 
         return slot_data
