@@ -43,7 +43,7 @@ class Goal(Choice):
     Local Triforce Hunt: Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
     Ganon Triforce Hunt: Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
     Local Ganon Triforce Hunt: Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
-    Ice Rod Hunt: You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock."""
+    Ice Rod Hunt: You start with everything except Ice Rod. Find the Ice rod, then kill Trinexx at Turtle rock."""
     display_name = "Goal"
     default = 0
     option_ganon = 0
@@ -59,9 +59,9 @@ class Goal(Choice):
 
 
 class EntranceShuffle(Choice):
-    """Dungeonssimple: Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
-    Dungeonsfull: Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world
-    Dungeonscrossed: like Dungeonsfull, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal"""
+    """Dungeonssimple: Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon.
+    Dungeonsfull: Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world.
+    Dungeonscrossed: like Dungeonsfull, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal."""
     display_name = "Entrance Shuffle"
     default = 0
     alias_none = 0
