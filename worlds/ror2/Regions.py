@@ -13,8 +13,9 @@ class RoRRegionData(NamedTuple):
 
 
 def create_regions(ror2_world: "RiskOfRainWorld"):
-    world = ror2_world.multiworld
     player = ror2_world.player
+    ror2_options = ror2_world.options
+    world = ror2_world.multiworld
     # Default Locations
     non_dlc_regions: Dict[str, RoRRegionData] = {
         "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)",
@@ -63,13 +64,13 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
         "Void Locus":                           RoRRegionData(None, ["The Planetarium"])
     }
     # Totals of each item
-    chests = int(world.chests_per_stage[player])
-    shrines = int(world.shrines_per_stage[player])
-    scavengers = int(world.scavengers_per_stage[player])
-    scanners = int(world.scanner_per_stage[player])
-    newt = int(world.altars_per_stage[player])
+    chests = int(ror2_options.chests_per_stage)
+    shrines = int(ror2_options.shrines_per_stage)
+    scavengers = int(ror2_options.scavengers_per_stage)
+    scanners = int(ror2_options.scanner_per_stage)
+    newt = int(ror2_options.altars_per_stage)
     all_location_regions = {**non_dlc_regions}
-    if world.dlc_sotv[player]:
+    if ror2_options.dlc_sotv:
         all_location_regions = {**non_dlc_regions, **dlc_regions}
 
     # Locations
@@ -97,7 +98,7 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
     regions_pool: Dict = {**all_location_regions, **other_regions}
 
     # DLC Locations
-    if world.dlc_sotv[player]:
+    if ror2_options.dlc_sotv:
         non_dlc_regions["Menu"].region_exits.append("Siphoned Forest")
         other_regions["OrderedStage_1"].region_exits.append("Aphelian Sanctuary")
         other_regions["OrderedStage_2"].region_exits.append("Sulfur Pools")
@@ -106,13 +107,13 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
         regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_other_regions}
 
     # Check to see if Victory needs to be removed from regions
-    if world.victory[player] == "mithrix":
+    if ror2_options.victory == "mithrix":
         other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
         dlc_other_regions["The Planetarium"].region_exits.pop(0)
-    elif world.victory[player] == "voidling":
+    elif ror2_options.victory == "voidling":
         other_regions["Commencement"].region_exits.pop(0)
         other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
-    elif world.victory[player] == "limbo":
+    elif ror2_options.victory == "limbo":
         other_regions["Commencement"].region_exits.pop(0)
         dlc_other_regions["The Planetarium"].region_exits.pop(0)
 
