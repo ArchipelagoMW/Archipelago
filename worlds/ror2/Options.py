@@ -398,6 +398,7 @@ class ROR2Weights:
 @dataclass
 class ROR2Options(PerGameCommonOptions, ROR2Weights):
     goal: Goal
+    victory: Victory
     total_locations: TotalLocations
     chests_per_stage: ChestsPerEnvironment
     shrines_per_stage: ShrinesPerEnvironment
@@ -412,6 +413,7 @@ class ROR2Options(PerGameCommonOptions, ROR2Weights):
     death_link: DeathLink
     item_pickup_step: ItemPickupStep
     shrine_use_step: ShrineUseStep
+    enable_trap: AllowTrapItems
     enable_lunar: AllowLunarItems
     item_weights: ItemWeights
     item_pool_presets: ItemPoolPresetToggle

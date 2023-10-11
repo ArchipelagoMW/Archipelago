@@ -60,19 +60,19 @@ class RiskOfRainWorld(World):
                     scavengers=self.options.scavengers_per_stage.value,
                     scanners=self.options.scanner_per_stage.value,
                     altars=self.options.altars_per_stage.value,
-                    dlc_sotv=self.options.dlc_sotv.value
+                    dlc_sotv=bool(self.options.dlc_sotv.value)
                 )
             )
         self.total_revivals = int(self.options.total_revivals.value / 100 *
                                   total_locations)
         if self.options.start_with_revive:
             self.total_revivals -= 1
-        if self.multiworld.victory[self.player] == "voidling" and not self.multiworld.dlc_sotv[self.player]:
-            self.multiworld.victory[self.player].value = "any"
+        if self.options.victory == "voidling" and not self.options.dlc_sotv:
+            self.options.victory.value = "any"
 
     def create_regions(self) -> None:
 
-        if self.multiworld.goal[self.player] == "classic":
+        if self.options.goal == "classic":
             # classic mode
             menu = create_region(self.multiworld, self.player, "Menu")
             self.multiworld.regions.append(menu)
@@ -81,7 +81,7 @@ class RiskOfRainWorld(World):
             victory_region = create_region(self.multiworld, self.player, "Victory")
             self.multiworld.regions.append(victory_region)
             petrichor = create_region(self.multiworld, self.player, "Petrichor V",
-                                      get_classic_item_pickups(self.multiworld.total_locations[self.player].value))
+                                      get_classic_item_pickups(self.options.total_locations.value))
             self.multiworld.regions.append(petrichor)
 
             # classic mode can get to victory from the beginning of the game
@@ -96,7 +96,7 @@ class RiskOfRainWorld(World):
             # explore mode
             create_regions(self)
 
-        create_events(self.multiworld, self.player)
+        create_events(self.multiworld, self.player, self.options)
 
     def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
@@ -156,7 +156,7 @@ class RiskOfRainWorld(World):
                     scavengers=self.options.scavengers_per_stage.value,
                     scanners=self.options.scanner_per_stage.value,
                     altars=self.options.altars_per_stage.value,
-                    dlc_sotv=self.options.dlc_sotv.value
+                    dlc_sotv=bool(self.options.dlc_sotv.value)
                 )
             )
         # Create junk items
@@ -204,7 +204,7 @@ class RiskOfRainWorld(World):
                 "Combat Trap": self.options.combat_trap.value,
                 "Teleport Trap": self.options.teleport_trap.value,
             }
-        if not self.multiworld.enable_trap[self.player]:
+        if not self.options.enable_trap:
             junk_pool.pop("Mountain Trap")
             junk_pool.pop("Time Warp Trap")
             junk_pool.pop("Combat Trap")
@@ -233,9 +233,10 @@ class RiskOfRainWorld(World):
 
     def fill_slot_data(self):
         options_dict = self.options.as_dict("item_pickup_step", "shrine_use_step", "goal", "total_locations",
-                                      "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
-                                      "scanner_per_stage", "altars_per_stage", "total_revivals", "start_with_revive",
-                                      "final_stage_death", "death_link", casing="camel")
+                                            "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
+                                            "scanner_per_stage", "altars_per_stage", "total_revivals",
+                                            "start_with_revive",
+                                            "final_stage_death", "death_link", casing="camel")
         return {
             **options_dict,
             "seed": "".join(self.multiworld.per_slot_randoms[self.player].choice(string.digits) for _ in range(16)),
@@ -243,13 +244,13 @@ class RiskOfRainWorld(World):
         }
 
 
-def create_events(world: MultiWorld, player: int) -> None:
-    total_locations = world.worlds[player].options.total_locations.value
+def create_events(world: MultiWorld, player: int, ror2_options: ROR2Options) -> None:
+    total_locations = ror2_options.total_locations.value
     num_of_events = total_locations // 25
     if total_locations / 25 == num_of_events:
         num_of_events -= 1
     world_region = world.get_region("Petrichor V", player)
-    if world.worlds[player].options.goal == "classic":
+    if ror2_options.goal == "classic":
         # only setup Pickups when using classic_mode
         for i in range(num_of_events):
             event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
