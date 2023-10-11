@@ -80,7 +80,6 @@ non_apworlds: set = {
     "Raft",
     "Secret of Evermore",
     "Slay the Spire",
-    "Starcraft 2 Wings of Liberty",
     "Sudoku",
     "Super Mario 64",
     "VVVVVV",
@@ -91,6 +90,7 @@ non_apworlds: set = {
 # LogicMixin is broken before 3.10 import revamp
 if sys.version_info < (3,10):
     non_apworlds.add("Hollow Knight")
+    non_apworlds.add("Starcraft 2 Wings of Liberty")
 
 def download_SNI():
     print("Updating SNI")
@@ -370,6 +370,10 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: typing.List[str] = []
+        disabled_worlds_folder = "worlds_disabled"
+        for entry in os.listdir(disabled_worlds_folder):
+            if os.path.isdir(os.path.join(disabled_worlds_folder, entry)):
+                folders_to_remove.append(entry)
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
             if worldname not in non_apworlds:
