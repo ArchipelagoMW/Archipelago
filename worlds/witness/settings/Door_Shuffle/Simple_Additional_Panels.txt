@@ -5,7 +5,7 @@ Quarry Stoneworks Control Panels
 Quarry Boathouse Control Panels
 Monastery Shutters Control (Panel)
 Town Control Panels
-Windmill/Theater Control Panels
+Windmill & Theater Control Panels
 Bunker Control Panels
 Swamp Control Panels
-Mountain&Caves Control Panels
+Mountain & Caves Control Panels
