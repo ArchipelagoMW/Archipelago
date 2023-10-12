@@ -8,7 +8,7 @@
 
 - Windows 8 o más reciente.
 - Muse Dash: [Disponible en Steam](https://store.steampowered.com/app/774171/Muse_Dash/)
-  - \[Opcional\] Just As Planned DLC: [tambien disponible on Steam](https://store.steampowered.com/app/1055810/Muse_Dash__Just_as_planned/)
+  - \[Opcional\] Just as Planned DLC: [tambien disponible on Steam](https://store.steampowered.com/app/1055810/Muse_Dash__Just_as_planned/)
 - Melon Loader: [GitHub](https://github.com/LavaGang/MelonLoader/releases/latest)
   - .Net Framework 4.8 podría ser necesario para el instalador: [Descarga](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 - .Net 6.0 (si aún no está instalado): [Descarga](https://dotnet.microsoft.com/en-us/download/dotnet/6.0#runtime-6.0.15)
