@@ -250,7 +250,7 @@ class WorldTestBase(unittest.TestCase):
         """A multiworld has been constructed by this point"""
         return hasattr(self, "game") and hasattr(self, "multiworld")
 
-    def testAllStateCanReachEverything(self):
+    def test_all_state_can_reach_everything(self):
         """Ensure all state can reach everything and complete the game with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
@@ -266,7 +266,7 @@ class WorldTestBase(unittest.TestCase):
                 self.multiworld.state = state
                 self.assertBeatable(True)
 
-    def testEmptyStateCanReachSomething(self):
+    def test_empty_state_can_reach_something(self):
         """Ensure empty state can reach at least one location with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
@@ -276,7 +276,7 @@ class WorldTestBase(unittest.TestCase):
             self.assertGreater(len(locations), 0,
                                "Need to be able to reach at least one location to get started.")
 
-    def testFill(self):
+    def test_fill(self):
         """Generates a multiworld and validates placements with the defined options"""
         # don't run this test if accessibility is set manually
         if not (self.run_default_tests and self.constructed):

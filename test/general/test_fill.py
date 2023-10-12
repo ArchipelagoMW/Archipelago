@@ -72,7 +72,7 @@ class PlayerDefinition(object):
         return region
 
 
-def fillRegion(world: MultiWorld, region: Region, items: List[Item]) -> List[Item]:
+def fill_region(world: MultiWorld, region: Region, items: List[Item]) -> List[Item]:
     items = items.copy()
     while len(items) > 0:
         location = region.locations.pop(0)
@@ -86,7 +86,7 @@ def fillRegion(world: MultiWorld, region: Region, items: List[Item]) -> List[Ite
     return items
 
 
-def regionContains(region: Region, item: Item) -> bool:
+def region_contains(region: Region, item: Item) -> bool:
     for location in region.locations:
         if location.item == item:
             return True
@@ -762,19 +762,19 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
 
         # Sphere 1
         region = player1.generate_region(player1.menu, 20)
-        items = fillRegion(multi_world, region, [
+        items = fill_region(multi_world, region, [
             player1.prog_items[0]] + items)
 
         # Sphere 2
         region = player1.generate_region(
             player1.regions[1], 20, lambda state: state.has(player1.prog_items[0].name, player1.id))
-        items = fillRegion(
+        items = fill_region(
             multi_world, region, [player1.prog_items[1], player2.prog_items[0]] + items)
 
         # Sphere 3
         region = player2.generate_region(
             player2.menu, 20, lambda state: state.has(player2.prog_items[0].name, player2.id))
-        fillRegion(multi_world, region, [player2.prog_items[1]] + items)
+        fill_region(multi_world, region, [player2.prog_items[1]] + items)
 
     def test_balances_progression(self) -> None:
         self.multi_world.progression_balancing[self.player1.id].value = 50

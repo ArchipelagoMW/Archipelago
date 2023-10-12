@@ -1,8 +1,7 @@
-from argparse import Namespace
-from typing import Dict, Optional, Callable
-
-from BaseClasses import MultiWorld, CollectionState, Region
 import unittest
+from typing import Callable, Dict, Optional
+
+from BaseClasses import CollectionState, MultiWorld, Region
 
 
 class TestHelpers(unittest.TestCase):
@@ -15,7 +14,7 @@ class TestHelpers(unittest.TestCase):
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed()
 
-    def testRegionHelpers(self) -> None:
+    def test_region_helpers(self) -> None:
         regions: Dict[str, str] = {
             "TestRegion1": "I'm an apple",
             "TestRegion2": "I'm a banana",
