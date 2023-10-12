@@ -85,6 +85,8 @@ class MessengerWorld(World):
             self.options.logic_level.value = Logic.option_hard
             self.options.accessibility.value = Accessibility.option_minimal
 
+        self.multiworld.early_items[self.player]["Meditation"] = self.options.early_meditation.value
+
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
     def create_regions(self) -> None:

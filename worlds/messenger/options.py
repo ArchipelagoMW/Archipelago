@@ -43,6 +43,11 @@ class LimitedMovement(Toggle):
     display_name = "Limited Movement"
 
 
+class EarlyMed(Toggle):
+    """Guarantees meditation will be found early"""
+    display_name = "Early Meditation"
+
+
 class Goal(Choice):
     """Requirement to finish the game. Power Seal Hunt will force power seal locations to be shuffled."""
     display_name = "Goal"
@@ -145,6 +150,7 @@ class MessengerOptions(PerGameCommonOptions):
     shuffle_seals: PowerSeals
     shuffle_shards: MegaShards
     limited_movement: LimitedMovement
+    early_meditation: EarlyMed
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded
