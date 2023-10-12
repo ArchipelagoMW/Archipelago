@@ -128,7 +128,7 @@ class WitnessPlayerItems:
                                "Orchard Second Gate (Door)",
                                "Jungle Bamboo Laser Shortcut (Door)",
                                "Keep Pressure Plates 2 Exit (Door)",
-                               "Caves Elevator Control (Panel)"}:
+                               "Caves Elevator Controls (Panel)"}:
                 # Downgrade doors that don't gate progress.
                 item_data.classification = ItemClassification.useful
 

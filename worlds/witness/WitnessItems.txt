@@ -87,13 +87,13 @@ Doors:
 1194 - Swamp Platform Shortcut (Panel) - 0x17C0D
 1195 - Swamp Rotating Bridge (Panel) - 0x181F5
 1196 - Swamp Long Bridge (Panel) - 0x17E2B
-1197 - Swamp Maze Control (Panel) - 0x17C0A,0x17E07
+1197 - Swamp Maze Controls (Panel) - 0x17C0A,0x17E07
 1220 - Mountain Floor 1 Light Bridge (Panel) - 0x09E39
 1225 - Mountain Floor 2 Light Bridge Near (Panel) - 0x09E86
 1230 - Mountain Floor 2 Light Bridge Far (Panel) - 0x09ED8
 1235 - Mountain Floor 2 Elevator Control (Panel) - 0x09EEB
 1240 - Caves Entry (Panel) - 0x00FF8
-1242 - Caves Elevator Control (Panel) - 0x335AB,0x335AC,0x3369D
+1242 - Caves Elevator Controls (Panel) - 0x335AB,0x335AC,0x3369D
 1245 - Challenge Entry (Panel) - 0x0A16E
 1250 - Tunnels Entry (Panel) - 0x039B4
 1255 - Tunnels Town Shortcut (Panel) - 0x09E85
