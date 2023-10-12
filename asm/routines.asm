@@ -26,6 +26,12 @@ hook 0x801BB7A, 0x801BB90, LoadTextSprites
 .align 2
 
 
+.macro @transfer_itemcount, offset
+    ldrb r2, [r0, offset]
+    strb r2, [r1, offset]
+.endmacro
+
+
 ; Create starting inventory by updating the item status after loading the empty save.
 CreateStartingInventory:
         call_using r0, AutoSave_EXRead_Work
@@ -46,7 +52,12 @@ CreateStartingInventory:
         b @@NextLevel
 
     @@Junk:
-        ; TODO
+        ldr r0, =StartingInventoryJunkCounts
+        ldr r1, =QueuedJunk
+        @transfer_itemcount 0
+        @transfer_itemcount 1
+        @transfer_itemcount 2
+        @transfer_itemcount 3
 
         pop {pc}  ; Return address from EXimage_Clear_Work_2Mode()
     .pool
