@@ -36,14 +36,14 @@ PyramidScreenCreateReceivedItemOAM:
 
         ldr r6, =IncomingItemID
         ldrb r6, [r6]
-        get_bit r1, r6, 6
+        get_bit r1, r6, ItemBit_Junk
         cmp r1, #0
         bne @@JunkItem
 
     ; Jewel Pieces or CD
         add r5, #1
 
-        get_bit r1, r6, 5
+        get_bit r1, r6, ItemBit_CD
         cmp r1, #0
         bne @@CD
 
@@ -117,7 +117,7 @@ PyramidScreenCreateReceivedItemOAM:
         strh r2, [r4, #12]
 
         ; Wario is padded on the left. Lightning on the right.
-        cmp r6, #0x43
+        cmp r6, #ItemID_Lightning
         beq @@BigBoardSpriteBottom
         sub r1, #8
 

@@ -48,7 +48,7 @@ hook_branch 0x80790B6, 0x80790CC, 0x80790D8, ReadCD
     ; Skip your junk items
         cmp r1, #0
         bne @@Give
-        lsr r2, r0, #6
+        lsr r2, r0, #ItemBit_Junk
         cmp r2, #1
         beq @@DontGive
 
@@ -229,7 +229,7 @@ ReadJewelPieces:
     @@Return:
         ldr r0, =LastCollectedItemID
         ldrb r3, [r0]
-        get_bits r3, r3, 6, 0
+        get_bits r3, r3, ItemBit_Junk, 0
         strb r3, [r0]
 
         pop {r7}
@@ -323,7 +323,7 @@ ReadCD:
     @@Return:
         ldr r0, =LastCollectedItemID
         ldrb r3, [r0]
-        get_bits r3, r3, 6, 0
+        get_bits r3, r3, ItemBit_Junk, 0
         strb r3, [r0]
 
         ldr r3, =Scbuf_ucStatus

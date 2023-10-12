@@ -88,7 +88,7 @@ SpawnRandomizedItemFromBox:
     ; If it's your own junk item, always release it
         cmp r1, #0
         bne @@CheckCollectionStatus
-        lsr r0, r0, #6
+        lsr r0, r0, #ItemBit_Junk
         cmp r0, #1
         beq @@ReleaseItem
 
@@ -155,11 +155,11 @@ LoadRandomItemAnimation:
         mov r5, #0
 
     ; AP items
-        cmp r6, #0xF0
+        cmp r6, #ItemID_Archipelago
         beq @@APItem
 
     ; Junk items
-        lsr r0, r6, #6
+        lsr r0, r6, #ItemBit_Junk
         cmp r0, #0
         bne @@JunkItem
 
@@ -171,7 +171,7 @@ LoadRandomItemAnimation:
         bl SetTreasurePalette
 
     ; Jewel/CD branch
-        lsr r1, r6, #5
+        lsr r1, r6, #ItemBit_CD
         cmp r1, #0
         bne @@CD
 
@@ -184,11 +184,11 @@ LoadRandomItemAnimation:
         b @@SetAnimation
 
     @@JunkItem:
-        cmp r6, #0x40
+        cmp r6, #ItemID_FullHealthItem
         beq @@FullHealthItem
-        cmp r6, #0x42
+        cmp r6, #ItemID_Heart
         beq @@Heart
-        b @@GiveImmediately  ; 0x41, 0x43
+        b @@GiveImmediately  ; ItemID_TransformTrap, ItemID_Lightning
 
     @@FullHealthItem:
         mov r6, #0x05
@@ -287,7 +287,7 @@ CollectRandomItem:
         bne @@MultiplayerItem
 
     ; Junk items
-        lsr r0, r5, #6
+        lsr r0, r5, #ItemBit_Junk
         cmp r0, #0
         bne @@JunkItem
 
@@ -298,7 +298,7 @@ CollectRandomItem:
         mov r1, #2
         strb r1, [r0]
 
-        lsr r1, r5, #5
+        lsr r1, r5, #ItemBit_CD
         cmp r1, #0
         bne @@CD
         mov r0, #0  ; a1
@@ -338,13 +338,13 @@ CollectRandomItem:
         b @@SetCheckLocation
 
     @@JunkItem:
-        cmp r5, #0x40
+        cmp r5, #ItemID_FullHealthItem
         beq @@FullHealthItem
-        cmp r5, #0x41
+        cmp r5, #ItemID_TransformTrap
         beq @@Transform
-        cmp r5, #0x42
+        cmp r5, #ItemID_Heart
         beq @@Heart
-        cmp r5, #0x43
+        cmp r5, #ItemID_Lightning
         beq @@Damage
 
     @@FullHealthItem:

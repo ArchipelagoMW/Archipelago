@@ -6,7 +6,21 @@
 ; 24 available level IDs, not all of which are used.
 @levels equ 6 * 4
 
-invalid_item equ 0xFF
+
+ItemBit_CD equ 5
+ItemBit_Junk equ 6
+
+.expfunc ItemID_Jewel(passage, quadrant), (passage << 2) | quadrant
+.expfunc ItemID_CD(passage, level), ItemBit_CD | (passage << 2) | level
+
+.expfunc ItemID_Junk(junk), (1 << ItemBit_Junk) | junk
+ItemID_FullHealthItem equ ItemID_Junk(0)
+ItemID_TransformTrap equ ItemID_Junk(1)
+ItemID_Heart equ ItemID_Junk(2)
+ItemID_Lightning equ ItemID_Junk(3)
+
+ItemID_Archipelago equ 0xF0
+ItemID_None equ 0xFF
 
 
 ; Maps locations to the 8-bit IDs of the items they contain.
@@ -14,12 +28,12 @@ invalid_item equ 0xFF
 ; locations that don't exist
 .align 4
 ItemLocationTable:
-    Jewel1LocationTable: .fill @levels, invalid_item
-    Jewel2LocationTable: .fill @levels, invalid_item
-    Jewel3LocationTable: .fill @levels, invalid_item
-    Jewel4LocationTable: .fill @levels, invalid_item
-    CDLocationTable:     .fill @levels, invalid_item
-    HealthLocationTable: .fill @levels, invalid_item
+    Jewel1LocationTable: .fill @levels, ItemID_None
+    Jewel2LocationTable: .fill @levels, ItemID_None
+    Jewel3LocationTable: .fill @levels, ItemID_None
+    Jewel4LocationTable: .fill @levels, ItemID_None
+    CDLocationTable:     .fill @levels, ItemID_None
+    HealthLocationTable: .fill @levels, ItemID_None
 
 ; Maps locations to pointers toward the item's multiworld data.
 .align 4
@@ -85,15 +99,14 @@ GetItemAtLocation:
 GiveItem:
         push {r4-r5, lr}
 
-    ; 0xFF means no item, so immediately return
-        cmp r0, #0xFF
+        cmp r0, #ItemID_None
         beq @@Return
 
     ; If another world's item, it'll be handled outside the game
         cmp r1, #0
         bne @@Return
 
-        lsr r1, r0, #6
+        lsr r1, r0, #ItemBit_Junk
         cmp r1, #0
         bne @@Junk
 
@@ -110,7 +123,7 @@ GiveItem:
         get_bits r2, r0, 1, 0
 
         ; Check bit 5 to determine CD/Jewel piece
-        lsr r3, r0, #5
+        lsr r3, r0, #ItemBit_CD
         cmp r3, #0
         bne @@CD
 

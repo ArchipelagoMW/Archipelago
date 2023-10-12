@@ -112,14 +112,14 @@ PyramidScreenShowReceivedItem:
         ldr r0, =IncomingItemID
         ldrb r0, [r0]
 
-        get_bit r1, r0, 6
+        get_bit r1, r0, ItemBit_Junk
         cmp r1, #1
         beq @@JunkItem
 
         ; Major item
         get_bits r2, r0, 4, 2  ; Passage
         lsl r2, r2, #5  ; r2: Passage * 32
-        get_bit r1, r0, 5
+        get_bit r1, r0, ItemBit_CD
         cmp r1, #1
         beq @@CD
 
@@ -247,7 +247,7 @@ PyramidScreenShowReceivedItem:
 
         ; Get trap types
         ldr r6, =@@WarioFormTrapOffsets
-        cmp r0, #0x43
+        cmp r0, #ItemID_Lightning
         bne @@Upper3x2
         add r6, #4
 

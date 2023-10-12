@@ -102,7 +102,7 @@ PyramidScreen:
         beq @@ShowTextBox
 
         bl ReceiveNextItem  ; a1
-        cmp r0, #0xFF
+        cmp r0, #ItemID_None
         beq @@RunCase2
 
         mov r4, r0
@@ -168,7 +168,7 @@ LevelScreen:
 
         bl ReceiveNextItem  ; a1
 
-        cmp r0, #0xFF
+        cmp r0, #ItemID_None
         beq @@CollectJunk
         ; Set text timer
         ldr r1, =TextTimer
@@ -181,7 +181,7 @@ LevelScreen:
         bl LoadReceivedText
 
     ; If we get treasure, tell the player
-        get_bit r0, r4, 6
+        get_bit r0, r4, ItemBit_Junk
         cmp r0, #0
         bne @@CollectJunk
 
@@ -189,7 +189,7 @@ LevelScreen:
         bl ItemReceivedFeedbackSound
         get_bits r0, r4, 4, 2
         bl SetTreasurePalette
-        lsr r0, r4, #5
+        lsr r0, r4, #ItemBit_CD
         bl SpawnCollectionIndicator
 
     @@CollectJunk:
