@@ -1,15 +1,27 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from BaseClasses import CollectionState, Item, ItemClassification, MultiWorld, Tutorial
-from Options import Accessibility
+from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, Type, components
+from .client_setup import launch_game
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
-from .options import Goal, Logic, MessengerOptions, NotesNeeded, PowerSeals
+from .options import Goal, Logic, NotesNeeded, PowerSeals
 from .regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
-from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
-from .subclasses import MessengerItem, MessengerLocation, MessengerRegion
+from .subclasses import MessengerItem, MessengerRegion
+
+components.append(
+    Component("The Messenger", component_type=Type.CLIENT, func=launch_game)
+)
+
+
+class MessengerSettings(Group):
+    class GamePath(FilePath):
+        description = "The Messenger game executable"
+        is_exe = True
+
+    game_path: GamePath = GamePath("TheMessenger.exe")
 
 
 class MessengerWeb(WebWorld):
@@ -36,17 +48,10 @@ class MessengerWorld(World):
     adventure full of thrills, surprises, and humor.
     """
     game = "The Messenger"
-
-    item_name_groups = {
-        "Notes": set(NOTES),
-        "Keys": set(NOTES),
-        "Crest": {"Sun Crest", "Moon Crest"},
-        "Phobe": set(PHOBEKINS),
-        "Phobekin": set(PHOBEKINS),
-    }
-
     options_dataclass = MessengerOptions
     options: MessengerOptions
+    settings_key = "messenger_settings"
+    settings: ClassVar[MessengerSettings]
 
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
@@ -62,6 +67,13 @@ class MessengerWorld(World):
                                *FIGURINES,
                                "Money Wrench",
                            ], base_offset)}
+    item_name_groups = {
+        "Notes": set(NOTES),
+        "Keys": set(NOTES),
+        "Crest": {"Sun Crest", "Moon Crest"},
+        "Phobe": set(PHOBEKINS),
+        "Phobekin": set(PHOBEKINS),
+    }
 
     data_version = 3
     required_client_version = (0, 4, 0)
