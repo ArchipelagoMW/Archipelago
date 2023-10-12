@@ -32,6 +32,7 @@ class TestBase(unittest.TestCase):
     }
 
     def test_default_all_state_can_reach_everything(self):
+        """Ensure all state can reach everything and complete the game with the defined options"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
             with self.subTest("Game", game=game_name):
@@ -55,6 +56,7 @@ class TestBase(unittest.TestCase):
                     self.assertTrue(world.can_beat_game(state))
 
     def test_default_empty_state_can_reach_something(self):
+        """Ensure empty state can reach at least one location with the defined options"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 world = setup_solo_multiworld(world_type)

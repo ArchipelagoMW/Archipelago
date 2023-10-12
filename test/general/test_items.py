@@ -5,6 +5,7 @@ from . import setup_solo_multiworld
 
 class TestBase(unittest.TestCase):
     def test_create_item(self):
+        """Test that a world can successfully create all items in its datapackage"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             proxy_world = world_type(None, 0)  # this is identical to MultiServer.py creating worlds
             for item_name in world_type.item_name_to_id:
@@ -42,6 +43,7 @@ class TestBase(unittest.TestCase):
                         self.assertNotIn(group_name, world_type.item_name_to_id)
 
     def test_item_count_greater_equal_locations(self):
+        """Test that by the pre_fill step under default settings, each game submits items >= locations"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
