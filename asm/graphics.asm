@@ -19,48 +19,12 @@ EmptyTile:
     .fill 0x20 * 12, 0
 
 .org BasicElementTiles + tile_coord_4b(14, 5)
-APLogoTile1:
-    .word 0x50000000
-    .word 0xB5000000
-    .word 0xBB555000
-    .word 0xB5888500
-    .word 0x58888850
-    .word 0x58888850
-    .word 0x58555850
-    .word 0x05FFF500
-
-APLogoTile2:
-    .word 0x00000055
-    .word 0x000005BB
-    .word 0x00555BBB
-    .word 0x05DDD5BB
-    .word 0x5DDDDD5B
-    .word 0x5DDDDD5B
-    .word 0x5D555D55
-    .word 0x05EEE500
+APLogoTop: .incbin "data/graphics/ap_logo.bin", 0x00, 0x40
 
 .fill 0x20 * 8, 0
 
 .org BasicElementTiles + tile_coord_4b(14, 6)
-APLogoTile3:
-    .word 0x5FFFFF50
-    .word 0x5FFFFF50
-    .word 0xC5FFFF50
-    .word 0xCC5FF500
-    .word 0xCC555000
-    .word 0xCC500000
-    .word 0xC5000000
-    .word 0x50000000
-
-APLogoTile4:
-    .word 0x5EEEEE50
-    .word 0x5EEEEE55
-    .word 0x5EEEE5CC
-    .word 0x05EE5CCC
-    .word 0x00555CCC
-    .word 0x00005CCC
-    .word 0x000005CC
-    .word 0x00000055
+APLogoBottom: .incbin "data/graphics/ap_logo.bin", 0x40, 0x40
 
 .fill 0x20 * 8, 0
 

@@ -114,10 +114,8 @@
 08401AE8 emptyjewel3tile
 08401B08 emptyjewel2tile
 08401C68 emptytile
-084020A8 aplogotile1
-084020C8 aplogotile2
-084024A8 aplogotile3
-084024C8 aplogotile4
+084020A8 aplogotop
+084024A8 aplogobottom
 08404548 carryingjewel1tile
 08404568 carryingjewel2tile
 08404588 carryingjewel3tile
