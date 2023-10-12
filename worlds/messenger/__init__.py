@@ -1,14 +1,15 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
+from BaseClasses import CollectionState, Item, ItemClassification, MultiWorld, Tutorial
+from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
 from .options import Goal, Logic, MessengerOptions, NotesNeeded, PowerSeals
 from .regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
-from .subclasses import MessengerItem, MessengerRegion
+from .subclasses import MessengerItem, MessengerLocation, MessengerRegion
 
 
 class MessengerWeb(WebWorld):
@@ -73,12 +74,6 @@ class MessengerWorld(World):
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]
     _filler_items: List[str]
-    unreachable_locs: List[MessengerLocation]
-    
-    def __init__(self, multiworld: "MultiWorld", player: int):
-        super().__init__(multiworld, player)
-        self.unreachable_locs = []
-
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
@@ -88,6 +83,7 @@ class MessengerWorld(World):
         if self.options.limited_movement:
             self.options.shuffle_seals.value = PowerSeals.option_true
             self.options.logic_level.value = Logic.option_hard
+            self.options.accessibility.value = Accessibility.option_minimal
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
@@ -108,7 +104,7 @@ class MessengerWorld(World):
                 *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
             } and "Time Shard" not in item
         ]
-        
+
         if self.options.limited_movement:
             itempool.append(self.create_item(self.random.choice(main_movement_items)))
         else:
@@ -143,16 +139,7 @@ class MessengerWorld(World):
             itempool += seals
 
         self.multiworld.itempool += itempool
-        if self.options.limited_movement and not self.options.accessibility == Accessibility.option_minimal:
-            # hardcoding these until i figure out a better solution
-            # need to figure out which locations are inaccessible with the missing item, and create filler based on
-            # that count
-            if self.options.shuffle_shards:
-                remaining_fill = 96 - len(self.multiworld.get_filled_locations(self.player))
-            else:
-                remaining_fill = 66 - len(self.multiworld.get_filled_locations(self.player))
-        else:
-            remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
+        remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
         if remaining_fill < 10:
             self._filler_items = self.random.choices(
                                       list(FILLER)[2:],
@@ -170,16 +157,7 @@ class MessengerWorld(World):
         elif logic == Logic.option_hard:
             MessengerHardRules(self).set_messenger_rules()
         else:
-            Rules.MessengerOOBRules(self).set_messenger_rules()
-    
-    def generate_basic(self) -> None:
-        if self.options.limited_movement and not self.options.accessibility == Accessibility.option_minimal:
-            all_state = self.multiworld.get_all_state(False)
-            reachable_locs = self.multiworld.get_reachable_locations(all_state, self.player)
-            unreachable_locs = list(set(self.multiworld.get_locations(self.player)) - set(reachable_locs))
-            for loc in unreachable_locs:
-                loc.place_locked_item(self.create_item("Time Shard"))
-                loc.access_rule = lambda state: True
+            MessengerOOBRules(self).set_messenger_rules()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         shop_prices = {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()}

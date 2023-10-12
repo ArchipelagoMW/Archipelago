@@ -1,7 +1,7 @@
 from typing import Callable, Dict, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, allow_self_locking_items, set_rule
+from worlds.generic.Rules import add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
 from .options import Goal, MessengerAccessibility
 from .subclasses import MessengerShopLocation
@@ -34,7 +34,8 @@ class MessengerRules:
             "Underworld": self.has_tabi,
             "Riviere Turquoise": lambda state: self.has_dart(state) or
                                                (self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
-            "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player) and self.can_dboost(state),
+            "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player)
+                                            and self.can_dboost(state),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
             "Music Box": self.has_dart,
@@ -182,9 +183,12 @@ class MessengerHardRules(MessengerRules):
         self.location_rules.update({
             "Howling Grotto Seal - Windy Saws and Balls": self.true,
             "Searing Crags Seal - Triple Ball Spinner": self.true,
-            "Searing Crags Seal - Raining Rocks": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
-            "Searing Crags Seal - Rhythm Rocks": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
-            "Searing Crags - Power Thistle": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
+            "Searing Crags Seal - Raining Rocks": lambda state: self.has_vertical(state)
+                                                                or self.can_destroy_projectiles(state),
+            "Searing Crags Seal - Rhythm Rocks": lambda state: self.has_vertical(state)
+                                                               or self.can_destroy_projectiles(state),
+            "Searing Crags - Power Thistle": lambda state: self.has_vertical(state)
+                                                           or self.can_destroy_projectiles(state),
             "Glacial Peak Seal - Ice Climbers": lambda state: self.has_vertical(state) or self.can_dboost(state),
             "Glacial Peak Seal - Projectile Spike Pit": self.true,
             "Glacial Peak Seal - Glacial Air Swag": lambda state: self.has_windmill(state) or self.has_vertical(state),
@@ -197,8 +201,10 @@ class MessengerHardRules(MessengerRules):
             "Elemental Skylands Seal - Fire": lambda state: (self.has_dart(state) or self.can_dboost(state)
                                                              or self.has_windmill(state)) and
                                                             self.can_destroy_projectiles(state),
-            "Earth Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
-            "Water Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+            "Earth Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state)
+                                              or self.has_windmill(state),
+            "Water Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state)
+                                              or self.has_windmill(state),
         })
 
         self.extra_rules = {
@@ -229,7 +235,8 @@ class MessengerOOBRules(MessengerRules):
 
         self.region_rules = {
             "Elemental Skylands":
-                lambda state: state.has_any({"Windmill Shuriken", "Wingsuit", "Rope Dart", "Magic Firefly"}, self.player),
+                lambda state: state.has_any({"Windmill Shuriken", "Wingsuit", "Rope Dart", "Magic Firefly"},
+                                            self.player),
             "Music Box": lambda state: state.has_all(set(NOTES), self.player)
         }
 
@@ -259,13 +266,17 @@ def set_self_locking_items(world: MessengerWorld, player: int) -> None:
     multiworld = world.multiworld
 
     # do the ones for seal shuffle on and off first
-    allow_self_locking_items(multiworld.get_location("Searing Crags - Key of Strength", player), "Power Thistle")
-    allow_self_locking_items(multiworld.get_location("Sunken Shrine - Key of Love", player), "Sun Crest", "Moon Crest")
-    allow_self_locking_items(multiworld.get_location("Corrupted Future - Key of Courage", player), "Demon King Crown")
+    allow_self_locking_items(multiworld.get_location("Searing Crags - Key of Strength", player),
+                             "Power Thistle")
+    allow_self_locking_items(multiworld.get_location("Sunken Shrine - Key of Love", player),
+                             "Sun Crest", "Moon Crest")
+    allow_self_locking_items(multiworld.get_location("Corrupted Future - Key of Courage", player),
+                             "Demon King Crown")
 
     # add these locations when seals are shuffled
     if world.options.shuffle_seals:
-        allow_self_locking_items(multiworld.get_location("Elemental Skylands Seal - Water", player), "Currents Master")
+        allow_self_locking_items(multiworld.get_location("Elemental Skylands Seal - Water", player),
+                                 "Currents Master")
     # add these locations when seals and shards aren't shuffled
     elif not world.options.shuffle_shards:
         for entrance in multiworld.get_region("Cloud Ruins", player).entrances:
