@@ -2,7 +2,7 @@ import os
 from argparse import Namespace
 from typing import Dict, FrozenSet, Tuple, Any, ClassVar
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState
 from test.TestBase import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from .. import StardewValleyWorld
