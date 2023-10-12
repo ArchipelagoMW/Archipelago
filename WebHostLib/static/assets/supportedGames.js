@@ -12,7 +12,7 @@ window.addEventListener('load', () => {
       return toggleButtons.forEach((header) => {
         header.style.display = null;
         header.firstElementChild.innerText = '▶';
-        header.classList.add('collapsed');
+        header.nextElementSibling.classList.add('collapsed');
       });
     }
 
