@@ -12,10 +12,11 @@ ItemReceivedFeedbackSound:
 
         get_bits r0, r4, ItemBit_Junk, ItemBit_CD
         cmp r0, #1
-        bgt @@Return
         beq @@CDSound
+        cmp r0, #4
+        beq @@Return
 
-    @@MultiplayerItem:
+    ; Treasure
         ldr r0, =0x13B  ; a1
         b @@PlaySound
 

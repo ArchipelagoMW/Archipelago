@@ -13,16 +13,6 @@
 ; 7: Grab heavy objects
 
 
-MoveBit_GroundPound equ 0
-MoveBit_Swim equ 1
-MoveBit_HeadSmash equ 2
-MoveBit_Grab equ 3
-MoveBit_DashAttack equ 4
-MoveBit_EnemyJump equ 5
-MoveBit_GroundPoundSuper equ 6
-MoveBit_GrabHeavy equ 7
-
-
 .macro get_wario_move, ability
         ldr r0, =WarioAbilities
         ldrb r0, [r0]

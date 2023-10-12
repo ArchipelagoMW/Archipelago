@@ -8,10 +8,12 @@
 
 
 ItemBit_CD equ 5
+ItemBit_Ability equ 6
 ItemBit_Junk equ 7
 
 .expfunc ItemID_Jewel(passage, quadrant), (passage << 2) | quadrant
-.expfunc ItemID_CD(passage, level), ItemBit_CD | (passage << 2) | level
+.expfunc ItemID_CD(passage, level), (1 << ItemBit_CD) | (passage << 2) | level
+.expfunc ItemID_Ability(ability), (1 << ItemBit_Ability) | ability
 
 .expfunc ItemID_Junk(junk), (1 << ItemBit_Junk) | junk
 ItemID_FullHealthItem equ ItemID_Junk(0)
@@ -21,6 +23,16 @@ ItemID_Lightning equ ItemID_Junk(3)
 
 ItemID_Archipelago equ 0xF0
 ItemID_None equ 0xFF
+
+; Wario's abilities
+MoveBit_GroundPound equ 0
+MoveBit_Swim equ 1
+MoveBit_HeadSmash equ 2
+MoveBit_Grab equ 3
+MoveBit_DashAttack equ 4
+MoveBit_EnemyJump equ 5
+MoveBit_GroundPoundSuper equ 6
+MoveBit_GrabHeavy equ 7
 
 
 ; Maps locations to the 8-bit IDs of the items they contain.
@@ -111,6 +123,10 @@ GiveItem:
         bne @@Junk
 
     ; Progression item
+        get_bit r1, r0, ItemBit_Ability
+        cmp r1, #1
+        beq @@WarioAbility
+
         ldr r4, =LevelStatusTable
 
         ; Get passage ID * 24 into r1
@@ -149,7 +165,7 @@ GiveItem:
         add r5, r5, #-1
         cmp r5, #0
         beq @@Return
-            b @@CheckJewel
+        b @@CheckJewel
 
     @@FoundJewel:
         orr r0, r3
@@ -165,7 +181,36 @@ GiveItem:
         mov r3, #0x10
         orr r2, r3
         str r2, [r1]
+        b @@Return
 
+    @@WarioAbility:
+        ldr r4, =WarioAbilities
+        ldrb r5, [r4]
+        get_bits r1, r0, 2, 0
+        mov r0, #1
+        lsl r0, r1
+        cmp r1, MoveBit_GroundPound
+        beq @@ProgressiveAbility
+        cmp r1, MoveBit_Grab
+        beq @@ProgressiveAbility
+        b @@SetBit
+
+    @@ProgressiveAbility:
+        mov r2, r0
+        and r2, r5
+        cmp r2, #0
+        beq @@SetBit
+
+    ; Switch to stronger version
+        ; r1 = 0 or 3
+        mov r0, #1
+        lsr r1, #1  ; 0 or 1
+        add r1, #6  ; 6 or 7
+        lsl r0, r1
+
+    @@SetBit:
+        orr r5, r0
+        strb r5, [r4]
         b @@Return
 
     @@Junk:

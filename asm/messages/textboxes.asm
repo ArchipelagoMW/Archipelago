@@ -116,6 +116,11 @@ PyramidScreenShowReceivedItem:
         cmp r1, #1
         beq @@JunkItem
 
+        ; TODO: Abilities
+        get_bit r1, r0, ItemBit_Ability
+        cmp r1, #1
+        beq @@FullHealthItem
+
         ; Major item
         get_bits r2, r0, 4, 2  ; Passage
         lsl r2, r2, #5  ; r2: Passage * 32

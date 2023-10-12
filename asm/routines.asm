@@ -187,6 +187,10 @@ LevelScreen:
 
         mov r0, r4
         bl ItemReceivedFeedbackSound
+        ; TODO: Implement collection indicator graphics for abilities
+        get_bit r0, r4, ItemBit_Ability
+        cmp r0, #1
+        beq @@Return
         get_bits r0, r4, 4, 2
         bl SetTreasurePalette
         lsr r0, r4, #ItemBit_CD  ; a1
