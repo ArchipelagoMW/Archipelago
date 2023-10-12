@@ -1,4 +1,3 @@
-import cmd
 import io
 import logging
 import os.path
@@ -17,6 +16,7 @@ from Utils import is_linux, is_windows, messagebox, tuplize_version
 path: str
 folder: str
 mono_exe = None
+
 
 def courier_installed() -> bool:
     """Check if Courier is installed"""
@@ -53,7 +53,8 @@ def install_courier() -> Optional[bool]:
                 with ZipFile(io.BytesIO(download.read()), "r") as zf:
                     os.makedirs(target, exist_ok=True)
                     zf.extractall(target)
-            installer = subprocess.Popen([os.path.join(target, "precompiled"), os.path.join(folder, "MiniInstaller.exe")])
+            installer = subprocess.Popen([os.path.join(target, "precompiled"),
+                                          os.path.join(folder, "MiniInstaller.exe")])
         else:
             installer = subprocess.Popen([mono_exe, os.path.join(folder, "MiniInstaller.exe")], shell=False)
     else:
