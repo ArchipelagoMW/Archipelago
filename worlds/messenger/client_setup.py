@@ -16,7 +16,7 @@ from Utils import is_linux, is_windows, messagebox, tuplize_version
 
 path: str
 folder: str
-
+mono_exe = None
 
 def courier_installed() -> bool:
     """Check if Courier is installed"""
@@ -42,8 +42,20 @@ def install_courier() -> Optional[bool]:
     working_directory = os.getcwd()
     os.chdir(folder)
     if is_linux:
+        global mono_exe
         mono_exe = which("mono")
-        installer = subprocess.Popen([mono_exe, os.path.join(folder, "MiniInstaller.exe")], shell=False)
+        if not mono_exe:
+            # download and use mono kickstart
+            # this allows steam deck support
+            mono_kick_url = "https://github.com/flibitijibibo/MonoKickstart/archive/refs/heads/main.zip"
+            target = os.path.join(folder, "monoKickstart")
+            with urllib.request.urlopen(mono_kick_url) as download:
+                with ZipFile(io.BytesIO(download.read()), "r") as zf:
+                    os.makedirs(target, exist_ok=True)
+                    zf.extractall(target)
+            os.startfile(os.path.join(target, "precompiled"), os.path.join(folder, "MiniInstaller.exe"))
+        else:
+            installer = subprocess.Popen([mono_exe, os.path.join(folder, "MiniInstaller.exe")], shell=False)
     else:
         installer = subprocess.Popen(os.path.join(folder, "MiniInstaller.exe"))
     failure = installer.wait()
@@ -115,7 +127,7 @@ def install_mod() -> None:
 def launch_game() -> None:
     """Check the game installation, then launch it"""
     from . import MessengerWorld
-    global path, folder
+    global path, folder, mono
     path = MessengerWorld.settings.game_path
     folder = os.path.dirname(path)
     if not (is_linux or is_windows):
@@ -131,4 +143,6 @@ def launch_game() -> None:
     else:
         if update_mod() is None:
             return
+    if is_linux and not mono_exe:  # don't launch the game if we're on steam deck
+        return
     os.startfile("steam://rungameid/764790")
