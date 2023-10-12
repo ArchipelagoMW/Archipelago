@@ -1,12 +1,13 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List, Optional
 
 from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
+from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
 from .client_setup import launch_game
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
-from .options import Goal, Logic, NotesNeeded, PowerSeals
+from .options import Goal, Logic, MessengerOptions, NotesNeeded, PowerSeals
 from .regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
 from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion

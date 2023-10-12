@@ -1,14 +1,18 @@
+import cmd
+import io
 import logging
 import os.path
 import subprocess
 import sys
+import urllib.request
+from shutil import which
 from tkinter.messagebox import askyesnocancel
 from typing import Any, Optional
 from zipfile import ZipFile
 
 import requests
 
-from Utils import messagebox, tuplize_version
+from Utils import is_linux, is_windows, messagebox, tuplize_version
 
 path: str
 folder: str
@@ -31,22 +35,22 @@ def install_courier() -> Optional[bool]:
     assets = request_data(courier_url)[0]["assets"]
     latest_download = assets[-1]["browser_download_url"]
 
-    remote_file = requests.get(latest_download)
-    temp_file = assets[-1]["name"]
-    with open(temp_file, "wb") as f:
-        f.write(remote_file.content)
-
-    with ZipFile(temp_file, "r") as data:
-        data.extractall(folder)
-    os.remove(temp_file)
+    with urllib.request.urlopen(latest_download) as download:
+        with ZipFile(io.BytesIO(download.read()), "r") as zf:
+            zf.extractall(folder)
 
     working_directory = os.getcwd()
     os.chdir(folder)
-    installer = subprocess.Popen(os.path.join(folder, "MiniInstaller.exe"))
+    if is_linux:
+        mono_exe = which("mono")
+        installer = subprocess.Popen([mono_exe, os.path.join(folder, "MiniInstaller.exe")], shell=False)
+    else:
+        installer = subprocess.Popen(os.path.join(folder, "MiniInstaller.exe"))
     failure = installer.wait()
     if failure:
         messagebox("Failure", "Failed to install Courier", True)
     os.chdir(working_directory)
+
     if courier_installed():
         messagebox("Success!", "Courier successfully installed!")
         return True
@@ -101,15 +105,10 @@ def install_mod() -> None:
     assets = request_data(url)["assets"]
     release_url = assets[0]["browser_download_url"]
 
-    remote_file = requests.get(release_url)
-    temp_file = assets[0]["name"]
-    with open(temp_file, "wb") as f:
-        f.write(remote_file.content)
+    with urllib.request.urlopen(release_url) as download:
+        with ZipFile(io.BytesIO(download.read()), "r") as zf:
+            zf.extractall(folder)
 
-    with ZipFile(temp_file, "r") as data:
-        target = os.path.join(folder, "Mods")
-        data.extractall(target)
-    os.remove(temp_file)
     messagebox("Success!", "Latest mod successfully installed!")
 
 
@@ -119,6 +118,8 @@ def launch_game() -> None:
     global path, folder
     path = MessengerWorld.settings.game_path
     folder = os.path.dirname(path)
+    if not (is_linux or is_windows):
+        return
     if not courier_installed():
         if not install_courier():
             return
@@ -130,4 +131,4 @@ def launch_game() -> None:
     else:
         if update_mod() is None:
             return
-    subprocess.Popen(path)
+    os.startfile("steam://rungameid/764790")
