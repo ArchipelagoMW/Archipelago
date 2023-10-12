@@ -52,7 +52,7 @@ level_rules = {
     'Hall of Hieroglyphs':   ['Dash Attack', 'Grab', 'Ground Pound'],
 
     #Palm Tree Paradise        None
-    'Wildflower Fields':     ['Ground Pound', 'Swim'],
+    'Wildflower Fields':     ['Super Ground Pound', 'Swim'],
     'Mystic Lake':           ['Swim', 'Head Smash'],
     'Monsoon Jungle':        ['Ground Pound'],
 
