@@ -11,7 +11,7 @@ from .LogicMixin import SC2Logic
 from . import ItemNames
 
 # Items with associated upgrades
-UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values()}
+UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}
 
 BARRACKS_UNITS = {
     ItemNames.Marine, ItemNames.Medic, ItemNames.Firebat, ItemNames.Marauder,
