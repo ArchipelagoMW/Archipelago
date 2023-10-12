@@ -1,6 +1,8 @@
 import random
+from dataclasses import dataclass
 
-from Options import Option, DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle
+from Options import Option, DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
+    PerGameCommonOptions
 import typing
 from .Names import LocationName
 
@@ -355,33 +357,33 @@ class VirtualConsoleChanges(Choice):
     default = 1
 
 
-kdl3_options: typing.Dict[str, typing.Type[Option[typing.Any]]] = {
-    "death_link": DeathLink,
-    "game_language": GameLanguage,
-    "goal": Goal,
-    "goal_speed": GoalSpeed,
-    "total_heart_stars": TotalHeartStars,
-    "heart_stars_required": HeartStarsRequired,
-    "filler_percentage": FillerPercentage,
-    "trap_percentage": TrapPercentage,
-    "gooey_trap_weight": GooeyTrapPercentage,
-    "slow_trap_weight": SlowTrapPercentage,
-    "ability_trap_weight": AbilityTrapPercentage,
-    "jumping_target": JumpingTarget,
-    "stage_shuffle": LevelShuffle,
-    "boss_shuffle": BossShuffle,
-    "allow_bb": BossShuffleAllowBB,
-    "animal_randomization": AnimalRandomization,
-    "copy_ability_randomization": CopyAbilityRandomization,
-    "strict_bosses": StrictBosses,
-    "open_world": OpenWorld,
-    "ow_boss_requirement": OpenWorldBossRequirement,
-    "boss_requirement_random": BossRequirementRandom,
-    "consumables": ConsumableChecks,
-    "kirby_flavor_preset": KirbyFlavorPreset,
-    "kirby_flavor": KirbyFlavor,
-    "gooey_flavor_preset": GooeyFlavorPreset,
-    "gooey_flavor": GooeyFlavor,
-    "music_shuffle": MusicShuffle,
-    "virtual_console": VirtualConsoleChanges,
-}
+@dataclass
+class KDL3Options(PerGameCommonOptions):
+    death_link: DeathLink
+    game_language: GameLanguage
+    goal: Goal
+    goal_speed: GoalSpeed
+    total_heart_stars: TotalHeartStars
+    heart_stars_required: HeartStarsRequired
+    filler_percentage: FillerPercentage
+    trap_percentage: TrapPercentage
+    gooey_trap_weight: GooeyTrapPercentage
+    slow_trap_weight: SlowTrapPercentage
+    ability_trap_weight: AbilityTrapPercentage
+    jumping_target: JumpingTarget
+    stage_shuffle: LevelShuffle
+    boss_shuffle: BossShuffle
+    allow_bb: BossShuffleAllowBB
+    animal_randomization: AnimalRandomization
+    copy_ability_randomization: CopyAbilityRandomization
+    strict_bosses: StrictBosses
+    open_world: OpenWorld
+    ow_boss_requirement: OpenWorldBossRequirement
+    boss_requirement_random: BossRequirementRandom
+    consumables: ConsumableChecks
+    kirby_flavor_preset: KirbyFlavorPreset
+    kirby_flavor: KirbyFlavor
+    gooey_flavor_preset: GooeyFlavorPreset
+    gooey_flavor: GooeyFlavor
+    music_shuffle: MusicShuffle
+    virtual_console: VirtualConsoleChanges

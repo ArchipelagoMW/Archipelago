@@ -398,22 +398,22 @@ gooey_target_palettes = {
 }
 
 
-def get_kirby_palette(multiworld, player):
-    palette = multiworld.kirby_flavor_preset[player].value
+def get_kirby_palette(world, player):
+    palette = world.options.kirby_flavor_preset.value
     if palette in kirby_flavor_presets:
         return kirby_flavor_presets[palette]
     elif palette == KirbyFlavorPreset.option_custom:
-        return multiworld.kirby_flavor[player].value
+        return world.options.kirby_flavor.value
     else:
         return None
 
 
-def get_gooey_palette(multiworld, player):
-    palette = multiworld.gooey_flavor_preset[player].value
+def get_gooey_palette(world, player):
+    palette = world.options.gooey_flavor_preset.value
     if palette in gooey_flavor_presets:
         return gooey_flavor_presets[palette]
     elif palette == GooeyFlavorPreset.option_custom:
-        return multiworld.gooey_flavor[player].value
+        return world.options.gooey_flavor.value
     else:
         return None
 

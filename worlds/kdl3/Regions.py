@@ -48,7 +48,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
         None for location in room_entry["locations"]
                             if not any([x in location for x in ["1-Up", "Maxim"]]) or
-                            world.multiworld.consumables[world.player]}, KDL3Location)
+                            world.options.consumables}, KDL3Location)
         rooms[room.name] = room
         for location in room.locations:
             if "Animal" in location.name:
@@ -81,7 +81,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                 exits.keys(),
                 exits
             )
-            if world.multiworld.open_world[world.player]:
+            if world.options.open_world:
                 if any(["Complete" in location.name for location in room.locations]):
                     room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None},
                                        KDL3Location)
@@ -89,7 +89,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
     for level in world.player_levels:
         for stage in range(6):
             proper_stage = world.player_levels[level][stage]
-            if world.multiworld.open_world[world.player] or stage == 0:
+            if world.options.open_world or stage == 0:
                 level_regions[level].add_exits([first_rooms[proper_stage].name])
             else:
                 previous_stage = first_rooms[world.player_levels[level][stage - 1]]
@@ -126,7 +126,7 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
             except Exception:
                 raise Exception(
                     f"Invalid connection: {connection.entrance} =>"
-                    f" {connection.exit} for player {world.player} ({world.multiworld.player_name[world.player]})")
+                    f" {connection.exit} for player {world.player} ({world.player_name})")
 
     for level in range(1, 6):
         for stage in range(6):
@@ -146,7 +146,7 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
                 raise Exception(f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
 
     # now handle bosses
-    boss_shuffle: typing.Union[int, str] = world.multiworld.boss_shuffle[world.player].value
+    boss_shuffle: typing.Union[int, str] = world.options.boss_shuffle.value
     plando_bosses = []
     if isinstance(boss_shuffle, str):
         # boss plando
@@ -208,7 +208,7 @@ def create_levels(world: "KDL3World") -> None:
         4: level4,
         5: level5,
     }
-    level_shuffle = world.multiworld.stage_shuffle[world.player]
+    level_shuffle = world.options.stage_shuffle.value
     if level_shuffle != 0:
         world.player_levels = generate_valid_levels(
             world,
@@ -217,7 +217,7 @@ def create_levels(world: "KDL3World") -> None:
 
     generate_rooms(world, False, levels)
 
-    level6.add_locations({LocationName.goals[world.multiworld.goal[world.player]]: None}, KDL3Location)
+    level6.add_locations({LocationName.goals[world.options.goal]: None}, KDL3Location)
 
     menu.connect(level1, "Start Game")
     level1.connect(level2, "To Level 2")

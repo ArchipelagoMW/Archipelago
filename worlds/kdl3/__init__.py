@@ -3,6 +3,7 @@ import typing
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from Fill import fill_restrictive
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
     trap_item_table, copy_ability_access_table
@@ -10,7 +11,7 @@ from .Locations import location_table, KDL3Location, level_consumables, consumab
 from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
 from .Regions import create_levels, default_levels
-from .Options import kdl3_options
+from .Options import KDL3Options
 from .Names import LocationName
 from .Rules import set_rules
 from .Rom import KDL3DeltaPatch, get_base_rom_path, RomData, patch_rom, KDL3JHASH, KDL3UHASH
@@ -62,7 +63,8 @@ class KDL3World(World):
     """
 
     game = "Kirby's Dream Land 3"
-    option_definitions = kdl3_options
+    options_dataclass: typing.ClassVar[typing.Type[PerGameCommonOptions]] = KDL3Options
+    options: KDL3Options
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location_table[location]: location for location in location_table}
     item_name_groups = item_names
@@ -105,12 +107,12 @@ class KDL3World(World):
 
     def get_trap_item_name(self) -> str:
         return self.random.choices(["Gooey Bag", "Slowness", "Eject Ability"],
-                                   weights=[self.multiworld.gooey_trap_weight[self.player],
-                                            self.multiworld.slow_trap_weight[self.player],
-                                            self.multiworld.ability_trap_weight[self.player]])[0]
+                                   weights=[self.options.gooey_trap_weight.value,
+                                            self.options.slow_trap_weight.value,
+                                            self.options.ability_trap_weight.value])[0]
 
     def generate_early(self) -> None:
-        if self.multiworld.copy_ability_randomization[self.player]:
+        if self.options.copy_ability_randomization:
             # randomize copy abilities
             valid_abilities = list(copy_ability_access_table.keys())
             enemies_to_set = list(self.copy_abilities.keys())
@@ -138,7 +140,7 @@ class KDL3World(World):
             self.multiworld.get_location(enemy, self.player) \
                 .place_locked_item(self.create_item(self.copy_abilities[enemy_mapping[enemy]]))
         # fill animals
-        if self.multiworld.animal_randomization[self.player] != 0:
+        if self.options.animal_randomization != 0:
             spawns = [animal for animal in animal_friend_spawns.keys() if
                       animal not in ["Ripple Field 5 - Animal 2", "Sand Canyon 6 - Animal 1", "Iceberg 4 - Animal 1"]]
             self.multiworld.get_location("Iceberg 4 - Animal 1", self.player) \
@@ -150,7 +152,7 @@ class KDL3World(World):
             self.multiworld.get_location("Sand Canyon 6 - Animal 1", self.player) \
                 .place_locked_item(self.create_item(guaranteed_animal))
             # Ripple Field 5 - Animal 2 needs to be Pitch to ensure accessibility on non-door rando
-            if self.multiworld.animal_randomization[self.player] == 1:
+            if self.options.animal_randomization == 1:
                 animal_pool = [animal_friend_spawns[spawn] for spawn in animal_friend_spawns
                                if spawn not in ["Ripple Field 5 - Animal 2", "Sand Canyon 6 - Animal 1",
                                                 "Iceberg 4 - Animal 1"]]
@@ -174,35 +176,34 @@ class KDL3World(World):
                 self.multiworld.get_location(animal, self.player) \
                     .place_locked_item(self.create_item(animal_friends[animal]))
 
-
     def create_items(self) -> None:
         itempool = []
         itempool.extend([self.create_item(name) for name in copy_ability_table])
         itempool.extend([self.create_item(name) for name in animal_friend_table])
-        required_percentage = self.multiworld.heart_stars_required[self.player] / 100.0
-        remaining_items = (len(location_table) if self.multiworld.consumables[self.player]
+        required_percentage = self.options.heart_stars_required / 100.0
+        remaining_items = (len(location_table) if self.options.consumables
                            else len(location_table) - len(consumable_locations)) - len(itempool)
-        total_heart_stars = self.multiworld.total_heart_stars[self.player]
+        total_heart_stars = self.options.total_heart_stars
         required_heart_stars = max(math.floor(total_heart_stars * required_percentage),
                                    5)  # ensure at least 1 heart star required
         filler_items = total_heart_stars - required_heart_stars
-        filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player] / 100.0))
-        trap_amount = math.floor(filler_amount * (self.multiworld.trap_percentage[self.player] / 100.0))
+        filler_amount = math.floor(filler_items * (self.options.filler_percentage / 100.0))
+        trap_amount = math.floor(filler_amount * (self.options.trap_percentage / 100.0))
         filler_amount -= trap_amount
         non_required_heart_stars = filler_items - filler_amount - trap_amount
         self.required_heart_stars = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
         quotient = required_heart_stars // 5  # since we set the last manually, we can afford imperfect rounding
-        if self.multiworld.boss_requirement_random[self.player]:
+        if self.options.boss_requirement_random:
             for i in range(1, 5):
-                if self.multiworld.strict_bosses[self.player]:
+                if self.options.strict_bosses:
                     max_stars = quotient * i
                 else:
                     max_stars = required_heart_stars
                 requirements.insert(i, self.random.randint(
                     min(1, max_stars), max_stars))
-            if self.multiworld.strict_bosses[self.player]:
+            if self.options.strict_bosses:
                 requirements.sort()
             else:
                 self.random.shuffle(requirements)
@@ -217,7 +218,7 @@ class KDL3World(World):
                          for _ in range(trap_amount)])
         itempool.extend([self.create_item("Heart Star", True) for _ in range(non_required_heart_stars)])
         self.multiworld.itempool += itempool
-        if self.multiworld.open_world[self.player]:
+        if self.options.open_world:
             for level in self.player_levels:
                 for stage in range(0, 6):
                     self.multiworld.get_location(location_table[self.player_levels[level][stage]]
@@ -229,8 +230,8 @@ class KDL3World(World):
     set_rules = set_rules
 
     def generate_basic(self) -> None:
-        self.stage_shuffle_enabled = self.multiworld.stage_shuffle[self.player] > 0
-        goal = self.multiworld.goal[self.player]
+        self.stage_shuffle_enabled = self.options.stage_shuffle > 0
+        goal = self.options.goal
         goal_location = self.multiworld.get_location(LocationName.goals[goal], self.player)
         goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
         for level in range(1, 6):
@@ -240,12 +241,12 @@ class KDL3World(World):
             self.multiworld.get_location(f"Level {level} Boss - Purified", self.player) \
                 .place_locked_item(
                 KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
+        self.options.completion_condition = lambda state: state.has("Love-Love Rod", self.player)
         # this can technically be done at any point before generate_output
         self.boss_butch_bosses.extend([None for _ in range(6)])
-        if self.multiworld.allow_bb[self.player]:
+        if self.options.allow_bb:
             for i in range(6):
-                if self.multiworld.allow_bb[self.player] == 1:
+                if self.options.allow_bb == 1:
                     self.boss_butch_bosses[i] = self.random.choice(
                         [True, False])
                 else:
@@ -258,7 +259,7 @@ class KDL3World(World):
             player = self.player
 
             rom = RomData(get_base_rom_path())
-            patch_rom(self.multiworld, self.player, rom, self.required_heart_stars,
+            patch_rom(self, self.multiworld, self.player, rom, self.required_heart_stars,
                       self.boss_requirements,
                       self.player_levels,
                       self.boss_butch_bosses,
@@ -305,7 +306,7 @@ class KDL3World(World):
                     level_hint_data[stage] = regions[level] + f" {i + 1}"
                     if stage & 0x200 == 0:
                         level_hint_data[stage + 0x100] = regions[level] + f" {i + 1}"
-                    if self.multiworld.consumables[self.player] and stage & 0xFF in level_consumables:
+                    if self.options.consumables and stage & 0xFF in level_consumables:
                         for consumable in level_consumables[stage & 0xFF]:
                             level_hint_data[consumable + 0x770300] = regions[level] + f" {i + 1}"
             for i in range(5):

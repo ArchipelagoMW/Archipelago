@@ -3,7 +3,7 @@ from pkgutil import get_data
 from random import Random
 
 import Utils
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, TYPE_CHECKING
 import hashlib
 import os
 import struct
@@ -16,6 +16,9 @@ from .Compression import hal_decompress
 import bsdiff4
 
 from .Room import Room
+
+if TYPE_CHECKING:
+    from . import KDL3World
 
 KDL3UHASH = "201e7658f6194458a3869dde36bf8ec2"
 KDL3JHASH = "b2f2d004ea640c3db66df958fce122b2"
@@ -376,7 +379,7 @@ class KDL3DeltaPatch(APDeltaPatch):
         rom.write_to_file(target)
 
 
-def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_required: int,
+def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomData, heart_stars_required: int,
               boss_requirements: Dict[int, int], shuffled_levels: Dict[int, List[int]], bb_boss_enabled: List[bool],
               copy_abilities: Dict[str, str], slot_random: Random):
     # increase BWRAM by 0x8000
@@ -1024,7 +1027,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
     # base patch done, write relevant slot info
 
     # Write strict bosses patch
-    if multiworld.strict_bosses[player]:
+    if world.options.strict_bosses:
         rom.write_bytes(0x3A000, [0xDA,  # PHX
                                   0xAD, 0xCB, 0x53,  # LDA $53CB - unlocked level
                                   0xC9, 0x05, 0x00,  # CMP #$0005 - have we unlocked level 5?
@@ -1048,7 +1051,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
         rom.write_bytes(0x143D9, [0x22, 0x00, 0xA0, 0x07, 0xEA, 0xEA, ])
 
     # Write open world patch
-    if multiworld.open_world[player]:
+    if world.options.open_world:
         rom.write_bytes(0x14238, [0xA9, 0x06, 0x00,  # LDA #$0006
                                   0x22, 0x80, 0x9A, 0x07,  # JSL $079A80
                                   0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])  # set starting stages to 6
@@ -1128,7 +1131,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
         rom.write_bytes(0x143F0, [0x22, 0x00, 0xA1, 0x07, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
 
     # Write checks for consumable-sanity
-    if multiworld.consumables[player]:
+    if world.options.consumables:
         # Redirect Consumable Effect and write index
         rom.write_bytes(0x3001E, [0x22, 0x80, 0x9E, 0x07, 0x4A, 0xC9, 0x05, 0x00, 0xB0, 0xFE, 0x0A, 0xAA, 0x7C, 0x2D,
                                   0x00, 0x37, 0x00, 0x37, 0x00, 0x7E, 0x00, 0x94, 0x00, 0x37, 0x00, 0xA9, 0x26, 0x00,
@@ -1182,8 +1185,8 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
                                   ])
 
     rooms = [region for region in multiworld.regions if region.player == player and isinstance(region, Room)]
-    if multiworld.music_shuffle[player] > 0:
-        if multiworld.music_shuffle[player] == 1:
+    if world.options.music_shuffle > 0:
+        if world.options.music_shuffle == 1:
             shuffled_music = music_choices.copy()
             slot_random.shuffle(shuffled_music)
             music_map = dict(zip(music_choices, shuffled_music))
@@ -1205,7 +1208,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
             # Heart Star success and fail
             rom.write_byte(0x4A388, music_map[0x08])
             rom.write_byte(0x4A38D, music_map[0x1D])
-        elif multiworld.music_shuffle[player] == 2:
+        elif world.options.music_shuffle == 2:
             for room in rooms:
                 room.music = slot_random.choice(music_choices)
             for room in room_pointers:
@@ -1222,7 +1225,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
     for room in rooms:
         room.patch(rom)
 
-    if multiworld.virtual_console[player] in [1, 3]:
+    if world.options.virtual_console in [1, 3]:
         # Flash Reduction
         rom.write_byte(0x9AE68, 0x10)
         rom.write_bytes(0x9AE8E, [0x08, 0x00, 0x22, 0x5D, 0xF7, 0x00, 0xA2, 0x08, ])
@@ -1231,7 +1234,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
         rom.write_bytes(0x9AED2, [0xA9, 0x1F])
         rom.write_byte(0x9AEE1, 0x08)
 
-    if multiworld.virtual_console[player] in [2, 3]:
+    if world.options.virtual_console in [2, 3]:
         # Hyper Zone BB colors
         rom.write_bytes(0x2C5E16, [0xEE, 0x1B, 0x18, 0x5B, 0xD3, 0x4A, 0xF4, 0x3B, ])
         rom.write_bytes(0x2C8217, [0xFF, 0x1E, ])
@@ -1239,13 +1242,13 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
     # boss requirements
     rom.write_bytes(0x3D000, struct.pack("HHHHH", boss_requirements[0], boss_requirements[1], boss_requirements[2],
                                          boss_requirements[3], boss_requirements[4]))
-    rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if multiworld.goal_speed[player] == 1 else 0xFFFF))
-    rom.write_byte(0x3D00C, multiworld.goal_speed[player])
-    rom.write_byte(0x3D010, multiworld.death_link[player])
-    rom.write_byte(0x3D012, multiworld.goal[player])
-    rom.write_byte(0x3D014, multiworld.stage_shuffle[player])
-    rom.write_byte(0x3D016, multiworld.ow_boss_requirement[player])
-    rom.write_byte(0x3D018, multiworld.consumables[player])
+    rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if world.options.goal_speed == 1 else 0xFFFF))
+    rom.write_byte(0x3D00C, world.options.goal_speed.value)
+    rom.write_byte(0x3D010, world.options.death_link.value)
+    rom.write_byte(0x3D012, world.options.goal.value)
+    rom.write_byte(0x3D014, world.options.stage_shuffle.value)
+    rom.write_byte(0x3D016, world.options.ow_boss_requirement.value)
+    rom.write_byte(0x3D018, world.options.consumables.value)
 
     for level in shuffled_levels:
         for i in range(len(shuffled_levels[level])):
@@ -1262,7 +1265,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
             rom.write_bytes(0x3F0000 + (level_pointers[0x770200 + i]), struct.pack("I", bb_bosses[0x770200 + i]))
 
     # copy ability shuffle
-    if multiworld.copy_ability_randomization[player] > 0:
+    if world.options.copy_ability_randomization.value > 0:
         for enemy in copy_abilities:
             if enemy in miniboss_remap:
                 rom.write_bytes(0xB417E + (miniboss_remap[enemy] << 1),
@@ -1289,32 +1292,32 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
         rom.write_byte(0x2F90E2, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
         rom.write_byte(0x2F9109, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
 
-        if multiworld.copy_ability_randomization[player] == 2:
+        if world.options.copy_ability_randomization == 2:
             for enemy in enemy_remap:
                 # we just won't include it for minibosses
                 rom.write_bytes(0xB3E40 + (enemy_remap[enemy] << 1), struct.pack("h", slot_random.randint(-1, 2)))
 
     # write jumping goal
-    rom.write_bytes(0x94F8, struct.pack("H", multiworld.jumping_target[player]))
-    rom.write_bytes(0x944E, struct.pack("H", multiworld.jumping_target[player]))
+    rom.write_bytes(0x94F8, struct.pack("H", world.options.jumping_target))
+    rom.write_bytes(0x944E, struct.pack("H", world.options.jumping_target))
 
     from Utils import __version__
     rom.name = bytearray(f'KDL3{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x3C000, rom.name)
-    rom.write_byte(0x3C020, multiworld.game_language[player].value)
+    rom.write_byte(0x3C020, world.options.game_language.value)
 
     # handle palette
-    if multiworld.kirby_flavor_preset[player] != 0:
+    if world.options.kirby_flavor_preset.value != 0:
         for addr in kirby_target_palettes:
             target = kirby_target_palettes[addr]
-            palette = get_kirby_palette(multiworld, player)
+            palette = get_kirby_palette(world, player)
             rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
-    if multiworld.gooey_flavor_preset[player] != 0:
+    if world.options.gooey_flavor_preset.value != 0:
         for addr in gooey_target_palettes:
             target = gooey_target_palettes[addr]
-            palette = get_gooey_palette(multiworld, player)
+            palette = get_gooey_palette(world, player)
             rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
 

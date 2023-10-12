@@ -8,7 +8,7 @@ if typing.TYPE_CHECKING:
     from BaseClasses import CollectionState
 
 
-def can_reach_boss(state: "CollectionState", player: int, level: int, open_world: bool,
+def can_reach_boss(state: "CollectionState", player: int, level: int, open_world: int,
                    ow_boss_req: int, player_levels: typing.Dict[int, typing.Dict[int, int]]):
     if open_world:
         return state.has(f"{LocationName.level_names_inverse[level]} - Stage Completion", player, ow_boss_req)
@@ -172,7 +172,7 @@ def set_rules(world: "KDL3World") -> None:
              lambda state: can_fix_angel_wings(state, world.player, world.copy_abilities))
 
     # Consumables
-    if world.multiworld.consumables[world.player]:
+    if world.options.consumables:
         add_rule(world.multiworld.get_location(LocationName.grass_land_1_u1, world.player),
                  lambda state: can_reach_parasol(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.grass_land_1_m1, world.player),
@@ -253,17 +253,17 @@ def set_rules(world: "KDL3World") -> None:
         set_rule(world.multiworld.get_location(boss_flag, world.player),
                  lambda state, i=i: (state.has("Heart Star", world.player, world.boss_requirements[i - 1])
                                      and can_reach_boss(state, world.player, i,
-                                                        world.multiworld.open_world[world.player],
-                                                        world.multiworld.ow_boss_requirement[world.player],
+                                                        world.options.open_world.value,
+                                                        world.options.ow_boss_requirement.value,
                                                         world.player_levels)))
         set_rule(world.multiworld.get_location(purification, world.player),
                  lambda state, i=i: (state.has("Heart Star", world.player, world.boss_requirements[i - 1])
                                      and can_reach_boss(state, world.player, i,
-                                                        world.multiworld.open_world[world.player],
-                                                        world.multiworld.ow_boss_requirement[world.player],
+                                                        world.options.open_world.value,
+                                                        world.options.ow_boss_requirement.value,
                                                         world.player_levels)))
 
-    if world.multiworld.strict_bosses[world.player]:
+    if world.options.strict_bosses:
         for level in range(2, 6):
             add_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),
                      lambda state, i=level: state.has(f"Level {i - 1} Boss Purified", world.player))
@@ -275,7 +275,7 @@ def set_rules(world: "KDL3World") -> None:
         add_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),
                  lambda state, i=level: state.has(f"Level {i - 1} Boss Defeated", world.player))
 
-    if world.multiworld.goal_speed[world.player] == 0:
+    if world.options.goal_speed == 0:
         add_rule(world.multiworld.get_entrance("To Level 6", world.player),
                  lambda state: state.has_all(["Level 1 Boss Purified", "Level 2 Boss Purified", "Level 3 Boss Purified",
                                               "Level 4 Boss Purified", "Level 5 Boss Purified"], world.player))

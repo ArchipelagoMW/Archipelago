@@ -48,7 +48,7 @@ class Room(Region):
         if len(animals) > 0:
             for current_animal, address in zip(animals, self.animal_pointers):
                 rom.write_byte(self.pointer + address + 7, animal_map[current_animal])
-        if self.multiworld.consumables[self.player]:
+        if self.multiworld.worlds[self.player].options.consumables.value:
             load_len = len(self.entity_load)
             for consumable in self.consumables:
                 location = next(x for x in self.locations if x.name == consumable["name"])
