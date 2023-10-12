@@ -424,7 +424,7 @@ The following operations can be applied to a data storage key
 | left_shift | Applies a bitwise left-shift to the current value of the key by `value`. |
 | right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
 | remove | List only: removes the first instance of `value` found in the list. |
-| pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. will error in index or key does not exist |
+| pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. Will error if index or key does not exist |
 | update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
 
 #### DataStorageErrorHandlingOptions
