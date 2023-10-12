@@ -24,7 +24,6 @@ window.addEventListener('load', () => {
         header.firstElementChild.innerText = '▼';
         header.nextElementSibling.classList.remove('collapsed');
       } else {
-        console.log(header);
         header.style.display = 'none';
         header.firstElementChild.innerText = '▶';
         header.nextElementSibling.classList.add('collapsed');
