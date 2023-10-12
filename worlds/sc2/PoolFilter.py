@@ -8,21 +8,25 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available
 from .LogicMixin import SC2Logic
+from . import ItemNames
 
 # Items with associated upgrades
-UPGRADABLE_ITEMS = [
-    # WoL
-    "Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre",
-    "Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine", "Cyclone",
-    "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Raven", "Science Vessel", "Liberator", "Valkyrie",
-    "Bunker", "Missile Turret",
-    # HotS
-    "Zergling", "Roach", "Hydralisk", "Baneling", "Mutalisk", "Swarm Host", "Ultralisk"
-]
+UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values()}
 
-BARRACKS_UNITS = {"Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre"}
-FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine", "Cyclone"}
-STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven", "Liberator", "Valkyrie"}
+BARRACKS_UNITS = {
+    ItemNames.Marine, ItemNames.Medic, ItemNames.Firebat, ItemNames.Marauder,
+    ItemNames.Reaper, ItemNames.Ghost, ItemNames.Spectre,
+}
+FACTORY_UNITS = {
+    ItemNames.Hellion, ItemNames.Vulture, ItemNames.Goliath, ItemNames.Diamondback,
+    ItemNames.Siege_Tank, ItemNames.Thor, ItemNames.Predator, ItemNames.Widow_Mine,
+    ItemNames.Cyclone,
+}
+STARPORT_UNITS = {
+    ItemNames.Medivac, ItemNames.Wraith, ItemNames.Viking, ItemNames.Banshee,
+    ItemNames.Battlecruiser, ItemNames.Hercules, ItemNames.Science_Vessel, ItemNames.Raven,
+    ItemNames.Liberator, ItemNames.Valkyrie,
+}
 
 
 def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, List[SC2Mission]]:
@@ -327,25 +331,27 @@ class ValidInventory:
             inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
         if not BARRACKS_UNITS & self.logical_inventory:
             inventory = [item for item in inventory if
-                         not (item.name.startswith("Progressive Infantry") or item.name == "Orbital Strike")]
+                         not (item.name.startswith(ItemNames.terran_infantry_upgrade_prefix) or item.name == ItemNames.Orbital_Strike)]
         if not FACTORY_UNITS & self.logical_inventory:
-            inventory = [item for item in inventory if not item.name.startswith("Progressive Vehicle")]
+            inventory = [item for item in inventory if not item.name.startswith(ItemNames.terran_vehicle_upgrade_prefix)]
         if not STARPORT_UNITS & self.logical_inventory:
-            inventory = [item for item in inventory if not item.name.startswith("Progressive Ship")]
+            inventory = [item for item in inventory if not item.name.startswith(ItemNames.terran_ship_upgrade_prefix)]
         # HotS
         # Baneling without sources => remove Baneling and upgrades
-        if "Baneling" in self.logical_inventory and\
-           "Zergling" not in self.logical_inventory and\
-           "Spawn Banelings (Kerrigan Tier 4)" not in self.logical_inventory:
-            inventory = [item for item in inventory if "Baneling" not in item.name]
+        if (ItemNames.Baneling in self.logical_inventory
+            and ItemNames.Zergling not in self.logical_inventory
+            and ItemNames.Kerrigan_Spawn_Banelings not in self.logical_inventory
+        ):
+            inventory = [item for item in inventory if ItemNames.Baneling not in item.name]
         # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades
-        if "Baneling" in self.logical_inventory and\
-           "Zergling" not in self.logical_inventory and\
-           "Spawn Banelings (Kerrigan Tier 4)" in self.logical_inventory:
-            inventory = [item for item in inventory if item.name != "Baneling"]
-        if "Mutalisk" not in self.logical_inventory:
-            inventory = [item for item in inventory if not item.name.startswith("Progressive Zerg Flyer")]
-            locked_items = [item for item in locked_items if not item.name.startswith("Progressive Zerg Flyer")]
+        if (ItemNames.Baneling in self.logical_inventory
+            and ItemNames.Zergling not in self.logical_inventory
+            and ItemNames.Kerrigan_Spawn_Banelings in self.logical_inventory
+        ):
+            inventory = [item for item in inventory if item.name != ItemNames.Baneling]
+        if ItemNames.Mutalisk not in self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith(ItemNames.zerg_flyer_upgrade_prefix)]
+            locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.zerg_flyer_upgrade_prefix)]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items

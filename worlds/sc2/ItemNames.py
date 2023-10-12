@@ -1,5 +1,8 @@
 """
 A complete collection of Starcraft 2 item names as strings.
+Users of this data may make some assumptions about the structure of a name:
+* The upgrade for a unit will end with the unit's name in parentheses
+* Weapon / armor upgrades may may be grouped by a common prefix specified within this file
 """
 
 # Terran Units
@@ -37,18 +40,23 @@ Missile_Turret                              = "Missile Turret"
 Sensor_Tower                                = "Sensor Tower"
 
 # Terran Weapon / Armor Upgrades
-Progressive_Terran_Infantry_Weapon      = "Progressive Terran Infantry Weapon"
-Progressive_Terran_Infantry_Armor       = "Progressive Terran Infantry Armor"
-Progressive_Terran_Vehicle_Weapon       = "Progressive Terran Vehicle Weapon"
-Progressive_Terran_Vehicle_Armor        = "Progressive Terran Vehicle Armor"
-Progressive_Terran_Ship_Weapon          = "Progressive Terran Ship Weapon"
-Progressive_Terran_Ship_Armor           = "Progressive Terran Ship Armor"
-Progressive_Terran_Weapon_Upgrade       = "Progressive Terran Weapon Upgrade"
-Progressive_Terran_Armor_Upgrade        = "Progressive Terran Armor Upgrade"
-Progressive_Terran_Infantry_Upgrade     = "Progressive Terran Infantry Upgrade"
-Progressive_Terran_Vehicle_Upgrade      = "Progressive Terran Vehicle Upgrade"
-Progressive_Terran_Ship_Upgrade         = "Progressive Terran Ship Upgrade"
-Progressive_Terran_Weapon_Armor_Upgrade = "Progressive Terran Weapon/Armor Upgrade"
+terran_upgrade_prefix = "Progressive Terran"
+terran_infantry_upgrade_prefix = f"{terran_upgrade_prefix} Infantry"
+terran_vehicle_upgrade_prefix = f"{terran_upgrade_prefix} Vehicle"
+terran_ship_upgrade_prefix = f"{terran_upgrade_prefix} Ship"
+
+Progressive_Terran_Infantry_Weapon      = f"{terran_infantry_upgrade_prefix} Weapon"
+Progressive_Terran_Infantry_Armor       = f"{terran_infantry_upgrade_prefix} Armor"
+Progressive_Terran_Vehicle_Weapon       = f"{terran_vehicle_upgrade_prefix} Weapon"
+Progressive_Terran_Vehicle_Armor        = f"{terran_vehicle_upgrade_prefix} Armor"
+Progressive_Terran_Ship_Weapon          = f"{terran_ship_upgrade_prefix} Weapon"
+Progressive_Terran_Ship_Armor           = f"{terran_ship_upgrade_prefix} Armor"
+Progressive_Terran_Weapon_Upgrade       = f"{terran_upgrade_prefix} Weapon Upgrade"
+Progressive_Terran_Armor_Upgrade        = f"{terran_upgrade_prefix} Armor Upgrade"
+Progressive_Terran_Infantry_Upgrade     = f"{terran_infantry_upgrade_prefix} Upgrade"
+Progressive_Terran_Vehicle_Upgrade      = f"{terran_vehicle_upgrade_prefix} Upgrade"
+Progressive_Terran_Ship_Upgrade         = f"{terran_ship_upgrade_prefix} Upgrade"
+Progressive_Terran_Weapon_Armor_Upgrade = f"{terran_upgrade_prefix} Weapon/Armor Upgrade"
 
 # Mercenaries
 War_Pigs                                    = "War Pigs"
@@ -238,16 +246,19 @@ Spore_Crawler = "Spore Crawler"
 Spine_Crawler = "Spine Crawler"
 
 # Zerg Weapon / Armor Upgrades
-Progressive_Zerg_Melee_Attack         = "Progressive Zerg Melee Attack"
-Progressive_Zerg_Missile_Attack       = "Progressive Zerg Missile Attack"
-Progressive_Zerg_Ground_Carapace      = "Progressive Zerg Ground Carapace"
-Progressive_Zerg_Flyer_Attack         = "Progressive Zerg Flyer Attack"
-Progressive_Zerg_Flyer_Carapace       = "Progressive Zerg Flyer Carapace"
-Progressive_Zerg_Weapon_Upgrade       = "Progressive Zerg Weapon Upgrade"
-Progressive_Zerg_Armor_Upgrade        = "Progressive Zerg Armor Upgrade"
-Progressive_Zerg_Ground_Upgrade       = "Progressive Zerg Ground Upgrade"
-Progressive_Zerg_Flyer_Upgrade        = "Progressive Zerg Flyer Upgrade"
-Progressive_Zerg_Weapon_Armor_Upgrade = "Progressive Zerg Weapon/Armor Upgrade"
+zerg_upgrade_prefix = "Progressive Zerg"
+zerg_flyer_upgrade_prefix = f"{zerg_upgrade_prefix} Flyer"
+
+Progressive_Zerg_Melee_Attack         = f"{zerg_upgrade_prefix} Melee Attack"
+Progressive_Zerg_Missile_Attack       = f"{zerg_upgrade_prefix} Missile Attack"
+Progressive_Zerg_Ground_Carapace      = f"{zerg_upgrade_prefix} Ground Carapace"
+Progressive_Zerg_Flyer_Attack         = f"{zerg_flyer_upgrade_prefix} Attack"
+Progressive_Zerg_Flyer_Carapace       = f"{zerg_flyer_upgrade_prefix} Carapace"
+Progressive_Zerg_Weapon_Upgrade       = f"{zerg_upgrade_prefix} Weapon Upgrade"
+Progressive_Zerg_Armor_Upgrade        = f"{zerg_upgrade_prefix} Armor Upgrade"
+Progressive_Zerg_Ground_Upgrade       = f"{zerg_upgrade_prefix} Ground Upgrade"
+Progressive_Zerg_Flyer_Upgrade        = f"{zerg_flyer_upgrade_prefix} Upgrade"
+Progressive_Zerg_Weapon_Armor_Upgrade = f"{zerg_upgrade_prefix} Weapon/Armor Upgrade"
 
 # Zerg Unit Upgrades
 Zergling_Hardened_Carapace    = "Hardened Carapace (Zergling)"
