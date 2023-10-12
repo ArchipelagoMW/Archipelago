@@ -53,7 +53,7 @@ def install_courier() -> Optional[bool]:
                 with ZipFile(io.BytesIO(download.read()), "r") as zf:
                     os.makedirs(target, exist_ok=True)
                     zf.extractall(target)
-            os.startfile(os.path.join(target, "precompiled"), os.path.join(folder, "MiniInstaller.exe"))
+            installer = subprocess.Popen([os.path.join(target, "precompiled"), os.path.join(folder, "MiniInstaller.exe")])
         else:
             installer = subprocess.Popen([mono_exe, os.path.join(folder, "MiniInstaller.exe")], shell=False)
     else:
