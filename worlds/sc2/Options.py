@@ -29,6 +29,18 @@ class GameSpeed(Choice):
     option_faster = 5
     default = option_default
 
+class DisableForcedCamera(Toggle):
+    """
+    Prevents the game from moving or locking the camera without the player's consent.
+    """
+    display_name = "Disable Forced Camera Movement"
+
+
+class SkipCutscenes(Toggle):
+    """
+    Skips all cutscenes and prevents dialog from blocking progress.
+    """
+    display_name = "Skip Cutscenes"
 
 class AllInMap(Choice):
     """Determines what version of All-In (final map) that will be generated for the campaign."""
@@ -474,6 +486,8 @@ class OptionalBossLocations(LocationInclusion):
 sc2_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
     "game_speed": GameSpeed,
+    "disable_forced_camera": DisableForcedCamera,
+    "skip_cutscenes": SkipCutscenes,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
     "player_color_terran_raynor": PlayerColorTerranRaynor,

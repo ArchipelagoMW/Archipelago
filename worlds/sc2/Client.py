@@ -138,6 +138,22 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         " or Default to select based on difficulty.")
             return False
 
+    def _cmd_disable_forced_camera(self, toggle: bool) -> None:
+        if toggle:
+            self.output("Blocking campaign triggers from forcing camera movement; repeat this command with 'False' to allow it again.")
+            self.ctx.disable_forced_camera = 1
+        else:
+            self.output("Allowing campaign triggers to force camera movement; repeat this command with 'True' to block them again.")
+            self.ctx.disable_forced_camera = 0
+
+    def _cmd_skip_cutscenes(self, toggle: bool) -> None:
+        if toggle:
+            self.output("Skipping all cutscenes and overly long dialogues; repeat this command with 'False' to stop.")
+            self.ctx.skip_cutscenes = 1
+        else:
+            self.output("No longer skipping cutscenes or dialog; repeat this command with 'True' to skip them again.")
+            self.ctx.skip_cutscenes = 0
+
     def _cmd_color(self, color: str = "") -> None:
         player_colors = [
             "White", "Red", "Blue", "Teal",
@@ -262,6 +278,8 @@ class SC2Context(CommonContext):
     items_handling = 0b111
     difficulty = -1
     game_speed = -1
+    disable_forced_camera = 0
+    skip_cutscenes = 0
     all_in_choice = 0
     mission_order = 0
     player_color = 2
@@ -303,6 +321,8 @@ class SC2Context(CommonContext):
         if cmd == "Connected":
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.game_speed = args["slot_data"].get("game_speed", GameSpeed.option_default)
+            self.disable_forced_camera = args["slot_data"]["disable_forced_camera"]
+            self.skip_cutscenes = args["slot_data"]["skip_cutscenes"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table: dict = args["slot_data"]["mission_req"]
 
@@ -618,11 +638,13 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
-                game_speed
+                game_speed,
+                self.ctx.disable_forced_camera,
+                self.ctx.skip_cutscenes
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
