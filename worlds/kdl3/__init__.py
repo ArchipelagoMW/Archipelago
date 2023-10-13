@@ -241,7 +241,7 @@ class KDL3World(World):
             self.multiworld.get_location(f"Level {level} Boss - Purified", self.player) \
                 .place_locked_item(
                 KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
-        self.options.completion_condition = lambda state: state.has("Love-Love Rod", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
         # this can technically be done at any point before generate_output
         self.boss_butch_bosses.extend([None for _ in range(6)])
         if self.options.allow_bb:

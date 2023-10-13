@@ -1,7 +1,7 @@
 import typing
 from argparse import Namespace
 
-from BaseClasses import MultiWorld, PlandoOptions
+from BaseClasses import MultiWorld, PlandoOptions, CollectionState
 from test.TestBase import WorldTestBase
 from test.general import gen_steps
 from worlds import AutoWorld
@@ -24,13 +24,13 @@ class KDL3TestBase(WorldTestBase):
         self.multiworld.game[1] = self.game
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed(seed)
+        self.multiworld.state = CollectionState(self.multiworld)
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
+        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })
         self.multiworld.set_options(args)
-        self.multiworld.set_default_common_options()
         self.multiworld.plando_options = PlandoOptions.connections
         self.multiworld.plando_connections = self.options["plando_connections"] if "plando_connections" in self.options.keys() else []
         for step in gen_steps:
