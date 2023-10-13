@@ -1,10 +1,14 @@
 from typing import Dict
-from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet
+from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet, OptionSet
+from .MuseDashCollection import MuseDashCollections
 
 
-class AllowJustAsPlannedDLCSongs(Toggle):
-    """Whether [Just as Planned]/[Muse Plus] DLC Songs, and all the DLCs along with it, will be included in the randomizer."""
-    display_name = "Allow [Just as Planned]/[Muse Plus] DLC Songs"
+class DLCMusicPacks(OptionSet):
+    """Which DLC packs should be included when finding songs to randomise.
+    Note: The [Just As Planned] DLC is equivalent to [Muse Plus]."""
+    display_name = "DLC Packs"
+    default = {}
+    valid_keys = [dlc for dlc in MuseDashCollections.DLC]
 
 
 class StreamerModeEnabled(Toggle):
@@ -160,7 +164,7 @@ class ExcludeSongs(ItemSet):
 
 
 musedash_options: Dict[str, type(Option)] = {
-    "allow_just_as_planned_dlc_songs": AllowJustAsPlannedDLCSongs,
+    "dlc_packs": DLCMusicPacks,
     "streamer_mode_enabled": StreamerModeEnabled,
     "starting_song_count": StartingSongs,
     "additional_song_count": AdditionalSongs,

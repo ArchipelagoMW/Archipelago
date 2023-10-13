@@ -1,5 +1,4 @@
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule
 from BaseClasses import Region, Item, ItemClassification, Entrance, Tutorial
 from typing import List
 from math import floor
@@ -66,7 +65,7 @@ class MuseDashWorld(World):
     location_count: int
 
     def generate_early(self):
-        dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
+        dlc_songs = {key for key in self.multiworld.dlc_packs[self.player].value}
         streamer_mode = self.multiworld.streamer_mode_enabled[self.player]
         (lower_diff_threshold, higher_diff_threshold) = self.get_difficulty_range()
 
@@ -258,14 +257,14 @@ class MuseDashWorld(World):
             state.has(self.md_collection.MUSIC_SHEET_NAME, self.player, self.get_music_sheet_win_count())
 
     def get_available_traps(self) -> List[str]:
-        dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
+        sfx_traps_available = self.md_collection.MUSE_PLUS_DLC in self.multiworld.dlc_packs[self.player]
 
         trap_list = []
         if self.multiworld.available_trap_types[self.player].value & 1 != 0:
             trap_list += self.md_collection.vfx_trap_items.keys()
 
         # SFX options are only available under Just as Planned DLC.
-        if dlc_songs and self.multiworld.available_trap_types[self.player].value & 2 != 0:
+        if sfx_traps_available and self.multiworld.available_trap_types[self.player].value & 2 != 0:
             trap_list += self.md_collection.sfx_trap_items.keys()
 
         return trap_list
