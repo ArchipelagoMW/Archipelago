@@ -8,7 +8,7 @@ from Fill import fill_restrictive
 
 from .Bosses import BossFactory, Boss
 from .Items import ItemFactory
-from .Regions import lookup_boss_drops
+from .Regions import lookup_boss_drops, key_drop_data
 from .Options import smallkey_shuffle
 
 if typing.TYPE_CHECKING:
@@ -81,15 +81,17 @@ def create_dungeons(world: "ALTTPWorld"):
         return dungeon
 
     ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],
-                      None, [ItemFactory('Small Key (Hyrule Castle)', player)],
+                      ItemFactory('Big Key (Hyrule Castle)', player),
+                      ItemFactory(['Small Key (Hyrule Castle)'] * 4, player),
                       [ItemFactory('Map (Hyrule Castle)', player)])
     EP = make_dungeon('Eastern Palace', 'Armos Knights', ['Eastern Palace'],
-                      ItemFactory('Big Key (Eastern Palace)', player), [],
+                      ItemFactory('Big Key (Eastern Palace)', player),
+                      ItemFactory(['Small Key (Eastern Palace)'] * 2, player),
                       ItemFactory(['Map (Eastern Palace)', 'Compass (Eastern Palace)'], player))
     DP = make_dungeon('Desert Palace', 'Lanmolas',
                       ['Desert Palace North', 'Desert Palace Main (Inner)', 'Desert Palace Main (Outer)',
                        'Desert Palace East'], ItemFactory('Big Key (Desert Palace)', player),
-                      [ItemFactory('Small Key (Desert Palace)', player)],
+                      ItemFactory(['Small Key (Desert Palace)'] * 4, player),
                       ItemFactory(['Map (Desert Palace)', 'Compass (Desert Palace)'], player))
     ToH = make_dungeon('Tower of Hera', 'Moldorm',
                        ['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'],
@@ -105,7 +107,8 @@ def create_dungeons(world: "ALTTPWorld"):
                        ItemFactory(['Small Key (Palace of Darkness)'] * 6, player),
                        ItemFactory(['Map (Palace of Darkness)', 'Compass (Palace of Darkness)'], player))
     TT = make_dungeon('Thieves Town', 'Blind', ['Thieves Town (Entrance)', 'Thieves Town (Deep)', 'Blind Fight'],
-                      ItemFactory('Big Key (Thieves Town)', player), [ItemFactory('Small Key (Thieves Town)', player)],
+                      ItemFactory('Big Key (Thieves Town)', player),
+                      ItemFactory(['Small Key (Thieves Town)'] * 3, player),
                       ItemFactory(['Map (Thieves Town)', 'Compass (Thieves Town)'], player))
     SW = make_dungeon('Skull Woods', 'Mothula', ['Skull Woods Final Section (Entrance)', 'Skull Woods First Section',
                                                  'Skull Woods Second Section', 'Skull Woods Second Section (Drop)',
@@ -113,52 +116,54 @@ def create_dungeons(world: "ALTTPWorld"):
                                                  'Skull Woods First Section (Right)',
                                                  'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)'],
                       ItemFactory('Big Key (Skull Woods)', player),
-                      ItemFactory(['Small Key (Skull Woods)'] * 3, player),
+                      ItemFactory(['Small Key (Skull Woods)'] * 5, player),
                       ItemFactory(['Map (Skull Woods)', 'Compass (Skull Woods)'], player))
     SP = make_dungeon('Swamp Palace', 'Arrghus',
                       ['Swamp Palace (Entrance)', 'Swamp Palace (First Room)', 'Swamp Palace (Starting Area)',
-                       'Swamp Palace (Center)', 'Swamp Palace (North)'], ItemFactory('Big Key (Swamp Palace)', player),
-                      [ItemFactory('Small Key (Swamp Palace)', player)],
+                       'Swamp Palace (West)', 'Swamp Palace (Center)', 'Swamp Palace (North)'],
+                      ItemFactory('Big Key (Swamp Palace)', player),
+                      ItemFactory(['Small Key (Swamp Palace)'] * 6, player),
                       ItemFactory(['Map (Swamp Palace)', 'Compass (Swamp Palace)'], player))
     IP = make_dungeon('Ice Palace', 'Kholdstare',
-                      ['Ice Palace (Entrance)', 'Ice Palace (Main)', 'Ice Palace (East)', 'Ice Palace (East Top)',
-                       'Ice Palace (Kholdstare)'], ItemFactory('Big Key (Ice Palace)', player),
-                      ItemFactory(['Small Key (Ice Palace)'] * 2, player),
+                      ['Ice Palace (Entrance)', 'Ice Palace (Second Section)', 'Ice Palace (Main)', 'Ice Palace (East)',
+                       'Ice Palace (East Top)', 'Ice Palace (Kholdstare)'], ItemFactory('Big Key (Ice Palace)', player),
+                      ItemFactory(['Small Key (Ice Palace)'] * 6, player),
                       ItemFactory(['Map (Ice Palace)', 'Compass (Ice Palace)'], player))
     MM = make_dungeon('Misery Mire', 'Vitreous',
                       ['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)',
                        'Misery Mire (Vitreous)'], ItemFactory('Big Key (Misery Mire)', player),
-                      ItemFactory(['Small Key (Misery Mire)'] * 3, player),
+                      ItemFactory(['Small Key (Misery Mire)'] * 6, player),
                       ItemFactory(['Map (Misery Mire)', 'Compass (Misery Mire)'], player))
     TR = make_dungeon('Turtle Rock', 'Trinexx',
                       ['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)',
+                       'Turtle Rock (Pokey Room)',
                        'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Crystaroller Room)',
                        'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'],
                       ItemFactory('Big Key (Turtle Rock)', player),
-                      ItemFactory(['Small Key (Turtle Rock)'] * 4, player),
+                      ItemFactory(['Small Key (Turtle Rock)'] * 6, player),
                       ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], player))
 
     if multiworld.mode[player] != 'inverted':
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
-                          ItemFactory(['Small Key (Agahnims Tower)'] * 2, player), [])
+                          ItemFactory(['Small Key (Agahnims Tower)'] * 4, player), [])
         GT = make_dungeon('Ganons Tower', 'Agahnim2',
                           ['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)',
                            'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)',
                            'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)',
                            'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'],
                           ItemFactory('Big Key (Ganons Tower)', player),
-                          ItemFactory(['Small Key (Ganons Tower)'] * 4, player),
+                          ItemFactory(['Small Key (Ganons Tower)'] * 8, player),
                           ItemFactory(['Map (Ganons Tower)', 'Compass (Ganons Tower)'], player))
     else:
         AT = make_dungeon('Inverted Agahnims Tower', 'Agahnim', ['Inverted Agahnims Tower', 'Agahnim 1'], None,
-                          ItemFactory(['Small Key (Agahnims Tower)'] * 2, player), [])
+                          ItemFactory(['Small Key (Agahnims Tower)'] * 4, player), [])
         GT = make_dungeon('Inverted Ganons Tower', 'Agahnim2',
                           ['Inverted Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)',
                            'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)',
                            'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)',
                            'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)',
                            'Agahnim 2'], ItemFactory('Big Key (Ganons Tower)', player),
-                          ItemFactory(['Small Key (Ganons Tower)'] * 4, player),
+                          ItemFactory(['Small Key (Ganons Tower)'] * 8, player),
                           ItemFactory(['Map (Ganons Tower)', 'Compass (Ganons Tower)'], player))
 
     GT.bosses['bottom'] = BossFactory('Armos Knights', player)
@@ -195,10 +200,11 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
     dungeon_specific: set = set()
     for subworld in multiworld.get_game_worlds("A Link to the Past"):
         player = subworld.player
-        localized |= {(player, item_name) for item_name in
-                      subworld.dungeon_local_item_names}
-        dungeon_specific |= {(player, item_name) for item_name in
-                             subworld.dungeon_specific_item_names}
+        if player not in multiworld.groups:
+            localized |= {(player, item_name) for item_name in
+                          subworld.dungeon_local_item_names}
+            dungeon_specific |= {(player, item_name) for item_name in
+                                 subworld.dungeon_specific_item_names}
 
     if localized:
         in_dungeon_items = [item for item in get_dungeon_item_pool(multiworld) if (item.player, item.name) in localized]
@@ -249,7 +255,16 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                 if all_state_base.has("Triforce", player):
                     all_state_base.remove(multiworld.worlds[player].create_item("Triforce"))
 
-            fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
+            for (player, key_drop_shuffle) in multiworld.key_drop_shuffle.items():
+                if not key_drop_shuffle and player not in multiworld.groups:
+                    for key_loc in key_drop_data:
+                        key_data = key_drop_data[key_loc]
+                        all_state_base.remove(ItemFactory(key_data[3], player))
+                        loc = multiworld.get_location(key_loc, player)
+
+                        if loc in all_state_base.events:
+                            all_state_base.events.remove(loc)
+            fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, True, True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],
