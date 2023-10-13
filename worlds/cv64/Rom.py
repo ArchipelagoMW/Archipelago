@@ -216,6 +216,8 @@ renon_item_dialogue = {
           "\"Banshee Boomerang.\"",
     0x10: "No weapon triangle\n"
           "advantages with this.",
+    0x12: "It looks sus? Trust me,"
+          "my wares are genuine.",
     0x15: "This non-volatile kind\n"
           "is safe to handle.",
     0x16: "If you can soul-wield,\n"
@@ -417,9 +419,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int32(0xBF300, 0x00000000)  # NOP
     rom.write_int32s(0xBFC5B4, Patches.give_powerup_stopper)
 
-    # Rename "Wooden stake" and "Rose" to "Sent major" and "Sent" respectively
-    rom.write_bytes(0xEFE34, cv64_string_to_bytes("Sent major  "))
-    rom.write_bytes(0xEFE4E, cv64_string_to_bytes("Sent"))
+    # Rename the Wooden Stake and Rose to "You are a FOOL!"
+    rom.write_bytes(0xEFE34, [0xFF, 0xFF, 0xA2, 0x0B] + cv64_string_to_bytes("You are a FOOL!", append_end=False))
     # Capitalize the "k" in "Archives key" to be consistent with...literally every other key name!
     rom.write_byte(0xEFF21, 0x2D)
 
@@ -663,8 +664,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
 
     # Sub-weapon check function hook
     rom.write_int32(0xBF32C, 0x00000000)  # NOP
-    rom.write_int32(0xBF330, 0x080FF05D)  # J	0x803FC174
-    rom.write_int32s(0xBFC174, Patches.give_subweapon_stopper)
+    rom.write_int32(0xBF330, 0x080FF05E)  # J	0x803FC178
+    rom.write_int32s(0xBFC178, Patches.give_subweapon_stopper)
 
     # Warp menu Special1 restriction
     rom.write_int32(0xADD68, 0x0C04AB12)  # JAL 0x8012AC48
@@ -979,13 +980,23 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
                                    0x8E020028])  # LW	V0, 0x0028 (S0)
         rom.write_int32(0xBC4A0, 0x080FF5E6)     # J 0x803FD798
         rom.write_int32(0xBC4C4, 0x080FF5E6)     # J 0x803FD798
-        rom.write_int32(0x19844, 0x080FF603)     # J 0x803FD808
+        rom.write_int32(0x19844, 0x080FF602)     # J 0x803FD808
         # If the option is set to "all locations", count it down no matter what the item is.
         if multiworld.countdown[player].value == 2:
             rom.write_int32s(0xBFD71C, [0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101,
                              0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101])
         rom.write_bytes(0xBFD818, countdown_list)
         rom.write_int32(0xA9ECC, 0x00000000)  # NOP the pointless overwrite of the item actor appearance custom value.
+
+    # Ice Trap stuff
+    rom.write_int32(0x697C60, 0x080FF06B)  # J 0x803FC18C
+    rom.write_int32(0x6A5160, 0x080FF06B)  # J 0x803FC18C
+    rom.write_int32s(0xBFC1AC, Patches.ice_trap_initializer)
+    rom.write_int32s(0xBFC1DC, Patches.the_deep_freezer)
+    rom.write_int32s(0xB2F354, [0x3739E4C0,  # ORI T9, T9, 0xE4C0
+                                0x03200008,  # JR  T9
+                                0x00000000])  # NOP
+    rom.write_int32s(0xBFE4C0, Patches.freeze_verifier)
 
     # Initial Countdown numbers
     rom.write_int32(0xAD6A8, 0x080FF60A)  # J	0x803FD828

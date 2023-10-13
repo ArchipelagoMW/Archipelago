@@ -273,6 +273,23 @@ class PermanentPowerUps(Toggle):
     display_name = "Permanent PowerUps"
 
 
+class IceTrapPercentage(Range):
+    """Replaces a percentage of junk items with Ice Traps."""
+    display_name = "Ice Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
+class IceTrapAppearance(Choice):
+    """Changes the appearance of ice traps as freestanding items."""
+    display_name = "Ice Trap Appearance"
+    option_major_only = 0
+    option_junk_only = 1
+    option_anything = 2
+    default = 0
+
+
 class DisableTimeRestrictions(Toggle):
     """Disables the time restriction on every event and door that requires the current time to be something specific
      (sun/moon doors, meeting Rosa, and the Villa fountain). The Villa coffin is not affected by this."""
@@ -394,6 +411,8 @@ cv64_options: Dict[str, Option] = {
     "invisible_items": InvisibleItems,
     "drop_previous_sub_weapon": DropPreviousSubWeapon,
     "permanent_powerups": PermanentPowerUps,
+    "ice_trap_percentage": IceTrapPercentage,
+    "ice_trap_appearance": IceTrapAppearance,
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_gondolas": SkipGondolas,
     "skip_brick_platforms": SkipBrickPlatforms,

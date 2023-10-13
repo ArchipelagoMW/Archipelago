@@ -2,12 +2,12 @@ import os
 import random
 import typing
 import base64
-# import math
+import math
 import threading
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import CV64Item, item_table, filler_junk_table, non_filler_junk_table, useful_table, key_table, \
-    special_table, sub_weapon_table, pickup_item_discrepancies
+    special_table, trap_table, sub_weapon_table, pickup_item_discrepancies
 from .Locations import CV64Location, all_locations, create_locations, boss_table, base_id
 from .Entrances import create_entrances
 from .Options import cv64_options
@@ -178,6 +178,8 @@ class CV64World(World):
             classification = ItemClassification.useful
         elif name in special_table:
             classification = ItemClassification.progression_skip_balancing
+        elif name in trap_table:
+            classification = ItemClassification.trap
         else:
             classification = ItemClassification.filler
 
@@ -194,9 +196,9 @@ class CV64World(World):
     def create_items(self) -> None:
         item_counts = {
             "filler_junk_counts": {name: 0 for name in filler_junk_table.keys()},
-            "non_filler_junk_counts": {name: 0 for name in {**non_filler_junk_table, **useful_table}.keys()},
+            "non_filler_junk_counts": {name: 0 for name in non_filler_junk_table},
             "key_counts": {name: 0 for name in key_table.keys()},
-            "special_counts": {name: 0 for name in special_table.keys()},
+            "special_counts": {name: 0 for name in {**special_table, **useful_table, **trap_table}.keys()},
         }
         extras_count = 0
 
@@ -291,10 +293,9 @@ class CV64World(World):
         if self.multiworld.permanent_powerups[self.player]:
             add_filler_junk(item_counts["non_filler_junk_counts"][IName.powerup] - 2)
             item_counts["non_filler_junk_counts"][IName.powerup] = 0
-            item_counts["non_filler_junk_counts"][IName.permaup] = 2
+            item_counts["special_counts"][IName.permaup] = 2
 
-        # Subtract from the junk tables the total number of "extra" items we're adding. Tier 1 will be subtracted from
-        # first until it runs out, at which point we'll start subtracting from Tier 2.
+        # Determine the total amounts of replaceable filler and non-filler junk.
         total_filler_junk = 0
         total_non_filler_junk = 0
         for junk in item_counts["filler_junk_counts"]:
@@ -302,6 +303,14 @@ class CV64World(World):
         for junk in item_counts["non_filler_junk_counts"]:
             total_non_filler_junk += item_counts["non_filler_junk_counts"][junk]
 
+        # Determine the Ice Trap count by taking a certain % of the total junk subtracted by the extras count.
+        item_counts["special_counts"][IName.ice_trap] = \
+            math.floor((total_filler_junk + total_non_filler_junk - extras_count) *
+                       (self.multiworld.ice_trap_percentage[self.player].value / 100.0))
+        extras_count += item_counts["special_counts"][IName.ice_trap]
+
+        # Subtract from the junk tables the total number of "extra" items we've added. Filler will be subtracted from
+        # first until it runs out, at which point we'll start subtracting from non-filler.
         for i in range(extras_count):
             table = "filler_junk_counts"
             if total_filler_junk > 0:
@@ -330,7 +339,6 @@ class CV64World(World):
                         s1s_created += 1
                     else:
                         self.multiworld.itempool.append(self.create_item(item))
-
 
     def set_rules(self) -> None:
         self.multiworld.get_location(LName.the_end, self.player).place_locked_item(
@@ -474,6 +482,18 @@ class CV64World(World):
 
             inv_setting = self.multiworld.invisible_items[self.player].value
 
+            # Figure out what list of possible Ice Trap appearances to use based on the settings.
+            trap_appearances = []
+            if multiworld.ice_trap_appearance[self.player].value == 0:
+                trap_appearances = [value for value in {**special_table, **key_table}.values()]
+            elif multiworld.ice_trap_appearances[self.player].value == 1:
+                trap_appearances = [value for value in {**filler_junk_table, **non_filler_junk_table,
+                                                        **useful_table, **sub_weapon_table}.values()]
+            else:
+                trap_appearances = [value for value in {**special_table, **key_table, **filler_junk_table,
+                                                        **non_filler_junk_table, **useful_table,
+                                                        **sub_weapon_table}.values()]
+
             for loc in active_locations:
                 # If the Location is an event, skip it.
                 if loc.address is None:
@@ -498,8 +518,14 @@ class CV64World(World):
                     offsets_to_ids[loc.cv64_rom_offset - 1] = 0x12  # Roses are minors
 
                 # If it's a PermaUp, change the item's model to a big PowerUp no matter what.
-                if loc.item.game == "Castlevania 64" and loc.item.code == 0xC6410C:
+                if loc.item.game == "Castlevania 64" and loc.item.code == 0x10C + base_id:
                     offsets_to_ids[loc.cv64_rom_offset - 1] = 0x0B
+
+                # If it's an Ice Trap, change it's model to a major or minor depending on the setting.
+                if loc.item.game == "Castlevania 64" and loc.item.code == 0x12 + base_id:
+                    offsets_to_ids[loc.cv64_rom_offset - 1] = self.random.choice(trap_appearances)
+                    if offsets_to_ids[loc.cv64_rom_offset - 1] == 0x10C:
+                        offsets_to_ids[loc.cv64_rom_offset - 1] = 0x0B
 
                 # Apply the invisibility variable depending on the "invisible items" setting.
                 if (inv_setting == 0 and loc.cv64_loc_type == "inv") or \

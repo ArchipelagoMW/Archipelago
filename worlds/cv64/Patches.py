@@ -163,10 +163,10 @@ remote_item_giver = [
     # DeathLink-specific checks
     0x3C0B8039,  # LUI   T3, 0x8039
     0x256B9BE1,  # ADDIU T3, T3, 0x9BE1
-    0x95640001,  # LHU   A0, 0x0001 (T3)
+    0x91640002,  # LBU   A0, 0x0002 (T3)
     0x14800002,  # BNEZ  A0,     [forward 0x02]
     0x916900A7,  # LBU   T1, 0x00A7 (T3)
-    0x03E00008,  # JR    RA
+    0x080FF077,  # J     0x803FC1DC
     0x312A0080,  # ANDI  T2, T1, 0x0080
     0x11400002,  # BEQZ  T2,     [forward 0x02]
     0x00000000,  # NOP
@@ -183,7 +183,7 @@ deathlink_nitro_edition = [
     # Alternative to the end of the above DeathLink-specific checks that kills the player with the Nitro explosion
     # instead of the normal death.
     0x91690043,  # LBU   T1, 0x0043 (T3)
-    0x03E00008,  # JR    RA
+    0x080FF077,  # J     0x803FC1DC
     0x3C088034,  # LUI   T0, 0x8034
     0x91082BFE,  # LBU   T0, 0x2BFE (T0)
     0x11000002,  # BEQZ  T0,     [forward 0x02]
@@ -220,10 +220,10 @@ deathlink_counter_decrementer = [
     # to the server if it was the former). Also resets the remote item values to 00 so the player's received items don't
     # get mucked up in-game.
     0x3C088039,  # LUI   T0, 0x8039
-    0x95099BE2,  # LHU   T1, 0x9BE2 (T0)
+    0x91099BE3,  # LBU   T1, 0x9BE3 (T0)
     0x11200002,  # BEQZ  T1, 0x803FC154
     0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
-    0xA5099BE2,  # SH    T1, 0x9BE2
+    0xA1099BE3,  # SB    T1, 0x9BE3
     0x240900FF,  # ADDIU T1, R0, 0x00FF
     0xA1099BE0,  # SB    T1, 0x9BE0 (T0)
     0xA1009BDF,  # SB	 R0, 0x9BDF (T0)
@@ -285,15 +285,18 @@ warp_menu_opener = [
 
 give_subweapon_stopper = [
     # Extension to "give subweapon" function to not change the player's weapon if the received item is a Stake or Rose.
-    # Can also jump to prev_subweapon_dropper if applicable.
+    # Can also increment the Ice Trap counter if getting a Rose or jump to prev_subweapon_dropper if applicable.
     0x24090011,  # ADDIU T1, R0, 0x0011
-    0x11240006,  # BEQ   T1, A0, [forward 0x06]
+    0x11240009,  # BEQ   T1, A0, [forward 0x09]
     0x24090012,  # ADDIU T1, R0, 0x0012
-    0x11240004,  # BEQ   T1, A0, [forward 0x04]
+    0x11240003,  # BEQ   T1, A0, [forward 0x03]
     0x9465618A,  # LHU   A1, 0x618A (V1)
     0xA46D618A,  # SH    T5, 0x618A (V1)
     0x0804F0BF,  # J     0x8013C2FC
-    0x00000000,  # NOP
+    0x3C098039,  # LUI   T1, 0x8039
+    0x912A9BE2,  # LBU   T2, 0x9BE2 (T1)
+    0x254A0001,  # ADDIU T2, T2, 0x0001
+    0xA12A9BE2,  # SB    T2, 0x9BE2 (T1)
     0x0804F0BF,  # J     0x8013C2FC
 ]
 
@@ -429,11 +432,18 @@ overlay_modifiers = [
     0xAF200CC8,  # SW    R0, 0x0CC8
     0x03200008,  # JR    T9
     0x24090134,  # ADDIU T1, R0, 0x0134
-    0x15090004,  # BNE   T0, T1, [forward 0x04]
+    0x15090005,  # BNE   T0, T1, [forward 0x05]
     0x340B8040,  # ORI   T3, R0, 0x8040
     0x340CDD20,  # ORI   T4, R0, 0xDD20
     0xA72B1D1E,  # SH    T3, 0x1D1E (T9)
     0xA72C1D22,  # SH    T4, 0x1D22 (T9)
+    0x03200008,  # JR    T9
+    # Make the Ice Trap model check branch properly
+    0x24090125,  # ADDIU T1, R0, 0x0125
+    0x15090003,  # BNE   T0, T1, [forward 0x03]
+    0x3C0B3C19,  # LUI   T3, 0x3C19
+    0x356B803F,  # ORI   T3, T3, 0x803F
+    0xAF2B04D0,  # SW    T3, 0x04D0 (T9)
     0x03200008   # JR    T9
 ]
 
@@ -1905,7 +1915,7 @@ countdown_number_updater = [
     0x01000000,
     0x00000000,
     0x00000000,
-    0x01000000,
+    0x00000000,
     0x01010000,
     0x00010101,
     0x01010101,
@@ -1960,6 +1970,7 @@ countdown_number_updater = [
     0x0804DFFA,  # J     0x8013
     0x3C047FFF,  # LUI   A0, 0x7FFFF
     0x00000000,  # NOP
+    # Kills the last map's pointer to the Countdown stuff.
     0x3C088040,  # LUI   T0, 0x8040
     0xFD00D6D0,  # SD    R0, 0xD6D0 (T0)
     0x03E00008   # JR    RA
@@ -2599,4 +2610,64 @@ multiworld_item_name_loader = [
     0x3C088019,  # LUI   T0, 0x8019
     0xA100C097,  # SB    R0, 0xC097 (T0)
     0x0804EDCE   # J     0x8013B738
+]
+
+ice_trap_initializer = [
+    # During a map load, creates the module that allows the ice block model to appear while in the frozen state if not
+    # on the intro narration map (map 0x16).
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91089EE1,  # LBU   T0, 0x9EE1 (T0)
+    0x24090016,  # ADDIU T1, R0, 0x0016
+    0x11090004,  # BEQ   T0, T1, [forward 0x04]
+    0x3C048034,  # LUI   A0, 0x8034
+    0x24842ACC,  # ADDIU A0, A0, 0x2ACC
+    0x08000660,  # J     0x80001980
+    0x24052125,  # ADDIU A1, R0, 0x2125
+    0x03E00008   # JR    RA
+]
+
+the_deep_freezer = [
+    # Writes 000C0000 into the player state to freeze the player on the spot if Ice Traps have been received, writes the
+    # Ice Trap code into the pointer value (0x20B8, which is also Camilla's boss code),and decrements the Ice Traps
+    # remaining counter.
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x91699BE2,  # LBU   T3, 0x9BE2 (T0)
+    0x1120000B,  # BEQZ  T1,     [forward 0x0B]
+    0x3C088034,  # LUI   T0, 0x8034
+    0x910827A9,  # LBU   T0, 0x27A9 (T0)
+    0x240A000C,  # ADDIU T2, R0, 0x000C
+    0x110A0007,  # BEQ   T0, T2, [forward 0x07]
+    0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
+    0xA1699BE2,  # SB    T1, 0x9BE2 (T3)
+    0x3C088034,  # LUI   T0, 0x8034
+    0x3C09000C,  # LUI   T1, 0x000C
+    0xAD0927A8,  # SW    T1, 0x27A8 (T0)
+    0x240820B8,  # ADDIU T0, R0, 0x20B8
+    0xA5689E6E,  # SH    T0, 0x9E6E (T3)
+    0x03E00008   # JR    RA
+]
+
+freeze_verifier = [
+    # Verifies for the ice chunk module that a freeze should spawn the ice model. The player must be in the frozen state
+    # (0x000C) and 0x20B8 must be in either the freeze pointer value or the current boss ID (Camilla's); otherwise, we
+    # weill assume that the freeze happened due to a vampire grab or Actrise shard tornado and not spawn the ice chunk.
+    0x8C4E000C,  # LW    T6, 0x000C (V0)
+    0x00803025,  # OR    A2, A0, R0
+    0x8DC30008,  # LW    V1, 0x0008 (T6)
+    0x3C088039,  # LUI   T0, 0x8039
+    0x240920B8,  # ADDIU T1, R0, 0x20B8
+    0x950A9E72,  # LHU   T2, 0x9E72 (T0)
+    0x3C0C8034,  # LUI   T4, 0x8034
+    0x918C27A9,  # LBU   T4, 0x27A9 (T4)
+    0x240D000C,  # ADDIU T5, R0, 0x000C
+    0x158D0004,  # BNE   T4, T5, [forward 0x04]
+    0x3C0B0F00,  # LUI   T3, 0x0F00
+    0x112A0005,  # BEQ   T1, T2, [forward 0x05]
+    0x950A9E78,  # LHU   T2, 0x9E78 (T0)
+    0x112A0003,  # BEQ   T1, T2, [forward 0x03]
+    0x357996A0,  # ORI   T9, T3, 0x96A0
+    0x03200008,  # JR    T9
+    0x00000000,  # NOP
+    0x35799640,  # ORI   T9, T3, 0x9640
+    0x03200008,  # JR    T9
 ]

@@ -63,6 +63,10 @@ sub_weapon_table = {
     IName.axe:        0x10
 }
 
+trap_table = {
+    IName.ice_trap: 0x12
+}
+
 # Every in-game item pickup actor that has a different ID from its actual item code.
 pickup_item_discrepancies = {
     IName.permaup:              0x0C,
@@ -95,6 +99,7 @@ item_table = {
     **useful_table,
     **key_table,
     **special_table,
+    **trap_table,
     **sub_weapon_table
 }
 
