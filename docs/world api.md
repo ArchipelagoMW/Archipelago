@@ -86,9 +86,11 @@ inside a `World` object.
 ### Player Options
 
 Players provide customized settings for their World in the form of yamls.
-Those are accessible through `self.multiworld.<option_name>[self.player]`. A dict
-of valid options has to be provided in `self.option_definitions`. Options are automatically
-added to the `World` object for easy access.
+A `dataclass` of valid options definitions has to be provided in `self.options_dataclass`.
+(It must be a subclass of `PerGameCommonOptions`.)
+Option results are automatically added to the `World` object for easy access.
+Those are accessible through `self.options.<option_name>`, and you can get a dictionary of the option values via
+`self.options.as_dict(<option_names>)`, passing the desired options as strings. 
 
 ### World Settings
 
@@ -221,11 +223,11 @@ See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requireme
 AP will only import the `__init__.py`. Depending on code size it makes sense to
 use multiple files and use relative imports to access them.
 
-e.g. `from .Options import mygame_options` from your `__init__.py` will load
-`worlds/<world_name>/Options.py` and make its `mygame_options` accessible.
+e.g. `from .Options import MyGameOptions` from your `__init__.py` will load
+`world/[world_name]/Options.py` and make its `MyGameOptions` accessible.
 
 When imported names pile up it may be easier to use `from . import Options`
-and access the variable as `Options.mygame_options`.
+and access the variable as `Options.MyGameOptions`.
 
 Imports from directories outside your world should use absolute imports.
 Correct use of relative / absolute imports is required for zipped worlds to
@@ -273,8 +275,9 @@ Each option has its own class, inherits from a base option type, has a docstring
 to describe it and a `display_name` property for display on the website and in
 spoiler logs.
 
-The actual name as used in the yaml is defined in a `Dict[str, AssembleOptions]`, that is
-assigned to the world under `self.option_definitions`.
+The actual name as used in the yaml is defined via the field names of a `dataclass` that is
+assigned to the world under `self.options_dataclass`. By convention, the strings
+that define your option names should be in `snake_case`.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`.
 For more see `Options.py` in AP's base directory.
@@ -309,8 +312,8 @@ default = 0
 ```python
 # Options.py
 
-from Options import Toggle, Range, Choice, Option
-import typing
+from dataclasses import dataclass
+from Options import Toggle, Range, Choice, PerGameCommonOptions
 
 class Difficulty(Choice):
     """Sets overall game difficulty."""
@@ -333,23 +336,27 @@ class FixXYZGlitch(Toggle):
     """Fixes ABC when you do XYZ"""
     display_name = "Fix XYZ Glitch"
 
-# By convention we call the options dict variable `<world>_options`.
-mygame_options: typing.Dict[str, AssembleOptions] = {
-    "difficulty": Difficulty,
-    "final_boss_hp": FinalBossHP,
-    "fix_xyz_glitch": FixXYZGlitch,
-}
+# By convention, we call the options dataclass `<world>Options`.
+# It has to be derived from 'PerGameCommonOptions'.
+@dataclass
+class MyGameOptions(PerGameCommonOptions):
+    difficulty: Difficulty
+    final_boss_hp: FinalBossHP
+    fix_xyz_glitch: FixXYZGlitch
 ```
+
 ```python
 # __init__.py
 
 from worlds.AutoWorld import World
-from .Options import mygame_options  # import the options dict
+from .Options import MyGameOptions  # import the options dataclass
+
 
 class MyGameWorld(World):
-    #...
-    option_definitions = mygame_options  # assign the options dict to the world
-    #...
+    # ...
+    options_dataclass = MyGameOptions  # assign the options dataclass to the world
+    options: MyGameOptions  # typing for option results
+    # ...
 ```
 
 ### A World Class Skeleton
@@ -359,11 +366,12 @@ class MyGameWorld(World):
 
 import settings
 import typing
-from .Options import mygame_options  # the options we defined earlier
+from .Options import MyGameOptions  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
 from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
+
 
 
 class MyGameItem(Item):  # or from Items import MyGameItem
@@ -372,6 +380,7 @@ class MyGameItem(Item):  # or from Items import MyGameItem
 
 class MyGameLocation(Location):  # or from Locations import MyGameLocation
     game = "My Game"  # name of the game/world this location is in
+
 
 
 class MyGameSettings(settings.Group):
@@ -384,7 +393,8 @@ class MyGameSettings(settings.Group):
 class MyGameWorld(World):
     """Insert description of the world/game here."""
     game = "My Game"  # name of the game/world
-    option_definitions = mygame_options  # options the player can set
+    options_dataclass = MyGameOptions  # options the player can set
+    options: MyGameOptions  # typing hints for option results
     settings: typing.ClassVar[MyGameSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
 
@@ -460,7 +470,7 @@ In addition, the following methods can be implemented and are called in this ord
 ```python
 def generate_early(self) -> None:
     # read player settings to world instance
-    self.final_boss_hp = self.multiworld.final_boss_hp[self.player].value
+    self.final_boss_hp = self.options.final_boss_hp.value
 ```
 
 #### create_item
@@ -687,9 +697,9 @@ def generate_output(self, output_directory: str):
                           in self.multiworld.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
-        "difficulty": self.multiworld.difficulty[self.player].current_key,
+        "difficulty": self.options.difficulty.current_key,
         # store option value True or False for fixing a glitch
-        "fix_xyz_glitch": self.multiworld.fix_xyz_glitch[self.player].value,
+        "fix_xyz_glitch": self.options.fix_xyz_glitch.value,
     }
     # point to a ROM specified by the installation
     src = self.settings.rom_file
@@ -700,6 +710,26 @@ def generate_output(self, output_directory: str):
     out_file = os.path.join(output_directory, mod_name + ".zip")
     # generate the file
     generate_mod(src, out_file, data)
+```
+
+### Slot Data
+
+If the game client needs to know information about the generated seed, a preferred method of transferring the data
+is through the slot data. This can be filled from the `fill_slot_data` method of your world by returning a `Dict[str, Any]`,
+but should be limited to data that is absolutely necessary to not waste resources. Slot data is sent to your client once
+it has successfully [connected](network%20protocol.md#connected).
+If you need to know information about locations in your world, instead
+of propagating the slot data, it is preferable to use [LocationScouts](network%20protocol.md#locationscouts) since that
+data already exists on the server. The most common usage of slot data is to send option results that the client needs
+to be aware of.
+
+```python
+def fill_slot_data(self):
+    # in order for our game client to handle the generated seed correctly we need to know what the user selected
+    # for their difficulty and final boss HP
+    # a dictionary returned from this method gets set as the slot_data and will be sent to the client after connecting
+    # the options dataclass has a method to return a `Dict[str, Any]` of each option name provided and the option's value
+    return self.options.as_dict("difficulty", "final_boss_hp")
 ```
 
 ### Documentation

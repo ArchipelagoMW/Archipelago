@@ -1,11 +1,12 @@
 import csv
 import enum
 import math
-from typing import Protocol, Union, Dict, List, Set
-from BaseClasses import Item, ItemClassification
-from . import Options, data
 from dataclasses import dataclass, field
 from random import Random
+from typing import Dict, List, Set
+
+from BaseClasses import Item, ItemClassification
+from . import Options, data
 
 
 class DLCQuestItem(Item):
@@ -93,38 +94,35 @@ def create_trap_items(world, World_Options: Options.DLCQuestOptions, trap_needed
 
 def create_items(world, World_Options: Options.DLCQuestOptions, locations_count: int, random: Random):
     created_items = []
-    if World_Options[Options.Campaign] == Options.Campaign.option_basic or World_Options[
-        Options.Campaign] == Options.Campaign.option_both:
+    if World_Options.campaign == Options.Campaign.option_basic or World_Options.campaign == Options.Campaign.option_both:
         for item in items_by_group[Group.DLCQuest]:
             if item.has_any_group(Group.DLC):
                 created_items.append(world.create_item(item))
-            if item.has_any_group(Group.Item) and World_Options[
-                Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+            if item.has_any_group(Group.Item) and World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
                 created_items.append(world.create_item(item))
-        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
-            coin_bundle_needed = math.floor(825 / World_Options[Options.CoinSanityRange])
+        if World_Options.coinsanity == Options.CoinSanity.option_coin:
+            coin_bundle_needed = math.floor(825 / World_Options.coinbundlequantity)
             for item in items_by_group[Group.DLCQuest]:
                 if item.has_any_group(Group.Coin):
                     for i in range(coin_bundle_needed):
                         created_items.append(world.create_item(item))
-                    if 825 % World_Options[Options.CoinSanityRange] != 0:
+                    if 825 % World_Options.coinbundlequantity != 0:
                         created_items.append(world.create_item(item))
 
-    if World_Options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or World_Options[
-        Options.Campaign] == Options.Campaign.option_both:
+    if (World_Options.campaign == Options.Campaign.option_live_freemium_or_die or
+            World_Options.campaign == Options.Campaign.option_both):
         for item in items_by_group[Group.Freemium]:
             if item.has_any_group(Group.DLC):
                 created_items.append(world.create_item(item))
-            if item.has_any_group(Group.Item) and World_Options[
-                Options.ItemShuffle] == Options.ItemShuffle.option_shuffled:
+            if item.has_any_group(Group.Item) and World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
                 created_items.append(world.create_item(item))
-        if World_Options[Options.CoinSanity] == Options.CoinSanity.option_coin:
-            coin_bundle_needed = math.floor(889 / World_Options[Options.CoinSanityRange])
+        if World_Options.coinsanity == Options.CoinSanity.option_coin:
+            coin_bundle_needed = math.floor(889 / World_Options.coinbundlequantity)
             for item in items_by_group[Group.Freemium]:
                 if item.has_any_group(Group.Coin):
                     for i in range(coin_bundle_needed):
                         created_items.append(world.create_item(item))
-                    if 889 % World_Options[Options.CoinSanityRange] != 0:
+                    if 889 % World_Options.coinbundlequantity != 0:
                         created_items.append(world.create_item(item))
 
     trap_items = create_trap_items(world, World_Options, locations_count - len(created_items), random)
