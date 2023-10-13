@@ -6,8 +6,8 @@ from .Options import khcom_options  # the options we defined earlier
 from .Items import KHCOMItem, item_table  # data used below to add items to the World
 from .Locations import KHCOMAchievement, achievement_table  # same as above
 from .Rules import set_rules
-from worlds.AutoWorld import World
-from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
+from worlds.AutoWorld import WebWorld, World
+from BaseClasses import Tutorial
 
 
 class KHCOMWeb(WebWorld):
@@ -34,7 +34,7 @@ class KHCOMWorld(World):
     item_name_to_id = {name: id for
                        id, name in enumerate(item_table, base_id)}
     location_name_to_id = {name: id for
-                           id, name in enumerate(mygame_locations, base_id)}
+                           id, name in enumerate(achievement_table, base_id)}
     
     def get_setting(self, name: str):
         return getattr(self.multiworld, name)[self.player]
