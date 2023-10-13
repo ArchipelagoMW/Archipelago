@@ -1127,7 +1127,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if os.path.isfile(full_path) and full_path.endswith(".yaml"):
             os.unlink(full_path)
 
-    def dictify_range(option: typing.Union[Range, SpecialRange]):
+    def dictify_range(option: typing.Union[Range, NamedRange, SpecialRange]):
         data = {option.default: 50}
         for sub_option in ["random", "random-low", "random-high"]:
             if sub_option != option.default:
