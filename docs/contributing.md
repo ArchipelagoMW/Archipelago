@@ -3,7 +3,7 @@ Contributions are welcome. We have a few requests for new contributors:
 
 * **Follow styling guidelines.**
   Please take a look at the [code style documentation](/docs/style.md)
-  to ensure uniformity and ease of communication.
+  to ensure ease of communication and uniformity.
 
 * **Ensure that critical changes are covered by tests.** 
 It is strongly recommended that unit tests are used to avoid regression and to ensure everything is still working.
