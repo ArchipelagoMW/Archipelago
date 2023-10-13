@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option, SpecialRange
 from .mods.mod_data import ModNames
 
 
@@ -47,12 +47,13 @@ class Goal(Choice):
         return super().get_option_name(value)
 
 
-class StartingMoney(NamedRange):
+class StartingMoney(SpecialRange):
     """Amount of gold when arriving at the farm.
     Set to -1 or unlimited for infinite money in this playthrough"""
     internal_name = "starting_money"
     display_name = "Starting Gold"
     range_start = -1
+    special_range_cutoff = 0
     range_end = 50000
     default = 5000
 
