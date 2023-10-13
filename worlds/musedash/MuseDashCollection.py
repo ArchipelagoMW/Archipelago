@@ -56,8 +56,8 @@ class MuseDashCollections:
         "Error SFX Trap": STARTING_CODE + 9,
     }
 
-    item_names_to_id: ChainMap[str, int] = ChainMap({}, sfx_trap_items, vfx_trap_items)
-    location_names_to_id: ChainMap[str, int] = ChainMap(song_locations, album_locations)
+    item_names_to_id: ChainMap = ChainMap({}, sfx_trap_items, vfx_trap_items)
+    location_names_to_id: ChainMap = ChainMap(song_locations, album_locations)
 
     def __init__(self) -> None:
         self.item_names_to_id[self.MUSIC_SHEET_NAME] = self.MUSIC_SHEET_CODE
