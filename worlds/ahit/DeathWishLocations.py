@@ -1,10 +1,11 @@
-from .Locations import HatInTimeLocation, death_wishes
-from .Items import HatInTimeItem
+from .Types import HatInTimeLocation, HatInTimeItem
 from .Regions import connect_regions, create_region
 from BaseClasses import Region, LocationProgressType, ItemClassification
 from worlds.generic.Rules import add_rule
 from worlds.AutoWorld import World
 from typing import List
+from .Locations import death_wishes
+
 
 dw_prereqs = {
     "So You're Back From Outer Space":  ["Beat the Heat"],
@@ -82,11 +83,9 @@ annoying_bonuses = [
     "Snatcher's Hit List",
     "10 Seconds until Self-Destruct",
     "Killing Two Birds",
-    "Snatcher Coins in Battle of the Birds",
     "Zero Jumps",
     "Bird Sanctuary",
     "Wound-Up Windmill",
-    "Snatcher Coins in Alpine Skyline",
     "Seal the Deal",
 ]
 

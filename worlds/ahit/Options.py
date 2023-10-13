@@ -532,11 +532,9 @@ class DWExcludeAnnoyingBonuses(Toggle):
     - Snatcher's Hit List
     - 10 Seconds until Self-Destruct
     - Killing Two Birds
-    - Snatcher Coins in Battle of the Birds
     - Zero Jumps
     - Bird Sanctuary
     - Wound-Up Windmill
-    - Snatcher Coins in Alpine Skyline
     - Seal the Deal"""
     display_name = "Exclude Annoying Death Wish Full Completions"
     default = 1
@@ -674,6 +672,7 @@ slot_data_options: typing.Dict[str, type(Option)] = {
     "CTRLogic":                     CTRLogic,
     "RandomizeHatOrder":            RandomizeHatOrder,
     "UmbrellaLogic":                UmbrellaLogic,
+    "StartWithCompassBadge":        StartWithCompassBadge,
     "CompassBadgeMode":             CompassBadgeMode,
     "ShuffleStorybookPages":        ShuffleStorybookPages,
     "ShuffleActContracts":          ShuffleActContracts,

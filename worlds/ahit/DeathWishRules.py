@@ -1,12 +1,12 @@
 from worlds.AutoWorld import World, CollectionState
-from .Locations import LocData, death_wishes, HatInTimeLocation
-from .Rules import can_use_hat, can_use_hookshot, can_hit, zipline_logic, has_paintings, get_difficulty
-from .Types import HatType, Difficulty
+from .Rules import can_use_hat, can_use_hookshot, can_hit, zipline_logic, get_difficulty
+from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData, HatDLC
 from .DeathWishLocations import dw_prereqs, dw_candles
-from .Items import HatInTimeItem
 from BaseClasses import Entrance, Location, ItemClassification
 from worlds.generic.Rules import add_rule, set_rule
 from typing import List, Callable
+from .Regions import act_chapters
+from .Locations import zero_jumps, zero_jumps_expert, zero_jumps_hard, death_wishes
 
 # Any speedruns expect the player to have Sprint Hat
 dw_requirements = {
@@ -79,6 +79,23 @@ dw_stamp_costs = {
     "The Mustache Gauntlet":    35,
     "No More Bad Guys":         50,
     "Seal the Deal":            70,
+}
+
+required_snatcher_coins = {
+    "Snatcher Coins in Mafia Town": ["Snatcher Coin - Top of HQ", "Snatcher Coin - Top of Tower",
+                                     "Snatcher Coin - Under Ruined Tower"],
+
+    "Snatcher Coins in Battle of the Birds": ["Snatcher Coin - Top of Red House", "Snatcher Coin - Train Rush",
+                                              "Snatcher Coin - Picture Perfect"],
+
+    "Snatcher Coins in Subcon Forest": ["Snatcher Coin - Swamp Tree", "Snatcher Coin - Manor Roof",
+                                        "Snatcher Coin - Giant Time Piece"],
+
+    "Snatcher Coins in Alpine Skyline": ["Snatcher Coin - Goat Village Top", "Snatcher Coin - Lava Cake",
+                                         "Snatcher Coin - Windmill"],
+
+    "Snatcher Coins in Nyakuza Metro": ["Snatcher Coin - Green Clean Tower", "Snatcher Coin - Bluefin Cat Train",
+                                        "Snatcher Coin - Pink Paw Fence"],
 }
 
 
@@ -219,11 +236,8 @@ def modify_dw_rules(world: World, name: str):
             add_rule(main_objective, lambda state: state.has("Umbrella", world.player))
 
     elif name == "The Mustache Gauntlet":
-        # Need a way to kill fire crows without being burned.
         add_rule(main_objective, lambda state: state.has("Umbrella", world.player)
                  or can_use_hat(state, world, HatType.ICE) or can_use_hat(state, world, HatType.BREWING))
-        add_rule(full_clear, lambda state: state.has("Umbrella", world.player)
-                 or can_use_hat(state, world, HatType.ICE))
 
     elif name == "Vault Codes in the Wind":
         # Sprint is normally expected here
@@ -236,15 +250,20 @@ def modify_dw_rules(world: World, name: str):
             set_rule(main_objective, lambda state: True)
 
     elif name == "Mafia's Jumps":
-        # Main objective without Ice, still expected for bonuses
         if difficulty >= Difficulty.HARD:
             set_rule(main_objective, lambda state: True)
-            set_rule(full_clear, lambda state: can_use_hat(state, world, HatType.ICE))
+            set_rule(full_clear, lambda state: True)
 
     elif name == "So You're Back from Outer Space":
         # Without Hookshot
         if difficulty >= Difficulty.HARD:
             set_rule(main_objective, lambda state: True)
+
+    elif name == "Wound-Up Windmill":
+        # No badge pin required. Player can switch to One Hit Hero after the checkpoint and do level without it.
+        if difficulty >= Difficulty.MODERATE:
+            set_rule(full_clear, lambda state: can_use_hookshot(state, world)
+                     and state.has("One-Hit Hero Badge", world.player))
 
     if name in dw_candles:
         set_candle_dw_rules(name, world)
@@ -268,7 +287,7 @@ def get_total_dw_stamps(state: CollectionState, world: World) -> int:
         if state.has(f"2 Stamps - {name}", world.player):
             count += 2
         elif name not in dw_candles:
-            # all non-candle bonus requirements allow the player to get the other stamp (like not having One Hit Hero)
+            # most non-candle bonus requirements allow the player to get the other stamp (like not having One Hit Hero)
             count += 1
 
     return count
@@ -281,7 +300,13 @@ def set_candle_dw_rules(name: str, world: World):
     if name == "Zero Jumps":
         add_rule(main_objective, lambda state: get_zero_jump_clear_count(state, world) >= 1)
         add_rule(full_clear, lambda state: get_zero_jump_clear_count(state, world) >= 4
-                 and state.has("Train Rush Cleared", world.player) and can_use_hat(state, world, HatType.ICE))
+                 and state.has("Train Rush (Zero Jumps)", world.player) and can_use_hat(state, world, HatType.ICE))
+
+        # No Ice Hat/painting required in Expert for Toilet Zero Jumps
+        if get_difficulty(world) >= Difficulty.EXPERT:
+            set_rule(world.multiworld.get_location("Toilet of Doom (Zero Jumps)", world.player),
+                     lambda state: can_use_hookshot(state, world)
+                     and can_hit(state, world))
 
     elif name == "Snatcher's Hit List":
         add_rule(main_objective, lambda state: state.has("Mafia Goon", world.player))
@@ -289,74 +314,33 @@ def set_candle_dw_rules(name: str, world: World):
 
     elif name == "Camera Tourist":
         add_rule(main_objective, lambda state: get_reachable_enemy_count(state, world) >= 8)
-        add_rule(full_clear, lambda state: can_reach_all_bosses(state, world))
+        add_rule(full_clear, lambda state: can_reach_all_bosses(state, world)
+                 and state.has("Triple Enemy Picture", world.player))
 
-    elif name == "Snatcher Coins in Mafia Town":
-        add_rule(main_objective, lambda state: state.has("MT Access", world.player)
-                 or state.has("HUMT Access", world.player))
-
-        add_rule(full_clear, lambda state: state.has("CTR Access", world.player)
-                 or state.has("HUMT Access", world.player)
-                 and can_hit(state, world, True)
-                 or state.has("DWTM Access", world.player)
-                 or state.has("TGV Access", world.player))
-
-    elif name == "Snatcher Coins in Battle of the Birds":
-        add_rule(main_objective, lambda state: state.has("PP Access", world.player)
-                 or state.has("DBS Access", world.player)
-                 or state.has("Train Rush Cleared", world.player))
-
-        add_rule(full_clear, lambda state: state.has("PP Access", world.player)
-                 and state.has("DBS Access", world.player)
-                 and state.has("Train Rush Cleared", world.player))
-
-    elif name == "Snatcher Coins in Subcon Forest":
-        add_rule(main_objective, lambda state: state.has("SF Access", world.player))
-
-        add_rule(main_objective, lambda state: has_paintings(state, world, 1) and (can_use_hookshot(state, world)
-                 or can_hit(state, world) or can_use_hat(state, world, HatType.DWELLER))
-                 or has_paintings(state, world, 3))
-
-        add_rule(full_clear, lambda state: has_paintings(state, world, 3) and can_use_hookshot(state, world)
-                 and (can_hit(state, world) or can_use_hat(state, world, HatType.DWELLER)))
-
-    elif name == "Snatcher Coins in Alpine Skyline":
-        add_rule(main_objective, lambda state: state.has("LC Access", world.player)
-                 or state.has("WM Access", world.player))
-
-        add_rule(full_clear, lambda state: state.has("LC Access", world.player)
-                 and state.has("WM Access", world.player))
-
-    elif name == "Snatcher Coins in Nyakuza Metro":
-        add_rule(main_objective, lambda state: state.has("Bluefin Tunnel Cleared", world.player)
-                 or (state.has("Nyakuza Intro Cleared", world.player)
-                 and (state.has("Metro Ticket - Pink", world.player)
-                      or state.has("Metro Ticket - Yellow", world.player)
-                      and state.has("Metro Ticket - Blue", world.player))))
-
-        add_rule(full_clear, lambda state: state.has("Bluefin Tunnel Cleared", world.player)
-                 and (state.has("Nyakuza Intro Cleared", world.player)
-                 and (state.has("Metro Ticket - Pink", world.player)
-                      or state.has("Metro Ticket - Yellow", world.player)
-                      and state.has("Metro Ticket - Blue", world.player))))
+    elif "Snatcher Coins" in name:
+        for coin in required_snatcher_coins[name]:
+            add_rule(main_objective, lambda state: state.has(coin, world.player), "or")
+            add_rule(full_clear, lambda state: state.has(coin, world.player))
 
 
 def get_zero_jump_clear_count(state: CollectionState, world: World) -> int:
     total: int = 0
 
-    for name, hats in zero_jumps.items():
-        if not state.has(f"{name} Cleared", world.player):
+    for name in act_chapters.keys():
+        n = f"{name} (Zero Jumps)"
+        if n not in zero_jumps:
             continue
 
-        valid: bool = True
+        if get_difficulty(world) < Difficulty.HARD and n in zero_jumps_hard:
+            continue
 
-        for hat in hats:
-            if not can_use_hat(state, world, hat):
-                valid = False
-                break
+        if get_difficulty(world) < Difficulty.EXPERT and n in zero_jumps_expert:
+            continue
 
-        if valid:
-            total += 1
+        if not state.has(n, world.player):
+            continue
+
+        total += 1
 
     return total
 
@@ -399,7 +383,7 @@ def create_enemy_events(world: World):
             if area == "Bluefin Tunnel" and not world.is_dlc2():
                 continue
 
-            if world.multiworld.DWShuffle[world.player].value > 0 and area in death_wishes \
+            if world.multiworld.DWShuffle[world.player].value > 0 and area in death_wishes.keys() \
                and area not in world.get_dw_shuffle():
                 continue
 
@@ -408,6 +392,22 @@ def create_enemy_events(world: World):
             event.place_locked_item(HatInTimeItem(enemy, ItemClassification.progression, None, world.player))
             region.locations.append(event)
             event.show_in_spoiler = False
+
+    for name in triple_enemy_locations:
+        if name == "Time Rift - Tour" and (not world.is_dlc1() or world.multiworld.ExcludeTour[world.player].value > 0):
+            continue
+
+        if world.multiworld.DWShuffle[world.player].value > 0 and name in death_wishes.keys() \
+           and name not in world.get_dw_shuffle():
+            continue
+
+        region = world.multiworld.get_region(name, world.player)
+        event = HatInTimeLocation(world.player, f"Triple Enemy Picture - {name}", None, region)
+        event.place_locked_item(HatInTimeItem("Triple Enemy Picture", ItemClassification.progression, None, world.player))
+        region.locations.append(event)
+        event.show_in_spoiler = False
+        if name == "The Mustache Gauntlet":
+            add_rule(event, lambda state: can_use_hookshot(state, world) and can_use_hat(state, world, HatType.DWELLER))
 
 
 def set_enemy_rules(world: World):
@@ -422,7 +422,7 @@ def set_enemy_rules(world: World):
                 continue
 
             if area == "Time Rift - Tour" and (not world.is_dlc1()
-                                               or world.multiworld.ExcludeTour[world.player].value > 0):
+               or world.multiworld.ExcludeTour[world.player].value > 0):
                 continue
 
             if area == "Bluefin Tunnel" and not world.is_dlc2():
@@ -462,17 +462,6 @@ def set_enemy_rules(world: World):
                 if area == "Time Rift - Deep Sea":
                     add_rule(event, lambda state: can_use_hookshot(state, world))
 
-
-# Zero Jumps completable levels, with required hats if any
-zero_jumps = {
-    "Welcome to Mafia Town": [],
-    "Cheating the Race": [HatType.TIME_STOP],
-    "Picture Perfect": [],
-    "Train Rush": [HatType.ICE],
-    "Contractual Obligations": [],
-    "Your Contract has Expired": [],
-    "Mail Delivery Service": [],  # rule for needing sprint is already on act completion
-}
 
 # Enemies for Snatcher's Hit List/Camera Tourist, and where to find them
 hit_list = {
@@ -522,6 +511,17 @@ hit_list = {
 
     "Mustache Girl":    ["The Finale", "Boss Rush", "No More Bad Guys"],
 }
+
+# Camera Tourist has a bonus that requires getting three different types of enemies in one picture.
+triple_enemy_locations = [
+    "She Came from Outer Space",
+    "She Speedran from Outer Space",
+    "Mafia's Jumps",
+    "The Mustache Gauntlet",
+    "The Birdhouse",
+    "Bird Sanctuary",
+    "Time Rift - Tour",
+]
 
 bosses = [
     "Mafia Boss",

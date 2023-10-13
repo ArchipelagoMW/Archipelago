@@ -1,10 +1,10 @@
-from BaseClasses import Item, ItemClassification, LocationProgressType, Tutorial
-from .Items import HatInTimeItem, item_table, create_item, relic_groups, act_contracts, create_itempool
+from BaseClasses import Item, ItemClassification, Tutorial
+from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, get_tasksanity_start_id
 from .Rules import set_rules
 from .Options import ahit_options, slot_data_options, adjust_options
-from .Types import HatType, ChapterIndex
+from .Types import HatType, ChapterIndex, HatInTimeItem
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events
 from worlds.AutoWorld import World, WebWorld

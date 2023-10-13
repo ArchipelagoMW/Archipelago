@@ -1,4 +1,14 @@
 from enum import IntEnum, IntFlag
+from typing import NamedTuple, Optional, List
+from BaseClasses import Location, Item, ItemClassification
+
+
+class HatInTimeLocation(Location):
+    game: str = "A Hat in Time"
+
+
+class HatInTimeItem(Item):
+    game: str = "A Hat in Time"
 
 
 class HatType(IntEnum):
@@ -15,6 +25,7 @@ class HatDLC(IntFlag):
     dlc1 = 0b001
     dlc2 = 0b010
     death_wish = 0b100
+    dlc2_dw = 0b0110  # for Snatcher Coins in Nyakuza Metro
 
 
 class ChapterIndex(IntEnum):
@@ -33,6 +44,30 @@ class Difficulty(IntEnum):
     MODERATE = 0
     HARD = 1
     EXPERT = 2
+
+
+class LocData(NamedTuple):
+    id: Optional[int] = 0
+    region: Optional[str] = ""
+    required_hats: Optional[List[HatType]] = [HatType.NONE]
+    hookshot: Optional[bool] = False
+    dlc_flags: Optional[HatDLC] = HatDLC.none
+    paintings: Optional[int] = 0  # Paintings required for Subcon painting shuffle
+    misc_required: Optional[List[str]] = []
+
+    # For UmbrellaLogic setting
+    umbrella: Optional[bool] = False  # Umbrella required for this check
+    hit_requirement: Optional[int] = 0  # Hit required. 1 = Umbrella/Brewing only, 2 = bypass w/Dweller Mask (bells)
+
+    # Other
+    act_event: Optional[bool] = False  # Only used for event locations. Copy access rule from act completion
+    nyakuza_thug: Optional[str] = ""  # Name of Nyakuza thug NPC (for metro shops)
+
+
+class ItemData(NamedTuple):
+    code: Optional[int]
+    classification: ItemClassification
+    dlc_flags: Optional[HatDLC] = HatDLC.none
 
 
 hat_type_to_item = {

@@ -1,19 +1,9 @@
 from BaseClasses import Item, ItemClassification
 from worlds.AutoWorld import World
-from .Types import HatDLC, HatType, hat_type_to_item, Difficulty
+from .Types import HatDLC, HatType, hat_type_to_item, Difficulty, ItemData, HatInTimeItem
 from .Locations import get_total_locations
 from .Rules import get_difficulty
-from typing import Optional, NamedTuple, List, Dict
-
-
-class ItemData(NamedTuple):
-    code: Optional[int]
-    classification: ItemClassification
-    dlc_flags: Optional[HatDLC] = HatDLC.none
-
-
-class HatInTimeItem(Item):
-    game: str = "A Hat in Time"
+from typing import Optional, List, Dict
 
 
 def create_itempool(world: World) -> List[Item]:
@@ -185,86 +175,86 @@ def create_junk_items(world: World, count: int) -> List[Item]:
 
 
 ahit_items = {
-    "Yarn": ItemData(300001, ItemClassification.progression_skip_balancing),
-    "Time Piece": ItemData(300002, ItemClassification.progression_skip_balancing),
+    "Yarn": ItemData(2000300001, ItemClassification.progression_skip_balancing),
+    "Time Piece": ItemData(2000300002, ItemClassification.progression_skip_balancing),
 
     # for HatItems option
-    "Sprint Hat": ItemData(300049, ItemClassification.progression),
-    "Brewing Hat": ItemData(300050, ItemClassification.progression),
-    "Ice Hat": ItemData(300051, ItemClassification.progression),
-    "Dweller Mask": ItemData(300052, ItemClassification.progression),
-    "Time Stop Hat": ItemData(300053, ItemClassification.progression),
+    "Sprint Hat": ItemData(2000300049, ItemClassification.progression),
+    "Brewing Hat": ItemData(2000300050, ItemClassification.progression),
+    "Ice Hat": ItemData(2000300051, ItemClassification.progression),
+    "Dweller Mask": ItemData(2000300052, ItemClassification.progression),
+    "Time Stop Hat": ItemData(2000300053, ItemClassification.progression),
 
     # Relics
-    "Relic (Burger Patty)": ItemData(300006, ItemClassification.progression),
-    "Relic (Burger Cushion)": ItemData(300007, ItemClassification.progression),
-    "Relic (Mountain Set)": ItemData(300008, ItemClassification.progression),
-    "Relic (Train)": ItemData(300009, ItemClassification.progression),
-    "Relic (UFO)": ItemData(300010, ItemClassification.progression),
-    "Relic (Cow)": ItemData(300011, ItemClassification.progression),
-    "Relic (Cool Cow)": ItemData(300012, ItemClassification.progression),
-    "Relic (Tin-foil Hat Cow)": ItemData(300013, ItemClassification.progression),
-    "Relic (Crayon Box)": ItemData(300014, ItemClassification.progression),
-    "Relic (Red Crayon)": ItemData(300015, ItemClassification.progression),
-    "Relic (Blue Crayon)": ItemData(300016, ItemClassification.progression),
-    "Relic (Green Crayon)": ItemData(300017, ItemClassification.progression),
+    "Relic (Burger Patty)": ItemData(2000300006, ItemClassification.progression),
+    "Relic (Burger Cushion)": ItemData(2000300007, ItemClassification.progression),
+    "Relic (Mountain Set)": ItemData(2000300008, ItemClassification.progression),
+    "Relic (Train)": ItemData(2000300009, ItemClassification.progression),
+    "Relic (UFO)": ItemData(2000300010, ItemClassification.progression),
+    "Relic (Cow)": ItemData(2000300011, ItemClassification.progression),
+    "Relic (Cool Cow)": ItemData(2000300012, ItemClassification.progression),
+    "Relic (Tin-foil Hat Cow)": ItemData(2000300013, ItemClassification.progression),
+    "Relic (Crayon Box)": ItemData(2000300014, ItemClassification.progression),
+    "Relic (Red Crayon)": ItemData(2000300015, ItemClassification.progression),
+    "Relic (Blue Crayon)": ItemData(2000300016, ItemClassification.progression),
+    "Relic (Green Crayon)": ItemData(2000300017, ItemClassification.progression),
 
     # Badges
-    "Projectile Badge": ItemData(300024, ItemClassification.useful),
-    "Fast Hatter Badge": ItemData(300025, ItemClassification.useful),
-    "Hover Badge": ItemData(300026, ItemClassification.useful),
-    "Hookshot Badge": ItemData(300027, ItemClassification.progression),
-    "Item Magnet Badge": ItemData(300028, ItemClassification.useful),
-    "No Bonk Badge": ItemData(300029, ItemClassification.useful),
-    "Compass Badge": ItemData(300030, ItemClassification.useful),
-    "Scooter Badge": ItemData(300031, ItemClassification.useful),
-    "One-Hit Hero Badge": ItemData(300038, ItemClassification.progression, HatDLC.death_wish),
-    "Camera Badge": ItemData(300042, ItemClassification.progression, HatDLC.death_wish),
+    "Projectile Badge": ItemData(2000300024, ItemClassification.useful),
+    "Fast Hatter Badge": ItemData(2000300025, ItemClassification.useful),
+    "Hover Badge": ItemData(2000300026, ItemClassification.useful),
+    "Hookshot Badge": ItemData(2000300027, ItemClassification.progression),
+    "Item Magnet Badge": ItemData(2000300028, ItemClassification.useful),
+    "No Bonk Badge": ItemData(2000300029, ItemClassification.useful),
+    "Compass Badge": ItemData(2000300030, ItemClassification.useful),
+    "Scooter Badge": ItemData(2000300031, ItemClassification.useful),
+    "One-Hit Hero Badge": ItemData(2000300038, ItemClassification.progression, HatDLC.death_wish),
+    "Camera Badge": ItemData(2000300042, ItemClassification.progression, HatDLC.death_wish),
 
     # Other
-    "Badge Pin": ItemData(300043, ItemClassification.useful),
-    "Umbrella": ItemData(300033, ItemClassification.progression),
-    "Progressive Painting Unlock": ItemData(300003, ItemClassification.progression),
+    "Badge Pin": ItemData(2000300043, ItemClassification.useful),
+    "Umbrella": ItemData(2000300033, ItemClassification.progression),
+    "Progressive Painting Unlock": ItemData(2000300003, ItemClassification.progression),
 
     # Garbage items
-    "25 Pons": ItemData(300034, ItemClassification.filler),
-    "50 Pons": ItemData(300035, ItemClassification.filler),
-    "100 Pons": ItemData(300036, ItemClassification.filler),
-    "Health Pon": ItemData(300037, ItemClassification.filler),
-    "Random Cosmetic": ItemData(300044, ItemClassification.filler),
+    "25 Pons": ItemData(2000300034, ItemClassification.filler),
+    "50 Pons": ItemData(2000300035, ItemClassification.filler),
+    "100 Pons": ItemData(2000300036, ItemClassification.filler),
+    "Health Pon": ItemData(2000300037, ItemClassification.filler),
+    "Random Cosmetic": ItemData(2000300044, ItemClassification.filler),
 
     # Traps
-    "Baby Trap": ItemData(300039, ItemClassification.trap),
-    "Laser Trap": ItemData(300040, ItemClassification.trap),
-    "Parade Trap": ItemData(300041, ItemClassification.trap),
+    "Baby Trap": ItemData(2000300039, ItemClassification.trap),
+    "Laser Trap": ItemData(2000300040, ItemClassification.trap),
+    "Parade Trap": ItemData(2000300041, ItemClassification.trap),
 
     # DLC1 items
-    "Relic (Cake Stand)": ItemData(300018, ItemClassification.progression, HatDLC.dlc1),
-    "Relic (Cake)": ItemData(300019, ItemClassification.progression, HatDLC.dlc1),
-    "Relic (Cake Slice)": ItemData(300020, ItemClassification.progression, HatDLC.dlc1),
-    "Relic (Shortcake)": ItemData(300021, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Cake Stand)": ItemData(2000300018, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Cake)": ItemData(2000300019, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Cake Slice)": ItemData(2000300020, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Shortcake)": ItemData(2000300021, ItemClassification.progression, HatDLC.dlc1),
 
     # DLC2 items
-    "Relic (Necklace Bust)": ItemData(300022, ItemClassification.progression, HatDLC.dlc2),
-    "Relic (Necklace)": ItemData(300023, ItemClassification.progression, HatDLC.dlc2),
-    "Metro Ticket - Yellow": ItemData(300045, ItemClassification.progression, HatDLC.dlc2),
-    "Metro Ticket - Green": ItemData(300046, ItemClassification.progression, HatDLC.dlc2),
-    "Metro Ticket - Blue": ItemData(300047, ItemClassification.progression, HatDLC.dlc2),
-    "Metro Ticket - Pink": ItemData(300048, ItemClassification.progression, HatDLC.dlc2),
+    "Relic (Necklace Bust)": ItemData(2000300022, ItemClassification.progression, HatDLC.dlc2),
+    "Relic (Necklace)": ItemData(2000300023, ItemClassification.progression, HatDLC.dlc2),
+    "Metro Ticket - Yellow": ItemData(2000300045, ItemClassification.progression, HatDLC.dlc2),
+    "Metro Ticket - Green": ItemData(2000300046, ItemClassification.progression, HatDLC.dlc2),
+    "Metro Ticket - Blue": ItemData(2000300047, ItemClassification.progression, HatDLC.dlc2),
+    "Metro Ticket - Pink": ItemData(2000300048, ItemClassification.progression, HatDLC.dlc2),
 }
 
 act_contracts = {
-    "Snatcher's Contract - The Subcon Well": ItemData(300200, ItemClassification.progression),
-    "Snatcher's Contract - Toilet of Doom": ItemData(300201, ItemClassification.progression),
-    "Snatcher's Contract - Queen Vanessa's Manor": ItemData(300202, ItemClassification.progression),
-    "Snatcher's Contract - Mail Delivery Service": ItemData(300203, ItemClassification.progression),
+    "Snatcher's Contract - The Subcon Well": ItemData(2000300200, ItemClassification.progression),
+    "Snatcher's Contract - Toilet of Doom": ItemData(2000300201, ItemClassification.progression),
+    "Snatcher's Contract - Queen Vanessa's Manor": ItemData(2000300202, ItemClassification.progression),
+    "Snatcher's Contract - Mail Delivery Service": ItemData(2000300203, ItemClassification.progression),
 }
 
 alps_hooks = {
-    "Zipline Unlock - The Birdhouse Path": ItemData(300204, ItemClassification.progression),
-    "Zipline Unlock - The Lava Cake Path": ItemData(300205, ItemClassification.progression),
-    "Zipline Unlock - The Windmill Path": ItemData(300206, ItemClassification.progression),
-    "Zipline Unlock - The Twilight Bell Path": ItemData(300207, ItemClassification.progression),
+    "Zipline Unlock - The Birdhouse Path": ItemData(2000300204, ItemClassification.progression),
+    "Zipline Unlock - The Lava Cake Path": ItemData(2000300205, ItemClassification.progression),
+    "Zipline Unlock - The Windmill Path": ItemData(2000300206, ItemClassification.progression),
+    "Zipline Unlock - The Twilight Bell Path": ItemData(2000300207, ItemClassification.progression),
 }
 
 relic_groups = {

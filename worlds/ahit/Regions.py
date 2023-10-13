@@ -1,11 +1,10 @@
 from worlds.AutoWorld import World
 from BaseClasses import Region, Entrance, ItemClassification, Location
-from .Locations import HatInTimeLocation, location_table, storybook_pages, event_locs, is_location_valid, \
-    shop_locations, get_tasksanity_start_id
-from .Items import HatInTimeItem
-from .Types import ChapterIndex, Difficulty
+from .Types import ChapterIndex, Difficulty, HatInTimeLocation, HatInTimeItem
+from .Locations import location_table, storybook_pages, event_locs, is_location_valid, \
+    shop_locations, get_tasksanity_start_id, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
 import typing
-from .Rules import set_rift_rules
+from .Rules import set_rift_rules, get_difficulty
 
 
 # ChapterIndex: region
@@ -880,6 +879,16 @@ def create_events(world: World) -> int:
     for (name, data) in event_locs.items():
         if not is_location_valid(world, name):
             continue
+
+        if world.is_dw():
+            if name in snatcher_coins.keys():
+                name = f"{name} ({data.region})"
+            elif name in zero_jumps:
+                if get_difficulty(world) < Difficulty.HARD and name in zero_jumps_hard:
+                    continue
+
+                if get_difficulty(world) < Difficulty.EXPERT and name in zero_jumps_expert:
+                    continue
 
         event: Location = create_event(name, world.multiworld.get_region(data.region, world.player), world)
         event.show_in_spoiler = False

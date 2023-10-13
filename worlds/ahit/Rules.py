@@ -1,8 +1,8 @@
 from worlds.AutoWorld import World, CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from .Locations import location_table, zipline_unlocks, is_location_valid, contract_locations, \
-    shop_locations, event_locs
-from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty
+    shop_locations, event_locs, snatcher_coins
+from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HatDLC
 from BaseClasses import Location, Entrance, Region
 import typing
 
@@ -62,7 +62,7 @@ def get_difficulty(world: World) -> Difficulty:
     return Difficulty(world.multiworld.LogicDifficulty[world.player].value)
 
 
-def has_paintings(state: CollectionState, world: World, count: int) -> bool:
+def has_paintings(state: CollectionState, world: World, count: int, surf: bool = True) -> bool:
     if not painting_logic(world):
         return True
 
@@ -71,11 +71,11 @@ def has_paintings(state: CollectionState, world: World, count: int) -> bool:
         return True
 
     # All paintings can be skipped with No Bonk, very easily, if the player knows
-    if get_difficulty(world) >= Difficulty.MODERATE and can_surf(state, world):
+    if surf and get_difficulty(world) >= Difficulty.MODERATE and can_surf(state, world):
         return True
 
     paintings: int = state.count("Progressive Painting Unlock", world.player)
-    if get_difficulty(world) >= Difficulty.MODERATE:
+    if surf and get_difficulty(world) >= Difficulty.MODERATE:
         # Green+Yellow paintings can also be skipped easily
         if count == 1 or paintings >= 1 and count == 3:
             return True
@@ -264,6 +264,10 @@ def set_rules(world: World):
         if key in contract_locations.keys():
             continue
 
+        if data.dlc_flags is HatDLC.death_wish or data.dlc_flags is HatDLC.dlc2_dw:
+            if key in snatcher_coins.keys():
+                key = f"{key} ({data.region})"
+
         location = world.multiworld.get_location(key, world.player)
 
         for hat in data.required_hats:
@@ -277,7 +281,10 @@ def set_rules(world: World):
             add_rule(location, lambda state: state.has("Umbrella", world.player))
 
         if data.paintings > 0 and world.multiworld.ShuffleSubconPaintings[world.player].value > 0:
-            add_rule(location, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
+            if "Toilet of Doom" not in key:
+                add_rule(location, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
+            else:
+                add_rule(location, lambda state, paintings=data.paintings: has_paintings(state, world, paintings, False))
 
         if data.hit_requirement > 0:
             if data.hit_requirement == 1:
@@ -402,6 +409,10 @@ def set_moderate_rules(world: World):
     # Moderate: Gallery without Brewing Hat
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - Gallery)", world.player), lambda state: True)
 
+    # Moderate: Above Boats via Ice Hat Sliding
+    add_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player),
+             lambda state: can_use_hat(state, world, HatType.ICE), "or")
+
     # Moderate: Clock Tower Chest + Ruined Tower with nothing
     add_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player), lambda state: True)
     add_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player), lambda state: True)
@@ -430,6 +441,13 @@ def set_moderate_rules(world: World):
     set_rule(world.multiworld.get_location("Alpine Skyline - The Birdhouse: Dweller Platforms Relic", world.player),
              lambda state: True)
 
+    # Moderate: Twilight Path without Dweller Mask
+    set_rule(world.multiworld.get_location("Alpine Skyline - The Twilight Path", world.player), lambda state: True)
+
+    # Moderate: Finale without Hookshot
+    set_rule(world.multiworld.get_location("Act Completion (The Finale)", world.player),
+             lambda state: can_use_hat(state, world, HatType.DWELLER))
+
     if world.is_dlc1():
         # Moderate: clear Rock the Boat without Ice Hat
         add_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", world.player), lambda state: True)
@@ -451,13 +469,6 @@ def set_moderate_rules(world: World):
         # The player can quite literally walk past the fan from the side without Time Stop.
         set_rule(world.multiworld.get_location("Pink Paw Station - Behind Fan", world.player), lambda state: True)
 
-        # The player can't jump back down to the manhole due to a fall damage volume preventing them from doing so
-        set_rule(world.multiworld.get_location("Act Completion (Pink Paw Manhole)", world.player),
-                 lambda state: (state.has("Metro Ticket - Pink", world.player)
-                 or state.has("Metro Ticket - Yellow", world.player)
-                 and state.has("Metro Ticket - Blue", world.player))
-                 and can_use_hat(state, world, HatType.ICE))
-
         # Moderate: clear Rush Hour without Hookshot
         set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
                  lambda state: state.has("Metro Ticket - Pink", world.player)
@@ -473,13 +484,12 @@ def set_hard_rules(world: World):
              lambda state: can_use_hat(state, world, HatType.SPRINT)
              and state.has("Scooter Badge", world.player), "or")
 
-    # Hard: Cross Subcon boss arena gap with No Bonk + SDJ, allowing access to the boss arena chest
-    # Doing this in reverse from YCHE is expert logic, which expects you to cherry hover
-    add_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
-             lambda state: can_surf(state, world) and can_sdj(state, world), "or")
-
     set_rule(world.multiworld.get_location("Subcon Forest - Dweller Floating Rocks", world.player),
              lambda state: has_paintings(state, world, 3))
+
+    # Cherry bridge over boss arena gap (painting still expected)
+    set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
+             lambda state: has_paintings(state, world, 1, False))
 
     # SDJ
     add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
@@ -492,12 +502,13 @@ def set_hard_rules(world: World):
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
              lambda state: can_sdj(state, world), "or")
 
-    add_rule(world.multiworld.get_location("Act Completion (The Finale)", world.player),
-             lambda state: can_use_hat(state, world, HatType.DWELLER) and can_sdj(state, world), "or")
-
     # Hard: Mystifying Time Mesa time trial without hats
     set_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
              lambda state: can_use_hookshot(state, world))
+
+    # Finale Telescope with only Ice Hat
+    add_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
+             lambda state: can_use_hat(state, world, HatType.ICE), "or")
 
     if world.is_dlc1():
         # Hard: clear Deep Sea without Dweller Mask
@@ -515,6 +526,10 @@ def set_hard_rules(world: World):
 
 
 def set_expert_rules(world: World):
+    # Finale Telescope with no hats
+    set_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
+             lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.FINALE)))
+
     # Expert: Mafia Town - Above Boats with nothing
     set_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player), lambda state: True)
 
@@ -526,8 +541,6 @@ def set_expert_rules(world: World):
 
     # Expert: get to and clear Twilight Bell without Dweller Mask.
     # Dweller Mask OR Sprint Hat OR Brewing Hat OR Time Stop + Umbrella required to complete act.
-    set_rule(world.multiworld.get_location("Alpine Skyline - The Twilight Path", world.player), lambda state: True)
-
     add_rule(world.multiworld.get_entrance("-> The Twilight Bell", world.player),
              lambda state: can_use_hookshot(state, world), "or")
 
@@ -639,10 +652,6 @@ def set_subcon_rules(world: World):
              lambda state: state.has("TOD Access", world.player) and can_use_hookshot(state, world)
              and (not painting_logic(world) or has_paintings(state, world, 1))
              or state.has("YCHE Access", world.player))
-
-    if world.multiworld.UmbrellaLogic[world.player].value > 0:
-        add_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
-                 lambda state: can_hit(state, world))
 
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", world.player),
              lambda state: can_use_hat(state, world, HatType.BREWING) or state.has("Umbrella", world.player)
@@ -907,9 +916,12 @@ def set_event_rules(world: World):
         if not is_location_valid(world, name):
             continue
 
+        if (data.dlc_flags is HatDLC.death_wish or data.dlc_flags is HatDLC.dlc2_dw) and name in snatcher_coins.keys():
+            name = f"{name} ({data.region})"
+
         event: Location = world.multiworld.get_location(name, world.player)
 
-        if data.act_complete_event:
+        if data.act_event:
             add_rule(event, world.multiworld.get_location(f"Act Completion ({data.region})", world.player).access_rule)
 
 
