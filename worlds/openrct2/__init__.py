@@ -48,6 +48,9 @@ class OpenRCT2World(World):
         self.item_table = {}
         self.item_frequency = {}
         self.location_prices = []#This list is passed to OpenRCT2 to create the unlock shop
+        self.rules = [self.multiworld.difficult_guest_generation[self.player].value, self.multiworld.difficult_park_rating[self.player].value,\
+            self.multiworld.forbid_high_construction[self.player].value,self.multiworld.forbid_landscape_changes[self.player].value,\
+            self.multiworld.forbid_marketing_campaigns[self.player].value, self.multiworld.forbid_tree_removal[self.player].value]
 
     #Okay future Colby, listen up. Here's the plan. We're going to take the item_table and shuffle it in the next section. We'll generate the 
     #unlock shop with the item locations and apply our logic to it. Prereqs can only be items one level lower on the tree. We then will set 
@@ -109,9 +112,11 @@ class OpenRCT2World(World):
         furry_convention_traps = self.multiworld.furry_convention_traps[self.player].value
         spam_traps = self.multiworld.spam_traps[self.player].value
         bathroom_traps = self.multiworld.bathroom_traps[self.player].value
-        rules = self.multiworld.include_park_rules[self.player].value
         filler = self.multiworld.filler[self.player].value
-        items = set_openRCT2_items(scenario,monopoly_mode,furry_convention_traps,spam_traps,bathroom_traps,rules,filler)
+        rules = [self.multiworld.difficult_guest_generation[self.player].value, self.multiworld.difficult_park_rating[self.player].value,\
+            self.multiworld.forbid_high_construction[self.player].value,self.multiworld.forbid_landscape_changes[self.player].value,\
+            self.multiworld.forbid_marketing_campaigns[self.player].value, self.multiworld.forbid_tree_removal[self.player].value]
+        items = set_openRCT2_items(scenario,rules,monopoly_mode,furry_convention_traps,spam_traps,bathroom_traps,filler)
 
         self.item_table = items[0]
         self.item_frequency = items[1]
@@ -400,7 +405,7 @@ class OpenRCT2World(World):
             "stat_rerolls": self.multiworld.stat_rerolls[self.player].value,
             "randomize_park_values": self.multiworld.randomize_park_values[self.player].value,
             "visibility": self.multiworld.visibility[self.player].value,
-            "rules": self.multiworld.include_park_rules[self.player].value,
+            "rules": self.rules,
             "preferred_intensity": self.multiworld.preferred_intensity[self.player].value,
             "objectives": objectives,
             "location_prices": self.location_prices

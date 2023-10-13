@@ -202,6 +202,35 @@ class Stat_ReRolls(IntEnum):
     very_frequent = 4
     extremely_frequent = 5
 
+class Difficult_Guest_Generation(IntEnum):
+    off = 0
+    unlockable = 1
+    on = 2
+
+class Difficult_Park_Rating(IntEnum):
+    off = 0
+    unlockable = 1
+    on = 2
+
+class Forbid_High_Construction(IntEnum):
+    off = 0
+    unlockable = 1
+    on = 2
+
+class Forbid_Landscape_Changes(IntEnum):
+    off = 0
+    unlockable = 1
+    on = 2
+
+class Forbid_Marketing_Campaigns(IntEnum):
+    off = 0
+    unlockable = 1
+    on = 2
+
+class Forbid_Tree_Removal(IntEnum):
+    off = 0
+    unlockable = 1
+    on = 2
 
 class OpenRCT2OnToggle(DefaultOnToggle):
     @property
@@ -475,9 +504,53 @@ class Stat_ReRolls(Choice):
     option_extremely_frequent = Stat_ReRolls.extremely_frequent.value
     default = Stat_ReRolls.infrequent.value
 
-class Include_Park_Rules(OpenRCT2OnToggle):
-    """Enables all park restrictions (No building above tree height, no marketing campains, harder guest generation, etc.) and includes items that will automatically disable them when found."""
-    display_name = "Include Park Rules"
+class Difficult_Guest_Generation(Choice):
+    """Makes guests harder to generate. Unlockable puts an item in generation that disables the rule when found."""
+    display_name = "Difficult Guest Generation"
+    option_off = Difficult_Guest_Generation.off.value
+    option_unlockable = Difficult_Guest_Generation.unlockable.value
+    option_on = Difficult_Guest_Generation.on.value
+    default = Difficult_Guest_Generation.unlockable.value
+
+class Difficult_Park_Rating(Choice):
+    """Makes park rating harder to improve. Unlockable puts an item in generation that disables the rule when found."""
+    display_name = "Difficult Park Rating"
+    option_off = Difficult_Park_Rating.off.value
+    option_unlockable = Difficult_Park_Rating.unlockable.value
+    option_on = Difficult_Park_Rating.on.value
+    default = Difficult_Park_Rating.unlockable.value
+
+class Forbid_High_Construction(Choice):
+    """Limits building to tree height. Unlockable puts an item in generation that disables the rule when found."""
+    display_name = "Forbid High Construction"
+    option_off = Forbid_High_Construction.off.value
+    option_unlockable = Forbid_High_Construction.unlockable.value
+    option_on = Forbid_High_Construction.on.value
+    default = Forbid_High_Construction.unlockable.value
+
+class Forbid_Landscape_Changes(Choice):
+    """Forbids the landscape from being altered. Unlockable puts an item in generation that disables the rule when found."""
+    display_name = "Forbid Landscape Changes"
+    option_off = Forbid_Landscape_Changes.off.value
+    option_unlockable = Forbid_Landscape_Changes.unlockable.value
+    option_on = Forbid_Landscape_Changes.on.value
+    default = Forbid_Landscape_Changes.unlockable.value
+
+class Forbid_Marketing_Campaigns(Choice):
+    """Forbids marketing campaigns. Unlockable puts an item in generation that disables the rule when found."""
+    display_name = "Forbid Marketing Campaigns"
+    option_off = Forbid_Marketing_Campaigns.off.value
+    option_unlockable = Forbid_Marketing_Campaigns.unlockable.value
+    option_on = Forbid_Marketing_Campaigns.on.value
+    default = Forbid_Marketing_Campaigns.unlockable.value
+
+class Forbid_Tree_Removal(Choice):
+    """Forbids removing trees. Unlockable puts an item in generation that disables the rule when found."""
+    display_name = "Forbid Tree Removal"
+    option_off = Forbid_Tree_Removal.off.value
+    option_unlockable = Forbid_Tree_Removal.unlockable.value
+    option_on = Forbid_Tree_Removal.on.value
+    default = Forbid_Tree_Removal.unlockable.value
 
 
 class Randomize_Park_Values(OpenRCT2OnToggle):
@@ -605,7 +678,6 @@ openRCT2_options = {
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
     "randomization_range": Randomization_Range,
     "stat_rerolls": Stat_ReRolls,
-    "include_park_rules": Include_Park_Rules,
     "randomize_park_values": Randomize_Park_Values,
     "visibility": Visibility,
     "preferred_intensity": Preferred_Intensity,
@@ -621,7 +693,14 @@ openRCT2_options = {
     # "include_park_rating_objective": Include_Park_Rating_Objective,
     "park_rating_objective": Park_Rating_Objective,
     "pay_off_loan": Pay_Off_Loan,
-    "monopoly_mode": Monopoly_Mode
+    "monopoly_mode": Monopoly_Mode,
+    # park rules. Depending on the option, these may affect which items are created
+    "difficult_guest_generation": Difficult_Guest_Generation,
+    "difficult_park_rating": Difficult_Park_Rating,
+    "forbid_high_construction": Forbid_High_Construction,
+    "forbid_landscape_changes": Forbid_Landscape_Changes,
+    "forbid_marketing_campaigns": Forbid_Marketing_Campaigns,
+    "forbid_tree_removal": Forbid_Tree_Removal
 }
 
 OpenRCT2Options = TypedDict("OpenRCT2Options", {option.__name__: option for option in openRCT2_options.values()})

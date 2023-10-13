@@ -10,7 +10,7 @@ class OpenRCT2Item(Item):
 
 
 
-def set_openRCT2_items(scenario, monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps, park_rules, filler):
+def set_openRCT2_items(scenario, rules, monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps, filler):
     print("\nThis is the selected scenario:")
     print(scenario)
     print("And these items will be randomized:")
@@ -37,9 +37,9 @@ def set_openRCT2_items(scenario, monopoly_mode, furry_convention_traps, spam_tra
         openRCT2_items.append("Bathroom Trap")
         count +=1
 
-    if park_rules:
-        for rule in item_info["park_rules"]:
-            openRCT2_items.append(rule)
+    for number, rule in enumerate(item_info["park_rules"]):#Check every rule type
+        if rules[number] == 1:#If it's enabled and can be disabled
+            openRCT2_items.append(rule)#Add an item to disable
 
     filler_count = len(openRCT2_items) * (filler * .01) - 1
     count = 0
