@@ -1,6 +1,13 @@
-from dataclasses import dataclass
-from Options import Toggle, Range, Choice, PerGameCommonOptions
+from typing import Dict
 
-@dataclass
-class khcom_options(PerGameCommonOptions):
-    include_battle_cards: Toggle
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
+
+class BattleCards(Toggle):
+    """
+    Determines if collecting specific battle cards should yield any progression items
+    """
+    display_name = "Battle Cards Yield Progression Items"
+
+khcom_options: Dict[str, type(Option)] = {
+    "battle_cards": BattleCards
+}

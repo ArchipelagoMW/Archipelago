@@ -1,140 +1,111 @@
-from BaseClasses import MultiWorld
+from typing import Dict, List, NamedTuple, Optional
+
+from BaseClasses import MultiWorld, Region, Entrance
+from .Locations import KHCOMLocation, location_table, get_locations_by_category
 
 
-def link_khcom_areas(world: MultiWorld, player: int):
-    for (exit, region) in mandatory_connections:
-        world.get_entrance(exit, player).connect(world.get_region(region, player))
+class KHCOMRegionData(NamedTuple):
+    locations: Optional[List[str]]
+    region_exits: Optional[List[str]]
 
 
-# (Region name, list of exits)
-khcom_regions = [
-    ("Menu", ["New Game"]),
-    ("Floor 1", ["Open F01 ROB", "Open F01 ROG", "Open F01 ROT", "Open F01 ROR"]),
-    ("Floor 1 Room of Beginnings", []),
-    ("Floor 1 Room of Guidance", []),
-    ("Floor 1 Room of Truth", ["Exit to Warp 1"]),
-    ("Floor 1 Room of Rewards", []),
-    ("Warp 1", ["Warp to Floor 2"
-        , "Warp to Floor 3"
-        , "Warp to Floor 4"
-        , "Warp to Floor 5"
-        , "Warp to Floor 6"]),
-    ("Floor 2", ["Open F02 ROB", "Open F02 ROG", "Open F02 ROT", "Open F02 ROR"]),
-    ("Floor 2 Room of Beginnings", []),
-    ("Floor 2 Room of Guidance", []),
-    ("Floor 2 Room of Truth", []),
-    ("Floor 2 Room of Rewards", []),
-    ("Floor 3", ["Open F03 ROB", "Open F03 ROG", "Open F03 ROT", "Open F03 ROR"]),
-    ("Floor 3 Room of Beginnings", []),
-    ("Floor 3 Room of Guidance", []),
-    ("Floor 3 Room of Truth", []),
-    ("Floor 3 Room of Rewards", []),
-    ("Floor 4", ["Open F04 ROB", "Open F04 ROG", "Open F04 ROT", "Open F04 ROR"]),
-    ("Floor 4 Room of Beginnings", []),
-    ("Floor 4 Room of Guidance", []),
-    ("Floor 3 Room of Truth", []),
-    ("Floor 4 Room of Rewards", []),
-    ("Floor 5", ["Open F05 ROB", "Open F05 ROG", "Open F05 ROT", "Open F05 ROR"]),
-    ("Floor 5 Room of Beginnings", []),
-    ("Floor 5 Room of Guidance", []),
-    ("Floor 5 Room of Truth", []),
-    ("Floor 5 Room of Rewards", []),
-    ("Floor 6", ["Open F06 ROB", "Open F06 ROG", "Open F06 ROT", "Open F06 ROR"]),
-    ("Floor 6 Room of Beginnings", []),
-    ("Floor 6 Room of Guidance", []),
-    ("Floor 6 Room of Truth", ["Exit to Warp 2"]),
-    ("Floor 6 Room of Rewards", []),
-    ("Warp 2", ["Warp to Floor 7"
-        , "Warp to Floor 8"
-        , "Warp to Floor 9"]),
-    ("Floor 7", ["Open F07 ROB", "Open F07 ROG", "Open F07 ROT", "Open F07 ROR"]),
-    ("Floor 7 Room of Beginnings", []),
-    ("Floor 7 Room of Guidance", []),
-    ("Floor 7 Room of Truth", []),
-    ("Floor 7 Room of Rewards", []),
-    ("Floor 8", ["Open F08 ROB", "Open F08 ROG", "Open F08 ROT", "Open F08 ROR"]),
-    ("Floor 8 Room of Beginnings", []),
-    ("Floor 8 Room of Guidance", []),
-    ("Floor 8 Room of Truth", []),
-    ("Floor 8 Room of Rewards", []),
-    ("Floor 9", ["Open F09 ROB", "Open F09 ROG", "Open F09 ROT", "Open F09 ROR"]),
-    ("Floor 9 Room of Beginnings", []),
-    ("Floor 9 Room of Guidance", []),
-    ("Floor 9 Room of Truth", ["Exit to Floor 10"]),
-    ("Floor 9 Room of Rewards", []),
-    ("Floor 10", ["Exit to Floor 11"]),
-    ("Floor 11", ["Open F11 ROB", "Open F11 ROR"]),
-    ("Floor 11 Room of Beginnings", ["Exit to Floor 12"]),
-    ("Floor 11 Room of Rewards", []),
-    ("Floor 12", ["Open F12 ROB", "Open F12 ROG", "Open F12 ROR"]),
-    ("Floor 12 Room of Beginnings", []),
-    ("Floor 12 Room of Guidance", []),
-    ("Floor 12 Room of Rewards", []),
-    ("Floor 13", ["Open F13 ROB", "Open F13 ROG", "Open F13 ROT", "Open F13 ROR"]),
-    ("Floor 13 Room of Beginnings", []),
-    ("Floor 13 Room of Guidance", []),
-    ("Floor 13 Room of Truth", []),
-    ("Floor 13 Room of Rewards", [])
-]
+def create_regions(multiworld: MultiWorld, player: int):
+    regions: Dict[str, RLRegionData] = {
+        "Menu":              RLRegionData(None, ["Castle Hamson"]),
+        "The Manor":         RLRegionData([],   []),
+        "Castle Hamson":     RLRegionData([],   ["Forest Abkhazia", "The Maya", "Land of Darkness",
+                                                 "The Fountain Room", "The Manor"]),
+        "Forest Abkhazia":   RLRegionData([],   []),
+        "The Maya":          RLRegionData([],   []),
+        "Land of Darkness":  RLRegionData([],   []),
+        "The Fountain Room": RLRegionData([],   None),
+    }
 
-# (Entrance, region pointed to)
-mandatory_connections = [
-    ("New Game", "Floor 1"),
-    ("Open F01 ROB", "Floor 1 Room of Beginnings"),
-    ("Open F01 ROG", "Floor 1 Room of Guidance"),
-    ("Open F01 ROT", "Floor 1 Room of Truth"),
-    ("Open F01 ROR", "Floor 1 Room of Rewards"),
-    ("Exit to Warp 1", "Warp 1")
-    ("Warp to Floor 2", "Floor 2"),
-    ("Warp to Floor 3", "Floor 3"),
-    ("Warp to Floor 4", "Floor 4"),
-    ("Warp to Floor 5", "Floor 5"),
-    ("Warp to Floor 6", "Floor 6"),
-    ("Open F02 ROB", "Floor 2 Room of Beginnings"),
-    ("Open F02 ROG", "Floor 2 Room of Guidance"),
-    ("Open F02 ROT", "Floor 2 Room of Truth"),
-    ("Open F02 ROR", "Floor 2 Room of Rewards"),
-    ("Open F03 ROB", "Floor 3 Room of Beginnings"),
-    ("Open F03 ROG", "Floor 3 Room of Guidance"),
-    ("Open F03 ROT", "Floor 3 Room of Truth"),
-    ("Open F03 ROR", "Floor 3 Room of Rewards"),
-    ("Open F04 ROB", "Floor 4 Room of Beginnings"),
-    ("Open F04 ROG", "Floor 4 Room of Guidance"),
-    ("Open F04 ROT", "Floor 4 Room of Truth"),
-    ("Open F04 ROR", "Floor 4 Room of Rewards"),
-    ("Open F05 ROB", "Floor 5 Room of Beginnings"),
-    ("Open F05 ROG", "Floor 5 Room of Guidance"),
-    ("Open F05 ROT", "Floor 5 Room of Truth"),
-    ("Open F05 ROR", "Floor 5 Room of Rewards"),
-    ("Open F06 ROB", "Floor 6 Room of Beginnings"),
-    ("Open F06 ROG", "Floor 6 Room of Guidance"),
-    ("Open F06 ROT", "Floor 6 Room of Truth"),
-    ("Open F06 ROR", "Floor 6 Room of Rewards"),
-    ("Exit to Warp 2", "Warp 2"),
-    ("Warp to Floor 7", "Floor 7"),
-    ("Warp to Floor 8", "Floor 8"),
-    ("Warp to Floor 9", "Floor 9"),
-    ("Open F07 ROB", "Floor 7 Room of Beginnings"),
-    ("Open F07 ROG", "Floor 7 Room of Guidance"),
-    ("Open F07 ROT", "Floor 7 Room of Truth"),
-    ("Open F07 ROR", "Floor 7 Room of Rewards"),
-    ("Open F08 ROB", "Floor 8 Room of Beginnings"),
-    ("Open F08 ROG", "Floor 8 Room of Guidance"),
-    ("Open F08 ROT", "Floor 8 Room of Truth"),
-    ("Open F08 ROR", "Floor 8 Room of Rewards"),
-    ("Open F09 ROB", "Floor 9 Room of Beginnings"),
-    ("Open F09 ROG", "Floor 9 Room of Guidance"),
-    ("Open F09 ROT", "Floor 9 Room of Truth"),
-    ("Open F09 ROR", "Floor 9 Room of Rewards"),
-    ("Exit to Floor 10", "Floor 10"),
-    ("Exit to Floor 11", "Floor 11"),
-    ("Open F11 ROB", "Floor 11 Room of Beginnings"),
-    ("Open F11 ROR", "Floor 11 Room of Rewards"),
-    ("Open F12 ROB", "Floor 12 Room of Beginnings"),
-    ("Open F12 ROG", "Floor 12 Room of Guidance"),
-    ("Open F12 ROR", "Floor 12 Room of Rewards"),
-    ("Open F13 ROB", "Floor 13 Room of Beginnings"),
-    ("Open F13 ROG", "Floor 13 Room of Guidance"),
-    ("Open F13 ROT", "Floor 13 Room of Truth"),
-    ("Open F13 ROR", "Floor 13 Room of Rewards"),
-]
+    # Artificially stagger diary spheres for progression.
+    for diary in range(0, 25):
+        region: str
+        if 0 <= diary < 6:
+            region = "Castle Hamson"
+        elif 6 <= diary < 12:
+            region = "Forest Abkhazia"
+        elif 12 <= diary < 18:
+            region = "The Maya"
+        elif 18 <= diary < 24:
+            region = "Land of Darkness"
+        else:
+            region = "The Fountain Room"
+        regions[region].locations.append(f"Diary {diary + 1}")
+
+    # Manor & Special
+    for manor in get_locations_by_category("Manor").keys():
+        regions["The Manor"].locations.append(manor)
+    for special in get_locations_by_category("Special").keys():
+        regions["Castle Hamson"].locations.append(special)
+
+    # Boss Rewards
+    regions["Castle Hamson"].locations.append("Castle Hamson Boss Reward")
+    regions["Forest Abkhazia"].locations.append("Forest Abkhazia Boss Reward")
+    regions["The Maya"].locations.append("The Maya Boss Reward")
+    regions["Land of Darkness"].locations.append("Land of Darkness Boss Reward")
+
+    # Events
+    regions["Castle Hamson"].locations.append("Castle Hamson Boss Room")
+    regions["Forest Abkhazia"].locations.append("Forest Abkhazia Boss Room")
+    regions["The Maya"].locations.append("The Maya Boss Room")
+    regions["Land of Darkness"].locations.append("Land of Darkness Boss Room")
+    regions["The Fountain Room"].locations.append("Fountain Room")
+
+    # Chests
+    chests = int(multiworld.chests_per_zone[player])
+    for i in range(0, chests):
+        if multiworld.universal_chests[player]:
+            regions["Castle Hamson"].locations.append(f"Chest {i + 1}")
+            regions["Forest Abkhazia"].locations.append(f"Chest {i + 1 + chests}")
+            regions["The Maya"].locations.append(f"Chest {i + 1 + (chests * 2)}")
+            regions["Land of Darkness"].locations.append(f"Chest {i + 1 + (chests * 3)}")
+        else:
+            regions["Castle Hamson"].locations.append(f"Castle Hamson - Chest {i + 1}")
+            regions["Forest Abkhazia"].locations.append(f"Forest Abkhazia - Chest {i + 1}")
+            regions["The Maya"].locations.append(f"The Maya - Chest {i + 1}")
+            regions["Land of Darkness"].locations.append(f"Land of Darkness - Chest {i + 1}")
+
+    # Fairy Chests
+    chests = int(multiworld.fairy_chests_per_zone[player])
+    for i in range(0, chests):
+        if multiworld.universal_fairy_chests[player]:
+            regions["Castle Hamson"].locations.append(f"Fairy Chest {i + 1}")
+            regions["Forest Abkhazia"].locations.append(f"Fairy Chest {i + 1 + chests}")
+            regions["The Maya"].locations.append(f"Fairy Chest {i + 1 + (chests * 2)}")
+            regions["Land of Darkness"].locations.append(f"Fairy Chest {i + 1 + (chests * 3)}")
+        else:
+            regions["Castle Hamson"].locations.append(f"Castle Hamson - Fairy Chest {i + 1}")
+            regions["Forest Abkhazia"].locations.append(f"Forest Abkhazia - Fairy Chest {i + 1}")
+            regions["The Maya"].locations.append(f"The Maya - Fairy Chest {i + 1}")
+            regions["Land of Darkness"].locations.append(f"Land of Darkness - Fairy Chest {i + 1}")
+
+    # Set up the regions correctly.
+    for name, data in regions.items():
+        multiworld.regions.append(create_region(multiworld, player, name, data))
+
+    multiworld.get_entrance("Castle Hamson", player).connect(multiworld.get_region("Castle Hamson", player))
+    multiworld.get_entrance("The Manor", player).connect(multiworld.get_region("The Manor", player))
+    multiworld.get_entrance("Forest Abkhazia", player).connect(multiworld.get_region("Forest Abkhazia", player))
+    multiworld.get_entrance("The Maya", player).connect(multiworld.get_region("The Maya", player))
+    multiworld.get_entrance("Land of Darkness", player).connect(multiworld.get_region("Land of Darkness", player))
+    multiworld.get_entrance("The Fountain Room", player).connect(multiworld.get_region("The Fountain Room", player))
+
+
+def create_region(multiworld: MultiWorld, player: int, name: str, data: RLRegionData):
+    region = Region(name, player, multiworld)
+    if data.locations:
+        for loc_name in data.locations:
+            loc_data = location_table.get(loc_name)
+            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, region)
+            region.locations.append(location)
+
+    if data.region_exits:
+        for exit in data.region_exits:
+            entrance = Entrance(player, exit, region)
+            region.exits.append(entrance)
+
+    return region

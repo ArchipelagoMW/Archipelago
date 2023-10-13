@@ -1,889 +1,813 @@
-from BaseClasses import ItemClassification, Item
-import typing
-from typing import Dict
+from typing import Dict, NamedTuple, Optional
 
-progression = ItemClassification.progression
-filler = ItemClassification.filler
-useful = ItemClassification.useful
-trap = ItemClassification.trap
+from BaseClasses import Item, ItemClassification
 
 
 class KHCOMItem(Item):
-    game = 'Kingdom Hearts Chain of Memories'
+    game: str = "Kingdom Hearts Chain of Memories"
 
 
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
-    classification: ItemClassification
-    khcomamount: int
-    khcomtype: str
-    khcomvalue: str
-    khcomiszero: bool
-    khcomiscure: bool
+class KHCOMItemData(NamedTuple):
+    category: str
+    code: Optional[int] = None
+    classification: ItemClassification = ItemClassification.filler
+    max_quantity: int = 1
+    weight: int = 1
+    value: str = "None"
+    cure: bool = False
+    zero: bool = False
 
-item_table: Dict[str, ItemData] = {
-    #Battle Cards
-    
-    "Kingdom Key 0": ItemData(1001, useful, 1, "battle card", "0000", True, False)
-    ,"Kingdom Key 1": ItemData(1002,filler, 1, "battle card", "0001", False, False)
-    ,"Kingdom Key 2": ItemData(1003,filler, 1, "battle card", "0002", False, False)
-    ,"Kingdom Key 3": ItemData(1004,filler, 1, "battle card", "0003", False, False)
-    ,"Kingdom Key 4": ItemData(1005,filler, 1, "battle card", "0004", False, False)
-    ,"Kingdom Key 5": ItemData(1006,filler, 1, "battle card", "0005", False, False)
-    ,"Kingdom Key 6": ItemData(1007,filler, 1, "battle card", "0006", False, False)
-    ,"Kingdom Key 7": ItemData(1008,filler, 1, "battle card", "0007", False, False)
-    ,"Kingdom Key 8": ItemData(1009,filler, 1, "battle card", "0008", False, False)
-    ,"Kingdom Key 9": ItemData(1010,filler, 1, "battle card", "0009", False, False)
-    
-    ,"Three Wishes 0": ItemData(1011, useful, 1, "battle card", "000A", True, False)
-    ,"Three Wishes 1": ItemData(1012, filler, 1, "battle card", "000B", False, False)
-    ,"Three Wishes 2": ItemData(1013, filler, 1, "battle card", "000C", False, False)
-    ,"Three Wishes 3": ItemData(1014, filler, 1, "battle card", "000D", False, False)
-    ,"Three Wishes 4": ItemData(1015, filler, 1, "battle card", "000E", False, False)
-    ,"Three Wishes 5": ItemData(1016, filler, 1, "battle card", "000F", False, False)
-    ,"Three Wishes 6": ItemData(1017, filler, 1, "battle card", "0010", False, False)
-    ,"Three Wishes 7": ItemData(1018, filler, 1, "battle card", "0011", False, False)
-    ,"Three Wishes 8": ItemData(1019, filler, 1, "battle card", "0012", False, False)
-    ,"Three Wishes 9": ItemData(1020, filler, 1, "battle card", "0013", False, False)
-    
-    ,"Crabclaw 0": ItemData(1021, useful, 1, "battle card", "0014", True, False)
-    ,"Crabclaw 1": ItemData(1022, filler, 1, "battle card", "0015", False, False)
-    ,"Crabclaw 2": ItemData(1023, filler, 1, "battle card", "0016", False, False)
-    ,"Crabclaw 3": ItemData(1024, filler, 1, "battle card", "0017", False, False)
-    ,"Crabclaw 4": ItemData(1025, filler, 1, "battle card", "0018", False, False)
-    ,"Crabclaw 5": ItemData(1026, filler, 1, "battle card", "0019", False, False)
-    ,"Crabclaw 6": ItemData(1027, filler, 1, "battle card", "001A", False, False)
-    ,"Crabclaw 7": ItemData(1028, filler, 1, "battle card", "001B", False, False)
-    ,"Crabclaw 8": ItemData(1029, filler, 1, "battle card", "001C", False, False)
-    ,"Crabclaw 9": ItemData(1030, filler, 1, "battle card", "001D", False, False)
-    
-    ,"Pumpkinhead 0": ItemData(1031, useful, 1, "battle card", "001E", True, False)
-    ,"Pumpkinhead 1": ItemData(1032, filler, 1, "battle card", "001F", False, False)
-    ,"Pumpkinhead 2": ItemData(1033, filler, 1, "battle card", "0020", False, False)
-    ,"Pumpkinhead 3": ItemData(1034, filler, 1, "battle card", "0021", False, False)
-    ,"Pumpkinhead 4": ItemData(1035, filler, 1, "battle card", "0022", False, False)
-    ,"Pumpkinhead 5": ItemData(1036, filler, 1, "battle card", "0023", False, False)
-    ,"Pumpkinhead 6": ItemData(1037, filler, 1, "battle card", "0024", False, False)
-    ,"Pumpkinhead 7": ItemData(1038, filler, 1, "battle card", "0025", False, False)
-    ,"Pumpkinhead 8": ItemData(1039, filler, 1, "battle card", "0026", False, False)
-    ,"Pumpkinhead 9": ItemData(1040, filler, 1, "battle card", "0027", False, False)
-    
-    ,"Fairy Harp 0": ItemData(1041, useful, 1, "battle card", "0028", True, False)
-    ,"Fairy Harp 1": ItemData(1042, filler, 1, "battle card", "0029", False, False)
-    ,"Fairy Harp 2": ItemData(1043, filler, 1, "battle card", "002A", False, False)
-    ,"Fairy Harp 3": ItemData(1044, filler, 1, "battle card", "002B", False, False)
-    ,"Fairy Harp 4": ItemData(1045, filler, 1, "battle card", "002C", False, False)
-    ,"Fairy Harp 5": ItemData(1046, filler, 1, "battle card", "002D", False, False)
-    ,"Fairy Harp 6": ItemData(1047, filler, 1, "battle card", "002E", False, False)
-    ,"Fairy Harp 7": ItemData(1048, filler, 1, "battle card", "002F", False, False)
-    ,"Fairy Harp 8": ItemData(1049, filler, 1, "battle card", "0030", False, False)
-    ,"Fairy Harp 9": ItemData(1050, filler, 1, "battle card", "0031", False, False)
-    
-    ,"Wishing Star 0": ItemData(1051, useful, 1, "battle card", "0032", True, False)
-    ,"Wishing Star 1": ItemData(1052, filler, 1, "battle card", "0033", False, False)
-    ,"Wishing Star 2": ItemData(1053, filler, 1, "battle card", "0034", False, False)
-    ,"Wishing Star 3": ItemData(1054, filler, 1, "battle card", "0035", False, False)
-    ,"Wishing Star 4": ItemData(1055, filler, 1, "battle card", "0036", False, False)
-    ,"Wishing Star 5": ItemData(1056, filler, 1, "battle card", "0037", False, False)
-    ,"Wishing Star 6": ItemData(1057, filler, 1, "battle card", "0038", False, False)
-    ,"Wishing Star 7": ItemData(1058, filler, 1, "battle card", "0039", False, False)
-    ,"Wishing Star 8": ItemData(1059, filler, 1, "battle card", "003A", False, False)
-    ,"Wishing Star 9": ItemData(1060, filler, 1, "battle card", "003B", False, False)
-    
-    ,"Spellbinder 0": ItemData(1061, useful, 1, "battle card", "003C", True, False)
-    ,"Spellbinder 1": ItemData(1062, filler, 1, "battle card", "003D", False, False)
-    ,"Spellbinder 2": ItemData(1063, filler, 1, "battle card", "003E", False, False)
-    ,"Spellbinder 3": ItemData(1064, filler, 1, "battle card", "003F", False, False)
-    ,"Spellbinder 4": ItemData(1065, filler, 1, "battle card", "0040", False, False)
-    ,"Spellbinder 5": ItemData(1066, filler, 1, "battle card", "0041", False, False)
-    ,"Spellbinder 6": ItemData(1067, filler, 1, "battle card", "0042", False, False)
-    ,"Spellbinder 7": ItemData(1068, filler, 1, "battle card", "0043", False, False)
-    ,"Spellbinder 8": ItemData(1069, filler, 1, "battle card", "0044", False, False)
-    ,"Spellbinder 9": ItemData(1070, filler, 1, "battle card", "0045", False, False)
-    
-    ,"Metal Chocobo 0": ItemData(1071, useful, 1, "battle card", "0046", True, False)
-    ,"Metal Chocobo 1": ItemData(1072, filler, 1, "battle card", "0047", False, False)
-    ,"Metal Chocobo 2": ItemData(1073, filler, 1, "battle card", "0048", False, False)
-    ,"Metal Chocobo 3": ItemData(1074, filler, 1, "battle card", "0049", False, False)
-    ,"Metal Chocobo 4": ItemData(1075, filler, 1, "battle card", "004A", False, False)
-    ,"Metal Chocobo 5": ItemData(1076, filler, 1, "battle card", "004B", False, False)
-    ,"Metal Chocobo 6": ItemData(1077, filler, 1, "battle card", "004C", False, False)
-    ,"Metal Chocobo 7": ItemData(1078, filler, 1, "battle card", "004D", False, False)
-    ,"Metal Chocobo 8": ItemData(1079, filler, 1, "battle card", "004E", False, False)
-    ,"Metal Chocobo 9": ItemData(1080, filler, 1, "battle card", "004F", False, False)
-    
-    ,"Olympia 0": ItemData(1081, useful, 1, "battle card", "0050", True, False)
-    ,"Olympia 1": ItemData(1082, filler, 1, "battle card", "0051", False, False)
-    ,"Olympia 2": ItemData(1083, filler, 1, "battle card", "0052", False, False)
-    ,"Olympia 3": ItemData(1084, filler, 1, "battle card", "0053", False, False)
-    ,"Olympia 4": ItemData(1085, filler, 1, "battle card", "0054", False, False)
-    ,"Olympia 5": ItemData(1086, filler, 1, "battle card", "0055", False, False)
-    ,"Olympia 6": ItemData(1087, filler, 1, "battle card", "0056", False, False)
-    ,"Olympia 7": ItemData(1088, filler, 1, "battle card", "0057", False, False)
-    ,"Olympia 8": ItemData(1089, filler, 1, "battle card", "0058", False, False)
-    ,"Olympia 9": ItemData(1090, filler, 1, "battle card", "0059", False, False)
-    
-    ,"Lionheart 0": ItemData(1091, useful, 1, "battle card", "005A", True, False)
-    ,"Lionheart 1": ItemData(1092, filler, 1, "battle card", "005B", False, False)
-    ,"Lionheart 2": ItemData(1093, filler, 1, "battle card", "005C", False, False)
-    ,"Lionheart 3": ItemData(1094, filler, 1, "battle card", "005D", False, False)
-    ,"Lionheart 4": ItemData(1095, filler, 1, "battle card", "005E", False, False)
-    ,"Lionheart 5": ItemData(1096, filler, 1, "battle card", "005F", False, False)
-    ,"Lionheart 6": ItemData(1097, filler, 1, "battle card", "0060", False, False)
-    ,"Lionheart 7": ItemData(1098, filler, 1, "battle card", "0061", False, False)
-    ,"Lionheart 8": ItemData(1099, filler, 1, "battle card", "0062", False, False)
-    ,"Lionheart 9": ItemData(1100, filler, 1, "battle card", "0063", False, False)
-    
-    ,"Lady Luck 0": ItemData(1101, useful, 1, "battle card", "0064", True, False)
-    ,"Lady Luck 1": ItemData(1102, filler, 1, "battle card", "0065", False, False)
-    ,"Lady Luck 2": ItemData(1103, filler, 1, "battle card", "0066", False, False)
-    ,"Lady Luck 3": ItemData(1104, filler, 1, "battle card", "0067", False, False)
-    ,"Lady Luck 4": ItemData(1105, filler, 1, "battle card", "0068", False, False)
-    ,"Lady Luck 5": ItemData(1106, filler, 1, "battle card", "0069", False, False)
-    ,"Lady Luck 6": ItemData(1107, filler, 1, "battle card", "006A", False, False)
-    ,"Lady Luck 7": ItemData(1108, filler, 1, "battle card", "006B", False, False)
-    ,"Lady Luck 8": ItemData(1109, filler, 1, "battle card", "006C", False, False)
-    ,"Lady Luck 9": ItemData(1110, filler, 1, "battle card", "006D", False, False)
-    
-    ,"Divine Rose 0": ItemData(1111, useful, 1, "battle card", "006E", True, False)
-    ,"Divine Rose 1": ItemData(1112, filler, 1, "battle card", "006F", False, False)
-    ,"Divine Rose 2": ItemData(1113, filler, 1, "battle card", "0070", False, False)
-    ,"Divine Rose 3": ItemData(1114, filler, 1, "battle card", "0071", False, False)
-    ,"Divine Rose 4": ItemData(1115, filler, 1, "battle card", "0072", False, False)
-    ,"Divine Rose 5": ItemData(1116, filler, 1, "battle card", "0073", False, False)
-    ,"Divine Rose 6": ItemData(1117, filler, 1, "battle card", "0074", False, False)
-    ,"Divine Rose 7": ItemData(1118, filler, 1, "battle card", "0075", False, False)
-    ,"Divine Rose 8": ItemData(1119, filler, 1, "battle card", "0076", False, False)
-    ,"Divine Rose 9": ItemData(1120, filler, 1, "battle card", "0077", False, False)
-    
-    ,"Oathkeeper 0": ItemData(1121, useful, 1, "battle card", "0078", True, False)
-    ,"Oathkeeper 1": ItemData(1122, filler, 1, "battle card", "0079", False, False)
-    ,"Oathkeeper 2": ItemData(1123, filler, 1, "battle card", "007A", False, False)
-    ,"Oathkeeper 3": ItemData(1124, filler, 1, "battle card", "007B", False, False)
-    ,"Oathkeeper 4": ItemData(1125, filler, 1, "battle card", "007C", False, False)
-    ,"Oathkeeper 5": ItemData(1126, filler, 1, "battle card", "007D", False, False)
-    ,"Oathkeeper 6": ItemData(1127, filler, 1, "battle card", "007E", False, False)
-    ,"Oathkeeper 7": ItemData(1128, filler, 1, "battle card", "007F", False, False)
-    ,"Oathkeeper 8": ItemData(1129, filler, 1, "battle card", "0080", False, False)
-    ,"Oathkeeper 9": ItemData(1130, filler, 1, "battle card", "0081", False, False)
-    
-    ,"Oblivion 0": ItemData(1131, useful, 1, "battle card", "0082", True, False)
-    ,"Oblivion 1": ItemData(1132, filler, 1, "battle card", "0083", False, False)
-    ,"Oblivion 2": ItemData(1133, filler, 1, "battle card", "0084", False, False)
-    ,"Oblivion 3": ItemData(1134, filler, 1, "battle card", "0085", False, False)
-    ,"Oblivion 4": ItemData(1135, filler, 1, "battle card", "0086", False, False)
-    ,"Oblivion 5": ItemData(1136, filler, 1, "battle card", "0087", False, False)
-    ,"Oblivion 6": ItemData(1137, filler, 1, "battle card", "0088", False, False)
-    ,"Oblivion 7": ItemData(1138, filler, 1, "battle card", "0089", False, False)
-    ,"Oblivion 8": ItemData(1139, filler, 1, "battle card", "008A", False, False)
-    ,"Oblivion 9": ItemData(1140, filler, 1, "battle card", "008B", False, False)
-    
-    ,"Diamond Dust 0": ItemData(1141, useful, 1, "battle card", "008C", True, False)
-    ,"Diamond Dust 1": ItemData(1142, filler, 1, "battle card", "008D", False, False)
-    ,"Diamond Dust 2": ItemData(1143, filler, 1, "battle card", "008E", False, False)
-    ,"Diamond Dust 3": ItemData(1144, filler, 1, "battle card", "0090", False, False)
-    ,"Diamond Dust 4": ItemData(1145, filler, 1, "battle card", "0091", False, False)
-    ,"Diamond Dust 5": ItemData(1146, filler, 1, "battle card", "0092", False, False)
-    ,"Diamond Dust 6": ItemData(1147, filler, 1, "battle card", "0093", False, False)
-    ,"Diamond Dust 7": ItemData(1148, filler, 1, "battle card", "0094", False, False)
-    ,"Diamond Dust 8": ItemData(1149, filler, 1, "battle card", "0095", False, False)
-    ,"Diamond Dust 9": ItemData(1150, filler, 1, "battle card", "0096", False, False)
-    
-    ,"One Winged Angel 0": ItemData(1151, useful, 1, "battle card", "0097", True, False)
-    ,"One Winged Angel 1": ItemData(1152, filler, 1, "battle card", "0098", False, False)
-    ,"One Winged Angel 2": ItemData(1153, filler, 1, "battle card", "0099", False, False)
-    ,"One Winged Angel 3": ItemData(1154, filler, 1, "battle card", "009A", False, False)
-    ,"One Winged Angel 4": ItemData(1155, filler, 1, "battle card", "009B", False, False)
-    ,"One Winged Angel 5": ItemData(1156, filler, 1, "battle card", "009C", False, False)
-    ,"One Winged Angel 6": ItemData(1157, filler, 1, "battle card", "009D", False, False)
-    ,"One Winged Angel 7": ItemData(1158, filler, 1, "battle card", "009E", False, False)
-    ,"One Winged Angel 8": ItemData(1159, filler, 1, "battle card", "009F", False, False)
-    ,"One Winged Angel 9": ItemData(1160, filler, 1, "battle card", "00A0", False, False)
-    
-    ,"Ultima Weapon 0": ItemData(1161, useful, 1, "battle card", "00A1", True, False)
-    ,"Ultima Weapon 1": ItemData(1162, filler, 1, "battle card", "00A2", False, False)
-    ,"Ultima Weapon 2": ItemData(1163, filler, 1, "battle card", "00A2", False, False)
-    ,"Ultima Weapon 3": ItemData(1164, filler, 1, "battle card", "00A3", False, False)
-    ,"Ultima Weapon 4": ItemData(1165, filler, 1, "battle card", "00A4", False, False)
-    ,"Ultima Weapon 5": ItemData(1166, filler, 1, "battle card", "00A5", False, False)
-    ,"Ultima Weapon 6": ItemData(1167, filler, 1, "battle card", "00A6", False, False)
-    ,"Ultima Weapon 7": ItemData(1168, filler, 1, "battle card", "00A7", False, False)
-    ,"Ultima Weapon 8": ItemData(1169, filler, 1, "battle card", "00A8", False, False)
-    ,"Ultima Weapon 9": ItemData(1170, filler, 1, "battle card", "00A9", False, False)
-    
-    ,"Fire 0": ItemData(1171, useful, 1, "battle card", "00AA", True, False)
-    ,"Fire 1": ItemData(1172, filler, 1, "battle card", "00AB", False, False)
-    ,"Fire 2": ItemData(1173, filler, 1, "battle card", "00AC", False, False)
-    ,"Fire 3": ItemData(1174, filler, 1, "battle card", "00AD", False, False)
-    ,"Fire 4": ItemData(1175, filler, 1, "battle card", "00AE", False, False)
-    ,"Fire 5": ItemData(1176, filler, 1, "battle card", "00AF", False, False)
-    ,"Fire 6": ItemData(1177, filler, 1, "battle card", "00B0", False, False)
-    ,"Fire 7": ItemData(1178, filler, 1, "battle card", "00B1", False, False)
-    ,"Fire 8": ItemData(1179, filler, 1, "battle card", "00B2", False, False)
-    ,"Fire 9": ItemData(1180, filler, 1, "battle card", "00B3", False, False)
-    
-    ,"Blizzard 0": ItemData(1181, useful, 1, "battle card", "00B4", True, False)
-    ,"Blizzard 1": ItemData(1182, filler, 1, "battle card", "00B5", False, False)
-    ,"Blizzard 2": ItemData(1183, filler, 1, "battle card", "00B6", False, False)
-    ,"Blizzard 3": ItemData(1184, filler, 1, "battle card", "00B7", False, False)
-    ,"Blizzard 4": ItemData(1185, filler, 1, "battle card", "00B8", False, False)
-    ,"Blizzard 5": ItemData(1186, filler, 1, "battle card", "00B9", False, False)
-    ,"Blizzard 6": ItemData(1187, filler, 1, "battle card", "00BA", False, False)
-    ,"Blizzard 7": ItemData(1188, filler, 1, "battle card", "00BB", False, False)
-    ,"Blizzard 8": ItemData(1189, filler, 1, "battle card", "00BC", False, False)
-    ,"Blizzard 9": ItemData(1190, filler, 1, "battle card", "00BD", False, False)
-    
-    ,"Thunder 0": ItemData(1191, useful, 1, "battle card", "00BE", True, False)
-    ,"Thunder 1": ItemData(1192, filler, 1, "battle card", "00BF", False, False)
-    ,"Thunder 2": ItemData(1193, filler, 1, "battle card", "00C0", False, False)
-    ,"Thunder 3": ItemData(1194, filler, 1, "battle card", "00C1", False, False)
-    ,"Thunder 4": ItemData(1195, filler, 1, "battle card", "00C2", False, False)
-    ,"Thunder 5": ItemData(1196, filler, 1, "battle card", "00C3", False, False)
-    ,"Thunder 6": ItemData(1197, filler, 1, "battle card", "00C4", False, False)
-    ,"Thunder 7": ItemData(1198, filler, 1, "battle card", "00C5", False, False)
-    ,"Thunder 8": ItemData(1199, filler, 1, "battle card", "00C6", False, False)
-    ,"Thunder 9": ItemData(1200, filler, 1, "battle card", "00C7", False, False)
-    
-    ,"Cure 0": ItemData(1201, useful, 1, "battle card", "00C8", True, True)
-    ,"Cure 1": ItemData(1202, filler, 1, "battle card", "00C9", False, True)
-    ,"Cure 2": ItemData(1203, filler, 1, "battle card", "00CA", False, True)
-    ,"Cure 3": ItemData(1204, filler, 1, "battle card", "00CB", False, True)
-    ,"Cure 4": ItemData(1205, filler, 1, "battle card", "00CC", False, True)
-    ,"Cure 5": ItemData(1206, filler, 1, "battle card", "00CD", False, True)
-    ,"Cure 6": ItemData(1207, filler, 1, "battle card", "00CE", False, True)
-    ,"Cure 7": ItemData(1208, filler, 1, "battle card", "00CF", False, True)
-    ,"Cure 8": ItemData(1209, filler, 1, "battle card", "00D0", False, True)
-    ,"Cure 9": ItemData(1210, filler, 1, "battle card", "00D1", False, True)
-    
-    ,"Gravity 0": ItemData(1211, useful, 1, "battle card", "00D2", True, False)
-    ,"Gravity 1": ItemData(1212, filler, 1, "battle card", "00D3", False, False)
-    ,"Gravity 2": ItemData(1213, filler, 1, "battle card", "00D4", False, False)
-    ,"Gravity 3": ItemData(1214, filler, 1, "battle card", "00D5", False, False)
-    ,"Gravity 4": ItemData(1215, filler, 1, "battle card", "00D6", False, False)
-    ,"Gravity 5": ItemData(1216, filler, 1, "battle card", "00D7", False, False)
-    ,"Gravity 6": ItemData(1217, filler, 1, "battle card", "00D8", False, False)
-    ,"Gravity 7": ItemData(1218, filler, 1, "battle card", "00D9", False, False)
-    ,"Gravity 8": ItemData(1219, filler, 1, "battle card", "00DA", False, False)
-    ,"Gravity 9": ItemData(1220, filler, 1, "battle card", "00DB", False, False)
-    
-    ,"Stop 0": ItemData(1221, useful, 1, "battle card", "00DC", True, False)
-    ,"Stop 1": ItemData(1222, filler, 1, "battle card", "00DD", False, False)
-    ,"Stop 2": ItemData(1223, filler, 1, "battle card", "00DE", False, False)
-    ,"Stop 3": ItemData(1224, filler, 1, "battle card", "00DF", False, False)
-    ,"Stop 4": ItemData(1225, filler, 1, "battle card", "00E0", False, False)
-    ,"Stop 5": ItemData(1226, filler, 1, "battle card", "00E1", False, False)
-    ,"Stop 6": ItemData(1227, filler, 1, "battle card", "00E2", False, False)
-    ,"Stop 7": ItemData(1228, filler, 1, "battle card", "00E3", False, False)
-    ,"Stop 8": ItemData(1229, filler, 1, "battle card", "00E4", False, False)
-    ,"Stop 9": ItemData(1230, filler, 1, "battle card", "00E5", False, False)
-    
-    ,"Aero 0": ItemData(1231, useful, 1, "battle card", "00E6", True, False)
-    ,"Aero 1": ItemData(1232, filler, 1, "battle card", "00E7", False, False)
-    ,"Aero 2": ItemData(1233, filler, 1, "battle card", "00E8", False, False)
-    ,"Aero 3": ItemData(1234, filler, 1, "battle card", "00E9", False, False)
-    ,"Aero 4": ItemData(1235, filler, 1, "battle card", "00EA", False, False)
-    ,"Aero 5": ItemData(1236, filler, 1, "battle card", "00EB", False, False)
-    ,"Aero 6": ItemData(1237, filler, 1, "battle card", "00EC", False, False)
-    ,"Aero 7": ItemData(1238, filler, 1, "battle card", "00ED", False, False)
-    ,"Aero 8": ItemData(1239, filler, 1, "battle card", "00EE", False, False)
-    ,"Aero 9": ItemData(1240, filler, 1, "battle card", "00EF", False, False)
-    
-    ,"Simba 0": ItemData(1241, useful, 1, "battle card", "0104", True, False)
-    ,"Simba 1": ItemData(1242, filler, 1, "battle card", "0105", False, False)
-    ,"Simba 2": ItemData(1243, filler, 1, "battle card", "0106", False, False)
-    ,"Simba 3": ItemData(1244, filler, 1, "battle card", "0107", False, False)
-    ,"Simba 4": ItemData(1245, filler, 1, "battle card", "0108", False, False)
-    ,"Simba 5": ItemData(1246, filler, 1, "battle card", "0109", False, False)
-    ,"Simba 6": ItemData(1247, filler, 1, "battle card", "010A", False, False)
-    ,"Simba 7": ItemData(1248, filler, 1, "battle card", "010B", False, False)
-    ,"Simba 8": ItemData(1249, filler, 1, "battle card", "010C", False, False)
-    ,"Simba 9": ItemData(1250, filler, 1, "battle card", "010D", False, False)
-    
-    ,"Genie 0": ItemData(1251, useful, 1, "battle card", "010E", True, False)
-    ,"Genie 1": ItemData(1252, filler, 1, "battle card", "010F", False, False)
-    ,"Genie 2": ItemData(1253, filler, 1, "battle card", "0110", False, False)
-    ,"Genie 3": ItemData(1254, filler, 1, "battle card", "0111", False, False)
-    ,"Genie 4": ItemData(1255, filler, 1, "battle card", "0112", False, False)
-    ,"Genie 5": ItemData(1256, filler, 1, "battle card", "0113", False, False)
-    ,"Genie 6": ItemData(1257, filler, 1, "battle card", "0114", False, False)
-    ,"Genie 7": ItemData(1258, filler, 1, "battle card", "0115", False, False)
-    ,"Genie 8": ItemData(1259, filler, 1, "battle card", "0116", False, False)
-    ,"Genie 9": ItemData(1260, filler, 1, "battle card", "0117", False, False)
-    
-    ,"Bambi 0": ItemData(1271, useful, 1, "battle card", "0118", True, False)
-    ,"Bambi 1": ItemData(1272, filler, 1, "battle card", "0119", False, False)
-    ,"Bambi 2": ItemData(1273, filler, 1, "battle card", "011A", False, False)
-    ,"Bambi 3": ItemData(1274, filler, 1, "battle card", "011B", False, False)
-    ,"Bambi 4": ItemData(1275, filler, 1, "battle card", "011C", False, False)
-    ,"Bambi 5": ItemData(1276, filler, 1, "battle card", "011D", False, False)
-    ,"Bambi 6": ItemData(1277, filler, 1, "battle card", "011E", False, False)
-    ,"Bambi 7": ItemData(1278, filler, 1, "battle card", "011F", False, False)
-    ,"Bambi 8": ItemData(1279, filler, 1, "battle card", "0120", False, False)
-    ,"Bambi 9": ItemData(1280, filler, 1, "battle card", "0121", False, False)
-    
-    ,"Dumbo 0": ItemData(1281, useful, 1, "battle card", "0122", True, False)
-    ,"Dumbo 1": ItemData(1282, filler, 1, "battle card", "0123", False, False)
-    ,"Dumbo 2": ItemData(1283, filler, 1, "battle card", "0124", False, False)
-    ,"Dumbo 3": ItemData(1284, filler, 1, "battle card", "0125", False, False)
-    ,"Dumbo 4": ItemData(1285, filler, 1, "battle card", "0126", False, False)
-    ,"Dumbo 5": ItemData(1286, filler, 1, "battle card", "0127", False, False)
-    ,"Dumbo 6": ItemData(1287, filler, 1, "battle card", "0128", False, False)
-    ,"Dumbo 7": ItemData(1288, filler, 1, "battle card", "0129", False, False)
-    ,"Dumbo 8": ItemData(1289, filler, 1, "battle card", "012A", False, False)
-    ,"Dumbo 9": ItemData(1290, filler, 1, "battle card", "012B", False, False)
-    
-    ,"Tinker Bell 0": ItemData(1291, useful, 1, "battle card", "012C", True, False)
-    ,"Tinker Bell 1": ItemData(1292, filler, 1, "battle card", "012D", False, False)
-    ,"Tinker Bell 2": ItemData(1293, filler, 1, "battle card", "012E", False, False)
-    ,"Tinker Bell 3": ItemData(1294, filler, 1, "battle card", "012F", False, False)
-    ,"Tinker Bell 4": ItemData(1295, filler, 1, "battle card", "0130", False, False)
-    ,"Tinker Bell 5": ItemData(1296, filler, 1, "battle card", "0131", False, False)
-    ,"Tinker Bell 6": ItemData(1297, filler, 1, "battle card", "0132", False, False)
-    ,"Tinker Bell 7": ItemData(1298, filler, 1, "battle card", "0133", False, False)
-    ,"Tinker Bell 8": ItemData(1299, filler, 1, "battle card", "0134", False, False)
-    ,"Tinker Bell 9": ItemData(1300, filler, 1, "battle card", "0135", False, False)
-    
-    ,"Mushu 0": ItemData(1301, useful, 1, "battle card", "0136", True, False)
-    ,"Mushu 1": ItemData(1302, filler, 1, "battle card", "0137", False, False)
-    ,"Mushu 2": ItemData(1303, filler, 1, "battle card", "0138", False, False)
-    ,"Mushu 3": ItemData(1304, filler, 1, "battle card", "0139", False, False)
-    ,"Mushu 4": ItemData(1305, filler, 1, "battle card", "013A", False, False)
-    ,"Mushu 5": ItemData(1306, filler, 1, "battle card", "013B", False, False)
-    ,"Mushu 6": ItemData(1307, filler, 1, "battle card", "013C", False, False)
-    ,"Mushu 7": ItemData(1308, filler, 1, "battle card", "013D", False, False)
-    ,"Mushu 8": ItemData(1309, filler, 1, "battle card", "013E", False, False)
-    ,"Mushu 9": ItemData(1310, filler, 1, "battle card", "013F", False, False)
-    
-    ,"Cloud 0": ItemData(1311, useful, 1, "battle card", "0140", True, False)
-    ,"Cloud 1": ItemData(1312, filler, 1, "battle card", "0141", False, False)
-    ,"Cloud 2": ItemData(1313, filler, 1, "battle card", "0142", False, False)
-    ,"Cloud 3": ItemData(1314, filler, 1, "battle card", "0143", False, False)
-    ,"Cloud 4": ItemData(1315, filler, 1, "battle card", "0144", False, False)
-    ,"Cloud 5": ItemData(1316, filler, 1, "battle card", "0145", False, False)
-    ,"Cloud 6": ItemData(1317, filler, 1, "battle card", "0146", False, False)
-    ,"Cloud 7": ItemData(1318, filler, 1, "battle card", "0147", False, False)
-    ,"Cloud 8": ItemData(1319, filler, 1, "battle card", "0148", False, False)
-    ,"Cloud 9": ItemData(1320, filler, 1, "battle card", "0149", False, False)
-    
-    ,"Potion 0": ItemData(1321, useful, 1, "battle card", "017C", True, False)
-    ,"Potion 1": ItemData(1322, filler, 1, "battle card", "017D", False, False)
-    ,"Potion 2": ItemData(1323, filler, 1, "battle card", "017E", False, False)
-    ,"Potion 3": ItemData(1324, filler, 1, "battle card", "017F", False, False)
-    ,"Potion 4": ItemData(1325, filler, 1, "battle card", "0180", False, False)
-    ,"Potion 5": ItemData(1326, filler, 1, "battle card", "0181", False, False)
-    ,"Potion 6": ItemData(1327, filler, 1, "battle card", "0182", False, False)
-    ,"Potion 7": ItemData(1328, filler, 1, "battle card", "0183", False, False)
-    ,"Potion 8": ItemData(1329, filler, 1, "battle card", "0184", False, False)
-    ,"Potion 9": ItemData(1330, filler, 1, "battle card", "0185", False, False)
-    
-    ,"Hi-Potion 0": ItemData(1331, useful, 1, "battle card", "0186", True, False)
-    ,"Hi-Potion 1": ItemData(1332, filler, 1, "battle card", "0187", False, False)
-    ,"Hi-Potion 2": ItemData(1333, filler, 1, "battle card", "0188", False, False)
-    ,"Hi-Potion 3": ItemData(1334, filler, 1, "battle card", "0189", False, False)
-    ,"Hi-Potion 4": ItemData(1335, filler, 1, "battle card", "018A", False, False)
-    ,"Hi-Potion 5": ItemData(1336, filler, 1, "battle card", "018B", False, False)
-    ,"Hi-Potion 6": ItemData(1337, filler, 1, "battle card", "018C", False, False)
-    ,"Hi-Potion 7": ItemData(1338, filler, 1, "battle card", "018D", False, False)
-    ,"Hi-Potion 8": ItemData(1339, filler, 1, "battle card", "018E", False, False)
-    ,"Hi-Potion 9": ItemData(1340, filler, 1, "battle card", "018F", False, False)
-    
-    ,"Mega-Potion 0": ItemData(1341, useful, 1, "battle card", "0190", True, False)
-    ,"Mega-Potion 1": ItemData(1342, filler, 1, "battle card", "0191", False, False)
-    ,"Mega-Potion 2": ItemData(1343, filler, 1, "battle card", "0192", False, False)
-    ,"Mega-Potion 3": ItemData(1344, filler, 1, "battle card", "0193", False, False)
-    ,"Mega-Potion 4": ItemData(1345, filler, 1, "battle card", "0194", False, False)
-    ,"Mega-Potion 5": ItemData(1346, filler, 1, "battle card", "0195", False, False)
-    ,"Mega-Potion 6": ItemData(1347, filler, 1, "battle card", "0196", False, False)
-    ,"Mega-Potion 7": ItemData(1348, filler, 1, "battle card", "0197", False, False)
-    ,"Mega-Potion 8": ItemData(1349, filler, 1, "battle card", "0198", False, False)
-    ,"Mega-Potion 9": ItemData(1350, filler, 1, "battle card", "0199", False, False)
-    
-    ,"Ether 0": ItemData(1351, useful, 1, "battle card", "019A", True, False)
-    ,"Ether 1": ItemData(1352, filler, 1, "battle card", "019B", False, False)
-    ,"Ether 2": ItemData(1353, filler, 1, "battle card", "019C", False, False)
-    ,"Ether 3": ItemData(1354, filler, 1, "battle card", "019D", False, False)
-    ,"Ether 4": ItemData(1355, filler, 1, "battle card", "019E", False, False)
-    ,"Ether 5": ItemData(1356, filler, 1, "battle card", "019F", False, False)
-    ,"Ether 6": ItemData(1357, filler, 1, "battle card", "01A0", False, False)
-    ,"Ether 7": ItemData(1358, filler, 1, "battle card", "01A1", False, False)
-    ,"Ether 8": ItemData(1359, filler, 1, "battle card", "01A2", False, False)
-    ,"Ether 9": ItemData(1360, filler, 1, "battle card", "01A3", False, False)
-    
-    ,"Mega-Ether 0": ItemData(1361, useful, 1, "battle card", "01A4", True, False)
-    ,"Mega-Ether 1": ItemData(1362, filler, 1, "battle card", "01A5", False, False)
-    ,"Mega-Ether 2": ItemData(1363, filler, 1, "battle card", "01A6", False, False)
-    ,"Mega-Ether 3": ItemData(1364, filler, 1, "battle card", "01A7", False, False)
-    ,"Mega-Ether 4": ItemData(1365, filler, 1, "battle card", "01A8", False, False)
-    ,"Mega-Ether 5": ItemData(1366, filler, 1, "battle card", "01A9", False, False)
-    ,"Mega-Ether 6": ItemData(1367, filler, 1, "battle card", "01AA", False, False)
-    ,"Mega-Ether 7": ItemData(1368, filler, 1, "battle card", "01AB", False, False)
-    ,"Mega-Ether 8": ItemData(1369, filler, 1, "battle card", "01AC", False, False)
-    ,"Mega-Ether 9": ItemData(1370, filler, 1, "battle card", "01AD", False, False)
-    
-    ,"Elxir 0": ItemData(1371, useful, 1, "battle card", "01AE", True, False)
-    ,"Elxir 1": ItemData(1372, filler, 1, "battle card", "01AF", False, False)
-    ,"Elxir 2": ItemData(1373, filler, 1, "battle card", "01B0", False, False)
-    ,"Elxir 3": ItemData(1374, filler, 1, "battle card", "01B1", False, False)
-    ,"Elxir 4": ItemData(1375, filler, 1, "battle card", "01B2", False, False)
-    ,"Elxir 5": ItemData(1376, filler, 1, "battle card", "01B3", False, False)
-    ,"Elxir 6": ItemData(1377, filler, 1, "battle card", "01B4", False, False)
-    ,"Elxir 7": ItemData(1378, filler, 1, "battle card", "01B5", False, False)
-    ,"Elxir 8": ItemData(1379, filler, 1, "battle card", "01B6", False, False)
-    ,"Elxir 9": ItemData(1380, filler, 1, "battle card", "01B7", False, False)
-    
-    ,"Megalixir 0": ItemData(1381, useful, 1, "battle card", "01B8", True, False)
-    ,"Megalixir 1": ItemData(1382, filler, 1, "battle card", "01B9", False, False)
-    ,"Megalixir 2": ItemData(1383, filler, 1, "battle card", "01BA", False, False)
-    ,"Megalixir 3": ItemData(1384, filler, 1, "battle card", "01BB", False, False)
-    ,"Megalixir 4": ItemData(1385, filler, 1, "battle card", "01BC", False, False)
-    ,"Megalixir 5": ItemData(1386, filler, 1, "battle card", "01BD", False, False)
-    ,"Megalixir 6": ItemData(1387, filler, 1, "battle card", "01BE", False, False)
-    ,"Megalixir 7": ItemData(1388, filler, 1, "battle card", "01BF", False, False)
-    ,"Megalixir 8": ItemData(1389, filler, 1, "battle card", "01C0", False, False)
-    ,"Megalixir 9": ItemData(1390, filler, 1, "battle card", "01C1", False, False)
+
+def get_items_by_category(category: str) -> Dict[str, KHCOMItemData]:
+    item_dict: Dict[str, KHCOMItemData] = {}
+    for name, data in item_table.items():
+        if data.category == category:
+            item_dict.setdefault(name, data)
+
+    return item_dict
+
+
+item_table: Dict[str, RLItemData] = {
+    # Battle Cards
+    "Kingdom Key 0": KHCOMItemData("Battle Cards", 266_1001, ItemClassification.useful, 1, 1, "0000", True, False),
+    "Kingdom Key 1": KHCOMItemData("Battle Cards", 266_1002, ItemClassification.filler, 1, 1, "0001", False, False),
+    "Kingdom Key 2": KHCOMItemData("Battle Cards", 266_1003, ItemClassification.filler, 1, 1, "0002", False, False),
+    "Kingdom Key 3": KHCOMItemData("Battle Cards", 266_1004, ItemClassification.filler, 1, 1, "0003", False, False),
+    "Kingdom Key 4": KHCOMItemData("Battle Cards", 266_1005, ItemClassification.filler, 1, 1, "0004", False, False),
+    "Kingdom Key 5": KHCOMItemData("Battle Cards", 266_1006, ItemClassification.filler, 1, 1, "0005", False, False),
+    "Kingdom Key 6": KHCOMItemData("Battle Cards", 266_1007, ItemClassification.filler, 1, 1, "0006", False, False),
+    "Kingdom Key 7": KHCOMItemData("Battle Cards", 266_1008, ItemClassification.filler, 1, 1, "0007", False, False),
+    "Kingdom Key 8": KHCOMItemData("Battle Cards", 266_1009, ItemClassification.filler, 1, 1, "0008", False, False),
+    "Kingdom Key 9": KHCOMItemData("Battle Cards", 266_1010, ItemClassification.filler, 1, 1, "0009", False, False),
+    "Three Wishes 0": KHCOMItemData("Battle Cards", 266_1011, ItemClassification.useful, 1, 1, "000A", True, False),
+    "Three Wishes 1": KHCOMItemData("Battle Cards", 266_1012, ItemClassification.filler, 1, 1, "000B", False, False),
+    "Three Wishes 2": KHCOMItemData("Battle Cards", 266_1013, ItemClassification.filler, 1, 1, "000C", False, False),
+    "Three Wishes 3": KHCOMItemData("Battle Cards", 266_1014, ItemClassification.filler, 1, 1, "000D", False, False),
+    "Three Wishes 4": KHCOMItemData("Battle Cards", 266_1015, ItemClassification.filler, 1, 1, "000E", False, False),
+    "Three Wishes 5": KHCOMItemData("Battle Cards", 266_1016, ItemClassification.filler, 1, 1, "000F", False, False),
+    "Three Wishes 6": KHCOMItemData("Battle Cards", 266_1017, ItemClassification.filler, 1, 1, "0010", False, False),
+    "Three Wishes 7": KHCOMItemData("Battle Cards", 266_1018, ItemClassification.filler, 1, 1, "0011", False, False),
+    "Three Wishes 8": KHCOMItemData("Battle Cards", 266_1019, ItemClassification.filler, 1, 1, "0012", False, False),
+    "Three Wishes 9": KHCOMItemData("Battle Cards", 266_1020, ItemClassification.filler, 1, 1, "0013", False, False),
+    "Crabclaw 0": KHCOMItemData("Battle Cards", 266_1021, ItemClassification.useful, 1, 1, "0014", True, False),
+    "Crabclaw 1": KHCOMItemData("Battle Cards", 266_1022, ItemClassification.filler, 1, 1, "0015", False, False),
+    "Crabclaw 2": KHCOMItemData("Battle Cards", 266_1023, ItemClassification.filler, 1, 1, "0016", False, False),
+    "Crabclaw 3": KHCOMItemData("Battle Cards", 266_1024, ItemClassification.filler, 1, 1, "0017", False, False),
+    "Crabclaw 4": KHCOMItemData("Battle Cards", 266_1025, ItemClassification.filler, 1, 1, "0018", False, False),
+    "Crabclaw 5": KHCOMItemData("Battle Cards", 266_1026, ItemClassification.filler, 1, 1, "0019", False, False),
+    "Crabclaw 6": KHCOMItemData("Battle Cards", 266_1027, ItemClassification.filler, 1, 1, "001A", False, False),
+    "Crabclaw 7": KHCOMItemData("Battle Cards", 266_1028, ItemClassification.filler, 1, 1, "001B", False, False),
+    "Crabclaw 8": KHCOMItemData("Battle Cards", 266_1029, ItemClassification.filler, 1, 1, "001C", False, False),
+    "Crabclaw 9": KHCOMItemData("Battle Cards", 266_1030, ItemClassification.filler, 1, 1, "001D", False, False),
+    "Pumpkinhead 0": KHCOMItemData("Battle Cards", 266_1031, ItemClassification.useful, 1, 1, "001E", True, False),
+    "Pumpkinhead 1": KHCOMItemData("Battle Cards", 266_1032, ItemClassification.filler, 1, 1, "001F", False, False),
+    "Pumpkinhead 2": KHCOMItemData("Battle Cards", 266_1033, ItemClassification.filler, 1, 1, "0020", False, False),
+    "Pumpkinhead 3": KHCOMItemData("Battle Cards", 266_1034, ItemClassification.filler, 1, 1, "0021", False, False),
+    "Pumpkinhead 4": KHCOMItemData("Battle Cards", 266_1035, ItemClassification.filler, 1, 1, "0022", False, False),
+    "Pumpkinhead 5": KHCOMItemData("Battle Cards", 266_1036, ItemClassification.filler, 1, 1, "0023", False, False),
+    "Pumpkinhead 6": KHCOMItemData("Battle Cards", 266_1037, ItemClassification.filler, 1, 1, "0024", False, False),
+    "Pumpkinhead 7": KHCOMItemData("Battle Cards", 266_1038, ItemClassification.filler, 1, 1, "0025", False, False),
+    "Pumpkinhead 8": KHCOMItemData("Battle Cards", 266_1039, ItemClassification.filler, 1, 1, "0026", False, False),
+    "Pumpkinhead 9": KHCOMItemData("Battle Cards", 266_1040, ItemClassification.filler, 1, 1, "0027", False, False),
+    "Fairy Harp 0": KHCOMItemData("Battle Cards", 266_1041, ItemClassification.useful, 1, 1, "0028", True, False),
+    "Fairy Harp 1": KHCOMItemData("Battle Cards", 266_1042, ItemClassification.filler, 1, 1, "0029", False, False),
+    "Fairy Harp 2": KHCOMItemData("Battle Cards", 266_1043, ItemClassification.filler, 1, 1, "002A", False, False),
+    "Fairy Harp 3": KHCOMItemData("Battle Cards", 266_1044, ItemClassification.filler, 1, 1, "002B", False, False),
+    "Fairy Harp 4": KHCOMItemData("Battle Cards", 266_1045, ItemClassification.filler, 1, 1, "002C", False, False),
+    "Fairy Harp 5": KHCOMItemData("Battle Cards", 266_1046, ItemClassification.filler, 1, 1, "002D", False, False),
+    "Fairy Harp 6": KHCOMItemData("Battle Cards", 266_1047, ItemClassification.filler, 1, 1, "002E", False, False),
+    "Fairy Harp 7": KHCOMItemData("Battle Cards", 266_1048, ItemClassification.filler, 1, 1, "002F", False, False),
+    "Fairy Harp 8": KHCOMItemData("Battle Cards", 266_1049, ItemClassification.filler, 1, 1, "0030", False, False),
+    "Fairy Harp 9": KHCOMItemData("Battle Cards", 266_1050, ItemClassification.filler, 1, 1, "0031", False, False),
+    "Wishing Star 0": KHCOMItemData("Battle Cards", 266_1051, ItemClassification.useful, 1, 1, "0032", True, False),
+    "Wishing Star 1": KHCOMItemData("Battle Cards", 266_1052, ItemClassification.filler, 1, 1, "0033", False, False),
+    "Wishing Star 2": KHCOMItemData("Battle Cards", 266_1053, ItemClassification.filler, 1, 1, "0034", False, False),
+    "Wishing Star 3": KHCOMItemData("Battle Cards", 266_1054, ItemClassification.filler, 1, 1, "0035", False, False),
+    "Wishing Star 4": KHCOMItemData("Battle Cards", 266_1055, ItemClassification.filler, 1, 1, "0036", False, False),
+    "Wishing Star 5": KHCOMItemData("Battle Cards", 266_1056, ItemClassification.filler, 1, 1, "0037", False, False),
+    "Wishing Star 6": KHCOMItemData("Battle Cards", 266_1057, ItemClassification.filler, 1, 1, "0038", False, False),
+    "Wishing Star 7": KHCOMItemData("Battle Cards", 266_1058, ItemClassification.filler, 1, 1, "0039", False, False),
+    "Wishing Star 8": KHCOMItemData("Battle Cards", 266_1059, ItemClassification.filler, 1, 1, "003A", False, False),
+    "Wishing Star 9": KHCOMItemData("Battle Cards", 266_1060, ItemClassification.filler, 1, 1, "003B", False, False),
+    "Spellbinder 0": KHCOMItemData("Battle Cards", 266_1061, ItemClassification.useful, 1, 1, "003C", True, False),
+    "Spellbinder 1": KHCOMItemData("Battle Cards", 266_1062, ItemClassification.filler, 1, 1, "003D", False, False),
+    "Spellbinder 2": KHCOMItemData("Battle Cards", 266_1063, ItemClassification.filler, 1, 1, "003E", False, False),
+    "Spellbinder 3": KHCOMItemData("Battle Cards", 266_1064, ItemClassification.filler, 1, 1, "003F", False, False),
+    "Spellbinder 4": KHCOMItemData("Battle Cards", 266_1065, ItemClassification.filler, 1, 1, "0040", False, False),
+    "Spellbinder 5": KHCOMItemData("Battle Cards", 266_1066, ItemClassification.filler, 1, 1, "0041", False, False),
+    "Spellbinder 6": KHCOMItemData("Battle Cards", 266_1067, ItemClassification.filler, 1, 1, "0042", False, False),
+    "Spellbinder 7": KHCOMItemData("Battle Cards", 266_1068, ItemClassification.filler, 1, 1, "0043", False, False),
+    "Spellbinder 8": KHCOMItemData("Battle Cards", 266_1069, ItemClassification.filler, 1, 1, "0044", False, False),
+    "Spellbinder 9": KHCOMItemData("Battle Cards", 266_1070, ItemClassification.filler, 1, 1, "0045", False, False),
+    "Metal Chocobo 0": KHCOMItemData("Battle Cards", 266_1071, ItemClassification.useful, 1, 1, "0046", True, False),
+    "Metal Chocobo 1": KHCOMItemData("Battle Cards", 266_1072, ItemClassification.filler, 1, 1, "0047", False, False),
+    "Metal Chocobo 2": KHCOMItemData("Battle Cards", 266_1073, ItemClassification.filler, 1, 1, "0048", False, False),
+    "Metal Chocobo 3": KHCOMItemData("Battle Cards", 266_1074, ItemClassification.filler, 1, 1, "0049", False, False),
+    "Metal Chocobo 4": KHCOMItemData("Battle Cards", 266_1075, ItemClassification.filler, 1, 1, "004A", False, False),
+    "Metal Chocobo 5": KHCOMItemData("Battle Cards", 266_1076, ItemClassification.filler, 1, 1, "004B", False, False),
+    "Metal Chocobo 6": KHCOMItemData("Battle Cards", 266_1077, ItemClassification.filler, 1, 1, "004C", False, False),
+    "Metal Chocobo 7": KHCOMItemData("Battle Cards", 266_1078, ItemClassification.filler, 1, 1, "004D", False, False),
+    "Metal Chocobo 8": KHCOMItemData("Battle Cards", 266_1079, ItemClassification.filler, 1, 1, "004E", False, False),
+    "Metal Chocobo 9": KHCOMItemData("Battle Cards", 266_1080, ItemClassification.filler, 1, 1, "004F", False, False),
+    "Olympia 0": KHCOMItemData("Battle Cards", 266_1081, ItemClassification.useful, 1, 1, "0050", True, False),
+    "Olympia 1": KHCOMItemData("Battle Cards", 266_1082, ItemClassification.filler, 1, 1, "0051", False, False),
+    "Olympia 2": KHCOMItemData("Battle Cards", 266_1083, ItemClassification.filler, 1, 1, "0052", False, False),
+    "Olympia 3": KHCOMItemData("Battle Cards", 266_1084, ItemClassification.filler, 1, 1, "0053", False, False),
+    "Olympia 4": KHCOMItemData("Battle Cards", 266_1085, ItemClassification.filler, 1, 1, "0054", False, False),
+    "Olympia 5": KHCOMItemData("Battle Cards", 266_1086, ItemClassification.filler, 1, 1, "0055", False, False),
+    "Olympia 6": KHCOMItemData("Battle Cards", 266_1087, ItemClassification.filler, 1, 1, "0056", False, False),
+    "Olympia 7": KHCOMItemData("Battle Cards", 266_1088, ItemClassification.filler, 1, 1, "0057", False, False),
+    "Olympia 8": KHCOMItemData("Battle Cards", 266_1089, ItemClassification.filler, 1, 1, "0058", False, False),
+    "Olympia 9": KHCOMItemData("Battle Cards", 266_1090, ItemClassification.filler, 1, 1, "0059", False, False),
+    "Lionheart 0": KHCOMItemData("Battle Cards", 266_1091, ItemClassification.useful, 1, 1, "005A", True, False),
+    "Lionheart 1": KHCOMItemData("Battle Cards", 266_1092, ItemClassification.filler, 1, 1, "005B", False, False),
+    "Lionheart 2": KHCOMItemData("Battle Cards", 266_1093, ItemClassification.filler, 1, 1, "005C", False, False),
+    "Lionheart 3": KHCOMItemData("Battle Cards", 266_1094, ItemClassification.filler, 1, 1, "005D", False, False),
+    "Lionheart 4": KHCOMItemData("Battle Cards", 266_1095, ItemClassification.filler, 1, 1, "005E", False, False),
+    "Lionheart 5": KHCOMItemData("Battle Cards", 266_1096, ItemClassification.filler, 1, 1, "005F", False, False),
+    "Lionheart 6": KHCOMItemData("Battle Cards", 266_1097, ItemClassification.filler, 1, 1, "0060", False, False),
+    "Lionheart 7": KHCOMItemData("Battle Cards", 266_1098, ItemClassification.filler, 1, 1, "0061", False, False),
+    "Lionheart 8": KHCOMItemData("Battle Cards", 266_1099, ItemClassification.filler, 1, 1, "0062", False, False),
+    "Lionheart 9": KHCOMItemData("Battle Cards", 266_1100, ItemClassification.filler, 1, 1, "0063", False, False),
+    "Lady Luck 0": KHCOMItemData("Battle Cards", 266_1101, ItemClassification.useful, 1, 1, "0064", True, False),
+    "Lady Luck 1": KHCOMItemData("Battle Cards", 266_1102, ItemClassification.filler, 1, 1, "0065", False, False),
+    "Lady Luck 2": KHCOMItemData("Battle Cards", 266_1103, ItemClassification.filler, 1, 1, "0066", False, False),
+    "Lady Luck 3": KHCOMItemData("Battle Cards", 266_1104, ItemClassification.filler, 1, 1, "0067", False, False),
+    "Lady Luck 4": KHCOMItemData("Battle Cards", 266_1105, ItemClassification.filler, 1, 1, "0068", False, False),
+    "Lady Luck 5": KHCOMItemData("Battle Cards", 266_1106, ItemClassification.filler, 1, 1, "0069", False, False),
+    "Lady Luck 6": KHCOMItemData("Battle Cards", 266_1107, ItemClassification.filler, 1, 1, "006A", False, False),
+    "Lady Luck 7": KHCOMItemData("Battle Cards", 266_1108, ItemClassification.filler, 1, 1, "006B", False, False),
+    "Lady Luck 8": KHCOMItemData("Battle Cards", 266_1109, ItemClassification.filler, 1, 1, "006C", False, False),
+    "Lady Luck 9": KHCOMItemData("Battle Cards", 266_1110, ItemClassification.filler, 1, 1, "006D", False, False),
+    "Divine Rose 0": KHCOMItemData("Battle Cards", 266_1111, ItemClassification.useful, 1, 1, "006E", True, False),
+    "Divine Rose 1": KHCOMItemData("Battle Cards", 266_1112, ItemClassification.filler, 1, 1, "006F", False, False),
+    "Divine Rose 2": KHCOMItemData("Battle Cards", 266_1113, ItemClassification.filler, 1, 1, "0070", False, False),
+    "Divine Rose 3": KHCOMItemData("Battle Cards", 266_1114, ItemClassification.filler, 1, 1, "0071", False, False),
+    "Divine Rose 4": KHCOMItemData("Battle Cards", 266_1115, ItemClassification.filler, 1, 1, "0072", False, False),
+    "Divine Rose 5": KHCOMItemData("Battle Cards", 266_1116, ItemClassification.filler, 1, 1, "0073", False, False),
+    "Divine Rose 6": KHCOMItemData("Battle Cards", 266_1117, ItemClassification.filler, 1, 1, "0074", False, False),
+    "Divine Rose 7": KHCOMItemData("Battle Cards", 266_1118, ItemClassification.filler, 1, 1, "0075", False, False),
+    "Divine Rose 8": KHCOMItemData("Battle Cards", 266_1119, ItemClassification.filler, 1, 1, "0076", False, False),
+    "Divine Rose 9": KHCOMItemData("Battle Cards", 266_1120, ItemClassification.filler, 1, 1, "0077", False, False),
+    "Oathkeeper 0": KHCOMItemData("Battle Cards", 266_1121, ItemClassification.useful, 1, 1, "0078", True, False),
+    "Oathkeeper 1": KHCOMItemData("Battle Cards", 266_1122, ItemClassification.filler, 1, 1, "0079", False, False),
+    "Oathkeeper 2": KHCOMItemData("Battle Cards", 266_1123, ItemClassification.filler, 1, 1, "007A", False, False),
+    "Oathkeeper 3": KHCOMItemData("Battle Cards", 266_1124, ItemClassification.filler, 1, 1, "007B", False, False),
+    "Oathkeeper 4": KHCOMItemData("Battle Cards", 266_1125, ItemClassification.filler, 1, 1, "007C", False, False),
+    "Oathkeeper 5": KHCOMItemData("Battle Cards", 266_1126, ItemClassification.filler, 1, 1, "007D", False, False),
+    "Oathkeeper 6": KHCOMItemData("Battle Cards", 266_1127, ItemClassification.filler, 1, 1, "007E", False, False),
+    "Oathkeeper 7": KHCOMItemData("Battle Cards", 266_1128, ItemClassification.filler, 1, 1, "007F", False, False),
+    "Oathkeeper 8": KHCOMItemData("Battle Cards", 266_1129, ItemClassification.filler, 1, 1, "0080", False, False),
+    "Oathkeeper 9": KHCOMItemData("Battle Cards", 266_1130, ItemClassification.filler, 1, 1, "0081", False, False),
+    "Oblivion 0": KHCOMItemData("Battle Cards", 266_1131, ItemClassification.useful, 1, 1, "0082", True, False),
+    "Oblivion 1": KHCOMItemData("Battle Cards", 266_1132, ItemClassification.filler, 1, 1, "0083", False, False),
+    "Oblivion 2": KHCOMItemData("Battle Cards", 266_1133, ItemClassification.filler, 1, 1, "0084", False, False),
+    "Oblivion 3": KHCOMItemData("Battle Cards", 266_1134, ItemClassification.filler, 1, 1, "0085", False, False),
+    "Oblivion 4": KHCOMItemData("Battle Cards", 266_1135, ItemClassification.filler, 1, 1, "0086", False, False),
+    "Oblivion 5": KHCOMItemData("Battle Cards", 266_1136, ItemClassification.filler, 1, 1, "0087", False, False),
+    "Oblivion 6": KHCOMItemData("Battle Cards", 266_1137, ItemClassification.filler, 1, 1, "0088", False, False),
+    "Oblivion 7": KHCOMItemData("Battle Cards", 266_1138, ItemClassification.filler, 1, 1, "0089", False, False),
+    "Oblivion 8": KHCOMItemData("Battle Cards", 266_1139, ItemClassification.filler, 1, 1, "008A", False, False),
+    "Oblivion 9": KHCOMItemData("Battle Cards", 266_1140, ItemClassification.filler, 1, 1, "008B", False, False),
+    "Diamond Dust 0": KHCOMItemData("Battle Cards", 266_1141, ItemClassification.useful, 1, 1, "008C", True, False),
+    "Diamond Dust 1": KHCOMItemData("Battle Cards", 266_1142, ItemClassification.filler, 1, 1, "008D", False, False),
+    "Diamond Dust 2": KHCOMItemData("Battle Cards", 266_1143, ItemClassification.filler, 1, 1, "008E", False, False),
+    "Diamond Dust 3": KHCOMItemData("Battle Cards", 266_1144, ItemClassification.filler, 1, 1, "0090", False, False),
+    "Diamond Dust 4": KHCOMItemData("Battle Cards", 266_1145, ItemClassification.filler, 1, 1, "0091", False, False),
+    "Diamond Dust 5": KHCOMItemData("Battle Cards", 266_1146, ItemClassification.filler, 1, 1, "0092", False, False),
+    "Diamond Dust 6": KHCOMItemData("Battle Cards", 266_1147, ItemClassification.filler, 1, 1, "0093", False, False),
+    "Diamond Dust 7": KHCOMItemData("Battle Cards", 266_1148, ItemClassification.filler, 1, 1, "0094", False, False),
+    "Diamond Dust 8": KHCOMItemData("Battle Cards", 266_1149, ItemClassification.filler, 1, 1, "0095", False, False),
+    "Diamond Dust 9": KHCOMItemData("Battle Cards", 266_1150, ItemClassification.filler, 1, 1, "0096", False, False),
+    "One Winged Angel 0": KHCOMItemData("Battle Cards", 266_1151, ItemClassification.useful, 1, 1, "0097", True, False),
+    "One Winged Angel 1": KHCOMItemData("Battle Cards", 266_1152, ItemClassification.filler, 1, 1, "0098", False, False),
+    "One Winged Angel 2": KHCOMItemData("Battle Cards", 266_1153, ItemClassification.filler, 1, 1, "0099", False, False),
+    "One Winged Angel 3": KHCOMItemData("Battle Cards", 266_1154, ItemClassification.filler, 1, 1, "009A", False, False),
+    "One Winged Angel 4": KHCOMItemData("Battle Cards", 266_1155, ItemClassification.filler, 1, 1, "009B", False, False),
+    "One Winged Angel 5": KHCOMItemData("Battle Cards", 266_1156, ItemClassification.filler, 1, 1, "009C", False, False),
+    "One Winged Angel 6": KHCOMItemData("Battle Cards", 266_1157, ItemClassification.filler, 1, 1, "009D", False, False),
+    "One Winged Angel 7": KHCOMItemData("Battle Cards", 266_1158, ItemClassification.filler, 1, 1, "009E", False, False),
+    "One Winged Angel 8": KHCOMItemData("Battle Cards", 266_1159, ItemClassification.filler, 1, 1, "009F", False, False),
+    "One Winged Angel 9": KHCOMItemData("Battle Cards", 266_1160, ItemClassification.filler, 1, 1, "00A0", False, False),
+    "Ultima Weapon 0": KHCOMItemData("Battle Cards", 266_1161, ItemClassification.useful, 1, 1, "00A1", True, False),
+    "Ultima Weapon 1": KHCOMItemData("Battle Cards", 266_1162, ItemClassification.filler, 1, 1, "00A2", False, False),
+    "Ultima Weapon 2": KHCOMItemData("Battle Cards", 266_1163, ItemClassification.filler, 1, 1, "00A2", False, False),
+    "Ultima Weapon 3": KHCOMItemData("Battle Cards", 266_1164, ItemClassification.filler, 1, 1, "00A3", False, False),
+    "Ultima Weapon 4": KHCOMItemData("Battle Cards", 266_1165, ItemClassification.filler, 1, 1, "00A4", False, False),
+    "Ultima Weapon 5": KHCOMItemData("Battle Cards", 266_1166, ItemClassification.filler, 1, 1, "00A5", False, False),
+    "Ultima Weapon 6": KHCOMItemData("Battle Cards", 266_1167, ItemClassification.filler, 1, 1, "00A6", False, False),
+    "Ultima Weapon 7": KHCOMItemData("Battle Cards", 266_1168, ItemClassification.filler, 1, 1, "00A7", False, False),
+    "Ultima Weapon 8": KHCOMItemData("Battle Cards", 266_1169, ItemClassification.filler, 1, 1, "00A8", False, False),
+    "Ultima Weapon 9": KHCOMItemData("Battle Cards", 266_1170, ItemClassification.filler, 1, 1, "00A9", False, False),
+    "Fire 0": KHCOMItemData("Battle Cards", 266_1171, ItemClassification.useful, 1, 1, "00AA", True, False),
+    "Fire 1": KHCOMItemData("Battle Cards", 266_1172, ItemClassification.filler, 1, 1, "00AB", False, False),
+    "Fire 2": KHCOMItemData("Battle Cards", 266_1173, ItemClassification.filler, 1, 1, "00AC", False, False),
+    "Fire 3": KHCOMItemData("Battle Cards", 266_1174, ItemClassification.filler, 1, 1, "00AD", False, False),
+    "Fire 4": KHCOMItemData("Battle Cards", 266_1175, ItemClassification.filler, 1, 1, "00AE", False, False),
+    "Fire 5": KHCOMItemData("Battle Cards", 266_1176, ItemClassification.filler, 1, 1, "00AF", False, False),
+    "Fire 6": KHCOMItemData("Battle Cards", 266_1177, ItemClassification.filler, 1, 1, "00B0", False, False),
+    "Fire 7": KHCOMItemData("Battle Cards", 266_1178, ItemClassification.filler, 1, 1, "00B1", False, False),
+    "Fire 8": KHCOMItemData("Battle Cards", 266_1179, ItemClassification.filler, 1, 1, "00B2", False, False),
+    "Fire 9": KHCOMItemData("Battle Cards", 266_1180, ItemClassification.filler, 1, 1, "00B3", False, False),
+    "Blizzard 0": KHCOMItemData("Battle Cards", 266_1181, ItemClassification.useful, 1, 1, "00B4", True, False),
+    "Blizzard 1": KHCOMItemData("Battle Cards", 266_1182, ItemClassification.filler, 1, 1, "00B5", False, False),
+    "Blizzard 2": KHCOMItemData("Battle Cards", 266_1183, ItemClassification.filler, 1, 1, "00B6", False, False),
+    "Blizzard 3": KHCOMItemData("Battle Cards", 266_1184, ItemClassification.filler, 1, 1, "00B7", False, False),
+    "Blizzard 4": KHCOMItemData("Battle Cards", 266_1185, ItemClassification.filler, 1, 1, "00B8", False, False),
+    "Blizzard 5": KHCOMItemData("Battle Cards", 266_1186, ItemClassification.filler, 1, 1, "00B9", False, False),
+    "Blizzard 6": KHCOMItemData("Battle Cards", 266_1187, ItemClassification.filler, 1, 1, "00BA", False, False),
+    "Blizzard 7": KHCOMItemData("Battle Cards", 266_1188, ItemClassification.filler, 1, 1, "00BB", False, False),
+    "Blizzard 8": KHCOMItemData("Battle Cards", 266_1189, ItemClassification.filler, 1, 1, "00BC", False, False),
+    "Blizzard 9": KHCOMItemData("Battle Cards", 266_1190, ItemClassification.filler, 1, 1, "00BD", False, False),
+    "Thunder 0": KHCOMItemData("Battle Cards", 266_1191, ItemClassification.useful, 1, 1, "00BE", True, False),
+    "Thunder 1": KHCOMItemData("Battle Cards", 266_1192, ItemClassification.filler, 1, 1, "00BF", False, False),
+    "Thunder 2": KHCOMItemData("Battle Cards", 266_1193, ItemClassification.filler, 1, 1, "00C0", False, False),
+    "Thunder 3": KHCOMItemData("Battle Cards", 266_1194, ItemClassification.filler, 1, 1, "00C1", False, False),
+    "Thunder 4": KHCOMItemData("Battle Cards", 266_1195, ItemClassification.filler, 1, 1, "00C2", False, False),
+    "Thunder 5": KHCOMItemData("Battle Cards", 266_1196, ItemClassification.filler, 1, 1, "00C3", False, False),
+    "Thunder 6": KHCOMItemData("Battle Cards", 266_1197, ItemClassification.filler, 1, 1, "00C4", False, False),
+    "Thunder 7": KHCOMItemData("Battle Cards", 266_1198, ItemClassification.filler, 1, 1, "00C5", False, False),
+    "Thunder 8": KHCOMItemData("Battle Cards", 266_1199, ItemClassification.filler, 1, 1, "00C6", False, False),
+    "Thunder 9": KHCOMItemData("Battle Cards", 266_1200, ItemClassification.filler, 1, 1, "00C7", False, False),
+    "Cure 0": KHCOMItemData("Battle Cards", 266_1201, ItemClassification.useful, 1, 1, "00C8", True, True),
+    "Cure 1": KHCOMItemData("Battle Cards", 266_1202, ItemClassification.filler, 1, 1, "00C9", False, True),
+    "Cure 2": KHCOMItemData("Battle Cards", 266_1203, ItemClassification.filler, 1, 1, "00CA", False, True),
+    "Cure 3": KHCOMItemData("Battle Cards", 266_1204, ItemClassification.filler, 1, 1, "00CB", False, True),
+    "Cure 4": KHCOMItemData("Battle Cards", 266_1205, ItemClassification.filler, 1, 1, "00CC", False, True),
+    "Cure 5": KHCOMItemData("Battle Cards", 266_1206, ItemClassification.filler, 1, 1, "00CD", False, True),
+    "Cure 6": KHCOMItemData("Battle Cards", 266_1207, ItemClassification.filler, 1, 1, "00CE", False, True),
+    "Cure 7": KHCOMItemData("Battle Cards", 266_1208, ItemClassification.filler, 1, 1, "00CF", False, True),
+    "Cure 8": KHCOMItemData("Battle Cards", 266_1209, ItemClassification.filler, 1, 1, "00D0", False, True),
+    "Cure 9": KHCOMItemData("Battle Cards", 266_1210, ItemClassification.filler, 1, 1, "00D1", False, True),
+    "Gravity 0": KHCOMItemData("Battle Cards", 266_1211, ItemClassification.useful, 1, 1, "00D2", True, False),
+    "Gravity 1": KHCOMItemData("Battle Cards", 266_1212, ItemClassification.filler, 1, 1, "00D3", False, False),
+    "Gravity 2": KHCOMItemData("Battle Cards", 266_1213, ItemClassification.filler, 1, 1, "00D4", False, False),
+    "Gravity 3": KHCOMItemData("Battle Cards", 266_1214, ItemClassification.filler, 1, 1, "00D5", False, False),
+    "Gravity 4": KHCOMItemData("Battle Cards", 266_1215, ItemClassification.filler, 1, 1, "00D6", False, False),
+    "Gravity 5": KHCOMItemData("Battle Cards", 266_1216, ItemClassification.filler, 1, 1, "00D7", False, False),
+    "Gravity 6": KHCOMItemData("Battle Cards", 266_1217, ItemClassification.filler, 1, 1, "00D8", False, False),
+    "Gravity 7": KHCOMItemData("Battle Cards", 266_1218, ItemClassification.filler, 1, 1, "00D9", False, False),
+    "Gravity 8": KHCOMItemData("Battle Cards", 266_1219, ItemClassification.filler, 1, 1, "00DA", False, False),
+    "Gravity 9": KHCOMItemData("Battle Cards", 266_1220, ItemClassification.filler, 1, 1, "00DB", False, False),
+    "Stop 0": KHCOMItemData("Battle Cards", 266_1221, ItemClassification.useful, 1, 1, "00DC", True, False),
+    "Stop 1": KHCOMItemData("Battle Cards", 266_1222, ItemClassification.filler, 1, 1, "00DD", False, False),
+    "Stop 2": KHCOMItemData("Battle Cards", 266_1223, ItemClassification.filler, 1, 1, "00DE", False, False),
+    "Stop 3": KHCOMItemData("Battle Cards", 266_1224, ItemClassification.filler, 1, 1, "00DF", False, False),
+    "Stop 4": KHCOMItemData("Battle Cards", 266_1225, ItemClassification.filler, 1, 1, "00E0", False, False),
+    "Stop 5": KHCOMItemData("Battle Cards", 266_1226, ItemClassification.filler, 1, 1, "00E1", False, False),
+    "Stop 6": KHCOMItemData("Battle Cards", 266_1227, ItemClassification.filler, 1, 1, "00E2", False, False),
+    "Stop 7": KHCOMItemData("Battle Cards", 266_1228, ItemClassification.filler, 1, 1, "00E3", False, False),
+    "Stop 8": KHCOMItemData("Battle Cards", 266_1229, ItemClassification.filler, 1, 1, "00E4", False, False),
+    "Stop 9": KHCOMItemData("Battle Cards", 266_1230, ItemClassification.filler, 1, 1, "00E5", False, False),
+    "Aero 0": KHCOMItemData("Battle Cards", 266_1231, ItemClassification.useful, 1, 1, "00E6", True, False),
+    "Aero 1": KHCOMItemData("Battle Cards", 266_1232, ItemClassification.filler, 1, 1, "00E7", False, False),
+    "Aero 2": KHCOMItemData("Battle Cards", 266_1233, ItemClassification.filler, 1, 1, "00E8", False, False),
+    "Aero 3": KHCOMItemData("Battle Cards", 266_1234, ItemClassification.filler, 1, 1, "00E9", False, False),
+    "Aero 4": KHCOMItemData("Battle Cards", 266_1235, ItemClassification.filler, 1, 1, "00EA", False, False),
+    "Aero 5": KHCOMItemData("Battle Cards", 266_1236, ItemClassification.filler, 1, 1, "00EB", False, False),
+    "Aero 6": KHCOMItemData("Battle Cards", 266_1237, ItemClassification.filler, 1, 1, "00EC", False, False),
+    "Aero 7": KHCOMItemData("Battle Cards", 266_1238, ItemClassification.filler, 1, 1, "00ED", False, False),
+    "Aero 8": KHCOMItemData("Battle Cards", 266_1239, ItemClassification.filler, 1, 1, "00EE", False, False),
+    "Aero 9": KHCOMItemData("Battle Cards", 266_1240, ItemClassification.filler, 1, 1, "00EF", False, False),
+    "Simba 0": KHCOMItemData("Battle Cards", 266_1241, ItemClassification.useful, 1, 1, "0104", True, False),
+    "Simba 1": KHCOMItemData("Battle Cards", 266_1242, ItemClassification.filler, 1, 1, "0105", False, False),
+    "Simba 2": KHCOMItemData("Battle Cards", 266_1243, ItemClassification.filler, 1, 1, "0106", False, False),
+    "Simba 3": KHCOMItemData("Battle Cards", 266_1244, ItemClassification.filler, 1, 1, "0107", False, False),
+    "Simba 4": KHCOMItemData("Battle Cards", 266_1245, ItemClassification.filler, 1, 1, "0108", False, False),
+    "Simba 5": KHCOMItemData("Battle Cards", 266_1246, ItemClassification.filler, 1, 1, "0109", False, False),
+    "Simba 6": KHCOMItemData("Battle Cards", 266_1247, ItemClassification.filler, 1, 1, "010A", False, False),
+    "Simba 7": KHCOMItemData("Battle Cards", 266_1248, ItemClassification.filler, 1, 1, "010B", False, False),
+    "Simba 8": KHCOMItemData("Battle Cards", 266_1249, ItemClassification.filler, 1, 1, "010C", False, False),
+    "Simba 9": KHCOMItemData("Battle Cards", 266_1250, ItemClassification.filler, 1, 1, "010D", False, False),
+    "Genie 0": KHCOMItemData("Battle Cards", 266_1251, ItemClassification.useful, 1, 1, "010E", True, False),
+    "Genie 1": KHCOMItemData("Battle Cards", 266_1252, ItemClassification.filler, 1, 1, "010F", False, False),
+    "Genie 2": KHCOMItemData("Battle Cards", 266_1253, ItemClassification.filler, 1, 1, "0110", False, False),
+    "Genie 3": KHCOMItemData("Battle Cards", 266_1254, ItemClassification.filler, 1, 1, "0111", False, False),
+    "Genie 4": KHCOMItemData("Battle Cards", 266_1255, ItemClassification.filler, 1, 1, "0112", False, False),
+    "Genie 5": KHCOMItemData("Battle Cards", 266_1256, ItemClassification.filler, 1, 1, "0113", False, False),
+    "Genie 6": KHCOMItemData("Battle Cards", 266_1257, ItemClassification.filler, 1, 1, "0114", False, False),
+    "Genie 7": KHCOMItemData("Battle Cards", 266_1258, ItemClassification.filler, 1, 1, "0115", False, False),
+    "Genie 8": KHCOMItemData("Battle Cards", 266_1259, ItemClassification.filler, 1, 1, "0116", False, False),
+    "Genie 9": KHCOMItemData("Battle Cards", 266_1260, ItemClassification.filler, 1, 1, "0117", False, False),
+    "Bambi 0": KHCOMItemData("Battle Cards", 266_1271, ItemClassification.useful, 1, 1, "0118", True, False),
+    "Bambi 1": KHCOMItemData("Battle Cards", 266_1272, ItemClassification.filler, 1, 1, "0119", False, False),
+    "Bambi 2": KHCOMItemData("Battle Cards", 266_1273, ItemClassification.filler, 1, 1, "011A", False, False),
+    "Bambi 3": KHCOMItemData("Battle Cards", 266_1274, ItemClassification.filler, 1, 1, "011B", False, False),
+    "Bambi 4": KHCOMItemData("Battle Cards", 266_1275, ItemClassification.filler, 1, 1, "011C", False, False),
+    "Bambi 5": KHCOMItemData("Battle Cards", 266_1276, ItemClassification.filler, 1, 1, "011D", False, False),
+    "Bambi 6": KHCOMItemData("Battle Cards", 266_1277, ItemClassification.filler, 1, 1, "011E", False, False),
+    "Bambi 7": KHCOMItemData("Battle Cards", 266_1278, ItemClassification.filler, 1, 1, "011F", False, False),
+    "Bambi 8": KHCOMItemData("Battle Cards", 266_1279, ItemClassification.filler, 1, 1, "0120", False, False),
+    "Bambi 9": KHCOMItemData("Battle Cards", 266_1280, ItemClassification.filler, 1, 1, "0121", False, False),
+    "Dumbo 0": KHCOMItemData("Battle Cards", 266_1281, ItemClassification.useful, 1, 1, "0122", True, False),
+    "Dumbo 1": KHCOMItemData("Battle Cards", 266_1282, ItemClassification.filler, 1, 1, "0123", False, False),
+    "Dumbo 2": KHCOMItemData("Battle Cards", 266_1283, ItemClassification.filler, 1, 1, "0124", False, False),
+    "Dumbo 3": KHCOMItemData("Battle Cards", 266_1284, ItemClassification.filler, 1, 1, "0125", False, False),
+    "Dumbo 4": KHCOMItemData("Battle Cards", 266_1285, ItemClassification.filler, 1, 1, "0126", False, False),
+    "Dumbo 5": KHCOMItemData("Battle Cards", 266_1286, ItemClassification.filler, 1, 1, "0127", False, False),
+    "Dumbo 6": KHCOMItemData("Battle Cards", 266_1287, ItemClassification.filler, 1, 1, "0128", False, False),
+    "Dumbo 7": KHCOMItemData("Battle Cards", 266_1288, ItemClassification.filler, 1, 1, "0129", False, False),
+    "Dumbo 8": KHCOMItemData("Battle Cards", 266_1289, ItemClassification.filler, 1, 1, "012A", False, False),
+    "Dumbo 9": KHCOMItemData("Battle Cards", 266_1290, ItemClassification.filler, 1, 1, "012B", False, False),
+    "Tinker Bell 0": KHCOMItemData("Battle Cards", 266_1291, ItemClassification.useful, 1, 1, "012C", True, False),
+    "Tinker Bell 1": KHCOMItemData("Battle Cards", 266_1292, ItemClassification.filler, 1, 1, "012D", False, False),
+    "Tinker Bell 2": KHCOMItemData("Battle Cards", 266_1293, ItemClassification.filler, 1, 1, "012E", False, False),
+    "Tinker Bell 3": KHCOMItemData("Battle Cards", 266_1294, ItemClassification.filler, 1, 1, "012F", False, False),
+    "Tinker Bell 4": KHCOMItemData("Battle Cards", 266_1295, ItemClassification.filler, 1, 1, "0130", False, False),
+    "Tinker Bell 5": KHCOMItemData("Battle Cards", 266_1296, ItemClassification.filler, 1, 1, "0131", False, False),
+    "Tinker Bell 6": KHCOMItemData("Battle Cards", 266_1297, ItemClassification.filler, 1, 1, "0132", False, False),
+    "Tinker Bell 7": KHCOMItemData("Battle Cards", 266_1298, ItemClassification.filler, 1, 1, "0133", False, False),
+    "Tinker Bell 8": KHCOMItemData("Battle Cards", 266_1299, ItemClassification.filler, 1, 1, "0134", False, False),
+    "Tinker Bell 9": KHCOMItemData("Battle Cards", 266_1300, ItemClassification.filler, 1, 1, "0135", False, False),
+    "Mushu 0": KHCOMItemData("Battle Cards", 266_1301, ItemClassification.useful, 1, 1, "0136", True, False),
+    "Mushu 1": KHCOMItemData("Battle Cards", 266_1302, ItemClassification.filler, 1, 1, "0137", False, False),
+    "Mushu 2": KHCOMItemData("Battle Cards", 266_1303, ItemClassification.filler, 1, 1, "0138", False, False),
+    "Mushu 3": KHCOMItemData("Battle Cards", 266_1304, ItemClassification.filler, 1, 1, "0139", False, False),
+    "Mushu 4": KHCOMItemData("Battle Cards", 266_1305, ItemClassification.filler, 1, 1, "013A", False, False),
+    "Mushu 5": KHCOMItemData("Battle Cards", 266_1306, ItemClassification.filler, 1, 1, "013B", False, False),
+    "Mushu 6": KHCOMItemData("Battle Cards", 266_1307, ItemClassification.filler, 1, 1, "013C", False, False),
+    "Mushu 7": KHCOMItemData("Battle Cards", 266_1308, ItemClassification.filler, 1, 1, "013D", False, False),
+    "Mushu 8": KHCOMItemData("Battle Cards", 266_1309, ItemClassification.filler, 1, 1, "013E", False, False),
+    "Mushu 9": KHCOMItemData("Battle Cards", 266_1310, ItemClassification.filler, 1, 1, "013F", False, False),
+    "Cloud 0": KHCOMItemData("Battle Cards", 266_1311, ItemClassification.useful, 1, 1, "0140", True, False),
+    "Cloud 1": KHCOMItemData("Battle Cards", 266_1312, ItemClassification.filler, 1, 1, "0141", False, False),
+    "Cloud 2": KHCOMItemData("Battle Cards", 266_1313, ItemClassification.filler, 1, 1, "0142", False, False),
+    "Cloud 3": KHCOMItemData("Battle Cards", 266_1314, ItemClassification.filler, 1, 1, "0143", False, False),
+    "Cloud 4": KHCOMItemData("Battle Cards", 266_1315, ItemClassification.filler, 1, 1, "0144", False, False),
+    "Cloud 5": KHCOMItemData("Battle Cards", 266_1316, ItemClassification.filler, 1, 1, "0145", False, False),
+    "Cloud 6": KHCOMItemData("Battle Cards", 266_1317, ItemClassification.filler, 1, 1, "0146", False, False),
+    "Cloud 7": KHCOMItemData("Battle Cards", 266_1318, ItemClassification.filler, 1, 1, "0147", False, False),
+    "Cloud 8": KHCOMItemData("Battle Cards", 266_1319, ItemClassification.filler, 1, 1, "0148", False, False),
+    "Cloud 9": KHCOMItemData("Battle Cards", 266_1320, ItemClassification.filler, 1, 1, "0149", False, False),
+    "Potion 0": KHCOMItemData("Battle Cards", 266_1321, ItemClassification.useful, 1, 1, "017C", True, False),
+    "Potion 1": KHCOMItemData("Battle Cards", 266_1322, ItemClassification.filler, 1, 1, "017D", False, False),
+    "Potion 2": KHCOMItemData("Battle Cards", 266_1323, ItemClassification.filler, 1, 1, "017E", False, False),
+    "Potion 3": KHCOMItemData("Battle Cards", 266_1324, ItemClassification.filler, 1, 1, "017F", False, False),
+    "Potion 4": KHCOMItemData("Battle Cards", 266_1325, ItemClassification.filler, 1, 1, "0180", False, False),
+    "Potion 5": KHCOMItemData("Battle Cards", 266_1326, ItemClassification.filler, 1, 1, "0181", False, False),
+    "Potion 6": KHCOMItemData("Battle Cards", 266_1327, ItemClassification.filler, 1, 1, "0182", False, False),
+    "Potion 7": KHCOMItemData("Battle Cards", 266_1328, ItemClassification.filler, 1, 1, "0183", False, False),
+    "Potion 8": KHCOMItemData("Battle Cards", 266_1329, ItemClassification.filler, 1, 1, "0184", False, False),
+    "Potion 9": KHCOMItemData("Battle Cards", 266_1330, ItemClassification.filler, 1, 1, "0185", False, False),
+    "Hi-Potion 0": KHCOMItemData("Battle Cards", 266_1331, ItemClassification.useful, 1, 1, "0186", True, False),
+    "Hi-Potion 1": KHCOMItemData("Battle Cards", 266_1332, ItemClassification.filler, 1, 1, "0187", False, False),
+    "Hi-Potion 2": KHCOMItemData("Battle Cards", 266_1333, ItemClassification.filler, 1, 1, "0188", False, False),
+    "Hi-Potion 3": KHCOMItemData("Battle Cards", 266_1334, ItemClassification.filler, 1, 1, "0189", False, False),
+    "Hi-Potion 4": KHCOMItemData("Battle Cards", 266_1335, ItemClassification.filler, 1, 1, "018A", False, False),
+    "Hi-Potion 5": KHCOMItemData("Battle Cards", 266_1336, ItemClassification.filler, 1, 1, "018B", False, False),
+    "Hi-Potion 6": KHCOMItemData("Battle Cards", 266_1337, ItemClassification.filler, 1, 1, "018C", False, False),
+    "Hi-Potion 7": KHCOMItemData("Battle Cards", 266_1338, ItemClassification.filler, 1, 1, "018D", False, False),
+    "Hi-Potion 8": KHCOMItemData("Battle Cards", 266_1339, ItemClassification.filler, 1, 1, "018E", False, False),
+    "Hi-Potion 9": KHCOMItemData("Battle Cards", 266_1340, ItemClassification.filler, 1, 1, "018F", False, False),
+    "Mega-Potion 0": KHCOMItemData("Battle Cards", 266_1341, ItemClassification.useful, 1, 1, "0190", True, False),
+    "Mega-Potion 1": KHCOMItemData("Battle Cards", 266_1342, ItemClassification.filler, 1, 1, "0191", False, False),
+    "Mega-Potion 2": KHCOMItemData("Battle Cards", 266_1343, ItemClassification.filler, 1, 1, "0192", False, False),
+    "Mega-Potion 3": KHCOMItemData("Battle Cards", 266_1344, ItemClassification.filler, 1, 1, "0193", False, False),
+    "Mega-Potion 4": KHCOMItemData("Battle Cards", 266_1345, ItemClassification.filler, 1, 1, "0194", False, False),
+    "Mega-Potion 5": KHCOMItemData("Battle Cards", 266_1346, ItemClassification.filler, 1, 1, "0195", False, False),
+    "Mega-Potion 6": KHCOMItemData("Battle Cards", 266_1347, ItemClassification.filler, 1, 1, "0196", False, False),
+    "Mega-Potion 7": KHCOMItemData("Battle Cards", 266_1348, ItemClassification.filler, 1, 1, "0197", False, False),
+    "Mega-Potion 8": KHCOMItemData("Battle Cards", 266_1349, ItemClassification.filler, 1, 1, "0198", False, False),
+    "Mega-Potion 9": KHCOMItemData("Battle Cards", 266_1350, ItemClassification.filler, 1, 1, "0199", False, False),
+    "Ether 0": KHCOMItemData("Battle Cards", 266_1351, ItemClassification.useful, 1, 1, "019A", True, False),
+    "Ether 1": KHCOMItemData("Battle Cards", 266_1352, ItemClassification.filler, 1, 1, "019B", False, False),
+    "Ether 2": KHCOMItemData("Battle Cards", 266_1353, ItemClassification.filler, 1, 1, "019C", False, False),
+    "Ether 3": KHCOMItemData("Battle Cards", 266_1354, ItemClassification.filler, 1, 1, "019D", False, False),
+    "Ether 4": KHCOMItemData("Battle Cards", 266_1355, ItemClassification.filler, 1, 1, "019E", False, False),
+    "Ether 5": KHCOMItemData("Battle Cards", 266_1356, ItemClassification.filler, 1, 1, "019F", False, False),
+    "Ether 6": KHCOMItemData("Battle Cards", 266_1357, ItemClassification.filler, 1, 1, "01A0", False, False),
+    "Ether 7": KHCOMItemData("Battle Cards", 266_1358, ItemClassification.filler, 1, 1, "01A1", False, False),
+    "Ether 8": KHCOMItemData("Battle Cards", 266_1359, ItemClassification.filler, 1, 1, "01A2", False, False),
+    "Ether 9": KHCOMItemData("Battle Cards", 266_1360, ItemClassification.filler, 1, 1, "01A3", False, False),
+    "Mega-Ether 0": KHCOMItemData("Battle Cards", 266_1361, ItemClassification.useful, 1, 1, "01A4", True, False),
+    "Mega-Ether 1": KHCOMItemData("Battle Cards", 266_1362, ItemClassification.filler, 1, 1, "01A5", False, False),
+    "Mega-Ether 2": KHCOMItemData("Battle Cards", 266_1363, ItemClassification.filler, 1, 1, "01A6", False, False),
+    "Mega-Ether 3": KHCOMItemData("Battle Cards", 266_1364, ItemClassification.filler, 1, 1, "01A7", False, False),
+    "Mega-Ether 4": KHCOMItemData("Battle Cards", 266_1365, ItemClassification.filler, 1, 1, "01A8", False, False),
+    "Mega-Ether 5": KHCOMItemData("Battle Cards", 266_1366, ItemClassification.filler, 1, 1, "01A9", False, False),
+    "Mega-Ether 6": KHCOMItemData("Battle Cards", 266_1367, ItemClassification.filler, 1, 1, "01AA", False, False),
+    "Mega-Ether 7": KHCOMItemData("Battle Cards", 266_1368, ItemClassification.filler, 1, 1, "01AB", False, False),
+    "Mega-Ether 8": KHCOMItemData("Battle Cards", 266_1369, ItemClassification.filler, 1, 1, "01AC", False, False),
+    "Mega-Ether 9": KHCOMItemData("Battle Cards", 266_1370, ItemClassification.filler, 1, 1, "01AD", False, False),
+    "Elxir 0": KHCOMItemData("Battle Cards", 266_1371, ItemClassification.useful, 1, 1, "01AE", True, False),
+    "Elxir 1": KHCOMItemData("Battle Cards", 266_1372, ItemClassification.filler, 1, 1, "01AF", False, False),
+    "Elxir 2": KHCOMItemData("Battle Cards", 266_1373, ItemClassification.filler, 1, 1, "01B0", False, False),
+    "Elxir 3": KHCOMItemData("Battle Cards", 266_1374, ItemClassification.filler, 1, 1, "01B1", False, False),
+    "Elxir 4": KHCOMItemData("Battle Cards", 266_1375, ItemClassification.filler, 1, 1, "01B2", False, False),
+    "Elxir 5": KHCOMItemData("Battle Cards", 266_1376, ItemClassification.filler, 1, 1, "01B3", False, False),
+    "Elxir 6": KHCOMItemData("Battle Cards", 266_1377, ItemClassification.filler, 1, 1, "01B4", False, False),
+    "Elxir 7": KHCOMItemData("Battle Cards", 266_1378, ItemClassification.filler, 1, 1, "01B5", False, False),
+    "Elxir 8": KHCOMItemData("Battle Cards", 266_1379, ItemClassification.filler, 1, 1, "01B6", False, False),
+    "Elxir 9": KHCOMItemData("Battle Cards", 266_1380, ItemClassification.filler, 1, 1, "01B7", False, False),
+    "Megalixir 0": KHCOMItemData("Battle Cards", 266_1381, ItemClassification.useful, 1, 1, "01B8", True, False),
+    "Megalixir 1": KHCOMItemData("Battle Cards", 266_1382, ItemClassification.filler, 1, 1, "01B9", False, False),
+    "Megalixir 2": KHCOMItemData("Battle Cards", 266_1383, ItemClassification.filler, 1, 1, "01BA", False, False),
+    "Megalixir 3": KHCOMItemData("Battle Cards", 266_1384, ItemClassification.filler, 1, 1, "01BB", False, False),
+    "Megalixir 4": KHCOMItemData("Battle Cards", 266_1385, ItemClassification.filler, 1, 1, "01BC", False, False),
+    "Megalixir 5": KHCOMItemData("Battle Cards", 266_1386, ItemClassification.filler, 1, 1, "01BD", False, False),
+    "Megalixir 6": KHCOMItemData("Battle Cards", 266_1387, ItemClassification.filler, 1, 1, "01BE", False, False),
+    "Megalixir 7": KHCOMItemData("Battle Cards", 266_1388, ItemClassification.filler, 1, 1, "01BF", False, False),
+    "Megalixir 8": KHCOMItemData("Battle Cards", 266_1389, ItemClassification.filler, 1, 1, "01C0", False, False),
+    "Megalixir 9": KHCOMItemData("Battle Cards", 266_1390, ItemClassification.filler, 1, 1, "01C1", False, False),
     
     #Premium Battle Cards
-    ,"Premium Kingdom Key 0": ItemData(2001, useful, 1, "premium battle card", "1000", True, False)
-    ,"Premium Kingdom Key 1": ItemData(2002,useful, 1, "premium battle card", "1001", False, False)
-    ,"Premium Kingdom Key 2": ItemData(2003,useful, 1, "premium battle card", "1002", False, False)
-    ,"Premium Kingdom Key 3": ItemData(2004,useful, 1, "premium battle card", "1003", False, False)
-    ,"Premium Kingdom Key 4": ItemData(2005,useful, 1, "premium battle card", "1004", False, False)
-    ,"Premium Kingdom Key 5": ItemData(2006,useful, 1, "premium battle card", "1005", False, False)
-    ,"Premium Kingdom Key 6": ItemData(2007,useful, 1, "premium battle card", "1006", False, False)
-    ,"Premium Kingdom Key 7": ItemData(2008,useful, 1, "premium battle card", "1007", False, False)
-    ,"Premium Kingdom Key 8": ItemData(2009,useful, 1, "premium battle card", "1008", False, False)
-    ,"Premium Kingdom Key 9": ItemData(2010,useful, 1, "premium battle card", "1009", False, False)
-    
-    ,"Premium Three Wishes 0": ItemData(2011, useful, 1, "premium battle card", "100A", True, False)
-    ,"Premium Three Wishes 1": ItemData(2012, useful, 1, "premium battle card", "100B", False, False)
-    ,"Premium Three Wishes 2": ItemData(2013, useful, 1, "premium battle card", "100C", False, False)
-    ,"Premium Three Wishes 3": ItemData(2014, useful, 1, "premium battle card", "100D", False, False)
-    ,"Premium Three Wishes 4": ItemData(2015, useful, 1, "premium battle card", "100E", False, False)
-    ,"Premium Three Wishes 5": ItemData(2016, useful, 1, "premium battle card", "100F", False, False)
-    ,"Premium Three Wishes 6": ItemData(2017, useful, 1, "premium battle card", "1010", False, False)
-    ,"Premium Three Wishes 7": ItemData(2018, useful, 1, "premium battle card", "1011", False, False)
-    ,"Premium Three Wishes 8": ItemData(2019, useful, 1, "premium battle card", "1012", False, False)
-    ,"Premium Three Wishes 9": ItemData(2020, useful, 1, "premium battle card", "1013", False, False)
-    
-    ,"Premium Crabclaw 0": ItemData(2021, useful, 1, "premium battle card", "1014", True, False)
-    ,"Premium Crabclaw 1": ItemData(2022, useful, 1, "premium battle card", "1015", False, False)
-    ,"Premium Crabclaw 2": ItemData(2023, useful, 1, "premium battle card", "1016", False, False)
-    ,"Premium Crabclaw 3": ItemData(2024, useful, 1, "premium battle card", "1017", False, False)
-    ,"Premium Crabclaw 4": ItemData(2025, useful, 1, "premium battle card", "1018", False, False)
-    ,"Premium Crabclaw 5": ItemData(2026, useful, 1, "premium battle card", "1019", False, False)
-    ,"Premium Crabclaw 6": ItemData(2027, useful, 1, "premium battle card", "101A", False, False)
-    ,"Premium Crabclaw 7": ItemData(2028, useful, 1, "premium battle card", "101B", False, False)
-    ,"Premium Crabclaw 8": ItemData(2029, useful, 1, "premium battle card", "101C", False, False)
-    ,"Premium Crabclaw 9": ItemData(2030, useful, 1, "premium battle card", "101D", False, False)
-    
-    ,"Premium Pumpkinhead 0": ItemData(2031, useful, 1, "premium battle card", "101E", True, False)
-    ,"Premium Pumpkinhead 1": ItemData(2032, useful, 1, "premium battle card", "101F", False, False)
-    ,"Premium Pumpkinhead 2": ItemData(2033, useful, 1, "premium battle card", "1020", False, False)
-    ,"Premium Pumpkinhead 3": ItemData(2034, useful, 1, "premium battle card", "1021", False, False)
-    ,"Premium Pumpkinhead 4": ItemData(2035, useful, 1, "premium battle card", "1022", False, False)
-    ,"Premium Pumpkinhead 5": ItemData(2036, useful, 1, "premium battle card", "1023", False, False)
-    ,"Premium Pumpkinhead 6": ItemData(2037, useful, 1, "premium battle card", "1024", False, False)
-    ,"Premium Pumpkinhead 7": ItemData(2038, useful, 1, "premium battle card", "1025", False, False)
-    ,"Premium Pumpkinhead 8": ItemData(2039, useful, 1, "premium battle card", "1026", False, False)
-    ,"Premium Pumpkinhead 9": ItemData(2040, useful, 1, "premium battle card", "1027", False, False)
-    
-    ,"Premium Fairy Harp 0": ItemData(2041, useful, 1, "premium battle card", "1028", True, False)
-    ,"Premium Fairy Harp 1": ItemData(2042, useful, 1, "premium battle card", "1029", False, False)
-    ,"Premium Fairy Harp 2": ItemData(2043, useful, 1, "premium battle card", "102A", False, False)
-    ,"Premium Fairy Harp 3": ItemData(2044, useful, 1, "premium battle card", "102B", False, False)
-    ,"Premium Fairy Harp 4": ItemData(2045, useful, 1, "premium battle card", "102C", False, False)
-    ,"Premium Fairy Harp 5": ItemData(2046, useful, 1, "premium battle card", "102D", False, False)
-    ,"Premium Fairy Harp 6": ItemData(2047, useful, 1, "premium battle card", "102E", False, False)
-    ,"Premium Fairy Harp 7": ItemData(2048, useful, 1, "premium battle card", "102F", False, False)
-    ,"Premium Fairy Harp 8": ItemData(2049, useful, 1, "premium battle card", "1030", False, False)
-    ,"Premium Fairy Harp 9": ItemData(2050, useful, 1, "premium battle card", "1031", False, False)
-    
-    ,"Premium Wishing Star 0": ItemData(2051, useful, 1, "premium battle card", "1032", True, False)
-    ,"Premium Wishing Star 1": ItemData(2052, useful, 1, "premium battle card", "1033", False, False)
-    ,"Premium Wishing Star 2": ItemData(2053, useful, 1, "premium battle card", "1034", False, False)
-    ,"Premium Wishing Star 3": ItemData(2054, useful, 1, "premium battle card", "1035", False, False)
-    ,"Premium Wishing Star 4": ItemData(2055, useful, 1, "premium battle card", "1036", False, False)
-    ,"Premium Wishing Star 5": ItemData(2056, useful, 1, "premium battle card", "1037", False, False)
-    ,"Premium Wishing Star 6": ItemData(2057, useful, 1, "premium battle card", "1038", False, False)
-    ,"Premium Wishing Star 7": ItemData(2058, useful, 1, "premium battle card", "1039", False, False)
-    ,"Premium Wishing Star 8": ItemData(2059, useful, 1, "premium battle card", "103A", False, False)
-    ,"Premium Wishing Star 9": ItemData(2060, useful, 1, "premium battle card", "103B", False, False)
-    
-    ,"Premium Spellbinder 0": ItemData(2061, useful, 1, "premium battle card", "103C", True, False)
-    ,"Premium Spellbinder 1": ItemData(2062, useful, 1, "premium battle card", "103D", False, False)
-    ,"Premium Spellbinder 2": ItemData(2063, useful, 1, "premium battle card", "103E", False, False)
-    ,"Premium Spellbinder 3": ItemData(2064, useful, 1, "premium battle card", "103F", False, False)
-    ,"Premium Spellbinder 4": ItemData(2065, useful, 1, "premium battle card", "1040", False, False)
-    ,"Premium Spellbinder 5": ItemData(2066, useful, 1, "premium battle card", "1041", False, False)
-    ,"Premium Spellbinder 6": ItemData(2067, useful, 1, "premium battle card", "1042", False, False)
-    ,"Premium Spellbinder 7": ItemData(2068, useful, 1, "premium battle card", "1043", False, False)
-    ,"Premium Spellbinder 8": ItemData(2069, useful, 1, "premium battle card", "1044", False, False)
-    ,"Premium Spellbinder 9": ItemData(2070, useful, 1, "premium battle card", "1045", False, False)
-    
-    ,"Premium Metal Chocobo 0": ItemData(2071, useful, 1, "premium battle card", "1046", True, False)
-    ,"Premium Metal Chocobo 1": ItemData(2072, useful, 1, "premium battle card", "1047", False, False)
-    ,"Premium Metal Chocobo 2": ItemData(2073, useful, 1, "premium battle card", "1048", False, False)
-    ,"Premium Metal Chocobo 3": ItemData(2074, useful, 1, "premium battle card", "1049", False, False)
-    ,"Premium Metal Chocobo 4": ItemData(2075, useful, 1, "premium battle card", "104A", False, False)
-    ,"Premium Metal Chocobo 5": ItemData(2076, useful, 1, "premium battle card", "104B", False, False)
-    ,"Premium Metal Chocobo 6": ItemData(2077, useful, 1, "premium battle card", "104C", False, False)
-    ,"Premium Metal Chocobo 7": ItemData(2078, useful, 1, "premium battle card", "104D", False, False)
-    ,"Premium Metal Chocobo 8": ItemData(2079, useful, 1, "premium battle card", "104E", False, False)
-    ,"Premium Metal Chocobo 9": ItemData(2080, useful, 1, "premium battle card", "104F", False, False)
-    
-    ,"Premium Olympia 0": ItemData(2081, useful, 1, "premium battle card", "1050", True, False)
-    ,"Premium Olympia 1": ItemData(2082, useful, 1, "premium battle card", "1051", False, False)
-    ,"Premium Olympia 2": ItemData(2083, useful, 1, "premium battle card", "1052", False, False)
-    ,"Premium Olympia 3": ItemData(2084, useful, 1, "premium battle card", "1053", False, False)
-    ,"Premium Olympia 4": ItemData(2085, useful, 1, "premium battle card", "1054", False, False)
-    ,"Premium Olympia 5": ItemData(2086, useful, 1, "premium battle card", "1055", False, False)
-    ,"Premium Olympia 6": ItemData(2087, useful, 1, "premium battle card", "1056", False, False)
-    ,"Premium Olympia 7": ItemData(2088, useful, 1, "premium battle card", "1057", False, False)
-    ,"Premium Olympia 8": ItemData(2089, useful, 1, "premium battle card", "1058", False, False)
-    ,"Premium Olympia 9": ItemData(2090, useful, 1, "premium battle card", "1059", False, False)
-    
-    ,"Premium Lionheart 0": ItemData(2091, useful, 1, "premium battle card", "105A", True, False)
-    ,"Premium Lionheart 1": ItemData(2092, useful, 1, "premium battle card", "105B", False, False)
-    ,"Premium Lionheart 2": ItemData(2093, useful, 1, "premium battle card", "105C", False, False)
-    ,"Premium Lionheart 3": ItemData(2094, useful, 1, "premium battle card", "105D", False, False)
-    ,"Premium Lionheart 4": ItemData(2095, useful, 1, "premium battle card", "105E", False, False)
-    ,"Premium Lionheart 5": ItemData(2096, useful, 1, "premium battle card", "105F", False, False)
-    ,"Premium Lionheart 6": ItemData(2097, useful, 1, "premium battle card", "1060", False, False)
-    ,"Premium Lionheart 7": ItemData(2098, useful, 1, "premium battle card", "1061", False, False)
-    ,"Premium Lionheart 8": ItemData(2099, useful, 1, "premium battle card", "1062", False, False)
-    ,"Premium Lionheart 9": ItemData(2100, useful, 1, "premium battle card", "1063", False, False)
-    
-    ,"Premium Lady Luck 0": ItemData(2101, useful, 1, "premium battle card", "1064", True, False)
-    ,"Premium Lady Luck 1": ItemData(2102, useful, 1, "premium battle card", "1065", False, False)
-    ,"Premium Lady Luck 2": ItemData(2103, useful, 1, "premium battle card", "1066", False, False)
-    ,"Premium Lady Luck 3": ItemData(2104, useful, 1, "premium battle card", "1067", False, False)
-    ,"Premium Lady Luck 4": ItemData(2105, useful, 1, "premium battle card", "1068", False, False)
-    ,"Premium Lady Luck 5": ItemData(2106, useful, 1, "premium battle card", "1069", False, False)
-    ,"Premium Lady Luck 6": ItemData(2107, useful, 1, "premium battle card", "106A", False, False)
-    ,"Premium Lady Luck 7": ItemData(2108, useful, 1, "premium battle card", "106B", False, False)
-    ,"Premium Lady Luck 8": ItemData(2109, useful, 1, "premium battle card", "106C", False, False)
-    ,"Premium Lady Luck 9": ItemData(2110, useful, 1, "premium battle card", "106D", False, False)
-    
-    ,"Premium Divine Rose 0": ItemData(2111, useful, 1, "premium battle card", "106E", True, False)
-    ,"Premium Divine Rose 1": ItemData(2112, useful, 1, "premium battle card", "106F", False, False)
-    ,"Premium Divine Rose 2": ItemData(2113, useful, 1, "premium battle card", "1070", False, False)
-    ,"Premium Divine Rose 3": ItemData(2114, useful, 1, "premium battle card", "1071", False, False)
-    ,"Premium Divine Rose 4": ItemData(2115, useful, 1, "premium battle card", "1072", False, False)
-    ,"Premium Divine Rose 5": ItemData(2116, useful, 1, "premium battle card", "1073", False, False)
-    ,"Premium Divine Rose 6": ItemData(2117, useful, 1, "premium battle card", "1074", False, False)
-    ,"Premium Divine Rose 7": ItemData(2118, useful, 1, "premium battle card", "1075", False, False)
-    ,"Premium Divine Rose 8": ItemData(2119, useful, 1, "premium battle card", "1076", False, False)
-    ,"Premium Divine Rose 9": ItemData(2120, useful, 1, "premium battle card", "1077", False, False)
-    
-    ,"Premium Oathkeeper 0": ItemData(2121, useful, 1, "premium battle card", "1078", True, False)
-    ,"Premium Oathkeeper 1": ItemData(2122, useful, 1, "premium battle card", "1079", False, False)
-    ,"Premium Oathkeeper 2": ItemData(2123, useful, 1, "premium battle card", "107A", False, False)
-    ,"Premium Oathkeeper 3": ItemData(2124, useful, 1, "premium battle card", "107B", False, False)
-    ,"Premium Oathkeeper 4": ItemData(2125, useful, 1, "premium battle card", "107C", False, False)
-    ,"Premium Oathkeeper 5": ItemData(2126, useful, 1, "premium battle card", "107D", False, False)
-    ,"Premium Oathkeeper 6": ItemData(2127, useful, 1, "premium battle card", "107E", False, False)
-    ,"Premium Oathkeeper 7": ItemData(2128, useful, 1, "premium battle card", "107F", False, False)
-    ,"Premium Oathkeeper 8": ItemData(2129, useful, 1, "premium battle card", "1080", False, False)
-    ,"Premium Oathkeeper 9": ItemData(2130, useful, 1, "premium battle card", "1081", False, False)
-    
-    ,"Premium Oblivion 0": ItemData(2131, useful, 1, "premium battle card", "1082", True, False)
-    ,"Premium Oblivion 1": ItemData(2132, useful, 1, "premium battle card", "1083", False, False)
-    ,"Premium Oblivion 2": ItemData(2133, useful, 1, "premium battle card", "1084", False, False)
-    ,"Premium Oblivion 3": ItemData(2134, useful, 1, "premium battle card", "1085", False, False)
-    ,"Premium Oblivion 4": ItemData(2135, useful, 1, "premium battle card", "1086", False, False)
-    ,"Premium Oblivion 5": ItemData(2136, useful, 1, "premium battle card", "1087", False, False)
-    ,"Premium Oblivion 6": ItemData(2137, useful, 1, "premium battle card", "1088", False, False)
-    ,"Premium Oblivion 7": ItemData(2138, useful, 1, "premium battle card", "1089", False, False)
-    ,"Premium Oblivion 8": ItemData(2139, useful, 1, "premium battle card", "108A", False, False)
-    ,"Premium Oblivion 9": ItemData(2140, useful, 1, "premium battle card", "108B", False, False)
-    
-    ,"Premium Diamond Dust 0": ItemData(2141, useful, 1, "premium battle card", "108C", True, False)
-    ,"Premium Diamond Dust 1": ItemData(2142, useful, 1, "premium battle card", "108D", False, False)
-    ,"Premium Diamond Dust 2": ItemData(2143, useful, 1, "premium battle card", "108E", False, False)
-    ,"Premium Diamond Dust 3": ItemData(2144, useful, 1, "premium battle card", "1090", False, False)
-    ,"Premium Diamond Dust 4": ItemData(2145, useful, 1, "premium battle card", "1091", False, False)
-    ,"Premium Diamond Dust 5": ItemData(2146, useful, 1, "premium battle card", "1092", False, False)
-    ,"Premium Diamond Dust 6": ItemData(2147, useful, 1, "premium battle card", "1093", False, False)
-    ,"Premium Diamond Dust 7": ItemData(2148, useful, 1, "premium battle card", "1094", False, False)
-    ,"Premium Diamond Dust 8": ItemData(2149, useful, 1, "premium battle card", "1095", False, False)
-    ,"Premium Diamond Dust 9": ItemData(2150, useful, 1, "premium battle card", "1096", False, False)
-    
-    ,"Premium One Winged Angel 0": ItemData(2151, useful, 1, "premium battle card", "1097", True, False)
-    ,"Premium One Winged Angel 1": ItemData(2152, useful, 1, "premium battle card", "1098", False, False)
-    ,"Premium One Winged Angel 2": ItemData(2153, useful, 1, "premium battle card", "1099", False, False)
-    ,"Premium One Winged Angel 3": ItemData(2154, useful, 1, "premium battle card", "109A", False, False)
-    ,"Premium One Winged Angel 4": ItemData(2155, useful, 1, "premium battle card", "109B", False, False)
-    ,"Premium One Winged Angel 5": ItemData(2156, useful, 1, "premium battle card", "109C", False, False)
-    ,"Premium One Winged Angel 6": ItemData(2157, useful, 1, "premium battle card", "109D", False, False)
-    ,"Premium One Winged Angel 7": ItemData(2158, useful, 1, "premium battle card", "109E", False, False)
-    ,"Premium One Winged Angel 8": ItemData(2159, useful, 1, "premium battle card", "109F", False, False)
-    ,"Premium One Winged Angel 9": ItemData(2160, useful, 1, "premium battle card", "10A0", False, False)
-    
-    ,"Premium Ultima Weapon 0": ItemData(2161, useful, 1, "premium battle card", "10A1", True, False)
-    ,"Premium Ultima Weapon 1": ItemData(2162, useful, 1, "premium battle card", "10A2", False, False)
-    ,"Premium Ultima Weapon 2": ItemData(2163, useful, 1, "premium battle card", "10A2", False, False)
-    ,"Premium Ultima Weapon 3": ItemData(2164, useful, 1, "premium battle card", "10A3", False, False)
-    ,"Premium Ultima Weapon 4": ItemData(2165, useful, 1, "premium battle card", "10A4", False, False)
-    ,"Premium Ultima Weapon 5": ItemData(2166, useful, 1, "premium battle card", "10A5", False, False)
-    ,"Premium Ultima Weapon 6": ItemData(2167, useful, 1, "premium battle card", "10A6", False, False)
-    ,"Premium Ultima Weapon 7": ItemData(2168, useful, 1, "premium battle card", "10A7", False, False)
-    ,"Premium Ultima Weapon 8": ItemData(2169, useful, 1, "premium battle card", "10A8", False, False)
-    ,"Premium Ultima Weapon 9": ItemData(2170, useful, 1, "premium battle card", "10A9", False, False)
-    
-    ,"Premium Fire 0": ItemData(2171, useful, 1, "premium battle card", "10AA", True, False)
-    ,"Premium Fire 1": ItemData(2172, useful, 1, "premium battle card", "10AB", False, False)
-    ,"Premium Fire 2": ItemData(2173, useful, 1, "premium battle card", "10AC", False, False)
-    ,"Premium Fire 3": ItemData(2174, useful, 1, "premium battle card", "10AD", False, False)
-    ,"Premium Fire 4": ItemData(2175, useful, 1, "premium battle card", "10AE", False, False)
-    ,"Premium Fire 5": ItemData(2176, useful, 1, "premium battle card", "10AF", False, False)
-    ,"Premium Fire 6": ItemData(2177, useful, 1, "premium battle card", "10B0", False, False)
-    ,"Premium Fire 7": ItemData(2178, useful, 1, "premium battle card", "10B1", False, False)
-    ,"Premium Fire 8": ItemData(2179, useful, 1, "premium battle card", "10B2", False, False)
-    ,"Premium Fire 9": ItemData(2180, useful, 1, "premium battle card", "10B3", False, False)
-    
-    ,"Premium Blizzard 0": ItemData(2181, useful, 1, "premium battle card", "10B4", True, False)
-    ,"Premium Blizzard 1": ItemData(2182, useful, 1, "premium battle card", "10B5", False, False)
-    ,"Premium Blizzard 2": ItemData(2183, useful, 1, "premium battle card", "10B6", False, False)
-    ,"Premium Blizzard 3": ItemData(2184, useful, 1, "premium battle card", "10B7", False, False)
-    ,"Premium Blizzard 4": ItemData(2185, useful, 1, "premium battle card", "10B8", False, False)
-    ,"Premium Blizzard 5": ItemData(2186, useful, 1, "premium battle card", "10B9", False, False)
-    ,"Premium Blizzard 6": ItemData(2187, useful, 1, "premium battle card", "10BA", False, False)
-    ,"Premium Blizzard 7": ItemData(2188, useful, 1, "premium battle card", "10BB", False, False)
-    ,"Premium Blizzard 8": ItemData(2189, useful, 1, "premium battle card", "10BC", False, False)
-    ,"Premium Blizzard 9": ItemData(2190, useful, 1, "premium battle card", "10BD", False, False)
-    
-    ,"Premium Thunder 0": ItemData(2191, useful, 1, "premium battle card", "10BE", True, False)
-    ,"Premium Thunder 1": ItemData(2192, useful, 1, "premium battle card", "10BF", False, False)
-    ,"Premium Thunder 2": ItemData(2193, useful, 1, "premium battle card", "10C0", False, False)
-    ,"Premium Thunder 3": ItemData(2194, useful, 1, "premium battle card", "10C1", False, False)
-    ,"Premium Thunder 4": ItemData(2195, useful, 1, "premium battle card", "10C2", False, False)
-    ,"Premium Thunder 5": ItemData(2196, useful, 1, "premium battle card", "10C3", False, False)
-    ,"Premium Thunder 6": ItemData(2197, useful, 1, "premium battle card", "10C4", False, False)
-    ,"Premium Thunder 7": ItemData(2198, useful, 1, "premium battle card", "10C5", False, False)
-    ,"Premium Thunder 8": ItemData(2199, useful, 1, "premium battle card", "10C6", False, False)
-    ,"Premium Thunder 9": ItemData(2200, useful, 1, "premium battle card", "10C7", False, False)
-    
-    ,"Premium Cure 0": ItemData(2201, useful, 1, "premium battle card", "10C8", True, True)
-    ,"Premium Cure 1": ItemData(2202, useful, 1, "premium battle card", "10C9", False, True)
-    ,"Premium Cure 2": ItemData(2203, useful, 1, "premium battle card", "10CA", False, True)
-    ,"Premium Cure 3": ItemData(2204, useful, 1, "premium battle card", "10CB", False, True)
-    ,"Premium Cure 4": ItemData(2205, useful, 1, "premium battle card", "10CC", False, True)
-    ,"Premium Cure 5": ItemData(2206, useful, 1, "premium battle card", "10CD", False, True)
-    ,"Premium Cure 6": ItemData(2207, useful, 1, "premium battle card", "10CE", False, True)
-    ,"Premium Cure 7": ItemData(2208, useful, 1, "premium battle card", "10CF", False, True)
-    ,"Premium Cure 8": ItemData(2209, useful, 1, "premium battle card", "10D0", False, True)
-    ,"Premium Cure 9": ItemData(2210, useful, 1, "premium battle card", "10D1", False, True)
-    
-    ,"Premium Gravity 0": ItemData(2211, useful, 1, "premium battle card", "10D2", True, False)
-    ,"Premium Gravity 1": ItemData(2212, useful, 1, "premium battle card", "10D3", False, False)
-    ,"Premium Gravity 2": ItemData(2213, useful, 1, "premium battle card", "10D4", False, False)
-    ,"Premium Gravity 3": ItemData(2214, useful, 1, "premium battle card", "10D5", False, False)
-    ,"Premium Gravity 4": ItemData(2215, useful, 1, "premium battle card", "10D6", False, False)
-    ,"Premium Gravity 5": ItemData(2216, useful, 1, "premium battle card", "10D7", False, False)
-    ,"Premium Gravity 6": ItemData(2217, useful, 1, "premium battle card", "10D8", False, False)
-    ,"Premium Gravity 7": ItemData(2218, useful, 1, "premium battle card", "10D9", False, False)
-    ,"Premium Gravity 8": ItemData(2219, useful, 1, "premium battle card", "10DA", False, False)
-    ,"Premium Gravity 9": ItemData(2220, useful, 1, "premium battle card", "10DB", False, False)
-    
-    ,"Premium Stop 0": ItemData(2221, useful, 1, "premium battle card", "10DC", True, False)
-    ,"Premium Stop 1": ItemData(2222, useful, 1, "premium battle card", "10DD", False, False)
-    ,"Premium Stop 2": ItemData(2223, useful, 1, "premium battle card", "10DE", False, False)
-    ,"Premium Stop 3": ItemData(2224, useful, 1, "premium battle card", "10DF", False, False)
-    ,"Premium Stop 4": ItemData(2225, useful, 1, "premium battle card", "10E0", False, False)
-    ,"Premium Stop 5": ItemData(2226, useful, 1, "premium battle card", "10E1", False, False)
-    ,"Premium Stop 6": ItemData(2227, useful, 1, "premium battle card", "10E2", False, False)
-    ,"Premium Stop 7": ItemData(2228, useful, 1, "premium battle card", "10E3", False, False)
-    ,"Premium Stop 8": ItemData(2229, useful, 1, "premium battle card", "10E4", False, False)
-    ,"Premium Stop 9": ItemData(2230, useful, 1, "premium battle card", "10E5", False, False)
-    
-    ,"Premium Aero 0": ItemData(2231, useful, 1, "premium battle card", "10E6", True, False)
-    ,"Premium Aero 1": ItemData(2232, useful, 1, "premium battle card", "10E7", False, False)
-    ,"Premium Aero 2": ItemData(2233, useful, 1, "premium battle card", "10E8", False, False)
-    ,"Premium Aero 3": ItemData(2234, useful, 1, "premium battle card", "10E9", False, False)
-    ,"Premium Aero 4": ItemData(2235, useful, 1, "premium battle card", "10EA", False, False)
-    ,"Premium Aero 5": ItemData(2236, useful, 1, "premium battle card", "10EB", False, False)
-    ,"Premium Aero 6": ItemData(2237, useful, 1, "premium battle card", "10EC", False, False)
-    ,"Premium Aero 7": ItemData(2238, useful, 1, "premium battle card", "10ED", False, False)
-    ,"Premium Aero 8": ItemData(2239, useful, 1, "premium battle card", "10EE", False, False)
-    ,"Premium Aero 9": ItemData(2240, useful, 1, "premium battle card", "10EF", False, False)
-    
-    ,"Premium Simba 0": ItemData(2241, useful, 1, "premium battle card", "1104", True, False)
-    ,"Premium Simba 1": ItemData(2242, useful, 1, "premium battle card", "1105", False, False)
-    ,"Premium Simba 2": ItemData(2243, useful, 1, "premium battle card", "1106", False, False)
-    ,"Premium Simba 3": ItemData(2244, useful, 1, "premium battle card", "1107", False, False)
-    ,"Premium Simba 4": ItemData(2245, useful, 1, "premium battle card", "1108", False, False)
-    ,"Premium Simba 5": ItemData(2246, useful, 1, "premium battle card", "1109", False, False)
-    ,"Premium Simba 6": ItemData(2247, useful, 1, "premium battle card", "110A", False, False)
-    ,"Premium Simba 7": ItemData(2248, useful, 1, "premium battle card", "110B", False, False)
-    ,"Premium Simba 8": ItemData(2249, useful, 1, "premium battle card", "110C", False, False)
-    ,"Premium Simba 9": ItemData(2250, useful, 1, "premium battle card", "110D", False, False)
-    
-    ,"Premium Genie 0": ItemData(2251, useful, 1, "premium battle card", "110E", True, False)
-    ,"Premium Genie 1": ItemData(2252, useful, 1, "premium battle card", "110F", False, False)
-    ,"Premium Genie 2": ItemData(2253, useful, 1, "premium battle card", "1110", False, False)
-    ,"Premium Genie 3": ItemData(2254, useful, 1, "premium battle card", "1111", False, False)
-    ,"Premium Genie 4": ItemData(2255, useful, 1, "premium battle card", "1112", False, False)
-    ,"Premium Genie 5": ItemData(2256, useful, 1, "premium battle card", "1113", False, False)
-    ,"Premium Genie 6": ItemData(2257, useful, 1, "premium battle card", "1114", False, False)
-    ,"Premium Genie 7": ItemData(2258, useful, 1, "premium battle card", "1115", False, False)
-    ,"Premium Genie 8": ItemData(2259, useful, 1, "premium battle card", "1116", False, False)
-    ,"Premium Genie 9": ItemData(2260, useful, 1, "premium battle card", "1117", False, False)
-    
-    ,"Premium Bambi 0": ItemData(2271, useful, 1, "premium battle card", "1118", True, False)
-    ,"Premium Bambi 1": ItemData(2272, useful, 1, "premium battle card", "1119", False, False)
-    ,"Premium Bambi 2": ItemData(2273, useful, 1, "premium battle card", "111A", False, False)
-    ,"Premium Bambi 3": ItemData(2274, useful, 1, "premium battle card", "111B", False, False)
-    ,"Premium Bambi 4": ItemData(2275, useful, 1, "premium battle card", "111C", False, False)
-    ,"Premium Bambi 5": ItemData(2276, useful, 1, "premium battle card", "111D", False, False)
-    ,"Premium Bambi 6": ItemData(2277, useful, 1, "premium battle card", "111E", False, False)
-    ,"Premium Bambi 7": ItemData(2278, useful, 1, "premium battle card", "111F", False, False)
-    ,"Premium Bambi 8": ItemData(2279, useful, 1, "premium battle card", "1120", False, False)
-    ,"Premium Bambi 9": ItemData(2280, useful, 1, "premium battle card", "1121", False, False)
-    
-    ,"Premium Dumbo 0": ItemData(2281, useful, 1, "premium battle card", "1122", True, False)
-    ,"Premium Dumbo 1": ItemData(2282, useful, 1, "premium battle card", "1123", False, False)
-    ,"Premium Dumbo 2": ItemData(2283, useful, 1, "premium battle card", "1124", False, False)
-    ,"Premium Dumbo 3": ItemData(2284, useful, 1, "premium battle card", "1125", False, False)
-    ,"Premium Dumbo 4": ItemData(2285, useful, 1, "premium battle card", "1126", False, False)
-    ,"Premium Dumbo 5": ItemData(2286, useful, 1, "premium battle card", "1127", False, False)
-    ,"Premium Dumbo 6": ItemData(2287, useful, 1, "premium battle card", "1128", False, False)
-    ,"Premium Dumbo 7": ItemData(2288, useful, 1, "premium battle card", "1129", False, False)
-    ,"Premium Dumbo 8": ItemData(2289, useful, 1, "premium battle card", "112A", False, False)
-    ,"Premium Dumbo 9": ItemData(2290, useful, 1, "premium battle card", "112B", False, False)
-    
-    ,"Premium Tinker Bell 0": ItemData(2291, useful, 1, "premium battle card", "112C", True, False)
-    ,"Premium Tinker Bell 1": ItemData(2292, useful, 1, "premium battle card", "112D", False, False)
-    ,"Premium Tinker Bell 2": ItemData(2293, useful, 1, "premium battle card", "112E", False, False)
-    ,"Premium Tinker Bell 3": ItemData(2294, useful, 1, "premium battle card", "112F", False, False)
-    ,"Premium Tinker Bell 4": ItemData(2295, useful, 1, "premium battle card", "1130", False, False)
-    ,"Premium Tinker Bell 5": ItemData(2296, useful, 1, "premium battle card", "1131", False, False)
-    ,"Premium Tinker Bell 6": ItemData(2297, useful, 1, "premium battle card", "1132", False, False)
-    ,"Premium Tinker Bell 7": ItemData(2298, useful, 1, "premium battle card", "1133", False, False)
-    ,"Premium Tinker Bell 8": ItemData(2299, useful, 1, "premium battle card", "1134", False, False)
-    ,"Premium Tinker Bell 9": ItemData(2300, useful, 1, "premium battle card", "1135", False, False)
-    
-    ,"Premium Mushu 0": ItemData(2301, useful, 1, "premium battle card", "1136", True, False)
-    ,"Premium Mushu 1": ItemData(2302, useful, 1, "premium battle card", "1137", False, False)
-    ,"Premium Mushu 2": ItemData(2303, useful, 1, "premium battle card", "1138", False, False)
-    ,"Premium Mushu 3": ItemData(2304, useful, 1, "premium battle card", "1139", False, False)
-    ,"Premium Mushu 4": ItemData(2305, useful, 1, "premium battle card", "113A", False, False)
-    ,"Premium Mushu 5": ItemData(2306, useful, 1, "premium battle card", "113B", False, False)
-    ,"Premium Mushu 6": ItemData(2307, useful, 1, "premium battle card", "113C", False, False)
-    ,"Premium Mushu 7": ItemData(2308, useful, 1, "premium battle card", "113D", False, False)
-    ,"Premium Mushu 8": ItemData(2309, useful, 1, "premium battle card", "113E", False, False)
-    ,"Premium Mushu 9": ItemData(2310, useful, 1, "premium battle card", "113F", False, False)
-    
-    ,"Premium Cloud 0": ItemData(2311, useful, 1, "premium battle card", "1140", True, False)
-    ,"Premium Cloud 1": ItemData(2312, useful, 1, "premium battle card", "1141", False, False)
-    ,"Premium Cloud 2": ItemData(2313, useful, 1, "premium battle card", "1142", False, False)
-    ,"Premium Cloud 3": ItemData(2314, useful, 1, "premium battle card", "1143", False, False)
-    ,"Premium Cloud 4": ItemData(2315, useful, 1, "premium battle card", "1144", False, False)
-    ,"Premium Cloud 5": ItemData(2316, useful, 1, "premium battle card", "1145", False, False)
-    ,"Premium Cloud 6": ItemData(2317, useful, 1, "premium battle card", "1146", False, False)
-    ,"Premium Cloud 7": ItemData(2318, useful, 1, "premium battle card", "1147", False, False)
-    ,"Premium Cloud 8": ItemData(2319, useful, 1, "premium battle card", "1148", False, False)
-    ,"Premium Cloud 9": ItemData(2320, useful, 1, "premium battle card", "1149", False, False)
+    "Premium Kingdom Key 0": KHCOMItemData("Premium Battle Cards", 266_2001, ItemClassification.useful, 1, 1, "8000", True, False),
+    "Premium Kingdom Key 1": KHCOMItemData("Premium Battle Cards", 266_2002, ItemClassification.useful, 1, 1, "8001", False, False),
+    "Premium Kingdom Key 2": KHCOMItemData("Premium Battle Cards", 266_2003, ItemClassification.useful, 1, 1, "8002", False, False),
+    "Premium Kingdom Key 3": KHCOMItemData("Premium Battle Cards", 266_2004, ItemClassification.useful, 1, 1, "8003", False, False),
+    "Premium Kingdom Key 4": KHCOMItemData("Premium Battle Cards", 266_2005, ItemClassification.useful, 1, 1, "8004", False, False),
+    "Premium Kingdom Key 5": KHCOMItemData("Premium Battle Cards", 266_2006, ItemClassification.useful, 1, 1, "8005", False, False),
+    "Premium Kingdom Key 6": KHCOMItemData("Premium Battle Cards", 266_2007, ItemClassification.useful, 1, 1, "8006", False, False),
+    "Premium Kingdom Key 7": KHCOMItemData("Premium Battle Cards", 266_2008, ItemClassification.useful, 1, 1, "8007", False, False),
+    "Premium Kingdom Key 8": KHCOMItemData("Premium Battle Cards", 266_2009, ItemClassification.useful, 1, 1, "8008", False, False),
+    "Premium Kingdom Key 9": KHCOMItemData("Premium Battle Cards", 266_2010, ItemClassification.useful, 1, 1, "8009", False, False),
+    "Premium Three Wishes 0": KHCOMItemData("Premium Battle Cards", 266_2011, ItemClassification.useful, 1, 1, "800A", True, False),
+    "Premium Three Wishes 1": KHCOMItemData("Premium Battle Cards", 266_2012, ItemClassification.useful, 1, 1, "800B", False, False),
+    "Premium Three Wishes 2": KHCOMItemData("Premium Battle Cards", 266_2013, ItemClassification.useful, 1, 1, "800C", False, False),
+    "Premium Three Wishes 3": KHCOMItemData("Premium Battle Cards", 266_2014, ItemClassification.useful, 1, 1, "800D", False, False),
+    "Premium Three Wishes 4": KHCOMItemData("Premium Battle Cards", 266_2015, ItemClassification.useful, 1, 1, "800E", False, False),
+    "Premium Three Wishes 5": KHCOMItemData("Premium Battle Cards", 266_2016, ItemClassification.useful, 1, 1, "800F", False, False),
+    "Premium Three Wishes 6": KHCOMItemData("Premium Battle Cards", 266_2017, ItemClassification.useful, 1, 1, "8010", False, False),
+    "Premium Three Wishes 7": KHCOMItemData("Premium Battle Cards", 266_2018, ItemClassification.useful, 1, 1, "8011", False, False),
+    "Premium Three Wishes 8": KHCOMItemData("Premium Battle Cards", 266_2019, ItemClassification.useful, 1, 1, "8012", False, False),
+    "Premium Three Wishes 9": KHCOMItemData("Premium Battle Cards", 266_2020, ItemClassification.useful, 1, 1, "8013", False, False),
+    "Premium Crabclaw 0": KHCOMItemData("Premium Battle Cards", 266_2021, ItemClassification.useful, 1, 1, "8014", True, False),
+    "Premium Crabclaw 1": KHCOMItemData("Premium Battle Cards", 266_2022, ItemClassification.useful, 1, 1, "8015", False, False),
+    "Premium Crabclaw 2": KHCOMItemData("Premium Battle Cards", 266_2023, ItemClassification.useful, 1, 1, "8016", False, False),
+    "Premium Crabclaw 3": KHCOMItemData("Premium Battle Cards", 266_2024, ItemClassification.useful, 1, 1, "8017", False, False),
+    "Premium Crabclaw 4": KHCOMItemData("Premium Battle Cards", 266_2025, ItemClassification.useful, 1, 1, "8018", False, False),
+    "Premium Crabclaw 5": KHCOMItemData("Premium Battle Cards", 266_2026, ItemClassification.useful, 1, 1, "8019", False, False),
+    "Premium Crabclaw 6": KHCOMItemData("Premium Battle Cards", 266_2027, ItemClassification.useful, 1, 1, "801A", False, False),
+    "Premium Crabclaw 7": KHCOMItemData("Premium Battle Cards", 266_2028, ItemClassification.useful, 1, 1, "801B", False, False),
+    "Premium Crabclaw 8": KHCOMItemData("Premium Battle Cards", 266_2029, ItemClassification.useful, 1, 1, "801C", False, False),
+    "Premium Crabclaw 9": KHCOMItemData("Premium Battle Cards", 266_2030, ItemClassification.useful, 1, 1, "801D", False, False),
+    "Premium Pumpkinhead 0": KHCOMItemData("Premium Battle Cards", 266_2031, ItemClassification.useful, 1, 1, "801E", True, False),
+    "Premium Pumpkinhead 1": KHCOMItemData("Premium Battle Cards", 266_2032, ItemClassification.useful, 1, 1, "801F", False, False),
+    "Premium Pumpkinhead 2": KHCOMItemData("Premium Battle Cards", 266_2033, ItemClassification.useful, 1, 1, "8020", False, False),
+    "Premium Pumpkinhead 3": KHCOMItemData("Premium Battle Cards", 266_2034, ItemClassification.useful, 1, 1, "8021", False, False),
+    "Premium Pumpkinhead 4": KHCOMItemData("Premium Battle Cards", 266_2035, ItemClassification.useful, 1, 1, "8022", False, False),
+    "Premium Pumpkinhead 5": KHCOMItemData("Premium Battle Cards", 266_2036, ItemClassification.useful, 1, 1, "8023", False, False),
+    "Premium Pumpkinhead 6": KHCOMItemData("Premium Battle Cards", 266_2037, ItemClassification.useful, 1, 1, "8024", False, False),
+    "Premium Pumpkinhead 7": KHCOMItemData("Premium Battle Cards", 266_2038, ItemClassification.useful, 1, 1, "8025", False, False),
+    "Premium Pumpkinhead 8": KHCOMItemData("Premium Battle Cards", 266_2039, ItemClassification.useful, 1, 1, "8026", False, False),
+    "Premium Pumpkinhead 9": KHCOMItemData("Premium Battle Cards", 266_2040, ItemClassification.useful, 1, 1, "8027", False, False),
+    "Premium Fairy Harp 0": KHCOMItemData("Premium Battle Cards", 266_2041, ItemClassification.useful, 1, 1, "8028", True, False),
+    "Premium Fairy Harp 1": KHCOMItemData("Premium Battle Cards", 266_2042, ItemClassification.useful, 1, 1, "8029", False, False),
+    "Premium Fairy Harp 2": KHCOMItemData("Premium Battle Cards", 266_2043, ItemClassification.useful, 1, 1, "802A", False, False),
+    "Premium Fairy Harp 3": KHCOMItemData("Premium Battle Cards", 266_2044, ItemClassification.useful, 1, 1, "802B", False, False),
+    "Premium Fairy Harp 4": KHCOMItemData("Premium Battle Cards", 266_2045, ItemClassification.useful, 1, 1, "802C", False, False),
+    "Premium Fairy Harp 5": KHCOMItemData("Premium Battle Cards", 266_2046, ItemClassification.useful, 1, 1, "802D", False, False),
+    "Premium Fairy Harp 6": KHCOMItemData("Premium Battle Cards", 266_2047, ItemClassification.useful, 1, 1, "802E", False, False),
+    "Premium Fairy Harp 7": KHCOMItemData("Premium Battle Cards", 266_2048, ItemClassification.useful, 1, 1, "802F", False, False),
+    "Premium Fairy Harp 8": KHCOMItemData("Premium Battle Cards", 266_2049, ItemClassification.useful, 1, 1, "8030", False, False),
+    "Premium Fairy Harp 9": KHCOMItemData("Premium Battle Cards", 266_2050, ItemClassification.useful, 1, 1, "8031", False, False),
+    "Premium Wishing Star 0": KHCOMItemData("Premium Battle Cards", 266_2051, ItemClassification.useful, 1, 1, "8032", True, False),
+    "Premium Wishing Star 1": KHCOMItemData("Premium Battle Cards", 266_2052, ItemClassification.useful, 1, 1, "8033", False, False),
+    "Premium Wishing Star 2": KHCOMItemData("Premium Battle Cards", 266_2053, ItemClassification.useful, 1, 1, "8034", False, False),
+    "Premium Wishing Star 3": KHCOMItemData("Premium Battle Cards", 266_2054, ItemClassification.useful, 1, 1, "8035", False, False),
+    "Premium Wishing Star 4": KHCOMItemData("Premium Battle Cards", 266_2055, ItemClassification.useful, 1, 1, "8036", False, False),
+    "Premium Wishing Star 5": KHCOMItemData("Premium Battle Cards", 266_2056, ItemClassification.useful, 1, 1, "8037", False, False),
+    "Premium Wishing Star 6": KHCOMItemData("Premium Battle Cards", 266_2057, ItemClassification.useful, 1, 1, "8038", False, False),
+    "Premium Wishing Star 7": KHCOMItemData("Premium Battle Cards", 266_2058, ItemClassification.useful, 1, 1, "8039", False, False),
+    "Premium Wishing Star 8": KHCOMItemData("Premium Battle Cards", 266_2059, ItemClassification.useful, 1, 1, "803A", False, False),
+    "Premium Wishing Star 9": KHCOMItemData("Premium Battle Cards", 266_2060, ItemClassification.useful, 1, 1, "803B", False, False),
+    "Premium Spellbinder 0": KHCOMItemData("Premium Battle Cards", 266_2061, ItemClassification.useful, 1, 1, "803C", True, False),
+    "Premium Spellbinder 1": KHCOMItemData("Premium Battle Cards", 266_2062, ItemClassification.useful, 1, 1, "803D", False, False),
+    "Premium Spellbinder 2": KHCOMItemData("Premium Battle Cards", 266_2063, ItemClassification.useful, 1, 1, "803E", False, False),
+    "Premium Spellbinder 3": KHCOMItemData("Premium Battle Cards", 266_2064, ItemClassification.useful, 1, 1, "803F", False, False),
+    "Premium Spellbinder 4": KHCOMItemData("Premium Battle Cards", 266_2065, ItemClassification.useful, 1, 1, "8040", False, False),
+    "Premium Spellbinder 5": KHCOMItemData("Premium Battle Cards", 266_2066, ItemClassification.useful, 1, 1, "8041", False, False),
+    "Premium Spellbinder 6": KHCOMItemData("Premium Battle Cards", 266_2067, ItemClassification.useful, 1, 1, "8042", False, False),
+    "Premium Spellbinder 7": KHCOMItemData("Premium Battle Cards", 266_2068, ItemClassification.useful, 1, 1, "8043", False, False),
+    "Premium Spellbinder 8": KHCOMItemData("Premium Battle Cards", 266_2069, ItemClassification.useful, 1, 1, "8044", False, False),
+    "Premium Spellbinder 9": KHCOMItemData("Premium Battle Cards", 266_2070, ItemClassification.useful, 1, 1, "8045", False, False),
+    "Premium Metal Chocobo 0": KHCOMItemData("Premium Battle Cards", 266_2071, ItemClassification.useful, 1, 1, "8046", True, False),
+    "Premium Metal Chocobo 1": KHCOMItemData("Premium Battle Cards", 266_2072, ItemClassification.useful, 1, 1, "8047", False, False),
+    "Premium Metal Chocobo 2": KHCOMItemData("Premium Battle Cards", 266_2073, ItemClassification.useful, 1, 1, "8048", False, False),
+    "Premium Metal Chocobo 3": KHCOMItemData("Premium Battle Cards", 266_2074, ItemClassification.useful, 1, 1, "8049", False, False),
+    "Premium Metal Chocobo 4": KHCOMItemData("Premium Battle Cards", 266_2075, ItemClassification.useful, 1, 1, "804A", False, False),
+    "Premium Metal Chocobo 5": KHCOMItemData("Premium Battle Cards", 266_2076, ItemClassification.useful, 1, 1, "804B", False, False),
+    "Premium Metal Chocobo 6": KHCOMItemData("Premium Battle Cards", 266_2077, ItemClassification.useful, 1, 1, "804C", False, False),
+    "Premium Metal Chocobo 7": KHCOMItemData("Premium Battle Cards", 266_2078, ItemClassification.useful, 1, 1, "804D", False, False),
+    "Premium Metal Chocobo 8": KHCOMItemData("Premium Battle Cards", 266_2079, ItemClassification.useful, 1, 1, "804E", False, False),
+    "Premium Metal Chocobo 9": KHCOMItemData("Premium Battle Cards", 266_2080, ItemClassification.useful, 1, 1, "804F", False, False),
+    "Premium Olympia 0": KHCOMItemData("Premium Battle Cards", 266_2081, ItemClassification.useful, 1, 1, "8050", True, False),
+    "Premium Olympia 1": KHCOMItemData("Premium Battle Cards", 266_2082, ItemClassification.useful, 1, 1, "8051", False, False),
+    "Premium Olympia 2": KHCOMItemData("Premium Battle Cards", 266_2083, ItemClassification.useful, 1, 1, "8052", False, False),
+    "Premium Olympia 3": KHCOMItemData("Premium Battle Cards", 266_2084, ItemClassification.useful, 1, 1, "8053", False, False),
+    "Premium Olympia 4": KHCOMItemData("Premium Battle Cards", 266_2085, ItemClassification.useful, 1, 1, "8054", False, False),
+    "Premium Olympia 5": KHCOMItemData("Premium Battle Cards", 266_2086, ItemClassification.useful, 1, 1, "8055", False, False),
+    "Premium Olympia 6": KHCOMItemData("Premium Battle Cards", 266_2087, ItemClassification.useful, 1, 1, "8056", False, False),
+    "Premium Olympia 7": KHCOMItemData("Premium Battle Cards", 266_2088, ItemClassification.useful, 1, 1, "8057", False, False),
+    "Premium Olympia 8": KHCOMItemData("Premium Battle Cards", 266_2089, ItemClassification.useful, 1, 1, "8058", False, False),
+    "Premium Olympia 9": KHCOMItemData("Premium Battle Cards", 266_2090, ItemClassification.useful, 1, 1, "8059", False, False),
+    "Premium Lionheart 0": KHCOMItemData("Premium Battle Cards", 266_2091, ItemClassification.useful, 1, 1, "805A", True, False),
+    "Premium Lionheart 1": KHCOMItemData("Premium Battle Cards", 266_2092, ItemClassification.useful, 1, 1, "805B", False, False),
+    "Premium Lionheart 2": KHCOMItemData("Premium Battle Cards", 266_2093, ItemClassification.useful, 1, 1, "805C", False, False),
+    "Premium Lionheart 3": KHCOMItemData("Premium Battle Cards", 266_2094, ItemClassification.useful, 1, 1, "805D", False, False),
+    "Premium Lionheart 4": KHCOMItemData("Premium Battle Cards", 266_2095, ItemClassification.useful, 1, 1, "805E", False, False),
+    "Premium Lionheart 5": KHCOMItemData("Premium Battle Cards", 266_2096, ItemClassification.useful, 1, 1, "805F", False, False),
+    "Premium Lionheart 6": KHCOMItemData("Premium Battle Cards", 266_2097, ItemClassification.useful, 1, 1, "8060", False, False),
+    "Premium Lionheart 7": KHCOMItemData("Premium Battle Cards", 266_2098, ItemClassification.useful, 1, 1, "8061", False, False),
+    "Premium Lionheart 8": KHCOMItemData("Premium Battle Cards", 266_2099, ItemClassification.useful, 1, 1, "8062", False, False),
+    "Premium Lionheart 9": KHCOMItemData("Premium Battle Cards", 266_2100, ItemClassification.useful, 1, 1, "8063", False, False),
+    "Premium Lady Luck 0": KHCOMItemData("Premium Battle Cards", 266_2101, ItemClassification.useful, 1, 1, "8064", True, False),
+    "Premium Lady Luck 1": KHCOMItemData("Premium Battle Cards", 266_2102, ItemClassification.useful, 1, 1, "8065", False, False),
+    "Premium Lady Luck 2": KHCOMItemData("Premium Battle Cards", 266_2103, ItemClassification.useful, 1, 1, "8066", False, False),
+    "Premium Lady Luck 3": KHCOMItemData("Premium Battle Cards", 266_2104, ItemClassification.useful, 1, 1, "8067", False, False),
+    "Premium Lady Luck 4": KHCOMItemData("Premium Battle Cards", 266_2105, ItemClassification.useful, 1, 1, "8068", False, False),
+    "Premium Lady Luck 5": KHCOMItemData("Premium Battle Cards", 266_2106, ItemClassification.useful, 1, 1, "8069", False, False),
+    "Premium Lady Luck 6": KHCOMItemData("Premium Battle Cards", 266_2107, ItemClassification.useful, 1, 1, "806A", False, False),
+    "Premium Lady Luck 7": KHCOMItemData("Premium Battle Cards", 266_2108, ItemClassification.useful, 1, 1, "806B", False, False),
+    "Premium Lady Luck 8": KHCOMItemData("Premium Battle Cards", 266_2109, ItemClassification.useful, 1, 1, "806C", False, False),
+    "Premium Lady Luck 9": KHCOMItemData("Premium Battle Cards", 266_2110, ItemClassification.useful, 1, 1, "806D", False, False),
+    "Premium Divine Rose 0": KHCOMItemData("Premium Battle Cards", 266_2111, ItemClassification.useful, 1, 1, "806E", True, False),
+    "Premium Divine Rose 1": KHCOMItemData("Premium Battle Cards", 266_2112, ItemClassification.useful, 1, 1, "806F", False, False),
+    "Premium Divine Rose 2": KHCOMItemData("Premium Battle Cards", 266_2113, ItemClassification.useful, 1, 1, "8070", False, False),
+    "Premium Divine Rose 3": KHCOMItemData("Premium Battle Cards", 266_2114, ItemClassification.useful, 1, 1, "8071", False, False),
+    "Premium Divine Rose 4": KHCOMItemData("Premium Battle Cards", 266_2115, ItemClassification.useful, 1, 1, "8072", False, False),
+    "Premium Divine Rose 5": KHCOMItemData("Premium Battle Cards", 266_2116, ItemClassification.useful, 1, 1, "8073", False, False),
+    "Premium Divine Rose 6": KHCOMItemData("Premium Battle Cards", 266_2117, ItemClassification.useful, 1, 1, "8074", False, False),
+    "Premium Divine Rose 7": KHCOMItemData("Premium Battle Cards", 266_2118, ItemClassification.useful, 1, 1, "8075", False, False),
+    "Premium Divine Rose 8": KHCOMItemData("Premium Battle Cards", 266_2119, ItemClassification.useful, 1, 1, "8076", False, False),
+    "Premium Divine Rose 9": KHCOMItemData("Premium Battle Cards", 266_2120, ItemClassification.useful, 1, 1, "8077", False, False),
+    "Premium Oathkeeper 0": KHCOMItemData("Premium Battle Cards", 266_2121, ItemClassification.useful, 1, 1, "8078", True, False),
+    "Premium Oathkeeper 1": KHCOMItemData("Premium Battle Cards", 266_2122, ItemClassification.useful, 1, 1, "8079", False, False),
+    "Premium Oathkeeper 2": KHCOMItemData("Premium Battle Cards", 266_2123, ItemClassification.useful, 1, 1, "807A", False, False),
+    "Premium Oathkeeper 3": KHCOMItemData("Premium Battle Cards", 266_2124, ItemClassification.useful, 1, 1, "807B", False, False),
+    "Premium Oathkeeper 4": KHCOMItemData("Premium Battle Cards", 266_2125, ItemClassification.useful, 1, 1, "807C", False, False),
+    "Premium Oathkeeper 5": KHCOMItemData("Premium Battle Cards", 266_2126, ItemClassification.useful, 1, 1, "807D", False, False),
+    "Premium Oathkeeper 6": KHCOMItemData("Premium Battle Cards", 266_2127, ItemClassification.useful, 1, 1, "807E", False, False),
+    "Premium Oathkeeper 7": KHCOMItemData("Premium Battle Cards", 266_2128, ItemClassification.useful, 1, 1, "807F", False, False),
+    "Premium Oathkeeper 8": KHCOMItemData("Premium Battle Cards", 266_2129, ItemClassification.useful, 1, 1, "8080", False, False),
+    "Premium Oathkeeper 9": KHCOMItemData("Premium Battle Cards", 266_2130, ItemClassification.useful, 1, 1, "8081", False, False),
+    "Premium Oblivion 0": KHCOMItemData("Premium Battle Cards", 266_2131, ItemClassification.useful, 1, 1, "8082", True, False),
+    "Premium Oblivion 1": KHCOMItemData("Premium Battle Cards", 266_2132, ItemClassification.useful, 1, 1, "8083", False, False),
+    "Premium Oblivion 2": KHCOMItemData("Premium Battle Cards", 266_2133, ItemClassification.useful, 1, 1, "8084", False, False),
+    "Premium Oblivion 3": KHCOMItemData("Premium Battle Cards", 266_2134, ItemClassification.useful, 1, 1, "8085", False, False),
+    "Premium Oblivion 4": KHCOMItemData("Premium Battle Cards", 266_2135, ItemClassification.useful, 1, 1, "8086", False, False),
+    "Premium Oblivion 5": KHCOMItemData("Premium Battle Cards", 266_2136, ItemClassification.useful, 1, 1, "8087", False, False),
+    "Premium Oblivion 6": KHCOMItemData("Premium Battle Cards", 266_2137, ItemClassification.useful, 1, 1, "8088", False, False),
+    "Premium Oblivion 7": KHCOMItemData("Premium Battle Cards", 266_2138, ItemClassification.useful, 1, 1, "8089", False, False),
+    "Premium Oblivion 8": KHCOMItemData("Premium Battle Cards", 266_2139, ItemClassification.useful, 1, 1, "808A", False, False),
+    "Premium Oblivion 9": KHCOMItemData("Premium Battle Cards", 266_2140, ItemClassification.useful, 1, 1, "808B", False, False),
+    "Premium Diamond Dust 0": KHCOMItemData("Premium Battle Cards", 266_2141, ItemClassification.useful, 1, 1, "808C", True, False),
+    "Premium Diamond Dust 1": KHCOMItemData("Premium Battle Cards", 266_2142, ItemClassification.useful, 1, 1, "808D", False, False),
+    "Premium Diamond Dust 2": KHCOMItemData("Premium Battle Cards", 266_2143, ItemClassification.useful, 1, 1, "808E", False, False),
+    "Premium Diamond Dust 3": KHCOMItemData("Premium Battle Cards", 266_2144, ItemClassification.useful, 1, 1, "8090", False, False),
+    "Premium Diamond Dust 4": KHCOMItemData("Premium Battle Cards", 266_2145, ItemClassification.useful, 1, 1, "8091", False, False),
+    "Premium Diamond Dust 5": KHCOMItemData("Premium Battle Cards", 266_2146, ItemClassification.useful, 1, 1, "8092", False, False),
+    "Premium Diamond Dust 6": KHCOMItemData("Premium Battle Cards", 266_2147, ItemClassification.useful, 1, 1, "8093", False, False),
+    "Premium Diamond Dust 7": KHCOMItemData("Premium Battle Cards", 266_2148, ItemClassification.useful, 1, 1, "8094", False, False),
+    "Premium Diamond Dust 8": KHCOMItemData("Premium Battle Cards", 266_2149, ItemClassification.useful, 1, 1, "8095", False, False),
+    "Premium Diamond Dust 9": KHCOMItemData("Premium Battle Cards", 266_2150, ItemClassification.useful, 1, 1, "8096", False, False),
+    "Premium One Winged Angel 0": KHCOMItemData("Premium Battle Cards", 266_2151, ItemClassification.useful, 1, 1, "8097", True, False),
+    "Premium One Winged Angel 1": KHCOMItemData("Premium Battle Cards", 266_2152, ItemClassification.useful, 1, 1, "8098", False, False),
+    "Premium One Winged Angel 2": KHCOMItemData("Premium Battle Cards", 266_2153, ItemClassification.useful, 1, 1, "8099", False, False),
+    "Premium One Winged Angel 3": KHCOMItemData("Premium Battle Cards", 266_2154, ItemClassification.useful, 1, 1, "809A", False, False),
+    "Premium One Winged Angel 4": KHCOMItemData("Premium Battle Cards", 266_2155, ItemClassification.useful, 1, 1, "809B", False, False),
+    "Premium One Winged Angel 5": KHCOMItemData("Premium Battle Cards", 266_2156, ItemClassification.useful, 1, 1, "809C", False, False),
+    "Premium One Winged Angel 6": KHCOMItemData("Premium Battle Cards", 266_2157, ItemClassification.useful, 1, 1, "809D", False, False),
+    "Premium One Winged Angel 7": KHCOMItemData("Premium Battle Cards", 266_2158, ItemClassification.useful, 1, 1, "809E", False, False),
+    "Premium One Winged Angel 8": KHCOMItemData("Premium Battle Cards", 266_2159, ItemClassification.useful, 1, 1, "809F", False, False),
+    "Premium One Winged Angel 9": KHCOMItemData("Premium Battle Cards", 266_2160, ItemClassification.useful, 1, 1, "80A0", False, False),
+    "Premium Ultima Weapon 0": KHCOMItemData("Premium Battle Cards", 266_2161, ItemClassification.useful, 1, 1, "80A1", True, False),
+    "Premium Ultima Weapon 1": KHCOMItemData("Premium Battle Cards", 266_2162, ItemClassification.useful, 1, 1, "80A2", False, False),
+    "Premium Ultima Weapon 2": KHCOMItemData("Premium Battle Cards", 266_2163, ItemClassification.useful, 1, 1, "80A2", False, False),
+    "Premium Ultima Weapon 3": KHCOMItemData("Premium Battle Cards", 266_2164, ItemClassification.useful, 1, 1, "80A3", False, False),
+    "Premium Ultima Weapon 4": KHCOMItemData("Premium Battle Cards", 266_2165, ItemClassification.useful, 1, 1, "80A4", False, False),
+    "Premium Ultima Weapon 5": KHCOMItemData("Premium Battle Cards", 266_2166, ItemClassification.useful, 1, 1, "80A5", False, False),
+    "Premium Ultima Weapon 6": KHCOMItemData("Premium Battle Cards", 266_2167, ItemClassification.useful, 1, 1, "80A6", False, False),
+    "Premium Ultima Weapon 7": KHCOMItemData("Premium Battle Cards", 266_2168, ItemClassification.useful, 1, 1, "80A7", False, False),
+    "Premium Ultima Weapon 8": KHCOMItemData("Premium Battle Cards", 266_2169, ItemClassification.useful, 1, 1, "80A8", False, False),
+    "Premium Ultima Weapon 9": KHCOMItemData("Premium Battle Cards", 266_2170, ItemClassification.useful, 1, 1, "80A9", False, False),
+    "Premium Fire 0": KHCOMItemData("Premium Battle Cards", 266_2171, ItemClassification.useful, 1, 1, "80AA", True, False),
+    "Premium Fire 1": KHCOMItemData("Premium Battle Cards", 266_2172, ItemClassification.useful, 1, 1, "80AB", False, False),
+    "Premium Fire 2": KHCOMItemData("Premium Battle Cards", 266_2173, ItemClassification.useful, 1, 1, "80AC", False, False),
+    "Premium Fire 3": KHCOMItemData("Premium Battle Cards", 266_2174, ItemClassification.useful, 1, 1, "80AD", False, False),
+    "Premium Fire 4": KHCOMItemData("Premium Battle Cards", 266_2175, ItemClassification.useful, 1, 1, "80AE", False, False),
+    "Premium Fire 5": KHCOMItemData("Premium Battle Cards", 266_2176, ItemClassification.useful, 1, 1, "80AF", False, False),
+    "Premium Fire 6": KHCOMItemData("Premium Battle Cards", 266_2177, ItemClassification.useful, 1, 1, "80B0", False, False),
+    "Premium Fire 7": KHCOMItemData("Premium Battle Cards", 266_2178, ItemClassification.useful, 1, 1, "80B1", False, False),
+    "Premium Fire 8": KHCOMItemData("Premium Battle Cards", 266_2179, ItemClassification.useful, 1, 1, "80B2", False, False),
+    "Premium Fire 9": KHCOMItemData("Premium Battle Cards", 266_2180, ItemClassification.useful, 1, 1, "80B3", False, False),
+    "Premium Blizzard 0": KHCOMItemData("Premium Battle Cards", 266_2181, ItemClassification.useful, 1, 1, "80B4", True, False),
+    "Premium Blizzard 1": KHCOMItemData("Premium Battle Cards", 266_2182, ItemClassification.useful, 1, 1, "80B5", False, False),
+    "Premium Blizzard 2": KHCOMItemData("Premium Battle Cards", 266_2183, ItemClassification.useful, 1, 1, "80B6", False, False),
+    "Premium Blizzard 3": KHCOMItemData("Premium Battle Cards", 266_2184, ItemClassification.useful, 1, 1, "80B7", False, False),
+    "Premium Blizzard 4": KHCOMItemData("Premium Battle Cards", 266_2185, ItemClassification.useful, 1, 1, "80B8", False, False),
+    "Premium Blizzard 5": KHCOMItemData("Premium Battle Cards", 266_2186, ItemClassification.useful, 1, 1, "80B9", False, False),
+    "Premium Blizzard 6": KHCOMItemData("Premium Battle Cards", 266_2187, ItemClassification.useful, 1, 1, "80BA", False, False),
+    "Premium Blizzard 7": KHCOMItemData("Premium Battle Cards", 266_2188, ItemClassification.useful, 1, 1, "80BB", False, False),
+    "Premium Blizzard 8": KHCOMItemData("Premium Battle Cards", 266_2189, ItemClassification.useful, 1, 1, "80BC", False, False),
+    "Premium Blizzard 9": KHCOMItemData("Premium Battle Cards", 266_2190, ItemClassification.useful, 1, 1, "80BD", False, False),
+    "Premium Thunder 0": KHCOMItemData("Premium Battle Cards", 266_2191, ItemClassification.useful, 1, 1, "80BE", True, False),
+    "Premium Thunder 1": KHCOMItemData("Premium Battle Cards", 266_2192, ItemClassification.useful, 1, 1, "80BF", False, False),
+    "Premium Thunder 2": KHCOMItemData("Premium Battle Cards", 266_2193, ItemClassification.useful, 1, 1, "80C0", False, False),
+    "Premium Thunder 3": KHCOMItemData("Premium Battle Cards", 266_2194, ItemClassification.useful, 1, 1, "80C1", False, False),
+    "Premium Thunder 4": KHCOMItemData("Premium Battle Cards", 266_2195, ItemClassification.useful, 1, 1, "80C2", False, False),
+    "Premium Thunder 5": KHCOMItemData("Premium Battle Cards", 266_2196, ItemClassification.useful, 1, 1, "80C3", False, False),
+    "Premium Thunder 6": KHCOMItemData("Premium Battle Cards", 266_2197, ItemClassification.useful, 1, 1, "80C4", False, False),
+    "Premium Thunder 7": KHCOMItemData("Premium Battle Cards", 266_2198, ItemClassification.useful, 1, 1, "80C5", False, False),
+    "Premium Thunder 8": KHCOMItemData("Premium Battle Cards", 266_2199, ItemClassification.useful, 1, 1, "80C6", False, False),
+    "Premium Thunder 9": KHCOMItemData("Premium Battle Cards", 266_2200, ItemClassification.useful, 1, 1, "80C7", False, False),
+    "Premium Cure 0": KHCOMItemData("Premium Battle Cards", 266_2201, ItemClassification.useful, 1, 1, "80C8", True, True),
+    "Premium Cure 1": KHCOMItemData("Premium Battle Cards", 266_2202, ItemClassification.useful, 1, 1, "80C9", False, True),
+    "Premium Cure 2": KHCOMItemData("Premium Battle Cards", 266_2203, ItemClassification.useful, 1, 1, "80CA", False, True),
+    "Premium Cure 3": KHCOMItemData("Premium Battle Cards", 266_2204, ItemClassification.useful, 1, 1, "80CB", False, True),
+    "Premium Cure 4": KHCOMItemData("Premium Battle Cards", 266_2205, ItemClassification.useful, 1, 1, "80CC", False, True),
+    "Premium Cure 5": KHCOMItemData("Premium Battle Cards", 266_2206, ItemClassification.useful, 1, 1, "80CD", False, True),
+    "Premium Cure 6": KHCOMItemData("Premium Battle Cards", 266_2207, ItemClassification.useful, 1, 1, "80CE", False, True),
+    "Premium Cure 7": KHCOMItemData("Premium Battle Cards", 266_2208, ItemClassification.useful, 1, 1, "80CF", False, True),
+    "Premium Cure 8": KHCOMItemData("Premium Battle Cards", 266_2209, ItemClassification.useful, 1, 1, "80D0", False, True),
+    "Premium Cure 9": KHCOMItemData("Premium Battle Cards", 266_2210, ItemClassification.useful, 1, 1, "80D1", False, True),
+    "Premium Gravity 0": KHCOMItemData("Premium Battle Cards", 266_2211, ItemClassification.useful, 1, 1, "80D2", True, False),
+    "Premium Gravity 1": KHCOMItemData("Premium Battle Cards", 266_2212, ItemClassification.useful, 1, 1, "80D3", False, False),
+    "Premium Gravity 2": KHCOMItemData("Premium Battle Cards", 266_2213, ItemClassification.useful, 1, 1, "80D4", False, False),
+    "Premium Gravity 3": KHCOMItemData("Premium Battle Cards", 266_2214, ItemClassification.useful, 1, 1, "80D5", False, False),
+    "Premium Gravity 4": KHCOMItemData("Premium Battle Cards", 266_2215, ItemClassification.useful, 1, 1, "80D6", False, False),
+    "Premium Gravity 5": KHCOMItemData("Premium Battle Cards", 266_2216, ItemClassification.useful, 1, 1, "80D7", False, False),
+    "Premium Gravity 6": KHCOMItemData("Premium Battle Cards", 266_2217, ItemClassification.useful, 1, 1, "80D8", False, False),
+    "Premium Gravity 7": KHCOMItemData("Premium Battle Cards", 266_2218, ItemClassification.useful, 1, 1, "80D9", False, False),
+    "Premium Gravity 8": KHCOMItemData("Premium Battle Cards", 266_2219, ItemClassification.useful, 1, 1, "80DA", False, False),
+    "Premium Gravity 9": KHCOMItemData("Premium Battle Cards", 266_2220, ItemClassification.useful, 1, 1, "80DB", False, False),
+    "Premium Stop 0": KHCOMItemData("Premium Battle Cards", 266_2221, ItemClassification.useful, 1, 1, "80DC", True, False),
+    "Premium Stop 1": KHCOMItemData("Premium Battle Cards", 266_2222, ItemClassification.useful, 1, 1, "80DD", False, False),
+    "Premium Stop 2": KHCOMItemData("Premium Battle Cards", 266_2223, ItemClassification.useful, 1, 1, "80DE", False, False),
+    "Premium Stop 3": KHCOMItemData("Premium Battle Cards", 266_2224, ItemClassification.useful, 1, 1, "80DF", False, False),
+    "Premium Stop 4": KHCOMItemData("Premium Battle Cards", 266_2225, ItemClassification.useful, 1, 1, "80E0", False, False),
+    "Premium Stop 5": KHCOMItemData("Premium Battle Cards", 266_2226, ItemClassification.useful, 1, 1, "80E1", False, False),
+    "Premium Stop 6": KHCOMItemData("Premium Battle Cards", 266_2227, ItemClassification.useful, 1, 1, "80E2", False, False),
+    "Premium Stop 7": KHCOMItemData("Premium Battle Cards", 266_2228, ItemClassification.useful, 1, 1, "80E3", False, False),
+    "Premium Stop 8": KHCOMItemData("Premium Battle Cards", 266_2229, ItemClassification.useful, 1, 1, "80E4", False, False),
+    "Premium Stop 9": KHCOMItemData("Premium Battle Cards", 266_2230, ItemClassification.useful, 1, 1, "80E5", False, False),
+    "Premium Aero 0": KHCOMItemData("Premium Battle Cards", 266_2231, ItemClassification.useful, 1, 1, "80E6", True, False),
+    "Premium Aero 1": KHCOMItemData("Premium Battle Cards", 266_2232, ItemClassification.useful, 1, 1, "80E7", False, False),
+    "Premium Aero 2": KHCOMItemData("Premium Battle Cards", 266_2233, ItemClassification.useful, 1, 1, "80E8", False, False),
+    "Premium Aero 3": KHCOMItemData("Premium Battle Cards", 266_2234, ItemClassification.useful, 1, 1, "80E9", False, False),
+    "Premium Aero 4": KHCOMItemData("Premium Battle Cards", 266_2235, ItemClassification.useful, 1, 1, "80EA", False, False),
+    "Premium Aero 5": KHCOMItemData("Premium Battle Cards", 266_2236, ItemClassification.useful, 1, 1, "80EB", False, False),
+    "Premium Aero 6": KHCOMItemData("Premium Battle Cards", 266_2237, ItemClassification.useful, 1, 1, "80EC", False, False),
+    "Premium Aero 7": KHCOMItemData("Premium Battle Cards", 266_2238, ItemClassification.useful, 1, 1, "80ED", False, False),
+    "Premium Aero 8": KHCOMItemData("Premium Battle Cards", 266_2239, ItemClassification.useful, 1, 1, "80EE", False, False),
+    "Premium Aero 9": KHCOMItemData("Premium Battle Cards", 266_2240, ItemClassification.useful, 1, 1, "80EF", False, False),
+    "Premium Simba 0": KHCOMItemData("Premium Battle Cards", 266_2241, ItemClassification.useful, 1, 1, "8104", True, False),
+    "Premium Simba 1": KHCOMItemData("Premium Battle Cards", 266_2242, ItemClassification.useful, 1, 1, "8105", False, False),
+    "Premium Simba 2": KHCOMItemData("Premium Battle Cards", 266_2243, ItemClassification.useful, 1, 1, "8106", False, False),
+    "Premium Simba 3": KHCOMItemData("Premium Battle Cards", 266_2244, ItemClassification.useful, 1, 1, "8107", False, False),
+    "Premium Simba 4": KHCOMItemData("Premium Battle Cards", 266_2245, ItemClassification.useful, 1, 1, "8108", False, False),
+    "Premium Simba 5": KHCOMItemData("Premium Battle Cards", 266_2246, ItemClassification.useful, 1, 1, "8109", False, False),
+    "Premium Simba 6": KHCOMItemData("Premium Battle Cards", 266_2247, ItemClassification.useful, 1, 1, "810A", False, False),
+    "Premium Simba 7": KHCOMItemData("Premium Battle Cards", 266_2248, ItemClassification.useful, 1, 1, "810B", False, False),
+    "Premium Simba 8": KHCOMItemData("Premium Battle Cards", 266_2249, ItemClassification.useful, 1, 1, "810C", False, False),
+    "Premium Simba 9": KHCOMItemData("Premium Battle Cards", 266_2250, ItemClassification.useful, 1, 1, "810D", False, False),
+    "Premium Genie 0": KHCOMItemData("Premium Battle Cards", 266_2251, ItemClassification.useful, 1, 1, "810E", True, False),
+    "Premium Genie 1": KHCOMItemData("Premium Battle Cards", 266_2252, ItemClassification.useful, 1, 1, "810F", False, False),
+    "Premium Genie 2": KHCOMItemData("Premium Battle Cards", 266_2253, ItemClassification.useful, 1, 1, "8110", False, False),
+    "Premium Genie 3": KHCOMItemData("Premium Battle Cards", 266_2254, ItemClassification.useful, 1, 1, "8111", False, False),
+    "Premium Genie 4": KHCOMItemData("Premium Battle Cards", 266_2255, ItemClassification.useful, 1, 1, "8112", False, False),
+    "Premium Genie 5": KHCOMItemData("Premium Battle Cards", 266_2256, ItemClassification.useful, 1, 1, "8113", False, False),
+    "Premium Genie 6": KHCOMItemData("Premium Battle Cards", 266_2257, ItemClassification.useful, 1, 1, "8114", False, False),
+    "Premium Genie 7": KHCOMItemData("Premium Battle Cards", 266_2258, ItemClassification.useful, 1, 1, "8115", False, False),
+    "Premium Genie 8": KHCOMItemData("Premium Battle Cards", 266_2259, ItemClassification.useful, 1, 1, "8116", False, False),
+    "Premium Genie 9": KHCOMItemData("Premium Battle Cards", 266_2260, ItemClassification.useful, 1, 1, "8117", False, False),
+    "Premium Bambi 0": KHCOMItemData("Premium Battle Cards", 266_2271, ItemClassification.useful, 1, 1, "8118", True, False),
+    "Premium Bambi 1": KHCOMItemData("Premium Battle Cards", 266_2272, ItemClassification.useful, 1, 1, "8119", False, False),
+    "Premium Bambi 2": KHCOMItemData("Premium Battle Cards", 266_2273, ItemClassification.useful, 1, 1, "811A", False, False),
+    "Premium Bambi 3": KHCOMItemData("Premium Battle Cards", 266_2274, ItemClassification.useful, 1, 1, "811B", False, False),
+    "Premium Bambi 4": KHCOMItemData("Premium Battle Cards", 266_2275, ItemClassification.useful, 1, 1, "811C", False, False),
+    "Premium Bambi 5": KHCOMItemData("Premium Battle Cards", 266_2276, ItemClassification.useful, 1, 1, "811D", False, False),
+    "Premium Bambi 6": KHCOMItemData("Premium Battle Cards", 266_2277, ItemClassification.useful, 1, 1, "811E", False, False),
+    "Premium Bambi 7": KHCOMItemData("Premium Battle Cards", 266_2278, ItemClassification.useful, 1, 1, "811F", False, False),
+    "Premium Bambi 8": KHCOMItemData("Premium Battle Cards", 266_2279, ItemClassification.useful, 1, 1, "8120", False, False),
+    "Premium Bambi 9": KHCOMItemData("Premium Battle Cards", 266_2280, ItemClassification.useful, 1, 1, "8121", False, False),
+    "Premium Dumbo 0": KHCOMItemData("Premium Battle Cards", 266_2281, ItemClassification.useful, 1, 1, "8122", True, False),
+    "Premium Dumbo 1": KHCOMItemData("Premium Battle Cards", 266_2282, ItemClassification.useful, 1, 1, "8123", False, False),
+    "Premium Dumbo 2": KHCOMItemData("Premium Battle Cards", 266_2283, ItemClassification.useful, 1, 1, "8124", False, False),
+    "Premium Dumbo 3": KHCOMItemData("Premium Battle Cards", 266_2284, ItemClassification.useful, 1, 1, "8125", False, False),
+    "Premium Dumbo 4": KHCOMItemData("Premium Battle Cards", 266_2285, ItemClassification.useful, 1, 1, "8126", False, False),
+    "Premium Dumbo 5": KHCOMItemData("Premium Battle Cards", 266_2286, ItemClassification.useful, 1, 1, "8127", False, False),
+    "Premium Dumbo 6": KHCOMItemData("Premium Battle Cards", 266_2287, ItemClassification.useful, 1, 1, "8128", False, False),
+    "Premium Dumbo 7": KHCOMItemData("Premium Battle Cards", 266_2288, ItemClassification.useful, 1, 1, "8129", False, False),
+    "Premium Dumbo 8": KHCOMItemData("Premium Battle Cards", 266_2289, ItemClassification.useful, 1, 1, "812A", False, False),
+    "Premium Dumbo 9": KHCOMItemData("Premium Battle Cards", 266_2290, ItemClassification.useful, 1, 1, "812B", False, False),
+    "Premium Tinker Bell 0": KHCOMItemData("Premium Battle Cards", 266_2291, ItemClassification.useful, 1, 1, "812C", True, False),
+    "Premium Tinker Bell 1": KHCOMItemData("Premium Battle Cards", 266_2292, ItemClassification.useful, 1, 1, "812D", False, False),
+    "Premium Tinker Bell 2": KHCOMItemData("Premium Battle Cards", 266_2293, ItemClassification.useful, 1, 1, "812E", False, False),
+    "Premium Tinker Bell 3": KHCOMItemData("Premium Battle Cards", 266_2294, ItemClassification.useful, 1, 1, "812F", False, False),
+    "Premium Tinker Bell 4": KHCOMItemData("Premium Battle Cards", 266_2295, ItemClassification.useful, 1, 1, "8130", False, False),
+    "Premium Tinker Bell 5": KHCOMItemData("Premium Battle Cards", 266_2296, ItemClassification.useful, 1, 1, "8131", False, False),
+    "Premium Tinker Bell 6": KHCOMItemData("Premium Battle Cards", 266_2297, ItemClassification.useful, 1, 1, "8132", False, False),
+    "Premium Tinker Bell 7": KHCOMItemData("Premium Battle Cards", 266_2298, ItemClassification.useful, 1, 1, "8133", False, False),
+    "Premium Tinker Bell 8": KHCOMItemData("Premium Battle Cards", 266_2299, ItemClassification.useful, 1, 1, "8134", False, False),
+    "Premium Tinker Bell 9": KHCOMItemData("Premium Battle Cards", 266_2300, ItemClassification.useful, 1, 1, "8135", False, False),
+    "Premium Mushu 0": KHCOMItemData("Premium Battle Cards", 266_2301, ItemClassification.useful, 1, 1, "8136", True, False),
+    "Premium Mushu 1": KHCOMItemData("Premium Battle Cards", 266_2302, ItemClassification.useful, 1, 1, "8137", False, False),
+    "Premium Mushu 2": KHCOMItemData("Premium Battle Cards", 266_2303, ItemClassification.useful, 1, 1, "8138", False, False),
+    "Premium Mushu 3": KHCOMItemData("Premium Battle Cards", 266_2304, ItemClassification.useful, 1, 1, "8139", False, False),
+    "Premium Mushu 4": KHCOMItemData("Premium Battle Cards", 266_2305, ItemClassification.useful, 1, 1, "813A", False, False),
+    "Premium Mushu 5": KHCOMItemData("Premium Battle Cards", 266_2306, ItemClassification.useful, 1, 1, "813B", False, False),
+    "Premium Mushu 6": KHCOMItemData("Premium Battle Cards", 266_2307, ItemClassification.useful, 1, 1, "813C", False, False),
+    "Premium Mushu 7": KHCOMItemData("Premium Battle Cards", 266_2308, ItemClassification.useful, 1, 1, "813D", False, False),
+    "Premium Mushu 8": KHCOMItemData("Premium Battle Cards", 266_2309, ItemClassification.useful, 1, 1, "813E", False, False),
+    "Premium Mushu 9": KHCOMItemData("Premium Battle Cards", 266_2310, ItemClassification.useful, 1, 1, "813F", False, False),
+    "Premium Cloud 0": KHCOMItemData("Premium Battle Cards", 266_2311, ItemClassification.useful, 1, 1, "8140", True, False),
+    "Premium Cloud 1": KHCOMItemData("Premium Battle Cards", 266_2312, ItemClassification.useful, 1, 1, "8141", False, False),
+    "Premium Cloud 2": KHCOMItemData("Premium Battle Cards", 266_2313, ItemClassification.useful, 1, 1, "8142", False, False),
+    "Premium Cloud 3": KHCOMItemData("Premium Battle Cards", 266_2314, ItemClassification.useful, 1, 1, "8143", False, False),
+    "Premium Cloud 4": KHCOMItemData("Premium Battle Cards", 266_2315, ItemClassification.useful, 1, 1, "8144", False, False),
+    "Premium Cloud 5": KHCOMItemData("Premium Battle Cards", 266_2316, ItemClassification.useful, 1, 1, "8145", False, False),
+    "Premium Cloud 6": KHCOMItemData("Premium Battle Cards", 266_2317, ItemClassification.useful, 1, 1, "8146", False, False),
+    "Premium Cloud 7": KHCOMItemData("Premium Battle Cards", 266_2318, ItemClassification.useful, 1, 1, "8147", False, False),
+    "Premium Cloud 8": KHCOMItemData("Premium Battle Cards", 266_2319, ItemClassification.useful, 1, 1, "8148", False, False),
+    "Premium Cloud 9": KHCOMItemData("Premium Battle Cards", 266_2320, ItemClassification.useful, 1, 1, "8149", False, False),
     
     #Enemy Battle Cards
-    ,"Shadow": ItemData(3001, useful, 1, "enemy battle card", "01C2", False, False)
-    ,"Soldier": ItemData(3002,useful, 1, "enemy battle card", "01C5", False, False)
-    ,"Large Body": ItemData(3003,useful, 1, "enemy battle card", "01C8", False, False)
-    ,"Red Nocturne": ItemData(3004,useful, 1, "enemy battle card", "01CB", False, False)
-    ,"Blue Rhapsody": ItemData(3005,useful, 1, "enemy battle card", "01CE", False, False)
-    ,"Yellow Opera": ItemData(3006,useful, 1, "enemy battle card", "01D1", False, False)
-    ,"Green Requiem": ItemData(3007,useful, 1, "enemy battle card", "01D4", False, False)
-    ,"Powerwild": ItemData(3008,useful, 1, "enemy battle card", "01D7", False, False)
-    ,"Bouncywild": ItemData(3009,useful, 1, "enemy battle card", "01DA", False, False)
-    ,"Air Soldier": ItemData(3010,useful, 1, "enemy battle card", "01DD", False, False)
-    ,"Bandit": ItemData(3011,useful, 1, "enemy battle card", "01E0", False, False)
-    ,"Fat Bandit": ItemData(3012,useful, 1, "enemy battle card", "01E3", False, False)
-    ,"Barrel Spider": ItemData(3013,useful, 1, "enemy battle card", "01E6", False, False)
-    ,"Search Ghost": ItemData(3014,useful, 1, "enemy battle card", "01E6", False, False)
-    ,"Sea Neon": ItemData(3015,useful, 1, "enemy battle card", "01EC", False, False)
-    ,"Screwdriver": ItemData(3016,useful, 1, "enemy battle card", "01EF", False, False)
-    ,"Aquatank": ItemData(3017,useful, 1, "enemy battle card", "01F2", False, False)
-    ,"Wight Knight": ItemData(3018,useful, 1, "enemy battle card", "01F5", False, False)
-    ,"Gargoyle": ItemData(3019,useful, 1, "enemy battle card", "01F8", False, False)
-    ,"Pirate": ItemData(3020,useful, 1, "enemy battle card", "01FB", False, False)
-    ,"Air Pirate": ItemData(3021,useful, 1, "enemy battle card", "01FE", False, False)
-    ,"Darkball": ItemData(3022,useful, 1, "enemy battle card", "0201", False, False)
-    ,"Defender": ItemData(3023,useful, 1, "enemy battle card", "0204", False, False)
-    ,"Wyvern": ItemData(3024,useful, 1, "enemy battle card", "0207", False, False)
-    ,"Neoshadow": ItemData(3025,useful, 1, "enemy battle card", "020D", False, False)
-    ,"White Mushroom": ItemData(3026,useful, 1, "enemy battle card", "0210", False, False)
-    ,"Black Fungus": ItemData(3027,useful, 1, "enemy battle card", "0211", False, False)
-    ,"Creeper Plant": ItemData(3028,useful, 1, "enemy battle card", "0214", False, False)
-    ,"Tornado Step": ItemData(3029,useful, 1, "enemy battle card", "0217", False, False)
-    ,"Crescendo": ItemData(3030,useful, 1, "enemy battle card", "021A", False, False)
-    ,"Guard Armor": ItemData(3031,useful, 1, "enemy battle card", "021D", False, False)
-    ,"Parasite Cage": ItemData(3032,useful, 1, "enemy battle card", "021E", False, False)
-    ,"Trickmaster": ItemData(3033,useful, 1, "enemy battle card", "021F", False, False)
-    ,"Darkside": ItemData(3034,useful, 1, "enemy battle card", "0220", False, False)
-    ,"Card Soldier (Red)": ItemData(3035,useful, 1, "enemy battle card", "0221", False, False)
-    ,"Card Soldier (Black)": ItemData(3036,useful, 1, "enemy battle card", "0224", False, False)
-    ,"Hades": ItemData(3037,useful, 1, "enemy battle card", "0227", False, False)
-    ,"Jafar": ItemData(3039,useful, 1, "enemy battle card", "0228", False, False)
-    ,"Oogie Boogie": ItemData(3040,useful, 1, "enemy battle card", "0229", False, False)
-    ,"Ursula": ItemData(3041,useful, 1, "enemy battle card", "022A", False, False)
-    ,"Hook": ItemData(3042,useful, 1, "enemy battle card", "022B", False, False)
-    ,"Dragon Maleficent": ItemData(3043,useful, 1, "enemy battle card", "022C", False, False)
-    ,"Riku": ItemData(3044,useful, 1, "enemy battle card", "022D", False, False)
-    ,"Axel": ItemData(3044,useful, 1, "enemy battle card", "022E", False, False)
-    ,"Larxene": ItemData(3045,useful, 1, "enemy battle card", "022F", False, False)
-    ,"Vexen": ItemData(3046,useful, 1, "enemy battle card", "0230", False, False)
-    ,"Marluxia": ItemData(3047,useful, 1, "enemy battle card", "0231", False, False)
-    ,"Lexaeus": ItemData(3048,useful, 1, "enemy battle card", "0233", False, False)
-    ,"Ansem": ItemData(3049,useful, 1, "enemy battle card", "0234", False, False)
+    "Shadow": KHCOMItemData("Enemy Battle Cards", 266_3001, ItemClassification.useful, 1, 1, "01C2", False, False),
+    "Soldier": KHCOMItemData("Enemy Battle Cards", 266_3002, ItemClassification.useful, 1, 1, "01C5", False, False),
+    "Large Body": KHCOMItemData("Enemy Battle Cards", 266_3003, ItemClassification.useful, 1, 1, "01C8", False, False),
+    "Red Nocturne": KHCOMItemData("Enemy Battle Cards", 266_3004, ItemClassification.useful, 1, 1, "01CB", False, False),
+    "Blue Rhapsody": KHCOMItemData("Enemy Battle Cards", 266_3005, ItemClassification.useful, 1, 1, "01CE", False, False),
+    "Yellow Opera": KHCOMItemData("Enemy Battle Cards", 266_3006, ItemClassification.useful, 1, 1, "01D1", False, False),
+    "Green Requiem": KHCOMItemData("Enemy Battle Cards", 266_3007, ItemClassification.useful, 1, 1, "01D4", False, False),
+    "Powerwild": KHCOMItemData("Enemy Battle Cards", 266_3008, ItemClassification.useful, 1, 1, "01D7", False, False),
+    "Bouncywild": KHCOMItemData("Enemy Battle Cards", 266_3009, ItemClassification.useful, 1, 1, "01DA", False, False),
+    "Air Soldier": KHCOMItemData("Enemy Battle Cards", 266_3010, ItemClassification.useful, 1, 1, "01DD", False, False),
+    "Bandit": KHCOMItemData("Enemy Battle Cards", 266_3011, ItemClassification.useful, 1, 1, "01E0", False, False),
+    "Fat Bandit": KHCOMItemData("Enemy Battle Cards", 266_3012, ItemClassification.useful, 1, 1, "01E3", False, False),
+    "Barrel Spider": KHCOMItemData("Enemy Battle Cards", 266_3013, ItemClassification.useful, 1, 1, "01E6", False, False),
+    "Search Ghost": KHCOMItemData("Enemy Battle Cards", 266_3014, ItemClassification.useful, 1, 1, "01E6", False, False),
+    "Sea Neon": KHCOMItemData("Enemy Battle Cards", 266_3015, ItemClassification.useful, 1, 1, "01EC", False, False),
+    "Screwdriver": KHCOMItemData("Enemy Battle Cards", 266_3016, ItemClassification.useful, 1, 1, "01EF", False, False),
+    "Aquatank": KHCOMItemData("Enemy Battle Cards", 266_3017, ItemClassification.useful, 1, 1, "01F2", False, False),
+    "Wight Knight": KHCOMItemData("Enemy Battle Cards", 266_3018, ItemClassification.useful, 1, 1, "01F5", False, False),
+    "Gargoyle": KHCOMItemData("Enemy Battle Cards", 266_3019, ItemClassification.useful, 1, 1, "01F8", False, False),
+    "Pirate": KHCOMItemData("Enemy Battle Cards", 266_3020, ItemClassification.useful, 1, 1, "01FB", False, False),
+    "Air Pirate": KHCOMItemData("Enemy Battle Cards", 266_3021, ItemClassification.useful, 1, 1, "01FE", False, False),
+    "Darkball": KHCOMItemData("Enemy Battle Cards", 266_3022, ItemClassification.useful, 1, 1, "0201", False, False),
+    "Defender": KHCOMItemData("Enemy Battle Cards", 266_3023, ItemClassification.useful, 1, 1, "0204", False, False),
+    "Wyvern": KHCOMItemData("Enemy Battle Cards", 266_3024, ItemClassification.useful, 1, 1, "0207", False, False),
+    "Neoshadow": KHCOMItemData("Enemy Battle Cards", 266_3025, ItemClassification.useful, 1, 1, "020D", False, False),
+    "White Mushroom": KHCOMItemData("Enemy Battle Cards", 266_3026, ItemClassification.useful, 1, 1, "0210", False, False),
+    "Black Fungus": KHCOMItemData("Enemy Battle Cards", 266_3027, ItemClassification.useful, 1, 1, "0211", False, False),
+    "Creeper Plant": KHCOMItemData("Enemy Battle Cards", 266_3028, ItemClassification.useful, 1, 1, "0214", False, False),
+    "Tornado Step": KHCOMItemData("Enemy Battle Cards", 266_3029, ItemClassification.useful, 1, 1, "0217", False, False),
+    "Crescendo": KHCOMItemData("Enemy Battle Cards", 266_3030, ItemClassification.useful, 1, 1, "021A", False, False),
+    "Guard Armor": KHCOMItemData("Enemy Battle Cards", 266_3031, ItemClassification.useful, 1, 1, "021D", False, False),
+    "Parasite Cage": KHCOMItemData("Enemy Battle Cards", 266_3032, ItemClassification.useful, 1, 1, "021E", False, False),
+    "Trickmaster": KHCOMItemData("Enemy Battle Cards", 266_3033, ItemClassification.useful, 1, 1, "021F", False, False),
+    "Darkside": KHCOMItemData("Enemy Battle Cards", 266_3034, ItemClassification.useful, 1, 1, "0220", False, False),
+    "Card Soldier (Red)": KHCOMItemData("Enemy Battle Cards", 266_3035, ItemClassification.useful, 1, 1, "0221", False, False),
+    "Card Soldier (Black)": KHCOMItemData("Enemy Battle Cards", 266_3036, ItemClassification.useful, 1, 1, "0224", False, False),
+    "Hades": KHCOMItemData("Enemy Battle Cards", 266_3037, ItemClassification.useful, 1, 1, "0227", False, False),
+    "Jafar": KHCOMItemData("Enemy Battle Cards", 266_3039, ItemClassification.useful, 1, 1, "0228", False, False),
+    "Oogie Boogie": KHCOMItemData("Enemy Battle Cards", 266_3040, ItemClassification.useful, 1, 1, "0229", False, False),
+    "Ursula": KHCOMItemData("Enemy Battle Cards", 266_3041, ItemClassification.useful, 1, 1, "022A", False, False),
+    "Hook": KHCOMItemData("Enemy Battle Cards", 266_3042, ItemClassification.useful, 1, 1, "022B", False, False),
+    "Dragon Maleficent": KHCOMItemData("Enemy Battle Cards", 266_3043, ItemClassification.useful, 1, 1, "022C", False, False),
+    "Riku": KHCOMItemData("Enemy Battle Cards", 266_3044, ItemClassification.useful, 1, 1, "022D", False, False),
+    "Axel": KHCOMItemData("Enemy Battle Cards", 266_3044, ItemClassification.useful, 1, 1, "022E", False, False),
+    "Larxene": KHCOMItemData("Enemy Battle Cards", 266_3045, ItemClassification.useful, 1, 1, "022F", False, False),
+    "Vexen": KHCOMItemData("Enemy Battle Cards", 266_3046, ItemClassification.useful, 1, 1, "0230", False, False),
+    "Marluxia": KHCOMItemData("Enemy Battle Cards", 266_3047, ItemClassification.useful, 1, 1, "0231", False, False),
+    "Lexaeus": KHCOMItemData("Enemy Battle Cards", 266_3048, ItemClassification.useful, 1, 1, "0233", False, False),
+    "Ansem": KHCOMItemData("Enemy Battle Cards", 266_3049, ItemClassification.useful, 1, 1, "0234", False, False),
     
     #Gold Map Cards
-    ,"Key of Beginnings F01": ItemData(4001, progression, 1, "gold map card", "KOB01", False, False)
-    ,"Key of Beginnings F02": ItemData(4002, progression, 1, "gold map card", "KOB02", False, False)
-    ,"Key of Beginnings F03": ItemData(4003, progression, 1, "gold map card", "KOB03", False, False)
-    ,"Key of Beginnings F04": ItemData(4004, progression, 1, "gold map card", "KOB04", False, False)
-    ,"Key of Beginnings F05": ItemData(4005, progression, 1, "gold map card", "KOB05", False, False)
-    ,"Key of Beginnings F06": ItemData(4006, progression, 1, "gold map card", "KOB06", False, False)
-    ,"Key of Beginnings F07": ItemData(4007, progression, 1, "gold map card", "KOB07", False, False)
-    ,"Key of Beginnings F08": ItemData(4008, progression, 1, "gold map card", "KOB08", False, False)
-    ,"Key of Beginnings F09": ItemData(4009, progression, 1, "gold map card", "KOB09", False, False)
-    #Floor 10 Will Always be 100 Acre Wood, so no map cards needed)
-    ,"Key of Beginnings F11": ItemData(4011, progression, 1, "gold map card", "KOB11", False, False)
-    ,"Key of Beginnings F12": ItemData(4012, progression, 1, "gold map card", "KOB12", False, False)
-    ,"Key of Beginnings F13": ItemData(4013, progression, 1, "gold map card", "KOB13", False, False)
-    
-    ,"Key of Guidance F01": ItemData(4101, progression, 1, "gold map card", "KOG01", False, False)
-    ,"Key of Guidance F02": ItemData(4102, progression, 1, "gold map card", "KOG02", False, False)
-    ,"Key of Guidance F03": ItemData(4103, progression, 1, "gold map card", "KOG03", False, False)
-    ,"Key of Guidance F04": ItemData(4104, progression, 1, "gold map card", "KOG04", False, False)
-    ,"Key of Guidance F05": ItemData(4105, progression, 1, "gold map card", "KOG05", False, False)
-    ,"Key of Guidance F06": ItemData(4106, progression, 1, "gold map card", "KOG06", False, False)
-    ,"Key of Guidance F07": ItemData(4107, progression, 1, "gold map card", "KOG07", False, False)
-    ,"Key of Guidance F08": ItemData(4108, progression, 1, "gold map card", "KOG08", False, False)
-    ,"Key of Guidance F09": ItemData(4109, progression, 1, "gold map card", "KOG09", False, False)
-    #Floor 10 Will Always be 100 Acre Wood, so no map cards needed)
-    #Floor 11 Will Always be Twilight Town, which has no KOG
-    ,"Key of Guidance F12": ItemData(4112, progression, 1, "gold map card", "KOG12", False, False)
-    ,"Key of Guidance F13": ItemData(4113, progression, 1, "gold map card", "KOG13", False, False)
-    
-    ,"Key to Truth F01": ItemData(4201, progression, 1, "gold map card", "KOT01", False, False)
-    ,"Key to Truth F02": ItemData(4202, progression, 1, "gold map card", "KOT02", False, False)
-    ,"Key to Truth F03": ItemData(4203, progression, 1, "gold map card", "KOT03", False, False)
-    ,"Key to Truth F04": ItemData(4204, progression, 1, "gold map card", "KOT04", False, False)
-    ,"Key to Truth F05": ItemData(4205, progression, 1, "gold map card", "KOT05", False, False)
-    ,"Key to Truth F06": ItemData(4206, progression, 1, "gold map card", "KOT06", False, False)
-    ,"Key to Truth F07": ItemData(4207, progression, 1, "gold map card", "KOT07", False, False)
-    ,"Key to Truth F08": ItemData(4208, progression, 1, "gold map card", "KOT08", False, False)
-    ,"Key to Truth F09": ItemData(4209, progression, 1, "gold map card", "KOT09", False, False)
-    #Floor 10 Will Always be 100 Acre Wood, so no map cards needed)
-    #Floor 11 Will Always be Twilight Town, which has no KOT
-    #Floor 11 Will Always be Destiny Islands, which has no KOT
-    ,"Key to Truth F13": ItemData(4213, progression, 1, "gold map card", "KOT13", False, False)
-    
-    ,"Victory": ItemData(4300, progression, 1, "victory", "victory", False, False)
+    "Key of Beginnings F01": KHCOMItemData("Gold Map Cards", 266_4001, ItemClassification.progression, 1, 1, "KOB01", False, False),
+    "Key of Beginnings F02": KHCOMItemData("Gold Map Cards", 266_4002, ItemClassification.progression, 1, 1, "KOB02", False, False),
+    "Key of Beginnings F03": KHCOMItemData("Gold Map Cards", 266_4003, ItemClassification.progression, 1, 1, "KOB03", False, False),
+    "Key of Beginnings F04": KHCOMItemData("Gold Map Cards", 266_4004, ItemClassification.progression, 1, 1, "KOB04", False, False),
+    "Key of Beginnings F05": KHCOMItemData("Gold Map Cards", 266_4005, ItemClassification.progression, 1, 1, "KOB05", False, False),
+    "Key of Beginnings F06": KHCOMItemData("Gold Map Cards", 266_4006, ItemClassification.progression, 1, 1, "KOB06", False, False),
+    "Key of Beginnings F07": KHCOMItemData("Gold Map Cards", 266_4007, ItemClassification.progression, 1, 1, "KOB07", False, False),
+    "Key of Beginnings F08": KHCOMItemData("Gold Map Cards", 266_4008, ItemClassification.progression, 1, 1, "KOB08", False, False),
+    "Key of Beginnings F09": KHCOMItemData("Gold Map Cards", 266_4009, ItemClassification.progression, 1, 1, "KOB09", False, False),
+    "Key of Beginnings F11": KHCOMItemData("Gold Map Cards", 266_4011, ItemClassification.progression, 1, 1, "KOB11", False, False),
+    "Key of Beginnings F12": KHCOMItemData("Gold Map Cards", 266_4012, ItemClassification.progression, 1, 1, "KOB12", False, False),
+    "Key of Beginnings F13": KHCOMItemData("Gold Map Cards", 266_4013, ItemClassification.progression, 1, 1, "KOB13", False, False),
+    "Key of Guidance F01": KHCOMItemData("Gold Map Cards", 266_4101, ItemClassification.progression, 1, 1, "KOG01", False, False),
+    "Key of Guidance F02": KHCOMItemData("Gold Map Cards", 266_4102, ItemClassification.progression, 1, 1, "KOG02", False, False),
+    "Key of Guidance F03": KHCOMItemData("Gold Map Cards", 266_4103, ItemClassification.progression, 1, 1, "KOG03", False, False),
+    "Key of Guidance F04": KHCOMItemData("Gold Map Cards", 266_4104, ItemClassification.progression, 1, 1, "KOG04", False, False),
+    "Key of Guidance F05": KHCOMItemData("Gold Map Cards", 266_4105, ItemClassification.progression, 1, 1, "KOG05", False, False),
+    "Key of Guidance F06": KHCOMItemData("Gold Map Cards", 266_4106, ItemClassification.progression, 1, 1, "KOG06", False, False),
+    "Key of Guidance F07": KHCOMItemData("Gold Map Cards", 266_4107, ItemClassification.progression, 1, 1, "KOG07", False, False),
+    "Key of Guidance F08": KHCOMItemData("Gold Map Cards", 266_4108, ItemClassification.progression, 1, 1, "KOG08", False, False),
+    "Key of Guidance F09": KHCOMItemData("Gold Map Cards", 266_4109, ItemClassification.progression, 1, 1, "KOG09", False, False),
+    "Key of Guidance F12": KHCOMItemData("Gold Map Cards", 266_4112, ItemClassification.progression, 1, 1, "KOG12", False, False),
+    "Key of Guidance F13": KHCOMItemData("Gold Map Cards", 266_4113, ItemClassification.progression, 1, 1, "KOG13", False, False),
+    "Key to Truth F01": KHCOMItemData("Gold Map Cards", 266_4201, ItemClassification.progression, 1, 1, "KOT01", False, False),
+    "Key to Truth F02": KHCOMItemData("Gold Map Cards", 266_4202, ItemClassification.progression, 1, 1, "KOT02", False, False),
+    "Key to Truth F03": KHCOMItemData("Gold Map Cards", 266_4203, ItemClassification.progression, 1, 1, "KOT03", False, False),
+    "Key to Truth F04": KHCOMItemData("Gold Map Cards", 266_4204, ItemClassification.progression, 1, 1, "KOT04", False, False),
+    "Key to Truth F05": KHCOMItemData("Gold Map Cards", 266_4205, ItemClassification.progression, 1, 1, "KOT05", False, False),
+    "Key to Truth F06": KHCOMItemData("Gold Map Cards", 266_4206, ItemClassification.progression, 1, 1, "KOT06", False, False),
+    "Key to Truth F07": KHCOMItemData("Gold Map Cards", 266_4207, ItemClassification.progression, 1, 1, "KOT07", False, False),
+    "Key to Truth F08": KHCOMItemData("Gold Map Cards", 266_4208, ItemClassification.progression, 1, 1, "KOT08", False, False),
+    "Key to Truth F09": KHCOMItemData("Gold Map Cards", 266_4209, ItemClassification.progression, 1, 1, "KOT09", False, False),
+    "Key to Truth F13": KHCOMItemData("Gold Map Cards", 266_4210, ItemClassification.progression, 1, 1, "KOT13", False, False)
 }
 
-item_frequencies = {}
-
-for (name) in item_table:
-    item_table[name] = ItemData(item_table[name].code, item_table[name].classification, item_table[name].khcomamount, item_table[name].khcomtype, item_table[name].khcomvalue, item_table[name].khcomiszero, item_table[name].khcomiscure)
-    
-lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+event_item_table: Dict[str, RLItemData] = {
+}
