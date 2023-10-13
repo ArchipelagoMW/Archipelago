@@ -15,7 +15,7 @@ class KHCOMAchievement(Location):
         self.event = not address
         
 achievement_table = {
-    ,"Kingdom Key 0": AchieveData(5001, "Floor 1")
+    "Kingdom Key 0": AchieveData(5001, "Floor 1")
     ,"Kingdom Key 1": AchieveData(5002, "Floor 1")
     ,"Kingdom Key 2": AchieveData(5003, "Floor 1")
     ,"Kingdom Key 3": AchieveData(5004, "Floor 1")
@@ -830,7 +830,7 @@ achievement_table = {
     ,"Ursula": AchieveData(7041, "Floor 7 Room of Truth")
     ,"Hook": AchieveData(7042, "Floor 8 Room of Truth")
     ,"Dragon Maleficent": AchieveData(7043, "Floor 9 Room of Truth")
-    ,"Riku" AchieveData(7051, "Floor 12 Room of Guidance")
+    ,"Riku": AchieveData(7051, "Floor 12 Room of Guidance")
     ,"Axel": AchieveData(7044, "Floor 13 Room of Beginnings")
     ,"Larxene": AchieveData(7045, "Floor 12 Room of Guidance")
     ,"Vexen": AchieveData(7046, "Floor 11 Room of Beginnings")
@@ -875,7 +875,7 @@ achievement_table = {
 }
 
 exclusion_table = {
-    ,"battle cards": {
+    "battle cards": {
         "Kingdom Key 0"
         ,"Kingdom Key 1"
         ,"Kingdom Key 2"
@@ -1256,7 +1256,7 @@ exclusion_table = {
         ,"Megalixir 7"
         ,"Megalixir 8"
         ,"Megalixir 9"
-        ,    #Premium Battle Cards"
+        #Premium Battle Cards"
         ,"Premium Kingdom Key 0"
         ,"Premium Kingdom Key 1"
         ,"Premium Kingdom Key 2"

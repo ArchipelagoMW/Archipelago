@@ -16,10 +16,10 @@ class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     classification: ItemClassification
     khcomamount: int
-    khcomtype: string
-    khcomvalue: string
+    khcomtype: str
+    khcomvalue: str
     khcomiszero: bool
-    hcomiscure: bool
+    khcomiscure: bool
 
 item_table: Dict[str, ItemData] = {
     #Battle Cards
@@ -878,12 +878,12 @@ item_table: Dict[str, ItemData] = {
     #Floor 11 Will Always be Destiny Islands, which has no KOT
     ,"Key to Truth F13": ItemData(4213, progression, 1, "gold map card", "KOT13", False, False)
     
-    ,"Victory": ItemData(None, True)
+    ,"Victory": ItemData(4300, progression, 1, "victory", "victory", False, False)
 }
 
 item_frequencies = {}
 
 for (name) in item_table:
-    item_table[name] = ItemData(item_table[name].classification, item_table[name].khcomamount, item_table[name].khcomtype, item_table[name].khcomvalue, item_table[name].khcomiszero, item_table[name].khcomiscure)
+    item_table[name] = ItemData(item_table[name].code, item_table[name].classification, item_table[name].khcomamount, item_table[name].khcomtype, item_table[name].khcomvalue, item_table[name].khcomiszero, item_table[name].khcomiscure)
     
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
