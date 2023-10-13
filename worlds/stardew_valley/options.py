@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from typing import Dict
 
-from Options import Range, SpecialRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option
 from .mods.mod_data import ModNames
 
 
@@ -48,7 +47,7 @@ class Goal(Choice):
         return super().get_option_name(value)
 
 
-class StartingMoney(SpecialRange):
+class StartingMoney(NamedRange):
     """Amount of gold when arriving at the farm.
     Set to -1 or unlimited for infinite money in this playthrough"""
     internal_name = "starting_money"
@@ -67,7 +66,7 @@ class StartingMoney(SpecialRange):
     }
 
 
-class ProfitMargin(SpecialRange):
+class ProfitMargin(NamedRange):
     """Multiplier over all gold earned in-game by the player."""
     internal_name = "profit_margin"
     display_name = "Profit Margin"
@@ -286,7 +285,7 @@ class SpecialOrderLocations(Choice):
     option_board_qi = 2
 
 
-class HelpWantedLocations(SpecialRange):
+class HelpWantedLocations(NamedRange):
     """How many "Help Wanted" quests need to be completed as Archipelago Locations
     Out of every 7 quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
     Choosing a multiple of 7 is recommended."""
@@ -431,7 +430,7 @@ class MultipleDaySleepEnabled(Toggle):
     default = 1
 
 
-class MultipleDaySleepCost(SpecialRange):
+class MultipleDaySleepCost(NamedRange):
     """How much gold it will cost to use MultiSleep. You will have to pay that amount for each day skipped."""
     internal_name = "multiple_day_sleep_cost"
     display_name = "Multiple Day Sleep Cost"
@@ -447,7 +446,7 @@ class MultipleDaySleepCost(SpecialRange):
     }
 
 
-class ExperienceMultiplier(SpecialRange):
+class ExperienceMultiplier(NamedRange):
     """How fast you want to earn skill experience. A lower setting mean less experience.
     A higher setting means more experience."""
     internal_name = "experience_multiplier"
@@ -466,7 +465,7 @@ class ExperienceMultiplier(SpecialRange):
     }
 
 
-class FriendshipMultiplier(SpecialRange):
+class FriendshipMultiplier(NamedRange):
     """How fast you want to earn friendship points with villagers.
     A lower setting mean less friendship per action.
     A higher setting means more friendship per action."""

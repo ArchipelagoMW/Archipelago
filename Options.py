@@ -696,8 +696,7 @@ class Range(NumericOption):
         return int(round(random.triangular(lower, end, tri), 0))
 
 
-class SpecialRange(Range):
-    special_range_cutoff = 0
+class NamedRange(Range):
     special_range_names: typing.Dict[str, int] = {}
     """Special Range names have to be all lowercase as matching is done with text.lower()"""
 
@@ -707,6 +706,29 @@ class SpecialRange(Range):
         if text in cls.special_range_names:
             return cls(cls.special_range_names[text])
         return super().from_text(text)
+
+    @classmethod
+    def weighted_range(cls, text) -> Range:
+        if text == "random-low":
+            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_start))
+        elif text == "random-high":
+            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_end))
+        elif text == "random-middle":
+            return cls(cls.triangular(cls.range_start, cls.range_end))
+        elif text.startswith("random-range-"):
+            return cls.custom_range(text)
+        elif text == "random":
+            return cls(random.randint(cls.range_start, cls.range_end))
+        else:
+            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+                            f"Acceptable values are: random, random-high, random-middle, random-low, "
+                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
+                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+
+
+class SpecialRange(NamedRange):
+    special_range_cutoff = 0
+    """The cutoff value is used instead of range_start when using randomized values"""
 
     @classmethod
     def weighted_range(cls, text) -> Range:
