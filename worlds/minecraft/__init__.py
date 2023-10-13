@@ -37,7 +37,7 @@ class MinecraftWebWorld(WebWorld):
     bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
 
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
         "single-player, multiworld, and related software.",
         "English",

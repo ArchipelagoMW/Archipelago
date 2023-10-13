@@ -45,7 +45,7 @@ class TLoZSettings(settings.Group):
 class TLoZWeb(WebWorld):
     theme = "stone"
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up The Legend of Zelda for Archipelago on your computer.",
         "English",
         "multiworld_en.md",

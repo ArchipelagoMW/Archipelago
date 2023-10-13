@@ -42,7 +42,7 @@ class ALTTPSettings(settings.Group):
 
 class ALTTPWeb(WebWorld):
     setup_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago ALttP Software on your computer. This guide covers single-player, multiworld, and related software.",
         "English",
         "multiworld_en.md",
@@ -78,7 +78,7 @@ class ALTTPWeb(WebWorld):
     )
 
     msu = Tutorial(
-        "MSU-1 Setup Tutorial",
+        "MSU-1 Setup Guide",
         "A guide to setting up MSU-1, which allows for custom in-game music.",
         "English",
         "msu1_en.md",
@@ -105,7 +105,7 @@ class ALTTPWeb(WebWorld):
     )
 
     plando = Tutorial(
-        "Plando Tutorial",
+        "Plando Guide",
         "A guide to creating Multiworld Plandos with LTTP",
         "English",
         "plando_en.md",

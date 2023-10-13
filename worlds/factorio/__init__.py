@@ -53,7 +53,7 @@ If this file does exist, then it will be used.
 
 class FactorioWeb(WebWorld):
     tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Factorio software on your computer.",
         "English",
         "setup_en.md",

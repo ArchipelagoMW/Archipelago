@@ -17,7 +17,7 @@ client_version = 1
 
 class MeritousWeb(WebWorld):
     tutorials = [Tutorial(
-        "Meritous Setup Tutorial",
+        "Meritous Setup Guide",
         "A guide to setting up the Archipelago Meritous software on your computer.",
         "English",
         "setup_en.md",

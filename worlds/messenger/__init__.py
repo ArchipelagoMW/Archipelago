@@ -17,7 +17,7 @@ class MessengerWeb(WebWorld):
     bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
     tut_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up The Messenger randomizer on your computer.",
         "English",
         "setup_en.md",
