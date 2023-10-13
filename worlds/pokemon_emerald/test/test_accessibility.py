@@ -6,7 +6,7 @@ from ..options import NormanRequirement
 
 
 class TestBasic(PokemonEmeraldTestBase):
-    def testAlwaysAccessible(self) -> None:
+    def test_always_accessible(self) -> None:
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_102_POTION")))
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_SUPER_POTION")))
 
@@ -16,7 +16,7 @@ class TestSurf(PokemonEmeraldTestBase):
         "npc_gifts": Toggle.option_true
     }
 
-    def testInaccessibleWithNoSurf(self) -> None:
+    def test_inaccessible_with_no_surf(self) -> None:
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_PETALBURG_CITY_ETHER")))
         self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_SOOTHE_BELL")))
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_LILYCOVE_CITY_MAX_REPEL")))
@@ -24,7 +24,7 @@ class TestSurf(PokemonEmeraldTestBase):
         self.assertFalse(self.can_reach_entrance("REGION_ROUTE119/UPPER -> REGION_FORTREE_CITY/MAIN"))
         self.assertFalse(self.can_reach_entrance("MAP_FORTREE_CITY:3/MAP_FORTREE_CITY_MART:0"))
 
-    def testAccessibleWithSurfOnly(self) -> None:
+    def test_accessible_with_surf_only(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge"])
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_PETALBURG_CITY_ETHER")))
         self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_SOOTHE_BELL")))
@@ -49,11 +49,11 @@ class TestFreeFly(PokemonEmeraldTestBase):
         free_fly_location.item = None
         free_fly_location.place_locked_item(self.multiworld.worlds[1].create_event("EVENT_VISITED_SOOTOPOLIS_CITY"))
 
-    def testSootopolisGiftInaccessibleWithNoSurf(self) -> None:
+    def test_sootopolis_gift_inaccessible_with_no_surf(self) -> None:
         self.collect_by_name(["HM02 Fly", "Feather Badge"])
         self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM31")))
 
-    def testSootopolisGiftAccessibleWithSurf(self) -> None:
+    def test_sootopolis_gift_accessible_with_surf(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge", "HM02 Fly", "Feather Badge"])
         self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM31")))
 
@@ -64,16 +64,16 @@ class TestFerry(PokemonEmeraldTestBase):
         "enable_ferry": Toggle.option_true
     }
 
-    def testInaccessibleWithNoItems(self) -> None:
+    def test_inaccessible_with_no_items(self) -> None:
         self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_SOOTHE_BELL")))
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_LILYCOVE_CITY_MAX_REPEL")))
 
-    def testInaccessibleWithOnlySlateportAccess(self) -> None:
+    def test_inaccessible_with_only_slateport_access(self) -> None:
         self.collect_by_name(["HM06 Rock Smash", "Dynamo Badge", "Acro Bike"])
         self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_SOOTHE_BELL")))
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_LILYCOVE_CITY_MAX_REPEL")))
 
-    def testAccessibleWithSlateportAccessAndTicket(self) -> None:
+    def test_accessible_with_slateport_access_and_ticket(self) -> None:
         self.collect_by_name(["HM06 Rock Smash", "Dynamo Badge", "Acro Bike", "S.S. Ticket"])
         self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_SOOTHE_BELL")))
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_LILYCOVE_CITY_MAX_REPEL")))
@@ -84,14 +84,14 @@ class TestExtraBouldersOn(PokemonEmeraldTestBase):
         "extra_boulders": Toggle.option_true
     }
 
-    def testInaccessibleWithNoItems(self) -> None:
+    def test_inaccessible_with_no_items(self) -> None:
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_PP_UP")))
 
-    def testInaccessibleWithSurfOnly(self) -> None:
+    def test_inaccessible_with_surf_only(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge"])
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_PP_UP")))
 
-    def testAccessibleWithSurfAndStrength(self) -> None:
+    def test_accessible_with_surf_and_strength(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge", "HM04 Strength", "Heat Badge"])
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_PP_UP")))
 
@@ -101,10 +101,10 @@ class TestExtraBouldersOff(PokemonEmeraldTestBase):
         "extra_boulders": Toggle.option_false
     }
 
-    def testInaccessibleWithNoItems(self) -> None:
+    def test_inaccessible_with_no_items(self) -> None:
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_PP_UP")))
 
-    def testAccessibleWithSurfOnly(self) -> None:
+    def test_accessible_with_surf_only(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge"])
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_PP_UP")))
 
@@ -115,7 +115,7 @@ class TestNormanRequirement1(PokemonEmeraldTestBase):
         "norman_count": 0
     }
 
-    def testAccessibleWithNoItems(self) -> None:
+    def test_accessible_with_no_items(self) -> None:
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
 
@@ -125,10 +125,10 @@ class TestNormanRequirement2(PokemonEmeraldTestBase):
         "norman_count": 4
     }
 
-    def testInaccessibleWithNoItems(self) -> None:
+    def test_inaccessible_with_no_items(self) -> None:
         self.assertFalse(self.can_reach_location(location_name_to_label("BADGE_5")))
 
-    def testAccessibleWithEnoughBadges(self) -> None:
+    def test_accessible_with_enough_badges(self) -> None:
         self.collect_by_name(["Stone Badge", "Knuckle Badge", "Feather Badge", "Balance Badge"])
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
@@ -139,7 +139,7 @@ class TestNormanRequirement3(PokemonEmeraldTestBase):
         "norman_count": 0
     }
 
-    def testAccessibleWithNoItems(self) -> None:
+    def test_accessible_with_no_items(self) -> None:
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
 
@@ -149,10 +149,10 @@ class TestNormanRequirement4(PokemonEmeraldTestBase):
         "norman_count": 4
     }
 
-    def testInaccessibleWithNoItems(self) -> None:
+    def test_inaccessible_with_no_items(self) -> None:
         self.assertFalse(self.can_reach_location(location_name_to_label("BADGE_5")))
 
-    def testAccessibleWithReachableGyms(self) -> None:
+    def test_accessible_with_reachable_gyms(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge"])  # Reaches Roxanne, Brawley, Wattson, and Flannery
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
@@ -164,7 +164,7 @@ class TestVictoryRoad(PokemonEmeraldTestBase):
         "remove_roadblocks": {"Lilycove City Wailmer"}
     }
 
-    def testAccessibleWithSpecificHMs(self) -> None:
+    def test_accessible_with_specific_hms(self) -> None:
         self.assertFalse(self.can_reach_location("EVENT_DEFEAT_CHAMPION"))
         self.collect_by_name(["HM03 Surf", "Balance Badge"])
         self.assertFalse(self.can_reach_location("EVENT_DEFEAT_CHAMPION"))
