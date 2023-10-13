@@ -5,6 +5,7 @@ import typing
 from .Options import khcom_options  # the options we defined earlier
 from .Items import KHCOMItem, item_table  # data used below to add items to the World
 from .Locations import KHCOMAchievement, achievement_table  # same as above
+from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial
@@ -27,7 +28,6 @@ class KHCOMWeb(WebWorld):
 class KHCOMWorld(World):
     game = "Kingdom Hearts Chain of Memories"
     options_dataclass = khcom_options
-    options: khcom_options
     topology_present = True
     base_id = 7474
 

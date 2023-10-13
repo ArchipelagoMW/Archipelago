@@ -1,6 +1,6 @@
-import typing
-from Options import Choice, Option, Toggle, Range
+from dataclasses import dataclass
+from Options import Toggle, Range, Choice, PerGameCommonOptions
 
-khcom_options: typing.Dict[str, type(Option)] = {
-    "include_battle_cards": Toggle
-}
+@dataclass
+class khcom_options(PerGameCommonOptions):
+    include_battle_cards: Toggle
