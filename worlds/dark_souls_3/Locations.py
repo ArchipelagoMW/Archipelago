@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Optional, NamedTuple, Dict
+from typing import Optional, NamedTuple, Dict, Set
 
 from BaseClasses import Location, Region
 
@@ -688,6 +688,114 @@ location_tables = {
         [DS3LocationData(f"Undead Bone Shard #{i + 1}", "Undead Bone Shard", DS3LocationCategory.HEALTH) for i in range(10)],
 }
 
+# In addition to these hand-authored location groups, every region automatically
+# has a location group added in the loop below.
+location_name_groups: Dict[str, Set[str]] = {
+    # Locations that are very obvious: boss/miniboss drops (one per boss), keys,
+    # items unlocked by keys, visibly guarded items, or items at the end of a
+    # bossless area. Intended for players without broad DS3 knowledge or who
+    # want fewer, more obvious checks.
+    "Prominent Locations": frozenset([
+        "FS: Tower Key",
+        "FS: Uchigatana",
+        "FSBT: Covetous Silver Serpent Ring",
+        "FSBT: Fire Keeper Robe",
+        "FSBT: Fire Keeper Gloves",
+        "FSBT: Fire Keeper Skirt",
+        "FSBT: Estus Ring",
+        "FSBT: Fire Keeper Soul",
+        "HWL: Basin of Vows",
+        "HWL: Small Lothric Banner",
+        "HWL: Cell Key",
+        "HWL: Soul of Boreal Valley Vordt",
+        "HWL: Soul of the Dancer",
+        "US: Soul of the Rotted Greatwood",
+        "US: Flynn's Ring", # Reward for killing the Fire Demon
+        "US: Irithyll Straight Sword", # Irithyll Outrider drop
+        "RS: Farron Coal",
+        "RS: Soul of a Crystal Sage",
+        "FK: Cinders of a Lord - Abyss Watcher",
+        "FK: Soul of a Stray Demon",
+        "CD: Spider Shield", # NPC drop
+        "CD: Small Doll",
+        "CC: Soul of a Demon",
+        "CC: Soul of High Lord Wolnir",
+        "SL: Lightning Stake",
+        "SL: Soul of Old Demon King",
+        "SL: Fume Ultra Greatsword", # Knight Slayer Tsorig drop
+        "SL: Dragonrider Bow", # Reward for making it through the Smouldering
+                               # Lake dungeon.
+        "IBV: Pontiff's Right Eye", # Sulyvahn's Beast drop
+        "IBV: Soul of Pontiff Sulyvahn",
+        "IBV: Ring of Favor", # Sulyvahn's Beast Duo drop
+        "ID: Jailbreaker's Key",
+        "ID: Old Cell Key",
+        "ID: Profaned Coal",
+        "ID: Jailer's Key King",
+        "PC: Logan's Scroll", # NPC drop
+        "PC: Cinders of a Lord - Yhorm the Giant",
+        "AL: Cinders of a Lord - Aldritch",
+        "LC: Irithyll Rapier", # Boreal Outrider drop
+        "LC: Soul of Dragonslayer Armour",
+        "LC: Grand Archives Key",
+        "CKG: Soul of Consumed Oceiros",
+        "UG: Soul of Champion Gundyr",
+        "UG: Eyes of a Fire Keeper",
+        "GA: Crystal Scroll", # Crystal Sage drop
+        "GA: Golden Wing Crest Shield", # NPC drop
+        "GA: Onikiri and Ubadachi", # NPC drop
+        "GA: Sage's Crystal Staff", # NPC drop
+        "GA: Outrider Knight Helm", # Boreal Outrider drop
+        "GA: Cinders of a Lord - Lothric Prince",
+        "AP: Dragon Head Stone", # Ancient Wyvern drop
+        "AP: Dragon Tooth", # NPC drop
+        "AP: Soul of the Nameless King",
+        "PW: Valorheart", # Champion's Graveyender drop
+        "PW: Contraption Key",
+        "PW: Soul of Sister Friede",
+        "DH: Soul of the Demon Prince",
+        "DH: Flame Fan", # Desert Pyromancer Zoey drop
+        "DH: Small Envoy Banner",
+        "RC: Fillianore's Spear Ornament",
+        "RC: Soul of Darkeater Midir",
+        "RC: Crucifix of the Mad King", # Shira drop
+        "RC: Soul of Slave Knight Gael",
+    ]),
+
+    # Locations that are particularly tricky to find or get to, for players
+    # without an encyclopedic knowledge of DS3 who don't want to get stuck
+    # looking for an invisible wall or one random mob with a guaranteed drop.
+    "Hidden Locations": frozenset([
+        # TODO: this list isn't at all comprehensive, expand it
+
+        # Behind illusory walls
+        "FS: Covetous Silver Serpent Ring",
+        "IBV: Ring of Favor",
+        "GA: Outrider Knight Helm",
+        "GA: Soul Stream",
+
+        "UG: Ashen Estus Ring",
+        "UG: Black Knight Glaive",
+        "UG: Hornet Ring",
+        "UG: Chaos Blade",
+        "UG: Blacksmith Hammer",
+        "UG: Eyes of a Fire Keeper",
+        "UG: Coiled Sword Fragment",
+        "UG: Soul of Champion Gundyr",
+    ])
+}
+
 location_dictionary: Dict[str, DS3LocationData] = {}
-for location_table in location_tables.values():
+for location_name, location_table in location_tables.items():
     location_dictionary.update({location_data.name: location_data for location_data in location_table})
+
+    # Allow entire locations to be added to location sets.
+    location_name_groups[location_name] = frozenset([
+        location_data.name for location_data in location_table
+        if not location_data.name.startswith("Progressive Items")
+    ])
+
+location_name_groups["Painted World of Ariandel"] = \
+    location_name_groups["Painted World of Ariandel 1"].union(location_name_groups["Painted World of Ariandel 2"])
+del location_name_groups["Painted World of Ariandel 1"]
+del location_name_groups["Painted World of Ariandel 2"]

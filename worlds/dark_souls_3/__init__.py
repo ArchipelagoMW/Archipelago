@@ -8,7 +8,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
-from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
+from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary, location_name_groups
 from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
 
 
@@ -52,6 +52,7 @@ class DarkSouls3World(World):
     required_client_version = (0, 4, 2)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
     location_name_to_id = DarkSouls3Location.get_name_to_id()
+    location_name_groups = location_name_groups
     item_name_groups = {
         "Cinders": {
             "Cinders of a Lord - Abyss Watcher",
