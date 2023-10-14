@@ -35,10 +35,12 @@
 
 ; I/O Registers
 .definelabel REG_BG3CNT, 0x400000E
+.definelabel REG_BG0VOFS, 0x4000012
 .definelabel REG_DMA3SAD, 0x40000D4
 
 ; PalRAM
 .definelabel ObjectPalette4, 0x5000280
+.definelabel ObjectPalette9, 0x5000320
 .definelabel ObjectPaletteF, 0x50003E0
 
 ; Functions
@@ -65,6 +67,9 @@
 .definelabel WarioCoinSet, 0x80768B8
 .definelabel TKakeraComp_SE_Set, 0x8078D60
 .definelabel TKakeraIconDsp_Sub, 0x8078D98
+.definelabel Select_Fade_Init, 0x807A428
+.definelabel MmapHekigaChange, 0x808502C
+.definelabel MmapBestScoreSet, 0x8085178
 .definelabel WarioVoiceSet, 0x8088620
 .definelabel MiniRandomCreate, 0x8089B80
 .definelabel MojiCreate, 0x80904DC
@@ -83,6 +88,8 @@
 .definelabel zako_takara_box_Anm_02, 0x83B4F34
 .definelabel zako_takara_box_Anm_11, 0x83B5004
 .definelabel CommonRoomEntityPalettes4, 0x8400A68
+.definelabel EmptyCDTile, 0x8400FA8
+.definelabel BasicElementTiles, 0x8400AE8
 .definelabel EmptyJewel4Tile, 0x84016E8
 .definelabel EmptyJewel1Tile, 0x8401708
 .definelabel EmptyJewel3Tile, 0x8401AE8
@@ -95,11 +102,11 @@
 .definelabel HasJewel2Tile, 0x84045E8
 .definelabel HasJewel3Tile, 0x8404608
 .definelabel HasJewel4Tile, 0x8404628
-.definelabel EmptyCDTile, 0x8400FA8
-.definelabel BasicElementTiles, 0x8400AE8
+.definelabel PassageTreasurePalettes, 0x8414A64
 .definelabel PortalTilemap3, 0x864BF58
 .definelabel PortalOBJTileset, 0x868269C
 .definelabel SaveTutorialTilemap, 0x868B15C
 .definelabel PortalTileset2, 0x868681C
-.definelabel PortalPaletteDTable, 0x0868A81C
-.definelabel PortalPaletteETable, 0x0868A8DC
+.definelabel PortalPaletteDTable, 0x868A81C
+.definelabel PortalPaletteETable, 0x868A8DC
+.definelabel PassageRoomTileSet, 0x869CE48

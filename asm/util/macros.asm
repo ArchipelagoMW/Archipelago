@@ -56,3 +56,8 @@
 .macro get_bit, dst, src, bit
         get_bits dst, src, bit, bit
 .endmacro
+
+; Tile sizes and coordinates
+sizeof_tile equ 0x20
+.expfunc tile_no_4b(n), n * sizeof_tile
+.expfunc tile_coord_4b(x, y), tile_no_4b(x + 32 * y)

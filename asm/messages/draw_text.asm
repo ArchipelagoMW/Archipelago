@@ -338,7 +338,7 @@ LoadSpriteString:
     @@LoadCharacter:
         mov r1, r5
         bl LoadSpriteCharacter
-        add r5, #0x20
+        add r5, #sizeof_tile
         sub r6, r6, #1
 
     @@CheckNChars:

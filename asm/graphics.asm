@@ -1,74 +1,65 @@
 .gba
 
 
-.expfunc tile_no_4b(n), n * 0x20
-.expfunc tile_coord_4b(x, y), tile_no_4b(x + 32 * y)
-
 ; Store letters and AP logo in some unused space in the tile data near the
 ; jewels and such. WL4 stores graphics data in 4bpp uncompressed 2D format.
 
 ; Spaces that will be used by text are now filled with empty tiles for clarity.
-
-; Interestingly, graphics are considered as a stream of nybbles (that is, the
-; left pixel is the least significant half byte), which means that the easiest
-; way to write them is as eight words, such that the hexits appear mirrored in
-; the assembly compared to how they look in the final game
-
 .org BasicElementTiles + tile_coord_4b(12, 4)
 EmptyTile:
-    .fill 0x20 * 12, 0
+    .fill 12 * sizeof_tile, 0
 
 .org BasicElementTiles + tile_coord_4b(14, 5)
-APLogoTop: .incbin "data/graphics/ap_logo.bin", 0x00, 0x40
+APLogoTop: .incbin "data/graphics/ap_logo.bin", 0x00, 2 * sizeof_tile
 
-.fill 0x20 * 8, 0
+.fill 8 * sizeof_tile, 0
 
 .org BasicElementTiles + tile_coord_4b(14, 6)
-APLogoBottom: .incbin "data/graphics/ap_logo.bin", 0x40, 0x40
+APLogoBottom: .incbin "data/graphics/ap_logo.bin", 2 * sizeof_tile, 2 * sizeof_tile
 
-.fill 0x20 * 8, 0
+.fill 8 * sizeof_tile, 0
 
 .org 0x0869FC88
-Text8x8_0: .skip 0x20
-Text8x8_1: .skip 0x20
-Text8x8_2: .skip 0x20
-Text8x8_3: .skip 0x20
-Text8x8_4: .skip 0x20
-Text8x8_5: .skip 0x20
-Text8x8_6: .skip 0x20
-Text8x8_7: .skip 0x20
-Text8x8_8: .skip 0x20
-Text8x8_9: .skip 0x20
+Text8x8_0: .skip sizeof_tile
+Text8x8_1: .skip sizeof_tile
+Text8x8_2: .skip sizeof_tile
+Text8x8_3: .skip sizeof_tile
+Text8x8_4: .skip sizeof_tile
+Text8x8_5: .skip sizeof_tile
+Text8x8_6: .skip sizeof_tile
+Text8x8_7: .skip sizeof_tile
+Text8x8_8: .skip sizeof_tile
+Text8x8_9: .skip sizeof_tile
 
 .org 0x08749870
-Text8x8_A: .skip 0x20
-Text8x8_B: .skip 0x20
-Text8x8_C: .skip 0x20
-Text8x8_D: .skip 0x20
-Text8x8_E: .skip 0x20
-Text8x8_F: .skip 0x20
-Text8x8_G: .skip 0x20
-Text8x8_H: .skip 0x20
-Text8x8_I: .skip 0x20
-Text8x8_J: .skip 0x20
-Text8x8_K: .skip 0x20
-Text8x8_L: .skip 0x20
-Text8x8_M: .skip 0x20
-Text8x8_N: .skip 0x20
-Text8x8_O: .skip 0x20
-Text8x8_P: .skip 0x20
-Text8x8_Q: .skip 0x20
-Text8x8_R: .skip 0x20
-Text8x8_S: .skip 0x20
-Text8x8_T: .skip 0x20
-Text8x8_U: .skip 0x20
-Text8x8_V: .skip 0x20
-Text8x8_W: .skip 0x20
-Text8x8_X: .skip 0x20
-Text8x8_Y: .skip 0x20
-Text8x8_Z: .skip 0x20
-Text8x8_Period: .skip 0x20
-Text8x8_Comma: .skip 0x20
+Text8x8_A: .skip sizeof_tile
+Text8x8_B: .skip sizeof_tile
+Text8x8_C: .skip sizeof_tile
+Text8x8_D: .skip sizeof_tile
+Text8x8_E: .skip sizeof_tile
+Text8x8_F: .skip sizeof_tile
+Text8x8_G: .skip sizeof_tile
+Text8x8_H: .skip sizeof_tile
+Text8x8_I: .skip sizeof_tile
+Text8x8_J: .skip sizeof_tile
+Text8x8_K: .skip sizeof_tile
+Text8x8_L: .skip sizeof_tile
+Text8x8_M: .skip sizeof_tile
+Text8x8_N: .skip sizeof_tile
+Text8x8_O: .skip sizeof_tile
+Text8x8_P: .skip sizeof_tile
+Text8x8_Q: .skip sizeof_tile
+Text8x8_R: .skip sizeof_tile
+Text8x8_S: .skip sizeof_tile
+Text8x8_T: .skip sizeof_tile
+Text8x8_U: .skip sizeof_tile
+Text8x8_V: .skip sizeof_tile
+Text8x8_W: .skip sizeof_tile
+Text8x8_X: .skip sizeof_tile
+Text8x8_Y: .skip sizeof_tile
+Text8x8_Z: .skip sizeof_tile
+Text8x8_Period: .skip sizeof_tile
+Text8x8_Comma: .skip sizeof_tile
 
 ; Repurpose the save tutorial and format it for arbitrary messages.
 ;
@@ -125,7 +116,29 @@ TextBoxCharCount equ 14 * (11 / 2)
     .fill 14 * 2, 0
 
 
+; Add ability icons to the top of the screen
+
+.org 0x869CE48 + tile_coord_4b(16, 6)
+    .incbin "data/graphics/ability_icons.bin", 0x00, 12 * sizeof_tile
+.org 0x869CE48 + tile_coord_4b(16, 7)
+    .incbin "data/graphics/ability_icons.bin", 16 * sizeof_tile, 12 * sizeof_tile
+
+.org 0x86A2648 + 0x10
+    .halfword 0x50D0, 0x50D1, 0x50D2, 0x50D3, 0x50D4, 0x50D5
+    .halfword 0x50D6, 0x50D7, 0x50D8, 0x50D9, 0x50DA, 0x50DB
+.org 0x86A2648 + 0x50
+    .halfword 0x50F0, 0x50F1, 0x50F2, 0x50F3, 0x50F4, 0x50F5
+    .halfword 0x50F6, 0x50F7, 0x50F8, 0x50F9, 0x50FA, 0x50FB
+
+
 .autoregion
+
+
+.align 4
+AbilityIconTilesTop:
+    .incbin "data/graphics/ability_icons.bin", 32 * sizeof_tile, 16 * sizeof_tile
+AbilityIconTilesBottom:
+    .incbin "data/graphics/ability_icons.bin", 48 * sizeof_tile, 16 * sizeof_tile
 
 
 .align 2
