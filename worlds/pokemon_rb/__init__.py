@@ -76,7 +76,7 @@ class PokemonWebWorld(WebWorld):
         ["TheLynk"]
     )
 
-    tutorials = [setup_en, setup_es]
+    tutorials = [setup_en, setup_es, setup_fr]
 
 
 class PokemonRedBlueWorld(World):
