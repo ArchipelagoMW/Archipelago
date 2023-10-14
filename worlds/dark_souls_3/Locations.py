@@ -768,6 +768,8 @@ location_name_groups: Dict[str, Set[str]] = {
     "Hidden Locations": frozenset([
         # TODO: this list isn't at all comprehensive, expand it
 
+        "DC: Dragonhead Shield", # requires gesture
+
         # Behind illusory walls
         "FS: Covetous Silver Serpent Ring",
         "IBV: Ring of Favor",
