@@ -1,9 +1,10 @@
 """
 Option definitions for Pokemon Emerald
 """
+from dataclasses import dataclass
 from typing import Dict, Type
 
-from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText
+from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText, PerGameCommonOptions
 
 from .data import data
 
@@ -546,58 +547,60 @@ class EasterEgg(FreeText):
     default = "Example Passphrase"
 
 
-option_definitions: Dict[str, Option] = {
-    "goal": Goal,
-    "badges": RandomizeBadges,
-    "hms": RandomizeHms,
-    "key_items": RandomizeKeyItems,
-    "bikes": RandomizeBikes,
-    "rods": RandomizeRods,
-    "overworld_items": RandomizeOverworldItems,
-    "hidden_items": RandomizeHiddenItems,
-    "npc_gifts": RandomizeNpcGifts,
+@dataclass
+class PokemonEmeraldOptions(PerGameCommonOptions):
+    goal: Goal
 
-    "item_pool_type": ItemPoolType,
+    badges: RandomizeBadges
+    hms: RandomizeHms
+    key_items: RandomizeKeyItems
+    bikes: RandomizeBikes
+    rods: RandomizeRods
+    overworld_items: RandomizeOverworldItems
+    hidden_items: RandomizeHiddenItems
+    npc_gifts: RandomizeNpcGifts
+    item_pool_type: ItemPoolType
 
-    "require_itemfinder": HiddenItemsRequireItemfinder,
-    "require_flash": DarkCavesRequireFlash,
-    "enable_ferry": EnableFerry,
-    "elite_four_requirement": EliteFourRequirement,
-    "elite_four_count": EliteFourCount,
-    "norman_requirement": NormanRequirement,
-    "norman_count": NormanCount,
+    require_itemfinder: HiddenItemsRequireItemfinder
+    require_flash: DarkCavesRequireFlash
+    elite_four_requirement: EliteFourRequirement
+    elite_four_count: EliteFourCount
+    norman_requirement: NormanRequirement
+    norman_count: NormanCount
 
-    "wild_pokemon": RandomizeWildPokemon,
-    "allow_wild_legendaries": AllowWildLegendaries,
-    "starters": RandomizeStarters,
-    "allow_starter_legendaries": AllowStarterLegendaries,
-    "trainer_parties": RandomizeTrainerParties,
-    "allow_trainer_legendaries": AllowTrainerLegendaries,
-    "static_encounters": RandomizeStaticEncounters,
+    wild_pokemon: RandomizeWildPokemon
+    allow_wild_legendaries: AllowWildLegendaries
+    starters: RandomizeStarters
+    allow_starter_legendaries: AllowStarterLegendaries
+    trainer_parties: RandomizeTrainerParties
+    allow_trainer_legendaries: AllowTrainerLegendaries
+    static_encounters: RandomizeStaticEncounters
+    types: RandomizeTypes
+    abilities: RandomizeAbilities
+    ability_blacklist: AbilityBlacklist
 
-    "types": RandomizeTypes,
-    "abilities": RandomizeAbilities,
-    "ability_blacklist": AbilityBlacklist,
-    "level_up_moves": LevelUpMoves,
-    "move_match_type_bias": MoveMatchTypeBias,
-    "move_normal_type_bias": MoveNormalTypeBias,
-    "tm_compatibility": TmCompatibility,
-    "hm_compatibility": HmCompatibility,
+    level_up_moves: LevelUpMoves
+    move_match_type_bias: MoveMatchTypeBias
+    move_normal_type_bias: MoveNormalTypeBias
+    tm_compatibility: TmCompatibility
+    hm_compatibility: HmCompatibility
+    tm_moves: TmMoves
+    reusable_tms: ReusableTms
 
-    "tm_moves": TmMoves,
-    "reusable_tms": ReusableTms,
-    "min_catch_rate": MinCatchRate,
-    "guaranteed_catch": GuaranteedCatch,
-    "exp_modifier": ExpModifier,
-    "blind_trainers": BlindTrainers,
-    "double_battle_chance": DoubleBattleChance,
-    "better_shops": BetterShops,
-    "remove_roadblocks": RemoveRoadblocks,
-    "extra_boulders": ExtraBoulders,
-    "free_fly_location": FreeFlyLocation,
-    "fly_without_badge": FlyWithoutBadge,
-    "turbo_a": TurboA,
-    "receive_item_messages": ReceiveItemMessages,
+    min_catch_rate: MinCatchRate
+    guaranteed_catch: GuaranteedCatch
+    exp_modifier: ExpModifier
+    blind_trainers: BlindTrainers
+    double_battle_chance: DoubleBattleChance
+    better_shops: BetterShops
 
-    "easter_egg": EasterEgg
-}
+    enable_ferry: EnableFerry
+    remove_roadblocks: RemoveRoadblocks
+    extra_boulders: ExtraBoulders
+    free_fly_location: FreeFlyLocation
+    fly_without_badge: FlyWithoutBadge
+
+    turbo_a: TurboA
+    receive_item_messages: ReceiveItemMessages
+
+    easter_egg: EasterEgg
