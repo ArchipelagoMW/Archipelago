@@ -758,6 +758,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
         ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
+        ctx.stored_data_notification_keys = (*ctx.stored_data_notification_keys, f"_read_hints_{ctx.team}_{ctx.slot}")
         msgs = []
         if ctx.locations_checked:
             msgs.append({"cmd": "LocationChecks",
@@ -836,9 +837,13 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "Retrieved":
         ctx.stored_data.update(args["keys"])
+        if f"_read_hints_{ctx.team}_{ctx.slot}" in args["keys"]:
+            ctx.ui.update_hints()
 
     elif cmd == "SetReply":
         ctx.stored_data[args["key"]] = args["value"]
+        if f"_read_hints_{ctx.team}_{ctx.slot}" == args["key"]:
+            ctx.ui.update_hints()
         if args["key"].startswith("EnergyLink"):
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:

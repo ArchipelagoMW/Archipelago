@@ -5,12 +5,13 @@ import typing
 
 if sys.platform == "win32":
     import ctypes
+
     # kivy 2.2.0 introduced DPI awareness on Windows, but it makes the UI enter an infinitely recursive re-layout
     # by setting the application to not DPI Aware, Windows handles scaling the entire window on its own, ignoring kivy's
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(0)
     except FileNotFoundError:  # shcore may not be found on <= Windows 7
-        pass # TODO: remove silent except when Python 3.8 is phased out.
+        pass  # TODO: remove silent except when Python 3.8 is phased out.
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -18,6 +19,7 @@ os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
 import Utils
+
 if Utils.is_frozen():
     os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
@@ -57,7 +59,6 @@ from kivy.animation import Animation
 from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
-
 
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
 from Utils import async_start
@@ -214,7 +215,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
             App.get_running_app().root.add_widget(self.tooltip)
 
         # handle left-side boundary to not render off-screen
-        x = max(x, 3+self.tooltip.children[0].texture_size[0] / 2)
+        x = max(x, 3 + self.tooltip.children[0].texture_size[0] / 2)
 
         # position float layout
         self.tooltip.x = x - self.tooltip.width / 2
@@ -282,6 +283,42 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
         self.selected = is_selected
 
 
+class HintLabel(RecycleDataViewBehavior, GridLayout):
+    cols = 6
+    selected = BooleanProperty(False)
+    index = None
+
+    def refresh_view_attrs(self, rv, index, data):
+        self.index = index
+        self.receiving_text = data['receiving']['text']
+        self.item_text = data['item']['text']
+        self.finding_text = data['finding']['text']
+        self.location_text = data['location']['text']
+        self.entrance_text = data['entrance']['text']
+        self.found_text = data['found']['text']
+        return super(HintLabel, self).refresh_view_attrs(rv, index, data)
+
+    def on_touch_down(self, touch):
+        """ Add selection on touch down """
+        if super(HintLabel, self).on_touch_down(touch):
+            return True
+        if self.collide_point(*touch.pos):
+            if self.selected:
+                self.parent.clear_selection()
+            else:
+                text = "".join([self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
+                                self.finding_text, "\'s World", (" at " + self.entrance_text) if self.entrance_text != "Vanilla"
+                                else "", ". (", self.found_text.lower(), ")"])
+                temp = MarkupLabel(text).markup
+                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                Clipboard.copy(escape_markup(text).replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
+                return self.parent.select_with_touch(self.index, touch)
+
+    def apply_selection(self, rv, index, is_selected):
+        """ Respond to the selection of items in the view. """
+        self.selected = is_selected
+
+
 class ConnectBarTextInput(TextInput):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace('\n', '').replace('\r', '')
@@ -302,7 +339,7 @@ class MessageBox(Popup):
     def __init__(self, title, text, error=False, **kwargs):
         label = MessageBox.MessageBoxLabel(text=text)
         separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
-        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width)+40),
+        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width) + 40),
                          separator_color=separator_color, **kwargs)
         self.height += max(0, label.height - 18)
 
@@ -358,11 +395,14 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:", size_hint_y=None,
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
+                                                      size_hint_y=None,
                                                       height=dp(30), multiline=False, write_tab=False)
+
         def connect_bar_validate(sender):
             if not self.ctx.server:
                 self.connect_button_action(sender)
+
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(dp(100), dp(30)), size_hint_y=None, size_hint_x=None)
@@ -383,19 +423,21 @@ class GameManager(App):
             bridge_logger = logging.getLogger(logger_name)
             panel = TabbedPanelItem(text=display_name)
             self.log_panels[display_name] = panel.content = UILog(bridge_logger)
-            self.tabs.add_widget(panel)
+            if len(self.logging_pairs) > 1:
+                # show Archipelago tab if other logging is present
+                self.tabs.add_widget(panel)
+
+        hint_panel = TabbedPanelItem(text="Hints")
+        self.log_panels["Hints"] = hint_panel.content = HintLog()
+        self.tabs.add_widget(hint_panel)
+
+        if len(self.logging_pairs) == 1:
+            self.tabs.default_tab_text = "Archipelago"
 
         self.main_area_container = GridLayout(size_hint_y=1, rows=1)
         self.main_area_container.add_widget(self.tabs)
 
         self.grid.add_widget(self.main_area_container)
-
-        if len(self.logging_pairs) == 1:
-            # Hide Tab selection if only one tab
-            self.tabs.clear_tabs()
-            self.tabs.do_default_tab = False
-            self.tabs.current_tab.height = 0
-            self.tabs.tab_height = 0
 
         # bottom part
         bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
@@ -499,6 +541,12 @@ class GameManager(App):
         if hasattr(self, "energy_link_label"):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
+    def update_hints(self):
+        hints = self.ctx.stored_data[f"_read_hints_{self.ctx.team}_{self.ctx.slot}"]
+        for hint in hints:
+            self.log_panels["Hints"].update_hint(hint)
+        self.log_panels["Hints"].refresh_hints(self.json_to_kivy_parser)
+
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
     def open_settings(self, *largs):
         pass
@@ -550,6 +598,31 @@ class UILog(RecycleView):
         for element in self.children[0].children:
             if element.height != element.texture_size[1]:
                 element.height = element.texture_size[1]
+
+
+class HintLog(RecycleView):
+    def __init__(self):
+        super(HintLog, self).__init__()
+        self.data = []
+        self.hints = dict()
+
+    def update_hint(self, hint: typing.Dict):
+        key = (hint["finding_player"], hint["location"])
+        self.hints[key] = hint
+
+    def refresh_hints(self, parser):
+        self.data = []
+        for hint in self.hints.values():
+            self.data.append({
+                'receiving': {'text': parser.handle_node({'type': "player_id", 'text': hint['receiving_player']})},
+                'item': {'text': parser.handle_node({'type': "item_id", 'text': hint['item'], 'flags': hint['item_flags']})},
+                'finding': {'text': parser.handle_node({'type': "player_id", 'text': hint['finding_player']})},
+                'location': {'text': parser.handle_node({'type': "location_id", 'text': hint['location']})},
+                'entrance': {'text': parser.handle_node({'type': "color", 'color': "blue", 'text': hint['entrance']
+                            if hint['entrance'] else "Vanilla"})},
+                'found': {'text': parser.handle_node({'type': "color", 'color': "green" if hint['found'] else "red",
+                                                      'text': "Found" if hint['found'] else "Not Found"})}
+            })
 
 
 class E(ExceptionHandler):
@@ -627,4 +700,3 @@ user_file = Utils.user_path("data", "user.kv")
 if os.path.exists(user_file):
     logging.info("Loading user.kv into builder.")
     Builder.load_file(user_file)
-
