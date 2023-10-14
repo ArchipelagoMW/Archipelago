@@ -9,6 +9,7 @@ class KHCOMLocation(Location):
 
 class KHCOMLocationData(NamedTuple):
     category: str
+    region_name: str
     code: Optional[int] = None
 
 

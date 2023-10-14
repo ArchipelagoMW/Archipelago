@@ -11,30 +11,23 @@ class KHCOMRegionData(NamedTuple):
 
 def create_regions(multiworld: MultiWorld, player: int):
     regions: Dict[str, RLRegionData] = {
-        "Menu":              RLRegionData(None, ["Castle Hamson"]),
-        "The Manor":         RLRegionData([],   []),
-        "Castle Hamson":     RLRegionData([],   ["Forest Abkhazia", "The Maya", "Land of Darkness",
-                                                 "The Fountain Room", "The Manor"]),
-        "Forest Abkhazia":   RLRegionData([],   []),
-        "The Maya":          RLRegionData([],   []),
-        "Land of Darkness":  RLRegionData([],   []),
-        "The Fountain Room": RLRegionData([],   None),
+        "Menu": KHCOMRegionData(None, ["Floor 1"]),
+        "Floor 1": KHCOMRegionData([], ["Warp 1"]),
+        "Warp 1": KHCOMRegionData([], ["Floor 2", "Floor 3", "Floor 4", "Floor 5", "Floor 6"]),
+        "Floor 2": KHCOMRegionData([], []),
+        "Floor 3": KHCOMRegionData([], []),
+        "Floor 4": KHCOMRegionData([], []),
+        "Floor 5": KHCOMRegionData([], []),
+        "Floor 6": KHCOMRegionData([], ["Warp 2"]),
+        "Warp 2": KHCOMRegionData([], ["Floor 7", "Floor 8", "Floor 9"]),
+        "Floor 7": KHCOMRegionData([], []),
+        "Floor 8": KHCOMRegionData([], []),
+        "Floor 9": KHCOMRegionData([], ["Floor 10"]),
+        "Floor 10": KHCOMRegionData([], ["Floor 11"]),
+        "Floor 11": KHCOMRegionData([], ["Floor 12"]),
+        "Floor 12": KHCOMRegionData([], ["Floor 13"]),
+        "Floor 13": KHCOMRegionData([], ["Floor 14"]),
     }
-
-    # Artificially stagger diary spheres for progression.
-    for diary in range(0, 25):
-        region: str
-        if 0 <= diary < 6:
-            region = "Castle Hamson"
-        elif 6 <= diary < 12:
-            region = "Forest Abkhazia"
-        elif 12 <= diary < 18:
-            region = "The Maya"
-        elif 18 <= diary < 24:
-            region = "Land of Darkness"
-        else:
-            region = "The Fountain Room"
-        regions[region].locations.append(f"Diary {diary + 1}")
 
     # Manor & Special
     for manor in get_locations_by_category("Manor").keys():
