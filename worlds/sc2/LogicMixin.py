@@ -25,23 +25,23 @@ class SC2Logic(LogicMixin):
         return self.has_any(get_basic_units(multiworld, player, SC2Race.TERRAN), player)
 
     def _sc2wol_has_air(self, multiworld: MultiWorld, player: int) -> bool:
-        return (self.has_any({ItemNames.Viking, ItemNames.Wraith, ItemNames.Banshee, ItemNames.Battlecruiser}, player) or self._sc2_advanced_tactics(multiworld, player)
-                and self.has_any({ItemNames.Hercules, ItemNames.Medivac}, player) and self._sc2wol_has_common_unit(multiworld, player)
+        return (self.has_any({ItemNames.VIKING, ItemNames.WRAITH, ItemNames.BANSHEE, ItemNames.BATTLECRUISER}, player) or self._sc2_advanced_tactics(multiworld, player)
+                and self.has_any({ItemNames.HERCULES, ItemNames.MEDIVAC}, player) and self._sc2wol_has_common_unit(multiworld, player)
         )
 
     def _sc2wol_has_air_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return (
-            self.has(ItemNames.Viking, player)
-            or self.has_all({ItemNames.Wraith, ItemNames.Wraith_Advanced_Laser_Technology}, player)
-            or self.has_all({ItemNames.Battlecruiser, ItemNames.Battlecruiser_ATX_Laser_Battery}, player)
-            or self._sc2_advanced_tactics(multiworld, player) and self.has_any({ItemNames.Wraith, ItemNames.Valkyrie, ItemNames.Battlecruiser}, player)
+            self.has(ItemNames.VIKING, player)
+            or self.has_all({ItemNames.WRAITH, ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY}, player)
+            or self.has_all({ItemNames.BATTLECRUISER, ItemNames.BATTLECRUISER_ATX_LASER_BATTERY}, player)
+            or self._sc2_advanced_tactics(multiworld, player) and self.has_any({ItemNames.WRAITH, ItemNames.VALKYRIE, ItemNames.BATTLECRUISER}, player)
         )
 
     def _sc2wol_has_competent_ground_to_air(self, multiworld: MultiWorld, player: int) -> bool:
         return (
-            self.has(ItemNames.Goliath, player)
-            or self.has(ItemNames.Marine, player) and self.has_any({ItemNames.Medic, ItemNames.Medivac}, player)
-            or self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.Cyclone, player)
+            self.has(ItemNames.GOLIATH, player)
+            or self.has(ItemNames.MARINE, player) and self.has_any({ItemNames.MEDIC, ItemNames.MEDIVAC}, player)
+            or self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.CYCLONE, player)
         )
 
     def _sc2wol_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
@@ -56,38 +56,38 @@ class SC2Logic(LogicMixin):
             and self._sc2wol_has_competent_ground_to_air(multiworld, player)
         ) or (
             self._sc2_advanced_tactics(multiworld, player)
-            and self.has_any({ItemNames.Marine, ItemNames.Vulture}, player)
+            and self.has_any({ItemNames.MARINE, ItemNames.VULTURE}, player)
             and self._sc2wol_has_air_anti_air(multiworld, player)
         )
 
     def _sc2wol_has_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return (
             self.has_any({
-                ItemNames.Missile_Turret, ItemNames.Thor, ItemNames.War_Pigs, ItemNames.Spartan_Company,
-                ItemNames.Hels_Angel, ItemNames.Battlecruiser, ItemNames.Marine, ItemNames.Wraith,
-                ItemNames.Valkyrie, ItemNames.Cyclone,
+                ItemNames.MISSILE_TURRET, ItemNames.THOR, ItemNames.WAR_PIGS, ItemNames.SPARTAN_COMPANY,
+                ItemNames.HELS_ANGEL, ItemNames.BATTLECRUISER, ItemNames.MARINE, ItemNames.WRAITH,
+                ItemNames.VALKYRIE, ItemNames.CYCLONE,
             }, player)
             or self._sc2wol_has_competent_anti_air(multiworld, player)
             or self._sc2_advanced_tactics(multiworld, player)
-            and self.has_any({ItemNames.Ghost, ItemNames.Spectre, ItemNames.Widow_Mine, ItemNames.Liberator}, player)
+            and self.has_any({ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.WIDOW_MINE, ItemNames.LIBERATOR}, player)
         )
 
     def _sc2wol_defense_rating(self, multiworld: MultiWorld, player: int, zerg_enemy: bool, air_enemy: bool = True) -> int:
         defense_score = sum((defense_ratings[item] for item in defense_ratings if self.has(item, player)))
-        if self.has_any({ItemNames.Marine, ItemNames.Marauder}, player) and self.has(ItemNames.Bunker, player):
+        if self.has_any({ItemNames.MARINE, ItemNames.MARAUDER}, player) and self.has(ItemNames.BUNKER, player):
             defense_score += 3
-        if self.has_all({ItemNames.Siege_Tank, ItemNames.Siege_Tank_Maelstrom_Rounds}, player):
+        if self.has_all({ItemNames.SIEGE_TANK, ItemNames.SIEGE_TANK_MAELSTROM_ROUNDS}, player):
             defense_score += 2
-        if self.has_all({ItemNames.Siege_Tank, ItemNames.Siege_Tank_Graduating_Range}, player):
+        if self.has_all({ItemNames.SIEGE_TANK, ItemNames.SIEGE_TANK_GRADUATING_RANGE}, player):
             defense_score += 1
-        if self.has_all({ItemNames.Widow_Mine, ItemNames.Widow_Mine_Concealment}, player):
+        if self.has_all({ItemNames.WIDOW_MINE, ItemNames.WIDOW_MINE_CONCEALMENT}, player):
             defense_score += 1
         if zerg_enemy:
             defense_score += sum((zerg_defense_ratings[item] for item in zerg_defense_ratings if self.has(item, player)))
-            if self.has(ItemNames.Firebat, player) and self.has(ItemNames.Bunker, player):
+            if self.has(ItemNames.FIREBAT, player) and self.has(ItemNames.BUNKER, player):
                 defense_score += 2
-        if not air_enemy and self.has(ItemNames.Missile_Turret, player):
-            defense_score -= defense_ratings[ItemNames.Missile_Turret]
+        if not air_enemy and self.has(ItemNames.MISSILE_TURRET, player):
+            defense_score -= defense_ratings[ItemNames.MISSILE_TURRET]
         # Advanced Tactics bumps defense rating requirements down by 2
         if self._sc2_advanced_tactics(multiworld, player):
             defense_score += 2
@@ -96,65 +96,65 @@ class SC2Logic(LogicMixin):
     def _sc2wol_has_competent_comp(self, multiworld: MultiWorld, player: int) -> bool:
         return (
             (
-                (self.has_any({ItemNames.Marine, ItemNames.Marauder}, player)
-                    and self.has_any({ItemNames.Medivac, ItemNames.Medic}, player))
-                or self.has_any({ItemNames.Thor, ItemNames.Banshee, ItemNames.Siege_Tank}, player)
-                or self.has_all({ItemNames.Liberator, ItemNames.Liberator_Raid_Artillery}, player)
+                (self.has_any({ItemNames.MARINE, ItemNames.MARAUDER}, player)
+                    and self.has_any({ItemNames.MEDIVAC, ItemNames.MEDIC}, player))
+                or self.has_any({ItemNames.THOR, ItemNames.BANSHEE, ItemNames.SIEGE_TANK}, player)
+                or self.has_all({ItemNames.LIBERATOR, ItemNames.LIBERATOR_RAID_ARTILLERY}, player)
             )
             and self._sc2wol_has_competent_anti_air(multiworld, player)
         ) or (
-            self.has(ItemNames.Battlecruiser, player) and self._sc2wol_has_common_unit(multiworld, player)
+            self.has(ItemNames.BATTLECRUISER, player) and self._sc2wol_has_common_unit(multiworld, player)
         )
 
     def _sc2wol_has_train_killers(self, multiworld: MultiWorld, player: int) -> bool:
         return (
-            self.has_any({ItemNames.Siege_Tank, ItemNames.Diamondback, ItemNames.Marauder, ItemNames.Cyclone}, player)
+            self.has_any({ItemNames.SIEGE_TANK, ItemNames.DIAMONDBACK, ItemNames.MARAUDER, ItemNames.CYCLONE}, player)
             or self._sc2_advanced_tactics(multiworld, player)
             and (
-                self.has_all({ItemNames.Reaper, ItemNames.Reaper_G4_Clusterbomb}, player)
-                or self.has_all({ItemNames.Spectre, ItemNames.Spectre_Psionic_Lash}, player)
-                or self.has_any({ItemNames.Vulture, ItemNames.Liberator}, player)
+                self.has_all({ItemNames.REAPER, ItemNames.REAPER_G4_CLUSTERBOMB}, player)
+                or self.has_all({ItemNames.SPECTRE, ItemNames.SPECTRE_PSIONIC_LASH}, player)
+                or self.has_any({ItemNames.VULTURE, ItemNames.LIBERATOR}, player)
             )
         )
 
     def _sc2wol_able_to_rescue(self, multiworld: MultiWorld, player: int) -> bool:
-        return (self.has_any({ItemNames.Medivac, ItemNames.Hercules, ItemNames.Raven, ItemNames.Viking}, player)
+        return (self.has_any({ItemNames.MEDIVAC, ItemNames.HERCULES, ItemNames.RAVEN, ItemNames.VIKING}, player)
                 or self._sc2_advanced_tactics(multiworld, player)
         )
 
     def _sc2wol_has_protoss_common_units(self, multiworld: MultiWorld, player: int) -> bool:
-        return (self.has_any({ItemNames.Zealot, ItemNames.Immortal, ItemNames.Stalker, ItemNames.Dark_Templar}, player)
-                or self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.High_Templar, player)
+        return (self.has_any({ItemNames.ZEALOT, ItemNames.IMMORTAL, ItemNames.STALKER, ItemNames.DARK_TEMPLAR}, player)
+                or self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.HIGH_TEMPLAR, player)
         )
 
     def _sc2wol_has_protoss_medium_units(self, multiworld: MultiWorld, player: int) -> bool:
         return (
             self._sc2wol_has_protoss_common_units(multiworld, player)
-                and self.has_any({ItemNames.Stalker, ItemNames.Void_Ray, ItemNames.Carrier}, player)
+                and self.has_any({ItemNames.STALKER, ItemNames.VOID_RAY, ItemNames.CARRIER}, player)
             or self._sc2_advanced_tactics(multiworld, player)
-                and self.has(ItemNames.Dark_Templar, player)
+                and self.has(ItemNames.DARK_TEMPLAR, player)
         )
 
     def _sc2wol_beats_protoss_deathball(self, multiworld: MultiWorld, player: int) -> bool:
         return (
             (
-                self.has_any({ItemNames.Banshee, ItemNames.Battlecruiser}, player)
-                or self.has_all({ItemNames.Liberator, ItemNames.Liberator_Raid_Artillery}, player)
+                self.has_any({ItemNames.BANSHEE, ItemNames.BATTLECRUISER}, player)
+                or self.has_all({ItemNames.LIBERATOR, ItemNames.LIBERATOR_RAID_ARTILLERY}, player)
             ) and self._sc2wol_has_competent_anti_air(multiworld, player)
             or self._sc2wol_has_competent_comp(multiworld, player) and self._sc2wol_has_air_anti_air(multiworld, player)
         )
 
     def _sc2wol_has_mm_upgrade(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_any({ItemNames.Marine_Combat_Shield, ItemNames.Medic_Stabilizer_Medpacks}, player)
+        return self.has_any({ItemNames.MARINE_COMBAT_SHIELD, ItemNames.MEDIC_STABILIZER_MEDPACKS}, player)
 
     def _sc2wol_survives_rip_field(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has(ItemNames.Battlecruiser, player) or \
+        return self.has(ItemNames.BATTLECRUISER, player) or \
            self._sc2wol_has_air(multiworld, player) and \
            self._sc2wol_has_competent_anti_air(multiworld, player) and \
-           self.has(ItemNames.Science_Vessel, player)
+           self.has(ItemNames.SCIENCE_VESSEL, player)
 
     def _sc2wol_has_nukes(self, multiworld: MultiWorld, player: int) -> bool:
-        return self._sc2_advanced_tactics(multiworld, player) and self.has_any({ItemNames.Ghost, ItemNames.Spectre}, player)
+        return self._sc2_advanced_tactics(multiworld, player) and self.has_any({ItemNames.GHOST, ItemNames.SPECTRE}, player)
 
     def _sc2wol_can_respond_to_colony_infestations(self, multiworld: MultiWorld, player: int) -> bool:
         return (
@@ -162,25 +162,25 @@ class SC2Logic(LogicMixin):
             and self._sc2wol_has_competent_anti_air(multiworld, player)
             and (
                     self._sc2wol_has_air_anti_air(multiworld, player)
-                    or self.has_any({ItemNames.Battlecruiser, ItemNames.Valkyrie}, player)
+                    or self.has_any({ItemNames.BATTLECRUISER, ItemNames.VALKYRIE}, player)
                 )
             and self._sc2wol_defense_rating(multiworld, player, True) >= 3
         )
 
     def _sc2wol_final_mission_requirements(self, multiworld: MultiWorld, player: int):
-        beats_kerrigan = self.has_any({ItemNames.Marine, ItemNames.Banshee, ItemNames.Ghost}, player) or self._sc2_advanced_tactics(multiworld, player)
+        beats_kerrigan = self.has_any({ItemNames.MARINE, ItemNames.BANSHEE, ItemNames.GHOST}, player) or self._sc2_advanced_tactics(multiworld, player)
         if get_option_value(multiworld, player, 'all_in_map') == AllInMap.option_ground:
             # Ground
             defense_rating = self._sc2wol_defense_rating(multiworld, player, True, False)
-            if self.has_any({ItemNames.Battlecruiser, ItemNames.Banshee}, player):
+            if self.has_any({ItemNames.BATTLECRUISER, ItemNames.BANSHEE}, player):
                 defense_rating += 3
             return defense_rating >= 12 and beats_kerrigan
         else:
             # Air
             defense_rating = self._sc2wol_defense_rating(multiworld, player, True, True)
             return defense_rating >= 8 and beats_kerrigan \
-                and self.has_any({ItemNames.Viking, ItemNames.Battlecruiser, ItemNames.Valkyrie}, player) \
-                and self.has_any({ItemNames.Hive_Mind_Emulator, ItemNames.Psi_Disrupter, ItemNames.Missile_Turret}, player)
+                and self.has_any({ItemNames.VIKING, ItemNames.BATTLECRUISER, ItemNames.VALKYRIE}, player) \
+                and self.has_any({ItemNames.HIVE_MIND_EMULATOR, ItemNames.PSI_DISRUPTER, ItemNames.MISSILE_TURRET}, player)
 
     def _sc2wol_cleared_missions(self, multiworld: MultiWorld, player: int, mission_count: int) -> bool:
         return self.has_group("WoL Missions", player, mission_count)
@@ -190,34 +190,34 @@ class SC2Logic(LogicMixin):
         return self.has_any(get_basic_units(multiworld, player, SC2Race.ZERG), player)
 
     def _sc2hots_has_good_antiair(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_any({ItemNames.Hydralisk, ItemNames.Mutalisk}, player) or \
-            self.has_all({ItemNames.Swarm_Host, ItemNames.Swarm_Host_Pressurized_Glands}, player) or \
-            (self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.Infestor, player))
+        return self.has_any({ItemNames.HYDRALISK, ItemNames.MUTALISK}, player) or \
+            self.has_all({ItemNames.SWARM_HOST, ItemNames.SWARM_HOST_PRESSURIZED_GLANDS}, player) or \
+            (self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.INFESTOR, player))
 
     def _sc2hots_has_minimal_antiair(self, multiworld: MultiWorld, player: int) -> bool:
         return self._sc2hots_has_good_antiair(multiworld, player) or get_option_value(multiworld, player, 'kerriganless') in kerrigan_unit_available or \
-            self.has(ItemNames.Swarm_Queen, player) or (self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.Spore_Crawler, player))
+            self.has(ItemNames.SWARM_QUEEN, player) or (self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.SPORE_CRAWLER, player))
     
     def _sc2hots_has_brood_lord(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_all({ItemNames.Mutalisk, ItemNames.Mutalisk_Brood_Lord_Strain}, player)
+        return self.has_all({ItemNames.MUTALISK, ItemNames.MUTALISK_BROOD_LORD_STRAIN}, player)
     
     def _sc2hots_has_viper(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_all({ItemNames.Mutalisk, ItemNames.Mutalisk_Viper_Strain}, player)
+        return self.has_all({ItemNames.MUTALISK, ItemNames.MUTALISK_VIPER_STRAIN}, player)
 
     def _sc2hots_has_impaler_or_lurker(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has(ItemNames.Hydralisk, player) and self.has_any({ItemNames.Hydralisk_Impaler_Strain, ItemNames.Hydralisk_Lurker_Strain}, player)
+        return self.has(ItemNames.HYDRALISK, player) and self.has_any({ItemNames.HYDRALISK_IMPALER_STRAIN, ItemNames.HYDRALISK_LURKER_STRAIN}, player)
 
     def _sc2hots_has_competent_comp(self, multiworld: MultiWorld, player: int) -> bool:
         advanced = self._sc2_advanced_tactics(multiworld, player)
-        core_unit = self.has_any({ItemNames.Roach, ItemNames.Aberration, ItemNames.Zergling}, player)
-        support_unit = self.has_any({ItemNames.Swarm_Queen, ItemNames.Hydralisk}, player) \
+        core_unit = self.has_any({ItemNames.ROACH, ItemNames.ABERRATION, ItemNames.ZERGLING}, player)
+        support_unit = self.has_any({ItemNames.SWARM_QUEEN, ItemNames.HYDRALISK}, player) \
                        or self._sc2hots_has_brood_lord(multiworld, player) \
-                       or advanced and (self.has(ItemNames.Infestor, player) or self._sc2hots_has_viper(multiworld, player))
+                       or advanced and (self.has(ItemNames.INFESTOR, player) or self._sc2hots_has_viper(multiworld, player))
         if core_unit and support_unit:
             return True
-        vespene_unit = self.has_any({ItemNames.Ultralisk, ItemNames.Aberration}, player) \
+        vespene_unit = self.has_any({ItemNames.ULTRALISK, ItemNames.ABERRATION}, player) \
                        or advanced and self._sc2hots_has_viper(multiworld, player)
-        return vespene_unit and self.has_any({ItemNames.Zergling, ItemNames.Swarm_Queen}, player)
+        return vespene_unit and self.has_any({ItemNames.ZERGLING, ItemNames.SWARM_QUEEN}, player)
 
     def _sc2hots_has_basic_comp(self, multiworld: MultiWorld, player: int) -> bool:
         if get_option_value(multiworld, player, 'game_difficulty') < GameDifficulty.option_brutal \
@@ -228,20 +228,20 @@ class SC2Logic(LogicMixin):
             return self._sc2hots_has_competent_comp(multiworld, player)
 
     def _sc2hots_can_spread_creep(self, multiworld: MultiWorld, player: int) -> bool:
-        return self._sc2_advanced_tactics(multiworld, player) or self.has(ItemNames.Swarm_Queen, player)
+        return self._sc2_advanced_tactics(multiworld, player) or self.has(ItemNames.SWARM_QUEEN, player)
     
     def _sc2hots_has_competent_defense(self, multiworld: MultiWorld, player: int) -> bool:
         return (
             self._sc2hots_has_common_unit(multiworld, player)
             and (
                 (
-                    self.has(ItemNames.Swarm_Host, player)
+                    self.has(ItemNames.SWARM_HOST, player)
                     or self._sc2hots_has_brood_lord(multiworld, player)
                     or self._sc2hots_has_impaler_or_lurker(multiworld, player)
                 ) or (
                     self._sc2_advanced_tactics(multiworld, player)
                     and (self._sc2hots_has_viper(multiworld, player)
-                        or self.has(ItemNames.Spine_Crawler, player))
+                        or self.has(ItemNames.SPINE_CRAWLER, player))
                 )
             )
         )
@@ -249,15 +249,15 @@ class SC2Logic(LogicMixin):
     def _sc2hots_has_basic_kerrigan(self, multiworld: MultiWorld, player: int) -> bool:
         # One active ability that can be used to defeat enemies directly on Standard
         if not self._sc2_advanced_tactics(multiworld, player) and \
-            not self.has_any({ItemNames.Kerrigan_Kinetic_Blast, ItemNames.Kerrigan_Leaping_Strike,
-                              ItemNames.Kerrigan_Crushing_Grip, ItemNames.Kerrigan_Psionic_Shift,
-                              ItemNames.Kerrigan_Spawn_Banelings}, player):
+            not self.has_any({ItemNames.KERRIGAN_KINETIC_BLAST, ItemNames.KERRIGAN_LEAPING_STRIKE,
+                              ItemNames.KERRIGAN_CRUSHING_GRIP, ItemNames.KERRIGAN_PSIONIC_SHIFT,
+                              ItemNames.KERRIGAN_SPAWN_BANELINGS}, player):
             return False
         # Two non-ultimate abilities
         count = 0
-        for item in (ItemNames.Kerrigan_Kinetic_Blast, ItemNames.Kerrigan_Leaping_Strike, ItemNames.Kerrigan_Heroic_Fortitude,
-                     ItemNames.Kerrigan_Chain_Reaction, ItemNames.Kerrigan_Crushing_Grip, ItemNames.Kerrigan_Psionic_Shift,
-                     ItemNames.Kerrigan_Spawn_Banelings, ItemNames.Kerrigan_Infest_Broodlings, ItemNames.Kerrigan_Fury):
+        for item in (ItemNames.KERRIGAN_KINETIC_BLAST, ItemNames.KERRIGAN_LEAPING_STRIKE, ItemNames.KERRIGAN_HEROIC_FORTITUDE,
+                     ItemNames.KERRIGAN_CHAIN_REACTION, ItemNames.KERRIGAN_CRUSHING_GRIP, ItemNames.KERRIGAN_PSIONIC_SHIFT,
+                     ItemNames.KERRIGAN_SPAWN_BANELINGS, ItemNames.KERRIGAN_INFEST_BROODLINGS, ItemNames.KERRIGAN_FURY):
             if self.has(item, player):
                 count += 1
             if count >= 2:
@@ -272,5 +272,5 @@ class SC2Logic(LogicMixin):
         return count >= 2
 
     def _sc2hots_has_low_tech(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_any({ItemNames.Zergling, ItemNames.Swarm_Queen, ItemNames.Spine_Crawler}, player) \
+        return self.has_any({ItemNames.ZERGLING, ItemNames.SWARM_QUEEN, ItemNames.SPINE_CRAWLER}, player) \
                or self._sc2hots_has_common_unit(multiworld, player) and self._sc2hots_has_basic_kerrigan(multiworld, player)

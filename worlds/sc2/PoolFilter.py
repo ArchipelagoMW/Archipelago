@@ -14,18 +14,18 @@ from . import ItemNames
 UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}
 
 BARRACKS_UNITS = {
-    ItemNames.Marine, ItemNames.Medic, ItemNames.Firebat, ItemNames.Marauder,
-    ItemNames.Reaper, ItemNames.Ghost, ItemNames.Spectre,
+    ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
+    ItemNames.REAPER, ItemNames.GHOST, ItemNames.SPECTRE,
 }
 FACTORY_UNITS = {
-    ItemNames.Hellion, ItemNames.Vulture, ItemNames.Goliath, ItemNames.Diamondback,
-    ItemNames.Siege_Tank, ItemNames.Thor, ItemNames.Predator, ItemNames.Widow_Mine,
-    ItemNames.Cyclone,
+    ItemNames.HELLION, ItemNames.VULTURE, ItemNames.GOLIATH, ItemNames.DIAMONDBACK,
+    ItemNames.SIEGE_TANK, ItemNames.THOR, ItemNames.PREDATOR, ItemNames.WIDOW_MINE,
+    ItemNames.CYCLONE,
 }
 STARPORT_UNITS = {
-    ItemNames.Medivac, ItemNames.Wraith, ItemNames.Viking, ItemNames.Banshee,
-    ItemNames.Battlecruiser, ItemNames.Hercules, ItemNames.Science_Vessel, ItemNames.Raven,
-    ItemNames.Liberator, ItemNames.Valkyrie,
+    ItemNames.MEDIVAC, ItemNames.WRAITH, ItemNames.VIKING, ItemNames.BANSHEE,
+    ItemNames.BATTLECRUISER, ItemNames.HERCULES, ItemNames.SCIENCE_VESSEL, ItemNames.RAVEN,
+    ItemNames.LIBERATOR, ItemNames.VALKYRIE,
 }
 
 
@@ -331,27 +331,27 @@ class ValidInventory:
             inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
         if not BARRACKS_UNITS & self.logical_inventory:
             inventory = [item for item in inventory if
-                         not (item.name.startswith(ItemNames.terran_infantry_upgrade_prefix) or item.name == ItemNames.Orbital_Strike)]
+                         not (item.name.startswith(ItemNames.TERRAN_INFANTRY_UPGRADE_PREFIX) or item.name == ItemNames.ORBITAL_STRIKE)]
         if not FACTORY_UNITS & self.logical_inventory:
-            inventory = [item for item in inventory if not item.name.startswith(ItemNames.terran_vehicle_upgrade_prefix)]
+            inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_VEHICLE_UPGRADE_PREFIX)]
         if not STARPORT_UNITS & self.logical_inventory:
-            inventory = [item for item in inventory if not item.name.startswith(ItemNames.terran_ship_upgrade_prefix)]
+            inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_SHIP_UPGRADE_PREFIX)]
         # HotS
         # Baneling without sources => remove Baneling and upgrades
-        if (ItemNames.Baneling in self.logical_inventory
-            and ItemNames.Zergling not in self.logical_inventory
-            and ItemNames.Kerrigan_Spawn_Banelings not in self.logical_inventory
+        if (ItemNames.BANELING in self.logical_inventory
+            and ItemNames.ZERGLING not in self.logical_inventory
+            and ItemNames.KERRIGAN_SPAWN_BANELINGS not in self.logical_inventory
         ):
-            inventory = [item for item in inventory if ItemNames.Baneling not in item.name]
+            inventory = [item for item in inventory if ItemNames.BANELING not in item.name]
         # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades
-        if (ItemNames.Baneling in self.logical_inventory
-            and ItemNames.Zergling not in self.logical_inventory
-            and ItemNames.Kerrigan_Spawn_Banelings in self.logical_inventory
+        if (ItemNames.BANELING in self.logical_inventory
+            and ItemNames.ZERGLING not in self.logical_inventory
+            and ItemNames.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
         ):
-            inventory = [item for item in inventory if item.name != ItemNames.Baneling]
-        if ItemNames.Mutalisk not in self.logical_inventory:
-            inventory = [item for item in inventory if not item.name.startswith(ItemNames.zerg_flyer_upgrade_prefix)]
-            locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.zerg_flyer_upgrade_prefix)]
+            inventory = [item for item in inventory if item.name != ItemNames.BANELING]
+        if ItemNames.MUTALISK not in self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
+            locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items
