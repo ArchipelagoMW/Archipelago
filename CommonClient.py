@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import copy
 import logging
 import asyncio
 import urllib.parse
@@ -242,6 +244,7 @@ class CommonContext:
         self.watcher_event = asyncio.Event()
 
         self.jsontotextparser = JSONtoTextParser(self)
+        self.rawjsontotextparser = RawJSONtoTextParser(self)
         self.update_data_package(network_data_package)
 
         # execution
@@ -377,10 +380,13 @@ class CommonContext:
 
     def on_print_json(self, args: dict):
         if self.ui:
-            self.ui.print_json(args["data"])
-        else:
-            text = self.jsontotextparser(args["data"])
-            logger.info(text)
+            # send copy to UI
+            self.ui.print_json(copy.deepcopy(args["data"]))
+
+        logging.getLogger("FileLog").info(self.rawjsontotextparser(copy.deepcopy(args["data"])),
+                                          extra={"NoStream": True})
+        logging.getLogger("StreamLog").info(self.jsontotextparser(copy.deepcopy(args["data"])),
+                                            extra={"NoFile": True})
 
     def on_package(self, cmd: str, args: dict):
         """For custom package handling in subclasses."""
@@ -876,7 +882,7 @@ def get_base_parser(description: typing.Optional[str] = None):
 def run_as_textclient():
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
-        tags = {"AP", "TextOnly"}
+        tags = CommonContext.tags | {"TextOnly"}
         game = ""  # empty matches any game since 0.3.2
         items_handling = 0b111  # receive all items for /received
         want_slot_data = False  # Can't use game specific slot_data
