@@ -1,6 +1,5 @@
 from .. import True_
-from ..logic import Received, Has, False_, And, Or, StardewLogic
-from ..options import default_options, StardewOptions
+from ..logic import Received, Has, False_, And, Or
 
 
 def test_simplify_true_in_and():
