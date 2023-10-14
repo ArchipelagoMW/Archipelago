@@ -55,7 +55,7 @@ Windows.
 4. Dans la nouvelle fenêtre, sélectionnez **Browse...**
 5. Sélectionnez le fichier lua connecteur inclus avec votre client
     - Recherchez `/SNI/lua/` dans votre fichier Archipelago. 
-6. Si vous avez une erreur en chargeant le script indiquant `socket.dll missing` ou similaure, naviguez vers le fichier du
+6. Si vous avez une erreur en chargeant le script indiquant `socket.dll missing` ou similaire, naviguez vers le fichier du
 lua que vous utilisez dans votre explorateur de fichiers et copiez le `socket.dll` à la base de votre installation snes9x.
 
 ##### BizHawk
