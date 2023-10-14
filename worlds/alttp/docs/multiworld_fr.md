@@ -4,7 +4,7 @@
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). N'oubliez pas de cocher `SNI Client - A Link to the Past Patch Setup` lors de l'installation.
 - [SNI](https://github.com/alttpo/sni/releases). Inclus avec l'installation d'Archipelago ci-dessus.
-- SNI n'est pas compatible avec (Q)Usb2Snes.
+   - SNI n'est pas compatible avec (Q)Usb2Snes.
 - Une solution logicielle ou matérielle capable de charger et de lancer des fichiers ROM de SNES
     - Un émulateur capable d'éxécuter des scripts Lua
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
@@ -13,7 +13,7 @@
     - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), ou une autre solution matérielle compatible. **À noter:
     les SNES minis ne sont pas encore supportés par SNI. Certains utilisateurs rapportent avoir du succès avec QUsb2Snes pour ce système,
     mais ce n'est pas supporté.**
-- Le fichier ROM de la v1.0 japonaise, sûrement nommé `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
+- Le fichier ROM de la v1.0 japonaise, habituellement nommé `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
 
 ## Procédure d'installation
 
