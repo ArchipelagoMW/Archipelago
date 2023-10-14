@@ -417,4 +417,6 @@ class OpenRCT2World(World):
             classification = ItemClassification.progression
         if item in item_info["filler_items"]:
             classification = ItemClassification.filler
+        if item in item_info["trap_items"]:
+            classification = ItemClassification.trap
         return OpenRCT2Item(item, classification, self.item_name_to_id[item], self.player)
