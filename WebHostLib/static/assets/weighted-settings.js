@@ -77,6 +77,7 @@ const createDefaultSettings = (settingData) => {
             });
             break;
           case 'range':
+          case 'named_range':
           case 'special_range':
             newSettings[game][gameSetting]['random'] = 0;
             newSettings[game][gameSetting]['random-low'] = 0;
@@ -297,6 +298,7 @@ const buildWeightedSettingsDiv = (game, settings, gameItems, gameLocations) => {
         break;
 
       case 'range':
+      case 'named_range':
       case 'special_range':
         const rangeTable = document.createElement('table');
         const rangeTbody = document.createElement('tbody');
