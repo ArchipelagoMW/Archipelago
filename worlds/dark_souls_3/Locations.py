@@ -769,13 +769,48 @@ location_name_groups: Dict[str, Set[str]] = {
         # TODO: this list isn't at all comprehensive, expand it
 
         "DC: Dragonhead Shield", # requires gesture
+        "SL: Speckled Stoneplate Ring", # requires careful ballista shot
+
+        # Out-of-the-way cave
+        "FK: Golden Scroll",
+        "FK: Antiquated Dress",
+        "FK: Antiquated Gloves",
+        "FK: Antiquated Skirt",
+
+        # In lava
+        "SL: Toxic Mist",
+        "SL: White Hair Talisman",
+        "SL: Sacred Flame"
+
+        # Guaranteed drop from normalish enemy
+        "CD: Deep Ring"
+
+        # Hidden falls
+        "US: Chloranthy Ring",
+        "US: Mirrah Vest",
+        "US: Mirrah Gloves",
+        "US: Mirrah Trousers",
+        "RS: Braille Divine Tome of Carim",
+        "RS: Morne's Ring",
+        "RS: Sorcerer Hood",
+        "RS: Sorcerer Robe",
+        "RS: Sorcerer Gloves",
+        "RS: Sorcerer Trousers",
+        "RS: Sage Ring",
+        "FK: Atonement",
+        "SL: Dragonrider Bow",
+        "CD: Arbalest",
 
         # Behind illusory walls
         "FS: Covetous Silver Serpent Ring",
         "IBV: Ring of Favor",
         "GA: Outrider Knight Helm",
         "GA: Soul Stream",
-
+        "FK: Dreamchaser's Ashes",
+        "CC: Carthus Pyromancy Tome",
+        "SL: Black Knight Sword",
+        "SL: Quelana Pyromancy Tome",
+        "SL: Izalith Staff",
         "UG: Ashen Estus Ring",
         "UG: Black Knight Glaive",
         "UG: Hornet Ring",
