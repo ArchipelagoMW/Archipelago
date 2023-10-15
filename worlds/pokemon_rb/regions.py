@@ -1456,7 +1456,9 @@ mansion_stair_destinations = [
 unreachable_outdoor_entrances = [
     "Route 4-C to Mt Moon B1F-NE",
     "Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House",
-    "Cerulean City-Badge House Backyard to Cerulean Badge House"
+    "Cerulean City-Badge House Backyard to Cerulean Badge House",
+    # TODO: This doesn't need to be forced if fly location is Pokemon League?
+    "Route 23-N to Victory Road 2F-E"
 ]
 
 
