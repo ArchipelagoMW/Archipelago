@@ -10,13 +10,6 @@ This transforms games from a linear experience into a puzzle, presenting players
 play a randomized game. Putting items in non-standard locations can require the player to think about the game world and
 the items they encounter in new and interesting ways.
 
-## What happens if an item is placed somewhere it is impossible to get?
-
-The randomizer has many strict sets of rules it must follow when generating a game. One of the functions of these rules
-is to ensure items necessary to complete the game will be accessible to the player. Many games also have a subset of
-rules allowing certain items to be placed in normally unreachable locations, provided the player has indicated they are
-comfortable exploiting certain glitches in the game.
-
 ## What is a multi-world?
 
 While a randomizer shuffles a game, a multi-world randomizer shuffles that game for multiple players. For example, in a
@@ -27,16 +20,25 @@ item will be sent to player B's world over the internet.
 This creates a cooperative experience during multi-world games, requiring players to rely upon each other to complete
 their game.
 
-## What happens if a person has to leave early?
+## What happens if an item is placed somewhere it is impossible to get?
 
-If a player must leave early, they can use Archipelago's release system. When a player releases their game, all the
-items in that game which belong to other players are sent out automatically, so other players can continue to play.
+The randomizer has many strict sets of rules it must follow when generating a game. One of the functions of these rules
+is to ensure items necessary to complete the game will be accessible to the player. Many games also have a subset of
+rules allowing certain items to be placed in normally unreachable locations, provided the player has indicated they are
+comfortable exploiting certain glitches in the game.
 
 ## What does multi-game mean?
 
 While a multi-world game traditionally requires all players to be playing the same game, a multi-game multi-world allows
-players to randomize any of a number of supported games, and send items between them. This allows players of different
-games to interact with one another in a single multiplayer environment.
+players to randomize any of the supported games, and send items between them. This allows players of different
+games to interact with one another in a single multiplayer environment.  Archipelago supports multi-game multi-world.
+Here's a list of our [Supported Games](https://archipelago.gg/games)
+
+## What happens if a person has to leave early?
+
+If a player must leave early, they can use Archipelago's release system. When a player releases their game, all the
+items in that game which belong to other players are sent out automatically, so other players can continue to play.
+Here's a list of all of our [Server Commands](https://archipelago.gg/tutorial/Archipelago/commands/en)
 
 ## Can I generate a single-player game with Archipelago?
 
@@ -44,6 +46,10 @@ Yes. All our supported games can be generated as single-player experiences, and 
 the website is not required to generate them.
 
 ## How do I get started?
+
+We have a [Getting Started](https://archipelago.gg/tutorial/Archipelago/setup/en) guide that will help you get the
+software set up.  You can use that guide to learn how to generate multiworlds.  There are also basic instructions for
+including multiple games, and hosting these multiworlds on the website for ease and convenience.
 
 If you are ready to start randomizing games, or want to start playing your favorite randomizer with others, please join
 our discord server at the [Archipelago Discord](https://discord.gg/8Z65BR2). There are always people ready to answer
