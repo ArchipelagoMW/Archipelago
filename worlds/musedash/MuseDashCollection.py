@@ -23,8 +23,8 @@ class MuseDashCollections:
 
     MUSE_PLUS_DLC: str = "Muse Plus"
     DLC: List[str] = [
-        MUSE_PLUS_DLC,
-        "maimai DX Limited-time Suite", # Part of Muse Plus. Goes away 31st Jan 2026.
+        # MUSE_PLUS_DLC, # To be included when OptionSets are rendered as part of basic settings.
+        # "maimai DX Limited-time Suite", # Part of Muse Plus. Goes away 31st Jan 2026.
         "Miku in Museland", # Paid DLC not included in Muse Plus
         "MSR Anthology", # Part of Muse Plus. Goes away 20th Jan 2024.
     ]

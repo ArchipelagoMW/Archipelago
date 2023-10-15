@@ -66,6 +66,9 @@ class MuseDashWorld(World):
 
     def generate_early(self):
         dlc_songs = {key for key in self.multiworld.dlc_packs[self.player].value}
+        if (self.multiworld.allow_just_as_planned_dlc_songs[self.player].value):
+            dlc_songs.add(self.md_collection.MUSE_PLUS_DLC)
+
         streamer_mode = self.multiworld.streamer_mode_enabled[self.player]
         (lower_diff_threshold, higher_diff_threshold) = self.get_difficulty_range()
 
