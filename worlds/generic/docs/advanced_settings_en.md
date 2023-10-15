@@ -109,9 +109,10 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
       but may not be able to access all locations or acquire all items. A good example of this is having a big key in
       the big chest in a dungeon in ALTTP making it impossible to get and finish the dungeon.
 * `progression_balancing` is a system the Archipelago generator uses to try and reduce "BK mode" as much as possible.
-  This primarily involves moving necessary progression items into earlier logic spheres to make the games more
-  accessible so that players almost always have something to do. This can be in a range from 0 to 99, and is 50 by
-  default. This number represents a percentage of the furthest progressible player.
+  "BK Mode" refers to a state where the player is unable to check any new locations without receiving a new item from 
+  another player. This primarily involves moving necessary progression items into earlier logic spheres to make the
+  games more accessible so that players almost always have something to do. This can be in a range from 0 to 99, and is
+  50 by default. This number represents a percentage of the furthest progressible player.
     * For example: With the default of 50%, if the furthest player can access 40% of their items, the randomizer tries
       to let you access at least 20% of your items. 50% of 40% is 20%.
     * Note that it is not always guaranteed that it will be able to bring you up to this threshold.
