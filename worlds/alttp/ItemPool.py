@@ -379,7 +379,7 @@ def generate_itempool(world):
     for key_loc in key_drop_data:
         key_data = key_drop_data[key_loc]
         drop_item = ItemFactory(key_data[3], player)
-        if multiworld.goal[player] == 'ice_rod_hunt' or not multiworld.key_drop_shuffle[player]:
+        if multiworld.goal[player] == 'icerodhunt' or not multiworld.key_drop_shuffle[player]:
             if drop_item in dungeon_items:
                 dungeon_items.remove(drop_item)
             else:
@@ -399,14 +399,14 @@ def generate_itempool(world):
             loc = multiworld.get_location(key_loc, player)
             loc.place_locked_item(drop_item)
             loc.address = None
-        elif multiworld.goal[player] == 'ice_rod_hunt':
-            # key drop item removed because of ice_rod_hunt
+        elif multiworld.goal[player] == 'icerodhunt':
+            # key drop item removed because of icerodhunt
             multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
             multiworld.push_precollected(drop_item)
         elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
             multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
-    dungeon_item_replacements = sum(difficulties[multiworld.item_pool[player].current_key].extras, []) * 2
+    dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
     multiworld.random.shuffle(dungeon_item_replacements)
     if multiworld.goal[player] == 'ice_rod_hunt':
         for item in dungeon_items:
@@ -704,7 +704,7 @@ def get_pool_core(world, player: int):
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         if mode == 'standard':
-            if world.key_drop_shuffle[player] and world.goal[player] != 'ice_rod_hunt':
+            if world.key_drop_shuffle[player] and world.goal[player] != 'icerodhunt':
                 key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
                 key_location = world.random.choice(key_locations)
                 key_locations.remove(key_location)

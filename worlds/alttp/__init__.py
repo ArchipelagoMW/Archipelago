@@ -297,7 +297,7 @@ class ALTTPWorld(World):
                 self.er_seed = int(world.entrance_shuffle_seed[player].value)
         elif world.entrance_shuffle[player] == "vanilla":
             self.er_seed = "vanilla"
-            
+
         for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
             option = getattr(world, dungeon_item)[player]
             if option == "own_world":
@@ -770,7 +770,7 @@ class ALTTPWorld(World):
             slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
                             "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
                             "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
-                            "boss_shuffle", "pot_shuffle", "enemy_shuffle"]
+                            "boss_shuffle", "pot_shuffle", "enemy_shuffle", "key_drop_shuffle"]
 
             slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
 
@@ -781,7 +781,7 @@ class ALTTPWorld(World):
                 'mm_medalion': self.multiworld.required_medallions[self.player][0],
                 'tr_medalion': self.multiworld.required_medallions[self.player][1],
                 'shop_shuffle': self.multiworld.shop_shuffle[self.player],
-                'entrance_shuffle': self.multiworld.entrance_shuffle[self.player]
+                'entrance_shuffle': self.multiworld.shuffle[self.player],
                 }
             )
         return slot_data
