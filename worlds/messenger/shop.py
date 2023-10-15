@@ -74,8 +74,8 @@ FIGURINES: Dict[str, ShopData] = {
 
 
 def shuffle_shop_prices(world: MessengerWorld) -> Tuple[Dict[str, int], Dict[str, int]]:
-    shop_price_mod = world.multiworld.shop_price[world.player].value
-    shop_price_planned = world.multiworld.shop_price_plan[world.player]
+    shop_price_mod = world.options.shop_price.value
+    shop_price_planned = world.options.shop_price_plan
 
     shop_prices: Dict[str, int] = {}
     figurine_prices: Dict[str, int] = {}
