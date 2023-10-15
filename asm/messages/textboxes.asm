@@ -116,10 +116,9 @@ PyramidScreenShowReceivedItem:
         cmp r1, #1
         beq @@JunkItem
 
-        ; TODO: Abilities
         get_bit r1, r0, ItemBit_Ability
         cmp r1, #1
-        beq @@FullHealthItem
+        beq @@Ability
 
         ; Major item
         get_bits r2, r0, 4, 2  ; Passage
@@ -175,6 +174,64 @@ PyramidScreenShowReceivedItem:
         ldr r1, =dma_enable | dma_words(8 * 100)
         str r1, [r3, #8]
         ldr r1, [r3, #8]
+
+        b @@Return
+
+    @@Ability:
+        cmp r0, #ItemID_GroundPound
+        beq @@GroundPound
+        cmp r0, #ItemID_Grab
+        beq @@Grab
+        b @@OtherAbility
+
+    @@GroundPound:
+        ldr r1, =WarioAbilities
+        ldrb r1, [r1]
+        get_bit r1, r1, MoveBit_GroundPoundSuper
+        cmp r1, #0
+        beq @@OtherAbility
+        mov r0, MoveBit_GroundPoundSuper
+        b @@OtherAbility
+
+    @@Grab:
+        ldr r1, =WarioAbilities
+        ldrb r1, [r1]
+        get_bit r1, r1, MoveBit_GrabHeavy
+        cmp r1, #0
+        beq @@OtherAbility
+        mov r0, MoveBit_GrabHeavy
+        b @@OtherAbility
+
+    @@OtherAbility:
+        get_bits r0, r0, 2, 0
+
+        ; Palette
+        ldr r1, =@@AbilityPaletteTable
+        lsl r2, r0, #2
+        add r1, r2
+        ldr r1, [r1]
+        str r1, [r3]  ; REG_DMA3SAD
+        ldr r1, =ObjectPaletteF
+        str r1, [r3, #4]  ; REG_DMA3DAD
+        ldr r1, =dma_enable | dma_halfwords(16)
+        str r1, [r3, #8]  ; REG_DMA3CNT
+
+        ; Graphic
+        ldr r1, =AbilityIconTilesTop
+        lsl r2, r0, #6
+        add r1, r2
+        str r1, [r3]  ; REG_DMA3SAD
+        ldr r2, =0x6014000
+        str r2, [r3, #4]  ; REG_DMA3DAD
+        ldr r2, =dma_enable | dma_halfwords(2 * sizeof_tile / 2)
+        str r2, [r3, #8]  ; REG_DMA3CNT
+        ldr r2, =sizeof_tile * 16
+        add r1, r2
+        str r1, [r3]  ; REG_DMA3SAD
+        ldr r2, =0x6014000 + tile_coord_4b(0, 1)
+        str r2, [r3, #4]  ; REG_DMA3DAD
+        ldr r2, =dma_enable | dma_halfwords(2 * sizeof_tile / 2)
+        str r2, [r3, #8]  ; REG_DMA3CNT
 
         b @@Return
 
@@ -290,6 +347,16 @@ PyramidScreenShowReceivedItem:
     @@CDOffset:             .halfword tile_no_4b(0x4A)
 
     .align 4
+    @@AbilityPaletteTable:
+        .word PassageTreasurePalettes             ; Ground Pound
+        .word PassageTreasurePalettes + 4 * 0x20  ; Swim
+        .word ExtraAbilityPalettes + 0x20         ; Head Smash
+        .word PassageTreasurePalettes + 4 * 0x20  ; Grab
+        .word ExtraAbilityPalettes                ; Dash Attack
+        .word PassageTreasurePalettes + 0x20      ; Enemy Jump
+        .word PassageTreasurePalettes             ; Super Ground Pound
+        .word PassageTreasurePalettes + 2 * 0x20  ; Heavy Grab
+
     ; 3x2 top offset, 4x1 bottom offset
     @@WarioFormTrapOffsets: .halfword tile_coord_4b(22, 4), tile_coord_4b(28, 5)
     @@DamageTrapOffsets:    .halfword tile_coord_4b(12, 4), tile_coord_4b(25, 4)

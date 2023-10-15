@@ -40,6 +40,10 @@ PyramidScreenCreateReceivedItemOAM:
         cmp r1, #0
         bne @@JunkItem
 
+        get_bit r1, r6, ItemBit_Ability
+        cmp r1, #0
+        bne @@JewelPiece
+
     ; Jewel Pieces or CD
         add r5, #1
 
@@ -47,7 +51,7 @@ PyramidScreenCreateReceivedItemOAM:
         cmp r1, #0
         bne @@CD
 
-    ; Jewel pieces
+    @@JewelPiece:  ; Or ability since they both use 16x16 sprites
         ldr r1, =attr1_size(1) | attr1_x(120 - 8)
         strh r0, [r4]
         strh r1, [r4, #2]

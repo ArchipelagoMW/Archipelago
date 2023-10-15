@@ -213,7 +213,7 @@ LoadRandomItemAnimation:
 
     @@GroundPound:
         ldr r0, =WarioAbilities
-        ldr r0, [r0]
+        ldrb r0, [r0]
         get_bit r0, r0, MoveBit_GroundPound
         cmp r0, #0
         beq @@OtherAbility
@@ -222,7 +222,7 @@ LoadRandomItemAnimation:
 
     @@Grab:
         ldr r0, =WarioAbilities
-        ldr r0, [r0]
+        ldrb r0, [r0]
         get_bit r0, r0, MoveBit_Grab
         cmp r0, #0
         beq @@OtherAbility
