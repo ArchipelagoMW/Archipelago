@@ -2,11 +2,11 @@ import base64
 import itertools
 import os
 from enum import IntFlag
-from typing import Any, ClassVar, Dict, get_type_hints, Iterator, List, Set, Tuple
+from typing import Any, ClassVar, Dict, Iterator, List, Set, Tuple, Type
 
 import settings
 from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, Tutorial
-from Options import AssembleOptions
+from Options import PerGameCommonOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule, set_rule
@@ -54,7 +54,8 @@ class L2ACWorld(World):
     game: ClassVar[str] = "Lufia II Ancient Cave"
     web: ClassVar[WebWorld] = L2ACWeb()
 
-    option_definitions: ClassVar[Dict[str, AssembleOptions]] = get_type_hints(L2ACOptions)
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = L2ACOptions
+    options: L2ACOptions
     settings: ClassVar[L2ACSettings]
     item_name_to_id: ClassVar[Dict[str, int]] = l2ac_item_name_to_id
     location_name_to_id: ClassVar[Dict[str, int]] = l2ac_location_name_to_id
@@ -87,7 +88,7 @@ class L2ACWorld(World):
             bytearray(f"L2AC{__version__.replace('.', '')[:3]}_{self.player}_{self.multiworld.seed}", "utf8")[:21]
         self.rom_name.extend([0] * (21 - len(self.rom_name)))
 
-        self.o = L2ACOptions(**{opt: getattr(self.multiworld, opt)[self.player] for opt in self.option_definitions})
+        self.o = self.options
 
         if self.o.blue_chest_count < self.o.custom_item_pool.count:
             raise ValueError(f"Number of items in custom_item_pool ({self.o.custom_item_pool.count}) is "
