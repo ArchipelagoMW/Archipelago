@@ -205,7 +205,48 @@ LoadRandomItemAnimation:
         b @@ProgressionItem
 
     @@Ability:
-        ; TODO: Set palette
+        cmp r6, #ItemID_GroundPound
+        beq @@GroundPound
+        cmp r6, #ItemID_Grab
+        beq @@Grab
+        b @@OtherAbility
+
+    @@GroundPound:
+        ldr r0, =WarioAbilities
+        ldr r0, [r0]
+        get_bit r0, r0, MoveBit_GroundPound
+        cmp r0, #0
+        beq @@OtherAbility
+        mov r0, #MoveBit_GroundPoundSuper
+        b @@FinishAbility
+
+    @@Grab:
+        ldr r0, =WarioAbilities
+        ldr r0, [r0]
+        get_bit r0, r0, MoveBit_Grab
+        cmp r0, #0
+        beq @@OtherAbility
+        mov r0, #MoveBit_GrabHeavy
+        b @@FinishAbility
+
+    @@OtherAbility:
+        get_bits r0, r6, 2, 0
+
+    @@FinishAbility:
+        ldr r1, =AbilityPaletteTable
+        add r1, r0
+        ldrb r1, [r1]
+
+        mov r5, r0
+        mov r0, r1
+        bl SetTreasurePalette
+
+        lsl r0, r5, #6
+        ldr r1, =AbilityIconTilesTop
+        add r0, r1
+        str r0, [r7]  ; DMA3SAD
+        ldr r1, =16 * sizeof_tile
+        add r5, r0, r1
 
     @@ProgressionItem:
         ldr r3, =CurrentJewelIconPosition
@@ -290,6 +331,17 @@ LoadRandomItemAnimation:
         .word APLogoAnm      ; Archipelago item
         .word HeartAnm       ; Single heart
         .word EmptyAnm       ; Nothing
+
+
+AbilityPaletteTable:
+        .byte 0  ; Ground pound:       Entry
+        .byte 4  ; Swim:               Sapphire
+        .byte 8  ; Head Smash:         Unique
+        .byte 4  ; Grab:               Sapphire
+        .byte 7  ; Dash Attack:        Unique
+        .byte 1  ; Enemy Jump:         Emerald
+        .byte 0  ; Super Ground Pound: Entry
+        .byte 2  ; Heavy Grab:         Ruby
 
 
 ; Collect this item. If it's your own junk item, it gets immediately given.
