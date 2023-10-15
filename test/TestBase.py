@@ -1,17 +1,12 @@
-import pathlib
 import typing
 import unittest
 from argparse import Namespace
 
-import Utils
 from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
 
-file_path = pathlib.Path(__file__).parent.parent
-Utils.local_path.cached_path = file_path
-
-from BaseClasses import MultiWorld, CollectionState, ItemClassification, Item
+from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
 
 
@@ -25,8 +20,9 @@ class TestBase(unittest.TestCase):
         state = CollectionState(self.multiworld)
         for item in items:
             item.classification = ItemClassification.progression
-            state.collect(item)
+            state.collect(item, event=True)
         state.sweep_for_events()
+        state.update_reachable_regions(1)
         self._state_cache[self.multiworld, tuple(items)] = state
         return state
 
@@ -53,7 +49,8 @@ class TestBase(unittest.TestCase):
             with self.subTest(msg="Reach Location", location=location, access=access, items=items,
                               all_except=all_except, path=path, entry=i):
 
-                self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), access)
+                self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), access,
+                                 f"failed {self.multiworld.get_location(location, 1)} with: {item_pool}")
 
             # check for partial solution
             if not all_except and access:  # we are not supposed to be able to reach location with partial inventory
@@ -61,7 +58,10 @@ class TestBase(unittest.TestCase):
                     with self.subTest(msg="Location reachable without required item", location=location,
                                       items=item_pool[0], missing_item=missing_item, entry=i):
                         state = self._get_items_partial(item_pool, missing_item)
-                        self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), False)
+
+                        self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), False,
+                                         f"failed {self.multiworld.get_location(location, 1)}: succeeded with "
+                                         f"{missing_item} removed from: {item_pool}")
 
     def run_entrance_tests(self, access_pool):
         for i, (entrance, access, *item_pool) in enumerate(access_pool):
@@ -80,7 +80,8 @@ class TestBase(unittest.TestCase):
                     with self.subTest(msg="Entrance reachable without required item", entrance=entrance,
                                       items=item_pool[0], missing_item=missing_item, entry=i):
                         state = self._get_items_partial(item_pool, missing_item)
-                        self.assertEqual(self.multiworld.get_entrance(entrance, 1).can_reach(state), False)
+                        self.assertEqual(self.multiworld.get_entrance(entrance, 1).can_reach(state), False,
+                                         f"failed {self.multiworld.get_entrance(entrance, 1)} with: {item_pool}")
 
     def _get_items(self, item_pool, all_except):
         if all_except and len(all_except) > 0:
@@ -124,24 +125,27 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.game[1] = self.game
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed(seed)
+        self.multiworld.state = CollectionState(self.multiworld)
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
+        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })
         self.multiworld.set_options(args)
-        self.multiworld.set_default_common_options()
         for step in gen_steps:
             call_all(self.multiworld, step)
 
     # methods that can be called within tests
-    def collect_all_but(self, item_names: typing.Union[str, typing.Iterable[str]]) -> None:
+    def collect_all_but(self, item_names: typing.Union[str, typing.Iterable[str]],
+                        state: typing.Optional[CollectionState] = None) -> None:
         """Collects all pre-placed items and items in the multiworld itempool except those provided"""
         if isinstance(item_names, str):
             item_names = (item_names,)
+        if not state:
+            state = self.multiworld.state
         for item in self.multiworld.get_items():
             if item.name not in item_names:
-                self.multiworld.state.collect(item)
+                state.collect(item)
 
     def get_item_by_name(self, item_name: str) -> Item:
         """Returns the first item found in placed items, or in the itempool with the matching name"""
@@ -168,6 +172,12 @@ class WorldTestBase(unittest.TestCase):
             items = (items,)
         for item in items:
             self.multiworld.state.collect(item)
+    
+    def remove_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
+        """Remove all of the items in the item pool with the given names from state"""
+        items = self.get_items_by_name(item_names)
+        self.remove(items)
+        return items
 
     def remove(self, items: typing.Union[Item, typing.Iterable[Item]]) -> None:
         """Removes the provided item(s) from state"""
@@ -179,12 +189,16 @@ class WorldTestBase(unittest.TestCase):
             self.multiworld.state.remove(item)
 
     def can_reach_location(self, location: str) -> bool:
-        """Determines if the current state can reach the provide location name"""
+        """Determines if the current state can reach the provided location name"""
         return self.multiworld.state.can_reach(location, "Location", 1)
 
     def can_reach_entrance(self, entrance: str) -> bool:
         """Determines if the current state can reach the provided entrance name"""
         return self.multiworld.state.can_reach(entrance, "Entrance", 1)
+    
+    def can_reach_region(self, region: str) -> bool:
+        """Determines if the current state can reach the provided region name"""
+        return self.multiworld.state.can_reach(region, "Region", 1)
 
     def count(self, item_name: str) -> int:
         """Returns the amount of an item currently in state"""
@@ -192,23 +206,32 @@ class WorldTestBase(unittest.TestCase):
 
     def assertAccessDependency(self,
                                locations: typing.List[str],
-                               possible_items: typing.Iterable[typing.Iterable[str]]) -> None:
+                               possible_items: typing.Iterable[typing.Iterable[str]],
+                               only_check_listed: bool = False) -> None:
         """Asserts that the provided locations can't be reached without the listed items but can be reached with any
          one of the provided combinations"""
         all_items = [item_name for item_names in possible_items for item_name in item_names]
 
-        self.collect_all_but(all_items)
-        for location in self.multiworld.get_locations():
-            loc_reachable = self.multiworld.state.can_reach(location)
-            self.assertEqual(loc_reachable, location.name not in locations,
-                             f"{location.name} is reachable without {all_items}" if loc_reachable
-                             else f"{location.name} is not reachable without {all_items}")
-        for item_names in possible_items:
-            items = self.collect_by_name(item_names)
+        state = CollectionState(self.multiworld)
+        self.collect_all_but(all_items, state)
+        if only_check_listed:
             for location in locations:
-                self.assertTrue(self.can_reach_location(location),
+                self.assertFalse(state.can_reach(location, "Location", 1), f"{location} is reachable without {all_items}")
+        else:
+            for location in self.multiworld.get_locations():
+                loc_reachable = state.can_reach(location, "Location", 1)
+                self.assertEqual(loc_reachable, location.name not in locations,
+                                 f"{location.name} is reachable without {all_items}" if loc_reachable
+                                 else f"{location.name} is not reachable without {all_items}")
+        for item_names in possible_items:
+            items = self.get_items_by_name(item_names)
+            for item in items:
+                state.collect(item)
+            for location in locations:
+                self.assertTrue(state.can_reach(location, "Location", 1),
                                 f"{location} not reachable with {item_names}")
-            self.remove(items)
+            for item in items:
+                state.remove(item)
 
     def assertBeatable(self, beatable: bool):
         """Asserts that the game can be beaten with the current state"""
@@ -252,3 +275,37 @@ class WorldTestBase(unittest.TestCase):
             locations = self.multiworld.get_reachable_locations(state, 1)
             self.assertGreater(len(locations), 0,
                                "Need to be able to reach at least one location to get started.")
+
+    def testFill(self):
+        """Generates a multiworld and validates placements with the defined options"""
+        # don't run this test if accessibility is set manually
+        if not (self.run_default_tests and self.constructed):
+            return
+        from Fill import distribute_items_restrictive
+
+        # basically a shortened reimplementation of this method from core, in order to force the check is done
+        def fulfills_accessibility():
+            locations = self.multiworld.get_locations(1).copy()
+            state = CollectionState(self.multiworld)
+            while locations:
+                sphere: typing.List[Location] = []
+                for n in range(len(locations) - 1, -1, -1):
+                    if locations[n].can_reach(state):
+                        sphere.append(locations.pop(n))
+                self.assertTrue(sphere or self.multiworld.accessibility[1] == "minimal",
+                                f"Unreachable locations: {locations}")
+                if not sphere:
+                    break
+                for location in sphere:
+                    if location.item:
+                        state.collect(location.item, True, location)
+                
+            return self.multiworld.has_beaten_game(state, 1)
+        
+        with self.subTest("Game", game=self.game):
+            distribute_items_restrictive(self.multiworld)
+            call_all(self.multiworld, "post_fill")
+            self.assertTrue(fulfills_accessibility(), "Collected all locations, but can't beat the game.")
+            placed_items = [loc.item for loc in self.multiworld.get_locations() if loc.item and loc.item.code]
+            self.assertLessEqual(len(self.multiworld.itempool), len(placed_items),
+                                 "Unplaced Items remaining in itempool")

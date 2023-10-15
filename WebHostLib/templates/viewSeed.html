@@ -34,7 +34,7 @@
                 {% endif %}
                 <tr>
                     <td>Rooms:&nbsp;</td>
-                <td>
+                    <td>
                         {% call macros.list_rooms(seed.rooms | selectattr("owner", "eq", session["_id"])) %}
                             <li>
                                 <a href="{{ url_for("new_room", seed=seed.id) }}">Create New Room</a>

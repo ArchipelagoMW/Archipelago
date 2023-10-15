@@ -49,14 +49,25 @@ class PokemonSettings(settings.Group):
 
 
 class PokemonWebWorld(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Pokemon Red and Blue with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Alchav"]
-    )]
+    )
+
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["Shiny"]
+    )
+
+    tutorials = [setup_en, setup_es]
 
 
 class PokemonRedBlueWorld(World):
@@ -69,7 +80,7 @@ class PokemonRedBlueWorld(World):
     settings: typing.ClassVar[PokemonSettings]
 
     data_version = 9
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 4, 2)
 
     topology_present = True
 
@@ -138,7 +149,7 @@ class PokemonRedBlueWorld(World):
 
         if self.multiworld.key_items_only[self.player]:
             self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
-            self.multiworld.dexsanity[self.player] = self.multiworld.dexsanity[self.player].from_text("false")
+            self.multiworld.dexsanity[self.player].value = 0
             self.multiworld.randomize_hidden_items[self.player] = \
                 self.multiworld.randomize_hidden_items[self.player].from_text("off")
 
@@ -263,6 +274,8 @@ class PokemonRedBlueWorld(World):
                         break
                     else:
                         unplaced_items.append(item)
+            else:
+                raise FillError(f"Pokemon Red and Blue local item fill failed for player {loc.player}: could not place {item.name}")
             progitempool += [item for item in unplaced_items if item.advancement]
             usefulitempool += [item for item in unplaced_items if item.useful]
             filleritempool += [item for item in unplaced_items if (not item.advancement) and (not item.useful)]
@@ -520,10 +533,12 @@ class PokemonRedBlueWorld(World):
             for location in locations:
                 if not location.can_reach(all_state):
                     pokedex.locations.remove(location)
+                    if location in self.local_locs:
+                        self.local_locs.remove(location)
                     self.dexsanity_table[poke_data.pokemon_dex[location.name.split(" - ")[1]] - 1] = False
                     remove_items += 1
 
-            for _ in range(remove_items - 5):
+            for _ in range(remove_items):
                 balls.append(balls.pop(0))
                 for ball in balls:
                     try:
@@ -713,6 +728,15 @@ class PokemonRedBlueWorld(World):
             "death_link": self.multiworld.death_link[self.player].value,
             "prizesanity": self.multiworld.prizesanity[self.player].value,
             "key_items_only": self.multiworld.key_items_only[self.player].value,
+            "poke_doll_skip": self.multiworld.poke_doll_skip[self.player].value,
+            "bicycle_gate_skips": self.multiworld.bicycle_gate_skips[self.player].value,
+            "stonesanity": self.multiworld.stonesanity[self.player].value,
+            "door_shuffle": self.multiworld.door_shuffle[self.player].value,
+            "warp_tile_shuffle": self.multiworld.warp_tile_shuffle[self.player].value,
+            "dark_rock_tunnel_logic": self.multiworld.dark_rock_tunnel_logic[self.player].value,
+            "split_card_key": self.multiworld.split_card_key[self.player].value,
+            "all_elevators_locked": self.multiworld.all_elevators_locked[self.player].value,
+
         }
 
 
