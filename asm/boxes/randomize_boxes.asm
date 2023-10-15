@@ -144,7 +144,7 @@ SpawnRandomizedItemFromBox:
 ; Load the appropriate animation for a randomized item found in a box. The
 ; item used and resulting animation chosen is based on the item's entity ID.
 LoadRandomItemAnimation:
-        push r4-r6, lr
+        push r4-r7, lr
         ldr r4, =CurrentEnemyData
         ldrb r0, [r4, @global_id]
         sub r0, 0x86
@@ -153,6 +153,7 @@ LoadRandomItemAnimation:
         ldrb r0, [r0]
         mov r6, r0
         mov r5, #0
+        ldr r7, =REG_DMA3SAD
 
     ; AP items
         cmp r6, #ItemID_Archipelago
@@ -162,6 +163,11 @@ LoadRandomItemAnimation:
         lsr r0, r6, #ItemBit_Junk
         cmp r0, #0
         bne @@JunkItem
+
+    ; Abilities
+        get_bit r0, r6, ItemBit_Ability
+        cmp r0, #1
+        beq @@Ability
 
     ; Jewel piece or CD
 
@@ -176,7 +182,55 @@ LoadRandomItemAnimation:
         bne @@CD
 
     ; Jewel piece
-        get_bits r6, r6, 1, 0
+        ldr r1, =BasicElementTiles + tile_coord_4b(2, 3)
+
+        ; Map the tiles correctly
+        ; 0 -> 2; 1 -> 3; 2 -> 1; 3 -> 0
+        ; I could've done this with a table or branches, but noooo, I haaad to
+        ; do it with math instead
+        get_bits r0, r6, 1, 0
+        lsr r3, r0, #1
+        mov r2, #2
+        orr r3, r2
+        xor r0, r3
+
+        lsl r0, #6
+        add r0, r1, r0
+        str r0, [r7]  ; DMA3SAD
+
+        ; Hold the address of the bottom row for later
+        ldr r1, =tile_coord_4b(0, 1)
+        add r5, r0, r1
+
+        b @@ProgressionItem
+
+    @@Ability:
+        ; TODO: Set palette
+
+    @@ProgressionItem:
+        ldr r3, =CurrentJewelIconPosition
+        ldrb r2, [r3]
+        get_bits r6, r2, 1, 0
+        add r1, r6, #1
+        strb r1, [r3]
+
+        ; Tile destination address = start of pieces + 2 * 0x20 * icon position
+        ldr r0, =0x6011C40
+        lsl r1, r6, #6
+        add r0, r1
+
+        str r0, [r7, #4]  ; DMA3DAD
+        ldr r2, =dma_enable | dma_halfwords(2 * sizeof_tile / 2)
+        str r2, [r7, #8]  ; DMA3CNT
+
+        ; DMA the second row
+        str r5, [r7]  ; DMA3SAD
+        ldr r1, =tile_coord_4b(0, 1)
+        add r0, r1
+        str r0, [r7, #4]  ; DMA3DAD
+        str r2, [r7, #8]  ; DMA3CNT
+
+        mov r5, #0
         b @@SetAnimation
 
     @@CD:
@@ -221,16 +275,16 @@ LoadRandomItemAnimation:
         bl CollectRandomItem
 
     @@Return:
-        pop r4-r6, pc
+        pop r4-r7, pc
 
     .pool
 
     .align 4
     @@ItemAnimationTable:
+        .word takara_Anm_02  ; NW jewel piece
+        .word takara_Anm_03  ; SW jewel piece
         .word takara_Anm_04  ; NE jewel piece
         .word takara_Anm_05  ; SE jewel piece
-        .word takara_Anm_03  ; SW jewel piece
-        .word takara_Anm_02  ; NW jewel piece
         .word takara_Anm_00  ; CD
         .word takara_Anm_01  ; Full health item
         .word APLogoAnm      ; Archipelago item

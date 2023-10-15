@@ -58,3 +58,8 @@
     .definelabel Jewel4BoxExtData, Jewel1BoxExtData + 12
     .definelabel CDBoxExtData, Jewel1BoxExtData + 16
     .definelabel HealthBoxExtData, Jewel1BoxExtData + 20
+
+; Indicates which icon is next to be selected and changed when a box is opened
+; with treasure in it. Loops around four values, values of upper six bits
+; unspecified and ignored.
+.definelabel CurrentJewelIconPosition, HealthBoxExtData + 4  ; byte
