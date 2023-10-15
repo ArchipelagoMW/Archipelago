@@ -720,7 +720,7 @@ location_name_groups: Dict[str, Set[str]] = {
         "FK: Soul of a Stray Demon",
         "CD: Spider Shield", # NPC drop
         "CD: Small Doll",
-        "CD: Saint Biden", # Guarded by giant
+        "CD: Saint Bident", # Guarded by giant
         "CC: Soul of a Demon",
         "CC: Soul of High Lord Wolnir",
         "SL: Lightning Stake",
