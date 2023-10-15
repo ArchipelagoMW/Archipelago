@@ -49,7 +49,7 @@ def set_access_rules(multiworld: MultiWorld, player: int):
 
 
 level_rules = {
-    'Hall of Hieroglyphs':   ['Dash Attack', 'Grab', 'Ground Pound'],
+    'Hall of Hieroglyphs':   ['Dash Attack', 'Grab', 'Super Ground Pound'],
 
     #Palm Tree Paradise        None
     'Wildflower Fields':     ['Super Ground Pound', 'Swim'],
