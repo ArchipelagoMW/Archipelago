@@ -710,7 +710,9 @@ location_name_groups: Dict[str, Set[str]] = {
         "HWL: Soul of Boreal Valley Vordt",
         "HWL: Soul of the Dancer",
         "US: Soul of the Rotted Greatwood",
-        "US: Flynn's Ring", # Reward for killing the Fire Demon
+        "US: Flynn's Ring", # The Fire Demon in Undead Settlement doesn't drop a
+                            # randomizable item, so this is the next best option
+                            # as a reward for that section.
         "US: Irithyll Straight Sword", # Irithyll Outrider drop
         "RS: Farron Coal",
         "RS: Soul of a Crystal Sage",
@@ -718,13 +720,14 @@ location_name_groups: Dict[str, Set[str]] = {
         "FK: Soul of a Stray Demon",
         "CD: Spider Shield", # NPC drop
         "CD: Small Doll",
+        "CD: Saint Biden", # Guarded by giant
         "CC: Soul of a Demon",
         "CC: Soul of High Lord Wolnir",
         "SL: Lightning Stake",
         "SL: Soul of Old Demon King",
         "SL: Fume Ultra Greatsword", # Knight Slayer Tsorig drop
-        "SL: Dragonrider Bow", # Reward for making it through the Smouldering
-                               # Lake dungeon.
+        "SL: Izalith Pyromancy Tome", # Reward for making it through the
+                                      # Smouldering Lake dungeon.
         "IBV: Pontiff's Right Eye", # Sulyvahn's Beast drop
         "IBV: Soul of Pontiff Sulyvahn",
         "IBV: Ring of Favor", # Sulyvahn's Beast Duo drop
