@@ -788,6 +788,11 @@ location_name_groups: Dict[str, Set[str]] = {
         # Guaranteed drop from normalish enemy
         "CD: Deep Ring"
 
+        # Have to return to cleared area
+        "CD: Archdeacon White Crown",
+        "CD: Archdeacon Holy Garb",
+        "CD: Archdeacon Skirt",
+
         # Hidden falls
         "US: Chloranthy Ring",
         "US: Mirrah Vest",
@@ -803,6 +808,9 @@ location_name_groups: Dict[str, Set[str]] = {
         "FK: Atonement",
         "SL: Dragonrider Bow",
         "CD: Arbalest",
+        "LC: Sunlight Straight Sword",
+        "LC: Braille Divine Tome of Lothric",
+        "CD: Rosaria's Fingers",
 
         # Behind illusory walls
         "FS: Covetous Silver Serpent Ring",
