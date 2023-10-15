@@ -8,12 +8,13 @@ from . import ItemNames
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     type: str
-    number: int
+    number: int  # Important for bot commands to send the item into the game
     race: SC2Race
     classification: ItemClassification = ItemClassification.useful
     quantity: int = 1
     parent_item: typing.Optional[str] = None
     origin: typing.Set[str] = {"wol"}
+    description: str = None
 
 
 class StarcraftItem(Item):
@@ -27,39 +28,183 @@ def get_full_item_list():
 SC2WOL_ITEM_ID_OFFSET = 1000
 SC2HOTS_ITEM_ID_OFFSET = SC2WOL_ITEM_ID_OFFSET + 900
 
+# Descriptions
+WEAPON_ARMOR_UPGRADE_NOTE = """
+    Must be researched during the mission if the mission type isn't set to auto-unlock generic upgrades.
+"""
+LASER_TARGETING_SYSTEMS_DESCRIPTION = """
+    Increases vision by 2 and weapon range by 1.
+"""
+STIMPACK_SMALL_COST = 10
+STIMPACK_SMALL_HEAL = 30
+STIMPACK_LARGE_COST = 20
+STIMPACK_LARGE_HEAL = 60
+STIMPACK_TEMPLATE = """
+    Level 1: Stimpack: Increases unit movement and attack speed for 15 seconds. Injures the unit for {} life.
+    Level 2: Super Stimpack: Instead of injuring the unit, heals the unit for {} life instead.
+"""
+STIMPACK_SMALL_DESCRIPTION = STIMPACK_TEMPLATE.format(STIMPACK_SMALL_COST, STIMPACK_SMALL_HEAL)
+STIMPACK_LARGE_DESCRIPTION = STIMPACK_TEMPLATE.format(STIMPACK_LARGE_COST, STIMPACK_LARGE_HEAL)
+SMART_SERVOS_DESCRIPTION = """
+    Increases transformation speed between modes.
+"""
+
+
 item_table = {
     # WoL
-    ItemNames.MARINE: ItemData(0 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.MEDIC: ItemData(1 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.FIREBAT: ItemData(2 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.MARAUDER: ItemData(3 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.REAPER: ItemData(4 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.HELLION: ItemData(5 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.VULTURE: ItemData(6 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.GOLIATH: ItemData(7 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.DIAMONDBACK: ItemData(8 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.SIEGE_TANK: ItemData(9 + SC2WOL_ITEM_ID_OFFSET, "Unit", 9, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.MEDIVAC: ItemData(10 + SC2WOL_ITEM_ID_OFFSET, "Unit", 10, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.WRAITH: ItemData(11 + SC2WOL_ITEM_ID_OFFSET, "Unit", 11, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.VIKING: ItemData(12 + SC2WOL_ITEM_ID_OFFSET, "Unit", 12, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.BANSHEE: ItemData(13 + SC2WOL_ITEM_ID_OFFSET, "Unit", 13, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.BATTLECRUISER: ItemData(14 + SC2WOL_ITEM_ID_OFFSET, "Unit", 14, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.GHOST: ItemData(15 + SC2WOL_ITEM_ID_OFFSET, "Unit", 15, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.SPECTRE: ItemData(16 + SC2WOL_ITEM_ID_OFFSET, "Unit", 16, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.THOR: ItemData(17 + SC2WOL_ITEM_ID_OFFSET, "Unit", 17, SC2Race.TERRAN, classification=ItemClassification.progression),
+    ItemNames.MARINE: ItemData(0 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.TERRAN,
+                               classification=ItemClassification.progression,
+                               description="""
+                                General-purpose infantry.
+                               """),
+    ItemNames.MEDIC: ItemData(1 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.TERRAN,
+                              classification=ItemClassification.progression,
+                              description="""
+                                Support trooper. Heals nearby biological units.
+                              """),
+    ItemNames.FIREBAT: ItemData(2 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.TERRAN,
+                                classification=ItemClassification.progression,
+                                description="""
+                                Specialized anti-infantry attacker.
+                                """),
+    ItemNames.MARAUDER: ItemData(3 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.TERRAN,
+                                 classification=ItemClassification.progression,
+                                 description="""
+                                 Heavy assault infantry.
+                                 """),
+    ItemNames.REAPER: ItemData(4 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.TERRAN,
+                               classification=ItemClassification.progression,
+                               description="""
+                               Raider. Capable of jumping up and down cliffs. Throws explosive mines.
+                               """),
+    ItemNames.HELLION: ItemData(5 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.TERRAN,
+                                classification=ItemClassification.progression,
+                                description="""
+                                Fast scout. Has a flame attack that damages all enemy units in its line of fire.
+                                """),
+    ItemNames.VULTURE: ItemData(6 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.TERRAN,
+                                classification=ItemClassification.progression,
+                                description="""
+                                Fast skirmish unit. Can use the Spider Mine ability.
+                                """),
+    ItemNames.GOLIATH: ItemData(7 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.TERRAN,
+                                classification=ItemClassification.progression,
+                                description="""
+                                Heavy-fire support unit.
+                                """),
+    ItemNames.DIAMONDBACK: ItemData(8 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.TERRAN,
+                                    classification=ItemClassification.progression,
+                                    description="""
+                                    Fast, high-damage hovertank. Rail Gun can fire while the Diamondback is moving.
+                                    """),
+    ItemNames.SIEGE_TANK: ItemData(9 + SC2WOL_ITEM_ID_OFFSET, "Unit", 9, SC2Race.TERRAN,
+                                   classification=ItemClassification.progression,
+                                   description="""
+                                   Heavy tank. Long-range artillery in Siege Mode.
+                                   """),
+    ItemNames.MEDIVAC: ItemData(10 + SC2WOL_ITEM_ID_OFFSET, "Unit", 10, SC2Race.TERRAN,
+                                classification=ItemClassification.progression,
+                                description="""
+                                Air transport. Heals nearby biological units.
+                                """),
+    ItemNames.WRAITH: ItemData(11 + SC2WOL_ITEM_ID_OFFSET, "Unit", 11, SC2Race.TERRAN,
+                               classification=ItemClassification.progression,
+                               description="""
+                               Highly mobile flying unit. Excellent at surgical strikes.
+                               """),
+    ItemNames.VIKING: ItemData(12 + SC2WOL_ITEM_ID_OFFSET, "Unit", 12, SC2Race.TERRAN,
+                               classification=ItemClassification.progression,
+                               description="""
+                               Durable support flyer. Loaded with strong anti-capital air missiles. 
+                               Can switch into Assault Mode to attack ground units.
+                               """),
+    ItemNames.BANSHEE: ItemData(13 + SC2WOL_ITEM_ID_OFFSET, "Unit", 13, SC2Race.TERRAN,
+                                classification=ItemClassification.progression,
+                                description="""
+                                Tactical-strike aircraft.
+                                """),
+    ItemNames.BATTLECRUISER: ItemData(14 + SC2WOL_ITEM_ID_OFFSET, "Unit", 14, SC2Race.TERRAN,
+                                      classification=ItemClassification.progression,
+                                      description="""
+                                      Powerful warship.
+                                      """),
+    ItemNames.GHOST: ItemData(15 + SC2WOL_ITEM_ID_OFFSET, "Unit", 15, SC2Race.TERRAN,
+                              classification=ItemClassification.progression,
+                              description="""
+                              Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.
+                              """),
+    ItemNames.SPECTRE: ItemData(16 + SC2WOL_ITEM_ID_OFFSET, "Unit", 16, SC2Race.TERRAN,
+                                classification=ItemClassification.progression,
+                                description="""
+                                Infiltration unit. Can use Ultrasonic Pulse, Psionic Lash, and Cloak. Can also call down Tactical Nukes.
+                                """),
+    ItemNames.THOR: ItemData(17 + SC2WOL_ITEM_ID_OFFSET, "Unit", 17, SC2Race.TERRAN,
+                             classification=ItemClassification.progression,
+                             description="""
+                             Heavy assault mech.
+                             """),
     # EE units
-    ItemNames.LIBERATOR: ItemData(18 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, SC2Race.TERRAN, classification=ItemClassification.progression, origin={"nco", "ext"}),
-    ItemNames.VALKYRIE: ItemData(19 + SC2WOL_ITEM_ID_OFFSET, "Unit", 19, SC2Race.TERRAN, classification=ItemClassification.progression, origin={"bw"}),
-    ItemNames.WIDOW_MINE: ItemData(20 + SC2WOL_ITEM_ID_OFFSET, "Unit", 20, SC2Race.TERRAN, classification=ItemClassification.progression, origin={"ext"}),
-    ItemNames.CYCLONE: ItemData(21 + SC2WOL_ITEM_ID_OFFSET, "Unit", 21, SC2Race.TERRAN, classification=ItemClassification.progression, origin={"ext"}),
+    ItemNames.LIBERATOR: ItemData(18 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, SC2Race.TERRAN,
+                                  classification=ItemClassification.progression, origin={"nco", "ext"},
+                                  description="""
+                                  Artillery fighter. Loaded with missiles that deal area damage to enemy air targets. 
+                                  Can switch into Defender Mode to provide siege support.
+                                  """),
+    ItemNames.VALKYRIE: ItemData(19 + SC2WOL_ITEM_ID_OFFSET, "Unit", 19, SC2Race.TERRAN,
+                                 classification=ItemClassification.progression, origin={"bw"},
+                                 description="""
+                                 Advanced anti-aircraft fighter. 
+                                 Able to use cluster missiles that deal area damage to air targets.
+                                 """),
+    ItemNames.WIDOW_MINE: ItemData(20 + SC2WOL_ITEM_ID_OFFSET, "Unit", 20, SC2Race.TERRAN,
+                                   classification=ItemClassification.progression, origin={"ext"},
+                                   description="""
+                                   Robotic mine. Launches missiles at nearby enemy units while burrowed. 
+                                   Attacks deal splash damage in a small area around the target. 
+                                   Widow Mine is revealed when Sentinel Missile is on cooldown.
+                                   """),
+    ItemNames.CYCLONE: ItemData(21 + SC2WOL_ITEM_ID_OFFSET, "Unit", 21, SC2Race.TERRAN,
+                                classification=ItemClassification.progression, origin={"ext"},
+                                description="""
+                                Mobile assault vehicle. Can use Lock On to quickly fire while moving.
+                                """),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
-    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.TERRAN, quantity=3),
-    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: ItemData(102 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.TERRAN, quantity=3),
-    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: ItemData(103 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.TERRAN, quantity=3),
-    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_ARMOR: ItemData(104 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 6, SC2Race.TERRAN, quantity=3),
-    ItemNames.PROGRESSIVE_TERRAN_SHIP_WEAPON: ItemData(105 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 8, SC2Race.TERRAN, quantity=3),
-    ItemNames.PROGRESSIVE_TERRAN_SHIP_ARMOR: ItemData(106 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 10, SC2Race.TERRAN, quantity=3),
+    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.TERRAN,
+                                                           quantity=3,
+                                                           description=f"""
+                                                           Increases damage of Terran infantry units. 
+                                                           ${WEAPON_ARMOR_UPGRADE_NOTE}
+                                                           """),
+    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: ItemData(102 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.TERRAN,
+                                                          quantity=3,
+                                                          description=f"""
+                                                           Increases armor of Terran infantry units. 
+                                                           ${WEAPON_ARMOR_UPGRADE_NOTE}
+                                                          """),
+    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: ItemData(103 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.TERRAN,
+                                                          quantity=3,
+                                                          description=f"""
+                                                          Increases damage of Terran vehicle units. 
+                                                          ${WEAPON_ARMOR_UPGRADE_NOTE}
+                                                          """),
+    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_ARMOR: ItemData(104 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 6, SC2Race.TERRAN,
+                                                         quantity=3,
+                                                         description=f"""
+                                                         Increases armor of Terran vehicle units. 
+                                                         ${WEAPON_ARMOR_UPGRADE_NOTE}
+                                                         """),
+    ItemNames.PROGRESSIVE_TERRAN_SHIP_WEAPON: ItemData(105 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 8, SC2Race.TERRAN,
+                                                       quantity=3,
+                                                       description=f"""
+                                                       Increases damage of Terran starship units. 
+                                                       ${WEAPON_ARMOR_UPGRADE_NOTE}
+                                                       """),
+    ItemNames.PROGRESSIVE_TERRAN_SHIP_ARMOR: ItemData(106 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 10, SC2Race.TERRAN,
+                                                      quantity=3, description=f"""
+                                                         Increases armor of Terran starship units. 
+                                                         ${WEAPON_ARMOR_UPGRADE_NOTE}
+                                                         """),
     # Upgrade bundle 'number' values are used as indices to get affected 'number's
     ItemNames.PROGRESSIVE_TERRAN_WEAPON_UPGRADE: ItemData(107 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.TERRAN, quantity=3),
     ItemNames.PROGRESSIVE_TERRAN_ARMOR_UPGRADE: ItemData(108 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 1, SC2Race.TERRAN, quantity=3),
@@ -68,175 +213,807 @@ item_table = {
     ItemNames.PROGRESSIVE_TERRAN_SHIP_UPGRADE: ItemData(111 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.TERRAN, quantity=3),
     ItemNames.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE: ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, SC2Race.TERRAN, quantity=3),
 
-    ItemNames.BUNKER_PROJECTILE_ACCELERATOR: ItemData(200 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 0, SC2Race.TERRAN, parent_item="Bunker"),
-    ItemNames.BUNKER_NEOSTEEL_BUNKER: ItemData(201 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 1, SC2Race.TERRAN, parent_item="Bunker"),
-    ItemNames.MISSILE_TURRET_TITANIUM_HOUSING: ItemData(202 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 2, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Missile Turret"),
-    ItemNames.MISSILE_TURRET_HELLSTORM_BATTERIES: ItemData(203 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 3, SC2Race.TERRAN, parent_item="Missile Turret"),
-    ItemNames.SCV_ADVANCED_CONSTRUCTION: ItemData(204 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 4, SC2Race.TERRAN),
-    ItemNames.SCV_DUAL_FUSION_WELDERS: ItemData(205 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 5, SC2Race.TERRAN),
-    ItemNames.BUILDING_FIRE_SUPPRESSION_SYSTEM: ItemData(206 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 6, SC2Race.TERRAN),
-    ItemNames.BUILDING_ORBITAL_COMMAND: ItemData(207 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 7, SC2Race.TERRAN),
-    ItemNames.MARINE_PROGRESSIVE_STIMPACK: ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 0, SC2Race.TERRAN, parent_item="Marine", quantity=2),
-    ItemNames.MARINE_COMBAT_SHIELD: ItemData(209 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Marine"),
-    ItemNames.MEDIC_ADVANCED_MEDIC_FACILITIES: ItemData(210 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Medic"),
-    ItemNames.MEDIC_STABILIZER_MEDPACKS: ItemData(211 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 11, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Medic"),
-    ItemNames.FIREBAT_INCINERATOR_GAUNTLETS: ItemData(212 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 12, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Firebat"),
-    ItemNames.FIREBAT_JUGGERNAUT_PLATING: ItemData(213 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 13, SC2Race.TERRAN, parent_item="Firebat"),
-    ItemNames.MARAUDER_CONCUSSIVE_SHELLS: ItemData(214 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 14, SC2Race.TERRAN, parent_item="Marauder"),
-    ItemNames.MARAUDER_KINETIC_FOAM: ItemData(215 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 15, SC2Race.TERRAN, parent_item="Marauder"),
-    ItemNames.REAPER_U238_ROUNDS: ItemData(216 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 16, SC2Race.TERRAN, parent_item="Reaper"),
-    ItemNames.REAPER_G4_CLUSTERBOMB: ItemData(217 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 17, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Reaper"),
+    ItemNames.BUNKER_PROJECTILE_ACCELERATOR: ItemData(200 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 0, SC2Race.TERRAN,
+                                                      parent_item="Bunker",
+                                                      description="""
+                                                      Increases range of all units in the Bunker by 1.
+                                                      """),
+    ItemNames.BUNKER_NEOSTEEL_BUNKER: ItemData(201 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 1, SC2Race.TERRAN,
+                                               parent_item="Bunker",
+                                               description="""
+                                               Increases the number of Bunker slots by 2.
+                                               """),
+    ItemNames.MISSILE_TURRET_TITANIUM_HOUSING: ItemData(202 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 2, SC2Race.TERRAN,
+                                                        classification=ItemClassification.filler,
+                                                        parent_item="Missile Turret",
+                                                        description="""
+                                                        Increases Missile Turret life by 75.
+                                                        """),
+    ItemNames.MISSILE_TURRET_HELLSTORM_BATTERIES: ItemData(203 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 3, SC2Race.TERRAN,
+                                                           parent_item="Missile Turret",
+                                                           description="""
+                                                           The Missile Turret unleashes an additional flurry of missiles with each attack.
+                                                           """),
+    ItemNames.SCV_ADVANCED_CONSTRUCTION: ItemData(204 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 4, SC2Race.TERRAN,
+                                                  description="""
+                                                  Multiple SCVs can construct a structure, reducing its construction time.
+                                                  """),
+    ItemNames.SCV_DUAL_FUSION_WELDERS: ItemData(205 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 5, SC2Race.TERRAN,
+                                                description="""
+                                                SCVs repair twice as fast.
+                                                """),
+    ItemNames.BUILDING_FIRE_SUPPRESSION_SYSTEM: ItemData(206 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 6, SC2Race.TERRAN,
+                                                         description="""
+                                                         While on low health, Terran structures are repaired to half health instead of burning down.
+                                                         """),
+    ItemNames.BUILDING_ORBITAL_COMMAND: ItemData(207 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 7, SC2Race.TERRAN,
+                                                 description="""
+                                                 Allows Command Centers to use Scanner Sweep and Calldown: MULE abilities
+                                                 """),
+    ItemNames.MARINE_PROGRESSIVE_STIMPACK: ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 0,
+                                                    SC2Race.TERRAN, parent_item="Marine", quantity=2,
+                                                    description=STIMPACK_SMALL_DESCRIPTION),
+    ItemNames.MARINE_COMBAT_SHIELD: ItemData(209 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9, SC2Race.TERRAN,
+                                             classification=ItemClassification.progression, parent_item="Marine",
+                                             description="""
+                                             Increases Marine life by 10.
+                                             """),
+    ItemNames.MEDIC_ADVANCED_MEDIC_FACILITIES: ItemData(210 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10, SC2Race.TERRAN,
+                                                        classification=ItemClassification.filler, parent_item="Medic",
+                                                        description="""
+                                                        Medics can be trained without a Tech Lab attached to Barracks.
+                                                        """),
+    ItemNames.MEDIC_STABILIZER_MEDPACKS: ItemData(211 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 11, SC2Race.TERRAN,
+                                                  classification=ItemClassification.progression, parent_item="Medic",
+                                                  description="""
+                                                  Increases Medic heal speed. Reduces the amount of energy required for each heal. 
+                                                  """),
+    ItemNames.FIREBAT_INCINERATOR_GAUNTLETS: ItemData(212 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 12, SC2Race.TERRAN,
+                                                      classification=ItemClassification.filler, parent_item="Firebat",
+                                                      description="""
+                                                      Increases Firebat's damage radius by 40%
+                                                      """),
+    ItemNames.FIREBAT_JUGGERNAUT_PLATING: ItemData(213 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 13, SC2Race.TERRAN,
+                                                   parent_item="Firebat",
+                                                   description="""
+                                                   Increases Firebat's armor by 2.
+                                                   """),
+    ItemNames.MARAUDER_CONCUSSIVE_SHELLS: ItemData(214 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 14, SC2Race.TERRAN,
+                                                   parent_item="Marauder",
+                                                   description="""
+                                                   Marauder attack temporarily slows all units in target area.
+                                                   """),
+    ItemNames.MARAUDER_KINETIC_FOAM: ItemData(215 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 15, SC2Race.TERRAN,
+                                              parent_item="Marauder",
+                                              description="""
+                                              Increases Marauder life by 25.
+                                              """),
+    ItemNames.REAPER_U238_ROUNDS: ItemData(216 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 16, SC2Race.TERRAN,
+                                           parent_item="Reaper",
+                                           description="""
+                                           Increases Reaper pistol attack range by 1.
+                                           Reaper pistols do additional 3 damage to Light Armor.
+                                           """),
+    ItemNames.REAPER_G4_CLUSTERBOMB: ItemData(217 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 17, SC2Race.TERRAN,
+                                              classification=ItemClassification.progression, parent_item="Reaper",
+                                              description="""
+                                              Timed explosive that does heavy area damage.
+                                              """),
     # Items from EE
-    ItemNames.CYCLONE_MAG_FIELD_ACCELERATORS: ItemData(218 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 18, SC2Race.TERRAN, parent_item="Cyclone", origin={"ext"}),
-    ItemNames.CYCLONE_MAG_FIELD_LAUNCHERS: ItemData(219 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 19, SC2Race.TERRAN, parent_item="Cyclone", origin={"ext"}),
+    ItemNames.CYCLONE_MAG_FIELD_ACCELERATORS: ItemData(218 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 18, SC2Race.TERRAN,
+                                                       parent_item="Cyclone", origin={"ext"},
+                                                       description="""
+                                                       Increases Cyclone Lock On damage
+                                                       """),
+    ItemNames.CYCLONE_MAG_FIELD_LAUNCHERS: ItemData(219 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 19, SC2Race.TERRAN,
+                                                    parent_item="Cyclone", origin={"ext"},
+                                                    description="""
+                                                    Increases Cyclone attack range by 2.
+                                                    """),
     # Items from new mod
-    ItemNames.MARINE_LASER_TARGETING_SYSTEM: ItemData(220 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 8, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Marine", origin={"nco"}), # Freed slot from Stimpack
-    ItemNames.MARINE_MAGRAIL_MUNITIONS: ItemData(221 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 20, SC2Race.TERRAN, parent_item="Marine", origin={"nco"}),
-    ItemNames.MARINE_OPTIMIZED_LOGISTICS: ItemData(222 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 21, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Marine", origin={"nco"}),
-    ItemNames.MEDIC_RESTORATION: ItemData(223 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 22, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Medic", origin={"bw"}),
-    ItemNames.MEDIC_OPTICAL_FLARE: ItemData(224 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 23, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Medic", origin={"bw"}),
-    ItemNames.MEDIC_OPTIMIZED_LOGISTICS: ItemData(225 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 24, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Medic", origin={"bw"}),
-    ItemNames.FIREBAT_PROGRESSIVE_STIMPACK: ItemData(226 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 6, SC2Race.TERRAN, parent_item="Firebat", quantity=2, origin={"bw"}),
-    ItemNames.FIREBAT_OPTIMIZED_LOGISTICS: ItemData(227 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 25, SC2Race.TERRAN, parent_item="Firebat", origin={"bw"}),
-    ItemNames.MARAUDER_PROGRESSIVE_STIMPACK: ItemData(228 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 8, SC2Race.TERRAN, parent_item="Marauder", quantity=2, origin={"nco"}),
-    ItemNames.MARAUDER_LASER_TARGETING_SYSTEM: ItemData(229 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 26, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Marauder", origin={"nco"}),
-    ItemNames.MARAUDER_MAGRAIL_MUNITIONS: ItemData(230 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 27, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Marauder", origin={"nco"}),
-    ItemNames.MARAUDER_INTERNAL_TECH_MODULE: ItemData(231 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 28, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Marauder", origin={"nco"}),
+    ItemNames.MARINE_LASER_TARGETING_SYSTEM: ItemData(220 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 8, SC2Race.TERRAN,
+                                                      classification=ItemClassification.filler, parent_item="Marine",
+                                                      origin={"nco"},
+                                                      description=LASER_TARGETING_SYSTEMS_DESCRIPTION),
+    ItemNames.MARINE_MAGRAIL_MUNITIONS: ItemData(221 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 20, SC2Race.TERRAN,
+                                                 parent_item="Marine", origin={"nco"},
+                                                 description="""
+                                                 Deals 20 damage to target unit. Autocast on attack with a cooldown.
+                                                 """),
+    ItemNames.MARINE_OPTIMIZED_LOGISTICS: ItemData(222 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 21, SC2Race.TERRAN,
+                                                   classification=ItemClassification.filler, parent_item="Marine",
+                                                   origin={"nco"},
+                                                   description="""
+                                                   Increases Marine training speed.
+                                                   """),
+    ItemNames.MEDIC_RESTORATION: ItemData(223 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 22, SC2Race.TERRAN,
+                                          classification=ItemClassification.filler, parent_item="Medic", origin={"bw"},
+                                          description="""
+                                          Removes negative status effects from target allied unit.
+                                          """),
+    ItemNames.MEDIC_OPTICAL_FLARE: ItemData(224 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 23, SC2Race.TERRAN,
+                                            classification=ItemClassification.filler, parent_item="Medic",
+                                            origin={"bw"},
+                                            description="""
+                                            Reduces vision range of target enemy unit. Disables detection.
+                                            """),
+    ItemNames.MEDIC_OPTIMIZED_LOGISTICS: ItemData(225 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 24, SC2Race.TERRAN,
+                                                  classification=ItemClassification.filler, parent_item="Medic",
+                                                  origin={"bw"},
+                                                  description="""
+                                                  Reduces Medic resource and supply cost.
+                                                  """),
+    ItemNames.FIREBAT_PROGRESSIVE_STIMPACK: ItemData(226 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 6,
+                                                     SC2Race.TERRAN, parent_item="Firebat", quantity=2, origin={"bw"},
+                                                     description=STIMPACK_LARGE_DESCRIPTION),
+    ItemNames.FIREBAT_OPTIMIZED_LOGISTICS: ItemData(227 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 25, SC2Race.TERRAN,
+                                                    parent_item="Firebat", origin={"bw"},
+                                                    description="""
+                                                    Reduces Firebat resource and supply cost.
+                                                    """),
+    ItemNames.MARAUDER_PROGRESSIVE_STIMPACK: ItemData(228 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 8,
+                                                      SC2Race.TERRAN, parent_item="Marauder", quantity=2,
+                                                      origin={"nco"},
+                                                      description=STIMPACK_LARGE_DESCRIPTION),
+    ItemNames.MARAUDER_LASER_TARGETING_SYSTEM: ItemData(229 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 26, SC2Race.TERRAN,
+                                                        classification=ItemClassification.filler,
+                                                        parent_item="Marauder", origin={"nco"},
+                                                        description=LASER_TARGETING_SYSTEMS_DESCRIPTION),
+    ItemNames.MARAUDER_MAGRAIL_MUNITIONS: ItemData(230 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 27, SC2Race.TERRAN,
+                                                   classification=ItemClassification.filler, parent_item="Marauder",
+                                                   origin={"nco"},
+                                                   description="""
+                                                   Deals 20 damage to target unit. Autocast on attack with a cooldown.
+                                                   """),
+    ItemNames.MARAUDER_INTERNAL_TECH_MODULE: ItemData(231 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 28, SC2Race.TERRAN,
+                                                      classification=ItemClassification.filler, parent_item="Marauder",
+                                                      origin={"nco"},
+                                                      description="""
+                                                      Marauders can be trained without a Tech Lab attached to Barracks.
+                                                      """),
 
     # Items from new mod
-    ItemNames.REAPER_PROGRESSIVE_STIMPACK: ItemData(250 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 10, SC2Race.TERRAN, parent_item="Reaper", quantity=2, origin={"nco"}),
-    ItemNames.REAPER_LASER_TARGETING_SYSTEM: ItemData(251 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 0, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Reaper", origin={"nco"}),
-    ItemNames.REAPER_ADVANCED_CLOAKING_FIELD: ItemData(252 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 1, SC2Race.TERRAN, parent_item="Reaper", origin={"nco"}),
-    ItemNames.REAPER_SPIDER_MINES: ItemData(253 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 2, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Reaper", origin={"nco"}),
-    ItemNames.REAPER_COMBAT_DRUGS: ItemData(254 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 3, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Reaper", origin={"ext"}),
-    ItemNames.HELLION_HELLBAT_ASPECT: ItemData(255 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 4, SC2Race.TERRAN, parent_item="Hellion", origin={"nco"}),
-    ItemNames.HELLION_SMART_SERVOS: ItemData(256 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 5, SC2Race.TERRAN, parent_item="Hellion", origin={"nco"}),
-    ItemNames.HELLION_OPTIMIZED_LOGISTICS: ItemData(257 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 6, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Hellion", origin={"nco"}),
-    ItemNames.HELLION_JUMP_JETS: ItemData(258 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 7, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Hellion", origin={"nco"}),
-    ItemNames.HELLION_PROGRESSIVE_STIMPACK: ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 12, SC2Race.TERRAN, parent_item="Hellion", quantity=2, origin={"nco"}),
-    ItemNames.VULTURE_ION_THRUSTERS: ItemData(260 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 8, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Vulture", origin={"bw"}),
-    ItemNames.VULTURE_AUTO_LAUNCHERS: ItemData(261 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 9, SC2Race.TERRAN, parent_item="Vulture", origin={"bw"}),
-    ItemNames.SPIDER_MINE_HIGH_EXPLOSIVE_MUNITION: ItemData(262 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 10, SC2Race.TERRAN, origin={"bw"}),
-    ItemNames.GOLIATH_JUMP_JETS: ItemData(263 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 11, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Goliath", origin={"nco"}),
-    ItemNames.GOLIATH_OPTIMIZED_LOGISTICS: ItemData(264 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 12, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Goliath", origin={"nco"}),
-    ItemNames.DIAMONDBACK_HYPERFLUXOR: ItemData(265 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 13, SC2Race.TERRAN, parent_item="Diamondback", origin={"ext"}),
-    ItemNames.DIAMONDBACK_BURST_CAPACITORS: ItemData(266 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 14, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Diamondback", origin={"ext"}),
-    ItemNames.DIAMONDBACK_OPTIMIZED_LOGISTICS: ItemData(267 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 15, SC2Race.TERRAN, parent_item="Diamondback", origin={"ext"}),
-    ItemNames.SIEGE_TANK_JUMP_JETS: ItemData(268 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 16, SC2Race.TERRAN, parent_item="Siege Tank", origin={"nco"}),
-    ItemNames.SIEGE_TANK_SPIDER_MINES: ItemData(269 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 17, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Siege Tank", origin={"nco"}),
-    ItemNames.SIEGE_TANK_SMART_SERVOS: ItemData(270 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 18, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Siege Tank", origin={"nco"}),
-    ItemNames.SIEGE_TANK_GRADUATING_RANGE: ItemData(271 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 19, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Siege Tank", origin={"ext"}),
-    ItemNames.SIEGE_TANK_LASER_TARGETING_SYSTEM: ItemData(272 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 20, SC2Race.TERRAN, parent_item="Siege Tank", origin={"nco"}),
-    ItemNames.SIEGE_TANK_ADVANCED_SIEGE_TECH: ItemData(273 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, SC2Race.TERRAN, parent_item="Siege Tank", origin={"ext"}),
-    ItemNames.SIEGE_TANK_INTERNAL_TECH_MODULE: ItemData(274 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 22, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Siege Tank", origin={"nco"}),
-    ItemNames.PREDATOR_OPTIMIZED_LOGISTICS: ItemData(275 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 23, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Predator", origin={"ext"}),
-    ItemNames.MEDIVAC_EXPANDED_HULL: ItemData(276 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 24, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Medivac", origin={"ext"}),
-    ItemNames.MEDIVAC_AFTERBURNERS: ItemData(277 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 25, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Medivac", origin={"ext"}),
-    ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY: ItemData(278 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 26, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Wraith", origin={"ext"}),
-    ItemNames.VIKING_SMART_SERVOS: ItemData(279 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 27, SC2Race.TERRAN, parent_item="Viking", origin={"ext"}),
-    ItemNames.VIKING_MAGRAIL_MUNITIONS: ItemData(280 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 28, SC2Race.TERRAN, parent_item="Viking", origin={"ext"}),
+    ItemNames.REAPER_PROGRESSIVE_STIMPACK: ItemData(250 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 10,
+                                                    SC2Race.TERRAN, parent_item="Reaper", quantity=2, origin={"nco"},
+                                                    description=STIMPACK_SMALL_DESCRIPTION),
+    ItemNames.REAPER_LASER_TARGETING_SYSTEM: ItemData(251 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 0, SC2Race.TERRAN,
+                                                      classification=ItemClassification.filler, parent_item="Reaper",
+                                                      origin={"nco"},
+                                                      description=LASER_TARGETING_SYSTEMS_DESCRIPTION),
+    ItemNames.REAPER_ADVANCED_CLOAKING_FIELD: ItemData(252 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 1, SC2Race.TERRAN,
+                                                       parent_item="Reaper", origin={"nco"},
+                                                       description="""
+                                                       Reapers are permanently cloaked.
+                                                       """),
+    ItemNames.REAPER_SPIDER_MINES: ItemData(253 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 2, SC2Race.TERRAN,
+                                            classification=ItemClassification.filler, parent_item="Reaper",
+                                            origin={"nco"},
+                                            description="""
+                                            Allows Reapers to lay Spider Mines. 3 charges per Reaper.
+                                            """),
+    ItemNames.REAPER_COMBAT_DRUGS: ItemData(254 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 3, SC2Race.TERRAN,
+                                            classification=ItemClassification.filler, parent_item="Reaper",
+                                            origin={"ext"},
+                                            description="""
+                                            Reapers regenerate life while out of combat.
+                                            """),
+    ItemNames.HELLION_HELLBAT_ASPECT: ItemData(255 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 4, SC2Race.TERRAN,
+                                               parent_item="Hellion", origin={"nco"},
+                                               description="""
+                                               Allows Hellions to transform into Hellbats.
+                                               """),
+    ItemNames.HELLION_SMART_SERVOS: ItemData(256 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 5, SC2Race.TERRAN,
+                                             parent_item="Hellion", origin={"nco"},
+                                             description="""
+                                             Transforms faster between modes. Hellions can attack while moving.
+                                             """),
+    ItemNames.HELLION_OPTIMIZED_LOGISTICS: ItemData(257 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 6, SC2Race.TERRAN,
+                                                    classification=ItemClassification.filler, parent_item="Hellion",
+                                                    origin={"nco"},
+                                                    description="""
+                                                    Increases Hellion training speed.
+                                                    """),
+    ItemNames.HELLION_JUMP_JETS: ItemData(258 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 7, SC2Race.TERRAN,
+                                          classification=ItemClassification.filler, parent_item="Hellion",
+                                          origin={"nco"},
+                                          description="""
+                                          Increases movement speed in Hellion mode.
+                                          In Hellbat mode, launches the Hellbat toward enemy ground units and birefly stuns them.
+                                          """),
+    ItemNames.HELLION_PROGRESSIVE_STIMPACK: ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 12,
+                                                     SC2Race.TERRAN, parent_item="Hellion", quantity=2, origin={"nco"},
+                                                     description=STIMPACK_LARGE_DESCRIPTION),
+    ItemNames.VULTURE_ION_THRUSTERS: ItemData(260 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 8, SC2Race.TERRAN,
+                                              classification=ItemClassification.filler, parent_item="Vulture",
+                                              origin={"bw"},
+                                              description="""
+                                              Increases Vulture movement speed.
+                                              """),
+    ItemNames.VULTURE_AUTO_LAUNCHERS: ItemData(261 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 9, SC2Race.TERRAN,
+                                               parent_item="Vulture", origin={"bw"},
+                                               description="""
+                                               Allows Vultures to attack while moving.
+                                               """),
+    ItemNames.SPIDER_MINE_HIGH_EXPLOSIVE_MUNITION: ItemData(262 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 10, SC2Race.TERRAN,
+                                                            origin={"bw"},
+                                                            description="""
+                                                            Increases Spider mine damage.
+                                                            """),
+    ItemNames.GOLIATH_JUMP_JETS: ItemData(263 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 11, SC2Race.TERRAN,
+                                          classification=ItemClassification.filler, parent_item="Goliath",
+                                          origin={"nco"},
+                                          description="""
+                                          Allows Goliaths to jump up and down cliffs.
+                                          """),
+    ItemNames.GOLIATH_OPTIMIZED_LOGISTICS: ItemData(264 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 12, SC2Race.TERRAN,
+                                                    classification=ItemClassification.filler, parent_item="Goliath",
+                                                    origin={"nco"},
+                                                    description="""
+                                                    Increases Goliath training speed.
+                                                    """),
+    ItemNames.DIAMONDBACK_HYPERFLUXOR: ItemData(265 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 13, SC2Race.TERRAN,
+                                                parent_item="Diamondback", origin={"ext"},
+                                                description="""
+                                                Increases Diamondback attack speed.
+                                                """),
+    ItemNames.DIAMONDBACK_BURST_CAPACITORS: ItemData(266 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 14, SC2Race.TERRAN,
+                                                     classification=ItemClassification.filler,
+                                                     parent_item="Diamondback", origin={"ext"},
+                                                     description="""
+                                                     While not attacking, the Diamonback charges its weapon. 
+                                                     The next attack does 10 additional damage.
+                                                     """),
+    ItemNames.DIAMONDBACK_OPTIMIZED_LOGISTICS: ItemData(267 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 15, SC2Race.TERRAN,
+                                                        parent_item="Diamondback", origin={"ext"},
+                                                        description="""
+                                                        Decreases Diamondback resource and supply cost.
+                                                        """),
+    ItemNames.SIEGE_TANK_JUMP_JETS: ItemData(268 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 16, SC2Race.TERRAN,
+                                             parent_item="Siege Tank", origin={"nco"},
+                                             description="""
+                                             Repositions Siege Tank to a target location. 
+                                             Can be used in either mode and to jump up and down cliffs. 
+                                             """),
+    ItemNames.SIEGE_TANK_SPIDER_MINES: ItemData(269 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 17, SC2Race.TERRAN,
+                                                classification=ItemClassification.filler, parent_item="Siege Tank",
+                                                origin={"nco"},
+                                                description="""
+                                                Allows Sige Tanks to lay Spider Mines. 
+                                                Lays 3 Spider Mines at once. 3 charges
+                                                """),
+    ItemNames.SIEGE_TANK_SMART_SERVOS: ItemData(270 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 18, SC2Race.TERRAN,
+                                                classification=ItemClassification.filler, parent_item="Siege Tank",
+                                                origin={"nco"},
+                                                description=SMART_SERVOS_DESCRIPTION),
+    ItemNames.SIEGE_TANK_GRADUATING_RANGE: ItemData(271 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 19, SC2Race.TERRAN,
+                                                    classification=ItemClassification.progression,
+                                                    parent_item="Siege Tank", origin={"ext"},
+                                                    description="""
+                                                    Increases Siege Tank attack range while staying in Siege Mode.
+                                                    Up to 5 additional range.
+                                                    """),
+    ItemNames.SIEGE_TANK_LASER_TARGETING_SYSTEM: ItemData(272 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 20, SC2Race.TERRAN,
+                                                          parent_item="Siege Tank", origin={"nco"},
+                                                          description=LASER_TARGETING_SYSTEMS_DESCRIPTION),
+    ItemNames.SIEGE_TANK_ADVANCED_SIEGE_TECH: ItemData(273 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, SC2Race.TERRAN,
+                                                       parent_item="Siege Tank", origin={"ext"},
+                                                       description="""
+                                                       Siege Tanks get additional 3 armor while in Siege Mode
+                                                       """),
+    ItemNames.SIEGE_TANK_INTERNAL_TECH_MODULE: ItemData(274 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 22, SC2Race.TERRAN,
+                                                        classification=ItemClassification.filler,
+                                                        parent_item="Siege Tank", origin={"nco"},
+                                                        description="""
+                                                        Siege Tanks can be trained without a Tech Lab attached to Factory.
+                                                        """),
+    ItemNames.PREDATOR_OPTIMIZED_LOGISTICS: ItemData(275 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 23, SC2Race.TERRAN,
+                                                     classification=ItemClassification.filler, parent_item="Predator",
+                                                     origin={"ext"},
+                                                     description="""
+                                                     Decreases Predator resource and supply cost.
+                                                     """),
+    ItemNames.MEDIVAC_EXPANDED_HULL: ItemData(276 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 24, SC2Race.TERRAN,
+                                              classification=ItemClassification.filler, parent_item="Medivac",
+                                              origin={"ext"},
+                                              description="""
+                                              Increases Medivac cargo space by 4.
+                                              """),
+    ItemNames.MEDIVAC_AFTERBURNERS: ItemData(277 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 25, SC2Race.TERRAN,
+                                             classification=ItemClassification.filler, parent_item="Medivac",
+                                             origin={"ext"},
+                                             description="""
+                                             Allows Medivacs a quick burst of movement speed.
+                                             """),
+    ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY: ItemData(278 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 26, SC2Race.TERRAN,
+                                                         classification=ItemClassification.progression,
+                                                         parent_item="Wraith", origin={"ext"},
+                                                         description="""
+                                                         Burst Lasers do more damage and can hit both ground and air targets.
+                                                         Replaces Gemini Missiles weapon.
+                                                         """),
+    ItemNames.VIKING_SMART_SERVOS: ItemData(279 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 27, SC2Race.TERRAN,
+                                            parent_item="Viking", origin={"ext"},
+                                            description=SMART_SERVOS_DESCRIPTION),
+    ItemNames.VIKING_MAGRAIL_MUNITIONS: ItemData(280 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 28, SC2Race.TERRAN,
+                                                 parent_item="Viking", origin={"ext"},
+                                                 description="""
+                                                 Increases Viking damage to mechanical units while in Assault Mode.
+                                                 """),
 
-    ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER: ItemData(300 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 0, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Hellion"),
-    ItemNames.HELLION_THERMITE_FILAMENTS: ItemData(301 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 1, SC2Race.TERRAN, parent_item="Hellion"),
-    ItemNames.SPIDER_MINE_CERBERUS_MINE: ItemData(302 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2, SC2Race.TERRAN, classification=ItemClassification.filler),
-    ItemNames.VULTURE_REPLENISHABLE_MAGAZINE: ItemData(303 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 3, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Vulture"),
-    ItemNames.GOLIATH_MULTI_LOCK_WEAPONS_SYSTEM: ItemData(304 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 4, SC2Race.TERRAN, parent_item="Goliath"),
-    ItemNames.GOLIATH_ARES_CLASS_TARGETING_SYSTEM: ItemData(305 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 5, SC2Race.TERRAN, parent_item="Goliath"),
-    ItemNames.DIAMONDBACK_TRI_LITHIUM_POWER_CELL: ItemData(306 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 6, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Diamondback"),
-    ItemNames.DIAMONDBACK_SHAPED_HULL: ItemData(307 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 7, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Diamondback"),
-    ItemNames.SIEGE_TANK_MAELSTROM_ROUNDS: ItemData(308 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 8, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Siege Tank"),
-    ItemNames.SIEGE_TANK_SHAPED_BLAST: ItemData(309 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 9, SC2Race.TERRAN, parent_item="Siege Tank"),
-    ItemNames.MEDIVAC_RAPID_DEPLOYMENT_TUBE: ItemData(310 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 10, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Medivac"),
-    ItemNames.MEDIVAC_ADVANCED_HEALING_AI: ItemData(311 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 11, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Medivac"),
-    ItemNames.WRAITH_TOMAHAWK_POWER_CELLS: ItemData(312 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 12, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Wraith"),
-    ItemNames.WRAITH_DISPLACEMENT_FIELD: ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 13, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Wraith"),
-    ItemNames.VIKING_RIPWAVE_MISSILES: ItemData(314 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 14, SC2Race.TERRAN, parent_item="Viking"),
-    ItemNames.VIKING_PHOBOS_CLASS_WEAPONS_SYSTEM: ItemData(315 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 15, SC2Race.TERRAN, parent_item="Viking"),
-    ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS: ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 2, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Banshee", quantity=2),
-    ItemNames.BANSHEE_SHOCKWAVE_MISSILE_BATTERY: ItemData(317 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 17, SC2Race.TERRAN, parent_item="Banshee"),
-    ItemNames.BATTLECRUISER_MISSILE_PODS: ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 18, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Battlecruiser"),
-    ItemNames.BATTLECRUISER_DEFENSIVE_MATRIX: ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 19, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Battlecruiser"),
-    ItemNames.GHOST_OCULAR_IMPLANTS: ItemData(320 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 20, SC2Race.TERRAN, parent_item="Ghost"),
-    ItemNames.GHOST_CRIUS_SUIT: ItemData(321 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 21, SC2Race.TERRAN, parent_item="Ghost"),
-    ItemNames.SPECTRE_PSIONIC_LASH: ItemData(322 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 22, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Spectre"),
-    ItemNames.SPECTRE_NYX_CLASS_CLOAKING_MODULE: ItemData(323 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 23, SC2Race.TERRAN, parent_item="Spectre"),
-    ItemNames.THOR_330MM_BARRAGE_CANNON: ItemData(324 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 24, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Thor"),
-    ItemNames.THOR_IMMORTALITY_PROTOCOL: ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Thor"),
+    ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER: ItemData(300 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 0, SC2Race.TERRAN,
+                                                         classification=ItemClassification.filler,
+                                                         parent_item="Hellion",
+                                                         description="""
+                                                         Doubles the width of Hellion's flame attack.
+                                                         """),
+    ItemNames.HELLION_THERMITE_FILAMENTS: ItemData(301 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 1, SC2Race.TERRAN,
+                                                   parent_item="Hellion",
+                                                   description="""
+                                                   Hellions do additional 10 damage to Light Armor.
+                                                   """),
+    ItemNames.SPIDER_MINE_CERBERUS_MINE: ItemData(302 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2, SC2Race.TERRAN,
+                                                  classification=ItemClassification.filler,
+                                                  description="""
+                                                  Increases trigger and blast radius of Spider Mines.
+                                                  """),
+    ItemNames.VULTURE_REPLENISHABLE_MAGAZINE: ItemData(303 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 3, SC2Race.TERRAN,
+                                                       classification=ItemClassification.filler, parent_item="Vulture",
+                                                       description="""
+                                                       Allows Vultures to replace used Spider Mines. Costs 15 minerals.
+                                                       """),
+    ItemNames.GOLIATH_MULTI_LOCK_WEAPONS_SYSTEM: ItemData(304 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 4, SC2Race.TERRAN,
+                                                          parent_item="Goliath",
+                                                          description="""
+                                                          Goliaths can attack both ground and air targets simultaneously.
+                                                          """),
+    ItemNames.GOLIATH_ARES_CLASS_TARGETING_SYSTEM: ItemData(305 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 5, SC2Race.TERRAN,
+                                                            parent_item="Goliath",
+                                                            description="""
+                                                            Increases Goliath ground attack range by 1 and air by 3.
+                                                            """),
+    ItemNames.DIAMONDBACK_TRI_LITHIUM_POWER_CELL: ItemData(306 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 6, SC2Race.TERRAN,
+                                                           classification=ItemClassification.filler,
+                                                           parent_item="Diamondback",
+                                                           description="""
+                                                           Increases Diamondback attack range by 1.
+                                                           """),
+    ItemNames.DIAMONDBACK_SHAPED_HULL: ItemData(307 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 7, SC2Race.TERRAN,
+                                                classification=ItemClassification.filler, parent_item="Diamondback",
+                                                description="""
+                                                Increases Diamondback life by 50.
+                                                """),
+    ItemNames.SIEGE_TANK_MAELSTROM_ROUNDS: ItemData(308 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 8, SC2Race.TERRAN,
+                                                    classification=ItemClassification.progression,
+                                                    parent_item="Siege Tank",
+                                                    description="""
+                                                    Siege Tanks do additional 40 damage to primary target in Siege Mode.
+                                                    """),
+    ItemNames.SIEGE_TANK_SHAPED_BLAST: ItemData(309 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 9, SC2Race.TERRAN,
+                                                parent_item="Siege Tank",
+                                                description="""
+                                                Reduces splash damage to friendly targets while in Siege Mode by 75%. 
+                                                """),
+    ItemNames.MEDIVAC_RAPID_DEPLOYMENT_TUBE: ItemData(310 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 10, SC2Race.TERRAN,
+                                                      classification=ItemClassification.filler, parent_item="Medivac",
+                                                      description="""
+                                                      The Medivac deploys loaded troops almost instantly.
+                                                      """),
+    ItemNames.MEDIVAC_ADVANCED_HEALING_AI: ItemData(311 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 11, SC2Race.TERRAN,
+                                                    classification=ItemClassification.filler, parent_item="Medivac",
+                                                    description="""
+                                                    The Medivac can heal two targets at once
+                                                    """),
+    ItemNames.WRAITH_TOMAHAWK_POWER_CELLS: ItemData(312 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 12, SC2Race.TERRAN,
+                                                    classification=ItemClassification.filler, parent_item="Wraith",
+                                                    description="""
+                                                    Increases Wraith starting energy by 100.
+                                                    """),
+    ItemNames.WRAITH_DISPLACEMENT_FIELD: ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 13, SC2Race.TERRAN,
+                                                  classification=ItemClassification.filler, parent_item="Wraith",
+                                                  description="""
+                                                  Wraith evades 20% of incoming attacks while cloaked.
+                                                  """),
+    ItemNames.VIKING_RIPWAVE_MISSILES: ItemData(314 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 14, SC2Race.TERRAN,
+                                                parent_item="Viking",
+                                                description="""
+                                                Vikings do area damage while in Fighter Mode
+                                                """),
+    ItemNames.VIKING_PHOBOS_CLASS_WEAPONS_SYSTEM: ItemData(315 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 15, SC2Race.TERRAN,
+                                                           parent_item="Viking",
+                                                           description="""
+                                                           Increases Viking attack range by 1 in Assault mode and 2 in Fighter mode.
+                                                           """),
+    ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS: ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade",
+                                                                     2, SC2Race.TERRAN,
+                                                                     classification=ItemClassification.filler,
+                                                                     parent_item="Banshee", quantity=2,
+                                                                     description="""
+                                                                     Level 1: Banshees can remain cloaked twice as long.
+                                                                     Level 2: Banshees do not require energy to cloak and remain cloaked.
+                                                                     """),
+    ItemNames.BANSHEE_SHOCKWAVE_MISSILE_BATTERY: ItemData(317 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 17, SC2Race.TERRAN,
+                                                          parent_item="Banshee",
+                                                          description="""
+                                                          Banshees do area damage in a straight line.
+                                                          """),
+    ItemNames.BATTLECRUISER_MISSILE_PODS: ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 18, SC2Race.TERRAN,
+                                                   classification=ItemClassification.filler,
+                                                   parent_item="Battlecruiser",
+                                                   description="""
+                                                   Spell. Missile Pods do damage to air targets in a target area. 
+                                                   """),
+    ItemNames.BATTLECRUISER_DEFENSIVE_MATRIX: ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 19, SC2Race.TERRAN,
+                                                       classification=ItemClassification.filler,
+                                                       parent_item="Battlecruiser",
+                                                       description="""
+                                                       Spell. For 20 seconds Battlecruiser gains a shield that can absorb up to 200 damage.
+                                                       """),
+    ItemNames.GHOST_OCULAR_IMPLANTS: ItemData(320 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 20, SC2Race.TERRAN,
+                                              parent_item="Ghost",
+                                              description="""
+                                              Increases Ghost sight range by 3 and attack range by 2.
+                                              """),
+    ItemNames.GHOST_CRIUS_SUIT: ItemData(321 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 21, SC2Race.TERRAN,
+                                         parent_item="Ghost",
+                                         description="""
+                                         Cloak no longer requires energy to activate or maintain.
+                                         """),
+    ItemNames.SPECTRE_PSIONIC_LASH: ItemData(322 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 22, SC2Race.TERRAN,
+                                             classification=ItemClassification.progression, parent_item="Spectre",
+                                             description="""
+                                             Spell. Deals 200 damage to a single target.
+                                             """),
+    ItemNames.SPECTRE_NYX_CLASS_CLOAKING_MODULE: ItemData(323 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 23, SC2Race.TERRAN,
+                                                          parent_item="Spectre",
+                                                          description="""
+                                                          Cloak no longer requires energy to activate or maintain.
+                                                          """),
+    ItemNames.THOR_330MM_BARRAGE_CANNON: ItemData(324 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 24, SC2Race.TERRAN,
+                                                  classification=ItemClassification.filler, parent_item="Thor",
+                                                  description="""
+                                                  Improves 250mm Strike Cannons ability to deal area damage and stun units in a small area.
+                                                  Can be also freely aimed on ground.
+                                                  """),
+    ItemNames.THOR_IMMORTALITY_PROTOCOL: ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25, SC2Race.TERRAN,
+                                                  classification=ItemClassification.filler, parent_item="Thor",
+                                                  description="""
+                                                  Allows to reconstruct destroyed Thors on field. Costs Vespene Gas.
+                                                  """),
     # Items from EE
-    ItemNames.LIBERATOR_ADVANCED_BALLISTICS: ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, SC2Race.TERRAN, parent_item="Liberator", origin={"ext"}),
-    ItemNames.LIBERATOR_RAID_ARTILLERY: ItemData(327 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Liberator", origin={"nco"}),
-    ItemNames.WIDOW_MINE_DRILLING_CLAWS: ItemData(328 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 28, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Widow Mine", origin={"ext"}),
-    ItemNames.WIDOW_MINE_CONCEALMENT: ItemData(329 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 29, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Widow Mine", origin={"ext"}),
+    ItemNames.LIBERATOR_ADVANCED_BALLISTICS: ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, SC2Race.TERRAN,
+                                                      parent_item="Liberator", origin={"ext"},
+                                                      description="""
+                                                      Increases Liberator range by 3 in Defender Mode.
+                                                      """),
+    ItemNames.LIBERATOR_RAID_ARTILLERY: ItemData(327 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, SC2Race.TERRAN,
+                                                 classification=ItemClassification.progression, parent_item="Liberator",
+                                                 origin={"nco"},
+                                                 description="""
+                                                 Allows Liberators to attack structures while in Defender Mode.
+                                                 """),
+    ItemNames.WIDOW_MINE_DRILLING_CLAWS: ItemData(328 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 28, SC2Race.TERRAN,
+                                                  classification=ItemClassification.filler, parent_item="Widow Mine",
+                                                  origin={"ext"},
+                                                  description="""
+                                                  Allows Widow Mines to burrow and unburrow faster.
+                                                  """),
+    ItemNames.WIDOW_MINE_CONCEALMENT: ItemData(329 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 29, SC2Race.TERRAN,
+                                               classification=ItemClassification.progression, parent_item="Widow Mine",
+                                               origin={"ext"},
+                                               description="""
+                                               Burrowed Widow Mines are no longer revealed when the Sentinel Missile is on cooldown.
+                                               """),
 
     #Items from new mod
-    ItemNames.BANSHEE_HYPERFLIGHT_ROTORS: ItemData(350 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 0, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Banshee", origin={"ext"}),
-    ItemNames.BANSHEE_LASER_TARGETING_SYSTEM: ItemData(351 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 1, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Banshee", origin={"nco"}),
-    ItemNames.BANSHEE_INTERNAL_TECH_MODULE: ItemData(352 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 2, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Banshee", origin={"nco"}),
-    ItemNames.BATTLECRUISER_TACTICAL_JUMP: ItemData(353 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 3, SC2Race.TERRAN, parent_item="Battlecruiser", origin={"nco", "ext"}),
-    ItemNames.BATTLECRUISER_CLOAK: ItemData(354 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 4, SC2Race.TERRAN, parent_item="Battlecruiser", origin={"nco"}),
-    ItemNames.BATTLECRUISER_ATX_LASER_BATTERY: ItemData(355 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 5, SC2Race.TERRAN, classification=ItemClassification.progression, parent_item="Battlecruiser", origin={"nco"}),
-    ItemNames.BATTLECRUISER_OPTIMIZED_LOGISTICS: ItemData(356 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 6, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Battlecruiser", origin={"ext"}),
-    ItemNames.BATTLECRUISER_INTERNAL_TECH_MODULE: ItemData(357 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 7, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Battlecruiser", origin={"nco"}),
-    ItemNames.GHOST_EMP_ROUNDS: ItemData(358 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 8, SC2Race.TERRAN, parent_item="Ghost", origin={"ext"}),
-    ItemNames.GHOST_LOCKDOWN: ItemData(359 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 9, SC2Race.TERRAN, parent_item="Ghost", origin={"bw"}),
-    ItemNames.SPECTRE_IMPALER_ROUNDS: ItemData(360 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 10, SC2Race.TERRAN, parent_item="Spectre", origin={"ext"}),
-    ItemNames.THOR_PROGRESSIVE_HIGH_IMPACT_PAYLOAD: ItemData(361 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 14, SC2Race.TERRAN, parent_item="Thor", quantity=2, origin={"ext"}),  # L2 is Smart Servos
-    ItemNames.RAVEN_BIO_MECHANICAL_REPAIR_DRONE: ItemData(363 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 13, SC2Race.TERRAN, parent_item="Raven", origin={"nco"}),
-    ItemNames.RAVEN_SPIDER_MINES: ItemData(364 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 14, SC2Race.TERRAN, parent_item="Raven", origin={"nco"}),
-    ItemNames.RAVEN_RAILGUN_TURRET: ItemData(365 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 15, SC2Race.TERRAN, parent_item="Raven", origin={"nco"}),
-    ItemNames.RAVEN_HUNTER_SEEKER_WEAPON: ItemData(366 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 16, SC2Race.TERRAN, parent_item="Raven", origin={"nco"}),
-    ItemNames.RAVEN_INTERFERENCE_MATRIX: ItemData(367 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 17, SC2Race.TERRAN, parent_item="Raven", origin={"ext"}),
-    ItemNames.RAVEN_ANTI_ARMOR_MISSILE: ItemData(368 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 18, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Raven", origin={"ext"}),
-    ItemNames.RAVEN_INTERNAL_TECH_MODULE: ItemData(369 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 19, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Raven", origin={"nco"}),
-    ItemNames.SCIENCE_VESSEL_EMP_SHOCKWAVE: ItemData(370 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 20, SC2Race.TERRAN, parent_item="Science Vessel", origin={"bw"}),
-    ItemNames.SCIENCE_VESSEL_DEFENSIVE_MATRIX: ItemData(371 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 21, SC2Race.TERRAN, parent_item="Science Vessel", origin={"bw"}),
-    ItemNames.CYCLONE_TARGETING_OPTICS: ItemData(372 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 22, SC2Race.TERRAN, parent_item="Cyclone", origin={"ext"}),
-    ItemNames.CYCLONE_RAPID_FIRE_LAUNCHERS: ItemData(373 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 23, SC2Race.TERRAN, parent_item="Cyclone", origin={"ext"}),
-    ItemNames.LIBERATOR_CLOAK: ItemData(374 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 24, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Liberator", origin={"nco"}),
-    ItemNames.LIBERATOR_LASER_TARGETING_SYSTEM: ItemData(375 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 25, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Liberator", origin={"ext"}),
-    ItemNames.LIBERATOR_OPTIMIZED_LOGISTICS: ItemData(376 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 26, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Liberator", origin={"nco"}),
-    ItemNames.WIDOW_MINE_BLACK_MARKET_LAUNCHERS: ItemData(377 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 27, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Widow Mine", origin={"ext"}),
-    ItemNames.WIDOW_MINE_EXECUTIONER_MISSILES: ItemData(378 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 28, SC2Race.TERRAN, parent_item="Widow Mine", origin={"ext"}),
+    ItemNames.BANSHEE_HYPERFLIGHT_ROTORS: ItemData(350 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 0, SC2Race.TERRAN,
+                                                   classification=ItemClassification.filler, parent_item="Banshee",
+                                                   origin={"ext"},
+                                                   description="""
+                                                   Increases Banshee movement speed.
+                                                   """),
+    ItemNames.BANSHEE_LASER_TARGETING_SYSTEM: ItemData(351 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 1, SC2Race.TERRAN,
+                                                       classification=ItemClassification.filler, parent_item="Banshee",
+                                                       origin={"nco"},
+                                                       description=LASER_TARGETING_SYSTEMS_DESCRIPTION),
+    ItemNames.BANSHEE_INTERNAL_TECH_MODULE: ItemData(352 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 2, SC2Race.TERRAN,
+                                                     classification=ItemClassification.filler, parent_item="Banshee",
+                                                     origin={"nco"},
+                                                     description="""
+                                                     Banshees can be trained without a Tech Lab attached to Starport.
+                                                     """),
+    ItemNames.BATTLECRUISER_TACTICAL_JUMP: ItemData(353 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 3, SC2Race.TERRAN,
+                                                    parent_item="Battlecruiser", origin={"nco", "ext"},
+                                                    description="""
+                                                    After 6 seconds, warps to target location anywhere on the map. 
+                                                    Invulnerable while warping.
+                                                    """),
+    ItemNames.BATTLECRUISER_CLOAK: ItemData(354 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 4, SC2Race.TERRAN,
+                                            parent_item="Battlecruiser", origin={"nco"},
+                                            description="""
+                                            Allows Battlecruiser to use Cloak ability. 
+                                            Requires energy to activate and maintain.
+                                            """),
+    ItemNames.BATTLECRUISER_ATX_LASER_BATTERY: ItemData(355 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 5, SC2Race.TERRAN,
+                                                        classification=ItemClassification.progression,
+                                                        parent_item="Battlecruiser", origin={"nco"},
+                                                        description="""
+                                                        Battlecruisers can attack while moving, 
+                                                        do the same damage to both ground and air targets and fire faster.
+                                                        """),
+    ItemNames.BATTLECRUISER_OPTIMIZED_LOGISTICS: ItemData(356 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 6, SC2Race.TERRAN,
+                                                          classification=ItemClassification.filler,
+                                                          parent_item="Battlecruiser", origin={"ext"},
+                                                          description="""
+                                                          Increases Battlecruiser training speed.
+                                                          """),
+    ItemNames.BATTLECRUISER_INTERNAL_TECH_MODULE: ItemData(357 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 7, SC2Race.TERRAN,
+                                                           classification=ItemClassification.filler,
+                                                           parent_item="Battlecruiser", origin={"nco"},
+                                                           description="""
+                                                           Battlecruisers can be trained without a Tech Lab attached to Starport.
+                                                           """),
+    ItemNames.GHOST_EMP_ROUNDS: ItemData(358 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 8, SC2Race.TERRAN,
+                                         parent_item="Ghost", origin={"ext"},
+                                         description="""
+                                         Spell. Drains 100 shields and all energy and reveals units in a target area.
+                                         """),
+    ItemNames.GHOST_LOCKDOWN: ItemData(359 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 9, SC2Race.TERRAN, parent_item="Ghost",
+                                       origin={"bw"},
+                                       description="""
+                                       Spell. Stuns a target mechanical unit for a long time.
+                                       """),
+    ItemNames.SPECTRE_IMPALER_ROUNDS: ItemData(360 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 10, SC2Race.TERRAN,
+                                               parent_item="Spectre", origin={"ext"},
+                                               description="""
+                                               Spectres do additional damage to armored targets.
+                                               """),
+    ItemNames.THOR_PROGRESSIVE_HIGH_IMPACT_PAYLOAD: ItemData(361 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 14,
+                                                             SC2Race.TERRAN, parent_item="Thor", quantity=2,
+                                                             origin={"ext"},
+                                                             description=f"""
+                                                             Level 1: Allows Thors to transform in order to use alternative air attack.
+                                                             Level 2: ${SMART_SERVOS_DESCRIPTION}
+                                                             """),
+    ItemNames.RAVEN_BIO_MECHANICAL_REPAIR_DRONE: ItemData(363 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 13, SC2Race.TERRAN,
+                                                          parent_item="Raven", origin={"nco"},
+                                                          description="""
+                                                          Spell. Deploys a drone that can heal biological or mechanical units.
+                                                          """),
+    ItemNames.RAVEN_SPIDER_MINES: ItemData(364 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 14, SC2Race.TERRAN,
+                                           parent_item="Raven", origin={"nco"},
+                                           description="""
+                                           Spell. Deploys 3 Spider Mines to a target location.
+                                           """),
+    ItemNames.RAVEN_RAILGUN_TURRET: ItemData(365 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 15, SC2Race.TERRAN,
+                                             parent_item="Raven", origin={"nco"},
+                                             description="""
+                                             Spell. Allows to deploy an advanced Auto-Turret, 
+                                             that can attack enemy ground units in a straight line.
+                                             """),
+    ItemNames.RAVEN_HUNTER_SEEKER_WEAPON: ItemData(366 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 16, SC2Race.TERRAN,
+                                                   parent_item="Raven", origin={"nco"},
+                                                   description="""
+                                                   Allows Ravens to attack with a Hunter-Seeker weapon.
+                                                   """),
+    ItemNames.RAVEN_INTERFERENCE_MATRIX: ItemData(367 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 17, SC2Race.TERRAN,
+                                                  parent_item="Raven", origin={"ext"},
+                                                  description="""
+                                                  Spell. Target enemy Mechanical or Psionic unit can't attack or use abilities for a short duration.
+                                                  """),
+    ItemNames.RAVEN_ANTI_ARMOR_MISSILE: ItemData(368 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 18, SC2Race.TERRAN,
+                                                 classification=ItemClassification.filler, parent_item="Raven",
+                                                 origin={"ext"},
+                                                 description="""
+                                                 Spell. Decreases target and nearby enemy unit armor by 2.
+                                                 """),
+    ItemNames.RAVEN_INTERNAL_TECH_MODULE: ItemData(369 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 19, SC2Race.TERRAN,
+                                                   classification=ItemClassification.filler, parent_item="Raven",
+                                                   origin={"nco"},
+                                                   description="""
+                                                   Ravens can be trained without a Tech Lab attached to Starport.
+                                                   """),
+    ItemNames.SCIENCE_VESSEL_EMP_SHOCKWAVE: ItemData(370 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 20, SC2Race.TERRAN,
+                                                     parent_item="Science Vessel", origin={"bw"},
+                                                     description="""
+                                                     Spell. Depletes all energy and shields of all units in a target area. 
+                                                     """),
+    ItemNames.SCIENCE_VESSEL_DEFENSIVE_MATRIX: ItemData(371 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 21, SC2Race.TERRAN,
+                                                        parent_item="Science Vessel", origin={"bw"},
+                                                        description="""
+                                                        Spell. Provides a target unit with a defensive barrier that can absorb up to 250 damage
+                                                        """),
+    ItemNames.CYCLONE_TARGETING_OPTICS: ItemData(372 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 22, SC2Race.TERRAN,
+                                                 parent_item="Cyclone", origin={"ext"},
+                                                 description="""
+                                                 Increases Cyclone Lock On casting range and the range while Locked On.
+                                                 """),
+    ItemNames.CYCLONE_RAPID_FIRE_LAUNCHERS: ItemData(373 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 23, SC2Race.TERRAN,
+                                                     parent_item="Cyclone", origin={"ext"},
+                                                     description="""
+                                                     First 12 shots of Lock On are fired more quickly 
+                                                     """),
+    ItemNames.LIBERATOR_CLOAK: ItemData(374 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 24, SC2Race.TERRAN,
+                                        classification=ItemClassification.filler, parent_item="Liberator",
+                                        origin={"nco"},
+                                        description="""
+                                        Allows Liberator to use Cloak ability. 
+                                        Requires energy to activate and maintain.
+                                        """),
+    ItemNames.LIBERATOR_LASER_TARGETING_SYSTEM: ItemData(375 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 25, SC2Race.TERRAN,
+                                                         classification=ItemClassification.filler,
+                                                         parent_item="Liberator", origin={"ext"},
+                                                         description=LASER_TARGETING_SYSTEMS_DESCRIPTION),
+    ItemNames.LIBERATOR_OPTIMIZED_LOGISTICS: ItemData(376 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 26, SC2Race.TERRAN,
+                                                      classification=ItemClassification.filler, parent_item="Liberator",
+                                                      origin={"nco"},
+                                                      description="""
+                                                      Increases Liberator training speed.
+                                                      """),
+    ItemNames.WIDOW_MINE_BLACK_MARKET_LAUNCHERS: ItemData(377 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 27, SC2Race.TERRAN,
+                                                          classification=ItemClassification.filler,
+                                                          parent_item="Widow Mine", origin={"ext"},
+                                                          description="""
+                                                          Increases Widow Mine Sentinel Missile range.
+                                                          """),
+    ItemNames.WIDOW_MINE_EXECUTIONER_MISSILES: ItemData(378 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 28, SC2Race.TERRAN,
+                                                        parent_item="Widow Mine", origin={"ext"},
+                                                        description="""
+                                                        Reduces Sentinel Missile cooldown.
+                                                        When killed, Widow Mine will launch several missiles at random enemy targets.
+                                                        """),
 
     # Just lazy to create a new group for one unit
-    ItemNames.VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS: ItemData(379 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 17, SC2Race.TERRAN, parent_item="Valkyrie", origin={"ext"}),
-    ItemNames.VALKYRIE_SHAPED_HULL: ItemData(380 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 20, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Valkyrie", origin={"ext"}),
-    ItemNames.VALKYRIE_BURST_LASERS: ItemData(381 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 21, SC2Race.TERRAN, parent_item="Valkyrie", origin={"ext"}),
-    ItemNames.VALKYRIE_AFTERBURNERS: ItemData(382 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 22, SC2Race.TERRAN, classification=ItemClassification.filler, parent_item="Valkyrie", origin={"ext"}),
+    ItemNames.VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS: ItemData(379 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 17,
+                                                            SC2Race.TERRAN, parent_item="Valkyrie", origin={"ext"},
+                                                            description="""
+                                                            Valkyrie fires 2 additional rockets each volley.
+                                                            """),
+    ItemNames.VALKYRIE_SHAPED_HULL: ItemData(380 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 20, SC2Race.TERRAN,
+                                             classification=ItemClassification.filler, parent_item="Valkyrie",
+                                             origin={"ext"},
+                                             description="""
+                                             Increases Valkyrie life by 50.
+                                             """),
+    ItemNames.VALKYRIE_BURST_LASERS: ItemData(381 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 21, SC2Race.TERRAN,
+                                              parent_item="Valkyrie", origin={"ext"},
+                                              description="""
+                                              Valkyries are equipped with Burst Lasers to attack ground units.
+                                              """),
+    ItemNames.VALKYRIE_AFTERBURNERS: ItemData(382 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 22, SC2Race.TERRAN,
+                                              classification=ItemClassification.filler, parent_item="Valkyrie",
+                                              origin={"ext"},
+                                              description="""
+                                              Allows Valkyries a quick burst of movement speed.
+                                              """),
 
-    ItemNames.BUNKER: ItemData(400 + SC2WOL_ITEM_ID_OFFSET, "Building", 0, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.MISSILE_TURRET: ItemData(401 + SC2WOL_ITEM_ID_OFFSET, "Building", 1, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.SENSOR_TOWER: ItemData(402 + SC2WOL_ITEM_ID_OFFSET, "Building", 2, SC2Race.TERRAN),
+    ItemNames.BUNKER: ItemData(400 + SC2WOL_ITEM_ID_OFFSET, "Building", 0, SC2Race.TERRAN,
+                               classification=ItemClassification.progression,
+                               description="""
+                               Defensive structure. Allows to garrison infantry to attack from inside.
+                               """),
+    ItemNames.MISSILE_TURRET: ItemData(401 + SC2WOL_ITEM_ID_OFFSET, "Building", 1, SC2Race.TERRAN,
+                                       classification=ItemClassification.progression,
+                                       description="""
+                                       Anti-air defensive structure.
+                                       """),
+    ItemNames.SENSOR_TOWER: ItemData(402 + SC2WOL_ITEM_ID_OFFSET, "Building", 2, SC2Race.TERRAN,
+                                     description="""
+                                     Reveals locations of enemy units at long range.
+                                     """),
 
-    ItemNames.WAR_PIGS: ItemData(500 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 0, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.DEVIL_DOGS: ItemData(501 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 1, SC2Race.TERRAN, classification=ItemClassification.filler),
-    ItemNames.HAMMER_SECURITIES: ItemData(502 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 2, SC2Race.TERRAN),
-    ItemNames.SPARTAN_COMPANY: ItemData(503 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 3, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.SIEGE_BREAKERS: ItemData(504 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 4, SC2Race.TERRAN),
-    ItemNames.HELS_ANGEL: ItemData(505 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 5, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.DUSK_WINGS: ItemData(506 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 6, SC2Race.TERRAN),
-    ItemNames.JACKSONS_REVENGE: ItemData(507 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 7, SC2Race.TERRAN),
+    ItemNames.WAR_PIGS: ItemData(500 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 0, SC2Race.TERRAN,
+                                 classification=ItemClassification.progression,
+                                 description="Mercenary Marines"),
+    ItemNames.DEVIL_DOGS: ItemData(501 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 1, SC2Race.TERRAN,
+                                   classification=ItemClassification.filler,
+                                   description="Mercenary Firebats"),
+    ItemNames.HAMMER_SECURITIES: ItemData(502 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 2, SC2Race.TERRAN,
+                                          description="Mercenary Marauders"),
+    ItemNames.SPARTAN_COMPANY: ItemData(503 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 3, SC2Race.TERRAN,
+                                        classification=ItemClassification.progression,
+                                        description="Mercenary Goliaths"),
+    ItemNames.SIEGE_BREAKERS: ItemData(504 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 4, SC2Race.TERRAN,
+                                       description="Mercenary Siege Tanks"),
+    ItemNames.HELS_ANGEL: ItemData(505 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 5, SC2Race.TERRAN,
+                                   classification=ItemClassification.progression,
+                                   description="Mercenary Vikings"),
+    ItemNames.DUSK_WINGS: ItemData(506 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 6, SC2Race.TERRAN,
+                                   description="Mercenary Banshees"),
+    ItemNames.JACKSONS_REVENGE: ItemData(507 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 7, SC2Race.TERRAN,
+                                         description="Mercenary Battlecruiser"),
 
-    ItemNames.ULTRA_CAPACITORS: ItemData(600 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 0, SC2Race.TERRAN),
-    ItemNames.VANADIUM_PLATING: ItemData(601 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 1, SC2Race.TERRAN),
-    ItemNames.ORBITAL_DEPOTS: ItemData(602 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 2, SC2Race.TERRAN),
-    ItemNames.MICRO_FILTERING: ItemData(603 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 3, SC2Race.TERRAN),
-    ItemNames.AUTOMATED_REFINERY: ItemData(604 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 4, SC2Race.TERRAN),
-    ItemNames.COMMAND_CENTER_REACTOR: ItemData(605 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 5, SC2Race.TERRAN),
-    ItemNames.RAVEN: ItemData(606 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 6, SC2Race.TERRAN),
-    ItemNames.SCIENCE_VESSEL: ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.TECH_REACTOR: ItemData(608 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 8, SC2Race.TERRAN),
-    ItemNames.ORBITAL_STRIKE: ItemData(609 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 9, SC2Race.TERRAN),
-    ItemNames.BUNKER_SHRIKE_TURRET: ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10, SC2Race.TERRAN, parent_item="Bunker"),
-    ItemNames.BUNKER_FORTIFIED_BUNKER: ItemData(611 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11, SC2Race.TERRAN, parent_item="Bunker"),
-    ItemNames.PLANETARY_FORTRESS: ItemData(612 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.PERDITION_TURRET: ItemData(613 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 13, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.PREDATOR: ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14, SC2Race.TERRAN, classification=ItemClassification.filler),
-    ItemNames.HERCULES: ItemData(615 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 15, SC2Race.TERRAN, classification=ItemClassification.progression),
-    ItemNames.CELLULAR_REACTOR: ItemData(616 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16, SC2Race.TERRAN),
-    ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL: ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 4, SC2Race.TERRAN, quantity=2),
-    ItemNames.HIVE_MIND_EMULATOR: ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18, SC2Race.TERRAN, ItemClassification.progression),
-    ItemNames.PSI_DISRUPTER: ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, SC2Race.TERRAN, classification=ItemClassification.progression),
+    ItemNames.ULTRA_CAPACITORS: ItemData(600 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 0, SC2Race.TERRAN,
+                                         description="""
+                                         Increases attack speed of all Terran units with each weapon upgrade.
+                                         """),
+    ItemNames.VANADIUM_PLATING: ItemData(601 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 1, SC2Race.TERRAN,
+                                         description="""
+                                         Increases life of all Teran units with each armor upgrade.
+                                         """),
+    ItemNames.ORBITAL_DEPOTS: ItemData(602 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 2, SC2Race.TERRAN,
+                                       description="""
+                                       Supply depots are built instantly.
+                                       """),
+    ItemNames.MICRO_FILTERING: ItemData(603 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 3, SC2Race.TERRAN,
+                                        description="""
+                                        Increases Vespene Gas harvesting speed.
+                                        """),
+    ItemNames.AUTOMATED_REFINERY: ItemData(604 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 4, SC2Race.TERRAN,
+                                           description="""
+                                           Refineries don't require harvesters to operate
+                                           """),
+    ItemNames.COMMAND_CENTER_REACTOR: ItemData(605 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 5, SC2Race.TERRAN,
+                                               description="""
+                                               Command Centers can train two SCVs at once.
+                                               """),
+    ItemNames.RAVEN: ItemData(606 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 6, SC2Race.TERRAN,
+                              description="""
+                              Aerial Support unit.
+                              """),
+    ItemNames.SCIENCE_VESSEL: ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7, SC2Race.TERRAN,
+                                       classification=ItemClassification.progression,
+                                       description="""
+                                       Aerial Support unit. Can repair mechanical units.
+                                       """),
+    ItemNames.TECH_REACTOR: ItemData(608 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 8, SC2Race.TERRAN,
+                                     description="""
+                                     Merges Tech Labs and Reactors into one add on structure to provide both functions.
+                                     """),
+    ItemNames.ORBITAL_STRIKE: ItemData(609 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 9, SC2Race.TERRAN,
+                                       description="""
+                                       Trained units from Barracks are instantly deployed on rally point.
+                                       """),
+    ItemNames.BUNKER_SHRIKE_TURRET: ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10, SC2Race.TERRAN,
+                                             parent_item="Bunker",
+                                             description="""
+                                             Adds an automated turret to Bunkers.
+                                             """),
+    ItemNames.BUNKER_FORTIFIED_BUNKER: ItemData(611 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11, SC2Race.TERRAN,
+                                                parent_item="Bunker",
+                                                description="""
+                                                Bunkers have more life.
+                                                """),
+    ItemNames.PLANETARY_FORTRESS: ItemData(612 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12, SC2Race.TERRAN,
+                                           classification=ItemClassification.progression,
+                                           description="""
+                                           Allows Command Centers to upgrade into a defensive structure with a turret and additional armor.
+                                           Can't use Lift Off, MULE and Scanner Sweep upgraded to a Planetary Fortress.
+                                           """),
+    ItemNames.PERDITION_TURRET: ItemData(613 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 13, SC2Race.TERRAN,
+                                         classification=ItemClassification.progression,
+                                         description="""
+                                         Automated defensive turret. Burrows down while no enemies are nearby.
+                                         """),
+    ItemNames.PREDATOR: ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14, SC2Race.TERRAN,
+                                 classification=ItemClassification.filler,
+                                 description="""
+                                 Anti-infantry specialist that deals area damage with each attack.
+                                 """),
+    ItemNames.HERCULES: ItemData(615 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 15, SC2Race.TERRAN,
+                                 classification=ItemClassification.progression,
+                                 description="""
+                                 Massive transport ship. 
+                                 """),
+    ItemNames.CELLULAR_REACTOR: ItemData(616 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16, SC2Race.TERRAN,
+                                         description="""
+                                         All Terran spellcasters get +100 starting and maximum energy.
+                                         """),
+    ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL: ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 4,
+                                                           SC2Race.TERRAN, quantity=2,
+                                                           description="""
+                                                           Allows Terran mechanical units to regenerate health while not in combat.
+                                                           Each level increases life regeneration speed.
+                                                           """),
+    ItemNames.HIVE_MIND_EMULATOR: ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18, SC2Race.TERRAN,
+                                           ItemClassification.progression,
+                                           description="""
+                                           Defensive structure. Allows to Mind Control nearby enemy Zerg units.
+                                           """),
+    ItemNames.PSI_DISRUPTER: ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, SC2Race.TERRAN,
+                                      classification=ItemClassification.progression,
+                                      description="""
+                                      Defensive structure. Slows down movement and attack speed of nearby enemy Zerg units. 
+                                      """),
 
     ItemNames.ZEALOT: ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.PROTOSS, classification=ItemClassification.progression),
     ItemNames.STALKER: ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.PROTOSS, classification=ItemClassification.progression),
