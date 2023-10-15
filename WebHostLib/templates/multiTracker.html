@@ -37,7 +37,7 @@
                                 {% endblock %}
                                 <th class="center-column">Checks</th>
                                 <th class="center-column">&percnt;</th>
-                                <th class="center-column hours">Last<br>Activity</th>
+                                <th class="center-column hours last-activity">Last<br>Activity</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,6 +64,19 @@
                                 </tr>
                             {%- endfor -%}
                         </tbody>
+                        {% if not self.custom_table_headers() | trim %}
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td>Total</td>
+                                    <td>All Games</td>
+                                    <td>{{ completed_worlds }}/{{ players|length }} Complete</td>
+                                    <td class="center-column">{{ players.values()|sum(attribute='Total') }}/{{ total_locations[team] }}</td>
+                                    <td class="center-column">{{ (players.values()|sum(attribute='Total') / total_locations[team] * 100) | int }}</td>
+                                    <td class="center-column last-activity"></td>
+                                </tr>
+                            </tfoot>
+                        {% endif %}
                     </table>
                 </div>
             {% endfor %}

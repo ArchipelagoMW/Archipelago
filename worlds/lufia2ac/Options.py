@@ -7,9 +7,10 @@ from dataclasses import dataclass
 from itertools import accumulate, chain, combinations
 from typing import Any, cast, Dict, Iterator, List, Mapping, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
-from Options import AssembleOptions, Choice, DeathLink, ItemDict, OptionDict, Range, SpecialRange, TextChoice, Toggle
-from .Items import ItemType, l2ac_item_table
+from Options import AssembleOptions, Choice, DeathLink, ItemDict, OptionDict, PerGameCommonOptions, Range, \
+    SpecialRange, TextChoice, Toggle
 from .Enemies import enemy_name_to_sprite
+from .Items import ItemType, l2ac_item_table
 
 if TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -818,7 +819,7 @@ class ShufflePartyMembers(Toggle):
 
 
 @dataclass
-class L2ACOptions:
+class L2ACOptions(PerGameCommonOptions):
     blue_chest_chance: BlueChestChance
     blue_chest_count: BlueChestCount
     boss: Boss
