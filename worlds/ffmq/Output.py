@@ -35,7 +35,8 @@ def generate_output(self, output_directory):
                                    "item_name": location.item.name})
 
     def cc(option):
-        return option.current_key.title().replace("_", "").replace("OverworldAndDungeons", "OverworldDungeons")
+        return option.current_key.title().replace("_", "").replace("OverworldAndDungeons",
+            "OverworldDungeons").replace("MobsAndBosses", "MobsBosses").replace("MobsBossesAndDarkKing", "MobsBossesDK")
 
     def tf(option):
         return True if option else False
@@ -74,6 +75,8 @@ def generate_output(self, output_directory):
                    "progressive_formations": cc(self.multiworld.progressive_formations[self.player]),
                    "map_shuffling": cc(self.multiworld.map_shuffle[self.player]),
                    "crest_shuffle": tf(self.multiworld.crest_shuffle[self.player]),
+                   "enemizer_groups": cc(self.multiworld.enemizer_groups[self.player]),
+                   "shuffle_res_weak_type": tf(self.multiworld.shuffle_res_weak_types[self.player])
                }
     for option, data in option_writes.items():
         options["Final Fantasy Mystic Quest"][option][data] = 1
@@ -83,7 +86,7 @@ def generate_output(self, output_directory):
                               'utf8')
     self.rom_name_available_event.set()
 
-    setup = {"version": "1.4", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
+    setup = {"version": "1.5", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
              hex(self.multiworld.per_slot_randoms[self.player].randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
 
     starting_items = [output_item_name(item) for item in self.multiworld.precollected_items[self.player]]

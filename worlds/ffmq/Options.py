@@ -131,6 +131,21 @@ class EnemizerAttacks(Choice):
     default = 0
 
 
+class EnemizerGroups(Choice):
+    """Set which enemy groups will be affected by Enemizer."""
+    display_name = "Enemizer Groups"
+    option_mobs_only = 0
+    option_mobs_and_bosses = 1
+    option_mobs_bosses_and_dark_king = 2
+    default = 1
+
+
+class ShuffleResWeakType(Toggle):
+    """Resistance and Weakness types are shuffled for all enemies."""
+    display_name = "Shuffle Resistance/Weakness Types"
+    default = 0
+
+
 class ShuffleEnemiesPositions(Toggle):
     """Instead of their original position in a given map, enemies are randomly placed."""
     display_name = "Shuffle Enemies' Positions"
@@ -244,6 +259,8 @@ option_definitions = {
     "bosses_scaling_lower": BossesScalingLower,
     "bosses_scaling_upper": BossesScalingUpper,
     "enemizer_attacks": EnemizerAttacks,
+    "enemizer_groups": EnemizerGroups,
+    "shuffle_res_weak_types": ShuffleResWeakType,
     "shuffle_enemies_position": ShuffleEnemiesPositions,
     "progressive_formations": ProgressiveFormations,
     "doom_castle_mode": DoomCastle,
