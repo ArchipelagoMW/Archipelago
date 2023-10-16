@@ -12,7 +12,7 @@ Comme nous utilisons BizHawk, ce guide s'applique uniquement aux systèmes Windo
    - Les utilisateurs Windows doivent d'abord exécuter le programme d'installation des prérequis, qui peut également être trouvé sur le lien ci-dessus.
 - Le client Archipelago intégré, qui peut être installé [ici](https://github.com/ArchipelagoMW/Archipelago/releases)
    (sélectionnez `Pokemon Client` lors de l'installation).
-- Fichiers ROM Pokémon Rouge et/ou Bleu. La communauté de l'Archipelago ne peut pas les fournir.
+- Fichiers ROM Pokémon Rouge et/ou Bleu. La communauté Archipelago ne peut pas les fournir.
 
 ## Logiciel en option
 
