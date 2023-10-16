@@ -54,8 +54,10 @@ class WL4Web(WebWorld):
 class WL4World(World):
     '''
     A golden pyramid has been discovered deep in the jungle, and Wario has set
-    out to rob it. But to make off with its legendary treasure, he has to first
-    defeat the five passage bosses and the pyramid's evil ruler, the Golden Diva.
+    out to rob it. But when he enters, he finds the Golden Diva's curse has
+    taken away his moves! To escape with his life and more importantly, the
+    treasure, Wario must find his abilities to defeat the passage bosses and
+    the Golden Diva.
     '''
 
     game: str = 'Wario Land 4'
