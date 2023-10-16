@@ -355,6 +355,13 @@
         "Submarine Ride",
         "River Rafts"
     ],
+    "stalls": [
+        "Food Stall",
+        "Drink Stall",
+        "Shop",
+        "Information Kiosk",
+        "Toilets"
+    ],
     "non_starters": [
         "Enterprise",
         "Launched Freefall",

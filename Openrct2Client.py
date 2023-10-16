@@ -140,7 +140,7 @@ class OpenRCT2Socket:
 
 
     def _send(self, data):
-        time.sleep(0.3)
+        # time.sleep(0.3)
         try:
             if data:
                 print("DATA")

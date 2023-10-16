@@ -37,7 +37,8 @@ class OpenRCT2World(World):
             "transport_rides": item_info["transport_rides"],
             "gentle_rides": item_info["gentle_rides"],
             "thrill_rides": item_info["thrill_rides"],
-            "water_rides": item_info["water_rides"]
+            "water_rides": item_info["water_rides"],
+            "rides": item_info["rides"]
         }
     
     def __init__(self, multiworld, player: int):
@@ -199,13 +200,11 @@ class OpenRCT2World(World):
             self.multiworld.regions.append(level)
             item += 8
             current_level += 1
-        if ((logic_length) % 8)  != 0:
-            level = Region("OpenRCT2_Level_" + str(current_level), self.player, self.multiworld)
-            level.locations = locations_to_region(item, (logic_length - 1),level)
-            self.multiworld.regions.append(level)
-        else:
-            current_level -= 1
-
+        
+        level = Region("OpenRCT2_Level_" + str(current_level), self.player, self.multiworld)
+        level.locations = locations_to_region(item, (logic_length - 1),level)
+        self.multiworld.regions.append(level)
+        
         victory = Region("Victory", self.player, self.multiworld)
         victory.locations = [OpenRCT2Location(self.player,"Victory",None,victory)]
         self.multiworld.regions.append(victory)
@@ -216,9 +215,27 @@ class OpenRCT2World(World):
         while count < current_level:
             region = self.multiworld.get_region("OpenRCT2_Level_" + str(count), self.player)
             region.connect(self.multiworld.get_region("OpenRCT2_Level_" + str(count + 1) ,self.player))
+            num_rides = 0
+            if count == 0:
+                pass
+            elif count == 1:#3 total items, we want 2 to be rides
+                num_rides = 2
+            elif count == 2:#7 total items, we want 4 rides and a food stall
+                num_rides = 4
+                add_rule(region.exits[0], lambda state: state.has("Food Stall", self.player))
+            elif count == 3:#15 total items, we want 10 rides and now a drink stall
+                num_rides = 10
+                add_rule(region.exits[0], lambda state: state.has("Drink Stall", self.player, 1))
+            elif count == 4:#23 total items, we want 15 rides and now toilets
+                num_rides = 15
+                add_rule(region.exits[0], lambda state: state.has("Toilets", self.player, 1))
+            add_rule(region.exits[0], lambda state: state.has_group("rides", self.player, num_rides))
             count += 1
         final_region = self.multiworld.get_region("OpenRCT2_Level_" + str(current_level), self.player)
         final_region.connect(victory)
+
+        # add_rule(self.multiworld.get_region("OpenRCT2_Level_2",self.player).exits[0], lambda state: state.has("Food Stall", self.player,1))
+
 
 
     def create_items(self) -> None:
@@ -260,8 +277,8 @@ class OpenRCT2World(World):
         difficulty_modifier = 0
         difficulty_minimum = 0
         difficulty_maximum = 0
-        minimum_price = 500
-        maximum_price = 500
+        base_price = 500
+        final_price = 500
 
 
         if difficulty == 0: #very_easy
@@ -283,28 +300,45 @@ class OpenRCT2World(World):
 
         if length == 0: #speedrun
             length_modifier = .2
-            maximum_price = 25000
+            final_price = 100000
         if length == 1: #normal
             length_modifier = .4
-            maximum_price = 50000
+            final_price = 250000
         if length == 2: #lengthy
             length_modifier = .6
-            maximum_price = 75000
+            final_price = 500000
         if length == 3: #marathon
             length_modifier = .9
-            maximum_price = 100000
+            final_price = 1000000
             
-
+        print("This is the final price: " + str(final_price))
         possible_prereqs = [self.starting_ride]
         queued_prereqs = [] #Once we're finished with the given region, we'll add the queued prereqs to the possibles list
         prereq_counter = 0
+        total_price = base_price * len(logic_table)
+        average_price = final_price/len(logic_table)
+        if final_price < total_price:#If everything being $500 is too expensive,
+            base_price = final_price/len(logic_table)#Make everything cheaper
+        print("This is the base price: " + str(base_price))
+        total_base = base_price * len(logic_table)
+        remaining_amount = final_price - total_base
+        increment = remaining_amount / (len(logic_table) * (len(logic_table) + 1) / 2)
+        print("This is the increment: " + str(increment))
+        print("with this many items: " + str(len(logic_table)))
+        current_price = base_price
         for number, item in enumerate(logic_table):
             unlock = {"LocationID": number, "Price": 0, "Lives": 0, "RidePrereq": []}
             if random.random() < 0.95 or number == 0: #95 perecnt of locations will have a cash price
-                unlock["Price"] = int(((maximum_price - minimum_price) * (number / len(logic_table))) + minimum_price)
+                current_price = base_price + increment * number
+                unlock["Price"] = int(current_price)
                 # print(unlock["Price"])
             else:# Everything else will cost lives. The Elder Gods will be pleased
-                unlock["Lives"] = random.randint(50,1000)
+                if number < 7:
+                    unlock["Lives"] = random.randint(25,150)
+                elif number < 22:
+                    unlock["Lives"] = random.randint(50,300)
+                else:
+                    unlock["Lives"] = random.randint(50,1000)
             if number != 0 and unlock["Lives"] == 0: #We'll never have a prereq on the first item or on blood prices
                 if random.random() < length_modifier: #Determines if we have a prereq
                     if random.random() < difficulty_modifier: #Determines if the prereq is a specific ride
@@ -413,7 +447,7 @@ class OpenRCT2World(World):
 
     def create_item(self, item:str) -> OpenRCT2Item:
         classification = ItemClassification.useful
-        if item in item_info["rides"] or item in item_info["progression_rules"]:
+        if item in item_info["rides"] or item in item_info["progression_rules"] or item in item_info["stalls"]:
             classification = ItemClassification.progression
         if item in item_info["filler_items"]:
             classification = ItemClassification.filler
