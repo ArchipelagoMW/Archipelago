@@ -923,10 +923,10 @@ for location_name, location_table in location_tables.items():
     location_dictionary.update({location_data.name: location_data for location_data in location_table})
 
     # Allow entire locations to be added to location sets.
-    location_name_groups[location_name] = frozenset([
-        location_data.name for location_data in location_table
-        if not location_data.name.startswith("Progressive Items")
-    ])
+    if not location_name.startswith("Progressive Items"):
+        location_name_groups[location_name] = frozenset([
+            location_data.name for location_data in location_table
+        ])
 
 location_name_groups["Painted World of Ariandel"] = \
     location_name_groups["Painted World of Ariandel 1"].union(location_name_groups["Painted World of Ariandel 2"])
