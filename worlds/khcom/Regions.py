@@ -202,6 +202,9 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 12"].locations.append("Darkside")
     regions["Floor 12"].locations.append("Key of Beginnings F12")
     regions["Floor 12"].locations.append("Key of Guidance F12")
+    #Post Floor Boss
+    regions["Floor 12"].locations.append("Riku")
+    regions["Floor 12"].locations.append("Larxene")
     #Room of Rewards
     regions["Floor 12"].locations.append("Megalixir")
     
@@ -212,8 +215,6 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 13"].locations.append("Axel")
     regions["Floor 13"].locations.append("Marluxia")
     regions["Floor 13"].locations.append("Key of Beginnings F13")
-    regions["Floor 13"].locations.append("Key of Guidance F13")
-    regions["Floor 13"].locations.append("Key to Truth F13")
     #Enemy Cards
     regions["Floor 13"].locations.append("Neoshadow")
 
@@ -237,12 +238,12 @@ def create_regions(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Warp", player).connect(multiworld.get_region("Warp", player))
 
 
-def create_region(multiworld: MultiWorld, player: int, name: str, data: RLRegionData):
+def create_region(multiworld: MultiWorld, player: int, name: str, data: KHCOMRegionData):
     region = Region(name, player, multiworld)
     if data.locations:
         for loc_name in data.locations:
             loc_data = location_table.get(loc_name)
-            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, region)
+            location = KHCOMLocation(player, loc_name, loc_data.code if loc_data else None, region)
             region.locations.append(location)
 
     if data.region_exits:

@@ -134,7 +134,6 @@ location_table: Dict[str, KHCOMLocationData] = {
     "Key of Guidance F08":   KHCOMLocationData("Progression", 267_4108),
     "Key of Guidance F09":   KHCOMLocationData("Progression", 267_4109),
     "Key of Guidance F12":   KHCOMLocationData("Progression", 267_4112),
-    "Key of Guidance F13":   KHCOMLocationData("Progression", 267_4113),
     "Key to Truth F01":      KHCOMLocationData("Progression", 267_4201),
     "Key to Truth F02":      KHCOMLocationData("Progression", 267_4202),
     "Key to Truth F03":      KHCOMLocationData("Progression", 267_4203),
@@ -144,7 +143,6 @@ location_table: Dict[str, KHCOMLocationData] = {
     "Key to Truth F07":      KHCOMLocationData("Progression", 267_4207),
     "Key to Truth F08":      KHCOMLocationData("Progression", 267_4208),
     "Key to Truth F09":      KHCOMLocationData("Progression", 267_4209),
-    "Key to Truth F13":      KHCOMLocationData("Progression", 267_4210),
 }
 
 event_location_table: Dict[str, KHCOMLocationData] = {
