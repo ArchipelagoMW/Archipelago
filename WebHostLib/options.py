@@ -84,7 +84,7 @@ def create():
                     "max": option.range_end,
                 }
 
-                if issubclass(option, Options.SpecialRange):
+                if issubclass(option, Options.NamedRange):
                     game_options[option_name]["type"] = 'special_range'
                     game_options[option_name]["value_names"] = {}
                     for key, val in option.special_range_names.items():
