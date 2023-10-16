@@ -19,16 +19,15 @@ helpers: Mapping[str, RequiredItem] = {
 
 def needs_all(player: int, requirements: Iterable[RequiredItem]) -> AccessRule:
     def has_requirements(state: CollectionState):
-        for requirement in requirements:
+        def has_item(requirement: RequiredItem):
             requirement = helpers.get(requirement, requirement)
             if isinstance(requirement, str):
                 item = requirement
                 count = 1
             else:
                 item, count = requirement
-            if not state.has(item, player, count):
-                return False
-        return True
+            return state.has(item, player, count)
+        return all(map(has_item, requirements))
     return has_requirements
 
 
