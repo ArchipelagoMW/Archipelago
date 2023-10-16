@@ -24,11 +24,11 @@ def get_items_by_category(category: str) -> Dict[str, KHCOMItemData]:
     return item_dict
 
 
-item_table: Dict[str, RLItemData] = {
+item_table: Dict[str, KHCOMItemData] = {
     #Battle Cards
-    "Bronze Card Pack":      KHCOMItemData("Card Packs",         266_1001, ItemClassification.filler,      70, 1),
-    "Silver Card Pack":      KHCOMItemData("Card Packs",         266_1002, ItemClassification.useful,      40, 1),
-    "Gold Card Pack":        KHCOMItemData("Card Packs",         266_1003, ItemClassification.useful,      20, 1),
+    "Bronze Card Pack":      KHCOMItemData("Filler",             266_1001, ItemClassification.filler, weight=5),
+    "Silver Card Pack":      KHCOMItemData("Filler",             266_1002, ItemClassification.filler, weight=3),
+    "Gold Card Pack":        KHCOMItemData("Filler",             266_1003, ItemClassification.filler, weight=1),
     
     #Enemy Battle Cards
     "Shadow":                KHCOMItemData("Enemy Battle Cards", 266_2001, ItemClassification.useful,      1,  1),
@@ -142,5 +142,5 @@ item_table: Dict[str, RLItemData] = {
 
 }
 
-event_item_table: Dict[str, RLItemData] = {
+event_item_table: Dict[str, KHCOMItemData] = {
 }

@@ -30,11 +30,11 @@ class KHCOMWorld(World):
     Sora on his journey through Castle Oblivion to find Riku and Kairi.
     """
     game = "Kingdom Hearts Chain of Memories"
-    option_definitions = kh_options
+    option_definitions = khcom_options
     topology_present = True
     data_version = 4
     required_client_version = (0, 3, 5)
-    web = KHWeb()
+    web = KHCOMWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
@@ -82,7 +82,3 @@ class KHCOMWorld(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
-        self._place_events()
-
-    def _place_events(self):
-        continue
