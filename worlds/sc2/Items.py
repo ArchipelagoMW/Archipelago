@@ -16,7 +16,7 @@ class ItemData(typing.NamedTuple):
     quantity: int = 1
     parent_item: typing.Optional[str] = None
     origin: typing.Set[str] = {"wol"}
-    description: str = None
+    description: typing.Optional[str] = None
 
 
 class StarcraftItem(Item):
@@ -50,6 +50,7 @@ STIMPACK_LARGE_DESCRIPTION = STIMPACK_TEMPLATE.format(STIMPACK_LARGE_COST, STIMP
 SMART_SERVOS_DESCRIPTION = inspect.cleandoc("""
     Increases transformation speed between modes.
 """)
+INTERNAL_TECH_MODULE_DESCRIPTION = "{} can be trained from a {} without an attached Tech Lab"
 
 
 item_table = {
@@ -185,7 +186,7 @@ item_table = {
                  description=inspect.cleandoc(
                      f"""
                      Increases damage of Terran infantry units. 
-                     ${WEAPON_ARMOR_UPGRADE_NOTE}
+                     {WEAPON_ARMOR_UPGRADE_NOTE}
                      """
                  )),
     ItemNames.PROGRESSIVE_TERRAN_INFANTRY_ARMOR:
@@ -194,7 +195,7 @@ item_table = {
                  description=inspect.cleandoc(
                      f"""
                      Increases armor of Terran infantry units. 
-                     ${WEAPON_ARMOR_UPGRADE_NOTE}
+                     {WEAPON_ARMOR_UPGRADE_NOTE}
                      """
                  )),
     ItemNames.PROGRESSIVE_TERRAN_VEHICLE_WEAPON:
@@ -203,7 +204,7 @@ item_table = {
                  description=inspect.cleandoc(
                      f"""
                      Increases damage of Terran vehicle units. 
-                     ${WEAPON_ARMOR_UPGRADE_NOTE}
+                     {WEAPON_ARMOR_UPGRADE_NOTE}
                      """
                  )),
     ItemNames.PROGRESSIVE_TERRAN_VEHICLE_ARMOR:
@@ -212,7 +213,7 @@ item_table = {
                  description=inspect.cleandoc(
                      f"""
                      Increases armor of Terran vehicle units. 
-                     ${WEAPON_ARMOR_UPGRADE_NOTE}
+                     {WEAPON_ARMOR_UPGRADE_NOTE}
                      """
                  )),
     ItemNames.PROGRESSIVE_TERRAN_SHIP_WEAPON:
@@ -221,7 +222,7 @@ item_table = {
                  description=inspect.cleandoc(
                      f"""
                      Increases damage of Terran starship units. 
-                     ${WEAPON_ARMOR_UPGRADE_NOTE}
+                     {WEAPON_ARMOR_UPGRADE_NOTE}
                      """
                  )),
     ItemNames.PROGRESSIVE_TERRAN_SHIP_ARMOR:
@@ -230,7 +231,7 @@ item_table = {
                  description=inspect.cleandoc(
                      f"""
                      Increases armor of Terran starship units. 
-                     ${WEAPON_ARMOR_UPGRADE_NOTE}
+                     {WEAPON_ARMOR_UPGRADE_NOTE}
                      """
                  )),
     # Upgrade bundle 'number' values are used as indices to get affected 'number's
@@ -288,7 +289,7 @@ item_table = {
     ItemNames.MEDIC_ADVANCED_MEDIC_FACILITIES:
         ItemData(210 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.MEDIC,
-                 description="Medics can be trained without a Tech Lab attached to Barracks."),
+                 description=INTERNAL_TECH_MODULE_DESCRIPTION.format("Medics", "Barracks")),
     ItemNames.MEDIC_STABILIZER_MEDPACKS:
         ItemData(211 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 11, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent_item=ItemNames.MEDIC,
@@ -379,7 +380,7 @@ item_table = {
     ItemNames.MARAUDER_INTERNAL_TECH_MODULE:
         ItemData(231 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 28, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.MARAUDER, origin={"nco"},
-                 description="Marauders can be trained without a Tech Lab attached to Barracks."),
+                 description=INTERNAL_TECH_MODULE_DESCRIPTION.format("Marauders", "Barracks")),
 
     # Items from new mod
     ItemNames.REAPER_PROGRESSIVE_STIMPACK:
@@ -420,7 +421,7 @@ item_table = {
                  description=inspect.cleandoc(
                      """
                      Increases movement speed in Hellion mode.
-                     In Hellbat mode, launches the Hellbat toward enemy ground units and birefly stuns them.
+                     In Hellbat mode, launches the Hellbat toward enemy ground units and briefly stuns them.
                      """
                  )),
     ItemNames.HELLION_PROGRESSIVE_STIMPACK:
@@ -455,7 +456,7 @@ item_table = {
                  classification=ItemClassification.filler, parent_item=ItemNames.DIAMONDBACK, origin={"ext"},
                  description=inspect.cleandoc(
                      """
-                     While not attacking, the Diamonback charges its weapon. 
+                     While not attacking, the Diamondback charges its weapon. 
                      The next attack does 10 additional damage.
                      """
                  )),
@@ -490,8 +491,8 @@ item_table = {
                  classification=ItemClassification.progression, parent_item=ItemNames.SIEGE_TANK, origin={"ext"},
                  description=inspect.cleandoc(
                      """
-                     Increases Siege Tank attack range while staying in Siege Mode.
-                     Up to 5 additional range.
+                     Increases the Siege Tank's attack range by 1 every 3 seconds while in Siege Mode, 
+                     up to a maximum of 5 additional range.
                      """
                  )),
     ItemNames.SIEGE_TANK_LASER_TARGETING_SYSTEM:
@@ -501,11 +502,11 @@ item_table = {
     ItemNames.SIEGE_TANK_ADVANCED_SIEGE_TECH:
         ItemData(273 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, SC2Race.TERRAN,
                  parent_item=ItemNames.SIEGE_TANK, origin={"ext"},
-                 description="Siege Tanks get additional 3 armor while in Siege Mode"),
+                 description="Siege Tanks gain +3 armor in Siege Mode."),
     ItemNames.SIEGE_TANK_INTERNAL_TECH_MODULE:
         ItemData(274 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 22, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.SIEGE_TANK, origin={"nco"},
-                 description="Siege Tanks can be trained without a Tech Lab attached to Factory."),
+                 description=INTERNAL_TECH_MODULE_DESCRIPTION.format("Siege Tanks", "Factory")),
     ItemNames.PREDATOR_OPTIMIZED_LOGISTICS:
         ItemData(275 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 23, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.PREDATOR, origin={"ext"},
@@ -517,8 +518,7 @@ item_table = {
     ItemNames.MEDIVAC_AFTERBURNERS:
         ItemData(277 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 25, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.MEDIVAC, origin={"ext"},
-                 description="Allows Medivacs a quick burst of movement speed."
-                 ),
+                 description="Ability. Temporarily increases the Medivac's movement speed by 70%."),
     ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY:
         ItemData(278 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 26, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent_item=ItemNames.WRAITH, origin={"ext"},
@@ -540,11 +540,11 @@ item_table = {
     ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER:
         ItemData(300 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 0, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.HELLION,
-                 description="Doubles the width of Hellion's flame attack."),
+                 description="Doubles the width of the Hellion's flame attack."),
     ItemNames.HELLION_THERMITE_FILAMENTS:
         ItemData(301 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 1, SC2Race.TERRAN,
                  parent_item=ItemNames.HELLION,
-                 description="Hellions do additional 10 damage to Light Armor."),
+                 description="Hellions do an additional 10 damage to Light Armor."),
     ItemNames.SPIDER_MINE_CERBERUS_MINE:
         ItemData(302 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2, SC2Race.TERRAN,
                  classification=ItemClassification.filler,
@@ -572,7 +572,7 @@ item_table = {
     ItemNames.SIEGE_TANK_MAELSTROM_ROUNDS:
         ItemData(308 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 8, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent_item=ItemNames.SIEGE_TANK,
-                 description="Siege Tanks do additional 40 damage to primary target in Siege Mode."),
+                 description="Siege Tanks do an additional 40 damage to the primary target in Siege Mode."),
     ItemNames.SIEGE_TANK_SHAPED_BLAST:
         ItemData(309 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 9, SC2Race.TERRAN,
                  parent_item=ItemNames.SIEGE_TANK,
@@ -580,11 +580,11 @@ item_table = {
     ItemNames.MEDIVAC_RAPID_DEPLOYMENT_TUBE:
         ItemData(310 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 10, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.MEDIVAC,
-                 description="The Medivac deploys loaded troops almost instantly."),
+                 description="Medivacs deploy loaded troops almost instantly."),
     ItemNames.MEDIVAC_ADVANCED_HEALING_AI:
         ItemData(311 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 11, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.MEDIVAC,
-                 description="The Medivac can heal two targets at once"),
+                 description="Medivacs can heal two targets at once."),
     ItemNames.WRAITH_TOMAHAWK_POWER_CELLS:
         ItemData(312 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 12, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.WRAITH,
@@ -592,7 +592,7 @@ item_table = {
     ItemNames.WRAITH_DISPLACEMENT_FIELD:
         ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 13, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.WRAITH,
-                 description="Wraith evades 20% of incoming attacks while cloaked."),
+                 description="Wraiths evade 20% of incoming attacks while cloaked."),
     ItemNames.VIKING_RIPWAVE_MISSILES:
         ItemData(314 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 14, SC2Race.TERRAN,
                  parent_item=ItemNames.VIKING,
@@ -623,7 +623,7 @@ item_table = {
                  classification=ItemClassification.filler, parent_item=ItemNames.BATTLECRUISER,
                  description=inspect.cleandoc(
                      """
-                     Spell. For 20 seconds Battlecruiser gains a shield that can absorb up to 200 damage.
+                     Spell. For 20 seconds the Battlecruiser gains a shield that can absorb up to 200 damage.
                      """
                  )),
     ItemNames.GHOST_OCULAR_IMPLANTS:
@@ -685,7 +685,7 @@ item_table = {
     ItemNames.BANSHEE_INTERNAL_TECH_MODULE:
         ItemData(352 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 2, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.BANSHEE, origin={"nco"},
-                 description="Banshees can be trained without a Tech Lab attached to Starport."),
+                 description=INTERNAL_TECH_MODULE_DESCRIPTION.format("Banshees", "Starport")),
     ItemNames.BATTLECRUISER_TACTICAL_JUMP:
         ItemData(353 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 3, SC2Race.TERRAN,
                  parent_item=ItemNames.BATTLECRUISER, origin={"nco", "ext"},
@@ -704,7 +704,7 @@ item_table = {
                  description=inspect.cleandoc(
                      """
                      Battlecruisers can attack while moving, 
-                     do the same damage to both ground and air targets and fire faster.
+                     do the same damage to both ground and air targets, and fire faster.
                      """
                  )),
     ItemNames.BATTLECRUISER_OPTIMIZED_LOGISTICS:
@@ -714,7 +714,7 @@ item_table = {
     ItemNames.BATTLECRUISER_INTERNAL_TECH_MODULE:
         ItemData(357 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 7, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.BATTLECRUISER, origin={"nco"},
-                 description="Battlecruisers can be built from a Starport without an attached Tech Lab."),
+                 description=INTERNAL_TECH_MODULE_DESCRIPTION.format("Battlecruisers", "Starport")),
     ItemNames.GHOST_EMP_ROUNDS:
         ItemData(358 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 8, SC2Race.TERRAN,
                  parent_item=ItemNames.GHOST, origin={"ext"},
@@ -738,7 +738,7 @@ item_table = {
                  description=inspect.cleandoc(
                      f"""
                      Level 1: Allows Thors to transform in order to use an alternative air attack.
-                     Level 2: ${SMART_SERVOS_DESCRIPTION}
+                     Level 2: {SMART_SERVOS_DESCRIPTION}
                      """
                  )),
     ItemNames.RAVEN_BIO_MECHANICAL_REPAIR_DRONE:
@@ -777,7 +777,7 @@ item_table = {
     ItemNames.RAVEN_INTERNAL_TECH_MODULE:
         ItemData(369 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 19, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.RAVEN, origin={"nco"},
-                 description="Ravens can be trained without a Tech Lab attached to Starport."),
+                 description=INTERNAL_TECH_MODULE_DESCRIPTION.format("Ravens", "Starport")),
     ItemNames.SCIENCE_VESSEL_EMP_SHOCKWAVE:
         ItemData(370 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 20, SC2Race.TERRAN,
                  parent_item=ItemNames.SCIENCE_VESSEL, origin={"bw"},
@@ -840,7 +840,7 @@ item_table = {
     ItemNames.VALKYRIE_AFTERBURNERS:
         ItemData(382 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 22, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.VALKYRIE, origin={"ext"},
-                 description="Temporary increases the Valkyrie's movement speed by 70%."),
+                 description="Ability. Temporarily increases the Valkyries's movement speed by 70%."),
 
     ItemNames.BUNKER:
         ItemData(400 + SC2WOL_ITEM_ID_OFFSET, "Building", 0, SC2Race.TERRAN,
