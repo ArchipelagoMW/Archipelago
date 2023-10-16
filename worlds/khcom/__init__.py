@@ -44,7 +44,7 @@ class KHCOMWorld(World):
         return getattr(self.multiworld, name)[self.player]
 
     def fill_slot_data(self) -> dict:
-        return {option_name: self.get_setting(option_name).value for option_name in kh_options}
+        return {option_name: self.get_setting(option_name).value for option_name in khcom_options}
 
     def create_items(self):
         item_pool: List[KHCOMItem] = []
