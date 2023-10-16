@@ -49,10 +49,6 @@ guard8 = write8
 guard16 = write16
 
 
-async def read_single_sequence(ctx: BizHawkContext, address: int, length: int) -> bytes:
-    return (await bizhawk.read(ctx, [read(address, length)]))[0]
-
-
 def next_int(iterator: Iterator[bytes]) -> int:
     return int.from_bytes(next(iterator), 'little')
 
@@ -109,22 +105,26 @@ class WL4Client(BizHawkClient):
 
         bizhawk_ctx = client_ctx.bizhawk_ctx
         try:
-            game_name = (await read_single_sequence(bizhawk_ctx, 0x080000A0, 10)).decode('ascii')
-            if game_name != 'WARIOLANDE':
-                return False
-
-            # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
-            # validating a ROM where there's no slot name to read.
-            try:
-                slot_name_bytes = await read_single_sequence(bizhawk_ctx, get_symbol('PlayerName'), 64)
-                self.rom_slot_name = bytes(filter(None, slot_name_bytes)).decode('utf-8')
-            except UnicodeDecodeError:
-                logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
-                return False
-        except UnicodeDecodeError:
-            return False
+            read_result = iter(await bizhawk.read(bizhawk_ctx, [
+                read(0x080000A0, 10),
+                read(get_symbol('PlayerName'), 64)
+            ]))
         except RequestFailedError:
             return False  # Should verify on the next pass
+
+        game_name = next(read_result).decode('ascii')
+        slot_name_bytes = bytes(filter(None, next(read_result)))
+
+        if game_name != 'WARIOLANDE':
+            return False
+
+        # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
+        # validating a ROM where there's no slot name to read.
+        try:
+            self.rom_slot_name = slot_name_bytes.decode('utf-8')
+        except UnicodeDecodeError:
+            logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
+            return False
 
         client_ctx.game = self.game
         client_ctx.items_handling = 0b101
@@ -145,18 +145,18 @@ class WL4Client(BizHawkClient):
         get_int = functools.partial(int.from_bytes, byteorder='little')
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
-        try:
-            game_mode_address = get_symbol('GlobalGameMode')
-            game_state_address = get_symbol('sGameSeq')
-            wario_stop_flag_address = get_symbol('usWarStopFlg')
-            level_status_address = get_symbol('LevelStatusTable')
-            received_item_count_address = level_status_address + 14  # Collection status for unused Entry level
-            multiworld_state_address = get_symbol('MultiworldState')
-            incoming_item_address = get_symbol('IncomingItemID')
-            item_sender_address = get_symbol('IncomingItemSender')
-            death_link_address = get_symbol('DeathLinkEnabled')
-            wario_health_address = get_symbol('WarioHeart')
+        game_mode_address = get_symbol('GlobalGameMode')
+        game_state_address = get_symbol('sGameSeq')
+        wario_stop_flag_address = get_symbol('usWarStopFlg')
+        level_status_address = get_symbol('LevelStatusTable')
+        received_item_count_address = level_status_address + 14  # Collection status for unused Entry level
+        multiworld_state_address = get_symbol('MultiworldState')
+        incoming_item_address = get_symbol('IncomingItemID')
+        item_sender_address = get_symbol('IncomingItemSender')
+        death_link_address = get_symbol('DeathLinkEnabled')
+        wario_health_address = get_symbol('WarioHeart')
 
+        try:
             read_result = iter(await bizhawk.read(bizhawk_ctx, [
                 read8(game_mode_address),
                 read8(game_state_address),
@@ -167,109 +167,111 @@ class WL4Client(BizHawkClient):
                 read8(death_link_address),
                 read8(wario_health_address),
             ]))
-            game_mode = next_int(read_result)
-            game_state = next_int(read_result)
-            wario_stop_flag = next_int(read_result)
-            item_status = tuple(map(get_int, batches(next(read_result), 4)))
-            multiworld_state = next_int(read_result)
-            received_item_count = next_int(read_result)
-            death_link_flag = next_int(read_result)
-            wario_health = next_int(read_result)
-
-            # Ensure safe state
-            gameplay_state = (game_mode, game_state)
-            safe_states = [
-                (1, 2),  # Passage select
-                (2, 2),  # Playing level
-            ]
-            if gameplay_state not in safe_states:
-                return
-
-            # Turn on death link if it is on, and if the client hasn't overriden it
-            if (death_link_flag
-                    and not client_ctx.death_link.enabled
-                    and not client_ctx.death_link.client_override):
-                await client_ctx.update_death_link(True)
-                client_ctx.death_link.enabled = True
-
-            locations = []
-            game_clear = False
-
-            # Parse item status bits
-            for passage in range(6):
-                for level in range(4):
-                    status_bits = item_status[passage * 6 + level] >> 8
-                    for location in get_level_locations(passage, level):
-                        bit = location_table[location].flag()
-                        location_id = location_name_to_id[location]
-                        if status_bits & bit and location_id in client_ctx.server_locations:
-                            locations.append(location_id)
-
-                # TODO: Boss event flags
-
-            if item_status[Passage.GOLDEN * 6 + 4] & 0x10:
-                game_clear = True
-
-            # Send locations
-            if self.local_checked_locations != locations:
-                self.local_checked_locations = locations
-                await client_ctx.send_msgs([{
-                    'cmd': 'LocationChecks',
-                    'locations': locations
-                }])
-
-            # Send game clear
-            if game_clear and not client_ctx.finished_game:
-                await client_ctx.send_msgs([{
-                    'cmd': 'StatusUpdate',
-                    'status': ClientStatus.CLIENT_GOAL
-                }])
-
-            # TODO: Send tracker event flags
-
-            # Send death link
-            if client_ctx.death_link.enabled:
-                if gameplay_state == (2, 2) and wario_health == 0:
-                    client_ctx.death_link.pending = False
-                    if not client_ctx.death_link.sent_this_death:
-                        client_ctx.death_link.sent_this_death = True
-                        await client_ctx.send_death()
-                else:
-                    client_ctx.death_link.sent_this_death = False
-
-            write_list = []
-            guard_list = [
-                # Ensure game state hasn't changed
-                guard8(game_mode_address, game_mode),
-                guard8(game_state_address, game_state),
-            ]
-
-            if gameplay_state == (2, 2):
-                if wario_stop_flag != 0:
-                    return
-                guard_list.append(guard16(wario_stop_flag_address, 0))
-
-            # Receive death link
-            if client_ctx.death_link.enabled and client_ctx.death_link.pending:
-                client_ctx.death_link.sent_this_death = True
-                write_list.append(write8(wario_health_address, 0))
-
-            # If the game hasn't received all items yet and the game isn't showing the player
-            # another item, then set up the next item message
-            if received_item_count < len(client_ctx.items_received) and multiworld_state == 0:
-                next_item = client_ctx.items_received[received_item_count]
-                next_item_id = next_item.item & 0xFF
-                next_item_sender = encode_str(client_ctx.player_names[next_item.player]) + b'\xFE'
-
-                write_list += [
-                    write8(incoming_item_address, next_item_id),
-                    write(item_sender_address, next_item_sender),
-                    write8(multiworld_state_address, 1),
-                ]
-                guard_list.append(guard8(multiworld_state_address, 0))
-
-            await bizhawk.guarded_write(bizhawk_ctx, write_list, guard_list)
-
         except RequestFailedError:
-            # Exit handler and return to main loop to reconnect
-            pass
+            return
+
+        game_mode = next_int(read_result)
+        game_state = next_int(read_result)
+        wario_stop_flag = next_int(read_result)
+        item_status = tuple(map(get_int, batches(next(read_result), 4)))
+        multiworld_state = next_int(read_result)
+        received_item_count = next_int(read_result)
+        death_link_flag = next_int(read_result)
+        wario_health = next_int(read_result)
+
+        # Ensure safe state
+        gameplay_state = (game_mode, game_state)
+        safe_states = [
+            (1, 2),  # Passage select
+            (2, 2),  # Playing level
+        ]
+        if gameplay_state not in safe_states:
+            return
+
+        # Turn on death link if it is on, and if the client hasn't overriden it
+        if (death_link_flag
+                and not client_ctx.death_link.enabled
+                and not client_ctx.death_link.client_override):
+            await client_ctx.update_death_link(True)
+            client_ctx.death_link.enabled = True
+
+        locations = []
+        game_clear = False
+
+        # Parse item status bits
+        for passage in range(6):
+            for level in range(4):
+                status_bits = item_status[passage * 6 + level] >> 8
+                for location in get_level_locations(passage, level):
+                    bit = location_table[location].flag()
+                    location_id = location_name_to_id[location]
+                    if status_bits & bit and location_id in client_ctx.server_locations:
+                        locations.append(location_id)
+
+            # TODO: Boss event flags
+
+        if item_status[Passage.GOLDEN * 6 + 4] & 0x10:
+            game_clear = True
+
+        # Send locations
+        if self.local_checked_locations != locations:
+            self.local_checked_locations = locations
+            await client_ctx.send_msgs([{
+                'cmd': 'LocationChecks',
+                'locations': locations
+            }])
+
+        # Send game clear
+        if game_clear and not client_ctx.finished_game:
+            await client_ctx.send_msgs([{
+                'cmd': 'StatusUpdate',
+                'status': ClientStatus.CLIENT_GOAL
+            }])
+
+        # TODO: Send tracker event flags
+
+        # Send death link
+        if client_ctx.death_link.enabled:
+            if gameplay_state == (2, 2) and wario_health == 0:
+                client_ctx.death_link.pending = False
+                if not client_ctx.death_link.sent_this_death:
+                    client_ctx.death_link.sent_this_death = True
+                    await client_ctx.send_death()
+            else:
+                client_ctx.death_link.sent_this_death = False
+
+        write_list = []
+        guard_list = [
+            # Ensure game state hasn't changed
+            guard8(game_mode_address, game_mode),
+            guard8(game_state_address, game_state),
+        ]
+
+        if gameplay_state == (2, 2):
+            if wario_stop_flag != 0:
+                return
+            guard_list.append(guard16(wario_stop_flag_address, 0))
+
+        # Receive death link
+        if client_ctx.death_link.enabled and client_ctx.death_link.pending:
+            client_ctx.death_link.sent_this_death = True
+            write_list.append(write8(wario_health_address, 0))
+
+        # If the game hasn't received all items yet and the game isn't showing the player
+        # another item, then set up the next item message
+        if received_item_count < len(client_ctx.items_received) and multiworld_state == 0:
+            next_item = client_ctx.items_received[received_item_count]
+            next_item_id = next_item.item & 0xFF
+            next_item_sender = encode_str(client_ctx.player_names[next_item.player]) + b'\xFE'
+
+            write_list += [
+                write8(incoming_item_address, next_item_id),
+                write(item_sender_address, next_item_sender),
+                write8(multiworld_state_address, 1),
+            ]
+            guard_list.append(guard8(multiworld_state_address, 0))
+
+        try:
+            await bizhawk.guarded_write(bizhawk_ctx, write_list, guard_list)
+        except RequestFailedError:
+            return
