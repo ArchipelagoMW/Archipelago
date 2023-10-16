@@ -654,7 +654,7 @@ item_table = {
     ItemNames.THOR_IMMORTALITY_PROTOCOL:
         ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.THOR,
-                 description="Allows to reconstruct destroyed Thors on field. Costs Vespene Gas."),
+                 description="Allows destroyed Thors to be reconstructed on the field. Costs Vespene Gas."),
     # Items from EE
     ItemNames.LIBERATOR_ADVANCED_BALLISTICS:
         ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, SC2Race.TERRAN,
@@ -691,19 +691,13 @@ item_table = {
                  parent_item=ItemNames.BATTLECRUISER, origin={"nco", "ext"},
                  description=inspect.cleandoc(
                      """
-                     After 6 seconds, warps to target location anywhere on the map. 
-                     Invulnerable while warping.
+                     Allows Battlecruisers to warp to a target location anywhere on the map.
                      """
                  )),
     ItemNames.BATTLECRUISER_CLOAK:
         ItemData(354 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 4, SC2Race.TERRAN,
                  parent_item=ItemNames.BATTLECRUISER, origin={"nco"},
-                 description=inspect.cleandoc(
-                     """
-                     Allows Battlecruiser to use Cloak ability. 
-                     Requires energy to activate and maintain.
-                     """
-                 )),
+                 description="Allows Battlecruisers to use the Cloak ability."),
     ItemNames.BATTLECRUISER_ATX_LASER_BATTERY:
         ItemData(355 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 5, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent_item=ItemNames.BATTLECRUISER, origin={"nco"},
@@ -720,11 +714,16 @@ item_table = {
     ItemNames.BATTLECRUISER_INTERNAL_TECH_MODULE:
         ItemData(357 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 7, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.BATTLECRUISER, origin={"nco"},
-                 description="Battlecruisers can be trained without a Tech Lab attached to Starport."),
+                 description="Battlecruisers can be built from a Starport without an attached Tech Lab."),
     ItemNames.GHOST_EMP_ROUNDS:
         ItemData(358 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 8, SC2Race.TERRAN,
                  parent_item=ItemNames.GHOST, origin={"ext"},
-                 description="Spell. Drains 100 shields and all energy and reveals units in a target area."),
+                 description=inspect.cleandoc(
+                     """
+                     Spell. Does 100 damage to shields and drains all energy from units in the targeted area. 
+                     Cloaked units hit by EMP are revealed for a short time.
+                     """
+                 )),
     ItemNames.GHOST_LOCKDOWN:
         ItemData(359 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 9, SC2Race.TERRAN, 
                  parent_item=ItemNames.GHOST, origin={"bw"},
@@ -738,7 +737,7 @@ item_table = {
                  parent_item=ItemNames.THOR, quantity=2, origin={"ext"},
                  description=inspect.cleandoc(
                      f"""
-                     Level 1: Allows Thors to transform in order to use alternative air attack.
+                     Level 1: Allows Thors to transform in order to use an alternative air attack.
                      Level 2: ${SMART_SERVOS_DESCRIPTION}
                      """
                  )),
@@ -755,7 +754,7 @@ item_table = {
                  parent_item=ItemNames.RAVEN, origin={"nco"},
                  description=inspect.cleandoc(
                      """
-                     Spell. Allows to deploy an advanced Auto-Turret, 
+                     Spell. Allows Ravens to deploy an advanced Auto-Turret, 
                      that can attack enemy ground units in a straight line.
                      """
                  )),
@@ -798,16 +797,11 @@ item_table = {
     ItemNames.CYCLONE_RAPID_FIRE_LAUNCHERS:
         ItemData(373 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 23, SC2Race.TERRAN,
                  parent_item=ItemNames.CYCLONE, origin={"ext"},
-                 description="First 12 shots of Lock On are fired more quickly"),
+                 description="The first 12 shots of Lock On are fired more quickly."),
     ItemNames.LIBERATOR_CLOAK:
         ItemData(374 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 24, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.LIBERATOR, origin={"nco"},
-                 description=inspect.cleandoc(
-                     """
-                     Allows Liberator to use Cloak ability. 
-                     Requires energy to activate and maintain.
-                     """
-                 )),
+                 description="Allows Liberators to use the Cloak ability"),
     ItemNames.LIBERATOR_LASER_TARGETING_SYSTEM:
         ItemData(375 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 25, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.LIBERATOR, origin={"ext"},
@@ -826,7 +820,7 @@ item_table = {
                  description=inspect.cleandoc(
                      """
                      Reduces Sentinel Missile cooldown.
-                     When killed, Widow Mine will launch several missiles at random enemy targets.
+                     When killed, Widow Mines will launch several missiles at random enemy targets.
                      """
                  )),
 
@@ -834,7 +828,7 @@ item_table = {
     ItemNames.VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS:
         ItemData(379 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 17,
                  SC2Race.TERRAN, parent_item=ItemNames.VALKYRIE, origin={"ext"},
-                 description="Valkyrie fires 2 additional rockets each volley."),
+                 description="Valkyries fire 2 additional rockets each volley."),
     ItemNames.VALKYRIE_SHAPED_HULL:
         ItemData(380 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 20, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.VALKYRIE, origin={"ext"},
@@ -842,16 +836,16 @@ item_table = {
     ItemNames.VALKYRIE_BURST_LASERS:
         ItemData(381 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 21, SC2Race.TERRAN,
                  parent_item=ItemNames.VALKYRIE, origin={"ext"},
-                 description="Valkyries are equipped with Burst Lasers to attack ground units."),
+                 description="Equips Valkyries with Burst Lasers to attack ground units."),
     ItemNames.VALKYRIE_AFTERBURNERS:
         ItemData(382 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 22, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.VALKYRIE, origin={"ext"},
-                 description="Allows Valkyries a quick burst of movement speed."),
+                 description="Temporary increases the Valkyrie's movement speed by 70%."),
 
     ItemNames.BUNKER:
         ItemData(400 + SC2WOL_ITEM_ID_OFFSET, "Building", 0, SC2Race.TERRAN,
                  classification=ItemClassification.progression,
-                 description="Defensive structure. Allows to garrison infantry to attack from inside."),
+                 description="Defensive structure. Able to load infantry units, giving them +1 range to their attacks."),
     ItemNames.MISSILE_TURRET:
         ItemData(401 + SC2WOL_ITEM_ID_OFFSET, "Building", 1, SC2Race.TERRAN,
                  classification=ItemClassification.progression,
@@ -891,29 +885,29 @@ item_table = {
 
     ItemNames.ULTRA_CAPACITORS:
         ItemData(600 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 0, SC2Race.TERRAN,
-                 description="Increases attack speed of all Terran units with each weapon upgrade."),
+                 description="Increases attack speed of units by 5% per weapon upgrade."),
     ItemNames.VANADIUM_PLATING:
         ItemData(601 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 1, SC2Race.TERRAN,
-                 description="Increases life of all Teran units with each armor upgrade."),
+                 description="Increases the life of units by 5% per armor upgrade."),
     ItemNames.ORBITAL_DEPOTS:
         ItemData(602 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 2, SC2Race.TERRAN,
                  description="Supply depots are built instantly."),
     ItemNames.MICRO_FILTERING:
         ItemData(603 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 3, SC2Race.TERRAN,
-                 description="Increases Vespene Gas harvesting speed."),
+                 description="Refineries produce Vespene gas 25% faster."),
     ItemNames.AUTOMATED_REFINERY:
         ItemData(604 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 4, SC2Race.TERRAN,
-                 description="Refineries don't require harvesters to operate"),
+                 description="Eliminates the need for SCVs in vespene gas production."),
     ItemNames.COMMAND_CENTER_REACTOR:
         ItemData(605 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 5, SC2Race.TERRAN,
                  description="Command Centers can train two SCVs at once."),
     ItemNames.RAVEN:
         ItemData(606 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 6, SC2Race.TERRAN,
-                 description="Aerial Support unit."),
+                 description="Aerial Caster unit."),
     ItemNames.SCIENCE_VESSEL:
         ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7, SC2Race.TERRAN,
                  classification=ItemClassification.progression,
-                 description="Aerial Support unit. Can repair mechanical units."),
+                 description="Aerial Caster unit. Can repair mechanical units."),
     ItemNames.TECH_REACTOR:
         ItemData(608 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 8, SC2Race.TERRAN,
                  description="Merges Tech Labs and Reactors into one add on structure to provide both functions."),
@@ -934,7 +928,7 @@ item_table = {
                  description=inspect.cleandoc(
                      """
                      Allows Command Centers to upgrade into a defensive structure with a turret and additional armor.
-                     Can't use Lift Off, MULE and Scanner Sweep upgraded to a Planetary Fortress.
+                     Planetary Fortresses cannot Lift Off, or cast Orbital Command spells.
                      """
                  )),
     ItemNames.PERDITION_TURRET:
@@ -963,11 +957,11 @@ item_table = {
     ItemNames.HIVE_MIND_EMULATOR:
         ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18, SC2Race.TERRAN,
                  ItemClassification.progression,
-                 description="Defensive structure. Allows to Mind Control nearby enemy Zerg units."),
+                 description="Defensive structure. Can permanently Mind Control Zerg units."),
     ItemNames.PSI_DISRUPTER:
         ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, SC2Race.TERRAN,
                  classification=ItemClassification.progression,
-                 description="Defensive structure. Slows down movement and attack speed of nearby enemy Zerg units."),
+                 description="Defensive structure. Slows the attack and movement speeds of all nearby Zerg units."),
 
     ItemNames.ZEALOT: ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.PROTOSS, classification=ItemClassification.progression),
     ItemNames.STALKER: ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.PROTOSS, classification=ItemClassification.progression),
