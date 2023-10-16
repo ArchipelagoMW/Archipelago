@@ -700,6 +700,10 @@ class SpecialRange(Range):
     special_range_cutoff = 0
     special_range_names: typing.Dict[str, int] = {}
     """Special Range names have to be all lowercase as matching is done with text.lower()"""
+    
+    def __init__(self, value: int):
+        assert self.special_range_cutoff >= self.range_start, f"special_range_cutoff less than range_start for {self}"
+        super().__init__(value)
 
     @classmethod
     def from_text(cls, text: str) -> Range:
