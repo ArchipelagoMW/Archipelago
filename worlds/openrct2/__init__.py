@@ -229,6 +229,14 @@ class OpenRCT2World(World):
             elif count == 4:#23 total items, we want 15 rides and now toilets
                 num_rides = 15
                 add_rule(region.exits[0], lambda state: state.has("Toilets", self.player, 1))
+            elif count == 5:#31 total items, we want 20 rides and some rules if applicable
+                num_rides = 20
+                if self.rules[2] == 1:#If high construction can be disabled
+                    add_rule(region.exits[0], lambda state: state.has("Allow High Construction", self.player, 1))
+                if self.rules[3] == 1:#landscape
+                    add_rule(region.exits[0], lambda state: state.has("Allow Landscape Changes", self.player, 1))
+                if self.rules[5] == 1:#tree removal
+                    add_rule(region.exits[0], lambda state: state.has("Allow Tree Removal", self.player, 1))
             add_rule(region.exits[0], lambda state: state.has_group("rides", self.player, num_rides))
             count += 1
         final_region = self.multiworld.get_region("OpenRCT2_Level_" + str(current_level), self.player)
