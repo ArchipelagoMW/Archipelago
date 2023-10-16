@@ -97,8 +97,10 @@ def set_rules(multiworld: MultiWorld, player: int):
         fairy_location.access_rule = lambda state: has_fairy_progression(state, player)
 
     # Region rules.
-    multiworld.get_entrance("Forest Abkhazia", player).access_rule = \
-        lambda state: has_upgrades_percentage(state, player, 12.5) and has_defeated_castle(state, player)
+    i = 2
+    while i <= 13:
+        multiworld.get_entrance("Floor " + str(i), player).access_rule = \
+            lambda state: state.has("Vault Runes", player) and has_defeated_castle(state, player)
 
     multiworld.get_entrance("The Maya", player).access_rule = \
         lambda state: has_upgrades_percentage(state, player, 25) and has_defeated_forest(state, player)
