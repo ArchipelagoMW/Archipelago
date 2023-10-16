@@ -74,6 +74,10 @@ class LingoPlayerLogic:
         victory_condition = getattr(world.multiworld, "victory_condition")[world.player]
         early_color_hallways = getattr(world.multiworld, "early_color_hallways")[world.player]
 
+        if location_checks == LocationChecks.option_reduced and door_shuffle != ShuffleDoors.option_none:
+            raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
+                            "be enough locations for all of the door items.")
+
         # Create an event for every room that represents being able to reach that room.
         for room_name in ROOMS.keys():
             roomloc_name = f"{room_name} (Reached)"
@@ -177,7 +181,7 @@ class LingoPlayerLogic:
                                 "iterations. This is very unlikely to happen on its own, and probably indicates some "
                                 "kind of logic error.")
 
-        if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity\
+        if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
                 and not early_color_hallways and LingoTestOptions.disable_forced_good_item is False:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
             # but the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded right
@@ -286,7 +290,7 @@ class LingoPlayerLogic:
 
         # Just for sanity's sake, ensure that all required painting rooms are accessed.
         for painting_id, painting in PAINTINGS.items():
-            if painting_id not in self.PAINTING_MAPPING.values()\
+            if painting_id not in self.PAINTING_MAPPING.values() \
                     and (painting.required or (painting.required_when_no_doors and door_shuffle == 0)):
                 return False
 
