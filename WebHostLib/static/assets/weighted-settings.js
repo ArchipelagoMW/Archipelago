@@ -734,107 +734,17 @@ class GameSettings {
           break;
 
         case 'items-list':
-          const itemsList = document.createElement('div');
-          itemsList.classList.add('simple-list');
-
-          Object.values(this.data.gameItems).forEach((item) => {
-            const itemRow = document.createElement('div');
-            itemRow.classList.add('list-row');
-
-            const itemLabel = document.createElement('label');
-            itemLabel.setAttribute('for', `${this.name}-${settingName}-${item}`)
-
-            const itemCheckbox = document.createElement('input');
-            itemCheckbox.setAttribute('id', `${this.name}-${settingName}-${item}`);
-            itemCheckbox.setAttribute('type', 'checkbox');
-            itemCheckbox.setAttribute('data-game', this.name);
-            itemCheckbox.setAttribute('data-setting', settingName);
-            itemCheckbox.setAttribute('data-option', item.toString());
-            itemCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-            if (this.current[settingName].includes(item)) {
-              itemCheckbox.setAttribute('checked', '1');
-            }
-
-            const itemName = document.createElement('span');
-            itemName.innerText = item.toString();
-
-            itemLabel.appendChild(itemCheckbox);
-            itemLabel.appendChild(itemName);
-
-            itemRow.appendChild(itemLabel);
-            itemsList.appendChild((itemRow));
-          });
-
+          const itemsList = this.#buildListDiv(settingName, this.data.gameItems);
           settingWrapper.appendChild(itemsList);
           break;
 
         case 'locations-list':
-          const locationsList = document.createElement('div');
-          locationsList.classList.add('simple-list');
-
-          Object.values(this.data.gameLocations).forEach((location) => {
-            const locationRow = document.createElement('div');
-            locationRow.classList.add('list-row');
-
-            const locationLabel = document.createElement('label');
-            locationLabel.setAttribute('for', `${this.name}-${settingName}-${location}`)
-
-            const locationCheckbox = document.createElement('input');
-            locationCheckbox.setAttribute('id', `${this.name}-${settingName}-${location}`);
-            locationCheckbox.setAttribute('type', 'checkbox');
-            locationCheckbox.setAttribute('data-game', this.name);
-            locationCheckbox.setAttribute('data-setting', settingName);
-            locationCheckbox.setAttribute('data-option', location.toString());
-            locationCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-            if (this.current[settingName].includes(location)) {
-              locationCheckbox.setAttribute('checked', '1');
-            }
-
-            const locationName = document.createElement('span');
-            locationName.innerText = location.toString();
-
-            locationLabel.appendChild(locationCheckbox);
-            locationLabel.appendChild(locationName);
-
-            locationRow.appendChild(locationLabel);
-            locationsList.appendChild((locationRow));
-          });
-
+          const locationsList = this.#buildListDiv(settingName, this.data.gameLocations);
           settingWrapper.appendChild(locationsList);
           break;
 
         case 'custom-list':
-          const customList = document.createElement('div');
-          customList.classList.add('simple-list');
-
-          Object.values(this.data.gameSettings[settingName].options).forEach((listItem) => {
-            const customListRow = document.createElement('div');
-            customListRow.classList.add('list-row');
-
-            const customItemLabel = document.createElement('label');
-            customItemLabel.setAttribute('for', `${this.name}-${settingName}-${listItem}`)
-
-            const customItemCheckbox = document.createElement('input');
-            customItemCheckbox.setAttribute('id', `${this.name}-${settingName}-${listItem}`);
-            customItemCheckbox.setAttribute('type', 'checkbox');
-            customItemCheckbox.setAttribute('data-game', this.name);
-            customItemCheckbox.setAttribute('data-setting', settingName);
-            customItemCheckbox.setAttribute('data-option', listItem.toString());
-            customItemCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-            if (this.current[settingName].includes(listItem)) {
-              customItemCheckbox.setAttribute('checked', '1');
-            }
-
-            const customItemName = document.createElement('span');
-            customItemName.innerText = listItem.toString();
-
-            customItemLabel.appendChild(customItemCheckbox);
-            customItemLabel.appendChild(customItemName);
-
-            customListRow.appendChild(customItemLabel);
-            customList.appendChild((customListRow));
-          });
-
+          const customList = this.#buildListDiv(settingName, this.data.gameSettings[settingName].options);
           settingWrapper.appendChild(customList);
           break;
 
@@ -1058,35 +968,7 @@ class GameSettings {
     itemHintsWrapper.classList.add('hints-wrapper');
     itemHintsWrapper.innerText = 'Starting Item Hints';
 
-    const itemHintsDiv = document.createElement('div');
-    itemHintsDiv.classList.add('simple-list');
-    this.data.gameItems.forEach((item) => {
-      const itemRow = document.createElement('div');
-      itemRow.classList.add('list-row');
-
-      const itemLabel = document.createElement('label');
-      itemLabel.setAttribute('for', `${this.name}-start_hints-${item}`);
-
-      const itemCheckbox = document.createElement('input');
-      itemCheckbox.setAttribute('type', 'checkbox');
-      itemCheckbox.setAttribute('id', `${this.name}-start_hints-${item}`);
-      itemCheckbox.setAttribute('data-game', this.name);
-      itemCheckbox.setAttribute('data-setting', 'start_hints');
-      itemCheckbox.setAttribute('data-option', item);
-      if (this.current.start_hints.includes(item)) {
-        itemCheckbox.setAttribute('checked', 'true');
-      }
-      itemCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-      itemLabel.appendChild(itemCheckbox);
-
-      const itemName = document.createElement('span');
-      itemName.innerText = item;
-      itemLabel.appendChild(itemName);
-
-      itemRow.appendChild(itemLabel);
-      itemHintsDiv.appendChild(itemRow);
-    });
-
+    const itemHintsDiv = this.#buildListDiv('start_hints', this.data.gameItems);
     itemHintsWrapper.appendChild(itemHintsDiv);
     itemHintsContainer.appendChild(itemHintsWrapper);
 
@@ -1095,35 +977,7 @@ class GameSettings {
     locationHintsWrapper.classList.add('hints-wrapper');
     locationHintsWrapper.innerText = 'Starting Location Hints';
 
-    const locationHintsDiv = document.createElement('div');
-    locationHintsDiv.classList.add('simple-list');
-    this.data.gameLocations.forEach((location) => {
-      const locationRow = document.createElement('div');
-      locationRow.classList.add('list-row');
-
-      const locationLabel = document.createElement('label');
-      locationLabel.setAttribute('for', `${this.name}-start_location_hints-${location}`);
-
-      const locationCheckbox = document.createElement('input');
-      locationCheckbox.setAttribute('type', 'checkbox');
-      locationCheckbox.setAttribute('id', `${this.name}-start_location_hints-${location}`);
-      locationCheckbox.setAttribute('data-game', this.name);
-      locationCheckbox.setAttribute('data-setting', 'start_location_hints');
-      locationCheckbox.setAttribute('data-option', location);
-      if (this.current.start_location_hints.includes(location)) {
-        locationCheckbox.setAttribute('checked', '1');
-      }
-      locationCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-      locationLabel.appendChild(locationCheckbox);
-
-      const locationName = document.createElement('span');
-      locationName.innerText = location;
-      locationLabel.appendChild(locationName);
-
-      locationRow.appendChild(locationLabel);
-      locationHintsDiv.appendChild(locationRow);
-    });
-
+    const locationHintsDiv = this.#buildListDiv('start_location_hints', this.data.gameLocations);
     locationHintsWrapper.appendChild(locationHintsDiv);
     itemHintsContainer.appendChild(locationHintsWrapper);
 
@@ -1151,35 +1005,7 @@ class GameSettings {
     priorityLocationsWrapper.classList.add('locations-wrapper');
     priorityLocationsWrapper.innerText = 'Priority Locations';
 
-    const priorityLocationsDiv = document.createElement('div');
-    priorityLocationsDiv.classList.add('simple-list');
-    this.data.gameLocations.forEach((location) => {
-      const locationRow = document.createElement('div');
-      locationRow.classList.add('list-row');
-
-      const locationLabel = document.createElement('label');
-      locationLabel.setAttribute('for', `${this.name}-priority_locations-${location}`);
-
-      const locationCheckbox = document.createElement('input');
-      locationCheckbox.setAttribute('type', 'checkbox');
-      locationCheckbox.setAttribute('id', `${this.name}-priority_locations-${location}`);
-      locationCheckbox.setAttribute('data-game', this.name);
-      locationCheckbox.setAttribute('data-setting', 'priority_locations');
-      locationCheckbox.setAttribute('data-option', location);
-      if (this.current.priority_locations.includes(location)) {
-        locationCheckbox.setAttribute('checked', '1');
-      }
-      locationCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-      locationLabel.appendChild(locationCheckbox);
-
-      const locationName = document.createElement('span');
-      locationName.innerText = location;
-      locationLabel.appendChild(locationName);
-
-      locationRow.appendChild(locationLabel);
-      priorityLocationsDiv.appendChild(locationRow);
-    });
-
+    const priorityLocationsDiv = this.#buildListDiv('priority_locations', this.data.gameLocations);
     priorityLocationsWrapper.appendChild(priorityLocationsDiv);
     locationsContainer.appendChild(priorityLocationsWrapper);
 
@@ -1188,40 +1014,47 @@ class GameSettings {
     excludeLocationsWrapper.classList.add('locations-wrapper');
     excludeLocationsWrapper.innerText = 'Exclude Locations';
 
-    const excludeLocationsDiv = document.createElement('div');
-    excludeLocationsDiv.classList.add('simple-list');
-    this.data.gameLocations.forEach((location) => {
-      const locationRow = document.createElement('div');
-      locationRow.classList.add('list-row');
-
-      const locationLabel = document.createElement('label');
-      locationLabel.setAttribute('for', `${this.name}-exclude_locations-${location}`);
-
-      const locationCheckbox = document.createElement('input');
-      locationCheckbox.setAttribute('type', 'checkbox');
-      locationCheckbox.setAttribute('id', `${this.name}-exclude_locations-${location}`);
-      locationCheckbox.setAttribute('data-game', this.name);
-      locationCheckbox.setAttribute('data-setting', 'exclude_locations');
-      locationCheckbox.setAttribute('data-option', location);
-      if (this.current.exclude_locations.includes(location)) {
-        locationCheckbox.setAttribute('checked', '1');
-      }
-      locationCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-      locationLabel.appendChild(locationCheckbox);
-
-      const locationName = document.createElement('span');
-      locationName.innerText = location;
-      locationLabel.appendChild(locationName);
-
-      locationRow.appendChild(locationLabel);
-      excludeLocationsDiv.appendChild(locationRow);
-    });
-
+    const excludeLocationsDiv = this.#buildListDiv('exclude_locations', this.data.gameLocations);
     excludeLocationsWrapper.appendChild(excludeLocationsDiv);
     locationsContainer.appendChild(excludeLocationsWrapper);
 
     locationsDiv.appendChild(locationsContainer);
     return locationsDiv;
+  }
+
+  // Builds a div for a setting named `setting` with a list value that can
+  // contain `items`.
+  #buildListDiv(setting, items) {
+    const div = document.createElement('div');
+    div.classList.add('simple-list');
+    items.forEach((item) => {
+      const row = document.createElement('div');
+      row.classList.add('list-row');
+
+      const label = document.createElement('label');
+      label.setAttribute('for', `${this.name}-${setting}-${item}`);
+
+      const checkbox = document.createElement('input');
+      checkbox.setAttribute('type', 'checkbox');
+      checkbox.setAttribute('id', `${this.name}-${setting}-${item}`);
+      checkbox.setAttribute('data-game', this.name);
+      checkbox.setAttribute('data-setting', setting);
+      checkbox.setAttribute('data-option', item);
+      if (this.current[setting].includes(item)) {
+        checkbox.setAttribute('checked', '1');
+      }
+      checkbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
+      label.appendChild(checkbox);
+
+      const name = document.createElement('span');
+      name.innerText = item;
+      label.appendChild(name);
+
+      row.appendChild(label);
+      div.appendChild(row);
+    });
+
+    return div;
   }
 
   #updateRangeSetting(evt) {
