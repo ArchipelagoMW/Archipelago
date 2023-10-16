@@ -139,7 +139,13 @@ def create():
             weighted_settings["games"][game_name] = {}
             weighted_settings["games"][game_name]["gameSettings"] = game_options
             weighted_settings["games"][game_name]["gameItems"] = tuple(world.item_names)
+            weighted_settings["games"][game_name]["gameItemGroups"] = [
+                group for group in world.item_name_groups.keys() if group != "Everything"
+            ]
             weighted_settings["games"][game_name]["gameLocations"] = tuple(world.location_names)
+            weighted_settings["games"][game_name]["gameLocationGroups"] = [
+                group for group in world.location_name_groups.keys() if group != "Everywhere"
+            ]
 
     with open(os.path.join(target_folder, 'weighted-settings.json'), "w") as f:
         json.dump(weighted_settings, f, indent=2, separators=(',', ': '))
