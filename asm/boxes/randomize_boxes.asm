@@ -397,6 +397,11 @@ CollectRandomItem:
         cmp r0, #0
         bne @@JunkItem
 
+    ; Abilities
+        get_bit r0, r5, ItemBit_Ability
+        cmp r0, #1
+        beq @@Ability
+
     ; Jewel/CD
         ldr r0, =LastCollectedItemID
         strb r5, [r0]
@@ -436,6 +441,10 @@ CollectRandomItem:
         mov r0, #1  ; a1
         mov r1, #0  ; a2
         bl SpawnCollectionIndicator
+        ldr r0, =0x13C  ; a1
+        b @@PlayCollectionSound
+
+    @@Ability:
         ldr r0, =0x13C  ; a1
 
     @@PlayCollectionSound:
