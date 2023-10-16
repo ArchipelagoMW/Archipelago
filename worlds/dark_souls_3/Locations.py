@@ -691,78 +691,163 @@ location_tables = {
 # In addition to these hand-authored location groups, every region automatically
 # has a location group added in the loop below.
 location_name_groups: Dict[str, Set[str]] = {
-    # Locations that are very obvious: boss/miniboss drops (one per boss), keys,
-    # items unlocked by keys, visibly guarded items, or items at the end of a
-    # bossless area. Intended for players without broad DS3 knowledge or who
-    # want fewer, more obvious checks.
+    # A small number of locations (boss drops and progression locations)
+    # intended to be set as priority progression locations for players who don't
+    # want a lot of mandatory checks.
     "Prominent Locations": frozenset([
-        "FS: Tower Key",
-        "FS: Uchigatana",
+        "HWL: Basin of Vows",
+        "HWL: Small Lothric Banner",
+        "CD: Small Doll",
+        "FK: Cinders of a Lord - Abyss Watcher",
+        "PC: Cinders of a Lord - Yhorm the Giant",
+        "AL: Cinders of a Lord - Aldrich",
+        "GA: Cinders of a Lord - Lothric Prince",
+        "LC: Grand Archives Key",
+        "PW: Contraption Key",
+
+        "HWL: Soul of Boreal Valley Vordt",
+        "US: Soul of the Rotted Greatwood",
+        "RS: Soul of a Crystal Sage",
+        "CC: Soul of High Lord Wolnir",
+        "SL: Soul of the Old Demon King",
+        "IBV: Soul of Pontiff Sulyvahn",
+        "HWL: Soul of the Dancer",
+        "LC: Soul of Dragonslayer Armour",
+        "CKG: Soul of Consumed Oceiros",
+        "UG: Soul of Champion Gundyr",
+        "AP: Soul of the Nameless King",
+        "PW: Soul of Sister Friede",
+        "PW: Valorheart",
+        "DH: Soul of the Demon Prince",
+        "RC: Soul of Darkeater Midir",
+    ]),
+
+    # Locations that contain items which block forward progress in the normal
+    # game order.
+    "Progression Locations": frozenset([
+        "HWL: Basin of Vows",
+        "HWL: Small Lothric Banner",
+        "CD: Small Doll",
+        "FK: Cinders of a Lord - Abyss Watcher",
+        "PC: Cinders of a Lord - Yhorm the Giant",
+        "AL: Cinders of a Lord - Aldrich",
+        "GA: Cinders of a Lord - Lothric Prince",
+        "LC: Grand Archives Key",
+        "PW: Contraption Key",
+    ]),
+
+    "Boss Rewards": frozenset([
+        "HWL: Soul of Boreal Valley Vordt",
+        "US: Transposing Kiln",
+        "US: Soul of the Rotted Greatwood",
+        "RS: Soul of a Crystal Sage",
+        "FK: Soul of the Blood of the Wolf",
+        "FK: Cinders of a Lord - Abyss Watcher",
+        "CD: Small Doll",
+        "CD: Soul of the Deacons of the Deep",
+        "CD: Archdeacon White Crown",
+        "CD: Archdeacon Holy Garb",
+        "CD: Archdeacon Skirt",
+        "CC: Soul of High Lord Wolnir",
+        "SL: Soul of the Old Demon King",
+        "IBV: Soul of Pontiff Sulyvahn",
+        "PC: Soul of Yhorm the Giant",
+        "PC: Cinders of a Lord - Yhorm the Giant",
+        "AL: Soul of Aldrich",
+        "AL: Cinders of a Lord - Aldrich",
+        "HWL: Soul of the Dancer",
+        "LC: Soul of Dragonslayer Armour",
+        "CKG: Soul of Consumed Oceiros",
+        "UG: Soul of Champion Gundyr",
+        "UG: Coiled Sword Fragment",
+        "GA: Soul of the Twin Princes",
+        "GA: Cinders of a Lord - Lothric Prince",
+        "AP: Soul of the Nameless King",
+        "PW: Soul of Sister Friede",
+        "PW: Valorheart",
+        "PW: Champion's Bones",
+        "DH: Soul of the Demon Prince",
+        "DH: Small Envoy Banner",
+        "RC: Soul of Darkeater Midir",
+
+        # Not currently randomized
+        # "FS: Coiled Sword",
+        # "AP: Dragon Head Stone",
+        # "RC: Fillianore's Spear Ornament",
+        # "RC: Spears of the Church",
+    ]),
+
+    "Miniboss Rewards": frozenset([
+        "FS: Uchigatana", # NPC drop
+        "FK: Soul of a Stray Demon",
+        "US: Irithyll Straight Sword", # Irithyll Outrider drop
+        "CC: Soul of a Demon",
+        "SL: Lightning Stake", # Sand Worm drop
+        "SL: Fume Ultra Greatsword", # Knight Slayer Tsorig drop
+        "CD: Aldrich's Sapphire", # Deep Accursed drop
+        "CD: Spider Shield", # NPC drop
+        "CD: Saint Bident", # Guarded by giant
+        "IBV: Pontiff's Right Eye", # Sulyvahn's Beast drop
+        "IBV: Ring of Favor", # Sulyvahn's Beast Duo drop
+        "AL: Aldrich's Ruby", # Deep Accursed drop
+        "PC: Logan's Scroll", # NPC drop
+        "LC: Irithyll Rapier", # Boreal Outrider drop
+        "GA: Crystal Scroll", # Crystal Sage drop
+        "GA: Outrider Knight Helm",
+        "GA: Outrider Knight Armor",
+        "GA: Outrider Knight Gauntlets",
+        "GA: Outrider Knight Leggings",
+        "GA: Golden Wing Crest Shield", # NPC drop
+        "GA: Onikiri and Ubadachi", # NPC drop
+        "GA: Sage's Crystal Staff", # NPC drop
+        "AP: Dragon Tooth", # NPC drop
+        "DH: Flame Fan", # Desert Pyromancer Zoey drop
+        "RC: Iron Dragonslayer Helm",
+        "RC: Iron Dragonslayer Armor",
+        "RC: Iron Dragonslayer Gauntlets",
+        "RC: Iron Dragonslayer Leggings",
+        "RC: Crucifix of the Mad King", # Shira drop
+    ]),
+
+    "Key Locations": frozenset([
+        "HWL: Cell Key",
+        "ID: Jailer's Key King",
+        "ID: Jailbreaker's Key",
+        "ID: Old Cell Key",
+        "LC: Grand Archives Key",
+        "PW: Contraption Key",
+
+        # Not currently randomized:
+        # "FS: Grave Key",
+        # "FS: Lift Chamber Key",
+        # "FS: Tower Key",
+    ]),
+
+    "Guarded by Keys": frozenset([
+        # Guarded by Tower Key
         "FSBT: Covetous Silver Serpent Ring",
         "FSBT: Fire Keeper Robe",
         "FSBT: Fire Keeper Gloves",
         "FSBT: Fire Keeper Skirt",
         "FSBT: Estus Ring",
         "FSBT: Fire Keeper Soul",
-        "HWL: Basin of Vows",
-        "HWL: Small Lothric Banner",
-        "HWL: Cell Key",
-        "HWL: Soul of Boreal Valley Vordt",
-        "HWL: Soul of the Dancer",
-        "US: Soul of the Rotted Greatwood",
-        "US: Flynn's Ring", # The Fire Demon in Undead Settlement doesn't drop a
-                            # randomizable item, so this is the next best option
-                            # as a reward for that section.
-        "US: Irithyll Straight Sword", # Irithyll Outrider drop
-        "RS: Farron Coal",
-        "RS: Soul of a Crystal Sage",
-        "FK: Cinders of a Lord - Abyss Watcher",
-        "FK: Soul of a Stray Demon",
-        "CD: Spider Shield", # NPC drop
-        "CD: Small Doll",
-        "CD: Saint Bident", # Guarded by giant
-        "CC: Soul of a Demon",
-        "CC: Soul of High Lord Wolnir",
-        "SL: Lightning Stake",
-        "SL: Soul of Old Demon King",
-        "SL: Fume Ultra Greatsword", # Knight Slayer Tsorig drop
-        "SL: Izalith Pyromancy Tome", # Reward for making it through the
-                                      # Smouldering Lake dungeon.
-        "IBV: Pontiff's Right Eye", # Sulyvahn's Beast drop
-        "IBV: Soul of Pontiff Sulyvahn",
-        "IBV: Ring of Favor", # Sulyvahn's Beast Duo drop
-        "ID: Jailbreaker's Key",
-        "ID: Old Cell Key",
-        "ID: Profaned Coal",
-        "ID: Jailer's Key King",
-        "PC: Logan's Scroll", # NPC drop
-        "PC: Cinders of a Lord - Yhorm the Giant",
-        "AL: Cinders of a Lord - Aldritch",
-        "LC: Irithyll Rapier", # Boreal Outrider drop
-        "LC: Soul of Dragonslayer Armour",
-        "LC: Grand Archives Key",
-        "CKG: Soul of Consumed Oceiros",
-        "UG: Soul of Champion Gundyr",
-        "UG: Eyes of a Fire Keeper",
-        "GA: Crystal Scroll", # Crystal Sage drop
-        "GA: Golden Wing Crest Shield", # NPC drop
-        "GA: Onikiri and Ubadachi", # NPC drop
-        "GA: Sage's Crystal Staff", # NPC drop
-        "GA: Outrider Knight Helm", # Boreal Outrider drop
-        "GA: Cinders of a Lord - Lothric Prince",
-        "AP: Dragon Head Stone", # Ancient Wyvern drop
-        "AP: Dragon Tooth", # NPC drop
-        "AP: Soul of the Nameless King",
-        "PW: Valorheart", # Champion's Graveyender drop
-        "PW: Contraption Key",
-        "PW: Soul of Sister Friede",
-        "DH: Soul of the Demon Prince",
-        "DH: Flame Fan", # Desert Pyromancer Zoey drop
-        "DH: Small Envoy Banner",
-        "RC: Fillianore's Spear Ornament",
-        "RC: Soul of Darkeater Midir",
-        "RC: Crucifix of the Mad King", # Shira drop
-        "RC: Soul of Slave Knight Gael",
+
+        # Guarded by Cell Key
+        "HWL: Greirat's Ashes",
+
+        # Guarded by Jailer's Key Ring
+        "ID: Prisoner Chief's Ashes",
+        "ID: Karla's Ashes",
+        "ID: Karla's Pointed Hat",
+        "ID: Karla's Coat",
+        "ID: Karla's Gloves",
+        "ID: Karla's Trousers",
+
+        # Guarded by Jailbreaker's Key
+        "ID: Bellowing Dragoncrest Ring",
+
+        # Guarded by Old Cell Key
+        "ID: Covetous Gold Serpent Ring",
     ]),
 
     # Locations that are particularly tricky to find or get to, for players
