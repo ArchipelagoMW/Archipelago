@@ -9,6 +9,7 @@ from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events
 from worlds.AutoWorld import World, WebWorld
 from typing import List, Dict, TextIO
+from worlds.LauncherComponents import Component, components
 
 hat_craft_order: Dict[int, List[HatType]] = {}
 hat_yarn_costs: Dict[int, Dict[HatType, int]] = {}
@@ -18,6 +19,8 @@ excluded_bonuses: Dict[int, List[str]] = {}
 dw_shuffle: Dict[int, List[str]] = {}
 nyakuza_thug_items: Dict[int, Dict[str, int]] = {}
 badge_seller_count: Dict[int, int] = {}
+
+components.append(Component("A Hat in Time Client", "AHITClient"))
 
 
 class AWebInTime(WebWorld):
