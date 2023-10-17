@@ -2221,4 +2221,4 @@ def set_rules(multiworld: MultiWorld, world: World, player: int, gate_bosses: ty
     # Upgrade Requirements for each boss gate
     set_boss_gate_rules(multiworld, player, gate_bosses)
 
-    world.options.completion_condition = lambda state: state.has(ItemName.maria, player)
+    multiworld.completion_condition[player] = lambda state: state.has(ItemName.maria, player)
