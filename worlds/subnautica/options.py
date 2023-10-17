@@ -1,7 +1,7 @@
 import typing
 
 from Options import Choice, Range, DeathLink, Toggle, DefaultOnToggle, StartInventoryPool
-from .Creatures import all_creatures, Definitions
+from .creatures import all_creatures, Definitions
 
 
 class SwimRule(Choice):
@@ -103,7 +103,7 @@ class SubnauticaDeathLink(DeathLink):
     Note: can be toggled via in-game console command "deathlink"."""
 
 
-options = {
+option_definitions = {
     "swim_rule": SwimRule,
     "early_seaglide": EarlySeaglide,
     "free_samples": FreeSamples,

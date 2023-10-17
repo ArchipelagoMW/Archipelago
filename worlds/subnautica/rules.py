@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, Dict, Callable, Optional
 
 from worlds.generic.Rules import set_rule, add_rule
-from .Locations import location_table, LocationDict
-from .Creatures import all_creatures, aggressive, suffix, hatchable, containment
-from .Options import AggressiveScanLogic, SwimRule
+from .locations import location_table, LocationDict
+from .creatures import all_creatures, aggressive, suffix, hatchable, containment
+from .options import AggressiveScanLogic, SwimRule
 import math
 
 if TYPE_CHECKING:
@@ -290,16 +290,16 @@ aggression_rules: Dict[int, Callable[["CollectionState", int], bool]] = {
 
 def set_rules(subnautica_world: "SubnauticaWorld"):
     player = subnautica_world.player
-    world = subnautica_world.multiworld
+    multiworld = subnautica_world.multiworld
 
     for loc in location_table.values():
-        set_location_rule(world, player, loc)
+        set_location_rule(multiworld, player, loc)
 
     if subnautica_world.creatures_to_scan:
-        option = world.creature_scan_logic[player]
+        option = multiworld.creature_scan_logic[player]
 
         for creature_name in subnautica_world.creatures_to_scan:
-            location = set_creature_rule(world, player, creature_name)
+            location = set_creature_rule(multiworld, player, creature_name)
             if creature_name in containment:  # there is no other way, hard-required containment
                 add_rule(location, lambda state: has_containment(state, player))
             elif creature_name in aggressive:
@@ -309,7 +309,7 @@ def set_rules(subnautica_world: "SubnauticaWorld"):
                              lambda state, loc_rule=get_aggression_rule(option, creature_name): loc_rule(state, player))
 
     # Victory locations
-    set_rule(world.get_location("Neptune Launch", player),
+    set_rule(multiworld.get_location("Neptune Launch", player),
              lambda state:
              get_max_depth(state, player) >= 1444 and
              has_mobile_vehicle_bay(state, player) and
@@ -322,13 +322,14 @@ def set_rules(subnautica_world: "SubnauticaWorld"):
              state.has("Ion Battery", player) and
              has_cyclops_shield(state, player))
 
-    set_rule(world.get_location("Disable Quarantine", player), lambda state:
-    get_max_depth(state, player) >= 1444)
+    set_rule(multiworld.get_location("Disable Quarantine", player),
+             lambda state: get_max_depth(state, player) >= 1444)
 
-    set_rule(world.get_location("Full Infection", player), lambda state:
-    get_max_depth(state, player) >= 900)
+    set_rule(multiworld.get_location("Full Infection", player),
+             lambda state: get_max_depth(state, player) >= 900)
 
-    room = world.get_location("Aurora Drive Room - Upgrade Console", player)
-    set_rule(world.get_location("Repair Aurora Drive", player), lambda state: room.can_reach(state))
+    room = multiworld.get_location("Aurora Drive Room - Upgrade Console", player)
+    set_rule(multiworld.get_location("Repair Aurora Drive", player),
+             lambda state: room.can_reach(state))
 
-    world.completion_condition[player] = lambda state: state.has("Victory", player)
+    multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

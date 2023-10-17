@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from itertools import accumulate, chain, combinations
 from typing import Any, cast, Dict, Iterator, List, Mapping, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
-from Options import AssembleOptions, Choice, DeathLink, ItemDict, Range, SpecialRange, TextChoice, Toggle
+from Options import AssembleOptions, Choice, DeathLink, ItemDict, PerGameCommonOptions, Range, SpecialRange, \
+    TextChoice, Toggle
 from .Enemies import enemy_name_to_sprite
 
 if TYPE_CHECKING:
@@ -697,7 +698,7 @@ class ShufflePartyMembers(Toggle):
 
 
 @dataclass
-class L2ACOptions:
+class L2ACOptions(PerGameCommonOptions):
     blue_chest_chance: BlueChestChance
     blue_chest_count: BlueChestCount
     boss: Boss

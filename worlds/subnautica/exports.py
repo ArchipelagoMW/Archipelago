@@ -12,8 +12,8 @@ if __name__ == "__main__":
     os.chdir(new_home)
     sys.path.append(new_home)
 
-    from worlds.subnautica.Locations import Vector, location_table
-    from worlds.subnautica.Items import item_table, group_items, items_by_type
+    from worlds.subnautica.locations import Vector, location_table
+    from worlds.subnautica.items import item_table, group_items, items_by_type
     from NetUtils import encode
 
     export_folder = os.path.join(new_home, "Subnautica Export")
