@@ -20,8 +20,10 @@ from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui
 from Utils import init_logging, is_windows
 from worlds.sc2 import ItemNames
 from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, Kerriganless, GameSpeed, \
-    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, KerriganChecksPerLevelPack, \
-    LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit
+    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
+    KerriganChecksPerLevelPack, \
+    LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit, \
+    DisableForcedCamera, SkipCutscenes
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -323,8 +325,8 @@ class SC2Context(CommonContext):
         if cmd == "Connected":
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.game_speed = args["slot_data"].get("game_speed", GameSpeed.option_default)
-            self.disable_forced_camera = args["slot_data"]["disable_forced_camera"]
-            self.skip_cutscenes = args["slot_data"]["skip_cutscenes"]
+            self.disable_forced_camera = args["slot_data"].get("disable_forced_camera", DisableForcedCamera.default)
+            self.skip_cutscenes = args["slot_data"].get("skip_cutscenes", SkipCutscenes.default)
             self.all_in_choice = args["slot_data"]["all_in_map"]
             self.slot_data_version = args["slot_data"].get("version", 2)
             slot_req_table: dict = args["slot_data"]["mission_req"]
