@@ -274,7 +274,7 @@ def create_events(world: MultiWorld, player: int, ror2_options: ROR2Options) -> 
     victory_region.locations.append(victory_event)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations: Dict[str, int]) -> Region:
+def create_region(world: MultiWorld, player: int, name: str, locations: Dict[str, int] = {}) -> Region:
     ret = Region(name, player, world)
     for location_name, location_id in locations.items():
         ret.locations.append(RiskOfRainLocation(player, location_name, location_id, ret))
