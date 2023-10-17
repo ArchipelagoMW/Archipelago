@@ -792,7 +792,6 @@ location_name_groups: Dict[str, Set[str]] = {
         "IBV: Aldrich Faithful", # Sulyvahn's Beast Duo reward
         "AL: Aldrich's Ruby", # Deep Accursed drop
         "PC: Logan's Scroll", # NPC drop
-        "PC: Eleonora", # Monstrosity of Sin drop
         "LC: Irithyll Rapier", # Boreal Outrider drop
         "GA: Crystal Scroll", # Crystal Sage drop
         "GA: Outrider Knight Helm",
