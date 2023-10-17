@@ -632,9 +632,9 @@ Bunker (Bunker) - Bunker Glass Room - 0x17C79:
 Door - 0x17C79 (Tinted Glass Door) - 0x0A099
 
 Bunker Glass Room (Bunker) - Bunker Ultraviolet Room - 0x0C2A3:
-158279 - 0x0A010 (Glass Room 1) - True - Colored Squares
-158280 - 0x0A01B (Glass Room 2) - 0x0A010 - Colored Squares & Black/White Squares
-158281 - 0x0A01F (Glass Room 3) - 0x0A01B - Colored Squares & Black/White Squares
+158279 - 0x0A010 (Glass Room 1) - 0x17C79 - Colored Squares
+158280 - 0x0A01B (Glass Room 2) - 0x17C79 & 0x0A010 - Colored Squares & Black/White Squares
+158281 - 0x0A01F (Glass Room 3) - 0x17C79 & 0x0A01B - Colored Squares & Black/White Squares
 Door - 0x0C2A3 (UV Room Entry) - 0x0A01F
 
 Bunker Ultraviolet Room (Bunker) - Bunker Elevator Section - 0x0A08D:

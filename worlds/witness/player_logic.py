@@ -603,7 +603,7 @@ class WitnessPlayerLogic:
             "0x2896A": "Bridge Underside EP available",
             "0x00064": "First Tunnel EP visible",
             "0x03553": "Tutorial Video EPs availble",
-            "0x17C79": "Bunker Door EP available",
+            "0x17C79": "Bunker Glass Room solutions visible",
             "0x275FF": "Stoneworks Light EPs available",
             "0x17E2B": "Remaining Purple Sand EPs available",
             "0x03852": "Ramp EPs requirement",
