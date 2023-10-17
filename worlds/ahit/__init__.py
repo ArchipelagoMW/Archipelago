@@ -170,7 +170,7 @@ class HatInTimeWorld(World):
                            "Chapter6Cost": chapter_timepiece_costs[self.player][ChapterIndex.CRUISE],
                            "Chapter7Cost": chapter_timepiece_costs[self.player][ChapterIndex.METRO],
                            "BadgeSellerItemCount": badge_seller_count[self.player],
-                           "SeedNumber": self.multiworld.seed}  # For shop prices
+                           "SeedNumber": str(self.multiworld.seed)}  # For shop prices
 
         if self.multiworld.HatItems[self.player].value == 0:
             slot_data.setdefault("SprintYarnCost", hat_yarn_costs[self.player][HatType.SPRINT])

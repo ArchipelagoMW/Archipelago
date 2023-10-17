@@ -9,6 +9,8 @@ from MultiServer import Endpoint
 from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
+DEBUG = False
+
 
 class AHITJSONToTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):
@@ -41,7 +43,6 @@ class AHITContext(CommonContext):
         self.connected_msg = None
         self.game_connected = False
         self.awaiting_info = False
-        self.log_network = False
         self.full_inventory: List[Any] = []
         self.server_msgs: List[Any] = []
 
@@ -63,7 +64,7 @@ class AHITContext(CommonContext):
         if not self.endpoint or not self.endpoint.socket.open or self.endpoint.socket.closed:
             return False
 
-        if self.log_network:
+        if DEBUG:
             logger.info(f"Outgoing message: {msgs}")
 
         await self.endpoint.socket.send(msgs)
@@ -139,12 +140,28 @@ async def proxy(websocket, path: str = "/", ctx: AHITContext = None):
             async for data in websocket:
                 for msg in decode(data):
                     if msg["cmd"] == "Connect":
+                        # Proxy is connecting, make sure it is valid
+                        if msg["game"] != "A Hat in Time":
+                            logger.info("Aborting proxy connection: game is not A Hat in Time")
+                            await ctx.disconnect_proxy()
+                            break
+
+                        if ctx.seed_name:
+                            seed = msg.get("seed", "")
+                            if seed != "" and seed != ctx.seed_name:
+                                logger.info("Aborting proxy connection: seed mismatch from save file")
+                                await ctx.disconnect_proxy()
+                                break
+
                         if ctx.connected_msg:
                             await ctx.send_msgs_proxy(ctx.connected_msg)
                             ctx.update_items()
                         continue
 
-                    if ctx.log_network:
+                    if not ctx.is_proxy_connected():
+                        break
+
+                    if DEBUG:
                         logger.info(f"Incoming message: {msg}")
 
                     await ctx.send_msgs([msg])
