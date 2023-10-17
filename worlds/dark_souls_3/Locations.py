@@ -789,8 +789,10 @@ location_name_groups: Dict[str, Set[str]] = {
         "CD: Saint Bident", # Guarded by giant
         "IBV: Pontiff's Right Eye", # Sulyvahn's Beast drop
         "IBV: Ring of Favor", # Sulyvahn's Beast Duo drop
+        "IBV: Aldrich Faithful", # Sulyvahn's Beast Duo reward
         "AL: Aldrich's Ruby", # Deep Accursed drop
         "PC: Logan's Scroll", # NPC drop
+        "PC: Eleonora", # Monstrosity of Sin drop
         "LC: Irithyll Rapier", # Boreal Outrider drop
         "GA: Crystal Scroll", # Crystal Sage drop
         "GA: Outrider Knight Helm",
@@ -868,15 +870,28 @@ location_name_groups: Dict[str, Set[str]] = {
         # In lava
         "SL: Toxic Mist",
         "SL: White Hair Talisman",
-        "SL: Sacred Flame"
+        "SL: Sacred Flame",
 
         # Guaranteed drop from normalish enemy
-        "CD: Deep Ring"
+        "CD: Deep Ring",
+        "PC: Eleonora",
+        "ID: Great Magic Shield",
 
         # Have to return to cleared area
         "CD: Archdeacon White Crown",
         "CD: Archdeacon Holy Garb",
         "CD: Archdeacon Skirt",
+
+        # Invisible walkway
+        "IBV: Painting Guardian's Curved Sword",
+        "IBV: Painting Guardian Hood",
+        "IBV: Painting Guardian Gown",
+        "IBV: Painting Guardian Gloves",
+        "IBV: Painting Guardian Waistcloth",
+
+        # Switch in darkened room
+        "GA: Witch's Locks",
+        "GA: Power Within",
 
         # Hidden falls
         "US: Chloranthy Ring",
@@ -896,6 +911,9 @@ location_name_groups: Dict[str, Set[str]] = {
         "LC: Sunlight Straight Sword",
         "LC: Braille Divine Tome of Lothric",
         "CD: Rosaria's Fingers",
+        "PW: Crow Quills",
+        # "PC: Onislayer Greatbow", # Not currently randomized
+        "GA: Avelyn",
 
         # Behind illusory walls
         "FS: Covetous Silver Serpent Ring",
@@ -907,6 +925,10 @@ location_name_groups: Dict[str, Set[str]] = {
         "SL: Black Knight Sword",
         "SL: Quelana Pyromancy Tome",
         "SL: Izalith Staff",
+        "IBV: Magic Clutch Ring",
+        "IBV: Dorhys' Gnawing",
+        "IBV: Witchtree Branch",
+        "IBV: Aldrich Faithful",
         "UG: Ashen Estus Ring",
         "UG: Black Knight Glaive",
         "UG: Hornet Ring",
