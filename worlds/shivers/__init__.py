@@ -1,5 +1,3 @@
-import random
-
 from .Items import item_table, ShiversItem
 from .Rules import set_rules
 from BaseClasses import Item, Tutorial, Region, Entrance, Location
@@ -114,8 +112,6 @@ class ShiversWorld(World):
             librarylocationkeytwo.place_locked_item(self.create_item("Key for Egypt Room"))
             
             keys = [key for key in keys if key.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
-                
-
 
         #If front door option is on, determine which set of keys will be used for lobby access and add front door key to item pool
         lobby_access_keys = 1
@@ -172,11 +168,9 @@ class ShiversWorld(World):
 
 
     set_rules = set_rules
-        
 
-    def generate_output(self, output_directory: str) -> None:
+    def generate_basic(self):
         self.multiworld.completion_condition[self.player] = lambda state: Rules.lightning_capturable(state, self.player)
-        return super().generate_output(output_directory)
 
     def _get_slot_data(self):
         return {
