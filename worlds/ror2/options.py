@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict
-from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCommonOptions
+from Options import Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCommonOptions
 
 
 # NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
