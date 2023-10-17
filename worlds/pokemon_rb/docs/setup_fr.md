@@ -24,7 +24,7 @@ Comme nous utilisons BizHawk, ce guide s'applique uniquement aux systèmes Windo
 Une fois BizHawk installé, ouvrez EmuHawk et modifiez les paramètres suivants :
 
 - (≤ 2,8) Allez dans Config > Personnaliser. Passez à l'onglet Avancé, puis faites passer le Lua Core de "NLua+KopiLua" à "Lua+LuaInterface". 
-Puis redémarrez EmuHawk. Ceci est nécessaire pour que le script Lua fonctionne correctement.
+Ensuite redémarrez EmuHawk. Ceci est nécessaire pour que le script Lua fonctionne correctement.
    **REMARQUE : Même si « Lua+LuaInterface » est déjà sélectionné, basculez entre les deux options et resélectionnez-la. Nouvelles installations**
    **des versions plus récentes d'EmuHawk ont tendance à afficher "Lua+LuaInterface" comme option sélectionnée par défaut mais se chargent toujours**
    ** "NLua+KopiLua" jusqu'à ce que cette étape soit terminée.**

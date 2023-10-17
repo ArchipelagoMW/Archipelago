@@ -67,7 +67,7 @@ class PokemonWebWorld(WebWorld):
         ["Shiny"]
     )
 
-    setup_es = Tutorial(
+    setup_fr = Tutorial(
         setup_en.tutorial_name,
         setup_en.description,
         "Français",
