@@ -981,7 +981,7 @@ class GameSettings {
     itemQty.setAttribute('maxlength', '3');
     itemQty.addEventListener('keyup', (evt) => {
       evt.target.value = isNaN(parseInt(evt.target.value)) ? 0 : parseInt(evt.target.value);
-      updateItemSetting(evt);
+      this.#updateItemSetting(evt);
     });
     inputWrapper.appendChild(itemQty);
     itemQtyDiv.appendChild(inputWrapper);
