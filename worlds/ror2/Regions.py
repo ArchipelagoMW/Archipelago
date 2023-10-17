@@ -15,7 +15,7 @@ class RoRRegionData(NamedTuple):
 def create_regions(ror2_world: "RiskOfRainWorld"):
     player = ror2_world.player
     ror2_options = ror2_world.options
-    world = ror2_world.multiworld
+    multiworld = ror2_world.multiworld
     # Default Locations
     non_dlc_regions: Dict[str, RoRRegionData] = {
         "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)",
@@ -120,11 +120,11 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
 
     # Create all the regions
     for name, data in regions_pool.items():
-        world.regions.append(create_region(world, player, name, data))
+        multiworld.regions.append(create_region(multiworld, player, name, data))
 
     # Connect all the regions to their exits
     for name, data in regions_pool.items():
-        create_connections_in_regions(world, player, name, data)
+        create_connections_in_regions(multiworld, player, name, data)
 
 
 def create_region(world, player: int, name: str, data: RoRRegionData):
