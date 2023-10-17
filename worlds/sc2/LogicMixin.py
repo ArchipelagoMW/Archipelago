@@ -64,8 +64,8 @@ class SC2Logic(LogicMixin):
         return (
             self.has_any({
                 ItemNames.MISSILE_TURRET, ItemNames.THOR, ItemNames.WAR_PIGS, ItemNames.SPARTAN_COMPANY,
-                ItemNames.HELS_ANGEL, ItemNames.BATTLECRUISER, ItemNames.MARINE, ItemNames.WRAITH,
-                ItemNames.VALKYRIE, ItemNames.CYCLONE,
+                ItemNames.HELS_ANGELS, ItemNames.BATTLECRUISER, ItemNames.MARINE, ItemNames.WRAITH,
+                ItemNames.VALKYRIE, ItemNames.CYCLONE, ItemNames.WINGED_NIGHTMARES, ItemNames.BRYNHILDS
             }, player)
             or self._sc2wol_has_competent_anti_air(multiworld, player)
             or self._sc2_advanced_tactics(multiworld, player)
@@ -154,7 +154,9 @@ class SC2Logic(LogicMixin):
            self.has(ItemNames.SCIENCE_VESSEL, player)
 
     def _sc2wol_has_nukes(self, multiworld: MultiWorld, player: int) -> bool:
-        return self._sc2_advanced_tactics(multiworld, player) and self.has_any({ItemNames.GHOST, ItemNames.SPECTRE}, player)
+        return (self._sc2_advanced_tactics(multiworld, player)
+                and (self.has_any({ItemNames.GHOST, ItemNames.SPECTRE}, player)
+                     or self.has_all({ItemNames.THOR, ItemNames.THOR_BUTTON_WITH_A_SKULL_ON_IT}), player))
 
     def _sc2wol_can_respond_to_colony_infestations(self, multiworld: MultiWorld, player: int) -> bool:
         return (

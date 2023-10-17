@@ -1,6 +1,7 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco
+from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
+    progressive_if_ext
 from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
     get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
@@ -159,6 +160,9 @@ def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
 def get_item_quantity(item: Item, multiworld: MultiWorld, player: int):
     if (not get_option_value(multiworld, player, "nco_items")) \
             and item.name in progressive_if_nco:
+        return 1
+    if (not get_option_value(multiworld, player, "ext_items")) \
+            and item.name in progressive_if_ext:
         return 1
     return get_full_item_list()[item.name].quantity
 

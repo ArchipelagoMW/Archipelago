@@ -5,7 +5,8 @@ from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
-    get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, kerrigan_only_passives
+    get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
+    kerrigan_only_passives, progressive_if_ext
 from .Locations import get_locations, LocationType
 from .Regions import create_regions
 from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
@@ -314,6 +315,8 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
                 or not data.origin.intersection(item_sets):
             return 0
         elif name in progressive_if_nco and 'nco' not in item_sets:
+            return 1
+        elif name in progressive_if_ext and 'ext' not in item_sets:
             return 1
         else:
             return data.quantity

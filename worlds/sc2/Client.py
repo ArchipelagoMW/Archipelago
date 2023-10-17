@@ -18,6 +18,7 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
+from worlds.sc2 import ItemNames
 from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, Kerriganless, GameSpeed, \
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, KerriganChecksPerLevelPack, \
     LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit
@@ -304,6 +305,7 @@ class SC2Context(CommonContext):
     game_speed_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
+    slot_data_version = None
 
     def __init__(self, *args, **kwargs) -> None:
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -324,6 +326,7 @@ class SC2Context(CommonContext):
             self.disable_forced_camera = args["slot_data"]["disable_forced_camera"]
             self.skip_cutscenes = args["slot_data"]["skip_cutscenes"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
+            self.slot_data_version = args["slot_data"].get("version", 2)
             slot_req_table: dict = args["slot_data"]["mission_req"]
 
             first_item = list(slot_req_table.keys())[0]
@@ -509,6 +512,12 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                 for bundled_number in upgrade_numbers[item_data.number]:
                     accumulators[item_data.race][flaggroup] += 1 << bundled_number
 
+            # Regen bio-steel nerf with API3 - undo for older games
+            if ctx.slot_data_version < 3 and name == ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL:
+                current_level = (accumulators[item_data.race][flaggroup] >> item_data.number) % 4
+                if current_level == 2:
+                    # Switch from level 2 to level 3 for compatibility
+                    accumulators[item_data.race][flaggroup] += 1 << item_data.number
         # sum
         else:
             accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += item_data.number
@@ -652,9 +661,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 start_items[SC2Race.ANY][2]
             ))
             terran_items = start_items[SC2Race.TERRAN]
-            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
-                terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9]))
+                terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
+                terran_items[11]))
             await self.chat_send("?GiveProtossTech {}".format(start_items[SC2Race.PROTOSS][0]))
             await self.chat_send("?SetColor rr " + str(self.ctx.player_color))  # TODO: Add faction color options
             # TODO needs zerg tech command
@@ -680,9 +690,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
                 terran_items = current_items[SC2Race.TERRAN]
-                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
+                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
                     terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
-                    terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9]))
+                    terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9],
+                    terran_items[10], terran_items[11]))
                 await self.chat_send("?GiveProtossTech {}".format(current_items[SC2Race.PROTOSS][0]))
                 # TODO needs zerg tech command
                 self.last_received_update = len(self.ctx.items_received)
