@@ -14,7 +14,9 @@ def add_coin_freemium(region: Region, Coin: int, player: int):
     location_coin = f"{region.name} coins freemium"
     location = DLCQuestLocation(player, location_coin, None, region)
     region.locations.append(location)
-    location.place_locked_item(create_event(player, number_coin))
+    event = create_event(player, number_coin)
+    event.freemium_coins = Coin
+    location.place_locked_item(event)
 
 
 def add_coin_dlcquest(region: Region, Coin: int, player: int):
@@ -22,7 +24,9 @@ def add_coin_dlcquest(region: Region, Coin: int, player: int):
     location_coin = f"{region.name} coins"
     location = DLCQuestLocation(player, location_coin, None, region)
     region.locations.append(location)
-    location.place_locked_item(create_event(player, number_coin))
+    event = create_event(player, number_coin)
+    event.coins = Coin
+    location.place_locked_item(event)
 
 
 def create_regions(world: MultiWorld, player: int, World_Options: Options.DLCQuestOptions):

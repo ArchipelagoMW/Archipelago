@@ -11,6 +11,8 @@ from . import Options, data
 
 class DLCQuestItem(Item):
     game: str = "DLCQuest"
+    coins: int = 0
+    freemium_coins: int = 0
 
 
 offset = 120_000

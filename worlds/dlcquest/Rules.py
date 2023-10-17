@@ -7,34 +7,16 @@ from . import Options
 from .Items import DLCQuestItem
 
 
-def create_event(player, event: str):
+def create_event(player, event: str) -> DLCQuestItem:
     return DLCQuestItem(event, ItemClassification.progression, None, player)
 
 
 def set_rules(world, player, World_Options: Options.DLCQuestOptions):
     def has_enough_coin(player: int, coin: int):
-        def has_coin(state, player: int, coins: int):
-            coin_possessed = 0
-            for i in [4, 7, 9, 10, 46, 50, 60, 76, 89, 100, 171, 203]:
-                name_coin = f"{i} coins"
-                if state.has(name_coin, player):
-                    coin_possessed += i
-
-            return coin_possessed >= coins
-
-        return lambda state: has_coin(state, player, coin)
+        return lambda state: state.prog_items["COINS", player] >= coin
 
     def has_enough_coin_freemium(player: int, coin: int):
-        def has_coin(state, player: int, coins: int):
-            coin_possessed = 0
-            for i in [20, 50, 90, 95, 130, 150, 154, 200]:
-                name_coin = f"{i} coins freemium"
-                if state.has(name_coin, player):
-                    coin_possessed += i
-
-            return coin_possessed >= coins
-
-        return lambda state: has_coin(state, player, coin)
+        return lambda state: state.prog_items["COINS_FREEMIUM", player] >= coin
 
     set_basic_rules(World_Options, has_enough_coin, player, world)
     set_lfod_rules(World_Options, has_enough_coin_freemium, player, world)
