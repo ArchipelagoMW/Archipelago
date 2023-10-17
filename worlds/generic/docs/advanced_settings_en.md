@@ -108,7 +108,7 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
     * `minimal` will only guarantee that the seed is beatable. You will be guaranteed able to finish the seed logically
       but may not be able to access all locations or acquire all items. A good example of this is having a big key in
       the big chest in a dungeon in ALTTP making it impossible to get and finish the dungeon.
-* `progression_balancing` is a system the Archipelago generator uses to try and reduce ["BK mode"](/glossary/en) as much
+* `progression_balancing` is a system the Archipelago generator uses to try and reduce ["BK mode"](/glossary/en/#burger-king-/-bk-mode) as much
   as possible. This primarily involves moving necessary progression items into earlier logic spheres to make the
   games more accessible so that players almost always have something to do. This can be in a range from 0 to 99, and is
   50 by default. This number represents a percentage of the furthest progressible player.
