@@ -3,7 +3,7 @@ from .Rules import set_rules
 from BaseClasses import Item, Tutorial, Region, Entrance, Location
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
-from . import Constants
+from . import Constants, Rules
 from .Options import Shivers_options, get_option_value
 
 client_version = 0
@@ -43,7 +43,7 @@ class ShiversWorld(World):
         loc.place_locked_item(self.create_event_item(event_name))
         region.locations.append(loc)
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         # Create regions
         for region_name, exits in Constants.region_info["regions"]:
             r = Region(region_name, self.player, self.multiworld)
@@ -59,10 +59,13 @@ class ShiversWorld(World):
         
         # Locations
         # Build exclusion list
+        include_information_plaques: bool = getattr(self.multiworld, "include_information_plaques")[self.player].value
+        elevators_stay_solved: bool = getattr(self.multiworld, "elevators_stay_solved")[self.player].value
+
         self.removed_locations = set()
-        if not self.multiworld.include_information_plaques[self.player]:
+        if not include_information_plaques:
             self.removed_locations.update(Constants.exclusion_info["plaques"])
-        if not self.multiworld.elevators_stay_solved[self.player]:
+        if not elevators_stay_solved:
             self.removed_locations.update(Constants.exclusion_info["elevators"])
 
         # Add locations
@@ -73,9 +76,8 @@ class ShiversWorld(World):
                     loc = ShiversLocation(self.player, loc_name,
                                           self.location_name_to_id.get(loc_name, None), region)
                     region.locations.append(loc)
-                
 
-    def create_items(self) -> Item:
+    def create_items(self) -> None:
         # Add pots
         pots = [self.create_item(name) for name, data in item_table.items() if data.type == 'pot']
 
@@ -115,7 +117,8 @@ class ShiversWorld(World):
 
         #If front door option is on, determine which set of keys will be used for lobby access and add front door key to item pool
         lobby_access_keys = 1
-        if self.multiworld.front_door_usable[self.player]:
+        front_door_usable: bool = getattr(self.multiworld, "front_door_usable")[self.player].value
+        if front_door_usable:
             lobby_access_keys = library_random = self.random.randint(1, 2)
             keys += [self.create_item("Key for Front Door")]
         else:
@@ -171,6 +174,7 @@ class ShiversWorld(World):
 
     def generate_basic(self):
         self.multiworld.completion_condition[self.player] = lambda state: Rules.lightning_capturable(state, self.player)
+
 
     def _get_slot_data(self):
         return {

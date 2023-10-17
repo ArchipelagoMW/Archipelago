@@ -150,12 +150,6 @@ def get_rules_lookup(player: int):
             "Ixupi Captured Crystal": lambda state: crystal_capturable(state, player),
             "Ixupi Captured Sand": lambda state: sand_capturable(state, player),
             "Ixupi Captured Metal": lambda state: metal_capturable(state, player),
-            "Puzzle Solved Underground Elevator": lambda state: ((state.can_reach("Underground Lake", "Region", player) or state.can_reach("Office", "Region", player)
-                                                                  and state.has("Key for Office Elevator", player))),
-            "Puzzle Solved Bedroom Elevator": lambda state: (state.can_reach("Office", "Region", player) and state.has("Key for Bedroom Elevator", player) and
-                                                             state.has("Crawling", player)),
-            "Puzzle Solved Three Floor Elevator": lambda state: ((state.can_reach("Maintenance Tunnels", "Region", player) or state.can_reach("Blue Maze", "Region", player)
-                                                                  and state.has("Key for Three Floor Elevator", player))),
             "Final Riddle: Planets Aligned": lambda state: state.can_reach("Fortune Teller", "Region", player),
             "Final Riddle: Norse God Stone Message": lambda state: (state.can_reach("Fortune Teller", "Region", player) and state.can_reach("UFO", "Region", player)),
             "Final Riddle: Beth's Body Page 17": lambda state: beths_body_available(state, player),
@@ -168,7 +162,15 @@ def get_rules_lookup(player: int):
             "Puzzle Solved Red Door": lambda state: state.can_reach("Maintenance Tunnels", "Region", player),
             "Puzzle Solved UFO Symbols": lambda state: state.can_reach("Library", "Region", player),
             "Puzzle Solved Maze Door": lambda state: state.can_reach("Projector Room", "Region", player)
-            }
+            },
+        "elevators": {
+            "Puzzle Solved Underground Elevator": lambda state: ((state.can_reach("Underground Lake", "Region", player) or state.can_reach("Office", "Region", player)
+                                                                  and state.has("Key for Office Elevator", player))),
+            "Puzzle Solved Bedroom Elevator": lambda state: (state.can_reach("Office", "Region", player) and state.has("Key for Bedroom Elevator", player) and
+                                                             state.has("Crawling", player)),
+            "Puzzle Solved Three Floor Elevator": lambda state: ((state.can_reach("Maintenance Tunnels", "Region", player) or state.can_reach("Blue Maze", "Region", player)
+                                                                  and state.has("Key for Three Floor Elevator", player)))
+        }
     }
     return rules_lookup
 
@@ -190,6 +192,9 @@ def set_rules(Shivers: World) -> None:
     #Set option location rules
     if get_option_value(multiworld, player, "puzzle_hints_required") == True:
         for location_name, rule in rules_lookup["locations_puzzle_hints"].items():
+            multiworld.get_location(location_name, player).access_rule = rule
+    if get_option_value(multiworld, player, "elevators_stay_solved") == True:
+        for location_name, rule in rules_lookup["elevators"].items():
             multiworld.get_location(location_name, player).access_rule = rule
 
     #forbid cloth in janitor closet and oil in tar river
@@ -240,5 +245,7 @@ def set_rules(Shivers: World) -> None:
     forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Projector Room", player)
     forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Bedroom", player)
     forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Prehistoric", player)
+
+
 
     
