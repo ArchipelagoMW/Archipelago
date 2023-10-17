@@ -1,6 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
+from worlds.AutoWorld import World
 from .Names import LocationName, ItemName
 from .Locations import boss_gate_set
 from worlds.AutoWorld import LogicMixin
@@ -37,7 +38,7 @@ def set_mission_progress_rules(multiworld: MultiWorld, player: int, mission_map:
                      lambda state, prev_location_name=prev_location_name: state.can_reach(prev_location_name, "Location", player))
 
 
-def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
+def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, player: int):
     # Mission 1 Upgrade Requirements
     add_rule_safe(multiworld, LocationName.metal_harbor_1, player,
                   lambda state: state.has(ItemName.sonic_light_shoes, player))
@@ -391,7 +392,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
              lambda state: state.has(ItemName.eggman_jet_engine, player))
 
     # Chao Key Upgrade Requirements
-    if multiworld.keysanity[player]:
+    if world.options.keysanity:
         add_rule(multiworld.get_location(LocationName.prison_lane_chao_1, player),
                  lambda state: state.has(ItemName.tails_bazooka, player))
         add_rule(multiworld.get_location(LocationName.mission_street_chao_1, player),
@@ -490,7 +491,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.sonic_flame_ring, player))
 
     # Pipe Upgrade Requirements
-    if multiworld.whistlesanity[player].value == 1 or multiworld.whistlesanity[player].value == 3:
+    if world.options.whistlesanity.value == 1 or world.options.whistlesanity.value == 3:
         add_rule(multiworld.get_location(LocationName.mission_street_pipe_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.hidden_base_pipe_1, player),
@@ -602,7 +603,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.knuckles_air_necklace, player))
 
     # Hidden Whistle Upgrade Requirements
-    if multiworld.whistlesanity[player].value == 2 or multiworld.whistlesanity[player].value == 3:
+    if world.options.whistlesanity.value == 2 or world.options.whistlesanity.value == 3:
         add_rule(multiworld.get_location(LocationName.mission_street_hidden_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.mission_street_hidden_4, player),
@@ -621,7 +622,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.eggman_jet_engine, player))
 
     # Omochao Upgrade Requirements
-    if multiworld.omosanity[player]:
+    if world.options.omosanity:
         add_rule(multiworld.get_location(LocationName.eternal_engine_omo_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
@@ -789,7 +790,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.sonic_flame_ring, player))
 
     # Gold Beetle Upgrade Requirements
-    if multiworld.beetlesanity[player]:
+    if world.options.beetlesanity:
         add_rule(multiworld.get_location(LocationName.mission_street_beetle, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.hidden_base_beetle, player),
@@ -829,7 +830,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.knuckles_air_necklace, player))
 
     # Animal Upgrade Requirements
-    if multiworld.animalsanity[player]:
+    if world.options.animalsanity:
         add_rule(multiworld.get_location(LocationName.hidden_base_animal_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
@@ -1329,7 +1330,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
         add_rule(multiworld.get_location(LocationName.radical_highway_animal_20, player),
                  lambda state: state.has(ItemName.shadow_flame_ring, player))
 
-def set_mission_upgrade_rules_hard(multiworld: MultiWorld, player: int):
+def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player: int):
     # Mission 1 Upgrade Requirements
     add_rule_safe(multiworld, LocationName.pumpkin_hill_1, player,
                   lambda state: state.has(ItemName.knuckles_shovel_claws, player))
@@ -1546,7 +1547,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, player: int):
              lambda state: state.has(ItemName.eggman_jet_engine, player))
 
     # Chao Key Upgrade Requirements
-    if multiworld.keysanity[player]:
+    if world.options.keysanity:
         add_rule(multiworld.get_location(LocationName.prison_lane_chao_1, player),
                  lambda state: state.has(ItemName.tails_bazooka, player))
         add_rule(multiworld.get_location(LocationName.mission_street_chao_1, player),
@@ -1619,7 +1620,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.sonic_flame_ring, player))
 
     # Pipe Upgrade Requirements
-    if multiworld.whistlesanity[player].value == 1 or multiworld.whistlesanity[player].value == 3:
+    if world.options.whistlesanity.value == 1 or world.options.whistlesanity.value == 3:
         add_rule(multiworld.get_location(LocationName.hidden_base_pipe_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
@@ -1696,7 +1697,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.knuckles_hammer_gloves, player))
 
     # Hidden Whistle Upgrade Requirements
-    if multiworld.whistlesanity[player].value == 2 or multiworld.whistlesanity[player].value == 3:
+    if world.options.whistlesanity.value == 2 or world.options.whistlesanity.value == 3:
         add_rule(multiworld.get_location(LocationName.mission_street_hidden_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.mission_street_hidden_4, player),
@@ -1710,7 +1711,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, player: int):
                  lambda state: state.has(ItemName.tails_booster, player))
 
     # Omochao Upgrade Requirements
-    if multiworld.omosanity[player]:
+    if world.options.omosanity:
         add_rule(multiworld.get_location(LocationName.eternal_engine_omo_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
@@ -1829,7 +1830,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.sonic_flame_ring, player))
 
     # Gold Beetle Upgrade Requirements
-    if multiworld.beetlesanity[player]:
+    if world.options.beetlesanity:
         add_rule(multiworld.get_location(LocationName.hidden_base_beetle, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.death_chamber_beetle, player),
@@ -1857,7 +1858,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, player: int):
                                state.has(ItemName.knuckles_hammer_gloves, player))
 
     # Animal Upgrade Requirements
-    if multiworld.animalsanity[player]:
+    if world.options.animalsanity:
         add_rule(multiworld.get_location(LocationName.hidden_base_animal_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
@@ -2196,22 +2197,22 @@ def set_boss_gate_rules(multiworld: MultiWorld, player: int, gate_bosses: typing
                      lambda state: state.has(ItemName.knuckles_shovel_claws, player))
 
 
-def set_rules(multiworld: MultiWorld, player: int, gate_bosses: typing.Dict[int, int], boss_rush_map: typing.Dict[int, int], mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int], black_market_costs: typing.Dict[int, int]):
+def set_rules(multiworld: MultiWorld, world: World, player: int, gate_bosses: typing.Dict[int, int], boss_rush_map: typing.Dict[int, int], mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int], black_market_costs: typing.Dict[int, int]):
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(multiworld, player, mission_map, mission_count_map)
 
-    if multiworld.goal[player].value != 3:
+    if world.options.goal.value != 3:
         # Upgrade Requirements for each mission location
-        if multiworld.logic_difficulty[player].value == 0:
-            set_mission_upgrade_rules_standard(multiworld, player)
-        elif multiworld.logic_difficulty[player].value == 1:
-            set_mission_upgrade_rules_hard(multiworld, player)
+        if world.options.logic_difficulty.value == 0:
+            set_mission_upgrade_rules_standard(multiworld, world, player)
+        elif world.options.logic_difficulty.value == 1:
+            set_mission_upgrade_rules_hard(multiworld, world, player)
 
-        for i in range(multiworld.black_market_slots[player].value):
+        for i in range(world.options.black_market_slots.value):
             add_rule(multiworld.get_location(LocationName.chao_black_market_base + str(i + 1), player),
                      lambda state, i=i: (state.has(ItemName.market_token, player, black_market_costs[i])))
 
-    if multiworld.goal[player] in [4, 5, 6]:
+    if world.options.goal in [4, 5, 6]:
         for i in range(16):
             if boss_rush_map[i] == 10:
                 add_rule(multiworld.get_location("Boss Rush - " + str(i + 1), player),
@@ -2220,4 +2221,4 @@ def set_rules(multiworld: MultiWorld, player: int, gate_bosses: typing.Dict[int,
     # Upgrade Requirements for each boss gate
     set_boss_gate_rules(multiworld, player, gate_bosses)
 
-    multiworld.completion_condition[player] = lambda state: state.has(ItemName.maria, player)
+    world.options.completion_condition = lambda state: state.has(ItemName.maria, player)

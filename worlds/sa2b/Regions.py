@@ -2,6 +2,7 @@ import typing
 import math
 
 from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
+from worlds.AutoWorld import World
 from .Items import SA2BItem
 from .Locations import SA2BLocation, boss_gate_location_table, boss_gate_set,\
                                      chao_stat_swim_table, chao_stat_fly_table, chao_stat_run_table,\
@@ -91,34 +92,34 @@ gate_0_whitelist_regions = [
 ]
 
 
-def create_regions(multiworld: MultiWorld, player: int, active_locations):
+def create_regions(multiworld: MultiWorld, world: World, player: int, active_locations):
     menu_region = create_region(multiworld, player, active_locations, 'Menu', None)
 
     conditional_regions = []
     gate_0_region = create_region(multiworld, player, active_locations, 'Gate 0', None)
     conditional_regions += [gate_0_region]
 
-    if multiworld.number_of_level_gates[player].value >= 1:
+    if world.options.number_of_level_gates.value >= 1:
         gate_1_boss_region = create_region(multiworld, player, active_locations, 'Gate 1 Boss', [LocationName.gate_1_boss])
         gate_1_region = create_region(multiworld, player, active_locations, 'Gate 1', None)
         conditional_regions += [gate_1_region, gate_1_boss_region]
 
-    if multiworld.number_of_level_gates[player].value >= 2:
+    if world.options.number_of_level_gates.value >= 2:
         gate_2_boss_region = create_region(multiworld, player, active_locations, 'Gate 2 Boss', [LocationName.gate_2_boss])
         gate_2_region = create_region(multiworld, player, active_locations, 'Gate 2', None)
         conditional_regions += [gate_2_region, gate_2_boss_region]
 
-    if multiworld.number_of_level_gates[player].value >= 3:
+    if world.options.number_of_level_gates.value >= 3:
         gate_3_boss_region = create_region(multiworld, player, active_locations, 'Gate 3 Boss', [LocationName.gate_3_boss])
         gate_3_region = create_region(multiworld, player, active_locations, 'Gate 3', None)
         conditional_regions += [gate_3_region, gate_3_boss_region]
 
-    if multiworld.number_of_level_gates[player].value >= 4:
+    if world.options.number_of_level_gates.value >= 4:
         gate_4_boss_region = create_region(multiworld, player, active_locations, 'Gate 4 Boss', [LocationName.gate_4_boss])
         gate_4_region = create_region(multiworld, player, active_locations, 'Gate 4', None)
         conditional_regions += [gate_4_region, gate_4_boss_region]
 
-    if multiworld.number_of_level_gates[player].value >= 5:
+    if world.options.number_of_level_gates.value >= 5:
         gate_5_boss_region = create_region(multiworld, player, active_locations, 'Gate 5 Boss', [LocationName.gate_5_boss])
         gate_5_region = create_region(multiworld, player, active_locations, 'Gate 5', None)
         conditional_regions += [gate_5_region, gate_5_boss_region]
@@ -1435,7 +1436,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
     chao_karate_super_region = create_region(multiworld, player, active_locations, LocationName.chao_karate_super_region,
                                              chao_karate_super_region_locations)
 
-    if multiworld.goal[player] == 7 or multiworld.chao_animal_parts[player]:
+    if world.options.goal == 7 or world.options.chao_animal_parts:
         animal_penguin_region_locations = [
             LocationName.animal_penguin,
             LocationName.chao_penguin_arms,
@@ -1656,13 +1657,13 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
                                               animal_phoenix_region_locations)
         conditional_regions += [animal_phoenix_region]
 
-    if multiworld.chao_kindergarten[player]:
+    if world.options.chao_kindergarten:
         chao_kindergarten_region_locations = list(chao_kindergarten_location_table.keys()) + list(chao_kindergarten_basics_location_table.keys())
         chao_kindergarten_region = create_region(multiworld, player, active_locations, LocationName.chao_kindergarten_region,
                                                  chao_kindergarten_region_locations)
         conditional_regions += [chao_kindergarten_region]
 
-    if multiworld.black_market_slots[player].value > 0:
+    if world.options.black_market_slots.value > 0:
 
         black_market_region_locations = list(black_market_location_table.keys())
         black_market_region = create_region(multiworld, player, active_locations, LocationName.black_market_region,
@@ -1670,7 +1671,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
         conditional_regions += [black_market_region]
 
     kart_race_beginner_region_locations = []
-    if multiworld.kart_race_checks[player] == 2:
+    if world.options.kart_race_checks == 2:
         kart_race_beginner_region_locations.extend([
             LocationName.kart_race_beginner_sonic,
             LocationName.kart_race_beginner_tails,
@@ -1679,13 +1680,13 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
             LocationName.kart_race_beginner_eggman,
             LocationName.kart_race_beginner_rouge,
         ])
-    if multiworld.kart_race_checks[player] == 1:
+    if world.options.kart_race_checks == 1:
         kart_race_beginner_region_locations.append(LocationName.kart_race_beginner)
     kart_race_beginner_region = create_region(multiworld, player, active_locations, LocationName.kart_race_beginner_region,
                                               kart_race_beginner_region_locations)
 
     kart_race_standard_region_locations = []
-    if multiworld.kart_race_checks[player] == 2:
+    if world.options.kart_race_checks == 2:
         kart_race_standard_region_locations.extend([
             LocationName.kart_race_standard_sonic,
             LocationName.kart_race_standard_tails,
@@ -1694,13 +1695,13 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
             LocationName.kart_race_standard_eggman,
             LocationName.kart_race_standard_rouge,
         ])
-    if multiworld.kart_race_checks[player] == 1:
+    if world.options.kart_race_checks == 1:
         kart_race_standard_region_locations.append(LocationName.kart_race_standard)
     kart_race_standard_region = create_region(multiworld, player, active_locations, LocationName.kart_race_standard_region,
                                               kart_race_standard_region_locations)
 
     kart_race_expert_region_locations = []
-    if multiworld.kart_race_checks[player] == 2:
+    if world.options.kart_race_checks == 2:
         kart_race_expert_region_locations.extend([
             LocationName.kart_race_expert_sonic,
             LocationName.kart_race_expert_tails,
@@ -1709,26 +1710,26 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
             LocationName.kart_race_expert_eggman,
             LocationName.kart_race_expert_rouge,
         ])
-    if multiworld.kart_race_checks[player] == 1:
+    if world.options.kart_race_checks == 1:
         kart_race_expert_region_locations.append(LocationName.kart_race_expert)
     kart_race_expert_region = create_region(multiworld, player, active_locations, LocationName.kart_race_expert_region,
                                             kart_race_expert_region_locations)
 
-    if multiworld.goal[player] == 3:
+    if world.options.goal == 3:
         grand_prix_region_locations = [
             LocationName.grand_prix,
         ]
         grand_prix_region = create_region(multiworld, player, active_locations, LocationName.grand_prix_region,
                                           grand_prix_region_locations)
         conditional_regions += [grand_prix_region]
-    elif multiworld.goal[player] in [0, 2, 4, 5, 6]:
+    elif world.options.goal in [0, 2, 4, 5, 6]:
         biolizard_region_locations = [
             LocationName.finalhazard,
         ]
         biolizard_region = create_region(multiworld, player, active_locations, LocationName.biolizard_region,
                                          biolizard_region_locations)
         conditional_regions += [biolizard_region]
-    elif multiworld.goal[player] == 7:
+    elif world.options.goal == 7:
         chaos_chao_region_locations = [
             LocationName.chaos_chao,
         ]
@@ -1736,7 +1737,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
                                           chaos_chao_region_locations)
         conditional_regions += [chaos_chao_region]
 
-    if multiworld.goal[player] in [1, 2]:
+    if world.options.goal in [1, 2]:
         green_hill_region_locations = [
             LocationName.green_hill,
             LocationName.green_hill_chao_1,
@@ -1746,7 +1747,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
                                           green_hill_region_locations)
         conditional_regions += [green_hill_region]
 
-    if multiworld.goal[player] in [4, 5, 6]:
+    if world.options.goal in [4, 5, 6]:
         for i in range(16):
             boss_region_locations = [
                 "Boss Rush - " + str(i + 1),
@@ -1805,22 +1806,22 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
     multiworld.regions += conditional_regions
 
 
-def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses, boss_rush_bosses, first_cannons_core_mission: str, final_cannons_core_mission: str):
+def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses, boss_rush_bosses, first_cannons_core_mission: str, final_cannons_core_mission: str):
     names: typing.Dict[str, int] = {}
 
     connect(multiworld, player, names, 'Menu', LocationName.gate_0_region)
     connect(multiworld, player, names, LocationName.gate_0_region, LocationName.cannon_core_region,
             lambda state: (state.has(ItemName.emblem, player, cannon_core_emblems)))
 
-    if multiworld.goal[player] == 0:
+    if world.options.goal == 0:
         required_mission_name = first_cannons_core_mission
 
-        if multiworld.required_cannons_core_missions[player].value == 1:
+        if world.options.required_cannons_core_missions.value == 1:
             required_mission_name = final_cannons_core_mission
 
         connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
                 lambda state: (state.can_reach(required_mission_name, "Location", player)))
-    elif multiworld.goal[player] in [1, 2]:
+    elif world.options.goal in [1, 2]:
         connect(multiworld, player, names, 'Menu', LocationName.green_hill_region,
                 lambda state: (state.has(ItemName.white_emerald, player) and
                                state.has(ItemName.red_emerald, player) and
@@ -1829,22 +1830,22 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
                                state.has(ItemName.green_emerald, player) and
                                state.has(ItemName.yellow_emerald, player) and
                                state.has(ItemName.blue_emerald, player)))
-        if multiworld.goal[player] == 2:
+        if world.options.goal == 2:
             connect(multiworld, player, names, LocationName.green_hill_region, LocationName.biolizard_region)
-    elif multiworld.goal[player] == 3:
+    elif world.options.goal == 3:
         connect(multiworld, player, names, LocationName.kart_race_expert_region, LocationName.grand_prix_region)
-    elif multiworld.goal[player] in [4, 5, 6]:
-        if multiworld.goal[player] == 4:
+    elif world.options.goal in [4, 5, 6]:
+        if world.options.goal == 4:
             connect(multiworld, player, names, LocationName.gate_0_region, LocationName.boss_rush_1_region)
-        elif multiworld.goal[player] == 5:
+        elif world.options.goal == 5:
             required_mission_name = first_cannons_core_mission
 
-            if multiworld.required_cannons_core_missions[player].value == 1:
+            if world.options.required_cannons_core_missions.value == 1:
                 required_mission_name = final_cannons_core_mission
 
             connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.boss_rush_1_region,
                     lambda state: (state.can_reach(required_mission_name, "Location", player)))
-        elif multiworld.goal[player] == 6:
+        elif world.options.goal == 6:
             connect(multiworld, player, names, LocationName.gate_0_region, LocationName.boss_rush_1_region,
                     lambda state: (state.has(ItemName.white_emerald, player) and
                                    state.has(ItemName.red_emerald, player) and
@@ -1862,7 +1863,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
                 connect(multiworld, player, names, "Boss Rush " + str(i + 1), "Boss Rush " + str(i + 2))
 
         connect(multiworld, player, names, LocationName.boss_rush_16_region, LocationName.biolizard_region)
-    elif multiworld.goal[player] == 7:
+    elif world.options.goal == 7:
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.chaos_chao,
                 lambda state: (state.has_all(chao_animal_event_location_table.keys(), player)))
 
@@ -1949,7 +1950,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.kart_race_expert_region)
 
-        if multiworld.chao_kindergarten[player]:
+        if world.options.chao_kindergarten:
             connect(multiworld, player, names, LocationName.gate_0_region, LocationName.chao_kindergarten_region)
     elif gates_len == 2:
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.chao_race_beginner_region)
@@ -1965,7 +1966,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
         connect(multiworld, player, names, LocationName.gate_1_region, LocationName.kart_race_expert_region)
 
-        if multiworld.chao_kindergarten[player]:
+        if world.options.chao_kindergarten:
             connect(multiworld, player, names, LocationName.gate_1_region, LocationName.chao_kindergarten_region)
     elif gates_len == 3:
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.chao_race_beginner_region)
@@ -1981,7 +1982,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
         connect(multiworld, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
         connect(multiworld, player, names, LocationName.gate_2_region, LocationName.kart_race_expert_region)
 
-        if multiworld.chao_kindergarten[player]:
+        if world.options.chao_kindergarten:
             connect(multiworld, player, names, LocationName.gate_1_region, LocationName.chao_kindergarten_region)
     elif gates_len == 4:
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.chao_race_beginner_region)
@@ -1997,7 +1998,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
         connect(multiworld, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
         connect(multiworld, player, names, LocationName.gate_3_region, LocationName.kart_race_expert_region)
 
-        if multiworld.chao_kindergarten[player]:
+        if world.options.chao_kindergarten:
             connect(multiworld, player, names, LocationName.gate_2_region, LocationName.chao_kindergarten_region)
     elif gates_len == 5:
         connect(multiworld, player, names, LocationName.gate_1_region, LocationName.chao_race_beginner_region)
@@ -2013,7 +2014,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
         connect(multiworld, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
         connect(multiworld, player, names, LocationName.gate_3_region, LocationName.kart_race_expert_region)
 
-        if multiworld.chao_kindergarten[player]:
+        if world.options.chao_kindergarten:
             connect(multiworld, player, names, LocationName.gate_3_region, LocationName.chao_kindergarten_region)
     elif gates_len >= 6:
         connect(multiworld, player, names, LocationName.gate_1_region, LocationName.chao_race_beginner_region)
@@ -2029,12 +2030,12 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
         connect(multiworld, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
         connect(multiworld, player, names, LocationName.gate_4_region, LocationName.kart_race_expert_region)
 
-        if multiworld.chao_kindergarten[player]:
+        if world.options.chao_kindergarten:
             connect(multiworld, player, names, LocationName.gate_3_region, LocationName.chao_kindergarten_region)
 
-    stat_checks_per_gate = multiworld.chao_stats[player].value / (gates_len)
-    for index in range(1, multiworld.chao_stats[player].value + 1):
-        if (index % multiworld.chao_stats_frequency[player].value) == (multiworld.chao_stats[player].value % multiworld.chao_stats_frequency[player].value):
+    stat_checks_per_gate = world.options.chao_stats.value / (gates_len)
+    for index in range(1, world.options.chao_stats.value + 1):
+        if (index % world.options.chao_stats_frequency.value) == (world.options.chao_stats.value % world.options.chao_stats_frequency.value):
             gate_val    = math.ceil(index / stat_checks_per_gate) - 1
             gate_region = multiworld.get_region("Gate " + str(gate_val), player)
 
@@ -2058,13 +2059,13 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
             location_power = SA2BLocation(player, loc_name_power, loc_id_power, gate_region)
             gate_region.locations.append(location_power)
 
-            if multiworld.chao_stats_stamina[player]:
+            if world.options.chao_stats_stamina:
                 loc_name_stamina = LocationName.chao_stat_stamina_base + str(index)
                 loc_id_stamina   = chao_stat_stamina_table[loc_name_stamina]
                 location_stamina = SA2BLocation(player, loc_name_stamina, loc_id_stamina, gate_region)
                 gate_region.locations.append(location_stamina)
 
-            if multiworld.chao_stats_hidden[player]:
+            if world.options.chao_stats_hidden:
                 loc_name_luck = LocationName.chao_stat_luck_base + str(index)
                 loc_id_luck   = chao_stat_luck_table[loc_name_luck]
                 location_luck = SA2BLocation(player, loc_name_luck, loc_id_luck, gate_region)
@@ -2076,7 +2077,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
                 gate_region.locations.append(location_intelligence)
 
     # Handle access to Animal Parts
-    if multiworld.goal[player] == 7 or multiworld.chao_animal_parts[player]:
+    if world.options.goal == 7 or world.options.chao_animal_parts:
         connect(multiworld, player, names, LocationName.city_escape_region, LocationName.animal_rabbit)
         connect(multiworld, player, names, LocationName.city_escape_region, LocationName.animal_skunk)
         connect(multiworld, player, names, LocationName.city_escape_region, LocationName.animal_sheep)
@@ -2240,14 +2241,14 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
         connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_gorilla)
         connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_skunk)
 
-        if multiworld.goal[player] in [1, 2]:
+        if world.options.goal in [1, 2]:
             connect(multiworld, player, names, LocationName.green_hill_region, LocationName.animal_penguin)
             connect(multiworld, player, names, LocationName.green_hill_region, LocationName.animal_otter)
             connect(multiworld, player, names, LocationName.green_hill_region, LocationName.animal_gorilla)
             connect(multiworld, player, names, LocationName.green_hill_region, LocationName.animal_raccoon)
             connect(multiworld, player, names, LocationName.green_hill_region, LocationName.animal_unicorn)
 
-        if multiworld.logic_difficulty[player].value == 0:
+        if world.options.logic_difficulty.value == 0:
             connect(multiworld, player, names, LocationName.metal_harbor_region, LocationName.animal_phoenix,
                     lambda state: (state.has(ItemName.sonic_light_shoes, player)))
 
@@ -2301,7 +2302,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
                     lambda state: (state.has(ItemName.tails_booster, player) and
                                    state.has(ItemName.eggman_jet_engine, player)))
 
-        elif multiworld.logic_difficulty[player].value == 1:
+        elif world.options.logic_difficulty.value == 1:
             connect(multiworld, player, names, LocationName.metal_harbor_region, LocationName.animal_phoenix)
 
             connect(multiworld, player, names, LocationName.crazy_gadget_region, LocationName.animal_skunk)
@@ -2335,7 +2336,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
             connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_phoenix,
                     lambda state: (state.has(ItemName.tails_booster, player)))
 
-        if multiworld.keysanity[player]:
+        if world.options.keysanity:
             connect(multiworld, player, names, LocationName.wild_canyon_region, LocationName.animal_dragon,
                     lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
 
@@ -2350,7 +2351,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
             connect(multiworld, player, names, LocationName.lost_colony_region, LocationName.animal_raccoon,
                     lambda state: (state.has(ItemName.eggman_jet_engine, player)))
 
-            if multiworld.logic_difficulty[player].value == 0:
+            if world.options.logic_difficulty.value == 0:
                 connect(multiworld, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.eggman_jet_engine, player) and
                                        state.has(ItemName.eggman_large_cannon, player)))
@@ -2358,7 +2359,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
                 connect(multiworld, player, names, LocationName.sand_ocean_region, LocationName.animal_skeleton_dog,
                         lambda state: (state.has(ItemName.eggman_jet_engine, player) and
                                        state.has(ItemName.eggman_large_cannon, player)))
-            if multiworld.logic_difficulty[player].value == 1:
+            if world.options.logic_difficulty.value == 1:
                 connect(multiworld, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.eggman_jet_engine, player)))
 
@@ -2397,7 +2398,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
 
             connect(multiworld, player, names, LocationName.sky_rail_region, LocationName.animal_phoenix)
 
-            if multiworld.logic_difficulty[player].value == 0:
+            if world.options.logic_difficulty.value == 0:
                 connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
                         lambda state: (state.has(ItemName.sonic_light_shoes, player) and
                                        state.has(ItemName.sonic_bounce_bracelet, player) and
@@ -2411,7 +2412,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
                                        state.has(ItemName.eggman_jet_engine, player) and
                                        state.has(ItemName.knuckles_air_necklace, player) and
                                        state.has(ItemName.knuckles_hammer_gloves, player)))
-            elif multiworld.logic_difficulty[player].value == 1:
+            elif world.options.logic_difficulty.value == 1:
                 connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog)
 
                 connect(multiworld, player, names, LocationName.white_jungle_region, LocationName.animal_dragon)
@@ -2420,7 +2421,7 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
                         lambda state: (state.has(ItemName.tails_booster, player) and
                                        state.has(ItemName.knuckles_hammer_gloves, player)))
 
-    if multiworld.black_market_slots[player].value > 0:
+    if world.options.black_market_slots.value > 0:
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.black_market_region)
 
 

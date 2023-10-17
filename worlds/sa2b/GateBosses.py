@@ -1,5 +1,6 @@
 import typing
 from BaseClasses import MultiWorld
+from worlds.AutoWorld import World
 
 speed_characters_1 = "Sonic vs Shadow 1"
 speed_characters_2 = "Sonic vs Shadow 2"
@@ -60,15 +61,15 @@ def boss_has_requirement(boss: int):
     return boss >= len(gate_bosses_no_requirements_table)
 
 
-def get_gate_bosses(multiworld: MultiWorld, player: int):
+def get_gate_bosses(multiworld: MultiWorld, world: World):
     selected_bosses: typing.List[int] = []
     boss_gates: typing.List[int] = []
     available_bosses: typing.List[str] = list(gate_bosses_no_requirements_table.keys())
     multiworld.random.shuffle(available_bosses)
     halfway = False
 
-    for x in range(multiworld.number_of_level_gates[player]):
-        if (not halfway) and ((x + 1) / multiworld.number_of_level_gates[player]) > 0.5:
+    for x in range(world.options.number_of_level_gates):
+        if (not halfway) and ((x + 1) / world.options.number_of_level_gates) > 0.5:
             available_bosses.extend(gate_bosses_with_requirements_table)
             multiworld.random.shuffle(available_bosses)
             halfway = True
@@ -81,27 +82,27 @@ def get_gate_bosses(multiworld: MultiWorld, player: int):
     return bosses
 
 
-def get_boss_rush_bosses(multiworld, player: int):
+def get_boss_rush_bosses(multiworld: MultiWorld, world: World):
 
-    if multiworld.boss_rush_shuffle[player] == 0:
+    if world.options.boss_rush_shuffle == 0:
         boss_list_o = list(range(0, 16))
         boss_list_s = [5, 2, 0, 10, 8, 4, 3, 1, 6, 13, 7, 11, 9, 15, 14, 12]
 
         return dict(zip(boss_list_o, boss_list_s))
-    elif multiworld.boss_rush_shuffle[player] == 1:
+    elif world.options.boss_rush_shuffle == 1:
         boss_list_o = list(range(0, 16))
         boss_list_s = boss_list_o.copy()
         multiworld.random.shuffle(boss_list_s)
 
         return dict(zip(boss_list_o, boss_list_s))
-    elif multiworld.boss_rush_shuffle[player] == 2:
+    elif world.options.boss_rush_shuffle == 2:
         boss_list_o = list(range(0, 16))
         boss_list_s = [multiworld.random.choice(boss_list_o) for i in range(0, 16)]
         if 10 not in boss_list_s:
             boss_list_s[multiworld.random.randint(0, 15)] = 10
 
         return dict(zip(boss_list_o, boss_list_s))
-    elif multiworld.boss_rush_shuffle[player] == 3:
+    elif world.options.boss_rush_shuffle == 3:
         boss_list_o = list(range(0, 16))
         boss_list_s = [multiworld.random.choice(boss_list_o)] * len(boss_list_o)
         if 10 not in boss_list_s:
