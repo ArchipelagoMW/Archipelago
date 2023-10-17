@@ -1,15 +1,15 @@
 import string
 
-from .Items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, get_items_by_category, \
+from .items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, get_items_by_category, \
     filler_table
-from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
-from .Rules import set_rules
-from .RoR2Environments import *
+from .locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
+from .rules import set_rules
+from .ror2environments import *
 
 from BaseClasses import Region, Entrance, Item, ItemClassification, MultiWorld, Tutorial
-from .Options import ItemWeights, ROR2Options
+from .options import ItemWeights, ROR2Options
 from worlds.AutoWorld import World, WebWorld
-from .Regions import create_regions
+from .regions import create_regions
 
 
 class RiskOfWeb(WebWorld):
@@ -19,7 +19,7 @@ class RiskOfWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Ijwu"]
+        ["Ijwu", "Kindasneaki"]
     )]
 
 

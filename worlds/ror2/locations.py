@@ -1,12 +1,8 @@
 from typing import Tuple
 from BaseClasses import Location
-from .Options import TotalLocations
-from .Options import ChestsPerEnvironment
-from .Options import ShrinesPerEnvironment
-from .Options import ScavengersPerEnvironment
-from .Options import ScannersPerEnvironment
-from .Options import AltarsPerEnvironment
-from .RoR2Environments import *
+from .options import TotalLocations, ChestsPerEnvironment, ShrinesPerEnvironment, ScavengersPerEnvironment, \
+    ScannersPerEnvironment, AltarsPerEnvironment
+from .ror2environments import *
 
 
 class RiskOfRainLocation(Location):

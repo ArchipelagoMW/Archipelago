@@ -1,7 +1,7 @@
 from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Region, Entrance
-from .Locations import location_table, RiskOfRainLocation
+from .locations import location_table, RiskOfRainLocation
 
 if TYPE_CHECKING:
     from . import RiskOfRainWorld

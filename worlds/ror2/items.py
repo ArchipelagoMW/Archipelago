@@ -1,6 +1,6 @@
 from BaseClasses import Item, ItemClassification
-from .Options import ItemWeights
-from .RoR2Environments import *
+from .options import ItemWeights
+from .ror2environments import *
 from typing import NamedTuple, Optional
 
 

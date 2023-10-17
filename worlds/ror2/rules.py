@@ -1,6 +1,6 @@
 from worlds.generic.Rules import set_rule, add_rule
-from .Locations import orderedstage_location
-from .RoR2Environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table
+from .locations import orderedstage_location
+from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table
 from typing import Set, TYPE_CHECKING
 
 if TYPE_CHECKING:
