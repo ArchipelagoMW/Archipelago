@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Optional, Dict, List, Set
 
 from BaseClasses import Item, MultiWorld, ItemClassification
+from worlds.AutoWorld import World
 from .Options import get_option_value, is_option_enabled, the_witness_options
 
 from .locations import ID_START, WitnessPlayerLocations
@@ -90,11 +91,12 @@ class WitnessPlayerItems:
     Class that defines Items for a single world
     """
 
-    def __init__(self, multiworld: MultiWorld, player: int, logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+    def __init__(self, world: World, logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
         """Adds event items after logic changes due to options"""
 
-        self._world: MultiWorld = multiworld
-        self._player_id: int = player
+        self._world: World = world
+        self._multiworld: MultiWorld = world.multiworld
+        self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = logic
         self._locations: WitnessPlayerLocations = locat
 
@@ -110,8 +112,8 @@ class WitnessPlayerItems:
         }
 
         # Adjust item classifications based on game settings.
-        eps_shuffled = get_option_value(self._world, self._player_id, "shuffle_EPs") != 0
-        come_to_you = get_option_value(self._world, self._player_id, "elevators_come_to_you") != 0
+        eps_shuffled = get_option_value(self._world, "shuffle_EPs") != 0
+        come_to_you = get_option_value(self._world, "elevators_come_to_you") != 0
         for item_name, item_data in self.item_data.items():
             if not eps_shuffled and item_name in {"Monastery Garden Entry (Door)",
                                                   "Monastery Shortcuts",
@@ -187,7 +189,7 @@ class WitnessPlayerItems:
         remaining_quantity -= len(output)
 
         # Read trap configuration data.
-        trap_weight = get_option_value(self._world, self._player_id, "trap_percentage") / 100
+        trap_weight = get_option_value(self._world, "trap_percentage") / 100
         filler_weight = 1 - trap_weight
 
         # Add filler items to the list.
@@ -216,14 +218,14 @@ class WitnessPlayerItems:
         """
         output: Set[str] = set()
         if "shuffle_symbols" not in the_witness_options.keys() \
-                or is_option_enabled(self._world, self._player_id, "shuffle_symbols"):
-            if get_option_value(self._world, self._player_id, "shuffle_doors") > 0:
+                or is_option_enabled(self._world, "shuffle_symbols"):
+            if get_option_value(self._world, "shuffle_doors") > 0:
                 output = {"Dots", "Black/White Squares", "Symmetry"}
             else:
                 output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
-            if is_option_enabled(self._world, self._player_id, "shuffle_discarded_panels"):
-                if get_option_value(self._world, self._player_id, "puzzle_randomization") == 1:
+            if is_option_enabled(self._world, "shuffle_discarded_panels"):
+                if get_option_value(self._world, "puzzle_randomization") == 1:
                     output.add("Arrows")
                 else:
                     output.add("Triangles")
@@ -234,7 +236,7 @@ class WitnessPlayerItems:
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
         #   regardless of whether or not they actually wind up being manually placed.
-        for plando_setting in self._world.plando_items[self._player_id]:
+        for plando_setting in self._multiworld.plando_items[self._player_id]:
             if plando_setting.get("from_pool", True):
                 for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
                     if type(plando_setting[item_setting_key]) is str:

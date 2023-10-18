@@ -86,18 +86,20 @@ class WitnessWorld(World):
         disabled_locations = self.multiworld.exclude_locations[self.player].value
 
         self.player_logic = WitnessPlayerLogic(
-            self.multiworld, self.player, disabled_locations, self.multiworld.start_inventory[self.player].value
+            self, disabled_locations, self.multiworld.start_inventory[self.player].value
         )
 
-        self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)
-        self.items: WitnessPlayerItems = WitnessPlayerItems(self.multiworld, self.player, self.player_logic, self.locat)
+        self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self, self.player, self.player_logic)
+        self.items: WitnessPlayerItems = WitnessPlayerItems(
+            self, self.player_logic, self.locat
+        )
         self.regio: WitnessRegions = WitnessRegions(self.locat)
 
         self.log_ids_to_hints = dict()
 
-        if not (is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
-                or get_option_value(self.multiworld, self.player, "shuffle_doors")
-                or is_option_enabled(self.multiworld, self.player, "shuffle_lasers")):
+        if not (is_option_enabled(self, "shuffle_symbols")
+                or get_option_value(self, "shuffle_doors")
+                or is_option_enabled(self, "shuffle_lasers")):
             if self.multiworld.players == 1:
                 warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
                         f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't"
@@ -107,11 +109,11 @@ class WitnessWorld(World):
                                 f" progression items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle.")
 
     def create_regions(self):
-        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
+        self.regio.create_regions(self, self.player_logic)
 
         # Set rules early so extra locations can be created based on the results of exploring collection states
 
-        set_rules(self.multiworld, self.player, self.player_logic, self.locat)
+        set_rules(self, self.player_logic, self.locat)
 
         # Add event items and tie them to event locations (e.g. laser activations).
 
@@ -136,7 +138,7 @@ class WitnessWorld(World):
         early_items = [item for item in self.items.get_early_items() if item in self.items.get_mandatory_items()]
         if early_items:
             random_early_item = self.multiworld.random.choice(early_items)
-            if get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1:
+            if get_option_value(self, "puzzle_randomization") == 1:
                 # In Expert, only tag the item as early, rather than forcing it onto the gate.
                 self.multiworld.local_early_items[self.player][random_early_item] = 1
             else:
@@ -158,9 +160,9 @@ class WitnessWorld(World):
         # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
 
         needed_size = 3
-        needed_size += get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1
-        needed_size += is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
-        needed_size += get_option_value(self.multiworld, self.player, "shuffle_doors") != 0
+        needed_size += get_option_value(self, "puzzle_randomization") == 1
+        needed_size += is_option_enabled(self, "shuffle_symbols")
+        needed_size += get_option_value(self, "shuffle_doors") != 0
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
@@ -224,7 +226,7 @@ class WitnessWorld(World):
         remaining_item_slots = pool_size - sum(item_pool.values())
 
         # Add puzzle skips.
-        num_puzzle_skips = get_option_value(self.multiworld, self.player, "puzzle_skip_amount")
+        num_puzzle_skips = get_option_value(self, "puzzle_skip_amount")
 
         if num_puzzle_skips > remaining_item_slots:
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world has insufficient locations"
@@ -244,7 +246,7 @@ class WitnessWorld(World):
                 self.multiworld.local_items[self.player].value.add(item_name)
 
     def fill_slot_data(self) -> dict:
-        hint_amount = get_option_value(self.multiworld, self.player, "hint_amount")
+        hint_amount = get_option_value(self, "hint_amount")
 
         credits_hint = (
             "This Randomizer is brought to you by",
@@ -255,7 +257,7 @@ class WitnessWorld(World):
         audio_logs = get_audio_logs().copy()
 
         if hint_amount != 0:
-            generated_hints = make_hints(self.multiworld, self.player, hint_amount)
+            generated_hints = make_hints(self, hint_amount)
 
             self.multiworld.per_slot_randoms[self.player].shuffle(audio_logs)
 
@@ -272,7 +274,7 @@ class WitnessWorld(World):
             audio_log = audio_logs.pop()
             self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
 
-        joke_hints = generate_joke_hints(self.multiworld, self.player, len(audio_logs))
+        joke_hints = generate_joke_hints(self, len(audio_logs))
 
         while audio_logs:
             audio_log = audio_logs.pop()
@@ -284,7 +286,7 @@ class WitnessWorld(World):
 
         for option_name in the_witness_options:
             slot_data[option_name] = get_option_value(
-                self.multiworld, self.player, option_name
+                self, option_name
             )
 
         return slot_data
@@ -320,13 +322,12 @@ class WitnessLocation(Location):
         self.check_hex = ch_hex
 
 
-def create_region(world: MultiWorld, player: int, name: str,
-                  locat: WitnessPlayerLocations, region_locations=None, exits=None):
+def create_region(world: World, name: str, locat: WitnessPlayerLocations, region_locations=None, exits=None):
     """
     Create an Archipelago Region for The Witness
     """
 
-    ret = Region(name, player, world)
+    ret = Region(name, world.player, world.multiworld)
     if region_locations:
         for location in region_locations:
             loc_id = locat.CHECK_LOCATION_TABLE[location]
@@ -337,12 +338,12 @@ def create_region(world: MultiWorld, player: int, name: str,
                     StaticWitnessLogic.ENTITIES_BY_NAME[location]["checkHex"], 0
                 )
             location = WitnessLocation(
-                player, location, loc_id, ret, check_hex
+                world.player, location, loc_id, ret, check_hex
             )
 
             ret.locations.append(location)
     if exits:
         for single_exit in exits:
-            ret.exits.append(Entrance(player, single_exit, ret))
+            ret.exits.append(Entrance(world.player, single_exit, ret))
 
     return ret

@@ -19,7 +19,7 @@ import copy
 from typing import Set, Dict, cast, List
 from logging import warning
 
-from BaseClasses import MultiWorld
+from worlds.AutoWorld import World
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .utils import *
 from .Options import is_option_enabled, get_option_value, the_witness_options
@@ -258,22 +258,22 @@ class WitnessPlayerLogic:
                 line = StaticWitnessLogic.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
-    def make_options_adjustments(self, world, player):
+    def make_options_adjustments(self, world: World):
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
 
         # Postgame
 
-        doors = get_option_value(world, player, "shuffle_doors") >= 2
-        lasers = is_option_enabled(world, player, "shuffle_lasers")
-        early_caves = get_option_value(world, player, "early_caves") > 0
-        victory = get_option_value(world, player, "victory_condition")
-        mnt_lasers = get_option_value(world, player, "mountain_lasers")
-        chal_lasers = get_option_value(world, player, "challenge_lasers")
+        doors = get_option_value(world, "shuffle_doors") >= 2
+        lasers = is_option_enabled(world, "shuffle_lasers")
+        early_caves = get_option_value(world, "early_caves") > 0
+        victory = get_option_value(world, "victory_condition")
+        mnt_lasers = get_option_value(world, "mountain_lasers")
+        chal_lasers = get_option_value(world, "challenge_lasers")
 
         mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mnt_lasers)
 
-        if not is_option_enabled(world, player, "shuffle_postgame"):
+        if not is_option_enabled(world, "shuffle_postgame"):
             if not (early_caves or doors):
                 adjustment_linesets_in_order.append(get_caves_exclusion_list())
                 if not victory == 1:
@@ -300,88 +300,88 @@ class WitnessPlayerLogic:
 
         # Exclude Discards / Vaults
 
-        if not is_option_enabled(world, player, "shuffle_discarded_panels"):
+        if not is_option_enabled(world, "shuffle_discarded_panels"):
             # In disable_non_randomized, the discards are needed for alternate activation triggers, UNLESS both
             # (remote) doors and lasers are shuffled.
-            if not is_option_enabled(world, player, "disable_non_randomized_puzzles") or (doors and lasers):
+            if not is_option_enabled(world, "disable_non_randomized_puzzles") or (doors and lasers):
                 adjustment_linesets_in_order.append(get_discard_exclusion_list())
 
             if doors:
                 adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
 
-        if not is_option_enabled(world, player, "shuffle_vault_boxes"):
+        if not is_option_enabled(world, "shuffle_vault_boxes"):
             adjustment_linesets_in_order.append(get_vault_exclusion_list())
             if not victory == 1:
                 adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
 
         # Victory Condition
 
-        if get_option_value(world, player, "victory_condition") == 0:
+        if get_option_value(world, "victory_condition") == 0:
             self.VICTORY_LOCATION = "0x3D9A9"
-        elif get_option_value(world, player, "victory_condition") == 1:
+        elif get_option_value(world, "victory_condition") == 1:
             self.VICTORY_LOCATION = "0x0356B"
-        elif get_option_value(world, player, "victory_condition") == 2:
+        elif get_option_value(world, "victory_condition") == 2:
             self.VICTORY_LOCATION = "0x09F7F"
-        elif get_option_value(world, player, "victory_condition") == 3:
+        elif get_option_value(world, "victory_condition") == 3:
             self.VICTORY_LOCATION = "0xFFF00"
 
-        if get_option_value(world, player, "challenge_lasers") <= 7:
+        if get_option_value(world, "challenge_lasers") <= 7:
             adjustment_linesets_in_order.append([
                 "Requirement Changes:",
                 "0xFFF00 - 11 Lasers - True",
             ])
 
-        if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
+        if is_option_enabled(world, "disable_non_randomized_puzzles"):
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
 
-        if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
+        if is_option_enabled(world, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
-        if get_option_value(world, player, "EP_difficulty") == 0:
+        if get_option_value(world, "EP_difficulty") == 0:
             adjustment_linesets_in_order.append(get_ep_easy())
-        elif get_option_value(world, player, "EP_difficulty") == 1:
+        elif get_option_value(world, "EP_difficulty") == 1:
             adjustment_linesets_in_order.append(get_ep_no_eclipse())
 
-        if get_option_value(world, player, "door_groupings") == 1:
-            if get_option_value(world, player, "shuffle_doors") == 1:
+        if get_option_value(world, "door_groupings") == 1:
+            if get_option_value(world, "shuffle_doors") == 1:
                 adjustment_linesets_in_order.append(get_simple_panels())
-            elif get_option_value(world, player, "shuffle_doors") == 2:
+            elif get_option_value(world, "shuffle_doors") == 2:
                 adjustment_linesets_in_order.append(get_simple_doors())
-            elif get_option_value(world, player, "shuffle_doors") == 3:
+            elif get_option_value(world, "shuffle_doors") == 3:
                 adjustment_linesets_in_order.append(get_simple_doors())
                 adjustment_linesets_in_order.append(get_simple_additional_panels())
         else:
-            if get_option_value(world, player, "shuffle_doors") == 1:
+            if get_option_value(world, "shuffle_doors") == 1:
                 adjustment_linesets_in_order.append(get_complex_door_panels())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
-            elif get_option_value(world, player, "shuffle_doors") == 2:
+            elif get_option_value(world, "shuffle_doors") == 2:
                 adjustment_linesets_in_order.append(get_complex_doors())
-            elif get_option_value(world, player, "shuffle_doors") == 3:
+            elif get_option_value(world, "shuffle_doors") == 3:
                 adjustment_linesets_in_order.append(get_complex_doors())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
 
-        if is_option_enabled(world, player, "shuffle_boat"):
+        if is_option_enabled(world, "shuffle_boat"):
             adjustment_linesets_in_order.append(get_boat())
 
-        if get_option_value(world, player, "early_caves") == 2:
+        if get_option_value(world, "early_caves") == 2:
             adjustment_linesets_in_order.append(get_early_caves_start_list())
 
-        if get_option_value(world, player, "early_caves") == 1 and not doors:
+        if get_option_value(world, "early_caves") == 1 and not doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
-        if is_option_enabled(world, player, "elevators_come_to_you"):
+        if is_option_enabled(world, "elevators_come_to_you"):
             adjustment_linesets_in_order.append(get_elevators_come_to_you())
 
         for item in self.YAML_ADDED_ITEMS:
             adjustment_linesets_in_order.append(["Items:", item])
 
-        if is_option_enabled(world, player, "shuffle_lasers"):
+        if is_option_enabled(world, "shuffle_lasers"):
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
-        if get_option_value(world, player, "shuffle_EPs") != 2:
+        if get_option_value(world, "shuffle_EPs") != 2:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
-        if get_option_value(world, player, "shuffle_EPs") == 0:
+        if get_option_value(world, "shuffle_EPs") == 0:
             adjustment_linesets_in_order.append(["Irrelevant Locations:"] + get_ep_all_individual()[1:])
 
         yaml_disabled_eps = []
@@ -392,7 +392,7 @@ class WitnessPlayerLogic:
 
             loc_obj = StaticWitnessLogic.ENTITIES_BY_NAME[yaml_disabled_location]
 
-            if loc_obj["entityType"] == "EP" and get_option_value(world, player, "shuffle_EPs") != 0:
+            if loc_obj["entityType"] == "EP" and get_option_value(world, "shuffle_EPs") != 0:
                 yaml_disabled_eps.append(loc_obj["checkHex"])
 
             if loc_obj["entityType"] in {"EP", "General", "Vault", "Discard"}:
@@ -493,7 +493,7 @@ class WitnessPlayerLogic:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-    def __init__(self, world: MultiWorld, player: int, disabled_locations: Set[str], start_inv: Dict[str, int]):
+    def __init__(self, world: World, disabled_locations: Set[str], start_inv: Dict[str, int]):
         self.YAML_DISABLED_LOCATIONS = disabled_locations
         self.YAML_ADDED_ITEMS = start_inv
 
@@ -511,7 +511,7 @@ class WitnessPlayerLogic:
         self.DOOR_ITEMS_BY_ID: Dict[str, List[int]] = {}
         self.STARTING_INVENTORY = set()
 
-        self.DIFFICULTY = get_option_value(world, player, "puzzle_randomization")
+        self.DIFFICULTY = get_option_value(world, "puzzle_randomization")
 
         if self.DIFFICULTY == 0:
             self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_normal
@@ -635,6 +635,6 @@ class WitnessPlayerLogic:
             "0x028A4": "Treehouse Laser Activation",
         }
 
-        self.make_options_adjustments(world, player)
+        self.make_options_adjustments(world)
         self.make_dependency_reduced_checklist()
         self.make_event_panel_lists()

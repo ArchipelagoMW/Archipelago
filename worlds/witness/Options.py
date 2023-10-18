@@ -1,11 +1,12 @@
 from typing import Dict, Union
-from BaseClasses import MultiWorld
+from worlds.AutoWorld import World
 from Options import Toggle, DefaultOnToggle, Range, Choice
 
 
 # class HardMode(Toggle):
 #    "Play the randomizer in hardmode"
 #    display_name = "Hard Mode"
+
 
 class DisableNonRandomizedPuzzles(Toggle):
     """Disables puzzles that cannot be randomized.
@@ -216,16 +217,16 @@ the_witness_options: Dict[str, type] = {
 }
 
 
-def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
-    return get_option_value(world, player, name) > 0
+def is_option_enabled(world: World, name: str) -> bool:
+    return getattr(world.options, name) > 0
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[bool, int]:
-    option = getattr(world, name, None)
+def get_option_value(world: World, name: str) -> Union[bool, int]:
+    option = getattr(world.options, name)
 
     if option is None:
         return 0
 
     if issubclass(the_witness_options[name], Toggle) or issubclass(the_witness_options[name], DefaultOnToggle):
-        return bool(option[player].value)
-    return option[player].value
+        return bool(option.value)
+    return option.value

@@ -4,8 +4,10 @@ depending on the items received
 """
 
 # pylint: disable=E1101
+from typing import FrozenSet
 
 from BaseClasses import MultiWorld
+from worlds.AutoWorld import World
 from .player_logic import WitnessPlayerLogic
 from .Options import is_option_enabled, get_option_value
 from .locations import WitnessPlayerLocations
@@ -19,8 +21,8 @@ class WitnessLogic(LogicMixin):
     Logic macros that get reused
     """
 
-    def _witness_has_lasers(self, world, player: int, amount: int) -> bool:
-        regular_lasers = not is_option_enabled(world, player, "shuffle_lasers")
+    def _witness_has_lasers(self, world: World, player: int, amount: int) -> bool:
+        regular_lasers = not is_option_enabled(world, "shuffle_lasers")
 
         lasers = 0
 
@@ -41,7 +43,8 @@ class WitnessLogic(LogicMixin):
 
         return lasers >= amount
 
-    def _witness_can_solve_panel(self, panel, world, player, player_logic: WitnessPlayerLogic, locat):
+    def _witness_can_solve_panel(self, panel: str, world: World, player: int,
+                                 player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
         """
         Determines whether a panel can be solved
         """
@@ -57,7 +60,8 @@ class WitnessLogic(LogicMixin):
             return False
         return True
 
-    def _witness_meets_item_requirements(self, panel, world, player, player_logic: WitnessPlayerLogic, locat):
+    def _witness_meets_item_requirements(self, panel: str, world: World, player: int,
+                                         player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
         """
         Checks whether item and panel requirements are met for
         a panel
@@ -73,13 +77,13 @@ class WitnessLogic(LogicMixin):
 
             for item in option:
                 if item == "7 Lasers":
-                    laser_req = get_option_value(world, player, "mountain_lasers")
+                    laser_req = get_option_value(world, "mountain_lasers")
 
                     if not self._witness_has_lasers(world, player, laser_req):
                         valid_option = False
                         break
                 elif item == "11 Lasers":
-                    laser_req = get_option_value(world, player, "challenge_lasers")
+                    laser_req = get_option_value(world, "challenge_lasers")
 
                     if not self._witness_has_lasers(world, player, laser_req):
                         valid_option = False
@@ -173,7 +177,8 @@ class WitnessLogic(LogicMixin):
 
         return False
 
-    def _witness_can_solve_panels(self, panel_hex_to_solve_set, world, player, player_logic: WitnessPlayerLogic, locat):
+    def _witness_can_solve_panels(self, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: World, player: int,
+                                  player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
         """
         Checks whether a set of panels can be solved.
         """
@@ -194,7 +199,8 @@ class WitnessLogic(LogicMixin):
         return False
 
 
-def make_lambda(check_hex, world, player, player_logic, locat):
+def make_lambda(check_hex: str, world: World, player: int,
+                player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     """
     Lambdas are created in a for loop so values need to be captured
     """
@@ -203,7 +209,7 @@ def make_lambda(check_hex, world, player, player_logic, locat):
     )
 
 
-def set_rules(world: MultiWorld, player: int, player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+def set_rules(world: World, player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     """
     Sets all rules for all locations
     """
@@ -217,9 +223,9 @@ def set_rules(world: MultiWorld, player: int, player_logic: WitnessPlayerLogic, 
         panel = StaticWitnessLogic.ENTITIES_BY_NAME[real_location]
         check_hex = panel["checkHex"]
 
-        rule = make_lambda(check_hex, world, player, player_logic, locat)
+        rule = make_lambda(check_hex, world, world.player, player_logic, locat)
 
-        set_rule(world.get_location(location, player), rule)
+        set_rule(world.multiworld.get_location(location, world.player), rule)
 
-    world.completion_condition[player] = \
-        lambda state: state.has('Victory', player)
+    world.multiworld.completion_condition[world.player] = \
+        lambda state: state.has('Victory', world.player)
