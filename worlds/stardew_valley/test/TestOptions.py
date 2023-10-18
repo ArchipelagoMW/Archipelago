@@ -3,7 +3,7 @@ from random import random
 from typing import Dict
 
 from BaseClasses import ItemClassification, MultiWorld
-from Options import SpecialRange
+from Options import NamedRange
 from . import setup_solo_multiworld, SVTestBase
 from .. import StardewItem, items_by_group, Group, StardewValleyWorld
 from ..locations import locations_by_tag, LocationTags, location_table
@@ -41,7 +41,7 @@ def check_no_ginger_island(tester: SVTestBase, multiworld: MultiWorld):
 
 
 def get_option_choices(option) -> Dict[str, int]:
-    if issubclass(option, SpecialRange):
+    if issubclass(option, NamedRange):
         return option.special_range_names
     elif option.options:
         return option.options
@@ -52,7 +52,7 @@ class TestGenerateDynamicOptions(SVTestBase):
     def test_given_special_range_when_generate_then_basic_checks(self):
         options = self.world.options_dataclass.type_hints
         for option_name, option in options.items():
-            if not isinstance(option, SpecialRange):
+            if not isinstance(option, NamedRange):
                 continue
             for value in option.special_range_names:
                 with self.subTest(f"{option_name}: {value}"):
@@ -151,7 +151,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
     def test_given_special_range_when_generate_exclude_ginger_island(self):
         options = self.world.options_dataclass.type_hints
         for option_name, option in options.items():
-            if not isinstance(option, SpecialRange) or option_name == ExcludeGingerIsland.internal_name:
+            if not isinstance(option, NamedRange) or option_name == ExcludeGingerIsland.internal_name:
                 continue
             for value in option.special_range_names:
                 with self.subTest(f"{option_name}: {value}"):
