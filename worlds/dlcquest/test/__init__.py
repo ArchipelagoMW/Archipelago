@@ -41,7 +41,7 @@ def setup_dlc_quest_solo_multiworld(test_options=None, seed=None, _cache: Dict[F
     multiworld.set_seed(seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
     args = Namespace()
-    for name, option in DLCqworld.option_definitions.items():
+    for name, option in DLCqworld.options_dataclass.type_hints.items():
         value = option(test_options[name]) if name in test_options else option.from_any(option.default)
         setattr(args, name, {1: value})
     multiworld.set_options(args)

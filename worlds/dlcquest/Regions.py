@@ -1,4 +1,5 @@
 import math
+from typing import List
 
 from BaseClasses import Entrance, MultiWorld, Region
 from . import Options
@@ -27,12 +28,11 @@ def add_coin(region: Region, coin: int, player: int, suffix: str):
 
 def create_regions(multiworld: MultiWorld, player: int, world_options: Options.DLCQuestOptions):
     region_menu = Region("Menu", player, multiworld)
-    has_campaign_basic = world_options[Options.Campaign] == Options.Campaign.option_basic or world_options[Options.Campaign] == Options.Campaign.option_both
-    has_campaign_lfod = world_options[Options.Campaign] == Options.Campaign.option_live_freemium_or_die or world_options[
-        Options.Campaign] == Options.Campaign.option_both
-    has_coinsanity = world_options[Options.CoinSanity] == Options.CoinSanity.option_coin
-    coin_bundle_size = world_options[Options.CoinSanityRange]
-    has_item_shuffle = world_options[Options.ItemShuffle] == Options.ItemShuffle.option_shuffled
+    has_campaign_basic = world_options.campaign == Options.Campaign.option_basic or world_options.campaign == Options.Campaign.option_both
+    has_campaign_lfod = world_options.campaign == Options.Campaign.option_live_freemium_or_die or world_options.campaign == Options.Campaign.option_both
+    has_coinsanity = world_options.coinsanity == Options.CoinSanity.option_coin
+    coin_bundle_size = world_options.coinbundlequantity.value
+    has_item_shuffle = world_options.item_shuffle == Options.ItemShuffle.option_shuffled
 
     multiworld.regions.append(region_menu)
 
