@@ -16,7 +16,7 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
-from typing import Set, Dict, cast, List
+from typing import cast
 from logging import warning
 
 from worlds.AutoWorld import World
@@ -474,7 +474,7 @@ class WitnessPlayerLogic:
                             continue
 
                         if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["region"]["name"] != region_name:
-                            if not panel in self.COMPLETELY_DISABLED_ENTITIES:
+                            if panel not in self.COMPLETELY_DISABLED_ENTITIES:
                                 self.EVENT_PANELS_FROM_REGIONS.add(panel)
 
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
@@ -508,7 +508,7 @@ class WitnessPlayerLogic:
         self.MULTI_LISTS = dict()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
-        self.DOOR_ITEMS_BY_ID: Dict[str, List[int]] = {}
+        self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
         self.STARTING_INVENTORY = set()
 
         self.DIFFICULTY = get_option_value(world, "puzzle_randomization")
