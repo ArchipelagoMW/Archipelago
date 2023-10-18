@@ -1,4 +1,5 @@
-from BaseClasses import MultiWorld
+from typing import Tuple, List
+
 from worlds.AutoWorld import World
 from .Options import is_option_enabled, get_option_value
 
@@ -371,5 +372,5 @@ def make_hints(world: World, hint_amount: int):
     return hints
 
 
-def generate_joke_hints(world: World, amount: int):
+def generate_joke_hints(world: World, amount: int) -> List[Tuple[str, int]]:
     return [(x, -1) for x in world.random.sample(joke_hints, amount)]
