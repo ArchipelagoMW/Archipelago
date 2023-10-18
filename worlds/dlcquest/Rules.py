@@ -11,19 +11,21 @@ def create_event(player, event: str) -> DLCQuestItem:
     return DLCQuestItem(event, ItemClassification.progression, None, player)
 
 
+def has_enough_coin(player: int, coin: int):
+    return lambda state: state.prog_items[" coins", player] >= coin
+
+
+def has_enough_coin_freemium(player: int, coin: int):
+    return lambda state: state.prog_items[" coins freemium", player] >= coin
+
+
 def set_rules(world, player, World_Options: Options.DLCQuestOptions):
-    def has_enough_coin(player: int, coin: int):
-        return lambda state: state.prog_items["COINS", player] >= coin
-
-    def has_enough_coin_freemium(player: int, coin: int):
-        return lambda state: state.prog_items["COINS_FREEMIUM", player] >= coin
-
-    set_basic_rules(World_Options, has_enough_coin, player, world)
-    set_lfod_rules(World_Options, has_enough_coin_freemium, player, world)
+    set_basic_rules(World_Options, player, world)
+    set_lfod_rules(World_Options, player, world)
     set_completion_condition(World_Options, player, world)
 
 
-def set_basic_rules(World_Options, has_enough_coin, player, world):
+def set_basic_rules(World_Options, player, world):
     if World_Options.campaign == Options.Campaign.option_live_freemium_or_die:
         return
     set_basic_entrance_rules(player, world)
@@ -31,8 +33,8 @@ def set_basic_rules(World_Options, has_enough_coin, player, world):
     set_basic_shuffled_items_rules(World_Options, player, world)
     set_double_jump_glitchless_rules(World_Options, player, world)
     set_easy_double_jump_glitch_rules(World_Options, player, world)
-    self_basic_coinsanity_funded_purchase_rules(World_Options, has_enough_coin, player, world)
-    set_basic_self_funded_purchase_rules(World_Options, has_enough_coin, player, world)
+    self_basic_coinsanity_funded_purchase_rules(World_Options, player, world)
+    set_basic_self_funded_purchase_rules(World_Options, player, world)
     self_basic_win_condition(World_Options, player, world)
 
 
@@ -113,7 +115,7 @@ def set_easy_double_jump_glitch_rules(World_Options, player, world):
              lambda state: state.has("Double Jump Pack", player))
 
 
-def self_basic_coinsanity_funded_purchase_rules(World_Options, has_enough_coin, player, world):
+def self_basic_coinsanity_funded_purchase_rules(World_Options, player, world):
     if World_Options.coinsanity != Options.CoinSanity.option_coin:
         return
     number_of_bundle = math.floor(825 / World_Options.coinbundlequantity)
@@ -176,7 +178,7 @@ def self_basic_coinsanity_funded_purchase_rules(World_Options, has_enough_coin, 
                                      math.ceil(5 / World_Options.coinbundlequantity)))
 
 
-def set_basic_self_funded_purchase_rules(World_Options, has_enough_coin, player, world):
+def set_basic_self_funded_purchase_rules(World_Options, player, world):
     if World_Options.coinsanity != Options.CoinSanity.option_none:
         return
     set_rule(world.get_location("Movement Pack", player),
@@ -223,14 +225,14 @@ def self_basic_win_condition(World_Options, player, world):
                                                                                             player))
 
 
-def set_lfod_rules(World_Options, has_enough_coin_freemium, player, world):
+def set_lfod_rules(World_Options, player, world):
     if World_Options.campaign == Options.Campaign.option_basic:
         return
     set_lfod_entrance_rules(player, world)
     set_boss_door_requirements_rules(player, world)
     set_lfod_self_obtained_items_rules(World_Options, player, world)
     set_lfod_shuffled_items_rules(World_Options, player, world)
-    self_lfod_coinsanity_funded_purchase_rules(World_Options, has_enough_coin_freemium, player, world)
+    self_lfod_coinsanity_funded_purchase_rules(World_Options, player, world)
     set_lfod_self_funded_purchase_rules(World_Options, has_enough_coin_freemium, player, world)
 
 
@@ -309,7 +311,7 @@ def set_lfod_shuffled_items_rules(World_Options, player, world):
              lambda state: state.can_reach("Cut Content", 'region', player))
 
 
-def self_lfod_coinsanity_funded_purchase_rules(World_Options, has_enough_coin_freemium, player, world):
+def self_lfod_coinsanity_funded_purchase_rules(World_Options, player, world):
     if World_Options.coinsanity != Options.CoinSanity.option_coin:
         return
     number_of_bundle = math.floor(889 / World_Options.coinbundlequantity)

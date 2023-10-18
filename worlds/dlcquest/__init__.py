@@ -90,13 +90,15 @@ class DLCqworld(World):
     def collect(self, state: CollectionState, item: DLCQuestItem) -> bool:
         change = super().collect(state, item)
         if change:
-            state.prog_items["COINS", self.player] += item.coins
-            state.prog_items["COINS_FREEMIUM", self.player] += item.freemium_coins
+            suffix = item.coin_suffix
+            if suffix:
+                state.prog_items[suffix,  self.player] += item.coins
         return change
 
     def remove(self, state: CollectionState, item: DLCQuestItem) -> bool:
         change = super().remove(state, item)
         if change:
-            state.prog_items["COINS", self.player] -= item.coins
-            state.prog_items["COINS_FREEMIUM", self.player] -= item.freemium_coins
+            suffix = item.coin_suffix
+            if suffix:
+                state.prog_items[suffix,  self.player] -= item.coins
         return change
