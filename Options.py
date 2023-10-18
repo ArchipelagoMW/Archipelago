@@ -720,6 +720,15 @@ class NamedRange(Range):
 class SpecialRange(NamedRange):
     special_range_cutoff = 0
 
+    # TODO: remove class SpecialRange, earliest 3 releases after 0.4.3
+    def __new__(cls, value: int) -> SpecialRange:
+        from Utils import deprecate
+        deprecate(f"Option type {cls.__name__} is a subclass of SpecialRange, which is deprecated and pending removal. "
+                  "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
+                  "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
+                  "placed anywhere (below, inside, or above the regular range).")
+        return super().__new__(cls, value)
+
     @classmethod
     def weighted_range(cls, text) -> Range:
         if text == "random-low":
