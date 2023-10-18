@@ -6,7 +6,6 @@ depending on the items received
 # pylint: disable=E1101
 from typing import FrozenSet
 
-from BaseClasses import MultiWorld
 from worlds.AutoWorld import World
 from .player_logic import WitnessPlayerLogic
 from .Options import is_option_enabled, get_option_value

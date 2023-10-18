@@ -4,7 +4,7 @@ and connects them with the proper requirements
 """
 from typing import FrozenSet
 
-from BaseClasses import Entrance, MultiWorld
+from BaseClasses import Entrance
 from worlds.AutoWorld import World
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
