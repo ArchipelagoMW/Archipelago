@@ -2,6 +2,8 @@
 Defines constants for different types of locations in the game
 """
 
+from worlds.AutoWorld import World
+
 from .Options import is_option_enabled, get_option_value
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
@@ -457,7 +459,7 @@ class StaticWitnessLocations:
     ALL_LOCATIONS_TO_ID = dict()
 
     @staticmethod
-    def get_id(chex):
+    def get_id(chex: str):
         """
         Calculates the location ID for any given location
         """
@@ -465,7 +467,7 @@ class StaticWitnessLocations:
         return StaticWitnessLogic.ENTITIES_BY_HEX[chex]["id"]
 
     @staticmethod
-    def get_event_name(panel_hex):
+    def get_event_name(panel_hex: str):
         """
         Returns the event name of any given panel.
         """
@@ -494,7 +496,7 @@ class WitnessPlayerLocations:
     Class that defines locations for a single player
     """
 
-    def __init__(self, world, player, player_logic: WitnessPlayerLogic):
+    def __init__(self, world: World, player_logic: WitnessPlayerLogic):
         """Defines locations AFTER logic changes due to options"""
 
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}

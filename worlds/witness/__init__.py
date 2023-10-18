@@ -89,7 +89,7 @@ class WitnessWorld(World):
             self, disabled_locations, self.multiworld.start_inventory[self.player].value
         )
 
-        self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self, self.player, self.player_logic)
+        self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self, self.player_logic)
         self.items: WitnessPlayerItems = WitnessPlayerItems(
             self, self.player_logic, self.locat
         )

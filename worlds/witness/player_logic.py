@@ -28,7 +28,7 @@ from .Options import is_option_enabled, get_option_value, the_witness_options
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
-    def reduce_req_within_region(self, panel_hex):
+    def reduce_req_within_region(self, panel_hex: str):
         """
         Panels in this game often only turn on when other panels are solved.
         Those other panels may have different item requirements.
@@ -124,7 +124,7 @@ class WitnessPlayerLogic:
 
         return frozenset(all_options)
 
-    def make_single_adjustment(self, adj_type, line):
+    def make_single_adjustment(self, adj_type: str, line: str):
         from . import StaticWitnessItems
         """Makes a single logic adjustment based on additional logic file"""
 
@@ -440,7 +440,7 @@ class WitnessPlayerLogic:
             else:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
-    def make_event_item_pair(self, panel):
+    def make_event_item_pair(self, panel: str):
         """
         Makes a pair of an event panel and its event item
         """
