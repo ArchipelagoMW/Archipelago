@@ -36,7 +36,7 @@ open the Settings Page, pick your settings, and click Generate Game.
 ## How do I get started?
 
 We have a [Getting Started](https://archipelago.gg/tutorial/Archipelago/setup/en) guide that will help you get the
-software set up.  You can use that guide to learn how to generate multiworlds.  There are also basic instructions for
+software set up.  You can use that guide to learn how to generate multi-worlds.  There are also basic instructions for
 including multiple games, and hosting these multi-worlds on the website for ease and convenience.
 
 If you are ready to start randomizing games, or want to start playing your favorite randomizer with others, please join
