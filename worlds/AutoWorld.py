@@ -4,11 +4,12 @@ import hashlib
 import logging
 import pathlib
 import sys
-from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
+from dataclasses import make_dataclass
+from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
     Union
 
+from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
-from Options import AssembleOptions
 
 if TYPE_CHECKING:
     import random
@@ -62,6 +63,12 @@ class AutoWorldRegister(type):
                 if "required_client_version" in base.__dict__:
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
+
+        # create missing options_dataclass from legacy option_definitions
+        # TODO - remove this once all worlds use options dataclasses
+        if "options_dataclass" not in dct and "option_definitions" in dct:
+            dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
+                                                      bases=(PerGameCommonOptions,))
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
@@ -163,8 +170,11 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: ClassVar[Dict[str, AssembleOptions]] = {}
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
     """link your Options mapping"""
+    options: PerGameCommonOptions
+    """resulting options for the player of this world"""
+
     game: ClassVar[str]
     """name the game"""
     topology_present: ClassVar[bool] = False
@@ -357,6 +367,19 @@ class World(metaclass=AutoWorldRegister):
         """Called when the item pool needs to be filled with additional items to match location count."""
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
+
+    @classmethod
+    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+        """Creates a group, which is an instance of World that is responsible for multiple others.
+        An example case is ItemLinks creating these."""
+        # TODO remove loop when worlds use options dataclass
+        for option_key, option in cls.options_dataclass.type_hints.items():
+            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+        group = cls(multiworld, new_player_id)
+        group.options = cls.options_dataclass(**{option_key: option(option.default)
+                                                 for option_key, option in cls.options_dataclass.type_hints.items()})
+
+        return group
 
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:

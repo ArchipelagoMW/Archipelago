@@ -23,7 +23,16 @@ class MuseDashWebWorld(WebWorld):
         ["DeamonHunter"]
     )
 
-    tutorials = [setup_en]
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["Shiny"]
+    )
+
+    tutorials = [setup_en, setup_es]
 
 
 class MuseDashWorld(World):
