@@ -25,7 +25,7 @@ For more details on permissions granted by the Triage role, see
 
 Users with triage-level permissions have no expectation to review code, but, if desired, to review pull requests/issues 
 and apply the relevant labels and ping/request reviews from any relevant [code owners](./CODEOWNERS) for review. Triage 
-users are also not expected to close others' issues or pull requests without strong reason to do so (with exception of 
+users are also expected not to close others' issues or pull requests without strong reason to do so (with exception of 
 `meta: invalid` or `meta: duplicate` scenarios, which are listed below). When in doubt, defer to a core maintainer.
 
 Triage users are not "moderators" for others' issues or pull requests. However, they may voice their opinions/feedback 
