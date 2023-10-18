@@ -566,7 +566,7 @@ class Guest_Objective(Range):
     display_name = "Guest Objective"
     range_start = 1
     range_end = 7500
-    default = 3000
+    default = 2000
 
 # class Include_Park_Value_Objective(OpenRCT2OnToggle):
 #     """Include an objective to achive a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
@@ -595,21 +595,21 @@ class Roller_Coaster_Excitement(Range):
     display_name = "Excitement Requirement"
     range_start = 0
     range_end = 10
-    default = 6
+    default = 5
 
 class Roller_Coaster_Intensity(Range):
     """Select the minimum intensity 😬 for a coaster to count towards your objective. 0 will disable a minimum intensity rating."""
     display_name = "Intensity Requirement"
     range_start = 0
     range_end = 10
-    default = 6
+    default = 5
 
 class Roller_Coaster_Nausea(Range):
     """Select the minimum nausea 🤢 for a coaster to count towards your objective. 0 will disable a minimum nausea rating."""
     display_name = "Nausea Requirement"
     range_start = 0
     range_end = 10
-    default = 5
+    default = 4
 
 # class Include_Park_Rating_Objective(OpenRCT2OnToggle):
 #     """Include an objective to require a minimum park rating for completion. Multiple objectives can be enabled!"""

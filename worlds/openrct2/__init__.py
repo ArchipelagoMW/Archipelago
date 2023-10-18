@@ -3,6 +3,7 @@ from enum import IntEnum
 import logging
 import json
 import random
+import math
 from .Options import *
 from .Constants import *
 from .Items import *
@@ -284,7 +285,7 @@ class OpenRCT2World(World):
         length_modifier = 0
         difficulty_modifier = 0
         difficulty_minimum = 0
-        difficulty_maximum = 0
+        difficulty_maximum = 2
         base_price = 500
         final_price = 500
 
@@ -351,7 +352,7 @@ class OpenRCT2World(World):
                 if random.random() < length_modifier: #Determines if we have a prereq
                     if random.random() < difficulty_modifier: #Determines if the prereq is a specific ride
                         chosen_prereq = random.choice(possible_prereqs)
-                        add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
+                        add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).exits[0],
                          lambda state: state.has(chosen_prereq, self.player))
                         if chosen_prereq in item_info["roller_coasters"]:
                             excitement = 0
@@ -360,7 +361,7 @@ class OpenRCT2World(World):
                             #3 coin flips to determine what, if any, stat prereqs will be used
                             if random.random() < .5: excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             if random.random() < .5: intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
-                            if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
                             unlock["RidePrereq"] = [random.randint(1,5),chosen_prereq,excitement,intensity,nausea,0]
                         else:
                             unlock["RidePrereq"] = [random.randint(1,7),chosen_prereq,0,0,0,0]
@@ -372,7 +373,7 @@ class OpenRCT2World(World):
                             for ride in possible_prereqs:
                                 if ride in item_info[category]:
                                     category_selected = True
-                        add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
+                        add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).exits[0],#self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
                          lambda state: state.has_group(category, self.player))
                         if category == "roller_coasters":
                             excitement = 0
@@ -462,3 +463,15 @@ class OpenRCT2World(World):
         if item in item_info["trap_items"]:
             classification = ItemClassification.trap
         return OpenRCT2Item(item, classification, self.item_name_to_id[item], self.player)
+
+    def get_previous_region_from_OpenRCT2_location(self,location_number:int):
+        if location_number == 0:
+            return "OpenRCT2_Level_0"
+        elif location_number == 1 or location_number == 2:
+            return "OpenRCT2_Level_0"
+        elif location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
+            return "OpenRCT2_Level_1"
+        else:
+            divider = location_number - 6
+            region = math.ceil(divider/8) + 1
+            return "OpenRCT2_Level_" + str(region)
