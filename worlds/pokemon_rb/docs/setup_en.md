@@ -7,7 +7,7 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
 ## Required Software
 
 - BizHawk: [BizHawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-  - Version 2.3.1 and later are supported. Version 2.7 is recommended for stability.
+  - Version 2.3.1 and later are supported. Version 2.9.1 is recommended.
   - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
@@ -23,7 +23,7 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
 
 Once BizHawk has been installed, open EmuHawk and change the following settings:
 
-- (≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
+- (If using 2.8 or earlier) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
   "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
   **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
@@ -57,7 +57,7 @@ For `trainer_name` and `rival_name` the following regular characters are allowed
 
 * `‘’“”·… ABCDEFGHIJKLMNOPQRSTUVWXYZ():;[]abcdefghijklmnopqrstuvwxyzé'-?!.♂$×/,♀0123456789`
 
-And the following special characters (these each take up one character):
+And the following special characters (these each count as one character):
 * `<'d>`
 * `<'l>`
 * `<'t>`

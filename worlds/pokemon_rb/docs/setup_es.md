@@ -7,7 +7,7 @@ Al usar BizHawk, esta guía solo es aplicable en los sistemas de Windows y Linux
 ## Software Requerido
 
 - BizHawk: [BizHawk Releases en TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-  - La versión 2.3.1 y posteriores son soportadas. Se recomienda la versión 2.7 para estabilidad.
+  - La versión 2.3.1 y posteriores son soportadas. Se recomienda la versión 2.9.1.
   - Instrucciones de instalación detalladas para BizHawk se pueden encontrar en el enlace de arriba.
   - Los usuarios de Windows deben ejecutar el instalador de prerrequisitos (prereq installer) primero, que también se 
     encuentra en el enlace de arriba.
