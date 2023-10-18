@@ -1,7 +1,7 @@
 # Triage Role Expectations
 
-Users with Triage-level access are selected contributors who can proactively label/triage issues and pull requests 
-without write access to the Archipelago repository.
+Users with Triage-level access are selected contributors who can and wish to proactively label/triage issues and pull 
+requests without being granted write access to the Archipelago repository.
 
 Triage users are not necessarily official members of the Archipelago organization, for the list of core maintainers,
 please reference [ArchipelagoMW Members](https://github.com/orgs/ArchipelagoMW/people) page.
@@ -24,9 +24,9 @@ For more details on permissions granted by the Triage role, see
 ## Expectations
 
 Users with triage-level permissions have no expectation to review code, but, if desired, to review pull requests/issues 
-and apply the relevant labels and ping any relevant [code owners](./CODEOWNERS) for review. Triage users are also not 
-expected to close others' issues or pull requests without strong reason to do so (with exception of `meta: invalid` or 
-`meta: duplicate` scenarios, which are listed below). When in doubt, defer to a core maintainer.
+and apply the relevant labels and ping/request reviews from any relevant [code owners](./CODEOWNERS) for review. Triage 
+users are also not expected to close others' issues or pull requests without strong reason to do so (with exception of 
+`meta: invalid` or `meta: duplicate` scenarios, which are listed below). When in doubt, defer to a core maintainer.
 
 Triage users are not "moderators" for others' issues or pull requests. However, they may voice their opinions/feedback 
 on issues or pull requests, just the same as any other GitHub user contributing to Archipelago.
@@ -93,7 +93,7 @@ discussion on GitHub.
     additional help is warranted.
 * `meta: good first issue` is to be applied to any issues that may be a good starting ground for new contributors to try 
 and tackle.
-    * This label might require some programming experience and familiarity with Archipelago source to determine if an 
+    * This label may require some programming experience and familiarity with Archipelago source to determine if an 
     issue is a "good first issue".
 * `meta: wontfix` is to be applied for any issues/PRs that are opened that will not be actioned because it's out of 
 scope or determined to not be an issue. 
