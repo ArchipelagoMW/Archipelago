@@ -38,13 +38,13 @@ As of the time of writing this document, there are 15 distinct labels that can b
 ### Affects
 
 These labels notate if certain issues or pull requests affect critical aspects of Archipelago that may require specific 
-review. Multiple of these labels can be used in a single issue or pull request if relevant.
+review. More than one of these labels can be used on a issue or pull request, if relevant.
 
-* `affects: core` is to be applied on any issues/PRs that may affect core Archipelago functionality and should have 
+* `affects: core` is to be applied to issues/PRs that may affect core Archipelago functionality and should have 
 additional scrutiny by pull request reviewers.
     * Core is defined as any files not contained in the `WebHostLib` directory or individual world implementations 
     directories inside the `worlds` directory, not including `worlds/generic`.
-* `affects: webhost` is to be applied on any issues/PRs that may affect the core WebHost portion of Archipelago. In 
+* `affects: webhost` is to be applied to issues/PRs that may affect the core WebHost portion of Archipelago. In 
 general, this is anything being modified inside the `WebHostLib` directory or `WebHost.py` file.
 * `affects: release/blocker` is to be applied for any issues/PRs that may either negatively impact (issues) or propose 
 to resolve critical issues (pull requests) that affect the current or next official release of Archipelago and should be
@@ -52,19 +52,19 @@ given top priority for review.
 
 ### Is
 
-These labels notate what kinds of changes are being made or proposed in issues or pull requests. Multiple of these 
-labels can be used in a single issue or pull request if relevant, but at least one of these labels should be applied on 
-all pull requests and issues.
+These labels notate what kinds of changes are being made or proposed in issues or pull requests. More than one of these 
+labels can be used on a issue or pull request, if relevant, but at least one of these labels should be applied to every 
+pull request and issue.
 
-* `is: bug/fix` is to be applied on any issues/PRs that report or resolve an issue in core, web, or individual world 
+* `is: bug/fix` is to be applied to issues/PRs that report or resolve an issue in core, web, or individual world 
 implementations.
-* `is: documentation` is to be applied on any issues/PRs that relate to adding, updating, or removing documentation in 
+* `is: documentation` is to be applied to issues/PRs that relate to adding, updating, or removing documentation in 
 core, web, or individual world implementations without modifying actual code.
-* `is: enhancement` is to be applied on any issues/PRs that relate to adding, modifying, or removing functionality in 
+* `is: enhancement` is to be applied to issues/PRs that relate to adding, modifying, or removing functionality in 
 core, web, or individual world implementations.
-* `is: refactor/cleanup` is to be applied on any issues/PRs that relate to reorganizing existing code to improve 
+* `is: refactor/cleanup` is to be applied to issues/PRs that relate to reorganizing existing code to improve 
 readability or performance without adding, modifying, or removing functionality or fixing known regressions.
-* `is: maintenance` is to be applied on any issues/PRs that don't modify logic, refactor existing code, change features.
+* `is: maintenance` is to be applied to issues/PRs that don't modify logic, refactor existing code, change features.
 This is typically reserved for pull requests that need to update dependencies or increment version numbers without 
 resolving existing issues.
 * `is: new game` is to be applied to any pull requests that introduce a new game for the first time to the `worlds` 
@@ -81,20 +81,20 @@ These labels allow additional quick meta information for contributors or reviewe
 have specific situations where they should be applied.
 
 * `meta: duplicate` is to be applied to any issues/PRs that are duplicate of another issue/PR that was already opened. 
-    * These should also be immediately closed afterwards after directing to the original request.
+    * These should be immediately closed after leaving a comment, directing to the original issue or pull request.
 * `meta: invalid` is to be applied to any issues/PRs that do not relate to Archipelago or are inappropriate for 
 discussion on GitHub.
-    * These should also be immediately closed afterwards.
+    * These should be immediately closed afterwards.
 * `meta: help wanted` is to be applied to any issues/PRs that require additional attention for whatever reason.
-    * These should also include a comment describing what kind of help is requested when the label is added.
+    * These should include a comment describing what kind of help is requested when the label is added.
     * Some common reasons include, but are not limited to: Breaking API changes that require developer input/testing or 
     pull requests with large line changes that need additional reviewers to be reviewed effectively.
     * This label may require some programming experience and familiarity with Archipelago source to determine if 
-    additional help is warranted.
+    requesting additional attention for help is warranted.
 * `meta: good first issue` is to be applied to any issues that may be a good starting ground for new contributors to try 
 and tackle.
     * This label may require some programming experience and familiarity with Archipelago source to determine if an 
     issue is a "good first issue".
 * `meta: wontfix` is to be applied for any issues/PRs that are opened that will not be actioned because it's out of 
 scope or determined to not be an issue. 
-    * This should be reserved for use by a world's codeowner(s) on its relevant world or by core maintainers.
+    * This should be reserved for use by a world's code owner(s) on their relevant world or by core maintainers.
