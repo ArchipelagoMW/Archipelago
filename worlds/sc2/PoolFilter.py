@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Set
+from typing import Callable, Dict, List, Set, Union
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
     progressive_if_ext
@@ -157,7 +157,7 @@ def remove_final_mission_from_other_pools(mission_pools: Dict[MissionPools, List
                 missions.remove(final_mission)
 
 
-def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
+def get_item_upgrades(inventory: List[Item], parent_item: Union[Item, str]) -> List[Item]:
     item_name = parent_item.name if isinstance(parent_item, Item) else parent_item
     return [
         inv_item for inv_item in inventory

@@ -82,7 +82,7 @@ class MaximumCampaignSize(Range):
     If a set-size mission order is selected, does nothing.
     """
     display_name = "Maximum Campaign Size"
-    range_start = 2
+    range_start = 1
     range_end = 29
     default = 29
 

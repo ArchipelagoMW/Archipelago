@@ -192,7 +192,7 @@ def create_grid_regions(
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
-    mission_pools: Dict[MissionPools, List[SC2Mission]] = filter_missions(multiworld, player)
+    mission_pools = filter_missions(multiworld, player)
     final_mission = mission_pools[MissionPools.FINAL][0]
 
     mission_slots: List[SC2MissionSlot] = []
