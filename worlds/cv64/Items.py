@@ -92,6 +92,47 @@ pickup_item_discrepancies = {
     IName.one_hundred_gold:     0x1C
 }
 
+# Every inventory item's offset in the inventory array, starting at 0x80389C4B. Used to write start_inventory.
+inventory_item_offsets = {
+    IName.special_one:          0,
+    IName.special_two:          1,
+    IName.roast_chicken:        2,
+    IName.roast_beef:           3,
+    IName.healing_kit:          4,
+    IName.purifying:            5,
+    IName.cure_ampoule:         6,
+    # IName.pot_pourri:           7,
+    IName.permaup:              8,
+    # IName.the_contract:         15,
+    # IName.engagement_ring:      16,
+    IName.magical_nitro:        17,
+    IName.mandragora:           18,
+    IName.sun_card:             19,
+    IName.moon_card:            20,
+    # IName.incandescent_gaze:    21,
+    IName.archives_key:         22,
+    IName.left_tower_key:       23,
+    IName.storeroom_key:        24,
+    IName.garden_key:           25,
+    IName.copper_key:           26,
+    IName.chamber_key:          27,
+    IName.execution_key:        28,
+    IName.science_key_one:      29,
+    IName.science_key_two:      30,
+    IName.science_key_three:    31,
+    IName.clocktower_key_one:   32,
+    IName.clocktower_key_two:   33,
+    IName.clocktower_key_three: 34
+}
+
+# Every sub-weapon's ID when currently equipped. For start_inventory.
+sub_weapon_ids = {
+    IName.knife:        1,
+    IName.holy_water:   2,
+    IName.cross:        3,
+    IName.axe:          4
+}
+
 # Complete item table.
 item_table = {
     **filler_junk_table,

@@ -78,7 +78,7 @@ class Castlevania64Client(BizHawkClient):
             return False  # Should verify on the next pass
 
         ctx.game = self.game
-        ctx.items_handling = 0b101
+        ctx.items_handling = 0b001
         ctx.want_slot_data = True
         return True
 

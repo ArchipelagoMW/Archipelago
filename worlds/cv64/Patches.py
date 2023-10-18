@@ -1915,7 +1915,7 @@ countdown_number_updater = [
     0x01000000,
     0x00000000,
     0x00000000,
-    0x00000000,
+    0x01000000,
     0x01010000,
     0x00010101,
     0x01010101,
@@ -1926,10 +1926,10 @@ countdown_number_updater = [
     0x240B0011,  # ADDIU T3, R0, 0x0011
     0x110B0002,  # BEQ   T0, T3, [forward 0x02]
     0x90EA0040,  # LBU   T2, 0x0040 (A3)
-    0x25480000,  # ADDIU T0, T2, 0x0000
+    0x2548FFFF,  # ADDIU T0, T2, 0xFFFF
     0x3C098040,  # LUI   T1, 0x8040
     0x01284821,  # ADDIU T1, T1, T0
-    0x9129D71B,  # LBU   T1, 0xD71B (T1)
+    0x9129D71C,  # LBU   T1, 0xD71C (T1)
     0x11200009,  # BEQZ  T1,     [forward 0x09]
     0x3C088039,  # LUI   T0, 0x8039
     0x91099EE1,  # LBU   T1, 0x9EE1 (T0)
@@ -1977,8 +1977,8 @@ countdown_number_updater = [
 ]
 
 new_game_extras = [
-    # Upon starting a new game, this will write anything extra to the save file data that it should have at the start.
-    # This currently includes the initial Countdown numbers.
+    # Upon starting a new game, this will write anything extra to the save file data that the run should have at the
+    # start. The initial Countdown numbers begin here.
     0x24080000,  # ADDIU T0, R0, 0x0000
     0x24090010,  # ADDIU T1, R0, 0x0010
     0x11090008,  # BEQ   T0, T1, [forward 0x08]
@@ -1990,6 +1990,32 @@ new_game_extras = [
     0xAD6A9CA4,  # SW    T2, 0x9CA4 (T3)
     0x1000FFF8,  # B             [backward 0x08]
     0x25080004,  # ADDIU T0, T0, 0x0004
+    # start_inventory begins here
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91099C27,  # LBU   T1, 0x9C27 (T0)
+    0x31290010,  # ANDI  T1, T1, 0x0010
+    0x15200005,  # BNEZ  T1,     [forward 0x05]
+    0x24090000,  # ADDIU T1, R0, 0x0000  <- Starting jewels
+    0xA1099C49,  # SB    T1, 0x9C49
+    0x3C0A8040,  # LUI   T2, 0x8040
+    0x8D4BE514,  # LW    T3, 0xE514 (T2) <- Starting money
+    0xAD0B9C44,  # SW    T3, 0x9C44 (T0)
+    0x24090000,  # ADDIU T1, R0, 0x0000  <- Starting PowerUps
+    0xA1099CED,  # SB    T1, 0x9CED (T0)
+    0x24090000,  # ADDIU T1, R0, 0x0000  <- Starting sub-weapon
+    0xA1099C43,  # SB    T1, 0x9C43 (T0)
+    0x24090000,  # ADDIU T1, R0, 0x0000  <- Starting Ice Traps
+    0xA1099BE2,  # SB    T1, 0x9BE2 (T0)
+    0x240C0000,  # ADDIU T4, R0, 0x0000
+    0x240D0022,  # ADDIU T5, R0, 0x0022
+    0x11AC0007,  # BEQ   T5, T4, [forward 0x07]
+    0x3C0A8040,  # LUI   T2, 0x8040
+    0x014C5021,  # ADDU  T2, T2, T4
+    0x814AE518,  # LB    T2, 0xE518      <- Starting inventory items
+    0x25080001,  # ADDIU T0, T0, 0x0001
+    0xA10A9C4A,  # SB    T2, 0x9C4A (T0)
+    0x1000FFF9,  # B             [backward 0x07]
+    0x258C0001,  # ADDIU T4, T4, 0x0001
     0x03E00008   # JR    RA
 ]
 

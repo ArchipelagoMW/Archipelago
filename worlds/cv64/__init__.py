@@ -7,7 +7,7 @@ import threading
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import CV64Item, item_table, filler_junk_table, non_filler_junk_table, useful_table, key_table, \
-    special_table, trap_table, sub_weapon_table, pickup_item_discrepancies
+    special_table, trap_table, sub_weapon_table, pickup_item_discrepancies, inventory_item_offsets, sub_weapon_ids
 from .Locations import CV64Location, all_locations, create_locations, boss_table, base_id
 from .Entrances import create_entrances
 from .Options import cv64_options
@@ -618,6 +618,46 @@ class CV64World(World):
                     offsets_to_ids[stage_info[stage].altzone_spawn_offset] = stage_info[
                         self.active_stage_exits[stage]["alt"]].start_spawn_id
 
+            # Calculate start_inventory values here
+            starting_jewels = 0
+            starting_money = 0
+            starting_powerups = 0
+            starting_ice_traps = 0
+            starting_sub_weapon = 0
+            inventory_items_array = [0 for i in range(35)]
+            items_max = 10
+            if multiworld.increase_item_limit[player]:
+                items_max = 100
+            for item in multiworld.start_inventory[player].value:
+                if item in inventory_item_offsets:
+                    inventory_items_array[inventory_item_offsets[item]] = multiworld.start_inventory[player].value[item]
+                    if inventory_items_array[inventory_item_offsets[item]] > items_max and "Special" not in item:
+                        inventory_items_array[inventory_item_offsets[item]] = items_max
+                    if item == IName.permaup:
+                        if inventory_items_array[inventory_item_offsets[item]] > 2:
+                            inventory_items_array[inventory_item_offsets[item]] = 2
+                elif item in sub_weapon_table:
+                    starting_sub_weapon = sub_weapon_ids[item]
+                elif item == IName.powerup:
+                    starting_powerups += multiworld.start_inventory[player].value[item]
+                    if starting_powerups > 2:
+                        starting_powerups = 2
+                elif "GOLD" in item:
+                    starting_money += int(item[0:4]) * multiworld.start_inventory[player].value[item]
+                    if starting_money > 99999:
+                        starting_money = 99999
+                elif "jewel" in item:
+                    if "L" in item:
+                        starting_jewels += 10 * multiworld.start_inventory[player].value[item]
+                    else:
+                        starting_jewels += 5 * multiworld.start_inventory[player].value[item]
+                    if starting_jewels > 99:
+                        starting_jewels = 99
+                else:
+                    starting_ice_traps += multiworld.start_inventory[player].value[item]
+                    if starting_ice_traps > 0xFF:
+                        starting_ice_traps = 0xFF
+
             slot_name = self.multiworld.player_name[self.player].encode("utf-8")
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
@@ -625,7 +665,8 @@ class CV64World(World):
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.total_available_bosses,
                       self.active_stage_list, self.active_stage_exits, self.active_warp_list, self.required_s2s,
                       music_list, countdown_list, shop_name_list, shop_desc_list, shop_price_list, shop_colors_list,
-                      slot_name, active_locations)
+                      slot_name, active_locations, starting_jewels, starting_money, starting_powerups,
+                      starting_ice_traps, starting_sub_weapon, inventory_items_array)
 
             rom.write_to_file(rompath)
 

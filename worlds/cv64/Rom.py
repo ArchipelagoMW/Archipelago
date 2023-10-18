@@ -328,7 +328,8 @@ class LocalRom(object):
 
 def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, active_stage_list, active_stage_exits,
               active_warp_list, required_s2s, music_list, countdown_list, shop_name_list, shop_desc_list,
-              shop_price_list, shop_colors_list, slot_name, active_locations):
+              shop_price_list, shop_colors_list, slot_name, active_locations, starting_jewels, starting_money,
+              starting_powerups, starting_ice_traps, starting_sub_weapon, inventory_items_array):
     w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
     w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
     w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
@@ -1001,6 +1002,14 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     # Initial Countdown numbers
     rom.write_int32(0xAD6A8, 0x080FF60A)  # J	0x803FD828
     rom.write_int32s(0xBFD828, Patches.new_game_extras)
+
+    # Starting inventory stuff
+    rom.write_byte(0xBFD867, starting_jewels)
+    rom.write_byte(0xBFD87B, starting_powerups)
+    rom.write_int32(0xBFE514, starting_money)
+    rom.write_bytes(0xBFE518, inventory_items_array)
+    rom.write_byte(0xBFD883, starting_sub_weapon)
+    rom.write_byte(0xBFD88B, starting_ice_traps)
 
     # Everything related to shopsanity
     if multiworld.shopsanity[player]:
