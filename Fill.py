@@ -748,8 +748,6 @@ def distribute_planned(world: MultiWorld) -> None:
     early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
     non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
     for loc in world.get_unfilled_locations():
-        if loc.address is None:  # handles edge case with randomized event locations
-            continue
         if loc in reachable:
             early_locations[loc.player].append(loc.name)
         else:  # not reachable with swept state
@@ -897,7 +895,7 @@ def distribute_planned(world: MultiWorld) -> None:
             for item_name in items:
                 item = world.worlds[player].create_item(item_name)
                 for location in reversed(candidates):
-                    if location.address is not None:
+                    if (location.address is None) == (item.code is None):  # either both None or both not None
                         if not location.item:
                             if location.item_rule(item):
                                 if location.can_fill(world.state, item, False):
@@ -912,7 +910,7 @@ def distribute_planned(world: MultiWorld) -> None:
                         else:
                             err.append(f"Cannot place {item_name} into already filled location {location}.")
                     else:
-                        err.append(f"Cannot place {item_name} into event location {location}.")
+                        err.append(f"Mismatch between {item_name} and {location}, only one is an event.")
                 if count == maxcount:
                     break
             if count < placement['count']['min']:
