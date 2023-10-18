@@ -50,15 +50,18 @@ class OpenRCT2World(World):
         self.item_table = {}
         self.item_frequency = {}
         self.location_prices = []#This list is passed to OpenRCT2 to create the unlock shop
-        self.rules = [self.multiworld.difficult_guest_generation[self.player].value, self.multiworld.difficult_park_rating[self.player].value,\
-            self.multiworld.forbid_high_construction[self.player].value,self.multiworld.forbid_landscape_changes[self.player].value,\
-            self.multiworld.forbid_marketing_campaigns[self.player].value, self.multiworld.forbid_tree_removal[self.player].value]
+        self.rules = []#self.multiworld.difficult_guest_generation[self.player].value, self.multiworld.difficult_park_rating[self.player].value,\
+        #     self.multiworld.forbid_high_construction[self.player].value,self.multiworld.forbid_landscape_changes[self.player].value,\
+        #     self.multiworld.forbid_marketing_campaigns[self.player].value, self.multiworld.forbid_tree_removal[self.player].value]
 
     #Okay future Colby, listen up. Here's the plan. We're going to take the item_table and shuffle it in the next section. We'll generate the 
     #unlock shop with the item locations and apply our logic to it. Prereqs can only be items one level lower on the tree. We then will set 
     #rules in create_regions that reflect our table.
 
     def generate_early(self) -> None:
+        self.rules = [self.multiworld.difficult_guest_generation[self.player].value, self.multiworld.difficult_park_rating[self.player].value,\
+            self.multiworld.forbid_high_construction[self.player].value,self.multiworld.forbid_landscape_changes[self.player].value,\
+            self.multiworld.forbid_marketing_campaigns[self.player].value, self.multiworld.forbid_tree_removal[self.player].value]
         #Grabs options for item generation
         scenario = self.multiworld.scenario[self.player].value
         #If the scenario is random, pick which random scenario it will be
