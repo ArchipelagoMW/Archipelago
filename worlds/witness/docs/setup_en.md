@@ -29,8 +29,10 @@ To continue an earlier game:
 
 ## Archipelago Text Client
 
-It is recommended to have Archipelago's Text Client open on the side to keep track of what items you receive and send, as The Witness has no in-game messages.
-<br/>Or use the Auto-Tracker!
+It is recommended to have Archipelago's Text Client open on the side to keep track of what items you receive and send.
+<br/>The Witness does display received and sent items in-game, but only for a short time, and the messages are easy to miss while playing.
+
+<br/><br/>Of course, you can also use the Auto-Tracker!
 
 ## Auto-Tracking
 
@@ -41,4 +43,4 @@ The Witness has a fully functional map tracker that supports auto-tracking.
 3. Click on the "AP" symbol at the top.
 4. Enter the AP address, slot name and password. 
 
-The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly. Note that the tracker may be out of date.
+The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly.
