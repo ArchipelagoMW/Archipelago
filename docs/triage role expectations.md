@@ -40,8 +40,8 @@ As of the time of writing this document, there are 15 distinct labels that can b
 These labels notate if certain issues or pull requests affect critical aspects of Archipelago that may require specific 
 review. More than one of these labels can be used on a issue or pull request, if relevant.
 
-* `affects: core` is to be applied to issues/PRs that may affect core Archipelago functionality and should have 
-additional scrutiny by pull request reviewers.
+* `affects: core` is to be applied to issues/PRs that may affect core Archipelago functionality and should be reviewed 
+with additional scrutiny.
     * Core is defined as any files not contained in the `WebHostLib` directory or individual world implementations 
     directories inside the `worlds` directory, not including `worlds/generic`.
 * `affects: webhost` is to be applied to issues/PRs that may affect the core WebHost portion of Archipelago. In 
