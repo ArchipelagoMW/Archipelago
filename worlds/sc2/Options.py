@@ -55,23 +55,45 @@ class MissionOrder(Choice):
     Vanilla (29): Keeps the standard mission order and branching from the WoL Campaign.
     Vanilla Shuffled (29): Keeps same branching paths from the WoL Campaign but randomizes the order of missions within.
     Mini Campaign (15): Shorter version of the campaign with randomized missions and optional branches.
-    Grid (16):  A 4x4 grid of random missions.  Start at the top-left and forge a path towards bottom-right mission to win.
+    Medium Grid (16):  A 4x4 grid of random missions.  Start at the top-left and forge a path towards bottom-right mission to win.
     Mini Grid (9):  A 3x3 version of Grid.  Complete the bottom-right mission to win.
     Blitz (12):  12 random missions that open up very quickly.  Complete the bottom-right mission to win.
     Gauntlet (7): Linear series of 7 random missions to complete the campaign.
     Mini Gauntlet (4): Linear series of 4 random missions to complete the campaign.
     Tiny Grid (4): A 2x2 version of Grid.  Complete the bottom-right mission to win.
+    Grid (variable): A grid that will resize to use all non-excluded missions.  Corners may be omitted to make the grid more square.  Complete the bottom-right mission to win.
     """
     display_name = "Mission Order"
     option_vanilla = 0
     option_vanilla_shuffled = 1
     option_mini_campaign = 2
-    option_grid = 3
+    option_medium_grid = 3
     option_mini_grid = 4
     option_blitz = 5
     option_gauntlet = 6
     option_mini_gauntlet = 7
     option_tiny_grid = 8
+    option_grid = 9
+
+
+class MaximumCampaignSize(Range):
+    """
+    Sets an upper bound on how many missions to include when a variable-size mission order is selected.
+    If a set-size mission order is selected, does nothing.
+    """
+    display_name = "Maximum Campaign Size"
+    range_start = 2
+    range_end = 29
+    default = 29
+
+
+class GridTwoStartPositions(Toggle):
+    """
+    If turned on and 'grid' mission order is selected, removes a mission from the starting
+    corner sets the adjacent two missions as the starter missions.
+    """
+    display_name = "Start with two unlocked missions on grid"
+    default = Toggle.option_false
 
 
 class ColorChoice(Choice):
@@ -506,6 +528,8 @@ sc2_options: Dict[str, Option] = {
     "skip_cutscenes": SkipCutscenes,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
+    "maximum_campaign_size": MaximumCampaignSize,
+    "grid_two_start_positions": GridTwoStartPositions,
     "player_color_terran_raynor": PlayerColorTerranRaynor,
     "player_color_protoss": PlayerColorProtoss,
     "player_color_zerg": PlayerColorZerg,
