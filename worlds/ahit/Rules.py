@@ -62,25 +62,16 @@ def get_difficulty(world: World) -> Difficulty:
     return Difficulty(world.multiworld.LogicDifficulty[world.player].value)
 
 
-def has_paintings(state: CollectionState, world: World, count: int, surf: bool = True) -> bool:
+def has_paintings(state: CollectionState, world: World, count: int, allow_skip: bool=True) -> bool:
     if not painting_logic(world):
         return True
 
-    # Cherry Hover
-    if get_difficulty(world) >= Difficulty.EXPERT:
-        return True
-
-    # All paintings can be skipped with No Bonk, very easily, if the player knows
-    if surf and get_difficulty(world) >= Difficulty.MODERATE and can_surf(state, world):
-        return True
-
-    paintings: int = state.count("Progressive Painting Unlock", world.player)
-    if surf and get_difficulty(world) >= Difficulty.MODERATE:
-        # Green+Yellow paintings can also be skipped easily
-        if count == 1 or paintings >= 1 and count == 3:
+    if world.multiworld.NoPaintingSkips[world.player].value == 0 and allow_skip:
+        # In Moderate there is a very easy trick to skip all the walls, except for the one guarding the boss arena
+        if get_difficulty(world) >= Difficulty.MODERATE:
             return True
 
-    return paintings >= count
+    return state.count("Progressive Painting Unlock", world.player) >= count
 
 
 def zipline_logic(world: World) -> bool:
@@ -281,10 +272,7 @@ def set_rules(world: World):
             add_rule(location, lambda state: state.has("Umbrella", world.player))
 
         if data.paintings > 0 and world.multiworld.ShuffleSubconPaintings[world.player].value > 0:
-            if "Toilet of Doom" not in key:
-                add_rule(location, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
-            else:
-                add_rule(location, lambda state, paintings=data.paintings: has_paintings(state, world, paintings, False))
+            add_rule(location, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
 
         if data.hit_requirement > 0:
             if data.hit_requirement == 1:
@@ -417,13 +405,9 @@ def set_moderate_rules(world: World):
     add_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player), lambda state: True)
     add_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player), lambda state: True)
 
-    # Moderate: hitting the bell is not required to enter Subcon Well, however hookshot is still expected to clear
-    set_rule(world.multiworld.get_location("Subcon Well - Hookshot Badge Chest", world.player),
-             lambda state: has_paintings(state, world, 1))
-    set_rule(world.multiworld.get_location("Subcon Well - Above Chest", world.player),
-             lambda state: has_paintings(state, world, 1))
-    set_rule(world.multiworld.get_location("Subcon Well - Mushroom", world.player),
-             lambda state: has_paintings(state, world, 1))
+    # Moderate: enter and clear The Subcon Well without Hookshot and without hitting the bell
+    for loc in world.multiworld.get_region("The Subcon Well", world.player).locations:
+        set_rule(loc, lambda state: has_paintings(state, world, 1))
 
     # Moderate: Vanessa Manor with nothing
     for loc in world.multiworld.get_region("Queen Vanessa's Manor", world.player).locations:
@@ -484,17 +468,17 @@ def set_hard_rules(world: World):
              lambda state: can_use_hat(state, world, HatType.SPRINT)
              and state.has("Scooter Badge", world.player), "or")
 
+    # No Dweller Mask required
     set_rule(world.multiworld.get_location("Subcon Forest - Dweller Floating Rocks", world.player),
              lambda state: has_paintings(state, world, 3))
 
     # Cherry bridge over boss arena gap (painting still expected)
     set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
-             lambda state: has_paintings(state, world, 1, False))
+             lambda state: has_paintings(state, world, 1, False) or state.has("YCHE Access", world.player))
 
     # SDJ
     add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
-             lambda state: can_sdj(state, world)
-             and has_paintings(state, world, 2), "or")
+             lambda state: can_sdj(state, world) and has_paintings(state, world, 2), "or")
 
     add_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
              lambda state: has_paintings(state, world, 3) and can_sdj(state, world), "or")
@@ -559,21 +543,29 @@ def set_expert_rules(world: World):
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - The Twilight Bell)", world.player),
              lambda state: True)
 
-    # Expert: enter and clear The Subcon Well with nothing
-    for loc in world.multiworld.get_region("The Subcon Well", world.player).locations:
-        set_rule(loc, lambda state: True)
-
     # Expert: Cherry Hovering
-    connect_regions(world.multiworld.get_region("Your Contract has Expired", world.player),
-                    world.multiworld.get_region("Subcon Forest Area", world.player),
-                    "Subcon Forest Entrance YCHE", world.player)
+    entrance = connect_regions(world.multiworld.get_region("Your Contract has Expired", world.player),
+                               world.multiworld.get_region("Subcon Forest Area", world.player),
+                               "Subcon Forest Entrance YCHE", world.player)
 
-    set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player), lambda state: True)
-    set_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player), lambda state: True)
-    set_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player), lambda state: True)
-    set_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player), lambda state: True)
-    set_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player), lambda state: True)
-    set_rule(world.multiworld.get_location("Subcon Forest - Tall Tree Hookshot Swing", world.player), lambda state: True)
+    if world.multiworld.NoPaintingSkips[world.player].value > 0:
+        add_rule(entrance, lambda state: has_paintings(state, world, 1))
+
+    set_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
+             lambda state: can_use_hookshot(state, world) and can_hit(state, world)
+             and has_paintings(state, world, 1, True))
+
+    # Set painting rules only. Skipping paintings is determined in has_paintings
+    set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
+             lambda state: has_paintings(state, world, 1, True))
+    set_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player),
+             lambda state: has_paintings(state, world, 2, True))
+    set_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
+             lambda state: has_paintings(state, world, 2, True))
+    set_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
+             lambda state: has_paintings(state, world, 3, True))
+    set_rule(world.multiworld.get_location("Subcon Forest - Tall Tree Hookshot Swing", world.player),
+             lambda state: has_paintings(state, world, 3, True))
 
     # You can cherry hover to Snatcher's post-fight cutscene, which completes the level without having to fight him
     connect_regions(world.multiworld.get_region("Subcon Forest Area", world.player),
@@ -648,14 +640,19 @@ def set_mafia_town_rules(world: World):
 
 
 def set_subcon_rules(world: World):
-    set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
-             lambda state: state.has("TOD Access", world.player) and can_use_hookshot(state, world)
-             and (not painting_logic(world) or has_paintings(state, world, 1))
-             or state.has("YCHE Access", world.player))
-
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", world.player),
              lambda state: can_use_hat(state, world, HatType.BREWING) or state.has("Umbrella", world.player)
              or can_use_hat(state, world, HatType.DWELLER))
+
+    # You can't skip over the boss arena wall without cherry hover, so these two need to be set this way
+    set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
+             lambda state: state.has("TOD Access", world.player) and can_use_hookshot(state, world)
+             and has_paintings(state, world, 1, False) or state.has("YCHE Access", world.player))
+
+    # The painting wall can't be skipped without cherry hover, which is Expert
+    set_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
+             lambda state: can_use_hookshot(state, world) and can_hit(state, world)
+             and has_paintings(state, world, 1, False))
 
     add_rule(world.multiworld.get_entrance("Subcon Forest - Act 2", world.player),
              lambda state: state.has("Snatcher's Contract - The Subcon Well", world.player))
@@ -671,7 +668,7 @@ def set_subcon_rules(world: World):
 
     if painting_logic(world):
         add_rule(world.multiworld.get_location("Act Completion (Contractual Obligations)", world.player),
-                 lambda state: state.has("Progressive Painting Unlock", world.player))
+                 lambda state: has_paintings(state, world, 1, False))
 
         for key in contract_locations:
             if key == "Snatcher's Contract - The Subcon Well":

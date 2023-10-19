@@ -9,7 +9,9 @@ from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events
 from worlds.AutoWorld import World, WebWorld
 from typing import List, Dict, TextIO
-from worlds.LauncherComponents import Component, components
+from worlds.LauncherComponents import Component, components, icon_paths
+from multiprocessing import Process
+from Utils import local_path
 
 hat_craft_order: Dict[int, List[HatType]] = {}
 hat_yarn_costs: Dict[int, Dict[HatType, int]] = {}
@@ -20,7 +22,14 @@ dw_shuffle: Dict[int, List[str]] = {}
 nyakuza_thug_items: Dict[int, Dict[str, int]] = {}
 badge_seller_count: Dict[int, int] = {}
 
-components.append(Component("A Hat in Time Client", "AHITClient"))
+components.append(Component("A Hat in Time Client", "AHITClient", icon='yatta'))
+icon_paths['yatta'] = local_path('data', 'yatta.png')
+
+
+def run_client():
+    from AHITClient import main
+    p = Process(target=main)
+    p.start()
 
 
 class AWebInTime(WebWorld):
@@ -170,7 +179,8 @@ class HatInTimeWorld(World):
                            "Chapter6Cost": chapter_timepiece_costs[self.player][ChapterIndex.CRUISE],
                            "Chapter7Cost": chapter_timepiece_costs[self.player][ChapterIndex.METRO],
                            "BadgeSellerItemCount": badge_seller_count[self.player],
-                           "SeedNumber": str(self.multiworld.seed)}  # For shop prices
+                           "SeedNumber": str(self.multiworld.seed),  # For shop prices
+                           "SeedName": self.multiworld.seed_name}
 
         if self.multiworld.HatItems[self.player].value == 0:
             slot_data.setdefault("SprintYarnCost", hat_yarn_costs[self.player][HatType.SPRINT])

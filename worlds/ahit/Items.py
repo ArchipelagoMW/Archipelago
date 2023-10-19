@@ -230,8 +230,8 @@ ahit_items = {
 
     # DLC1 items
     "Relic (Cake Stand)": ItemData(2000300018, ItemClassification.progression, HatDLC.dlc1),
-    "Relic (Cake)": ItemData(2000300019, ItemClassification.progression, HatDLC.dlc1),
-    "Relic (Cake Slice)": ItemData(2000300020, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Chocolate Cake)": ItemData(2000300019, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Chocolate Cake Slice)": ItemData(2000300020, ItemClassification.progression, HatDLC.dlc1),
     "Relic (Shortcake)": ItemData(2000300021, ItemClassification.progression, HatDLC.dlc1),
 
     # DLC2 items

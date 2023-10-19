@@ -1,6 +1,6 @@
 from worlds.AutoWorld import World, CollectionState
-from .Rules import can_use_hat, can_use_hookshot, can_hit, zipline_logic, get_difficulty
-from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData, HatDLC
+from .Rules import can_use_hat, can_use_hookshot, can_hit, zipline_logic, get_difficulty, has_paintings
+from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData
 from .DeathWishLocations import dw_prereqs, dw_candles
 from BaseClasses import Entrance, Location, ItemClassification
 from worlds.generic.Rules import add_rule, set_rule
@@ -169,8 +169,7 @@ def set_dw_rules(world: World):
                 add_rule(loc, lambda state: state.has("Umbrella", world.player))
 
             if data.paintings > 0 and world.multiworld.ShuffleSubconPaintings[world.player].value > 0:
-                add_rule(loc, lambda state, paintings=data.paintings: state.has("Progressive Painting Unlock",
-                                                                                world.player, paintings))
+                add_rule(loc, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
 
             if data.hit_requirement > 0:
                 if data.hit_requirement == 1:
@@ -303,10 +302,17 @@ def set_candle_dw_rules(name: str, world: World):
                  and state.has("Train Rush (Zero Jumps)", world.player) and can_use_hat(state, world, HatType.ICE))
 
         # No Ice Hat/painting required in Expert for Toilet Zero Jumps
-        if get_difficulty(world) >= Difficulty.EXPERT:
+        # This painting wall can only be skipped via cherry hover.
+        if get_difficulty(world) < Difficulty.EXPERT or world.multiworld.NoPaintingSkips[world.player].value == 1:
             set_rule(world.multiworld.get_location("Toilet of Doom (Zero Jumps)", world.player),
-                     lambda state: can_use_hookshot(state, world)
-                     and can_hit(state, world))
+                     lambda state: can_use_hookshot(state, world) and can_hit(state, world)
+                     and has_paintings(state, world, 1, False))
+        else:
+            set_rule(world.multiworld.get_location("Toilet of Doom (Zero Jumps)", world.player),
+                     lambda state: can_use_hookshot(state, world) and can_hit(state, world))
+
+        set_rule(world.multiworld.get_location("Contractual Obligations (Zero Jumps)", world.player),
+                 lambda state: has_paintings(state, world, 1, False))
 
     elif name == "Snatcher's Hit List":
         add_rule(main_objective, lambda state: state.has("Mafia Goon", world.player))

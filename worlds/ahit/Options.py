@@ -211,6 +211,12 @@ class ShuffleSubconPaintings(Toggle):
     default = 0
 
 
+class NoPaintingSkips(Toggle):
+    """If enabled, prevent Subcon fire wall skips from being in logic on higher difficulty settings."""
+    display_name = "No Subcon Fire Wall Skips"
+    default = 0
+
+
 class StartingChapter(Choice):
     """Determines which chapter you will be guaranteed to be able to enter at the beginning of the game."""
     display_name = "Starting Chapter"
@@ -606,6 +612,7 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "ShuffleStorybookPages":    ShuffleStorybookPages,
     "ShuffleActContracts":      ShuffleActContracts,
     "ShuffleSubconPaintings":   ShuffleSubconPaintings,
+    "NoPaintingSkips":          NoPaintingSkips,
     "StartingChapter":          StartingChapter,
     "CTRLogic":                 CTRLogic,
 
@@ -677,6 +684,7 @@ slot_data_options: typing.Dict[str, type(Option)] = {
     "ShuffleStorybookPages":        ShuffleStorybookPages,
     "ShuffleActContracts":          ShuffleActContracts,
     "ShuffleSubconPaintings":       ShuffleSubconPaintings,
+    "NoPaintingSkips":              NoPaintingSkips,
     "HatItems":                     HatItems,
 
     "EnableDLC1":               EnableDLC1,
