@@ -86,10 +86,10 @@ joke_hints = [
     "The Keep laser panels use the same trick on both sides!",
     "Can't get past a door? Try going around. Can't go around? Try building a nether portal.",
     "We've been trying to reach you about your car's extended warranty.",
-    "I hate this game. I hate this game. I hate this game.\n- Chess world.player Bobby Fischer",
+    "I hate this game. I hate this game. I hate this game.\n- Chess player Bobby Fischer",
     "Dear Mario,\nPlease come to the castle. I've baked a cake for you!",
     "Have you tried waking up?\nYeah, me neither.",
-    "Why do they call it The Witness, when wit game the world.player view play of with the game.",
+    "Why do they call it The Witness, when wit game the player view play of with the game.",
     "THE WIND FISH IN NAME ONLY, FOR IT IS NEITHER",
     "Like this game?\nTry The Wit.nes, Understand, INSIGHT, Taiji What the Witness?, and Tametsi.",
     "In a race, It's survival of the Witnesst.",
@@ -108,7 +108,7 @@ joke_hints = [
     "Here's a hint: Get good at the game.",
     "I'm still not entirely sure what we're witnessing here.",
     "Have you found a red page yet? No? Then have you found a blue page?",
-    "And here we see the Witness world.player, seeking answers where there are none-\nDid someone turn on the loudspeaker?",
+    "And here we see the Witness player, seeking answers where there are none-\nDid someone turn on the loudspeaker?",
 
     "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi,"
     "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch.",
