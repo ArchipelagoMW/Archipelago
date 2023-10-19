@@ -812,7 +812,7 @@ location_name_groups: Dict[str, Set[str]] = {
 
     "Key Locations": frozenset([
         "HWL: Cell Key",
-        "ID: Jailer's Key King",
+        "ID: Jailer's Key Ring",
         "ID: Jailbreaker's Key",
         "ID: Old Cell Key",
         "LC: Grand Archives Key",
