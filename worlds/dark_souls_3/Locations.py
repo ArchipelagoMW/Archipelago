@@ -857,7 +857,7 @@ location_name_groups: Dict[str, Set[str]] = {
     "Hidden Locations": frozenset([
         # TODO: this list isn't at all comprehensive, expand it
 
-        "DC: Dragonhead Shield", # requires gesture
+        "RC: Dragonhead Shield", # requires gesture
         "SL: Speckled Stoneplate Ring", # requires careful ballista shot
 
         # Out-of-the-way cave
