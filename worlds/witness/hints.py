@@ -1,5 +1,6 @@
 from typing import Tuple, List
 
+from BaseClasses import Item
 from worlds.AutoWorld import World
 from .Options import is_option_enabled, get_option_value
 
@@ -221,8 +222,8 @@ def get_priority_hint_locations(world: World):
     }
 
 
-def make_hint_from_item(world: World, item: str):
-    locations = world.multiworld.find_item_locations(item, world.player)
+def make_hint_from_item(world: World, item_name: str, own_itempool: List[Item]):
+    locations = [item.location for item in own_itempool if item.name == item_name]
 
     location_obj = world.random.choice(locations)
     location_name = location_obj.name
@@ -230,7 +231,7 @@ def make_hint_from_item(world: World, item: str):
     if location_obj.player != world.player:
         location_name += " (" + world.multiworld.get_player_name(location_obj.player) + ")"
 
-    return location_name, item, location_obj.address if (location_obj.player == world.player) else -1
+    return location_name, item_name, location_obj.address if (location_obj.player == world.player) else -1
 
 
 def make_hint_from_location(world: World, location: str):
@@ -243,16 +244,14 @@ def make_hint_from_location(world: World, location: str):
     return location, item_name, location_obj.address if (location_obj.player == world.player) else -1
 
 
-def make_hints(world: World, hint_amount: int):
+def make_hints(world: World, hint_amount: int, own_itempool: List[Item]):
     hints = list()
 
     prog_items_in_this_world = {
-        item.name for item in world.multiworld.get_items()
-        if item.player == world.player and item.code and item.advancement
+        item.name for item in own_itempool if item.advancement and item.location
     }
     loc_in_this_world = {
-        location.name for location in world.multiworld.get_locations()
-        if location.player == world.player and location.address
+        location.name for location in world.multiworld.get_locations(world.player) if location.address
     }
 
     always_locations = [
@@ -275,7 +274,7 @@ def make_hints(world: World, hint_amount: int):
     always_hint_pairs = dict()
 
     for item in always_items:
-        hint_pair = make_hint_from_item(world, item)
+        hint_pair = make_hint_from_item(world, item, own_itempool)
 
         if hint_pair[2] == 158007:  # Tutorial Gate Open
             continue
@@ -289,7 +288,7 @@ def make_hints(world: World, hint_amount: int):
     priority_hint_pairs = dict()
 
     for item in priority_items:
-        hint_pair = make_hint_from_item(world, item)
+        hint_pair = make_hint_from_item(world, item, own_itempool)
 
         if hint_pair[2] == 158007:  # Tutorial Gate Open
             continue
@@ -349,7 +348,7 @@ def make_hints(world: World, hint_amount: int):
                 next_random_hint_is_item = not next_random_hint_is_item
                 continue
 
-            hint = make_hint_from_item(world, prog_items_in_this_world.pop())
+            hint = make_hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)
 
             if hint[0] in already_hinted_locations:
                 continue

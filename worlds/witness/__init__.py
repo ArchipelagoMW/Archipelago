@@ -65,6 +65,7 @@ class WitnessWorld(World):
         self.log_ids_to_hints = None
 
         self.items_placed_early = []
+        self.own_itempool = []
 
     def _get_slot_data(self):
         return {
@@ -241,7 +242,10 @@ class WitnessWorld(World):
 
         # Generate the actual items.
         for item_name, quantity in sorted(item_pool.items()):
-            self.multiworld.itempool += [self.create_item(item_name) for _ in range(0, quantity)]
+            new_items = [self.create_item(item_name) for _ in range(0, quantity)]
+
+            self.own_itempool += new_items
+            self.multiworld.itempool += new_items
             if self.items.item_data[item_name].local_only:
                 self.multiworld.local_items[self.player].value.add(item_name)
 
@@ -257,7 +261,7 @@ class WitnessWorld(World):
         audio_logs = get_audio_logs().copy()
 
         if hint_amount != 0:
-            generated_hints = make_hints(self, hint_amount)
+            generated_hints = make_hints(self, hint_amount, self.own_itempool)
 
             self.multiworld.per_slot_randoms[self.player].shuffle(audio_logs)
 
