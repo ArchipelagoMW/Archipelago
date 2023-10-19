@@ -44,7 +44,7 @@ upgrade_table: Dict[str, RiskOfRainItemData] = {
 other_table: Dict[str, RiskOfRainItemData] = {
     "Dio's Best Friend":    RiskOfRainItemData("ExtraLife", 1 + offset, ItemClassification.filler),
     "Beads of Fealty":      RiskOfRainItemData("Beads", 13 + offset, ItemClassification.progression),
-    "Radar Scanner":        RiskOfRainItemData("Radar", 14 + offset, ItemClassification.progression)
+    "Radar Scanner":        RiskOfRainItemData("Radar", 14 + offset, ItemClassification.useful)
 }
 filler_table: Dict[str, RiskOfRainItemData] = {
     "Money":                RiskOfRainItemData("Filler", 1 + filler_offset, ItemClassification.filler, 64),
