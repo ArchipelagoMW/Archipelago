@@ -5,6 +5,7 @@ checking or launching the client, otherwise it will probably cause circular impo
 
 
 import asyncio
+import subprocess
 import traceback
 from typing import Any, Dict, Optional
 
@@ -146,8 +147,24 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
 
 async def _run_game(rom: str):
-    import webbrowser
-    webbrowser.open(rom)
+    import os
+    auto_start = Utils.get_settings().bizhawkclient_options.rom_start
+
+    if auto_start is True:
+        emuhawk_path = Utils.get_settings().bizhawkclient_options.emuhawk_path
+        subprocess.Popen([emuhawk_path, "--lua=data/lua/connector_bizhawk_generic.lua", os.path.realpath(rom)],
+                         cwd=Utils.local_path("."),
+                         stdin=subprocess.DEVNULL,
+                         stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL)
+    elif isinstance(auto_start, str):
+        import shlex
+
+        subprocess.Popen([*shlex.split(auto_start), os.path.realpath(rom)],
+                         cwd=Utils.local_path("."),
+                         stdin=subprocess.DEVNULL,
+                         stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL)
 
 
 async def _patch_and_run_game(patch_file: str):

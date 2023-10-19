@@ -694,6 +694,25 @@ does nothing if not found
     snes_rom_start: Union[SnesRomStart, bool] = True
 
 
+class BizHawkClientOptions(Group):
+    class EmuHawkPath(UserFilePath):
+        """
+        The location of the EmuHawk you want to auto launch patched ROMs with
+        """
+        is_exe = True
+        description = "EmuHawk Executable"
+
+    class RomStart(str):
+        """
+        Set this to true to autostart a patched ROM in BizHawk with the connector script,
+        to false to never open the patched rom automatically,
+        or to a path to an external program to open the ROM file with that instead.
+        """
+
+    emuhawk_path: EmuHawkPath = EmuHawkPath(None)
+    rom_start: Union[RomStart, bool] = True
+
+
 # Top-level group with lazy loading of worlds
 
 class Settings(Group):
@@ -701,6 +720,7 @@ class Settings(Group):
     server_options: ServerOptions = ServerOptions()
     generator: GeneratorOptions = GeneratorOptions()
     sni_options: SNIOptions = SNIOptions()
+    bizhawkclient_options: BizHawkClientOptions = BizHawkClientOptions()
 
     _filename: Optional[str] = None
 
