@@ -126,12 +126,15 @@ class WitnessWorld(World):
             )
             location_obj = self.multiworld.get_location(event_location, self.player)
             location_obj.place_locked_item(item_obj)
+            self.own_itempool.append(item_obj)
 
             event_locations.append(location_obj)
 
         # Place other locked items
+        dog_puzzle_skip = self.create_item("Puzzle Skip")
         self.multiworld.get_location("Town Pet the Dog", self.player)\
-            .place_locked_item(self.create_item("Puzzle Skip"))
+            .place_locked_item(dog_puzzle_skip)
+        self.own_itempool.append(dog_puzzle_skip)
 
         self.items_placed_early.append("Puzzle Skip")
 
@@ -144,8 +147,10 @@ class WitnessWorld(World):
                 self.multiworld.local_early_items[self.player][random_early_item] = 1
             else:
                 # Force the item onto the tutorial gate check and remove it from our random pool.
+                gate_item = self.create_item(random_early_item)
                 self.multiworld.get_location("Tutorial Gate Open", self.player)\
-                    .place_locked_item(self.create_item(random_early_item))
+                    .place_locked_item(gate_item)
+                self.own_itempool.append(gate_item)
                 self.items_placed_early.append(random_early_item)
 
         # There are some really restrictive settings in The Witness.
