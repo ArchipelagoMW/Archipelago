@@ -618,6 +618,7 @@ class WitnessPlayerLogic:
             "0x09E6B": "Mountain Floor 1 Exit Door Requirement 2",
             "0x09F6E": "Mountain Floor 1 Exit Door Requirement 3",
             "0x09EAF": "Mountain Floor 1 Exit Door Requirement 4",
+            "0x03608": "Desert Elevator Goes Up",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {

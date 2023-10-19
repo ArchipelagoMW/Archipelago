@@ -116,6 +116,7 @@ Doors:
 1624 - Desert Pond Room Entry (Door) - 0x0C2C3
 1627 - Desert Flood Room Entry (Door) - 0x0A24B
 1630 - Desert Elevator Room Entry (Door) - 0x0C316
+1631 - Desert Elevator (Door) - 0x01317
 1633 - Quarry Entry 1 (Door) - 0x09D6F
 1636 - Quarry Entry 2 (Door) - 0x17C07
 1639 - Quarry Stoneworks Entry (Door) - 0x02010
@@ -203,7 +204,7 @@ Doors:
 1904 - Glass Factory Doors - 0x0D7ED,0x01A29
 1906 - Symmetry Island Doors - 0x17F3E,0x18269
 1909 - Orchard Gates - 0x03313,0x03307
-1912 - Desert Doors - 0x09FEE,0x0C2C3,0x0A24B,0x0C316
+1912 - Desert Doors & Elevator - 0x09FEE,0x0C2C3,0x0A24B,0x0C316,0x01317
 1915 - Quarry Entry Doors - 0x09D6F,0x17C07
 1918 - Quarry Stoneworks Doors - 0x02010,0x275FF,0x17CE8,0x0368A
 1921 - Quarry Boathouse Doors - 0x17C50,0x3865F,0x2769B,0x27163
@@ -259,7 +260,7 @@ Doors:
 
 Lasers:
 1500 - Symmetry Laser - 0x00509
-1501 - Desert Laser - 0x012FB,0x01317
+1501 - Desert Laser - 0x012FB
 1502 - Quarry Laser - 0x01539
 1503 - Shadows Laser - 0x181B3
 1504 - Keep Laser - 0x014BB
