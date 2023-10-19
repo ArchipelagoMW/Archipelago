@@ -248,7 +248,7 @@ def make_hints(world: World, hint_amount: int, own_itempool: List[Item]):
     hints = list()
 
     prog_items_in_this_world = {
-        item.name for item in own_itempool if item.advancement and item.location
+        item.name for item in own_itempool if item.advancement and item.code and item.location
     }
     loc_in_this_world = {
         location.name for location in world.multiworld.get_locations(world.player) if location.address
