@@ -23,7 +23,7 @@ class RequiredJewels(Range):
     '''
     range_start = 0
     range_end = 4
-    default = 4
+    default = 3
     display_name = 'Required Jewels'
 
 
