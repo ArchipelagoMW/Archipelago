@@ -308,6 +308,8 @@ deck_card_pointers_addresses = {0x02039DE0, 0x02039EC0, 0x02039FA0}
 world_card_addresses = {0x02039D30, 0x02039D31}
 world_card_values = {{0x00,0x02}, {0x08,0x00}, {0x04,0x00}, {0x10,0x00}, {0x01,0x00}, {0x20,0x00}
        ,{0x02,0x00}, {0x40,0x00}, {0x80,0x00}, {0x00,0x04}, {0x00,0x08}, {0x00,0x01}, {0x00,0x10}}
+floor_assignment_addresses = {0x02039D34,0x02039D38,0x02039D3C,0x02039D40,0x02039D44,0x02039D48,0x02039D4C,0x02039D50,0x02039D54,0x02039D58,0x02039D5C,0x02039D60,0x02039D64}
+floor_assignment_values = {0x0A, 0x04, 0x03, 0x05, 0x01, 0x06, 0x02, 0x07, 0x08, 0x0D, 0x0B, 0x09, 0x0C}
 
 bronze_pack_attack_cards = {"Kingdom Key", "Three Wishes", "Pumpkinhead", "Olympia", "Wishing Star", "Lady Luck"}
 bronze_pack_magic_cards = {"Fire", "Blizzard", "Thunder", "Simba", "Genie", "Cloud", "Dumbo"}
@@ -526,16 +528,18 @@ function update_current_gold_card_qty(current_floor)
     else
         memory.writebyte(current_gold_map_cards_addresses["Key to Truth"], get_stored_gold_cards("Key to Truth", current_floor))
     end
-    memory.writebyte(current_gold_map_cards_addresses["Key to Rewards"], get_stored_gold_cards("Key to Rewards", current_floor))
+    if get_stored_gold_cards("Key of Beginnings", current_floor) < 1 then
+        memory.writebyte(current_gold_map_cards_addresses["Key to Rewards"], 0x0)
+    else
+        memory.writebyte(current_gold_map_cards_addresses["Key to Rewards"], get_stored_gold_cards("Key to Rewards", current_floor))
+    end
 end
 
 function update_world_cards(current_floor)
     if get_stored_gold_cards("Key of Beginnings", current_floor) > 0 then
-        memory.writebyte(world_card_addresses[1], world_card_values[current_floor][1])
-        memory.writebyte(world_card_addresses[2], world_card_values[current_floor][2])
+        memory.writebyte(floor_assignment_addresses[current_floor], floor_assignment_values[current_floor])
     else
-        memory.writebyte(world_card_addresses[1], 0)
-        memory.writebyte(world_card_addresses[2], 0)
+        memory.writebyte(floor_assignment_addresses[current_floor], 0x0A)
     end
 end
 
