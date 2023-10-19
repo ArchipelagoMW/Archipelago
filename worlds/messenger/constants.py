@@ -1,7 +1,7 @@
+from .shop import FIGURINES, SHOP_ITEMS
+
 # items
 # listing individual groups first for easy lookup
-from .Shop import SHOP_ITEMS, FIGURINES
-
 NOTES = [
     "Key of Hope",
     "Key of Chaos",

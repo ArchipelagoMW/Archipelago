@@ -1,13 +1,13 @@
 # Tests for Generate.py (ArchipelagoGenerate.exe)
 
 import unittest
+import os
+import os.path
 import sys
+
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import os.path
-import os
-import ModuleUpdate
-ModuleUpdate.update_ran = True  # don't upgrade
+
 import Generate
 
 
