@@ -1,5 +1,7 @@
 from typing import Dict
-from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet, OptionSet
+from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet, OptionSet, PerGameCommonOptions
+from dataclasses import dataclass
+
 from .MuseDashCollection import MuseDashCollections
 
 class AllowJustAsPlannedDLCSongs(Toggle):
@@ -166,22 +168,22 @@ class ExcludeSongs(ItemSet):
     display_name = "Exclude Songs"
 
 
-musedash_options: Dict[str, type(Option)] = {
-    "allow_just_as_planned_dlc_songs": AllowJustAsPlannedDLCSongs,
-    "dlc_packs": DLCMusicPacks,
-    "streamer_mode_enabled": StreamerModeEnabled,
-    "starting_song_count": StartingSongs,
-    "additional_song_count": AdditionalSongs,
-    "additional_item_percentage": AdditionalItemPercentage,
-    "song_difficulty_mode": DifficultyMode,
-    "song_difficulty_min": DifficultyModeOverrideMin,
-    "song_difficulty_max": DifficultyModeOverrideMax,
-    "grade_needed": GradeNeeded,
-    "music_sheet_count_percentage": MusicSheetCountPercentage,
-    "music_sheet_win_count_percentage": MusicSheetWinCountPercentage,
-    "available_trap_types": TrapTypes,
-    "trap_count_percentage": TrapCountPercentage,
-    "death_link": DeathLink,
-    "include_songs": IncludeSongs,
-    "exclude_songs": ExcludeSongs
-}
+@dataclass
+class MuseDashOptions(PerGameCommonOptions):
+    allow_just_as_planned_dlc_songs: AllowJustAsPlannedDLCSongs
+    dlc_packs: DLCMusicPacks
+    streamer_mode_enabled: StreamerModeEnabled
+    starting_song_count: StartingSongs
+    additional_song_count: AdditionalSongs
+    additional_item_percentage: AdditionalItemPercentage
+    song_difficulty_mode: DifficultyMode
+    song_difficulty_min: DifficultyModeOverrideMin
+    song_difficulty_max: DifficultyModeOverrideMax
+    grade_needed: GradeNeeded
+    music_sheet_count_percentage: MusicSheetCountPercentage
+    music_sheet_win_count_percentage: MusicSheetWinCountPercentage
+    available_trap_types: TrapTypes
+    trap_count_percentage: TrapCountPercentage
+    death_link: DeathLink
+    include_songs: IncludeSongs
+    exclude_songs: ExcludeSongs
