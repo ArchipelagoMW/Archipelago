@@ -915,7 +915,7 @@ location_name_groups: Dict[str, Set[str]] = {
         "GA: Avelyn",
 
         # Behind illusory walls
-        "FS: Covetous Silver Serpent Ring",
+        "FSBT: Covetous Silver Serpent Ring",
         "IBV: Ring of Favor",
         "GA: Outrider Knight Helm",
         "GA: Soul Stream",
