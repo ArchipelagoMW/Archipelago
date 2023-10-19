@@ -132,8 +132,7 @@ class WitnessWorld(World):
 
         # Place other locked items
         dog_puzzle_skip = self.create_item("Puzzle Skip")
-        self.multiworld.get_location("Town Pet the Dog", self.player)\
-            .place_locked_item(dog_puzzle_skip)
+        self.multiworld.get_location("Town Pet the Dog", self.player).place_locked_item(dog_puzzle_skip)
         self.own_itempool.append(dog_puzzle_skip)
 
         self.items_placed_early.append("Puzzle Skip")
