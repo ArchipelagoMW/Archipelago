@@ -2056,6 +2056,30 @@
       SPRING:
         id: Entry Room/Panel_spring_spring
         tag: midwhite
+      PAINTING (1):
+        id: Panel Room/Panel_painting_flower
+        colors: green
+        tag: forbid
+      PAINTING (2):
+        id: Panel Room/Panel_painting_eye
+        colors: green
+        tag: forbid
+      PAINTING (3):
+        id: Panel Room/Panel_painting_snowman
+        colors: green
+        tag: forbid
+      PAINTING (4):
+        id: Panel Room/Panel_painting_owl
+        colors: green
+        tag: forbid
+      PAINTING (5):
+        id: Panel Room/Panel_painting_panda
+        colors: green
+        tag: forbid
+      ROOM:
+        id: Panel Room/Panel_room_stairs
+        colors: gray
+        tag: forbid
     doors:
       Welcome Back:
         id: Entry Room Area Doors/Door_sizes
@@ -6715,31 +6739,6 @@
       Orange Tower Fifth Floor:
         room: Room Room
         door: Shortcut to Fifth Floor
-    panels:
-      FLOWER:
-        id: Panel Room/Panel_painting_flower
-        colors: green
-        tag: forbid
-      EYE:
-        id: Panel Room/Panel_painting_eye
-        colors: green
-        tag: forbid
-      SNOWMAN:
-        id: Panel Room/Panel_painting_snowman
-        colors: green
-        tag: forbid
-      OWL:
-        id: Panel Room/Panel_painting_owl
-        colors: green
-        tag: forbid
-      PANDA:
-        id: Panel Room/Panel_painting_panda
-        colors: green
-        tag: forbid
-      STAIRS:
-        id: Panel Room/Panel_room_stairs
-        colors: gray
-        tag: forbid
   Outside The Wise:
     entrances:
       Orange Tower Sixth Floor:
