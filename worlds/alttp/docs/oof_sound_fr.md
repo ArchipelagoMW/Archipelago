@@ -17,7 +17,8 @@ Quelques exemples de ce qui est possible : https://www.youtube.com/watch?v=TYs32
 
 Le fichier .brr **ne peut pas** dépasser 2 673 octets. Tant que le fichier d'entrée répond aux spécifications ci-dessus, le fichier .brr doit avoir cette taille ou moins. Si le fichier est trop volumineux, retournez à l'étape 1 et raccourcissez l'échantillon. 
 
-3. Lors de l'exécution de l'interface graphique de l'ajusteur, sélectionner simplement le fichier .brr que vous souhaitez utiliser après avoir cliqué l'option de menu `"OOF" Sound`.
+3. Lors de l'exécution de l'interface graphique de l'ajusteur, sélectionnez le fichier .brr que vous souhaitez utiliser après avoir cliqué l'option de menu  `"OOF" Sound`.
+
 4. Vous pouvez également faire le patch via la ligne de commande: `python .\LttPAdjuster.py --baserom .\baserom.sfc --oof .\oof.brr .\romtobeadjusted.sfc`, qui remplace les noms de fichiers par les vôtres. 
 
 ## Puis-je utiliser plusieurs sons pour les sprites composites ?
