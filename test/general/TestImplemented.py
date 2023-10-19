@@ -1,7 +1,7 @@
-import json
 import unittest
 
 from Fill import distribute_items_restrictive
+from NetUtils import encode
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from . import setup_solo_multiworld
 
@@ -41,10 +41,9 @@ class TestImplemented(unittest.TestCase):
             if game_name in {"Ocarina of Time", "Zillion"}:
                 continue
             with self.subTest(game_name):
-                print(game_name)
                 multiworld = setup_solo_multiworld(world_type)
                 distribute_items_restrictive(multiworld)
                 call_all(multiworld, "post_fill")
-                slot_data = multiworld.worlds[1].fill_slot_data()
-                if slot_data:
-                    self.assertIsInstance(json.dumps(slot_data), str, slot_data)
+                for key, data in multiworld.worlds[1].fill_slot_data().items():
+                    self.assertIsInstance(key, str, "keys in slot data must be a string")
+                    self.assertIsInstance(encode(data), str, f"object {type(data).__name__} not serializable.")
