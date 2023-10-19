@@ -15,7 +15,7 @@ from .Stages import CV64Stage, stage_info, shuffle_stages, vanilla_stage_order, 
 from .Names import IName, LName, RName
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, get_item_text_color, CV64DeltaPatch, rom_sub_weapon_offsets, \
-    rom_looping_music_fade_ins, rom_axe_cross_lower_values
+    rom_looping_music_fade_ins, rom_axe_cross_lower_values, music_sfx_ids
 from .Client import Castlevania64Client
 
 
@@ -408,6 +408,8 @@ class CV64World(World):
 
             # Handle music shuffle/disable here.
             music_list = [0] * 0x7A
+            for number in music_sfx_ids:
+                music_list[number] = number
             if self.multiworld.background_music[self.player].value == 2:
                 looping_songs = []
                 non_looping_songs = []

@@ -166,7 +166,7 @@ remote_item_giver = [
     0x91640002,  # LBU   A0, 0x0002 (T3)
     0x14800002,  # BNEZ  A0,     [forward 0x02]
     0x916900A7,  # LBU   T1, 0x00A7 (T3)
-    0x080FF077,  # J     0x803FC1DC
+    0x080FF076,  # J     0x803FC1D8
     0x312A0080,  # ANDI  T2, T1, 0x0080
     0x11400002,  # BEQZ  T2,     [forward 0x02]
     0x00000000,  # NOP
@@ -183,7 +183,7 @@ deathlink_nitro_edition = [
     # Alternative to the end of the above DeathLink-specific checks that kills the player with the Nitro explosion
     # instead of the normal death.
     0x91690043,  # LBU   T1, 0x0043 (T3)
-    0x080FF077,  # J     0x803FC1DC
+    0x080FF076,  # J     0x803FC1D8
     0x3C088034,  # LUI   T0, 0x8034
     0x91082BFE,  # LBU   T0, 0x2BFE (T0)
     0x11000002,  # BEQZ  T0,     [forward 0x02]
@@ -2658,10 +2658,14 @@ the_deep_freezer = [
     # remaining counter.
     0x3C0B8039,  # LUI   T3, 0x8039
     0x91699BE2,  # LBU   T3, 0x9BE2 (T0)
-    0x1120000B,  # BEQZ  T1,     [forward 0x0B]
+    0x1120000F,  # BEQZ  T1,     [forward 0x0F]
     0x3C088034,  # LUI   T0, 0x8034
     0x910827A9,  # LBU   T0, 0x27A9 (T0)
     0x240A000C,  # ADDIU T2, R0, 0x000C
+    0x110A000B,  # BEQ   T0, T2, [forward 0x0B]
+    0x240A0002,  # ADDIU T2, R0, 0x0002
+    0x110A0009,  # BEQ   T0, T2, [forward 0x09]
+    0x240A0008,  # ADDIU T2, R0, 0x0008
     0x110A0007,  # BEQ   T0, T2, [forward 0x07]
     0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
     0xA1699BE2,  # SB    T1, 0x9BE2 (T3)

@@ -183,6 +183,8 @@ rom_looping_music_fade_ins = {
     0x79: None
 }
 
+music_sfx_ids = [0x1C, 0x4B, 0x4C, 0x4D, 0x4E, 0x55, 0x6C, 0x76]
+
 warp_map_offsets = [0xADF67, 0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
 renon_item_dialogue = {
@@ -752,6 +754,9 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int32(0xEDADC, 0x0000000C)   # CT Door 2
     rom.write_int32(0xEDAE4, 0x0000000D)   # CT Door 3
 
+    # Fix ToE gate's "unlocked" flag in the locked door flags table
+    rom.write_int16(0x10B3B6, 0x0001)
+
     rom.write_int32(0x10AB2C, 0x8015FBD4)  # Maze Gates' check code pointer adjustments
     rom.write_int32(0x10AB40, 0x8015FBD4)
     rom.write_int32s(0x10AB50, [0x0D0C0000,
@@ -993,7 +998,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int32(0x697C60, 0x080FF06B)  # J 0x803FC18C
     rom.write_int32(0x6A5160, 0x080FF06B)  # J 0x803FC18C
     rom.write_int32s(0xBFC1AC, Patches.ice_trap_initializer)
-    rom.write_int32s(0xBFC1DC, Patches.the_deep_freezer)
+    rom.write_int32s(0xBFC1D8, Patches.the_deep_freezer)
     rom.write_int32s(0xB2F354, [0x3739E4C0,  # ORI T9, T9, 0xE4C0
                                 0x03200008,  # JR  T9
                                 0x00000000])  # NOP
