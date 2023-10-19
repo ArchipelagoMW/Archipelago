@@ -142,7 +142,7 @@ class MuseDashCollections:
         if song.album in dlc_songs:
             return True
 
-        # This is a catch all term. Muse Plus provides
+        # Muse Plus provides access to any DLC not included as a seperate pack
         if song.album not in self.DLC and self.MUSE_PLUS_DLC in dlc_songs:
             return True
 
