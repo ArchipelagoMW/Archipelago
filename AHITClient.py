@@ -128,10 +128,6 @@ class AHITContext(CommonContext):
             if cmd != "PrintJSON":
                 self.server_msgs.append(encode([args]))
 
-    # def on_deathlink(self, data: Dict[str, Any]):
-    #    self.server_msgs.append(encode([data]))
-    #    super().on_deathlink(data)
-
     def run_gui(self):
         from kvui import GameManager
 

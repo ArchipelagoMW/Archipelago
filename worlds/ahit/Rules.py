@@ -372,6 +372,7 @@ def set_specific_rules(world: World):
              lambda state: state.has("Time Piece", world.player, 4))
 
     set_mafia_town_rules(world)
+    set_botb_rules(world)
     set_subcon_rules(world)
     set_alps_rules(world)
 
@@ -427,6 +428,10 @@ def set_moderate_rules(world: World):
 
     # Moderate: Twilight Path without Dweller Mask
     set_rule(world.multiworld.get_location("Alpine Skyline - The Twilight Path", world.player), lambda state: True)
+
+    # Moderate: Mystifying Time Mesa time trial without hats
+    set_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
+             lambda state: can_use_hookshot(state, world))
 
     # Moderate: Finale without Hookshot
     set_rule(world.multiworld.get_location("Act Completion (The Finale)", world.player),
@@ -485,10 +490,6 @@ def set_hard_rules(world: World):
 
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
              lambda state: can_sdj(state, world), "or")
-
-    # Hard: Mystifying Time Mesa time trial without hats
-    set_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
-             lambda state: can_use_hookshot(state, world))
 
     # Finale Telescope with only Ice Hat
     add_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
@@ -637,6 +638,15 @@ def set_mafia_town_rules(world: World):
         add_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", world.player),
                  lambda state: can_use_hat(state, world, HatType.SPRINT)
                  and state.has("Scooter Badge", world.player), "or")
+
+
+def set_botb_rules(world: World):
+    if world.multiworld.UmbrellaLogic[world.player].value == 0 and get_difficulty(world) < Difficulty.MODERATE:
+        for loc in world.multiworld.get_region("Dead Bird Studio - Post Elevator Area", world.player).locations:
+            set_rule(loc, lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
+
+        set_rule(world.multiworld.get_location("Act Completion (Dead Bird Studio)", world.player),
+                 lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
 
 
 def set_subcon_rules(world: World):
