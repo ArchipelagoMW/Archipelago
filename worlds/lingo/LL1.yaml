@@ -1104,18 +1104,22 @@
         id: Cross Room/Panel_north_missing
         colors: green
         tag: forbid
+        required_room: Outside The Bold
       DIAMONDS:
         id: Cross Room/Panel_diamonds_missing
         colors: green
         tag: forbid
+        required_room: Suits Area
       FIRE:
         id: Cross Room/Panel_fire_missing
         colors: green
         tag: forbid
+        required_room: Elements Area
       WINTER:
         id: Cross Room/Panel_winter_missing
         colors: green
         tag: forbid
+        required_room: Orange Tower Fifth Floor
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_massacred_sacred
@@ -2060,26 +2064,32 @@
         id: Panel Room/Panel_painting_flower
         colors: green
         tag: forbid
+        required_room: Cellar
       PAINTING (2):
         id: Panel Room/Panel_painting_eye
         colors: green
         tag: forbid
+        required_room: Cellar
       PAINTING (3):
         id: Panel Room/Panel_painting_snowman
         colors: green
         tag: forbid
+        required_room: Cellar
       PAINTING (4):
         id: Panel Room/Panel_painting_owl
         colors: green
         tag: forbid
+        required_room: Cellar
       PAINTING (5):
         id: Panel Room/Panel_painting_panda
         colors: green
         tag: forbid
+        required_room: Cellar
       ROOM:
         id: Panel Room/Panel_room_stairs
         colors: gray
         tag: forbid
+        required_room: Cellar
     doors:
       Welcome Back:
         id: Entry Room Area Doors/Door_sizes
@@ -4296,6 +4306,7 @@
         required_panel:
           room: The Bearer (North)
           panel: SPACE
+        required_room: Orange Tower Fifth Floor
   Cross Tower (North):
     entrances:
       The Bearer (East):
@@ -4310,6 +4321,7 @@
         required_panel:
           room: The Bearer (West)
           panel: SMILE
+        required_room: Outside The Bold
   Cross Tower (South):
     entrances: # No roof access
       The Bearer (North):
@@ -4323,6 +4335,7 @@
         required_panel:
           room: The Bearer (North)
           panel: SILENT (1)
+        required_room: Elements Area
   Cross Tower (West):
     entrances:
       Bearer Side Area:
@@ -4337,6 +4350,7 @@
         required_panel:
           room: The Bearer (North)
           panel: WARTS
+        required_room: Suits Area
   The Steady (Rose):
     entrances:
       Outside The Bold:
@@ -5019,37 +5033,49 @@
         achievement: The Artistic
       FINE:
         id: Ceiling Room/Panel_yellow_top_5
-        colors: yellow
+        colors:
+          - yellow
+          - blue
         tag: yellow top blue bot
         subtag: top
         link: yxu KNIFE
       BLADE:
         id: Ceiling Room/Panel_blue_bot_5
-        colors: blue
+        colors:
+          - blue
+          - yellow
         tag: yellow top blue bot
         subtag: bot
         link: yxu KNIFE
       RED:
         id: Ceiling Room/Panel_blue_top_6
-        colors: blue
+        colors:
+          - blue
+          - yellow
         tag: blue top yellow mid
         subtag: top
         link: uyx BREAD
       BEARD:
         id: Ceiling Room/Panel_yellow_mid_6
-        colors: yellow
+        colors:
+          - yellow
+          - blue
         tag: blue top yellow mid
         subtag: mid
         link: uyx BREAD
       ICE:
         id: Ceiling Room/Panel_blue_mid_7
-        colors: blue
+        colors:
+          - blue
+          - yellow
         tag: blue mid yellow bot
         subtag: mid
         link: xuy SPICE
       ROOT:
         id: Ceiling Room/Panel_yellow_bot_7
-        colors: yellow
+        colors:
+          - yellow
+          - blue
         tag: blue mid yellow bot
         subtag: bot
         link: xuy SPICE
@@ -5101,49 +5127,65 @@
     panels:
       EYE (Top):
         id: Ceiling Room/Panel_blue_top_1
-        colors: blue
+        colors:
+          - blue
+          - red
         tag: blue top red bot
         subtag: top
         link: uxr IRIS
       EYE (Bottom):
         id: Ceiling Room/Panel_red_bot_1
-        colors: red
+        colors:
+          - red
+          - blue
         tag: blue top red bot
         subtag: bot
         link: uxr IRIS
       LADYLIKE:
         id: Ceiling Room/Panel_red_mid_2
-        colors: red
+        colors:
+          - red
+          - blue
         tag: red mid blue bot
         subtag: mid
         link: xru LAKE
       WATER:
         id: Ceiling Room/Panel_blue_bot_2
-        colors: blue
+        colors:
+          - blue
+          - red
         tag: red mid blue bot
         subtag: bot
         link: xru LAKE
       OURS:
         id: Ceiling Room/Panel_blue_mid_3
-        colors: blue
+        colors:
+          - blue
+          - red
         tag: blue mid red bot
         subtag: mid
         link: xur HOURS
       DAYS:
         id: Ceiling Room/Panel_red_bot_3
-        colors: red
+        colors:
+          - red
+          - blue
         tag: blue mid red bot
         subtag: bot
         link: xur HOURS
       NIGHTTIME:
         id: Ceiling Room/Panel_red_top_4
-        colors: red
+        colors:
+          - red
+          - blue
         tag: red top mid blue
         subtag: top
         link: rux KNIGHT
       NIGHT:
         id: Ceiling Room/Panel_blue_mid_4
-        colors: blue
+        colors:
+          - blue
+          - red
         tag: red top mid blue
         subtag: mid
         link: rux KNIGHT
@@ -5196,49 +5238,65 @@
     panels:
       POSH:
         id: Ceiling Room/Panel_black_top_12
-        colors: black
+        colors:
+          - black
+          - red
         tag: black top red bot
         subtag: top
         link: bxr SHOP
       MALL:
         id: Ceiling Room/Panel_red_bot_12
-        colors: red
+        colors:
+          - red
+          - black
         tag: black top red bot
         subtag: bot
         link: bxr SHOP
       DEICIDE:
         id: Ceiling Room/Panel_red_top_13
-        colors: red
+        colors:
+          - red
+          - black
         tag: red top black bot
         subtag: top
         link: rxb DECIDE
       WAVER:
         id: Ceiling Room/Panel_black_bot_13
-        colors: black
+        colors:
+          - black
+          - red
         tag: red top black bot
         subtag: bot
         link: rxb DECIDE
       REPAID:
         id: Ceiling Room/Panel_black_mid_14
-        colors: black
+        colors:
+          - black
+          - red
         tag: black mid red bot
         subtag: mid
         link: xbr DIAPER
       BABY:
         id: Ceiling Room/Panel_red_bot_14
-        colors: red
+        colors:
+          - red
+          - black
         tag: black mid red bot
         subtag: bot
         link: xbr DIAPER
       LOBE:
         id: Ceiling Room/Panel_black_top_15
-        colors: black
+        colors:
+          - black
+          - red
         tag: black top red mid
         subtag: top
         link: brx BOWL
       BOWELS:
         id: Ceiling Room/Panel_red_mid_15
-        colors: red
+        colors:
+          - red
+          - black
         tag: black top red mid
         subtag: mid
         link: brx BOWL
@@ -5293,49 +5351,65 @@
     panels:
       SPRIG:
         id: Ceiling Room/Panel_yellow_mid_8
-        colors: yellow
+        colors:
+          - yellow
+          - black
         tag: yellow mid black bot
         subtag: mid
         link: xyb GRIPS
       RELEASES:
         id: Ceiling Room/Panel_black_bot_8
-        colors: black
+        colors:
+          - black
+          - yellow
         tag: yellow mid black bot
         subtag: bot
         link: xyb GRIPS
       MUCH:
         id: Ceiling Room/Panel_black_top_9
-        colors: black
+        colors:
+          - black
+          - yellow
         tag: black top yellow bot
         subtag: top
         link: bxy CHUM
       FISH:
         id: Ceiling Room/Panel_yellow_bot_9
-        colors: yellow
+        colors:
+          - yellow
+          - black
         tag: black top yellow bot
         subtag: bot
         link: bxy CHUM
       MASK:
         id: Ceiling Room/Panel_yellow_top_10
-        colors: yellow
+        colors:
+          - yellow
+          - black
         tag: yellow top black bot
         subtag: top
         link: yxb CHASM
       HILL:
         id: Ceiling Room/Panel_black_bot_10
-        colors: black
+        colors:
+          - black
+          - yellow
         tag: yellow top black bot
         subtag: bot
         link: yxb CHASM
       TINE:
         id: Ceiling Room/Panel_black_top_11
-        colors: black
+        colors:
+          - black
+          - yellow
         tag: black top yellow mid
         subtag: top
         link: byx NIGHT
       THING:
         id: Ceiling Room/Panel_yellow_mid_11
-        colors: yellow
+        colors:
+          - yellow
+          - black
         tag: black top yellow mid
         subtag: mid
         link: byx NIGHT
