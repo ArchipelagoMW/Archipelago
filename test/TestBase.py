@@ -1,1 +1,1 @@
-from .test_base import TestBase, WorldTestBase
+from .bases import TestBase, WorldTestBase
