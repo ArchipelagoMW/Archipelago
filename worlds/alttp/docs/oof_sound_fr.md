@@ -4,7 +4,8 @@
 
 Elle permet de modifier l'effet sonore quand Link prend des dégâts. Elle est habituellement utilisé en paire avec l'usage d'un sprite personnalisé. Cependant, il est possible d'utiliser cette fonctionnalité avec le sprite par défaut.
 
-En raison de restrictions techniques résultant d'une limite de mémoire disponible, il y a une limite quand à la durée du son. Utilisant la méthode actuelle, la limite est de  **0,394 secondes**. Cela signifie que beaucoup d'idées ne fonctionneront pas, et tout dialogue intelligible ou tout autre chose qu'un grognement ou un simple bruit sera trop long.
+En raison de restrictions techniques dû à la limite de mémoire disponible, le son utilisé ne peut pas dépasser  **0,394 secondes**. Il est alors recommandé de choisir un son court comme un grognement ou un simple bruit afin qu'il soit reconnaissable.
+
 
 Quelques exemples de ce qui est possible : https://www.youtube.com/watch?v=TYs322kHlc0
 
