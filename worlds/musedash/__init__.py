@@ -107,7 +107,7 @@ class MuseDashWorld(World):
     def handle_plando(self, available_song_keys: List[str]) -> List[str]:
         song_items = self.md_collection.song_items
 
-        start_items = self.multiworld.start_inventory[self.player].value.keys()
+        start_items = self.options.start_inventory.value.keys()
         include_songs = self.options.include_songs.value
         exclude_songs = self.options.exclude_songs.value
 
