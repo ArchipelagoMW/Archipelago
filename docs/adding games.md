@@ -33,7 +33,7 @@ Examples are provided below.
 
 ### Creepy Castle
 
-![Creepy Castle Root Directory in Window's Explorer](/docs/img/creepy-castle-directory.png)
+![Creepy Castle Root Directory in Windows Explorer](/docs/img/creepy-castle-directory.png)
 
 This is the delightful title Creepy Castle, which is a fantastic game that I highly recommend. It’s also your worst-case
 scenario as a modder. All that’s present here is an executable file and some meta-information that Steam uses. You have
