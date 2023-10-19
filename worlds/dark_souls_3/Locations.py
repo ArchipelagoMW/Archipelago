@@ -936,6 +936,11 @@ location_name_groups: Dict[str, Set[str]] = {
         "UG: Eyes of a Fire Keeper",
         "UG: Coiled Sword Fragment",
         "UG: Soul of Champion Gundyr",
+        "LC: Sacred Bloom Shield",
+        "LC: Winged Knight Helm",
+        "LC: Winged Knight Armor",
+        "LC: Winged Knight Gauntlets",
+        "LC: Winged Knight Leggings",
     ])
 }
 
