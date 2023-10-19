@@ -261,7 +261,7 @@ class MuseDashWorld(World):
             state.has(self.md_collection.MUSIC_SHEET_NAME, self.player, self.get_music_sheet_win_count())
 
     def get_available_traps(self) -> List[str]:
-        sfx_traps_available = self.md_collection.MUSE_PLUS_DLC in self.options.dlc_packs
+        sfx_traps_available = self.options.allow_just_as_planned_dlc_songs.value
 
         trap_list = []
         if self.options.available_trap_types.value & 1 != 0:
