@@ -18,10 +18,16 @@
     margin-bottom: 2px;
 }
 
+#games .collapse-toggle{
+    cursor: pointer;
+}
+
 #games h2 .collapse-arrow{
     font-size: 20px;
+    display: inline-block; /* make vertical-align work */
+    padding-bottom: 9px;
     vertical-align: middle;
-    cursor: pointer;
+    padding-right: 8px;
 }
 
 #games p.collapsed{
@@ -42,12 +48,12 @@
     margin-bottom: 7px;
 }
 
-#games #page-controls{
+#games .page-controls{
     display: flex;
     flex-direction: row;
     margin-top: 0.25rem;
 }
 
-#games #page-controls button{
+#games .page-controls button{
     margin-left: 0.5rem;
 }
