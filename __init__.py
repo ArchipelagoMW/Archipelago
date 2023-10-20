@@ -54,8 +54,10 @@ class WL4Web(WebWorld):
 class WL4World(World):
     '''
     A golden pyramid has been discovered deep in the jungle, and Wario has set
-    out to rob it. But to make off with its legendary treasure, he has to first
-    defeat the five passage bosses and the pyramid's evil ruler, the Golden Diva.
+    out to rob it. But when he enters, he finds the Golden Diva's curse has
+    taken away his moves! To escape with his life and more importantly, the
+    treasure, Wario must find his abilities to defeat the passage bosses and
+    the Golden Diva.
     '''
 
     game: str = 'Wario Land 4'
@@ -118,10 +120,6 @@ class WL4World(World):
             if name.startswith('Progressive'):
                 itempool.append(self.create_item(name))
 
-        if full_health_items <= 8:
-            raise NotImplementedError('Logic is only implemented for Normal')
-        full_health_items -= 8
-
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
 
@@ -132,6 +130,10 @@ class WL4World(World):
             itempool.append(self.create_item(item_name))
 
         self.multiworld.itempool += itempool
+
+    def pre_fill(self) -> None:
+        if self.multiworld.difficulty[self.player].value == 2:
+            raise NotImplementedError('Logic is not implemented for S-Hard. Sorry!')
 
     def generate_output(self, output_directory: str):
         output_path = Path(output_directory)
