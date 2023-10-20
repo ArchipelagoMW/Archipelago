@@ -353,6 +353,11 @@ SWARM_HOST_CARRION_STRAIN  = "Carrion Strain (Swarm Host)"
 SWARM_HOST_CREEPER_STRAIN  = "Creeper Strain (Swarm Host)"
 ULTRALISK_NOXIOUS_STRAIN   = "Noxious Strain (Ultralisk)"
 ULTRALISK_TORRASQUE_STRAIN = "Torrasque Strain (Ultralisk)"
+
+# Zerg Mercs
+INFESTED_MEDICS      = "Infested Medics"
+INFESTED_SIEGE_TANKS = "Infested Siege Tanks"
+INFESTED_BANSHEES    = "Infested Banshees"
     
 # Kerrigan Upgrades
 KERRIGAN_KINETIC_BLAST           = "Kinetic Blast (Kerrigan Tier 1)"

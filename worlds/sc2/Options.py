@@ -287,18 +287,18 @@ class IncludeStrains(Range):
     default = 1
 
 
-class Kerriganless(Choice):
+class KerriganPresence(Choice):
     """Determines whether Kerrigan is playable outside of missions that require her.
 
-    Off:  Kerrigan is playable as normal.
-    On:  Kerrigan is not playable.  Other hero units stay playable,
-    and locations normally requiring Kerrigan can be checked by any unit.
-    Kerrigan level items, active abilities and passive abilities affecting her will not appear.
-    On Without Passives:  In addition to the above, Kerrigan's passive abilities affecting other units (such as Twin Drones) will not appear."""
-    display_name = "Kerriganless"
-    option_off = 0
-    option_on = 1
-    option_on_without_passives = 2
+    Vanilla: Kerrigan is playable as normal, appears in the same missions as in vanilla game.
+    Not Present:  Kerrigan is not playable, unless the mission requires her to be present.  Other hero units stay playable,
+        and locations normally requiring Kerrigan can be checked by any unit.
+        Kerrigan level items, active abilities and passive abilities affecting her will not appear.
+    Not Present And No Passives:  In addition to the above, Kerrigan's passive abilities affecting other units (such as Twin Drones) will not appear."""
+    display_name = "Kerrigan Presence"
+    option_vanilla = 0
+    option_not_present = 1
+    option_not_present_and_no_passives = 2
 
 
 class KerriganChecksPerLevelPack(Range):
@@ -391,6 +391,15 @@ class KerriganPrimalStatus(Choice):
     option_level_35 = 3
     option_half_completion = 4
     option_item = 5
+
+
+class GrantStoryTech(Toggle):
+    """
+    If set true, grants special tech required for story mission completion for duration of the mission.
+    Otherwise, you need to find these tech by a normal means as items.
+    Affects story missions like Back in the Saddle and Supreme
+    """
+    display_name = "Grant Story Tech"
 
 
 class LockedItems(ItemSet):
@@ -508,7 +517,7 @@ sc2_options: Dict[str, Option] = {
     "generic_upgrade_items": GenericUpgradeItems,
     "include_mutations": IncludeMutations,
     "include_strains": IncludeStrains,
-    "kerriganless": Kerriganless,
+    "kerrigan_presence": KerriganPresence,
     "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPack,
     "kerrigan_check_level_pack_size": KerriganCheckLevelPackSize,
     "kerrigan_level_item_sum": KerriganLevelItemSum,
@@ -516,6 +525,7 @@ sc2_options: Dict[str, Option] = {
     "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
     "start_primary_abilities": StartPrimaryAbilities,
     "kerrigan_primal_status": KerriganPrimalStatus,
+    "grant_story_tech": GrantStoryTech,
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,
     "excluded_missions": ExcludedMissions,
@@ -564,5 +574,5 @@ campaign_depending_orders = [
 ]
 
 kerrigan_unit_available = [
-    Kerriganless.option_off,
+    KerriganPresence.option_vanilla,
 ]

@@ -19,7 +19,7 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
 from worlds.sc2 import ItemNames
-from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, Kerriganless, GameSpeed, \
+from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed, \
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
     KerriganChecksPerLevelPack, \
     LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit, \
@@ -172,10 +172,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 return
             if color.lower() == "random":
                 color = random.choice(player_colors[:16])
-            self.ctx.player_color = match_colors.index(color.lower())
-            self.output("Color set to " + player_colors[self.ctx.player_color])
+            self.ctx.player_color_raynor = match_colors.index(color.lower())
+            self.output("Color set to " + player_colors[self.ctx.player_color_raynor])
         else:
-            self.output("Current player color: " + player_colors[self.ctx.player_color])
+            self.output("Current player color: " + player_colors[self.ctx.player_color_raynor])
             self.output("To change your colors, add the name of the color after the command.")
             self.output("Available colors: " + ', '.join(player_colors))
 
@@ -285,8 +285,10 @@ class SC2Context(CommonContext):
     skip_cutscenes = 0
     all_in_choice = 0
     mission_order = 0
-    player_color = 2
-    kerriganless = 0
+    player_color_raynor = ColorChoice.option_blue
+    player_color_zerg = ColorChoice.option_orange
+    player_color_zerg_primal = ColorChoice.option_purple
+    kerrigan_presence = 0
     kerrigan_primal_status = 0
     levels_per_check = 0
     checks_per_level = 1
@@ -307,7 +309,8 @@ class SC2Context(CommonContext):
     game_speed_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
-    slot_data_version = None
+    slot_data_version = 2
+    grant_story_tech = False
 
     def __init__(self, *args, **kwargs) -> None:
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -351,14 +354,17 @@ class SC2Context(CommonContext):
 
             self.mission_order = args["slot_data"].get("mission_order", MissionOrder.option_vanilla)
             self.final_mission = args["slot_data"].get("final_mission", SC2Mission.ALL_IN.id)
-            self.player_color = args["slot_data"].get("player_color_terran_raynor", ColorChoice.option_blue)
+            self.player_color_raynor = args["slot_data"].get("player_color_terran_raynor", ColorChoice.option_blue)
+            self.player_color_zerg = args["slot_data"].get("player_color_zerg", ColorChoice.option_orange)
+            self.player_color_zerg_primal = args["slot_data"].get("player_color_zerg_primal", ColorChoice.option_purple)
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", GenericUpgradeMissions.default)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", GenericUpgradeItems.option_individual_items)
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", GenericUpgradeResearch.option_vanilla)
-            self.kerriganless = args["slot_data"].get("kerriganless", Kerriganless.option_off)
+            self.kerrigan_presence = args["slot_data"].get("kerrigan_presence", KerriganPresence.option_vanilla)
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", KerriganPrimalStatus.option_vanilla)
             self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", KerriganCheckLevelPackSize.default)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", KerriganChecksPerLevelPack.default)
+            self.grant_story_tech = args["slot_data"].get("grant_story_tech", False)
 
             self.location_inclusions = {
                 LocationType.VICTORY: LocationInclusion.option_enabled, # Victory checks are always enabled
@@ -569,18 +575,18 @@ def kerrigan_level_adjusted(ctx: SC2Context, items: typing.Dict[SC2Race, typing.
     value += ((checks + extra_checks) // ctx.checks_per_level) * ctx.levels_per_check
     return value
 
-def calculate_kerrigan_options(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]]) -> int:
+def calculate_kerrigan_options(ctx: SC2Context) -> int:
     options = 0
 
-    # Bit 0
-    if ctx.kerriganless not in kerrigan_unit_available:
+    # Bits 0, 1
+    # Kerrigan unit available
+    if ctx.kerrigan_presence in kerrigan_unit_available:
         options |= 1 << 0
     
     # Bits 1, 2
+    # Kerrigan primal status by map
     if ctx.kerrigan_primal_status != KerriganPrimalStatus.option_vanilla:
-        options |= 1 << 1
-        if kerrigan_primal(ctx, items):
-            options |= 1 << 2
+        options |= 1 << 2
     
     return options
 
@@ -598,7 +604,7 @@ def kerrigan_primal(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
         codes = [item.item for item in ctx.items_received]
-        return get_full_item_list()["Primal Form (Kerrigan)"].code in codes
+        return get_full_item_list()[ItemNames.KERRIGAN_PRIMAL_FORM].code in codes
     return False
 
 async def starcraft_launch(ctx: SC2Context, mission_id: int):
@@ -640,7 +646,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             self.setup_done = True
             start_items = calculate_items(self.ctx)
             self.last_kerrigan_level = start_items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]]
-            kerrigan_options = calculate_kerrigan_options(self.ctx, start_items)
+            kerrigan_options = calculate_kerrigan_options(self.ctx)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
@@ -649,13 +655,15 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
                 game_speed,
                 self.ctx.disable_forced_camera,
-                self.ctx.skip_cutscenes
+                self.ctx.skip_cutscenes,
+                kerrigan_options,
+                1 if self.ctx.grant_story_tech else 0
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
@@ -663,13 +671,12 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 start_items[SC2Race.ANY][2]
             ))
             terran_items = start_items[SC2Race.TERRAN]
-            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
-                terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
-                terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
-                terran_items[11]))
+            await self.updateTerranTech(terran_items)
+            await self.updateZergTech(start_items)
             await self.chat_send("?GiveProtossTech {}".format(start_items[SC2Race.PROTOSS][0]))
-            await self.chat_send("?SetColor rr " + str(self.ctx.player_color))  # TODO: Add faction color options
-            # TODO needs zerg tech command
+            await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
+            await self.chat_send("?SetColor zs" + str(self.ctx.player_color_zerg))
+            await self.chat_send("?SetColor pz" + str(self.ctx.player_color_zerg_primal))
             await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
 
@@ -692,12 +699,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
                 terran_items = current_items[SC2Race.TERRAN]
-                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
-                    terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
-                    terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9],
-                    terran_items[10], terran_items[11]))
+                await self.updateTerranTech(terran_items)
+                await self.updateZergTech(current_items)
                 await self.chat_send("?GiveProtossTech {}".format(current_items[SC2Race.PROTOSS][0]))
-                # TODO needs zerg tech command
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -732,11 +736,25 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                                 new_level = kerrigan_level_adjusted(self.ctx, current_items, checks, 1)
                                 if self.last_kerrigan_level != new_level:
                                     self.last_kerrigan_level = new_level
-                                    primal = 1 if kerrigan_primal(self.ctx, current_items) else 0
-                                    # TODO send zerg tech command to update kerrigan level
+                                    await self.updateZergTech(current_items)
 
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
+
+    async def updateTerranTech(self, terran_items):
+        await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
+            terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
+            terran_items[11]))
+
+    async def updateZergTech(self, current_items):
+        zerg_items = current_items[SC2Race.ZERG]
+        kerrigan_primal_by_items = kerrigan_primal(self.ctx, current_items)
+        kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
+        await self.chat_send("?GiveZergTech {} {} {} {} {} {} {}".format(
+            self.last_kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
+            zerg_items[3], zerg_items[4], zerg_items[5]
+        ))
 
 
 def request_unfinished_missions(ctx: SC2Context) -> None:

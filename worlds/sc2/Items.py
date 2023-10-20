@@ -1328,6 +1328,11 @@ item_table = {
     ItemNames.KERRIGAN_LEVELS_14: ItemData(510 + SC2HOTS_ITEM_ID_OFFSET, "Level", 14, SC2Race.ZERG, origin={"hots"}, quantity=0),
     ItemNames.KERRIGAN_LEVELS_35: ItemData(511 + SC2HOTS_ITEM_ID_OFFSET, "Level", 35, SC2Race.ZERG, origin={"hots"}, quantity=0),
     ItemNames.KERRIGAN_LEVELS_70: ItemData(512 + SC2HOTS_ITEM_ID_OFFSET, "Level", 70, SC2Race.ZERG, origin={"hots"}, quantity=0),
+
+    # Zerg Mercs
+    ItemNames.INFESTED_MEDICS: ItemData(600 + SC2HOTS_ITEM_ID_OFFSET, "Mercenary", 0, SC2Race.ZERG, origin={"ext"}),
+    ItemNames.INFESTED_SIEGE_TANKS: ItemData(601 + SC2HOTS_ITEM_ID_OFFSET, "Mercenary", 0, SC2Race.ZERG, origin={"ext"}),
+    ItemNames.INFESTED_BANSHEES: ItemData(602 + SC2HOTS_ITEM_ID_OFFSET, "Mercenary", 0, SC2Race.ZERG, origin={"ext"}),
 }
 
 def get_item_table(multiworld: MultiWorld, player: int):
@@ -1596,12 +1601,13 @@ type_flaggroups: typing.Dict[SC2Race, typing.Dict[str, int]] = {
         "Mercenary": 11,
     },
     SC2Race.ZERG: {
-        "Unit": 0,
-        "Upgrade": 1,
-        "Mutation": 2,
-        "Strain": 3,
-        "Ability": 4,
-        "Level": 5,
+        "Ability": 0,
+        "Mutation": 1,
+        "Strain": 2,
+        "Upgrade": 3,
+        "Mercenary": 4,
+        "Unit": 5,
+        "Level": 6,
     },
     SC2Race.PROTOSS: {
         "Unit": 0,
