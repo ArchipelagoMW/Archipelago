@@ -3,22 +3,22 @@ from struct import unpack, pack
 
 
 def setup_gamevars(world, multiworld, player: int):
-    world.playergoal = multiworld.goal[player].value
-    if multiworld.luigi_pieces_in_pool[player].value < multiworld.luigi_pieces_required[player].value:
-        multiworld.luigi_pieces_in_pool[world.player].value = world.random.randint(multiworld.luigi_pieces_required[world.player].value, 100)
-    world.luigi_pieces = multiworld.luigi_pieces_required[player].value
+    world.playergoal = world.options.goal.value
+    if world.options.luigi_pieces_in_pool.value < world.options.luigi_pieces_required.value:
+        world.options.luigi_pieces_in_pool.value = world.random.randint(world.options.luigi_pieces_required.value, 100)
+    world.luigi_pieces = world.options.luigi_pieces_required.value
 
-    world.starting_lives = struct.pack("H", multiworld.starting_lives[player])
+    world.starting_lives = struct.pack("H", world.options.starting_lives)
 
     world.level_colors = []
     world.color_order = []
     for i in range(72):
             world.level_colors.append(world.random.randint(0,7))
-    if multiworld.yoshi_colors[player].value == 3:
-        singularity_color = multiworld.yoshi_singularity_color[player].value
+    if world.options.yoshi_colors.value == 3:
+        singularity_color = world.options.yoshi_singularity_color.value
         for i in range(len(world.level_colors)):
                     world.level_colors[i] = singularity_color
-    elif multiworld.yoshi_colors[player].value == 1:
+    elif world.options.yoshi_colors.value == 1:
         world.leader_color = world.random.randint(0,7)
         for i in range(7):
             world.color_order.append(world.random.randint(0,7))
@@ -35,9 +35,9 @@ def setup_gamevars(world, multiworld, player: int):
     0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x73, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86,
     0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2]
 
-    if multiworld.baby_mario_sound[player] == 2:
+    if world.options.baby_mario_sound == 2:
         world.baby_mario_sfx = world.random.choice(safe_baby_sounds)
-    elif multiworld.baby_mario_sound[player] == 1:
+    elif world.options.baby_mario_sound == 1:
         world.baby_mario_sfx = 0x42
     else:
         world.baby_mario_sfx = 0x44
@@ -51,7 +51,7 @@ def setup_gamevars(world, multiworld, player: int):
 
     world.boss_order = []
 
-    if multiworld.boss_shuffle[player] == 1:
+    if world.options.boss_shuffle == 1:
         for i in range(11):
             world.random.shuffle(boss_list)
     world.boss_order = boss_list
@@ -255,41 +255,41 @@ def setup_gamevars(world, multiworld, player: int):
     norm_start_lv = [0x00, 0x01, 0x02, 0x04, 0x06, 0x0E, 0x10, 0x12, 0x18, 0x1A, 0x1C, 0x1E, 0x28, 0x30, 0x31, 0x34, 0x35, 0x36, 0x3D, 0x3E, 0x40, 0x42]
     hard_start_lv = [0x00, 0x01, 0x02, 0x04, 0x06, 0x0D, 0x0E, 0x10, 0x11, 0x12, 0x18, 0x1A, 0x1C, 0x1E, 0x24, 0x25, 0x26, 0x28, 0x29, 0x2B, 0x30, 0x31, 0x34, 0x35, 0x36, 0x3D, 0x3E, 0x40, 0x42]
     diff_index = [easy_start_lv, norm_start_lv, hard_start_lv]
-    diff_level = diff_index[multiworld.stage_logic[player].value]
+    diff_level = diff_index[world.options.stage_logic.value]
     boss_lv = [0x03, 0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F]
     world.world_start_lv = [0, 8, 16, 24, 32, 40]
-    if multiworld.shuffle_midrings[player].value == 0:
+    if world.options.shuffle_midrings.value == 0:
         easy_start_lv.extend([0x1A, 0x24, 0x34])
         norm_start_lv.extend([0x24, 0x3C])
         hard_start_lv.extend([0x1D, 0x3C])
 
-    if multiworld.level_shuffle[player].value != 1:
+    if world.options.level_shuffle.value != 1:
         hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
-        if multiworld.shuffle_midrings[player].value == 0:
+        if world.options.shuffle_midrings.value == 0:
             easy_start_lv.extend([0x1B])
             norm_start_lv.extend([0x1B, 0x2B, 0x37])
 
     starting_level = world.random.choice(diff_level)
 
-    starting_level_entrance = world.world_start_lv[multiworld.starting_world[player].value]
-    if multiworld.level_shuffle[player].value != 0:
+    starting_level_entrance = world.world_start_lv[world.options.starting_world.value]
+    if world.options.level_shuffle.value != 0:
         world.global_level_list.remove(starting_level)
         world.random.shuffle(world.global_level_list)
-        if multiworld.level_shuffle[player].value == 1:
+        if world.options.level_shuffle.value == 1:
             for i in range(11):
                 world.global_level_list = [item for item in world.global_level_list if item not in boss_lv]
             world.random.shuffle(boss_lv)
 
-            world.global_level_list.insert(3 - world_1_offsets[multiworld.starting_world[player].value], boss_lv[0]) #1 if starting world is 1, 0 otherwise
-            world.global_level_list.insert(7 - world_1_offsets[multiworld.starting_world[player].value], boss_lv[1])
-            world.global_level_list.insert(11 - world_2_offsets[multiworld.starting_world[player].value], boss_lv[2])
-            world.global_level_list.insert(15 - world_2_offsets[multiworld.starting_world[player].value], boss_lv[3])
-            world.global_level_list.insert(19 - world_3_offsets[multiworld.starting_world[player].value], boss_lv[4])
-            world.global_level_list.insert(23 - world_3_offsets[multiworld.starting_world[player].value], boss_lv[5])
-            world.global_level_list.insert(27 - world_4_offsets[multiworld.starting_world[player].value], boss_lv[6])
-            world.global_level_list.insert(31 - world_4_offsets[multiworld.starting_world[player].value], boss_lv[7])
-            world.global_level_list.insert(35 - world_5_offsets[multiworld.starting_world[player].value], boss_lv[8])
-            world.global_level_list.insert(39 - world_5_offsets[multiworld.starting_world[player].value], boss_lv[9])
+            world.global_level_list.insert(3 - world_1_offsets[world.options.starting_world.value], boss_lv[0]) #1 if starting world is 1, 0 otherwise
+            world.global_level_list.insert(7 - world_1_offsets[world.options.starting_world.value], boss_lv[1])
+            world.global_level_list.insert(11 - world_2_offsets[world.options.starting_world.value], boss_lv[2])
+            world.global_level_list.insert(15 - world_2_offsets[world.options.starting_world.value], boss_lv[3])
+            world.global_level_list.insert(19 - world_3_offsets[world.options.starting_world.value], boss_lv[4])
+            world.global_level_list.insert(23 - world_3_offsets[world.options.starting_world.value], boss_lv[5])
+            world.global_level_list.insert(27 - world_4_offsets[world.options.starting_world.value], boss_lv[6])
+            world.global_level_list.insert(31 - world_4_offsets[world.options.starting_world.value], boss_lv[7])
+            world.global_level_list.insert(35 - world_5_offsets[world.options.starting_world.value], boss_lv[8])
+            world.global_level_list.insert(39 - world_5_offsets[world.options.starting_world.value], boss_lv[9])
             world.global_level_list.insert(43 - 1, boss_lv[10])
         world.global_level_list.insert(starting_level_entrance, starting_level)
     world.level_location_list = [level_id_list[LevelID] for LevelID in world.global_level_list]
@@ -412,7 +412,7 @@ def setup_gamevars(world, multiworld, player: int):
                     5: [0xB8, 0x05, 0x77, 0x00]
     }
 
-    world.castle_door = castle_door_dict[multiworld.bowser_door_mode[player].value]
+    world.castle_door = castle_door_dict[world.options.bowser_door_mode.value]
 
     world.world_1_stages = world.global_level_list[0:8]
     world.world_2_stages = world.global_level_list[8:16]

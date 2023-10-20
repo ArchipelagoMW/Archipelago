@@ -183,9 +183,9 @@ class YIWorld(World):
                         self.location_cache, self, self.boss_ap_loc, self.level_location_list, self.luigi_pieces)
 
     def get_filler_item_name(self) -> str:
-        trap_chance: int = self.multiworld.trap_percent[self.player].value
+        trap_chance: int = self.options.trap_percent.value
 
-        if self.random.random() < (trap_chance / 100) and self.multiworld.traps_enabled[self.player].value == 1:
+        if self.random.random() < (trap_chance / 100) and self.options.traps_enabled.value == 1:
             return self.random.choice(trap_items)
         else:
             return self.random.choice(filler_items)
@@ -204,7 +204,7 @@ class YIWorld(World):
         self.multiworld.get_location("Raphael The Raven Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Tap-Tap The Red Nose Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
 
-        if self.multiworld.goal[self.player].value == 1:
+        if self.options.goal.value == 1:
             self.multiworld.get_location("Reconstituted Luigi", self.player).place_locked_item(self.create_item("Saved Baby Luigi"))
         else:
             self.multiworld.get_location("King Bowser's Castle: Level Clear", self.player).place_locked_item(self.create_item("Saved Baby Luigi"))
@@ -230,15 +230,15 @@ class YIWorld(World):
 
         starting_gate = ["World 1 Gate", "World 2 Gate", "World 3 Gate", "World 4 Gate", "World 5 Gate", "World 6 Gate"]
 
-        excluded_items.add(starting_gate[multiworld.starting_world[player].value])
+        excluded_items.add(starting_gate[self.options.starting_world.value])
 
-        if self.multiworld.shuffle_midrings[self.player] == 0:
+        if self.options.shuffle_midrings.value == 0:
             excluded_items.add('Middle Ring')
 
-        if self.multiworld.add_secretlens[self.player] == 0:
+        if self.options.add_secretlens.value == 0:
             excluded_items.add('Secret Lens')
 
-        if self.multiworld.extras_enabled[self.player] == 0:
+        if self.options.extras_enabled.value == 0:
             excluded_items.add('Extra Panels')
             excluded_items.add('Extra 1')
             excluded_items.add('Extra 2')
@@ -247,7 +247,7 @@ class YIWorld(World):
             excluded_items.add('Extra 5')
             excluded_items.add('Extra 6')
 
-        if self.multiworld.split_extras[self.player] == 1:
+        if self.options.split_extras.value == 1:
             excluded_items.add('Extra Panels')
         else:
             excluded_items.add('Extra 1')
@@ -257,7 +257,7 @@ class YIWorld(World):
             excluded_items.add('Extra 5')
             excluded_items.add('Extra 6')
 
-        if self.multiworld.split_bonus[self.player] == 1:
+        if self.options.split_bonus.value == 1:
             excluded_items.add('Bonus Panels')
         else:
             excluded_items.add('Bonus 1')
@@ -297,7 +297,7 @@ class YIWorld(World):
             item.classification = ItemClassification.progression
 
         if name == 'Piece of Luigi' and world.options.goal.value != 0:
-            if self.luigi_count >= multiworld.luigi_pieces_required[player].value:
+            if self.luigi_count >= self.options.luigi_pieces_required.value:
                 item.classification = ItemClassification.useful
             else:
                 item.classification = ItemClassification.progression_skip_balancing
@@ -308,7 +308,7 @@ class YIWorld(World):
     def generate_filler(self, multiworld: MultiWorld, player: int, locked_locations: List[str],
                                         location_cache: List[Location], pool: List[Item]):
         if self.playergoal == 1:
-            for i in range(multiworld.luigi_pieces_in_pool[player].value):
+            for i in range(self.options.luigi_pieces_in_pool.value):
                 item = self.create_item_with_correct_settings( multiworld, player, "Piece of Luigi")
                 pool.append(item)
 
@@ -334,7 +334,7 @@ class YIWorld(World):
         self.luigi_count = 0
         
 
-        if self.multiworld.minigame_checks[self.player].value >= 2:
+        if self.options.minigame_checks.value >= 2:
             self.multiworld.get_location("Flip Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
             self.multiworld.get_location("Drawing Lots", self.player).place_locked_item(self.create_item("Bonus Consumables"))
             self.multiworld.get_location("Match Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
