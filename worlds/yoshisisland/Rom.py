@@ -1,7 +1,6 @@
 import Utils
 import pdb
 import struct
-from .Options import get_option_value
 from worlds.Files import APDeltaPatch
 from struct import unpack, pack
 USHASH = 'cb472164c5a71ccd3739963390ec6a50'
@@ -1023,7 +1022,7 @@ def patch_rom(world, rom, player: int, multiworld):
 
     rom.write_bytes(0x06FC89, world.starting_lives)
     rom.write_bytes(0x03464F, ([world.baby_mario_sfx]))
-    rom.write_bytes(0x06FC83, ([multiworld.starting_world[player].value]))
+    rom.write_bytes(0x06FC83, ([world.options.starting_world.value]))
     rom.write_bytes(0x06FC84, ([multiworld.hidden_object_visibility[player].value]))
     rom.write_bytes(0x06FC88, ([multiworld.shuffle_midrings[player].value]))
     rom.write_bytes(0x06FC85, ([multiworld.castle_open_condition[player].value]))
@@ -1109,7 +1108,7 @@ def patch_rom(world, rom, player: int, multiworld):
     rom.write_bytes(0x0BDC4F, bytearray(world.palette_panel_list))
 
 
-    if get_option_value(world, player, "yoshi_colors") == 1:
+    if world.options.yoshi_colors.value == 1:
         rom.write_bytes(0x010000, ([world.leader_color]))
         rom.write_bytes(0x010008, ([world.leader_color]))
         rom.write_bytes(0x010009, ([world.leader_color]))
@@ -1135,32 +1134,32 @@ def patch_rom(world, rom, player: int, multiworld):
         rom.write_bytes(0x010045, ([world.leader_color]))
         rom.write_bytes(0x01003D, bytearray(world.color_order))
         rom.write_bytes(0x010043, ([world.leader_color]))
-    elif get_option_value(multiworld, player, "yoshi_colors") == 2 or get_option_value(multiworld, player, "yoshi_colors") == 3:
+    elif world.options.yoshi_colors.value in {2, 3}:
         rom.write_bytes(0x010000, bytearray(world.level_colors))
 
-    if get_option_value(multiworld, player, "minigame_checks") == 2 or get_option_value(multiworld, player, "minigame_checks") == 3:
+    if world.options.minigame_checks.value in {2, 3}:
         bonus_checks(rom)
 
-    if get_option_value(multiworld, player, "minigame_checks") == 1 or get_option_value(multiworld, player, "minigame_checks") == 3:
+    if world.options.minigame_checks.value in {1, 3}:
         bandit_checks(rom)
 
     rom.write_bytes(0x00BF2C, bytearray(world.world_bonus))
 
-    if get_option_value(multiworld, player, "softlock_prevention") == 1:
+    if world.options.softlock_prevention == 1:
         rom.write_bytes(0x00C18F, bytearray([0x5C, 0x58, 0xFB, 0x0B])), #R + X Code
 
-    if get_option_value(multiworld, player, "bowser_door_mode") != 0:
+    if world.options.bowser_door_mode.value != 0:
         rom.write_bytes(0x07891F, bytearray(world.castle_door)) #1 Entry
         rom.write_bytes(0x078923, bytearray(world.castle_door)) #2 Entry
         rom.write_bytes(0x078927, bytearray(world.castle_door)) #3 Entry
         rom.write_bytes(0x07892B, bytearray(world.castle_door)) #4 Entry
 
-    if get_option_value(multiworld, player, "bowser_door_mode") == 5:
+    if world.options.bowser_door_mode.value == 5:
         rom.write_bytes(0x0AF517, bytearray([0xC6, 0x07, 0x7A, 0x00])), #Door 2
         rom.write_bytes(0x0AF6B7, bytearray([0xCD, 0x05, 0x5B, 0x00])), #Door 3
         rom.write_bytes(0x0AF8F2, bytearray([0xD3, 0x00, 0x77, 0x06])), #Door 4
 
-    if get_option_value(multiworld, player, "goal") == 1:
+    if world.options.bowser_door_mode.value == 1:
         rom.write_bytes(0x1153F6, bytearray([0x16, 0x28, 0x10, 0x0C, 0x10, 0x4E, 0x1E, 0x10, 0x08, 0x04, 0x08, 0x24, 0x36, 0x82, 0x83, 0x83, 0x34, 0x84, 0x85, 0x85])), #Luigi piece clear text
         rom.write_bytes(0x06FC86, bytearray([0xFF])) #Boss clear goal = 255, renders bowser inaccessible
     

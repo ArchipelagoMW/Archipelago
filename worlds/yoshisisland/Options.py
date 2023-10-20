@@ -267,10 +267,3 @@ yoshi_options: Dict[str, Option] ={
 
     
 }
-
-def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int, dict]:
-    option = getattr(multiworld, name, None)
-    if option == None:
-        return 0
-
-    return option[player].value

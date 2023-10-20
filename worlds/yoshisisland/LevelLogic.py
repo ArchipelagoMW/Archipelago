@@ -1,6 +1,5 @@
 from typing import Union, Optional
 from BaseClasses import MultiWorld, CollectionState
-from .Options import get_option_value
 
 class YoshiLogic:
     player: int
@@ -11,35 +10,37 @@ class YoshiLogic:
     luigi_pieces: int
 
 
-    def __init__(self, multiworld: MultiWorld, player: int, boss_order: Optional[list], luigi_pieces: int):
+    def __init__(self, multiworld: MultiWorld, player: int, boss_order: Optional[list], luigi_pieces: int, world):
         self.player = player
         self.boss_order = boss_order
         self.luigi_pieces = luigi_pieces
 
         
-        if get_option_value(multiworld, player, "stage_logic") == 0:
+        if not None or world.options.stage_logic.value == 0:
             self.game_logic = "Easy"
-        elif get_option_value(multiworld, player, "stage_logic") == 1:
+        elif world.options.stage_logic.value == 1:
             self.game_logic = "Normal"
         else:
             self.game_logic = "Hard"
 
-        self.midring_start = get_option_value(multiworld, player, "shuffle_midrings") == 0
+        if world:
+            self.midring_start = world.options.shuffle_midrings.value == 0
 
-        self.consumable_logic = get_option_value(multiworld, player, "consumable_logic") == 0
+        if world:
+            self.consumable_logic = world.options.item_logic.value != 0
 
-        if get_option_value(multiworld, player, "hidden_object_visibility") >= 2:
+        if not None or world.options.hidden_object_visibility.value >= 2:
             self.clouds_always_visible = True
         else:
             self.clouds_always_visible = False
 
-        if get_option_value(multiworld, player, "bowser_door_mode") == 0:
+        if not None or world.options.bowser_door_mode.value == 0:
             self.bowser_door = 0
-        elif get_option_value(multiworld, player, "bowser_door_mode") == 1:
+        elif world.options.bowser_door_mode.value == 1:
             self.bowser_door = 1
-        elif get_option_value(multiworld, player, "bowser_door_mode") == 2:
+        elif world.options.bowser_door_mode.value == 2:
             self.bowser_door = 2
-        elif get_option_value(multiworld, player, "bowser_door_mode") == 5:
+        elif world.options.bowser_door_mode.value == 5:
             self.bowser_door = 5
         else:
             self.bowser_door = 3

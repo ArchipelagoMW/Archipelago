@@ -116,7 +116,6 @@ trap_items: Tuple[str, ...] = (
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
-    event_items = ["Saved Baby Luigi"]
 
     for name, data in item_table.items():
         if data.category != "Events":

@@ -2,7 +2,6 @@ from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .LevelLogic import YoshiLogic
-from .Options import get_option_value
 from .SetupBosses import BossReqs
 
 class YILocation(Location):
@@ -14,8 +13,8 @@ def __init__(self, player: int, name: str = " ", address: int = None, parent=Non
     self.LevelID = LevelID
 
 
-def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], gamevar, boss_order: list, level_location_list: list, luigi_pieces: int):
-    logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces)
+def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], world, boss_order: list, level_location_list: list, luigi_pieces: int):
+    logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces, world)
 
     locations_per_region = get_locations_per_region(locations)
 
@@ -96,7 +95,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         create_region(multiworld, player, locations_per_region, location_cache, "Bowser's Room"),
 
     ]
-    if get_option_value(multiworld, player, "extras_enabled") == 1:
+    if world.options.extras_enabled.value == 1:
         regions.insert(68, create_region(multiworld, player, locations_per_region, location_cache, "6-Extra")),
         regions.insert(58, create_region(multiworld, player, locations_per_region, location_cache, "5-Extra")),
         regions.insert(48, create_region(multiworld, player, locations_per_region, location_cache, "4-Extra")),
@@ -104,7 +103,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         regions.insert(28, create_region(multiworld, player, locations_per_region, location_cache, "2-Extra")),
         regions.insert(18, create_region(multiworld, player, locations_per_region, location_cache, "1-Extra"))
 
-    if get_option_value(multiworld, player, "minigame_checks") >= 2:
+    if world.options.minigame_checks.value >= 2:
         regions.insert(74, create_region(multiworld, player, locations_per_region, location_cache, "6-Bonus")),
         regions.insert(63, create_region(multiworld, player, locations_per_region, location_cache, "5-Bonus")),
         regions.insert(52, create_region(multiworld, player, locations_per_region, location_cache, "4-Bonus")),
@@ -129,32 +128,32 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     cur_world = 1
     cur_level = 1
     for i in range(47):
-        multiworld.get_region(f'World {cur_world}', player).add_exits([gamevar.level_location_list[i]])
+        multiworld.get_region(f'World {cur_world}', player).add_exits([world.level_location_list[i]])
         if cur_level > 7:
             cur_level = 1
             cur_world += 1
         else: cur_level += 1
 
-    multiworld.get_region('1-4', player).add_exits([gamevar.boss_order[0]],{gamevar.boss_order[0]: lambda state: logic._14Clear(state)})
-    multiworld.get_region('1-8', player).add_exits([gamevar.boss_order[1]],{gamevar.boss_order[1]: lambda state: logic._18Clear(state)})
-    multiworld.get_region('2-4', player).add_exits([gamevar.boss_order[2]],{gamevar.boss_order[2]: lambda state: logic._24Clear(state)})
-    multiworld.get_region('2-8', player).add_exits([gamevar.boss_order[3]],{gamevar.boss_order[3]: lambda state: logic._28Clear(state)})
-    multiworld.get_region('3-4', player).add_exits([gamevar.boss_order[4]],{gamevar.boss_order[4]: lambda state: logic._34Clear(state)})
-    multiworld.get_region('3-8', player).add_exits([gamevar.boss_order[5]],{gamevar.boss_order[5]: lambda state: logic._38Clear(state)})
-    multiworld.get_region('4-4', player).add_exits([gamevar.boss_order[6]],{gamevar.boss_order[6]: lambda state: logic._44Clear(state)})
-    multiworld.get_region('4-8', player).add_exits([gamevar.boss_order[7]],{gamevar.boss_order[7]: lambda state: logic._48Clear(state)})
-    multiworld.get_region('5-4', player).add_exits([gamevar.boss_order[8]],{gamevar.boss_order[8]: lambda state: logic._54Clear(state)})
-    multiworld.get_region('5-8', player).add_exits([gamevar.boss_order[9]],{gamevar.boss_order[9]: lambda state: logic._58Clear(state)})
+    multiworld.get_region('1-4', player).add_exits([world.boss_order[0]],{world.boss_order[0]: lambda state: logic._14Clear(state)})
+    multiworld.get_region('1-8', player).add_exits([world.boss_order[1]],{world.boss_order[1]: lambda state: logic._18Clear(state)})
+    multiworld.get_region('2-4', player).add_exits([world.boss_order[2]],{world.boss_order[2]: lambda state: logic._24Clear(state)})
+    multiworld.get_region('2-8', player).add_exits([world.boss_order[3]],{world.boss_order[3]: lambda state: logic._28Clear(state)})
+    multiworld.get_region('3-4', player).add_exits([world.boss_order[4]],{world.boss_order[4]: lambda state: logic._34Clear(state)})
+    multiworld.get_region('3-8', player).add_exits([world.boss_order[5]],{world.boss_order[5]: lambda state: logic._38Clear(state)})
+    multiworld.get_region('4-4', player).add_exits([world.boss_order[6]],{world.boss_order[6]: lambda state: logic._44Clear(state)})
+    multiworld.get_region('4-8', player).add_exits([world.boss_order[7]],{world.boss_order[7]: lambda state: logic._48Clear(state)})
+    multiworld.get_region('5-4', player).add_exits([world.boss_order[8]],{world.boss_order[8]: lambda state: logic._54Clear(state)})
+    multiworld.get_region('5-8', player).add_exits([world.boss_order[9]],{world.boss_order[9]: lambda state: logic._58Clear(state)})
     multiworld.get_region('World 6', player).add_exits(["6-8"],{"6-8": lambda state: bosses.castle_access(state)})
-    multiworld.get_region('6-4', player).add_exits([gamevar.boss_order[10]],{gamevar.boss_order[10]: lambda state: logic._64Clear(state)})
+    multiworld.get_region('6-4', player).add_exits([world.boss_order[10]],{world.boss_order[10]: lambda state: logic._64Clear(state)})
     multiworld.get_region('6-8', player).add_exits(["Bowser's Room"],{"Bowser's Room": lambda state: bosses.castle_clear(state)})
 
-    if get_option_value(multiworld, player, "extras_enabled") == 1:
+    if world.options.extras_enabled == 1:
         for i in range(6):
             multiworld.get_region(f'World {i + 1}', player).add_exits([f'{i + 1}-Extra'],
             {f'{i+1}-Extra': lambda state: state.has('Extra Panels', player) or state.has(f'Extra {i + 1}', player)})
 
-    if get_option_value(multiworld, player, "minigame_checks") >= 2:
+    if world.options.minigame_checks.value >= 2:
         for i in range(6):
             multiworld.get_region(f'World {i + 1}', player).add_exits([f'{i + 1}-Bonus'],
             {f'{i+1}-Bonus': lambda state: state.has('Bonus Panels', player) or state.has(f'Bonus {i + 1}', player)})

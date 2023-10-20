@@ -1,6 +1,5 @@
 from typing import Union
 from BaseClasses import MultiWorld, CollectionState
-from .Options import get_option_value
 
 class BossReqs:
     player: int

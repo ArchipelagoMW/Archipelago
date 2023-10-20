@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Tuple, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import get_item_names_per_category, item_table, filler_items, trap_items
 from .Locations import get_locations
-from .Options import yoshi_options, get_option_value
+from .Options import yoshi_options
 from .Regions import create_regions
 from .SetupGame import setup_gamevars
 from worlds.AutoWorld import World, WebWorld
@@ -50,7 +50,7 @@ class YIWorld(World):
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None, None, None)}
+    location_name_to_id = {location.name: location.code for location in get_locations(None, None, None, None, None)}
     item_name_groups = get_item_names_per_category()
 
     web = YIWeb()
@@ -179,7 +179,7 @@ class YIWorld(World):
         return item
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player, self.boss_ap_loc, self.luigi_pieces),
+        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player, self.boss_ap_loc, self.luigi_pieces, self),
                         self.location_cache, self, self.boss_ap_loc, self.level_location_list, self.luigi_pieces)
 
     def get_filler_item_name(self) -> str:
@@ -284,19 +284,19 @@ class YIWorld(World):
         if not item.advancement:
             return item
 
-        if name == 'Car Morph' and get_option_value(multiworld, player, "stage_logic") != 0:
+        if name == 'Car Morph' and self.options.stage_logic.value != 0:
             item.classification = ItemClassification.useful
 
-        if name == 'Secret Lens' and (get_option_value(multiworld, player, "hidden_object_visibility") >= 2 or get_option_value(multiworld, player, "stage_logic") != 0):
+        if name == 'Secret Lens' and (self.options.hidden_object_visibility.value >= 2 or self.options.stage_logic.value != 0):
             item.classification = ItemClassification.useful
 
-        if name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(multiworld, player, "minigame_checks") <= 1:
+        if name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and self.options.minigame_checks.value <= 1:
             item.classification = ItemClassification.useful
 
-        if name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(multiworld, player, "item_logic") == 1:
+        if name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and self.options.item_logic.value == 1:
             item.classification = ItemClassification.progression
 
-        if name == 'Piece of Luigi' and get_option_value(multiworld, player, "goal") != 0:
+        if name == 'Piece of Luigi' and world.options.goal.value != 0:
             if self.luigi_count >= multiworld.luigi_pieces_required[player].value:
                 item.classification = ItemClassification.useful
             else:
