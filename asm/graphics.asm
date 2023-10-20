@@ -141,6 +141,35 @@ AbilityIconTilesBottom:
     .incbin "data/graphics/ability_icons.bin", 48 * sizeof_tile, 16 * sizeof_tile
 
 
+EmptyGroundPound1Tile:
+    .incbin "data/graphics/ability_get.bin", 0, 16 * sizeof_tile
+.org EmptyGroundPound1Tile + sizeof_tile
+EmptyGroundPound2Tile: .skip sizeof_tile
+CarryingGroundPound1Tile: .skip sizeof_tile
+CarryingGroundPound2Tile: .skip sizeof_tile
+HasGroundPound1Tile: .skip sizeof_tile
+HasGroundPound2Tile: .skip sizeof_tile
+
+EmptyGrab1Tile: .skip sizeof_tile
+EmptyGrab2Tile: .skip sizeof_tile
+CarryingGrab1Tile: .skip sizeof_tile
+CarryingGrab2Tile: .skip sizeof_tile
+HasGrab1Tile: .skip sizeof_tile
+HasGrab2Tile: .skip sizeof_tile
+
+EmptySwimTile: .skip sizeof_tile
+EmptyHeadSmashTile: .skip sizeof_tile
+EmptyDashAttackTile: .skip sizeof_tile
+EmptyEnemyJumpTile: .skip sizeof_tile
+
+HasSwimTile:
+    .incbin "data/graphics/ability_get.bin", 18 * sizeof_tile, 4 * sizeof_tile
+.org HasSwimTile + sizeof_tile
+HasHeadSmashTile: .skip sizeof_tile
+HasDashAttackTile: .skip sizeof_tile
+HasEnemyJumpTile: .skip sizeof_tile
+
+
 .align 2
 APLogoObj:
     .halfword 1  ; Length

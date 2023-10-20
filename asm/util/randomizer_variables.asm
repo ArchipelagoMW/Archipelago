@@ -63,3 +63,7 @@
 ; with treasure in it. Loops around four values, values of upper six bits
 ; unspecified and ignored.
 .definelabel CurrentJewelIconPosition, HealthBoxExtData + 4  ; byte
+
+; Tracks what abilities you've found in this level but haven't properly
+; collected yet.
+.definelabel AbilitiesInThisLevel, HealthBoxExtData + 5  ; byte

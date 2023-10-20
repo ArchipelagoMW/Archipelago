@@ -187,14 +187,60 @@ LevelScreen:
 
         mov r0, r4
         bl ItemReceivedFeedbackSound
-        ; TODO: Implement collection indicator graphics for abilities
         get_bit r0, r4, ItemBit_Ability
         cmp r0, #1
-        beq @@Return
+        beq @@Ability
+
         get_bits r0, r4, 4, 2
         bl SetTreasurePalette
         lsr r0, r4, #ItemBit_CD  ; a1
         mov r1, #1  ; a2
+        bl SpawnCollectionIndicator
+        b @@CollectJunk
+
+    @@Ability:
+        cmp r4, #ItemID_GroundPound
+        beq @@GroundPound
+        cmp r4, #ItemID_Grab
+        beq @@Grab
+        b @@OtherAbility
+
+    @@GroundPound:
+        bl MixTemporaryAbilities
+        get_bit r0, r0, MoveBit_GroundPoundSuper
+        cmp r0, #0
+        beq @@FirstProgressive
+        mov r0, #MoveBit_GroundPoundSuper
+        b @@FinishProgressive
+
+    @@Grab:
+        bl MixTemporaryAbilities
+        get_bit r0, r0, MoveBit_GrabHeavy
+        cmp r0, #0
+        beq @@FirstProgressive
+        mov r0, #MoveBit_GrabHeavy
+        b @@FinishProgressive
+
+    @@FirstProgressive:
+        get_bits r0, r4, 2, 0
+
+    @@FinishProgressive:
+        mov r4, #0
+        b @@FinishAbility
+
+    @@OtherAbility:
+        get_bits r0, r4, 2, 0
+        mov r4, #1
+
+    @@FinishAbility:
+        ldr r1, =AbilityPaletteTable
+        add r1, r0
+        ldrb r1, [r1]
+
+        mov r0, r1
+        bl SetTreasurePalette
+        mov r0, r4
+        mov r1, #1
         bl SpawnCollectionIndicator
 
     @@CollectJunk:

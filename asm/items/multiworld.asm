@@ -11,10 +11,10 @@ ItemReceivedFeedbackSound:
         push {lr}
 
         get_bits r0, r4, ItemBit_Junk, ItemBit_CD
-        cmp r0, #1
-        beq @@CDSound
         cmp r0, #4
         beq @@Return
+        cmp r0, #0
+        bne @@CDSound
 
     ; Treasure
         ldr r0, =0x13B  ; a1
@@ -59,9 +59,14 @@ ReceiveNextItem:
     ; Set last collected item (if jewel or CD)
         ldr r2, =IncomingItemID
         ldrb r0, [r2]
-        lsr r1, r0, #ItemBit_CD
-        cmp r1, #2
-        bge @@Return
+        get_bit r1, r0, ItemBit_Ability
+        cmp r1, #1
+        beq @@SetLastCollected
+        get_bit r1, r0, ItemBit_Junk
+        cmp r1, #1
+        beq @@Return
+
+    @@SetLastCollected:
         ldr r1, =LastCollectedItemID
         strb r0, [r1]
 

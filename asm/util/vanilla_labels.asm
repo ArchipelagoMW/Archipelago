@@ -89,6 +89,7 @@
 .definelabel zako_takara_box_Anm_11, 0x83B5004
 .definelabel CommonRoomEntityPalettes4, 0x8400A68
 .definelabel EmptyCDTile, 0x8400FA8
+.definelabel HasCDTile, 0x8404648
 .definelabel BasicElementTiles, 0x8400AE8
 .definelabel EmptyJewel4Tile, 0x84016E8
 .definelabel EmptyJewel1Tile, 0x8401708

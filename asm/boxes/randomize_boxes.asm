@@ -212,8 +212,7 @@ LoadRandomItemAnimation:
         b @@OtherAbility
 
     @@GroundPound:
-        ldr r0, =WarioAbilities
-        ldrb r0, [r0]
+        bl MixTemporaryAbilities
         get_bit r0, r0, MoveBit_GroundPound
         cmp r0, #0
         beq @@OtherAbility
@@ -221,8 +220,7 @@ LoadRandomItemAnimation:
         b @@FinishAbility
 
     @@Grab:
-        ldr r0, =WarioAbilities
-        ldrb r0, [r0]
+        bl MixTemporaryAbilities
         get_bit r0, r0, MoveBit_Grab
         cmp r0, #0
         beq @@OtherAbility
@@ -397,15 +395,16 @@ CollectRandomItem:
         cmp r0, #0
         bne @@JunkItem
 
+    ; Progression items
+        ldr r0, =LastCollectedItemID
+        strb r5, [r0]
+
     ; Abilities
         get_bit r0, r5, ItemBit_Ability
         cmp r0, #1
         beq @@Ability
 
     ; Jewel/CD
-        ldr r0, =LastCollectedItemID
-        strb r5, [r0]
-
         lsr r1, r5, #ItemBit_CD
         cmp r1, #0
         bne @@CD
@@ -445,6 +444,41 @@ CollectRandomItem:
         b @@PlayCollectionSound
 
     @@Ability:
+        cmp r5, #ItemID_GroundPound
+        beq @@ProgressiveAbility
+        cmp r5, #ItemID_Grab
+        beq @@ProgressiveAbility
+        mov r0, #1  ; a1
+        b @@AbilityFinal
+
+    @@ProgressiveAbility:
+        bl MixTemporaryAbilities  ; r0 = Carried abilities
+        get_bits r1, r5, 2, 0  ; r1 = Ability number
+        mov r2, #1
+        lsl r2, r1  ; r2 = Ability bit
+        and r0, r2
+        cmp r0, #0
+        beq @@ProgressiveFinal
+        cmp r5, #ItemID_Grab
+        beq @@Grab
+
+    ; Ground Pound
+        mov r2, #1 << MoveBit_GroundPoundSuper
+        b @@ProgressiveFinal
+
+    @@Grab:
+        mov r2, #1 << MoveBit_GrabHeavy
+
+    @@ProgressiveFinal:
+        ldr r1, =AbilitiesInThisLevel
+        ldrb r3, [r1]
+        orr r2, r3
+        strb r2, [r1]
+        mov r0, #0  ; a1
+
+    @@AbilityFinal:
+        mov r1, #0  ; a2
+        bl SpawnCollectionIndicator
         ldr r0, =0x13C  ; a1
 
     @@PlayCollectionSound:
