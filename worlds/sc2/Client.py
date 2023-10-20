@@ -675,7 +675,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             await self.updateZergTech(start_items)
             await self.chat_send("?GiveProtossTech {}".format(start_items[SC2Race.PROTOSS][0]))
             await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
-            await self.chat_send("?SetColor zs" + str(self.ctx.player_color_zerg))
+            await self.chat_send("?SetColor ks" + str(self.ctx.player_color_zerg))
             await self.chat_send("?SetColor pz" + str(self.ctx.player_color_zerg_primal))
             await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
