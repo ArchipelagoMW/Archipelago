@@ -25,6 +25,7 @@ UnusedRomStart equ 0x0878F97C
 .include "asm/items/multiworld.asm"
 .include "asm/items/collect_treasure.asm"
 .include "asm/items/collect_junk.asm"
+.include "asm/items/collection_indicator.asm"
 .include "asm/boxes/randomize_boxes.asm"
 .include "asm/boxes/save_full_health.asm"
 .include "asm/move_shuffle/limit_abilities.asm"
