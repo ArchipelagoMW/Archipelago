@@ -8,6 +8,14 @@ class EnemyCards(Toggle):
     """
     display_name = "Enemy Cards Checks Hold Progression"
 
+class PrioritizeBosses(Toggle):
+    """
+    Should boss location prioritize holding friend cards?
+    """
+    display_name = "Friend Cards Prioritized to Bosses"
+
+
 khcom_options: Dict[str, type(Option)] = {
-    "enemy_cards": EnemyCards
+    "enemy_cards": EnemyCards,
+    "prioritize_bosses": PrioritizeBosses,
 }

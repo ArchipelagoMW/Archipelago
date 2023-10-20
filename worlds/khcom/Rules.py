@@ -1,4 +1,5 @@
-from BaseClasses import CollectionState, MultiWorld
+from BaseClasses import CollectionState, MultiWorld, LocationProgressType
+from .Locations import get_locations_by_category
 
 def has_room_of_beginnings(state: CollectionState, player: int, floor_num) -> bool:
     return state.has("Key of Beginnings F" + floor_num, player)
@@ -72,5 +73,17 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Floor 11", player).access_rule = lambda state: has_room_of_truth(state, player, "09")
     multiworld.get_entrance("Floor 12", player).access_rule = lambda state: has_room_of_beginnings(state, player, "11")
     multiworld.get_entrance("Floor 13", player).access_rule = lambda state: has_room_of_guidance(state, player, "12")
+    
+    # Options
+    if not multiworld.enemy_cards[player]:
+        for location in multiworld.get_locations(player):
+            if location.name in get_locations_by_category("Enemy Unlock").keys():
+                location.progress_type = LocationProgressType.EXCLUDED
+    
+    if multiworld.prioritize_bosses[player]:
+        for location in multiworld.get_locations(player):
+            if location.name in get_locations_by_category("Boss").keys():
+                location.progress_type = LocationProgressType.PRIORITY
+    
     # Win condition.
     multiworld.completion_condition[player] = lambda state: state.has_all({"Donald", "Goofy", "Aladdin", "Ariel", "Beast", "Jack", "Peter Pan"}, player)

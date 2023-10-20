@@ -87,6 +87,7 @@ function define_location_ids()
     location_ids["Creeper Plant"]         = 2672028
     location_ids["Tornado Step"]          = 2672029
     location_ids["Crescendo"]             = 2672030
+    location_ids["Wizard"]                = 2672031
     location_ids["Card Soldier (Black)"]  = 2672036
     location_ids["Key of Beginnings F01"] = 2674001
     location_ids["Key of Beginnings F02"] = 2674002
@@ -410,7 +411,7 @@ bronze_pack_enemy_cards = {"Shadow", "Soldier", "Large Body", "Card Soldier (Red
                             ,"Wizard"}
 
 silver_pack_attack_cards = {"Lionheart", "Metal Chocobo", "Spellbinder", "Divine Rose", "Crabclaw"}
-silver_pack_magic_cards = {"Stop", "Gravity", "Aero", "Bambi", "Mushu", "Tinker Bell"}
+silver_pack_magic_cards = {"Cure", "Stop", "Gravity", "Aero", "Bambi", "Mushu", "Tinker Bell"}
 silver_pack_item_cards = {"Mega-Potion", "Elixir", "Mega-Ether"}
 silver_pack_enemy_cards = {"Guard Armor", "Trickmaster", "Hades", "Parasite Cage", "Jafar", "Oogie Boogie", "Ursula", "Hook", "Dragon Malificent"}
 
@@ -970,6 +971,28 @@ function is_used(card_value)
     return (card_value % 0x8000) >= 0x1000
 end
 
+function check_if_victorious()
+    i = 0
+    battle_cards = get_battle_cards()
+    for k,v in pairs(battle_cards) do
+        for ik, iv in pairs(win_conditions) do
+            if v == iv then
+                i = i + 1
+            end
+        end
+    end
+    if i >= 7 then
+        send_victory()
+    end
+end
+
+function send_victory()
+    file = io.open(client_communication_path .. "victory", "w")
+    io.output(file)
+    io.write("")
+    io.close(file)
+end
+
 function main_loop(last_variables)
     local frame = emu.framecount()
     local current_playtime = get_playtime()
@@ -1013,6 +1036,7 @@ function main_loop(last_variables)
         reassign_deck_pointers(last_deck_pointers)
         update_current_gold_card_qty(get_floor_number())
         set_key_description_text()
+        check_if_victorious()
     end
     last_variables["Last Floor"] = get_floor_number()
     last_variables["Last Key of Beginnings"] = get_current_gold_card_qty("Key of Beginnings")
