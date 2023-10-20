@@ -314,7 +314,7 @@ goals = {
     'local_triforce_hunt': 'localtriforcehunt',
     'ganon_triforce_hunt': 'ganontriforcehunt',
     'local_ganon_triforce_hunt': 'localganontriforcehunt',
-    'ice_rod_hunt': 'icerodhunt',
+    'ice_rod_hunt': 'ice_rod_hunt',
 }
 
 

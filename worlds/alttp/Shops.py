@@ -119,7 +119,7 @@ class Shop:
         }
 
     def push_inventory(self, slot: int, item: str, price: int, max: int = 1, player: int = 0,
-                       price_type: int = ShopPriceType.Rupees):
+                       price_type: int = ShopPriceType.Rupees, push_replacement: bool = True):
         if not self.inventory[slot]:
             raise ValueError("Inventory can't be pushed back if it doesn't exist")
 
@@ -131,9 +131,9 @@ class Shop:
             'price': price,
             'price_type': price_type,
             'max': max,
-            'replacement': self.inventory[slot]["item"],
-            'replacement_price': self.inventory[slot]["price"],
-            'replacement_price_type': self.inventory[slot]["price_type"],
+            'replacement': self.inventory[slot]["item"] if push_replacement else None,
+            'replacement_price': self.inventory[slot]["price"] if push_replacement else 0,
+            'replacement_price_type': self.inventory[slot]["price_type"] if push_replacement else ShopPriceType.Rupees,
             'create_location': self.inventory[slot]["create_location"],
             'player': player
         }
@@ -213,9 +213,33 @@ def ShopSlotFill(multiworld):
         cumu_weights = []
         shops_per_sphere = []
         candidates_per_sphere = []
+        allowed_prices_by_sphere = {player: [{ShopPriceType.Bombs: 0, ShopPriceType.Hearts: 0} for i in range(len(locations_per_sphere))]
+                                    for player in multiworld.get_game_players("A Link to the Past")}
 
         # sort spheres into piles of valid candidates and shops
-        for sphere in locations_per_sphere:
+        for sphere_num, sphere in enumerate(locations_per_sphere):
+            items_in_sphere = [(location.item.name, location.player) for location in sphere]
+            for player in allowed_prices_by_sphere:
+                if sphere_num:
+                    bombs = allowed_prices_by_sphere[player][sphere_num-1][ShopPriceType.Bombs]
+                    hearts = allowed_prices_by_sphere[player][sphere_num-1][ShopPriceType.Hearts]
+                else:
+                    bombs = 0 if multiworld.bombless_start[player] else 10
+                    if ((not multiworld.shuffle_capacity_upgrades[player]) and ("Capacity Upgrade Shop", player) in
+                            items_in_sphere):
+                        bombs += 40
+                    hearts = 2
+                bombs += (items_in_sphere.count(("Bomb Upgrade (+5)", player)) * 5)
+                bombs += (items_in_sphere.count(("Bomb Upgrade (+10)", player)) * 10)
+                bombs = 50 if ("Bomb Upgrade (+50)", player) in items_in_sphere else bombs
+
+                hearts += (((items_in_sphere.count(("Boss Heart Container", player))
+                           + items_in_sphere.count(("Sanctuary Heart Container", player))) * 8)
+                           + (items_in_sphere.count(("Piece of Heart", player))) * 2)
+
+                allowed_prices_by_sphere[player][sphere_num][ShopPriceType.Bombs] = bombs
+                allowed_prices_by_sphere[player][sphere_num][ShopPriceType.Hearts] = hearts
+
             current_shops_slots = []
             current_candidates = []
             shops_per_sphere.append(current_shops_slots)
@@ -276,12 +300,12 @@ def ShopSlotFill(multiworld):
                         price = multiworld.random.randrange(4, 28)
                     else:
                         price = multiworld.random.randrange(8, 56)
-
                     shop.push_inventory(location.shop_slot, item_name,
-                                        min(int(price * multiworld.shop_price_modifier[location.player] / 100) * 5, 9999), 1,
-                                        location.item.player if location.item.player != location.player else 0)
+                                        min(int(price * multiworld.shop_price_modifier[location.player] / 100) * 5, 9999),
+                                        1, location.item.player if location.item.player != location.player else 0,
+                                        push_replacement=not isinstance(shop, UpgradeShop))
                     if multiworld.randomize_cost_types[location.player]:
-                        price_to_funny_price(multiworld, shop.inventory[location.shop_slot], location.player)
+                        price_to_funny_price(multiworld, shop.inventory[location.shop_slot], location.player, allowed_prices_by_sphere[player][i])
 
     FillDisabledShopSlots(multiworld)
 
@@ -312,7 +336,7 @@ def create_shops(multiworld, player: int):
         for name, shop in player_shop_table.items():
             typ, shop_id, keeper, custom, locked, items, sram_offset = shop
             if not locked:
-                new_items = multiworld.random.sample(default_shop_table, k=3)
+                new_items = multiworld.random.sample(default_shop_table, k=len(items))
                 if multiworld.randomize_shop_inventories[player] == RandomizeShopInventories.option_randomize_by_shop_type:
                     if items == _basic_shop_defaults:
                         new_items = new_basic_shop
@@ -446,7 +470,7 @@ def set_up_shops(world, player: int):
 
 
 def shuffle_shops(multiworld, items, player: int):
-    # option = world.shop_shuffle[player]
+
     if multiworld.shuffle_capacity_upgrades[player]:
         capacityshop: Optional[Shop] = None
         for shop in multiworld.shops:
@@ -534,6 +558,7 @@ price_type_display_name = {
     ShopPriceType.Bombs: "Bombs",
     ShopPriceType.Arrows: "Arrows",
     ShopPriceType.Keys: "Keys",
+    ShopPriceType.Item: "Item"
 }
 
 # price division
@@ -552,16 +577,21 @@ simple_price_types = [
 ]
 
 
-def price_to_funny_price(world, item: dict, player: int):
+def price_to_funny_price(world, item: dict, player: int, allowed_prices=None):
     """
     Converts a raw Rupee price into a special price type
     """
+    if allowed_prices is None:
+        allowed_prices = {}
     if item:
         price_types = [
             ShopPriceType.Rupees,  # included as a chance to not change price type
             ShopPriceType.Hearts,
             ShopPriceType.Bombs,
         ]
+        for price_type in price_types:
+            if price_type in allowed_prices and allowed_prices[price_type] < 1:
+                price_types.remove(price_type)
         # don't pay in universal keys to get access to universal keys
         if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal \
                 and not "Small Key (Universal)" == item['replacement']:
@@ -577,7 +607,15 @@ def price_to_funny_price(world, item: dict, player: int):
                 continue
             else:
                 item['price'] = min(price_chart[p_type](item['price']), 255)
+                if p_type in allowed_prices:
+                    price_cap = allowed_prices[p_type]
+                    if p_type in price_rate_display:
+                        price_cap = price_cap // price_rate_display[p_type] * price_rate_display[p_type]
+                    m = {ShopPriceType.Bombs: "Bombs", ShopPriceType.Hearts: "Hearts"}
+                    print(f"setting min {int(price_cap)} onto price {item['price']} - {m[p_type]}")
+                    item['price'] = min(item['price'], int(price_cap))
                 item['price_type'] = p_type
+
             break
 
 

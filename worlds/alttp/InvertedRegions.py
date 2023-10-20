@@ -133,7 +133,7 @@ def create_inverted_regions(world, player):
         create_cave_region(world, player, 'Kakariko Gamble Game', 'a game of chance'),
         create_cave_region(world, player, 'Potion Shop', 'the potion shop', ['Potion Shop']),
         create_lw_region(world, player, 'Lake Hylia Island', ['Lake Hylia Island']),
-        create_cave_region(world, player, 'Capacity Upgrade', 'the queen of fairies'),
+        create_cave_region(world, player, 'Capacity Upgrade', 'the queen of fairies', ['Capacity Upgrade Shop']),
         create_cave_region(world, player, 'Two Brothers House', 'a connector', None,
                            ['Two Brothers House Exit (East)', 'Two Brothers House Exit (West)']),
         create_lw_region(world, player, 'Maze Race Ledge', ['Maze Race'],

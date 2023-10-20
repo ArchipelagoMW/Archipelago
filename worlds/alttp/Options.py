@@ -719,6 +719,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "glitches_required": GlitchesRequired,
     "dark_room_logic": DarkRoomLogic,
     "entrance_shuffle": EntranceShuffle,
+    "entrance_shuffle_seed": EntranceShuffleSeed,
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,

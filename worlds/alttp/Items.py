@@ -224,6 +224,7 @@ item_table = {'Bow': ItemData(IC.progression, None, 0x0B, 'You have\nchosen the\
               'Return Smith': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
               'Pick Up Purple Chest': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
               'Open Floodgate': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
+              'Capacity Upgrade Shop': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
               }
 
 item_init_table = {name: data.as_init_dict() for name, data in item_table.items()}

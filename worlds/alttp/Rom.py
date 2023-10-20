@@ -4,7 +4,7 @@ import Utils
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "9952c2a3ec1b421e408df0d20c8f0c7f"
+RANDOMIZERBASEHASH: str = "9008c65dc34027e3dd7473d5b4c67692"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
@@ -1764,7 +1764,7 @@ def write_custom_shops(rom, world, player):
                 break
             if world.shop_item_slots[player] or shop.type == ShopType.TakeAny:
                 count_shop = (shop.region.name != 'Potion Shop' or world.include_witch_hut[player]) and \
-                             shop.region.name != 'Capacity Upgrade'
+                             (shop.region.name != 'Capacity Upgrade' or world.shuffle_capacity_upgrades[player])
                 rom.write_byte(0x186560 + shop.sram_offset + slot, 1 if count_shop else 0)
             if item['item'] == 'Single Arrow' and item['player'] == 0:
                 arrow_mask |= 1 << index
