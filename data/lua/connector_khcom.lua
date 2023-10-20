@@ -14,8 +14,8 @@ function define_location_ids()
     location_ids["Metal Chocobo"]         = 2671008
     location_ids["Olympia"]               = 2671009
     location_ids["Lionheart"]             = 2671010
-    location_ids["LadyLuck"]              = 2671011
-    location_ids["DivineRose"]            = 2671012
+    location_ids["Lady Luck"]             = 2671011
+    location_ids["Divine Rose"]           = 2671012
     location_ids["Oathkeeper"]            = 2671013
     location_ids["Oblivion"]              = 2671014
     location_ids["Diamond Dust"]          = 2671015
@@ -71,7 +71,7 @@ function define_location_ids()
     location_ids["Fat Bandit"]            = 2672012
     location_ids["Barrel Spider"]         = 2672013
     location_ids["Search Ghost"]          = 2672014
-    location_ids["SeaNeon"]               = 2672015
+    location_ids["Sea Neon"]               = 2672015
     location_ids["Screwdriver"]           = 2672016
     location_ids["Aquatank"]              = 2672017
     location_ids["Wight Knight"]          = 2672018
@@ -175,6 +175,7 @@ function define_item_ids()
     item_ids["Beast"]                 = 2665005
     item_ids["Peter Pan"]             = 2665006
     item_ids["Jack"]                  = 2665007
+    item_ids["Progressive Warp"]      = 2666001
     return item_ids
 end
 
@@ -283,10 +284,98 @@ function define_win_conditions()
     return win_conditions
 end
 
+function define_char_to_hex_map()
+    char_to_hex_map = {}
+    char_to_hex_map[" "] = 0x20
+    char_to_hex_map["!"] = 0x21
+    char_to_hex_map["#"] = 0x23
+    char_to_hex_map["%"] = 0x25
+    char_to_hex_map["&"] = 0x26
+    char_to_hex_map["'"] = 0x27
+    char_to_hex_map["("] = 0x28
+    char_to_hex_map[")"] = 0x28
+    char_to_hex_map["*"] = 0x2A
+    char_to_hex_map["+"] = 0x2B
+    char_to_hex_map[","] = 0x2C
+    char_to_hex_map["-"] = 0x2D
+    char_to_hex_map["."] = 0x00
+    char_to_hex_map["/"] = 0x2F
+    char_to_hex_map["0"] = 0x30
+    char_to_hex_map["1"] = 0x31
+    char_to_hex_map["2"] = 0x32
+    char_to_hex_map["3"] = 0x33
+    char_to_hex_map["4"] = 0x34
+    char_to_hex_map["5"] = 0x35
+    char_to_hex_map["6"] = 0x36
+    char_to_hex_map["7"] = 0x37
+    char_to_hex_map["8"] = 0x38
+    char_to_hex_map["9"] = 0x39
+    char_to_hex_map[";"] = 0x3B
+    char_to_hex_map["<"] = 0x3C
+    char_to_hex_map["="] = 0x3D
+    char_to_hex_map[">"] = 0x62
+    char_to_hex_map["?"] = 0x3F
+    char_to_hex_map["@"] = 0x40
+    char_to_hex_map["A"] = 0x41
+    char_to_hex_map["B"] = 0x42
+    char_to_hex_map["C"] = 0x43
+    char_to_hex_map["D"] = 0x44
+    char_to_hex_map["E"] = 0x45
+    char_to_hex_map["F"] = 0x46
+    char_to_hex_map["G"] = 0x47
+    char_to_hex_map["H"] = 0x48
+    char_to_hex_map["I"] = 0x49
+    char_to_hex_map["J"] = 0x4A
+    char_to_hex_map["K"] = 0x4B
+    char_to_hex_map["L"] = 0x4C
+    char_to_hex_map["M"] = 0x4D
+    char_to_hex_map["N"] = 0x4E
+    char_to_hex_map["O"] = 0x4F
+    char_to_hex_map["P"] = 0x50
+    char_to_hex_map["Q"] = 0x51
+    char_to_hex_map["R"] = 0x52
+    char_to_hex_map["S"] = 0x53
+    char_to_hex_map["T"] = 0x54
+    char_to_hex_map["U"] = 0x55
+    char_to_hex_map["V"] = 0x56
+    char_to_hex_map["W"] = 0x57
+    char_to_hex_map["X"] = 0x58
+    char_to_hex_map["Y"] = 0x59
+    char_to_hex_map["Z"] = 0x5A
+    char_to_hex_map["a"] = 0x61
+    char_to_hex_map["b"] = 0x62
+    char_to_hex_map["c"] = 0x63
+    char_to_hex_map["d"] = 0x64
+    char_to_hex_map["e"] = 0x65
+    char_to_hex_map["f"] = 0x66
+    char_to_hex_map["g"] = 0x67
+    char_to_hex_map["h"] = 0x68
+    char_to_hex_map["i"] = 0x69
+    char_to_hex_map["j"] = 0x6A
+    char_to_hex_map["k"] = 0x6B
+    char_to_hex_map["l"] = 0x6C
+    char_to_hex_map["m"] = 0x6D
+    char_to_hex_map["n"] = 0x6E
+    char_to_hex_map["o"] = 0x6F
+    char_to_hex_map["p"] = 0x70
+    char_to_hex_map["q"] = 0x71
+    char_to_hex_map["r"] = 0x72
+    char_to_hex_map["s"] = 0x73
+    char_to_hex_map["t"] = 0x74
+    char_to_hex_map["u"] = 0x75
+    char_to_hex_map["v"] = 0x76
+    char_to_hex_map["w"] = 0x77
+    char_to_hex_map["x"] = 0x78
+    char_to_hex_map["y"] = 0x79
+    char_to_hex_map["z"] = 0x7A
+    return char_to_hex_map
+end
+
 location_ids = define_location_ids()
 item_ids = define_item_ids()
 battle_cards = define_battle_cards()
 win_conditions = define_win_conditions()
+char_to_hex_map = define_char_to_hex_map()
 
 --Addresses
 current_gold_map_cards_addresses = {}
@@ -304,11 +393,12 @@ battle_cards_address = 0x0203A080
 time_played_address = 0x02039D8C
 check_count_address = 0x02039D22
 highest_warp_floor_address = 0x0203C590
+moogle_points_address = 0x02039D24
 deck_card_pointers_addresses = {0x02039DE0, 0x02039EC0, 0x02039FA0}
 world_card_addresses = {0x02039D30, 0x02039D31}
 world_card_values = {{0x00,0x02}, {0x08,0x00}, {0x04,0x00}, {0x10,0x00}, {0x01,0x00}, {0x20,0x00}
        ,{0x02,0x00}, {0x40,0x00}, {0x80,0x00}, {0x00,0x04}, {0x00,0x08}, {0x00,0x01}, {0x00,0x10}}
-floor_assignment_addresses = {0x02039D34,0x02039D38,0x02039D3C,0x02039D40,0x02039D44,0x02039D48,0x02039D4C,0x02039D50,0x02039D54,0x02039D58,0x02039D5C,0x02039D60,0x02039D64}
+floor_assignment_addresses = {0x02039D36,0x02039D3A,0x02039D3E,0x02039D42,0x02039D46,0x02039D4A,0x02039D4E,0x02039D52,0x02039D56,0x02039D5A,0x02039D5E,0x02039D62,0x02039D66}
 floor_assignment_values = {0x0A, 0x04, 0x03, 0x05, 0x01, 0x06, 0x02, 0x07, 0x08, 0x0D, 0x0B, 0x09, 0x0C}
 
 bronze_pack_attack_cards = {"Kingdom Key", "Three Wishes", "Pumpkinhead", "Olympia", "Wishing Star", "Lady Luck"}
@@ -349,7 +439,7 @@ end
 
 function get_battle_card(offset)
     if memory.read_u16_le(battle_cards_address + (2 * offset)) ~= 0xFFFF then
-        return memory.read_u16_le(battle_cards_address + (2 * offset)) % 0x1000
+        return memory.read_u16_le(battle_cards_address + (2 * offset))
     else
         return 0xFFFF
     end
@@ -371,7 +461,7 @@ function get_battle_cards()
 end
 
 function get_battle_card_type(battle_card_value)
-    battle_card_value = battle_card_value
+    battle_card_value = battle_card_value % 0x1000
     for k,v in pairs(battle_cards) do
         if battle_card_value >= v[1] and battle_card_value <= v[2] then
             return k
@@ -435,8 +525,17 @@ function get_deck_pointers()
     return deck_pointers
 end
 
-function get_check_count()
-    return memory.read_u16_le(check_count_address)
+function get_moogle_points()
+    return memory.read_u32_le(moogle_points_address)
+end
+
+function get_card_base(card_value, premium)
+    if premium then
+        if card_value > 0x8000 then
+            return (card_value % 0x1000) + 0x8000
+        end
+    end
+    return card_value % 0x1000
 end
 
 function set_deck_pointer(deck_number, offset, value)
@@ -444,12 +543,12 @@ function set_deck_pointer(deck_number, offset, value)
 end
 
 function set_starting_deck()
-    memory.write_u16_le(battle_cards_address, 0x0008) --Kingdom Key 8
-    memory.write_u16_le(battle_cards_address, 0x0007) --Kingdom Key 7
-    memory.write_u16_le(battle_cards_address, 0x0006) --Kingdom Key 6
-    memory.write_u16_le(battle_cards_address, 0x0005) --Kingdom Key 5
-    memory.write_u16_le(battle_cards_address, 0x00B9) --Blizzard 5
-    memory.write_u16_le(battle_cards_address, 0x0181) --Potion 5
+    memory.write_u16_le(battle_cards_address, 0x1008) --Kingdom Key 8
+    memory.write_u16_le(battle_cards_address + 2, 0x1007) --Kingdom Key 7
+    memory.write_u16_le(battle_cards_address + 4, 0x1006) --Kingdom Key 6
+    memory.write_u16_le(battle_cards_address + 6, 0x1005) --Kingdom Key 5
+    memory.write_u16_le(battle_cards_address + 8, 0x10B9) --Blizzard 5
+    memory.write_u16_le(battle_cards_address + 10, 0x1181) --Potion 5
     local i = 7
     while i <= 15 do
         memory.write_u16_le(battle_cards_address + 2*(i-1), 0x0FFF)
@@ -516,6 +615,10 @@ function set_stored_gold_cards(gold_card_type, floor_number, x)
     end
 end
 
+function set_moogle_points(value)
+    memory.write_u32_le(moogle_points_address, value)
+end
+
 function update_current_gold_card_qty(current_floor)
     memory.writebyte(current_gold_map_cards_addresses["Key of Beginnings"], get_stored_gold_cards("Key of Beginnings", current_floor))
     if get_stored_gold_cards("Key of Beginnings", current_floor) < 1 then
@@ -528,29 +631,36 @@ function update_current_gold_card_qty(current_floor)
     else
         memory.writebyte(current_gold_map_cards_addresses["Key to Truth"], get_stored_gold_cards("Key to Truth", current_floor))
     end
-    if get_stored_gold_cards("Key of Beginnings", current_floor) < 1 then
-        memory.writebyte(current_gold_map_cards_addresses["Key to Rewards"], 0x0)
-    else
-        memory.writebyte(current_gold_map_cards_addresses["Key to Rewards"], get_stored_gold_cards("Key to Rewards", current_floor))
-    end
+    memory.writebyte(current_gold_map_cards_addresses["Key to Rewards"], get_stored_gold_cards("Key to Rewards", current_floor))
 end
 
 function update_world_cards(current_floor)
-    if get_stored_gold_cards("Key of Beginnings", current_floor) > 0 then
-        memory.writebyte(floor_assignment_addresses[current_floor], floor_assignment_values[current_floor])
-    else
-        memory.writebyte(floor_assignment_addresses[current_floor], 0x0A)
-    end
+    memory.writebyte(world_card_addresses[1], world_card_values[current_floor][1])
+    memory.writebyte(world_card_addresses[2], world_card_values[current_floor][2])
 end
 
 function update_highest_warp_floor(past_highest_warp_floor, current_highest_warp_floor)
-    if current_highest_warp_floor < 13 then
-        memory.writebyte(highest_warp_floor_address, 0x16)
+    if current_highest_warp_floor < 6 then
+        memory.writebyte(highest_warp_floor_address, 0x0A)
+        return
     end
-    if current_highest_warp_floor > 12 and past_highest_warp_floor < 13 and get_floor_number() > 12 then
-        memory.writebyte(highest_warp_floor_address, 0x18)
-    else
-        memory.writebyte(highest_warp_floor_address, 0x16)
+    if current_highest_warp_floor > 6 and current_highest_warp_floor < 9 and get_floor_number() > 6 and get_floor_number() < 9 then
+        memory.writebyte(highest_warp_floor_address, 0x10)
+        return
+    end
+end
+
+function update_current_floor()
+    if get_stored_gold_cards("Key of Beginnings", get_floor_number()) < 1 then
+        memory.writebyte(floor_number_address, 0x00)
+    end
+end
+
+function update_world_assignments()
+    i = 1
+    while i <= #floor_assignment_values do
+        memory.writebyte(floor_assignment_addresses[i], floor_assignment_values[i])
+        i = i + 1
     end
 end
 
@@ -564,16 +674,14 @@ end
 
 function remove_battle_card(card_value)
     local removed = false
-    if card_value < 0x9000 then
-        i = 0
-        while get_battle_card(i) ~= 0xFFFF and not removed do
-            if card_value == get_battle_card(i) then
-                memory.write_u16_le(battle_cards_address + (2 * i), 0x0FFF)
-                removed = true
-            end
-            i = i + 1
-        end
-    end
+   i = 0
+   while get_battle_card(i) ~= 0xFFFF and not removed do
+       if card_value == get_battle_card(i) then
+           memory.write_u16_le(battle_cards_address + (2 * i), 0x0FFF)
+           removed = true
+       end
+       i = i + 1
+   end
 end
 
 function reassign_deck_pointers(old_deck_pointers)
@@ -602,18 +710,18 @@ function find_new_battle_cards(old_battle_cards, current_battle_cards)
     old_battle_card_counts = {}
     current_battle_card_counts = {}
     for index,card_value in pairs(old_battle_cards) do
-        old_battle_card_counts[card_value] = 0
-        current_battle_card_counts[card_value] = 0
+        old_battle_card_counts[get_card_base(card_value, false)] = 0
+        current_battle_card_counts[get_card_base(card_value, false)] = 0
     end
     for index,card_value in pairs(current_battle_cards) do
-        old_battle_card_counts[card_value] = 0
-        current_battle_card_counts[card_value] = 0
+        old_battle_card_counts[get_card_base(card_value, false)] = 0
+        current_battle_card_counts[get_card_base(card_value, false)] = 0
     end
     for index,card_value in pairs(old_battle_cards) do
-        old_battle_card_counts[card_value] = old_battle_card_counts[card_value] + 1
+        old_battle_card_counts[get_card_base(card_value, false)] = old_battle_card_counts[get_card_base(card_value, false)] + 1
     end
     for index,card_value in pairs(current_battle_cards) do
-        current_battle_card_counts[card_value] = current_battle_card_counts[card_value] + 1
+        current_battle_card_counts[get_card_base(card_value, false)] = current_battle_card_counts[get_card_base(card_value, false)] + 1
     end
     for card_value, cnt in pairs(current_battle_card_counts) do
         if cnt > old_battle_card_counts[card_value] then
@@ -629,19 +737,18 @@ end
 
 function find_empty_battle_card_offset()
     offset = 0
-    while memory.read_u16_le(battle_cards_address + (2 * offset)) ~= 0x0FFF and offset < 950 do
-        offset = offset + 1
+    while memory.read_u16_le(battle_cards_address + (2 * offset)) ~= 0x0FFF and offset < 915 do
         battle_card = get_battle_card(i)
         offset = offset + 1
     end
-    if offset < 950 then
+    if offset < 915 then
         return offset
     end
     return -1
 end
 
 function increment_check_count()
-    memory.write_u16_le(check_count_address, get_check_count() + 1)
+    memory.write_u32_le(moogle_points_address, get_moogle_points() + 1)
 end
 
 function write_to_output(file_name, location_name)
@@ -702,36 +809,48 @@ function open_card_pack(card_pack)
         add_battle_card(bronze_pack_attack_cards[math.random(1, table.getn(bronze_pack_attack_cards))])
         add_battle_card(bronze_pack_attack_cards[math.random(1, table.getn(bronze_pack_attack_cards))])
         add_battle_card(bronze_pack_attack_cards[math.random(1, table.getn(bronze_pack_attack_cards))])
-        add_battle_card(bronze_pack_attack_cards[math.random(1, table.getn(bronze_pack_attack_cards))])
-        add_battle_card(bronze_pack_item_cards[math.random(1, table.getn(bronze_pack_item_cards))])
-        add_battle_card(bronze_pack_magic_cards[math.random(1, table.getn(bronze_pack_magic_cards))])
-        add_battle_card(bronze_pack_enemy_cards[math.random(1, table.getn(bronze_pack_enemy_cards))])
+        choice = math.random(1,3)
+        if choice == 1 then
+            add_battle_card(bronze_pack_item_cards[math.random(1, table.getn(bronze_pack_item_cards))])
+        elseif choice == 2 then
+            add_battle_card(bronze_pack_magic_cards[math.random(1, table.getn(bronze_pack_magic_cards))])
+        else
+            add_battle_card(bronze_pack_enemy_cards[math.random(1, table.getn(bronze_pack_enemy_cards))])
+        end
     end
     if card_pack == "Silver Card Pack" then
         add_battle_card(silver_pack_attack_cards[math.random(1, table.getn(silver_pack_attack_cards))])
         add_battle_card(silver_pack_attack_cards[math.random(1, table.getn(silver_pack_attack_cards))])
         add_battle_card(silver_pack_attack_cards[math.random(1, table.getn(silver_pack_attack_cards))])
-        add_battle_card(silver_pack_attack_cards[math.random(1, table.getn(silver_pack_attack_cards))])
-        add_battle_card(silver_pack_item_cards[math.random(1, table.getn(silver_pack_item_cards))])
-        add_battle_card(silver_pack_magic_cards[math.random(1, table.getn(silver_pack_magic_cards))])
-        add_battle_card(silver_pack_enemy_cards[math.random(1, table.getn(silver_pack_enemy_cards))])
+        choice = math.random(1,3)
+        if choice == 1 then
+            add_battle_card(silver_pack_item_cards[math.random(1, table.getn(silver_pack_item_cards))])
+        elseif choice == 2 then
+            add_battle_card(silver_pack_magic_cards[math.random(1, table.getn(silver_pack_magic_cards))])
+        else
+            add_battle_card(silver_pack_enemy_cards[math.random(1, table.getn(silver_pack_enemy_cards))])
+        end
     end
     if card_pack == "Gold Card Pack" then
         add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
         add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
         add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
-        add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
-        add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
-        add_battle_card(gold_pack_item_cards[math.random(1, table.getn(gold_pack_item_cards))])
-        add_battle_card(gold_pack_enemy_cards[math.random(1, table.getn(gold_pack_enemy_cards))])
+        choice = math.random(1,3)
+        if choice == 1 then
+            add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
+        elseif choice == 2 then
+            add_battle_card(gold_pack_item_cards[math.random(1, table.getn(gold_pack_item_cards))])
+        else
+            add_battle_card(gold_pack_enemy_cards[math.random(1, table.getn(gold_pack_enemy_cards))])
+        end
     end
 end
 
 function receive_items()
     number_of_items_received = 0
-    while file_exists(client_communication_path .. "AP_" .. get_check_count() + 1 .. ".item") do
+    while file_exists(client_communication_path .. "AP_" .. get_moogle_points() + 1 .. ".item") do
         item_found = false
-        file = io.open(client_communication_path .. "AP_" .. get_check_count() + 1 .. ".item", "r")
+        file = io.open(client_communication_path .. "AP_" .. get_moogle_points() + 1 .. ".item", "r")
         io.input(file)
         received_item_id = tonumber(io.read())
         io.close(file)
@@ -770,12 +889,94 @@ function receive_items()
     end
 end
 
+function replace_text(address, bytes, new_text)
+    local replacement_bytes = {}
+    j = 1
+    for i = 1, #new_text do
+        local c = new_text:sub(i,i)
+        replacement_bytes[j] = char_to_hex_map[c]
+        replacement_bytes[j+1] = 0x00
+        j = j + 2
+        i = i + 1
+    end
+    i = 0
+    while i < bytes do
+        memory.writebyte(address + i, 0x00)
+        i = i + 1
+    end
+    i = 0
+    while i < #replacement_bytes do
+        memory.writebyte(address + i, replacement_bytes[i+1])
+        i = i + 1
+    end
+end
+
+function set_key_description_text()
+    i=1
+    local new_string = ""
+    while i <= 13 do
+        if get_stored_gold_cards("Key of Beginnings", i)  == 1 then
+            new_string = new_string .. tostring(i) .. ","
+        end
+        i = i + 1
+    end
+    if new_string ~= "" then
+        new_string = new_string:sub(1,-2)
+    end
+    replace_text(0x09045026, 70, new_string)
+    i=1
+    new_string = ""
+    while i <= 13 do
+        if get_stored_gold_cards("Key of Guidance", i)  == 1 then
+            new_string = new_string .. tostring(i) .. ","
+        end
+        i = i + 1
+    end
+    if new_string ~= "" then
+        new_string = new_string:sub(1,-2)
+    end
+    replace_text(0x0904506E, 70, new_string)
+    i=1
+    new_string = ""
+    while i <= 13 do
+        if get_stored_gold_cards("Key to Truth", i)  == 1 then
+            new_string = new_string .. tostring(i) .. ","
+        end
+        i = i + 1
+    end
+    if new_string ~= "" then
+        new_string = new_string:sub(1,-2)
+    end
+    replace_text(0x090450B6, 70, new_string)
+    i=1
+    new_string = ""
+    while i <= 13 do
+        if get_stored_gold_cards("Key to Rewards", i)  == 1 then
+            new_string = new_string .. tostring(i) .. ","
+        end
+        i = i + 1
+    end
+    if new_string ~= "" then
+        new_string = new_string:sub(1,-2)
+    end
+    replace_text(0x090450FE, 70, new_string)
+end
+
+function is_premium(card_value)
+    return card_value >= 0x8000
+end
+
+function is_used(card_value)
+    return (card_value % 0x8000) >= 0x1000
+end
+
 function main_loop(last_variables)
     local frame = emu.framecount()
     local current_playtime = get_playtime()
     if current_playtime == 1 then
         set_starting_deck()
         last_variables["Last Battle Cards"] = get_battle_cards()
+        last_variables["Last Moogle Points"] = get_moogle_points()
         set_stored_gold_cards("Key of Beginnings", 1, 1)
         set_stored_gold_cards("Key of Guidance", 1, 1)
         set_stored_gold_cards("Key to Truth", 1, 1)
@@ -784,13 +985,13 @@ function main_loop(last_variables)
     if not save_or_savestate_loaded(last_variables["Last Playtime"], current_playtime) and current_playtime > 3 then
         local current_floor = get_floor_number()
         if current_floor ~= last_variables["Last Floor"] then
-            update_current_gold_card_qty(current_floor)
-            update_world_cards(current_floor)
+            update_world_cards(get_floor_number())
             update_highest_warp_floor(last_variables["Last Highest Warp Floor"], get_highest_warp_floor())
             last_variables["Last Key of Beginnings"] = get_current_gold_card_qty("Key of Beginnings")
             last_variables["Last Key of Guidance"] = get_current_gold_card_qty("Key of Guidance")
             last_variables["Last Key to Truth"] = get_current_gold_card_qty("Key to Truth")
             last_variables["Last Key to Rewards"] = get_current_gold_card_qty("Key to Rewards")
+            last_variables["Last Moogle Points"] = get_moogle_points()
         end
         local current_key_of_beginnings = get_current_gold_card_qty("Key of Beginnings")
         local current_key_of_guidance = get_current_gold_card_qty("Key of Guidance")
@@ -804,11 +1005,14 @@ function main_loop(last_variables)
         last_deck_pointers = get_deck_pointers()
         find_new_battle_cards(last_variables["Last Battle Cards"], current_battle_cards)
         reassign_deck_pointers(last_deck_pointers)
+        set_moogle_points(last_variables["Last Moogle Points"])
     end
     if frame % 300 then
         last_deck_pointers = get_deck_pointers()
         receive_items()
         reassign_deck_pointers(last_deck_pointers)
+        update_current_gold_card_qty(get_floor_number())
+        set_key_description_text()
     end
     last_variables["Last Floor"] = get_floor_number()
     last_variables["Last Key of Beginnings"] = get_current_gold_card_qty("Key of Beginnings")
@@ -818,7 +1022,10 @@ function main_loop(last_variables)
     last_variables["Last Battle Cards"] = get_battle_cards()
     last_variables["Last Playtime"] = get_playtime()
     last_variables["Last Highest Warp Floor"] = get_highest_warp_floor()
+    last_variables["Last Moogle Points"] = get_moogle_points()
     update_map_cards()
+    update_world_cards(get_floor_number())
+    update_world_assignments()
     return last_variables
 end
 
@@ -832,6 +1039,7 @@ function main()
     last_variables["Last Battle Cards"] = get_battle_cards()
     last_variables["Last Playtime"] = get_playtime()
     last_variables["Last Highest Warp Floor"] = get_highest_warp_floor()
+    last_variables["Last Moogle Points"] = get_moogle_points()
     while true do
         local frame = emu.framecount()
         if frame % 20 == 0 then

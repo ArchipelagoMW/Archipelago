@@ -97,12 +97,25 @@ class KHCOMContext(CommonContext):
                     check_num = 0
                     for filename in os.listdir(self.game_communication_path):
                         if filename.startswith("AP"):
-                            check_num = int(filename.split("_")[1].split(".")[0])
-                        
-                    filename = f"AP_{str(check_num+1)}.item"
-                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                        f.write(str(NetworkItem(*item).item))
-                        f.close()
+                            if int(filename.split("_")[-1].split(".")[0]) > check_num:
+                                check_num = int(filename.split("_")[-1].split(".")[0])
+                    item_id = ""
+                    location_id = ""
+                    player = ""
+                    found = False
+                    for filename in os.listdir(self.game_communication_path):
+                        if filename.startswith(f"AP"):
+                            with open(os.path.join(self.game_communication_path, filename), 'r') as f:
+                                item_id = str(f.readline()).replace("\n", "")
+                                location_id = str(f.readline()).replace("\n", "")
+                                player = str(f.readline()).replace("\n", "")
+                                if str(item_id) == str(NetworkItem(*item).item) and str(location_id) == str(NetworkItem(*item).location) and str(player) == str(NetworkItem(*item).player):
+                                    found = True
+                    if not found:
+                        filename = f"AP_{str(check_num+1)}.item"
+                        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                            f.write(str(NetworkItem(*item).item) + "\n" + str(NetworkItem(*item).location) + "\n" + str(NetworkItem(*item).player))
+                            f.close()
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
