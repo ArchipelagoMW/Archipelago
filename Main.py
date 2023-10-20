@@ -301,15 +301,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
-        with concurrent.futures.ThreadPoolExecutor(world.players + 2) as pool:
+        output_players = [player for player in world.player_ids if AutoWorld.World.generate_output.__code__
+                          is not world.worlds[player].generate_output.__code__]
+        with concurrent.futures.ThreadPoolExecutor(len(output_players) + 2) as pool:
             check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
             output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
-            for player in world.player_ids:
+            for player in output_players:
                 # skip starting a thread for methods that say "pass".
-                if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
-                    output_file_futures.append(
-                        pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
+                output_file_futures.append(
+                    pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
 
             # collect ER hint info
             er_hint_data: Dict[int, Dict[int, str]] = {}
