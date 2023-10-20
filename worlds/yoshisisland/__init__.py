@@ -284,19 +284,19 @@ class YIWorld(World):
         if not item.advancement:
             return item
 
-        if (name == 'Car Morph' and get_option_value(multiworld, player, "stage_logic") != 0):
+        if name == 'Car Morph' and get_option_value(multiworld, player, "stage_logic") != 0:
             item.classification = ItemClassification.useful
 
-        if (name == 'Secret Lens' and (get_option_value(multiworld, player, "hidden_object_visibility") >= 2 or get_option_value(multiworld, player, "stage_logic") != 0)):
+        if name == 'Secret Lens' and (get_option_value(multiworld, player, "hidden_object_visibility") >= 2 or get_option_value(multiworld, player, "stage_logic") != 0):
             item.classification = ItemClassification.useful
 
-        if (name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(multiworld, player, "minigame_checks") <= 1):
+        if name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(multiworld, player, "minigame_checks") <= 1:
             item.classification = ItemClassification.useful
 
-        if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(multiworld, player, "item_logic") == 1):
+        if name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(multiworld, player, "item_logic") == 1:
             item.classification = ItemClassification.progression
 
-        if (name == 'Piece of Luigi' and get_option_value(multiworld, player, "goal") != 0):
+        if name == 'Piece of Luigi' and get_option_value(multiworld, player, "goal") != 0:
             if self.luigi_count >= multiworld.luigi_pieces_required[player].value:
                 item.classification = ItemClassification.useful
             else:

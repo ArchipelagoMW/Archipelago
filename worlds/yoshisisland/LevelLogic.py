@@ -24,15 +24,9 @@ class YoshiLogic:
         else:
             self.game_logic = "Hard"
 
-        if get_option_value(multiworld, player, "shuffle_midrings") == 0:
-            self.midring_start = True
-        else:
-            self.midring_start = False
+        self.midring_start = get_option_value(multiworld, player, "shuffle_midrings") == 0
 
-        if get_option_value(multiworld, player, "item_logic") == 0:
-            self.consumable_logic = False
-        else:
-            self.consumable_logic = True
+        self.consumable_logic = get_option_value(multiworld, player, "consumable_logic") == 0
 
         if get_option_value(multiworld, player, "hidden_object_visibility") >= 2:
             self.clouds_always_visible = True
@@ -51,10 +45,7 @@ class YoshiLogic:
             self.bowser_door = 3
 
     def has_midring(self, state: CollectionState) -> bool:
-        if self.midring_start == True:
-            return True
-        else:
-            return state.has('Middle Ring', self.player)
+        return self.midring_start or state.has('Middle Ring', self.player)
 
     def ReconstituteLuigi(self, state: CollectionState) -> bool:
         return state.has('Piece of Luigi', self.player, self.luigi_pieces)
@@ -81,7 +72,7 @@ class YoshiLogic:
             if self.game_logic == "Easy":
                 return self.item_bonus(state)
             else:
-                return state.has('Bandit Watemrlons', self.player) or self.item_bonus(state)
+                return state.has('Bandit Watermelons', self.player) or self.item_bonus(state)
 
     def default_vis(self, state: CollectionState) -> bool:
         if self.clouds_always_visible == True:

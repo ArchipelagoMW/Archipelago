@@ -126,14 +126,14 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                                                         'World 4': lambda state: state.has('World 4 Gate', player),
                                                         'World 5': lambda state: state.has('World 5 Gate', player),
                                                         'World 6': lambda state: state.has('World 6 Gate', player)})
-    CurWorld = 1
-    CurLev = 1
+    cur_world = 1
+    cur_level = 1
     for i in range(47):
-        multiworld.get_region(f'World {CurWorld}', player).add_exits([gamevar.level_location_list[i]])
-        if CurLev > 7:
-            CurLev = 1
-            CurWorld += 1
-        else: CurLev += 1
+        multiworld.get_region(f'World {cur_world}', player).add_exits([gamevar.level_location_list[i]])
+        if cur_level > 7:
+            cur_level = 1
+            cur_world += 1
+        else: cur_level += 1
 
     multiworld.get_region('1-4', player).add_exits([gamevar.boss_order[0]],{gamevar.boss_order[0]: lambda state: logic._14Clear(state)})
     multiworld.get_region('1-8', player).add_exits([gamevar.boss_order[1]],{gamevar.boss_order[1]: lambda state: logic._18Clear(state)})
@@ -152,12 +152,12 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     if get_option_value(multiworld, player, "extras_enabled") == 1:
         for i in range(6):
             multiworld.get_region(f'World {i + 1}', player).add_exits([f'{i + 1}-Extra'],
-                                                                {f'{i+1}-Extra': lambda state: state.has('Extra Panels', player) or state.has(f'Extra {i + 1}', player)})
+            {f'{i+1}-Extra': lambda state: state.has('Extra Panels', player) or state.has(f'Extra {i + 1}', player)})
 
     if get_option_value(multiworld, player, "minigame_checks") >= 2:
         for i in range(6):
             multiworld.get_region(f'World {i + 1}', player).add_exits([f'{i + 1}-Bonus'],
-                                                                {f'{i+1}-Bonus': lambda state: state.has('Bonus Panels', player) or state.has(f'Bonus {i + 1}', player)})
+            {f'{i+1}-Bonus': lambda state: state.has('Bonus Panels', player) or state.has(f'Bonus {i + 1}', player)})
 
     
 

@@ -349,4 +349,4 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
         location_table += ( 
             LocationData("Bowser's Room", "King Bowser's Castle: Level Clear", None, 0x43, lambda state: logic._68Clear(state)),
         )
-    return tuple(location_table)
+    return list(location_table)

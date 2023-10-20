@@ -37,7 +37,7 @@ def setup_gamevars(world, multiworld, player: int):
 
     if multiworld.baby_mario_sound[player] == 2:
         world.baby_mario_sfx = world.random.choice(safe_baby_sounds)
-    elif multiworld.baby_mario_sound == 1:
+    elif multiworld.baby_mario_sound[player] == 1:
         world.baby_mario_sfx = 0x42
     else:
         world.baby_mario_sfx = 0x44

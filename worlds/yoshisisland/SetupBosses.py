@@ -8,15 +8,6 @@ class BossReqs:
 
     def __init__(self, multiworld, player: int):
         self.player = player
-
-        
-        if get_option_value(multiworld, player, "stage_logic") == 0:
-            self.game_logic = "Easy"
-        elif get_option_value(multiworld, player, "stage_logic") == 1:
-            self.game_logic = "Normal"
-        else:
-            self.game_logic = "Hard"
-
         self.castle_unlock = multiworld.castle_open_condition[player].value
         self.boss_unlock = multiworld.castle_clear_condition[player].value
 
