@@ -40,11 +40,11 @@ class WitnessPlayerLogic:
         if panel_hex in self.COMPLETELY_DISABLED_ENTITIES or panel_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
             return frozenset()
 
-        check_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel_hex]
+        entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel_hex]
 
         these_items = frozenset({frozenset()})
 
-        if check_obj["id"]:
+        if entity_obj["id"]:
             these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
 
         these_items = frozenset({
@@ -98,13 +98,20 @@ class WitnessPlayerLogic:
                     new_items = frozenset()
                 elif option_panel in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_panel])})
+
+                    if option_panel in {"7 Lasers", "11 Lasers"}:
+                        for laser in {"0x00509", "0x012FB", "0x01539", "0x181B3", "0x014BB", "0x17C65",
+                                      "0x032F9", "0x00274", "0x0C2B2", "0x00BF6", "0x028A4", "0x09F98"}:
+                            if laser not in self.DOOR_ITEMS_BY_ID:
+                                if laser not in self.COMPLETELY_DISABLED_ENTITIES | self.DONT_MAKE_EVENTS:
+                                    if laser not in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
+                                        self.EVENT_PANELS_FROM_PANELS.add(laser)
                 # If a panel turns on when a panel in a different region turns on,
-                # the latter panel will be an "event panel", unless it ends up being
-                # a location itself. This prevents generation failures.
-                elif dep_obj["region"]["name"] != check_obj["region"]["name"]:
-                    new_items = frozenset({frozenset([option_panel])})
-                    self.EVENT_PANELS_FROM_PANELS.add(option_panel)
-                elif option_panel in self.ALWAYS_EVENT_NAMES_BY_HEX.keys():
+                # the latter panel will be an "event panel".
+                # However, if this is a door or laser and it's opened by an item, its region does not physically
+                # need to be reached.
+                elif dep_obj["region"]["name"] != entity_obj["region"]["name"] \
+                        and not (option_panel in self.DOOR_ITEMS_BY_ID and dep_obj["id"] is None):
                     new_items = frozenset({frozenset([option_panel])})
                     self.EVENT_PANELS_FROM_PANELS.add(option_panel)
                 else:
@@ -154,7 +161,7 @@ class WitnessPlayerLogic:
 
             self.THEORETICAL_ITEMS.discard(item_name)
             if isinstance(StaticWitnessLogic.all_items[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_ITEMS_NO_MULTI\
+                self.THEORETICAL_ITEMS_NO_MULTI \
                     .difference_update(cast(ProgressiveItemDefinition,
                                             StaticWitnessLogic.all_items[item_name]).child_item_names)
             else:
@@ -171,19 +178,15 @@ class WitnessPlayerLogic:
 
         if adj_type == "Event Items":
             line_split = line.split(" - ")
+            new_event_name = line_split[0]
             hex_set = line_split[1].split(",")
 
+            for entity, event_name in self.EVENT_ITEM_NAMES.items():
+                if event_name == new_event_name:
+                    self.DONT_MAKE_EVENTS.add(entity)
+
             for hex_code in hex_set:
-                self.ALWAYS_EVENT_NAMES_BY_HEX[hex_code] = line_split[0]
-
-            to_remove = set()
-
-            for hex_code, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
-                if hex_code not in hex_set and event_name == line_split[0]:
-                    to_remove.add(hex_code)
-
-            for remove in to_remove:
-                del self.ALWAYS_EVENT_NAMES_BY_HEX[remove]
+                self.EVENT_ITEM_NAMES[hex_code] = new_event_name
 
             return
 
@@ -226,7 +229,7 @@ class WitnessPlayerLogic:
 
         if adj_type == "Region Changes":
             new_region_and_options = define_new_region(line + ":")
-            
+
             self.CONNECTIONS_BY_REGION_NAME[new_region_and_options[0]["name"]] = new_region_and_options[1]
 
             return
@@ -286,7 +289,7 @@ class WitnessPlayerLogic:
                 if not victory == 1:
                     adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
 
-            if not(doors or mountain_enterable_from_top):
+            if not (doors or mountain_enterable_from_top):
                 adjustment_linesets_in_order.append(get_mountain_lower_exclusion_list())
 
             if not mountain_enterable_from_top:
@@ -473,9 +476,12 @@ class WitnessPlayerLogic:
                         if panel == "TrueOneWay":
                             continue
 
-                        if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["region"]["name"] != region_name:
+                        entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]
+
+                        if entity_obj["region"]["name"] != region_name:
                             if panel not in self.COMPLETELY_DISABLED_ENTITIES:
-                                self.EVENT_PANELS_FROM_REGIONS.add(panel)
+                                if not (panel in self.DOOR_ITEMS_BY_ID and entity_obj["id"] is None):
+                                    self.EVENT_PANELS_FROM_REGIONS.add(panel)
 
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_REGIONS)
@@ -528,6 +534,7 @@ class WitnessPlayerLogic:
         # At the end, we will have EVENT_ITEM_PAIRS for all the necessary ones.
         self.EVENT_PANELS = set()
         self.EVENT_ITEM_PAIRS = dict()
+        self.DONT_MAKE_EVENTS = set()
         self.ALWAYS_EVENT_HEX_CODES = set()
         self.COMPLETELY_DISABLED_ENTITIES = set()
         self.PRECOMPLETED_LOCATIONS = set()
@@ -619,12 +626,8 @@ class WitnessPlayerLogic:
             "0x09F6E": "Mountain Floor 1 Exit Door Requirement 3",
             "0x09EAF": "Mountain Floor 1 Exit Door Requirement 4",
             "0x03608": "Desert Elevator Goes Up",
-        }
-
-        self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "Symmetry Laser Activation",
             "0x012FB": "Desert Laser Activation",
-            "0x09F98": "Desert Laser Redirection",
             "0x01539": "Quarry Laser Activation",
             "0x181B3": "Shadows Laser Activation",
             "0x014BB": "Keep Laser Activation",
@@ -634,7 +637,10 @@ class WitnessPlayerLogic:
             "0x0C2B2": "Bunker Laser Activation",
             "0x00BF6": "Swamp Laser Activation",
             "0x028A4": "Treehouse Laser Activation",
+            "0x09F98": "Desert Laser Redirection",
         }
+
+        self.ALWAYS_EVENT_NAMES_BY_HEX = dict()
 
         self.make_options_adjustments(world)
         self.make_dependency_reduced_checklist()

@@ -20,9 +20,7 @@ class WitnessLogic(LogicMixin):
     Logic macros that get reused
     """
 
-    def _witness_has_lasers(self, world: World, player: int, amount: int) -> bool:
-        regular_lasers = not is_option_enabled(world, "shuffle_lasers")
-
+    def _witness_has_lasers(self, player: int, amount: int) -> bool:
         lasers = 0
 
         place_names = [
@@ -31,9 +29,7 @@ class WitnessLogic(LogicMixin):
         ]
 
         for place in place_names:
-            has_laser = self.has(place + " Laser", player)
-
-            has_laser = has_laser or (regular_lasers and self.has(place + " Laser Activation", player))
+            has_laser = self.has(place + " Laser", player) or self.has(place + " Laser Activation", player)
 
             if place == "Desert":
                 has_laser = has_laser and self.has("Desert Laser Redirection", player)
@@ -78,13 +74,13 @@ class WitnessLogic(LogicMixin):
                 if item == "7 Lasers":
                     laser_req = get_option_value(world, "mountain_lasers")
 
-                    if not self._witness_has_lasers(world, player, laser_req):
+                    if not self._witness_has_lasers(player, laser_req):
                         valid_option = False
                         break
                 elif item == "11 Lasers":
                     laser_req = get_option_value(world, "challenge_lasers")
 
-                    if not self._witness_has_lasers(world, player, laser_req):
+                    if not self._witness_has_lasers(player, laser_req):
                         valid_option = False
                         break
                 elif item == "PP2 Weirdness":
