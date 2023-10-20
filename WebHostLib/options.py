@@ -85,7 +85,7 @@ def create():
                 }
 
                 if issubclass(option, Options.NamedRange):
-                    game_options[option_name]["type"] = 'special_range'
+                    game_options[option_name]["type"] = 'named_range'
                     game_options[option_name]["value_names"] = {}
                     for key, val in option.special_range_names.items():
                         game_options[option_name]["value_names"][key] = val

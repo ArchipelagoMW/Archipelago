@@ -194,7 +194,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         element.appendChild(randomButton);
         break;
 
-      case 'special_range':
+      case 'named_range':
         element = document.createElement('div');
         element.classList.add('special-range-container');
 

@@ -93,7 +93,7 @@ class WeightedSettings {
             });
             break;
           case 'range':
-          case 'special_range':
+          case 'named_range':
             this.current[game][gameSetting]['random'] = 0;
             this.current[game][gameSetting]['random-low'] = 0;
             this.current[game][gameSetting]['random-high'] = 0;
@@ -518,7 +518,7 @@ class GameSettings {
           break;
 
         case 'range':
-        case 'special_range':
+        case 'named_range':
           const rangeTable = document.createElement('table');
           const rangeTbody = document.createElement('tbody');
 
