@@ -197,7 +197,7 @@ class SC2Logic(LogicMixin):
             (self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.INFESTOR, player))
 
     def _sc2hots_has_minimal_antiair(self, multiworld: MultiWorld, player: int) -> bool:
-        return self._sc2hots_has_good_antiair(multiworld, player) or get_option_value(multiworld, player, 'kerriganless') in kerrigan_unit_available or \
+        return self._sc2hots_has_good_antiair(multiworld, player) or get_option_value(multiworld, player, 'kerrigan_presence') in kerrigan_unit_available or \
             self.has(ItemNames.SWARM_QUEEN, player) or (self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.SPORE_CRAWLER, player))
     
     def _sc2hots_has_brood_lord(self, multiworld: MultiWorld, player: int) -> bool:
