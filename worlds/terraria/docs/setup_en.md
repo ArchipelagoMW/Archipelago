@@ -31,6 +31,7 @@ highly recommended to use utility mods and features to speed up gameplay, such a
     - (Can be used to break progression)
 - Reduced Grinding
 - Upgraded Research
+    - (Automatically researchers certain items so don't be afraid when they don't appear in your inventory)
 
 ## Configuring your YAML File
 
