@@ -897,19 +897,22 @@ def distribute_planned(world: MultiWorld) -> None:
             for item_name in items:
                 item = world.worlds[player].create_item(item_name)
                 for location in reversed(candidates):
-                    if not location.item:
-                        if location.item_rule(item):
-                            if location.can_fill(world.state, item, False):
-                                successful_pairs.append((item, location))
-                                candidates.remove(location)
-                                count = count + 1
-                                break
+                    if (location.address is None) == (item.code is None):  # either both None or both not None
+                        if not location.item:
+                            if location.item_rule(item):
+                                if location.can_fill(world.state, item, False):
+                                    successful_pairs.append((item, location))
+                                    candidates.remove(location)
+                                    count = count + 1
+                                    break
+                                else:
+                                    err.append(f"Can't place item at {location} due to fill condition not met.")
                             else:
-                                err.append(f"Can't place item at {location} due to fill condition not met.")
+                                err.append(f"{item_name} not allowed at {location}.")
                         else:
-                            err.append(f"{item_name} not allowed at {location}.")
+                            err.append(f"Cannot place {item_name} into already filled location {location}.")
                     else:
-                        err.append(f"Cannot place {item_name} into already filled location {location}.")
+                        err.append(f"Mismatch between {item_name} and {location}, only one is an event.")
                 if count == maxcount:
                     break
             if count < placement['count']['min']:
