@@ -296,7 +296,7 @@ class YIWorld(World):
         if name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and self.options.item_logic.value == 1:
             item.classification = ItemClassification.progression
 
-        if name == 'Piece of Luigi' and world.options.goal.value != 0:
+        if name == 'Piece of Luigi' and self.options.goal.value != 0:
             if self.luigi_count >= self.options.luigi_pieces_required.value:
                 item.classification = ItemClassification.useful
             else:
