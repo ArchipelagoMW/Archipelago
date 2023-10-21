@@ -39,7 +39,7 @@ function define_location_ids()
     location_ids["Mega-Potion"]           = 2671033
     location_ids["Ether"]                 = 2671034
     location_ids["Mega-Ether"]            = 2671035
-    location_ids["Elxir"]                 = 2671036
+    location_ids["Elixir"]                = 2671036
     location_ids["Megalixir"]             = 2671037
     location_ids["Guard Armor"]           = 2671038
     location_ids["Parasite Cage"]         = 2671039
@@ -71,7 +71,7 @@ function define_location_ids()
     location_ids["Fat Bandit"]            = 2672012
     location_ids["Barrel Spider"]         = 2672013
     location_ids["Search Ghost"]          = 2672014
-    location_ids["Sea Neon"]               = 2672015
+    location_ids["Sea Neon"]              = 2672015
     location_ids["Screwdriver"]           = 2672016
     location_ids["Aquatank"]              = 2672017
     location_ids["Wight Knight"]          = 2672018
@@ -620,6 +620,20 @@ function set_moogle_points(value)
     memory.write_u32_le(moogle_points_address, value)
 end
 
+function can_complete_floor(floor_number)
+    if floor_number < 10 then
+        return get_stored_gold_cards("Key of Beginnings", floor_number) > 0 and get_stored_gold_cards("Key of Guidance", floor_number) > 0 and get_stored_gold_cards("Key to Truth", floor_number) > 0
+    elseif floor_number == 12 then
+        return get_stored_gold_cards("Key of Beginnings", floor_number) > 0 and get_stored_gold_cards("Key of Guidance", floor_number)
+    elseif floor_number == 11 then
+        return get_stored_gold_cards("Key of Beginnings", floor_number) > 0
+    elseif floor_number == 10 then
+        return true
+    else
+        return false
+    end
+end
+
 function update_current_gold_card_qty(current_floor)
     memory.writebyte(current_gold_map_cards_addresses["Key of Beginnings"], get_stored_gold_cards("Key of Beginnings", current_floor))
     if get_stored_gold_cards("Key of Beginnings", current_floor) < 1 then
@@ -641,18 +655,21 @@ function update_world_cards(current_floor)
 end
 
 function update_highest_warp_floor(past_highest_warp_floor, current_highest_warp_floor)
-    if current_highest_warp_floor < 6 then
-        memory.writebyte(highest_warp_floor_address, (6-1)*2)
+    if can_complete_floor(12) and can_complete_floor(11) and can_complete_floor(9) and can_complete_floor(6) then
+        memory.writebyte(highest_warp_floor_address, (14-1)*2)
         return
-    elseif current_highest_warp_floor == get_floor_number() and current_highest_warp_floor == 7 then
+    elseif can_complete_floor(11) and can_complete_floor(9) and can_complete_floor(6) then
+        memory.writebyte(highest_warp_floor_address, (12-1)*2)
+        return
+    elseif can_complete_floor(9) and can_complete_floor(6) then
+        memory.writebyte(highest_warp_floor_address, (11-1)*2)
+        return
+    elseif can_complete_floor(6) then
         memory.writebyte(highest_warp_floor_address, (9-1)*2)
         return
-    elseif current_highest_warp_floor == get_floor_number() and current_highest_warp_floor > 9 then
-        return
-    elseif current_highest_warp_floor > 10 then
-        return
     else
-        memory.writebyte(highest_warp_floor_address, (past_highest_warp_floor-1)*2)
+        memory.writebyte(highest_warp_floor_address, (6-1)*2)
+        return
     end
 end
 

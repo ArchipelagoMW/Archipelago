@@ -38,7 +38,7 @@ location_table: Dict[str, KHCOMLocationData] = {
     "Lady Luck":             KHCOMLocationData("Progression", 267_1011),
     "Divine Rose":           KHCOMLocationData("Progression", 267_1012),
     "Oathkeeper":            KHCOMLocationData("Progression", 267_1013),
-    "Oblivion":              KHCOMLocationData("Progression", 267_1014),
+    #"Oblivion":              KHCOMLocationData("Progression", 267_1014), missable
     "Diamond Dust":          KHCOMLocationData("Progression", 267_1015),
     "One Winged Angel":      KHCOMLocationData("Progression", 267_1016),
     "Fire":                  KHCOMLocationData("Boss", 267_1017),
@@ -60,7 +60,7 @@ location_table: Dict[str, KHCOMLocationData] = {
     "Mega-Potion":           KHCOMLocationData("Boss", 267_1033),
     "Ether":                 KHCOMLocationData("Boss", 267_1034),
     "Mega-Ether":            KHCOMLocationData("Boss", 267_1035),
-    "Elxir":                 KHCOMLocationData("Boss", 267_1036),
+    "Elixir":                KHCOMLocationData("Boss", 267_1036),
     "Megalixir":             KHCOMLocationData("Progression", 267_1037),
     "Guard Armor":           KHCOMLocationData("Boss", 267_1038),
     "Parasite Cage":         KHCOMLocationData("Boss", 267_1039),
@@ -75,7 +75,7 @@ location_table: Dict[str, KHCOMLocationData] = {
     "Dragon Maleficent":     KHCOMLocationData("Boss", 267_1048),
     "Riku":                  KHCOMLocationData("Boss", 267_1049),
     "Axel":                  KHCOMLocationData("Boss", 267_1050),
-    "Larxene":               KHCOMLocationData("Boss", 267_1051),
+    #"Larxene":               KHCOMLocationData("Boss", 267_1051), missable
     "Vexen":                 KHCOMLocationData("Boss", 267_1052),
     "Marluxia":              KHCOMLocationData("Boss", 267_1053),
     

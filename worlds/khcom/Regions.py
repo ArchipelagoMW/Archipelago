@@ -203,13 +203,14 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 12"].locations.append("Key of Guidance F12")
     #Post Floor Boss
     regions["Floor 12"].locations.append("Riku")
-    regions["Floor 12"].locations.append("Larxene")
+    #regions["Floor 12"].locations.append("Larxene") missable?
     #Room of Rewards
     regions["Floor 12"].locations.append("Megalixir")
     
     # Floor 13 Castle Oblivion
     # Standard Cards
-    regions["Floor 13"].locations.append("Divine Rose")
+    regions["Floor 13"].locations.append("Oathkeeper")
+    #regions["Floor 13"].locations.append("Oblivion") missable?
     # KOB, KOG, KTT Rewards
     regions["Floor 13"].locations.append("Axel")
     regions["Floor 13"].locations.append("Marluxia")
