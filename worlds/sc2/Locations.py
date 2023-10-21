@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
-from .Options import get_option_value, kerrigan_unit_available, RequiredTactics
+from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech
 
 from BaseClasses import Location
 
@@ -33,6 +33,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
     logic_level = get_option_value(multiworld, player, 'required_tactics')
     adv_tactics = logic_level != RequiredTactics.option_standard
     kerriganless = get_option_value(multiworld, player, 'kerrigan_presence') not in kerrigan_unit_available
+    story_tech_granted = get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true
     location_table: List[LocationData] = [
         # WoL
         LocationData("Liberation Day", "Liberation Day: Victory", SC2WOL_LOC_ID_OFFSET + 100, LocationType.VICTORY),
@@ -515,12 +516,12 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Lab Rat", "Lab Rat: West Zergling Group", SC2HOTS_LOC_ID_OFFSET + 104, LocationType.BONUS,
                      lambda state: adv_tactics or state._sc2hots_has_common_unit(multiworld, player)),
         LocationData("Back in the Saddle", "Back in the Saddle: Victory", SC2HOTS_LOC_ID_OFFSET + 200, LocationType.VICTORY,
-                     lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
+                     lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless or story_tech_granted),
         LocationData("Back in the Saddle", "Back in the Saddle: Kinetic Blast", SC2HOTS_LOC_ID_OFFSET + 202, LocationType.MISSION_PROGRESS),
         LocationData("Back in the Saddle", "Back in the Saddle: Crushing Grip", SC2HOTS_LOC_ID_OFFSET + 203, LocationType.MISSION_PROGRESS),
         LocationData("Back in the Saddle", "Back in the Saddle: Reach the Sublevel", SC2HOTS_LOC_ID_OFFSET + 204, LocationType.MISSION_PROGRESS),
         LocationData("Back in the Saddle", "Back in the Saddle: Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201, LocationType.MISSION_PROGRESS,
-                     lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless),
+                     lambda state: state._sc2hots_has_basic_kerrigan(multiworld, player) or kerriganless or story_tech_granted),
         LocationData("Rendezvous", "Rendezvous: Victory", SC2HOTS_LOC_ID_OFFSET + 300, LocationType.VICTORY,
                      lambda state: state._sc2hots_has_low_tech(multiworld, player) and
                                    state._sc2hots_has_minimal_antiair(multiworld, player)),
