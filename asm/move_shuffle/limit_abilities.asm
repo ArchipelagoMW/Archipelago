@@ -276,17 +276,21 @@ LimitWarioAbility_Swim_Fat:
 
 
 ; Prevent Wario breaking blocks with his head.
-; Undecided on whether Bouncy Wario should retain this ability like how Fat
-; Wario is allowed to break hard blocks
+; Bouncy Wario can still break blocks.
 LimitWarioAbility_HeadSmash:
+        ldr r0, =Wario_ucReact
+        ldrb r0, [r0]
+        cmp r0, #7
+        beq @@HeadSmash
+
         get_wario_move MoveBit_HeadSmash
         cmp r0, #0
-        bne @@ReplacedCode
+        bne @@HeadSmash
 
         ldr r0, =0x806EE7C
         mov pc, r0
 
-    @@ReplacedCode:
+    @@HeadSmash:
         mov r0, sp
         call_using r1, PanelPartWork_Broken_Main
         mov r3, r0
