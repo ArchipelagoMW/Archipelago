@@ -847,7 +847,7 @@ def distribute_planned(world: MultiWorld) -> None:
                 for target_player in worlds:
                     locations += non_early_locations[target_player]
 
-            block['locations'] = locations
+            block['locations'] = list(dict.fromkeys(locations))
 
             if not block['count']:
                 block['count'] = (min(len(block['items']), len(block['locations'])) if
