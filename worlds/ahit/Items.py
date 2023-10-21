@@ -262,7 +262,7 @@ relic_groups = {
     "Train": {"Relic (Mountain Set)", "Relic (Train)"},
     "UFO": {"Relic (UFO)", "Relic (Cow)", "Relic (Cool Cow)", "Relic (Tin-foil Hat Cow)"},
     "Crayon": {"Relic (Crayon Box)", "Relic (Red Crayon)", "Relic (Blue Crayon)", "Relic (Green Crayon)"},
-    "Cake": {"Relic (Cake Stand)", "Relic (Cake)", "Relic (Cake Slice)", "Relic (Shortcake)"},
+    "Cake": {"Relic (Cake Stand)", "Relic (Chocolate Cake)", "Relic (Chocolate Cake Slice)", "Relic (Shortcake)"},
     "Necklace": {"Relic (Necklace Bust)", "Relic (Necklace)"},
 }
 

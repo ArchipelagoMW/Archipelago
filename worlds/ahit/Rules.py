@@ -642,9 +642,12 @@ def set_mafia_town_rules(world: World):
 
 def set_botb_rules(world: World):
     if world.multiworld.UmbrellaLogic[world.player].value == 0 and get_difficulty(world) < Difficulty.MODERATE:
-        for loc in world.multiworld.get_region("Dead Bird Studio - Post Elevator Area", world.player).locations:
-            set_rule(loc, lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
-
+        set_rule(world.multiworld.get_location("Dead Bird Studio - DJ Grooves Sign Chest", world.player),
+                 lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
+        set_rule(world.multiworld.get_location("Dead Bird Studio - Tepee Chest", world.player),
+                 lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
+        set_rule(world.multiworld.get_location("Dead Bird Studio - Conductor Chest", world.player),
+                 lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
         set_rule(world.multiworld.get_location("Act Completion (Dead Bird Studio)", world.player),
                  lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
 

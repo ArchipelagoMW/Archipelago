@@ -306,8 +306,8 @@ class YarnAvailable(Range):
     """How much yarn is available to collect in the item pool."""
     display_name = "Yarn Available"
     range_start = 30
-    range_end = 75
-    default = 45
+    range_end = 80
+    default = 50
 
 
 class MinExtraYarn(Range):
