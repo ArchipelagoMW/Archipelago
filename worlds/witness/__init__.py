@@ -69,7 +69,7 @@ class WitnessWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': self.multiworld.per_slot_randoms[self.player].randint(0, 1000000),
+            'seed': self.random.randint(0, 1000000),
             'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
             'item_id_to_door_hexes': StaticWitnessItems.get_item_to_door_mappings(),
@@ -267,7 +267,7 @@ class WitnessWorld(World):
         if hint_amount != 0:
             generated_hints = make_hints(self, hint_amount, self.own_itempool)
 
-            self.multiworld.per_slot_randoms[self.player].shuffle(audio_logs)
+            self.random.shuffle(audio_logs)
 
             duplicates = min(3, len(audio_logs) // hint_amount)
 
