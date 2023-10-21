@@ -20,10 +20,9 @@ from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProc
 
 
 class KHCOMClientCommandProcessor(ClientCommandProcessor):
-    def _cmd_resync(self):
-        """Manually trigger a resync."""
-        self.output(f"Syncing items.")
-        self.ctx.syncing = True
+    def _cmd_test(self):
+        """Test"""
+        self.output(f"Test")
 
 
 class KHCOMContext(CommonContext):

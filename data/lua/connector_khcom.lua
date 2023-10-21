@@ -972,8 +972,8 @@ function is_used(card_value)
 end
 
 function check_if_victorious()
-    i = 0
-    battle_cards = get_battle_cards()
+    local i = 0
+    local battle_cards = get_battle_cards()
     for k,v in pairs(battle_cards) do
         for ik, iv in pairs(win_conditions) do
             if v == iv then

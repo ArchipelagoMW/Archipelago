@@ -125,7 +125,6 @@ def create_regions(multiworld: MultiWorld, player: int):
     # Floor 6 Halloween Town
     # Standard Cards
     regions["Floor 6"].locations.append("Pumpkinhead")
-    regions["Floor 6"].locations.append("Gravity")
     # KOB, KOG, KTT Rewards
     regions["Floor 6"].locations.append("Oogie Boogie")
     regions["Floor 6"].locations.append("Key of Beginnings F06")
