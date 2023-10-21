@@ -21,7 +21,7 @@ server_options:
   location_check_points: 1
   # Relative point cost to receive a hint via !hint for players
   # so for example hint_cost: 20 would mean that for every 20% of available checks, you get the ability to hint, for a total of 5
-  hint_cost: 10 # Set to 0 if you want free hints
+  hint_cost: 0 # Set to 0 if you want free hints
   # Forfeit modes
   # A Forfeit sends out the remaining items *from* a world that forfeits
   # "disabled" -> clients can't forfeit,
@@ -29,7 +29,7 @@ server_options:
   # "auto" -> automatic forfeit on goal completion
   # "auto-enabled" -> automatic forfeit on goal completion and manual forfeit is also enabled
   # "goal" -> forfeit is allowed after goal completion
-  forfeit_mode: "goal"
+  forfeit_mode: "enabled"
   # Collect modes
   # A Collect sends the remaining items *to* a world that collects
   # "disabled" -> clients can't collect,
@@ -37,13 +37,13 @@ server_options:
   # "auto" -> automatic collect on goal completion
   # "auto-enabled" -> automatic collect on goal completion and manual collect is also enabled
   # "goal" -> collect is allowed after goal completion
-  collect_mode: "goal"
+  collect_mode: "enabled"
   # Remaining modes
   # !remaining handling, that tells a client which items remain in their pool
   # "enabled" -> Client can always ask for remaining items
   # "disabled" -> Client can never ask for remaining items
   # "goal" -> Client can ask for remaining items after goal completion
-  remaining_mode: "goal"
+  remaining_mode: "enabled"
   # Automatically shut down the server after this many seconds without new location checks, 0 to keep running
   auto_shutdown: 0
   # Compatibility handling
