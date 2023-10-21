@@ -670,8 +670,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 start_items[SC2Race.ANY][1],
                 start_items[SC2Race.ANY][2]
             ))
-            terran_items = start_items[SC2Race.TERRAN]
-            await self.updateTerranTech(terran_items)
+            await self.updateTerranTech(start_items)
             await self.updateZergTech(start_items)
             await self.chat_send("?GiveProtossTech {}".format(start_items[SC2Race.PROTOSS][0]))
             await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
@@ -698,8 +697,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
-                terran_items = current_items[SC2Race.TERRAN]
-                await self.updateTerranTech(terran_items)
+                await self.updateTerranTech(current_items)
                 await self.updateZergTech(current_items)
                 await self.chat_send("?GiveProtossTech {}".format(current_items[SC2Race.PROTOSS][0]))
                 self.last_received_update = len(self.ctx.items_received)
@@ -741,7 +739,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
-    async def updateTerranTech(self, terran_items):
+
+    async def updateTerranTech(self, current_items):
+        terran_items = current_items[SC2Race.TERRAN]
         await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
             terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
             terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
@@ -751,7 +751,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         zerg_items = current_items[SC2Race.ZERG]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, current_items)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
-        await self.chat_send("?GiveZergTech {} {} {} {} {} {} {}".format(
+        await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {}".format(
             self.last_kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
             zerg_items[3], zerg_items[4], zerg_items[5]
         ))

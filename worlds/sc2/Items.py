@@ -1335,8 +1335,10 @@ item_table = {
     ItemNames.INFESTED_BANSHEES: ItemData(602 + SC2HOTS_ITEM_ID_OFFSET, "Mercenary", 0, SC2Race.ZERG, origin={"ext"}),
 }
 
+
 def get_item_table(multiworld: MultiWorld, player: int):
     return item_table
+
 
 basic_units = {
     SC2Race.TERRAN: {
