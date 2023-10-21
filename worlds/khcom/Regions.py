@@ -168,7 +168,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     # Standard Cards
     regions["Floor 9"].locations.append("Divine Rose")
     # KOB, KOG, KTT Rewards
-    regions["Floor 9"].locations.append("Dragon Malificent")
+    regions["Floor 9"].locations.append("Dragon Maleficent")
     regions["Floor 9"].locations.append("Key of Beginnings F09")
     regions["Floor 9"].locations.append("Key of Guidance F09")
     regions["Floor 9"].locations.append("Key to Truth F09")

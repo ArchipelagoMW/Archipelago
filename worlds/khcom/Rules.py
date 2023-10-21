@@ -51,7 +51,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("Aero"               , player).access_rule = lambda state: has_room_of_truth     (state, player, "07")
     multiworld.get_location("Hook"               , player).access_rule = lambda state: has_room_of_truth     (state, player, "08")
     multiworld.get_location("Tinker Bell"        , player).access_rule = lambda state: has_room_of_truth     (state, player, "08")
-    multiworld.get_location("Dragon Malificent"  , player).access_rule = lambda state: has_room_of_truth     (state, player, "09")
+    multiworld.get_location("Dragon Maleficent"  , player).access_rule = lambda state: has_room_of_truth     (state, player, "09")
     multiworld.get_location("Vexen"              , player).access_rule = lambda state: has_room_of_beginnings(state, player, "11")
     multiworld.get_location("Mega-Potion"        , player).access_rule = lambda state: has_room_of_beginnings(state, player, "11")
     multiworld.get_location("Darkside"           , player).access_rule = lambda state: has_room_of_guidance  (state, player, "12")

@@ -229,7 +229,7 @@ function define_battle_cards()
     battle_cards["Oogie Boogie"] = {0x229, 0x229}
     battle_cards["Ursula"] = {0x22A, 0x22A}
     battle_cards["Hook"] = {0x22B, 0x22B}
-    battle_cards["Dragon Malificent"] = {0x22C, 0x22C}
+    battle_cards["Dragon Maleficent"] = {0x22C, 0x22C}
     battle_cards["Shadow"] = {0x1C2, 0x1C4}
     battle_cards["Soldier"] = {0x1C5, 0x1C7}
     battle_cards["Large Body"] = {0x1C8, 0x1CA}
@@ -413,7 +413,7 @@ bronze_pack_enemy_cards = {"Shadow", "Soldier", "Large Body", "Card Soldier (Red
 silver_pack_attack_cards = {"Lionheart", "Metal Chocobo", "Spellbinder", "Divine Rose", "Crabclaw"}
 silver_pack_magic_cards = {"Cure", "Stop", "Gravity", "Aero", "Bambi", "Mushu", "Tinker Bell"}
 silver_pack_item_cards = {"Mega-Potion", "Elixir", "Mega-Ether"}
-silver_pack_enemy_cards = {"Guard Armor", "Trickmaster", "Hades", "Parasite Cage", "Jafar", "Oogie Boogie", "Ursula", "Hook", "Dragon Malificent"}
+silver_pack_enemy_cards = {"Guard Armor", "Trickmaster", "Hades", "Parasite Cage", "Jafar", "Oogie Boogie", "Ursula", "Hook", "Dragon Maleficent"}
 
 gold_pack_attack_cards = {"Oathkeeper", "Oblivion", "Diamond Dust", "One-Winged Angel", "Ultima Weapon"}
 gold_pack_item_cards = {"Megalixir"}
@@ -642,12 +642,17 @@ end
 
 function update_highest_warp_floor(past_highest_warp_floor, current_highest_warp_floor)
     if current_highest_warp_floor < 6 then
-        memory.writebyte(highest_warp_floor_address, 0x0A)
+        memory.writebyte(highest_warp_floor_address, (6-1)*2)
         return
-    end
-    if current_highest_warp_floor > 6 and current_highest_warp_floor < 9 and get_floor_number() > 6 and get_floor_number() < 9 then
-        memory.writebyte(highest_warp_floor_address, 0x10)
+    elseif current_highest_warp_floor == get_floor_number() and current_highest_warp_floor == 7 then
+        memory.writebyte(highest_warp_floor_address, (9-1)*2)
         return
+    elseif current_highest_warp_floor == get_floor_number() and current_highest_warp_floor > 9 then
+        return
+    elseif current_highest_warp_floor > 10 then
+        return
+    else
+        memory.writebyte(highest_warp_floor_address, (past_highest_warp_floor-1)*2)
     end
 end
 
