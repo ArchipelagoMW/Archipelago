@@ -29,7 +29,7 @@ class CMWorld(World):
     game: str = "ChecksMate"
     option_definitions = cm_options
     data_version = 0
-    required_client_version = (0, 3, 6)
+    required_client_version = (0, 4, 3)
     web = CMWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -67,6 +67,7 @@ class CMWorld(World):
         self.multiworld.regions.append(region)
 
     def generate_basic(self):
-        self.multiworld.get_location("Checkmate", self.player).place_locked_item(CMItem("Victory", ItemClassification.progression, 4_016, self.player))
+        (self.multiworld.get_location("Checkmate Maxima", self.player).
+         place_locked_item(CMItem("Victory", ItemClassification.progression, 4_065, self.player)))
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
