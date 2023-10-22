@@ -172,7 +172,7 @@ class WorldTestBase(unittest.TestCase):
             items = (items,)
         for item in items:
             self.multiworld.state.collect(item)
-    
+
     def remove_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
         """Remove all of the items in the item pool with the given names from state"""
         items = self.get_items_by_name(item_names)
@@ -278,7 +278,6 @@ class WorldTestBase(unittest.TestCase):
 
     def testFill(self):
         """Generates a multiworld and validates placements with the defined options"""
-        # don't run this test if accessibility is set manually
         if not (self.run_default_tests and self.constructed):
             return
         from Fill import distribute_items_restrictive
@@ -301,8 +300,8 @@ class WorldTestBase(unittest.TestCase):
                         state.collect(location.item, True, location)
                 
             return self.multiworld.has_beaten_game(state, 1)
-        
-        with self.subTest("Game", game=self.game):
+
+        with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
             self.assertTrue(fulfills_accessibility(), "Collected all locations, but can't beat the game.")
