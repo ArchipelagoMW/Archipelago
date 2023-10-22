@@ -106,11 +106,23 @@ class AutoLogicRegister(type):
         return new_class
 
 
+def _timed_call(method, *args, multiworld: "MultiWorld" = None, player: int = None):
+    start = time.perf_counter()
+    ret = method(*args)
+    taken = time.perf_counter() - start
+    if taken > 0.1:
+        if player and multiworld:
+            perf_logger.info(f"Took {taken} seconds in {method} for player {player}, "
+                             f"named {multiworld.player_name[player]}.")
+        else:
+            perf_logger.info(f"Took {taken} seconds in {method}.")
+    return ret
+
+
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
-    start = time.perf_counter()
     try:
-        ret = method(*args)
+        ret = _timed_call(method, *args, multiworld=multiworld, player=player)
     except Exception as e:
         message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
         if sys.version_info >= (3, 11, 0):
@@ -119,10 +131,6 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
             logging.error(message)
         raise e
     else:
-        taken = time.perf_counter()-start
-        if taken > 0.1:
-            perf_logger.info(f"Took {taken} seconds in {method} for player {player}, "
-                             f"named {multiworld.player_name[player]}.")
         return ret
 
 
@@ -140,14 +148,7 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
                         f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
                         f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
-    for world_type in sorted(world_types, key=lambda world: world.__name__):
-        stage_callable = getattr(world_type, f"stage_{method_name}", None)
-        if stage_callable:
-            start = time.perf_counter()
-            stage_callable(multiworld, *args)
-            taken = time.perf_counter() - start
-            if taken > 0.1:
-                perf_logger.info(f"Took {taken} seconds in {stage_callable}.")
+    call_stage(multiworld, method_name, *args)
 
 
 def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
@@ -155,7 +156,7 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(multiworld, *args)
+            _timed_call(stage_callable, multiworld, *args)
 
 
 class WebWorld:
