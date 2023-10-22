@@ -815,6 +815,8 @@ class OOTWorld(World):
                     locations = gather_locations(self.multiworld, fill_stage, self.player, dungeon=dungeon_name)
                     if isinstance(locations, list):
                         dungeon_items = list(filter(lambda item: dungeon_name in item.name, stage_items))
+                        if not dungeon_items:
+                            continue
                         for item in dungeon_items:
                             self.multiworld.itempool.remove(item)
                         self.multiworld.random.shuffle(locations)
@@ -824,7 +826,7 @@ class OOTWorld(World):
         # Place songs
         # 5 built-in retries because this section can fail sometimes
         if self.shuffle_song_items != 'any':
-            tries = 5
+            tries = 10
             if self.shuffle_song_items == 'song':
                 song_locations = list(filter(lambda location: location.type == 'Song',
                                              self.multiworld.get_unfilled_locations(player=self.player)))
@@ -1291,25 +1293,13 @@ class OOTWorld(World):
     # Specifically ensures that only real items are gotten, not any events.
     # In particular, ensures that Time Travel needs to be found.
     def get_state_with_complete_itempool(self):
-        all_state = self.multiworld.get_all_state(use_cache=False)
-        # Remove event progression items
-        for item, player in all_state.prog_items:
-            if player == self.player and (item not in item_table or item_table[item][2] is None):
-                all_state.prog_items[(item, player)] = 0
-        # Remove all events and checked locations
-        all_state.locations_checked = {loc for loc in all_state.locations_checked if loc.player != self.player}
-        all_state.events = {loc for loc in all_state.events if loc.player != self.player}
+        all_state = CollectionState(self.multiworld)
+        for item in self.multiworld.itempool:
+            if item.player == self.player:
+                self.multiworld.worlds[item.player].collect(all_state, item)
         # If free_scarecrow give Scarecrow Song
         if self.free_scarecrow:
             all_state.collect(self.create_item("Scarecrow Song"), event=True)
-
-        # Invalidate caches
-        all_state.child_reachable_regions[self.player] = set()
-        all_state.adult_reachable_regions[self.player] = set()
-        all_state.child_blocked_connections[self.player] = set()
-        all_state.adult_blocked_connections[self.player] = set()
-        all_state.day_reachable_regions[self.player] = set()
-        all_state.dampe_reachable_regions[self.player] = set()
         all_state.stale[self.player] = True
 
         return all_state
