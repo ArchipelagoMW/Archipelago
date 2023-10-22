@@ -287,11 +287,12 @@ class OpenRCT2World(World):
             if rule_type == "ride":
                 add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],
                  lambda state, prereq=item: state.has(prereq, self.player))
-                if item in item_info["requires_height"]:
+                 #Only add rules if there's an item to be unlocked in the first place
+                if (item in item_info["requires_height"]) and (self.multiworld.forbid_high_construction[self.player].value == 1):
                     add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],
                      lambda state, prereq="Allow High Construction": state.has(prereq, self.player))
                     print("Added rule: \nHave: Allow High Construction\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
-                if item in item_info["requires_landscaping"]:
+                if (item in item_info["requires_landscaping"]) and self.multiworld.forbid_landscape_changes[self.player].value == 1:
                     add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],
                      lambda state, prereq="Allow Landscape Changes": state.has(prereq, self.player))
                     print("Added rule: \nHave: Allow Landscape Changes\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
@@ -419,9 +420,11 @@ class OpenRCT2World(World):
             #Add the shop item to the shop prices
             self.location_prices.append(unlock)
             #Handle unlocked rides
-            if item in item_info["rides"]:
-                queued_prereqs.append(item)
-            if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:#This might be my error
+            if item in item_info["rides"]:#Don't put items in that require an impossible rule
+                if not (self.multiworld.forbid_high_construction[self.player].value == 2 and item in item_info["requires_height"]):
+                    if not (self.multiworld.forbid_landscape_changes[self.player].value == 2 and item in item_info["requires_landscaping"]):
+                        queued_prereqs.append(item)
+            if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:
                 for prereq in queued_prereqs:
                     possible_prereqs.append(prereq)
                 queued_prereqs.clear()
