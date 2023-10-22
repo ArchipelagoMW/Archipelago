@@ -11,7 +11,7 @@ class TestDocs(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.tutorials_data = WebHost.create_ordered_tutorials_file()
 
-    def testHasTutorial(self):
+    def test_has_tutorial(self):
         games_with_tutorial = set(entry["gameTitle"] for entry in self.tutorials_data)
         for game_name, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
@@ -27,7 +27,7 @@ class TestDocs(unittest.TestCase):
                             self.fail(f"{game_name} has no setup tutorial. "
                                       f"Games with Tutorial: {games_with_tutorial}")
 
-    def testHasGameInfo(self):
+    def test_has_game_info(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
                 target_path = Utils.local_path("WebHostLib", "static", "generated", "docs", game_name)

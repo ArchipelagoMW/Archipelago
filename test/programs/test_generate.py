@@ -16,7 +16,7 @@ class TestGenerateMain(unittest.TestCase):
 
     generate_dir = Path(Generate.__file__).parent
     run_dir = generate_dir / "test"  # reproducible cwd that's neither __file__ nor Generate.__file__
-    abs_input_dir = Path(__file__).parent / 'data' / 'OnePlayer'
+    abs_input_dir = Path(__file__).parent / 'data' / 'one_player'
     rel_input_dir = abs_input_dir.relative_to(run_dir)  # directly supplied relative paths are relative to cwd
     yaml_input_dir = abs_input_dir.relative_to(generate_dir)  # yaml paths are relative to user_path
 

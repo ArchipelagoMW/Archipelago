@@ -4,7 +4,8 @@ from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
-    def testCreateItem(self):
+    def test_create_item(self):
+        """Test that a world can successfully create all items in its datapackage"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             proxy_world = world_type(None, 0)  # this is identical to MultiServer.py creating worlds
             for item_name in world_type.item_name_to_id:
@@ -12,7 +13,7 @@ class TestBase(unittest.TestCase):
                     item = proxy_world.create_item(item_name)
                     self.assertEqual(item.name, item_name)
 
-    def testItemNameGroupHasValidItem(self):
+    def test_item_name_group_has_valid_item(self):
         """Test that all item name groups contain valid items. """
         # This cannot test for Event names that you may have declared for logic, only sendable Items.
         # In such a case, you can add your entries to this Exclusion dict. Game Name -> Group Names
@@ -33,7 +34,7 @@ class TestBase(unittest.TestCase):
                             for item in items:
                                 self.assertIn(item, world_type.item_name_to_id)
 
-    def testItemNameGroupConflict(self):
+    def test_item_name_group_conflict(self):
         """Test that all item name groups aren't also item names."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game_name, game_name=game_name):
@@ -41,7 +42,8 @@ class TestBase(unittest.TestCase):
                     with self.subTest(group_name, group_name=group_name):
                         self.assertNotIn(group_name, world_type.item_name_to_id)
 
-    def testItemCountGreaterEqualLocations(self):
+    def test_item_count_greater_equal_locations(self):
+        """Test that by the pre_fill step under default settings, each game submits items >= locations"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)

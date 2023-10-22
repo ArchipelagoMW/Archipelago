@@ -1,8 +1,7 @@
-from argparse import Namespace
-from typing import Dict, Optional, Callable
-
-from BaseClasses import MultiWorld, CollectionState, Region
 import unittest
+from typing import Callable, Dict, Optional
+
+from BaseClasses import CollectionState, MultiWorld, Region
 
 
 class TestHelpers(unittest.TestCase):
@@ -15,7 +14,8 @@ class TestHelpers(unittest.TestCase):
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed()
 
-    def testRegionHelpers(self) -> None:
+    def test_region_helpers(self) -> None:
+        """Tests `Region.add_locations()` and `Region.add_exits()` have correct behavior"""
         regions: Dict[str, str] = {
             "TestRegion1": "I'm an apple",
             "TestRegion2": "I'm a banana",
@@ -79,4 +79,5 @@ class TestHelpers(unittest.TestCase):
                 current_region.add_exits(reg_exit_set[region])
                 exit_names = {_exit.name for _exit in current_region.exits}
                 for reg_exit in reg_exit_set[region]:
-                    self.assertTrue(f"{region} -> {reg_exit}" in exit_names, f"{region} -> {reg_exit} not in {exit_names}")
+                    self.assertTrue(f"{region} -> {reg_exit}" in exit_names,
+                                    f"{region} -> {reg_exit} not in {exit_names}")

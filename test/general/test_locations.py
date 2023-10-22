@@ -5,7 +5,7 @@ from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
-    def testCreateDuplicateLocations(self):
+    def test_create_duplicate_locations(self):
         """Tests that no two Locations share a name or ID."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             multiworld = setup_solo_multiworld(world_type)
@@ -20,7 +20,7 @@ class TestBase(unittest.TestCase):
                 self.assertLessEqual(locations.most_common(1)[0][1], 1,
                                      f"{world_type.game} has duplicate of location ID {locations.most_common(1)}")
 
-    def testLocationsInDatapackage(self):
+    def test_locations_in_datapackage(self):
         """Tests that created locations not filled before fill starts exist in the datapackage."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
@@ -30,7 +30,7 @@ class TestBase(unittest.TestCase):
                     self.assertIn(location.name, world_type.location_name_to_id)
                     self.assertEqual(location.address, world_type.location_name_to_id[location.name])
 
-    def testLocationCreationSteps(self):
+    def test_location_creation_steps(self):
         """Tests that Regions and Locations aren't created after `create_items`."""
         gen_steps = ("generate_early", "create_regions", "create_items")
         for game_name, world_type in AutoWorldRegister.world_types.items():
@@ -60,7 +60,7 @@ class TestBase(unittest.TestCase):
                 self.assertGreaterEqual(location_count, len(multiworld.get_locations()),
                                         f"{game_name} modified locations count during pre_fill")
     
-    def testLocationGroup(self):
+    def test_location_group(self):
         """Test that all location name groups contain valid locations and don't share names."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game_name, game_name=game_name):
