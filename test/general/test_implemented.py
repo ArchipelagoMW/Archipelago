@@ -34,7 +34,7 @@ class TestImplemented(unittest.TestCase):
                         self.assertFalse(hasattr(world_type, method),
                                          f"{method} must be implemented as a @classmethod named stage_{method}.")
 
-    def testSlotData(self):
+    def test_slot_data(self):
         """Tests that if a world creates slot data, it's json serializable."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             # has an await for generate_output which isn't being called
