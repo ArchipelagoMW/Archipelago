@@ -36,7 +36,11 @@ class CMWorld(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
     item_name_groups = {
-        "Pawn": {"Pawn A", "Pawn B", "Pawn C", "Pawn D", "Pawn E", "Pawn F", "Pawn G", "Pawn H"}
+        # "Pawn": {"Pawn A", "Pawn B", "Pawn C", "Pawn D", "Pawn E", "Pawn F", "Pawn G", "Pawn H"},
+        "Enemy Pawn": {"Enemy Pawn A", "Enemy Pawn B", "Enemy Pawn C", "Enemy Pawn D",
+                       "Enemy Pawn E", "Enemy Pawn F", "Enemy Pawn G", "Enemy Pawn H"},
+        "Enemy Piece": {"Enemy Piece A", "Enemy Piece B", "Enemy Piece C", "Enemy Piece D",
+                        "Enemy Piece F", "Enemy Piece G", "Enemy Piece H"},
     }
 
     item_pool: List[CMItem] = []

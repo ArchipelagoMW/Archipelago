@@ -2,6 +2,27 @@ from typing import Dict
 
 from Options import Range, Option, Choice
 
+"""
+These are not implemented yet
+"""
+
+
+class Goal(Choice):
+    """
+    How victory is defined.
+    Single: Your opponent starts with an army of 7 pieces and 8 pawns. You have a king. Finding checkmate is your goal.
+    To get there, find checks, mate!
+    Progressive: Your goal is to checkmate a full army, but their army is scattered across the multiworld. When you
+    deliver checkmate, send a check, and add a sent enemy chessman. Progressively add each enemy pawn and piece by
+    checkmating the opponent 15 times. See also ChecksFinder rows and columns.
+    Ordered Progressive: As Progressive, but the enemy chessmen are always in the progressive locations.
+    """
+    display_name = "Goal"
+    option_single = 0
+    # option_progressive = 1
+    # option_ordered_progressive = 2
+    default = 0
+
 
 class PieceLocations(Choice):
     """
@@ -46,6 +67,27 @@ class EnemyPieceTypes(Choice):
     default = 2
 
 
+class MaterialMinLimit(Choice):
+    """
+    The minimum material value of your army, once all items are collected. A FIDE army has value 39 (8+6+6+10+9). (If
+    you want consistent access to material, consider using Starting Inventory or Starting Hints in your YAML.)
+    """
+    display_name = "Minimum Material"
+    range_start = 30
+    range_end = 90
+    default = 39
+
+
+class MaterialMaxLimit(Choice):
+    """
+    The maximum material value of your army, once all items are collected. A FIDE army has value 39 (8+6+6+10+9).
+    """
+    display_name = "Maximum Material"
+    range_start = 30
+    range_end = 100
+    default = 49
+
+
 class FairyChessArmy(Choice):
     """
     Whether to mix pieces between the Different Armies. No effect if Pieces is Vanilla. Does not affect pawns.
@@ -70,11 +112,11 @@ class FairyChessPieces(Choice):
     Eurasian: Adds the Cannon and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
     """
     display_name = "Fairy Chess Pieces"
-    option_vanilla = 0
+    # option_vanilla = 0
     option_full = 1
-    option_cw_d_a = 2
-    option_cannon = 3
-    option_eurasian = 4
+    # option_cw_d_a = 2
+    # option_cannon = 3
+    # option_eurasian = 4
     default = 1
 
 
@@ -95,51 +137,55 @@ class FairyChessPawns(Choice):
 class MinorPieceTypeLimit(Range):
     """
     How many of any given type of minor piece you might play with. If set to 1, you will never start with more than 1
-    Knight, nor 1 Bishop. You may have both 1 Knight and 1 Bishop.
+    Knight, nor 1 Bishop, but you may have both 1 Knight and 1 Bishop. If set to -1, this setting is disabled.
     """
     display_name = "Minor Piece Limit by Type"
-    range_start = 1
+    range_start = -1
     range_end = 15
-    default = 2
+    default = -1
 
 
 class MajorPieceTypeLimit(Range):
     """
     How many of any given type of major piece you might play with. If set to 1, you will never start with more than 1
-    Rook.
+    Rook. If set to -1, this setting is disabled.
     """
     display_name = "Major Piece Limit by Type"
-    range_start = 1
+    range_start = -1
     range_end = 15
-    default = 2
+    default = -1
 
 
 class QueenPieceTypeLimit(Range):
     """
     How many of any given type of Queen-equivalent piece you might play with. If set to 1, you will never start with
-    more than 1 Queen. You may have both 1 Queen and 1 Amazon.
+    more than 1 Queen. You may have both 1 Queen and 1 Amazon. If set to -1, this setting is disabled.
     """
     display_name = "Queen Piece Limit by Type"
-    range_start = 1
+    range_start = -1
     range_end = 15
-    default = 2
+    default = -1
 
 
 class QueenPieceLimit(Range):
     """
     How many Queen-equivalent pieces you might play with. If set to 1, you will never start with more than 1 piece
-    upgraded to a Queen. You may still promote pawns to any piece during a game by moving them to the distant rank.
+    upgraded to a Queen. (This should be equal to or lower than 'Queen Piece Limit by Type'.)  You may still promote
+    pawns to any piece during a game by moving them to the distant rank. If set to -1, this setting is disabled.
     """
     display_name = "Queen Piece Limit"
-    range_start = 1
+    range_start = -1
     range_end = 15
-    default = 1
+    default = -1
 
 
 cm_options: Dict[str, type(Option)] = {
+    "goal": Goal,
     "piece_locations": PieceLocations,
     "piece_types": PieceTypes,
     "enemy_piece_types": EnemyPieceTypes,
+    "max_material": MaterialMaxLimit,
+    "min_material": MaterialMinLimit,
     "fairy_chess_army": FairyChessArmy,
     "fairy_chess_pieces": FairyChessPieces,
     "fairy_chess_pawns": FairyChessPawns,

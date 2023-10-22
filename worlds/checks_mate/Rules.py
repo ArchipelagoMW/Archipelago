@@ -87,6 +87,10 @@ def set_rules(multiworld: MultiWorld, player: int):
     for piece, material in capture_expectations.items():
         set_rule(multiworld.get_location(piece, player), lambda state, v=material: state.has_piece_material(player, v))
 
+    ###
+    # inelegance is malleable
+    ###
+
     # piece must exist to be captured
     set_rule(multiworld.get_location("Capture 2 Pieces", player), lambda state: state.count_enemy_pieces(player) > 1)
     set_rule(multiworld.get_location("Capture 3 Pieces", player), lambda state: state.count_enemy_pieces(player) > 2)
