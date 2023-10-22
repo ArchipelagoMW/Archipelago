@@ -21,6 +21,10 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
+class OptionError(RuntimeError):
+    pass
+
+
 class AssembleOptions(abc.ABCMeta):
     def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}

@@ -355,7 +355,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
                           "misery_mire_medallion", "turtle_rock_medallion", "sprite_pool", "sprite",
                           "random_sprite_on_event"}:
             return get_choice(option_key, category_dict)
-    raise Exception(f"Error generating meta option {option_key} for {game}.")
+    raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 
 
 def roll_linked_options(weights: dict) -> dict:
@@ -419,7 +419,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
                 player_option = option.from_any(get_choice(option_key, game_weights))
             setattr(ret, option_key, player_option)
         except Exception as e:
-            raise Exception(f"Error generating option {option_key} in {ret.game}") from e
+            raise Options.OptionError(f"Error generating option {option_key} in {ret.game}") from e
         else:
             player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
     else:
