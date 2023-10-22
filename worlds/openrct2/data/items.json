@@ -374,6 +374,29 @@
         "Haunted House",
         "Magic Carpet"
     ],
+    "stat_exempt_roller_coasters": [
+        "Junior Roller Coaster",
+        "Mini Suspended Roller Coaster",
+        "Steeplechase",
+        "Reverse Freefall Coaster",
+        "Heartline Twister Coaster",
+        "Mini Roller Coaster",
+        "Classic Mini Roller Coaster"
+    ],
+    "requires_height": [
+        "Enterprise",
+        "Reverse Freefall Coaster",
+        "Launched Freefall",
+        "Swinging Inverter Ship",
+        "Lift",
+        "Ferris Wheel",
+        "Haunted House",
+        "Magic Carpet"
+    ],
+    "requires_landscaping": [
+        "Boat Hire",
+        "Submarine Ride"
+    ],
     "ride_types": [
         "roller_coasters",
         "transport_rides",

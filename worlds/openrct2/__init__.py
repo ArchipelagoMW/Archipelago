@@ -283,6 +283,31 @@ class OpenRCT2World(World):
         random.shuffle(logic_table)
         print(logic_table)
 
+        def set_openRCT2_rule(rule_type, item, location_number):
+            if rule_type == "ride":
+                add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],
+                 lambda state, prereq=item: state.has(prereq, self.player))
+                if item in item_info["requires_height"]:
+                    add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],
+                     lambda state, prereq="Allow High Construction": state.has(prereq, self.player))
+                    print("Added rule: \nHave: Allow High Construction\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
+                if item in item_info["requires_landscaping"]:
+                    add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],
+                     lambda state, prereq="Allow Landscape Changes": state.has(prereq, self.player))
+                    print("Added rule: \nHave: Allow Landscape Changes\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
+                print(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances)
+                print("Added rule: \nHave: " + str(chosen_prereq) + "\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
+            else:
+                add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],#self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
+                 lambda state, prereq=item: state.has_group(prereq, self.player))
+                 #TODO: Check if every item in the category has a rule requirement, and if so, force the rule to appear before the location
+                # if item_info[item].issubset(item_info["requires_height"]):
+                #     add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],
+                #      lambda state, prereq="Allow High Construction": state.has(prereq, self.player))
+                #     print("Added rule: \nHave: Allow High Construction\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
+                print(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances)
+                print("Added rule: \nHave: " + str(category) + "\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
+
         difficulty = self.multiworld.difficulty[self.player].value
         length = self.multiworld.scenario_length[self.player].value
         length_modifier = 0
@@ -340,6 +365,8 @@ class OpenRCT2World(World):
         current_price = base_price
         for number, item in enumerate(logic_table):
             unlock = {"LocationID": number, "Price": 0, "Lives": 0, "RidePrereq": []}
+
+            #Handles the price of each location
             if random.random() < 0.95 or number == 0: #95 perecnt of locations will have a cash price
                 current_price = base_price + increment * number
                 unlock["Price"] = int(current_price)
@@ -351,13 +378,14 @@ class OpenRCT2World(World):
                     unlock["Lives"] = random.randint(50,300)
                 else:
                     unlock["Lives"] = random.randint(50,1000)
+
+            #Handles the selection of a prerequisite and associated stats
             if number != 0 and unlock["Lives"] == 0: #We'll never have a prereq on the first item or on blood prices
                 if random.random() < length_modifier: #Determines if we have a prereq
                     if random.random() < difficulty_modifier: #Determines if the prereq is a specific ride
                         chosen_prereq = random.choice(possible_prereqs)
-                        add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).exits[0],
-                         lambda state: state.has(chosen_prereq, self.player))
-                        if chosen_prereq in item_info["roller_coasters"]:
+                        set_openRCT2_rule("ride",chosen_prereq,number)
+                        if chosen_prereq in item_info["roller_coasters"] and chosen_prereq not in item_info["stat_exempt_roller_coasters"]:
                             excitement = 0
                             intensity = 0
                             nausea = 0
@@ -376,8 +404,7 @@ class OpenRCT2World(World):
                             for ride in possible_prereqs:
                                 if ride in item_info[category]:
                                     category_selected = True
-                        add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).exits[0],#self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
-                         lambda state: state.has_group(category, self.player))
+                        set_openRCT2_rule("category", category, number)
                         if category == "roller_coasters":
                             excitement = 0
                             intensity = 0
@@ -394,7 +421,7 @@ class OpenRCT2World(World):
             #Handle unlocked rides
             if item in item_info["rides"]:
                 queued_prereqs.append(item)
-            if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:
+            if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:#This might be my error
                 for prereq in queued_prereqs:
                     possible_prereqs.append(prereq)
                 queued_prereqs.clear()
@@ -441,7 +468,10 @@ class OpenRCT2World(World):
                     self.location_prices[index]["RidePrereq"][1] = "thrill"
                 else:
                     self.location_prices[index]["RidePrereq"][1] = "water"
-
+        from Utils import visualize_regions
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
+        print("Here's the final unlock shop:")
+        print(self.location_prices)
         return {
             "difficulty": self.multiworld.difficulty[self.player].value,
             "scenario_length": self.multiworld.scenario_length[self.player].value,
@@ -468,13 +498,18 @@ class OpenRCT2World(World):
         return OpenRCT2Item(item, classification, self.item_name_to_id[item], self.player)
 
     def get_previous_region_from_OpenRCT2_location(self,location_number:int):
+        # print("Getting previous region from location: " + str(location_number))
         if location_number == 0:
+            # print("OpenRCT2_Level_0")
             return "OpenRCT2_Level_0"
         elif location_number == 1 or location_number == 2:
+            # print("OpenRCT2_Level_0")
             return "OpenRCT2_Level_0"
         elif location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
+            # print("OpenRCT2_Level_1")
             return "OpenRCT2_Level_1"
         else:
             divider = location_number - 6
             region = math.ceil(divider/8) + 1
+            # print("OpenRCT2_Level_" + str(region))
             return "OpenRCT2_Level_" + str(region)
