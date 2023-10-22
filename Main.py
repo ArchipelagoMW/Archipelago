@@ -3,18 +3,21 @@ import concurrent.futures
 import logging
 import os
 import pickle
+import sys
 import tempfile
 import time
 import zipfile
 import zlib
-from typing import Dict, List, Optional, Set, Tuple, Union
+from traceback import format_exception, format_exception_only
+from types import TracebackType
+from typing import Dict, List, Optional, Set, Tuple, Type, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
 from settings import get_settings
-from Utils import __version__, output_path, version_tuple, messagebox
+from Utils import __version__, local_path, output_path, version_tuple, messagebox
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
 
@@ -104,6 +107,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     AutoWorld.call_stage(world, "assert_generate")
 
     AutoWorld.call_all(world, "generate_early")
+
+    if not __debug__:
+        sys.excepthook = generation_failure_gui
 
     logger.info('')
 
@@ -433,3 +439,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         messagebox("Generation Succeeded", f"Done. Enjoy. Total Time: {gen_time}."
                                            f"\nOutput to {zipfilename}")
     return world
+
+
+def generation_failure_gui(_type: Type[BaseException], value: BaseException, traceback: TracebackType) -> None:
+    exception_text = format_exception(_type, value, traceback.tb_next, 0)
+    error_message = exception_text[0]
+    error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(_type, value)[0]}"
+
+    logging.exception(error_message, exc_info=value)
+    if _type is not FileNotFoundError:
+        error_message += f"\nPlease attach log from {local_path('logs')}" \
+                         f"\nand all used player files in a bug report."
+    messagebox(f"Generation Failed", error_message, True)
