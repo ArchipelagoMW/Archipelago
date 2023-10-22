@@ -2267,9 +2267,12 @@ def create_regions(self):
                 "Defeat Viridian Gym Giovanni",
             ]
 
+        player_locations = multiworld.get_locations(player=player)
+
         def adds_reachable_entrances(entrances_copy, item):
             state_copy = state.copy()
-            state_copy.collect(item, False)
+            state_copy.collect(item, True)
+            state.sweep_for_events(locations=player_locations)
             ret = len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
                       entrance.parent_region.can_reach(state_copy)]) > len(reachable_entrances)
             return ret
@@ -2330,10 +2333,6 @@ def create_regions(self):
             if multiworld.door_shuffle[player] == "full" or len(entrances) != len(reachable_entrances):
                 entrances.sort(key=lambda e: e.name not in entrance_only)
 
-                if len(entrances) < 48 and multiworld.door_shuffle[player] == "full":
-                    # Prevent a situation where the only remaining outdoor entrances are ones that cannot be reached
-                    # except by connecting directly to it.
-                    entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
                 # entrances list is empty while it's being sorted, must pass a copy to iterate through
                 entrances_copy = entrances.copy()
                 if multiworld.door_shuffle[player] == "decoupled":
@@ -2350,6 +2349,11 @@ def create_regions(self):
                                    dead_end(entrances_copy, e) else 2)
                 if multiworld.door_shuffle[player] == "full":
                     outdoor = outdoor_map(entrances[0].parent_region.name)
+                    if len(entrances) < 48 and not outdoor:
+                        # Prevent a situation where the only remaining outdoor entrances are ones that cannot be reached
+                        # except by connecting directly to it.
+                        entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
+
                     entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
                 assert entrances[0] in reachable_entrances, \
                     "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
