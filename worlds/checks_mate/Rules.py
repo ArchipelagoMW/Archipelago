@@ -8,10 +8,11 @@ from .Items import item_table, CMItemData
 
 
 class ChecksMateLogic(LogicMixin):
-    def individual_piece_material(self: CollectionState, item_id: str, item: CMItemData, player: int) -> int:
+    def individual_piece_material(self, item_id: str, item: CMItemData, player: int) -> int:
         val = self.item_count(item_id, player) * item.material
-        if item.parent is not None:
-            val = (min(self.item_count(item_id, player), self.item_count(item.parent, player))) * item.material
+        if item.parents is not None:
+            parent_items = [item_id] + [parent_name for parent_name in item.parents]
+            val = min([self.item_count(item_name, player) for item_name in parent_items]) * item.material
 
         return val
 
@@ -24,7 +25,7 @@ class ChecksMateLogic(LogicMixin):
             for item_id, item in owned_items]
         return reduce(lambda a, b: a + b, owned_piece_materials, 0)
         
-    def has_piece_material(self, player: int, amount: int) -> bool:
+    def has_piece_material(self: CollectionState, player: int, amount: int) -> bool:
         return self.total_piece_material(player) >= amount
         
     def count_enemy_pieces(self: CollectionState, player: int) -> int:
@@ -35,18 +36,17 @@ class ChecksMateLogic(LogicMixin):
         owned_item_ids = [item_id for item_id, item in item_table.items() if self.has(item_id, player)]
         return sum(1 if x == "Progressive Enemy Piece" else 0 for x in owned_item_ids)
         
-    def has_french_move(self, player: int) -> bool:
+    def has_french_move(self: CollectionState, player: int) -> bool:
         return self.has("Play En Passant", player) and self.has_pawn()
 
-    def has_pawn(self, player: int) -> bool:
+    def has_pawn(self: CollectionState, player: int) -> bool:
         return self.has_any({"Progressive Pawn"}, player)
 
-    def has_pin(self, player: int) -> bool:
+    def has_pin(self: CollectionState, player: int) -> bool:
         return self.has_any({"Progressive Minor Piece", "Progressive Major Piece", "Progressive Pocket Piece"}, player)
 
-    def has_castle(self, player: int) -> bool:
+    def has_castle(self: CollectionState, player: int) -> bool:
         return self.has_any({"Progressive Major Piece"}, player)
-
 
 
 def set_rules(multiworld: MultiWorld, player: int):
@@ -56,33 +56,33 @@ def set_rules(multiworld: MultiWorld, player: int):
     # b. capture series of pieces and pawns within 1 game
     # c. fork/pin
     capture_expectations = {
-        "Capture Piece A": 10, # rook
-        "Capture Piece H": 10, # rook
-        "Capture Piece B": 6, # knight
-        "Capture Piece G": 6, # knight
-        "Capture Piece C": 6, # bishop
-        "Capture Piece F": 6, # bishop
-        "Capture Piece D": 18, # queen
-        "Capture 2 Pawns": 3,
-        "Capture 3 Pawns": 5,
-        "Capture 4 Pawns": 7,
-        "Capture 5 Pawns": 11,
-        "Capture 6 Pawns": 13,
-        "Capture 7 Pawns": 14,
-        "Capture 8 Pawns": 16,
-        "Capture 2 Pieces": 14,
-        "Capture 3 Pieces": 22,
-        "Capture 4 Pieces": 30,
-        "Capture 5 Pieces": 38,
-        "Capture 6 Pieces": 46,
-        "Capture 7 Pieces": 61,
-        "Fork": 10,
-        "Royal Fork": 28,
-        "Pin": 9,
-        "Bongcloud Center": 2,
-        "Bongcloud A File": 3,
-        "Bongcloud Capture": 1,
-        "Bongcloud Promotion": 29,
+        "Capture Piece A": 500, # rook
+        "Capture Piece H": 500, # rook
+        "Capture Piece B": 300, # knight
+        "Capture Piece G": 300, # knight
+        "Capture Piece C": 300, # bishop
+        "Capture Piece F": 300, # bishop
+        "Capture Piece D": 900, # queen
+        "Capture 2 Pawns": 150,
+        "Capture 3 Pawns": 250,
+        "Capture 4 Pawns": 360,
+        "Capture 5 Pawns": 490,
+        "Capture 6 Pawns": 625,
+        "Capture 7 Pawns": 735,
+        "Capture 8 Pawns": 850,
+        "Capture 2 Pieces": 700,
+        "Capture 3 Pieces": 1100,
+        "Capture 4 Pieces": 1500,
+        "Capture 5 Pieces": 1900,
+        "Capture 6 Pieces": 2300,
+        "Capture 7 Pieces": 3050,
+        "Fork": 500,
+        "Royal Fork": 1400,
+        "Pin": 450,
+        "Bongcloud Center": 100,
+        "Bongcloud A File": 150,
+        "Bongcloud Capture": 50,
+        "Bongcloud Promotion": 1450,
     }
     for piece, material in capture_expectations.items():
         set_rule(multiworld.get_location(piece, player), lambda state, v=material: state.has_piece_material(player, v))
@@ -123,7 +123,8 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Fork", player), lambda state: state.has_pin(player))
     set_rule(multiworld.get_location("Royal Fork", player), lambda state: state.has_pin(player))
     # special moves
-    set_rule(multiworld.get_location("00 Castle", player), lambda state: state.has_castle(player))
+    # set_rule(multiworld.get_location("00 Castle", player), lambda state: state.has_castle(player))
+    # set_rule(multiworld.get_location("000 Castle", player), lambda state: state.has_castle(player))
     set_rule(multiworld.get_location("French Move", player), lambda state: state.has_french_move(player))
     # goal materials
     set_rule(multiworld.get_location("Checkmate Minima", player), lambda state: state.has_piece_material(player, 2))

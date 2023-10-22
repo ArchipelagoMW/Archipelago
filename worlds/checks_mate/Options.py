@@ -12,9 +12,9 @@ class PieceLocations(Choice):
     Ordered: Puts pieces as close to king as possible, and pawns as close to center as possible (but never first rank).
     """
     display_name = "Piece Locations"
-    chaos = 0
-    # stable = 1
-    # ordered = 2
+    option_chaos = 0
+    # option_stable = 1
+    # option_ordered = 2
     default = 0
 
 
@@ -26,9 +26,9 @@ class PieceTypes(Choice):
     Book: Uses the standard Chess army. Adds the King's Bishop, then both Knights, then a Bishop.
     """
     display_name = "Piece Types"
-    chaos = 0
-    # stable = 1
-    # book = 2
+    option_chaos = 0
+    # option_stable = 1
+    # option_book = 2
     default = 0
 
 
@@ -40,9 +40,9 @@ class EnemyPieceTypes(Choice):
     Book: Uses the standard Chess army. Adds the King's Bishop, then both Knights, then a Bishop.
     """
     display_name = "Enemy Piece Types"
-    # chaos = 0
-    # stable = 1
-    book = 2
+    # option_chaos = 0
+    # option_stable = 1
+    option_book = 2
     default = 2
 
 
@@ -54,9 +54,9 @@ class FairyChessArmy(Choice):
     Fair: Chooses within your army, to a maximum of 2 of any given piece.
     """
     display_name = "Fairy Chess Army"
-    chaos = 0
-    # limited = 1
-    # fair = 2
+    option_chaos = 0
+    # option_limited = 1
+    # option_fair = 2
     default = 0
 
 
@@ -70,11 +70,11 @@ class FairyChessPieces(Choice):
     Eurasian: Adds the Cannon and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
     """
     display_name = "Fairy Chess Pieces"
-    vanilla = 0
-    full = 1
-    cw_d_a = 2
-    cannon = 3
-    eurasian = 4
+    option_vanilla = 0
+    option_full = 1
+    option_cw_d_a = 2
+    option_cannon = 3
+    option_eurasian = 4
     default = 1
 
 
@@ -86,9 +86,9 @@ class FairyChessPawns(Choice):
     Berolina: Only use the Berolina pawn (may appear to be a Ferz), which moves diagonally and captures forward.
     """
     display_name = "Fairy Chess Pawns"
-    # vanilla = 0
-    mixed = 1
-    # berolina = 2
+    # option_vanilla = 0
+    option_mixed = 1
+    # option_berolina = 2
     default = 1
 
 
