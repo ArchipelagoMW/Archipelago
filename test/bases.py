@@ -278,13 +278,12 @@ class WorldTestBase(unittest.TestCase):
 
     def test_fill(self):
         """Generates a multiworld and validates placements with the defined options"""
-        # don't run this test if accessibility is set manually
         if not (self.run_default_tests and self.constructed):
             return
         from Fill import distribute_items_restrictive
 
         # basically a shortened reimplementation of this method from core, in order to force the check is done
-        def fulfills_accessibility():
+        def fulfills_accessibility() -> bool:
             locations = self.multiworld.get_locations(1).copy()
             state = CollectionState(self.multiworld)
             while locations:
@@ -299,10 +298,9 @@ class WorldTestBase(unittest.TestCase):
                 for location in sphere:
                     if location.item:
                         state.collect(location.item, True, location)
-                
             return self.multiworld.has_beaten_game(state, 1)
-        
-        with self.subTest("Game", game=self.game):
+
+        with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
             self.assertTrue(fulfills_accessibility(), "Collected all locations, but can't beat the game.")
