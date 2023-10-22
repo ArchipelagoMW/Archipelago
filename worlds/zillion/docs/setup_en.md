@@ -51,7 +51,7 @@ them.
 
 ### Verifying your config file
 
-If you would like to validate your config file to make sure it works, you may do so on the [YAML Validator page](/mysterycheck).
+If you would like to validate your config file to make sure it works, you may do so on the [YAML Validator page](/check).
 
 ## Generating a Single-Player Game
 

@@ -28,6 +28,10 @@
                     {% endfor %}
                 </tbody>
             </table>
+        {% if combined_yaml %}
+            <h1>Combined File Download</h1>
+            <p><a href="data:text/yaml;base64,{{ combined_yaml }}" download="combined.yaml">Download</a></p>
+        {% endif %}
         </div>
     </div>
 {% endblock %}

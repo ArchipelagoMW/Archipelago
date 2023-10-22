@@ -31,7 +31,7 @@ them. Factorio player settings page: [Factorio Settings Page](/games/Factorio/pl
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-Validator page: [Yaml Validation Page](/mysterycheck)
+Validator page: [Yaml Validation Page](/check)
 
 ## Connecting to Someone Else's Factorio Game
 
