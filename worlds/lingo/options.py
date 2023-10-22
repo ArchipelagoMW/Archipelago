@@ -1,6 +1,6 @@
-from typing import Dict
+from dataclasses import dataclass
 
-from Options import Toggle, Choice, DefaultOnToggle, Range
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions
 
 
 class ShuffleDoors(Choice):
@@ -109,18 +109,18 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
-lingo_options: Dict[str, type] = {
-    "shuffle_doors": ShuffleDoors,
-    "progressive_orange_tower": ProgressiveOrangeTower,
-    "location_checks": LocationChecks,
-    "shuffle_colors": ShuffleColors,
-    "shuffle_panels": ShufflePanels,
-    "shuffle_paintings": ShufflePaintings,
-    "victory_condition": VictoryCondition,
-    "mastery_achievements": MasteryAchievements,
-    "level_2_requirement": Level2Requirement,
-    "early_color_hallways": EarlyColorHallways,
-    "trap_percentage": TrapPercentage,
-    "puzzle_skip_percentage": PuzzleSkipPercentage,
-    "death_link": DeathLink
-}
+@dataclass
+class LingoOptions(PerGameCommonOptions):
+    shuffle_doors: ShuffleDoors
+    progressive_orange_tower: ProgressiveOrangeTower
+    location_checks: LocationChecks
+    shuffle_colors: ShuffleColors
+    shuffle_panels: ShufflePanels
+    shuffle_paintings: ShufflePaintings
+    victory_condition: VictoryCondition
+    mastery_achievements: MasteryAchievements
+    level_2_requirement: Level2Requirement
+    early_color_hallways: EarlyColorHallways
+    trap_percentage: TrapPercentage
+    puzzle_skip_percentage: PuzzleSkipPercentage
+    death_link: DeathLink

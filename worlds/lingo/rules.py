@@ -45,8 +45,7 @@ class LingoLogic(LogicMixin):
         return True
 
     def lingo_can_use_mastery_location(self, world: World):
-        return self.has("Mastery Achievement", world.player,
-                        getattr(world.multiworld, "mastery_achievements")[world.player])
+        return self.has("Mastery Achievement", world.player, world.options.mastery_achievements.value)
 
     def _lingo_can_open_door(self, start_room: str, room: str, door: str, player: int, player_logic: LingoPlayerLogic):
         """
@@ -67,9 +66,9 @@ class LingoLogic(LogicMixin):
         if start_room != room and not self.has(f"{room} (Reached)", world.player):
             return False
         if room == "Second Room" and panel == "ANOTHER TRY"\
-                and getattr(world.multiworld, "victory_condition")[world.player] == VictoryCondition.option_level_2\
+                and world.options.victory_condition.value == VictoryCondition.option_level_2\
                 and not self.has("Counting Panel Solved", world.player,
-                                 getattr(world.multiworld, "level_2_requirement")[world.player] - 1):
+                                 world.options.level_2_requirement.value - 1):
             return False
         panel_object = PANELS_BY_ROOM[room][panel]
         for req_room in panel_object.required_rooms:
@@ -83,7 +82,7 @@ class LingoLogic(LogicMixin):
             if not self._lingo_can_solve_panel(start_room, room if req_panel.room is None else req_panel.room,
                                                req_panel.panel, world, player_logic):
                 return False
-        if len(panel_object.colors) > 0 and getattr(world.multiworld, "shuffle_colors")[world.player]:
+        if len(panel_object.colors) > 0 and world.options.shuffle_colors.value:
             for color in panel_object.colors:
                 if not self.has(color.capitalize(), world.player):
                     return False

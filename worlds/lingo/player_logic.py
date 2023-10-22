@@ -46,7 +46,7 @@ class LingoPlayerLogic:
 
     def handle_non_grouped_door(self, room_name: str, door_data: Door, world: World):
         if room_name in PROGRESSION_BY_ROOM and door_data.name in PROGRESSION_BY_ROOM[room_name]:
-            if room_name == "Orange Tower" and not getattr(world.multiworld, "progressive_orange_tower")[world.player]:
+            if room_name == "Orange Tower" and not world.options.progressive_orange_tower.value:
                 self.set_door_item(room_name, door_data.name, door_data.item_name)
             else:
                 progressive_item_name = PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
@@ -67,12 +67,12 @@ class LingoPlayerLogic:
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
 
-        door_shuffle = getattr(world.multiworld, "shuffle_doors")[world.player]
-        color_shuffle = getattr(world.multiworld, "shuffle_colors")[world.player]
-        painting_shuffle = getattr(world.multiworld, "shuffle_paintings")[world.player]
-        location_checks = getattr(world.multiworld, "location_checks")[world.player]
-        victory_condition = getattr(world.multiworld, "victory_condition")[world.player]
-        early_color_hallways = getattr(world.multiworld, "early_color_hallways")[world.player]
+        door_shuffle = world.options.shuffle_doors.value
+        color_shuffle = world.options.shuffle_colors.value
+        painting_shuffle = world.options.shuffle_paintings.value
+        location_checks = world.options.location_checks.value
+        victory_condition = world.options.victory_condition.value
+        early_color_hallways = world.options.early_color_hallways.value
 
         if location_checks == LocationChecks.option_reduced and door_shuffle != ShuffleDoors.option_none:
             raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
@@ -238,7 +238,7 @@ class LingoPlayerLogic:
     def randomize_paintings(self, world: World) -> bool:
         self.PAINTING_MAPPING.clear()
 
-        door_shuffle = getattr(world.multiworld, "shuffle_doors")[world.player]
+        door_shuffle = world.options.shuffle_doors.value
 
         # Determine the set of exit paintings. All required-exit paintings are included, as are all
         # required-when-no-doors paintings if door shuffle is off. We then fill the set with random other paintings.

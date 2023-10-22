@@ -65,8 +65,8 @@ def create_regions(world: World, player_logic: LingoPlayerLogic):
     for room in ALL_ROOMS:
         create_region(room, world, player_logic)
 
-    painting_shuffle = bool(getattr(world.multiworld, "shuffle_paintings")[world.player])
-    early_color_hallways = bool(getattr(world.multiworld, "early_color_hallways")[world.player])
+    painting_shuffle = bool(world.options.shuffle_paintings.value)
+    early_color_hallways = bool(world.options.early_color_hallways.value)
 
     for room in ALL_ROOMS:
         for entrance in room.entrances:

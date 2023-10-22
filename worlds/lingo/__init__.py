@@ -1,13 +1,14 @@
 """
 Archipelago init file for Lingo
 """
+from dataclasses import asdict
 
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import World, WebWorld
 
 from .items import LingoItem, ALL_ITEM_TABLE
 from .locations import ALL_LOCATION_TABLE
-from .options import lingo_options
+from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
 from .static_logic import Room, RoomEntrance
@@ -38,7 +39,8 @@ class LingoWorld(World):
     topology_present = True
     data_version = 1
 
-    option_definitions = lingo_options
+    options_dataclass = LingoOptions
+    options: LingoOptions
 
     item_name_to_id = {
         name: data.code for name, data in ALL_ITEM_TABLE.items()
@@ -63,12 +65,12 @@ class LingoWorld(World):
 
         item_difference = len(self.player_logic.REAL_LOCATIONS) - len(pool)
         if item_difference:
-            trap_percentage = getattr(self.multiworld, "trap_percentage")[self.player]
+            trap_percentage = self.options.trap_percentage.value
             traps = int(item_difference * trap_percentage / 100.0)
             non_traps = item_difference - traps
 
             if non_traps:
-                skip_percentage = getattr(self.multiworld, "puzzle_skip_percentage")[self.player]
+                skip_percentage = self.options.puzzle_skip_percentage.value
                 skips = int(non_traps * skip_percentage / 100.0)
                 non_skips = non_traps - skips
 
@@ -101,9 +103,9 @@ class LingoWorld(World):
         for option_name in ["death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings",
                             "shuffle_panels", "mastery_achievements", "level_2_requirement", "location_checks",
                             "early_color_hallways"]:
-            slot_data[option_name] = int(getattr(self.multiworld, option_name)[self.player])
+            slot_data[option_name] = int(asdict(self.options).get(option_name).value)
 
-        if getattr(self.multiworld, "shuffle_paintings")[self.player]:
+        if self.options.shuffle_paintings.value:
             slot_data["painting_entrance_to_exit"] = self.player_logic.PAINTING_MAPPING
 
         return slot_data
