@@ -122,6 +122,60 @@ class HovererableLabel(HoverBehavior, Label):
     pass
 
 
+class TooltipLabel(HovererableLabel):
+    tooltip = None
+
+    def create_tooltip(self, text, x, y):
+        text = text.replace("<br>", "\n").replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']')
+        if self.tooltip:
+            # update
+            self.tooltip.children[0].text = text
+        else:
+            self.tooltip = FloatLayout()
+            tooltip_label = ToolTip(text=text)
+            self.tooltip.add_widget(tooltip_label)
+            fade_in_animation.start(self.tooltip)
+            App.get_running_app().root.add_widget(self.tooltip)
+
+        # handle left-side boundary to not render off-screen
+        x = max(x, 3+self.tooltip.children[0].texture_size[0] / 2)
+
+        # position float layout
+        self.tooltip.x = x - self.tooltip.width / 2
+        self.tooltip.y = y - self.tooltip.height / 2 + 48
+
+    def remove_tooltip(self):
+        if self.tooltip:
+            App.get_running_app().root.remove_widget(self.tooltip)
+            self.tooltip = None
+
+    def on_mouse_pos(self, window, pos):
+        if not self.get_root_window():
+            return  # Abort if not displayed
+        super().on_mouse_pos(window, pos)
+        if self.refs and self.hovered:
+
+            tx, ty = self.to_widget(*pos, relative=True)
+            # Why TF is Y flipped *within* the texture?
+            ty = self.texture_size[1] - ty
+            hit = False
+            for uid, zones in self.refs.items():
+                for zone in zones:
+                    x, y, w, h = zone
+                    if x <= tx <= w and y <= ty <= h:
+                        self.create_tooltip(uid.split("|", 1)[1], *pos)
+                        hit = True
+                        break
+            if not hit:
+                self.remove_tooltip()
+
+    def on_enter(self):
+        pass
+
+    def on_leave(self):
+        self.remove_tooltip()
+
+
 class ServerLabel(HovererableLabel):
     def __init__(self, *args, **kwargs):
         super(HovererableLabel, self).__init__(*args, **kwargs)
@@ -190,67 +244,16 @@ class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
     """ Adds selection and focus behaviour to the view. """
 
 
-class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
+class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
     """ Add selection support to the Label """
     index = None
     selected = BooleanProperty(False)
-    tooltip = None
 
     def refresh_view_attrs(self, rv, index, data):
         """ Catch and handle the view changes """
         self.index = index
         return super(SelectableLabel, self).refresh_view_attrs(
             rv, index, data)
-
-    def create_tooltip(self, text, x, y):
-        text = text.replace("<br>", "\n").replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']')
-        if self.tooltip:
-            # update
-            self.tooltip.children[0].text = text
-        else:
-            self.tooltip = FloatLayout()
-            tooltip_label = ToolTip(text=text)
-            self.tooltip.add_widget(tooltip_label)
-            fade_in_animation.start(self.tooltip)
-            App.get_running_app().root.add_widget(self.tooltip)
-
-        # handle left-side boundary to not render off-screen
-        x = max(x, 3 + self.tooltip.children[0].texture_size[0] / 2)
-
-        # position float layout
-        self.tooltip.x = x - self.tooltip.width / 2
-        self.tooltip.y = y - self.tooltip.height / 2 + 48
-
-    def remove_tooltip(self):
-        if self.tooltip:
-            App.get_running_app().root.remove_widget(self.tooltip)
-            self.tooltip = None
-
-    def on_mouse_pos(self, window, pos):
-        if not self.get_root_window():
-            return  # Abort if not displayed
-        super().on_mouse_pos(window, pos)
-        if self.refs and self.hovered:
-
-            tx, ty = self.to_widget(*pos, relative=True)
-            # Why TF is Y flipped *within* the texture?
-            ty = self.texture_size[1] - ty
-            hit = False
-            for uid, zones in self.refs.items():
-                for zone in zones:
-                    x, y, w, h = zone
-                    if x <= tx <= w and y <= ty <= h:
-                        self.create_tooltip(uid.split("|", 1)[1], *pos)
-                        hit = True
-                        break
-            if not hit:
-                self.remove_tooltip()
-
-    def on_enter(self):
-        pass
-
-    def on_leave(self):
-        self.remove_tooltip()
 
     def on_touch_down(self, touch):
         """ Add selection on touch down """
