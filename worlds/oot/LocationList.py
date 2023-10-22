@@ -238,7 +238,7 @@ location_table = OrderedDict([
     ("Market Night Green Rupee Crate 1",                             ("Crate",        0x21,  (0,0,24), None,                        'Rupee (1)',                             ("the Market", "Market", "Crate"))),
     ("Market Night Green Rupee Crate 2",                             ("Crate",        0x21,  (0,0,25), None,                        'Rupee (1)',                             ("the Market", "Market", "Crate"))),
     ("Market Night Green Rupee Crate 3",                             ("Crate",        0x21,  (0,0,26), None,                        'Rupee (1)',                             ("the Market", "Market", "Crate"))),
-    ("Market Dog Lady House Crate",                                  ("Crate",        0x35,  (0,0,3), None,                         'Rupees (5)',                            ("Market", "Market", "Crate"))),
+    ("Market Dog Lady House Crate",                                  ("Crate",        0x35,  (0,0,3), None,                         'Rupees (5)',                            ("the Market", "Market", "Crate"))),
     ("Market Guard House Child Crate",                               ("Crate",        0x4D,  (0,0,6), None,                         'Rupee (1)',                             ("the Market", "Market", "Crate"))),
     ("Market Guard House Child Pot 1",                               ("Pot",          0x4D,  (0,0,9), None,                         'Rupee (1)',                             ("the Market", "Market", "Pot"))),
     ("Market Guard House Child Pot 2",                               ("Pot",          0x4D,  (0,0,10), None,                        'Rupee (1)',                             ("the Market", "Market", "Pot"))),

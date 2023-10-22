@@ -223,9 +223,6 @@ def set_shop_rules(ootworld):
 # The goal is to automatically set item rules based on age requirements in case entrances were shuffled
 def set_entrances_based_rules(ootworld):
 
-    if ootworld.multiworld.accessibility == 'beatable': 
-        return
-
     all_state = ootworld.multiworld.get_all_state(False)
 
     for location in filter(lambda location: location.type == 'Shop', ootworld.get_locations()):
