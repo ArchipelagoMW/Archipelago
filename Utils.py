@@ -743,11 +743,32 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     task.add_done_callback(_faf_tasks.discard)
 
 
-def deprecate(message: str):
-    if __debug__:
+def deprecate(message: str, version: Version = version_tuple):
+    if __debug__ and version == version_tuple:
         raise Exception(message)
     import warnings
     warnings.warn(message)
+
+
+class DeprecationDict(dict):
+    last_version: Version
+    message: str
+
+    def __init__(self, message: str, version: Version = version_tuple) -> None:
+        """
+        A dictionary that prints deprecation warnings in its get method. Throws an exception when the software version
+        meets the provided version.
+        :param message: The message to be printed when accessed.
+        :param version: The last "supported" version before this dictionary will be removed.
+        """
+        self.last_version = version
+        self.message = message
+        super().__init__()
+
+    def __getitem__(self, item: Any) -> Any:
+        deprecate(self.message, self.last_version)
+        return super().__getitem__(item)
+
 
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
