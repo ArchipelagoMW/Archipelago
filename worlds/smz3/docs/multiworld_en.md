@@ -47,7 +47,7 @@ them. Player settings page: [SMZ3 Player Settings Page](/games/SMZ3/player-setti
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-validator page: [YAML Validation page](/mysterycheck)
+validator page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 
