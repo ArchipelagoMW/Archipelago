@@ -17,6 +17,12 @@
     color: "FFFFFF"
 <TabbedPanel>:
     tab_width: root.width / app.tab_count
+<TooltipLabel>:
+    text_size: self.width, None
+    size_hint_y: None
+    height: self.texture_size[1]
+    font_size: dp(20)
+    markup: True
 <SelectableLabel>:
     canvas.before:
         Color:
@@ -24,11 +30,6 @@
         Rectangle:
             size: self.size
             pos: self.pos
-    text_size: self.width, None
-    size_hint_y: None
-    height: self.texture_size[1]
-    font_size: dp(20)
-    markup: True
 <UILog>:
     messages: 1000 # amount of messages stored in client logs.
     cols: 1
@@ -61,61 +62,31 @@
     TooltipLabel:
         id: receiving
         text: root.receiving_text
-        text_size: self.width, None
-        size_hint_y: None
-        height: self.texture_size[1]
-        font_size: dp(20)
-        markup: True
         halign: 'center'
         valign: 'center'
     TooltipLabel:
         id: item
         text: root.item_text
-        text_size: self.width, None
-        size_hint_y: None
-        height: self.texture_size[1]
-        font_size: dp(20)
-        markup: True
         halign: 'center'
         valign: 'center'
     TooltipLabel:
         id: finding
         text: root.finding_text
-        text_size: self.width, None
-        size_hint_y: None
-        height: self.texture_size[1]
-        font_size: dp(20)
-        markup: True
         halign: 'center'
         valign: 'center'
     TooltipLabel:
         id: location
         text: root.location_text
-        text_size: self.width, None
-        size_hint_y: None
-        height: self.texture_size[1]
-        font_size: dp(20)
-        markup: True
         halign: 'center'
         valign: 'center'
     TooltipLabel:
         id: entrance
         text: root.entrance_text
-        text_size: self.width, None
-        size_hint_y: None
-        height: self.texture_size[1]
-        font_size: dp(20)
-        markup: True
         halign: 'center'
         valign: 'center'
     TooltipLabel:
         id: found
         text: root.found_text
-        text_size: self.width, None
-        size_hint_y: None
-        height: self.texture_size[1]
-        font_size: dp(20)
-        markup: True
         halign: 'center'
         valign: 'center'
 <HintLog>:
