@@ -77,3 +77,11 @@ item_table = {
 }
 
 lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+
+
+def create_item_with_correct_settings(player: int, name: str) -> Item:
+    data = item_table[name]
+
+    item = Item(name, data.classification, data.code, player)
+
+    return item

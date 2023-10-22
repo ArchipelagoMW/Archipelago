@@ -1,9 +1,11 @@
-from typing import List
+import math
+import random
+from typing import List, Set
 
-from BaseClasses import Tutorial, Region, RegionType, ItemClassification
+from BaseClasses import Tutorial, Region, RegionType, ItemClassification, MultiWorld, Item
 from worlds.AutoWorld import WebWorld, World
-from .Options import cm_options
-from .Items import CMItem, item_table
+from .Options import cm_options, get_option_value
+from .Items import CMItem, item_table, create_item_with_correct_settings
 from .Locations import CMLocation, location_table
 from .Options import cm_options
 from .Rules import set_rules
@@ -17,7 +19,7 @@ class CMWeb(WebWorld):
         "English",
         "checks-mate_en.md",
         "checks-mate/en",
-        ["rft50"]
+        ["roty", "rft50"]
     )]
 
 
@@ -29,8 +31,8 @@ class CMWorld(World):
     game: str = "ChecksMate"
     option_definitions = cm_options
     data_version = 0
-    required_client_version = (0, 4, 3)
     web = CMWeb()
+    required_client_version = (0, 2, 2) # TODO: what does it mean
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
@@ -50,7 +52,9 @@ class CMWorld(World):
         return getattr(self.multiworld, name)[self.player]
 
     def fill_slot_data(self) -> dict:
-        return {option_name: self.setting(option_name).value for option_name in cm_options}
+        seeds = {name: self.multiworld.random.getrandbits(31) for name in [
+            "pocketSeed", "pawnSeed", "minorSeed", "majorSeed", "queenSeed"]}
+        return dict(seeds, **{option_name: self.setting(option_name).value for option_name in cm_options})
 
     def create_item(self, name: str) -> CMItem:
         data = item_table[name]
@@ -60,6 +64,7 @@ class CMWorld(World):
         set_rules(self.multiworld, self.player)
 
     def create_items(self):
+
         self.multiworld.itempool += [self.create_item(item) for item in item_table]
 
     def create_regions(self):
@@ -75,3 +80,42 @@ class CMWorld(World):
          place_locked_item(CMItem("Victory", ItemClassification.progression, 4_065, self.player)))
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+
+def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
+    excluded_items: Set[str] = set()
+
+    for item in multiworld.precollected_items[player]:
+        excluded_items.add(item.name)
+
+    excluded_items_option = getattr(multiworld, 'excluded_items', [])
+
+    excluded_items.update(excluded_items_option[player].value)
+
+    return excluded_items
+
+
+def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str],
+                         locked_locations: List[str]) -> List[Item]:
+    non_local_items = multiworld.non_local_items[player].value
+    early_material_option = get_option_value(multiworld, player, "early_material")
+    if early_material_option > 0:
+        early_units = []
+        if early_material_option == 1 or early_material_option > 4:
+            early_units.append("Progressive Pawn")
+        if early_material_option == 2 or early_material_option > 3:
+            early_units.append("Progressive Minor Piece")
+        if early_material_option > 2:
+            early_units.append("Progressive Major Piece")
+        local_basic_unit = sorted(item for item in early_units if
+                                  item not in non_local_items and item not in excluded_items)
+        if not local_basic_unit:
+            raise Exception("At least one early chessman must be local")
+
+        item = create_item_with_correct_settings(player, multiworld.random.choice(local_basic_unit))
+        multiworld.get_location("Bongcloud Once", player).place_locked_item(item)
+        locked_locations.append("Bongcloud Once")
+
+        return [item]
+    else:
+        return []
