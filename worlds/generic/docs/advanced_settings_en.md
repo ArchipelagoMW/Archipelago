@@ -108,7 +108,9 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
     * `minimal` will only guarantee that the seed is beatable. You will be guaranteed able to finish the seed logically
       but may not be able to access all locations or acquire all items. A good example of this is having a big key in
       the big chest in a dungeon in ALTTP making it impossible to get and finish the dungeon.
-* `progression_balancing` is a system the Archipelago generator uses to try and reduce "BK mode" as much as possible.
+* `progression_balancing` is a system the Archipelago generator uses to try and reduce
+  ["BK mode"](/glossary/en/#burger-king-/-bk-mode)
+  as much as possible.
   This primarily involves moving necessary progression items into earlier logic spheres to make the games more
   accessible so that players almost always have something to do. This can be in a range from 0 to 99, and is 50 by
   default. This number represents a percentage of the furthest progressible player.
@@ -130,7 +132,7 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   there without using any hint points.
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
-* `priority_locations` is the inverse of `exlcude_locations`, forcing a progression item in the defined locations.
+* `priority_locations` is the inverse of `exclude_locations`, forcing a progression item in the defined locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
   in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links
   can also have local and non local items, forcing the items to either be placed within the worlds of the group or in
