@@ -340,7 +340,7 @@ def make_hints(world: World, hint_amount: int, own_itempool: List[Item]):
 
         already_hinted_locations.add(loc)
 
-    next_random_hint_is_item = world.random.randint(0, 2)
+    next_random_hint_is_item = world.random.randrange(0, 2)
 
     while len(hints) < hint_amount:
         if next_random_hint_is_item:
