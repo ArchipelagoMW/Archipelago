@@ -4,6 +4,7 @@ import hashlib
 import logging
 import pathlib
 import sys
+import time
 from dataclasses import make_dataclass
 from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
     Union
@@ -16,6 +17,8 @@ if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
     from settings import Group
+
+perf_logger = logging.getLogger("performance")
 
 
 class AutoWorldRegister(type):
@@ -105,6 +108,7 @@ class AutoLogicRegister(type):
 
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
+    start = time.perf_counter()
     try:
         ret = method(*args)
     except Exception as e:
@@ -115,6 +119,10 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
             logging.error(message)
         raise e
     else:
+        taken = time.perf_counter()-start
+        if taken > 0.1:
+            perf_logger.info(f"Took {taken} seconds in {method} for player {player}, "
+                             f"named {multiworld.player_name[player]}.")
         return ret
 
 
@@ -135,7 +143,11 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
+            start = time.perf_counter()
             stage_callable(multiworld, *args)
+            taken = time.perf_counter() - start
+            if taken > 0.1:
+                perf_logger.info(f"Took {taken} seconds in {stage_callable}.")
 
 
 def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
