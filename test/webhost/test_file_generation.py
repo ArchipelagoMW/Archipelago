@@ -13,7 +13,7 @@ class TestFileGeneration(unittest.TestCase):
         # should not create the folder *here*
         cls.incorrect_path = os.path.join(os.path.split(os.path.dirname(__file__))[0], "WebHostLib")
 
-    def testOptions(self):
+    def test_options(self):
         from WebHostLib.options import create as create_options_files
         create_options_files()
         target = os.path.join(self.correct_path, "static", "generated", "configs")
@@ -30,7 +30,7 @@ class TestFileGeneration(unittest.TestCase):
                         for value in roll_options({file.name: f.read()})[0].values():
                             self.assertTrue(value is True, f"Default Options for template {file.name} cannot be run.")
 
-    def testTutorial(self):
+    def test_tutorial(self):
         WebHost.create_ordered_tutorials_file()
         self.assertTrue(os.path.exists(os.path.join(self.correct_path, "static", "generated", "tutorials.json")))
         self.assertFalse(os.path.exists(os.path.join(self.incorrect_path, "static", "generated", "tutorials.json")))
