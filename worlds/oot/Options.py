@@ -110,11 +110,11 @@ class Bridge(Choice):
     """Set the requirements for the Rainbow Bridge.
     Open: The bridge is always present.
     Vanilla: Bridge requires Shadow Medallion, Spirit Medallion, and Light Arrows.
-    Stones: Bridge requires a configurale amount of Spiritual Stones.
-    Medallions: Bridge requires a configurale amount of medallions.
-    Dungeons: Bridge requires a configurale amount of rewards (stones + medallions).
-    Tokens: Bridge requires a configurale amount of gold skulltula tokens.
-    Hearts: Bridge requires a configurale amount of hearts."""
+    Stones: Bridge requires a configurable amount of Spiritual Stones.
+    Medallions: Bridge requires a configurable amount of medallions.
+    Dungeons: Bridge requires a configurable amount of rewards (stones + medallions).
+    Tokens: Bridge requires a configurable amount of gold skulltula tokens.
+    Hearts: Bridge requires a configurable amount of hearts."""
     display_name = "Rainbow Bridge Requirement"
     option_open = 0
     option_vanilla = 1
