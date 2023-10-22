@@ -927,7 +927,7 @@ class StardewLogic:
         return region_rule & ((tool_rule & foraging_rule) | magic_rule)
 
     def has_max_buffs(self) -> StardewRule:
-        return self.received(Buff.movement, self.options.number_of_movement_buffs.value) & self.received(Buff.luck, self.options.number_of_luck_buffs.value)
+        return self.received(Buff.movement, self.options.movement_buff_number.value) & self.received(Buff.luck, self.options.luck_buff_number.value)
 
     def get_weapon_rule_for_floor_tier(self, tier: int):
         if tier >= 4:
@@ -1376,7 +1376,7 @@ class StardewLogic:
         return self.received(Wallet.rusty_key)
 
     def can_win_egg_hunt(self) -> StardewRule:
-        number_of_movement_buffs = self.options.number_of_movement_buffs.value
+        number_of_movement_buffs = self.options.movement_buff_number.value
         if self.options.festival_locations == FestivalLocations.option_hard or number_of_movement_buffs < 2:
             return True_()
         return self.received(Buff.movement, number_of_movement_buffs // 2)
