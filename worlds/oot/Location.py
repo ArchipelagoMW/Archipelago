@@ -2,6 +2,8 @@ from enum import Enum
 from .LocationList import location_table
 from BaseClasses import Location
 
+non_indexed_location_types = {'Boss', 'Event', 'Drop', 'HintStone', 'Hint'}
+
 location_id_offset = 67000
 locnames_pre_70 = {
     "Gift from Sages",
@@ -18,7 +20,7 @@ new_name_order = sorted(location_table.keys(),
                 else 0)
 
 location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(new_name_order) 
-    if location_table[name][0] not in {'Boss', 'Event', 'Drop', 'HintStone', 'Hint'}}
+    if location_table[name][0] not in non_indexed_location_types}
 
 class DisableType(Enum):
     ENABLED  = 0
@@ -104,7 +106,10 @@ def build_location_name_groups() -> dict:
     sorted_tags = sorted(list(tags))
 
     ret = {
-        tag: {k for k, v in location_table.items() if v[5] is not None and tag in fix_sing(v[5])}
+        tag: {k for k, v in location_table.items()
+        if v[5] is not None
+            and tag in fix_sing(v[5])
+            and v[0] not in non_indexed_location_types}
         for tag in sorted_tags
     }
 
