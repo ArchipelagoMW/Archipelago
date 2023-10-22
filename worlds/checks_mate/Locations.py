@@ -31,6 +31,7 @@ location_table = {
     "Capture Piece G": CMLocationData(4_011, True, False),
     "Capture Piece H": CMLocationData(4_009, True, False),
     # some first locations
+    # for strategic analysis see: https://en.wikipedia.org/wiki/Bongcloud_Attack
     "Bongcloud Once": CMLocationData(4_015, True, False),
     "Bongcloud Center": CMLocationData(4_016, True, False),
     "Bongcloud A File": CMLocationData(4_017, True, False),
