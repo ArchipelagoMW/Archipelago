@@ -290,9 +290,15 @@ class HintLabel(RecycleDataViewBehavior, GridLayout):
     cols = 6
     selected = BooleanProperty(False)
     index = None
+    no_select = []
+
+    def __init__(self):
+        super(HintLabel, self).__init__()
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
+        if "select" in data and not data['select']:
+            self.no_select.append(index)
         self.receiving_text = data['receiving']['text']
         self.item_text = data['item']['text']
         self.finding_text = data['finding']['text']
@@ -305,21 +311,24 @@ class HintLabel(RecycleDataViewBehavior, GridLayout):
         """ Add selection on touch down """
         if super(HintLabel, self).on_touch_down(touch):
             return True
-        if self.collide_point(*touch.pos):
-            if self.selected:
-                self.parent.clear_selection()
-            else:
-                text = "".join([self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
-                                self.finding_text, "\'s World", (" at " + self.entrance_text) if self.entrance_text != "Vanilla"
-                                else "", ". (", self.found_text.lower(), ")"])
-                temp = MarkupLabel(text).markup
-                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
-                Clipboard.copy(escape_markup(text).replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
-                return self.parent.select_with_touch(self.index, touch)
+        if self.index not in self.no_select:
+            if self.collide_point(*touch.pos):
+                if self.selected:
+                    self.parent.clear_selection()
+                else:
+                    text = "".join([self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
+                                    self.finding_text, "\'s World", (" at " + self.entrance_text)
+                                    if self.entrance_text != "Vanilla"
+                                    else "", ". (", self.found_text.lower(), ")"])
+                    temp = MarkupLabel(text).markup
+                    text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                    Clipboard.copy(escape_markup(text).replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
+                    return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
-        self.selected = is_selected
+        if self.index not in self.no_select:
+            self.selected = is_selected
 
 
 class ConnectBarTextInput(TextInput):
@@ -608,6 +617,15 @@ class HintLog(RecycleView):
         super(HintLog, self).__init__()
         self.data = []
         self.hints = dict()
+        self.header = {
+            "receiving": {'text': "Receiving Player:"},
+            "item": {'text': "Item:"},
+            "finding": {'text': "Finding Player:"},
+            "location": {'text': "Location:"},
+            "entrance": {'text': "Entrance:"},
+            "found": {'text': "Status:"},
+            "select": False
+        }
 
     def update_hint(self, hint: typing.Dict):
         key = (hint["finding_player"], hint["location"])
@@ -615,18 +633,19 @@ class HintLog(RecycleView):
 
     def refresh_hints(self, parser):
         self.data = []
+        self.data.append(self.header)
         for hint in self.hints.values():
             self.data.append({
                 'receiving': {'text': parser.handle_node({'type': "player_id", 'text': hint['receiving_player']})},
                 'item': {'text': parser.handle_node({'type': "item_id", 'text': hint['item'], 'flags': hint['item_flags']})},
                 'finding': {'text': parser.handle_node({'type': "player_id", 'text': hint['finding_player']})},
                 'location': {'text': parser.handle_node({'type': "location_id", 'text': hint['location']})},
-                'entrance': {'text': parser.handle_node({'type': "color", 'color': "blue", 'text': hint['entrance']
-                            if hint['entrance'] else "Vanilla"})},
+                'entrance': {'text': parser.handle_node({'type': "color" if hint['entrance'] else "text",
+                                                         'color': "blue", 'text': hint['entrance']
+                                                         if hint['entrance'] else "Vanilla"})},
                 'found': {'text': parser.handle_node({'type': "color", 'color': "green" if hint['found'] else "red",
                                                       'text': "Found" if hint['found'] else "Not Found"})}
             })
-
 
 class E(ExceptionHandler):
     logger = logging.getLogger("Client")

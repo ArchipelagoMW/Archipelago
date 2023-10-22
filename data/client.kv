@@ -66,6 +66,8 @@
         height: self.texture_size[1]
         font_size: dp(20)
         markup: True
+        halign: 'center'
+        valign: 'center'
     TooltipLabel:
         id: item
         text: root.item_text
@@ -74,6 +76,8 @@
         height: self.texture_size[1]
         font_size: dp(20)
         markup: True
+        halign: 'center'
+        valign: 'center'
     TooltipLabel:
         id: finding
         text: root.finding_text
@@ -82,7 +86,9 @@
         height: self.texture_size[1]
         font_size: dp(20)
         markup: True
-    Label:
+        halign: 'center'
+        valign: 'center'
+    TooltipLabel:
         id: location
         text: root.location_text
         text_size: self.width, None
@@ -90,7 +96,9 @@
         height: self.texture_size[1]
         font_size: dp(20)
         markup: True
-    Label:
+        halign: 'center'
+        valign: 'center'
+    TooltipLabel:
         id: entrance
         text: root.entrance_text
         text_size: self.width, None
@@ -98,7 +106,9 @@
         height: self.texture_size[1]
         font_size: dp(20)
         markup: True
-    Label:
+        halign: 'center'
+        valign: 'center'
+    TooltipLabel:
         id: found
         text: root.found_text
         text_size: self.width, None
@@ -106,6 +116,8 @@
         height: self.texture_size[1]
         font_size: dp(20)
         markup: True
+        halign: 'center'
+        valign: 'center'
 <HintLog>:
     viewclass: 'HintLabel'
     scroll_y: self.height
