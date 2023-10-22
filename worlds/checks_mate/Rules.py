@@ -16,7 +16,7 @@ class ChecksMateLogic(LogicMixin):
     def __init__(self, world: MultiWorld, player: int):
         self.flag_goal = get_option_value(world, player, "Goal")
 
-    def individual_piece_material(self, item_id: str, item: CMItemData, player: int) -> int:
+    def individual_piece_material(self: CollectionState, item_id: str, item: CMItemData, player: int) -> int:
         val = self.item_count(item_id, player) * item.material
         if item.parents is not None:
             parent_items = [item_id] + [parent_name for parent_name in item.parents]
