@@ -4,7 +4,7 @@ from BaseClasses import MultiWorld
 from Options import Range, Option, Choice
 
 """
-These are not implemented yet
+Most of these are not implemented yet
 """
 
 
@@ -71,7 +71,8 @@ class EnemyPieceTypes(Choice):
 
     Stable: As Chaos, but doesn't change between matches. You'll only ever add or upgrade pieces.
 
-    Book: Uses the standard Chess army. Adds the King's Bishop, then both Knights, then a Bishop.
+    Book: Uses the standard Chess army. Adds pieces inward, then kingside. For example, minor pieces are added in order
+    of the King's Bishop, then both Knights, then a Bishop.
     """
     display_name = "Enemy Piece Types"
     # option_chaos = 0
@@ -85,13 +86,19 @@ class EarlyMaterial(Choice):
     Guarantees that the first few King moves will provide a piece or pawn (chessman).
 
     This location gets overridden over any exclusion. It's guaranteed to be reachable with an empty inventory.
+
+    Pawn, Minor, Major: You will get an early chessman of the specified type (i.e. a pawn, minor piece, or major piece).
+
+    Piece: You will get an early minor or major piece.
+
+    Any: You will get an early chessman.
     """
     display_name = "Early Material"
     option_off = 0
     option_pawn = 1
     option_minor = 2
-    #option_major = 3
-    #option_piece = 4
+    option_major = 3
+    option_piece = 4
     option_any = 5
     default = 1
 
@@ -110,28 +117,13 @@ class MaterialMinLimit(Range):
 class MaterialMaxLimit(Range):
     """
     The maximum material value of your army, once all items are collected. A FIDE army has value 39 (8+6+6+10+9).
+
+    Due to a bug, you may go over this maximum (by one piece) if your minimum and maximum are very close (within 4).
     """
     display_name = "Maximum Material"
     range_start = 30
     range_end = 100
-    default = 49
-
-
-class FairyChessArmy(Choice):
-    """
-    Whether to mix pieces between the Different Armies. No effect if Pieces is Vanilla. Does not affect pawns.
-
-    Chaos: Chooses random enabled options.
-
-    Limited: Chooses within your army, but in any distribution.
-
-    Fair: Chooses within your army, to a maximum of 2 of any given piece.
-    """
-    display_name = "Fairy Chess Army"
-    option_chaos = 0
-    # option_limited = 1
-    # option_fair = 2
-    default = 0
+    default = 50
 
 
 class FairyChessPieces(Choice):
@@ -155,6 +147,24 @@ class FairyChessPieces(Choice):
     # option_cannon = 3
     # option_eurasian = 4
     default = 1
+
+
+class FairyChessArmy(Choice):
+    """
+    Whether to mix pieces between the Different Armies. No effect if Pieces is Vanilla. Does not affect pawns. Note that
+    the Eurasian Army, which replaces the Bishop and Knight with a Vao and Cannon, is a very powerful Different Army.
+
+    Chaos: Chooses random enabled options.
+
+    Limited: Chooses within your army, but in any distribution.
+
+    Fair: Chooses within your army.
+    """
+    display_name = "Fairy Chess Army"
+    option_chaos = 0
+    # option_limited = 1
+    # option_fair = 2
+    default = 0
 
 
 class FairyChessPawns(Choice):
@@ -227,8 +237,8 @@ cm_options: Dict[str, type(Option)] = {
     "early_material": EarlyMaterial,
     "max_material": MaterialMaxLimit,
     "min_material": MaterialMinLimit,
-    "fairy_chess_army": FairyChessArmy,
     "fairy_chess_pieces": FairyChessPieces,
+    "fairy_chess_army": FairyChessArmy,
     "fairy_chess_pawns": FairyChessPawns,
     "minor_piece_limit_by_type": MinorPieceTypeLimit,
     "major_piece_limit_by_type": MajorPieceTypeLimit,

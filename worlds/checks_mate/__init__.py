@@ -58,10 +58,8 @@ class CMWorld(World):
         # TODO: if goal is not option_single do not add all enemies (requires add client support)
         for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
             self.multiworld.start_inventory[self.player].value[enemy_pawn] = 1
-            self.items_used[enemy_pawn] = 1
         for enemy_piece in self.item_name_groups["Enemy Piece"]:
             self.multiworld.start_inventory[self.player].value[enemy_piece] = 1
-            self.items_used[enemy_piece] = 1
 
     def setting(self, name: str):
         return getattr(self.multiworld, name)[self.player]
@@ -83,6 +81,10 @@ class CMWorld(World):
         #items = [[self.create_item(item) for _ in range(item_data.quantity)]
         #                             for item, item_data in progression_items]0
         excluded_items = get_excluded_items(self.multiworld, self.player)
+        for item_name in excluded_items:
+            if item_name not in self.items_used:
+                self.items_used[item_name] = 0
+            self.items_used[item_name] += excluded_items[item_name]
         starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
         for item in starter_items:
             if item.name not in self.items_used:
@@ -147,7 +149,6 @@ class CMWorld(World):
 
         my_filler_items = set(filler_items.keys())
         while len(items) < len(location_table):
-            print(my_filler_items)
             chosen_item = self.multiworld.random.choice(list(my_filler_items))
             if self.can_add_more(chosen_item):
                 if chosen_item not in self.items_used:
