@@ -66,7 +66,7 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
     - If you don't want to have a save in the GoA. Disconnect the client, load the auto save, and then reconnect the client after it loads the auto save.
 - Set fps limit to 60fps.
 - Run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
-- Make sure to save in a different save slot when playing in a async/disconnecting and playing a different seed
+- Make sure to save in a different save slot when playing in an async or disconnecting from the server to play a different seed
 
 <h2 style="text-transform:none";>Requirement/logic sheet</h2>
 Have any questions on what's in logic? This spreadsheet has the answer [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1Embae0t7pIrbzvX-NRywk7bTHHEvuFzzQBUUpSUL7Ak/edit?usp=sharing)
