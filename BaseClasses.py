@@ -206,8 +206,7 @@ class MultiWorld():
                         break
                     break
             else:
-                if not stack()[1].function.startswith("test_"):
-                    raise ValueError("Unable to properly evaluate stack from multiworld.random call.")
+                raise ValueError(f"Unable to properly evaluate stack from multiworld.random call. {stack}")
         return self._random
 
     def get_all_ids(self) -> Tuple[int, ...]:

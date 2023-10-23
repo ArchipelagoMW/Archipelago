@@ -726,9 +726,9 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         # copied this code from the beginning of `distribute_items_restrictive`
         # before `distribute_early_items` is called
         fill_locations = sorted(mw.get_unfilled_locations())
-        mw.random.shuffle(fill_locations)
+        mw._random.shuffle(fill_locations)
         itempool = sorted(mw.itempool)
-        mw.random.shuffle(itempool)
+        mw._random.shuffle(itempool)
 
         fill_locations, itempool = distribute_early_items(mw, fill_locations, itempool)
 
