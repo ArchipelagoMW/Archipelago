@@ -193,19 +193,18 @@ class MultiWorld():
         if __debug__:
             from inspect import stack
             for frame in stack():
-                if frame.filename.endswith("Main.py"):
+                if frame.filename.endswith(("Main.py", "Fill.py")):
                     break
                 if frame.filename.endswith("AutoWorld.py"):
-                    # TODO remove ~0.5.0
+                    # TODO replace with deprecate ~0.5.0
                     if frame.function == "call_single":
                         warnings.warn("Calls to `MultiWorld.random` from a World instance have been deprecated. "
                                       "Please use `self.random`.")
                         break
-                    assert frame.function != "call_single", ("Calls to `MultiWorld.random` from a World instance have "
-                                                             "been deprecated. Please use `self.random`.")
                     break
             else:
-                raise ValueError("Unable to properly evaluate stack from multiworld.random call.")
+                if not stack()[1].function.startswith("test_"):
+                    raise ValueError("Unable to properly evaluate stack from multiworld.random call.")
         return self._random
 
     def get_all_ids(self) -> Tuple[int, ...]:
