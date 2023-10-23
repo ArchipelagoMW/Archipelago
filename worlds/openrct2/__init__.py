@@ -471,8 +471,8 @@ class OpenRCT2World(World):
                     self.location_prices[index]["RidePrereq"][1] = "thrill"
                 else:
                     self.location_prices[index]["RidePrereq"][1] = "water"
-        from Utils import visualize_regions
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
+        # from Utils import visualize_regions
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
         print("Here's the final unlock shop:")
         print(self.location_prices)
         return {
