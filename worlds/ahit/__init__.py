@@ -26,12 +26,6 @@ components.append(Component("A Hat in Time Client", "AHITClient", icon='yatta'))
 icon_paths['yatta'] = local_path('data', 'yatta.png')
 
 
-def run_client():
-    from AHITClient import main
-    p = Process(target=main)
-    p.start()
-
-
 class AWebInTime(WebWorld):
     theme = "partyTime"
     tutorials = [Tutorial(
@@ -106,7 +100,7 @@ class HatInTimeWorld(World):
                or "Camera Tourist" not in self.get_excluded_dws():
                 create_enemy_events(self)
 
-        # place default contract locations if contract shuffle is off so logic can still utilize them
+        # place vanilla contract locations if contract shuffle is off
         if self.multiworld.ShuffleActContracts[self.player].value == 0:
             for name in contract_locations.keys():
                 self.multiworld.get_location(name, self.player).place_locked_item(create_item(self, name))

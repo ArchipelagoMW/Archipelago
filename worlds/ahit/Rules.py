@@ -466,6 +466,9 @@ def set_moderate_rules(world: World):
                  and can_use_hat(state, world, HatType.ICE)
                  and can_use_hat(state, world, HatType.BREWING))
 
+        # Moderate: Bluefin Tunnel without tickets
+        set_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", world.player), lambda state: True)
+
 
 def set_hard_rules(world: World):
     # Hard: clear Time Rift - The Twilight Bell with Sprint+Scooter only

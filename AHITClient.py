@@ -3,11 +3,10 @@ import Utils
 import websockets
 import functools
 from copy import deepcopy
-from typing import List, Any, Iterable, Dict
+from typing import List, Any, Iterable
 from NetUtils import decode, encode, JSONtoTextParser, JSONMessagePart, NetworkItem
 from MultiServer import Endpoint
-from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, \
-    get_base_parser
+from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 
 DEBUG = False
 
@@ -148,6 +147,9 @@ async def proxy(websocket, path: str = "/", ctx: AHITContext = None):
 
         if ctx.is_proxy_connected():
             async for data in websocket:
+                if DEBUG:
+                    logger.info(f"Incoming message: {data}")
+
                 for msg in decode(data):
                     if msg["cmd"] == "Connect":
                         # Proxy is connecting, make sure it is valid
@@ -174,9 +176,6 @@ async def proxy(websocket, path: str = "/", ctx: AHITContext = None):
 
                     if not ctx.is_proxy_connected():
                         break
-
-                    if DEBUG:
-                        logger.info(f"Incoming message: {msg}")
 
                     await ctx.send_msgs([msg])
 

@@ -157,61 +157,61 @@ rift_access_regions = {
     "Time Rift - Rumbi Factory": ["Nyakuza Free Roam"],
 }
 
-# Hat_ChapterActInfo, from the game files to be used in act shuffle
+# Time piece identifiers to be used in act shuffle
 chapter_act_info = {
-    "Time Rift - Gallery":          "hatintime_chapterinfo.spaceship.Spaceship_WaterRift_Gallery",
-    "Time Rift - The Lab":          "hatintime_chapterinfo.spaceship.Spaceship_WaterRift_MailRoom",
+    "Time Rift - Gallery":          "Spaceship_WaterRift_Gallery",
+    "Time Rift - The Lab":          "Spaceship_WaterRift_MailRoom",
 
-    "Welcome to Mafia Town":        "hatintime_chapterinfo.MafiaTown.MafiaTown_Welcome",
-    "Barrel Battle":                "hatintime_chapterinfo.MafiaTown.MafiaTown_BarrelBattle",
-    "She Came from Outer Space":    "hatintime_chapterinfo.MafiaTown.MafiaTown_AlienChase",
-    "Down with the Mafia!":         "hatintime_chapterinfo.MafiaTown.MafiaTown_MafiaBoss",
-    "Cheating the Race":            "hatintime_chapterinfo.MafiaTown.MafiaTown_Race",
-    "Heating Up Mafia Town":        "hatintime_chapterinfo.MafiaTown.MafiaTown_Lava",
-    "The Golden Vault":             "hatintime_chapterinfo.MafiaTown.MafiaTown_GoldenVault",
-    "Time Rift - Mafia of Cooks":   "hatintime_chapterinfo.MafiaTown.MafiaTown_CaveRift_Mafia",
-    "Time Rift - Sewers":           "hatintime_chapterinfo.MafiaTown.MafiaTown_WaterRift_Easy",
-    "Time Rift - Bazaar":           "hatintime_chapterinfo.MafiaTown.MafiaTown_WaterRift_Hard",
+    "Welcome to Mafia Town":        "chapter1_tutorial",
+    "Barrel Battle":                "chapter1_barrelboss",
+    "She Came from Outer Space":    "chapter1_cannon_repair",
+    "Down with the Mafia!":         "chapter1_boss",
+    "Cheating the Race":            "harbor_impossible_race",
+    "Heating Up Mafia Town":        "mafiatown_lava",
+    "The Golden Vault":             "mafiatown_goldenvault",
+    "Time Rift - Mafia of Cooks":   "TimeRift_Cave_Mafia",
+    "Time Rift - Sewers":           "TimeRift_Water_Mafia_Easy",
+    "Time Rift - Bazaar":           "TimeRift_Water_Mafia_Hard",
 
-    "Dead Bird Studio":             "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_DeadBirdStudio",
-    "Murder on the Owl Express":    "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_Murder",
-    "Picture Perfect":              "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_PicturePerfect",
-    "Train Rush":                   "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_TrainRush",
-    "The Big Parade":               "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_Parade",
-    "Award Ceremony":               "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_AwardCeremony",
-    "Dead Bird Studio Basement":    "DeadBirdBasement",  # Dead Bird Studio Basement has no ChapterActInfo
-    "Time Rift - Dead Bird Studio": "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_CaveRift_Basement",
-    "Time Rift - The Owl Express":  "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_WaterRift_Panels",
-    "Time Rift - The Moon":         "hatintime_chapterinfo.BattleOfTheBirds.BattleOfTheBirds_WaterRift_Parade",
+    "Dead Bird Studio":             "DeadBirdStudio",
+    "Murder on the Owl Express":    "chapter3_murder",
+    "Picture Perfect":              "moon_camerasnap",
+    "Train Rush":                   "trainwreck_selfdestruct",
+    "The Big Parade":               "moon_parade",
+    "Award Ceremony":               "award_ceremony",
+    "Dead Bird Studio Basement":    "chapter3_secret_finale",
+    "Time Rift - Dead Bird Studio": "TimeRift_Cave_BirdBasement",
+    "Time Rift - The Owl Express":  "TimeRift_Water_TWreck_Panels",
+    "Time Rift - The Moon":         "TimeRift_Water_TWreck_Parade",
 
-    "Contractual Obligations":      "hatintime_chapterinfo.subconforest.SubconForest_IceWall",
-    "The Subcon Well":              "hatintime_chapterinfo.subconforest.SubconForest_Cave",
-    "Toilet of Doom":               "hatintime_chapterinfo.subconforest.SubconForest_Toilet",
-    "Queen Vanessa's Manor":        "hatintime_chapterinfo.subconforest.SubconForest_Manor",
-    "Mail Delivery Service":        "hatintime_chapterinfo.subconforest.SubconForest_MailDelivery",
-    "Your Contract has Expired":    "hatintime_chapterinfo.subconforest.SubconForest_SnatcherBoss",
-    "Time Rift - Sleepy Subcon":    "hatintime_chapterinfo.subconforest.SubconForest_CaveRift_Raccoon",
-    "Time Rift - Pipe":             "hatintime_chapterinfo.subconforest.SubconForest_WaterRift_Hookshot",
-    "Time Rift - Village":          "hatintime_chapterinfo.subconforest.SubconForest_WaterRift_Dwellers",
+    "Contractual Obligations":      "subcon_village_icewall",
+    "The Subcon Well":              "subcon_cave",
+    "Toilet of Doom":               "chapter2_toiletboss",
+    "Queen Vanessa's Manor":        "vanessa_manor_attic",
+    "Mail Delivery Service":        "subcon_maildelivery",
+    "Your Contract has Expired":    "snatcher_boss",
+    "Time Rift - Sleepy Subcon":    "TimeRift_Cave_Raccoon",
+    "Time Rift - Pipe":             "TimeRift_Water_Subcon_Hookshot",
+    "Time Rift - Village":          "TimeRift_Water_Subcon_Dwellers",
 
-    "Alpine Free Roam":                 "hatintime_chapterinfo.AlpineSkyline.AlpineSkyline_IntroMountain",
-    "The Illness has Spread":           "hatintime_chapterinfo.AlpineSkyline.AlpineSkyline_Finale",
-    "Time Rift - Alpine Skyline":       "hatintime_chapterinfo.AlpineSkyline.AlpineSkyline_CaveRift_Alpine",
-    "Time Rift - The Twilight Bell":    "hatintime_chapterinfo.AlpineSkyline.AlpineSkyline_WaterRift_Goats",
-    "Time Rift - Curly Tail Trail":     "hatintime_chapterinfo.AlpineSkyline.AlpineSkyline_WaterRift_Cats",
+    "Alpine Free Roam":                 "AlpineFreeRoam",  # not an actual Time Piece
+    "The Illness has Spread":           "AlpineSkyline_Finale",
+    "Time Rift - Alpine Skyline":       "TimeRift_Cave_Alps",
+    "Time Rift - The Twilight Bell":    "TimeRift_Water_Alp_Goats",
+    "Time Rift - Curly Tail Trail":     "TimeRift_Water_AlpineSkyline_Cats",
 
-    "The Finale":                       "hatintime_chapterinfo.TheFinale.TheFinale_FinalBoss",
-    "Time Rift - Tour":                 "hatintime_chapterinfo_dlc1.spaceship.CaveRift_Tour",
+    "The Finale":                       "TheFinale_FinalBoss",
+    "Time Rift - Tour":                 "TimeRift_Cave_Tour",
 
-    "Bon Voyage!":                 "hatintime_chapterinfo_dlc1.Cruise.Cruise_Boarding",
-    "Ship Shape":                  "hatintime_chapterinfo_dlc1.Cruise.Cruise_Working",
-    "Rock the Boat":               "hatintime_chapterinfo_dlc1.Cruise.Cruise_Sinking",
-    "Time Rift - Balcony":         "hatintime_chapterinfo_dlc1.Cruise.Cruise_WaterRift_Slide",
-    "Time Rift - Deep Sea":        "hatintime_chapterinfo_dlc1.Cruise.Cruise_CaveRift",
+    "Bon Voyage!":                 "Cruise_Boarding",
+    "Ship Shape":                  "Cruise_Working",
+    "Rock the Boat":               "Cruise_Sinking",
+    "Time Rift - Balcony":         "Cruise_WaterRift_Slide",
+    "Time Rift - Deep Sea":        "Cruise_CaveRift_Aquarium",
 
-    "Nyakuza Free Roam":            "hatintime_chapterinfo_dlc2.metro.Metro_FreeRoam",
-    "Rush Hour":                    "hatintime_chapterinfo_dlc2.metro.Metro_Escape",
-    "Time Rift - Rumbi Factory":    "hatintime_chapterinfo_dlc2.metro.Metro_RumbiFactory"
+    "Nyakuza Free Roam":            "MetroFreeRoam",  # not an actual Time Piece
+    "Rush Hour":                    "Metro_Escape",
+    "Time Rift - Rumbi Factory":    "Metro_CaveRift_RumbiFactory"
 }
 
 # Guarantee that the first level a player can access is a location dense area beatable with no items
