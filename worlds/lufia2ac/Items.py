@@ -2,9 +2,8 @@ from enum import auto, Enum
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
-from . import Locations
 
-start_id: int = Locations.start_id
+start_id: int = 0xAC0000
 
 
 class ItemType(Enum):
@@ -500,7 +499,7 @@ l2ac_item_table: Dict[str, ItemData] = {
     # 0x01C8: "Key28"
     # 0x01C9: "Key29"
     # 0x01CA: "AP item"  # replaces "Key30"
-    # 0x01CB: "Crown"
+    # 0x01CB: "SOLD OUT"  # replaces "Crown"
     # 0x01CC: "Ruby apple"
     # 0x01CD: "PURIFIA"
     # 0x01CE: "Tag ring"
