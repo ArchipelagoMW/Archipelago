@@ -791,4 +791,4 @@ class TestChestAccess(MyGameTestBase):
         self.assertAccessDependency(locations, items)
 ```
 
-For more information on tests check the [tests doc](tests.md)
+For more information on tests check the [tests doc](tests.md).
