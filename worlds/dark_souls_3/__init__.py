@@ -494,6 +494,8 @@ class DarkSouls3World(World):
                 "enable_boss_locations": self.multiworld.enable_boss_locations[self.player].value,
                 "enable_npc_locations": self.multiworld.enable_npc_locations[self.player].value,
                 "enable_misc_locations": self.multiworld.enable_misc_locations[self.player].value,
+                "random_starting_loadout": self.multiworld.random_starting_loadout[self.player].value,
+                "require_one_handed_starting_weapons": self.multiworld.require_one_handed_starting_weapons[self.player].value,
                 "auto_equip": self.multiworld.auto_equip[self.player].value,
                 "lock_equip": self.multiworld.lock_equip[self.player].value,
                 "no_weapon_requirements": self.multiworld.no_weapon_requirements[self.player].value,

@@ -53,6 +53,16 @@ class RandomizeHealthLocations(Toggle):
     display_name = "Randomize Health Upgrade Locations"
 
 
+class RandomizeStartingLoadout(DefaultOnToggle):
+    """Randomizes the equipment characters begin with."""
+    display_name = "Randomize Starting Loadout"
+
+
+class RequireOneHandedStartingWeapons(Toggle):
+    """Require starting equipment to be usable one-handed."""
+    display_name = "Require One-Handed Starting Weapons"
+
+
 class PoolTypeOption(Choice):
     """Changes which non-progression items you add to the pool
 
@@ -192,6 +202,8 @@ dark_souls_options: typing.Dict[str, Option] = {
     "enable_npc_locations": RandomizeNPCLocations,
     "enable_misc_locations": RandomizeMiscLocations,
     "enable_health_upgrade_locations": RandomizeHealthLocations,
+    "random_starting_loadout": RandomizeStartingLoadout,
+    "require_one_handed_starting_weapons": RequireOneHandedStartingWeapons,
     "pool_type": PoolTypeOption,
     "guaranteed_items": GuaranteedItemsOption,
     "auto_equip": AutoEquipOption,
