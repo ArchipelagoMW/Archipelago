@@ -1,16 +1,16 @@
 
 import sys, random
 from collections import defaultdict
-from rando.Items import ItemManager
-from utils.utils import getRangeDict, chooseFromRange
-from rando.ItemLocContainer import ItemLocation
+from ..rando.Items import ItemManager
+from ..utils.utils import getRangeDict, chooseFromRange
+from ..rando.ItemLocContainer import ItemLocation
 
 # Holder for settings and a few utility functions related to them
 # (especially for plando/rando).
 # Holds settings not related to graph layout.
 class RandoSettings(object):
     def __init__(self, maxDiff, progSpeed, progDiff, qty, restrictions,
-                 superFun, runtimeLimit_s, plandoSettings, minDiff):
+                 superFun, runtimeLimit_s, PlandoOptions, minDiff):
         self.progSpeed = progSpeed.lower()
         self.progDiff = progDiff.lower()
         self.maxDiff = maxDiff
@@ -20,7 +20,7 @@ class RandoSettings(object):
         self.runtimeLimit_s = runtimeLimit_s
         if self.runtimeLimit_s <= 0:
             self.runtimeLimit_s = sys.maxsize
-        self.plandoSettings = plandoSettings
+        self.PlandoOptions = PlandoOptions
         self.minDiff = minDiff
 
     def getSuperFun(self):
@@ -30,33 +30,33 @@ class RandoSettings(object):
         self.superFun = superFun[:]
 
     def isPlandoRando(self):
-        return self.plandoSettings is not None
+        return self.PlandoOptions is not None
 
-    def getItemManager(self, smbm, nLocs):
+    def getItemManager(self, smbm, nLocs, bossesItems):
         if not self.isPlandoRando():
-            return ItemManager(self.restrictions['MajorMinor'], self.qty, smbm, nLocs, self.maxDiff)
+            return ItemManager(self.restrictions['MajorMinor'], self.qty, smbm, nLocs, bossesItems, self.maxDiff)
         else:
-            return ItemManager('Plando', self.qty, smbm, nLocs, self.maxDiff)
+            return ItemManager('Plando', self.qty, smbm, nLocs, bossesItems, self.maxDiff)
 
     def getExcludeItems(self, locations):
         if not self.isPlandoRando():
             return None
         exclude = {'alreadyPlacedItems': defaultdict(int), 'forbiddenItems': []}
         # locsItems is a dict {'loc name': 'item type'}
-        for locName,itemType in self.plandoSettings["locsItems"].items():
+        for locName,itemType in self.PlandoOptions["locsItems"].items():
             if not any(loc.Name == locName for loc in locations):
                 continue
             exclude['alreadyPlacedItems'][itemType] += 1
             exclude['alreadyPlacedItems']['total'] += 1
 
-        exclude['forbiddenItems'] = self.plandoSettings['forbiddenItems']
+        exclude['forbiddenItems'] = self.PlandoOptions['forbiddenItems']
 
         return exclude
 
     def collectAlreadyPlacedItemLocations(self, container):
         if not self.isPlandoRando():
             return
-        for locName,itemType in self.plandoSettings["locsItems"].items():
+        for locName,itemType in self.PlandoOptions["locsItems"].items():
             if not any(loc.Name == locName for loc in container.unusedLocations):
                 continue
             item = container.getNextItemInPool(itemType)
@@ -67,7 +67,11 @@ class RandoSettings(object):
 
 # Holds settings and utiliy functions related to graph layout
 class GraphSettings(object):
-    def __init__(self, startAP, areaRando, lightAreaRando, bossRando, escapeRando, minimizerN, dotFile, doorsColorsRando, allowGreyDoors, plandoRandoTransitions):
+    def __init__(self, player, startAP, areaRando, lightAreaRando,
+                 bossRando, escapeRando, minimizerN, dotFile,
+                 doorsColorsRando, allowGreyDoors, tourian,
+                 plandoRandoTransitions):
+        self.player = player
         self.startAP = startAP
         self.areaRando = areaRando
         self.lightAreaRando = lightAreaRando
@@ -77,6 +81,7 @@ class GraphSettings(object):
         self.dotFile = dotFile
         self.doorsColorsRando = doorsColorsRando
         self.allowGreyDoors = allowGreyDoors
+        self.tourian = tourian
         self.plandoRandoTransitions = plandoRandoTransitions
 
     def isMinimizer(self):
@@ -122,10 +127,16 @@ class ProgSpeedParameters(object):
         elif progSpeed == 'fastest':
             return 0.33
         return 0
+    
+    # chozo/slowest can make seed generation fail often, not much
+    # of a gameplay difference between slow/slowest in Chozo anyway,
+    # so we merge slow and slowest for some params
+    def isSlow(self, progSpeed):
+        return progSpeed == "slow" or (progSpeed == "slowest" and self.restrictions.split == "Chozo")
 
     def getItemLimit(self, progSpeed):
         itemLimit = self.nLocs
-        if progSpeed == 'slow':
+        if self.isSlow(progSpeed):
             itemLimit = int(self.nLocs*0.209) # 21 for 105
         elif progSpeed == 'medium':
             itemLimit = int(self.nLocs*0.095) # 9 for 105
@@ -143,7 +154,7 @@ class ProgSpeedParameters(object):
 
     def getLocLimit(self, progSpeed):
         locLimit = -1
-        if progSpeed == 'slow':
+        if self.isSlow(progSpeed):
             locLimit = 1
         elif progSpeed == 'medium':
             locLimit = 2
@@ -158,12 +169,12 @@ class ProgSpeedParameters(object):
         if self.restrictions.isLateDoors():
             progTypes += ['Wave','Spazer','Plasma']
         progTypes.append('Charge')
-        if progSpeed == 'slowest':
+        if progSpeed == 'slowest' and self.restrictions.split != "Chozo":
             return progTypes
         else:
             progTypes.remove('HiJump')
             progTypes.remove('Charge')
-        if progSpeed == 'slow':
+        if self.isSlow(progSpeed):
             return progTypes
         else:
             progTypes.remove('Bomb')

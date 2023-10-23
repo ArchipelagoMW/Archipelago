@@ -2,8 +2,14 @@
 
 ## Required Software
 
-- Rogue Legacy Randomizer from
-  the [Rogue Legacy Randomizer Releases Page](https://github.com/ThePhar/RogueLegacyRandomizer/releases)
+- Rogue Legacy Randomizer from the
+  [Rogue Legacy Randomizer Releases Page](https://github.com/ThePhar/RogueLegacyRandomizer/releases)
+
+## Recommended Installation Instructions
+
+Please read the README file on the 
+[Rogue Legacy Randomizer GitHub](https://github.com/ThePhar/RogueLegacyRandomizer/blob/master/README.md) page for 
+up-to-date installation instructions.
 
 ## Configuring your YAML file
 
@@ -27,9 +33,3 @@ provides an alternative one to the default values.
 
 Once you have entered the required values, you go to Connect and then select Confirm on the "Ready to Start" screen. Now
 you're off to start your legacy!
-
-## Recommended Installation Instructions
-
-Please read the README file on the 
-[Rogue Legacy Randomizer GitHub](https://github.com/ThePhar/RogueLegacyRandomizer/blob/master/README.md) page for up to
-date installation instructions.

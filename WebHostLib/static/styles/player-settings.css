@@ -5,7 +5,8 @@ html{
 }
 
 #player-settings{
-    max-width: 1000px;
+    box-sizing: border-box;
+    max-width: 1024px;
     margin-left: auto;
     margin-right: auto;
     background-color: rgba(0, 0, 0, 0.15);
@@ -116,6 +117,10 @@ html{
     flex-grow: 1;
 }
 
+#player-settings table select:disabled{
+    background-color: lightgray;
+}
+
 #player-settings table .range-container{
     display: flex;
     flex-direction: row;
@@ -138,10 +143,30 @@ html{
 #player-settings table .special-range-wrapper{
     display: flex;
     flex-direction: row;
+    margin-top: 0.25rem;
 }
 
 #player-settings table .special-range-wrapper input[type=range]{
     flex-grow: 1;
+}
+
+#player-settings table .randomize-button {
+    max-height: 24px;
+    line-height: 16px;
+    padding: 2px 8px;
+    margin: 0 0 0 0.25rem;
+    font-size: 12px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+#player-settings table .randomize-button.active {
+    background-color: #ffef00; /* Same as .interactive in globalStyles.css */
+}
+
+#player-settings table .randomize-button[data-tooltip]::after {
+    left: unset;
+    right: 0;
 }
 
 #player-settings table label{
@@ -158,18 +183,31 @@ html{
     vertical-align: top;
 }
 
-@media all and (max-width: 1000px), all and (orientation: portrait){
+@media all and (max-width: 1024px) {
+    #player-settings {
+        border-radius: 0;
+    }
+
     #player-settings #game-options{
         justify-content: flex-start;
         flex-wrap: wrap;
     }
 
-    #player-settings .left, #player-settings .right{
-        flex-grow: unset;
+    #player-settings .left,
+    #player-settings .right {
+        margin: 0;
+    }
+
+    #game-options table {
+        margin-bottom: 0;
     }
 
     #game-options table label{
         display: block;
         min-width: 200px;
+    }
+
+    #game-options table tr td {
+        width: 50%;
     }
 }

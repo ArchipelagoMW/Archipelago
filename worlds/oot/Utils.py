@@ -4,14 +4,14 @@ import subprocess
 import Utils
 from functools import lru_cache
 
-__version__ = '6.1.0 f.LUM'
+__version__ = '7.1.0'
 
 
 def data_path(*args):
     return os.path.join(os.path.dirname(__file__), 'data', *args)
 
 
-@lru_cache(maxsize=13)  # Cache Overworld.json and the 12 dungeons
+@lru_cache
 def read_json(file_path):
     json_string = ""
     with io.open(file_path, 'r') as file:
@@ -97,3 +97,9 @@ def compare_version(a, b):
         if sa[i] < sb[i]:
             return -1
     return 0
+
+# https://stackoverflow.com/a/23146126
+def find_last(source_list, sought_element):
+    for reverse_index, element in enumerate(reversed(source_list)):
+        if element == sought_element:
+            return len(source_list) - 1 - reverse_index

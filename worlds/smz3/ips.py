@@ -1,5 +1,7 @@
 import itertools
 
+from .TotalSMZ3.Text.Texts import openFile
+
 def range_union(ranges):
     ret = []
     for rg in sorted([[r.start, r.stop] for r in ranges]):
@@ -33,7 +35,7 @@ class IPS_Patch(object):
     @staticmethod
     def load(filename):
         loaded_patch = IPS_Patch()
-        with open(filename, 'rb') as file:
+        with openFile(filename, 'rb') as file:
             header = file.read(5)
             if header != b'PATCH':
                 raise Exception('Not a valid IPS patch file!')

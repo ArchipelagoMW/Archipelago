@@ -1,37 +1,59 @@
-from BaseClasses import MultiWorld, CollectionState
-
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
+from BaseClasses import CollectionState, MultiWorld
 
 
-class LegacyLogic(LogicMixin):
-    def has_any_vendors(self: CollectionState, player: int) -> bool:
-        return self.has_any({"Blacksmith", "Enchantress"}, player)
+def get_upgrade_total(multiworld: MultiWorld, player: int) -> int:
+    return int(multiworld.health_pool[player]) + int(multiworld.mana_pool[player]) + \
+           int(multiworld.attack_pool[player]) + int(multiworld.magic_damage_pool[player])
 
-    def has_all_vendors(self: CollectionState, player: int) -> bool:
-        return self.has_all({"Blacksmith", "Enchantress"}, player)
 
-    def has_stat_upgrades(self, player: int, amount: int) -> bool:
-        return self.stat_upgrade_count(player) >= amount
+def get_upgrade_count(state: CollectionState, player: int) -> int:
+    return state.item_count("Health Up", player) + state.item_count("Mana Up", player) + \
+           state.item_count("Attack Up", player) + state.item_count("Magic Damage Up", player)
 
-    def total_stat_upgrades_count(self, player: int) -> int:
-        return int(self.multiworld.health_pool[player]) + \
-               int(self.multiworld.mana_pool[player]) + \
-               int(self.multiworld.attack_pool[player]) + \
-               int(self.multiworld.magic_damage_pool[player])
 
-    def stat_upgrade_count(self: CollectionState, player: int) -> int:
-        return self.item_count("Health Up", player) + self.item_count("Mana Up", player) + \
-               self.item_count("Attack Up", player) + self.item_count("Magic Damage Up", player)
+def has_vendors(state: CollectionState, player: int) -> bool:
+    return state.has_all({"Blacksmith", "Enchantress"}, player)
+
+
+def has_upgrade_amount(state: CollectionState, player: int, amount: int) -> bool:
+    return get_upgrade_count(state, player) >= amount
+
+
+def has_upgrades_percentage(state: CollectionState, player: int, percentage: float) -> bool:
+    return has_upgrade_amount(state, player, round(get_upgrade_total(state.multiworld, player) * (percentage / 100)))
+
+
+def has_movement_rune(state: CollectionState, player: int) -> bool:
+    return state.has("Vault Runes", player) or state.has("Sprint Runes", player) or state.has("Sky Runes", player)
+
+
+def has_fairy_progression(state: CollectionState, player: int) -> bool:
+    return state.has("Dragons", player) or (state.has("Enchantress", player) and has_movement_rune(state, player))
+
+
+def has_defeated_castle(state: CollectionState, player: int) -> bool:
+    return state.has("Defeat Khidr", player) or state.has("Defeat Neo Khidr", player)
+
+
+def has_defeated_forest(state: CollectionState, player: int) -> bool:
+    return state.has("Defeat Alexander", player) or state.has("Defeat Alexander IV", player)
+
+
+def has_defeated_tower(state: CollectionState, player: int) -> bool:
+    return state.has("Defeat Ponce de Leon", player) or state.has("Defeat Ponce de Freon", player)
+
+
+def has_defeated_dungeon(state: CollectionState, player: int) -> bool:
+    return state.has("Defeat Herodotus", player) or state.has("Defeat Astrodotus", player)
 
 
 def set_rules(multiworld: MultiWorld, player: int):
-    # Vendors
+    # If 'vendors' are 'normal', then expect it to show up in the first half(ish) of the spheres.
     if multiworld.vendors[player] == "normal":
-        set_rule(multiworld.get_location("Forest Abkhazia Boss Reward", player),
-                 lambda state: state.has_all_vendors(player))
+        multiworld.get_location("Forest Abkhazia Boss Reward", player).access_rule = \
+            lambda state: has_vendors(state, player)
 
-    # Scale each manor location.
+    # Gate each manor location so everything isn't dumped into sphere 1.
     manor_rules = {
         "Defeat Khidr" if multiworld.khidr[player] == "vanilla" else "Defeat Neo Khidr": [
             "Manor - Left Wing Window",
@@ -65,22 +87,27 @@ def set_rules(multiworld: MultiWorld, player: int):
         ]
     }
 
+    # Set rules for manor locations.
     for event, locations in manor_rules.items():
         for location in locations:
-            set_rule(multiworld.get_location(location, player), lambda state: state.has(event, player))
+            multiworld.get_location(location, player).access_rule = lambda state: state.has(event, player)
 
-    # Standard Zone Progression
+    # Set rules for fairy chests to decrease headache of expectation to find non-movement fairy chests.
+    for fairy_location in [location for location in multiworld.get_locations(player) if "Fairy" in location.name]:
+        fairy_location.access_rule = lambda state: has_fairy_progression(state, player)
+
+    # Region rules.
     multiworld.get_entrance("Forest Abkhazia", player).access_rule = \
-        (lambda state: state.has_stat_upgrades(player, 0.125 * state.total_stat_upgrades_count(player)) and
-                       (state.has("Defeat Khidr", player) or state.has("Defeat Neo Khidr", player)))
-    multiworld.get_entrance("The Maya", player).access_rule = \
-        (lambda state: state.has_stat_upgrades(player, 0.25 * state.total_stat_upgrades_count(player)) and
-                           (state.has("Defeat Alexander", player) or state.has("Defeat Alexander IV", player)))
-    multiworld.get_entrance("Land of Darkness", player).access_rule = \
-        (lambda state: state.has_stat_upgrades(player, 0.375 * state.total_stat_upgrades_count(player)) and
-                           (state.has("Defeat Ponce de Leon", player) or state.has("Defeat Ponce de Freon", player)))
-    multiworld.get_entrance("The Fountain Room", player).access_rule = \
-        (lambda state: state.has_stat_upgrades(player, 0.5 * state.total_stat_upgrades_count(player)) and
-                           (state.has("Defeat Herodotus", player) or state.has("Defeat Astrodotus", player)))
+        lambda state: has_upgrades_percentage(state, player, 12.5) and has_defeated_castle(state, player)
 
+    multiworld.get_entrance("The Maya", player).access_rule = \
+        lambda state: has_upgrades_percentage(state, player, 25) and has_defeated_forest(state, player)
+
+    multiworld.get_entrance("Land of Darkness", player).access_rule = \
+        lambda state: has_upgrades_percentage(state, player, 37.5) and has_defeated_tower(state, player)
+
+    multiworld.get_entrance("The Fountain Room", player).access_rule = \
+        lambda state: has_upgrades_percentage(state, player, 50) and has_defeated_dungeon(state, player)
+
+    # Win condition.
     multiworld.completion_condition[player] = lambda state: state.has("Defeat The Fountain", player)

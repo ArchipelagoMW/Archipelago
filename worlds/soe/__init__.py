@@ -3,9 +3,11 @@ import os
 import os.path
 import threading
 import typing
+
+import settings
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
-from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, RegionType, Tutorial
+from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
 from Utils import output_path
 
 try:
@@ -145,6 +147,16 @@ class SoEWebWorld(WebWorld):
     )]
 
 
+class SoESettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the SoE US ROM"""
+        description = "Secret of Evermore (USA) ROM"
+        copy_to = "Secret of Evermore (USA).sfc"
+        md5s = [SoEDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+
+
 class SoEWorld(World):
     """
     Secret of Evermore is a SNES action RPG. You learn alchemy spells, fight bosses and gather rocket parts to visit a
@@ -152,8 +164,8 @@ class SoEWorld(World):
     """
     game: str = "Secret of Evermore"
     option_definitions = soe_options
+    settings: typing.ClassVar[SoESettings]
     topology_present = False
-    remote_items = False
     data_version = 4
     web = SoEWebWorld()
     required_client_version = (0, 3, 5)
@@ -202,7 +214,7 @@ class SoEWorld(World):
         return SoEItem(item.name, classification, self.item_name_to_id[item.name], self.player)
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
@@ -212,7 +224,7 @@ class SoEWorld(World):
         max_difficulty = 1 if self.multiworld.difficulty[self.player] == Difficulty.option_easy else 256
 
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.multiworld)
+        r = Region('Menu', self.player, self.multiworld)
         r.exits = [Entrance(self.player, 'New Game', r)]
         self.multiworld.regions += [r]
 
@@ -268,7 +280,7 @@ class SoEWorld(World):
         late_locations = self.multiworld.random.sample(late_bosses, late_count)
 
         # add locations to the world
-        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.multiworld)
+        r = Region('Ingame', self.player, self.multiworld)
         for sphere in spheres.values():
             for locations in sphere.values():
                 for location in locations:

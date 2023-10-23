@@ -508,3 +508,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
 
     def can_live_dmg(self, node):
         return ast.parse(f"state._oot_can_live_dmg({self.player}, {node.args[0].value})", mode='eval').body
+
+    def region_has_shortcuts(self, node):
+        return ast.parse(f"state._oot_region_has_shortcuts({self.player}, '{node.args[0].value}')", mode='eval').body

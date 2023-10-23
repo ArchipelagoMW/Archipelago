@@ -1,7 +1,7 @@
 import Utils
 from worlds.Files import APDeltaPatch
-from .Aesthetics import generate_shuffled_header_data
-from .Levels import level_info_dict
+from .Aesthetics import generate_shuffled_header_data, generate_shuffled_ow_palettes
+from .Levels import level_info_dict, full_bowser_rooms, standard_bowser_rooms, submap_boss_rooms, ow_boss_rooms
 from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
@@ -36,18 +36,13 @@ item_rom_data = {
     0xBC000F: [0x1F27, 0x1, 0x1C], # Green Switch Palace
     0xBC0010: [0x1F2A, 0x1, 0x1C], # Red Switch Palace
     0xBC0011: [0x1F29, 0x1, 0x1C], # Blue Switch Palace
-
-    0xBC0013: [0x0086, 0x1, 0x0E], # Ice Trap
-    0xBC0014: [0x18BD, 0x7F, 0x18], # Stun Trap
 }
 
-music_rom_data = [
-
-]
-
-level_music_ids = [
-
-]
+trap_rom_data = {
+    0xBC0013: [0x0086, 0x1, 0x0E], # Ice Trap
+    0xBC0014: [0x18BD, 0x7F, 0x18], # Stun Trap
+    0xBC0016: [0x0F31, 0x1], # Timer Trap
+}
 
 
 class SMWDeltaPatch(APDeltaPatch):
@@ -213,6 +208,22 @@ def handle_ability_code(rom):
     rom.write_bytes(CLIMB_SUB_ADDR + 0x12, bytearray([0x5C, 0x76, 0xCD, 0x00])) # JML $00CD76
     # End Climb
 
+    # Climb Rope
+    rom.write_bytes(0xDA33, bytearray([0x22, 0x70, 0xBC, 0x03])) # JSL $03BC70
+
+    CLIMB_ROPE_SUB_ADDR = 0x01BC70
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x04, bytearray([0x89, 0x20]))       # BIT #20
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x06, bytearray([0xF0, 0x07]))       # BEQ +0x07
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x09, bytearray([0xA9, 0xB0]))       # LDA #B0
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0B, bytearray([0x85, 0x7D]))       # STA $7D
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0D, bytearray([0x80, 0x01]))       # BRA +0x01
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0F, bytearray([0x28]))             # PLP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x10, bytearray([0x6B]))             # RTL
+    # End Climb Rope
+
     # P-Switch
     rom.write_bytes(0xAB1A, bytearray([0x22, 0xA0, 0xBA, 0x03])) # JSL $03BAA0
     rom.write_bytes(0xAB1E, bytearray([0xEA] * 0x01))
@@ -348,6 +359,9 @@ def handle_ability_code(rom):
     # Baby Yoshi
     rom.write_bytes(0xA2B8, bytearray([0x22, 0x20, 0xBB, 0x03])) # JSL $03BB20
     rom.write_bytes(0xA2BC, bytearray([0xEA] * 0x01))
+
+    rom.write_bytes(0x1C05F, bytearray([0x22, 0x20, 0xBB, 0x03])) # JSL $03BB20
+    rom.write_bytes(0x1C063, bytearray([0xEA] * 0x01))
 
     YOSHI_SUB_ADDR = 0x01BB20
     rom.write_bytes(YOSHI_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
@@ -658,6 +672,22 @@ def handle_collected_paths(rom):
     rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x13, bytearray([0x6B]))                   # RTL
 
 
+def handle_vertical_scroll(rom):
+    rom.write_bytes(0x285BA, bytearray([0x22, 0x90, 0xBC, 0x03])) # JSL $03BC90
+
+    VERTICAL_SCROLL_SUB_ADDR = 0x01BC90
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x00, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x01, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x02, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x03, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x04, bytearray([0x08]))       # PHP
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x05, bytearray([0xC9, 0x02])) # CMP #02
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x07, bytearray([0xD0, 0x02])) # BNE +0x02
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x09, bytearray([0xA9, 0x01])) # LDA #01
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x0B, bytearray([0x28]))       # PLP
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x0C, bytearray([0x6B]))       # RTL
+
+
 def handle_music_shuffle(rom, world, player):
     from .Aesthetics import generate_shuffled_level_music, generate_shuffled_ow_music, level_music_address_data, ow_music_address_data
 
@@ -693,9 +723,104 @@ def handle_swap_donut_gh_exits(rom):
     rom.write_bytes(0x26371, bytes([0x32]))
 
 
-def patch_rom(world, rom, player, active_level_dict):
-    local_random = world.slot_seeds[player]
+def handle_bowser_rooms(rom, world, player: int):
+    if world.bowser_castle_rooms[player] == "random_two_room":
+        chosen_rooms = world.per_slot_randoms[player].sample(standard_bowser_rooms, 2)
 
+        rom.write_byte(0x3A680, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A684, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A688, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A68C, chosen_rooms[0].roomID)
+
+        for i in range(1, len(chosen_rooms)):
+            rom.write_byte(chosen_rooms[i-1].exitAddress, chosen_rooms[i].roomID)
+
+        rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
+
+    elif world.bowser_castle_rooms[player] == "random_five_room":
+        chosen_rooms = world.per_slot_randoms[player].sample(standard_bowser_rooms, 5)
+
+        rom.write_byte(0x3A680, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A684, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A688, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A68C, chosen_rooms[0].roomID)
+
+        for i in range(1, len(chosen_rooms)):
+            rom.write_byte(chosen_rooms[i-1].exitAddress, chosen_rooms[i].roomID)
+
+        rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
+
+    elif world.bowser_castle_rooms[player] == "gauntlet":
+        chosen_rooms = standard_bowser_rooms.copy()
+        world.per_slot_randoms[player].shuffle(chosen_rooms)
+
+        rom.write_byte(0x3A680, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A684, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A688, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A68C, chosen_rooms[0].roomID)
+
+        for i in range(1, len(chosen_rooms)):
+            rom.write_byte(chosen_rooms[i-1].exitAddress, chosen_rooms[i].roomID)
+
+        rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
+    elif world.bowser_castle_rooms[player] == "labyrinth":
+        bowser_rooms_copy = full_bowser_rooms.copy()
+
+        entrance_point = bowser_rooms_copy.pop(0)
+
+        world.per_slot_randoms[player].shuffle(bowser_rooms_copy)
+
+        rom.write_byte(entrance_point.exitAddress, bowser_rooms_copy[0].roomID)
+        for i in range(0, len(bowser_rooms_copy) - 1):
+            rom.write_byte(bowser_rooms_copy[i].exitAddress, bowser_rooms_copy[i+1].roomID)
+
+        rom.write_byte(bowser_rooms_copy[len(bowser_rooms_copy)-1].exitAddress, 0xBD)
+
+
+def handle_boss_shuffle(rom, world, player):
+    if world.boss_shuffle[player] == "simple":
+        submap_boss_rooms_copy = submap_boss_rooms.copy()
+        ow_boss_rooms_copy = ow_boss_rooms.copy()
+
+        world.per_slot_randoms[player].shuffle(submap_boss_rooms_copy)
+        world.per_slot_randoms[player].shuffle(ow_boss_rooms_copy)
+
+        for i in range(len(submap_boss_rooms_copy)):
+            rom.write_byte(submap_boss_rooms[i].exitAddress, submap_boss_rooms_copy[i].roomID)
+
+        for i in range(len(ow_boss_rooms_copy)):
+            rom.write_byte(ow_boss_rooms[i].exitAddress, ow_boss_rooms_copy[i].roomID)
+
+            if ow_boss_rooms[i].exitAddressAlt is not None:
+                rom.write_byte(ow_boss_rooms[i].exitAddressAlt, ow_boss_rooms_copy[i].roomID)
+
+    elif world.boss_shuffle[player] == "full":
+        for i in range(len(submap_boss_rooms)):
+            chosen_boss = world.per_slot_randoms[player].choice(submap_boss_rooms)
+            rom.write_byte(submap_boss_rooms[i].exitAddress, chosen_boss.roomID)
+
+        for i in range(len(ow_boss_rooms)):
+            chosen_boss = world.per_slot_randoms[player].choice(ow_boss_rooms)
+            rom.write_byte(ow_boss_rooms[i].exitAddress, chosen_boss.roomID)
+
+            if ow_boss_rooms[i].exitAddressAlt is not None:
+                rom.write_byte(ow_boss_rooms[i].exitAddressAlt, chosen_boss.roomID)
+
+    elif world.boss_shuffle[player] == "singularity":
+        chosen_submap_boss = world.per_slot_randoms[player].choice(submap_boss_rooms)
+        chosen_ow_boss = world.per_slot_randoms[player].choice(ow_boss_rooms)
+
+        for i in range(len(submap_boss_rooms)):
+            rom.write_byte(submap_boss_rooms[i].exitAddress, chosen_submap_boss.roomID)
+
+        for i in range(len(ow_boss_rooms)):
+            rom.write_byte(ow_boss_rooms[i].exitAddress, chosen_ow_boss.roomID)
+
+            if ow_boss_rooms[i].exitAddressAlt is not None:
+                rom.write_byte(ow_boss_rooms[i].exitAddressAlt, chosen_ow_boss.roomID)
+
+
+def patch_rom(world, rom, player, active_level_dict):
     goal_text = generate_goal_text(world, player)
 
     rom.write_bytes(0x2A6E2, goal_text)
@@ -704,18 +829,8 @@ def patch_rom(world, rom, player, active_level_dict):
     intro_text = generate_text_box("Bowser has stolen all of Mario's abilities. Can you help Mario travel across Dinosaur land to get them back and save the Princess from him?")
     rom.write_bytes(0x2A5D9, intro_text)
 
-    # Force all 8 Bowser's Castle Rooms
-    rom.write_byte(0x3A680, 0xD4)
-    rom.write_byte(0x3A684, 0xD4)
-    rom.write_byte(0x3A688, 0xD4)
-    rom.write_byte(0x3A68C, 0xD4)
-    rom.write_byte(0x3A705, 0xD3)
-    rom.write_byte(0x3A763, 0xD2)
-    rom.write_byte(0x3A800, 0xD1)
-    rom.write_byte(0x3A83D, 0xCF)
-    rom.write_byte(0x3A932, 0xCE)
-    rom.write_byte(0x3A9E1, 0xCD)
-    rom.write_byte(0x3AA75, 0xCC)
+    handle_bowser_rooms(rom, world, player)
+    handle_boss_shuffle(rom, world, player)
 
     # Prevent Title Screen Deaths
     rom.write_byte(0x1C6A, 0x80)
@@ -770,12 +885,19 @@ def patch_rom(world, rom, player, active_level_dict):
     if world.autosave[player]:
         rom.write_bytes(0x20F93, bytearray([0x00]))
 
+    if world.overworld_speed[player] == "fast":
+        rom.write_bytes(0x21414, bytearray([0x20, 0x10]))
+    elif world.overworld_speed[player] == "slow":
+        rom.write_bytes(0x21414, bytearray([0x05, 0x05]))
+
     # Starting Life Count
     rom.write_bytes(0x1E25, bytearray([world.starting_life_count[player].value - 1]))
 
     # Repurpose Bonus Stars counter for Boss Token or Yoshi Eggs
     rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
-    rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3B))
+
+     # Delete Routine that would copy Mario position data over repurposed Luigi save data
+    rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3D))
 
     # Prevent Switch Palaces setting the Switch Palace flags
     rom.write_bytes(0x6EC9A, bytearray([0xEA, 0xEA]))
@@ -789,12 +911,16 @@ def patch_rom(world, rom, player, active_level_dict):
 
     handle_collected_paths(rom)
 
+    handle_vertical_scroll(rom)
+
     # Handle Level Shuffle
     handle_level_shuffle(rom, active_level_dict)
 
     # Handle Music Shuffle
     if world.music_shuffle[player] != "none":
         handle_music_shuffle(rom, world, player)
+
+    generate_shuffled_ow_palettes(rom, world, player)
 
     generate_shuffled_header_data(rom, world, player)
 
@@ -805,7 +931,10 @@ def patch_rom(world, rom, player, active_level_dict):
 
     # Store all relevant option results in ROM
     rom.write_byte(0x01BFA0, world.goal[player].value)
-    rom.write_byte(0x01BFA1, world.bosses_required[player].value)
+    if world.goal[player].value == 0:
+        rom.write_byte(0x01BFA1, world.bosses_required[player].value)
+    else:
+        rom.write_byte(0x01BFA1, 0x7F)
     required_yoshi_eggs = max(math.floor(
         world.number_of_yoshi_eggs[player].value * (world.percentage_of_yoshi_eggs[player].value / 100.0)), 1)
     rom.write_byte(0x01BFA2, required_yoshi_eggs)
@@ -816,7 +945,7 @@ def patch_rom(world, rom, player, active_level_dict):
     rom.write_byte(0x01BFA7, world.swap_donut_gh_exits[player].value)
 
 
-    from Main import __version__
+    from Utils import __version__
     rom.name = bytearray(f'SMW{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
@@ -842,5 +971,5 @@ def get_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["smw_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name

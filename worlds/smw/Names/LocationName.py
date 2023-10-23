@@ -118,7 +118,7 @@ chocolate_island_5_dragon    = "Chocolate Island 5 - Dragon Coins"
 chocolate_ghost_house_exit_1 = "Choco-Ghost House - Normal Exit"
 chocolate_secret_exit_1      = "Chocolate Secret - Normal Exit"
 chocolate_fortress           = "Chocolate Fortress - Normal Exit"
-chocolate_reznor             = "Chocolate Fortress Defeat"
+chocolate_reznor             = "Chocolate Fortress - Boss"
 chocolate_castle             = "#6 Wendy's Castle - Normal Exit"
 chocolate_koopaling          = "#6 Wendy's Castle - Boss"
 

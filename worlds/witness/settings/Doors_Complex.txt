@@ -14,14 +14,14 @@ Desert Flood Room Entry (Door)
 Desert Elevator Room Entry (Door)
 Quarry Entry 1 (Door)
 Quarry Entry 2 (Door)
-Quarry Mill Entry (Door)
-Quarry Mill Side Exit (Door)
-Quarry Mill Roof Exit (Door)
-Quarry Mill Stairs (Door)
+Quarry Stoneworks Entry (Door)
+Quarry Stoneworks Side Exit (Door)
+Quarry Stoneworks Roof Exit (Door)
+Quarry Stoneworks Stairs (Door)
 Quarry Boathouse Dock (Door)
 Quarry Boathouse First Barrier (Door)
 Quarry Boathouse Second Barrier (Door)
-Shadows Timed Door (Door)
+Shadows Timed Door
 Shadows Laser Entry Right (Door)
 Shadows Laser Entry Left (Door)
 Shadows Quarry Barrier (Door)
@@ -45,15 +45,15 @@ Monastery Entry Outer (Door)
 Monastery Garden Entry (Door)
 Town Cargo Box Entry (Door)
 Town Wooden Roof Stairs (Door)
-Town Tinted Glass Door (Door)
+Town Tinted Glass Door
 Town Church Entry (Door)
 Town Maze Stairs (Door)
 Town Windmill Entry (Door)
 Town RGB House Stairs (Door)
-Town Tower First Door (Door)
-Town Tower Third Door (Door)
-Town Tower Fourth Door (Door)
-Town Tower Second Door (Door)
+Town Tower Second (Door)
+Town Tower First (Door)
+Town Tower Fourth (Door)
+Town Tower Third (Door)
 Theater Entry (Door)
 Theater Exit Left (Door)
 Theater Exit Right (Door)
@@ -61,7 +61,7 @@ Jungle Bamboo Laser Shortcut (Door)
 Jungle Popup Wall (Door)
 River Monastery Shortcut (Door)
 Bunker Entry (Door)
-Bunker Tinted Glass Door (Door)
+Bunker Tinted Glass Door
 Bunker UV Room Entry (Door)
 Bunker Elevator Room Entry (Door)
 Swamp Entry (Door)
@@ -74,9 +74,9 @@ Swamp Red Underwater Exit (Door)
 Swamp Blue Water Pump (Door)
 Swamp Purple Water Pump (Door)
 Swamp Laser Shortcut (Door)
-Treehouse First Door (Door)
-Treehouse Second Door (Door)
-Treehouse Third Door (Door)
+Treehouse First (Door)
+Treehouse Second (Door)
+Treehouse Third (Door)
 Treehouse Drawbridge (Door)
 Treehouse Laser House Entry (Door)
 Mountain Floor 1 Exit (Door)
@@ -87,7 +87,7 @@ Mountain Bottom Floor Giant Puzzle Exit (Door)
 Mountain Bottom Floor Final Room Entry (Door)
 Mountain Bottom Floor Rock (Door)
 Caves Entry (Door)
-Caves Pillar Door (Door)
+Caves Pillar Door
 Caves Mountain Shortcut (Door)
 Caves Swamp Shortcut (Door)
 Challenge Entry (Door)
@@ -111,11 +111,11 @@ Desert Flood Room Entry Panel
 Desert Flood Room 6
 Quarry Entry 1 Panel
 Quarry Entry 2 Panel
-Quarry Mill Entry Right Panel
-Quarry Mill Entry Left Panel
-Quarry Mill Side Exit Panel
-Quarry Mill Roof Exit Panel
-Quarry Mill Stair Control
+Quarry Stoneworks Entry Right Panel
+Quarry Stoneworks Entry Left Panel
+Quarry Stoneworks Side Exit Panel
+Quarry Stoneworks Roof Exit Panel
+Quarry Stoneworks Stair Control
 Quarry Boathouse Second Barrier Panel
 Shadows Door Timer Inside
 Shadows Door Timer Outside

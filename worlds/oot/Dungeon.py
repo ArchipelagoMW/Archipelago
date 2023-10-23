@@ -1,22 +1,15 @@
 class Dungeon(object):
 
-    def __init__(self, world, name, hint, font_color, boss_key, small_keys, dungeon_items):
-        def to_array(obj):
-            if obj == None:
-                return []
-            if isinstance(obj, list):
-                return obj
-            else:
-                return [obj]
+    def __init__(self, world, name, hint, font_color):
 
-        self.multiworld = world
+        self.world = world
         self.name = name
         self.hint_text = hint
         self.font_color = font_color
         self.regions = []
-        self.boss_key = to_array(boss_key)
-        self.small_keys = to_array(small_keys)
-        self.dungeon_items = to_array(dungeon_items)
+        self.boss_key = []
+        self.small_keys = []
+        self.dungeon_items = []
 
         for region in world.multiworld.regions:
             if region.player == world.player and region.dungeon == self.name:
@@ -46,6 +39,10 @@ class Dungeon(object):
 
     def is_dungeon_item(self, item):
         return item.name in [dungeon_item.name for dungeon_item in self.all_items]
+
+
+    def item_name(self, name):
+        return f"{name} ({self.name})"
 
 
     def __str__(self):

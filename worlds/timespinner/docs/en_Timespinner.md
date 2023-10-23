@@ -28,9 +28,7 @@ certain items to your own world.
 
 ## What does another world's item look like in Timespinner?
 
-Items belonging to other worlds are represented by the vanilla item Elemental
-Beads ([Elemental Beads Wiki Page](https://timespinnerwiki.com/Use_Items)), Elemental Beads have no use in the
-randomizer.
+Items belonging to other worlds are represented by the four orbs icon from the [Orb Collectors (Wiki Page)](https://timespinnerwiki.com/Achievements) achievement.
 
 ## When the player receives an item, what happens?
 

@@ -136,13 +136,22 @@ valid_background_colors = {
     0xFFF45A: [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07], # Castle
 }
 
+valid_ow_palettes = {
+    0x2D1E: [0x00, 0x01, 0x03],       # Main OW
+    0x2D1F: [0x00, 0x03, 0x04],       # Yoshi's Island
+    0x2D20: [0x00, 0x01, 0x03, 0x04], # Vanilla Dome
+    0x2D21: [0x00, 0x02, 0x03, 0x04], # Forest of Illusion
+    0x2D22: [0x00, 0x01, 0x03, 0x04], # Valley of Bowser
+    0x2D24: [0x00, 0x02, 0x03],       # Star Road
+}
+
 def generate_shuffled_level_music(world, player):
     shuffled_level_music = level_music_value_data.copy()
 
     if world.music_shuffle[player] == "consistent":
-        world.random.shuffle(shuffled_level_music)
+        world.per_slot_randoms[player].shuffle(shuffled_level_music)
     elif world.music_shuffle[player] == "singularity":
-        single_song = world.random.choice(shuffled_level_music)
+        single_song = world.per_slot_randoms[player].choice(shuffled_level_music)
         shuffled_level_music = [single_song for i in range(len(shuffled_level_music))]
 
     return shuffled_level_music
@@ -151,12 +160,18 @@ def generate_shuffled_ow_music(world, player):
     shuffled_ow_music = ow_music_value_data.copy()
 
     if world.music_shuffle[player] == "consistent" or world.music_shuffle[player] == "full":
-        world.random.shuffle(shuffled_ow_music)
+        world.per_slot_randoms[player].shuffle(shuffled_ow_music)
     elif world.music_shuffle[player] == "singularity":
-        single_song = world.random.choice(shuffled_ow_music)
+        single_song = world.per_slot_randoms[player].choice(shuffled_ow_music)
         shuffled_ow_music = [single_song for i in range(len(shuffled_ow_music))]
 
     return shuffled_ow_music
+
+def generate_shuffled_ow_palettes(rom, world, player):
+    if world.overworld_palette_shuffle[player]:
+        for address, valid_palettes in valid_ow_palettes.items():
+            chosen_palette = world.per_slot_randoms[player].choice(valid_palettes)
+            rom.write_byte(address, chosen_palette)
 
 def generate_shuffled_header_data(rom, world, player):
     if world.music_shuffle[player] != "full" and not world.foreground_palette_shuffle[player] and not world.background_palette_shuffle[player]:
@@ -181,11 +196,11 @@ def generate_shuffled_header_data(rom, world, player):
 
         if world.music_shuffle[player] == "full":
             level_header[2] &= 0x8F
-            level_header[2] |= (world.random.randint(0, 7) << 5)
+            level_header[2] |= (world.per_slot_randoms[player].randint(0, 7) << 5)
 
         if (world.foreground_palette_shuffle[player] and tileset in valid_foreground_palettes):
             level_header[3] &= 0xF8
-            level_header[3] |= world.random.choice(valid_foreground_palettes[tileset])
+            level_header[3] |= world.per_slot_randoms[player].choice(valid_foreground_palettes[tileset])
 
         if world.background_palette_shuffle[player]:
             layer2_ptr_list = list(rom.read_bytes(0x2E600 + level_id * 3, 3))
@@ -193,10 +208,10 @@ def generate_shuffled_header_data(rom, world, player):
 
             if layer2_ptr in valid_background_palettes:
                 level_header[0] &= 0x1F
-                level_header[0] |= (world.random.choice(valid_background_palettes[layer2_ptr]) << 5)
+                level_header[0] |= (world.per_slot_randoms[player].choice(valid_background_palettes[layer2_ptr]) << 5)
 
             if layer2_ptr in valid_background_colors:
                 level_header[1] &= 0x1F
-                level_header[1] |= (world.random.choice(valid_background_colors[layer2_ptr]) << 5)
+                level_header[1] |= (world.per_slot_randoms[player].choice(valid_background_colors[layer2_ptr]) << 5)
 
         rom.write_bytes(layer1_ptr, bytes(level_header))

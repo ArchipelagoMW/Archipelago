@@ -13,7 +13,8 @@ class StrictCapRequirements(DefaultOnToggle):
 
 
 class StrictCannonRequirements(DefaultOnToggle):
-    """If disabled, Stars that expect cannons may have to be acquired without them. Only makes a difference if Buddy Checks are enabled"""
+    """If disabled, Stars that expect cannons may have to be acquired without them. Only makes a difference if Buddy
+    Checks are enabled"""
     display_name = "Strict Cannon Requirements"
 
 
