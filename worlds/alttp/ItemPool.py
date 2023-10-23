@@ -400,11 +400,11 @@ def generate_itempool(world):
             loc.address = None
         elif multiworld.goal[player] == 'icerodhunt':
             # key drop item removed because of icerodhunt
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), player))
             multiworld.push_precollected(drop_item)
         elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Small Key (Universal)'), player))
     dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
     world.random.shuffle(dungeon_item_replacements)
     if multiworld.goal[player] == 'icerodhunt':
@@ -523,10 +523,10 @@ def set_up_take_anys(multiworld: MultiWorld, player: int):
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0, create_location=True)
 
     for num in range(4):
-        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, world)
-        world.regions.append(take_any)
+        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, multiworld)
+        multiworld.regions.append(take_any)
 
-        target, room_id = multiworld.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
+        target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
         entrance = multiworld.get_region(reg, player).entrances[0]
         connect_entrance(multiworld, entrance.name, take_any.name, player)
@@ -669,7 +669,7 @@ def get_pool_core(multiworld: MultiWorld, player: int):
     if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         if mode == 'standard':
-            if world.key_drop_shuffle[player] and world.goal[player] != 'icerodhunt':
+            if multiworld.key_drop_shuffle[player] and multiworld.goal[player] != 'icerodhunt':
                 key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
                 key_location = world.random.choice(key_locations)
                 key_locations.remove(key_location)
@@ -687,7 +687,7 @@ def get_pool_core(multiworld: MultiWorld, player: int):
                 key_location = world.random.choice(key_locations)
                 place_item(key_location, "Small Key (Universal)")
                 pool = pool[:-3]
-        if world.key_drop_shuffle[player]:
+        if multiworld.key_drop_shuffle[player]:
             pass # pool.extend([item_to_place] * (len(key_drop_data) - 1))
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,

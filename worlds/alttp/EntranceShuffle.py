@@ -1860,7 +1860,8 @@ def connect_two_way(world, entrancename, exitname, player):
     world.spoiler.set_entrance(entrance.name, exit.name, 'both', player)
 
 
-def scramble_holes(world, player):
+def scramble_holes(multiworld: MultiWorld, player: int):
+    world = multiworld.worlds[player]
     hole_entrances = [('Kakariko Well Cave', 'Kakariko Well Drop'),
                       ('Bat Cave Cave', 'Bat Cave Drop'),
                       ('North Fairy Cave', 'North Fairy Cave Drop'),
@@ -1874,36 +1875,36 @@ def scramble_holes(world, player):
                     ('Lost Woods Hideout Exit', 'Lost Woods Hideout (top)'),
                     ('Lumberjack Tree Exit', 'Lumberjack Tree (top)')]
 
-    if not world.shuffle_ganon:
-        connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit', player)
-        connect_entrance(world, 'Pyramid Hole', 'Pyramid', player)
+    if not multiworld.shuffle_ganon:
+        connect_two_way(multiworld, 'Pyramid Entrance', 'Pyramid Exit', player)
+        connect_entrance(multiworld, 'Pyramid Hole', 'Pyramid', player)
     else:
         hole_targets.append(('Pyramid Exit', 'Pyramid'))
 
-    if world.mode[player] == 'standard':
+    if multiworld.mode[player] == 'standard':
         # cannot move uncle cave
-        connect_two_way(world, 'Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Exit', player)
-        connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance', player)
+        connect_two_way(multiworld, 'Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Exit', player)
+        connect_entrance(multiworld, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance', player)
     else:
         hole_entrances.append(('Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Drop'))
         hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
 
     # do not shuffle sanctuary into pyramid hole unless shuffle is crossed
-    if world.shuffle[player] == 'crossed':
+    if multiworld.shuffle[player] == 'crossed':
         hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
-    if world.shuffle_ganon:
+    if multiworld.shuffle_ganon:
         world.random.shuffle(hole_targets)
         exit, target = hole_targets.pop()
-        connect_two_way(world, 'Pyramid Entrance', exit, player)
-        connect_entrance(world, 'Pyramid Hole', target, player)
-    if world.shuffle[player] != 'crossed':
+        connect_two_way(multiworld, 'Pyramid Entrance', exit, player)
+        connect_entrance(multiworld, 'Pyramid Hole', target, player)
+    if multiworld.shuffle[player] != 'crossed':
         hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
 
     world.random.shuffle(hole_targets)
     for entrance, drop in hole_entrances:
         exit, target = hole_targets.pop()
-        connect_two_way(world, entrance, exit, player)
-        connect_entrance(world, drop, target, player)
+        connect_two_way(multiworld, entrance, exit, player)
+        connect_entrance(multiworld, drop, target, player)
 
 
 def scramble_inverted_holes(multiworld: MultiWorld, player: int):

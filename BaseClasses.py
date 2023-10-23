@@ -192,14 +192,17 @@ class MultiWorld():
         """Calls to `MultiWorld.random` have been deprecated. Please use `World.random` instead."""
         if __debug__:
             from inspect import stack
-            for frame in stack():
+            stack = stack()
+            for frame in stack:
                 if frame.filename.endswith(("Main.py", "Fill.py")):
                     break
                 if frame.filename.endswith("AutoWorld.py"):
                     # TODO replace with deprecate ~0.5.0
                     if frame.function == "call_single":
+                        calling_frame = stack[1]
                         warnings.warn("Calls to `MultiWorld.random` from a World instance have been deprecated. "
-                                      "Please use `self.random`.")
+                                      "Please use `self.random`. "
+                                      f"Called from {calling_frame.filename}, {calling_frame.function} L{calling_frame.lineno}")
                         break
                     break
             else:
