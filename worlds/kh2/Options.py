@@ -1,7 +1,14 @@
-from Options import Choice, Option, Range, Toggle, OptionSet, ItemDict
-import typing
+from dataclasses import dataclass
+
+from Options import Choice, Range, Toggle, ItemDict, Accessibility, PerGameCommonOptions, StartInventoryPool
 
 from worlds.kh2 import default_itempool_option
+
+
+class KingdomHearts2Accessibility(Accessibility):
+    default = Accessibility.option_locations
+    # defaulting to locations accessibility since items makes certain items self-locking
+    __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
 
 
 class SoraEXP(Range):
@@ -159,7 +166,7 @@ class RandomVisitLockingItem(Range):
 
 
 class SuperBosses(Toggle):
-    """Terra, Sephiroth and Data Fights Toggle."""
+    """Terra Sephiroth and Data Fights Toggle."""
     display_name = "Super Bosses"
     default = True
 
@@ -330,41 +337,43 @@ class SummonLevelLocationToggle(Toggle):
     default = False
 
 
-KH2_Options: typing.Dict[str, type(Option)] = {
-    "LevelDepth":                LevelDepth,
-    "Sora_Level_EXP":            SoraEXP,
-    "Valor_Form_EXP":            ValorEXP,
-    "Wisdom_Form_EXP":           WisdomEXP,
-    "Limit_Form_EXP":            LimitEXP,
-    "Master_Form_EXP":           MasterEXP,
-    "Final_Form_EXP":            FinalEXP,
-    "Summon_EXP":                SummonEXP,
-    "Schmovement":               Schmovement,
-    "RandomGrowth":              RandomGrowth,
-    "AntiForm":                  AntiForm,
-    "Promise_Charm":             PromiseCharm,
-    "Goal":                      Goal,
-    "FinalXemnas":               FinalXemnas,
-    "LuckyEmblemsAmount":        LuckyEmblemsAmount,
-    "LuckyEmblemsRequired":      LuckyEmblemsRequired,
-    "BountyAmount":              BountyAmount,
-    "BountyRequired":            BountyRequired,
-    "BountyStartingHintToggle":  BountyStartHint,
-    "Keyblade_Minimum":          KeybladeMin,
-    "Keyblade_Maximum":          KeybladeMax,
-    "WeaponSlotStartHint":       WeaponSlotStartHint,
-    "FightLogic":                FightLogic,
-    "FinalFormLogic":            FinalFormLogic,
-    "AutoFormLogic":             AutoFormLogic,
-    "DonaldGoofyStatsanity":     DonaldGoofyStatsanity,
-    "FillerItemsLocal":          FillerItemsLocal,
-    "Visitlocking":              Visitlocking,
-    "RandomVisitLockingItem":    RandomVisitLockingItem,
-    "SuperBosses":               SuperBosses,
-    "Cups":                      Cups,
-    "SummonLevelLocationToggle": SummonLevelLocationToggle,
-    "AtlanticaToggle":           AtlanticaToggle,
-    "CorSkipToggle":             CorSkipToggle,
-    "CustomItemPoolQuantity":    CustomItemPoolQuantity,
-
-}
+# shamelessly stolen from the messanger
+@dataclass
+class KingdomHearts2Options(PerGameCommonOptions):
+    accessibility: KingdomHearts2Accessibility
+    start_inventory: StartInventoryPool
+    LevelDepth: LevelDepth
+    Sora_Level_EXP: SoraEXP
+    Valor_Form_EXP: ValorEXP
+    Wisdom_Form_EXP: WisdomEXP
+    Limit_Form_EXP: LimitEXP
+    Master_Form_EXP: MasterEXP
+    Final_Form_EXP: FinalEXP
+    Summon_EXP: SummonEXP
+    Schmovement: Schmovement
+    RandomGrowth: RandomGrowth
+    AntiForm: AntiForm
+    Promise_Charm: PromiseCharm
+    Goal: Goal
+    FinalXemnas: FinalXemnas
+    LuckyEmblemsAmount: LuckyEmblemsAmount
+    LuckyEmblemsRequired: LuckyEmblemsRequired
+    BountyAmount: BountyAmount
+    BountyRequired: BountyRequired
+    BountyStartingHintToggle: BountyStartHint
+    Keyblade_Minimum: KeybladeMin
+    Keyblade_Maximum: KeybladeMax
+    WeaponSlotStartHint: WeaponSlotStartHint
+    FightLogic: FightLogic
+    FinalFormLogic: FinalFormLogic
+    AutoFormLogic: AutoFormLogic
+    DonaldGoofyStatsanity: DonaldGoofyStatsanity
+    FillerItemsLocal: FillerItemsLocal
+    Visitlocking: Visitlocking
+    RandomVisitLockingItem: RandomVisitLockingItem
+    SuperBosses: SuperBosses
+    Cups: Cups
+    SummonLevelLocationToggle: SummonLevelLocationToggle
+    AtlanticaToggle: AtlanticaToggle
+    CorSkipToggle: CorSkipToggle
+    CustomItemPoolQuantity: CustomItemPoolQuantity

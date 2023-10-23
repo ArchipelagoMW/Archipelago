@@ -71,7 +71,7 @@ class TestDefaultForms(KH2TestFormBase):
         "FinalFormLogic": "light_and_darkness"
     }
 
-    def testDefaultAutoFormLogic(self):
+    def test_default_Auto_Form_Logic(self):
         allPossibleForms = global_all_possible_forms
         # this tests with a light and darkness in the inventory.
         self.collect_all_but(allPossibleForms)
@@ -80,7 +80,7 @@ class TestDefaultForms(KH2TestFormBase):
             self.collect(self.get_item_by_name(self.driveToAuto[form]))
             self.assertFalse((self.can_reach_location(self.driveFormMap[form][0])), form)
 
-    def testDefaultFinalForm(self):
+    def test_default_Final_Form(self):
         allPossibleForms = global_all_possible_forms
         self.collect_all_but(allPossibleForms)
         self.collect_by_name(ItemName.FinalForm)
@@ -88,7 +88,7 @@ class TestDefaultForms(KH2TestFormBase):
         self.assertTrue((self.can_reach_location(LocationName.Finallvl3)))
         self.assertFalse((self.can_reach_location(LocationName.Finallvl4)))
 
-    def testDefaultWithoutLnD(self):
+    def test_default_without_LnD(self):
         allPossibleForms = self.allForms
         self.collect_all_but(allPossibleForms)
         for form, levels in self.driveFormMap.items():
@@ -122,7 +122,7 @@ class TestDefaultForms(KH2TestFormBase):
                         self.remove(self.get_item_by_name(ItemName.LightDarkness))
                     self.assertTrue((self.can_reach_location(levels[3 + i])))
 
-    def testDefaultWithLnD(self):
+    def test_default_with_lnd(self):
         allPossibleForms = self.allForms
         self.collect_all_but(allPossibleForms)
         for form, levels in self.driveFormMap.items():
@@ -154,10 +154,10 @@ class TestJustAForm(KH2TestFormBase):
         "FinalFormLogic": "just_a_form"
     }
 
-    def testNothing(self):
+    def test_nothing(self):
         KH2TestBase()
 
-    def testJustAFormConnections(self):
+    def test_just_a_form_connections(self):
         allPossibleForms = self.allForms
         self.collect_all_but(allPossibleForms)
         allPossibleForms.remove(ItemName.FinalForm)
@@ -193,10 +193,10 @@ class TestAutoForms(KH2TestFormBase):
         "FinalFormLogic": "light_and_darkness"
     }
 
-    def testNothing(self):
+    def test_Nothing(self):
         KH2TestBase()
 
-    def testAutoFormsLevelProgression(self):
+    def test_auto_forms_level_progression(self):
         allPossibleForms = self.allForms + [ItemName.LightDarkness]
         # state has all auto forms
         self.collect_all_but(allPossibleForms)

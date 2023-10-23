@@ -1,8 +1,7 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .logic import *
-from .Items import exclusion_item_table, visit_locking_dict, item_dictionary_table, DonaldAbility_Table, GoofyAbility_Table
+from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table
 from .Locations import STT_Checks, exclusion_table, popups_set
 from .Names import LocationName, ItemName, RegionName
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
@@ -13,7 +12,79 @@ if TYPE_CHECKING:
 else:
     KH2World = object
 
-
+base_tools = [
+    ItemName.FinishingPlus,
+    ItemName.Guard,
+    ItemName.AerialRecovery
+]
+gap_closer = [
+    ItemName.SlideDash,
+    ItemName.FlashStep
+]
+defensive_tool = [
+    ItemName.ReflectElement,
+    ItemName.Guard
+]
+drive_form = [
+    ItemName.ValorForm,
+    ItemName.WisdomForm,
+    ItemName.LimitForm,
+    ItemName.MasterForm,
+    ItemName.FinalForm
+]
+ground_finisher = [
+    ItemName.GuardBreak,
+    ItemName.Explosion,
+    ItemName.FinishingLeap
+]
+party_limit = [
+    ItemName.Fantasia,
+    ItemName.FlareForce,
+    ItemName.Teamwork,
+    ItemName.TornadoFusion
+]
+donald_limit = [
+    ItemName.Fantasia,
+    ItemName.FlareForce
+]
+aerial_move = [
+    ItemName.AerialDive,
+    ItemName.AerialSpiral,
+    ItemName.HorizontalSlash,
+    ItemName.AerialSweep,
+    ItemName.AerialFinish
+]
+level_3_form_loc = [
+    LocationName.Valorlvl3,
+    LocationName.Wisdomlvl3,
+    LocationName.Limitlvl3,
+    LocationName.Masterlvl3,
+    LocationName.Finallvl3
+]
+black_magic = [
+    ItemName.FireElement,
+    ItemName.BlizzardElement,
+    ItemName.ThunderElement
+]
+magic = [
+    ItemName.FireElement,
+    ItemName.BlizzardElement,
+    ItemName.ThunderElement,
+    ItemName.ReflectElement,
+    ItemName.CureElement,
+    ItemName.MagnetElement
+]
+summons = [
+    ItemName.ChickenLittle,
+    ItemName.Stitch,
+    ItemName.Genie,
+    ItemName.PeterPan
+]
+three_proofs = [
+    ItemName.ProofofConnection,
+    ItemName.ProofofPeace,
+    ItemName.ProofofNonexistence
+]
 # Shamelessly Stolen from Messanger
 
 

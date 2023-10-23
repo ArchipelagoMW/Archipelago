@@ -5,7 +5,7 @@ import os
 import Utils
 import zipfile
 
-from .Items import item_dictionary_table, CheckDupingItems
+from .Items import item_dictionary_table
 from .Locations import all_locations, SoraLevels, exclusion_table
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
@@ -121,8 +121,8 @@ def patch_kh2(self, output_directory):
         elif data.yml == "Keyblade":
             self.formattedItem["Stats"].append({
                 "Id":                  data.locid,
-                "Attack":              self.multiworld.per_slot_randoms[self.player].randint(keyblademin, keyblademax),
-                "Magic":               self.multiworld.per_slot_randoms[self.player].randint(keyblademin, keyblademax),
+                "Attack":              self.random.randint(keyblademin, keyblademax),
+                "Magic":               self.random.randint(keyblademin, keyblademax),
                 "Defense":             0,
                 "Ability":             itemcode,
                 "AbilityPoints":       0,
@@ -180,7 +180,7 @@ def patch_kh2(self, output_directory):
     # levels done down here because of optional settings that can take locations out of the pool.
     self.i = 2
     for location in SoraLevels:
-        increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
+        increaseStat(self.random.randint(0, 3))
         if location in levelsetting:
             data = self.multiworld.get_location(location, self.player)
             if data.item:
@@ -189,7 +189,7 @@ def patch_kh2(self, output_directory):
                 else:
                     itemcode = 90  # castle map
         else:
-            increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
+            increaseStat(self.random.randint(0, 3))
             itemcode = 0
         self.formattedLvup["Sora"][self.i] = {
             "Exp":           int(soraExp[self.i] / self.multiworld.Sora_Level_EXP[self.player].value),

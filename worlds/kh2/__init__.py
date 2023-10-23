@@ -9,7 +9,7 @@ from .Items import *
 from .Locations import *
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
-from .Options import KH2_Options
+from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
 from .Rules import *
 
@@ -44,7 +44,8 @@ class KH2World(World):
     data_version = 2
 
     required_client_version = (0, 4, 2)
-    option_definitions = KH2_Options
+    options_dataclass = KingdomHearts2Options
+    options: KingdomHearts2Options
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(item_dictionary_table.keys(), 0x130000)}
     location_name_to_id = {item: location
@@ -101,7 +102,7 @@ class KH2World(World):
                 if self.goofy_ability_dict[ability] >= 1:
                     self.goofy_ability_dict[ability] -= 1
         return {
-            "hitlist":                [],
+            "hitlist":                [], # remove this after next update
             "Goal":                   self.multiworld.Goal[self.player].value,
             "FinalXemnas":            self.multiworld.FinalXemnas[self.player].value,
             "LuckyEmblemsRequired":   self.multiworld.LuckyEmblemsRequired[self.player].value,

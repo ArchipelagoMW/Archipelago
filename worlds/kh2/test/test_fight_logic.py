@@ -1,5 +1,4 @@
 from . import KH2TestBase
-from ..Names import ItemName
 
 
 class TestEasy(KH2TestBase):
