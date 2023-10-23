@@ -829,42 +829,42 @@ end
 
 function open_card_pack(card_pack)
     if card_pack == "Bronze Card Pack" then
-        add_battle_card(bronze_pack_attack_cards[math.random(1, table.getn(bronze_pack_attack_cards))])
-        add_battle_card(bronze_pack_attack_cards[math.random(1, table.getn(bronze_pack_attack_cards))])
-        add_battle_card(bronze_pack_attack_cards[math.random(1, table.getn(bronze_pack_attack_cards))])
+        add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
+        add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
+        add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
         choice = math.random(1,3)
         if choice == 1 then
-            add_battle_card(bronze_pack_item_cards[math.random(1, table.getn(bronze_pack_item_cards))])
+            add_battle_card(bronze_pack_item_cards[math.random(1, #bronze_pack_items_cards)])
         elseif choice == 2 then
-            add_battle_card(bronze_pack_magic_cards[math.random(1, table.getn(bronze_pack_magic_cards))])
+            add_battle_card(bronze_pack_magic_cards[math.random(1, #bronze_pack_magic_cards)])
         else
-            add_battle_card(bronze_pack_enemy_cards[math.random(1, table.getn(bronze_pack_enemy_cards))])
+            add_battle_card(bronze_pack_enemy_cards[math.random(1, #bronze_pack_enemy_cards)])
         end
     end
     if card_pack == "Silver Card Pack" then
-        add_battle_card(silver_pack_attack_cards[math.random(1, table.getn(silver_pack_attack_cards))])
-        add_battle_card(silver_pack_attack_cards[math.random(1, table.getn(silver_pack_attack_cards))])
-        add_battle_card(silver_pack_attack_cards[math.random(1, table.getn(silver_pack_attack_cards))])
+        add_battle_card(silver_pack_attack_cards[math.random(1, #silver_pack_attack_cards)])
+        add_battle_card(silver_pack_attack_cards[math.random(1, #silver_pack_attack_cards)])
+        add_battle_card(silver_pack_attack_cards[math.random(1, #silver_pack_attack_cards)])
         choice = math.random(1,3)
         if choice == 1 then
-            add_battle_card(silver_pack_item_cards[math.random(1, table.getn(silver_pack_item_cards))])
+            add_battle_card(silver_pack_item_cards[math.random(1, #silver_pack_item_cards)])
         elseif choice == 2 then
-            add_battle_card(silver_pack_magic_cards[math.random(1, table.getn(silver_pack_magic_cards))])
+            add_battle_card(silver_pack_magic_cards[math.random(1, #silver_pack_magic_cards)])
         else
-            add_battle_card(silver_pack_enemy_cards[math.random(1, table.getn(silver_pack_enemy_cards))])
+            add_battle_card(silver_pack_enemy_cards[math.random(1, #silver_pack_enemy_cards)])
         end
     end
     if card_pack == "Gold Card Pack" then
-        add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
-        add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
-        add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
+        add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
+        add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
+        add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
         choice = math.random(1,3)
         if choice == 1 then
-            add_battle_card(gold_pack_attack_cards[math.random(1, table.getn(gold_pack_attack_cards))])
+            add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
         elseif choice == 2 then
-            add_battle_card(gold_pack_item_cards[math.random(1, table.getn(gold_pack_item_cards))])
+            add_battle_card(gold_pack_item_cards[math.random(1, #gold_pack_item_cards)])
         else
-            add_battle_card(gold_pack_enemy_cards[math.random(1, table.getn(gold_pack_enemy_cards))])
+            add_battle_card(gold_pack_enemy_cards[math.random(1, #gold_pack_enemy_cards)])
         end
     end
 end

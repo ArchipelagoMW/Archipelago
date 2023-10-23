@@ -73,6 +73,7 @@ non_apworlds: set = {
     "Final Fantasy",
     "Hylics 2",
     "Kingdom Hearts 2",
+    "Kingdom Hearts Chain of Memories",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",
@@ -613,7 +614,7 @@ cx_Freeze.setup(
     version=f"{version_tuple.major}.{version_tuple.minor}.{version_tuple.build}",
     description="Archipelago",
     executables=exes,
-    ext_modules=cythonize("_speedups.pyx"),
+    #ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
             "packages": ["worlds", "kivy", "cymem", "websockets"],
