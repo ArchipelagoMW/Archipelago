@@ -92,28 +92,12 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
         if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
-        if self.multiworld.enable_progressive_locations[self.player] == Toggle.option_true:
-            self.enabled_location_categories.add(DS3LocationCategory.PROGRESSIVE_ITEM)
 
 
     def create_regions(self):
-        progressive_location_table = []
-        if self.multiworld.enable_progressive_locations[self.player]:
-            progressive_location_table = [] + \
-                location_tables["Progressive Items 1"] + \
-                location_tables["Progressive Items 2"] + \
-                location_tables["Progressive Items 3"] + \
-                location_tables["Progressive Items 4"]
-
-            if self.multiworld.enable_dlc[self.player].value:
-                progressive_location_table += location_tables["Progressive Items DLC"]
-
-        if self.multiworld.enable_health_upgrade_locations[self.player]:
-            progressive_location_table += location_tables["Progressive Items Health"]
-
         # Create Vanilla Regions
         regions: Dict[str, Region] = {}
-        regions["Menu"] = self.create_region("Menu", progressive_location_table)
+        regions["Menu"] = self.create_region("Menu", {})
         regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
             "Firelink Shrine",
             "Firelink Shrine Bell Tower",
@@ -490,27 +474,14 @@ class DarkSouls3World(World):
                         name_to_ds3_code[item.name] += 100 * self.multiworld.per_slot_randoms[self.player].randint(0, 15)
 
         # Create the mandatory lists to generate the player's output file
-        items_id = []
-        items_address = []
-        locations_id = []
-        locations_address = []
-        locations_target = []
+        ap_ids_to_ds3_ids: Dict[str, int] = {}
         for location in self.multiworld.get_filled_locations():
             # Skip events
             if location.item.code is None:
                 continue
 
             if location.item.player == self.player:
-                items_id.append(location.item.code)
-                items_address.append(name_to_ds3_code[location.item.name])
-
-            if location.player == self.player:
-                locations_address.append(item_dictionary[location_dictionary[location.name].default_item].ds3_code)
-                locations_id.append(location.address)
-                if location.item.player == self.player:
-                    locations_target.append(name_to_ds3_code[location.item.name])
-                else:
-                    locations_target.append(0)
+                ap_ids_to_ds3_ids[str(location.item.code)] = name_to_ds3_code[location.item.name]
 
         slot_data = {
             "options": {
@@ -534,11 +505,7 @@ class DarkSouls3World(World):
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
             "base_id": self.base_id,  # to merge location and items lists
-            "locationsId": locations_id,
-            "locationsAddress": locations_address,
-            "locationsTarget": locations_target,
-            "itemsId": items_id,
-            "itemsAddress": items_address
+            "apIdsToItemIds": ap_ids_to_ds3_ids
         }
 
         return slot_data

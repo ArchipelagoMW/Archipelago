@@ -53,15 +53,6 @@ class RandomizeHealthLocations(Toggle):
     display_name = "Randomize Health Upgrade Locations"
 
 
-class RandomizeProgressiveLocationsOption(Toggle):
-    """Randomizes upgrade materials and consumables such as the titanite shards, firebombs, resin, etc...
-
-    Instead of specific locations, these are progressive, so Titanite Shard #1 is the first titanite shard
-    you pick up, regardless of whether it's from an enemy drop late in the game or an item on the ground in the
-    first 5 minutes."""
-    display_name = "Randomize Progressive Locations"
-
-
 class PoolTypeOption(Choice):
     """Changes which non-progression items you add to the pool
 
@@ -201,7 +192,6 @@ dark_souls_options: typing.Dict[str, Option] = {
     "enable_npc_locations": RandomizeNPCLocations,
     "enable_misc_locations": RandomizeMiscLocations,
     "enable_health_upgrade_locations": RandomizeHealthLocations,
-    "enable_progressive_locations": RandomizeProgressiveLocationsOption,
     "pool_type": PoolTypeOption,
     "guaranteed_items": GuaranteedItemsOption,
     "auto_equip": AutoEquipOption,
