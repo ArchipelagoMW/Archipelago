@@ -6,6 +6,7 @@ import logging
 import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
+import warnings
 from argparse import Namespace
 from collections import ChainMap, Counter, deque
 from collections.abc import Collection
@@ -185,12 +186,26 @@ class MultiWorld():
         self.worlds = {}
         self.per_slot_randoms = {}
         self.plando_options = PlandoOptions.none
-    
+
     @property
     def random(self) -> random.Random:
         """Calls to `MultiWorld.random` have been deprecated. Please use `World.random` instead."""
         if __debug__:
-            logging.warning("Calls to `MultiWorld.random` have been deprecated. Please use `World.random` instead.")
+            from inspect import stack
+            for frame in stack():
+                if frame.filename.endswith("Main.py"):
+                    break
+                if frame.filename.endswith("AutoWorld.py"):
+                    # TODO remove ~0.5.0
+                    if frame.function == "call_single":
+                        warnings.warn("Calls to `MultiWorld.random` from a World instance have been deprecated. "
+                                      "Please use `self.random`.")
+                        break
+                    assert frame.function != "call_single", ("Calls to `MultiWorld.random` from a World instance have "
+                                                             "been deprecated. Please use `self.random`.")
+                    break
+            else:
+                raise ValueError("Unable to properly evaluate stack from multiworld.random call.")
         return self._random
 
     def get_all_ids(self) -> Tuple[int, ...]:
@@ -227,9 +242,9 @@ class MultiWorld():
         if secure:
             self.secure()
         else:
-            self.random.seed(self.seed)
+            self._random.seed(self.seed)
         self.seed_name = name if name else str(self.seed)
-        self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
+        self.per_slot_randoms = {player: random.Random(self._random.getrandbits(64)) for player in
                                  range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
@@ -306,7 +321,7 @@ class MultiWorld():
             group["link_replacement"] = replacement_prio[item_link["link_replacement"]]
 
     def secure(self):
-        self.random = ThreadBarrierProxy(secrets.SystemRandom())
+        self._random = ThreadBarrierProxy(secrets.SystemRandom())
         self.is_race = True
 
     @functools.cached_property
