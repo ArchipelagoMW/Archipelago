@@ -492,7 +492,7 @@ class ALTTPWorld(World):
 
     @classmethod
     def stage_post_fill(cls, multiworld: MultiWorld):
-        ShopSlotFill(multiworld, multiworld.worlds[multiworld.get_game_players(cls.game)[0]].random)
+        ShopSlotFill(multiworld, multiworld.random)
 
     @property
     def use_enemizer(self) -> bool:
@@ -557,11 +557,11 @@ class ALTTPWorld(World):
             self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
     @classmethod
-    def stage_extend_hint_information(cls, world, hint_data: typing.Dict[int, typing.Dict[int, str]]):
-        er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
-                        world.shuffle[player] != "vanilla" or world.retro_caves[player]}
+    def stage_extend_hint_information(cls, multiworld: MultiWorld, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        er_hint_data = {player: {} for player in multiworld.get_game_players("A Link to the Past") if
+                        multiworld.shuffle[player] != "vanilla" or multiworld.retro_caves[player]}
 
-        for region in world.regions:
+        for region in multiworld.regions:
             if region.player in er_hint_data and region.locations:
                 main_entrance = region.get_connecting_entrance(is_main_entrance)
                 for location in region.locations:
@@ -571,7 +571,7 @@ class ALTTPWorld(World):
         hint_data.update(er_hint_data)
 
     @classmethod
-    def stage_modify_multidata(cls, multiworld, multidata: dict):
+    def stage_modify_multidata(cls, multiworld: MultiWorld, multidata: dict):
 
         ordered_areas = (
             'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
@@ -629,10 +629,10 @@ class ALTTPWorld(World):
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
                 pass
             elif 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
-                trash_counts[player] = world.worlds[player].random.randint(world.crystals_needed_for_gt[player] * 2,
+                trash_counts[player] = world.random.randint(world.crystals_needed_for_gt[player] * 2,
                                                                            world.crystals_needed_for_gt[player] * 4)
             else:
-                trash_counts[player] = world.worlds[player].random.randint(0, world.crystals_needed_for_gt[player] * 2)
+                trash_counts[player] = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
@@ -642,7 +642,7 @@ class ALTTPWorld(World):
 
             for player, trash_count in trash_counts.items():
                 gtower_locations = locations_mapping[player]
-                world.worlds[player].random.shuffle(gtower_locations)
+                world.random.shuffle(gtower_locations)
 
                 while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
