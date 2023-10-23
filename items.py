@@ -116,13 +116,17 @@ class ItemData(NamedTuple):
     prog: IC
 
     def passage(self):
+        if not isinstance(self.id, tuple):
+            return None
         return self.id[0]
 
     def box(self):
-        if self.type == ItemType.CD:
+        if self.type == ItemType.JEWEL:
+            return self.id[1]
+        elif self.type == ItemType.CD:
             return Box.CD
         else:
-            return self.id[1]
+            return None
 
 
 item_table = {
