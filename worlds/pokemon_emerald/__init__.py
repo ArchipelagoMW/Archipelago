@@ -774,7 +774,7 @@ class PokemonEmeraldWorld(World):
         if self.options.starters != RandomizeStarters.option_vanilla:
             randomize_starters()
 
-        generate_output(self.modified_data, self.multiworld, self.player, output_directory)
+        generate_output(self, output_directory)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
