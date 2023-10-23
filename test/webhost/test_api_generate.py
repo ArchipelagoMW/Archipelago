@@ -19,11 +19,11 @@ class TestDocs(unittest.TestCase):
 
         cls.client = app.test_client()
 
-    def testCorrectErrorEmptyRequest(self):
+    def test_correct_error_empty_request(self):
         response = self.client.post("/api/generate")
         self.assertIn("No options found. Expected file attachment or json weights.", response.text)
 
-    def testGenerationQueued(self):
+    def test_generation_queued(self):
         options = {
             "Tester1":
                 {

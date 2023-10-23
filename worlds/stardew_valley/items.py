@@ -368,8 +368,8 @@ def create_arcade_machine_items(item_factory: StardewItemFactory, options: Stard
 
 
 def create_player_buffs(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    items.extend(item_factory(item) for item in [Buff.movement] * options.number_of_movement_buffs.value)
-    items.extend(item_factory(item) for item in [Buff.luck] * options.number_of_luck_buffs.value)
+    items.extend(item_factory(item) for item in [Buff.movement] * options.movement_buff_number.value)
+    items.extend(item_factory(item) for item in [Buff.luck] * options.luck_buff_number.value)
 
 
 def create_traveling_merchant_items(item_factory: StardewItemFactory, items: List[Item]):
