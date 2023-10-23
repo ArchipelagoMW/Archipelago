@@ -35,11 +35,11 @@ class RiskOfRainWorld(World):
     topology_present = False
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     item_name_groups = {
-        "Stage": get_items_by_category("Stage"),
-        "Environment": get_items_by_category("Environment"),
-        "Upgrade": get_items_by_category("Upgrade"),
-        "Filler": get_items_by_category("Filler"),
-        "Trap": get_items_by_category("Trap")
+        "Stages": get_items_by_category("Stage"),
+        "Environments": get_items_by_category("Environment"),
+        "Upgrades": get_items_by_category("Upgrade"),
+        "Fillers": get_items_by_category("Filler"),
+        "Traps": get_items_by_category("Trap")
     }
     location_name_to_id = item_pickups
 
@@ -232,7 +232,7 @@ class RiskOfRainWorld(World):
         return filler
 
     def fill_slot_data(self):
-        options_dict = self.options.as_dict("item_pickup_step", "shrine_use_step", "goal", "total_locations",
+        options_dict = self.options.as_dict("item_pickup_step", "shrine_use_step", "goal", "victory", "total_locations",
                                             "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
                                             "scanner_per_stage", "altars_per_stage", "total_revivals",
                                             "start_with_revive",

@@ -371,31 +371,8 @@ class ItemWeights(Choice):
     option_void = 9
 
 
-# define a class for the weights of the generated item pool.
 @dataclass
-class ROR2Weights:
-    green_scrap: GreenScrap
-    red_scrap: RedScrap
-    yellow_scrap: YellowScrap
-    white_scrap: WhiteScrap
-    common_item: CommonItem
-    uncommon_item: UncommonItem
-    legendary_item: LegendaryItem
-    boss_item: BossItem
-    lunar_item: LunarItem
-    void_item: VoidItem
-    equipment: Equipment
-    money: Money
-    lunar_coin: LunarCoin
-    experience: Experience
-    mountain_trap: MountainTrap
-    time_warp_trap: TimeWarpTrap
-    combat_trap: CombatTrap
-    teleport_trap: TeleportTrap
-
-
-@dataclass
-class ROR2Options(PerGameCommonOptions, ROR2Weights):
+class ROR2Options(PerGameCommonOptions):
     goal: Goal
     victory: Victory
     total_locations: TotalLocations
@@ -416,3 +393,22 @@ class ROR2Options(PerGameCommonOptions, ROR2Weights):
     enable_lunar: AllowLunarItems
     item_weights: ItemWeights
     item_pool_presets: ItemPoolPresetToggle
+    # weights of the generated item pool.
+    green_scrap: GreenScrap
+    red_scrap: RedScrap
+    yellow_scrap: YellowScrap
+    white_scrap: WhiteScrap
+    common_item: CommonItem
+    uncommon_item: UncommonItem
+    legendary_item: LegendaryItem
+    boss_item: BossItem
+    lunar_item: LunarItem
+    void_item: VoidItem
+    equipment: Equipment
+    money: Money
+    lunar_coin: LunarCoin
+    experience: Experience
+    mountain_trap: MountainTrap
+    time_warp_trap: TimeWarpTrap
+    combat_trap: CombatTrap
+    teleport_trap: TeleportTrap
