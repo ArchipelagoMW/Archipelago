@@ -2267,12 +2267,12 @@ def create_regions(self):
                 "Defeat Viridian Gym Giovanni",
             ]
 
-        player_locations = multiworld.get_locations(player=player)
+        event_locations = self.multiworld.get_filled_locations(player)
 
         def adds_reachable_entrances(entrances_copy, item):
             state_copy = state.copy()
             state_copy.collect(item, True)
-            state.sweep_for_events(locations=player_locations)
+            state.sweep_for_events(locations=event_locations)
             ret = len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
                       entrance.parent_region.can_reach(state_copy)]) > len(reachable_entrances)
             return ret
@@ -2308,7 +2308,6 @@ def create_regions(self):
 
         starting_entrances = len(entrances)
         dc_connected = []
-        event_locations = self.multiworld.get_filled_locations(player)
         rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name]
         entrances = [entrance for entrance in entrances if entrance not in rock_tunnel_entrances]
         while entrances:
