@@ -7,7 +7,7 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
     campaign_mission_table
 from .Options import get_option_value, MissionOrder, \
-    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available
+    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech
 from .LogicMixin import SC2Logic
 from . import ItemNames
 
@@ -40,6 +40,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
     disabled_campaigns = get_disabled_campaigns(multiworld, player)
     excluded_mission_names = get_option_value(multiworld, player, "excluded_missions")
+    grant_story_tech = get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
     mission_pools: Dict[MissionPools, List[SC2Mission]] = {}
     for mission in SC2Mission:
@@ -121,10 +122,6 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         move_mission(SC2Mission.A_SINISTER_TURN, MissionPools.MEDIUM, MissionPools.EASY)
     # HotS
     kerriganless = get_option_value(multiworld, player, "kerriganless") not in kerrigan_unit_available
-    if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
-        # Conditionally moving Easy missions to Starter
-        move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)
-        move_mission(SC2Mission.DOMINATION, MissionPools.EASY, MissionPools.STARTER)
     if adv_tactics:
         # Medium -> Easy
         for mission in (SC2Mission.FIRE_IN_THE_SKY, SC2Mission.WAKING_THE_ANCIENT, SC2Mission.CONVICTION):
@@ -134,6 +131,13 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         if not kerriganless:
             # Additional starter mission assuming player starts with minimal anti-air
             move_mission(SC2Mission.WAKING_THE_ANCIENT, MissionPools.EASY, MissionPools.STARTER)
+    if grant_story_tech:
+        # Additional starter mission if player is granted story tech
+        move_mission(SC2Mission.ENEMY_WITHIN, MissionPools.EASY, MissionPools.STARTER)
+    if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
+        # Conditionally moving Easy missions to Starter
+        move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.DOMINATION, MissionPools.EASY, MissionPools.STARTER)
 
     remove_final_mission_from_other_pools(mission_pools)
     return mission_pools
@@ -410,6 +414,7 @@ class ValidInventory:
         self._sc2hots_has_basic_kerrigan = lambda world, player: SC2Logic._sc2hots_has_basic_kerrigan(self, world, player)
         self._sc2hots_has_two_kerrigan_actives = lambda world, player: SC2Logic._sc2hots_has_two_kerrigan_actives(self, world, player)
         self._sc2hots_has_low_tech = lambda world, player: SC2Logic._sc2hots_has_low_tech(self, world, player)
+        self._sc2hots_can_pass_vents = lambda world, player: SC2Logic._sc2hots_can_pass_vents(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],

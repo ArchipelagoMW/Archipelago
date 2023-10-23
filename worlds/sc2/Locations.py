@@ -1,6 +1,7 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
+from . import ItemNames
 from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech
 
 from BaseClasses import Location
@@ -553,11 +554,20 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Shoot the Messenger", "Shoot the Messenger: Destroy 4 Shuttles", SC2HOTS_LOC_ID_OFFSET + 504, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
-        LocationData("Enemy Within", "Enemy Within: Victory", SC2HOTS_LOC_ID_OFFSET + 600, LocationType.VICTORY),
-        LocationData("Enemy Within", "Enemy Within: First Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 602, LocationType.MISSION_PROGRESS),
-        LocationData("Enemy Within", "Enemy Within: Second Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 603, LocationType.MISSION_PROGRESS),
-        LocationData("Enemy Within", "Enemy Within: Third Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 604, LocationType.MISSION_PROGRESS),
-        LocationData("Enemy Within", "Enemy Within: Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601, LocationType.BONUS),
+        LocationData("Enemy Within", "Enemy Within: Victory", SC2HOTS_LOC_ID_OFFSET + 600, LocationType.VICTORY,
+                     lambda state: state._sc2hots_can_pass_vents(multiworld, player)
+                                   and (story_tech_granted
+                                        or state.has_any({ItemNames.ZERGLING_RAPTOR_STRAIN, ItemNames.ROACH,
+                                                         ItemNames.HYDRALISK, ItemNames.INFESTOR}, player))
+                     ),
+        LocationData("Enemy Within", "Enemy Within: First Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 602, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_can_pass_vents(multiworld, player)),
+        LocationData("Enemy Within", "Enemy Within: Second Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 603, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_can_pass_vents(multiworld, player)),
+        LocationData("Enemy Within", "Enemy Within: Third Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 604, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2hots_can_pass_vents(multiworld, player)),
+        LocationData("Enemy Within", "Enemy Within: Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601, LocationType.BONUS,
+                     lambda state: state._sc2hots_can_pass_vents(multiworld, player)),
         LocationData("Domination", "Domination: Victory", SC2HOTS_LOC_ID_OFFSET + 700, LocationType.VICTORY,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and state._sc2hots_has_minimal_antiair(multiworld, player)),
         LocationData("Domination", "Domination: Repel Zagara", SC2HOTS_LOC_ID_OFFSET + 703, LocationType.MISSION_PROGRESS),

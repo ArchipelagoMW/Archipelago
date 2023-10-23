@@ -1,6 +1,7 @@
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
-from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, GameDifficulty
+from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, GameDifficulty, \
+    GrantStoryTech
 from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives
 from .MissionTables import SC2Race
 from . import ItemNames
@@ -276,3 +277,8 @@ class SC2Logic(LogicMixin):
     def _sc2hots_has_low_tech(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any({ItemNames.ZERGLING, ItemNames.SWARM_QUEEN, ItemNames.SPINE_CRAWLER}, player) \
                or self._sc2hots_has_common_unit(multiworld, player) and self._sc2hots_has_basic_kerrigan(multiworld, player)
+
+    def _sc2hots_can_pass_vents(self, multiworld: MultiWorld, player: int) -> bool:
+        return (get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true) \
+            or self.has(ItemNames.ZERGLING, player) \
+            or (self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.INFESTOR, player))
