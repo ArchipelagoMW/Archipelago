@@ -2118,13 +2118,15 @@ class ServerCommandProcessor(CommonCommandProcessor):
 async def console(ctx: Context):
     import sys
     queue = asyncio.Queue()
-    Utils.stream_input(sys.stdin, queue)
+    worker = Utils.stream_input(sys.stdin, queue)
     while not ctx.exit_event.is_set():
         try:
             # I don't get why this while loop is needed. Works fine without it on clients,
             # but the queue.get() for server never fulfills if the queue is empty when entering the await.
             while queue.qsize() == 0:
                 await asyncio.sleep(0.05)
+                if not worker.is_alive():
+                    return
             input_text = await queue.get()
             queue.task_done()
             ctx.commandprocessor(input_text)

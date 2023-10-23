@@ -10,7 +10,7 @@ joke_hints = [
     "You can do it!",
     "I believe in you!",
     "The person playing is cute. <3",
-    "dash dot, dash dash dash, dash, dot dot dot dot, dot dot, dash dot, dash dash dot",
+    "dash dot, dash dash dash,\ndash, dot dot dot dot, dot dot,\ndash dot, dash dash dot",
     "When you think about it, there are actually a lot of bubbles in a stream.",
     "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you",
     "Thanks to the Archipelago developers for making this possible.",
@@ -306,7 +306,7 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
         else:
             hints.append((f"{loc} contains {item[0]}.", item[2]))
 
-    next_random_hint_is_item = multiworld.per_slot_randoms[player].randint(0, 2)
+    next_random_hint_is_item = multiworld.per_slot_randoms[player].randrange(0, 2)  # Moving this to the new system is in the bigger refactoring PR
 
     while len(hints) < hint_amount:
         if next_random_hint_is_item:
