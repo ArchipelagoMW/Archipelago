@@ -96,7 +96,7 @@ class EarlyMaterial(Choice):
     default = 1
 
 
-class MaterialMinLimit(Choice):
+class MaterialMinLimit(Range):
     """
     The minimum material value of your army, once all items are collected. A FIDE army has value 39 (8+6+6+10+9). (If
     you want consistent access to material, consider using Starting Inventory or Starting Hints in your YAML.)
@@ -107,7 +107,7 @@ class MaterialMinLimit(Choice):
     default = 39
 
 
-class MaterialMaxLimit(Choice):
+class MaterialMaxLimit(Range):
     """
     The maximum material value of your army, once all items are collected. A FIDE army has value 39 (8+6+6+10+9).
     """

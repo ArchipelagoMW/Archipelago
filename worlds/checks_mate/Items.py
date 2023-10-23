@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Tuple, List
 
 from BaseClasses import Item, ItemClassification
 
@@ -25,7 +25,7 @@ item_table = {
     # Rooks are worth 5.25 to 5.5, but many major pieces are worse, so we assume 4.85, which stays under 5.0
     "Progressive Major Piece": CMItemData(4_005, ItemClassification.progression, quantity=9, material=485),
     # Queen pieces are pretty good, and even the weak ones are pretty close, so queens can stay 9.0 (but not 10.0)
-    "Progressive Major To Queen": CMItemData(4_006, ItemClassification.useful, quantity=7, material=415,
+    "Progressive Major To Queen": CMItemData(4_006, ItemClassification.progression, quantity=7, material=415,
                                              parents=["Progressive Major Piece"]),
     # TODO: implement extra moves
     # "Progressive Opening Move": CMItemData(4_007, ItemClassification.useful, quantity=3),
@@ -77,6 +77,16 @@ item_table = {
 }
 
 lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+
+
+material_items: Dict[str, CMItemData] = {
+    item: item_data for (item, item_data) in item_table.items() if item_data.material > 0}
+progression_items: Dict[str, CMItemData] = {
+    item: item_data for (item, item_data) in item_table.items() if item_data.classification == ItemClassification.progression}
+useful_items: Dict[str, CMItemData] = {
+    item: item_data for (item, item_data) in item_table.items() if item_data.classification == ItemClassification.useful}
+filler_items: Dict[str, CMItemData] = {
+    item: item_data for (item, item_data) in item_table.items() if item_data.classification == ItemClassification.filler}
 
 
 def create_item_with_correct_settings(player: int, name: str) -> Item:

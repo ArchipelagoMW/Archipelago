@@ -45,7 +45,7 @@ class ChecksMateLogic(LogicMixin):
         return sum(1 if x == "Progressive Enemy Piece" else 0 for x in owned_item_ids)
         
     def has_french_move(self: CollectionState, player: int) -> bool:
-        return self.has("Play En Passant", player) and self.has_pawn()
+        return self.has("Play En Passant", player) and self.has_pawn(player)
 
     def has_pawn(self: CollectionState, player: int) -> bool:
         return self.has_any({"Progressive Pawn"}, player)
