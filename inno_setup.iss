@@ -52,7 +52,6 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 [Components]
 Name: "core";             Description: "Archipelago"; Types: full minimal custom; Flags: fixed
 Name: "lttp_sprites";     Description: "Download ""A Link to the Past"" player sprites"; Types: full;
-Name: "client_minecraft"; Description: "Setup ""Minecraft"" Forge Server"; Types: full; ExtraDiskSpaceRequired: 226894278;
 
 [Dirs]
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
@@ -74,7 +73,6 @@ Name: "{commondesktop}\{#MyAppName} Launcher"; Filename: "{app}\ArchipelagoLaunc
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Flags: nowait; Components: lttp_sprites
-Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client_minecraft
 Filename: "{app}\ArchipelagoLauncher"; Parameters: "--update_settings"; StatusMsg: "Updating host.yaml..."; Flags: runasoriginaluser runhidden
 Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringChange('Launcher', '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
