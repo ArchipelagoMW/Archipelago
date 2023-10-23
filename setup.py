@@ -71,7 +71,6 @@ non_apworlds: set = {
     "Clique",
     "DLCQuest",
     "Final Fantasy",
-    "Hylics 2",
     "Kingdom Hearts 2",
     "Kingdom Hearts Chain of Memories",
     "Lufia II Ancient Cave",
