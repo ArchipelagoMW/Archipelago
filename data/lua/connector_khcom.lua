@@ -834,7 +834,7 @@ function open_card_pack(card_pack)
         add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
         choice = math.random(1,3)
         if choice == 1 then
-            add_battle_card(bronze_pack_item_cards[math.random(1, #bronze_pack_items_cards)])
+            add_battle_card(bronze_pack_item_cards[math.random(1, #bronze_pack_item_cards)])
         elseif choice == 2 then
             add_battle_card(bronze_pack_magic_cards[math.random(1, #bronze_pack_magic_cards)])
         else
