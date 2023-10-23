@@ -25,8 +25,7 @@ from .options import (ItemPoolType, RandomizeWildPokemon, RandomizeBadges, Rando
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
-from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
-                    set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
+from .rules import set_rules
 from .sanity_check import validate_regions
 from .util import int_to_bool_array, bool_array_to_int
 
@@ -134,8 +133,8 @@ class PokemonEmeraldWorld(World):
         if self.options.enable_ferry:
             tags.add("Ferry")
 
-        create_regions(self.multiworld, self.player)
-        create_locations_with_tags(self.multiworld, self.player, tags)
+        create_regions(self)
+        create_locations_with_tags(self, tags)
 
     def create_items(self) -> None:
         item_locations: List[PokemonEmeraldLocation] = [
@@ -232,25 +231,7 @@ class PokemonEmeraldWorld(World):
                 self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
-        set_default_rules(self.multiworld, self.player)
-
-        if self.options.overworld_items:
-            set_overworld_item_rules(self.multiworld, self.player)
-
-        if self.options.hidden_items:
-            set_hidden_item_rules(self.multiworld, self.player)
-
-        if self.options.npc_gifts:
-            set_npc_gift_rules(self.multiworld, self.player)
-
-        if self.options.enable_ferry:
-            set_enable_ferry_rules(self.multiworld, self.player)
-
-        if self.options.require_itemfinder:
-            add_hidden_item_itemfinder_rules(self.multiworld, self.player)
-
-        if self.options.require_flash:
-            add_flash_rules(self.multiworld, self.player)
+        set_rules(self)
 
     def generate_basic(self) -> None:
         locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
