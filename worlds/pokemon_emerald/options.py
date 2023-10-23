@@ -1,9 +1,10 @@
 """
 Option definitions for Pokemon Emerald
 """
-from typing import Dict
+from dataclasses import dataclass
+from typing import Dict, Type
 
-from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText
+from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText, PerGameCommonOptions
 
 from .data import data
 
@@ -686,69 +687,71 @@ class EasterEgg(FreeText):
     default = "EMERALD SECRET"
 
 
-option_definitions: Dict[str, Option] = {
-    "goal": Goal,
-    "badges": RandomizeBadges,
-    "hms": RandomizeHms,
-    "key_items": RandomizeKeyItems,
-    "bikes": RandomizeBikes,
-    "rods": RandomizeRods,
-    "overworld_items": RandomizeOverworldItems,
-    "hidden_items": RandomizeHiddenItems,
-    "npc_gifts": RandomizeNpcGifts,
-    "berry_trees": RandomizeBerryTrees,
+@dataclass
+class PokemonEmeraldOptions(PerGameCommonOptions):
+    goal: Goal
 
-    "item_pool_type": ItemPoolType,
+    badges: RandomizeBadges
+    hms: RandomizeHms
+    key_items: RandomizeKeyItems
+    bikes: RandomizeBikes
+    rods: RandomizeRods
+    overworld_items: RandomizeOverworldItems
+    hidden_items: RandomizeHiddenItems
+    npc_gifts: RandomizeNpcGifts
+    berry_trees: RandomizeBerryTrees
+    item_pool_type: ItemPoolType
 
-    "require_itemfinder": HiddenItemsRequireItemfinder,
-    "require_flash": DarkCavesRequireFlash,
-    "elite_four_requirement": EliteFourRequirement,
-    "elite_four_count": EliteFourCount,
-    "norman_requirement": NormanRequirement,
-    "norman_count": NormanCount,
-    "legendary_hunt_catch": LegendaryHuntCatch,
-    "legendary_hunt_count": LegendaryHuntCount,
-    "allowed_legendary_hunt_encounters": AllowedLegendaryHuntEncounters,
+    require_itemfinder: HiddenItemsRequireItemfinder
+    require_flash: DarkCavesRequireFlash
+    elite_four_requirement: EliteFourRequirement
+    elite_four_count: EliteFourCount
+    norman_requirement: NormanRequirement
+    norman_count: NormanCount
+    legendary_hunt_catch: LegendaryHuntCatch
+    legendary_hunt_count: LegendaryHuntCount
+    allowed_legendary_hunt_encounters: AllowedLegendaryHuntEncounters
 
-    "wild_pokemon": RandomizeWildPokemon,
-    "allow_wild_legendaries": AllowWildLegendaries,
-    "starters": RandomizeStarters,
-    "allow_starter_legendaries": AllowStarterLegendaries,
-    "trainer_parties": RandomizeTrainerParties,
-    "allow_trainer_legendaries": AllowTrainerLegendaries,
-    "static_encounters": RandomizeStaticEncounters,
+    wild_pokemon: RandomizeWildPokemon
+    allow_wild_legendaries: AllowWildLegendaries
+    starters: RandomizeStarters
+    allow_starter_legendaries: AllowStarterLegendaries
+    trainer_parties: RandomizeTrainerParties
+    allow_trainer_legendaries: AllowTrainerLegendaries
+    static_encounters: RandomizeStaticEncounters
+    types: RandomizeTypes
+    abilities: RandomizeAbilities
+    ability_blacklist: AbilityBlacklist
 
-    "types": RandomizeTypes,
-    "abilities": RandomizeAbilities,
-    "ability_blacklist": AbilityBlacklist,
-    "level_up_moves": LevelUpMoves,
-    "move_match_type_bias": MoveMatchTypeBias,
-    "move_normal_type_bias": MoveNormalTypeBias,
-    "tm_compatibility": TmCompatibility,
-    "hm_compatibility": HmCompatibility,
+    level_up_moves: LevelUpMoves
+    move_match_type_bias: MoveMatchTypeBias
+    move_normal_type_bias: MoveNormalTypeBias
+    tm_compatibility: TmCompatibility
+    hm_compatibility: HmCompatibility
+    tm_moves: TmMoves
+    reusable_tms: ReusableTms
+    move_tutor_moves: MoveTutorMoves
 
-    "tm_moves": TmMoves,
-    "reusable_tms": ReusableTms,
-    "move_tutor_moves": MoveTutorMoves,
-    "min_catch_rate": MinCatchRate,
-    "guaranteed_catch": GuaranteedCatch,
-    "exp_modifier": ExpModifier,
-    "blind_trainers": BlindTrainers,
-    "match_trainer_levels": MatchTrainerLevels,
-    "match_trainer_levels_multiplier": MatchTrainerLevelsMultiplier,
-    "double_battle_chance": DoubleBattleChance,
-    "better_shops": BetterShops,
-    "remove_roadblocks": RemoveRoadblocks,
-    "extra_boulders": ExtraBoulders,
-    "extra_bumpy_slope": ExtraBumpySlope,
-    "free_fly_location": FreeFlyLocation,
-    "fly_without_badge": FlyWithoutBadge,
-    "turbo_a": TurboA,
-    "receive_item_messages": ReceiveItemMessages,
-    "remote_items": RemoteItems,
+    min_catch_rate: MinCatchRate
+    guaranteed_catch: GuaranteedCatch
+    exp_modifier: ExpModifier
+    blind_trainers: BlindTrainers
+    match_trainer_levels: MatchTrainerLevels
+    match_trainer_levels_multiplier: MatchTrainerLevelsMultiplier
+    double_battle_chance: DoubleBattleChance
+    better_shops: BetterShops
 
-    "music": RandomizeMusic,
-    "fanfares": RandomizeFanfares,
+    remove_roadblocks: RemoveRoadblocks
+    extra_boulders: ExtraBoulders
+    extra_bumpy_slope: ExtraBumpySlope
+    free_fly_location: FreeFlyLocation
+    fly_without_badge: FlyWithoutBadge
 
-    "easter_egg": EasterEgg
-}
+    turbo_a: TurboA
+    receive_item_messages: ReceiveItemMessages
+    remote_items: RemoteItems
+
+    music: RandomizeMusic
+    fanfares: RandomizeFanfares
+
+    easter_egg: EasterEgg

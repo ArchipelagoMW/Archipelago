@@ -31,20 +31,20 @@ clear it.
 2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
 This will generate an output file for you. Your patch file will have the `.apemerald` file extension.
 3. Open `ArchipelagoLauncher.exe`
-4. Select "Open Patch" on the left side and select your patch file. (You may also be prompted to select your vanilla ROM
-the first time you do this.)
-5. This will create a patched `.gba` file using your vanilla ROM. It will also open the client and try to run the
-newly-created `.gba` file in your emulator. If you want it to automatically open the ROM in BizHawk you need to register
-`.gba` files with `EmuHawk.exe`.
-
-If your install was configured correctly, double-clicking the patch file should automatically open the patch with
-Archipelago, doing steps 3-5 for you.
+4. Select "Open Patch" on the left side and select your patch file.
+5. If this is your first time patching, you will be prompted to locate your vanilla ROM.
+6. A patched `.gba` file will be created in the same place as the patch file.
+7. On your first time opening a patch with BizHawk Client, you will also be asked to locate `EmuHawk.exe` in your
+BizHawk install.
 
 If you're playing a single-player seed and you don't care about autotracking or hints, you can stop here, close the
 client, and load the patched ROM in any emulator. However, for multiworlds and other Archipelago features, continue
 below using BizHawk as your emulator.
 
 ## Connecting to a Server
+
+By default, opening a patch file will do steps 1-5 below for you automatically. Even so, keep them in your memory just
+in case you have to close and reopen a window mid-game for some reason.
 
 1. Pokemon Emerald uses Archipelago's BizHawk Client. If the client isn't still open from when you patched your game,
 you can re-open it from the launcher.
@@ -54,14 +54,11 @@ you can re-open it from the launcher.
 5. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
 6. The emulator may freeze every few seconds until it manages to connect to the client. This is expected. The BizHawk
 Client window should indicate that it connected and recognized Pokemon Emerald.
-7. To connect the client to the server, enter your room's `<address>:<port>` into the top text field of the client and
-click Connect.
+7. To connect the client to the server, enter your room's address and port (e.g. `archipelago.gg:38281`) into the
+top text field of the client and click Connect.
 
 You should now be able to receive and send items. You'll need to do these steps every time you want to reconnect. It is
 perfectly safe to make progress offline; everything will re-sync when you reconnect.
-
-If you're feeling adventurous in the future, you can drag the lua script directly onto the emulator screen to open it.
-Or, from the Lua Console window, you can use `File > Recent Scripts` to quickly open a script you've used before.
 
 ## Auto-Tracking
 

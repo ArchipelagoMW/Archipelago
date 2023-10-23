@@ -1,18 +1,17 @@
 from __future__ import annotations
 
-import logging
-import copy
-import os
-import threading
 import base64
-import settings
+import copy
+import logging
+import threading
 import typing
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
-from Fill import fill_restrictive
-from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
+import settings
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from Options import Accessibility
+from worlds.AutoWorld import AutoLogicRegister, WebWorld, World
+from worlds.generic.Rules import add_rule, set_rule
 
 logger = logging.getLogger("Super Metroid")
 
@@ -148,7 +147,7 @@ class SMWorld(World):
         self.remote_items = self.multiworld.remote_items[self.player]
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
-            self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("minimal")
+            self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
             logger.warning(f"accessibility forced to 'minimal' for player {self.multiworld.get_player_name(self.player)} because of 'fun' settings")
     
     def create_items(self):
