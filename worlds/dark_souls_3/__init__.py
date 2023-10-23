@@ -82,8 +82,6 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.RING)
         if self.multiworld.enable_spell_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
-        if self.multiworld.enable_npc_locations[self.player] == Toggle.option_true:
-            self.enabled_location_categories.add(DS3LocationCategory.NPC)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
         if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
@@ -99,6 +97,7 @@ class DarkSouls3World(World):
         regions: Dict[str, Region] = {}
         regions["Menu"] = self.create_region("Menu", {})
         regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
+            "Cemetery of Ash",
             "Firelink Shrine",
             "Firelink Shrine Bell Tower",
             "High Wall of Lothric",
@@ -141,7 +140,9 @@ class DarkSouls3World(World):
             connection.connect(regions[to_region])
 
         regions["Menu"].exits.append(Entrance(self.player, "New Game", regions["Menu"]))
-        self.multiworld.get_entrance("New Game", self.player).connect(regions["Firelink Shrine"])
+        self.multiworld.get_entrance("New Game", self.player).connect(regions["Cemetery of Ash"])
+
+        create_connection("Cemetery of Ash", "Firelink Shrine")
 
         create_connection("Firelink Shrine", "High Wall of Lothric")
         create_connection("Firelink Shrine", "Firelink Shrine Bell Tower")
@@ -184,7 +185,8 @@ class DarkSouls3World(World):
         new_region = Region(region_name, self.player, self.multiworld)
 
         for location in location_table:
-            if location.category in self.enabled_location_categories:
+            if (location.category in self.enabled_location_categories and
+                (not location.npc or self.multiworld.enable_npc_locations[self.player] == Toggle.option_true)):
                 new_location = DarkSouls3Location(
                     self.player,
                     location.name,

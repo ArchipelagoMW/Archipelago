@@ -1,5 +1,6 @@
 from enum import IntEnum
-from typing import Optional, NamedTuple, Dict, Set
+from typing import Optional, Dict, Set
+from dataclasses import dataclass
 
 from BaseClasses import Location, Region
 
@@ -10,19 +11,29 @@ class DS3LocationCategory(IntEnum):
     ARMOR = 2
     RING = 3
     SPELL = 4
-    NPC = 5
-    KEY = 6
-    BOSS = 7
-    MISC = 8
-    HEALTH = 9
-    PROGRESSIVE_ITEM = 10
-    EVENT = 11
+    KEY = 5
+    BOSS = 6
+    MISC = 7
+    HEALTH = 8
+    PROGRESSIVE_ITEM = 9
+    EVENT = 10
 
 
-class DS3LocationData(NamedTuple):
+@dataclass
+class DS3LocationData:
     name: str
-    default_item: str
+    """The name of this location according to Archipelago.
+    
+    This needs to be unique within this world."""
+
+    default_item_name: str
+    """The name of the item that appears by default in this location."""
+
     category: DS3LocationCategory
+    """The category into which this location falls."""
+
+    npc: bool = False
+    """Whether this item is contingent on killing an NPC or following their quest."""
 
 
 class DarkSouls3Location(Location):
@@ -124,8 +135,10 @@ location_tables = {
         DS3LocationData("HWL: Soul of Boreal Valley Vordt",        "Soul of Boreal Valley Vordt",       DS3LocationCategory.BOSS),
         DS3LocationData("HWL: Soul of the Dancer",                 "Soul of the Dancer",                DS3LocationCategory.BOSS),
         DS3LocationData("HWL: Way of Blue",                        "Way of Blue",                       DS3LocationCategory.MISC),
-        DS3LocationData("HWL: Greirat's Ashes",                    "Greirat's Ashes",                   DS3LocationCategory.NPC),
-        DS3LocationData("HWL: Blue Tearstone Ring",                "Blue Tearstone Ring",               DS3LocationCategory.NPC),
+        DS3LocationData("HWL: Greirat's Ashes",                    "Greirat's Ashes",                   DS3LocationCategory.KEY,
+                        npc = True),
+        DS3LocationData("HWL: Blue Tearstone Ring",                "Blue Tearstone Ring",               DS3LocationCategory.RING,
+                        npc = True),
     ],
     "Undead Settlement": [
         DS3LocationData("US: Small Leather Shield",                "Small Leather Shield",              DS3LocationCategory.SHIELD),
@@ -166,14 +179,21 @@ location_tables = {
         DS3LocationData("US: Hawk Ring",                           "Hawk Ring",                         DS3LocationCategory.RING),
         DS3LocationData("US: Warrior of Sunlight",                 "Warrior of Sunlight",               DS3LocationCategory.MISC),
         DS3LocationData("US: Blessed Red and White Shield+1",      "Blessed Red and White Shield+1",    DS3LocationCategory.SHIELD),
-        DS3LocationData("US: Irina's Ashes",                       "Irina's Ashes",                     DS3LocationCategory.NPC),
-        DS3LocationData("US: Cornyx's Ashes",                      "Cornyx's Ashes",                    DS3LocationCategory.NPC),
-        DS3LocationData("US: Cornyx's Wrap",                       "Cornyx's Wrap",                     DS3LocationCategory.NPC),
-        DS3LocationData("US: Cornyx's Garb",                       "Cornyx's Garb",                     DS3LocationCategory.NPC),
-        DS3LocationData("US: Cornyx's Skirt",                      "Cornyx's Skirt",                    DS3LocationCategory.NPC),
-        DS3LocationData("US: Pyromancy Flame",                     "Pyromancy Flame",                   DS3LocationCategory.NPC),
+        DS3LocationData("US: Irina's Ashes",                       "Irina's Ashes",                     DS3LocationCategory.KEY,
+                        npc = True),
+        DS3LocationData("US: Cornyx's Ashes",                      "Cornyx's Ashes",                    DS3LocationCategory.KEY,
+                        npc = True),
+        DS3LocationData("US: Cornyx's Wrap",                       "Cornyx's Wrap",                     DS3LocationCategory.ARMOR,
+                        npc = True),
+        DS3LocationData("US: Cornyx's Garb",                       "Cornyx's Garb",                     DS3LocationCategory.ARMOR,
+                        npc = True),
+        DS3LocationData("US: Cornyx's Skirt",                      "Cornyx's Skirt",                    DS3LocationCategory.ARMOR,
+                        npc = True),
+        DS3LocationData("US: Pyromancy Flame",                     "Pyromancy Flame",                   DS3LocationCategory.ARMOR,
+                        npc = True),
         DS3LocationData("US: Transposing Kiln",                    "Transposing Kiln",                  DS3LocationCategory.MISC),
-        DS3LocationData("US: Tower Key",                           "Tower Key",                         DS3LocationCategory.NPC),
+        DS3LocationData("US: Tower Key",                           "Tower Key",                         DS3LocationCategory.KEY,
+                        npc = True),
     ],
     "Road of Sacrifices": [
         DS3LocationData("RS: Brigand Twindaggers",                 "Brigand Twindaggers",               DS3LocationCategory.WEAPON),
@@ -217,7 +237,8 @@ location_tables = {
         DS3LocationData("RS: Grass Crest Shield",                  "Grass Crest Shield",                DS3LocationCategory.SHIELD),
         DS3LocationData("RS: Soul of a Crystal Sage",              "Soul of a Crystal Sage",            DS3LocationCategory.BOSS),
         DS3LocationData("RS: Great Swamp Ring",                    "Great Swamp Ring",                  DS3LocationCategory.RING),
-        DS3LocationData("RS: Orbeck's Ashes",                      "Orbeck's Ashes",                    DS3LocationCategory.NPC),
+        DS3LocationData("RS: Orbeck's Ashes",                      "Orbeck's Ashes",                    DS3LocationCategory.KEY,
+                        npc = True),
     ],
     "Cathedral of the Deep": [
         DS3LocationData("CD: Paladin's Ashes",                     "Paladin's Ashes",                   DS3LocationCategory.MISC),
@@ -363,11 +384,16 @@ location_tables = {
         DS3LocationData("ID: Jailer's Key Ring",                   "Jailer's Key Ring",                 DS3LocationCategory.KEY),
         DS3LocationData("ID: Dusk Crown Ring",                     "Dusk Crown Ring",                   DS3LocationCategory.RING),
         DS3LocationData("ID: Dark Clutch Ring",                    "Dark Clutch Ring",                  DS3LocationCategory.RING),
-        DS3LocationData("ID: Karla's Ashes",                       "Karla's Ashes",                     DS3LocationCategory.NPC),
-        DS3LocationData("ID: Karla's Pointed Hat",                 "Karla's Pointed Hat",               DS3LocationCategory.NPC),
-        DS3LocationData("ID: Karla's Coat",                        "Karla's Coat",                      DS3LocationCategory.NPC),
-        DS3LocationData("ID: Karla's Gloves",                      "Karla's Gloves",                    DS3LocationCategory.NPC),
-        DS3LocationData("ID: Karla's Trousers",                    "Karla's Trousers",                  DS3LocationCategory.NPC),
+        DS3LocationData("ID: Karla's Ashes",                       "Karla's Ashes",                     DS3LocationCategory.KEY,
+                        npc = True),
+        DS3LocationData("ID: Karla's Pointed Hat",                 "Karla's Pointed Hat",               DS3LocationCategory.ARMOR,
+                        npc = True),
+        DS3LocationData("ID: Karla's Coat",                        "Karla's Coat",                      DS3LocationCategory.ARMOR,
+                        npc = True),
+        DS3LocationData("ID: Karla's Gloves",                      "Karla's Gloves",                    DS3LocationCategory.ARMOR,
+                        npc = True),
+        DS3LocationData("ID: Karla's Trousers",                    "Karla's Trousers",                  DS3LocationCategory.ARMOR,
+                        npc = True),
     ],
     "Profaned Capital": [
         DS3LocationData("PC: Cursebite Ring",                      "Cursebite Ring",                      DS3LocationCategory.RING),
