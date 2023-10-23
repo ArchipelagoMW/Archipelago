@@ -64,8 +64,8 @@ def generate(race=False):
         if 'file' not in request.files:
             flash('No file part')
         else:
-            file = request.files['file']
-            options = get_yaml_data(file)
+            files = request.files.getlist('file')
+            options = get_yaml_data(files)
             if isinstance(options, str):
                 flash(options)
             else:

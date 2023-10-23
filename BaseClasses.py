@@ -8,6 +8,7 @@ import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import ChainMap, Counter, deque
+from collections.abc import Collection
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
     Type, ClassVar
@@ -202,14 +203,7 @@ class MultiWorld():
         self.player_types[new_id] = NetUtils.SlotType.group
         self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
-        for option_key, option in world_type.option_definitions.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-        for option_key, option in Options.common_options.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-        for option_key, option in Options.per_game_common_options.items():
-            getattr(self, option_key)[new_id] = option(option.default)
-
-        self.worlds[new_id] = world_type(self, new_id)
+        self.worlds[new_id] = world_type.create_group(self, new_id, players)
         self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
         self.player_name[new_id] = name
 
@@ -232,25 +226,24 @@ class MultiWorld():
                                  range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
-        for option_key in Options.common_options:
-            setattr(self, option_key, getattr(args, option_key, {}))
-        for option_key in Options.per_game_common_options:
-            setattr(self, option_key, getattr(args, option_key, {}))
-
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
-            for option_key in world_type.option_definitions:
-                setattr(self, option_key, getattr(args, option_key, {}))
-
             self.worlds[player] = world_type(self, player)
             self.worlds[player].random = self.per_slot_randoms[player]
+            for option_key in world_type.options_dataclass.type_hints:
+                option_values = getattr(args, option_key, {})
+                setattr(self, option_key, option_values)
+                # TODO - remove this loop once all worlds use options dataclasses
+            options_dataclass: typing.Type[Options.PerGameCommonOptions] = self.worlds[player].options_dataclass
+            self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
+                                                               for option_key in options_dataclass.type_hints})
 
     def set_item_links(self):
         item_links = {}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
-            for item_link in self.item_links[player].value:
+            for item_link in self.worlds[player].options.item_links.value:
                 if item_link["name"] in item_links:
                     if item_links[item_link["name"]]["game"] != self.game[player]:
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
@@ -305,14 +298,6 @@ class MultiWorld():
             group["non_local_items"] = item_link["non_local_items"]
             group["link_replacement"] = replacement_prio[item_link["link_replacement"]]
 
-    # intended for unittests
-    def set_default_common_options(self):
-        for option_key, option in Options.common_options.items():
-            setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
-        for option_key, option in Options.per_game_common_options.items():
-            setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
-        self.state = CollectionState(self)
-
     def secure(self):
         self.random = ThreadBarrierProxy(secrets.SystemRandom())
         self.is_race = True
@@ -364,7 +349,7 @@ class MultiWorld():
             for r_location in region.locations:
                 self._location_cache[r_location.name, player] = r_location
 
-    def get_regions(self, player=None):
+    def get_regions(self, player: Optional[int] = None) -> Collection[Region]:
         return self.regions if player is None else self._region_cache[player].values()
 
     def get_region(self, regionname: str, player: int) -> Region:
@@ -869,19 +854,19 @@ class Region:
         """
         Adds locations to the Region object, where location_type is your Location class and locations is a dict of
         location names to address.
-        
+
         :param locations: dictionary of locations to be created and added to this Region `{name: ID}`
         :param location_type: Location class to be used to create the locations with"""
         if location_type is None:
             location_type = Location
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
-    
+
     def connect(self, connecting_region: Region, name: Optional[str] = None,
                 rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
         """
         Connects this Region to another Region, placing the provided rule on the connection.
-        
+
         :param connecting_region: Region object to connect to path is `self -> exiting_region`
         :param name: name of the connection being created
         :param rule: callable to determine access of this connection to go from self to the exiting_region"""
@@ -889,11 +874,11 @@ class Region:
         if rule:
             exit_.access_rule = rule
         exit_.connect(connecting_region)
-    
+
     def create_exit(self, name: str) -> Entrance:
         """
         Creates and returns an Entrance object as an exit of this region.
-        
+
         :param name: name of the Entrance being created
         """
         exit_ = self.entrance_type(self.player, name, self)
@@ -1263,7 +1248,7 @@ class Spoiler:
 
     def to_file(self, filename: str) -> None:
         def write_option(option_key: str, option_obj: Options.AssembleOptions) -> None:
-            res = getattr(self.multiworld, option_key)[player]
+            res = getattr(self.multiworld.worlds[player].options, option_key)
             display_name = getattr(option_obj, "display_name", option_key)
             outfile.write(f"{display_name + ':':33}{res.current_option_name}\n")
 
@@ -1281,8 +1266,7 @@ class Spoiler:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
 
-                options = ChainMap(Options.per_game_common_options, self.multiworld.worlds[player].option_definitions)
-                for f_option, option in options.items():
+                for f_option, option in self.multiworld.worlds[player].options_dataclass.type_hints.items():
                     write_option(f_option, option)
 
                 AutoWorld.call_single(self.multiworld, "write_spoiler_header", player, outfile)

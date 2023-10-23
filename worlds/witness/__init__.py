@@ -66,7 +66,7 @@ class WitnessWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': self.multiworld.per_slot_randoms[self.player].randint(0, 1000000),
+            'seed': self.random.randrange(0, 1000000),
             'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
             'item_id_to_door_hexes': StaticWitnessItems.get_item_to_door_mappings(),
@@ -247,6 +247,9 @@ class WitnessWorld(World):
             item_data = StaticWitnessItems.item_data[item_name]
 
         return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
+
+    def get_filler_item_name(self) -> str:
+        return "Speed Boost"
 
 
 class WitnessLocation(Location):
