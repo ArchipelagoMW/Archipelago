@@ -952,7 +952,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
                                      "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
                 value = getattr(self, option_name).value
                 if isinstance(value, set):
-                    value = list(value)
+                    value = sorted(value)
                 option_results[display_name] = value
             else:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
