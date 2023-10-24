@@ -46,16 +46,16 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
         return state.has("Mach Bike", world.player)
     
     def defeated_n_gym_leaders(state: CollectionState, n: int) -> bool:
-        num_gym_leaders_defeated = 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_ROXANNE", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_BRAWLY", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WATTSON", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_FLANNERY", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_NORMAN", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WINONA", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_TATE_AND_LIZA", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", world.player) else 0
-        return num_gym_leaders_defeated >= n
+        return sum([state.has(event, world.player) for event in [
+            "EVENT_DEFEAT_ROXANNE",
+            "EVENT_DEFEAT_BRAWLY",
+            "EVENT_DEFEAT_WATTSON",
+            "EVENT_DEFEAT_FLANNERY",
+            "EVENT_DEFEAT_NORMAN",
+            "EVENT_DEFEAT_WINONA",
+            "EVENT_DEFEAT_TATE_AND_LIZA",
+            "EVENT_DEFEAT_JUAN"
+        ]]) >= n
 
     def get_entrance(entrance: str):
         return world.multiworld.get_entrance(entrance, world.player)
