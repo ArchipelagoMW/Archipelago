@@ -16,95 +16,64 @@ else:
     PokemonEmeraldWorld = object
 
 
-def _can_cut(state: CollectionState, player: int) -> bool:
-    return state.has("HM01 Cut", player) and state.has("Stone Badge", player)
-
-
-def _can_surf(state: CollectionState, player: int) -> bool:
-    return state.has("HM03 Surf", player) and state.has("Balance Badge", player)
-
-
-def _can_strength(state: CollectionState, player: int) -> bool:
-    return state.has("HM04 Strength", player) and state.has("Heat Badge", player)
-
-
-def _can_flash(state: CollectionState, player: int) -> bool:
-    return state.has("HM05 Flash", player) and state.has("Knuckle Badge", player)
-
-
-def _can_rock_smash(state: CollectionState, player: int) -> bool:
-    return state.has("HM06 Rock Smash", player) and state.has("Dynamo Badge", player)
-
-
-def _can_waterfall(state: CollectionState, player: int) -> bool:
-    return state.has("HM07 Waterfall", player) and state.has("Rain Badge", player)
-
-
-def _can_dive(state: CollectionState, player: int) -> bool:
-    return state.has("HM08 Dive", player) and state.has("Mind Badge", player)
-
-
-def _can_use_mach_bike(state: CollectionState, player: int) -> bool:
-    return state.has("Mach Bike", player)
-
-
-def _can_use_acro_bike(state: CollectionState, player: int) -> bool:
-    return state.has("Acro Bike", player)
-
-
-def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int) -> bool:
-    num_gym_leaders_defeated = 0
-    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_ROXANNE", player) else 0
-    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_BRAWLY", player) else 0
-    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WATTSON", player) else 0
-    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_FLANNERY", player) else 0
-    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_NORMAN", player) else 0
-    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WINONA", player) else 0
-    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_TATE_AND_LIZA", player) else 0
-    num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", player) else 0
-    return num_gym_leaders_defeated >= n
-
-
-def _encountered_n_legendaries(state: CollectionState, player: int, n: int) -> bool:
-    num_encounters = 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_GROUDON", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_KYOGRE", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_RAYQUAZA", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIAS", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIOS", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGIROCK", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGICE", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGISTEEL", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_MEW", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_DEOXYS", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_HO_OH", player) else 0
-    num_encounters += 1 if state.has("EVENT_ENCOUNTER_LUGIA", player) else 0
-    return num_encounters >= n
-
-
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
 def set_rules(world: PokemonEmeraldWorld) -> None:
     def can_cut(state: CollectionState):
-        return _can_cut(state, world.player)
+        return state.has("HM01 Cut", world.player) and state.has("Stone Badge", world.player)
 
     def can_surf(state: CollectionState):
-        return _can_surf(state, world.player)
+        return state.has("HM03 Surf", world.player) and state.has("Balance Badge", world.player)
 
     def can_strength(state: CollectionState):
-        return _can_strength(state, world.player)
+        return state.has("HM04 Strength", world.player) and state.has("Heat Badge", world.player)
 
     def can_flash(state: CollectionState):
-        return _can_flash(state, world.player)
+        return state.has("HM05 Flash", world.player) and state.has("Knuckle Badge", world.player)
 
     def can_rock_smash(state: CollectionState):
-        return _can_rock_smash(state, world.player)
+        return state.has("HM06 Rock Smash", world.player) and state.has("Dynamo Badge", world.player)
 
     def can_waterfall(state: CollectionState):
-        return _can_waterfall(state, world.player)
+        return state.has("HM07 Waterfall", world.player) and state.has("Rain Badge", world.player)
 
     def can_dive(state: CollectionState):
-        return _can_dive(state, world.player)
+        return state.has("HM08 Dive", world.player) and state.has("Mind Badge", world.player)
+
+    def has_acro_bike(state: CollectionState):
+        return state.has("Acro Bike", world.player)
+
+    def has_mach_bike(state: CollectionState):
+        return state.has("Mach Bike", world.player)
+    
+    def defeated_n_gym_leaders(state: CollectionState, n: int) -> bool:
+        num_gym_leaders_defeated = 0
+        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_ROXANNE", world.player) else 0
+        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_BRAWLY", world.player) else 0
+        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WATTSON", world.player) else 0
+        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_FLANNERY", world.player) else 0
+        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_NORMAN", world.player) else 0
+        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WINONA", world.player) else 0
+        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_TATE_AND_LIZA", world.player) else 0
+        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", world.player) else 0
+        return num_gym_leaders_defeated >= n
+
+
+    def encountered_n_legendaries(state: CollectionState, n: int) -> bool:
+        num_encounters = 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_GROUDON", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_KYOGRE", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_RAYQUAZA", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIAS", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIOS", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGIROCK", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGICE", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGISTEEL", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_MEW", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_DEOXYS", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_HO_OH", world.player) else 0
+        num_encounters += 1 if state.has("EVENT_ENCOUNTER_LUGIA", world.player) else 0
+        return num_encounters >= n
 
     def get_entrance(entrance: str):
         return world.multiworld.get_entrance(entrance, world.player)
@@ -122,7 +91,7 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     elif world.options.goal == Goal.option_norman:
         completion_condition = lambda state: state.has("EVENT_DEFEAT_NORMAN", world.player)
     elif world.options.goal == Goal.option_legendary_hunt:
-        completion_condition = lambda state: _encountered_n_legendaries(state, world.player, world.options.legendary_hunt_count.value)
+        completion_condition = lambda state: encountered_n_legendaries(state, world.player, world.options.legendary_hunt_count.value)
 
     world.multiworld.completion_condition[world.player] = completion_condition
 
@@ -270,11 +239,11 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     else:
         set_rule(
             get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3"),
-            lambda state: _defeated_n_gym_leaders(state, world.player, world.options.norman_count.value)
+            lambda state: defeated_n_gym_leaders(state, world.options.norman_count.value)
         )
         set_rule(
             get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6"),
-            lambda state: _defeated_n_gym_leaders(state, world.player, world.options.norman_count.value)
+            lambda state: defeated_n_gym_leaders(state, world.options.norman_count.value)
         )
 
     # Route 104
@@ -368,7 +337,7 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE"),
-        lambda state: _can_use_mach_bike(state, world.player)
+        lambda state: has_mach_bike(state)
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
@@ -396,7 +365,7 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     if world.options.extra_bumpy_slope:
         set_rule(
             get_entrance("REGION_ROUTE115/SOUTH_BELOW_LEDGE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE"),
-            lambda state: _can_use_acro_bike(state, world.player)
+            lambda state: has_acro_bike(state)
         )
     else:
         set_rule(
@@ -456,7 +425,7 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     )
     set_rule(
         get_entrance("REGION_GRANITE_CAVE_B1F/LOWER -> REGION_GRANITE_CAVE_B1F/UPPER"),
-        lambda state: _can_use_mach_bike(state, world.player)
+        lambda state: has_mach_bike(state)
     )
 
     # Route 107
@@ -512,11 +481,11 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/EAST"),
-        lambda state: _can_use_acro_bike(state, world.player) or _can_use_mach_bike(state, world.player)
+        lambda state: has_acro_bike(state) or has_mach_bike(state)
     )
     set_rule(
         get_entrance("REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/EAST"),
-        lambda state: _can_use_acro_bike(state, world.player) or _can_use_mach_bike(state, world.player)
+        lambda state: has_acro_bike(state) or has_mach_bike(state)
     )
     if "Route 110 Aqua Grunts" not in world.options.remove_roadblocks.value:
         set_rule(
@@ -708,11 +677,11 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     # Jagged Pass
     set_rule(
         get_entrance("REGION_JAGGED_PASS/BOTTOM -> REGION_JAGGED_PASS/MIDDLE"),
-        lambda state: _can_use_acro_bike(state, world.player)
+        lambda state: has_acro_bike(state)
     )
     set_rule(
         get_entrance("REGION_JAGGED_PASS/MIDDLE -> REGION_JAGGED_PASS/TOP"),
-        lambda state: _can_use_acro_bike(state, world.player)
+        lambda state: has_acro_bike(state)
     )
     set_rule(
         get_entrance("MAP_JAGGED_PASS:4/MAP_MAGMA_HIDEOUT_1F:0"),
@@ -728,11 +697,11 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     # Mirage Tower
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_2F/TOP -> REGION_MIRAGE_TOWER_2F/BOTTOM"),
-        lambda state: _can_use_mach_bike(state, world.player)
+        lambda state: has_mach_bike(state)
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_2F/BOTTOM -> REGION_MIRAGE_TOWER_2F/TOP"),
-        lambda state: _can_use_mach_bike(state, world.player)
+        lambda state: has_mach_bike(state)
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_3F/TOP -> REGION_MIRAGE_TOWER_3F/BOTTOM"),
@@ -812,11 +781,11 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_ACROSS_RAILS"),
-        lambda state: _can_use_acro_bike(state, world.player)
+        lambda state: has_acro_bike(state)
     )
     set_rule(
         get_entrance("REGION_ROUTE119/LOWER_ACROSS_RAILS -> REGION_ROUTE119/LOWER"),
-        lambda state: _can_use_acro_bike(state, world.player)
+        lambda state: has_acro_bike(state)
     )
     set_rule(
         get_entrance("REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE_RIVER"),
@@ -832,7 +801,7 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS"),
-        lambda state: _can_use_acro_bike(state, world.player)
+        lambda state: has_acro_bike(state)
     )
     if "Route 119 Aqua Grunts" not in world.options.remove_roadblocks.value:
         set_rule(
@@ -909,11 +878,11 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_NORTH/MAIN"),
-        lambda state: _can_use_acro_bike(state, world.player)
+        lambda state: has_acro_bike(state)
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_NORTHWEST/MAIN"),
-        lambda state: _can_use_mach_bike(state, world.player)
+        lambda state: has_mach_bike(state)
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_SOUTHWEST/POND"),
@@ -1392,15 +1361,15 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     # is only logically locked behind the mach bike after the top has been reached already
     # set_rule(
     #     get_entrance("REGION_SKY_PILLAR_2F/RIGHT -> REGION_SKY_PILLAR_2F/LEFT"),
-    #     lambda state: _can_use_mach_bike(state, world.player)
+    #     lambda state: has_mach_bike(state)
     # )
     # set_rule(
     #     get_entrance("REGION_SKY_PILLAR_2F/LEFT -> REGION_SKY_PILLAR_2F/RIGHT"),
-    #     lambda state: _can_use_mach_bike(state, world.player)
+    #     lambda state: has_mach_bike(state)
     # )
     # set_rule(
     #     get_entrance("REGION_SKY_PILLAR_4F/MAIN -> REGION_SKY_PILLAR_4F/ABOVE_3F_TOP_CENTER"),
-    #     lambda state: _can_use_mach_bike(state, world.player)
+    #     lambda state: has_mach_bike(state)
     # )
 
     # Route 134
@@ -1490,7 +1459,7 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
     else:
         set_rule(
             get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS"),
-            lambda state: _defeated_n_gym_leaders(state, world.player, world.options.elite_four_count.value)
+            lambda state: defeated_n_gym_leaders(state, world.options.elite_four_count.value)
         )
 
     # Battle Frontier
