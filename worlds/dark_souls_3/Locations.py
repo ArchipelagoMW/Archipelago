@@ -294,7 +294,6 @@ location_tables = {
         DS3LocationData("CC: Black Blade",                         "Black Blade",                       DS3LocationCategory.WEAPON),
         DS3LocationData("CC: Soul of High Lord Wolnir",            "Soul of High Lord Wolnir",          DS3LocationCategory.BOSS),
         DS3LocationData("CC: Soul of a Demon",                     "Soul of a Demon",                   DS3LocationCategory.BOSS),
-        DS3LocationData("CC: Knight Slayer's Ring",                "Knight Slayer's Ring",              DS3LocationCategory.RING),
     ],
     "Smouldering Lake": [
         DS3LocationData("SL: Shield of Want",                      "Shield of Want",                    DS3LocationCategory.SHIELD),
@@ -308,6 +307,7 @@ location_tables = {
         DS3LocationData("SL: White Hair Talisman",                 "White Hair Talisman",               DS3LocationCategory.WEAPON),
         DS3LocationData("SL: Izalith Staff",                       "Izalith Staff",                     DS3LocationCategory.WEAPON),
         DS3LocationData("SL: Sacred Flame",                        "Sacred Flame",                      DS3LocationCategory.SPELL),
+        DS3LocationData("SL: Knight Slayer's Ring",                "Knight Slayer's Ring",              DS3LocationCategory.RING),
         DS3LocationData("SL: Fume Ultra Greatsword",               "Fume Ultra Greatsword",             DS3LocationCategory.WEAPON),
         DS3LocationData("SL: Black Iron Greatshield",              "Black Iron Greatshield",            DS3LocationCategory.SHIELD),
         DS3LocationData("SL: Soul of the Old Demon King",          "Soul of the Old Demon King",        DS3LocationCategory.BOSS),
@@ -821,7 +821,7 @@ location_name_groups: Dict[str, Set[str]] = {
         "FS: Master's Gloves", # Sword Master
         "RS: Exile Greatsword", # Exile Knight #1
         "RS: Great Club", # Exile Knight #2
-        "CC: Knight Slayer's Ring", # Knight Slayer Tsorig (ember required)
+        "SL: Knight Slayer's Ring", # Knight Slayer Tsorig
         "SL: Fume Ultra Greatsword", # Knight Slayer Tsorig
         "SL: Black Iron Greatshield", # Knight Slayer Tsorig
         "CD: Spider Shield", # Brigand
@@ -899,9 +899,6 @@ location_name_groups: Dict[str, Set[str]] = {
         # Switch in darkened room
         "GA: Witch's Locks",
         "GA: Power Within",
-
-        # Ember-required invader rewards
-        "CC: Knight Slayer's Ring",
 
         # Gesture requirements
         "AP: Calamity Ring",
