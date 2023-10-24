@@ -44,6 +44,8 @@ def location_dlc_enabled(world: World, location: str) -> bool:
         return True
     elif data.dlc_flags == HatDLC.death_wish and world.is_dw():
         return True
+    elif data.dlc_flags == HatDLC.dlc1_dw and world.is_dlc1() and world.is_dw():
+        return True
     elif data.dlc_flags == HatDLC.dlc2_dw and world.is_dlc2() and world.is_dw():
         return True
 
@@ -70,11 +72,12 @@ def is_location_valid(world: World, location: str) -> bool:
         return False
 
     # No need for all those event items if we're not doing candles
-    if data.dlc_flags is HatDLC.death_wish or data.dlc_flags is HatDLC.dlc2_dw:
+    if data.dlc_flags & HatDLC.death_wish:
         if world.multiworld.DWExcludeCandles[world.player].value > 0 and location in event_locs.keys():
             return False
 
-        if world.multiworld.DWShuffle[world.player].value > 0 and data.region not in world.get_dw_shuffle():
+        if world.multiworld.DWShuffle[world.player].value > 0 \
+           and data.region in death_wishes and data.region not in world.get_dw_shuffle():
             return False
 
         if location in zero_jumps:
@@ -720,7 +723,7 @@ zero_jumps_expert = {
                                               dlc_flags=HatDLC.death_wish),
 
     "Sleepy Subcon (Zero Jumps)": LocData(0, "Sleepy Subcon", required_hats=[HatType.ICE], dlc_flags=HatDLC.death_wish),
-    "Ship Shape (Zero Jumps)": LocData(0, "Ship Shape", required_hats=[HatType.ICE], dlc_flags=HatDLC.death_wish),
+    "Ship Shape (Zero Jumps)": LocData(0, "Ship Shape", required_hats=[HatType.ICE], dlc_flags=HatDLC.dlc1_dw),
 }
 
 zero_jumps = {

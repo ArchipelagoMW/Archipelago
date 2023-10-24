@@ -25,7 +25,8 @@ class HatDLC(IntFlag):
     dlc1 = 0b001
     dlc2 = 0b010
     death_wish = 0b100
-    dlc2_dw = 0b0110  # for Snatcher Coins in Nyakuza Metro
+    dlc1_dw = 0b101
+    dlc2_dw = 0b110
 
 
 class ChapterIndex(IntEnum):

@@ -255,9 +255,8 @@ def set_rules(world: World):
         if key in contract_locations.keys():
             continue
 
-        if data.dlc_flags is HatDLC.death_wish or data.dlc_flags is HatDLC.dlc2_dw:
-            if key in snatcher_coins.keys():
-                key = f"{key} ({data.region})"
+        if data.dlc_flags & HatDLC.death_wish and key in snatcher_coins.keys():
+            key = f"{key} ({data.region})"
 
         location = world.multiworld.get_location(key, world.player)
 
@@ -929,7 +928,7 @@ def set_event_rules(world: World):
         if not is_location_valid(world, name):
             continue
 
-        if (data.dlc_flags is HatDLC.death_wish or data.dlc_flags is HatDLC.dlc2_dw) and name in snatcher_coins.keys():
+        if data.dlc_flags & HatDLC.death_wish and name in snatcher_coins.keys():
             name = f"{name} ({data.region})"
 
         event: Location = world.multiworld.get_location(name, world.player)
