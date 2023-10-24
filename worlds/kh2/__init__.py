@@ -7,7 +7,7 @@ from worlds.LauncherComponents import Component, components, Type, launch_subpro
 from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
-from .Names import ItemName, LocationName
+from .Names import ItemName, LocationName, RegionName
 from .OpenKH import patch_kh2
 from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
