@@ -2,9 +2,9 @@
 Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
-from typing import FrozenSet
+from typing import FrozenSet, Dict
 
-from BaseClasses import Entrance
+from BaseClasses import Entrance, Region
 from worlds.AutoWorld import World
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
@@ -34,8 +34,8 @@ class WitnessRegions:
         """
         connect two regions and set the corresponding requirement
         """
-        source_region = world.multiworld.get_region(source, world.player)
-        target_region = world.multiworld.get_region(target, world.player)
+        source_region = self.region_cache[source]
+        target_region = self.region_cache[target]
 
         backwards = " Backwards" if backwards else ""
 
@@ -55,10 +55,6 @@ class WitnessRegions:
         Creates all the regions for The Witness
         """
         from . import create_region
-
-        world.multiworld.regions += [
-            create_region(world, 'Menu', self.locat, None, ["The Splashscreen?"]),
-        ]
 
         difficulty = get_option_value(world, "puzzle_randomization")
 
@@ -83,9 +79,10 @@ class WitnessRegions:
 
             all_locations = all_locations | set(locations_for_this_region)
 
-            world.multiworld.regions += [
-                create_region(world, region_name, self.locat, locations_for_this_region)
-            ]
+            new_region = create_region(world, region_name, self.locat, locations_for_this_region)
+            self.region_cache[region_name] = new_region
+
+            world.multiworld.regions.append(new_region)
 
         for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
@@ -108,9 +105,15 @@ class WitnessRegions:
 
                 self.connect(world, region_name, connection[0], player_logic, connection[1])
 
-        world.multiworld.get_entrance("The Splashscreen?", world.player).connect(
-            world.multiworld.get_region('First Hallway', world.player)
-        )
+        menu_region = create_region(world, 'Menu', self.locat, None)
+        self.region_cache['Menu'] = menu_region
+
+        world.multiworld.regions += [
+            menu_region
+        ]
+        
+        self.region_cache['Menu'].connect(self.region_cache['First Hallway'], "The Splashscreen?")
 
     def __init__(self, locat: WitnessPlayerLocations):
         self.locat = locat
+        self.region_cache: Dict[str, Region] = dict()
