@@ -84,10 +84,3 @@ class DataStorage:
         self.stored_data[set_cmd["key"]] = set_cmd["value"] = value
 
         return set_cmd
-
-
-
-
-
-
-
