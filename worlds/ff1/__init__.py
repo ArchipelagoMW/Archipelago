@@ -14,7 +14,7 @@ class FF1Settings(settings.Group):
 
 
 class FF1Web(WebWorld):
-    settings_page = "https://finalfantasyrandomizer.com/"
+    options_page = "https://finalfantasyrandomizer.com/"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
