@@ -122,7 +122,7 @@ class RiskOfRainWorld(World):
             environments_to_precollect = 5 if self.options.begin_with_loop else 1
             # percollect environments for each stage (or just stage 1)
             for i in range(environments_to_precollect):
-                unlock = self.multiworld.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
+                unlock = self.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
                 self.multiworld.push_precollected(self.create_item(unlock[0]))
                 environments_pool.pop(unlock[0])
         else:
@@ -164,7 +164,7 @@ class RiskOfRainWorld(World):
         # Fill remaining items with randomly generated junk
         while len(itempool) < total_locations:
             weights = [data for data in junk_pool.values()]
-            filler = self.multiworld.random.choices([filler for filler in junk_pool.keys()], weights,
+            filler = self.random.choices([filler for filler in junk_pool.keys()], weights,
                                                     k=1)[0]
             itempool.append(filler)
 
@@ -180,7 +180,7 @@ class RiskOfRainWorld(World):
             # generate chaos weights if the preset is chosen
             if pool_option == ItemWeights.option_chaos:
                 for name, max_value in item_pool_weights[pool_option].items():
-                    junk_pool[name] = self.multiworld.random.randint(0, max_value)
+                    junk_pool[name] = self.random.randint(0, max_value)
             else:
                 junk_pool = item_pool_weights[pool_option].copy()
         else:  # generate junk pool from user created presets
@@ -227,7 +227,7 @@ class RiskOfRainWorld(World):
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in filler_table.values()]
-        filler = self.multiworld.random.choices([filler for filler in filler_table.keys()], weights,
+        filler = self.random.choices([filler for filler in filler_table.keys()], weights,
                                                 k=1)[0]
         return filler
 
@@ -239,7 +239,7 @@ class RiskOfRainWorld(World):
                                             "final_stage_death", "death_link", casing="camel")
         return {
             **options_dict,
-            "seed": "".join(self.multiworld.per_slot_randoms[self.player].choice(string.digits) for _ in range(16)),
+            "seed": "".join(self.random.choice(string.digits) for _ in range(16)),
             "offset": offset
         }
 
