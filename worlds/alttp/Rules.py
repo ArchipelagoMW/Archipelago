@@ -18,8 +18,7 @@ from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_shoot_arrows, has_beam_sword, has_crystals,
                            has_fire_source, has_hearts,
                            has_misery_mire_medallion, has_sword, has_turtle_rock_medallion,
-                           has_triforce_pieces, can_deal_class_1_damage, can_deal_class_3_damage,
-                           can_deal_class_4_damage, can_use_bombs, can_bomb_or_bonk, can_deal_damage)
+                           has_triforce_pieces, can_use_bombs, can_bomb_or_bonk, can_deal_damage)
 from .UnderworldGlitchRules import underworld_glitches_rules
 
 

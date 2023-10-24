@@ -82,20 +82,6 @@ def can_extend_magic(state: CollectionState, player: int, smallmagic: int = 16,
             basemagic = basemagic + basemagic * bottle_count(state, player)
     return basemagic >= smallmagic
 
-
-def can_deal_class_1_damage(state: CollectionState, player: int) -> bool:
-    return (state.has("Fighter Sword", player) or state.has("Cane of Somaria", player) or
-            state.has("Cane of Byrna", player) or can_deal_class_3_damage(state, player))
-
-
-def can_deal_class_3_damage(state: CollectionState, player: int) -> bool:
-    return state.has("Hammer", player) or state.has("Master Sword", player) or can_deal_class_4_damage(state, player)
-
-
-def can_deal_class_4_damage(state: CollectionState, player: int) -> bool:
-    return state.has("Tempered Sword", player) or state.has("Golden Sword", player)
-
-
 def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> bool:
     bombs = 0 if state.multiworld.bombless_start[player] else 10
     bombs += ((state.count("Bomb Upgrade (+5)", player) * 5) + (state.count("Bomb Upgrade (+10)", player) * 10)
