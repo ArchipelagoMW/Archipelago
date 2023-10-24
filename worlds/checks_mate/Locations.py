@@ -52,6 +52,7 @@ location_table = {
     "Capture 6 Pieces": CMLocationData(4_034, True, False),
     "Capture 7 Pieces": CMLocationData(4_035, True, False),
     # special moves and tactics
+    # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
     # "00 Castle": CMLocationData(4_040, True, False),
     # "000 Castle": CMLocationData(4_041, True, False),
     "Fork": CMLocationData(4_042, True, False),
