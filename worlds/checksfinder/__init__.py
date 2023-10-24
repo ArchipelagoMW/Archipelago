@@ -15,7 +15,7 @@ class ChecksFinderWeb(WebWorld):
         "single-player, multiworld, and related software.",
         "English",
         "checksfinder_en.md",
-        "checksfinder/en",
+        "setup/en",
         ["Mewlif"]
     )]
 
