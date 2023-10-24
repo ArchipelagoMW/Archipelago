@@ -346,13 +346,21 @@ def generate_itempool(world):
                 if item in ['Progressive Bow', 'Bow'] and not found_bow:
                     found_bow = True
                     possible_weapons.append(item)
-                if item in ['Hammer', 'Bombs (10)', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
+                if item in ['Hammer', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
                     if item not in possible_weapons:
                         possible_weapons.append(item)
+                if (item.name == 'Bombs (10)' and (not multiworld.bombless_start[player]) and item not in
+                        possible_weapons):
+                    possible_weapons.append(item)
+                if (item.name == 'Bomb Upgrade (+10)' and multiworld.bombless_start[player] and item not in
+                        possible_weapons):
+                    possible_weapons.append(item)
+
             starting_weapon = multiworld.random.choice(possible_weapons)
             placed_items["Link's Uncle"] = starting_weapon
             pool.remove(starting_weapon)
-        if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Cane of Somaria', 'Cane of Byrna'] and multiworld.enemy_health[player] not in ['default', 'easy']:
+        if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Bomb Upgrade (+10)',
+                'Cane of Somaria', 'Cane of Byrna'] and multiworld.enemy_health[player] not in ['default', 'easy']:
             multiworld.escape_assist[player].append('bombs')
 
     for (location, item) in placed_items.items():
