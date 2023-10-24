@@ -21,6 +21,7 @@ class ModNames:
     ayeisha = "Ayeisha - The Postal Worker (Custom NPC)"
     riley = "Custom NPC - Riley"
     skull_cavern_elevator = "Skull Cavern Elevator"
+    sve = "Stardew Valley Expanded"
 
 
 all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
@@ -28,4 +29,4 @@ all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpac
                       ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
                       ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
                       ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-                      ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator})
+                      ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve})
