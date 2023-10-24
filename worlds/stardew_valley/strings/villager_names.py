@@ -47,3 +47,4 @@ class ModNPC:
     shiko = "Shiko"
     wellwick = "Wellwick"
     yoba = "Yoba"
+    lance = "Lance"

@@ -43,6 +43,16 @@ island = (Region.island_east,)
 secret_woods = (Region.secret_woods,)
 wizard_tower = (Region.wizard_tower,)
 
+# Stardew Valley Expanded Locations
+adventurer = (SVRegion.adventurer_guild,)
+highlands = (SVERegion.highlands,)
+bluemoon = (SVERegion.blue_moon_vineyard,)
+aurora = (SVERegion.aurora_vineyard,)
+museum = (SVRegion.museum,)
+jojamart = (SVRegion.jojamart,)
+railroad = (SVRegion.railroad,)
+junimo = (SVERegion.junimo_woods,)
+
 golden_pumpkin = ("Golden Pumpkin",)
 # magic_rock_candy = ("Magic Rock Candy",)
 pearl = ("Pearl",)
@@ -273,6 +283,70 @@ jasper_loves = apple + blueberry + diamond + dwarf_gadget + dwarvish_helm + fire
 juna_loves = ancient_doll + elvish_jewelry + dinosaur_egg + strange_doll + joja_cola + hashbrowns + pancakes + \
              pink_cake + jelly + ghost_crystal + prehistoric_scapula + cherry
 
+glazed_butterfish = ("Glazed Butterfish",)
+aged_blue_moon_wine = ("Aged Blue Moon Wine",)
+blue_moon_wine = ("Blue Moon Wine",)
+daggerfish = ("Daggerfish",)
+gemfish = ("Gemfish",)
+green_mushroom = ("Green Mushroom",)
+monster_mushroom = ("Monster Mushroom",)
+swirl_stone = ("Swirl Stone",)
+torpedo_trout = ("Torpedo Trout",)
+void_shard = ("Void Shard",)
+ornate_treasure_chest = ("Ornate Treasure Chest",)
+frog_legs = ("Frog Legs",)
+void_delight = ("Void Delight",)
+void_pebble = ("Void Pebble",)
+void_salmon_sushi = ("Void Salmon Sushi",)
+puppyfish = ("Puppyfish",)
+butterfish = ("Butterfish",)
+king_salmon = ("King Salmon",)
+frog = ("Frog",)
+kittyfish = ("Kittyfish",)
+big_bark_burger = ("Big Bark Burger",)
+starfruit = ("Starfruit",)
+bruschetta = ("Brushetta",)
+apricot = ("Apricot",)
+ocean_stone = ("Ocean Stone",)
+galaxy_soul = ("Galaxy Soul",)
+fairy_stone = ("Fairy Stone",)
+lunarite = ("Lunarite",)
+bean_hotpot = ("Bean Hotpot",)
+petrified_slime = ("Petrified Slime",)
+ornamental_fan = ("Ornamental Fan",)
+ancient_sword = ("Ancient Sword",)
+star_shards = ("Star Shards",)
+life_elixir = ("Life Elixir",)
+juice = ("Juice",)
+lobster_bisque = ("Lobster Bisque",)
+chowder = ("Chowder",)
+goat_milk = ("Goat Milk",)
+maple_syrup = ("Maple Syrup",)
+cookie = ("Cookie",)
+blueberry_tart = ("Blueberry Tart",)
+
+claire_loves = green_tea + sunflower + energy_tonic + bruschetta + apricot + ocean_stone + glazed_butterfish
+lance_loves = aged_blue_moon_wine + daggerfish + galaxy_soul + gemfish + golden_pumpkin + \
+              green_mushroom + monster_mushroom + swirl_stone + torpedo_trout + tropical_curry + void_shard + \
+              ornate_treasure_chest
+olivia_loves = wine + chocolate_cake + pink_cake + golden_mask + golden_relic + \
+               blue_moon_wine + aged_blue_moon_wine
+sophia_loves = fairy_rose + fairy_stone + puppyfish
+victor_loves = spaghetti + battery_pack + duck_feather + lunarite + \
+               aged_blue_moon_wine + blue_moon_wine + butterfish
+andy_loves = pearl + beer + mead + pale_ale + farmers_lunch + glazed_butterfish + butterfish + \
+             king_salmon + blackberry_cobbler
+gunther_loves = bean_hotpot + petrified_slime + salmon_dinner + elvish_jewelry + ornamental_fan + \
+                dinosaur_egg + rare_disc + ancient_sword + dwarvish_helm + dwarf_gadget + golden_mask + golden_relic + \
+                star_shards
+marlon_loves = roots_platter + life_elixir + aged_blue_moon_wine + void_delight
+martin_loves = juice + ice_cream + big_bark_burger
+morgan_loves = iridium_bar + void_egg + void_mayonnaise + frog + kittyfish
+morris_loves = lobster_bisque + chowder + truffle_oil + star_shards + aged_blue_moon_wine
+scarlett_loves = goat_cheese + duck_feather + goat_milk + cherry + maple_syrup + honey + \
+                 chocolate_cake + pink_cake + jade + glazed_yams # actually large milk but meh
+susan_loves = pancakes + chocolate_cake + pink_cake + ice_cream + cookie + pumpkin_pie + rhubarb_pie + \
+              blueberry_tart + blackberry_cobbler + cranberry_candy + red_plate
 
 all_villagers: List[Villager] = []
 
@@ -331,6 +405,23 @@ shiko = villager(ModNPC.shiko, True, town, Season.winter, universal_loves + shik
 wellwick = villager(ModNPC.wellwick, True, forest, Season.winter, universal_loves + wellwick_loves, True, ModNames.shiko)
 yoba = villager(ModNPC.yoba, False, secret_woods, Season.spring, universal_loves + yoba_loves, False, ModNames.yoba)
 riley = villager(ModNPC.riley, True, town, Season.spring, universal_loves, True, ModNames.riley)
+
+# SVE Villagers
+claire = villager("Claire", True, town + jojamart, "Fall", universal_loves + claire_loves, True, "Stardew Valley Expanded")
+lance = villager("Lance", True, adventurer + highlands + island, "Spring", lance_loves, False, "Stardew Valley Expanded")
+mommy = villager("Olivia", True, town, "Spring", universal_loves_no_rabbit_foot + olivia_loves, True, "Stardew Valley Expanded")
+sophia = villager("Sophia", True, bluemoon, "Winter", universal_loves_no_rabbit_foot + sophia_loves, True, "Stardew Valley Expanded")
+victor = villager("Victor", True, town, "Summer", universal_loves + victor_loves, True, "Stardew Valley Expanded")
+andy = villager("Andy", False, forest, "Spring", universal_loves + andy_loves, True, "Stardew Valley Expanded")
+apples = villager("Apples", False, aurora + junimo, "Spring", starfruit, False, "Stardew Valley Expanded")
+gunther = villager("Gunther", False, museum, "Winter", universal_loves + gunther_loves, True, "Stardew Valley Expanded")
+martin = villager("Martin", False, town + jojamart, "Summer", universal_loves + martin_loves, True, "Stardew Valley Expanded")
+marlon = villager("Marlon", False, adventurer, "Winter", universal_loves + marlon_loves, False, "Stardew Valley Expanded")
+morgan = villager("Morgan", False, forest, "Fall", universal_loves_no_rabbit_foot + morgan_loves, False, "Stardew Valley Expanded")
+scarlett = villager("Scarlett", False, bluemoon, "Summer", universal_loves + scarlett_loves, False, "Stardew Valley Expanded")
+susan = villager("Susan", False, railroad, "Fall", universal_loves + susan_loves, False, "Stardew Valley Expanded")
+morris = villager("Morris", False, jojamart, "Spring", universal_loves + morris_loves, True, "Stardew Valley Expanded")
+
 
 all_villagers_by_name: Dict[str, Villager] = {villager.name: villager for villager in all_villagers}
 all_villagers_by_mod: Dict[str, List[Villager]] = {}

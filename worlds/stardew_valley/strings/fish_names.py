@@ -73,5 +73,35 @@ class WaterChest:
     treasure = "Treasure Chest"
 
 
+class SVEFish:
+    baby_lunaloo = "Baby Lunaloo"
+    bonefish = "Bonefish"
+    bull_trout = "Bull Trout"
+    butterfish = "Butterfish"
+    clownfish = "Clownfish"
+    daggerfish = "Daggerfish"
+    frog = "Frog"
+    gemfish = "Gemfish"
+    goldenfish = "Goldenfish"
+    grass_carp = "Grass Carp"
+    king_salmon = "King Salmon"
+    kittyfish = "Kittyfish"
+    lunaloo = "Lunaloo"
+    meteor_carp = "Meteor Carp"
+    minnow = "Minnow"
+    puppyfish = "Puppyfish"
+    radioactive_bass = "Radioactive Bass"
+    seahorse = "Seahorse"
+    shiny_lunaloo = "Shiny Lunaloo"
+    snatcher_worm = "Snatcher Worm"
+    starfish = "Starfish"
+    torpedo_trout = "Torpedo Trout"
+    undeadfish = "Undeadfish"
+    void_eel = "Void Eel"
+    water_grub = "Water Grub"
+    sea_sponge = "Sea Sponge"
+    dulse_seaweed = "Dulse Seaweed"
+
+
 
 
