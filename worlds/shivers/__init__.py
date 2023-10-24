@@ -173,14 +173,16 @@ class ShiversWorld(World):
     set_rules = set_rules
 
     def generate_basic(self):
-        self.multiworld.completion_condition[self.player] = lambda state: Rules.lightning_capturable(state, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: (Rules.first_nine_ixupi_capturable(state, self.player)
+                                                                           and Rules.lightning_capturable(state, self.player))
 
 
     def _get_slot_data(self):
         return {
             'storageplacements': self.storage_placements,
             'excludedlocations': {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
-            'elevatorsstaysolved': {self.multiworld.elevators_stay_solved[self.player].value}
+            'elevatorsstaysolved': {self.multiworld.elevators_stay_solved[self.player].value},
+            'earlybeth': {self.multiworld.early_beth[self.player].value}
         }
 
     def fill_slot_data(self) -> dict:

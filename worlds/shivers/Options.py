@@ -31,12 +31,17 @@ class ElevatorsStaySolved(DefaultOnToggle):
     """Adds elevators as checks and will remain open upon solving them."""
     display_name = "Elevators Stay Solved"
 
+class EarlyBeth(DefaultOnToggle):
+    """Beth's body is open at the start of the game. This allows any pot piece to be placed in the slide and early checks on the second half of the final riddle."""
+    display_name = "Early Beth"
+
 Shivers_options: Dict[str, Option] = {
     "lobby_access": LobbyAccess,
     "puzzle_hints_required": PuzzleHintsRequired,
     "include_information_plaques": InformationPlaques,
     "front_door_usable": FrontDoorUsable,
-    "elevators_stay_solved": ElevatorsStaySolved
+    "elevators_stay_solved": ElevatorsStaySolved,
+    "early_beth": EarlyBeth
 }
 
 def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
