@@ -1,18 +1,20 @@
 import logging
-from typing import Dict, Any, Iterable, Optional, Union, Set
+from typing import Dict, Any, Iterable, Optional, Union, Set, List
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification, MultiWorld
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from . import rules, logic, options
+from . import rules
 from .bundles import get_all_bundles, Bundle
 from .items import item_table, create_items, ItemData, Group, items_by_group
 from .locations import location_table, create_locations, LocationData
 from .logic import StardewLogic, StardewRule, True_, MAX_MONTHS
-from .options import stardew_valley_options, StardewOptions, fetch_options
+from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
+    BackpackProgression, BuildingProgression, ExcludeGingerIsland
 from .regions import create_regions
 from .rules import set_rules
 from worlds.generic.Rules import set_rule
-from .strings.goal_names import Goal
+from .strings.goal_names import Goal as GoalName
 
 client_version = 0
 
@@ -50,7 +52,6 @@ class StardewValleyWorld(World):
     befriend villagers, and uncover dark secrets.
     """
     game = "Stardew Valley"
-    option_definitions = stardew_valley_options
     topology_present = False
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -59,7 +60,8 @@ class StardewValleyWorld(World):
     data_version = 3
     required_client_version = (0, 4, 0)
 
-    options: StardewOptions
+    options_dataclass = StardewValleyOptions
+    options: StardewValleyOptions
     logic: StardewLogic
 
     web = StardewWebWorld()
@@ -72,25 +74,24 @@ class StardewValleyWorld(World):
         self.all_progression_items = set()
 
     def generate_early(self):
-        self.options = fetch_options(self.multiworld, self.player)
         self.force_change_options_if_incompatible()
 
         self.logic = StardewLogic(self.player, self.options)
         self.modified_bundles = get_all_bundles(self.multiworld.random,
                                                 self.logic,
-                                                self.options[options.BundleRandomization],
-                                                self.options[options.BundlePrice])
+                                                self.options.bundle_randomization,
+                                                self.options.bundle_price)
 
     def force_change_options_if_incompatible(self):
-        goal_is_walnut_hunter = self.options[options.Goal] == options.Goal.option_greatest_walnut_hunter
-        goal_is_perfection = self.options[options.Goal] == options.Goal.option_perfection
+        goal_is_walnut_hunter = self.options.goal == Goal.option_greatest_walnut_hunter
+        goal_is_perfection = self.options.goal == Goal.option_perfection
         goal_is_island_related = goal_is_walnut_hunter or goal_is_perfection
-        exclude_ginger_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+        exclude_ginger_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
         if goal_is_island_related and exclude_ginger_island:
-            self.options[options.ExcludeGingerIsland] = options.ExcludeGingerIsland.option_false
-            goal = options.Goal.name_lookup[self.options[options.Goal]]
+            self.options.exclude_ginger_island.value = ExcludeGingerIsland.option_false
+            goal_name = self.options.goal.current_key
             player_name = self.multiworld.player_name[self.player]
-            logging.warning(f"Goal '{goal}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
+            logging.warning(f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
@@ -116,7 +117,7 @@ class StardewValleyWorld(World):
                             if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
                                                                                  Group.FRIENDSHIP_PACK)]
 
-        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_disabled:
+        if self.options.season_randomization == SeasonRandomization.option_disabled:
             items_to_exclude = [item for item in items_to_exclude
                                 if item_table[item.name] not in items_by_group[Group.SEASON]]
 
@@ -134,12 +135,12 @@ class StardewValleyWorld(World):
         self.setup_victory()
 
     def precollect_starting_season(self) -> Optional[StardewItem]:
-        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_progressive:
+        if self.options.season_randomization == SeasonRandomization.option_progressive:
             return
 
         season_pool = items_by_group[Group.SEASON]
 
-        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_disabled:
+        if self.options.season_randomization == SeasonRandomization.option_disabled:
             for season in season_pool:
                 self.multiworld.push_precollected(self.create_item(season))
             return
@@ -148,18 +149,18 @@ class StardewValleyWorld(World):
             if item.name in {season.name for season in items_by_group[Group.SEASON]}]:
             return
 
-        if self.options[options.SeasonRandomization] == options.SeasonRandomization.option_randomized_not_winter:
+        if self.options.season_randomization == SeasonRandomization.option_randomized_not_winter:
             season_pool = [season for season in season_pool if season.name != "Winter"]
 
         starting_season = self.create_item(self.multiworld.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
 
     def setup_early_items(self):
-        if (self.options[options.BuildingProgression] ==
-                options.BuildingProgression.option_progressive_early_shipping_bin):
+        if (self.options.building_progression ==
+                BuildingProgression.option_progressive_early_shipping_bin):
             self.multiworld.early_items[self.player]["Shipping Bin"] = 1
 
-        if self.options[options.BackpackProgression] == options.BackpackProgression.option_early_progressive:
+        if self.options.backpack_progression == BackpackProgression.option_early_progressive:
             self.multiworld.early_items[self.player]["Progressive Backpack"] = 1
 
     def setup_month_events(self):
@@ -172,40 +173,40 @@ class StardewValleyWorld(World):
             self.create_event_location(month_end, self.logic.received("Month End", i).simplify(), "Month End")
 
     def setup_victory(self):
-        if self.options[options.Goal] == options.Goal.option_community_center:
-            self.create_event_location(location_table[Goal.community_center],
+        if self.options.goal == Goal.option_community_center:
+            self.create_event_location(location_table[GoalName.community_center],
                                        self.logic.can_complete_community_center().simplify(),
                                        "Victory")
-        elif self.options[options.Goal] == options.Goal.option_grandpa_evaluation:
-            self.create_event_location(location_table[Goal.grandpa_evaluation],
+        elif self.options.goal == Goal.option_grandpa_evaluation:
+            self.create_event_location(location_table[GoalName.grandpa_evaluation],
                                        self.logic.can_finish_grandpa_evaluation().simplify(),
                                        "Victory")
-        elif self.options[options.Goal] == options.Goal.option_bottom_of_the_mines:
-            self.create_event_location(location_table[Goal.bottom_of_the_mines],
+        elif self.options.goal == Goal.option_bottom_of_the_mines:
+            self.create_event_location(location_table[GoalName.bottom_of_the_mines],
                                        self.logic.can_mine_to_floor(120).simplify(),
                                        "Victory")
-        elif self.options[options.Goal] == options.Goal.option_cryptic_note:
-            self.create_event_location(location_table[Goal.cryptic_note],
+        elif self.options.goal == Goal.option_cryptic_note:
+            self.create_event_location(location_table[GoalName.cryptic_note],
                                        self.logic.can_complete_quest("Cryptic Note").simplify(),
                                        "Victory")
-        elif self.options[options.Goal] == options.Goal.option_master_angler:
-            self.create_event_location(location_table[Goal.master_angler],
+        elif self.options.goal == Goal.option_master_angler:
+            self.create_event_location(location_table[GoalName.master_angler],
                                        self.logic.can_catch_every_fish().simplify(),
                                        "Victory")
-        elif self.options[options.Goal] == options.Goal.option_complete_collection:
-            self.create_event_location(location_table[Goal.complete_museum],
+        elif self.options.goal == Goal.option_complete_collection:
+            self.create_event_location(location_table[GoalName.complete_museum],
                                        self.logic.can_complete_museum().simplify(),
                                        "Victory")
-        elif self.options[options.Goal] == options.Goal.option_full_house:
-            self.create_event_location(location_table[Goal.full_house],
+        elif self.options.goal == Goal.option_full_house:
+            self.create_event_location(location_table[GoalName.full_house],
                                        (self.logic.has_children(2) & self.logic.can_reproduce()).simplify(),
                                        "Victory")
-        elif self.options[options.Goal] == options.Goal.option_greatest_walnut_hunter:
-            self.create_event_location(location_table[Goal.greatest_walnut_hunter],
+        elif self.options.goal == Goal.option_greatest_walnut_hunter:
+            self.create_event_location(location_table[GoalName.greatest_walnut_hunter],
                                        self.logic.has_walnut(130).simplify(),
                                        "Victory")
-        elif self.options[options.Goal] == options.Goal.option_perfection:
-            self.create_event_location(location_table[Goal.perfection],
+        elif self.options.goal == Goal.option_perfection:
+            self.create_event_location(location_table[GoalName.perfection],
                                        self.logic.has_everything(self.all_progression_items).simplify(),
                                        "Victory")
 
@@ -230,7 +231,7 @@ class StardewValleyWorld(World):
         location.place_locked_item(self.create_item(item))
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.options, self.logic, self.modified_bundles)
+        set_rules(self)
         self.force_first_month_once_all_early_items_are_found()
 
     def force_first_month_once_all_early_items_are_found(self):
@@ -276,11 +277,12 @@ class StardewValleyWorld(World):
             key, value = self.modified_bundles[bundle_key].to_pair()
             modified_bundles[key] = value
 
-        excluded_options = [options.BundleRandomization, options.BundlePrice,
-                            options.NumberOfMovementBuffs, options.NumberOfLuckBuffs]
-        slot_data = dict(self.options.options)
-        for option in excluded_options:
-            slot_data.pop(option.internal_name)
+        excluded_options = [BundleRandomization, BundlePrice, NumberOfMovementBuffs, NumberOfLuckBuffs]
+        excluded_option_names = [option.internal_name for option in excluded_options]
+        generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
+        excluded_option_names.extend(generic_option_names)
+        included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
+        slot_data = self.options.as_dict(*included_option_names)
         slot_data.update({
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
