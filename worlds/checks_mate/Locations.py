@@ -59,8 +59,10 @@ location_table = {
     "Capture 7 Of Each": CMLocationData(4_038, True, False),
     "Capture Everything": CMLocationData(4_039, True, False),
     "Pawn Threat": CMLocationData(4_040, True, False),
-    "Piece Threat": CMLocationData(4_041, True, False),
-    "King Threat": CMLocationData(4_042, True, False),
+    "Minor Threat": CMLocationData(4_041, True, False),
+    "Major Threat": CMLocationData(4_042, True, False),
+    "Queen Threat": CMLocationData(4_043, True, False),
+    "King Threat": CMLocationData(4_044, True, False),
     # special moves and tactics
     # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
     # "00 Castle": CMLocationData(4_050, True, False),
@@ -69,6 +71,7 @@ location_table = {
     "Royal Fork": CMLocationData(4_053, True, True),
     "Pin": CMLocationData(4_054, True, False),
     "French Move": CMLocationData(4_055, True, False),
+    # "Discovered Attack": CMLocationData(4_056, True, False),
     # goal 1+ requires that you successively checkmate your opponent as they gain material
     # "Checkmate Minima": CMLocationData(4_050, True, False),
     # "Checkmate One Piece": CMLocationData(4_051, True, False),

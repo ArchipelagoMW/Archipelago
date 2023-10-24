@@ -32,7 +32,7 @@ class CMWorld(World):
     option_definitions = cm_options
     data_version = 0
     web = CMWeb()
-    required_client_version = (0, 2, 2) # TODO: what does it mean
+    required_client_version = (0, 2, 2)  # TODO: what does it mean
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
@@ -55,7 +55,7 @@ class CMWorld(World):
         self.locked_locations = []
 
     def generate_early(self) -> None:
-        # TODO: if goal is not option_single do not add all enemies (requires add client support)
+        # TODO: if goal is not option_single do not add all enemies (requires client support)
         for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
             self.multiworld.start_inventory[self.player].value[enemy_pawn] = 1
         for enemy_piece in self.item_name_groups["Enemy Piece"]:
@@ -78,7 +78,7 @@ class CMWorld(World):
 
     def create_items(self):
         # TODO: limit total material
-        #items = [[self.create_item(item) for _ in range(item_data.quantity)]
+        # items = [[self.create_item(item) for _ in range(item_data.quantity)]
         #                             for item, item_data in progression_items]0
         excluded_items = get_excluded_items(self.multiworld, self.player)
         for item_name in excluded_items:
@@ -91,13 +91,22 @@ class CMWorld(World):
                 self.items_used[item.name] = 0
             self.items_used[item.name] += 1
 
+        starter_dict = {item.name: 1 for item in starter_items}
+        excluded_dict = {
+            item: excluded_items[item] for item in excluded_items if not (
+                        not (item not in self.item_name_groups["Enemy Pawn"]) or not (
+                            item not in self.item_name_groups["Enemy Piece"]))}
+        user_items = {key: starter_dict.get(key, 0) + excluded_dict.get(key, 0)
+                      for key in set(starter_dict) | set(excluded_dict)}
+        user_item_count = len(user_items)
         items = []
 
         material = 0
         my_progression_items = set(progression_items.keys())
         min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
         max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
-        while material < min_material_option and len(my_progression_items) > 0:
+        while (len(items) + user_item_count) < len(location_table) and material < min_material_option and len(
+                my_progression_items) > 0:
             chosen_item = self.multiworld.random.choice(list(my_progression_items))
             # obey user's wishes
             if progression_items[chosen_item].material + material > max_material_option:
@@ -114,13 +123,16 @@ class CMWorld(World):
             else:
                 my_progression_items.remove(chosen_item)
 
+        print(len(items) + user_item_count)
         max_material_actual = (
                 self.multiworld.random.random() * (max_material_option - min_material_option) + max_material_option)
-        while material < max_material_actual and len(my_progression_items) > 0:
+        while (len(items) + user_item_count) < len(location_table) and material < max_material_actual and len(
+                my_progression_items) > 0:
             chosen_item = self.multiworld.random.choice(list(my_progression_items))
             # obey user's wishes
             if progression_items[chosen_item].material + material > max_material_option:
-                break
+                my_progression_items.remove(chosen_item)
+                continue
             # add item
             if self.can_add_more(chosen_item):
                 try_item = self.create_item(chosen_item)
@@ -132,8 +144,9 @@ class CMWorld(World):
             else:
                 my_progression_items.remove(chosen_item)
 
+        print(len(items) + user_item_count)
         my_useful_items = set(useful_items.keys())
-        while len(items) < len(location_table) and len(my_useful_items) > 0:
+        while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
             chosen_item = self.multiworld.random.choice(list(my_useful_items))
             if self.can_add_more(chosen_item):
                 if chosen_item not in self.items_used:
@@ -144,8 +157,9 @@ class CMWorld(World):
             else:
                 my_useful_items.remove(chosen_item)
 
+        print(len(items) + user_item_count)
         my_filler_items = set(filler_items.keys())
-        while len(items) < len(location_table):
+        while (len(items) + user_item_count) < len(location_table):
             chosen_item = self.multiworld.random.choice(list(my_filler_items))
             if self.can_add_more(chosen_item):
                 if chosen_item not in self.items_used:

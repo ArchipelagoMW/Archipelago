@@ -1,3 +1,4 @@
+import math
 from typing import Dict, NamedTuple, Optional, Tuple, List
 
 from BaseClasses import Item, ItemClassification
@@ -10,7 +11,7 @@ class CMItem(Item):
 class CMItemData(NamedTuple):
     code: Optional[int]
     classification: ItemClassification
-    quantity: int = 1 # maximum, not guaranteed
+    quantity: float = 1 # maximum, not guaranteed
     material: int = 0 # pawns=2, minor=6, major=10, queen=18 - doubled to account for 0.5 values
     parents: list[str] = None
 
@@ -20,7 +21,7 @@ item_table = {
     "Progressive Engine ELO Lobotomy": CMItemData(4_001, ItemClassification.useful, quantity=15),
     # TODO: stop counting material if the board fills up with 23 pieces+pawns
     "Progressive Pawn": CMItemData(4_002, ItemClassification.progression, quantity=14, material=100),
-    "Progressive Pawn Forwardness": CMItemData(4_003, ItemClassification.filler, quantity=8, parents=["Progressive Pawn"]),
+    "Progressive Pawn Forwardness": CMItemData(4_003, ItemClassification.filler, quantity=4, parents=["Progressive Pawn"]),
     # Bishops and Knights are worth 3.25 to 3.5, but some minor pieces are worse, so we assume 3.0 conservatively
     "Progressive Minor Piece": CMItemData(4_004, ItemClassification.progression, quantity=9, material=300),
     # Rooks are worth 5.25 to 5.5, but many major pieces are worse, so we assume 4.85, which stays under 5.0
@@ -64,7 +65,7 @@ item_table = {
     # Gems are generated 1/turn and Pocket pieces cost 1 Gem per their material value
     # Turn off Pocket entirely to hide this item. Also you can't yet EleGiggle
     # You should probably use excluded items though.
-    "Progressive Pocket Gems": CMItemData(4_023, ItemClassification.filler, quantity=-1),
+    "Progressive Pocket Gems": CMItemData(4_023, ItemClassification.filler, quantity=math.inf),
     # Allows the player to deploy pocket items one rank further from the home row, but not the opponent's home row
     "Progressive Pocket Range": CMItemData(4_024, ItemClassification.filler, quantity=6),
 
