@@ -14,7 +14,7 @@ class ChecksFinderWeb(WebWorld):
         "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers "
         "single-player, multiworld, and related software.",
         "English",
-        "checksfinder_en.md",
+        "setup_en.md",
         "setup/en",
         ["Mewlif"]
     )]
