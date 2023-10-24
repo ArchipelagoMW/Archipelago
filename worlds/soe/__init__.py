@@ -10,12 +10,8 @@ from worlds.generic.Rules import add_item_rule, set_rule
 from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
 from Utils import output_path
 
-try:
-    import pyevermizer  # from package
-except ImportError:
-    import traceback
-    traceback.print_exc()
-    from . import pyevermizer  # as part of the source tree
+import pyevermizer  # from package
+# from . import pyevermizer  # as part of the source tree
 
 from . import Logic  # load logic mixin
 from .Options import soe_options, Difficulty, EnergyCore, RequiredFragments, AvailableFragments
@@ -179,6 +175,8 @@ class SoEWorld(World):
     evermizer_seed: int
     connect_name: str
     energy_core: int
+    sequence_breaks: int
+    out_of_bounds: int
     available_fragments: int
     required_fragments: int
 
@@ -191,6 +189,8 @@ class SoEWorld(World):
     def generate_early(self) -> None:
         # store option values that change logic
         self.energy_core = self.multiworld.energy_core[self.player].value
+        self.sequence_breaks = self.multiworld.sequence_breaks[self.player].value
+        self.out_of_bounds = self.multiworld.out_of_bounds[self.player].value
         self.required_fragments = self.multiworld.required_fragments[self.player].value
         if self.required_fragments > self.multiworld.available_fragments[self.player].value:
             self.multiworld.available_fragments[self.player].value = self.required_fragments
