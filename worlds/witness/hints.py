@@ -223,7 +223,10 @@ def get_priority_hint_locations(world: World):
 
 
 def make_hint_from_item(world: World, item_name: str, own_itempool: List[Item]):
-    locations = [item.location for item in own_itempool if item.name == item_name]
+    locations = [item.location for item in own_itempool if item.name == item_name and item.location]
+
+    if not locations:
+        return None
 
     location_obj = world.random.choice(locations)
     location_name = location_obj.name
@@ -276,7 +279,7 @@ def make_hints(world: World, hint_amount: int, own_itempool: List[Item]):
     for item in always_items:
         hint_pair = make_hint_from_item(world, item, own_itempool)
 
-        if hint_pair[2] == 158007:  # Tutorial Gate Open
+        if not hint_pair or hint_pair[2] == 158007:  # Tutorial Gate Open
             continue
 
         always_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
@@ -290,7 +293,7 @@ def make_hints(world: World, hint_amount: int, own_itempool: List[Item]):
     for item in priority_items:
         hint_pair = make_hint_from_item(world, item, own_itempool)
 
-        if hint_pair[2] == 158007:  # Tutorial Gate Open
+        if not hint_pair or hint_pair[2] == 158007:  # Tutorial Gate Open
             continue
 
         priority_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
@@ -350,7 +353,7 @@ def make_hints(world: World, hint_amount: int, own_itempool: List[Item]):
 
             hint = make_hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)
 
-            if hint[0] in already_hinted_locations:
+            if not hint or hint[0] in already_hinted_locations:
                 continue
 
             hints.append((f"{hint[1]} can be found at {hint[0]}.", hint[2]))
