@@ -1456,7 +1456,9 @@ mansion_stair_destinations = [
 unreachable_outdoor_entrances = [
     "Route 4-C to Mt Moon B1F-NE",
     "Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House",
-    "Cerulean City-Badge House Backyard to Cerulean Badge House"
+    "Cerulean City-Badge House Backyard to Cerulean Badge House",
+    # TODO: This doesn't need to be forced if fly location is Pokemon League?
+    "Route 23-N to Victory Road 2F-E"
 ]
 
 
@@ -2220,7 +2222,7 @@ def create_regions(self):
                         "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
                 badge_locs.append(multiworld.get_location(loc, player))
             multiworld.random.shuffle(badges)
-            while badges[3].name == "Cascade Badge" and multiworld.badges_needed_for_hm_moves[player] == "on":
+            while badges[3].name == "Cascade Badge" and multiworld.badges_needed_for_hm_moves[player]:
                 multiworld.random.shuffle(badges)
             for badge, loc in zip(badges, badge_locs):
                 loc.place_locked_item(badge)
@@ -2265,11 +2267,14 @@ def create_regions(self):
                 "Defeat Viridian Gym Giovanni",
             ]
 
+        event_locations = self.multiworld.get_filled_locations(player)
+
         def adds_reachable_entrances(entrances_copy, item):
-            state.collect(item, False)
+            state_copy = state.copy()
+            state_copy.collect(item, True)
+            state.sweep_for_events(locations=event_locations)
             ret = len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
-                      entrance.parent_region.can_reach(state)]) > len(reachable_entrances)
-            state.remove(item)
+                      entrance.parent_region.can_reach(state_copy)]) > len(reachable_entrances)
             return ret
 
         def dead_end(entrances_copy, e):
@@ -2303,10 +2308,16 @@ def create_regions(self):
 
         starting_entrances = len(entrances)
         dc_connected = []
-        event_locations = self.multiworld.get_filled_locations(player)
+        rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name]
+        entrances = [entrance for entrance in entrances if entrance not in rock_tunnel_entrances]
         while entrances:
             state.update_reachable_regions(player)
             state.sweep_for_events(locations=event_locations)
+
+            if rock_tunnel_entrances and logic.rock_tunnel(state, player):
+                entrances += rock_tunnel_entrances
+                rock_tunnel_entrances = None
+
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
                                    entrance.parent_region.can_reach(state)]
             assert reachable_entrances, \
@@ -2321,19 +2332,11 @@ def create_regions(self):
             if multiworld.door_shuffle[player] == "full" or len(entrances) != len(reachable_entrances):
                 entrances.sort(key=lambda e: e.name not in entrance_only)
 
-                if len(entrances) < 48 and multiworld.door_shuffle[player] == "full":
-                    # Prevent a situation where the only remaining outdoor entrances are ones that cannot be reached
-                    # except by connecting directly to it.
-                    entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
                 # entrances list is empty while it's being sorted, must pass a copy to iterate through
                 entrances_copy = entrances.copy()
                 if multiworld.door_shuffle[player] == "decoupled":
-                    if len(reachable_entrances) <= 8 and not logic.rock_tunnel(state, player):
-                        entrances.sort(key=lambda e: 1 if "Rock Tunnel" in e.name else 2 if e.connected_region is not
-                                       None else 3 if e not in reachable_entrances else 0)
-                    else:
-                        entrances.sort(key=lambda e: 1 if e.connected_region is not None else 2 if e not in
-                                       reachable_entrances else 0)
+                    entrances.sort(key=lambda e: 1 if e.connected_region is not None else 2 if e not in
+                                   reachable_entrances else 0)
                     assert entrances[0].connected_region is None,\
                         "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
                 elif len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
@@ -2345,6 +2348,11 @@ def create_regions(self):
                                    dead_end(entrances_copy, e) else 2)
                 if multiworld.door_shuffle[player] == "full":
                     outdoor = outdoor_map(entrances[0].parent_region.name)
+                    if len(entrances) < 48 and not outdoor:
+                        # Prevent a situation where the only remaining outdoor entrances are ones that cannot be reached
+                        # except by connecting directly to it.
+                        entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
+
                     entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
                 assert entrances[0] in reachable_entrances, \
                     "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
