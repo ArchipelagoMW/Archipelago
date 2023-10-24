@@ -5,6 +5,8 @@ import typing
 from collections import Counter, deque
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
+from Options import Accessibility
+
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import add_item_rule
 
@@ -70,7 +72,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             spot_to_fill: typing.Optional[Location] = None
 
             # if minimal accessibility, only check whether location is reachable if game not beatable
-            if world.accessibility[item_to_place.player] == 'minimal':
+            if world.worlds[item_to_place.player].options.accessibility == Accessibility.option_minimal:
                 perform_access_check = not world.has_beaten_game(maximum_exploration_state,
                                                                  item_to_place.player) \
                     if single_player_placement else not has_beaten_game
@@ -265,7 +267,7 @@ def fast_fill(world: MultiWorld,
 
 def accessibility_corrections(world: MultiWorld, state: CollectionState, locations, pool=[]):
     maximum_exploration_state = sweep_from_pool(state, pool)
-    minimal_players = {player for player in world.player_ids if world.accessibility[player] == "minimal"}
+    minimal_players = {player for player in world.player_ids if world.worlds[player].options.accessibility == "minimal"}
     unreachable_locations = [location for location in world.get_locations() if location.player in minimal_players and
                              not location.can_reach(maximum_exploration_state)]
     for location in unreachable_locations:
@@ -288,7 +290,7 @@ def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locat
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
     if unreachable_locations:
         def forbid_important_item_rule(item: Item):
-            return not ((item.classification & 0b0011) and world.accessibility[item.player] != 'minimal')
+            return not ((item.classification & 0b0011) and world.worlds[item.player].options.accessibility != 'minimal')
 
         for location in unreachable_locations:
             add_item_rule(location, forbid_important_item_rule)
@@ -531,9 +533,9 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
     # If other players are below the threshold value, swap progression in this sphere into earlier spheres,
     #   which gives more locations available by this sphere.
     balanceable_players: typing.Dict[int, float] = {
-        player: world.progression_balancing[player] / 100
+        player: world.worlds[player].options.progression_balancing / 100
         for player in world.player_ids
-        if world.progression_balancing[player] > 0
+        if world.worlds[player].options.progression_balancing > 0
     }
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')
@@ -845,7 +847,7 @@ def distribute_planned(world: MultiWorld) -> None:
                 for target_player in worlds:
                     locations += non_early_locations[target_player]
 
-            block['locations'] = locations
+            block['locations'] = list(dict.fromkeys(locations))
 
             if not block['count']:
                 block['count'] = (min(len(block['items']), len(block['locations'])) if
@@ -895,19 +897,22 @@ def distribute_planned(world: MultiWorld) -> None:
             for item_name in items:
                 item = world.worlds[player].create_item(item_name)
                 for location in reversed(candidates):
-                    if not location.item:
-                        if location.item_rule(item):
-                            if location.can_fill(world.state, item, False):
-                                successful_pairs.append((item, location))
-                                candidates.remove(location)
-                                count = count + 1
-                                break
+                    if (location.address is None) == (item.code is None):  # either both None or both not None
+                        if not location.item:
+                            if location.item_rule(item):
+                                if location.can_fill(world.state, item, False):
+                                    successful_pairs.append((item, location))
+                                    candidates.remove(location)
+                                    count = count + 1
+                                    break
+                                else:
+                                    err.append(f"Can't place item at {location} due to fill condition not met.")
                             else:
-                                err.append(f"Can't place item at {location} due to fill condition not met.")
+                                err.append(f"{item_name} not allowed at {location}.")
                         else:
-                            err.append(f"{item_name} not allowed at {location}.")
+                            err.append(f"Cannot place {item_name} into already filled location {location}.")
                     else:
-                        err.append(f"Cannot place {item_name} into already filled location {location}.")
+                        err.append(f"Mismatch between {item_name} and {location}, only one is an event.")
                 if count == maxcount:
                     break
             if count < placement['count']['min']:
