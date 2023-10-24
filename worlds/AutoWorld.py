@@ -106,11 +106,12 @@ class AutoLogicRegister(type):
         return new_class
 
 
-def _timed_call(method: Callable, *args: Any, multiworld: "MultiWorld" = None, player: int = None) -> Any:
+def _timed_call(method: Callable, *args: Any,
+                multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
     start = time.perf_counter()
     ret = method(*args)
     taken = time.perf_counter() - start
-    if taken > 0.1:
+    if taken > 1.0:
         if player and multiworld:
             perf_logger.info(f"Took {taken} seconds in {method} for player {player}, "
                              f"named {multiworld.player_name[player]}.")
