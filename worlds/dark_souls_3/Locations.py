@@ -294,6 +294,7 @@ location_tables = {
         DS3LocationData("CC: Black Blade",                         "Black Blade",                       DS3LocationCategory.WEAPON),
         DS3LocationData("CC: Soul of High Lord Wolnir",            "Soul of High Lord Wolnir",          DS3LocationCategory.BOSS),
         DS3LocationData("CC: Soul of a Demon",                     "Soul of a Demon",                   DS3LocationCategory.BOSS),
+        DS3LocationData("CC: Knight Slayer's Ring",                "Knight Slayer's Ring",              DS3LocationCategory.RING),
     ],
     "Smouldering Lake": [
         DS3LocationData("SL: Shield of Want",                      "Shield of Want",                    DS3LocationCategory.SHIELD),
@@ -310,7 +311,6 @@ location_tables = {
         DS3LocationData("SL: Fume Ultra Greatsword",               "Fume Ultra Greatsword",             DS3LocationCategory.WEAPON),
         DS3LocationData("SL: Black Iron Greatshield",              "Black Iron Greatshield",            DS3LocationCategory.SHIELD),
         DS3LocationData("SL: Soul of the Old Demon King",          "Soul of the Old Demon King",        DS3LocationCategory.BOSS),
-        DS3LocationData("SL: Knight Slayer's Ring",                "Knight Slayer's Ring",              DS3LocationCategory.RING),
     ],
     "Irithyll of the Boreal Valley": [
         DS3LocationData("IBV: Dorhys' Gnawing",                    "Dorhys' Gnawing",                   DS3LocationCategory.SPELL),
@@ -778,36 +778,68 @@ location_name_groups: Dict[str, Set[str]] = {
     ]),
 
     "Miniboss Rewards": frozenset([
-        "FS: Uchigatana", # NPC drop
-        "FK: Soul of a Stray Demon",
+        "US: Bloodbite Ring", # Giant Rat drop
         "US: Irithyll Straight Sword", # Irithyll Outrider drop
+        "RS: Great Swamp Ring", # Great Crab drop
+        "FK: Soul of a Stray Demon",
+        "FK: Lingering Dragoncrest Ring", # Great Crab drop
         "CC: Soul of a Demon",
         "SL: Lightning Stake", # Sand Worm drop
-        "SL: Fume Ultra Greatsword", # Knight Slayer Tsorig drop
         "CD: Aldrich's Sapphire", # Deep Accursed drop
-        "CD: Spider Shield", # NPC drop
         "CD: Saint Bident", # Guarded by giant
         "IBV: Pontiff's Right Eye", # Sulyvahn's Beast drop
         "IBV: Ring of Favor", # Sulyvahn's Beast Duo drop
         "IBV: Aldrich Faithful", # Sulyvahn's Beast Duo reward
         "AL: Aldrich's Ruby", # Deep Accursed drop
-        "PC: Logan's Scroll", # NPC drop
         "LC: Irithyll Rapier", # Boreal Outrider drop
         "GA: Crystal Scroll", # Crystal Sage drop
         "GA: Outrider Knight Helm",
         "GA: Outrider Knight Armor",
         "GA: Outrider Knight Gauntlets",
         "GA: Outrider Knight Leggings",
-        "GA: Golden Wing Crest Shield", # NPC drop
-        "GA: Onikiri and Ubadachi", # NPC drop
-        "GA: Sage's Crystal Staff", # NPC drop
-        "AP: Dragon Tooth", # NPC drop
-        "DH: Flame Fan", # Desert Pyromancer Zoey drop
         "RC: Iron Dragonslayer Helm",
         "RC: Iron Dragonslayer Armor",
         "RC: Iron Dragonslayer Gauntlets",
         "RC: Iron Dragonslayer Leggings",
-        "RC: Crucifix of the Mad King", # Shira drop
+    ]),
+
+    "Mimic Rewards": frozenset([
+        "HWL: Deep Battle Axe",
+        "CC: Black Blade",
+        "CD: Deep Braille Divine Tome",
+        "IBV: Golden Ritual Spear",
+        "ID: Dark Clutch Ring",
+        "PC: Court Sorcerer's Staff",
+        "PC: Greatshield of Glory",
+        "LC: Sunlight Straight Sword",
+        "RC: Ring of the Evil Eye+3",
+    ]),
+
+    "Hostile NPC Rewards": frozenset([
+        "FS: Uchigatana", # Sword Master
+        "FS: Master's Attire", # Sword Master
+        "FS: Master's Gloves", # Sword Master
+        "RS: Exile Greatsword", # Exile Knight #1
+        "RS: Great Club", # Exile Knight #2
+        "CC: Knight Slayer's Ring", # Knight Slayer Tsorig (ember required)
+        "SL: Fume Ultra Greatsword", # Knight Slayer Tsorig
+        "SL: Black Iron Greatshield", # Knight Slayer Tsorig
+        "CD: Spider Shield", # Brigand
+        "PC: Logan's Scroll", # Sorcerer on roof in toxic pool
+        "GA: Golden Wing Crest Shield", # Lion Knight Albert
+        "GA: Onikiri and Ubadachi", # Black Hand Kamui
+        "GA: Sage's Crystal Staff", # Daughter of Crystal Kriemhild
+        "AP: Dragon Tooth", # Havel Knight
+        "DH: Flame Fan", # Desert Pyromancer Zoey drop
+        "RC: Wolf Ring+3", # Alva
+        "RC: Crucifix of the Mad King", # Shira
+        "PW: Contraption Key", # Sir Vilhelm
+        "PW: Onyx Blade", # Sir Vilhelm
+
+        # Not currently randomized:
+        # "AP: Havel's Greatshield", # Havel Knight
+        # "RC: Ledo's Great Hammer", # Silver Knight Ledo
+        # "RC: Blindfold Mask", # Moaning Knight
     ]),
 
     "Key Locations": frozenset([
@@ -855,8 +887,6 @@ location_name_groups: Dict[str, Set[str]] = {
     # without an encyclopedic knowledge of DS3 who don't want to get stuck
     # looking for an invisible wall or one random mob with a guaranteed drop.
     "Hidden Locations": frozenset([
-        # TODO: this list isn't at all comprehensive, expand it
-
         "RC: Dragonhead Shield", # requires gesture
         "SL: Speckled Stoneplate Ring", # requires careful ballista shot
 
@@ -872,9 +902,14 @@ location_name_groups: Dict[str, Set[str]] = {
         "SL: Sacred Flame",
 
         # Guaranteed drop from normalish enemy
-        "CD: Deep Ring",
-        "PC: Eleonora",
-        "ID: Great Magic Shield",
+        "RS: Butcher Knife", # Butcher drop
+        "CD: Deep Ring", # Deacon drop
+        "FK: Pharis's Hat", # Elder Ghru drop
+        "FK: Black Bow of Pharis", # Elder Ghru drop
+        "ID: Great Magic Shield", # Corpse-Grub drop
+        "PC: Eleonora", # Monstrosity of Sin drop
+        "CKG: Magic Stoneplate Ring", # Consumed King's Knight drop
+        "RC: Ringed Knight Paired Greatswords", # Ringed Knight drop
 
         # Have to return to cleared area
         "CD: Archdeacon White Crown",
@@ -892,8 +927,24 @@ location_name_groups: Dict[str, Set[str]] = {
         "GA: Witch's Locks",
         "GA: Power Within",
 
+        # Ember-required invader rewards
+        "CC: Knight Slayer's Ring",
+
+        # Gesture requirements
+        "AP: Calamity Ring",
+        "AP: Twinkling Dragon Torso Stone",
+
+        # Drop from a summon who may or may not appear
+        "AP: Drakeblood Greatsword",
+        "AP: Ricard's Rapier",
+
+        # "Show Your Humanity" puzzle
+        "RC: Dragonhead Shield",
+
         # Hidden falls
+        "HWL: Astora's Straight Sword",
         "US: Chloranthy Ring",
+        "US: Warrior of Sunlight",
         "US: Mirrah Vest",
         "US: Mirrah Gloves",
         "US: Mirrah Trousers",
@@ -911,8 +962,11 @@ location_name_groups: Dict[str, Set[str]] = {
         "LC: Braille Divine Tome of Lothric",
         "CD: Rosaria's Fingers",
         "PW: Crow Quills",
-        # "PC: Onislayer Greatbow", # Not currently randomized
         "GA: Avelyn",
+        "RC: Chloranthy Ring+3",
+        "RC: Havel's Ring+3",
+        # "CC: Ring of Steel Protection+2", # Not currently randomized
+        # "PC: Onislayer Greatbow", # Not currently randomized
 
         # Behind illusory walls
         "FSBT: Covetous Silver Serpent Ring",
@@ -941,6 +995,9 @@ location_name_groups: Dict[str, Set[str]] = {
         "LC: Winged Knight Armor",
         "LC: Winged Knight Gauntlets",
         "LC: Winged Knight Leggings",
+        "DH: Great Soul Dregs",
+        "DH: Covetous Silver Serpent Ring+3",
+        # "SL: Flame Stoneplate Ring+2", # Not currently randomized
     ])
 }
 
