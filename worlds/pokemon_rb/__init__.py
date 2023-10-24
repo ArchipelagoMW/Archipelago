@@ -49,14 +49,25 @@ class PokemonSettings(settings.Group):
 
 
 class PokemonWebWorld(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Pokemon Red and Blue with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Alchav"]
-    )]
+    )
+
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["Shiny"]
+    )
+
+    tutorials = [setup_en, setup_es]
 
 
 class PokemonRedBlueWorld(World):
@@ -717,6 +728,15 @@ class PokemonRedBlueWorld(World):
             "death_link": self.multiworld.death_link[self.player].value,
             "prizesanity": self.multiworld.prizesanity[self.player].value,
             "key_items_only": self.multiworld.key_items_only[self.player].value,
+            "poke_doll_skip": self.multiworld.poke_doll_skip[self.player].value,
+            "bicycle_gate_skips": self.multiworld.bicycle_gate_skips[self.player].value,
+            "stonesanity": self.multiworld.stonesanity[self.player].value,
+            "door_shuffle": self.multiworld.door_shuffle[self.player].value,
+            "warp_tile_shuffle": self.multiworld.warp_tile_shuffle[self.player].value,
+            "dark_rock_tunnel_logic": self.multiworld.dark_rock_tunnel_logic[self.player].value,
+            "split_card_key": self.multiworld.split_card_key[self.player].value,
+            "all_elevators_locked": self.multiworld.all_elevators_locked[self.player].value,
+
         }
 
 

@@ -214,7 +214,7 @@ class TestLocationAndItemCount(SVTestBase):
         self.assertGreaterEqual(len(valid_locations), len(multiworld.itempool))
 
     def test_allsanity_without_mods_has_at_least_locations(self):
-        expected_locations = 993
+        expected_locations = 994
         allsanity_options = self.allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         number_locations = len(get_real_locations(self, multiworld))
@@ -227,7 +227,7 @@ class TestLocationAndItemCount(SVTestBase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 1245
+        expected_locations = 1246
         allsanity_options = self.allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         number_locations = len(get_real_locations(self, multiworld))
