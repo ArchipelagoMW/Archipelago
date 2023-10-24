@@ -4,11 +4,10 @@ Classes and functions related to creating a ROM patch
 import copy
 import os
 import pkgutil
-from typing import Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple
 
 import bsdiff4
 
-from BaseClasses import MultiWorld
 from worlds.Files import APDeltaPatch
 from settings import get_settings
 
@@ -17,6 +16,11 @@ from .items import reverse_offset_item_value
 from .options import RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement
 from .pokemon import get_random_species, get_random_move
 from .util import encode_string, get_easter_egg
+
+if TYPE_CHECKING:
+    from . import PokemonEmeraldWorld
+else:
+    PokemonEmeraldWorld = object
 
 
 _LOOPING_MUSIC = [
@@ -58,7 +62,6 @@ _FANFARES = [
     "MUS_RG_JIGGLYPUFF", "MUS_RG_HEAL", "MUS_RG_DEX_RATING", "MUS_RG_OBTAIN_KEY_ITEM", "MUS_RG_CAUGHT_INTRO",
     "MUS_RG_PHOTO", "MUS_RG_POKE_FLUTE"
 ]
-
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -113,22 +116,22 @@ cave_event_to_id_map = {
 }
 
 
-def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, player: int, output_directory: str) -> None:
+def generate_output(world: PokemonEmeraldWorld, output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
     # Set free fly location
-    if multiworld.free_fly_location[player]:
+    if world.options.free_fly_location:
         _set_bytes_little_endian(
             patched_rom,
             data.rom_addresses["gArchipelagoOptions"] + 0x16,
             1,
-            multiworld.worlds[player].free_fly_location_id
+            world.free_fly_location_id
         )
 
     location_info: List[Tuple[int, int, str]] = []
-    for location in multiworld.get_locations(player):
+    for location in world.multiworld.get_locations(world.player):
         if location.address is None:
             continue
 
@@ -136,7 +139,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
             continue
 
         # Set local item values
-        if not multiworld.remote_items[player] and location.item.player == player:
+        if not world.remote_items and location.item.player == world.player:
             if type(location.item_address) is int:
                 _set_bytes_little_endian(
                     patched_rom,
@@ -164,19 +167,19 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
             # ITEM"
             location_info.append((location.address - BASE_OFFSET, location.item.player, location.item.name))
 
-    player_name_ids: Dict[str, int] = {multiworld.player_name[player]: 0}
+    player_name_ids: Dict[str, int] = {world.multiworld.player_name[world.player]: 0}
     item_name_offsets: Dict[str, int] = {}
     next_item_name_offset = 0
     for i, (flag, item_player, item_name) in enumerate(sorted(location_info, key=lambda t: t[0])):
         # The player's own items are still set in the table with the value 0 to indicate the game should not show any
         # message (the message for receiving an item will pop up when the client eventually gives it to them).
         # In race mode, no item location data is included, and only recieved (or own) items will show any text box.
-        if item_player == player or multiworld.is_race:
+        if item_player == world.player or world.multiworld.is_race:
             _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
             _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, 0)
             _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, 0)
         else:
-            player_name = multiworld.player_name[item_player]
+            player_name = world.multiworld.player_name[item_player]
 
             if player_name not in player_name_ids:
                 # Only space for 50 player names
@@ -215,10 +218,10 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
             _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, item_name_offsets[item_name])
             _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, player_name_ids[player_name])
 
-    easter_egg = get_easter_egg(multiworld.easter_egg[player].value)
+    easter_egg = get_easter_egg(world.options.easter_egg.value)
 
     # Set start inventory
-    start_inventory = multiworld.start_inventory[player].value.copy()
+    start_inventory = world.options.start_inventory.value.copy()
 
     starting_badges = 0
     if start_inventory.pop("Stone Badge", 0) > 0:
@@ -259,39 +262,39 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
     for i, slot in enumerate(pc_slots):
         address = data.rom_addresses["sNewGamePCItems"] + (i * 4)
-        item = reverse_offset_item_value(multiworld.worlds[player].item_name_to_id[slot[0]])
+        item = reverse_offset_item_value(world.item_name_to_id[slot[0]])
         _set_bytes_little_endian(patched_rom, address + 0, 2, item)
         _set_bytes_little_endian(patched_rom, address + 2, 2, slot[1])
 
     # Set species data
-    _set_species_info(modified_data, patched_rom, easter_egg)
+    _set_species_info(world.modified_data, patched_rom, easter_egg)
 
     # Set encounter tables
-    if multiworld.wild_pokemon[player] != RandomizeWildPokemon.option_vanilla:
-        _set_encounter_tables(modified_data, patched_rom)
+    if world.options.wild_pokemon != RandomizeWildPokemon.option_vanilla:
+        _set_encounter_tables(world.modified_data, patched_rom)
 
     # Set opponent data
-    if multiworld.trainer_parties[player] != RandomizeTrainerParties.option_vanilla or easter_egg[0] == 2:
-        _set_opponents(modified_data, patched_rom, easter_egg)
+    if world.options.trainer_parties != RandomizeTrainerParties.option_vanilla or easter_egg[0] == 2:
+        _set_opponents(world.modified_data, patched_rom, easter_egg)
 
     # Set static pokemon
-    _set_static_encounters(modified_data, patched_rom)
+    _set_static_encounters(world.modified_data, patched_rom)
 
     # Set starters
-    _set_starters(modified_data, patched_rom)
+    _set_starters(world.modified_data, patched_rom)
 
     # Set TM moves
-    _set_tm_moves(modified_data, patched_rom, easter_egg)
+    _set_tm_moves(world.modified_data, patched_rom, easter_egg)
 
     # Randomize move tutor moves
-    if multiworld.move_tutor_moves[player] or easter_egg[0] == 2:
-        _randomize_move_tutor_moves(multiworld, player, patched_rom, easter_egg)
+    if world.options.move_tutor_moves or easter_egg[0] == 2:
+        _randomize_move_tutor_moves(world, patched_rom, easter_egg)
 
     # Set TM/HM compatibility
-    _set_tmhm_compatibility(modified_data, patched_rom)
+    _set_tmhm_compatibility(world.modified_data, patched_rom)
 
     # Randomize opponent double or single
-    _randomize_opponent_battle_type(multiworld, player, patched_rom)
+    _randomize_opponent_battle_type(world, patched_rom)
 
     # Options
     # struct ArchipelagoOptions
@@ -329,24 +332,24 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
     # Set hold A to advance text
-    turbo_a = 1 if multiworld.turbo_a[player] else 0
+    turbo_a = 1 if world.options.turbo_a else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x00, 1, turbo_a)
 
     # Set terra/marine cave locations
-    terra_cave_id = cave_event_to_id_map[multiworld.get_location("TERRA_CAVE_LOCATION", player).item.name]
-    marine_cave_id = cave_event_to_id_map[multiworld.get_location("MARINE_CAVE_LOCATION", player).item.name]
+    terra_cave_id = cave_event_to_id_map[world.multiworld.get_location("TERRA_CAVE_LOCATION", world.player).item.name]
+    marine_cave_id = cave_event_to_id_map[world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player).item.name]
     _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, terra_cave_id | (marine_cave_id << 4))
 
     # Set blind trainers
-    blind_trainers = 1 if multiworld.blind_trainers[player] else 0
+    blind_trainers = 1 if world.options.blind_trainers else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x02, 1, blind_trainers)
 
     # Set fly without badge
-    fly_without_badge = 1 if multiworld.fly_without_badge[player] else 0
+    fly_without_badge = 1 if world.options.fly_without_badge else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, fly_without_badge)
 
     # Set exp modifier
-    numerator = min(max(multiworld.exp_modifier[player].value, 0), 2**16 - 1)
+    numerator = min(max(world.options.exp_modifier.value, 0), 2**16 - 1)
     _set_bytes_little_endian(patched_rom, options_address + 0x04, 2, numerator)
     _set_bytes_little_endian(patched_rom, options_address + 0x06, 2, 100)
 
@@ -355,62 +358,62 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         patched_rom,
         options_address + 0x08,
         2,
-        get_random_species(multiworld.per_slot_randoms[player], data.species).species_id
+        get_random_species(world.random, data.species).species_id
     )
 
     # Set guaranteed catch
-    guaranteed_catch = 1 if multiworld.guaranteed_catch[player] else 0
+    guaranteed_catch = 1 if world.options.guaranteed_catch else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0A, 1, guaranteed_catch)
 
     # Set better shops
-    better_shops = 1 if multiworld.better_shops[player] else 0
+    better_shops = 1 if world.options.better_shops else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0B, 1, better_shops)
 
     # Set elite four requirement
-    elite_four_requires_gyms = 1 if multiworld.elite_four_requirement[player] == EliteFourRequirement.option_gyms else 0
+    elite_four_requires_gyms = 1 if world.options.elite_four_requirement == EliteFourRequirement.option_gyms else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0C, 1, elite_four_requires_gyms)
 
     # Set elite four count
-    elite_four_count = min(max(multiworld.elite_four_count[player].value, 0), 8)
+    elite_four_count = min(max(world.options.elite_four_count.value, 0), 8)
     _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, elite_four_count)
 
     # Set norman requirement
-    norman_requires_gyms = 1 if multiworld.norman_requirement[player] == NormanRequirement.option_gyms else 0
+    norman_requires_gyms = 1 if world.options.norman_requirement == NormanRequirement.option_gyms else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, norman_requires_gyms)
 
     # Set norman count
-    norman_count = min(max(multiworld.norman_count[player].value, 0), 8)
+    norman_count = min(max(world.options.norman_count.value, 0), 8)
     _set_bytes_little_endian(patched_rom, options_address + 0x0F, 1, norman_count)
 
     # Set starting badges
     _set_bytes_little_endian(patched_rom, options_address + 0x10, 1, starting_badges)
 
     # Set receive item messages type
-    receive_item_messages_type = multiworld.receive_item_messages[player].value
+    receive_item_messages_type = world.options.receive_item_messages.value
     _set_bytes_little_endian(patched_rom, options_address + 0x11, 1, receive_item_messages_type)
 
     # Set reusable TMs
-    reusable_tms = 1 if multiworld.reusable_tms[player] else 0
+    reusable_tms = 1 if world.options.reusable_tms else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, reusable_tms)
 
     # Set route 115 boulders
-    route_115_boulders = 1 if multiworld.extra_boulders[player] else 0
+    route_115_boulders = 1 if world.options.extra_boulders else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x13, 1, route_115_boulders)
 
     # Set removed blockers
-    list_of_removed_roadblocks = multiworld.remove_roadblocks[player].value
-    removed_roadblocks = 0
-    removed_roadblocks |= (1 << 0) if "Safari Zone Construction Workers" in list_of_removed_roadblocks else 0
-    removed_roadblocks |= (1 << 1) if "Lilycove City Wailmer" in list_of_removed_roadblocks else 0
-    removed_roadblocks |= (1 << 2) if "Route 110 Aqua Grunts" in list_of_removed_roadblocks else 0
-    removed_roadblocks |= (1 << 3) if "Aqua Hideout Grunts" in list_of_removed_roadblocks else 0
-    removed_roadblocks |= (1 << 4) if "Route 119 Aqua Grunts" in list_of_removed_roadblocks else 0
-    removed_roadblocks |= (1 << 5) if "Route 112 Magma Grunts" in list_of_removed_roadblocks else 0
-    removed_roadblocks |= (1 << 6) if "Seafloor Cavern Aqua Grunt" in list_of_removed_roadblocks else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks)
+    removed_roadblocks = world.options.remove_roadblocks.value
+    removed_roadblocks_bitfield = 0
+    removed_roadblocks_bitfield |= (1 << 0) if "Safari Zone Construction Workers" in removed_roadblocks else 0
+    removed_roadblocks_bitfield |= (1 << 1) if "Lilycove City Wailmer" in removed_roadblocks else 0
+    removed_roadblocks_bitfield |= (1 << 2) if "Route 110 Aqua Grunts" in removed_roadblocks else 0
+    removed_roadblocks_bitfield |= (1 << 3) if "Aqua Hideout Grunts" in removed_roadblocks else 0
+    removed_roadblocks_bitfield |= (1 << 4) if "Route 119 Aqua Grunts" in removed_roadblocks else 0
+    removed_roadblocks_bitfield |= (1 << 5) if "Route 112 Magma Grunts" in removed_roadblocks else 0
+    removed_roadblocks_bitfield |= (1 << 6) if "Seafloor Cavern Aqua Grunt" in removed_roadblocks else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks_bitfield)
 
     # Set match trainer levels
-    match_trainer_levels = 1 if multiworld.match_trainer_levels[player] else 0
+    match_trainer_levels = 1 if world.options.match_trainer_levels else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x17, 1, match_trainer_levels)
 
     # Set easter egg data
@@ -429,26 +432,26 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIG"] * 12) + 4, 1, 1)
 
     # Set match trainer levels multiplier
-    match_trainer_levels_multiplier = min(max(multiworld.match_trainer_levels_multiplier[player].value, 0), 2**16 - 1)
+    match_trainer_levels_multiplier = min(max(world.options.match_trainer_levels_multiplier.value, 0), 2**16 - 1)
     _set_bytes_little_endian(patched_rom, options_address + 0x19, 2, match_trainer_levels_multiplier)
     _set_bytes_little_endian(patched_rom, options_address + 0x1B, 2, 100)
 
     # Mark berry trees as randomized
-    berry_trees = 1 if multiworld.berry_trees[player] else 0
+    berry_trees = 1 if world.options.berry_trees else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x1D, 1, berry_trees)
 
     # Swap route 115 layout if bumpy slope enabled
-    extra_bumpy_slope = 1 if multiworld.extra_bumpy_slope[player] else 0
+    extra_bumpy_slope = 1 if world.options.extra_bumpy_slope else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x1F, 1, extra_bumpy_slope)
 
     # Set slot name
-    for i, byte in enumerate(multiworld.player_name[player].encode("utf-8")):
+    for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
 
     # Randomize music
-    if multiworld.music[player]:
+    if world.options.music:
         randomized_looping_music = copy.copy(_LOOPING_MUSIC)
-        multiworld.worlds[player].random.shuffle(randomized_looping_music)
+        world.random.shuffle(randomized_looping_music)
         for original_music, randomized_music in zip(_LOOPING_MUSIC, randomized_looping_music):
             _set_bytes_little_endian(
                 patched_rom,
@@ -458,9 +461,9 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
             )
 
     # Randomize fanfares
-    if multiworld.fanfares[player]:
+    if world.options.fanfares:
         randomized_fanfares = copy.copy(_FANFARES)
-        multiworld.worlds[player].random.shuffle(randomized_fanfares)
+        world.random.shuffle(randomized_fanfares)
         for original_fanfare, randomized_fanfare in zip(_FANFARES, randomized_fanfares):
             _set_bytes_little_endian(
                 patched_rom,
@@ -470,15 +473,15 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
             )
 
     # Write Output
-    outfile_player_name = f"_P{player}"
-    outfile_player_name += f"_{multiworld.get_file_safe_player_name(player).replace(' ', '_')}" \
-        if multiworld.player_name[player] != f"Player{player}" else ""
+    outfile_player_name = f"_P{world.player}"
+    outfile_player_name += f"_{world.multiworld.get_file_safe_player_name(world.player).replace(' ', '_')}" \
+        if world.multiworld.player_name[world.player] != f"Player{world.player}" else ""
 
-    output_path = os.path.join(output_directory, f"AP_{multiworld.seed_name}{outfile_player_name}.gba")
+    output_path = os.path.join(output_directory, f"AP_{world.multiworld.seed_name}{outfile_player_name}.gba")
     with open(output_path, "wb") as outfile:
         outfile.write(patched_rom)
-    patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=player,
-                                     player_name=multiworld.player_name[player], patched_path=output_path)
+    patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=world.player,
+                                     player_name=world.multiworld.player_name[world.player], patched_path=output_path)
 
     patch.write()
     os.unlink(output_path)
@@ -616,8 +619,8 @@ def _set_tmhm_compatibility(modified_data: PokemonEmeraldData, rom: bytearray) -
             _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
 
 
-def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
-    probability = multiworld.double_battle_chance[player].value / 100
+def _randomize_opponent_battle_type(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+    probability = world.options.double_battle_chance.value / 100
 
     battle_type_map = {
         0: 4,
@@ -628,7 +631,7 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
 
     for trainer_data in data.trainers:
         if trainer_data.script_address != 0 and len(trainer_data.party.pokemon) > 1:
-            if multiworld.per_slot_randoms[player].random() < probability:
+            if world.random.random() < probability:
                 # Set the trainer to be a double battle
                 _set_bytes_little_endian(rom, trainer_data.address + 0x18, 1, 1)
 
@@ -644,7 +647,7 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
                     )
 
 
-def _randomize_move_tutor_moves(multiworld: MultiWorld, player: int, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _randomize_move_tutor_moves(world: PokemonEmeraldWorld, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for i in range(30):
         if i == 24:
             continue  # Don't overwrite the Dig tutor
@@ -656,12 +659,12 @@ def _randomize_move_tutor_moves(multiworld: MultiWorld, player: int, rom: bytear
                 rom,
                 data.rom_addresses["gTutorMoves"] + (i * 2),
                 2,
-                get_random_move(multiworld.worlds[player].random, {data.constants["MOVE_CUT"],
-                                                                   data.constants["MOVE_FLY"],
-                                                                   data.constants["MOVE_SURF"],
-                                                                   data.constants["MOVE_STRENGTH"],
-                                                                   data.constants["MOVE_FLASH"],
-                                                                   data.constants["MOVE_ROCK_SMASH"],
-                                                                   data.constants["MOVE_WATERFALL"],
-                                                                   data.constants["MOVE_DIVE"]})
+                get_random_move(world.random, {data.constants["MOVE_CUT"],
+                                               data.constants["MOVE_FLY"],
+                                               data.constants["MOVE_SURF"],
+                                               data.constants["MOVE_STRENGTH"],
+                                               data.constants["MOVE_FLASH"],
+                                               data.constants["MOVE_ROCK_SMASH"],
+                                               data.constants["MOVE_WATERFALL"],
+                                               data.constants["MOVE_DIVE"]})
             )

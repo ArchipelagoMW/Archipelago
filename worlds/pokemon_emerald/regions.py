@@ -1,16 +1,21 @@
 """
 Functions related to AP regions for Pokemon Emerald (see ./data/regions for region definitions)
 """
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Callable, Dict, List, Optional, Tuple
 
-from BaseClasses import CollectionState, ItemClassification, Region, Location, MultiWorld
+from BaseClasses import CollectionState, ItemClassification, Region
 
 from .data import data
 from .items import PokemonEmeraldItem
 from .locations import PokemonEmeraldLocation
 
+if TYPE_CHECKING:
+    from . import PokemonEmeraldWorld
+else:
+    PokemonEmeraldWorld = object
 
-def create_regions(multiworld: MultiWorld, player: int) -> None:
+
+def create_regions(world: PokemonEmeraldWorld) -> None:
     """
     Iterates through regions created from JSON to create regions and adds them to the multiworld.
     Also creates and places events and connects regions via warps and the exits defined in the JSON.
@@ -21,9 +26,9 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
         "LAND": [(None, range(0, 12), None)],
         "WATER": [(None, range(0, 5), None)],
         "FISHING": [
-            ("OLD_ROD", range(0, 2), lambda state: state.has("Old Rod", player)),
-            ("GOOD_ROD", range(2, 5), lambda state: state.has("Good Rod", player)),
-            ("SUPER_ROD", range(5, 10), lambda state: state.has("Super Rod", player))
+            ("OLD_ROD", range(0, 2), lambda state: state.has("Old Rod", world.player)),
+            ("GOOD_ROD", range(2, 5), lambda state: state.has("Good Rod", world.player)),
+            ("SUPER_ROD", range(5, 10), lambda state: state.has("Super Rod", world.player))
         ]
     }
 
@@ -44,9 +49,9 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
 
                 # If the region hasn't been created yet, create it now
                 try:
-                    encounter_region = multiworld.get_region(region_name, player)
+                    encounter_region = world.multiworld.get_region(region_name, world.player)
                 except KeyError:
-                    encounter_region = Region(region_name, player, multiworld)
+                    encounter_region = Region(region_name, world.player, world.multiworld)
                     encounter_slots = getattr(data.maps[map_name], f"{encounter_category[0].lower()}_encounters").slots
 
                     # Subcategory is for splitting fishing rods; land and water only have one subcategory
@@ -61,7 +66,7 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
                         # Create a location for the species
                         for j, species_id in enumerate(unique_species):
                             encounter_location = PokemonEmeraldLocation(
-                                player,
+                                world.player,
                                 f"{region_name}{'_' + subcategory[0] if subcategory[0] is not None else ''}_{j + 1}",
                                 None,
                                 encounter_region
@@ -77,23 +82,23 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
                                 f"CATCH_{data.species[species_id].name}",
                                 ItemClassification.progression_skip_balancing,
                                 None,
-                                player
+                                world.player
                             ))
                             encounter_region.locations.append(encounter_location)
 
                     # Add the new encounter region to the multiworld
-                    multiworld.regions.append(encounter_region)
+                    world.multiworld.regions.append(encounter_region)
 
                 # Encounter region exists, just connect to it
                 region.connect(encounter_region, f"{region.name} -> {region_name}")
 
     connections = []
     for region_name, region_data in data.regions.items():
-        new_region = Region(region_name, player, multiworld)
+        new_region = Region(region_name, world.player, world.multiworld)
 
         for event_data in region_data.events:
-            event = PokemonEmeraldLocation(player, event_data.name, None, new_region)
-            event.place_locked_item(PokemonEmeraldItem(event_data.name, ItemClassification.progression_skip_balancing, None, player))
+            event = PokemonEmeraldLocation(world.player, event_data.name, None, new_region)
+            event.place_locked_item(PokemonEmeraldItem(event_data.name, ItemClassification.progression, None, world.player))
             new_region.locations.append(event)
 
         for region_exit in region_data.exits:
@@ -105,15 +110,15 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
                 continue
             connections.append((warp, region_name, dest_warp.parent_region))
 
-        multiworld.regions.append(new_region)
+        world.multiworld.regions.append(new_region)
 
         connect_to_map_encounters(new_region, region_data.parent_map.name,
                                   (region_data.has_grass, region_data.has_water, region_data.has_fishing))
 
     for name, source, dest in connections:
-        multiworld.get_region(source, player).connect(multiworld.get_region(dest, player), name)
+        world.multiworld.get_region(source, world.player).connect(world.multiworld.get_region(dest, world.player), name)
 
-    menu = Region("Menu", player, multiworld)
-    menu.connect(multiworld.get_region("REGION_LITTLEROOT_TOWN/MAIN", player), "Start Game")
+    menu = Region("Menu", world.player, world.multiworld)
+    menu.connect(world.multiworld.get_region("REGION_LITTLEROOT_TOWN/MAIN", world.player), "Start Game")
 
-    multiworld.regions.append(menu)
+    world.multiworld.regions.append(menu)
