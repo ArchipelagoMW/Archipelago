@@ -468,13 +468,14 @@ class PokemonRedBlueWorld(World):
                 self.multiworld.get_location("Fossil - Choice B", self.player)}
 
         if not self.multiworld.key_items_only[self.player]:
+            if self.multiworld.fossil_check_item_types[self.player] == "key_items":
+                rule = lambda i: i.advancement
+            elif self.multiworld.fossil_check_item_types[self.player] == "unique_items":
+                rule = lambda i: i.name in item_groups["Unique"]
+            elif self.multiworld.fossil_check_item_types[self.player] == "no_key_items":
+                rule = lambda i: not i.advancement
             for loc in locs:
-                if self.multiworld.fossil_check_item_types[self.player] == "key_items":
-                    add_item_rule(loc, lambda i: i.advancement)
-                elif self.multiworld.fossil_check_item_types[self.player] == "unique_items":
-                    add_item_rule(loc, lambda i: i.name in item_groups["Unique"])
-                elif self.multiworld.fossil_check_item_types[self.player] == "no_key_items":
-                    add_item_rule(loc, lambda i: not i.advancement)
+                add_item_rule(loc, rule)
 
         for mon in ([" ".join(self.multiworld.get_location(
                 f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
