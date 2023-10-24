@@ -6,7 +6,7 @@ class MithrixGoalTest(RoR2TestBase):
         "victory": "mithrix"
     }
 
-    def testMithrix(self) -> None:
+    def test_mithrix(self) -> None:
         self.collect_all_but(["Commencement", "Victory"])
         self.assertFalse(self.can_reach_entrance("Commencement"))
         self.assertBeatable(False)
@@ -14,7 +14,7 @@ class MithrixGoalTest(RoR2TestBase):
         self.assertTrue(self.can_reach_entrance("Commencement"))
         self.assertBeatable(True)
 
-    def testStage5(self) -> None:
+    def test_stage5(self) -> None:
         self.collect_all_but(["Stage 4", "Sky Meadow", "Victory"])
         self.assertFalse(self.can_reach_entrance("Sky Meadow"))
         self.assertBeatable(False)

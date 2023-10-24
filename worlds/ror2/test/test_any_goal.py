@@ -7,19 +7,19 @@ class DLCTest(RoR2TestBase):
         "victory": "any"
     }
 
-    def testCommencementVictory(self) -> None:
+    def test_commencement_victory(self) -> None:
         self.collect_all_but(["Commencement", "The Planetarium", "Hidden Realm: A Moment, Whole", "Victory"])
         self.assertBeatable(False)
         self.collect_by_name("Commencement")
         self.assertBeatable(True)
 
-    def testPlanetariumVictory(self) -> None:
+    def test_planetarium_victory(self) -> None:
         self.collect_all_but(["Commencement", "The Planetarium", "Hidden Realm: A Moment, Whole", "Victory"])
         self.assertBeatable(False)
         self.collect_by_name("The Planetarium")
         self.assertBeatable(True)
 
-    def testMomentWholeVictory(self) -> None:
+    def test_moment_whole_victory(self) -> None:
         self.collect_all_but(["Commencement", "The Planetarium", "Hidden Realm: A Moment, Whole", "Victory"])
         self.assertBeatable(False)
         self.collect_by_name("Hidden Realm: A Moment, Whole")

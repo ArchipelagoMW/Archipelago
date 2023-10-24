@@ -6,7 +6,7 @@ class LimboGoalTest(RoR2TestBase):
         "victory": "limbo"
     }
 
-    def testLimbo(self) -> None:
+    def test_limbo(self) -> None:
         self.collect_all_but(["Hidden Realm: A Moment, Whole", "Victory"])
         self.assertFalse(self.can_reach_entrance("Hidden Realm: A Moment, Whole"))
         self.assertBeatable(False)
