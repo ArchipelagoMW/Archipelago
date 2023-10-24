@@ -446,6 +446,8 @@ In addition, the following methods can be implemented and are called in this ord
 * `def create_items(self)`
   called to place player's items into the MultiWorld's itempool. After this step all regions and items have to be in
   the MultiWorld's regions and itempool, and these lists should not be modified afterwards.
+* `def connect_regions(self)`
+  called to connect player's regions together.
 * `def set_rules(self)`
   called to set access and item rules on locations and entrances. 
   Locations have to be defined before this, or rule application can miss them.
@@ -493,6 +495,35 @@ def create_event(self, event: str):
     return MyGameItem(event, True, None, self.player)
 ```
 
+#### create_regions
+
+```python
+def create_regions(self) -> None:
+    # Add regions to the multiworld. "Menu" is the required starting point.
+    # Arguments to Region() are name, player, world, and optionally hint_text
+    menu_region = Region("Menu", self.player, self.multiworld)
+    self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
+    
+    main_region = Region("Main Area", self.player, self.multiworld)
+    # Add main area's locations to main area (all but final boss)
+    main_region.add_locations(main_region_locations, MyGameLocation)
+    # or 
+    # main_region.locations = \
+    #   [MyGameLocation(self.player, location_name, self.location_name_to_id[location_name], main_region]
+    self.multiworld.regions.append(main_region)
+    
+    boss_region = Region("Boss Room", self.player, self.multiworld)
+    # Add event to Boss Room
+    boss_region.locations.append(MyGameLocation(self.player, "Final Boss", None, boss_region))
+
+    # If entrances are not randomized, they should be connected here,
+    # otherwise they can also be connected at a later stage.
+    # Create Entrances and connect the Regions
+    menu_region.connect(main_region)  # connects the "Menu" and "Main Area", can also pass a rule
+    
+    # If setting location access rules from data is easier here, set_rules can possibly be omitted.
+```
+
 #### create_items
 
 ```python
@@ -520,37 +551,16 @@ def create_items(self) -> None:
     self.multiworld.itempool += [self.create_item("nothing") for _ in range(junk)]
 ```
 
-#### create_regions
+#### connect_regions
 
 ```python
-def create_regions(self) -> None:
-    # Add regions to the multiworld. "Menu" is the required starting point.
-    # Arguments to Region() are name, player, world, and optionally hint_text
-    menu_region = Region("Menu", self.player, self.multiworld)
-    self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
-    
-    main_region = Region("Main Area", self.player, self.multiworld)
-    # Add main area's locations to main area (all but final boss)
-    main_region.add_locations(main_region_locations, MyGameLocation)
-    # or 
-    # main_region.locations = \
-    #   [MyGameLocation(self.player, location_name, self.location_name_to_id[location_name], main_region]
-    self.multiworld.regions.append(main_region)
-    
-    boss_region = Region("Boss Room", self.player, self.multiworld)
-    # Add event to Boss Room
-    boss_region.locations.append(MyGameLocation(self.player, "Final Boss", None, boss_region))
-
-    # If entrances are not randomized, they should be connected here,
-    # otherwise they can also be connected at a later stage.
-    # Create Entrances and connect the Regions
-    menu_region.connect(main_region)  # connects the "Menu" and "Main Area", can also pass a rule
-    # or
-    main_region.add_exits({"Boss Room": "Boss Door"}, {"Boss Room": lambda state: state.has("Sword", self.player)})
-    # Connects the "Main Area" and "Boss Room" regions, and places a rule requiring the "Sword" item to traverse
-    
-    # If setting location access rules from data is easier here, set_rules can
-    # possibly omitted.
+def connect_regions(self) -> None:
+  # Connects the "Main Area" and "Boss Room" regions, with an Entrance named "Boss Door" between them, and places a
+  # rule requiring the "Sword" item to traverse
+  self.multiworld.get_region("Main Area", self.player).add_exits(
+    {"Boss Room": "Boss Door"},
+    {"Boss Room": lambda state: state.has("Sword", self.player)}
+  )
 ```
 
 #### generate_basic

@@ -122,6 +122,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Creating Items.')
     AutoWorld.call_all(world, "create_items")
 
+    logger.info("Connecting Regions.")
+    AutoWorld.call_all(world, "connect_regions")
+
     # All worlds should have finished creating all regions, locations, and entrances.
     # Recache to ensure that they are all visible for locality rules.
     world._recache()
