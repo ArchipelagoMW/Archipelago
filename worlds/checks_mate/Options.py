@@ -109,7 +109,7 @@ class MaterialMinLimit(Range):
     you want consistent access to material, consider using Starting Inventory or Starting Hints in your YAML.)
     """
     display_name = "Minimum Material"
-    range_start = 30
+    range_start = 39
     range_end = 90
     default = 39
 
@@ -121,9 +121,9 @@ class MaterialMaxLimit(Range):
     Due to a bug, you may go over this maximum (by one piece) if your minimum and maximum are very close (within 4).
     """
     display_name = "Maximum Material"
-    range_start = 30
+    range_start = 39
     range_end = 100
-    default = 50
+    default = 52
 
 
 class FairyChessPieces(Choice):

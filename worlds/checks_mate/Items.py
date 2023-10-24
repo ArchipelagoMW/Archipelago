@@ -51,7 +51,7 @@ item_table = {
     # "Play 00 Castle": CMItemData(4_010, ItemClassification.progression),
     # "Play 000 Castle": CMItemData(4_011, ItemClassification.progression),
     # TODO: consider breaking passant into individual pawns, or progressive for outer..center pawns
-    "Play En Passant": CMItemData(4_012, ItemClassification.progression),
+    # "Play En Passant": CMItemData(4_012, ItemClassification.progression),
 
     # Players have 3 pockets, which can be empty, or hold a pawn, minor piece, major piece, or queen.
     # Collected pocket items are distributed randomly to the 3 pockets in the above order.
