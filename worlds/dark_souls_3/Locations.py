@@ -35,6 +35,68 @@ class DS3LocationData:
     npc: bool = False
     """Whether this item is contingent on killing an NPC or following their quest."""
 
+    prominent: bool = False
+    """Whether this is one of few particularly prominent places for items to appear.
+
+    This is a small number of locations (boss drops and progression locations)
+    intended to be set as priority locations for players who don't want a lot of
+    mandatory checks.
+
+    For bosses with multiple drops, only one should be marked prominent.
+    """
+
+    progression: bool = False
+    """Whether this location normally contains an item that blocks forward progress."""
+
+    boss: bool = False
+    """Whether this location is a reward for defeating a full boss."""
+
+    miniboss: bool = False
+    """Whether this location is a reward for defeating a miniboss.
+
+    The classification of "miniboss" is a bit fuzzy, but we consider them to be enemies that are
+    visually distinctive in their locations, usually bigger than normal enemies, with a guaranteed
+    item drop. NPCs are never considered minibosses, and some normal-looking enemies with guaranteed
+    drops aren't either (these are instead classified as hidden locations)."""
+
+    mimic: bool = False
+    """Whether this location is dropped by a mimic."""
+
+    hostile_npc: bool = False
+    """Whether this location is dropped by a hostile NPC.
+
+    An "NPC" is specifically a human (or rather, ash) is built like a player character rather than a
+    monster. This includes both scripted invaders and NPCs who are always on the overworld.
+    """
+
+    key: bool = False
+    """Whether this location normally contains a key.
+
+    This is a literal key, not just a key item or a progression item.
+    """
+
+    hidden: bool = False
+    """Whether this location is particularly tricky to find.
+
+    This is for players without an encyclopedic knowledge of DS3 who don't want to get stuck looking
+    for an invisible wall or one random mob with a guaranteed drop.
+    """
+
+    def location_groups():
+        """The names of location groups this location should appear in.
+
+        This is computed from the properties assigned to this location."""
+        names = []
+        if prominent: names.add("Prominent")
+        if progression: names.add("Progression")
+        if boss: names.add("Boss Rewards")
+        if miniboss: names.add("Miniboss Rewards")
+        if mimic: names.add("Mimic Rewards")
+        if hostile_npc: names.add("Hostile NPC Rewards")
+        if key: names.add("Keys")
+        if hidden: names.add("Hidden")
+        return names
+
 
 class DarkSouls3Location(Location):
     game: str = "Dark Souls III"
@@ -105,12 +167,17 @@ location_tables = {
     "Firelink Shrine": [
         DS3LocationData("FS: Broken Straight Sword",               "Broken Straight Sword",             DS3LocationCategory.WEAPON),
         DS3LocationData("FS: East-West Shield",                    "East-West Shield",                  DS3LocationCategory.SHIELD),
-        DS3LocationData("FS: Uchigatana",                          "Uchigatana",                        DS3LocationCategory.WEAPON),
-        DS3LocationData("FS: Master's Attire",                     "Master's Attire",                   DS3LocationCategory.ARMOR),
-        DS3LocationData("FS: Master's Gloves",                     "Master's Gloves",                   DS3LocationCategory.ARMOR),
+        DS3LocationData("FS: Uchigatana",                          "Uchigatana",                        DS3LocationCategory.WEAPON,
+                        hostile_npc = True), # Sword Master drop
+        DS3LocationData("FS: Master's Attire",                     "Master's Attire",                   DS3LocationCategory.ARMOR,
+                        hostile_npc = True), # Sword Master drop
+        DS3LocationData("FS: Master's Gloves",                     "Master's Gloves",                   DS3LocationCategory.ARMOR,
+                        hostile_npc = True), # Sword Master drop
     ],
     "Firelink Shrine Bell Tower": [
-        DS3LocationData("FSBT: Covetous Silver Serpent Ring",      "Covetous Silver Serpent Ring",      DS3LocationCategory.RING),
+        # Guarded by Tower Key
+        DS3LocationData("FSBT: Covetous Silver Serpent Ring",      "Covetous Silver Serpent Ring",      DS3LocationCategory.RING,
+                        hidden = True), # Behind invisible wall
         DS3LocationData("FSBT: Fire Keeper Robe",                  "Fire Keeper Robe",                  DS3LocationCategory.ARMOR),
         DS3LocationData("FSBT: Fire Keeper Gloves",                "Fire Keeper Gloves",                DS3LocationCategory.ARMOR),
         DS3LocationData("FSBT: Fire Keeper Skirt",                 "Fire Keeper Skirt",                 DS3LocationCategory.ARMOR),
@@ -118,7 +185,8 @@ location_tables = {
         DS3LocationData("FSBT: Fire Keeper Soul",                  "Fire Keeper Soul",                  DS3LocationCategory.MISC),
     ],
     "High Wall of Lothric": [
-        DS3LocationData("HWL: Deep Battle Axe",                    "Deep Battle Axe",                   DS3LocationCategory.WEAPON),
+        DS3LocationData("HWL: Deep Battle Axe",                    "Deep Battle Axe",                   DS3LocationCategory.WEAPON,
+                        mimic = True),
         DS3LocationData("HWL: Club",                               "Club",                              DS3LocationCategory.WEAPON),
         DS3LocationData("HWL: Claymore",                           "Claymore",                          DS3LocationCategory.WEAPON),
         DS3LocationData("HWL: Binoculars",                         "Binoculars",                        DS3LocationCategory.MISC),
@@ -126,14 +194,20 @@ location_tables = {
         DS3LocationData("HWL: Mail Breaker",                       "Mail Breaker",                      DS3LocationCategory.WEAPON),
         DS3LocationData("HWL: Broadsword",                         "Broadsword",                        DS3LocationCategory.WEAPON),
         DS3LocationData("HWL: Silver Eagle Kite Shield",           "Silver Eagle Kite Shield",          DS3LocationCategory.SHIELD),
-        DS3LocationData("HWL: Astora's Straight Sword",            "Astora's Straight Sword",           DS3LocationCategory.WEAPON),
-        DS3LocationData("HWL: Cell Key",                           "Cell Key",                          DS3LocationCategory.KEY),
+        DS3LocationData("HWL: Astora's Straight Sword",            "Astora's Straight Sword",           DS3LocationCategory.WEAPON,
+                        hidden = True), # Hidden fall
+        DS3LocationData("HWL: Cell Key",                           "Cell Key",                          DS3LocationCategory.KEY,
+                        key = True),
         DS3LocationData("HWL: Rapier",                             "Rapier",                            DS3LocationCategory.WEAPON),
         DS3LocationData("HWL: Lucerne",                            "Lucerne",                           DS3LocationCategory.WEAPON),
-        DS3LocationData("HWL: Small Lothric Banner",               "Small Lothric Banner",              DS3LocationCategory.KEY),
-        DS3LocationData("HWL: Basin of Vows",                      "Basin of Vows",                     DS3LocationCategory.KEY),
-        DS3LocationData("HWL: Soul of Boreal Valley Vordt",        "Soul of Boreal Valley Vordt",       DS3LocationCategory.BOSS),
-        DS3LocationData("HWL: Soul of the Dancer",                 "Soul of the Dancer",                DS3LocationCategory.BOSS),
+        DS3LocationData("HWL: Small Lothric Banner",               "Small Lothric Banner",              DS3LocationCategory.KEY,
+                        prominent = True, progression = True),
+        DS3LocationData("HWL: Basin of Vows",                      "Basin of Vows",                     DS3LocationCategory.KEY,
+                        prominent = True, progression = True),
+        DS3LocationData("HWL: Soul of Boreal Valley Vordt",        "Soul of Boreal Valley Vordt",       DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
+        DS3LocationData("HWL: Soul of the Dancer",                 "Soul of the Dancer",                DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
         DS3LocationData("HWL: Way of Blue",                        "Way of Blue",                       DS3LocationCategory.MISC),
         DS3LocationData("HWL: Greirat's Ashes",                    "Greirat's Ashes",                   DS3LocationCategory.KEY,
                         npc = True),
@@ -156,28 +230,36 @@ location_tables = {
         DS3LocationData("US: Caduceus Round Shield",               "Caduceus Round Shield",             DS3LocationCategory.SHIELD),
         DS3LocationData("US: Fire Clutch Ring",                    "Fire Clutch Ring",                  DS3LocationCategory.RING),
         DS3LocationData("US: Partizan",                            "Partizan",                          DS3LocationCategory.WEAPON),
-        DS3LocationData("US: Bloodbite Ring",                      "Bloodbite Ring",                    DS3LocationCategory.RING),
+        DS3LocationData("US: Bloodbite Ring",                      "Bloodbite Ring",                    DS3LocationCategory.RING,
+                        miniboss = True), # Giant Rat drop
         DS3LocationData("US: Red Hilted Halberd",                  "Red Hilted Halberd",                DS3LocationCategory.WEAPON),
         DS3LocationData("US: Saint's Talisman",                    "Saint's Talisman",                  DS3LocationCategory.WEAPON),
-        DS3LocationData("US: Irithyll Straight Sword",             "Irithyll Straight Sword",           DS3LocationCategory.WEAPON),
+        DS3LocationData("US: Irithyll Straight Sword",             "Irithyll Straight Sword",           DS3LocationCategory.WEAPON,
+                        miniboss = True), # Boreal Outrider drop
         DS3LocationData("US: Large Club",                          "Large Club",                        DS3LocationCategory.WEAPON),
         DS3LocationData("US: Northern Helm",                       "Northern Helm",                     DS3LocationCategory.ARMOR),
         DS3LocationData("US: Northern Armor",                      "Northern Armor",                    DS3LocationCategory.ARMOR),
         DS3LocationData("US: Northern Gloves",                     "Northern Gloves",                   DS3LocationCategory.ARMOR),
         DS3LocationData("US: Northern Trousers",                   "Northern Trousers",                 DS3LocationCategory.ARMOR),
         DS3LocationData("US: Flynn's Ring",                        "Flynn's Ring",                      DS3LocationCategory.RING),
-        DS3LocationData("US: Mirrah Vest",                         "Mirrah Vest",                       DS3LocationCategory.ARMOR),
-        DS3LocationData("US: Mirrah Gloves",                       "Mirrah Gloves",                     DS3LocationCategory.ARMOR),
-        DS3LocationData("US: Mirrah Trousers",                     "Mirrah Trousers",                   DS3LocationCategory.ARMOR),
-        DS3LocationData("US: Chloranthy Ring",                     "Chloranthy Ring",                   DS3LocationCategory.RING),
+        DS3LocationData("US: Mirrah Vest",                         "Mirrah Vest",                       DS3LocationCategory.ARMOR,
+                        hidden = True), # Hidden fall
+        DS3LocationData("US: Mirrah Gloves",                       "Mirrah Gloves",                     DS3LocationCategory.ARMOR,
+                        hidden = True), # Hidden fall
+        DS3LocationData("US: Mirrah Trousers",                     "Mirrah Trousers",                   DS3LocationCategory.ARMOR,
+                        hidden = True), # Hidden fall
+        DS3LocationData("US: Chloranthy Ring",                     "Chloranthy Ring",                   DS3LocationCategory.RING,
+                        hidden = True), # Hidden fall
         DS3LocationData("US: Loincloth",                           "Loincloth",                         DS3LocationCategory.ARMOR),
         DS3LocationData("US: Wargod Wooden Shield",                "Wargod Wooden Shield",              DS3LocationCategory.SHIELD),
         DS3LocationData("US: Loretta's Bone",                      "Loretta's Bone",                    DS3LocationCategory.KEY),
         DS3LocationData("US: Hand Axe",                            "Hand Axe",                          DS3LocationCategory.WEAPON),
         DS3LocationData("US: Great Scythe",                        "Great Scythe",                      DS3LocationCategory.WEAPON),
-        DS3LocationData("US: Soul of the Rotted Greatwood",        "Soul of the Rotted Greatwood",      DS3LocationCategory.BOSS),
+        DS3LocationData("US: Soul of the Rotted Greatwood",        "Soul of the Rotted Greatwood",      DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
         DS3LocationData("US: Hawk Ring",                           "Hawk Ring",                         DS3LocationCategory.RING),
-        DS3LocationData("US: Warrior of Sunlight",                 "Warrior of Sunlight",               DS3LocationCategory.MISC),
+        DS3LocationData("US: Warrior of Sunlight",                 "Warrior of Sunlight",               DS3LocationCategory.MISC,
+                        hidden = True), # Hidden fall
         DS3LocationData("US: Blessed Red and White Shield+1",      "Blessed Red and White Shield+1",    DS3LocationCategory.SHIELD),
         DS3LocationData("US: Irina's Ashes",                       "Irina's Ashes",                     DS3LocationCategory.KEY,
                         npc = True),
@@ -191,7 +273,8 @@ location_tables = {
                         npc = True),
         DS3LocationData("US: Pyromancy Flame",                     "Pyromancy Flame",                   DS3LocationCategory.ARMOR,
                         npc = True),
-        DS3LocationData("US: Transposing Kiln",                    "Transposing Kiln",                  DS3LocationCategory.MISC),
+        DS3LocationData("US: Transposing Kiln",                    "Transposing Kiln",                  DS3LocationCategory.MISC,
+                        boss = True),
         DS3LocationData("US: Tower Key",                           "Tower Key",                         DS3LocationCategory.KEY,
                         npc = True),
     ],
@@ -201,17 +284,25 @@ location_tables = {
         DS3LocationData("RS: Brigand Armor",                       "Brigand Armor",                     DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Brigand Gauntlets",                   "Brigand Gauntlets",                 DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Brigand Trousers",                    "Brigand Trousers",                  DS3LocationCategory.ARMOR),
-        DS3LocationData("RS: Butcher Knife",                       "Butcher Knife",                     DS3LocationCategory.WEAPON),
+        DS3LocationData("RS: Butcher Knife",                       "Butcher Knife",                     DS3LocationCategory.WEAPON,
+                        hidden = True), # Guaranteed drop from a normal-looking Butcher
         DS3LocationData("RS: Brigand Axe",                         "Brigand Axe",                       DS3LocationCategory.WEAPON),
-        DS3LocationData("RS: Braille Divine Tome of Carim",        "Braille Divine Tome of Carim",      DS3LocationCategory.MISC),
-        DS3LocationData("RS: Morne's Ring",                        "Morne's Ring",                      DS3LocationCategory.RING),
+        DS3LocationData("RS: Braille Divine Tome of Carim",        "Braille Divine Tome of Carim",      DS3LocationCategory.MISC,
+                        hidden = True), # Hidden fall
+        DS3LocationData("RS: Morne's Ring",                        "Morne's Ring",                      DS3LocationCategory.RING,
+                        hidden = True), # Hidden fall
         DS3LocationData("RS: Twin Dragon Greatshield",             "Twin Dragon Greatshield",           DS3LocationCategory.SHIELD),
         DS3LocationData("RS: Heretic's Staff",                     "Heretic's Staff",                   DS3LocationCategory.WEAPON),
-        DS3LocationData("RS: Sorcerer Hood",                       "Sorcerer Hood",                     DS3LocationCategory.ARMOR),
-        DS3LocationData("RS: Sorcerer Robe",                       "Sorcerer Robe",                     DS3LocationCategory.ARMOR),
-        DS3LocationData("RS: Sorcerer Gloves",                     "Sorcerer Gloves",                   DS3LocationCategory.ARMOR),
-        DS3LocationData("RS: Sorcerer Trousers",                   "Sorcerer Trousers",                 DS3LocationCategory.ARMOR),
-        DS3LocationData("RS: Sage Ring",                           "Sage Ring",                         DS3LocationCategory.RING),
+        DS3LocationData("RS: Sorcerer Hood",                       "Sorcerer Hood",                     DS3LocationCategory.ARMOR,
+                        hidden = True), # Hidden fall
+        DS3LocationData("RS: Sorcerer Robe",                       "Sorcerer Robe",                     DS3LocationCategory.ARMOR,
+                        hidden = True), # Hidden fall
+        DS3LocationData("RS: Sorcerer Gloves",                     "Sorcerer Gloves",                   DS3LocationCategory.ARMOR,
+                        hidden = True), # Hidden fall
+        DS3LocationData("RS: Sorcerer Trousers",                   "Sorcerer Trousers",                 DS3LocationCategory.ARMOR,
+                        hidden = True), # Hidden fall
+        DS3LocationData("RS: Sage Ring",                           "Sage Ring",                         DS3LocationCategory.RING,
+                        hidden = True), # Hidden fall
         DS3LocationData("RS: Fallen Knight Helm",                  "Fallen Knight Helm",                DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Fallen Knight Armor",                 "Fallen Knight Armor",               DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Fallen Knight Gauntlets",             "Fallen Knight Gauntlets",           DS3LocationCategory.ARMOR),
@@ -221,8 +312,10 @@ location_tables = {
         DS3LocationData("RS: Conjurator Manchettes",               "Conjurator Manchettes",             DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Conjurator Boots",                    "Conjurator Boots",                  DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Great Swamp Pyromancy Tome",          "Great Swamp Pyromancy Tome",        DS3LocationCategory.MISC),
-        DS3LocationData("RS: Great Club",                          "Great Club",                        DS3LocationCategory.WEAPON),
-        DS3LocationData("RS: Exile Greatsword",                    "Exile Greatsword",                  DS3LocationCategory.WEAPON),
+        DS3LocationData("RS: Great Club",                          "Great Club",                        DS3LocationCategory.WEAPON,
+                        hostile_npc = True), # Exile Knight #1 drop
+        DS3LocationData("RS: Exile Greatsword",                    "Exile Greatsword",                  DS3LocationCategory.WEAPON,
+                        hostile_npc = True), # Exile Knight #2 drop
         DS3LocationData("RS: Farron Coal",                         "Farron Coal",                       DS3LocationCategory.MISC),
         DS3LocationData("RS: Sellsword Twinblades",                "Sellsword Twinblades",              DS3LocationCategory.WEAPON),
         DS3LocationData("RS: Sellsword Helm",                      "Sellsword Helm",                    DS3LocationCategory.ARMOR),
@@ -235,14 +328,17 @@ location_tables = {
         DS3LocationData("RS: Herald Gloves",                       "Herald Gloves",                     DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Herald Trousers",                     "Herald Trousers",                   DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Grass Crest Shield",                  "Grass Crest Shield",                DS3LocationCategory.SHIELD),
-        DS3LocationData("RS: Soul of a Crystal Sage",              "Soul of a Crystal Sage",            DS3LocationCategory.BOSS),
-        DS3LocationData("RS: Great Swamp Ring",                    "Great Swamp Ring",                  DS3LocationCategory.RING),
+        DS3LocationData("RS: Soul of a Crystal Sage",              "Soul of a Crystal Sage",            DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
+        DS3LocationData("RS: Great Swamp Ring",                    "Great Swamp Ring",                  DS3LocationCategory.RING,
+                        miniboss = True), # Giant Crab drop
         DS3LocationData("RS: Orbeck's Ashes",                      "Orbeck's Ashes",                    DS3LocationCategory.KEY,
                         npc = True),
     ],
     "Cathedral of the Deep": [
         DS3LocationData("CD: Paladin's Ashes",                     "Paladin's Ashes",                   DS3LocationCategory.MISC),
-        DS3LocationData("CD: Spider Shield",                       "Spider Shield",                     DS3LocationCategory.SHIELD),
+        DS3LocationData("CD: Spider Shield",                       "Spider Shield",                     DS3LocationCategory.SHIELD,
+                        hostile_npc = True), # Brigand
         DS3LocationData("CD: Crest Shield",                        "Crest Shield",                      DS3LocationCategory.SHIELD),
         DS3LocationData("CD: Notched Whip",                        "Notched Whip",                      DS3LocationCategory.WEAPON),
         DS3LocationData("CD: Astora Greatsword",                   "Astora Greatsword",                 DS3LocationCategory.WEAPON),
@@ -252,9 +348,12 @@ location_tables = {
         DS3LocationData("CD: Poisonbite Ring",                     "Poisonbite Ring",                   DS3LocationCategory.RING),
         DS3LocationData("CD: Lloyd's Sword Ring",                  "Lloyd's Sword Ring",                DS3LocationCategory.RING),
         DS3LocationData("CD: Seek Guidance",                       "Seek Guidance",                     DS3LocationCategory.SPELL),
-        DS3LocationData("CD: Aldrich's Sapphire",                  "Aldrich's Sapphire",                DS3LocationCategory.RING),
-        DS3LocationData("CD: Deep Braille Divine Tome",            "Deep Braille Divine Tome",          DS3LocationCategory.MISC),
-        DS3LocationData("CD: Saint Bident",                        "Saint Bident",                      DS3LocationCategory.WEAPON),
+        DS3LocationData("CD: Aldrich's Sapphire",                  "Aldrich's Sapphire",                DS3LocationCategory.RING,
+                        miniboss = True), # Deep Accursed Drop
+        DS3LocationData("CD: Deep Braille Divine Tome",            "Deep Braille Divine Tome",          DS3LocationCategory.MISC,
+                        mimic = True),
+        DS3LocationData("CD: Saint Bident",                        "Saint Bident",                      DS3LocationCategory.WEAPON,
+                        miniboss = True), # Guarded by giant
         DS3LocationData("CD: Maiden Hood",                         "Maiden Hood",                       DS3LocationCategory.ARMOR),
         DS3LocationData("CD: Maiden Robe",                         "Maiden Robe",                       DS3LocationCategory.ARMOR),
         DS3LocationData("CD: Maiden Gloves",                       "Maiden Gloves",                     DS3LocationCategory.ARMOR),
@@ -263,22 +362,34 @@ location_tables = {
         DS3LocationData("CD: Drang Gauntlets",                     "Drang Gauntlets",                   DS3LocationCategory.ARMOR),
         DS3LocationData("CD: Drang Shoes",                         "Drang Shoes",                       DS3LocationCategory.ARMOR),
         DS3LocationData("CD: Drang Hammers",                       "Drang Hammers",                     DS3LocationCategory.WEAPON),
-        DS3LocationData("CD: Deep Ring",                           "Deep Ring",                         DS3LocationCategory.RING),
-        DS3LocationData("CD: Archdeacon White Crown",              "Archdeacon White Crown",            DS3LocationCategory.ARMOR),
-        DS3LocationData("CD: Archdeacon Holy Garb",                "Archdeacon Holy Garb",              DS3LocationCategory.ARMOR),
-        DS3LocationData("CD: Archdeacon Skirt",                    "Archdeacon Skirt",                  DS3LocationCategory.ARMOR),
-        DS3LocationData("CD: Arbalest",                            "Arbalest",                          DS3LocationCategory.WEAPON),
-        DS3LocationData("CD: Small Doll",                          "Small Doll",                        DS3LocationCategory.KEY),
-        DS3LocationData("CD: Soul of the Deacons of the Deep",     "Soul of the Deacons of the Deep",   DS3LocationCategory.BOSS),
-        DS3LocationData("CD: Rosaria's Fingers",                   "Rosaria's Fingers",                 DS3LocationCategory.MISC)
+        DS3LocationData("CD: Deep Ring",                           "Deep Ring",                         DS3LocationCategory.RING,
+                        hidden = True), # Guaranteed drop from a normal-looking Deacon
+        DS3LocationData("CD: Archdeacon White Crown",              "Archdeacon White Crown",            DS3LocationCategory.ARMOR,
+                        boss = True, hidden = True), # Have to return to a cleared area
+        DS3LocationData("CD: Archdeacon Holy Garb",                "Archdeacon Holy Garb",              DS3LocationCategory.ARMOR,
+                        boss = True, hidden = True), # Have to return to a cleared area
+        DS3LocationData("CD: Archdeacon Skirt",                    "Archdeacon Skirt",                  DS3LocationCategory.ARMOR,
+                        boss = True, hidden = True), # Have to return to a cleared area
+        DS3LocationData("CD: Arbalest",                            "Arbalest",                          DS3LocationCategory.WEAPON,
+                        hidden = True), # Hidden fall
+        DS3LocationData("CD: Small Doll",                          "Small Doll",                        DS3LocationCategory.KEY,
+                        prominent = True, progression = True, boss = True),
+        DS3LocationData("CD: Soul of the Deacons of the Deep",     "Soul of the Deacons of the Deep",   DS3LocationCategory.BOSS,
+                        boss = True),
+        DS3LocationData("CD: Rosaria's Fingers",                   "Rosaria's Fingers",                 DS3LocationCategory.MISC,
+                        hidden = True) # Hidden fall
     ],
     "Farron Keep": [
         DS3LocationData("FK: Ragged Mask",                         "Ragged Mask",                       DS3LocationCategory.ARMOR),
         DS3LocationData("FK: Iron Flesh",                          "Iron Flesh",                        DS3LocationCategory.SPELL),
-        DS3LocationData("FK: Golden Scroll",                       "Golden Scroll",                     DS3LocationCategory.MISC),
-        DS3LocationData("FK: Antiquated Dress",                    "Antiquated Dress",                  DS3LocationCategory.ARMOR),
-        DS3LocationData("FK: Antiquated Gloves",                   "Antiquated Gloves",                 DS3LocationCategory.ARMOR),
-        DS3LocationData("FK: Antiquated Skirt",                    "Antiquated Skirt",                  DS3LocationCategory.ARMOR),
+        DS3LocationData("FK: Golden Scroll",                       "Golden Scroll",                     DS3LocationCategory.MISC,
+                        hostile_npc = True), # Out-of-the-way hard-to-see cave
+        DS3LocationData("FK: Antiquated Dress",                    "Antiquated Dress",                  DS3LocationCategory.ARMOR,
+                        hostile_npc = True), # Out-of-the-way hard-to-see cave
+        DS3LocationData("FK: Antiquated Gloves",                   "Antiquated Gloves",                 DS3LocationCategory.ARMOR,
+                        hostile_npc = True), # Out-of-the-way hard-to-see cave
+        DS3LocationData("FK: Antiquated Skirt",                    "Antiquated Skirt",                  DS3LocationCategory.ARMOR,
+                        hostile_npc = True), # Out-of-the-way hard-to-see cave
         DS3LocationData("FK: Nameless Knight Helm",                "Nameless Knight Helm",              DS3LocationCategory.ARMOR),
         DS3LocationData("FK: Nameless Knight Armor",               "Nameless Knight Armor",             DS3LocationCategory.ARMOR),
         DS3LocationData("FK: Nameless Knight Gauntlets",           "Nameless Knight Gauntlets",         DS3LocationCategory.ARMOR),
@@ -290,56 +401,83 @@ location_tables = {
         DS3LocationData("FK: Stone Parma",                         "Stone Parma",                       DS3LocationCategory.SHIELD),
         DS3LocationData("FK: Sage's Scroll",                       "Sage's Scroll",                     DS3LocationCategory.MISC),
         DS3LocationData("FK: Crown of Dusk",                       "Crown of Dusk",                     DS3LocationCategory.ARMOR),
-        DS3LocationData("FK: Lingering Dragoncrest Ring",          "Lingering Dragoncrest Ring",        DS3LocationCategory.RING),
-        DS3LocationData("FK: Pharis's Hat",                        "Pharis's Hat",                      DS3LocationCategory.ARMOR),
-        DS3LocationData("FK: Black Bow of Pharis",                 "Black Bow of Pharis",               DS3LocationCategory.WEAPON),
-        DS3LocationData("FK: Dreamchaser's Ashes",                 "Dreamchaser's Ashes",               DS3LocationCategory.MISC),
+        DS3LocationData("FK: Lingering Dragoncrest Ring",          "Lingering Dragoncrest Ring",        DS3LocationCategory.RING,
+                        miniboss = True), # Great Crab drop
+        DS3LocationData("FK: Pharis's Hat",                        "Pharis's Hat",                      DS3LocationCategory.ARMOR,
+                        hidden = True), # Guaranteed drop from a normal-looking Elder Ghru
+        DS3LocationData("FK: Black Bow of Pharis",                 "Black Bow of Pharis",               DS3LocationCategory.WEAPON,
+                        hidden = True), # Guaranteed drop from a normal-looking Elder Ghru
+        DS3LocationData("FK: Dreamchaser's Ashes",                 "Dreamchaser's Ashes",               DS3LocationCategory.MISC,
+                        hidden = True), # Behind invisible wall
         DS3LocationData("FK: Great Axe",                           "Great Axe",                         DS3LocationCategory.WEAPON),
         DS3LocationData("FK: Dragon Crest Shield",                 "Dragon Crest Shield",               DS3LocationCategory.SHIELD),
         DS3LocationData("FK: Lightning Spear",                     "Lightning Spear",                   DS3LocationCategory.SPELL),
-        DS3LocationData("FK: Atonement",                           "Atonement",                         DS3LocationCategory.SPELL),
+        DS3LocationData("FK: Atonement",                           "Atonement",                         DS3LocationCategory.SPELL,
+                        hidden = True), # Hidden fall
         DS3LocationData("FK: Great Magic Weapon",                  "Great Magic Weapon",                DS3LocationCategory.SPELL),
-        DS3LocationData("FK: Cinders of a Lord - Abyss Watcher",   "Cinders of a Lord - Abyss Watcher", DS3LocationCategory.KEY),
-        DS3LocationData("FK: Soul of the Blood of the Wolf",       "Soul of the Blood of the Wolf",     DS3LocationCategory.BOSS),
-        DS3LocationData("FK: Soul of a Stray Demon",               "Soul of a Stray Demon",             DS3LocationCategory.BOSS),
+        DS3LocationData("FK: Cinders of a Lord - Abyss Watcher",   "Cinders of a Lord - Abyss Watcher", DS3LocationCategory.KEY,
+                        prominent = True, progression = True, boss = True),
+        DS3LocationData("FK: Soul of the Blood of the Wolf",       "Soul of the Blood of the Wolf",     DS3LocationCategory.BOSS,
+                        boss = True),
+        DS3LocationData("FK: Soul of a Stray Demon",               "Soul of a Stray Demon",             DS3LocationCategory.BOSS,
+                        miniboss = True),
         DS3LocationData("FK: Watchdogs of Farron",                 "Watchdogs of Farron",               DS3LocationCategory.MISC),
     ],
     "Catacombs of Carthus": [
-        DS3LocationData("CC: Carthus Pyromancy Tome",              "Carthus Pyromancy Tome",            DS3LocationCategory.MISC),
+        DS3LocationData("CC: Carthus Pyromancy Tome",              "Carthus Pyromancy Tome",            DS3LocationCategory.MISC,
+                        hidden = True), # Behind invisible wall
         DS3LocationData("CC: Carthus Milkring",                    "Carthus Milkring",                  DS3LocationCategory.RING),
         DS3LocationData("CC: Grave Warden's Ashes",                "Grave Warden's Ashes",              DS3LocationCategory.MISC),
         DS3LocationData("CC: Carthus Bloodring",                   "Carthus Bloodring",                 DS3LocationCategory.RING),
         DS3LocationData("CC: Grave Warden Pyromancy Tome",         "Grave Warden Pyromancy Tome",       DS3LocationCategory.MISC),
         DS3LocationData("CC: Old Sage's Blindfold",                "Old Sage's Blindfold",              DS3LocationCategory.ARMOR),
         DS3LocationData("CC: Witch's Ring",                        "Witch's Ring",                      DS3LocationCategory.RING),
-        DS3LocationData("CC: Black Blade",                         "Black Blade",                       DS3LocationCategory.WEAPON),
-        DS3LocationData("CC: Soul of High Lord Wolnir",            "Soul of High Lord Wolnir",          DS3LocationCategory.BOSS),
-        DS3LocationData("CC: Soul of a Demon",                     "Soul of a Demon",                   DS3LocationCategory.BOSS),
+        DS3LocationData("CC: Black Blade",                         "Black Blade",                       DS3LocationCategory.WEAPON,
+                        mimic = True),
+        DS3LocationData("CC: Soul of High Lord Wolnir",            "Soul of High Lord Wolnir",          DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
+        DS3LocationData("CC: Soul of a Demon",                     "Soul of a Demon",                   DS3LocationCategory.BOSS,
+                        miniboss = True),
     ],
     "Smouldering Lake": [
         DS3LocationData("SL: Shield of Want",                      "Shield of Want",                    DS3LocationCategory.SHIELD),
-        DS3LocationData("SL: Speckled Stoneplate Ring",            "Speckled Stoneplate Ring",          DS3LocationCategory.RING),
-        DS3LocationData("SL: Dragonrider Bow",                     "Dragonrider Bow",                   DS3LocationCategory.WEAPON),
-        DS3LocationData("SL: Lightning Stake",                     "Lightning Stake",                   DS3LocationCategory.SPELL),
+        DS3LocationData("SL: Speckled Stoneplate Ring",            "Speckled Stoneplate Ring",          DS3LocationCategory.RING,
+                        hidden = True), # Requires careful ballista shot
+        DS3LocationData("SL: Dragonrider Bow",                     "Dragonrider Bow",                   DS3LocationCategory.WEAPON,
+                        hidden = True), # Hidden fall
+        DS3LocationData("SL: Lightning Stake",                     "Lightning Stake",                   DS3LocationCategory.SPELL,
+                        miniboss = True), # Sand Worm drop
         DS3LocationData("SL: Izalith Pyromancy Tome",              "Izalith Pyromancy Tome",            DS3LocationCategory.MISC),
         DS3LocationData("SL: Black Knight Sword",                  "Black Knight Sword",                DS3LocationCategory.WEAPON),
         DS3LocationData("SL: Quelana Pyromancy Tome",              "Quelana Pyromancy Tome",            DS3LocationCategory.MISC),
-        DS3LocationData("SL: Toxic Mist",                          "Toxic Mist",                        DS3LocationCategory.SPELL),
-        DS3LocationData("SL: White Hair Talisman",                 "White Hair Talisman",               DS3LocationCategory.WEAPON),
-        DS3LocationData("SL: Izalith Staff",                       "Izalith Staff",                     DS3LocationCategory.WEAPON),
-        DS3LocationData("SL: Sacred Flame",                        "Sacred Flame",                      DS3LocationCategory.SPELL),
-        DS3LocationData("SL: Knight Slayer's Ring",                "Knight Slayer's Ring",              DS3LocationCategory.RING),
-        DS3LocationData("SL: Fume Ultra Greatsword",               "Fume Ultra Greatsword",             DS3LocationCategory.WEAPON),
-        DS3LocationData("SL: Black Iron Greatshield",              "Black Iron Greatshield",            DS3LocationCategory.SHIELD),
-        DS3LocationData("SL: Soul of the Old Demon King",          "Soul of the Old Demon King",        DS3LocationCategory.BOSS),
+        DS3LocationData("SL: Toxic Mist",                          "Toxic Mist",                        DS3LocationCategory.SPELL,
+                        hidden = True), # In lava
+        DS3LocationData("SL: White Hair Talisman",                 "White Hair Talisman",               DS3LocationCategory.WEAPON,
+                        hidden = True), # In lava
+        DS3LocationData("SL: Izalith Staff",                       "Izalith Staff",                     DS3LocationCategory.WEAPON,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("SL: Sacred Flame",                        "Sacred Flame",                      DS3LocationCategory.SPELL,
+                        hidden = True), # In lava
+        DS3LocationData("CC: Knight Slayer's Ring",                "Knight Slayer's Ring",              DS3LocationCategory.RING,
+                        hostile_npc = True), # Knight Slayer Tsorig drop
+        DS3LocationData("SL: Fume Ultra Greatsword",               "Fume Ultra Greatsword",             DS3LocationCategory.WEAPON,
+                        hostile_npc = True), # Knight Slayer Tsorig drop
+        DS3LocationData("SL: Black Iron Greatshield",              "Black Iron Greatshield",            DS3LocationCategory.SHIELD,
+                        hostile_npc = True), # Knight Slayer Tsorig drop
+        DS3LocationData("SL: Soul of the Old Demon King",          "Soul of the Old Demon King",        DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
     ],
     "Irithyll of the Boreal Valley": [
-        DS3LocationData("IBV: Dorhys' Gnawing",                    "Dorhys' Gnawing",                   DS3LocationCategory.SPELL),
-        DS3LocationData("IBV: Witchtree Branch",                   "Witchtree Branch",                  DS3LocationCategory.WEAPON),
-        DS3LocationData("IBV: Magic Clutch Ring",                  "Magic Clutch Ring",                 DS3LocationCategory.RING),
+        DS3LocationData("IBV: Dorhys' Gnawing",                    "Dorhys' Gnawing",                   DS3LocationCategory.SPELL,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("IBV: Witchtree Branch",                   "Witchtree Branch",                  DS3LocationCategory.WEAPON,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("IBV: Magic Clutch Ring",                  "Magic Clutch Ring",                 DS3LocationCategory.RING,
+                        hidden = True), # Behind invisible wall
         DS3LocationData("IBV: Ring of the Sun's First Born",       "Ring of the Sun's First Born",      DS3LocationCategory.RING),
         DS3LocationData("IBV: Roster of Knights",                  "Roster of Knights",                 DS3LocationCategory.MISC),
-        DS3LocationData("IBV: Pontiff's Right Eye",                "Pontiff's Right Eye",               DS3LocationCategory.RING),
+        DS3LocationData("IBV: Pontiff's Right Eye",                "Pontiff's Right Eye",               DS3LocationCategory.RING,
+                        miniboss = True), # Sullyvahn's Beast drop
         DS3LocationData("IBV: Yorshka's Spear",                    "Yorshka's Spear",                   DS3LocationCategory.WEAPON),
         DS3LocationData("IBV: Great Heal",                         "Great Heal",                        DS3LocationCategory.SPELL),
         DS3LocationData("IBV: Smough's Great Hammer",              "Smough's Great Hammer",             DS3LocationCategory.WEAPON),
@@ -347,43 +485,57 @@ location_tables = {
         DS3LocationData("IBV: Excrement-covered Ashes",            "Excrement-covered Ashes",           DS3LocationCategory.MISC),
         DS3LocationData("IBV: Dark Stoneplate Ring",               "Dark Stoneplate Ring",              DS3LocationCategory.RING),
         DS3LocationData("IBV: Easterner's Ashes",                  "Easterner's Ashes",                 DS3LocationCategory.MISC),
-        DS3LocationData("IBV: Painting Guardian's Curved Sword",   "Painting Guardian's Curved Sword",  DS3LocationCategory.WEAPON),
-        DS3LocationData("IBV: Painting Guardian Hood",             "Painting Guardian Hood",            DS3LocationCategory.ARMOR),
-        DS3LocationData("IBV: Painting Guardian Gown",             "Painting Guardian Gown",            DS3LocationCategory.ARMOR),
-        DS3LocationData("IBV: Painting Guardian Gloves",           "Painting Guardian Gloves",          DS3LocationCategory.ARMOR),
-        DS3LocationData("IBV: Painting Guardian Waistcloth",       "Painting Guardian Waistcloth",      DS3LocationCategory.ARMOR),
+        DS3LocationData("IBV: Painting Guardian's Curved Sword",   "Painting Guardian's Curved Sword",  DS3LocationCategory.WEAPON,
+                        hidden = True), # Invisible walkway
+        DS3LocationData("IBV: Painting Guardian Hood",             "Painting Guardian Hood",            DS3LocationCategory.ARMOR,
+                        hidden = True), # Invisible walkway
+        DS3LocationData("IBV: Painting Guardian Gown",             "Painting Guardian Gown",            DS3LocationCategory.ARMOR,
+                        hidden = True), # Invisible walkway
+        DS3LocationData("IBV: Painting Guardian Gloves",           "Painting Guardian Gloves",          DS3LocationCategory.ARMOR,
+                        hidden = True), # Invisible walkway
+        DS3LocationData("IBV: Painting Guardian Waistcloth",       "Painting Guardian Waistcloth",      DS3LocationCategory.ARMOR,
+                        hidden = True), # Invisible walkway
         DS3LocationData("IBV: Dragonslayer Greatbow",              "Dragonslayer Greatbow",             DS3LocationCategory.WEAPON),
         DS3LocationData("IBV: Reversal Ring",                      "Reversal Ring",                     DS3LocationCategory.RING),
         DS3LocationData("IBV: Brass Helm",                         "Brass Helm",                        DS3LocationCategory.ARMOR),
         DS3LocationData("IBV: Brass Armor",                        "Brass Armor",                       DS3LocationCategory.ARMOR),
         DS3LocationData("IBV: Brass Gauntlets",                    "Brass Gauntlets",                   DS3LocationCategory.ARMOR),
         DS3LocationData("IBV: Brass Leggings",                     "Brass Leggings",                    DS3LocationCategory.ARMOR),
-        DS3LocationData("IBV: Ring of Favor",                      "Ring of Favor",                     DS3LocationCategory.RING),
-        DS3LocationData("IBV: Golden Ritual Spear",                "Golden Ritual Spear",               DS3LocationCategory.WEAPON),
-        DS3LocationData("IBV: Soul of Pontiff Sulyvahn",           "Soul of Pontiff Sulyvahn",          DS3LocationCategory.BOSS),
-        DS3LocationData("IBV: Aldrich Faithful",                   "Aldrich Faithful",                  DS3LocationCategory.MISC),
+        DS3LocationData("IBV: Ring of Favor",                      "Ring of Favor",                     DS3LocationCategory.RING,
+                        miniboss = True, hidden = True), # Sulyvahn's Beast Duo drop, behind invisible wall
+        DS3LocationData("IBV: Golden Ritual Spear",                "Golden Ritual Spear",               DS3LocationCategory.WEAPON,
+                        mimic = True),
+        DS3LocationData("IBV: Soul of Pontiff Sulyvahn",           "Soul of Pontiff Sulyvahn",          DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
+        DS3LocationData("IBV: Aldrich Faithful",                   "Aldrich Faithful",                  DS3LocationCategory.MISC,
+                        miniboss = True, hidden = True), # Sulyvahn's Beast Duo reward, behind invisible wall
         DS3LocationData("IBV: Drang Twinspears",                   "Drang Twinspears",                  DS3LocationCategory.WEAPON),
     ],
     "Irithyll Dungeon": [
         DS3LocationData("ID: Bellowing Dragoncrest Ring",          "Bellowing Dragoncrest Ring",        DS3LocationCategory.RING),
-        DS3LocationData("ID: Jailbreaker's Key",                   "Jailbreaker's Key",                 DS3LocationCategory.KEY),
+        DS3LocationData("ID: Jailbreaker's Key",                   "Jailbreaker's Key",                 DS3LocationCategory.KEY,
+                        key = True),
         DS3LocationData("ID: Prisoner Chief's Ashes",              "Prisoner Chief's Ashes",            DS3LocationCategory.KEY),
         DS3LocationData("ID: Old Sorcerer Hat",                    "Old Sorcerer Hat",                  DS3LocationCategory.ARMOR),
         DS3LocationData("ID: Old Sorcerer Coat",                   "Old Sorcerer Coat",                 DS3LocationCategory.ARMOR),
         DS3LocationData("ID: Old Sorcerer Gauntlets",              "Old Sorcerer Gauntlets",            DS3LocationCategory.ARMOR),
         DS3LocationData("ID: Old Sorcerer Boots",                  "Old Sorcerer Boots",                DS3LocationCategory.ARMOR),
-        DS3LocationData("ID: Great Magic Shield",                  "Great Magic Shield",                DS3LocationCategory.SPELL),
+        DS3LocationData("ID: Great Magic Shield",                  "Great Magic Shield",                DS3LocationCategory.SPELL,
+                        hidden = True), # Guaranteed drop from a normal-looking Corpse-Grub
         DS3LocationData("ID: Dragon Torso Stone",                  "Dragon Torso Stone",                DS3LocationCategory.MISC),
         DS3LocationData("ID: Lightning Blade",                     "Lightning Blade",                   DS3LocationCategory.SPELL),
         DS3LocationData("ID: Profaned Coal",                       "Profaned Coal",                     DS3LocationCategory.MISC),
         DS3LocationData("ID: Xanthous Ashes",                      "Xanthous Ashes",                    DS3LocationCategory.MISC),
-        DS3LocationData("ID: Old Cell Key",                        "Old Cell Key",                      DS3LocationCategory.KEY),
+        DS3LocationData("ID: Old Cell Key",                        "Old Cell Key",                      DS3LocationCategory.KEY,
+                        key = True),
         DS3LocationData("ID: Pickaxe",                             "Pickaxe",                           DS3LocationCategory.WEAPON),
         DS3LocationData("ID: Profaned Flame",                      "Profaned Flame",                    DS3LocationCategory.SPELL),
         DS3LocationData("ID: Covetous Gold Serpent Ring",          "Covetous Gold Serpent Ring",        DS3LocationCategory.RING),
-        DS3LocationData("ID: Jailer's Key Ring",                   "Jailer's Key Ring",                 DS3LocationCategory.KEY),
+        DS3LocationData("ID: Jailer's Key Ring",                   "Jailer's Key Ring",                 DS3LocationCategory.KEY,
+                        key = True),
         DS3LocationData("ID: Dusk Crown Ring",                     "Dusk Crown Ring",                   DS3LocationCategory.RING),
-        DS3LocationData("ID: Dark Clutch Ring",                    "Dark Clutch Ring",                  DS3LocationCategory.RING),
+        DS3LocationData("ID: Dark Clutch Ring",                    "Dark Clutch Ring",                  DS3LocationCategory.RING,
+                        mimic = True),
         DS3LocationData("ID: Karla's Ashes",                       "Karla's Ashes",                     DS3LocationCategory.KEY,
                         npc = True),
         DS3LocationData("ID: Karla's Pointed Hat",                 "Karla's Pointed Hat",               DS3LocationCategory.ARMOR,
@@ -402,41 +554,60 @@ location_tables = {
         DS3LocationData("PC: Court Sorcerer Gloves",               "Court Sorcerer Gloves",               DS3LocationCategory.ARMOR),
         DS3LocationData("PC: Court Sorcerer Trousers",             "Court Sorcerer Trousers",             DS3LocationCategory.ARMOR),
         DS3LocationData("PC: Wrath of the Gods",                   "Wrath of the Gods",                   DS3LocationCategory.SPELL),
-        DS3LocationData("PC: Logan's Scroll",                      "Logan's Scroll",                      DS3LocationCategory.MISC),
-        DS3LocationData("PC: Eleonora",                            "Eleonora",                            DS3LocationCategory.WEAPON),
-        DS3LocationData("PC: Court Sorcerer's Staff",              "Court Sorcerer's Staff",              DS3LocationCategory.WEAPON),
-        DS3LocationData("PC: Greatshield of Glory",                "Greatshield of Glory",                DS3LocationCategory.SHIELD),
+        DS3LocationData("PC: Logan's Scroll",                      "Logan's Scroll",                      DS3LocationCategory.MISC,
+                        hostile_npc = True), # Sorcerer
+        DS3LocationData("PC: Eleonora",                            "Eleonora",                            DS3LocationCategory.WEAPON,
+                        hidden = True), # Guaranteed drop from a normal-looking Monstrosity of Sin
+        DS3LocationData("PC: Court Sorcerer's Staff",              "Court Sorcerer's Staff",              DS3LocationCategory.WEAPON,
+                        mimic = True),
+        DS3LocationData("PC: Greatshield of Glory",                "Greatshield of Glory",                DS3LocationCategory.SHIELD,
+                        mimic = True),
         DS3LocationData("PC: Storm Ruler",                         "Storm Ruler",                         DS3LocationCategory.KEY),
-        DS3LocationData("PC: Cinders of a Lord - Yhorm the Giant", "Cinders of a Lord - Yhorm the Giant", DS3LocationCategory.KEY),
-        DS3LocationData("PC: Soul of Yhorm the Giant",             "Soul of Yhorm the Giant",             DS3LocationCategory.BOSS),
+        DS3LocationData("PC: Cinders of a Lord - Yhorm the Giant", "Cinders of a Lord - Yhorm the Giant", DS3LocationCategory.KEY,
+                        prominent = True, progression = True, boss = True),
+        DS3LocationData("PC: Soul of Yhorm the Giant",             "Soul of Yhorm the Giant",             DS3LocationCategory.BOSS,
+                        boss = True),
     ],
     "Anor Londo": [
         DS3LocationData("AL: Giant's Coal",                        "Giant's Coal",                        DS3LocationCategory.MISC),
         DS3LocationData("AL: Sun Princess Ring",                   "Sun Princess Ring",                   DS3LocationCategory.RING),
-        DS3LocationData("AL: Aldrich's Ruby",                      "Aldrich's Ruby",                      DS3LocationCategory.RING),
-        DS3LocationData("AL: Cinders of a Lord - Aldrich",         "Cinders of a Lord - Aldrich",         DS3LocationCategory.KEY),
-        DS3LocationData("AL: Soul of Aldrich",                     "Soul of Aldrich",                     DS3LocationCategory.BOSS),
+        DS3LocationData("AL: Aldrich's Ruby",                      "Aldrich's Ruby",                      DS3LocationCategory.RING,
+                        miniboss = True), # Deep Accursed drop
+        DS3LocationData("AL: Cinders of a Lord - Aldrich",         "Cinders of a Lord - Aldrich",         DS3LocationCategory.KEY,
+                        prominent = True, progression = True, boss = True),
+        DS3LocationData("AL: Soul of Aldrich",                     "Soul of Aldrich",                     DS3LocationCategory.BOSS,
+                        boss = True),
     ],
     "Lothric Castle": [
         DS3LocationData("LC: Hood of Prayer",                      "Hood of Prayer",                      DS3LocationCategory.ARMOR),
         DS3LocationData("LC: Robe of Prayer",                      "Robe of Prayer",                      DS3LocationCategory.ARMOR),
         DS3LocationData("LC: Skirt of Prayer",                     "Skirt of Prayer",                     DS3LocationCategory.ARMOR),
-        DS3LocationData("LC: Sacred Bloom Shield",                 "Sacred Bloom Shield",                 DS3LocationCategory.SHIELD),
-        DS3LocationData("LC: Winged Knight Helm",                  "Winged Knight Helm",                  DS3LocationCategory.ARMOR),
-        DS3LocationData("LC: Winged Knight Armor",                 "Winged Knight Armor",                 DS3LocationCategory.ARMOR),
-        DS3LocationData("LC: Winged Knight Gauntlets",             "Winged Knight Gauntlets",             DS3LocationCategory.ARMOR),
-        DS3LocationData("LC: Winged Knight Leggings",              "Winged Knight Leggings",              DS3LocationCategory.ARMOR),
+        DS3LocationData("LC: Sacred Bloom Shield",                 "Sacred Bloom Shield",                 DS3LocationCategory.SHIELD,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("LC: Winged Knight Helm",                  "Winged Knight Helm",                  DS3LocationCategory.ARMOR,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("LC: Winged Knight Armor",                 "Winged Knight Armor",                 DS3LocationCategory.ARMOR,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("LC: Winged Knight Gauntlets",             "Winged Knight Gauntlets",             DS3LocationCategory.ARMOR,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("LC: Winged Knight Leggings",              "Winged Knight Leggings",              DS3LocationCategory.ARMOR,
+                        hidden = True), # Behind invisible wall
         DS3LocationData("LC: Greatlance",                          "Greatlance",                          DS3LocationCategory.WEAPON),
         DS3LocationData("LC: Sniper Crossbow",                     "Sniper Crossbow",                     DS3LocationCategory.WEAPON),
         DS3LocationData("LC: Spirit Tree Crest Shield",            "Spirit Tree Crest Shield",            DS3LocationCategory.SHIELD),
         DS3LocationData("LC: Red Tearstone Ring",                  "Red Tearstone Ring",                  DS3LocationCategory.RING),
         DS3LocationData("LC: Caitha's Chime",                      "Caitha's Chime",                      DS3LocationCategory.WEAPON),
-        DS3LocationData("LC: Braille Divine Tome of Lothric",      "Braille Divine Tome of Lothric",      DS3LocationCategory.MISC),
+        DS3LocationData("LC: Braille Divine Tome of Lothric",      "Braille Divine Tome of Lothric",      DS3LocationCategory.MISC,
+                        hidden = True), # Hidden fall
         DS3LocationData("LC: Knight's Ring",                       "Knight's Ring",                       DS3LocationCategory.RING),
-        DS3LocationData("LC: Irithyll Rapier",                     "Irithyll Rapier",                     DS3LocationCategory.WEAPON),
-        DS3LocationData("LC: Sunlight Straight Sword",             "Sunlight Straight Sword",             DS3LocationCategory.WEAPON),
-        DS3LocationData("LC: Soul of Dragonslayer Armour",         "Soul of Dragonslayer Armour",         DS3LocationCategory.BOSS),
-        DS3LocationData("LC: Grand Archives Key",                  "Grand Archives Key",                  DS3LocationCategory.KEY),
+        DS3LocationData("LC: Irithyll Rapier",                     "Irithyll Rapier",                     DS3LocationCategory.WEAPON,
+                        miniboss = True), # Boreal Outrider drop
+        DS3LocationData("LC: Sunlight Straight Sword",             "Sunlight Straight Sword",             DS3LocationCategory.WEAPON,
+                        mimic = True, hidden = True), # Hidden fall
+        DS3LocationData("LC: Soul of Dragonslayer Armour",         "Soul of Dragonslayer Armour",         DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
+        DS3LocationData("LC: Grand Archives Key",                  "Grand Archives Key",                  DS3LocationCategory.KEY,
+                        prominent = True, progression = True, key = True),
         DS3LocationData("LC: Gotthard Twinswords",                 "Gotthard Twinswords",                 DS3LocationCategory.WEAPON),
     ],
     "Consumed King's Garden": [
@@ -446,59 +617,90 @@ location_tables = {
         DS3LocationData("CKG: Shadow Gauntlets",                   "Shadow Gauntlets",                        DS3LocationCategory.ARMOR),
         DS3LocationData("CKG: Shadow Leggings",                    "Shadow Leggings",                         DS3LocationCategory.ARMOR),
         DS3LocationData("CKG: Claw",                               "Claw",                                    DS3LocationCategory.WEAPON),
-        DS3LocationData("CKG: Soul of Consumed Oceiros",           "Soul of Consumed Oceiros",                DS3LocationCategory.BOSS),
-        DS3LocationData("CKG: Magic Stoneplate Ring",              "Magic Stoneplate Ring",                   DS3LocationCategory.RING),
+        DS3LocationData("CKG: Soul of Consumed Oceiros",           "Soul of Consumed Oceiros",                DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
+        DS3LocationData("CKG: Magic Stoneplate Ring",              "Magic Stoneplate Ring",                   DS3LocationCategory.RING,
+                        hidden = True), # Guaranteed drop from a normal-looking Consumed King's Knight
     ],
     "Grand Archives": [
-        DS3LocationData("GA: Avelyn",                              "Avelyn",                                  DS3LocationCategory.WEAPON),
-        DS3LocationData("GA: Witch's Locks",                       "Witch's Locks",                           DS3LocationCategory.WEAPON),
-        DS3LocationData("GA: Power Within",                        "Power Within",                            DS3LocationCategory.SPELL),
+        DS3LocationData("GA: Avelyn",                              "Avelyn",                                  DS3LocationCategory.WEAPON,
+                        hidden = True), # Hidden fall
+        DS3LocationData("GA: Witch's Locks",                       "Witch's Locks",                           DS3LocationCategory.WEAPON,
+                        hidden = True), # Switch in darkened room
+        DS3LocationData("GA: Power Within",                        "Power Within",                            DS3LocationCategory.SPELL,
+                        hidden = True), # Switch in darkened room
         DS3LocationData("GA: Scholar Ring",                        "Scholar Ring",                            DS3LocationCategory.RING),
-        DS3LocationData("GA: Soul Stream",                         "Soul Stream",                             DS3LocationCategory.SPELL),
+        DS3LocationData("GA: Soul Stream",                         "Soul Stream",                             DS3LocationCategory.SPELL,
+                        hidden = True), # Behind invisible wall
         DS3LocationData("GA: Fleshbite Ring",                      "Fleshbite Ring",                          DS3LocationCategory.RING),
         DS3LocationData("GA: Crystal Chime",                       "Crystal Chime",                           DS3LocationCategory.WEAPON),
-        DS3LocationData("GA: Golden Wing Crest Shield",            "Golden Wing Crest Shield",                DS3LocationCategory.SHIELD),
-        DS3LocationData("GA: Onikiri and Ubadachi",                "Onikiri and Ubadachi",                    DS3LocationCategory.WEAPON),
-        DS3LocationData("GA: Hunter's Ring",                       "Hunter's Ring",                           DS3LocationCategory.RING),
+        DS3LocationData("GA: Golden Wing Crest Shield",            "Golden Wing Crest Shield",                DS3LocationCategory.SHIELD,
+                        hostile_npc = True), # Lion Knight Albert drop
+        DS3LocationData("GA: Onikiri and Ubadachi",                "Onikiri and Ubadachi",                    DS3LocationCategory.WEAPON,
+                        hostile_npc = True), # Black Hand Kamui drop
+        DS3LocationData("GA: Hunter's Ring",                       "Hunter's Ring",                           DS3LocationCategory.RING,
+                        hostile_npc = True), # Daughter of Crystal Kriemhild drop
         DS3LocationData("GA: Divine Pillars of Light",             "Divine Pillars of Light",                 DS3LocationCategory.SPELL),
-        DS3LocationData("GA: Cinders of a Lord - Lothric Prince",  "Cinders of a Lord - Lothric Prince",      DS3LocationCategory.KEY),
-        DS3LocationData("GA: Soul of the Twin Princes",            "Soul of the Twin Princes",                DS3LocationCategory.BOSS),
+        DS3LocationData("GA: Cinders of a Lord - Lothric Prince",  "Cinders of a Lord - Lothric Prince",      DS3LocationCategory.KEY,
+                        prominent = True, progression = True, boss = True),
+        DS3LocationData("GA: Soul of the Twin Princes",            "Soul of the Twin Princes",                DS3LocationCategory.BOSS,
+                        boss = True),
         DS3LocationData("GA: Sage's Crystal Staff",                "Sage's Crystal Staff",                    DS3LocationCategory.WEAPON),
-        DS3LocationData("GA: Outrider Knight Helm",                "Outrider Knight Helm",                    DS3LocationCategory.ARMOR),
-        DS3LocationData("GA: Outrider Knight Armor",               "Outrider Knight Armor",                   DS3LocationCategory.ARMOR),
-        DS3LocationData("GA: Outrider Knight Gauntlets",           "Outrider Knight Gauntlets",               DS3LocationCategory.ARMOR),
-        DS3LocationData("GA: Outrider Knight Leggings",            "Outrider Knight Leggings",                DS3LocationCategory.ARMOR),
-        DS3LocationData("GA: Crystal Scroll",                      "Crystal Scroll",                          DS3LocationCategory.MISC),
+        DS3LocationData("GA: Outrider Knight Helm",                "Outrider Knight Helm",                    DS3LocationCategory.ARMOR,
+                        miniboss = True, hidden = True), # Behind invisible wall
+        DS3LocationData("GA: Outrider Knight Armor",               "Outrider Knight Armor",                   DS3LocationCategory.ARMOR,
+                        miniboss = True, hidden = True), # Behind invisible wall
+        DS3LocationData("GA: Outrider Knight Gauntlets",           "Outrider Knight Gauntlets",               DS3LocationCategory.ARMOR,
+                        miniboss = True, hidden = True), # Behind invisible wall
+        DS3LocationData("GA: Outrider Knight Leggings",            "Outrider Knight Leggings",                DS3LocationCategory.ARMOR,
+                        miniboss = True, hidden = True), # Behind invisible wall
+        DS3LocationData("GA: Crystal Scroll",                      "Crystal Scroll",                          DS3LocationCategory.MISC,
+                        miniboss = True), # Crystal Sage drop
     ],
     "Untended Graves": [
-        DS3LocationData("UG: Ashen Estus Ring",                    "Ashen Estus Ring",                        DS3LocationCategory.RING),
-        DS3LocationData("UG: Black Knight Glaive",                 "Black Knight Glaive",                     DS3LocationCategory.WEAPON),
-        DS3LocationData("UG: Hornet Ring",                         "Hornet Ring",                             DS3LocationCategory.RING),
-        DS3LocationData("UG: Chaos Blade",                         "Chaos Blade",                             DS3LocationCategory.WEAPON),
-        DS3LocationData("UG: Blacksmith Hammer",                   "Blacksmith Hammer",                       DS3LocationCategory.WEAPON),
-        DS3LocationData("UG: Eyes of a Fire Keeper",               "Eyes of a Fire Keeper",                   DS3LocationCategory.KEY),
-        DS3LocationData("UG: Coiled Sword Fragment",               "Coiled Sword Fragment",                   DS3LocationCategory.MISC),
-        DS3LocationData("UG: Soul of Champion Gundyr",             "Soul of Champion Gundyr",                 DS3LocationCategory.BOSS),
+        DS3LocationData("UG: Ashen Estus Ring",                    "Ashen Estus Ring",                        DS3LocationCategory.RING,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("UG: Black Knight Glaive",                 "Black Knight Glaive",                     DS3LocationCategory.WEAPON,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("UG: Hornet Ring",                         "Hornet Ring",                             DS3LocationCategory.RING,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("UG: Chaos Blade",                         "Chaos Blade",                             DS3LocationCategory.WEAPON,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("UG: Blacksmith Hammer",                   "Blacksmith Hammer",                       DS3LocationCategory.WEAPON,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("UG: Eyes of a Fire Keeper",               "Eyes of a Fire Keeper",                   DS3LocationCategory.KEY,
+                        hidden = True), # Behind invisible wall
+        DS3LocationData("UG: Coiled Sword Fragment",               "Coiled Sword Fragment",                   DS3LocationCategory.MISC,
+                        boss = True, hidden = True), # Behind invisible wall
+        DS3LocationData("UG: Soul of Champion Gundyr",             "Soul of Champion Gundyr",                 DS3LocationCategory.BOSS,
+                        prominent = True, boss = True, hidden = True), # Behind invisible wall
     ],
     "Archdragon Peak": [
         DS3LocationData("AP: Lightning Clutch Ring",               "Lightning Clutch Ring",                   DS3LocationCategory.RING),
         DS3LocationData("AP: Ancient Dragon Greatshield",          "Ancient Dragon Greatshield",              DS3LocationCategory.SHIELD),
         DS3LocationData("AP: Ring of Steel Protection",            "Ring of Steel Protection",                DS3LocationCategory.RING),
-        DS3LocationData("AP: Calamity Ring",                       "Calamity Ring",                           DS3LocationCategory.RING),
-        DS3LocationData("AP: Drakeblood Greatsword",               "Drakeblood Greatsword",                   DS3LocationCategory.WEAPON),
+        DS3LocationData("AP: Calamity Ring",                       "Calamity Ring",                           DS3LocationCategory.RING,
+                        hidden = True), # Requires gesture
+        DS3LocationData("AP: Drakeblood Greatsword",               "Drakeblood Greatsword",                   DS3LocationCategory.WEAPON,
+                        hostile_npc = True, hidden = True), # Drop from a summon who may or may not appear
         DS3LocationData("AP: Dragonslayer Spear",                  "Dragonslayer Spear",                      DS3LocationCategory.WEAPON),
         DS3LocationData("AP: Thunder Stoneplate Ring",             "Thunder Stoneplate Ring",                 DS3LocationCategory.RING),
         DS3LocationData("AP: Great Magic Barrier",                 "Great Magic Barrier",                     DS3LocationCategory.SPELL),
         DS3LocationData("AP: Dragon Chaser's Ashes",               "Dragon Chaser's Ashes",                   DS3LocationCategory.MISC),
-        DS3LocationData("AP: Twinkling Dragon Torso Stone",        "Twinkling Dragon Torso Stone",            DS3LocationCategory.MISC),
+        DS3LocationData("AP: Twinkling Dragon Torso Stone",        "Twinkling Dragon Torso Stone",            DS3LocationCategory.MISC,
+                        hidden = True), # Requires gesture
         DS3LocationData("AP: Dragonslayer Helm",                   "Dragonslayer Helm",                       DS3LocationCategory.ARMOR),
         DS3LocationData("AP: Dragonslayer Armor",                  "Dragonslayer Armor",                      DS3LocationCategory.ARMOR),
         DS3LocationData("AP: Dragonslayer Gauntlets",              "Dragonslayer Gauntlets",                  DS3LocationCategory.ARMOR),
         DS3LocationData("AP: Dragonslayer Leggings",               "Dragonslayer Leggings",                   DS3LocationCategory.ARMOR),
-        DS3LocationData("AP: Ricard's Rapier",                     "Ricard's Rapier",                         DS3LocationCategory.WEAPON),
-        DS3LocationData("AP: Soul of the Nameless King",           "Soul of the Nameless King",               DS3LocationCategory.BOSS),
-        DS3LocationData("AP: Dragon Tooth",                        "Dragon Tooth",                            DS3LocationCategory.WEAPON),
-        DS3LocationData("AP: Havel's Greatshield",                 "Havel's Greatshield",                     DS3LocationCategory.SHIELD),
+        DS3LocationData("AP: Ricard's Rapier",                     "Ricard's Rapier",                         DS3LocationCategory.WEAPON,
+                        hostile_npc = True, hidden = True), # Drop from a summon who may or may not appear
+        DS3LocationData("AP: Soul of the Nameless King",           "Soul of the Nameless King",               DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
+        DS3LocationData("AP: Dragon Tooth",                        "Dragon Tooth",                            DS3LocationCategory.WEAPON,
+                        hostile_npc = True), # Havel Knight drop
+        DS3LocationData("AP: Havel's Greatshield",                 "Havel's Greatshield",                     DS3LocationCategory.SHIELD,
+                        hostile_npc = True), # Havel Knight drop
     ],
     "Kiln of the First Flame": [],
 
@@ -510,15 +712,18 @@ location_tables = {
         DS3LocationData("PW: Captain's Ashes",                     "Captain's Ashes",                         DS3LocationCategory.MISC),
         DS3LocationData("PW: Millwood Battle Axe",                 "Millwood Battle Axe",                     DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Ethereal Oak Shield",                 "Ethereal Oak Shield",                     DS3LocationCategory.SHIELD),
-        DS3LocationData("PW: Crow Quills",                         "Crow Quills",                             DS3LocationCategory.WEAPON),
+        DS3LocationData("PW: Crow Quills",                         "Crow Quills",                             DS3LocationCategory.WEAPON,
+                        hidden = True), # Hidden fall
         DS3LocationData("PW: Slave Knight Hood",                   "Slave Knight Hood",                       DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Slave Knight Armor",                  "Slave Knight Armor",                      DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Slave Knight Gauntlets",              "Slave Knight Gauntlets",                  DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Slave Knight Leggings",               "Slave Knight Leggings",                   DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Way of White Corona",                 "Way of White Corona",                     DS3LocationCategory.SPELL),
         DS3LocationData("PW: Crow Talons",                         "Crow Talons",                             DS3LocationCategory.WEAPON),
-        DS3LocationData("PW: Onyx Blade",                          "Onyx Blade",                              DS3LocationCategory.WEAPON),
-        DS3LocationData("PW: Contraption Key",                     "Contraption Key",                         DS3LocationCategory.KEY),
+        DS3LocationData("PW: Onyx Blade",                          "Onyx Blade",                              DS3LocationCategory.WEAPON,
+                        hostile_npc = True), # Sir Vilhelm drop
+        DS3LocationData("PW: Contraption Key",                     "Contraption Key",                         DS3LocationCategory.KEY,
+                        prominent = True, progression = True, hostile_npc = True, key = True), # Sir Vilhelm drop
     ],
     "Painted World of Ariandel 2": [  
         DS3LocationData("PW: Quakestone Hammer",                   "Quakestone Hammer",                       DS3LocationCategory.WEAPON),
@@ -533,9 +738,12 @@ location_tables = {
         DS3LocationData("PW: Vilhelm's Armor",                     "Vilhelm's Armor",                         DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Vilhelm's Gauntlets",                 "Vilhelm's Gauntlets",                     DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Vilhelm's Leggings",                  "Vilhelm's Leggings",                      DS3LocationCategory.ARMOR),
-        DS3LocationData("PW: Valorheart",                          "Valorheart",                              DS3LocationCategory.WEAPON),
-        DS3LocationData("PW: Champion's Bones",                    "Champion's Bones",                        DS3LocationCategory.MISC),
-        DS3LocationData("PW: Soul of Sister Friede",               "Soul of Sister Friede",                   DS3LocationCategory.BOSS),
+        DS3LocationData("PW: Valorheart",                          "Valorheart",                              DS3LocationCategory.WEAPON,
+                        prominent = True, boss = True),
+        DS3LocationData("PW: Champion's Bones",                    "Champion's Bones",                        DS3LocationCategory.MISC,
+                        boss = True),
+        DS3LocationData("PW: Soul of Sister Friede",               "Soul of Sister Friede",                   DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
         DS3LocationData("PW: Chillbite Ring",                      "Chillbite Ring",                          DS3LocationCategory.RING),
     ],
     "Dreg Heap": [
@@ -543,7 +751,8 @@ location_tables = {
         DS3LocationData("DH: Aquamarine Dagger",                   "Aquamarine Dagger",                       DS3LocationCategory.WEAPON),
         DS3LocationData("DH: Murky Hand Scythe",                   "Murky Hand Scythe",                       DS3LocationCategory.WEAPON),
         DS3LocationData("DH: Murky Longstaff",                     "Murky Longstaff",                         DS3LocationCategory.WEAPON),
-        DS3LocationData("DH: Great Soul Dregs",                    "Great Soul Dregs",                        DS3LocationCategory.SPELL),
+        DS3LocationData("DH: Great Soul Dregs",                    "Great Soul Dregs",                        DS3LocationCategory.SPELL,
+                        hidden = True), # Behind invisible wall
         DS3LocationData("DH: Lothric War Banner",                  "Lothric War Banner",                      DS3LocationCategory.WEAPON),
         DS3LocationData("DH: Projected Heal",                      "Projected Heal",                          DS3LocationCategory.SPELL),
         DS3LocationData("DH: Desert Pyromancer Hood",              "Desert Pyromancer Hood",                  DS3LocationCategory.ARMOR),
@@ -552,11 +761,15 @@ location_tables = {
         DS3LocationData("DH: Desert Pyromancer Skirt",             "Desert Pyromancer Skirt",                 DS3LocationCategory.ARMOR),
         DS3LocationData("DH: Giant Door Shield",                   "Giant Door Shield",                       DS3LocationCategory.SHIELD),
         DS3LocationData("DH: Herald Curved Greatsword",            "Herald Curved Greatsword",                DS3LocationCategory.WEAPON),
-        DS3LocationData("DH: Flame Fan",                           "Flame Fan",                               DS3LocationCategory.SPELL),
-        DS3LocationData("DH: Soul of the Demon Prince",            "Soul of the Demon Prince",                DS3LocationCategory.BOSS),
-        DS3LocationData("DH: Small Envoy Banner",                  "Small Envoy Banner",                      DS3LocationCategory.KEY),
+        DS3LocationData("DH: Flame Fan",                           "Flame Fan",                               DS3LocationCategory.SPELL,
+                        hostile_npc = True), # Desert Pyromancer Zoey drop
+        DS3LocationData("DH: Soul of the Demon Prince",            "Soul of the Demon Prince",                DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
+        DS3LocationData("DH: Small Envoy Banner",                  "Small Envoy Banner",                      DS3LocationCategory.KEY,
+                        boss = True),
         DS3LocationData("DH: Ring of Favor+3",                     "Ring of Favor+3",                         DS3LocationCategory.RING),
-        DS3LocationData("DH: Covetous Silver Serpent Ring+3",      "Covetous Silver Serpent Ring+3",          DS3LocationCategory.RING),
+        DS3LocationData("DH: Covetous Silver Serpent Ring+3",      "Covetous Silver Serpent Ring+3",          DS3LocationCategory.RING,
+                        hidden = True), # Behind invisible wall
         DS3LocationData("DH: Ring of Steel Protection+3",          "Ring of Steel Protection+3",              DS3LocationCategory.RING),
     ],
     "Ringed City": [
@@ -570,36 +783,48 @@ location_tables = {
         DS3LocationData("RC: Black Witch Wrappings",               "Black Witch Wrappings",                   DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Black Witch Trousers",                "Black Witch Trousers",                    DS3LocationCategory.ARMOR),
         DS3LocationData("RC: White Preacher Head",                 "White Preacher Head",                     DS3LocationCategory.ARMOR),
-        DS3LocationData("RC: Havel's Ring+3",                      "Havel's Ring+3",                          DS3LocationCategory.RING),
+        DS3LocationData("RC: Havel's Ring+3",                      "Havel's Ring+3",                          DS3LocationCategory.RING,
+                        hidden = True), # Hidden fall
         DS3LocationData("RC: Ringed Knight Spear",                 "Ringed Knight Spear",                     DS3LocationCategory.WEAPON),
-        DS3LocationData("RC: Dragonhead Shield",                   "Dragonhead Shield",                       DS3LocationCategory.SHIELD),
+        DS3LocationData("RC: Dragonhead Shield",                   "Dragonhead Shield",                       DS3LocationCategory.SHIELD,
+                        hidden = true), # "Show Your Humanity" puzzle
         DS3LocationData("RC: Ringed Knight Straight Sword",        "Ringed Knight Straight Sword",            DS3LocationCategory.WEAPON),
         DS3LocationData("RC: Preacher's Right Arm",                "Preacher's Right Arm",                    DS3LocationCategory.WEAPON),
         DS3LocationData("RC: White Birch Bow",                     "White Birch Bow",                         DS3LocationCategory.WEAPON),
         DS3LocationData("RC: Church Guardian Shiv",                "Church Guardian Shiv",                    DS3LocationCategory.MISC),
         DS3LocationData("RC: Dragonhead Greatshield",              "Dragonhead Greatshield",                  DS3LocationCategory.SHIELD),
-        DS3LocationData("RC: Ringed Knight Paired Greatswords",    "Ringed Knight Paired Greatswords",        DS3LocationCategory.WEAPON),
+        DS3LocationData("RC: Ringed Knight Paired Greatswords",    "Ringed Knight Paired Greatswords",        DS3LocationCategory.WEAPON,
+                        hidden = True), # Guaranteed drop from a normal-looking Ringed Knight
         DS3LocationData("RC: Shira's Crown",                       "Shira's Crown",                           DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Shira's Armor",                       "Shira's Armor",                           DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Shira's Gloves",                      "Shira's Gloves",                          DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Shira's Trousers",                    "Shira's Trousers",                        DS3LocationCategory.ARMOR),
-        DS3LocationData("RC: Crucifix of the Mad King",            "Crucifix of the Mad King",                DS3LocationCategory.WEAPON),
+        DS3LocationData("RC: Crucifix of the Mad King",            "Crucifix of the Mad King",                DS3LocationCategory.WEAPON,
+                        hostile_npc = True), # Shira drop
         DS3LocationData("RC: Sacred Chime of Filianore",           "Sacred Chime of Filianore",               DS3LocationCategory.WEAPON),
-        DS3LocationData("RC: Iron Dragonslayer Helm",              "Iron Dragonslayer Helm",                  DS3LocationCategory.ARMOR),
-        DS3LocationData("RC: Iron Dragonslayer Armor",             "Iron Dragonslayer Armor",                 DS3LocationCategory.ARMOR),
-        DS3LocationData("RC: Iron Dragonslayer Gauntlets",         "Iron Dragonslayer Gauntlets",             DS3LocationCategory.ARMOR),
-        DS3LocationData("RC: Iron Dragonslayer Leggings",          "Iron Dragonslayer Leggings",              DS3LocationCategory.ARMOR),
+        DS3LocationData("RC: Iron Dragonslayer Helm",              "Iron Dragonslayer Helm",                  DS3LocationCategory.ARMOR,
+                        miniboss = True),
+        DS3LocationData("RC: Iron Dragonslayer Armor",             "Iron Dragonslayer Armor",                 DS3LocationCategory.ARMOR,
+                        miniboss = True),
+        DS3LocationData("RC: Iron Dragonslayer Gauntlets",         "Iron Dragonslayer Gauntlets",             DS3LocationCategory.ARMOR,
+                        miniboss = True),
+        DS3LocationData("RC: Iron Dragonslayer Leggings",          "Iron Dragonslayer Leggings",              DS3LocationCategory.ARMOR,
+                        miniboss = True),
         DS3LocationData("RC: Lightning Arrow",                     "Lightning Arrow",                         DS3LocationCategory.SPELL),
         DS3LocationData("RC: Ritual Spear Fragment",               "Ritual Spear Fragment",                   DS3LocationCategory.MISC),
         DS3LocationData("RC: Antiquated Plain Garb",               "Antiquated Plain Garb",                   DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Violet Wrappings",                    "Violet Wrappings",                        DS3LocationCategory.ARMOR),
-        DS3LocationData("RC: Soul of Darkeater Midir",             "Soul of Darkeater Midir",                 DS3LocationCategory.BOSS),
+        DS3LocationData("RC: Soul of Darkeater Midir",             "Soul of Darkeater Midir",                 DS3LocationCategory.BOSS,
+                        prominent = True, boss = True),
         DS3LocationData("RC: Soul of Slave Knight Gael",           "Soul of Slave Knight Gael",               DS3LocationCategory.BOSS),
         DS3LocationData("RC: Blood of the Dark Soul",              "Blood of the Dark Soul",                  DS3LocationCategory.KEY),
-        DS3LocationData("RC: Chloranthy Ring+3",                   "Chloranthy Ring+3",                       DS3LocationCategory.RING),
+        DS3LocationData("RC: Chloranthy Ring+3",                   "Chloranthy Ring+3",                       DS3LocationCategory.RING,
+                        hidden = True), # Hidden fall
         DS3LocationData("RC: Covetous Gold Serpent Ring+3",        "Covetous Gold Serpent Ring+3",            DS3LocationCategory.RING),
-        DS3LocationData("RC: Ring of the Evil Eye+3",              "Ring of the Evil Eye+3",                  DS3LocationCategory.RING),
-        DS3LocationData("RC: Wolf Ring+3",                         "Wolf Ring+3",                             DS3LocationCategory.RING),
+        DS3LocationData("RC: Ring of the Evil Eye+3",              "Ring of the Evil Eye+3",                  DS3LocationCategory.RING,
+                        mimic = True),
+        DS3LocationData("RC: Wolf Ring+3",                         "Wolf Ring+3",                             DS3LocationCategory.RING,
+                        hostile_npc = True), # Alva drop
     ],
 
     # Progressive
@@ -714,292 +939,27 @@ location_tables = {
         [DS3LocationData(f"Undead Bone Shard #{i + 1}", "Undead Bone Shard", DS3LocationCategory.HEALTH) for i in range(10)],
 }
 
-# In addition to these hand-authored location groups, every region automatically
-# has a location group added in the loop below.
 location_name_groups: Dict[str, Set[str]] = {
-    # A small number of locations (boss drops and progression locations)
-    # intended to be set as priority progression locations for players who don't
-    # want a lot of mandatory checks.
-    "Prominent Locations": frozenset([
-        "HWL: Basin of Vows",
-        "HWL: Small Lothric Banner",
-        "CD: Small Doll",
-        "FK: Cinders of a Lord - Abyss Watcher",
-        "PC: Cinders of a Lord - Yhorm the Giant",
-        "AL: Cinders of a Lord - Aldrich",
-        "GA: Cinders of a Lord - Lothric Prince",
-        "LC: Grand Archives Key",
-        "PW: Contraption Key",
-
-        "HWL: Soul of Boreal Valley Vordt",
-        "US: Soul of the Rotted Greatwood",
-        "RS: Soul of a Crystal Sage",
-        "CC: Soul of High Lord Wolnir",
-        "SL: Soul of the Old Demon King",
-        "IBV: Soul of Pontiff Sulyvahn",
-        "HWL: Soul of the Dancer",
-        "LC: Soul of Dragonslayer Armour",
-        "CKG: Soul of Consumed Oceiros",
-        "UG: Soul of Champion Gundyr",
-        "AP: Soul of the Nameless King",
-        "PW: Soul of Sister Friede",
-        "PW: Valorheart",
-        "DH: Soul of the Demon Prince",
-        "RC: Soul of Darkeater Midir",
-    ]),
-
-    # Locations that contain items which block forward progress in the normal
-    # game order.
-    "Progression Locations": frozenset([
-        "HWL: Basin of Vows",
-        "HWL: Small Lothric Banner",
-        "CD: Small Doll",
-        "FK: Cinders of a Lord - Abyss Watcher",
-        "PC: Cinders of a Lord - Yhorm the Giant",
-        "AL: Cinders of a Lord - Aldrich",
-        "GA: Cinders of a Lord - Lothric Prince",
-        "LC: Grand Archives Key",
-        "PW: Contraption Key",
-    ]),
-
-    "Boss Rewards": frozenset([
-        "HWL: Soul of Boreal Valley Vordt",
-        "US: Transposing Kiln",
-        "US: Soul of the Rotted Greatwood",
-        "RS: Soul of a Crystal Sage",
-        "FK: Soul of the Blood of the Wolf",
-        "FK: Cinders of a Lord - Abyss Watcher",
-        "CD: Small Doll",
-        "CD: Soul of the Deacons of the Deep",
-        "CD: Archdeacon White Crown",
-        "CD: Archdeacon Holy Garb",
-        "CD: Archdeacon Skirt",
-        "CC: Soul of High Lord Wolnir",
-        "SL: Soul of the Old Demon King",
-        "IBV: Soul of Pontiff Sulyvahn",
-        "PC: Soul of Yhorm the Giant",
-        "PC: Cinders of a Lord - Yhorm the Giant",
-        "AL: Soul of Aldrich",
-        "AL: Cinders of a Lord - Aldrich",
-        "HWL: Soul of the Dancer",
-        "LC: Soul of Dragonslayer Armour",
-        "CKG: Soul of Consumed Oceiros",
-        "UG: Soul of Champion Gundyr",
-        "UG: Coiled Sword Fragment",
-        "GA: Soul of the Twin Princes",
-        "GA: Cinders of a Lord - Lothric Prince",
-        "AP: Soul of the Nameless King",
-        "PW: Soul of Sister Friede",
-        "PW: Valorheart",
-        "PW: Champion's Bones",
-        "DH: Soul of the Demon Prince",
-        "DH: Small Envoy Banner",
-        "RC: Soul of Darkeater Midir",
-
-        # Not currently randomized
-        # "FS: Coiled Sword",
-        # "AP: Dragon Head Stone",
-        # "RC: Fillianore's Spear Ornament",
-        # "RC: Spears of the Church",
-    ]),
-
-    "Miniboss Rewards": frozenset([
-        "US: Bloodbite Ring", # Giant Rat drop
-        "US: Irithyll Straight Sword", # Irithyll Outrider drop
-        "RS: Great Swamp Ring", # Great Crab drop
-        "FK: Soul of a Stray Demon",
-        "FK: Lingering Dragoncrest Ring", # Great Crab drop
-        "CC: Soul of a Demon",
-        "SL: Lightning Stake", # Sand Worm drop
-        "CD: Aldrich's Sapphire", # Deep Accursed drop
-        "CD: Saint Bident", # Guarded by giant
-        "IBV: Pontiff's Right Eye", # Sulyvahn's Beast drop
-        "IBV: Ring of Favor", # Sulyvahn's Beast Duo drop
-        "IBV: Aldrich Faithful", # Sulyvahn's Beast Duo reward
-        "AL: Aldrich's Ruby", # Deep Accursed drop
-        "LC: Irithyll Rapier", # Boreal Outrider drop
-        "GA: Crystal Scroll", # Crystal Sage drop
-        "GA: Outrider Knight Helm",
-        "GA: Outrider Knight Armor",
-        "GA: Outrider Knight Gauntlets",
-        "GA: Outrider Knight Leggings",
-        "RC: Iron Dragonslayer Helm",
-        "RC: Iron Dragonslayer Armor",
-        "RC: Iron Dragonslayer Gauntlets",
-        "RC: Iron Dragonslayer Leggings",
-    ]),
-
-    "Mimic Rewards": frozenset([
-        "HWL: Deep Battle Axe",
-        "CC: Black Blade",
-        "CD: Deep Braille Divine Tome",
-        "IBV: Golden Ritual Spear",
-        "ID: Dark Clutch Ring",
-        "PC: Court Sorcerer's Staff",
-        "PC: Greatshield of Glory",
-        "LC: Sunlight Straight Sword",
-        "RC: Ring of the Evil Eye+3",
-    ]),
-
-    "Hostile NPC Rewards": frozenset([
-        "FS: Uchigatana", # Sword Master
-        "FS: Master's Attire", # Sword Master
-        "FS: Master's Gloves", # Sword Master
-        "RS: Exile Greatsword", # Exile Knight #1
-        "RS: Great Club", # Exile Knight #2
-        "SL: Knight Slayer's Ring", # Knight Slayer Tsorig
-        "SL: Fume Ultra Greatsword", # Knight Slayer Tsorig
-        "SL: Black Iron Greatshield", # Knight Slayer Tsorig
-        "CD: Spider Shield", # Brigand
-        "PC: Logan's Scroll", # Sorcerer on roof in toxic pool
-        "GA: Golden Wing Crest Shield", # Lion Knight Albert
-        "GA: Onikiri and Ubadachi", # Black Hand Kamui
-        "GA: Sage's Crystal Staff", # Daughter of Crystal Kriemhild
-        "AP: Dragon Tooth", # Havel Knight
-        "DH: Flame Fan", # Desert Pyromancer Zoey drop
-        "RC: Wolf Ring+3", # Alva
-        "RC: Crucifix of the Mad King", # Shira
-        "PW: Contraption Key", # Sir Vilhelm
-        "PW: Onyx Blade", # Sir Vilhelm
-
-        # Not currently randomized:
-        # "AP: Havel's Greatshield", # Havel Knight
-        # "RC: Ledo's Great Hammer", # Silver Knight Ledo
-        # "RC: Blindfold Mask", # Moaning Knight
-    ]),
-
-    "Key Locations": frozenset([
-        "HWL: Cell Key",
-        "ID: Jailer's Key Ring",
-        "ID: Jailbreaker's Key",
-        "ID: Old Cell Key",
-        "LC: Grand Archives Key",
-        "PW: Contraption Key",
-
-        # Not currently randomized:
-        # "FS: Grave Key",
-        # "FS: Lift Chamber Key",
-        # "FS: Tower Key",
-    ]),
-
-    # Locations that are particularly tricky to find or get to, for players
-    # without an encyclopedic knowledge of DS3 who don't want to get stuck
-    # looking for an invisible wall or one random mob with a guaranteed drop.
-    "Hidden Locations": frozenset([
-        "RC: Dragonhead Shield", # requires gesture
-        "SL: Speckled Stoneplate Ring", # requires careful ballista shot
-
-        # Out-of-the-way cave
-        "FK: Golden Scroll",
-        "FK: Antiquated Dress",
-        "FK: Antiquated Gloves",
-        "FK: Antiquated Skirt",
-
-        # In lava
-        "SL: Toxic Mist",
-        "SL: White Hair Talisman",
-        "SL: Sacred Flame",
-
-        # Guaranteed drop from normalish enemy
-        "RS: Butcher Knife", # Butcher drop
-        "CD: Deep Ring", # Deacon drop
-        "FK: Pharis's Hat", # Elder Ghru drop
-        "FK: Black Bow of Pharis", # Elder Ghru drop
-        "ID: Great Magic Shield", # Corpse-Grub drop
-        "PC: Eleonora", # Monstrosity of Sin drop
-        "CKG: Magic Stoneplate Ring", # Consumed King's Knight drop
-        "RC: Ringed Knight Paired Greatswords", # Ringed Knight drop
-
-        # Have to return to cleared area
-        "CD: Archdeacon White Crown",
-        "CD: Archdeacon Holy Garb",
-        "CD: Archdeacon Skirt",
-
-        # Invisible walkway
-        "IBV: Painting Guardian's Curved Sword",
-        "IBV: Painting Guardian Hood",
-        "IBV: Painting Guardian Gown",
-        "IBV: Painting Guardian Gloves",
-        "IBV: Painting Guardian Waistcloth",
-
-        # Switch in darkened room
-        "GA: Witch's Locks",
-        "GA: Power Within",
-
-        # Gesture requirements
-        "AP: Calamity Ring",
-        "AP: Twinkling Dragon Torso Stone",
-
-        # Drop from a summon who may or may not appear
-        "AP: Drakeblood Greatsword",
-        "AP: Ricard's Rapier",
-
-        # "Show Your Humanity" puzzle
-        "RC: Dragonhead Shield",
-
-        # Hidden falls
-        "HWL: Astora's Straight Sword",
-        "US: Chloranthy Ring",
-        "US: Warrior of Sunlight",
-        "US: Mirrah Vest",
-        "US: Mirrah Gloves",
-        "US: Mirrah Trousers",
-        "RS: Braille Divine Tome of Carim",
-        "RS: Morne's Ring",
-        "RS: Sorcerer Hood",
-        "RS: Sorcerer Robe",
-        "RS: Sorcerer Gloves",
-        "RS: Sorcerer Trousers",
-        "RS: Sage Ring",
-        "FK: Atonement",
-        "SL: Dragonrider Bow",
-        "CD: Arbalest",
-        "LC: Sunlight Straight Sword",
-        "LC: Braille Divine Tome of Lothric",
-        "CD: Rosaria's Fingers",
-        "PW: Crow Quills",
-        "GA: Avelyn",
-        "RC: Chloranthy Ring+3",
-        "RC: Havel's Ring+3",
-        # "CC: Ring of Steel Protection+2", # Not currently randomized
-        # "PC: Onislayer Greatbow", # Not currently randomized
-
-        # Behind illusory walls
-        "FSBT: Covetous Silver Serpent Ring",
-        "IBV: Ring of Favor",
-        "GA: Outrider Knight Helm",
-        "GA: Soul Stream",
-        "FK: Dreamchaser's Ashes",
-        "CC: Carthus Pyromancy Tome",
-        "SL: Black Knight Sword",
-        "SL: Quelana Pyromancy Tome",
-        "SL: Izalith Staff",
-        "IBV: Magic Clutch Ring",
-        "IBV: Dorhys' Gnawing",
-        "IBV: Witchtree Branch",
-        "IBV: Aldrich Faithful",
-        "UG: Ashen Estus Ring",
-        "UG: Black Knight Glaive",
-        "UG: Hornet Ring",
-        "UG: Chaos Blade",
-        "UG: Blacksmith Hammer",
-        "UG: Eyes of a Fire Keeper",
-        "UG: Coiled Sword Fragment",
-        "UG: Soul of Champion Gundyr",
-        "LC: Sacred Bloom Shield",
-        "LC: Winged Knight Helm",
-        "LC: Winged Knight Armor",
-        "LC: Winged Knight Gauntlets",
-        "LC: Winged Knight Leggings",
-        "DH: Great Soul Dregs",
-        "DH: Covetous Silver Serpent Ring+3",
-        # "SL: Flame Stoneplate Ring+2", # Not currently randomized
-    ])
+    # We could insert these locations automatically with setdefault(), but we set them up explicitly
+    # instead so we can choose the ordering.
+    "Prominent": set(),
+    "Progression": set(),
+    "Boss Rewards": set(),
+    "Miniboss Rewards": set(),
+    "Mimic Rewards": set(),
+    "Hostile NPC Rewards": set(),
+    "Keys": set(),
+    "Hidden": set()
 }
+
 
 location_dictionary: Dict[str, DS3LocationData] = {}
 for location_name, location_table in location_tables.items():
     location_dictionary.update({location_data.name: location_data for location_data in location_table})
+
+    for location_data in location_table:
+        for group_name in location_data.location_groups():
+            location_name[group_name].add(group_name)
 
     # Allow entire locations to be added to location sets.
     if not location_name.startswith("Progressive Items"):
