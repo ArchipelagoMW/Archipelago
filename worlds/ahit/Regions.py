@@ -832,8 +832,11 @@ def get_shuffled_region(self, region: str) -> str:
 
 
 def create_thug_shops(world: World):
-    min_items: int = world.multiworld.NyakuzaThugMinShopItems[world.player].value
-    max_items: int = world.multiworld.NyakuzaThugMaxShopItems[world.player].value
+    min_items: int = min(world.multiworld.NyakuzaThugMinShopItems[world.player].value,
+                         world.multiworld.NyakuzaThugMaxShopItems[world.player].value)
+
+    max_items: int = max(world.multiworld.NyakuzaThugMaxShopItems[world.player].value,
+                         world.multiworld.NyakuzaThugMinShopItems[world.player].value)
     count: int = -1
     step: int = 0
     old_name: str = ""

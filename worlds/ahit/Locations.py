@@ -722,7 +722,7 @@ zero_jumps_expert = {
                                               misc_required=["No Bonk Badge"],
                                               dlc_flags=HatDLC.death_wish),
 
-    "Sleepy Subcon (Zero Jumps)": LocData(0, "Sleepy Subcon", required_hats=[HatType.ICE], dlc_flags=HatDLC.death_wish),
+    "Sleepy Subcon (Zero Jumps)": LocData(0, "Time Rift - Sleepy Subcon", required_hats=[HatType.ICE], dlc_flags=HatDLC.death_wish),
     "Ship Shape (Zero Jumps)": LocData(0, "Ship Shape", required_hats=[HatType.ICE], dlc_flags=HatDLC.dlc1_dw),
 }
 

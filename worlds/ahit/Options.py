@@ -61,7 +61,6 @@ def adjust_options(world: World):
         world.multiworld.ShuffleActContracts[world.player].value = 0
         world.multiworld.EnableDLC1[world.player].value = 0
         world.multiworld.LogicDifficulty[world.player].value = -1
-        world.multiworld.KnowledgeChecks[world.player].value = 0
         world.multiworld.DWTimePieceRequirement[world.player].value = 0
 
 
