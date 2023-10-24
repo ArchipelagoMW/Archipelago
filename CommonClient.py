@@ -837,14 +837,14 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "Retrieved":
         ctx.stored_data.update(args["keys"])
-        if f"_read_hints_{ctx.team}_{ctx.slot}" in args["keys"]:
+        if ctx.ui and f"_read_hints_{ctx.team}_{ctx.slot}" in args["keys"]:
             ctx.ui.update_hints()
 
     elif cmd == "SetReply":
         ctx.stored_data[args["key"]] = args["value"]
-        if f"_read_hints_{ctx.team}_{ctx.slot}" == args["key"]:
+        if ctx.ui and f"_read_hints_{ctx.team}_{ctx.slot}" == args["key"]:
             ctx.ui.update_hints()
-        if args["key"].startswith("EnergyLink"):
+        elif args["key"].startswith("EnergyLink"):
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
                 ctx.ui.set_new_energy_link_value()
