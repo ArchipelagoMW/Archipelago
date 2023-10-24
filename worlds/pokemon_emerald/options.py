@@ -625,11 +625,31 @@ class FreeFlyLocation(Toggle):
     display_name = "Free Fly Location"
 
 
-class FlyWithoutBadge(DefaultOnToggle):
+class HmsRequiringBadge(OptionSet):
     """
-    Fly does not require the Feather Badge to use in the field
+    Sets which badges require their corresponding badge to use in the overworld
     """
-    display_name = "Fly Without Badge"
+    display_name = "HMs Requiring Badge"
+    valid_keys = frozenset([
+        "HM01 Cut",
+        "HM02 Fly",
+        "HM03 Surf",
+        "HM04 Strength",
+        "HM05 Flash",
+        "HM06 Rock Smash",
+        "HM07 Waterfall",
+        "HM08 Dive"
+    ])
+    default = frozenset([
+        "HM01 Cut",
+        "HM02 Fly",
+        "HM03 Surf",
+        "HM04 Strength",
+        "HM05 Flash",
+        "HM06 Rock Smash",
+        "HM07 Waterfall",
+        "HM08 Dive"
+    ])
 
 
 class TurboA(Toggle):
@@ -745,7 +765,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     extra_boulders: ExtraBoulders
     extra_bumpy_slope: ExtraBumpySlope
     free_fly_location: FreeFlyLocation
-    fly_without_badge: FlyWithoutBadge
+    hms_requiring_badge: HmsRequiringBadge
 
     turbo_a: TurboA
     receive_item_messages: ReceiveItemMessages

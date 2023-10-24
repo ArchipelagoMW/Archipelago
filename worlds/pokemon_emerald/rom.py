@@ -344,9 +344,17 @@ def generate_output(world: PokemonEmeraldWorld, output_directory: str) -> None:
     blind_trainers = 1 if world.options.blind_trainers else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x02, 1, blind_trainers)
 
-    # Set fly without badge
-    fly_without_badge = 1 if world.options.fly_without_badge else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, fly_without_badge)
+    # Set HM badge requirements
+    hms_requiring_badge_bitfield = 0
+    hms_requiring_badge_bitfield |= (1 << 0) if "HM01 Cut" in world.options.hms_requiring_badge.value else 0
+    hms_requiring_badge_bitfield |= (1 << 1) if "HM02 Fly" in world.options.hms_requiring_badge.value else 0
+    hms_requiring_badge_bitfield |= (1 << 2) if "HM03 Surf" in world.options.hms_requiring_badge.value else 0
+    hms_requiring_badge_bitfield |= (1 << 3) if "HM04 Strength" in world.options.hms_requiring_badge.value else 0
+    hms_requiring_badge_bitfield |= (1 << 4) if "HM05 Flash" in world.options.hms_requiring_badge.value else 0
+    hms_requiring_badge_bitfield |= (1 << 5) if "HM06 Rock Smash" in world.options.hms_requiring_badge.value else 0
+    hms_requiring_badge_bitfield |= (1 << 6) if "HM07 Waterfall" in world.options.hms_requiring_badge.value else 0
+    hms_requiring_badge_bitfield |= (1 << 7) if "HM08 Dive" in world.options.hms_requiring_badge.value else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, hms_requiring_badge_bitfield)
 
     # Set exp modifier
     numerator = min(max(world.options.exp_modifier.value, 0), 2**16 - 1)

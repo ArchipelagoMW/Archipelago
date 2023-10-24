@@ -944,7 +944,6 @@ class PokemonEmeraldWorld(World):
             "extra_boulders",
             "extra_bumpy_slope",
             "free_fly_location",
-            "fly_without_badge",
             "remote_items",
         ]
 
@@ -954,6 +953,7 @@ class PokemonEmeraldWorld(World):
 
         slot_data["free_fly_location_id"] = self.free_fly_location_id
         slot_data["remove_roadblocks"] = list(self.options.remove_roadblocks.value)
+        slot_data["hms_requiring_badge"] = list(self.options.hms_requiring_badge.value)
         slot_data["allowed_legendary_hunt_encounters"] = list(self.options.allowed_legendary_hunt_encounters.value)
 
         return slot_data

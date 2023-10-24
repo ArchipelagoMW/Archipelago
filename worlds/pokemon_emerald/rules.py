@@ -123,15 +123,15 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
                  lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player))
 
     # Sky
-    if world.options.fly_without_badge:
+    if "HM02 Fly" in world.options.hms_requiring_badge:
         set_rule(
             get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY"),
-            lambda state: state.has("HM02 Fly", world.player)
+            lambda state: state.has("HM02 Fly", world.player) and state.has("Feather Badge", world.player)
         )
     else:
         set_rule(
             get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY"),
-            lambda state: state.has("HM02 Fly", world.player) and state.has("Feather Badge", world.player)
+            lambda state: state.has("HM02 Fly", world.player)
         )
     set_rule(
         get_entrance("REGION_SKY -> REGION_LITTLEROOT_TOWN/MAIN"),
