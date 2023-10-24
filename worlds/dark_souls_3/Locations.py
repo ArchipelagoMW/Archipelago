@@ -856,33 +856,6 @@ location_name_groups: Dict[str, Set[str]] = {
         # "FS: Tower Key",
     ]),
 
-    "Guarded by Keys": frozenset([
-        # Guarded by Tower Key
-        "FSBT: Covetous Silver Serpent Ring",
-        "FSBT: Fire Keeper Robe",
-        "FSBT: Fire Keeper Gloves",
-        "FSBT: Fire Keeper Skirt",
-        "FSBT: Estus Ring",
-        "FSBT: Fire Keeper Soul",
-
-        # Guarded by Cell Key
-        "HWL: Greirat's Ashes",
-
-        # Guarded by Jailer's Key Ring
-        "ID: Prisoner Chief's Ashes",
-        "ID: Karla's Ashes",
-        "ID: Karla's Pointed Hat",
-        "ID: Karla's Coat",
-        "ID: Karla's Gloves",
-        "ID: Karla's Trousers",
-
-        # Guarded by Jailbreaker's Key
-        "ID: Bellowing Dragoncrest Ring",
-
-        # Guarded by Old Cell Key
-        "ID: Covetous Gold Serpent Ring",
-    ]),
-
     # Locations that are particularly tricky to find or get to, for players
     # without an encyclopedic knowledge of DS3 who don't want to get stuck
     # looking for an invisible wall or one random mob with a guaranteed drop.
