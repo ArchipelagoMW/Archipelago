@@ -626,42 +626,6 @@ class StardewLogic:
         traveling_merchant_days = [f"Traveling Merchant: {day}" for day in Weekday.all_days]
         return self.received(traveling_merchant_days, tier)
 
-    def can_complete_bundle(self, bundle_requirements: List[BundleItem], number_required: int) -> StardewRule:
-        item_rules = []
-        highest_quality_yet = 0
-        can_speak_junimo = self.region.can_reach(Region.wizard_tower)
-        for bundle_item in bundle_requirements:
-            if bundle_item.item.item_id == -1:
-                return can_speak_junimo & self.money.can_spend(bundle_item.amount)
-            else:
-                item_rules.append(bundle_item.item.name)
-                if bundle_item.quality > highest_quality_yet:
-                    highest_quality_yet = bundle_item.quality
-        return can_speak_junimo & self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
-
-    def can_grow_gold_quality(self, quality: int) -> StardewRule:
-        if quality <= 0:
-            return True_()
-        if quality == 1:
-            return self.skill.has_farming_level(5) | (self.has_fertilizer(1) & self.skill.has_farming_level(2)) | (
-                    self.has_fertilizer(2) & self.skill.has_farming_level(1)) | self.has_fertilizer(3)
-        if quality == 2:
-            return self.skill.has_farming_level(10) | (self.has_fertilizer(1) & self.skill.has_farming_level(5)) | (
-                    self.has_fertilizer(2) & self.skill.has_farming_level(3)) | (
-                           self.has_fertilizer(3) & self.skill.has_farming_level(2))
-        if quality >= 3:
-            return self.has_fertilizer(3) & self.skill.has_farming_level(4)
-
-    def has_fertilizer(self, tier: int) -> StardewRule:
-        if tier <= 0:
-            return True_()
-        if tier == 1:
-            return self.has(Fertilizer.basic)
-        if tier == 2:
-            return self.has(Fertilizer.quality)
-        if tier >= 3:
-            return self.has(Fertilizer.deluxe)
-
     def can_complete_field_office(self) -> StardewRule:
         field_office = self.region.can_reach(Region.field_office)
         professor_snail = self.received("Open Professor Snail Cave")
@@ -674,14 +638,6 @@ class StardewLogic:
         bat = self.has(Fossil.mummified_bat)
         snake_vertebrae = self.has(Fossil.snake_vertebrae)
         return field_office & professor_snail & tools & leg_and_snake_skull & ribs_and_spine & skull & tail & frog & bat & snake_vertebrae
-
-    def can_complete_community_center(self) -> StardewRule:
-        return (self.region.can_reach_location("Complete Crafts Room") &
-                self.region.can_reach_location("Complete Pantry") &
-                self.region.can_reach_location("Complete Fish Tank") &
-                self.region.can_reach_location("Complete Bulletin Board") &
-                self.region.can_reach_location("Complete Vault") &
-                self.region.can_reach_location("Complete Boiler Room"))
 
     def can_finish_grandpa_evaluation(self) -> StardewRule:
         # https://stardewvalleywiki.com/Grandpa

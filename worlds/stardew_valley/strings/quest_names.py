@@ -50,9 +50,16 @@ class Quest:
     goblin_problem = "Goblin Problem"
     magic_ink = "Magic Ink"
 
+
 class ModQuest:
     MrGinger = "Mr.Ginger's request"
     AyeishaEnvelope = "Missing Envelope"
     AyeishaRing = "Lost Emerald Ring"
     JunaCola = "Juna's Drink Request"
     JunaSpaghetti = "Juna's BFF Request"
+    RailroadBoulder = "The Railroad Boulder"
+    GrandpasShed = "Grandpa's Shed"
+    MarlonsBoat = "Marlon's Boat"
+    AuroraVineyard = "Aurora Vineyard"
+    MonsterCrops = "Monster Crops"
+    VoidSoul = "Void Soul"

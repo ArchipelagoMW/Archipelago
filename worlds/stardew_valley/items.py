@@ -78,6 +78,7 @@ class Group(enum.Enum):
     CRAFTSANITY = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
+    TEMPERED_GALAXY_WEAPONS = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -194,6 +195,8 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory("Dark Talisman"))
     create_tv_channels(item_factory, items)
     create_special_quest_rewards(item_factory, items)
+    if ModNames.sve in options.mods:
+        create_special_quest_rewards_sve(item_factory, items)
     create_stardrops(item_factory, options, items)
     create_museum_items(item_factory, options, items)
     create_arcade_machine_items(item_factory, options, items)
@@ -327,6 +330,13 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[I
     items.append(item_factory("Iridium Snake Milk"))
     items.append(item_factory("Fairy Dust Recipe"))
 
+def create_special_quest_rewards_sve(item_factory: StardewItemFactory, items: List[Item]):
+    items.append(item_factory("Marlon's Boat Paddle"))
+    items.append(item_factory("Iridium Bomb"))
+    items.append(item_factory("Krobus' Protection"))
+    items.append(item_factory("Kittyfish Spell"))
+    create_nexus_warps(item_factory, items)
+    items.append(item_factory("Lance's Fable Reef Portal"))
 
 def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     stardrops_classification = get_stardrop_classification(options)
