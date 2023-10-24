@@ -25,7 +25,7 @@ item_table = {
     # Rooks are worth 5.25 to 5.5, but many major pieces are worse, so we assume 4.85, which stays under 5.0
     "Progressive Major Piece": CMItemData(4_005, ItemClassification.progression, quantity=9, material=485),
     # Queen pieces are pretty good, and even the weak ones are pretty close, so queens can stay 9.0 (but not 10.0)
-    "Progressive Major To Queen": CMItemData(4_006, ItemClassification.progression, quantity=7, material=415,
+    "Progressive Major To Queen": CMItemData(4_006, ItemClassification.progression, quantity=5, material=415,
                                              parents=["Progressive Major Piece"]),
     # TODO: implement extra moves
     # "Progressive Opening Move": CMItemData(4_007, ItemClassification.useful, quantity=3),
