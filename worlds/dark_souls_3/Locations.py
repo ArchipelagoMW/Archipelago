@@ -694,7 +694,7 @@ location_name_groups: Dict[str, Set[str]] = {
     # A small number of locations (boss drops and progression locations)
     # intended to be set as priority progression locations for players who don't
     # want a lot of mandatory checks.
-    "Prominent Locations": frozenset([
+    "Prominent": frozenset([
         "HWL: Basin of Vows",
         "HWL: Small Lothric Banner",
         "CD: Small Doll",
@@ -724,7 +724,7 @@ location_name_groups: Dict[str, Set[str]] = {
 
     # Locations that contain items which block forward progress in the normal
     # game order.
-    "Progression Locations": frozenset([
+    "Progression": frozenset([
         "HWL: Basin of Vows",
         "HWL: Small Lothric Banner",
         "CD: Small Doll",
@@ -842,7 +842,7 @@ location_name_groups: Dict[str, Set[str]] = {
         # "RC: Blindfold Mask", # Moaning Knight
     ]),
 
-    "Key Locations": frozenset([
+    "Keys": frozenset([
         "HWL: Cell Key",
         "ID: Jailer's Key Ring",
         "ID: Jailbreaker's Key",
@@ -859,7 +859,7 @@ location_name_groups: Dict[str, Set[str]] = {
     # Locations that are particularly tricky to find or get to, for players
     # without an encyclopedic knowledge of DS3 who don't want to get stuck
     # looking for an invisible wall or one random mob with a guaranteed drop.
-    "Hidden Locations": frozenset([
+    "Hidden": frozenset([
         "RC: Dragonhead Shield", # requires gesture
         "SL: Speckled Stoneplate Ring", # requires careful ballista shot
 
