@@ -1086,6 +1086,11 @@ class PerGameCommonOptions(CommonOptions):
     item_links: ItemLinks
 
 
+@dataclass
+class DeathLinkOption:
+    death_link: DeathLink
+
+
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
     import os
 
