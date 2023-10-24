@@ -4,7 +4,7 @@ and connects them with the proper requirements
 """
 from typing import FrozenSet, Dict
 
-from BaseClasses import Entrance, Region
+from BaseClasses import Entrance, Region, Location
 from worlds.AutoWorld import World
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
@@ -81,6 +81,7 @@ class WitnessRegions:
 
             new_region = create_region(world, region_name, self.locat, locations_for_this_region)
             self.region_cache[region_name] = new_region
+            self.location_cache.update({location.name: location for location in new_region.locations})
 
             world.multiworld.regions.append(new_region)
 
@@ -105,15 +106,9 @@ class WitnessRegions:
 
                 self.connect(world, region_name, connection[0], player_logic, connection[1])
 
-        menu_region = create_region(world, 'Menu', self.locat, None)
-        self.region_cache['Menu'] = menu_region
-
-        world.multiworld.regions += [
-            menu_region
-        ]
-        
-        self.region_cache['Menu'].connect(self.region_cache['First Hallway'], "The Splashscreen?")
+        return self.location_cache
 
     def __init__(self, locat: WitnessPlayerLocations):
         self.locat = locat
         self.region_cache: Dict[str, Region] = dict()
+        self.location_cache: Dict[str, Location] = dict()

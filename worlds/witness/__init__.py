@@ -110,11 +110,11 @@ class WitnessWorld(World):
                                 f" progression items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle.")
 
     def create_regions(self):
-        self.regio.create_regions(self, self.player_logic)
+        location_cache = self.regio.create_regions(self, self.player_logic)
 
         # Set rules early so extra locations can be created based on the results of exploring collection states
 
-        set_rules(self, self.player_logic, self.locat)
+        set_rules(self, self.player_logic, self.locat, location_cache)
 
         # Add event items and tie them to event locations (e.g. laser activations).
 

@@ -4,8 +4,9 @@ depending on the items received
 """
 
 # pylint: disable=E1101
-from typing import FrozenSet
+from typing import FrozenSet, Dict
 
+from BaseClasses import Location
 from worlds.AutoWorld import World
 from .player_logic import WitnessPlayerLogic
 from .Options import is_option_enabled, get_option_value
@@ -204,7 +205,8 @@ def make_lambda(check_hex: str, world: World, player: int,
     )
 
 
-def set_rules(world: World, player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+def set_rules(world: World, player_logic: WitnessPlayerLogic,
+              locat: WitnessPlayerLocations, location_cache: Dict[str, Location]):
     """
     Sets all rules for all locations
     """
@@ -220,7 +222,12 @@ def set_rules(world: World, player_logic: WitnessPlayerLogic, locat: WitnessPlay
 
         rule = make_lambda(check_hex, world, world.player, player_logic, locat)
 
-        set_rule(world.multiworld.get_location(location, world.player), rule)
+        if location in location_cache:
+            location = location_cache[location]
+        else:
+            location = world.multiworld.get_location(location, world.player)
+
+        set_rule(location, rule)
 
     world.multiworld.completion_condition[world.player] = \
         lambda state: state.has('Victory', world.player)
