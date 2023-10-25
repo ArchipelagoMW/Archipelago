@@ -630,11 +630,16 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Crucible", "The Crucible: Tyrannozor", SC2HOTS_LOC_ID_OFFSET + 1101, LocationType.OPTIONAL_BOSS,
                      lambda state: state._sc2hots_has_competent_defense(multiworld, player) and
                                    state._sc2hots_has_good_antiair(multiworld, player)),
-        LocationData("Supreme", "Supreme: Victory", SC2HOTS_LOC_ID_OFFSET + 1200, LocationType.VICTORY),
-        LocationData("Supreme", "Supreme: First Relic", SC2HOTS_LOC_ID_OFFSET + 1201, LocationType.BONUS),
-        LocationData("Supreme", "Supreme: Second Relic", SC2HOTS_LOC_ID_OFFSET + 1202, LocationType.BONUS),
-        LocationData("Supreme", "Supreme: Third Relic", SC2HOTS_LOC_ID_OFFSET + 1203, LocationType.BONUS),
-        LocationData("Supreme", "Supreme: Fourth Relic", SC2HOTS_LOC_ID_OFFSET + 1204, LocationType.BONUS),
+        LocationData("Supreme", "Supreme: Victory", SC2HOTS_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
+                     lambda state: state._sc2hots_can_pass_supreme(multiworld, player)),
+        LocationData("Supreme", "Supreme: First Relic", SC2HOTS_LOC_ID_OFFSET + 1201, LocationType.BONUS,
+                     lambda state: state._sc2hots_can_pass_supreme(multiworld, player)),
+        LocationData("Supreme", "Supreme: Second Relic", SC2HOTS_LOC_ID_OFFSET + 1202, LocationType.BONUS,
+                     lambda state: state._sc2hots_can_pass_supreme(multiworld, player)),
+        LocationData("Supreme", "Supreme: Third Relic", SC2HOTS_LOC_ID_OFFSET + 1203, LocationType.BONUS,
+                     lambda state: state._sc2hots_can_pass_supreme(multiworld, player)),
+        LocationData("Supreme", "Supreme: Fourth Relic", SC2HOTS_LOC_ID_OFFSET + 1204, LocationType.BONUS,
+                     lambda state: state._sc2hots_can_pass_supreme(multiworld, player)),
         LocationData("Infested", "Infested: Victory", SC2HOTS_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
                      lambda state: state._sc2hots_has_common_unit(multiworld, player) and
                                    ((state._sc2hots_has_good_antiair(multiworld, player) and state.has('Infestor', player)) or

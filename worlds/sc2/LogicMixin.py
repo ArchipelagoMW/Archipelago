@@ -282,3 +282,8 @@ class SC2Logic(LogicMixin):
         return (get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true) \
             or self.has(ItemNames.ZERGLING, player) \
             or (self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.INFESTOR, player))
+
+    def _sc2hots_can_pass_supreme(self, multiworld: MultiWorld, player: int) -> bool:
+        return (get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true) \
+            or (get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available) \
+            or self.has_all({ItemNames.KERRIGAN_LEAPING_STRIKE, ItemNames.KERRIGAN_MEND}, player)

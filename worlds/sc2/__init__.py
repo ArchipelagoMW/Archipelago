@@ -4,6 +4,7 @@ from typing import List, Set, Iterable, Sequence, Dict, Callable
 from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
+from . import ItemNames
 from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
     kerrigan_only_passives, progressive_if_ext
@@ -12,7 +13,7 @@ from .Regions import create_regions
 from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
     KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available
 from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS
-from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission
+from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission
 
 
 class Starcraft2WebWorld(WebWorld):
@@ -142,7 +143,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
     # Exclude Primal Form item if option is not set
     if get_option_value(multiworld, player, "kerrigan_primal_status") != KerriganPrimalStatus.option_item:
-        excluded_items.add("Primal Form (Kerrigan)")
+        excluded_items.add(ItemNames.KERRIGAN_PRIMAL_FORM)
 
     # Ensure no item is both guaranteed and excluded
     invalid_items = excluded_items.intersection(locked_items)
@@ -194,9 +195,15 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                     smart_exclude(kerrigan_passives[tier], 0)
                 else:
                     smart_exclude(kerrigan_actives[tier].union(kerrigan_passives[tier]), 1)
-            # ensure Kerrigan has an active T1 or T2 ability for no-build missions on Standard
+            # TODO: Do these mission-bases stuff only if the mission is rolled instead of these mission able to roll
+            excluded_mission_names = get_option_value(multiworld, player, "excluded_missions")
+            # ensure Kerrigan has an active T1 or T2 ability for no-build missions on Standard - Back in the Saddle and Conviction
             if get_option_value(multiworld, player, "required_tactics") == RequiredTactics.option_standard and \
-               get_option_value(multiworld, player, "shuffle_no_build"):
+                    get_option_value(multiworld, player, "shuffle_no_build") == Options.ShuffleNoBuild.option_true and \
+                    get_option_value(multiworld, player, "grant_story_tech") == Options.GrantStoryTech.option_false and \
+                    not excluded_mission_names.intersection(
+                        {SC2Mission.BACK_IN_THE_SADDLE.name, SC2Mission.CONVICTION.name}
+                    ):
                 active_t1_t2 = kerrigan_actives[0].union(kerrigan_actives[1])
                 if active_t1_t2.issubset(excluded_items):
                     # all T1 and T2 actives were excluded
@@ -204,6 +211,14 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                     excluded_items.update(kerrigan_passives[tier])
                     active_ability = multiworld.random.choice(sorted(kerrigan_actives[tier]))
                     excluded_items.remove(active_ability)
+            # These items must exist in order to complete Supreme
+            if get_option_value(multiworld, player, "shuffle_no_build") == Options.ShuffleNoBuild.option_true and \
+                    get_option_value(multiworld, player, "grant_story_tech") == Options.GrantStoryTech.option_false and \
+                    SC2Mission.SUPREME.name not in excluded_mission_names:
+                excluded_items.remove(ItemNames.KERRIGAN_LEAPING_STRIKE)
+                excluded_items.remove(ItemNames.KERRIGAN_MEND)
+                excluded_items.union({ItemNames.KERRIGAN_HEROIC_FORTITUDE, ItemNames.KERRIGAN_KINETIC_BLAST,
+                                      ItemNames.KERRIGAN_WILD_MUTATION, ItemNames.KERRIGAN_SPAWN_BANELINGS})
     # if Kerrigan exists and all abilities are included,
     # no ability needs to be excluded
 

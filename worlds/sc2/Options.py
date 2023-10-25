@@ -357,7 +357,7 @@ class KerriganLevelItemDistribution(Choice):
     default = option_smooth
 
 
-class IncludeAllKerriganAbilities(Toggle):
+class IncludeAllKerriganAbilities(DefaultOnToggle):
     """If turned on, all abilities from every Kerrigan ability tier will be able to appear.
     If turned off, one random passive or active ability per tier will be included."""
     display_name = "Include All Kerrigan Abilities"

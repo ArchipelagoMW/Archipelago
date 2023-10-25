@@ -415,6 +415,7 @@ class ValidInventory:
         self._sc2hots_has_two_kerrigan_actives = lambda world, player: SC2Logic._sc2hots_has_two_kerrigan_actives(self, world, player)
         self._sc2hots_has_low_tech = lambda world, player: SC2Logic._sc2hots_has_low_tech(self, world, player)
         self._sc2hots_can_pass_vents = lambda world, player: SC2Logic._sc2hots_can_pass_vents(self, world, player)
+        self._sc2hots_can_pass_supreme = lambda world, player: SC2Logic._sc2hots_can_pass_supreme(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
