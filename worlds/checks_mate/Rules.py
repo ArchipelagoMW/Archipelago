@@ -111,7 +111,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Bongcloud Center": 100,
         "Bongcloud A File": 150,
         "Bongcloud Capture": 50,
-        "Bongcloud Promotion": 1450,
+        "Bongcloud Promotion": 1950, # requires reaching a rather late-game state
     }
     for piece, material in capture_expectations.items():
         set_rule(multiworld.get_location(piece, player), lambda state, v=material: state.has_piece_material(player, v))
@@ -167,8 +167,9 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Capture Pawn H", player), lambda state: state.count_enemy_pawns(player) > 7)
     set_rule(multiworld.get_location("Capture Piece A", player), lambda state: state.count_enemy_pieces(player) > 6)
     # tactics
-    set_rule(multiworld.get_location("Pin", player), lambda state: state.has_pin(player))
+    # set_rule(multiworld.get_location("Pin", player), lambda state: state.has_pin(player))
     set_rule(multiworld.get_location("Fork", player), lambda state: state.has_pin(player))
+    set_rule(multiworld.get_location("Triple Fork", player), lambda state: state.has_pin(player))
     set_rule(multiworld.get_location("Royal Fork", player), lambda state: state.has_pin(player))
     set_rule(multiworld.get_location("Threaten Pawn", player), lambda state: state.count_enemy_pawns(player) > 0)
     set_rule(multiworld.get_location("Threaten Minor", player), lambda state: state.count_enemy_pieces(player) > 3)
