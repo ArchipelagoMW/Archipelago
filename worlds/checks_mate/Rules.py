@@ -105,7 +105,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Fork": 700,
         "Royal Fork": 3000, # this should really not block anything vital until you are set, that would make me angry
         "Pin": 550,
-        "King Threat": 400,
+        "Threaten King": 400,
         "Bongcloud Center": 100,
         "Bongcloud A File": 150,
         "Bongcloud Capture": 50,
@@ -168,11 +168,11 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Pin", player), lambda state: state.has_pin(player))
     set_rule(multiworld.get_location("Fork", player), lambda state: state.has_pin(player))
     set_rule(multiworld.get_location("Royal Fork", player), lambda state: state.has_pin(player))
-    set_rule(multiworld.get_location("Pawn Threat", player), lambda state: state.count_enemy_pawns(player) > 0)
-    set_rule(multiworld.get_location("Minor Threat", player), lambda state: state.count_enemy_pieces(player) > 3)
-    set_rule(multiworld.get_location("Major Threat", player), lambda state: state.count_enemy_pieces(player) > 5)
-    set_rule(multiworld.get_location("Queen Threat", player), lambda state: state.count_enemy_pieces(player) > 6)
-    set_rule(multiworld.get_location("King Threat", player), lambda state: state.has_pin(player))
+    set_rule(multiworld.get_location("Threaten Pawn", player), lambda state: state.count_enemy_pawns(player) > 0)
+    set_rule(multiworld.get_location("Threaten Minor", player), lambda state: state.count_enemy_pieces(player) > 3)
+    set_rule(multiworld.get_location("Threaten Major", player), lambda state: state.count_enemy_pieces(player) > 5)
+    set_rule(multiworld.get_location("Threaten Queen", player), lambda state: state.count_enemy_pieces(player) > 6)
+    set_rule(multiworld.get_location("Threaten King", player), lambda state: state.has_pin(player))
     # special moves
     # set_rule(multiworld.get_location("00 Castle", player), lambda state: state.has_castle(player))
     # set_rule(multiworld.get_location("000 Castle", player), lambda state: state.has_castle(player))
