@@ -32,7 +32,7 @@ class MessengerRegion(Region):
         loc_dict = {loc: world.location_name_to_id[loc] if loc in world.location_name_to_id else None
                     for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
-        world.multiworld.regions.append(self)
+        world.multiworld.add_regions(self)
 
 
 class MessengerLocation(Location):
