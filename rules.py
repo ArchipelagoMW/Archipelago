@@ -2,7 +2,8 @@
 from typing import Mapping, Iterable, Tuple, Union
 from BaseClasses import CollectionState, MultiWorld
 
-from .types import AccessRule
+from . import items
+from .types import AccessRule, ItemType, Passage
 from .locations import location_table as w4_locations
 
 
@@ -17,25 +18,42 @@ helpers: Mapping[str, RequiredItem] = {
 }
 
 
+def resolve_helper(item_name: RequiredItem):
+    requirement = helpers.get(item_name, item_name)
+    if isinstance(requirement, str):
+        return (requirement, 1)
+    else:
+        return requirement
+
+
 def needs_items(player: int, requirements: Iterable[Iterable[RequiredItem]]) -> AccessRule:
     def has_requirements(state: CollectionState):
         def has_item(requirement: RequiredItem):
-            requirement = helpers.get(requirement, requirement)
-            if isinstance(requirement, str):
-                item = requirement
-                count = 1
-            else:
-                item, count = requirement
+            item, count = resolve_helper(requirement)
             return state.has(item, player, count)
         return any(map(lambda all_list: all(map(has_item, all_list)), requirements))
     return has_requirements
 
 
-def set_access_rules(multiworld: MultiWorld, player: int):
-    for level, items in level_rules.items():
-        region = multiworld.get_region(level, player)
-        region.clear_rule = needs_items(player, items)
+def get_access_rule(player: int, level: str):
+    rule = level_rules[level]
+    if rule is None:
+        return None
+    return needs_items(player, level_rules[level])
 
+
+def make_boss_access_rule(player: int, passage: Passage):
+    if passage in (Passage.ENTRY, Passage.GOLDEN):
+        jewels_needed = 1
+    else:
+        jewels_needed = 4
+
+    jewel_list = [[(name, jewels_needed)
+                  for name in items.filter_item_names(type=ItemType.JEWEL, passage=passage)]]
+    return needs_items(player, jewel_list)
+
+
+def set_access_rules(multiworld: MultiWorld, player: int):
     location_rules = difficulty_location_rules[multiworld.difficulty[player].value]
     for name, items in location_rules.items():
         try:
@@ -50,19 +68,19 @@ def set_access_rules(multiworld: MultiWorld, player: int):
 level_rules = {
     'Hall of Hieroglyphs':   [['Dash Attack', 'Grab', 'Super Ground Pound']],
 
-    #Palm Tree Paradise         None
+    'Palm Tree Paradise':       None,
     'Wildflower Fields':     [['Super Ground Pound', 'Swim']],
     'Mystic Lake':           [['Swim', 'Head Smash']],
     'Monsoon Jungle':        [['Ground Pound']],
 
-    #The Curious Factory        None
+    'The Curious Factory':      None,
     'The Toxic Landfill':    [['Dash Attack', 'Super Ground Pound', 'Head Smash']],
     '40 Below Fridge':       [['Super Ground Pound']],
     'Pinball Zone':          [['Grab', 'Ground Pound', 'Head Smash']],
 
     'Toy Block Tower':       [['Heavy Grab']],
     'The Big Board':         [['Ground Pound']],
-    #Doodle Woods               None
+    'Doodle Woods':             None,
     'Domino Row':            [['Swim']],
 
     'Crescent Moon Village': [['Head Smash', 'Dash Attack']],
@@ -70,14 +88,11 @@ level_rules = {
     'Fiery Cavern':          [['Ground Pound', 'Dash Attack']],
     'Hotel Horror':          [['Heavy Grab']],
 
-    # This one's weird. You need swim to get anything, but Keyzer is the only
-    # thing that requires grab in there.
-    # Logic considers the escape necessary to get the items in a level and
+    # This one's weird. You need swim to get anything, but Keyzer also requires
+    # grab. Logic considers the escape necessary to get the items in a level and
     # Keyzer to advance, but Golden Passage is the only level where the two have
     # different requirements.
-    # When more settings like level shuffle and always-open portals get added,
-    # it'll probably be best for logic to have them as separate events.
-    'Golden Passage':        [['Swim', 'Grab']],
+    'Golden Passage':        [['Swim']],
 }
 
 
