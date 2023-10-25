@@ -107,7 +107,6 @@ location_rules_all = {
     'Mystic Lake - Small Cave Box':                   [['Dash Attack']],
     'Mystic Lake - CD Box':                           [['Dash Attack']],
     'Mystic Lake - Full Health Item Box':             [['Grab']],
-    'Monsoon Jungle - Buried Cave Box':               [['Grab', 'Ground Pound']],
     'Monsoon Jungle - Puffy Hallway Box':             [['Dash Attack']],
     'Monsoon Jungle - Full Health Item Box':          [['Swim']],
 
@@ -130,6 +129,8 @@ location_rules_all = {
     'Crescent Moon Village - Sewer Box':              [['Swim']],
     'Arabian Night - Flying Carpet Dash Attack Box':  [['Dash Attack']],
     'Arabian Night - Kool-Aid Box':                   [['Dash Attack']],
+
+    'Golden Passage - Mad Scienstein Box':            [['Ground Pound']],
 }
 
 
@@ -142,8 +143,9 @@ location_rules_normal = {
 location_rules_hard = {
     **location_rules_all,
 
-    'Arabian Night - Onomi Box': [['Ground Pound'], ['Head Smash']],
-    'Arabian Night - Sewer Box': [['Super Ground Pound']],
+    'Monsoon Jungle - Buried Cave Box': [['Grab']],
+    'Arabian Night - Onomi Box':        [['Ground Pound'], ['Head Smash']],
+    'Arabian Night - Sewer Box':        [['Super Ground Pound']],
 }
 
 location_rules_s_hard = {
