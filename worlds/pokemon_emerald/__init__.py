@@ -758,9 +758,7 @@ class PokemonEmeraldWorld(World):
         generate_output(self, output_directory)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        slot_data: Dict[str, Any] = {}
-
-        sent_options = [
+        slot_data = self.options.as_dict(
             "goal",
             "badges",
             "hms",
@@ -778,17 +776,11 @@ class PokemonEmeraldWorld(World):
             "norman_requirement",
             "norman_count",
             "extra_boulders",
+            "remove_roadblocks",
             "free_fly_location",
             "fly_without_badge",
-        ]
-
-        for option_name in sent_options:
-            option = getattr(self.options, option_name)
-            slot_data[option_name] = option.value
-
+        )
         slot_data["free_fly_location_id"] = self.free_fly_location_id
-        slot_data["remove_roadblocks"] = list(self.options.remove_roadblocks.value)
-
         return slot_data
 
     def create_item(self, name: str) -> PokemonEmeraldItem:
