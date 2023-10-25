@@ -69,6 +69,11 @@ class SubnauticaWorld(World):
         menu_region = Region("Menu", self.player, self.multiworld)
         planet_region = Region("Planet 4546B", self.player, self.multiworld)
 
+        # Link regions together
+        lifepod_5_connection = Entrance(self.player, "Lifepod 5", menu_region)
+        menu_region.exits.append(lifepod_5_connection)
+        lifepod_5_connection.connect(planet_region)
+
         # Create regular locations
         location_names = itertools.chain((location["name"] for location in locations.location_table.values()),
                                          (creature + creatures.suffix for creature in self.creatures_to_scan))
@@ -77,12 +82,7 @@ class SubnauticaWorld(World):
             location = SubnauticaLocation(self.player, location_name, loc_id, planet_region)
             planet_region.locations.append(location)
 
-        # Link regions
-        lifepod_5_connection = Entrance(self.player, "Lifepod 5", menu_region)
-        menu_region.exits.append(lifepod_5_connection)
-        lifepod_5_connection.connect(planet_region)
-
-        # Handle events
+        # Create events
         goal_event_name = self.options.goal.get_event_name()
 
         for event in locations.events:
