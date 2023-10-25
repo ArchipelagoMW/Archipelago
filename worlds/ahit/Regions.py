@@ -298,11 +298,11 @@ def create_regions(world: World):
     botb = create_region_and_connect(w, "Battle of the Birds", "Telescope -> Battle of the Birds", spaceship)
     dbs = create_region_and_connect(w, "Dead Bird Studio", "Battle of the Birds - Act 1", botb)
     create_region_and_connect(w, "Murder on the Owl Express", "Battle of the Birds - Act 2", botb)
-    create_region_and_connect(w, "Picture Perfect", "Battle of the Birds - Act 3", botb)
-    create_region_and_connect(w, "Train Rush", "Battle of the Birds - Act 4", botb)
+    pp = create_region_and_connect(w, "Picture Perfect", "Battle of the Birds - Act 3", botb)
+    tr = create_region_and_connect(w, "Train Rush", "Battle of the Birds - Act 4", botb)
     create_region_and_connect(w, "The Big Parade", "Battle of the Birds - Act 5", botb)
     create_region_and_connect(w, "Award Ceremony", "Battle of the Birds - Finale A", botb)
-    create_region_and_connect(w, "Dead Bird Studio Basement", "Battle of the Birds - Finale B", botb)
+    basement = create_region_and_connect(w, "Dead Bird Studio Basement", "Battle of the Birds - Finale B", botb)
     create_rift_connections(w, create_region(w, "Time Rift - Dead Bird Studio"))
     create_rift_connections(w, create_region(w, "Time Rift - The Owl Express"))
     create_rift_connections(w, create_region(w, "Time Rift - The Moon"))
@@ -310,7 +310,6 @@ def create_regions(world: World):
     # Items near the Dead Bird Studio elevator can be reached from the basement act, and beyond in Expert
     ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
     post_ev_area = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
-    basement = mw.get_region("Dead Bird Studio Basement", p)
     connect_regions(basement, ev_area, "DBS Basement -> Elevator Area", p)
     if world.multiworld.LogicDifficulty[world.player].value >= int(Difficulty.EXPERT):
         connect_regions(basement, post_ev_area, "DBS Basement -> Post Elevator Area", p)
@@ -330,7 +329,8 @@ def create_regions(world: World):
     alpine_area = create_region_and_connect(w, "Alpine Skyline Area", "AFR -> Alpine Skyline Area", alpine_freeroam)
 
     # Needs to be separate because there are a lot of locations in Alpine that can't be accessed from Illness
-    alpine_area_tihs = create_region_and_connect(w, "Alpine Skyline Area (TIHS)", "-> Alpine Skyline Area (TIHS)", alpine_area)
+    alpine_area_tihs = create_region_and_connect(w, "Alpine Skyline Area (TIHS)", "-> Alpine Skyline Area (TIHS)",
+                                                 alpine_area)
 
     create_region_and_connect(w, "The Birdhouse", "-> The Birdhouse", alpine_area)
     create_region_and_connect(w, "The Lava Cake", "-> The Lava Cake", alpine_area)
@@ -374,10 +374,10 @@ def create_regions(world: World):
     connect_regions(mt_area, badge_seller, "MT Area -> Badge Seller", p)
     connect_regions(mt_area_humt, badge_seller, "MT Area (HUMT) -> Badge Seller", p)
     connect_regions(sf_area, badge_seller, "SF Area -> Badge Seller", p)
-    connect_regions(mw.get_region("Dead Bird Studio", p), badge_seller, "DBS -> Badge Seller", p)
-    connect_regions(mw.get_region("Picture Perfect", p), badge_seller, "PP -> Badge Seller", p)
-    connect_regions(mw.get_region("Train Rush", p), badge_seller, "TR -> Badge Seller", p)
-    connect_regions(mw.get_region("Alpine Skyline Area (TIHS)", p), badge_seller, "ASA -> Badge Seller", p)
+    connect_regions(dbs, badge_seller, "DBS -> Badge Seller", p)
+    connect_regions(pp, badge_seller, "PP -> Badge Seller", p)
+    connect_regions(tr, badge_seller, "TR -> Badge Seller", p)
+    connect_regions(alpine_area_tihs, badge_seller, "ASA -> Badge Seller", p)
 
     times_end = create_region_and_connect(w, "Time's End", "Telescope -> Time's End", spaceship)
     create_region_and_connect(w, "The Finale", "Time's End - Act 1", times_end)
@@ -403,10 +403,7 @@ def create_regions(world: World):
         if mw.Tasksanity[p].value > 0:
             create_tasksanity_locations(w)
 
-        # force recache
-        mw.get_region("Time Rift - Deep Sea", p)
-
-        connect_regions(mw.get_region("Cruise Ship", p), badge_seller, "CS -> Badge Seller", p)
+        connect_regions(cruise_ship, badge_seller, "CS -> Badge Seller", p)
 
     if w.is_dlc2():
         nyakuza_metro = create_region_and_connect(w, "Nyakuza Metro", "Telescope -> Nyakuza Metro", spaceship)
@@ -424,9 +421,6 @@ def create_regions(world: World):
 
         create_rift_connections(w, create_region(w, "Time Rift - Rumbi Factory"))
         create_thug_shops(w)
-
-    # force recache
-    mw.get_region("Time Rift - Sewers", p)
 
 
 def create_rift_connections(world: World, region: Region):

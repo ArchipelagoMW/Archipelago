@@ -62,7 +62,7 @@ def get_difficulty(world: World) -> Difficulty:
     return Difficulty(world.multiworld.LogicDifficulty[world.player].value)
 
 
-def has_paintings(state: CollectionState, world: World, count: int, allow_skip: bool=True) -> bool:
+def has_paintings(state: CollectionState, world: World, count: int, allow_skip: bool = True) -> bool:
     if not painting_logic(world):
         return True
 

@@ -10,7 +10,6 @@ from .DeathWishRules import set_dw_rules, create_enemy_events
 from worlds.AutoWorld import World, WebWorld
 from typing import List, Dict, TextIO
 from worlds.LauncherComponents import Component, components, icon_paths
-from multiprocessing import Process
 from Utils import local_path
 
 hat_craft_order: Dict[int, List[HatType]] = {}
@@ -158,7 +157,7 @@ class HatInTimeWorld(World):
 
         set_rules(self)
 
-        if self.multiworld.EnableDeathWish[self.player].value > 0:
+        if self.is_dw():
             set_dw_rules(self)
 
     def create_item(self, name: str) -> Item:
