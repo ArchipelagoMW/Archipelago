@@ -88,6 +88,16 @@ Final Fantasy Mystic Quest:
     DoubleHalf: 0
     Triple: 0
     Quadruple: 0
+  companion_leveling_type:
+    Quests: 0
+    BenPlus0: 0
+    BenPlus5: 0
+    BenPlus10: 0
+  companion_spellbook_type:
+    Standard: 0
+    StandardExtended: 0
+    RandomBalanced: 0
+    RandomChaos: 0
   battles_quantity:
     Ten: 0
     Seven: 0

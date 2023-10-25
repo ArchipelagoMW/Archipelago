@@ -36,48 +36,50 @@ def generate_output(self, output_directory):
 
     def cc(option):
         return option.current_key.title().replace("_", "").replace("OverworldAndDungeons",
-            "OverworldDungeons").replace("MobsAndBosses", "MobsBosses").replace("MobsBossesAndDarkKing", "MobsBossesDK")
+            "OverworldDungeons").replace("MobsAndBosses", "MobsBosses").replace("MobsBossesAndDarkKing",
+            "MobsBossesDK").replace("BenjaminLevelPlus", "BenPlus").replace("BenjaminLevel", "BenPlus0")
 
     def tf(option):
         return True if option else False
 
     options = deepcopy(settings_template)
     options["name"] = self.multiworld.player_name[self.player]
-
     option_writes = {
-                   "enemies_density": cc(self.multiworld.enemies_density[self.player]),
-                   "chests_shuffle": "Include",
-                   "shuffle_boxes_content": self.multiworld.brown_boxes[self.player] == "shuffle",
-                   "npcs_shuffle": "Include",
-                   "battlefields_shuffle": "Include",
-                   "logic_options": cc(self.multiworld.logic[self.player]),
-                   "shuffle_enemies_position": tf(self.multiworld.shuffle_enemies_position[self.player]),
-                   "enemies_scaling_lower": cc(self.multiworld.enemies_scaling_lower[self.player]),
-                   "enemies_scaling_upper": cc(self.multiworld.enemies_scaling_upper[self.player]),
-                   "bosses_scaling_lower": cc(self.multiworld.bosses_scaling_lower[self.player]),
-                   "bosses_scaling_upper": cc(self.multiworld.bosses_scaling_upper[self.player]),
-                   "enemizer_attacks": cc(self.multiworld.enemizer_attacks[self.player]),
-                   "leveling_curve": cc(self.multiworld.leveling_curve[self.player]),
-                   "battles_quantity": cc(self.multiworld.battlefields_battles_quantities[self.player]) if
-                                          self.multiworld.battlefields_battles_quantities[self.player].value < 5 else
-                                         "RandomLow" if
-                                         self.multiworld.battlefields_battles_quantities[self.player].value == 5 else
-                                         "RandomHigh",
-                   "shuffle_battlefield_rewards": tf(self.multiworld.shuffle_battlefield_rewards[self.player]),
-                   "random_starting_weapon": True,
-                   "progressive_gear": tf(self.multiworld.progressive_gear[self.player]),
-                   "tweaked_dungeons": tf(self.multiworld.tweak_frustrating_dungeons[self.player]),
-                   "doom_castle_mode": cc(self.multiworld.doom_castle_mode[self.player]),
-                   "doom_castle_shortcut": tf(self.multiworld.doom_castle_shortcut[self.player]),
-                   "sky_coin_mode": cc(self.multiworld.sky_coin_mode[self.player]),
-                   "sky_coin_fragments_qty": cc(self.multiworld.shattered_sky_coin_quantity[self.player]),
-                   "enable_spoilers": False,
-                   "progressive_formations": cc(self.multiworld.progressive_formations[self.player]),
-                   "map_shuffling": cc(self.multiworld.map_shuffle[self.player]),
-                   "crest_shuffle": tf(self.multiworld.crest_shuffle[self.player]),
-                   "enemizer_groups": cc(self.multiworld.enemizer_groups[self.player]),
-                   "shuffle_res_weak_type": tf(self.multiworld.shuffle_res_weak_types[self.player])
-               }
+       "enemies_density": cc(self.multiworld.enemies_density[self.player]),
+       "chests_shuffle": "Include",
+       "shuffle_boxes_content": self.multiworld.brown_boxes[self.player] == "shuffle",
+       "npcs_shuffle": "Include",
+       "battlefields_shuffle": "Include",
+       "logic_options": cc(self.multiworld.logic[self.player]),
+       "shuffle_enemies_position": tf(self.multiworld.shuffle_enemies_position[self.player]),
+       "enemies_scaling_lower": cc(self.multiworld.enemies_scaling_lower[self.player]),
+       "enemies_scaling_upper": cc(self.multiworld.enemies_scaling_upper[self.player]),
+       "bosses_scaling_lower": cc(self.multiworld.bosses_scaling_lower[self.player]),
+       "bosses_scaling_upper": cc(self.multiworld.bosses_scaling_upper[self.player]),
+       "enemizer_attacks": cc(self.multiworld.enemizer_attacks[self.player]),
+       "leveling_curve": cc(self.multiworld.leveling_curve[self.player]),
+       "battles_quantity": cc(self.multiworld.battlefields_battles_quantities[self.player]) if
+                              self.multiworld.battlefields_battles_quantities[self.player].value < 5 else
+                             "RandomLow" if
+                             self.multiworld.battlefields_battles_quantities[self.player].value == 5 else
+                             "RandomHigh",
+       "shuffle_battlefield_rewards": tf(self.multiworld.shuffle_battlefield_rewards[self.player]),
+       "random_starting_weapon": True,
+       "progressive_gear": tf(self.multiworld.progressive_gear[self.player]),
+       "tweaked_dungeons": tf(self.multiworld.tweak_frustrating_dungeons[self.player]),
+       "doom_castle_mode": cc(self.multiworld.doom_castle_mode[self.player]),
+       "doom_castle_shortcut": tf(self.multiworld.doom_castle_shortcut[self.player]),
+       "sky_coin_mode": cc(self.multiworld.sky_coin_mode[self.player]),
+       "sky_coin_fragments_qty": cc(self.multiworld.shattered_sky_coin_quantity[self.player]),
+       "enable_spoilers": False,
+       "progressive_formations": cc(self.multiworld.progressive_formations[self.player]),
+       "map_shuffling": cc(self.multiworld.map_shuffle[self.player]),
+       "crest_shuffle": tf(self.multiworld.crest_shuffle[self.player]),
+       "enemizer_groups": cc(self.multiworld.enemizer_groups[self.player]),
+       "shuffle_res_weak_type": tf(self.multiworld.shuffle_res_weak_types[self.player]),
+       "companion_leveling_type": cc(self.multiworld.companion_leveling_type[self.player]),
+       "companion_spellbook_type": cc(self.multiworld.companion_spellbook_type[self.player]),
+    }
     for option, data in option_writes.items():
         options["Final Fantasy Mystic Quest"][option][data] = 1
 

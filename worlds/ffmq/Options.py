@@ -246,6 +246,32 @@ class BattlefieldsBattlesQuantities(Choice):
     option_random_one_through_ten = 6
 
 
+class CompanionLevelingType(Choice):
+    """Set how companions gain levels.
+    Quest: Complete each companion's individual quest for them to promote to their second version.
+    Benjamin Level: Companions' level tracks Benjamin's."""
+    option_quests = 0
+    option_benjamin_level = 1
+    option_benjamin_level_plus_5 = 2
+    option_benjamin_level_plus_10 = 3
+    default = 0
+    dislpay_name = "Companion Leveling Type"
+
+
+class CompanionSpellbookType(Choice):
+    """Update companions' spellbook.
+    Standard: Original game spellbooks.
+    Standard Extended: Add some extra spells. Tristam gains Exit and Quake and Reuben gets Blizzard.
+    Random Balanced: Randomize the spellbooks with an appropriate mix of spells.
+    Random Chaos: Randomize the spellbooks in total free-for-all."""
+    option_standard = 0
+    option_standard_extended = 1
+    option_random_balanced = 2
+    option_random_chaos = 3
+    default = 0
+    display_name = "Companion Spellbook Type"
+
+
 option_definitions = {
     "logic": Logic,
     "brown_boxes": BrownBoxes,
@@ -253,6 +279,9 @@ option_definitions = {
     "shattered_sky_coin_quantity": ShatteredSkyCoinQuantity,
     "starting_weapon": StartingWeapon,
     "progressive_gear": ProgressiveGear,
+    "leveling_curve": LevelingCurve,
+    "companion_leveling_type": CompanionLevelingType,
+    "companion_spellbook_type": CompanionSpellbookType,
     "enemies_density": EnemiesDensity,
     "enemies_scaling_lower": EnemiesScalingLower,
     "enemies_scaling_upper": EnemiesScalingUpper,
@@ -270,6 +299,5 @@ option_definitions = {
     "crest_shuffle": CrestShuffle,
     "shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
     "map_shuffle_seed": MapShuffleSeed,
-    "leveling_curve": LevelingCurve,
     "battlefields_battles_quantities": BattlefieldsBattlesQuantities,
 }
