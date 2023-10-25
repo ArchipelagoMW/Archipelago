@@ -1,6 +1,7 @@
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from . import Events, Items, Locations, Options, Regions, Rules
+from .Options import NoitaOptions
 
 
 class NoitaWeb(WebWorld):
@@ -24,7 +25,8 @@ class NoitaWorld(World):
     """
 
     game = "Noita"
-    option_definitions = Options.noita_options
+    options: Options.NoitaOptions
+    options_dataclass: Options.NoitaOptions
 
     item_name_to_id = Items.item_name_to_id
     location_name_to_id = Locations.location_name_to_id
@@ -36,8 +38,8 @@ class NoitaWorld(World):
     web = NoitaWeb()
 
     # Returned items will be sent over to the client
-    def fill_slot_data(self):
-        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+    # def fill_slot_data(self):
+    #     return {option_name: option_value for option_name, option_value in self.options.as_dict()}
 
     def create_regions(self) -> None:
         Regions.create_all_regions_and_connections(self.multiworld, self.player)

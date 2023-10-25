@@ -1,9 +1,14 @@
-from typing import List, NamedTuple, Set
+from typing import List, NamedTuple, Set, TYPE_CHECKING
 
 from BaseClasses import CollectionState, MultiWorld
 from . import Items, Locations
 from .Options import BossesAsChecks, VictoryCondition
 from worlds.generic import Rules as GenericRules
+
+if TYPE_CHECKING:
+    from . import NoitaWorld
+else:
+    NoitaWorld = object
 
 
 class EntranceLock(NamedTuple):
@@ -105,10 +110,10 @@ def lock_holy_mountains_into_spheres(multiworld: MultiWorld, player: int) -> Non
         GenericRules.set_rule(location, lambda state, evt=lock.event: state.has(evt, player))
 
 
-def holy_mountain_unlock_conditions(multiworld: MultiWorld, player: int) -> None:
-    victory_condition = multiworld.victory_condition[player].value
+def holy_mountain_unlock_conditions(world: NoitaWorld, player: int) -> None:
+    victory_condition = world.options.victory_condition.value
     for lock in entrance_locks:
-        location = multiworld.get_location(lock.event, player)
+        location = world.get_location(lock.event, player)
 
         if victory_condition == VictoryCondition.option_greed_ending:
             location.access_rule = lambda state, items_needed=lock.items_needed: (

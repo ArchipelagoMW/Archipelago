@@ -1,8 +1,14 @@
 # Regions are areas in your game that you travel to.
-from typing import Dict, Set
+from typing import Dict, Set, TYPE_CHECKING
 
 from BaseClasses import Entrance, MultiWorld, Region
 from . import Locations
+from .Options import NoitaOptions
+
+if TYPE_CHECKING:
+    from . import NoitaWorld
+else:
+    NoitaWorld = object
 
 
 def add_location(player: int, loc_name: str, id: int, region: Region) -> None:
@@ -10,17 +16,17 @@ def add_location(player: int, loc_name: str, id: int, region: Region) -> None:
     region.locations.append(location)
 
 
-def add_locations(multiworld: MultiWorld, player: int, region: Region) -> None:
+def add_locations(world: NoitaWorld, player: int, region: Region) -> None:
     locations = Locations.location_region_mapping.get(region.name, {})
     for location_name, location_data in locations.items():
         location_type = location_data.ltype
         flag = location_data.flag
 
-        opt_orbs = multiworld.orbs_as_checks[player].value
-        opt_bosses = multiworld.bosses_as_checks[player].value
-        opt_paths = multiworld.path_option[player].value
-        opt_num_chests = multiworld.hidden_chests[player].value
-        opt_num_pedestals = multiworld.pedestal_checks[player].value
+        opt_orbs = world.options.orbs_as_checks.value
+        opt_bosses = world.options.bosses_as_checks.value
+        opt_paths = world.options.path_option.value
+        opt_num_chests = world.options.hidden_chests.value
+        opt_num_pedestals = world.options.pedestal_checks.value
 
         is_orb_allowed = location_type == "orb" and flag <= opt_orbs
         is_boss_allowed = location_type == "boss" and flag <= opt_bosses
@@ -35,14 +41,14 @@ def add_locations(multiworld: MultiWorld, player: int, region: Region) -> None:
 
 
 # Creates a new Region with the locations found in `location_region_mapping` and adds them to the world.
-def create_region(multiworld: MultiWorld, player: int, region_name: str) -> Region:
+def create_region(multiworld: MultiWorld, world: NoitaWorld, player: int, region_name: str) -> Region:
     new_region = Region(region_name, player, multiworld)
-    add_locations(multiworld, player, new_region)
+    add_locations(world, player, new_region)
     return new_region
 
 
-def create_regions(multiworld: MultiWorld, player: int) -> Dict[str, Region]:
-    return {name: create_region(multiworld, player, name) for name in noita_regions}
+def create_regions(multiworld: MultiWorld, world: NoitaWorld, player: int) -> Dict[str, Region]:
+    return {name: create_region(multiworld, world, player, name) for name in noita_regions}
 
 
 # An "Entrance" is really just a connection between two regions
@@ -61,7 +67,8 @@ def create_connections(player: int, regions: Dict[str, Region]) -> None:
 
 # Creates all regions and connections. Called from NoitaWorld.
 def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> None:
-    created_regions = create_regions(multiworld, player)
+    world = multiworld.worlds[player]
+    created_regions = create_regions(multiworld, world, player)
     create_connections(player, created_regions)
 
     multiworld.regions += created_regions.values()

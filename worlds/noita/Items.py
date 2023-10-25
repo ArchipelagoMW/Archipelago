@@ -1,9 +1,14 @@
 import itertools
 from collections import Counter
-from typing import Dict, List, NamedTuple, Set
+from typing import Dict, List, NamedTuple, Set, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 from .Options import BossesAsChecks, VictoryCondition, ExtraOrbs
+
+if TYPE_CHECKING:
+    from . import NoitaWorld
+else:
+    NoitaWorld = object
 
 
 class ItemData(NamedTuple):
@@ -44,9 +49,9 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
     return ["Kantele"] if victory_condition.value >= VictoryCondition.option_pure_ending else []
 
 
-def create_random_items(multiworld: MultiWorld, player: int, random_count: int) -> List[str]:
+def create_random_items(multiworld: MultiWorld, world: NoitaWorld, random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
-    if multiworld.bad_effects[player].value == 0:
+    if world.options.bad_effects.value == 0:
         del filler_pool["Trap"]
 
     return multiworld.random.choices(
@@ -57,17 +62,18 @@ def create_random_items(multiworld: MultiWorld, player: int, random_count: int) 
 
 
 def create_all_items(multiworld: MultiWorld, player: int) -> None:
+    world = multiworld.worlds[player]
     sum_locations = len(multiworld.get_unfilled_locations(player))
 
     itempool = (
         create_fixed_item_pool()
-        + create_orb_items(multiworld.victory_condition[player], multiworld.extra_orbs[player])
-        + create_spatial_awareness_item(multiworld.bosses_as_checks[player])
-        + create_kantele(multiworld.victory_condition[player])
+        + create_orb_items(world.options.victory_condition, world.options.extra_orbs)
+        + create_spatial_awareness_item(world.options.bosses_as_checks)
+        + create_kantele(world.options.victory_condition)
     )
 
     random_count = sum_locations - len(itempool)
-    itempool += create_random_items(multiworld, player, random_count)
+    itempool += create_random_items(multiworld, world, random_count)
 
     multiworld.itempool += [create_item(player, name) for name in itempool]
 
