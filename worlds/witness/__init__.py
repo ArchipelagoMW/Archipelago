@@ -94,7 +94,7 @@ class WitnessWorld(World):
         self.items: WitnessPlayerItems = WitnessPlayerItems(
             self, self.player_logic, self.locat
         )
-        self.regio: WitnessRegions = WitnessRegions(self.locat)
+        self.regio: WitnessRegions = WitnessRegions(self.locat, self)
 
         self.log_ids_to_hints = dict()
 
@@ -124,7 +124,7 @@ class WitnessWorld(World):
             item_obj = self.create_item(
                 self.player_logic.EVENT_ITEM_PAIRS[event_location]
             )
-            location_obj = self.multiworld.get_location(event_location, self.player)
+            location_obj = location_cache[event_location]
             location_obj.place_locked_item(item_obj)
             self.own_itempool.append(item_obj)
 
@@ -132,7 +132,8 @@ class WitnessWorld(World):
 
         # Place other locked items
         dog_puzzle_skip = self.create_item("Puzzle Skip")
-        self.multiworld.get_location("Town Pet the Dog", self.player).place_locked_item(dog_puzzle_skip)
+        location_cache["Town Pet the Dog"].place_locked_item(dog_puzzle_skip)
+
         self.own_itempool.append(dog_puzzle_skip)
 
         self.items_placed_early.append("Puzzle Skip")
@@ -147,8 +148,7 @@ class WitnessWorld(World):
             else:
                 # Force the item onto the tutorial gate check and remove it from our random pool.
                 gate_item = self.create_item(random_early_item)
-                self.multiworld.get_location("Tutorial Gate Open", self.player)\
-                    .place_locked_item(gate_item)
+                location_cache["Tutorial Gate Open"].place_locked_item(gate_item)
                 self.own_itempool.append(gate_item)
                 self.items_placed_early.append(random_early_item)
 

@@ -222,10 +222,8 @@ def set_rules(world: World, player_logic: WitnessPlayerLogic,
 
         rule = make_lambda(check_hex, world, world.player, player_logic, locat)
 
-        if location in location_cache:
-            location = location_cache[location]
-        else:
-            location = world.multiworld.get_location(location, world.player)
+        location = location_cache[location] if location in location_cache\
+            else world.multiworld.get_location(location, world.player)
 
         set_rule(location, rule)
 

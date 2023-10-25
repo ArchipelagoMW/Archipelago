@@ -2,12 +2,14 @@
 Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
+from logging import warning
 from typing import FrozenSet, Dict
 
 from BaseClasses import Entrance, Region, Location
 from worlds.AutoWorld import World
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
+from Utils import KeyedDefaultDict
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -108,7 +110,21 @@ class WitnessRegions:
 
         return self.location_cache
 
-    def __init__(self, locat: WitnessPlayerLocations):
+    def __init__(self, locat: WitnessPlayerLocations, world: World):
         self.locat = locat
-        self.region_cache: Dict[str, Region] = dict()
-        self.location_cache: Dict[str, Location] = dict()
+        player_name = world.multiworld.get_player_name(world.player)
+
+        def get_uncached_region(key: str) -> Region:
+            warning(f"Region \"{key}\" was not cached in {player_name}'s Witness world. Violet pls fix this.")
+            return world.multiworld.get_region(key, world.player)
+
+        def get_uncached_location(key: str) -> Location:
+            warning(f"Location \"{key}\" was not cached in {player_name}'s Witness world. Violet pls fix this.")
+            return world.multiworld.get_location(key, world.player)
+
+        self.region_cache: KeyedDefaultDict[str, Region] = KeyedDefaultDict(
+            get_uncached_region
+        )
+        self.location_cache: Dict[str, Location] = KeyedDefaultDict(
+            get_uncached_location
+        )
