@@ -87,16 +87,25 @@ class Overcooked2World(World):
         )
         self.multiworld.regions.append(region)
 
-    def connect_regions(self, source: str, target: str, rule: Optional[Callable[[CollectionState], bool]] = None):
-        sourceRegion = self.multiworld.get_region(source, self.player)
-        targetRegion = self.multiworld.get_region(target, self.player)
+    def connect_regions(self) -> None:
+        menu = self.multiworld.get_region("Menu", self.player)
+        overworld = self.multiworld.get_region("Overworld", self.player)
+        menu.connect(overworld)
+        for level in Overcooked2Level():
+            level_region = self.multiworld.get_region(level.level_name, self.player)
+            
+            # Overworld -> Level
+            required_star_count: int = self.level_unlock_counts[level.level_id]
+            if level.level_id % 6 != 1 and level.level_id <= 36:
+                previous_level_completed_event_name: str = Overcooked2GenericLevel(
+                    level.level_id - 1).shortname.split(" ")[1] + " Level Complete"
+            else:
+                previous_level_completed_event_name = None
 
-        connection = Entrance(self.player, '', sourceRegion)
-        if rule:
-            connection.access_rule = rule
-
-        sourceRegion.exits.append(connection)
-        connection.connect(targetRegion)
+            level_access_rule: Callable[[CollectionState], bool] = \
+                lambda state, level_name=level.level_name, previous_level_completed_event_name=previous_level_completed_event_name, required_star_count=required_star_count: \
+                    has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.options.ramp_tricks.result, self.player)
+            overworld.connect(level_region, rule=level_access_rule)
 
     def add_level_location(
         self,
@@ -267,7 +276,6 @@ class Overcooked2World(World):
         # Menu -> Overworld
         self.add_region("Menu")
         self.add_region("Overworld")
-        self.connect_regions("Menu", "Overworld")
 
         # Create and populate "regions" (a.k.a. levels)
         for level in Overcooked2Level():
@@ -320,26 +328,9 @@ class Overcooked2World(World):
                     is_event=True,
                 )
 
-            # Overworld -> Level
-            required_star_count: int = self.level_unlock_counts[level.level_id]
-            if level.level_id % 6 != 1 and level.level_id <= 36:
-                previous_level_completed_event_name: str = Overcooked2GenericLevel(
-                    level.level_id - 1).shortname.split(" ")[1] + " Level Complete"
-            else:
-                previous_level_completed_event_name = None
-
-            level_access_rule: Callable[[CollectionState], bool] = \
-                lambda state, level_name=level.level_name, previous_level_completed_event_name=previous_level_completed_event_name, required_star_count=required_star_count: \
-                has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.options.ramp_tricks.result, self.player)
-            self.connect_regions("Overworld", level.level_name, level_access_rule)
-
-            # Level --> Overworld
-            self.connect_regions(level.level_name, "Overworld")
-
         completion_condition: Callable[[CollectionState], bool] = lambda state: \
             state.has("Victory", self.player)
         self.multiworld.completion_condition[self.player] = completion_condition
-
 
     def create_items(self):
         self.itempool = []
