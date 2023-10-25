@@ -47,7 +47,6 @@ class ThreadBarrierProxy:
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
-    _region_cache: Dict[int, Dict[str, Region]]
     difficulty_requirements: dict
     required_medallions: dict
     dark_room_logic: Dict[int, str]
@@ -57,7 +56,7 @@ class MultiWorld():
     plando_connections: List
     worlds: Dict[int, auto_world]
     groups: Dict[int, Group]
-    regions: List[Region]
+    regions: RegionManager
     itempool: List[Item]
     is_race: bool = False
     precollected_items: Dict[int, List[Item]]
@@ -92,6 +91,64 @@ class MultiWorld():
         def __getitem__(self, player) -> bool:
             return self.rule(player)
 
+    class RegionManager:
+        regions: List[Region]
+        _dirty_regions: List[Region]
+        region_cache: Dict[int, Dict[str, Region]]
+        entrance_cache: Dict[Tuple[str, int], Entrance]
+        location_cache: Dict[Tuple[str, int], Location]
+
+        def __init__(self, players: int):
+            self.regions = []
+            self._dirty_regions = []
+
+            self.region_cache = {player: {} for player in range(1, players+1)}
+            self.entrance_cache = {}
+            self.location_cache = {}
+
+        def __iadd__(self, other: Iterable[Region]):
+            self.extend(other)
+            return self
+
+        def append(self, other: Region):
+            self.regions.append(other)
+            self._dirty_regions.append(other)
+
+        def extend(self, other: Iterable[Region]):
+            self.regions.extend(other)
+            self._dirty_regions.extend(other)
+
+        def __iter__(self) -> Iterator[Region]:
+            return iter(self.regions)
+
+        def refresh_region(self, region: Region):
+            """Can be called to alert about added locations or entrances to the region."""
+            for region_exit in region.exits:
+                self.entrance_cache[region_exit.name, region_exit.player] = region_exit
+
+            for r_location in region.locations:
+                self.location_cache[r_location.name, r_location.player] = r_location
+
+        def recache(self, full: bool = False) -> bool:
+            """Called by Multiworld to flush changes to cache."""
+            if full:
+                logging.warning(
+                    "Could not find Region content. "
+                    "Please avoid adding Regions to multiworld.regions before their Entrances and Locations are added. "
+                    "If you need to, please refresh the region by passing it to multiworld.regions.refresh_region."
+                )
+                regions = self.regions
+            else:
+                regions = self._dirty_regions
+
+            for region in regions:
+                self.region_cache[region.player][region.name] = region
+                self.refresh_region(region)
+
+            self._dirty_regions[:] = []
+
+            return bool(regions)
+
     def __init__(self, players: int):
         # world-local random state is saved for multiple generations running concurrently
         self.random = ThreadBarrierProxy(random.Random())
@@ -100,7 +157,7 @@ class MultiWorld():
         self.glitch_triforce = False
         self.algorithm = 'balanced'
         self.groups = {}
-        self.regions = []
+        self.regions = self.RegionManager(players)
         self.shops = []
         self.itempool = []
         self.seed = None
@@ -108,8 +165,6 @@ class MultiWorld():
         self.precollected_items = {player: [] for player in self.player_ids}
         self._cached_entrances = None
         self._cached_locations = None
-        self._entrance_cache = {}
-        self._location_cache: Dict[Tuple[str, int], Location] = {}
         self.required_locations = []
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
@@ -201,7 +256,6 @@ class MultiWorld():
         self.game[new_id] = game
         self.custom_data[new_id] = {}
         self.player_types[new_id] = NetUtils.SlotType.group
-        self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
         self.worlds[new_id] = world_type.create_group(self, new_id, players)
         self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
@@ -334,39 +388,42 @@ class MultiWorld():
 
     def _recache(self):
         """Rebuild world cache"""
-        self._cached_locations = None
-        for region in self.regions:
-            player = region.player
-            self._region_cache[player][region.name] = region
-            for exit in region.exits:
-                self._entrance_cache[exit.name, player] = exit
-
-            for r_location in region.locations:
-                self._location_cache[r_location.name, player] = r_location
+        self.clear_location_cache()
+        self.clear_entrance_cache()
+        self.regions.recache()
 
     def get_regions(self, player: Optional[int] = None) -> Collection[Region]:
-        return self.regions if player is None else self._region_cache[player].values()
+        self.regions.recache()
+        return self.regions.regions if player is None else self.regions.region_cache[player].values()
 
     def get_region(self, regionname: str, player: int) -> Region:
         try:
-            return self._region_cache[player][regionname]
+            return self.regions.region_cache[player][regionname]
         except KeyError:
-            self._recache()
-            return self._region_cache[player][regionname]
+            self.regions.recache()
+            return self.regions.region_cache[player][regionname]
 
     def get_entrance(self, entrance: str, player: int) -> Entrance:
         try:
-            return self._entrance_cache[entrance, player]
+            return self.regions.entrance_cache[entrance, player]
         except KeyError:
-            self._recache()
-            return self._entrance_cache[entrance, player]
+            self.regions.recache()
+            try:
+                return self.regions.entrance_cache[entrance, player]
+            except KeyError:
+                self.regions.recache(full=True)
+                return self.regions.entrance_cache[entrance, player]
 
     def get_location(self, location: str, player: int) -> Location:
         try:
-            return self._location_cache[location, player]
+            return self.regions.location_cache[location, player]
         except KeyError:
-            self._recache()
-            return self._location_cache[location, player]
+            self.regions.recache()
+            try:
+                return self.regions.location_cache[location, player]
+            except KeyError:
+                self.regions.recache(full=True)
+                return self.regions.location_cache[location, player]
 
     def get_all_state(self, use_cache: bool) -> CollectionState:
         cached = getattr(self, "_all_state", None)
@@ -428,7 +485,8 @@ class MultiWorld():
         logging.debug('Placed %s at %s', item, location)
 
     def get_entrances(self) -> List[Entrance]:
-        if self._cached_entrances is None:
+        change = self.regions.recache()
+        if change or self._cached_entrances is None:
             self._cached_entrances = [entrance for region in self.regions for entrance in region.entrances]
         return self._cached_entrances
 
@@ -441,7 +499,8 @@ class MultiWorld():
         self.indirect_connections.setdefault(region, set()).add(entrance)
 
     def get_locations(self, player: Optional[int] = None) -> List[Location]:
-        if self._cached_locations is None:
+        change = self.regions.recache()
+        if change or self._cached_locations is None:
             self._cached_locations = [location for region in self.regions for location in region.locations]
         if player is not None:
             return [location for location in self._cached_locations if location.player == player]
@@ -471,7 +530,7 @@ class MultiWorld():
             else:
                 valid_locations = location_names
             for location_name in valid_locations:
-                location = self._location_cache.get((location_name, player), None)
+                location = self.regions.location_cache.get((location_name, player), None)
                 if location is not None and location.item is None:
                     yield location
 
