@@ -328,11 +328,6 @@ class MultiWorld():
         """ the base name (without file extension) for each player's output file for a seed """
         return f"AP_{self.seed_name}_P{player}_{self.get_file_safe_player_name(player).replace(' ', '_')}"
 
-    def initialize_regions(self, regions=None):
-        for region in regions if regions else self.regions:
-            region.multiworld = self
-            self._region_cache[region.player][region.name] = region
-
     @functools.cached_property
     def world_name_lookup(self):
         return {self.player_name[player_id]: player_id for player_id in self.player_ids}

@@ -382,8 +382,6 @@ def create_regions(world, player):
         create_dw_region(world, player, 'Dark Death Mountain Bunny Descent Area')
     ]
 
-    world.initialize_regions()
-
 
 def create_lw_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     return _create_region(world, player, name, LTTPRegionType.LightWorld, 'Light World', locations, exits)
