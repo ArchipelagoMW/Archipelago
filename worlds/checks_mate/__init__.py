@@ -105,23 +105,23 @@ class CMWorld(World):
         my_progression_items = set(progression_items.keys())
         min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
         max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
-        while (len(items) + user_item_count) < len(location_table) and material < min_material_option and len(
-                my_progression_items) > 0:
-            chosen_item = self.multiworld.random.choice(list(my_progression_items))
-            # obey user's wishes
-            if progression_items[chosen_item].material + material > max_material_option:
-                my_progression_items.remove(chosen_item)
-                continue
-            # add item
-            if self.can_add_more(chosen_item):
-                try_item = self.create_item(chosen_item)
-                if chosen_item not in self.items_used:
-                    self.items_used[chosen_item] = 0
-                self.items_used[chosen_item] += 1
-                items.append(try_item)
-                material += progression_items[chosen_item].material
-            else:
-                my_progression_items.remove(chosen_item)
+        # while (len(items) + user_item_count) < len(location_table) and material < min_material_option and len(
+        #         my_progression_items) > 0:
+        #     chosen_item = self.multiworld.random.choice(list(my_progression_items))
+        #     # obey user's wishes
+        #     if progression_items[chosen_item].material + material > max_material_option:
+        #         my_progression_items.remove(chosen_item)
+        #         continue
+        #     # add item
+        #     if self.can_add_more(chosen_item):
+        #         try_item = self.create_item(chosen_item)
+        #         if chosen_item not in self.items_used:
+        #             self.items_used[chosen_item] = 0
+        #         self.items_used[chosen_item] += 1
+        #         items.append(try_item)
+        #         material += progression_items[chosen_item].material
+        #     else:
+        #         my_progression_items.remove(chosen_item)
 
         max_material_actual = (
                 self.multiworld.random.random() * (max_material_option - min_material_option) + max_material_option)
