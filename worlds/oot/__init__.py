@@ -998,6 +998,7 @@ class OOTWorld(World):
                             fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_dungeon_items,
                                 single_player_placement=False, lock=True, allow_excluded=True)
 
+
     def generate_output(self, output_directory: str):
         if self.hints != 'none':
             self.hint_data_available.wait()
@@ -1033,30 +1034,6 @@ class OOTWorld(World):
                 player_name=self.multiworld.get_player_name(self.player))
             apz5.write()
 
-            # Write entrances to spoiler log
-            all_entrances = self.get_shuffled_entrances()
-            all_entrances.sort(reverse=True, key=lambda x: x.name)
-            all_entrances.sort(reverse=True, key=lambda x: x.type)
-            if not self.decouple_entrances:
-                while all_entrances:
-                    loadzone = all_entrances.pop()
-                    if loadzone.type != 'Overworld':
-                        if loadzone.primary:
-                            entrance = loadzone
-                        else:
-                            entrance = loadzone.reverse
-                        if entrance.reverse is not None:
-                            self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
-                        else:
-                            self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
-                    else:
-                        reverse = loadzone.replaces.reverse
-                        if reverse in all_entrances:
-                            all_entrances.remove(reverse)
-                        self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
-            else:
-                for entrance in all_entrances:
-                    self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
     @classmethod
@@ -1136,12 +1113,14 @@ class OOTWorld(World):
             for autoworld in multiworld.get_game_worlds("Ocarina of Time"):
                 autoworld.hint_data_available.set()
 
+
     def fill_slot_data(self):
         self.collectible_flags_available.wait()
         return {
             'collectible_override_flags': self.collectible_override_flags,
             'collectible_flag_offsets': self.collectible_flag_offsets
         }
+
 
     def modify_multidata(self, multidata: dict):
 
@@ -1156,6 +1135,7 @@ class OOTWorld(World):
             if item_id is None:
                 continue
             multidata["precollected_items"][self.player].remove(item_id)
+
 
     def extend_hint_information(self, er_hint_data: dict):
 
@@ -1203,6 +1183,7 @@ class OOTWorld(World):
                             er_hint_data[self.player][location.address] = main_entrance.name
                             logger.debug(f"Set {location.name} hint data to {main_entrance.name}")
 
+
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         required_trials_str = ", ".join(t for t in self.skipped_trials if not self.skipped_trials[t])
         spoiler_handle.write(f"\n\nTrials ({self.multiworld.get_player_name(self.player)}): {required_trials_str}\n")
@@ -1211,6 +1192,32 @@ class OOTWorld(World):
             spoiler_handle.write(f"\nShop Prices ({self.multiworld.get_player_name(self.player)}):\n")
             for k, v in self.shop_prices.items():
                 spoiler_handle.write(f"{k}: {v} Rupees\n")
+
+        # Write entrances to spoiler log
+        all_entrances = self.get_shuffled_entrances()
+        all_entrances.sort(reverse=True, key=lambda x: x.name)
+        all_entrances.sort(reverse=True, key=lambda x: x.type)
+        if not self.decouple_entrances:
+            while all_entrances:
+                loadzone = all_entrances.pop()
+                if loadzone.type != 'Overworld':
+                    if loadzone.primary:
+                        entrance = loadzone
+                    else:
+                        entrance = loadzone.reverse
+                    if entrance.reverse is not None:
+                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
+                    else:
+                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+                else:
+                    reverse = loadzone.replaces.reverse
+                    if reverse in all_entrances:
+                        all_entrances.remove(reverse)
+                    self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
+        else:
+            for entrance in all_entrances:
+                self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+
 
     # Key ring handling:
     # Key rings are multiple items glued together into one, so we need to give
