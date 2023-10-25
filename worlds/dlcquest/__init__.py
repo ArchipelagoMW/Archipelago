@@ -1,6 +1,6 @@
 from typing import Union
 
-from BaseClasses import Tutorial
+from BaseClasses import Tutorial, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from . import Options
 from .Items import DLCQuestItem, ItemData, create_items, item_table
@@ -71,7 +71,6 @@ class DLCqworld(World):
             if self.options.coinsanity == Options.CoinSanity.option_coin and self.options.coinbundlequantity >= 5:
                 self.multiworld.push_precollected(self.create_item("Movement Pack"))
 
-
     def create_item(self, item: Union[str, ItemData]) -> DLCQuestItem:
         if isinstance(item, str):
             item = item_table[item]
@@ -87,3 +86,19 @@ class DLCqworld(World):
             "seed": self.random.randrange(99999999)
         })
         return options_dict
+
+    def collect(self, state: CollectionState, item: DLCQuestItem) -> bool:
+        change = super().collect(state, item)
+        if change:
+            suffix = item.coin_suffix
+            if suffix:
+                state.prog_items[suffix,  self.player] += item.coins
+        return change
+
+    def remove(self, state: CollectionState, item: DLCQuestItem) -> bool:
+        change = super().remove(state, item)
+        if change:
+            suffix = item.coin_suffix
+            if suffix:
+                state.prog_items[suffix,  self.player] -= item.coins
+        return change
