@@ -149,14 +149,32 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     multiworld.get_region('6-8', player).add_exits(["Bowser's Room"],{"Bowser's Room": lambda state: bosses.castle_clear(state)})
 
     if world.options.extras_enabled == 1:
-        for i in range(6):
-            multiworld.get_region(f'World {i + 1}', player).add_exits([f'{i + 1}-Extra'],
-            {f'{i+1}-Extra': lambda state: state.has('Extra Panels', player) or state.has(f'Extra {i + 1}', player)})
+        multiworld.get_region('World 1', player).add_exits(['1-Extra'],
+            {'1-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 1'}, player)})
+        multiworld.get_region('World 2', player).add_exits(['2-Extra'],
+            {'2-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 2'}, player)})
+        multiworld.get_region('World 3', player).add_exits(['3-Extra'],
+            {'3-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 3'}, player)})
+        multiworld.get_region('World 4', player).add_exits(['4-Extra'],
+            {'4-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 4'}, player)})
+        multiworld.get_region('World 5', player).add_exits(['5-Extra'],
+            {'5-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 5'}, player)})
+        multiworld.get_region('World 6', player).add_exits(['6-Extra'],
+            {'6-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 6'}, player)})
 
     if world.options.minigame_checks.value >= 2:
-        for i in range(6):
-            multiworld.get_region(f'World {i + 1}', player).add_exits([f'{i + 1}-Bonus'],
-            {f'{i+1}-Bonus': lambda state: state.has('Bonus Panels', player) or state.has(f'Bonus {i + 1}', player)})
+        multiworld.get_region('World 1', player).add_exits(['1-Bonus'],
+            {'1-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 1'}, player)})
+        multiworld.get_region('World 2', player).add_exits(['2-Bonus'],
+            {'2-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 2'}, player)})
+        multiworld.get_region('World 3', player).add_exits(['3-Bonus'],
+            {'3-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 3'}, player)})
+        multiworld.get_region('World 4', player).add_exits(['4-Bonus'],
+            {'4-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 4'}, player)})
+        multiworld.get_region('World 5', player).add_exits(['5-Bonus'],
+            {'5-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 5'}, player)})
+        multiworld.get_region('World 6', player).add_exits(['6-Bonus'],
+            {'6-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 6'}, player)})
 
     
 
