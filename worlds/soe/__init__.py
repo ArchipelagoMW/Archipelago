@@ -225,8 +225,6 @@ class SoEWorld(World):
 
         # TODO: generate *some* regions from locations' requirements?
         menu = Region('Menu', self.player, self.multiworld)
-        new_game = Entrance(self.player, 'New Game', menu)
-        menu.exits = [new_game]
         self.multiworld.regions += [menu]
 
         def get_sphere_index(evermizer_loc):
@@ -292,8 +290,8 @@ class SoEWorld(World):
                         location.progress_type = LocationProgressType.PRIORITY
 
         ingame.locations.append(SoELocation(self.player, 'Done', None, ingame))
+        menu.connect(ingame, "New Game")
         self.multiworld.regions += [ingame]
-        new_game.connect(ingame)
 
     def create_items(self):
         # add regular items to the pool
