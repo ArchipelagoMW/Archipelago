@@ -103,8 +103,10 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture 7 Of Each": 3350,
         "Capture Everything": 3700,
         "Fork": 700,
-        "Royal Fork": 3000, # this should really not block anything vital until you are set, that would make me angry
-        "Pin": 550,
+        "Triple Fork": 1700,
+        "Royal Fork": 3200, # AI really hates getting royal forked, even if we allow the attacking square was defended
+        # "Pin": 600,
+        # "Skewer": 600,
         "Threaten King": 400,
         "Bongcloud Center": 100,
         "Bongcloud A File": 150,

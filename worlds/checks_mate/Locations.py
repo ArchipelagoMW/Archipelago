@@ -65,12 +65,14 @@ location_table = {
     "Threaten King": CMLocationData(4_044, True, False),
     # special moves and tactics
     # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
-    # "00 Castle": CMLocationData(4_050, True, False),
-    # "000 Castle": CMLocationData(4_051, True, False),
+    "French Move": CMLocationData(4_050, True, False),
+    # "Discover Attack": CMLocationData(4_051, True, False),
     "Fork": CMLocationData(4_052, True, False),
     "Royal Fork": CMLocationData(4_053, True, True),
-    "Pin": CMLocationData(4_054, True, False),
-    "French Move": CMLocationData(4_055, True, False),
+    # "Pin": CMLocationData(4_054, True, False),
+    # "Skewer": CMLocationData(4_055, True, False),
+    # "00 Castle": CMLocationData(4_056, True, False),
+    # "000 Castle": CMLocationData(4_057, True, False),
     # "Discovered Attack": CMLocationData(4_056, True, False),
     # goal 1+ requires that you successively checkmate your opponent as they gain material
     # "Checkmate Minima": CMLocationData(4_050, True, False),
