@@ -70,9 +70,7 @@ class SubnauticaWorld(World):
         planet_region = Region("Planet 4546B", self.player, self.multiworld)
 
         # Link regions together
-        lifepod_5_connection = Entrance(self.player, "Lifepod 5", menu_region)
-        menu_region.exits.append(lifepod_5_connection)
-        lifepod_5_connection.connect(planet_region)
+        menu_region.connect(planet_region, "Lifepod 5")
 
         # Create regular locations
         location_names = itertools.chain((location["name"] for location in locations.location_table.values()),
