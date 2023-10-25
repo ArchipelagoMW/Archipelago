@@ -108,7 +108,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('')
 
     for player in world.player_ids:
-        for item_name, count in world.start_inventory[player].value.items():
+        for item_name, count in world.worlds[player].options.start_inventory.value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
@@ -130,15 +130,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     for player in world.player_ids:
         # items can't be both local and non-local, prefer local
-        world.non_local_items[player].value -= world.local_items[player].value
-        world.non_local_items[player].value -= set(world.local_early_items[player])
+        world.worlds[player].options.non_local_items.value -= world.worlds[player].options.local_items.value
+        world.worlds[player].options.non_local_items.value -= set(world.local_early_items[player])
 
     AutoWorld.call_all(world, "set_rules")
 
     for player in world.player_ids:
-        exclusion_rules(world, player, world.exclude_locations[player].value)
-        world.priority_locations[player].value -= world.exclude_locations[player].value
-        for location_name in world.priority_locations[player].value:
+        exclusion_rules(world, player, world.worlds[player].options.exclude_locations.value)
+        world.worlds[player].options.priority_locations.value -= world.worlds[player].options.exclude_locations.value
+        for location_name in world.worlds[player].options.priority_locations.value:
             try:
                 location = world.get_location(location_name, player)
             except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
@@ -151,8 +151,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if world.players > 1:
         locality_rules(world)
     else:
-        world.non_local_items[1].value = set()
-        world.local_items[1].value = set()
+        world.worlds[1].options.non_local_items.value = set()
+        world.worlds[1].options.local_items.value = set()
     
     AutoWorld.call_all(world, "generate_basic")
 
@@ -301,15 +301,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
-        with concurrent.futures.ThreadPoolExecutor(world.players + 2) as pool:
+        output_players = [player for player in world.player_ids if AutoWorld.World.generate_output.__code__
+                          is not world.worlds[player].generate_output.__code__]
+        with concurrent.futures.ThreadPoolExecutor(len(output_players) + 2) as pool:
             check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
             output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
-            for player in world.player_ids:
+            for player in output_players:
                 # skip starting a thread for methods that say "pass".
-                if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
-                    output_file_futures.append(
-                        pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
+                output_file_futures.append(
+                    pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
 
             # collect ER hint info
             er_hint_data: Dict[int, Dict[int, str]] = {}
@@ -360,11 +361,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                                                f" {location}"
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
-                        if location.name in world.start_location_hints[location.player]:
+                        if location.name in world.worlds[location.player].options.start_location_hints:
                             precollect_hint(location)
-                        elif location.item.name in world.start_hints[location.item.player]:
+                        elif location.item.name in world.worlds[location.item.player].options.start_hints:
                             precollect_hint(location)
-                        elif any([location.item.name in world.start_hints[player]
+                        elif any([location.item.name in world.worlds[player].options.start_hints
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
