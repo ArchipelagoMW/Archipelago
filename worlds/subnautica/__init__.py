@@ -65,22 +65,38 @@ class SubnauticaWorld(World):
             creature_pool, self.options.creature_scans.value)
 
     def create_regions(self):
-        self.multiworld.regions += [
-            self.create_region("Menu", None, ["Lifepod 5"]),
-            self.create_region("Planet 4546B",
-                               locations.events +
-                               [location["name"] for location in locations.location_table.values()] +
-                               [creature + creatures.suffix for creature in self.creatures_to_scan])
-        ]
+        # Create Regions
+        menu_region = Region("Menu", self.player, self.multiworld)
+        planet_region = Region("Planet 4546B", self.player, self.multiworld)
 
-        # Link regions
-        self.multiworld.get_entrance("Lifepod 5", self.player).connect(self.multiworld.get_region("Planet 4546B", self.player))
+        # Link regions together
+        menu_region.connect(planet_region, "Lifepod 5")
+
+        # Create regular locations
+        location_names = itertools.chain((location["name"] for location in locations.location_table.values()),
+                                         (creature + creatures.suffix for creature in self.creatures_to_scan))
+        for location_name in location_names:
+            loc_id = self.location_name_to_id[location_name]
+            location = SubnauticaLocation(self.player, location_name, loc_id, planet_region)
+            planet_region.locations.append(location)
+
+        # Create events
+        goal_event_name = self.options.goal.get_event_name()
 
         for event in locations.events:
-            self.multiworld.get_location(event, self.player).place_locked_item(
+            location = SubnauticaLocation(self.player, event, None, planet_region)
+            planet_region.locations.append(location)
+            location.place_locked_item(
                 SubnauticaItem(event, ItemClassification.progression, None, player=self.player))
-        # make the goal event the victory "item"
-        self.multiworld.get_location(self.options.goal.get_event_name(), self.player).item.name = "Victory"
+            if event == goal_event_name:
+                # make the goal event the victory "item"
+                location.item.name = "Victory"
+
+        # Register regions to multiworld
+        self.multiworld.regions += [
+            menu_region,
+            planet_region
+        ]
 
     # refer to Rules.py
     set_rules = set_rules
