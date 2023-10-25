@@ -585,7 +585,7 @@ def calculate_kerrigan_options(ctx: SC2Context) -> int:
     
     # Bits 1, 2
     # Kerrigan primal status by map
-    if ctx.kerrigan_primal_status != KerriganPrimalStatus.option_vanilla:
+    if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_vanilla:
         options |= 1 << 2
     
     return options
