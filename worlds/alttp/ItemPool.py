@@ -1,7 +1,7 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, MultiWorld
 from Fill import FillError
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
@@ -493,49 +493,47 @@ take_any_locations_inverted.sort()
 take_any_locations.sort()
 
 
-def set_up_take_anys(world, player):
+def set_up_take_anys(multiworld: MultiWorld, player: int):
     # these are references, do not modify these lists in-place
-    if world.mode[player] == 'inverted':
+    if multiworld.mode[player] == 'inverted':
         take_any_locs = take_any_locations_inverted
     else:
         take_any_locs = take_any_locations
 
-    regions = world.random.sample(take_any_locs, 5)
+    regions = multiworld.random.sample(take_any_locs, 5)
 
-    old_man_take_any = LTTPRegion("Old Man Sword Cave", LTTPRegionType.Cave, 'the sword cave', player, world)
-    world.regions.append(old_man_take_any)
+    old_man_take_any = LTTPRegion("Old Man Sword Cave", LTTPRegionType.Cave, 'the sword cave', player, multiworld)
+    multiworld.regions.append(old_man_take_any)
 
     reg = regions.pop()
-    entrance = world.get_region(reg, player).entrances[0]
-    connect_entrance(world, entrance.name, old_man_take_any.name, player)
+    entrance = multiworld.get_region(reg, player).entrances[0]
+    connect_entrance(multiworld, entrance.name, old_man_take_any.name, player)
     entrance.target = 0x58
     old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
-    world.shops.append(old_man_take_any.shop)
+    multiworld.shops.append(old_man_take_any.shop)
 
-    swords = [item for item in world.itempool if item.player == player and item.type == 'Sword']
+    swords = [item for item in multiworld.itempool if item.player == player and item.type == 'Sword']
     if swords:
-        sword = world.random.choice(swords)
-        world.itempool.remove(sword)
-        world.itempool.append(ItemFactory('Rupees (20)', player))
+        sword = multiworld.random.choice(swords)
+        multiworld.itempool.remove(sword)
+        multiworld.itempool.append(ItemFactory('Rupees (20)', player))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
     else:
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0, create_location=True)
 
     for num in range(4):
-        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, world)
-        world.regions.append(take_any)
+        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, multiworld)
+        multiworld.regions.append(take_any)
 
-        target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
+        target, room_id = multiworld.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
-        entrance = world.get_region(reg, player).entrances[0]
-        connect_entrance(world, entrance.name, take_any.name, player)
+        entrance = multiworld.get_region(reg, player).entrances[0]
+        connect_entrance(multiworld, entrance.name, take_any.name, player)
         entrance.target = target
         take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True, total_shop_slots + num + 1)
-        world.shops.append(take_any.shop)
+        multiworld.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0, create_location=True)
-
-    world.initialize_regions()
 
 
 def get_pool_core(world, player: int):
