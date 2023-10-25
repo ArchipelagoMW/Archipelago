@@ -195,7 +195,8 @@ class OOTWorld(World):
             setattr(self, option_name, option_value)
 
         self.shop_prices = {}
-        self.regions = []  # internal cache of regions for this world, used later
+        self.regions = []  # internal caches of regions for this world, used later
+        self._regions_cache = {}
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
         self.starting_items = Counter()
         self.songs_as_items = False
@@ -555,6 +556,8 @@ class OOTWorld(World):
 
             self.multiworld.regions.append(new_region)
             self.regions.append(new_region)
+            self._regions_cache[new_region.name] = new_region
+        self.multiworld._recache()
 
     def set_scrub_prices(self):
         # Get Deku Scrub Locations
@@ -670,7 +673,7 @@ class OOTWorld(World):
         self.multiworld.regions.append(menu)
         self.load_regions_from_json(overworld_data_path)
         self.load_regions_from_json(bosses_data_path)
-        start.connect(self.multiworld.get_region('Root', self.player))
+        start.connect(self.get_region('Root'))
         create_dungeons(self)
         self.parser.create_delayed_rules()
 
@@ -681,7 +684,7 @@ class OOTWorld(World):
         # Bind entrances to vanilla
         for region in self.regions:
             for exit in region.exits:
-                exit.connect(self.multiworld.get_region(exit.vanilla_connected_region, self.player))
+                exit.connect(self.get_region(exit.vanilla_connected_region))
 
     def create_items(self):
         # Uniquely rename drop locations for each region and erase them from the spoiler
@@ -768,7 +771,7 @@ class OOTWorld(World):
 
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
-        all_state = self.multiworld.get_all_state(True)
+        all_state = self.multiworld.get_all_state(use_cache=True)
         all_locations = self.get_locations()
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
@@ -1255,8 +1258,13 @@ class OOTWorld(World):
     def get_location(self, location):
         return self.multiworld.get_location(location, self.player)
 
-    def get_region(self, region):
-        return self.multiworld.get_region(region, self.player)
+    def get_region(self, region_name):
+        try:
+            return self._regions_cache[region_name]
+        except KeyError:
+            ret = self.multiworld.get_region(region_name, self.player)
+            self._regions_cache[region_name] = ret
+            return ret
 
     def get_entrance(self, entrance):
         return self.multiworld.get_entrance(entrance, self.player)
