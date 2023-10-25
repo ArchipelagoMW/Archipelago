@@ -8,7 +8,7 @@ from worlds.generic.Rules import add_item_rule
 from .Locations import KDL3Location
 from .Names import LocationName
 from .Options import BossShuffle
-from .Room import Room
+from .Room import KDL3Room
 
 if typing.TYPE_CHECKING:
     from . import KDL3World
@@ -39,9 +39,9 @@ def generate_valid_level(level, stage, possible_stages, slot_random):
 def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing.Dict[int, Region]):
     level_names = {LocationName.level_names[level]: level for level in LocationName.level_names}
     room_data = json.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
-    rooms: typing.Dict[str, Room] = dict()
+    rooms: typing.Dict[str, KDL3Room] = dict()
     for room_entry in room_data:
-        room = Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"], room_entry["stage"],
+        room = KDL3Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"], room_entry["stage"],
                     room_entry["room"], room_entry["pointer"], room_entry["music"], room_entry["default_exits"],
                     room_entry["animal_pointers"], room_entry["enemies"], room_entry["entity_load"],
                     room_entry["consumables"], room_entry["consumables_pointer"])
@@ -56,7 +56,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                     "Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"
                 })
     world.multiworld.regions.extend([rooms[room] for room in rooms])
-    first_rooms: typing.Dict[int, Room] = dict()
+    first_rooms: typing.Dict[int, KDL3Room] = dict()
     if door_shuffle:
         # first, we need to generate the notable edge cases
         # 5-6 is the first, being the most restrictive

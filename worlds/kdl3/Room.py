@@ -15,7 +15,7 @@ animal_map = {
 }
 
 
-class Room(Region):
+class KDL3Room(Region):
     pointer: int = 0
     level: int = 0
     stage: int = 0

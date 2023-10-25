@@ -15,7 +15,7 @@ from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_pale
 from .Compression import hal_decompress
 import bsdiff4
 
-from .Room import Room
+from .Room import KDL3Room
 
 if TYPE_CHECKING:
     from . import KDL3World
@@ -1184,7 +1184,7 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
                                   0x6B,  # RTL
                                   ])
 
-    rooms = [region for region in multiworld.regions if region.player == player and isinstance(region, Room)]
+    rooms = [region for region in multiworld.get_regions(player) if isinstance(region, KDL3Room)]
     if world.options.music_shuffle > 0:
         if world.options.music_shuffle == 1:
             shuffled_music = music_choices.copy()
