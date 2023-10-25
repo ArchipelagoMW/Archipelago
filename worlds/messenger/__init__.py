@@ -140,8 +140,6 @@ class MessengerWorld(World):
             self.multiworld.get_region(reg_name, self.player).add_exits(connections)
 
     def set_rules(self) -> None:
-        for reg_name, connections in REGION_CONNECTIONS.items():
-            self.multiworld.get_region(reg_name, self.player).add_exits(connections)
         logic = self.options.logic_level
         if logic == Logic.option_normal:
             MessengerRules(self).set_messenger_rules()
