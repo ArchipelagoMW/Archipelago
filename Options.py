@@ -1087,7 +1087,7 @@ class PerGameCommonOptions(CommonOptions):
 
 
 @dataclass
-class DeathLinkOption:
+class DeathLinkMixin:
     death_link: DeathLink
 
 
