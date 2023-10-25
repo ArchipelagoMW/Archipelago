@@ -718,8 +718,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int32s(0xBFC700, Patches.overlay_modifiers)
 
     # On-the-fly actor data modifier hook
-    rom.write_int32(0xEAB04, 0x080FF220)  # J 0x803FC880
-    rom.write_int32s(0xBFC878, Patches.map_data_modifiers)
+    rom.write_int32(0xEAB04, 0x080FF21E)  # J 0x803FC878
+    rom.write_int32s(0xBFC870, Patches.map_data_modifiers)
 
     # Fix to make flags apply to freestanding invisible items properly
     rom.write_int32(0xA84F8, 0x90CC0039)  # LBU T4, 0x0039 (A2)

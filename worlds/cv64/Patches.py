@@ -553,7 +553,9 @@ map_data_modifiers = [
     0x00000000,  # NOP
     # Villa living area (Replaces 1 chicken, 1 knife, and 3 invisible Purifyings and assigns flags to the sub-weapons)
     0x24090005,  # ADDIU T1, R0, 0x0005
-    0x15090023,  # BNE   T0, T1, [forward 0x23]
+    0x15090025,  # BNE   T0, T1, [forward 0x25]
+    0x340B0010,  # ORI   T3, R0, 0x0001         <- Hallway axe
+    0xA44B00B8,  # SH    T3, 0x00B8 (V0)
     0x340A0001,  # ORI   T2, R0, 0x0001         <- Storeroom R
     0x340B0010,  # ORI   T3, R0, 0x0001         <- Hallway knife
     0x340C0001,  # ORI   T4, R0, 0x0001         <- Living Room painting
@@ -599,7 +601,7 @@ map_data_modifiers = [
     0x240B0005,  # ADDIU T3, R0, 0x0005
     0xA04B0150,  # SB    T3, 0x0150 (V0)
     0x24090011,  # ADDIU T1, R0, 0x0011
-    0x1139FFB2,  # BEQ   T1, T9, [backward 0x4E]
+    0x1139FFB0,  # BEQ   T1, T9, [backward 0x50]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Center factory floor (replaces 1 moneybag, 1 jewel, and gives every lizard man coffin item a unique flag)
@@ -642,7 +644,7 @@ map_data_modifiers = [
     0xAC4C0A88,  # SW    T4, 0x0AE8 (V0)
     0xAC4D0A8C,  # SW    T5, 0x0AEC (V0)
     0x24090001,  # ADDIU T1, R0, 0x0001
-    0x1139FF89,  # BEQ   T1, T9, [backward 0x75]
+    0x1139FF87,  # BEQ   T1, T9, [backward 0x77]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Keep outside (replaces 1 invisible Healing Kit and gives both invisible Healing Kits pickup flags)
@@ -655,7 +657,7 @@ map_data_modifiers = [
     0xA44A004A,  # SH    T2, 0x004A (V0)
     0xA44B005A,  # SH    T3, 0x005A (V0)
     0x24090002,  # ADDIU T1, R0, 0x0002
-    0x1139FF7D,  # BEQ   T0, T1, [backward 0x72]
+    0x1139FF7C,  # BEQ   T0, T1, [backward 0x74]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Wall main area (sets a flag for the freestanding Holy Water if applicable and the "beginning of stage"
@@ -665,7 +667,7 @@ map_data_modifiers = [
     0x24090000,  # ADDIU T1, R0, 0x0000
     0xA049009B,  # SB    T1, 0x009B (V0)
     0x24090010,  # ADDIU T1, R0, 0x0010
-    0x1139FF75,  # BEQ   T1, T9, [backward 0x8B]
+    0x1139FF73,  # BEQ   T1, T9, [backward 0x8D]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Villa vampire crypt (sets the "beginning of stage" state if entered from the rear, as well as the "can warp here"
@@ -677,14 +679,14 @@ map_data_modifiers = [
     0x356B0001,  # ORI   T3, T3, 0x0001
     0xA14B9C1C,  # SB    T3, 0x9C1C (T2)
     0x24090003,  # ADDIU T1, R0, 0x0003
-    0x1139FF6B,  # BEQ   T1, T9, [backward 0x96]
+    0x1139FF69,  # BEQ   T1, T9, [backward 0x98]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Underground Waterway (sets the "beginning of stage" state if entered from the rear)
     0x24090008,  # ADDIU T1, R0, 0x0008
     0x15090004,  # BNE   T0, T1, [forward 0x04]
     0x24090001,  # ADDIU T1, R0, 0x0001
-    0x1139FF65,  # BEQ   T1, T9, [backward 0x9D]
+    0x1139FF63,  # BEQ   T1, T9, [backward 0x9F]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Center elevator top (sets the "beginning of stage" state if entered from either rear, as well as the "can
@@ -696,30 +698,30 @@ map_data_modifiers = [
     0x356B0002,  # ORI   T3, T3, 0x0002
     0xA14B9C1C,  # SB    T3, 0x9C1C (T2)
     0x24090002,  # ADDIU T1, R0, 0x0002
-    0x1139FF5B,  # BEQ   T1, T9, [backward 0xA8]
-    0x24090003,  # ADDIU T1, R0, 0x0003
     0x1139FF59,  # BEQ   T1, T9, [backward 0xAA]
+    0x24090003,  # ADDIU T1, R0, 0x0003
+    0x1139FF57,  # BEQ   T1, T9, [backward 0xAC]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Tower of Execution (sets the "beginning of stage" state if entered from the rear)
     0x24090010,  # ADDIU T1, R0, 0x0010
     0x15090004,  # BNE   T0, T1, [forward 0x10]
     0x24090012,  # ADDIU T1, R0, 0x0012
-    0x1139FF53,  # BEQ   T1, T9, [backward 0xAD]
+    0x1139FF51,  # BEQ   T1, T9, [backward 0xAF]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Tower of Sorcery (sets the "beginning of stage" state if entered from the rear)
     0x24090011,  # ADDIU T1, R0, 0x0011
     0x15090004,  # BNE   T0, T1, [forward 0x04]
     0x24090013,  # ADDIU T1, R0, 0x0013
-    0x1139FF4D,  # BEQ   T1, T9, [backward 0xB8]
+    0x1139FF4B,  # BEQ   T1, T9, [backward 0xBA]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Tower of Science (sets the "beginning of stage" state if entered from the rear)
     0x24090012,  # ADDIU T1, R0, 0x0012
     0x15090004,  # BNE   T0, T1, [forward 0x04]
     0x24090004,  # ADDIU T1, R0, 0x0004
-    0x1139FF47,  # BEQ   T1, T9, [backward 0xBF]
+    0x1139FF45,  # BEQ   T1, T9, [backward 0xC1]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Room of Clocks (changes 2 candle settings if applicable and sets the "begging of stage" state if spawning at end)
@@ -730,7 +732,7 @@ map_data_modifiers = [
     0xA0490059,  # SB    T1, 0x0059 (V0)
     0xA04A0069,  # SB    T2, 0x0069 (V0)
     0x24090014,  # ADDIU T1, R0, 0x0014
-    0x1139FF3D,  # BEQ   T1, T9, [backward 0xCA]
+    0x1139FF3B,  # BEQ   T1, T9, [backward 0xCC]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Center basement (changes 2 non-pickup-able Mandragoras into 2 real items and moves the torture shelf item
@@ -780,7 +782,7 @@ map_data_modifiers = [
     0x03E00008,  # JR    RA
     # Fan meeting room (sets "beginning of stage" flag)
     0x24090019,  # ADDIU T1, R0, 0x0019
-    0x1109FF0F,  # BEQ   T1, T9, [backward 0xF9]
+    0x1109FF0D,  # BEQ   T1, T9, [backward 0xFB]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
 ]
