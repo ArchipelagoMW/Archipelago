@@ -1,6 +1,7 @@
 from BaseClasses import Item
 import typing
 import random
+import copy
 from .Constants import *
 from .Options import *
 
@@ -15,7 +16,7 @@ def set_openRCT2_items(scenario, rules, monopoly_mode, furry_convention_traps, s
     print(scenario)
     print("And these items will be randomized:")
     print(Scenario_Items[scenario])
-    openRCT2_items = Scenario_Items[scenario]
+    openRCT2_items = copy.deepcopy(Scenario_Items[scenario])
     
     if monopoly_mode:
         count = 0
