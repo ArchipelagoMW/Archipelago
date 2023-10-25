@@ -1,5 +1,6 @@
 # world/dark_souls_3/__init__.py
 from typing import Dict, Set, List
+import re
 
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from Options import Toggle
@@ -88,6 +89,7 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.BOSS)
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
+            self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
         if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
 
@@ -117,6 +119,8 @@ class DarkSouls3World(World):
             "Untended Graves",
             "Archdragon Peak",
             "Kiln of the First Flame",
+            "Greirat's Shop",
+            "Karla's Shop",
         ]})
 
         # Adds Path of the Dragon as an event item for Archdragon Peak access
@@ -127,8 +131,8 @@ class DarkSouls3World(World):
         # Create DLC Regions
         if self.multiworld.enable_dlc[self.player]:
             regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
-                "Painted World of Ariandel 1",
-                "Painted World of Ariandel 2",
+                "Painted World of Ariandel (Before Contraption)",
+                "Painted World of Ariandel (After Contraption)",
                 "Dreg Heap",
                 "Ringed City",
             ]})
@@ -150,6 +154,7 @@ class DarkSouls3World(World):
 
         create_connection("High Wall of Lothric", "Undead Settlement")
         create_connection("High Wall of Lothric", "Lothric Castle")
+        create_connection("High Wall of Lothric", "Greirat's Shop")
 
         create_connection("Undead Settlement", "Road of Sacrifices")
 
@@ -166,6 +171,7 @@ class DarkSouls3World(World):
 
         create_connection("Irithyll Dungeon", "Archdragon Peak")
         create_connection("Irithyll Dungeon", "Profaned Capital")
+        create_connection("Irithyll Dungeon", "Karla's Shop")
 
         create_connection("Lothric Castle", "Consumed King's Garden")
         create_connection("Lothric Castle", "Grand Archives")
@@ -174,9 +180,10 @@ class DarkSouls3World(World):
 
         # Connect DLC Regions
         if self.multiworld.enable_dlc[self.player]:
-            create_connection("Cathedral of the Deep", "Painted World of Ariandel 1")
-            create_connection("Painted World of Ariandel 1", "Painted World of Ariandel 2")
-            create_connection("Painted World of Ariandel 2", "Dreg Heap")
+            create_connection("Cathedral of the Deep", "Painted World of Ariandel (Before Contraption)")
+            create_connection("Painted World of Ariandel (Before Contraption)",
+                              "Painted World of Ariandel (After Contraption)")
+            create_connection("Painted World of Ariandel (After Contraption)", "Dreg Heap")
             create_connection("Dreg Heap", "Ringed City")
 
 
@@ -187,27 +194,22 @@ class DarkSouls3World(World):
         for location in location_table:
             if (location.category in self.enabled_location_categories and
                 (not location.npc or self.multiworld.enable_npc_locations[self.player] == Toggle.option_true)):
-                new_location = DarkSouls3Location(
+                new_location = DarkSouls3Location.from_data(
                     self.player,
-                    location.name,
-                    location.category,
-                    location.default_item,
+                    location,
                     self.location_name_to_id[location.name],
                     new_region
                 )
             else:
                 # Replace non-randomized progression items with events
-                event_item = self.create_item(location.default_item)
+                event_item = self.create_item(location.default_item_name)
                 if event_item.classification != ItemClassification.progression:
                     continue
 
-                new_location = DarkSouls3Location(
+                new_location = DarkSouls3Location.from_data(
                     self.player,
-                    location.name,
-                    location.category,
-                    location.default_item,
-                    None,
-                    new_region
+                    location,
+                    parent = new_region
                 )
                 event_item.code = None
                 new_location.place_locked_item(event_item)
@@ -226,14 +228,27 @@ class DarkSouls3World(World):
 
         itempool_by_category = {category: [] for category in self.enabled_location_categories}
 
+        # Just used to efficiently deduplicate items
+        item_set_by_category = {category: set() for category in self.enabled_location_categories}
+
         # Gather all default items on randomized locations
         num_required_extra_items = 0
         for location in self.multiworld.get_locations(self.player):
             if location.category in itempool_by_category:
-                if item_dictionary[location.default_item_name].category == DS3ItemCategory.SKIP:
+                item_category = item_dictionary[location.default_item_name].category
+                if item_category == DS3ItemCategory.SKIP:
                     num_required_extra_items += 1
-                else:
+                elif item_category == DS3ItemCategory.MISC:
                     itempool_by_category[location.category].append(location.default_item_name)
+                else:
+                    # For non-miscellaneous non-skip items, make sure there aren't duplicates in the
+                    # item set even if there are multiple in-game locations that provide them.
+                    item_set = item_set_by_category[location.category]
+                    if location.default_item_name in item_set:
+                        num_required_extra_items += 1
+                    else:
+                        item_set.add(location.default_item_name)
+                        itempool_by_category[location.category].append(location.default_item_name)
 
         # Replace each item category with a random sample of items of those types
         if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various:
@@ -277,7 +292,7 @@ class DarkSouls3World(World):
 
         itempool: List[DarkSouls3Item] = []
         for category in self.enabled_location_categories:
-            itempool += [self.create_item(name) for name in itempool_by_category[category]]
+            itempool.extend(self.create_item(name) for name in itempool_by_category[category])
 
         # A list of items we can replace
         removable_items = [item for item in itempool if item.classification != ItemClassification.progression]
@@ -318,8 +333,18 @@ class DarkSouls3World(World):
 
                 itempool.append(self.create_item(item_name))
 
+        injectable_items = [
+            item for item
+            in item_dictionary.values()
+            if item.inject and (not item.is_dlc or dlc_enabled)
+        ]
+        number_to_inject = min(num_required_extra_items, len(injectable_items))
+        for item in self.multiworld.random.choices(injectable_items, k=number_to_inject):
+            num_required_extra_items -= 1
+            itempool.append(self.create_item(item.name))
+
         # Extra filler items for locations containing SKIP items
-        itempool += [self.create_filler() for _ in range(num_required_extra_items)]
+        itempool.extend(self.create_filler() for _ in range(num_required_extra_items))
 
         # Add items to itempool
         self.multiworld.itempool += itempool
@@ -332,7 +357,6 @@ class DarkSouls3World(World):
             DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE,
             DS3ItemCategory.SPELL,
         }
-        data = self.item_name_to_id[name]
 
         if name in key_item_names:
             item_classification = ItemClassification.progression
@@ -341,7 +365,13 @@ class DarkSouls3World(World):
         else:
             item_classification = ItemClassification.filler
 
-        return DarkSouls3Item(name, item_classification, data, self.player)
+        data = item_dictionary[name]
+        return DarkSouls3Item(
+            name,
+            item_classification,
+            self.item_name_to_id[name],
+            self.player,
+            data.count)
 
 
     def get_filler_item_name(self) -> str:
@@ -350,6 +380,8 @@ class DarkSouls3World(World):
 
     def set_rules(self) -> None:
         # Define the access rules to the entrances
+        set_rule(self.multiworld.get_entrance("Go To Firelink Shrine Bell Tower", self.player),
+                 lambda state: state.has("Tower Key", self.player))
         set_rule(self.multiworld.get_entrance("Go To Undead Settlement", self.player),
                  lambda state: state.has("Small Lothric Banner", self.player))
         set_rule(self.multiworld.get_entrance("Go To Lothric Castle", self.player),
@@ -366,6 +398,42 @@ class DarkSouls3World(World):
                                state.has("Cinders of a Lord - Aldrich", self.player) and
                                state.has("Cinders of a Lord - Lothric Prince", self.player))
 
+        ashes = {
+            "Mortician's Ashes": ["Alluring Skull", "Ember (Mortician)", "Grave Key"],
+            "Dreamchaser's Ashes": ["Life Ring"],
+            "Paladin's Ashes": ["Lloyd's Shield Ring"],
+            "Grave Warden's Ashes": ["Ember (Grave Warden)"],
+            "Prisoner Chief's Ashes": [
+                "Karla's Pointed Hat",
+                "Karla's Coat",
+                "Karla's Gloves",
+                "Karla's Trousers",
+            ],
+            "Xanthous Ashes": ["Xanthous Overcoat", "Xanthous Gloves", "Xanthous Trousers"],
+            "Grave Warden's Ashes": ["Ember (Dragon Chaser)"],
+            "Easterner's Ashes": [
+                "Washing Pole",
+                "Eastern Helm",
+                "Eastern Armor",
+                "Eastern Gauntlets",
+                "Eastern Leggings",
+                "Wood Grain Ring",
+            ],
+            "Captain's Ashes": [
+                "Millwood Knight Helm",
+                "Millwood Knight Armor",
+                "Millwood Knight Gauntlets",
+                "Millwood Knight Leggings",
+                "Refined Gem",
+            ]
+        }
+        for ash, items in ashes.items():
+            for item in items:
+                location = location_dictionary["FS: " + item]
+                if location.category in self.enabled_location_categories:
+                    set_rule(self.multiworld.get_location(location.name, self.player),
+                             lambda state, ash=ash: state.has(ash, self.player))
+
         if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
             add_rule(self.multiworld.get_entrance("Go To Lothric Castle", self.player),
                      lambda state: state.has("Small Lothric Banner", self.player))
@@ -378,11 +446,11 @@ class DarkSouls3World(World):
             # If key items are randomized, must have contraption key to enter second half of Ashes DLC
             # If key items are not randomized, Contraption Key is guaranteed to be accessible before it is needed
             if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
-                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 2", self.player),
+                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel (After Contraption)", self.player),
                          lambda state: state.has("Contraption Key", self.player))
 
             if self.multiworld.late_dlc[self.player] == Toggle.option_true:
-                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 1", self.player),
+                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel (Before Contraption)", self.player),
                          lambda state: state.has("Small Doll", self.player))
 
         # Define the access rules to some specific locations
@@ -398,22 +466,26 @@ class DarkSouls3World(World):
                      lambda state: state.has("Small Lothric Banner", self.player))
 
         if self.multiworld.enable_npc_locations[self.player] == Toggle.option_true:
-            set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
+            # Technically the player could lock themselves out of Greirat's shop if they send him to
+            # Lothric Castle before they have the Grand Archives Key with which to retrieve his
+            # ashes, but this is so unlikely it's not worth telling the randomizer that the shop is
+            # contingent on such a lategame item.
+            set_rule(self.multiworld.get_entrance("Go To Greirat's Shop", self.player),
                      lambda state: state.has("Cell Key", self.player))
-            set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
-                     lambda state: state.has("Cell Key", self.player))
-            set_rule(self.multiworld.get_location("ID: Karla's Ashes", self.player),
+
+            set_rule(self.multiworld.get_entrance("Go To Karla's Shop", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
-            set_rule(self.multiworld.get_location("ID: Karla's Pointed Hat", self.player),
-                     lambda state: state.has("Jailer's Key Ring", self.player))
-            set_rule(self.multiworld.get_location("ID: Karla's Coat", self.player),
-                     lambda state: state.has("Jailer's Key Ring", self.player))
-            set_rule(self.multiworld.get_location("ID: Karla's Gloves", self.player),
-                     lambda state: state.has("Jailer's Key Ring", self.player))
-            set_rule(self.multiworld.get_location("ID: Karla's Trousers", self.player),
-                     lambda state: state.has("Jailer's Key Ring", self.player))
+            if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
+                set_rule(self.multiworld.get_location("HWL: Red Eye Orb", self.player),
+                         lambda state: state.has("Lift Chamber Key", self.player))
+            for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]:
+                set_rule(self.multiworld.get_location("AL: " + item, self.player),
+                         lambda state: state.has("Black Eye Orb", self.player))
+                
 
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
+            set_rule(self.multiworld.get_location("AP: Hawkwood's Swordgrass", self.player),
+                     lambda state: state.has("AP: Twinkling Dragon Torso Stone", self.player))
             set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
 
@@ -475,15 +547,26 @@ class DarkSouls3World(World):
                     if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < infusion_percentage:
                         name_to_ds3_code[item.name] += 100 * self.multiworld.per_slot_randoms[self.player].randint(0, 15)
 
-        # Create the mandatory lists to generate the player's output file
-        ap_ids_to_ds3_ids: Dict[str, int] = {}
-        for location in self.multiworld.get_filled_locations():
-            # Skip events
-            if location.item.code is None:
-                continue
+        our_items = {
+            location.item
+            for location in self.multiworld.get_filled_locations()
+            # item.code None is used for events, which we want to skip
+            if location.item.code is not None and location.item.player == self.player
+        }
 
-            if location.item.player == self.player:
-                ap_ids_to_ds3_ids[str(location.item.code)] = name_to_ds3_code[location.item.name]
+        ap_ids_to_ds3_ids: Dict[str, int] = {}
+        item_counts: Dict[str, int] = {}
+        for item in our_items:
+            ap_ids_to_ds3_ids[str(item.code)] = name_to_ds3_code[item.name]
+            if item.count != 1: item_counts[str(item.code)] = item.count
+
+        # A map from Archipelago's location names to the keys the offline
+        # randomizer uses to identify locations.
+        location_names_to_keys: Dict[str, str] = {}
+        for location in self.multiworld.get_filled_locations():
+            # Skip events and only look at this world's locations
+            if location.item.code is not None and location.player == self.player and location.offline:
+                location_names_to_keys[location.name] = location.offline
 
         slot_data = {
             "options": {
@@ -509,7 +592,9 @@ class DarkSouls3World(World):
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
             "base_id": self.base_id,  # to merge location and items lists
-            "apIdsToItemIds": ap_ids_to_ds3_ids
+            "apIdsToItemIds": ap_ids_to_ds3_ids,
+            "itemCounts": item_counts,
+            "locationNamesToKeys": location_names_to_keys,
         }
 
         return slot_data
