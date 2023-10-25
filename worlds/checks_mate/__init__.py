@@ -123,7 +123,6 @@ class CMWorld(World):
             else:
                 my_progression_items.remove(chosen_item)
 
-        print(len(items) + user_item_count)
         max_material_actual = (
                 self.multiworld.random.random() * (max_material_option - min_material_option) + max_material_option)
         while (len(items) + user_item_count) < len(location_table) and material < max_material_actual and len(
@@ -144,7 +143,6 @@ class CMWorld(World):
             else:
                 my_progression_items.remove(chosen_item)
 
-        print(len(items) + user_item_count)
         my_useful_items = set(useful_items.keys())
         while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
             chosen_item = self.multiworld.random.choice(list(my_useful_items))
@@ -157,7 +155,6 @@ class CMWorld(World):
             else:
                 my_useful_items.remove(chosen_item)
 
-        print(len(items) + user_item_count)
         my_filler_items = set(filler_items.keys())
         while (len(items) + user_item_count) < len(location_table):
             chosen_item = self.multiworld.random.choice(list(my_filler_items))
