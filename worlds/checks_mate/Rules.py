@@ -60,6 +60,8 @@ class ChecksMateLogic(LogicMixin):
 
 
 def set_rules(multiworld: MultiWorld, player: int):
+    # TODO: handle other goals
+    multiworld.completion_condition[player] = lambda state: state.has("Checkmate Maxima", player)
 
     # suggested material required to
     # a. capture individual pieces
