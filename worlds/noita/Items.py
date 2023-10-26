@@ -2,7 +2,7 @@ import itertools
 from collections import Counter
 from typing import Dict, List, NamedTuple, Set, TYPE_CHECKING
 
-from BaseClasses import Item, ItemClassification, MultiWorld
+from BaseClasses import Item, ItemClassification
 from .Options import BossesAsChecks, VictoryCondition, ExtraOrbs
 
 if TYPE_CHECKING:
@@ -49,21 +49,20 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
     return ["Kantele"] if victory_condition.value >= VictoryCondition.option_pure_ending else []
 
 
-def create_random_items(multiworld: MultiWorld, world: NoitaWorld, random_count: int) -> List[str]:
+def create_random_items(world: NoitaWorld, random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
     if world.options.bad_effects.value == 0:
         del filler_pool["Trap"]
 
-    return multiworld.random.choices(
+    return world.random.choices(
         population=list(filler_pool.keys()),
         weights=list(filler_pool.values()),
         k=random_count
     )
 
 
-def create_all_items(multiworld: MultiWorld, player: int) -> None:
-    world = multiworld.worlds[player]
-    sum_locations = len(multiworld.get_unfilled_locations(player))
+def create_all_items(world: NoitaWorld) -> None:
+    sum_locations = len(world.multiworld.get_unfilled_locations(world.player))
 
     itempool = (
         create_fixed_item_pool()
@@ -73,9 +72,9 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
     )
 
     random_count = sum_locations - len(itempool)
-    itempool += create_random_items(multiworld, world, random_count)
+    itempool += create_random_items(world, random_count)
 
-    multiworld.itempool += [create_item(player, name) for name in itempool]
+    world.multiworld.itempool += [create_item(world.player, name) for name in itempool]
 
 
 # 110000 - 110032

@@ -1,5 +1,4 @@
-from typing import Dict
-from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, Range, StartInventoryPool, PerGameCommonOptions
+from Options import Choice, DeathLink, DefaultOnToggle, Range, StartInventoryPool, PerGameCommonOptions
 from dataclasses import dataclass
 
 

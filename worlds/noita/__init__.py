@@ -25,8 +25,8 @@ class NoitaWorld(World):
     """
 
     game = "Noita"
-    options: Options.NoitaOptions
-    options_dataclass: Options.NoitaOptions
+    options: NoitaOptions
+    options_dataclass = NoitaOptions
 
     item_name_to_id = Items.item_name_to_id
     location_name_to_id = Locations.location_name_to_id
@@ -49,10 +49,10 @@ class NoitaWorld(World):
         return Items.create_item(self.player, name)
 
     def create_items(self) -> None:
-        Items.create_all_items(self.multiworld, self.player)
+        Items.create_all_items(self)
 
     def set_rules(self) -> None:
-        Rules.create_all_rules(self.multiworld, self.player)
+        Rules.create_all_rules(self)
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(Items.filler_items)
