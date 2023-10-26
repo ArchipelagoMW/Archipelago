@@ -233,6 +233,11 @@ class TestFriendsanityNone(SVTestBase):
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
     }
 
+    @property
+    def run_default_tests(self) -> bool:
+        # None is default
+        return False
+
     def test_no_friendsanity_items(self):
         for item in self.multiworld.itempool:
             self.assertFalse(item.name.endswith(" <3"))

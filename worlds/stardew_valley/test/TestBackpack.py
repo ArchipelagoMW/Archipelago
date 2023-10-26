@@ -5,11 +5,12 @@ from .. import options
 class TestBackpackVanilla(SVTestBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla}
 
-    def test_no_backpack_in_pool(self):
+    def test_no_backpack(self):
+        # no items
         item_names = {item.name for item in self.multiworld.get_items()}
         self.assertNotIn("Progressive Backpack", item_names)
 
-    def test_no_backpack_locations(self):
+        # no locations
         location_names = {location.name for location in self.multiworld.get_locations()}
         self.assertNotIn("Large Pack", location_names)
         self.assertNotIn("Deluxe Pack", location_names)
@@ -18,11 +19,12 @@ class TestBackpackVanilla(SVTestBase):
 class TestBackpackProgressive(SVTestBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive}
 
-    def test_backpack_is_in_pool_2_times(self):
+    def test_backpack(self):
+        # 2 items
         item_names = [item.name for item in self.multiworld.get_items()]
         self.assertEqual(item_names.count("Progressive Backpack"), 2)
 
-    def test_2_backpack_locations(self):
+        # 2 locations
         location_names = {location.name for location in self.multiworld.get_locations()}
         self.assertIn("Large Pack", location_names)
         self.assertIn("Deluxe Pack", location_names)
@@ -31,14 +33,20 @@ class TestBackpackProgressive(SVTestBase):
 class TestBackpackEarlyProgressive(SVTestBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_early_progressive}
 
-    def test_backpack_is_in_pool_2_times(self):
+    @property
+    def run_default_tests(self) -> bool:
+        # EarlyProgressive is default
+        return False
+
+    def test_backpack(self):
+        # 2 items
         item_names = [item.name for item in self.multiworld.get_items()]
         self.assertEqual(item_names.count("Progressive Backpack"), 2)
 
-    def test_2_backpack_locations(self):
+        # 2 locations
         location_names = {location.name for location in self.multiworld.get_locations()}
         self.assertIn("Large Pack", location_names)
         self.assertIn("Deluxe Pack", location_names)
 
-    def test_progressive_backpack_is_in_early_pool(self):
+        # early item
         self.assertIn("Progressive Backpack", self.multiworld.early_items[1])
