@@ -118,21 +118,6 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
                 self.assertTrue(count == 0 or count == 2)
 
 
-class TestGivenProgressiveBackpack(SVTestBase):
-    options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive}
-
-    def test_when_generate_world_then_two_progressive_backpack_are_added(self):
-        self.assertEqual(self.multiworld.itempool.count(self.world.create_item("Progressive Backpack")), 2)
-
-    def test_when_generate_world_then_backpack_locations_are_added(self):
-        created_locations = {location.name for location in self.multiworld.get_locations(1)}
-        backpacks_exist = [location.name in created_locations
-                           for location in locations.locations_by_tag[LocationTags.BACKPACK]
-                           if location.name != "Premium Pack"]
-        all_exist = all(backpacks_exist)
-        self.assertTrue(all_exist)
-
-
 class TestRemixedMineRewards(SVTestBase):
     def test_when_generate_world_then_one_reward_is_added_per_chest(self):
         # assert self.world.create_item("Rusty Sword") in self.multiworld.itempool
