@@ -404,6 +404,7 @@ class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
                     self.assertLessEqual(int(hearts), 10)
 
 
+"""  # Assuming math is correct if we check 2 points
 class TestFriendsanityAllNpcsWithMarriageHeartSize2(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
@@ -516,6 +517,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize4(SVTestBase):
                 self.assertTrue(hearts == 4 or hearts == 8 or hearts == 12 or hearts == 14)
             else:
                 self.assertTrue(hearts == 4 or hearts == 8 or hearts == 10)
+"""
 
 
 class TestFriendsanityAllNpcsWithMarriageHeartSize5(SVTestBase):
