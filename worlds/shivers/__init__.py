@@ -61,12 +61,15 @@ class ShiversWorld(World):
         # Build exclusion list
         include_information_plaques: bool = getattr(self.multiworld, "include_information_plaques")[self.player].value
         elevators_stay_solved: bool = getattr(self.multiworld, "elevators_stay_solved")[self.player].value
+        early_lightning: bool = getattr(self.multiworld, "early_lightning")[self.player].value
 
         self.removed_locations = set()
         if not include_information_plaques:
             self.removed_locations.update(Constants.exclusion_info["plaques"])
         if not elevators_stay_solved:
             self.removed_locations.update(Constants.exclusion_info["elevators"])
+        if not early_lightning:
+            self.removed_locations.update(Constants.exclusion_info["lightning"])
 
         # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
@@ -91,7 +94,7 @@ class ShiversWorld(World):
         filler = []
         filler += [self.create_item("Easier Lyre") for i in range(10)]
         filler += [self.create_item(name) for name, data in item_table.items() if data.type == 'filler2']
-        filler += [self.create_item("Heal") for i in range(42 - len(self.removed_locations))]
+        filler += [self.create_item("Heal") for i in range(43 - len(self.removed_locations))]
 
         #Place library escape items. Choose a location to place the escape item
         library_region = self.multiworld.get_region("Library", self.player)
@@ -182,7 +185,8 @@ class ShiversWorld(World):
             'storageplacements': self.storage_placements,
             'excludedlocations': {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
             'elevatorsstaysolved': {self.multiworld.elevators_stay_solved[self.player].value},
-            'earlybeth': {self.multiworld.early_beth[self.player].value}
+            'earlybeth': {self.multiworld.early_beth[self.player].value},
+            'earlylightning': {self.multiworld.early_lightning[self.player].value},
         }
 
     def fill_slot_data(self) -> dict:

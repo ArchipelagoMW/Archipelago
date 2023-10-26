@@ -112,7 +112,8 @@
     "Information Plaque: Aliens (UFO)",
     "Puzzle Solved Underground Elevator",
     "Puzzle Solved Bedroom Elevator",
-    "Puzzle Solved Three Floor Elevator"
+    "Puzzle Solved Three Floor Elevator",
+    "Ixupi Captured Lightning"
   ],
   "locations_by_region": {
     "Outside": [
@@ -127,6 +128,7 @@
       "Ixupi Captured Crystal",
       "Ixupi Captured Sand",
       "Ixupi Captured Metal",
+      "Ixupi Captured Lightning",
       "Puzzle Solved Underground Elevator",
       "Puzzle Solved Three Floor Elevator",
       "Puzzle Hint Found: Combo Lock in Mailbox",
@@ -319,8 +321,5 @@
       "Accessible: Storage: Skull Bridge",
       "Puzzle Solved Skull Dial Door"
     ]
-  },
-  "future locations": [
-    "Ixupi Captured Lightning"
-  ]
+  }
 }   
