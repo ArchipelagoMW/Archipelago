@@ -557,7 +557,7 @@ class OOTWorld(World):
             self.multiworld.regions.append(new_region)
             self.regions.append(new_region)
             self._regions_cache[new_region.name] = new_region
-        self.multiworld._recache()
+        # self.multiworld._recache()
 
     def set_scrub_prices(self):
         # Get Deku Scrub Locations
@@ -624,7 +624,7 @@ class OOTWorld(World):
             'Twinrova',
             'Links Pocket'
         )
-        boss_rewards = [item for item in self.itempool if item.type == 'DungeonReward']
+        boss_rewards = sorted(map(self.create_item, self.item_name_groups['rewards']))
         boss_locations = [self.multiworld.get_location(loc, self.player) for loc in boss_location_names]
 
         placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
@@ -638,7 +638,6 @@ class OOTWorld(World):
             item = prizepool.pop()
             loc = prize_locs.pop()
             loc.place_locked_item(item)
-            self.multiworld.itempool.remove(item)
             self.hinted_dungeon_reward_locations[item.name] = loc
 
     def create_item(self, name: str, allow_arbitrary_name: bool = False):
@@ -691,9 +690,6 @@ class OOTWorld(World):
         set_drop_location_names(self)
         # Generate itempool
         generate_itempool(self)
-        # Add dungeon rewards
-        rewardlist = sorted(list(self.item_name_groups['rewards']))
-        self.itempool += map(self.create_item, rewardlist)
 
         junk_pool = get_junk_pool(self)
         removed_items = []
