@@ -405,19 +405,13 @@ floor_assignment_values = {0x0A, 0x04, 0x03, 0x05, 0x01, 0x06, 0x02, 0x07, 0x08,
 bronze_pack_attack_cards = {"Kingdom Key", "Three Wishes", "Pumpkinhead", "Olympia", "Wishing Star", "Lady Luck"}
 bronze_pack_magic_cards = {"Fire", "Blizzard", "Thunder", "Simba", "Genie", "Cloud", "Dumbo"}
 bronze_pack_item_cards = {"Potion", "Hi-Potion", "Ether"}
-bronze_pack_enemy_cards = {"Shadow", "Soldier", "Large Body", "Card Soldier (Red)", "Card Soldier (Black)", "Red Nocturne", "Blue Rhapsody", "Yellow Opera", "Green Requiem"
-                            ,"Powerwild", "Bouncywild", "Air Soldier", "Bandit", "Fat Bandit", "Barrel Spider", "Search Ghost", "Sea Neon"
-                            ,"Screwdriver", "Aquatank", "Wight Knight", "Gargoyle", "Pirate", "Air Pirate", "Darkball", "Defender", "Wyvern"
-                            ,"Wizard"}
 
 silver_pack_attack_cards = {"Lionheart", "Metal Chocobo", "Spellbinder", "Divine Rose", "Crabclaw"}
 silver_pack_magic_cards = {"Cure", "Stop", "Gravity", "Aero", "Bambi", "Mushu", "Tinker Bell"}
 silver_pack_item_cards = {"Mega-Potion", "Elixir", "Mega-Ether"}
-silver_pack_enemy_cards = {"Guard Armor", "Trickmaster", "Hades", "Parasite Cage", "Jafar", "Oogie Boogie", "Ursula", "Hook", "Dragon Maleficent"}
 
 gold_pack_attack_cards = {"Oathkeeper", "Oblivion", "Diamond Dust", "One-Winged Angel", "Ultima Weapon"}
 gold_pack_item_cards = {"Megalixir"}
-gold_pack_enemy_cards = {"Riku", "Axel", "Larxene", "Vexen", "Marluxia", "Lexaeus", "Ansem"}
 
 function save_or_savestate_loaded(past_playtime, current_playtime)
     if current_playtime >= past_playtime then
@@ -749,7 +743,7 @@ function find_new_battle_cards(old_battle_cards, current_battle_cards)
     for card_value, cnt in pairs(current_battle_card_counts) do
         if cnt > old_battle_card_counts[card_value] then
             i = 0
-            while i < cnt - old_battle_card_counts[card_value] do
+            while i < cnt - old_battle_card_counts[card_value] and (card_value % 0x1000) < 0x01C2 do --don't remove enemy cards
                 remove_battle_card(card_value)
                 i = i + 1
             end
@@ -831,40 +825,31 @@ function open_card_pack(card_pack)
     if card_pack == "Bronze Card Pack" then
         add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
         add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
-        add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
-        choice = math.random(1,3)
+        choice = math.random(1,2)
         if choice == 1 then
             add_battle_card(bronze_pack_item_cards[math.random(1, #bronze_pack_item_cards)])
         elseif choice == 2 then
             add_battle_card(bronze_pack_magic_cards[math.random(1, #bronze_pack_magic_cards)])
-        else
-            add_battle_card(bronze_pack_enemy_cards[math.random(1, #bronze_pack_enemy_cards)])
         end
     end
     if card_pack == "Silver Card Pack" then
         add_battle_card(silver_pack_attack_cards[math.random(1, #silver_pack_attack_cards)])
         add_battle_card(silver_pack_attack_cards[math.random(1, #silver_pack_attack_cards)])
-        add_battle_card(silver_pack_attack_cards[math.random(1, #silver_pack_attack_cards)])
-        choice = math.random(1,3)
+        choice = math.random(1,2)
         if choice == 1 then
             add_battle_card(silver_pack_item_cards[math.random(1, #silver_pack_item_cards)])
         elseif choice == 2 then
             add_battle_card(silver_pack_magic_cards[math.random(1, #silver_pack_magic_cards)])
-        else
-            add_battle_card(silver_pack_enemy_cards[math.random(1, #silver_pack_enemy_cards)])
         end
     end
     if card_pack == "Gold Card Pack" then
         add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
         add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
-        add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
-        choice = math.random(1,3)
+        choice = math.random(1,2)
         if choice == 1 then
             add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
         elseif choice == 2 then
             add_battle_card(gold_pack_item_cards[math.random(1, #gold_pack_item_cards)])
-        else
-            add_battle_card(gold_pack_enemy_cards[math.random(1, #gold_pack_enemy_cards)])
         end
     end
 end
