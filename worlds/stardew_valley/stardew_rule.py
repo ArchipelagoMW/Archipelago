@@ -140,14 +140,14 @@ class Or(StardewRule):
         if true_ in self.rules:
             return true_
 
-        simplified_rules = {rule.simplify() for rule in self.rules}
-        simplified_rules = {rule for rule in simplified_rules if rule is not False_()}
+        simplified_rules = [simplified for simplified in {rule.simplify() for rule in self.rules}
+                            if simplified is not false_]
 
         if not simplified_rules:
             return false_
 
         if len(simplified_rules) == 1:
-            return next(iter(simplified_rules))
+            return simplified_rules[0]
 
         return Or(simplified_rules)
 
@@ -207,14 +207,14 @@ class And(StardewRule):
         if false_ in self.rules:
             return false_
 
-        simplified_rules = {rule.simplify() for rule in self.rules}
-        simplified_rules = {rule for rule in simplified_rules if rule is not True_()}
+        simplified_rules = [simplified for simplified in {rule.simplify() for rule in self.rules}
+                            if simplified is not true_]
 
         if not simplified_rules:
             return true_
 
         if len(simplified_rules) == 1:
-            return next(iter(simplified_rules))
+            return simplified_rules[0]
 
         return And(simplified_rules)
 
