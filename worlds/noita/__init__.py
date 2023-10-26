@@ -1,5 +1,6 @@
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
+from typing import Dict, Any
 from . import Events, Items, Locations, Options, Regions, Rules
 from .Options import NoitaOptions
 
@@ -38,8 +39,20 @@ class NoitaWorld(World):
     web = NoitaWeb()
 
     # Returned items will be sent over to the client
-    def fill_slot_data(self):
-        return {option_name: option_value for option_name, option_value in self.options.as_dict()}
+    def fill_slot_data(self) -> Dict[str, Any]:
+        return {
+            "start_inventory_from_pool": self.options.start_inventory_from_pool.value,
+            "death_link": self.options.death_link.value,
+            "bad_effects": self.options.bad_effects.value,
+            "victory_condition": self.options.victory_condition.value,
+            "path_option": self.options.path_option.value,
+            "hidden_chests": self.options.hidden_chests.value,
+            "pedestal_checks": self.options.pedestal_checks.value,
+            "orbs_as_checks": self.options.orbs_as_checks.value,
+            "bosses_as_checks": self.options.bosses_as_checks.value,
+            "extra_orbs": self.options.extra_orbs.value,
+            "shop_price": self.options.shop_price.value
+        }
 
     def create_regions(self) -> None:
         Regions.create_all_regions_and_connections(self)
