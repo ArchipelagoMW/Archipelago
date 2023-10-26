@@ -49,7 +49,13 @@ As randomizers and multiworld randomizers have been around for a while now there
 and jargon that is used in conjunction by the communities surrounding them. For a lot of the terms that are more common
 to Archipelago and its specific systems please see the [Glossary](/glossary/en).
 
-## What happens if a person has to leave early?
+## Does everyone need to be connected at the same time?
+
+There are two different playstyles that are common for Archipelago multiworld sessions.  Multiworld sessions can either
+be considered synchronous (also known as a "sync" multiworld) where everyone connects and plays at the same time, or,
+a multiworld can be considered asynchronous (also known as an "async" multiworld) where players connect and play at
+their own pace.  The setup for each is identical.  The difference is how you and your friends choose to organize and
+play your multiworld.  Most groups decide on the format before creating their multiworld.
 
 If a player must leave early, they can use Archipelago's release system. When a player releases their game, all the
 items in that game which belong to other players are sent out automatically, so other players can continue to play.
