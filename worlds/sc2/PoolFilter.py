@@ -134,6 +134,9 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     if grant_story_tech:
         # Additional starter mission if player is granted story tech
         move_mission(SC2Mission.ENEMY_WITHIN, MissionPools.EASY, MissionPools.STARTER)
+    if grant_story_tech or kerriganless:
+        # The player has, all the stuff he needs, provided under these settings
+        move_mission(SC2Mission.SUPREME, MissionPools.MEDIUM, MissionPools.STARTER)
     if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
         # Conditionally moving Easy missions to Starter
         move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)
