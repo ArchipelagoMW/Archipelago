@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional, Callable, NamedTuple
+from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld, CollectionState
 from .Options import is_option_enabled
 from .PreCalculatedWeights import PreCalculatedWeights
@@ -11,11 +11,11 @@ class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
-    rule: Callable[[CollectionState], bool] = lambda state: True
+    rule: Optional[Callable[[CollectionState], bool]] = None
 
 
 def get_location_datas(world: Optional[MultiWorld], player: Optional[int], 
-                  precalculated_weights: PreCalculatedWeights) -> Tuple[LocationData, ...]:
+                  precalculated_weights: PreCalculatedWeights) -> List[LocationData]:
 
     flooded: PreCalculatedWeights = precalculated_weights
     logic = TimespinnerLogic(world, player, precalculated_weights)
@@ -271,4 +271,4 @@ def get_location_datas(world: Optional[MultiWorld], player: Optional[int],
             LocationData('Ifrit\'s Lair', 'Ifrit: Post fight (chest)', 1337245),
         )
  
-    return tuple(location_table)
+    return location_table
