@@ -1,6 +1,6 @@
 import math
 import random
-from typing import List, Set, Dict
+from typing import List, Dict
 
 from BaseClasses import Tutorial, Region, ItemClassification, MultiWorld, Item
 from worlds.AutoWorld import WebWorld, World
@@ -102,36 +102,26 @@ class CMWorld(World):
         items = []
 
         material = 0
-        my_progression_items = set(progression_items.keys())
         min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
         max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
         if max_material_option < min_material_option:
             max_material_option = min_material_option
-        # while (len(items) + user_item_count) < len(location_table) and material < min_material_option and len(
-        #         my_progression_items) > 0:
-        #     chosen_item = self.multiworld.random.choice(list(my_progression_items))
-        #     # obey user's wishes
-        #     if progression_items[chosen_item].material + material > max_material_option:
-        #         my_progression_items.remove(chosen_item)
-        #         continue
-        #     # add item
-        #     if self.can_add_more(chosen_item):
-        #         try_item = self.create_item(chosen_item)
-        #         if chosen_item not in self.items_used:
-        #             self.items_used[chosen_item] = 0
-        #         self.items_used[chosen_item] += 1
-        #         items.append(try_item)
-        #         material += progression_items[chosen_item].material
-        #     else:
-        #         my_progression_items.remove(chosen_item)
-
         max_material_actual = (
                 self.multiworld.random.random() * (max_material_option - min_material_option) + max_material_option)
+
+        my_progression_items = list(progression_items.keys())
+        # more pawn chance (minor:major:pawn distribution)
+        my_progression_items.append("Progressive Pawn")
+        # I am proud of this feature, so I want players to see more of it. Fight me.
+        my_progression_items.append("Progressive Pocket")
+        # halve chance of queen promotion - with an equal distribution, majors will equal upgrades
+        my_progression_items.extend([item for item in my_progression_items if item != "Progressive Major To Queen"])
         while (len(items) + user_item_count) < len(location_table) and material < max_material_actual and len(
                 my_progression_items) > 0:
-            chosen_item = self.multiworld.random.choice(list(my_progression_items))
+            chosen_item = self.multiworld.random.choice(my_progression_items)
             # obey user's wishes
             if progression_items[chosen_item].material + material > max_material_option:
+                print(my_progression_items)
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
@@ -145,9 +135,9 @@ class CMWorld(World):
             else:
                 my_progression_items.remove(chosen_item)
 
-        my_useful_items = set(useful_items.keys())
+        my_useful_items = list(useful_items.keys())
         while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
-            chosen_item = self.multiworld.random.choice(list(my_useful_items))
+            chosen_item = self.multiworld.random.choice(my_useful_items)
             if self.can_add_more(chosen_item):
                 if chosen_item not in self.items_used:
                     self.items_used[chosen_item] = 0
@@ -157,9 +147,9 @@ class CMWorld(World):
             else:
                 my_useful_items.remove(chosen_item)
 
-        my_filler_items = set(filler_items.keys())
+        my_filler_items = list(filler_items.keys())
         while (len(items) + user_item_count) < len(location_table):
-            chosen_item = self.multiworld.random.choice(list(my_filler_items))
+            chosen_item = self.multiworld.random.choice(my_filler_items)
             if self.can_add_more(chosen_item):
                 if chosen_item not in self.items_used:
                     self.items_used[chosen_item] = 0
