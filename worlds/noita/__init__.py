@@ -42,8 +42,7 @@ class NoitaWorld(World):
     #     return {option_name: option_value for option_name, option_value in self.options.as_dict()}
 
     def create_regions(self) -> None:
-        Regions.create_all_regions_and_connections(self.multiworld, self.player)
-        Events.create_all_events(self.multiworld, self.player)
+        Regions.create_all_regions_and_connections(self)
 
     def create_item(self, name: str) -> Item:
         return Items.create_item(self.player, name)
