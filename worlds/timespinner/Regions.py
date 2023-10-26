@@ -64,7 +64,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     if __debug__:
         throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
 
-    world.regions.extend(regions.values())
+    world.regions += regions.values()
 
     connectStartingRegion(world, player, regions)
 
