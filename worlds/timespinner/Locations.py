@@ -11,7 +11,7 @@ class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
-    rule: Optional[Callable[[CollectionState], bool]]
+    rule: Optional[Callable[[CollectionState], bool]] = None
 
 
 def get_location_datas(world: Optional[MultiWorld], player: Optional[int], 
@@ -204,7 +204,7 @@ def get_location_datas(world: Optional[MultiWorld], player: Optional[int],
 
     # 1337156 - 1337170 Downloads
     if not world or is_option_enabled(world, player, "DownloadableItems"):
-        location_table.extend( 
+        location_table += ( 
             LocationData('Library', 'Library: Terminal 2 (Lachiem)',  1337156, lambda state: state.has('Tablet', player)),
             LocationData('Library', 'Library: Terminal 1 (Windaria)',  1337157, lambda state: state.has('Tablet', player)),
             # 1337158 Is lost in time
@@ -224,13 +224,13 @@ def get_location_datas(world: Optional[MultiWorld], player: Optional[int],
 
     # 1337176 - 1337176 Cantoran
     if not world or is_option_enabled(world, player, "Cantoran"):
-        location_table.extend(
+        location_table += (
             LocationData('Left Side forest Caves', 'Lake Serene: Cantoran',  1337176),
         )
 
     # 1337177 - 1337198 Lore Checks
     if not world or is_option_enabled(world, player, "LoreChecks"):
-        location_table.extend(
+        location_table += (
             LocationData('Lower lake desolation', 'Lake Desolation: Memory - Coyote Jump (Time Messenger)',  1337177),
             LocationData('Library', 'Library: Memory - Waterway (A Message)',  1337178),
             LocationData('Library top', 'Library: Memory - Library Gap (Lachiemi Sun)',  1337179),
@@ -259,7 +259,7 @@ def get_location_datas(world: Optional[MultiWorld], player: Optional[int],
 
     # 1337237 - 1337245 GyreArchives
     if not world or is_option_enabled(world, player, "GyreArchives"):
-        location_table.extend(
+        location_table += (
             LocationData('Ravenlord\'s Lair', 'Ravenlord: Post fight (pedestal)',  1337237),
             LocationData('Ifrit\'s Lair', 'Ifrit: Post fight (pedestal)',  1337238),
             LocationData('Temporal Gyre', 'Temporal Gyre: Chest 1',  1337239),

@@ -73,6 +73,7 @@ def main(args=None, callback=ERmain):
         options = get_settings()
 
     seed = get_seed(args.seed)
+    #seed = 9990777742039920545
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
     random.seed(seed)
     seed_name = get_seed_name(random)

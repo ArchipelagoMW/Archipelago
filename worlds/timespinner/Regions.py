@@ -7,7 +7,7 @@ from .LogicExtensions import TimespinnerLogic
 
 
 def create_regions_and_locations(world: MultiWorld, player: int, precalculated_weights: PreCalculatedWeights):
-    region_names = [
+    region_names: List[str] = [
         'Menu',
         "Tutorial",
         "Lake desolation",
@@ -52,10 +52,10 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     ]
 
     if is_option_enabled(world, player, "GyreArchives"):
-        region_names.extend((
+        region_names += (
             "Ravenlord\'s Lair",
             "Ifrit\'s Lair"
-        ))
+        )
 
     locationn_datas: List[LocationData] = get_location_datas(world, player, precalculated_weights)
     locations_per_region: Dict[str, List[LocationData]] = split_location_datas_per_region(locationn_datas)
@@ -66,7 +66,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
 
     world.regions.extend(regions.values())
 
-    connectStartingRegion(world, player)
+    connectStartingRegion(world, player, regions)
 
     flooded: PreCalculatedWeights = precalculated_weights
     logic = TimespinnerLogic(world, player, precalculated_weights)
@@ -192,10 +192,10 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
         connect(player, regions, 'Ifrit\'s Lair', 'Library top')
 
 
-def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
+def throwIfAnyLocationIsNotAssignedToARegion(regions: Dict[str, Region], regionNames: Set[str]):
     existingRegions: Set[str] = set()
 
-    for region in regions:
+    for region in regions.values():
         existingRegions.add(region.name)
 
     if (regionNames - existingRegions):
