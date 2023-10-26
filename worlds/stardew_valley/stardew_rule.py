@@ -80,6 +80,12 @@ class False_(StardewRule):  # noqa
         return 999999999
 
 
+false_ = False_()
+true_ = True_()
+assert false_ is False_()
+assert true_ is True_()
+
+
 class Or(StardewRule):
     rules: FrozenSet[StardewRule]
 
@@ -112,12 +118,11 @@ class Or(StardewRule):
         return f"({' | '.join(repr(rule) for rule in self.rules)})"
 
     def __or__(self, other):
-        t = type(other)
-        if t is True_:
+        if other is true_:
             return other
-        if t is False_:
+        if other is false_:
             return self
-        if t is Or:
+        if type(other) is Or:
             return Or(self.rules.union(other.rules))
 
         return Or(self.rules.union({other}))
@@ -132,14 +137,14 @@ class Or(StardewRule):
         return min(rule.get_difficulty() for rule in self.rules)
 
     def simplify(self) -> StardewRule:
-        if any((type(rule) is True_) for rule in self.rules):
-            return True_()
+        if true_ in self.rules:
+            return true_
 
         simplified_rules = {rule.simplify() for rule in self.rules}
         simplified_rules = {rule for rule in simplified_rules if rule is not False_()}
 
         if not simplified_rules:
-            return False_()
+            return false_
 
         if len(simplified_rules) == 1:
             return next(iter(simplified_rules))
@@ -161,7 +166,7 @@ class And(StardewRule):
             rules_list.update(rules)
 
         if len(rules_list) < 1:
-            rules_list.add(True_())
+            rules_list.add(true_)
 
         new_rules = set()
         for rule in rules_list:
@@ -180,12 +185,11 @@ class And(StardewRule):
         return f"({' & '.join(repr(rule) for rule in self.rules)})"
 
     def __and__(self, other):
-        t = type(other)
-        if t is True_:
+        if other is true_:
             return self
-        if t is False_:
+        if other is false_:
             return other
-        if t is And:
+        if type(other) is And:
             return And(self.rules.union(other.rules))
 
         return And(self.rules.union({other}))
@@ -200,14 +204,14 @@ class And(StardewRule):
         return max(rule.get_difficulty() for rule in self.rules)
 
     def simplify(self) -> StardewRule:
-        if any((type(rule) is False_) for rule in self.rules):
-            return False_()
+        if false_ in self.rules:
+            return false_
 
         simplified_rules = {rule.simplify() for rule in self.rules}
         simplified_rules = {rule for rule in simplified_rules if rule is not True_()}
 
         if not simplified_rules:
-            return True_()
+            return true_
 
         if len(simplified_rules) == 1:
             return next(iter(simplified_rules))
