@@ -14,13 +14,13 @@ class StardewRule:
         raise NotImplementedError
 
     def __or__(self, other) -> StardewRule:
-        if isinstance(other, Or):
+        if type(other) is Or:
             return Or(self, *other.rules)
 
         return Or(self, other)
 
     def __and__(self, other) -> StardewRule:
-        if isinstance(other, And):
+        if type(other) is And:
             return And(other.rules.union({self}))
 
         return And(self, other)
@@ -97,7 +97,7 @@ class Or(StardewRule):
 
         new_rules = set()
         for rule in rules_list:
-            if isinstance(rule, Or):
+            if type(rule) is Or:
                 new_rules.update(rule.rules)
             else:
                 new_rules.add(rule)
@@ -112,11 +112,11 @@ class Or(StardewRule):
         return f"({' | '.join(repr(rule) for rule in self.rules)})"
 
     def __or__(self, other):
-        if isinstance(other, True_):
+        if type(other) is True_:
             return other
-        if isinstance(other, False_):
+        if type(other) is False_:
             return self
-        if isinstance(other, Or):
+        if type(other) is Or:
             return Or(self.rules.union(other.rules))
 
         return Or(self.rules.union({other}))
@@ -131,7 +131,7 @@ class Or(StardewRule):
         return min(rule.get_difficulty() for rule in self.rules)
 
     def simplify(self) -> StardewRule:
-        if any(isinstance(rule, True_) for rule in self.rules):
+        if any((type(rule) is True_) for rule in self.rules):
             return True_()
 
         simplified_rules = {rule.simplify() for rule in self.rules}
@@ -164,7 +164,7 @@ class And(StardewRule):
 
         new_rules = set()
         for rule in rules_list:
-            if isinstance(rule, And):
+            if type(rule) is And:
                 new_rules.update(rule.rules)
             else:
                 new_rules.add(rule)
@@ -179,11 +179,11 @@ class And(StardewRule):
         return f"({' & '.join(repr(rule) for rule in self.rules)})"
 
     def __and__(self, other):
-        if isinstance(other, True_):
+        if type(other) is True_:
             return self
-        if isinstance(other, False_):
+        if type(other) is False_:
             return other
-        if isinstance(other, And):
+        if type(other) is And:
             return And(self.rules.union(other.rules))
 
         return And(self.rules.union({other}))
@@ -198,7 +198,7 @@ class And(StardewRule):
         return max(rule.get_difficulty() for rule in self.rules)
 
     def simplify(self) -> StardewRule:
-        if any(isinstance(rule, False_) for rule in self.rules):
+        if any((type(rule) is False_) for rule in self.rules):
             return False_()
 
         simplified_rules = {rule.simplify() for rule in self.rules}
