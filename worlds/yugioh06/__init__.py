@@ -1,4 +1,7 @@
+import logging
 import os
+import random
+import sys
 
 import bsdiff4
 import math
@@ -7,7 +10,8 @@ import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .utils import openFile
 from ..AutoWorld import World, WebWorld
-from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster
+from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster, \
+    challenges
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special
 from .Opponents import get_opponents, get_opponent_locations
@@ -18,7 +22,13 @@ from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
 from .StructureDeck import get_deck_content_locations
 from .RomValues import structure_deck_selection, banlist_ids
-from .Client_bh import YuGiOh2006Client
+
+if "worlds._bizhawk" not in sys.modules:
+    bh_apworld_path = os.path.join(os.path.dirname(sys.modules["worlds"].__file__), "_bizhawk.apworld")
+    if not os.path.isfile(bh_apworld_path) and not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
+        logging.warning("Did not find _bizhawk.apworld required to play Yu-Gi-Oh! 2006. Still able to generate.")
+    else:
+        from .Client_bh import YuGiOh2006Client  # Unused, but required to register with BizHawkClient
 
 
 class Yugioh06Web(WebWorld):
@@ -77,13 +87,22 @@ class Yugioh06World(World):
         "Core Booster": core_booster
     }
 
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
+        self.removed_challenges = None
+
     def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_items(self):
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
         item_pool = []
-        for name in item_to_index:
+        items = item_to_index.copy()
+        if not self.multiworld.AddEmptyBanList[self.player].value:
+            items.pop("No Banlist")
+        for rc in self.removed_challenges:
+            items.pop(rc + " Unlock")
+        for name in items:
             if name in excluded_items or name in start_inventory:
                 continue
             item = Yugioh2006Item(
@@ -94,7 +113,7 @@ class Yugioh06World(World):
             )
             item_pool.append(item)
 
-        while len(item_pool) < len(self.location_name_to_id):
+        while len(item_pool) < len([l for l in self.location_name_to_id if l not in self.removed_challenges]):
             item = Yugioh2006Item(
                 "5000DP",
                 ItemClassification.filler,
@@ -105,7 +124,7 @@ class Yugioh06World(World):
 
         self.multiworld.itempool += item_pool
 
-        for challenge in get_beat_challenge_events().keys():
+        for challenge in get_beat_challenge_events(self).keys():
             item = Yugioh2006Item(
                 "Challenge Beaten",
                 ItemClassification.progression,
@@ -180,11 +199,11 @@ class Yugioh06World(World):
                                    opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
             if opponent.tier == 5 and opponent.column > 2:
-                entrance.access_rule =\
+                entrance.access_rule = \
                     (lambda opp: lambda state: opp.rule(state))(opponent)
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
-                                        state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
+                state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -200,15 +219,16 @@ class Yugioh06World(World):
             entrance.connect(region)
             self.multiworld.regions.append(region)
 
-        challenges = self.multiworld.get_region('Challenges', self.player)
+        challenge_region = self.multiworld.get_region('Challenges', self.player)
         # Challenges
         for challenge, lid in (Limited_Duels | Theme_Duels).items():
+            if challenge in self.removed_challenges:
+                continue
             region = create_region(self,
                                    challenge, {challenge: lid, challenge + " Complete": None})
-            entrance = Entrance(self.player, challenge, challenges)
-            entrance.access_rule = (lambda unlock: lambda state:
-                                    state.has(unlock + " Unlock", self.player))(challenge)
-            challenges.exits.append(entrance)
+            entrance = Entrance(self.player, challenge, challenge_region)
+            entrance.access_rule = (lambda unlock: lambda state: state.has(unlock + " Unlock", self.player))(challenge)
+            challenge_region.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
 
@@ -219,6 +239,18 @@ class Yugioh06World(World):
         self.multiworld.push_precollected(self.create_item(starting_pack))
         banlist = self.multiworld.Banlist[self.player]
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
+        challenge = list((Limited_Duels | Theme_Duels).keys())
+        noc = len(challenge) - max(self.multiworld.ThirdTier5CampaignBossChallenges[self.player].value,
+                                   self.multiworld.FourthTier5CampaignBossChallenges[self.player].value,
+                                   self.multiworld.FinalCampaignBossChallenges[self.player].value,
+                                   self.multiworld.NumberOfChallenges[self.player].value)
+
+        self.random.shuffle(challenge)
+        excluded = self.multiworld.exclude_locations[self.player].value.intersection(challenge)
+        prio = self.multiworld.priority_locations[self.player].value.intersection(challenge)
+        normal = [e for e in challenge if e not in excluded and e not in prio]
+        total = list(excluded) + normal + list(prio)
+        self.removed_challenges = total[:noc]
 
     def apply_base_path(self, rom):
         base_patch_location = "/".join((os.path.dirname(self.__file__), "patch.bsdiff4"))

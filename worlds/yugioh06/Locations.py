@@ -183,10 +183,12 @@ Required_Cards = {
 }
 
 
-def get_beat_challenge_events():
+def get_beat_challenge_events(self):
     beat_events = {}
     for limited in Limited_Duels.keys():
-        beat_events[limited + ' Complete'] = None
+        if limited not in self.removed_challenges:
+            beat_events[limited + ' Complete'] = None
     for theme in Theme_Duels.keys():
-        beat_events[theme + ' Complete'] = None
+        if theme not in self.removed_challenges:
+            beat_events[theme + ' Complete'] = None
     return beat_events

@@ -31,7 +31,7 @@ class FinalCampaignBossChallenges(Range):
     display_name = "Final Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 20
+    default = 15
 
 
 class FourthTier5CampaignBossChallenges(Range):
@@ -39,7 +39,7 @@ class FourthTier5CampaignBossChallenges(Range):
     display_name = "Fourth Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 15
+    default = 10
 
 
 class ThirdTier5CampaignBossChallenges(Range):
@@ -47,7 +47,15 @@ class ThirdTier5CampaignBossChallenges(Range):
     display_name = "Third Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 10
+    default = 5
+
+
+class NumberOfChallenges(Range):
+    """Number of random Limited/Theme Duels that are included. The rest will be unaccessible."""
+    display_name = "Number of Challenges"
+    range_start = 0
+    range_end = 91
+    default = 20
 
 
 class StartingMoney(Range):
@@ -82,14 +90,21 @@ class BoosterPackPrices(Range):
     default = 300
 
 
+class AddEmptyBanList(Toggle):
+    """Adds a Ban List where everything is at 3 to the item pool"""
+    display_name = "Add Empty Ban List"
+
+
 ygo06_options: typing.Dict[str, type(Option)] = {
     "StructureDeck": StructureDeck,
     "Banlist": Banlist,
     "FinalCampaignBossChallenges": FinalCampaignBossChallenges,
     "FourthTier5CampaignBossChallenges": FourthTier5CampaignBossChallenges,
     "ThirdTier5CampaignBossChallenges": ThirdTier5CampaignBossChallenges,
+    "NumberOfChallenges": NumberOfChallenges,
     "StartingMoney": StartingMoney,
     "MoneyRewardMultiplier": MoneyRewardMultiplier,
     "NormalizeBoostersPacks": NormalizeBoostersPacks,
-    "BoosterPackPrices": BoosterPackPrices
+    "BoosterPackPrices": BoosterPackPrices,
+    "AddEmptyBanList": AddEmptyBanList
 }
