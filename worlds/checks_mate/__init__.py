@@ -121,7 +121,6 @@ class CMWorld(World):
             chosen_item = self.multiworld.random.choice(my_progression_items)
             # obey user's wishes
             if progression_items[chosen_item].material + material > max_material_option:
-                print(my_progression_items)
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
