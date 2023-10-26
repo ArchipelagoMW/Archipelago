@@ -11,7 +11,7 @@ Quest: Prince Ali Rescue,Quest,"Al Kharid, Central Varrock, Bronze Ores, Clay Or
 Quest: Doric's Quest,Quest,"Dwarven Mountain Pass, Clay Ore, Iron Ore, Bronze Ores",Mining 15,,
 Quest: Black Knights' Fortress,Quest,"Dwarven Mines, Falador, Monastery, Ice Mountain, Falador Farms",,Progressive Armor,12
 Quest: Witch's Potion,Quest,"Rimmington, Port Sarim",,,
-Quest: The Knight's Sword,Quest,"Falador, Varrock Palace, Mudskipper Point, South of Varrock, Windmill, Pie Dish","Cooking 10, Mining 10",,
+Quest: The Knight's Sword,Quest,"Falador, Varrock Palace, Mudskipper Point, South of Varrock, Windmill, Pie Dish, Port Sarim","Cooking 10, Mining 10",,
 Quest: Goblin Diplomacy,Quest,"Goblin Village, Draynor Village, Falador, South of Varrock, Onion",,,
 Quest: Pirate's Treasure,Quest,"Port Sarim, Karamja, Falador",,,
 Quest: Rune Mysteries,Quest,"Lumbridge, Wizard Tower, Central Varrock",,,
@@ -35,7 +35,7 @@ Cut a Sapphire,Crafting,Chisel,Crafting 20,,
 Cut an Emerald,Crafting,Chisel,Crafting 27,,
 Cut a Ruby,Crafting,Chisel,Crafting 34,,4
 Cut a Diamond,Crafting,Chisel,Crafting 43,,8
-Mine a Blurite Ore,Mining,Mudskipper Point,Mining 10,,
+Mine a Blurite Ore,Mining,"Mudskipper Point, Port Sarim",Mining 10,,
 Crush a Barronite Deposit,Mining,Camdozaal,Mining 14,,
 Mine Silver,Mining,Silver Ore,Mining 20,,
 Mine Coal,Mining,Coal Ore,Mining 30,,2
@@ -50,7 +50,7 @@ Prepare a Tetra,Fishing,Camdozaal,"Fishing 33, Cooking 33",,2
 Catch a Lobster,Fishing,Lobster Spot,Fishing 40,,6
 Catch a Swordfish,Fishing,Lobster Spot,Fishing 50,,12
 Bake a Redberry Pie,Cooking,"Redberry Bush, Wheat, Windmill, Pie Dish",Cooking 10,,
-Cook some Stew,Cooking,"Bowl, Meat",Cooking 25,,
+Cook some Stew,Cooking,"Bowl, Meat, Potato",Cooking 25,,
 Bake an Apple Pie,Cooking,"Cooking Apple, Wheat, Windmill, Pie Dish",Cooking 30,,2
 Bake a Cake,Cooking,"Wheat, Windmill, Egg, Milk, Cake Tin",Cooking 40,,6
 Bake a Meat Pizza,Cooking,"Wheat, Windmill, Cheese, Tomato, Meat",Cooking 45,,8
@@ -67,6 +67,7 @@ Kill a Giant Frog,Combat,Lumbridge Swamp,Combat 13,,
 Kill a Zombie,Combat,Zombie,Combat 13,,
 Kill a Guard,Combat,Guard,Combat 21,,
 Kill a Hill Giant,Combat,Hill Giant,Combat 28,,2
+Kill a Deadly Red Spider,Combat,Deadly Red Spider,Combat 34,,2
 Kill a Moss Giant,Combat,Moss Giant,Combat 42,,2
 Kill a Catablepon,Combat,Barbarian Village,Combat 49,,4
 Kill an Ice Giant,Combat,Ice Giant,Combat 53,,4
