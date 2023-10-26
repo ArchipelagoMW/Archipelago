@@ -112,11 +112,12 @@ class Or(StardewRule):
         return f"({' | '.join(repr(rule) for rule in self.rules)})"
 
     def __or__(self, other):
-        if type(other) is True_:
+        t = type(other)
+        if t is True_:
             return other
-        if type(other) is False_:
+        if t is False_:
             return self
-        if type(other) is Or:
+        if t is Or:
             return Or(self.rules.union(other.rules))
 
         return Or(self.rules.union({other}))
@@ -179,11 +180,12 @@ class And(StardewRule):
         return f"({' & '.join(repr(rule) for rule in self.rules)})"
 
     def __and__(self, other):
-        if type(other) is True_:
+        t = type(other)
+        if t is True_:
             return self
-        if type(other) is False_:
+        if t is False_:
             return other
-        if type(other) is And:
+        if t is And:
             return And(self.rules.union(other.rules))
 
         return And(self.rules.union({other}))
