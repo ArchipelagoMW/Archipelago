@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable, Dict, List, Union, FrozenSet
+from typing import Iterable, Dict, List, Union, FrozenSet, Set
 
 from BaseClasses import CollectionState, ItemClassification
 from .items import item_table
@@ -90,24 +90,26 @@ class Or(StardewRule):
     rules: FrozenSet[StardewRule]
 
     def __init__(self, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
-        rules_list = set()
+        rules_list: Set[StardewRule]
+
         if isinstance(rule, Iterable):
-            rules_list.update(rule)
+            rules_list = {*rule}
         else:
-            rules_list.add(rule)
+            rules_list = {rule}
 
         if rules is not None:
             rules_list.update(rules)
 
         assert rules_list, "Can't create a Or conditions without rules"
 
-        new_rules = set()
-        for rule in rules_list:
-            if type(rule) is Or:
-                new_rules.update(rule.rules)
-            else:
-                new_rules.add(rule)
-        rules_list = new_rules
+        if any(type(rule) is Or for rule in rules_list):
+            new_rules: Set[StardewRule] = set()
+            for rule in rules_list:
+                if type(rule) is Or:
+                    new_rules.update(rule.rules)
+                else:
+                    new_rules.add(rule)
+            rules_list = new_rules
 
         self.rules = frozenset(rules_list)
 
@@ -156,25 +158,26 @@ class And(StardewRule):
     rules: FrozenSet[StardewRule]
 
     def __init__(self, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
-        rules_list = set()
+        rules_list: Set[StardewRule]
+
         if isinstance(rule, Iterable):
-            rules_list.update(rule)
+            rules_list = {*rule}
         else:
-            rules_list.add(rule)
+            rules_list = {rule}
 
         if rules is not None:
             rules_list.update(rules)
 
-        if len(rules_list) < 1:
+        if not rules_list:
             rules_list.add(true_)
-
-        new_rules = set()
-        for rule in rules_list:
-            if type(rule) is And:
-                new_rules.update(rule.rules)
-            else:
-                new_rules.add(rule)
-        rules_list = new_rules
+        elif any(type(rule) is And for rule in rules_list):
+            new_rules: Set[StardewRule] = set()
+            for rule in rules_list:
+                if type(rule) is And:
+                    new_rules.update(rule.rules)
+                else:
+                    new_rules.add(rule)
+            rules_list = new_rules
 
         self.rules = frozenset(rules_list)
 
@@ -224,11 +227,12 @@ class Count(StardewRule):
     rules: List[StardewRule]
 
     def __init__(self, count: int, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
-        rules_list = []
+        rules_list: List[StardewRule]
+
         if isinstance(rule, Iterable):
-            rules_list.extend(rule)
+            rules_list = [*rule]
         else:
-            rules_list.append(rule)
+            rules_list = [rule]
 
         if rules is not None:
             rules_list.extend(rules)
@@ -266,11 +270,12 @@ class TotalReceived(StardewRule):
     player: int
 
     def __init__(self, count: int, items: Union[str, Iterable[str]], player: int):
-        items_list = []
+        items_list: List[str]
+
         if isinstance(items, Iterable):
-            items_list.extend(items)
+            items_list = [*items]
         else:
-            items_list.append(items)
+            items_list = [items]
 
         assert items_list, "Can't create a Total Received conditions without items"
         for item in items_list:
