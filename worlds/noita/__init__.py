@@ -56,4 +56,4 @@ class NoitaWorld(World):
         Rules.create_all_rules(self)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(Items.filler_items)
+        return self.random.choice(Items.filler_items)
