@@ -49,11 +49,9 @@ class TimespinnerWorld(World):
 
     precalculated_weights: PreCalculatedWeights
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
-        self.precalculated_weights = PreCalculatedWeights(world, player)
-
     def generate_early(self) -> None:
+        self.precalculated_weights = PreCalculatedWeights(self.multiworld, self.player)
+
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
         if self.multiworld.start_inventory[self.player].value.pop('Meyef', 0) > 0:
             self.multiworld.StartWithMeyef[self.player].value = self.multiworld.StartWithMeyef[self.player].option_true
