@@ -105,6 +105,8 @@ class CMWorld(World):
         my_progression_items = set(progression_items.keys())
         min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
         max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
+        if max_material_option < min_material_option:
+            max_material_option = min_material_option
         # while (len(items) + user_item_count) < len(location_table) and material < min_material_option and len(
         #         my_progression_items) > 0:
         #     chosen_item = self.multiworld.random.choice(list(my_progression_items))
