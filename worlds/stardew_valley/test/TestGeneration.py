@@ -1,5 +1,8 @@
+import typing
+
 from BaseClasses import ItemClassification, MultiWorld
-from . import setup_solo_multiworld, SVTestBase
+from . import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_with_mods, \
+    allsanity_options_without_mods, minimal_locations_maximal_items
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import items_by_group, Group
@@ -7,11 +10,11 @@ from ..locations import LocationTags
 from ..mods.mod_data import ModNames
 
 
-def get_real_locations(tester: SVTestBase, multiworld: MultiWorld):
+def get_real_locations(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
     return [location for location in multiworld.get_locations(tester.player) if not location.event]
 
 
-def get_real_location_names(tester: SVTestBase, multiworld: MultiWorld):
+def get_real_location_names(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
     return [location.name for location in multiworld.get_locations(tester.player) if not location.event]
 
 
@@ -205,17 +208,17 @@ class TestLocationGeneration(SVTestBase):
                 self.assertIn(location.name, location_table)
 
 
-class TestLocationAndItemCount(SVTestBase):
+class TestLocationAndItemCount(SVTestCase):
 
     def test_minimal_location_maximal_items_still_valid(self):
-        min_max_options = self.minimal_locations_maximal_items()
+        min_max_options = minimal_locations_maximal_items()
         multiworld = setup_solo_multiworld(min_max_options)
         valid_locations = get_real_locations(self, multiworld)
         self.assertGreaterEqual(len(valid_locations), len(multiworld.itempool))
 
     def test_allsanity_without_mods_has_at_least_locations(self):
         expected_locations = 994
-        allsanity_options = self.allsanity_options_without_mods()
+        allsanity_options = allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         number_locations = len(get_real_locations(self, multiworld))
         self.assertGreaterEqual(number_locations, expected_locations)
@@ -228,7 +231,7 @@ class TestLocationAndItemCount(SVTestBase):
 
     def test_allsanity_with_mods_has_at_least_locations(self):
         expected_locations = 1246
-        allsanity_options = self.allsanity_options_with_mods()
+        allsanity_options = allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         number_locations = len(get_real_locations(self, multiworld))
         self.assertGreaterEqual(number_locations, expected_locations)
