@@ -786,8 +786,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
 
     # patch items
 
-    for location in world.get_locations():
-        if location.player != player or location.address is None or location.shop_slot is not None:
+    for location in world.get_locations(player):
+        if location.address is None or location.shop_slot is not None:
             continue
 
         itemid = location.item.code if location.item is not None else 0x5A

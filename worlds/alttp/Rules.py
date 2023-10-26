@@ -1603,21 +1603,20 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
         return options_to_access_rule(possible_options)
 
     # Add requirements for bunny-impassible caves if link is a bunny in them
-    for region in [world.get_region(name, player) for name in bunny_impassable_caves]:
-
+    for region in (world.get_region(name, player) for name in bunny_impassable_caves):
         if not is_bunny(region):
             continue
         rule = get_rule_to_add(region)
-        for exit in region.exits:
-            add_rule(exit, rule)
+        for region_exit in region.exits:
+            add_rule(region_exit, rule)
 
     paradox_shop = world.get_region('Light World Death Mountain Shop', player)
     if is_bunny(paradox_shop):
         add_rule(paradox_shop.entrances[0], get_rule_to_add(paradox_shop))
 
     # Add requirements for all locations that are actually in the dark world, except those available to the bunny, including dungeon revival
-    for entrance in world.get_entrances():
-        if entrance.player == player and is_bunny(entrance.connected_region):
+    for entrance in world.get_entrances(player):
+        if is_bunny(entrance.connected_region):
             if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] :
                 if entrance.connected_region.type == LTTPRegionType.Dungeon:
                     if entrance.parent_region.type != LTTPRegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():

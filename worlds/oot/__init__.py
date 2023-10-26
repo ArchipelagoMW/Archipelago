@@ -555,7 +555,6 @@ class OOTWorld(World):
 
             self.multiworld.regions.append(new_region)
             self.regions.append(new_region)
-        self.multiworld._recache()
 
     def set_scrub_prices(self):
         # Get Deku Scrub Locations
@@ -781,7 +780,6 @@ class OOTWorld(World):
         bigpoe = self.multiworld.get_location('Sell Big Poe from Market Guard House', self.player)
         if not all_state.has('Bottle with Big Poe', self.player) and bigpoe not in reachable:
             bigpoe.parent_region.locations.remove(bigpoe)
-        self.multiworld.clear_location_cache()
 
         # If fast scarecrow then we need to kill the Pierre location as it will be unreachable
         if self.free_scarecrow:
@@ -1242,9 +1240,8 @@ class OOTWorld(World):
             return False
 
     def get_shufflable_entrances(self, type=None, only_primary=False):
-        return [entrance for entrance in self.multiworld.get_entrances() if (entrance.player == self.player and
-                                                                             (type == None or entrance.type == type) and
-                                                                             (not only_primary or entrance.primary))]
+        return [entrance for entrance in self.multiworld.get_entrances(self.player) if (
+                (type == None or entrance.type == type) and (not only_primary or entrance.primary))]
 
     def get_shuffled_entrances(self, type=None, only_primary=False):
         return [entrance for entrance in self.get_shufflable_entrances(type=type, only_primary=only_primary) if
