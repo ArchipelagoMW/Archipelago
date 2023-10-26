@@ -2289,8 +2289,8 @@ def create_regions(self):
             check_warps.update(region.exits)
             check_warps.remove(e)
             for location in region.locations:
-                if location.item and location.item.name in relevant_events \
-                    and adds_reachable_entrances(entrances_copy, location.item, dead_end_cache):
+                if location.item and location.item.name in relevant_events and \
+                                 adds_reachable_entrances(entrances_copy, location.item, dead_end_cache):
                     return False
             while check_warps:
                 warp = check_warps.pop()
