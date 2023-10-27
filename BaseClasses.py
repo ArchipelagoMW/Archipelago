@@ -368,7 +368,7 @@ class MultiWorld():
             self._recache()
             return self._location_cache[location, player]
 
-    def get_all_state(self, use_cache: bool) -> CollectionState:
+    def get_all_state(self, use_cache: bool = True) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
             return cached.copy()

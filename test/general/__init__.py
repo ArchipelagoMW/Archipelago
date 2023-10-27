@@ -4,7 +4,7 @@ from typing import Type, Tuple
 from BaseClasses import MultiWorld, CollectionState
 from worlds.AutoWorld import call_all, World
 
-gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")
+gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill", "create_filler_items")
 
 
 def setup_solo_multiworld(world_type: Type[World], steps: Tuple[str, ...] = gen_steps) -> MultiWorld:
@@ -13,7 +13,7 @@ def setup_solo_multiworld(world_type: Type[World], steps: Tuple[str, ...] = gen_
     
     :param world_type: Type of the world to generate a multiworld for
     :param steps: The gen steps that should be called on the generated multiworld before returning. Default calls
-    steps through pre_fill
+    steps through create_filler_items
     """
     multiworld = MultiWorld(1)
     multiworld.game[1] = world_type.game

@@ -4,8 +4,10 @@ import hashlib
 import logging
 import pathlib
 import sys
+from collections import Counter
 from dataclasses import make_dataclass
-from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
+from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, \
+    Type, \
     Union
 
 from Options import PerGameCommonOptions
@@ -123,7 +125,26 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     for player in multiworld.player_ids:
         prev_item_count = len(multiworld.itempool)
         world_types.add(multiworld.worlds[player].__class__)
+        # there's probably a better way to do this
+        if method_name == "create_filler_items":
+            sub_world = multiworld.worlds[player]
+            # TODO remove when all worlds on new API
+            if not isinstance(getattr(sub_world, "itempool", None), Counter):
+                continue
+            count = len(multiworld.get_unfilled_locations(player)) - sum(sub_world.itempool.values())
+            sub_world.itempool = Counter()
+            call_single(multiworld, method_name, player, count)
+            multiworld.itempool += [sub_world.create_item(item_name)
+                                    for item_name, count in sub_world.itempool.items() for _ in range(count)]
+            continue
         call_single(multiworld, method_name, player, *args)
+        # this is here for unit tests
+        if method_name == "create_items":
+            sub_world = multiworld.worlds[player]
+            # items need to be created so that state can collect them
+            if isinstance(getattr(sub_world, "itempool", None), Counter):
+                multiworld.itempool += [sub_world.create_item(item_name)
+                                        for item_name, count in sub_world.itempool.items() for _ in range(count)]
         if __debug__:
             new_items = multiworld.itempool[prev_item_count:]
             for i, item in enumerate(new_items):
@@ -240,6 +261,9 @@ class World(metaclass=AutoWorldRegister):
     location_names: ClassVar[Set[str]]
     """set of all potential location names"""
 
+    itempool: Counter[str]
+    """Item names and the amount to be created for the multiworld."""
+
     random: random.Random
     """This world's random object. Should be used for any randomization needed in world for this player slot."""
 
@@ -286,13 +310,19 @@ class World(metaclass=AutoWorldRegister):
 
     def create_items(self) -> None:
         """
-        Method for creating and submitting items to the itempool. Items and Regions should *not* be created and submitted
-        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
+        Method for determining the basic itempool. Item names should be determined and then added to `self.itempool`.
         """
         pass
 
     def set_rules(self) -> None:
         """Method for setting the rules on the World's regions and locations."""
+        pass
+
+    def create_filler_items(self, count: int) -> None:
+        """
+        Method for determining what remaining filler should be added to the multiworld. Item names should be determined
+        and added to `self.itempool`.
+        """
         pass
 
     def generate_basic(self) -> None:

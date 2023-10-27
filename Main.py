@@ -164,6 +164,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             player: world.start_inventory_from_pool[player].value.copy() for player in world.player_ids}
         for player, items in depletion_pool.items():
             player_world: AutoWorld.World = world.worlds[player]
+            if isinstance(getattr(player_world, "itempool", None), collections.Counter):
+                for item, count in items.items():
+                    player_world.itempool[item] = max(player_world.itempool[item] - count, 0)
+                continue
+        # TODO remove when all worlds use new API
             for count in items.values():
                 for _ in range(count):
                     new_items.append(player_world.create_filler())
@@ -277,6 +282,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Running Pre Main Fill.')
 
     AutoWorld.call_all(world, "pre_fill")
+
+    AutoWorld.call_all(world, "create_filler_items")
 
     logger.info(f'Filling the world with {len(world.itempool)} items.')
 
