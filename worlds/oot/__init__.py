@@ -527,6 +527,10 @@ class OOTWorld(World):
                         # We still need to fill the location even if ALR is off.
                         logger.debug('Unreachable location: %s', new_location.name)
                     new_location.player = self.player
+                    # Change some attributes of Drop locations
+                    if new_location.type == 'Drop':
+                        new_location.name = new_region.name + ' ' + new_location.name
+                        new_location.show_in_spoiler = False
                     new_region.locations.append(new_location)
             if 'events' in region:
                 for event, rule in region['events'].items():
@@ -686,8 +690,6 @@ class OOTWorld(World):
                 exit.connect(self.get_region(exit.vanilla_connected_region))
 
     def create_items(self):
-        # Uniquely rename drop locations for each region and erase them from the spoiler
-        set_drop_location_names(self)
         # Generate itempool
         generate_itempool(self)
 
