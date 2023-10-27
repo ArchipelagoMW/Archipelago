@@ -197,8 +197,13 @@ def global_rules(world, player):
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
     for exit in world.get_region('Menu', player).exits:
         exit.hide_path = True
-
-    set_rule(world.get_entrance('Old Man S&Q', player), lambda state: state.can_reach('Old Man', 'Location', player))
+    try:
+        old_man_sq = world.get_entrance('Old Man S&Q', player)
+    except KeyError:
+        pass  # it doesn't exist, should be dungeon-only unittests
+    else:
+        old_man = world.get_location("Old Man", player)
+        set_rule(old_man_sq, lambda state: old_man.can_reach(state))
 
     set_rule(world.get_location('Sunken Treasure', player), lambda state: state.has('Open Floodgate', player))
     set_rule(world.get_location('Dark Blacksmith Ruins', player), lambda state: state.has('Return Smith', player))
@@ -1526,16 +1531,16 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     # Helper functions to determine if the moon pearl is required
     if inverted:
         def is_bunny(region):
-            return region.is_light_world
+            return region and region.is_light_world
 
         def is_link(region):
-            return region.is_dark_world
+            return region and region.is_dark_world
     else:
         def is_bunny(region):
-            return region.is_dark_world
+            return region and region.is_dark_world
 
         def is_link(region):
-            return region.is_light_world
+            return region and region.is_light_world
 
     def get_rule_to_add(region, location = None, connecting_entrance = None):
         # In OWG, a location can potentially be superbunny-mirror accessible or
