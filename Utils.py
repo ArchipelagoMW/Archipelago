@@ -762,7 +762,7 @@ class DeprecateDict(dict):
     def __getitem__(self, item: Any) -> Any:
         if self.should_error:
             deprecate(self.log_message)
-        else:
+        elif __debug__:
             import warnings
             warnings.warn(self.log_message)
         return super().__getitem__(item)

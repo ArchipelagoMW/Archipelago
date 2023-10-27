@@ -69,7 +69,8 @@ class AutoWorldRegister(type):
         if "options_dataclass" not in dct and "option_definitions" in dct:
             # TODO - switch to deprecate after a version
             from warnings import warn
-            warn("Assigning options through option_definitions is now deprecated. Use options_dataclass instead.")
+            if __debug__:
+                warn("Assigning options through option_definitions is now deprecated. Use options_dataclass instead.")
             dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
                                                       bases=(PerGameCommonOptions,))
 
