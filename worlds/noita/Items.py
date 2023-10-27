@@ -45,17 +45,20 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
     return ["Kantele"] if victory_condition.value >= VictoryCondition.option_pure_ending else []
 
 
-def create_random_items(multiworld: MultiWorld, player: int, random_count: int) -> List[str]:
+def create_random_items(multiworld: MultiWorld, player: int, shop_count: int, random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
     if multiworld.bad_effects[player].value == 0:
         del filler_pool["Trap"]
+    
+    shop_filler_pool = filler_pool.copy()
+    for item_name in shop_filler_pool:
+        if item_name in items_hidden_from_shops:
+            del shop_filler_pool[item_name]
 
-    return multiworld.random.choices(
-        population=list(filler_pool.keys()),
-        weights=list(filler_pool.values()),
-        k=random_count
-    )
+    shop_filler = multiworld.random.choices(population=list(shop_filler_pool.keys()), weights=list(shop_filler_pool.values()), k=shop_count)
+    random_filler = multiworld.random.choices(population=list(filler_pool.keys()), weights=list(filler_pool.values()), k=random_count)
 
+    return shop_filler + random_filler
 
 def create_all_items(multiworld: MultiWorld, player: int) -> None:
     locations_to_fill = len(multiworld.get_unfilled_locations(player))
@@ -67,24 +70,14 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
         + create_kantele(multiworld.victory_condition[player])
     )
 
-    random_count = locations_to_fill - len(itempool)
-    filler_to_add = []
-    # quick and dirty check to avoid filler issues without manually adding filler
-    # will remove when the client can handle filler items spawning in shops
-    player_count = 1  # todo: figure out how to get player count in multi
-    if player_count > 1:  # if there's multiple players, it's nearly impossible to fail
-        filler_to_add = create_random_items(multiworld, player, random_count)
-    else:
-        shop_allowable_filler_count = 0
-        while shop_allowable_filler_count + len(itempool) < 39:
-            shop_allowable_filler_count = 0
-            filler_to_add = create_random_items(multiworld, player, random_count)
-            for item in filler_to_add:
-                if item not in items_hidden_from_shops:
-                    shop_allowable_filler_count += 1
-    # itempool += create_random_items(multiworld, player, random_count)
-    itempool += filler_to_add
-
+    # 39 is the number of shop checks in the pool
+    shop_random_count = 39 - len(itempool)
+    if shop_random_count < 0:
+        shop_random_count = 0
+    
+    random_count = locations_to_fill - 39
+    
+    itempool += create_random_items(multiworld, player, shop_count, random_count)
     multiworld.itempool += [create_item(player, name) for name in itempool]
 
 
@@ -122,7 +115,6 @@ item_table: Dict[str, ItemData] = {
     "Refreshing Gourd":                     ItemData(110029, "Items", ItemClassification.filler),
     "Sädekivi":                             ItemData(110030, "Items", ItemClassification.filler),
     "Broken Wand":                          ItemData(110031, "Items", ItemClassification.filler),
-
 }
 
 filler_weights: Dict[str, int] = {
