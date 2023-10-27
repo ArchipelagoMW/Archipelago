@@ -4,7 +4,6 @@ from typing import Dict, List, NamedTuple, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 from .Options import BossesAsChecks, VictoryCondition, ExtraOrbs
-from .Rules import items_hidden_from_shops
 
 
 class ItemData(NamedTuple):
@@ -45,20 +44,28 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
     return ["Kantele"] if victory_condition.value >= VictoryCondition.option_pure_ending else []
 
 
+items_hidden_from_shops: List[str] = ["Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
+                                      "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
+                                      "Powder Pouch"]
+
+
 def create_random_items(multiworld: MultiWorld, player: int, shop_count: int, random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
     if multiworld.bad_effects[player].value == 0:
         del filler_pool["Trap"]
     
-    shop_filler_pool = filler_pool.copy()
-    for item_name in shop_filler_pool:
+    shop_filler_pool = {}
+    for item_name, weight in filler_pool.items():
         if item_name in items_hidden_from_shops:
-            del shop_filler_pool[item_name]
+            shop_filler_pool[item_name] = weight
 
-    shop_filler = multiworld.random.choices(population=list(shop_filler_pool.keys()), weights=list(shop_filler_pool.values()), k=shop_count)
-    random_filler = multiworld.random.choices(population=list(filler_pool.keys()), weights=list(filler_pool.values()), k=random_count)
+    shop_filler = multiworld.random.choices(population=list(shop_filler_pool.keys()),
+                                            weights=list(shop_filler_pool.values()), k=shop_count)
+    random_filler = multiworld.random.choices(population=list(filler_pool.keys()),
+                                              weights=list(filler_pool.values()), k=random_count)
 
     return shop_filler + random_filler
+
 
 def create_all_items(multiworld: MultiWorld, player: int) -> None:
     locations_to_fill = len(multiworld.get_unfilled_locations(player))
@@ -70,14 +77,16 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
         + create_kantele(multiworld.victory_condition[player])
     )
 
+    # if there's not enough shop-allowed items in the pool, we can encounter gen issues
     # 39 is the number of shop checks in the pool
-    shop_random_count = 39 - len(itempool)
-    if shop_random_count < 0:
-        shop_random_count = 0
-    
-    random_count = locations_to_fill - 39
-    
-    itempool += create_random_items(multiworld, player, shop_count, random_count)
+    shop_random_count = 0
+    if len(itempool) < 39:
+        shop_random_count = 39 - len(itempool)
+        random_count = locations_to_fill - 39
+    else:
+        random_count = locations_to_fill - len(itempool)
+
+    itempool += create_random_items(multiworld, player, shop_random_count, random_count)
     multiworld.itempool += [create_item(player, name) for name in itempool]
 
 
