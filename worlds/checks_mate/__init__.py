@@ -110,11 +110,11 @@ class CMWorld(World):
                 self.multiworld.random.random() * (max_material_option - min_material_option) + max_material_option)
 
         my_progression_items = list(progression_items.keys())
-        # more pawn chance (minor:major:pawn distribution)
+        # more pawn chance (1 major:1 minor:2 pawn distribution)
         my_progression_items.append("Progressive Pawn")
         # I am proud of this feature, so I want players to see more of it. Fight me.
         my_progression_items.append("Progressive Pocket")
-        # halve chance of queen promotion - with an equal distribution, majors will equal upgrades
+        # halve chance of queen promotion - with an equal distribution, user will end up with no majors and only queens
         my_progression_items.extend([item for item in my_progression_items if item != "Progressive Major To Queen"])
         while (len(items) + user_item_count) < len(location_table) and material < max_material_actual and len(
                 my_progression_items) > 0:
@@ -124,6 +124,8 @@ class CMWorld(World):
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
+            if not self.has_prereqs(chosen_item):
+                continue
             if self.can_add_more(chosen_item):
                 try_item = self.create_item(chosen_item)
                 if chosen_item not in self.items_used:
@@ -137,6 +139,8 @@ class CMWorld(World):
         my_useful_items = list(useful_items.keys())
         while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
             chosen_item = self.multiworld.random.choice(my_useful_items)
+            if not self.has_prereqs(chosen_item):
+                continue
             if self.can_add_more(chosen_item):
                 if chosen_item not in self.items_used:
                     self.items_used[chosen_item] = 0
@@ -149,6 +153,8 @@ class CMWorld(World):
         my_filler_items = list(filler_items.keys())
         while (len(items) + user_item_count) < len(location_table):
             chosen_item = self.multiworld.random.choice(my_filler_items)
+            if not self.has_prereqs(chosen_item):
+                continue
             if self.can_add_more(chosen_item):
                 if chosen_item not in self.items_used:
                     self.items_used[chosen_item] = 0
@@ -171,6 +177,16 @@ class CMWorld(World):
          place_locked_item(CMItem("Victory", ItemClassification.progression, 4_065, self.player)))
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+    def has_prereqs(self, chosen_item: str) -> bool:
+        parents = [item for item in item_table
+                   if item_table[chosen_item].parents is not None and item in item_table[chosen_item].parents]
+        if parents:
+            fewest_parents = min([self.items_used.get(item, 0) for item in parents])
+            enough_parents = fewest_parents > self.items_used.get(chosen_item, 0)
+            if not enough_parents:
+                return False
+        return True
 
     def can_add_more(self, chosen_item: str) -> bool:
         return chosen_item not in self.items_used or \
