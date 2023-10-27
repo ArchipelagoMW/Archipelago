@@ -20,14 +20,14 @@ It is extremely encouraged to use the default install directory!
 Then follow the steps below
 
 1. Go to the page linked for SM64AP-Launcher, and press on the topmost entry
-3. Scroll down, and download the zip file
-4. Unpack the zip file in an empty folder
-5. Run the Launcher. On first start, press `Check Requirements`, which will guide you through the rest of the needed steps dependencies.
+2. Scroll down, and download the zip file
+3. Unpack the zip file in an empty folder
+4. Run the Launcher. On first start, press `Check Requirements`, which will guide you through the rest of the needed steps dependencies.
     - If you did not use the default install directory for MSYS, close this window, check `Show advanced options` and reopen using `Re-check Requirements`. You can then set the path manually.
-7. When finished, use `Compile default SM64AP build` to continue
+5. When finished, use `Compile default SM64AP build` to continue
     - Advanced user can use `Show advanced options` to build with custom makeflags (BETTERCAMERA, NODRAWINGDISTANCE, ...), different repos and branches, and game patches such as 60FPS, Enhanced Moveset and others.
-8. Press `Download Files` to prepare the build, afterwards `Create Build`.
-9. SM64EX will now be compiled. This can take a while.
+6. Press `Download Files` to prepare the build, afterwards `Create Build`.
+7. SM64EX will now be compiled. This can take a while.
 
 After it's done, the build list should have another entry with the name you gave it.
 
