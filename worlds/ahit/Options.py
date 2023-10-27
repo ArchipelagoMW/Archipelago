@@ -29,6 +29,22 @@ def adjust_options(world: World):
         world.options.BadgeSellerMinItems.value,
         world.options.BadgeSellerMaxItems.value)
 
+    world.options.NyakuzaThugMinShopItems.value = min(
+        world.options.NyakuzaThugMinShopItems.value,
+        world.options.NyakuzaThugMaxShopItems.value)
+
+    world.options.NyakuzaThugMaxShopItems.value = max(
+        world.options.NyakuzaThugMinShopItems.value,
+        world.options.NyakuzaThugMaxShopItems.value)
+
+    world.options.DWShuffleCountMin.value = min(
+        world.options.DWShuffleCountMin.value,
+        world.options.DWShuffleCountMax.value)
+
+    world.options.DWShuffleCountMax.value = max(
+        world.options.DWShuffleCountMin.value,
+        world.options.DWShuffleCountMax.value)
+
     total_tps: int = get_total_time_pieces(world)
     if world.options.HighestChapterCost.value > total_tps-5:
         world.options.HighestChapterCost.value = min(45, total_tps-5)
