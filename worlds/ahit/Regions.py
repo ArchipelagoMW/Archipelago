@@ -270,7 +270,6 @@ blacklisted_combos = {
 
 def create_regions(world: World):
     w = world
-    mw = world.multiworld
     p = world.player
 
     # ------------------------------------------- HUB -------------------------------------------------- #
@@ -311,7 +310,7 @@ def create_regions(world: World):
     ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
     post_ev_area = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
     connect_regions(basement, ev_area, "DBS Basement -> Elevator Area", p)
-    if world.multiworld.LogicDifficulty[world.player].value >= int(Difficulty.EXPERT):
+    if world.options.LogicDifficulty.value >= int(Difficulty.EXPERT):
         connect_regions(basement, post_ev_area, "DBS Basement -> Post Elevator Area", p)
 
     # ------------------------------------------- SUBCON FOREST --------------------------------------- #
@@ -397,10 +396,10 @@ def create_regions(world: World):
         create_rift_connections(w, create_region(w, "Time Rift - Balcony"))
         create_rift_connections(w, create_region(w, "Time Rift - Deep Sea"))
 
-        if mw.ExcludeTour[world.player].value == 0:
+        if w.options.ExcludeTour.value == 0:
             create_rift_connections(w, create_region(w, "Time Rift - Tour"))
 
-        if mw.Tasksanity[p].value > 0:
+        if w.options.Tasksanity.value > 0:
             create_tasksanity_locations(w)
 
         connect_regions(cruise_ship, badge_seller, "CS -> Badge Seller", p)
@@ -440,7 +439,7 @@ def create_rift_connections(world: World, region: Region):
 def create_tasksanity_locations(world: World):
     ship_shape: Region = world.multiworld.get_region("Ship Shape", world.player)
     id_start: int = get_tasksanity_start_id()
-    for i in range(world.multiworld.TasksanityCheckCount[world.player].value):
+    for i in range(world.options.TasksanityCheckCount.value):
         location = HatInTimeLocation(world.player, f"Tasksanity Check {i+1}", id_start+i, ship_shape)
         ship_shape.locations.append(location)
 
@@ -449,10 +448,10 @@ def is_valid_plando(world: World, region: str) -> bool:
     if region in blacklisted_acts.values():
         return False
 
-    if region not in world.multiworld.ActPlando[world.player].keys():
+    if region not in world.options.ActPlando.keys():
         return False
 
-    act = world.multiworld.ActPlando[world.player].get(region)
+    act = world.options.ActPlando.get(region)
     if act in blacklisted_acts.values():
         return False
 
@@ -461,10 +460,10 @@ def is_valid_plando(world: World, region: str) -> bool:
         and region in act_entrances.keys() and ("Act 1" in act_entrances[region] or "Free Roam" in act_entrances[region])
 
     if is_first_act:
-        if act_chapters[act] == "Subcon Forest" and world.multiworld.ShuffleSubconPaintings[world.player].value > 0:
+        if act_chapters[act] == "Subcon Forest" and world.options.ShuffleSubconPaintings.value > 0:
             return False
 
-        if world.multiworld.UmbrellaLogic[world.player].value > 0 \
+        if world.options.UmbrellaLogic.value > 0 \
            and (act == "Heating Up Mafia Town" or act == "Queen Vanessa's Manor"):
             return False
 
@@ -484,7 +483,7 @@ def is_valid_plando(world: World, region: str) -> bool:
     if region == "Time Rift - The Owl Express" and act == "Murder on the Owl Express":
         return False
 
-    return any(a.name == world.multiworld.ActPlando[world.player].get(region) for a in
+    return any(a.name == world.options.ActPlando.get(region) for a in
                world.multiworld.get_regions(world.player))
 
 
@@ -492,7 +491,7 @@ def randomize_act_entrances(world: World):
     region_list: typing.List[Region] = get_act_regions(world)
     world.random.shuffle(region_list)
 
-    separate_rifts: bool = bool(world.multiworld.ActRandomizer[world.player].value == 1)
+    separate_rifts: bool = bool(world.options.ActRandomizer.value == 1)
 
     for region in region_list.copy():
         if (act_chapters[region.name] == "Alpine Skyline" or act_chapters[region.name] == "Nyakuza Metro") \
@@ -511,14 +510,14 @@ def randomize_act_entrances(world: World):
             region_list.append(region)
 
     for region in region_list.copy():
-        if region.name in world.multiworld.ActPlando[world.player].keys():
+        if region.name in world.options.ActPlando.keys():
             if is_valid_plando(world, region.name):
                 region_list.remove(region)
                 region_list.append(region)
             else:
                 print("Disallowing act plando for",
                       world.multiworld.player_name[world.player],
-                      "-", region.name, ":", world.multiworld.ActPlando[world.player].get(region.name))
+                      "-", region.name, ":", world.options.ActPlando.get(region.name))
 
     # Reverse the list, so we can do what we want to do first
     region_list.reverse()
@@ -543,7 +542,7 @@ def randomize_act_entrances(world: World):
                and "Free Roam" not in act_entrances[region.name]:
                 continue
 
-            if region.name in world.multiworld.ActPlando[world.player].keys() and is_valid_plando(world, region.name):
+            if region.name in world.options.ActPlando.keys() and is_valid_plando(world, region.name):
                 has_guaranteed = True
 
             i = 0
@@ -562,16 +561,16 @@ def randomize_act_entrances(world: World):
                 if candidate.name not in guaranteed_first_acts:
                     continue
 
-                if candidate.name in world.multiworld.ActPlando[world.player].values():
+                if candidate.name in world.options.ActPlando.values():
                     continue
 
                 # Not completable without Umbrella
-                if world.multiworld.UmbrellaLogic[world.player].value > 0 \
+                if world.options.UmbrellaLogic.value > 0 \
                    and (candidate.name == "Heating Up Mafia Town" or candidate.name == "Queen Vanessa's Manor"):
                     continue
 
                 # Subcon sphere 1 is too small without painting unlocks, and no acts are completable either
-                if world.multiworld.ShuffleSubconPaintings[world.player].value > 0 \
+                if world.options.ShuffleSubconPaintings.value > 0 \
                    and "Subcon Forest" in act_entrances[candidate.name]:
                     continue
 
@@ -579,10 +578,10 @@ def randomize_act_entrances(world: World):
                 has_guaranteed = True
                 break
 
-            if region.name in world.multiworld.ActPlando[world.player].keys() and is_valid_plando(world, region.name):
+            if region.name in world.options.ActPlando.keys() and is_valid_plando(world, region.name):
                 candidate_list.clear()
                 candidate_list.append(
-                   world.multiworld.get_region(world.multiworld.ActPlando[world.player].get(region.name), world.player))
+                   world.multiworld.get_region(world.options.ActPlando.get(region.name), world.player))
                 break
 
             # Already mapped onto something else
@@ -607,12 +606,12 @@ def randomize_act_entrances(world: World):
                 continue
 
             # Prevent Contractual Obligations from being inaccessible if contracts are not shuffled
-            if world.multiworld.ShuffleActContracts[world.player].value == 0:
+            if world.options.ShuffleActContracts.value == 0:
                 if (region.name == "Your Contract has Expired" or region.name == "The Subcon Well") \
                    and candidate.name == "Contractual Obligations":
                     continue
 
-            if world.multiworld.FinaleShuffle[world.player].value > 0 and region.name in chapter_finales:
+            if world.options.FinaleShuffle.value > 0 and region.name in chapter_finales:
                 if candidate.name not in chapter_finales:
                     continue
 
@@ -687,17 +686,17 @@ def get_act_regions(world: World) -> typing.List[Region]:
 
 
 def is_act_blacklisted(world: World, name: str) -> bool:
-    plando: bool = name in world.multiworld.ActPlando[world.player].keys() \
-        or name in world.multiworld.ActPlando[world.player].values()
+    plando: bool = name in world.options.ActPlando.keys() \
+        or name in world.options.ActPlando.values()
 
     if name == "The Finale":
-        return not plando and world.multiworld.EndGoal[world.player].value == 1
+        return not plando and world.options.EndGoal.value == 1
 
     if name == "Rush Hour":
-        return not plando and world.multiworld.EndGoal[world.player].value == 2
+        return not plando and world.options.EndGoal.value == 2
 
     if name == "Time Rift - Tour":
-        return world.multiworld.ExcludeTour[world.player].value > 0
+        return world.options.ExcludeTour.value > 0
 
     return name in blacklisted_acts.values()
 
@@ -714,7 +713,7 @@ def create_region(world: World, name: str) -> Region:
 
         if data.region == name:
             if key in storybook_pages.keys() \
-               and world.multiworld.ShuffleStorybookPages[world.player].value == 0:
+               and world.options.ShuffleStorybookPages.value == 0:
                 continue
 
             location = HatInTimeLocation(world.player, key, data.id, reg)
@@ -732,9 +731,9 @@ def create_badge_seller(world: World) -> Region:
     count: int = 0
     max_items: int = 0
 
-    if world.multiworld.BadgeSellerMaxItems[world.player].value > 0:
-        max_items = world.random.randint(world.multiworld.BadgeSellerMinItems[world.player].value,
-                                         world.multiworld.BadgeSellerMaxItems[world.player].value)
+    if world.options.BadgeSellerMaxItems.value > 0:
+        max_items = world.random.randint(world.options.BadgeSellerMinItems.value,
+                                         world.options.BadgeSellerMaxItems.value)
 
     if max_items <= 0:
         world.set_badge_seller_count(0)
@@ -801,7 +800,7 @@ def create_region_and_connect(world: World,
 
 
 def get_first_chapter_region(world: World) -> Region:
-    start_chapter: ChapterIndex = world.multiworld.StartingChapter[world.player]
+    start_chapter: ChapterIndex = world.options.StartingChapter.value
     return world.multiworld.get_region(chapter_regions.get(start_chapter), world.player)
 
 
@@ -826,11 +825,11 @@ def get_shuffled_region(self, region: str) -> str:
 
 
 def create_thug_shops(world: World):
-    min_items: int = min(world.multiworld.NyakuzaThugMinShopItems[world.player].value,
-                         world.multiworld.NyakuzaThugMaxShopItems[world.player].value)
+    min_items: int = min(world.options.NyakuzaThugMinShopItems.value,
+                         world.options.NyakuzaThugMaxShopItems.value)
 
-    max_items: int = max(world.multiworld.NyakuzaThugMaxShopItems[world.player].value,
-                         world.multiworld.NyakuzaThugMinShopItems[world.player].value)
+    max_items: int = max(world.options.NyakuzaThugMaxShopItems.value,
+                         world.options.NyakuzaThugMinShopItems.value)
     count: int = -1
     step: int = 0
     old_name: str = ""

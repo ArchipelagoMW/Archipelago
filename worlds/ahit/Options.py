@@ -1,6 +1,7 @@
-import typing
-from worlds.AutoWorld import World
-from Options import Option, Range, Toggle, DeathLink, Choice, OptionDict
+from typing import List
+from dataclasses import dataclass
+from worlds.AutoWorld import World, PerGameCommonOptions
+from Options import Range, Toggle, DeathLink, Choice, OptionDict
 
 
 def adjust_options(world: World):
@@ -594,119 +595,118 @@ class ParadeTrapWeight(Range):
     default = 20
 
 
-ahit_options: typing.Dict[str, type(Option)] = {
+@dataclass
+class AHITOptions(PerGameCommonOptions):
+    EndGoal:                  EndGoal
+    ActRandomizer:            ActRandomizer
+    ActPlando:                ActPlando
+    ShuffleAlpineZiplines:    ShuffleAlpineZiplines
+    FinaleShuffle:            FinaleShuffle
+    LogicDifficulty:          LogicDifficulty
+    YarnBalancePercent:       YarnBalancePercent
+    TimePieceBalancePercent:  TimePieceBalancePercent
+    RandomizeHatOrder:        RandomizeHatOrder
+    UmbrellaLogic:            UmbrellaLogic
+    StartWithCompassBadge:    StartWithCompassBadge
+    CompassBadgeMode:         CompassBadgeMode
+    ShuffleStorybookPages:    ShuffleStorybookPages
+    ShuffleActContracts:      ShuffleActContracts
+    ShuffleSubconPaintings:   ShuffleSubconPaintings
+    NoPaintingSkips:          NoPaintingSkips
+    StartingChapter:          StartingChapter
+    CTRLogic:                 CTRLogic
 
-    "EndGoal":                  EndGoal,
-    "ActRandomizer":            ActRandomizer,
-    "ActPlando":                ActPlando,
-    "ShuffleAlpineZiplines":    ShuffleAlpineZiplines,
-    "FinaleShuffle":            FinaleShuffle,
-    "LogicDifficulty":          LogicDifficulty,
-    "YarnBalancePercent":       YarnBalancePercent,
-    "TimePieceBalancePercent":  TimePieceBalancePercent,
-    "RandomizeHatOrder":        RandomizeHatOrder,
-    "UmbrellaLogic":            UmbrellaLogic,
-    "StartWithCompassBadge":    StartWithCompassBadge,
-    "CompassBadgeMode":         CompassBadgeMode,
-    "ShuffleStorybookPages":    ShuffleStorybookPages,
-    "ShuffleActContracts":      ShuffleActContracts,
-    "ShuffleSubconPaintings":   ShuffleSubconPaintings,
-    "NoPaintingSkips":          NoPaintingSkips,
-    "StartingChapter":          StartingChapter,
-    "CTRLogic":                 CTRLogic,
+    EnableDLC1:               EnableDLC1
+    Tasksanity:               Tasksanity
+    TasksanityTaskStep:       TasksanityTaskStep
+    TasksanityCheckCount:     TasksanityCheckCount
+    ExcludeTour:              ExcludeTour
+    ShipShapeCustomTaskGoal:  ShipShapeCustomTaskGoal
 
-    "EnableDLC1":               EnableDLC1,
-    "Tasksanity":               Tasksanity,
-    "TasksanityTaskStep":       TasksanityTaskStep,
-    "TasksanityCheckCount":     TasksanityCheckCount,
-    "ExcludeTour":              ExcludeTour,
-    "ShipShapeCustomTaskGoal":  ShipShapeCustomTaskGoal,
+    EnableDeathWish:              EnableDeathWish
+    DWShuffle:                    DWShuffle
+    DWShuffleCountMin:            DWShuffleCountMin
+    DWShuffleCountMax:            DWShuffleCountMax
+    DeathWishOnly:                DeathWishOnly
+    DWEnableBonus:                DWEnableBonus
+    DWAutoCompleteBonuses:        DWAutoCompleteBonuses
+    DWExcludeAnnoyingContracts:   DWExcludeAnnoyingContracts
+    DWExcludeAnnoyingBonuses:     DWExcludeAnnoyingBonuses
+    DWExcludeCandles:             DWExcludeCandles
+    DWTimePieceRequirement:       DWTimePieceRequirement
 
-    "EnableDeathWish":              EnableDeathWish,
-    "DWShuffle":                    DWShuffle,
-    "DWShuffleCountMin":            DWShuffleCountMin,
-    "DWShuffleCountMax":            DWShuffleCountMax,
-    "DeathWishOnly":                DeathWishOnly,
-    "DWEnableBonus":                DWEnableBonus,
-    "DWAutoCompleteBonuses":        DWAutoCompleteBonuses,
-    "DWExcludeAnnoyingContracts":   DWExcludeAnnoyingContracts,
-    "DWExcludeAnnoyingBonuses":     DWExcludeAnnoyingBonuses,
-    "DWExcludeCandles":             DWExcludeCandles,
-    "DWTimePieceRequirement":       DWTimePieceRequirement,
+    EnableDLC2:               EnableDLC2
+    BaseballBat:              BaseballBat
+    MetroMinPonCost:          MetroMinPonCost
+    MetroMaxPonCost:          MetroMaxPonCost
+    NyakuzaThugMinShopItems:  NyakuzaThugMinShopItems
+    NyakuzaThugMaxShopItems:  NyakuzaThugMaxShopItems
 
-    "EnableDLC2":               EnableDLC2,
-    "BaseballBat":              BaseballBat,
-    "MetroMinPonCost":          MetroMinPonCost,
-    "MetroMaxPonCost":          MetroMaxPonCost,
-    "NyakuzaThugMinShopItems":  NyakuzaThugMinShopItems,
-    "NyakuzaThugMaxShopItems":  NyakuzaThugMaxShopItems,
+    LowestChapterCost:        LowestChapterCost
+    HighestChapterCost:       HighestChapterCost
+    ChapterCostIncrement:     ChapterCostIncrement
+    ChapterCostMinDifference: ChapterCostMinDifference
+    MaxExtraTimePieces:       MaxExtraTimePieces
 
-    "LowestChapterCost":        LowestChapterCost,
-    "HighestChapterCost":       HighestChapterCost,
-    "ChapterCostIncrement":     ChapterCostIncrement,
-    "ChapterCostMinDifference": ChapterCostMinDifference,
-    "MaxExtraTimePieces":       MaxExtraTimePieces,
+    FinalChapterMinCost:          FinalChapterMinCost
+    FinalChapterMaxCost:          FinalChapterMaxCost
 
-    "FinalChapterMinCost":          FinalChapterMinCost,
-    "FinalChapterMaxCost":          FinalChapterMaxCost,
+    YarnCostMin:              YarnCostMin
+    YarnCostMax:              YarnCostMax
+    YarnAvailable:            YarnAvailable
+    MinExtraYarn:             MinExtraYarn
+    HatItems:                 HatItems
 
-    "YarnCostMin":              YarnCostMin,
-    "YarnCostMax":              YarnCostMax,
-    "YarnAvailable":            YarnAvailable,
-    "MinExtraYarn":             MinExtraYarn,
-    "HatItems":                 HatItems,
+    MinPonCost:               MinPonCost
+    MaxPonCost:               MaxPonCost
+    BadgeSellerMinItems:      BadgeSellerMinItems
+    BadgeSellerMaxItems:      BadgeSellerMaxItems
 
-    "MinPonCost":               MinPonCost,
-    "MaxPonCost":               MaxPonCost,
-    "BadgeSellerMinItems":      BadgeSellerMinItems,
-    "BadgeSellerMaxItems":      BadgeSellerMaxItems,
+    TrapChance:               TrapChance
+    BabyTrapWeight:           BabyTrapWeight
+    LaserTrapWeight:          LaserTrapWeight
+    ParadeTrapWeight:         ParadeTrapWeight
 
-    "TrapChance":               TrapChance,
-    "BabyTrapWeight":           BabyTrapWeight,
-    "LaserTrapWeight":          LaserTrapWeight,
-    "ParadeTrapWeight":         ParadeTrapWeight,
+    death_link:               DeathLink
 
-    "death_link":               DeathLink,
-}
 
-slot_data_options: typing.Dict[str, type(Option)] = {
+slot_data_options: List[str] = [
+    "EndGoal",
+    "ActRandomizer",
+    "ShuffleAlpineZiplines",
+    "LogicDifficulty",
+    "CTRLogic",
+    "RandomizeHatOrder",
+    "UmbrellaLogic",
+    "StartWithCompassBadge",
+    "CompassBadgeMode",
+    "ShuffleStorybookPages",
+    "ShuffleActContracts",
+    "ShuffleSubconPaintings",
+    "NoPaintingSkips",
+    "HatItems",
 
-    "EndGoal":                      EndGoal,
-    "ActRandomizer":                ActRandomizer,
-    "ShuffleAlpineZiplines":        ShuffleAlpineZiplines,
-    "LogicDifficulty":              LogicDifficulty,
-    "CTRLogic":                     CTRLogic,
-    "RandomizeHatOrder":            RandomizeHatOrder,
-    "UmbrellaLogic":                UmbrellaLogic,
-    "StartWithCompassBadge":        StartWithCompassBadge,
-    "CompassBadgeMode":             CompassBadgeMode,
-    "ShuffleStorybookPages":        ShuffleStorybookPages,
-    "ShuffleActContracts":          ShuffleActContracts,
-    "ShuffleSubconPaintings":       ShuffleSubconPaintings,
-    "NoPaintingSkips":              NoPaintingSkips,
-    "HatItems":                     HatItems,
+    "EnableDLC1",
+    "Tasksanity",
+    "TasksanityTaskStep",
+    "TasksanityCheckCount",
+    "ShipShapeCustomTaskGoal",
+    "ExcludeTour",
 
-    "EnableDLC1":               EnableDLC1,
-    "Tasksanity":               Tasksanity,
-    "TasksanityTaskStep":       TasksanityTaskStep,
-    "TasksanityCheckCount":     TasksanityCheckCount,
-    "ShipShapeCustomTaskGoal":  ShipShapeCustomTaskGoal,
-    "ExcludeTour":              ExcludeTour,
+    "EnableDeathWish",
+    "DWShuffle",
+    "DeathWishOnly",
+    "DWEnableBonus",
+    "DWAutoCompleteBonuses",
+    "DWTimePieceRequirement",
 
-    "EnableDeathWish":          EnableDeathWish,
-    "DWShuffle":                DWShuffle,
-    "DeathWishOnly":            DeathWishOnly,
-    "DWEnableBonus":            DWEnableBonus,
-    "DWAutoCompleteBonuses":    DWAutoCompleteBonuses,
-    "DWTimePieceRequirement":   DWTimePieceRequirement,
+    "EnableDLC2",
+    "MetroMinPonCost",
+    "MetroMaxPonCost",
+    "BaseballBat",
 
-    "EnableDLC2":       EnableDLC2,
-    "MetroMinPonCost":  MetroMinPonCost,
-    "MetroMaxPonCost":  MetroMaxPonCost,
-    "BaseballBat":      BaseballBat,
+    "MinPonCost",
+    "MaxPonCost",
 
-    "MinPonCost":       MinPonCost,
-    "MaxPonCost":       MaxPonCost,
-
-    "death_link":       DeathLink,
-}
+    "death_link",
+]

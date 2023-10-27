@@ -8,13 +8,13 @@ from typing import Optional, List, Dict
 
 def create_itempool(world: World) -> List[Item]:
     itempool: List[Item] = []
-    if not world.is_dw_only() and world.multiworld.HatItems[world.player].value == 0:
+    if not world.is_dw_only() and world.options.HatItems.value == 0:
         calculate_yarn_costs(world)
         yarn_pool: List[Item] = create_multiple_items(world, "Yarn",
-                                                      world.multiworld.YarnAvailable[world.player].value,
+                                                      world.options.YarnAvailable.value,
                                                       ItemClassification.progression_skip_balancing)
 
-        for i in range(int(len(yarn_pool) * (0.01 * world.multiworld.YarnBalancePercent[world.player].value))):
+        for i in range(int(len(yarn_pool) * (0.01 * world.options.YarnBalancePercent.value))):
             yarn_pool[i].classification = ItemClassification.progression
 
         itempool += yarn_pool
@@ -26,7 +26,7 @@ def create_itempool(world: World) -> List[Item]:
         if not item_dlc_enabled(world, name):
             continue
 
-        if world.multiworld.HatItems[world.player].value == 0 and name in hat_type_to_item.values():
+        if world.options.HatItems.value == 0 and name in hat_type_to_item.values():
             continue
 
         item_type: ItemClassification = item_table.get(name).classification
@@ -37,7 +37,7 @@ def create_itempool(world: World) -> List[Item]:
                 continue
         else:
             if name == "Scooter Badge":
-                if world.multiworld.CTRLogic[world.player].value >= 1 or get_difficulty(world) >= Difficulty.MODERATE:
+                if world.options.CTRLogic.value >= 1 or get_difficulty(world) >= Difficulty.MODERATE:
                     item_type = ItemClassification.progression
             elif name == "No Bonk Badge":
                 if get_difficulty(world) >= Difficulty.MODERATE:
@@ -50,17 +50,17 @@ def create_itempool(world: World) -> List[Item]:
         if item_type is ItemClassification.filler or item_type is ItemClassification.trap:
             continue
 
-        if name in act_contracts.keys() and world.multiworld.ShuffleActContracts[world.player].value == 0:
+        if name in act_contracts.keys() and world.options.ShuffleActContracts.value == 0:
             continue
 
-        if name in alps_hooks.keys() and world.multiworld.ShuffleAlpineZiplines[world.player].value == 0:
+        if name in alps_hooks.keys() and world.options.ShuffleAlpineZiplines.value == 0:
             continue
 
         if name == "Progressive Painting Unlock" \
-           and world.multiworld.ShuffleSubconPaintings[world.player].value == 0:
+           and world.options.ShuffleSubconPaintings.value == 0:
             continue
 
-        if world.multiworld.StartWithCompassBadge[world.player].value > 0 and name == "Compass Badge":
+        if world.options.StartWithCompassBadge.value > 0 and name == "Compass Badge":
             continue
 
         if name == "Time Piece":
@@ -72,10 +72,10 @@ def create_itempool(world: World) -> List[Item]:
             if world.is_dlc2():
                 max_extra += 10
 
-            tp_count += min(max_extra, world.multiworld.MaxExtraTimePieces[world.player].value)
+            tp_count += min(max_extra, world.options.MaxExtraTimePieces.value)
             tp_list: List[Item] = create_multiple_items(world, name, tp_count, item_type)
 
-            for i in range(int(len(tp_list) * (0.01 * world.multiworld.TimePieceBalancePercent[world.player].value))):
+            for i in range(int(len(tp_list) * (0.01 * world.options.TimePieceBalancePercent.value))):
                 tp_list[i].classification = ItemClassification.progression
 
             itempool += tp_list
@@ -90,8 +90,8 @@ def create_itempool(world: World) -> List[Item]:
 def calculate_yarn_costs(world: World):
     mw = world.multiworld
     p = world.player
-    min_yarn_cost = int(min(mw.YarnCostMin[p].value, mw.YarnCostMax[p].value))
-    max_yarn_cost = int(max(mw.YarnCostMin[p].value, mw.YarnCostMax[p].value))
+    min_yarn_cost = int(min(world.options.YarnCostMin.value, world.options.YarnCostMax.value))
+    max_yarn_cost = int(max(world.options.YarnCostMin.value, world.options.YarnCostMax.value))
 
     max_cost: int = 0
     for i in range(5):
@@ -99,13 +99,13 @@ def calculate_yarn_costs(world: World):
         world.get_hat_yarn_costs()[HatType(i)] = cost
         max_cost += cost
 
-    available_yarn: int = mw.YarnAvailable[p].value
+    available_yarn: int = world.options.YarnAvailable.value
     if max_cost > available_yarn:
-        mw.YarnAvailable[p].value = max_cost
+        world.options.YarnAvailable.value = max_cost
         available_yarn = max_cost
 
-    if max_cost + mw.MinExtraYarn[p].value > available_yarn:
-        mw.YarnAvailable[p].value += (max_cost + mw.MinExtraYarn[p].value) - available_yarn
+    if max_cost + world.options.MinExtraYarn.value > available_yarn:
+        world.options.YarnAvailable.value += (max_cost + world.options.MinExtraYarn.value) - available_yarn
 
 
 def item_dlc_enabled(world: World, name: str) -> bool:
@@ -141,7 +141,7 @@ def create_multiple_items(world: World, name: str, count: int = 1,
 
 
 def create_junk_items(world: World, count: int) -> List[Item]:
-    trap_chance = world.multiworld.TrapChance[world.player].value
+    trap_chance = world.options.TrapChance.value
     junk_pool: List[Item] = []
     junk_list: Dict[str, int] = {}
     trap_list: Dict[str, int] = {}
@@ -157,11 +157,11 @@ def create_junk_items(world: World, count: int) -> List[Item]:
 
         elif trap_chance > 0 and ic == ItemClassification.trap:
             if name == "Baby Trap":
-                trap_list[name] = world.multiworld.BabyTrapWeight[world.player].value
+                trap_list[name] = world.options.BabyTrapWeight.value
             elif name == "Laser Trap":
-                trap_list[name] = world.multiworld.LaserTrapWeight[world.player].value
+                trap_list[name] = world.options.LaserTrapWeight.value
             elif name == "Parade Trap":
-                trap_list[name] = world.multiworld.ParadeTrapWeight[world.player].value
+                trap_list[name] = world.options.ParadeTrapWeight.value
 
     for i in range(count):
         if trap_chance > 0 and world.random.randint(1, 100) <= trap_chance:

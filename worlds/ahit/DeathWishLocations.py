@@ -139,19 +139,19 @@ dw_classes = {
 
 
 def create_dw_regions(world: World):
-    if world.multiworld.DWExcludeAnnoyingContracts[world.player].value > 0:
+    if world.options.DWExcludeAnnoyingContracts.value > 0:
         for name in annoying_dws:
             world.get_excluded_dws().append(name)
 
-    if world.multiworld.DWEnableBonus[world.player].value == 0 \
-       or world.multiworld.DWAutoCompleteBonuses[world.player].value > 0:
+    if world.options.DWEnableBonus.value == 0 \
+       or world.options.DWAutoCompleteBonuses.value > 0:
         for name in death_wishes:
             world.get_excluded_bonuses().append(name)
-    elif world.multiworld.DWExcludeAnnoyingBonuses[world.player].value > 0:
+    elif world.options.DWExcludeAnnoyingBonuses.value > 0:
         for name in annoying_bonuses:
             world.get_excluded_bonuses().append(name)
 
-    if world.multiworld.DWExcludeCandles[world.player].value > 0:
+    if world.options.DWExcludeCandles.value > 0:
         for name in dw_candles:
             if name in world.get_excluded_dws():
                 continue
@@ -162,9 +162,9 @@ def create_dw_regions(world: World):
     entrance = connect_regions(spaceship, dw_map, "-> Death Wish Map", world.player)
 
     add_rule(entrance, lambda state: state.has("Time Piece", world.player,
-                                               world.multiworld.DWTimePieceRequirement[world.player].value))
+                                               world.options.DWTimePieceRequirement.value))
 
-    if world.multiworld.DWShuffle[world.player].value > 0:
+    if world.options.DWShuffle.value > 0:
         dw_list: List[str] = []
         for name in death_wishes.keys():
             if not world.is_dlc2() and name == "Snatcher Coins in Nyakuza Metro" or world.is_dw_excluded(name):
@@ -173,8 +173,8 @@ def create_dw_regions(world: World):
             dw_list.append(name)
 
         world.random.shuffle(dw_list)
-        count = world.random.randint(world.multiworld.DWShuffleCountMin[world.player].value,
-                                     world.multiworld.DWShuffleCountMax[world.player].value)
+        count = world.random.randint(world.options.DWShuffleCountMin.value,
+                                     world.options.DWShuffleCountMax.value)
 
         dw_shuffle: List[str] = []
         total = min(len(dw_list), count)
@@ -182,7 +182,7 @@ def create_dw_regions(world: World):
             dw_shuffle.append(dw_list[i])
 
         # Seal the Deal is always last if it's the goal
-        if world.multiworld.EndGoal[world.player].value == 3:
+        if world.options.EndGoal.value == 3:
             if "Seal the Deal" in dw_shuffle:
                 dw_shuffle.remove("Seal the Deal")
 

@@ -32,7 +32,7 @@ act_connections = {
 
 
 def can_use_hat(state: CollectionState, world: World, hat: HatType) -> bool:
-    if world.multiworld.HatItems[world.player].value > 0:
+    if world.options.HatItems.value > 0:
         return state.has(hat_type_to_item[hat], world.player)
 
     return state.count("Yarn", world.player) >= get_hat_cost(world, hat)
@@ -54,19 +54,19 @@ def can_sdj(state: CollectionState, world: World):
 
 
 def painting_logic(world: World) -> bool:
-    return world.multiworld.ShuffleSubconPaintings[world.player].value > 0
+    return world.options.ShuffleSubconPaintings.value > 0
 
 
 # -1 = Normal, 0 = Moderate, 1 = Hard, 2 = Expert
 def get_difficulty(world: World) -> Difficulty:
-    return Difficulty(world.multiworld.LogicDifficulty[world.player].value)
+    return Difficulty(world.options.LogicDifficulty.value)
 
 
 def has_paintings(state: CollectionState, world: World, count: int, allow_skip: bool = True) -> bool:
     if not painting_logic(world):
         return True
 
-    if world.multiworld.NoPaintingSkips[world.player].value == 0 and allow_skip:
+    if world.options.NoPaintingSkips.value == 0 and allow_skip:
         # In Moderate there is a very easy trick to skip all the walls, except for the one guarding the boss arena
         if get_difficulty(world) >= Difficulty.MODERATE:
             return True
@@ -75,7 +75,7 @@ def has_paintings(state: CollectionState, world: World, count: int, allow_skip: 
 
 
 def zipline_logic(world: World) -> bool:
-    return world.multiworld.ShuffleAlpineZiplines[world.player].value > 0
+    return world.options.ShuffleAlpineZiplines.value > 0
 
 
 def can_use_hookshot(state: CollectionState, world: World):
@@ -83,7 +83,7 @@ def can_use_hookshot(state: CollectionState, world: World):
 
 
 def can_hit(state: CollectionState, world: World, umbrella_only: bool = False):
-    if world.multiworld.UmbrellaLogic[world.player].value == 0:
+    if world.options.UmbrellaLogic.value == 0:
         return True
 
     return state.has("Umbrella", world.player) or not umbrella_only and can_use_hat(state, world, HatType.BREWING)
@@ -132,7 +132,7 @@ def can_clear_metro(state: CollectionState, world: World) -> bool:
 
 def set_rules(world: World):
     # First, chapter access
-    starting_chapter = ChapterIndex(world.multiworld.StartingChapter[world.player].value)
+    starting_chapter = ChapterIndex(world.options.StartingChapter.value)
     world.set_chapter_cost(starting_chapter, 0)
 
     # Chapter costs increase progressively. Randomly decide the chapter order, except for Finale
@@ -140,10 +140,10 @@ def set_rules(world: World):
                                                ChapterIndex.SUBCON, ChapterIndex.ALPINE]
 
     final_chapter = ChapterIndex.FINALE
-    if world.multiworld.EndGoal[world.player].value == 2:
+    if world.options.EndGoal.value == 2:
         final_chapter = ChapterIndex.METRO
         chapter_list.append(ChapterIndex.FINALE)
-    elif world.multiworld.EndGoal[world.player].value == 3:
+    elif world.options.EndGoal.value == 3:
         final_chapter = None
         chapter_list.append(ChapterIndex.FINALE)
 
@@ -185,11 +185,11 @@ def set_rules(world: World):
         else:
             chapter_list.insert(world.random.randint(index+1, len(chapter_list)), ChapterIndex.METRO)
 
-    lowest_cost: int = world.multiworld.LowestChapterCost[world.player].value
-    highest_cost: int = world.multiworld.HighestChapterCost[world.player].value
+    lowest_cost: int = world.options.LowestChapterCost.value
+    highest_cost: int = world.options.HighestChapterCost.value
 
-    cost_increment: int = world.multiworld.ChapterCostIncrement[world.player].value
-    min_difference: int = world.multiworld.ChapterCostMinDifference[world.player].value
+    cost_increment: int = world.options.ChapterCostIncrement.value
+    min_difference: int = world.options.ChapterCostMinDifference.value
     last_cost: int = 0
     cost: int
     loop_count: int = 0
@@ -213,8 +213,8 @@ def set_rules(world: World):
 
     if final_chapter is not None:
         world.set_chapter_cost(final_chapter, world.random.randint(
-                                                            world.multiworld.FinalChapterMinCost[world.player].value,
-                                                            world.multiworld.FinalChapterMaxCost[world.player].value))
+                                                            world.options.FinalChapterMinCost.value,
+                                                            world.options.FinalChapterMaxCost.value))
 
     add_rule(world.multiworld.get_entrance("Telescope -> Mafia Town", world.player),
              lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.MAFIA)))
@@ -243,7 +243,7 @@ def set_rules(world: World):
                  and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.METRO))
                  and can_use_hat(state, world, HatType.DWELLER) and can_use_hat(state, world, HatType.ICE))
 
-    if world.multiworld.ActRandomizer[world.player].value == 0:
+    if world.options.ActRandomizer.value == 0:
         set_default_rift_rules(world)
 
     table = location_table | event_locs
@@ -267,10 +267,10 @@ def set_rules(world: World):
         if data.hookshot:
             add_rule(location, lambda state: can_use_hookshot(state, world))
 
-        if data.umbrella and world.multiworld.UmbrellaLogic[world.player].value > 0:
+        if data.umbrella and world.options.UmbrellaLogic.value > 0:
             add_rule(location, lambda state: state.has("Umbrella", world.player))
 
-        if data.paintings > 0 and world.multiworld.ShuffleSubconPaintings[world.player].value > 0:
+        if data.paintings > 0 and world.options.ShuffleSubconPaintings.value > 0:
             add_rule(location, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
 
         if data.hit_requirement > 0:
@@ -288,7 +288,7 @@ def set_rules(world: World):
     # Illness starts the player past the intro
     alpine_entrance = world.multiworld.get_entrance("AFR -> Alpine Skyline Area", world.player)
     add_rule(alpine_entrance, lambda state: can_use_hookshot(state, world))
-    if world.multiworld.UmbrellaLogic[world.player].value > 0:
+    if world.options.UmbrellaLogic.value > 0:
         add_rule(alpine_entrance, lambda state: state.has("Umbrella", world.player))
 
     if zipline_logic(world):
@@ -356,9 +356,9 @@ def set_rules(world: World):
 
     set_event_rules(world)
 
-    if world.multiworld.EndGoal[world.player].value == 1:
+    if world.options.EndGoal.value == 1:
         world.multiworld.completion_condition[world.player] = lambda state: state.has("Time Piece Cluster", world.player)
-    elif world.multiworld.EndGoal[world.player].value == 2:
+    elif world.options.EndGoal.value == 2:
         world.multiworld.completion_condition[world.player] = lambda state: state.has("Rush Hour Cleared", world.player)
 
 
@@ -551,7 +551,7 @@ def set_expert_rules(world: World):
                                world.multiworld.get_region("Subcon Forest Area", world.player),
                                "Subcon Forest Entrance YCHE", world.player)
 
-    if world.multiworld.NoPaintingSkips[world.player].value > 0:
+    if world.options.NoPaintingSkips.value > 0:
         add_rule(entrance, lambda state: has_paintings(state, world, 1))
 
     set_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
@@ -630,7 +630,7 @@ def set_mafia_town_rules(world: World):
     add_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player),
              lambda state: state.has("HUMT Access", world.player), "or")
 
-    ctr_logic: int = world.multiworld.CTRLogic[world.player].value
+    ctr_logic: int = world.options.CTRLogic.value
     if ctr_logic == 3:
         set_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", world.player), lambda state: True)
     elif ctr_logic == 2:
@@ -643,7 +643,7 @@ def set_mafia_town_rules(world: World):
 
 
 def set_botb_rules(world: World):
-    if world.multiworld.UmbrellaLogic[world.player].value == 0 and get_difficulty(world) < Difficulty.MODERATE:
+    if world.options.UmbrellaLogic.value == 0 and get_difficulty(world) < Difficulty.MODERATE:
         set_rule(world.multiworld.get_location("Dead Bird Studio - DJ Grooves Sign Chest", world.player),
                  lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
         set_rule(world.multiworld.get_location("Dead Bird Studio - Tepee Chest", world.player),
