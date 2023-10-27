@@ -34,7 +34,6 @@ class ChecksMateLogic(LogicMixin):
         return reduce(lambda a, b: a + b, owned_piece_materials, 0)
         
     def has_piece_material(self: CollectionState, player: int, amount: int) -> bool:
-        #print(str(self.total_piece_material(player)) + " needs " + str(amount))
         return self.total_piece_material(player) >= amount
         
     def count_enemy_pieces(self: CollectionState, player: int) -> int:
@@ -43,7 +42,6 @@ class ChecksMateLogic(LogicMixin):
         
     def count_enemy_pawns(self: CollectionState, player: int) -> int:
         owned_item_ids = [item_id for item_id, item in item_table.items() if self.has(item_id, player)]
-        #print(sum(1 if x.startswith("Enemy Pawn") else 0 for x in owned_item_ids))
         return sum(1 if x.startswith("Enemy Pawn") else 0 for x in owned_item_ids)
         
     def has_french_move(self: CollectionState, player: int) -> bool:
@@ -56,7 +54,10 @@ class ChecksMateLogic(LogicMixin):
         return self.has_any({"Progressive Minor Piece", "Progressive Major Piece"}, player)
 
     def has_castle(self: CollectionState, player: int) -> bool:
-        return self.has_any({"Progressive Major Piece"}, player)
+        return self.count("Progressive Major Piece", player) > max(
+            self.count("Progressive Major To Queen", player),
+            len([item for item in self.multiworld.itempool if
+                 item.player == player and item.name == "Progressive Major To Queen"]))
 
 
 def set_rules(multiworld: MultiWorld, player: int):
@@ -181,7 +182,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     # special moves
     # set_rule(multiworld.get_location("00 Castle", player), lambda state: state.has_castle(player))
     # set_rule(multiworld.get_location("000 Castle", player), lambda state: state.has_castle(player))
-    set_rule(multiworld.get_location("French Move", player), lambda state: state.has_french_move(player))
+    # set_rule(multiworld.get_location("French Move", player), lambda state: state.has_french_move(player))
 
     # goal materials
     # set_rule(multiworld.get_location("Checkmate Minima", player), lambda state: state.has_piece_material(player, 2))

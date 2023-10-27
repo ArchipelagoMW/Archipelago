@@ -64,14 +64,15 @@ location_table = {
     "Threaten Queen": CMLocationData(4_043, True, False),
     "Threaten King": CMLocationData(4_044, True, False),
     # special moves and tactics
-    # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
-    "French Move": CMLocationData(4_050, True, False),
+    # TODO: Getting a french move on the AI seems nigh impossible - maybe I can tweak the evaluation or something
+    # "French Move": CMLocationData(4_050, True, False),
     # "Discovered Attack": CMLocationData(4_051, True, False),
     "Fork": CMLocationData(4_052, True, False),
     "Triple Fork": CMLocationData(4_053, True, False),
     "Royal Fork": CMLocationData(4_054, True, True),
     # "Pin": CMLocationData(4_056, True, False),
     # "Skewer": CMLocationData(4_057, True, False),
+    # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
     # "00 Castle": CMLocationData(4_058, True, False),
     # "000 Castle": CMLocationData(4_059, True, False),
     # "Discovered Attack": CMLocationData(4_060, True, False),
