@@ -15,11 +15,14 @@ from ..options import Cropsanity, SkillProgression, SpecialOrderLocations, Frien
     BundleRandomization, BundlePrice, FestivalLocations, FriendsanityHeartSize, ExcludeGingerIsland, TrapItems, Goal, Mods
 
 
-class SVTestBase(WorldTestBase):
-    game = "Stardew Valley"
-    world: StardewValleyWorld
+class SVTestCase(unittest.TestCase):
     player: ClassVar[int] = 1
     skip_long_tests: bool = True
+
+
+class SVTestBase(WorldTestBase, SVTestCase):
+    game = "Stardew Valley"
+    world: StardewValleyWorld
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)
@@ -35,10 +38,6 @@ class SVTestBase(WorldTestBase):
         is_not_stardew_test = type(self) is not SVTestBase
         should_run_default_tests = is_not_stardew_test and super().run_default_tests
         return should_run_default_tests
-
-
-class SVTestCase(unittest.TestCase):
-    player: ClassVar[int] = 1
 
 
 @cache_argsless
