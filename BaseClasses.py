@@ -181,7 +181,6 @@ class MultiWorld():
             set_player_attr('plando_connections', [])
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
-        self.custom_data = {}
         self.worlds = {}
         self.per_slot_randoms = {}
         self.plando_options = PlandoOptions.none
@@ -199,7 +198,6 @@ class MultiWorld():
         new_id: int = self.players + len(self.groups) + 1
 
         self.game[new_id] = game
-        self.custom_data[new_id] = {}
         self.player_types[new_id] = NetUtils.SlotType.group
         self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
@@ -227,7 +225,6 @@ class MultiWorld():
 
     def set_options(self, args: Namespace) -> None:
         for player in self.player_ids:
-            self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
             self.worlds[player].random = self.per_slot_randoms[player]
@@ -327,11 +324,6 @@ class MultiWorld():
     def get_out_file_name_base(self, player: int) -> str:
         """ the base name (without file extension) for each player's output file for a seed """
         return f"AP_{self.seed_name}_P{player}_{self.get_file_safe_player_name(player).replace(' ', '_')}"
-
-    def initialize_regions(self, regions=None):
-        for region in regions if regions else self.regions:
-            region.multiworld = self
-            self._region_cache[region.player][region.name] = region
 
     @functools.cached_property
     def world_name_lookup(self):
