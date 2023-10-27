@@ -2,7 +2,7 @@
 
 
 ; ItemGetFlgSet_LoadSavestateInfo2RAM() - Before checking anything else
-hook 0x8075F10, 0x8075F20, ItemGetFlagFullHealth
+hook 0x8075F10, 0x8075F20, ItemGetFlags
 
 
 ; SeisanSave() - Just before Keyzer check
@@ -15,7 +15,7 @@ hook 0x8081262, 0x8081284, SeisanSaveFullHealthItem
 
 ; Check the appropriate bit in the level save to determine whether the full
 ; health item box has been collected already.
-ItemGetFlagFullHealth:
+ItemGetFlags:
     ; Load level state flags into r1
         add r1, r4, r6
         lsl r1, r1, #3
@@ -40,6 +40,11 @@ ItemGetFlagFullHealth:
     @@NoFullhealth:
         ldr r1, =HasFullHealthItem
         strb r2, [r1]
+
+    ; Reset the abilities that have been marked as found in the level
+        ldr r0, =AbilitiesInThisLevel
+        mov r1, #0
+        strb r1, [r0]
 
     @@CheckKeyzer:
         add r1, r4, r6

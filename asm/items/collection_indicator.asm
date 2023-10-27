@@ -208,8 +208,8 @@ ReadAbility:
 
         ; Hack to make the blue W work with the red palette active
         ldr r0, =ObjectPalette4 + 2 * 0xF
-        ldr r1, =0x50A5
-        strh r1, [r0]
+        ldr r2, =0x50A5
+        strh r2, [r0]
 
         mov r0, #2
         ldr r2, =HasGrab1Tile
