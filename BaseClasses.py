@@ -93,13 +93,11 @@ class MultiWorld():
             return self.rule(player)
 
     class RegionManager:
-        regions: List[Region]
         region_cache: Dict[int, Dict[str, Region]]
         entrance_cache: Dict[int, Dict[str, Entrance]]
         location_cache: Dict[int, Dict[str, Location]]
 
         def __init__(self, players: int):
-            self.regions = []
             self.region_cache = {player: {} for player in range(1, players+1)}
             self.entrance_cache = {player: {} for player in range(1, players+1)}
             self.location_cache = {player: {} for player in range(1, players+1)}
@@ -109,16 +107,18 @@ class MultiWorld():
             return self
 
         def append(self, region: Region):
-            self.regions.append(region)
             self.region_cache[region.player][region.name] = region
 
         def extend(self, regions: Iterable[Region]):
-            self.regions.extend(regions)
             for region in regions:
                 self.region_cache[region.player][region.name] = region
 
         def __iter__(self) -> Iterator[Region]:
-            return iter(self.regions)
+            for regions in self.region_cache.values():
+                yield from regions.values()
+
+        def __len__(self):
+            return sum(len(regions) for regions in self.region_cache.values())
 
     def __init__(self, players: int):
         # world-local random state is saved for multiple generations running concurrently
@@ -355,7 +355,7 @@ class MultiWorld():
         return {self.player_name[player_id]: player_id for player_id in self.player_ids}
 
     def get_regions(self, player: Optional[int] = None) -> Collection[Region]:
-        return self.regions.regions if player is None else self.regions.region_cache[player].values()
+        return self.regions if player is None else self.regions.region_cache[player].values()
 
     def get_region(self, region_name: str, player: int) -> Region:
         return self.regions.region_cache[player][region_name]
