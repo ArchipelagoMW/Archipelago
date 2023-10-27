@@ -181,7 +181,6 @@ class MultiWorld():
             set_player_attr('plando_connections', [])
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
-        self.custom_data = {}
         self.worlds = {}
         self.per_slot_randoms = {}
         self.plando_options = PlandoOptions.none
@@ -199,7 +198,6 @@ class MultiWorld():
         new_id: int = self.players + len(self.groups) + 1
 
         self.game[new_id] = game
-        self.custom_data[new_id] = {}
         self.player_types[new_id] = NetUtils.SlotType.group
         self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
@@ -227,7 +225,6 @@ class MultiWorld():
 
     def set_options(self, args: Namespace) -> None:
         for player in self.player_ids:
-            self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
             self.worlds[player].random = self.per_slot_randoms[player]
