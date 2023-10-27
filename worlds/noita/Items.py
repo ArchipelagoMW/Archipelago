@@ -56,7 +56,7 @@ def create_random_items(multiworld: MultiWorld, player: int, shop_count: int, ra
     
     shop_filler_pool = {}
     for item_name, weight in filler_pool.items():
-        if item_name in items_hidden_from_shops:
+        if item_name not in items_hidden_from_shops:
             shop_filler_pool[item_name] = weight
 
     shop_filler = multiworld.random.choices(population=list(shop_filler_pool.keys()),
