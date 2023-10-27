@@ -5,64 +5,64 @@ from Options import Range, Toggle, DeathLink, Choice, OptionDict
 
 
 def adjust_options(world: World):
-    world.multiworld.HighestChapterCost[world.player].value = max(
-        world.multiworld.HighestChapterCost[world.player].value,
-        world.multiworld.LowestChapterCost[world.player].value)
+    world.options.HighestChapterCost.value = max(
+        world.options.HighestChapterCost.value,
+        world.options.LowestChapterCost.value)
 
-    world.multiworld.LowestChapterCost[world.player].value = min(
-        world.multiworld.LowestChapterCost[world.player].value,
-        world.multiworld.HighestChapterCost[world.player].value)
+    world.options.LowestChapterCost.value = min(
+        world.options.LowestChapterCost.value,
+        world.options.HighestChapterCost.value)
 
-    world.multiworld.FinalChapterMinCost[world.player].value = min(
-        world.multiworld.FinalChapterMinCost[world.player].value,
-        world.multiworld.FinalChapterMaxCost[world.player].value)
+    world.options.FinalChapterMinCost.value = min(
+        world.options.FinalChapterMinCost.value,
+        world.options.FinalChapterMaxCost.value)
 
-    world.multiworld.FinalChapterMaxCost[world.player].value = max(
-        world.multiworld.FinalChapterMaxCost[world.player].value,
-        world.multiworld.FinalChapterMinCost[world.player].value)
+    world.options.FinalChapterMaxCost.value = max(
+        world.options.FinalChapterMaxCost.value,
+        world.options.FinalChapterMinCost.value)
 
-    world.multiworld.BadgeSellerMinItems[world.player].value = min(
-        world.multiworld.BadgeSellerMinItems[world.player].value,
-        world.multiworld.BadgeSellerMaxItems[world.player].value)
+    world.options.BadgeSellerMinItems.value = min(
+        world.options.BadgeSellerMinItems.value,
+        world.options.BadgeSellerMaxItems.value)
 
-    world.multiworld.BadgeSellerMaxItems[world.player].value = max(
-        world.multiworld.BadgeSellerMinItems[world.player].value,
-        world.multiworld.BadgeSellerMaxItems[world.player].value)
+    world.options.BadgeSellerMaxItems.value = max(
+        world.options.BadgeSellerMinItems.value,
+        world.options.BadgeSellerMaxItems.value)
 
     total_tps: int = get_total_time_pieces(world)
-    if world.multiworld.HighestChapterCost[world.player].value > total_tps-5:
-        world.multiworld.HighestChapterCost[world.player].value = min(45, total_tps-5)
+    if world.options.HighestChapterCost.value > total_tps-5:
+        world.options.HighestChapterCost.value = min(45, total_tps-5)
 
-    if world.multiworld.LowestChapterCost[world.player].value > total_tps-5:
-        world.multiworld.LowestChapterCost[world.player].value = min(45, total_tps-5)
+    if world.options.LowestChapterCost.value > total_tps-5:
+        world.options.LowestChapterCost.value = min(45, total_tps-5)
 
-    if world.multiworld.FinalChapterMaxCost[world.player].value > total_tps:
-        world.multiworld.FinalChapterMaxCost[world.player].value = min(50, total_tps)
+    if world.options.FinalChapterMaxCost.value > total_tps:
+        world.options.FinalChapterMaxCost.value = min(50, total_tps)
 
-    if world.multiworld.FinalChapterMinCost[world.player].value > total_tps:
-        world.multiworld.FinalChapterMinCost[world.player].value = min(50, total_tps-5)
+    if world.options.FinalChapterMinCost.value > total_tps:
+        world.options.FinalChapterMinCost.value = min(50, total_tps-5)
 
     # Don't allow Rush Hour goal if DLC2 content is disabled
-    if world.multiworld.EndGoal[world.player].value == 2 and world.multiworld.EnableDLC2[world.player].value == 0:
-        world.multiworld.EndGoal[world.player].value = 1
+    if world.options.EndGoal.value == 2 and world.options.EnableDLC2.value == 0:
+        world.options.EndGoal.value = 1
 
     # Don't allow Seal the Deal goal if Death Wish content is disabled
-    if world.multiworld.EndGoal[world.player].value == 3 and not world.is_dw():
-        world.multiworld.EndGoal[world.player].value = 1
+    if world.options.EndGoal.value == 3 and not world.is_dw():
+        world.options.EndGoal.value = 1
 
-    if world.multiworld.DWEnableBonus[world.player].value > 0:
-        world.multiworld.DWAutoCompleteBonuses[world.player].value = 0
+    if world.options.DWEnableBonus.value > 0:
+        world.options.DWAutoCompleteBonuses.value = 0
 
     if world.is_dw_only():
-        world.multiworld.EndGoal[world.player].value = 3
-        world.multiworld.ActRandomizer[world.player].value = 0
-        world.multiworld.ShuffleAlpineZiplines[world.player].value = 0
-        world.multiworld.ShuffleSubconPaintings[world.player].value = 0
-        world.multiworld.ShuffleStorybookPages[world.player].value = 0
-        world.multiworld.ShuffleActContracts[world.player].value = 0
-        world.multiworld.EnableDLC1[world.player].value = 0
-        world.multiworld.LogicDifficulty[world.player].value = -1
-        world.multiworld.DWTimePieceRequirement[world.player].value = 0
+        world.options.EndGoal.value = 3
+        world.options.ActRandomizer.value = 0
+        world.options.ShuffleAlpineZiplines.value = 0
+        world.options.ShuffleSubconPaintings.value = 0
+        world.options.ShuffleStorybookPages.value = 0
+        world.options.ShuffleActContracts.value = 0
+        world.options.EnableDLC1.value = 0
+        world.options.LogicDifficulty.value = -1
+        world.options.DWTimePieceRequirement.value = 0
 
 
 def get_total_time_pieces(world: World) -> int:
@@ -73,7 +73,7 @@ def get_total_time_pieces(world: World) -> int:
     if world.is_dlc2():
         count += 10
 
-    return min(40+world.multiworld.MaxExtraTimePieces[world.player].value, count)
+    return min(40+world.options.MaxExtraTimePieces.value, count)
 
 
 class EndGoal(Choice):
