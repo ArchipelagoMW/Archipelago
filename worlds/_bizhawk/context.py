@@ -13,8 +13,8 @@ from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser,
 import Patch
 import Utils
 
-from . import BizHawkContext, ConnectionStatus, RequestFailedError, connect, disconnect, get_hash, get_script_version, \
-    get_system, ping
+from . import BizHawkContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, get_hash, \
+    get_script_version, get_system, ping
 from .client import BizHawkClient, AutoBizHawkClientRegister
 
 
@@ -132,6 +132,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
         except RequestFailedError as exc:
             logger.info(f"Lost connection to BizHawk: {exc.args[0]}")
+            continue
+        except NotConnectedError:
             continue
 
         # Get slot name and send `Connect`
