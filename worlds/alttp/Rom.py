@@ -2247,7 +2247,7 @@ def write_strings(rom, world, player):
                 tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
             hint_locations = HintLocations.copy()
             local_random.shuffle(hint_locations)
-            all_entrances = [entrance for entrance in world.get_entrances() if entrance.player == player]
+            all_entrances = list(world.get_entrances(player))
             local_random.shuffle(all_entrances)
 
             # First we take care of the one inconvenient dungeon in the appropriately simple shuffles.
