@@ -17,6 +17,9 @@ from ..options import Cropsanity, SkillProgression, SpecialOrderLocations, Frien
 
 class SVTestCase(unittest.TestCase):
     player: ClassVar[int] = 1
+    """Set to False to not skip some 'extra' tests"""
+    skip_extra_tests: bool = True
+    """Set to False to run tests that take long"""
     skip_long_tests: bool = True
 
 
