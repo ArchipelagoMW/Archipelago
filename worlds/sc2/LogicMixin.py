@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
 from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, GameDifficulty, \
-    GrantStoryTech
+    GrantStoryTech, TakeOverAIAllies
 from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives
 from .MissionTables import SC2Race
 from . import ItemNames
@@ -222,14 +222,6 @@ class SC2Logic(LogicMixin):
                        or advanced and self._sc2hots_has_viper(multiworld, player)
         return vespene_unit and self.has_any({ItemNames.ZERGLING, ItemNames.SWARM_QUEEN}, player)
 
-    def _sc2hots_has_basic_comp(self, multiworld: MultiWorld, player: int) -> bool:
-        if get_option_value(multiworld, player, 'game_difficulty') < GameDifficulty.option_brutal \
-           or self._sc2hots_has_basic_kerrigan(multiworld, player) \
-           or self._sc2hots_has_two_kerrigan_actives(multiworld, player):
-            return self._sc2hots_has_common_unit(multiworld, player)
-        else:
-            return self._sc2hots_has_competent_comp(multiworld, player)
-
     def _sc2hots_can_spread_creep(self, multiworld: MultiWorld, player: int) -> bool:
         return self._sc2_advanced_tactics(multiworld, player) or self.has(ItemNames.SWARM_QUEEN, player)
     
@@ -274,10 +266,6 @@ class SC2Logic(LogicMixin):
                 count += 1
         return count >= 2
 
-    def _sc2hots_has_low_tech(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_any({ItemNames.ZERGLING, ItemNames.SWARM_QUEEN, ItemNames.SPINE_CRAWLER}, player) \
-               or self._sc2hots_has_common_unit(multiworld, player) and self._sc2hots_has_basic_kerrigan(multiworld, player)
-
     def _sc2hots_can_pass_vents(self, multiworld: MultiWorld, player: int) -> bool:
         return (get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true) \
             or self.has(ItemNames.ZERGLING, player) \
@@ -287,3 +275,13 @@ class SC2Logic(LogicMixin):
         return (get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true) \
             or (get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available) \
             or self.has_all({ItemNames.KERRIGAN_LEAPING_STRIKE, ItemNames.KERRIGAN_MEND}, player)
+
+    def _sc2hots_final_mission_requirements(self, multiworld: MultiWorld, player: int) -> bool:
+        if get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true:
+            return self._sc2wol_has_competent_comp(multiworld, player) \
+                and self._sc2hots_has_competent_comp(multiworld, player) \
+                and (self._sc2hots_has_good_antiair(multiworld, player)
+                     or self._sc2wol_has_competent_anti_air(multiworld, player))
+        else:
+            return self._sc2hots_has_competent_comp(multiworld, player) \
+                and self._sc2hots_has_good_antiair(multiworld, player)
