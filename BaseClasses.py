@@ -422,22 +422,22 @@ class MultiWorld():
 
         logging.debug('Placed %s at %s', item, location)
 
-    def get_entrances(self, player: Optional[int] = None) -> List[Entrance]:
+    def get_entrances(self, player: Optional[int] = None) -> Iterable[Entrance]:
         if player is not None:
-            return list(self.regions.entrance_cache[player].values())
-        return list(itertools.chain(*(self.regions.entrance_cache[player].values()
-                                      for player in self.regions.entrance_cache)))
+            return self.regions.entrance_cache[player].values()
+        return Utils.RepeatableChain(tuple(self.regions.entrance_cache[player].values()
+                                           for player in self.regions.entrance_cache))
 
     def register_indirect_condition(self, region: Region, entrance: Entrance):
         """Report that access to this Region can result in unlocking this Entrance,
         state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
         self.indirect_connections.setdefault(region, set()).add(entrance)
 
-    def get_locations(self, player: Optional[int] = None) -> List[Location]:
+    def get_locations(self, player: Optional[int] = None) -> Iterable[Location]:
         if player is not None:
-            return list(self.regions.location_cache[player].values())
-        return list(itertools.chain(*(self.regions.location_cache[player].values()
-                                      for player in self.regions.location_cache)))
+            return self.regions.location_cache[player].values()
+        return Utils.RepeatableChain(tuple(self.regions.location_cache[player].values()
+                                           for player in self.regions.location_cache))
 
     def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
         return [location for location in self.get_locations(player) if location.item is None]
