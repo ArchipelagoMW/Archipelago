@@ -4,6 +4,7 @@ from typing import Dict, List, NamedTuple, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 from .Options import BossesAsChecks, VictoryCondition, ExtraOrbs
+from .Rules import items_hidden_from_shops
 
 
 class ItemData(NamedTuple):
@@ -57,7 +58,7 @@ def create_random_items(multiworld: MultiWorld, player: int, random_count: int) 
 
 
 def create_all_items(multiworld: MultiWorld, player: int) -> None:
-    sum_locations = len(multiworld.get_unfilled_locations(player))
+    locations_to_fill = len(multiworld.get_unfilled_locations(player))
 
     itempool = (
         create_fixed_item_pool()
@@ -66,8 +67,23 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
         + create_kantele(multiworld.victory_condition[player])
     )
 
-    random_count = sum_locations - len(itempool)
-    itempool += create_random_items(multiworld, player, random_count)
+    random_count = locations_to_fill - len(itempool)
+    filler_to_add = []
+    # quick and dirty check to avoid filler issues without manually adding filler
+    # will remove when the client can handle filler items spawning in shops
+    player_count = 1  # todo: figure out how to get player count in multi
+    if player_count > 1:  # if there's multiple players, it's nearly impossible to fail
+        filler_to_add = create_random_items(multiworld, player, random_count)
+    else:
+        shop_allowable_filler_count = 0
+        while shop_allowable_filler_count + len(itempool) < 39:
+            shop_allowable_filler_count = 0
+            filler_to_add = create_random_items(multiworld, player, random_count)
+            for item in filler_to_add:
+                if item not in items_hidden_from_shops:
+                    shop_allowable_filler_count += 1
+    # itempool += create_random_items(multiworld, player, random_count)
+    itempool += filler_to_add
 
     multiworld.itempool += [create_item(player, name) for name in itempool]
 
