@@ -402,6 +402,13 @@ class GrantStoryTech(Toggle):
     display_name = "Grant Story Tech"
 
 
+class TakeOverAIAllies(Toggle):
+    """
+    On maps supporting this feature allows you to take control over an AI Ally.
+    """
+    display_name = "Take Over AI Allies"
+
+
 class LockedItems(ItemSet):
     """Guarantees that these items will be unlockable"""
     display_name = "Locked Items"
@@ -526,6 +533,7 @@ sc2_options: Dict[str, Option] = {
     "start_primary_abilities": StartPrimaryAbilities,
     "kerrigan_primal_status": KerriganPrimalStatus,
     "grant_story_tech": GrantStoryTech,
+    "take_over_ai_allies": TakeOverAIAllies,
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,
     "excluded_missions": ExcludedMissions,

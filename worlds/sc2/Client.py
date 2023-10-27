@@ -24,7 +24,7 @@ from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
     KerriganChecksPerLevelPack, \
     LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit, \
-    DisableForcedCamera, SkipCutscenes
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -365,7 +365,8 @@ class SC2Context(CommonContext):
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", KerriganPrimalStatus.option_vanilla)
             self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", KerriganCheckLevelPackSize.default)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", KerriganChecksPerLevelPack.default)
-            self.grant_story_tech = args["slot_data"].get("grant_story_tech", False)
+            self.grant_story_tech = args["slot_data"].get("grant_story_tech", GrantStoryTech.option_false)
+            self.take_over_ai_allies = args["slot_data"].get("take_over_ai_allies", TakeOverAIAllies.option_false)
 
             self.location_inclusions = {
                 LocationType.VICTORY: LocationInclusion.option_enabled, # Victory checks are always enabled
@@ -656,7 +657,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
@@ -664,7 +665,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 self.ctx.disable_forced_camera,
                 self.ctx.skip_cutscenes,
                 kerrigan_options,
-                1 if self.ctx.grant_story_tech else 0
+                self.ctx.grant_story_tech,
+                self.ctx.take_over_ai_allies
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],

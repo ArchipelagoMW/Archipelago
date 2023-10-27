@@ -12,8 +12,9 @@ from .Locations import get_locations, LocationType
 from .Regions import create_regions
 from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
     KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available
-from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS
-from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission
+from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS, missions_in_mission_table, get_used_races
+from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
+    SC2Race
 
 
 class Starcraft2WebWorld(WebWorld):
@@ -232,15 +233,30 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
         first_mission = get_first_mission(multiworld.worlds[player].mission_req_table)
         first_race = lookup_name_to_mission[first_mission].race
 
-        local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in non_local_items and item not in excluded_items)
-        if not local_basic_unit:
-            local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in excluded_items)
+        if first_race == SC2Race.ANY:
+            # If the first mission is a logic-less no-build
+            mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = multiworld.worlds[player].mission_req_table
+            races = get_used_races(mission_req_table, multiworld, player)
+            races.remove(SC2Race.ANY)
+            if lookup_name_to_mission[first_mission].race in races:
+                # The campaign's race is in (At least one mission that's not logic-less no-build exists)
+                first_race = lookup_name_to_mission[first_mission].campaign.race
+            elif len(races) > 0:
+                # The campaign only has logic-less no-build missions. Find any other valid race
+                first_race = multiworld.random.choice(list(races))
+
+        if first_race != SC2Race.ANY:
+            # The race of the early unit has been chosen
+            local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in non_local_items and item not in excluded_items)
             if not local_basic_unit:
-                raise Exception("Early Unit: At least one basic unit must be included")
+                # Drop non_local_items constraint
+                local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in excluded_items)
+                if not local_basic_unit:
+                    raise Exception("Early Unit: At least one basic unit must be included")
 
-        first_location = get_early_unit_location_name(first_mission)
+            first_location = get_early_unit_location_name(first_mission)
 
-        starter_items.append(assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit))
+            starter_items.append(assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit))
     
     starter_abilities = get_option_value(multiworld, player, 'start_primary_abilities')
     assert isinstance(starter_abilities, int)

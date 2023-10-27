@@ -7,7 +7,8 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
     campaign_mission_table
 from .Options import get_option_value, MissionOrder, \
-    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech
+    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
+    TakeOverAIAllies
 from .LogicMixin import SC2Logic
 from . import ItemNames
 
@@ -83,7 +84,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
         if len(candidate_missions) == 0:
             raise Exception("There are no valid goal missions. Please exclude fewer missions.")
-        goal_mission = multiworld.random.choice(candidate_missions).mission_name
+        goal_mission = multiworld.random.choice(candidate_missions)
     else:
         goal_mission = primary_goal.mission
 
@@ -121,7 +122,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     if enabled_campaigns == {SC2Campaign.PROPHECY} and mission_order_type == MissionOrder.option_tiny_grid:
         move_mission(SC2Mission.A_SINISTER_TURN, MissionPools.MEDIUM, MissionPools.EASY)
     # HotS
-    kerriganless = get_option_value(multiworld, player, "kerriganless") not in kerrigan_unit_available
+    kerriganless = get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available
     if adv_tactics:
         # Medium -> Easy
         for mission in (SC2Mission.FIRE_IN_THE_SKY, SC2Mission.WAKING_THE_ANCIENT, SC2Mission.CONVICTION):
@@ -474,9 +475,42 @@ def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[SC
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
-    used_races = set([mission.mission.race for campaign_missions in mission_req_table.values() for mission in campaign_missions.values()])
+    used_races = get_used_races(mission_req_table, multiworld, player)
     mission_requirements = [location.access_rule for location in location_cache]
     valid_inventory = ValidInventory(multiworld, player, item_pool, existing_items, locked_items, used_races)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items
+
+
+def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], multiworld: MultiWorld, player: int) -> Set[SC2Race]:
+    grant_story_tech = get_option_value(multiworld, player, "grant_story_tech")
+    take_over_ai_allies = get_option_value(multiworld, player, "take_over_ai_allies")
+    kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
+    missions = missions_in_mission_table(mission_req_table)
+
+    # By missions
+    races = set([mission.race for mission in missions])
+
+    # Conditionally logic-less no-builds (They're set to SC2Race.ANY):
+    if grant_story_tech == GrantStoryTech.option_false:
+        if SC2Mission.ENEMY_WITHIN in missions:
+            # Zerg units need to be unlocked
+            races.add(SC2Race.ZERG)
+        if kerrigan_presence in kerrigan_unit_available \
+                and not missions.isdisjoint({SC2Mission.BACK_IN_THE_SADDLE, SC2Mission.SUPREME, SC2Mission.CONVICTION}):
+            # You need some Kerrigan abilities (they're granted if Kerriganless or story tech granted)
+            races.add(SC2Race.ZERG)
+
+    # If you take over the AI Ally, you need to have its race stuff
+    if take_over_ai_allies == TakeOverAIAllies.option_true \
+            and not missions.isdisjoint({SC2Mission.THE_RECKONING}):
+        # Jimmy in The Reckoning
+        races.add(SC2Race.TERRAN)
+
+    return races
+
+
+def missions_in_mission_table(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> Set[SC2Mission]:
+    return set([mission.mission for campaign_missions in mission_req_table.values() for mission in
+                campaign_missions.values()])
