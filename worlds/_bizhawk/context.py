@@ -24,8 +24,8 @@ EXPECTED_SCRIPT_VERSION = 1
 
 class AuthStatus(enum.IntEnum):
     NOT_AUTHENTICATED = 0
-    PENDING = 1
-    AWAITING_PASSWORD = 2
+    NEED_INFO = 1
+    PENDING = 2
     AUTHENTICATED = 3
 
 
@@ -86,37 +86,33 @@ class BizHawkClientContext(CommonContext):
             return
 
         if self.client_handler is None:
-            logger.info("Connected to BizHawk and server, but no game handler exists for this ROM. Refusing to authenticate.")
             return
 
+        # Ask handler to set auth
         if self.auth is None:
-            # When the user clicks the connect button while connected to
-            # BizHawk, this function will be called immediately when
-            # receiving room info, not giving us a chance to ask the handler
-            # to set auth.
-            #
-            # So if self.auth is still None here, we're too early and need to
-            # stop here and let `_game_watcher` call `server_auth` later.
-            #
-            # Communicating with BizHawk from here (as might happen during a
-            # handler's `set_auth`) can cause SyncErrors. So `set_auth` can
-            # only be called from the watcher loop.
-            return
+            self.auth_status = AuthStatus.NEED_INFO
+            await self.client_handler.set_auth(self)
+
+            # Handler didn't set auth, ask user for slot name
+            if self.auth is None:
+                await self.get_username()
 
         if password_requested and not self.password:
-            self.auth_status = AuthStatus.AWAITING_PASSWORD
+            self.auth_status = AuthStatus.NEED_INFO
             await super(BizHawkClientContext, self).server_auth(password_requested)
 
         await self.send_connect()
         self.auth_status = AuthStatus.PENDING
+
+    async def disconnect(self, allow_autoreconnect: bool = False):
+        self.auth_status = AuthStatus.NOT_AUTHENTICATED
+        await super().disconnect(allow_autoreconnect)
 
 
 async def _game_watcher(ctx: BizHawkClientContext):
     showed_connecting_message = False
     showed_connected_message = False
     showed_no_handler_message = False
-
-    auth_task: Optional[asyncio.Task] = None
 
     while not ctx.exit_event.is_set():
         try:
@@ -156,13 +152,13 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
             rom_hash = await get_hash(ctx.bizhawk_ctx)
             if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
-                if ctx.server is not None:
+                if ctx.server is not None and not ctx.server.socket.closed:
                     logger.info(f"ROM changed. Disconnecting from server.")
-                    await ctx.disconnect(False)
 
                 ctx.auth = None
                 ctx.username = None
                 ctx.client_handler = None
+                await ctx.disconnect(False)
             ctx.rom_hash = rom_hash
 
             if ctx.client_handler is None:
@@ -185,19 +181,9 @@ async def _game_watcher(ctx: BizHawkClientContext):
             continue
 
         # Server auth
-        if ctx.server is not None:
-            # Only progress auth steps if previous step is done
-            if auth_task is None or auth_task.done():
-                if ctx.auth is None:
-                    # Ask the handler to set ctx.auth if it can
-                    await ctx.client_handler.set_auth(ctx)
-
-                if ctx.auth is None:
-                    # If the handler didn't set ctx.auth, ask the user for their slot name
-                    auth_task = asyncio.Task(ctx.get_username(), name="GetUsername")
-                elif ctx.auth_status == AuthStatus.NOT_AUTHENTICATED:
-                    # ctx.auth is set, Connect has not been sent, ask for password if required and try to send Connect
-                    auth_task = asyncio.Task(ctx.server_auth(ctx.password_requested), name="ServerAuth")
+        if ctx.server is not None and not ctx.server.socket.closed:
+            if ctx.auth_status == AuthStatus.NOT_AUTHENTICATED:
+                Utils.async_start(ctx.server_auth(ctx.password_requested))
         else:
             ctx.auth_status = AuthStatus.NOT_AUTHENTICATED
 
