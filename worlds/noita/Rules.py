@@ -1,4 +1,4 @@
-from typing import List, NamedTuple, Set, Optional, TYPE_CHECKING
+from typing import List, NamedTuple, Set, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from . import Items, Locations
@@ -50,9 +50,9 @@ wand_tiers: List[str] = [
 ]
 
 
-items_hidden_from_shops: List[str] = ["Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
-                                      "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
-                                      "Powder Pouch"]
+items_hidden_from_shops: Set[str] = {"Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
+                                     "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
+                                     "Powder Pouch"}
 
 
 perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
@@ -71,7 +71,7 @@ def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
     return state.item_count("Orb", player) >= amount
 
 
-def forbid_items_at_location(world: NoitaWorld, location_name: str, items: Optional[Set[str] | List[str]]):
+def forbid_items_at_location(world: NoitaWorld, location_name: str, items: Set[str]):
     location = world.multiworld.get_location(location_name, world.player)
     GenericRules.forbid_items_for_player(location, items, world.player)
 
@@ -91,14 +91,14 @@ def ban_items_from_shops(world: NoitaWorld) -> None:
 # Prevent high tier wands from appearing in early Holy Mountain shops
 def ban_early_high_tier_wands(world: NoitaWorld) -> None:
     for i, region_name in enumerate(holy_mountain_regions):
-        wands_to_forbid = wand_tiers[i+1:]
+        wands_to_forbid = set(wand_tiers[i+1:])
 
         locations_in_region = Locations.location_region_mapping[region_name].keys()
         for location_name in locations_in_region:
             forbid_items_at_location(world, location_name, wands_to_forbid)
 
     # Prevent high tier wands from appearing in the Secret shop
-    wands_to_forbid = wand_tiers[3:]
+    wands_to_forbid = set(wand_tiers[3:])
     locations_in_region = Locations.location_region_mapping["Secret Shop"].keys()
     for location_name in locations_in_region:
         forbid_items_at_location(world, location_name, wands_to_forbid)
