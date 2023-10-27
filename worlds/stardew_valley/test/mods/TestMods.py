@@ -4,24 +4,17 @@ import random
 import sys
 
 from BaseClasses import MultiWorld
-from ...mods.mod_data import ModNames
-from .. import setup_solo_multiworld
-from ..TestOptions import basic_checks, SVTestBase
+from ...mods.mod_data import all_mods
+from .. import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods
+from ..TestOptions import basic_checks
 from ... import items, Group, ItemClassification
 from ...regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
 from ...items import item_table, items_by_group
 from ...locations import location_table
 from ...options import Mods, EntranceRandomization, Friendsanity, SeasonRandomization, SpecialOrderLocations, ExcludeGingerIsland, TrapItems
 
-all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-                      ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-                      ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-                      ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-                      ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-                      ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator})
 
-
-def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: SVTestBase, multiworld: MultiWorld):
+def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: unittest.TestCase, multiworld: MultiWorld):
     if isinstance(chosen_mods, str):
         chosen_mods = [chosen_mods]
     for multiworld_item in multiworld.get_items():
@@ -34,7 +27,7 @@ def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: SVTestBase
         tester.assertTrue(location.mod_name is None or location.mod_name in chosen_mods)
 
 
-class TestGenerateModsOptions(SVTestBase):
+class TestGenerateModsOptions(SVTestCase):
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
         for mod in all_mods:
@@ -50,6 +43,8 @@ class TestGenerateModsOptions(SVTestBase):
                     multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: option, Mods: mod})
                     basic_checks(self, multiworld)
                     check_stray_mod_items(mod, self, multiworld)
+                    if self.skip_extra_tests:
+                        return  # assume the rest will work as well
 
 
 class TestBaseItemGeneration(SVTestBase):
@@ -103,7 +98,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
                     self.assertIn(progression_item.name, all_created_items)
 
 
-class TestModEntranceRando(unittest.TestCase):
+class TestModEntranceRando(SVTestCase):
 
     def test_mod_entrance_randomization(self):
 
@@ -137,12 +132,12 @@ class TestModEntranceRando(unittest.TestCase):
                                  f"Connections are duplicated in randomization. Seed = {seed}")
 
 
-class TestModTraps(SVTestBase):
+class TestModTraps(SVTestCase):
     def test_given_traps_when_generate_then_all_traps_in_pool(self):
         for value in TrapItems.options:
             if value == "no_traps":
                 continue
-            world_options = self.allsanity_options_without_mods()
+            world_options = allsanity_options_without_mods()
             world_options.update({TrapItems.internal_name: TrapItems.options[value], Mods: "Magic"})
             multi_world = setup_solo_multiworld(world_options)
             trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups]
