@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Dict, Set
+from typing import TYPE_CHECKING, Dict, Set
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -84,6 +84,7 @@ KEY_LOCATION_FLAG_MAP = {data.locations[location_name].flag: location_name for l
 class PokemonEmeraldClient(BizHawkClient):
     game = "Pokemon Emerald"
     system = "GBA"
+    patch_suffix = ".apemerald"
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
