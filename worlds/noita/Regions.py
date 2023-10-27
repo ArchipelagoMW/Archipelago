@@ -11,11 +11,6 @@ else:
     NoitaWorld = object
 
 
-def add_location(player: int, loc_name: str, loc_id: int, region: Region) -> None:
-    location = Locations.NoitaLocation(player, loc_name, loc_id, region)
-    region.locations.append(location)
-
-
 def add_locations(world: NoitaWorld, region: Region) -> None:
     locations = Locations.location_region_mapping.get(region.name, {})
     for location_name, location_data in locations.items():
