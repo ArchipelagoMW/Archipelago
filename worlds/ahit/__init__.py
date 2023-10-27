@@ -49,7 +49,7 @@ class HatInTimeWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = get_location_names()
 
-    option_definitions = ahit_options
+    # option_definitions = ahit_options
     act_connections: Dict[str, str] = {}
     shop_locs: List[str] = []
     item_name_groups = relic_groups
