@@ -229,12 +229,12 @@ class MultiWorld():
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
-            self.worlds[player] = world_type(self, player)
-            self.worlds[player].random = self.per_slot_randoms[player]
+            # TODO - remove this loop once all worlds use options dataclasses
             for option_key in world_type.options_dataclass.type_hints:
                 option_values = getattr(args, option_key, {})
                 setattr(self, option_key, option_values)
-                # TODO - remove this loop once all worlds use options dataclasses
+            self.worlds[player] = world_type(self, player)
+            self.worlds[player].random = self.per_slot_randoms[player]
             options_dataclass: typing.Type[Options.PerGameCommonOptions] = self.worlds[player].options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
