@@ -104,45 +104,35 @@ class TestRubyPassageHard(TestHard):
             ['Pinball Zone - Rolling Room Box', False, [], ['Head Smash']],
             ['Pinball Zone - Rolling Room Box', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
-        ])
 
-        self.run_location_tests([
             ['Pinball Zone - Fruit Room Box', False, []],
             ['Pinball Zone - Fruit Room Box', False, [], ['Progressive Grab']],
             ['Pinball Zone - Fruit Room Box', False, [], ['Progressive Ground Pound']],
             ['Pinball Zone - Fruit Room Box', False, [], ['Head Smash']],
             ['Pinball Zone - Fruit Room Box', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
-        ])
 
-        self.run_location_tests([
             ['Pinball Zone - Jungle Room Box', False, []],
             ['Pinball Zone - Jungle Room Box', False, [], ['Progressive Grab']],
             ['Pinball Zone - Jungle Room Box', False, [], ['Progressive Ground Pound']],
             ['Pinball Zone - Jungle Room Box', False, [], ['Head Smash']],
             ['Pinball Zone - Jungle Room Box', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
-        ])
 
-        self.run_location_tests([
             ['Pinball Zone - Snow Room Box', False, []],
             ['Pinball Zone - Snow Room Box', False, [], ['Progressive Grab']],
             ['Pinball Zone - Snow Room Box', False, [], ['Progressive Ground Pound']],
             ['Pinball Zone - Snow Room Box', False, [], ['Head Smash']],
             ['Pinball Zone - Snow Room Box', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
-        ])
 
-        self.run_location_tests([
             ['Pinball Zone - CD Box', False, []],
             ['Pinball Zone - CD Box', False, [], ['Progressive Grab']],
             ['Pinball Zone - CD Box', False, [], ['Progressive Ground Pound']],
             ['Pinball Zone - CD Box', False, [], ['Head Smash']],
             ['Pinball Zone - CD Box', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
-        ])
 
-        self.run_location_tests([
             ['Pinball Zone - Full Health Item Box', False, []],
             ['Pinball Zone - Full Health Item Box', False, [], ['Progressive Grab']],
             ['Pinball Zone - Full Health Item Box', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
