@@ -1,4 +1,5 @@
 import logging
+from collections import Counter
 from typing import Any, Dict, List, Optional
 
 from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
@@ -69,6 +70,7 @@ class MessengerWorld(World):
 
     total_seals: int = 0
     required_seals: int = 0
+    created_seals: int = 0
     total_shards: int = 0
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]
@@ -86,14 +88,13 @@ class MessengerWorld(World):
 
     def create_items(self) -> None:
         # create items that are always in the item pool
-        itempool: List[MessengerItem] = [
-            self.create_item(item)
-            for item in self.item_name_to_id
+        itempool: List[str] = [
+            item for item in self.item_name_to_id
             if item not in
-            {
-                "Power Seal", *NOTES, *FIGURINES,
-                *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
-            } and "Time Shard" not in item
+               {
+                   "Power Seal", *NOTES, *FIGURINES,
+                   *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
+               } and "Time Shard" not in item
         ]
 
         if self.options.goal == Goal.option_open_music_box:
@@ -108,7 +109,7 @@ class MessengerWorld(World):
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
                 notes = notes[precollected_notes_amount:]
-            itempool += [self.create_item(note) for note in notes]
+            itempool += notes
 
         elif self.options.goal == Goal.option_power_seal_hunt:
             total_seals = min(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool),
@@ -119,21 +120,10 @@ class MessengerWorld(World):
                 self.total_seals = total_seals
             self.required_seals = int(self.options.percent_seals_required.value / 100 * self.total_seals)
 
-            seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
-            for i in range(self.required_seals):
-                seals[i].classification = ItemClassification.progression_skip_balancing
+            seals = ["Power Seal" for _ in range(self.total_seals)]
             itempool += seals
 
-        remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
-        if remaining_fill < 10:
-            self._filler_items = self.random.choices(
-                                      list(FILLER)[2:],
-                                      weights=list(FILLER.values())[2:],
-                                      k=remaining_fill
-            )
-        itempool += [self.create_filler() for _ in range(remaining_fill)]
-
-        self.multiworld.itempool += itempool
+        self.itempool = Counter(itempool)
 
     def set_rules(self) -> None:
         for reg_name, connections in REGION_CONNECTIONS.items():
@@ -145,6 +135,9 @@ class MessengerWorld(World):
             MessengerHardRules(self).set_messenger_rules()
         else:
             MessengerOOBRules(self).set_messenger_rules()
+
+    def create_filler_items(self, count: int) -> None:
+        self.itempool.update([self.get_filler_item_name() for _ in range(count)])
 
     def fill_slot_data(self) -> Dict[str, Any]:
         shop_prices = {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()}
@@ -181,6 +174,9 @@ class MessengerWorld(World):
             count = int(name.strip("Time Shard ()"))
             count = count if count >= 100 else 0
             self.total_shards += count
+        elif name == "Power Seal":  # there's probably a better way to do this
+            self.created_seals += 1
+            count = self.created_seals <= self.required_seals
         return MessengerItem(name, self.player, item_id, override_prog, count)
 
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
