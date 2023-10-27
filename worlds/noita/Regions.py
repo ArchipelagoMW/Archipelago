@@ -17,7 +17,6 @@ def add_location(player: int, loc_name: str, loc_id: int, region: Region) -> Non
 
 
 def add_locations(world: NoitaWorld, region: Region) -> None:
-    player = world.player
     locations = Locations.location_region_mapping.get(region.name, {})
     for location_name, location_data in locations.items():
         location_type = location_data.ltype
@@ -31,14 +30,16 @@ def add_locations(world: NoitaWorld, region: Region) -> None:
 
         is_orb_allowed = location_type == "orb" and flag <= opt_orbs
         is_boss_allowed = location_type == "boss" and flag <= opt_bosses
+        amount = 0
         if flag == Locations.LocationFlag.none or is_orb_allowed or is_boss_allowed:
-            add_location(player, location_name, location_data.id, region)
+            amount = 1
         elif location_type == "chest" and flag <= opt_paths:
-            for i in range(opt_num_chests):
-                add_location(player, f"{location_name} {i+1}", location_data.id + i, region)
+            amount = opt_num_chests
         elif location_type == "pedestal" and flag <= opt_paths:
-            for i in range(opt_num_pedestals):
-                add_location(player, f"{location_name} {i+1}", location_data.id + i, region)
+            amount = opt_num_pedestals
+
+        region.add_locations(Locations.make_location_range(location_name, location_data.id, amount),
+                             Locations.NoitaLocation)
 
 
 # Creates a new Region with the locations found in `location_region_mapping` and adds them to the world.

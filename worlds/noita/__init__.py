@@ -1,7 +1,7 @@
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from typing import Dict, Any
-from . import Events, Items, Locations, Options, Regions, Rules
+from . import Events, Items, Locations, Regions, Rules
 from .Options import NoitaOptions
 
 

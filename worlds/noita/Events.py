@@ -1,6 +1,5 @@
 from typing import Dict
-
-from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region
+from BaseClasses import Item, ItemClassification, Location, Region
 from . import Items, Locations
 
 
