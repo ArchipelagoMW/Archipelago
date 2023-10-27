@@ -5,6 +5,7 @@ checking or launching the client, otherwise it will probably cause circular impo
 
 
 import asyncio
+import subprocess
 import traceback
 from typing import Any, Dict, Optional
 
@@ -12,8 +13,8 @@ from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser,
 import Patch
 import Utils
 
-from . import BizHawkContext, ConnectionStatus, RequestFailedError, connect, disconnect, get_hash, get_script_version, \
-    get_system, ping
+from . import BizHawkContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, get_hash, \
+    get_script_version, get_system, ping
 from .client import BizHawkClient, AutoBizHawkClientRegister
 
 
@@ -132,6 +133,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
         except RequestFailedError as exc:
             logger.info(f"Lost connection to BizHawk: {exc.args[0]}")
             continue
+        except NotConnectedError:
+            continue
 
         # Get slot name and send `Connect`
         if ctx.server is not None and ctx.username is None:
@@ -146,8 +149,24 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
 
 async def _run_game(rom: str):
-    import webbrowser
-    webbrowser.open(rom)
+    import os
+    auto_start = Utils.get_settings().bizhawkclient_options.rom_start
+
+    if auto_start is True:
+        emuhawk_path = Utils.get_settings().bizhawkclient_options.emuhawk_path
+        subprocess.Popen([emuhawk_path, "--lua=data/lua/connector_bizhawk_generic.lua", os.path.realpath(rom)],
+                         cwd=Utils.local_path("."),
+                         stdin=subprocess.DEVNULL,
+                         stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL)
+    elif isinstance(auto_start, str):
+        import shlex
+
+        subprocess.Popen([*shlex.split(auto_start), os.path.realpath(rom)],
+                         cwd=Utils.local_path("."),
+                         stdin=subprocess.DEVNULL,
+                         stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL)
 
 
 async def _patch_and_run_game(patch_file: str):
