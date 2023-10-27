@@ -59,6 +59,12 @@ CreateStartingInventory:
         @transfer_itemcount 2
         @transfer_itemcount 3
 
+    ; Abilities
+        ldr r0, =StartingInventoryWarioAbilities
+        ldr r1, =WarioAbilities
+        ldrb r0, [r0]
+        strb r0, [r1]
+
         pop {pc}  ; Return address from EXimage_Clear_Work_2Mode()
     .pool
 

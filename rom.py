@@ -155,8 +155,15 @@ def give_item(rom: LocalRom, item: WL4Item):
         status = rom.read_byte(address)
         status |= 1 << 4
         rom.write_byte(address, status)
+    elif item.type == ItemType.ABILITY:
+        ability = item.code - (ap_id_offset + 0x40)
+        flag = 1 << ability
+        address = get_symbol('StartingInventoryWarioAbilities')
+        abilities = rom.read_byte(address)
+        abilities |= flag
+        rom.write_byte(address, abilities)
     elif item.type == ItemType.ITEM:
-        junk_type = item.code - (ap_id_offset + 0x40)
+        junk_type = item.code - (ap_id_offset + 0x80)
         address = get_symbol('StartingInventoryJunkCounts', junk_type)
         count = rom.read_byte(address)
         count += 1
