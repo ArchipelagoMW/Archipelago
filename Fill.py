@@ -42,11 +42,13 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
     cleanup_required = False
-
     swapped_items: typing.Counter[typing.Tuple[int, str, bool]] = Counter()
     reachable_items: typing.Dict[int, typing.Deque[Item]] = {}
     for item in item_pool:
         reachable_items.setdefault(item.player, deque()).append(item)
+
+    total_items = len(item_pool)
+    placed = 0
 
     while any(reachable_items.values()) and locations:
         # grab one item per player
@@ -152,8 +154,14 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
             spot_to_fill.event = item_to_place.advancement
+            placed += 1
+            if not placed % 1000:
+                logging.info(f"Current fill step at {placed}/{total_items} items placed.")
             if on_place:
                 on_place(spot_to_fill)
+
+    if total_items > 1000:
+        logging.info(f"Current fill step at {placed}/{total_items} items placed.")
 
     if cleanup_required:
         # validate all placements and remove invalid ones
