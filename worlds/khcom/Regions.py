@@ -195,8 +195,6 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 11"].locations.append("Mega-Potion")
     
     # Floor 12 Destiny Islands
-    # Standard Cards
-    regions["Floor 12"].locations.append("Divine Rose")
     # KOB, KOG, KTT Rewards
     regions["Floor 12"].locations.append("Darkside")
     regions["Floor 12"].locations.append("Key of Beginnings F12")
