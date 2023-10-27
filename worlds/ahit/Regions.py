@@ -826,11 +826,9 @@ def get_shuffled_region(self, region: str) -> str:
 
 
 def create_thug_shops(world: World):
-    min_items: int = min(world.multiworld.NyakuzaThugMinShopItems[world.player].value,
-                         world.multiworld.NyakuzaThugMaxShopItems[world.player].value)
+    min_items: int = world.multiworld.NyakuzaThugMinShopItems[world.player].value
 
-    max_items: int = max(world.multiworld.NyakuzaThugMaxShopItems[world.player].value,
-                         world.multiworld.NyakuzaThugMinShopItems[world.player].value)
+    max_items: int = world.multiworld.NyakuzaThugMaxShopItems[world.player].value
     count: int = -1
     step: int = 0
     old_name: str = ""
@@ -877,6 +875,7 @@ def create_events(world: World) -> int:
         if not is_location_valid(world, name):
             continue
 
+        item_name: str = name
         if world.is_dw():
             if name in snatcher_coins.keys():
                 name = f"{name} ({data.region})"
@@ -887,15 +886,15 @@ def create_events(world: World) -> int:
                 if get_difficulty(world) < Difficulty.EXPERT and name in zero_jumps_expert:
                     continue
 
-        event: Location = create_event(name, world.multiworld.get_region(data.region, world.player), world)
+        event: Location = create_event(name, item_name, world.multiworld.get_region(data.region, world.player), world)
         event.show_in_spoiler = False
         count += 1
 
     return count
 
 
-def create_event(name: str, region: Region, world: World) -> Location:
+def create_event(name: str, item_name: str, region: Region, world: World) -> Location:
     event = HatInTimeLocation(world.player, name, None, region)
     region.locations.append(event)
-    event.place_locked_item(HatInTimeItem(name, ItemClassification.progression, None, world.player))
+    event.place_locked_item(HatInTimeItem(item_name, ItemClassification.progression, None, world.player))
     return event
