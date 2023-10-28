@@ -100,15 +100,15 @@ class StardewValleyWorld(World):
             return region
 
         world_regions, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
-        self.multiworld.regions.extend(world_regions)
 
         def add_location(name: str, code: Optional[int], region: str):
-            region = self.multiworld.get_region(region, self.player)
+            region = world_regions[region]
             location = StardewLocation(self.player, name, code, region)
             location.access_rule = lambda _: True
             region.locations.append(location)
 
         create_locations(add_location, self.options, self.multiworld.random)
+        self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
         self.precollect_starting_season()

@@ -37,17 +37,29 @@ def start_playing():
     return render_template(f"startPlaying.html")
 
 
-@app.route('/weighted-settings')
-@cache.cached()
+# TODO for back compat. remove around 0.4.5
+@app.route("/weighted-settings")
 def weighted_settings():
-    return render_template(f"weighted-settings.html")
+    return redirect("weighted-options", 301)
 
 
-# Player settings pages
-@app.route('/games/<string:game>/player-settings')
+@app.route("/weighted-options")
 @cache.cached()
-def player_settings(game):
-    return render_template(f"player-settings.html", game=game, theme=get_world_theme(game))
+def weighted_options():
+    return render_template("weighted-options.html")
+
+
+# TODO for back compat. remove around 0.4.5
+@app.route("/games/<string:game>/player-settings")
+def player_settings(game: str):
+    return redirect(url_for("player_options", game=game), 301)
+
+
+# Player options pages
+@app.route("/games/<string:game>/player-options")
+@cache.cached()
+def player_options(game: str):
+    return render_template("player-options.html", game=game, theme=get_world_theme(game))
 
 
 # Game Info Pages
@@ -181,6 +193,6 @@ def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
-            has_settings: bool = isinstance(world.web.settings_page, bool) and world.web.settings_page
+            has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
             available_games.append({ 'title': game, 'has_settings': has_settings })
     return render_template("siteMap.html", games=available_games)
