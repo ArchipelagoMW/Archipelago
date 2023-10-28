@@ -16,7 +16,7 @@ class Goal(Choice):
     display_name = "Game Mode"
     option_classic = 0
     option_explore = 1
-    default = 0
+    default = 1
 
 
 class TotalLocations(Range):
@@ -48,7 +48,8 @@ class ScavengersPerEnvironment(Range):
     display_name = "Scavenger per Environment"
     range_start = 0
     range_end = 1
-    default = 1
+    default = 0
+
 
 class ScannersPerEnvironment(Range):
     """Explore Mode: The number of scanners locations per environment."""
