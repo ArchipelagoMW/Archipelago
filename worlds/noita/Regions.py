@@ -1,5 +1,5 @@
 # Regions are areas in your game that you travel to.
-from typing import Dict, Set
+from typing import Dict, Set, List
 
 from BaseClasses import Entrance, MultiWorld, Region
 from . import Locations
@@ -79,68 +79,46 @@ def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> N
 # - Lake is connected to The Laboratory, since the boss is hard without specific set-ups (which means late game)
 # - Snowy Depths connects to Lava Lake orb since you need digging for it, so fairly early is acceptable
 # - Ancient Laboratory is connected to the Coal Pits, so that Ylialkemisti isn't sphere 1
-noita_connections: Dict[str, Set[str]] = {
-    "Menu": {"Forest"},
-    "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
-    "Snowy Wasteland": set(),
-    "Frozen Vault": {"The Vault"},
-    "Lake": set(),
-    "Desert": set(),
-    "Floating Island": set(),
-    "Pyramid": set(),
-    "Overgrown Cavern": {"Sandcave"},
-    "Sandcave": set(),
+noita_connections: Dict[str, List[str]] = {
+    "Menu": ["Forest"],
+    "Forest": ["Mines", "Floating Island", "Desert", "Snowy Wasteland"],
+    "Frozen Vault": ["The Vault"],
+    "Overgrown Cavern": ["Sandcave"],
 
     ###
-    "Mines": {"Collapsed Mines", "Coal Pits Holy Mountain", "Lava Lake"},
-    "Collapsed Mines": set(),
-    "Lava Lake": {"Abyss Orb Room"},
-    "Abyss Orb Room": set(),
-    "Below Lava Lake": set(),
-    # "Dark Cave": set(),
-    "Ancient Laboratory": set(),
+    "Mines": ["Collapsed Mines", "Coal Pits Holy Mountain", "Lava Lake"],
+    "Lava Lake": ["Abyss Orb Room"],
 
     ###
-    "Coal Pits Holy Mountain": {"Coal Pits"},
-    "Coal Pits": {"Fungal Caverns", "Snowy Depths Holy Mountain", "Ancient Laboratory"},
-    "Fungal Caverns": set(),
+    "Coal Pits Holy Mountain": ["Coal Pits"],
+    "Coal Pits": ["Fungal Caverns", "Snowy Depths Holy Mountain", "Ancient Laboratory"],
 
     ###
-    "Snowy Depths Holy Mountain": {"Snowy Depths"},
-    "Snowy Depths": {"Hiisi Base Holy Mountain", "Magical Temple", "Below Lava Lake"},
-    "Magical Temple": set(),
+    "Snowy Depths Holy Mountain": ["Snowy Depths"],
+    "Snowy Depths": ["Hiisi Base Holy Mountain", "Magical Temple", "Below Lava Lake"],
 
     ###
-    "Hiisi Base Holy Mountain": {"Hiisi Base"},
-    "Hiisi Base": {"Secret Shop", "Pyramid", "Underground Jungle Holy Mountain"},
-    "Secret Shop": set(),
+    "Hiisi Base Holy Mountain": ["Hiisi Base"],
+    "Hiisi Base": ["Secret Shop", "Pyramid", "Underground Jungle Holy Mountain"],
 
     ###
-    "Underground Jungle Holy Mountain": {"Underground Jungle"},
-    "Underground Jungle": {"Dragoncave", "Overgrown Cavern", "Vault Holy Mountain", "Lukki Lair", "Snow Chasm"},
-    "Dragoncave": set(),
-    "Lukki Lair": set(),
-    "Snow Chasm": set(),
+    "Underground Jungle Holy Mountain": ["Underground Jungle"],
+    "Underground Jungle": ["Dragoncave", "Overgrown Cavern", "Vault Holy Mountain", "Lukki Lair", "Snow Chasm"],
 
     ###
-    "Vault Holy Mountain": {"The Vault"},
-    "The Vault": {"Frozen Vault", "Temple of the Art Holy Mountain"},
+    "Vault Holy Mountain": ["The Vault"],
+    "The Vault": ["Frozen Vault", "Temple of the Art Holy Mountain"],
 
     ###
-    "Temple of the Art Holy Mountain": {"Temple of the Art"},
-    "Temple of the Art": {"Laboratory Holy Mountain", "The Tower", "Wizards' Den"},
-    "Wizards' Den": {"Powerplant"},
-    "Powerplant": {"Deep Underground"},
-    "The Tower": set(),
-    "Deep Underground": set(),
+    "Temple of the Art Holy Mountain": ["Temple of the Art"],
+    "Temple of the Art": ["Laboratory Holy Mountain", "The Tower", "Wizards' Den"],
+    "Wizards' Den": ["Powerplant"],
+    "Powerplant": ["Deep Underground"],
 
     ###
-    "Laboratory Holy Mountain": {"The Laboratory"},
-    "The Laboratory": {"The Work", "Friend Cave", "The Work (Hell)", "Lake"},
-    "Friend Cave": set(),
-    "The Work": set(),
-    "The Work (Hell)": set(),
+    "Laboratory Holy Mountain": ["The Laboratory"],
+    "The Laboratory": ["The Work", "Friend Cave", "The Work (Hell)", "Lake"],
     ###
 }
 
-noita_regions: Set[str] = set(noita_connections.keys()).union(*noita_connections.values())
+noita_regions: List[str] = sorted(set(noita_connections.keys()).union(*noita_connections.values()))
