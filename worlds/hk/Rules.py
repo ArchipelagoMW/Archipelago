@@ -37,7 +37,7 @@ def hk_set_rule(hk_world: World, location: str, rule):
 
 
 def set_rules(hk_world: World):
-    player = hk_world
+    player = hk_world.player
     set_generated_rules(hk_world, hk_set_rule)
 
     # Shop costs
