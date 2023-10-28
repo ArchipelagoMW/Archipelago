@@ -88,6 +88,7 @@ assert true_ is True_()
 
 class Or(StardewRule):
     rules: FrozenSet[StardewRule]
+    _simplified: bool
 
     def __init__(self, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
         rules_list: Set[StardewRule]
@@ -112,6 +113,7 @@ class Or(StardewRule):
             rules_list = new_rules
 
         self.rules = frozenset(rules_list)
+        self._simplified = False
 
     def __call__(self, state: CollectionState) -> bool:
         return any(rule(state) for rule in self.rules)
@@ -139,6 +141,8 @@ class Or(StardewRule):
         return min(rule.get_difficulty() for rule in self.rules)
 
     def simplify(self) -> StardewRule:
+        if self._simplified:
+            return self
         if true_ in self.rules:
             return true_
 
@@ -151,11 +155,14 @@ class Or(StardewRule):
         if len(simplified_rules) == 1:
             return simplified_rules[0]
 
-        return Or(simplified_rules)
+        self.rules = frozenset(simplified_rules)
+        self._simplified = True
+        return self
 
 
 class And(StardewRule):
     rules: FrozenSet[StardewRule]
+    _simplified: bool
 
     def __init__(self, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
         rules_list: Set[StardewRule]
@@ -180,6 +187,7 @@ class And(StardewRule):
             rules_list = new_rules
 
         self.rules = frozenset(rules_list)
+        self._simplified = False
 
     def __call__(self, state: CollectionState) -> bool:
         return all(rule(state) for rule in self.rules)
@@ -207,6 +215,8 @@ class And(StardewRule):
         return max(rule.get_difficulty() for rule in self.rules)
 
     def simplify(self) -> StardewRule:
+        if self._simplified:
+            return self
         if false_ in self.rules:
             return false_
 
@@ -219,7 +229,9 @@ class And(StardewRule):
         if len(simplified_rules) == 1:
             return simplified_rules[0]
 
-        return And(simplified_rules)
+        self.rules = frozenset(simplified_rules)
+        self._simplified = True
+        return self
 
 
 class Count(StardewRule):
