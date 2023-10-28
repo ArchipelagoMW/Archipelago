@@ -23,6 +23,25 @@ class DS3ItemCategory(IntEnum):
     BOSS = 10
     SKIP = 11
 
+class UsefulIf(IntEnum):
+    """An enum that indicates when an item should be upgraded to ItemClassification.useful.
+
+    This is used for rings with +x variants that may or may not be the best in class depending on
+    the player's settings.
+    """
+
+    DEFAULT = 0
+    """Follows DS3ItemData.classification as written."""
+
+    BASE = 1
+    """Useful only if the DLC and NG+ locations are disabled."""
+
+    NO_DLC = 2
+    """Useful if the DLC is disabled, whether or not NG+ locations are."""
+
+    NO_NGP = 3
+    """Useful if NG+ locations is disabled, whether or not the DLC is."""
+
 
 @dataclass
 class DS3ItemData():
@@ -32,6 +51,9 @@ class DS3ItemData():
     name: str
     ds3_code: int
     category: DS3ItemCategory
+
+    classification: ItemClassification = ItemClassification.filler
+    """How important this item is to the game progression."""
 
     ap_code: int = False
     """The Archipelago ID for this item."""
@@ -53,6 +75,9 @@ class DS3ItemData():
 
     soul: bool = False
     """Whether this is a consumable item that gives souls when used."""
+
+    useful_if: UsefulIf = UsefulIf.DEFAULT
+    """Whether and when this item should be marked as "useful"."""
 
     def __post_init__(self):
         self.ap_code = DS3ItemData.__item_id
@@ -89,58 +114,15 @@ class DarkSouls3Item(Item):
         super().__init__(name, classification, code, player)
 
     @staticmethod
-    def from_data(player: int, data: DS3ItemData) -> Self:
-        useful_categories = {
-            DS3ItemCategory.WEAPON_UPGRADE_5,
-            DS3ItemCategory.WEAPON_UPGRADE_10,
-            DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE,
-            DS3ItemCategory.SPELL,
-        }
-
-        if data.name in key_item_names:
-            classification = ItemClassification.progression
-        elif data.category in useful_categories or data.name in {"Estus Shard", "Undead Bone Shard"}:
-            classification = ItemClassification.useful
-        else:
-            classification = ItemClassification.filler
-
+    def from_data(player: int, data: DS3ItemData, classification = None) -> Self:
         item = DarkSouls3Item(
             data.name,
-            classification,
+            classification or data.classification,
             data.ap_code,
             player)
         item.count = data.count
         item.soul = data.soul
         return item
-
-key_item_names = {
-    "Small Lothric Banner",
-    "Basin of Vows",
-    "Small Doll",
-    "Storm Ruler",
-    "Grand Archives Key",
-    "Cinders of a Lord - Abyss Watcher",
-    "Cinders of a Lord - Yhorm the Giant",
-    "Cinders of a Lord - Aldrich",
-    "Cinders of a Lord - Lothric Prince",
-    "Mortician's Ashes",
-    "Dreamchaser's Ashes",
-    "Paladin's Ashes",
-    "Grave Warden's Ashes",
-    "Prisoner Chief's Ashes",
-    "Xanthus Ashes",
-    "Dragon Chaser's Ashes",
-    "Easterner's Ashes",
-    "Captain's Ashes",
-    "Cell Key",
-    "Tower Key",
-    "Lift Chamber Key",
-    "Jailbreaker's Key",
-    "Old Cell Key",
-    "Jailer's Key Ring",
-    "Contraption Key",
-    "Small Envoy Banner"
-}
 
 _vanilla_items = flatten([
     # Ammunition
@@ -240,7 +222,8 @@ _vanilla_items = flatten([
     DS3ItemData("Fume Ultra Greatsword",               0x0060E4B0, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Old Wolf Curved Sword",               0x00610BC0, DS3ItemCategory.WEAPON_UPGRADE_5,
                 inject = True), # Covenant reward
-    DS3ItemData("Storm Ruler",                         0x006132D0, DS3ItemCategory.KEY),
+    DS3ItemData("Storm Ruler",                         0x006132D0, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
     DS3ItemData("Hand Axe",                            0x006ACFC0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Battle Axe",                          0x006AF6D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Deep Battle Axe",                     0x006AFA54, DS3ItemCategory.WEAPON_UPGRADE_10),
@@ -747,18 +730,26 @@ _vanilla_items = flatten([
     DS3ItemData("Life Ring+1",                         0x20004E21, DS3ItemCategory.RING),
     DS3ItemData("Life Ring+2",                         0x20004E22, DS3ItemCategory.RING),
     DS3ItemData("Life Ring+3",                         0x20004E23, DS3ItemCategory.RING),
-    DS3ItemData("Chloranthy Ring",                     0x20004E2A, DS3ItemCategory.RING),
+    DS3ItemData("Chloranthy Ring",                     0x20004E2A, DS3ItemCategory.RING,
+                useful_if = UsefulIf.BASE),
     DS3ItemData("Chloranthy Ring+1",                   0x20004E2B, DS3ItemCategory.RING),
-    DS3ItemData("Chloranthy Ring+2",                   0x20004E2C, DS3ItemCategory.RING),
-    DS3ItemData("Havel's Ring",                        0x20004E34, DS3ItemCategory.RING),
+    DS3ItemData("Chloranthy Ring+2",                   0x20004E2C, DS3ItemCategory.RING,
+                useful_if = UsefulIf.NO_DLC),
+    DS3ItemData("Havel's Ring",                        0x20004E34, DS3ItemCategory.RING,
+                useful_if = UsefulIf.BASE),
     DS3ItemData("Havel's Ring+1",                      0x20004E35, DS3ItemCategory.RING),
-    DS3ItemData("Havel's Ring+2",                      0x20004E36, DS3ItemCategory.RING),
-    DS3ItemData("Ring of Favor",                       0x20004E3E, DS3ItemCategory.RING),
+    DS3ItemData("Havel's Ring+2",                      0x20004E36, DS3ItemCategory.RING,
+                useful_if = UsefulIf.NO_DLC),
+    DS3ItemData("Ring of Favor",                       0x20004E3E, DS3ItemCategory.RING,
+                useful_if = UsefulIf.BASE),
     DS3ItemData("Ring of Favor+1",                     0x20004E3F, DS3ItemCategory.RING),
-    DS3ItemData("Ring of Favor+2",                     0x20004E40, DS3ItemCategory.RING),
-    DS3ItemData("Ring of Steel Protection",            0x20004E48, DS3ItemCategory.RING),
+    DS3ItemData("Ring of Favor+2",                     0x20004E40, DS3ItemCategory.RING,
+                useful_if = UsefulIf.NO_DLC),
+    DS3ItemData("Ring of Steel Protection",            0x20004E48, DS3ItemCategory.RING,
+                useful_if = UsefulIf.BASE),
     DS3ItemData("Ring of Steel Protection+1",          0x20004E49, DS3ItemCategory.RING),
-    DS3ItemData("Ring of Steel Protection+2",          0x20004E4A, DS3ItemCategory.RING),
+    DS3ItemData("Ring of Steel Protection+2",          0x20004E4A, DS3ItemCategory.RING,
+                useful_if = UsefulIf.NO_DLC),
     DS3ItemData("Flame Stoneplate Ring",               0x20004E52, DS3ItemCategory.RING),
     DS3ItemData("Flame Stoneplate Ring+1",             0x20004E53, DS3ItemCategory.RING),
     DS3ItemData("Flame Stoneplate Ring+2",             0x20004E54, DS3ItemCategory.RING),
@@ -802,9 +793,11 @@ _vanilla_items = flatten([
     DS3ItemData("Lingering Dragoncrest Ring",          0x20004F2E, DS3ItemCategory.RING),
     DS3ItemData("Lingering Dragoncrest Ring+1",        0x20004F2F, DS3ItemCategory.RING),
     DS3ItemData("Lingering Dragoncrest Ring+2",        0x20004F30, DS3ItemCategory.RING),
-    DS3ItemData("Sage Ring",                           0x20004F38, DS3ItemCategory.RING),
+    DS3ItemData("Sage Ring",                           0x20004F38, DS3ItemCategory.RING,
+                useful_if = UsefulIf.NO_NGP),
     DS3ItemData("Sage Ring+1",                         0x20004F39, DS3ItemCategory.RING),
-    DS3ItemData("Sage Ring+2",                         0x20004F3A, DS3ItemCategory.RING),
+    DS3ItemData("Sage Ring+2",                         0x20004F3A, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
     DS3ItemData("Slumbering Dragoncrest Ring",         0x20004F42, DS3ItemCategory.RING),
     DS3ItemData("Dusk Crown Ring",                     0x20004F4C, DS3ItemCategory.RING),
     DS3ItemData("Saint's Ring",                        0x20004F56, DS3ItemCategory.RING),
@@ -816,9 +809,11 @@ _vanilla_items = flatten([
     DS3ItemData("Covetous Gold Serpent Ring",          0x20004FA6, DS3ItemCategory.RING),
     DS3ItemData("Covetous Gold Serpent Ring+1",        0x20004FA7, DS3ItemCategory.RING),
     DS3ItemData("Covetous Gold Serpent Ring+2",        0x20004FA8, DS3ItemCategory.RING),
-    DS3ItemData("Covetous Silver Serpent Ring",        0x20004FB0, DS3ItemCategory.RING),
+    DS3ItemData("Covetous Silver Serpent Ring",        0x20004FB0, DS3ItemCategory.RING,
+                useful_if = UsefulIf.BASE),
     DS3ItemData("Covetous Silver Serpent Ring+1",      0x20004FB1, DS3ItemCategory.RING),
-    DS3ItemData("Covetous Silver Serpent Ring+2",      0x20004FB2, DS3ItemCategory.RING),
+    DS3ItemData("Covetous Silver Serpent Ring+2",      0x20004FB2, DS3ItemCategory.RING,
+                useful_if = UsefulIf.NO_DLC),
     DS3ItemData("Sun Princess Ring",                   0x20004FBA, DS3ItemCategory.RING),
     DS3ItemData("Silvercat Ring",                      0x20004FC4, DS3ItemCategory.RING),
     DS3ItemData("Skull Ring",                          0x20004FCE, DS3ItemCategory.RING),
@@ -832,7 +827,8 @@ _vanilla_items = flatten([
     DS3ItemData("Fire Clutch Ring",                    0x2000501E, DS3ItemCategory.RING),
     DS3ItemData("Dark Clutch Ring",                    0x20005028, DS3ItemCategory.RING),
     DS3ItemData("Flynn's Ring",                        0x2000503C, DS3ItemCategory.RING),
-    DS3ItemData("Prisoner's Chain",                    0x20005046, DS3ItemCategory.RING),
+    DS3ItemData("Prisoner's Chain",                    0x20005046, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
     DS3ItemData("Untrue Dark Ring",                    0x20005050, DS3ItemCategory.RING),
     DS3ItemData("Obscuring Ring",                      0x20005064, DS3ItemCategory.RING),
     DS3ItemData("Ring of the Evil Eye",                0x2000506E, DS3ItemCategory.RING),
@@ -842,12 +838,14 @@ _vanilla_items = flatten([
     DS3ItemData("Farron Ring",                         0x20005082, DS3ItemCategory.RING),
     DS3ItemData("Aldrich's Ruby",                      0x2000508C, DS3ItemCategory.RING),
     DS3ItemData("Aldrich's Sapphire",                  0x20005096, DS3ItemCategory.RING),
-    DS3ItemData("Lloyd's Sword Ring",                  0x200050B4, DS3ItemCategory.RING),
+    DS3ItemData("Lloyd's Sword Ring",                  0x200050B4, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
     DS3ItemData("Lloyd's Shield Ring",                 0x200050BE, DS3ItemCategory.RING),
     DS3ItemData("Estus Ring",                          0x200050DC, DS3ItemCategory.RING),
     DS3ItemData("Ashen Estus Ring",                    0x200050E6, DS3ItemCategory.RING),
     DS3ItemData("Horsehoof Ring",                      0x200050F0, DS3ItemCategory.RING),
-    DS3ItemData("Carthus Bloodring",                   0x200050FA, DS3ItemCategory.RING),
+    DS3ItemData("Carthus Bloodring",                   0x200050FA, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
     DS3ItemData("Reversal Ring",                       0x20005104, DS3ItemCategory.RING),
     DS3ItemData("Pontiff's Right Eye",                 0x2000510E, DS3ItemCategory.RING),
     DS3ItemData("Pontiff's Left Eye",                  0x20005136, DS3ItemCategory.RING),
@@ -908,7 +906,7 @@ _vanilla_items = flatten([
     DS3ItemData("Binoculars",                          0x40000173, DS3ItemCategory.MISC),
     DS3ItemData("Proof of a Concord Kept",             0x40000174, DS3ItemCategory.SKIP),
     DS3ItemData("Pale Tongue",                         0x40000175, DS3ItemCategory.SKIP,
-                inject = True), # Inject one of these for Leonhard's quest
+                classification = ItemClassification.useful, inject = True), # Inject one of these for Leonhard's quest
     DS3ItemData("Vertebra Shackle",                    0x40000176, DS3ItemCategory.SKIP,
                 inject = True), # Inject one of these to trade to the crow
     DS3ItemData("Sunlight Medal",                      0x40000177, DS3ItemCategory.SKIP),
@@ -959,30 +957,51 @@ _vanilla_items = flatten([
     DS3ItemData("Very good! Carving",                  0x4000020A, DS3ItemCategory.SKIP),
     DS3ItemData("I'm sorry Carving",                   0x4000020B, DS3ItemCategory.SKIP),
     DS3ItemData("Help me! Carving",                    0x4000020C, DS3ItemCategory.SKIP),
-    DS3ItemData("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Consumed Oceiros",            0x400002CE, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Boreal Valley Vordt",         0x400002CF, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Old Demon King",          0x400002D0, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Dragonslayer Armour",         0x400002D1, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Nameless King",           0x400002D2, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Pontiff Sulyvahn",            0x400002D4, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Aldrich",                     0x400002D5, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of High Lord Wolnir",            0x400002D6, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Rotted Greatwood",        0x400002D7, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Rosaria",                     0x400002D8, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of the Deacons of the Deep",     0x400002D9, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Yhorm the Giant",             0x400002DC, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Lords",                   0x400002DD, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Demon",                     0x400002E3, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of a Stray Demon",               0x400002E7, DS3ItemCategory.BOSS, soul = True),
+    DS3ItemData("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of Consumed Oceiros",            0x400002CE, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of Boreal Valley Vordt",         0x400002CF, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of the Old Demon King",          0x400002D0, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of Dragonslayer Armour",         0x400002D1, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of the Nameless King",           0x400002D2, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of Pontiff Sulyvahn",            0x400002D4, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of Aldrich",                     0x400002D5, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of High Lord Wolnir",            0x400002D6, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of the Rotted Greatwood",        0x400002D7, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of Rosaria",                     0x400002D8, DS3ItemCategory.MISC, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of the Deacons of the Deep",     0x400002D9, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of Yhorm the Giant",             0x400002DC, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of the Lords",                   0x400002DD, DS3ItemCategory.MISC, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of a Demon",                     0x400002E3, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
+    DS3ItemData("Soul of a Stray Demon",               0x400002E7, DS3ItemCategory.BOSS, soul = True,
+                classification = ItemClassification.useful),
     DS3ItemData("Titanite Shard",                      0x400003E8, DS3ItemCategory.MISC).counts([2]),
     DS3ItemData("Large Titanite Shard",                0x400003E9, DS3ItemCategory.MISC).counts([2, 3]),
     DS3ItemData("Titanite Chunk",                      0x400003EA, DS3ItemCategory.MISC).counts([2, 6]),
-    DS3ItemData("Titanite Slab",                       0x400003EB, DS3ItemCategory.MISC),
+    DS3ItemData("Titanite Slab",                       0x400003EB, DS3ItemCategory.MISC,
+                classification = ItemClassification.useful),
     DS3ItemData("Titanite Scale",                      0x400003FC, DS3ItemCategory.MISC).counts([2, 3]),
     DS3ItemData("Twinkling Titanite",                  0x40000406, DS3ItemCategory.MISC).counts([2, 3]),
     DS3ItemData("Heavy Gem",                           0x4000044C, DS3ItemCategory.MISC),
@@ -1001,39 +1020,58 @@ _vanilla_items = flatten([
     DS3ItemData("Blessed Gem",                         0x400004CE, DS3ItemCategory.MISC),
     DS3ItemData("Hollow Gem",                          0x400004D8, DS3ItemCategory.MISC),
     DS3ItemData("Shriving Stone",                      0x400004E2, DS3ItemCategory.MISC),
-    DS3ItemData("Lift Chamber Key",                    0x400007D1, DS3ItemCategory.KEY),
-    DS3ItemData("Small Doll",                          0x400007D5, DS3ItemCategory.KEY),
-    DS3ItemData("Jailbreaker's Key",                   0x400007D7, DS3ItemCategory.KEY),
-    DS3ItemData("Jailer's Key Ring",                   0x400007D8, DS3ItemCategory.KEY),
+    DS3ItemData("Lift Chamber Key",                    0x400007D1, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Small Doll",                          0x400007D5, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Jailbreaker's Key",                   0x400007D7, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Jailer's Key Ring",                   0x400007D8, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
     DS3ItemData("Grave Key",                           0x400007D9, DS3ItemCategory.KEY),
-    DS3ItemData("Cell Key",                            0x400007DA, DS3ItemCategory.KEY),
+    DS3ItemData("Cell Key",                            0x400007DA, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
     DS3ItemData("Dungeon Ground Floor Key",            0x400007DB, DS3ItemCategory.KEY),
-    DS3ItemData("Old Cell Key",                        0x400007DC, DS3ItemCategory.KEY),
-    DS3ItemData("Grand Archives Key",                  0x400007DE, DS3ItemCategory.KEY),
-    DS3ItemData("Tower Key",                           0x400007DF, DS3ItemCategory.KEY),
-    DS3ItemData("Small Lothric Banner",                0x40000836, DS3ItemCategory.KEY),
+    DS3ItemData("Old Cell Key",                        0x400007DC, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Grand Archives Key",                  0x400007DE, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Tower Key",                           0x400007DF, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Small Lothric Banner",                0x40000836, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
     DS3ItemData("Farron Coal",                         0x40000837, DS3ItemCategory.MISC),
     DS3ItemData("Sage's Coal",                         0x40000838, DS3ItemCategory.MISC),
     DS3ItemData("Giant's Coal",                        0x40000839, DS3ItemCategory.MISC),
     DS3ItemData("Profaned Coal",                       0x4000083A, DS3ItemCategory.MISC),
-    DS3ItemData("Mortician's Ashes",                   0x4000083B, DS3ItemCategory.MISC),
-    DS3ItemData("Dreamchaser's Ashes",                 0x4000083C, DS3ItemCategory.MISC),
-    DS3ItemData("Paladin's Ashes",                     0x4000083D, DS3ItemCategory.MISC),
-    DS3ItemData("Grave Warden's Ashes",                0x4000083E, DS3ItemCategory.MISC),
+    DS3ItemData("Mortician's Ashes",                   0x4000083B, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
+    DS3ItemData("Dreamchaser's Ashes",                 0x4000083C, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
+    DS3ItemData("Paladin's Ashes",                     0x4000083D, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
+    DS3ItemData("Grave Warden's Ashes",                0x4000083E, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
     DS3ItemData("Greirat's Ashes",                     0x4000083F, DS3ItemCategory.MISC),
     DS3ItemData("Orbeck's Ashes",                      0x40000840, DS3ItemCategory.MISC),
     DS3ItemData("Cornyx's Ashes",                      0x40000841, DS3ItemCategory.MISC),
     DS3ItemData("Karla's Ashes",                       0x40000842, DS3ItemCategory.MISC),
     DS3ItemData("Irina's Ashes",                       0x40000843, DS3ItemCategory.MISC),
     DS3ItemData("Yuria's Ashes",                       0x40000844, DS3ItemCategory.MISC),
-    DS3ItemData("Basin of Vows",                       0x40000845, DS3ItemCategory.KEY),
-    DS3ItemData("Loretta's Bone",                      0x40000846, DS3ItemCategory.KEY),
+    DS3ItemData("Basin of Vows",                       0x40000845, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Loretta's Bone",                      0x40000846, DS3ItemCategory.KEY,
+                classification = ItemClassification.useful),
     DS3ItemData("Braille Divine Tome of Carim",        0x40000847, DS3ItemCategory.MISC),
     DS3ItemData("Braille Divine Tome of Lothric",      0x40000848, DS3ItemCategory.MISC),
-    DS3ItemData("Cinders of a Lord - Abyss Watcher",   0x4000084B, DS3ItemCategory.KEY),
-    DS3ItemData("Cinders of a Lord - Aldrich",         0x4000084C, DS3ItemCategory.KEY),
-    DS3ItemData("Cinders of a Lord - Yhorm the Giant", 0x4000084D, DS3ItemCategory.KEY),
-    DS3ItemData("Cinders of a Lord - Lothric Prince",  0x4000084E, DS3ItemCategory.KEY),
+    DS3ItemData("Cinders of a Lord - Abyss Watcher",   0x4000084B, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Cinders of a Lord - Aldrich",         0x4000084C, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Cinders of a Lord - Yhorm the Giant", 0x4000084D, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Cinders of a Lord - Lothric Prince",  0x4000084E, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
     DS3ItemData("Great Swamp Pyromancy Tome",          0x4000084F, DS3ItemCategory.MISC),
     DS3ItemData("Carthus Pyromancy Tome",              0x40000850, DS3ItemCategory.MISC),
     DS3ItemData("Izalith Pyromancy Tome",              0x40000851, DS3ItemCategory.MISC),
@@ -1047,18 +1085,24 @@ _vanilla_items = flatten([
     DS3ItemData("Eyes of a Fire Keeper",               0x4000085A, DS3ItemCategory.KEY),
     DS3ItemData("Sword of Avowal",                     0x4000085B, DS3ItemCategory.KEY),
     DS3ItemData("Golden Scroll",                       0x4000085C, DS3ItemCategory.MISC),
-    DS3ItemData("Estus Shard",                         0x4000085D, DS3ItemCategory.MISC),
+    DS3ItemData("Estus Shard",                         0x4000085D, DS3ItemCategory.MISC,
+                classification = ItemClassification.useful),
     DS3ItemData("Hawkwood's Swordgrass",               0x4000085E, DS3ItemCategory.SKIP),
-    DS3ItemData("Undead Bone Shard",                   0x4000085F, DS3ItemCategory.MISC),
+    DS3ItemData("Undead Bone Shard",                   0x4000085F, DS3ItemCategory.MISC,
+                classification = ItemClassification.useful),
     DS3ItemData("Deep Braille Divine Tome",            0x40000860, DS3ItemCategory.MISC),
     DS3ItemData("Londor Braille Divine Tome",          0x40000861, DS3ItemCategory.MISC),
     DS3ItemData("Excrement-covered Ashes",             0x40000862, DS3ItemCategory.MISC),
-    DS3ItemData("Prisoner Chief's Ashes",              0x40000863, DS3ItemCategory.MISC),
-    DS3ItemData("Xanthous Ashes",                      0x40000864, DS3ItemCategory.MISC),
+    DS3ItemData("Prisoner Chief's Ashes",              0x40000863, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
+    DS3ItemData("Xanthous Ashes",                      0x40000864, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
     DS3ItemData("Hollow's Ashes",                      0x40000865, DS3ItemCategory.MISC),
     DS3ItemData("Patches' Ashes",                      0x40000866, DS3ItemCategory.MISC),
-    DS3ItemData("Dragon Chaser's Ashes",               0x40000867, DS3ItemCategory.MISC),
-    DS3ItemData("Easterner's Ashes",                   0x40000868, DS3ItemCategory.MISC),
+    DS3ItemData("Dragon Chaser's Ashes",               0x40000867, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
+    DS3ItemData("Easterner's Ashes",                   0x40000868, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
 
     # Spells
     DS3ItemData("Farron Dart",                         0x40124F80, DS3ItemCategory.SPELL),
@@ -1080,10 +1124,12 @@ _vanilla_items = flatten([
     DS3ItemData("Magic Shield",                        0x40144B50, DS3ItemCategory.SPELL),
     DS3ItemData("Great Magic Shield",                  0x40144F38, DS3ItemCategory.SPELL),
     DS3ItemData("Hidden Weapon",                       0x40147260, DS3ItemCategory.SPELL),
-    DS3ItemData("Hidden Body",                         0x40147648, DS3ItemCategory.SPELL),
+    DS3ItemData("Hidden Body",                         0x40147648, DS3ItemCategory.SPELL,
+                classification = ItemClassification.useful),
     DS3ItemData("Cast Light",                          0x40149970, DS3ItemCategory.SPELL),
     DS3ItemData("Repair",                              0x4014A528, DS3ItemCategory.SPELL),
-    DS3ItemData("Spook",                               0x4014A910, DS3ItemCategory.SPELL),
+    DS3ItemData("Spook",                               0x4014A910, DS3ItemCategory.SPELL,
+                classification = ItemClassification.useful),
     DS3ItemData("Chameleon",                           0x4014ACF8, DS3ItemCategory.SPELL),
     DS3ItemData("Aural Decoy",                         0x4014B0E0, DS3ItemCategory.SPELL),
     DS3ItemData("White Dragon Breath",                 0x4014E790, DS3ItemCategory.SPELL),
@@ -1095,7 +1141,8 @@ _vanilla_items = flatten([
     DS3ItemData("Dark Edge",                           0x40189CC8, DS3ItemCategory.SPELL),
     DS3ItemData("Soul Stream",                         0x4018B820, DS3ItemCategory.SPELL),
     DS3ItemData("Twisted Wall of Light",               0x40193138, DS3ItemCategory.SPELL),
-    DS3ItemData("Pestilent Mist",                      0x401A8CE0, DS3ItemCategory.SPELL), # Originally called "Pestilent Mercury" pre 1.15
+    DS3ItemData("Pestilent Mist",                      0x401A8CE0, DS3ItemCategory.SPELL,
+                classification = ItemClassification.useful), # Originally called "Pestilent Mercury" pre 1.15
     DS3ItemData("Fireball",                            0x40249F00, DS3ItemCategory.SPELL),
     DS3ItemData("Fire Orb",                            0x4024A6D0, DS3ItemCategory.SPELL),
     DS3ItemData("Firestorm",                           0x4024AAB8, DS3ItemCategory.SPELL),
@@ -1109,7 +1156,8 @@ _vanilla_items = flatten([
     DS3ItemData("Iron Flesh",                          0x40251430, DS3ItemCategory.SPELL),
     DS3ItemData("Flash Sweat",                         0x40251818, DS3ItemCategory.SPELL),
     DS3ItemData("Carthus Flame Arc",                   0x402527B8, DS3ItemCategory.SPELL),
-    DS3ItemData("Rapport",                             0x40252BA0, DS3ItemCategory.SPELL),
+    DS3ItemData("Rapport",                             0x40252BA0, DS3ItemCategory.SPELL,
+                classification = ItemClassification.useful),
     DS3ItemData("Power Within",                        0x40253B40, DS3ItemCategory.SPELL),
     DS3ItemData("Great Chaos Fire Orb",                0x40256250, DS3ItemCategory.SPELL),
     DS3ItemData("Chaos Storm",                         0x40256638, DS3ItemCategory.SPELL),
@@ -1127,15 +1175,18 @@ _vanilla_items = flatten([
     DS3ItemData("Carthus Beacon",                      0x40286F90, DS3ItemCategory.SPELL),
     DS3ItemData("Heal Aid",                            0x403540D0, DS3ItemCategory.SPELL),
     DS3ItemData("Heal",                                0x403567E0, DS3ItemCategory.SPELL),
-    DS3ItemData("Med Heal",                            0x40356BC8, DS3ItemCategory.SPELL),
+    DS3ItemData("Med Heal",                            0x40356BC8, DS3ItemCategory.SPELL,
+                classification = ItemClassification.useful),
     DS3ItemData("Great Heal",                          0x40356FB0, DS3ItemCategory.SPELL),
     DS3ItemData("Soothing Sunlight",                   0x40357398, DS3ItemCategory.SPELL),
     DS3ItemData("Replenishment",                       0x40357780, DS3ItemCategory.SPELL),
     DS3ItemData("Bountiful Sunlight",                  0x40357B68, DS3ItemCategory.SPELL),
     DS3ItemData("Bountiful Light",                     0x40358338, DS3ItemCategory.SPELL),
     DS3ItemData("Caressing Tears",                     0x40358720, DS3ItemCategory.SPELL),
-    DS3ItemData("Tears of Denial",                     0x4035B600, DS3ItemCategory.SPELL),
-    DS3ItemData("Homeward",                            0x4035B9E8, DS3ItemCategory.SPELL),
+    DS3ItemData("Tears of Denial",                     0x4035B600, DS3ItemCategory.SPELL,
+                classification = ItemClassification.useful),
+    DS3ItemData("Homeward",                            0x4035B9E8, DS3ItemCategory.SPELL,
+                classification = ItemClassification.useful),
     DS3ItemData("Force",                               0x4035DD10, DS3ItemCategory.SPELL),
     DS3ItemData("Wrath of the Gods",                   0x4035E0F8, DS3ItemCategory.SPELL),
     DS3ItemData("Emit Force",                          0x4035E4E0, DS3ItemCategory.SPELL),
@@ -1272,13 +1323,18 @@ _dlc_items = flatten([
     DS3ItemData("Spear of the Church",              0x2000276A, DS3ItemCategory.SKIP),
 
     # Rings
-    DS3ItemData("Chloranthy Ring+3",                0x20004E2D, DS3ItemCategory.RING),
-    DS3ItemData("Havel's Ring+3",                   0x20004E37, DS3ItemCategory.RING),
-    DS3ItemData("Ring of Favor+3",                  0x20004E41, DS3ItemCategory.RING),
-    DS3ItemData("Ring of Steel Protection+3",       0x20004E4B, DS3ItemCategory.RING),
+    DS3ItemData("Chloranthy Ring+3",                0x20004E2D, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
+    DS3ItemData("Havel's Ring+3",                   0x20004E37, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
+    DS3ItemData("Ring of Favor+3",                  0x20004E41, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
+    DS3ItemData("Ring of Steel Protection+3",       0x20004E4B, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
     DS3ItemData("Wolf Ring+3",                      0x20004EE1, DS3ItemCategory.RING),
     DS3ItemData("Covetous Gold Serpent Ring+3",     0x20004FA9, DS3ItemCategory.RING),
-    DS3ItemData("Covetous Silver Serpent Ring+3",   0x20004FB3, DS3ItemCategory.RING),
+    DS3ItemData("Covetous Silver Serpent Ring+3",   0x20004FB3, DS3ItemCategory.RING,
+                classification = ItemClassification.useful),
     DS3ItemData("Ring of the Evil Eye+3",           0x20005071, DS3ItemCategory.RING),
     DS3ItemData("Chillbite Ring",                   0x20005208, DS3ItemCategory.RING),
 
@@ -1292,9 +1348,12 @@ _dlc_items = flatten([
     DS3ItemData("Soul of the Demon Prince",         0x400002EA, DS3ItemCategory.BOSS),
     DS3ItemData("Soul of Darkeater Midir",          0x400002EB, DS3ItemCategory.BOSS),
     DS3ItemData("Champion's Bones",                 0x40000869, DS3ItemCategory.SKIP),
-    DS3ItemData("Captain's Ashes",                  0x4000086A, DS3ItemCategory.MISC),
-    DS3ItemData("Contraption Key",                  0x4000086B, DS3ItemCategory.KEY),
-    DS3ItemData("Small Envoy Banner",               0x4000086C, DS3ItemCategory.KEY),
+    DS3ItemData("Captain's Ashes",                  0x4000086A, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression),
+    DS3ItemData("Contraption Key",                  0x4000086B, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
+    DS3ItemData("Small Envoy Banner",               0x4000086C, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
     DS3ItemData("Old Woman's Ashes",                0x4000086D, DS3ItemCategory.SKIP),
     DS3ItemData("Blood of the Dark Soul",           0x4000086E, DS3ItemCategory.SKIP),
 

@@ -8,7 +8,7 @@ from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
-from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, item_dictionary, key_item_names
+from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
 from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
 
@@ -294,7 +294,7 @@ class DarkSouls3World(World):
             itempool.extend(self.create_item(name) for name in itempool_by_category[category])
 
         # A list of items we can replace
-        removable_items = [item for item in itempool if item.classification != ItemClassification.progression]
+        removable_items = [item for item in itempool if item.classification == ItemClassification.filler]
 
         guaranteed_items = self.multiworld.guaranteed_items[self.player].value
         for item_name in guaranteed_items:
@@ -350,8 +350,21 @@ class DarkSouls3World(World):
 
 
     def create_item(self, item: str|DS3ItemData) -> Item:
-        return DarkSouls3Item.from_data(
-            self.player, item if isinstance(item, DS3ItemData) else item_dictionary[item])
+        data = item if isinstance(item, DS3ItemData) else item_dictionary[item]
+        if (
+            data.useful_if == UsefulIf.BASE and
+            not self.multiworld.enable_dlc[self.player] and
+            not self.multiworld.enable_ngp[self.player]
+        ) or (
+            data.useful_if == UsefulIf.NO_DLC and
+            not self.multiworld.enable_dlc[self.player]
+        ) or (
+            data.useful_if == UsefulIf.NO_NGP and
+            not self.multiworld.enable_ngp[self.player]
+        ):
+            progression = ItemProgression.useful
+
+        return DarkSouls3Item.from_data(self.player, data)
 
 
     def get_filler_item_name(self) -> str:
