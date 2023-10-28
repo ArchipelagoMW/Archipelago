@@ -76,8 +76,7 @@ class ShiversWorld(World):
             region = self.multiworld.get_region(region_name, self.player)
             for loc_name in locations:
                 if loc_name not in self.removed_locations:
-                    loc = ShiversLocation(self.player, loc_name,
-                                          self.location_name_to_id.get(loc_name, None), region)
+                    loc = ShiversLocation(self.player, loc_name, self.location_name_to_id.get(loc_name, None), region)
                     region.locations.append(loc)
 
     def create_items(self) -> None:
@@ -122,7 +121,7 @@ class ShiversWorld(World):
         lobby_access_keys = 1
         front_door_usable: bool = getattr(self.multiworld, "front_door_usable")[self.player].value
         if front_door_usable:
-            lobby_access_keys = library_random = self.random.randint(1, 2)
+            lobby_access_keys = self.random.randint(1, 2)
             keys += [self.create_item("Key for Front Door")]
         else:
             filler += [self.create_item("Heal")]
@@ -148,13 +147,12 @@ class ShiversWorld(World):
             elif lobby_access_keys == 2:
                 self.multiworld.local_early_items[self.player]["Key for Front Door"] = 1
 
-    #Prefills event storage locations with duplicate pots
     def pre_fill(self) -> None:
+        # Prefills event storage locations with duplicate pots
         storagelocs = []
         storageitems = []
         self.storage_placements = []
-        
-         
+
         for locations in Constants.location_info["locations_by_region"].values():
             for loc_name in locations:
                 if loc_name.startswith("Accessible: "):
@@ -178,7 +176,6 @@ class ShiversWorld(World):
     def generate_basic(self):
         self.multiworld.completion_condition[self.player] = lambda state: (Rules.first_nine_ixupi_capturable(state, self.player)
                                                                            and Rules.lightning_capturable(state, self.player))
-
 
     def _get_slot_data(self):
         return {
