@@ -49,6 +49,19 @@
     b 0x0807b204
 
 
+; PauseInit(): Show the player which boxes they've opened, not what they have.
+.org 0x8088BEA
+    ldrb r1, [r1, #1]
+.org 0x8088CDE
+    ldrb r0, [r1, #1]
+.org 0x8088D12
+    ldrb r0, [r1, #1]
+.org 0x8088D46
+    ldrb r0, [r1, #1]
+.org 0x8088D7A
+    ldrb r0, [r1, #1]
+
+
 ; Skip cutscenes
 ; --------------
 
