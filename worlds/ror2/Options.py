@@ -57,12 +57,14 @@ class ScannersPerEnvironment(Range):
     range_end = 1
     default = 1
 
+
 class AltarsPerEnvironment(Range):
     """Explore Mode: The number of altars locations per environment."""
     display_name = "Newts Per Environment"
     range_start = 0
     range_end = 2
     default = 1
+
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""
@@ -82,6 +84,7 @@ class ItemPickupStep(Range):
     range_start = 0
     range_end = 5
     default = 1
+
 
 class ShrineUseStep(Range):
     """
@@ -129,7 +132,6 @@ class DLC_SOTV(Toggle):
      Adds Void Items into the item pool
      """
     display_name = "Enable DLC - SOTV"
-
 
 
 class GreenScrap(Range):
@@ -274,25 +276,8 @@ class ItemWeights(Choice):
     option_void = 9
 
 
-
-
-# define a class for the weights of the generated item pool.
 @dataclass
-class ROR2Weights:
-    green_scrap: GreenScrap
-    red_scrap: RedScrap
-    yellow_scrap: YellowScrap
-    white_scrap: WhiteScrap
-    common_item: CommonItem
-    uncommon_item: UncommonItem
-    legendary_item: LegendaryItem
-    boss_item: BossItem
-    lunar_item: LunarItem
-    void_item: VoidItem
-    equipment: Equipment
-
-@dataclass
-class ROR2Options(PerGameCommonOptions, ROR2Weights):
+class ROR2Options(PerGameCommonOptions):
     goal: Goal
     total_locations: TotalLocations
     chests_per_stage: ChestsPerEnvironment
@@ -311,3 +296,15 @@ class ROR2Options(PerGameCommonOptions, ROR2Weights):
     enable_lunar: AllowLunarItems
     item_weights: ItemWeights
     item_pool_presets: ItemPoolPresetToggle
+    # define  the weights of the generated item pool.
+    green_scrap: GreenScrap
+    red_scrap: RedScrap
+    yellow_scrap: YellowScrap
+    white_scrap: WhiteScrap
+    common_item: CommonItem
+    uncommon_item: UncommonItem
+    legendary_item: LegendaryItem
+    boss_item: BossItem
+    lunar_item: LunarItem
+    void_item: VoidItem
+    equipment: Equipment
