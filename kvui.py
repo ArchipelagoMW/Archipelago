@@ -287,7 +287,6 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
 
 
 class HintLabel(RecycleDataViewBehavior, BoxLayout):
-    cols = 6
     selected = BooleanProperty(False)
     index = None
     no_select = []
@@ -301,10 +300,10 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.entrance_text = ""
         self.found_text = ""
         for child in self.children:
-            child.bind(height=self.set_height)
+            child.bind(texture_size=self.set_height)
 
     def set_height(self, instance, value):
-        self.height = max([child.height for child in self.children])
+        self.height = max([child.texture_size[1] for child in self.children])
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
@@ -316,6 +315,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.location_text = data['location']['text']
         self.entrance_text = data['entrance']['text']
         self.found_text = data['found']['text']
+        self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
     def on_touch_down(self, touch):
@@ -566,9 +566,7 @@ class GameManager(App):
 
     def update_hints(self):
         hints = self.ctx.stored_data[f"_read_hints_{self.ctx.team}_{self.ctx.slot}"]
-        for hint in hints:
-            self.log_panels["Hints"].update_hint(hint)
-        self.log_panels["Hints"].refresh_hints(self.json_to_kivy_parser)
+        self.log_panels["Hints"].refresh_hints(hints, self.json_to_kivy_parser)
 
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
     def open_settings(self, *largs):
@@ -638,14 +636,10 @@ class HintLog(RecycleView):
             "select": False
         }
 
-    def update_hint(self, hint: typing.Dict):
-        key = (hint["finding_player"], hint["location"])
-        self.hints[key] = hint
-
-    def refresh_hints(self, parser):
+    def refresh_hints(self, hints, parser):
         self.data = []
         self.data.append(self.header)
-        for hint in self.hints.values():
+        for hint in hints:
             self.data.append({
                 'receiving': {'text': parser.handle_node({'type': "player_id", 'text': hint['receiving_player']})},
                 'item': {'text': parser.handle_node({'type': "item_id", 'text': hint['item'], 'flags': hint['item_flags']})},
