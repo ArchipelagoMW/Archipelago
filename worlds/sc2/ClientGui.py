@@ -126,7 +126,7 @@ class SC2Manager(GameManager):
 
                 multi_campaign_layout_height = 0
 
-                for campaign, missions in self.ctx.mission_req_table.items():
+                for campaign, missions in sorted(self.ctx.mission_req_table.items(), key=lambda item: item[0].id):
                     categories: Dict[str, List[str]] = {}
 
                     # separate missions into categories
