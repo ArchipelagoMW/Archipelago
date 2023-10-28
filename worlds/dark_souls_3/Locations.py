@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Optional, Dict, Set
+from typing import Optional, Dict, Self, Set
 from dataclasses import dataclass
 
 from BaseClasses import Location, LocationProgressType, Region
@@ -60,6 +60,9 @@ class DS3LocationData:
     Missable locations are always marked as excluded, so they will never contain
     progression or useful items.
     """
+
+    dlc: bool = False
+    """Whether this location is only accessible if the DLC is enabled."""
 
     # TODO: implement this properly
     ngp: bool = False
@@ -166,7 +169,7 @@ class DarkSouls3Location(Location):
             player: int,
             data: DS3LocationData,
             address: Optional[int] = None,
-            parent: Optional[Region] = None):
+            parent: Optional[Region] = None) -> Self:
         location = DarkSouls3Location(
             player,
             data.name,
@@ -2660,7 +2663,7 @@ location_tables = {
                         offline = "99,0:-1:110000,120000,70000110:", shop = True, npc = True),
 
         # Undead Settlement rewards
-        DS3LocationData("Greirat: Divine Blessing",                "Divine Blessing",                   DS3LocationCategory.MISC,
+        DS3LocationData("Greirat: Divine Blessing #1",             "Divine Blessing",                   DS3LocationCategory.MISC,
                         offline = '99,0:-1:110000,120000,70000150,70000175:', missable = True, shop = True, npc = True),
         DS3LocationData("Greirat: Ember #2",                       "Ember",                             DS3LocationCategory.MISC,
                         offline = '99,0:-1:110000,120000,70000150,70000175:', missable = True, shop = True, npc = True),
@@ -2668,11 +2671,11 @@ location_tables = {
         # Irityhll rewards
         DS3LocationData("Greirat: Divine Blessing #2",             "Divine Blessing",                   DS3LocationCategory.MISC,
                         offline = '99,0:-1:110000,120000,70000151,70000176:', missable = True, shop = True, npc = True),
-        DS3LocationData("Greirat: Hidden Blessing #1",             "Hidden Blessing",                   DS3LocationCategory.MISC,
+        DS3LocationData("Greirat: Hidden Blessing",                "Hidden Blessing",                   DS3LocationCategory.MISC,
                         offline = '99,0:-1:110000,120000,70000151,70000176:', missable = True, shop = True, npc = True),
-        DS3LocationData("Greirat: Titanite Scale #1",              "Titanite Scale",                    DS3LocationCategory.UPGRADE,
+        DS3LocationData("Greirat: Titanite Scale",                 "Titanite Scale",                    DS3LocationCategory.UPGRADE,
                         offline = '99,0:-1:110000,120000,70000151,70000176:', missable = True, shop = True, npc = True),
-        DS3LocationData("Greirat: Twinkling Titanite #1",          "Twinkling Titanite",                DS3LocationCategory.UPGRADE,
+        DS3LocationData("Greirat: Twinkling Titanite",            "Twinkling Titanite",                DS3LocationCategory.UPGRADE,
                         offline = '99,0:-1:110000,120000,70000151,70000176:', missable = True, shop = True, npc = True),
 
         # Lothric rewards (from Shrine Handmaid)
@@ -2711,6 +2714,17 @@ location_tables = {
                         offline = '07,0:50006150::', missable = True, npc = True),
     ],
 }
+
+
+for region in [
+    "Painted World of Ariandel (Before Contraption)",
+    "Painted World of Ariandel (After Contraption)",
+    "Dreg Heap",
+    "Ringed City",
+]:
+    for location in location_tables[region]:
+        location.dlc = True
+
 
 location_name_groups: Dict[str, Set[str]] = {
     # We could insert these locations automatically with setdefault(), but we set them up explicitly

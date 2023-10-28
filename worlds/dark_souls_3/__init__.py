@@ -8,8 +8,8 @@ from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
-from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
-from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary, location_name_groups
+from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, item_dictionary, key_item_names
+from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
 from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
 
 
@@ -51,7 +51,7 @@ class DarkSouls3World(World):
     base_id = 100000
     enabled_location_categories: Set[DS3LocationCategory]
     required_client_version = (0, 4, 2)
-    item_name_to_id = DarkSouls3Item.get_name_to_id()
+    item_name_to_id = {data.name: data.ap_code for data in item_dictionary.values()}
     location_name_to_id = DarkSouls3Location.get_name_to_id()
     location_name_groups = location_name_groups
     item_name_groups = {
@@ -350,28 +350,9 @@ class DarkSouls3World(World):
         self.multiworld.itempool += itempool
 
 
-    def create_item(self, name: str) -> Item:
-        useful_categories = {
-            DS3ItemCategory.WEAPON_UPGRADE_5,
-            DS3ItemCategory.WEAPON_UPGRADE_10,
-            DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE,
-            DS3ItemCategory.SPELL,
-        }
-
-        if name in key_item_names:
-            item_classification = ItemClassification.progression
-        elif item_dictionary[name].category in useful_categories or name in {"Estus Shard", "Undead Bone Shard"}:
-            item_classification = ItemClassification.useful
-        else:
-            item_classification = ItemClassification.filler
-
-        data = item_dictionary[name]
-        return DarkSouls3Item(
-            name,
-            item_classification,
-            self.item_name_to_id[name],
-            self.player,
-            data.count)
+    def create_item(self, item: str|DS3ItemData) -> Item:
+        return DarkSouls3Item.from_data(
+            self.player, item if isinstance(item, DS3ItemData) else item_dictionary[item])
 
 
     def get_filler_item_name(self) -> str:
@@ -429,9 +410,9 @@ class DarkSouls3World(World):
         }
         for ash, items in ashes.items():
             for item in items:
-                location = location_dictionary["FS: " + item]
-                if location.category in self.enabled_location_categories:
-                    set_rule(self.multiworld.get_location(location.name, self.player),
+                location = "FS: " + item
+                if self.__is_location_available(location):
+                    set_rule(self.multiworld.get_location(location, self.player),
                              lambda state, ash=ash: state.has(ash, self.player))
 
         if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
@@ -510,11 +491,27 @@ class DarkSouls3World(World):
         if self.multiworld.enable_weapon_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("LC: Gotthard Twinswords", self.player), gotthard_corpse_rule)
 
+        # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
+        # logic for choosing how many shop items to sell), and from carring soul items.
+        for location in location_dictionary.values():
+            if location.shop and self.__is_location_available(location):
+                add_item_rule(self.multiworld.get_location(location.name, self.player),
+                              lambda item: item.count == 1 and not item.soul)
+
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
             state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
             state.has("Cinders of a Lord - Aldrich", self.player) and \
             state.has("Cinders of a Lord - Lothric Prince", self.player)
+
+
+    def __is_location_available(self, location: str|DS3LocationData):
+        """Returns whether the given location is being randomized."""
+        data = location if isinstance(location, DS3LocationData) else location_dictionary[location]
+        return (
+            data.category in self.enabled_location_categories and
+            (not data.dlc or self.multiworld.enable_dlc[self.player] == Toggle.option_true)
+        )
 
 
     def fill_slot_data(self) -> Dict[str, object]:
@@ -591,7 +588,6 @@ class DarkSouls3World(World):
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
-            "base_id": self.base_id,  # to merge location and items lists
             "apIdsToItemIds": ap_ids_to_ds3_ids,
             "itemCounts": item_counts,
             "locationNamesToKeys": location_names_to_keys,
