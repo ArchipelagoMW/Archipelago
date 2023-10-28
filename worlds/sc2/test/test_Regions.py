@@ -1,5 +1,5 @@
 import unittest
-from .TestBase import Sc2TestBase
+from .test_base import Sc2TestBase
 from .. import Regions
 from .. import Options, MissionTables
 

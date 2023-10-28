@@ -83,8 +83,8 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 29
-    default = 29
+    range_end = 49
+    default = 49
 
 
 class GridTwoStartPositions(Toggle):
