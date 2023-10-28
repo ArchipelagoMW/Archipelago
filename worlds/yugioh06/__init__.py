@@ -2,9 +2,11 @@ import logging
 import os
 import random
 import sys
+from typing import ClassVar
 
 import bsdiff4
 import math
+import settings
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
@@ -16,7 +18,7 @@ from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, 
     get_beat_challenge_events, special
 from .Opponents import get_opponents, get_opponent_locations
 from .Options import ygo06_options
-from .Rom import YGO06DeltaPatch, get_base_rom_path
+from .Rom import YGO06DeltaPatch, get_base_rom_path, MD5Europe, MD5America
 from .Rules import set_rules
 from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
@@ -45,6 +47,14 @@ class Yugioh06Web(WebWorld):
 
     tutorials = [setup]
 
+class Yugioh2006Setting(settings.Group):
+    class Yugioh2006RomFile(settings.UserFilePath):
+        """File name of your Yu-Gi-Oh 2006 ROM"""
+        description = "Yu-Gi-Oh 2006 ROM File"
+        copy_to = "YuGiOh06.gba"
+        md5s = [MD5Europe, MD5America]
+
+    rom_file: Yugioh2006RomFile = Yugioh2006RomFile(Yugioh2006RomFile.copy_to)
 
 class Yugioh06World(World):
     """
@@ -55,6 +65,13 @@ class Yugioh06World(World):
     data_version = 1
     web = Yugioh06Web()
     option_definitions = ygo06_options
+    settings_key = "yugioh06_settings"
+    settings: ClassVar[Yugioh2006Setting]
+
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        if not os.path.exists(cls.settings.rom_file):
+            raise FileNotFoundError(cls.settings.rom_file)
 
     item_name_to_id = {}
     start_id = 5730000
@@ -345,7 +362,6 @@ def create_region(self, name: str, locations=None, exits=None):
         for _exit in exits:
             region.exits.append(Entrance(self.player, _exit, region))
     return region
-
 
 class Yugioh2006Item(Item):
     game = "Yu-Gi-Oh! 2006"

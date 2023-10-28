@@ -3,6 +3,7 @@ import os
 
 import Utils
 from Patch import APDeltaPatch
+from settings import get_settings
 
 MD5Europe = '020411d3b08f5639eb8cb878283f84bf'
 MD5America = 'b8a7c976b28172995fe9e465d654297a'
@@ -37,9 +38,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
     if not file_name:
-        file_name = "Yu-Gi-Oh06.gba"
+        file_name = get_settings().yugioh06_settings.rom_file
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
