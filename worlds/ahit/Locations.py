@@ -4,6 +4,9 @@ from typing import Dict
 from .Options import TasksanityCheckCount
 
 
+TASKSANITY_START_ID = 2000300204
+
+
 def get_total_locations(world: World) -> int:
     total: int = 0
 
@@ -96,7 +99,7 @@ def is_location_valid(world: World, location: str) -> bool:
 
 def get_location_names() -> Dict[str, int]:
     names = {name: data.id for name, data in location_table.items()}
-    id_start: int = get_tasksanity_start_id()
+    id_start: int = TASKSANITY_START_ID
     for i in range(TasksanityCheckCount.range_end):
         names.setdefault(f"Tasksanity Check {i+1}", id_start+i)
 
@@ -105,10 +108,6 @@ def get_location_names() -> Dict[str, int]:
         names.setdefault(f"{key} - All Clear", loc_id+1)
 
     return names
-
-
-def get_tasksanity_start_id() -> int:
-    return 2000300204
 
 
 ahit_locations = {
@@ -848,6 +847,7 @@ zero_jumps = {
                                                 dlc_flags=HatDLC.dlc2_dw),
 }
 
+# noinspection PyDictDuplicateKeys
 snatcher_coins = {
     "Snatcher Coin - Top of HQ": LocData(0, "Down with the Mafia!", dlc_flags=HatDLC.death_wish),
     "Snatcher Coin - Top of HQ": LocData(0, "Cheating the Race", dlc_flags=HatDLC.death_wish),

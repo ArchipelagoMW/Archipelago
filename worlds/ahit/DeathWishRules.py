@@ -321,7 +321,7 @@ def set_candle_dw_rules(name: str, world: World):
     elif name == "Camera Tourist":
         add_rule(main_objective, lambda state: get_reachable_enemy_count(state, world) >= 8)
         add_rule(full_clear, lambda state: can_reach_all_bosses(state, world)
-                 and state.has("Triple Enemy Picture", world.player))
+                 and state.has("Triple Enemy Photo", world.player))
 
     elif "Snatcher Coins" in name:
         for coin in required_snatcher_coins[name]:
@@ -408,8 +408,8 @@ def create_enemy_events(world: World):
             continue
 
         region = world.multiworld.get_region(name, world.player)
-        event = HatInTimeLocation(world.player, f"Triple Enemy Picture - {name}", None, region)
-        event.place_locked_item(HatInTimeItem("Triple Enemy Picture", ItemClassification.progression, None, world.player))
+        event = HatInTimeLocation(world.player, f"Triple Enemy Photo - {name}", None, region)
+        event.place_locked_item(HatInTimeItem("Triple Enemy Photo", ItemClassification.progression, None, world.player))
         region.locations.append(event)
         event.show_in_spoiler = False
         if name == "The Mustache Gauntlet":

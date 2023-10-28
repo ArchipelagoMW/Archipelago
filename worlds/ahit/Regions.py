@@ -2,7 +2,7 @@ from worlds.AutoWorld import World
 from BaseClasses import Region, Entrance, ItemClassification, Location
 from .Types import ChapterIndex, Difficulty, HatInTimeLocation, HatInTimeItem
 from .Locations import location_table, storybook_pages, event_locs, is_location_valid, \
-    shop_locations, get_tasksanity_start_id, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
+    shop_locations, TASKSANITY_START_ID, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
 import typing
 from .Rules import set_rift_rules, get_difficulty
 
@@ -439,7 +439,7 @@ def create_rift_connections(world: World, region: Region):
 
 def create_tasksanity_locations(world: World):
     ship_shape: Region = world.multiworld.get_region("Ship Shape", world.player)
-    id_start: int = get_tasksanity_start_id()
+    id_start: int = TASKSANITY_START_ID
     for i in range(world.multiworld.TasksanityCheckCount[world.player].value):
         location = HatInTimeLocation(world.player, f"Tasksanity Check {i+1}", id_start+i, ship_shape)
         ship_shape.locations.append(location)
