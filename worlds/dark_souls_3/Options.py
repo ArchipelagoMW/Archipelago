@@ -191,6 +191,11 @@ class EnableDLCOption(Toggle):
     display_name = "Enable DLC"
 
 
+class EnableNGPOption(Toggle):
+    """Whether to include items and locations exclusive to NG+ cycles."""
+    display_name = "Enable NG+"
+
+
 dark_souls_options: typing.Dict[str, Option] = {
     "enable_weapon_locations": RandomizeWeaponLocations,
     "enable_shield_locations": RandomizeShieldLocations,
@@ -223,4 +228,5 @@ dark_souls_options: typing.Dict[str, Option] = {
     "no_equip_load": NoEquipLoadOption,
     "death_link": DeathLink,
     "enable_dlc": EnableDLCOption,
+    "enable_ngp": EnableNGPOption,
 }

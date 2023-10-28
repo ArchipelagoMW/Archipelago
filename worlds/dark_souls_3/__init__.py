@@ -192,8 +192,7 @@ class DarkSouls3World(World):
         new_region = Region(region_name, self.player, self.multiworld)
 
         for location in location_table:
-            if (location.category in self.enabled_location_categories and
-                (not location.npc or self.multiworld.enable_npc_locations[self.player] == Toggle.option_true)):
+            if self.__is_location_available(location):
                 new_location = DarkSouls3Location.from_data(
                     self.player,
                     location,
@@ -234,7 +233,7 @@ class DarkSouls3World(World):
         # Gather all default items on randomized locations
         num_required_extra_items = 0
         for location in self.multiworld.get_locations(self.player):
-            if location.category in itempool_by_category:
+            if self.__is_location_available(location.name):
                 item_category = item_dictionary[location.default_item_name].category
                 if item_category == DS3ItemCategory.SKIP:
                     num_required_extra_items += 1
@@ -507,10 +506,19 @@ class DarkSouls3World(World):
 
     def __is_location_available(self, location: str|DS3LocationData):
         """Returns whether the given location is being randomized."""
-        data = location if isinstance(location, DS3LocationData) else location_dictionary[location]
+        if isinstance(location, DS3LocationData):
+            data = location
+        elif location in location_dictionary:
+            data = location_dictionary[location]
+        else:
+            # Synthetic locations (like Path of the Dragon) are never considered available.
+            return False
+
         return (
             data.category in self.enabled_location_categories and
-            (not data.dlc or self.multiworld.enable_dlc[self.player] == Toggle.option_true)
+            (not data.npc or self.multiworld.enable_npc_locations[self.player] == Toggle.option_true) and
+            (not data.dlc or self.multiworld.enable_dlc[self.player] == Toggle.option_true) and
+            (not data.ngp or self.multiworld.enable_ngp[self.player] == Toggle.option_true)
         )
 
 
@@ -584,7 +592,8 @@ class DarkSouls3World(World):
                 "death_link": self.multiworld.death_link[self.player].value,
                 "no_spell_requirements": self.multiworld.no_spell_requirements[self.player].value,
                 "no_equip_load": self.multiworld.no_equip_load[self.player].value,
-                "enable_dlc": self.multiworld.enable_dlc[self.player].value
+                "enable_dlc": self.multiworld.enable_dlc[self.player].value,
+                "enable_ngp": self.multiworld.enable_ngp[self.player].value,
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server

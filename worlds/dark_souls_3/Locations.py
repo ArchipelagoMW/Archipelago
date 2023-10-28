@@ -343,15 +343,15 @@ location_tables = {
                         shop = True),
         # Captain's Ashes
         DS3LocationData("FS: Millwood Knight Helm",                "Millwood Knight Helm",              DS3LocationCategory.ARMOR,
-                        shop = True),
+                        dlc = True, shop = True),
         DS3LocationData("FS: Millwood Knight Armor",               "Millwood Knight Armor",             DS3LocationCategory.ARMOR,
-                        shop = True),
+                        dlc = True, shop = True),
         DS3LocationData("FS: Millwood Knight Gauntlets",           "Millwood Knight Gauntlets",         DS3LocationCategory.ARMOR,
-                        shop = True),
+                        dlc = True, shop = True),
         DS3LocationData("FS: Millwood Knight Leggings",            "Millwood Knight Leggings",          DS3LocationCategory.ARMOR,
-                        shop = True),
+                        dlc = True, shop = True),
         DS3LocationData("FS: Refined Gem",                         "Refined Gem",                       DS3LocationCategory.UPGRADE,
-                        shop = True),
+                        dlc = True, shop = True),
     ],
     "Firelink Shrine Bell Tower": [
         # Guarded by Tower Key
