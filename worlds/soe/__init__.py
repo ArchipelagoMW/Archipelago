@@ -224,9 +224,8 @@ class SoEWorld(World):
         max_difficulty = 1 if self.multiworld.difficulty[self.player] == Difficulty.option_easy else 256
 
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', self.player, self.multiworld)
-        r.exits = [Entrance(self.player, 'New Game', r)]
-        self.multiworld.regions += [r]
+        menu = Region('Menu', self.player, self.multiworld)
+        self.multiworld.regions += [menu]
 
         def get_sphere_index(evermizer_loc):
             """Returns 0, 1 or 2 for locations in spheres 1, 2, 3+"""
@@ -234,11 +233,14 @@ class SoEWorld(World):
                 return 2
             return min(2, len(evermizer_loc.requires))
 
+        # create ingame region
+        ingame = Region('Ingame', self.player, self.multiworld)
+
         # group locations into spheres (1, 2, 3+ at index 0, 1, 2)
         spheres: typing.Dict[int, typing.Dict[int, typing.List[SoELocation]]] = {}
         for loc in _locations:
             spheres.setdefault(get_sphere_index(loc), {}).setdefault(loc.type, []).append(
-                SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r,
+                SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], ingame,
                             loc.difficulty > max_difficulty))
 
         # location balancing data
@@ -280,18 +282,16 @@ class SoEWorld(World):
         late_locations = self.multiworld.random.sample(late_bosses, late_count)
 
         # add locations to the world
-        r = Region('Ingame', self.player, self.multiworld)
         for sphere in spheres.values():
             for locations in sphere.values():
                 for location in locations:
-                    r.locations.append(location)
+                    ingame.locations.append(location)
                     if location.name in late_locations:
                         location.progress_type = LocationProgressType.PRIORITY
 
-        r.locations.append(SoELocation(self.player, 'Done', None, r))
-        self.multiworld.regions += [r]
-
-        self.multiworld.get_entrance('New Game', self.player).connect(self.multiworld.get_region('Ingame', self.player))
+        ingame.locations.append(SoELocation(self.player, 'Done', None, ingame))
+        menu.connect(ingame, "New Game")
+        self.multiworld.regions += [ingame]
 
     def create_items(self):
         # add regular items to the pool
