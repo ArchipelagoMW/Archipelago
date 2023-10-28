@@ -286,7 +286,7 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         self.selected = is_selected
 
 
-class HintLabel(RecycleDataViewBehavior, GridLayout):
+class HintLabel(RecycleDataViewBehavior, BoxLayout):
     cols = 6
     selected = BooleanProperty(False)
     index = None
@@ -294,6 +294,17 @@ class HintLabel(RecycleDataViewBehavior, GridLayout):
 
     def __init__(self):
         super(HintLabel, self).__init__()
+        self.receiving_text = ""
+        self.item_text = ""
+        self.finding_text = ""
+        self.location_text = ""
+        self.entrance_text = ""
+        self.found_text = ""
+        for child in self.children:
+            child.bind(height=self.set_height)
+
+    def set_height(self, instance, value):
+        self.height = max([child.height for child in self.children])
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
