@@ -257,11 +257,12 @@ item_table = {
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
 
 item_groups: typing.Dict[str, str] = {
-    "Chaos Emeralds": [item_name for item_name, data in emeralds_table.items()],
-    "Eggs":           [item_name for item_name, data in eggs_table.items()],
-    "Fruits":         [item_name for item_name, data in fruits_table.items()],
-    "Seeds":          [item_name for item_name, data in seeds_table.items()],
-    "Hats":           [item_name for item_name, data in hats_table.items()],
+    "Chaos Emeralds": list(emeralds_table.keys()),
+    "Eggs":           list(eggs_table.keys()),
+    "Fruits":         list(fruits_table.keys()),
+    "Seeds":          list(seeds_table.keys()),
+    "Hats":           list(hats_table.keys()),
+    "Traps":          list(trap_table.keys()),
 }
 
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"
