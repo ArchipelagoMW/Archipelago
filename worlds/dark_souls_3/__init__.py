@@ -8,7 +8,7 @@ from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
-from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, item_dictionary
+from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
 from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
 
@@ -368,7 +368,7 @@ class DarkSouls3World(World):
 
 
     def get_filler_item_name(self) -> str:
-        return "Soul of an Intrepid Hero"
+        return self.multiworld.random.choice(filler_item_names)
 
 
     def set_rules(self) -> None:
