@@ -85,9 +85,9 @@ class TestBase(unittest.TestCase):
             args = Namespace()
             for name, option in world_type.options_dataclass.type_hints.items():
                 setattr(args, name, {1: option.from_any(option.default), 2: option.from_any(option.default)})
-            multiworld.set_options(args)
-            setattr(multiworld, "item_links",
+            setattr(args, "item_links",
                     {1: ItemLinks.from_any(item_link_group), 2: ItemLinks.from_any(item_link_group)})
+            multiworld.set_options(args)
             multiworld.set_item_links()
             # groups get added to state during its constructor so this has to be after item links are set
             multiworld.state = CollectionState(multiworld)
