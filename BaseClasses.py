@@ -308,6 +308,10 @@ class MultiWorld():
         return tuple(player for player in self.player_ids if self.game[player] == game_name)
 
     @functools.lru_cache()
+    def get_game_groups(self, game_name: str) -> Tuple[int, ...]:
+        return tuple(group_id for group_id in self.groups if self.game[group_id] == game_name)
+
+    @functools.lru_cache()
     def get_game_worlds(self, game_name: str):
         return tuple(world for player, world in self.worlds.items() if
                      player not in self.groups and self.game[player] == game_name)

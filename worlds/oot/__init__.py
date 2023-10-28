@@ -43,14 +43,14 @@ i_o_limiter = threading.Semaphore(2)
 
 class OOTCollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
-        all_ids = parent.get_all_ids()
-        self.child_reachable_regions = {player: set() for player in all_ids}
-        self.adult_reachable_regions = {player: set() for player in all_ids}
-        self.child_blocked_connections = {player: set() for player in all_ids}
-        self.adult_blocked_connections = {player: set() for player in all_ids}
-        self.day_reachable_regions = {player: set() for player in all_ids}
-        self.dampe_reachable_regions = {player: set() for player in all_ids}
-        self.age = {player: None for player in all_ids}
+        oot_ids = parent.get_game_players(OOTWorld.game) + parent.get_game_groups(OOTWorld.game)
+        self.child_reachable_regions = {player: set() for player in oot_ids}
+        self.adult_reachable_regions = {player: set() for player in oot_ids}
+        self.child_blocked_connections = {player: set() for player in oot_ids}
+        self.adult_blocked_connections = {player: set() for player in oot_ids}
+        self.day_reachable_regions = {player: set() for player in oot_ids}
+        self.dampe_reachable_regions = {player: set() for player in oot_ids}
+        self.age = {player: None for player in oot_ids}
 
     def copy_mixin(self, ret) -> CollectionState:
         ret.child_reachable_regions = {player: copy.copy(self.child_reachable_regions[player]) for player in
