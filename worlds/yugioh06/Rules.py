@@ -7,7 +7,7 @@ def set_rules(world):
     player = world.player
     world = world.multiworld
 
-    access_rules = {
+    location_rules = {
         # Campaign
         "Campaign Tier 1: 1 Win": lambda state: state.has("Tier 1 Beaten", player),
         "Campaign Tier 1: 3 Wins A": lambda state: state.has("Tier 1 Beaten", player, 3),
@@ -105,8 +105,9 @@ def set_rules(world):
         "Obtain Gate Guardian and its pieces":
             lambda state: state.yugioh06_has_gate_guardian(player),
         "Dark Scorpion Combination and its required cards":
-            lambda state: state.yugioh06_has_dark_scorpion_combination(player),
-
+            lambda state: state.yugioh06_has_dark_scorpion_combination(player)
+    }
+    access_rules = {
         # Limited
         "LD01 All except Level 4 forbidden":
             lambda state: state.yugioh06_difficulty(player, 3),
@@ -378,8 +379,10 @@ def set_rules(world):
     world.completion_condition[player] = lambda state: state.has("Goal", player)
 
     for loc in world.get_locations(player):
+        if loc.name in location_rules:
+            add_rule(loc, location_rules[loc.name])
         if loc.name in access_rules:
-            add_rule(loc, access_rules[loc.name])
+            add_rule(world.get_entrance(loc.name, player), access_rules[loc.name])
 
 
 def only_light(state, player):
