@@ -67,7 +67,7 @@ class TestBase(unittest.TestCase):
                 for item in multiworld.itempool:
                     self.assertIn(item.name, world_type.item_name_to_id)
     
-    def testItemLinks(self) -> None:
+    def test_item_links(self) -> None:
         """
         Tests item link creation by creating a multiworld of 2 worlds for every game and linking their items together.
         """
@@ -83,10 +83,9 @@ class TestBase(unittest.TestCase):
                 "replacement_item": None,
             }]
             args = Namespace()
-            for name, option in world_type.option_definitions.items():
+            for name, option in world_type.options_dataclass.type_hints.items():
                 setattr(args, name, {1: option.from_any(option.default), 2: option.from_any(option.default)})
             multiworld.set_options(args)
-            multiworld.set_default_common_options()
             setattr(multiworld, "item_links",
                     {1: ItemLinks.from_any(item_link_group), 2: ItemLinks.from_any(item_link_group)})
             multiworld.set_item_links()
@@ -102,7 +101,8 @@ class TestBase(unittest.TestCase):
             call_all(multiworld, "pre_fill")
             distribute_items_restrictive(multiworld)
             call_all(multiworld, "post_fill")
-        
+            self.assertTrue(multiworld.can_beat_game(CollectionState(multiworld)))
+
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Can generate with link replacement", game=game_name):
                 setup_link_multiworld(world_type, True)
