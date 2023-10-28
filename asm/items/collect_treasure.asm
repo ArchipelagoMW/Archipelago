@@ -20,8 +20,8 @@ hook 0x808134C, 0x808135C, CheckLocations
 .macro check_has_item, HasLocation, LocationTable
         ldr r0, =HasLocation
         ldrb r0, [r0]
-        cmp r0, #0
-        beq @@DontGive
+        cmp r0, #1
+        bne @@DontGive
 
     ; Get the item and multiworld pointer
         ldr r0, =LocationTable
