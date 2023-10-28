@@ -272,6 +272,7 @@ id,name,classification,groups,mod_name
 285,Ugly Baby,progression,"BABY",
 286,Deluxe Scarecrow Recipe,progression,"FESTIVAL,RARECROW",
 287,Treehouse,progression,"GINGER_ISLAND",
+288,Coffee Bean,progression,CROPSANITY,
 4001,Burnt,trap,TRAP,
 4002,Darkness,trap,TRAP,
 4003,Frozen,trap,TRAP,
