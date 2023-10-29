@@ -1,5 +1,5 @@
 import unittest
-from worlds.AutoWorld import AutoWorldRegister
+from worlds.AutoWorld import AutoWorldRegister, call_all
 from . import setup_solo_multiworld
 
 
@@ -47,6 +47,9 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
+                call_all(multiworld, "create_filler_items",
+                         {1: len(multiworld.get_unfilled_locations(1)) - len(multiworld.itempool)})
+                multiworld.update_itempool()
                 self.assertGreaterEqual(
                     len(multiworld.itempool),
                     len(multiworld.get_unfilled_locations()),
