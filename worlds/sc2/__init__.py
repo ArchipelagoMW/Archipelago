@@ -487,7 +487,7 @@ def get_plando_locations(multiworld: MultiWorld, player) -> List[str]:
 
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
     total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
-    if get_option_value(multiworld, player, "kerrigan_presence") in kerrigan_unit_available \
+    if get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available \
             or total_levels == 0:
         return
     
