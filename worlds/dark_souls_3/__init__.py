@@ -232,22 +232,24 @@ class DarkSouls3World(World):
 
         # Gather all default items on randomized locations
         num_required_extra_items = 0
-        for location in self.multiworld.get_locations(self.player):
-            if self.__is_location_available(location.name):
-                item_category = item_dictionary[location.default_item_name].category
-                if item_category == DS3ItemCategory.SKIP:
+        for location in self.multiworld.get_unfilled_locations(self.player):
+            if not self.__is_location_available(location.name):
+                raise Exception("DS3 generation bug: Added an unavailable location.")
+
+            item_category = item_dictionary[location.default_item_name].category
+            if item_category == DS3ItemCategory.SKIP:
+                num_required_extra_items += 1
+            elif item_category == DS3ItemCategory.MISC:
+                itempool_by_category[location.category].append(location.default_item_name)
+            else:
+                # For non-miscellaneous non-skip items, make sure there aren't duplicates in the
+                # item set even if there are multiple in-game locations that provide them.
+                item_set = item_set_by_category[location.category]
+                if location.default_item_name in item_set:
                     num_required_extra_items += 1
-                elif item_category == DS3ItemCategory.MISC:
-                    itempool_by_category[location.category].append(location.default_item_name)
                 else:
-                    # For non-miscellaneous non-skip items, make sure there aren't duplicates in the
-                    # item set even if there are multiple in-game locations that provide them.
-                    item_set = item_set_by_category[location.category]
-                    if location.default_item_name in item_set:
-                        num_required_extra_items += 1
-                    else:
-                        item_set.add(location.default_item_name)
-                        itempool_by_category[location.category].append(location.default_item_name)
+                    item_set.add(location.default_item_name)
+                    itempool_by_category[location.category].append(location.default_item_name)
 
         # Replace each item category with a random sample of items of those types
         if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various:
@@ -478,7 +480,7 @@ class DarkSouls3World(World):
 
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("AP: Hawkwood's Swordgrass", self.player),
-                     lambda state: state.has("AP: Twinkling Dragon Torso Stone", self.player))
+                     lambda state: state.has("Twinkling Dragon Torso Stone", self.player))
             set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
 
@@ -508,7 +510,10 @@ class DarkSouls3World(World):
         for location in location_dictionary.values():
             if location.shop and self.__is_location_available(location):
                 add_item_rule(self.multiworld.get_location(location.name, self.player),
-                              lambda item: item.count == 1 and not item.soul)
+                              lambda item: (
+                                  item.player != self.player or
+                                  (item.count == 1 and not item.soul)
+                              ))
 
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \

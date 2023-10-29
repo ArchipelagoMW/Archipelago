@@ -1599,7 +1599,7 @@ location_tables = {
                         missable = True, boss = True, shop = True),
 
         # Siegward drops (kill or quest)
-        DS3LocationData("PC: Storm Ruler",                         "Storm Ruler",                         DS3LocationCategory.WEAPON,
+        DS3LocationData("PC: Storm Ruler (Siegward)",              "Storm Ruler",                         DS3LocationCategory.WEAPON,
                         offline = '02,0:50006218::', missable = True, npc = True),
         DS3LocationData("PC: Pierce Shield",                       "Pierce Shield",                       DS3LocationCategory.SHIELD,
                         missable = True, npc = True),
@@ -2349,8 +2349,8 @@ location_tables = {
     "Painted World of Ariandel (After Contraption)": [
         DS3LocationData("PW2: Soul of Sister Friede",              "Soul of Sister Friede",                   DS3LocationCategory.BOSS,
                         prominent = True, boss = True),
-        DS3LocationData("PW2: Titanite Slab",                      "Titanite Slab",                           DS3LocationCategory.UPGRADE,
-                        boss = True), # One-time drop after Friede Phase 2
+        DS3LocationData("PW2: Titanite Slab (Friede)",             "Titanite Slab",                           DS3LocationCategory.UPGRADE,
+                        offline = '11,0:50004700::', boss = True), # One-time drop after Friede Phase 2
         DS3LocationData("PW2: Floating Chaos",                     "Floating Chaos",                          DS3LocationCategory.SPELL,
                         missable = True, hostile_npc = True), # Livid Pyromancer Dunnel drop (requires ember)
         DS3LocationData("PW2: Prism Stone",                        "Prism Stone x10",                         DS3LocationCategory.MISC),
@@ -2383,7 +2383,7 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("PW2: Rose of Ariandel",                   "Rose of Ariandel",                        DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
-        DS3LocationData("PW2: Titanite Slab",                      "Titanite Slab",                           DS3LocationCategory.UPGRADE,
+        DS3LocationData("PW2: Titanite Slab (Corvian)",            "Titanite Slab",                           DS3LocationCategory.UPGRADE,
                         offline = '11,0:50006540::', missable = True, npc = True), # Corvian Settler (quest)
 
         # Shrine Handmaid after killing Sister Friede
