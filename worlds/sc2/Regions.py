@@ -275,7 +275,7 @@ def create_grid_regions(
             connections,
             category=f'_{coords[0] + 1}',
             or_requirements=True,
-            ui_vertical_padding=prepend_vertical
+            ui_vertical_padding=prepend_vertical,
         )
 
     final_mission_id = final_mission.id
