@@ -495,7 +495,7 @@ class OptionalBossLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-    display_name = "Challenge Locations"
+    display_name = "Optional Boss Locations"
 
 
 # noinspection PyTypeChecker
