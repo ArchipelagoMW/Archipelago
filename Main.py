@@ -283,8 +283,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, "pre_fill")
 
-    AutoWorld.call_all(world, "create_filler_items")
-
     logger.info(f'Filling the world with {len(world.itempool)} items.')
 
     if world.algorithm == 'flood':

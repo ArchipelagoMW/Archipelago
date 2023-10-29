@@ -383,6 +383,17 @@ def distribute_early_items(world: MultiWorld,
 def distribute_items_restrictive(world: MultiWorld) -> None:
     fill_locations = sorted(world.get_unfilled_locations())
     world.random.shuffle(fill_locations)
+
+    # create remaining items to equal locations left
+    items_needed = {
+        player:
+            len([loc for loc in fill_locations if loc.player == player])
+            - len([item for item in world.itempool if item.player == player])
+        for player in world.player_ids
+    }
+    call_all(world, "create_filler_items", items_needed)
+    world.update_itempool()
+
     # get items to distribute
     itempool = sorted(world.itempool)
     world.random.shuffle(itempool)
