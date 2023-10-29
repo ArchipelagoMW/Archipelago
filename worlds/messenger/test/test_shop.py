@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from . import MessengerTestBase
 from ..shop import SHOP_ITEMS, FIGURINES
@@ -9,6 +9,12 @@ class ShopCostTest(MessengerTestBase):
         "shop_price": "random",
         "shuffle_shards": "true",
     }
+
+    def world_setup(self, seed: Optional[int] = None) -> None:
+        super().world_setup(seed)
+        self.multiworld.worlds[self.player].create_filler_items(
+            len(self.multiworld.get_unfilled_locations()) - len(self.multiworld.itempool))
+        self.multiworld.update_itempool()
 
     def test_shop_rules(self) -> None:
         for loc in SHOP_ITEMS:
@@ -69,7 +75,7 @@ class ShopCostMinTest(ShopCostTest):
         pass
 
 
-class PlandoTest(MessengerTestBase):
+class PlandoTest(ShopCostTest):
     options = {
         "shop_price_plan": {
             "Karuta Plates": 50,
@@ -109,3 +115,6 @@ class PlandoTest(MessengerTestBase):
                 self.assertLessEqual(price, self.multiworld.get_location(loc, self.player).cost)
                 self.assertTrue(loc in FIGURINES)
         self.assertEqual(len(figures), len(FIGURINES))
+
+    def test_dboost(self) -> None:
+        pass

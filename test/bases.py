@@ -301,6 +301,7 @@ class WorldTestBase(unittest.TestCase):
             return self.multiworld.has_beaten_game(state, 1)
 
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
+            self.multiworld.update_itempool()
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
             self.assertTrue(fulfills_accessibility(), "Collected all locations, but can't beat the game.")
