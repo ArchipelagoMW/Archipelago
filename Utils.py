@@ -257,15 +257,13 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = Settings  # TODO: remove ~2 versions after 0.4.1
+OptionsType = Settings  # TODO: remove when removing get_options
 
 
-@cache_argsless
-def get_default_options() -> Settings:  # TODO: remove ~2 versions after 0.4.1
-    return Settings(None)
-
-
-get_options = get_settings  # TODO: add a warning ~2 versions after 0.4.1 and remove once all games are ported
+def get_options() -> Settings:
+    # TODO: switch to Utils.deprecate after 0.4.4
+    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    return get_settings()
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
