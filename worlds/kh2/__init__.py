@@ -98,8 +98,6 @@ class KH2World(World):
             if ability in self.goofy_ability_dict.keys():
                 if self.goofy_ability_dict[ability] >= 1:
                     self.goofy_ability_dict[ability] -= 1
-        return {
-
 
         slot_data = self.options.as_dict("Goal", "FinalXemnas", "LuckyEmblemsRequired", "BountyRequired")
         slot_data.update({
@@ -133,14 +131,14 @@ class KH2World(World):
         """
         self.visitlocking_dict = visit_locking_dict["AllVisitLocking"].copy()
         if self.options.Schmovement != "level_0":
-            for _ in range(self.multiworld.Schmovement[self.player].value):
+            for _ in range(self.options.Schmovement.value):
                 for name in Movement_Table.keys():
                     self.item_quantity_dict[name] -= 1
                     self.growth_list.remove(name)
                     self.multiworld.push_precollected(self.create_item(name))
 
-        if self.options.RandomGrowth != 0:
-            max_growth = min(self.multiworld.RandomGrowth[self.player].value, len(self.growth_list))
+        if self.options.RandomGrowth:
+            max_growth = min(self.options.RandomGrowth.value, len(self.growth_list))
             for _ in range(max_growth):
                 random_growth = self.random.choice(self.growth_list)
                 self.item_quantity_dict[random_growth] -= 1
