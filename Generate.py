@@ -640,9 +640,14 @@ if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
     multiworld = main()
-    import weakref
-    weak = weakref.ref(multiworld)
-    del multiworld
-    assert not weak(), "Multiworld object was not de-allocated. This would be a memory leak."
+    if __debug__:
+        import gc
+        import sys
+        import weakref
+        weak = weakref.ref(multiworld)
+        del multiworld
+        gc.collect()  # need to collect to deref all hard references
+        assert not weak(), f"MultiWorld object was not de-allocated, it's referenced {sys.getrefcount(weak())} times." \
+                           " This would be a memory leak."
     # in case of error-free exit should not need confirmation
     atexit.unregister(confirmation)
