@@ -2,6 +2,7 @@ from itertools import chain
 import logging
 
 from worlds.generic.Rules import set_rule, add_rule
+from BaseClasses import CollectionState
 
 from .Hints import get_hint_area, HintAreaNotFound
 from .Regions import TimeOfDay
@@ -542,10 +543,7 @@ def shuffle_random_entrances(ootworld):
 
     # Build all_state and none_state
     all_state = ootworld.get_state_with_complete_itempool()
-    none_state = all_state.copy()
-    for item_tuple in none_state.prog_items:
-        if item_tuple[1] == player:
-            none_state.prog_items[item_tuple] = 0
+    none_state = CollectionState(ootworld.multiworld)
 
     # Plando entrances
     if world.plando_connections[player]:
@@ -628,7 +626,7 @@ def shuffle_random_entrances(ootworld):
             logging.getLogger('').error(f'Root Exit: {exit} -> {exit.connected_region}')
         logging.getLogger('').error(f'Root has too many entrances left after shuffling entrances')
     # Game is beatable
-    new_all_state = world.get_all_state(use_cache=False)
+    new_all_state = ootworld.get_state_with_complete_itempool()
     if not world.has_beaten_game(new_all_state, player):
         raise EntranceShuffleError('Cannot beat game')
     # Validate world

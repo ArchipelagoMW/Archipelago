@@ -827,7 +827,8 @@ class OOTWorld(World):
 
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
-        all_state = self.multiworld.get_all_state(use_cache=True)
+        all_state = self.get_state_with_complete_itempool()
+        all_state.sweep_for_events()
         all_locations = self.get_locations()
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
