@@ -123,6 +123,8 @@ class PokemonEmeraldWorld(World):
             self.options.norman_count.value = max_norman_count
 
     def create_regions(self) -> None:
+        regions = create_regions(self)
+
         tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}
         if self.options.overworld_items:
             tags.add("OverworldItem")
@@ -132,9 +134,9 @@ class PokemonEmeraldWorld(World):
             tags.add("NpcGift")
         if self.options.enable_ferry:
             tags.add("Ferry")
+        create_locations_with_tags(self, regions, tags)
 
-        create_regions(self)
-        create_locations_with_tags(self, tags)
+        self.multiworld.regions.extend(regions.values())
 
     def create_items(self) -> None:
         item_locations: List[PokemonEmeraldLocation] = [

@@ -15,7 +15,7 @@ else:
     PokemonEmeraldWorld = object
 
 
-def create_regions(world: PokemonEmeraldWorld) -> None:
+def create_regions(world: PokemonEmeraldWorld) -> Dict[str, Region]:
     """
     Iterates through regions created from JSON to create regions and adds them to the multiworld.
     Also creates and places events and connects regions via warps and the exits defined in the JSON.
@@ -48,4 +48,4 @@ def create_regions(world: PokemonEmeraldWorld) -> None:
     regions["Menu"] = Region("Menu", world.player, world.multiworld)
     regions["Menu"].connect(regions["REGION_LITTLEROOT_TOWN/MAIN"], "Start Game")
 
-    world.multiworld.regions.extend(regions.values())
+    return regions
