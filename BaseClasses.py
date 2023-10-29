@@ -374,6 +374,7 @@ class MultiWorld():
             return cached.copy()
 
         ret = CollectionState(self)
+        self.update_itempool()
 
         for item in self.itempool:
             self.worlds[item.player].collect(ret, item)
@@ -414,6 +415,16 @@ class MultiWorld():
 
     def create_item(self, item_name: str, player: int) -> Item:
         return self.worlds[player].create_item(item_name)
+
+    def update_itempool(self) -> None:
+        updated_itempools = {player for player, world in self.worlds.items()
+                             if isinstance(getattr(world, "itempool", None), Counter) and world.itempool}
+        items_to_add = []
+        for player in updated_itempools:
+            items_to_add += [self.create_item(item, player)
+                             for item, count in self.worlds[player].itempool.items() for _ in range(count)]
+            self.worlds[player].itempool = Counter()
+        self.itempool += items_to_add
 
     def push_precollected(self, item: Item):
         self.precollected_items[item.player].append(item)

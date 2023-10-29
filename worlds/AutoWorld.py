@@ -131,20 +131,9 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
             # TODO remove when all worlds on new API
             if not isinstance(getattr(sub_world, "itempool", None), Counter):
                 continue
-            count = len(multiworld.get_unfilled_locations(player)) - sum(sub_world.itempool.values())
-            sub_world.itempool = Counter()
-            call_single(multiworld, method_name, player, count)
-            multiworld.itempool += [sub_world.create_item(item_name)
-                                    for item_name, count in sub_world.itempool.items() for _ in range(count)]
+            call_single(multiworld, method_name, player, args[0][player])
             continue
         call_single(multiworld, method_name, player, *args)
-        # this is here for unit tests
-        if method_name == "create_items":
-            sub_world = multiworld.worlds[player]
-            # items need to be created so that state can collect them
-            if isinstance(getattr(sub_world, "itempool", None), Counter):
-                multiworld.itempool += [sub_world.create_item(item_name)
-                                        for item_name, count in sub_world.itempool.items() for _ in range(count)]
         if __debug__:
             new_items = multiworld.itempool[prev_item_count:]
             for i, item in enumerate(new_items):
@@ -157,6 +146,9 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
             stage_callable(multiworld, *args)
+
+    if "item" in method_name:
+        multiworld.update_itempool()
 
 
 def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:

@@ -4,7 +4,7 @@ from typing import Type, Tuple
 from BaseClasses import MultiWorld, CollectionState
 from worlds.AutoWorld import call_all, World
 
-gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill", "create_filler_items")
+gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")
 
 
 def setup_solo_multiworld(world_type: Type[World], steps: Tuple[str, ...] = gen_steps) -> MultiWorld:
