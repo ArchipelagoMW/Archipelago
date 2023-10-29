@@ -2,9 +2,10 @@ import functools
 import logging
 from typing import Any, Dict, List
 
-from BaseClasses import Entrance, CollectionState, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import Entrance, CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from . import Items, Locations, Maps, Options, Regions, Rules
+from . import Items, Locations, Maps, Regions, Rules
+from .Options import DOOM2Options
 
 logger = logging.getLogger("DOOM II")
 
@@ -38,7 +39,8 @@ class DOOM2World(World):
     It was released for MS-DOS in 1994.
     Compared to its predecessor, Doom II features larger levels, new enemies, a new "super shotgun" weapon
     """
-    option_definitions = Options.options
+    options_dataclass = DOOM2Options
+    options: DOOM2Options
     game = "DOOM II"
     web = DOOM2Web()
     data_version = 3
@@ -79,25 +81,22 @@ class DOOM2World(World):
         super().__init__(world, player)
 
     def get_episode_count(self):
-        count = 0
-        for i in range(3): # Don't include 4th, those are secret levels they are additive
-            count += self.included_episodes[i]
-        return count
+        # Don't include 4th, those are secret levels they are additive
+        return sum(self.included_episodes[:3])
 
     def generate_early(self):
         # Cache which episodes are included
-        for i in range(3):
-            self.included_episodes[i] = getattr(self.multiworld, f"episode{i + 1}")[self.player].value
+        self.included_episodes[0] = self.options.episode1.value
+        self.included_episodes[1] = self.options.episode2.value
+        self.included_episodes[2] = self.options.episode3.value
+        self.included_episodes[3] = self.options.episode4.value # 4th episode are secret levels
 
         # If no episodes selected, select Episode 1
         if self.get_episode_count() == 0:
             self.included_episodes[0] = 1
 
-        # 4th episode are secret levels
-        self.included_episodes[3] = getattr(self.multiworld, "episode4")[self.player].value
-
     def create_regions(self):
-        pro = getattr(self.multiworld, "pro")[self.player].value
+        pro = self.options.pro.value
 
         # Main regions
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -163,8 +162,8 @@ class DOOM2World(World):
         return True
 
     def set_rules(self):
-        pro = getattr(self.multiworld, "pro")[self.player].value
-        allow_death_logic = getattr(self.multiworld, "allow_death_logic")[self.player].value
+        pro = self.options.pro.value
+        allow_death_logic = self.options.allow_death_logic.value
 
         Rules.set_rules(self, self.included_episodes, pro)
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
@@ -181,7 +180,7 @@ class DOOM2World(World):
 
     def create_items(self):
         itempool: List[DOOM2Item] = []
-        start_with_computer_area_maps: bool = getattr(self.multiworld, "start_with_computer_area_maps")[self.player].value
+        start_with_computer_area_maps: bool = self.options.start_with_computer_area_maps.value
 
         # Items
         for item_id, item in Items.item_table.items():
@@ -221,7 +220,7 @@ class DOOM2World(World):
                 self.multiworld.push_precollected(self.create_item(self.starting_level_for_episode[i]))
         
         # Give Computer area maps if option selected
-        if getattr(self.multiworld, "start_with_computer_area_maps")[self.player].value:
+        if start_with_computer_area_maps:
             for item_id, item_dict in Items.item_table.items():
                 item_episode = item_dict["episode"]
                 if item_episode > 0:
@@ -265,4 +264,4 @@ class DOOM2World(World):
             itempool.append(self.create_item(item_name))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+        return self.options.as_dict("difficulty", "random_monsters", "random_pickups", "random_music", "flip_levels", "allow_death_logic", "pro", "death_link", "reset_level_on_death", "episode1", "episode2", "episode3", "episode4")
