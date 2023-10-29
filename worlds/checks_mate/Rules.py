@@ -10,7 +10,6 @@ from .Options import get_option_value
 
 
 class ChecksMateLogic(LogicMixin):
-
     flag_goal: int
 
     def __init__(self, world: MultiWorld, player: int):
@@ -32,20 +31,20 @@ class ChecksMateLogic(LogicMixin):
             self.individual_piece_material(item_id, item, player)
             for item_id, item in owned_items]
         return reduce(lambda a, b: a + b, owned_piece_materials, 0)
-        
+
     def has_piece_material(self: CollectionState, player: int, amount: int) -> bool:
         return self.total_piece_material(player) >= amount
-        
+
     def count_enemy_pieces(self: CollectionState, player: int) -> int:
         owned_item_ids = [item_id for item_id, item in item_table.items() if self.has(item_id, player)]
         return sum(1 if x.startswith("Enemy Piece") else 0 for x in owned_item_ids)
-        
+
     def count_enemy_pawns(self: CollectionState, player: int) -> int:
         owned_item_ids = [item_id for item_id, item in item_table.items() if self.has(item_id, player)]
         return sum(1 if x.startswith("Enemy Pawn") else 0 for x in owned_item_ids)
-        
+
     def has_french_move(self: CollectionState, player: int) -> bool:
-        return self.has_pawn(player) # and self.has("Play En Passant", player)
+        return self.has_pawn(player)  # and self.has("Play En Passant", player)
 
     def has_pawn(self: CollectionState, player: int) -> bool:
         return self.has_any({"Progressive Pawn"}, player)
@@ -53,11 +52,15 @@ class ChecksMateLogic(LogicMixin):
     def has_pin(self: CollectionState, player: int) -> bool:
         return self.has_any({"Progressive Minor Piece", "Progressive Major Piece"}, player)
 
+    # TODO(chesslogic): Ensure the current (and next?) sphere have more majors than queens
     def has_castle(self: CollectionState, player: int) -> bool:
-        return self.count("Progressive Major Piece", player) > max(
-            self.count("Progressive Major To Queen", player),
-            len([item for item in self.multiworld.itempool if
-                 item.player == player and item.name == "Progressive Major To Queen"]))
+        return (self.count("Progressive Major Piece", player) > self.count("Progressive Major To Queen", player) and
+                len([item for item in self.multiworld.itempool if item.player == player and item.name == "Progressive "
+                                                                                                         "Major Piece"])
+                > len(
+                    [item for item in self.multiworld.itempool if item.player == player and item.name == "Progressive "
+                                                                                                         "Major To "
+                                                                                                         "Queen"]))
 
 
 def set_rules(multiworld: MultiWorld, player: int):
@@ -78,13 +81,13 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture Pawn F": 100,
         "Capture Pawn G": 100,
         "Capture Pawn H": 100,
-        "Capture Piece A": 500, # rook
-        "Capture Piece H": 500, # rook
-        "Capture Piece B": 300, # knight
-        "Capture Piece G": 300, # knight
-        "Capture Piece C": 300, # bishop
-        "Capture Piece F": 300, # bishop
-        "Capture Piece D": 900, # queen
+        "Capture Piece A": 500,  # rook
+        "Capture Piece H": 500,  # rook
+        "Capture Piece B": 300,  # knight
+        "Capture Piece G": 300,  # knight
+        "Capture Piece C": 300,  # bishop
+        "Capture Piece F": 300,  # bishop
+        "Capture Piece D": 900,  # queen
         "Capture 2 Pawns": 150,
         "Capture 3 Pawns": 250,
         "Capture 4 Pawns": 360,
@@ -107,14 +110,14 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture Everything": 3700,
         "Fork": 700,
         "Triple Fork": 1700,
-        "Royal Fork": 3200, # AI really hates getting royal forked, even if we allow the attacking square was defended
+        "Royal Fork": 3200,  # AI really hates getting royal forked, even if we allow the attacking square was defended
         # "Pin": 600,
         # "Skewer": 600,
         "Threaten King": 400,
         "Bongcloud Center": 100,
         "Bongcloud A File": 150,
         "Bongcloud Capture": 50,
-        "Bongcloud Promotion": 1950, # requires reaching a rather late-game state
+        "Bongcloud Promotion": 1950,  # requires reaching a rather late-game state
     }
     for piece, material in capture_expectations.items():
         set_rule(multiworld.get_location(piece, player), lambda state, v=material: state.has_piece_material(player, v))
@@ -200,5 +203,3 @@ def set_rules(multiworld: MultiWorld, player: int):
     # set_rule(multiworld.get_location("Checkmate 12 Pieces", player), lambda state: state.has_piece_material(player, 34))
     # set_rule(multiworld.get_location("Checkmate 13 Pieces", player), lambda state: state.has_piece_material(player, 36))
     # set_rule(multiworld.get_location("Checkmate 14 Pieces", player), lambda state: state.has_piece_material(player, 38))
-
-
