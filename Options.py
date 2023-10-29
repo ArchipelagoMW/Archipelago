@@ -950,7 +950,10 @@ class CommonOptions(metaclass=OptionsMetaProperty):
                 else:
                     raise ValueError(f"{casing} is invalid casing for as_dict. "
                                      "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
-                option_results[display_name] = getattr(self, option_name).value
+                value = getattr(self, option_name).value
+                if isinstance(value, set):
+                    value = sorted(value)
+                option_results[display_name] = value
             else:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
         return option_results
