@@ -1974,6 +1974,9 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
         add_rule(multiworld.get_location(LocationName.final_rush_animal_9, player),
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
+        add_rule(multiworld.get_location(LocationName.lost_colony_animal_9, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player) or
+                               state.has(ItemName.eggman_large_cannon, player))
         add_rule(multiworld.get_location(LocationName.weapons_bed_animal_9, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_animal_9, player),
