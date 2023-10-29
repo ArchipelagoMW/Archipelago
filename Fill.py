@@ -15,7 +15,7 @@ class FillError(RuntimeError):
     pass
 
 
-def _log_fill_progress(name: str, placed:int, total_items: int) -> None:
+def _log_fill_progress(name: str, placed: int, total_items: int) -> None:
     logging.info(f"Current fill step ({name}) at {placed}/{total_items} items placed.")
 
 
