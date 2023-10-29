@@ -103,7 +103,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                 connect(multiworld, player, names, 'The Dig', 'Whispers of Doom',
                         lambda state: state.has("Beat The Dig", player)),
             else:
-                # TODO for prophecy-only there is still a connection to WoL in the mission reqs
+                vanilla_mission_reqs[SC2Campaign.PROPHECY][SC2Mission.WHISPERS_OF_DOOM.mission_name] = MissionInfo(
+                    SC2Mission.WHISPERS_OF_DOOM, [], SC2Mission.WHISPERS_OF_DOOM.area)
                 connect(multiworld, player, names, 'Menu', 'Whispers of Doom'),
             connect(multiworld, player, names, 'Whispers of Doom', 'A Sinister Turn',
                     lambda state: state.has("Beat Whispers of Doom", player))
