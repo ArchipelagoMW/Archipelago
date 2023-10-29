@@ -1,14 +1,8 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Toggle, ItemDict, Accessibility, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, StartInventoryPool
 
 from worlds.kh2 import default_itempool_option
-
-
-class KingdomHearts2Accessibility(Accessibility):
-    default = Accessibility.option_locations
-    # defaulting to locations accessibility since items makes certain items self-locking
-    __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
 
 
 class SoraEXP(Range):
@@ -340,7 +334,6 @@ class SummonLevelLocationToggle(Toggle):
 # shamelessly stolen from the messanger
 @dataclass
 class KingdomHearts2Options(PerGameCommonOptions):
-    accessibility: KingdomHearts2Accessibility
     start_inventory: StartInventoryPool
     LevelDepth: LevelDepth
     Sora_Level_EXP: SoraEXP

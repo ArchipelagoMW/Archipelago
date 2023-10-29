@@ -209,17 +209,17 @@ Armor_Table = {
     ItemName.GrandRibbon:      ItemData(1, 157, 0x35D4),
 }
 Usefull_Table = {
-    ItemName.MickyMunnyPouch:  ItemData(1, 535, 0x3695),  # 5000 munny per
+    ItemName.MickeyMunnyPouch:  ItemData(1, 535, 0x3695),  # 5000 munny per
     ItemName.OletteMunnyPouch: ItemData(2, 362, 0x363C),  # 2500 munny per
     ItemName.HadesCupTrophy:   ItemData(1, 537, 0x3696),
     ItemName.UnknownDisk:      ItemData(1, 462, 0x365F),
     ItemName.OlympusStone:     ItemData(1, 370, 0x3644),
-    ItemName.MaxHPUp:          ItemData(20, 470, 0x3671),
-    ItemName.MaxMPUp:          ItemData(4, 471, 0x3672),
-    ItemName.DriveGaugeUp:     ItemData(6, 472, 0x3673),
-    ItemName.ArmorSlotUp:      ItemData(3, 473, 0x3674),
-    ItemName.AccessorySlotUp:  ItemData(3, 474, 0x3675),
-    ItemName.ItemSlotUp:       ItemData(5, 463, 0x3660),
+    ItemName.MaxHPUp:          ItemData(20, 112, 0x3671),  # 470 is DUMMY 23, 112 is Encampment Area Map
+    ItemName.MaxMPUp:          ItemData(4, 113, 0x3672),  # 471 is DUMMY 24, 113 is Village Area Map
+    ItemName.DriveGaugeUp:     ItemData(6, 114, 0x3673),  # 472 is DUMMY 25, 114 is Cornerstone Hill Map
+    ItemName.ArmorSlotUp:      ItemData(3, 116, 0x3674),  # 473 is DUMMY 26, 116 is Lilliput Map
+    ItemName.AccessorySlotUp:  ItemData(3, 117, 0x3675),  # 474 is DUMMY 27, 117 is Building Site Map
+    ItemName.ItemSlotUp:       ItemData(5, 118, 0x3660),  # 463 is DUMMY 16, 118 is Mickey’s House Map
 }
 SupportAbility_Table = {
     ItemName.Scan:             ItemData(2, 138, 0x08A, ability=True),
@@ -290,7 +290,7 @@ ActionAbility_Table = {
 Boosts_Table = {
     ItemName.PowerBoost:   ItemData(1, 253, 0x359D),  # 276, 0x3666, market place map
     ItemName.MagicBoost:   ItemData(1, 586, 0x35E0),  # 277, 0x3667, dark rememberance map
-    ItemName.DefenseBoost: ItemData(1, 590, 0x35F8),  # 278, 0x3668, depths of remembrance
+    ItemName.DefenseBoost: ItemData(1, 590, 0x35F8),  # 278, 0x3668, depths of remembrance map
     ItemName.APBoost:      ItemData(1, 532, 0x35FE),  # 279, 0x3669, mansion map
 }
 
@@ -357,7 +357,7 @@ Wincon_Table = {
 Consumable_Table = {
     ItemName.Potion:            ItemData(1, 127, 0x36B8),  # 1, 0x3580, piglets house map
     ItemName.HiPotion:          ItemData(1, 126, 0x36B9),  # 2, 0x03581, rabbits house map
-    ItemName.Ether:             ItemData(1, 128, 0x36BA),  # 3, 0x3582, kangas house
+    ItemName.Ether:             ItemData(1, 128, 0x36BA),  # 3, 0x3582, kangas house map
     ItemName.Elixir:            ItemData(1, 129, 0x36BB),  # 4, 0x3583, spooky cave map
     ItemName.Megalixir:         ItemData(1, 124, 0x36BC),  # 7, 0x3586, starry hill map
     ItemName.Tent:              ItemData(1, 512, 0x36BD),  # 131,0x35E1, savannah map
@@ -378,13 +378,13 @@ Events_Table = {
     ItemName.CerberusEvent,
     ItemName.OlympusPeteEvent,
     ItemName.HydraEvent,
-    ItemName.Oc_pain_and_panic_cupEvent,
-    ItemName.Oc_cerberus_cupEvent,
+    ItemName.OcPainAndPanicCupEvent,
+    ItemName.OcCerberusCupEvent,
     ItemName.HadesEvent,
     ItemName.ASZexionEvent,
     ItemName.DataZexionEvent,
-    ItemName.Oc2_titan_cupEvent,
-    ItemName.Oc2_gof_cupEvent,
+    ItemName.Oc2TitanCupEvent,
+    ItemName.Oc2GofCupEvent,
     ItemName.Oc2CupsEvent,
     ItemName.HadesCupEvents,
     ItemName.PrisonKeeperEvent,
@@ -442,7 +442,7 @@ Events_Table = {
 # Equipped abilities have an offset of 0x8000 so check for if whatever || whatever+0x8000
 CheckDupingItems = {
     "Items":          {
-        item_name for keys in [Progression_Table.keys(), Wincon_Table.keys(), Consumable_Table, [ItemName.MickyMunnyPouch,
+        item_name for keys in [Progression_Table.keys(), Wincon_Table.keys(), Consumable_Table, [ItemName.MickeyMunnyPouch,
                                                                                                  ItemName.OletteMunnyPouch,
                                                                                                  ItemName.HadesCupTrophy,
                                                                                                  ItemName.UnknownDisk,

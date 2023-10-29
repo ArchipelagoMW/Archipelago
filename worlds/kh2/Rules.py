@@ -304,19 +304,6 @@ class KH2Rules:
         for slot, weapon in exclusion_table["WeaponSlots"].items():
             add_rule(world.get_location(slot, player), lambda state: state.has(weapon, player))
 
-        #  Forbid Abilities on popups due to game limitations
-        for location in list(popups_set):
-            # location = world.get_location(location, player)
-            # forbid_items(location, exclusion_item_table["Ability"])
-            forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
-
-        for location in STT_Checks:
-            forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
-
-        # Santa's house also breaks with stat ups
-        for location in {LocationName.SantasHouseChristmasTownMap, LocationName.SantasHouseAPBoost}:
-            forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
-
         for goofy_slot in [LocationName.AdamantShield,
                            LocationName.AkashicRecord,
                            LocationName.ChainGear,
@@ -416,7 +403,7 @@ class KH2Rules:
         """
         return all(
                 [state.count(item_name, self.player) >= item_amount for item_name, item_amount in
-                 item_name_to_count.items() if item_name]
+                 item_name_to_count.items()]
         )
 
     def kh2_dict_one_count(self, item_name_to_count: dict, state: CollectionState) -> int:
@@ -593,10 +580,10 @@ class KH2FightRules(KH2Rules):
             RegionName.Hydra:                 lambda state: self.get_hydra_rules(state),
             RegionName.Hades:                 lambda state: self.get_hades_rules(state),
             RegionName.DataZexion:            lambda state: self.get_data_zexion_rules(state),
-            RegionName.Oc_pain_and_panic_cup: lambda state: self.get_pain_and_panic_cup_rules(state),
-            RegionName.Oc_cerberus_cup:       lambda state: self.get_cerberus_cup_rules(state),
-            RegionName.Oc2_titan_cup:         lambda state: self.get_titan_cup_rules(state),
-            RegionName.Oc2_gof_cup:           lambda state: self.get_goddess_of_fate_cup_rules(state),
+            RegionName.OcPainAndPanicCup: lambda state: self.get_pain_and_panic_cup_rules(state),
+            RegionName.OcCerberusCup:       lambda state: self.get_cerberus_cup_rules(state),
+            RegionName.Oc2TitanCup:         lambda state: self.get_titan_cup_rules(state),
+            RegionName.Oc2GofCup:           lambda state: self.get_goddess_of_fate_cup_rules(state),
             RegionName.HadesCups:             lambda state: self.get_hades_cup_rules(state),
             RegionName.Thresholder:           lambda state: self.get_thresholder_rules(state),
             RegionName.Beast:                 lambda state: self.get_beast_rules(),
@@ -944,11 +931,11 @@ class KH2FightRules(KH2Rules):
 
     def get_goddess_of_fate_cup_rules(self, state: CollectionState) -> bool:
         # can beat all the other cups+xemnas 1
-        return self.kh2_has_all([ItemName.Oc_pain_and_panic_cupEvent, ItemName.Oc_cerberus_cupEvent, ItemName.Oc2_titan_cupEvent], state)
+        return self.kh2_has_all([ItemName.OcPainAndPanicCupEvent, ItemName.OcCerberusCupEvent, ItemName.Oc2TitanCupEvent], state)
 
     def get_hades_cup_rules(self, state: CollectionState) -> bool:
         # can beat goddess of fate cup
-        return state.has(ItemName.Oc2_gof_cupEvent, self.player)
+        return state.has(ItemName.Oc2GofCupEvent, self.player)
 
     def get_olympus_pete_rules(self, state: CollectionState) -> bool:
         # easy:gap closer,defensive option,drive form

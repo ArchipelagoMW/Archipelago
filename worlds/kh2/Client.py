@@ -326,7 +326,7 @@ class KH2Context(CommonContext):
             self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
             if "keyblade_abilities" in self.kh2slotdata.keys():
-                sora_ability_dict = self.kh2slotdata["keyblade_abilities"]
+                sora_ability_dict = self.kh2slotdata["KeybladeAbilities"]
                 # sora ability to slot
                 # itemid:[slots that are available for that item]
                 for k, v in sora_ability_dict.items():
@@ -336,7 +336,7 @@ class KH2Context(CommonContext):
                         for _ in range(sora_ability_dict[k]):
                             self.sora_ability_to_slot[k].append(self.kh2_seed_save_cache["SoraInvo"][0])
                             self.kh2_seed_save_cache["SoraInvo"][0] -= 2
-                donald_ability_dict = self.kh2slotdata["staff_abilities"]
+                donald_ability_dict = self.kh2slotdata["StaffAbilities"]
                 for k, v in donald_ability_dict.items():
                     if v >= 1:
                         if k not in self.donald_ability_to_slot.keys():
@@ -344,7 +344,7 @@ class KH2Context(CommonContext):
                         for _ in range(donald_ability_dict[k]):
                             self.donald_ability_to_slot[k].append(self.kh2_seed_save_cache["DonaldInvo"][0])
                             self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
-                goofy_ability_dict = self.kh2slotdata["shield_abilities"]
+                goofy_ability_dict = self.kh2slotdata["ShieldAbilities"]
                 for k, v in goofy_ability_dict.items():
                     if v >= 1:
                         if k not in self.goofy_ability_to_slot.keys():

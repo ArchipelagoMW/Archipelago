@@ -306,25 +306,25 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.GuardianSoul,
         LocationName.HadesEventLocation
     ],
-    RegionName.Oc_pain_and_panic_cup: [
+    RegionName.OcPainAndPanicCup: [
         LocationName.ProtectBeltPainandPanicCup,
         LocationName.SerenityGemPainandPanicCup,
-        LocationName.Oc_pain_and_panic_cupEventLocation
+        LocationName.OcPainAndPanicCupEventLocation
     ],
-    RegionName.Oc_cerberus_cup:       [
+    RegionName.OcCerberusCup:       [
         LocationName.RisingDragonCerberusCup,
         LocationName.SerenityCrystalCerberusCup,
-        LocationName.Oc_cerberus_cupEventLocation
+        LocationName.OcCerberusCupEventLocation
     ],
-    RegionName.Oc2_titan_cup:         [
+    RegionName.Oc2TitanCup:         [
         LocationName.GenjiShieldTitanCup,
         LocationName.SkillfulRingTitanCup,
-        LocationName.Oc2_titan_cupEventLocation
+        LocationName.Oc2TitanCupEventLocation
     ],
-    RegionName.Oc2_gof_cup:           [
+    RegionName.Oc2GofCup:           [
         LocationName.FatalCrestGoddessofFateCup,
         LocationName.OrichalcumPlusGoddessofFateCup,
-        LocationName.Oc2_gof_cupEventLocation,
+        LocationName.Oc2GofCupEventLocation,
     ],
     RegionName.HadesCups:             [
         LocationName.HadesCupTrophyParadoxCups,
@@ -1059,10 +1059,10 @@ def connect_regions(world: MultiWorld, player: int):
         RegionName.Oc:                 {RegionName.Cerberus},
         RegionName.Cerberus:           {RegionName.OlympusPete},
         RegionName.OlympusPete:        {RegionName.Hydra},
-        RegionName.Hydra:              {RegionName.Oc_pain_and_panic_cup, RegionName.Oc_cerberus_cup, RegionName.Oc2},
+        RegionName.Hydra:              {RegionName.OcPainAndPanicCup, RegionName.OcCerberusCup, RegionName.Oc2},
         RegionName.Oc2:                {RegionName.Hades},
-        RegionName.Hades:              {RegionName.Oc2_titan_cup, RegionName.Oc2_gof_cup, RegionName.DataZexion},
-        RegionName.Oc2_gof_cup:        {RegionName.HadesCups},
+        RegionName.Hades:              {RegionName.Oc2TitanCup, RegionName.Oc2GofCup, RegionName.DataZexion},
+        RegionName.Oc2GofCup:        {RegionName.HadesCups},
         RegionName.Bc:                 {RegionName.Thresholder},
         RegionName.Thresholder:        {RegionName.Beast},
         RegionName.Beast:              {RegionName.DarkThorn},
