@@ -772,7 +772,7 @@ class ALTTPWorld(World):
                             "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
                             "boss_shuffle", "pot_shuffle", "enemy_shuffle", "key_drop_shuffle", "bombless_start",
                             "randomize_shop_inventories", "shuffle_shop_inventories", "shuffle_capacity_upgrades",
-                            "combined_capacity_upgrades", "entrance_shuffle", "dark_room_logic", "goal", "mode"]
+                            "entrance_shuffle", "dark_room_logic", "goal", "mode"]
 
             slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
 

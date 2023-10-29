@@ -757,7 +757,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "randomize_cost_types": RandomizeCostTypes,
     "shop_price_modifier": ShopPriceModifier,
     "shuffle_capacity_upgrades": ShuffleCapacityUpgrades,
-    "combined_capacity_upgrades": CombinedCapacityUpgrades,
     "shuffle_prizes": ShufflePrizes,
     "tile_shuffle": TileShuffle,
     "misery_mire_medallion": MiseryMireMedallion,
