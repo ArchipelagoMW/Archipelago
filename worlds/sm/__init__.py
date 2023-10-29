@@ -1,18 +1,17 @@
 from __future__ import annotations
 
-import logging
-import copy
-import os
-import threading
 import base64
-import settings
+import copy
+import logging
+import threading
 import typing
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
-from Fill import fill_restrictive
-from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
+import settings
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from Options import Accessibility
+from worlds.AutoWorld import AutoLogicRegister, WebWorld, World
+from worlds.generic.Rules import add_rule, set_rule
 
 logger = logging.getLogger("Super Metroid")
 
@@ -295,7 +294,7 @@ class SMWorld(World):
         for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
             src_region = self.multiworld.get_region(src.Name, self.player)
             dest_region = self.multiworld.get_region(dest.Name, self.player)
-            if ((src.Name + "->" + dest.Name, self.player) not in self.multiworld._entrance_cache):
+            if src.Name + "->" + dest.Name not in self.multiworld.regions.entrance_cache[self.player]:
                 src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
             srcDestEntrance = self.multiworld.get_entrance(src.Name + "->" + dest.Name, self.player)
             srcDestEntrance.connect(dest_region)
@@ -564,8 +563,8 @@ class SMWorld(World):
         multiWorldItems: List[ByteEdit] = []
         idx = 0
         vanillaItemTypesCount = 21
-        for itemLoc in self.multiworld.get_locations():
-            if itemLoc.player == self.player and "Boss" not in locationsDict[itemLoc.name].Class:
+        for itemLoc in self.multiworld.get_locations(self.player):
+            if "Boss" not in locationsDict[itemLoc.name].Class:
                 SMZ3NameToSMType = {
                     "ETank": "ETank", "Missile": "Missile", "Super": "Super", "PowerBomb": "PowerBomb", "Bombs": "Bomb",
                     "Charge": "Charge", "Ice": "Ice", "HiJump": "HiJump", "SpeedBooster": "SpeedBooster",

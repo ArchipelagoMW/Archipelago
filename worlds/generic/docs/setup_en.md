@@ -40,7 +40,7 @@ game you will be playing as well as the settings you would like for that game.
 
 YAML is a format very similar to JSON however it is made to be more human-readable. If you are ever unsure of the
 validity of your YAML file you may check the file by uploading it to the check page on the Archipelago website:
-[YAML Validation Page](/mysterycheck)
+[YAML Validation Page](/check)
 
 ### Creating a YAML
 

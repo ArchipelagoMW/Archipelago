@@ -477,8 +477,6 @@ def create_inverted_regions(world, player):
         create_lw_region(world, player, 'Death Mountain Bunny Descent Area')
     ]
 
-    world.initialize_regions()
-
 
 def mark_dark_world_regions(world, player):
     # cross world caves may have some sections marked as both in_light_world, and in_dark_work.
