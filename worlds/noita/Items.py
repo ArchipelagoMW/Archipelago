@@ -70,16 +70,8 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
         itempool += create_random_items(multiworld, player, shop_only_filler_weights, 39 - len(itempool))
         # this is so that it passes tests and gens if you have minimal locations and only one player
         if multiworld.players == 1:
-            itempool2 = itempool.copy()
-            perkpool = []
-            for item_name in itempool2:
-                if "Perk" in item_name and item_name not in {"Extra Life Perk", "Spatial Awareness Perk"}:
-                    perkpool.append(item_name)
-                    itempool.remove(item_name)
             for location in multiworld.get_unfilled_locations(player):
-                if "Shop Item 5" in location.name:
-                    location.item = create_item(player, perkpool.pop())
-                elif "Shop Item" in location.name:
+                if "Shop Item" in location.name:
                     location.item = create_item(player, itempool.pop())
             locations_to_fill = len(multiworld.get_unfilled_locations(player))
 
