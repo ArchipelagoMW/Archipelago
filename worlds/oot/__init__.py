@@ -890,7 +890,7 @@ class OOTWorld(World):
             'HideoutSmallKey': 'shuffle_hideoutkeys',
             'GanonBossKey': 'shuffle_ganon_bosskey',
         }
-        special_fill_types.sort(key=lambda x: 1 if getattr(self, type_to_setting[x]) == 'dungeon' else 0)
+        special_fill_types.sort(key=lambda x: 0 if getattr(self, type_to_setting[x]) == 'dungeon' else 1)
 
         for fill_stage in special_fill_types:
             stage_items = list(filter(lambda item: oot_is_item_of_type(item, fill_stage), self.pre_fill_items))
