@@ -353,7 +353,8 @@ class DarkSouls3World(World):
 
     def create_item(self, item: Union[str, DS3ItemData]) -> Item:
         data = item if isinstance(item, DS3ItemData) else item_dictionary[item]
-        if (
+        classification = None
+        if self.multiworld and ((
             data.useful_if == UsefulIf.BASE and
             not self.multiworld.enable_dlc[self.player] and
             not self.multiworld.enable_ngp[self.player]
@@ -363,10 +364,11 @@ class DarkSouls3World(World):
         ) or (
             data.useful_if == UsefulIf.NO_NGP and
             not self.multiworld.enable_ngp[self.player]
-        ):
-            progression = ItemProgression.useful
+        )):
+            classification = ItemClassification.useful
 
-        return DarkSouls3Item.from_data(self.player, data)
+        return DarkSouls3Item.from_data(
+            self.player, data, classification=classification)
 
 
     def get_filler_item_name(self) -> str:
