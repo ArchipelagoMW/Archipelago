@@ -281,8 +281,23 @@ class PokemonEmeraldWorld(World):
     def pre_fill(self) -> None:
         # Items which are shuffled between their own locations
         if self.options.badges == RandomizeBadges.option_shuffle:
-            badge_locations = [location for location, _ in self.badge_shuffle_info]
-            badge_items = [item for _, item in self.badge_shuffle_info]
+            badge_locations: List[PokemonEmeraldLocation]
+            badge_items: List[PokemonEmeraldItem]
+
+            # Sort order makes `fill_restrictive` try to place important badges later, which
+            # makes it less likely to have to swap at all, and more likely for swaps to work.
+            badge_locations, badge_items = [list(l) for l in zip(*self.badge_shuffle_info)]
+            badge_priority = {
+                "Balance Badge": 0,
+                "Dynamo Badge": 0,
+                "Mind Badge": 1,
+                "Heat Badge": 1,
+                "Rain Badge": 2,
+                "Knuckle Badge": 2,
+                "Stone Badge": 3,
+                "Feather Badge": 4
+            }
+            badge_items.sort(key=lambda item: badge_priority.get(item.name, 0))
 
             collection_state = self.multiworld.get_all_state(False)
             if self.hm_shuffle_info is not None:
@@ -290,20 +305,33 @@ class PokemonEmeraldWorld(World):
                     collection_state.collect(item)
 
             self.random.shuffle(badge_locations)
-            self.random.shuffle(badge_items)
-
-            fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items, True, True)
+            fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items,
+                             single_player_placement=True, lock=True, allow_excluded=True)
 
         if self.options.hms == RandomizeHms.option_shuffle:
-            hm_locations = [location for location, _ in self.hm_shuffle_info]
-            hm_items = [item for _, item in self.hm_shuffle_info]
+            hm_locations: List[PokemonEmeraldLocation]
+            hm_items: List[PokemonEmeraldItem]
+
+            # Sort order makes `fill_restrictive` try to place important HMs later, which
+            # makes it less likely to have to swap at all, and more likely for swaps to work.
+            hm_locations, hm_items = [list(l) for l in zip(*self.hm_shuffle_info)]
+            hm_priority = {
+                "HM03 Surf": 0,
+                "HM06 Rock Smash": 0,
+                "HM08 Dive": 1,
+                "HM04 Strength": 1,
+                "HM07 Waterfall": 2,
+                "HM05 Flash": 2,
+                "HM01 Cut": 3,
+                "HM02 Fly": 4
+            }
+            hm_items.sort(key=lambda item: hm_priority.get(item.name, 0))
 
             collection_state = self.multiworld.get_all_state(False)
 
             self.random.shuffle(hm_locations)
-            self.random.shuffle(hm_items)
-
-            fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items, True, True)
+            fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items,
+                             single_player_placement=True, lock=True, allow_excluded=True)
 
     def generate_output(self, output_directory: str) -> None:
         def randomize_abilities() -> None:
