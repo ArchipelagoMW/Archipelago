@@ -858,7 +858,7 @@ class OOTWorld(World):
             state = base_state.copy()
             for item in self.get_pre_fill_items():
                 self.collect(state, item)
-            state.sweep_for_events()
+            state.sweep_for_events(self.get_events())
             return state
 
         # Prefill shops, songs, and dungeon items
@@ -870,7 +870,7 @@ class OOTWorld(World):
         state = CollectionState(self.multiworld)
         for item in self.itempool:
             self.collect(state, item)
-        state.sweep_for_events()
+        state.sweep_for_events(self.get_events())
 
         # Place dungeon items
         special_fill_types = ['GanonBossKey', 'BossKey', 'SmallKey', 'HideoutSmallKey', 'Map', 'Compass']
