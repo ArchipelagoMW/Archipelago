@@ -174,8 +174,7 @@ class CMWorld(World):
 
     def generate_basic(self):
         victory_item = CMItem("Victory", ItemClassification.progression, 4_009, self.player)
-        (self.multiworld.get_location("Checkmate Maxima", self.player).
-         place_locked_item(victory_item))
+        self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(victory_item, self.player)
 
