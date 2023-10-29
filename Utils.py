@@ -5,6 +5,7 @@ import json
 import typing
 import builtins
 import os
+import itertools
 import subprocess
 import sys
 import pickle
@@ -903,3 +904,17 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     with open(file_name, "wt", encoding="utf-8") as f:
         f.write("\n".join(uml))
+
+
+class RepeatableChain:
+    def __init__(self, iterable: typing.Iterable):
+        self.iterable = iterable
+
+    def __iter__(self):
+        return itertools.chain.from_iterable(self.iterable)
+
+    def __bool__(self):
+        return any(sub_iterable for sub_iterable in self.iterable)
+
+    def __len__(self):
+        return sum(len(iterable) for iterable in self.iterable)

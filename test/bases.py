@@ -284,7 +284,7 @@ class WorldTestBase(unittest.TestCase):
 
         # basically a shortened reimplementation of this method from core, in order to force the check is done
         def fulfills_accessibility() -> bool:
-            locations = self.multiworld.get_locations(1).copy()
+            locations = list(self.multiworld.get_locations(1))
             state = CollectionState(self.multiworld)
             while locations:
                 sphere: typing.List[Location] = []
