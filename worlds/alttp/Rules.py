@@ -18,7 +18,7 @@ from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_shoot_arrows, has_beam_sword, has_crystals,
                            has_fire_source, has_hearts,
                            has_misery_mire_medallion, has_sword, has_turtle_rock_medallion,
-                           has_triforce_pieces, can_use_bombs, can_bomb_or_bonk, can_deal_damage)
+                           has_triforce_pieces, can_use_bombs, can_bomb_or_bonk)
 from .UnderworldGlitchRules import underworld_glitches_rules
 
 
@@ -240,9 +240,6 @@ def global_rules(world, player):
     set_rule(world.get_location('Mini Moldorm Cave - Far Right', player), lambda state: can_kill_most_things(state, player, 4))
     set_rule(world.get_location('Mini Moldorm Cave - Right', player), lambda state: can_kill_most_things(state, player, 4))
     set_rule(world.get_location('Mini Moldorm Cave - Generous Guy', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Sewers - Secret Room - Left', player), lambda state: can_bomb_or_bonk(state, player))
-    set_rule(world.get_location('Sewers - Secret Room - Middle', player), lambda state: can_bomb_or_bonk(state, player))
-    set_rule(world.get_location('Sewers - Secret Room - Right', player), lambda state: can_bomb_or_bonk(state, player))
     set_rule(world.get_location('Hype Cave - Bottom', player), lambda state: can_use_bombs(state, player))
     set_rule(world.get_location('Hype Cave - Middle Left', player), lambda state: can_use_bombs(state, player))
     set_rule(world.get_location('Hype Cave - Middle Right', player), lambda state: can_use_bombs(state, player))
@@ -251,14 +248,6 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Two Brothers House Exit (West)', player), lambda state: can_bomb_or_bonk(state, player))
     set_rule(world.get_entrance('Two Brothers House Exit (East)', player), lambda state: can_bomb_or_bonk(state, player))
-
-    set_rule(world.get_entrance('Light World Bomb Hut', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Light Hype Fairy', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Mini Moldorm Cave', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Ice Rod Cave', player), lambda state: can_use_bombs(state, player))
-
-    set_rule(world.get_entrance('Hype Cave', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Dark Lake Hylia Fairy', player), lambda state: can_use_bombs(state, player))
 
     set_rule(world.get_location('Spike Cave', player), lambda state:
              state.has('Hammer', player) and can_lift_rocks(state, player) and
@@ -464,13 +453,11 @@ def global_rules(world, player):
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Right', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
     set_rule(world.get_entrance('Turtle Rock (Trinexx)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6) and state.has('Big Key (Turtle Rock)', player) and state.has('Cane of Somaria', player))
 
-    if not world.enemy_shuffle[player]:
-        set_rule(world.get_entrance('Palace of Darkness Bonk Wall', player), lambda state: can_shoot_arrows(state, player))
+    set_rule(world.get_entrance('Palace of Darkness Bonk Wall', player), lambda state: can_bomb_or_bonk(state, player) and (can_shoot_arrows(state, player) or world.enemy_shuffle[player]))
     set_rule(world.get_entrance('Palace of Darkness Hammer Peg Drop', player), lambda state: state.has('Hammer', player))
     set_rule(world.get_entrance('Palace of Darkness Bridge Room', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 1))  # If we can reach any other small key door, we already have back door access to this area
     set_rule(world.get_entrance('Palace of Darkness Big Key Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) and state.has('Big Key (Palace of Darkness)', player) and can_shoot_arrows(state, player) and state.has('Hammer', player))
     set_rule(world.get_entrance('Palace of Darkness (North)', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 4))
-    set_rule(world.get_entrance('Palace of Darkness Bonk Wall', player), lambda state: can_bomb_or_bonk(state, player))
     set_rule(world.get_location('Palace of Darkness - Big Chest', player), lambda state: can_use_bombs(state, player) and state.has('Big Key (Palace of Darkness)', player))
     set_rule(world.get_location('Palace of Darkness - The Arena - Ledge', player), lambda state: can_use_bombs(state, player))
     if world.pot_shuffle[player]:
@@ -623,12 +610,12 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)', player), lambda state: (state.has('Moon Pearl', player) and state.has('Flippers', player) or state.has('Magic Mirror', player)))  # Overworld Bunny Revival
     set_rule(world.get_location('Bombos Tablet', player), lambda state: can_retrieve_tablet(state, player))
     set_rule(world.get_entrance('Dark Lake Hylia Drop (South)', player), lambda state: state.has('Moon Pearl', player) and state.has('Flippers', player))  # ToDo any fake flipper set up?
-    set_rule(world.get_entrance('Dark Lake Hylia Ledge Fairy', player), lambda state: state.has('Moon Pearl', player)) # bomb required
+    set_rule(world.get_entrance('Dark Lake Hylia Ledge Fairy', player), lambda state: state.has('Moon Pearl', player) and can_use_bombs(state, player))
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Spike Cave', player), lambda state: can_lift_rocks(state, player) and state.has('Moon Pearl', player))
     set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has('Moon Pearl', player))
     set_rule(world.get_entrance('Village of Outcasts Heavy Rock', player), lambda state: state.has('Moon Pearl', player) and can_lift_heavy_rocks(state, player))
-    set_rule(world.get_entrance('Hype Cave', player), lambda state: state.has('Moon Pearl', player)) # bomb required
-    set_rule(world.get_entrance('Brewery', player), lambda state: state.has('Moon Pearl', player)) # bomb required
+    set_rule(world.get_entrance('Hype Cave', player), lambda state: state.has('Moon Pearl', player) and can_use_bombs(state, player))
+    set_rule(world.get_entrance('Brewery', player), lambda state: state.has('Moon Pearl', player) and can_use_bombs(state, player))
     set_rule(world.get_entrance('Thieves Town', player), lambda state: state.has('Moon Pearl', player)) # bunny cannot pull
     set_rule(world.get_entrance('Skull Woods First Section Hole (North)', player), lambda state: state.has('Moon Pearl', player)) # bunny cannot lift bush
     set_rule(world.get_entrance('Skull Woods Second Section Hole', player), lambda state: state.has('Moon Pearl', player)) # bunny cannot lift bush
@@ -682,9 +669,9 @@ def inverted_rules(world, player):
 
     # overworld requirements 
     set_rule(world.get_location('Maze Race', player), lambda state: state.has('Moon Pearl', player))
-    set_rule(world.get_entrance('Mini Moldorm Cave', player), lambda state: state.has('Moon Pearl', player))
-    set_rule(world.get_entrance('Ice Rod Cave', player), lambda state: state.has('Moon Pearl', player))
-    set_rule(world.get_entrance('Light Hype Fairy', player), lambda state: state.has('Moon Pearl', player))
+    set_rule(world.get_entrance('Mini Moldorm Cave', player), lambda state: state.has('Moon Pearl', player) and can_use_bombs(state, player))
+    set_rule(world.get_entrance('Ice Rod Cave', player), lambda state: state.has('Moon Pearl', player) and can_use_bombs(state, player))
+    set_rule(world.get_entrance('Light Hype Fairy', player), lambda state: state.has('Moon Pearl', player) and can_use_bombs(state, player))
     set_rule(world.get_entrance('Potion Shop Pier', player), lambda state: state.has('Flippers', player) and state.has('Moon Pearl', player))
     set_rule(world.get_entrance('Light World Pier', player), lambda state: state.has('Flippers', player) and state.has('Moon Pearl', player))
     set_rule(world.get_entrance('Kings Grave', player), lambda state: state.has('Pegasus Boots', player) and state.has('Moon Pearl', player))
@@ -730,7 +717,7 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Bush Covered Lawn Outer Bushes', player), lambda state: state.has('Moon Pearl', player))
     set_rule(world.get_entrance('Bomb Hut Inner Bushes', player), lambda state: state.has('Moon Pearl', player))
     set_rule(world.get_entrance('Bomb Hut Outer Bushes', player), lambda state: state.has('Moon Pearl', player))
-    set_rule(world.get_entrance('Light World Bomb Hut', player), lambda state: state.has('Moon Pearl', player)) # need bomb
+    set_rule(world.get_entrance('Light World Bomb Hut', player), lambda state: state.has('Moon Pearl', player) and can_use_bombs(state, player))
     set_rule(world.get_entrance('North Fairy Cave Drop', player), lambda state: state.has('Moon Pearl', player))
     set_rule(world.get_entrance('Lost Woods Hideout Drop', player), lambda state: state.has('Moon Pearl', player))
     set_rule(world.get_location('Potion Shop', player), lambda state: state.has('Mushroom', player) and (state.can_reach('Potion Shop Area', 'Region', player))) # new inverted region, need pearl for bushes or access to potion shop door/waterfall fairy
@@ -775,6 +762,11 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Grassy Lawn Pegs', player), lambda state: state.has('Hammer', player))
     set_rule(world.get_entrance('Bumper Cave Exit (Top)', player), lambda state: state.has('Cape', player))
     set_rule(world.get_entrance('Bumper Cave Exit (Bottom)', player), lambda state: state.has('Cape', player) or state.has('Hookshot', player))
+
+    set_rule(world.get_entrance('Hype Cave', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Brewery', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Dark Lake Hylia Ledge Fairy', player), lambda state: can_use_bombs(state, player))
+
 
     set_rule(world.get_entrance('Skull Woods Final Section', player), lambda state: state.has('Fire Rod', player))
     set_rule(world.get_entrance('Misery Mire', player), lambda state: has_sword(state, player) and has_misery_mire_medallion(state, player))  # sword required to cast magic (!)
@@ -961,6 +953,11 @@ def add_conditional_lamps(world, player):
 
 
 def open_rules(world, player):
+
+    set_rule(world.get_entrance('Light World Bomb Hut', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Light Hype Fairy', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Mini Moldorm Cave', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Ice Rod Cave', player), lambda state: can_use_bombs(state, player))
 
     set_rule(world.get_location('Hyrule Castle - Map Guard Key Drop', player),
              lambda state: can_kill_most_things(state, player, 1))

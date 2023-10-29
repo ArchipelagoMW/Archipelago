@@ -14,6 +14,8 @@ class TestDungeon(LTTPTestBase):
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
+        self.multiworld.bombless_start[1].value = True
+        self.multiworld.shuffle_capacity_upgrades[1].value = True
         create_regions(self.multiworld, 1)
         self.multiworld.worlds[1].create_dungeons()
         create_shops(self.multiworld, 1)

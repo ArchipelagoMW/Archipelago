@@ -13,7 +13,7 @@ from worlds.alttp.test import LTTPTestBase
 class TestInvertedMinor(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
-        self.multiworld.mode[1] = "inverted"
+        self.multiworld.mode[1].value = 2
         self.multiworld.logic[1] = "minorglitches"
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.multiworld, 1)

@@ -78,7 +78,8 @@ class TestMiseryMire(TestDungeon):
             ["Misery Mire - Boss", False, [], ['Progressive Sword', 'Hammer', 'Progressive Bow']],
             ["Misery Mire - Boss", False, [], ['Big Key (Misery Mire)']],
             ["Misery Mire - Boss", False, [], ['Pegasus Boots', 'Hookshot']],
-            ["Misery Mire - Boss", True, ['Big Key (Misery Mire)', 'Lamp', 'Cane of Somaria', 'Progressive Sword', 'Pegasus Boots']],
-            ["Misery Mire - Boss", True, ['Big Key (Misery Mire)', 'Lamp', 'Cane of Somaria', 'Hammer', 'Pegasus Boots']],
-            ["Misery Mire - Boss", True, ['Big Key (Misery Mire)', 'Lamp', 'Cane of Somaria', 'Progressive Bow', 'Pegasus Boots']],
+            ["Misery Mire - Boss", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Misery Mire - Boss", True, ['Bomb Upgrade (+5)', 'Big Key (Misery Mire)', 'Lamp', 'Cane of Somaria', 'Progressive Sword', 'Pegasus Boots']],
+            ["Misery Mire - Boss", True, ['Bomb Upgrade (+5)', 'Big Key (Misery Mire)', 'Lamp', 'Cane of Somaria', 'Hammer', 'Pegasus Boots']],
+            ["Misery Mire - Boss", True, ['Bomb Upgrade (+5)', 'Big Key (Misery Mire)', 'Lamp', 'Cane of Somaria', 'Progressive Bow', 'Pegasus Boots']],
         ])

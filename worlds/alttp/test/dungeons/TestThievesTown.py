@@ -41,8 +41,9 @@ class TestThievesTown(TestDungeon):
             ["Thieves' Town - Boss", False, []],
             ["Thieves' Town - Boss", False, [], ['Big Key (Thieves Town)']],
             ["Thieves' Town - Boss", False, [], ['Hammer', 'Progressive Sword', 'Cane of Somaria', 'Cane of Byrna']],
-            ["Thieves' Town - Boss", True, ['Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Hammer']],
-            ["Thieves' Town - Boss", True, ['Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Progressive Sword']],
-            ["Thieves' Town - Boss", True, ['Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Cane of Somaria']],
-            ["Thieves' Town - Boss", True, ['Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Cane of Byrna']],
+            ["Thieves' Town - Boss", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Thieves' Town - Boss", True, ['Bomb Upgrade (+5)', 'Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Hammer']],
+            ["Thieves' Town - Boss", True, ['Bomb Upgrade (+5)', 'Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Progressive Sword']],
+            ["Thieves' Town - Boss", True, ['Bomb Upgrade (+5)', 'Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Cane of Somaria']],
+            ["Thieves' Town - Boss", True, ['Bomb Upgrade (+5)', 'Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Cane of Byrna']],
         ])
