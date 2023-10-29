@@ -321,7 +321,6 @@ def create_shops(multiworld, player: int):
         dynamic_shop_slots = total_dynamic_shop_slots
     if multiworld.shuffle_capacity_upgrades[player]:
         player_shop_table["Capacity Upgrade"] = player_shop_table["Capacity Upgrade"]._replace(locked=False)
-        dynamic_shop_slots += 2
 
     num_slots = min(dynamic_shop_slots, multiworld.shop_item_slots[player])
     single_purchase_slots: List[bool] = [True] * num_slots + [False] * (dynamic_shop_slots - num_slots)
