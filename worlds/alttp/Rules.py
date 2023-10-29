@@ -555,6 +555,12 @@ def global_rules(world, player):
 def default_rules(world, player):
     """Default world rules when world state is not inverted."""
     # overworld requirements
+
+    set_rule(world.get_entrance('Light World Bomb Hut', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Light Hype Fairy', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Mini Moldorm Cave', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Ice Rod Cave', player), lambda state: can_use_bombs(state, player))
+
     set_rule(world.get_entrance('Kings Grave', player), lambda state: state.has('Pegasus Boots', player))
     set_rule(world.get_entrance('Kings Grave Outer Rocks', player), lambda state: can_lift_heavy_rocks(state, player))
     set_rule(world.get_entrance('Kings Grave Inner Rocks', player), lambda state: can_lift_heavy_rocks(state, player))
@@ -953,11 +959,6 @@ def add_conditional_lamps(world, player):
 
 
 def open_rules(world, player):
-
-    set_rule(world.get_entrance('Light World Bomb Hut', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Light Hype Fairy', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Mini Moldorm Cave', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Ice Rod Cave', player), lambda state: can_use_bombs(state, player))
 
     set_rule(world.get_location('Hyrule Castle - Map Guard Key Drop', player),
              lambda state: can_kill_most_things(state, player, 1))
