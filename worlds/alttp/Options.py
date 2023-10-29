@@ -415,13 +415,15 @@ class IncludeWitchHut(Toggle):
     display_name = "Include Witch's Hut"
 
 
-class ShuffleCapacityUpgrades(Toggle):
-    """Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)"""
+class ShuffleCapacityUpgrades(Choice):
+    """Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld).
+    On Combined will shuffle only a single bomb upgrade and arrow upgrade each which bring you to the maximum capacity."""
     display_name = "Shuffle Capacity Upgrades"
-
-
-class CombinedCapacityUpgrades(Toggle):
-    """Combines the Bomb and Arrow Upgrade items into a single item each which brings your capacity to the maximum"""
+    option_off = 0
+    option_on = 1
+    option_on_combined = 2
+    alias_false = 0
+    alias_true = 1
 
 
 class LTTPBosses(PlandoBosses):

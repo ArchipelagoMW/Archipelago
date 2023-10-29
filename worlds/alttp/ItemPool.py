@@ -446,7 +446,7 @@ def generate_itempool(world):
         progressive = multiworld.progressive[player]
         progressive = multiworld.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
         progressive &= multiworld.goal == 'ice_rod_hunt'
-        if multiworld.combined_capacity_upgrades[player]:
+        if multiworld.shuffle_capacity_upgrades[player] == "on_combined":
             new_items = ["Bomb Upgrade (50)"]
         else:
             new_items = ["Bomb Upgrade (+5)"] * 6
@@ -455,7 +455,7 @@ def generate_itempool(world):
                 new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
 
         if not multiworld.retro_bow[player]:
-            if multiworld.combined_capacity_upgrades[player]:
+            if multiworld.shuffle_capacity_upgrades[player] == "on_combined":
                 new_items += ["Arrow Upgrade (70)"]
             else:
                 new_items += ["Arrow Upgrade (+5)"] * 6
