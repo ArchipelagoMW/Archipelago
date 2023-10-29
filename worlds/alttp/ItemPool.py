@@ -293,7 +293,6 @@ def generate_itempool(world):
         loc.access_rule = lambda state: has_triforce_pieces(state, player)
 
         region.locations.append(loc)
-        multiworld.clear_location_cache()
 
         multiworld.push_item(loc, ItemFactory('Triforce', player), False)
         loc.event = True

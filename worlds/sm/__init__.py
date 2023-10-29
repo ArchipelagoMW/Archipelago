@@ -294,7 +294,7 @@ class SMWorld(World):
         for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
             src_region = self.multiworld.get_region(src.Name, self.player)
             dest_region = self.multiworld.get_region(dest.Name, self.player)
-            if ((src.Name + "->" + dest.Name, self.player) not in self.multiworld._entrance_cache):
+            if src.Name + "->" + dest.Name not in self.multiworld.regions.entrance_cache[self.player]:
                 src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
             srcDestEntrance = self.multiworld.get_entrance(src.Name + "->" + dest.Name, self.player)
             srcDestEntrance.connect(dest_region)
@@ -563,8 +563,8 @@ class SMWorld(World):
         multiWorldItems: List[ByteEdit] = []
         idx = 0
         vanillaItemTypesCount = 21
-        for itemLoc in self.multiworld.get_locations():
-            if itemLoc.player == self.player and "Boss" not in locationsDict[itemLoc.name].Class:
+        for itemLoc in self.multiworld.get_locations(self.player):
+            if "Boss" not in locationsDict[itemLoc.name].Class:
                 SMZ3NameToSMType = {
                     "ETank": "ETank", "Missile": "Missile", "Super": "Super", "PowerBomb": "PowerBomb", "Bombs": "Bomb",
                     "Charge": "Charge", "Ice": "Ice", "HiJump": "HiJump", "SpeedBooster": "SpeedBooster",

@@ -219,7 +219,7 @@ def create_regions_from_ladxr(player, multiworld, logic):
 
         r = LinksAwakeningRegion(
             name=name, ladxr_region=l, hint="", player=player, world=multiworld)
-        r.locations = [LinksAwakeningLocation(player, r, i) for i in l.items]
+        r.locations += [LinksAwakeningLocation(player, r, i) for i in l.items]
         regions[l] = r
 
     for ladxr_location in logic.location_list:

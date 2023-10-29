@@ -546,10 +546,8 @@ def generate_output(self, output_directory: str):
 
     write_quizzes(self, data, random)
 
-    for location in self.multiworld.get_locations():
-        if location.player != self.player:
-            continue
-        elif location.party_data:
+    for location in self.multiworld.get_locations(self.player):
+        if location.party_data:
             for party in location.party_data:
                 if not isinstance(party["party_address"], list):
                     addresses = [rom_addresses[party["party_address"]]]
