@@ -6,25 +6,14 @@ class TestEasy(KH2TestBase):
         "FightLogic": 0
     }
 
-    KH2TestBase()
-
 
 class TestNormal(KH2TestBase):
     options = {
         "FightLogic": 1
     }
 
-    KH2TestBase()
-
 
 class TestHard(KH2TestBase):
     options = {
         "FightLogic": 2
     }
-
-    KH2TestBase()
-
-
-
-
-

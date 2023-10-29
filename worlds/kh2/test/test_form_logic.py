@@ -154,9 +154,6 @@ class TestJustAForm(KH2TestFormBase):
         "FinalFormLogic": "just_a_form"
     }
 
-    def test_nothing(self):
-        KH2TestBase()
-
     def test_just_a_form_connections(self):
         allPossibleForms = self.allForms
         self.collect_all_but(allPossibleForms)

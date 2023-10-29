@@ -85,19 +85,16 @@ class KH2World(World):
 
     def fill_slot_data(self) -> dict:
         for ability in self.slot_data_sora_weapon:
-            if ability in self.sora_ability_dict.keys():
-                if self.sora_ability_dict[ability] >= 1:
-                    self.sora_ability_dict[ability] -= 1
+            if ability in self.sora_ability_dict and self.sora_ability_dict[ability] >= 1:
+                self.sora_ability_dict[ability] -= 1
         self.donald_ability_dict = {k: v.quantity for k, v in DonaldAbility_Table.items()}
         for ability in self.slot_data_donald_weapon:
-            if ability in self.donald_ability_dict.keys():
-                if self.donald_ability_dict[ability] >= 1:
-                    self.donald_ability_dict[ability] -= 1
+            if ability in self.donald_ability_dict and self.donald_ability_dict[ability] >= 1:
+                self.donald_ability_dict[ability] -= 1
         self.goofy_ability_dict = {k: v.quantity for k, v in GoofyAbility_Table.items()}
         for ability in self.slot_data_goofy_weapon:
-            if ability in self.goofy_ability_dict.keys():
-                if self.goofy_ability_dict[ability] >= 1:
-                    self.goofy_ability_dict[ability] -= 1
+            if ability in self.goofy_ability_dict and self.goofy_ability_dict[ability] >= 1:
+                self.goofy_ability_dict[ability] -= 1
 
         slot_data = self.options.as_dict("Goal", "FinalXemnas", "LuckyEmblemsRequired", "BountyRequired")
         slot_data.update({
@@ -189,16 +186,15 @@ class KH2World(World):
         self.total_locations = len(all_locations.keys())
         for x in range(4):
             self.growth_list.extend(Movement_Table.keys())
-        print(len(self.growth_list))
+
         self.item_quantity_dict = {item: data.quantity for item, data in item_dictionary_table.items()}
         self.sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
                                   dic.items()}
         # Dictionary to mark locations with their plandoed item
         # Example. Final Xemnas: Victory
         # 3 random support abilities because there are left over slots
-
+        support_abilities = list(SupportAbility_Table.keys())
         for _ in range(6):
-            support_abilities = list(SupportAbility_Table.keys())
             random_support_ability = self.random.choice(support_abilities)
             self.item_quantity_dict[random_support_ability] += 1
             self.sora_ability_dict[random_support_ability] += 1
@@ -211,7 +207,7 @@ class KH2World(World):
             if 255 > v > self.item_quantity_dict[k] and k in default_itempool_option.keys():
                 self.item_quantity_dict[k] = v
             elif 255 <= v:
-                logging.info(
+                logging.warning(
                         f"{self.player} has too many {k} in their CustomItemPool setting. Setting to default quantity")
         # Option to turn off Promise Charm Item
         if not self.options.Promise_Charm:
@@ -295,7 +291,7 @@ class KH2World(World):
         """
         Sets the Logic for the Regions and Locations.
         """
-        universal_logic = Rules.KH2Rules(self)
+        universal_logic = Rules.KH2WorldRules(self)
         form_logic = Rules.KH2FormRules(self)
         fight_rules = Rules.KH2FightRules(self)
         fight_rules.set_kh2_fight_rules()

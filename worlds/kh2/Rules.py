@@ -2,9 +2,10 @@ from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table
-from .Locations import STT_Checks, exclusion_table, popups_set
+from .Locations import exclusion_table, popups_set, Goofy_Checks, Donald_Checks
 from .Names import LocationName, ItemName, RegionName
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
+from .Logic import *
 
 # I don't know what is going on here, but it works.
 if TYPE_CHECKING:
@@ -12,79 +13,7 @@ if TYPE_CHECKING:
 else:
     KH2World = object
 
-base_tools = [
-    ItemName.FinishingPlus,
-    ItemName.Guard,
-    ItemName.AerialRecovery
-]
-gap_closer = [
-    ItemName.SlideDash,
-    ItemName.FlashStep
-]
-defensive_tool = [
-    ItemName.ReflectElement,
-    ItemName.Guard
-]
-drive_form = [
-    ItemName.ValorForm,
-    ItemName.WisdomForm,
-    ItemName.LimitForm,
-    ItemName.MasterForm,
-    ItemName.FinalForm
-]
-ground_finisher = [
-    ItemName.GuardBreak,
-    ItemName.Explosion,
-    ItemName.FinishingLeap
-]
-party_limit = [
-    ItemName.Fantasia,
-    ItemName.FlareForce,
-    ItemName.Teamwork,
-    ItemName.TornadoFusion
-]
-donald_limit = [
-    ItemName.Fantasia,
-    ItemName.FlareForce
-]
-aerial_move = [
-    ItemName.AerialDive,
-    ItemName.AerialSpiral,
-    ItemName.HorizontalSlash,
-    ItemName.AerialSweep,
-    ItemName.AerialFinish
-]
-level_3_form_loc = [
-    LocationName.Valorlvl3,
-    LocationName.Wisdomlvl3,
-    LocationName.Limitlvl3,
-    LocationName.Masterlvl3,
-    LocationName.Finallvl3
-]
-black_magic = [
-    ItemName.FireElement,
-    ItemName.BlizzardElement,
-    ItemName.ThunderElement
-]
-magic = [
-    ItemName.FireElement,
-    ItemName.BlizzardElement,
-    ItemName.ThunderElement,
-    ItemName.ReflectElement,
-    ItemName.CureElement,
-    ItemName.MagnetElement
-]
-summons = [
-    ItemName.ChickenLittle,
-    ItemName.Stitch,
-    ItemName.Genie,
-    ItemName.PeterPan
-]
-three_proofs = [
-    ItemName.ProofofConnection,
-    ItemName.ProofofPeace,
-    ItemName.ProofofNonexistence
-]
+
 # Shamelessly Stolen from Messanger
 
 
@@ -103,86 +32,7 @@ class KH2Rules:
     def __init__(self, world: KH2World) -> None:
         self.player = world.player
         self.world = world
-
-        self.auto_form_dict = {
-            ItemName.FinalForm:  ItemName.AutoFinal,
-            ItemName.MasterForm: ItemName.AutoMaster,
-            ItemName.LimitForm:  ItemName.AutoLimit,
-            ItemName.WisdomForm: ItemName.AutoWisdom,
-            ItemName.ValorForm:  ItemName.AutoValor,
-        }
-        # These Rules are Always in effect
-        self.region_rules = {
-            RegionName.LoD:                lambda state: self.lod_unlocked(state, 1),
-            RegionName.LoD2:               lambda state: self.lod_unlocked(state, 2),
-
-            RegionName.Oc:                 lambda state: self.oc_unlocked(state, 1),
-            RegionName.Oc2:                lambda state: self.oc_unlocked(state, 2),
-
-            RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 2),
-            # These will be swapped and First Visit lock for twtnw is in development.
-            # RegionName.Twtnw1: lambda state: self.lod_unlocked(state, 2),
-
-            RegionName.Ht:                 lambda state: self.ht_unlocked(state, 1),
-            RegionName.Ht2:                lambda state: self.ht_unlocked(state, 2),
-
-            RegionName.Tt:                 lambda state: self.tt_unlocked(state, 1),
-            RegionName.Tt2:                lambda state: self.tt_unlocked(state, 2),
-            RegionName.Tt3:                lambda state: self.tt_unlocked(state, 3),
-
-            RegionName.Pr:                 lambda state: self.pr_unlocked(state, 1),
-            RegionName.Pr2:                lambda state: self.pr_unlocked(state, 2),
-
-            RegionName.Sp:                 lambda state: self.sp_unlocked(state, 1),
-            RegionName.Sp2:                lambda state: self.sp_unlocked(state, 2),
-
-            RegionName.Stt:                lambda state: self.stt_unlocked(state, 1),
-
-            RegionName.Dc:                 lambda state: self.dc_unlocked(state, 1),
-            RegionName.Tr:                 lambda state: self.dc_unlocked(state, 2),
-            #  Terra is a fight and can have more than just this requirement.
-            # RegionName.Terra:      lambda state:state.has(ItemName.ProofofConnection,self.player),
-
-            RegionName.Hb:                 lambda state: self.hb_unlocked(state, 1),
-            RegionName.Hb2:                lambda state: self.hb_unlocked(state, 2),
-            RegionName.Mushroom13:         lambda state: state.has(ItemName.ProofofPeace, self.player),
-
-            RegionName.Pl:                 lambda state: self.pl_unlocked(state, 1),
-            RegionName.Pl2:                lambda state: self.pl_unlocked(state, 2),
-
-            RegionName.Ag:                 lambda state: self.ag_unlocked(state, 1),
-            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2),
-
-            RegionName.Bc:                 lambda state: self.bc_unlocked(state, 1),
-            RegionName.Bc2:                lambda state: self.bc_unlocked(state, 2),
-
-            RegionName.Valor:              lambda state: self.multi_form_region_access(state),
-            RegionName.Wisdom:             lambda state: self.multi_form_region_access(state),
-            RegionName.Limit:              lambda state: self.limit_form_region_access(state),
-            RegionName.Master:             lambda state: self.multi_form_region_access(state),
-            RegionName.Final:              lambda state: self.final_form_region_access(state),
-
-            RegionName.AtlanticaSongThree: lambda state: self.at_three_unlocked(state),
-            RegionName.AtlanticaSongFour:  lambda state: self.at_four_unlocked(state),
-
-            RegionName.Ha1:                lambda state: True,
-            RegionName.Ha2:                lambda state: self.hundred_acre_unlocked(state, 1),
-            RegionName.Ha3:                lambda state: self.hundred_acre_unlocked(state, 2),
-            RegionName.Ha4:                lambda state: self.hundred_acre_unlocked(state, 3),
-            RegionName.Ha5:                lambda state: self.hundred_acre_unlocked(state, 4),
-            RegionName.Ha6:                lambda state: self.hundred_acre_unlocked(state, 5),
-
-            RegionName.LevelsVS1:          lambda state: self.level_locking_unlock(state, 1),
-            RegionName.LevelsVS3:          lambda state: self.level_locking_unlock(state, 3),
-            RegionName.LevelsVS6:          lambda state: self.level_locking_unlock(state, 6),
-            RegionName.LevelsVS9:          lambda state: self.level_locking_unlock(state, 9),
-            RegionName.LevelsVS12:         lambda state: self.level_locking_unlock(state, 12),
-            RegionName.LevelsVS15:         lambda state: self.level_locking_unlock(state, 15),
-            RegionName.LevelsVS18:         lambda state: self.level_locking_unlock(state, 18),
-            RegionName.LevelsVS21:         lambda state: self.level_locking_unlock(state, 21),
-            RegionName.LevelsVS24:         lambda state: self.level_locking_unlock(state, 24),
-            RegionName.LevelsVS26:         lambda state: self.level_locking_unlock(state, 26),
-        }
+        self.multiworld = world.multiworld
 
     def lod_unlocked(self, state: CollectionState, Amount) -> bool:
         return state.has(ItemName.SwordoftheAncestor, self.player, Amount)
@@ -232,152 +82,11 @@ class KH2Rules:
     def hundred_acre_unlocked(self, state: CollectionState, amount) -> bool:
         return state.has(ItemName.TornPages, self.player, amount)
 
-    def final_form_region_access(self, state: CollectionState) -> bool:
-        """
-        Can reach one of TT3,Twtnw post Roxas, BC2, LoD2 or PR2
-        """
-        # tt3 start, can beat roxas, can beat gr2, can beat xaldin, can beat storm rider.
-        final_leveling_access = [LocationName.MemorysSkyscaperMythrilCrystal, LocationName.GrimReaper2,
-                                 LocationName.Xaldin, LocationName.StormRider, LocationName.SunsetTerraceAbilityRing]
-        return any(
-                self.world.multiworld.get_location(location, self.player).can_reach(state) for location in
-                final_leveling_access
-        )
-
-    def limit_form_region_access(self, state: CollectionState) -> bool:
-        """
-        multi_form_region_access + namine sketches for leveling
-        """
-        multi_form_region_access = {
-            ItemName.CastleKey,
-            ItemName.BattlefieldsofWar,
-            ItemName.SwordoftheAncestor,
-            ItemName.BeastsClaw,
-            ItemName.BoneFist,
-            ItemName.SkillandCrossbones,
-            ItemName.Scimitar,
-            ItemName.MembershipCard,
-            ItemName.IceCream,
-            ItemName.WaytotheDawn,
-            ItemName.IdentityDisk,
-            ItemName.NamineSketches
-        }
-        return state.has_any(multi_form_region_access, self.player)
-
-    def multi_form_region_access(self, state: CollectionState) -> bool:
-        """
-        Valor, Wisdom and Master Form region access.
-        Note: This does not account for having the drive form. See drive_form_unlock
-        """
-        # todo: if boss enemy start the player with oc stone because of cerb
-        multi_form_region_access = {
-            ItemName.CastleKey,
-            ItemName.BattlefieldsofWar,
-            ItemName.SwordoftheAncestor,
-            ItemName.BeastsClaw,
-            ItemName.BoneFist,
-            ItemName.SkillandCrossbones,
-            ItemName.Scimitar,
-            ItemName.MembershipCard,
-            ItemName.IceCream,
-            ItemName.WaytotheDawn,
-            ItemName.IdentityDisk,
-        }
-        return state.has_any(multi_form_region_access, self.player)
-
     def level_locking_unlock(self, state: CollectionState, amount):
         return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
 
     def summon_levels_unlocked(self, state: CollectionState, amount) -> bool:
         return amount <= sum([state.count(item_name, self.player) for item_name in summons])
-
-    def set_kh2_rules(self) -> None:
-        world = self.world.multiworld
-        player = self.player
-        for region in world.get_regions(self.player):
-            if region.name in self.region_rules:
-                for entrance in region.entrances:
-                    entrance.access_rule = self.region_rules[region.name]
-
-        self.set_kh2_goal()
-
-        for slot, weapon in exclusion_table["WeaponSlots"].items():
-            add_rule(world.get_location(slot, player), lambda state: state.has(weapon, player))
-
-        for goofy_slot in [LocationName.AdamantShield,
-                           LocationName.AkashicRecord,
-                           LocationName.ChainGear,
-                           LocationName.DreamCloud,
-                           LocationName.FallingStar,
-                           LocationName.FrozenPride2,
-                           LocationName.GenjiShield,
-                           LocationName.KnightDefender,
-                           LocationName.KnightsShield,
-                           LocationName.MajesticMushroom,
-                           LocationName.MajesticMushroom2,
-                           LocationName.NobodyGuard,
-                           LocationName.OgreShield,
-                           LocationName.SaveTheKing2,
-                           LocationName.UltimateMushroom]:
-            add_item_rule(world.get_location(goofy_slot, self.player),
-                    lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
-        for donald_slot in [LocationName.Centurion2,
-                            LocationName.CometStaff,
-                            LocationName.HammerStaff,
-                            LocationName.LordsBroom,
-                            LocationName.MagesStaff,
-                            LocationName.MeteorStaff,
-                            LocationName.NobodyLance,
-                            LocationName.PreciousMushroom,
-                            LocationName.PreciousMushroom2,
-                            LocationName.PremiumMushroom,
-                            LocationName.RisingDragon,
-                            LocationName.SaveTheQueen2,
-                            LocationName.ShamansRelic,
-                            LocationName.VictoryBell,
-                            LocationName.WisdomWand, ]:
-            add_item_rule(world.get_location(donald_slot, self.player),
-                    lambda item: item.player == self.player and item.name in DonaldAbility_Table.keys())
-
-    def set_kh2_goal(self):
-        if self.world.multiworld.Goal[self.player] == "three_proofs":
-            add_rule(
-                    self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
-                    lambda state: self.kh2_has_all(three_proofs, state)
-            )
-            if self.world.multiworld.FinalXemnas[self.player]:
-                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.world.multiworld.completion_condition[self.player] = lambda state: self.kh2_has_all(three_proofs, state)
-        # lucky emblem hunt
-        elif self.world.multiworld.Goal[self.player] == "lucky_emblem_hunt":
-            add_rule(
-                    self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
-                    lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value))
-            if self.world.multiworld.FinalXemnas[self.player]:
-                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value)
-        # hitlist if == 2
-        elif self.world.multiworld.Goal[self.player] == "hitlist":
-            add_rule(
-                    self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
-                    lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value))
-            if self.world.multiworld.FinalXemnas[self.player]:
-                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value)
-        else:
-            add_rule(
-                    self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
-                    lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value) and
-                                  state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value))
-
-            if self.world.multiworld.FinalXemnas[self.player]:
-                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value) and \
-                                                                                        state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value)
 
     def kh2_set_count_sum(self, item_name_set: set, state: CollectionState) -> int:
         """
@@ -429,18 +138,14 @@ class KH2Rules:
         Can reach all locations in the set.
         """
         return all(
-                [state.can_reach(self.world.multiworld.get_location(location, self.player), "location", self.player) for location in
-                 loc_list]
+                [self.kh2_can_reach(location, state) for location in loc_list]
         )
 
     def kh2_can_reach(self, loc: str, state: CollectionState):
         """
         Returns bool instead of collection state.
         """
-        if state.can_reach(self.world.multiworld.get_location(loc, self.player), "location", self.player):
-            return True
-        else:
-            return False
+        return state.can_reach(self.multiworld.get_location(loc, self.player), "location", self.player)
 
     def kh2_has_all(self, items: list, state: CollectionState):
         """If state has at least one of all."""
@@ -449,14 +154,14 @@ class KH2Rules:
     def kh2_has_any(self, items: list, state: CollectionState):
         return state.has_any(set(items), self.player)
 
-    def drive_form_unlock(self, state: CollectionState, parent_drive_form, level_required, fight_logic=False) -> bool:
-        form_access = {parent_drive_form}
-        if self.world.multiworld.AutoFormLogic[self.player] and state.has(ItemName.SecondChance, self.player) and not fight_logic:
-            if parent_drive_form == ItemName.MasterForm:
+    def form_list_unlock(self, state: CollectionState, parent_form_list, level_required, fight_logic=False) -> bool:
+        form_access = {parent_form_list}
+        if self.multiworld.AutoFormLogic[self.player] and state.has(ItemName.SecondChance, self.player) and not fight_logic:
+            if parent_form_list == ItemName.MasterForm:
                 if state.has(ItemName.DriveConverter, self.player):
-                    form_access.add(self.auto_form_dict[parent_drive_form])
+                    form_access.add(auto_form_dict[parent_form_list])
             else:
-                form_access.add(self.auto_form_dict[parent_drive_form])
+                form_access.add(auto_form_dict[parent_form_list])
         return state.has_any(form_access, self.player) \
             and self.get_form_level_requirement(state, level_required)
 
@@ -469,13 +174,139 @@ class KH2Rules:
                 if state.has(ItemName.LightDarkness, self.player) and state.has_any(set(form_list), self.player):
                     forms_available += 1
                     form_list.remove(ItemName.FinalForm)
-
             else:  # self.multiworld.FinalFormLogic=="just a form"
                 form_list.remove(ItemName.FinalForm)
                 if state.has_any(form_list, self.player):
                     forms_available += 1
         forms_available += sum([1 for form in form_list if state.has(form, self.player)])
         return forms_available >= amount
+
+
+class KH2WorldRules(KH2Rules):
+    def __init__(self, kh2world: KH2World) -> None:
+        # These Rules are Always in effect
+        super().__init__(kh2world)
+        self.region_rules = {
+            RegionName.LoD:                lambda state: self.lod_unlocked(state, 1),
+            RegionName.LoD2:               lambda state: self.lod_unlocked(state, 2),
+
+            RegionName.Oc:                 lambda state: self.oc_unlocked(state, 1),
+            RegionName.Oc2:                lambda state: self.oc_unlocked(state, 2),
+
+            RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 2),
+            # These will be swapped and First Visit lock for twtnw is in development.
+            # RegionName.Twtnw1: lambda state: self.lod_unlocked(state, 2),
+
+            RegionName.Ht:                 lambda state: self.ht_unlocked(state, 1),
+            RegionName.Ht2:                lambda state: self.ht_unlocked(state, 2),
+
+            RegionName.Tt:                 lambda state: self.tt_unlocked(state, 1),
+            RegionName.Tt2:                lambda state: self.tt_unlocked(state, 2),
+            RegionName.Tt3:                lambda state: self.tt_unlocked(state, 3),
+
+            RegionName.Pr:                 lambda state: self.pr_unlocked(state, 1),
+            RegionName.Pr2:                lambda state: self.pr_unlocked(state, 2),
+
+            RegionName.Sp:                 lambda state: self.sp_unlocked(state, 1),
+            RegionName.Sp2:                lambda state: self.sp_unlocked(state, 2),
+
+            RegionName.Stt:                lambda state: self.stt_unlocked(state, 1),
+
+            RegionName.Dc:                 lambda state: self.dc_unlocked(state, 1),
+            RegionName.Tr:                 lambda state: self.dc_unlocked(state, 2),
+            #  Terra is a fight and can have more than just this requirement.
+            # RegionName.Terra:      lambda state:state.has(ItemName.ProofofConnection,self.player),
+
+            RegionName.Hb:                 lambda state: self.hb_unlocked(state, 1),
+            RegionName.Hb2:                lambda state: self.hb_unlocked(state, 2),
+            RegionName.Mushroom13:         lambda state: state.has(ItemName.ProofofPeace, self.player),
+
+            RegionName.Pl:                 lambda state: self.pl_unlocked(state, 1),
+            RegionName.Pl2:                lambda state: self.pl_unlocked(state, 2),
+
+            RegionName.Ag:                 lambda state: self.ag_unlocked(state, 1),
+            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2),
+
+            RegionName.Bc:                 lambda state: self.bc_unlocked(state, 1),
+            RegionName.Bc2:                lambda state: self.bc_unlocked(state, 2),
+
+            RegionName.AtlanticaSongThree: lambda state: self.at_three_unlocked(state),
+            RegionName.AtlanticaSongFour:  lambda state: self.at_four_unlocked(state),
+
+            RegionName.Ha1:                lambda state: True,
+            RegionName.Ha2:                lambda state: self.hundred_acre_unlocked(state, 1),
+            RegionName.Ha3:                lambda state: self.hundred_acre_unlocked(state, 2),
+            RegionName.Ha4:                lambda state: self.hundred_acre_unlocked(state, 3),
+            RegionName.Ha5:                lambda state: self.hundred_acre_unlocked(state, 4),
+            RegionName.Ha6:                lambda state: self.hundred_acre_unlocked(state, 5),
+
+            RegionName.LevelsVS1:          lambda state: self.level_locking_unlock(state, 1),
+            RegionName.LevelsVS3:          lambda state: self.level_locking_unlock(state, 3),
+            RegionName.LevelsVS6:          lambda state: self.level_locking_unlock(state, 6),
+            RegionName.LevelsVS9:          lambda state: self.level_locking_unlock(state, 9),
+            RegionName.LevelsVS12:         lambda state: self.level_locking_unlock(state, 12),
+            RegionName.LevelsVS15:         lambda state: self.level_locking_unlock(state, 15),
+            RegionName.LevelsVS18:         lambda state: self.level_locking_unlock(state, 18),
+            RegionName.LevelsVS21:         lambda state: self.level_locking_unlock(state, 21),
+            RegionName.LevelsVS24:         lambda state: self.level_locking_unlock(state, 24),
+            RegionName.LevelsVS26:         lambda state: self.level_locking_unlock(state, 26),
+        }
+
+    def set_kh2_rules(self) -> None:
+        for region_name, rules in self.region_rules.items():
+            region = self.multiworld.get_region(region_name, self.player)
+            for entrance in region.entrances:
+                entrance.access_rule = rules
+
+        self.set_kh2_goal()
+
+        weapon_region = self.multiworld.get_region(RegionName.Keyblade, self.player)
+        for location in weapon_region.locations:
+            add_rule(location, lambda state: state.has(exclusion_table["WeaponSlots"][location.name], self.player))
+            if location.name in Goofy_Checks:
+                add_item_rule(location, lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
+            elif location.name in Donald_Checks:
+                add_item_rule(location, lambda item: item.player == self.player and item.name in DonaldAbility_Table.keys())
+
+    def set_kh2_goal(self):
+        if self.multiworld.Goal[self.player] == "three_proofs":
+            add_rule(
+                    self.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                    lambda state: self.kh2_has_all(three_proofs, state)
+            )
+            if self.multiworld.FinalXemnas[self.player]:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
+            else:
+                self.multiworld.completion_condition[self.player] = lambda state: self.kh2_has_all(three_proofs, state)
+        # lucky emblem hunt
+        elif self.multiworld.Goal[self.player] == "lucky_emblem_hunt":
+            add_rule(
+                    self.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                    lambda state: state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value))
+            if self.multiworld.FinalXemnas[self.player]:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
+            else:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
+        # hitlist if == 2
+        elif self.multiworld.Goal[self.player] == "hitlist":
+            add_rule(
+                    self.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                    lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value))
+            if self.multiworld.FinalXemnas[self.player]:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
+            else:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value)
+        else:
+            add_rule(
+                    self.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                    lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and
+                                  state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value))
+
+            if self.multiworld.FinalXemnas[self.player]:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
+            else:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and \
+                                                                                  state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
 
 
 class KH2FormRules(KH2Rules):
@@ -485,56 +316,91 @@ class KH2FormRules(KH2Rules):
         # access rules on where you can level a form.
 
         self.form_rules = {
-            LocationName.Valorlvl2:  lambda state: self.drive_form_unlock(state, ItemName.ValorForm, 0),
-            LocationName.Valorlvl3:  lambda state: self.drive_form_unlock(state, ItemName.ValorForm, 1),
-            LocationName.Valorlvl4:  lambda state: self.drive_form_unlock(state, ItemName.ValorForm, 2),
-            LocationName.Valorlvl5:  lambda state: self.drive_form_unlock(state, ItemName.ValorForm, 3),
-            LocationName.Valorlvl6:  lambda state: self.drive_form_unlock(state, ItemName.ValorForm, 4),
-            LocationName.Valorlvl7:  lambda state: self.drive_form_unlock(state, ItemName.ValorForm, 5),
-            LocationName.Wisdomlvl2: lambda state: self.drive_form_unlock(state, ItemName.WisdomForm, 0),
-            LocationName.Wisdomlvl3: lambda state: self.drive_form_unlock(state, ItemName.WisdomForm, 1),
-            LocationName.Wisdomlvl4: lambda state: self.drive_form_unlock(state, ItemName.WisdomForm, 2),
-            LocationName.Wisdomlvl5: lambda state: self.drive_form_unlock(state, ItemName.WisdomForm, 3),
-            LocationName.Wisdomlvl6: lambda state: self.drive_form_unlock(state, ItemName.WisdomForm, 4),
-            LocationName.Wisdomlvl7: lambda state: self.drive_form_unlock(state, ItemName.WisdomForm, 5),
-            LocationName.Limitlvl2:  lambda state: self.drive_form_unlock(state, ItemName.LimitForm, 0),
-            LocationName.Limitlvl3:  lambda state: self.drive_form_unlock(state, ItemName.LimitForm, 1),
-            LocationName.Limitlvl4:  lambda state: self.drive_form_unlock(state, ItemName.LimitForm, 2),
-            LocationName.Limitlvl5:  lambda state: self.drive_form_unlock(state, ItemName.LimitForm, 3),
-            LocationName.Limitlvl6:  lambda state: self.drive_form_unlock(state, ItemName.LimitForm, 4),
-            LocationName.Limitlvl7:  lambda state: self.drive_form_unlock(state, ItemName.LimitForm, 5),
-            LocationName.Masterlvl2: lambda state: self.drive_form_unlock(state, ItemName.MasterForm, 0),
-            LocationName.Masterlvl3: lambda state: self.drive_form_unlock(state, ItemName.MasterForm, 1),
-            LocationName.Masterlvl4: lambda state: self.drive_form_unlock(state, ItemName.MasterForm, 2),
-            LocationName.Masterlvl5: lambda state: self.drive_form_unlock(state, ItemName.MasterForm, 3),
-            LocationName.Masterlvl6: lambda state: self.drive_form_unlock(state, ItemName.MasterForm, 4),
-            LocationName.Masterlvl7: lambda state: self.drive_form_unlock(state, ItemName.MasterForm, 5),
-            LocationName.Finallvl2:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 0),
-            LocationName.Finallvl3:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 1),
-            LocationName.Finallvl4:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 2),
-            LocationName.Finallvl5:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 3),
-            LocationName.Finallvl6:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 4),
-            LocationName.Finallvl7:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 5),
+            LocationName.Valorlvl2:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 0),
+            LocationName.Valorlvl3:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 1),
+            LocationName.Valorlvl4:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 2),
+            LocationName.Valorlvl5:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 3),
+            LocationName.Valorlvl6:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 4),
+            LocationName.Valorlvl7:  lambda state: self.form_list_unlock(state, ItemName.ValorForm, 5),
+            LocationName.Wisdomlvl2: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 0),
+            LocationName.Wisdomlvl3: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 1),
+            LocationName.Wisdomlvl4: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 2),
+            LocationName.Wisdomlvl5: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 3),
+            LocationName.Wisdomlvl6: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 4),
+            LocationName.Wisdomlvl7: lambda state: self.form_list_unlock(state, ItemName.WisdomForm, 5),
+            LocationName.Limitlvl2:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 0),
+            LocationName.Limitlvl3:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 1),
+            LocationName.Limitlvl4:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 2),
+            LocationName.Limitlvl5:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 3),
+            LocationName.Limitlvl6:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 4),
+            LocationName.Limitlvl7:  lambda state: self.form_list_unlock(state, ItemName.LimitForm, 5),
+            LocationName.Masterlvl2: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 0),
+            LocationName.Masterlvl3: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 1),
+            LocationName.Masterlvl4: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 2),
+            LocationName.Masterlvl5: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 3),
+            LocationName.Masterlvl6: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 4),
+            LocationName.Masterlvl7: lambda state: self.form_list_unlock(state, ItemName.MasterForm, 5),
+            LocationName.Finallvl2:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 0),
+            LocationName.Finallvl3:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 1),
+            LocationName.Finallvl4:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 2),
+            LocationName.Finallvl5:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 3),
+            LocationName.Finallvl6:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 4),
+            LocationName.Finallvl7:  lambda state: self.form_list_unlock(state, ItemName.FinalForm, 5),
             LocationName.Summonlvl2: lambda state: self.summon_levels_unlocked(state, 1),
             LocationName.Summonlvl3: lambda state: self.summon_levels_unlocked(state, 1),
             LocationName.Summonlvl4: lambda state: self.summon_levels_unlocked(state, 2),
             LocationName.Summonlvl5: lambda state: self.summon_levels_unlocked(state, 3),
             LocationName.Summonlvl6: lambda state: self.summon_levels_unlocked(state, 4),
             LocationName.Summonlvl7: lambda state: self.summon_levels_unlocked(state, 4),
-
+        }
+        self.form_region_rules = {
+            RegionName.Valor:  lambda state: self.multi_form_region_access(),
+            RegionName.Wisdom: lambda state: self.multi_form_region_access(),
+            RegionName.Limit:  lambda state: self.limit_form_region_access(),
+            RegionName.Master: lambda state: self.multi_form_region_access(),
+            RegionName.Final:  lambda state: self.final_form_region_access(state)
         }
 
+    def final_form_region_access(self, state: CollectionState) -> bool:
+        """
+        Can reach one of TT3,Twtnw post Roxas, BC2, LoD2 or PR2
+        """
+        # tt3 start, can beat roxas, can beat gr2, can beat xaldin, can beat storm rider.
+
+        return any(
+                self.multiworld.get_location(location, self.player).can_reach(state) for location in
+                final_leveling_access
+        )
+
+    @staticmethod
+    def limit_form_region_access() -> bool:
+        """
+        returns true since twtnw always is open and has enemies
+        """
+        return True
+
+    @staticmethod
+    def multi_form_region_access() -> bool:
+        """
+        returns true since twtnw always is open and has enemies
+        Valor, Wisdom and Master Form region access.
+        Note: This does not account for having the drive form. See form_list_unlock
+        """
+        # todo: if boss enemy start the player with oc stone because of cerb
+        return True
+
     def set_kh2_form_rules(self):
-        # could use comprehension for getting a list of the region objects
-        drive_form_set = {RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master, RegionName.Final, RegionName.Summon}
-        for region in self.world.multiworld.get_regions(self.player):
-            if region.name in drive_form_set:
-                for loc in region.locations:
-                    if region.name == RegionName.Summon:
-                        if self.world.multiworld.SummonLevelLocationToggle[self.player]:
-                            loc.access_rule = self.form_rules[loc.name]
-                    else:
-                        loc.access_rule = self.form_rules[loc.name]
+        for region_name in drive_form_list:
+            if region_name == RegionName.Summon and not self.world.options.SummonLevelLocationToggle:
+                continue
+            # could get the location of each of these, but I feel like that would be less optimal
+            region = self.multiworld.get_region(region_name, self.player)
+            # if region_name in form_region_rules
+            if region_name != RegionName.Summon:
+                for entrance in region.entrances:
+                    entrance.access_rule = self.form_region_rules[region_name]
+            for loc in region.locations:
+                loc.access_rule = self.form_rules[loc.name]
 
 
 class KH2FightRules(KH2Rules):
@@ -549,89 +415,80 @@ class KH2FightRules(KH2Rules):
     # if skip rules are of return false
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
-        self.fight_logic = self.world.multiworld.FightLogic[self.player].current_key
-        self.player = world.player
-        self.world = world
-        self.final_leveling_access = {
-            LocationName.MemorysSkyscaperMythrilCrystal,
-            LocationName.GrimReaper2,
-            LocationName.Xaldin,
-            LocationName.StormRider,
-            LocationName.SunsetTerraceAbilityRing
-        }
+        self.fight_logic = self.multiworld.FightLogic[self.player].current_key
+
         self.fight_region_rules = {
-            RegionName.ShanYu:                lambda state: self.get_shan_yu_rules(state),
-            RegionName.AnsemRiku:             lambda state: self.get_ansem_riku_rules(state),
-            RegionName.StormRider:            lambda state: self.get_storm_rider_rules(state),
-            RegionName.DataXigbar:            lambda state: self.get_data_xigbar_rules(state),
-            RegionName.TwinLords:             lambda state: self.get_fire_lord_rules(state) and self.get_blizzard_lord_rules(state),
-            RegionName.GenieJafar:            lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataLexaeus:           lambda state: self.get_data_lexaeus_rules(state),
-            RegionName.OldPete:               lambda state: self.get_old_pete_rules(),
-            RegionName.FuturePete:            lambda state: self.get_future_pete_rules(state),
-            RegionName.Terra:                 lambda state: self.get_terra_rules(state),
-            RegionName.DataMarluxia:          lambda state: self.get_data_marluxia_rules(state),
-            RegionName.Barbosa:               lambda state: self.get_barbosa_rules(state),
-            RegionName.GrimReaper1:           lambda state: self.get_grim_reaper1_rules(),
-            RegionName.GrimReaper2:           lambda state: self.get_grim_reaper2_rules(state),
-            RegionName.DataLuxord:            lambda state: self.get_data_luxord_rules(state),
-            RegionName.Cerberus:              lambda state: self.get_cerberus_rules(state),
-            RegionName.OlympusPete:           lambda state: self.get_olympus_pete_rules(state),
-            RegionName.Hydra:                 lambda state: self.get_hydra_rules(state),
-            RegionName.Hades:                 lambda state: self.get_hades_rules(state),
-            RegionName.DataZexion:            lambda state: self.get_data_zexion_rules(state),
+            RegionName.ShanYu:            lambda state: self.get_shan_yu_rules(state),
+            RegionName.AnsemRiku:         lambda state: self.get_ansem_riku_rules(state),
+            RegionName.StormRider:        lambda state: self.get_storm_rider_rules(state),
+            RegionName.DataXigbar:        lambda state: self.get_data_xigbar_rules(state),
+            RegionName.TwinLords:         lambda state: self.get_fire_lord_rules(state) and self.get_blizzard_lord_rules(state),
+            RegionName.GenieJafar:        lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataLexaeus:       lambda state: self.get_data_lexaeus_rules(state),
+            RegionName.OldPete:           lambda state: self.get_old_pete_rules(),
+            RegionName.FuturePete:        lambda state: self.get_future_pete_rules(state),
+            RegionName.Terra:             lambda state: self.get_terra_rules(state),
+            RegionName.DataMarluxia:      lambda state: self.get_data_marluxia_rules(state),
+            RegionName.Barbosa:           lambda state: self.get_barbosa_rules(state),
+            RegionName.GrimReaper1:       lambda state: self.get_grim_reaper1_rules(),
+            RegionName.GrimReaper2:       lambda state: self.get_grim_reaper2_rules(state),
+            RegionName.DataLuxord:        lambda state: self.get_data_luxord_rules(state),
+            RegionName.Cerberus:          lambda state: self.get_cerberus_rules(state),
+            RegionName.OlympusPete:       lambda state: self.get_olympus_pete_rules(state),
+            RegionName.Hydra:             lambda state: self.get_hydra_rules(state),
+            RegionName.Hades:             lambda state: self.get_hades_rules(state),
+            RegionName.DataZexion:        lambda state: self.get_data_zexion_rules(state),
             RegionName.OcPainAndPanicCup: lambda state: self.get_pain_and_panic_cup_rules(state),
-            RegionName.OcCerberusCup:       lambda state: self.get_cerberus_cup_rules(state),
-            RegionName.Oc2TitanCup:         lambda state: self.get_titan_cup_rules(state),
-            RegionName.Oc2GofCup:           lambda state: self.get_goddess_of_fate_cup_rules(state),
-            RegionName.HadesCups:             lambda state: self.get_hades_cup_rules(state),
-            RegionName.Thresholder:           lambda state: self.get_thresholder_rules(state),
-            RegionName.Beast:                 lambda state: self.get_beast_rules(),
-            RegionName.DarkThorn:             lambda state: self.get_dark_thorn_rules(state),
-            RegionName.Xaldin:                lambda state: self.get_xaldin_rules(state),
-            RegionName.DataXaldin:            lambda state: self.get_data_xaldin_rules(state),
-            RegionName.HostileProgram:        lambda state: self.get_hostile_program_rules(state),
-            RegionName.Mcp:                   lambda state: self.get_mcp_rules(state),
-            RegionName.DataLarxene:           lambda state: self.get_data_larxene_rules(state),
-            RegionName.PrisonKeeper:          lambda state: self.get_prison_keeper_rules(state),
-            RegionName.OogieBoogie:           lambda state: self.get_oogie_rules(),
-            RegionName.Experiment:            lambda state: self.get_experiment_rules(state),
-            RegionName.DataVexen:             lambda state: self.get_data_vexen_rules(state),
-            RegionName.HBDemyx:               lambda state: self.get_demyx_rules(state),
-            RegionName.ThousandHeartless:     lambda state: self.get_thousand_heartless_rules(state),
-            RegionName.DataDemyx:             lambda state: self.get_data_demyx_rules(state),
-            RegionName.Sephi:                 lambda state: self.get_sephiroth_rules(state),
-            RegionName.CorFirstFight:         lambda state: self.get_cor_first_fight_movement_rules(state) and (self.get_cor_first_fight_rules(state) or self.get_cor_skip_first_rules(state)),
-            RegionName.CorSecondFight:        lambda state: self.get_cor_second_fight_movement_rules(state),
-            RegionName.Transport:             lambda state: self.get_transport_movement_rules(state),
-            RegionName.Scar:                  lambda state: self.get_scar_rules(state),
-            RegionName.GroundShaker:          lambda state: self.get_groundshaker_rules(state),
-            RegionName.DataSaix:              lambda state: self.get_data_saix_rules(state),
-            RegionName.TwilightThorn:         lambda state: self.get_twilight_thorn_rules(),
-            RegionName.Axel1:                 lambda state: self.get_axel_one_rules(),
-            RegionName.Axel2:                 lambda state: self.get_axel_two_rules(),
-            RegionName.DataRoxas:             lambda state: self.get_data_roxas_rules(state),
-            RegionName.DataAxel:              lambda state: self.get_data_axel_rules(state),
-            RegionName.Roxas:                 lambda state: self.get_roxas_rules(state) and self.twtnw_unlocked(state, 1),
-            RegionName.Xigbar:                lambda state: self.get_xigbar_rules(state),
-            RegionName.Luxord:                lambda state: self.get_luxord_rules(state),
-            RegionName.Saix:                  lambda state: self.get_saix_rules(state),
-            RegionName.Xemnas:                lambda state: self.get_xemnas_rules(state),
-            RegionName.ArmoredXemnas:         lambda state: self.get_armored_xemnas_one_rules(state),
-            RegionName.ArmoredXemnas2:        lambda state: self.get_armored_xemnas_two_rules(state),
-            RegionName.FinalXemnas:           lambda state: self.get_final_xemnas_rules(state),
-            RegionName.DataXemnas:            lambda state: self.get_data_xemnas_rules(state),
+            RegionName.OcCerberusCup:     lambda state: self.get_cerberus_cup_rules(state),
+            RegionName.Oc2TitanCup:       lambda state: self.get_titan_cup_rules(state),
+            RegionName.Oc2GofCup:         lambda state: self.get_goddess_of_fate_cup_rules(state),
+            RegionName.HadesCups:         lambda state: self.get_hades_cup_rules(state),
+            RegionName.Thresholder:       lambda state: self.get_thresholder_rules(state),
+            RegionName.Beast:             lambda state: self.get_beast_rules(),
+            RegionName.DarkThorn:         lambda state: self.get_dark_thorn_rules(state),
+            RegionName.Xaldin:            lambda state: self.get_xaldin_rules(state),
+            RegionName.DataXaldin:        lambda state: self.get_data_xaldin_rules(state),
+            RegionName.HostileProgram:    lambda state: self.get_hostile_program_rules(state),
+            RegionName.Mcp:               lambda state: self.get_mcp_rules(state),
+            RegionName.DataLarxene:       lambda state: self.get_data_larxene_rules(state),
+            RegionName.PrisonKeeper:      lambda state: self.get_prison_keeper_rules(state),
+            RegionName.OogieBoogie:       lambda state: self.get_oogie_rules(),
+            RegionName.Experiment:        lambda state: self.get_experiment_rules(state),
+            RegionName.DataVexen:         lambda state: self.get_data_vexen_rules(state),
+            RegionName.HBDemyx:           lambda state: self.get_demyx_rules(state),
+            RegionName.ThousandHeartless: lambda state: self.get_thousand_heartless_rules(state),
+            RegionName.DataDemyx:         lambda state: self.get_data_demyx_rules(state),
+            RegionName.Sephi:             lambda state: self.get_sephiroth_rules(state),
+            RegionName.CorFirstFight:     lambda state: self.get_cor_first_fight_movement_rules(state) and (self.get_cor_first_fight_rules(state) or self.get_cor_skip_first_rules(state)),
+            RegionName.CorSecondFight:    lambda state: self.get_cor_second_fight_movement_rules(state),
+            RegionName.Transport:         lambda state: self.get_transport_movement_rules(state),
+            RegionName.Scar:              lambda state: self.get_scar_rules(state),
+            RegionName.GroundShaker:      lambda state: self.get_groundshaker_rules(state),
+            RegionName.DataSaix:          lambda state: self.get_data_saix_rules(state),
+            RegionName.TwilightThorn:     lambda state: self.get_twilight_thorn_rules(),
+            RegionName.Axel1:             lambda state: self.get_axel_one_rules(),
+            RegionName.Axel2:             lambda state: self.get_axel_two_rules(),
+            RegionName.DataRoxas:         lambda state: self.get_data_roxas_rules(state),
+            RegionName.DataAxel:          lambda state: self.get_data_axel_rules(state),
+            RegionName.Roxas:             lambda state: self.get_roxas_rules(state) and self.twtnw_unlocked(state, 1),
+            RegionName.Xigbar:            lambda state: self.get_xigbar_rules(state),
+            RegionName.Luxord:            lambda state: self.get_luxord_rules(state),
+            RegionName.Saix:              lambda state: self.get_saix_rules(state),
+            RegionName.Xemnas:            lambda state: self.get_xemnas_rules(state),
+            RegionName.ArmoredXemnas:     lambda state: self.get_armored_xemnas_one_rules(state),
+            RegionName.ArmoredXemnas2:    lambda state: self.get_armored_xemnas_two_rules(state),
+            RegionName.FinalXemnas:       lambda state: self.get_final_xemnas_rules(state),
+            RegionName.DataXemnas:        lambda state: self.get_data_xemnas_rules(state),
         }
 
     def set_kh2_fight_rules(self) -> None:
-        world = self.world.multiworld
-        player = self.player
-        for region in world.get_regions(player):
+        for region_name, rules in self.fight_region_rules.items():
+            region = self.multiworld.get_region(region_name, self.player)
             for entrance in region.entrances:
-                if region.name in self.fight_region_rules:
-                    entrance.access_rule = self.fight_region_rules[region.name]
+                entrance.access_rule = rules
+
         for loc_name in [LocationName.TransportEventLocation, LocationName.TransporttoRemembrance]:
-            location = world.get_location(loc_name, player)
+            location = self.multiworld.get_location(loc_name, self.player)
             add_rule(location, lambda state: self.get_transport_fight_rules(state))
 
     def get_shan_yu_rules(self, state: CollectionState) -> bool:
@@ -639,9 +496,9 @@ class KH2FightRules(KH2Rules):
         # normal: 2 out of easy
         # hard: defensive tool or drive form
         shan_yu_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 3,
-            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, drive_form], state) >= 1
+            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 3,
+            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool, form_list], state) >= 1
         }
         return shan_yu_rules[self.fight_logic]
 
@@ -661,9 +518,9 @@ class KH2FightRules(KH2Rules):
         # normal: has 3 of those things
         # hard: has 2 of those things 
         storm_rider_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 4,
-            "normal": self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 3,
-            "hard":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 2,
+            "easy":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, form_list], state) >= 4,
+            "normal": self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, form_list], state) >= 3,
+            "hard":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, form_list], state) >= 2,
         }
         return storm_rider_rules[self.fight_logic]
 
@@ -671,27 +528,10 @@ class KH2FightRules(KH2Rules):
         # easy:final 7,firaga,2 air combo plus,air gap closer, finishing plus,guard,reflega,horizontal slash,donald limit
         # normal:final 7,firaga,finishing plus,guard,reflect horizontal slash,donald limit
         # hard:((final 5, fira) or donald limit), finishing plus,guard/reflect
-        easy_data_xigbar_tools = {
-            ItemName.FinishingPlus:   1,
-            ItemName.Guard:           1,
-            ItemName.AerialDive:      1,
-            ItemName.HorizontalSlash: 1,
-            ItemName.AirComboPlus:    2,
-            ItemName.FireElement:     3,
-            ItemName.ReflectElement:  3,
-        }
-        normal_data_xigbar_tools = {
-            ItemName.FinishingPlus:   1,
-            ItemName.Guard:           1,
-            ItemName.HorizontalSlash: 1,
-            ItemName.FireElement:     3,
-            ItemName.ReflectElement:  3,
-        }
-
         data_xigbar_rules = {
-            "easy":   self.kh2_dict_count(easy_data_xigbar_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_has_any(donald_limit, state),
-            "normal": self.kh2_dict_count(normal_data_xigbar_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_has_any(donald_limit, state),
-            "hard":   ((self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and state.has(ItemName.FireElement, self.player, 2)) or self.kh2_has_any(donald_limit, state))
+            "easy":   self.kh2_dict_count(easy_data_xigbar_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_has_any(donald_limit, state),
+            "normal": self.kh2_dict_count(normal_data_xigbar_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_has_any(donald_limit, state),
+            "hard":   ((self.form_list_unlock(state, ItemName.FinalForm, 3, True) and state.has(ItemName.FireElement, self.player, 2)) or self.kh2_has_any(donald_limit, state))
                       and state.has(ItemName.FinishingPlus, self.player) and self.kh2_has_any(defensive_tool, state)
         }
         return data_xigbar_rules[self.fight_logic]
@@ -702,9 +542,9 @@ class KH2FightRules(KH2Rules):
         # hard:2 of those things
         # duplicate of the other because in boss rando there will be to bosses in arena and these bosses can be split.
         fire_lords_rules = {
-            "easy":   self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 4,
-            "normal": self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 3,
-            "hard":   self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 2,
+            "easy":   self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 4,
+            "normal": self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 3,
+            "hard":   self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 2,
         }
         return fire_lords_rules[self.fight_logic]
 
@@ -714,9 +554,9 @@ class KH2FightRules(KH2Rules):
         # hard:2 of those things
         # duplicate of the other because in boss rando there will be to bosses in arena and these bosses can be split.
         blizzard_lords_rules = {
-            "easy":   self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 4,
-            "normal": self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 3,
-            "hard":   self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 2,
+            "easy":   self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 4,
+            "normal": self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 3,
+            "hard":   self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 2,
         }
         return blizzard_lords_rules[self.fight_logic]
 
@@ -735,21 +575,9 @@ class KH2FightRules(KH2Rules):
         # easy:both gap closers,final 7,firaga,reflera,donald limit, guard
         # normal:one gap closer,final 5,fira,reflect, donald limit,guard
         # hard:defensive tool,gap closer
-        easy_data_lex_tools = {
-            ItemName.Guard:          1,
-            ItemName.FireElement:    3,
-            ItemName.ReflectElement: 2,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1
-        }
-        normal_data_lex_tools = {
-            ItemName.Guard:          1,
-            ItemName.FireElement:    3,
-            ItemName.ReflectElement: 1,
-        }
         data_lexaues_rules = {
-            "easy":   self.kh2_dict_count(easy_data_lex_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_lex_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_data_lex_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_lex_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
             "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer], state) >= 2,
         }
         return data_lexaues_rules[self.fight_logic]
@@ -764,9 +592,9 @@ class KH2FightRules(KH2Rules):
         # norma:2 of those things
         # hard 1 of those things
         future_pete_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, gap_closer, drive_form], state) >= 3,
-            "normal": self.kh2_list_any_sum([defensive_tool, gap_closer, drive_form], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer, drive_form], state) >= 1,
+            "easy":   self.kh2_list_any_sum([defensive_tool, gap_closer, form_list], state) >= 3,
+            "normal": self.kh2_list_any_sum([defensive_tool, gap_closer, form_list], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer, form_list], state) >= 1,
         }
         return future_pete_rules[self.fight_logic]
 
@@ -774,23 +602,9 @@ class KH2FightRules(KH2Rules):
         # easy:both gap closers,final 7,firaga,reflera,donald limit, guard
         # normal:one gap closer,final 5,fira,reflect, donald limit,guard
         # hard:defensive tool,gap closer
-        easy_data_marluxia_tools = {
-            ItemName.Guard:          1,
-            ItemName.FireElement:    3,
-            ItemName.ReflectElement: 2,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.AerialRecovery: 1,
-        }
-        normal_data_marluxia_tools = {
-            ItemName.Guard:          1,
-            ItemName.FireElement:    3,
-            ItemName.ReflectElement: 1,
-            ItemName.AerialRecovery: 1,
-        }
         data_marluxia_rules = {
-            "easy":   self.kh2_dict_count(easy_data_marluxia_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_marluxia_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_data_marluxia_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_marluxia_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
             "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer, [ItemName.AerialRecovery]], state) >= 3,
         }
         return data_marluxia_rules[self.fight_logic]
@@ -799,42 +613,8 @@ class KH2FightRules(KH2Rules):
         # easy:scom,gap closers,explosion,2 combo pluses,final 7,firaga, donald limits,reflect,guard,3 dodge roll,3 aerial dodge and 3glide
         # normal:gap closers,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard,donald limit, guard
         # hard:1 gap closer,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard
-        easy_terra_tools = {
-            ItemName.SecondChance:   1,
-            ItemName.OnceMore:       1,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.Explosion:      1,
-            ItemName.ComboPlus:      2,
-            ItemName.FireElement:    3,
-            ItemName.Fantasia:       1,
-            ItemName.FlareForce:     1,
-            ItemName.ReflectElement: 1,
-            ItemName.Guard:          1,
-            ItemName.DodgeRoll:      3,
-            ItemName.AerialDodge:    3,
-            ItemName.Glide:          3
-        }
-        normal_terra_tools = {
-            ItemName.SlideDash:   1,
-            ItemName.FlashStep:   1,
-            ItemName.Explosion:   1,
-            ItemName.ComboPlus:   2,
-            ItemName.Guard:       1,
-            ItemName.DodgeRoll:   2,
-            ItemName.AerialDodge: 2,
-            ItemName.Glide:       2
-        }
-        hard_terra_tools = {
-            ItemName.Explosion:   1,
-            ItemName.ComboPlus:   2,
-            ItemName.DodgeRoll:   2,
-            ItemName.AerialDodge: 2,
-            ItemName.Glide:       2,
-            ItemName.Guard:       1
-        }
         terra_rules = {
-            "easy":   self.kh2_dict_count(easy_terra_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
+            "easy":   self.kh2_dict_count(easy_terra_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
             "normal": self.kh2_dict_count(normal_terra_tools, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
             "hard":   self.kh2_dict_count(hard_terra_tools, state) and self.kh2_list_any_sum([gap_closer], state) >= 1,
         }
@@ -871,14 +651,6 @@ class KH2FightRules(KH2Rules):
         # easy:gap closers,reflega,aerial dodge lvl 2,glide lvl 2,guard
         # normal:1 gap closer,reflect,aerial dodge lvl 1,glide lvl 1,guard
         # hard:quick run,defensive option
-        easy_data_luxord_tools = {
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.AerialDodge:    2,
-            ItemName.Glide:          2,
-            ItemName.ReflectElement: 3,
-            ItemName.Guard:          1,
-        }
         data_luxord_rules = {
             "easy":   self.kh2_dict_count(easy_data_luxord_tools, state),
             "normal": self.kh2_has_all([ItemName.ReflectElement, ItemName.AerialDodge, ItemName.Glide, ItemName.Guard], state) and self.kh2_has_any(defensive_tool, state),
@@ -942,9 +714,9 @@ class KH2FightRules(KH2Rules):
         # normal:2 of those things
         # hard:1 of those things
         olympus_pete_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 3,
-            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 2,
-            "hard":   self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 1,
+            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 3,
+            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 2,
+            "hard":   self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 1,
         }
         return olympus_pete_rules[self.fight_logic]
 
@@ -953,9 +725,9 @@ class KH2FightRules(KH2Rules):
         # normal 2 of those things
         # hard: one of those things
         hydra_rules = {
-            "easy":   self.kh2_list_any_sum([black_magic, defensive_tool, drive_form], state) >= 3,
-            "normal": self.kh2_list_any_sum([black_magic, defensive_tool, drive_form], state) >= 2,
-            "hard":   self.kh2_list_any_sum([black_magic, defensive_tool, drive_form], state) >= 1,
+            "easy":   self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 3,
+            "normal": self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 2,
+            "hard":   self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 1,
         }
         return hydra_rules[self.fight_logic]
 
@@ -964,9 +736,9 @@ class KH2FightRules(KH2Rules):
         # normal:3 of those things
         # hard:2 of those things
         hades_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 4,
-            "normal": self.kh2_list_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 3,
-            "hard":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 2,
+            "easy":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 4,
+            "normal": self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 3,
+            "hard":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 2,
         }
         return hades_rules[self.fight_logic]
 
@@ -974,33 +746,10 @@ class KH2FightRules(KH2Rules):
         # easy: final 7,firaga,scom,both donald limits, Reflega ,guard,2 gap closers,quick run level 3
         # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,quick run level 3
         # hard:final 5,fira, donald limit, reflect,gap closer,quick run level 2
-        easy_data_zexion = {
-            ItemName.FireElement:    3,
-            ItemName.SecondChance:   1,
-            ItemName.OnceMore:       1,
-            ItemName.Fantasia:       1,
-            ItemName.FlareForce:     1,
-            ItemName.ReflectElement: 3,
-            ItemName.Guard:          1,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.QuickRun:       3,
-        }
-        normal_data_zexion = {
-            ItemName.FireElement:    3,
-            ItemName.ReflectElement: 3,
-            ItemName.Guard:          1,
-            ItemName.QuickRun:       3
-        }
-        hard_data_zexion = {
-            ItemName.FireElement:    2,
-            ItemName.ReflectElement: 1,
-            ItemName.QuickRun:       2,
-        }
         data_zexion_rules = {
-            "easy":   self.kh2_dict_count(easy_data_zexion, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_zexion, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_zexion, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_data_zexion, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
+            "normal": self.kh2_dict_count(normal_data_zexion, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "hard":   self.kh2_dict_count(hard_data_zexion, state) and self.form_list_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
         }
         return data_zexion_rules[self.fight_logic]
 
@@ -1009,9 +758,9 @@ class KH2FightRules(KH2Rules):
         # normal:2 of those things
         # hard:defensive tool or drive form
         thresholder_rules = {
-            "easy":   self.kh2_list_any_sum([drive_form, black_magic, defensive_tool], state) >= 3,
-            "normal": self.kh2_list_any_sum([drive_form, black_magic, defensive_tool], state) >= 2,
-            "hard":   self.kh2_list_any_sum([drive_form, defensive_tool], state) >= 1,
+            "easy":   self.kh2_list_any_sum([form_list, black_magic, defensive_tool], state) >= 3,
+            "normal": self.kh2_list_any_sum([form_list, black_magic, defensive_tool], state) >= 2,
+            "hard":   self.kh2_list_any_sum([form_list, defensive_tool], state) >= 1,
         }
         return thresholder_rules[self.fight_logic]
 
@@ -1025,8 +774,8 @@ class KH2FightRules(KH2Rules):
         # normal:drive form,defensive tool
         # hard:defensive tool
         dark_thorn_rules = {
-            "easy":   self.kh2_list_any_sum([drive_form, gap_closer, defensive_tool], state) >= 3,
-            "normal": self.kh2_list_any_sum([drive_form, defensive_tool], state) >= 2,
+            "easy":   self.kh2_list_any_sum([form_list, gap_closer, defensive_tool], state) >= 3,
+            "normal": self.kh2_list_any_sum([form_list, defensive_tool], state) >= 2,
             "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
         }
         return dark_thorn_rules[self.fight_logic]
@@ -1046,52 +795,10 @@ class KH2FightRules(KH2Rules):
         # easy:final 7,firaga,2 air combo plus, finishing plus,guard,reflega,donald limit,high jump aerial dodge glide lvl 3,magnet,aerial dive,aerial spiral,hori slash,berserk charge
         # normal:final 7,firaga, finishing plus,guard,reflega,donald limit,high jump aerial dodge glide lvl 3,magnet,aerial dive,aerial spiral,hori slash
         # hard:final 5, fira, party limit, finishing plus,guard,high jump aerial dodge glide lvl 2,magnet,aerial dive
-        easy_data_xaldin = {
-            ItemName.FireElement:     3,
-            ItemName.AirComboPlus:    2,
-            ItemName.FinishingPlus:   1,
-            ItemName.Guard:           1,
-            ItemName.ReflectElement:  3,
-            ItemName.FlareForce:      1,
-            ItemName.Fantasia:        1,
-            ItemName.HighJump:        3,
-            ItemName.AerialDodge:     3,
-            ItemName.Glide:           3,
-            ItemName.MagnetElement:   1,
-            ItemName.HorizontalSlash: 1,
-            ItemName.AerialDive:      1,
-            ItemName.AerialSpiral:    1,
-            ItemName.BerserkCharge:   1
-        }
-        normal_data_xaldin = {
-            ItemName.FireElement:     3,
-            ItemName.FinishingPlus:   1,
-            ItemName.Guard:           1,
-            ItemName.ReflectElement:  3,
-            ItemName.FlareForce:      1,
-            ItemName.Fantasia:        1,
-            ItemName.HighJump:        3,
-            ItemName.AerialDodge:     3,
-            ItemName.Glide:           3,
-            ItemName.MagnetElement:   1,
-            ItemName.HorizontalSlash: 1,
-            ItemName.AerialDive:      1,
-            ItemName.AerialSpiral:    1,
-        }
-        hard_data_xaldin = {
-            ItemName.FireElement:   2,
-            ItemName.FinishingPlus: 1,
-            ItemName.Guard:         1,
-            ItemName.HighJump:      2,
-            ItemName.AerialDodge:   2,
-            ItemName.Glide:         2,
-            ItemName.MagnetElement: 1,
-            ItemName.AerialDive:    1
-        }
         data_xaldin_rules = {
-            "easy":   self.kh2_dict_count(easy_data_xaldin, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_xaldin, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_xaldin, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_has_any(party_limit, state),
+            "easy":   self.kh2_dict_count(easy_data_xaldin, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
+            "normal": self.kh2_dict_count(normal_data_xaldin, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
+            "hard":   self.kh2_dict_count(hard_data_xaldin, state) and self.form_list_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_has_any(party_limit, state),
         }
         return data_xaldin_rules[self.fight_logic]
 
@@ -1100,9 +807,9 @@ class KH2FightRules(KH2Rules):
         # normal:3 of those things
         # hard: 2 of those things
         hostile_program_rules = {
-            "easy":   self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 2,
+            "easy":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 4,
+            "normal": self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 3,
+            "hard":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 2,
         }
         return hostile_program_rules[self.fight_logic]
 
@@ -1111,9 +818,9 @@ class KH2FightRules(KH2Rules):
         # normal:3 of those things
         # hard: 2 of those things
         mcp_rules = {
-            "easy":   self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 2,
+            "easy":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 4,
+            "normal": self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 3,
+            "hard":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 2,
         }
         return mcp_rules[self.fight_logic]
 
@@ -1121,39 +828,10 @@ class KH2FightRules(KH2Rules):
         # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3
         # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3
         # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2
-        easy_data_larxene = {
-            ItemName.FireElement:    3,
-            ItemName.SecondChance:   1,
-            ItemName.OnceMore:       1,
-            ItemName.Fantasia:       1,
-            ItemName.FlareForce:     1,
-            ItemName.ReflectElement: 3,
-            ItemName.Guard:          1,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.AerialDodge:    3,
-            ItemName.Glide:          3,
-            ItemName.GuardBreak:     1,
-            ItemName.Explosion:      1
-        }
-        normal_data_larxene = {
-            ItemName.FireElement:    3,
-            ItemName.ReflectElement: 3,
-            ItemName.Guard:          1,
-            ItemName.AerialDodge:    3,
-            ItemName.Glide:          3,
-        }
-        hard_data_larxene = {
-            ItemName.FireElement:    2,
-            ItemName.ReflectElement: 1,
-            ItemName.Guard:          1,
-            ItemName.AerialDodge:    2,
-            ItemName.Glide:          2,
-        }
         data_larxene_rules = {
-            "easy":   self.kh2_dict_count(easy_data_larxene, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_larxene, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_larxene, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.drive_form_unlock(state, ItemName.FinalForm, 3, True),
+            "easy":   self.kh2_dict_count(easy_data_larxene, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
+            "normal": self.kh2_dict_count(normal_data_larxene, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
+            "hard":   self.kh2_dict_count(hard_data_larxene, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.form_list_unlock(state, ItemName.FinalForm, 3, True),
         }
         return data_larxene_rules[self.fight_logic]
 
@@ -1162,9 +840,9 @@ class KH2FightRules(KH2Rules):
         # normal:two of those things
         # hard:one of those things
         prison_keeper_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, drive_form, party_limit], state) >= 3,
-            "normal": self.kh2_list_any_sum([defensive_tool, drive_form, party_limit], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, drive_form, party_limit], state) >= 1,
+            "easy":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3,
+            "normal": self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 1,
         }
         return prison_keeper_rules[self.fight_logic]
 
@@ -1178,9 +856,9 @@ class KH2FightRules(KH2Rules):
         # normal:3 of those things
         # hard 2 of those things
         experiment_rules = {
-            "easy":   self.kh2_list_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 4,
-            "normal": self.kh2_list_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 3,
-            "hard":   self.kh2_list_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 2,
+            "easy":   self.kh2_list_any_sum([form_list, defensive_tool, party_limit, summons], state) >= 4,
+            "normal": self.kh2_list_any_sum([form_list, defensive_tool, party_limit, summons], state) >= 3,
+            "hard":   self.kh2_list_any_sum([form_list, defensive_tool, party_limit, summons], state) >= 2,
         }
         return experiment_rules[self.fight_logic]
 
@@ -1188,45 +866,10 @@ class KH2FightRules(KH2Rules):
         # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3,dodge roll 3,quick run 3
         # normal:final 7,firaga, donald limit, Reflega,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3,dodge roll 3,quick run 3
         # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2,dodge roll 2,quick run 2
-        easy_data_vexen = {
-            ItemName.FireElement:    3,
-            ItemName.SecondChance:   1,
-            ItemName.OnceMore:       1,
-            ItemName.Fantasia:       1,
-            ItemName.FlareForce:     1,
-            ItemName.ReflectElement: 3,
-            ItemName.Guard:          1,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.AerialDodge:    3,
-            ItemName.Glide:          3,
-            ItemName.GuardBreak:     1,
-            ItemName.Explosion:      1,
-            ItemName.DodgeRoll:      3,
-            ItemName.QuickRun:       3,
-        }
-        normal_data_vexen = {
-            ItemName.FireElement:    3,
-            ItemName.ReflectElement: 3,
-            ItemName.Guard:          1,
-            ItemName.AerialDodge:    3,
-            ItemName.Glide:          3,
-            ItemName.DodgeRoll:      3,
-            ItemName.QuickRun:       3,
-        }
-        hard_data_vexen = {
-            ItemName.FireElement:    2,
-            ItemName.ReflectElement: 1,
-            ItemName.Guard:          1,
-            ItemName.AerialDodge:    2,
-            ItemName.Glide:          2,
-            ItemName.DodgeRoll:      3,
-            ItemName.QuickRun:       3,
-        }
         data_vexen_rules = {
-            "easy":   self.kh2_dict_count(easy_data_vexen, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_vexen, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_vexen, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.drive_form_unlock(state, ItemName.FinalForm, 3, True),
+            "easy":   self.kh2_dict_count(easy_data_vexen, state) and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
+            "normal": self.kh2_dict_count(normal_data_vexen, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.form_list_unlock(state, ItemName.FinalForm, 5, True),
+            "hard":   self.kh2_dict_count(hard_data_vexen, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.form_list_unlock(state, ItemName.FinalForm, 3, True),
         }
         return data_vexen_rules[self.fight_logic]
 
@@ -1235,8 +878,8 @@ class KH2FightRules(KH2Rules):
         # defensive option,drive form
         # defensive option
         demyx_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, drive_form, party_limit], state) >= 3,
-            "normal": self.kh2_list_any_sum([defensive_tool, drive_form], state) >= 2,
+            "easy":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3,
+            "normal": self.kh2_list_any_sum([defensive_tool, form_list], state) >= 2,
             "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
         }
         return demyx_rules[self.fight_logic]
@@ -1245,16 +888,6 @@ class KH2FightRules(KH2Rules):
         # easy:scom,limit form,guard,magnera
         # normal:limit form, guard
         # hard:guard
-        easy_thousand_heartless_rules = {
-            ItemName.SecondChance:  1,
-            ItemName.OnceMore:      1,
-            ItemName.Guard:         1,
-            ItemName.MagnetElement: 2,
-        }
-        normal_thousand_heartless_rules = {
-            ItemName.LimitForm: 1,
-            ItemName.Guard:     1,
-        }
         thousand_heartless_rules = {
             "easy":   self.kh2_dict_count(easy_thousand_heartless_rules, state),
             "normal": self.kh2_dict_count(normal_thousand_heartless_rules, state),
@@ -1266,34 +899,10 @@ class KH2FightRules(KH2Rules):
         # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
         # normal:remove form boost and scom
         # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
-        easy_data_demyx = {
-            ItemName.FormBoost:      1,
-            ItemName.ReflectElement: 2,
-            ItemName.FireElement:    3,
-            ItemName.FlareForce:     1,
-            ItemName.Guard:          1,
-            ItemName.SecondChance:   1,
-            ItemName.OnceMore:       1,
-            ItemName.FinishingPlus:  1,
-        }
-        normal_data_demyx = {
-            ItemName.ReflectElement: 2,
-            ItemName.FireElement:    3,
-            ItemName.FlareForce:     1,
-            ItemName.Guard:          1,
-            ItemName.FinishingPlus:  1,
-        }
-        hard_data_demyx = {
-            ItemName.ReflectElement: 1,
-            ItemName.FireElement:    2,
-            ItemName.FlareForce:     1,
-            ItemName.Guard:          1,
-            ItemName.FinishingPlus:  1,
-        }
         data_demyx_rules = {
-            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.drive_form_unlock(state, ItemName.WisdomForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.drive_form_unlock(state, ItemName.WisdomForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.drive_form_unlock(state, ItemName.WisdomForm, 4, True),
+            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.form_list_unlock(state, ItemName.WisdomForm, 5, True),
+            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.form_list_unlock(state, ItemName.WisdomForm, 5, True),
+            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.form_list_unlock(state, ItemName.WisdomForm, 4, True),
         }
         return data_demyx_rules[self.fight_logic]
 
@@ -1301,34 +910,6 @@ class KH2FightRules(KH2Rules):
         # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
-        easy_sephiroth_tools = {
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 3,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.GuardBreak:     1,
-            ItemName.Explosion:      1,
-            ItemName.DodgeRoll:      3,
-            ItemName.FinishingPlus:  1,
-            ItemName.SecondChance:   1,
-            ItemName.OnceMore:       1,
-        }
-        normal_sephiroth_tools = {
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 2,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.GuardBreak:     1,
-            ItemName.Explosion:      1,
-            ItemName.DodgeRoll:      3,
-            ItemName.FinishingPlus:  1,
-        }
-        hard_sephiroth_tools = {
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 1,
-            ItemName.DodgeRoll:      2,
-            ItemName.FinishingPlus:  1,
-        }
         sephiroth_rules = {
             "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
             "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
@@ -1341,8 +922,8 @@ class KH2FightRules(KH2Rules):
         # normal: quick run 2 and aerial dodge 1 or wisdom 5 (wisdom has qr 3)
         # hard: (quick run 1, aerial dodge 1) or (wisdom form and aerial dodge 1)
         cor_first_fight_movement_rules = {
-            "easy":   state.has(ItemName.QuickRun, self.player, 3) or self.drive_form_unlock(state, ItemName.WisdomForm, 3, True),
-            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 1}, state) or self.drive_form_unlock(state, ItemName.WisdomForm, 3, True),
+            "easy":   state.has(ItemName.QuickRun, self.player, 3) or self.form_list_unlock(state, ItemName.WisdomForm, 3, True),
+            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 1}, state) or self.form_list_unlock(state, ItemName.WisdomForm, 3, True),
             "hard":   self.kh2_has_all([ItemName.AerialDodge, ItemName.QuickRun], state) or self.kh2_has_all([ItemName.AerialDodge, ItemName.WisdomForm], state),
         }
         return cor_first_fight_movement_rules[self.fight_logic]
@@ -1351,26 +932,16 @@ class KH2FightRules(KH2Rules):
         # easy:have 5 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
         # normal:have 3 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
         # hard: reflect,stitch or chicken,final form
-
-        not_hard_tools_dict = {
-            ItemName.ReflectElement: 3,
-            ItemName.Stitch:         1,
-            ItemName.ChickenLittle:  1,
-            ItemName.MagnetElement:  2,
-            ItemName.Explosion:      1,
-            ItemName.FinishingLeap:  1,
-            ItemName.ThunderElement: 2,
-        }
         cor_first_fight_rules = {
-            "easy":   self.kh2_dict_one_count(not_hard_tools_dict, state) >= 5 or self.kh2_dict_one_count(not_hard_tools_dict, state) >= 4 and self.drive_form_unlock(state, ItemName.FinalForm, 1, True),
-            "normal": self.kh2_dict_one_count(not_hard_tools_dict, state) >= 3 or self.kh2_dict_one_count(not_hard_tools_dict, state) >= 2 and self.drive_form_unlock(state, ItemName.FinalForm, 1, True),
-            "hard":   state.has(ItemName.ReflectElement, self.player) and self.kh2_has_any([ItemName.Stitch, ItemName.ChickenLittle], state) and self.drive_form_unlock(state, ItemName.FinalForm, 1, True),
+            "easy":   self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 5 or self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 4 and self.form_list_unlock(state, ItemName.FinalForm, 1, True),
+            "normal": self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 3 or self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 2 and self.form_list_unlock(state, ItemName.FinalForm, 1, True),
+            "hard":   state.has(ItemName.ReflectElement, self.player) and self.kh2_has_any([ItemName.Stitch, ItemName.ChickenLittle], state) and self.form_list_unlock(state, ItemName.FinalForm, 1, True),
         }
         return cor_first_fight_rules[self.fight_logic]
 
     def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
         # if option is not allow skips return false else run rules
-        if not self.world.multiworld.CorSkipToggle[self.player]:
+        if not self.multiworld.CorSkipToggle[self.player]:
             return False
         # easy: aerial dodge 3,master form,fire
         # normal: aerial dodge 2, master form,fire
@@ -1390,7 +961,7 @@ class KH2FightRules(KH2Rules):
         wall_rise_rules = {
             "easy":   True,
             "normal": True,
-            "hard":   state.has(ItemName.AerialDodge, self.player) and (self.drive_form_unlock(state, ItemName.FinalForm, 1, True) or state.has(ItemName.Glide, self.player, 2))
+            "hard":   state.has(ItemName.AerialDodge, self.player) and (self.form_list_unlock(state, ItemName.FinalForm, 1, True) or state.has(ItemName.Glide, self.player, 2))
         }
         return void_cross_rules[self.fight_logic] and wall_rise_rules[self.fight_logic]
 
@@ -1400,8 +971,8 @@ class KH2FightRules(KH2Rules):
         # hard: (glide 1,aerial dodge 1 any magic) or (master 3 any magic) or glide 1 and aerial dodge 2
 
         cor_second_fight_movement_rules = {
-            "easy":   self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 3}, state) or self.drive_form_unlock(state, ItemName.MasterForm, 3, True),
-            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) or self.drive_form_unlock(state, ItemName.MasterForm, 3, True),
+            "easy":   self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 3}, state) or self.form_list_unlock(state, ItemName.MasterForm, 3, True),
+            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) or self.form_list_unlock(state, ItemName.MasterForm, 3, True),
             "hard":   (self.kh2_has_all([ItemName.Glide, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)) \
                       or (state.has(ItemName.MasterForm, self.player) and self.kh2_has_any(magic, state)) \
                       or (state.has(ItemName.Glide, self.player) and state.has(ItemName.AerialDodge, self.player, 2)),
@@ -1412,22 +983,10 @@ class KH2FightRules(KH2Rules):
         # easy: reflega,stitch and chicken,final form,magnera,explosion,finishing leap,thundaga,2 donald limits
         # normal: 7 of those things
         # hard: 5 of those things
-        tools_dict = {
-            ItemName.ReflectElement: 3,
-            ItemName.Stitch:         1,
-            ItemName.ChickenLittle:  1,
-            ItemName.MagnetElement:  2,
-            ItemName.Explosion:      1,
-            ItemName.FinishingLeap:  1,
-            ItemName.ThunderElement: 3,
-            ItemName.Fantasia:       1,
-            ItemName.FlareForce:     1,
-            ItemName.Genie:          1,
-        }
         transport_fight_rules = {
-            "easy":   self.kh2_dict_count(tools_dict, state),
-            "normal": self.kh2_dict_one_count(tools_dict, state) >= 7,
-            "hard":   self.kh2_dict_one_count(tools_dict, state) >= 5,
+            "easy":   self.kh2_dict_count(transport_tools_dict, state),
+            "normal": self.kh2_dict_one_count(transport_tools_dict, state) >= 7,
+            "hard":   self.kh2_dict_one_count(transport_tools_dict, state) >= 5,
         }
         return transport_fight_rules[self.fight_logic]
 
@@ -1471,42 +1030,9 @@ class KH2FightRules(KH2Rules):
         # easy:guard,2 gap closers,thunder,blizzard,2 donald limit,reflega,2 ground finisher,aerial dodge 3,glide 3,final 7,firaga,scom
         # normal:guard,1 gap closers,thunder,blizzard,1 donald limit,reflega,1 ground finisher,aerial dodge 3,glide 3,final 7,firaga
         # hard:aerial dodge 3,glide 3,guard,reflect,blizzard,1 gap closer,1 ground finisher
-        easy_data_saix = {
-            ItemName.Guard:           1,
-            ItemName.SlideDash:       1,
-            ItemName.FlashStep:       1,
-            ItemName.ThunderElement:  1,
-            ItemName.BlizzardElement: 1,
-            ItemName.FlareForce:      1,
-            ItemName.Fantasia:        1,
-            ItemName.FireElement:     3,
-            ItemName.ReflectElement:  3,
-            ItemName.GuardBreak:      1,
-            ItemName.Explosion:       1,
-            ItemName.AerialDodge:     3,
-            ItemName.Glide:           3,
-            ItemName.SecondChance:    1,
-            ItemName.OnceMore:        1
-        }
-        normal_data_saix = {
-            ItemName.Guard:           1,
-            ItemName.ThunderElement:  1,
-            ItemName.BlizzardElement: 1,
-            ItemName.FireElement:     3,
-            ItemName.ReflectElement:  3,
-            ItemName.AerialDodge:     3,
-            ItemName.Glide:           3,
-        }
-        hard_data_saix = {
-            ItemName.Guard:           1,
-            ItemName.BlizzardElement: 1,
-            ItemName.ReflectElement:  1,
-            ItemName.AerialDodge:     3,
-            ItemName.Glide:           3,
-        }
         easy_data_rules = {
-            "easy":   self.kh2_dict_count(easy_data_saix, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5),
-            "normal": self.kh2_dict_count(normal_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5),
+            "easy":   self.kh2_dict_count(easy_data_saix, state) and self.form_list_unlock(state, ItemName.FinalForm, 5),
+            "normal": self.kh2_dict_count(normal_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.form_list_unlock(state, ItemName.FinalForm, 5),
             "hard":   self.kh2_dict_count(hard_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
         }
         return easy_data_rules[self.fight_logic]
@@ -1527,34 +1053,6 @@ class KH2FightRules(KH2Rules):
         # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
-        easy_data_roxas_tools = {
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 3,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.GuardBreak:     1,
-            ItemName.Explosion:      1,
-            ItemName.DodgeRoll:      3,
-            ItemName.FinishingPlus:  1,
-            ItemName.SecondChance:   1,
-            ItemName.OnceMore:       1,
-        }
-        normal_data_roxas_tools = {
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 2,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.GuardBreak:     1,
-            ItemName.Explosion:      1,
-            ItemName.DodgeRoll:      3,
-            ItemName.FinishingPlus:  1,
-        }
-        hard_data_roxas_tools = {
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 1,
-            ItemName.DodgeRoll:      2,
-            ItemName.FinishingPlus:  1,
-        }
         data_roxas_rules = {
             "easy":   self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
             "normal": self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
@@ -1566,37 +1064,6 @@ class KH2FightRules(KH2Rules):
         # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom,blizzaga
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara
-        easy_data_axel_tools = {
-            ItemName.Guard:           1,
-            ItemName.ReflectElement:  3,
-            ItemName.SlideDash:       1,
-            ItemName.FlashStep:       1,
-            ItemName.GuardBreak:      1,
-            ItemName.Explosion:       1,
-            ItemName.DodgeRoll:       3,
-            ItemName.FinishingPlus:   1,
-            ItemName.SecondChance:    1,
-            ItemName.OnceMore:        1,
-            ItemName.BlizzardElement: 3,
-        }
-        normal_data_axel_tools = {
-            ItemName.Guard:           1,
-            ItemName.ReflectElement:  2,
-            ItemName.SlideDash:       1,
-            ItemName.FlashStep:       1,
-            ItemName.GuardBreak:      1,
-            ItemName.Explosion:       1,
-            ItemName.DodgeRoll:       3,
-            ItemName.FinishingPlus:   1,
-            ItemName.BlizzardElement: 3,
-        }
-        hard_data_axel_tools = {
-            ItemName.Guard:           1,
-            ItemName.ReflectElement:  1,
-            ItemName.DodgeRoll:       2,
-            ItemName.FinishingPlus:   1,
-            ItemName.BlizzardElement: 2,
-        }
         data_axel_rules = {
             "easy":   self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
             "normal": self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
@@ -1608,27 +1075,6 @@ class KH2FightRules(KH2Rules):
         # easy:aerial dodge 1,glide 1, limit form,thunder,reflera,guard break,2 gap closers,finishing plus,blizzard
         # normal:thunder,reflera,guard break,2 gap closers,finishing plus,blizzard
         # hard:guard
-        easy_roxas_tools = {
-            ItemName.AerialDodge:     1,
-            ItemName.Glide:           1,
-            ItemName.LimitForm:       1,
-            ItemName.ThunderElement:  1,
-            ItemName.ReflectElement:  2,
-            ItemName.GuardBreak:      1,
-            ItemName.SlideDash:       1,
-            ItemName.FlashStep:       1,
-            ItemName.FinishingPlus:   1,
-            ItemName.BlizzardElement: 1
-        }
-        normal_roxas_tools = {
-            ItemName.ThunderElement:  1,
-            ItemName.ReflectElement:  2,
-            ItemName.GuardBreak:      1,
-            ItemName.SlideDash:       1,
-            ItemName.FlashStep:       1,
-            ItemName.FinishingPlus:   1,
-            ItemName.BlizzardElement: 1
-        }
         roxas_rules = {
             "easy":   self.kh2_dict_count(easy_roxas_tools, state),
             "normal": self.kh2_dict_count(normal_roxas_tools, state),
@@ -1640,28 +1086,9 @@ class KH2FightRules(KH2Rules):
         # easy:final 4,horizontal slash,fira,finishing plus,glide 2,aerial dodge 2,quick run 2,guard,reflect
         # normal:final 4,fira,finishing plus,glide 2,aerial dodge 2,quick run 2,guard,reflect
         # hard:guard,quick run,finishing plus
-        easy_xigbar_tools = {
-            ItemName.HorizontalSlash: 1,
-            ItemName.FireElement:     2,
-            ItemName.FinishingPlus:   1,
-            ItemName.Glide:           2,
-            ItemName.AerialDodge:     2,
-            ItemName.QuickRun:        2,
-            ItemName.ReflectElement:  1,
-            ItemName.Guard:           1,
-        }
-        normal_xigbar_tools = {
-            ItemName.FireElement:    2,
-            ItemName.FinishingPlus:  1,
-            ItemName.Glide:          2,
-            ItemName.AerialDodge:    2,
-            ItemName.QuickRun:       2,
-            ItemName.ReflectElement: 1,
-            ItemName.Guard:          1
-        }
         xigbar_rules = {
-            "easy":   self.kh2_dict_count(easy_xigbar_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 1) and self.kh2_has_any([ItemName.LightDarkness, ItemName.FinalForm], state),
-            "normal": self.kh2_dict_count(normal_xigbar_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 1),
+            "easy":   self.kh2_dict_count(easy_xigbar_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 1) and self.kh2_has_any([ItemName.LightDarkness, ItemName.FinalForm], state),
+            "normal": self.kh2_dict_count(normal_xigbar_tools, state) and self.form_list_unlock(state, ItemName.FinalForm, 1),
             "hard":   self.kh2_has_all([ItemName.Guard, ItemName.QuickRun, ItemName.FinishingPlus], state),
         }
         return xigbar_rules[self.fight_logic]
@@ -1670,23 +1097,6 @@ class KH2FightRules(KH2Rules):
         # easy:aerial dodge 1,glide 1,quickrun 2,guard,reflera,2 gap closers,ground finisher,limit form
         # normal:aerial dodge 1,glide 1,quickrun 2,guard,reflera,1 gap closers,ground finisher
         # hard:quick run,guard
-        easy_luxord_tools = {
-            ItemName.AerialDodge:    1,
-            ItemName.Glide:          1,
-            ItemName.QuickRun:       2,
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 2,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.LimitForm:      1,
-        }
-        normal_luxord_tools = {
-            ItemName.AerialDodge:    1,
-            ItemName.Glide:          1,
-            ItemName.QuickRun:       2,
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 2,
-        }
         luxord_rules = {
             "easy":   self.kh2_dict_count(easy_luxord_tools, state) and self.kh2_has_any(ground_finisher, state),
             "normal": self.kh2_dict_count(normal_luxord_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
@@ -1698,23 +1108,7 @@ class KH2FightRules(KH2Rules):
         # easy:aerial dodge 1,glide 1,quickrun 2,guard,reflera,2 gap closers,ground finisher,limit form
         # normal:aerial dodge 1,glide 1,quickrun 2,guard,reflera,1 gap closers,ground finisher
         # hard:,guard
-        easy_saix_tools = {
-            ItemName.AerialDodge:    1,
-            ItemName.Glide:          1,
-            ItemName.QuickRun:       2,
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 2,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.LimitForm:      1,
-        }
-        normal_saix_tools = {
-            ItemName.AerialDodge:    1,
-            ItemName.Glide:          1,
-            ItemName.QuickRun:       2,
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 2,
-        }
+
         saix_rules = {
             "easy":   self.kh2_dict_count(easy_saix_tools, state) and self.kh2_has_any(ground_finisher, state),
             "normal": self.kh2_dict_count(normal_saix_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
@@ -1726,23 +1120,6 @@ class KH2FightRules(KH2Rules):
         # easy:aerial dodge 1,glide 1,quickrun 2,guard,reflera,2 gap closers,ground finisher,limit form
         # normal:aerial dodge 1,glide 1,quickrun 2,guard,reflera,1 gap closers,ground finisher
         # hard:,guard
-        easy_xemnas_tools = {
-            ItemName.AerialDodge:    1,
-            ItemName.Glide:          1,
-            ItemName.QuickRun:       2,
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 2,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.LimitForm:      1,
-        }
-        normal_xemnas_tools = {
-            ItemName.AerialDodge:    1,
-            ItemName.Glide:          1,
-            ItemName.QuickRun:       2,
-            ItemName.Guard:          1,
-            ItemName.ReflectElement: 2,
-        }
         xemnas_rules = {
             "easy":   self.kh2_dict_count(easy_xemnas_tools, state) and self.kh2_has_any(ground_finisher, state),
             "normal": self.kh2_dict_count(normal_xemnas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
@@ -1787,37 +1164,6 @@ class KH2FightRules(KH2Rules):
         # easy:combo master,slapshot,reflega,2 ground finishers,both gap closers,finishing plus,guard,limit 5,scom,trinity limit
         # normal:combo master,slapshot,reflega,2 ground finishers,both gap closers,finishing plus,guard,limit 5,
         # hard:combo master,slapshot,reflera,1 ground finishers,1 gap closers,finishing plus,guard,limit form
-        easy_data_xemnas = {
-            ItemName.ComboMaster:    1,
-            ItemName.Slapshot:       1,
-            ItemName.ReflectElement: 3,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.FinishingPlus:  1,
-            ItemName.Guard:          1,
-            ItemName.TrinityLimit:   1,
-            ItemName.SecondChance:   1,
-            ItemName.OnceMore:       1,
-            ItemName.LimitForm:      1,
-        }
-        normal_data_xemnas = {
-            ItemName.ComboMaster:    1,
-            ItemName.Slapshot:       1,
-            ItemName.ReflectElement: 3,
-            ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1,
-            ItemName.FinishingPlus:  1,
-            ItemName.Guard:          1,
-            ItemName.LimitForm:      1,
-        }
-        hard_data_xemnas = {
-            ItemName.ComboMaster:    1,
-            ItemName.Slapshot:       1,
-            ItemName.ReflectElement: 2,
-            ItemName.FinishingPlus:  1,
-            ItemName.Guard:          1,
-            ItemName.LimitForm:      1,
-        }
         data_xemnas_rules = {
             "easy":   self.kh2_dict_count(easy_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
             "normal": self.kh2_dict_count(normal_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),

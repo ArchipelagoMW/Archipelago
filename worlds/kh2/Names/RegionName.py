@@ -7,7 +7,7 @@ Ha6 = "Starry Hill"
 
 SoraLevels = "Sora's Levels"
 GoA = "Garden Of Assemblage"
-Keyblade = "Keyblade Slots"
+Keyblade = "Weapon Slots"
 
 Valor = "Valor Form"
 Wisdom = "Wisdom Form"
