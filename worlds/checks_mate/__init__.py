@@ -173,10 +173,11 @@ class CMWorld(World):
         self.multiworld.regions.append(region)
 
     def generate_basic(self):
+        victory_item = CMItem("Victory", ItemClassification.progression, 4_009, self.player)
         (self.multiworld.get_location("Checkmate Maxima", self.player).
-         place_locked_item(CMItem("Victory", ItemClassification.progression, 4_065, self.player)))
+         place_locked_item(victory_item))
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(victory_item, self.player)
 
     def has_prereqs(self, chosen_item: str) -> bool:
         parents = [item for item in item_table
