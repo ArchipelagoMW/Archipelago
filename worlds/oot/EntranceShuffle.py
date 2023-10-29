@@ -958,7 +958,6 @@ def confirm_replacement(entrance, target):
 
 
 def delete_target_entrance(target):
-    print(f"Deleting entrance: {target.name}")
     if target.connected_region != None:
         target.disconnect()
     if target.parent_region != None:
