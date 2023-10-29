@@ -851,14 +851,6 @@ class OOTWorld(World):
             loc = self.multiworld.get_location("Deliver Rutos Letter", self.player)
             loc.parent_region.locations.remove(loc)
 
-    @classmethod
-    def stage_generate_basic(cls, multiworld: MultiWorld):
-        # This is cleanup from all OoTWorld.generate_basic because we deleted locations.
-        # We only actually have to clean the cache once.
-        # TODO: when #2366 is merged, change how we remove these locations from the cache,
-        #       hopefully we can avoid a full recache
-        multiworld.clear_location_cache()
-
 
     def pre_fill(self):
 

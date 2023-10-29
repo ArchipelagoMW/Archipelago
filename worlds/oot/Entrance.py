@@ -1,6 +1,4 @@
-
 from BaseClasses import Entrance
-from .Regions import TimeOfDay
 
 class OOTEntrance(Entrance): 
     game: str = 'Ocarina of Time'
