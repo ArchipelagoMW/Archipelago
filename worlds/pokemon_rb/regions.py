@@ -1456,7 +1456,9 @@ mansion_stair_destinations = [
 unreachable_outdoor_entrances = [
     "Route 4-C to Mt Moon B1F-NE",
     "Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House",
-    "Cerulean City-Badge House Backyard to Cerulean Badge House"
+    "Cerulean City-Badge House Backyard to Cerulean Badge House",
+    # TODO: This doesn't need to be forced if fly location is Pokemon League?
+    "Route 23-N to Victory Road 2F-E"
 ]
 
 
@@ -1592,7 +1594,7 @@ def create_regions(self):
     connect(multiworld, player, "Menu", "Pallet Town", one_way=True)
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
     connect(multiworld, player, "Menu", "Evolution", one_way=True)
-    connect(multiworld, player, "Menu", "Fossil", lambda state: logic.fossil_checks(state, 
+    connect(multiworld, player, "Menu", "Fossil", lambda state: logic.fossil_checks(state,
         state.multiworld.second_fossil_check_condition[player].value, player), one_way=True)
     connect(multiworld, player, "Pallet Town", "Route 1")
     connect(multiworld, player, "Route 1", "Viridian City")
@@ -2220,7 +2222,7 @@ def create_regions(self):
                         "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
                 badge_locs.append(multiworld.get_location(loc, player))
             multiworld.random.shuffle(badges)
-            while badges[3].name == "Cascade Badge" and multiworld.badges_needed_for_hm_moves[player] == "on":
+            while badges[3].name == "Cascade Badge" and multiworld.badges_needed_for_hm_moves[player]:
                 multiworld.random.shuffle(badges)
             for badge, loc in zip(badges, badge_locs):
                 loc.place_locked_item(badge)
@@ -2265,22 +2267,30 @@ def create_regions(self):
                 "Defeat Viridian Gym Giovanni",
             ]
 
-        def adds_reachable_entrances(entrances_copy, item):
-            state.collect(item, False)
+        event_locations = self.multiworld.get_filled_locations(player)
+
+        def adds_reachable_entrances(entrances_copy, item, dead_end_cache):
+            ret = dead_end_cache.get(item.name)
+            if (ret != None):
+                return ret
+
+            state_copy = state.copy()
+            state_copy.collect(item, True)
+            state.sweep_for_events(locations=event_locations)
             ret = len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
-                      entrance.parent_region.can_reach(state)]) > len(reachable_entrances)
-            state.remove(item)
+                      entrance.parent_region.can_reach(state_copy)]) > len(reachable_entrances)
+            dead_end_cache[item.name] = ret
             return ret
 
-        def dead_end(entrances_copy, e):
+        def dead_end(entrances_copy, e, dead_end_cache):
             region = e.parent_region
             check_warps = set()
             checked_regions = {region}
             check_warps.update(region.exits)
             check_warps.remove(e)
             for location in region.locations:
-                if location.item and location.item.name in relevant_events and adds_reachable_entrances(entrances_copy,
-                                                                                                        location.item):
+                if location.item and location.item.name in relevant_events and \
+                                 adds_reachable_entrances(entrances_copy, location.item, dead_end_cache):
                     return False
             while check_warps:
                 warp = check_warps.pop()
@@ -2297,16 +2307,22 @@ def create_regions(self):
                                 check_warps.update(warp.connected_region.exits)
                                 for location in warp.connected_region.locations:
                                     if (location.item and location.item.name in relevant_events and
-                                            adds_reachable_entrances(entrances_copy, location.item)):
+                                            adds_reachable_entrances(entrances_copy, location.item, dead_end_cache)):
                                         return False
             return True
 
         starting_entrances = len(entrances)
         dc_connected = []
-        event_locations = self.multiworld.get_filled_locations(player)
+        rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name]
+        entrances = [entrance for entrance in entrances if entrance not in rock_tunnel_entrances]
         while entrances:
             state.update_reachable_regions(player)
             state.sweep_for_events(locations=event_locations)
+
+            if rock_tunnel_entrances and logic.rock_tunnel(state, player):
+                entrances += rock_tunnel_entrances
+                rock_tunnel_entrances = None
+
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
                                    entrance.parent_region.can_reach(state)]
             assert reachable_entrances, \
@@ -2321,30 +2337,29 @@ def create_regions(self):
             if multiworld.door_shuffle[player] == "full" or len(entrances) != len(reachable_entrances):
                 entrances.sort(key=lambda e: e.name not in entrance_only)
 
-                if len(entrances) < 48 and multiworld.door_shuffle[player] == "full":
-                    # Prevent a situation where the only remaining outdoor entrances are ones that cannot be reached
-                    # except by connecting directly to it.
-                    entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
+                dead_end_cache = {}
+
                 # entrances list is empty while it's being sorted, must pass a copy to iterate through
                 entrances_copy = entrances.copy()
                 if multiworld.door_shuffle[player] == "decoupled":
-                    if len(reachable_entrances) <= 8 and not logic.rock_tunnel(state, player):
-                        entrances.sort(key=lambda e: 1 if "Rock Tunnel" in e.name else 2 if e.connected_region is not
-                                       None else 3 if e not in reachable_entrances else 0)
-                    else:
-                        entrances.sort(key=lambda e: 1 if e.connected_region is not None else 2 if e not in
-                                       reachable_entrances else 0)
+                    entrances.sort(key=lambda e: 1 if e.connected_region is not None else 2 if e not in
+                                   reachable_entrances else 0)
                     assert entrances[0].connected_region is None,\
                         "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
                 elif len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
                         entrances) <= (starting_entrances - 3):
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
-                                   dead_end(entrances_copy, e) else 1)
+                                   dead_end(entrances_copy, e, dead_end_cache) else 1)
                 else:
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if
-                                   dead_end(entrances_copy, e) else 2)
+                                   dead_end(entrances_copy, e, dead_end_cache) else 2)
                 if multiworld.door_shuffle[player] == "full":
                     outdoor = outdoor_map(entrances[0].parent_region.name)
+                    if len(entrances) < 48 and not outdoor:
+                        # Prevent a situation where the only remaining outdoor entrances are ones that cannot be reached
+                        # except by connecting directly to it.
+                        entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
+
                     entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
                 assert entrances[0] in reachable_entrances, \
                     "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"

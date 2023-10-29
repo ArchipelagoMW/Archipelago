@@ -1,15 +1,14 @@
-from typing import Dict, List
+from typing import Dict
 import random
 
 from BaseClasses import MultiWorld
 from Options import SpecialRange, Range
 from .option_names import options_to_include
-from .. import setup_solo_multiworld, SVTestBase
+from .. import setup_solo_multiworld, SVTestCase
 from ..checks.goal_checks import assert_perfection_world_is_valid, assert_goal_world_is_valid
 from ..checks.option_checks import assert_can_reach_island_if_should, assert_cropsanity_same_number_items_and_locations, \
     assert_festivals_give_access_to_deluxe_scarecrow
 from ..checks.world_checks import assert_same_number_items_locations, assert_victory_exists
-from ... import options
 
 
 def get_option_choices(option) -> Dict[str, int]:
@@ -73,14 +72,14 @@ def generate_many_worlds(number_worlds: int, start_index: int) -> Dict[int, Mult
     return multiworlds
 
 
-def check_every_multiworld_is_valid(tester: SVTestBase, multiworlds: Dict[int, MultiWorld]):
+def check_every_multiworld_is_valid(tester: SVTestCase, multiworlds: Dict[int, MultiWorld]):
     for multiworld_id in multiworlds:
         multiworld = multiworlds[multiworld_id]
         with tester.subTest(f"Checking validity of world {multiworld_id}"):
             check_multiworld_is_valid(tester, multiworld_id, multiworld)
 
 
-def check_multiworld_is_valid(tester: SVTestBase, multiworld_id: int, multiworld: MultiWorld):
+def check_multiworld_is_valid(tester: SVTestCase, multiworld_id: int, multiworld: MultiWorld):
     assert_victory_exists(tester, multiworld)
     assert_same_number_items_locations(tester, multiworld)
     assert_goal_world_is_valid(tester, multiworld)
@@ -89,7 +88,7 @@ def check_multiworld_is_valid(tester: SVTestBase, multiworld_id: int, multiworld
     assert_festivals_give_access_to_deluxe_scarecrow(tester, multiworld)
 
 
-class TestGenerateManyWorlds(SVTestBase):
+class TestGenerateManyWorlds(SVTestCase):
     def test_generate_many_worlds_then_check_results(self):
         if self.skip_long_tests:
             return

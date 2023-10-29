@@ -7,7 +7,7 @@ to obtain a config file for StarCraft 2.
 
 - [StarCraft 2](https://starcraft2.com/en-us/)
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
-- [StarCraft 2 AP Maps and Data](https://github.com/TheCondor07/Starcraft2ArchipelagoData)
+- [StarCraft 2 AP Maps and Data](https://github.com/Ziktofel/Archipelago-SC2-data/releases)
 
 ## How do I install this randomizer?
 
