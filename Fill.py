@@ -30,7 +30,7 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
                      item_pool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
                      swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
-                     allow_partial: bool = False, allow_excluded: bool = False, name: str = "") -> None:
+                     allow_partial: bool = False, allow_excluded: bool = False, name: str = "Unknown") -> None:
     """
     :param world: Multiworld to be filled.
     :param base_state: State assumed before fill.
@@ -55,7 +55,6 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     # for progress logging
     total = min(len(item_pool), len(locations))
     placed = 0
-    name = name if name else "Unknown"
 
     while any(reachable_items.values()) and locations:
         # grab one item per player
