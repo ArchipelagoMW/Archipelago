@@ -445,13 +445,9 @@ class PokemonRedBlueWorld(World):
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
         # fail. Re-use test_state from previous final loop.
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
-        clear_cache = False
         for location in evolutions_region.locations.copy():
             if not test_state.can_reach(location, player=self.player):
                 evolutions_region.locations.remove(location)
-                clear_cache = True
-        if clear_cache:
-            self.multiworld.clear_location_cache()
 
         if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
@@ -559,7 +555,6 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
-            self.multiworld._recache()
 
         if self.multiworld.door_shuffle[self.player] == "decoupled":
             swept_state = self.multiworld.state.copy()
