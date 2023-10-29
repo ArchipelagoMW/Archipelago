@@ -27,16 +27,16 @@ class OOTEntrance(Entrance):
         self.connected_region = None
         return previously_connected
 
-    def get_new_target(self):
+    def get_new_target(self, pool_type):
         root = self.multiworld.get_region('Root Exits', self.player)
-        target_entrance = OOTEntrance(self.player, self.multiworld, 'Root -> ' + self.connected_region.name, root)
+        target_entrance = OOTEntrance(self.player, self.multiworld, f'Root -> ({self.name}) ({pool_type})', root)
         target_entrance.connect(self.connected_region)
         target_entrance.replaces = self
         root.exits.append(target_entrance)
         return target_entrance
 
-    def assume_reachable(self):
+    def assume_reachable(self, pool_type):
         if self.assumed == None:
-            self.assumed = self.get_new_target()
+            self.assumed = self.get_new_target(pool_type)
             self.disconnect()
         return self.assumed

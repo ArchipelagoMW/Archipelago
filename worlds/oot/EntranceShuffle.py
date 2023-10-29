@@ -26,12 +26,12 @@ def set_all_entrances_data(world, player):
                 return_entrance.data['index'] = 0x7FFF
 
 
-def assume_entrance_pool(entrance_pool, ootworld):
+def assume_entrance_pool(entrance_pool, ootworld, pool_type):
     assumed_pool = []
     for entrance in entrance_pool:
-        assumed_forward = entrance.assume_reachable()
+        assumed_forward = entrance.assume_reachable(pool_type)
         if entrance.reverse != None and not ootworld.decouple_entrances:
-            assumed_return = entrance.reverse.assume_reachable()
+            assumed_return = entrance.reverse.assume_reachable(pool_type)
             if not (ootworld.mix_entrance_pools != 'off' and (ootworld.shuffle_overworld_entrances or ootworld.shuffle_special_interior_entrances)):
                 if (entrance.type in ('Dungeon', 'Grotto', 'Grave') and entrance.reverse.name != 'Spirit Temple Lobby -> Desert Colossus From Spirit Lobby') or \
                    (entrance.type == 'Interior' and ootworld.shuffle_special_interior_entrances):
@@ -42,15 +42,15 @@ def assume_entrance_pool(entrance_pool, ootworld):
     return assumed_pool
 
 
-def build_one_way_targets(world, types_to_include, exclude=(), target_region_names=()):
+def build_one_way_targets(world, pool, types_to_include, exclude=(), target_region_names=()):
     one_way_entrances = []
     for pool_type in types_to_include:
         one_way_entrances += world.get_shufflable_entrances(type=pool_type)
     valid_one_way_entrances = list(filter(lambda entrance: entrance.name not in exclude, one_way_entrances))
     if target_region_names:
-        return [entrance.get_new_target() for entrance in valid_one_way_entrances
+        return [entrance.get_new_target(pool) for entrance in valid_one_way_entrances
                 if entrance.connected_region.name in target_region_names]
-    return [entrance.get_new_target() for entrance in valid_one_way_entrances]
+    return [entrance.get_new_target(pool) for entrance in valid_one_way_entrances]
 
 
 #   Abbreviations
@@ -525,12 +525,12 @@ def shuffle_random_entrances(ootworld):
     for pool_type, entrance_pool in one_way_entrance_pools.items():
         if pool_type == 'OwlDrop':
             valid_target_types = ('WarpSong', 'OwlDrop', 'Overworld', 'Extra')
-            one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, valid_target_types, exclude=['Prelude of Light Warp -> Temple of Time'])
+            one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, pool_type, valid_target_types, exclude=['Prelude of Light Warp -> Temple of Time'])
             for target in one_way_target_entrance_pools[pool_type]:
                 set_rule(target, lambda state: state._oot_reach_as_age(target.parent_region, 'child', player))
         elif pool_type in {'Spawn', 'WarpSong'}: 
             valid_target_types = ('Spawn', 'WarpSong', 'OwlDrop', 'Overworld', 'Interior', 'SpecialInterior', 'Extra')
-            one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, valid_target_types)
+            one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, pool_type, valid_target_types)
         # Ensure that the last entrance doesn't assume the rest of the targets are reachable
         for target in one_way_target_entrance_pools[pool_type]:
             add_rule(target, (lambda entrances=entrance_pool: (lambda state: any(entrance.connected_region == None for entrance in entrances)))())
@@ -540,7 +540,7 @@ def shuffle_random_entrances(ootworld):
 
     target_entrance_pools = {}
     for pool_type, entrance_pool in entrance_pools.items():
-        target_entrance_pools[pool_type] = assume_entrance_pool(entrance_pool, ootworld)
+        target_entrance_pools[pool_type] = assume_entrance_pool(entrance_pool, ootworld, pool_type)
 
     # Build all_state and none_state
     all_state = ootworld.get_state_with_complete_itempool()
@@ -958,6 +958,7 @@ def confirm_replacement(entrance, target):
 
 
 def delete_target_entrance(target):
+    print(f"Deleting entrance: {target.name}")
     if target.connected_region != None:
         target.disconnect()
     if target.parent_region != None:
