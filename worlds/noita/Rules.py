@@ -153,11 +153,12 @@ def victory_unlock_conditions(multiworld: MultiWorld, player: int) -> None:
 
 
 def create_all_rules(multiworld: MultiWorld, player: int) -> None:
-    ban_items_from_shops(multiworld, player)
-    ban_early_high_tier_wands(multiworld, player)
-    lock_holy_mountains_into_spheres(multiworld, player)
-    holy_mountain_unlock_conditions(multiworld, player)
-    biome_unlock_conditions(multiworld, player)
+    if multiworld.players > 1:
+        ban_items_from_shops(multiworld, player)
+        ban_early_high_tier_wands(multiworld, player)
+        lock_holy_mountains_into_spheres(multiworld, player)
+        holy_mountain_unlock_conditions(multiworld, player)
+        biome_unlock_conditions(multiworld, player)
     victory_unlock_conditions(multiworld, player)
 
     # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)

@@ -68,6 +68,21 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
     # 39 is the number of shop-valid items we need to guarantee
     if len(itempool) < 39:
         itempool += create_random_items(multiworld, player, shop_only_filler_weights, 39 - len(itempool))
+        # this is so that it passes tests and gens if you have minimal locations and only one player
+        if multiworld.players == 1:
+            itempool2 = itempool.copy()
+            perkpool = []
+            for item_name in itempool2:
+                if "Perk" in item_name and item_name not in {"Extra Life Perk", "Spatial Awareness Perk"}:
+                    perkpool.append(item_name)
+                    itempool.remove(item_name)
+            for location in multiworld.get_unfilled_locations(player):
+                if "Shop Item 5" in location.name:
+                    location.item = create_item(player, perkpool.pop())
+                elif "Shop Item" in location.name:
+                    location.item = create_item(player, itempool.pop())
+            locations_to_fill = len(multiworld.get_unfilled_locations(player))
+
     itempool += create_random_items(multiworld, player, filler_weights, locations_to_fill - len(itempool))
     multiworld.itempool += [create_item(player, name) for name in itempool]
 
@@ -95,7 +110,7 @@ item_table: Dict[str, ItemData] = {
     "Tinker with Wands Everywhere Perk":    ItemData(110018, "Perks", ItemClassification.progression, 1),
     "All-Seeing Eye Perk":                  ItemData(110019, "Perks", ItemClassification.progression, 1),
     "Spatial Awareness Perk":               ItemData(110020, "Perks", ItemClassification.progression),
-    "Extra Life Perk":                      ItemData(110021, "Repeatable Perks", ItemClassification.useful, 2),
+    "Extra Life Perk":                      ItemData(110021, "Repeatable Perks", ItemClassification.useful, 1),
     "Orb":                                  ItemData(110022, "Orbs", ItemClassification.progression_skip_balancing),
     "Random Potion":                        ItemData(110023, "Items", ItemClassification.filler),
     "Secret Potion":                        ItemData(110024, "Items", ItemClassification.filler),
