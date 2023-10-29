@@ -10,7 +10,7 @@ from worlds.alttp.test import LTTPTestBase
 class TestMinor(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
-        self.multiworld.logic[1] = "minorglitches"
+        self.multiworld.glitches_required[1] = "minor_glitches"
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         self.multiworld.worlds[1].er_seed = 0
         self.multiworld.worlds[1].create_regions()

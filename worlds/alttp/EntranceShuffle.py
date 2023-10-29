@@ -1069,10 +1069,10 @@ def link_entrances(world, player):
         raise NotImplementedError(
             f'{world.entrance_shuffle[player]} Shuffling not supported yet. Player {world.get_player_name(player)}')
 
-    if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
+    if world.glitches_required[player] in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
         overworld_glitch_connections(world, player)
         # mandatory hybrid major glitches connections
-        if world.logic[player] in ['hybridglitches', 'nologic']:
+        if world.glitches_required[player] in ['hybrid_major_glitches', 'no_logic']:
             underworld_glitch_connections(world, player)
 
     # check for swamp palace fix
@@ -1776,10 +1776,10 @@ def link_inverted_entrances(world, player):
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
-    if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
+    if world.glitches_required[player] in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
         overworld_glitch_connections(world, player)
         # mandatory hybrid major glitches connections
-        if world.logic[player] in ['hybridglitches', 'nologic']:
+        if world.glitches_required[player] in ['hybrid_major_glitches', 'no_logic']:
             underworld_glitch_connections(world, player)
 
     # patch swamp drain
@@ -1958,7 +1958,7 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits, player):
         invalid_connections = Must_Exit_Invalid_Connections.copy()
     invalid_cave_connections = defaultdict(set)
 
-    if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
+    if world.glitches_required[player] in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
         from worlds.alttp import OverworldGlitchRules
         for entrance in OverworldGlitchRules.get_non_mandatory_exits(world.mode[player] == 'inverted'):
             invalid_connections[entrance] = set()

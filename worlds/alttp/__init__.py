@@ -292,7 +292,7 @@ class ALTTPWorld(World):
             elif (not world.entrance_shuffle_seed[player].value.isdigit()) or world.is_race:
                 self.er_seed = get_same_seed(world, (
                     shuffle, world.entrance_shuffle_seed[player].value, world.retro_caves[player], world.mode[player],
-                    world.logic[player]))
+                    world.glitches_required[player]))
             else:  # not a race or group seed, use set seed as is.
                 self.er_seed = int(world.entrance_shuffle_seed[player].value)
         elif world.entrance_shuffle[player] == "vanilla":
@@ -337,7 +337,7 @@ class ALTTPWorld(World):
         create_shops(world, player)
         self.create_dungeons()
 
-        if world.logic[player] not in ["noglitches", "minorglitches"] and world.entrance_shuffle[player] in \
+        if world.glitches_required[player] not in ["no_glitches", "minor_glitches"] and world.entrance_shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
             world.fix_fake_world[player] = False
 
@@ -438,7 +438,7 @@ class ALTTPWorld(World):
                     if state.has('Silver Bow', item.player):
                         return
                     elif state.has('Bow', item.player) and (self.multiworld.difficulty_requirements[item.player].progressive_bow_limit >= 2
-                                                            or self.multiworld.logic[item.player] == 'noglitches'
+                                                            or self.multiworld.glitches_required[item.player] == 'no_glitches'
                                                             or self.multiworld.swordless[item.player]): # modes where silver bow is always required for ganon
                         return 'Silver Bow'
                     elif self.multiworld.difficulty_requirements[item.player].progressive_bow_limit >= 1:
@@ -628,7 +628,7 @@ class ALTTPWorld(World):
         trash_counts = {}
         for player in world.get_game_players("A Link to the Past"):
             if not world.ganonstower_vanilla[player] or \
-                    world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
+                    world.glitches_required[player] in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
                 pass
             elif 'triforce_hunt' in world.goal[player].current_key and ('local' in world.goal[player].current_key or world.players == 1):
                 trash_counts[player] = world.random.randint(world.crystals_needed_for_gt[player] * 2,
@@ -795,7 +795,7 @@ def get_same_seed(world, seed_def: tuple) -> str:
 
 class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
-        if self.multiworld.logic[player] == 'nologic':
+        if self.multiworld.glitches_required[player] == 'no_logic':
             return True
         if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             return can_buy_unlimited(self, 'Small Key (Universal)', player)

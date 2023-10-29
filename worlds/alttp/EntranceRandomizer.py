@@ -23,7 +23,7 @@ def parse_arguments(argv, no_defaults=False):
     multiargs, _ = parser.parse_known_args(argv)
 
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--logic', default=defval('noglitches'), const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'owglitches', 'hybridglitches', 'nologic'],
+    parser.add_argument('--logic', default=defval('no_glitches'), const='no_glitches', nargs='?', choices=['no_glitches', 'minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'],
                         help='''\
                              Select Enforcement of Item Requirements. (default: %(default)s)
                              No Glitches:

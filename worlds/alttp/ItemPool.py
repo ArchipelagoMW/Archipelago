@@ -589,7 +589,7 @@ def get_pool_core(world, player: int):
     mode = world.mode[player].current_key
     swordless = world.swordless[player]
     retro_bow = world.retro_bow[player]
-    logic = world.logic[player]
+    logic = world.glitches_required[player]
 
     pool = []
     placed_items = {}
@@ -606,7 +606,7 @@ def get_pool_core(world, player: int):
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
-    if logic in {'owglitches', 'hybridglitches', 'nologic'} and world.glitch_boots[player] and goal != 'ice_rod_hunt':
+    if logic in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.glitch_boots[player] and goal != 'ice_rod_hunt':
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
@@ -657,7 +657,7 @@ def get_pool_core(world, player: int):
     if want_progressives(world.random):
         pool.extend(diff.progressivebow)
         world.worlds[player].has_progressive_bows = True
-    elif (swordless or logic == 'noglitches') and goal != 'ice_rod_hunt':
+    elif (swordless or logic == 'no_glitches') and goal != 'ice_rod_hunt':
         swordless_bows = ['Bow', 'Silver Bow']
         if difficulty == "easy":
             swordless_bows *= 2

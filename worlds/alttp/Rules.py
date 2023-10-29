@@ -25,9 +25,9 @@ from .UnderworldGlitchRules import underworld_glitches_rules
 def set_rules(world):
     player = world.player
     world = world.multiworld
-    if world.logic[player] == 'nologic':
+    if world.glitches_required[player] == 'no_logic':
         if player == next(player_id for player_id in world.get_game_players("A Link to the Past")
-                          if world.logic[player_id] == 'nologic'):  # only warn one time
+                          if world.glitches_required[player_id] == 'no_logic'):  # only warn one time
             logging.info(
                 'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
@@ -61,24 +61,24 @@ def set_rules(world):
     else:
         raise NotImplementedError(f'World state {world.mode[player]} is not implemented yet')
 
-    if world.logic[player] == 'noglitches':
+    if world.glitches_required[player] == 'no_glitches':
         no_glitches_rules(world, player)
-    elif world.logic[player] == 'owglitches':
+    elif world.glitches_required[player] == 'overworld_glitches':
         # Initially setting no_glitches_rules to set the baseline rules for some
         # entrances. The overworld_glitches_rules set is primarily additive.
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
-    elif world.logic[player] in ['hybridglitches', 'nologic']: 
+    elif world.glitches_required[player] in ['hybrid_major_glitches', 'no_logic']: 
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
         underworld_glitches_rules(world, player)
-    elif world.logic[player] == 'minorglitches':
+    elif world.glitches_required[player] == 'minor_glitches':
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
     else:
-        raise NotImplementedError(f'Not implemented yet: Logic - {world.logic[player]}')
+        raise NotImplementedError(f'Not implemented yet: Logic - {world.glitches_required[player]}')
 
     if world.goal[player] == 'bosses':
         # require all bosses to beat ganon
@@ -89,7 +89,7 @@ def set_rules(world):
 
     if world.mode[player] != 'inverted':
         set_big_bomb_rules(world, player)
-        if world.logic[player] in {'owglitches', 'hybridglitches', 'nologic'} and world.entrance_shuffle[player] not in {'insanity', 'insanity_legacy', 'madness'}:
+        if world.glitches_required[player] in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.entrance_shuffle[player] not in {'insanity', 'insanity_legacy', 'madness'}:
             path_to_courtyard = mirrorless_path_to_castle_courtyard(world, player)
             add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.multiworld.get_entrance('Dark Death Mountain Offset Mirror', player).can_reach(state) and all(rule(state) for rule in path_to_courtyard), 'or')
     else:
@@ -97,18 +97,18 @@ def set_rules(world):
 
     # if swamp and dam have not been moved we require mirror for swamp palace
     # however there is mirrorless swamp in hybrid MG, so we don't necessarily want this. HMG handles this requirement itself. 
-    if not world.swamp_patch_required[player] and world.logic[player] not in ['hybridglitches', 'nologic']:
+    if not world.swamp_patch_required[player] and world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
         add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
 
     # GT Entrance may be required for Turtle Rock for OWG and < 7 required
     ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.mode[player] == 'inverted' else 'Ganons Tower', player)
-    if world.crystals_needed_for_gt[player] == 7 and not (world.logic[player] in ['owglitches', 'hybridglitches', 'nologic'] and world.mode[player] != 'inverted'):
+    if world.crystals_needed_for_gt[player] == 7 and not (world.glitches_required[player] in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and world.mode[player] != 'inverted'):
         set_rule(ganons_tower, lambda state: False)
 
     set_trock_key_rules(world, player)
 
     set_rule(ganons_tower, lambda state: has_crystals(state, state.multiworld.crystals_needed_for_gt[player], player))
-    if world.mode[player] != 'inverted' and world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
+    if world.mode[player] != 'inverted' and world.glitches_required[player] in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.multiworld.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
     set_bunny_rules(world, player, world.mode[player] == 'inverted')
@@ -345,7 +345,7 @@ def global_rules(world, player):
     if world.accessibility[player] != 'locations':
         allow_self_locking_items(world.get_location('Swamp Palace - Big Chest', player), 'Big Key (Swamp Palace)')
     set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
-    if not world.smallkey_shuffle[player] and world.logic[player] not in ['hybridglitches', 'nologic']:
+    if not world.smallkey_shuffle[player] and world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
         forbid_item(world.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
     set_rule(world.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     set_rule(world.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
@@ -1612,7 +1612,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     def get_rule_to_add(region, location = None, connecting_entrance = None):
         # In OWG, a location can potentially be superbunny-mirror accessible or
         # bunny revival accessible.
-        if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic']:
+        if world.glitches_required[player] in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
             if region.name == 'Swamp Palace (Entrance)':  # Need to 0hp revive - not in logic
                 return lambda state: state.has('Moon Pearl', player)
             if region.name == 'Tower of Hera (Bottom)':  # Need to hit the crystal switch
@@ -1652,7 +1652,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 seen.add(new_region)
                 if not is_link(new_region):
                     # For glitch rulesets, establish superbunny and revival rules.
-                    if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] and entrance.name not in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
+                    if world.glitches_required[player] in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name not in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         if region.name in OverworldGlitchRules.get_sword_required_superbunny_mirror_regions():
                             possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has('Magic Mirror', player) and has_sword(state, player))
                         elif (region.name in OverworldGlitchRules.get_boots_required_superbunny_mirror_regions()
@@ -1690,7 +1690,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     # Add requirements for all locations that are actually in the dark world, except those available to the bunny, including dungeon revival
     for entrance in world.get_entrances():
         if entrance.player == player and is_bunny(entrance.connected_region):
-            if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] :
+            if world.glitches_required[player] in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] :
                 if entrance.connected_region.type == LTTPRegionType.Dungeon:
                     if entrance.parent_region.type != LTTPRegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         add_rule(entrance, get_rule_to_add(entrance.connected_region, None, entrance))
@@ -1698,7 +1698,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 if entrance.connected_region.name == 'Turtle Rock (Entrance)':
                     add_rule(world.get_entrance('Turtle Rock Entrance Gap', player), get_rule_to_add(entrance.connected_region, None, entrance))
             for location in entrance.connected_region.locations:
-                if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] and entrance.name in OverworldGlitchRules.get_invalid_mirror_bunny_entrances():
+                if world.glitches_required[player] in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name in OverworldGlitchRules.get_invalid_mirror_bunny_entrances():
                     continue
                 if location.name in bunny_accessible_locations:
                     continue
