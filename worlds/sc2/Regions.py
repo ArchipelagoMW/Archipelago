@@ -313,7 +313,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             slot_offset = 0
             for position, mission in enumerate(campaign_mission_slots[campaign]):
                 slot_map[campaign].append(position - slot_offset + 1)
-                if mission is None:
+                if mission is None or mission.slot is None:
                     slot_offset += 1
 
         def build_connection_rule(mission_names: List[str], missions_req: int) -> Callable:
