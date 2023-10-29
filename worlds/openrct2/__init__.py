@@ -241,6 +241,8 @@ class OpenRCT2World(World):
                     add_rule(region.exits[0], lambda state: state.has("Allow Landscape Changes", self.player, 1))
                 if self.rules[5] == 1:#tree removal
                     add_rule(region.exits[0], lambda state: state.has("Allow Tree Removal", self.player, 1))
+                add_rule(region.exits[0], lambda state: state.has("Cash Machine", self.player, 1))
+                add_rule(region.exits[0], lambda state: state.has("First Aid", self.player, 1))
             add_rule(region.exits[0], lambda state: state.has_group("rides", self.player, num_rides))
             count += 1
         final_region = self.multiworld.get_region("OpenRCT2_Level_" + str(current_level), self.player)
