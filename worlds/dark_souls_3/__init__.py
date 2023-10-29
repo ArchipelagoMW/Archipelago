@@ -10,7 +10,7 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
-from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
+from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption
 
 
 class DarkSouls3Web(WebWorld):
@@ -44,7 +44,8 @@ class DarkSouls3World(World):
     """
 
     game: str = "Dark Souls III"
-    option_definitions = dark_souls_options
+    options: DarkSouls3Options
+    options_dataclass = DarkSouls3Options
     topology_present: bool = True
     web = DarkSouls3Web()
     data_version = 8
@@ -83,10 +84,14 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.RING)
         if self.multiworld.enable_spell_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
+        if self.multiworld.enable_upgrade_locations[self.player] == Toggle.option_true:
+            self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
         if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.BOSS)
+        if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
+            self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
             self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
@@ -236,10 +241,10 @@ class DarkSouls3World(World):
             if not self.__is_location_available(location.name):
                 raise Exception("DS3 generation bug: Added an unavailable location.")
 
-            item_category = item_dictionary[location.default_item_name].category
-            if item_category == DS3ItemCategory.SKIP:
+            item = item_dictionary[location.default_item_name]
+            if item.category == DS3ItemCategory.SKIP:
                 num_required_extra_items += 1
-            elif item_category == DS3ItemCategory.MISC:
+            elif item.category == DS3ItemCategory.MISC or item.force_unique:
                 itempool_by_category[location.category].append(location.default_item_name)
             else:
                 # For non-miscellaneous non-skip items, make sure there aren't duplicates in the
@@ -453,6 +458,8 @@ class DarkSouls3World(World):
         # Define the access rules to some specific locations
         set_rule(self.multiworld.get_location("PC: Cinders of a Lord - Yhorm the Giant", self.player),
                  lambda state: state.has("Storm Ruler", self.player))
+        set_rule(self.multiworld.get_location("HWL: Red Eye Orb", self.player),
+                 lambda state: state.has("Lift Chamber Key", self.player))
 
         if self.multiworld.enable_ring_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
@@ -472,13 +479,14 @@ class DarkSouls3World(World):
 
             set_rule(self.multiworld.get_entrance("Go To Karla's Shop", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
-            if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
-                set_rule(self.multiworld.get_location("HWL: Red Eye Orb", self.player),
-                         lambda state: state.has("Lift Chamber Key", self.player))
             for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]:
                 set_rule(self.multiworld.get_location("AL: " + item, self.player),
                          lambda state: state.has("Black Eye Orb", self.player))
-                
+
+            # You could just kill NPCs for these, but it's more fun to ensure the player can do
+            # their quests.
+            set_rule(self.multiworld.get_location("FS: Lift Chamber Key", self.player),
+                     lambda state: state.has("Pale Tongue", self.player))
 
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("AP: Hawkwood's Swordgrass", self.player),

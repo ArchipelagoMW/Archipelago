@@ -18,9 +18,15 @@ class DS3LocationCategory(IntEnum):
     EVENT = 9
 
     UPGRADE = 10
-    """Any upgrade material.
+    """The original location of any upgrade material.
 
-    This includes various forms of titanite as well as infusion gems and shriving stones.
+    This includes various forms of titanite as well as infusion gems and Shriving Stones.
+    """
+
+    UNIQUE = 11
+    """The original location of a unique item that's not a key, equipment, spell, or boss soul.
+
+    This includes spellbooks, covenants, multiplayer items, coals, and various quest items.
     """
 
 
@@ -142,6 +148,8 @@ class DS3LocationData:
         if self.hostile_npc: names.append("Hostile NPC Rewards")
         if self.lizard: names.append("Small Crystal Lizards")
         if self.key: names.append("Keys")
+        if self.category == DS3LocationCategory.UPGRADE: names.append("Upgrade")
+        if self.category == DS3LocationCategory.MISC: names.append("Miscellaneous")
         if self.hidden: names.append("Hidden")
         return names
 
@@ -271,15 +279,15 @@ location_tables = {
         DS3LocationData("FS: Ember #2",                            "Ember",                             DS3LocationCategory.MISC),
         DS3LocationData("FS: Wolf Ring+2",                         "Wolf Ring+2",                       DS3LocationCategory.RING,
                         ngp = True),
-        DS3LocationData("FS: Cracked Red Eye Orb",                 "Cracked Red Eye Orb x5",            DS3LocationCategory.MISC,
+        DS3LocationData("FS: Cracked Red Eye Orb",                 "Cracked Red Eye Orb x5",            DS3LocationCategory.UNIQUE,
                         missable = True, npc = True), # Leonhard (quest)
         DS3LocationData("FS: Lift Chamber Key",                    "Lift Chamber Key",                  DS3LocationCategory.KEY,
-                        progression = True, npc = True, key = True), # Leonhard (kill or quest, after giving Pale Tongue and lighting Cliff Underside or killing Greatwood)
+                        progression = True, npc = True, key = True), # Leonhard (kill or quest)
 
         # Shrine Handmaid shop
-        DS3LocationData("FS: White Sign Soapstone",                "White Sign Soapstone",              DS3LocationCategory.MISC,
+        DS3LocationData("FS: White Sign Soapstone",                "White Sign Soapstone",              DS3LocationCategory.UNIQUE,
                         shop = True),
-        DS3LocationData("FS: Dried Finger",                        "Dried Finger",                      DS3LocationCategory.MISC,
+        DS3LocationData("FS: Dried Finger",                        "Dried Finger",                      DS3LocationCategory.UNIQUE,
                         shop = True),
         DS3LocationData("FS: Tower Key",                           "Tower Key",                         DS3LocationCategory.KEY,
                         progression = True, shop = True, key = True),
@@ -296,7 +304,7 @@ location_tables = {
                         shop = True),
         DS3LocationData("FS: Ember (Mortician)"  ,                 "Ember",                             DS3LocationCategory.MISC,
                         offline = '99,0:-1:110000,70000100:', shop = True),
-        DS3LocationData("FS: Grave Key",                           "Grave Key",                         DS3LocationCategory.MISC,
+        DS3LocationData("FS: Grave Key",                           "Grave Key",                         DS3LocationCategory.KEY,
                         shop = True, key = True),
         # Dreamchaser's Ashes
         DS3LocationData("FS: Life Ring",                           "Life Ring",                         DS3LocationCategory.RING,
@@ -358,7 +366,7 @@ location_tables = {
         DS3LocationData("FSBT: Homeward Bone",                     "Homeward Bone x3",                  DS3LocationCategory.MISC),
         DS3LocationData("FSBT: Estus Ring",                        "Estus Ring",                        DS3LocationCategory.RING),
         DS3LocationData("FSBT: Estus Shard",                       "Estus Shard",                       DS3LocationCategory.HEALTH),
-        DS3LocationData("FSBT: Fire Keeper Soul",                  "Fire Keeper Soul",                  DS3LocationCategory.MISC),
+        DS3LocationData("FSBT: Fire Keeper Soul",                  "Fire Keeper Soul",                  DS3LocationCategory.UNIQUE),
         DS3LocationData("FSBT: Fire Keeper Robe",                  "Fire Keeper Robe",                  DS3LocationCategory.ARMOR),
         DS3LocationData("FSBT: Fire Keeper Gloves",                "Fire Keeper Gloves",                DS3LocationCategory.ARMOR),
         DS3LocationData("FSBT: Fire Keeper Skirt",                 "Fire Keeper Skirt",                 DS3LocationCategory.ARMOR),
@@ -377,11 +385,11 @@ location_tables = {
                         missable = True),
         DS3LocationData("FSBT: Lucatiel's Mask",                   "Lucatiel's Mask",                   DS3LocationCategory.ARMOR,
                         missable = True),
-        DS3LocationData("FSBT: Very good! Carving",                "Very good! Carving",                DS3LocationCategory.MISC,
+        DS3LocationData("FSBT: Very good! Carving",                "Very good! Carving",                DS3LocationCategory.UNIQUE,
                         missable = True),
-        DS3LocationData("FSBT: Thank you Carving",                 "Thank you Carving",                 DS3LocationCategory.MISC,
+        DS3LocationData("FSBT: Thank you Carving",                 "Thank you Carving",                 DS3LocationCategory.UNIQUE,
                         missable = True),
-        DS3LocationData("FSBT: I'm sorry Carving",                 "I'm sorry Carving",                 DS3LocationCategory.MISC,
+        DS3LocationData("FSBT: I'm sorry Carving",                 "I'm sorry Carving",                 DS3LocationCategory.UNIQUE,
                         missable = True),
         DS3LocationData("FSBT: Sunlight Shield",                   "Sunlight Shield",                   DS3LocationCategory.SHIELD,
                         missable = True),
@@ -389,11 +397,11 @@ location_tables = {
                         missable = True),
         DS3LocationData("FSBT: Titanite Scale #1",                 "Titanite Scale x3",                 DS3LocationCategory.UPGRADE,
                         missable = True),
-        DS3LocationData("FSBT: Help me! Carving",                  "Help me! Carving",                  DS3LocationCategory.MISC,
+        DS3LocationData("FSBT: Help me! Carving",                  "Help me! Carving",                  DS3LocationCategory.UNIQUE,
                         missable = True),
         DS3LocationData("FSBT: Titanite Slab",                     "Titanite Slab",                     DS3LocationCategory.UPGRADE,
                         missable = True),
-        DS3LocationData("FSBT: Hello Carving",                     "Hello Carving",                     DS3LocationCategory.MISC,
+        DS3LocationData("FSBT: Hello Carving",                     "Hello Carving",                     DS3LocationCategory.UNIQUE,
                         missable = True),
         DS3LocationData("FSBT: Armor of the Sun",                  "Armor of the Sun",                  DS3LocationCategory.ARMOR,
                         missable = True),
@@ -460,7 +468,7 @@ location_tables = {
         DS3LocationData("HWL: Ember #3",                           "Ember",                             DS3LocationCategory.MISC),
         DS3LocationData("HWL: Large Soul of a Deserted Corpse #3", "Large Soul of a Deserted Corpse",   DS3LocationCategory.MISC,
                         hidden = True), # Easily missed turnoff
-        DS3LocationData("HWL: Binoculars",                         "Binoculars",                        DS3LocationCategory.MISC),
+        DS3LocationData("HWL: Binoculars",                         "Binoculars",                        DS3LocationCategory.UNIQUE),
         DS3LocationData("HWL: Ring of Sacrifice",                  "Ring of Sacrifice",                 DS3LocationCategory.MISC,
                         hidden = True), # Easily missed turnoff
         DS3LocationData("HWL: Throwing Knife #2",                  "Throwing Knife x6",                 DS3LocationCategory.MISC),
@@ -493,7 +501,7 @@ location_tables = {
                                           # because it requires range and is a crazy thing to do
         DS3LocationData("HWL: Refined Gem",                        "Refined Gem",                       DS3LocationCategory.UPGRADE,
                         miniboss = True), # Red-Eyed Lothric Knight drop
-        DS3LocationData("HWL: Way of Blue",                        "Way of Blue",                       DS3LocationCategory.MISC),
+        DS3LocationData("HWL: Way of Blue",                        "Way of Blue",                       DS3LocationCategory.UNIQUE),
         DS3LocationData("HWL: Raw Gem",                            "Raw Gem",                           DS3LocationCategory.UPGRADE,
                         lizard = True),
         DS3LocationData("HWL: Red Eye Orb",                        "Red Eye Orb",                       DS3LocationCategory.MISC,
@@ -506,24 +514,20 @@ location_tables = {
     "Undead Settlement": [
         DS3LocationData("US: Soul of the Rotted Greatwood",        "Soul of the Rotted Greatwood",      DS3LocationCategory.BOSS,
                         prominent = True, boss = True),
-        DS3LocationData("US: Transposing Kiln",                    "Transposing Kiln",                  DS3LocationCategory.MISC,
+        DS3LocationData("US: Transposing Kiln",                    "Transposing Kiln",                  DS3LocationCategory.UNIQUE,
                         boss = True),
         DS3LocationData("US: Pyromancy Flame",                     "Pyromancy Flame",                   DS3LocationCategory.WEAPON,
                         missable = True, npc = True),
         DS3LocationData("US: Old Sage's Blindfold",                "Old Sage's Blindfold",              DS3LocationCategory.ARMOR,
                         missable = True, npc = True),
         DS3LocationData("US: Cornyx's Garb",                       "Cornyx's Garb",                     DS3LocationCategory.ARMOR,
-                        missable = True, npc = True),
+                        offline = '02,0:50006141::', missable = True, npc = True),
         DS3LocationData("US: Cornyx's Wrap",                       "Cornyx's Wrap",                     DS3LocationCategory.ARMOR,
-                        missable = True, npc = True),
+                        offline = '02,0:50006141::', missable = True, npc = True),
         DS3LocationData("US: Cornyx's Skirt",                      "Cornyx's Skirt",                    DS3LocationCategory.ARMOR,
-                        missable = True, npc = True),
+                        offline = '02,0:50006141::', missable = True, npc = True),
         DS3LocationData("US: Tower Key",                           "Tower Key",                         DS3LocationCategory.KEY,
                         missable = True, npc = True, key = True),
-        DS3LocationData("US: Morne's Great Hammer",                "Morne's Great Hammer",              DS3LocationCategory.WEAPON,
-                        npc = True), # Eygon (kill or quest)
-        DS3LocationData("US: Moaning Shield",                      "Moaning Shield",                    DS3LocationCategory.SHIELD,
-                        npc = True), # Eygon (kill or quest)
         DS3LocationData("US: Hawk Ring",                           "Hawk Ring",                         DS3LocationCategory.RING,
                         npc = True), # Giant archer (kill or quest)
         DS3LocationData("US: Flynn's Ring",                        "Flynn's Ring",                      DS3LocationCategory.RING),
@@ -627,9 +631,9 @@ location_tables = {
                         miniboss = True), # Boreal Outrider drop
         DS3LocationData("US: Fire Gem",                            "Fire Gem",                          DS3LocationCategory.UPGRADE,
                         miniboss = True), # Fire Demon drop
-        DS3LocationData("US: Warrior of Sunlight",                 "Warrior of Sunlight",               DS3LocationCategory.MISC,
+        DS3LocationData("US: Warrior of Sunlight",                 "Warrior of Sunlight",               DS3LocationCategory.UNIQUE,
                         hidden = True), # hidden fall
-        DS3LocationData("US: Mound-makers",                        "Mound-makers",                      DS3LocationCategory.MISC,
+        DS3LocationData("US: Mound-makers",                        "Mound-makers",                      DS3LocationCategory.UNIQUE,
                         missable = True),
         DS3LocationData("US: Sharp Gem",                           "Sharp Gem",                         DS3LocationCategory.UPGRADE,
                         lizard = True),
@@ -638,7 +642,7 @@ location_tables = {
         DS3LocationData("US: Siegbräu",                            "Siegbräu",                          DS3LocationCategory.MISC,
                         missable = True, npc = True),
         DS3LocationData("US: Heavy Gem (Hawkwood)",                "Heavy Gem",                         DS3LocationCategory.UPGRADE,
-                        missable = True, npc = True), # Hawkwood (quest, after Greatwood or Sage)
+                        offline = '00,0:50006070::', missable = True, npc = True), # Hawkwood (quest, after Greatwood or Sage)
         DS3LocationData("US: Hollowslayer Greatsword",             "Hollowslayer Greatsword",           DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
         DS3LocationData("US: Arstor's Spear",                      "Arstor's Spear",                    DS3LocationCategory.WEAPON,
@@ -661,8 +665,8 @@ location_tables = {
                         missable = True, npc = True),
         DS3LocationData("US: Untrue Dark Ring",                    "Untrue Dark Ring",                  DS3LocationCategory.RING,
                         missable = True, npc = True),
-        DS3LocationData("US: Londor Braille Divine Tome",          "Londor Braille Divine Tome",        DS3LocationCategory.MISC,
-                        missable = True, npc = True),
+        DS3LocationData("US: Londor Braille Divine Tome",          "Londor Braille Divine Tome",        DS3LocationCategory.UNIQUE,
+                        offline = '99,0:-1:40000,110000,70000116:', missable = True, npc = True),
         DS3LocationData("US: Darkdrift",                           "Darkdrift",                         DS3LocationCategory.WEAPON,
                         missable = True, npc = True), # kill her or kill Soul of Cinder
 
@@ -773,7 +777,7 @@ location_tables = {
         DS3LocationData("RS: Conjurator Boots",                    "Conjurator Boots",                  DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Soul of an Unknown Traveler #2",      "Soul of an Unknown Traveler",       DS3LocationCategory.MISC),
         DS3LocationData("RS: Green Blossom #2",                    "Green Blossom x2",                  DS3LocationCategory.MISC),
-        DS3LocationData("RS: Great Swamp Pyromancy Tome",          "Great Swamp Pyromancy Tome",        DS3LocationCategory.MISC),
+        DS3LocationData("RS: Great Swamp Pyromancy Tome",          "Great Swamp Pyromancy Tome",        DS3LocationCategory.UNIQUE),
         DS3LocationData("RS: Homeward Bone",                       "Homeward Bone x2",                  DS3LocationCategory.MISC),
         DS3LocationData("RS: Titanite Shard #3",                   "Titanite Shard",                    DS3LocationCategory.MISC),
         DS3LocationData("RS: Twin Dragon Greatshield",             "Twin Dragon Greatshield",           DS3LocationCategory.SHIELD),
@@ -794,7 +798,7 @@ location_tables = {
         DS3LocationData("RS: Shriving Stone",                      "Shriving Stone",                    DS3LocationCategory.UPGRADE),
         DS3LocationData("RS: Titanite Shard #4",                   "Titanite Shard",                    DS3LocationCategory.UPGRADE),
         DS3LocationData("RS: Brigand Twindaggers",                 "Brigand Twindaggers",               DS3LocationCategory.WEAPON),
-        DS3LocationData("RS: Braille Divine Tome of Carim",        "Braille Divine Tome of Carim",      DS3LocationCategory.MISC,
+        DS3LocationData("RS: Braille Divine Tome of Carim",        "Braille Divine Tome of Carim",      DS3LocationCategory.UNIQUE,
                         hidden = True), # Hidden fall
         DS3LocationData("RS: Ember #2",                            "Ember",                             DS3LocationCategory.MISC),
         DS3LocationData("RS: Sellsword Twinblades",                "Sellsword Twinblades",              DS3LocationCategory.WEAPON),
@@ -810,14 +814,14 @@ location_tables = {
         DS3LocationData("RS: Sellsword Armor",                     "Sellsword Armor",                   DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Sellsword Gauntlet",                  "Sellsword Gauntlet",                DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Sellsword Trousers",                  "Sellsword Trousers",                DS3LocationCategory.ARMOR),
-        DS3LocationData("RS: Farron Coal",                         "Farron Coal",                       DS3LocationCategory.MISC),
+        DS3LocationData("RS: Farron Coal",                         "Farron Coal",                       DS3LocationCategory.UNIQUE),
         DS3LocationData("RS: Chloranthy Ring+2",                   "Chloranthy Ring+2",                 DS3LocationCategory.RING,
                         hidden = True, ngp = True), # Hidden fall
         DS3LocationData("RS: Lingering Dragoncrest Ring+1",        "Lingering Dragoncrest Ring+1",      DS3LocationCategory.RING,
                         ngp = True),
         DS3LocationData("RS: Great Swamp Ring",                    "Great Swamp Ring",                  DS3LocationCategory.RING,
                         miniboss = True), # Giant Crab drop
-        DS3LocationData("RS: Blue Sentinels",                      "Blue Sentinels",                    DS3LocationCategory.MISC,
+        DS3LocationData("RS: Blue Sentinels",                      "Blue Sentinels",                    DS3LocationCategory.UNIQUE,
                         missable = True, npc = True), # Horace quest
         DS3LocationData("RS: Crystal Gem",                         "Crystal Gem",                       DS3LocationCategory.UPGRADE),
 
@@ -830,7 +834,7 @@ location_tables = {
         DS3LocationData("RS: Great Soul Arrow",                    "Great Soul Arrow",                  DS3LocationCategory.SPELL,
                         missable = True, npc = True, shop = True),
         DS3LocationData("RS: Heavy Soul Arrow",                    "Heavy Soul Arrow",                  DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        offline = '99,0:-1:110000,130100,70000111:', missable = True, npc = True, shop = True),
         DS3LocationData("RS: Great Heavy Soul Arrow",              "Great Heavy Soul Arrow",            DS3LocationCategory.SPELL,
                         missable = True, npc = True, shop = True),
         DS3LocationData("RS: Magic Weapon",                        "Magic Weapon",                      DS3LocationCategory.SPELL,
@@ -911,7 +915,7 @@ location_tables = {
                         prominent = True, progression = True, boss = True),
         DS3LocationData("CD: Soul of the Deacons of the Deep",     "Soul of the Deacons of the Deep",   DS3LocationCategory.BOSS,
                         boss = True),
-        DS3LocationData("CD: Black Eye Orb",                       "Black Eye Orb",                     DS3LocationCategory.MISC,
+        DS3LocationData("CD: Black Eye Orb",                       "Black Eye Orb",                     DS3LocationCategory.UNIQUE,
                         missable = True, npc = True),
         DS3LocationData("CD: Winged Spear #1",                     "Winged Spear",                      DS3LocationCategory.WEAPON,
                         missable = True), # Patches (kill)
@@ -996,9 +1000,9 @@ location_tables = {
                         missable = True),
         DS3LocationData("CD: Deep Ring",                           "Deep Ring",                         DS3LocationCategory.RING,
                         hidden = True), # Guaranteed drop from a normal-looking Deacon
-        DS3LocationData("CD: Deep Braille Divine Tome",            "Deep Braille Divine Tome",          DS3LocationCategory.MISC,
+        DS3LocationData("CD: Deep Braille Divine Tome",            "Deep Braille Divine Tome",          DS3LocationCategory.UNIQUE,
                         mimic = True),
-        DS3LocationData("CD: Red Sign Soapstone",                  "Red Sign Soapstone",                DS3LocationCategory.MISC,
+        DS3LocationData("CD: Red Sign Soapstone",                  "Red Sign Soapstone",                DS3LocationCategory.UNIQUE,
                         hidden = True), # Guaranteed drop from a normal-looking Corpse-grub
         DS3LocationData("CD: Aldrich's Sapphire",                  "Aldrich's Sapphire",                DS3LocationCategory.RING,
                         miniboss = True), # Deep Accursed Drop
@@ -1012,7 +1016,7 @@ location_tables = {
                         lizard = True),
         DS3LocationData("CD: Twinkling Titanite #4",               "Twinkling Titanite",                DS3LocationCategory.UPGRADE,
                         lizard = True),
-        DS3LocationData("CD: Rosaria's Fingers",                   "Rosaria's Fingers",                 DS3LocationCategory.MISC,
+        DS3LocationData("CD: Rosaria's Fingers",                   "Rosaria's Fingers",                 DS3LocationCategory.UNIQUE,
                         hidden = True), # Hidden fall
         DS3LocationData("CD: Cleric's Candlestick",                "Cleric's Candlestick",              DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
@@ -1080,9 +1084,9 @@ location_tables = {
         DS3LocationData("FK: Shriving Stone",                      "Shriving Stone",                    DS3LocationCategory.UPGRADE),
         DS3LocationData("FK: Repair Powder",                       "Repair Powder x4",                  DS3LocationCategory.MISC,
                         hidden = True), # Out-of-the-way hard-to-see cave
-        DS3LocationData("FK: Golden Scroll",                       "Golden Scroll",                     DS3LocationCategory.MISC,
+        DS3LocationData("FK: Golden Scroll",                       "Golden Scroll",                     DS3LocationCategory.UNIQUE,
                         hostile_npc = True), # Out-of-the-way hard-to-see cave
-        DS3LocationData("FK: Sage's Scroll",                       "Sage's Scroll",                     DS3LocationCategory.MISC),
+        DS3LocationData("FK: Sage's Scroll",                       "Sage's Scroll",                     DS3LocationCategory.UNIQUE),
         DS3LocationData("FK: Dreamchaser's Ashes",                 "Dreamchaser's Ashes",               DS3LocationCategory.KEY,
                         progression = True, hidden = True), # Behind illusory wall
         DS3LocationData("FK: Titanite Shard #3",                   "Titanite Shard",                    DS3LocationCategory.UPGRADE),
@@ -1102,7 +1106,7 @@ location_tables = {
         DS3LocationData("FK: Large Soul of a Nameless Soldier #1", "Large Soul of a Nameless Soldier",  DS3LocationCategory.MISC),
         DS3LocationData("FK: Prism Stone",                         "Prism Stone x10",                   DS3LocationCategory.MISC),
         DS3LocationData("FK: Large Soul of a Nameless Soldier #2", "Large Soul of a Nameless Soldier",  DS3LocationCategory.MISC),
-        DS3LocationData("FK: Sage's Coal",                         "Sage's Coal",                       DS3LocationCategory.MISC),
+        DS3LocationData("FK: Sage's Coal",                         "Sage's Coal",                       DS3LocationCategory.UNIQUE),
         DS3LocationData("FK: Gold Pine Bundle",                    "Gold Pine Bundle x6",               DS3LocationCategory.MISC),
         DS3LocationData("FK: Ember #2",                            "Ember",                             DS3LocationCategory.MISC),
         DS3LocationData("FK: Soul of a Nameless Soldier",          "Soul of a Nameless Soldier",        DS3LocationCategory.MISC),
@@ -1142,7 +1146,7 @@ location_tables = {
                         lizard = True),
         DS3LocationData("FK: Soul of a Stray Demon",               "Soul of a Stray Demon",             DS3LocationCategory.BOSS,
                         miniboss = True),
-        DS3LocationData("FK: Watchdogs of Farron",                 "Watchdogs of Farron",               DS3LocationCategory.MISC),
+        DS3LocationData("FK: Watchdogs of Farron",                 "Watchdogs of Farron",               DS3LocationCategory.UNIQUE),
         DS3LocationData("FK: Hawkwood's Shield",                   "Hawkwood's Shield",                 DS3LocationCategory.SHIELD,
                         missable = True, npc = True), # Hawkwood (quest, after Greatwood, Sage, Watchers, and Deacons)
         DS3LocationData("FK: Havel's Ring",                        "Havel's Ring",                      DS3LocationCategory.RING,
@@ -1186,7 +1190,7 @@ location_tables = {
         DS3LocationData("CC: Titanite Shard #2",                   "Titanite Shard x2",                 DS3LocationCategory.UPGRADE),
         DS3LocationData("CC: Titanite Shard #3",                   "Titanite Shard x2",                 DS3LocationCategory.UPGRADE),
         DS3LocationData("CC: Ember #3",                            "Ember",                             DS3LocationCategory.MISC),
-        DS3LocationData("CC: Carthus Pyromancy Tome",              "Carthus Pyromancy Tome",            DS3LocationCategory.MISC,
+        DS3LocationData("CC: Carthus Pyromancy Tome",              "Carthus Pyromancy Tome",            DS3LocationCategory.UNIQUE,
                         hidden = True), # Behind illusory wall
         DS3LocationData("CC: Large Titanite Shard #1",             "Large Titanite Shard",              DS3LocationCategory.MISC),
         DS3LocationData("CC: Large Titanite Shard #2",             "Large Titanite Shard",              DS3LocationCategory.MISC),
@@ -1200,7 +1204,7 @@ location_tables = {
         DS3LocationData("CC: Old Sage's Blindfold",                "Old Sage's Blindfold",              DS3LocationCategory.ARMOR),
         DS3LocationData("CC: Witch's Ring",                        "Witch's Ring",                      DS3LocationCategory.RING),
         DS3LocationData("CC: Soul of a Nameless Soldier #2",       "Soul of a Nameless Soldier",        DS3LocationCategory.MISC),
-        DS3LocationData("CC: Grave Warden Pyromancy Tome",         "Grave Warden Pyromancy Tome",       DS3LocationCategory.MISC),
+        DS3LocationData("CC: Grave Warden Pyromancy Tome",         "Grave Warden Pyromancy Tome",       DS3LocationCategory.UNIQUE),
         DS3LocationData("CC: Large Soul of an Unknown Traveler",   "Large Soul of an Unknown Traveler", DS3LocationCategory.MISC),
         DS3LocationData("CC: Ring of Steel Protection+2",          "Ring of Steel Protection+2",        DS3LocationCategory.RING,
                         ngp = True),
@@ -1257,11 +1261,11 @@ location_tables = {
         DS3LocationData("SL: Ember #1",                            "Ember",                             DS3LocationCategory.MISC),
         DS3LocationData("SL: Chaos Gem #1",                        "Chaos Gem",                         DS3LocationCategory.UPGRADE),
         DS3LocationData("SL: Ember #2",                            "Ember",                             DS3LocationCategory.MISC),
-        DS3LocationData("SL: Izalith Pyromancy Tome",              "Izalith Pyromancy Tome",            DS3LocationCategory.MISC),
+        DS3LocationData("SL: Izalith Pyromancy Tome",              "Izalith Pyromancy Tome",            DS3LocationCategory.UNIQUE),
         DS3LocationData("SL: Black Knight Sword",                  "Black Knight Sword",                DS3LocationCategory.WEAPON,
                         hidden = True), # Behind illusory wall
         DS3LocationData("SL: Ember #3",                            "Ember",                             DS3LocationCategory.MISC),
-        DS3LocationData("SL: Quelana Pyromancy Tome",              "Quelana Pyromancy Tome",            DS3LocationCategory.MISC),
+        DS3LocationData("SL: Quelana Pyromancy Tome",              "Quelana Pyromancy Tome",            DS3LocationCategory.UNIQUE),
         DS3LocationData("SL: Izalith Staff",                       "Izalith Staff",                     DS3LocationCategory.WEAPON,
                         hidden = True), # Behind illusory wall
         DS3LocationData("SL: White Hair Talisman",                 "White Hair Talisman",               DS3LocationCategory.WEAPON,
@@ -1302,12 +1306,13 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("SL: Chaos Bed Vestiges",                  "Chaos Bed Vestiges",                DS3LocationCategory.SPELL,
                         missable = True, boss = True, shop = True),
-        DS3LocationData("SL: Llewellyn Shield",                    "Llewellyn Shield",                  DS3LocationCategory.SHIELD,
-                        missable = True, npc = True), # Horace (kill or quest)
 
-        # Shrine Handmaid after killing Horace the Hushed
+        # Horace the Hushed
         # These are listed here even though you can kill Horace in the Road of Sacrifices because
         # the player may want to complete his and Anri's quest first.
+        DS3LocationData("SL: Llewellyn Shield",                    "Llewellyn Shield",                  DS3LocationCategory.SHIELD,
+                        npc = True), # kill or quest
+        # Shrine Handmaiden after killing
         DS3LocationData("SL: Executioner Helm",                    "Executioner Helm",                  DS3LocationCategory.ARMOR,
                         hidden = True, npc = True, shop = True),
         DS3LocationData("SL: Executioner Armor",                   "Executioner Armor",                 DS3LocationCategory.ARMOR,
@@ -1377,7 +1382,7 @@ location_tables = {
         DS3LocationData("IBV: Dung Pie #1",                        "Dung Pie x3",                       DS3LocationCategory.MISC),
         DS3LocationData("IBV: Dung Pie #2",                        "Dung Pie x3",                       DS3LocationCategory.MISC),
         # These don't actually guard any single item sales. Maybe we can inject one manually?
-        DS3LocationData("IBV: Excrement-covered Ashes",            "Excrement-covered Ashes",           DS3LocationCategory.MISC),
+        DS3LocationData("IBV: Excrement-covered Ashes",            "Excrement-covered Ashes",           DS3LocationCategory.UNIQUE),
         DS3LocationData("IBV: Large Soul of a Nameless Soldier #4", "Large Soul of a Nameless Soldier",  DS3LocationCategory.MISC),
         DS3LocationData("IBV: Soul of a Weary Warrior #4",         "Soul of a Weary Warrior",           DS3LocationCategory.MISC),
         DS3LocationData("IBV: Large Titanite Shard #7",            "Large Titanite Shard",              DS3LocationCategory.UPGRADE),
@@ -1411,7 +1416,7 @@ location_tables = {
                         hidden = True), # Guaranteed drop from normal-looking Silver Knight
         DS3LocationData("IBV: Large Titanite Shard #11",           "Large Titanite Shard x2",           DS3LocationCategory.UPGRADE,
                         hidden = True), # Guaranteed drop from normal-looking Silver Knight
-        DS3LocationData("IBV: Roster of Knights",                  "Roster of Knights",                 DS3LocationCategory.MISC),
+        DS3LocationData("IBV: Roster of Knights",                  "Roster of Knights",                 DS3LocationCategory.UNIQUE),
         DS3LocationData("IBV: Twinkling Titanite #1",              "Twinkling Titanite",                DS3LocationCategory.UPGRADE,
                         lizard = True, hidden = True), # Behind illusory wall
         DS3LocationData("IBV: Twinkling Titanite #2",              "Twinkling Titanite",                DS3LocationCategory.UPGRADE,
@@ -1466,7 +1471,7 @@ location_tables = {
                         missable = True, npc = True),
     ],
     "Irithyll Dungeon": [
-        DS3LocationData("ID: Titanite Slab",                       "Titanite Slab",                     DS3LocationCategory.MISC,
+        DS3LocationData("ID: Titanite Slab",                       "Titanite Slab",                     DS3LocationCategory.UPGRADE,
                         missable = True, npc = True), # Siegward (quest)
         DS3LocationData("ID: Murakumo",                            "Murakumo",                          DS3LocationCategory.WEAPON,
                         missable = True, npc = True), # Alva (requires ember)
@@ -1491,7 +1496,7 @@ location_tables = {
         DS3LocationData("ID: Dung Pie #1",                         "Dung Pie x4",                       DS3LocationCategory.MISC),
         DS3LocationData("ID: Ember #1",                            "Ember",                             DS3LocationCategory.MISC),
         DS3LocationData("ID: Ember #2",                            "Ember",                             DS3LocationCategory.MISC),
-        DS3LocationData("ID: Profaned Coal",                       "Profaned Coal",                     DS3LocationCategory.MISC),
+        DS3LocationData("ID: Profaned Coal",                       "Profaned Coal",                     DS3LocationCategory.UNIQUE),
         DS3LocationData("ID: Large Titanite Shard #5",             "Large Titanite Shard",              DS3LocationCategory.UPGRADE),
         DS3LocationData("ID: Old Sorcerer Hat",                    "Old Sorcerer Hat",                  DS3LocationCategory.ARMOR),
         DS3LocationData("ID: Old Sorcerer Coat",                   "Old Sorcerer Coat",                 DS3LocationCategory.ARMOR),
@@ -1511,7 +1516,7 @@ location_tables = {
                         key = True),
         DS3LocationData("ID: Covetous Silver Serpent Ring+1",      "Covetous Silver Serpent Ring+1",    DS3LocationCategory.RING,
                         ngp = True),
-        DS3LocationData("ID: Dragon Torso Stone",                  "Dragon Torso Stone",                DS3LocationCategory.MISC),
+        DS3LocationData("ID: Dragon Torso Stone",                  "Dragon Torso Stone",                DS3LocationCategory.UNIQUE),
         DS3LocationData("ID: Prisoner Chief's Ashes",              "Prisoner Chief's Ashes",            DS3LocationCategory.KEY,
                         progression = True),
         DS3LocationData("ID: Great Magic Shield",                  "Great Magic Shield",                DS3LocationCategory.SPELL,
@@ -1547,7 +1552,7 @@ location_tables = {
                         boss = True),
         DS3LocationData("PC: Cinders of a Lord - Yhorm the Giant", "Cinders of a Lord - Yhorm the Giant", DS3LocationCategory.KEY,
                         offline = "07,0:50002170::", prominent = True, progression = True, boss = True),
-        DS3LocationData("PC: Logan's Scroll",                      "Logan's Scroll",                      DS3LocationCategory.MISC,
+        DS3LocationData("PC: Logan's Scroll",                      "Logan's Scroll",                      DS3LocationCategory.UNIQUE,
                         hostile_npc = True), # Sorcerer
         DS3LocationData("PC: Purging Stone #1",                    "Purging Stone x3",                    DS3LocationCategory.MISC),
         DS3LocationData("PC: Rusted Coin #1",                      "Rusted Coin x2",                      DS3LocationCategory.MISC),
@@ -1658,7 +1663,7 @@ location_tables = {
         DS3LocationData("AL: Moonlight Arrow",                     "Moonlight Arrow x6",                  DS3LocationCategory.MISC),
         DS3LocationData("AL: Proof of a Concord Kept",             "Proof of a Concord Kept",             DS3LocationCategory.MISC),
         DS3LocationData("AL: Large Soul of a Weary Warrior",       "Large Soul of a Weary Warrior",       DS3LocationCategory.MISC),
-        DS3LocationData("AL: Giant's Coal",                        "Giant's Coal",                        DS3LocationCategory.MISC),
+        DS3LocationData("AL: Giant's Coal",                        "Giant's Coal",                        DS3LocationCategory.UNIQUE),
         DS3LocationData("AL: Havel's Ring+2",                      "Havel's Ring+2",                      DS3LocationCategory.RING,
                         ngp = True, hidden = True), # Invisible walkway
         DS3LocationData("AL: Ring of Favor+1",                     "Ring of Favor+1",                     DS3LocationCategory.RING,
@@ -1670,7 +1675,7 @@ location_tables = {
                         mimic = True),
         DS3LocationData("AL: Ring of Favor",                       "Ring of Favor",                       DS3LocationCategory.RING,
                         miniboss = True, hidden = True), # Sulyvahn's Beast Duo drop, behind illusory wall
-        DS3LocationData("AL: Blade of the Darkmoon",               "Blade of the Darkmoon",               DS3LocationCategory.MISC,
+        DS3LocationData("AL: Blade of the Darkmoon",               "Blade of the Darkmoon",               DS3LocationCategory.UNIQUE,
                         missable = True, npc = True), # Yorshka (quest or kill)
         DS3LocationData("AL: Simple Gem",                          "Simple Gem",                          DS3LocationCategory.UPGRADE,
                         lizard = True),
@@ -1680,10 +1685,10 @@ location_tables = {
                         lizard = True),
         DS3LocationData("AL: Aldrich's Ruby",                      "Aldrich's Ruby",                      DS3LocationCategory.RING,
                         miniboss = True), # Deep Accursed drop
-        DS3LocationData("AL: Aldrich Faithful",                    "Aldrich Faithful",                    DS3LocationCategory.MISC,
+        DS3LocationData("AL: Aldrich Faithful",                    "Aldrich Faithful",                    DS3LocationCategory.UNIQUE,
                         hidden = True), # Behind illusory wall
         DS3LocationData("AL: Budding Green Blossom",               "Budding Green Blossom",               DS3LocationCategory.MISC,
-                        missable = True, npc = True, shop = True), # sold by Shrine Maiden after helping Sirris and defeating Aldrich
+                        offline = '99,0:-1:110000,70000118:', missable = True, npc = True, shop = True), # sold by Shrine Maiden after helping Sirris and defeating Aldrich
         DS3LocationData("AL: Bountiful Sunlight",                  "Bountiful Sunlight",                  DS3LocationCategory.SPELL,
                         missable = True, boss = True, shop = True),
         DS3LocationData("AL: Darkmoon Longbow",                    "Darkmoon Longbow",                    DS3LocationCategory.WEAPON,
@@ -1753,7 +1758,7 @@ location_tables = {
                         missable = True, npc = True),
         DS3LocationData("AL: Silver Mask",                         "Silver Mask",                         DS3LocationCategory.ARMOR,
                         missable = True, npc = True),
-        DS3LocationData("AL: Soul of Rosaria",                     "Soul of Rosaria",                     DS3LocationCategory.MISC,
+        DS3LocationData("AL: Soul of Rosaria",                     "Soul of Rosaria",                     DS3LocationCategory.UNIQUE,
                         missable = True, npc = True),
 
     ],
@@ -1806,7 +1811,7 @@ location_tables = {
         DS3LocationData("LC: Winged Knight Leggings",              "Winged Knight Leggings",              DS3LocationCategory.ARMOR,
                         hidden = True), # Behind illusory wall
         DS3LocationData("LC: Rusted Coin",                         "Rusted Coin x2",                      DS3LocationCategory.MISC),
-        DS3LocationData("LC: Braille Divine Tome of Lothric",      "Braille Divine Tome of Lothric",      DS3LocationCategory.MISC,
+        DS3LocationData("LC: Braille Divine Tome of Lothric",      "Braille Divine Tome of Lothric",      DS3LocationCategory.UNIQUE,
                         hidden = True), # Hidden fall
         DS3LocationData("LC: Red Tearstone Ring",                  "Red Tearstone Ring",                  DS3LocationCategory.RING),
         DS3LocationData("LC: Twinkling Titanite #2",               "Twinkling Titanite x2",               DS3LocationCategory.UPGRADE),
@@ -1856,6 +1861,12 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("LC: Dragonslayer Greatshield",            "Dragonslayer Greatshield",            DS3LocationCategory.SHIELD,
                         missable = True, boss = True, shop = True),
+
+        # Eygon of Carim (kill or quest)
+        DS3LocationData("LC: Morne's Great Hammer",                "Morne's Great Hammer",                DS3LocationCategory.WEAPON,
+                        npc = True),
+        DS3LocationData("LC: Moaning Shield",                      "Moaning Shield",                      DS3LocationCategory.SHIELD,
+                        npc = True),
 
         # Shrine Handmaid after killing Dancer of the Boreal Valley
         DS3LocationData("LC: Dancer's Crown",                      "Dancer's Crown",                      DS3LocationCategory.ARMOR,
@@ -1973,13 +1984,13 @@ location_tables = {
                         ngp = True),
         DS3LocationData("GA: Divine Blessing",                     "Divine Blessing",                         DS3LocationCategory.MISC,
                         hidden = True), # Hidden fall
-        DS3LocationData("GA: Twinkling Titanite #1",               "Twinkling Titanite x3",                   DS3LocationCategory.MISC,
+        DS3LocationData("GA: Twinkling Titanite #1",               "Twinkling Titanite x3",                   DS3LocationCategory.UPGRADE,
                         hidden = True), # Hidden fall
         DS3LocationData("GA: Witch's Locks",                       "Witch's Locks",                           DS3LocationCategory.WEAPON,
                         hidden = True), # Switch in darkened room
         DS3LocationData("GA: Titanite Slab #2",                    "Titanite Slab",                           DS3LocationCategory.UPGRADE,
                         hidden = True), # Backtrack after flipping bridge switch
-        DS3LocationData("GA: Titanite Scale #7",                   "Titanite Scale x3",                       DS3LocationCategory.MISC),
+        DS3LocationData("GA: Titanite Scale #7",                   "Titanite Scale x3",                       DS3LocationCategory.UPGRADE),
         DS3LocationData("GA: Soul Stream",                         "Soul Stream",                             DS3LocationCategory.SPELL,
                         hidden = True), # Behind illusory wall
         DS3LocationData("GA: Scholar Ring",                        "Scholar Ring",                            DS3LocationCategory.RING),
@@ -1994,7 +2005,7 @@ location_tables = {
                         miniboss = True, hidden = True), # Behind illusory wall, Outrider Knight drop
         DS3LocationData("GA: Outrider Knight Leggings",            "Outrider Knight Leggings",                DS3LocationCategory.ARMOR,
                         miniboss = True, hidden = True), # Behind illusory wall, Outrider Knight drop
-        DS3LocationData("GA: Crystal Scroll",                      "Crystal Scroll",                          DS3LocationCategory.MISC,
+        DS3LocationData("GA: Crystal Scroll",                      "Crystal Scroll",                          DS3LocationCategory.UNIQUE,
                         miniboss = True), # Crystal Sage drop
         DS3LocationData("GA: Twinkling Titanite #2",               "Twinkling Titanite",                      DS3LocationCategory.UPGRADE,
                         lizard = True),
@@ -2079,7 +2090,7 @@ location_tables = {
                         hidden = True),
         DS3LocationData("UG: Chaos Blade",                         "Chaos Blade",                             DS3LocationCategory.WEAPON,
                         hidden = True),
-        DS3LocationData("UG: Coiled Sword Fragment",               "Coiled Sword Fragment",                   DS3LocationCategory.MISC,
+        DS3LocationData("UG: Coiled Sword Fragment",               "Coiled Sword Fragment",                   DS3LocationCategory.UNIQUE,
                         boss = True, hidden = True),
         DS3LocationData("UG: Life Ring+3",                         "Life Ring+3",                             DS3LocationCategory.RING,
                         ngp = True, hidden = True),
@@ -2121,8 +2132,7 @@ location_tables = {
                         hidden = True, boss = True, shop = True),
     ],
     "Archdragon Peak": [
-
-        DS3LocationData("AP: Dragon Head Stone",                   "Dragon Head Stone",                       DS3LocationCategory.MISC,
+        DS3LocationData("AP: Dragon Head Stone",                   "Dragon Head Stone",                       DS3LocationCategory.UNIQUE,
                         prominent = True, boss = True),
         DS3LocationData("AP: Soul of the Nameless King",           "Soul of the Nameless King",               DS3LocationCategory.BOSS,
                         prominent = True, boss = True),
@@ -2194,7 +2204,7 @@ location_tables = {
                         miniboss = True), # Wyvern miniboss drop
         DS3LocationData("AP: Twinkling Titanite #5",               "Twinkling Titanite x3",                   DS3LocationCategory.UPGRADE,
                         miniboss = True), # Wyvern miniboss drop
-        DS3LocationData("AP: Hawkwood's Swordgrass",               "Hawkwood's Swordgrass",                   DS3LocationCategory.MISC,
+        DS3LocationData("AP: Hawkwood's Swordgrass",               "Hawkwood's Swordgrass",                   DS3LocationCategory.UNIQUE,
                         hidden = True),
         DS3LocationData("AP: Storm Curved Sword",                  "Storm Curved Sword",                      DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
@@ -2212,7 +2222,7 @@ location_tables = {
                         boss = True, shop = True),
         DS3LocationData("AP: Dragonscale Waistcloth",              "Dragonscale Waistcloth",                  DS3LocationCategory.ARMOR,
                         boss = True, shop = True),
-        DS3LocationData("AP: Twinkling Dragon Head Stone",         "Twinkling Dragon Head Stone",             DS3LocationCategory.MISC,
+        DS3LocationData("AP: Twinkling Dragon Head Stone",         "Twinkling Dragon Head Stone",             DS3LocationCategory.UNIQUE,
                         missable = True, npc = True), # Hawkwood (quest)
 
         # After Oceiros's boss room, only once the Drakeblood summon in AP has been killed
@@ -2273,7 +2283,7 @@ location_tables = {
         DS3LocationData("PW1: Onyx Blade",                         "Onyx Blade",                              DS3LocationCategory.WEAPON,
                         hostile_npc = True), # Sir Vilhelm drop
         DS3LocationData("PW: Chillbite Ring",                      "Chillbite Ring",                          DS3LocationCategory.RING,
-                        npc = True),
+                        npc = True), # Friede conversation
         DS3LocationData("PW1: Rime-blue Moss Clump #1",            "Rime-blue Moss Clump x2",                 DS3LocationCategory.MISC),
         DS3LocationData("PW1: Poison Gem",                         "Poison Gem",                              DS3LocationCategory.UPGRADE),
         DS3LocationData("PW1: Large Soul of an Unknown Traveler #1", "Large Soul of an Unknown Traveler",     DS3LocationCategory.MISC),
@@ -2343,7 +2353,7 @@ location_tables = {
                         lizard = True),
         DS3LocationData("PW1: Large Titanite Shard #3",            "Large Titanite Shard x2",                 DS3LocationCategory.UPGRADE,
                         lizard = True),
-        DS3LocationData("PW2: Champion's Bones",                   "Champion's Bones",                        DS3LocationCategory.MISC,
+        DS3LocationData("PW2: Champion's Bones",                   "Champion's Bones",                        DS3LocationCategory.UNIQUE,
                         offline = '11,0:50002310::', boss = True),
     ],
     "Painted World of Ariandel (After Contraption)": [
@@ -2485,9 +2495,9 @@ location_tables = {
         DS3LocationData("RC: Soul of Darkeater Midir",             "Soul of Darkeater Midir",                 DS3LocationCategory.BOSS,
                         prominent = True, boss = True),
         DS3LocationData("RC: Sacred Chime of Filianore",           "Sacred Chime of Filianore",               DS3LocationCategory.WEAPON,
-                        npc = True),
+                        npc = True), # Shira (kill or quest)
         DS3LocationData("RC: Titanite Slab #2",                    "Titanite Slab",                           DS3LocationCategory.UPGRADE,
-                        npc = True),
+                        npc = True), # Shira (kill or quest)
         DS3LocationData("RC: Crucifix of the Mad King",            "Crucifix of the Mad King",                DS3LocationCategory.WEAPON,
                         hostile_npc = True), # Shira drop
         DS3LocationData("RC: Ledo's Great Hammer",                 "Ledo's Great Hammer",                     DS3LocationCategory.WEAPON,
@@ -2610,9 +2620,9 @@ location_tables = {
         DS3LocationData("RC: Iron Dragonslayer Leggings",          "Iron Dragonslayer Leggings",              DS3LocationCategory.ARMOR,
                         miniboss = True),
         DS3LocationData("RC: Church Guardian Shiv",                "Church Guardian Shiv",                    DS3LocationCategory.MISC),
-        DS3LocationData("RC: Spears of the Church",                "Spears of the Church",                    DS3LocationCategory.MISC,
+        DS3LocationData("RC: Spears of the Church",                "Spears of the Church",                    DS3LocationCategory.UNIQUE,
                         boss = True), # Midir drop
-        DS3LocationData("RC: Ritual Spear Fragment",               "Ritual Spear Fragment",                   DS3LocationCategory.MISC),
+        DS3LocationData("RC: Ritual Spear Fragment",               "Ritual Spear Fragment",                   DS3LocationCategory.UNIQUE),
         DS3LocationData("RC: Titanite Scale #8",                   "Titanite Scale",                          DS3LocationCategory.UPGRADE,
                         lizard = True),
         DS3LocationData("RC: Twinkling Titanite #5",               "Twinkling Titanite",                      DS3LocationCategory.UPGRADE,
@@ -2737,6 +2747,8 @@ location_name_groups: Dict[str, Set[str]] = {
     "Hostile NPC Rewards": set(),
     "Small Crystal Lizards": set(),
     "Keys": set(),
+    "Upgrade": set(),
+    "Miscellaneous": set(),
     "Hidden": set()
 }
 
@@ -2757,7 +2769,13 @@ for location_name, location_table in location_tables.items():
 
 location_name_groups["Painted World of Ariandel"] = (
     location_name_groups["Painted World of Ariandel (Before Contraption)"]
-    .union(location_name_groups["Painted World of Ariandel (After Contraption)"])
+        .union(location_name_groups["Painted World of Ariandel (After Contraption)"])
 )
 del location_name_groups["Painted World of Ariandel (Before Contraption)"]
 del location_name_groups["Painted World of Ariandel (After Contraption)"]
+
+location_name_groups["DLC"] = (
+    location_name_groups["Painted World of Ariandel"]
+        .union(location_name_groups["Dreg Heap"])
+        .union(location_name_groups["Ringed City"])
+)

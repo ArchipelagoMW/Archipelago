@@ -1,55 +1,90 @@
 import typing
+from dataclasses import dataclass
 
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, DeathLink
+from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, Option, PerGameCommonOptions, Range, Toggle
 
 
 class RandomizeWeaponLocations(DefaultOnToggle):
-    """Randomizes weapons (+76 locations)"""
+    """Randomizes weapons (+101 checks)"""
     display_name = "Randomize Weapon Locations"
 
 
 class RandomizeShieldLocations(DefaultOnToggle):
-    """Randomizes shields (+24 locations)"""
+    """Randomizes shields (+32 checks)"""
     display_name = "Randomize Shield Locations"
 
 
 class RandomizeArmorLocations(DefaultOnToggle):
-    """Randomizes armor pieces (+97 locations)"""
+    """Randomizes armor pieces (+216 checks)"""
     display_name = "Randomize Armor Locations"
 
 
 class RandomizeRingLocations(DefaultOnToggle):
-    """Randomizes rings (+49 locations)"""
+    """Randomizes rings (+64 checks, +101 with NG+ locations)"""
     display_name = "Randomize Ring Locations"
 
 
 class RandomizeSpellLocations(DefaultOnToggle):
-    """Randomizes spells (+18 locations)"""
+    """Randomizes spells (+35 checks)"""
     display_name = "Randomize Spell Locations"
 
 
+class RandomizeUpgradeLocations(DefaultOnToggle):
+    """Randomizes titanite and gems (+220 checks)
+
+    By default, these locations will never include progression items, so they
+    aren't mandatory checks. You can override this by customizing the
+    "exclude_locations" field in your YAML config. (For example,
+    "exclude_locations: []" will allow progression items in every unmissable
+    location.)
+    """
+    display_name = "Randomize Upgrade Locations"
+
+
 class RandomizeKeyLocations(DefaultOnToggle):
-    """Randomizes items which unlock doors or bypass barriers"""
+    """Randomizes items which unlock doors or bypass barriers.
+
+    If these aren't randomized, the route through the game will remain unchanged.
+    """
     display_name = "Randomize Key Locations"
 
 
 class RandomizeBossSoulLocations(DefaultOnToggle):
-    """Randomizes Boss Souls (+18 Locations)"""
+    """Randomizes boss souls (+22 Locations)"""
     display_name = "Randomize Boss Soul Locations"
 
 
-class RandomizeNPCLocations(Toggle):
-    """Randomizes friendly NPC drops (meaning you will probably have to kill them) (+14 locations)"""
+class RandomizeNPCLocations(DefaultOnToggle):
+    """Randomizes friendly NPC drops and rewards (+34 checks)
+
+    Although all NPC drops will be randomized, progression items will only
+    appear in drops that aren't possible to lock yourself out of. Progression
+    items may be available by killing NPCs, but you can always do their quest
+    instead if you want.
+
+    """
     display_name = "Randomize NPC Locations"
 
 
-class RandomizeMiscLocations(Toggle):
-    """Randomizes miscellaneous items (ashes, tomes, scrolls, etc.) to the pool. (+36 locations)"""
+class RandomizeUniqueLocations(DefaultOnToggle):
+    """Randomizes unique items (ashes, tomes, scrolls, etc.) (+36 checks)"""
     display_name = "Randomize Miscellaneous Locations"
 
 
-class RandomizeHealthLocations(Toggle):
-    """Randomizes health upgrade items. (+21 locations)"""
+class RandomizeMiscLocations(DefaultOnToggle):
+    """Randomizes miscellaneous items (arrows, firebombs, soul items, etc.) (+388 locations)
+
+    By default, these locations will never include progression items, so they
+    aren't mandatory checks. You can override this by customizing the
+    "exclude_locations" field in your YAML config. (For example,
+    "exclude_locations: []" will allow progression items in every unmissable
+    location.)
+    """
+    display_name = "Randomize Miscellaneous Locations"
+
+
+class RandomizeHealthLocations(DefaultOnToggle):
+    """Randomizes health upgrade items. (+21 checks)"""
     display_name = "Randomize Health Upgrade Locations"
 
 
@@ -84,14 +119,12 @@ class AutoEquipOption(Toggle):
 
 
 class LockEquipOption(Toggle):
-    """Lock the equipment slots so you cannot change your armor or your left/right weapons. Works great with the
-    Auto-equip option."""
+    """Lock the equipment slots so you cannot change your armor or your left/right weapons. Works great with the Auto-equip option."""
     display_name = "Lock Equipment Slots"
 
 
 class NoWeaponRequirementsOption(Toggle):
-    """Disable the weapon requirements by removing any movement or damage penalties.
-    Permitting you to use any weapon early"""
+    """Disable the weapon requirements by removing any movement or damage penalties, permitting you to use any weapon early."""
     display_name = "No Weapon Requirements"
 
 
@@ -119,12 +152,13 @@ class RandomizeInfusionPercentageOption(Range):
 
 
 class RandomizeWeaponLevelOption(Choice):
-    """Enable this option to upgrade a percentage of the pool of weapons to a random value between the minimum and 
-    maximum levels defined.
+    """Enable this option to upgrade a percentage of the pool of weapons to a
+    random value between the minimum and maximum levels defined.
 
     All: All weapons are eligible, both basic and epic
     Basic: Only weapons that can be upgraded to +10
-    Epic: Only weapons that can be upgraded to +5"""
+    Epic: Only weapons that can be upgraded to +5
+    """
     display_name = "Randomize Weapon Level"
     option_none = 0
     option_all = 1
@@ -173,16 +207,12 @@ class MaxLevelsIn10WeaponPoolOption(Range):
 
 
 class LateBasinOfVowsOption(Toggle):
-    """This option makes it so the Basin of Vows is still randomized, but guarantees you that you wont have to venture into
-    Lothric Castle to find your Small Lothric Banner to get out of High Wall of Lothric. So you may find Basin of Vows early, 
-    but you wont have to fight Dancer to find your Small Lothric Banner."""
+    """This option makes it so the Basin of Vows is still randomized, but guarantees you that you wont have to venture into Lothric Castle to find your Small Lothric Banner to get out of High Wall of Lothric. So you may find Basin of Vows early, but you wont have to fight Dancer to find your Small Lothric Banner."""
     display_name = "Late Basin of Vows"
 
 
 class LateDLCOption(Toggle):
-    """This option makes it so you are guaranteed to find your Small Doll without having to venture off into the DLC, 
-    effectively putting anything in the DLC in logic after finding both Contraption Key and Small Doll, 
-    and being able to get into Irithyll of the Boreal Valley."""
+    """This option makes it so you are guaranteed to find your Small Doll without having to venture off into the DLC, effectively putting anything in the DLC in logic after finding both Contraption Key and Small Doll, and being able to get into Irithyll of the Boreal Valley."""
     display_name = "Late DLC"
 
 
@@ -192,41 +222,49 @@ class EnableDLCOption(Toggle):
 
 
 class EnableNGPOption(Toggle):
-    """Whether to include items and locations exclusive to NG+ cycles."""
+    """Whether to include items and locations exclusive to NG+ cycles"""
     display_name = "Enable NG+"
 
 
-dark_souls_options: typing.Dict[str, Option] = {
-    "enable_weapon_locations": RandomizeWeaponLocations,
-    "enable_shield_locations": RandomizeShieldLocations,
-    "enable_armor_locations": RandomizeArmorLocations,
-    "enable_ring_locations": RandomizeRingLocations,
-    "enable_spell_locations": RandomizeSpellLocations,
-    "enable_key_locations": RandomizeKeyLocations,
-    "enable_boss_locations": RandomizeBossSoulLocations,
-    "enable_npc_locations": RandomizeNPCLocations,
-    "enable_misc_locations": RandomizeMiscLocations,
-    "enable_health_upgrade_locations": RandomizeHealthLocations,
-    "random_starting_loadout": RandomizeStartingLoadout,
-    "require_one_handed_starting_weapons": RequireOneHandedStartingWeapons,
-    "pool_type": PoolTypeOption,
-    "guaranteed_items": GuaranteedItemsOption,
-    "auto_equip": AutoEquipOption,
-    "lock_equip": LockEquipOption,
-    "no_weapon_requirements": NoWeaponRequirementsOption,
-    "randomize_infusion": RandomizeInfusionOption,
-    "randomize_infusion_percentage": RandomizeInfusionPercentageOption,
-    "randomize_weapon_level": RandomizeWeaponLevelOption,
-    "randomize_weapon_level_percentage": RandomizeWeaponLevelPercentageOption,
-    "min_levels_in_5": MinLevelsIn5WeaponPoolOption,
-    "max_levels_in_5": MaxLevelsIn5WeaponPoolOption,
-    "min_levels_in_10": MinLevelsIn10WeaponPoolOption,
-    "max_levels_in_10": MaxLevelsIn10WeaponPoolOption,
-    "late_basin_of_vows": LateBasinOfVowsOption,
-    "late_dlc": LateDLCOption,
-    "no_spell_requirements": NoSpellRequirementsOption,
-    "no_equip_load": NoEquipLoadOption,
-    "death_link": DeathLink,
-    "enable_dlc": EnableDLCOption,
-    "enable_ngp": EnableNGPOption,
-}
+class DS3ExcludeLocations(ExcludeLocations):
+    """Prevent these locations from having an important item"""
+    default = {"Hidden", "Small Crystal Lizards", "Miscellaneous"}
+
+
+@dataclass
+class DarkSouls3Options(PerGameCommonOptions):
+    enable_weapon_locations: RandomizeWeaponLocations
+    enable_shield_locations: RandomizeShieldLocations
+    enable_armor_locations: RandomizeArmorLocations
+    enable_ring_locations: RandomizeRingLocations
+    enable_spell_locations: RandomizeSpellLocations
+    enable_upgrade_locations: RandomizeUpgradeLocations
+    enable_key_locations: RandomizeKeyLocations
+    enable_boss_locations: RandomizeBossSoulLocations
+    enable_npc_locations: RandomizeNPCLocations
+    enable_unique_locations: RandomizeUniqueLocations
+    enable_misc_locations: RandomizeMiscLocations
+    enable_health_upgrade_locations: RandomizeHealthLocations
+    random_starting_loadout: RandomizeStartingLoadout
+    require_one_handed_starting_weapons: RequireOneHandedStartingWeapons
+    pool_type: PoolTypeOption
+    guaranteed_items: GuaranteedItemsOption
+    auto_equip: AutoEquipOption
+    lock_equip: LockEquipOption
+    no_weapon_requirements: NoWeaponRequirementsOption
+    randomize_infusion: RandomizeInfusionOption
+    randomize_infusion_percentage: RandomizeInfusionPercentageOption
+    randomize_weapon_level: RandomizeWeaponLevelOption
+    randomize_weapon_level_percentage: RandomizeWeaponLevelPercentageOption
+    min_levels_in_5: MinLevelsIn5WeaponPoolOption
+    max_levels_in_5: MaxLevelsIn5WeaponPoolOption
+    min_levels_in_10: MinLevelsIn10WeaponPoolOption
+    max_levels_in_10: MaxLevelsIn10WeaponPoolOption
+    late_basin_of_vows: LateBasinOfVowsOption
+    late_dlc: LateDLCOption
+    no_spell_requirements: NoSpellRequirementsOption
+    no_equip_load: NoEquipLoadOption
+    death_link: DeathLink
+    enable_dlc: EnableDLCOption
+    enable_ngp: EnableNGPOption
+    exclude_locations: DS3ExcludeLocations

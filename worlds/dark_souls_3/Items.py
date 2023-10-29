@@ -80,6 +80,12 @@ class DS3ItemData():
     filler: bool = False
     """Whether this is a candidate for a filler item to be added to fill out extra locations."""
 
+    force_unique: bool = False
+    """Whether to ensure only one copy of this item appears in the run.
+
+    This is automatically done for non-MISC items, but may be useful for MISC items in some cases.
+    """
+
     def __post_init__(self):
         self.ap_code = DS3ItemData.__item_id
         DS3ItemData.__item_id += 1
@@ -907,10 +913,10 @@ _vanilla_items = flatten([
     DS3ItemData("Prism Stone",                         0x40000172, DS3ItemCategory.SKIP).counts([4, 6, 10]),
     DS3ItemData("Binoculars",                          0x40000173, DS3ItemCategory.MISC),
     DS3ItemData("Proof of a Concord Kept",             0x40000174, DS3ItemCategory.SKIP),
-    DS3ItemData("Pale Tongue",                         0x40000175, DS3ItemCategory.SKIP,
-                classification = ItemClassification.useful, inject = True), # Inject one of these for Leonhard's quest
-    DS3ItemData("Vertebra Shackle",                    0x40000176, DS3ItemCategory.SKIP,
-                inject = True), # Inject one of these to trade to the crow
+    DS3ItemData("Pale Tongue",                         0x40000175, DS3ItemCategory.MISC,
+                force_unique = True), # One is needed for Leonhard's quest
+    DS3ItemData("Vertebra Shackle",                    0x40000176, DS3ItemCategory.MISC,
+                force_unique = True), # Allow one of these to trade to the crow
     DS3ItemData("Sunlight Medal",                      0x40000177, DS3ItemCategory.SKIP),
     DS3ItemData("Dragon Head Stone",                   0x40000179, DS3ItemCategory.MISC),
     DS3ItemData("Dragon Torso Stone",                  0x4000017A, DS3ItemCategory.MISC),
