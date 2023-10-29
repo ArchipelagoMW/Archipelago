@@ -1,9 +1,7 @@
-from collections.abc import Generator
 from dataclasses import dataclass, field
 import dataclasses
 from enum import IntEnum
-import itertools
-from typing import ClassVar, List, NamedTuple, Optional, Self, TypeVar
+from typing import ClassVar, Generator, List, Optional
 
 from BaseClasses import Item, ItemClassification
 from Utils import flatten
@@ -86,7 +84,7 @@ class DS3ItemData():
         self.ap_code = DS3ItemData.__item_id
         DS3ItemData.__item_id += 1
 
-    def counts(self, counts: List[int]) -> Generator[Self]:
+    def counts(self, counts: List[int]) -> Generator["DS3ItemData", None, None]:
         """Returns an iterable of copies of this item with the given counts."""
         yield self
         for count in counts:
@@ -118,7 +116,7 @@ class DarkSouls3Item(Item):
         super().__init__(name, classification, code, player)
 
     @staticmethod
-    def from_data(player: int, data: DS3ItemData, classification = None) -> Self:
+    def from_data(player: int, data: DS3ItemData, classification = None) -> "DarkSouls3Item":
         item = DarkSouls3Item(
             data.name,
             classification or data.classification,
@@ -1233,7 +1231,7 @@ _dlc_items = flatten([
     DS3ItemData("Follower Sabre",                   0x003EDDC0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Demon's Scar",                     0x003F04D0, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Frayed Blade",                     0x004D35A0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    DS3ItemData("Herald Curved Greatsword",         0x006159E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    DS3ItemData("Harald Curved Greatsword",         0x006159E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Millwood Battle Axe",              0x006D67D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Earth Seeker",                     0x006D8EE0, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Quakestone Hammer",                0x007ECCF0, DS3ItemCategory.WEAPON_UPGRADE_5),

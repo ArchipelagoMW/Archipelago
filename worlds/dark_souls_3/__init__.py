@@ -1,5 +1,5 @@
 # world/dark_souls_3/__init__.py
-from typing import Dict, Set, List
+from typing import Dict, Set, List, Union
 import re
 
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
@@ -349,7 +349,7 @@ class DarkSouls3World(World):
         self.multiworld.itempool += itempool
 
 
-    def create_item(self, item: str|DS3ItemData) -> Item:
+    def create_item(self, item: Union[str, DS3ItemData]) -> Item:
         data = item if isinstance(item, DS3ItemData) else item_dictionary[item]
         if (
             data.useful_if == UsefulIf.BASE and
@@ -517,7 +517,7 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Lothric Prince", self.player)
 
 
-    def __is_location_available(self, location: str|DS3LocationData):
+    def __is_location_available(self, location: Union[str, DS3LocationData]):
         """Returns whether the given location is being randomized."""
         if isinstance(location, DS3LocationData):
             data = location
@@ -578,13 +578,14 @@ class DarkSouls3World(World):
             ap_ids_to_ds3_ids[str(item.code)] = name_to_ds3_code[item.name]
             if item.count != 1: item_counts[str(item.code)] = item.count
 
-        # A map from Archipelago's location names to the keys the offline
+        # A map from Archipelago's location IDs to the keys the offline
         # randomizer uses to identify locations.
-        location_names_to_keys: Dict[str, str] = {}
+        location_ids_to_keys: Dict[str, str] = {}
         for location in self.multiworld.get_filled_locations():
             # Skip events and only look at this world's locations
-            if location.item.code is not None and location.player == self.player and location.offline:
-                location_names_to_keys[location.name] = location.offline
+            if (location.address is not None and location.item.code is not None
+                    and location.player == self.player and location.offline):
+                location_ids_to_keys[location.address] = location.offline
 
         slot_data = {
             "options": {
@@ -612,7 +613,7 @@ class DarkSouls3World(World):
             "slot": self.multiworld.player_name[self.player],  # to connect to server
             "apIdsToItemIds": ap_ids_to_ds3_ids,
             "itemCounts": item_counts,
-            "locationNamesToKeys": location_names_to_keys,
+            "locationIdsToKeys": location_ids_to_keys,
         }
 
         return slot_data

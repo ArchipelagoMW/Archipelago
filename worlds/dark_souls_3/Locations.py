@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Optional, Dict, Self, Set
+from typing import Optional, Dict, List, Set
 from dataclasses import dataclass
 
 from BaseClasses import Location, LocationProgressType, Region
@@ -129,7 +129,7 @@ class DS3LocationData:
     for an illusory wall or one random mob with a guaranteed drop.
     """
 
-    def location_groups(self):
+    def location_groups(self) -> List[str]:
         """The names of location groups this location should appear in.
 
         This is computed from the properties assigned to this location."""
@@ -150,7 +150,7 @@ class DarkSouls3Location(Location):
     game: str = "Dark Souls III"
     category: DS3LocationCategory
     default_item_name: str
-    offline: Optional[str]
+    offline: Optional[str] = None
 
     def __init__(
             self,
@@ -169,7 +169,7 @@ class DarkSouls3Location(Location):
             player: int,
             data: DS3LocationData,
             address: Optional[int] = None,
-            parent: Optional[Region] = None) -> Self:
+            parent: Optional[Region] = None) -> "DarkSouls3Location":
         location = DarkSouls3Location(
             player,
             data.name,
@@ -327,7 +327,7 @@ location_tables = {
                         shop = True),
         # Dragon Chaser's Ashes
         DS3LocationData("FS: Ember (Dragon Chaser)",               "Ember",                             DS3LocationCategory.MISC,
-                        offline = '99,3:-1:110000,70000108:', shop = True),
+                        offline = '99,0:-1:110000,70000108:', shop = True),
         # Easterner's Ashes
         DS3LocationData("FS: Washing Pole",                        "Washing Pole",                      DS3LocationCategory.WEAPON,
                         shop = True),
@@ -1641,9 +1641,9 @@ location_tables = {
         DS3LocationData("AL: Deep Gem",                            "Deep Gem",                            DS3LocationCategory.UPGRADE),
         DS3LocationData("AL: Titanite Scale",                      "Titanite Scale",                      DS3LocationCategory.UPGRADE),
         DS3LocationData("AL: Dragonslayer Greatarrow",             "Dragonslayer Greatarrow x5",          DS3LocationCategory.MISC,
-                        hidden = True), # Hidden fall
+                        offline = '06,0:53700620::', hidden = True), # Hidden fall
         DS3LocationData("AL: Dragonslayer Greatbow",               "Dragonslayer Greatbow",               DS3LocationCategory.WEAPON,
-                        hidden = True), # Hidden fall
+                        offline = '06,0:53700620::', hidden = True), # Hidden fall
         DS3LocationData("AL: Easterner's Ashes",                   "Easterner's Ashes",                   DS3LocationCategory.KEY,
                         progression = True),
         DS3LocationData("AL: Painting Guardian Hood",              "Painting Guardian Hood",              DS3LocationCategory.ARMOR,
@@ -2243,7 +2243,7 @@ location_tables = {
 
         # Shrine Handmaid after placing all Cinders of a Lord
         DS3LocationData("KFF: Titanite Slab",                      "Titanite Slab",                           DS3LocationCategory.UPGRADE,
-                        hidden = True),
+                        offline = '99,0:-1:9210,110000:', hidden = True),
         DS3LocationData("KFF: Firelink Helm",                      "Firelink Helm",                           DS3LocationCategory.ARMOR,
                         missable = True),
         DS3LocationData("KFF: Firelink Armor",                     "Firelink Armor",                          DS3LocationCategory.ARMOR,
@@ -2344,7 +2344,7 @@ location_tables = {
         DS3LocationData("PW1: Large Titanite Shard #3",            "Large Titanite Shard x2",                 DS3LocationCategory.UPGRADE,
                         lizard = True),
         DS3LocationData("PW2: Champion's Bones",                   "Champion's Bones",                        DS3LocationCategory.MISC,
-                        boss = True),
+                        offline = '11,0:50002310::', boss = True),
     ],
     "Painted World of Ariandel (After Contraption)": [
         DS3LocationData("PW2: Soul of Sister Friede",              "Soul of Sister Friede",                   DS3LocationCategory.BOSS,
@@ -2445,7 +2445,7 @@ location_tables = {
         DS3LocationData("DH: Loincloth",                           "Loincloth",                               DS3LocationCategory.ARMOR),
         DS3LocationData("DH: Titanite Chunk #8",                   "Titanite Chunk",                          DS3LocationCategory.UPGRADE),
         DS3LocationData("DH: Large Soul of a Weary Warrior #3",    "Large Soul of a Weary Warrior",           DS3LocationCategory.MISC),
-        DS3LocationData("DH: Herald Curved Greatsword",            "Herald Curved Greatsword",                DS3LocationCategory.WEAPON),
+        DS3LocationData("DH: Harald Curved Greatsword",            "Harald Curved Greatsword",                DS3LocationCategory.WEAPON),
         DS3LocationData("DH: Homeward Bone #2",                    "Homeward Bone",                           DS3LocationCategory.MISC),
         DS3LocationData("DH: Prism Stone",                         "Prism Stone x6",                          DS3LocationCategory.MISC),
         DS3LocationData("DH: Desert Pyromancer Hood",              "Desert Pyromancer Hood",                  DS3LocationCategory.ARMOR),
