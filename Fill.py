@@ -375,7 +375,7 @@ def distribute_early_items(world: MultiWorld,
             player_local = early_local_rest_items[player]
             fill_restrictive(world, base_state,
                              [loc for loc in early_locations if loc.player == player],
-                             player_local, lock=True, allow_partial=True, name=f"Local Early Items {player}")
+                             player_local, lock=True, allow_partial=True, name=f"Local Early Items P{player}")
             if player_local:
                 logging.warning(f"Could not fulfill rules of early items: {player_local}")
                 early_rest_items.extend(early_local_rest_items[player])
@@ -387,7 +387,7 @@ def distribute_early_items(world: MultiWorld,
             player_local = early_local_prog_items[player]
             fill_restrictive(world, base_state,
                              [loc for loc in early_locations if loc.player == player],
-                             player_local, lock=True, allow_partial=True, name=f"Local Early Progression {player}")
+                             player_local, lock=True, allow_partial=True, name=f"Local Early Progression P{player}")
             if player_local:
                 logging.warning(f"Could not fulfill rules of early items: {player_local}")
                 early_prog_items.extend(player_local)
