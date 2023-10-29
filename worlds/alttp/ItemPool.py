@@ -580,8 +580,6 @@ def set_up_take_anys(world, player):
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0, create_location=True)
 
-    world.initialize_regions()
-
 
 def get_pool_core(world, player: int):
     shuffle = world.entrance_shuffle[player].current_key

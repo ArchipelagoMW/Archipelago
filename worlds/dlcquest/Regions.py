@@ -23,7 +23,10 @@ def add_coin(region: Region, coin: int, player: int, suffix: str):
     location_coin = f"{region.name}{suffix}"
     location = DLCQuestLocation(player, location_coin, None, region)
     region.locations.append(location)
-    location.place_locked_item(create_event(player, number_coin))
+    event = create_event(player, number_coin)
+    event.coins = coin
+    event.coin_suffix = suffix
+    location.place_locked_item(event)
 
 
 def create_regions(multiworld: MultiWorld, player: int, world_options: Options.DLCQuestOptions):
