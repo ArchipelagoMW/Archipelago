@@ -198,9 +198,10 @@ class OOTWorld(World):
                 option_value = result.current_key
             setattr(self, option_name, option_value)
 
-        self.shop_prices = {}
         self.regions = []  # internal caches of regions for this world, used later
         self._regions_cache = {}
+
+        self.shop_prices = {}
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
         self.starting_items = Counter()
         self.songs_as_items = False
@@ -1274,17 +1275,20 @@ class OOTWorld(World):
             return False
 
     def get_shufflable_entrances(self, type=None, only_primary=False):
-        return [entrance for entrance in self.multiworld.get_entrances(self.player) if (
-                (type == None or entrance.type == type) and (not only_primary or entrance.primary))]
+        return [entrance for entrance in self.get_entrances() if ((type == None or entrance.type == type)
+            and (not only_primary or entrance.primary))]
 
     def get_shuffled_entrances(self, type=None, only_primary=False):
         return [entrance for entrance in self.get_shufflable_entrances(type=type, only_primary=only_primary) if
                 entrance.shuffled]
 
+    @functools.cache
     def get_locations(self):
+        locations = []
         for region in self.regions:
             for loc in region.locations:
-                yield loc
+                locations.append(loc)
+        return locations
 
     def get_location(self, location):
         return self.multiworld.get_location(location, self.player)
@@ -1297,8 +1301,16 @@ class OOTWorld(World):
             self._regions_cache[region_name] = ret
             return ret
 
+    @functools.cache
+    def get_entrances(self):
+        return [entrance for entrance in self.multiworld.get_entrances() if entrance.player == self.player]
+
     def get_entrance(self, entrance):
         return self.multiworld.get_entrance(entrance, self.player)
+
+    @functools.cache
+    def get_events(self):
+        return [loc for loc in self.get_locations() if loc.event]
 
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':
