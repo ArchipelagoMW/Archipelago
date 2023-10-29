@@ -106,7 +106,7 @@ class AutoLogicRegister(type):
         return new_class
 
 
-def _timed_call(method: Callable, *args: Any,
+def _timed_call(method: Callable[..., Any], *args: Any,
                 multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
     start = time.perf_counter()
     ret = method(*args)
