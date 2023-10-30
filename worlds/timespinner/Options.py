@@ -389,7 +389,7 @@ class TimespinnerOptions(PerGameCommonOptions):
     eye_spy: EyeSpy
     start_with_meyef: StartWithMeyef
     quick_seed: QuickSeed
-    Specific_keycards: SpecificKeycards
+    specific_keycards: SpecificKeycards
     inverted: Inverted
     gyre_archives: GyreArchives
     cantoran: Cantoran

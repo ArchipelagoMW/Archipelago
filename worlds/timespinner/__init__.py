@@ -90,7 +90,7 @@ class TimespinnerWorld(World):
             "EyeSpy": self.options.eye_spy,
             "StartWithMeyef": self.options.start_with_meyef,
             "QuickSeed": self.options.quick_seed,
-            "SpecificKeycards": self.options.Specific_keycards,
+            "SpecificKeycards": self.options.specific_keycards,
             "Inverted": self.options.inverted,
             "GyreArchives": self.options.gyre_archives,
             "Cantoran": self.options.cantoran,
