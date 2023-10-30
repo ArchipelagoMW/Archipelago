@@ -4,6 +4,7 @@ import hashlib
 import logging
 import pathlib
 import sys
+import time
 from dataclasses import make_dataclass
 from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
     Union
@@ -16,6 +17,8 @@ if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
     from settings import Group
+
+perf_logger = logging.getLogger("performance")
 
 
 class AutoWorldRegister(type):
@@ -103,10 +106,24 @@ class AutoLogicRegister(type):
         return new_class
 
 
+def _timed_call(method: Callable[..., Any], *args: Any,
+                multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
+    start = time.perf_counter()
+    ret = method(*args)
+    taken = time.perf_counter() - start
+    if taken > 1.0:
+        if player and multiworld:
+            perf_logger.info(f"Took {taken} seconds in {method.__qualname__} for player {player}, "
+                             f"named {multiworld.player_name[player]}.")
+        else:
+            perf_logger.info(f"Took {taken} seconds in {method.__qualname__}.")
+    return ret
+
+
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
     try:
-        ret = method(*args)
+        ret = _timed_call(method, *args, multiworld=multiworld, player=player)
     except Exception as e:
         message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
         if sys.version_info >= (3, 11, 0):
@@ -132,18 +149,15 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
                         f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
                         f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
-    for world_type in sorted(world_types, key=lambda world: world.__name__):
-        stage_callable = getattr(world_type, f"stage_{method_name}", None)
-        if stage_callable:
-            stage_callable(multiworld, *args)
+    call_stage(multiworld, method_name, *args)
 
 
 def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}
-    for world_type in world_types:
+    for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(multiworld, *args)
+            _timed_call(stage_callable, multiworld, *args)
 
 
 class WebWorld:
