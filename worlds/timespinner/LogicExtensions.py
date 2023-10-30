@@ -19,7 +19,7 @@ class TimespinnerLogic:
                  precalculated_weights: Optional[PreCalculatedWeights]):
         self.player = player
 
-        self.flag_specific_keycards = options and options.Specific_keycards.value
+        self.flag_specific_keycards = options and options.specific_keycards.value
         self.flag_eye_spy = options and options.eye_spy.value
         self.flag_unchained_keys = options and options.unchained_keys.value
 
