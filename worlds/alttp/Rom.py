@@ -1435,8 +1435,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                    'Bottle (Fairy)': 6, 'Bottle (Bee)': 7, 'Bottle (Good Bee)': 8}
         rupees = {'Rupee (1)': 1, 'Rupees (5)': 5, 'Rupees (20)': 20, 'Rupees (50)': 50, 'Rupees (100)': 100,
                   'Rupees (300)': 300}
-        bomb_caps = {'Bomb Upgrade (+5)': 5, 'Bomb Upgrade (+10)': 10}
-        arrow_caps = {'Arrow Upgrade (+5)': 5, 'Arrow Upgrade (+10)': 10}
+        bomb_caps = {'Bomb Upgrade (+5)': 5, 'Bomb Upgrade (+10)': 10, 'Bomb Upgrade (50)': 50}
+        arrow_caps = {'Arrow Upgrade (+5)': 5, 'Arrow Upgrade (+10)': 10, 'Arrow Upgrade (70)': 70}
         bombs = {'Single Bomb': 1, 'Bombs (3)': 3, 'Bombs (10)': 10}
         arrows = {'Single Arrow': 1, 'Arrows (10)': 10}
 
