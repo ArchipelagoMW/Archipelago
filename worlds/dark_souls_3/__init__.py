@@ -103,6 +103,9 @@ class DarkSouls3World(World):
         if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
 
+        # The offline randomizer's clever code for converting an item into a gesture only works for
+        # items in the local world.
+        self.multiworld.local_items[self.player].value.add("Path of the Dragon")
 
     def create_regions(self):
         # Create Vanilla Regions
@@ -132,11 +135,6 @@ class DarkSouls3World(World):
             "Greirat's Shop",
             "Karla's Shop",
         ]})
-
-        # Adds Path of the Dragon as an event item for Archdragon Peak access
-        potd_location = DarkSouls3Location(self.player, "CKG: Path of the Dragon", DS3LocationCategory.EVENT, "Path of the Dragon", None, regions["Consumed King's Garden"])
-        potd_location.place_locked_item(Item("Path of the Dragon", ItemClassification.progression, None, self.player))
-        regions["Consumed King's Garden"].locations.append(potd_location)
 
         # Create DLC Regions
         if self.multiworld.enable_dlc[self.player]:
@@ -308,11 +306,15 @@ class DarkSouls3World(World):
         # A list of items we can replace
         removable_items = [item for item in itempool if item.classification == ItemClassification.filler]
 
-        guaranteed_items = self.multiworld.guaranteed_items[self.player].value
+        guaranteed_items = {"Path of the Dragon": 1}
+        guaranteed_items.update(self.multiworld.guaranteed_items[self.player].value)
+        if len(removable_items) == 0 and num_required_extra_items == 0:
+            raise Exception("Can't add Path of the Dragon to the item pool")
+
         for item_name in guaranteed_items:
             # Break early just in case nothing is removable (if user is trying to guarantee more
             # items than the pool can hold, for example)
-            if len(removable_items) == 0:
+            if len(removable_items) == 0 and num_required_extra_items == 0:
                 break
 
             num_existing_copies = len([item for item in itempool if item.name == item_name])
@@ -322,7 +324,7 @@ class DarkSouls3World(World):
                     continue
 
                 if num_required_extra_items > 0:
-                    # We can just add them instead of using "Soul of an Intrepid Hero" later
+                    # We can just add them instead of using filler later
                     num_required_extra_items -= 1
                 else:
                     if len(removable_items) == 0:
@@ -530,6 +532,12 @@ class DarkSouls3World(World):
                                   (item.count == 1 and not item.soul)
                               ))
 
+        add_item_rule(self.multiworld.get_location(location.name, self.player),
+                        lambda item: (
+                            item.player != self.player or
+                            (item.count == 1 and not item.soul)
+                        ))
+
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
             state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
@@ -544,7 +552,7 @@ class DarkSouls3World(World):
         elif location in location_dictionary:
             data = location_dictionary[location]
         else:
-            # Synthetic locations (like Path of the Dragon) are never considered available.
+            # Synthetic locations are never considered available.
             return False
 
         return (
