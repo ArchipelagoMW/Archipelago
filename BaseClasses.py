@@ -920,7 +920,7 @@ class Region:
             self.locations.append(location_type(self.player, location, address, self))
 
     def connect(self, connecting_region: Region, name: Optional[str] = None,
-                rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
+                rule: Optional[Callable[[CollectionState], bool]] = None) -> entrance_type:
         """
         Connects this Region to another Region, placing the provided rule on the connection.
 
@@ -931,6 +931,7 @@ class Region:
         if rule:
             exit_.access_rule = rule
         exit_.connect(connecting_region)
+        return exit_
 
     def create_exit(self, name: str) -> Entrance:
         """
