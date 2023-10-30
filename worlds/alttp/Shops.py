@@ -120,11 +120,12 @@ class Shop:
 
     def push_inventory(self, slot: int, item: str, price: int, max: int = 1, player: int = 0,
                        price_type: int = ShopPriceType.Rupees, push_replacement: bool = True):
-        if not self.inventory[slot]:
-            raise ValueError("Inventory can't be pushed back if it doesn't exist")
+        if push_replacement:
+            if not self.inventory[slot]:
+                raise ValueError("Inventory can't be pushed back if it doesn't exist")
 
-        if not self.can_push_inventory(slot):
-            logging.warning(f'Warning, there is already an item pushed into this slot.')
+            if not self.can_push_inventory(slot):
+                logging.warning(f'Warning, there is already an item pushed into this slot.')
 
         self.inventory[slot] = {
             'item': item,
@@ -134,7 +135,7 @@ class Shop:
             'replacement': self.inventory[slot]["item"] if push_replacement else None,
             'replacement_price': self.inventory[slot]["price"] if push_replacement else 0,
             'replacement_price_type': self.inventory[slot]["price_type"] if push_replacement else ShopPriceType.Rupees,
-            'create_location': self.inventory[slot]["create_location"],
+            'create_location': (not push_replacement) or self.inventory[slot]["create_location"],
             'player': player
         }
 
@@ -187,7 +188,8 @@ def ShopSlotFill(multiworld):
     removed = set()
     for location in shop_slots:
         shop: Shop = location.parent_region.shop
-        if not shop.can_push_inventory(location.shop_slot) or location.shop_slot_disabled:
+        if shop.type != ShopType.UpgradeShop and (not shop.can_push_inventory(location.shop_slot)
+                                                  or location.shop_slot_disabled):
             location.shop_slot_disabled = True
             removed.add(location)
 
@@ -365,7 +367,8 @@ def create_shops(multiworld, player: int):
                                     parent=region, hint_text="for sale")
                 loc.shop_slot = index
                 loc.locked = True
-                if single_purchase_slots.pop():
+                if ((multiworld.shuffle_capacity_upgrades[player] and type == ShopType.UpgradeShop)
+                        or single_purchase_slots.pop()):
                     if multiworld.goal[player] != 'ice_rod_hunt':
                         if multiworld.random.random() < chance_100:
                             additional_item = 'Rupees (100)'
@@ -471,12 +474,10 @@ def set_up_shops(world, player: int):
 def shuffle_shops(multiworld, items, player: int):
 
     if multiworld.shuffle_capacity_upgrades[player]:
-        capacityshop: Optional[Shop] = None
         for shop in multiworld.shops:
             if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
                     shop.region.name == "Capacity Upgrade":
                 shop.clear_inventory()
-                capacityshop = shop
 
     if (multiworld.shuffle_shop_inventories[player] or multiworld.randomize_shop_prices[player]
             or multiworld.randomize_cost_types[player]):
@@ -610,8 +611,6 @@ def price_to_funny_price(world, item: dict, player: int, allowed_prices=None):
                     price_cap = allowed_prices[p_type]
                     if p_type in price_rate_display:
                         price_cap = price_cap // price_rate_display[p_type] * price_rate_display[p_type]
-                    m = {ShopPriceType.Bombs: "Bombs", ShopPriceType.Hearts: "Hearts"}
-                    print(f"setting min {int(price_cap)} onto price {item['price']} - {m[p_type]}")
                     item['price'] = min(item['price'], int(price_cap))
                 item['price_type'] = p_type
 
