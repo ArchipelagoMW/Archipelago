@@ -1,8 +1,8 @@
-from ..strings.entrance_names import DeepWoodsEntrance, EugeneEntrance, \
+from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance, SVEEntrance
 from ..strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, \
     AlecRegion, YobaRegion, JunaRegion, MagicRegion, AyeishaRegion, RileyRegion, SVERegion
-from ..region_classes import RegionData, ConnectionData, RandomizationFlag, ModRegionData
+from ..region_classes import RegionData, ConnectionData, ModificationFlag, RandomizationFlag, ModRegionData
 from .mod_data import ModNames
 
 deep_woods_regions = [
@@ -184,6 +184,7 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.issac_shop),
     RegionData(SVERegion.summit),
     RegionData(SVERegion.susans_house),
+    RegionData(Region.mountain, [Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines], ModificationFlag.MODIFIED)
 
 ]
 

@@ -5,7 +5,7 @@ from BaseClasses import Region, Entrance
 from .options import EntranceRandomization, ExcludeGingerIsland, Museumsanity
 from .strings.entrance_names import Entrance
 from .strings.region_names import Region
-from .region_classes import RegionData, ConnectionData, RandomizationFlag
+from .region_classes import RegionData, ConnectionData, RandomizationFlag, ModificationFlag
 from .mods.mod_regions import ModDataList
 
 
@@ -480,10 +480,12 @@ def create_final_regions(world_options) -> List[RegionData]:
                 (region for region in final_regions if region.name == mod_region.name), None)
             if existing_region:
                 final_regions.remove(existing_region)
+                if ModificationFlag.MODIFIED in mod_region.flag:
+                    mod_region = modify_vanilla_regions(existing_region, mod_region)
                 final_regions.append(existing_region.get_merged_with(mod_region.exits))
                 continue
-
             final_regions.append(mod_region.get_clone())
+
     return final_regions
 
 
@@ -497,6 +499,17 @@ def create_final_connections(world_options) -> List[ConnectionData]:
             continue
         final_connections.extend(ModDataList[mod].connections)
     return final_connections
+
+
+def modify_vanilla_regions(existing_region: RegionData, modified_region: RegionData) -> RegionData:
+
+    updated_region = existing_region
+    region_exits = updated_region.exits
+    modified_exits = modified_region.exits
+    for exits in modified_exits:
+        region_exits.remove(exits)
+
+    return updated_region
 
 
 def create_regions(region_factory: RegionFactory, random: Random, world_options) -> Tuple[
