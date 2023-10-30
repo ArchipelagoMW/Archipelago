@@ -261,7 +261,7 @@ def generate_itempool(world):
                 logging.warning(f'Cannot guarantee that Trinexx is the boss of Turtle Rock for player {player}')
         loc.event = True
         loc.locked = True
-        itemdiff = difficulties[multiworld.item_pool[player]]
+        itemdiff = difficulties[multiworld.item_pool[player].current_key.lower()]
         itempool = []
         itempool.extend(itemdiff.alwaysitems)
         itempool.remove('Ice Rod')
@@ -410,11 +410,11 @@ def generate_itempool(world):
             loc.address = None
         elif multiworld.goal[player] == 'ice_rod_hunt':
             # key drop item removed because of ice_rod_hunt
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), player))
             multiworld.push_precollected(drop_item)
         elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Small Key (Universal)'), player))
     dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
     multiworld.random.shuffle(dungeon_item_replacements)
     if multiworld.goal[player] == 'ice_rod_hunt':
