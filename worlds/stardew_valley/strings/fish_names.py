@@ -20,6 +20,7 @@ class Fish:
     legend = "Legend"
     legend_ii = "Legend II"
     lionfish = "Lionfish"
+    lingcod = "Lingcod"
     lobster = "Lobster"
     midnight_carp = "Midnight Carp"
     ms_angler = "Ms. Angler"

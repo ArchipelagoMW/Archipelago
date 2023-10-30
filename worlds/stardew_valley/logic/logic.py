@@ -19,6 +19,7 @@ from .money_logic import MoneyLogic
 from .monster_logic import MonsterLogic
 from .museum_logic import MuseumLogic
 from .pet_logic import PetLogic
+from .quest_logic import QuestLogic
 from .received_logic import ReceivedLogic
 from .has_logic import HasLogic
 from .region_logic import RegionLogic
@@ -35,7 +36,6 @@ from ..data.crops_data import crops_by_name
 from ..data.monster_data import all_monsters_by_category, all_monsters_by_name
 from ..mods.logic.mod_logic import ModLogic
 from ..data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops
-from ..data.bundle_data import BundleItem
 from ..data.fish_data import island_fish, legendary_fish, extended_family
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
@@ -50,7 +50,7 @@ from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.calendar_names import Weekday
-from worlds.stardew_valley.strings.craftable_names import Craftable, Consumable, Furniture, Ring, Fishing, Lighting
+from worlds.stardew_valley.strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.decoration_names import Decoration
@@ -70,7 +70,6 @@ from ..strings.food_names import Meal, Beverage
 from ..strings.metal_names import Ore, MetalBar, Mineral, Fossil
 from ..strings.monster_drop_names import Loot
 from ..strings.monster_names import Monster
-from ..strings.quest_names import Quest
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.seed_names import Seed, TreeSeed
@@ -139,12 +138,14 @@ class StardewLogic:
                                     self.region, self.tool, self.skill, self.mine)
         self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
+        self.quest = QuestLogic(self.player, skill_option, self.received, self.has, self.mine, self.region, self.action, self.relationship, self.buildings,
+                                self.tool, self.fishing, self.cooking, self.money, self.combat, self.season, mods_option)
         self.crafting = CraftingLogic(self.player, self.options.craftsanity, self.options.festival_locations,
                                       self.options.special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
-
         self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.season, self.money,
-                            self.relationship, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing, self.cooking, self.mine, self.ability)
+                            self.relationship, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing, self.cooking, self.mine, self.ability,
+                            self.time, self.quest)
 
         self.fish_rules.update({fish.name: self.can_catch_fish(fish) for fish in all_fish})
         self.museum_rules.update({donation.name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
@@ -451,61 +452,7 @@ class StardewLogic:
         self.buildings.initialize_rules()
         self.buildings.update_rules(self.mod.buildings.get_modded_building_rules())
 
-        self.quest_rules.update({
-            Quest.introductions: self.region.can_reach(Region.town),
-            Quest.how_to_win_friends: self.can_complete_quest(Quest.introductions),
-            Quest.getting_started: self.has(Vegetable.parsnip) & self.tool.has_tool(Tool.hoe) & self.tool.can_water(0),
-            Quest.to_the_beach: self.region.can_reach(Region.beach),
-            Quest.raising_animals: self.can_complete_quest(Quest.getting_started) & self.buildings.has_building(Building.coop),
-            Quest.advancement: self.can_complete_quest(Quest.getting_started) & self.has(Craftable.scarecrow),
-            Quest.archaeology: (self.tool.has_tool(Tool.hoe) | self.mine.can_mine_in_the_mines_floor_1_40() | self.skill.can_fish()) & self.region.can_reach(Region.museum),
-            Quest.meet_the_wizard: self.region.can_reach(Region.town) & self.region.can_reach(Region.community_center) & self.region.can_reach(Region.wizard_tower),
-            Quest.forging_ahead: self.has(Ore.copper) & self.has(Machine.furnace),
-            Quest.smelting: self.has(MetalBar.copper),
-            Quest.initiation: self.mine.can_mine_in_the_mines_floor_1_40(),
-            Quest.robins_lost_axe: self.season.has(Season.spring) & self.region.can_reach(Region.forest) & self.relationship.can_meet(NPC.robin),
-            Quest.jodis_request: self.season.has(Season.spring) & self.has(Vegetable.cauliflower) & self.relationship.can_meet(NPC.jodi),
-            Quest.mayors_shorts: self.season.has(Season.summer) & self.region.can_reach(Region.ranch) &
-                                 (self.relationship.has_hearts(NPC.marnie, 2) | (self.mod.magic.can_blink())) & self.relationship.can_meet(NPC.lewis),
-            Quest.blackberry_basket: self.season.has(Season.fall) & self.relationship.can_meet(NPC.linus),
-            Quest.marnies_request: self.relationship.has_hearts(NPC.marnie, 3) & self.has(Forageable.cave_carrot) & self.region.can_reach(Region.ranch),
-            Quest.pam_is_thirsty: self.season.has(Season.summer) & self.has(ArtisanGood.pale_ale) & self.relationship.can_meet(NPC.pam),
-            Quest.a_dark_reagent: self.season.has(Season.winter) & self.has(Loot.void_essence) & self.relationship.can_meet(NPC.wizard),
-            Quest.cows_delight: self.season.has(Season.fall) & self.has(Vegetable.amaranth) & self.relationship.can_meet(NPC.marnie),
-            Quest.the_skull_key: self.received(Wallet.skull_key) & self.region.can_reach(Region.skull_cavern_entrance),
-            Quest.crop_research: self.season.has(Season.summer) & self.has(Fruit.melon) & self.relationship.can_meet(NPC.demetrius),
-            Quest.knee_therapy: self.season.has(Season.summer) & self.has(Fruit.hot_pepper) & self.relationship.can_meet(NPC.george),
-            Quest.robins_request: self.season.has(Season.winter) & self.has(Material.hardwood) & self.relationship.can_meet(NPC.robin),
-            Quest.qis_challenge: self.mine.can_mine_in_the_skull_cavern(),
-            Quest.the_mysterious_qi: self.region.can_reach(Region.bus_tunnel) & self.has(ArtisanGood.battery_pack) & self.region.can_reach(Region.desert) & self.has(Forageable.rainbow_shell) & self.has(Vegetable.beet) & self.has(Loot.solar_essence),
-            Quest.carving_pumpkins: self.season.has(Season.fall) & self.has(Vegetable.pumpkin) & self.relationship.can_meet(NPC.caroline),
-            Quest.a_winter_mystery: self.season.has(Season.winter) & self.region.can_reach(Region.town),
-            Quest.strange_note: self.has(Forageable.secret_note) & self.region.can_reach(Region.secret_woods) & self.has(ArtisanGood.maple_syrup),
-            Quest.cryptic_note: self.has(Forageable.secret_note) & self.region.can_reach(Region.skull_cavern_100),
-            Quest.fresh_fruit: self.season.has(Season.spring) & self.has(Fruit.apricot) & self.relationship.can_meet(NPC.emily),
-            Quest.aquatic_research: self.season.has(Season.summer) & self.has(Fish.pufferfish) & self.relationship.can_meet(NPC.demetrius),
-            Quest.a_soldiers_star: self.season.has(Season.summer) & self.time.has_year_two() & self.has(Fruit.starfruit) & self.relationship.can_meet(NPC.kent),
-            Quest.mayors_need: self.season.has(Season.summer) & self.has(ArtisanGood.truffle_oil) & self.relationship.can_meet(NPC.lewis),
-            Quest.wanted_lobster: self.season.has(Season.fall) & self.season.has(Season.fall) & self.has(Fish.lobster) & self.relationship.can_meet(NPC.gus),
-            Quest.pam_needs_juice: self.season.has(Season.fall) & self.has(ArtisanGood.battery_pack) & self.relationship.can_meet(NPC.pam),
-            Quest.fish_casserole: self.relationship.has_hearts(NPC.jodi, 4) & self.has(Fish.largemouth_bass) & self.region.can_reach(Region.sam_house),
-            Quest.catch_a_squid: self.season.has(Season.winter) & self.has(Fish.squid) & self.relationship.can_meet(NPC.willy),
-            Quest.fish_stew: self.season.has(Season.winter) & self.has(Fish.albacore) & self.relationship.can_meet(NPC.gus),
-            Quest.pierres_notice: self.season.has(Season.spring) & self.has("Sashimi") & self.relationship.can_meet(NPC.pierre),
-            Quest.clints_attempt: self.season.has(Season.winter) & self.has(Mineral.amethyst) & self.relationship.can_meet(NPC.emily),
-            Quest.a_favor_for_clint: self.season.has(Season.winter) & self.has(MetalBar.iron) & self.relationship.can_meet(NPC.clint),
-            Quest.staff_of_power: self.season.has(Season.winter) & self.has(MetalBar.iridium) & self.relationship.can_meet(NPC.wizard),
-            Quest.grannys_gift: self.season.has(Season.spring) & self.has(Forageable.leek) & self.relationship.can_meet(NPC.evelyn),
-            Quest.exotic_spirits: self.season.has(Season.winter) & self.has(Forageable.coconut) & self.relationship.can_meet(NPC.gus),
-            Quest.catch_a_lingcod: self.season.has(Season.winter) & self.has("Lingcod") & self.relationship.can_meet(NPC.willy),
-            Quest.dark_talisman: self.wallet.has_rusty_key() & self.region.can_reach(Region.railroad) & self.relationship.can_meet(NPC.krobus) & self.region.can_reach(Region.mutant_bug_lair),
-            Quest.goblin_problem: self.region.can_reach(Region.witch_swamp) & self.has(ArtisanGood.void_mayonnaise),
-            Quest.magic_ink: self.region.can_reach(Region.witch_hut) & self.relationship.can_meet(NPC.wizard),
-            Quest.the_pirates_wife: self.region.can_reach(Region.island_west) & self.relationship.can_meet(NPC.kent) &
-                                    self.relationship.can_meet(NPC.gus) & self.relationship.can_meet(NPC.sandy) & self.relationship.can_meet(NPC.george) &
-                                    self.relationship.can_meet(NPC.wizard) & self.relationship.can_meet(NPC.willy),
-        })
-
+        self.quest_rules.update(self.quest.set_quest_rules())
         self.quest_rules.update(self.mod.quests.get_modded_quest_rules())
 
         self.festival_rules.update({

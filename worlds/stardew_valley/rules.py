@@ -22,9 +22,11 @@ from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building
 from .strings.calendar_names import Weekday
-from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, MagicEntrance
+from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, MagicEntrance, \
+    SVEEntrance
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
+from .strings.quest_names import Quest, ModQuest
 from .strings.region_names import Region
 from .strings.season_names import Season
 from .strings.skill_names import ModSkill, Skill
@@ -892,3 +894,29 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
                               logic.region.can_reach(Region.witch_hut) &
                               logic.region.can_reach(Region.mines_floor_100) &
                               logic.region.can_reach(Region.farm) & logic.has_lived_months(12)).simplify())
+
+
+def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
+    if ModNames.sve not in world_options.mods:
+        return
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.forest_to_junimo, player),
+                             logic.received("Abandoned House Outskirts Clean-up").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.enter_summit, player),
+                             logic.received("Iridium Bomb").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_bear_shop, player),
+                             logic.can_complete_quest(Quest.strange_note).simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.backwoods_to_grove, player),
+                             logic.mod.sve.has_any_rune().simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.forest_west_to_spring, player),
+                             logic.can_complete_quest(Quest.magic_ink).simplify())
+    set_sve_ginger_island_rules(logic, multiworld, player, world_options)
+
+
+def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
+    if world_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
+        return
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.summit_to_boat, player),
+                             logic.received("Marlon's Boat Paddle").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_to_fable_reef, player),
+                             logic.received("Fable Reef Portal").simplify())
+

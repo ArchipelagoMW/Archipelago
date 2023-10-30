@@ -17,6 +17,7 @@ from .options import StardewValleyOptions, TrapItems, FestivalLocations, Exclude
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.event_names import Event
+from .strings.villager_names import NPC, ModNPC
 
 ITEM_CODE_OFFSET = 717000
 
@@ -79,7 +80,7 @@ class Group(enum.Enum):
     # Mods
     MAGIC_SPELL = enum.auto()
     TEMPERED_GALAXY_WEAPONS = enum.auto()
-
+    MOD_WARP = enum.auto()
 
 @dataclass(frozen=True)
 class ItemData:
@@ -330,13 +331,6 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[I
     items.append(item_factory("Iridium Snake Milk"))
     items.append(item_factory("Fairy Dust Recipe"))
 
-def create_special_quest_rewards_sve(item_factory: StardewItemFactory, items: List[Item]):
-    items.append(item_factory("Marlon's Boat Paddle"))
-    items.append(item_factory("Iridium Bomb"))
-    items.append(item_factory("Krobus' Protection"))
-    items.append(item_factory("Kittyfish Spell"))
-    create_nexus_warps(item_factory, items)
-    items.append(item_factory("Lance's Fable Reef Portal"))
 
 def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     stardrops_classification = get_stardrop_classification(options)
@@ -361,6 +355,7 @@ def create_museum_items(item_factory: StardewItemFactory, options: StardewValley
 
 
 def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item], random):
+    island_villagers = [NPC.Leo, ModNPC.lance]
     if options.friendsanity == Friendsanity.option_none:
         return
     exclude_non_bachelors = options.friendsanity == Friendsanity.option_bachelors
@@ -377,7 +372,7 @@ def create_friendsanity_items(item_factory: StardewItemFactory, options: Stardew
             continue
         if not villager.bachelor and exclude_non_bachelors:
             continue
-        if villager.name == "Leo" and exclude_ginger_island:
+        if villager.name in island_villagers and exclude_ginger_island:
             continue
         heart_cap = 8 if villager.bachelor else 10
         if include_post_marriage_hearts and villager.bachelor:
@@ -560,6 +555,17 @@ def create_magic_mod_spells(item_factory: StardewItemFactory, options: StardewVa
     if ModNames.magic not in options.mods:
         return []
     items.extend([item_factory(item) for item in items_by_group[Group.MAGIC_SPELL]])
+
+
+def create_special_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    if ModNames.sve not in options.mods:
+        return []
+    items.append(item_factory("Diamond Wand"))
+    items.append(item_factory("Marlon's Boat Paddle"))
+    items.append(item_factory("Iridium Bomb"))
+    items.append(item_factory("Krobus' Protection"))
+    items.append(item_factory("Kittyfish Spell"))
+    items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP]])
 
 
 def create_unique_filler_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,

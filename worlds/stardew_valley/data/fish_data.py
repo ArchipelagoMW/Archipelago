@@ -48,7 +48,7 @@ shearwater = (SVERegion.shearwater,)
 highlands = (SVERegion.highlands,)
 sprite_spring = (SVERegion.sprite_spring,)
 fable_reef = (SVERegion.fable_reef,)
-vineyard = (SVERegion.vineyard,)
+vineyard = (SVERegion.blue_moon_vineyard,)
 
 all_fish: List[FishItem] = []
 

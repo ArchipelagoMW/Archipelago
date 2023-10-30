@@ -10,6 +10,7 @@ from .items import item_table, create_items, ItemData, Group, items_by_group, ge
 from .locations import location_table, create_locations, LocationData
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
+from .logic.bundle_logic import BundleLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
     BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems
 from .presets import sv_options_presets
@@ -67,6 +68,7 @@ class StardewValleyWorld(World):
 
     options_dataclass = StardewValleyOptions
     options: StardewValleyOptions
+    bundle: BundleLogic
     logic: StardewLogic
 
     web = StardewWebWorld()
@@ -186,7 +188,7 @@ class StardewValleyWorld(World):
     def setup_victory(self):
         if self.options.goal == Goal.option_community_center:
             self.create_event_location(location_table[GoalName.community_center],
-                                       self.logic.can_complete_community_center().simplify(),
+                                       self.bundle.can_complete_community_center().simplify(),
                                        Event.victory)
         elif self.options.goal == Goal.option_grandpa_evaluation:
             self.create_event_location(location_table[GoalName.grandpa_evaluation],

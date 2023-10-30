@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List, Tuple, Optional, Dict
 
 from ..strings.food_names import Beverage
-from ..strings.region_names import Region
+from ..strings.region_names import Region, SVERegion
 from ..mods.mod_data import ModNames
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
@@ -44,13 +44,13 @@ secret_woods = (Region.secret_woods,)
 wizard_tower = (Region.wizard_tower,)
 
 # Stardew Valley Expanded Locations
-adventurer = (SVRegion.adventurer_guild,)
+adventurer = (Region.adventurer_guild,)
 highlands = (SVERegion.highlands,)
 bluemoon = (SVERegion.blue_moon_vineyard,)
 aurora = (SVERegion.aurora_vineyard,)
-museum = (SVRegion.museum,)
-jojamart = (SVRegion.jojamart,)
-railroad = (SVRegion.railroad,)
+museum = (Region.museum,)
+jojamart = (Region.jojamart,)
+railroad = (Region.railroad,)
 junimo = (SVERegion.junimo_woods,)
 
 golden_pumpkin = ("Golden Pumpkin",)
