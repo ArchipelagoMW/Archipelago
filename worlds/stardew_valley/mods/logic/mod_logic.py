@@ -13,6 +13,8 @@ from ...logic.action_logic import ActionLogic
 from ...logic.building_logic import BuildingLogic
 from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
+from ...logic.crafting_logic import CraftingLogic
+from ...logic.crop_logic import CropLogic
 from ...logic.fishing_logic import FishingLogic
 from ...logic.has_logic import HasLogic
 from ...logic.mine_logic import MineLogic
@@ -31,6 +33,7 @@ from ...options import SkillProgression, ElevatorProgression, Mods
 
 class ModLogic:
     quests: QuestLogic
+    region: RegionLogic
     magic: MagicLogic
     buildings: ModBuildingLogic
     special_orders: ModSpecialOrderLogic
@@ -42,11 +45,11 @@ class ModLogic:
     def __init__(self, player: int, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  action: ActionLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, building: BuildingLogic, wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
-                 time: TimeLogic, quest: QuestLogic):
+                 time: TimeLogic, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
         self.magic = MagicLogic(player, mods, received, region)
         self.quests = QuestLogic(mods, has, region, season, relationship)
         self.buildings = ModBuildingLogic(player, has, money, mods)
-        self.special_orders = ModSpecialOrderLogic(player, has, region, relationship, wallet, mods)
+        self.special_orders = ModSpecialOrderLogic(player, action, crafting, crop, has, region, relationship, season, wallet, mods)
         self.elevator = ModElevatorLogic(player, elevator_option, mods, received)
         self.deepwoods = DeepWoodsLogic(player, skill_option, elevator_option, received, has, combat, tool, skill, cooking)
         self.skill = ModSkillLogic(player, skill_option, received, has, region, action, relationship, building, tool, fishing, cooking, self.magic, mods)

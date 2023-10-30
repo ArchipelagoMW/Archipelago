@@ -31,3 +31,8 @@ class SpecialOrder:
 
 class ModSpecialOrder:
     junas_monster_mash = "Juna's Monster Mash"
+    andys_cellar = "Andy's Cellar"
+    a_mysterious_venture = "A Mysterious Venture"
+    an_elegant_reception = "An Elegant Reception"
+    fairy_garden = "Fairy Garden"
+    homemade_fertilizer = "Homemade Fertilizer"

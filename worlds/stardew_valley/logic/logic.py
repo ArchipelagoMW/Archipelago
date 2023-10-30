@@ -56,7 +56,7 @@ from ..strings.currency_names import Currency
 from ..strings.decoration_names import Decoration
 from ..strings.fertilizer_names import Fertilizer
 from ..strings.festival_check_names import FestivalCheck
-from ..strings.fish_names import Fish, Trash, WaterItem, WaterChest
+from ..strings.fish_names import Fish, Trash, WaterItem, WaterChest, SVEFish
 from ..strings.flower_names import Flower
 from ..strings.forageable_names import Forageable
 from ..strings.fruit_tree_names import Sapling
@@ -145,7 +145,7 @@ class StardewLogic:
                                       self.relationship, self.skill, self.special_order)
         self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.season, self.money,
                             self.relationship, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing, self.cooking, self.mine, self.ability,
-                            self.time, self.quest)
+                            self.time, self.quest, self.crafting, self.crop)
 
         self.fish_rules.update({fish.name: self.can_catch_fish(fish) for fish in all_fish})
         self.museum_rules.update({donation.name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
@@ -542,7 +542,11 @@ class StardewLogic:
             difficulty_rule = self.skill.can_crab_pot()
         else:
             difficulty_rule = self.skill.can_fish([], 120 if fish.legendary else fish.difficulty)
-        return quest_rule & region_rule & season_rule & difficulty_rule
+        if fish.name == SVEFish.kittyfish:
+            item_rule = self.received("Kittyfish Spell")
+        else:
+            item_rule = True_()
+        return quest_rule & region_rule & season_rule & difficulty_rule & item_rule
 
     def can_catch_every_fish(self) -> StardewRule:
         rules = [self.skill.has_level(Skill.fishing, 10), self.tool.has_fishing_rod(4)]

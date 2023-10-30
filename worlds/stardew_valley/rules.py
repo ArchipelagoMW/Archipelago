@@ -909,6 +909,35 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
                              logic.mod.sve.has_any_rune().simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.forest_west_to_spring, player),
                              logic.can_complete_quest(Quest.magic_ink).simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.secret_woods_to_west, player),
+                             logic.tool.has_tool(Tool.axe, ToolMaterial.iron).simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_to_fable_reef, player),
+                             logic.received("Fable Reef Portal").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_shed_to_interior, player),
+                             logic.tool.has_tool(Tool.axe, ToolMaterial.iron).simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_aurora, player),
+                             logic.received("Nexus: Aurora Vineyard Runes").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_farm, player),
+                             logic.mod.sve.has_any_rune().simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_guild, player),
+                             logic.received("Nexus: Adventurer's Guild Runes").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_junimo, player),
+                             logic.received("Nexus: Junimo Woods Runes").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_spring, player),
+                             logic.received("Nexus: Sprite Spring Runes").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_outpost, player),
+                             logic.received("Nexus: Outpost Runes").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_wizard, player),
+                             logic.mod.sve.has_any_rune().simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_purple_junimo, player),
+                             logic.relationship.has_hearts(ModNPC.apples, 10).simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.to_grandpa_upstairs, player),
+                             logic.special_order.can_complete_special_order("Grandpa's Shed").simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
+                             logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron).simplify())
+    for location in logic.mod.sve.sve_location_rules:
+        MultiWorldRules.set_rule(multiworld.get_location(location, player),
+                                 logic.mod.sve.sve_location_rules[location].simplify())
     set_sve_ginger_island_rules(logic, multiworld, player, world_options)
 
 

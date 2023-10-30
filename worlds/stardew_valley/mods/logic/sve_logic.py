@@ -39,6 +39,8 @@ class SVELogic:
     combat: CombatLogic
     season: SeasonLogic
 
+    sve_location_rules: Dict[str, StardewRule] = field(default_factory=dict)
+
     def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, quest: QuestLogic, region: RegionLogic, action: ActionLogic,
                  relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
                  money: MoneyLogic, combat: CombatLogic, season: SeasonLogic, time: TimeLogic):
@@ -58,6 +60,26 @@ class SVELogic:
         self.money = money
         self.combat = combat
         self.season = season
+
+        self.sve_location_rules.update({
+            "Bear: Baked Berry Oatmeal Recipe": self.quest.can_complete_quest("Strange Note") & self.money.can_spend(
+                12500),
+            "Bear: Flower Cookie Recipe": self.quest.can_complete_quest("Strange Note") & self.money.can_spend(8750),
+            "Purple Junimo: Super Starfruit": self.relationship.has_hearts("Apples", 10) &
+                                              self.region.can_reach(
+                                                  SVERegion.purple_junimo_shop) & self.money.can_spend(80000),
+            "Alesia: Tempered Galaxy Dagger": self.region.can_reach(
+                SVERegion.alesia_shop) & self.combat.has_galaxy_weapon() &
+                                              self.money.can_spend(350000) & self.time.has_lived_months(3),
+            "Issac: Tempered Galaxy Sword": self.region.can_reach(
+                SVERegion.issac_shop) & self.combat.has_galaxy_weapon() &
+                                            self.money.can_spend(600000),
+            "Issac: Tempered Galaxy Hammer": self.region.can_reach(
+                SVERegion.issac_shop) & self.combat.has_galaxy_weapon() &
+                                             self.money.can_spend(400000),
+            "Lance's Diamond Wand": self.quest.can_complete_quest("Monster Crops") & self.region.can_reach(
+                SVERegion.lances_house),
+        })
 
     def set_sve_item_rules(self, items: Dict[str, StardewRule]):
         items.update({
@@ -85,24 +107,6 @@ class SVELogic:
             "Void Seed": self.region.can_reach(SVERegion.highlands_cavern) & self.combat.has_good_weapon(),
             "Void Soul": self.region.can_reach(SVERegion.crimson_badlands) & self.combat.has_good_weapon() &
                          self.cooking.can_cook(),
-        })
-
-    def sve_misc_rules(self):
-        sve_misc_rules = Dict[str, StardewRule] = field(default_factory=dict)
-        sve_misc_rules.update({
-            "Bear: Baked Berry Oatmeal Recipe": self.quest.can_complete_quest("Strange Note") & self.money.can_spend(12500),
-            "Bear: Flower Cookie Recipe": self.quest.can_complete_quest("Strange Note") & self.money.can_spend(8750),
-            "Purple Junimo: Super Starfruit": self.relationship.has_hearts("Apples", 10) &
-                                              self.region.can_reach(
-                                                  SVERegion.purple_junimo_shop) & self.money.can_spend(80000),
-            "Alesia: Tempered Galaxy Dagger": self.region.can_reach(SVERegion.alesia_shop) & self.combat.has_galaxy_weapon() &
-                                              self.money.can_spend(350000) & self.time.has_lived_months(3),
-            "Issac: Tempered Galaxy Sword": self.region.can_reach(SVERegion.issac_shop) & self.combat.has_galaxy_weapon() &
-                                            self.money.can_spend(600000),
-            "Issac: Tempered Galaxy Hammer": self.region.can_reach(SVERegion.issac_shop) & self.combat.has_galaxy_weapon() &
-                                             self.money.can_spend(400000),
-            "Lance's Diamond Wand": self.quest.can_complete_quest("Monster Crops") & self.region.can_reach(
-                SVERegion.lances_house),
         })
 
     def has_any_rune(self):
