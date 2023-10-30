@@ -15,7 +15,7 @@ from kivy.properties import StringProperty
 
 from CommonClient import CommonContext
 from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
-from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, SC2Mission, starting_mission_locations
+from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, SC2Mission, MissionInfo
 from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
 from worlds.sc2.Options import LocationInclusion
 from worlds.sc2 import SC2World, get_first_mission, get_early_unit_location_name
@@ -31,7 +31,7 @@ class MissionButton(HoverableButton):
     def __init__(self, *args, **kwargs):
         super(HoverableButton, self).__init__(*args, **kwargs)
         self.layout = FloatLayout()
-        self.popuplabel = ServerToolTip(text=self.text)
+        self.popuplabel = ServerToolTip(text=self.text, markup=True)
         self.popuplabel.padding = [5, 2, 5, 2]
         self.layout.add_widget(self.popuplabel)
 
@@ -209,8 +209,13 @@ class SC2Manager(GameManager):
                                 if len(plando_locations) > 0:
                                     tooltip += f"\nPlando:\n- "
                                     tooltip += "\n- ".join(plando_locations)
+                            
+                            MISSION_BUTTON_HEIGHT = 50
+                            for pad in range(mission_data.ui_vertical_padding):
+                                column_spacer = Label(text='', size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
+                                category_panel.add_widget(column_spacer)
 
-                            mission_button = MissionButton(text=text, size_hint_y=None, height=50)
+                            mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
                             mission_button.tooltip_text = tooltip
                             mission_button.bind(on_press=self.mission_callback)
                             self.mission_id_to_button[mission_id] = mission_button

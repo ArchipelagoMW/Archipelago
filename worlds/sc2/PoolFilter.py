@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Set
+from typing import Callable, Dict, List, Set, Union
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
     progressive_if_ext
@@ -157,7 +157,7 @@ def remove_final_mission_from_other_pools(mission_pools: Dict[MissionPools, List
                 missions.remove(final_mission)
 
 
-def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
+def get_item_upgrades(inventory: List[Item], parent_item: Union[Item, str]) -> List[Item]:
     item_name = parent_item.name if isinstance(parent_item, Item) else parent_item
     return [
         inv_item for inv_item in inventory
@@ -177,6 +177,15 @@ def get_item_quantity(item: Item, multiworld: MultiWorld, player: int):
 
 def copy_item(item: Item):
     return Item(item.name, item.classification, item.code, item.player)
+
+
+def num_missions(multiworld: MultiWorld, player: int) -> int:
+    mission_order_type = multiworld.mission_order[player]
+    if mission_order_type != MissionOrder.option_grid:
+        return len(mission_orders[mission_order_type]) - 1
+    else:
+        mission_pools = filter_missions(multiworld, player)
+        return sum(len(pool) for _, pool in mission_pools.items())
 
 
 class ValidInventory:
@@ -433,8 +442,7 @@ class ValidInventory:
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
         # Inventory restrictiveness based on number of missions with checks
-        mission_order_type = get_option_value(self.multiworld, self.player, "mission_order")
-        mission_count = len(mission_orders[mission_order_type]) - 1
+        mission_count = num_missions(multiworld, player)
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:

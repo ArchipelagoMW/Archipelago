@@ -143,6 +143,7 @@ class MissionInfo(NamedTuple):
     number: int = 0  # number of worlds need beaten
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
+    ui_vertical_padding: int = 0
 
 
 class FillMission(NamedTuple):
