@@ -96,8 +96,7 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
         #   a long enough run to have enough director credits for scavengers and
         #   help prevent being stuck in the same stages until that point.)
 
-        for location in multiworld.get_locations():
-            if location.player != player: continue  # ignore all checks that don't belong to this player
+        for location in multiworld.get_locations(player):
             if "Scavenger" in location.name:
                 add_rule(location, lambda state: state.has("Stage_5", player))
         # Regions
