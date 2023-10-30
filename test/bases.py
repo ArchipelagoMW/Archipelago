@@ -4,7 +4,7 @@ from argparse import Namespace
 
 from test.general import gen_steps
 from worlds import AutoWorld
-from worlds.AutoWorld import call_all
+from worlds.AutoWorld import World, call_all
 
 from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
@@ -102,9 +102,14 @@ class TestBase(unittest.TestCase):
 
 class WorldTestBase(unittest.TestCase):
     options: typing.Dict[str, typing.Any] = {}
+    """Define options that should be used when setting up this TestBase."""
     multiworld: MultiWorld
+    world: World
+    """Can be used to add typing for your world type."""
+    player: typing.ClassVar[int] = 1
 
-    game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
+    game: typing.ClassVar[str]
+    """Define game name in subclass, example "Secret of Evermore"."""
     auto_construct: typing.ClassVar[bool] = True
     """ automatically set up a world for each test in this class """
 
@@ -129,9 +134,10 @@ class WorldTestBase(unittest.TestCase):
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             setattr(args, name, {
-                1: option.from_any(self.options.get(name, getattr(option, "default")))
+                1: option.from_any(self.options.get(name, option.default))
             })
         self.multiworld.set_options(args)
+        self.world = self.multiworld.worlds[1]
         for step in gen_steps:
             call_all(self.multiworld, step)
 
