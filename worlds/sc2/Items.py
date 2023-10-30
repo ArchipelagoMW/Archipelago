@@ -439,11 +439,11 @@ item_table = {
                  description="Increases Goliath life by 25."),
     ItemNames.GOLIATH_RESOURCE_EFFICIENCY:
         ItemData(243 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 10, SC2Race.TERRAN,
-                 parent_item=ItemNames.GOLIATH, origin={"nco, bw"},
+                 parent_item=ItemNames.GOLIATH, origin={"nco", "bw"},
                  description=RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE.format("Goliath")),
     ItemNames.GOLIATH_INTERNAL_TECH_MODULE:
         ItemData(244 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 11, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent_item=ItemNames.GOLIATH, origin={"nco, bw"},
+                 classification=ItemClassification.filler, parent_item=ItemNames.GOLIATH, origin={"nco", "bw"},
                  description=INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Goliaths", "Factory")),
     ItemNames.SIEGE_TANK_SHAPED_HULL:
         ItemData(245 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 12, SC2Race.TERRAN,
