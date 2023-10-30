@@ -8,7 +8,7 @@ from . import data
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .data.fish_data import legendary_fish, special_fish, all_fish
 from .data.museum_data import all_museum_items
-from .data.villagers_data import all_villagers
+from .data.villagers_data import all_villagers, all_modified_villagers_by_name_by_mod
 from .options import ExcludeGingerIsland, Friendsanity, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
 from .strings.goal_names import Goal
 from .strings.region_names import Region
@@ -234,6 +234,9 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], opti
     for villager in all_villagers:
         if villager.mod_name not in options.mods and villager.mod_name is not None:
             continue
+        if villager.name in all_modified_villagers_by_name_by_mod and all_modified_villagers_by_name_by_mod[villager.name] in mods:
+            modified_villager_mod = all_modified_villagers_by_name_by_mod[villager.name]
+            villager = modified_villager_mod[villager.name]
         if not villager.available and exclude_locked_villagers:
             continue
         if not villager.bachelor and exclude_non_bachelors:

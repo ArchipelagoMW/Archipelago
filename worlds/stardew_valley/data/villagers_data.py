@@ -354,7 +354,8 @@ all_villagers: List[Villager] = []
 def villager(name: str, bachelor: bool, locations: Tuple[str, ...], birthday: str, gifts: Tuple[str, ...],
              available: bool, mod_name: Optional[str] = None) -> Villager:
     npc = Villager(name, bachelor, locations, birthday, gifts, available, mod_name)
-    all_villagers.append(npc)
+    if npc not in all_modified_villagers:
+        all_villagers.append(npc)
     return npc
 
 
@@ -407,22 +408,26 @@ yoba = villager(ModNPC.yoba, False, secret_woods, Season.spring, universal_loves
 riley = villager(ModNPC.riley, True, town, Season.spring, universal_loves, True, ModNames.riley)
 
 # SVE Villagers
-claire = villager("Claire", True, town + jojamart, "Fall", universal_loves + claire_loves, True, "Stardew Valley Expanded")
-lance = villager("Lance", True, adventurer + highlands + island, "Spring", lance_loves, False, "Stardew Valley Expanded")
-mommy = villager("Olivia", True, town, "Spring", universal_loves_no_rabbit_foot + olivia_loves, True, "Stardew Valley Expanded")
-sophia = villager("Sophia", True, bluemoon, "Winter", universal_loves_no_rabbit_foot + sophia_loves, True, "Stardew Valley Expanded")
-victor = villager("Victor", True, town, "Summer", universal_loves + victor_loves, True, "Stardew Valley Expanded")
-andy = villager("Andy", False, forest, "Spring", universal_loves + andy_loves, True, "Stardew Valley Expanded")
-apples = villager("Apples", False, aurora + junimo, "Spring", starfruit, False, "Stardew Valley Expanded")
-gunther = villager("Gunther", False, museum, "Winter", universal_loves + gunther_loves, True, "Stardew Valley Expanded")
-martin = villager("Martin", False, town + jojamart, "Summer", universal_loves + martin_loves, True, "Stardew Valley Expanded")
-marlon = villager("Marlon", False, adventurer, "Winter", universal_loves + marlon_loves, False, "Stardew Valley Expanded")
-morgan = villager("Morgan", False, forest, "Fall", universal_loves_no_rabbit_foot + morgan_loves, False, "Stardew Valley Expanded")
-scarlett = villager("Scarlett", False, bluemoon, "Summer", universal_loves + scarlett_loves, False, "Stardew Valley Expanded")
-susan = villager("Susan", False, railroad, "Fall", universal_loves + susan_loves, False, "Stardew Valley Expanded")
-morris = villager("Morris", False, jojamart, "Spring", universal_loves + morris_loves, True, "Stardew Valley Expanded")
+claire = villager(ModNPC.claire, True, town + jojamart, Season.fall, universal_loves + claire_loves, True, ModNames.sve)
+lance = villager(ModNPC.lance, True, adventurer + highlands + island, Season.spring, lance_loves, False, ModNames.sve)
+mommy = villager(ModNPC.olivia, True, town, Season.spring, universal_loves_no_rabbit_foot + olivia_loves, True, ModNames.sve)
+sophia = villager(ModNPC.sophia, True, bluemoon, Season.winter, universal_loves_no_rabbit_foot + sophia_loves, True, ModNames.sve)
+victor = villager(ModNPC.victor, True, town, Season.summer, universal_loves + victor_loves, True, ModNames.sve)
+andy = villager(ModNPC.andy, False, forest, Season.spring, universal_loves + andy_loves, True, ModNames.sve)
+apples = villager(ModNPC.apples, False, aurora + junimo, Season.spring, starfruit, False, ModNames.sve)
+gunther = villager(ModNPC.gunther, False, museum, Season.winter, universal_loves + gunther_loves, True, ModNames.sve)
+martin = villager(ModNPC.martin, False, town + jojamart, Season.summer, universal_loves + martin_loves, True, ModNames.sve)
+marlon = villager(ModNPC.marlon, False, adventurer, Season.winter, universal_loves + marlon_loves, False, ModNames.sve)
+morgan = villager(ModNPC.morgan, False, forest, Season.fall, universal_loves_no_rabbit_foot + morgan_loves, False, ModNames.sve)
+scarlett = villager(ModNPC.scarlett, False, bluemoon, Season.summer, universal_loves + scarlett_loves, False, ModNames.sve)
+susan = villager(ModNPC.susan, False, railroad, Season.fall, universal_loves + susan_loves, False, ModNames.sve)
+morris = villager(ModNPC.morris, False, jojamart, Season.spring, universal_loves + morris_loves, True, ModNames.sve)
 
+# Modified villagers; not included in all villagers
+magnus = villager(NPC.wizard, True, wizard_tower, Season.winter, universal_loves + wizard_loves, True, ModNames.sve)
 
+all_modified_villagers = [magnus]
+all_modified_villagers_by_name_by_mod: Dict[str, Dict[str, Villager]] = {NPC.wizard: {ModNames.sve: magnus}}
 all_villagers_by_name: Dict[str, Villager] = {villager.name: villager for villager in all_villagers}
 all_villagers_by_mod: Dict[str, List[Villager]] = {}
 all_villagers_by_mod_by_name: Dict[str, Dict[str, Villager]] = {}
