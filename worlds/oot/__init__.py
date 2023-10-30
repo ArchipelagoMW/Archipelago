@@ -1161,6 +1161,15 @@ class OOTWorld(World):
                 continue
             multidata["precollected_items"][self.player].remove(item_id)
 
+        # If skip child zelda, push item onto autotracker
+        if self.shuffle_child_trade == 'skip_child_zelda':
+            impa_item_id = self.item_name_to_id.get(self.get_location('Song from Impa').item.name, None)
+            zelda_item_id = self.item_name_to_id.get(self.get_location('HC Zeldas Letter').item.name, None)
+            if impa_item_id:
+                multidata["precollected_items"][self.player].append(impa_item_id)
+            if zelda_item_id:
+                multidata["precollected_items"][self.player].append(zelda_item_id)
+
 
     def extend_hint_information(self, er_hint_data: dict):
 
