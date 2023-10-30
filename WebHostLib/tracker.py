@@ -1692,7 +1692,7 @@ def get_LttP_multiworld_tracker(tracker: UUID):
             for recipient in recipients:
                 attribute_item(team, recipient, item)
                 checks_done[team][player][player_location_to_area[player][location]] += 1
-                checks_done[team][player]["Total"] += 1
+        checks_done[team][player]["Total"] = len(locations_checked)
 
         percent_total_checks_done[team][player] = (
             checks_done[team][player]["Total"] / len(player_locations) * 100
