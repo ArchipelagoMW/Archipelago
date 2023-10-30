@@ -556,8 +556,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     museumsanity: Museumsanity
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
-    number_of_movement_buffs: NumberOfMovementBuffs
-    number_of_luck_buffs: NumberOfLuckBuffs
+    movement_buff_number: NumberOfMovementBuffs
+    luck_buff_number: NumberOfLuckBuffs
     exclude_ginger_island: ExcludeGingerIsland
     trap_items: TrapItems
     multiple_day_sleep_enabled: MultipleDaySleepEnabled
