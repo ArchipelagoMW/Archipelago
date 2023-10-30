@@ -92,7 +92,7 @@ class DLCqworld(World):
         if change:
             suffix = item.coin_suffix
             if suffix:
-                state.prog_items[suffix,  self.player] += item.coins
+                state.prog_items[self.player][suffix] += item.coins
         return change
 
     def remove(self, state: CollectionState, item: DLCQuestItem) -> bool:
@@ -100,5 +100,5 @@ class DLCqworld(World):
         if change:
             suffix = item.coin_suffix
             if suffix:
-                state.prog_items[suffix,  self.player] -= item.coins
+                state.prog_items[self.player][suffix] -= item.coins
         return change
