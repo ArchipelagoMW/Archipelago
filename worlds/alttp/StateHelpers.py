@@ -82,6 +82,7 @@ def can_extend_magic(state: CollectionState, player: int, smallmagic: int = 16,
             basemagic = basemagic + basemagic * bottle_count(state, player)
     return basemagic >= smallmagic
 
+
 def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> bool:
     bombs = 0 if state.multiworld.bombless_start[player] else 10
     bombs += ((state.count("Bomb Upgrade (+5)", player) * 5) + (state.count("Bomb Upgrade (+10)", player) * 10)
@@ -96,12 +97,23 @@ def can_bomb_or_bonk(state: CollectionState, player: int) -> bool:
 
 
 def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) -> bool:
-    return (has_melee_weapon(state, player)
-            or state.has('Cane of Somaria', player)
-            or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
-            or can_shoot_arrows(state, player)
-            or state.has('Fire Rod', player)
-            or (state.multiworld.enemy_health[player] in ("easy", "default") and can_use_bombs(state, player, enemies)))
+    if state.multiworld.enemy_shuffle[player]:
+        # I don't fully understand Enemizer's logic for placing enemies in spots where they need to be killable, if any.
+        # Just go with maximal requirements for now.
+        return (has_melee_weapon(state, player)
+                and state.has('Cane of Somaria', player)
+                and state.has('Cane of Byrna', player) and can_extend_magic(state, player)
+                and can_shoot_arrows(state, player)
+                and state.has('Fire Rod', player)
+                and can_use_bombs(state, player, enemies * 4))
+    else:
+        return (has_melee_weapon(state, player)
+                or state.has('Cane of Somaria', player)
+                or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
+                or can_shoot_arrows(state, player)
+                or state.has('Fire Rod', player)
+                or (state.multiworld.enemy_health[player] in ("easy", "default")
+                    and can_use_bombs(state, player, enemies * 4)))
 
 
 def can_get_good_bee(state: CollectionState, player: int) -> bool:

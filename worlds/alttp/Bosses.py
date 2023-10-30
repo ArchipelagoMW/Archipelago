@@ -6,7 +6,7 @@ from typing import Optional, Union, List, Tuple, Callable, Dict, TYPE_CHECKING
 from Fill import FillError
 from .Options import LTTPBosses as Bosses
 from .StateHelpers import can_shoot_arrows, can_extend_magic, can_get_good_bee, has_sword, has_beam_sword, \
-    has_melee_weapon, has_fire_source
+    has_melee_weapon, has_fire_source, can_use_bombs
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
@@ -62,7 +62,8 @@ def MoldormDefeatRule(state, player: int) -> bool:
 
 def HelmasaurKingDefeatRule(state, player: int) -> bool:
     # TODO: technically possible with the hammer
-    return has_sword(state, player) or can_shoot_arrows(state, player)
+    return (can_use_bombs(state, player, 5) or state.has("Hammer", player)) and (has_sword(state, player)
+                                                                                 or can_shoot_arrows(state, player))
 
 
 def ArrghusDefeatRule(state, player: int) -> bool:
