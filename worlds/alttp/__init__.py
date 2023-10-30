@@ -470,7 +470,8 @@ class ALTTPWorld(World):
                 prizepool = unplaced_prizes.copy()
                 prize_locs = empty_crystal_locations.copy()
                 world.random.shuffle(prize_locs)
-                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
+                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True,
+                                 name="LttP Dungeon Prizes")
             except FillError as e:
                 lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
                                                 attempts - attempt)
