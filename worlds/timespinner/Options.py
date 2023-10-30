@@ -1,6 +1,6 @@
-from typing import Dict, Union, List
-from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, OptionList
+from dataclasses import dataclass
+from typing import Dict
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, PerGameCommonOptions
 from schema import Schema, And, Optional, Or
 
 
@@ -382,54 +382,40 @@ class Traps(OptionList):
     valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
     default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
 
-
-# Some options that are available in the timespinner randomizer arent currently implemented
-timespinner_options: Dict[str, Option] = {
-    "StartWithJewelryBox": StartWithJewelryBox,
-    "DownloadableItems": DownloadableItems,
-    "EyeSpy": EyeSpy,
-    "StartWithMeyef": StartWithMeyef,
-    "QuickSeed": QuickSeed,
-    "SpecificKeycards": SpecificKeycards,
-    "Inverted": Inverted,
-    "GyreArchives": GyreArchives,
-    "Cantoran": Cantoran,
-    "LoreChecks": LoreChecks,
-    "BossRando": BossRando,
-    "BossScaling": BossScaling,
-    "DamageRando": DamageRando,
-    "DamageRandoOverrides": DamageRandoOverrides,
-    "HpCap": HpCap,
-    "LevelCap": LevelCap,
-    "ExtraEarringsXP": ExtraEarringsXP,
-    "BossHealing": BossHealing,
-    "ShopFill": ShopFill,
-    "ShopWarpShards": ShopWarpShards,
-    "ShopMultiplier": ShopMultiplier,
-    "LootPool": LootPool,
-    "DropRateCategory": DropRateCategory,
-    "FixedDropRate": FixedDropRate,
-    "LootTierDistro": LootTierDistro,
-    "ShowBestiary": ShowBestiary,
-    "ShowDrops": ShowDrops,
-    "EnterSandman": EnterSandman,
-    "DadPercent": DadPercent,
-    "RisingTides": RisingTides,
-    "RisingTidesOverrides": RisingTidesOverrides,
-    "UnchainedKeys": UnchainedKeys,
-    "TrapChance": TrapChance,
-    "Traps": Traps,
-    "DeathLink": DeathLink,
-}
-
-
-def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
-    return get_option_value(world, player, name) > 0
-
-
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
-    option = getattr(world, name, None)
-    if option == None:
-        return 0
-
-    return option[player].value
+@dataclass
+class TimespinnerOptions(PerGameCommonOptions):
+    start_with_jewelry_box: StartWithJewelryBox
+    downloadable_items: DownloadableItems
+    eye_spy: EyeSpy
+    start_with_meyef: StartWithMeyef
+    quick_seed: QuickSeed
+    Specific_keycards: SpecificKeycards
+    inverted: Inverted
+    gyre_archives: GyreArchives
+    cantoran: Cantoran
+    lore_checks: LoreChecks
+    boss_rando: BossRando
+    boss_scaling: BossScaling
+    damage_rando: DamageRando
+    damage_rando_overrides: DamageRandoOverrides
+    hp_cap: HpCap
+    level_cap: LevelCap
+    extra_earrings_xp: ExtraEarringsXP
+    boss_healing: BossHealing
+    shop_fill: ShopFill
+    shop_warp_shards: ShopWarpShards
+    shop_multiplier: ShopMultiplier
+    loot_pool: LootPool
+    drop_rate_category: DropRateCategory
+    fixed_drop_rate: FixedDropRate
+    loot_tier_distro: LootTierDistro
+    show_bestiary: ShowBestiary
+    show_drops: ShowDrops
+    enter_sandman: EnterSandman
+    dad_percent: DadPercent
+    rising_tides: RisingTides
+    rising_tides_overrides: RisingTidesOverrides
+    unchained_keys: UnchainedKeys
+    trap_chance: TrapChance
+    traps: Traps
+    death_link: DeathLink

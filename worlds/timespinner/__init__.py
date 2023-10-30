@@ -1,9 +1,9 @@
-from typing import Dict, List, Set, Tuple, TextIO, Union
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
+from typing import Dict, List, Set, Tuple, TextIO
+from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import get_item_names_per_category
 from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
 from .Locations import get_location_datas, EventId
-from .Options import is_option_enabled, get_option_value, timespinner_options
+from .Options import TimespinnerOptions
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions_and_locations
 from worlds.AutoWorld import World, WebWorld
@@ -35,8 +35,8 @@ class TimespinnerWorld(World):
     Timespinner is a beautiful metroidvania inspired by classic 90s action-platformers.
     Travel back in time to change fate itself. Join timekeeper Lunais on her quest for revenge against the empire that killed her family.
     """
-
-    option_definitions = timespinner_options
+    options_dataclass = TimespinnerOptions
+    options: TimespinnerOptions
     game = "Timespinner"
     topology_present = True
     data_version = 11
@@ -44,24 +44,24 @@ class TimespinnerWorld(World):
     required_client_version = (0, 3, 7)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.code for location in get_location_datas(None, None, None)}
+    location_name_to_id = {location.name: location.code for location in get_location_datas(-1, None, None)}
     item_name_groups = get_item_names_per_category()
 
     precalculated_weights: PreCalculatedWeights
 
     def generate_early(self) -> None:
-        self.precalculated_weights = PreCalculatedWeights(self.multiworld, self.player)
+        self.precalculated_weights = PreCalculatedWeights(self.options, self.random)
 
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.multiworld.start_inventory[self.player].value.pop('Meyef', 0) > 0:
-            self.multiworld.StartWithMeyef[self.player].value = self.multiworld.StartWithMeyef[self.player].option_true
-        if self.multiworld.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
-            self.multiworld.QuickSeed[self.player].value = self.multiworld.QuickSeed[self.player].option_true
-        if self.multiworld.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
-            self.multiworld.StartWithJewelryBox[self.player].value = self.multiworld.StartWithJewelryBox[self.player].option_true
+        if self.options.start_inventory.value.pop('Meyef', 0) > 0:
+            self.options.start_with_meyef.value = self.options.start_with_meyef.option_true
+        if self.options.start_inventory.value.pop('Talaria Attachment', 0) > 0:
+            self.options.quick_seed.value = self.options.quick_seed.option_true
+        if self.options.start_inventory.value.pop('Jewelry Box', 0) > 0:
+            self.options.start_with_jewelry_box.value = self.options.start_with_jewelry_box.option_true
 
     def create_regions(self) -> None: 
-        create_regions_and_locations(self.multiworld, self.player, self.precalculated_weights)
+        create_regions_and_locations(self.multiworld, self.player, self.options, self.precalculated_weights)
 
     def create_items(self) -> None: 
         self.create_and_assign_event_items()
@@ -75,7 +75,7 @@ class TimespinnerWorld(World):
 
     def set_rules(self) -> None:
         final_boss: str
-        if self.is_option_enabled("DadPercent"):
+        if self.options.dad_percent:
             final_boss = "Killed Emperor"
         else:
             final_boss = "Killed Nightmare"
@@ -83,46 +83,72 @@ class TimespinnerWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(final_boss, self.player) 
 
     def fill_slot_data(self) -> Dict[str, object]:
-        slot_data: Dict[str, object] = {}
-
-        ap_specific_settings: Set[str] = {"RisingTidesOverrides", "TrapChance"}
-
-        for option_name in timespinner_options:
-            if (option_name not in ap_specific_settings):
-                slot_data[option_name] = self.get_option_value(option_name)
-
-        slot_data["StinkyMaw"] = True
-        slot_data["ProgressiveVerticalMovement"] = False
-        slot_data["ProgressiveKeycards"] = False
-        slot_data["PersonalItems"] = self.get_personal_items()
-        slot_data["PyramidKeysGate"] = self.precalculated_weights.pyramid_keys_unlock
-        slot_data["PresentGate"] = self.precalculated_weights.present_key_unlock
-        slot_data["PastGate"] = self.precalculated_weights.past_key_unlock
-        slot_data["TimeGate"] = self.precalculated_weights.time_key_unlock
-        slot_data["Basement"] = int(self.precalculated_weights.flood_basement) + \
-                                int(self.precalculated_weights.flood_basement_high)
-        slot_data["Xarion"] = self.precalculated_weights.flood_xarion
-        slot_data["Maw"] = self.precalculated_weights.flood_maw
-        slot_data["PyramidShaft"] = self.precalculated_weights.flood_pyramid_shaft
-        slot_data["BackPyramid"] = self.precalculated_weights.flood_pyramid_back
-        slot_data["CastleMoat"] = self.precalculated_weights.flood_moat
-        slot_data["CastleCourtyard"] = self.precalculated_weights.flood_courtyard
-        slot_data["LakeDesolation"] = self.precalculated_weights.flood_lake_desolation
-        slot_data["DryLakeSerene"] = self.precalculated_weights.dry_lake_serene
-
-        return slot_data
+        return {
+            # options
+            "StartWithJewelryBox": self.options.start_with_jewelry_box,
+            "DownloadableItems": self.options.downloadable_items,
+            "EyeSpy": self.options.eye_spy,
+            "StartWithMeyef": self.options.start_with_meyef,
+            "QuickSeed": self.options.quick_seed,
+            "SpecificKeycards": self.options.Specific_keycards,
+            "Inverted": self.options.inverted,
+            "GyreArchives": self.options.gyre_archives,
+            "Cantoran": self.options.cantoran,
+            "LoreChecks": self.options.lore_checks,
+            "BossRando": self.options.boss_rando,
+            "BossScaling": self.options.boss_scaling,
+            "DamageRando": self.options.damage_rando,
+            "DamageRandoOverrides": self.options.damage_rando_overrides,
+            "HpCap": self.options.hp_cap,
+            "LevelCap": self.options.level_cap,
+            "ExtraEarringsXP": self.options.extra_earrings_xp,
+            "BossHealing": self.options.boss_healing,
+            "ShopFill": self.options.shop_fill,
+            "ShopWarpShards": self.options.shop_warp_shards,
+            "ShopMultiplier": self.options.shop_multiplier,
+            "LootPool": self.options.loot_pool,
+            "DropRateCategory": self.options.drop_rate_category,
+            "FixedDropRate": self.options.fixed_drop_rate,
+            "LootTierDistro": self.options.loot_tier_distro,
+            "ShowBestiary": self.options.show_bestiary,
+            "ShowDrops": self.options.show_drops,
+            "EnterSandman": self.options.enter_sandman,
+            "DadPercent": self.options.dad_percent,
+            "RisingTides": self.options.rising_tides,
+            "UnchainedKeys": self.options.unchained_keys,
+            "Traps": self.options.traps,
+            "DeathLink": self.options.death_link,
+            "StinkyMaw": True,
+            # data
+            "PersonalItems": self.get_personal_items(),
+            "PyramidKeysGate": self.precalculated_weights.pyramid_keys_unlock,
+            "PresentGate": self.precalculated_weights.present_key_unlock,
+            "PastGate": self.precalculated_weights.past_key_unlock,
+            "TimeGate": self.precalculated_weights.time_key_unlock,
+            # rising tides
+            "Basement": int(self.precalculated_weights.flood_basement) + \
+                                    int(self.precalculated_weights.flood_basement_high),
+            "Xarion": self.precalculated_weights.flood_xarion,
+            "Maw": self.precalculated_weights.flood_maw,
+            "PyramidShaft": self.precalculated_weights.flood_pyramid_shaft,
+            "BackPyramid": self.precalculated_weights.flood_pyramid_back,
+            "CastleMoat": self.precalculated_weights.flood_moat,
+            "CastleCourtyard": self.precalculated_weights.flood_courtyard,
+            "LakeDesolation": self.precalculated_weights.flood_lake_desolation,
+            "DryLakeSerene": self.precalculated_weights.dry_lake_serene,
+        }
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
-        if self.is_option_enabled("UnchainedKeys"):
+        if self.options.unchained_keys:
             spoiler_handle.write(f'Modern Warp Beacon unlock:       {self.precalculated_weights.present_key_unlock}\n')
             spoiler_handle.write(f'Timeworn Warp Beacon unlock:     {self.precalculated_weights.past_key_unlock}\n')
 
-            if self.is_option_enabled("EnterSandman"):
+            if self.options.enter_sandman:
                 spoiler_handle.write(f'Mysterious Warp Beacon unlock:   {self.precalculated_weights.time_key_unlock}\n')
         else:
             spoiler_handle.write(f'Twin Pyramid Keys unlock:        {self.precalculated_weights.pyramid_keys_unlock}\n')
        
-        if self.is_option_enabled("RisingTides"):
+        if self.options.rising_tides:
             flooded_areas: List[str] = []
 
             if self.precalculated_weights.flood_basement:
@@ -171,41 +197,41 @@ class TimespinnerWorld(World):
         if not item.advancement:
             return item
 
-        if (name == 'Tablet' or name == 'Library Keycard V') and not self.is_option_enabled("DownloadableItems"):
+        if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
             item.classification = ItemClassification.filler
-        elif name == 'Oculus Ring' and not self.is_option_enabled("EyeSpy"):
+        elif name == 'Oculus Ring' and not self.options.eye_spy:
             item.classification = ItemClassification.filler
-        elif (name == 'Kobo' or name == 'Merchant Crow') and not self.is_option_enabled("GyreArchives"):
+        elif (name == 'Kobo' or name == 'Merchant Crow') and not self.options.gyre_archives:
             item.classification = ItemClassification.filler
         elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
-                and not self.is_option_enabled("UnchainedKeys"):
+                and not self.options.unchained_keys:
             item.classification = ItemClassification.filler
 
         return item
 
     def get_filler_item_name(self) -> str:
-        trap_chance: int = self.get_option_value("TrapChance")
-        enabled_traps: List[str] = self.get_option_value("Traps")
+        trap_chance: int = self.options.trap_chance.value
+        enabled_traps: List[str] = self.options.traps.value
 
-        if self.multiworld.random.random() < (trap_chance / 100) and enabled_traps:
-            return self.multiworld.random.choice(enabled_traps)
+        if self.random.random() < (trap_chance / 100) and enabled_traps:
+            return self.random.choice(enabled_traps)
         else:
-            return self.multiworld.random.choice(filler_items) 
+            return self.random.choice(filler_items) 
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
 
-        if self.is_option_enabled("StartWithJewelryBox"):
+        if self.options.start_with_jewelry_box:
             excluded_items.add('Jewelry Box')
-        if self.is_option_enabled("StartWithMeyef"):
+        if self.options.start_with_meyef:
             excluded_items.add('Meyef')
-        if self.is_option_enabled("QuickSeed"):
+        if self.options.quick_seed:
             excluded_items.add('Talaria Attachment')
 
-        if self.is_option_enabled("UnchainedKeys"):
+        if self.options.unchained_keys:
             excluded_items.add('Twin Pyramid Key')
 
-            if not self.is_option_enabled("EnterSandman"):
+            if not self.options.enter_sandman:
                 excluded_items.add('Mysterious Warp Beacon')
         else:
             excluded_items.add('Timeworn Warp Beacon')
@@ -244,8 +270,7 @@ class TimespinnerWorld(World):
         self.place_locked_item(excluded_items, location, item_name)
 
     def place_first_progression_item(self, excluded_items: Set[str]) -> None:
-        if self.is_option_enabled("QuickSeed") or self.is_option_enabled("Inverted") \
-                or self.precalculated_weights.flood_lake_desolation:
+        if self.options.quick_seed or self.options.inverted or self.precalculated_weights.flood_lake_desolation:
             return
 
         for item in self.multiworld.precollected_items[self.player]:
@@ -259,7 +284,7 @@ class TimespinnerWorld(World):
         if not local_starter_progression_items:
             return
 
-        progression_item = self.multiworld.random.choice(local_starter_progression_items)
+        progression_item = self.random.choice(local_starter_progression_items)
 
         self.multiworld.local_early_items[self.player][progression_item] = 1
 
@@ -299,9 +324,3 @@ class TimespinnerWorld(World):
                 personal_items[location.address] = location.item.code
 
         return personal_items
-    
-    def is_option_enabled(self, option: str) -> bool:
-        return is_option_enabled(self.multiworld, self.player, option)
-
-    def get_option_value(self, option: str) -> Union[int, Dict, List]:
-        return get_option_value(self.multiworld, self.player, option)
