@@ -107,10 +107,33 @@ class WorldTestBase(unittest.TestCase):
     game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
     auto_construct: typing.ClassVar[bool] = True
     """ automatically set up a world for each test in this class """
+    memory_leak_tested: typing.ClassVar[bool] = False
+    """ remember if memory leak test was already done for this class """
 
     def setUp(self) -> None:
         if self.auto_construct:
             self.world_setup()
+
+    def tearDown(self) -> None:
+        if self.__class__.memory_leak_tested or not self.options or not self.constructed:
+            # only run memory leak test once per class, only for constructed with non-default options
+            # default options will be tested in test/general
+            return
+
+        import gc
+        import weakref
+        weak = weakref.ref(self.multiworld)
+        for attr_name in dir(self):  # delete all direct references to MultiWorld and World
+            attr: object = typing.cast(object, getattr(self, attr_name))
+            if type(attr) is MultiWorld or isinstance(attr, AutoWorld.World):
+                delattr(self, attr_name)
+        state_cache: typing.Optional[typing.Dict[typing.Any, typing.Any]] = getattr(self, "_state_cache", None)
+        if state_cache is not None:  # in case of multiple inheritance with TestBase, we need to clear its cache
+            state_cache.clear()
+        gc.collect()
+        self.__class__.memory_leak_tested = True
+        self.assertFalse(weak(), f"World {getattr(self, 'game', '')} leaked MultiWorld object")
+        super().tearDown()
 
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
         if type(self) is WorldTestBase or \
