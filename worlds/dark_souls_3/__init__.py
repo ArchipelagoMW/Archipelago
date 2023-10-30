@@ -76,6 +76,8 @@ class DarkSouls3World(World):
     def generate_early(self):
         if self.multiworld.enable_weapon_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.WEAPON)
+            # Always make this available early because so many items are useless without it.
+            self.multiworld.early_items[self.player]['Pyromancy Flame'] = 1
         if self.multiworld.enable_shield_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.SHIELD)
         if self.multiworld.enable_armor_locations[self.player] == Toggle.option_true:
@@ -92,8 +94,11 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.BOSS)
         if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
+            # Make this available early just because it's fun to be able to check boss souls early.
+            self.multiworld.early_items[self.player]['Transposing Kiln'] = 1
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
+        if self.multiworld.enable_upgrade_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
         if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)

@@ -591,7 +591,9 @@ location_tables = {
         DS3LocationData("US: Fire Clutch Ring",                    "Fire Clutch Ring",                  DS3LocationCategory.RING),
         DS3LocationData("US: Estus Shard",                         "Estus Shard",                       DS3LocationCategory.HEALTH),
         DS3LocationData("US: Firebomb",                            "Firebomb x6",                       DS3LocationCategory.MISC),
-        DS3LocationData("US: Whip",                                "Whip",                              DS3LocationCategory.WEAPON),
+        DS3LocationData("US: Whip",                                "Whip",                              DS3LocationCategory.WEAPON,
+                        hidden = True), # In enemy rando, the enemy may not burst through the wall
+                                        # and make this room obvious
         DS3LocationData("US: Great Scythe",                        "Great Scythe",                      DS3LocationCategory.WEAPON),
         DS3LocationData("US: Homeward Bone #3",                    "Homeward Bone x2",                  DS3LocationCategory.MISC),
         DS3LocationData("US: Large Soul of a Deserted Corpse #3",  "Large Soul of a Deserted Corpse",   DS3LocationCategory.MISC),
@@ -679,14 +681,6 @@ location_tables = {
         DS3LocationData("US: Great Combustion",                    "Great Combustion",                  DS3LocationCategory.SPELL,
                         npc = True, shop = True),
         DS3LocationData("US: Flash Sweat",                         "Flash Sweat",                       DS3LocationCategory.SPELL,
-                        npc = True, shop = True),
-        DS3LocationData("US: Pyromancer Crown",                    "Pyromancer Crown",                  DS3LocationCategory.ARMOR,
-                        npc = True, shop = True),
-        DS3LocationData("US: Pyromancer Garb",                     "Pyromancer Garb",                   DS3LocationCategory.ARMOR,
-                        npc = True, shop = True),
-        DS3LocationData("US: Pyromancer Wrap",                     "Pyromancer Wrap",                   DS3LocationCategory.ARMOR,
-                        npc = True, shop = True),
-        DS3LocationData("US: Pyromancer Trousers",                 "Pyromancer Trousers",               DS3LocationCategory.ARMOR,
                         npc = True, shop = True),
         # These are missable if you kill Cornyx before giving him the right tomes.
         DS3LocationData("US: Poison Mist",                         "Poison Mist",                       DS3LocationCategory.SPELL,
