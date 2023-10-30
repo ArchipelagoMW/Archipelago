@@ -16,6 +16,7 @@ class Villager:
     birthday: str
     gifts: Tuple[str]
     available: bool
+    modified: Optional[bool]
     mod_name: Optional[str]
 
     def __repr__(self):
@@ -352,9 +353,9 @@ all_villagers: List[Villager] = []
 
 
 def villager(name: str, bachelor: bool, locations: Tuple[str, ...], birthday: str, gifts: Tuple[str, ...],
-             available: bool, mod_name: Optional[str] = None) -> Villager:
-    npc = Villager(name, bachelor, locations, birthday, gifts, available, mod_name)
-    if npc not in all_modified_villagers:
+             available: bool, modified: Optional[bool] = False, mod_name: Optional[str] = None) -> Villager:
+    npc = Villager(name, bachelor, locations, birthday, gifts, available, modified, mod_name)
+    if not npc.modified:
         all_villagers.append(npc)
     return npc
 
@@ -424,9 +425,8 @@ susan = villager(ModNPC.susan, False, railroad, Season.fall, universal_loves + s
 morris = villager(ModNPC.morris, False, jojamart, Season.spring, universal_loves + morris_loves, True, ModNames.sve)
 
 # Modified villagers; not included in all villagers
-magnus = villager(NPC.wizard, True, wizard_tower, Season.winter, universal_loves + wizard_loves, True, ModNames.sve)
+magnus = villager(NPC.wizard, True, wizard_tower, Season.winter, universal_loves + wizard_loves, True, True, ModNames.sve)
 
-all_modified_villagers = [magnus]
 all_modified_villagers_by_name_by_mod: Dict[str, Dict[str, Villager]] = {NPC.wizard: {ModNames.sve: magnus}}
 all_villagers_by_name: Dict[str, Villager] = {villager.name: villager for villager in all_villagers}
 all_villagers_by_mod: Dict[str, List[Villager]] = {}

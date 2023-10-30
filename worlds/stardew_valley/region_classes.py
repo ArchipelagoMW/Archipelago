@@ -5,6 +5,10 @@ from dataclasses import dataclass, field
 connector_keyword = " to "
 
 
+class ModificationFlag(IntFlag):
+    NOT_MODIFIED = 0
+    MODIFIED = 1
+
 class RandomizationFlag(IntFlag):
     NOT_RANDOMIZED = 0b0
     PELICAN_TOWN = 0b11111
@@ -20,6 +24,7 @@ class RandomizationFlag(IntFlag):
 class RegionData:
     name: str
     exits: List[str] = field(default_factory=list)
+    flag: ModificationFlag = ModificationFlag.NOT_MODIFIED
 
     def get_merged_with(self, exits: List[str]):
         merged_exits = []
