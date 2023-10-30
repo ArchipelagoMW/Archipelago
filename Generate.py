@@ -7,8 +7,9 @@ import random
 import string
 import urllib.parse
 import urllib.request
-from collections import ChainMap, Counter
-from typing import Any, Callable, Dict, Tuple, Union
+from collections import Counter, ChainMap
+from itertools import chain
+from typing import Dict, Tuple, Callable, Any, Union
 
 import ModuleUpdate
 
@@ -380,7 +381,7 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def roll_triggers(weights: dict, triggers: list) -> dict:
+def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
@@ -403,7 +404,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
-
+            valid_keys.add(key)
         except Exception as e:
             raise ValueError(f"Your trigger number {i + 1} is invalid. "
                              f"Please fix your triggers.") from e
@@ -430,8 +431,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
+    valid_trigger_names = set()
     if "triggers" in weights:
-        weights = roll_triggers(weights, weights["triggers"])
+        weights = roll_triggers(weights, weights["triggers"], valid_trigger_names)
 
     requirements = weights.get("requires", {})
     if requirements:
@@ -463,8 +465,15 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     game_weights = weights[ret.game]
 
     if "triggers" in game_weights:
-        weights = roll_triggers(weights, game_weights["triggers"])
+        weights = roll_triggers(weights, game_weights["triggers"], valid_trigger_names)
         game_weights = weights[ret.game]
+
+    if ret.game != "A Link to the Past":  # TODO rip out LTTP behavior
+        for option_key in weights[ret.game]:
+            if option_key not in chain(Options.common_options, Options.per_game_common_options,
+                                          AutoWorldRegister.world_types[ret.game].option_definitions,
+                                       {*valid_trigger_names, "plando_connections", "plando_items", "plando_texts", "triggers"}):
+                logging.warning(f"{option_key} not a valid option name for {ret.game} and not present in triggers")
 
     ret.name = get_choice('name', weights)
     for option_key, option in Options.CommonOptions.type_hints.items():
@@ -474,7 +483,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         handle_option(ret, game_weights, option_key, option, plando_options)
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
-    if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
+    if ret.game == "A Link to the Past":
+        roll_alttp_settings(ret, game_weights, plando_options)
+    else:
         # bad hardcoded behavior to make this work for now
         ret.plando_connections = []
         if PlandoOptions.connections in plando_options:
@@ -486,8 +497,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                         get_choice("exit", placement),
                         get_choice("direction", placement)
                     ))
-    elif ret.game == "A Link to the Past":
-        roll_alttp_settings(ret, game_weights, plando_options)
 
     return ret
 
