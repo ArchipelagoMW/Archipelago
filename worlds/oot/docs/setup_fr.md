@@ -21,19 +21,18 @@ Une fois BizHawk installé, ouvrez EmuHawk et modifiez les paramètres suivants 
 - (≤ 2,8) Allez dans Config > Personnaliser. Passez à l'onglet Avancé, puis faites passer le Lua Core de "NLua+KopiLua" à
    "Lua+LuaInterface". Puis redémarrez EmuHawk. Ceci est nécessaire pour que le script Lua fonctionne correctement.
    **REMARQUE : Même si « Lua+LuaInterface » est déjà sélectionné, basculez entre les deux options et resélectionnez-la. Nouvelles installations**
-   **des versions plus récentes d'EmuHawk ont tendance à afficher "Lua+LuaInterface" comme option sélectionnée par défaut mais se chargent toujours**
-   ** "NLua+KopiLua" jusqu'à ce que cette étape soit terminée.**
+   **des versions plus récentes d'EmuHawk ont tendance à afficher "Lua+LuaInterface" comme option sélectionnée par défaut mais ce pendant refait l'épate juste au dessus par précautions**
 - Sous Config > Personnaliser > Avancé, assurez-vous que la case AutoSaveRAM est cochée et cliquez sur le bouton 5s.
    Cela réduit la possibilité de perdre des données de sauvegarde en cas de crash de l'émulateur.
 - Sous Config > Personnaliser, cochez les cases « Exécuter en arrière-plan » et « Accepter la saisie en arrière-plan ». Cela vous permettra continuez à jouer en arrière-plan, même si une autre fenêtre est sélectionnée.
 - Sous Config > Hotkeys, de nombreux raccourcis clavier sont répertoriés, dont beaucoup sont liés aux touches communes du clavier. Vous voudrez probablement pour désactiver la plupart d'entre eux, ce que vous pouvez faire rapidement en utilisant « Esc ».
-- Si vous jouez avec un contrôleur, lorsque vous associez des commandes, désactivez "P1 A Up", "P1 A Down", "P1 A Left" et "P1 A Right".
+- Si vous jouez avec une manette, lorsque vous associez des commandes, désactivez "P1 A Up", "P1 A Down", "P1 A Left" et "P1 A Right".
    car ceux-ci interfèrent avec la visée s’ils sont liés. Définissez plutôt l'entrée directionnelle à l'aide de l'onglet Analogique.
 - Sous N64, activez "Utiliser le connecteur d'extension". Ceci est nécessaire pour que les états de sauvegarde fonctionnent.
    (Le menu N64 n'apparaît qu'après le chargement d'une ROM.)
 
 Il est fortement recommandé d'associer les extensions de rom N64 (\*.n64, \*.z64) à l'EmuHawk que nous venons d'installer.
-Pour ce faire, nous devons simplement rechercher n'importe quelle rom N64 que nous possédons, faire un clic droit et sélectionner "Ouvrir avec...", déplier la liste qui apparaît et sélectionnez l'option du bas "Rechercher une autre application", puis accédez au dossier BizHawk et sélectionnez EmuHawk.exe.
+Pour ce faire, vous devez simplement rechercher n'importe quelle rom N64 que vous possédez, faire un clic droit et sélectionner "Ouvrir avec...", déplier la liste qui apparaît et sélectionnez l'option du bas "Rechercher une autre application", puis accédez au dossier BizHawk et sélectionnez EmuHawk.exe.
 
 Un guide de configuration BizHawk alternatif ainsi que divers conseils de dépannage sont disponibles
 [ici](https://wiki.ootrandomizer.com/index.php?title=Bizhawk).
@@ -56,7 +55,7 @@ YAML page du validateur : [page de validation YAML](/mysterycheck)
 
 ## Rejoindre un jeu multimonde
 
-### Obtenez votre fichier OOT modifier
+### Obtenez votre fichier OOT modifié
 
 Lorsque vous rejoignez un jeu multimonde, il vous sera demandé de fournir votre fichier YAML à celui qui l'héberge. Une fois cela fait, l'hébergeur vous fournira soit un lien pour télécharger votre fichier de données, soit un fichier zip contenant les données de chacun des dossiers. Votre fichier de données doit avoir une extension « .apz5 ».
 
@@ -64,8 +63,7 @@ Double-cliquez sur votre fichier « .apz5 » pour démarrer votre client et dém
 
 ### Connectez-vous au multiserveur
 
-Une fois le client et l'émulateur démarrés, vous devez les connecter. Accédez à votre dossier d'installation Archipelago,
-puis vers `data/lua`, et faites glisser et déposez le script `connector_oot.lua` sur la fenêtre principale d'EmuHawk. (Vous pourriez plutôt ouvrir depuis la console Lua manuellement, cliquez sur `Script` 〉 `Open Script` et accédez à `connector_oot.lua` avec le sélecteur de fichiers.)
+Une fois le client et l'émulateur démarrés, vous devez les connecter. Accédez à votre dossier d'installation Archipelago, puis vers `data/lua`, et faites glisser et déposez le script `connector_oot.lua` sur la fenêtre principale d'EmuHawk. (Vous pourrez plutôt ouvrir depuis la console Lua manuellement, cliquez sur `Script` 〉 `Open Script` et accédez à `connector_oot.lua` avec le sélecteur de fichiers.)
 
 Pour connecter le client au multiserveur, mettez simplement `<adresse>:<port>` dans le champ de texte en haut et appuyez sur Entrée (si le serveur utilise un mot de passe, tapez dans le champ de texte inférieur `/connect <adresse>:<port> [mot de passe]`)
 
