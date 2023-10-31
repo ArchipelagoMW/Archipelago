@@ -495,11 +495,26 @@ class DarkSouls3World(World):
             set_rule(self.multiworld.get_location("FS: Lift Chamber Key", self.player),
                      lambda state: state.has("Pale Tongue", self.player))
 
-        if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
+        if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("AP: Hawkwood's Swordgrass", self.player),
                      lambda state: state.has("Twinkling Dragon Torso Stone", self.player))
             set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
+
+            # Make sure that the player can keep Orbeck around by giving him at least one scroll
+            # before killing Abyss Watchers.
+            def has_any_scroll(state):
+                return (state.has("Sage's Scroll", self.player) or
+                    state.has("Golden Scroll", self.player) or
+                    state.has("Logan's Scroll", self.player) or
+                    state.has("Crystal Scroll", self.player))
+            if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
+                set_rule(self.multiworld.get_location("FK: Soul of the Blood of the Wolf", self.player),
+                        has_any_scroll)
+                set_rule(self.multiworld.get_location("FK: Cinders of a Lord - Abyss Watcher", self.player),
+                        has_any_scroll)
+            set_rule(self.multiworld.get_entrance("Catacombs of Carthus", self.player),
+                     has_any_scroll)
 
         if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("PC: Soul of Yhorm the Giant", self.player),
