@@ -449,7 +449,8 @@ class TestFillRestrictive(unittest.TestCase):
         locations = player1.locations[:]  # copy required
         items = player1.prog_items[:]  # copy required
         # Two items provide access to sphere 2.
-        # One of them is forbidden in sphere 1, the other is placed in sphere 3 because of placement order.
+        # One of them is forbidden in sphere 1, the other is first placed in sphere 4 because of placement order,
+        # requiring a swap.
         # There are spheres in between, so for the swap to work, it'll have to assume all other items are collected.
         one_to_two1 = items[4].name
         one_to_two2 = items[3].name
@@ -467,14 +468,15 @@ class TestFillRestrictive(unittest.TestCase):
                                               and state.has(two_to_three2, player1.id)))
         # Sphere 2
         set_rule(locations[2], lambda state: state.has(one_to_two1, player1.id) or state.has(one_to_two2, player1.id))
-
-        # forbid one_to_two2 in sphere 1, which will have to swap out one_to_two1
+        # Sphere 1
         sphere1_loc1 = locations[3]
         sphere1_loc2 = locations[4]
+        # forbid one_to_two2 in sphere 1 to make the swap happen as described above
         add_item_rule(sphere1_loc1, lambda item_to_place: item_to_place.name != one_to_two2)
         add_item_rule(sphere1_loc2, lambda item_to_place: item_to_place.name != one_to_two2)
-        # fill has to place one_to_two1 in sphere1_loc1 or sphere1_loc2,
-        # which will result in a swap before two_to_three and three_to_four is placed because of placement order
+
+        # Now fill should place one_to_two1 in sphere1_loc1 or sphere1_loc2 via swap,
+        # which it will attempt before two_to_three and three_to_four are placed, testing the behavior.
         fill_restrictive(multi_world, multi_world.state, player1.locations, player1.prog_items)
         # assert swap happened
         self.assertTrue(sphere1_loc1.item and sphere1_loc2.item, "Did not swap required item into Sphere 1")
