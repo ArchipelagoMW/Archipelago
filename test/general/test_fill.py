@@ -443,7 +443,7 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertEqual(sphere1_loc.item, allowed_item, "Wrong item in Sphere 1")
 
     def test_swap_to_earlier_location_with_item_rule2(self):
-        """Also test that item swap happens and works as intended"""
+        """Test that swap works before all items are placed"""
         multi_world = generate_multi_world(1)
         player1 = generate_player_data(multi_world, 1, 5, 5)
         locations = player1.locations[:]  # copy required
@@ -473,7 +473,8 @@ class TestFillRestrictive(unittest.TestCase):
         sphere1_loc2 = locations[4]
         add_item_rule(sphere1_loc1, lambda item_to_place: item_to_place.name != one_to_two2)
         add_item_rule(sphere1_loc2, lambda item_to_place: item_to_place.name != one_to_two2)
-        # fill has to place items[1] in locations[0] which will result in a swap because of placement order
+        # fill has to place one_to_two1 in sphere1_loc1 or sphere1_loc2,
+        # which will result in a swap before two_to_three and three_to_four is placed because of placement order
         fill_restrictive(multi_world, multi_world.state, player1.locations, player1.prog_items)
         # assert swap happened
         self.assertTrue(sphere1_loc1.item and sphere1_loc2.item, "Did not swap required item into Sphere 1")
