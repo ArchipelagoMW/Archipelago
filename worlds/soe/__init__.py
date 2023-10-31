@@ -417,7 +417,7 @@ class SoEWorld(World):
                     flags += option.to_flag()
 
             with open(placement_file, "wb") as f:  # generate placement file
-                for location in filter(lambda l: l.player == self.player, self.multiworld.get_locations()):
+                for location in self.multiworld.get_locations(self.player):
                     item = location.item
                     assert item is not None, "Can't handle unfilled location"
                     if item.code is None or location.address is None:
