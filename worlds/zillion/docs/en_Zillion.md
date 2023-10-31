@@ -67,8 +67,16 @@ Note that in "restrictive" mode, Champ is the only one that can get Zillion powe
 
 Canisters retain their original appearance, so you won't know if an item belongs to another player until you collect it.
 
-When you collect an item, you see the name of the player it goes to. You can see in the client log what item was collected.
+When you collect an item, you see the name of the player it goes to. You can see in the client log what item was
+collected.
 
 ## When the player receives an item, what happens?
 
 The item collect sound is played. You can see in the client log what item was received.
+
+## Unique Local Commands
+
+The following commands are only available when using the ZillionClient to play with Archipelago.
+
+- `/sms` Tell the client that Zillion is running in RetroArch.
+- `/map` Toggle view of the map tracker.
