@@ -435,7 +435,7 @@ function send_receive ()
     end
 
     if message == "VERSION" then
-        local result, err client_socket:send(tostring(SCRIPT_VERSION).."\n")
+        client_socket:send(tostring(SCRIPT_VERSION).."\n")
     else
         local res = {}
         local data = json.decode(message)
@@ -464,6 +464,7 @@ function send_receive ()
 end
 
 function main ()
+    local err
     server, err = socket.bind("localhost", SOCKET_PORT)
     if err ~= nil then
         print(err)
@@ -547,7 +548,7 @@ else
             co = coroutine.create(main)
         end
     end
-    
+
     -- Gambatte has a setting which can cause script execution to become
     -- misaligned, so for GB and GBC we explicitly set the callback on
     -- vblank instead.
@@ -557,7 +558,7 @@ else
     else
         event.onframeend(tick)
     end
-    
+
     while true do
         emu.frameadvance()
     end
