@@ -395,6 +395,7 @@ class ValidInventory:
         self._sc2_advanced_tactics = lambda world, player: SC2Logic._sc2_advanced_tactics(self, world, player)
         # WoL
         self._sc2wol_has_common_unit = lambda world, player: SC2Logic._sc2wol_has_common_unit(self, world, player)
+        self._sc2wol_has_early_tech = lambda world, player: SC2Logic._sc2wol_has_early_tech(self, world, player)
         self._sc2wol_has_air = lambda world, player: SC2Logic._sc2wol_has_air(self, world, player)
         self._sc2wol_has_air_anti_air = lambda world, player: SC2Logic._sc2wol_has_air_anti_air(self, world, player)
         self._sc2wol_has_competent_anti_air = lambda world, player: SC2Logic._sc2wol_has_competent_anti_air(self, world, player)

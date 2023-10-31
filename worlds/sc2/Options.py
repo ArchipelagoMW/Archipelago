@@ -175,14 +175,21 @@ class ShuffleNoBuild(DefaultOnToggle):
     display_name = "Shuffle No-Build Missions"
 
 
-class EarlyUnit(DefaultOnToggle):
+class EarlyUnit(Choice):
     """
     Guarantees that the first mission will contain a unit.
 
     Each mission available to be the first mission has a pre-defined location where the unit should spawn.
     This location gets overriden over any exclusion. It's guaranteed to be reachable with an empty inventory.
+
+    Off: No unit guaranteed in the first mission
+    Balanced: A unit that doesn't give the player too much power early on is spawned
+    Any Starter Unit: Any starter unit can be spawned
     """
     display_name = "Early Unit"
+    option_off = 0
+    option_balanced = 1
+    option_any_starter_unit = 2
 
 
 class RequiredTactics(Choice):

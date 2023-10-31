@@ -25,6 +25,13 @@ class SC2Logic(LogicMixin):
     def _sc2wol_has_common_unit(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any(get_basic_units(multiworld, player, SC2Race.TERRAN), player)
 
+    def _sc2wol_has_early_tech(self, multiworld: MultiWorld, player: int):
+        return (
+                self.has_any({ItemNames.MARINE, ItemNames.FIREBAT, ItemNames.MARAUDER, ItemNames.REAPER, ItemNames.HELLION}, player)
+                or (self._sc2_advanced_tactics(multiworld, player)
+                    and self.has_any({ItemNames.GOLIATH, ItemNames.DIAMONDBACK, ItemNames.VIKING, ItemNames.BANSHEE}, player))
+        )
+
     def _sc2wol_has_air(self, multiworld: MultiWorld, player: int) -> bool:
         return (self.has_any({ItemNames.VIKING, ItemNames.WRAITH, ItemNames.BANSHEE, ItemNames.BATTLECRUISER}, player) or self._sc2_advanced_tactics(multiworld, player)
                 and self.has_any({ItemNames.HERCULES, ItemNames.MEDIVAC}, player) and self._sc2wol_has_common_unit(multiworld, player)

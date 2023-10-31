@@ -46,12 +46,13 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Liberation Day", "Liberation Day: Sixth Statue", SC2WOL_LOC_ID_OFFSET + 106, LocationType.BONUS),
         LocationData("Liberation Day", "Liberation Day: Special Delivery", SC2WOL_LOC_ID_OFFSET + 107, LocationType.MISSION_PROGRESS),
         LocationData("The Outlaws", "The Outlaws: Victory", SC2WOL_LOC_ID_OFFSET + 200, LocationType.VICTORY,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player)),
+                     lambda state: state._sc2wol_has_early_tech(multiworld, player)),
         LocationData("The Outlaws", "The Outlaws: Rebel Base", SC2WOL_LOC_ID_OFFSET + 201, LocationType.BONUS,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player)),
-        LocationData("The Outlaws", "The Outlaws: North Resource Pickups", SC2WOL_LOC_ID_OFFSET + 202, LocationType.BONUS),
+                     lambda state: state._sc2wol_has_early_tech(multiworld, player)),
+        LocationData("The Outlaws", "The Outlaws: North Resource Pickups", SC2WOL_LOC_ID_OFFSET + 202, LocationType.BONUS,
+                     lambda state: state._sc2wol_has_early_tech(multiworld, player)),
         LocationData("The Outlaws", "The Outlaws: Bunker", SC2WOL_LOC_ID_OFFSET + 203, LocationType.MISSION_PROGRESS,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player)),
+                     lambda state: state._sc2wol_has_early_tech(multiworld, player)),
         LocationData("Zero Hour", "Zero Hour: Victory", SC2WOL_LOC_ID_OFFSET + 300, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
                                    state._sc2wol_defense_rating(multiworld, player, True) >= 2 and
@@ -71,18 +72,18 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Zero Hour", "Zero Hour: Fourth Hatchery", SC2WOL_LOC_ID_OFFSET + 307, LocationType.CHALLENGE,
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Evacuation", "Evacuation: Victory", SC2WOL_LOC_ID_OFFSET + 400, LocationType.VICTORY,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player) and
+                     lambda state: state._sc2wol_has_early_tech(multiworld, player) and
                                    (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Evacuation", "Evacuation: North Chrysalis", SC2WOL_LOC_ID_OFFSET + 401, LocationType.BONUS),
         LocationData("Evacuation", "Evacuation: West Chrysalis", SC2WOL_LOC_ID_OFFSET + 402, LocationType.BONUS,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player)),
+                     lambda state: state._sc2wol_has_early_tech(multiworld, player)),
         LocationData("Evacuation", "Evacuation: East Chrysalis", SC2WOL_LOC_ID_OFFSET + 403, LocationType.BONUS,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player)),
+                     lambda state: state._sc2wol_has_early_tech(multiworld, player)),
         LocationData("Evacuation", "Evacuation: Reach Hanson", SC2WOL_LOC_ID_OFFSET + 404, LocationType.MISSION_PROGRESS),
         LocationData("Evacuation", "Evacuation: Secret Resource Stash", SC2WOL_LOC_ID_OFFSET + 405, LocationType.BONUS),
         LocationData("Evacuation", "Evacuation: Flawless", SC2WOL_LOC_ID_OFFSET + 406, LocationType.CHALLENGE,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player) and
+                     lambda state: state._sc2wol_has_early_tech(multiworld, player) and
                                    state._sc2wol_defense_rating(multiworld, player, True, False) >= 2 and
                                    (adv_tactics and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),

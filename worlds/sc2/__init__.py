@@ -7,11 +7,11 @@ from worlds.AutoWorld import WebWorld, World
 from . import ItemNames
 from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
-    kerrigan_only_passives, progressive_if_ext
+    kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units
 from .Locations import get_locations, LocationType
 from .Regions import create_regions
 from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
-    KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available
+    KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, EarlyUnit
 from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS, missions_in_mission_table, get_used_races
 from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
     SC2Race
@@ -229,7 +229,8 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
     starter_items: List[Item] = []
     non_local_items = multiworld.non_local_items[player].value
-    if get_option_value(multiworld, player, "early_unit"):
+    early_unit = get_option_value(multiworld, player, "early_unit")
+    if early_unit != EarlyUnit.option_off:
         first_mission = get_first_mission(multiworld.worlds[player].mission_req_table)
         first_race = lookup_name_to_mission[first_mission].race
 
@@ -247,10 +248,13 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
         if first_race != SC2Race.ANY:
             # The race of the early unit has been chosen
-            local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in non_local_items and item not in excluded_items)
+            basic_units = get_basic_units(multiworld, player, first_race)
+            if early_unit == EarlyUnit.option_balanced:
+                basic_units = basic_units.difference(not_balanced_starting_units)
+            local_basic_unit = sorted(item for item in basic_units if item not in non_local_items and item not in excluded_items)
             if not local_basic_unit:
                 # Drop non_local_items constraint
-                local_basic_unit = sorted(item for item in get_basic_units(multiworld, player, first_race) if item not in excluded_items)
+                local_basic_unit = sorted(item for item in basic_units if item not in excluded_items)
                 if not local_basic_unit:
                     raise Exception("Early Unit: At least one basic unit must be included")
 

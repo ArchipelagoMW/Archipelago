@@ -1366,6 +1366,11 @@ advanced_basic_units = {
         ItemNames.REAPER,
         ItemNames.DIAMONDBACK,
         ItemNames.VIKING,
+        ItemNames.SIEGE_TANK,
+        ItemNames.BANSHEE,
+        ItemNames.THOR,
+        ItemNames.BATTLECRUISER,
+        ItemNames.CYCLONE
     }),
     SC2Race.ZERG: basic_units[SC2Race.ZERG].union({
         ItemNames.INFESTOR,
@@ -1376,9 +1381,37 @@ advanced_basic_units = {
     })
 }
 
+no_logic_starting_units = {
+    SC2Race.TERRAN: advanced_basic_units[SC2Race.TERRAN].union({
+        ItemNames.FIREBAT,
+        ItemNames.GHOST,
+        ItemNames.SPECTRE,
+        ItemNames.WRAITH,
+        ItemNames.RAVEN,
+        ItemNames.PREDATOR,
+        ItemNames.LIBERATOR
+    }),
+    SC2Race.ZERG: advanced_basic_units[SC2Race.ZERG].union({
+        ItemNames.ULTRALISK,
+        ItemNames.SWARM_HOST
+    }),
+    SC2Race.PROTOSS: advanced_basic_units[SC2Race.PROTOSS]
+}
+
+not_balanced_starting_units = {
+    ItemNames.SIEGE_TANK,
+    ItemNames.THOR,
+    ItemNames.BANSHEE,
+    ItemNames.BATTLECRUISER,
+    ItemNames.ULTRALISK
+}
+
 
 def get_basic_units(multiworld: MultiWorld, player: int, race: SC2Race) -> typing.Set[str]:
-    if get_option_value(multiworld, player, 'required_tactics') != RequiredTactics.option_standard:
+    logic_level = get_option_value(multiworld, player, 'required_tactics')
+    if logic_level == RequiredTactics.option_no_logic:
+        return no_logic_starting_units[race]
+    elif logic_level == RequiredTactics.option_advanced:
         return advanced_basic_units[race]
     else:
         return basic_units[race]

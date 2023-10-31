@@ -17,7 +17,7 @@ from CommonClient import CommonContext
 from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
 from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, SC2Mission, MissionInfo
 from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
-from worlds.sc2.Options import LocationInclusion
+from worlds.sc2.Options import LocationInclusion, EarlyUnit
 from worlds.sc2 import SC2World, get_first_mission, get_early_unit_location_name
 
 
@@ -256,7 +256,7 @@ class SC2Manager(GameManager):
                 locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names[loc])
 
         early_unit = None
-        if self.ctx.early_unit and mission_name == self.first_mission:
+        if self.ctx.early_unit != EarlyUnit.option_off and mission_name == self.first_mission:
             early_unit = get_early_unit_location_name(mission_name)
             for loctype in LocationType:
                 if early_unit in locations[loctype]:
