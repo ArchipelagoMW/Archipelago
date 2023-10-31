@@ -37,6 +37,10 @@ character_decoding_map = {
 }
 
 character_encoding_map = {value: key for key, value in character_decoding_map.items()}
+character_encoding_map.update({
+    "'": character_encoding_map["’"],
+    "\"": character_encoding_map["”"]
+})
 
 valid_name_characters = {
     " ", "0", "1", "2", "3", "4", "5", "6", "7", "8",
