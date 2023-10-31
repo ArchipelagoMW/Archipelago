@@ -139,7 +139,7 @@ def generate_output(world: PokemonEmeraldWorld, output_directory: str) -> None:
             continue
 
         # Set local item values
-        if not world.remote_items and location.item.player == world.player:
+        if not world.options.remote_items and location.item.player == world.player:
             if type(location.item_address) is int:
                 _set_bytes_little_endian(
                     patched_rom,
