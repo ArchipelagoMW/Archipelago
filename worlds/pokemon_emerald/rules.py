@@ -47,16 +47,16 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
         return state.has("Mach Bike", world.player)
     
     def defeated_n_gym_leaders(state: CollectionState, n: int) -> bool:
-        num_gym_leaders_defeated = 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_ROXANNE", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_BRAWLY", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WATTSON", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_FLANNERY", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_NORMAN", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_WINONA", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_TATE_AND_LIZA", world.player) else 0
-        num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", world.player) else 0
-        return num_gym_leaders_defeated >= n
+        return sum([state.has(event, world.player) for event in [
+            "EVENT_DEFEAT_ROXANNE",
+            "EVENT_DEFEAT_BRAWLY",
+            "EVENT_DEFEAT_WATTSON",
+            "EVENT_DEFEAT_FLANNERY",
+            "EVENT_DEFEAT_NORMAN",
+            "EVENT_DEFEAT_WINONA",
+            "EVENT_DEFEAT_TATE_AND_LIZA",
+            "EVENT_DEFEAT_JUAN"
+        ]]) >= n
 
 
     def encountered_n_legendaries(state: CollectionState, n: int) -> bool:
@@ -863,7 +863,7 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
         can_cut
     )
     set_rule(
-        get_entrance("REGION_ROUTE121/EAST -> REGION_ROUTE121/WATER", world.player),
+        get_entrance("REGION_ROUTE121/EAST -> REGION_ROUTE121/WATER"),
         can_surf
     )
 
@@ -1604,33 +1604,6 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
         set_rule(
             get_location("NPC_GIFT_RECEIVED_MENTAL_HERB"),
             lambda state: state.has("EVENT_WINGULL_QUEST_2", world.player)
-        )
-
-        # Fallarbor Town
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_TM27"),
-            lambda state: state.has("EVENT_RECOVER_METEORITE", world.player) and state.has("Meteorite", world.player)
-        )
-
-        # Fortree City
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_MENTAL_HERB"),
-            lambda state: state.has("EVENT_WINGULL_QUEST_2", world.player)
-        )
-
-    # Ferry Items
-    if world.options.enable_ferry:
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_SS_TICKET"),
-            lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
-        )
-        set_rule(
-            get_entrance("REGION_SLATEPORT_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN"),
-            lambda state: state.has("S.S. Ticket", world.player)
-        )
-        set_rule(
-            get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN"),
-            lambda state: state.has("S.S. Ticket", world.player)
         )
 
     # Add Itemfinder requirement to hidden items

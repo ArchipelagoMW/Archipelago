@@ -9,16 +9,10 @@ from Options import Toggle
 import Utils
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
-from worlds.LauncherComponents import SuffixIdentifier, components
 
 from .data import BASE_OFFSET, data
 from .options import Goal, RemoteItems
 from .util import pokemon_data_to_json, json_to_pokemon_data
-
-if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext
-else:
-    BizHawkClientContext = object
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -115,6 +109,7 @@ CAUGHT_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_CAUGHT_{name}"]: name for nam
 class PokemonEmeraldClient(BizHawkClient):
     game = "Pokemon Emerald"
     system = "GBA"
+    patch_suffix = ".apemerald"
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]

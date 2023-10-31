@@ -1,7 +1,7 @@
 """
 Classes and functions related to AP locations for Pokemon Emerald
 """
-from typing import TYPE_CHECKING, Dict, Optional, FrozenSet, Iterable
+from typing import TYPE_CHECKING, Dict, List, Optional, FrozenSet, Iterable
 
 from BaseClasses import Location, Region
 
@@ -53,7 +53,7 @@ def reverse_offset_flag(location_id: int) -> int:
     return location_id - BASE_OFFSET
 
 
-def create_locations_with_tags(world: PokemonEmeraldWorld, tags: Iterable[str]) -> None:
+def create_locations_with_tags(world: PokemonEmeraldWorld, regions: Dict[str, Region], tags: Iterable[str]) -> None:
     """
     Iterates through region data and adds locations to the multiworld if
     those locations include any of the provided tags.
@@ -61,7 +61,7 @@ def create_locations_with_tags(world: PokemonEmeraldWorld, tags: Iterable[str]) 
     tags = set(tags)
 
     for region_name, region_data in data.regions.items():
-        region = world.multiworld.get_region(region_name, world.player)
+        region = regions[region_name]
         filtered_locations = [loc for loc in region_data.locations if len(tags & data.locations[loc].tags) > 0]
 
         for location_name in filtered_locations:
