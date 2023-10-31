@@ -513,7 +513,7 @@ class DarkSouls3World(World):
                         has_any_scroll)
                 set_rule(self.multiworld.get_location("FK: Cinders of a Lord - Abyss Watcher", self.player),
                         has_any_scroll)
-            set_rule(self.multiworld.get_entrance("Catacombs of Carthus", self.player),
+            set_rule(self.multiworld.get_entrance("Go To Catacombs of Carthus", self.player),
                      has_any_scroll)
 
         if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
