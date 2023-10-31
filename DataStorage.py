@@ -9,14 +9,12 @@ def remove_from_list(container, value):
         pass
     return container
 
-
 def pop_from_container(container, value):
     try:
         container.pop(value)
     except ValueError:
         pass
     return container
-
 
 def update_dict(dictionary, entries):
     dictionary.update(entries)
@@ -44,18 +42,31 @@ modify_functions = {
     "update": update_dict,
 }
 
+class InvalidArgumentsException(Exception):
+    pass
+
 class DataStorage:
     stored_data: Dict[str, object]
 
     def __init__(self, stored_data: Dict[str, object]):
         self.stored_data = stored_data
 
-    @static_method
-    def is_valid_set_cmd(set_cmd: Dict[str, object]) -> bool:
-        return "key" in set_cmd and type(set_cmd["key"]) == str and not set_cmd["key"].startswith("_read_") \
-            and "operations" in set_cmd and type(set_cmd["operations"]) == list
+    @staticmethod
+    def validate_set_cmd(set_cmd: Dict[str, object]) -> bool:
+        if "key" not in set_cmd:
+            raise InvalidArgumentsException("`Key` is not provided")
+        if type(set_cmd["key"]) != str:
+            raise InvalidArgumentsException("`Key` is not a string")
+        if set_cmd["key"].startswith("_read_"):
+            raise InvalidArgumentsException(f"cannot apply `Set` operation to the read only key `{set_cmd['key']}`")
+        if "operations" not in set_cmd:
+            raise InvalidArgumentsException("`operations` are not provided")
+        if type(set_cmd["operations"]) != List:
+            raise InvalidArgumentsException("`operations` is not a list")
 
     def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
+        self.validate_set_cmd(set_cmd)
+
         value = self.stored_data.get(set_cmd["key"], set_cmd.get("default", 0))
         on_error =  set_cmd.get("on_error", "raise")
 

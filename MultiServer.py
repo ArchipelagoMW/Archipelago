@@ -17,7 +17,7 @@ import time
 import typing
 import weakref
 import zlib
-from DataStorage import DataStorage
+from DataStorage import DataStorage, InvalidArgumentsException
 
 import ModuleUpdate
 
@@ -1738,19 +1738,20 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if not ctx.data_storage.is_valid_set_cmd(args):
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": 'Set', "original_cmd": cmd}])
-                return
-            
-            result: typing.Dict[str, object] = ctx.data_storage.set(args)
-            
-            targets = set(ctx.stored_data_notification_clients[args["key"]])
-            if args.get("want_reply", True):
-                targets.add(client)
-            if targets:
-                ctx.broadcast(targets, [result])
-            ctx.save()
+            try:
+                result: typing.Dict[str, object] = ctx.data_storage.set(args)
+            except InvalidArgumentsException as argument_exception:
+                await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
+                                              "text": str(argument_exception), "original_cmd": cmd}])
+            else:
+                targets = set(ctx.stored_data_notification_clients[args["key"]])
+
+                if args.get("want_reply", True):
+                    targets.add(client)
+                if targets:
+                    ctx.broadcast(targets, [result])
+
+                ctx.save()
 
         elif cmd == "SetNotify":
             if "keys" not in args or type(args["keys"]) != list:
