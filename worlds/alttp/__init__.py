@@ -15,7 +15,7 @@ from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import alttp_options, smallkey_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
-    is_main_entrance
+    is_main_entrance, key_drop_data
 from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
@@ -303,6 +303,8 @@ class ALTTPWorld(World):
                 world.local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option == "different_world":
                 world.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
+                if world.mode[player] == "standard":
+                    world.non_local_items[player].value -= {"Small Key (Hyrule Castle)"}
             elif option.in_dungeon:
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
@@ -468,7 +470,8 @@ class ALTTPWorld(World):
                 prizepool = unplaced_prizes.copy()
                 prize_locs = empty_crystal_locations.copy()
                 world.random.shuffle(prize_locs)
-                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
+                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True,
+                                 name="LttP Dungeon Prizes")
             except FillError as e:
                 lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
                                                 attempts - attempt)
@@ -478,11 +481,16 @@ class ALTTPWorld(World):
             break
         else:
             raise FillError('Unable to place dungeon prizes')
+        if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
+                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
+                world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
+            world.local_early_items[player]["Small Key (Hyrule Castle)"] = 1
 
     @classmethod
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
         fill_dungeons_restrictive(world)
+
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -578,27 +586,26 @@ class ALTTPWorld(World):
 
         for player in checks_in_area:
             checks_in_area[player]["Total"] = 0
-
-        for location in multiworld.get_locations():
-            if location.game == cls.game and type(location.address) is int:
-                main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
-                if location.parent_region.dungeon:
-                    dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                   'Inverted Ganons Tower': 'Ganons Tower'} \
-                        .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                    checks_in_area[location.player][dungeonname].append(location.address)
-                elif location.parent_region.type == LTTPRegionType.LightWorld:
-                    checks_in_area[location.player]["Light World"].append(location.address)
-                elif location.parent_region.type == LTTPRegionType.DarkWorld:
-                    checks_in_area[location.player]["Dark World"].append(location.address)
-                elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
-                    checks_in_area[location.player]["Light World"].append(location.address)
-                elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
-                    checks_in_area[location.player]["Dark World"].append(location.address)
-                else:
-                    assert False, "Unknown Location area."
-                # TODO: remove Total as it's duplicated data and breaks consistent typing
-                checks_in_area[location.player]["Total"] += 1
+            for location in multiworld.get_locations(player):
+                if location.game == cls.game and type(location.address) is int:
+                    main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
+                    if location.parent_region.dungeon:
+                        dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                       'Inverted Ganons Tower': 'Ganons Tower'} \
+                            .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                        checks_in_area[location.player][dungeonname].append(location.address)
+                    elif location.parent_region.type == LTTPRegionType.LightWorld:
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif location.parent_region.type == LTTPRegionType.DarkWorld:
+                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
+                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    else:
+                        assert False, "Unknown Location area."
+                    # TODO: remove Total as it's duplicated data and breaks consistent typing
+                    checks_in_area[location.player]["Total"] += 1
 
         multidata["checks_in_area"].update(checks_in_area)
 
@@ -618,7 +625,6 @@ class ALTTPWorld(World):
     @classmethod
     def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
-
         for player in world.get_game_players("A Link to the Past"):
             if not world.ganonstower_vanilla[player] or \
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
@@ -781,6 +787,32 @@ class ALTTPWorld(World):
                     if item.name in self.dungeon_local_item_names:
                         res.append(item)
         return res
+
+    def fill_slot_data(self):
+        slot_data = {}
+        if not self.multiworld.is_race:
+            # all of these option are NOT used by the SNI- or Text-Client.
+            # they are used by the alttp-poptracker pack (https://github.com/StripesOO7/alttp-ap-poptracker-pack)
+            # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
+
+            slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
+                            "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
+                            "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
+                            "boss_shuffle", "pot_shuffle", "enemy_shuffle", "key_drop_shuffle"]
+
+            slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
+
+            slot_data.update({
+                'mode': self.multiworld.mode[self.player],
+                'goal': self.multiworld.goal[self.player],
+                'dark_room_logic': self.multiworld.dark_room_logic[self.player],
+                'mm_medalion': self.multiworld.required_medallions[self.player][0],
+                'tr_medalion': self.multiworld.required_medallions[self.player][1],
+                'shop_shuffle': self.multiworld.shop_shuffle[self.player],
+                'entrance_shuffle': self.multiworld.shuffle[self.player],
+                }
+            )
+        return slot_data
 
 
 def get_same_seed(world, seed_def: tuple) -> str:

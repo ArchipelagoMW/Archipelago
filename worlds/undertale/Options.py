@@ -12,6 +12,17 @@ class RouteRequired(Choice):
     default = 0
 
 
+class StartingArea(Choice):
+    """Which area to start with access to."""
+    display_name = "Starting Area"
+    option_ruins = 0
+    option_snowdin = 1
+    option_waterfall = 2
+    option_hotland = 3
+    option_core = 4
+    default = 0
+
+
 class IncludeTemy(Toggle):
     """Adds Temmy Armor to the item pool."""
     display_name = "Include Temy Armor"
@@ -57,13 +68,13 @@ class NoEquips(Toggle):
 
 
 class RandomizeLove(Toggle):
-    """Adds LOVE to the pool. GENOCIDE ONLY!"""
+    """Adds LOVE to the pool. Only matters if your goal includes Genocide route"""
     display_name = "Randomize LOVE"
     default = 0
 
 
 class RandomizeStats(Toggle):
-    """Makes each stat increase from LV a separate item. GENOCIDE ONLY!
+    """Makes each stat increase from LV a separate item. Only matters if your goal includes Genocide route
     Warning: This tends to spam chat with sending out checks."""
     display_name = "Randomize Stats"
     default = 0
@@ -77,6 +88,7 @@ class RandoBattleOptions(Toggle):
 
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
+    "starting_area":                            StartingArea,
     "key_hunt":                                 KeyHunt,
     "key_pieces":                               KeyPieces,
     "rando_love":                               RandomizeLove,

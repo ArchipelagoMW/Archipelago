@@ -665,7 +665,7 @@ class HKLogicMixin(LogicMixin):
         return self.multiworld.StartLocation[player] == start_location
 
     def _hk_nail_combat(self, player: int) -> bool:
-        return self.has_any({'LFFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
+        return self.has_any({'LEFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
 
     def _hk_can_beat_thk(self, player: int) -> bool:
         return (

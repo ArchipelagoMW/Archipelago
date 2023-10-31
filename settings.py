@@ -21,6 +21,7 @@ __all__ = [
 ]
 
 no_gui = False
+skip_autosave = False
 _world_settings_name_cache: Dict[str, str] = {}  # TODO: cache on disk and update when worlds change
 _world_settings_name_cache_updated = False
 _lock = Lock()
@@ -117,7 +118,7 @@ class Group:
                 cls._type_cache = typing.get_type_hints(cls, globalns=mod_dict, localns=cls.__dict__)
         return cls._type_cache
 
-    def get(self, key: str, default: Any) -> Any:
+    def get(self, key: str, default: Any = None) -> Any:
         if key in self:
             return self[key]
         return default
@@ -693,6 +694,25 @@ does nothing if not found
     snes_rom_start: Union[SnesRomStart, bool] = True
 
 
+class BizHawkClientOptions(Group):
+    class EmuHawkPath(UserFilePath):
+        """
+        The location of the EmuHawk you want to auto launch patched ROMs with
+        """
+        is_exe = True
+        description = "EmuHawk Executable"
+
+    class RomStart(str):
+        """
+        Set this to true to autostart a patched ROM in BizHawk with the connector script,
+        to false to never open the patched rom automatically,
+        or to a path to an external program to open the ROM file with that instead.
+        """
+
+    emuhawk_path: EmuHawkPath = EmuHawkPath(None)
+    rom_start: Union[RomStart, bool] = True
+
+
 # Top-level group with lazy loading of worlds
 
 class Settings(Group):
@@ -700,6 +720,7 @@ class Settings(Group):
     server_options: ServerOptions = ServerOptions()
     generator: GeneratorOptions = GeneratorOptions()
     sni_options: SNIOptions = SNIOptions()
+    bizhawkclient_options: BizHawkClientOptions = BizHawkClientOptions()
 
     _filename: Optional[str] = None
 
@@ -767,11 +788,17 @@ class Settings(Group):
             self._filename = location
 
         def autosave() -> None:
-            if self._filename and self.changed:
+            if __debug__:
+                import __main__
+                main_file = getattr(__main__, "__file__", "")
+                assert "pytest" not in main_file and "unittest" not in main_file, \
+                       f"Auto-saving {self._filename} during unittests"
+            if self._filename and self.changed and not skip_autosave:
                 self.save()
 
-        import atexit
-        atexit.register(autosave)
+        if not skip_autosave:
+            import atexit
+            atexit.register(autosave)
 
     def save(self, location: Optional[str] = None) -> None:  # as above
         location = location or self._filename

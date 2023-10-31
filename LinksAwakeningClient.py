@@ -347,12 +347,13 @@ class LinksAwakeningClient():
                             f"Core type should be '{GAME_BOY}', found {core_type} instead - wrong type of ROM?")
                         await asyncio.sleep(1.0)
                         continue
+                self.stop_bizhawk_spam = False
                 logger.info(f"Connected to Retroarch {version.decode('ascii')} running {rom_name.decode('ascii')}")
                 return
             except (BlockingIOError, TimeoutError, ConnectionResetError):
                 await asyncio.sleep(1.0)
                 pass
-        self.stop_bizhawk_spam = False
+
     async def reset_auth(self):
         auth = binascii.hexlify(await self.gameboy.async_read_memory(0x0134, 12)).decode()
         self.auth = auth

@@ -7,7 +7,7 @@ config file.
 
 ## What does randomization do to this game?
 
-A vast number of optional objectives in stardew valley can be shuffled around the multiworld. Most of these are optional, and the player can customize their experience in their YAML file.
+A vast number of objectives in Stardew Valley can be shuffled around the multiworld. Most of these are optional, and the player can customize their experience in their YAML file.
 
 For these objectives, if they have a vanilla reward, this reward will instead be an item in the multiworld. For the remaining number of such objectives, there are a number of "Resource Pack" items, which are simply an item or a stack of items that may be useful to the player.
 
@@ -24,28 +24,28 @@ The player can choose from a number of goals, using their YAML settings.
 - Get recognized as the [Greatest Walnut Hunter](https://stardewvalleywiki.com/Golden_Walnut) by Mr Qi, which requires finding all 130 golden walnuts on ginger island
 - Achieve [Perfection](https://stardewvalleywiki.com/Perfection) in your save file
 
-## What are location check in Stardew Valley?
+## What are location checks in Stardew Valley?
 
 Location checks in Stardew Valley always include:
 - [Community Center Bundles](https://stardewvalleywiki.com/Bundles)
-- [Mineshaft chest rewards](https://stardewvalleywiki.com/The_Mines#Remixed_Rewards)
+- [Mineshaft Chest Rewards](https://stardewvalleywiki.com/The_Mines#Remixed_Rewards)
 - [Story Quests](https://stardewvalleywiki.com/Quests#List_of_Story_Quests)
-- [Traveling Merchant items](https://stardewvalleywiki.com/Traveling_Cart)
+- [Traveling Merchant Items](https://stardewvalleywiki.com/Traveling_Cart)
 - Isolated objectives such as the [beach bridge](https://stardewvalleywiki.com/The_Beach#Tide_Pools), [Old Master Cannoli](https://stardewvalleywiki.com/Secret_Woods#Old_Master_Cannoli), [Grim Reaper Statue](https://stardewvalleywiki.com/Golden_Scythe), etc
 
 There also are a number of location checks that are optional, and individual players choose to include them or not in their shuffling:
 - Tools and Fishing Rod Upgrades
 - Carpenter Buildings
 - Backpack Upgrades
-- Mine elevator levels
+- Mine Elevator Levels
 - Skill Levels
 - Arcade Machines
-- Help Wanted quests
+- Help Wanted Quests
 - Participating in Festivals
 - Special Orders from the town board, or from Mr Qi
-- Cropsanity: Growing and harvesting individual crop types
+- Cropsanity: Growing and Harvesting individual crop types
 - Fishsanity: Catching individual fish
-- Museumsanity: Donating individual items to the museum, or reaching the museum milestones for donations
+- Museumsanity: Donating individual items, or reaching milestones for museum donations
 - Friendsanity: Reaching specific friendship levels with NPCs
 
 ## Which items can be in another player's world?
@@ -93,8 +93,15 @@ Starting in version 4.x.x, some Stardew Valley mods unrelated to Archipelago are
 This means that, for these specific mods, if you decide to include them in your yaml settings, the multiworld will be generated with the assumption that you will install and play with these mods.
 The multiworld will contain related items and locations for these mods, the specifics will vary from mod to mod
 
+[Supported Mods Documentation](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md)
+
 List of supported mods:
 
+- General
+  - [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571)
+  - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401)
+  - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845)
+  - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963)
 - Skills
   - [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521)
   - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007)
@@ -114,11 +121,6 @@ List of supported mods:
   - [Shiko - New Custom NPC](https://www.nexusmods.com/stardewvalley/mods/3732)
   - [Delores - Custom NPC](https://www.nexusmods.com/stardewvalley/mods/5510)
   - [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811)
-- Other
-  - [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571)
-  - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401)
-  - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845)
-  - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963)
 
 ## Multiplayer
 
