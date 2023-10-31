@@ -233,7 +233,7 @@ async def guarded_read(ctx: BizHawkContext, read_list: typing.List[typing.Tuple[
                 return None
         else:
             if item["type"] != "READ_RESPONSE":
-                raise SyncError(f"Expected response of type READ_RESPONSE or GUARD_RESPONSE but got {res['type']}")
+                raise SyncError(f"Expected response of type READ_RESPONSE or GUARD_RESPONSE but got {item['type']}")
 
             ret.append(base64.b64decode(item["value"]))
 
@@ -285,7 +285,7 @@ async def guarded_write(ctx: BizHawkContext, write_list: typing.List[typing.Tupl
                 return False
         else:
             if item["type"] != "WRITE_RESPONSE":
-                raise SyncError(f"Expected response of type WRITE_RESPONSE or GUARD_RESPONSE but got {res['type']}")
+                raise SyncError(f"Expected response of type WRITE_RESPONSE or GUARD_RESPONSE but got {item['type']}")
 
     return True
 
