@@ -1,6 +1,6 @@
 from typing import Dict
+from DataStorage import DataStorage, InvalidArgumentsException
 import unittest
-from DataStorage import DataStorage
 
 class TestDataStorage(unittest.TestCase):
     storage: DataStorage
@@ -15,6 +15,60 @@ class TestDataStorage(unittest.TestCase):
         self.assertEqual(result["key"], key)
         self.assertEqual(result["value"], value)
         self.assertEqual(result["original_value"], original_value)
+
+    def test_raises_on_missing_key(self):
+        self.setup_storage({})
+
+        set_cmd: Dict[str, object] = { 
+            "operations": [{"operation": "add", "value": 12}] 
+        }
+
+        with self.assertRaisesRegex(InvalidArgumentsException, "`Key` is not provided"):
+            self.storage.set(set_cmd)
+
+    def test_raises_on_key_invalid_type(self):
+        self.setup_storage({})
+
+        set_cmd: Dict[str, object] = { 
+            "key": 10,
+            "operations": [{"operation": "add", "value": 12}] 
+        }
+
+        with self.assertRaisesRegex(InvalidArgumentsException, "`Key` is not a string"):
+            self.storage.set(set_cmd)
+
+    def test_raises_on_set_on_read_only_key(self):
+        self.setup_storage({})
+
+        set_cmd: Dict[str, object] = { 
+            "key": "_read_ReadOnlyKey",
+            "operations": [{"operation": "add", "value": 12}] 
+        }
+
+        with self.assertRaisesRegex(InvalidArgumentsException, 
+                                    "cannot apply `Set` operation to the read only key `_read_ReadOnlyKey`"):
+            self.storage.set(set_cmd)
+
+    def test_raises_on_missing_operations(self):
+        self.setup_storage({})
+
+        set_cmd: Dict[str, object] = { 
+            "key": "OperationsMissing"
+        }
+
+        with self.assertRaisesRegex(InvalidArgumentsException, "`operations` are not provided"):
+            self.storage.set(set_cmd)
+
+    def test_raises_on_operations_invalid_type(self):
+        self.setup_storage({})
+
+        set_cmd: Dict[str, object] = { 
+            "key": "OperationsNotAList",
+            "operations": {"operation": "add", "value": 12}
+        }
+
+        with self.assertRaisesRegex(InvalidArgumentsException, "`operations` is not a list"):
+            self.storage.set(set_cmd)
 
     def test_adding_number(self):
         self.setup_storage({ "BasicAdd": 10 })

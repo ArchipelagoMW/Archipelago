@@ -61,7 +61,7 @@ class DataStorage:
             raise InvalidArgumentsException(f"cannot apply `Set` operation to the read only key `{set_cmd['key']}`")
         if "operations" not in set_cmd:
             raise InvalidArgumentsException("`operations` are not provided")
-        if type(set_cmd["operations"]) != List:
+        if not isinstance(set_cmd["operations"], List):
             raise InvalidArgumentsException("`operations` is not a list")
 
     def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
