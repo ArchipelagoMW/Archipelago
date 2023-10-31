@@ -203,7 +203,7 @@ def throwIfAnyLocationIsNotAssignedToARegion(regions: Dict[str, Region], regionN
 def create_location(player: int, location_data: LocationData, region: Region) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
 
-    if (location_data.rule):
+    if location_data.rule:
         location.access_rule = location_data.rule
 
     if id is None:
