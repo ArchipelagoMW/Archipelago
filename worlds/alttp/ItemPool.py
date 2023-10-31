@@ -343,25 +343,31 @@ def generate_itempool(world):
                     if not found_sword:
                         found_sword = True
                         possible_weapons.append(item)
-                if item in ['Progressive Bow', 'Bow'] and not found_bow:
+                elif item in ['Progressive Bow', 'Bow'] and not found_bow:
                     found_bow = True
                     possible_weapons.append(item)
-                if item in ['Hammer', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
+                elif item in ['Hammer', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
                     if item not in possible_weapons:
                         possible_weapons.append(item)
-                if (item.name == 'Bombs (10)' and (not multiworld.bombless_start[player]) and item not in
+                elif (item == 'Bombs (10)' and (not multiworld.bombless_start[player]) and item not in
                         possible_weapons):
                     possible_weapons.append(item)
-                if (item.name == 'Bomb Upgrade (+10)' and multiworld.bombless_start[player] and item not in
-                        possible_weapons):
+                elif (item in ['Bomb Upgrade (+10)', 'Bomb Upgrade (50)'] and multiworld.bombless_start[player] and item
+                        not in possible_weapons):
                     possible_weapons.append(item)
 
             starting_weapon = multiworld.random.choice(possible_weapons)
             placed_items["Link's Uncle"] = starting_weapon
             pool.remove(starting_weapon)
-        if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Bomb Upgrade (+10)',
-                'Cane of Somaria', 'Cane of Byrna'] and multiworld.enemy_health[player] not in ['default', 'easy']:
-            multiworld.escape_assist[player].append('bombs')
+        if (placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Bomb Upgrade (+10)',
+                                            'Bomb Upgrade (50)', 'Cane of Somaria', 'Cane of Byrna'] and multiworld.enemy_health[player] not in ['default', 'easy']):
+            if multiworld.bombless_start[player] and "Bomb Upgrade" not in placed_items["Link's Uncle"]:
+                if 'Bow' in placed_items["Link's Uncle"]:
+                    multiworld.escape_assist[player].append('arrows')
+                elif 'Cane' in placed_items["Link's Uncle"]:
+                    multiworld.escape_assist[player].append('magic')
+            else:
+                multiworld.escape_assist[player].append('bombs')
 
     for (location, item) in placed_items.items():
         multiworld.get_location(location, player).place_locked_item(ItemFactory(item, player))
@@ -442,19 +448,20 @@ def generate_itempool(world):
         for i in range(4):
             next(adv_heart_pieces).classification = ItemClassification.progression
 
-    if multiworld.shuffle_capacity_upgrades[player]:
+    if multiworld.shuffle_capacity_upgrades[player] or multiworld.bombless_start[player]:
         progressive = multiworld.progressive[player]
         progressive = multiworld.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
         progressive &= multiworld.goal == 'ice_rod_hunt'
+        new_items = []
         if multiworld.shuffle_capacity_upgrades[player] == "on_combined":
-            new_items = ["Bomb Upgrade (50)"]
-        else:
-            new_items = ["Bomb Upgrade (+5)"] * 6
+            new_items.append("Bomb Upgrade (50)")
+        elif multiworld.shuffle_capacity_upgrades[player] == "on":
+            new_items += ["Bomb Upgrade (+5)"] * 6
             new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
-            if multiworld.bombless_start[player]:
-                new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+        if multiworld.bombless_start[player]:
+            new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
 
-        if not multiworld.retro_bow[player]:
+        if multiworld.shuffle_capacity_upgrades[player] and not multiworld.retro_bow[player]:
             if multiworld.shuffle_capacity_upgrades[player] == "on_combined":
                 new_items += ["Arrow Upgrade (70)"]
             else:
@@ -462,8 +469,6 @@ def generate_itempool(world):
                 new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
 
         multiworld.random.shuffle(new_items)  # Decide what gets tossed randomly if it can't insert everything.
-
-
 
         if multiworld.goal[player] != 'ice_rod_hunt':
             for i, item in enumerate(items):
@@ -476,12 +481,18 @@ def generate_itempool(world):
                     f"Not all upgrades put into Player{player}' item pool. Putting remaining items in Capacity Upgrade shop instead.")
                 bombupgrades = sum(1 for item in new_items if 'Bomb Upgrade' in item)
                 arrowupgrades = sum(1 for item in new_items if 'Arrow Upgrade' in item)
-                slots = iter(range(2))
-                breakpoint()
-                # if bombupgrades:
-                #     capacityshop.add_inventory(next(slots), 'Bomb Upgrade (+5)', 100, bombupgrades)
-                # if arrowupgrades:
-                #     capacityshop.add_inventory(next(slots), 'Arrow Upgrade (+5)', 100, arrowupgrades)
+                # slots = iter(range(2))
+                # from .Shops import ShopType
+                # for shop in world.shops:
+                #     if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
+                #             shop.region.name == "Capacity Upgrade":
+                #         # shop.clear_inventory()
+                #         capacityshop = shop
+                #         if bombupgrades:
+                #             capacityshop.add_inventory(next(slots), 'Bomb Upgrade (+5)', 100, bombupgrades)
+                #         if arrowupgrades:
+                #             capacityshop.add_inventory(next(slots), 'Arrow Upgrade (+5)', 100, arrowupgrades)
+                #         break
         else:
             for item in new_items:
                 multiworld.push_precollected(ItemFactory(item, player))

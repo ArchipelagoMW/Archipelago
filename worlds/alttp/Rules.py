@@ -45,8 +45,8 @@ def set_rules(world):
     else:
         world.completion_condition[player] = lambda state: state.has('Triforce', player)
 
-    global_rules(world, player)
     dungeon_boss_rules(world, player)
+    global_rules(world, player)
 
     if world.mode[player] != 'inverted':
         default_rules(world, player)
@@ -314,11 +314,11 @@ def global_rules(world, player):
     # not bothering to check for can_kill_most_things in the rooms leading to boss, as if you can kill a boss you should
     # be able to get through these rooms
     ep_boss = world.get_location('Eastern Palace - Boss', player)
-    set_rule(ep_boss, lambda state: state.has('Big Key (Eastern Palace)', player) and
+    add_rule(ep_boss, lambda state: state.has('Big Key (Eastern Palace)', player) and
                                     state._lttp_has_key('Small Key (Eastern Palace)', player, 2) and
                                     ep_boss.parent_region.dungeon.boss.can_defeat(state))
     ep_prize = world.get_location('Eastern Palace - Prize', player)
-    set_rule(ep_prize, lambda state: state.has('Big Key (Eastern Palace)', player) and
+    add_rule(ep_prize, lambda state: state.has('Big Key (Eastern Palace)', player) and
                                      state._lttp_has_key('Small Key (Eastern Palace)', player, 2) and
                                      ep_prize.parent_region.dungeon.boss.can_defeat(state))
     if not world.enemy_shuffle[player]:
@@ -332,8 +332,8 @@ def global_rules(world, player):
     set_rule(world.get_location('Desert Palace - Big Key Chest', player), lambda state: can_kill_most_things(state, player, 3))
     set_rule(world.get_location('Desert Palace - Beamos Hall Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2) and can_kill_most_things(state, player, 4))
     set_rule(world.get_location('Desert Palace - Desert Tiles 2 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 3) and can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Desert Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
-    set_rule(world.get_location('Desert Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
+    add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
+    add_rule(world.get_location('Desert Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
 
     # logic patch to prevent placing a crystal in Desert that's required to reach the required keys
     if not (world.smallkey_shuffle[player] and world.bigkey_shuffle[player]):
@@ -371,8 +371,8 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
     if not world.smallkey_shuffle[player] and world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
         forbid_item(world.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
-    set_rule(world.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
-    set_rule(world.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(world.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(world.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     if world.pot_shuffle[player]:
         # key can (and probably will) be moved behind bombable wall
         set_rule(world.get_location('Swamp Palace - Waterway Pot Key', player), lambda state: can_use_bombs(state, player))

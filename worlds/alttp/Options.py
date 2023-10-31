@@ -715,6 +715,7 @@ class AllowCollect(Toggle):
 alttp_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
     "triforce_pieces_mode": TriforcePiecesMode,
+    "triforce_pieces_percentage": TriforcePiecesPercentage,
     "triforce_pieces_required": TriforcePiecesRequired,
     "triforce_pieces_available": TriforcePiecesAvailable,
     "triforce_pieces_extra": TriforcePiecesExtra,

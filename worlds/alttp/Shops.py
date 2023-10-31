@@ -227,13 +227,13 @@ def ShopSlotFill(multiworld):
                     hearts = allowed_prices_by_sphere[player][sphere_num-1][ShopPriceType.Hearts]
                 else:
                     bombs = 0 if multiworld.bombless_start[player] else 10
-                    if ((not multiworld.shuffle_capacity_upgrades[player]) and ("Capacity Upgrade Shop", player) in
-                            items_in_sphere):
-                        bombs += 40
                     hearts = 2
                 bombs += (items_in_sphere.count(("Bomb Upgrade (+5)", player)) * 5)
                 bombs += (items_in_sphere.count(("Bomb Upgrade (+10)", player)) * 10)
                 bombs = 50 if ("Bomb Upgrade (+50)", player) in items_in_sphere else bombs
+                if ((not multiworld.shuffle_capacity_upgrades[player]) and ("Capacity Upgrade Shop", player) in
+                        items_in_sphere):
+                    bombs += 40
 
                 hearts += (((items_in_sphere.count(("Boss Heart Container", player))
                            + items_in_sphere.count(("Sanctuary Heart Container", player))) * 8)
@@ -260,7 +260,7 @@ def ShopSlotFill(multiworld):
 
             multiworld.random.shuffle(current_candidates)
 
-        del locations_per_sphere
+        # del locations_per_sphere
 
         for i, current_shop_slots in enumerate(shops_per_sphere):
             if current_shop_slots:
@@ -361,7 +361,7 @@ def create_shops(multiworld, player: int):
         multiworld.shops.append(shop)
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
-            if not locked and num_slots:
+            if not locked and (num_slots or type == ShopType.UpgradeShop):
                 slot_name = f"{region.name}{shop.slot_names[index]}"
                 loc = ALttPLocation(player, slot_name, address=shop_table_by_location[slot_name],
                                     parent=region, hint_text="for sale")
@@ -421,9 +421,10 @@ total_dynamic_shop_slots = sum(3 for shopname, data in shop_table.items() if not
 
 SHOP_ID_START = 0x400000
 shop_table_by_location_id = dict(enumerate(
-    (f"{name}{Shop.slot_names[num]}" for name, shop_data in
-     sorted(shop_table.items(), key=lambda item: item[1].sram_offset)
-     for num in range(3)), start=SHOP_ID_START))
+    (f"{name}{UpgradeShop.slot_names[num]}" if shop_data.type == ShopType.UpgradeShop else
+     f"{name}{Shop.slot_names[num]}" for name, shop_data in sorted(shop_table.items(),
+                                                                   key=lambda item: item[1].sram_offset)
+     for num in range(2 if shop_data.type == ShopType.UpgradeShop else 3)), start=SHOP_ID_START))
 
 shop_table_by_location_id[(SHOP_ID_START + total_shop_slots)] = "Old Man Sword Cave"
 shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 1)] = "Take-Any #1"
@@ -558,7 +559,8 @@ price_type_display_name = {
     ShopPriceType.Bombs: "Bombs",
     ShopPriceType.Arrows: "Arrows",
     ShopPriceType.Keys: "Keys",
-    ShopPriceType.Item: "Item"
+    ShopPriceType.Item: "Item",
+    ShopPriceType.Magic: "Magic"
 }
 
 # price division
@@ -588,6 +590,7 @@ def price_to_funny_price(world, item: dict, player: int, allowed_prices=None):
             ShopPriceType.Rupees,  # included as a chance to not change price type
             ShopPriceType.Hearts,
             ShopPriceType.Bombs,
+            ShopPriceType.Magic,
         ]
         for price_type in price_types:
             if price_type in allowed_prices and allowed_prices[price_type] < 1:
@@ -606,9 +609,11 @@ def price_to_funny_price(world, item: dict, player: int, allowed_prices=None):
             if any(x in item['item'] for x in price_blacklist[p_type]):
                 continue
             else:
-                item['price'] = min(price_chart[p_type](item['price']), 255)
                 if p_type in allowed_prices:
                     price_cap = allowed_prices[p_type]
+                    if price_cap == 0:
+                        continue
+                    item['price'] = min(price_chart[p_type](item['price']), 255)
                     if p_type in price_rate_display:
                         price_cap = price_cap // price_rate_display[p_type] * price_rate_display[p_type]
                     item['price'] = min(item['price'], int(price_cap))
