@@ -1,5 +1,4 @@
 from ..generic.Rules import set_rule, add_rule
-from BaseClasses import MultiWorld
 from ..AutoWorld import World
 from .GeneratedRules import set_generated_rules
 from typing import NamedTuple
@@ -39,14 +38,12 @@ def hk_set_rule(hk_world: World, location: str, rule):
 
 def set_rules(hk_world: World):
     player = hk_world.player
-    world = hk_world.multiworld
     set_generated_rules(hk_world, hk_set_rule)
 
     # Shop costs
-    for region in world.get_regions(player):
-        for location in region.locations:
-            if location.costs:
-                for term, amount in location.costs.items():
-                    if term == "GEO":  # No geo logic!
-                        continue
-                    add_rule(location, lambda state, term=term, amount=amount: state.count(term, player) >= amount)
+    for location in hk_world.multiworld.get_locations(player):
+        if location.costs:
+            for term, amount in location.costs.items():
+                if term == "GEO":  # No geo logic!
+                    continue
+                add_rule(location, lambda state, term=term, amount=amount: state.count(term, player) >= amount)
