@@ -112,15 +112,12 @@ class SMWorld(World):
     required_client_version = (0, 2, 6)
 
     itemManager: ItemManager
-    spheres = None
 
     Logic.factory('vanilla')
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
-        if SMWorld.spheres != None:
-            SMWorld.spheres = None
         super().__init__(world, player)
 
     @classmethod
@@ -368,7 +365,7 @@ class SMWorld(World):
                                     locationsDict[first_local_collected_loc.name]),
                         itemLoc.item.player,
                         True)
-                        for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player and (not progression_only or itemLoc.item.advancement)
+                        for itemLoc in spheres if itemLoc.item.player == self.player and (not progression_only or itemLoc.item.advancement)
                     ]
         
         # Having a sorted itemLocs from collection order is required for escapeTrigger when Tourian is Disabled.
@@ -376,8 +373,10 @@ class SMWorld(World):
         # get_spheres could be cached in multiworld?
         # Another possible solution would be to have a globally accessible list of items in the order in which the get placed in push_item
         # and use the inversed starting from the first progression item.
-        if (SMWorld.spheres == None):
-            SMWorld.spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sorted(sphere, key=lambda location: location.name)]
+        spheres: List[Location] = getattr(self.multiworld, "_sm_spheres", None)
+        if spheres is None:
+            spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sorted(sphere, key=lambda location: location.name)]
+            setattr(self.multiworld, "_sm_spheres", spheres)
 
         self.itemLocs = [
             ItemLocation(copy.copy(ItemManager.Items[itemLoc.item.type
