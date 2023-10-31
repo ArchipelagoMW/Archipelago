@@ -271,13 +271,10 @@ def generate_output(world: PokemonEmeraldWorld, output_directory: str) -> None:
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
 
     # Write Output
-    outfile_player_name = f"_P{world.player}"
-    outfile_player_name += f"_{world.multiworld.get_file_safe_player_name(world.player).replace(' ', '_')}" \
-        if world.multiworld.player_name[world.player] != f"Player{world.player}" else ""
-
-    output_path = os.path.join(output_directory, f"AP_{world.multiworld.seed_name}{outfile_player_name}.gba")
-    with open(output_path, "wb") as outfile:
-        outfile.write(patched_rom)
+    out_file_name = world.multiworld.get_out_file_name_base(world.player)
+    output_path = os.path.join(output_directory, f"{out_file_name}.gba")
+    with open(output_path, "wb") as out_file:
+        out_file.write(patched_rom)
     patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=world.player,
                                      player_name=world.multiworld.player_name[world.player], patched_path=output_path)
 
