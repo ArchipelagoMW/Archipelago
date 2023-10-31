@@ -1111,8 +1111,8 @@ _vanilla_items = flatten([
     DS3ItemData("Coiled Sword",                        0x40000859, DS3ItemCategory.SKIP), # Useless
     DS3ItemData("Eyes of a Fire Keeper",               0x4000085A, DS3ItemCategory.KEY,
                 classification = ItemClassification.useful), # Allow players to do any ending
-    DS3ItemData("Sword of Avowal",                     0x4000085B, DS3ItemCategory.KEY),
-                classification = ItemClassification.useful,
+    DS3ItemData("Sword of Avowal",                     0x4000085B, DS3ItemCategory.KEY,
+                classification = ItemClassification.useful),
     DS3ItemData("Golden Scroll",                       0x4000085C, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression),
     DS3ItemData("Estus Shard",                         0x4000085D, DS3ItemCategory.MISC,
