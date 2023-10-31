@@ -43,7 +43,7 @@ const resetSettings = () => {
 };
 
 const fetchSettingData = () => new Promise((resolve, reject) => {
-  fetch(new Request(`${window.location.origin}/static/generated/weighted-settings.json`)).then((response) => {
+  fetch(new Request(`${window.location.origin}/static/generated/weighted-options.json`)).then((response) => {
     try{ response.json().then((jsonObj) => resolve(jsonObj)); }
     catch(error){ reject(error); }
   });
@@ -256,7 +256,7 @@ class WeightedSettings {
 
         // Remove empty arrays
         else if (
-          ['exclude_locations', 'priority_locations', 'local_items', 
+          ['exclude_locations', 'priority_locations', 'local_items',
           'non_local_items', 'start_hints', 'start_location_hints'].includes(setting) &&
           settings[game][setting].length === 0
         ) {
