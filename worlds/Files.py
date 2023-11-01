@@ -285,7 +285,7 @@ class APTokenMixin:
 class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     """Class that defines patch extension functions for a given game.
     Patch extension functions must have the following two arguments:
-    caller: APPatchExtension (used to retrieve files from the patch container)
+    caller: APProcedurePatch (used to retrieve files from the patch container)
     rom: bytes (the data to patch)
     Patch extension functions must return the changed bytes.
     """
