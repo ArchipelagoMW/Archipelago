@@ -7,6 +7,16 @@ class DeathLink(Toggle):
     display_name = "DeathLink"
 
 
+class Act1DeathLinkBehaviour(Choice):
+    """If DeathLink is enabled, determines what counts as a death in act 1. This affects deaths sent and received.
+    Sacrificed: Send a death when sacrificed by Leshy. Receiving a death will extinguish all candles.
+    Candle Extinguished: Send a death when a candle is extinguished. Receiving a death will extinguish a candle."""
+    auto_display_name = True
+    display_name = "Act 1 DeathLink Behaviour"
+    option_sacrificed = 0
+    option_candle_extinguished = 1
+
+
 class Trap(Toggle):
     """Put some traps in the item pool"""
     display_name = "Trap"
@@ -71,13 +81,27 @@ class SkipTutorial(Toggle):
     default = 1
 
 
+class EpitaphPiecesRandomization(Choice):
+    """Determines how epitaph pieces in act 2 are randomized. This can affect your chances of getting stuck.
+    All Pieces: Randomizes all nine pieces as their own item.
+    In Groups: Randomizes pieces in groups of three.
+    As One Item: Group all nine pieces as a single item."""
+    auto_display_name = True
+    display_name = "Epitaph Pieces Randomization"
+    option_all_pieces = 0
+    option_in_groups = 1
+    option_as_one_item = 2
+
+
 inscryption_options: typing.Dict[str, type(Option)] = {
     "deathlink": DeathLink,
+    "act1_deathlink_behaviour": Act1DeathLinkBehaviour,
     "trap": Trap,
     "goal": Goal,
     "randomize_codes": RandomizeCodes,
     "randomize_deck": RandomizeDeck,
     "randomize_abilities": RandomizeAbilities,
     "optional_death_card": OptionalDeathCard,
-    "skip_tutorial": SkipTutorial
+    "skip_tutorial": SkipTutorial,
+    "epitaph_pieces_randomization": EpitaphPiecesRandomization
 }

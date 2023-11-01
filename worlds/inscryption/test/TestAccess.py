@@ -123,9 +123,7 @@ class AccessTestOrdered(InscryptionTestBase):
              "Act 3 - Chest", "Act 3 - Goobert's Painting", "Act 3 - Luke's File Entry 1", "Act 3 - Gems Drone",
              "Act 3 - Luke's File Entry 2", "Act 3 - Luke's File Entry 3", "Act 3 - Luke's File Entry 4",
              "Act 3 - Inspectometer Battery", "Act 3 - Gems Drone", "Act 3 - The Great Transcendence", "Act 3 - Well"],
-            [["Epitaph Piece 1", "Epitaph Piece 2", "Epitaph Piece 3", "Epitaph Piece 4",
-              "Epitaph Piece 5", "Epitaph Piece 6", "Epitaph Piece 7", "Epitaph Piece 8",
-              "Epitaph Piece 9", "Camera Replica", "Pile Of Meat"]]
+            [["Epitaph Piece", "Camera Replica", "Pile Of Meat"]]
         )
 
     def test_epitaphs(self) -> None:
@@ -139,8 +137,7 @@ class AccessTestOrdered(InscryptionTestBase):
              "Act 3 - Chest", "Act 3 - Goobert's Painting", "Act 3 - Luke's File Entry 1", "Act 3 - Gems Drone",
              "Act 3 - Luke's File Entry 2", "Act 3 - Luke's File Entry 3", "Act 3 - Luke's File Entry 4",
              "Act 3 - Inspectometer Battery", "Act 3 - Gems Drone", "Act 3 - The Great Transcendence", "Act 3 - Well"],
-            [["Epitaph Piece 1", "Epitaph Piece 2", "Epitaph Piece 3", "Epitaph Piece 4",
-              "Epitaph Piece 5", "Epitaph Piece 6", "Epitaph Piece 7", "Epitaph Piece 8", "Epitaph Piece 9"]]
+            [["Epitaph Piece"]]
         )
 
     def test_forest_items(self) -> None:
@@ -190,16 +187,13 @@ class AccessTestUnordered(InscryptionTestBase):
              "Act 2 - Factory Drawer 2", "Act 2 - Factory Chest 1", "Act 2 - Factory Chest 2",
              "Act 2 - Factory Chest 3", "Act 2 - Factory Chest 4", "Act 2 - Monocle", "Act 2 - Boss Leshy",
              "Act 2 - Boss Grimora", "Act 2 - Boss Magnificus", "Act 2 - Boss P03", "Act 2 - Mycologists Holo Key"],
-            [["Epitaph Piece 1", "Epitaph Piece 2", "Epitaph Piece 3", "Epitaph Piece 4",
-              "Epitaph Piece 5", "Epitaph Piece 6", "Epitaph Piece 7", "Epitaph Piece 8",
-              "Epitaph Piece 9", "Camera Replica", "Pile Of Meat"]]
+            [["Epitaph Piece", "Camera Replica", "Pile Of Meat"]]
         )
 
     def test_epitaphs(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Boss Grimora"],
-            [["Epitaph Piece 1", "Epitaph Piece 2", "Epitaph Piece 3", "Epitaph Piece 4",
-              "Epitaph Piece 5", "Epitaph Piece 6", "Epitaph Piece 7", "Epitaph Piece 8", "Epitaph Piece 9"]]
+            [["Epitaph Piece"]]
         )
 
     def test_forest_items(self) -> None:

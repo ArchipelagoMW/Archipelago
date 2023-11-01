@@ -102,11 +102,12 @@ class InscryptionRules:
         return state.has("Magnificus Eye", self.player)
 
     def has_all_epitaph_pieces(self, state: CollectionState) -> bool:
-        return state.has("Epitaph Piece 1", self.player) and \
-            state.has("Epitaph Piece 2", self.player) and state.has("Epitaph Piece 3", self.player) and \
-            state.has("Epitaph Piece 4", self.player) and state.has("Epitaph Piece 5", self.player) and \
-            state.has("Epitaph Piece 6", self.player) and state.has("Epitaph Piece 7", self.player) and \
-            state.has("Epitaph Piece 8", self.player) and state.has("Epitaph Piece 9", self.player)
+        if self.world.multiworld.epitaph_pieces_randomization[self.player].value == 0:
+            return state.has("Epitaph Piece", self.player, 9)
+        elif self.world.multiworld.epitaph_pieces_randomization[self.player].value == 1:
+            return state.has("Epitaph Pieces", self.player, 3)
+        else:
+            return state.has("Epitaph Pieces", self.player, 1)
 
     def has_camera_and_meat(self, state: CollectionState) -> bool:
         return state.has("Camera Replica", self.player) and state.has("Pile Of Meat", self.player)

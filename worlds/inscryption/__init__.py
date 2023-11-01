@@ -54,6 +54,16 @@ class InscryptionWorld(World):
     def create_items(self) -> None:
         nb_items_added = 0
         useful_items = (act1_items + act2_items + act3_items) if self.multiworld.goal[self.player] <= 1 else act1_items
+
+        if self.multiworld.goal[self.player] <= 1:
+            if self.multiworld.epitaph_pieces_randomization[self.player].value == 0:
+                useful_items.remove(act2_items[3])
+            elif self.multiworld.epitaph_pieces_randomization[self.player].value == 1:
+                useful_items.remove(act2_items[2])
+            else:
+                useful_items.remove(act2_items[2])
+                useful_items[len(act1_items) + 2]['count'] = 1
+
         for item in useful_items:
             for _ in range(item["count"]):
                 new_item = self.create_item(item['name'])
@@ -87,10 +97,12 @@ class InscryptionWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "deathlink": self.multiworld.deathlink[self.player].value,
+            "act1_deathlink_behaviour": self.multiworld.act1_deathlink_behaviour[self.player].value,
             "goal": self.multiworld.goal[self.player].value,
             "randomize_codes": self.multiworld.randomize_codes[self.player].value,
             "randomize_deck": self.multiworld.randomize_deck[self.player].value,
             "randomize_abilities": self.multiworld.randomize_abilities[self.player].value,
             "optional_death_card": self.multiworld.optional_death_card[self.player].value,
-            "skip_tutorial": self.multiworld.skip_tutorial[self.player].value
+            "skip_tutorial": self.multiworld.skip_tutorial[self.player].value,
+            "epitaph_pieces_randomization": self.multiworld.epitaph_pieces_randomization[self.player].value
         }
