@@ -153,7 +153,7 @@
                                             {%- endif -%}
                                         {% endif %}
                                     {%- endfor -%}
-                                    <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
+                                    <td class="center-column">{{ "{0:.2f}".format(percent_total_checks_done[team][player]) }}</td>
                                     {%- if activity_timers[(team, player)] -%}
                                         <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>
                                     {%- else -%}

@@ -5,6 +5,7 @@ defined data (like location labels or usable pokemon species), some cleanup
 and sorting, and Warp methods.
 """
 from dataclasses import dataclass
+import copy
 from enum import IntEnum
 import orjson
 from typing import Dict, List, NamedTuple, Optional, Set, FrozenSet, Tuple, Any, Union
@@ -320,6 +321,14 @@ def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
 
 
 data = PokemonEmeraldData()
+
+def create_data_copy() -> PokemonEmeraldData:
+    new_copy = PokemonEmeraldData()
+    new_copy.species = copy.deepcopy(data.species)
+    new_copy.tmhm_moves = copy.deepcopy(data.tmhm_moves)
+    new_copy.maps = copy.deepcopy(data.maps)
+    new_copy.static_encounters = copy.deepcopy(data.static_encounters)
+    new_copy.trainers = copy.deepcopy(data.trainers)
 
 
 def _init() -> None:
