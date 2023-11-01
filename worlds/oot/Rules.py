@@ -1,8 +1,12 @@
 from collections import deque
 import logging
+import typing
 
 from .Regions import TimeOfDay
+from .DungeonList import dungeon_table
+from .Hints import HintArea
 from .Items import oot_is_item_of_type
+from .LocationList import dungeon_song_locations
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
@@ -150,11 +154,16 @@ def set_rules(ootworld):
         location = world.get_location('Forest Temple MQ First Room Chest', player)
         forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
 
-    if ootworld.shuffle_song_items == 'song' and not ootworld.songs_as_items:
+    if ootworld.shuffle_song_items in {'song', 'dungeon'} and not ootworld.songs_as_items:
         # Sheik in Ice Cavern is the only song location in a dungeon; need to ensure that it cannot be anything else.
         # This is required if map/compass included, or any_dungeon shuffle.
         location = world.get_location('Sheik in Ice Cavern', player)
-        add_item_rule(location, lambda item: item.player == player and oot_is_item_of_type(item, 'Song'))
+        add_item_rule(location, lambda item: oot_is_item_of_type(item, 'Song'))
+
+    if ootworld.shuffle_child_trade == 'skip_child_zelda':
+        # Song from Impa must be local
+        location = world.get_location('Song from Impa', player)
+        add_item_rule(location, lambda item: item.player == player)
 
     for name in ootworld.always_hints:
         add_rule(world.get_location(name, player), guarantee_hint)
@@ -174,11 +183,6 @@ def create_shop_rule(location, parser):
             return 1
         return 0
     return parser.parse_rule('(Progressive_Wallet, %d)' % required_wallets(location.price))
-
-
-def limit_to_itemset(location, itemset):
-    old_rule = location.item_rule
-    location.item_rule = lambda item: item.name in itemset and old_rule(item)
 
 
 # This function should be run once after the shop items are placed in the world.
@@ -222,9 +226,6 @@ def set_shop_rules(ootworld):
 # This function should be ran once after setting up entrances and before placing items
 # The goal is to automatically set item rules based on age requirements in case entrances were shuffled
 def set_entrances_based_rules(ootworld):
-
-    if ootworld.multiworld.accessibility == 'beatable': 
-        return
 
     all_state = ootworld.multiworld.get_all_state(False)
 
