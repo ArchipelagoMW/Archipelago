@@ -5,7 +5,7 @@ from collections import Counter
 import copy
 import logging
 import os
-from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
+from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
 from Fill import fill_restrictive

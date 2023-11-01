@@ -316,18 +316,16 @@ def generate_output(world: PokemonEmeraldWorld, output_directory: str) -> None:
     #     /* 0x10 */ u8 startingBadges;
     #     /* 0x11 */ u8 receivedItemMessageFilter; // 0 = Show All; 1 = Show Progression Only; 2 = Show None
     #     /* 0x12 */ bool8 reusableTms;
-    #     /* 0x14 */ u16 removedBlockers;
     #     /* 0x13 */ bool8 addRoute115Boulders;
-    #     /* 0x14 */ u16 removedBlockers;
     #     /* 0x14 */ u16 removedBlockers;
     #     /* 0x16 */ u8 freeFlyLocation;
     #     /* 0x17 */ bool8 matchTrainerLevels;
     #     /* 0x18 */ u8 activeEasterEgg;
-    #     /* 0x19 */ u16 matchTrainerLevelsMultiplierNumerator;
-    #     /* 0x1B */ u16 matchTrainerLevelsMultiplierDenominator;
-    #     /* 0x1D */ u8 berryTreesRandomized;
-    #     /* 0x1E */ bool8 isWarpRando;
-    #     /* 0x1F */ bool8 addBumpySlopes;
+    #     /* 0x19 */ s8 matchTrainerLevelBonus;
+    #     /* 0x1A */ bool8 berryTreesRandomized;
+    #     /* 0x1B */ bool8 isWarpRando;
+    #     /* 0x1C */ bool8 addBumpySlopes;
+    #     /* 0x1D */ bool8 isDexsanity;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -440,17 +438,20 @@ def generate_output(world: PokemonEmeraldWorld, output_directory: str) -> None:
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIG"] * 12) + 4, 1, 1)
 
     # Set match trainer levels multiplier
-    match_trainer_levels_multiplier = min(max(world.options.match_trainer_levels_multiplier.value, 0), 2**16 - 1)
-    _set_bytes_little_endian(patched_rom, options_address + 0x19, 2, match_trainer_levels_multiplier)
-    _set_bytes_little_endian(patched_rom, options_address + 0x1B, 2, 100)
+    match_trainer_levels_bonus = max(min(world.options.match_trainer_levels_bonus.value, 100), -100)
+    _set_bytes_little_endian(patched_rom, options_address + 0x19, 1, match_trainer_levels_bonus)  # Works with negatives
 
     # Mark berry trees as randomized
     berry_trees = 1 if world.options.berry_trees else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x1D, 1, berry_trees)
+    _set_bytes_little_endian(patched_rom, options_address + 0x1A, 1, berry_trees)
 
     # Swap route 115 layout if bumpy slope enabled
     extra_bumpy_slope = 1 if world.options.extra_bumpy_slope else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x1F, 1, extra_bumpy_slope)
+    _set_bytes_little_endian(patched_rom, options_address + 0x1C, 1, extra_bumpy_slope)
+
+    # Mark dexsanity as enabled
+    dexsanity = 1 if world.options.dexsanity else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x1D, 1, dexsanity)
 
     # Set slot name
     for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):

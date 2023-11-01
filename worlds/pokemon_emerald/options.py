@@ -550,17 +550,16 @@ class MatchTrainerLevels(Toggle):
     display_name = "Match Trainer Levels"
 
 
-class MatchTrainerLevelsMultiplier(Range):
+class MatchTrainerLevelsBonus(Range):
     """
-    The percent multiplier to apply to your team's levels when matching an opponent's levels.
-    For example, a value of 50 in a battle with a trainer using level 16 pokemon would set your team's levels to 8.
+    A level bonus to apply to your team when matching an opponent's levels.
 
     Only used when match trainer levels is enabled.
     """
-    display_name = "Match Trainer Levels Multiplier"
-    range_start = 1
-    range_end = 200
-    default = 100
+    display_name = "Match Trainer Levels Bonus"
+    range_start = -100
+    range_end = 100
+    default = 0
 
 
 class DoubleBattleChance(Range):
@@ -765,7 +764,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     exp_modifier: ExpModifier
     blind_trainers: BlindTrainers
     match_trainer_levels: MatchTrainerLevels
-    match_trainer_levels_multiplier: MatchTrainerLevelsMultiplier
+    match_trainer_levels_bonus: MatchTrainerLevelsBonus
     double_battle_chance: DoubleBattleChance
     better_shops: BetterShops
 
