@@ -759,8 +759,9 @@ multiworld for each test written using it. Within subsequent modules, classes sh
 TestBase, and can then define options to test in the class body, and run tests in each test method.
 
 Example `__init__.py`
+
 ```python
-from test.TestBase import WorldTestBase
+from test.test_base import WorldTestBase
 
 
 class MyGameTestBase(WorldTestBase):

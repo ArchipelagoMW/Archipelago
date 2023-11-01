@@ -15,14 +15,16 @@ class TestIDs(unittest.TestCase):
             cls.yaml_options = Utils.parse_yaml(f.read())
 
     def test_utils_in_yaml(self) -> None:
-        for option_key, option_set in Utils.get_default_options().items():
+        """Tests that the auto generated host.yaml has default settings in it"""
+        for option_key, option_set in Settings(None).items():
             with self.subTest(option_key):
                 self.assertIn(option_key, self.yaml_options)
                 for sub_option_key in option_set:
                     self.assertIn(sub_option_key, self.yaml_options[option_key])
 
     def test_yaml_in_utils(self) -> None:
-        utils_options = Utils.get_default_options()
+        """Tests that the auto generated host.yaml shows up in reference calls"""
+        utils_options = Settings(None)
         for option_key, option_set in self.yaml_options.items():
             with self.subTest(option_key):
                 self.assertIn(option_key, utils_options)
