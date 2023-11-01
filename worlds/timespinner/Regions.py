@@ -183,7 +183,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     connect(player, regions, 'Space time continuum', 'Ancient Pyramid (left)', lambda state: logic.can_teleport_to(state, "Time", "GateLeftPyramid"))
     connect(player, regions, 'Space time continuum', 'Ancient Pyramid (right)', lambda state: logic.can_teleport_to(state, "Time", "GateRightPyramid"))
 
-    if is_option_enabled(player, regions, "GyreArchives"):
+    if is_option_enabled(world, player, "GyreArchives"):
         connect(player, regions, 'The lab (upper)', 'Ravenlord\'s Lair', lambda state: state.has('Merchant Crow', player))
         connect(player, regions, 'Ravenlord\'s Lair', 'The lab (upper)')
         connect(player, regions, 'Library top', 'Ifrit\'s Lair', lambda state: state.has('Kobo', player) and state.can_reach('Refugee Camp', 'Region', player))
