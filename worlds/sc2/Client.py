@@ -24,7 +24,7 @@ from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
     KerriganChecksPerLevelPack, \
     LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit, \
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -312,6 +312,8 @@ class SC2Context(CommonContext):
     last_bot: typing.Optional[ArchipelagoBot] = None
     slot_data_version = 2
     grant_story_tech = False
+    required_tactics = RequiredTactics.option_standard
+    take_over_ai_allies = TakeOverAIAllies.option_false
 
     def __init__(self, *args, **kwargs) -> None:
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -366,7 +368,12 @@ class SC2Context(CommonContext):
             self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", KerriganCheckLevelPackSize.default)
             self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", KerriganChecksPerLevelPack.default)
             self.grant_story_tech = args["slot_data"].get("grant_story_tech", GrantStoryTech.option_false)
+            self.required_tactics = args["slot_data"].get("required_tactics", RequiredTactics.option_standard)
             self.take_over_ai_allies = args["slot_data"].get("take_over_ai_allies", TakeOverAIAllies.option_false)
+
+            if self.required_tactics == RequiredTactics.option_no_logic:
+                # Locking Grant Story Tech if no logic
+                self.grant_story_tech = GrantStoryTech.option_true
 
             self.location_inclusions = {
                 LocationType.VICTORY: LocationInclusion.option_enabled, # Victory checks are always enabled

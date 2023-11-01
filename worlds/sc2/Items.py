@@ -289,7 +289,7 @@ item_table = {
                  )),
     ItemNames.MARINE_PROGRESSIVE_STIMPACK:
         ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 0, SC2Race.TERRAN,
-                 parent_item=ItemNames.MARINE, quantity=2,
+                 classification=ItemClassification.progression, parent_item=ItemNames.MARINE, quantity=2,
                  description=STIMPACK_SMALL_DESCRIPTION),
     ItemNames.MARINE_COMBAT_SHIELD:
         ItemData(209 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9, SC2Race.TERRAN,
@@ -346,7 +346,7 @@ item_table = {
                  description=LASER_TARGETING_SYSTEMS_DESCRIPTION),
     ItemNames.MARINE_MAGRAIL_MUNITIONS:
         ItemData(221 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 20, SC2Race.TERRAN,
-                 parent_item=ItemNames.MARINE, origin={"nco"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.MARINE, origin={"nco"},
                  description="Deals 20 damage to target unit. Autocast on attack with a cooldown."),
     ItemNames.MARINE_OPTIMIZED_LOGISTICS:
         ItemData(222 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 21, SC2Race.TERRAN,
@@ -394,7 +394,7 @@ item_table = {
                  description="Increases SCV life by 15 and attack speed slightly."),
     ItemNames.MEDIC_ADAPTIVE_MEDPACKS:
         ItemData(233 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 0, SC2Race.TERRAN,
-                 parent_item=ItemNames.MEDIC, origin={"ext"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.MEDIC, origin={"ext"},
                  description="Allows Medics to heal mechanical and air units."),
     ItemNames.MEDIC_NANO_PROJECTOR:
         ItemData(234 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 1, SC2Race.TERRAN,
@@ -705,7 +705,7 @@ item_table = {
                  )),
     ItemNames.BANSHEE_SHOCKWAVE_MISSILE_BATTERY:
         ItemData(317 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 0, SC2Race.TERRAN,
-                 parent_item=ItemNames.BANSHEE,
+                 classification=ItemClassification.progression, parent_item=ItemNames.BANSHEE,
                  description="Banshees do area damage in a straight line."),
     ItemNames.BATTLECRUISER_MISSILE_PODS:
         ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 1, SC2Race.TERRAN,
@@ -783,7 +783,7 @@ item_table = {
                  description=RESOURCE_EFFICIENCY_NO_SUPPLY_DESCRIPTION_TEMPLATE.format("Wraith")),
     ItemNames.VIKING_SHREDDER_ROUNDS:
         ItemData(334 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 15, SC2Race.TERRAN,
-                 parent_item=ItemNames.VIKING, origin={"ext"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.VIKING, origin={"ext"},
                  description="Attacks in Assault mode do line splash damage."),
     ItemNames.VIKING_WILD_MISSILES:
         ItemData(335 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 16, SC2Race.TERRAN,
@@ -795,7 +795,7 @@ item_table = {
                  description="Increases Banshee life by 100."),
     ItemNames.BANSHEE_ADVANCED_TARGETING_OPTICS:
         ItemData(337 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 18, SC2Race.TERRAN,
-                 parent_item=ItemNames.BANSHEE, origin={"ext"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.BANSHEE, origin={"ext"},
                  description="Increases Banshee attack range by 2 while cloaked."),
     ItemNames.BANSHEE_DISTORTION_BLASTERS:
         ItemData(338 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 19, SC2Race.TERRAN,
@@ -803,7 +803,7 @@ item_table = {
                  description="Increases Banshee attack damage by 25% while cloaked."),
     ItemNames.BANSHEE_ROCKET_BARRAGE:
         ItemData(339 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 20, SC2Race.TERRAN,
-                 parent_item=ItemNames.BANSHEE, origin={"ext"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.BANSHEE, origin={"ext"},
                  description="Deals 75 damage to enemy ground units in the target area."),
     ItemNames.GHOST_RESOURCE_EFFICIENCY:
         ItemData(340 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 21, SC2Race.TERRAN,
@@ -914,7 +914,7 @@ item_table = {
                  )),
     ItemNames.RAVEN_BIO_MECHANICAL_REPAIR_DRONE:
         ItemData(363 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 12, SC2Race.TERRAN,
-                 parent_item=ItemNames.RAVEN, origin={"nco"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.RAVEN, origin={"nco"},
                  description="Spell. Deploys a drone that can heal biological or mechanical units."),
     ItemNames.RAVEN_SPIDER_MINES:
         ItemData(364 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 13, SC2Race.TERRAN,
@@ -931,7 +931,7 @@ item_table = {
                  )),
     ItemNames.RAVEN_HUNTER_SEEKER_WEAPON:
         ItemData(366 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 15, SC2Race.TERRAN,
-                 parent_item=ItemNames.RAVEN, origin={"nco"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.RAVEN, origin={"nco"},
                  description="Allows Ravens to attack with a Hunter-Seeker weapon."),
     ItemNames.RAVEN_INTERFERENCE_MATRIX:
         ItemData(367 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 16, SC2Race.TERRAN,
@@ -1136,6 +1136,7 @@ item_table = {
                  description="Command Centers can train two SCVs at once."),
     ItemNames.RAVEN:
         ItemData(606 + SC2WOL_ITEM_ID_OFFSET, "Unit", 22, SC2Race.TERRAN,
+                 classification=ItemClassification.progression,
                  description="Aerial Caster unit."),
     ItemNames.SCIENCE_VESSEL:
         ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Unit", 23, SC2Race.TERRAN,
@@ -1181,6 +1182,7 @@ item_table = {
                  description="All Terran spellcasters get +100 starting and maximum energy."),
     ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL:
         ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 4, SC2Race.TERRAN, quantity=3,
+                 classification= ItemClassification.progression,
                  description=inspect.cleandoc(
                      """
                      Allows Terran mechanical units to regenerate health while not in combat.
@@ -1493,17 +1495,23 @@ defense_ratings = {
     ItemNames.PLANETARY_FORTRESS: 3,
     # Bunker w/ Marine/Marauder: 3,
     ItemNames.PERDITION_TURRET: 2,
-    ItemNames.MISSILE_TURRET: 2,
-    ItemNames.VULTURE: 2,
-    ItemNames.LIBERATOR: 2,
+    ItemNames.VULTURE: 1,
+    ItemNames.BANSHEE: 1,
+    ItemNames.BATTLECRUISER: 1,
+    ItemNames.LIBERATOR: 4,
     ItemNames.WIDOW_MINE: 2,
     # "Concealment (Widow Mine)": 1
 }
 zerg_defense_ratings = {
     ItemNames.PERDITION_TURRET: 2,
     # Bunker w/ Firebat: 2,
+    ItemNames.LIBERATOR: -2,
     ItemNames.HIVE_MIND_EMULATOR: 3,
     ItemNames.PSI_DISRUPTER: 3,
+}
+air_defense_ratings = {
+    ItemNames.MISSILE_TURRET: 2,
+    ItemNames.VALKYRIE: 2
 }
 
 spider_mine_sources = {

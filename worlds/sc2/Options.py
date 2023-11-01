@@ -193,12 +193,15 @@ class EarlyUnit(Choice):
 
 
 class RequiredTactics(Choice):
-    """Determines the maximum tactical difficulty of the seed (separate from mission difficulty).  Higher settings
+    """
+    Determines the maximum tactical difficulty of the seed (separate from mission difficulty).  Higher settings
     increase randomness.
 
     Standard:  All missions can be completed with good micro and macro.
     Advanced:  Completing missions may require relying on starting units and micro-heavy units.
-    No Logic:  Units and upgrades may be placed anywhere.  LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!"""
+    No Logic:  Units and upgrades may be placed anywhere.  LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!
+               Locks Grant Story Tech option to true.
+    """
     display_name = "Required Tactics"
     option_standard = 0
     option_advanced = 1
@@ -317,13 +320,16 @@ class IncludeStrains(Range):
 
 
 class KerriganPresence(Choice):
-    """Determines whether Kerrigan is playable outside of missions that require her.
+    """
+    Determines whether Kerrigan is playable outside of missions that require her.
 
     Vanilla: Kerrigan is playable as normal, appears in the same missions as in vanilla game.
     Not Present:  Kerrigan is not playable, unless the mission requires her to be present.  Other hero units stay playable,
         and locations normally requiring Kerrigan can be checked by any unit.
         Kerrigan level items, active abilities and passive abilities affecting her will not appear.
-    Not Present And No Passives:  In addition to the above, Kerrigan's passive abilities affecting other units (such as Twin Drones) will not appear."""
+        In missions where the Kerrigan unit is required, story abilities are given in same way as Grant Story Tech is set to true
+    Not Present And No Passives:  In addition to the above, Kerrigan's passive abilities affecting other units (such as Twin Drones) will not appear.
+    """
     display_name = "Kerrigan Presence"
     option_vanilla = 0
     option_not_present = 1
@@ -427,6 +433,8 @@ class GrantStoryTech(Toggle):
     If set true, grants special tech required for story mission completion for duration of the mission.
     Otherwise, you need to find these tech by a normal means as items.
     Affects story missions like Back in the Saddle and Supreme
+
+    Locked to true if Required Tactics is set to no logic.
     """
     display_name = "Grant Story Tech"
 

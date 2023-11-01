@@ -189,7 +189,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_defense_rating(multiworld, player, False) >= 5),
         LocationData("The Dig", "The Dig: Right Cliff Relic", SC2WOL_LOC_ID_OFFSET + 903, LocationType.BONUS,
                      lambda state: state._sc2wol_defense_rating(multiworld, player, False) >= 5),
-        LocationData("The Dig", "The Dig: Moebius Base", SC2WOL_LOC_ID_OFFSET + 904, LocationType.MISSION_PROGRESS),
+        LocationData("The Dig", "The Dig: Moebius Base", SC2WOL_LOC_ID_OFFSET + 904, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) or adv_tactics),
         LocationData("The Moebius Factor", "The Moebius Factor: Victory", SC2WOL_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_anti_air(multiworld, player) and
                                    (state._sc2wol_has_air(multiworld, player)
@@ -289,9 +290,11 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Middle Base", SC2WOL_LOC_ID_OFFSET + 1404, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)),
-        LocationData("Welcome to the Jungle", "Welcome to the Jungle: Main Base", SC2WOL_LOC_ID_OFFSET + 1405, LocationType.CHALLENGE,
+        LocationData("Welcome to the Jungle", "Welcome to the Jungle: Main Base", SC2WOL_LOC_ID_OFFSET + 1405,
+                     LocationType.CHALLENGE,
                      lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)
-                                    and state._sc2wol_beats_protoss_deathball(multiworld, player)),
+                                   and state._sc2wol_beats_protoss_deathball(multiworld, player)
+                                   and state._sc2wol_has_competent_base_trasher(multiworld, player)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: No Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1406, LocationType.CHALLENGE,
                      lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)
                                     and state._sc2wol_has_competent_ground_to_air(multiworld, player)
@@ -354,30 +357,41 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Cutthroat", "Cutthroat: West Command Center", SC2WOL_LOC_ID_OFFSET + 1807, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Victory", SC2WOL_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
-                     lambda state: state._sc2wol_has_competent_anti_air(multiworld, player) and
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) and
+                                   state._sc2wol_has_competent_anti_air(multiworld, player) and
                                    state._sc2wol_has_common_unit(multiworld, player) or state.has('Wraith', player)),
-        LocationData("Engine of Destruction", "Engine of Destruction: Odin", SC2WOL_LOC_ID_OFFSET + 1901, LocationType.MISSION_PROGRESS),
-        LocationData("Engine of Destruction", "Engine of Destruction: Loki", SC2WOL_LOC_ID_OFFSET + 1902, LocationType.OPTIONAL_BOSS,
-                     lambda state: state._sc2wol_has_competent_anti_air(multiworld, player) and
+        LocationData("Engine of Destruction", "Engine of Destruction: Odin", SC2WOL_LOC_ID_OFFSET + 1901, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player)),
+        LocationData("Engine of Destruction", "Engine of Destruction: Loki", SC2WOL_LOC_ID_OFFSET + 1902,
+                     LocationType.OPTIONAL_BOSS,
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) and
+                                   state._sc2wol_has_competent_anti_air(multiworld, player) and
                                    state._sc2wol_has_common_unit(multiworld, player) or state.has('Wraith', player)),
-        LocationData("Engine of Destruction", "Engine of Destruction: Lab Devourer", SC2WOL_LOC_ID_OFFSET + 1903, LocationType.BONUS),
+        LocationData("Engine of Destruction", "Engine of Destruction: Lab Devourer", SC2WOL_LOC_ID_OFFSET + 1903, LocationType.BONUS,
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player)),
         LocationData("Engine of Destruction", "Engine of Destruction: North Devourer", SC2WOL_LOC_ID_OFFSET + 1904, LocationType.BONUS,
-                     lambda state: state._sc2wol_has_competent_anti_air(multiworld, player) and
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) and
+                                   state._sc2wol_has_competent_anti_air(multiworld, player) and
                                    state._sc2wol_has_common_unit(multiworld, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Southeast Devourer", SC2WOL_LOC_ID_OFFSET + 1905, LocationType.BONUS,
-                     lambda state: state._sc2wol_has_competent_anti_air(multiworld, player) and
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) and
+                                   state._sc2wol_has_competent_anti_air(multiworld, player) and
                                    state._sc2wol_has_common_unit(multiworld, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Engine of Destruction: West Base", SC2WOL_LOC_ID_OFFSET + 1906, LocationType.MISSION_PROGRESS,
-                     lambda state: state._sc2wol_has_competent_anti_air(multiworld, player) and
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) and
+                                   state._sc2wol_has_competent_anti_air(multiworld, player) and
                                    state._sc2wol_has_common_unit(multiworld, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Northwest Base", SC2WOL_LOC_ID_OFFSET + 1907, LocationType.MISSION_PROGRESS,
-                     lambda state: state._sc2wol_has_competent_anti_air(multiworld, player) and
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) and
+                                   state._sc2wol_has_competent_anti_air(multiworld, player) and
                                    state._sc2wol_has_common_unit(multiworld, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Northeast Base", SC2WOL_LOC_ID_OFFSET + 1908, LocationType.MISSION_PROGRESS,
-                     lambda state: state._sc2wol_has_competent_anti_air(multiworld, player) and
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) and
+                                   state._sc2wol_has_competent_anti_air(multiworld, player) and
                                    state._sc2wol_has_common_unit(multiworld, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Southeast Base", SC2WOL_LOC_ID_OFFSET + 1909, LocationType.MISSION_PROGRESS,
-                     lambda state: state._sc2wol_has_competent_anti_air(multiworld, player) and
+                     lambda state: state._sc2wol_has_mm_upgrade(multiworld, player) and
+                                   state._sc2wol_has_competent_anti_air(multiworld, player) and
                                    state._sc2wol_has_common_unit(multiworld, player) or state.has('Wraith', player)),
         LocationData("Media Blitz", "Media Blitz: Victory", SC2WOL_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),

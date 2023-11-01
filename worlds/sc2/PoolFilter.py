@@ -199,6 +199,9 @@ class ValidInventory:
     def has_all(self, items: Set[str], player: int):
         return all(item in self.logical_inventory for item in items)
 
+    def count(self, item: str, player: int) -> int:
+        return len([inventory_item for inventory_item in self.logical_inventory if inventory_item == item])
+
     def has_units_per_structure(self) -> bool:
         return len(BARRACKS_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure and \
             len(FACTORY_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure and \
@@ -208,10 +211,10 @@ class ValidInventory:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory = list(self.item_pool)
         locked_items = list(self.locked_items)
-        self.logical_inventory = {
+        self.logical_inventory = [
             item.name for item in inventory + locked_items + self.existing_items
             if item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing)
-        }
+        ]
         requirements = mission_requirements
         cascade_keys = self.cascade_removal_map.keys()
         units_always_have_upgrades = get_option_value(self.multiworld, self.player, "units_always_have_upgrades")
@@ -224,7 +227,7 @@ class ValidInventory:
                 self.logical_inventory.remove(item.name)
                 if not all(requirement(self) for requirement in requirements):
                     # If item cannot be removed, lock or revert
-                    self.logical_inventory.add(item.name)
+                    self.logical_inventory.append(item.name)
                     for _ in range(get_item_quantity(item, self.multiworld, self.player)):
                         locked_items.append(copy_item(item))
                     return False
@@ -342,20 +345,21 @@ class ValidInventory:
                             for _ in range(get_item_quantity(transient_item, self.multiworld, self.player)):
                                 locked_items.append(copy_item(transient_item))
                         if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
-                            self.logical_inventory.add(transient_item.name)
+                            self.logical_inventory.append(transient_item.name)
             else:
                 attempt_removal(item)
 
         # Removing extra dependencies
         # WoL
-        if not spider_mine_sources & self.logical_inventory:
+        logical_inventory_set = set(self.logical_inventory)
+        if not spider_mine_sources & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
-        if not BARRACKS_UNITS & self.logical_inventory:
+        if not BARRACKS_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if
                          not (item.name.startswith(ItemNames.TERRAN_INFANTRY_UPGRADE_PREFIX) or item.name == ItemNames.ORBITAL_STRIKE)]
-        if not FACTORY_UNITS & self.logical_inventory:
+        if not FACTORY_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_VEHICLE_UPGRADE_PREFIX)]
-        if not STARPORT_UNITS & self.logical_inventory:
+        if not STARPORT_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_SHIP_UPGRADE_PREFIX)]
         # HotS
         # Baneling without sources => remove Baneling and upgrades
@@ -407,6 +411,10 @@ class ValidInventory:
         self._sc2wol_able_to_rescue = lambda world, player: SC2Logic._sc2wol_able_to_rescue(self, world, player)
         self._sc2wol_beats_protoss_deathball = lambda world, player: SC2Logic._sc2wol_beats_protoss_deathball(self, world, player)
         self._sc2wol_survives_rip_field = lambda world, player: SC2Logic._sc2wol_survives_rip_field(self, world, player)
+        self._sc2wol_has_sustainable_mech_heal = lambda world, player: SC2Logic._sc2wol_has_sustainable_mech_heal(self, world, player)
+        self._sc2wol_has_bio_heal = lambda world, player: SC2Logic._sc2wol_has_bio_heal(self, world, player)
+        self._sc2wol_has_competent_base_trasher = lambda world, player: SC2Logic._sc2wol_has_competent_base_trasher(self, world, player)
+        self._sc2wol_has_nukes = lambda world, player: SC2Logic._sc2wol_has_nukes(self, world, player)
         self._sc2wol_has_protoss_common_units = lambda world, player: SC2Logic._sc2wol_has_protoss_common_units(self, world, player)
         self._sc2wol_has_protoss_medium_units = lambda world, player: SC2Logic._sc2wol_has_protoss_medium_units(self, world, player)
         self._sc2wol_has_mm_upgrade = lambda world, player: SC2Logic._sc2wol_has_mm_upgrade(self, world, player)
@@ -435,7 +443,7 @@ class ValidInventory:
                  used_races: Set[SC2Race]):
         self.multiworld = multiworld
         self.player = player
-        self.logical_inventory = set()
+        self.logical_inventory = list()
         self.locked_items = locked_items[:]
         self.existing_items = existing_items
         self._read_logic()
