@@ -518,7 +518,10 @@ class MultiWorld():
 
         return False
 
-    def get_spheres(self):
+    def get_spheres(self) -> List[List[Location]]:
+        spheres = getattr(self, "_spheres", [])
+        if spheres:
+            return spheres
         state = CollectionState(self)
         locations = set(self.get_filled_locations())
 
@@ -528,15 +531,16 @@ class MultiWorld():
             for location in locations:
                 if location.can_reach(state):
                     sphere.add(location)
-            yield sphere
             if not sphere:
                 if locations:
-                    yield locations  # unreachable locations
+                    sphere.update(locations)  # unreachable locations
                 break
 
+            spheres.append(sorted(sphere, key=lambda location: (location.name, location.player)))
             for location in sphere:
                 state.collect(location.item, True, location)
             locations -= sphere
+        return spheres
 
     def fulfills_accessibility(self, state: Optional[CollectionState] = None):
         """Check if accessibility rules are fulfilled with current or supplied state."""

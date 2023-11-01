@@ -375,7 +375,7 @@ class SMWorld(World):
         # and use the inversed starting from the first progression item.
         spheres: List[Location] = getattr(self.multiworld, "_sm_spheres", None)
         if spheres is None:
-            spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sorted(sphere, key=lambda location: location.name)]
+            spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sphere]
             setattr(self.multiworld, "_sm_spheres", spheres)
 
         self.itemLocs = [
