@@ -134,27 +134,27 @@ def generate_output(world: PokemonEmeraldWorld, output_directory: str) -> None:
         _set_bytes_little_endian(patched_rom, address + 2, 2, slot[1])
 
     # Set species data
-    _set_species_info(world.modified_data, patched_rom)
+    _set_species_info(world, patched_rom)
 
     # Set encounter tables
     if world.options.wild_pokemon != RandomizeWildPokemon.option_vanilla:
-        _set_encounter_tables(world.modified_data, patched_rom)
+        _set_encounter_tables(world, patched_rom)
 
     # Set opponent data
     if world.options.trainer_parties != RandomizeTrainerParties.option_vanilla:
-        _set_opponents(world.modified_data, patched_rom)
+        _set_opponents(world, patched_rom)
 
     # Set static pokemon
-    _set_static_encounters(world.modified_data, patched_rom)
+    _set_static_encounters(world, patched_rom)
 
     # Set starters
-    _set_starters(world.modified_data, patched_rom)
+    _set_starters(world, patched_rom)
 
     # Set TM moves
-    _set_tm_moves(world.modified_data, patched_rom)
+    _set_tm_moves(world, patched_rom)
 
     # Set TM/HM compatibility
-    _set_tmhm_compatibility(world.modified_data, patched_rom)
+    _set_tmhm_compatibility(world, patched_rom)
 
     # Randomize opponent double or single
     _randomize_opponent_battle_type(world, patched_rom)
@@ -298,7 +298,7 @@ def _set_bytes_little_endian(byte_array: bytearray, address: int, size: int, val
         size -= 1
 
 
-def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_encounter_tables(world: PokemonEmeraldWorld, rom: bytearray) -> None:
     """
     Encounter tables are lists of
     struct {
@@ -308,7 +308,7 @@ def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> 
     }
     """
 
-    for map_data in modified_data.maps:
+    for map_data in world.modified_maps:
         tables = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
         for table in tables:
             if table is not None:
@@ -317,8 +317,8 @@ def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> 
                     _set_bytes_little_endian(rom, address, 2, species_id)
 
 
-def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
-    for species in modified_data.species:
+def _set_species_info(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+    for species in world.modified_species:
         if species is not None:
             _set_bytes_little_endian(rom, species.rom_address + 6, 1, species.types[0])
             _set_bytes_little_endian(rom, species.rom_address + 7, 1, species.types[1])
@@ -331,8 +331,8 @@ def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None
                 _set_bytes_little_endian(rom, species.learnset_rom_address + (i * 2), 2, level_move)
 
 
-def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
-    for trainer in modified_data.trainers:
+def _set_opponents(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+    for trainer in world.modified_trainers:
         party_address = trainer.party.rom_address
 
         pokemon_data_size: int
@@ -360,24 +360,24 @@ def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
                 _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
 
 
-def _set_static_encounters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
-    for encounter in modified_data.static_encounters:
+def _set_static_encounters(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+    for encounter in world.modified_static_encounters:
         _set_bytes_little_endian(rom, encounter.rom_address, 2, encounter.species_id)
 
 
-def _set_starters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_starters(world: PokemonEmeraldWorld, rom: bytearray) -> None:
     address = data.rom_addresses["sStarterMon"]
-    (starter_1, starter_2, starter_3) = modified_data.starters
+    (starter_1, starter_2, starter_3) = world.modified_starters
 
     _set_bytes_little_endian(rom, address + 0, 2, starter_1)
     _set_bytes_little_endian(rom, address + 2, 2, starter_2)
     _set_bytes_little_endian(rom, address + 4, 2, starter_3)
 
 
-def _set_tm_moves(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_tm_moves(world: PokemonEmeraldWorld, rom: bytearray) -> None:
     tmhm_list_address = data.rom_addresses["sTMHMMoves"]
 
-    for i, move in enumerate(modified_data.tmhm_moves):
+    for i, move in enumerate(world.modified_tmhm_moves):
         # Don't modify HMs
         if i >= 50:
             break
@@ -385,10 +385,10 @@ def _set_tm_moves(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
         _set_bytes_little_endian(rom, tmhm_list_address + (i * 2), 2, move)
 
 
-def _set_tmhm_compatibility(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_tmhm_compatibility(world: PokemonEmeraldWorld, rom: bytearray) -> None:
     learnsets_address = data.rom_addresses["gTMHMLearnsets"]
 
-    for species in modified_data.species:
+    for species in world.modified_species:
         if species is not None:
             _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
 

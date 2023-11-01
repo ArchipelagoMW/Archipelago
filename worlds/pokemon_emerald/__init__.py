@@ -14,8 +14,8 @@ import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import (PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
-                   data as emerald_data)
+from .data import (SpeciesData, MapData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
+                   TrainerData, data as emerald_data)
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
                     offset_item_value)
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
@@ -83,7 +83,13 @@ class PokemonEmeraldWorld(World):
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
     free_fly_location_id: int = 0
-    modified_data: PokemonEmeraldData
+
+    modified_species: List[Optional[SpeciesData]]
+    modified_maps: List[MapData]
+    modified_tmhm_moves: List[int]
+    modified_static_encounters: List[int]
+    modified_starters: Tuple[int, int, int]
+    modified_trainers: List[TrainerData]
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -358,7 +364,7 @@ class PokemonEmeraldWorld(World):
                 # Hitmonlee/Hitmonchan, and once to verify that there's nothing left to do.
                 while True:
                     had_clean_pass = True
-                    for species in self.modified_data.species:
+                    for species in self.modified_species:
                         if species is None:
                             continue
                         if species.species_id in already_modified:
@@ -381,7 +387,7 @@ class PokemonEmeraldWorld(World):
                                 evolution.abilities = new_abilities
                                 already_modified.add(evolution.species_id)
                                 evolutions += [
-                                    self.modified_data.species[evolution.species_id]
+                                    self.modified_species[evolution.species_id]
                                     for evolution in evolution.evolutions
                                     if evolution.species_id not in already_modified
                                 ]
@@ -389,7 +395,7 @@ class PokemonEmeraldWorld(World):
                     if had_clean_pass:
                         break
             else:  # Not following evolutions
-                for species in self.modified_data.species:
+                for species in self.modified_species:
                     if species is None:
                         continue
 
@@ -411,11 +417,11 @@ class PokemonEmeraldWorld(World):
                 mystery_type_index = type_map.index(9)
                 type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
 
-                for species in self.modified_data.species:
+                for species in self.modified_species:
                     if species is not None:
                         species.types = (type_map[species.types[0]], type_map[species.types[1]])
             elif self.options.types == RandomizeTypes.option_completely_random:
-                for species in self.modified_data.species:
+                for species in self.modified_species:
                     if species is not None:
                         new_type_1 = get_random_type(self.random)
                         new_type_2 = new_type_1
@@ -437,7 +443,7 @@ class PokemonEmeraldWorld(World):
                 # - Onyx (Rock/Ground) -> Steelix (Steel/Ground)
                 # - Nincada (Bug/Ground) -> Ninjask (Bug/Flying) && Shedinja (Bug/Ghost)
                 # - Azurill (Normal/Normal) -> Marill (Water/Water)
-                for species in self.modified_data.species:
+                for species in self.modified_species:
                     if species is None:
                         continue
                     if species.species_id in already_modified:
@@ -458,13 +464,13 @@ class PokemonEmeraldWorld(World):
                         evolution = evolutions.pop()
                         evolution.types = (type_map[evolution.types[0]], type_map[evolution.types[1]])
                         already_modified.add(evolution.species_id)
-                        evolutions += [self.modified_data.species[evo.species_id] for evo in evolution.evolutions]
+                        evolutions += [self.modified_species[evo.species_id] for evo in evolution.evolutions]
 
         def randomize_learnsets() -> None:
             type_bias = self.options.move_match_type_bias.value
             normal_bias = self.options.move_normal_type_bias.value
 
-            for species in self.modified_data.species:
+            for species in self.modified_species:
                 if species is None:
                     continue
 
@@ -495,7 +501,7 @@ class PokemonEmeraldWorld(World):
                 species.learnset = new_learnset
 
         def randomize_tm_hm_compatibility() -> None:
-            for species in self.modified_data.species:
+            for species in self.modified_species:
                 if species is None:
                     continue
 
@@ -523,7 +529,7 @@ class PokemonEmeraldWorld(World):
             for i in range(50):
                 new_move = get_random_move(self.random, new_moves)
                 new_moves.add(new_move)
-                self.modified_data.tmhm_moves[i] = new_move
+                self.modified_tmhm_moves[i] = new_move
 
         def randomize_wild_encounters() -> None:
             should_match_bst = self.options.wild_pokemon in {
@@ -536,7 +542,7 @@ class PokemonEmeraldWorld(World):
             }
             should_allow_legendaries = self.options.allow_wild_legendaries == Toggle.option_true
 
-            for map_data in self.modified_data.maps:
+            for map_data in self.modified_maps:
                 new_encounters: List[Optional[EncounterTableData]] = [None, None, None]
                 old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
 
@@ -551,7 +557,7 @@ class PokemonEmeraldWorld(World):
 
                                 species_old_to_new_map[species_id] = get_random_species(
                                     self.random,
-                                    self.modified_data.species,
+                                    self.modified_species,
                                     target_bst,
                                     target_type,
                                     should_allow_legendaries
@@ -572,9 +578,9 @@ class PokemonEmeraldWorld(World):
                 shuffled_species = [encounter.species_id for encounter in emerald_data.static_encounters]
                 self.random.shuffle(shuffled_species)
 
-                self.modified_data.static_encounters = []
+                self.modified_static_encounters = []
                 for i, encounter in enumerate(emerald_data.static_encounters):
-                    self.modified_data.static_encounters.append(StaticEncounterData(
+                    self.modified_static_encounters.append(StaticEncounterData(
                         shuffled_species[i],
                         encounter.rom_address
                     ))
@@ -589,12 +595,12 @@ class PokemonEmeraldWorld(World):
                 }
 
                 for encounter in emerald_data.static_encounters:
-                    original_species = self.modified_data.species[encounter.species_id]
+                    original_species = self.modified_species[encounter.species_id]
                     target_bst = sum(original_species.base_stats) if should_match_bst else None
                     target_type = self.random.choice(original_species.types) if should_match_type else None
 
-                    self.modified_data.static_encounters.append(StaticEncounterData(
-                        get_random_species(self.random, self.modified_data.species, target_bst, target_type).species_id,
+                    self.modified_static_encounters.append(StaticEncounterData(
+                        get_random_species(self.random, self.modified_species, target_bst, target_type).species_id,
                         encounter.rom_address
                     ))
 
@@ -609,7 +615,7 @@ class PokemonEmeraldWorld(World):
             }
             allow_legendaries = self.options.allow_trainer_legendaries == Toggle.option_true
 
-            for trainer in self.modified_data.trainers:
+            for trainer in self.modified_trainers:
                 new_party = []
                 for pokemon in trainer.party.pokemon:
                     original_species = emerald_data.species[pokemon.species_id]
@@ -618,7 +624,7 @@ class PokemonEmeraldWorld(World):
 
                     new_species = get_random_species(
                         self.random,
-                        self.modified_data.species,
+                        self.modified_species,
                         target_bst,
                         target_type,
                         allow_legendaries
@@ -626,7 +632,7 @@ class PokemonEmeraldWorld(World):
 
                     # Could cache this per species
                     tm_hm_movepool = list({
-                        self.modified_data.tmhm_moves[i]
+                        self.modified_tmhm_moves[i]
                         for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
                         if is_compatible
                     })
@@ -671,11 +677,11 @@ class PokemonEmeraldWorld(World):
             )
 
             new_starters = (
-                get_random_species(self.random, self.modified_data.species,
+                get_random_species(self.random, self.modified_species,
                                    starter_bsts[0], starter_types[0], allow_legendaries),
-                get_random_species(self.random, self.modified_data.species,
+                get_random_species(self.random, self.modified_species,
                                    starter_bsts[1], starter_types[1], allow_legendaries),
-                get_random_species(self.random, self.modified_data.species,
+                get_random_species(self.random, self.modified_species,
                                    starter_bsts[2], starter_types[2], allow_legendaries)
             )
 
@@ -689,16 +695,16 @@ class PokemonEmeraldWorld(World):
 
             egg = 96 + egg_check_2 - (egg_check_1 * 0x077C)
             if egg_check_2 == 0x14E03A and egg < 411 and egg > 0 and egg not in range(252, 277):
-                self.modified_data.starters = (egg, egg, egg)
+                self.modified_starters = (egg, egg, egg)
             else:
-                self.modified_data.starters = (
+                self.modified_starters = (
                     new_starters[0].species_id,
                     new_starters[1].species_id,
                     new_starters[2].species_id
                 )
 
             # Putting the unchosen starter onto the rival's team
-            rival_teams = [
+            rival_teams: List[List[Tuple[str, int, bool]]] = [
                 [
                     ("TRAINER_BRENDAN_ROUTE_103_TREECKO", 0, False),
                     ("TRAINER_BRENDAN_RUSTBORO_TREECKO",  1, False),
@@ -744,10 +750,15 @@ class PokemonEmeraldWorld(World):
                     picked_evolution = self.random.choice(potential_evolutions)
 
                 for trainer_name, starter_position, is_evolved in rival_teams[i]:
-                    trainer_data = self.modified_data.trainers[emerald_data.constants[trainer_name]]
+                    trainer_data = self.modified_trainers[emerald_data.constants[trainer_name]]
                     trainer_data.party.pokemon[starter_position].species_id = picked_evolution if is_evolved else starter.species_id
 
-        self.modified_data = copy.deepcopy(emerald_data)
+        self.modified_species = copy.deepcopy(emerald_data.species)
+        self.modified_trainers = copy.deepcopy(emerald_data.trainers)
+        self.modified_maps = copy.deepcopy(emerald_data.maps)
+        self.modified_tmhm_moves = copy.deepcopy(emerald_data.tmhm_moves)
+        self.modified_static_encounters = copy.deepcopy(emerald_data.static_encounters)
+        self.modified_starters = copy.deepcopy(emerald_data.starters)
 
         # Randomize species data
         if self.options.abilities != RandomizeAbilities.option_vanilla:
@@ -762,7 +773,7 @@ class PokemonEmeraldWorld(World):
         randomize_tm_hm_compatibility()  # Options are checked within this function
 
         min_catch_rate = min(self.options.min_catch_rate.value, 255)
-        for species in self.modified_data.species:
+        for species in self.modified_species:
             if species is not None:
                 species.catch_rate = max(species.catch_rate, min_catch_rate)
 
