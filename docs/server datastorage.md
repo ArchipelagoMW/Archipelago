@@ -1,6 +1,6 @@
 # Serverside Data Storage
 
-This document covers some of the patterns and tips and tricks used to communicate with data storage, communication with the data storage is don't through the [`Get`](network%20protocol.md#Get) \ [`Retrieved`](network%20protocol.md#Retrieved), [`Set`](network%20protocol.md#Set) \ [`SetReply`](network%20protocol.md#SetReply) and [`SetNotify`](network%20protocol.md#SetNotify) commands described inside the [Network Protocol](network%20protocol.md). The data storage is meant to preserve some date on the server that spans across the lifecycle of the server and is shared with all clients (on any team). 
+This document covers some of the patterns and tips and tricks used to communicate with data storage, communication with the data storage is done through the [`Get`](network%20protocol.md#Get) \ [`Retrieved`](network%20protocol.md#Retrieved), [`Set`](network%20protocol.md#Set) \ [`SetReply`](network%20protocol.md#SetReply) and [`SetNotify`](network%20protocol.md#SetNotify) commands described inside the [Network Protocol](network%20protocol.md). The data storage is meant to preserve some data on the server that spans across the lifecycle of the server and is shared with all clients (on any team). 
 
 ## Keys
 The data storage works by keys and is internally stored as a dictionary. note that the whole data storage is accessible by all clients so if you want to store data specifically for your team, game or slot you will have to make your key unique, this is often done by add the team number, game name or slot id to the key. Some examples:
@@ -111,6 +111,36 @@ Removing gifts, note we are ignoring the errors here as pop-ing an non existing 
 }
 ```
 
+### Queue (FIFO) \ Stack (FILO) 
+Queues can be implemented using lists and this will still be safe aslong as all producers only append to the end of the list and consumers only remove the first or last element in the list. To append to a list we would use the `add` operation with an array value, this will append all elements in the provided array to the list. In order to `peek` any elemment in the list, you would unfortunately have to retrieve the full list by its key. To remove the first or last element of a list we can use the `pop` opperation.
+
+Adding elements to the list is easy, just a `Set`-`add` operation with an array as value:
+```json
+{
+    "cmd": "Set",
+    "key": "SomeQueueName",
+    "default": [],
+    "operations": [
+        {"operation": "add", "value": ["whatever value"] },
+    ]
+}
+```
+To pop an element in the queue we would use a `Set`-`pop` operation, with a value of `0` for queues and `1` for stacks
+```json
+{
+    "cmd": "Set",
+    "key": "SomeQueueName",
+    "default": [],
+    "on_error": "ignore",
+    "tag": "4CDF4226-C7D2-4242-8636-D16FA9EA2016",
+    "want_reply": true,
+    "operations": [
+        {"operation": "pop", "value": 0 },
+    ]
+}
+```
+Than inside the `SetReply` check by tag if this was done as a result to you pop-ing it, if thats the case you find the pop-ed element in the `original_value`. 
+
 ### Locking
 This is not an actual used example but if you want an even more complex thread safe way you can implement using the techniques aboves. it is possible to use a `pop` operation on specific dictionary keys along with a tagging your `Set` command to see if you client can obtain a lock, for example:
 ```json
@@ -126,7 +156,7 @@ This is not an actual used example but if you want an even more complex thread s
     ]
 }
 ```
-Than inside the `SetReply` check by looking in the `original_value` and 'value' if `Key1` got removed and by tag if this was done as a result to you pop-int it, if thats all true, you know you now got the lock and can do whatever you want to the key `MyStoreAvailableKeys:Key1`. and when your done with it, you write back `Key1` to the `MyStoreAvailableKeys` using an update.
+Than inside the `SetReply` check by looking in the `original_value` and 'value' if `Key1` got removed and by tag if this was done as a result to you pop-ing it, if thats all true, you know you now got the lock and can do whatever you want to the key `MyStoreAvailableKeys:Key1`. and when your done with it, you write back `Key1` to the `MyStoreAvailableKeys` using an update.
 ```json
 {
     "cmd": "Set",
