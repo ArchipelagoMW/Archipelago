@@ -17,6 +17,14 @@ from BaseClasses import ItemClassification
 BASE_OFFSET = 3860000
 POKEDEX_OFFSET = 10000
 
+IGNORABLE_MAPS = {
+    "MAP_ALTERING_CAVE",
+    "MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP1",
+    "MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2",
+    "MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3",
+}
+"""These maps exist but don't show up in the rando or are unused, and so should be discarded"""
+
 
 class Warp:
     """
@@ -324,6 +332,9 @@ def _init() -> None:
 
     # Create map data
     for map_name, map_json in extracted_data["maps"].items():
+        if map_name in IGNORABLE_MAPS:
+            continue
+
         land_encounters = None
         water_encounters = None
         fishing_encounters = None
@@ -711,7 +722,7 @@ def _init() -> None:
         ("SPECIES_POOCHYENA", "Poochyena", 261),
         ("SPECIES_MIGHTYENA", "Mightyena", 262),
         ("SPECIES_ZIGZAGOON", "Zigzagoon", 263),
-        ("SPECIES_LINOONE", "Linoon", 264),
+        ("SPECIES_LINOONE", "Linoone", 264),
         ("SPECIES_WURMPLE", "Wurmple", 265),
         ("SPECIES_SILCOON", "Silcoon", 266),
         ("SPECIES_BEAUTIFLY", "Beautifly", 267),

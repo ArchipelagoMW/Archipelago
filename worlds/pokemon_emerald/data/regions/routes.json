@@ -1232,7 +1232,7 @@
   },
   "REGION_DESERT_UNDERPASS/MAIN": {
     "parent_map": "MAP_DESERT_UNDERPASS",
-    "has_grass": false,
+    "has_grass": true,
     "has_water": false,
     "has_fishing": false,
     "locations": [],

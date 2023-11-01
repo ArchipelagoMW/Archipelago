@@ -423,7 +423,7 @@
 
   "REGION_ARTISAN_CAVE_1F/MAIN": {
     "parent_map": "MAP_ARTISAN_CAVE_1F",
-    "has_grass": false,
+    "has_grass": true,
     "has_water": false,
     "has_fishing": false,
     "locations": [
@@ -438,7 +438,7 @@
   },
   "REGION_ARTISAN_CAVE_B1F/MAIN": {
     "parent_map": "MAP_ARTISAN_CAVE_B1F",
-    "has_grass": false,
+    "has_grass": true,
     "has_water": false,
     "has_fishing": false,
     "locations": [
