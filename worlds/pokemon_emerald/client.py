@@ -11,6 +11,7 @@ import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import BASE_OFFSET, data
+from .locations import POKEDEX_OFFSET
 from .options import Goal, RemoteItems
 from .util import pokemon_data_to_json, json_to_pokemon_data
 
@@ -190,7 +191,7 @@ class PokemonEmeraldClient(BizHawkClient):
             # Checks that the player is in the overworld
             overworld_guard = (data.ram_addresses["gMain"] + 4, (data.ram_addresses["CB2_Overworld"] + 1).to_bytes(4, "little"), "System Bus")
 
-            # Read save block address
+            # Read save block 1 address
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
                 [(data.ram_addresses["gSaveBlock1Ptr"], 4, "System Bus")],
@@ -200,18 +201,18 @@ class PokemonEmeraldClient(BizHawkClient):
                 return
 
             # Checks that the save block hasn't moved
-            save_block_address_guard = (data.ram_addresses["gSaveBlock1Ptr"], read_result[0], "System Bus")
+            save_block_1_address_guard = (data.ram_addresses["gSaveBlock1Ptr"], read_result[0], "System Bus")
 
-            save_block_address = int.from_bytes(read_result[0], "little")
+            save_block_1_address = int.from_bytes(read_result[0], "little")
 
             # Handle giving the player items
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
                 [
-                    (save_block_address + 0x3778, 2, "System Bus"),                        # Number of received items
+                    (save_block_1_address + 0x3778, 2, "System Bus"),                        # Number of received items
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 4, 1, "System Bus")  # Received item struct full?
                 ],
-                [overworld_guard, save_block_address_guard]
+                [overworld_guard, save_block_1_address_guard]
             )
             if read_result is None:  # Not in overworld, or save block moved
                 return
@@ -233,31 +234,54 @@ class PokemonEmeraldClient(BizHawkClient):
             # Read flags in 2 chunks
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
-                [(save_block_address + 0x1450, 0x96, "System Bus")],  # Flags
-                [overworld_guard, save_block_address_guard]
+                [(save_block_1_address + 0x1450, 0x96, "System Bus")],  # Flags
+                [overworld_guard, save_block_1_address_guard]
             )
             if read_result is None:  # Not in overworld, or save block moved
                 return
-
             flag_bytes = read_result[0]
 
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
-                [(save_block_address + 0x14E6, 0x96, "System Bus")],  # Flags continued
-                [overworld_guard, save_block_address_guard]
+                [(save_block_1_address + 0x14E6, 0x96, "System Bus")],  # Flags continued
+                [overworld_guard, save_block_1_address_guard]
             )
             if read_result is not None:
                 flag_bytes += read_result[0]
+
+            # Read save block 2 address
+            if ctx.slot_data is not None and ctx.slot_data["dexsanity"] == Toggle.option_true:
+                read_result = await bizhawk.guarded_read(
+                    ctx.bizhawk_ctx,
+                    [(data.ram_addresses["gSaveBlock2Ptr"], 4, "System Bus")],
+                    [overworld_guard]
+                )
+                if read_result is None:  # Not in overworld
+                    return
+
+                save_block_2_address_guard = (data.ram_addresses["gSaveBlock2Ptr"], read_result[0], "System Bus")
+
+                save_block_2_address = int.from_bytes(read_result[0], "little")
+
+                # Read pokedex flags
+                read_result = await bizhawk.guarded_read(
+                    ctx.bizhawk_ctx,
+                    [(save_block_2_address + 0x28, 0x34, "System Bus")],
+                    [overworld_guard, save_block_2_address_guard]
+                )
+                if read_result is None:  # Not in overworld, or save block moved
+                    return
+                pokedex_caught_bytes = read_result[0]
 
             # Wonder Trades (only when connected to the server)
             if ctx.server is not None and not ctx.server.socket.closed:
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
                     [
-                        (save_block_address + 0x377C, 0x50, "System Bus"),  # Wonder trade data
-                        (save_block_address + 0x37CC, 1, "System Bus"),     # Is wonder trade sent
+                        (save_block_1_address + 0x377C, 0x50, "System Bus"),  # Wonder trade data
+                        (save_block_1_address + 0x37CC, 1, "System Bus"),     # Is wonder trade sent
                     ],
-                    [overworld_guard, save_block_address_guard]
+                    [overworld_guard, save_block_1_address_guard]
                 )
 
                 if read_result is not None:
@@ -269,8 +293,8 @@ class PokemonEmeraldClient(BizHawkClient):
                         # and mark that the game is waiting on receiving a trade
                         Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
                         await bizhawk.write(ctx.bizhawk_ctx, [
-                            (save_block_address + 0x377C, bytes(0x50), "System Bus"),
-                            (save_block_address + 0x37CC, [1], "System Bus"),
+                            (save_block_1_address + 0x377C, bytes(0x50), "System Bus"),
+                            (save_block_1_address + 0x37CC, [1], "System Bus"),
                         ])
                     elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
                         # Game is waiting on receiving a trade. See if there are any available trades that were not
@@ -282,7 +306,7 @@ class PokemonEmeraldClient(BizHawkClient):
                                 received_trade = await self.wonder_trade_receive(ctx)
                                 if received_trade is not None:
                                     await bizhawk.write(ctx.bizhawk_ctx, [
-                                        (save_block_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
+                                        (save_block_1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
                                     ])
                         else:
                             # Very approximate "time since last loop", but extra delay is fine for this
@@ -319,6 +343,17 @@ class PokemonEmeraldClient(BizHawkClient):
 
                         if flag_id in KEY_LOCATION_FLAG_MAP:
                             local_found_key_items[KEY_LOCATION_FLAG_MAP[flag_id]] = True
+
+            # Check pokedex
+            if ctx.slot_data is not None and ctx.slot_data["dexsanity"] == Toggle.option_true:
+                for byte_i, byte in enumerate(pokedex_caught_bytes):
+                    for i in range(8):
+                        if byte & (1 << i) != 0:
+                            dex_number = (byte_i * 8 + i) + 1
+
+                            location_id = dex_number + BASE_OFFSET + POKEDEX_OFFSET
+                            if location_id in ctx.server_locations:
+                                local_checked_locations.add(location_id)
 
             if ctx.slot_data is not None and ctx.slot_data["goal"] == Goal.option_legendary_hunt:
                 # If legendary hunt doesn't require catching, add defeated legendaries to caught_legendaries

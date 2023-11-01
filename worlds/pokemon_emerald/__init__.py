@@ -996,6 +996,7 @@ class PokemonEmeraldWorld(World):
             "extra_bumpy_slope",
             "free_fly_location",
             "remote_items",
+            "dexsanity",
         )
         slot_data["free_fly_location_id"] = self.free_fly_location_id
         return slot_data
