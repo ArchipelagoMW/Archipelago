@@ -70,7 +70,6 @@ class DS3LocationData:
     dlc: bool = False
     """Whether this location is only accessible if the DLC is enabled."""
 
-    # TODO: implement this properly
     ngp: bool = False
     """Whether this location only contains an item in NG+ and later.
 
