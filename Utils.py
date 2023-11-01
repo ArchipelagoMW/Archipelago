@@ -5,6 +5,7 @@ import json
 import typing
 import builtins
 import os
+import itertools
 import subprocess
 import sys
 import pickle
@@ -73,6 +74,8 @@ def snes_to_pc(value: int) -> int:
 
 
 RetType = typing.TypeVar("RetType")
+S = typing.TypeVar("S")
+T = typing.TypeVar("T")
 
 
 def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
@@ -88,6 +91,31 @@ def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[]
         return typing.cast(RetType, result)
 
     return _wrap
+
+
+def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[S, T], RetType]:
+    """Specialized cache for self + 1 arg. Does not keep global ref to self and skips building a dict key tuple."""
+
+    assert function.__code__.co_argcount == 2, "Can only cache 2 argument functions with this cache."
+
+    cache_name = f"__cache_{function.__name__}__"
+
+    @functools.wraps(function)
+    def wrap(self: S, arg: T) -> RetType:
+        cache: Optional[Dict[T, RetType]] = typing.cast(Optional[Dict[T, RetType]],
+                                                        getattr(self, cache_name, None))
+        if cache is None:
+            res = function(self, arg)
+            setattr(self, cache_name, {arg: res})
+            return res
+        try:
+            return cache[arg]
+        except KeyError:
+            res = function(self, arg)
+            cache[arg] = res
+            return res
+
+    return wrap
 
 
 def is_frozen() -> bool:
@@ -257,15 +285,13 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = Settings  # TODO: remove ~2 versions after 0.4.1
+OptionsType = Settings  # TODO: remove when removing get_options
 
 
-@cache_argsless
-def get_default_options() -> Settings:  # TODO: remove ~2 versions after 0.4.1
-    return Settings(None)
-
-
-get_options = get_settings  # TODO: add a warning ~2 versions after 0.4.1 and remove once all games are ported
+def get_options() -> Settings:
+    # TODO: switch to Utils.deprecate after 0.4.4
+    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    return get_settings()
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
@@ -905,3 +931,17 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     with open(file_name, "wt", encoding="utf-8") as f:
         f.write("\n".join(uml))
+
+
+class RepeatableChain:
+    def __init__(self, iterable: typing.Iterable):
+        self.iterable = iterable
+
+    def __iter__(self):
+        return itertools.chain.from_iterable(self.iterable)
+
+    def __bool__(self):
+        return any(sub_iterable for sub_iterable in self.iterable)
+
+    def __len__(self):
+        return sum(len(iterable) for iterable in self.iterable)
