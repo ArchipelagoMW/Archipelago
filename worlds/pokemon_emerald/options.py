@@ -106,6 +106,13 @@ class RandomizeBerryTrees(Toggle):
     display_name = "Randomize Berry Trees"
 
 
+class Dexsanity(Toggle):
+    """
+    Adding a "caught" pokedex entry gives you an item (catching, evolving, trading, etc...)
+    """
+    display_name = "Dexsanity"
+
+
 class ItemPoolType(Choice):
     """
     Determines which non-progression items get put into the item pool
@@ -720,6 +727,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     hidden_items: RandomizeHiddenItems
     npc_gifts: RandomizeNpcGifts
     berry_trees: RandomizeBerryTrees
+    dexsanity: Dexsanity
     item_pool_type: ItemPoolType
 
     require_itemfinder: HiddenItemsRequireItemfinder

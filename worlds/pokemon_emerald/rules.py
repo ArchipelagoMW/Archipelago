@@ -8,7 +8,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from .data import data
 from .options import DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal
-from .options import EliteFourRequirement, NormanRequirement, Goal
+from .pokemon import national_id_to_species_id_map
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
@@ -1483,6 +1483,15 @@ def set_rules(world: PokemonEmeraldWorld) -> None:
         get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/WATER -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL"),
         can_waterfall
     )
+
+    # Pokedex Rewards
+    if world.options.dexsanity:
+        for i in range(386):
+            species = data.species[national_id_to_species_id_map[i + 1]]
+            set_rule(
+                get_location(f"Pokedex - {species.label}"),
+                lambda state, species_name=species.name: state.has(f"CATCH_{species_name}", world.player)
+            )
 
     # Overworld Items
     if world.options.overworld_items:

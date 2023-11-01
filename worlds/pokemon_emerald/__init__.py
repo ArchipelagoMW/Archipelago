@@ -23,7 +23,7 @@ from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, ReceiveItemMessages,
                       PokemonEmeraldOptions)
-from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
+from .pokemon import LEGENDARY_POKEMON, get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
 from .rules import set_rules
@@ -133,6 +133,12 @@ class PokemonEmeraldWorld(World):
                                 self.multiworld.player_name[self.player])
                 self.options.legendary_hunt_count.value = len(self.options.allowed_legendary_hunt_encounters.value)
 
+        # Disallow blacklisting wild legendaries if dexsanity is enabled
+        if self.options.dexsanity and not self.options.allow_wild_legendaries:
+            logging.warning("Pokemon Emerald: Forcing Player %s (%s) allow wild legendaries for dexsanity.",
+                            self.player, self.multiworld.player_name[self.player])
+            self.options.allow_wild_legendaries.value = Toggle.option_true
+
         # If badges or HMs are vanilla, Norman locks you from using Surf,
         # which means you're not guaranteed to be able to reach Fortree Gym,
         # Mossdeep Gym, or Sootopolis Gym. So we can't require reaching those
@@ -176,6 +182,8 @@ class PokemonEmeraldWorld(World):
             tags.add("NpcGift")
         if self.options.berry_trees:
             tags.add("BerryTree")
+        if self.options.dexsanity:
+            tags.add("Pokedex")
         create_locations_with_tags(self, regions, tags)
 
         self.multiworld.regions.extend(regions.values())
@@ -297,15 +305,19 @@ class PokemonEmeraldWorld(World):
                 RandomizeWildPokemon.option_match_type,
                 RandomizeWildPokemon.option_match_base_stats_and_type
             }
-            should_allow_legendaries = self.options.allow_wild_legendaries.value == Toggle.option_true
+            catch_em_all = self.options.dexsanity == Toggle.option_true
+            should_allow_legendaries = self.options.allow_wild_legendaries == Toggle.option_true
 
             # If doing legendary hunt, blacklist Latios from wild encounters so
             # it can be tracked as the roamer. Otherwise it may be impossible
             # to tell whether a highlighted route is the roamer or a wild
             # encounter.
             wild_encounter_blacklist: Set[int] = set()
+            catch_em_all_placed = set()
             if self.options.goal == Goal.option_legendary_hunt:
                 wild_encounter_blacklist.add(emerald_data.constants["SPECIES_LATIOS"])
+            if not self.options.allow_wild_legendaries:
+                wild_encounter_blacklist |= LEGENDARY_POKEMON
 
             placed_wailord = False
             placed_relicanth = False
@@ -327,14 +339,22 @@ class PokemonEmeraldWorld(World):
                                 target_bst = sum(original_species.base_stats) if should_match_bst else None
                                 target_type = self.random.choice(original_species.types) if should_match_type else None
 
-                                species_old_to_new_map[species_id] = get_random_species(
+                                merged_blacklist = set(species_old_to_new_map.values()) | wild_encounter_blacklist
+                                if catch_em_all and len(catch_em_all_placed) < 386:
+                                    merged_blacklist |= catch_em_all_placed
+
+                                new_species_id = get_random_species(
                                     self.random,
                                     self.modified_data.species,
                                     target_bst,
                                     target_type,
-                                    should_allow_legendaries,
-                                    wild_encounter_blacklist
+                                    merged_blacklist
                                 ).species_id
+                                species_old_to_new_map[species_id] = new_species_id
+
+                                if catch_em_all:
+                                    catch_em_all_placed.add(new_species_id)
+
 
                         # Actually create the new list of slots and encounter table
                         new_slots: List[int] = []
@@ -790,7 +810,7 @@ class PokemonEmeraldWorld(World):
                         self.modified_data.species,
                         target_bst,
                         target_type,
-                        allow_legendaries
+                        LEGENDARY_POKEMON if allow_legendaries else set()
                     )
 
                     # TMs and HMs compatible with the species. Could cache this per species
@@ -843,11 +863,11 @@ class PokemonEmeraldWorld(World):
             )
 
             starter_1 = get_random_species(self.random, self.modified_data.species, starter_bsts[0], starter_types[0],
-                                           allow_legendaries)
+                                           LEGENDARY_POKEMON if allow_legendaries else set())
             starter_2 = get_random_species(self.random, self.modified_data.species, starter_bsts[1], starter_types[1],
-                                           allow_legendaries, {starter_1.species_id})
+                                           LEGENDARY_POKEMON | {starter_1.species_id} if allow_legendaries else set())
             starter_3 = get_random_species(self.random, self.modified_data.species, starter_bsts[2], starter_types[2],
-                                           allow_legendaries, {starter_1.species_id, starter_2.species_id})
+                                           LEGENDARY_POKEMON | {starter_1.species_id, starter_2.species_id} if allow_legendaries else set())
             new_starters = (starter_1, starter_2, starter_3)
 
             easter_egg_type, easter_egg_value = get_easter_egg(self.options.easter_egg.value)

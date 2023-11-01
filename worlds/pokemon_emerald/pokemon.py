@@ -66,29 +66,29 @@ _move_blacklist = frozenset({
     127   # Waterfall
 })
 
-_legendary_pokemon = frozenset({
-    'Mew',
-    'Mewtwo',
-    'Articuno',
-    'Zapdos',
-    'Moltres',
-    'Lugia',
-    'Ho-oh',
-    'Raikou',
-    'Suicune',
-    'Entei',
-    'Celebi',
-    'Groudon',
-    'Kyogre',
-    'Rayquaza',
-    'Latios',
-    'Latias',
-    'Registeel',
-    'Regirock',
-    'Regice',
-    'Jirachi',
-    'Deoxys'
-})
+LEGENDARY_POKEMON = frozenset([data.constants[species] for species in [
+    "SPECIES_ARTICUNO",
+    "SPECIES_ZAPDOS",
+    "SPECIES_MOLTRES",
+    "SPECIES_MEWTWO",
+    "SPECIES_MEW",
+    "SPECIES_RAIKOU",
+    "SPECIES_ENTEI",
+    "SPECIES_SUICUNE",
+    "SPECIES_LUGIA",
+    "SPECIES_HO_OH",
+    "SPECIES_CELEBI",
+    "SPECIES_REGIROCK",
+    "SPECIES_REGICE",
+    "SPECIES_REGISTEEL",
+    "SPECIES_LATIAS",
+    "SPECIES_LATIOS",
+    "SPECIES_KYOGRE",
+    "SPECIES_GROUDON",
+    "SPECIES_RAYQUAZA",
+    "SPECIES_JIRACHI",
+    "SPECIES_DEOXYS"
+]])
 
 
 national_id_to_species_id_map = {species.national_dex_number: i for i, species in enumerate(data.species) if species is not None}
@@ -99,7 +99,6 @@ def get_random_species(
         candidates: List[Optional[SpeciesData]],
         nearby_bst: Optional[int] = None,
         species_type: Optional[int] = None,
-        allow_legendaries: bool = True,
         blacklist: Set[int] = set()) -> SpeciesData:
     candidates: List[SpeciesData] = [
         species
@@ -109,9 +108,6 @@ def get_random_species(
 
     if species_type is not None:
         candidates = [species for species in candidates if species_type in species.types]
-
-    if not allow_legendaries:
-        candidates = [species for species in candidates if species.label not in _legendary_pokemon]
 
     if nearby_bst is not None:
         def has_nearby_bst(species: SpeciesData, max_percent_different: int) -> bool:

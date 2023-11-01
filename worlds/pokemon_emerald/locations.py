@@ -86,6 +86,10 @@ def create_location_label_to_id_map() -> Dict[str, int]:
     for region_data in data.regions.values():
         for location_name in region_data.locations:
             location_data = data.locations[location_name]
-            label_to_id_map[location_data.label] = offset_flag(location_data.flag)
+
+            if location_data.flag == 0:
+                label_to_id_map[location_data.label] = BASE_OFFSET + 10000 + int(location_data.name[15:])
+            else:
+                label_to_id_map[location_data.label] = offset_flag(location_data.flag)
 
     return label_to_id_map
