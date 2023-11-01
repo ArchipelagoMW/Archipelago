@@ -2351,7 +2351,7 @@ location_tables = {
                         lizard = True),
         DS3LocationData("PW1: Large Titanite Shard #3",            "Large Titanite Shard x2",                 DS3LocationCategory.UPGRADE,
                         lizard = True),
-        DS3LocationData("PW2: Champion's Bones",                   "Champion's Bones",                        DS3LocationCategory.UNIQUE,
+        DS3LocationData("PW1: Champion's Bones",                   "Champion's Bones",                        DS3LocationCategory.UNIQUE,
                         offline = '11,0:50002310::', boss = True),
     ],
     "Painted World of Ariandel (After Contraption)": [

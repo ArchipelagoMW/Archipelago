@@ -120,7 +120,7 @@ class DarkSouls3World(World):
             self.yhorm_location = self.multiworld.random.choice(
                 [
                     boss for boss in all_bosses if not boss.dlc
-                ] if self.multiworld.enable_dlc[self.player] else all_bosses
+                ] if not self.multiworld.enable_dlc[self.player] else all_bosses
             )
 
             # If Yhorm is early, make sure the Storm Ruler is easily available to avoid BK
@@ -581,7 +581,7 @@ class DarkSouls3World(World):
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location:
             if self.yhorm_location.region:
-                set_rule(self.multiworld.get_entrance("Go To " + self.yhorm_location.region, self.player),
+                set_rule(self.multiworld.get_entrance(f"Go To {self.yhorm_location.region}", self.player),
                         lambda state: state.has("Storm Ruler", self.player))
             for location in self.yhorm_location.locations:
                 if self.__is_location_available(location):

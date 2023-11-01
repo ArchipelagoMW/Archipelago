@@ -46,7 +46,7 @@ all_bosses = [
     }),
     DS3BossInfo("Abyss Watchers", 3300801, region = "Catacombs of Carthus", locations = {
         "FK: Soul of the Blood of the Wolf",
-        "FK: Cinders of a Lord - Abyss Watchers",
+        "FK: Cinders of a Lord - Abyss Watcher",
         "UG: Hornet Ring",
         "FK: Undead Legion Helm",
         "FK: Undead Legion Armor",
@@ -54,7 +54,7 @@ all_bosses = [
         "FK: Undead Legion Leggings",
         "UG: Wolf Knight Helm",
         "UG: Wolf Knight Armor",
-        "UG: Wolf Knight Gauntlet",
+        "UG: Wolf Knight Gauntlets",
         "UG: Wolf Knight Leggings",
     }),
     DS3BossInfo("High Lord Wolnir", 3800800, region = "Irithyll of the Boreal Valley", locations = {
@@ -64,7 +64,7 @@ all_bosses = [
         "CC: Pontiff's Right Eye",
     }),
     DS3BossInfo("Pontiff Sulyvahn", 3700850, region = "Anor Londo", locations = {
-        "IBV: Soul of Ponyiff Sulyvahn",
+        "IBV: Soul of Pontiff Sulyvahn",
     }),
     DS3BossInfo("Old Demon King", 3800830, locations = {
         "SL: Soul of the Old Demon King",
@@ -113,13 +113,13 @@ all_bosses = [
         "UG: Ember",
         "UG: Wolf Knight Helm",
         "UG: Wolf Knight Armor",
-        "UG: Wolf Knight Gauntlet",
+        "UG: Wolf Knight Gauntlets",
         "UG: Wolf Knight Leggings",
     }),
     # This is a white lie, you can get to a bunch of items in AP before you beat the Wyvern, but
     # this saves us from having to split the entire region in two just to mark which specific items
     # are before and after.
-    DS3BossInfo("Ancient Wyvern", 3200800, region = {"Archdragon Peak"}),
+    DS3BossInfo("Ancient Wyvern", 3200800, region = "Archdragon Peak"),
     DS3BossInfo("King of the Storm", 3200850, locations = {
         "AP: Soul of the Nameless King",
         "AP: Golden Crown",
@@ -142,11 +142,11 @@ all_bosses = [
     }),
     DS3BossInfo("Lorian, Elder Prince", 3410830, locations = {
         "GA: Soul of the Twin Princes",
-        "GA: Cinders of a Lord - Twin Princes",
+        "GA: Cinders of a Lord - Lothric Prince",
     }),
     DS3BossInfo("Lothric, Younger Prince", 3410832, locations = {
         "GA: Soul of the Twin Princes",
-        "GA: Cinders of a Lord - Twin Princes",
+        "GA: Cinders of a Lord - Lothric Prince",
         "GA: Lorian's Helm",
         "GA: Lorian's Armor",
         "GA: Lorian's Gauntlets",
@@ -163,17 +163,17 @@ all_bosses = [
         "PW2: Ordained Dress",
         "PW2: Ordained Trousers",
     }),
-    DS3BossInfo("Blackflame Friede", 5000801, dlc = True, region = "Ringed City", locations = {
+    DS3BossInfo("Blackflame Friede", 5000801, dlc = True, region = "Dreg Heap", locations = {
         "PW2: Soul of Sister Friede",
         "PW2: Ordained Hood",
         "PW2: Ordained Dress",
         "PW2: Ordained Trousers",
     }),
-    DS3BossInfo("Demon Prince", 4500800, dlc = True, region = "Dreg Heap", locations = {
+    DS3BossInfo("Demon Prince", 4500800, dlc = True, region = "Ringed City", locations = {
         "DH: Soul of the Demon Prince",
         "DH: Small Envoy Banner",
     }),
-    DS3BossInfo("Halflight, Spear of the Church", 5100800, dlc = True, region = "Ringed City", locations = {
+    DS3BossInfo("Halflight, Spear of the Church", 5100800, dlc = True, locations = {
         "RC: Titanite Slab #1",
         "RC: Titanite Slab #2",
         "RC: Titanite Slab #3",

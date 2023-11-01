@@ -19,7 +19,7 @@ class DarkSouls3Test(WorldTestBase):
                 self.assertIn(boss.region, all_regions)
 
     def testBossLocations(self):
-        all_locations = {location for locations in location_tables.values() for location in locations)}
+        all_locations = {location.name for locations in location_tables.values() for location in locations}
         for boss in all_bosses:
             for location in boss.locations:
                 self.assertIn(location, all_locations)
