@@ -250,7 +250,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 flag_bytes += read_result[0]
 
             # Wonder Trades (only when connected to the server)
-            if ctx.server is not None:
+            if ctx.server is not None and not ctx.server.socket.closed:
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
                     [
@@ -443,6 +443,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 await asyncio.sleep(self.wonder_trade_cooldown)
                 continue
 
+            self.wonder_trade_cooldown = 5000
             return reply
 
     async def wonder_trade_send(self, ctx: BizHawkClientContext, data: str) -> None:
