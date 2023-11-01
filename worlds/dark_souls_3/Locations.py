@@ -891,10 +891,6 @@ location_tables = {
         # Yuria of Londor for Orbeck's Ashes
         DS3LocationData("RS: Morion Blade",                        "Morion Blade",                      DS3LocationCategory.WEAPON,
                         missable = True, npc = True),
-
-        # Hawkwood after killing Abyss Watchers
-        DS3LocationData("RS: Farron Ring",                         "Farron Ring",                       DS3LocationCategory.RING,
-                        missable = True, npc = True),
     ],
     "Cathedral of the Deep": [
         DS3LocationData("CD: Herald Helm",                         "Herald Helm",                       DS3LocationCategory.ARMOR),
@@ -1147,6 +1143,10 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("FK: Boulder Heave",                       "Boulder Heave",                     DS3LocationCategory.SPELL,
                         missable = True, boss = True, shop = True),
+
+        # Hawkwood after killing Abyss Watchers
+        DS3LocationData("RS: Farron Ring",                         "Farron Ring",                       DS3LocationCategory.RING,
+                        missable = True, npc = True),
 
         # Shrine Handmaid after killing exiles
         DS3LocationData("FK: Exile Mask",                          "Exile Mask",                        DS3LocationCategory.ARMOR,
@@ -1873,10 +1873,14 @@ location_tables = {
                         boss = True, shop = True),
 
         # Shrine Handmaid after killing Dragonslayer Armour (or Eygon of Carim)
-        DS3LocationData("LC: Morne's Helm",                        "Morne's Helm",                        DS3LocationCategory.ARMOR),
-        DS3LocationData("LC: Morne's Armor",                       "Morne's Armor",                       DS3LocationCategory.ARMOR),
-        DS3LocationData("LC: Morne's Gauntlets",                   "Morne's Gauntlets",                   DS3LocationCategory.ARMOR),
-        DS3LocationData("LC: Morne's Leggings",                    "Morne's Leggings",                    DS3LocationCategory.ARMOR),
+        DS3LocationData("LC: Morne's Helm",                        "Morne's Helm",                        DS3LocationCategory.ARMOR,
+                        boss = True, shop = True),
+        DS3LocationData("LC: Morne's Armor",                       "Morne's Armor",                       DS3LocationCategory.ARMOR,
+                        boss = True, shop = True),
+        DS3LocationData("LC: Morne's Gauntlets",                   "Morne's Gauntlets",                   DS3LocationCategory.ARMOR,
+                        boss = True, shop = True),
+        DS3LocationData("LC: Morne's Leggings",                    "Morne's Leggings",                    DS3LocationCategory.ARMOR,
+                        boss = True, shop = True),
     ],
     "Consumed King's Garden": [
 

@@ -1,5 +1,6 @@
 # world/dark_souls_3/__init__.py
-from typing import Dict, Set, List, Union
+import logging
+from typing import Dict, Set, List, Optional, TextIO, Union
 import re
 
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
@@ -8,6 +9,7 @@ from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
+from .Bosses import DS3BossInfo, all_bosses
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
 from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption
@@ -64,6 +66,12 @@ class DarkSouls3World(World):
         }
     }
 
+    yhorm_location: Optional[DS3BossInfo]
+    """If enemy randomization is enabled, this is the boss who Yhorm the Giant should replace.
+    
+    This is used to determine where the Storm Ruler can be placed.
+    """
+
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -106,6 +114,25 @@ class DarkSouls3World(World):
         # The offline randomizer's clever code for converting an item into a gesture only works for
         # items in the local world.
         self.multiworld.local_items[self.player].value.add("Path of the Dragon")
+
+        # Randomize Yhorm manually so that we know where to place the Storm Ruler
+        if self.multiworld.randomize_enemies[self.player] == Toggle.option_true:
+            self.yhorm_location = self.multiworld.random.choice(
+                [
+                    boss for boss in all_bosses if not boss.dlc
+                ] if self.multiworld.enable_dlc[self.player] else all_bosses
+            )
+
+            # If Yhorm is early, make sure the Storm Ruler is easily available to avoid BK
+            if (
+                self.yhorm_location.name == "Iudex Gundyr" or
+                self.yhorm_location.name == "Vordt of the Boreal Valley" or (
+                    self.yhorm_location.name == "Dancer of the Boreal Valley" and
+                    self.multiworld.late_basin_of_vows[self.player] == Toggle.option_false
+                )
+            ):
+                self.multiworld.early_items[self.player]['Storm Ruler'] = 1
+                self.multiworld.local_items[self.player].value.add('Storm Ruler')
 
     def create_regions(self):
         # Create Vanilla Regions
@@ -245,10 +272,7 @@ class DarkSouls3World(World):
                 raise Exception("DS3 generation bug: Added an unavailable location.")
 
             item = item_dictionary[location.default_item_name]
-            if item.category == DS3ItemCategory.SKIP or (
-                self.multiworld.randomize_enemies[self.player] == Toggle.option_true and
-                item.name == "Storm Ruler"
-            ):
+            if item.category == DS3ItemCategory.SKIP:
                 num_required_extra_items += 1
             elif item.category == DS3ItemCategory.MISC or item.force_unique:
                 itempool_by_category[location.category].append(location.default_item_name)
@@ -466,9 +490,6 @@ class DarkSouls3World(World):
                          lambda state: state.has("Small Doll", self.player))
 
         # Define the access rules to some specific locations
-        if self.multiworld.randomize_enemies[self.player] == Toggle.option_false:
-            set_rule(self.multiworld.get_location("PC: Cinders of a Lord - Yhorm the Giant", self.player),
-                    lambda state: state.has("Storm Ruler", self.player))
         set_rule(self.multiworld.get_location("HWL: Red Eye Orb", self.player),
                  lambda state: state.has("Lift Chamber Key", self.player))
 
@@ -556,6 +577,19 @@ class DarkSouls3World(World):
                             item.player != self.player or
                             (item.count == 1 and not item.soul)
                         ))
+        
+        # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
+        if self.yhorm_location:
+            if self.yhorm_location.region:
+                set_rule(self.multiworld.get_entrance("Go To " + self.yhorm_location.region, self.player),
+                        lambda state: state.has("Storm Ruler", self.player))
+            for location in self.yhorm_location.locations:
+                if self.__is_location_available(location):
+                    set_rule(self.multiworld.get_location(location, self.player),
+                            lambda state: state.has("Storm Ruler", self.player))
+        else:
+            set_rule(self.multiworld.get_location("PC: Cinders of a Lord - Yhorm the Giant", self.player),
+                    lambda state: state.has("Storm Ruler", self.player))
 
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
@@ -580,6 +614,11 @@ class DarkSouls3World(World):
             (not data.dlc or self.multiworld.enable_dlc[self.player] == Toggle.option_true) and
             (not data.ngp or self.multiworld.enable_ngp[self.player] == Toggle.option_true)
         )
+
+
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        if self.yhorm_location:
+            spoiler_handle.write(f"Yhorm takes the place of {self.yhorm_location.name}")
 
 
     def fill_slot_data(self) -> Dict[str, object]:
@@ -666,6 +705,7 @@ class DarkSouls3World(World):
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
+            "yhorm": f"{self.yhorm_location.name} {self.yhorm_location.id}" if self.yhorm_location else None,
             "apIdsToItemIds": ap_ids_to_ds3_ids,
             "itemCounts": item_counts,
             "locationIdsToKeys": location_ids_to_keys,
