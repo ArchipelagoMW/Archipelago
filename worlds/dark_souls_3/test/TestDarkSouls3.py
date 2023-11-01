@@ -23,3 +23,7 @@ class DarkSouls3Test(WorldTestBase):
         for boss in all_bosses:
             for location in boss.locations:
                 self.assertIn(location, all_locations)
+
+    def testForceUnique(self):
+        tongues = self.get_items_by_name("Pale Tongue")
+        self.assertEqual(len(tongues), 1, "There should only be one Pale Tongue in the item pool.")

@@ -274,7 +274,7 @@ class DarkSouls3World(World):
             item = item_dictionary[location.default_item_name]
             if item.category == DS3ItemCategory.SKIP:
                 num_required_extra_items += 1
-            elif item.category == DS3ItemCategory.MISC or item.force_unique:
+            elif item.category == DS3ItemCategory.MISC and not item.force_unique:
                 itempool_by_category[location.category].append(location.default_item_name)
             else:
                 # For non-miscellaneous non-skip items, make sure there aren't duplicates in the
