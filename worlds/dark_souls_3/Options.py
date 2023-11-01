@@ -226,6 +226,91 @@ class EnableNGPOption(Toggle):
     display_name = "Enable NG+"
 
 
+class RandomizeEnemiesOption(DefaultOnToggle):
+    """Whether to randomize enemy and boss placements.
+
+    If this is enabled, the Storm Ruler sword is granted immediately upon meeting Yhorm the Giant
+    instead of being randomized into the world.
+    """
+    display_name = "Randomize Enemies"
+
+
+class RandomizeMimicsWithEnemiesOption(Toggle):
+    """Whether to mix Mimics into the main enemy pool.
+
+    If this is enabled, Mimics will be replaced by normal enemies who drop the Mimic rewards on
+    death, and Mimics will be placed randomly in place of normal enemies. It's recommended to
+    enable Impatient Mimcs as well if you enable this.
+
+    This is ignored unless enemies are randomized.
+    """
+    display_name = "Randomize Mimics With Enemies"
+
+
+class RandomizeSmallCrystalLizardsWithEnemiesOption(Toggle):
+    """Whether to mix small Crystal Lizards into the main enemy pool.
+
+    If this is enabled, Crystal Lizards will be replaced by normal enemies who drop the Crystal
+    Lizard rewards on death, and Crystal Lizards will be placed randomly in place of normal
+    enemies.
+
+    This is ignored unless enemies are randomized.
+    """
+    display_name = "Randomize Small Crystal Lizards With Enemies"
+
+
+class ReduceHarmlessEnemiesOption(Toggle):
+    """Whether to reduce the frequency that "harmless" enemies appear.
+
+    Enable this to add a bit of extra challenge. This severely limits the number of enemies that
+    are slow to aggro, slow to attack, and do very little damage that appear in the enemy pool.
+
+    This is ignored unless enemies are randomized.
+    """
+    display_name = "Reduce Harmless Enemies"
+
+
+class SimpleEarlyBossesOption(DefaultOnToggle):
+    """Whether to avoid replacing Iudex Gundyr and Vordt with late bosses.
+
+    This excludes all bosses after Dancer of the Boreal Valley from these two boss fights. Disable
+    it for a chance at a much harder early game.
+
+    This is ignored unless enemies are randomized.
+    """
+    display_name = "Simple Early Bosses"
+
+
+class ScaleEnemiesOption(DefaultOnToggle):
+    """Whether to scale randomized enemy stats to match the areas in which they appear.
+
+    Disabling this will tend to make the early game much more difficult and the late game much
+    easier.
+
+    This is ignored unless enemies are randomized.
+    """
+    display_name = "Scale Enemies"
+
+
+class AllChestsAreMimicsOption(Toggle):
+    """Whether to replace all chests with mimics that drop the same items.
+
+    If "Randomize Mimics With Enemies" is set, these chests will instead be replaced with random
+    enemies that drop the same items.
+
+    This is ignored unless enemies are randomized.
+    """
+    display_name = "All Chests Are Mimics"
+
+
+class ImpatientMimicsOption(Toggle):
+    """Whether mimics should attack as soon as you get close.
+
+    This is ignored unless enemies are randomized.
+    """
+    display_name = "All Chests Are Mimics"
+
+
 class DS3ExcludeLocations(ExcludeLocations):
     """Prevent these locations from having an important item"""
     default = {"Hidden", "Small Crystal Lizards", "Miscellaneous"}
@@ -267,4 +352,12 @@ class DarkSouls3Options(PerGameCommonOptions):
     death_link: DeathLink
     enable_dlc: EnableDLCOption
     enable_ngp: EnableNGPOption
+    randomize_enemies: RandomizeEnemiesOption
+    randomize_mimics_with_enemies: RandomizeMimicsWithEnemiesOption
+    randomize_small_crystal_lizards_with_enemies: RandomizeSmallCrystalLizardsWithEnemiesOption
+    reduce_harmless_enemies: ReduceHarmlessEnemiesOption
+    simple_early_bosses: SimpleEarlyBossesOption
+    scale_enemies: ScaleEnemiesOption
+    all_chests_are_mimics: AllChestsAreMimicsOption
+    impatient_mimics: ImpatientMimicsOption
     exclude_locations: DS3ExcludeLocations

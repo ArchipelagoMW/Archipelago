@@ -245,7 +245,10 @@ class DarkSouls3World(World):
                 raise Exception("DS3 generation bug: Added an unavailable location.")
 
             item = item_dictionary[location.default_item_name]
-            if item.category == DS3ItemCategory.SKIP:
+            if item.category == DS3ItemCategory.SKIP or (
+                self.multiworld.randomize_enemies[self.player] == Toggle.option_true and
+                item.name == "Storm Ruler"
+            ):
                 num_required_extra_items += 1
             elif item.category == DS3ItemCategory.MISC or item.force_unique:
                 itempool_by_category[location.category].append(location.default_item_name)
@@ -463,8 +466,9 @@ class DarkSouls3World(World):
                          lambda state: state.has("Small Doll", self.player))
 
         # Define the access rules to some specific locations
-        set_rule(self.multiworld.get_location("PC: Cinders of a Lord - Yhorm the Giant", self.player),
-                 lambda state: state.has("Storm Ruler", self.player))
+        if self.multiworld.randomize_enemies[self.player] == Toggle.option_false:
+            set_rule(self.multiworld.get_location("PC: Cinders of a Lord - Yhorm the Giant", self.player),
+                    lambda state: state.has("Storm Ruler", self.player))
         set_rule(self.multiworld.get_location("HWL: Red Eye Orb", self.player),
                  lambda state: state.has("Lift Chamber Key", self.player))
 
@@ -651,6 +655,14 @@ class DarkSouls3World(World):
                 "no_equip_load": self.multiworld.no_equip_load[self.player].value,
                 "enable_dlc": self.multiworld.enable_dlc[self.player].value,
                 "enable_ngp": self.multiworld.enable_ngp[self.player].value,
+                "randomize_enemies": self.multiworld.randomize_enemies[self.player].value,
+                "randomize_mimics_with_enemies": self.multiworld.randomize_mimics_with_enemies[self.player].value,
+                "randomize_small_crystal_lizards_with_enemies": self.multiworld.randomize_small_crystal_lizards_with_enemies[self.player].value,
+                "reduce_harmless_enemies": self.multiworld.reduce_harmless_enemies[self.player].value,
+                "simple_early_bosses": self.multiworld.simple_early_bosses[self.player].value,
+                "scale_enemies": self.multiworld.scale_enemies[self.player].value,
+                "all_chests_are_mimics": self.multiworld.all_chests_are_mimics[self.player].value,
+                "impatient_mimics": self.multiworld.impatient_mimics[self.player].value,
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
