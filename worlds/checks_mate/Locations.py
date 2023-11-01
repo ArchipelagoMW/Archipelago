@@ -73,8 +73,8 @@ location_table = {
     # "Pin": CMLocationData(4_056, True, False),
     # "Skewer": CMLocationData(4_057, True, False),
     # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
-    # "00 Castle": CMLocationData(4_058, True, False),
-    # "000 Castle": CMLocationData(4_059, True, False),
+    # "O-O Castle": CMLocationData(4_058, True, False),
+    # "O-O-O Castle": CMLocationData(4_059, True, False),
     # "Discovered Attack": CMLocationData(4_060, True, False),
     # goal 1+ requires that you successively checkmate your opponent as they gain material
     # "Checkmate Minima": CMLocationData(4_084, True, False),

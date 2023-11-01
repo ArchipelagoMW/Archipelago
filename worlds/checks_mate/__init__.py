@@ -45,7 +45,7 @@ class CMWorld(World):
         "Enemy Piece": {"Enemy Piece A", "Enemy Piece B", "Enemy Piece C", "Enemy Piece D",
                         "Enemy Piece F", "Enemy Piece G", "Enemy Piece H"},
     }
-    items_used: Dict[str, int] = {}
+    items_used: Dict[int, Dict[str, int]] = {}
 
     item_pool: List[CMItem] = []
     prefill_items: List[CMItem] = []
@@ -81,16 +81,18 @@ class CMWorld(World):
         # items = [[self.create_item(item) for _ in range(item_data.quantity)]
         #                             for item, item_data in progression_items]0
         excluded_items = get_excluded_items(self.multiworld, self.player)
+        self.items_used[self.player] = {}
         for item_name in excluded_items:
-            if item_name not in self.items_used:
-                self.items_used[item_name] = 0
-            self.items_used[item_name] += excluded_items[item_name]
+            if item_name not in self.items_used[self.player]:
+                self.items_used[self.player][item_name] = 0
+            self.items_used[self.player][item_name] += excluded_items[item_name]
         starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
         for item in starter_items:
-            if item.name not in self.items_used:
-                self.items_used[item.name] = 0
-            self.items_used[item.name] += 1
+            if item.name not in self.items_used[self.player]:
+                self.items_used[self.player][item.name] = 0
+            self.items_used[self.player][item.name] += 1
 
+        print(self.items_used)
         starter_dict = {item.name: 1 for item in starter_items}
         excluded_dict = {
             item: excluded_items[item] for item in excluded_items if not (
@@ -124,27 +126,31 @@ class CMWorld(World):
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
+            print(material)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
                 try_item = self.create_item(chosen_item)
-                if chosen_item not in self.items_used:
-                    self.items_used[chosen_item] = 0
-                self.items_used[chosen_item] += 1
+                if chosen_item not in self.items_used[self.player]:
+                    self.items_used[self.player][chosen_item] = 0
+                self.items_used[self.player][chosen_item] += 1
                 items.append(try_item)
                 material += progression_items[chosen_item].material
             else:
                 my_progression_items.remove(chosen_item)
+                print(chosen_item)
 
+        print("Ended")
+        print(material)
         my_useful_items = list(useful_items.keys())
         while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
             chosen_item = self.multiworld.random.choice(my_useful_items)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
-                if chosen_item not in self.items_used:
-                    self.items_used[chosen_item] = 0
-                self.items_used[chosen_item] += 1
+                if chosen_item not in self.items_used[self.player]:
+                    self.items_used[self.player][chosen_item] = 0
+                self.items_used[self.player][chosen_item] += 1
                 try_item = self.create_item(chosen_item)
                 items.append(try_item)
             else:
@@ -156,9 +162,9 @@ class CMWorld(World):
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
-                if chosen_item not in self.items_used:
-                    self.items_used[chosen_item] = 0
-                self.items_used[chosen_item] += 1
+                if chosen_item not in self.items_used[self.player]:
+                    self.items_used[self.player][chosen_item] = 0
+                self.items_used[self.player][chosen_item] += 1
                 try_item = self.create_item(chosen_item)
                 items.append(try_item)
             else:
@@ -176,22 +182,22 @@ class CMWorld(World):
         victory_item = CMItem("Victory", ItemClassification.progression, 4_009, self.player)
         self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(victory_item, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def has_prereqs(self, chosen_item: str) -> bool:
         parents = [item for item in item_table
                    if item_table[chosen_item].parents is not None and item in item_table[chosen_item].parents]
         if parents:
-            fewest_parents = min([self.items_used.get(item, 0) for item in parents])
-            enough_parents = fewest_parents > self.items_used.get(chosen_item, 0)
+            fewest_parents = min([self.items_used[self.player].get(item, 0) for item in parents])
+            enough_parents = fewest_parents > self.items_used[self.player].get(chosen_item, 0)
             if not enough_parents:
                 return False
         return True
 
     def can_add_more(self, chosen_item: str) -> bool:
-        return chosen_item not in self.items_used or \
+        return chosen_item not in self.items_used[self.player] or \
             item_table[chosen_item].quantity == -1 or \
-            self.items_used[chosen_item] < item_table[chosen_item].quantity
+            self.items_used[self.player][chosen_item] < item_table[chosen_item].quantity
 
 
 def get_excluded_items(multiworld: MultiWorld, player: int) -> Dict[str, int]:

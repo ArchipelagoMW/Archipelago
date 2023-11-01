@@ -31,9 +31,9 @@ item_table = {
                                              parents=["Progressive Major Piece"]),
     "Victory": CMItemData(4_009, ItemClassification.progression),
     # TODO: implement extra moves
-    # "Progressive Opening Move": CMItemData(4_007, ItemClassification.useful, quantity=3),
-    # "Progressive Enemy Pawn": CMItemData(4_008, ItemClassification.trap, quantity=8),
-    # "Progressive Enemy Piece": CMItemData(4_009, ItemClassification.trap, quantity=7),
+    # "Progressive Enemy Pawn": CMItemData(4_007, ItemClassification.trap, quantity=8),
+    # "Progressive Enemy Piece": CMItemData(4_008, ItemClassification.trap, quantity=7),
+    # "Progressive Opening Move": CMItemData(4_010, ItemClassification.useful, quantity=3),
     "Enemy Pawn A": CMItemData(4_030, ItemClassification.progression),
     "Enemy Pawn B": CMItemData(4_031, ItemClassification.progression),
     "Enemy Pawn C": CMItemData(4_032, ItemClassification.progression),
