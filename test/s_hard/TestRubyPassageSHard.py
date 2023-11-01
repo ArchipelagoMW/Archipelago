@@ -1,9 +1,9 @@
-from . import TestHard
+from . import TestSHard
 
 
 # Format:
 # [location, expected_result, given_items, [excluded_items]]
-class TestRubyPassageHard(TestHard):
+class TestRubyPassageSHard(TestSHard):
 
     def test_the_curious_factory(self):
         self.starting_regions = ['The Curious Factory (entrance)']
@@ -98,11 +98,11 @@ class TestRubyPassageHard(TestHard):
     def test_pinball_zone(self):
         self.starting_regions = ['Pinball Zone (entrance)']
         self.run_location_tests([
-            ['Pinball Zone - Rolling Room Box', False, []],
-            ['Pinball Zone - Rolling Room Box', False, [], ['Progressive Grab']],
-            ['Pinball Zone - Rolling Room Box', False, [], ['Progressive Ground Pound']],
-            ['Pinball Zone - Rolling Room Box', False, [], ['Head Smash']],
-            ['Pinball Zone - Rolling Room Box', True,
+            ['Pinball Zone - Switch Room Box', False, []],
+            ['Pinball Zone - Switch Room Box', False, [], ['Progressive Grab']],
+            ['Pinball Zone - Switch Room Box', False, [], ['Progressive Ground Pound']],
+            ['Pinball Zone - Switch Room Box', False, [], ['Head Smash']],
+            ['Pinball Zone - Switch Room Box', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
 
             ['Pinball Zone - Fruit Room Box', False, []],
@@ -133,10 +133,11 @@ class TestRubyPassageHard(TestHard):
             ['Pinball Zone - CD Box', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
 
-            # Pinball Zone has two of these. One is near the switch, accessible
-            # with no extra items. The other is in a pink room which needs both
-            # levels of Ground Pound to access. Both of them are currently the
-            # same check, so account for the one with less requirements.
+            # Pinball Zone has two of these. One is where the NE jewel would be
+            # on the other difficulties, accessible with no extra items. The
+            # other is in a pink room which needs both levels of Ground Pound to
+            # access. Both of them are currently the same check, so account for
+            # the one with less requirements.
             ['Pinball Zone - Full Health Item Box', False, []],
             ['Pinball Zone - Full Health Item Box', False, [], ['Progressive Grab']],
             ['Pinball Zone - Full Health Item Box', False, [], ['Progressive Ground Pound']],
@@ -152,6 +153,7 @@ class TestRubyPassageHard(TestHard):
              # ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
             # ['Pinball Zone - Full Health Item Box', True,
              # ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Head Smash']],
+
         ])
 
     def test_cuckoo_condor(self):
