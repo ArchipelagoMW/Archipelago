@@ -104,7 +104,6 @@ class CMWorld(World):
         items = []
 
         material = 0
-        greatest_material = max([progression_items[item].material for item in progression_items])
         min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
         max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
         if max_material_option < min_material_option:
@@ -124,12 +123,6 @@ class CMWorld(World):
             chosen_item = self.multiworld.random.choice(my_progression_items)
             # obey user's wishes
             if progression_items[chosen_item].material + material > max_material_option:
-                my_progression_items.remove(chosen_item)
-                continue
-            remaining_count = len(location_table) - (len(items) + user_item_count)
-            if (progression_items[chosen_item].material + material + (greatest_material * (remaining_count - 1))
-                    < min_material_option):
-                print("ChecksMate " + str(self.player) + " removed " + chosen_item + " for being too puny and impotent")
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
