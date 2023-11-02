@@ -1022,7 +1022,7 @@ item_table = {
                  description=SMART_SERVOS_DESCRIPTION),
     ItemNames.LIBERATOR_RESOURCE_EFFICIENCY:
         ItemData(385 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 4, SC2Race.TERRAN,
-                 parent_item=ItemNames.LIBERATOR, origin={"ext"},
+                 classification=ItemClassification.filler, parent_item=ItemNames.LIBERATOR, origin={"ext"},
                  description=RESOURCE_EFFICIENCY_NO_SUPPLY_DESCRIPTION_TEMPLATE.format("Liberator")),
     ItemNames.HERCULES_INTERNAL_FUSION_MODULE:
         ItemData(386 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 5, SC2Race.TERRAN,
@@ -1499,7 +1499,7 @@ defense_ratings = {
     ItemNames.BANSHEE: 1,
     ItemNames.BATTLECRUISER: 1,
     ItemNames.LIBERATOR: 4,
-    ItemNames.WIDOW_MINE: 2,
+    ItemNames.WIDOW_MINE: 1,
     # "Concealment (Widow Mine)": 1
 }
 zerg_defense_ratings = {
