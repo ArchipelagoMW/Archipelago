@@ -55,7 +55,7 @@ class TestDeathMountain(TestInvertedOWG):
             ["Mimic Cave", False, []],
             ["Mimic Cave", False, [], ['Moon Pearl']],
             ["Mimic Cave", False, [], ['Hammer']],
-            ["Mimic Cave", True, ['Moon Pearl', 'Hammer', 'Pegasus Boots']],
+            ["Mimic Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Hammer', 'Pegasus Boots']],
 
             ["Ether Tablet", False, []],
             ["Ether Tablet", False, ['Progressive Sword'], ['Progressive Sword']],

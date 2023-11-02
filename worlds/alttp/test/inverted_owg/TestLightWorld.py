@@ -142,27 +142,27 @@ class TestLightWorld(TestInvertedOWG):
             ["Mini Moldorm Cave - Far Left", False, []],
             ["Mini Moldorm Cave - Far Left", False, [], ['Moon Pearl']],
             ["Mini Moldorm Cave - Far Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
-            ["Mini Moldorm Cave - Far Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Far Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Left", False, []],
             ["Mini Moldorm Cave - Left", False, [], ['Moon Pearl']],
             ["Mini Moldorm Cave - Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
-            ["Mini Moldorm Cave - Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Right", False, []],
             ["Mini Moldorm Cave - Right", False, [], ['Moon Pearl']],
             ["Mini Moldorm Cave - Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
-            ["Mini Moldorm Cave - Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Far Right", False, []],
             ["Mini Moldorm Cave - Far Right", False, [], ['Moon Pearl']],
             ["Mini Moldorm Cave - Far Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
-            ["Mini Moldorm Cave - Far Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Far Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Generous Guy", False, []],
             ["Mini Moldorm Cave - Generous Guy", False, [], ['Moon Pearl']],
             ["Mini Moldorm Cave - Generous Guy", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
-            ["Mini Moldorm Cave - Generous Guy", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Generous Guy", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Ice Rod Cave", False, []],
             ["Ice Rod Cave", False, [], ['Moon Pearl']],

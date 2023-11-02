@@ -21,7 +21,8 @@ class TestDungeons(TestInvertedOWG):
             ["Sewers - Secret Room - Left", True, ['Moon Pearl', 'Progressive Glove', 'Pegasus Boots']],
             ["Sewers - Secret Room - Left", True, ['Progressive Sword', 'Moon Pearl', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)']],
             ["Sewers - Secret Room - Left", True, ['Progressive Sword', 'Magic Mirror', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)']],
-            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+10)', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)']],
 
             ["Eastern Palace - Compass Chest", False, []],
             ["Eastern Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots']],

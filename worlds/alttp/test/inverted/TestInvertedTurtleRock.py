@@ -21,10 +21,10 @@ class TestInvertedTurtleRock(TestInverted):
             ["Turtle Rock - Chain Chomps", False, ['Small Key (Turtle Rock)'], ['Magic Mirror', 'Small Key (Turtle Rock)']],
             ["Turtle Rock - Chain Chomps", True, ['Flute', 'Quake', 'Progressive Sword', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
             ["Turtle Rock - Chain Chomps", True, ['Lamp', 'Progressive Glove', 'Quake', 'Progressive Sword', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Chain Chomps", True, ['Lamp', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove']],
+            ["Turtle Rock - Chain Chomps", True, ['Bomb Upgrade (+5)', 'Lamp', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove']],
             ["Turtle Rock - Chain Chomps", True, ['Lamp', 'Magic Mirror', 'Progressive Glove', 'Moon Pearl', 'Hookshot']],
             ["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Flute', 'Magic Mirror', 'Hookshot']],
-            ["Turtle Rock - Chain Chomps", True, ['Flute', 'Progressive Glove', 'Progressive Glove', 'Magic Mirror']],
+            ["Turtle Rock - Chain Chomps", True, ['Flute', 'Progressive Glove', 'Progressive Glove', 'Magic Mirror', 'Fire Rod']],
 
             ["Turtle Rock - Roller Room - Left", False, []],
             ["Turtle Rock - Roller Room - Left", False, [], ['Cane of Somaria']],
@@ -54,8 +54,8 @@ class TestInvertedTurtleRock(TestInverted):
             ["Turtle Rock - Big Chest", False, [], ['Big Key (Turtle Rock)']],
             ["Turtle Rock - Big Chest", False, [], ['Magic Mirror', 'Cane of Somaria']],
             ["Turtle Rock - Big Chest", False, ['Small Key (Turtle Rock)', 'Small Key (Turtle Rock)'], ['Magic Mirror', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Big Chest", True, ['Big Key (Turtle Rock)', 'Flute', 'Quake', 'Progressive Sword', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Big Chest", True, ['Big Key (Turtle Rock)', 'Lamp', 'Progressive Glove', 'Quake', 'Progressive Sword', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Big Chest", True, ['Bomb Upgrade (+5)', 'Big Key (Turtle Rock)', 'Flute', 'Quake', 'Progressive Sword', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Big Chest", True, ['Bomb Upgrade (+5)', 'Big Key (Turtle Rock)', 'Lamp', 'Progressive Glove', 'Quake', 'Progressive Sword', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
             ["Turtle Rock - Big Chest", True, ['Big Key (Turtle Rock)', 'Lamp', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Cane of Somaria']],
             ["Turtle Rock - Big Chest", True, ['Big Key (Turtle Rock)', 'Lamp', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Hookshot']],
             ["Turtle Rock - Big Chest", True, ['Big Key (Turtle Rock)', 'Lamp', 'Magic Mirror', 'Progressive Glove', 'Moon Pearl', 'Hookshot']],
@@ -68,10 +68,10 @@ class TestInvertedTurtleRock(TestInverted):
             ["Turtle Rock - Big Key Chest", True, ['Flute', 'Quake', 'Progressive Sword', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
             ["Turtle Rock - Big Key Chest", True, ['Lamp', 'Progressive Glove', 'Quake', 'Progressive Sword', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
             # Mirror in from ledge, use left side entrance, have enough keys to get to the chest
-            ["Turtle Rock - Big Key Chest", True, ['Lamp', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Big Key Chest", True, ['Lamp', 'Magic Mirror', 'Progressive Glove', 'Moon Pearl', 'Hookshot', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Big Key Chest", True, ['Moon Pearl', 'Flute', 'Magic Mirror', 'Hookshot', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Big Key Chest", True, ['Flute', 'Progressive Glove', 'Progressive Glove', 'Magic Mirror', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Big Key Chest", True, ['Progressive Sword', 'Lamp', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Big Key Chest", True, ['Progressive Sword', 'Lamp', 'Magic Mirror', 'Progressive Glove', 'Moon Pearl', 'Hookshot', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Big Key Chest", True, ['Progressive Sword', 'Moon Pearl', 'Flute', 'Magic Mirror', 'Hookshot', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Big Key Chest", True, ['Progressive Sword', 'Flute', 'Progressive Glove', 'Progressive Glove', 'Magic Mirror', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
 
             ["Turtle Rock - Crystaroller Room", False, []],
             ["Turtle Rock - Crystaroller Room", False, [], ['Big Key (Turtle Rock)', 'Magic Mirror']],
@@ -102,7 +102,10 @@ class TestInvertedTurtleRock(TestInverted):
             ["Turtle Rock - Boss", True, ['Ice Rod', 'Fire Rod', 'Lamp', 'Progressive Glove', 'Quake', 'Progressive Sword', 'Progressive Sword', 'Cane of Somaria', 'Magic Upgrade (1/2)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)','Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Big Key (Turtle Rock)']],
             ["Turtle Rock - Boss", True, ['Ice Rod', 'Fire Rod', 'Lamp', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Hammer', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Big Key (Turtle Rock)']],
             ["Turtle Rock - Boss", True, ['Ice Rod', 'Fire Rod', 'Flute', 'Magic Mirror', 'Moon Pearl', 'Hookshot', 'Hammer', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Big Key (Turtle Rock)']]
+
         ])
+
+
 
     def testEyeBridge(self):
         for location in ["Turtle Rock - Eye Bridge - Top Right", "Turtle Rock - Eye Bridge - Top Left",

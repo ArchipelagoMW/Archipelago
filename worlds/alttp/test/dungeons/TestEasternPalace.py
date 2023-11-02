@@ -18,7 +18,7 @@ class TestEasternPalace(TestDungeon):
 
                 ["Eastern Palace - Big Key Chest", False, []],
                 ["Eastern Palace - Big Key Chest", False, [], ['Lamp']],
-                ["Eastern Palace - Big Key Chest", True, ['Lamp', 'Small Key (Eastern Palace)', 'Small Key (Eastern Palace)']],
+                ["Eastern Palace - Big Key Chest", True, ['Lamp', 'Small Key (Eastern Palace)', 'Small Key (Eastern Palace)', 'Progressive Sword']],
                 ["Eastern Palace - Big Key Chest", True, ['Lamp', 'Big Key (Eastern Palace)', 'Progressive Sword']],
 
                 #@todo: Advanced?

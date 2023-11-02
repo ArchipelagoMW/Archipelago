@@ -11,6 +11,8 @@ class TestVanilla(TestBase, LTTPTestBase):
         self.world_setup()
         self.multiworld.glitches_required[1] = "no_glitches"
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
+        self.multiworld.bombless_start[1].value = True
+        self.multiworld.shuffle_capacity_upgrades[1].value = True
         self.multiworld.worlds[1].er_seed = 0
         self.multiworld.worlds[1].create_regions()
         self.multiworld.worlds[1].create_items()
