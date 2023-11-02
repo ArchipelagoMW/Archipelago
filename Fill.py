@@ -448,14 +448,16 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
 
     if prioritylocations:
         # "priority fill"
-        fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking,
+        fill_restrictive(world, world.state, prioritylocations, progitempool,
+                         single_player_placement=world.players == 1, swap=False, on_place=mark_for_locking,
                          name="Priority")
         accessibility_corrections(world, world.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
         # "advancement/progression fill"
-        fill_restrictive(world, world.state, defaultlocations, progitempool, name="Progression")
+        fill_restrictive(world, world.state, defaultlocations, progitempool, single_player_placement=world.players == 1,
+                         name="Progression")
         if progitempool:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
