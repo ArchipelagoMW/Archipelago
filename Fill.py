@@ -20,11 +20,11 @@ def _log_fill_progress(name: str, placed: int, total_items: int) -> None:
 
 
 def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item] = tuple(),
-                    player: typing.Optional[int] = None) -> CollectionState:
+                    locations: typing.Optional[typing.List[Location]] = None) -> CollectionState:
     new_state = base_state.copy()
     for item in itempool:
         new_state.collect(item, True)
-    new_state.sweep_for_events(player=player)
+    new_state.sweep_for_events(locations=locations)
     return new_state
 
 
@@ -67,7 +67,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                     item_pool.pop(p)
                     break
         maximum_exploration_state = sweep_from_pool(
-            base_state, item_pool + unplaced_items, item.player if single_player_placement else None)
+            base_state, item_pool + unplaced_items, world.get_filled_locations(item.player)
+            if single_player_placement else None)
 
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
@@ -114,7 +115,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                         location.item = None
                         placed_item.location = None
                         swap_state = sweep_from_pool(base_state, [placed_item] if unsafe else [],
-                                                     item.player if single_player_placement else None)
+                                                     world.get_filled_locations(item.player)
+                                                     if single_player_placement else None)
                         # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
                         # by continuing to swap, which is not guaranteed. This is unsafe because there is no mechanic
                         # to clean that up later, so there is a chance generation fails.
@@ -173,7 +175,9 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
     if cleanup_required:
         # validate all placements and remove invalid ones
-        state = sweep_from_pool(base_state, [], item.player if single_player_placement else None)
+        state = sweep_from_pool(
+            base_state, [], world.get_filled_locations(item.player)
+            if single_player_placement else None)
         for placement in placements:
             if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(state):
                 placement.item.location = None
