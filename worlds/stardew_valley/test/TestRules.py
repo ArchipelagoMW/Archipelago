@@ -24,7 +24,7 @@ class TestProgressiveToolsLogic(SVTestBase):
 
     def setUp(self):
         super().setUp()
-        self.multiworld.state.prog_items = Counter()
+        self.multiworld.state.prog_items = {1: Counter()}
 
     def test_sturgeon(self):
         self.assertFalse(self.world.logic.has("Sturgeon")(self.multiworld.state))

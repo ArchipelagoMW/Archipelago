@@ -188,6 +188,6 @@ class MessengerWorld(World):
             shard_count = int(item.name.strip("Time Shard ()"))
             if remove:
                 shard_count = -shard_count
-            state.prog_items["Shards", self.player] += shard_count
+            state.prog_items[self.player]["Shards"] += shard_count
 
         return super().collect_item(state, item, remove)

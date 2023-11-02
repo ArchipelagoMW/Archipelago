@@ -517,12 +517,12 @@ class HKWorld(World):
         change = super(HKWorld, self).collect(state, item)
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                state.prog_items[effect_name, item.player] += effect_value
+                state.prog_items[item.player][effect_name] += effect_value
         if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
-            if state.prog_items.get(('RIGHTDASH', item.player), 0) and \
-                    state.prog_items.get(('LEFTDASH', item.player), 0):
-                (state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player]) = \
-                    ([max(state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player])] * 2)
+            if state.prog_items[item.player].get('RIGHTDASH', 0) and \
+                    state.prog_items[item.player].get('LEFTDASH', 0):
+                (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
+                    ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
         return change
 
     def remove(self, state, item: HKItem) -> bool:
@@ -530,9 +530,9 @@ class HKWorld(World):
 
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                if state.prog_items[effect_name, item.player] == effect_value:
-                    del state.prog_items[effect_name, item.player]
-                state.prog_items[effect_name, item.player] -= effect_value
+                if state.prog_items[item.player][effect_name] == effect_value:
+                    del state.prog_items[item.player][effect_name]
+                state.prog_items[item.player][effect_name] -= effect_value
 
         return change
 

@@ -1260,16 +1260,16 @@ class OOTWorld(World):
     def collect(self, state: CollectionState, item: OOTItem) -> bool:
         if item.advancement and item.special and item.special.get('alias', False):
             alt_item_name, count = item.special.get('alias')
-            state.prog_items[alt_item_name, self.player] += count
+            state.prog_items[self.player][alt_item_name] += count
             return True
         return super().collect(state, item)
 
     def remove(self, state: CollectionState, item: OOTItem) -> bool:
         if item.advancement and item.special and item.special.get('alias', False):
             alt_item_name, count = item.special.get('alias')
-            state.prog_items[alt_item_name, self.player] -= count
-            if state.prog_items[alt_item_name, self.player] < 1:
-                del (state.prog_items[alt_item_name, self.player])
+            state.prog_items[self.player][alt_item_name] -= count
+            if state.prog_items[self.player][alt_item_name] < 1:
+                del (state.prog_items[self.player][alt_item_name])
             return True
         return super().remove(state, item)
 

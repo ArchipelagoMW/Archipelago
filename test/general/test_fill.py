@@ -455,8 +455,8 @@ class TestFillRestrictive(unittest.TestCase):
         location.place_locked_item(item)
         multi_world.state.sweep_for_events()
         multi_world.state.sweep_for_events()
-        self.assertTrue(multi_world.state.prog_items[item.name, item.player], "Sweep did not collect - Test flawed")
-        self.assertEqual(multi_world.state.prog_items[item.name, item.player], 1, "Sweep collected multiple times")
+        self.assertTrue(multi_world.state.prog_items[item.player][item.name], "Sweep did not collect - Test flawed")
+        self.assertEqual(multi_world.state.prog_items[item.player][item.name], 1, "Sweep collected multiple times")
 
     def test_correct_item_instance_removed_from_pool(self):
         """Test that a placed item gets removed from the submitted pool"""
