@@ -38,7 +38,7 @@ class MessengerRules:
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
             "Music Box": lambda state: (state.has_all(set(NOTES), self.player)
-                                        or state.has("Power Seal", self.player, world.required_seals))
+                                        or state.has("Power Seal", self.player, max(1, world.required_seals)))
                                        and self.has_dart(state),
         }
 
