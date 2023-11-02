@@ -37,7 +37,9 @@ class MessengerRules:
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player) and self.can_dboost(state),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_dart(state),
+            "Music Box": lambda state: (state.has_all(set(NOTES), self.player)
+                                        or state.has("Power Seal", self.player, world.required_seals))
+                                       and self.has_dart(state),
         }
 
         self.location_rules = {
@@ -201,8 +203,7 @@ class MessengerHardRules(MessengerRules):
         self.extra_rules = {
             "Searing Crags - Key of Strength": lambda state: self.has_dart(state) or self.has_windmill(state),
             "Elemental Skylands - Key of Symbiosis": lambda state: self.has_windmill(state) or self.can_dboost(state),
-            "Autumn Hills Seal - Spike Ball Darts": lambda state: (self.has_dart(state) and self.has_windmill(state))
-                                                                  or self.has_wingsuit(state),
+            "Autumn Hills Seal - Spike Ball Darts": lambda state: self.has_dart(state) or self.has_windmill(state),
             "Underworld Seal - Fireball Wave": self.has_windmill,
         }
 
