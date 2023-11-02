@@ -2182,7 +2182,7 @@ def patch_rom(world, rom):
             'Shadow Temple':      ("the \x05\x45Shadow Temple",      'Bongo Bongo',   0x7f, 0xa3),
         }
         for dungeon in world.dungeon_mq:
-            if dungeon in ['Gerudo Training Ground', 'Ganons Castle']:
+            if dungeon in ['Thieves Hideout', 'Gerudo Training Ground', 'Ganons Castle']:
                 pass
             elif dungeon in ['Bottom of the Well', 'Ice Cavern']:
                 dungeon_name, boss_name, compass_id, map_id = dungeon_list[dungeon]
