@@ -295,133 +295,133 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()
-    # with output as temp_dir:
-    #     output_players = [player for player in world.player_ids if AutoWorld.World.generate_output.__code__
-    #                       is not world.worlds[player].generate_output.__code__]
-    #     with concurrent.futures.ThreadPoolExecutor(len(output_players) + 2) as pool:
-    #         check_accessibility_task = pool.submit(world.fulfills_accessibility)
-    # 
-    #         output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
-    #         for player in output_players:
-    #             # skip starting a thread for methods that say "pass".
-    #             output_file_futures.append(
-    #                 pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
-    # 
-    #         # collect ER hint info
-    #         er_hint_data: Dict[int, Dict[int, str]] = {}
-    #         AutoWorld.call_all(world, 'extend_hint_information', er_hint_data)
-    # 
-    #         def write_multidata():
-    #             import NetUtils
-    #             slot_data = {}
-    #             client_versions = {}
-    #             games = {}
-    #             minimum_versions = {"server": AutoWorld.World.required_server_version, "clients": client_versions}
-    #             slot_info = {}
-    #             names = [[name for player, name in sorted(world.player_name.items())]]
-    #             for slot in world.player_ids:
-    #                 player_world: AutoWorld.World = world.worlds[slot]
-    #                 minimum_versions["server"] = max(minimum_versions["server"], player_world.required_server_version)
-    #                 client_versions[slot] = player_world.required_client_version
-    #                 games[slot] = world.game[slot]
-    #                 slot_info[slot] = NetUtils.NetworkSlot(names[0][slot - 1], world.game[slot],
-    #                                                        world.player_types[slot])
-    #             for slot, group in world.groups.items():
-    #                 games[slot] = world.game[slot]
-    #                 slot_info[slot] = NetUtils.NetworkSlot(group["name"], world.game[slot], world.player_types[slot],
-    #                                                        group_members=sorted(group["players"]))
-    #             precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
-    #                                   for player, world_precollected in world.precollected_items.items()}
-    #             precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
-    # 
-    #             for slot in world.player_ids:
-    #                 slot_data[slot] = world.worlds[slot].fill_slot_data()
-    # 
-    #             def precollect_hint(location):
-    #                 entrance = er_hint_data.get(location.player, {}).get(location.address, "")
-    #                 hint = NetUtils.Hint(location.item.player, location.player, location.address,
-    #                                      location.item.code, False, entrance, location.item.flags)
-    #                 precollected_hints[location.player].add(hint)
-    #                 if location.item.player not in world.groups:
-    #                     precollected_hints[location.item.player].add(hint)
-    #                 else:
-    #                     for player in world.groups[location.item.player]["players"]:
-    #                         precollected_hints[player].add(hint)
-    # 
-    #             locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
-    #             for location in world.get_filled_locations():
-    #                 if type(location.address) == int:
-    #                     assert location.item.code is not None, "item code None should be event, " \
-    #                                                            "location.address should then also be None. Location: " \
-    #                                                            f" {location}"
-    #                     locations_data[location.player][location.address] = \
-    #                         location.item.code, location.item.player, location.item.flags
-    #                     if location.name in world.worlds[location.player].options.start_location_hints:
-    #                         precollect_hint(location)
-    #                     elif location.item.name in world.worlds[location.item.player].options.start_hints:
-    #                         precollect_hint(location)
-    #                     elif any([location.item.name in world.worlds[player].options.start_hints
-    #                               for player in world.groups.get(location.item.player, {}).get("players", [])]):
-    #                         precollect_hint(location)
-    # 
-    #             # embedded data package
-    #             data_package = {
-    #                 game_world.game: worlds.network_data_package["games"][game_world.game]
-    #                 for game_world in world.worlds.values()
-    #             }
-    # 
-    #             checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
-    # 
-    #             multidata = {
-    #                 "slot_data": slot_data,
-    #                 "slot_info": slot_info,
-    #                 "connect_names": {name: (0, player) for player, name in world.player_name.items()},
-    #                 "locations": locations_data,
-    #                 "checks_in_area": checks_in_area,
-    #                 "server_options": baked_server_options,
-    #                 "er_hint_data": er_hint_data,
-    #                 "precollected_items": precollected_items,
-    #                 "precollected_hints": precollected_hints,
-    #                 "version": tuple(version_tuple),
-    #                 "tags": ["AP"],
-    #                 "minimum_versions": minimum_versions,
-    #                 "seed_name": world.seed_name,
-    #                 "datapackage": data_package,
-    #             }
-    #             AutoWorld.call_all(world, "modify_multidata", multidata)
-    # 
-    #             multidata = zlib.compress(pickle.dumps(multidata), 9)
-    # 
-    #             with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
-    #                 f.write(bytes([3]))  # version of format
-    #                 f.write(multidata)
-    # 
-    #         output_file_futures.append(pool.submit(write_multidata))
-    #         if not check_accessibility_task.result():
-    #             if not world.can_beat_game():
-    #                 raise Exception("Game appears as unbeatable. Aborting.")
-    #             else:
-    #                 logger.warning("Location Accessibility requirements not fulfilled.")
-    # 
-    #         # retrieve exceptions via .result() if they occurred.
-    #         for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
-    #             if i % 10 == 0 or i == len(output_file_futures):
-    #                 logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
-    #             future.result()
-    # 
-    #     if args.spoiler > 1:
-    #         logger.info('Calculating playthrough.')
-    #         world.spoiler.create_playthrough(create_paths=args.spoiler > 2)
-    # 
-    #     if args.spoiler:
-    #         world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
-    # 
-    #     zipfilename = output_path(f"AP_{world.seed_name}.zip")
-    #     logger.info(f"Creating final archive at {zipfilename}")
-    #     with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
-    #                          compresslevel=9) as zf:
-    #         for file in os.scandir(temp_dir):
-    #             zf.write(file.path, arcname=file.name)
+    with output as temp_dir:
+        output_players = [player for player in world.player_ids if AutoWorld.World.generate_output.__code__
+                          is not world.worlds[player].generate_output.__code__]
+        with concurrent.futures.ThreadPoolExecutor(len(output_players) + 2) as pool:
+            check_accessibility_task = pool.submit(world.fulfills_accessibility)
+
+            output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
+            for player in output_players:
+                # skip starting a thread for methods that say "pass".
+                output_file_futures.append(
+                    pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
+
+            # collect ER hint info
+            er_hint_data: Dict[int, Dict[int, str]] = {}
+            AutoWorld.call_all(world, 'extend_hint_information', er_hint_data)
+
+            def write_multidata():
+                import NetUtils
+                slot_data = {}
+                client_versions = {}
+                games = {}
+                minimum_versions = {"server": AutoWorld.World.required_server_version, "clients": client_versions}
+                slot_info = {}
+                names = [[name for player, name in sorted(world.player_name.items())]]
+                for slot in world.player_ids:
+                    player_world: AutoWorld.World = world.worlds[slot]
+                    minimum_versions["server"] = max(minimum_versions["server"], player_world.required_server_version)
+                    client_versions[slot] = player_world.required_client_version
+                    games[slot] = world.game[slot]
+                    slot_info[slot] = NetUtils.NetworkSlot(names[0][slot - 1], world.game[slot],
+                                                           world.player_types[slot])
+                for slot, group in world.groups.items():
+                    games[slot] = world.game[slot]
+                    slot_info[slot] = NetUtils.NetworkSlot(group["name"], world.game[slot], world.player_types[slot],
+                                                           group_members=sorted(group["players"]))
+                precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
+                                      for player, world_precollected in world.precollected_items.items()}
+                precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
+
+                for slot in world.player_ids:
+                    slot_data[slot] = world.worlds[slot].fill_slot_data()
+
+                def precollect_hint(location):
+                    entrance = er_hint_data.get(location.player, {}).get(location.address, "")
+                    hint = NetUtils.Hint(location.item.player, location.player, location.address,
+                                         location.item.code, False, entrance, location.item.flags)
+                    precollected_hints[location.player].add(hint)
+                    if location.item.player not in world.groups:
+                        precollected_hints[location.item.player].add(hint)
+                    else:
+                        for player in world.groups[location.item.player]["players"]:
+                            precollected_hints[player].add(hint)
+
+                locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
+                for location in world.get_filled_locations():
+                    if type(location.address) == int:
+                        assert location.item.code is not None, "item code None should be event, " \
+                                                               "location.address should then also be None. Location: " \
+                                                               f" {location}"
+                        locations_data[location.player][location.address] = \
+                            location.item.code, location.item.player, location.item.flags
+                        if location.name in world.worlds[location.player].options.start_location_hints:
+                            precollect_hint(location)
+                        elif location.item.name in world.worlds[location.item.player].options.start_hints:
+                            precollect_hint(location)
+                        elif any([location.item.name in world.worlds[player].options.start_hints
+                                  for player in world.groups.get(location.item.player, {}).get("players", [])]):
+                            precollect_hint(location)
+
+                # embedded data package
+                data_package = {
+                    game_world.game: worlds.network_data_package["games"][game_world.game]
+                    for game_world in world.worlds.values()
+                }
+
+                checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
+
+                multidata = {
+                    "slot_data": slot_data,
+                    "slot_info": slot_info,
+                    "connect_names": {name: (0, player) for player, name in world.player_name.items()},
+                    "locations": locations_data,
+                    "checks_in_area": checks_in_area,
+                    "server_options": baked_server_options,
+                    "er_hint_data": er_hint_data,
+                    "precollected_items": precollected_items,
+                    "precollected_hints": precollected_hints,
+                    "version": tuple(version_tuple),
+                    "tags": ["AP"],
+                    "minimum_versions": minimum_versions,
+                    "seed_name": world.seed_name,
+                    "datapackage": data_package,
+                }
+                AutoWorld.call_all(world, "modify_multidata", multidata)
+
+                multidata = zlib.compress(pickle.dumps(multidata), 9)
+
+                with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
+                    f.write(bytes([3]))  # version of format
+                    f.write(multidata)
+
+            output_file_futures.append(pool.submit(write_multidata))
+            if not check_accessibility_task.result():
+                if not world.can_beat_game():
+                    raise Exception("Game appears as unbeatable. Aborting.")
+                else:
+                    logger.warning("Location Accessibility requirements not fulfilled.")
+
+            # retrieve exceptions via .result() if they occurred.
+            for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
+                if i % 10 == 0 or i == len(output_file_futures):
+                    logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
+                future.result()
+
+        if args.spoiler > 1:
+            logger.info('Calculating playthrough.')
+            world.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+
+        if args.spoiler:
+            world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
+
+        zipfilename = output_path(f"AP_{world.seed_name}.zip")
+        logger.info(f"Creating final archive at {zipfilename}")
+        with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
+                             compresslevel=9) as zf:
+            for file in os.scandir(temp_dir):
+                zf.write(file.path, arcname=file.name)
 
     logger.info('Done. Enjoy. Total Time: %s', time.perf_counter() - start)
     return world
