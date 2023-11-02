@@ -389,7 +389,7 @@ class SMWorld(World):
         escapeTrigger = None
         if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"]:
             #used to simulate received items
-            first_local_collected_loc = next(itemLoc for itemLoc in SMWorld.spheres if itemLoc.player == self.player)
+            first_local_collected_loc = next(itemLoc for itemLoc in spheres if itemLoc.player == self.player)
 
             playerItemsItemLocs = get_player_ItemLocation(False)
             playerProgItemsItemLocs = get_player_ItemLocation(True)
