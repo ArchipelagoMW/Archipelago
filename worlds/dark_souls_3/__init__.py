@@ -7,9 +7,9 @@ from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassi
 from Options import Toggle
 
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
+from worlds.generic.Rules import CollectionRule, set_rule, add_rule, add_item_rule
 
-from .Bosses import DS3BossInfo, all_bosses
+from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Fill import Fill
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
@@ -132,6 +132,8 @@ class DarkSouls3World(World):
             ):
                 self.multiworld.early_items[self.player]['Storm Ruler'] = 1
                 self.multiworld.local_items[self.player].value.add('Storm Ruler')
+        else:
+            self.yhorm_location = default_yhorm_location
 
         # Mark all items with similar distribution as non-local, so that pre_fill can leave a few to
         # be given as multiworld items.
@@ -425,23 +427,18 @@ class DarkSouls3World(World):
 
     def set_rules(self) -> None:
         # Define the access rules to the entrances
-        set_rule(self.multiworld.get_entrance("Go To Firelink Shrine Bell Tower", self.player),
-                 lambda state: state.has("Tower Key", self.player))
-        set_rule(self.multiworld.get_entrance("Go To Undead Settlement", self.player),
-                 lambda state: state.has("Small Lothric Banner", self.player))
-        set_rule(self.multiworld.get_entrance("Go To Lothric Castle", self.player),
-                 lambda state: state.has("Basin of Vows", self.player))
-        set_rule(self.multiworld.get_entrance("Go To Irithyll of the Boreal Valley", self.player),
-                 lambda state: state.has("Small Doll", self.player))
-        set_rule(self.multiworld.get_entrance("Go To Archdragon Peak", self.player),
-                 lambda state: state.has("Path of the Dragon", self.player))
-        set_rule(self.multiworld.get_entrance("Go To Grand Archives", self.player),
-                 lambda state: state.has("Grand Archives Key", self.player))
-        set_rule(self.multiworld.get_entrance("Go To Kiln of the First Flame", self.player),
-                 lambda state: state.has("Cinders of a Lord - Abyss Watcher", self.player) and
-                               state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
-                               state.has("Cinders of a Lord - Aldrich", self.player) and
-                               state.has("Cinders of a Lord - Lothric Prince", self.player))
+        self._set_entrance_rule("Firelink Shrine Bell Tower", "Tower Key")
+        self._set_entrance_rule("Undead Settlement", "Small Lothric Banner")
+        self._set_entrance_rule("Lothric Castle", "Basin of Vows")
+        self._set_entrance_rule("Irithyll of the Boreal Valley", "Small Doll")
+        self._set_entrance_rule("Archdragon Peak", "Path of the Dragon")
+        self._set_entrance_rule("Grand Archives", "Grand Archives Key")
+        self._set_entrance_rule(
+            "Kiln of the First Flame",
+            lambda state: state.has("Cinders of a Lord - Abyss Watcher", self.player) and
+                          state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
+                          state.has("Cinders of a Lord - Aldrich", self.player) and
+                          state.has("Cinders of a Lord - Lothric Prince", self.player))
 
         ashes = {
             "Mortician's Ashes": ["Alluring Skull", "Ember (Mortician)", "Grave Key"],
@@ -474,102 +471,62 @@ class DarkSouls3World(World):
         }
         for ash, items in ashes.items():
             for item in items:
-                location = "FS: " + item
-                if self.is_location_available(location):
-                    set_rule(self.multiworld.get_location(location, self.player),
-                             lambda state, ash=ash: state.has(ash, self.player))
+                self._set_location_rule("FS: " + item, ash)
 
         if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
-            add_rule(self.multiworld.get_entrance("Go To Lothric Castle", self.player),
-                     lambda state: state.has("Small Lothric Banner", self.player))
+            self._set_entrance_rule("Lothric Castle", "Small Lothric Banner")
 
         # DLC Access Rules Below
         if self.multiworld.enable_dlc[self.player]:
-            set_rule(self.multiworld.get_entrance("Go To Ringed City", self.player),
-                     lambda state: state.has("Small Envoy Banner", self.player))
+            self._set_entrance_rule("Ringed City", "Small Envoy Banner")
+            self._set_entrance_rule("Painted World of Ariandel (After Contraption)", "Contraption Key")
 
-            # If key items are randomized, must have contraption key to enter second half of Ashes DLC
-            # If key items are not randomized, Contraption Key is guaranteed to be accessible before it is needed
-            if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
-                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel (After Contraption)", self.player),
-                         lambda state: state.has("Contraption Key", self.player))
-
-            if self.multiworld.late_dlc[self.player] == Toggle.option_true:
-                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel (Before Contraption)", self.player),
-                         lambda state: state.has("Small Doll", self.player))
+            if self.multiworld.late_dlc[self.player]:
+                self._set_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
 
         # Define the access rules to some specific locations
-        set_rule(self.multiworld.get_location("HWL: Red Eye Orb", self.player),
-                 lambda state: state.has("Lift Chamber Key", self.player))
+        self._set_location_rule("HWL: Red Eye Orb", "Lift Chamber Key")
+        self._set_location_rule("ID: Bellowing Dragoncrest Ring", "Jailbreaker's Key")
+        self._set_location_rule("ID: Covetous Gold Serpent Ring", "Old Cell Key")
+        self._set_location_rule("UG: Hornet Ring", "Small Lothric Banner")
+        self._set_entrance_rule("Karla's Shop", "Jailer's Key Ring")
 
-        if self.multiworld.enable_ring_locations[self.player] == Toggle.option_true:
-            set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
-                     lambda state: state.has("Jailbreaker's Key", self.player))
-            set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
-                     lambda state: state.has("Old Cell Key", self.player))
-            set_rule(self.multiworld.get_location("UG: Hornet Ring", self.player),
-                     lambda state: state.has("Small Lothric Banner", self.player))
+        # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
+        # Grand Archives is available, so his shop will always be available one way or another.
+        self._set_entrance_rule("Greirat's Shop", "Cell Key")
 
-        if self.multiworld.enable_npc_locations[self.player] == Toggle.option_true:
-            # Technically the player could lock themselves out of Greirat's shop if they send him to
-            # Lothric Castle before they have the Grand Archives Key with which to retrieve his
-            # ashes, but this is so unlikely it's not worth telling the randomizer that the shop is
-            # contingent on such a lategame item.
-            set_rule(self.multiworld.get_entrance("Go To Greirat's Shop", self.player),
-                     lambda state: state.has("Cell Key", self.player))
+        for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]:
+            self._set_location_rule("AL: " + item, "Black Eye Orb")
 
-            set_rule(self.multiworld.get_entrance("Go To Karla's Shop", self.player),
-                     lambda state: state.has("Jailer's Key Ring", self.player))
-            for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]:
-                set_rule(self.multiworld.get_location("AL: " + item, self.player),
-                         lambda state: state.has("Black Eye Orb", self.player))
+        # You could just kill NPCs for these, but it's more fun to ensure the player can do
+        # their quests.
+        self._set_location_rule("FS: Lift Chamber Key", "Pale Tongue")
+        self._set_location_rule("AP: Hawkwood's Swordgrass", "Twinkling Dragon Torso Stone")
+        self._set_location_rule("ID: Prisoner Chief's Ashes", "Jailer's Key Ring")
 
-            # You could just kill NPCs for these, but it's more fun to ensure the player can do
-            # their quests.
-            set_rule(self.multiworld.get_location("FS: Lift Chamber Key", self.player),
-                     lambda state: state.has("Pale Tongue", self.player))
+        # Make sure that the player can keep Orbeck around by giving him at least one scroll
+        # before killing Abyss Watchers.
+        def has_any_scroll(state):
+            return (state.has("Sage's Scroll", self.player) or
+                state.has("Golden Scroll", self.player) or
+                state.has("Logan's Scroll", self.player) or
+                state.has("Crystal Scroll", self.player))
+        self._set_location_rule("FK: Soul of the Blood of the Wolf", has_any_scroll)
+        self._set_location_rule("FK: Cinders of a Lord - Abyss Watcher", has_any_scroll)
+        self._set_entrance_rule("Catacombs of Carthus", has_any_scroll)
 
-        if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
-            set_rule(self.multiworld.get_location("AP: Hawkwood's Swordgrass", self.player),
-                     lambda state: state.has("Twinkling Dragon Torso Stone", self.player))
-            set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
-                     lambda state: state.has("Jailer's Key Ring", self.player))
+        self._set_location_rule("HWL: Soul of the Dancer", "Basin of Vows")
 
-            # Make sure that the player can keep Orbeck around by giving him at least one scroll
-            # before killing Abyss Watchers.
-            def has_any_scroll(state):
-                return (state.has("Sage's Scroll", self.player) or
-                    state.has("Golden Scroll", self.player) or
-                    state.has("Logan's Scroll", self.player) or
-                    state.has("Crystal Scroll", self.player))
-            if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
-                set_rule(self.multiworld.get_location("FK: Soul of the Blood of the Wolf", self.player),
-                        has_any_scroll)
-                set_rule(self.multiworld.get_location("FK: Cinders of a Lord - Abyss Watcher", self.player),
-                        has_any_scroll)
-            set_rule(self.multiworld.get_entrance("Go To Catacombs of Carthus", self.player),
-                     has_any_scroll)
-
-        if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
-            set_rule(self.multiworld.get_location("PC: Soul of Yhorm the Giant", self.player),
-                     lambda state: state.has("Storm Ruler", self.player))
-            set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
-                     lambda state: state.has("Basin of Vows", self.player))
-
-            # Lump Soul of the Dancer in with LC for locations that should not be reachable
-            # before having access to US. (Prevents requiring getting Basin to fight Dancer to get SLB to go to US)
-            if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
-                add_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
-                         lambda state: state.has("Small Lothric Banner", self.player))
+        # Lump Soul of the Dancer in with LC for locations that should not be reachable
+        # before having access to US. (Prevents requiring getting Basin to fight Dancer to get SLB to go to US)
+        if self.multiworld.late_basin_of_vows[self.player]:
+            self._set_location_rule("HWL: Soul of the Dancer", "Small Lothric Banner")
 
         gotthard_corpse_rule = lambda state: \
             (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
              state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player))
-
-        set_rule(self.multiworld.get_location("LC: Grand Archives Key", self.player), gotthard_corpse_rule)
-
-        if self.multiworld.enable_weapon_locations[self.player] == Toggle.option_true:
-            set_rule(self.multiworld.get_location("LC: Gotthard Twinswords", self.player), gotthard_corpse_rule)
+        self._set_location_rule("LC: Grand Archives Key", gotthard_corpse_rule)
+        self._set_location_rule("LC: Gotthard Twinswords", gotthard_corpse_rule)
 
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
         # logic for choosing how many shop items to sell), and from carring soul items.
@@ -582,23 +539,38 @@ class DarkSouls3World(World):
                               ))
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
-        if self.yhorm_location:
-            if self.yhorm_location.region:
-                set_rule(self.multiworld.get_entrance(f"Go To {self.yhorm_location.region}", self.player),
-                        lambda state: state.has("Storm Ruler", self.player))
-            for location in self.yhorm_location.locations:
-                if self.is_location_available(location):
-                    set_rule(self.multiworld.get_location(location, self.player),
-                            lambda state: state.has("Storm Ruler", self.player))
-        else:
-            set_rule(self.multiworld.get_location("PC: Cinders of a Lord - Yhorm the Giant", self.player),
-                    lambda state: state.has("Storm Ruler", self.player))
+        if self.yhorm_location.region:
+            self._set_entrance_rule(self.yhorm_location.region, "Storm Ruler")
+        for location in self.yhorm_location.locations:
+            self._set_location_rule(location, "Storm Ruler")
 
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
             state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
             state.has("Cinders of a Lord - Aldrich", self.player) and \
             state.has("Cinders of a Lord - Lothric Prince", self.player)
+
+
+    def _set_location_rule(self, location: str, rule: Union[CollectionRule, str]) -> None:
+        """Sets a rule for the given location if it that location is randomized.
+
+        The rule can just be a single item/event name as well as an explicit rule lambda.
+        """
+        if not self.is_location_available(location): return
+        if isinstance(rule, str):
+            item = rule
+            assert item_dictionary[item].classification == ItemClassification.progression
+            rule = lambda state: state.has(item, self.player)
+        set_rule(self.multiworld.get_location(location, self.player), rule)
+
+
+    def _set_entrance_rule(self, region: str, rule: Union[CollectionRule, str]) -> None:
+        """Sets a rule for the entrance to the given region."""
+        if isinstance(rule, str):
+            item = rule
+            assert item_dictionary[item].classification == ItemClassification.progression
+            rule = lambda state: state.has(item, self.player)
+        set_rule(self.multiworld.get_entrance("Go To " + region, self.player), rule)
 
 
     def is_location_available(self, location: Union[str, DS3LocationData]) -> bool:
@@ -617,7 +589,7 @@ class DarkSouls3World(World):
 
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
-        if self.yhorm_location:
+        if self.yhorm_location != default_yhorm_location:
             spoiler_handle.write(f"Yhorm takes the place of {self.yhorm_location.name}")
 
 
@@ -787,7 +759,11 @@ class DarkSouls3World(World):
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
-            "yhorm": f"{self.yhorm_location.name} {self.yhorm_location.id}" if self.yhorm_location else None,
+            "yhorm": (
+                f"{self.yhorm_location.name} {self.yhorm_location.id}"
+                if self.yhorm_location != default_yhorm_location
+                else None
+            ),
             "apIdsToItemIds": ap_ids_to_ds3_ids,
             "itemCounts": item_counts,
             "locationIdsToKeys": location_ids_to_keys,

@@ -122,8 +122,6 @@ class Fill:
             and not location.item
         ]
 
-        print(f"{name}: {len(chosen_items)} items chosen, {len(possible_locations)} locations available")
-
         if len(possible_locations) == 0: return
         if len(possible_locations) < len(chosen_items):
             chosen_items = self.multiworld.random.sample(chosen_items, k = len(possible_locations))

@@ -875,7 +875,7 @@ _vanilla_items = flatten([
     DS3ItemData("Roster of Knights",                   0x4000006C, DS3ItemCategory.SKIP),
     DS3ItemData("Cracked Red Eye Orb",                 0x4000006F, DS3ItemCategory.SKIP).counts([5]),
     DS3ItemData("Black Eye Orb",                       0x40000073, DS3ItemCategory.KEY,
-                classification = ItemClassification.useful),
+                classification = ItemClassification.progression),
     DS3ItemData("Divine Blessing",                     0x400000F0, DS3ItemCategory.MISC),
     DS3ItemData("Hidden Blessing",                     0x400000F1, DS3ItemCategory.MISC),
     DS3ItemData("Green Blossom",                       0x40000104, DS3ItemCategory.MISC, filler = True).counts([2, 3, 4]),

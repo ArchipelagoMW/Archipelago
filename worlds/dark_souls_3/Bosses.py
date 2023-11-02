@@ -195,3 +195,8 @@ all_bosses = [
     }),
     DS3BossInfo("Soul of Cinder", 4100800),
 ]
+
+default_yhorm_location = DS3BossInfo("Yhorm the Giant", 3900800, locations = {
+    "PC: Soul of Yhorm the Giant",
+    "PC: Cinders of a Lord - Yhorm the Giant",
+})
