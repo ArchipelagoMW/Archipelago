@@ -107,10 +107,13 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture 5 Of Each": 2350,
         "Capture 6 Of Each": 2850,
         "Capture 7 Of Each": 3350,
-        "Capture Everything": 3700,
-        "Fork": 700,
-        "Triple Fork": 1700,
-        "Royal Fork": 3200,  # AI really hates getting royal forked, even if we allow the attacking square was defended
+        "Capture Everything": 3800,
+        "Fork, Sacrificial": 700,
+        "Fork, True": 1950,
+        "Fork, Sacrificial Triple": 1700,
+        "Fork, True Triple": 2650,
+        "Fork, Sacrificial Royal": 3200,  # AI really hates getting royal forked
+        "Fork, True Royal": 4150,  # I sincerely believe this should be filler
         # "Pin": 600,
         # "Skewer": 600,
         "Threaten King": 400,
@@ -174,9 +177,12 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Capture Piece A", player), lambda state: state.count_enemy_pieces(player) > 6)
     # tactics
     # set_rule(multiworld.get_location("Pin", player), lambda state: state.has_pin(player))
-    set_rule(multiworld.get_location("Fork", player), lambda state: state.has_pin(player))
-    set_rule(multiworld.get_location("Triple Fork", player), lambda state: state.has_pin(player))
-    set_rule(multiworld.get_location("Royal Fork", player), lambda state: state.has_pin(player))
+    set_rule(multiworld.get_location("Fork, Sacrificial", player), lambda state: state.has_pin(player))
+    set_rule(multiworld.get_location("Fork, True", player), lambda state: state.has_pin(player))
+    set_rule(multiworld.get_location("Fork, Sacrificial Triple", player), lambda state: state.has_pin(player))
+    set_rule(multiworld.get_location("Fork, True Triple", player), lambda state: state.has_pin(player))
+    set_rule(multiworld.get_location("Fork, Sacrificial Royal", player), lambda state: state.has_pin(player))
+    set_rule(multiworld.get_location("Fork, True Royal", player), lambda state: state.has_pin(player))
     set_rule(multiworld.get_location("Threaten Pawn", player), lambda state: state.count_enemy_pawns(player) > 0)
     set_rule(multiworld.get_location("Threaten Minor", player), lambda state: state.count_enemy_pieces(player) > 3)
     set_rule(multiworld.get_location("Threaten Major", player), lambda state: state.count_enemy_pieces(player) > 5)

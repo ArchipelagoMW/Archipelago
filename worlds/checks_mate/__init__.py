@@ -32,7 +32,7 @@ class CMWorld(World):
     option_definitions = cm_options
     data_version = 0
     web = CMWeb()
-    required_client_version = (0, 2, 2)  # TODO: what does it mean
+    required_client_version = (0, 3, 4)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
@@ -103,7 +103,9 @@ class CMWorld(World):
         user_item_count = len(user_items)
         items = []
 
-        material = 0
+        material = sum([
+            progression_items[item].material * self.items_used[self.player][item]
+            for item in self.items_used[self.player].keys() if item in progression_items])
         min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
         max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
         if max_material_option < min_material_option:
@@ -112,6 +114,7 @@ class CMWorld(World):
                 self.multiworld.random.random() * (max_material_option - min_material_option) + max_material_option)
 
         my_progression_items = list(progression_items.keys())
+        my_progression_items.remove("Victory")
         # more pawn chance (1 major:1 minor:2 pawn distribution)
         my_progression_items.append("Progressive Pawn")
         # I am proud of this feature, so I want players to see more of it. Fight me.
@@ -180,7 +183,7 @@ class CMWorld(World):
         self.multiworld.regions.append(region)
 
     def generate_basic(self):
-        victory_item = CMItem("Victory", ItemClassification.progression, 4_009, self.player)
+        victory_item = CMItem("Victory", ItemClassification.progression_skip_balancing, 4_009, self.player)
         self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)

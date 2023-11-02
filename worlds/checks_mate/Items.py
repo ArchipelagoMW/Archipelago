@@ -29,7 +29,7 @@ item_table = {
     # Queen pieces are pretty good, and even the weak ones are pretty close, so queens can stay 9.0 (but not 10.0)
     "Progressive Major To Queen": CMItemData(4_006, ItemClassification.progression, quantity=5, material=415,
                                              parents=["Progressive Major Piece"]),
-    #"Victory": CMItemData(4_009, ItemClassification.progression),
+    "Victory": CMItemData(4_009, ItemClassification.progression),
     # TODO: implement extra moves
     # "Progressive Enemy Pawn": CMItemData(4_007, ItemClassification.trap, quantity=8),
     # "Progressive Enemy Piece": CMItemData(4_008, ItemClassification.trap, quantity=7),

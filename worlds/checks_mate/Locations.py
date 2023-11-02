@@ -67,15 +67,18 @@ location_table = {
     # TODO: Getting a french move on the AI seems nigh impossible - maybe I can tweak the evaluation or something
     # "French Move": CMLocationData(4_050, True, False),
     # "Discovered Attack": CMLocationData(4_051, True, False),
-    "Fork": CMLocationData(4_052, True, False),
-    "Triple Fork": CMLocationData(4_053, True, False),
-    "Royal Fork": CMLocationData(4_054, True, True),
-    # "Pin": CMLocationData(4_056, True, False),
-    # "Skewer": CMLocationData(4_057, True, False),
+    "Fork, Sacrificial": CMLocationData(4_052, True, False),
+    "Fork, Sacrificial Triple": CMLocationData(4_053, True, False),
+    "Fork, Sacrificial Royal": CMLocationData(4_054, True, True),
+    "Fork, True": CMLocationData(4_055, True, False),
+    "Fork, True Triple": CMLocationData(4_056, True, False),
+    "Fork, True Royal": CMLocationData(4_057, True, True),
     # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
     # "O-O Castle": CMLocationData(4_058, True, False),
     # "O-O-O Castle": CMLocationData(4_059, True, False),
     # "Discovered Attack": CMLocationData(4_060, True, False),
+    # "Pin": CMLocationData(4_061, True, False),
+    # "Skewer": CMLocationData(4_062, True, False),
     # goal 1+ requires that you successively checkmate your opponent as they gain material
     # "Checkmate Minima": CMLocationData(4_084, True, False),
     # "Checkmate One Piece": CMLocationData(4_085, True, False),
