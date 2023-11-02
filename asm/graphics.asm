@@ -1,110 +1,65 @@
 .gba
 
 
-.expfunc tile_no_4b(n), n * 0x20
-.expfunc tile_coord_4b(x, y), tile_no_4b(x + 32 * y)
-
 ; Store letters and AP logo in some unused space in the tile data near the
 ; jewels and such. WL4 stores graphics data in 4bpp uncompressed 2D format.
 
 ; Spaces that will be used by text are now filled with empty tiles for clarity.
-
-; Interestingly, graphics are considered as a stream of nybbles (that is, the
-; left pixel is the least significant half byte), which means that the easiest
-; way to write them is as eight words, such that the hexits appear mirrored in
-; the assembly compared to how they look in the final game
-
 .org BasicElementTiles + tile_coord_4b(12, 4)
 EmptyTile:
-    .fill 0x20 * 12, 0
+    .fill 12 * sizeof_tile, 0
 
 .org BasicElementTiles + tile_coord_4b(14, 5)
-APLogoTile1:
-    .word 0x50000000
-    .word 0xB5000000
-    .word 0xBB555000
-    .word 0xB5888500
-    .word 0x58888850
-    .word 0x58888850
-    .word 0x58555850
-    .word 0x05FFF500
+APLogoTop: .incbin "data/graphics/ap_logo.bin", 0x00, 2 * sizeof_tile
 
-APLogoTile2:
-    .word 0x00000055
-    .word 0x000005BB
-    .word 0x00555BBB
-    .word 0x05DDD5BB
-    .word 0x5DDDDD5B
-    .word 0x5DDDDD5B
-    .word 0x5D555D55
-    .word 0x05EEE500
-
-.fill 0x20 * 8, 0
+.fill 8 * sizeof_tile, 0
 
 .org BasicElementTiles + tile_coord_4b(14, 6)
-APLogoTile3:
-    .word 0x5FFFFF50
-    .word 0x5FFFFF50
-    .word 0xC5FFFF50
-    .word 0xCC5FF500
-    .word 0xCC555000
-    .word 0xCC500000
-    .word 0xC5000000
-    .word 0x50000000
+APLogoBottom: .incbin "data/graphics/ap_logo.bin", 2 * sizeof_tile, 2 * sizeof_tile
 
-APLogoTile4:
-    .word 0x5EEEEE50
-    .word 0x5EEEEE55
-    .word 0x5EEEE5CC
-    .word 0x05EE5CCC
-    .word 0x00555CCC
-    .word 0x00005CCC
-    .word 0x000005CC
-    .word 0x00000055
-
-.fill 0x20 * 8, 0
+.fill 8 * sizeof_tile, 0
 
 .org 0x0869FC88
-Text8x8_0: .skip 0x20
-Text8x8_1: .skip 0x20
-Text8x8_2: .skip 0x20
-Text8x8_3: .skip 0x20
-Text8x8_4: .skip 0x20
-Text8x8_5: .skip 0x20
-Text8x8_6: .skip 0x20
-Text8x8_7: .skip 0x20
-Text8x8_8: .skip 0x20
-Text8x8_9: .skip 0x20
+Text8x8_0: .skip sizeof_tile
+Text8x8_1: .skip sizeof_tile
+Text8x8_2: .skip sizeof_tile
+Text8x8_3: .skip sizeof_tile
+Text8x8_4: .skip sizeof_tile
+Text8x8_5: .skip sizeof_tile
+Text8x8_6: .skip sizeof_tile
+Text8x8_7: .skip sizeof_tile
+Text8x8_8: .skip sizeof_tile
+Text8x8_9: .skip sizeof_tile
 
 .org 0x08749870
-Text8x8_A: .skip 0x20
-Text8x8_B: .skip 0x20
-Text8x8_C: .skip 0x20
-Text8x8_D: .skip 0x20
-Text8x8_E: .skip 0x20
-Text8x8_F: .skip 0x20
-Text8x8_G: .skip 0x20
-Text8x8_H: .skip 0x20
-Text8x8_I: .skip 0x20
-Text8x8_J: .skip 0x20
-Text8x8_K: .skip 0x20
-Text8x8_L: .skip 0x20
-Text8x8_M: .skip 0x20
-Text8x8_N: .skip 0x20
-Text8x8_O: .skip 0x20
-Text8x8_P: .skip 0x20
-Text8x8_Q: .skip 0x20
-Text8x8_R: .skip 0x20
-Text8x8_S: .skip 0x20
-Text8x8_T: .skip 0x20
-Text8x8_U: .skip 0x20
-Text8x8_V: .skip 0x20
-Text8x8_W: .skip 0x20
-Text8x8_X: .skip 0x20
-Text8x8_Y: .skip 0x20
-Text8x8_Z: .skip 0x20
-Text8x8_Period: .skip 0x20
-Text8x8_Comma: .skip 0x20
+Text8x8_A: .skip sizeof_tile
+Text8x8_B: .skip sizeof_tile
+Text8x8_C: .skip sizeof_tile
+Text8x8_D: .skip sizeof_tile
+Text8x8_E: .skip sizeof_tile
+Text8x8_F: .skip sizeof_tile
+Text8x8_G: .skip sizeof_tile
+Text8x8_H: .skip sizeof_tile
+Text8x8_I: .skip sizeof_tile
+Text8x8_J: .skip sizeof_tile
+Text8x8_K: .skip sizeof_tile
+Text8x8_L: .skip sizeof_tile
+Text8x8_M: .skip sizeof_tile
+Text8x8_N: .skip sizeof_tile
+Text8x8_O: .skip sizeof_tile
+Text8x8_P: .skip sizeof_tile
+Text8x8_Q: .skip sizeof_tile
+Text8x8_R: .skip sizeof_tile
+Text8x8_S: .skip sizeof_tile
+Text8x8_T: .skip sizeof_tile
+Text8x8_U: .skip sizeof_tile
+Text8x8_V: .skip sizeof_tile
+Text8x8_W: .skip sizeof_tile
+Text8x8_X: .skip sizeof_tile
+Text8x8_Y: .skip sizeof_tile
+Text8x8_Z: .skip sizeof_tile
+Text8x8_Period: .skip sizeof_tile
+Text8x8_Comma: .skip sizeof_tile
 
 ; Repurpose the save tutorial and format it for arbitrary messages.
 ;
@@ -161,19 +116,97 @@ TextBoxCharCount equ 14 * (11 / 2)
     .fill 14 * 2, 0
 
 
+; Add ability icons to the top of the screen
+
+.org 0x869CE48 + tile_coord_4b(16, 6)
+    .incbin "data/graphics/ability_icons.bin", 0x00, 12 * sizeof_tile
+.org 0x869CE48 + tile_coord_4b(16, 7)
+    .incbin "data/graphics/ability_icons.bin", 16 * sizeof_tile, 12 * sizeof_tile
+
+.org 0x86A2648 + 0x10
+    .halfword 0x50D0, 0x50D1, 0x50D2, 0x50D3, 0x50D4, 0x50D5
+    .halfword 0x50D6, 0x50D7, 0x50D8, 0x50D9, 0x50DA, 0x50DB
+.org 0x86A2648 + 0x50
+    .halfword 0x50F0, 0x50F1, 0x50F2, 0x50F3, 0x50F4, 0x50F5
+    .halfword 0x50F6, 0x50F7, 0x50F8, 0x50F9, 0x50FA, 0x50FB
+
+
 .autoregion
+
+
+.align 4
+AbilityIconTilesTop:
+    .incbin "data/graphics/ability_icons.bin", 32 * sizeof_tile, 16 * sizeof_tile
+AbilityIconTilesBottom:
+    .incbin "data/graphics/ability_icons.bin", 48 * sizeof_tile, 16 * sizeof_tile
+
+
+EmptyGroundPound1Tile:
+    .incbin "data/graphics/ability_get.bin", 0, 16 * sizeof_tile
+.org EmptyGroundPound1Tile + sizeof_tile
+EmptyGroundPound2Tile: .skip sizeof_tile
+CarryingGroundPound1Tile: .skip sizeof_tile
+CarryingGroundPound2Tile: .skip sizeof_tile
+HasGroundPound1Tile: .skip sizeof_tile
+HasGroundPound2Tile: .skip sizeof_tile
+
+EmptyGrab1Tile: .skip sizeof_tile
+EmptyGrab2Tile: .skip sizeof_tile
+CarryingGrab1Tile: .skip sizeof_tile
+CarryingGrab2Tile: .skip sizeof_tile
+HasGrab1Tile: .skip sizeof_tile
+HasGrab2Tile: .skip sizeof_tile
+
+EmptySwimTile: .skip sizeof_tile
+EmptyHeadSmashTile: .skip sizeof_tile
+EmptyDashAttackTile: .skip sizeof_tile
+EmptyEnemyJumpTile: .skip sizeof_tile
+
+HasSwimTile:
+    .incbin "data/graphics/ability_get.bin", 18 * sizeof_tile, 4 * sizeof_tile
+.org HasSwimTile + sizeof_tile
+HasHeadSmashTile: .skip sizeof_tile
+HasDashAttackTile: .skip sizeof_tile
+HasEnemyJumpTile: .skip sizeof_tile
 
 
 .align 2
 APLogoObj:
-    .halfword 1, 0xF8, 0x41F8, 0x412E
+    .halfword 1  ; Length
+    .halfword attr0_square | attr0_4bpp | attr0_y(-8)
+    .halfword attr1_size(1) | attr1_x(-8)
+    .halfword attr2_palette(4) | attr2_priority(0) | attr2_id(0x12E)
+
+HeartObj:
+    .halfword 1  ; Length
+    .halfword attr0_square | attr0_4bpp | attr0_y(-8)
+    .halfword attr1_size(1) | attr1_x(-8)
+    .halfword attr2_palette(7) | attr2_priority(0) | attr2_id(234)
+
+EmptyObj:
+    .halfword 1  ; Length
+    .halfword attr0_square | attr0_4bpp | attr0_hide | attr0_y(0)
+    .halfword attr1_size(0) | attr1_x(0)
+    .halfword attr2_palette(0) | attr2_priority(0) | attr2_id(0)
 
 .align 4
 APLogoAnm:
-    .word APLogoObj
-    .byte 0xC8
-    .fill 0, 3
-    .word 0, 0
+    .word APLogoObj  ; Object address
+    .byte 0xFF  ; Timer
+    .fill 3, 0  ; Unused
+    .fill 8, 0  ; Zeroed entry
+
+HeartAnm:
+    .word HeartObj  ; Object address
+    .byte 0xFF  ; Timer
+    .fill 3, 0  ; Unused
+    .fill 8, 0  ; Zeroed entry
+
+EmptyAnm:
+    .word EmptyObj  ; Object address
+    .byte 0xFF  ; Timer
+    .fill 3, 0  ; Unused
+    .fill 8, 0  ; Zeroed entry
 
 
 .endautoregion

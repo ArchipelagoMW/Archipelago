@@ -36,18 +36,22 @@ PyramidScreenCreateReceivedItemOAM:
 
         ldr r6, =IncomingItemID
         ldrb r6, [r6]
-        get_bit r1, r6, 6
+        get_bit r1, r6, ItemBit_Junk
         cmp r1, #0
         bne @@JunkItem
+
+        get_bit r1, r6, ItemBit_Ability
+        cmp r1, #0
+        bne @@JewelPiece
 
     ; Jewel Pieces or CD
         add r5, #1
 
-        get_bit r1, r6, 5
+        get_bit r1, r6, ItemBit_CD
         cmp r1, #0
         bne @@CD
 
-    ; Jewel pieces
+    @@JewelPiece:  ; Or ability since they both use 16x16 sprites
         ldr r1, =attr1_size(1) | attr1_x(120 - 8)
         strh r0, [r4]
         strh r1, [r4, #2]
@@ -117,7 +121,7 @@ PyramidScreenCreateReceivedItemOAM:
         strh r2, [r4, #12]
 
         ; Wario is padded on the left. Lightning on the right.
-        cmp r6, #0x43
+        cmp r6, #ItemID_Lightning
         beq @@BigBoardSpriteBottom
         sub r1, #8
 
@@ -199,6 +203,8 @@ PassagePaletteTable:
     .halfword 0x7F5A, 0x7E94, 0x7D29, 0x50A5, 0x38A5  ; Sapphire passage
     .halfword 0x579F, 0x3B1F, 0x1A7F, 0x05DE, 0x00FB  ; Golden pyramid
     .halfword 0x3D9C, 0x327D, 0x2B28, 0x6A3B, 0x6DED  ; Archipelago item
+    .halfword 0x0000, 0x6BDF, 0x3FBF, 0x22FA, 0x0DAF  ; Garlic (Dash Attack)
+    .halfword 0x0000, 0x0000, 0x0000, 0x05DE, 0x24C5  ; Helmet (Head Smash)
 
 
 ; Set the end of object palette 4 to the colors matching the passage in r0
@@ -338,7 +344,7 @@ LoadSpriteString:
     @@LoadCharacter:
         mov r1, r5
         bl LoadSpriteCharacter
-        add r5, #0x20
+        add r5, #sizeof_tile
         sub r6, r6, #1
 
     @@CheckNChars:

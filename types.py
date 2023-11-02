@@ -1,4 +1,7 @@
 from enum import IntEnum, IntFlag
+from typing import Callable, Optional
+
+from BaseClasses import CollectionState
 
 
 class ItemType(IntEnum):
@@ -6,6 +9,7 @@ class ItemType(IntEnum):
     CD = 1
     ITEM = 2
     EVENT = 3
+    ABILITY = 4
 
 
 class Box(IntEnum):
@@ -55,3 +59,6 @@ class Difficulty(IntEnum):
     NORMAL = 0
     HARD = 1
     S_HARD = 2
+
+
+AccessRule = Optional[Callable[[CollectionState], bool]]

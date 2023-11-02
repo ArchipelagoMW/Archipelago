@@ -127,7 +127,7 @@ class WL4Client(BizHawkClient):
             return False
 
         client_ctx.game = self.game
-        client_ctx.items_handling = 0b101
+        client_ctx.items_handling = 0b001
         client_ctx.want_slot_data = True
 
         # bizhawk_ctx.command_processor = WL4CommandProcessor(client_ctx)

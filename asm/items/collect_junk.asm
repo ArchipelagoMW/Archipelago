@@ -63,6 +63,7 @@ CollectJunkItems:
         sub r2, r2, #1
         strb r2, [r3]
         bl GiveTransformTrap
+        b @@EndLightningTraps
     @@EndTransformTraps:
 
     ; Check lightning traps

@@ -8,10 +8,10 @@ from worlds.AutoWorld import WebWorld, World
 from .client import WL4Client
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
 from .locations import location_name_to_id, setup_locations
-from .logic import WL4Logic
 from .options import wl4_options
 from .regions import connect_regions, create_regions
 from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
+from .rules import set_access_rules
 from .types import ItemType, Passage
 
 
@@ -44,8 +44,10 @@ class WL4Web(WebWorld):
 class WL4World(World):
     '''
     A golden pyramid has been discovered deep in the jungle, and Wario has set
-    out to rob it. But to make off with its legendary treasure, he has to first
-    defeat the five passage bosses and the pyramid's evil ruler, the Golden Diva.
+    out to rob it. But when he enters, he finds the Golden Diva's curse has
+    taken away his moves! To escape with his life and more importantly, the
+    treasure, Wario must find his abilities to defeat the passage bosses and
+    the Golden Diva.
     '''
 
     game: str = 'Wario Land 4'
@@ -61,14 +63,10 @@ class WL4World(World):
 
     web = WL4Web()
 
-    def generate_early(self):
-        if self.multiworld.early_entry_jewels[self.player]:
-            for item in filter_item_names(type=ItemType.JEWEL, passage=Passage.ENTRY):
-                self.multiworld.local_early_items[self.player][item] = 1
-
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
+        set_access_rules(self.multiworld, self.player)
         connect_regions(self.multiworld, self.player)
 
         passages = ('Entry', 'Emerald', 'Ruby', 'Topaz', 'Sapphire')
@@ -84,27 +82,44 @@ class WL4World(World):
     def create_items(self):
         diamond_pieces = 18 * 4
         cds = 16
+        # FIXME: Hard and S-Hard have two heart boxes in Pinball Zone, but the
+        # two aren't distinguishable, so this should be 9, 8, 6.
         full_health_items = (9, 7, 5)[self.multiworld.difficulty[self.player].value]
         total_required_locations = diamond_pieces + cds + full_health_items
 
         itempool = []
 
+        required_jewels = self.multiworld.required_jewels[self.player]
+        required_jewels_entry = min(1, required_jewels)
         for name, item in filter_items(type=ItemType.JEWEL):
             if item.passage() in (Passage.ENTRY, Passage.GOLDEN):
-                copies = 1
+                copies = required_jewels_entry
+                start = 1 - required_jewels_entry
             else:
-                copies = 4
+                copies = required_jewels
+                start = 4 - required_jewels
+
             for _ in range(copies):
                 itempool.append(self.create_item(name))
+            for _ in range(start):
+                self.multiworld.push_precollected(self.create_item(name))
 
         for name in filter_item_names(type=ItemType.CD):
             itempool.append(self.create_item(name))
+
+        for name in filter_item_names(type=ItemType.ABILITY):
+            itempool.append(self.create_item(name))
+            if name.startswith('Progressive'):
+                itempool.append(self.create_item(name))
 
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
 
         junk_count = total_required_locations - len(itempool)
-        assert junk_count == 0, f'Mismatched location counts: {junk_count} empty checks'
+        junk_item_pool = tuple(filter_item_names(type=ItemType.ITEM))
+        for _ in range(junk_count):
+            item_name = self.multiworld.random.choice(junk_item_pool)
+            itempool.append(self.create_item(item_name))
 
         self.multiworld.itempool += itempool
 

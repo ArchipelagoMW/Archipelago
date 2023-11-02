@@ -10,12 +10,13 @@
 ItemReceivedFeedbackSound:
         push {lr}
 
-        get_bits r0, r4, 6, 5
-        cmp r0, #1
-        bgt @@Return
-        beq @@CDSound
+        get_bits r0, r4, ItemBit_Junk, ItemBit_CD
+        cmp r0, #4
+        beq @@Return
+        cmp r0, #0
+        bne @@CDSound
 
-    @@MultiplayerItem:
+    ; Treasure
         ldr r0, =0x13B  ; a1
         b @@PlaySound
 
@@ -32,7 +33,7 @@ ItemReceivedFeedbackSound:
     .pool
 
 
-; Get the next incoming item. If nothing was received, return 0xFF.
+; Get the next incoming item. If nothing was received, return ItemID_None.
 ;
 ; Returns:
 ;   r0: Item ID received
@@ -41,7 +42,7 @@ ReceiveNextItem:
         ldrb r0, [r2]
         cmp r0, #1
         beq @@GotItem
-        mov r0, #0xFF
+        mov r0, #ItemID_None
         b @@Return
 
     @@GotItem:
@@ -58,14 +59,16 @@ ReceiveNextItem:
     ; Set last collected item (if jewel or CD)
         ldr r2, =IncomingItemID
         ldrb r0, [r2]
-        lsr r1, r0, #5
-        cmp r1, #2
-        bge @@Return
+        get_bit r1, r0, ItemBit_Ability
+        cmp r1, #1
+        beq @@SetLastCollected
+        get_bit r1, r0, ItemBit_Junk
+        cmp r1, #1
+        beq @@Return
+
+    @@SetLastCollected:
         ldr r1, =LastCollectedItemID
         strb r0, [r1]
-        ldr r1, =LastCollectedItemStatus
-        mov r2, #3
-        strb r2, [r1]
 
     @@Return:
         mov pc, lr

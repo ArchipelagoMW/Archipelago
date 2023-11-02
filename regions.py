@@ -1,175 +1,204 @@
-from typing import Callable, Dict, Iterable, Optional
+from typing import Iterable, Set
 
 from BaseClasses import MultiWorld, Region, Entrance
 
+from . import rules
 from .locations import WL4Location, get_level_locations
-from .types import Passage
+from .types import AccessRule, Passage
 
 
-def create_regions(world: MultiWorld, player: int, location_table: dict):
+class WL4Region(Region):
+    clear_rule: AccessRule
+
+    def __init__(self, name: str, player: int, multiworld: MultiWorld):
+        super().__init__(name, player, multiworld)
+        self.clear_rule = None
+
+
+def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
     def basic_region(name, locations=()):
         return create_region(world, player, location_table, name, locations)
 
     def passage_region(passage: Passage):
         return basic_region(passage.long_name())
 
-    def level_region(name, passage, level):
-        return basic_region(name, get_level_locations(passage, level))
+    def level_regions(name: str, passage: Passage, level: int):
+        entrance = basic_region(f'{name} (entrance)')
+        boxes = basic_region(name, get_level_locations(passage, level))
+        return entrance, boxes
 
-    def boss_region(passage: Passage, boss_name):
+    def minigame_shop(passage: Passage):
+        return basic_region(f'{passage.short_name()} Minigame Shop')
+
+    def boss_region(passage: Passage, boss_name: str):
         return basic_region(f'{passage.long_name()} Boss', [boss_name])
 
     menu_region = basic_region('Menu')
 
-    entry_passage = passage_region(Passage.ENTRY)
-    hall_of_hieroglyphs = level_region('Hall of Hieroglyphs', Passage.ENTRY, 0)
+    passage_regions = (passage_region(passage) for passage in Passage)
+    minigame_shops = (minigame_shop(passage) for passage in Passage)
+
+    hall_of_hieroglyphs = level_regions('Hall of Hieroglyphs', Passage.ENTRY, 0)
     spoiled_rotten = boss_region(Passage.ENTRY, 'Spoiled Rotten')
 
-    emerald_passage = passage_region(Passage.EMERALD)
-    palm_tree_paradise = level_region('Palm Tree Paradise', Passage.EMERALD, 0)
-    wildflower_fields = level_region('Wildflower Fields', Passage.EMERALD, 1)
-    mystic_lake = level_region('Mystic Lake', Passage.EMERALD, 2)
-    monsoon_jungle = level_region('Monsoon Jungle', Passage.EMERALD, 3)
+    palm_tree_paradise = level_regions('Palm Tree Paradise', Passage.EMERALD, 0)
+    wildflower_fields = level_regions('Wildflower Fields', Passage.EMERALD, 1)
+    mystic_lake = level_regions('Mystic Lake', Passage.EMERALD, 2)
+    monsoon_jungle = level_regions('Monsoon Jungle', Passage.EMERALD, 3)
     cractus = boss_region(Passage.EMERALD, 'Cractus')
 
-    ruby_passage = passage_region(Passage.RUBY)
-    curious_factory = level_region('The Curious Factory', Passage.RUBY, 0)
-    toxic_landfill = level_region('The Toxic Landfill', Passage.RUBY, 1)
-    forty_below_fridge = level_region('40 Below Fridge', Passage.RUBY, 2)
-    pinball_zone = level_region('Pinball Zone', Passage.RUBY, 3)
+    curious_factory = level_regions('The Curious Factory', Passage.RUBY, 0)
+    toxic_landfill = level_regions('The Toxic Landfill', Passage.RUBY, 1)
+    forty_below_fridge = level_regions('40 Below Fridge', Passage.RUBY, 2)
+    pinball_zone = level_regions('Pinball Zone', Passage.RUBY, 3)
     cuckoo_condor = boss_region(Passage.RUBY, 'Cuckoo Condor')
 
-    topaz_passage = passage_region(Passage.TOPAZ)
-    toy_block_tower = level_region('Toy Block Tower', Passage.TOPAZ, 0)
-    big_board = level_region('The Big Board', Passage.TOPAZ, 1)
-    doodle_woods = level_region('Doodle Woods', Passage.TOPAZ, 2)
-    domino_row = level_region('Domino Row', Passage.TOPAZ, 3)
+    toy_block_tower = level_regions('Toy Block Tower', Passage.TOPAZ, 0)
+    big_board = level_regions('The Big Board', Passage.TOPAZ, 1)
+    doodle_woods = level_regions('Doodle Woods', Passage.TOPAZ, 2)
+    domino_row = level_regions('Domino Row', Passage.TOPAZ, 3)
     aerodent = boss_region(Passage.TOPAZ, 'Aerodent')
 
-    sapphire_passage = passage_region(Passage.SAPPHIRE)
-    crescent_moon_village = level_region('Crescent Moon Village', Passage.SAPPHIRE, 0)
-    arabian_night = level_region('Arabian Night', Passage.SAPPHIRE, 1)
-    fiery_cavern = level_region('Fiery Cavern', Passage.SAPPHIRE, 2)
-    hotel_horror = level_region('Hotel Horror', Passage.SAPPHIRE, 3)
+    crescent_moon_village = level_regions('Crescent Moon Village', Passage.SAPPHIRE, 0)
+    arabian_night = level_regions('Arabian Night', Passage.SAPPHIRE, 1)
+    fiery_cavern = level_regions('Fiery Cavern', Passage.SAPPHIRE, 2)
+    hotel_horror = level_regions('Hotel Horror', Passage.SAPPHIRE, 3)
     catbat = boss_region(Passage.SAPPHIRE, 'Catbat')
 
-    golden_pyramid = passage_region(Passage.GOLDEN)
-    golden_passage = level_region('Golden Passage', Passage.GOLDEN, 0)
+    golden_passage = level_regions('Golden Passage', Passage.GOLDEN, 0)
     golden_diva = boss_region(Passage.GOLDEN, 'Golden Diva')
 
     world.regions += [
         menu_region,
-        entry_passage,
-        hall_of_hieroglyphs,
+        *passage_regions,
+        *minigame_shops,
+        *hall_of_hieroglyphs,
         spoiled_rotten,
-        emerald_passage,
-        palm_tree_paradise,
-        wildflower_fields,
-        mystic_lake,
-        monsoon_jungle,
+        *palm_tree_paradise,
+        *wildflower_fields,
+        *mystic_lake,
+        *monsoon_jungle,
         cractus,
-        ruby_passage,
-        curious_factory,
-        toxic_landfill,
-        forty_below_fridge,
-        pinball_zone,
+        *curious_factory,
+        *toxic_landfill,
+        *forty_below_fridge,
+        *pinball_zone,
         cuckoo_condor,
-        topaz_passage,
-        toy_block_tower,
-        big_board,
-        doodle_woods,
-        domino_row,
+        *toy_block_tower,
+        *big_board,
+        *doodle_woods,
+        *domino_row,
         aerodent,
-        sapphire_passage,
-        crescent_moon_village,
-        arabian_night,
-        fiery_cavern,
-        hotel_horror,
+        *crescent_moon_village,
+        *arabian_night,
+        *fiery_cavern,
+        *hotel_horror,
         catbat,
-        golden_pyramid,
-        golden_passage,
+        *golden_passage,
         golden_diva,
     ]
 
 
 def connect_regions(world, player):
-    names: Dict[str, int] = {}
+    def connect_level(level_name):
+        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name,
+                         rules.get_access_rule(player, level_name))
 
-    connect(world, player, names, 'Menu', 'Entry Passage')
-    connect(world, player, names, 'Entry Passage', 'Hall of Hieroglyphs')
-    connect(world, player, names, 'Hall of Hieroglyphs', 'Entry Passage Boss',
-            lambda state: state.wl4_has_full_jewels(player, Passage.ENTRY, 1))
+    connect_level('Hall of Hieroglyphs')
+    connect_level('Palm Tree Paradise')
+    connect_level('Wildflower Fields')
+    connect_level('Mystic Lake')
+    connect_level('Monsoon Jungle')
+    connect_level('The Curious Factory')
+    connect_level('The Toxic Landfill')
+    connect_level('40 Below Fridge')
+    connect_level('Pinball Zone')
+    connect_level('Toy Block Tower')
+    connect_level('The Big Board')
+    connect_level('Doodle Woods')
+    connect_level('Domino Row')
+    connect_level('Crescent Moon Village')
+    connect_level('Arabian Night')
+    connect_level('Fiery Cavern')
+    connect_level('Hotel Horror')
+    connect_level('Golden Passage')
 
-    connect(world, player, names, 'Menu', 'Emerald Passage',
-            lambda state: state.has('Entry Passage Clear', player))
-    connect(world, player, names, 'Emerald Passage', 'Palm Tree Paradise')
-    connect(world, player, names, 'Palm Tree Paradise', 'Wildflower Fields')
-    connect(world, player, names, 'Wildflower Fields', 'Mystic Lake')
-    connect(world, player, names, 'Mystic Lake', 'Monsoon Jungle')
-    connect(world, player, names, 'Monsoon Jungle', 'Emerald Passage Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.EMERALD, 4))
+    def connect_with_name(source, destination, name, rule: AccessRule = None):
+        connect_entrance(world, player, name, source, destination, rule)
 
-    connect(world, player, names, 'Menu', 'Ruby Passage',
-            lambda state: state.has('Entry Passage Clear', player))
-    connect(world, player, names, 'Ruby Passage', 'The Curious Factory')
-    connect(world, player, names, 'The Curious Factory', 'The Toxic Landfill')
-    connect(world, player, names, 'The Toxic Landfill', '40 Below Fridge')
-    connect(world, player, names, '40 Below Fridge', 'Pinball Zone')
-    connect(world, player, names, 'Pinball Zone', 'Ruby Passage Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.RUBY, 4))
+    def connect(source, destination, rule: AccessRule = None):
+        connect_with_name(source, destination, f'{source} -> {destination}', rule)
 
-    connect(world, player, names, 'Menu', 'Topaz Passage',
-            lambda state: state.has('Entry Passage Clear', player))
-    connect(world, player, names, 'Topaz Passage', 'Toy Block Tower')
-    connect(world, player, names, 'Toy Block Tower', 'The Big Board')
-    connect(world, player, names, 'The Big Board', 'Doodle Woods')
-    connect(world, player, names, 'Doodle Woods', 'Domino Row')
-    connect(world, player, names, 'Domino Row', 'Topaz Passage Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.TOPAZ, 4))
+    def connect_level_exit(source, destination, rule: AccessRule = None):
+        connect_with_name(source, destination, f'{source} Gate', rule)
 
-    connect(world, player, names, 'Menu', 'Sapphire Passage',
-            lambda state: state.has('Entry Passage Clear', player))
-    connect(world, player, names, 'Sapphire Passage', 'Crescent Moon Village')
-    connect(world, player, names, 'Crescent Moon Village', 'Arabian Night')
-    connect(world, player, names, 'Arabian Night', 'Fiery Cavern')
-    connect(world, player, names, 'Fiery Cavern', 'Hotel Horror')
-    connect(world, player, names, 'Hotel Horror', 'Sapphire Passage Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.SAPPHIRE, 4))
+    connect('Menu', 'Entry Passage')
+    connect('Entry Passage', 'Hall of Hieroglyphs (entrance)')
+    connect_level_exit('Hall of Hieroglyphs', 'Entry Minigame Shop')
+    connect('Entry Minigame Shop', 'Entry Passage Boss',
+            rules.make_boss_access_rule(player, Passage.ENTRY))
 
-    connect(world, player, names, 'Menu', 'Golden Pyramid',
-        lambda state: (state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
-                                      'Topaz Passage Clear', 'Sapphire Passage Clear'}, player)))
-    connect(world, player, names, 'Golden Pyramid', 'Golden Passage')
-    connect(world, player, names, 'Golden Passage', 'Golden Pyramid Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.GOLDEN, 1))
+    connect('Menu', 'Emerald Passage')
+    connect('Emerald Passage', 'Palm Tree Paradise (entrance)')
+    connect_level_exit('Palm Tree Paradise', 'Wildflower Fields (entrance)')
+    connect_level_exit('Wildflower Fields', 'Mystic Lake (entrance)')
+    connect_level_exit('Mystic Lake', 'Monsoon Jungle (entrance)')
+    connect_level_exit('Monsoon Jungle', 'Emerald Minigame Shop')
+    connect('Emerald Minigame Shop', 'Emerald Passage Boss',
+            rules.make_boss_access_rule(player, Passage.EMERALD))
+
+    connect('Menu', 'Ruby Passage')
+    connect('Ruby Passage', 'The Curious Factory (entrance)')
+    connect_level_exit('The Curious Factory', 'The Toxic Landfill (entrance)')
+    connect_level_exit('The Toxic Landfill', '40 Below Fridge (entrance)')
+    connect_level_exit('40 Below Fridge', 'Pinball Zone (entrance)')
+    connect_level_exit('Pinball Zone', 'Ruby Minigame Shop')
+    connect('Ruby Minigame Shop', 'Ruby Passage Boss',
+            rules.make_boss_access_rule(player, Passage.RUBY))
+
+    connect('Menu', 'Topaz Passage')
+    connect('Topaz Passage', 'Toy Block Tower (entrance)')
+    connect_level_exit('Toy Block Tower', 'The Big Board (entrance)')
+    connect_level_exit('The Big Board', 'Doodle Woods (entrance)')
+    connect_level_exit('Doodle Woods', 'Domino Row (entrance)')
+    connect_level_exit('Domino Row', 'Topaz Minigame Shop')
+    connect('Topaz Minigame Shop', 'Topaz Passage Boss',
+            rules.make_boss_access_rule(player, Passage.TOPAZ))
+
+    connect('Menu', 'Sapphire Passage')
+    connect('Sapphire Passage', 'Crescent Moon Village (entrance)')
+    connect_level_exit('Crescent Moon Village', 'Arabian Night (entrance)')
+    connect_level_exit('Arabian Night', 'Fiery Cavern (entrance)')
+    connect_level_exit('Fiery Cavern', 'Hotel Horror (entrance)')
+    connect_level_exit('Hotel Horror', 'Sapphire Minigame Shop')
+    connect('Sapphire Minigame Shop', 'Sapphire Passage Boss',
+            rules.make_boss_access_rule(player, Passage.SAPPHIRE))
+
+    connect('Menu', 'Golden Pyramid',
+            lambda state: state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
+                                     'Topaz Passage Clear', 'Sapphire Passage Clear'}, player))
+    connect('Golden Pyramid', 'Golden Passage (entrance)')
+    # Golden Passage is the only level where escaping has different requirements from getting Keyzer
+    connect_level_exit('Golden Passage', 'Golden Minigame Shop',
+            lambda state: state.has('Progressive Grab', player) and
+                          state.has('Progressive Ground Pound', player))
+    connect('Golden Minigame Shop', 'Golden Pyramid Boss',
+            rules.make_boss_access_rule(player, Passage.GOLDEN))
 
 
-def create_region(world: MultiWorld, player: int, location_table: dict,
-                  name: str, locations: Iterable[str] = ()):
-    region = Region(name, player, world)
+def create_region(world: MultiWorld, player: int, location_table: Set[str],
+                  name: str, locations: Iterable[str] = ()) -> WL4Region:
+    region = WL4Region(name, player, world)
     for location in locations:
         if location in location_table:
             region.locations.append(WL4Location.from_name(player, location, region))
     return region
 
 
-def connect(
-    world: MultiWorld,
-    player: int,
-    used_names: Dict[str, int],
-    source: str,
-    target: str,
-    rule: Optional[Callable] = None,
-):
+def connect_entrance(world: MultiWorld, player: int, name: str,
+            source: str, target: str, rule: AccessRule = None):
     source_region = world.get_region(source, player)
     target_region = world.get_region(target, player)
-
-    if target not in used_names:
-        used_names[target] = 1
-        name = target
-    else:
-        used_names[target] += 1
-        name = target + (' ' * used_names[target])
 
     connection = Entrance(player, name, source_region)
 

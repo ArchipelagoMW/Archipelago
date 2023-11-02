@@ -1,6 +1,13 @@
 .gba
 
 
+; Override the end of EXimage_Clear_Work_2Mode() to instead jump to our function
+.org 0x8074068
+        ldr r0, =CreateStartingInventory | 1
+        bx r0
+    .pool
+
+; HardwareInitialization()
 hook 0x8000728, 0x8000738, PreGamePrep
 
 ; GameSelect() case 2
@@ -17,6 +24,49 @@ hook 0x801BB7A, 0x801BB90, LoadTextSprites
 
 .autoregion
 .align 2
+
+
+.macro @transfer_itemcount, offset
+    ldrb r2, [r0, offset]
+    strb r2, [r1, offset]
+.endmacro
+
+
+; Create starting inventory by updating the item status after loading the empty save.
+CreateStartingInventory:
+        call_using r0, AutoSave_EXRead_Work
+
+        ldr r0, =LevelStatusTable
+        ldr r1, =StartingInventoryLevelStatus
+        mov r2, #36
+
+    @@NextLevel:
+        ldrb r3, [r1]
+        strb r3, [r0]
+
+        add r0, #4
+        add r1, #1
+        sub r2, #1
+        cmp r2, #0
+        beq @@Junk
+        b @@NextLevel
+
+    @@Junk:
+        ldr r0, =StartingInventoryJunkCounts
+        ldr r1, =QueuedJunk
+        @transfer_itemcount 0
+        @transfer_itemcount 1
+        @transfer_itemcount 2
+        @transfer_itemcount 3
+
+    ; Abilities
+        ldr r0, =StartingInventoryWarioAbilities
+        ldr r1, =WarioAbilities
+        ldrb r0, [r0]
+        strb r0, [r1]
+
+        pop {pc}  ; Return address from EXimage_Clear_Work_2Mode()
+    .pool
 
 
 ; Initialize randomizer variables
@@ -58,7 +108,7 @@ PyramidScreen:
         beq @@ShowTextBox
 
         bl ReceiveNextItem  ; a1
-        cmp r0, #0xFF
+        cmp r0, #ItemID_None
         beq @@RunCase2
 
         mov r4, r0
@@ -124,8 +174,8 @@ LevelScreen:
 
         bl ReceiveNextItem  ; a1
 
-        cmp r0, #0xFF
-        beq @@Return
+        cmp r0, #ItemID_None
+        beq @@CollectJunk
         ; Set text timer
         ldr r1, =TextTimer
         mov r2, #120
@@ -137,15 +187,66 @@ LevelScreen:
         bl LoadReceivedText
 
     ; If we get treasure, tell the player
-        get_bit r0, r4, 6
+        get_bit r0, r4, ItemBit_Junk
         cmp r0, #0
         bne @@CollectJunk
 
         mov r0, r4
         bl ItemReceivedFeedbackSound
+        get_bit r0, r4, ItemBit_Ability
+        cmp r0, #1
+        beq @@Ability
+
         get_bits r0, r4, 4, 2
         bl SetTreasurePalette
-        lsr r0, r4, #5
+        lsr r0, r4, #ItemBit_CD  ; a1
+        mov r1, #1  ; a2
+        bl SpawnCollectionIndicator
+        b @@CollectJunk
+
+    @@Ability:
+        cmp r4, #ItemID_GroundPound
+        beq @@GroundPound
+        cmp r4, #ItemID_Grab
+        beq @@Grab
+        b @@OtherAbility
+
+    @@GroundPound:
+        bl MixTemporaryAbilities
+        get_bit r0, r0, MoveBit_GroundPoundSuper
+        cmp r0, #0
+        beq @@FirstProgressive
+        mov r0, #MoveBit_GroundPoundSuper
+        b @@FinishProgressive
+
+    @@Grab:
+        bl MixTemporaryAbilities
+        get_bit r0, r0, MoveBit_GrabHeavy
+        cmp r0, #0
+        beq @@FirstProgressive
+        mov r0, #MoveBit_GrabHeavy
+        b @@FinishProgressive
+
+    @@FirstProgressive:
+        get_bits r0, r4, 2, 0
+
+    @@FinishProgressive:
+        mov r4, #0
+        b @@FinishAbility
+
+    @@OtherAbility:
+        get_bits r0, r4, 2, 0
+        mov r4, #1
+
+    @@FinishAbility:
+        ldr r1, =AbilityPaletteTable
+        add r1, r0
+        ldrb r1, [r1]
+
+        mov r0, r1
+        bl SetTreasurePalette
+        mov r0, r4
+        mov r1, #1
         bl SpawnCollectionIndicator
 
     @@CollectJunk:

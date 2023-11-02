@@ -9,10 +9,12 @@
 .definelabel TilesItemB8, 0x06012600
 .definelabel TilesItemC8, 0x06012A00
 
-; This is the upper halfword of entry passage level 3.
-; This level doesn't actually exist, so we can sneak this bit of extra save data
-; in there.
-.definelabel ReceivedItemCount, LevelStatusTable + 14  ; halfword
+; These extra bits of save data are stored in the upper parts of Entry Passage
+; levels that don't exist.
+; Most significant byte of the "third" level
+.definelabel WarioAbilities, LevelStatusTable + 11
+; Upper halfword of the "fourth" level
+.definelabel ReceivedItemCount, LevelStatusTable + 14
 
 ; Extends the existing box system to include full health boxes
 .definelabel HasFullHealthItem, UnusedRamStart + 0  ; byte
@@ -56,3 +58,12 @@
     .definelabel Jewel4BoxExtData, Jewel1BoxExtData + 12
     .definelabel CDBoxExtData, Jewel1BoxExtData + 16
     .definelabel HealthBoxExtData, Jewel1BoxExtData + 20
+
+; Indicates which icon is next to be selected and changed when a box is opened
+; with treasure in it. Loops around four values, values of upper six bits
+; unspecified and ignored.
+.definelabel CurrentJewelIconPosition, HealthBoxExtData + 4  ; byte
+
+; Tracks what abilities you've found in this level but haven't properly
+; collected yet.
+.definelabel AbilitiesInThisLevel, HealthBoxExtData + 5  ; byte

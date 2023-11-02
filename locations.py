@@ -71,7 +71,8 @@ location_table = {
     'Mystic Lake - Air Pocket Box':                       LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_NE),    'Jewel1', _NORMAL),
     'Mystic Lake - Large Cave Box':                       LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_NE),    'Jewel1', _HARDER),
     'Mystic Lake - Hill Room Box':                        LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SE),    'Jewel2', _NORMAL),
-    'Mystic Lake - Small Cave Box':                       LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SE),    'Jewel2', _HARDER),
+    'Mystic Lake - Small Cave Box':                       LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SE),    'Jewel2', _HARD),
+    'Mystic Lake - Rock Cave Box':                        LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SE),    'Jewel2', _S_HARD),
     'Mystic Lake - Cavern Box':                           LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SW),    'Jewel3', _NORMAL),
     'Mystic Lake - Spring Cave Box':                      LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SW),    'Jewel3', _HARDER),
     'Mystic Lake - Box Before Bridge':                    LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_NW),    'Jewel4', _NORMAL),
@@ -129,6 +130,7 @@ location_table = {
     'Pinball Zone - Jungle Room Box':                     LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_SW),    'Jewel3', _ALL),
     'Pinball Zone - Snow Room Box':                       LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_NW),    'Jewel4', _ALL),
     'Pinball Zone - CD Box':                              LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.CD),          'CD',     _ALL),
+    # FIXME: Pinball Zone apparently has two of these on Hard and S-Hard
     'Pinball Zone - Full Health Item Box':                LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.FULL_HEALTH), 'Health', _ALL),
 
     'Cuckoo Condor':                                      LocationData(LocationType.BOSS, (Passage.RUBY,     4, ItemFlag.KEYZER),      None,     _ALL),

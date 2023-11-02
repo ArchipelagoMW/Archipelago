@@ -88,7 +88,7 @@ SpawnRandomizedItemFromBox:
     ; If it's your own junk item, always release it
         cmp r1, #0
         bne @@CheckCollectionStatus
-        lsr r0, r0, #6
+        lsr r0, r0, #ItemBit_Junk
         cmp r0, #1
         beq @@ReleaseItem
 
@@ -144,7 +144,7 @@ SpawnRandomizedItemFromBox:
 ; Load the appropriate animation for a randomized item found in a box. The
 ; item used and resulting animation chosen is based on the item's entity ID.
 LoadRandomItemAnimation:
-        push r4-r6, lr
+        push r4-r7, lr
         ldr r4, =CurrentEnemyData
         ldrb r0, [r4, @global_id]
         sub r0, 0x86
@@ -152,15 +152,22 @@ LoadRandomItemAnimation:
         add r0, r1, r0
         ldrb r0, [r0]
         mov r6, r0
+        mov r5, #0
+        ldr r7, =REG_DMA3SAD
 
     ; AP items
-        cmp r6, #0xF0
+        cmp r6, #ItemID_Archipelago
         beq @@APItem
 
     ; Junk items
-        lsr r0, r6, #6
+        lsr r0, r6, #ItemBit_Junk
         cmp r0, #0
         bne @@JunkItem
+
+    ; Abilities
+        get_bit r0, r6, ItemBit_Ability
+        cmp r0, #1
+        beq @@Ability
 
     ; Jewel piece or CD
 
@@ -170,12 +177,99 @@ LoadRandomItemAnimation:
         bl SetTreasurePalette
 
     ; Jewel/CD branch
-        lsr r1, r6, #5
+        lsr r1, r6, #ItemBit_CD
         cmp r1, #0
         bne @@CD
 
     ; Jewel piece
-        get_bits r6, r6, 1, 0
+        ldr r1, =BasicElementTiles + tile_coord_4b(2, 3)
+
+        ; Map the tiles correctly
+        ; 0 -> 2; 1 -> 3; 2 -> 1; 3 -> 0
+        ; I could've done this with a table or branches, but noooo, I haaad to
+        ; do it with math instead
+        get_bits r0, r6, 1, 0
+        lsr r3, r0, #1
+        mov r2, #2
+        orr r3, r2
+        xor r0, r3
+
+        lsl r0, #6
+        add r0, r1, r0
+        str r0, [r7]  ; DMA3SAD
+
+        ; Hold the address of the bottom row for later
+        ldr r1, =tile_coord_4b(0, 1)
+        add r5, r0, r1
+
+        b @@ProgressionItem
+
+    @@Ability:
+        cmp r6, #ItemID_GroundPound
+        beq @@GroundPound
+        cmp r6, #ItemID_Grab
+        beq @@Grab
+        b @@OtherAbility
+
+    @@GroundPound:
+        bl MixTemporaryAbilities
+        get_bit r0, r0, MoveBit_GroundPound
+        cmp r0, #0
+        beq @@OtherAbility
+        mov r0, #MoveBit_GroundPoundSuper
+        b @@FinishAbility
+
+    @@Grab:
+        bl MixTemporaryAbilities
+        get_bit r0, r0, MoveBit_Grab
+        cmp r0, #0
+        beq @@OtherAbility
+        mov r0, #MoveBit_GrabHeavy
+        b @@FinishAbility
+
+    @@OtherAbility:
+        get_bits r0, r6, 2, 0
+
+    @@FinishAbility:
+        ldr r1, =AbilityPaletteTable
+        add r1, r0
+        ldrb r1, [r1]
+
+        mov r5, r0
+        mov r0, r1
+        bl SetTreasurePalette
+
+        lsl r0, r5, #6
+        ldr r1, =AbilityIconTilesTop
+        add r0, r1
+        str r0, [r7]  ; DMA3SAD
+        ldr r1, =16 * sizeof_tile
+        add r5, r0, r1
+
+    @@ProgressionItem:
+        ldr r3, =CurrentJewelIconPosition
+        ldrb r2, [r3]
+        get_bits r6, r2, 1, 0
+        add r1, r6, #1
+        strb r1, [r3]
+
+        ; Tile destination address = start of pieces + 2 * 0x20 * icon position
+        ldr r0, =0x6011C40
+        lsl r1, r6, #6
+        add r0, r1
+
+        str r0, [r7, #4]  ; DMA3DAD
+        ldr r2, =dma_enable | dma_halfwords(2 * sizeof_tile / 2)
+        str r2, [r7, #8]  ; DMA3CNT
+
+        ; DMA the second row
+        str r5, [r7]  ; DMA3SAD
+        ldr r1, =tile_coord_4b(0, 1)
+        add r0, r1
+        str r0, [r7, #4]  ; DMA3DAD
+        str r2, [r7, #8]  ; DMA3CNT
+
+        mov r5, #0
         b @@SetAnimation
 
     @@CD:
@@ -183,17 +277,29 @@ LoadRandomItemAnimation:
         b @@SetAnimation
 
     @@JunkItem:
-        cmp r6, #0x40
+        cmp r6, #ItemID_FullHealthItem
         beq @@FullHealthItem
+        cmp r6, #ItemID_Heart
+        beq @@Heart
+        b @@GiveImmediately  ; ItemID_TransformTrap, ItemID_Lightning
 
     @@FullHealthItem:
         mov r6, #0x05
+        b @@SetAnimation
+
+    @@Heart:
+        mov r6, #0x07
         b @@SetAnimation
 
     @@APItem:
         mov r0, #6
         bl SetTreasurePalette
         mov r6, #0x06
+        b @@SetAnimation
+
+    @@GiveImmediately:
+        mov r5, #1
+        mov r6, #0x08
 
     @@SetAnimation:
         ldr r0, =@@ItemAnimationTable
@@ -203,19 +309,37 @@ LoadRandomItemAnimation:
         str r0, [r4, @oam_animation_pointer]
         call_using r0, EntityAI_INITIAL_takara_kakera
 
-        pop r4-r6, pc
+        cmp r5, #1
+        bne @@Return
+        bl CollectRandomItem
+
+    @@Return:
+        pop r4-r7, pc
 
     .pool
 
     .align 4
     @@ItemAnimationTable:
+        .word takara_Anm_02  ; NW jewel piece
+        .word takara_Anm_03  ; SW jewel piece
         .word takara_Anm_04  ; NE jewel piece
         .word takara_Anm_05  ; SE jewel piece
-        .word takara_Anm_03  ; SW jewel piece
-        .word takara_Anm_02  ; NW jewel piece
         .word takara_Anm_00  ; CD
         .word takara_Anm_01  ; Full health item
         .word APLogoAnm      ; Archipelago item
+        .word HeartAnm       ; Single heart
+        .word EmptyAnm       ; Nothing
+
+
+AbilityPaletteTable:
+        .byte 0  ; Ground pound:       Entry
+        .byte 4  ; Swim:               Sapphire
+        .byte 8  ; Head Smash:         Unique
+        .byte 4  ; Grab:               Sapphire
+        .byte 7  ; Dash Attack:        Unique
+        .byte 1  ; Enemy Jump:         Emerald
+        .byte 0  ; Super Ground Pound: Entry
+        .byte 2  ; Heavy Grab:         Ruby
 
 
 ; Collect this item. If it's your own junk item, it gets immediately given.
@@ -267,21 +391,25 @@ CollectRandomItem:
         bne @@MultiplayerItem
 
     ; Junk items
-        lsr r0, r5, #6
+        lsr r0, r5, #ItemBit_Junk
         cmp r0, #0
         bne @@JunkItem
 
-    ; Jewel/CD
+    ; Progression items
         ldr r0, =LastCollectedItemID
         strb r5, [r0]
-        ldr r0, =LastCollectedItemStatus
-        mov r1, #2
-        strb r1, [r0]
 
-        lsr r1, r5, #5
+    ; Abilities
+        get_bit r0, r5, ItemBit_Ability
+        cmp r0, #1
+        beq @@Ability
+
+    ; Jewel/CD
+        lsr r1, r5, #ItemBit_CD
         cmp r1, #0
         bne @@CD
         mov r0, #0  ; a1
+        mov r1, #0  ; a2
         bl SpawnCollectionIndicator
         b @@JewelPiece
 
@@ -310,6 +438,46 @@ CollectRandomItem:
 
     @@CD:
         mov r0, #1  ; a1
+        mov r1, #0  ; a2
+        bl SpawnCollectionIndicator
+        ldr r0, =0x13C  ; a1
+        b @@PlayCollectionSound
+
+    @@Ability:
+        cmp r5, #ItemID_GroundPound
+        beq @@ProgressiveAbility
+        cmp r5, #ItemID_Grab
+        beq @@ProgressiveAbility
+        mov r0, #1  ; a1
+        b @@AbilityFinal
+
+    @@ProgressiveAbility:
+        bl MixTemporaryAbilities  ; r0 = Carried abilities
+        get_bits r1, r5, 2, 0  ; r1 = Ability number
+        mov r2, #1
+        lsl r2, r1  ; r2 = Ability bit
+        and r0, r2
+        cmp r0, #0
+        beq @@ProgressiveFinal
+        cmp r5, #ItemID_Grab
+        beq @@Grab
+
+    ; Ground Pound
+        mov r2, #1 << MoveBit_GroundPoundSuper
+        b @@ProgressiveFinal
+
+    @@Grab:
+        mov r2, #1 << MoveBit_GrabHeavy
+
+    @@ProgressiveFinal:
+        ldr r1, =AbilitiesInThisLevel
+        ldrb r3, [r1]
+        orr r2, r3
+        strb r2, [r1]
+        mov r0, #0  ; a1
+
+    @@AbilityFinal:
+        mov r1, #0  ; a2
         bl SpawnCollectionIndicator
         ldr r0, =0x13C  ; a1
 
@@ -318,12 +486,31 @@ CollectRandomItem:
         b @@SetCheckLocation
 
     @@JunkItem:
-        cmp r5, #0x40
-        bne @@SetCheckLocation
+        cmp r5, #ItemID_FullHealthItem
+        beq @@FullHealthItem
+        cmp r5, #ItemID_TransformTrap
+        beq @@Transform
+        cmp r5, #ItemID_Heart
+        beq @@Heart
+        cmp r5, #ItemID_Lightning
+        beq @@Damage
 
-    ; Full health item
+    @@FullHealthItem:
         mov r0, #8
         bl GiveWarioHearts
+        b @@SetCheckLocation
+
+    @@Transform:
+        bl GiveTransformTrap
+        b @@SetCheckLocation
+
+    @@Heart:
+        mov r0, #1
+        bl GiveWarioHearts
+        b @@SetCheckLocation
+
+    @@Damage:
+        bl GiveLightningTrap
 
     @@SetCheckLocation:
         mov r0, #1

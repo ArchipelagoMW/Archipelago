@@ -1,6 +1,6 @@
 from typing import Dict, Type
 
-from Options import Choice, Option, DefaultOnToggle, DeathLink
+from Options import Choice, Option, DefaultOnToggle, DeathLink, Range
 
 
 class Difficulty(Choice):
@@ -15,12 +15,16 @@ class Difficulty(Choice):
     default = 0
 
 
-class EarlyEntryJewels(DefaultOnToggle):
+class RequiredJewels(Range):
     '''
-    Force the Entry Passage Jewel Pieces to appear early in the seed as a local item.
-    Recommended to prevent early BK
+    Number of jewels required to fight the bosses.
+    The Entry Passage and Golden Pyramid always require 1 unless this option is
+    set to 0.
     '''
-    display_name = 'Early Entry Passage Jewels'
+    range_start = 0
+    range_end = 4
+    default = 3
+    display_name = 'Required Jewels'
 
 
 class MusicShuffle(Choice):
@@ -39,7 +43,7 @@ class MusicShuffle(Choice):
 
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
-    'early_entry_jewels': EarlyEntryJewels,
+    'required_jewels': RequiredJewels,
     'death_link': DeathLink,
     #'music_shuffle': MusicShuffle,
 }

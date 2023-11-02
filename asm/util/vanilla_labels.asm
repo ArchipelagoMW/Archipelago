@@ -6,6 +6,7 @@
 .definelabel CurrentRoomId, 0x3000024
 .definelabel ucFlashLoop, 0x3000044
 .definelabel ucTimeUp, 0x3000047
+.definelabel CurrentEntityInfoList_TEbuf, 0x3000104
 .definelabel EntityLeftOverStateList, 0x3000564
 .definelabel CurrentEnemyData, 0x3000A24
 .definelabel LevelStatusTable, 0x3000A68
@@ -27,16 +28,20 @@
 .definelabel Wario_ucReact, 0x3001898
 .definelabel Wario_ucMiss, 0x300189C
 .definelabel WarioHeart, 0x3001910
+.definelabel WHit, 0x3001918
+.definelabel WarioLift, 0x3001940
 .definelabel usWarStopFlg, 0x30019F6
 .definelabel ucSeldemoSeq, 0x3003C39
 .definelabel usMojiCount, 0x3004A30  ; ???
 
 ; I/O Registers
 .definelabel REG_BG3CNT, 0x400000E
+.definelabel REG_BG0VOFS, 0x4000012
 .definelabel REG_DMA3SAD, 0x40000D4
 
 ; PalRAM
 .definelabel ObjectPalette4, 0x5000280
+.definelabel ObjectPalette9, 0x5000320
 .definelabel ObjectPaletteF, 0x50003E0
 
 ; Functions
@@ -45,6 +50,7 @@
 .definelabel m4aSongNumStart, 0x8001DA4
 .definelabel WarioHitMain, 0x801009c
 .definelabel GmWarioCreate, 0x801C5D8
+.definelabel WarChng_Flying, 0x8012CC8
 .definelabel EnemyDisplayMain, 0x801D8C4
 .definelabel EnemyChildSet, 0x801E328
 .definelabel ChangeWarioReact_Fire, 0x801EA3C
@@ -56,10 +62,15 @@
 .definelabel EntityAI_Q_K5_Hip_COM_takarabako, 0x80292BC
 .definelabel EntityAI_INITIAL_takara_kakera, 0x802932C
 .definelabel GmapSceneCreate, 0x806C794
+.definelabel PanelPartWork_Broken_Main, 0x806EE98
+.definelabel AutoSave_EXRead_Work, 0x8073A18
 .definelabel TOptObjSet, 0x80766E8
 .definelabel WarioCoinSet, 0x80768B8
 .definelabel TKakeraComp_SE_Set, 0x8078D60
 .definelabel TKakeraIconDsp_Sub, 0x8078D98
+.definelabel Select_Fade_Init, 0x807A428
+.definelabel MmapHekigaChange, 0x808502C
+.definelabel MmapBestScoreSet, 0x8085178
 .definelabel WarioVoiceSet, 0x8088620
 .definelabel MiniRandomCreate, 0x8089B80
 .definelabel MojiCreate, 0x80904DC
@@ -78,6 +89,9 @@
 .definelabel zako_takara_box_Anm_02, 0x83B4F34
 .definelabel zako_takara_box_Anm_11, 0x83B5004
 .definelabel CommonRoomEntityPalettes4, 0x8400A68
+.definelabel EmptyCDTile, 0x8400FA8
+.definelabel HasCDTile, 0x8404648
+.definelabel BasicElementTiles, 0x8400AE8
 .definelabel EmptyJewel4Tile, 0x84016E8
 .definelabel EmptyJewel1Tile, 0x8401708
 .definelabel EmptyJewel3Tile, 0x8401AE8
@@ -90,11 +104,11 @@
 .definelabel HasJewel2Tile, 0x84045E8
 .definelabel HasJewel3Tile, 0x8404608
 .definelabel HasJewel4Tile, 0x8404628
-.definelabel EmptyCDTile, 0x8400FA8
-.definelabel BasicElementTiles, 0x8400AE8
+.definelabel PassageTreasurePalettes, 0x8414A64
 .definelabel PortalTilemap3, 0x864BF58
 .definelabel PortalOBJTileset, 0x868269C
 .definelabel SaveTutorialTilemap, 0x868B15C
 .definelabel PortalTileset2, 0x868681C
-.definelabel PortalPaletteDTable, 0x0868A81C
-.definelabel PortalPaletteETable, 0x0868A8DC
+.definelabel PortalPaletteDTable, 0x868A81C
+.definelabel PortalPaletteETable, 0x868A8DC
+.definelabel PassageRoomTileSet, 0x869CE48
