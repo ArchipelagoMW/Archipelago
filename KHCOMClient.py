@@ -62,10 +62,10 @@ class KHCOMContext(CommonContext):
 
     async def connection_closed(self):
         await super(KHCOMContext, self).connection_closed()
-        #for root, dirs, files in os.walk(self.game_communication_path):
-        #    for file in files:
-        #        if file.find("obtain") <= -1:
-        #            os.remove(root + "/" + file)
+        for root, dirs, files in os.walk(self.game_communication_path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root + "/" + file)
 
     @property
     def endpoints(self):
@@ -76,10 +76,10 @@ class KHCOMContext(CommonContext):
 
     async def shutdown(self):
         await super(KHCOMContext, self).shutdown()
-        #for root, dirs, files in os.walk(self.game_communication_path):
-        #    for file in files:
-        #        if file.find("obtain") <= -1:
-        #            os.remove(root+"/"+file)
+        for root, dirs, files in os.walk(self.game_communication_path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root+"/"+file)
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
