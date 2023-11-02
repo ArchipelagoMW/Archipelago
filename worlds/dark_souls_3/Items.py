@@ -50,6 +50,9 @@ class DS3ItemData():
     ds3_code: int
     category: DS3ItemCategory
 
+    base_name: Optional[str] = None
+    """The name of the individual item, if this is a multi-item group."""
+
     classification: ItemClassification = ItemClassification.filler
     """How important this item is to the game progression."""
 
@@ -88,6 +91,7 @@ class DS3ItemData():
 
     def __post_init__(self):
         self.ap_code = DS3ItemData.__item_id
+        if not self.base_name: self.base_name = self.name
         DS3ItemData.__item_id += 1
 
     def counts(self, counts: List[int]) -> Generator["DS3ItemData", None, None]:
@@ -96,7 +100,8 @@ class DS3ItemData():
         for count in counts:
             yield dataclasses.replace(
                 self,
-                name = "{} x{}".format(self.name, count),
+                name = "{} x{}".format(self.base_name, count),
+                base_name = self.base_name,
                 count = count,
                 filler = False, # Don't count multiples as filler by default
             )
@@ -916,7 +921,7 @@ _vanilla_items = flatten([
     DS3ItemData("Binoculars",                          0x40000173, DS3ItemCategory.MISC),
     DS3ItemData("Proof of a Concord Kept",             0x40000174, DS3ItemCategory.SKIP),
     DS3ItemData("Pale Tongue",                         0x40000175, DS3ItemCategory.MISC,
-                classification = ItemClassification.useful,
+                classification = ItemClassification.progression,
                 force_unique = True), # One is needed for Leonhard's quest
     DS3ItemData("Vertebra Shackle",                    0x40000176, DS3ItemCategory.MISC,
                 force_unique = True), # Allow one of these to trade to the crow
@@ -929,20 +934,20 @@ _vanilla_items = flatten([
     DS3ItemData("Twinkling Dragon Torso Stone",        0x40000184, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression),
     DS3ItemData("Fire Keeper Soul",                    0x40000186, DS3ItemCategory.MISC),
-    DS3ItemData("Fading Soul",                         0x40000190, DS3ItemCategory.MISC, soul = True),
+    DS3ItemData("Fading Soul",                         0x40000190, DS3ItemCategory.MISC, filler = True, soul = True),
     DS3ItemData("Soul of a Deserted Corpse",           0x40000191, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC, soul = True),
+    DS3ItemData("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC, filler = True, soul = True),
+    DS3ItemData("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC, filler = True, soul = True),
     DS3ItemData("Large Soul of an Unknown Traveler",   0x40000194, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Soul of a Nameless Soldier",          0x40000195, DS3ItemCategory.MISC, soul = True),
+    DS3ItemData("Soul of a Nameless Soldier",          0x40000195, DS3ItemCategory.MISC, filler = True, soul = True),
     DS3ItemData("Large Soul of a Nameless Soldier",    0x40000196, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Weary Warrior",             0x40000197, DS3ItemCategory.MISC, filler = True, soul = True),
+    DS3ItemData("Soul of a Weary Warrior",             0x40000197, DS3ItemCategory.MISC, soul = True),
     DS3ItemData("Large Soul of a Weary Warrior",       0x40000198, DS3ItemCategory.MISC, soul = True),
     DS3ItemData("Soul of a Crestfallen Knight",        0x40000199, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Crestfallen Knight",  0x4000019A, DS3ItemCategory.MISC, filler = True, soul = True),
+    DS3ItemData("Large Soul of a Crestfallen Knight",  0x4000019A, DS3ItemCategory.MISC, soul = True),
     DS3ItemData("Soul of a Proud Paladin",             0x4000019B, DS3ItemCategory.MISC, soul = True),
     DS3ItemData("Large Soul of a Proud Paladin",       0x4000019C, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of an Intrepid Hero",            0x4000019D, DS3ItemCategory.MISC, filler = True, soul = True),
+    DS3ItemData("Soul of an Intrepid Hero",            0x4000019D, DS3ItemCategory.MISC, soul = True),
     DS3ItemData("Large Soul of an Intrepid Hero",      0x4000019E, DS3ItemCategory.MISC, soul = True),
     DS3ItemData("Soul of a Seasoned Warrior",          0x4000019F, DS3ItemCategory.MISC, soul = True),
     DS3ItemData("Large Soul of a Seasoned Warrior",    0x400001A0, DS3ItemCategory.MISC, soul = True),

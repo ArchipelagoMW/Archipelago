@@ -70,7 +70,6 @@ class DS3LocationData:
     dlc: bool = False
     """Whether this location is only accessible if the DLC is enabled."""
 
-    # TODO: implement this properly
     ngp: bool = False
     """Whether this location only contains an item in NG+ and later.
 
@@ -121,6 +120,13 @@ class DS3LocationData:
 
     shop: bool = False
     """Whether this location appears in an NPC's shop."""
+
+    conditional: bool = False
+    """Whether this location is conditional on a progression item.
+
+    This is used to track locations that won't become available until an unknown amount of time into
+    the run, and as such shouldn't have "similar to the base game" items placed in them.
+    """
 
     key: bool = False
     """Whether this location normally contains a key.
@@ -280,9 +286,9 @@ location_tables = {
         DS3LocationData("FS: Wolf Ring+2",                         "Wolf Ring+2",                       DS3LocationCategory.RING,
                         ngp = True),
         DS3LocationData("FS: Cracked Red Eye Orb",                 "Cracked Red Eye Orb x5",            DS3LocationCategory.UNIQUE,
-                        missable = True, npc = True), # Leonhard (quest)
+                        missable = True, npc = True, conditional = True), # Leonhard (quest)
         DS3LocationData("FS: Lift Chamber Key",                    "Lift Chamber Key",                  DS3LocationCategory.KEY,
-                        progression = True, npc = True, key = True), # Leonhard (kill or quest)
+                        progression = True, npc = True, key = True, conditional = True), # Leonhard (kill or quest)
 
         # Shrine Handmaid shop
         DS3LocationData("FS: White Sign Soapstone",                "White Sign Soapstone",              DS3LocationCategory.UNIQUE,
@@ -301,65 +307,65 @@ location_tables = {
                         shop = True),
         # Mortician's Ashes
         DS3LocationData("FS: Alluring Skull",                      "Alluring Skull",                    DS3LocationCategory.MISC,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Ember (Mortician)"  ,                 "Ember",                             DS3LocationCategory.MISC,
-                        offline = '99,0:-1:110000,70000100:', shop = True),
+                        offline = '99,0:-1:110000,70000100:', shop = True, conditional = True),
         DS3LocationData("FS: Grave Key",                           "Grave Key",                         DS3LocationCategory.KEY,
-                        shop = True, key = True),
+                        shop = True, key = True, conditional = True),
         # Dreamchaser's Ashes
         DS3LocationData("FS: Life Ring",                           "Life Ring",                         DS3LocationCategory.RING,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Hidden Blessing #2",                  "Hidden Blessing",                   DS3LocationCategory.MISC,
-                        missable = True, shop = True), # only if you say where the ashes were found
+                        missable = True, shop = True, conditional = True), # only if you say where the ashes were found
         # Paladin's Ashes
         DS3LocationData("FS: Lloyd's Shield Ring",                 "Lloyd's Shield Ring",               DS3LocationCategory.RING,
-                        shop = True),
+                        shop = True, conditional = True),
         # Grave Warden's Ashes
         DS3LocationData("FS: Ember (Grave Warden)",                "Ember",                             DS3LocationCategory.MISC,
-                        offline = '99,0:-1:110000,70000103:', shop = True),
+                        offline = '99,0:-1:110000,70000103:', shop = True, conditional = True),
         # Prisoner Chief's Ashes
         DS3LocationData("FS: Karla's Pointed Hat",                 "Karla's Pointed Hat",               DS3LocationCategory.ARMOR,
-                        offline = '99,0:-1:110000,70000105:', shop = True),
+                        offline = '99,0:-1:110000,70000105:', shop = True, conditional = True),
         DS3LocationData("FS: Karla's Coat",                        "Karla's Coat",                      DS3LocationCategory.ARMOR,
-                        offline = '99,0:-1:110000,70000105:', shop = True),
+                        offline = '99,0:-1:110000,70000105:', shop = True, conditional = True),
         DS3LocationData("FS: Karla's Gloves",                      "Karla's Gloves",                    DS3LocationCategory.ARMOR,
-                        offline = '99,0:-1:110000,70000105:', shop = True),
+                        offline = '99,0:-1:110000,70000105:', shop = True, conditional = True),
         DS3LocationData("FS: Karla's Trousers",                    "Karla's Trousers",                  DS3LocationCategory.ARMOR,
-                        offline = '99,0:-1:110000,70000105:', shop = True),
+                        offline = '99,0:-1:110000,70000105:', shop = True, conditional = True),
         # Xanthous Ashes
         DS3LocationData("FS: Xanthous Overcoat",                   "Xanthous Overcoat",                 DS3LocationCategory.ARMOR,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Xanthous Gloves",                     "Xanthous Gloves",                   DS3LocationCategory.ARMOR,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Xanthous Trousers",                   "Xanthous Trousers",                 DS3LocationCategory.ARMOR,
-                        shop = True),
+                        shop = True, conditional = True),
         # Dragon Chaser's Ashes
         DS3LocationData("FS: Ember (Dragon Chaser)",               "Ember",                             DS3LocationCategory.MISC,
-                        offline = '99,0:-1:110000,70000108:', shop = True),
+                        offline = '99,0:-1:110000,70000108:', shop = True, conditional = True),
         # Easterner's Ashes
         DS3LocationData("FS: Washing Pole",                        "Washing Pole",                      DS3LocationCategory.WEAPON,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Eastern Helm",                        "Eastern Helm",                      DS3LocationCategory.ARMOR,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Eastern Armor",                       "Eastern Armor",                     DS3LocationCategory.ARMOR,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Eastern Gauntlets",                   "Eastern Gauntlets",                 DS3LocationCategory.ARMOR,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Eastern Leggings",                    "Eastern Leggings",                  DS3LocationCategory.ARMOR,
-                        shop = True),
+                        shop = True, conditional = True),
         DS3LocationData("FS: Wood Grain Ring",                     "Wood Grain Ring",                   DS3LocationCategory.RING,
-                        shop = True),
+                        shop = True, conditional = True),
         # Captain's Ashes
         DS3LocationData("FS: Millwood Knight Helm",                "Millwood Knight Helm",              DS3LocationCategory.ARMOR,
-                        dlc = True, shop = True),
+                        dlc = True, shop = True, conditional = True),
         DS3LocationData("FS: Millwood Knight Armor",               "Millwood Knight Armor",             DS3LocationCategory.ARMOR,
-                        dlc = True, shop = True),
+                        dlc = True, shop = True, conditional = True),
         DS3LocationData("FS: Millwood Knight Gauntlets",           "Millwood Knight Gauntlets",         DS3LocationCategory.ARMOR,
-                        dlc = True, shop = True),
+                        dlc = True, shop = True, conditional = True),
         DS3LocationData("FS: Millwood Knight Leggings",            "Millwood Knight Leggings",          DS3LocationCategory.ARMOR,
-                        dlc = True, shop = True),
+                        dlc = True, shop = True, conditional = True),
         DS3LocationData("FS: Refined Gem",                         "Refined Gem",                       DS3LocationCategory.UPGRADE,
-                        dlc = True, shop = True),
+                        dlc = True, shop = True, conditional = True),
     ],
     "Firelink Shrine Bell Tower": [
         # Guarded by Tower Key
@@ -1479,7 +1485,8 @@ location_tables = {
         DS3LocationData("ID: Large Soul of a Nameless Soldier #2", "Large Soul of a Nameless Soldier",  DS3LocationCategory.MISC),
         DS3LocationData("ID: Large Titanite Shard #2",             "Large Titanite Shard",              DS3LocationCategory.UPGRADE),
         DS3LocationData("ID: Homeward Bone",                       "Homeward Bone x2",                  DS3LocationCategory.MISC),
-        DS3LocationData("ID: Bellowing Dragoncrest Ring",          "Bellowing Dragoncrest Ring",        DS3LocationCategory.RING),
+        DS3LocationData("ID: Bellowing Dragoncrest Ring",          "Bellowing Dragoncrest Ring",        DS3LocationCategory.RING,
+                        conditional = True),
         DS3LocationData("ID: Soul of a Weary Warrior #1",          "Soul of a Weary Warrior",           DS3LocationCategory.MISC),
         DS3LocationData("ID: Soul of a Crestfallen Knight",        "Soul of a Crestfallen Knight",      DS3LocationCategory.MISC),
         DS3LocationData("ID: Lightning Bolt",                      "Lightning Bolt x9",                 DS3LocationCategory.MISC),
@@ -1497,7 +1504,8 @@ location_tables = {
         DS3LocationData("ID: Old Sorcerer Gauntlets",              "Old Sorcerer Gauntlets",            DS3LocationCategory.ARMOR),
         DS3LocationData("ID: Old Sorcerer Boots",                  "Old Sorcerer Boots",                DS3LocationCategory.ARMOR),
         DS3LocationData("ID: Large Soul of a Weary Warrior",       "Large Soul of a Weary Warrior",     DS3LocationCategory.MISC),
-        DS3LocationData("ID: Covetous Gold Serpent Ring",          "Covetous Gold Serpent Ring",        DS3LocationCategory.RING),
+        DS3LocationData("ID: Covetous Gold Serpent Ring",          "Covetous Gold Serpent Ring",        DS3LocationCategory.RING,
+                        conditional = True),
         DS3LocationData("ID: Lightning Blade",                     "Lightning Blade",                   DS3LocationCategory.SPELL),
         DS3LocationData("ID: Rusted Coin",                         "Rusted Coin",                       DS3LocationCategory.MISC),
         DS3LocationData("ID: Dusk Crown Ring",                     "Dusk Crown Ring",                   DS3LocationCategory.RING),
@@ -1721,11 +1729,11 @@ location_tables = {
         # This is listed here even though you can kill Leonhard immediately because we don't want to
         # make people do that until they have a chance to complete his quest and Sirris's.
         DS3LocationData("AL: Leonhard's Garb",                     "Leonhard's Garb",                     DS3LocationCategory.ARMOR,
-                        hidden = True, npc = True, shop = True),
+                        hidden = True, npc = True, shop = True, conditional = True),
         DS3LocationData("AL: Leonhard's Gauntlets",                "Leonhard's Gauntlets",                DS3LocationCategory.ARMOR,
-                        hidden = True, npc = True, shop = True),
+                        hidden = True, npc = True, shop = True, conditional = True),
         DS3LocationData("AL: Leonhard's Trousers",                 "Leonhard's Trousers",                 DS3LocationCategory.ARMOR,
-                        hidden = True, npc = True, shop = True),
+                        hidden = True, npc = True, shop = True, conditional = True),
 
         # Shrine Handmaid after killing Alrich, Devourer of Gods
         DS3LocationData("AL: Smough's Helm",                       "Smough's Helm",                       DS3LocationCategory.ARMOR,
@@ -1843,9 +1851,10 @@ location_tables = {
                         lizard = True),
         DS3LocationData("LC: Twinkling Titanite #6",               "Twinkling Titanite x2",               DS3LocationCategory.UPGRADE,
                         lizard = True),
-        DS3LocationData("LC: Gotthard Twinswords",                 "Gotthard Twinswords",                 DS3LocationCategory.WEAPON),
+        DS3LocationData("LC: Gotthard Twinswords",                 "Gotthard Twinswords",                 DS3LocationCategory.WEAPON,
+                        conditional = True),
         DS3LocationData("LC: Grand Archives Key",                  "Grand Archives Key",                  DS3LocationCategory.KEY,
-                        prominent = True, progression = True, key = True),
+                        prominent = True, progression = True, key = True, conditional = True),
         DS3LocationData("LC: Titanite Chunk #11",                  "Titanite Chunk",                      DS3LocationCategory.UPGRADE),
         DS3LocationData("LC: Dancer's Enchanted Swords",           "Dancer's Enchanted Swords",           DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
@@ -2095,7 +2104,7 @@ location_tables = {
         DS3LocationData("UG: Ring of Steel Protection+1",          "Ring of Steel Protection+1",              DS3LocationCategory.RING,
                         ngp = True, hidden = True),
         DS3LocationData("UG: Hornet Ring",                         "Hornet Ring",                             DS3LocationCategory.RING,
-                        hidden = True),
+                        hidden = True, conditional = True),
         DS3LocationData("FS: Gundyr's Halberd",                    "Gundyr's Halberd",                        DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
         DS3LocationData("FS: Prisoner's Chain",                    "Prisoner's Chain",                        DS3LocationCategory.RING,

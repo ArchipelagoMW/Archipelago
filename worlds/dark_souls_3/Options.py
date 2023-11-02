@@ -29,18 +29,6 @@ class RandomizeSpellLocations(DefaultOnToggle):
     display_name = "Randomize Spell Locations"
 
 
-class RandomizeUpgradeLocations(DefaultOnToggle):
-    """Randomizes titanite and gems (+220 checks)
-
-    By default, these locations will never include progression items, so they
-    aren't mandatory checks. You can override this by customizing the
-    "exclude_locations" field in your YAML config. (For example,
-    "exclude_locations: []" will allow progression items in every unmissable
-    location.)
-    """
-    display_name = "Randomize Upgrade Locations"
-
-
 class RandomizeKeyLocations(DefaultOnToggle):
     """Randomizes items which unlock doors or bypass barriers.
 
@@ -88,12 +76,32 @@ class RandomizeHealthLocations(DefaultOnToggle):
     display_name = "Randomize Health Upgrade Locations"
 
 
+class UpgradeLocationsOption(Choice):
+    """Where to randomize titanite and gems (220 checks)
+
+    * Not Randomized: All upgrade item locations contain the same items as in the base game.
+    * Anywhere: Upgrade items are distributed totally randomly throughout the game.
+    * Similar to Base Game: Upgrade items appear in approximately the same regions they do in the
+      base game.
+
+    By default, upgrade item locations will never include progression items, so they aren't
+    mandatory checks. You can override this by customizing the "exclude_locations" field in your
+    YAML config. (For example, "exclude_locations: []" will allow progression items in every
+    unmissable location.)
+    """
+    display_name = "Upgrade Locations"
+    option_not_randomized = 1
+    option_anywhere = 2
+    option_similar_to_base_game = 3
+    default = 3
+
+
 class RandomizeStartingLoadout(DefaultOnToggle):
     """Randomizes the equipment characters begin with."""
     display_name = "Randomize Starting Loadout"
 
 
-class RequireOneHandedStartingWeapons(Toggle):
+class RequireOneHandedStartingWeapons(DefaultOnToggle):
     """Require starting equipment to be usable one-handed."""
     display_name = "Require One-Handed Starting Weapons"
 
@@ -323,13 +331,13 @@ class DarkSouls3Options(PerGameCommonOptions):
     enable_armor_locations: RandomizeArmorLocations
     enable_ring_locations: RandomizeRingLocations
     enable_spell_locations: RandomizeSpellLocations
-    enable_upgrade_locations: RandomizeUpgradeLocations
     enable_key_locations: RandomizeKeyLocations
     enable_boss_locations: RandomizeBossSoulLocations
     enable_npc_locations: RandomizeNPCLocations
     enable_unique_locations: RandomizeUniqueLocations
     enable_misc_locations: RandomizeMiscLocations
     enable_health_upgrade_locations: RandomizeHealthLocations
+    upgrade_locations: UpgradeLocationsOption
     random_starting_loadout: RandomizeStartingLoadout
     require_one_handed_starting_weapons: RequireOneHandedStartingWeapons
     pool_type: PoolTypeOption

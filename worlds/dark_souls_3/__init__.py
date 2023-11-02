@@ -10,9 +10,10 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Bosses import DS3BossInfo, all_bosses
+from .Fill import Fill
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
-from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption
+from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption, UpgradeLocationsOption
 
 
 class DarkSouls3Web(WebWorld):
@@ -94,7 +95,7 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.RING)
         if self.multiworld.enable_spell_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
-        if self.multiworld.enable_upgrade_locations[self.player] == Toggle.option_true:
+        if self.multiworld.upgrade_locations[self.player] != UpgradeLocationsOption.option_not_randomized:
             self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
@@ -106,8 +107,6 @@ class DarkSouls3World(World):
             self.multiworld.early_items[self.player]['Transposing Kiln'] = 1
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
-        if self.multiworld.enable_upgrade_locations[self.player] == Toggle.option_true:
-            self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
         if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
 
@@ -133,6 +132,16 @@ class DarkSouls3World(World):
             ):
                 self.multiworld.early_items[self.player]['Storm Ruler'] = 1
                 self.multiworld.local_items[self.player].value.add('Storm Ruler')
+
+        # Mark all items with similar distribution as non-local, so that pre_fill can leave a few to
+        # be given as multiworld items.
+        if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_similar_to_base_game:
+            for item in item_dictionary.values():
+                # Carefully control the actual weapon upgrade material locations, but be looser with
+                # gems since they're inherently controlled by coals anyway (which are all local).
+                if item.base_name in {"Titanite Shard", "Large Titanite Shard", "Titanite Chunk",
+                                      "Titanite Slab", "Titanite Scale", "Twinkling Titanite"}:
+                    self.multiworld.non_local_items[self.player].value.add(item.name)
 
     def create_regions(self):
         # Create Vanilla Regions
@@ -227,7 +236,7 @@ class DarkSouls3World(World):
         new_region = Region(region_name, self.player, self.multiworld)
 
         for location in location_table:
-            if self.__is_location_available(location):
+            if self.is_location_available(location):
                 new_location = DarkSouls3Location.from_data(
                     self.player,
                     location,
@@ -268,7 +277,7 @@ class DarkSouls3World(World):
         # Gather all default items on randomized locations
         num_required_extra_items = 0
         for location in self.multiworld.get_unfilled_locations(self.player):
-            if not self.__is_location_available(location.name):
+            if not self.is_location_available(location.name):
                 raise Exception("DS3 generation bug: Added an unavailable location.")
 
             item = item_dictionary[location.default_item_name]
@@ -466,7 +475,7 @@ class DarkSouls3World(World):
         for ash, items in ashes.items():
             for item in items:
                 location = "FS: " + item
-                if self.__is_location_available(location):
+                if self.is_location_available(location):
                     set_rule(self.multiworld.get_location(location, self.player),
                              lambda state, ash=ash: state.has(ash, self.player))
 
@@ -565,18 +574,12 @@ class DarkSouls3World(World):
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
         # logic for choosing how many shop items to sell), and from carring soul items.
         for location in location_dictionary.values():
-            if location.shop and self.__is_location_available(location):
+            if location.shop and self.is_location_available(location):
                 add_item_rule(self.multiworld.get_location(location.name, self.player),
                               lambda item: (
                                   item.player != self.player or
                                   (item.count == 1 and not item.soul)
                               ))
-
-        add_item_rule(self.multiworld.get_location(location.name, self.player),
-                        lambda item: (
-                            item.player != self.player or
-                            (item.count == 1 and not item.soul)
-                        ))
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location:
@@ -584,7 +587,7 @@ class DarkSouls3World(World):
                 set_rule(self.multiworld.get_entrance(f"Go To {self.yhorm_location.region}", self.player),
                         lambda state: state.has("Storm Ruler", self.player))
             for location in self.yhorm_location.locations:
-                if self.__is_location_available(location):
+                if self.is_location_available(location):
                     set_rule(self.multiworld.get_location(location, self.player),
                             lambda state: state.has("Storm Ruler", self.player))
         else:
@@ -598,15 +601,12 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Lothric Prince", self.player)
 
 
-    def __is_location_available(self, location: Union[str, DS3LocationData]):
+    def is_location_available(self, location: Union[str, DS3LocationData]) -> bool:
         """Returns whether the given location is being randomized."""
         if isinstance(location, DS3LocationData):
             data = location
-        elif location in location_dictionary:
-            data = location_dictionary[location]
         else:
-            # Synthetic locations are never considered available.
-            return False
+            data = location_dictionary[location]
 
         return (
             data.category in self.enabled_location_categories and
@@ -619,6 +619,88 @@ class DarkSouls3World(World):
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         if self.yhorm_location:
             spoiler_handle.write(f"Yhorm takes the place of {self.yhorm_location.name}")
+
+
+    def pre_fill(self) -> None:
+        fill = Fill(self)
+
+        if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_similar_to_base_game:
+            # Guarantee enough early shards to level a weapon a few times
+            fill.fill("Titanite Shard", through="High Wall of Lothric", count=6)
+            fill.fill("Titanite Shard", start="Undead Settlement", through="Catacombs of Carthus")
+            fill.fill("Titanite Shard x2", start="Farron Keep", through="Catacombs of Carthus", count=-1)
+            fill.fill("Large Titanite Shard", start="Farron Keep", through="Catacombs of Carthus", count=6)
+            fill.fill("Large Titanite Shard", start="Smouldering Lake", through="Anor Londo", count=-3)
+            fill.fill("Large Titanite Shard x2", start="Irithyll of the Boreal Valley", through="Lothric Castle", count=-1)
+            fill.fill("Large Titanite Shard x3", start="Irithyll of the Boreal Valley", through="Lothric Castle")
+            fill.fill("Titanite Chunk", start="Smouldering Lake", through="Profaned Capital", count=3)
+            # There are a whopping twenty chunks available in these areas in the base game. To add a
+            # bit more variety, we'll guarantee just enough to level one weapon but allow more to be
+            # added randomly.
+            fill.fill("Titanite Chunk", start="Painted World of Ariandel (After Contraption)", through="Consumed King's Garden", count=9)
+            fill.fill("Titanite Chunk", start="Painted World of Ariandel (After Contraption)")
+            fill.fill("Titanite Chunk x3", start="Painted World of Ariandel (After Contraption)", count=-2)
+            fill.fill("Titanite Chunk x6", start="Grand Archives")
+            # In the base game, a slab is available in the first Painted World and in Irithyll
+            # Dungeon, so we'll be nice and make one available relatively early.
+            fill.fill("Titanite Slab", start="Irithyll Dungeon", through="Profaned Capital", count=1)
+            # We'll make another two available in the castle area to match the one in Untended
+            # Graves and the three in Painted World.
+            fill.fill("Titanite Slab", start="Painted World of Ariandel (After Contraption)", through="Untended Graves", count=2)
+            # Drop the rest in the lategame, leaving one as a nice multiworld item.
+            fill.fill("Titanite Slab", start="Grand Archives", count=-1)
+
+            # Twinkling Titanite and Titanite Scales both have relatively flat distributions until
+            # the castle.
+            fill.fill("Twinkling Titanite", start="Farron Keep", through="Cathedral of the Deep", count=6)
+            fill.fill("Twinkling Titanite", start="Catacombs of Carthus", through="Profaned Capital",
+                count=(11 if self.multiworld.enable_dlc[self.player] else 8))
+            fill.fill("Twinkling Titanite", start="Painted World of Ariandel (After Contraption)", count=-1)
+            fill.fill("Twinkling Titanite x2", start="Painted World of Ariandel (After Contraption)", count=-1)
+            fill.fill("Twinkling Titanite x3", start="Painted World of Ariandel (After Contraption)", count=-1)
+            fill.fill("Titanite Scale", through="High Wall of Lothric", count=1)
+            fill.fill("Titanite Scale", start="Undead Settlement", through="Cathedral of the Deep", count=2)
+            fill.fill("Titanite Scale", start="Catacombs of Carthus", through="Profaned Capital", count=4)
+            fill.fill("Titanite Scale", start="Painted World of Ariandel (After Contraption)")
+            fill.fill("Titanite Scale x2", start="Painted World of Ariandel (After Contraption)", count=-1)
+            fill.fill("Titanite Scale x3", start="Painted World of Ariandel (After Contraption)", count=-1)
+
+            # There's not a lot of cost to making coals available early, so we just need to make
+            # sure they're not available too late. We set the limit approximately one region after
+            # they appear in the main game so there's a chance that they're a bit tougher to find.
+            fill.fill("Farron Coal", through="Road of Sacrifices")
+            fill.fill("Sage's Coal", through="Catacombs of Carthus")
+            fill.fill("Giant's Coal", through="Painted World of Ariandel (After Contraption)")
+            fill.fill("Profaned Coal", through="Profaned Capital")
+
+            # Note: unlike other upgrade items, gems that aren't explicitly filled are freely placed
+            # so they may appear in earlier areas.
+
+            # If there are infused weapons floating around, guarantee a couple early Shriving Stones
+            # to undo bad infusions.
+            if self.multiworld.randomize_infusion[self.player]:
+                fill.fill("Shriving Stone", through="High Wall of Lothric", count=1)
+                fill.fill("Shriving Stone", start="Undead Settlement", through="Road of Sacrifices", count=1)
+
+            # Guarantee one easily-findable Raw Gem early on for SL1 runs.
+            fill.fill("Raw Gem", through="High Wall of Lothric", count=1, no_excluded=True)
+            # Otherwise, provide one of each type of gem before the coal it requires.
+            fill.fill("Refined Gem", through="Road of Sacrifices", count=1)
+            fill.fill("Fire Gem", through="Road of Sacrifices", count=1)
+            fill.fill("Heavy Gem", through="Road of Sacrifices", count=1)
+            fill.fill("Sharp Gem", through="Road of Sacrifices", count=1)
+            fill.fill("Poison Gem", through="Road of Sacrifices", count=1)
+            fill.fill("Crystal Gem", through="Catacombs of Carthus", count=1)
+            fill.fill("Blessed Gem", through="Catacombs of Carthus", count=1)
+            fill.fill("Deep Gem", through="Catacombs of Carthus", count=1)
+            fill.fill("Dark Gem", through="Painted World of Ariandel (After Contraption)", count=1)
+            fill.fill("Blood Gem", through="Painted World of Ariandel (After Contraption)", count=1)
+            fill.fill("Hollow Gem", through="Painted World of Ariandel (After Contraption)", count=1)
+            fill.fill("Lightning Gem", through="Profaned Capital", count=1)
+            fill.fill("Simple Gem", through="Profaned Capital", count=1)
+            fill.fill("Chaos Gem", through="Profaned Capital", count=1)
+
+        fill.save()
 
 
     def fill_slot_data(self) -> Dict[str, object]:
