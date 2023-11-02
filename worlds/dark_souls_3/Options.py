@@ -66,9 +66,24 @@ class RandomizeMiscLocations(DefaultOnToggle):
     display_name = "Randomize Miscellaneous Locations"
 
 
-class RandomizeHealthLocations(DefaultOnToggle):
-    """Randomizes health upgrade items. (+21 checks)"""
-    display_name = "Randomize Health Upgrade Locations"
+class HealthLocationsOption(Choice):
+    """Where to andomize health upgrade items (21 checks)
+
+    * Not Randomized: All health item locations contain the same items as in the base game.
+    * Anywhere: Health items are distributed totally randomly throughout the multiworld.
+    * Similar to Base Game: Health items appear in approximately the same regions they do in the
+      base game.
+
+    By default, health item locations will never include progression items, so they aren't mandatory
+    checks. You can override this by customizing the "exclude_locations" field in your YAML config.
+    (For example, "exclude_locations: []" will allow progression items in every unmissable
+    location.)
+    """
+    display_name = "Health Upgrade Locations"
+    option_not_randomized = 1
+    option_anywhere = 2
+    option_similar_to_base_game = 3
+    default = 3
 
 
 class SoulLocationsOption(Choice):
@@ -350,7 +365,7 @@ class DarkSouls3Options(PerGameCommonOptions):
     enable_npc_locations: RandomizeNPCLocations
     enable_unique_locations: RandomizeUniqueLocations
     enable_misc_locations: RandomizeMiscLocations
-    enable_health_upgrade_locations: RandomizeHealthLocations
+    health_locations: HealthLocationsOption
     soul_locations: SoulLocationsOption
     upgrade_locations: UpgradeLocationsOption
     random_starting_loadout: RandomizeStartingLoadout

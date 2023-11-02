@@ -13,7 +13,7 @@ from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Fill import Fill
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
-from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption, SoulLocationsOption, UpgradeLocationsOption
+from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, HealthLocationsOption, PoolTypeOption, SoulLocationsOption, UpgradeLocationsOption
 
 
 class DarkSouls3Web(WebWorld):
@@ -103,7 +103,7 @@ class DarkSouls3World(World):
             self.multiworld.early_items[self.player]['Transposing Kiln'] = 1
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
-        if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:
+        if self.multiworld.health_locations[self.player] != HealthLocationsOption.option_not_randomized:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
         if self.multiworld.upgrade_locations[self.player] != UpgradeLocationsOption.option_not_randomized:
             self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
@@ -561,6 +561,9 @@ class DarkSouls3World(World):
                         (item.category != DS3ItemCategory.BOSS or item.souls >= 10000)
                     )
                 )
+            if self.multiworld.health_locations[self.player] == HealthLocationsOption.option_similar_to_base_game:
+                non_local_or_conditional_items.update({"Estus Shard", "Undead Bone Shard"})
+
             if len(non_local_or_conditional_items) > 0:
                 for location in self.multiworld.get_locations(self.player):
                     if not location.conditional:
@@ -725,7 +728,7 @@ class DarkSouls3World(World):
             fill.fill("Large Soul of a Crestfallen Knight", start="Grand Archives")
 
             # Boss souls are all in a similar general value range, so we shuffle them and gently
-            # stagger them so that a player doesn't get too many or too few. We leave one left over
+            # stagger them so that a player doesn't get too many or too few. We leave two left over
             # to go into the multiworld and show up whenever.
             boss_souls = {
                 item.name for item in item_dictionary.values()
@@ -735,9 +738,21 @@ class DarkSouls3World(World):
             fill.fill(boss_souls, start="Farron Keep", through="Catacombs of Carthus", count=4)
             fill.fill(boss_souls, start="Smouldering Lake", through="Profaned Capital", count=4)
             fill.fill(boss_souls, start="Painted World of Ariandel (After Contraption)", through="Untended Graves",
-                      count=(5 if self.multiworld.enable_dlc[self.player] else 4))
+                      count=(5 if self.multiworld.enable_dlc[self.player] else 3))
             fill.fill(boss_souls, start="Grand Archives", through="Ringed City",
-                      count=(5 if self.multiworld.enable_dlc[self.player] else 2))
+                      count=(4 if self.multiworld.enable_dlc[self.player] else 2))
+
+        if self.multiworld.health_locations[self.player] == HealthLocationsOption.option_similar_to_base_game:
+            # Leave three Estus Shards and three Undead Bone Shards for the multiworld, since
+            # they're relatively low-risk to just show up anywhere.
+            fill.fill("Estus Shard", through="Undead Settlement", count=2)
+            fill.fill("Estus Shard", start="Road of Sacrifices", through="Catacombs of Carthus", count=3)
+            fill.fill("Estus Shard", start="Catacombs of Carthus", through="Profaned Capital", count=2)
+            fill.fill("Estus Shard", start="Profaned Capital", count=2)
+            fill.fill("Undead Bone Shard", start="Undead Settlement", through="Cathedral of the Deep", count=3)
+            fill.fill("Undead Bone Shard", start="Catacombs of Carthus",
+                      through="Painted World of Ariandel (Before Contraption)", count=2)
+            fill.fill("Undead Bone Shard", start="Anor Londo", count=2)
 
         fill.save()
 
