@@ -1,12 +1,10 @@
 from .Items import item_table, ShiversItem
 from .Rules import set_rules
-from BaseClasses import Item, Tutorial, Region, Entrance, Location
+from BaseClasses import Item, Tutorial, Region, Location
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from . import Constants, Rules
-from .Options import Shivers_options, get_option_value
-
-client_version = 0
+from .Options import ShiversOptions
 
 
 class ShiversWeb(WebWorld):
@@ -16,7 +14,7 @@ class ShiversWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["GodlFire, Mathx2, Mouse"]
+        ["GodlFire, Mathx2"]
     )]
 
 class ShiversWorld(World):
@@ -27,11 +25,11 @@ class ShiversWorld(World):
     game: str = "Shivers"
     topology_present = False
     web = ShiversWeb()
-    option_definitions = Shivers_options
+    options_dataclass = ShiversOptions
+    options: ShiversOptions
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
-    data_version = 0
     
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -47,9 +45,10 @@ class ShiversWorld(World):
         # Create regions
         for region_name, exits in Constants.region_info["regions"]:
             r = Region(region_name, self.player, self.multiworld)
-            for exit_name in exits:
-                r.exits.append(Entrance(self.player, exit_name, r))
             self.multiworld.regions.append(r)
+            for exit_name in exits:
+                r.create_exit(exit_name)
+
 
         # Bind mandatory connections
         for entr_name, region_name in Constants.region_info["mandatory_connections"]:
@@ -59,16 +58,12 @@ class ShiversWorld(World):
         
         # Locations
         # Build exclusion list
-        include_information_plaques: bool = getattr(self.multiworld, "include_information_plaques")[self.player].value
-        elevators_stay_solved: bool = getattr(self.multiworld, "elevators_stay_solved")[self.player].value
-        early_lightning: bool = getattr(self.multiworld, "early_lightning")[self.player].value
-
         self.removed_locations = set()
-        if not include_information_plaques:
+        if not self.options.include_information_plaques:
             self.removed_locations.update(Constants.exclusion_info["plaques"])
-        if not elevators_stay_solved:
+        if not self.options.elevators_stay_solved:
             self.removed_locations.update(Constants.exclusion_info["elevators"])
-        if not early_lightning:
+        if not self.options.early_lightning:
             self.removed_locations.update(Constants.exclusion_info["lightning"])
 
         # Add locations
@@ -80,20 +75,15 @@ class ShiversWorld(World):
                     region.locations.append(loc)
 
     def create_items(self) -> None:
-        # Add pots
-        pots = [self.create_item(name) for name, data in item_table.items() if data.type == 'pot']
-
-        # Add keys
-        keys = [self.create_item(name) for name, data in item_table.items() if data.type == 'key']
-
-        #Add abilities
-        abilities = [self.create_item(name) for name, data in item_table.items() if data.type == 'ability']
+        #Add items to item pool
+        itempool = []
+        for name, data in item_table.items():
+            if data.type in {"pot", "key", "ability", "filler2"}:
+                itempool.append(self.create_item(name))
 
         #Add Filler
-        filler = []
-        filler += [self.create_item("Easier Lyre") for i in range(10)]
-        filler += [self.create_item(name) for name, data in item_table.items() if data.type == 'filler2']
-        filler += [self.create_item("Heal") for i in range(43 - len(self.removed_locations))]
+        itempool += [self.create_item("Easier Lyre") for i in range(10)]
+        itempool += [self.create_item("Heal") for i in range(43 - len(self.removed_locations))]
 
         #Place library escape items. Choose a location to place the escape item
         library_region = self.multiworld.get_region("Library", self.player)
@@ -104,42 +94,40 @@ class ShiversWorld(World):
         if library_random == 1: 
             librarylocation.place_locked_item(self.create_item("Crawling"))
 
-            abilities = [ability for ability in abilities if ability.name != "Crawling"]
+            itempool = [item for item in itempool if item.name != "Crawling"]
+
         elif library_random == 2: 
             librarylocation.place_locked_item(self.create_item("Key for Library Room"))
-            
-            keys = [key for key in keys if key.name != "Key for Library Room"]
+
+            itempool = [item for item in itempool if item.name != "Key for Library Room"]
         elif library_random == 3: 
             librarylocation.place_locked_item(self.create_item("Key for Three Floor Elevator"))
             
-            librarylocationkeytwo = self.multiworld.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:") and loc != librarylocation])
+            librarylocationkeytwo = self.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:") and loc != librarylocation])
             librarylocationkeytwo.place_locked_item(self.create_item("Key for Egypt Room"))
-            
-            keys = [key for key in keys if key.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
+
+            itempool = [item for item in itempool if item.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
 
         #If front door option is on, determine which set of keys will be used for lobby access and add front door key to item pool
         lobby_access_keys = 1
         front_door_usable: bool = getattr(self.multiworld, "front_door_usable")[self.player].value
         if front_door_usable:
             lobby_access_keys = self.random.randint(1, 2)
-            keys += [self.create_item("Key for Front Door")]
+            itempool += [self.create_item("Key for Front Door")]
         else:
-            filler += [self.create_item("Heal")]
+            itempool += [self.create_item("Heal")]
 
-        self.multiworld.itempool += pots
-        self.multiworld.itempool += keys
-        self.multiworld.itempool += abilities
-        self.multiworld.itempool += filler
+        self.multiworld.itempool += itempool
 
         #Lobby acess:
-        if get_option_value(self.multiworld, self.player, "lobby_access") == 1:
+        if self.options.lobby_access == 1:
             if lobby_access_keys == 1:
                 self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
                 self.multiworld.early_items[self.player]["Key for Office Elevator"] = 1
                 self.multiworld.early_items[self.player]["Key for Office"] = 1
             elif lobby_access_keys == 2:
                 self.multiworld.early_items[self.player]["Key for Front Door"] = 1
-        if get_option_value(self.multiworld, self.player, "lobby_access") == 2:
+        if self.options.lobby_access == 2:
             if lobby_access_keys == 1:
                 self.multiworld.local_early_items[self.player]["Key for Underground Lake Room"] = 1
                 self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
@@ -161,15 +149,14 @@ class ShiversWorld(World):
         storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate']
         storageitems += [self.create_item("Empty") for i in range(3)]
 
-        state = self.multiworld.get_all_state(False)
+        state = self.multiworld.get_all_state(True)
 
-        self.multiworld.random.shuffle(storagelocs)
-        self.multiworld.random.shuffle(storageitems)
+        self.random.shuffle(storagelocs)
+        self.random.shuffle(storageitems)
         
         fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True, True)
 
         self.storage_placements = {location.name: location.item.name for location in storagelocs}
-
 
     set_rules = set_rules
 
@@ -181,9 +168,9 @@ class ShiversWorld(World):
         return {
             'storageplacements': self.storage_placements,
             'excludedlocations': {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
-            'elevatorsstaysolved': {self.multiworld.elevators_stay_solved[self.player].value},
-            'earlybeth': {self.multiworld.early_beth[self.player].value},
-            'earlylightning': {self.multiworld.early_lightning[self.player].value},
+            'elevatorsstaysolved': {self.options.elevators_stay_solved.value},
+            'earlybeth': {self.options.early_beth.value},
+            'earlylightning': {self.options.early_lightning.value},
         }
 
     def fill_slot_data(self) -> dict:

@@ -1,6 +1,5 @@
-from typing import Dict, FrozenSet, Union
-from Options import Choice, Option, DefaultOnToggle, Toggle
-from BaseClasses import MultiWorld
+from Options import Choice, DefaultOnToggle, Toggle, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class LobbyAccess(Choice):
@@ -39,20 +38,13 @@ class EarlyLightning(Toggle):
     """Allows lightning to be captured at any point in the game. You will still need to capture all ten Ixupi for victory."""
     display_name = "Early Lightning"
 
-Shivers_options: Dict[str, Option] = {
-    "lobby_access": LobbyAccess,
-    "puzzle_hints_required": PuzzleHintsRequired,
-    "include_information_plaques": InformationPlaques,
-    "front_door_usable": FrontDoorUsable,
-    "elevators_stay_solved": ElevatorsStaySolved,
-    "early_beth": EarlyBeth,
-    "early_lightning": EarlyLightning
-}
 
-def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
-    if multiworld is None:
-        return Shivers_options[name].default
-
-    player_option = getattr(multiworld, name)[player]
-
-    return player_option.value
+@dataclass
+class ShiversOptions(PerGameCommonOptions):
+    lobby_access: LobbyAccess
+    puzzle_hints_required: PuzzleHintsRequired
+    include_information_plaques: InformationPlaques
+    front_door_usable: FrontDoorUsable
+    elevators_stay_solved: ElevatorsStaySolved
+    early_beth: EarlyBeth
+    early_lightning: EarlyLightning

@@ -24,3 +24,8 @@ If the player receives a key then the corresponding door will be unlocked. If th
 ## What is the victory condition?
 
 Victory is achieved when the player captures Lightning in the generator room.
+
+## Encountered a bug?
+
+Please contact GodlFire on Discord for bugs related to Shivers world generation.\
+Please contact GodlFire or mouse on Discord for bugs related to the Shivers Randomizer.
