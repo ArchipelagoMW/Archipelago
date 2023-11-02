@@ -370,7 +370,7 @@ class MultiWorld():
     def get_all_state(self, use_cache: bool, player: Optional[int] = None) -> CollectionState:
         if use_cache:
             if player:
-                cached = getattr(self, f"_all_state_{player}", None)
+                cached = getattr(self, f"_all_state{player}", None)
             else:
                 cached = getattr(self, "_all_state", None)
             if cached:
@@ -390,13 +390,14 @@ class MultiWorld():
                 subworld = self.worlds[player]
                 for item in subworld.get_pre_fill_items():
                     subworld.collect(ret, item)
-        ret.sweep_for_events()  # TODO player=player
+        ret.sweep_for_events(locations=self.get_filled_locations(player))  # TODO player=player
 
         if use_cache:
             if player:
-                setattr(self, f"_all_state_{player}", ret)
+                setattr(self, f"_all_state{player}", None)
             else:
                 self._all_state = ret
+            return ret.copy()
         return ret
 
     def get_items(self) -> List[Item]:
