@@ -92,7 +92,7 @@ class CMWorld(World):
                 self.items_used[self.player][item.name] = 0
             self.items_used[self.player][item.name] += 1
 
-        print(self.items_used)
+        #print(self.items_used)
         starter_dict = {item.name: 1 for item in starter_items}
         excluded_dict = {
             item: excluded_items[item] for item in excluded_items if not (
@@ -104,6 +104,7 @@ class CMWorld(World):
         items = []
 
         material = 0
+        greatest_material = max([progression_items[item].material for item in progression_items])
         min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
         max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
         if max_material_option < min_material_option:
@@ -125,8 +126,14 @@ class CMWorld(World):
             if progression_items[chosen_item].material + material > max_material_option:
                 my_progression_items.remove(chosen_item)
                 continue
+            remaining_count = len(location_table) - (len(items) + user_item_count)
+            if (progression_items[chosen_item].material + material + (greatest_material * (remaining_count - 1))
+                    < min_material_option):
+                print("ChecksMate " + str(self.player) + " removed " + chosen_item + " for being too puny and impotent")
+                my_progression_items.remove(chosen_item)
+                continue
             # add item
-            print(material)
+            #print(material)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
@@ -138,10 +145,11 @@ class CMWorld(World):
                 material += progression_items[chosen_item].material
             else:
                 my_progression_items.remove(chosen_item)
-                print(chosen_item)
+                #print(chosen_item)
 
-        print("Ended")
-        print(material)
+        #print("Ended")
+        #print(material)
+        #print(self.items_used)
         my_useful_items = list(useful_items.keys())
         while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
             chosen_item = self.multiworld.random.choice(my_useful_items)
