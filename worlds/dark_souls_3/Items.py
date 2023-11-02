@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 import dataclasses
 from enum import IntEnum
-from typing import ClassVar, Generator, List, Optional
+from typing import ClassVar, Generator, List, Optional, Set
 
 from BaseClasses import Item, ItemClassification
 from Utils import flatten
@@ -74,8 +74,8 @@ class DS3ItemData():
     difference.
     """
 
-    soul: bool = False
-    """Whether this is a consumable item that gives souls when used."""
+    souls: Set[int] = None
+    """If this is a consumable item that gives souls, the number of souls it gives."""
 
     useful_if: UsefulIf = UsefulIf.DEFAULT
     """Whether and when this item should be marked as "useful"."""
@@ -116,7 +116,7 @@ class DS3ItemData():
 class DarkSouls3Item(Item):
     game: str = "Dark Souls III"
     count: int = 1
-    soul: bool = False
+    souls: Optional[int] = None
 
     def __init__(
             self,
@@ -134,7 +134,7 @@ class DarkSouls3Item(Item):
             data.ap_code,
             player)
         item.count = data.count
-        item.soul = data.soul
+        item.souls = data.souls
         return item
 
 _vanilla_items = flatten([
@@ -934,27 +934,28 @@ _vanilla_items = flatten([
     DS3ItemData("Twinkling Dragon Torso Stone",        0x40000184, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression),
     DS3ItemData("Fire Keeper Soul",                    0x40000186, DS3ItemCategory.MISC),
-    DS3ItemData("Fading Soul",                         0x40000190, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Soul of a Deserted Corpse",           0x40000191, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Large Soul of an Unknown Traveler",   0x40000194, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Soul of a Nameless Soldier",          0x40000195, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Large Soul of a Nameless Soldier",    0x40000196, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Weary Warrior",             0x40000197, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Weary Warrior",       0x40000198, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Crestfallen Knight",        0x40000199, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Crestfallen Knight",  0x4000019A, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Proud Paladin",             0x4000019B, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Proud Paladin",       0x4000019C, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of an Intrepid Hero",            0x4000019D, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of an Intrepid Hero",      0x4000019E, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Seasoned Warrior",          0x4000019F, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Seasoned Warrior",    0x400001A0, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of an Old Hand",                 0x400001A1, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Venerable Old Hand",        0x400001A2, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Champion",                  0x400001A3, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Great Champion",            0x400001A4, DS3ItemCategory.MISC, soul = True),
+    # Allow souls up to 2k in value to be used as filler
+    DS3ItemData("Fading Soul",                         0x40000190, DS3ItemCategory.MISC, filler = True, souls = 50),
+    DS3ItemData("Soul of a Deserted Corpse",           0x40000191, DS3ItemCategory.MISC, filler = True, souls = 200),
+    DS3ItemData("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC, filler = True, souls = 400),
+    DS3ItemData("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC, filler = True, souls = 800),
+    DS3ItemData("Large Soul of an Unknown Traveler",   0x40000194, DS3ItemCategory.MISC, filler = True, souls = 1000),
+    DS3ItemData("Soul of a Nameless Soldier",          0x40000195, DS3ItemCategory.MISC, filler = True, souls = 2000),
+    DS3ItemData("Large Soul of a Nameless Soldier",    0x40000196, DS3ItemCategory.MISC, souls = 3000),
+    DS3ItemData("Soul of a Weary Warrior",             0x40000197, DS3ItemCategory.MISC, souls = 5000),
+    DS3ItemData("Large Soul of a Weary Warrior",       0x40000198, DS3ItemCategory.MISC, souls = 8000),
+    DS3ItemData("Soul of a Crestfallen Knight",        0x40000199, DS3ItemCategory.MISC, souls = 10000),
+    DS3ItemData("Large Soul of a Crestfallen Knight",  0x4000019A, DS3ItemCategory.MISC, souls = 20000),
+    DS3ItemData("Soul of a Proud Paladin",             0x4000019B, DS3ItemCategory.MISC, souls = 500),
+    DS3ItemData("Large Soul of a Proud Paladin",       0x4000019C, DS3ItemCategory.MISC, souls = 1000),
+    DS3ItemData("Soul of an Intrepid Hero",            0x4000019D, DS3ItemCategory.MISC, souls = 2000),
+    DS3ItemData("Large Soul of an Intrepid Hero",      0x4000019E, DS3ItemCategory.MISC, souls = 2500),
+    DS3ItemData("Soul of a Seasoned Warrior",          0x4000019F, DS3ItemCategory.MISC, souls = 5000),
+    DS3ItemData("Large Soul of a Seasoned Warrior",    0x400001A0, DS3ItemCategory.MISC, souls = 7500),
+    DS3ItemData("Soul of an Old Hand",                 0x400001A1, DS3ItemCategory.MISC, souls = 12500),
+    DS3ItemData("Soul of a Venerable Old Hand",        0x400001A2, DS3ItemCategory.MISC, souls = 20000),
+    DS3ItemData("Soul of a Champion",                  0x400001A3, DS3ItemCategory.MISC, souls = 25000),
+    DS3ItemData("Soul of a Great Champion",            0x400001A4, DS3ItemCategory.MISC, souls = 50000),
     DS3ItemData("Seed of a Giant Tree",                0x400001B8, DS3ItemCategory.SKIP,
                 inject = True),
     DS3ItemData("Mossfruit",                           0x400001C4, DS3ItemCategory.MISC, filler = True).counts([2]),
@@ -974,45 +975,45 @@ _vanilla_items = flatten([
     DS3ItemData("Very good! Carving",                  0x4000020A, DS3ItemCategory.SKIP),
     DS3ItemData("I'm sorry Carving",                   0x4000020B, DS3ItemCategory.SKIP),
     DS3ItemData("Help me! Carving",                    0x4000020C, DS3ItemCategory.SKIP),
-    DS3ItemData("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.BOSS, souls = 10000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.BOSS, souls = 3000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Consumed Oceiros",            0x400002CE, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Consumed Oceiros",            0x400002CE, DS3ItemCategory.BOSS, souls = 12000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Boreal Valley Vordt",         0x400002CF, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Boreal Valley Vordt",         0x400002CF, DS3ItemCategory.BOSS, souls = 2000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Old Demon King",          0x400002D0, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Old Demon King",          0x400002D0, DS3ItemCategory.BOSS, souls = 10000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Dragonslayer Armour",         0x400002D1, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Dragonslayer Armour",         0x400002D1, DS3ItemCategory.BOSS, souls = 15000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Nameless King",           0x400002D2, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Nameless King",           0x400002D2, DS3ItemCategory.BOSS, souls = 16000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Pontiff Sulyvahn",            0x400002D4, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Pontiff Sulyvahn",            0x400002D4, DS3ItemCategory.BOSS, souls = 12000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Aldrich",                     0x400002D5, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Aldrich",                     0x400002D5, DS3ItemCategory.BOSS, souls = 15000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of High Lord Wolnir",            0x400002D6, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of High Lord Wolnir",            0x400002D6, DS3ItemCategory.BOSS, souls = 10000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Rotted Greatwood",        0x400002D7, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Rotted Greatwood",        0x400002D7, DS3ItemCategory.BOSS, souls = 3000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Rosaria",                     0x400002D8, DS3ItemCategory.MISC, soul = True,
+    DS3ItemData("Soul of Rosaria",                     0x400002D8, DS3ItemCategory.MISC, souls = 5000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Deacons of the Deep",     0x400002D9, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Deacons of the Deep",     0x400002D9, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Yhorm the Giant",             0x400002DC, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Yhorm the Giant",             0x400002DC, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Lords",                   0x400002DD, DS3ItemCategory.MISC, soul = True,
+    DS3ItemData("Soul of the Lords",                   0x400002DD, DS3ItemCategory.MISC, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of a Demon",                     0x400002E3, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of a Demon",                     0x400002E3, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of a Stray Demon",               0x400002E7, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of a Stray Demon",               0x400002E7, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
     DS3ItemData("Titanite Shard",                      0x400003E8, DS3ItemCategory.MISC).counts([2]),
     DS3ItemData("Large Titanite Shard",                0x400003E9, DS3ItemCategory.MISC).counts([2, 3]),
@@ -1382,10 +1383,10 @@ _dlc_items = flatten([
     DS3ItemData("Filianore's Spear Ornament",       0x4000017B, DS3ItemCategory.SKIP),
     DS3ItemData("Ritual Spear Fragment",            0x4000028A, DS3ItemCategory.SKIP),
     DS3ItemData("Divine Spear Fragment",            0x4000028B, DS3ItemCategory.SKIP),
-    DS3ItemData("Soul of Sister Friede",            0x400002E8, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Slave Knight Gael",        0x400002E9, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Demon Prince",         0x400002EA, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Darkeater Midir",          0x400002EB, DS3ItemCategory.BOSS, soul = True),
+    DS3ItemData("Soul of Sister Friede",            0x400002E8, DS3ItemCategory.BOSS, souls = 20000),
+    DS3ItemData("Soul of Slave Knight Gael",        0x400002E9, DS3ItemCategory.BOSS, souls = 20000),
+    DS3ItemData("Soul of the Demon Prince",         0x400002EA, DS3ItemCategory.BOSS, souls = 20000),
+    DS3ItemData("Soul of Darkeater Midir",          0x400002EB, DS3ItemCategory.BOSS, souls = 20000),
     DS3ItemData("Champion's Bones",                 0x40000869, DS3ItemCategory.SKIP),
     DS3ItemData("Captain's Ashes",                  0x4000086A, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression),

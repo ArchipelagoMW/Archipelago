@@ -37,11 +37,6 @@ class RandomizeKeyLocations(DefaultOnToggle):
     display_name = "Randomize Key Locations"
 
 
-class RandomizeBossSoulLocations(DefaultOnToggle):
-    """Randomizes boss souls (+22 Locations)"""
-    display_name = "Randomize Boss Soul Locations"
-
-
 class RandomizeNPCLocations(DefaultOnToggle):
     """Randomizes friendly NPC drops and rewards (+34 checks)
 
@@ -56,11 +51,11 @@ class RandomizeNPCLocations(DefaultOnToggle):
 
 class RandomizeUniqueLocations(DefaultOnToggle):
     """Randomizes unique items (ashes, tomes, scrolls, etc.) (+36 checks)"""
-    display_name = "Randomize Miscellaneous Locations"
+    display_name = "Randomize Unique Locations"
 
 
 class RandomizeMiscLocations(DefaultOnToggle):
-    """Randomizes miscellaneous items (arrows, firebombs, soul items, etc.) (+388 locations)
+    """Randomizes miscellaneous items (arrows, firebombs, etc.) (222 checks, 288 with NG+)
 
     By default, these locations will never include progression items, so they
     aren't mandatory checks. You can override this by customizing the
@@ -76,11 +71,31 @@ class RandomizeHealthLocations(DefaultOnToggle):
     display_name = "Randomize Health Upgrade Locations"
 
 
+class SoulLocationsOption(Choice):
+    """Where to randomize soul items (140 checks, 103 with NG+)
+
+    * Not Randomized: All soul item locations contain the same items as in the base game.
+    * Anywhere: Soul items are distributed totally randomly throughout the multiworld.
+    * Similar to Base Game: Soul items appear in approximately the same regions they do in the
+      base game.
+
+    By default, soul item locations will never include progression items, so they aren't mandatory
+    checks. You can override this by customizing the "exclude_locations" field in your YAML config.
+    (For example, "exclude_locations: []" will allow progression items in every unmissable
+    location.)
+    """
+    display_name = "Soul Locations"
+    option_not_randomized = 1
+    option_anywhere = 2
+    option_similar_to_base_game = 3
+    default = 3
+
+
 class UpgradeLocationsOption(Choice):
     """Where to randomize titanite and gems (220 checks)
 
     * Not Randomized: All upgrade item locations contain the same items as in the base game.
-    * Anywhere: Upgrade items are distributed totally randomly throughout the game.
+    * Anywhere: Upgrade items are distributed totally randomly throughout the multiworld.
     * Similar to Base Game: Upgrade items appear in approximately the same regions they do in the
       base game.
 
@@ -321,7 +336,7 @@ class ImpatientMimicsOption(Toggle):
 
 class DS3ExcludeLocations(ExcludeLocations):
     """Prevent these locations from having an important item"""
-    default = {"Hidden", "Small Crystal Lizards", "Miscellaneous"}
+    default = {"Hidden", "Small Crystal Lizards", "Upgrade", "Small Souls", "Miscellaneous"}
 
 
 @dataclass
@@ -332,11 +347,11 @@ class DarkSouls3Options(PerGameCommonOptions):
     enable_ring_locations: RandomizeRingLocations
     enable_spell_locations: RandomizeSpellLocations
     enable_key_locations: RandomizeKeyLocations
-    enable_boss_locations: RandomizeBossSoulLocations
     enable_npc_locations: RandomizeNPCLocations
     enable_unique_locations: RandomizeUniqueLocations
     enable_misc_locations: RandomizeMiscLocations
     enable_health_upgrade_locations: RandomizeHealthLocations
+    soul_locations: SoulLocationsOption
     upgrade_locations: UpgradeLocationsOption
     random_starting_loadout: RandomizeStartingLoadout
     require_one_handed_starting_weapons: RequireOneHandedStartingWeapons

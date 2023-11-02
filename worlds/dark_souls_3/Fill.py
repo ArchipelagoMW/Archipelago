@@ -1,7 +1,8 @@
-from typing import List, Optional
+from typing import List, Optional, Set, Union
 
 from BaseClasses import ItemClassification, LocationProgressType, MultiWorld
 
+from .Items import item_dictionary
 from .Locations import location_tables
 
 class Fill:
@@ -65,7 +66,7 @@ class Fill:
 
     def fill(
             self,
-            name: str,
+            name_or_names: Union[str, Set[str]],
             start: Optional[str] = None,
             through: Optional[str] = None,
             count: int = 0,
@@ -75,6 +76,9 @@ class Fill:
         This fills open slots from start through through, inclusive, ordered by how good their
         rewards are in the base game. If either start or through isn't passed, this fills from the
         beginning or through the end of the game, respectively.
+
+        The name can be a set of names, in which case the items to place are chosen randomly from
+        among all unplaced items with one of those names.
 
         If count is positive, this will place up to that many copies of the item. If it's negative,
         this will place all but that many copies with the expectation that the remainder will be
@@ -86,10 +90,17 @@ class Fill:
         important items in excluded locations.
         """
 
-        all_items = [
-            item for item in self.multiworld.itempool
-            if item.name == name and not item.location
-        ]
+        if isinstance(name_or_names, str):
+            all_items = [
+                item for item in self.multiworld.itempool
+                if item.name == name_or_names and not item.location
+            ]
+        else:
+            all_items = [
+                item for item in self.multiworld.itempool
+                if item.name in name_or_names and not item.location
+            ]
+
         if count == 0 or count < 0 and len(self.multiworld.worlds) == 1:
             self.multiworld.random.shuffle(all_items)
             chosen_items = all_items
@@ -98,6 +109,7 @@ class Fill:
                 count += len(all_items)
                 if count < 1: return 
             chosen_items = self.multiworld.random.sample(all_items, k = min(count, len(all_items)))
+        if len(chosen_items) == 0: return
 
         if start: assert start in self.regions
         if through: assert through in self.regions
@@ -105,23 +117,25 @@ class Fill:
         region_end = self.regions.index(through) + 1 if through else -1
         selected_regions = self.regions[region_start:region_end]
 
-        filler = chosen_items[0].classification == ItemClassification.filler and not no_excluded
+        # All items are expected to have the same properties, so we choose one arbitrarily
+        item = chosen_items[0]
+        filler = item.classification == ItemClassification.filler and not no_excluded
         possible_locations = [
             location for location in (
                 self.multiworld.get_location(location.name, self.player)
                 for region in selected_regions
                 for location in location_tables[region]
                 if (
-                    self.world.is_location_available(location) and
-                    not location.missable and
-                    not location.conditional
+                    self.world.is_location_available(location)
+                    and not location.missable
+                    and not location.conditional
+                    and not (location.shop and item.souls)
                 )
             )
             # Don't put important items in excluded locations.
-            if (filler or location.progress_type != LocationProgressType.EXCLUDED)
-            and not location.item
+            if not location.item
+            and (filler or location.progress_type != LocationProgressType.EXCLUDED)
         ]
-
         if len(possible_locations) == 0: return
         if len(possible_locations) < len(chosen_items):
             chosen_items = self.multiworld.random.sample(chosen_items, k = len(possible_locations))

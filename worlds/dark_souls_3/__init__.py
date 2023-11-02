@@ -13,7 +13,7 @@ from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Fill import Fill
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups
-from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption, UpgradeLocationsOption
+from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption, SoulLocationsOption, UpgradeLocationsOption
 
 
 class DarkSouls3Web(WebWorld):
@@ -95,12 +95,8 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.RING)
         if self.multiworld.enable_spell_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
-        if self.multiworld.upgrade_locations[self.player] != UpgradeLocationsOption.option_not_randomized:
-            self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
-        if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
-            self.enabled_location_categories.add(DS3LocationCategory.BOSS)
         if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
             # Make this available early just because it's fun to be able to check boss souls early.
@@ -109,6 +105,10 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
         if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
+        if self.multiworld.upgrade_locations[self.player] != UpgradeLocationsOption.option_not_randomized:
+            self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
+        if self.multiworld.soul_locations[self.player] != SoulLocationsOption.option_not_randomized:
+            self.enabled_location_categories.add(DS3LocationCategory.SOUL)
 
         # The offline randomizer's clever code for converting an item into a gesture only works for
         # items in the local world.
@@ -143,6 +143,13 @@ class DarkSouls3World(World):
                 # gems since they're inherently controlled by coals anyway (which are all local).
                 if item.base_name in {"Titanite Shard", "Large Titanite Shard", "Titanite Chunk",
                                       "Titanite Slab", "Titanite Scale", "Twinkling Titanite"}:
+                    self.multiworld.non_local_items[self.player].value.add(item.name)
+        if self.multiworld.soul_locations[self.player] == SoulLocationsOption.option_similar_to_base_game:
+            for item in item_dictionary.values():
+                if (
+                    item.souls and item.souls > 50 and
+                    (item.category != DS3ItemCategory.BOSS or item.souls >= 10000)
+                ):
                     self.multiworld.non_local_items[self.player].value.add(item.name)
 
     def create_regions(self):
@@ -535,7 +542,7 @@ class DarkSouls3World(World):
                 add_item_rule(self.multiworld.get_location(location.name, self.player),
                               lambda item: (
                                   item.player != self.player or
-                                  (item.count == 1 and not item.soul)
+                                  (item.count == 1 and not item.souls)
                               ))
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
@@ -672,6 +679,54 @@ class DarkSouls3World(World):
             fill.fill("Simple Gem", through="Profaned Capital", count=1)
             fill.fill("Chaos Gem", through="Profaned Capital", count=1)
 
+        if self.multiworld.soul_locations[self.player] == SoulLocationsOption.option_similar_to_base_game:
+            # Fading souls are worthless and all over the place anyway, so we don't smooth them.
+            fill.fill("Soul of a Deserted Corpse", through="High Wall of Lothric")
+            fill.fill("Large Soul of a Deserted Corpse", start="High Wall of Lothric")
+            fill.fill("Soul of an Unknown Traveler", through="Road of Sacrifices")
+
+            # Only put items worth 800 to 5k souls in the random pool. Any smaller and it sucks, any
+            # larger and if we're going to disrupt the XP curve that much it's better to do it with
+            # a splashy boss soul.
+            fill.fill("Large Soul of an Unknown Traveler", start="Undead Settlement", through="Road of Sacrifices", count=1)
+            fill.fill("Large Soul of an Unknown Traveler", start="Farron Keep",
+                      through="Painted World of Ariandel (Before Contraption)", count=-3)
+            fill.fill("Soul of a Nameless Soldier", start="Undead Settlement", through="Road of Sacrifices", count=1)
+            fill.fill("Soul of a Nameless Soldier", start="Farron Keep",
+                      through="Painted World of Ariandel (Before Contraption)", count=-3)
+            fill.fill("Soul of a Nameless Soldier", start="Lothric Castle", through="Kiln of the First Flame", count=1)
+            fill.fill("Large Soul of a Nameless Soldier", start="Farron Keep", through="Catacombs of Carthus", count=4)
+            fill.fill("Large Soul of a Nameless Soldier", start="Farron Keep", through="Catacombs of Carthus", count=-5)
+            fill.fill("Large Soul of a Nameless Soldier", start="Lothric Castle", through="Kiln of the First Flame", count=3)
+            fill.fill("Soul of a Weary Warrior", start="Irithyll of the Boreal Valley", count=-2)
+
+            fill.fill("Large Soul of a Weary Warrior", start="Irithyll Dungeon", through="Profaned Capital",
+                      count=(5 if self.multiworld.enable_dlc[self.player] else 3))
+            fill.fill("Large Soul of a Weary Warrior", start="Painted World of Ariandel (After Contraption)",
+                      through="Kiln of the First Flame", count=3)
+            fill.fill("Large Soul of a Weary Warrior", start="Dreg Heap")
+            fill.fill("Soul of a Crestfallen Knight", start="Smouldering Lake", through="Profaned Capital",
+                      count=(4 if self.multiworld.enable_dlc[self.player] else 3))
+            fill.fill("Soul of a Crestfallen Knight", start="Painted World of Ariandel (After Contraption)")
+            fill.fill("Large Soul of a Crestfallen Knight", start="Painted World of Ariandel (After Contraption)",
+                      through="Lothric Castle", count=1)
+            fill.fill("Large Soul of a Crestfallen Knight", start="Grand Archives")
+
+            # Boss souls are all in a similar general value range, so we shuffle them and gently
+            # stagger them so that a player doesn't get too many or too few. We leave one left over
+            # to go into the multiworld and show up whenever.
+            boss_souls = {
+                item.name for item in item_dictionary.values()
+                # Don't smooth boss souls worth less than 10k, it's more fun to let them go wherever.
+                if item.category == DS3ItemCategory.BOSS and item.souls and item.souls >= 10000
+            }
+            fill.fill(boss_souls, start="Farron Keep", through="Catacombs of Carthus", count=4)
+            fill.fill(boss_souls, start="Smouldering Lake", through="Profaned Capital", count=4)
+            fill.fill(boss_souls, start="Painted World of Ariandel (After Contraption)", through="Untended Graves",
+                      count=(5 if self.multiworld.enable_dlc[self.player] else 4))
+            fill.fill(boss_souls, start="Grand Archives", through="Ringed City",
+                      count=(5 if self.multiworld.enable_dlc[self.player] else 2))
+
         fill.save()
 
 
@@ -729,15 +784,6 @@ class DarkSouls3World(World):
 
         slot_data = {
             "options": {
-                "enable_weapon_locations": self.multiworld.enable_weapon_locations[self.player].value,
-                "enable_shield_locations": self.multiworld.enable_shield_locations[self.player].value,
-                "enable_armor_locations": self.multiworld.enable_armor_locations[self.player].value,
-                "enable_ring_locations": self.multiworld.enable_ring_locations[self.player].value,
-                "enable_spell_locations": self.multiworld.enable_spell_locations[self.player].value,
-                "enable_key_locations": self.multiworld.enable_key_locations[self.player].value,
-                "enable_boss_locations": self.multiworld.enable_boss_locations[self.player].value,
-                "enable_npc_locations": self.multiworld.enable_npc_locations[self.player].value,
-                "enable_misc_locations": self.multiworld.enable_misc_locations[self.player].value,
                 "random_starting_loadout": self.multiworld.random_starting_loadout[self.player].value,
                 "require_one_handed_starting_weapons": self.multiworld.require_one_handed_starting_weapons[self.player].value,
                 "auto_equip": self.multiworld.auto_equip[self.player].value,
