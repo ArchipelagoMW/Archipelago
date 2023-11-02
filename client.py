@@ -93,6 +93,7 @@ def client_on_deathlink(ctx: BizHawkClientContext, data: Dict[str, Any]) -> None
 class WL4Client(BizHawkClient):
     game = 'Wario Land 4'
     system = 'GBA'
+    patch_suffix = '.apwl4'
     local_checked_locations: List[int]
     rom_slot_name: str
 
