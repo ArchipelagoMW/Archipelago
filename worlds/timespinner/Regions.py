@@ -138,7 +138,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     connect(world, player, 'Lower Lake Serene', 'Upper Lake Serene')
     connect(world, player, 'Lower Lake Serene', 'Left Side forest Caves')
     connect(world, player, 'Lower Lake Serene', 'Caves of Banishment (upper)', lambda state: flooded.flood_lake_serene or logic.has_doublejump(state))
-    connect(world, player, 'Caves of Banishment (upper)', 'Upper Lake Serene', lambda state: flooded.flood_lake_serene or state.has('Water Mask', player))
+    connect(world, player, 'Caves of Banishment (upper)', 'Lower Lake Serene', lambda state: not flooded.flood_lake_serene or state.has('Water Mask', player))
     connect(world, player, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)', lambda state: logic.has_doublejump(state) or state.has_any({'Gas Mask', 'Talaria Attachment'} or logic.has_teleport(state), player))
     connect(world, player, 'Caves of Banishment (upper)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: logic.has_doublejump(state) if not flooded.flood_maw else state.has('Water Mask', player))
