@@ -13,19 +13,29 @@ You can use other sm64-port based builds with it, but you can't use a different 
 
 ## Installation and Game Start Procedures
 
-### Installation via SM64AP-Launcher (For Windows)
+### Installation via SM64AP-Launcher
+
+*Windows Preparations*
 
 First, install [MSYS](https://www.msys2.org/) as described on the page. DO NOT INSTALL INTO A FOLDER PATH WITH SPACES.
 It is extremely encouraged to use the default install directory!
-Then follow the steps below
+Then continue to `Using the Launcher`
+
+*Linux Preparations*
+
+You will need to install some dependencies before using the launcher.
+The launcher itself needs `Qt6`, and building the game requires `sdl2 glew cmake python make` (If you install `jsoncpp` as well, it will be linked dynamically).
+Then continue to `Using the Launcher`
+
+*Using the Launcher*
 
 1. Go to the page linked for SM64AP-Launcher, and press on the topmost entry
-2. Scroll down, and download the zip file
+2. Scroll down, and download the zip file for your OS.
 3. Unpack the zip file in an empty folder
-4. Run the Launcher. On first start, press `Check Requirements`, which will guide you through the rest of the needed steps dependencies.
-    - If you did not use the default install directory for MSYS, close this window, check `Show advanced options` and reopen using `Re-check Requirements`. You can then set the path manually.
+4. Run the Launcher. On first start, press `Check Requirements`, which will guide you through the rest of the needed steps.
+    - Windows: If you did not use the default install directory for MSYS, close this window, check `Show advanced options` and reopen using `Re-check Requirements`. You can then set the path manually.
 5. When finished, use `Compile default SM64AP build` to continue
-    - Advanced user can use `Show advanced options` to build with custom makeflags (BETTERCAMERA, NODRAWINGDISTANCE, ...), different repos and branches, and game patches such as 60FPS, Enhanced Moveset and others.
+    - Advanced user can use `Show advanced options` to build with custom makeflags (`BETTERCAMERA`, `NODRAWINGDISTANCE`, ...), different repos and branches, and game patches such as 60FPS, Enhanced Moveset and others.
 6. Press `Download Files` to prepare the build, afterwards `Create Build`.
 7. SM64EX will now be compiled. This can take a while.
 
@@ -39,7 +49,7 @@ NOTE: If it does not start when pressing `Play selected build`, recheck if you t
 
 First, install [MSYS](https://www.msys2.org/) as described on the page. DO NOT INSTALL INTO A FOLDER PATH WITH SPACES.
 
-After launching msys2, update by entering `pacman -Syuu` in the command prompt. Next, install the relevant dependencies by entering `pacman -S unzip mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 mingw-w64-x86_64-cmake`. SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
+After launching msys2 using a MinGW x64 shell (there should be a start menu entry), update by entering `pacman -Syuu` in the command prompt. Next, install the relevant dependencies by entering `pacman -S unzip mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 mingw-w64-x86_64-cmake`.
 
 Continue to `Compiling`.
 
@@ -47,15 +57,13 @@ Continue to `Compiling`.
 
 Install the relevant dependencies `sdl2 glew cmake python make`. SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
 
-After this, obtain the code base by cloning the relevant repository manually via `git clone --recursive https://github.com/N00byKing/sm64ex`. Ready your ROM by copying your legally dumped rom into your sm64ex folder. The name of the ROM needs to be `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
-
 Continue to `Compiling`.
 
 *Compiling*
 
-After this, obtain the code base by cloning the relevant repository via `git clone --recursive https://github.com/N00byKing/sm64ex`. Copy your legally dumped rom into your sm64ex folder (if you are not sure where your folder is located, do a quick Windows search for sm64ex). The name of the ROM needs to be `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
+Obtain the code base by cloning the relevant repository via `git clone --recursive https://github.com/N00byKing/sm64ex`. Copy your legally dumped rom into your sm64ex folder (if you are not sure where your folder is located, do a quick Windows search for sm64ex). The name of the ROM needs to be `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
 
-After all these preparatory steps have succeeded, type `make` in your command prompt and get ready to wait for a bit. If you want to speed up compilation, tell the compiler how many CPU cores to use by using `make -jn` where n is the number of cores you want.
+After all these preparatory steps have succeeded, type `cd sm64ex && make` in your command prompt and get ready to wait for a bit. If you want to speed up compilation, tell the compiler how many CPU cores to use by using `make -jn` instead, where n is the number of cores you want.
 
 After the compliation was successful, there will be a binary in your `sm64ex/build/REGION_pc/` folder.
 
