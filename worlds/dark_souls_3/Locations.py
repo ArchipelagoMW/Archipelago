@@ -168,6 +168,7 @@ class DarkSouls3Location(Location):
     category: DS3LocationCategory
     default_item_name: str
     offline: Optional[str] = None
+    conditional: bool = False
 
     def __init__(
             self,
@@ -196,6 +197,7 @@ class DarkSouls3Location(Location):
             parent
         )
         location.offline = data.offline
+        location.conditional = data.conditional
         if data.missable:
             location.progress_type = LocationProgressType.EXCLUDED
         return location
@@ -693,23 +695,23 @@ location_tables = {
                         npc = True, shop = True),
         # These are missable if you kill Cornyx before giving him the right tomes.
         DS3LocationData("US: Poison Mist",                         "Poison Mist",                       DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Fire Orb",                            "Fire Orb",                          DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Profuse Sweat",                       "Profuse Sweat",                     DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Bursting Fireball",                   "Bursting Fireball",                 DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Acid Surge",                          "Acid Surge",                        DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Carthus Flame Arc",                   "Carthus Flame Arc",                 DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Carthus Beacon",                      "Carthus Beacon",                    DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Great Chaos Fire Orb",                "Great Chaos Fire Orb",              DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Chaos Storm",                         "Chaos Storm",                       DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
 
         # Irina of Carim
         # These aren't in their own location because you don't actually need the Grave Key to access
@@ -725,28 +727,28 @@ location_tables = {
         DS3LocationData("US: Homeward",                            "Homeward",                          DS3LocationCategory.SPELL,
                         npc = True, shop = True),
         DS3LocationData("US: Med Heal",                            "Med Heal",                          DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Tears of Denial",                     "Tears of Denial",                   DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Force",                               "Force",                             DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Bountiful Light",                     "Bountiful Light",                   DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Magic Barrier",                       "Magic Barrier",                     DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Blessed Weapon",                      "Blessed Weapon",                    DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         # You can also get these from Karla
         DS3LocationData("US: Gnaw",                                "Gnaw",                              DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Deep Protection",                     "Deep Protection",                   DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Vow of Silence",                      "Vow of Silence",                    DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Dark Blade",                          "Dark Blade",                        DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("US: Dead Again",                          "Dead Again",                        DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
     ],
     "Road of Sacrifices": [
         DS3LocationData("RS: Soul of a Crystal Sage",              "Soul of a Crystal Sage",            DS3LocationCategory.SOUL,
@@ -853,31 +855,31 @@ location_tables = {
         DS3LocationData("RS: Farron Flashsword",                   "Farron Flashsword",                 DS3LocationCategory.SPELL,
                         missable = True, npc = True, shop = True),
         DS3LocationData("RS: Pestilent Mist",                      "Pestilent Mist",                    DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Great Farron Dart",                   "Great Farron Dart",                 DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Farron Hail",                         "Farron Hail",                       DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Homing Soulmass",                     "Homing Soulmass",                   DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Soul Spear",                          "Soul Spear",                        DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Homing Crystal Soulmass",             "Homing Crystal Soulmass",           DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Crystal Soul Spear",                  "Crystal Soul Spear",                DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Crystal Magic Weapon",                "Crystal Magic Weapon",              DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Cast Light",                          "Cast Light",                        DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Twisted Wall of Light",               "Twisted Wall of Light",             DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Hidden Weapon",                       "Hidden Weapon",                     DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Hidden Body",                         "Hidden Body",                       DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Repair",                              "Repair",                            DS3LocationCategory.SPELL,
-                        missable = True, npc = True, shop = True),
+                        conditional = True, missable = True, npc = True, shop = True),
         DS3LocationData("RS: Clandestine Coat",                    "Clandestine Coat",                  DS3LocationCategory.ARMOR,
                         missable = True, npc = True, shop = True), # Shrine Handmaid with Orbeck's Ashes + reload
         DS3LocationData("RS: Young Dragon Ring",                   "Young Dragon Ring",                 DS3LocationCategory.RING,
@@ -2744,6 +2746,14 @@ for region in [
 ]:
     for location in location_tables[region]:
         location.dlc = True
+
+for region in [
+    "Firelink Shrine Bell Tower",
+    "Greirat's Shop",
+    "Karla's Shop"
+]:
+    for location in location_tables[region]:
+        location.conditional = True
 
 
 location_name_groups: Dict[str, Set[str]] = {

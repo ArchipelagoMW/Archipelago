@@ -135,23 +135,6 @@ class DarkSouls3World(World):
         else:
             self.yhorm_location = default_yhorm_location
 
-        # Mark all items with similar distribution as non-local, so that pre_fill can leave a few to
-        # be given as multiworld items.
-        if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_similar_to_base_game:
-            for item in item_dictionary.values():
-                # Carefully control the actual weapon upgrade material locations, but be looser with
-                # gems since they're inherently controlled by coals anyway (which are all local).
-                if item.base_name in {"Titanite Shard", "Large Titanite Shard", "Titanite Chunk",
-                                      "Titanite Slab", "Titanite Scale", "Twinkling Titanite"}:
-                    self.multiworld.non_local_items[self.player].value.add(item.name)
-        if self.multiworld.soul_locations[self.player] == SoulLocationsOption.option_similar_to_base_game:
-            for item in item_dictionary.values():
-                if (
-                    item.souls and item.souls > 50 and
-                    (item.category != DS3ItemCategory.BOSS or item.souls >= 10000)
-                ):
-                    self.multiworld.non_local_items[self.player].value.add(item.name)
-
     def create_regions(self):
         # Create Vanilla Regions
         regions: Dict[str, Region] = {}
@@ -556,6 +539,35 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
             state.has("Cinders of a Lord - Aldrich", self.player) and \
             state.has("Cinders of a Lord - Lothric Prince", self.player)
+
+        # If smoothing is enabled and there are multiple worlds, set a special rule to forbid the
+        # remaining items of certain types from in-world locations _except_ those that are small
+        # unlocks from progression items. This allows exciting items to be unlocked while also
+        # limiting unlocks to the same pool of items we've already chosen to show up unexpectedly.
+        if len(self.multiworld.worlds) > 1:
+            non_local_or_conditional_items = set()
+            if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_similar_to_base_game:
+                # Carefully control the actual weapon upgrade material locations, but be looser with
+                # gems since they're inherently controlled by coals anyway (which are all local).
+                non_local_or_conditional_items.update({
+                    "Titanite Shard", "Large Titanite Shard", "Titanite Chunk", "Titanite Slab",
+                    "Titanite Scale", "Twinkling Titanite"
+                })
+            if self.multiworld.soul_locations[self.player] == SoulLocationsOption.option_similar_to_base_game:
+                non_local_or_conditional_items.update(
+                    item.name for item in item_dictionary.values()
+                    if (
+                        item.souls and item.souls > 50 and
+                        (item.category != DS3ItemCategory.BOSS or item.souls >= 10000)
+                    )
+                )
+            if len(non_local_or_conditional_items) > 0:
+                for location in self.multiworld.get_locations(self.player):
+                    if not location.conditional:
+                        add_item_rule(location, lambda item: (
+                            item.player != self.player or
+                            item.base_name not in non_local_or_conditional_items
+                        ))
 
 
     def _set_location_rule(self, location: str, rule: Union[CollectionRule, str]) -> None:

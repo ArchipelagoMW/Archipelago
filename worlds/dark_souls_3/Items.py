@@ -117,6 +117,7 @@ class DarkSouls3Item(Item):
     game: str = "Dark Souls III"
     count: int = 1
     souls: Optional[int] = None
+    base_name: str
 
     def __init__(
             self,
@@ -125,6 +126,7 @@ class DarkSouls3Item(Item):
             code: Optional[int],
             player: int):
         super().__init__(name, classification, code, player)
+        self.base_name = name
 
     @staticmethod
     def from_data(player: int, data: DS3ItemData, classification = None) -> "DarkSouls3Item":
@@ -135,6 +137,7 @@ class DarkSouls3Item(Item):
             player)
         item.count = data.count
         item.souls = data.souls
+        item.base_name = data.base_name
         return item
 
 _vanilla_items = flatten([

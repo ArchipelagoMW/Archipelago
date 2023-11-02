@@ -129,7 +129,7 @@ class Fill:
                     self.world.is_location_available(location)
                     and not location.missable
                     and not location.conditional
-                    and not (location.shop and item.souls)
+                    and not (location.shop and (item.count > 1 or item.souls))
                 )
             )
             # Don't put important items in excluded locations.
