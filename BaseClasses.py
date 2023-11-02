@@ -693,9 +693,10 @@ class CollectionState():
                 spot = self.multiworld.get_region(spot, player)
         return spot.can_reach(self)
 
-    def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
+    def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None,
+                         player: Optional[int] = None) -> None:
         if locations is None:
-            locations = self.multiworld.get_filled_locations()
+            locations = self.multiworld.get_filled_locations(player)
         reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
         locations = {location for location in locations if location.event and location not in self.events and
