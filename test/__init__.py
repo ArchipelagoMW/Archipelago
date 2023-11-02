@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Sequence
 from BaseClasses import CollectionState, ItemClassification
 
-from test.TestBase import TestBase, WorldTestBase
+from test.bases import TestBase, WorldTestBase
 
 class WL4TestBase(WorldTestBase, TestBase):
     game = 'Wario Land 4'
