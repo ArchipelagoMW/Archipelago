@@ -294,16 +294,18 @@ class PokemonEmeraldWorld(World):
 
             # Sort order makes `fill_restrictive` try to place important badges later, which
             # makes it less likely to have to swap at all, and more likely for swaps to work.
+            # In the case of vanilla HMs, navigating Granite Cave is required to access more than 2 gyms,
+            # so Knuckle Badge deserves highest priority if Flash is logically required.
             badge_locations, badge_items = [list(l) for l in zip(*self.badge_shuffle_info)]
             badge_priority = {
-                "Balance Badge": 0,
-                "Dynamo Badge": 0,
-                "Mind Badge": 1,
-                "Heat Badge": 1,
-                "Rain Badge": 2,
-                "Knuckle Badge": 2,
-                "Stone Badge": 3,
-                "Feather Badge": 4
+                "Knuckle Badge": 0 if (self.options.hms == RandomizeHms.option_vanilla and self.options.require_flash) else 3,
+                "Balance Badge": 1,
+                "Dynamo Badge": 1,
+                "Mind Badge": 2,
+                "Heat Badge": 2,
+                "Rain Badge": 3,
+                "Stone Badge": 4,
+                "Feather Badge": 5
             }
             badge_items.sort(key=lambda item: badge_priority.get(item.name, 0))
 
@@ -322,16 +324,18 @@ class PokemonEmeraldWorld(World):
 
             # Sort order makes `fill_restrictive` try to place important HMs later, which
             # makes it less likely to have to swap at all, and more likely for swaps to work.
+            # In the case of vanilla badges, navigating Granite Cave is required to access more than 2 gyms,
+            # so Flash deserves highest priority if it's logically required.
             hm_locations, hm_items = [list(l) for l in zip(*self.hm_shuffle_info)]
             hm_priority = {
-                "HM03 Surf": 0,
-                "HM06 Rock Smash": 0,
-                "HM08 Dive": 1,
-                "HM04 Strength": 1,
-                "HM07 Waterfall": 2,
-                "HM05 Flash": 2,
-                "HM01 Cut": 3,
-                "HM02 Fly": 4
+                "HM05 Flash": 0 if (self.options.badges == RandomizeBadges.option_vanilla and self.options.require_flash) else 3,
+                "HM03 Surf": 1,
+                "HM06 Rock Smash": 1,
+                "HM08 Dive": 2,
+                "HM04 Strength": 2,
+                "HM07 Waterfall": 3,
+                "HM01 Cut": 4,
+                "HM02 Fly": 5
             }
             hm_items.sort(key=lambda item: hm_priority.get(item.name, 0))
 
