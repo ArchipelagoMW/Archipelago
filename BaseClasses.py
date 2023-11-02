@@ -367,23 +367,36 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool) -> CollectionState:
-        cached = getattr(self, "_all_state", None)
-        if use_cache and cached:
-            return cached.copy()
+    def get_all_state(self, use_cache: bool, player: Optional[int] = None) -> CollectionState:
+        if use_cache:
+            if player:
+                cached = getattr(self, f"_all_state_{player}", None)
+            else:
+                cached = getattr(self, "_all_state", None)
+            if cached:
+                return cached.copy()
 
         ret = CollectionState(self)
 
-        for item in self.itempool:
-            self.worlds[item.player].collect(ret, item)
-        for player in self.player_ids:
-            subworld = self.worlds[player]
-            for item in subworld.get_pre_fill_items():
-                subworld.collect(ret, item)
-        ret.sweep_for_events()
+        if player:
+            for item in {player_item for player_item in self.itempool if player_item.player == player}:
+                self.worlds[player].collect(ret, item)
+            for item in self.worlds[player].get_pre_fill_items():
+                self.worlds[player].collect(ret, item)
+        else:
+            for item in self.itempool:
+                self.worlds[item.player].collect(ret, item)
+            for player in self.player_ids:
+                subworld = self.worlds[player]
+                for item in subworld.get_pre_fill_items():
+                    subworld.collect(ret, item)
+        ret.sweep_for_events()  # TODO player=player
 
         if use_cache:
-            self._all_state = ret
+            if player:
+                setattr(self, f"_all_state_{player}", ret)
+            else:
+                self._all_state = ret
         return ret
 
     def get_items(self) -> List[Item]:
