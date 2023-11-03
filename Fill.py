@@ -959,7 +959,6 @@ def distribute_planned(world: MultiWorld) -> None:
                 failed(
                     f"Plando block failed to place {m - count} of {m} item(s) for {world.player_name[player]}, error(s): {' '.join(err)}",
                     placement['force'])
-
             for (item, location) in successful_pairs:
                 world.push_item(location, item, collect=False)
                 location.event = True  # flag location to be checked during fill
