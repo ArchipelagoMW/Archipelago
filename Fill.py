@@ -918,15 +918,31 @@ def distribute_planned(world: MultiWorld) -> None:
             world.random.shuffle(items)
             count = 0
             err: typing.List[str] = []
-            successful_pairs: typing.List[typing.Tuple[Item, Location]] = []
+            successful_pairs: typing.List[typing.Tuple[int, Item, Location]] = []  # int -> index in multiworld.itempool
+            claimed_indices: typing.Set[int] = set()
             for item_name in items:
-                item = world.worlds[player].create_item(item_name)
+                index = None
+
+                if from_pool:
+                    try:
+                        index, item = next(
+                            (i, item) for i, item in enumerate(world.itempool)
+                            if item.name == item_name and i not in claimed_indices)
+                    except StopIteration:
+                        warn(
+                        f"Could not remove {item_name} from pool for {world.player_name[player]} as it's already missing from it.",
+                        placement['force'])
+                        item = world.worlds[player].create_item(item_name)
+                else:
+                    item = world.worlds[player].create_item(item_name)
+
                 for location in reversed(candidates):
                     if (location.address is None) == (item.code is None):  # either both None or both not None
                         if not location.item:
                             if location.item_rule(item):
                                 if location.can_fill(world.state, item, False):
-                                    successful_pairs.append((item, location))
+                                    successful_pairs.append((index, item, location))
+                                    claimed_indices.add(index)
                                     candidates.remove(location)
                                     count = count + 1
                                     break
@@ -945,18 +961,17 @@ def distribute_planned(world: MultiWorld) -> None:
                 failed(
                     f"Plando block failed to place {m - count} of {m} item(s) for {world.player_name[player]}, error(s): {' '.join(err)}",
                     placement['force'])
-            for (item, location) in successful_pairs:
+
+            # Sort indices in reverse so we can remove them one by one
+            successful_pairs.sort(key=lambda index_and_placement: index_and_placement[0], reverse=True)
+
+            for (index, item, location) in successful_pairs:
                 world.push_item(location, item, collect=False)
                 location.event = True  # flag location to be checked during fill
                 location.locked = True
                 logging.debug(f"Plando placed {item} at {location}")
-                if from_pool:
-                    try:
-                        world.itempool.remove(item)
-                    except ValueError:
-                        warn(
-                            f"Could not remove {item} from pool for {world.player_name[player]} as it's already missing from it.",
-                            placement['force'])
+                if index is not None:
+                    world.itempool.pop(index)
 
         except Exception as e:
             raise Exception(
