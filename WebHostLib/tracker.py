@@ -9,7 +9,7 @@ from jinja2 import pass_context, runtime
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
-from NetUtils import SlotType, NetworkSlot
+from NetUtils import ClientStatus, SlotType, NetworkSlot
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package, games
 from worlds.alttp import Items
@@ -1532,9 +1532,11 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
             continue
         player_locations = locations[player]
         checks_done[team][player]["Total"] = len(locations_checked)
-        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
-                                                      len(player_locations) * 100) \
-            if player_locations else 100
+        percent_total_checks_done[team][player] = (
+            checks_done[team][player]["Total"] / len(player_locations) * 100
+            if player_locations
+            else 100
+        )
 
     activity_timers = {}
     now = datetime.datetime.utcnow()
@@ -1548,7 +1550,7 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         for player, name in enumerate(names, 1):
             player_names[team, player] = name
             states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
-            if states[team, player] == 30:  # Goal Completed
+            if states[team, player] == ClientStatus.CLIENT_GOAL and player not in groups:
                 completed_worlds += 1
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
@@ -1683,17 +1685,20 @@ def get_LttP_multiworld_tracker(tracker: UUID):
             for item_id in precollected:
                 attribute_item(team, player, item_id)
         for location in locations_checked:
-            if location not in player_locations or location not in player_location_to_area[player]:
+            if location not in player_locations or location not in player_location_to_area.get(player, {}):
                 continue
             item, recipient, flags = player_locations[location]
             recipients = groups.get(recipient, [recipient])
             for recipient in recipients:
                 attribute_item(team, recipient, item)
                 checks_done[team][player][player_location_to_area[player][location]] += 1
-                checks_done[team][player]["Total"] += 1
-        percent_total_checks_done[team][player] = int(
-            checks_done[team][player]["Total"] / len(player_locations) * 100) if \
-        player_locations else 100
+        checks_done[team][player]["Total"] = len(locations_checked)
+
+        percent_total_checks_done[team][player] = (
+            checks_done[team][player]["Total"] / len(player_locations) * 100
+            if player_locations
+            else 100
+        )
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:

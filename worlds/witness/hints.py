@@ -228,8 +228,8 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
         if item.player == player and item.code and item.advancement
     }
     loc_in_this_world = {
-        location.name for location in multiworld.get_locations()
-        if location.player == player and location.address
+        location.name for location in multiworld.get_locations(player)
+        if location.address
     }
 
     always_locations = [
@@ -306,7 +306,7 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
         else:
             hints.append((f"{loc} contains {item[0]}.", item[2]))
 
-    next_random_hint_is_item = multiworld.per_slot_randoms[player].randint(0, 2)
+    next_random_hint_is_item = multiworld.per_slot_randoms[player].randrange(0, 2)  # Moving this to the new system is in the bigger refactoring PR
 
     while len(hints) < hint_amount:
         if next_random_hint_is_item:

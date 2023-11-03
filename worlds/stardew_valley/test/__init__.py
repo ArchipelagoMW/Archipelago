@@ -1,20 +1,31 @@
 import os
+import unittest
 from argparse import Namespace
 from typing import Dict, FrozenSet, Tuple, Any, ClassVar
 
 from BaseClasses import MultiWorld
+from Utils import cache_argsless
 from test.TestBase import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
-from .. import StardewValleyWorld, options
+from .. import StardewValleyWorld
 from ..mods.mod_data import ModNames
 from worlds.AutoWorld import call_all
+from ..options import Cropsanity, SkillProgression, SpecialOrderLocations, Friendsanity, NumberOfLuckBuffs, SeasonRandomization, ToolProgression, \
+    ElevatorProgression, Museumsanity, BackpackProgression, BuildingProgression, ArcadeMachineLocations, HelpWantedLocations, Fishsanity, NumberOfMovementBuffs, \
+    BundleRandomization, BundlePrice, FestivalLocations, FriendsanityHeartSize, ExcludeGingerIsland, TrapItems, Goal, Mods
 
 
-class SVTestBase(WorldTestBase):
+class SVTestCase(unittest.TestCase):
+    player: ClassVar[int] = 1
+    """Set to False to not skip some 'extra' tests"""
+    skip_extra_tests: bool = True
+    """Set to False to run tests that take long"""
+    skip_long_tests: bool = True
+
+
+class SVTestBase(WorldTestBase, SVTestCase):
     game = "Stardew Valley"
     world: StardewValleyWorld
-    player: ClassVar[int] = 1
-    skip_long_tests: bool = True
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)
@@ -31,66 +42,73 @@ class SVTestBase(WorldTestBase):
         should_run_default_tests = is_not_stardew_test and super().run_default_tests
         return should_run_default_tests
 
-    def minimal_locations_maximal_items(self):
-        min_max_options = {
-            options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
-            options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
-            options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
-            options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-            options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
-            options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
-            options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
-            options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
-            options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled,
-            options.HelpWantedLocations.internal_name: 0,
-            options.Fishsanity.internal_name: options.Fishsanity.option_none,
-            options.Museumsanity.internal_name: options.Museumsanity.option_none,
-            options.Friendsanity.internal_name: options.Friendsanity.option_none,
-            options.NumberOfMovementBuffs.internal_name: 12,
-            options.NumberOfLuckBuffs.internal_name: 12,
-        }
-        return min_max_options
 
-    def allsanity_options_without_mods(self):
-        allsanity = {
-            options.Goal.internal_name: options.Goal.option_perfection,
-            options.BundleRandomization.internal_name: options.BundleRandomization.option_shuffled,
-            options.BundlePrice.internal_name: options.BundlePrice.option_expensive,
-            options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
-            options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
-            options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
-            options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-            options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
-            options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
-            options.FestivalLocations.internal_name: options.FestivalLocations.option_hard,
-            options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
-            options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_full_shuffling,
-            options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
-            options.HelpWantedLocations.internal_name: 56,
-            options.Fishsanity.internal_name: options.Fishsanity.option_all,
-            options.Museumsanity.internal_name: options.Museumsanity.option_all,
-            options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-            options.FriendsanityHeartSize.internal_name: 1,
-            options.NumberOfMovementBuffs.internal_name: 12,
-            options.NumberOfLuckBuffs.internal_name: 12,
-            options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
-            options.TrapItems.internal_name: options.TrapItems.option_nightmare,
-        }
-        return allsanity
+@cache_argsless
+def minimal_locations_maximal_items():
+    min_max_options = {
+        SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
+        Cropsanity.internal_name: Cropsanity.option_shuffled,
+        BackpackProgression.internal_name: BackpackProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_vanilla,
+        SkillProgression.internal_name: SkillProgression.option_vanilla,
+        BuildingProgression.internal_name: BuildingProgression.option_vanilla,
+        ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
+        ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_disabled,
+        HelpWantedLocations.internal_name: 0,
+        Fishsanity.internal_name: Fishsanity.option_none,
+        Museumsanity.internal_name: Museumsanity.option_none,
+        Friendsanity.internal_name: Friendsanity.option_none,
+        NumberOfMovementBuffs.internal_name: 12,
+        NumberOfLuckBuffs.internal_name: 12,
+    }
+    return min_max_options
 
-    def allsanity_options_with_mods(self):
-        allsanity = {}
-        allsanity.update(self.allsanity_options_without_mods())
-        all_mods = (
-            ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-            ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-            ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-            ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-            ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-            ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator
-        )
-        allsanity.update({options.Mods.internal_name: all_mods})
-        return allsanity
+
+@cache_argsless
+def allsanity_options_without_mods():
+    allsanity = {
+        Goal.internal_name: Goal.option_perfection,
+        BundleRandomization.internal_name: BundleRandomization.option_shuffled,
+        BundlePrice.internal_name: BundlePrice.option_expensive,
+        SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
+        Cropsanity.internal_name: Cropsanity.option_shuffled,
+        BackpackProgression.internal_name: BackpackProgression.option_progressive,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
+        SkillProgression.internal_name: SkillProgression.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        FestivalLocations.internal_name: FestivalLocations.option_hard,
+        ElevatorProgression.internal_name: ElevatorProgression.option_progressive,
+        ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_full_shuffling,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        HelpWantedLocations.internal_name: 56,
+        Fishsanity.internal_name: Fishsanity.option_all,
+        Museumsanity.internal_name: Museumsanity.option_all,
+        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
+        FriendsanityHeartSize.internal_name: 1,
+        NumberOfMovementBuffs.internal_name: 12,
+        NumberOfLuckBuffs.internal_name: 12,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        TrapItems.internal_name: TrapItems.option_nightmare,
+    }
+    return allsanity
+
+
+@cache_argsless
+def allsanity_options_with_mods():
+    allsanity = {}
+    allsanity.update(allsanity_options_without_mods())
+    all_mods = (
+        ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+        ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+        ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+        ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+        ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+        ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator
+    )
+    allsanity.update({Mods.internal_name: all_mods})
+    return allsanity
+
 
 pre_generated_worlds = {}
 
@@ -110,7 +128,7 @@ def setup_solo_multiworld(test_options=None, seed=None,
     multiworld.set_seed(seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
     args = Namespace()
-    for name, option in StardewValleyWorld.option_definitions.items():
+    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
         value = option(test_options[name]) if name in test_options else option.from_any(option.default)
         setattr(args, name, {1: value})
     multiworld.set_options(args)
