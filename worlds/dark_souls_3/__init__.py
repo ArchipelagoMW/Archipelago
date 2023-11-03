@@ -407,6 +407,23 @@ class DarkSouls3World(World):
         )):
             classification = ItemClassification.useful
 
+        if (
+            self.multiworld.randomize_weapon_level[self.player] != RandomizeWeaponLevelOption.option_none
+            and data.category.upgrade_level
+        ):
+            # if the user made an error and set a min higher than the max we default to the max
+            max_5 = self.multiworld.max_levels_in_5[self.player]
+            min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
+            max_10 = self.multiworld.max_levels_in_10[self.player]
+            min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
+            weapon_level_percentage = self.multiworld.randomize_weapon_level_percentage[self.player]
+
+            if self.multiworld.random.randint(0, 99) < weapon_level_percentage:
+                if data.category.upgrade_level == 5:
+                    data = data.upgrade(self.multiworld.random.randint(min_5, max_5))
+                elif data.category.upgrade_level == 10:
+                    data = data.upgrade(self.multiworld.random.randint(min_10, max_10))
+
         if self.multiworld.randomize_infusion[self.player] and data.category.is_infusible:
             infusion_percentage = self.multiworld.randomize_infusion_percentage[self.player]
             if self.multiworld.random.randint(0, 99) < infusion_percentage:
@@ -764,22 +781,6 @@ class DarkSouls3World(World):
 
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
-
-        # # Randomize some weapon upgrades
-        # if self.multiworld.randomize_weapon_level[self.player] != RandomizeWeaponLevelOption.option_none:
-        #     # if the user made an error and set a min higher than the max we default to the max
-        #     max_5 = self.multiworld.max_levels_in_5[self.player]
-        #     min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
-        #     max_10 = self.multiworld.max_levels_in_10[self.player]
-        #     min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
-        #     weapon_level_percentage = self.multiworld.randomize_weapon_level_percentage[self.player]
-
-        #     for item in item_dictionary.values():
-        #         if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < weapon_level_percentage:
-        #             if item.category == DS3ItemCategory.WEAPON_UPGRADE_5:
-        #                 name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
-        #             elif item.category in {DS3ItemCategory.WEAPON_UPGRADE_10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE}:
-        #                 name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
 
         our_items = {
             location.item

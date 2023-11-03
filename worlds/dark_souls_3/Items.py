@@ -29,6 +29,16 @@ class DS3ItemCategory(IntEnum):
             DS3ItemCategory.SHIELD_INFUSIBLE
         ]
 
+    @property
+    def upgrade_level(self) -> Optional[int]:
+        """The maximum upgrade level for this category, or None if it's not upgradable."""
+        if self == DS3ItemCategory.WEAPON_UPGRADE_5: return 5
+        if self in [
+            DS3ItemCategory.WEAPON_UPGRADE_10,
+            DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE
+        ]: return 10
+        return None
+
 
 @dataclass
 class Infusion(IntEnum):
@@ -152,7 +162,21 @@ class DS3ItemData():
         return dataclasses.replace(
             self,
             name = f"{infusion.prefix} {self.name}",
-            ds3_code = ds3_code + infusion.value,
+            ds3_code = self.ds3_code + infusion.value,
+            base_name = self.base_name,
+            filler = False,
+        )
+
+    def upgrade(self, level: int) -> "DS3ItemData":
+        """Upgrades this item to the given level."""
+        if not self.category.upgrade_level: raise f"{name} is not upgradable."
+        if level > self.category.upgrade_level: raise f"{name} can't be upgraded to +{level}."
+        if self.ds3_code % 100 != 0: raise f"{name} is already upgraded."
+
+        return dataclasses.replace(
+            self,
+            name = f"{self.name} +{level}",
+            ds3_code = self.ds3_code + level,
             base_name = self.base_name,
             filler = False,
         )
