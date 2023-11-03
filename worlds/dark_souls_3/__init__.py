@@ -725,7 +725,7 @@ class DarkSouls3World(World):
             smooth_items([item for item in all_item_order if item.base_name in base_names])
 
         if self.multiworld.soul_locations[self.player] == SoulLocationsOption.option_smooth:
-            # Shuffle larger boss sould among themselves because they're all worth 10-20k souls in
+            # Shuffle larger boss souls among themselves because they're all worth 10-20k souls in
             # no particular order and that's a lot more interesting than getting them in the same
             # order every single run.
             shuffled = {
@@ -740,16 +740,12 @@ class DarkSouls3World(World):
                     item_order.append(item_dictionary[shuffled_order.pop(0)])
                 else:
                     item_order.append(item)
-
-            order_names = [item.name for item in item_order]
-            location_names = [loc.item.name for loc in self.multiworld.get_locations() if loc.item.name in order_names]
-
             smooth_items(item_order)
 
         if self.multiworld.upgraded_weapon_locations[self.player] == UpgradedWeaponLocationsOption.option_smooth:
             upgraded_weapons = [
                 location.item
-                for location in self.multiworld.get_locations()
+                for location in self.multiworld.get_filled_locations()
                 if location.item.player == self.player
                 and location.item.level and location.item.level > 0
             ]
@@ -764,7 +760,11 @@ class DarkSouls3World(World):
         return copy
 
 
-    def _pop_item(self, location: Location, items: List[DS3ItemData]) -> DS3ItemData:
+    def _pop_item(
+        self,
+        location: Location,
+        items: List[Union[DS3ItemData, DarkSouls3Item]]
+    ) -> Union[DS3ItemData, DarkSouls3Item]:
         """Returns the next item in items that can be assigned to location."""
         # Non-excluded locations can take any item we throw at them. (More specifically, if they can
         # take one item in a group, they can take any other).
