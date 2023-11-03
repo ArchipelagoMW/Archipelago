@@ -737,44 +737,61 @@ class StardewLogic:
         return Has(specialorder, self.special_order_rules)
 
     def can_get_farming_xp(self) -> StardewRule:
-        crop_rules = []
-        for crop in all_crops:
-            crop_rules.append(self.can_grow_crop(crop))
-        return Or(crop_rules)
+        key = f"can_get_foraging_xp"
+        if key not in self.cached_rules:
+            crop_rules = []
+            for crop in all_crops:
+                crop_rules.append(self.can_grow_crop(crop))
+            self.cached_rules[key] = Or(crop_rules)
+        return self.cached_rules[key]
 
     def can_get_foraging_xp(self) -> StardewRule:
-        tool_rule = self.has_tool(Tool.axe)
-        tree_rule = self.can_reach_region(Region.forest) & self.has_any_season_not_winter()
-        stump_rule = self.can_reach_region(Region.secret_woods) & self.has_tool(Tool.axe, ToolMaterial.copper)
-        return tool_rule & (tree_rule | stump_rule)
+        key = f"can_get_foraging_xp"
+        if key not in self.cached_rules:
+            tool_rule = self.has_tool(Tool.axe)
+            tree_rule = self.can_reach_region(Region.forest) & self.has_any_season_not_winter()
+            self.cached_rules[key] = tool_rule & tree_rule
+        return self.cached_rules[key]
 
     def can_get_mining_xp(self) -> StardewRule:
-        tool_rule = self.has_tool(Tool.pickaxe)
-        stone_rule = self.can_reach_any_region([Region.mines_floor_5, Region.quarry, Region.skull_cavern_25, Region.volcano_floor_5])
-        return tool_rule & stone_rule
+        key = f"can_get_mining_xp"
+        if key not in self.cached_rules:
+            tool_rule = self.has_tool(Tool.pickaxe)
+            stone_rule = self.can_reach_any_region([Region.mines_floor_5, Region.quarry, Region.skull_cavern_25, Region.volcano_floor_5])
+            self.cached_rules[key] = tool_rule & stone_rule
+        return self.cached_rules[key]
 
     def can_get_combat_xp(self) -> StardewRule:
-        tool_rule = self.has_any_weapon()
-        enemy_rule = self.can_reach_any_region([Region.mines_floor_5, Region.skull_cavern_25, Region.volcano_floor_5])
-        return tool_rule & enemy_rule
+        key = f"can_get_combat_xp"
+        if key not in self.cached_rules:
+            tool_rule = self.has_any_weapon()
+            enemy_rule = self.can_reach_any_region([Region.mines_floor_5, Region.skull_cavern_25, Region.volcano_floor_5])
+            self.cached_rules[key] = tool_rule & enemy_rule
+        return self.cached_rules[key]
 
     def can_get_fishing_xp(self) -> StardewRule:
-        if self.options.skill_progression == SkillProgression.option_progressive:
-            return self.can_fish() | self.can_crab_pot()
-
-        return self.can_fish()
+        key = f"can_get_fishing_xp"
+        if key not in self.cached_rules:
+            if self.options.skill_progression == SkillProgression.option_progressive:
+                self.cached_rules[key] = self.can_fish() | self.can_crab_pot()
+            else:
+                self.cached_rules[key] = self.can_fish()
+        return self.cached_rules[key]
 
     def can_fish(self, difficulty: int = 0) -> StardewRule:
-        skill_required = max(0, int((difficulty / 10) - 1))
-        if difficulty <= 40:
-            skill_required = 0
-        skill_rule = self.has_skill_level(Skill.fishing, skill_required)
-        region_rule = self.can_reach_any_region(fishing_regions)
-        number_fishing_rod_required = 1 if difficulty < 50 else 2
-        if self.options.tool_progression == ToolProgression.option_progressive:
-            return self.received("Progressive Fishing Rod", number_fishing_rod_required) & skill_rule & region_rule
-
-        return skill_rule & region_rule
+        key = f"can_fish {difficulty}"
+        if key not in self.cached_rules:
+            skill_required = max(0, int((difficulty / 10) - 1))
+            if difficulty <= 40:
+                skill_required = 0
+            skill_rule = self.has_skill_level(Skill.fishing, skill_required)
+            region_rule = self.can_reach_any_region(fishing_regions)
+            tool_rule = True_()
+            if self.options.tool_progression == ToolProgression.option_progressive:
+                number_fishing_rod_required = 1 if difficulty < 50 else (2 if difficulty < 80 else 4)
+                tool_rule = self.received("Progressive Fishing Rod", number_fishing_rod_required)
+            self.cached_rules[key] = skill_rule & region_rule & tool_rule
+        return self.cached_rules[key]
 
     def can_fish_in_freshwater(self) -> StardewRule:
         return self.can_fish() & self.can_reach_any_region([Region.forest, Region.town, Region.mountain])
@@ -841,13 +858,16 @@ class StardewLogic:
         return self.can_reach_region(Region.island_south)
 
     def can_catch_fish(self, fish: FishItem) -> StardewRule:
-        region_rule = self.can_reach_any_region(fish.locations)
-        season_rule = self.has_any_season(fish.seasons)
-        if fish.difficulty == -1:
-            difficulty_rule = self.can_crab_pot()
-        else:
-            difficulty_rule = self.can_fish(fish.difficulty)
-        return region_rule & season_rule & difficulty_rule
+        key = f"can_catch_fish {fish.name}"
+        if key not in self.cached_rules:
+            region_rule = self.can_reach_any_region(fish.locations)
+            season_rule = self.has_any_season(fish.seasons)
+            if fish.difficulty == -1:
+                difficulty_rule = self.can_crab_pot()
+            else:
+                difficulty_rule = self.can_fish(fish.difficulty)
+            self.cached_rules[key] = region_rule & season_rule & difficulty_rule
+        return self.cached_rules[key]
 
     def can_catch_every_fish(self) -> StardewRule:
         rules = [self.has_skill_level(Skill.fishing, 10), self.has_max_fishing_rod()]
@@ -1067,6 +1087,12 @@ class StardewLogic:
         return self.can_get_married() & self.has_house(2) & self.has_relationship(Generic.bachelor, 12) & self.has_children(number_children - 1)
 
     def has_relationship(self, npc: str, hearts: int = 1) -> StardewRule:
+        key = f"has_relationship {npc} {hearts}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._has_relationship(npc, hearts)
+        return self.cached_rules[key]
+
+    def _has_relationship(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
             return True_()
         friendsanity = self.options.friendsanity
@@ -1121,31 +1147,38 @@ class StardewLogic:
         return self.cached_rules[key]
 
     def can_meet(self, npc: str) -> StardewRule:
-        if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
-            return True_()
-        villager = all_villagers_by_name[npc]
-        rules = [self.can_reach_any_region(villager.locations)]
-        if npc == NPC.kent:
-            rules.append(self.has_year_two())
-        elif npc == NPC.leo:
-            rules.append(self.received("Island West Turtle"))
+        key = f"can_meet {npc}"
+        if key not in self.cached_rules:
+            if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
+                self.cached_rules[key] = True_()
+                return self.cached_rules[key]
+            villager = all_villagers_by_name[npc]
+            rules = [self.can_reach_any_region(villager.locations)]
+            if npc == NPC.kent:
+                rules.append(self.has_year_two())
+            elif npc == NPC.leo:
+                rules.append(self.received("Island West Turtle"))
 
-        return And(rules)
+            self.cached_rules[key] = And(rules)
+        return self.cached_rules[key]
 
     def can_give_loved_gifts_to_everyone(self) -> StardewRule:
         rules = []
         for npc in all_villagers_by_name:
             if not self.npc_is_in_current_slot(npc):
                 continue
-            villager = all_villagers_by_name[npc]
-            gift_rule = self.has_any_universal_love()
             meet_rule = self.can_meet(npc)
-            rules.append(meet_rule & gift_rule)
-        loved_gifts_rules = And(rules)
-        simplified_rules = loved_gifts_rules.simplify()
-        return simplified_rules
+            rules.append(meet_rule)
+        loved_gifts_rules = And(rules) & self.has_any_universal_love()
+        return loved_gifts_rules
 
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
+        key = f"can_meet {npc} {hearts}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._can_earn_relationship(npc, hearts)
+        return self.cached_rules[key]
+
+    def _can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
         if hearts <= 0:
             return True_()
 
@@ -1458,8 +1491,10 @@ class StardewLogic:
         return self.can_fish(60)
 
     def has_any_universal_love(self) -> StardewRule:
-        return self.has(Gift.golden_pumpkin) | self.has("Magic Rock Candy") | self.has(Gift.pearl) | self.has(
-            "Prismatic Shard") | self.has(AnimalProduct.rabbit_foot)
+        key = f"has_any_universal_love"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self.has(Gift.golden_pumpkin) | self.has(Gift.pearl) | self.has("Prismatic Shard") | self.has(AnimalProduct.rabbit_foot)
+        return self.cached_rules[key]
 
     def has_jelly(self) -> StardewRule:
         return self.can_preserves_jar(Fruit.any)
