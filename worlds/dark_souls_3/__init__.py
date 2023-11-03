@@ -381,7 +381,7 @@ class DarkSouls3World(World):
             if item.inject and (not item.is_dlc or dlc_enabled)
         ]
         number_to_inject = min(num_required_extra_items, len(injectable_items))
-        for item in self.multiworld.random.choices(injectable_items, k=number_to_inject):
+        for item in self.multiworld.random.sample(injectable_items, k=number_to_inject):
             num_required_extra_items -= 1
             itempool.append(self.create_item(item.name))
 
@@ -683,6 +683,11 @@ class DarkSouls3World(World):
             if self.is_location_available(location)
         ]
 
+        # Full DarkSouls3Items, grouped by name
+        full_items_by_name = defaultdict(list)
+        for location in self.multiworld.get_filled_locations():
+            full_items_by_name[location.item.name].append(location.item)
+
         def smooth_items(item_order: List[Union[DS3ItemData, DarkSouls3Item]]) -> None:
             """Rearrange all items in item_order to match that order.
 
@@ -709,14 +714,10 @@ class DarkSouls3World(World):
                 # Give offworld regions the last (best) items within a given sphere
                 for location in onworld + offworld:
                     new_item = self._pop_item(location, item_order)
-                    if isinstance(new_item, DarkSouls3Item):
-                        location.item = new_item
-                        new_item.location = location
-                    else:
-                        location.item.name = new_item.name
-                        location.item.base_name = new_item.base_name
-                        location.item.ds3_code = new_item.ds3_code
-                        location.item.count = new_item.count
+                    if isinstance(new_item, DS3ItemData):
+                        new_item = full_items_by_name[new_item.name].pop(0)
+                    location.item = new_item
+                    new_item.location = location
 
         if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_smooth:
             base_names = {

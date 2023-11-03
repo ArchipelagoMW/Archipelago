@@ -156,8 +156,8 @@ class DS3ItemData():
 
     def infuse(self, infusion: Infusion) -> "DS3ItemData":
         """Returns this item with the given infusion applied."""
-        if not self.category.is_infusible: raise f"{name} is not infusible."
-        if self.ds3_code % 10000 >= 100: raise f"{name} is already infused."
+        if not self.category.is_infusible: raise f"{self.name} is not infusible."
+        if self.ds3_code % 10000 >= 100: raise f"{self.name} is already infused."
 
         return dataclasses.replace(
             self,
@@ -169,9 +169,9 @@ class DS3ItemData():
 
     def upgrade(self, level: int) -> "DS3ItemData":
         """Upgrades this item to the given level."""
-        if not self.category.upgrade_level: raise f"{name} is not upgradable."
-        if level > self.category.upgrade_level: raise f"{name} can't be upgraded to +{level}."
-        if self.ds3_code % 100 != 0: raise f"{name} is already upgraded."
+        if not self.category.upgrade_level: raise f"{self.name} is not upgradable."
+        if level > self.category.upgrade_level: raise f"{self.name} can't be upgraded to +{level}."
+        if self.ds3_code % 100 != 0: raise f"{self.name} is already upgraded."
 
         return dataclasses.replace(
             self,
@@ -180,12 +180,6 @@ class DS3ItemData():
             base_name = self.base_name,
             filler = False,
         )
-
-    def __hash__(self):
-        return hash((name, count))
-
-    def __eq__(self, other):
-        return self.name == other.name and self.count == other.count
 
 
 class DarkSouls3Item(Item):
