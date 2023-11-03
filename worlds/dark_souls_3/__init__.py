@@ -464,7 +464,7 @@ class DarkSouls3World(World):
                 "Karla's Trousers",
             ],
             "Xanthous Ashes": ["Xanthous Overcoat", "Xanthous Gloves", "Xanthous Trousers"],
-            "Grave Warden's Ashes": ["Ember (Dragon Chaser)"],
+            "Dragon Chaser's Ashes": ["Ember (Dragon Chaser)"],
             "Easterner's Ashes": [
                 "Washing Pole",
                 "Eastern Helm",
