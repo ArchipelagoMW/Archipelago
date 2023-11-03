@@ -48,7 +48,6 @@ class Overcooked2World(World):
     web = Overcooked2Web()
     required_client_version = (0, 3, 8)
     topology_present: bool = False
-    data_version = 3
 
     item_name_to_id = item_name_to_id
     item_id_to_name = item_id_to_name

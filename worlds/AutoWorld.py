@@ -6,16 +6,16 @@ import pathlib
 import sys
 import time
 from dataclasses import make_dataclass
-from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
+from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
     Union
 
-from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
+from Options import PerGameCommonOptions
 
 if TYPE_CHECKING:
     import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
-    from . import GamesPackage
+    from . import GamePackage
     from settings import Group
 
 perf_logger = logging.getLogger("performance")
@@ -207,18 +207,6 @@ class World(metaclass=AutoWorldRegister):
 
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
-
-    data_version: ClassVar[int] = 0
-    """
-    Increment this every time something in your world's names/id mappings changes.
-
-    When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
-    that it should not be cached, and clients should request that world's DataPackage every connection. Not
-    recommended for production-ready worlds.
-
-    Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
-    request a new DataPackage, if necessary.
-    """
 
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
     """
@@ -431,20 +419,19 @@ class World(metaclass=AutoWorldRegister):
         return self.create_item(self.get_filler_item_name())
 
     @classmethod
-    def get_data_package_data(cls) -> "GamesPackage":
+    def get_data_package_data(cls) -> GamePackage:
         sorted_item_name_groups = {
             name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
         }
         sorted_location_name_groups = {
             name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
         }
-        res: "GamesPackage" = {
+        res: GamePackage = {
             # sorted alphabetically
             "item_name_groups": sorted_item_name_groups,
             "item_name_to_id": cls.item_name_to_id,
             "location_name_groups": sorted_location_name_groups,
             "location_name_to_id": cls.location_name_to_id,
-            "version": cls.data_version,
         }
         res["checksum"] = data_package_checksum(res)
         return res
@@ -456,7 +443,7 @@ class LogicMixin(metaclass=AutoLogicRegister):
     pass
 
 
-def data_package_checksum(data: "GamesPackage") -> str:
+def data_package_checksum(data: "GamePackage") -> str:
     """Calculates the data package checksum for a game from a dict"""
     assert "checksum" not in data, "Checksum already in data"
     assert sorted(data) == list(data), "Data not ordered"

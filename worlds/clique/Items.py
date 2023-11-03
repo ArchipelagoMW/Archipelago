@@ -15,16 +15,16 @@ class CliqueItemData(NamedTuple):
 
 item_data_table: Dict[str, CliqueItemData] = {
     "Feeling of Satisfaction": CliqueItemData(
-        code=69696969,
+        code=1,
         type=ItemClassification.progression,
     ),
     "Button Activation": CliqueItemData(
-        code=69696968,
+        code=2,
         type=ItemClassification.progression,
         can_create=lambda multiworld, player: bool(getattr(multiworld, "hard_mode")[player]),
     ),
     "A Cool Filler Item (No Satisfaction Guaranteed)": CliqueItemData(
-        code=69696967,
+        code=3,
         can_create=lambda multiworld, player: False  # Only created from `get_filler_item_name`.
     ),
     "The Urge to Push": CliqueItemData(

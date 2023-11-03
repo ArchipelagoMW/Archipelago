@@ -17,11 +17,11 @@ class CliqueLocationData(NamedTuple):
 location_data_table: Dict[str, CliqueLocationData] = {
     "The Big Red Button": CliqueLocationData(
         region="The Button Realm",
-        address=69696969,
+        address=1,
     ),
     "The Item on the Desk": CliqueLocationData(
         region="The Button Realm",
-        address=69696968,
+        address=2,
         can_create=lambda multiworld, player: bool(getattr(multiworld, "hard_mode")[player]),
     ),
     "In the Player's Mind": CliqueLocationData(

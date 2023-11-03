@@ -42,7 +42,6 @@ class WargrooveWorld(World):
     settings: typing.ClassVar[WargrooveSettings]
     game = "Wargroove"
     topology_present = True
-    data_version = 1
     web = WargrooveWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}

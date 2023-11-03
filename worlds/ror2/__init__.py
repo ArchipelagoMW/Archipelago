@@ -36,7 +36,6 @@ class RiskOfRainWorld(World):
     item_name_to_id = item_table
     location_name_to_id = item_pickups
 
-    data_version = 7
     required_client_version = (0, 4, 2)
     web = RiskOfWeb()
     total_revivals: int

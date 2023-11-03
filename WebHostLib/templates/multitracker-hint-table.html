@@ -1,0 +1,35 @@
+{% for team, hints in hints.items() %}
+    <div class="table-wrapper">
+        <table id="hints-table" class="table non-unique-item-table" data-order='[[5, "asc"], [0, "asc"]]'>
+            <thead>
+            <tr>
+                <th>Finder</th>
+                <th>Receiver</th>
+                <th>Item</th>
+                <th>Location</th>
+                <th>Entrance</th>
+                <th>Found</th>
+            </tr>
+            </thead>
+            <tbody>
+            {%- for hint in hints -%}
+                {%-
+                    if current_tracker == "Generic" or (
+                        room_data.games[hint.finding_player] == current_tracker or
+                        room_data.games[hint.receiving_player] == current_tracker
+                    )
+                -%}
+                    <tr>
+                        <td>{{ player_names_with_alias[(team, hint.finding_player)] }}</td>
+                        <td>{{ player_names_with_alias[(team, hint.receiving_player)] }}</td>
+                        <td>{{ room_data.item_id_to_name[room_data.games[hint.receiving_player]][hint.item] }}</td>
+                        <td>{{ room_data.location_id_to_name[room_data.games[hint.finding_player]][hint.location] }}</td>
+                        <td>{% if hint.entrance %}{{ hint.entrance }}{% else %}Vanilla{% endif %}</td>
+                        <td>{% if hint.found %}✔{% endif %}</td>
+                    </tr>
+                {% endif %}
+            {%- endfor -%}
+            </tbody>
+        </table>
+    </div>
+{% endfor %}

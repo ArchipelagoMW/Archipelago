@@ -53,7 +53,6 @@ class DKC3World(World):
     option_definitions = dkc3_options
     settings: typing.ClassVar[DK3Settings]
     topology_present = False
-    data_version = 2
     #hint_blacklist = {LocationName.rocket_rush_flag}
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
