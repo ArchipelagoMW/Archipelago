@@ -328,7 +328,8 @@ _vanilla_items = flatten([
     DS3ItemData("Thrall Axe",                          0x006C5660, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Dragonslayer Greataxe",               0x006C7D70, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Demon's Greataxe",                    0x006CA480, DS3ItemCategory.WEAPON_UPGRADE_5),
-    DS3ItemData("Eleonora",                            0x006CCB90, DS3ItemCategory.WEAPON_UPGRADE_5),
+    DS3ItemData("Eleonora",                            0x006CCB90, DS3ItemCategory.WEAPON_UPGRADE_5,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Man Serpent Hatchet",                 0x006D19B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Club",                                0x007A1200, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Mace",                                0x007A3910, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
@@ -346,7 +347,8 @@ _vanilla_items = flatten([
     DS3ItemData("Pickaxe",                             0x007DE290, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Dragon Tooth",                        0x007E09A0, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Smough's Great Hammer",               0x007E30B0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    DS3ItemData("Blacksmith Hammer",                   0x007E57C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    DS3ItemData("Blacksmith Hammer",                   0x007E57C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Morne's Great Hammer",                0x007E7ED0, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Spiked Mace",                         0x007EA5E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Spear",                               0x00895440, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
@@ -389,7 +391,8 @@ _vanilla_items = flatten([
     DS3ItemData("Talisman",                            0x00C72090, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Sorcerer's Staff",                    0x00C747A0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Storyteller's Staff",                 0x00C76EB0, DS3ItemCategory.WEAPON_UPGRADE_10),
-    DS3ItemData("Mendicant's Staff",                   0x00C795C0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    DS3ItemData("Mendicant's Staff",                   0x00C795C0, DS3ItemCategory.WEAPON_UPGRADE_10,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Man-grub's Staff",                    0x00C7E3E0, DS3ItemCategory.WEAPON_UPGRADE_5,
                 inject = True), # Covenant reward
     DS3ItemData("Archdeacon's Great Staff",            0x00C80AF0, DS3ItemCategory.WEAPON_UPGRADE_5,
@@ -420,7 +423,8 @@ _vanilla_items = flatten([
     DS3ItemData("Arbalest",                            0x00D662D0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Longbow",                             0x00D689E0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Dragonrider Bow",                     0x00D6B0F0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    DS3ItemData("Avelyn",                              0x00D6FF10, DS3ItemCategory.WEAPON_UPGRADE_10),
+    DS3ItemData("Avelyn",                              0x00D6FF10, DS3ItemCategory.WEAPON_UPGRADE_10,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Knight's Crossbow",                   0x00D72620, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Heavy Crossbow",                      0x00D74D30, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Darkmoon Longbow",                    0x00D79B50, DS3ItemCategory.WEAPON_UPGRADE_5),
@@ -442,7 +446,8 @@ _vanilla_items = flatten([
     DS3ItemData("Buckler",                             0x01312D00, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Small Leather Shield",                0x01315410, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Round Shield",                        0x0131A230, DS3ItemCategory.SHIELD_INFUSIBLE),
-    DS3ItemData("Large Leather Shield",                0x0131C940, DS3ItemCategory.SHIELD_INFUSIBLE),
+    DS3ItemData("Large Leather Shield",                0x0131C940, DS3ItemCategory.SHIELD_INFUSIBLE,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Hawkwood's Shield",                   0x01323E70, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Iron Round Shield",                   0x01326580, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Wooden Shield",                       0x0132DAB0, DS3ItemCategory.SHIELD_INFUSIBLE),
@@ -489,7 +494,8 @@ _vanilla_items = flatten([
     DS3ItemData("Lothric Knight Greatshield",          0x014FD890, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Cathedral Knight Greatshield",        0x014FFFA0, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Dragonslayer Greatshield",            0x01504DC0, DS3ItemCategory.SHIELD),
-    DS3ItemData("Moaning Shield",                      0x015074D0, DS3ItemCategory.SHIELD),
+    DS3ItemData("Moaning Shield",                      0x015074D0, DS3ItemCategory.SHIELD,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Yhorm's Greatshield",                 0x0150C2F0, DS3ItemCategory.SHIELD),
     DS3ItemData("Black Iron Greatshield",              0x0150EA00, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Wolf Knight's Greatshield",           0x01511110, DS3ItemCategory.SHIELD,
@@ -532,7 +538,8 @@ _vanilla_items = flatten([
     DS3ItemData("Assassin Trousers",                   0x115EFF78, DS3ItemCategory.ARMOR),
     DS3ItemData("Assassin Hood",                       0x11607A60, DS3ItemCategory.ARMOR),
     DS3ItemData("Assassin Armor",                      0x11607E48, DS3ItemCategory.ARMOR),
-    DS3ItemData("Xanthous Crown",                      0x116694E0, DS3ItemCategory.ARMOR),
+    DS3ItemData("Xanthous Crown",                      0x116694E0, DS3ItemCategory.ARMOR,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Xanthous Overcoat",                   0x116698C8, DS3ItemCategory.ARMOR),
     DS3ItemData("Xanthous Gloves",                     0x11669CB0, DS3ItemCategory.ARMOR),
     DS3ItemData("Xanthous Trousers",                   0x1166A098, DS3ItemCategory.ARMOR),
@@ -989,7 +996,8 @@ _vanilla_items = flatten([
     DS3ItemData("Gold Pine Bundle",                    0x40000155, DS3ItemCategory.MISC).counts([6]),
     DS3ItemData("Rotten Pine Resin",                   0x40000157, DS3ItemCategory.MISC).counts([2, 4]),
     DS3ItemData("Homeward Bone",                       0x4000015E, DS3ItemCategory.MISC, filler = True).counts([2, 3, 6]),
-    DS3ItemData("Coiled Sword Fragment",               0x4000015F, DS3ItemCategory.MISC),
+    DS3ItemData("Coiled Sword Fragment",               0x4000015F, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Wolf's Blood Swordgrass",             0x4000016E, DS3ItemCategory.SKIP),
     DS3ItemData("Human Dregs",                         0x4000016F, DS3ItemCategory.SKIP),
     DS3ItemData("Forked Pale Tongue",                  0x40000170, DS3ItemCategory.SKIP),
@@ -1001,7 +1009,7 @@ _vanilla_items = flatten([
                 classification = ItemClassification.progression,
                 force_unique = True), # One is needed for Leonhard's quest
     DS3ItemData("Vertebra Shackle",                    0x40000176, DS3ItemCategory.MISC,
-                force_unique = True), # Allow one of these to trade to the crow
+                classification = ItemClassification.progression, force_unique = True), # Crow trade
     DS3ItemData("Sunlight Medal",                      0x40000177, DS3ItemCategory.SKIP),
     DS3ItemData("Dragon Head Stone",                   0x40000179, DS3ItemCategory.MISC),
     DS3ItemData("Dragon Torso Stone",                  0x4000017A, DS3ItemCategory.MISC),
@@ -1034,11 +1042,12 @@ _vanilla_items = flatten([
     DS3ItemData("Soul of a Champion",                  0x400001A3, DS3ItemCategory.MISC, souls = 25000),
     DS3ItemData("Soul of a Great Champion",            0x400001A4, DS3ItemCategory.MISC, souls = 50000),
     DS3ItemData("Seed of a Giant Tree",                0x400001B8, DS3ItemCategory.SKIP,
-                inject = True),
+                classification = ItemClassification.progression, inject = True), # Crow trade
     DS3ItemData("Mossfruit",                           0x400001C4, DS3ItemCategory.MISC, filler = True).counts([2]),
     DS3ItemData("Young White Branch",                  0x400001C6, DS3ItemCategory.MISC),
     DS3ItemData("Rusted Coin",                         0x400001C7, DS3ItemCategory.MISC, filler = True).counts([2]),
-    DS3ItemData("Siegbräu",                            0x400001C8, DS3ItemCategory.MISC),
+    DS3ItemData("Siegbräu",                            0x400001C8, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Rusted Gold Coin",                    0x400001C9, DS3ItemCategory.MISC, filler = True).counts([2, 3]),
     DS3ItemData("Blue Bug Pellet",                     0x400001CA, DS3ItemCategory.MISC, filler = True).counts([2]),
     DS3ItemData("Red Bug Pellet",                      0x400001CB, DS3ItemCategory.MISC, filler = True).counts([2, 3]),
@@ -1160,7 +1169,7 @@ _vanilla_items = flatten([
     DS3ItemData("Basin of Vows",                       0x40000845, DS3ItemCategory.KEY,
                 classification = ItemClassification.progression),
     DS3ItemData("Loretta's Bone",                      0x40000846, DS3ItemCategory.KEY,
-                classification = ItemClassification.useful),
+                classification = ItemClassification.progression),
     DS3ItemData("Braille Divine Tome of Carim",        0x40000847, DS3ItemCategory.MISC,
                 classification = ItemClassification.useful),
     DS3ItemData("Braille Divine Tome of Lothric",      0x40000848, DS3ItemCategory.MISC,

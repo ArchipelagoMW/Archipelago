@@ -503,6 +503,21 @@ class DarkSouls3World(World):
         self._add_location_rule("UG: Hornet Ring", "Small Lothric Banner")
         self._add_entrance_rule("Karla's Shop", "Jailer's Key Ring")
 
+        # List crow trades even though they never contain progression items so that the game knows
+        # what sphere they're in. This is especially useful for item smoothing.
+        self._add_location_rule("FSBT: Ring of Sacrifice", "Loretta's Bone")
+        self._add_location_rule("FSBT: Titanite Scale #1", "Avelyn")
+        self._add_location_rule("FSBT: Titanite Slab", "Coiled Sword Fragment")
+        self._add_location_rule("FSBT: Iron Leggings", "Seed of a Giant Tree")
+        self._add_location_rule("FSBT: Armor of the Sun", "Siegbräu")
+        self._add_location_rule("FSBT: Lucatiel's Mask", "Vertebra Shackle")
+        self._add_location_rule("FSBT: Lightning Gem", "Xanthous Crown")
+        self._add_location_rule("FSBT: Sunlight Shield", "Mendicant's Staff")
+        self._add_location_rule("FSBT: Titanite Scale #2", "Blacksmith Hammer")
+        self._add_location_rule("FSBT: Twinkling Titanite #3", "Large Leather Shield")
+        self._add_location_rule("FSBT: Blessed Gem", "Moaning Shield")
+        self._add_location_rule("FSBT: Hollow Gem", "Eleonora")
+
         # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
         # Grand Archives is available, so his shop will always be available one way or another.
         self._add_entrance_rule("Greirat's Shop", "Cell Key")
@@ -648,7 +663,10 @@ class DarkSouls3World(World):
         while len(unchecked_locations) > 0:
             sphere_locations = {loc for loc in unchecked_locations if state.can_reach(loc)}
             locations_by_sphere.append(self._shuffle(sphere_locations))
+
+            old_length = len(unchecked_locations)
             unchecked_locations.difference_update(sphere_locations)
+            if len(unchecked_locations) == old_length: break # Unreachable locations
 
             state.sweep_for_events(key_only=True, locations=unchecked_locations)
             for location in sphere_locations:
