@@ -48,6 +48,8 @@ class MuseDashWorld(World):
     # World Options
     game = "Muse Dash"
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = MuseDashOptions
+    options: MuseDashOptions
+
     topology_present = False
     web = MuseDashWebWorld()
 
