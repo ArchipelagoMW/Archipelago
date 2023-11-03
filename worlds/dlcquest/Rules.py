@@ -12,11 +12,11 @@ def create_event(player, event: str) -> DLCQuestItem:
 
 
 def has_enough_coin(player: int, coin: int):
-    return lambda state: state.prog_items[" coins", player] >= coin
+    return lambda state: state.prog_items[player][" coins"] >= coin
 
 
 def has_enough_coin_freemium(player: int, coin: int):
-    return lambda state: state.prog_items[" coins freemium", player] >= coin
+    return lambda state: state.prog_items[player][" coins freemium"] >= coin
 
 
 def set_rules(world, player, World_Options: Options.DLCQuestOptions):

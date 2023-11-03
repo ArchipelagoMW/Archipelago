@@ -325,15 +325,15 @@ class MultiWorld():
     def player_ids(self) -> Tuple[int, ...]:
         return tuple(range(1, self.players + 1))
 
-    @functools.lru_cache()
+    @Utils.cache_self1
     def get_game_players(self, game_name: str) -> Tuple[int, ...]:
         return tuple(player for player in self.player_ids if self.game[player] == game_name)
 
-    @functools.lru_cache()
+    @Utils.cache_self1
     def get_game_groups(self, game_name: str) -> Tuple[int, ...]:
         return tuple(group_id for group_id in self.groups if self.game[group_id] == game_name)
 
-    @functools.lru_cache()
+    @Utils.cache_self1
     def get_game_worlds(self, game_name: str):
         return tuple(world for player, world in self.worlds.items() if
                      player not in self.groups and self.game[player] == game_name)
@@ -605,7 +605,7 @@ PathValue = Tuple[str, Optional["PathValue"]]
 
 
 class CollectionState():
-    prog_items: typing.Counter[Tuple[str, int]]
+    prog_items: Dict[int, Counter[str]]
     multiworld: MultiWorld
     reachable_regions: Dict[int, Set[Region]]
     blocked_connections: Dict[int, Set[Entrance]]
@@ -617,7 +617,7 @@ class CollectionState():
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
 
     def __init__(self, parent: MultiWorld):
-        self.prog_items = Counter()
+        self.prog_items = {player: Counter() for player in parent.player_ids}
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
         self.blocked_connections = {player: set() for player in parent.get_all_ids()}
@@ -665,7 +665,7 @@ class CollectionState():
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.multiworld)
-        ret.prog_items = self.prog_items.copy()
+        ret.prog_items = copy.deepcopy(self.prog_items)
         ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
                                  self.reachable_regions}
         ret.blocked_connections = {player: copy.copy(self.blocked_connections[player]) for player in
@@ -709,23 +709,23 @@ class CollectionState():
                 self.collect(event.item, True, event)
 
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.prog_items[item, player] >= count
+        return self.prog_items[player][item] >= count
 
     def has_all(self, items: Set[str], player: int) -> bool:
         """Returns True if each item name of items is in state at least once."""
-        return all(self.prog_items[item, player] for item in items)
+        return all(self.prog_items[player][item] for item in items)
 
     def has_any(self, items: Set[str], player: int) -> bool:
         """Returns True if at least one item name of items is in state at least once."""
-        return any(self.prog_items[item, player] for item in items)
+        return any(self.prog_items[player][item] for item in items)
 
     def count(self, item: str, player: int) -> int:
-        return self.prog_items[item, player]
+        return self.prog_items[player][item]
 
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
         found: int = 0
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += self.prog_items[item_name, player]
+            found += self.prog_items[player][item_name]
             if found >= count:
                 return True
         return False
@@ -733,11 +733,11 @@ class CollectionState():
     def count_group(self, item_name_group: str, player: int) -> int:
         found: int = 0
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += self.prog_items[item_name, player]
+            found += self.prog_items[player][item_name]
         return found
 
     def item_count(self, item: str, player: int) -> int:
-        return self.prog_items[item, player]
+        return self.prog_items[player][item]
 
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
         if location:
@@ -746,7 +746,7 @@ class CollectionState():
         changed = self.multiworld.worlds[item.player].collect(self, item)
 
         if not changed and event:
-            self.prog_items[item.name, item.player] += 1
+            self.prog_items[item.player][item.name] += 1
             changed = True
 
         self.stale[item.player] = True
@@ -920,7 +920,7 @@ class Region:
             self.locations.append(location_type(self.player, location, address, self))
 
     def connect(self, connecting_region: Region, name: Optional[str] = None,
-                rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
+                rule: Optional[Callable[[CollectionState], bool]] = None) -> entrance_type:
         """
         Connects this Region to another Region, placing the provided rule on the connection.
 
@@ -931,6 +931,7 @@ class Region:
         if rule:
             exit_.access_rule = rule
         exit_.connect(connecting_region)
+        return exit_
 
     def create_exit(self, name: str) -> Entrance:
         """

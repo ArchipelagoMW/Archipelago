@@ -55,7 +55,7 @@
                                     <td class="center-column" data-sort="{{ checks["Total"] }}">
                                       {{ checks["Total"] }}/{{ locations[player] | length }}
                                     </td>
-                                    <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
+                                    <td class="center-column">{{ "{0:.2f}".format(percent_total_checks_done[team][player]) }}</td>
                                     {%- if activity_timers[team, player] -%}
                                         <td class="center-column">{{ activity_timers[team, player].total_seconds() }}</td>
                                     {%- else -%}
@@ -72,7 +72,13 @@
                                     <td>All Games</td>
                                     <td>{{ completed_worlds }}/{{ players|length }} Complete</td>
                                     <td class="center-column">{{ players.values()|sum(attribute='Total') }}/{{ total_locations[team] }}</td>
-                                    <td class="center-column">{{ (players.values()|sum(attribute='Total') / total_locations[team] * 100) | int }}</td>
+                                    <td class="center-column">
+                                        {% if total_locations[team] == 0 %}
+                                            100
+                                        {% else %}
+                                            {{ "{0:.2f}".format(players.values()|sum(attribute='Total') / total_locations[team] * 100) }}
+                                        {% endif %}
+                                    </td>
                                     <td class="center-column last-activity"></td>
                                 </tr>
                             </tfoot>
