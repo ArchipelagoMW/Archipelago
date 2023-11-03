@@ -82,7 +82,7 @@ tool_upgrade_prices = {
 fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west]
 
 
-@dataclass(frozen=True, repr=False)
+@dataclass(frozen=False, repr=False)
 class StardewLogic:
     player: int
     options: StardewValleyOptions
@@ -99,6 +99,11 @@ class StardewLogic:
     quest_rules: Dict[str, StardewRule] = field(default_factory=dict)
     festival_rules: Dict[str, StardewRule] = field(default_factory=dict)
     special_order_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    any_weapon_rule: StardewRule = None
+    decent_weapon_rule: StardewRule = None
+    good_weapon_rule: StardewRule = None
+    great_weapon_rule: StardewRule = None
+    galaxy_weapon_rule: StardewRule = None
 
     def __post_init__(self):
         self.fish_rules.update({fish.name: self.can_catch_fish(fish) for fish in all_fish})
@@ -1250,31 +1255,29 @@ class StardewLogic:
         return self.received(Transportation.island_obelisk) | self.received(Transportation.boat_repair)
 
     def has_any_weapon(self) -> StardewRule:
-        return self.has_decent_weapon() | self.received(item.name for item in all_items if Group.WEAPON in item.groups)
+        if not self.any_weapon_rule:
+            self.any_weapon_rule = self.has_decent_weapon() | self.received(item.name for item in all_items if Group.WEAPON in item.groups)
+        return self.any_weapon_rule
 
     def has_decent_weapon(self) -> StardewRule:
-        return (self.has_good_weapon() |
-                self.received(item.name for item in all_items
-                              if Group.WEAPON in item.groups and
-                              (Group.MINES_FLOOR_50 in item.groups or Group.MINES_FLOOR_60 in item.groups)))
+        if not self.decent_weapon_rule:
+            self.decent_weapon_rule = self.has_good_weapon() | self.received(item.name for item in all_items if Group.WEAPON in item.groups and (Group.MINES_FLOOR_50 in item.groups or Group.MINES_FLOOR_60 in item.groups))
+        return self.decent_weapon_rule
 
     def has_good_weapon(self) -> StardewRule:
-        return ((self.has_great_weapon() |
-                 self.received(item.name for item in all_items
-                               if Group.WEAPON in item.groups and
-                               (Group.MINES_FLOOR_80 in item.groups or Group.MINES_FLOOR_90 in item.groups))) &
-                self.received("Adventurer's Guild"))
+        if not self.good_weapon_rule:
+            self.good_weapon_rule = self.has_great_weapon() | self.received(item.name for item in all_items if Group.WEAPON in item.groups and (Group.MINES_FLOOR_80 in item.groups or Group.MINES_FLOOR_90 in item.groups))
+        return self.good_weapon_rule
 
     def has_great_weapon(self) -> StardewRule:
-        return ((self.has_galaxy_weapon() |
-                 self.received(item.name for item in all_items
-                               if Group.WEAPON in item.groups and Group.MINES_FLOOR_110 in item.groups)) &
-                self.received("Adventurer's Guild"))
+        if not self.great_weapon_rule:
+            self.great_weapon_rule = self.has_galaxy_weapon() | self.received(item.name for item in all_items if Group.WEAPON in item.groups and Group.MINES_FLOOR_110 in item.groups)
+        return self.great_weapon_rule
 
     def has_galaxy_weapon(self) -> StardewRule:
-        return (self.received(item.name for item in all_items
-                              if Group.WEAPON in item.groups and Group.GALAXY_WEAPONS in item.groups) &
-                self.received("Adventurer's Guild"))
+        if not self.galaxy_weapon_rule:
+            self.galaxy_weapon_rule = self.received(item.name for item in all_items if Group.WEAPON in item.groups and Group.GALAXY_WEAPONS in item.groups)
+        return self.galaxy_weapon_rule
 
     def has_year_two(self) -> StardewRule:
         return self.has_lived_months(4)
