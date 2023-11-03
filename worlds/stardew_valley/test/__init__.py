@@ -74,6 +74,12 @@ def minimal_locations_maximal_items():
 
 
 @cache_argsless
+def default_options():
+    default = {}
+    return default
+
+
+@cache_argsless
 def allsanity_options_without_mods():
     allsanity = {
         Goal.internal_name: Goal.option_perfection,
