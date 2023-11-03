@@ -238,11 +238,17 @@ class TestFriendsanityNone(SVTestBase):
         # None is default
         return False
 
-    def test_no_friendsanity_items(self):
+    def test_friendsanity_none(self):
+        with self.subTest("No Items"):
+            self.check_no_friendsanity_items()
+        with self.subTest("No Locations"):
+            self.check_no_friendsanity_locations()
+
+    def check_no_friendsanity_items(self):
         for item in self.multiworld.itempool:
             self.assertFalse(item.name.endswith(" <3"))
 
-    def test_no_friendsanity_locations(self):
+    def check_no_friendsanity_locations(self):
         for location_name in get_real_location_names(self, self.multiworld):
             self.assertFalse(location_name.startswith("Friendsanity"))
 
@@ -255,14 +261,20 @@ class TestFriendsanityBachelors(SVTestBase):
     bachelors = {"Harvey", "Elliott", "Sam", "Alex", "Shane", "Sebastian", "Emily", "Haley", "Leah", "Abigail", "Penny",
                  "Maru"}
 
-    def test_friendsanity_only_bachelor_items(self):
+    def test_friendsanity_only_bachelors(self):
+        with self.subTest("Items are valid"):
+            self.check_only_bachelors_items()
+        with self.subTest("Locations are valid"):
+            self.check_only_bachelors_locations()
+
+    def check_only_bachelors_items(self):
         suffix = " <3"
         for item in self.multiworld.itempool:
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
                 self.assertIn(villager_name, self.bachelors)
 
-    def test_friendsanity_only_bachelor_locations(self):
+    def check_only_bachelors_locations(self):
         prefix = "Friendsanity: "
         suffix = " <3"
         for location_name in get_real_location_names(self, self.multiworld):
@@ -283,14 +295,20 @@ class TestFriendsanityStartingNpcs(SVTestBase):
     }
     excluded_npcs = {"Leo", "Krobus", "Dwarf", "Sandy", "Kent"}
 
-    def test_friendsanity_only_starting_npcs_items(self):
+    def test_friendsanity_only_starting_npcs(self):
+        with self.subTest("Items are valid"):
+            self.check_only_starting_npcs_items()
+        with self.subTest("Locations are valid"):
+            self.check_only_starting_npcs_locations()
+
+    def check_only_starting_npcs_items(self):
         suffix = " <3"
         for item in self.multiworld.itempool:
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
                 self.assertNotIn(villager_name, self.excluded_npcs)
 
-    def test_friendsanity_only_starting_npcs_locations(self):
+    def check_only_starting_npcs_locations(self):
         prefix = "Friendsanity: "
         suffix = " <3"
         for location_name in get_real_location_names(self, self.multiworld):
@@ -313,43 +331,70 @@ class TestFriendsanityStartingNpcs(SVTestBase):
 class TestFriendsanityAllNpcs(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all,
-        options.FriendsanityHeartSize.internal_name: 1,
+        options.FriendsanityHeartSize.internal_name: 4,
     }
 
-    def test_friendsanity_all_items(self):
+    def test_friendsanity_all_npcs(self):
+        with self.subTest("Items are valid"):
+            self.check_items_are_valid()
+        with self.subTest("Correct number of items"):
+            self.check_correct_number_of_items()
+        with self.subTest("Locations are valid"):
+            self.check_locations_are_valid()
+
+    def check_items_are_valid(self):
         suffix = " <3"
         for item in self.multiworld.itempool:
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
                 self.assertTrue(villager_name in all_villagers_by_mod_by_name[ModNames.vanilla] or villager_name == "Pet")
 
-    def test_friendsanity_all_locations(self):
+    def check_correct_number_of_items(self):
+        suffix = " <3"
+        item_names = [item.name for item in self.multiworld.itempool]
+        for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
+            heart_item_name = f"{villager_name}{suffix}"
+            number_heart_items = item_names.count(heart_item_name)
+            if all_villagers_by_name[villager_name].bachelor:
+                self.assertEqual(number_heart_items, 2)
+            else:
+                self.assertEqual(number_heart_items, 3)
+        self.assertEqual(item_names.count("Pet <3"), 2)
+
+    def check_locations_are_valid(self):
         prefix = "Friendsanity: "
         suffix = " <3"
         for location_name in get_real_location_names(self, self.multiworld):
-            if location_name.startswith(prefix):
-                name_no_prefix = location_name[len(prefix):]
-                name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
-                parts = name_trimmed.split(" ")
-                name = parts[0]
-                hearts = parts[1]
-                self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
-                if name == "Pet":
-                    self.assertLessEqual(int(hearts), 5)
-                elif all_villagers_by_name[name].bachelor:
-                    self.assertLessEqual(int(hearts), 8)
-                else:
-                    self.assertLessEqual(int(hearts), 10)
+            if not location_name.startswith(prefix):
+                continue
+            name_no_prefix = location_name[len(prefix):]
+            name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+            parts = name_trimmed.split(" ")
+            name = parts[0]
+            hearts = int(parts[1])
+            self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
+            if name == "Pet":
+                self.assertTrue(hearts == 4 or hearts == 5)
+            elif all_villagers_by_name[name].bachelor:
+                self.assertTrue(hearts == 4 or hearts == 8 or hearts == 12 or hearts == 14)
+            else:
+                self.assertTrue(hearts == 4 or hearts == 8 or hearts == 10)
 
 
 class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all,
-        options.FriendsanityHeartSize.internal_name: 1,
+        options.FriendsanityHeartSize.internal_name: 4,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
     }
 
-    def test_friendsanity_all_items(self):
+    def test_friendsanity_all_npcs_exclude_island(self):
+        with self.subTest("Items"):
+            self.check_items()
+        with self.subTest("Locations"):
+            self.check_locations()
+
+    def check_items(self):
         suffix = " <3"
         for item in self.multiworld.itempool:
             if item.name.endswith(suffix):
@@ -357,7 +402,7 @@ class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
                 self.assertNotEqual(villager_name, "Leo")
                 self.assertTrue(villager_name in all_villagers_by_mod_by_name[ModNames.vanilla] or villager_name == "Pet")
 
-    def test_friendsanity_all_locations(self):
+    def check_locations(self):
         prefix = "Friendsanity: "
         suffix = " <3"
         for location_name in get_real_location_names(self, self.multiworld):
@@ -377,84 +422,28 @@ class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
                     self.assertLessEqual(int(hearts), 10)
 
 
-class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
+class TestFriendsanityHeartSize3(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.FriendsanityHeartSize.internal_name: 1,
+        options.FriendsanityHeartSize.internal_name: 3,
     }
 
-    def test_friendsanity_all_with_marriage_items(self):
+    def test_friendsanity_all_npcs_with_marriage(self):
+        with self.subTest("Items are valid"):
+            self.check_items_are_valid()
+        with self.subTest("Correct number of items"):
+            self.check_correct_number_of_items()
+        with self.subTest("Locations are valid"):
+            self.check_locations_are_valid()
+
+    def check_items_are_valid(self):
         suffix = " <3"
         for item in self.multiworld.itempool:
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
                 self.assertTrue(villager_name in all_villagers_by_mod_by_name[ModNames.vanilla] or villager_name == "Pet")
 
-    def test_friendsanity_all_with_marriage_locations(self):
-        prefix = "Friendsanity: "
-        suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
-            if location_name.startswith(prefix):
-                name_no_prefix = location_name[len(prefix):]
-                name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
-                parts = name_trimmed.split(" ")
-                name = parts[0]
-                hearts = parts[1]
-                self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
-                if name == "Pet":
-                    self.assertLessEqual(int(hearts), 5)
-                elif all_villagers_by_name[name].bachelor:
-                    self.assertLessEqual(int(hearts), 14)
-                else:
-                    self.assertLessEqual(int(hearts), 10)
-
-
-"""  # Assuming math is correct if we check 2 points
-class TestFriendsanityAllNpcsWithMarriageHeartSize2(SVTestBase):
-    options = {
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.FriendsanityHeartSize.internal_name: 2,
-    }
-
-    def test_friendsanity_all_with_marriage_items(self):
-        suffix = " <3"
-        item_names = [item.name for item in self.multiworld.itempool]
-        for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
-            heart_item_name = f"{villager_name}{suffix}"
-            number_heart_items = item_names.count(heart_item_name)
-            if all_villagers_by_name[villager_name].bachelor:
-                self.assertEqual(number_heart_items, 7)
-            else:
-                self.assertEqual(number_heart_items, 5)
-        self.assertEqual(item_names.count("Pet <3"), 3)
-
-    def test_friendsanity_all_with_marriage_locations(self):
-        prefix = "Friendsanity: "
-        suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
-            if not location_name.startswith(prefix):
-                continue
-            name_no_prefix = location_name[len(prefix):]
-            name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
-            parts = name_trimmed.split(" ")
-            name = parts[0]
-            hearts = int(parts[1])
-            self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
-            if name == "Pet":
-                self.assertTrue(hearts == 2 or hearts == 4 or hearts == 5)
-            elif all_villagers_by_name[name].bachelor:
-                self.assertTrue(hearts == 2 or hearts == 4 or hearts == 6 or hearts == 8 or hearts == 10 or hearts == 12 or hearts == 14)
-            else:
-                self.assertTrue(hearts == 2 or hearts == 4 or hearts == 6 or hearts == 8 or hearts == 10)
-
-
-class TestFriendsanityAllNpcsWithMarriageHeartSize3(SVTestBase):
-    options = {
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.FriendsanityHeartSize.internal_name: 3,
-    }
-
-    def test_friendsanity_all_with_marriage_items(self):
+    def check_correct_number_of_items(self):
         suffix = " <3"
         item_names = [item.name for item in self.multiworld.itempool]
         for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
@@ -466,7 +455,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize3(SVTestBase):
                 self.assertEqual(number_heart_items, 4)
         self.assertEqual(item_names.count("Pet <3"), 2)
 
-    def test_friendsanity_all_with_marriage_locations(self):
+    def check_locations_are_valid(self):
         prefix = "Friendsanity: "
         suffix = " <3"
         for location_name in get_real_location_names(self, self.multiworld):
@@ -486,52 +475,28 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize3(SVTestBase):
                 self.assertTrue(hearts == 3 or hearts == 6 or hearts == 9 or hearts == 10)
 
 
-class TestFriendsanityAllNpcsWithMarriageHeartSize4(SVTestBase):
-    options = {
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.FriendsanityHeartSize.internal_name: 4,
-    }
-
-    def test_friendsanity_all_with_marriage_items(self):
-        suffix = " <3"
-        item_names = [item.name for item in self.multiworld.itempool]
-        for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
-            heart_item_name = f"{villager_name}{suffix}"
-            number_heart_items = item_names.count(heart_item_name)
-            if all_villagers_by_name[villager_name].bachelor:
-                self.assertEqual(number_heart_items, 4)
-            else:
-                self.assertEqual(number_heart_items, 3)
-        self.assertEqual(item_names.count("Pet <3"), 2)
-
-    def test_friendsanity_all_with_marriage_locations(self):
-        prefix = "Friendsanity: "
-        suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
-            if not location_name.startswith(prefix):
-                continue
-            name_no_prefix = location_name[len(prefix):]
-            name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
-            parts = name_trimmed.split(" ")
-            name = parts[0]
-            hearts = int(parts[1])
-            self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
-            if name == "Pet":
-                self.assertTrue(hearts == 4 or hearts == 5)
-            elif all_villagers_by_name[name].bachelor:
-                self.assertTrue(hearts == 4 or hearts == 8 or hearts == 12 or hearts == 14)
-            else:
-                self.assertTrue(hearts == 4 or hearts == 8 or hearts == 10)
-"""
-
-
-class TestFriendsanityAllNpcsWithMarriageHeartSize5(SVTestBase):
+class TestFriendsanityHeartSize5(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.FriendsanityHeartSize.internal_name: 5,
     }
 
-    def test_friendsanity_all_with_marriage_items(self):
+    def test_friendsanity_all_npcs_with_marriage(self):
+        with self.subTest("Items are valid"):
+            self.check_items_are_valid()
+        with self.subTest("Correct number of items"):
+            self.check_correct_number_of_items()
+        with self.subTest("Locations are valid"):
+            self.check_locations_are_valid()
+
+    def check_items_are_valid(self):
+        suffix = " <3"
+        for item in self.multiworld.itempool:
+            if item.name.endswith(suffix):
+                villager_name = item.name[:item.name.index(suffix)]
+                self.assertTrue(villager_name in all_villagers_by_mod_by_name[ModNames.vanilla] or villager_name == "Pet")
+
+    def check_correct_number_of_items(self):
         suffix = " <3"
         item_names = [item.name for item in self.multiworld.itempool]
         for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
@@ -543,7 +508,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize5(SVTestBase):
                 self.assertEqual(number_heart_items, 2)
         self.assertEqual(item_names.count("Pet <3"), 1)
 
-    def test_friendsanity_all_with_marriage_locations(self):
+    def check_locations_are_valid(self):
         prefix = "Friendsanity: "
         suffix = " <3"
         for location_name in get_real_location_names(self, self.multiworld):
