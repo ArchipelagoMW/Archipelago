@@ -109,6 +109,18 @@ class UpgradeLocationsOption(Choice):
     default = 3
 
 
+class UpgradedWeaponLocationsOption(Choice):
+    """Where to randomize upgraded weapons (if they're enabled)
+
+    * Anywhere: Upgraded weapons are distributed totally randomly throughout the multiworld.
+    * Smooth: More upgraded weapons appear deeper in the game.
+    """
+    display_name = "Upgraded Weapon Locations"
+    option_anywhere = 2
+    option_smooth = 3
+    default = 3
+
+
 class RandomizeStartingLoadout(DefaultOnToggle):
     """Randomizes the equipment characters begin with."""
     display_name = "Randomize Starting Loadout"
@@ -353,6 +365,7 @@ class DarkSouls3Options(PerGameCommonOptions):
     enable_health_locations: RandomizeHealthLocations
     soul_locations: SoulLocationsOption
     upgrade_locations: UpgradeLocationsOption
+    upgraded_weapon_locations: UpgradedWeaponLocationsOption
     random_starting_loadout: RandomizeStartingLoadout
     require_one_handed_starting_weapons: RequireOneHandedStartingWeapons
     pool_type: PoolTypeOption

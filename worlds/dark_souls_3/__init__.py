@@ -1,6 +1,7 @@
 # world/dark_souls_3/__init__.py
 from collections.abc import Sequence
 import logging
+from collections import defaultdict
 from typing import Dict, Set, List, Optional, TextIO, Union
 import re
 
@@ -13,7 +14,7 @@ from worlds.generic.Rules import CollectionRule, set_rule, add_rule, add_item_ru
 from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups, region_order
-from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption, SoulLocationsOption, UpgradeLocationsOption
+from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption, SoulLocationsOption, UpgradeLocationsOption, UpgradedWeaponLocationsOption
 
 
 class DarkSouls3Web(WebWorld):
@@ -429,8 +430,7 @@ class DarkSouls3World(World):
             if self.multiworld.random.randint(0, 99) < infusion_percentage:
                 data = data.infuse(self.multiworld.random.choice(list(Infusion)))
 
-        return DarkSouls3Item.from_data(
-            self.player, data, classification=classification)
+        return DarkSouls3Item(self.player, data, classification=classification)
 
 
     def get_filler_item_name(self) -> str:
@@ -663,28 +663,21 @@ class DarkSouls3World(World):
             if self.is_location_available(location)
         ]
 
-        def smooth_items(names: Set[str], shuffled: Optional[Set[str]] = None) -> None:
-            """Rearrange all items with a given base name to the order they appear in the base game.
+        def smooth_items(item_order: List[Union[DS3ItemData, DarkSouls3Item]]) -> None:
+            """Rearrange all items in item_order to match that order.
 
-            If a shuffle set is passed, items from that list will also be randomized, but they will
-            first be shuffled amongst themselves.
+            Note: this requires that item_order exactly matches the number of placed items from this
+            world matching the given names.
             """
 
-            shuffled = shuffled or set()
-            shuffled_order = self._shuffle(shuffled)
-            item_order: List[DS3ItemData] = []
-            for item in all_item_order:
-                if item.base_name in names:
-                    item_order.append(item)
-                elif item.base_name in shuffled:
-                    item_order.append(item_dictionary[shuffled_order.pop(0)])
+            names = {item.name for item in item_order}
 
             for i, all_locations in enumerate(locations_by_sphere):
                 locations = [
                     loc for loc in all_locations
                     if loc.item.player == self.player
                     and not loc.locked
-                    and loc.item.base_name in names
+                    and loc.item.name in names
                 ]
 
                 # Check the game, not the player, because we know how to sort within regions for DS3
@@ -696,29 +689,55 @@ class DarkSouls3World(World):
                 # Give offworld regions the last (best) items within a given sphere
                 for location in onworld + offworld:
                     new_item = self._pop_item(location, item_order)
-                    location.item.name = new_item.name
-                    location.item.base_name = new_item.base_name
-                    location.item.ds3_code = new_item.ds3_code
-                    location.item.count = new_item.count
+                    if isinstance(new_item, DarkSouls3Item):
+                        location.item = new_item
+                        new_item.location = location
+                    else:
+                        location.item.name = new_item.name
+                        location.item.base_name = new_item.base_name
+                        location.item.ds3_code = new_item.ds3_code
+                        location.item.count = new_item.count
 
         if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_smooth:
-            smooth_items({
+            base_names = {
                 "Titanite Shard", "Large Titanite Shard", "Titanite Chunk", "Titanite Slab",
                 "Titanite Scale", "Twinkling Titanite", "Farron Coal", "Sage's Coal", "Giant's Coal",
                 "Profaned Coal"
-            })
+            }
+            smooth_items([item for item in all_item_order if item.base_name in base_names])
 
         if self.multiworld.soul_locations[self.player] == SoulLocationsOption.option_smooth:
-            smooth_items({
-                item.name for item in item_dictionary.values()
-                if item.souls and (item.category != DS3ItemCategory.BOSS or item.souls < 10000)
-            }, shuffled = {
-                # Larger boss souls are all worth the same general range, so let them appear in any
-                # order.
+            # Shuffle larger boss sould among themselves because they're all worth 10-20k souls in
+            # no particular order and that's a lot more interesting than getting them in the same
+            # order every single run.
+            shuffled = {
                 item.name for item in item_dictionary.values()
                 if item.category == DS3ItemCategory.BOSS and item.souls and item.souls >= 10000
-            })
-                
+            }
+            shuffled_order = self._shuffle(shuffled)
+            item_order: List[DS3ItemData] = []
+            for item in all_item_order:
+                if not item.souls: continue
+                if item.base_name in shuffled:
+                    item_order.append(item_dictionary[shuffled_order.pop(0)])
+                else:
+                    item_order.append(item)
+
+            order_names = [item.name for item in item_order]
+            location_names = [loc.item.name for loc in self.multiworld.get_locations() if loc.item.name in order_names]
+
+            smooth_items(item_order)
+
+        if self.multiworld.upgraded_weapon_locations[self.player] == UpgradedWeaponLocationsOption.option_smooth:
+            upgraded_weapons = [
+                location.item
+                for location in self.multiworld.get_locations()
+                if location.item.player == self.player
+                and location.item.level and location.item.level > 0
+            ]
+            upgraded_weapons.sort(key=lambda item: item.level)
+            smooth_items(upgraded_weapons)
+
 
     def _shuffle(self, seq: Sequence) -> Sequence:
         """Returns a shuffled copy of a sequence."""

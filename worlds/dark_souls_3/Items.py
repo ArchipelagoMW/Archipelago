@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 import dataclasses
 from enum import IntEnum
-from typing import ClassVar, Generator, List, Optional, Set
+from typing import ClassVar, Generator, List, Optional, Set, Union
 
 from BaseClasses import Item, ItemClassification
 from Utils import flatten
@@ -190,32 +190,29 @@ class DS3ItemData():
 
 class DarkSouls3Item(Item):
     game: str = "Dark Souls III"
-    ds3_code = int
-    count: int = 1
-    souls: Optional[int] = None
+    ds3_code: int
+    count: int
+    souls: Optional[int]
+    category: DS3ItemCategory
     base_name: str
+
+    @property
+    def level(self) -> Union[int, None]:
+        """This item's upgrade level, if it's a weapon."""
+        return self.ds3_code % 100 if self.category.upgrade_level else None
 
     def __init__(
             self,
-            name: str,
-            classification: ItemClassification,
-            code: Optional[int],
-            player: int):
-        super().__init__(name, classification, code, player)
-        self.base_name = name
+            player: int,
+            data: DS3ItemData,
+            classification = None):
+        super().__init__(data.name, classification or data.classification, data.ap_code, player)
+        self.ds3_code = data.ds3_code
+        self.count = data.count
+        self.souls = data.souls
+        self.category = data.category
+        self.base_name = data.base_name
 
-    @staticmethod
-    def from_data(player: int, data: DS3ItemData, classification = None) -> "DarkSouls3Item":
-        item = DarkSouls3Item(
-            data.name,
-            classification or data.classification,
-            data.ap_code,
-            player)
-        item.count = data.count
-        item.souls = data.souls
-        item.base_name = data.base_name
-        item.ds3_code = data.ds3_code
-        return item
 
 _vanilla_items = flatten([
     # Ammunition
@@ -1015,12 +1012,12 @@ _vanilla_items = flatten([
                 classification = ItemClassification.progression),
     DS3ItemData("Fire Keeper Soul",                    0x40000186, DS3ItemCategory.MISC),
     # Allow souls up to 2k in value to be used as filler
-    DS3ItemData("Fading Soul",                         0x40000190, DS3ItemCategory.MISC, filler = True, souls = 50),
-    DS3ItemData("Soul of a Deserted Corpse",           0x40000191, DS3ItemCategory.MISC, filler = True, souls = 200),
-    DS3ItemData("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC, filler = True, souls = 400),
-    DS3ItemData("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC, filler = True, souls = 800),
-    DS3ItemData("Large Soul of an Unknown Traveler",   0x40000194, DS3ItemCategory.MISC, filler = True, souls = 1000),
-    DS3ItemData("Soul of a Nameless Soldier",          0x40000195, DS3ItemCategory.MISC, filler = True, souls = 2000),
+    DS3ItemData("Fading Soul",                         0x40000190, DS3ItemCategory.MISC, souls = 50),
+    DS3ItemData("Soul of a Deserted Corpse",           0x40000191, DS3ItemCategory.MISC, souls = 200),
+    DS3ItemData("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC, souls = 400),
+    DS3ItemData("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC, souls = 800),
+    DS3ItemData("Large Soul of an Unknown Traveler",   0x40000194, DS3ItemCategory.MISC, souls = 1000),
+    DS3ItemData("Soul of a Nameless Soldier",          0x40000195, DS3ItemCategory.MISC, souls = 2000),
     DS3ItemData("Large Soul of a Nameless Soldier",    0x40000196, DS3ItemCategory.MISC, souls = 3000),
     DS3ItemData("Soul of a Weary Warrior",             0x40000197, DS3ItemCategory.MISC, souls = 5000),
     DS3ItemData("Large Soul of a Weary Warrior",       0x40000198, DS3ItemCategory.MISC, souls = 8000),
