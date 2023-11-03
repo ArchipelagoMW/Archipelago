@@ -918,16 +918,12 @@ def distribute_planned(world: MultiWorld) -> None:
             world.random.shuffle(items)
             count = 0
             err: typing.List[str] = []
-            successful_pairs: typing.List[typing.Tuple[int, Item, Location]] = []  # int -> index in multiworld.itempool
-            claimed_indices: typing.Set[int] = set()
+            successful_pairs: typing.List[typing.Tuple[Item, Location]] = []
             for item_name in items:
-                index = None
-
                 if from_pool:
                     try:
-                        index, item = next(
-                            (i, item) for i, item in enumerate(world.itempool)
-                            if item.name == item_name and i not in claimed_indices)
+                        index, item = next((i, item) for i, item in enumerate(world.itempool) if item.name == item_name)
+                        world.itempool.pop(index)
                     except StopIteration:
                         warn(
                         f"Could not remove {item_name} from pool for {world.player_name[player]} as it's already missing from it.",
@@ -941,8 +937,7 @@ def distribute_planned(world: MultiWorld) -> None:
                         if not location.item:
                             if location.item_rule(item):
                                 if location.can_fill(world.state, item, False):
-                                    successful_pairs.append((index, item, location))
-                                    claimed_indices.add(index)
+                                    successful_pairs.append((item, location))
                                     candidates.remove(location)
                                     count = count + 1
                                     break
@@ -954,6 +949,9 @@ def distribute_planned(world: MultiWorld) -> None:
                             err.append(f"Cannot place {item_name} into already filled location {location}.")
                     else:
                         err.append(f"Mismatch between {item_name} and {location}, only one is an event.")
+                else:  # Execute if break statement wasn't hit: Placement was unsuccessful
+                    if from_pool:
+                        world.itempool.append(item)
                 if count == maxcount:
                     break
             if count < placement['count']['min']:
@@ -963,15 +961,12 @@ def distribute_planned(world: MultiWorld) -> None:
                     placement['force'])
 
             # Sort indices in reverse so we can remove them one by one
-            successful_pairs.sort(key=lambda index_and_placement: index_and_placement[0], reverse=True)
 
-            for (index, item, location) in successful_pairs:
+            for (item, location) in successful_pairs:
                 world.push_item(location, item, collect=False)
                 location.event = True  # flag location to be checked during fill
                 location.locked = True
                 logging.debug(f"Plando placed {item} at {location}")
-                if index is not None:
-                    world.itempool.pop(index)
 
         except Exception as e:
             raise Exception(
