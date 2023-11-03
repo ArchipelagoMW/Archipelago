@@ -29,15 +29,17 @@ class MultiworldTestBase(TestCase):
                     state.collect(location.item, True, location)
         return self.multiworld.has_beaten_game(state, 1)
 
-    def assertSteps(self, steps: Tuple[str, ...]):
+    def assertSteps(self, steps: Tuple[str, ...]) -> None:
+        world_types = set(self.multiworld.worlds.values())
         for step in steps:
-            for player, world in self.multiworld.worlds.items():
-                with self.subTest(f"stage_{step}"):
-                    stage_callable = getattr(world.__class__, f"stage_{step}", None)
-                    if stage_callable:
-                        stage_callable(self.multiworld)
+            for player in self.multiworld.worlds:
                 with self.subTest(step):
                     call_single(self.multiworld, step, player)
+            for world_type in sorted(world_types, key=lambda world: world.__name__):
+                with self.subTest(f"stage_{step}"):
+                    stage_callable = getattr(world_type, f"stage_{step}", None)
+                    if stage_callable:
+                        stage_callable(self.multiworld)
 
 
 class TestAllGamesMultiworld(MultiworldTestBase):
