@@ -134,12 +134,12 @@ class OSRSWorld(World):
     def generate_special_rules_for(self, entrance, region_row, outbound_region_name):
         # print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
         if outbound_region_name == "Cook's Guild":
-            item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
+            item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
             entrance.access_rule = lambda state: state.has(item_name, self.player) and\
                 self.can_reach_skill(state, "cooking", 32)
             return
         if outbound_region_name == "Crafting Guild":
-            item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
+            item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
             entrance.access_rule = lambda state:  state.has(item_name, self.player) and\
                 self.can_reach_skill(state, "crafting", 40)
             return
