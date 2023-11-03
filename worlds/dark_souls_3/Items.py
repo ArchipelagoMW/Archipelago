@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 import dataclasses
 from enum import IntEnum
-from typing import ClassVar, Generator, List, Optional
+from typing import ClassVar, Generator, List, Optional, Set, Union
 
 from BaseClasses import Item, ItemClassification
 from Utils import flatten
@@ -20,6 +20,54 @@ class DS3ItemCategory(IntEnum):
     KEY = 9
     BOSS = 10
     SKIP = 11
+
+    @property
+    def is_infusible(self) -> bool:
+        """Returns whether this category can be infused."""
+        return self in [
+            DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE,
+            DS3ItemCategory.SHIELD_INFUSIBLE
+        ]
+
+    @property
+    def upgrade_level(self) -> Optional[int]:
+        """The maximum upgrade level for this category, or None if it's not upgradable."""
+        if self == DS3ItemCategory.WEAPON_UPGRADE_5: return 5
+        if self in [
+            DS3ItemCategory.WEAPON_UPGRADE_10,
+            DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE
+        ]: return 10
+        return None
+
+
+@dataclass
+class Infusion(IntEnum):
+    """Infusions supported by Dark Souls III.
+
+    The value of each infusion is the number added to the base weapon's ID to get the infused ID.
+    """
+
+    HEAVY = 100
+    SHARP = 200
+    REFINED = 300
+    SIMPLE = 400
+    CRYSTAL = 500
+    FIRE = 600
+    CHAOS = 700
+    LIGHTNING = 800
+    DEEP = 900
+    DARK = 1000
+    POISON = 1100
+    BLOOD = 1200
+    RAW = 1300
+    BLESSED = 1400
+    HOLLOW = 1500
+
+    @property
+    def prefix(self):
+        """The prefix to add to a weapon name with this infusion."""
+        return self.name.title()
+
 
 class UsefulIf(IntEnum):
     """An enum that indicates when an item should be upgraded to ItemClassification.useful.
@@ -50,6 +98,9 @@ class DS3ItemData():
     ds3_code: int
     category: DS3ItemCategory
 
+    base_name: Optional[str] = None
+    """The name of the individual item, if this is a multi-item group."""
+
     classification: ItemClassification = ItemClassification.filler
     """How important this item is to the game progression."""
 
@@ -71,8 +122,8 @@ class DS3ItemData():
     difference.
     """
 
-    soul: bool = False
-    """Whether this is a consumable item that gives souls when used."""
+    souls: Set[int] = None
+    """If this is a consumable item that gives souls, the number of souls it gives."""
 
     useful_if: UsefulIf = UsefulIf.DEFAULT
     """Whether and when this item should be marked as "useful"."""
@@ -88,6 +139,7 @@ class DS3ItemData():
 
     def __post_init__(self):
         self.ap_code = DS3ItemData.__item_id
+        if not self.base_name: self.base_name = self.name
         DS3ItemData.__item_id += 1
 
     def counts(self, counts: List[int]) -> Generator["DS3ItemData", None, None]:
@@ -96,10 +148,38 @@ class DS3ItemData():
         for count in counts:
             yield dataclasses.replace(
                 self,
-                name = "{} x{}".format(self.name, count),
+                name = "{} x{}".format(self.base_name, count),
+                base_name = self.base_name,
                 count = count,
                 filler = False, # Don't count multiples as filler by default
             )
+
+    def infuse(self, infusion: Infusion) -> "DS3ItemData":
+        """Returns this item with the given infusion applied."""
+        if not self.category.is_infusible: raise f"{name} is not infusible."
+        if self.ds3_code % 10000 >= 100: raise f"{name} is already infused."
+
+        return dataclasses.replace(
+            self,
+            name = f"{infusion.prefix} {self.name}",
+            ds3_code = self.ds3_code + infusion.value,
+            base_name = self.base_name,
+            filler = False,
+        )
+
+    def upgrade(self, level: int) -> "DS3ItemData":
+        """Upgrades this item to the given level."""
+        if not self.category.upgrade_level: raise f"{name} is not upgradable."
+        if level > self.category.upgrade_level: raise f"{name} can't be upgraded to +{level}."
+        if self.ds3_code % 100 != 0: raise f"{name} is already upgraded."
+
+        return dataclasses.replace(
+            self,
+            name = f"{self.name} +{level}",
+            ds3_code = self.ds3_code + level,
+            base_name = self.base_name,
+            filler = False,
+        )
 
     def __hash__(self):
         return hash((name, count))
@@ -110,27 +190,29 @@ class DS3ItemData():
 
 class DarkSouls3Item(Item):
     game: str = "Dark Souls III"
-    count: int = 1
-    soul: bool = False
+    ds3_code: int
+    count: int
+    souls: Optional[int]
+    category: DS3ItemCategory
+    base_name: str
+
+    @property
+    def level(self) -> Union[int, None]:
+        """This item's upgrade level, if it's a weapon."""
+        return self.ds3_code % 100 if self.category.upgrade_level else None
 
     def __init__(
             self,
-            name: str,
-            classification: ItemClassification,
-            code: Optional[int],
-            player: int):
-        super().__init__(name, classification, code, player)
+            player: int,
+            data: DS3ItemData,
+            classification = None):
+        super().__init__(data.name, classification or data.classification, data.ap_code, player)
+        self.ds3_code = data.ds3_code
+        self.count = data.count
+        self.souls = data.souls
+        self.category = data.category
+        self.base_name = data.base_name
 
-    @staticmethod
-    def from_data(player: int, data: DS3ItemData, classification = None) -> "DarkSouls3Item":
-        item = DarkSouls3Item(
-            data.name,
-            classification or data.classification,
-            data.ap_code,
-            player)
-        item.count = data.count
-        item.soul = data.soul
-        return item
 
 _vanilla_items = flatten([
     # Ammunition
@@ -246,7 +328,8 @@ _vanilla_items = flatten([
     DS3ItemData("Thrall Axe",                          0x006C5660, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Dragonslayer Greataxe",               0x006C7D70, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Demon's Greataxe",                    0x006CA480, DS3ItemCategory.WEAPON_UPGRADE_5),
-    DS3ItemData("Eleonora",                            0x006CCB90, DS3ItemCategory.WEAPON_UPGRADE_5),
+    DS3ItemData("Eleonora",                            0x006CCB90, DS3ItemCategory.WEAPON_UPGRADE_5,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Man Serpent Hatchet",                 0x006D19B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Club",                                0x007A1200, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Mace",                                0x007A3910, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
@@ -264,7 +347,8 @@ _vanilla_items = flatten([
     DS3ItemData("Pickaxe",                             0x007DE290, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Dragon Tooth",                        0x007E09A0, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Smough's Great Hammer",               0x007E30B0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    DS3ItemData("Blacksmith Hammer",                   0x007E57C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    DS3ItemData("Blacksmith Hammer",                   0x007E57C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Morne's Great Hammer",                0x007E7ED0, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Spiked Mace",                         0x007EA5E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Spear",                               0x00895440, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
@@ -307,7 +391,8 @@ _vanilla_items = flatten([
     DS3ItemData("Talisman",                            0x00C72090, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Sorcerer's Staff",                    0x00C747A0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Storyteller's Staff",                 0x00C76EB0, DS3ItemCategory.WEAPON_UPGRADE_10),
-    DS3ItemData("Mendicant's Staff",                   0x00C795C0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    DS3ItemData("Mendicant's Staff",                   0x00C795C0, DS3ItemCategory.WEAPON_UPGRADE_10,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Man-grub's Staff",                    0x00C7E3E0, DS3ItemCategory.WEAPON_UPGRADE_5,
                 inject = True), # Covenant reward
     DS3ItemData("Archdeacon's Great Staff",            0x00C80AF0, DS3ItemCategory.WEAPON_UPGRADE_5,
@@ -338,7 +423,8 @@ _vanilla_items = flatten([
     DS3ItemData("Arbalest",                            0x00D662D0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Longbow",                             0x00D689E0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Dragonrider Bow",                     0x00D6B0F0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    DS3ItemData("Avelyn",                              0x00D6FF10, DS3ItemCategory.WEAPON_UPGRADE_10),
+    DS3ItemData("Avelyn",                              0x00D6FF10, DS3ItemCategory.WEAPON_UPGRADE_10,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Knight's Crossbow",                   0x00D72620, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Heavy Crossbow",                      0x00D74D30, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Darkmoon Longbow",                    0x00D79B50, DS3ItemCategory.WEAPON_UPGRADE_5),
@@ -360,7 +446,8 @@ _vanilla_items = flatten([
     DS3ItemData("Buckler",                             0x01312D00, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Small Leather Shield",                0x01315410, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Round Shield",                        0x0131A230, DS3ItemCategory.SHIELD_INFUSIBLE),
-    DS3ItemData("Large Leather Shield",                0x0131C940, DS3ItemCategory.SHIELD_INFUSIBLE),
+    DS3ItemData("Large Leather Shield",                0x0131C940, DS3ItemCategory.SHIELD_INFUSIBLE,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Hawkwood's Shield",                   0x01323E70, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Iron Round Shield",                   0x01326580, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Wooden Shield",                       0x0132DAB0, DS3ItemCategory.SHIELD_INFUSIBLE),
@@ -407,7 +494,8 @@ _vanilla_items = flatten([
     DS3ItemData("Lothric Knight Greatshield",          0x014FD890, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Cathedral Knight Greatshield",        0x014FFFA0, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Dragonslayer Greatshield",            0x01504DC0, DS3ItemCategory.SHIELD),
-    DS3ItemData("Moaning Shield",                      0x015074D0, DS3ItemCategory.SHIELD),
+    DS3ItemData("Moaning Shield",                      0x015074D0, DS3ItemCategory.SHIELD,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Yhorm's Greatshield",                 0x0150C2F0, DS3ItemCategory.SHIELD),
     DS3ItemData("Black Iron Greatshield",              0x0150EA00, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Wolf Knight's Greatshield",           0x01511110, DS3ItemCategory.SHIELD,
@@ -450,7 +538,8 @@ _vanilla_items = flatten([
     DS3ItemData("Assassin Trousers",                   0x115EFF78, DS3ItemCategory.ARMOR),
     DS3ItemData("Assassin Hood",                       0x11607A60, DS3ItemCategory.ARMOR),
     DS3ItemData("Assassin Armor",                      0x11607E48, DS3ItemCategory.ARMOR),
-    DS3ItemData("Xanthous Crown",                      0x116694E0, DS3ItemCategory.ARMOR),
+    DS3ItemData("Xanthous Crown",                      0x116694E0, DS3ItemCategory.ARMOR,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Xanthous Overcoat",                   0x116698C8, DS3ItemCategory.ARMOR),
     DS3ItemData("Xanthous Gloves",                     0x11669CB0, DS3ItemCategory.ARMOR),
     DS3ItemData("Xanthous Trousers",                   0x1166A098, DS3ItemCategory.ARMOR),
@@ -870,7 +959,7 @@ _vanilla_items = flatten([
     DS3ItemData("Roster of Knights",                   0x4000006C, DS3ItemCategory.SKIP),
     DS3ItemData("Cracked Red Eye Orb",                 0x4000006F, DS3ItemCategory.SKIP).counts([5]),
     DS3ItemData("Black Eye Orb",                       0x40000073, DS3ItemCategory.KEY,
-                classification = ItemClassification.useful),
+                classification = ItemClassification.progression),
     DS3ItemData("Divine Blessing",                     0x400000F0, DS3ItemCategory.MISC),
     DS3ItemData("Hidden Blessing",                     0x400000F1, DS3ItemCategory.MISC),
     DS3ItemData("Green Blossom",                       0x40000104, DS3ItemCategory.MISC, filler = True).counts([2, 3, 4]),
@@ -907,7 +996,8 @@ _vanilla_items = flatten([
     DS3ItemData("Gold Pine Bundle",                    0x40000155, DS3ItemCategory.MISC).counts([6]),
     DS3ItemData("Rotten Pine Resin",                   0x40000157, DS3ItemCategory.MISC).counts([2, 4]),
     DS3ItemData("Homeward Bone",                       0x4000015E, DS3ItemCategory.MISC, filler = True).counts([2, 3, 6]),
-    DS3ItemData("Coiled Sword Fragment",               0x4000015F, DS3ItemCategory.MISC),
+    DS3ItemData("Coiled Sword Fragment",               0x4000015F, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Wolf's Blood Swordgrass",             0x4000016E, DS3ItemCategory.SKIP),
     DS3ItemData("Human Dregs",                         0x4000016F, DS3ItemCategory.SKIP),
     DS3ItemData("Forked Pale Tongue",                  0x40000170, DS3ItemCategory.SKIP),
@@ -916,10 +1006,10 @@ _vanilla_items = flatten([
     DS3ItemData("Binoculars",                          0x40000173, DS3ItemCategory.MISC),
     DS3ItemData("Proof of a Concord Kept",             0x40000174, DS3ItemCategory.SKIP),
     DS3ItemData("Pale Tongue",                         0x40000175, DS3ItemCategory.MISC,
-                classification = ItemClassification.useful,
+                classification = ItemClassification.progression,
                 force_unique = True), # One is needed for Leonhard's quest
     DS3ItemData("Vertebra Shackle",                    0x40000176, DS3ItemCategory.MISC,
-                force_unique = True), # Allow one of these to trade to the crow
+                classification = ItemClassification.progression, force_unique = True), # Crow trade
     DS3ItemData("Sunlight Medal",                      0x40000177, DS3ItemCategory.SKIP),
     DS3ItemData("Dragon Head Stone",                   0x40000179, DS3ItemCategory.MISC),
     DS3ItemData("Dragon Torso Stone",                  0x4000017A, DS3ItemCategory.MISC),
@@ -929,33 +1019,35 @@ _vanilla_items = flatten([
     DS3ItemData("Twinkling Dragon Torso Stone",        0x40000184, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression),
     DS3ItemData("Fire Keeper Soul",                    0x40000186, DS3ItemCategory.MISC),
-    DS3ItemData("Fading Soul",                         0x40000190, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Deserted Corpse",           0x40000191, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of an Unknown Traveler",   0x40000194, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Soul of a Nameless Soldier",          0x40000195, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Nameless Soldier",    0x40000196, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Weary Warrior",             0x40000197, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Large Soul of a Weary Warrior",       0x40000198, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Crestfallen Knight",        0x40000199, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Crestfallen Knight",  0x4000019A, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Soul of a Proud Paladin",             0x4000019B, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Proud Paladin",       0x4000019C, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of an Intrepid Hero",            0x4000019D, DS3ItemCategory.MISC, filler = True, soul = True),
-    DS3ItemData("Large Soul of an Intrepid Hero",      0x4000019E, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Seasoned Warrior",          0x4000019F, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Large Soul of a Seasoned Warrior",    0x400001A0, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of an Old Hand",                 0x400001A1, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Venerable Old Hand",        0x400001A2, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Champion",                  0x400001A3, DS3ItemCategory.MISC, soul = True),
-    DS3ItemData("Soul of a Great Champion",            0x400001A4, DS3ItemCategory.MISC, soul = True),
+    # Allow souls up to 2k in value to be used as filler
+    DS3ItemData("Fading Soul",                         0x40000190, DS3ItemCategory.MISC, souls = 50),
+    DS3ItemData("Soul of a Deserted Corpse",           0x40000191, DS3ItemCategory.MISC, souls = 200),
+    DS3ItemData("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC, souls = 400),
+    DS3ItemData("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC, souls = 800),
+    DS3ItemData("Large Soul of an Unknown Traveler",   0x40000194, DS3ItemCategory.MISC, souls = 1000),
+    DS3ItemData("Soul of a Nameless Soldier",          0x40000195, DS3ItemCategory.MISC, souls = 2000),
+    DS3ItemData("Large Soul of a Nameless Soldier",    0x40000196, DS3ItemCategory.MISC, souls = 3000),
+    DS3ItemData("Soul of a Weary Warrior",             0x40000197, DS3ItemCategory.MISC, souls = 5000),
+    DS3ItemData("Large Soul of a Weary Warrior",       0x40000198, DS3ItemCategory.MISC, souls = 8000),
+    DS3ItemData("Soul of a Crestfallen Knight",        0x40000199, DS3ItemCategory.MISC, souls = 10000),
+    DS3ItemData("Large Soul of a Crestfallen Knight",  0x4000019A, DS3ItemCategory.MISC, souls = 20000),
+    DS3ItemData("Soul of a Proud Paladin",             0x4000019B, DS3ItemCategory.MISC, souls = 500),
+    DS3ItemData("Large Soul of a Proud Paladin",       0x4000019C, DS3ItemCategory.MISC, souls = 1000),
+    DS3ItemData("Soul of an Intrepid Hero",            0x4000019D, DS3ItemCategory.MISC, souls = 2000),
+    DS3ItemData("Large Soul of an Intrepid Hero",      0x4000019E, DS3ItemCategory.MISC, souls = 2500),
+    DS3ItemData("Soul of a Seasoned Warrior",          0x4000019F, DS3ItemCategory.MISC, souls = 5000),
+    DS3ItemData("Large Soul of a Seasoned Warrior",    0x400001A0, DS3ItemCategory.MISC, souls = 7500),
+    DS3ItemData("Soul of an Old Hand",                 0x400001A1, DS3ItemCategory.MISC, souls = 12500),
+    DS3ItemData("Soul of a Venerable Old Hand",        0x400001A2, DS3ItemCategory.MISC, souls = 20000),
+    DS3ItemData("Soul of a Champion",                  0x400001A3, DS3ItemCategory.MISC, souls = 25000),
+    DS3ItemData("Soul of a Great Champion",            0x400001A4, DS3ItemCategory.MISC, souls = 50000),
     DS3ItemData("Seed of a Giant Tree",                0x400001B8, DS3ItemCategory.SKIP,
-                inject = True),
+                classification = ItemClassification.progression, inject = True), # Crow trade
     DS3ItemData("Mossfruit",                           0x400001C4, DS3ItemCategory.MISC, filler = True).counts([2]),
     DS3ItemData("Young White Branch",                  0x400001C6, DS3ItemCategory.MISC),
     DS3ItemData("Rusted Coin",                         0x400001C7, DS3ItemCategory.MISC, filler = True).counts([2]),
-    DS3ItemData("Siegbräu",                            0x400001C8, DS3ItemCategory.MISC),
+    DS3ItemData("Siegbräu",                            0x400001C8, DS3ItemCategory.MISC,
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Rusted Gold Coin",                    0x400001C9, DS3ItemCategory.MISC, filler = True).counts([2, 3]),
     DS3ItemData("Blue Bug Pellet",                     0x400001CA, DS3ItemCategory.MISC, filler = True).counts([2]),
     DS3ItemData("Red Bug Pellet",                      0x400001CB, DS3ItemCategory.MISC, filler = True).counts([2, 3]),
@@ -969,45 +1061,45 @@ _vanilla_items = flatten([
     DS3ItemData("Very good! Carving",                  0x4000020A, DS3ItemCategory.SKIP),
     DS3ItemData("I'm sorry Carving",                   0x4000020B, DS3ItemCategory.SKIP),
     DS3ItemData("Help me! Carving",                    0x4000020C, DS3ItemCategory.SKIP),
-    DS3ItemData("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.BOSS, souls = 10000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.BOSS, souls = 3000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Consumed Oceiros",            0x400002CE, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Consumed Oceiros",            0x400002CE, DS3ItemCategory.BOSS, souls = 12000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Boreal Valley Vordt",         0x400002CF, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Boreal Valley Vordt",         0x400002CF, DS3ItemCategory.BOSS, souls = 2000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Old Demon King",          0x400002D0, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Old Demon King",          0x400002D0, DS3ItemCategory.BOSS, souls = 10000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Dragonslayer Armour",         0x400002D1, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Dragonslayer Armour",         0x400002D1, DS3ItemCategory.BOSS, souls = 15000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Nameless King",           0x400002D2, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Nameless King",           0x400002D2, DS3ItemCategory.BOSS, souls = 16000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Pontiff Sulyvahn",            0x400002D4, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Pontiff Sulyvahn",            0x400002D4, DS3ItemCategory.BOSS, souls = 12000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Aldrich",                     0x400002D5, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Aldrich",                     0x400002D5, DS3ItemCategory.BOSS, souls = 15000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of High Lord Wolnir",            0x400002D6, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of High Lord Wolnir",            0x400002D6, DS3ItemCategory.BOSS, souls = 10000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Rotted Greatwood",        0x400002D7, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Rotted Greatwood",        0x400002D7, DS3ItemCategory.BOSS, souls = 3000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Rosaria",                     0x400002D8, DS3ItemCategory.MISC, soul = True,
+    DS3ItemData("Soul of Rosaria",                     0x400002D8, DS3ItemCategory.MISC, souls = 5000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Deacons of the Deep",     0x400002D9, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Deacons of the Deep",     0x400002D9, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of Yhorm the Giant",             0x400002DC, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of Yhorm the Giant",             0x400002DC, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of the Lords",                   0x400002DD, DS3ItemCategory.MISC, soul = True,
+    DS3ItemData("Soul of the Lords",                   0x400002DD, DS3ItemCategory.MISC, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of a Demon",                     0x400002E3, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of a Demon",                     0x400002E3, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
-    DS3ItemData("Soul of a Stray Demon",               0x400002E7, DS3ItemCategory.BOSS, soul = True,
+    DS3ItemData("Soul of a Stray Demon",               0x400002E7, DS3ItemCategory.BOSS, souls = 20000,
                 classification = ItemClassification.useful),
     DS3ItemData("Titanite Shard",                      0x400003E8, DS3ItemCategory.MISC).counts([2]),
     DS3ItemData("Large Titanite Shard",                0x400003E9, DS3ItemCategory.MISC).counts([2, 3]),
@@ -1077,7 +1169,7 @@ _vanilla_items = flatten([
     DS3ItemData("Basin of Vows",                       0x40000845, DS3ItemCategory.KEY,
                 classification = ItemClassification.progression),
     DS3ItemData("Loretta's Bone",                      0x40000846, DS3ItemCategory.KEY,
-                classification = ItemClassification.useful),
+                classification = ItemClassification.progression),
     DS3ItemData("Braille Divine Tome of Carim",        0x40000847, DS3ItemCategory.MISC,
                 classification = ItemClassification.useful),
     DS3ItemData("Braille Divine Tome of Lothric",      0x40000848, DS3ItemCategory.MISC,
@@ -1377,10 +1469,10 @@ _dlc_items = flatten([
     DS3ItemData("Filianore's Spear Ornament",       0x4000017B, DS3ItemCategory.SKIP),
     DS3ItemData("Ritual Spear Fragment",            0x4000028A, DS3ItemCategory.SKIP),
     DS3ItemData("Divine Spear Fragment",            0x4000028B, DS3ItemCategory.SKIP),
-    DS3ItemData("Soul of Sister Friede",            0x400002E8, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Slave Knight Gael",        0x400002E9, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of the Demon Prince",         0x400002EA, DS3ItemCategory.BOSS, soul = True),
-    DS3ItemData("Soul of Darkeater Midir",          0x400002EB, DS3ItemCategory.BOSS, soul = True),
+    DS3ItemData("Soul of Sister Friede",            0x400002E8, DS3ItemCategory.BOSS, souls = 20000),
+    DS3ItemData("Soul of Slave Knight Gael",        0x400002E9, DS3ItemCategory.BOSS, souls = 20000),
+    DS3ItemData("Soul of the Demon Prince",         0x400002EA, DS3ItemCategory.BOSS, souls = 20000),
+    DS3ItemData("Soul of Darkeater Midir",          0x400002EB, DS3ItemCategory.BOSS, souls = 20000),
     DS3ItemData("Champion's Bones",                 0x40000869, DS3ItemCategory.SKIP),
     DS3ItemData("Captain's Ashes",                  0x4000086A, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression),

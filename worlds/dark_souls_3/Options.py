@@ -29,29 +29,12 @@ class RandomizeSpellLocations(DefaultOnToggle):
     display_name = "Randomize Spell Locations"
 
 
-class RandomizeUpgradeLocations(DefaultOnToggle):
-    """Randomizes titanite and gems (+220 checks)
-
-    By default, these locations will never include progression items, so they
-    aren't mandatory checks. You can override this by customizing the
-    "exclude_locations" field in your YAML config. (For example,
-    "exclude_locations: []" will allow progression items in every unmissable
-    location.)
-    """
-    display_name = "Randomize Upgrade Locations"
-
-
 class RandomizeKeyLocations(DefaultOnToggle):
     """Randomizes items which unlock doors or bypass barriers.
 
     If these aren't randomized, the route through the game will remain unchanged.
     """
     display_name = "Randomize Key Locations"
-
-
-class RandomizeBossSoulLocations(DefaultOnToggle):
-    """Randomizes boss souls (+22 Locations)"""
-    display_name = "Randomize Boss Soul Locations"
 
 
 class RandomizeNPCLocations(DefaultOnToggle):
@@ -68,11 +51,11 @@ class RandomizeNPCLocations(DefaultOnToggle):
 
 class RandomizeUniqueLocations(DefaultOnToggle):
     """Randomizes unique items (ashes, tomes, scrolls, etc.) (+36 checks)"""
-    display_name = "Randomize Miscellaneous Locations"
+    display_name = "Randomize Unique Locations"
 
 
 class RandomizeMiscLocations(DefaultOnToggle):
-    """Randomizes miscellaneous items (arrows, firebombs, soul items, etc.) (+388 locations)
+    """Randomizes miscellaneous items (arrows, firebombs, etc.) (222 checks, 288 with NG+)
 
     By default, these locations will never include progression items, so they
     aren't mandatory checks. You can override this by customizing the
@@ -84,8 +67,58 @@ class RandomizeMiscLocations(DefaultOnToggle):
 
 
 class RandomizeHealthLocations(DefaultOnToggle):
-    """Randomizes health upgrade items. (+21 checks)"""
-    display_name = "Randomize Health Upgrade Locations"
+    """Whether to andomize health upgrade items (+21 checks)"""
+    display_name = "Randomize Health Locations"
+
+
+class SoulLocationsOption(Choice):
+    """Where to randomize soul items (140 checks, 103 with NG+)
+
+    * Not Randomized: All soul item locations contain the same items as in the base game.
+    * Anywhere: Soul items are distributed totally randomly throughout the multiworld.
+    * Smooth: Soul items appear in a similar order as in the base game.
+
+    By default, soul item locations will never include progression items, so they aren't mandatory
+    checks. You can override this by customizing the "exclude_locations" field in your YAML config.
+    (For example, "exclude_locations: []" will allow progression items in every unmissable
+    location.)
+    """
+    display_name = "Soul Locations"
+    option_not_randomized = 1
+    option_anywhere = 2
+    option_smooth = 3
+    default = 3
+
+
+class UpgradeLocationsOption(Choice):
+    """Where to randomize titanite and gems (220 checks)
+
+    * Not Randomized: All upgrade item locations contain the same items as in the base game.
+    * Anywhere: Upgrade items are distributed totally randomly throughout the multiworld.
+    * Smooth: Upgrade items appear in a similar order as in the base game.
+
+    By default, upgrade item locations will never include progression items, so they aren't
+    mandatory checks. You can override this by customizing the "exclude_locations" field in your
+    YAML config. (For example, "exclude_locations: []" will allow progression items in every
+    unmissable location.)
+    """
+    display_name = "Upgrade Locations"
+    option_not_randomized = 1
+    option_anywhere = 2
+    option_smooth = 3
+    default = 3
+
+
+class UpgradedWeaponLocationsOption(Choice):
+    """Where to randomize upgraded weapons (if they're enabled)
+
+    * Anywhere: Upgraded weapons are distributed totally randomly throughout the multiworld.
+    * Smooth: More upgraded weapons appear deeper in the game.
+    """
+    display_name = "Upgraded Weapon Locations"
+    option_anywhere = 2
+    option_smooth = 3
+    default = 3
 
 
 class RandomizeStartingLoadout(DefaultOnToggle):
@@ -93,7 +126,7 @@ class RandomizeStartingLoadout(DefaultOnToggle):
     display_name = "Randomize Starting Loadout"
 
 
-class RequireOneHandedStartingWeapons(Toggle):
+class RequireOneHandedStartingWeapons(DefaultOnToggle):
     """Require starting equipment to be usable one-handed."""
     display_name = "Require One-Handed Starting Weapons"
 
@@ -149,6 +182,8 @@ class RandomizeInfusionPercentageOption(Range):
     range_start = 0
     range_end = 100
     default = 33
+    # 3/155 weapons are infused in the base game, or about 2%
+    special_range_names = {"similar to base game": 2}
 
 
 class RandomizeWeaponLevelOption(Choice):
@@ -313,7 +348,7 @@ class ImpatientMimicsOption(Toggle):
 
 class DS3ExcludeLocations(ExcludeLocations):
     """Prevent these locations from having an important item"""
-    default = {"Hidden", "Small Crystal Lizards", "Miscellaneous"}
+    default = {"Hidden", "Small Crystal Lizards", "Upgrade", "Small Souls", "Miscellaneous"}
 
 
 @dataclass
@@ -323,13 +358,14 @@ class DarkSouls3Options(PerGameCommonOptions):
     enable_armor_locations: RandomizeArmorLocations
     enable_ring_locations: RandomizeRingLocations
     enable_spell_locations: RandomizeSpellLocations
-    enable_upgrade_locations: RandomizeUpgradeLocations
     enable_key_locations: RandomizeKeyLocations
-    enable_boss_locations: RandomizeBossSoulLocations
     enable_npc_locations: RandomizeNPCLocations
     enable_unique_locations: RandomizeUniqueLocations
     enable_misc_locations: RandomizeMiscLocations
-    enable_health_upgrade_locations: RandomizeHealthLocations
+    enable_health_locations: RandomizeHealthLocations
+    soul_locations: SoulLocationsOption
+    upgrade_locations: UpgradeLocationsOption
+    upgraded_weapon_locations: UpgradedWeaponLocationsOption
     random_starting_loadout: RandomizeStartingLoadout
     require_one_handed_starting_weapons: RequireOneHandedStartingWeapons
     pool_type: PoolTypeOption
