@@ -66,24 +66,9 @@ class RandomizeMiscLocations(DefaultOnToggle):
     display_name = "Randomize Miscellaneous Locations"
 
 
-class HealthLocationsOption(Choice):
-    """Where to andomize health upgrade items (21 checks)
-
-    * Not Randomized: All health item locations contain the same items as in the base game.
-    * Anywhere: Health items are distributed totally randomly throughout the multiworld.
-    * Similar to Base Game: Health items appear in approximately the same regions they do in the
-      base game.
-
-    By default, health item locations will never include progression items, so they aren't mandatory
-    checks. You can override this by customizing the "exclude_locations" field in your YAML config.
-    (For example, "exclude_locations: []" will allow progression items in every unmissable
-    location.)
-    """
-    display_name = "Health Upgrade Locations"
-    option_not_randomized = 1
-    option_anywhere = 2
-    option_similar_to_base_game = 3
-    default = 3
+class RandomizeHealthLocations(DefaultOnToggle):
+    """Whether to andomize health upgrade items (+21 checks)"""
+    display_name = "Randomize Health Locations"
 
 
 class SoulLocationsOption(Choice):
@@ -91,8 +76,7 @@ class SoulLocationsOption(Choice):
 
     * Not Randomized: All soul item locations contain the same items as in the base game.
     * Anywhere: Soul items are distributed totally randomly throughout the multiworld.
-    * Similar to Base Game: Soul items appear in approximately the same regions they do in the
-      base game.
+    * Smooth: Soul items appear in a similar order as in the base game.
 
     By default, soul item locations will never include progression items, so they aren't mandatory
     checks. You can override this by customizing the "exclude_locations" field in your YAML config.
@@ -102,7 +86,7 @@ class SoulLocationsOption(Choice):
     display_name = "Soul Locations"
     option_not_randomized = 1
     option_anywhere = 2
-    option_similar_to_base_game = 3
+    option_smooth = 3
     default = 3
 
 
@@ -111,8 +95,7 @@ class UpgradeLocationsOption(Choice):
 
     * Not Randomized: All upgrade item locations contain the same items as in the base game.
     * Anywhere: Upgrade items are distributed totally randomly throughout the multiworld.
-    * Similar to Base Game: Upgrade items appear in approximately the same regions they do in the
-      base game.
+    * Smooth: Upgrade items appear in a similar order as in the base game.
 
     By default, upgrade item locations will never include progression items, so they aren't
     mandatory checks. You can override this by customizing the "exclude_locations" field in your
@@ -122,7 +105,7 @@ class UpgradeLocationsOption(Choice):
     display_name = "Upgrade Locations"
     option_not_randomized = 1
     option_anywhere = 2
-    option_similar_to_base_game = 3
+    option_smooth = 3
     default = 3
 
 
@@ -367,7 +350,7 @@ class DarkSouls3Options(PerGameCommonOptions):
     enable_npc_locations: RandomizeNPCLocations
     enable_unique_locations: RandomizeUniqueLocations
     enable_misc_locations: RandomizeMiscLocations
-    health_locations: HealthLocationsOption
+    enable_health_locations: RandomizeHealthLocations
     soul_locations: SoulLocationsOption
     upgrade_locations: UpgradeLocationsOption
     random_starting_loadout: RandomizeStartingLoadout

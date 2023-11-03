@@ -5,6 +5,44 @@ from dataclasses import dataclass
 from BaseClasses import Location, LocationProgressType, Region
 
 
+# Regions in approximate order of reward, mostly measured by how high-quality the upgrade items are
+# in each region.
+region_order = [
+    "Cemetery of Ash",
+    "Firelink Shrine",
+    "High Wall of Lothric",
+    "Greirat's Shop",
+    "Undead Settlement",
+    "Road of Sacrifices",
+    "Farron Keep",
+    "Cathedral of the Deep",
+    "Catacombs of Carthus",
+    "Smouldering Lake",
+    "Irithyll of the Boreal Valley",
+    "Irithyll Dungeon",
+    "Karla's Shop",
+    # The first half of Painted World has one Titanite Slab but mostly Large Titanite Shards,
+    # much like Irithyll Dungeon.
+    "Painted World of Ariandel (Before Contraption)",
+    "Anor Londo",
+    "Profaned Capital",
+    # The second half of Painted World has two Titanite Chunks and two Titanite Slabs, which
+    # puts it on the low end of the post-Lothric Castle areas in terms of rewards.
+    "Painted World of Ariandel (After Contraption)",
+    "Lothric Castle",
+    "Consumed King's Garden",
+    "Untended Graves",
+    # List this late becaues it contains a Titanite Slab in the base game
+    "Firelink Shrine Bell Tower",
+    "Grand Archives",
+    "Archdragon Peak",
+    "Kiln of the First Flame",
+    # Both areas of DLC2 have premium rewards.
+    "Dreg Heap",
+    "Ringed City",
+]
+
+
 class DS3LocationCategory(IntEnum):
     WEAPON = 0
     SHIELD = 1
@@ -45,6 +83,12 @@ class DS3LocationData:
     category: DS3LocationCategory
     """The category into which this location falls."""
 
+    region_value: int = 0
+    """The relative value of items in this location's region.
+
+    This is used to sort locations when placing items like the base game.
+    """
+ 
     offline: Optional[str] = None
     """The key in the offline randomizer's Slots table that corresponds to this location.
 
@@ -57,7 +101,7 @@ class DS3LocationData:
     item name disagrees with the offline randomizer's, this field is used to provide an explicit
     association instead.
     """
- 
+
     missable: bool = False
     """Whether this item is possible to permanently lose access to.
 
@@ -169,6 +213,7 @@ class DarkSouls3Location(Location):
     default_item_name: str
     offline: Optional[str] = None
     conditional: bool = False
+    region_value: int
 
     def __init__(
             self,
@@ -198,6 +243,7 @@ class DarkSouls3Location(Location):
         )
         location.offline = data.offline
         location.conditional = data.conditional
+        location.region_value = data.region_value
         if data.missable:
             location.progress_type = LocationProgressType.EXCLUDED
         return location
@@ -507,9 +553,6 @@ location_tables = {
                         hidden = True, miniboss = True), # Only dropped by Pus of Man after transformation
         DS3LocationData("HWL: Titanite Shard #5",                  "Titanite Shard",                    DS3LocationCategory.MISC,
                         hidden = True, miniboss = True), # Only dropped by Pus of Man after transformation
-        DS3LocationData("HWL: Large Titanite Shard",               "Large Titanite Shard",              DS3LocationCategory.UPGRADE,
-                        missable = True), # Getting fire-breathing wyvern down to 20% HP. Missable
-                                          # because it requires range and is a crazy thing to do
         DS3LocationData("HWL: Refined Gem",                        "Refined Gem",                       DS3LocationCategory.UPGRADE,
                         miniboss = True), # Red-Eyed Lothric Knight drop
         DS3LocationData("HWL: Way of Blue",                        "Way of Blue",                       DS3LocationCategory.UNIQUE),
@@ -2737,6 +2780,8 @@ location_tables = {
     ],
 }
 
+for i, region in enumerate(region_order):
+    for location in location_tables[region]: location.region_value = i
 
 for region in [
     "Painted World of Ariandel (Before Contraption)",
