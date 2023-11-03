@@ -470,7 +470,8 @@ class ALTTPWorld(World):
                 prizepool = unplaced_prizes.copy()
                 prize_locs = empty_crystal_locations.copy()
                 world.random.shuffle(prize_locs)
-                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
+                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True,
+                                 name="LttP Dungeon Prizes")
             except FillError as e:
                 lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
                                                 attempts - attempt)
@@ -585,27 +586,26 @@ class ALTTPWorld(World):
 
         for player in checks_in_area:
             checks_in_area[player]["Total"] = 0
-
-        for location in multiworld.get_locations():
-            if location.game == cls.game and type(location.address) is int:
-                main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
-                if location.parent_region.dungeon:
-                    dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                   'Inverted Ganons Tower': 'Ganons Tower'} \
-                        .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                    checks_in_area[location.player][dungeonname].append(location.address)
-                elif location.parent_region.type == LTTPRegionType.LightWorld:
-                    checks_in_area[location.player]["Light World"].append(location.address)
-                elif location.parent_region.type == LTTPRegionType.DarkWorld:
-                    checks_in_area[location.player]["Dark World"].append(location.address)
-                elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
-                    checks_in_area[location.player]["Light World"].append(location.address)
-                elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
-                    checks_in_area[location.player]["Dark World"].append(location.address)
-                else:
-                    assert False, "Unknown Location area."
-                # TODO: remove Total as it's duplicated data and breaks consistent typing
-                checks_in_area[location.player]["Total"] += 1
+            for location in multiworld.get_locations(player):
+                if location.game == cls.game and type(location.address) is int:
+                    main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
+                    if location.parent_region.dungeon:
+                        dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                       'Inverted Ganons Tower': 'Ganons Tower'} \
+                            .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                        checks_in_area[location.player][dungeonname].append(location.address)
+                    elif location.parent_region.type == LTTPRegionType.LightWorld:
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif location.parent_region.type == LTTPRegionType.DarkWorld:
+                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
+                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    else:
+                        assert False, "Unknown Location area."
+                    # TODO: remove Total as it's duplicated data and breaks consistent typing
+                    checks_in_area[location.player]["Total"] += 1
 
         multidata["checks_in_area"].update(checks_in_area)
 
@@ -830,4 +830,4 @@ class ALttPLogic(LogicMixin):
             return True
         if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             return can_buy_unlimited(self, 'Small Key (Universal)', player)
-        return self.prog_items[item, player] >= count
+        return self.prog_items[player][item] >= count

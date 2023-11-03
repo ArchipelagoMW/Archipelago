@@ -292,6 +292,12 @@ html{
     margin-right: 0.5rem;
 }
 
+#weighted-settings .simple-list hr{
+    width: calc(100% - 2px);
+    margin: 2px auto;
+    border-bottom: 1px solid rgb(255 255 255 / 0.6);
+}
+
 #weighted-settings .invisible{
     display: none;
 }
