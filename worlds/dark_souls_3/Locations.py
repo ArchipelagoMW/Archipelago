@@ -149,6 +149,12 @@ class DS3LocationData:
     item drop. NPCs are never considered minibosses, and some normal-looking enemies with guaranteed
     drops aren't either (these are instead classified as hidden locations)."""
 
+    drop: bool = False
+    """Whether this is an item dropped by a (non-boss) enemy.
+    
+    This is automatically set to True if miniboss, mimic, lizard, or hostile_npc is True.
+    """
+
     mimic: bool = False
     """Whether this location is dropped by a mimic."""
 
@@ -186,6 +192,9 @@ class DS3LocationData:
     This is for players without an encyclopedic knowledge of DS3 who don't want to get stuck looking
     for an illusory wall or one random mob with a guaranteed drop.
     """
+
+    def __post_init__(self):
+        if self.miniboss or self.mimic or self.lizard or self.hostile_npc: self.drop = True
 
     def location_groups(self) -> List[str]:
         """The names of location groups this location should appear in.
@@ -320,7 +329,7 @@ location_tables = {
     ],
     "Firelink Shrine": [
         DS3LocationData("FS: Skull Ring",                          "Skull Ring",                        DS3LocationCategory.RING,
-                        hidden = True, npc = True), # Ludleth drop, does not permanently die
+                        hidden = True, drop = True, npc = True), # Ludleth drop, does not permanently die
         DS3LocationData("FS: Uchigatana",                          "Uchigatana",                        DS3LocationCategory.WEAPON,
                         hostile_npc = True), # Sword Master drop
         DS3LocationData("FS: Master's Attire",                     "Master's Attire",                   DS3LocationCategory.ARMOR,
@@ -339,7 +348,7 @@ location_tables = {
         DS3LocationData("FS: Cracked Red Eye Orb",                 "Cracked Red Eye Orb x5",            DS3LocationCategory.UNIQUE,
                         missable = True, npc = True, conditional = True), # Leonhard (quest)
         DS3LocationData("FS: Lift Chamber Key",                    "Lift Chamber Key",                  DS3LocationCategory.KEY,
-                        progression = True, npc = True, key = True, conditional = True), # Leonhard (kill or quest)
+                        progression = True, npc = True, key = True, drop = True, conditional = True), # Leonhard (kill or quest)
 
         # Shrine Handmaid shop
         DS3LocationData("FS: White Sign Soapstone",                "White Sign Soapstone",              DS3LocationCategory.UNIQUE,
@@ -583,7 +592,7 @@ location_tables = {
         DS3LocationData("US: Tower Key",                           "Tower Key",                         DS3LocationCategory.KEY,
                         missable = True, npc = True, key = True),
         DS3LocationData("US: Hawk Ring",                           "Hawk Ring",                         DS3LocationCategory.RING,
-                        npc = True), # Giant archer (kill or quest)
+                        drop = True, npc = True), # Giant archer (kill or quest)
         DS3LocationData("US: Flynn's Ring",                        "Flynn's Ring",                      DS3LocationCategory.RING),
         DS3LocationData("US: Undead Bone Shard",                   "Undead Bone Shard",                 DS3LocationCategory.HEALTH),
         DS3LocationData("US: Alluring Skull #1",                   "Alluring Skull x2",                 DS3LocationCategory.MISC),
@@ -724,7 +733,7 @@ location_tables = {
         DS3LocationData("US: Londor Braille Divine Tome",          "Londor Braille Divine Tome",        DS3LocationCategory.UNIQUE,
                         offline = '99,0:-1:40000,110000,70000116:', missable = True, npc = True),
         DS3LocationData("US: Darkdrift",                           "Darkdrift",                         DS3LocationCategory.WEAPON,
-                        missable = True, npc = True), # kill her or kill Soul of Cinder
+                        missable = True, drop = True, npc = True), # kill her or kill Soul of Cinder
 
         # Cornyx of the Great Swamp
         # These aren't missable because the Shrine Handmaid will carry them if you kill Cornyx.
@@ -805,7 +814,7 @@ location_tables = {
         DS3LocationData("RS: Xanthous Crown",                      "Xanthous Crown",                    DS3LocationCategory.WEAPON,
                         missable = True, hostile_npc = True), # Heysel drop
         DS3LocationData("RS: Butcher Knife",                       "Butcher Knife",                     DS3LocationCategory.WEAPON,
-                        hidden = True), # Guaranteed drop from a normal-looking Butcher
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Butcher
         DS3LocationData("RS: Titanite Shard #1",                   "Titanite Shard",                    DS3LocationCategory.UPGRADE),
         DS3LocationData("RS: Titanite Shard #2",                   "Titanite Shard",                    DS3LocationCategory.UPGRADE),
         DS3LocationData("RS: Green Blossom #1",                    "Green Blossom x4",                  DS3LocationCategory.MISC),
@@ -962,7 +971,7 @@ location_tables = {
         DS3LocationData("CD: Black Eye Orb",                       "Black Eye Orb",                     DS3LocationCategory.UNIQUE,
                         missable = True, npc = True),
         DS3LocationData("CD: Winged Spear #1",                     "Winged Spear",                      DS3LocationCategory.WEAPON,
-                        missable = True), # Patches (kill)
+                        drop = True, missable = True), # Patches (kill)
         DS3LocationData("CD: Spider Shield",                       "Spider Shield",                     DS3LocationCategory.SHIELD,
                         hostile_npc = True), # Brigand
         DS3LocationData("CD: Notched Whip",                        "Notched Whip",                      DS3LocationCategory.WEAPON),
@@ -1043,11 +1052,11 @@ location_tables = {
         DS3LocationData("CD: Xanthous Crown",                      "Xanthous Crown",                    DS3LocationCategory.WEAPON,
                         missable = True),
         DS3LocationData("CD: Deep Ring",                           "Deep Ring",                         DS3LocationCategory.RING,
-                        hidden = True), # Guaranteed drop from a normal-looking Deacon
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Deacon
         DS3LocationData("CD: Deep Braille Divine Tome",            "Deep Braille Divine Tome",          DS3LocationCategory.UNIQUE,
                         mimic = True),
         DS3LocationData("CD: Red Sign Soapstone",                  "Red Sign Soapstone",                DS3LocationCategory.UNIQUE,
-                        hidden = True), # Guaranteed drop from a normal-looking Corpse-grub
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Corpse-grub
         DS3LocationData("CD: Aldrich's Sapphire",                  "Aldrich's Sapphire",                DS3LocationCategory.RING,
                         miniboss = True), # Deep Accursed Drop
         DS3LocationData("CD: Dung Pie",                            "Dung Pie x4",                       DS3LocationCategory.MISC,
@@ -1094,7 +1103,7 @@ location_tables = {
         DS3LocationData("CD: Hidden Blessing",                     "Hidden Blessing",                   DS3LocationCategory.MISC,
                         missable = True, npc = True, shop = True),
         DS3LocationData("CD: Horsehoof Ring",                      "Horsehoof Ring",                    DS3LocationCategory.RING,
-                        missable = True, npc = True, shop = True), # (kill or buy)
+                        missable = True, npc = True, drop = True, shop = True), # (kill or buy)
     ],
     "Farron Keep": [
         DS3LocationData("FK: Lightning Spear",                     "Lightning Spear",                   DS3LocationCategory.WEAPON),
@@ -1177,9 +1186,9 @@ location_tables = {
         DS3LocationData("FK: Lingering Dragoncrest Ring",          "Lingering Dragoncrest Ring",        DS3LocationCategory.RING,
                         miniboss = True), # Great Crab drop
         DS3LocationData("FK: Pharis's Hat",                        "Pharis's Hat",                      DS3LocationCategory.ARMOR,
-                        hidden = True), # Guaranteed drop from a normal-looking Elder Ghru
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Elder Ghru
         DS3LocationData("FK: Black Bow of Pharis",                 "Black Bow of Pharis",               DS3LocationCategory.WEAPON,
-                        hidden = True), # Guaranteed drop from a normal-looking Elder Ghru
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Elder Ghru
         DS3LocationData("FK: Titanite Scale",                      "Titanite Scale x2",                 DS3LocationCategory.UPGRADE,
                         miniboss = True), # Ravenous Crystal Lizard drop
         DS3LocationData("FK: Large Titanite Shard #1",             "Large Titanite Shard",              DS3LocationCategory.UPGRADE),
@@ -1359,7 +1368,7 @@ location_tables = {
         # These are listed here even though you can kill Horace in the Road of Sacrifices because
         # the player may want to complete his and Anri's quest first.
         DS3LocationData("SL: Llewellyn Shield",                    "Llewellyn Shield",                  DS3LocationCategory.SHIELD,
-                        npc = True), # kill or quest
+                        drop = True, npc = True), # kill or quest
         # Shrine Handmaiden after killing
         DS3LocationData("SL: Executioner Helm",                    "Executioner Helm",                  DS3LocationCategory.ARMOR,
                         hidden = True, npc = True, shop = True),
@@ -1457,13 +1466,13 @@ location_tables = {
         DS3LocationData("IBV: Dorhys' Gnawing",                    "Dorhys' Gnawing",                   DS3LocationCategory.SPELL,
                         hidden = True), # Behind illusory wall
         DS3LocationData("IBV: Divine Blessing #2",                 "Divine Blessing",                   DS3LocationCategory.MISC,
-                        hidden = True), # Guaranteed drop from normal-looking Silver Knight
+                        drop = True, hidden = True), # Guaranteed drop from normal-looking Silver Knight
         DS3LocationData("IBV: Large Titanite Shard #9",            "Large Titanite Shard",              DS3LocationCategory.UPGRADE,
-                        hidden = True), # Guaranteed drop from normal-looking Silver Knight
+                        drop = True, hidden = True), # Guaranteed drop from normal-looking Silver Knight
         DS3LocationData("IBV: Large Titanite Shard #10",           "Large Titanite Shard x2",           DS3LocationCategory.UPGRADE,
-                        hidden = True), # Guaranteed drop from normal-looking Silver Knight
+                        drop = True, hidden = True), # Guaranteed drop from normal-looking Silver Knight
         DS3LocationData("IBV: Large Titanite Shard #11",           "Large Titanite Shard x2",           DS3LocationCategory.UPGRADE,
-                        hidden = True), # Guaranteed drop from normal-looking Silver Knight
+                        drop = True, hidden = True), # Guaranteed drop from normal-looking Silver Knight
         DS3LocationData("IBV: Roster of Knights",                  "Roster of Knights",                 DS3LocationCategory.UNIQUE),
         DS3LocationData("IBV: Twinkling Titanite #1",              "Twinkling Titanite",                DS3LocationCategory.UPGRADE,
                         lizard = True, hidden = True), # Behind illusory wall
@@ -1570,7 +1579,7 @@ location_tables = {
         DS3LocationData("ID: Prisoner Chief's Ashes",              "Prisoner Chief's Ashes",            DS3LocationCategory.KEY,
                         progression = True),
         DS3LocationData("ID: Great Magic Shield",                  "Great Magic Shield",                DS3LocationCategory.SPELL,
-                        hidden = True), # Guaranteed drop from a normal-looking Corpse-Grub
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Corpse-Grub
         DS3LocationData("ID: Dragonslayer Lightning Arrow",        "Dragonslayer Lightning Arrow x10",  DS3LocationCategory.MISC,
                         mimic = True),
         DS3LocationData("ID: Titanite Scale #1",                   "Titanite Scale x2",                 DS3LocationCategory.UPGRADE,
@@ -1635,7 +1644,7 @@ location_tables = {
         DS3LocationData("PC: Storm Ruler",                         "Storm Ruler",                         DS3LocationCategory.KEY),
         DS3LocationData("PC: Undead Bone Shard",                   "Undead Bone Shard",                   DS3LocationCategory.HEALTH),
         DS3LocationData("PC: Eleonora",                            "Eleonora",                            DS3LocationCategory.WEAPON,
-                        hidden = True), # Guaranteed drop from a normal-looking Monstrosity of Sin
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Monstrosity of Sin
         DS3LocationData("PC: Rusted Gold Coin #2",                 "Rusted Gold Coin x2",                 DS3LocationCategory.MISC,
                         mimic = True),
         DS3LocationData("PC: Court Sorcerer's Staff",              "Court Sorcerer's Staff",              DS3LocationCategory.WEAPON,
@@ -1655,9 +1664,9 @@ location_tables = {
 
         # Siegward drops (kill or quest)
         DS3LocationData("PC: Storm Ruler (Siegward)",              "Storm Ruler",                         DS3LocationCategory.WEAPON,
-                        offline = '02,0:50006218::', missable = True, npc = True),
+                        offline = '02,0:50006218::', missable = True, drop = True, npc = True),
         DS3LocationData("PC: Pierce Shield",                       "Pierce Shield",                       DS3LocationCategory.SHIELD,
-                        missable = True, npc = True),
+                        missable = True, drop = True, npc = True),
     ],
     # We consider "Anor Londo" to be everything accessible only after killing Pontiff. This doesn't
     # match up one-to-one with where the game pops up the region name, but it balances items better
@@ -1668,9 +1677,9 @@ location_tables = {
         DS3LocationData("AL: Cinders of a Lord - Aldrich",         "Cinders of a Lord - Aldrich",         DS3LocationCategory.KEY,
                         offline = '06,0:50002130::', prominent = True, progression = True, boss = True),
         DS3LocationData("AL: Yorshka's Chime",                     "Yorshka's Chime",                     DS3LocationCategory.WEAPON,
-                        missable = True, npc = True), # Yorshka (kill), invisible walkway
+                        missable = True, drop = True, npc = True), # Yorshka (kill), invisible walkway
         DS3LocationData("AL: Drang Twinspears",                    "Drang Twinspears",                    DS3LocationCategory.WEAPON,
-                        hidden = True), # Guaranteed drop from a normal-loking knight
+                        drop = True, hidden = True), # Guaranteed drop from a normal-loking knight
         DS3LocationData("AL: Estus Shard",                         "Estus Shard",                         DS3LocationCategory.HEALTH),
         DS3LocationData("AL: Painting Guardian's Curved Sword",    "Painting Guardian's Curved Sword",    DS3LocationCategory.WEAPON,
                         hidden = True), # Invisible walkway
@@ -1726,7 +1735,7 @@ location_tables = {
         DS3LocationData("AL: Ring of Favor",                       "Ring of Favor",                       DS3LocationCategory.RING,
                         miniboss = True, hidden = True), # Sulyvahn's Beast Duo drop, behind illusory wall
         DS3LocationData("AL: Blade of the Darkmoon",               "Blade of the Darkmoon",               DS3LocationCategory.UNIQUE,
-                        missable = True, npc = True), # Yorshka (quest or kill)
+                        missable = True, drop = True, npc = True), # Yorshka (quest or kill)
         DS3LocationData("AL: Simple Gem",                          "Simple Gem",                          DS3LocationCategory.UPGRADE,
                         lizard = True),
         DS3LocationData("AL: Twinkling Titanite #1",               "Twinkling Titanite",                  DS3LocationCategory.UPGRADE,
@@ -1915,9 +1924,9 @@ location_tables = {
 
         # Eygon of Carim (kill or quest)
         DS3LocationData("LC: Morne's Great Hammer",                "Morne's Great Hammer",                DS3LocationCategory.WEAPON,
-                        npc = True),
+                        drop = True, npc = True),
         DS3LocationData("LC: Moaning Shield",                      "Moaning Shield",                      DS3LocationCategory.SHIELD,
-                        npc = True),
+                        drop = True, npc = True),
 
         # Shrine Handmaid after killing Dancer of the Boreal Valley
         DS3LocationData("LC: Dancer's Crown",                      "Dancer's Crown",                      DS3LocationCategory.ARMOR,
@@ -1970,7 +1979,7 @@ location_tables = {
         DS3LocationData("CKG: Titanite Scale #2",                  "Titanite Scale",                          DS3LocationCategory.UPGRADE),
         DS3LocationData("CKG: Titanite Scale #3",                  "Titanite Scale",                          DS3LocationCategory.UPGRADE),
         DS3LocationData("CKG: Magic Stoneplate Ring",              "Magic Stoneplate Ring",                   DS3LocationCategory.RING,
-                        hidden = True), # Guaranteed drop from a normal-looking Consumed King's Knight
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Consumed King's Knight
         DS3LocationData("CKG: Moonlight Greatsword",               "Moonlight Greatsword",                    DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
         DS3LocationData("CKG: White Dragon Breath",                "White Dragon Breath",                     DS3LocationCategory.SPELL,
@@ -2051,7 +2060,7 @@ location_tables = {
         DS3LocationData("GA: Scholar Ring",                        "Scholar Ring",                            DS3LocationCategory.RING),
         DS3LocationData("GA: Undead Bone Shard",                   "Undead Bone Shard",                       DS3LocationCategory.HEALTH),
         DS3LocationData("GA: Titanite Slab #3",                    "Titanite Slab",                           DS3LocationCategory.UPGRADE,
-                        hidden = True), # Guaranteed drop from killing all Winged Knights
+                        drop = True, hidden = True), # Guaranteed drop from killing all Winged Knights
         DS3LocationData("GA: Outrider Knight Helm",                "Outrider Knight Helm",                    DS3LocationCategory.ARMOR,
                         miniboss = True, hidden = True), # Behind illusory wall, Outrider Knight drop
         DS3LocationData("GA: Outrider Knight Armor",               "Outrider Knight Armor",                   DS3LocationCategory.ARMOR,
@@ -2382,7 +2391,7 @@ location_tables = {
         DS3LocationData("PW1: Follower Sabre",                     "Follower Sabre",                          DS3LocationCategory.WEAPON),
         DS3LocationData("PW1: Ember #2",                           "Ember",                                   DS3LocationCategory.MISC),
         DS3LocationData("PW1: Snap Freeze",                        "Snap Freeze",                             DS3LocationCategory.SPELL,
-                        hidden = True), # Guaranteed drop from normal-looking Tree Woman
+                        drop = True, hidden = True), # Guaranteed drop from normal-looking Tree Woman
         DS3LocationData("PW1: Rime-blue Moss Clump #3",            "Rime-blue Moss Clump",                    DS3LocationCategory.MISC),
         DS3LocationData("PW1: Large Soul of an Unknown Traveler #8", "Large Soul of an Unknown Traveler",     DS3LocationCategory.SOUL),
         DS3LocationData("PW1: Ember #3",                           "Ember",                                   DS3LocationCategory.MISC),
@@ -2463,7 +2472,7 @@ location_tables = {
         DS3LocationData("DH: Soul of the Demon Prince",            "Soul of the Demon Prince",                DS3LocationCategory.SOUL,
                         prominent = True, boss = True),
         DS3LocationData("DH: Siegbräu",                            "Siegbräu",                                DS3LocationCategory.MISC,
-                        missable = True, npc = True), # Lapp (quest or kill)
+                        missable = True, drop = True, npc = True), # Lapp (quest or kill)
         DS3LocationData("DH: Flame Fan",                           "Flame Fan",                               DS3LocationCategory.SPELL,
                         hostile_npc = True), # Desert Pyromancer Zoey drop
         DS3LocationData("DH: Ember #1",                            "Ember",                                   DS3LocationCategory.MISC),
@@ -2522,11 +2531,11 @@ location_tables = {
         DS3LocationData("DH: Small Envoy Banner",                  "Small Envoy Banner",                      DS3LocationCategory.KEY,
                         progression = True, boss = True),
         DS3LocationData("DH: Twinkling Titanite #4",               "Twinkling Titanite x2",                   DS3LocationCategory.UPGRADE,
-                        hidden = True), # Hidden fall, also guaranteed drop from killing normal-looking pilgrim
+                        drop = True, hidden = True), # Hidden fall, also guaranteed drop from killing normal-looking pilgrim
         DS3LocationData("DH: Twinkling Titanite #5",               "Twinkling Titanite x2",                   DS3LocationCategory.UPGRADE,
-                        hidden = True), # Hidden fall, also guaranteed drop from killing normal-looking pilgrim
+                        drop = True, hidden = True), # Hidden fall, also guaranteed drop from killing normal-looking pilgrim
         DS3LocationData("DH: Twinkling Titanite #6",               "Twinkling Titanite x2",                   DS3LocationCategory.UPGRADE,
-                        hidden = True), # Guaranteed drop from killing normal-looking pilgrim
+                        drop = True, hidden = True), # Guaranteed drop from killing normal-looking pilgrim
         DS3LocationData("DH: Demon's Scar",                        "Demon's Scar",                            DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
         DS3LocationData("DH: Seething Chaos",                      "Seething Chaos",                          DS3LocationCategory.SPELL,
@@ -2550,9 +2559,9 @@ location_tables = {
         DS3LocationData("RC: Soul of Darkeater Midir",             "Soul of Darkeater Midir",                 DS3LocationCategory.SOUL,
                         prominent = True, boss = True),
         DS3LocationData("RC: Sacred Chime of Filianore",           "Sacred Chime of Filianore",               DS3LocationCategory.WEAPON,
-                        npc = True), # Shira (kill or quest)
+                        drop = True, npc = True), # Shira (kill or quest)
         DS3LocationData("RC: Titanite Slab #2",                    "Titanite Slab",                           DS3LocationCategory.UPGRADE,
-                        npc = True), # Shira (kill or quest)
+                        drop = True, npc = True), # Shira (kill or quest)
         DS3LocationData("RC: Crucifix of the Mad King",            "Crucifix of the Mad King",                DS3LocationCategory.WEAPON,
                         hostile_npc = True), # Shira drop
         DS3LocationData("RC: Ledo's Great Hammer",                 "Ledo's Great Hammer",                     DS3LocationCategory.WEAPON,
@@ -2657,7 +2666,7 @@ location_tables = {
         DS3LocationData("RC: Young White Branch #2",               "Young White Branch",                      DS3LocationCategory.MISC),
         DS3LocationData("RC: Young White Branch #3",               "Young White Branch",                      DS3LocationCategory.MISC),
         DS3LocationData("RC: Ringed Knight Paired Greatswords",    "Ringed Knight Paired Greatswords",        DS3LocationCategory.WEAPON,
-                        hidden = True), # Guaranteed drop from a normal-looking Ringed Knight
+                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Ringed Knight
         DS3LocationData("RC: Hidden Blessing #2",                  "Hidden Blessing",                         DS3LocationCategory.MISC,
                         miniboss = True), # Judicator drop
         DS3LocationData("RC: Divine Blessing #1",                  "Divine Blessing",                         DS3LocationCategory.MISC,
@@ -2694,7 +2703,7 @@ location_tables = {
                         prominent = True, boss = True),
         DS3LocationData("RC: Blood of the Dark Soul",              "Blood of the Dark Soul",                  DS3LocationCategory.KEY),
         DS3LocationData("RC: Titanite Slab #3",                    "Titanite Slab",                           DS3LocationCategory.UPGRADE,
-                        hidden = True), # Guaranteed drop from normal-looking Ringed Knight
+                        drop = True, hidden = True), # Guaranteed drop from normal-looking Ringed Knight
         DS3LocationData("RC: Frayed Blade",                        "Frayed Blade",                            DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
         DS3LocationData("RC: Old Moonlight",                       "Old Moonlight",                           DS3LocationCategory.SPELL,
@@ -2770,13 +2779,13 @@ location_tables = {
         # Drops on death. Missable because the player would have to decide between killing her or
         # seeing everything she sells.
         DS3LocationData("Karla: Karla's Pointed Hat",              "Karla's Pointed Hat",               DS3LocationCategory.ARMOR,
-                        offline = '07,0:50006150::', missable = True, npc = True),
+                        offline = '07,0:50006150::', missable = True, drop = True, npc = True),
         DS3LocationData("Karla: Karla's Coat",                     "Karla's Coat",                      DS3LocationCategory.ARMOR,
-                        offline = '07,0:50006150::', missable = True, npc = True),
+                        offline = '07,0:50006150::', missable = True, drop = True, npc = True),
         DS3LocationData("Karla: Karla's Gloves",                   "Karla's Gloves",                    DS3LocationCategory.ARMOR,
-                        offline = '07,0:50006150::', missable = True, npc = True),
+                        offline = '07,0:50006150::', missable = True, drop = True, npc = True),
         DS3LocationData("Karla: Karla's Trousers",                 "Karla's Trousers",                  DS3LocationCategory.ARMOR,
-                        offline = '07,0:50006150::', missable = True, npc = True),
+                        offline = '07,0:50006150::', missable = True, drop = True, npc = True),
     ],
 }
 

@@ -564,12 +564,23 @@ class DarkSouls3World(World):
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
         # logic for choosing how many shop items to sell), and from carring soul items.
         for location in location_dictionary.values():
-            if location.shop and self.is_location_available(location):
-                add_item_rule(self.multiworld.get_location(location.name, self.player),
-                              lambda item: (
-                                  item.player != self.player or
-                                  (item.count == 1 and not item.souls)
-                              ))
+            if self.is_location_available(location):
+                if location.shop:
+                    add_item_rule(self.multiworld.get_location(location.name, self.player),
+                                    lambda item: (
+                                        item.player != self.player or
+                                        (item.count == 1 and not item.souls)
+                                    ))
+                elif location.drop:
+                    # TODO: I'm not sure this is precisely the rule for where this can and can't
+                    # go, but I've seen the offline randomizer reject it as a Ravenous Crystal
+                    # Lizard drop. Should consult thefifthmatt.
+                    add_item_rule(self.multiworld.get_location(location.name, self.player),
+                                    lambda item: (
+                                        item.player != self.player or
+                                        item.name != "Path of the Dragon"
+                                    ))
+
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location.region:
