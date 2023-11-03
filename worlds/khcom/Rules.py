@@ -66,13 +66,18 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("Megalixir"          , player).access_rule = lambda state: has_room_of_rewards   (state, player, "12")
 
     # Region rules.
-    multiworld.get_entrance("Floor 7" , player).access_rule = lambda state: has_room_of_truth(state, player, "06")
-    multiworld.get_entrance("Floor 8" , player).access_rule = lambda state: has_room_of_truth(state, player, "06")
-    multiworld.get_entrance("Floor 9" , player).access_rule = lambda state: has_room_of_truth(state, player, "06")
-    multiworld.get_entrance("Floor 10", player).access_rule = lambda state: has_room_of_truth(state, player, "06") and has_room_of_truth(state, player, "09")
-    multiworld.get_entrance("Floor 11", player).access_rule = lambda state: has_room_of_truth(state, player, "06") and has_room_of_truth(state, player, "09")
-    multiworld.get_entrance("Floor 12", player).access_rule = lambda state: has_room_of_truth(state, player, "06") and has_room_of_truth(state, player, "09") and has_room_of_beginnings(state, player, "11")
-    multiworld.get_entrance("Floor 13", player).access_rule = lambda state: has_room_of_truth(state, player, "06") and has_room_of_truth(state, player, "09") and has_room_of_beginnings(state, player, "11") and has_room_of_guidance(state, player, "12")
+    multiworld.get_entrance("Floor 2" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "02")
+    multiworld.get_entrance("Floor 3" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "03")
+    multiworld.get_entrance("Floor 4" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "04")
+    multiworld.get_entrance("Floor 5" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "05")
+    multiworld.get_entrance("Floor 6" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "06")
+    multiworld.get_entrance("Floor 7" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "07")
+    multiworld.get_entrance("Floor 8" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "08")
+    multiworld.get_entrance("Floor 9" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "09")
+    multiworld.get_entrance("Floor 10" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "10")
+    multiworld.get_entrance("Floor 11" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "11")
+    multiworld.get_entrance("Floor 12" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "12")
+    multiworld.get_entrance("Floor 13", player).access_rule = lambda state: has_room_of_guidance(state, player, "12")
     
     # Options
     if not multiworld.enemy_cards[player]:

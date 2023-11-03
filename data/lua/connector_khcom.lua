@@ -395,11 +395,14 @@ time_played_address = 0x02039D8C
 check_count_address = 0x02039D22
 highest_warp_floor_address = 0x0203C590
 moogle_points_address = 0x02039D24
+deck_cp_cost_address = 0x02039EBA
 deck_card_pointers_addresses = {0x02039DE0, 0x02039EC0, 0x02039FA0}
 world_card_addresses = {0x02039D30, 0x02039D31}
 world_card_values = {{0x00,0x02}, {0x08,0x00}, {0x04,0x00}, {0x10,0x00}, {0x01,0x00}, {0x20,0x00}
        ,{0x02,0x00}, {0x40,0x00}, {0x80,0x00}, {0x00,0x04}, {0x00,0x08}, {0x00,0x01}, {0x00,0x10}}
 floor_assignment_addresses = {0x02039D36,0x02039D3A,0x02039D3E,0x02039D42,0x02039D46,0x02039D4A,0x02039D4E,0x02039D52,0x02039D56,0x02039D5A,0x02039D5E,0x02039D62,0x02039D66}
+floor_progress_addresses = {0x02039D34,0x02039D38,0x02039D3C,0x02039D40,0x02039D44,0x02039D48,0x02039D4C,0x02039D50,0x02039D54,0x02039D58,0x02039D5C,0x02039D60}
+floor_doors_addresses = {0x02039D37,0x02039D3B,0x02039D3F,0x02039D43,0x02039D47,0x02039D4B,0x02039D4F,0x02039D53,0x02039D57,0x02039D5B,0x02039D5F,0x02039D63}
 floor_assignment_values = {0x0A, 0x04, 0x03, 0x05, 0x01, 0x06, 0x02, 0x07, 0x08, 0x0D, 0x0B, 0x09, 0x0C}
 
 bronze_pack_attack_cards = {"Kingdom Key", "Three Wishes", "Pumpkinhead", "Olympia", "Wishing Star", "Lady Luck"}
@@ -538,12 +541,20 @@ function set_deck_pointer(deck_number, offset, value)
 end
 
 function set_starting_deck()
+    memory.write_u16_le(deck_cp_cost_address, 0x007B)
+    
     memory.write_u16_le(battle_cards_address, 0x1008) --Kingdom Key 8
+    set_deck_pointer(1, 0, 0x0000)
     memory.write_u16_le(battle_cards_address + 2, 0x1007) --Kingdom Key 7
+    set_deck_pointer(1, 1, 0x0001)
     memory.write_u16_le(battle_cards_address + 4, 0x1006) --Kingdom Key 6
+    set_deck_pointer(1, 2, 0x0002)
     memory.write_u16_le(battle_cards_address + 6, 0x1005) --Kingdom Key 5
+    set_deck_pointer(1, 3, 0x0003)
     memory.write_u16_le(battle_cards_address + 8, 0x10B9) --Blizzard 5
+    set_deck_pointer(1, 4, 0x0004)
     memory.write_u16_le(battle_cards_address + 10, 0x1181) --Potion 5
+    set_deck_pointer(1, 5, 0x0005)
     local i = 7
     while i <= 15 do
         memory.write_u16_le(battle_cards_address + 2*(i-1), 0x0FFF)
@@ -618,7 +629,7 @@ function can_complete_floor(floor_number)
     if floor_number < 10 then
         return get_stored_gold_cards("Key of Beginnings", floor_number) > 0 and get_stored_gold_cards("Key of Guidance", floor_number) > 0 and get_stored_gold_cards("Key to Truth", floor_number) > 0
     elseif floor_number == 12 then
-        return get_stored_gold_cards("Key of Beginnings", floor_number) > 0 and get_stored_gold_cards("Key of Guidance", floor_number)
+        return get_stored_gold_cards("Key of Beginnings", floor_number) > 0 and get_stored_gold_cards("Key of Guidance", floor_number) > 0
     elseif floor_number == 11 then
         return get_stored_gold_cards("Key of Beginnings", floor_number) > 0
     elseif floor_number == 10 then
@@ -644,41 +655,44 @@ function update_current_gold_card_qty(current_floor)
 end
 
 function update_world_cards(current_floor)
-    memory.writebyte(world_card_addresses[1], world_card_values[current_floor][1])
-    memory.writebyte(world_card_addresses[2], world_card_values[current_floor][2])
+    if get_stored_gold_cards("Key of Beginnings", current_floor) > 1 then
+        memory.writebyte(world_card_addresses[1], world_card_values[current_floor][1])
+        memory.writebyte(world_card_addresses[2], world_card_values[current_floor][2])
+    else
+        memory.writebyte(world_card_addresses[1], world_card_values[1][1])
+        memory.writebyte(world_card_addresses[2], world_card_values[1][2])
+    end
 end
 
-function update_highest_warp_floor(past_highest_warp_floor, current_highest_warp_floor)
-    if can_complete_floor(12) and can_complete_floor(11) and can_complete_floor(9) and can_complete_floor(6) then
+function update_highest_warp_floor()
+    if can_complete_floor(12) then
         memory.writebyte(highest_warp_floor_address, (14-1)*2)
         return
-    elseif can_complete_floor(11) and can_complete_floor(9) and can_complete_floor(6) then
-        memory.writebyte(highest_warp_floor_address, (12-1)*2)
-        return
-    elseif can_complete_floor(9) and can_complete_floor(6) then
-        memory.writebyte(highest_warp_floor_address, (11-1)*2)
-        return
-    elseif can_complete_floor(6) then
-        memory.writebyte(highest_warp_floor_address, (9-1)*2)
-        return
     else
-        memory.writebyte(highest_warp_floor_address, (6-1)*2)
+        memory.writebyte(highest_warp_floor_address, (12-1)*2)
         return
     end
 end
 
 function update_current_floor()
-    if get_stored_gold_cards("Key of Beginnings", get_floor_number()) < 1 then
-        memory.writebyte(floor_number_address, 0x00)
+    if get_floor_number() > 0 and get_floor_number() < 14 then
+        if get_stored_gold_cards("Key of Beginnings", get_floor_number()) < 1 then
+            memory.writebyte(floor_number_address, 0x00)
+        end
     end
 end
 
 function update_world_assignments()
     i = 1
     while i <= #floor_assignment_values do
-        memory.writebyte(floor_assignment_addresses[i], floor_assignment_values[i])
+        if get_stored_gold_cards("Key of Beginnings", i) < 1 then
+            memory.writebyte(floor_assignment_addresses[i], 0x0A)
+        else
+            memory.writebyte(floor_assignment_addresses[i], floor_assignment_values[i])
+        end
         i = i + 1
     end
+    memory.writebyte(floor_assignment_addresses[13], floor_assignment_values[13])
 end
 
 function update_map_cards()
@@ -993,6 +1007,38 @@ function check_if_victorious()
     end
 end
 
+function update_floor_status()
+    i = 2
+    while i < 13 do
+        if get_stored_gold_cards("Key of Beginnings", i) < 1 then
+            memory.writebyte(floor_progress_addresses[i], 0x77)
+            memory.writebyte(floor_doors_addresses[i], 0x03)
+        elseif memory.readbyte(floor_assignment_addresses[i]) == 0x0A and i > 1 then
+            memory.writebyte(floor_progress_addresses[i], 0x00)
+            memory.writebyte(floor_doors_addresses[i], 0x00)
+        end
+        i = i + 1
+    end
+end
+
+function update_post_floor_cutscene_valid()
+    i = 1
+    while i < 13 do
+        if can_complete_floor(i) then
+            x = memory.readbyte(floor_progress_addresses[i])
+            x = bit.clear(x, 2) --Turns on the post floor cutscene
+            x = bit.clear(x, 0) --Turns on the 2nd post floor cutscene
+            memory.writebyte(floor_progress_addresses[i],x)
+        else
+            x = memory.readbyte(floor_progress_addresses[i])
+            x = bit.set(x, 2) --Turns off the post floor cutscene
+            x = bit.set(x, 0) --Turns off the post floor cutscene
+            memory.writebyte(floor_progress_addresses[i],x)
+        end
+        i = i + 1
+    end
+end
+
 function send_victory()
     file = io.open(client_communication_path .. "victory", "w")
     io.output(file)
@@ -1016,7 +1062,7 @@ function main_loop(last_variables)
         local current_floor = get_floor_number()
         if current_floor ~= last_variables["Last Floor"] then
             update_world_cards(get_floor_number())
-            update_highest_warp_floor(last_variables["Last Highest Warp Floor"], get_highest_warp_floor())
+            update_highest_warp_floor()
             last_variables["Last Key of Beginnings"] = get_current_gold_card_qty("Key of Beginnings")
             last_variables["Last Key of Guidance"] = get_current_gold_card_qty("Key of Guidance")
             last_variables["Last Key to Truth"] = get_current_gold_card_qty("Key to Truth")
@@ -1037,7 +1083,7 @@ function main_loop(last_variables)
         reassign_deck_pointers(last_deck_pointers)
         set_moogle_points(last_variables["Last Moogle Points"])
     end
-    if frame % 300 then
+    if frame % 300 and current_playtime > 3 then
         last_deck_pointers = get_deck_pointers()
         receive_items()
         reassign_deck_pointers(last_deck_pointers)
@@ -1056,7 +1102,9 @@ function main_loop(last_variables)
     last_variables["Last Moogle Points"] = get_moogle_points()
     update_map_cards()
     update_world_cards(get_floor_number())
+    update_floor_status()
     update_world_assignments()
+    update_post_floor_cutscene_valid()
     return last_variables
 end
 
