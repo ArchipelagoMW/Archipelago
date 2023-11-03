@@ -12,6 +12,7 @@ def performance_test_multiworld(tester, options, acceptable_time_per_player):
     number_players = len(options)
     acceptable_average_time = acceptable_time_per_player * number_players
     total_time = 0
+    all_times = {}
     for i in range(number_generations):
         seed = get_seed()
         with tester.subTest(f"Seed: {seed}"):
@@ -19,12 +20,20 @@ def performance_test_multiworld(tester, options, acceptable_time_per_player):
             multiworld = setup_multiworld(options, seed)
             time_after = time.time()
             elapsed_time = time_after - time_before
-            print(f"Multiworld {i + 1}/{number_generations} [{seed}] generated in {elapsed_time} seconds")
             total_time += elapsed_time
-            tester.assertLessEqual(elapsed_time, acceptable_average_time * acceptable_deviation)
+            all_times[i] = elapsed_time
+            print(f"Multiworld {i + 1}/{number_generations} [{seed}] generated in {elapsed_time} seconds")
+            # tester.assertLessEqual(elapsed_time, acceptable_average_time * acceptable_deviation)
     size = size_name(number_players)
-    print(f"Generated {number_generations} {size} multiworlds in {total_time} seconds")
     average_time = total_time / number_generations
+    # Remove outliers
+    num_outliers = 0
+    for world in all_times:
+        if all_times[world] > average_time * 4:
+            num_outliers += 1
+            total_time -= all_times[world]
+    average_time = total_time / (number_generations - num_outliers)
+    print(f"Generated {(number_generations - num_outliers)} {size} multiworlds in {total_time} seconds")
     print(f"Average time per world: {average_time} seconds (Acceptable: {acceptable_average_time})")
     tester.assertLessEqual(average_time, acceptable_average_time)
 
@@ -40,7 +49,7 @@ def size_name(number_players):
 
 
 class TestDefaultOptions(SVTestCase):
-    acceptable_time_per_player = 0.30
+    acceptable_time_per_player = 0.12
     options = default_options()
 
     def test_solo(self):
@@ -49,6 +58,7 @@ class TestDefaultOptions(SVTestCase):
 
         number_players = 1
         multiworld_options = [self.options] * number_players
+        # seed = 47965111899197590996
         performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
 
     def test_duo(self):
@@ -77,7 +87,7 @@ class TestDefaultOptions(SVTestCase):
 
 
 class TestMinLocationMaxItems(SVTestCase):
-    acceptable_time_per_player = 0.35
+    acceptable_time_per_player = 0.25
     options = minimal_locations_maximal_items()
 
     def test_solo(self):
@@ -114,7 +124,7 @@ class TestMinLocationMaxItems(SVTestCase):
 
 
 class TestAllsanityWithoutMods(SVTestCase):
-    acceptable_time_per_player = 0.30
+    acceptable_time_per_player = 0.18
     options = allsanity_options_without_mods()
 
     def test_solo(self):

@@ -99,6 +99,7 @@ class StardewLogic:
     quest_rules: Dict[str, StardewRule] = field(default_factory=dict)
     festival_rules: Dict[str, StardewRule] = field(default_factory=dict)
     special_order_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    cached_rules: Dict[str, StardewRule] = field(default_factory=dict)
     any_weapon_rule: StardewRule = None
     decent_weapon_rule: StardewRule = None
     good_weapon_rule: StardewRule = None
@@ -578,19 +579,20 @@ class StardewLogic:
         return TotalReceived(count, items, self.player)
 
     def can_reach_region(self, spot: str) -> StardewRule:
-        return Reach(spot, "Region", self.player)
+        key = f"can_reach_region {spot}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = Reach(spot, "Region", self.player)
+        return self.cached_rules[key]
 
     def can_reach_any_region(self, spots: Iterable[str]) -> StardewRule:
-        return Or(self.can_reach_region(spot) for spot in spots)
+        spots = list(spots)
+        key = f"can_reach_any_region {spots}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = Or(self.can_reach_region(spot) for spot in spots)
+        return self.cached_rules[key]
 
     def can_reach_all_regions(self, spots: Iterable[str]) -> StardewRule:
         return And(self.can_reach_region(spot) for spot in spots)
-
-    def can_reach_all_regions_except_one(self, spots: Iterable[str]) -> StardewRule:
-        num_required = len(list(spots)) - 1
-        if num_required <= 0:
-            num_required = len(list(spots))
-        return Count(num_required, [self.can_reach_region(spot) for spot in spots])
 
     def can_reach_location(self, spot: str) -> StardewRule:
         return Reach(spot, "Location", self.player)
@@ -602,14 +604,24 @@ class StardewLogic:
         return self.has_lived_months(min(8, amount // MONEY_PER_MONTH))
 
     def can_spend_money(self, amount: int) -> StardewRule:
-        if self.options.starting_money == -1:
-            return True_()
-        return self.has_lived_months(min(8, amount // (MONEY_PER_MONTH // 5)))
+        key = f"can_spend_money {amount}"
+        if key not in self.cached_rules:
+            if self.options.starting_money == -1:
+                self.cached_rules[key] = True_()
+            else:
+                self.cached_rules[key] = self.has_lived_months(min(8, amount // (MONEY_PER_MONTH // 5)))
+        return self.cached_rules[key]
 
     def can_spend_money_at(self, region: str, amount: int) -> StardewRule:
         return self.can_reach_region(region) & self.can_spend_money(amount)
 
     def has_tool(self, tool: str, material: str = ToolMaterial.basic) -> StardewRule:
+        key = f"has_tool {tool} {material}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._has_tool(tool, material)
+        return self.cached_rules[key]
+
+    def _has_tool(self, tool: str, material: str = ToolMaterial.basic) -> StardewRule:
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
 
@@ -619,6 +631,12 @@ class StardewLogic:
         return self.has(f"{material} Bar") & self.can_spend_money(tool_upgrade_prices[material])
 
     def can_earn_skill_level(self, skill: str, level: int) -> StardewRule:
+        key = f"can_earn_skill_level {skill} {level}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._can_earn_skill_level(skill, level)
+        return self.cached_rules[key]
+
+    def _can_earn_skill_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
             return True_()
 
@@ -647,6 +665,12 @@ class StardewLogic:
         return previous_level_rule & months_rule & xp_rule
 
     def has_skill_level(self, skill: str, level: int) -> StardewRule:
+        key = f"has_skill_level {skill} {level}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._has_skill_level(skill, level)
+        return self.cached_rules[key]
+
+    def _has_skill_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
             return True_()
 
@@ -800,12 +824,15 @@ class StardewLogic:
         return allowed_buy_sapling & can_buy_sapling
 
     def can_grow_crop(self, crop: CropItem) -> StardewRule:
-        season_rule = self.has_any_season(crop.farm_growth_seasons)
-        seed_rule = self.has(crop.seed.name)
-        farm_rule = self.can_reach_region(Region.farm) & season_rule
-        tool_rule = self.has_tool(Tool.hoe) & self.has_tool(Tool.watering_can)
-        region_rule = farm_rule | self.can_reach_region(Region.greenhouse) | self.can_reach_region(Region.island_west)
-        return seed_rule & region_rule & tool_rule
+        key = f"can_grow_crop {crop.name}"
+        if key not in self.cached_rules:
+            season_rule = self.has_any_season(crop.farm_growth_seasons)
+            seed_rule = self.has(crop.seed.name)
+            farm_rule = self.can_reach_region(Region.farm) & season_rule
+            tool_rule = self.has_tool(Tool.hoe) & self.has_tool(Tool.watering_can)
+            region_rule = farm_rule | self.can_reach_region(Region.greenhouse) | self.can_reach_region(Region.island_west)
+            self.cached_rules[key] = seed_rule & region_rule & tool_rule
+        return self.cached_rules[key]
 
     def can_plant_and_grow_item(self, seasons: Union[str, Iterable[str]]) -> StardewRule:
         if isinstance(seasons, str):
@@ -1088,14 +1115,15 @@ class StardewLogic:
             return self.can_earn_relationship(npc, hearts)
         is_capped_at_8 = villager.bachelor and friendsanity != Friendsanity.option_all_with_marriage
         if is_capped_at_8 and hearts > 8:
-            return self.received_hearts(villager, 8) & self.can_earn_relationship(npc, hearts)
-        return self.received_hearts(villager, hearts)
+            return self.received_hearts(villager.name, 8) & self.can_earn_relationship(npc, hearts)
+        return self.received_hearts(villager.name, hearts)
 
-    def received_hearts(self, npc: Union[str, Villager], hearts: int) -> StardewRule:
-        if isinstance(npc, Villager):
-            return self.received_hearts(npc.name, hearts)
-        heart_size = self.options.friendsanity_heart_size.value
-        return self.received(self.heart(npc), math.ceil(hearts / heart_size))
+    def received_hearts(self, npc: str, hearts: int) -> StardewRule:
+        key = f"received_hearts {npc}, {hearts}"
+        if key not in self.cached_rules:
+            heart_size = self.options.friendsanity_heart_size.value
+            self.cached_rules[key] = self.received(self.heart(npc), math.ceil(hearts / heart_size))
+        return self.cached_rules[key]
 
     def can_meet(self, npc: str) -> StardewRule:
         if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
@@ -1301,14 +1329,17 @@ class StardewLogic:
         return self.can_reach_region(Region.museum) & self.can_find_museum_minerals(number)
 
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
-        region_rule = self.can_reach_all_regions_except_one(item.locations)
-        geodes_rule = And([self.can_open_geode(geode) for geode in item.geodes])
-        # monster_rule = self.can_farm_monster(item.monsters)
-        # extra_rule = True_()
-        pan_rule = False_()
-        if item.name == "Earth Crystal" or item.name == "Fire Quartz" or item.name == "Frozen Tear":
-            pan_rule = self.can_do_panning()
-        return pan_rule | (region_rule & geodes_rule)  # & monster_rule & extra_rule
+        key = f"can_find_museum_item {item.name}"
+        if key not in self.cached_rules:
+            region_rule = self.can_reach_any_region(item.locations)
+            geodes_rule = And([self.can_open_geode(geode) for geode in item.geodes])
+            # monster_rule = self.can_farm_monster(item.monsters)
+            # extra_rule = True_()
+            pan_rule = False_()
+            if item.name == "Earth Crystal" or item.name == "Fire Quartz" or item.name == "Frozen Tear":
+                pan_rule = self.can_do_panning()
+            self.cached_rules[key] = pan_rule | (region_rule & geodes_rule)  # & monster_rule & extra_rule
+        return self.cached_rules[key]
 
     def can_find_museum_artifacts(self, number: int) -> StardewRule:
         rules = []
@@ -1342,6 +1373,12 @@ class StardewLogic:
         return And(rules)
 
     def has_season(self, season: str) -> StardewRule:
+        key = f"has_season {season}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._has_season(season)
+        return self.cached_rules[key]
+
+    def _has_season(self, season: str) -> StardewRule:
         if season == Generic.any:
             return True_()
         seasons_order = [Season.spring, Season.summer, Season.fall, Season.winter]
@@ -1367,8 +1404,11 @@ class StardewLogic:
         return And([self.has_season(season) for season in seasons])
 
     def has_lived_months(self, number: int) -> StardewRule:
-        number = max(0, min(number, MAX_MONTHS))
-        return self.received("Month End", number)
+        key = f"has_lived_months {number}"
+        if key not in self.cached_rules:
+            number = max(0, min(number, MAX_MONTHS))
+            self.cached_rules[key] = self.received("Month End", number)
+        return self.cached_rules[key]
 
     def has_rusty_key(self) -> StardewRule:
         return self.received(Wallet.rusty_key)
@@ -1517,11 +1557,15 @@ class StardewLogic:
         return barn_rule
 
     def can_open_geode(self, geode: str) -> StardewRule:
-        blacksmith_access = self.can_reach_region("Clint's Blacksmith")
-        geodes = [Geode.geode, Geode.frozen, Geode.magma, Geode.omni]
-        if geode == Generic.any:
-            return blacksmith_access & Or([self.has(geode_type) for geode_type in geodes])
-        return blacksmith_access & self.has(geode)
+        key = f"can_open_geode {geode}"
+        if key not in self.cached_rules:
+            blacksmith_access = self.can_reach_region("Clint's Blacksmith")
+            geodes = [Geode.geode, Geode.frozen, Geode.magma, Geode.omni]
+            if geode == Generic.any:
+                self.cached_rules[key] = blacksmith_access & Or([self.has(geode_type) for geode_type in geodes])
+            else:
+                self.cached_rules[key] = blacksmith_access & self.has(geode)
+        return self.cached_rules[key]
 
     def has_island_trader(self) -> StardewRule:
         if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
