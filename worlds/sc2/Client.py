@@ -548,7 +548,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             if "Upgrade" not in type_flaggroups[race]:
                 continue
             upgrade_flaggroup = type_flaggroups[race]["Upgrade"]
-            num_missions = ctx.generic_upgrade_missions * len(ctx.mission_req_table)
+            campaign_length = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
+            num_missions = ctx.generic_upgrade_missions * campaign_length
             amounts = [
                 num_missions // 100,
                 2 * num_missions // 100,
