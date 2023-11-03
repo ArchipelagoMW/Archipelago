@@ -949,7 +949,7 @@ def distribute_planned(world: MultiWorld) -> None:
                             err.append(f"Cannot place {item_name} into already filled location {location}.")
                     else:
                         err.append(f"Mismatch between {item_name} and {location}, only one is an event.")
-                else:  # Execute if break statement wasn't hit: Placement was unsuccessful
+                else:  # Execute if break statement wasn't hit: Placement was unsuccessful, put item back if from_pool
                     if from_pool:
                         world.itempool.append(item)
                 if count == maxcount:
@@ -959,8 +959,6 @@ def distribute_planned(world: MultiWorld) -> None:
                 failed(
                     f"Plando block failed to place {m - count} of {m} item(s) for {world.player_name[player]}, error(s): {' '.join(err)}",
                     placement['force'])
-
-            # Sort indices in reverse so we can remove them one by one
 
             for (item, location) in successful_pairs:
                 world.push_item(location, item, collect=False)
