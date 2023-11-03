@@ -1,9 +1,9 @@
 import os
 import unittest
 from argparse import Namespace
-from typing import Dict, FrozenSet, Tuple, Any, ClassVar
+from typing import Dict, FrozenSet, Tuple, Any, ClassVar, Iterable
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState
 from Utils import cache_argsless
 from test.TestBase import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
@@ -21,6 +21,17 @@ class SVTestCase(unittest.TestCase):
     skip_extra_tests: bool = True
     """Set to False to run tests that take long"""
     skip_long_tests: bool = True
+    """Set to False to run tests that take long"""
+    skip_performance_tests: bool = True
+
+    def setUp(self) -> None:
+        super().setUp()
+        long_tests_key = "long"
+        if long_tests_key in os.environ:
+            self.skip_long_tests = not bool(os.environ[long_tests_key])
+        performance_tests_key = "performance"
+        if performance_tests_key in os.environ:
+            self.skip_performance_tests = not bool(os.environ[performance_tests_key])
 
 
 class SVTestBase(WorldTestBase, SVTestCase):
@@ -29,9 +40,6 @@ class SVTestBase(WorldTestBase, SVTestCase):
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)
-        long_tests_key = "long"
-        if long_tests_key in os.environ:
-            self.skip_long_tests = not bool(os.environ[long_tests_key])
         if self.constructed:
             self.world = self.multiworld.worlds[self.player]  # noqa
 
@@ -114,8 +122,7 @@ pre_generated_worlds = {}
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options=None, seed=None,
-                          _cache: Dict[FrozenSet[Tuple[str, Any]], MultiWorld] = {}) -> MultiWorld:  # noqa
+def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[FrozenSet[Tuple[str, Any]], MultiWorld] = {}) -> MultiWorld:  # noqa
     if test_options is None:
         test_options = {}
 
@@ -136,5 +143,32 @@ def setup_solo_multiworld(test_options=None, seed=None,
         call_all(multiworld, step)
 
     _cache[frozen_options] = multiworld
+
+    return multiworld
+
+
+def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -> MultiWorld:  # noqa
+    if test_options is None:
+        test_options = []
+
+    multiworld = MultiWorld(len(test_options))
+    multiworld.player_name = {}
+    multiworld.set_seed(seed)
+    multiworld.state = CollectionState(multiworld)
+    for i in range(1, len(test_options) + 1):
+        args = Namespace()
+        multiworld.game[i] = StardewValleyWorld.game
+        multiworld.player_name.update({i: f"Tester{i}"})
+    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
+        options = {}
+        for i in range(1, len(test_options) + 1):
+            player_options = test_options[i-1]
+            value = option(player_options[name]) if name in player_options else option.from_any(option.default)
+            options.update({i: value})
+        setattr(args, name, options)
+    multiworld.set_options(args)
+
+    for step in gen_steps:
+        call_all(multiworld, step)
 
     return multiworld
