@@ -187,6 +187,8 @@ class RandomizeInfusionPercentageOption(Range):
     range_start = 0
     range_end = 100
     default = 33
+    # 3/155 weapons are infused in the base game, or about 2%
+    special_range_names = {"similar to base game": 2}
 
 
 class RandomizeWeaponLevelOption(Choice):

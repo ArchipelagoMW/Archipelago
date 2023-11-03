@@ -21,6 +21,44 @@ class DS3ItemCategory(IntEnum):
     BOSS = 10
     SKIP = 11
 
+    @property
+    def is_infusible(self) -> bool:
+        """Returns whether this category can be infused."""
+        return self in [
+            DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE,
+            DS3ItemCategory.SHIELD_INFUSIBLE
+        ]
+
+
+@dataclass
+class Infusion(IntEnum):
+    """Infusions supported by Dark Souls III.
+
+    The value of each infusion is the number added to the base weapon's ID to get the infused ID.
+    """
+
+    HEAVY = 100
+    SHARP = 200
+    REFINED = 300
+    SIMPLE = 400
+    CRYSTAL = 500
+    FIRE = 600
+    CHAOS = 700
+    LIGHTNING = 800
+    DEEP = 900
+    DARK = 1000
+    POISON = 1100
+    BLOOD = 1200
+    RAW = 1300
+    BLESSED = 1400
+    HOLLOW = 1500
+
+    @property
+    def prefix(self):
+        """The prefix to add to a weapon name with this infusion."""
+        return self.name.title()
+
+
 class UsefulIf(IntEnum):
     """An enum that indicates when an item should be upgraded to ItemClassification.useful.
 
@@ -106,6 +144,19 @@ class DS3ItemData():
                 filler = False, # Don't count multiples as filler by default
             )
 
+    def infuse(self, infusion: Infusion) -> "DS3ItemData":
+        """Returns this item with the given infusion applied."""
+        if not self.category.is_infusible: raise f"{name} is not infusible."
+        if self.ds3_code % 10000 >= 100: raise f"{name} is already infused."
+
+        return dataclasses.replace(
+            self,
+            name = f"{infusion.prefix} {self.name}",
+            ds3_code = ds3_code + infusion.value,
+            base_name = self.base_name,
+            filler = False,
+        )
+
     def __hash__(self):
         return hash((name, count))
 
@@ -115,6 +166,7 @@ class DS3ItemData():
 
 class DarkSouls3Item(Item):
     game: str = "Dark Souls III"
+    ds3_code = int
     count: int = 1
     souls: Optional[int] = None
     base_name: str
@@ -138,6 +190,7 @@ class DarkSouls3Item(Item):
         item.count = data.count
         item.souls = data.souls
         item.base_name = data.base_name
+        item.ds3_code = data.ds3_code
         return item
 
 _vanilla_items = flatten([
