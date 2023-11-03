@@ -201,7 +201,7 @@ class DS3LocationData:
         if self.lizard: names.append("Small Crystal Lizards")
         if self.key: names.append("Keys")
         if self.category == DS3LocationCategory.UPGRADE: names.append("Upgrade")
-        if self.category == DS3LocationCategory.SOUL: names.append("Soul Items")
+        if self.category == DS3LocationCategory.SOUL and not self.boss: names.append("Small Souls")
         if self.category == DS3LocationCategory.MISC: names.append("Miscellaneous")
         if self.hidden: names.append("Hidden")
         return names
@@ -2813,7 +2813,7 @@ location_name_groups: Dict[str, Set[str]] = {
     "Small Crystal Lizards": set(),
     "Keys": set(),
     "Upgrade": set(),
-    "Soul Items": set(),
+    "Small Souls": set(),
     "Miscellaneous": set(),
     "Hidden": set()
 }

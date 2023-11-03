@@ -598,6 +598,8 @@ class DarkSouls3World(World):
 
     def _add_entrance_rule(self, region: str, rule: Union[CollectionRule, str]) -> None:
         """Sets a rule for the entrance to the given region."""
+        assert region in location_tables
+        if not any(region == reg.name for reg in self.multiworld.regions): return
         if isinstance(rule, str):
             assert item_dictionary[rule].classification == ItemClassification.progression
             rule = lambda state, item=rule: state.has(item, self.player)
