@@ -439,13 +439,13 @@ class DarkSouls3World(World):
 
     def set_rules(self) -> None:
         # Define the access rules to the entrances
-        self._set_entrance_rule("Firelink Shrine Bell Tower", "Tower Key")
-        self._set_entrance_rule("Undead Settlement", "Small Lothric Banner")
-        self._set_entrance_rule("Lothric Castle", "Basin of Vows")
-        self._set_entrance_rule("Irithyll of the Boreal Valley", "Small Doll")
-        self._set_entrance_rule("Archdragon Peak", "Path of the Dragon")
-        self._set_entrance_rule("Grand Archives", "Grand Archives Key")
-        self._set_entrance_rule(
+        self._add_entrance_rule("Firelink Shrine Bell Tower", "Tower Key")
+        self._add_entrance_rule("Undead Settlement", "Small Lothric Banner")
+        self._add_entrance_rule("Lothric Castle", "Basin of Vows")
+        self._add_entrance_rule("Irithyll of the Boreal Valley", "Small Doll")
+        self._add_entrance_rule("Archdragon Peak", "Path of the Dragon")
+        self._add_entrance_rule("Grand Archives", "Grand Archives Key")
+        self._add_entrance_rule(
             "Kiln of the First Flame",
             lambda state: state.has("Cinders of a Lord - Abyss Watcher", self.player) and
                           state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
@@ -483,38 +483,38 @@ class DarkSouls3World(World):
         }
         for ash, items in ashes.items():
             for item in items:
-                self._set_location_rule("FS: " + item, ash)
+                self._add_location_rule("FS: " + item, ash)
 
         if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
-            self._set_entrance_rule("Lothric Castle", "Small Lothric Banner")
+            self._add_entrance_rule("Lothric Castle", "Small Lothric Banner")
 
         # DLC Access Rules Below
         if self.multiworld.enable_dlc[self.player]:
-            self._set_entrance_rule("Ringed City", "Small Envoy Banner")
-            self._set_entrance_rule("Painted World of Ariandel (After Contraption)", "Contraption Key")
+            self._add_entrance_rule("Ringed City", "Small Envoy Banner")
+            self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Contraption Key")
 
             if self.multiworld.late_dlc[self.player]:
-                self._set_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
+                self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
 
         # Define the access rules to some specific locations
-        self._set_location_rule("HWL: Red Eye Orb", "Lift Chamber Key")
-        self._set_location_rule("ID: Bellowing Dragoncrest Ring", "Jailbreaker's Key")
-        self._set_location_rule("ID: Covetous Gold Serpent Ring", "Old Cell Key")
-        self._set_location_rule("UG: Hornet Ring", "Small Lothric Banner")
-        self._set_entrance_rule("Karla's Shop", "Jailer's Key Ring")
+        self._add_location_rule("HWL: Red Eye Orb", "Lift Chamber Key")
+        self._add_location_rule("ID: Bellowing Dragoncrest Ring", "Jailbreaker's Key")
+        self._add_location_rule("ID: Covetous Gold Serpent Ring", "Old Cell Key")
+        self._add_location_rule("UG: Hornet Ring", "Small Lothric Banner")
+        self._add_entrance_rule("Karla's Shop", "Jailer's Key Ring")
 
         # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
         # Grand Archives is available, so his shop will always be available one way or another.
-        self._set_entrance_rule("Greirat's Shop", "Cell Key")
+        self._add_entrance_rule("Greirat's Shop", "Cell Key")
 
         for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]:
-            self._set_location_rule("AL: " + item, "Black Eye Orb")
+            self._add_location_rule("AL: " + item, "Black Eye Orb")
 
         # You could just kill NPCs for these, but it's more fun to ensure the player can do
         # their quests.
-        self._set_location_rule("FS: Lift Chamber Key", "Pale Tongue")
-        self._set_location_rule("AP: Hawkwood's Swordgrass", "Twinkling Dragon Torso Stone")
-        self._set_location_rule("ID: Prisoner Chief's Ashes", "Jailer's Key Ring")
+        self._add_location_rule("FS: Lift Chamber Key", "Pale Tongue")
+        self._add_location_rule("AP: Hawkwood's Swordgrass", "Twinkling Dragon Torso Stone")
+        self._add_location_rule("ID: Prisoner Chief's Ashes", "Jailer's Key Ring")
 
         # Make sure that the player can keep Orbeck around by giving him at least one scroll
         # before killing Abyss Watchers.
@@ -523,22 +523,22 @@ class DarkSouls3World(World):
                 state.has("Golden Scroll", self.player) or
                 state.has("Logan's Scroll", self.player) or
                 state.has("Crystal Scroll", self.player))
-        self._set_location_rule("FK: Soul of the Blood of the Wolf", has_any_scroll)
-        self._set_location_rule("FK: Cinders of a Lord - Abyss Watcher", has_any_scroll)
-        self._set_entrance_rule("Catacombs of Carthus", has_any_scroll)
+        self._add_location_rule("FK: Soul of the Blood of the Wolf", has_any_scroll)
+        self._add_location_rule("FK: Cinders of a Lord - Abyss Watcher", has_any_scroll)
+        self._add_entrance_rule("Catacombs of Carthus", has_any_scroll)
 
-        self._set_location_rule("HWL: Soul of the Dancer", "Basin of Vows")
+        self._add_location_rule("HWL: Soul of the Dancer", "Basin of Vows")
 
         # Lump Soul of the Dancer in with LC for locations that should not be reachable
         # before having access to US. (Prevents requiring getting Basin to fight Dancer to get SLB to go to US)
         if self.multiworld.late_basin_of_vows[self.player]:
-            self._set_location_rule("HWL: Soul of the Dancer", "Small Lothric Banner")
+            self._add_location_rule("HWL: Soul of the Dancer", "Small Lothric Banner")
 
         gotthard_corpse_rule = lambda state: \
             (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
              state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player))
-        self._set_location_rule("LC: Grand Archives Key", gotthard_corpse_rule)
-        self._set_location_rule("LC: Gotthard Twinswords", gotthard_corpse_rule)
+        self._add_location_rule("LC: Grand Archives Key", gotthard_corpse_rule)
+        self._add_location_rule("LC: Gotthard Twinswords", gotthard_corpse_rule)
 
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
         # logic for choosing how many shop items to sell), and from carring soul items.
@@ -552,9 +552,9 @@ class DarkSouls3World(World):
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location.region:
-            self._set_entrance_rule(self.yhorm_location.region, "Storm Ruler")
+            self._add_entrance_rule(self.yhorm_location.region, "Storm Ruler")
         for location in self.yhorm_location.locations:
-            self._set_location_rule(location, "Storm Ruler")
+            self._add_location_rule(location, "Storm Ruler")
 
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
@@ -595,26 +595,24 @@ class DarkSouls3World(World):
                         ))
 
 
-    def _set_location_rule(self, location: str, rule: Union[CollectionRule, str]) -> None:
+    def _add_location_rule(self, location: str, rule: Union[CollectionRule, str]) -> None:
         """Sets a rule for the given location if it that location is randomized.
 
         The rule can just be a single item/event name as well as an explicit rule lambda.
         """
         if not self.is_location_available(location): return
         if isinstance(rule, str):
-            item = rule
-            assert item_dictionary[item].classification == ItemClassification.progression
-            rule = lambda state: state.has(item, self.player)
-        set_rule(self.multiworld.get_location(location, self.player), rule)
+            assert item_dictionary[rule].classification == ItemClassification.progression
+            rule = lambda state, item=rule: state.has(item, self.player)
+        add_rule(self.multiworld.get_location(location, self.player), rule)
 
 
-    def _set_entrance_rule(self, region: str, rule: Union[CollectionRule, str]) -> None:
+    def _add_entrance_rule(self, region: str, rule: Union[CollectionRule, str]) -> None:
         """Sets a rule for the entrance to the given region."""
         if isinstance(rule, str):
-            item = rule
-            assert item_dictionary[item].classification == ItemClassification.progression
-            rule = lambda state: state.has(item, self.player)
-        set_rule(self.multiworld.get_entrance("Go To " + region, self.player), rule)
+            assert item_dictionary[rule].classification == ItemClassification.progression
+            rule = lambda state, item=rule: state.has(item, self.player)
+        add_rule(self.multiworld.get_entrance("Go To " + region, self.player), rule)
 
 
     def is_location_available(self, location: Union[str, DS3LocationData]) -> bool:
