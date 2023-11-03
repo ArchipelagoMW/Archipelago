@@ -32,11 +32,11 @@ class MultiworldTestBase(TestCase):
     def assertSteps(self, steps: Tuple[str, ...]) -> None:
         world_types = set(self.multiworld.worlds.values())
         for step in steps:
-            for player in self.multiworld.worlds:
-                with self.subTest(step):
+            for player, world_type in self.multiworld.worlds.items():
+                with self.subTest(game=world_type.game, step=step):
                     call_single(self.multiworld, step, player)
             for world_type in sorted(world_types, key=lambda world: world.__name__):
-                with self.subTest(f"stage_{step}"):
+                with self.subTest(game=world_type.game, step=f"stage_{step}"):
                     stage_callable = getattr(world_type, f"stage_{step}", None)
                     if stage_callable:
                         stage_callable(self.multiworld)
@@ -47,6 +47,7 @@ class TestAllGamesMultiworld(MultiworldTestBase):
 
     def test_fills(self) -> None:
         all_worlds = list(AutoWorldRegister.world_types.values())
+        # lttp requires a bunch of options not in the options API to function
         all_worlds.remove(ALTTPWorld)
         self.multiworld = setup_multiworld(all_worlds, ())
         self.assertSteps(gen_steps)
@@ -58,11 +59,11 @@ class TestAllGamesMultiworld(MultiworldTestBase):
 
 class TestTwoPlayerMulti(MultiworldTestBase):
     def test_two_player_single_game_fills(self) -> None:
-        for game, world in AutoWorldRegister.world_types.items():
+        for world in AutoWorldRegister.world_types.values():
+            # lttp requires a bunch of options not in the options API to function
             if world is ALTTPWorld:
                 continue
-            worlds = [world] * 2
-            self.multiworld = setup_multiworld(worlds, ())
+            self.multiworld = setup_multiworld([world, world], ())
             self.assertSteps(gen_steps)
         with self.subTest("filling multiworld", seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
