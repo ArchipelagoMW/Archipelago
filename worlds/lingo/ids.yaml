@@ -953,9 +953,6 @@ panels:
     LAPEL SHEEP: 445202
 doors:
   Starting Room:
-    Main Door:
-      item: 444414
-      location: 444400
     Back Right Door:
       item: 444416
       location: 444401
@@ -1426,7 +1423,6 @@ doors:
       item: 444574
       location: 445176
 door_groups:
-  Entry Doors: 444415
   Rhyme Room Doors: 444418
   Dead End Area Access: 444420
   Entrances to The Tenacious: 444427

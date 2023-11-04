@@ -122,9 +122,7 @@
         tag: midwhite
     doors:
       Main Door:
-        id: Entry Room Area Doors/Door_hi_hi
-        group: Entry Doors
-        include_reduce: True
+        event: True
         panels:
           - HI
       Back Right Door:
@@ -381,7 +379,6 @@
         id: Entry Room Area Doors/Door_hi_high
         location_name: Second Room - Good Luck
         include_reduce: True
-        group: Entry Doors
         panels:
           - HI
           - LOW

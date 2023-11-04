@@ -60,7 +60,7 @@ class LingoWorld(World):
 
         if self.player_logic.FORCED_GOOD_ITEM != "":
             new_item = self.create_item(self.player_logic.FORCED_GOOD_ITEM)
-            location_obj = self.multiworld.get_location("Starting Room - HI", self.player)
+            location_obj = self.multiworld.get_location("Second Room - Good Luck", self.player)
             location_obj.place_locked_item(new_item)
 
         item_difference = len(self.player_logic.REAL_LOCATIONS) - len(pool)

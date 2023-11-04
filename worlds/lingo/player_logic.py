@@ -188,18 +188,18 @@ class LingoPlayerLogic:
             # now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there are
             # no extra checks in there. We only include the entrance to the Rhyme Room when color shuffle is off and
             # door shuffle is on simple, because otherwise there are no extra checks in there.
-            good_item_options: List[str] = ["Starting Room - Back Right Door"]
+            good_item_options: List[str] = ["Starting Room - Back Right Door", "Second Room - Exit Door"]
 
             if not color_shuffle:
                 good_item_options.append("Pilgrim Room - Sun Painting")
 
             if door_shuffle == ShuffleDoors.option_simple:
-                good_item_options += ["Entry Doors", "Welcome Back Doors"]
+                good_item_options += ["Welcome Back Doors"]
 
                 if not color_shuffle:
                     good_item_options.append("Rhyme Room Doors")
             else:
-                good_item_options += ["Starting Room - Main Door", "Welcome Back Area - Shortcut to Starting Room"]
+                good_item_options += ["Welcome Back Area - Shortcut to Starting Room"]
 
             for painting_obj in PAINTINGS_BY_ROOM["Starting Room"]:
                 if not painting_obj.enter_only or painting_obj.required_door is None:
@@ -233,7 +233,7 @@ class LingoPlayerLogic:
             if len(good_item_options) > 0:
                 self.FORCED_GOOD_ITEM = world.random.choice(good_item_options)
                 self.REAL_ITEMS.remove(self.FORCED_GOOD_ITEM)
-                self.REAL_LOCATIONS.remove("Starting Room - HI")
+                self.REAL_LOCATIONS.remove("Second Room - Good Luck")
 
     def randomize_paintings(self, world: World) -> bool:
         self.PAINTING_MAPPING.clear()
