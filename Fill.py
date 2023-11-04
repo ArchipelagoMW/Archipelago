@@ -15,6 +15,10 @@ class FillError(RuntimeError):
     pass
 
 
+def _log_fill_progress(name: str, placed: int, total_items: int) -> None:
+    logging.info(f"Current fill step ({name}) at {placed}/{total_items} items placed.")
+
+
 def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item] = tuple()) -> CollectionState:
     new_state = base_state.copy()
     for item in itempool:
@@ -26,7 +30,7 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
                      item_pool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
                      swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
-                     allow_partial: bool = False, allow_excluded: bool = False) -> None:
+                     allow_partial: bool = False, allow_excluded: bool = False, name: str = "Unknown") -> None:
     """
     :param world: Multiworld to be filled.
     :param base_state: State assumed before fill.
@@ -38,15 +42,19 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     :param on_place: callback that is called when a placement happens
     :param allow_partial: only place what is possible. Remaining items will be in the item_pool list.
     :param allow_excluded: if true and placement fails, it is re-attempted while ignoring excluded on Locations
+    :param name: name of this fill step for progress logging purposes
     """
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
     cleanup_required = False
-
     swapped_items: typing.Counter[typing.Tuple[int, str, bool]] = Counter()
     reachable_items: typing.Dict[int, typing.Deque[Item]] = {}
     for item in item_pool:
         reachable_items.setdefault(item.player, deque()).append(item)
+
+    # for progress logging
+    total = min(len(item_pool), len(locations))
+    placed = 0
 
     while any(reachable_items.values()) and locations:
         # grab one item per player
@@ -152,8 +160,14 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
             spot_to_fill.event = item_to_place.advancement
+            placed += 1
+            if not placed % 1000:
+                _log_fill_progress(name, placed, total)
             if on_place:
                 on_place(spot_to_fill)
+
+    if total > 1000:
+        _log_fill_progress(name, placed, total)
 
     if cleanup_required:
         # validate all placements and remove invalid ones
@@ -198,6 +212,8 @@ def remaining_fill(world: MultiWorld,
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
+    total = min(len(itempool),  len(locations))
+    placed = 0
     while locations and itempool:
         item_to_place = itempool.pop()
         spot_to_fill: typing.Optional[Location] = None
@@ -247,6 +263,12 @@ def remaining_fill(world: MultiWorld,
 
         world.push_item(spot_to_fill, item_to_place, False)
         placements.append(spot_to_fill)
+        placed += 1
+        if not placed % 1000:
+            _log_fill_progress("Remaining", placed, total)
+
+    if total > 1000:
+        _log_fill_progress("Remaining", placed, total)
 
     if unplaced_items and locations:
         # There are leftover unplaceable items and locations that won't accept them
@@ -282,7 +304,7 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, locatio
             locations.append(location)
     if pool and locations:
         locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
-        fill_restrictive(world, state, locations, pool)
+        fill_restrictive(world, state, locations, pool, name="Accessibility Corrections")
 
 
 def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locations):
@@ -352,23 +374,25 @@ def distribute_early_items(world: MultiWorld,
             player_local = early_local_rest_items[player]
             fill_restrictive(world, base_state,
                              [loc for loc in early_locations if loc.player == player],
-                             player_local, lock=True, allow_partial=True)
+                             player_local, lock=True, allow_partial=True, name=f"Local Early Items P{player}")
             if player_local:
                 logging.warning(f"Could not fulfill rules of early items: {player_local}")
                 early_rest_items.extend(early_local_rest_items[player])
         early_locations = [loc for loc in early_locations if not loc.item]
-        fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True, allow_partial=True)
+        fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True, allow_partial=True,
+                         name="Early Items")
         early_locations += early_priority_locations
         for player in world.player_ids:
             player_local = early_local_prog_items[player]
             fill_restrictive(world, base_state,
                              [loc for loc in early_locations if loc.player == player],
-                             player_local, lock=True, allow_partial=True)
+                             player_local, lock=True, allow_partial=True, name=f"Local Early Progression P{player}")
             if player_local:
                 logging.warning(f"Could not fulfill rules of early items: {player_local}")
                 early_prog_items.extend(player_local)
         early_locations = [loc for loc in early_locations if not loc.item]
-        fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True, allow_partial=True)
+        fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True, allow_partial=True,
+                         name="Early Progression")
         unplaced_early_items = early_rest_items + early_prog_items
         if unplaced_early_items:
             logging.warning("Ran out of early locations for early items. Failed to place "
@@ -422,13 +446,14 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
 
     if prioritylocations:
         # "priority fill"
-        fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
+        fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking,
+                         name="Priority")
         accessibility_corrections(world, world.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
-        # "progression fill"
-        fill_restrictive(world, world.state, defaultlocations, progitempool)
+        # "advancement/progression fill"
+        fill_restrictive(world, world.state, defaultlocations, progitempool, name="Progression")
         if progitempool:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
