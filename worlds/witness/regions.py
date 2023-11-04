@@ -3,10 +3,11 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from logging import warning
-from typing import FrozenSet, Dict, Set
+from typing import FrozenSet, Dict
 
 from BaseClasses import Entrance, Region, Location
 from worlds.AutoWorld import World
+from .rules import _can_solve_panels
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
 from Utils import KeyedDefaultDict
@@ -27,9 +28,7 @@ class WitnessRegions:
         This function is for that purpose
         """
 
-        return lambda state: state._witness_can_solve_panels(
-            panel_hex_to_solve_set, world, player, player_logic, self.locat
-        )
+        return lambda state: _can_solve_panels(state, panel_hex_to_solve_set, world, player, player_logic, self.locat)
 
     def entity_requires_region(self, entity: str, region: str, player_logic: WitnessPlayerLogic):
         if all(region in requirement for requirement in player_logic.REQUIREMENTS_BY_HEX[entity]):
