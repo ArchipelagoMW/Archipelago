@@ -586,8 +586,11 @@ class StardewLogic:
             self.cached_rules[key] = Or(self.can_reach_region(spot) for spot in spots)
         return self.cached_rules[key]
 
-    def can_reach_all_regions(self, spots: Iterable[str]) -> StardewRule:
-        return And(self.can_reach_region(spot) for spot in spots)
+    def can_reach_all_regions(self, spots: List[str]) -> StardewRule:
+        key = f"can_reach_all_regions {spots}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = And(self.can_reach_region(spot) for spot in spots)
+        return self.cached_rules[key]
 
     def can_reach_location(self, spot: str) -> StardewRule:
         return Reach(spot, "Location", self.player)
@@ -608,7 +611,10 @@ class StardewLogic:
         return self.cached_rules[key]
 
     def can_spend_money_at(self, region: str, amount: int) -> StardewRule:
-        return self.can_reach_region(region) & self.can_spend_money(amount)
+        key = f"can_spend_money_at {region} {amount}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self.can_reach_region(region) & self.can_spend_money(amount)
+        return self.cached_rules[key]
 
     def has_tool(self, tool: str, material: str = ToolMaterial.basic) -> StardewRule:
         key = f"has_tool {tool} {material}"
@@ -712,6 +718,12 @@ class StardewLogic:
         return Has(building, self.building_rules) & carpenter_rule
 
     def has_house(self, upgrade_level: int) -> StardewRule:
+        key = f"has_house {upgrade_level}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._has_house(upgrade_level)
+        return self.cached_rules[key]
+
+    def _has_house(self, upgrade_level: int) -> StardewRule:
         if upgrade_level < 1:
             return True_()
 
@@ -805,18 +817,21 @@ class StardewLogic:
         return self.has_max_fishing_rod() & skill_rule
 
     def can_buy_seed(self, seed: SeedItem) -> StardewRule:
-        if self.options.cropsanity == Cropsanity.option_disabled:
-            item_rule = True_()
-        else:
-            item_rule = self.received(seed.name)
-        season_rule = self.has_any_season(seed.seasons)
-        region_rule = self.can_reach_all_regions(seed.regions)
-        currency_rule = self.can_spend_money(1000)
-        if seed.name == Seed.pineapple:
-            currency_rule = self.has(Forageable.magma_cap)
-        if seed.name == Seed.taro:
-            currency_rule = self.has(Fossil.bone_fragment)
-        return season_rule & region_rule & item_rule & currency_rule
+        key = f"can_buy_seed {seed.name}"
+        if key not in self.cached_rules:
+            if self.options.cropsanity == Cropsanity.option_disabled:
+                item_rule = True_()
+            else:
+                item_rule = self.received(seed.name)
+            season_rule = self.has_any_season(seed.seasons)
+            region_rule = self.can_reach_all_regions(seed.regions)
+            currency_rule = self.can_spend_money(1000)
+            if seed.name == Seed.pineapple:
+                currency_rule = self.has(Forageable.magma_cap)
+            if seed.name == Seed.taro:
+                currency_rule = self.has(Fossil.bone_fragment)
+            self.cached_rules[key] = season_rule & region_rule & item_rule & currency_rule
+        return self.cached_rules[key]
 
     def can_buy_sapling(self, fruit: str) -> StardewRule:
         sapling_prices = {Fruit.apple: 4000, Fruit.apricot: 2000, Fruit.cherry: 3400, Fruit.orange: 4000,
@@ -884,17 +899,30 @@ class StardewLogic:
         return self.can_get_fishing_xp()
 
     def can_cook(self, recipe: CookingRecipe = None) -> StardewRule:
-        cook_rule = self.has_house(1) | self.has_skill_level(Skill.foraging, 9)
         if recipe is None:
-            return cook_rule
+            key = f"can_cook"
+        else:
+            key = f"can_cook {recipe.meal} {type(recipe.source)}"
+        if key not in self.cached_rules:
+            cook_rule = self.has_house(1) | self.has_skill_level(Skill.foraging, 9)
+            if recipe is None:
+                self.cached_rules[key] = cook_rule
+                return self.cached_rules[key]
 
-        learn_rule = self.can_learn_recipe(recipe.source)
-        ingredients_rule = And([self.has(ingredient) for ingredient in recipe.ingredients])
-        number_ingredients = sum(recipe.ingredients[ingredient] for ingredient in recipe.ingredients)
-        time_rule = self.has_lived_months(number_ingredients)
-        return cook_rule & learn_rule & ingredients_rule & time_rule
+            learn_rule = self.can_learn_recipe(recipe.source)
+            ingredients_rule = And([self.has(ingredient) for ingredient in recipe.ingredients])
+            number_ingredients = sum(recipe.ingredients[ingredient] for ingredient in recipe.ingredients)
+            time_rule = self.has_lived_months(number_ingredients)
+            self.cached_rules[key] = cook_rule & learn_rule & ingredients_rule & time_rule
+        return self.cached_rules[key]
 
     def can_learn_recipe(self, source: RecipeSource) -> StardewRule:
+        key = f"can_learn_recipe {source}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._can_learn_recipe(source)
+        return self.cached_rules[key]
+
+    def _can_learn_recipe(self, source: RecipeSource) -> StardewRule:
         if isinstance(source, StarterSource):
             return True_()
         if isinstance(source, ShopSource):
@@ -922,17 +950,20 @@ class StardewLogic:
         return self.received("Glittering Boulder Removed")
 
     def can_crab_pot(self, region: str = Generic.any) -> StardewRule:
-        crab_pot_rule = self.has(Craftable.bait)
-        if self.options.skill_progression == SkillProgression.option_progressive:
-            crab_pot_rule = crab_pot_rule & self.has(Machine.crab_pot)
-        else:
-            crab_pot_rule = crab_pot_rule & self.can_get_fishing_xp()
+        key = f"can_crab_pot {region}"
+        if key not in self.cached_rules:
+            crab_pot_rule = self.has(Craftable.bait)
+            if self.options.skill_progression == SkillProgression.option_progressive:
+                crab_pot_rule = crab_pot_rule & self.has(Machine.crab_pot)
+            else:
+                crab_pot_rule = crab_pot_rule & self.can_get_fishing_xp()
 
-        if region != Generic.any:
-            return crab_pot_rule & self.can_reach_region(region)
-
-        water_region_rules = self.can_reach_any_region(fishing_regions)
-        return crab_pot_rule & water_region_rules
+            if region != Generic.any:
+                self.cached_rules[key] = crab_pot_rule & self.can_reach_region(region)
+            else:
+                water_region_rules = self.can_reach_any_region(fishing_regions)
+                self.cached_rules[key] = crab_pot_rule & water_region_rules
+        return self.cached_rules[key]
 
     # Regions
     def can_mine_in_the_mines_floor_1_40(self) -> StardewRule:
@@ -988,16 +1019,19 @@ class StardewLogic:
         return self.can_do_combat_at_level(Performance.basic)
 
     def can_progress_in_the_mines_from_floor(self, floor: int) -> StardewRule:
-        tier = int(floor / 40)
-        rules = []
-        weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
-        rules.append(weapon_rule)
-        if self.options.tool_progression == ToolProgression.option_progressive:
-            rules.append(self.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
-        if self.options.skill_progression == SkillProgression.option_progressive:
-            combat_tier = min(10, max(0, tier * 2))
-            rules.append(self.has_skill_level(Skill.combat, combat_tier))
-        return And(rules)
+        key = f"can_progress_in_the_mines_from_floor {floor}"
+        if key not in self.cached_rules:
+            tier = int(floor / 40)
+            rules = []
+            weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
+            rules.append(weapon_rule)
+            if self.options.tool_progression == ToolProgression.option_progressive:
+                rules.append(self.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
+            if self.options.skill_progression == SkillProgression.option_progressive:
+                combat_tier = min(10, max(0, tier * 2))
+                rules.append(self.has_skill_level(Skill.combat, combat_tier))
+            self.cached_rules[key] = And(rules)
+        return self.cached_rules[key]
 
     def can_progress_easily_in_the_mines_from_floor(self, floor: int) -> StardewRule:
         tier = int(floor / 40) + 1
@@ -1012,9 +1046,15 @@ class StardewLogic:
         return And(rules)
 
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
-        if self.options.elevator_progression != ElevatorProgression.option_vanilla:
-            return self.received("Progressive Mine Elevator", count=int(floor / 5))
-        return True_()
+        key = f"has_mine_elevator_to_floor {floor}"
+        if key not in self.cached_rules:
+            if self.options.elevator_progression != ElevatorProgression.option_vanilla:
+                self.cached_rules[key] = self.received("Progressive Mine Elevator", count=int(floor / 5))
+            else:
+                self.cached_rules[key] = True_()
+        return self.cached_rules[key]
+
+
 
     def can_mine_to_floor(self, floor: int) -> StardewRule:
         previous_elevator = max(floor - 5, 0)
@@ -1350,7 +1390,10 @@ class StardewLogic:
         return self.received("Dwarvish Translation Guide")
 
     def can_donate_museum_item(self, item: MuseumItem) -> StardewRule:
-        return self.can_reach_region(Region.museum) & self.can_find_museum_item(item)
+        key = f"can_donate_museum_item {item.name}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self.can_reach_region(Region.museum) & self.can_find_museum_item(item)
+        return self.cached_rules[key]
 
     def can_donate_museum_items(self, number: int) -> StardewRule:
         return self.can_reach_region(Region.museum) & self.can_find_museum_items(number)
@@ -1661,11 +1704,15 @@ class StardewLogic:
         return self.heart(npc.name)
 
     def can_forage(self, season: str, region: str = Region.forest, need_hoe: bool = False) -> StardewRule:
-        season_rule = self.has_season(season)
-        region_rule = self.can_reach_region(region)
-        if need_hoe:
-            return season_rule & region_rule & self.has_tool(Tool.hoe)
-        return season_rule & region_rule
+        key = f"can_forage {season} {region} {need_hoe}"
+        if key not in self.cached_rules:
+            season_rule = self.has_season(season)
+            region_rule = self.can_reach_region(region)
+            if need_hoe:
+                self.cached_rules[key] = season_rule & region_rule & self.has_tool(Tool.hoe)
+            else:
+                self.cached_rules[key] = season_rule & region_rule
+        return self.cached_rules[key]
 
     def npc_is_in_current_slot(self, name: str) -> bool:
         npc = all_villagers_by_name[name]
@@ -1673,21 +1720,29 @@ class StardewLogic:
         return mod is None or mod in self.options.mods
 
     def can_do_combat_at_level(self, level: str) -> StardewRule:
-        if level == Performance.basic:
-            return self.has_any_weapon() | magic.has_any_spell(self)
-        if level == Performance.decent:
-            return self.has_decent_weapon() | magic.has_decent_spells(self)
-        if level == Performance.good:
-            return self.has_good_weapon() | magic.has_good_spells(self)
-        if level == Performance.great:
-            return self.has_great_weapon() | magic.has_great_spells(self)
-        if level == Performance.galaxy:
-            return self.has_galaxy_weapon() | magic.has_amazing_spells(self)
+        key = f"can_do_combat_at_level {level}"
+        if key not in self.cached_rules:
+            if level == Performance.basic:
+                self.cached_rules[key] = self.has_any_weapon() | magic.has_any_spell(self)
+            elif level == Performance.decent:
+                self.cached_rules[key] = self.has_decent_weapon() | magic.has_decent_spells(self)
+            elif level == Performance.good:
+                self.cached_rules[key] = self.has_good_weapon() | magic.has_good_spells(self)
+            elif level == Performance.great:
+                self.cached_rules[key] = self.has_great_weapon() | magic.has_great_spells(self)
+            elif level == Performance.galaxy:
+                self.cached_rules[key] = self.has_galaxy_weapon() | magic.has_amazing_spells(self)
+            else:
+                self.cached_rules[key] = False_()
+        return self.cached_rules[key]
 
     def can_water(self, level: int) -> StardewRule:
-        tool_rule = self.has_tool(Tool.watering_can, ToolMaterial.tiers[level])
-        spell_rule = (self.received(MagicSpell.water) & magic.can_use_altar(self) & self.has_skill_level(ModSkill.magic, level))
-        return tool_rule | spell_rule
+        key = f"can_water {level}"
+        if key not in self.cached_rules:
+            tool_rule = self.has_tool(Tool.watering_can, ToolMaterial.tiers[level])
+            spell_rule = (self.received(MagicSpell.water) & magic.can_use_altar(self) & self.has_skill_level(ModSkill.magic, level))
+            self.cached_rules[key] = tool_rule | spell_rule
+        return self.cached_rules[key]
 
     def has_prismatic_jelly_reward_access(self) -> StardewRule:
         if self.options.special_order_locations == SpecialOrderLocations.option_disabled:
