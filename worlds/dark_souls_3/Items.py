@@ -104,7 +104,7 @@ class DS3ItemData():
     classification: ItemClassification = ItemClassification.filler
     """How important this item is to the game progression."""
 
-    ap_code: int = False
+    ap_code: int = None
     """The Archipelago ID for this item."""
 
     is_dlc: bool = False
@@ -138,7 +138,7 @@ class DS3ItemData():
     """
 
     def __post_init__(self):
-        self.ap_code = DS3ItemData.__item_id
+        self.ap_code = self.ap_code or DS3ItemData.__item_id
         if not self.base_name: self.base_name = self.name
         DS3ItemData.__item_id += 1
 
@@ -159,11 +159,14 @@ class DS3ItemData():
         if not self.category.is_infusible: raise f"{self.name} is not infusible."
         if self.ds3_code % 10000 >= 100: raise f"{self.name} is already infused."
 
+        # We can't change the name or AP code when infusing/upgrading weapons, because they both
+        # need to match what's in item_name_to_id. We don't want to add every possible
+        # infusion/upgrade combination to that map because it's way too many items.
         return dataclasses.replace(
             self,
-            name = f"{infusion.prefix} {self.name}",
+            ap_code = self.ap_code,
+            name = self.name,
             ds3_code = self.ds3_code + infusion.value,
-            base_name = self.base_name,
             filler = False,
         )
 
@@ -173,11 +176,14 @@ class DS3ItemData():
         if level > self.category.upgrade_level: raise f"{self.name} can't be upgraded to +{level}."
         if self.ds3_code % 100 != 0: raise f"{self.name} is already upgraded."
 
+        # We can't change the name or AP code when infusing/upgrading weapons, because they both
+        # need to match what's in item_name_to_id. We don't want to add every possible
+        # infusion/upgrade combination to that map because it's way too many items.
         return dataclasses.replace(
             self,
-            name = f"{self.name} +{level}",
+            ap_code = self.ap_code,
+            name = self.name,
             ds3_code = self.ds3_code + level,
-            base_name = self.base_name,
             filler = False,
         )
 

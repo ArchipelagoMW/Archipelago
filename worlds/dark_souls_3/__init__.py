@@ -1,9 +1,8 @@
 # world/dark_souls_3/__init__.py
 from collections.abc import Sequence
-import logging
 from collections import defaultdict
+import json
 from typing import Dict, Set, List, Optional, TextIO, Union
-import re
 
 from BaseClasses import CollectionState, MultiWorld, Region, Item, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
 from Options import Toggle
@@ -841,6 +840,8 @@ class DarkSouls3World(World):
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
+            # Reserializing here is silly, but it's easier for the offline randomizer.
+            "random_enemy_preset": json.dumps(self.multiworld.random_enemy_preset[self.player].value),
             "yhorm": (
                 f"{self.yhorm_location.name} {self.yhorm_location.id}"
                 if self.yhorm_location != default_yhorm_location

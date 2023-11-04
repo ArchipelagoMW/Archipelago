@@ -163,13 +163,13 @@ all_bosses = [
         "PW2: Ordained Dress",
         "PW2: Ordained Trousers",
     }),
-    DS3BossInfo("Blackflame Friede", 5000801, dlc = True, region = "Dreg Heap", locations = {
+    DS3BossInfo("Blackflame Friede", 4500800, dlc = True, region = "Dreg Heap", locations = {
         "PW2: Soul of Sister Friede",
         "PW2: Ordained Hood",
         "PW2: Ordained Dress",
         "PW2: Ordained Trousers",
     }),
-    DS3BossInfo("Demon Prince", 4500800, dlc = True, region = "Ringed City", locations = {
+    DS3BossInfo("Demon Prince", 5000801, dlc = True, region = "Ringed City", locations = {
         "DH: Soul of the Demon Prince",
         "DH: Small Envoy Banner",
     }),

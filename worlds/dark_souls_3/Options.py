@@ -1,7 +1,9 @@
-import typing
+from copy import deepcopy
 from dataclasses import dataclass
+import json
+import typing
 
-from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, Option, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, Option, PerGameCommonOptions, Range, Toggle, VerifyKeys
 
 
 class RandomizeWeaponLocations(DefaultOnToggle):
@@ -270,6 +272,34 @@ class RandomizeEnemiesOption(DefaultOnToggle):
     display_name = "Randomize Enemies"
 
 
+class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
+    """The YAML preset for the offline enemy randomizer.
+    
+    See the offline randomizer documentation in randomizer\\presets\\README.txt for details.
+    """
+    display_name = "Random Enemy Preset"
+    supports_weighting = False
+    default = {}
+
+    valid_keys: ["Description", "RecommendFullRandomization", "RecommendNoEnemyProgression",
+                 "OopsAll", "Boss", "Miniboss", "Basic", "BuffBasicEnemiesAsBosses",
+                 "DontRandomize", "RemoveSource", "Enemies"]
+
+    def __init__(self, value: typing.Dict[str, typing.Any]):
+        self.value = deepcopy(value)
+
+    def get_option_name(self, value: typing.Dict[str, typing.Any]):
+        return json.dumps(value)
+
+    @classmethod
+    def from_any(cls, data: typing.Dict[str, typing.Any]) -> "RandomEnemyPresetOption":
+        if type(data) == dict:
+            cls.verify_keys(data)
+            return cls(data)
+        else:
+            raise NotImplementedError(f"Must be a dictionary, got {type(data)}")
+
+
 class RandomizeMimicsWithEnemiesOption(Toggle):
     """Whether to mix Mimics into the main enemy pool.
 
@@ -389,6 +419,7 @@ class DarkSouls3Options(PerGameCommonOptions):
     enable_dlc: EnableDLCOption
     enable_ngp: EnableNGPOption
     randomize_enemies: RandomizeEnemiesOption
+    random_enemy_preset: RandomEnemyPresetOption
     randomize_mimics_with_enemies: RandomizeMimicsWithEnemiesOption
     randomize_small_crystal_lizards_with_enemies: RandomizeSmallCrystalLizardsWithEnemiesOption
     reduce_harmless_enemies: ReduceHarmlessEnemiesOption
