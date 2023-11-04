@@ -53,13 +53,13 @@ Avant de commencer le processus d'installation, voici ce que vous deviez savoir:
 
 ## Dépannage
 ### Le jeu ouvre normalement sans nouveau menu.
-Si le nouveau menu mentionné précédemment n'apparaît pas, c'est peut être l'un des deux problèmes suivants:
+Si le nouveau menu mentionné précédemment n'apparaît pas, c'est peut-être l'un des deux problèmes suivants:
  - Si aucune console n'apparait à l'ouverture du jeu, cela signifie que les mods ne se sont pas chargés correctement. Voici ce que vous pouvez essayer:
    - Si vous utilisez le mod manager, assurez-vous de l'ouvrir et d'appuyer sur `Start Modded`. Ouvrir le jeu normalement depuis Steam ne chargera aucun mod.
    - Vérifiez si le mod manager a correctement trouvé le répertoire du jeu. Dans le mod manager, cliquez sur `Settings` puis allez dans l'onglet `Locations`. Assurez-vous que le répertoire sous `Change Inscryption directory` est correct. Vous pouvez vérifier le répertoire correct si vous faites un clic droit sur le jeu Inscription sur Steam et cliquez sur `Gérer` > `Parcourir les fichiers locaux`. Si le répertoire est erroné, cliquez sur ce paramètre et modifiez le répertoire.
    - Si vous avez installé les mods manuellement, cela signifie généralement que BepInEx n'a pas été correctement installé. Assurez-vous de lire attentivement le guide d'installation.
    - S'il n'y a toujours pas de console lors de l'ouverture du jeu modifié, essayez de demander de l'aide sur [Archipelago Discord Server](https://discord.gg/8Z65BR2).
- - S'il y a une console, cela signifie que les mods ont été chargés mais que ArchipelagoMod n'a pas été trouvé ou a eu des erreurs lors du chargement.
+ - S'il y a une console, cela signifie que les mods ont été chargés, mais que ArchipelagoMod n'a pas été trouvé ou a eu des erreurs lors du chargement.
    - Regardez dans la console et assurez-vous que vous trouvez un message concernant le chargement d'ArchipelagoMod.
    - Si vous voyez du texte rouge, il y a eu une erreur. Signalez le problème dans [Archipelago Discord Server](https://discord.gg/8Z65BR2) ou dans notre [GitHub](https://github.com/DrBibop/Archipelago_Inscryption/issues).
 
