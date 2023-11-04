@@ -174,12 +174,16 @@ def user_path(*path: str) -> str:
         if user_path.cached_path != local_path():
             import filecmp
             if not os.path.exists(user_path("manifest.json")) or \
+                    not os.path.exists(local_path("manifest.json")) or \
                     not filecmp.cmp(local_path("manifest.json"), user_path("manifest.json"), shallow=True):
                 import shutil
-                for dn in ("Players", "data/sprites"):
+                for dn in ("Players", "data/sprites", "data/lua"):
                     shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
-                for fn in ("manifest.json",):
-                    shutil.copy2(local_path(fn), user_path(fn))
+                if not os.path.exists(local_path("manifest.json")):
+                    warnings.warn(f"Upgrading {user_path()} from something that is not a proper install")
+                else:
+                    shutil.copy2(local_path("manifest.json"), user_path("manifest.json"))
+            os.makedirs(user_path("worlds"), exist_ok=True)
 
     return os.path.join(user_path.cached_path, *path)
 

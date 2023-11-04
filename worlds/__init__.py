@@ -5,19 +5,20 @@ import typing
 import warnings
 import zipimport
 
-folder = os.path.dirname(__file__)
+from Utils import user_path, local_path
 
-__all__ = {
+local_folder = os.path.dirname(__file__)
+user_folder = user_path("worlds") if user_path() != local_path() else None
+
+__all__ = (
     "lookup_any_item_id_to_name",
     "lookup_any_location_id_to_name",
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
-    "folder",
-}
-
-if typing.TYPE_CHECKING:
-    from .AutoWorld import World
+    "local_folder",
+    "user_folder",
+)
 
 
 class GamesData(typing.TypedDict):
@@ -41,13 +42,13 @@ class WorldSource(typing.NamedTuple):
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative})"
 
     @property
     def resolved_path(self) -> str:
         if self.relative:
-            return os.path.join(folder, self.path)
+            return os.path.join(local_folder, self.path)
         return self.path
 
     def load(self) -> bool:
@@ -56,6 +57,7 @@ class WorldSource(typing.NamedTuple):
                 importer = zipimport.zipimporter(self.resolved_path)
                 if hasattr(importer, "find_spec"):  # new in Python 3.10
                     spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
+                    assert spec, f"{self.path} is not a loadable module"
                     mod = importlib.util.module_from_spec(spec)
                 else:  # TODO: remove with 3.8 support
                     mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0])
@@ -72,7 +74,7 @@ class WorldSource(typing.NamedTuple):
                 importlib.import_module(f".{self.path}", "worlds")
             return True
 
-        except Exception as e:
+        except Exception:
             # A single world failing can still mean enough is working for the user, log and carry on
             import traceback
             import io
@@ -87,14 +89,16 @@ class WorldSource(typing.NamedTuple):
 
 # find potential world containers, currently folders and zip-importable .apworld's
 world_sources: typing.List[WorldSource] = []
-file: os.DirEntry  # for me (Berserker) at least, PyCharm doesn't seem to infer the type correctly
-for file in os.scandir(folder):
-    # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
-    if not file.name.startswith(("_", ".")):
-        if file.is_dir():
-            world_sources.append(WorldSource(file.name))
-        elif file.is_file() and file.name.endswith(".apworld"):
-            world_sources.append(WorldSource(file.name, is_zip=True))
+for folder in (folder for folder in (user_folder, local_folder) if folder):
+    relative = folder == local_folder
+    for entry in os.scandir(folder):
+        # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
+        if not entry.name.startswith(("_", ".")):
+            file_name = entry.name if relative else os.path.join(folder, entry.name)
+            if entry.is_dir():
+                world_sources.append(WorldSource(file_name, relative=relative))
+            elif entry.is_file() and entry.name.endswith(".apworld"):
+                world_sources.append(WorldSource(file_name, is_zip=True, relative=relative))
 
 # import all submodules to trigger AutoWorldRegister
 world_sources.sort()
@@ -105,7 +109,7 @@ lookup_any_item_id_to_name = {}
 lookup_any_location_id_to_name = {}
 games: typing.Dict[str, GamesPackage] = {}
 
-from .AutoWorld import AutoWorldRegister
+from .AutoWorld import AutoWorldRegister  # noqa: E402
 
 # Build the data package for each game.
 for world_name, world in AutoWorldRegister.world_types.items():
