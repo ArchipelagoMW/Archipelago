@@ -1,8 +1,8 @@
 import math
 import random
-from typing import List, Dict
+from typing import List, Dict, ClassVar
 
-from BaseClasses import Tutorial, Region, ItemClassification, MultiWorld, Item
+from BaseClasses import Tutorial, Region, MultiWorld, Item
 from worlds.AutoWorld import WebWorld, World
 from .Options import cm_options, get_option_value
 from .Items import CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items, useful_items
@@ -28,7 +28,7 @@ class CMWorld(World):
     Checksmate is a game where you play chess, but all of your pieces were scattered across the multiworld.
     You win when you checkmate the opposing king!
     """
-    game: str = "ChecksMate"
+    game: ClassVar[str] = "ChecksMate"
     option_definitions = cm_options
     data_version = 0
     web = CMWeb()
@@ -46,16 +46,58 @@ class CMWorld(World):
                         "Enemy Piece F", "Enemy Piece G", "Enemy Piece H"},
     }
     items_used: Dict[int, Dict[str, int]] = {}
+    army: Dict[int, int] = {}
 
     item_pool: List[CMItem] = []
     prefill_items: List[CMItem] = []
+
+    known_pieces = {"Progressive Minor Piece": 9, "Progressive Major Piece": 5, "Progressive Major To Queen": 4, }
+    piece_type_limit_options = {
+        "Progressive Minor Piece": "minor_piece_limit_by_type",
+        "Progressive Major Piece": "major_piece_limit_by_type",
+        "Progressive Queen Piece": "queen_piece_limit_by_type",
+    }
+    piece_limit_options = {
+        "Progressive Queen Piece": "queen_piece_limit",
+    }
+    piece_limits_by_army = {
+        # Vanilla
+        0: {"Progressive Minor Piece": 4, "Progressive Major Piece": 3, "Progressive Major To Queen": 1},
+        # Colorbound Clobberers (the War Elephant is rather powerful)
+        1: {"Progressive Minor Piece": 2, "Progressive Major Piece": 5, "Progressive Major To Queen": 1},
+        # Remarkable Rookies
+        2: {"Progressive Minor Piece": 4, "Progressive Major Piece": 3, "Progressive Major To Queen": 1},
+        # Nutty Knights (although the Short Rook and Half Duck swap potency)
+        3: {"Progressive Minor Piece": 4, "Progressive Major Piece": 3, "Progressive Major To Queen": 1},
+        # Eurasian pieces
+        4: {"Progressive Minor Piece": 4, "Progressive Major Piece": 3, "Progressive Major To Queen": 1},
+    }
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super(CMWorld, self).__init__(multiworld, player)
         self.locked_locations = []
 
     def generate_early(self) -> None:
-        # TODO: if goal is not option_single do not add all enemies (requires client support)
+        army_constraint = get_option_value(self.multiworld, self.player, "fairy_chess_army")
+        if army_constraint != 0:
+            which_pieces = get_option_value(self.multiworld, self.player, "fairy_chess_pieces")
+            # Full: Adds the 12 Chess With Different Armies pieces, the Cannon, and the Vao.
+            if which_pieces == 1:
+                army_options = [0, 1, 2, 3, 4]
+            # CwDA: Adds the pieces from Ralph Betza's 12 Chess With Different Armies.
+            elif which_pieces == 2:
+                army_options = [0, 1, 2, 3]
+            # Cannon: Adds a Rook-like piece, which captures a distal chessman by leaping over an intervening chessman.
+            # Eurasian: Adds the Cannon and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
+            elif which_pieces > 2:
+                army_options = [0, 4]
+            # Vanilla: Disables fairy chess pieces completely.
+            else:
+                army_options = [0]
+            self.army[self.player] = self.multiworld.per_slot_randoms[self.player].choice(army_options)
+        is_single = get_option_value(self.multiworld, self.player, "goal") == 0
+        if not is_single:
+            return
         for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
             self.multiworld.start_inventory[self.player].value[enemy_pawn] = 1
         for enemy_piece in self.item_name_groups["Enemy Piece"]:
@@ -65,9 +107,11 @@ class CMWorld(World):
         return getattr(self.multiworld, name)[self.player]
 
     def fill_slot_data(self) -> dict:
-        seeds = {name: self.multiworld.per_slot_randoms[self.player].getrandbits(31) for name in [
+        cursed_knowledge = {name: self.multiworld.per_slot_randoms[self.player].getrandbits(31) for name in [
             "pocketSeed", "pawnSeed", "minorSeed", "majorSeed", "queenSeed"]}
-        return dict(seeds, **{option_name: self.setting(option_name).value for option_name in cm_options})
+        if self.player in self.army:
+            cursed_knowledge["army"] = self.army[self.player]
+        return dict(cursed_knowledge, **{option_name: self.setting(option_name).value for option_name in cm_options})
 
     def create_item(self, name: str) -> CMItem:
         data = item_table[name]
@@ -111,7 +155,7 @@ class CMWorld(World):
         if max_material_option < min_material_option:
             max_material_option = min_material_option
         max_material_actual = (
-                self.multiworld.random.random() * (max_material_option - min_material_option) + max_material_option)
+                self.multiworld.per_slot_randoms[self.player].random() * (max_material_option - min_material_option) + max_material_option)
 
         my_progression_items = list(progression_items.keys())
         my_progression_items.remove("Victory")
@@ -123,7 +167,7 @@ class CMWorld(World):
         my_progression_items.extend([item for item in my_progression_items if item != "Progressive Major To Queen"])
         while (len(items) + user_item_count) < len(location_table) and material < max_material_actual and len(
                 my_progression_items) > 0:
-            chosen_item = self.multiworld.random.choice(my_progression_items)
+            chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_progression_items)
             # obey user's wishes
             if progression_items[chosen_item].material + material > max_material_option:
                 my_progression_items.remove(chosen_item)
@@ -148,7 +192,7 @@ class CMWorld(World):
         #print(self.items_used)
         my_useful_items = list(useful_items.keys())
         while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
-            chosen_item = self.multiworld.random.choice(my_useful_items)
+            chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_useful_items)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
@@ -162,7 +206,7 @@ class CMWorld(World):
 
         my_filler_items = list(filler_items.keys())
         while (len(items) + user_item_count) < len(location_table):
-            chosen_item = self.multiworld.random.choice(my_filler_items)
+            chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_filler_items)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
@@ -197,9 +241,40 @@ class CMWorld(World):
         return True
 
     def can_add_more(self, chosen_item: str) -> bool:
+        if not self.under_piece_limit(chosen_item):
+            return False
         return chosen_item not in self.items_used[self.player] or \
             item_table[chosen_item].quantity == -1 or \
             self.items_used[self.player][chosen_item] < item_table[chosen_item].quantity
+
+    def under_piece_limit(self, chosen_item: str) -> bool:
+        is_army_constrained = get_option_value(self.multiworld, self.player, "fairy_chess_army")
+        # Limit pieces placed by individual variety
+        if chosen_item in self.piece_type_limit_options:
+            piece_limit: int = get_option_value(
+                self.multiworld, self.player, self.piece_type_limit_options[chosen_item])
+            # Chaos: Chooses random enabled options.
+            if is_army_constrained == 0:
+                piece_limit = piece_limit * self.known_pieces[chosen_item]
+            # Limited: Chooses within your army, but in any distribution.
+            elif is_army_constrained == 1:
+                army = self.army[self.player]
+                piece_limit = math.ceil(piece_limit * self.piece_limits_by_army[army][chosen_item] / 2.0)
+            # Fair: Chooses within your army
+            elif is_army_constrained == 2:
+                army = self.army[self.player]
+                piece_limit = self.piece_limits_by_army[army][chosen_item]
+            pieces_used = self.items_used[self.player].get(chosen_item, 0)
+            if 0 < piece_limit <= pieces_used:
+                # Intentionally ignore "parents" property: player might receive parent items after all children
+                return False
+        # Limit pieces placed by total number
+        if chosen_item in self.piece_limit_options:
+            piece_total_limit = get_option_value(self.multiworld, self.player, self.piece_limit_options[chosen_item])
+            pieces_used = self.items_used[self.player].get(chosen_item, 0)
+            if 0 < piece_total_limit <= pieces_used:
+                return False
+        return True
 
 
 def get_excluded_items(multiworld: MultiWorld, player: int) -> Dict[str, int]:
@@ -236,7 +311,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Di
         if not local_basic_unit:
             raise Exception("At least one early chessman must be local")
 
-        item = create_item_with_correct_settings(player, multiworld.random.choice(local_basic_unit))
+        item = create_item_with_correct_settings(player, multiworld.per_slot_randoms[player].choice(local_basic_unit))
         multiworld.get_location("Bongcloud Once", player).place_locked_item(item)
         locked_locations.append("Bongcloud Once")
 

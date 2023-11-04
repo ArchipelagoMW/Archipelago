@@ -19,7 +19,7 @@ class Goal(Choice):
     deliver checkmate, send a check, and add a sent enemy chessman. Progressively add each enemy pawn and piece by
     checkmating the opponent 15 times. See also ChecksFinder rows and columns.
 
-    Ordered Progressive: As Progressive, but the enemy chessmen are always in the progressive locations.
+    Ordered Progressive: As Progressive, but the enemy chessmen are always in the progressive checkmate locations.
     """
     display_name = "Goal"
     option_single = 0
@@ -41,7 +41,7 @@ class PieceLocations(Choice):
     """
     display_name = "Piece Locations"
     option_chaos = 0
-    # option_stable = 1
+    option_stable = 1
     # option_ordered = 2
     default = 0
 
@@ -58,7 +58,7 @@ class PieceTypes(Choice):
     """
     display_name = "Piece Types"
     option_chaos = 0
-    # option_stable = 1
+    option_stable = 1
     # option_book = 2
     default = 0
 
@@ -69,7 +69,7 @@ class EnemyPieceTypes(Choice):
 
     Chaos: Chooses random valid options.
 
-    Stable: As Chaos, but doesn't change between matches. You'll only ever add or upgrade pieces.
+    Stable: As Chaos, but doesn't change between matches. You'll only ever add pieces.
 
     Book: Uses the standard Chess army. Adds pieces inward, then kingside. For example, minor pieces are added in order
     of the King's Bishop, then both Knights, then a Bishop.
@@ -136,7 +136,8 @@ class FairyChessPieces(Choice):
 
     Full: Adds the 12 Chess With Different Armies pieces, the Cannon, and the Vao.
 
-    CwDA: Adds the pieces from Ralph Betza's 12 Chess With Different Armies.
+    CwDA: Adds the pieces from Ralph Betza's 12 Chess With Different Armies. Note that some castling rules are changed:
+    The Rookies' Half-Duck castles rather than the Short Rook, and the Clobberers' Fad and Bede may both castle.
 
     Cannon: Adds a Rook-like piece, which captures a distal chessman by leaping over an intervening chessman.
 
@@ -153,19 +154,20 @@ class FairyChessPieces(Choice):
 
 class FairyChessArmy(Choice):
     """
-    Whether to mix pieces between the Different Armies. No effect if Pieces is Vanilla. Does not affect pawns. Note that
-    the Eurasian Army, which replaces the Bishop and Knight with a Vao and Cannon, is a very powerful Different Army.
+    Whether to mix pieces between the Different Armies. Disables Piece Type Limits. Does not affect pawns. Note that the
+    Eurasian pieces, which replace the Bishop and Knight with a Vao and Cannon, constitute a very powerful Different
+    Army.
 
     Chaos: Chooses random enabled options.
 
     Limited: Chooses within your army, but in any distribution.
 
-    Fair: Chooses within your army.
+    Fair: Chooses within your army. Further limited to 2 pieces of most types, and 1 Queen-equivalent piece.
     """
     display_name = "Fairy Chess Army"
     option_chaos = 0
-    # option_limited = 1
-    # option_fair = 2
+    option_limited = 1
+    option_fair = 2
     default = 0
 
 
@@ -180,55 +182,63 @@ class FairyChessPawns(Choice):
     Berolina: Only use the Berolina pawn (may appear to be a Ferz), which moves diagonally and captures forward.
     """
     display_name = "Fairy Chess Pawns"
-    # option_vanilla = 0
+    option_vanilla = 0
     option_mixed = 1
-    # option_berolina = 2
+    option_berolina = 2
     default = 1
 
 
 class MinorPieceTypeLimit(Range):
     """
     How many of any given type of minor piece you might play with. If set to 1, you will never start with more than 1
-    Knight, nor 1 Bishop, but you may have both 1 Knight and 1 Bishop. If set to -1, this setting is disabled.
+    Knight, nor 1 Bishop, but you may have both 1 Knight and 1 Bishop. If set to 0, this setting is disabled.
+
+    Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Minor Piece Limit by Type"
-    range_start = -1
+    range_start = 0
     range_end = 15
-    default = -1
+    default = 0
 
 
 class MajorPieceTypeLimit(Range):
     """
     How many of any given type of major piece you might play with. If set to 1, you will never start with more than 1
-    Rook. If set to -1, this setting is disabled.
+    Rook. If set to 0, this setting is disabled.
+
+    Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Major Piece Limit by Type"
-    range_start = -1
+    range_start = 0
     range_end = 15
-    default = -1
+    default = 0
 
 
 class QueenPieceTypeLimit(Range):
     """
     How many of any given type of Queen-equivalent piece you might play with. If set to 1, you will never start with
-    more than 1 Queen. You may have both 1 Queen and 1 Amazon. If set to -1, this setting is disabled.
+    more than 1 Queen. You may have both 1 Queen and 1 Amazon. If set to 0, this setting is disabled.
+
+    Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Queen Piece Limit by Type"
-    range_start = -1
+    range_start = 0
     range_end = 15
-    default = -1
+    default = 0
 
 
 class QueenPieceLimit(Range):
     """
     How many Queen-equivalent pieces you might play with. If set to 1, you will never start with more than 1 piece
     upgraded to a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still promote pawns
-    during a game. If set to -1, this setting is disabled.
+    during a game. If set to 0, this setting is disabled.
+
+    Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Queen Piece Limit"
-    range_start = -1
+    range_start = 0
     range_end = 15
-    default = -1
+    default = 0
 
 
 cm_options: Dict[str, type(Option)] = {
@@ -258,6 +268,9 @@ def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Di
         return cm_options[name].default
     option = getattr(world, name, None)
     if option is None:
+        # TODO(chesslogic): is this necessary when the default for my class isn't 0?
+        if name in cm_options:
+            return cm_options[name].default
         return 0
 
     return option[player].value
