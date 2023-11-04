@@ -35,186 +35,188 @@ def create_regions(multiworld: MultiWorld, player: int):
     
     # Floor 1 Traverse Town
     # Standard Cards
-    regions["Floor 1"].locations.append("Kingdom Key")
-    regions["Floor 1"].locations.append("Blizzard")
-    regions["Floor 1"].locations.append("Cure")
-    regions["Floor 1"].locations.append("Potion")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Kingdom Key)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Blizzard)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Cure)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Potion)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 1"].locations.append("Simba")
-    regions["Floor 1"].locations.append("Guard Armor")
-    regions["Floor 1"].locations.append("Key of Beginnings F01")
-    regions["Floor 1"].locations.append("Key of Guidance F01")
-    regions["Floor 1"].locations.append("Key to Truth F01")
+    regions["Floor 1"].locations.append("F01 Traverse Town Room of Beginnings (Simba)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Room of Truth (Guard Armor)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Entrance")
+    regions["Floor 1"].locations.append("F01 Traverse Town Room of Beginnings")
+    regions["Floor 1"].locations.append("F01 Traverse Town Room of Guidance")
     #Room of Rewards
-    regions["Floor 1"].locations.append("Lionheart")
+    regions["Floor 1"].locations.append("F01 Traverse Town Room of Rewards (Lionheart)")
     #Post Floor Boss
-    regions["Floor 1"].locations.append("Fire")
+    regions["Floor 1"].locations.append("F01 Traverse Town Post Floor (Fire)")
     #Enemy Cards
-    regions["Floor 1"].locations.append("Shadow")
-    regions["Floor 1"].locations.append("Soldier")
-    regions["Floor 1"].locations.append("Blue Rhapsody")
-    regions["Floor 1"].locations.append("Red Nocturne")
-    regions["Floor 1"].locations.append("White Mushroom")
-    regions["Floor 1"].locations.append("Black Fungus")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Shadow)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Soldier)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Blue Rhapsody)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Red Nocturne)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (White Mushroom)")
+    regions["Floor 1"].locations.append("F01 Traverse Town Field (Black Fungus)")
     
     
     # Floor 2 Wonderland
     # Standard Cards
-    regions["Floor 2"].locations.append("Lady Luck")
-    regions["Floor 2"].locations.append("Stop")
+    regions["Floor 2"].locations.append("F02 Wonderland Field (Lady Luck)")
+    regions["Floor 2"].locations.append("F02 Wonderland Bounty (Stop)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 2"].locations.append("Card Soldier (Red)")
-    regions["Floor 2"].locations.append("Trickmaster")
-    regions["Floor 2"].locations.append("Key of Beginnings F02")
-    regions["Floor 2"].locations.append("Key of Guidance F02")
-    regions["Floor 2"].locations.append("Key to Truth F02")
+    regions["Floor 2"].locations.append("F02 Wonderland Room of Beginnings (Card Soldier Red)")
+    regions["Floor 2"].locations.append("F02 Wonderland Room of Truth (Trickmaster)")
+    regions["Floor 2"].locations.append("F02 Wonderland Entrance")
+    regions["Floor 2"].locations.append("F02 Wonderland Room of Beginnings")
+    regions["Floor 2"].locations.append("F02 Wonderland Room of Guidance")
     #Enemy Cards
-    regions["Floor 2"].locations.append("Card Soldier (Black)")
-    regions["Floor 2"].locations.append("Creeper Plant")
-    regions["Floor 2"].locations.append("Crescendo")
-    regions["Floor 2"].locations.append("Large Body")
+    regions["Floor 2"].locations.append("F02 Wonderland Field (Card Soldier Black)")
+    regions["Floor 2"].locations.append("F02 Wonderland Field (Creeper Plant)")
+    regions["Floor 2"].locations.append("F02 Wonderland Field (Crescendo)")
+    regions["Floor 2"].locations.append("F02 Wonderland Field (Large Body)")
     
     # Floor 3 Olympus Coliseum
     # Standard Cards
-    regions["Floor 3"].locations.append("Olympia")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Field (Olympia)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 3"].locations.append("Cloud")
-    regions["Floor 3"].locations.append("Hades")
-    regions["Floor 3"].locations.append("Hi-Potion")
-    regions["Floor 3"].locations.append("Key of Beginnings F03")
-    regions["Floor 3"].locations.append("Key of Guidance F03")
-    regions["Floor 3"].locations.append("Key to Truth F03")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Room of Truth (Cloud)")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Room of Truth (Hades)")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Room of Guidance (Hi-Potion)")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Entrance")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Room of Beginnings")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Room of Guidance")
     #Room of Rewards
-    regions["Floor 3"].locations.append("Metal Chocobo")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Room of Rewards (Metal Chocobo)")
     #Enemy Cards
-    regions["Floor 3"].locations.append("Barrel Spider")
-    regions["Floor 3"].locations.append("Bouncywild")
-    regions["Floor 3"].locations.append("Powerwild")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Field (Barrel Spider)")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Field (Bouncywild)")
+    regions["Floor 3"].locations.append("F03 Olympus Coliseum Field (Powerwild)")
     
     # Floor 4 Monstro
     # Standard Cards
-    regions["Floor 4"].locations.append("Wishing Star")
+    regions["Floor 4"].locations.append("F04 Monstro Field (Wishing Star)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 4"].locations.append("Parasite Cage")
-    regions["Floor 4"].locations.append("Dumbo")
-    regions["Floor 4"].locations.append("Key of Beginnings F04")
-    regions["Floor 4"].locations.append("Key of Guidance F04")
-    regions["Floor 4"].locations.append("Key to Truth F04")
+    regions["Floor 4"].locations.append("F04 Monstro Room of Guidance (Parasite Cage)")
+    regions["Floor 4"].locations.append("F04 Monstro Room of Truth (Dumbo)")
+    regions["Floor 4"].locations.append("F04 Monstro Entrance")
+    regions["Floor 4"].locations.append("F04 Monstro Room of Beginnings")
+    regions["Floor 4"].locations.append("F04 Monstro Room of Guidance")
     #Enemy Cards
-    regions["Floor 4"].locations.append("Green Requiem")
-    regions["Floor 4"].locations.append("Search Ghost")
-    regions["Floor 4"].locations.append("Tornado Step")
-    regions["Floor 4"].locations.append("Yellow Opera")
-    regions["Floor 4"].locations.append("Air Soldier")
+    regions["Floor 4"].locations.append("F04 Monstro Field (Green Requiem)")
+    regions["Floor 4"].locations.append("F04 Monstro Field (Search Ghost)")
+    regions["Floor 4"].locations.append("F04 Monstro Field (Tornado Step)")
+    regions["Floor 4"].locations.append("F04 Monstro Field (Yellow Opera)")
+    regions["Floor 4"].locations.append("F04 Monstro Field (Air Soldier)")
     
     # Floor 5 Agrabah
     # Standard Cards
-    regions["Floor 5"].locations.append("Three Wishes")
-    regions["Floor 5"].locations.append("Gravity")
+    regions["Floor 5"].locations.append("F05 Agrabah Field (Three Wishes)")
+    regions["Floor 5"].locations.append("F05 Agrabah Bounty (Gravity)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 5"].locations.append("Genie")
-    regions["Floor 5"].locations.append("Jafar")
-    regions["Floor 5"].locations.append("Ether")
-    regions["Floor 5"].locations.append("Key of Beginnings F05")
-    regions["Floor 5"].locations.append("Key of Guidance F05")
-    regions["Floor 5"].locations.append("Key to Truth F05")
+    regions["Floor 5"].locations.append("F05 Agrabah Room of Truth (Genie)")
+    regions["Floor 5"].locations.append("F05 Agrabah Room of Truth (Jafar)")
+    regions["Floor 5"].locations.append("F05 Agrabah Room of Guidance (Ether)")
+    regions["Floor 5"].locations.append("F05 Agrabah Entrance")
+    regions["Floor 5"].locations.append("F05 Agrabah Room of Beginnings")
+    regions["Floor 5"].locations.append("F05 Agrabah Room of Guidance")
     #Enemy Cards
-    regions["Floor 5"].locations.append("Bandit")
-    regions["Floor 5"].locations.append("Fat Bandit")
+    regions["Floor 5"].locations.append("F05 Agrabah Field (Bandit)")
+    regions["Floor 5"].locations.append("F05 Agrabah Field (Fat Bandit)")
     
     # Floor 6 Halloween Town
     # Standard Cards
-    regions["Floor 6"].locations.append("Pumpkinhead")
+    regions["Floor 6"].locations.append("F06 Halloween Town Field (Pumpkinhead)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 6"].locations.append("Oogie Boogie")
-    regions["Floor 6"].locations.append("Key of Beginnings F06")
-    regions["Floor 6"].locations.append("Key of Guidance F06")
-    regions["Floor 6"].locations.append("Key to Truth F06")
+    regions["Floor 6"].locations.append("F06 Halloween Town Room of Truth (Oogie Boogie)")
+    regions["Floor 6"].locations.append("F06 Halloween Town Entrance")
+    regions["Floor 6"].locations.append("F06 Halloween Town Room of Beginnings")
+    regions["Floor 6"].locations.append("F06 Halloween Town Room of Guidance")
     #Post Floor Boss
-    regions["Floor 6"].locations.append("Thunder")
+    regions["Floor 6"].locations.append("F06 Halloween Town Post Floor (Thunder)")
     #Enemy Cards
-    regions["Floor 6"].locations.append("Gargoyle")
-    regions["Floor 6"].locations.append("Wight Knight")
+    regions["Floor 6"].locations.append("F06 Halloween Town Field (Gargoyle)")
+    regions["Floor 6"].locations.append("F06 Halloween Town Field (Wight Knight)")
     
     # Floor 7 Atlantica
     # Standard Cards
-    regions["Floor 7"].locations.append("Crabclaw")
+    regions["Floor 7"].locations.append("F07 Atlantica Field (Crabclaw)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 7"].locations.append("Ursula")
-    regions["Floor 7"].locations.append("Key of Beginnings F07")
-    regions["Floor 7"].locations.append("Key of Guidance F07")
-    regions["Floor 7"].locations.append("Key to Truth F07")
+    regions["Floor 7"].locations.append("F07 Atlantica Room of Truth (Ursula)")
+    regions["Floor 7"].locations.append("F07 Atlantica Entrance")
+    regions["Floor 7"].locations.append("F07 Atlantica Room of Beginnings")
+    regions["Floor 7"].locations.append("F07 Atlantica Room of Guidance")
     #Post Floor Boss
-    regions["Floor 7"].locations.append("Aero")
+    regions["Floor 7"].locations.append("F07 Atlantica Post Floor (Aero)")
     #Enemy Cards
-    regions["Floor 7"].locations.append("Aquatank")
-    regions["Floor 7"].locations.append("Darkball")
-    regions["Floor 7"].locations.append("Sea Neon")
+    regions["Floor 7"].locations.append("F07 Atlantica Field (Aquatank)")
+    regions["Floor 7"].locations.append("F07 Atlantica Field (Darkball)")
+    regions["Floor 7"].locations.append("F07 Atlantica Field (Sea Neon)")
+    regions["Floor 7"].locations.append("F07 Atlantica Field (Screwdriver)")
     
     # Floor 8 Never Land
     # Standard Cards
-    regions["Floor 8"].locations.append("Fairy Harp")
+    regions["Floor 8"].locations.append("F08 Neverland Field (Fairy Harp)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 8"].locations.append("Hook")
-    regions["Floor 8"].locations.append("Tinker Bell")
-    regions["Floor 8"].locations.append("Key of Beginnings F08")
-    regions["Floor 8"].locations.append("Key of Guidance F08")
-    regions["Floor 8"].locations.append("Key to Truth F08")
+    regions["Floor 8"].locations.append("F08 Neverland Room of Truth (Hook)")
+    regions["Floor 8"].locations.append("F08 Neverland Room of Truth (Tinker Bell)")
+    regions["Floor 8"].locations.append("F08 Neverland Entrance")
+    regions["Floor 8"].locations.append("F08 Neverland Room of Beginnings")
+    regions["Floor 8"].locations.append("F08 Neverland Room of Guidance")
     #Enemy Cards
-    regions["Floor 8"].locations.append("Air Pirate")
-    regions["Floor 8"].locations.append("Pirate")
+    regions["Floor 8"].locations.append("F08 Neverland Field (Air Pirate)")
+    regions["Floor 8"].locations.append("F08 Neverland Field (Pirate)")
     
     # Floor 9 Holloow Bastion
     # Standard Cards
-    regions["Floor 9"].locations.append("Divine Rose")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Field (Divine Rose)")
     # KOB, KOG, KTT Rewards
-    regions["Floor 9"].locations.append("Dragon Maleficent")
-    regions["Floor 9"].locations.append("Key of Beginnings F09")
-    regions["Floor 9"].locations.append("Key of Guidance F09")
-    regions["Floor 9"].locations.append("Key to Truth F09")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Room of Truth (Dragon Maleficent)")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Entrance")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Room of Beginnings")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Room of Guidance")
     #Room of Rewards
-    regions["Floor 9"].locations.append("Mushu")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Room of Rewards (Mushu)")
     #Enemy Cards
-    regions["Floor 9"].locations.append("Defender")
-    regions["Floor 9"].locations.append("Wizard")
-    regions["Floor 9"].locations.append("Wyvern")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Field (Defender)")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Field (Wizard)")
+    regions["Floor 9"].locations.append("F09 Hollow Bastion Field (Wyvern)")
     
     # Floor 10 100 Acre Wood
     # Rewards
-    regions["Floor 10"].locations.append("Bambi")
-    regions["Floor 10"].locations.append("Elixir")
-    regions["Floor 10"].locations.append("Spellbinder")
+    regions["Floor 10"].locations.append("F10 100 Acre Wood Complete (Bambi)")
+    regions["Floor 10"].locations.append("F10 100 Acre Wood Roo (Elixir)")
+    regions["Floor 10"].locations.append("F10 100 Acre Wood Owl (Spellbinder)")
     #Post Floor Boss
-    regions["Floor 10"].locations.append("Mega-Ether")
+    regions["Floor 10"].locations.append("F10 100 Acre Wood Post Floor (Mega-Ether)")
     
     # Floor 11 Twilight Town
     # KOB, KOG, KTT Rewards
-    regions["Floor 11"].locations.append("Vexen")
-    regions["Floor 11"].locations.append("Key of Beginnings F11")
+    regions["Floor 11"].locations.append("F11 Twilight Town Room of Beginnings (Vexen)")
+    regions["Floor 11"].locations.append("F11 Twilight Town Entrance")
     #Post Floor Boss
-    regions["Floor 11"].locations.append("Mega-Potion")
+    regions["Floor 11"].locations.append("F11 Twilight Town Post Floor (Mega-Potion)")
     
     # Floor 12 Destiny Islands
     # KOB, KOG, KTT Rewards
-    regions["Floor 12"].locations.append("Darkside")
-    regions["Floor 12"].locations.append("Key of Beginnings F12")
-    regions["Floor 12"].locations.append("Key of Guidance F12")
+    regions["Floor 12"].locations.append("F12 Destiny Islands Room of Guidance (Darkside)")
+    regions["Floor 12"].locations.append("F12 Destiny Islands Entrance")
+    regions["Floor 12"].locations.append("F12 Destiny Islands Room of Beginnings")
     #Post Floor Boss
-    regions["Floor 12"].locations.append("Riku")
-    #regions["Floor 12"].locations.append("Larxene") missable?
+    regions["Floor 12"].locations.append("F12 Destiny Islands Post Floor (Riku)")
+    #regions["Floor 12"].locations.append("F12 Destiny Islands Post Floor (Larxene)")
+    regions["Floor 12"].locations.append("F12 Destiny Islands Post Floor (Oathkeeper)")
+    #regions["Floor 12"].locations.append("F12 Destiny Islands Post Floor (Oblivion)")
     #Room of Rewards
-    regions["Floor 12"].locations.append("Megalixir")
+    regions["Floor 12"].locations.append("F12 Destiny Islands Room of Rewards (Megalixir)")
     
     # Floor 13 Castle Oblivion
-    # Standard Cards
-    regions["Floor 13"].locations.append("Oathkeeper")
-    #regions["Floor 13"].locations.append("Oblivion") missable?
     # KOB, KOG, KTT Rewards
-    regions["Floor 13"].locations.append("Axel")
-    regions["Floor 13"].locations.append("Marluxia")
-    regions["Floor 13"].locations.append("Key of Beginnings F13")
+    regions["Floor 13"].locations.append("F13 Castle Oblivion Room of Beginnings (Axel)")
+    regions["Floor 13"].locations.append("F13 Castle Oblivion Post Floor (Marluxia)")
+    regions["Floor 13"].locations.append("F13 Castle Oblivion Post Marluxia (Diamond Dust)")
+    regions["Floor 13"].locations.append("F13 Castle Oblivion Post Marluxia (One-Winged Angel)")
+    regions["Floor 13"].locations.append("F13 Castle Oblivion Entrance")
     #Enemy Cards
-    regions["Floor 13"].locations.append("Neoshadow")
+    regions["Floor 13"].locations.append("F13 Castle Oblivion Field (Neoshadow)")
 
     # Set up the regions correctly.
     for name, data in regions.items():
