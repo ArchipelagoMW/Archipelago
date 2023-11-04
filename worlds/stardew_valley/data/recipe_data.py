@@ -15,11 +15,15 @@ from ..strings.villager_names import NPC
 
 
 class RecipeSource:
-    pass
+
+    def __repr__(self):
+        return f"RecipeSource"
 
 
 class StarterSource(RecipeSource):
-    pass
+
+    def __repr__(self):
+        return f"StarterSource"
 
 
 class QueenOfSauceSource(RecipeSource):
@@ -32,6 +36,9 @@ class QueenOfSauceSource(RecipeSource):
         self.season = season
         self.day = day
 
+    def __repr__(self):
+        return f"QueenOfSauceSource at year {self.year} {self.season} {self.day}"
+
 
 class FriendshipSource(RecipeSource):
     friend: str
@@ -40,6 +47,9 @@ class FriendshipSource(RecipeSource):
     def __init__(self, friend: str, hearts: int):
         self.friend = friend
         self.hearts = hearts
+
+    def __repr__(self):
+        return f"FriendshipSource at {self.friend} {self.hearts} <3"
 
 
 class SkillSource(RecipeSource):
@@ -50,6 +60,9 @@ class SkillSource(RecipeSource):
         self.skill = skill
         self.level = level
 
+    def __repr__(self):
+        return f"SkillSource at level {self.level} {self.skill}"
+
 
 class ShopSource(RecipeSource):
     region: str
@@ -59,9 +72,15 @@ class ShopSource(RecipeSource):
         self.region = region
         self.price = price
 
+    def __repr__(self):
+        return f"ShopSource at {self.region} costing {self.price}g"
+
 
 class ShopTradeSource(ShopSource):
     currency: str
+
+    def __repr__(self):
+        return f"ShopTradeSource at {self.region} costing {self.price} {self.currency}"
 
 
 class CookingRecipe:
