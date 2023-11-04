@@ -15,6 +15,14 @@ from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
 
 
+def entity_requires_region(entity: str, region: str, player_logic: WitnessPlayerLogic):
+    if all(region in requirement for requirement in player_logic.REQUIREMENTS_BY_HEX[entity]):
+        return True
+    if entity in StaticWitnessLogic.ENTITIES_BY_HEX and StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]:
+        return StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]["name"] == region
+    return False
+
+
 class WitnessRegions:
     """Class that defines Witness Regions"""
 
@@ -30,13 +38,6 @@ class WitnessRegions:
 
         return lambda state: _can_solve_panels(state, panel_hex_to_solve_set, world, player, player_logic, self.locat)
 
-    def entity_requires_region(self, entity: str, region: str, player_logic: WitnessPlayerLogic):
-        if all(region in requirement for requirement in player_logic.REQUIREMENTS_BY_HEX[entity]):
-            return True
-        if entity in StaticWitnessLogic.ENTITIES_BY_HEX and StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]:
-            return StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]["name"] == region
-        return False
-
     def connect_if_possible(self, world: World, source: str, target: str, player_logic: WitnessPlayerLogic,
                             panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], backwards: bool = False):
         """
@@ -46,7 +47,7 @@ class WitnessRegions:
         # Remove any possibilities where being in the target region would be required anyway.
         for subset in panel_hex_to_solve_set:
             if any(
-                self.entity_requires_region(entity, target, player_logic)
+                entity_requires_region(entity, target, player_logic)
                 or not player_logic.REQUIREMENTS_BY_HEX[entity]
                 for entity in subset
             ):

@@ -142,7 +142,7 @@ def get_always_hint_items(world: World):
     return always
 
 
-def get_always_hint_locations(world: World):
+def get_always_hint_locations(_: World):
     return {
         "Challenge Vault Box",
         "Mountain Bottom Floor Discard",
@@ -204,7 +204,7 @@ def get_priority_hint_items(world: World):
     return priority
 
 
-def get_priority_hint_locations(world: World):
+def get_priority_hint_locations(_: World):
     return {
         "Swamp Purple Underwater",
         "Shipwreck Vault Box",

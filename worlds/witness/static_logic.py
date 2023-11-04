@@ -162,7 +162,10 @@ class StaticWitnessLogicObj:
 
             current_region["panels"].append(check_hex)
 
-    def __init__(self, lines=get_sigma_normal_logic()):
+    def __init__(self, lines=None):
+        if lines is None:
+            lines = get_sigma_normal_logic()
+
         # All regions with a list of panels in them and the connections to other regions, before logic adjustments
         self.ALL_REGIONS_BY_NAME = dict()
         self.STATIC_CONNECTIONS_BY_REGION_NAME = dict()
