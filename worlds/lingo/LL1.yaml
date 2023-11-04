@@ -7002,14 +7002,16 @@
         tag: forbid
         check: True
         achievement: The Ecstatic
-      VINES:
+      FORM (1):
         id: Smiley Room/Panel_soundgram_1
         colors: yellow
-        tag: topyellow
-      LEAVES:
+        tag: yellow top bot
+        subtag: bottom
+        link: ytb FORM
+      WIND:
         id: Smiley Room/Panel_soundgram_2
         colors: yellow
-        tag: topyellow
+        tag: botyellow
       EGGS:
         id: Smiley Room/Panel_scrambled_1
         colors: yellow
@@ -7018,46 +7020,48 @@
         id: Smiley Room/Panel_scrambled_2
         colors: yellow
         tag: botyellow
-      ARGENT:
+      WATER:
         id: Smiley Room/Panel_anagram_6_1
         colors: yellow
-        tag: midyellow
-      CHASER:
+        tag: botyellow
+      FRUITS:
         id: Smiley Room/Panel_anagram_6_2
         colors: yellow
-        tag: midyellow
-      REGALLY:
+        tag: botyellow
+      LEAVES:
         id: Smiley Room/Panel_anagram_7_1
         colors: yellow
-        tag: midyellow
-      REPENTS:
+        tag: topyellow
+      VINES:
         id: Smiley Room/Panel_anagram_7_2
         colors: yellow
-        tag: midyellow
-      PRAISED:
+        tag: topyellow
+      ICE:
         id: Smiley Room/Panel_anagram_7_3
         colors: yellow
-        tag: midyellow
-      ADMIRER:
+        tag: topyellow
+      STYLE:
         id: Smiley Room/Panel_anagram_7_4
         colors: yellow
-        tag: midyellow
-      DISOWNED:
+        tag: topyellow
+      FIR:
         id: Smiley Room/Panel_anagram_8_1
         colors: yellow
-        tag: midyellow
-      GENERALS:
+        tag: topyellow
+      REEF:
         id: Smiley Room/Panel_anagram_8_2
         colors: yellow
-        tag: midyellow
-      RESIGNED:
+        tag: topyellow
+      ROTS:
         id: Smiley Room/Panel_anagram_8_3
         colors: yellow
-        tag: midyellow
-      EMIGRANTS:
+        tag: topyellow
+      FORM (2):
         id: Smiley Room/Panel_anagram_9_1
         colors: yellow
-        tag: midyellow
+        tag: yellow top bot
+        subtag: top
+        link: ytb FORM
   Outside The Scientific:
     entrances:
       Roof: True
