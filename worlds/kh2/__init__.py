@@ -284,8 +284,8 @@ class KH2World(World):
         """
         Creates the Regions and Connects them.
         """
-        create_regions(self.multiworld, self.player, self.location_name_to_id)
-        connect_regions(self.multiworld, self.player)
+        create_regions(self)
+        connect_regions(self)
 
     def set_rules(self):
         """

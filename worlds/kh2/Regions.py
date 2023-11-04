@@ -6,8 +6,8 @@ from .Locations import KH2Location, event_location_to_item
 from . import LocationName, RegionName, Events_Table
 
 KH2REGIONS: typing.Dict[str, typing.List[str]] = {
-    "Menu":                           [],
-    RegionName.GoA:                   [
+    "Menu":                        [],
+    RegionName.GoA:                [
         LocationName.GardenofAssemblageMap,
         LocationName.GoALostIllusion,
         LocationName.ProofofNonexistence,
@@ -16,7 +16,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         # LocationName.GoofyStarting1,
         # LocationName.GoofyStarting2
     ],
-    RegionName.LoD:                   [
+    RegionName.LoD:                [
         LocationName.BambooGroveDarkShard,
         LocationName.BambooGroveEther,
         LocationName.BambooGroveMythrilShard,
@@ -35,15 +35,15 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.RidgeFrostShard,
         LocationName.RidgeAPBoost,
     ],
-    RegionName.ShanYu:                [
+    RegionName.ShanYu:             [
         LocationName.ShanYu,
         LocationName.ShanYuGetBonus,
         LocationName.HiddenDragon,
         LocationName.GoofyShanYu,
         LocationName.ShanYuEventLocation
     ],
-    RegionName.LoD2:                  [],
-    RegionName.AnsemRiku:             [
+    RegionName.LoD2:               [],
+    RegionName.AnsemRiku:          [
         LocationName.ThroneRoomTornPages,
         LocationName.ThroneRoomPalaceMap,
         LocationName.ThroneRoomAPBoost,
@@ -54,16 +54,16 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.ThroneRoomOrichalcum,
         LocationName.AnsemRikuEventLocation,
     ],
-    RegionName.StormRider:            [
+    RegionName.StormRider:         [
         LocationName.StormRider,
         LocationName.GoofyStormRider,
         LocationName.StormRiderEventLocation
     ],
-    RegionName.DataXigbar:            [
+    RegionName.DataXigbar:         [
         LocationName.XigbarDataDefenseBoost,
         LocationName.DataXigbarEventLocation
     ],
-    RegionName.Ag:                    [
+    RegionName.Ag:                 [
         LocationName.AgrabahMap,
         LocationName.AgrabahDarkShard,
         LocationName.AgrabahMythrilShard,
@@ -94,27 +94,27 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.GoofyTreasureRoom,
         LocationName.DonaldAbuEscort
     ],
-    RegionName.TwinLords:             [
+    RegionName.TwinLords:          [
         LocationName.ElementalLords,
         LocationName.LampCharm,
         LocationName.TwinLordsEventLocation
     ],
-    RegionName.Ag2:                   [
+    RegionName.Ag2:                [
         LocationName.RuinedChamberTornPages,
         LocationName.RuinedChamberRuinsMap,
     ],
-    RegionName.GenieJafar:            [
+    RegionName.GenieJafar:         [
         LocationName.GenieJafar,
         LocationName.WishingLamp,
         LocationName.GenieJafarEventLocation,
     ],
-    RegionName.DataLexaeus:           [
+    RegionName.DataLexaeus:        [
         LocationName.LexaeusBonus,
         LocationName.LexaeusASStrengthBeyondStrength,
         LocationName.LexaeusDataLostIllusion,
         LocationName.DataLexaeusEventLocation
     ],
-    RegionName.Dc:                    [
+    RegionName.Dc:                 [
         LocationName.DCCourtyardMythrilShard,
         LocationName.DCCourtyardStarRecipe,
         LocationName.DCCourtyardAPBoost,
@@ -127,13 +127,13 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.MinnieEscort,
         LocationName.MinnieEscortGetBonus
     ],
-    RegionName.Tr:                    [
+    RegionName.Tr:                 [
         LocationName.CornerstoneHillMap,
         LocationName.CornerstoneHillFrostShard,
         LocationName.PierMythrilShard,
         LocationName.PierHiPotion,
     ],
-    RegionName.OldPete:               [
+    RegionName.OldPete:            [
         LocationName.WaterwayMythrilStone,
         LocationName.WaterwayAPBoost,
         LocationName.WaterwayFrostStone,
@@ -143,7 +143,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.DonaldBoatPeteGetBonus,
         LocationName.OldPeteEventLocation,
     ],
-    RegionName.FuturePete:            [
+    RegionName.FuturePete:         [
         LocationName.FuturePete,
         LocationName.FuturePeteGetBonus,
         LocationName.Monochrome,
@@ -151,39 +151,39 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.GoofyFuturePete,
         LocationName.FuturePeteEventLocation
     ],
-    RegionName.DataMarluxia:          [
+    RegionName.DataMarluxia:       [
         LocationName.MarluxiaGetBonus,
         LocationName.MarluxiaASEternalBlossom,
         LocationName.MarluxiaDataLostIllusion,
         LocationName.DataMarluxiaEventLocation
     ],
-    RegionName.Terra:                 [
+    RegionName.Terra:              [
         LocationName.LingeringWillBonus,
         LocationName.LingeringWillProofofConnection,
         LocationName.LingeringWillManifestIllusion,
         LocationName.TerraEventLocation
     ],
-    RegionName.Ha1:                   [
+    RegionName.Ha1:                [
         LocationName.PoohsHouse100AcreWoodMap,
         LocationName.PoohsHouseAPBoost,
         LocationName.PoohsHouseMythrilStone
     ],
-    RegionName.Ha2:                   [
+    RegionName.Ha2:                [
         LocationName.PigletsHouseDefenseBoost,
         LocationName.PigletsHouseAPBoost,
         LocationName.PigletsHouseMythrilGem
     ],
-    RegionName.Ha3:                   [
+    RegionName.Ha3:                [
         LocationName.RabbitsHouseDrawRing,
         LocationName.RabbitsHouseMythrilCrystal,
         LocationName.RabbitsHouseAPBoost,
     ],
-    RegionName.Ha4:                   [
+    RegionName.Ha4:                [
         LocationName.KangasHouseMagicBoost,
         LocationName.KangasHouseAPBoost,
         LocationName.KangasHouseOrichalcum,
     ],
-    RegionName.Ha5:                   [
+    RegionName.Ha5:                [
         LocationName.SpookyCaveMythrilGem,
         LocationName.SpookyCaveAPBoost,
         LocationName.SpookyCaveOrichalcum,
@@ -193,13 +193,13 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.SweetMemories,
         LocationName.SpookyCaveMap
     ],
-    RegionName.Ha6:                   [
+    RegionName.Ha6:                [
         LocationName.StarryHillCosmicRing,
         LocationName.StarryHillStyleRecipe,
         LocationName.StarryHillCureElement,
         LocationName.StarryHillOrichalcumPlus
     ],
-    RegionName.Pr:                    [
+    RegionName.Pr:                 [
         LocationName.RampartNavalMap,
         LocationName.RampartMythrilStone,
         LocationName.RampartDarkShard,
@@ -221,7 +221,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.GoofyInterceptorBarrels,
 
     ],
-    RegionName.Barbosa:               [
+    RegionName.Barbosa:            [
         LocationName.Barbossa,
         LocationName.BarbossaGetBonus,
         LocationName.FollowtheWind,
@@ -229,8 +229,8 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.GoofyBarbossaGetBonus,
         LocationName.BarbosaEventLocation,
     ],
-    RegionName.Pr2:                   [],
-    RegionName.GrimReaper1:           [
+    RegionName.Pr2:                [],
+    RegionName.GrimReaper1:        [
         LocationName.GrimReaper1,
         LocationName.InterceptorsHoldFeatherCharm,
         LocationName.SeadriftKeepAPBoost,
@@ -244,17 +244,17 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.GoofyGrimReaper1,
         LocationName.GrimReaper1EventLocation,
     ],
-    RegionName.GrimReaper2:           [
+    RegionName.GrimReaper2:        [
         LocationName.DonaladGrimReaper2,
         LocationName.GrimReaper2,
         LocationName.SecretAnsemReport6,
         LocationName.GrimReaper2EventLocation,
     ],
-    RegionName.DataLuxord:            [
+    RegionName.DataLuxord:         [
         LocationName.LuxordDataAPBoost,
         LocationName.DataLuxordEventLocation
     ],
-    RegionName.Oc:                    [
+    RegionName.Oc:                 [
         LocationName.PassageMythrilShard,
         LocationName.PassageMythrilStone,
         LocationName.PassageEther,
@@ -263,7 +263,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.InnerChamberUnderworldMap,
         LocationName.InnerChamberMythrilShard,
     ],
-    RegionName.Cerberus:              [
+    RegionName.Cerberus:           [
         LocationName.Cerberus,
         LocationName.ColiseumMap,
         LocationName.Urns,
@@ -285,59 +285,59 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.TheLockAPBoost,
         LocationName.CerberusEventLocation
     ],
-    RegionName.OlympusPete:           [
+    RegionName.OlympusPete:        [
         LocationName.PeteOC,
         LocationName.DonaldDemyxOC,
         LocationName.GoofyPeteOC,
         LocationName.OlympusPeteEventLocation
     ],
-    RegionName.Hydra:                 [
+    RegionName.Hydra:              [
         LocationName.Hydra,
         LocationName.HydraGetBonus,
         LocationName.HerosCrest,
         LocationName.HydraEventLocation
     ],
-    RegionName.Oc2:                   [
+    RegionName.Oc2:                [
         LocationName.AuronsStatue,
     ],
-    RegionName.Hades:                 [
+    RegionName.Hades:              [
         LocationName.Hades,
         LocationName.HadesGetBonus,
         LocationName.GuardianSoul,
         LocationName.HadesEventLocation
     ],
-    RegionName.OcPainAndPanicCup: [
+    RegionName.OcPainAndPanicCup:  [
         LocationName.ProtectBeltPainandPanicCup,
         LocationName.SerenityGemPainandPanicCup,
         LocationName.OcPainAndPanicCupEventLocation
     ],
-    RegionName.OcCerberusCup:       [
+    RegionName.OcCerberusCup:      [
         LocationName.RisingDragonCerberusCup,
         LocationName.SerenityCrystalCerberusCup,
         LocationName.OcCerberusCupEventLocation
     ],
-    RegionName.Oc2TitanCup:         [
+    RegionName.Oc2TitanCup:        [
         LocationName.GenjiShieldTitanCup,
         LocationName.SkillfulRingTitanCup,
         LocationName.Oc2TitanCupEventLocation
     ],
-    RegionName.Oc2GofCup:           [
+    RegionName.Oc2GofCup:          [
         LocationName.FatalCrestGoddessofFateCup,
         LocationName.OrichalcumPlusGoddessofFateCup,
         LocationName.Oc2GofCupEventLocation,
     ],
-    RegionName.HadesCups:             [
+    RegionName.HadesCups:          [
         LocationName.HadesCupTrophyParadoxCups,
         LocationName.HadesCupEventLocations
     ],
-    RegionName.DataZexion:            [
+    RegionName.DataZexion:         [
         LocationName.ZexionBonus,
         LocationName.ZexionASBookofShadows,
         LocationName.ZexionDataLostIllusion,
         LocationName.GoofyZexion,
         LocationName.DataZexionEventLocation
     ],
-    RegionName.Bc:                    [
+    RegionName.Bc:                 [
         LocationName.BCCourtyardAPBoost,
         LocationName.BCCourtyardHiPotion,
         LocationName.BCCourtyardMythrilShard,
@@ -351,7 +351,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.TheWestHallBrightStone,
         LocationName.TheWestHallMythrilShard,
     ],
-    RegionName.Thresholder:           [
+    RegionName.Thresholder:        [
         LocationName.Thresholder,
         LocationName.DungeonBasementMap,
         LocationName.DungeonAPBoost,
@@ -364,34 +364,34 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.DonaldThresholder,
         LocationName.ThresholderEventLocation
     ],
-    RegionName.Beast:                 [
+    RegionName.Beast:              [
         LocationName.Beast,
         LocationName.TheBeastsRoomBlazingShard,
         LocationName.GoofyBeast,
         LocationName.BeastEventLocation
     ],
-    RegionName.DarkThorn:             [
+    RegionName.DarkThorn:          [
         LocationName.DarkThorn,
         LocationName.DarkThornGetBonus,
         LocationName.DarkThornCureElement,
         LocationName.DarkThornEventLocation,
     ],
-    RegionName.Bc2:                   [
+    RegionName.Bc2:                [
         LocationName.RumblingRose,
         LocationName.CastleWallsMap
     ],
-    RegionName.Xaldin:                [
+    RegionName.Xaldin:             [
         LocationName.Xaldin,
         LocationName.XaldinGetBonus,
         LocationName.DonaldXaldinGetBonus,
         LocationName.SecretAnsemReport4,
         LocationName.XaldinEventLocation
     ],
-    RegionName.DataXaldin:            [
+    RegionName.DataXaldin:         [
         LocationName.XaldinDataDefenseBoost,
         LocationName.DataXaldinEventLocation
     ],
-    RegionName.Sp:                    [
+    RegionName.Sp:                 [
         LocationName.PitCellAreaMap,
         LocationName.PitCellMythrilCrystal,
         LocationName.CanyonDarkCrystal,
@@ -405,14 +405,14 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.CommunicationsRoomGaiaBelt,
         LocationName.DonaldScreens,
     ],
-    RegionName.HostileProgram:        [
+    RegionName.HostileProgram:     [
         LocationName.HostileProgram,
         LocationName.HostileProgramGetBonus,
         LocationName.PhotonDebugger,
         LocationName.GoofyHostileProgram,
         LocationName.HostileProgramEventLocation
     ],
-    RegionName.Sp2:                   [
+    RegionName.Sp2:                [
         LocationName.SolarSailer,
         LocationName.CentralComputerCoreAPBoost,
         LocationName.CentralComputerCoreOrichalcumPlus,
@@ -420,18 +420,18 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.CentralComputerCoreMap,
         LocationName.DonaldSolarSailer
     ],
-    RegionName.Mcp:                   [
+    RegionName.Mcp:                [
         LocationName.MCP,
         LocationName.MCPGetBonus,
         LocationName.McpEventLocation
     ],
-    RegionName.DataLarxene:           [
+    RegionName.DataLarxene:        [
         LocationName.LarxeneBonus,
         LocationName.LarxeneASCloakedThunder,
         LocationName.LarxeneDataLostIllusion,
         LocationName.DataLarxeneEventLocation
     ],
-    RegionName.Ht:                    [
+    RegionName.Ht:                 [
         LocationName.GraveyardMythrilShard,
         LocationName.GraveyardSerenityGem,
         LocationName.FinklesteinsLabHalloweenTownMap,
@@ -447,36 +447,36 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.SantasHouseChristmasTownMap,
         LocationName.SantasHouseAPBoost,
     ],
-    RegionName.PrisonKeeper:          [
+    RegionName.PrisonKeeper:       [
         LocationName.PrisonKeeper,
         LocationName.DonaldPrisonKeeper,
         LocationName.PrisonKeeperEventLocation,
     ],
-    RegionName.OogieBoogie:           [
+    RegionName.OogieBoogie:        [
         LocationName.OogieBoogie,
         LocationName.OogieBoogieMagnetElement,
         LocationName.GoofyOogieBoogie,
         LocationName.OogieBoogieEventLocation
     ],
-    RegionName.Ht2:                   [
+    RegionName.Ht2:                [
         LocationName.Lock,
         LocationName.Present,
         LocationName.DecoyPresents,
         LocationName.GoofyLock
     ],
-    RegionName.Experiment:            [
+    RegionName.Experiment:         [
         LocationName.Experiment,
         LocationName.DecisivePumpkin,
         LocationName.DonaldExperiment,
         LocationName.ExperimentEventLocation,
     ],
-    RegionName.DataVexen:             [
+    RegionName.DataVexen:          [
         LocationName.VexenBonus,
         LocationName.VexenASRoadtoDiscovery,
         LocationName.VexenDataLostIllusion,
         LocationName.DataVexenEventLocation
     ],
-    RegionName.Hb:                    [
+    RegionName.Hb:                 [
         LocationName.MarketplaceMap,
         LocationName.BoroughDriveRecovery,
         LocationName.BoroughAPBoost,
@@ -489,7 +489,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.BaileySecretAnsemReport7,
         LocationName.BaseballCharm
     ],
-    RegionName.Hb2:                   [
+    RegionName.Hb2:                [
         LocationName.PosternCastlePerimeterMap,
         LocationName.PosternMythrilGem,
         LocationName.PosternAPBoost,
@@ -504,7 +504,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.RestorationSiteMoonRecipe,
         LocationName.RestorationSiteAPBoost,
     ],
-    RegionName.HBDemyx:               [
+    RegionName.HBDemyx:            [
         LocationName.DonaldDemyxHBGetBonus,
         LocationName.DemyxHB,
         LocationName.DemyxHBGetBonus,
@@ -515,7 +515,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.CrystalFissureAPBoost,
         LocationName.HBDemyxEventLocation,
     ],
-    RegionName.ThousandHeartless:     [
+    RegionName.ThousandHeartless:  [
         LocationName.ThousandHeartless,
         LocationName.ThousandHeartlessSecretAnsemReport1,
         LocationName.ThousandHeartlessIceCream,
@@ -524,21 +524,21 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.HeartlessManufactoryCosmicChain,
         LocationName.ThousandHeartlessEventLocation,
     ],
-    RegionName.DataDemyx:             [
+    RegionName.DataDemyx:          [
         LocationName.DemyxDataAPBoost,
         LocationName.DataDemyxEventLocation,
     ],
-    RegionName.Mushroom13:            [
+    RegionName.Mushroom13:         [
         LocationName.WinnersProof,
         LocationName.ProofofPeace,
         LocationName.Mushroom13EventLocation,
     ],
-    RegionName.Sephi:                 [
+    RegionName.Sephi:              [
         LocationName.SephirothBonus,
         LocationName.SephirothFenrir,
         LocationName.SephiEventLocation
     ],
-    RegionName.CoR:                   [
+    RegionName.CoR:                [
         LocationName.CoRDepthsAPBoost,
         LocationName.CoRDepthsPowerCrystal,
         LocationName.CoRDepthsFrostCrystal,
@@ -547,7 +547,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap,
         LocationName.CoRMineshaftLowerLevelAPBoost,
     ],
-    RegionName.CorFirstFight:         [
+    RegionName.CorFirstFight:      [
         LocationName.CoRDepthsUpperLevelRemembranceGem,
         LocationName.CoRMiningAreaSerenityGem,
         LocationName.CoRMiningAreaAPBoost,
@@ -557,7 +557,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.CoRMiningAreaDarkRemembranceMap,
         LocationName.CorFirstFightEventLocation,
     ],
-    RegionName.CorSecondFight:        [
+    RegionName.CorSecondFight:     [
         LocationName.CoRMineshaftMidLevelPowerBoost,
         LocationName.CoREngineChamberSerenityCrystal,
         LocationName.CoREngineChamberRemembranceCrystal,
@@ -566,12 +566,12 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.CoRMineshaftUpperLevelMagicBoost,
         LocationName.CorSecondFightEventLocation,
     ],
-    RegionName.Transport:             [
+    RegionName.Transport:          [
         LocationName.CoRMineshaftUpperLevelAPBoost,  # last chest
         LocationName.TransporttoRemembrance,
         LocationName.TransportEventLocation,
     ],
-    RegionName.Pl:                    [
+    RegionName.Pl:                 [
         LocationName.GorgeSavannahMap,
         LocationName.GorgeDarkGem,
         LocationName.GorgeMythrilStone,
@@ -602,37 +602,37 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
 
         LocationName.GoofyHyenas1
     ],
-    RegionName.Scar:                  [
+    RegionName.Scar:               [
         LocationName.Scar,
         LocationName.ScarFireElement,
         LocationName.DonaldScar,
         LocationName.ScarEventLocation,
     ],
-    RegionName.Pl2:                   [
+    RegionName.Pl2:                [
         LocationName.Hyenas2,
         LocationName.GoofyHyenas2
     ],
-    RegionName.GroundShaker:          [
+    RegionName.GroundShaker:       [
         LocationName.Groundshaker,
         LocationName.GroundshakerGetBonus,
         LocationName.GroundShakerEventLocation,
     ],
-    RegionName.DataSaix:              [
+    RegionName.DataSaix:           [
         LocationName.SaixDataDefenseBoost,
         LocationName.DataSaixEventLocation
     ],
-    RegionName.Stt:                   [
+    RegionName.Stt:                [
         LocationName.TwilightTownMap,
         LocationName.MunnyPouchOlette,
         LocationName.StationDusks,
         LocationName.StationofSerenityPotion,
         LocationName.StationofCallingPotion,
     ],
-    RegionName.TwilightThorn:         [
+    RegionName.TwilightThorn:      [
         LocationName.TwilightThorn,
         LocationName.TwilightThornEventLocation
     ],
-    RegionName.Axel1:                 [
+    RegionName.Axel1:              [
         LocationName.Axel1,
         LocationName.JunkChampionBelt,
         LocationName.JunkMedal,
@@ -654,16 +654,16 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.MansionLibraryHiPotion,
         LocationName.Axel1EventLocation
     ],
-    RegionName.Axel2:                 [
+    RegionName.Axel2:              [
         LocationName.Axel2,
         LocationName.MansionBasementCorridorHiPotion,
         LocationName.Axel2EventLocation
     ],
-    RegionName.DataRoxas:             [
+    RegionName.DataRoxas:          [
         LocationName.RoxasDataMagicBoost,
         LocationName.DataRoxasEventLocation
     ],
-    RegionName.Tt:                    [
+    RegionName.Tt:                 [
         LocationName.OldMansionPotion,
         LocationName.OldMansionMythrilShard,
         LocationName.TheWoodsPotion,
@@ -692,12 +692,12 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.StarSeeker,
         LocationName.ValorForm
     ],
-    RegionName.Tt2:                   [
+    RegionName.Tt2:                [
         LocationName.SeifersTrophy,
         LocationName.Oathkeeper,
         LocationName.LimitForm
     ],
-    RegionName.Tt3:                   [
+    RegionName.Tt3:                [
         LocationName.UndergroundConcourseMythrilGem,
         LocationName.UndergroundConcourseAPBoost,
         LocationName.UndergroundConcourseMythrilCrystal,
@@ -721,17 +721,17 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.BetwixtandBetweenBondofFlame,
         LocationName.DonaldMansionNobodies
     ],
-    RegionName.DataAxel:              [
+    RegionName.DataAxel:           [
         LocationName.AxelDataMagicBoost,
         LocationName.DataAxelEventLocation,
     ],
-    RegionName.Twtnw:                 [
+    RegionName.Twtnw:              [
         LocationName.FragmentCrossingMythrilStone,
         LocationName.FragmentCrossingMythrilCrystal,
         LocationName.FragmentCrossingAPBoost,
         LocationName.FragmentCrossingOrichalcum
     ],
-    RegionName.Roxas:                 [
+    RegionName.Roxas:              [
         LocationName.Roxas,
         LocationName.RoxasGetBonus,
         LocationName.RoxasSecretAnsemReport8,
@@ -746,7 +746,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.TwilightsViewCosmicBelt,
         LocationName.RoxasEventLocation
     ],
-    RegionName.Xigbar:                [
+    RegionName.Xigbar:             [
         LocationName.XigbarBonus,
         LocationName.XigbarSecretAnsemReport3,
         LocationName.NaughtsSkywayMythrilGem,
@@ -756,58 +756,58 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.CastleThatNeverWasMap,
         LocationName.XigbarEventLocation,
     ],
-    RegionName.Luxord:                [
+    RegionName.Luxord:             [
         LocationName.Luxord,
         LocationName.LuxordGetBonus,
         LocationName.LuxordSecretAnsemReport9,
         LocationName.LuxordEventLocation,
     ],
-    RegionName.Saix:                  [
+    RegionName.Saix:               [
         LocationName.SaixBonus,
         LocationName.SaixSecretAnsemReport12,
         LocationName.SaixEventLocation,
     ],
-    RegionName.Twtnw2:                [
+    RegionName.Twtnw2:             [
         LocationName.PreXemnas1SecretAnsemReport11,
         LocationName.RuinandCreationsPassageMythrilStone,
         LocationName.RuinandCreationsPassageAPBoost,
         LocationName.RuinandCreationsPassageMythrilCrystal,
         LocationName.RuinandCreationsPassageOrichalcum
     ],
-    RegionName.Xemnas:                [
+    RegionName.Xemnas:             [
         LocationName.Xemnas1,
         LocationName.Xemnas1GetBonus,
         LocationName.Xemnas1SecretAnsemReport13,
         LocationName.XemnasEventLocation
 
     ],
-    RegionName.ArmoredXemnas:         [
+    RegionName.ArmoredXemnas:      [
         LocationName.ArmoredXemnasEventLocation
     ],
-    RegionName.ArmoredXemnas2:        [
+    RegionName.ArmoredXemnas2:     [
         LocationName.ArmoredXemnas2EventLocation
     ],
-    RegionName.FinalXemnas:           [
+    RegionName.FinalXemnas:        [
         LocationName.FinalXemnas
     ],
-    RegionName.DataXemnas:            [
+    RegionName.DataXemnas:         [
         LocationName.XemnasDataPowerBoost,
         LocationName.DataXemnasEventLocation
     ],
-    RegionName.AtlanticaSongOne:      [
+    RegionName.AtlanticaSongOne:   [
         LocationName.UnderseaKingdomMap
     ],
-    RegionName.AtlanticaSongTwo:      [
+    RegionName.AtlanticaSongTwo:   [
 
     ],
-    RegionName.AtlanticaSongThree:    [
+    RegionName.AtlanticaSongThree: [
         LocationName.MysteriousAbyss
     ],
-    RegionName.AtlanticaSongFour:     [
+    RegionName.AtlanticaSongFour:  [
         LocationName.MusicalBlizzardElement,
         LocationName.MusicalOrichalcumPlus
     ],
-    RegionName.Valor:                 [
+    RegionName.Valor:              [
         LocationName.Valorlvl2,
         LocationName.Valorlvl3,
         LocationName.Valorlvl4,
@@ -815,7 +815,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.Valorlvl6,
         LocationName.Valorlvl7
     ],
-    RegionName.Wisdom:                [
+    RegionName.Wisdom:             [
         LocationName.Wisdomlvl2,
         LocationName.Wisdomlvl3,
         LocationName.Wisdomlvl4,
@@ -823,7 +823,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.Wisdomlvl6,
         LocationName.Wisdomlvl7
     ],
-    RegionName.Limit:                 [
+    RegionName.Limit:              [
         LocationName.Limitlvl2,
         LocationName.Limitlvl3,
         LocationName.Limitlvl4,
@@ -831,7 +831,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.Limitlvl6,
         LocationName.Limitlvl7
     ],
-    RegionName.Master:                [
+    RegionName.Master:             [
         LocationName.Masterlvl2,
         LocationName.Masterlvl3,
         LocationName.Masterlvl4,
@@ -839,7 +839,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.Masterlvl6,
         LocationName.Masterlvl7
     ],
-    RegionName.Final:                 [
+    RegionName.Final:              [
         LocationName.Finallvl2,
         LocationName.Finallvl3,
         LocationName.Finallvl4,
@@ -847,7 +847,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.Finallvl6,
         LocationName.Finallvl7
     ],
-    RegionName.Keyblade:              [
+    RegionName.Keyblade:           [
         LocationName.FAKESlot,
         LocationName.DetectionSaberSlot,
         LocationName.EdgeofUltimaSlot,
@@ -923,13 +923,17 @@ level_region_list = [
 ]
 
 
-def create_regions(world, player: int, active_locations):
+def create_regions(self):
     # Level region depends on level depth.
     # for every 5 levels there should be +3 visit locking
     # level 50
+    multiworld = self.multiworld
+    player = self.player
+    active_locations = self.location_name_to_id
+
     for level_region_name in level_region_list:
         KH2REGIONS[level_region_name] = []
-    if world.LevelDepth[player] == "level_50":
+    if multiworld.LevelDepth[player] == "level_50":
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7, LocationName.Lvl9,
                                             LocationName.Lvl10]
         KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl12, LocationName.Lvl14, LocationName.Lvl15,
@@ -943,7 +947,7 @@ def create_regions(world, player: int, active_locations):
         KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl50]
 
     # level 99
-    elif world.LevelDepth[player] == "level_99":
+    elif multiworld.LevelDepth[player] == "level_99":
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl7, LocationName.Lvl9]
         KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl12, LocationName.Lvl15, LocationName.Lvl17,
                                             LocationName.Lvl20]
@@ -959,7 +963,7 @@ def create_regions(world, player: int, active_locations):
         KH2REGIONS[RegionName.LevelsVS26] = [LocationName.Lvl99]
     # level sanity
     # has to be [] instead of {} for in
-    elif world.LevelDepth[player] in ["level_50_sanity", "level_99_sanity"]:
+    elif multiworld.LevelDepth[player] in ["level_50_sanity", "level_99_sanity"]:
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl3, LocationName.Lvl4, LocationName.Lvl5,
                                             LocationName.Lvl6,
                                             LocationName.Lvl7, LocationName.Lvl8, LocationName.Lvl9, LocationName.Lvl10]
@@ -980,7 +984,7 @@ def create_regions(world, player: int, active_locations):
                                              LocationName.Lvl46, LocationName.Lvl47, LocationName.Lvl48,
                                              LocationName.Lvl49, LocationName.Lvl50]
         # level 99 sanity
-        if world.LevelDepth[player] == "level_99_sanity":
+        if multiworld.LevelDepth[player] == "level_99_sanity":
             KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl51, LocationName.Lvl52, LocationName.Lvl53,
                                                  LocationName.Lvl54,
                                                  LocationName.Lvl55, LocationName.Lvl56, LocationName.Lvl57,
@@ -1004,25 +1008,27 @@ def create_regions(world, player: int, active_locations):
             KH2REGIONS[RegionName.LevelsVS26] = [LocationName.Lvl91, LocationName.Lvl92, LocationName.Lvl93,
                                                  LocationName.Lvl94,
                                                  LocationName.Lvl95, LocationName.Lvl96, LocationName.Lvl97,
-                                                 LocationName.Lvl98,LocationName.Lvl99]
+                                                 LocationName.Lvl98, LocationName.Lvl99]
     KH2REGIONS[RegionName.Summon] = []
-    if world.SummonLevelLocationToggle[player]:
+    if multiworld.SummonLevelLocationToggle[player]:
         KH2REGIONS[RegionName.Summon] = [LocationName.Summonlvl2,
                                          LocationName.Summonlvl3,
                                          LocationName.Summonlvl4,
                                          LocationName.Summonlvl5,
                                          LocationName.Summonlvl6,
                                          LocationName.Summonlvl7]
-    world.regions += [create_region(world, player, active_locations, region, locations) for region, locations in
-                      KH2REGIONS.items()]
+    multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
+                           KH2REGIONS.items()]
     # fill the event locations with events
-    world.worlds[player].item_name_to_id.update({event_name: None for event_name in Events_Table})
+    multiworld.worlds[player].item_name_to_id.update({event_name: None for event_name in Events_Table})
     for location, item in event_location_to_item.items():
-        world.get_location(location, player).place_locked_item(
-                world.worlds[player].create_item(item))
+        multiworld.get_location(location, player).place_locked_item(
+                multiworld.worlds[player].create_item(item))
 
 
-def connect_regions(world: MultiWorld, player: int):
+def connect_regions(self):
+    multiworld = self.multiworld
+    player = self.player
     # connecting every first visit to the GoA
     KH2RegionConnections: typing.Dict[str, typing.Set[str]] = {
         "Menu":                        {RegionName.GoA},
@@ -1062,7 +1068,7 @@ def connect_regions(world: MultiWorld, player: int):
         RegionName.Hydra:              {RegionName.OcPainAndPanicCup, RegionName.OcCerberusCup, RegionName.Oc2},
         RegionName.Oc2:                {RegionName.Hades},
         RegionName.Hades:              {RegionName.Oc2TitanCup, RegionName.Oc2GofCup, RegionName.DataZexion},
-        RegionName.Oc2GofCup:        {RegionName.HadesCups},
+        RegionName.Oc2GofCup:          {RegionName.HadesCups},
         RegionName.Bc:                 {RegionName.Thresholder},
         RegionName.Thresholder:        {RegionName.Beast},
         RegionName.Beast:              {RegionName.DarkThorn},
@@ -1120,7 +1126,7 @@ def connect_regions(world: MultiWorld, player: int):
     }
 
     for source, target in KH2RegionConnections.items():
-        source_region = world.get_region(source, player)
+        source_region = multiworld.get_region(source, player)
         source_region.add_exits(target)
 
 
@@ -1143,8 +1149,8 @@ def connect_regions(world: MultiWorld, player: int):
 # tt3: stitch/chicken little, magnera,reflera,base tools,finishing leap,limit form
 # cor
 
-def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):
-    ret = Region(name, player, world)
+def create_region(multiworld, player: int, active_locations, name: str, locations=None):
+    ret = Region(name, player, multiworld)
     if locations:
         loc_to_id = {loc: active_locations.get(loc, 0) for loc in locations if active_locations.get(loc, None)}
         ret.add_locations(loc_to_id, KH2Location)
