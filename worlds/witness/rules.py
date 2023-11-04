@@ -10,7 +10,7 @@ from worlds.AutoWorld import World
 from .player_logic import WitnessPlayerLogic
 from .Options import get_option_value
 from .locations import WitnessPlayerLocations
-from . import StaticWitnessLogic
+from . import StaticWitnessLogic, WitnessRegions
 from worlds.generic.Rules import set_rule
 
 laser_hexes = [
@@ -58,6 +58,13 @@ def _can_solve_panel(state: CollectionState, panel: str, world: World, player: i
         return _meets_item_requirements(state, panel, world, player, player_logic, locat)
 
 
+def _can_move_either_direction(state: CollectionState, player: int, source: str, target: str, regio: WitnessRegions):
+    return (
+        any(state.can_reach(entrance, "Entrance", player) for entrance in regio.created_entrances[(source, target)])
+        or any(state.can_reach(entrance, "Entrance", player) for entrance in regio.created_entrances[(target, source)])
+    )
+
+
 def _has_item(state: CollectionState, item: str, world: World, player: int,
               player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     if item in StaticWitnessLogic.ALL_REGIONS_BY_NAME:
@@ -70,50 +77,49 @@ def _has_item(state: CollectionState, item: str, world: World, player: int,
         return _has_lasers(state, laser_req, world, player, player_logic, locat)
     elif item == "PP2 Weirdness":
         hedge_2_access = (
-                state.can_reach("Keep 2nd Maze to Keep", "Entrance", player)
-                or state.can_reach("Keep to Keep 2nd Maze", "Entrance", player)
+            _can_move_either_direction(state, player, "Keep 2nd Maze", "Keep", world.regio)
         )
 
         hedge_3_access = (
-                state.can_reach("Keep 3rd Maze to Keep", "Entrance", player)
-                or state.can_reach("Keep 2nd Maze to Keep 3rd Maze", "Entrance", player)
-                and hedge_2_access
+            _can_move_either_direction(state, player, "Keep 3rd Maze", "Keep", world.regio)
+            or _can_move_either_direction(state, player, "Keep 3rd Maze", "Keep 2nd Maze", world.regio)
+            and hedge_2_access
         )
 
         hedge_4_access = (
-                state.can_reach("Keep 4th Maze to Keep", "Entrance", player)
-                or state.can_reach("Keep 3rd Maze to Keep 4th Maze", "Entrance", player)
-                and hedge_3_access
+            _can_move_either_direction(state, player, "Keep 4th Maze", "Keep", world.regio)
+            or _can_move_either_direction(state, player, "Keep 4th Maze", "Keep 3rd Maze", world.regio)
+            and hedge_3_access
         )
 
         hedge_access = (
-                state.can_reach("Keep 4th Maze to Keep Tower", "Entrance", player)
-                and state.can_reach("Keep", "Region", player)
-                and hedge_4_access
+            _can_move_either_direction(state, player, "Keep 4th Maze", "Keep Tower", world.regio)
+            and state.can_reach("Keep", "Region", player)
+            and hedge_4_access
         )
 
         backwards_to_fourth = (
-                state.can_reach("Keep", "Region", player)
-                and state.can_reach("Keep 4th Pressure Plate to Keep Tower", "Entrance", player)
-                and (
-                        state.can_reach("Keep Tower to Keep", "Entrance", player)
-                        or hedge_access
-                )
+            state.can_reach("Keep", "Region", player)
+            and _can_move_either_direction(state, player, "Keep 4th Pressure Plate", "Keep Tower", world.regio)
+            and (
+                _can_move_either_direction(state, player, "Keep", "Keep Tower", world.regio)
+                or hedge_access
+            )
         )
 
         shadows_shortcut = (
-                state.can_reach("Main Island", "Region", player)
-                and state.can_reach("Keep 4th Pressure Plate to Shadows", "Entrance", player)
+            state.can_reach("Main Island", "Region", player)
+            and _can_move_either_direction(state, player, "Keep 4th Pressure Plate", "Shadows", world.regio)
         )
 
         backwards_access = (
-                state.can_reach("Keep 3rd Pressure Plate to Keep 4th Pressure Plate", "Entrance", player)
-                and (backwards_to_fourth or shadows_shortcut)
+            _can_move_either_direction(state, player, "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate", world.regio)
+            and (backwards_to_fourth or shadows_shortcut)
         )
 
         front_access = (
-                state.can_reach("Keep to Keep 2nd Pressure Plate", 'Entrance', player)
-                and state.can_reach("Keep", "Region", player)
+            _can_move_either_direction(state, player, "Keep 2nd Pressure Plate", "Keep", world.regio)
+            and state.can_reach("Keep", "Region", player)
         )
 
         return front_access and backwards_access

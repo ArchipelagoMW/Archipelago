@@ -11,8 +11,8 @@ from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
-from .rules import set_rules
 from .regions import WitnessRegions
+from .rules import set_rules
 from .Options import is_option_enabled, the_witness_options, get_option_value
 from .utils import get_audio_logs
 from logging import warning, error

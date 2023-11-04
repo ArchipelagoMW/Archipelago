@@ -3,11 +3,10 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from logging import warning
-from typing import FrozenSet, Dict
+from typing import FrozenSet, Dict, Tuple, List
 
 from BaseClasses import Entrance, Region, Location
 from worlds.AutoWorld import World
-from .rules import _can_solve_panels
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
 from Utils import KeyedDefaultDict
@@ -31,6 +30,8 @@ class WitnessRegions:
 
     def make_lambda(self, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: World, player: int,
                     player_logic: WitnessPlayerLogic):
+        from .rules import _can_solve_panels
+
         """
         Lambdas are made in a for loop, so the values have to be captured
         This function is for that purpose
@@ -61,10 +62,11 @@ class WitnessRegions:
         target_region = self.region_cache[target]
 
         backwards = " Backwards" if backwards else ""
+        connection_name = source + " to " + target + backwards
 
         connection = Entrance(
             world.player,
-            source + " to " + target + backwards,
+            connection_name,
             source_region
         )
 
@@ -72,6 +74,8 @@ class WitnessRegions:
 
         source_region.exits.append(connection)
         connection.connect(target_region)
+
+        self.created_entrances[(source, target)].append(connection_name)
 
         # Register any necessary indirect connections
 
@@ -138,6 +142,8 @@ class WitnessRegions:
         self.locat = locat
         player_name = world.multiworld.get_player_name(world.player)
 
+        self.created_entrances: Dict[Tuple[str, str], List[str]] = KeyedDefaultDict(lambda _: [])
+
         def get_uncached_region(key: str) -> Region:
             warning(f"Region \"{key}\" was not cached in {player_name}'s Witness world. Violet pls fix this.")
             return world.multiworld.get_region(key, world.player)
@@ -146,7 +152,7 @@ class WitnessRegions:
             warning(f"Location \"{key}\" was not cached in {player_name}'s Witness world. Violet pls fix this.")
             return world.multiworld.get_location(key, world.player)
 
-        self.region_cache: KeyedDefaultDict[str, Region] = KeyedDefaultDict(
+        self.region_cache: Dict[str, Region] = KeyedDefaultDict(
             get_uncached_region
         )
         self.location_cache: Dict[str, Location] = KeyedDefaultDict(
