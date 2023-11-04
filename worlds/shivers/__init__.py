@@ -82,8 +82,12 @@ class ShiversWorld(World):
                 itempool.append(self.create_item(name))
 
         #Add Filler
-        itempool += [self.create_item("Easier Lyre") for i in range(10)]
-        itempool += [self.create_item("Heal") for i in range(43 - len(self.removed_locations))]
+        itempool += [self.create_item("Easier Lyre") for i in range(9)]
+
+        #Extra filler is random between Heals and Easier Lyre. Heals weighted 95%.
+        filler_needed = len(self.multiworld.get_unfilled_locations(self.player)) - 24 - len(itempool)
+        itempool += [self.random.choices([self.create_item("Heal"), self.create_item("Easier Lyre")], weights=[95, 5])[0] for i in range(filler_needed)]
+
 
         #Place library escape items. Choose a location to place the escape item
         library_region = self.multiworld.get_region("Library", self.player)
@@ -110,8 +114,7 @@ class ShiversWorld(World):
 
         #If front door option is on, determine which set of keys will be used for lobby access and add front door key to item pool
         lobby_access_keys = 1
-        front_door_usable: bool = getattr(self.multiworld, "front_door_usable")[self.player].value
-        if front_door_usable:
+        if self.options.front_door_usable:
             lobby_access_keys = self.random.randint(1, 2)
             itempool += [self.create_item("Key for Front Door")]
         else:
