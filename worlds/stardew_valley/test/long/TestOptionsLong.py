@@ -1,13 +1,14 @@
+import unittest
 from typing import Dict
 
 from BaseClasses import MultiWorld
 from Options import SpecialRange
 from .option_names import options_to_include
 from worlds.stardew_valley.test.checks.world_checks import assert_can_win, assert_same_number_items_locations
-from .. import setup_solo_multiworld, SVTestBase
+from .. import setup_solo_multiworld, SVTestCase
 
 
-def basic_checks(tester: SVTestBase, multiworld: MultiWorld):
+def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):
     assert_can_win(tester, multiworld)
     assert_same_number_items_locations(tester, multiworld)
 
@@ -20,11 +21,10 @@ def get_option_choices(option) -> Dict[str, int]:
     return {}
 
 
-class TestGenerateDynamicOptions(SVTestBase):
+class TestGenerateDynamicOptions(SVTestCase):
     def test_given_option_pair_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
             return
-
         num_options = len(options_to_include)
         for option1_index in range(0, num_options):
             for option2_index in range(option1_index + 1, num_options):
