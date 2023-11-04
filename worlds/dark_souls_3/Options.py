@@ -171,10 +171,14 @@ class MaxLevelsIn10WeaponPoolOption(Range):
     default = 10
 
 
-
-class EarlySmallLothricBanner(Toggle):
-    """This option makes it so the Small Lothric Banner is forced to be in an early sphere."""
+class EarlySmallLothricBanner(Choice):
+    """This option makes it so the user can choose to force the Small Lothric Banner into an early sphere in their world or
+    into an early sphere across all worlds."""
     display_name = "Early Small Lothric Banner"
+    option_off = 0
+    option_early_anywhere = 1
+    option_early_self = 2
+    default = option_off
 
 
 class LateBasinOfVowsOption(Toggle):

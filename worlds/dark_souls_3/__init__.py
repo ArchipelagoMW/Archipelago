@@ -9,7 +9,7 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
-from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
+from .Options import RandomizeWeaponLevelOption, PoolTypeOption, EarlySmallLothricBanner, dark_souls_options
 
 
 class DarkSouls3Web(WebWorld):
@@ -93,8 +93,10 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
         if self.multiworld.enable_progressive_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.PROGRESSIVE_ITEM)
-        if self.multiworld.early_banner[self.player] == Toggle.option_true:
+        if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_anywhere:
             self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
+        if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_self:
+            self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
 
 
     def create_regions(self):
