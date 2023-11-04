@@ -91,7 +91,6 @@ class TestProgressiveOrangeTower(LingoTestBase):
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Sixth Floor", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player))
 
-        self.collect_by_name("Starting Room - Main Door")
         self.collect_by_name("Second Room - Exit Door")
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower First Floor", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Orange Tower Second Floor", "Region", self.player))

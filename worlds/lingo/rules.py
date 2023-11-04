@@ -21,13 +21,13 @@ class LingoLogic(LogicMixin):
 
     def lingo_can_use_pilgrimage(self, player: int, player_logic: LingoPlayerLogic):
         fake_pilgrimage = [
-            ["Starting Room", "Main Door"], ["Second Room", "Exit Door"],
-            ["Crossroads", "Tower Entrance"], ["Orange Tower Fourth Floor", "Hot Crusts Door"],
-            ["Outside The Initiated", "Shortcut to Hub Room"], ["Orange Tower First Floor", "Shortcut to Hub Room"],
-            ["Directional Gallery", "Shortcut to The Undeterred"], ["Orange Tower First Floor", "Salt Pepper Door"],
-            ["Hub Room", "Crossroads Entrance"], ["Champion's Rest", "Shortcut to The Steady"],
-            ["The Bearer", "Shortcut to The Bold"], ["Art Gallery", "Exit"],
-            ["The Tenacious", "Shortcut to Hub Room"], ["Outside The Agreeable", "Tenacious Entrance"]
+            ["Second Room", "Exit Door"], ["Crossroads", "Tower Entrance"],
+            ["Orange Tower Fourth Floor", "Hot Crusts Door"], ["Outside The Initiated", "Shortcut to Hub Room"],
+            ["Orange Tower First Floor", "Shortcut to Hub Room"], ["Directional Gallery", "Shortcut to The Undeterred"],
+            ["Orange Tower First Floor", "Salt Pepper Door"], ["Hub Room", "Crossroads Entrance"],
+            ["Champion's Rest", "Shortcut to The Steady"], ["The Bearer", "Shortcut to The Bold"],
+            ["Art Gallery", "Exit"], ["The Tenacious", "Shortcut to Hub Room"],
+            ["Outside The Agreeable", "Tenacious Entrance"]
         ]
         viable_option = True
         for entrance in fake_pilgrimage:

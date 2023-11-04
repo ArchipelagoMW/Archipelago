@@ -13,8 +13,8 @@ class TestComplexProgressiveHallwayRoom(LingoTestBase):
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (4)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Elements Area", "Region", self.player))
 
-        self.collect_by_name(["Starting Room - Main Door", "Second Room - Exit Door",
-                              "The Tenacious - Shortcut to Hub Room", "Outside The Agreeable - Tenacious Entrance"])
+        self.collect_by_name(["Second Room - Exit Door", "The Tenacious - Shortcut to Hub Room",
+                              "Outside The Agreeable - Tenacious Entrance"])
         self.assertTrue(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -64,7 +64,7 @@ class TestSimpleHallwayRoom(LingoTestBase):
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (4)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Elements Area", "Region", self.player))
 
-        self.collect_by_name(["Entry Doors", "Entrances to The Tenacious"])
+        self.collect_by_name(["Second Room - Exit Door", "Entrances to The Tenacious"])
         self.assertTrue(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -92,7 +92,7 @@ class TestProgressiveArtGallery(LingoTestBase):
         self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
-        self.collect_by_name(["Starting Room - Main Door", "Second Room - Exit Door", "Crossroads - Tower Entrance",
+        self.collect_by_name(["Second Room - Exit Door", "Crossroads - Tower Entrance",
                               "Orange Tower Fourth Floor - Hot Crusts Door"])
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
