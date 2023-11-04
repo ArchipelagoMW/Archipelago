@@ -513,7 +513,7 @@ class LinksAwakeningWorld(World):
         change = super().collect(state, item)
         if change:
             rupees = self.rupees.get(item.name, 0)
-            state.prog_items["RUPEES", item.player] += rupees
+            state.prog_items[item.player]["RUPEES"] += rupees
 
         return change
 
@@ -521,6 +521,6 @@ class LinksAwakeningWorld(World):
         change = super().remove(state, item)
         if change:
             rupees = self.rupees.get(item.name, 0)
-            state.prog_items["RUPEES", item.player] -= rupees
+            state.prog_items[item.player]["RUPEES"] -= rupees
 
         return change
