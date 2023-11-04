@@ -393,7 +393,7 @@ class ROR2Options(PerGameCommonOptions):
     enable_lunar: AllowLunarItems
     item_weights: ItemWeights
     item_pool_presets: ItemPoolPresetToggle
-    # weights of the generated item pool.
+    # define the weights of the generated item pool.
     green_scrap: GreenScrap
     red_scrap: RedScrap
     yellow_scrap: YellowScrap

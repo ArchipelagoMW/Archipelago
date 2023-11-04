@@ -6,6 +6,7 @@
     - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
 - The BizHawk emulator. Versions 2.3.1 and higher are supported.
     - [BizHawk at TASVideos](https://tasvideos.org/BizHawk)
+- Your legally acquired US v1.0 PRG0 ROM file, probably named `Legend of Zelda, The (U) (PRG0) [!].nes`
 
 ## Optional Software
 

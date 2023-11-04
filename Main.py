@@ -122,10 +122,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Creating Items.')
     AutoWorld.call_all(world, "create_items")
 
-    # All worlds should have finished creating all regions, locations, and entrances.
-    # Recache to ensure that they are all visible for locality rules.
-    world._recache()
-
     logger.info('Calculating Access Rules.')
 
     for player in world.player_ids:
@@ -233,7 +229,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
         region = Region("Menu", group_id, world, "ItemLink")
         world.regions.append(region)
-        locations = region.locations = []
+        locations = region.locations
         for item in world.itempool:
             count = common_item_count.get(item.player, {}).get(item.name, 0)
             if count:
@@ -267,7 +263,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
     if any(world.item_links.values()):
-        world._recache()
         world._all_state = None
 
     logger.info("Running Item Plando")
