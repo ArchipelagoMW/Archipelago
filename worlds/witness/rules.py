@@ -3,7 +3,6 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 
-# pylint: disable=E1101
 from typing import FrozenSet, Dict
 
 from BaseClasses import Location, CollectionState
