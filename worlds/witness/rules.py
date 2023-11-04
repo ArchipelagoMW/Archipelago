@@ -13,24 +13,24 @@ from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic
 from worlds.generic.Rules import set_rule
 
+laser_hexes = [
+    "0x028A4",
+    "0x00274",
+    "0x032F9",
+    "0x01539",
+    "0x181B3",
+    "0x0C2B2",
+    "0x00509",
+    "0x00BF6",
+    "0x014BB",
+    "0x012FB",
+    "0x17C65",
+]
+
 
 def _has_lasers(state: CollectionState, amount: int, world: World, player: int,
                 player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> bool:
     lasers = 0
-
-    laser_hexes = [
-        "0x028A4",
-        "0x00274",
-        "0x032F9",
-        "0x01539",
-        "0x181B3",
-        "0x0C2B2",
-        "0x00509",
-        "0x00BF6",
-        "0x014BB",
-        "0x012FB",
-        "0x17C65",
-    ]
 
     for laser_hex in laser_hexes:
         has_laser = _can_solve_panel(state, laser_hex, world, player, player_logic, locat)
