@@ -3,7 +3,7 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from logging import warning
-from typing import FrozenSet, Dict
+from typing import FrozenSet, Dict, Set
 
 from BaseClasses import Entrance, Region, Location
 from worlds.AutoWorld import World
@@ -31,11 +31,32 @@ class WitnessRegions:
             panel_hex_to_solve_set, world, player, player_logic, self.locat
         )
 
-    def connect(self, world: World, source: str, target: str, player_logic: WitnessPlayerLogic,
-                panel_hex_to_solve_set: FrozenSet[FrozenSet[str]] = frozenset({frozenset()}), backwards: bool = False):
+    def entity_requires_region(self, entity: str, region: str, player_logic: WitnessPlayerLogic):
+        if all(region in requirement for requirement in player_logic.REQUIREMENTS_BY_HEX[entity]):
+            return True
+        if entity in StaticWitnessLogic.ENTITIES_BY_HEX and StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]:
+            return StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]["name"] == region
+        return False
+
+    def connect_if_possible(self, world: World, source: str, target: str, player_logic: WitnessPlayerLogic,
+                            panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], backwards: bool = False):
         """
         connect two regions and set the corresponding requirement
         """
+
+        # Remove any possibilities where being in the target region would be required anyway.
+        for subset in panel_hex_to_solve_set:
+            if any(
+                self.entity_requires_region(entity, target, player_logic)
+                or not player_logic.REQUIREMENTS_BY_HEX[entity]
+                for entity in subset
+            ):
+                panel_hex_to_solve_set = panel_hex_to_solve_set - {subset}
+
+        # If there is no way to actually use this connection, don't even bother making it.
+        if not panel_hex_to_solve_set:
+            return
+
         source_region = self.region_cache[source]
         target_region = self.region_cache[target]
 
@@ -51,6 +72,21 @@ class WitnessRegions:
 
         source_region.exits.append(connection)
         connection.connect(target_region)
+
+        # Register any necessary indirect connections
+
+        entities = {entity for sub in panel_hex_to_solve_set for entity in sub}
+        mentioned_regions = {
+                                single_unlock
+                                for entity in entities
+                                for requirement in player_logic.REQUIREMENTS_BY_HEX[entity]
+                                for single_unlock in requirement
+                                if single_unlock in StaticWitnessLogic.ALL_REGIONS_BY_NAME
+                                and single_unlock != source
+        }
+
+        for dependent_region in mentioned_regions:
+            world.multiworld.register_indirect_condition(self.region_cache[dependent_region], connection)
 
     def create_regions(self, world: World, player_logic: WitnessPlayerLogic):
         """
@@ -90,23 +126,11 @@ class WitnessRegions:
         for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 if connection[1] == frozenset({frozenset(["TrueOneWay"])}):
-                    self.connect(world, region_name, connection[0], player_logic, frozenset({frozenset()}))
+                    self.connect_if_possible(world, region_name, connection[0], player_logic, frozenset({frozenset()}))
                     continue
 
-                backwards_connections = set()
-
-                for subset in connection[1]:
-                    if all({panel in player_logic.DOOR_ITEMS_BY_ID for panel in subset}):
-                        if all({reference_logic.ENTITIES_BY_HEX[panel]["id"] is None for panel in subset}):
-                            backwards_connections.add(subset)
-
-                if backwards_connections:
-                    self.connect(
-                        world, connection[0], region_name, player_logic,
-                        frozenset(backwards_connections), True
-                    )
-
-                self.connect(world, region_name, connection[0], player_logic, connection[1])
+                self.connect_if_possible(world, region_name, connection[0], player_logic, connection[1])
+                self.connect_if_possible(world, connection[0], region_name, player_logic, connection[1])
 
         return self.location_cache
 

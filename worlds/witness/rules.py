@@ -21,18 +21,28 @@ class WitnessLogic(LogicMixin):
     Logic macros that get reused
     """
 
-    def _witness_has_lasers(self, player: int, amount: int) -> bool:
+    def _witness_has_lasers(self, amount: int, world: World, player: int,
+                            player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> bool:
         lasers = 0
 
-        place_names = [
-            "Symmetry", "Desert", "Town", "Monastery", "Keep",
-            "Quarry", "Treehouse", "Jungle", "Bunker", "Swamp", "Shadows"
+        laser_hexes = [
+            "0x028A4",
+            "0x00274",
+            "0x032F9",
+            "0x01539",
+            "0x181B3",
+            "0x0C2B2",
+            "0x00509",
+            "0x00BF6",
+            "0x014BB",
+            "0x012FB",
+            "0x17C65",
         ]
 
-        for place in place_names:
-            has_laser = self.has(place + " Laser", player) or self.has(place + " Laser Activation", player)
+        for laser_hex in laser_hexes:
+            has_laser = self._witness_can_solve_panel(laser_hex, world, player, player_logic, locat)
 
-            if place == "Desert":
+            if laser_hex == "0x012FB":
                 has_laser = has_laser and self.has("Desert Laser Redirection", player)
 
             lasers += int(has_laser)
@@ -48,13 +58,95 @@ class WitnessLogic(LogicMixin):
         panel_obj = StaticWitnessLogic.ENTITIES_BY_HEX[panel]
         entity_name = panel_obj["checkName"]
 
-        if (entity_name + " Solved" in locat.EVENT_LOCATION_TABLE
-                and not self.has(player_logic.EVENT_ITEM_PAIRS[entity_name + " Solved"], player)):
-            return False
-        if (entity_name + " Solved" not in locat.EVENT_LOCATION_TABLE
-                and not self._witness_meets_item_requirements(panel, world, player, player_logic, locat)):
-            return False
-        return True
+        if entity_name + " Solved" in locat.EVENT_LOCATION_TABLE:
+            return self.has(player_logic.EVENT_ITEM_PAIRS[entity_name + " Solved"], player)
+        else:
+            return self._witness_meets_item_requirements(panel, world, player, player_logic, locat)
+
+    def _witness_has_item(self, item: str, world: World, player: int,
+                          player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+
+            if item in StaticWitnessLogic.ALL_REGIONS_BY_NAME:
+                return self.can_reach(item, "Region", player)
+            if item == "7 Lasers":
+                laser_req = get_option_value(world, "mountain_lasers")
+                return self._witness_has_lasers(laser_req, world, player, player_logic, locat)
+            if item == "11 Lasers":
+                laser_req = get_option_value(world, "challenge_lasers")
+                return self._witness_has_lasers(laser_req, world, player, player_logic, locat)
+            elif item == "PP2 Weirdness":
+                hedge_2_access = (
+                        self.can_reach("Keep 2nd Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep to Keep 2nd Maze", "Entrance", player)
+                )
+
+                hedge_3_access = (
+                        self.can_reach("Keep 3rd Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep 2nd Maze to Keep 3rd Maze", "Entrance", player)
+                        and hedge_2_access
+                )
+
+                hedge_4_access = (
+                        self.can_reach("Keep 4th Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep 3rd Maze to Keep 4th Maze", "Entrance", player)
+                        and hedge_3_access
+                )
+
+                hedge_access = (
+                        self.can_reach("Keep 4th Maze to Keep Tower", "Entrance", player)
+                        and self.can_reach("Keep", "Region", player)
+                        and hedge_4_access
+                )
+
+                backwards_to_fourth = (
+                        self.can_reach("Keep", "Region", player)
+                        and self.can_reach("Keep 4th Pressure Plate to Keep Tower", "Entrance", player)
+                        and (
+                                self.can_reach("Keep Tower to Keep", "Entrance", player)
+                                or hedge_access
+                        )
+                )
+
+                shadows_shortcut = (
+                        self.can_reach("Main Island", "Region", player)
+                        and self.can_reach("Keep 4th Pressure Plate to Shadows", "Entrance", player)
+                )
+
+                backwards_access = (
+                        self.can_reach("Keep 3rd Pressure Plate to Keep 4th Pressure Plate", "Entrance", player)
+                        and (backwards_to_fourth or shadows_shortcut)
+                )
+
+                front_access = (
+                        self.can_reach("Keep to Keep 2nd Pressure Plate", 'Entrance', player)
+                        and self.can_reach("Keep", "Region", player)
+                )
+
+                return front_access and backwards_access
+            elif item == "Theater to Tunnels":
+                direct_access = (
+                        self.can_reach("Tunnels to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Windmill Interior to Theater", "Entrance", player)
+                )
+
+                theater_from_town = (
+                        self.can_reach("Town to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Windmill Interior to Theater", "Entrance", player)
+                        or self.can_reach("Theater to Town", "Entrance", player)
+                )
+
+                tunnels_from_town = (
+                        self.can_reach("Tunnels to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Town to Windmill Interior", "Entrance", player)
+                        or self.can_reach("Tunnels to Town", "Entrance", player)
+                )
+
+                return direct_access or theater_from_town and tunnels_from_town
+            if item in player_logic.EVENT_PANELS:
+                return self._witness_can_solve_panel(item, world, player, player_logic, locat)
+
+            prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
+            return self.has(prog_item, player)
 
     def _witness_meets_item_requirements(self, panel: str, world: World, player: int,
                                          player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
@@ -63,115 +155,12 @@ class WitnessLogic(LogicMixin):
         a panel
         """
 
-        panel_req = player_logic.REQUIREMENTS_BY_HEX[panel]
+        entity_req = player_logic.REQUIREMENTS_BY_HEX[panel]
 
-        for option in panel_req:
-            if len(option) == 0:
-                return True
-
-            valid_option = True
-
-            for item in option:
-                if item == "7 Lasers":
-                    laser_req = get_option_value(world, "mountain_lasers")
-
-                    if not self._witness_has_lasers(player, laser_req):
-                        valid_option = False
-                        break
-                elif item == "11 Lasers":
-                    laser_req = get_option_value(world, "challenge_lasers")
-
-                    if not self._witness_has_lasers(player, laser_req):
-                        valid_option = False
-                        break
-                elif item == "PP2 Weirdness":
-                    hedge_2_access = (
-                        self.can_reach("Keep 2nd Maze to Keep", "Entrance", player)
-                        or self.can_reach("Keep to Keep 2nd Maze", "Entrance", player)
-                    )
-
-                    hedge_3_access = (
-                        self.can_reach("Keep 3rd Maze to Keep", "Entrance", player)
-                        or self.can_reach("Keep 2nd Maze to Keep 3rd Maze", "Entrance", player)
-                        and hedge_2_access
-                    )
-
-                    hedge_4_access = (
-                        self.can_reach("Keep 4th Maze to Keep", "Entrance", player)
-                        or self.can_reach("Keep 3rd Maze to Keep 4th Maze", "Entrance", player)
-                        and hedge_3_access
-                    )
-
-                    hedge_access = (
-                        self.can_reach("Keep 4th Maze to Keep Tower", "Entrance", player)
-                        and self.can_reach("Keep", "Region", player)
-                        and hedge_4_access
-                    )
-
-                    backwards_to_fourth = (
-                        self.can_reach("Keep", "Region", player)
-                        and self.can_reach("Keep 4th Pressure Plate to Keep Tower", "Entrance", player)
-                        and (
-                            self.can_reach("Keep Tower to Keep", "Entrance", player)
-                            or hedge_access
-                        )
-                    )
-                    
-                    shadows_shortcut = (
-                        self.can_reach("Main Island", "Region", player)
-                        and self.can_reach("Keep 4th Pressure Plate to Shadows", "Entrance", player)
-                    )
-
-                    backwards_access = (
-                        self.can_reach("Keep 3rd Pressure Plate to Keep 4th Pressure Plate", "Entrance", player)
-                        and (backwards_to_fourth or shadows_shortcut)
-                    )
-
-                    front_access = (
-                        self.can_reach("Keep to Keep 2nd Pressure Plate", 'Entrance', player)
-                        and self.can_reach("Keep", "Region", player)
-                    )
-
-                    if not (front_access and backwards_access):
-                        valid_option = False
-                        break
-                elif item == "Theater to Tunnels":
-                    direct_access = (
-                        self.can_reach("Tunnels to Windmill Interior", "Entrance", player)
-                        and self.can_reach("Windmill Interior to Theater", "Entrance", player)
-                    )
-
-                    theater_from_town = (
-                        self.can_reach("Town to Windmill Interior", "Entrance", player)
-                        and self.can_reach("Windmill Interior to Theater", "Entrance", player)
-                        or self.can_reach("Theater to Town", "Entrance", player)
-                    )
-
-                    tunnels_from_town = (
-                        self.can_reach("Tunnels to Windmill Interior", "Entrance", player)
-                        and self.can_reach("Town to Windmill Interior", "Entrance", player)
-                        or self.can_reach("Tunnels to Town", "Entrance", player)
-                    )
-
-                    if not (direct_access or theater_from_town and tunnels_from_town):
-                        valid_option = False
-                        break
-                elif item in player_logic.EVENT_PANELS:
-                    if not self._witness_can_solve_panel(item, world, player, player_logic, locat):
-                        valid_option = False
-                        break
-                elif not self.has(item, player):
-                    # The player doesn't have the item. Check to see if it's part of a progressive item and, if so, the
-                    #   player has enough of that.
-                    prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
-                    if prog_item is item or not self.has(prog_item, player, player_logic.MULTI_AMOUNTS[item]):
-                        valid_option = False
-                        break
-
-            if valid_option:
-                return True
-
-        return False
+        return any(
+            all(self._witness_has_item(item, world, player, player_logic, locat)
+            for item in sub_requirement) for sub_requirement in entity_req
+        )
 
     def _witness_can_solve_panels(self, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: World, player: int,
                                   player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
@@ -179,20 +168,10 @@ class WitnessLogic(LogicMixin):
         Checks whether a set of panels can be solved.
         """
 
-        for option in panel_hex_to_solve_set:
-            if len(option) == 0:
-                return True
-
-            valid_option = True
-
-            for panel in option:
-                if not self._witness_can_solve_panel(panel, world, player, player_logic, locat):
-                    valid_option = False
-                    break
-
-            if valid_option:
-                return True
-        return False
+        return any(
+            all(self._witness_can_solve_panel(panel, world, player, player_logic, locat) for panel in subset)
+            for subset in panel_hex_to_solve_set
+        )
 
 
 def make_lambda(check_hex: str, world: World, player: int,

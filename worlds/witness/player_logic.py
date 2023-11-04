@@ -28,7 +28,7 @@ from .Options import is_option_enabled, get_option_value, the_witness_options
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
-    def reduce_req_within_region(self, panel_hex: str):
+    def reduce_req_within_region(self, panel_hex: str) -> FrozenSet[FrozenSet[str]]:
         """
         Panels in this game often only turn on when other panels are solved.
         Those other panels may have different item requirements.
@@ -96,26 +96,17 @@ class WitnessPlayerLogic:
 
                 if option_panel in self.COMPLETELY_DISABLED_ENTITIES:
                     new_items = frozenset()
+                elif option_panel in self.EVENT_NAMES_BY_HEX:
+                    new_items = frozenset({frozenset([option_panel])})
                 elif option_panel in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_panel])})
-
-                    if option_panel in {"7 Lasers", "11 Lasers"}:
-                        for laser in {"0x00509", "0x012FB", "0x01539", "0x181B3", "0x014BB", "0x17C65",
-                                      "0x032F9", "0x00274", "0x0C2B2", "0x00BF6", "0x028A4", "0x09F98"}:
-                            if laser not in self.DOOR_ITEMS_BY_ID:
-                                if laser not in self.COMPLETELY_DISABLED_ENTITIES | self.DONT_MAKE_EVENTS:
-                                    if laser not in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
-                                        self.EVENT_PANELS_FROM_PANELS.add(laser)
-                # If a panel turns on when a panel in a different region turns on,
-                # the latter panel will be an "event panel".
-                # However, if this is a door or laser and it's opened by an item, its region does not physically
-                # need to be reached.
-                elif dep_obj["region"]["name"] != entity_obj["region"]["name"] \
-                        and not (option_panel in self.DOOR_ITEMS_BY_ID and dep_obj["id"] is None):
-                    new_items = frozenset({frozenset([option_panel])})
-                    self.EVENT_PANELS_FROM_PANELS.add(option_panel)
                 else:
                     new_items = self.reduce_req_within_region(option_panel)
+                    if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
+                        new_items = frozenset(
+                            frozenset(possibility | {dep_obj["region"]["name"]})
+                            for possibility in new_items
+                        )
 
                 updated_items = set()
 
@@ -181,12 +172,12 @@ class WitnessPlayerLogic:
             new_event_name = line_split[0]
             hex_set = line_split[1].split(",")
 
-            for entity, event_name in self.EVENT_ITEM_NAMES.items():
+            for entity, event_name in self.EVENT_NAMES_BY_HEX.items():
                 if event_name == new_event_name:
                     self.DONT_MAKE_EVENTS.add(entity)
 
             for hex_code in hex_set:
-                self.EVENT_ITEM_NAMES[hex_code] = new_event_name
+                self.EVENT_NAMES_BY_HEX[hex_code] = new_event_name
 
             return
 
@@ -381,7 +372,15 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, "shuffle_lasers"):
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
-        if get_option_value(world, "shuffle_EPs") != 2:
+        if get_option_value(world, "shuffle_EPs") == 2:
+            ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in StaticWitnessLogic.ENTITIES_BY_HEX.items()
+                      if ep_obj["entityType"] == "EP")
+
+            for ep_hex, ep_obj in ep_gen:
+                obelisk = StaticWitnessLogic.ENTITIES_BY_HEX[StaticWitnessLogic.EP_TO_OBELISK_SIDE[ep_hex]]["checkName"]
+                ep_name = StaticWitnessLogic.ENTITIES_BY_HEX[ep_hex]["checkName"]
+                self.EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk} - {ep_name}"
+        else:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
         if get_option_value(world, "shuffle_EPs") == 0:
@@ -450,50 +449,19 @@ class WitnessPlayerLogic:
         action = " Opened" if StaticWitnessLogic.ENTITIES_BY_HEX[panel]["entityType"] == "Door" else " Solved"
 
         name = StaticWitnessLogic.ENTITIES_BY_HEX[panel]["checkName"] + action
-        if panel not in self.EVENT_ITEM_NAMES:
-            if StaticWitnessLogic.ENTITIES_BY_HEX[panel]["entityType"] == "EP":
-                obelisk = StaticWitnessLogic.ENTITIES_BY_HEX[StaticWitnessLogic.EP_TO_OBELISK_SIDE[panel]]["checkName"]
-
-                self.EVENT_ITEM_NAMES[panel] = obelisk + " - " + StaticWitnessLogic.ENTITIES_BY_HEX[panel]["checkName"]
-
-            else:
-                warning("Panel \"" + name + "\" does not have an associated event name.")
-                self.EVENT_ITEM_NAMES[panel] = name + " Event"
-        pair = (name, self.EVENT_ITEM_NAMES[panel])
+        if panel not in self.EVENT_NAMES_BY_HEX:
+            warning("Panel \"" + name + "\" does not have an associated event name.")
+            self.EVENT_NAMES_BY_HEX[panel] = name + " Event"
+        pair = (name, self.EVENT_NAMES_BY_HEX[panel])
         return pair
 
     def make_event_panel_lists(self):
-        """
-        Special event panel data structures
-        """
+        self.EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
-        self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
-
-        for region_name, connections in self.CONNECTIONS_BY_REGION_NAME.items():
-            for connection in connections:
-                for panel_req in connection[1]:
-                    for panel in panel_req:
-                        if panel == "TrueOneWay":
-                            continue
-
-                        entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]
-
-                        if entity_obj["region"]["name"] != region_name:
-                            if panel not in self.COMPLETELY_DISABLED_ENTITIES:
-                                if not (panel in self.DOOR_ITEMS_BY_ID and entity_obj["id"] is None):
-                                    self.EVENT_PANELS_FROM_REGIONS.add(panel)
-
-        self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
-        self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_REGIONS)
-
-        self.EVENT_PANELS -= self.COMPLETELY_DISABLED_ENTITIES
-
-        for always_hex, always_item in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
-            if always_hex in self.COMPLETELY_DISABLED_ENTITIES:
+        for event_hex, event_name in self.EVENT_NAMES_BY_HEX.items():
+            if event_hex in self.COMPLETELY_DISABLED_ENTITIES:
                 continue
-            self.ALWAYS_EVENT_HEX_CODES.add(always_hex)
-            self.EVENT_PANELS.add(always_hex)
-            self.EVENT_ITEM_NAMES[always_hex] = always_item
+            self.EVENT_PANELS.add(event_hex)
 
         for panel in self.EVENT_PANELS:
             pair = self.make_event_item_pair(panel)
@@ -535,112 +503,28 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS = set()
         self.EVENT_ITEM_PAIRS = dict()
         self.DONT_MAKE_EVENTS = set()
-        self.ALWAYS_EVENT_HEX_CODES = set()
         self.COMPLETELY_DISABLED_ENTITIES = set()
         self.PRECOMPLETED_LOCATIONS = set()
         self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
-        self.EVENT_ITEM_NAMES = {
-            "0xFFD00": "Main Island Reached Independently",
-            "0xFFD01": "Inside Quarry Reached Independently",
-            "0x09D9B": "Monastery Shutters Open",
-            "0x193A6": "Monastery Laser Panel Activates",
-            "0x00037": "Monastery Branch Panels Activate",
-            "0x0A079": "Access to Bunker Laser",
-            "0x0A3B5": "Door to Tutorial Discard Opens",
-            "0x00139": "Keep Hedges 1 Knowledge",
-            "0x019DC": "Keep Hedges 2 Knowledge",
-            "0x019E7": "Keep Hedges 3 Knowledge",
-            "0x01A0F": "Keep Hedges 4 Knowledge",
-            "0x033EA": "Pressure Plates 1 Knowledge",
-            "0x01BE9": "Pressure Plates 2 Knowledge",
-            "0x01CD3": "Pressure Plates 3 Knowledge",
-            "0x01D3F": "Pressure Plates 4 Knowledge",
-            "0x09F7F": "Mountain Access",
-            "0x0367C": "Quarry Laser Stoneworks Requirement Met",
-            "0x009A1": "Swamp Between Bridges Far 1 Activates",
-            "0x00006": "Swamp Cyan Water Drains",
-            "0x00990": "Swamp Between Bridges Near Row 1 Activates",
-            "0x0A8DC": "Intro 6 Activates",
-            "0x0000A": "Swamp Beyond Rotating Bridge 1 Access",
-            "0x09E86": "Mountain Floor 2 Blue Bridge Access",
-            "0x09ED8": "Mountain Floor 2 Yellow Bridge Access",
-            "0x0A3D0": "Quarry Laser Boathouse Requirement Met",
-            "0x00596": "Swamp Red Water Drains",
-            "0x00E3A": "Swamp Purple Water Drains",
-            "0x0343A": "Door to Symmetry Island Powers On",
-            "0xFFF00": "Mountain Bottom Floor Discard Turns On",
-            "0x17CA6": "All Boat Panels Turn On",
-            "0x17CDF": "All Boat Panels Turn On",
-            "0x09DB8": "All Boat Panels Turn On",
-            "0x17C95": "All Boat Panels Turn On",
-            "0x0A054": "Couch EP solvable",
-            "0x03BB0": "Town Church Lattice Vision From Outside",
-            "0x28AC1": "Town Wooden Rooftop Turns On",
-            "0x28A69": "Town Tower 1st Door Opens",
-            "0x28ACC": "Town Tower 2nd Door Opens",
-            "0x28AD9": "Town Tower 3rd Door Opens",
-            "0x28B39": "Town Tower 4th Door Opens",
-            "0x014E8": "Quarry Stoneworks Lift Control Powers On",
-            "0x03675": "Quarry Stoneworks Ramp Moving",
-            "0x03679": "Quarry Stoneworks Lift Moving",
-            "0x2FAF6": "Tutorial Gate Secret Solution Knowledge",
-            "0x079DF": "Town Tall Hexagonal Turns On",
-            "0x17DA2": "Right Orange Bridge Fully Extended",
-            "0x19B24": "Shadows Intro Patterns Visible",
-            "0x2700B": "Open Door to Treehouse Laser House",
-            "0x00055": "Orchard Apple Trees 4 Turns On",
-            "0x17DDB": "Left Orange Bridge Fully Extended",
-            "0x03535": "Shipwreck Video Pattern Knowledge",
-            "0x03542": "Mountain Video Pattern Knowledge",
-            "0x0339E": "Desert Video Pattern Knowledge",
-            "0x03481": "Tutorial Video Pattern Knowledge",
-            "0x03702": "Jungle Video Pattern Knowledge",
-            "0x0356B": "Challenge Video Pattern Knowledge",
-            "0x0A15F": "Desert Laser Panel Shutters Open (1)",
-            "0x012D7": "Desert Laser Panel Shutters Open (2)",
-            "0x03613": "Treehouse Orange Bridge 13 Turns On",
-            "0x17DEC": "Treehouse Laser House Access Requirement",
-            "0x03C08": "Town Church Entry Opens",
-            "0x17D02": "Windmill Blades Spinning",
-            "0x0A0C9": "Cargo Box EP completable",
-            "0x09E39": "Pink Light Bridge Extended",
-            "0x17CC4": "Rails EP available",
-            "0x2896A": "Bridge Underside EP available",
-            "0x00064": "First Tunnel EP visible",
-            "0x03553": "Tutorial Video EPs availble",
-            "0x17C79": "Bunker Glass Room solutions visible",
-            "0x275FF": "Stoneworks Light EPs available",
-            "0x17E2B": "Remaining Purple Sand EPs available",
-            "0x03852": "Ramp EPs requirement",
-            "0x334D8": "RGB panels & EPs solvable",
-            "0x03750": "Left Garden EP available",
-            "0x03C0C": "RGB Flowers EP requirement",
-            "0x01CD5": "Pressure Plates 3 EP requirement",
-            "0x3865F": "Ramp EPs access requirement",
-            "0x1C31A": "Challenge Completion Requirement 1",
-            "0x1C319": "Challenge Completion Requirement 2",
-            "0x09E7B": "Mountain Floor 1 Exit Door Requirement 1",
-            "0x09E6B": "Mountain Floor 1 Exit Door Requirement 2",
-            "0x09F6E": "Mountain Floor 1 Exit Door Requirement 3",
-            "0x09EAF": "Mountain Floor 1 Exit Door Requirement 4",
-            "0x03608": "Desert Elevator Goes Up",
-            "0x00509": "Symmetry Laser Activation",
-            "0x012FB": "Desert Laser Activation",
-            "0x01539": "Quarry Laser Activation",
-            "0x181B3": "Shadows Laser Activation",
-            "0x014BB": "Keep Laser Activation",
-            "0x17C65": "Monastery Laser Activation",
-            "0x032F9": "Town Laser Activation",
-            "0x00274": "Jungle Laser Activation",
-            "0x0C2B2": "Bunker Laser Activation",
-            "0x00BF6": "Swamp Laser Activation",
-            "0x028A4": "Treehouse Laser Activation",
-            "0x09F98": "Desert Laser Redirection",
-        }
 
-        self.ALWAYS_EVENT_NAMES_BY_HEX = dict()
+        self.EVENT_NAMES_BY_HEX = {
+            "0x00509": "+1 Laser (Symmetry Laser)",
+            "0x012FB": "+1 Laser (Desert Laser)",
+            "0x09F98": "Desert Laser Redirection",
+            "0x01539": "+1 Laser (Quarry Laser)",
+            "0x181B3": "+1 Laser (Shadows Laser)",
+            "0x014BB": "+1 Laser (Keep Laser)",
+            "0x17C65": "+1 Laser (Monastery Laser)",
+            "0x032F9": "+1 Laser (Town Laser)",
+            "0x00274": "+1 Laser (Jungle Laser)",
+            "0x0C2B2": "+1 Laser (Bunker Laser)",
+            "0x00BF6": "+1 Laser (Swamp Laser)",
+            "0x028A4": "+1 Laser (Treehouse Laser)",
+            "0x09F7F": "Mountain Entry",
+            "0xFFF00": "Bottom Floor Discard Turns On",
+        }
 
         self.make_options_adjustments(world)
         self.make_dependency_reduced_checklist()

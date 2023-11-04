@@ -82,7 +82,7 @@ Inside Glass Factory (Glass Factory) - Inside Glass Factory Behind Back Wall - 0
 158038 - 0x0343A (Melting 3) - 0x00082 - Symmetry & Dots
 Door - 0x0D7ED (Back Wall) - 0x0005C
 
-Inside Glass Factory Behind Back Wall (Glass Factory) - Boat - 0x17CC8:
+Inside Glass Factory Behind Back Wall (Glass Factory) - The Ocean - 0x17CC8:
 158039 - 0x17CC8 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 
 Outside Symmetry Island (Symmetry Island) - Main Island - True - Symmetry Island Lower - 0x17F3E:
@@ -290,7 +290,7 @@ Quarry Boathouse (Quarry Boathouse) - Quarry - True - Quarry Boathouse Upper Fro
 Door - 0x2769B (Dock) - 0x17CA6
 Door - 0x27163 (Dock Invis Barrier) - 0x17CA6
 
-Quarry Boathouse Behind Staircase (Quarry Boathouse) - Boat - 0x17CA6:
+Quarry Boathouse Behind Staircase (Quarry Boathouse) - The Ocean - 0x17CA6:
 
 Quarry Boathouse Upper Front (Quarry Boathouse) - Quarry Boathouse Upper Middle - 0x17C50:
 158149 - 0x021B3 (Front Row 1) - True - Shapers & Eraser & Negative Shapers
@@ -470,7 +470,7 @@ Inside Monastery (Monastery):
 
 Monastery Garden (Monastery):
 
-Town (Town) - Main Island - True - Boat - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x1845B - Town Inside Cargo Box - 0x0A0C9:
+Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x1845B - Town Inside Cargo Box - 0x0A0C9:
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 158219 - 0x0A0C8 (Cargo Box Entry Panel) - True - Squares & Black/White Squares & Shapers & Triangles
 Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
@@ -573,7 +573,7 @@ Door - 0x3CCDF (Exit Right) - 0x33AB2
 159556 - 0x33A2A (Door EP) - 0x03553 - True
 159558 - 0x33B06 (Church EP) - 0x0354E - True
 
-Jungle (Jungle) - Main Island - True - Boat - 0x17CDF:
+Jungle (Jungle) - Main Island - True - The Ocean - 0x17CDF:
 158251 - 0x17CDF (Shore Boat Spawn) - True - Boat
 158609 - 0x17F9B (Discard) - True - Arrows
 158252 - 0x002C4 (First Row 1) - True - True
@@ -734,7 +734,7 @@ Swamp Rotating Bridge (Swamp) - Swamp Between Bridges Far - 0x181F5 - Swamp Near
 159331 - 0x016B2 (Rotating Bridge CCW EP) - 0x181F5 - True
 159334 - 0x036CE (Rotating Bridge CW EP) - 0x181F5 - True
 
-Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482 - Swamp Long Bridge - 0xFFD00 & 0xFFD02 - Boat - 0x09DB8:
+Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482 - Swamp Long Bridge - 0xFFD00 & 0xFFD02 - The Ocean - 0x09DB8:
 158903 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
 158328 - 0x09DB8 (Boat Spawn) - True - Boat
 158329 - 0x003B2 (Beyond Rotating Bridge 1) - 0x0000A - Shapers & Dots & Full Dots
@@ -774,7 +774,7 @@ Laser - 0x00BF6 (Laser) - 0x03615
 158342 - 0x17C02 (Laser Shortcut Right Panel) - 0x17C05 - Shapers & Negative Shapers & Stars & Stars + Same Colored Symbol
 Door - 0x2D880 (Laser Shortcut) - 0x17C02
 
-Treehouse Entry Area (Treehouse) - Treehouse Between Doors - 0x0C309 - Boat - 0x17C95:
+Treehouse Entry Area (Treehouse) - Treehouse Between Doors - 0x0C309 - The Ocean - 0x17C95:
 158343 - 0x17C95 (Boat Spawn) - True - Boat
 158344 - 0x0288C (First Door Panel) - True - Stars & Stars + Same Colored Symbol & Triangles
 Door - 0x0C309 (First Door) - 0x0288C
@@ -972,19 +972,17 @@ Mountain Third Layer (Mountain Bottom Floor) - Mountain Floor 2 Elevator - TrueO
 159314 - 0x09D5E (Blue Bridge EP) - 0x09E86 & 0x09ED8 - True
 Door - 0x09F89 (Exit) - 0x09FDA
 
-Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Bottom Floor Rock - 0x17FA2 - Final Room - 0x0C141:
+Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Path to Caves - 0x17F33 - Final Room - 0x0C141:
 158614 - 0x17FA2 (Discard) - 0xFFF00 - Arrows
 158445 - 0x01983 (Final Room Entry Left) - True - Shapers & Stars
 158446 - 0x01987 (Final Room Entry Right) - True - Squares & Colored Squares & Dots
 Door - 0x0C141 (Final Room Entry) - 0x01983 & 0x01987
+Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
 
 Mountain Pink Bridge EP (Mountain Floor 2):
 159312 - 0x09D63 (Pink Bridge EP) - 0x09E39 - True
 
-Mountain Bottom Floor Rock (Mountain Bottom Floor) - Mountain Bottom Floor - 0x17F33 - Mountain Path to Caves - 0x17F33:
-Door - 0x17F33 (Rock Open) - True
-
-Mountain Path to Caves (Mountain Bottom Floor) - Mountain Bottom Floor Rock - 0x334E1 - Caves - 0x2D77D:
+Mountain Path to Caves (Mountain Bottom Floor) - Mountain Bottom Floor - 0x17F33 - Caves - 0x2D77D:
 158447 - 0x00FF8 (Caves Entry Panel) - True - Arrows & Black/White Squares
 Door - 0x2D77D (Caves Entry) - 0x00FF8
 158448 - 0x334E1 (Rock Control) - True - True
@@ -1105,7 +1103,7 @@ Elevator (Mountain Final Room):
 158535 - 0x3D9A8 (Back Wall Right) - 0x3D9A6 | 0x3D9A7 - True
 158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA & 7 Lasers | 0x3D9A8 & 7 Lasers - True
 
-Boat (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse Behind Staircase - TrueOneWay - Inside Glass Factory Behind Back Wall - TrueOneWay:
+The Ocean (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse Behind Staircase - TrueOneWay - Inside Glass Factory Behind Back Wall - TrueOneWay:
 159042 - 0x22106 (Desert EP) - True - True
 159223 - 0x03B25 (Shipwreck CCW Underside EP) - True - True
 159231 - 0x28B29 (Shipwreck Green EP) - True - True

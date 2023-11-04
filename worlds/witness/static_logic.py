@@ -86,7 +86,7 @@ class StaticWitnessLogicObj:
                 self.ENTITIES_BY_HEX[check_hex] = {
                     "checkName": full_entity_name,
                     "checkHex": check_hex,
-                    "region": current_region,
+                    "region": None,
                     "id": None,
                     "entityType": location_id
                 }
@@ -97,7 +97,10 @@ class StaticWitnessLogicObj:
                     "panels": parse_lambda(required_panel_lambda)
                 }
 
-                current_region["panels"].append(check_hex)
+                # Lasers and Doors exist in a region, but don't have a regional *requirement*
+                # If a laser is activated, you don't need to physically walk up to it for it to count
+                # As such, logically, they behave more as if they were part of the "Entry" region
+                self.ALL_REGIONS_BY_NAME["Entry"]["panels"].append(check_hex)
                 continue
 
             required_item_lambda = line_split.pop(0)
