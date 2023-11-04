@@ -544,6 +544,14 @@ class StardewLogic:
         self.special_order_rules.update(get_modded_special_orders_rules(self, self.options.mods))
 
     def has(self, items: Union[str, (Iterable[str], Sized)], count: Optional[int] = None) -> StardewRule:
+        if not isinstance(items, str):
+            items = list(items)
+        key = f"has {items} {count}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._has(items, count)
+        return self.cached_rules[key]
+
+    def _has(self, items: Union[str, (Iterable[str], Sized)], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
             return Has(items, self.item_rules)
 
@@ -559,6 +567,14 @@ class StardewLogic:
         return Count(count, (self.has(item) for item in items))
 
     def received(self, items: Union[str, Iterable[str]], count: Optional[int] = 1) -> StardewRule:
+        if not isinstance(items, str):
+            items = list(items)
+        key = f"received {items} {count}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self._received(items, count)
+        return self.cached_rules[key]
+
+    def _received(self, items: Union[str, Iterable[str]], count: Optional[int] = 1) -> StardewRule:
         if count <= 0 or not items:
             return True_()
 
@@ -593,13 +609,22 @@ class StardewLogic:
         return self.cached_rules[key]
 
     def can_reach_location(self, spot: str) -> StardewRule:
-        return Reach(spot, "Location", self.player)
+        key = f"can_reach_location {spot}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = Reach(spot, "Location", self.player)
+        return self.cached_rules[key]
 
     def can_reach_entrance(self, spot: str) -> StardewRule:
-        return Reach(spot, "Entrance", self.player)
+        key = f"can_reach_entrance {spot}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = Reach(spot, "Entrance", self.player)
+        return self.cached_rules[key]
 
     def can_have_earned_total_money(self, amount: int) -> StardewRule:
-        return self.has_lived_months(min(8, amount // MONEY_PER_MONTH))
+        key = f"can_have_earned_total_money {amount}"
+        if key not in self.cached_rules:
+            self.cached_rules[key] = self.has_lived_months(min(8, amount // MONEY_PER_MONTH))
+        return self.cached_rules[key]
 
     def can_spend_money(self, amount: int) -> StardewRule:
         key = f"can_spend_money {amount}"
