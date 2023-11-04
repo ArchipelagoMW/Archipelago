@@ -58,17 +58,18 @@ def _can_solve_panel(state: CollectionState, panel: str, world: World, player: i
         return _meets_item_requirements(state, panel, world, player, player_logic, locat)
 
 
-def _can_move_either_direction(state: CollectionState, player: int, source: str, target: str, regio: WitnessRegions):
+def _can_move_either_direction(state: CollectionState, source: str, target: str, regio: WitnessRegions):
     return (
-        any(state.can_reach(entrance, "Entrance", player) for entrance in regio.created_entrances[(source, target)])
-        or any(state.can_reach(entrance, "Entrance", player) for entrance in regio.created_entrances[(target, source)])
+        any(entrance.can_reach(state) for entrance in regio.created_entrances[(source, target)])
+        or
+        any(entrance.can_reach(state) for entrance in regio.created_entrances[(target, source)])
     )
 
 
 def _has_item(state: CollectionState, item: str, world: World, player: int,
               player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     if item in StaticWitnessLogic.ALL_REGIONS_BY_NAME:
-        return state.can_reach(item, "Region", player)
+        return world.regio.region_cache[item].can_reach(state)
     if item == "7 Lasers":
         laser_req = get_option_value(world, "mountain_lasers")
         return _has_lasers(state, laser_req, world, player, player_logic, locat)
@@ -77,68 +78,68 @@ def _has_item(state: CollectionState, item: str, world: World, player: int,
         return _has_lasers(state, laser_req, world, player, player_logic, locat)
     elif item == "PP2 Weirdness":
         hedge_2_access = (
-            _can_move_either_direction(state, player, "Keep 2nd Maze", "Keep", world.regio)
+            _can_move_either_direction(state, "Keep 2nd Maze", "Keep", world.regio)
         )
 
         hedge_3_access = (
-            _can_move_either_direction(state, player, "Keep 3rd Maze", "Keep", world.regio)
-            or _can_move_either_direction(state, player, "Keep 3rd Maze", "Keep 2nd Maze", world.regio)
+            _can_move_either_direction(state, "Keep 3rd Maze", "Keep", world.regio)
+            or _can_move_either_direction(state, "Keep 3rd Maze", "Keep 2nd Maze", world.regio)
             and hedge_2_access
         )
 
         hedge_4_access = (
-            _can_move_either_direction(state, player, "Keep 4th Maze", "Keep", world.regio)
-            or _can_move_either_direction(state, player, "Keep 4th Maze", "Keep 3rd Maze", world.regio)
+            _can_move_either_direction(state, "Keep 4th Maze", "Keep", world.regio)
+            or _can_move_either_direction(state, "Keep 4th Maze", "Keep 3rd Maze", world.regio)
             and hedge_3_access
         )
 
         hedge_access = (
-            _can_move_either_direction(state, player, "Keep 4th Maze", "Keep Tower", world.regio)
-            and state.can_reach("Keep", "Region", player)
+            _can_move_either_direction(state, "Keep 4th Maze", "Keep Tower", world.regio)
+            and world.regio.region_cache["Keep"].can_reach(state)
             and hedge_4_access
         )
 
         backwards_to_fourth = (
-            state.can_reach("Keep", "Region", player)
-            and _can_move_either_direction(state, player, "Keep 4th Pressure Plate", "Keep Tower", world.regio)
+            world.regio.region_cache["Keep"].can_reach(state)
+            and _can_move_either_direction(state, "Keep 4th Pressure Plate", "Keep Tower", world.regio)
             and (
-                _can_move_either_direction(state, player, "Keep", "Keep Tower", world.regio)
+                _can_move_either_direction(state, "Keep", "Keep Tower", world.regio)
                 or hedge_access
             )
         )
 
         shadows_shortcut = (
-            state.can_reach("Main Island", "Region", player)
-            and _can_move_either_direction(state, player, "Keep 4th Pressure Plate", "Shadows", world.regio)
+            world.regio.region_cache["Main Island"].can_reach(state)
+            and _can_move_either_direction(state, "Keep 4th Pressure Plate", "Shadows", world.regio)
         )
 
         backwards_access = (
-            _can_move_either_direction(state, player, "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate", world.regio)
+            _can_move_either_direction(state, "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate", world.regio)
             and (backwards_to_fourth or shadows_shortcut)
         )
 
         front_access = (
-            _can_move_either_direction(state, player, "Keep 2nd Pressure Plate", "Keep", world.regio)
-            and state.can_reach("Keep", "Region", player)
+            _can_move_either_direction(state, "Keep 2nd Pressure Plate", "Keep", world.regio)
+            and world.regio.region_cache["Keep"].can_reach(state)
         )
 
         return front_access and backwards_access
     elif item == "Theater to Tunnels":
         direct_access = (
-                state.can_reach("Tunnels to Windmill Interior", "Entrance", player)
-                and state.can_reach("Windmill Interior to Theater", "Entrance", player)
+            _can_move_either_direction(state, "Tunnels", "Windmill Interior", world.regio)
+            and _can_move_either_direction(state, "Theater", "Windmill Interior", world.regio)
         )
 
         theater_from_town = (
-                state.can_reach("Town to Windmill Interior", "Entrance", player)
-                and state.can_reach("Windmill Interior to Theater", "Entrance", player)
-                or state.can_reach("Theater to Town", "Entrance", player)
+                _can_move_either_direction(state, "Town", "Windmill Interior", world.regio)
+                and _can_move_either_direction(state, "Theater", "Windmill Interior", world.regio)
+                or _can_move_either_direction(state, "Town", "Theater", world.regio)
         )
 
         tunnels_from_town = (
-                state.can_reach("Tunnels to Windmill Interior", "Entrance", player)
-                and state.can_reach("Town to Windmill Interior", "Entrance", player)
-                or state.can_reach("Tunnels to Town", "Entrance", player)
+                _can_move_either_direction(state, "Tunnels", "Windmill Interior", world.regio)
+                and _can_move_either_direction(state, "Town", "Windmill Interior", world.regio)
+                or _can_move_either_direction(state, "Tunnels", "Town", world.regio)
         )
 
         return direct_access or theater_from_town and tunnels_from_town

@@ -75,7 +75,7 @@ class WitnessRegions:
         source_region.exits.append(connection)
         connection.connect(target_region)
 
-        self.created_entrances[(source, target)].append(connection_name)
+        self.created_entrances[(source, target)].append(connection)
 
         # Register any necessary indirect connections
 
@@ -142,7 +142,11 @@ class WitnessRegions:
         self.locat = locat
         player_name = world.multiworld.get_player_name(world.player)
 
-        self.created_entrances: Dict[Tuple[str, str], List[str]] = KeyedDefaultDict(lambda _: [])
+        self.created_entrances: Dict[Tuple[str, str], List[Entrance]] = KeyedDefaultDict(lambda _: [])
+
+        def get_uncached_entrance(key: str) -> Entrance:
+            warning(f"Entrance \"{key}\" was not cached in {player_name}'s Witness world. Violet pls fix this.")
+            return world.multiworld.get_entrance(key, world.player)
 
         def get_uncached_region(key: str) -> Region:
             warning(f"Region \"{key}\" was not cached in {player_name}'s Witness world. Violet pls fix this.")
@@ -152,9 +156,6 @@ class WitnessRegions:
             warning(f"Location \"{key}\" was not cached in {player_name}'s Witness world. Violet pls fix this.")
             return world.multiworld.get_location(key, world.player)
 
-        self.region_cache: Dict[str, Region] = KeyedDefaultDict(
-            get_uncached_region
-        )
-        self.location_cache: Dict[str, Location] = KeyedDefaultDict(
-            get_uncached_location
-        )
+        self.region_cache: Dict[str, Region] = KeyedDefaultDict(get_uncached_region)
+        self.location_cache: Dict[str, Location] = KeyedDefaultDict(get_uncached_location)
+        self.entrance_cache: Dict[str, Entrance] = KeyedDefaultDict(get_uncached_entrance)
