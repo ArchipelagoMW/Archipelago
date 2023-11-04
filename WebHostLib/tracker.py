@@ -1532,9 +1532,11 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
             continue
         player_locations = locations[player]
         checks_done[team][player]["Total"] = len(locations_checked)
-        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
-                                                      len(player_locations) * 100) \
-            if player_locations else 100
+        percent_total_checks_done[team][player] = (
+            checks_done[team][player]["Total"] / len(player_locations) * 100
+            if player_locations
+            else 100
+        )
 
     activity_timers = {}
     now = datetime.datetime.utcnow()
@@ -1690,10 +1692,13 @@ def get_LttP_multiworld_tracker(tracker: UUID):
             for recipient in recipients:
                 attribute_item(team, recipient, item)
                 checks_done[team][player][player_location_to_area[player][location]] += 1
-                checks_done[team][player]["Total"] += 1
-        percent_total_checks_done[team][player] = int(
-            checks_done[team][player]["Total"] / len(player_locations) * 100) if \
-        player_locations else 100
+        checks_done[team][player]["Total"] = len(locations_checked)
+
+        percent_total_checks_done[team][player] = (
+            checks_done[team][player]["Total"] / len(player_locations) * 100
+            if player_locations
+            else 100
+        )
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:
