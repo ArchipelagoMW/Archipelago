@@ -60,7 +60,9 @@ class DLCqworld(World):
         created_items = create_items(self, self.options, locations_count + len(items_to_exclude), self.multiworld.random)
 
         self.multiworld.itempool += created_items
-        self.multiworld.early_items[self.player]["Movement Pack"] = 1
+
+        if self.options.campaign == Options.Campaign.option_basic or self.options.campaign == Options.Campaign.option_both:
+            self.multiworld.early_items[self.player]["Movement Pack"] = 1
 
         for item in items_to_exclude:
             if item in self.multiworld.itempool:
