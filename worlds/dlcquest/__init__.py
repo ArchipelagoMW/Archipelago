@@ -3,7 +3,7 @@ from typing import Union
 from BaseClasses import Tutorial, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from . import Options
-from .Items import DLCQuestItem, ItemData, create_items, item_table
+from .Items import DLCQuestItem, ItemData, create_items, item_table, items_by_group, Group
 from .Locations import DLCQuestLocation, location_table
 from .Options import DLCQuestOptions
 from .Regions import create_regions
@@ -78,6 +78,10 @@ class DLCqworld(World):
             item = item_table[item]
 
         return DLCQuestItem(item.name, item.classification, item.code, self.player)
+
+    def get_filler_item_name(self) -> str:
+        trap = self.multiworld.random.choice(items_by_group[Group.Trap])
+        return trap.name
 
     def fill_slot_data(self):
         options_dict = self.options.as_dict(
