@@ -9,7 +9,7 @@ from .Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, creat
 from .Bosses import place_bosses
 from .Dungeons import get_dungeon_item_pool_player
 from .EntranceShuffle import connect_entrance
-from .Items import ItemFactory, GetBeemizerItem, trap_replaceable
+from .Items import ItemFactory, GetBeemizerItem, trap_replaceable, item_name_groups
 from .Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, LTTPBosses
 from .StateHelpers import has_triforce_pieces, has_melee_weapon
 from .Regions import key_drop_data
@@ -223,6 +223,37 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
         boss_heart_container_limit=difficulties[diff].boss_heart_container_limit,
         heart_piece_limit=difficulties[diff].heart_piece_limit,
     )
+
+items_reduction_table = (
+    ("Piece of Heart", "Boss Heart Container", 4, 1),
+    # the order of the upgrades is important
+    ("Arrow Upgrade (+5)", "Arrow Upgrade (+10)", 8, 4),
+    ("Arrow Upgrade (+5)", "Arrow Upgrade (+10)", 7, 4),
+    ("Arrow Upgrade (+5)", "Arrow Upgrade (+10)", 6, 3),
+    ("Arrow Upgrade (+10)", "Arrow Upgrade (70)", 4, 1),
+    ("Bomb Upgrade (+5)", "Bomb Upgrade (+10)", 8, 4),
+    ("Bomb Upgrade (+5)", "Bomb Upgrade (+10)", 7, 4),
+    ("Bomb Upgrade (+5)", "Bomb Upgrade (+10)", 6, 3),
+    ("Bomb Upgrade (+10)", "Bomb Upgrade (50)", 5, 1),
+    ("Bomb Upgrade (+10)", "Bomb Upgrade (50)", 4, 1),
+    ("Progressive Sword", 4),
+    ("Fighter Sword", 1),
+    ("Master Sword", 1),
+    ("Tempered Sword", 1),
+    ("Golden Sword", 1),
+    ("Progressive Shield", 3),
+    ("Blue Shield", 1),
+    ("Red Shield", 1),
+    ("Mirror Shield", 1),
+    ("Progressive Mail", 2),
+    ("Blue Mail", 1),
+    ("Red Mail", 1),
+    ("Progressive Bow", 2),
+    ("Bow", 1),
+    ("Silver Bow", 1),
+    ("Lamp", 1),
+    ("Bottles",)
+)
 
 
 def generate_itempool(world):
@@ -448,11 +479,28 @@ def generate_itempool(world):
         for i in range(4):
             next(adv_heart_pieces).classification = ItemClassification.progression
 
+
+    shop_items = multiworld.shop_item_slots[player]
+    if multiworld.shuffle_capacity_upgrades[player]:
+        shop_items += 2
+    chance_100 = int(multiworld.retro_bow[player]) * 0.25 + int(
+        multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal) * 0.5
+    for _ in range(shop_items):
+        if multiworld.goal[player] != 'ice_rod_hunt':
+            if multiworld.random.random() < chance_100:
+                items.append(ItemFactory(GetBeemizerItem(multiworld, player, "Rupees (100)"), player))
+            else:
+                items.append(ItemFactory(GetBeemizerItem(multiworld, player, "Rupees (50)"), player))
+        else:
+            items.append(ItemFactory(GetBeemizerItem(multiworld, player, "Nothing"), player))
+
+    multiworld.random.shuffle(items)
+    pool_count = len(items)
+    new_items = ["Triforce Piece" for _ in range(additional_triforce_pieces)]
     if multiworld.shuffle_capacity_upgrades[player] or multiworld.bombless_start[player]:
         progressive = multiworld.progressive[player]
         progressive = multiworld.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
         progressive &= multiworld.goal == 'ice_rod_hunt'
-        new_items = []
         if multiworld.shuffle_capacity_upgrades[player] == "on_combined":
             new_items.append("Bomb Upgrade (50)")
         elif multiworld.shuffle_capacity_upgrades[player] == "on":
@@ -468,53 +516,62 @@ def generate_itempool(world):
                 new_items += ["Arrow Upgrade (+5)"] * 6
                 new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
 
-        multiworld.random.shuffle(new_items)  # Decide what gets tossed randomly if it can't insert everything.
+    items += [ItemFactory(item, player) for item in new_items]
+    removed_filler = []
 
-        if multiworld.goal[player] != 'ice_rod_hunt':
-            for i, item in enumerate(items):
-                if item.name in trap_replaceable:
-                    items[i] = ItemFactory(new_items.pop(), player)
-                    if not new_items:
+    multiworld.random.shuffle(items)  # Decide what gets tossed randomly.
+
+    while len(items) > pool_count:
+        for i, item in enumerate(items):
+            if item.classification in (ItemClassification.filler, ItemClassification.trap):
+                removed_filler.append(items.pop(i))
+                break
+        else:
+            # no more junk to remove, condense progressive items
+            def condense_items(items, small_item, big_item, rem, add):
+                small_item = ItemFactory(small_item, player)
+                # while (len(items) >= pool_count + rem - 1  # minus 1 to account for the replacement item
+                #         and items.count(small_item) >= rem):
+                if items.count(small_item) >= rem:
+                    for _ in range(rem):
+                        items.remove(small_item)
+                        removed_filler.append(ItemFactory(small_item.name, player))
+                    items += [ItemFactory(big_item, player) for _ in range(add)]
+                    return True
+                return False
+
+            def cut_item(items, item_to_cut, minimum_items):
+                item_to_cut = ItemFactory(item_to_cut, player)
+                if items.count(item_to_cut) > minimum_items:
+                    items.remove(item_to_cut)
+                    removed_filler.append(ItemFactory(item_to_cut.name, player))
+                    return True
+                return False
+
+            while len(items) > pool_count:
+                items_were_cut = False
+                for reduce_item in items_reduction_table:
+                    if len(items) <= pool_count:
                         break
-            else:
-                logging.warning(
-                    f"Not all upgrades put into Player{player}' item pool. Putting remaining items in Capacity Upgrade shop instead.")
-                bombupgrades = sum(1 for item in new_items if 'Bomb Upgrade' in item)
-                arrowupgrades = sum(1 for item in new_items if 'Arrow Upgrade' in item)
-                # slots = iter(range(2))
-                # from .Shops import ShopType
-                # for shop in world.shops:
-                #     if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
-                #             shop.region.name == "Capacity Upgrade":
-                #         # shop.clear_inventory()
-                #         capacityshop = shop
-                #         if bombupgrades:
-                #             capacityshop.add_inventory(next(slots), 'Bomb Upgrade (+5)', 100, bombupgrades)
-                #         if arrowupgrades:
-                #             capacityshop.add_inventory(next(slots), 'Arrow Upgrade (+5)', 100, arrowupgrades)
-                #         break
-        else:
-            for item in new_items:
-                multiworld.push_precollected(ItemFactory(item, player))
+                    if len(reduce_item) == 2:
+                        items_were_cut = items_were_cut or cut_item(items, *reduce_item)
+                    elif len(reduce_item) == 4:
+                        items_were_cut = items_were_cut or condense_items(items, *reduce_item)
+                    elif len(reduce_item) == 1:  # Bottles
+                        bottles = [item for item in items if item.name in item_name_groups["Bottles"]]
+                        if len(bottles) > 4:
+                            bottle = multiworld.random.choice(bottles)
+                            items.remove(bottle)
+                            removed_filler.append(bottle)
+                            items_were_cut = True
+                assert items_were_cut, f"Failed to limit item pool size for player {player}"
+    if len(items) < pool_count:
+        items += removed_filler[len(items) - pool_count:]
 
+    # for i, item in enumerate(items):
+    #     if not (item.advancement or item.type):
+    #         items[i] = GetBeemizerItem(multiworld, item.player, item)
 
-    progressionitems = []
-    nonprogressionitems = []
-    for item in items:
-        if item.advancement or item.type:
-            progressionitems.append(item)
-        else:
-            nonprogressionitems.append(GetBeemizerItem(multiworld, item.player, item))
-    multiworld.random.shuffle(nonprogressionitems)
-
-    if additional_triforce_pieces:
-        if additional_triforce_pieces > len(nonprogressionitems):
-            raise FillError(f"Not enough non-progression items to replace with Triforce pieces found for player "
-                            f"{multiworld.get_player_name(player)}.")
-        progressionitems += [ItemFactory("Triforce Piece", player) for _ in range(additional_triforce_pieces)]
-        nonprogressionitems.sort(key=lambda item: int("Heart" in item.name))  # try to keep hearts in the pool
-        nonprogressionitems = nonprogressionitems[additional_triforce_pieces:]
-        multiworld.random.shuffle(nonprogressionitems)
 
     multiworld.required_medallions[player] = (multiworld.misery_mire_medallion[player].current_key.title(),
                                               multiworld.turtle_rock_medallion[player].current_key.title())
@@ -522,14 +579,12 @@ def generate_itempool(world):
     place_bosses(world)
     set_up_shops(multiworld, player)
 
-    shuffle_shops(multiworld, nonprogressionitems, player)
+    shuffle_shops(multiworld, player)
 
-    multiworld.itempool += progressionitems + nonprogressionitems
+    multiworld.itempool += items
 
     if multiworld.retro_caves[player]:
         set_up_take_anys(multiworld, player)  # depends on world.itempool to be set
-    # set_up_take_anys needs to run first
-    create_dynamic_shop_locations(multiworld, player)
 
 
 take_any_locations = {
