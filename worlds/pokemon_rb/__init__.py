@@ -445,9 +445,13 @@ class PokemonRedBlueWorld(World):
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
         # fail. Re-use test_state from previous final loop.
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
+        clear_cache = False
         for location in evolutions_region.locations.copy():
             if not test_state.can_reach(location, player=self.player):
                 evolutions_region.locations.remove(location)
+                clear_cache = True
+        if clear_cache:
+            self.multiworld.clear_location_cache()
 
         if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
@@ -463,17 +467,13 @@ class PokemonRedBlueWorld(World):
         locs = {self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)}
 
-        if not self.multiworld.key_items_only[self.player]:
-            rule = None
+        for loc in locs:
             if self.multiworld.fossil_check_item_types[self.player] == "key_items":
-                rule = lambda i: i.advancement
+                add_item_rule(loc, lambda i: i.advancement)
             elif self.multiworld.fossil_check_item_types[self.player] == "unique_items":
-                rule = lambda i: i.name in item_groups["Unique"]
+                add_item_rule(loc, lambda i: i.name in item_groups["Unique"])
             elif self.multiworld.fossil_check_item_types[self.player] == "no_key_items":
-                rule = lambda i: not i.advancement
-            if rule:
-                for loc in locs:
-                    add_item_rule(loc, rule)
+                add_item_rule(loc, lambda i: not i.advancement)
 
         for mon in ([" ".join(self.multiworld.get_location(
                 f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
@@ -559,6 +559,7 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
+            self.multiworld._recache()
 
         if self.multiworld.door_shuffle[self.player] == "decoupled":
             swept_state = self.multiworld.state.copy()

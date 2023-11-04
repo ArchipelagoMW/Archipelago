@@ -309,10 +309,10 @@ def create_regions(world: World):
 
     # Items near the Dead Bird Studio elevator can be reached from the basement act, and beyond in Expert
     ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
-    post_ev = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
+    post_ev_area = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
     connect_regions(basement, ev_area, "DBS Basement -> Elevator Area", p)
     if world.multiworld.LogicDifficulty[world.player].value >= int(Difficulty.EXPERT):
-        connect_regions(basement, post_ev, "DBS Basement -> Post Elevator Area", p)
+        connect_regions(basement, post_ev_area, "DBS Basement -> Post Elevator Area", p)
 
     # ------------------------------------------- SUBCON FOREST --------------------------------------- #
     subcon_forest = create_region_and_connect(w, "Subcon Forest", "Telescope -> Subcon Forest", spaceship)
@@ -431,10 +431,9 @@ def create_rift_connections(world: World, region: Region):
         connect_regions(act_region, region, entrance_name, world.player)
         i += 1
 
-    # fix for some weird keyerror
+    # fix for some weird keyerror from tests
     if region.name == "Time Rift - Rumbi Factory":
         for entrance in region.entrances:
-            print(entrance.name)
             world.multiworld.get_entrance(entrance.name, world.player)
 
 
@@ -632,8 +631,8 @@ def randomize_act_entrances(world: World):
                     candidate = c
                     break
 
-        # noinspection PyUnboundLocalVariable
         shuffled_list.append(candidate)
+        # print(region, candidate)
 
         # Vanilla
         if candidate.name == region.name:

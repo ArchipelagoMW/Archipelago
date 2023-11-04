@@ -1,8 +1,5 @@
-import typing
-
 from BaseClasses import ItemClassification, MultiWorld
-from . import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_with_mods, \
-    allsanity_options_without_mods, minimal_locations_maximal_items
+from . import setup_solo_multiworld, SVTestBase
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import items_by_group, Group
@@ -10,11 +7,11 @@ from ..locations import LocationTags
 from ..mods.mod_data import ModNames
 
 
-def get_real_locations(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
+def get_real_locations(tester: SVTestBase, multiworld: MultiWorld):
     return [location for location in multiworld.get_locations(tester.player) if not location.event]
 
 
-def get_real_location_names(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
+def get_real_location_names(tester: SVTestBase, multiworld: MultiWorld):
     return [location.name for location in multiworld.get_locations(tester.player) if not location.event]
 
 
@@ -118,6 +115,21 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
                 self.assertTrue(count == 0 or count == 2)
 
 
+class TestGivenProgressiveBackpack(SVTestBase):
+    options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive}
+
+    def test_when_generate_world_then_two_progressive_backpack_are_added(self):
+        self.assertEqual(self.multiworld.itempool.count(self.world.create_item("Progressive Backpack")), 2)
+
+    def test_when_generate_world_then_backpack_locations_are_added(self):
+        created_locations = {location.name for location in self.multiworld.get_locations(1)}
+        backpacks_exist = [location.name in created_locations
+                           for location in locations.locations_by_tag[LocationTags.BACKPACK]
+                           if location.name != "Premium Pack"]
+        all_exist = all(backpacks_exist)
+        self.assertTrue(all_exist)
+
+
 class TestRemixedMineRewards(SVTestBase):
     def test_when_generate_world_then_one_reward_is_added_per_chest(self):
         # assert self.world.create_item("Rusty Sword") in self.multiworld.itempool
@@ -193,17 +205,17 @@ class TestLocationGeneration(SVTestBase):
                 self.assertIn(location.name, location_table)
 
 
-class TestLocationAndItemCount(SVTestCase):
+class TestLocationAndItemCount(SVTestBase):
 
     def test_minimal_location_maximal_items_still_valid(self):
-        min_max_options = minimal_locations_maximal_items()
+        min_max_options = self.minimal_locations_maximal_items()
         multiworld = setup_solo_multiworld(min_max_options)
         valid_locations = get_real_locations(self, multiworld)
         self.assertGreaterEqual(len(valid_locations), len(multiworld.itempool))
 
     def test_allsanity_without_mods_has_at_least_locations(self):
         expected_locations = 994
-        allsanity_options = allsanity_options_without_mods()
+        allsanity_options = self.allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         number_locations = len(get_real_locations(self, multiworld))
         self.assertGreaterEqual(number_locations, expected_locations)
@@ -216,7 +228,7 @@ class TestLocationAndItemCount(SVTestCase):
 
     def test_allsanity_with_mods_has_at_least_locations(self):
         expected_locations = 1246
-        allsanity_options = allsanity_options_with_mods()
+        allsanity_options = self.allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         number_locations = len(get_real_locations(self, multiworld))
         self.assertGreaterEqual(number_locations, expected_locations)
@@ -232,11 +244,6 @@ class TestFriendsanityNone(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
     }
-
-    @property
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
 
     def test_no_friendsanity_items(self):
         for item in self.multiworld.itempool:
@@ -409,7 +416,6 @@ class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
                     self.assertLessEqual(int(hearts), 10)
 
 
-"""  # Assuming math is correct if we check 2 points
 class TestFriendsanityAllNpcsWithMarriageHeartSize2(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
@@ -522,7 +528,6 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize4(SVTestBase):
                 self.assertTrue(hearts == 4 or hearts == 8 or hearts == 12 or hearts == 14)
             else:
                 self.assertTrue(hearts == 4 or hearts == 8 or hearts == 10)
-"""
 
 
 class TestFriendsanityAllNpcsWithMarriageHeartSize5(SVTestBase):
