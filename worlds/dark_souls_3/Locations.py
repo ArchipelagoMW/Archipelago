@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Optional, Dict, List, Set
+from typing import ClassVar, Optional, Dict, List, Set
 from dataclasses import dataclass
 
 from BaseClasses import Location, LocationProgressType, Region
@@ -72,6 +72,9 @@ class DS3LocationCategory(IntEnum):
 
 @dataclass
 class DS3LocationData:
+    __location_id: ClassVar[int] = 100000
+    """The next location ID to use when creating location data."""
+
     name: str
     """The name of this location according to Archipelago.
     
@@ -82,6 +85,9 @@ class DS3LocationData:
 
     category: DS3LocationCategory
     """The category into which this location falls."""
+
+    ap_code: int = None
+    """Archipelago's internal ID for this location (also known as its "address")."""
 
     region_value: int = 0
     """The relative value of items in this location's region.
@@ -194,6 +200,8 @@ class DS3LocationData:
     """
 
     def __post_init__(self):
+        self.ap_code = self.ap_code or DS3LocationData.__location_id
+        DS3LocationData.__location_id += 1
         if self.miniboss or self.mimic or self.lizard or self.hostile_npc: self.drop = True
 
     def location_groups(self) -> List[str]:
@@ -218,102 +226,17 @@ class DS3LocationData:
 
 class DarkSouls3Location(Location):
     game: str = "Dark Souls III"
-    category: DS3LocationCategory
-    default_item_name: str
-    offline: Optional[str] = None
-    conditional: bool = False
-    region_value: int
+    data: DS3LocationData
 
     def __init__(
             self,
             player: int,
-            name: str,
-            category: DS3LocationCategory,
-            default_item_name: str,
-            address: Optional[int] = None,
-            parent: Optional[Region] = None):
-        super().__init__(player, name, address, parent)
-        self.default_item_name = default_item_name
-        self.category = category
-
-    @staticmethod
-    def from_data(
-            player: int,
             data: DS3LocationData,
-            address: Optional[int] = None,
-            parent: Optional[Region] = None) -> "DarkSouls3Location":
-        location = DarkSouls3Location(
-            player,
-            data.name,
-            data.category,
-            data.default_item_name,
-            address,
-            parent
-        )
-        location.offline = data.offline
-        location.conditional = data.conditional
-        location.region_value = data.region_value
-        if data.missable:
-            location.progress_type = LocationProgressType.EXCLUDED
-        return location
-        
-
-    @staticmethod
-    def get_name_to_id() -> dict:
-        base_id = 100000
-        table_offset = 150
-
-        table_order = [
-            "Cemetery of Ash",
-            "Firelink Shrine",
-            "Firelink Shrine Bell Tower",
-            "High Wall of Lothric",
-            "Undead Settlement",
-            "Road of Sacrifices",
-            "Cathedral of the Deep",
-            "Farron Keep",
-            "Catacombs of Carthus",
-            "Smouldering Lake",
-            "Irithyll of the Boreal Valley",
-            "Irithyll Dungeon",
-            "Profaned Capital",
-            "Anor Londo",
-            "Lothric Castle",
-            "Consumed King's Garden",
-            "Grand Archives",
-            "Untended Graves",
-            "Archdragon Peak",
-            "Kiln of the First Flame",
-
-            "Painted World of Ariandel (Before Contraption)",
-            "Painted World of Ariandel (After Contraption)",
-            "Dreg Heap",
-            "Ringed City",
-
-            "Greirat's Shop",
-            "Karla's Shop",
-        ]
-
-        if len(location_tables) != len(table_order):
-            for location in location_tables.keys():
-                if location not in table_order:
-                    raise Exception("Location table is missing location {}".format(location))
-            for location in table_order:
-                if location not in location_tables:
-                    raise Exception("Table order is missing location {}".format(location))
-
-        output = {}
-        for i, region_name in enumerate(table_order):
-            if len(location_tables[region_name]) > table_offset:
-                raise Exception("The location table for {} has {} entries, that is more than {} entries".format(
-                    region_name,
-                    len(location_tables[region_name]),
-                    table_offset,
-                ))
-
-            output.update({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + (table_offset * i))})
-
-        return output
+            event: bool = False,
+            parent: Optional[Region] = None):
+        super().__init__(player, data.name, None if event else data.ap_code, parent)
+        self.data = data
+        if data.missable: self.progress_type = LocationProgressType.EXCLUDED
 
 
 location_tables = {

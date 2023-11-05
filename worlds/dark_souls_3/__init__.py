@@ -56,7 +56,11 @@ class DarkSouls3World(World):
     enabled_location_categories: Set[DS3LocationCategory]
     required_client_version = (0, 4, 2)
     item_name_to_id = {data.name: data.ap_code for data in item_dictionary.values()}
-    location_name_to_id = DarkSouls3Location.get_name_to_id()
+    location_name_to_id = {
+        location.name: location.ap_code
+        for locations in location_tables.values()
+        for location in locations
+    }
     location_name_groups = location_name_groups
     item_name_groups = {
         "Cinders": {
@@ -229,7 +233,7 @@ class DarkSouls3World(World):
 
         for location in location_table:
             if self.is_location_available(location):
-                new_location = DarkSouls3Location.from_data(
+                new_location = DarkSouls3Location(
                     self.player,
                     location,
                     self.location_name_to_id[location.name],
@@ -241,7 +245,7 @@ class DarkSouls3World(World):
                 if event_item.classification != ItemClassification.progression:
                     continue
 
-                new_location = DarkSouls3Location.from_data(
+                new_location = DarkSouls3Location(
                     self.player,
                     location,
                     parent = new_region
@@ -272,20 +276,20 @@ class DarkSouls3World(World):
             if not self.is_location_available(location.name):
                 raise Exception("DS3 generation bug: Added an unavailable location.")
 
-            item = item_dictionary[location.default_item_name]
+            item = item_dictionary[location.data.default_item_name]
             if item.category == DS3ItemCategory.SKIP:
                 num_required_extra_items += 1
             elif not item.unique:
-                itempool_by_category[location.category].append(location.default_item_name)
+                itempool_by_category[location.data.category].append(location.data.default_item_name)
             else:
                 # For unique items, make sure there aren't duplicates in the item set even if there
                 # are multiple in-game locations that provide them.
-                item_set = item_set_by_category[location.category]
-                if location.default_item_name in item_set:
+                item_set = item_set_by_category[location.data.category]
+                if location.data.default_item_name in item_set:
                     num_required_extra_items += 1
                 else:
-                    item_set.add(location.default_item_name)
-                    itempool_by_category[location.category].append(location.default_item_name)
+                    item_set.add(location.data.default_item_name)
+                    itempool_by_category[location.data.category].append(location.data.default_item_name)
 
         # Replace each item category with a random sample of items of those types
         if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various:
@@ -749,7 +753,7 @@ class DarkSouls3World(World):
                 offworld = [loc for loc in locations if loc.game != "Dark Souls III"]
                 self.multiworld.random.shuffle(offworld)
                 onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
-                                 key=lambda loc: loc.region_value)
+                                 key=lambda loc: loc.data.region_value)
 
                 # Give offworld regions the last (best) items within a given sphere
                 for location in onworld + offworld:
@@ -844,8 +848,8 @@ class DarkSouls3World(World):
         for location in self.multiworld.get_filled_locations():
             # Skip events and only look at this world's locations
             if (location.address is not None and location.item.code is not None
-                    and location.player == self.player and location.offline):
-                location_ids_to_keys[location.address] = location.offline
+                    and location.player == self.player and location.data.offline):
+                location_ids_to_keys[location.address] = location.data.offline
 
         slot_data = {
             "options": {
