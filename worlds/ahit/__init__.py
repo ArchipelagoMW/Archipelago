@@ -1,7 +1,8 @@
 from BaseClasses import Item, ItemClassification, Tutorial
 from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
-from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID
+from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
+    get_total_locations
 from .Rules import set_rules
 from .Options import ahit_options, slot_data_options, adjust_options
 from .Types import HatType, ChapterIndex, HatInTimeItem
@@ -173,7 +174,8 @@ class HatInTimeWorld(World):
                            "Chapter7Cost": chapter_timepiece_costs[self.player][ChapterIndex.METRO],
                            "BadgeSellerItemCount": badge_seller_count[self.player],
                            "SeedNumber": str(self.multiworld.seed),  # For shop prices
-                           "SeedName": self.multiworld.seed_name}
+                           "SeedName": self.multiworld.seed_name,
+                           "TotalLocations": get_total_locations(self)}
 
         if self.multiworld.HatItems[self.player].value == 0:
             slot_data.setdefault("SprintYarnCost", hat_yarn_costs[self.player][HatType.SPRINT])

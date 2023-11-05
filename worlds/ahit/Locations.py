@@ -283,7 +283,7 @@ ahit_locations = {
     # Alpine Skyline
     "Alpine Skyline - Goat Village: Below Hookpoint": LocData(2000334856, "Alpine Skyline Area (TIHS)"),
     "Alpine Skyline - Goat Village: Hidden Branch": LocData(2000334855, "Alpine Skyline Area (TIHS)"),
-    "Alpine Skyline - Goat Refinery": LocData(2000333635, "Alpine Skyline Area"),
+    "Alpine Skyline - Goat Refinery": LocData(2000333635, "Alpine Skyline Area (TIHS)"),
     "Alpine Skyline - Bird Pass Fork": LocData(2000335911, "Alpine Skyline Area (TIHS)"),
 
     "Alpine Skyline - Yellow Band Hills": LocData(2000335756, "Alpine Skyline Area (TIHS)",
@@ -900,6 +900,8 @@ event_locs = {
     "HUMT Access": LocData(0, "Heating Up Mafia Town"),
     "TOD Access": LocData(0, "Toilet of Doom"),
     "YCHE Access": LocData(0, "Your Contract has Expired"),
+    "AFR Access": LocData(0, "Alpine Free Roam"),
+    "TIHS Access": LocData(0, "The Illness has Spread"),
 
     "Birdhouse Cleared": LocData(0, "The Birdhouse", act_event=True),
     "Lava Cake Cleared": LocData(0, "The Lava Cake", act_event=True),

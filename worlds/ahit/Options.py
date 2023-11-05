@@ -458,6 +458,15 @@ class NyakuzaThugMaxShopItems(Range):
     default = 4
 
 
+class NoTicketSkips(Choice):
+    """Prevent metro gate skips from being in logic on higher difficulties.
+    Rush Hour option will only consider the ticket skips for Rush Hour in logic."""
+    display_name = "No Ticket Skips"
+    option_false = 0
+    option_true = 1
+    option_rush_hour = 2
+
+
 class BaseballBat(Toggle):
     """Replace the Umbrella with the baseball bat from Nyakuza Metro.
     DLC2 content does not have to be shuffled for this option but Nyakuza Metro still needs to be installed."""
@@ -656,6 +665,7 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "MetroMaxPonCost":          MetroMaxPonCost,
     "NyakuzaThugMinShopItems":  NyakuzaThugMinShopItems,
     "NyakuzaThugMaxShopItems":  NyakuzaThugMaxShopItems,
+    "NoTicketSkips":            NoTicketSkips,
 
     "LowestChapterCost":        LowestChapterCost,
     "HighestChapterCost":       HighestChapterCost,
@@ -720,6 +730,7 @@ slot_data_options: typing.Dict[str, type(Option)] = {
     "MetroMinPonCost":  MetroMinPonCost,
     "MetroMaxPonCost":  MetroMaxPonCost,
     "BaseballBat":      BaseballBat,
+    "NoTicketSkips":    NoTicketSkips,
 
     "MinPonCost":       MinPonCost,
     "MaxPonCost":       MaxPonCost,

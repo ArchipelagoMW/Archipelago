@@ -197,6 +197,7 @@ def create_dw_regions(world: World):
             if i == 0:
                 connect_regions(dw_map, dw, f"-> {name}", world.player)
             else:
+                # noinspection PyUnboundLocalVariable
                 connect_regions(prev_dw, dw, f"{prev_dw.name} -> {name}", world.player)
 
             loc_id = death_wishes[name]

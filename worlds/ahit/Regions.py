@@ -309,10 +309,10 @@ def create_regions(world: World):
 
     # Items near the Dead Bird Studio elevator can be reached from the basement act, and beyond in Expert
     ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
-    post_ev_area = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
+    post_ev = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
     connect_regions(basement, ev_area, "DBS Basement -> Elevator Area", p)
     if world.multiworld.LogicDifficulty[world.player].value >= int(Difficulty.EXPERT):
-        connect_regions(basement, post_ev_area, "DBS Basement -> Post Elevator Area", p)
+        connect_regions(basement, post_ev, "DBS Basement -> Post Elevator Area", p)
 
     # ------------------------------------------- SUBCON FOREST --------------------------------------- #
     subcon_forest = create_region_and_connect(w, "Subcon Forest", "Telescope -> Subcon Forest", spaceship)
@@ -501,12 +501,12 @@ def randomize_act_entrances(world: World):
             region_list.append(region)
 
     for region in region_list.copy():
-        if "Time Rift" in region.name:
+        if region.name in chapter_finales:
             region_list.remove(region)
             region_list.append(region)
 
     for region in region_list.copy():
-        if region.name in chapter_finales:
+        if "Time Rift" in region.name:
             region_list.remove(region)
             region_list.append(region)
 
@@ -631,8 +631,8 @@ def randomize_act_entrances(world: World):
                     candidate = c
                     break
 
+        # noinspection PyUnboundLocalVariable
         shuffled_list.append(candidate)
-        # print(region, candidate)
 
         # Vanilla
         if candidate.name == region.name:
