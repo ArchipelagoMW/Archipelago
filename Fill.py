@@ -918,13 +918,16 @@ def distribute_planned(world: MultiWorld) -> None:
             world.random.shuffle(items)
             count = 0
             err: typing.List[str] = []
-            successful_pairs: typing.List[typing.Tuple[Item, Location]] = []
+            successful_pairs: typing.List[typing.Tuple[int, Item, Location]] = []
+            claimed_indices: typing.Set[typing.Optional[int]] = set()
             for item_name in items:
-                index_to_delete = None
+                index_to_delete: typing.Optional[int] = None
                 if from_pool:
                     try:
-                        index_to_delete, item = next((i, item) for i, item in enumerate(world.itempool)
-                                                     if item.name == item_name and item.player == player)
+                        index_to_delete, item = next(
+                            (i, item) for i, item in enumerate(world.itempool)
+                            if item.name == item_name and item.player == player and i not in claimed_indices
+                        )
                     except StopIteration:
                         warn(
                         f"Could not remove {item_name} from pool for {world.player_name[player]} as it's already missing from it.",
@@ -938,11 +941,10 @@ def distribute_planned(world: MultiWorld) -> None:
                         if not location.item:
                             if location.item_rule(item):
                                 if location.can_fill(world.state, item, False):
-                                    successful_pairs.append((item, location))
+                                    successful_pairs.append((index_to_delete, item, location))
+                                    claimed_indices.add(index_to_delete)
                                     candidates.remove(location)
                                     count = count + 1
-                                    if index_to_delete is not None:
-                                        world.itempool.pop(index_to_delete)
                                     break
                                 else:
                                     err.append(f"Can't place item at {location} due to fill condition not met.")
@@ -960,11 +962,17 @@ def distribute_planned(world: MultiWorld) -> None:
                 failed(
                     f"Plando block failed to place {m - count} of {m} item(s) for {world.player_name[player]}, error(s): {' '.join(err)}",
                     placement['force'])
-            for (item, location) in successful_pairs:
+
+            # Sort indices in reverse so we can remove them one by one
+            successful_pairs = sorted(successful_pairs, key=lambda successful_pair: successful_pair[0], reverse=True)
+
+            for (index, item, location) in successful_pairs:
                 world.push_item(location, item, collect=False)
                 location.event = True  # flag location to be checked during fill
                 location.locked = True
                 logging.debug(f"Plando placed {item} at {location}")
+                if index is not None:  # If this item is from_pool and was found in the pool, remove it.
+                    world.itempool.pop(index)
 
         except Exception as e:
             raise Exception(
