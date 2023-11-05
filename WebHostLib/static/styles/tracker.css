@@ -125,6 +125,7 @@ img.alttp-sprite {
 
 #tracker-navigation {
     display: inline-flex;
+    flex-wrap: wrap;
     background-color: #b0a77d;
     margin: 0.5rem;
     border-radius: 4px;

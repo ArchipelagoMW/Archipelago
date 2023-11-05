@@ -353,6 +353,7 @@ def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) ->
 
     return render_template(
         template_name_or_list="genericTracker.html",
+        game_specific_tracker=game in __player_trackers,
         room=tracker_data.room,
         team=team,
         player=player,
@@ -865,6 +866,8 @@ if "A Link to the Past" in network_data_package["games"].keys():
         return render_template(
             template_name_or_list="tracker__ALinkToThePast.html",
             room=tracker_data.room,
+            team=tracked_team,
+            player=tracked_player,
             inventory=inventory,
             player_name=tracker_data.get_player_name(tracked_team, tracked_player),
             checks_done=checks_done,
