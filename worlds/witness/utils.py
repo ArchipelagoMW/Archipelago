@@ -242,6 +242,10 @@ def dnf_remove_redundancies(dnf_requirement: FrozenSet[FrozenSet[str]]) -> Froze
 
 
 def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]) -> FrozenSet[FrozenSet[str]]:
+    """
+    performs the "and" operator on a list of logical formula in disjunctive normal form, represented as a set of sets.
+    A logical formula might look like this: {{a, b}, {c, d}}, which would mean "a & b | c & d".
+    """
     current_overall_requirement = frozenset({frozenset()})
 
     for next_dnf_requirement in dnf_requirements:

@@ -117,7 +117,7 @@ class WitnessPlayerLogic:
                 for dependentItem in dependent_items_for_option:
                     all_options.add(items_option.union(dependentItem))
 
-        return frozenset(all_options)
+        return dnf_remove_redundancies(frozenset(all_options))
 
     def make_single_adjustment(self, adj_type: str, line: str):
         from . import StaticWitnessItems
