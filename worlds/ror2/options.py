@@ -352,7 +352,8 @@ class ItemWeights(Choice):
     - New is a test for a potential adjustment to the default weights.
     - Uncommon puts a large number of uncommon items in the pool.
     - Legendary puts a large number of legendary items in the pool.
-    - Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.
+    - Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being
+    too easy.
     - No Scraps removes all scrap items from the item pool.
     - Even generates the item pool with every item having an even weight.
     - Scraps Only will be only scrap items in the item pool.

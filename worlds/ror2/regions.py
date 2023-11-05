@@ -117,7 +117,6 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
         other_regions["Commencement"].region_exits.pop(0)
         dlc_other_regions["The Planetarium"].region_exits.pop(0)
 
-
     # Create all the regions
     for name, data in regions_pool.items():
         multiworld.regions.append(create_region(multiworld, player, name, data))
@@ -127,7 +126,7 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
         create_connections_in_regions(multiworld, player, name, data)
 
 
-def create_region(world, player: int, name: str, data: RoRRegionData):
+def create_region(world, player: int, name: str, data: RoRRegionData) -> Region:
     region = Region(name, player, world)
     if data.locations:
         for location_name in data.locations:

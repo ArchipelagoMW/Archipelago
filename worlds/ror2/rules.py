@@ -74,8 +74,8 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                 if i * event_location_step != total_locations:
                     event_loc = multiworld.get_location(f"Pickup{i * event_location_step}", player)
                     set_rule(event_loc,
-                            lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}",
-                                                               "Location", player))
+                             lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}",
+                                                                "Location", player))
                     # we want to create a rule for each of the 25 locations per division
                 for n in range(i * event_location_step, (i + 1) * event_location_step + 1):
                     if n > total_locations:
@@ -101,11 +101,11 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
         #   help prevent being stuck in the same stages until that point.)
 
         # Regions
-        chests = ror2_options.chests_per_stage
-        shrines = ror2_options.shrines_per_stage
-        newts = ror2_options.altars_per_stage
-        scavengers = ror2_options.scavengers_per_stage
-        scanners = ror2_options.scanner_per_stage
+        chests = ror2_options.chests_per_stage.value
+        shrines = ror2_options.shrines_per_stage.value
+        newts = ror2_options.altars_per_stage.value
+        scavengers = ror2_options.scavengers_per_stage.value
+        scanners = ror2_options.scanner_per_stage.value
         for i in range(len(environment_vanilla_orderedstages_table)):
             for environment_name, _ in environment_vanilla_orderedstages_table[i].items():
                 # Make sure to go through each location
@@ -124,7 +124,7 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                     has_entrance_access_rule(multiworld, f"Stage {i}", environment_name, player)
             get_stage_event(multiworld, player, i)
 
-        if multiworld.dlc_sotv[player]:
+        if ror2_options.dlc_sotv:
             for i in range(len(environment_sotv_orderedstages_table)):
                 for environment_name, _ in environment_sotv_orderedstages_table[i].items():
                     # Make sure to go through each location
@@ -149,10 +149,10 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
         has_entrance_access_rule(multiworld, "Stage 5", "Hidden Realm: A Moment, Fractured", player)
         has_entrance_access_rule(multiworld, "Beads of Fealty", "Hidden Realm: A Moment, Whole", player)
         if ror2_options.dlc_sotv:
-            if ror2_options.victory == "voidling":
-                has_all_items(multiworld, {"Stage 5", "The Planetarium"}, "Commencement", player)
             has_entrance_access_rule(multiworld, "Stage 5", "The Planetarium", player)
             has_entrance_access_rule(multiworld, "Stage 5", "Void Locus", player)
-            # has_all_items(multiworld, {"Stage 5", "The Planetarium"}, "Void Locus", player)
+            if ror2_options.victory == "voidling":
+                has_all_items(multiworld, {"Stage 5", "The Planetarium"}, "Commencement", player)
+
     # Win Condition
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

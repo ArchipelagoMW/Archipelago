@@ -6,7 +6,7 @@ from .locations import RiskOfRainLocation, get_classic_item_pickups, item_pickup
 from .rules import set_rules
 from .ror2environments import *
 
-from BaseClasses import Region, Entrance, Item, ItemClassification, MultiWorld, Tutorial
+from BaseClasses import Region, Entrance, Item, ItemClassification, Tutorial
 from .options import ItemWeights, ROR2Options
 from worlds.AutoWorld import World, WebWorld
 from .regions import create_regions
@@ -74,13 +74,13 @@ class RiskOfRainWorld(World):
 
         if self.options.goal == "classic":
             # classic mode
-            menu = create_region(self.multiworld, self.player, "Menu")
+            menu = create_region(self, self.player, "Menu")
             self.multiworld.regions.append(menu)
             # By using a victory region, we can define it as being connected to by several regions
             #   which can then determine the availability of the victory.
-            victory_region = create_region(self.multiworld, self.player, "Victory")
+            victory_region = create_region(self, self.player, "Victory")
             self.multiworld.regions.append(victory_region)
-            petrichor = create_region(self.multiworld, self.player, "Petrichor V",
+            petrichor = create_region(self, self.player, "Petrichor V",
                                       get_classic_item_pickups(self.options.total_locations.value))
             self.multiworld.regions.append(petrichor)
 
@@ -96,7 +96,7 @@ class RiskOfRainWorld(World):
             # explore mode
             create_regions(self)
 
-        create_events(self.multiworld, self.player, self.options)
+        create_events(self, self.player)
 
     def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
@@ -165,7 +165,7 @@ class RiskOfRainWorld(World):
         while len(itempool) < total_locations:
             weights = [data for data in junk_pool.values()]
             filler = self.random.choices([filler for filler in junk_pool.keys()], weights,
-                                                    k=1)[0]
+                                         k=1)[0]
             itempool.append(filler)
 
         # Convert itempool into real items
@@ -228,7 +228,7 @@ class RiskOfRainWorld(World):
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in filler_table.values()]
         filler = self.random.choices([filler for filler in filler_table.keys()], weights,
-                                                k=1)[0]
+                                     k=1)[0]
         return filler
 
     def fill_slot_data(self):
@@ -244,13 +244,13 @@ class RiskOfRainWorld(World):
         }
 
 
-def create_events(world: MultiWorld, player: int, ror2_options: ROR2Options) -> None:
-    total_locations = ror2_options.total_locations.value
+def create_events(world: RiskOfRainWorld, player: int) -> None:
+    total_locations = world.options.total_locations.value
     num_of_events = total_locations // 25
     if total_locations / 25 == num_of_events:
         num_of_events -= 1
-    world_region = world.get_region("Petrichor V", player)
-    if ror2_options.goal == "classic":
+    world_region = world.multiworld.get_region("Petrichor V", player)
+    if world.options.goal == "classic":
         # only setup Pickups when using classic_mode
         for i in range(num_of_events):
             event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
@@ -259,23 +259,23 @@ def create_events(world: MultiWorld, player: int, ror2_options: ROR2Options) -> 
             event_loc.access_rule = \
                 lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", "Location", player)
             world_region.locations.append(event_loc)
-    elif world.worlds[player].options.goal == "explore":
-        event_region = world.get_region("OrderedStage_5", player)
+    elif world.options.goal == "explore":
+        event_region = world.multiworld.get_region("OrderedStage_5", player)
         event_loc = RiskOfRainLocation(player, f"Stage 5", None, event_region)
         event_loc.place_locked_item(RiskOfRainItem(f"Stage 5", ItemClassification.progression, None, player))
         event_loc.show_in_spoiler = False
         event_region.locations.append(event_loc)
-        world.get_location(f"Stage 5", player).access_rule = \
+        world.multiworld.get_location(f"Stage 5", player).access_rule = \
             lambda state: state.has("Sky Meadow", player)
 
-    victory_region = world.get_region("Victory", player)
+    victory_region = world.multiworld.get_region("Victory", player)
     victory_event = RiskOfRainLocation(player, "Victory", None, victory_region)
     victory_event.place_locked_item(RiskOfRainItem("Victory", ItemClassification.progression, None, player))
     victory_region.locations.append(victory_event)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations: Dict[str, int] = {}) -> Region:
-    ret = Region(name, player, world)
+def create_region(world: RiskOfRainWorld, player: int, name: str, locations: Dict[str, int] = {}) -> Region:
+    ret = Region(name, player, world.multiworld)
     for location_name, location_id in locations.items():
         ret.locations.append(RiskOfRainLocation(player, location_name, location_id, ret))
     return ret

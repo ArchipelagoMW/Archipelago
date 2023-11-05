@@ -86,10 +86,11 @@ class orderedstage_location:
 
     def get_locations(chests: int, shrines: int, scavengers: int, scanners: int, altars: int, dlc_sotv: bool) -> Dict[
         str, int]:
-        """Get a dictionary of locations for the ordedstage environments with the locations from the parameters."""
+        """Get a dictionary of locations for the orderedstage environments with the locations from the parameters."""
         locations = {}
         orderedstages = compress_dict_list_horizontal(environment_vanilla_orderedstages_table)
-        if (dlc_sotv): orderedstages.update(compress_dict_list_horizontal(environment_sotv_orderedstages_table))
+        if dlc_sotv:
+            orderedstages.update(compress_dict_list_horizontal(environment_sotv_orderedstages_table))
         # for every environment, generate the respective locations
         for environment_name, environment_index in orderedstages.items():
             # locations = locations | orderedstage_location.get_environment_locations(
