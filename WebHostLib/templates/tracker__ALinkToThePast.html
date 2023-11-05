@@ -75,7 +75,7 @@
     <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <table id="inventory-table">
             <tr>
-                <td><img src="{{ bow_url }}" class="{{ 'acquired' if bow_acquired }}" /></td>
+                <td><img src="{{ icons[bow_icon] }}" class="{{ 'acquired' if bow_acquired }}" /></td>
                 <td><img src="{{ icons["Blue Boomerang"] }}" class="{{ 'acquired' if 'Blue Boomerang' in acquired_items }}" /></td>
                 <td><img src="{{ icons["Red Boomerang"] }}" class="{{ 'acquired' if 'Red Boomerang' in acquired_items }}" /></td>
                 <td><img src="{{ icons["Hookshot"] }}" class="{{ 'acquired' if 'Hookshot' in acquired_items }}" /></td>
@@ -104,15 +104,15 @@
             </tr>
             <tr>
                 <td><img src="{{ icons["Pegasus Boots"] }}" class="{{ 'acquired' if "Pegasus Boots" in acquired_items }}" /></td>
-                <td><img src="{{ glove_url }}" class="{{ 'acquired' if glove_acquired }}" /></td>
+                <td><img src="{{ icons[glove_icon] }}" class="{{ 'acquired' if glove_acquired }}" /></td>
                 <td><img src="{{ icons["Flippers"] }}" class="{{ 'acquired' if "Flippers" in acquired_items }}" /></td>
                 <td><img src="{{ icons["Moon Pearl"] }}" class="{{ 'acquired' if "Moon Pearl" in acquired_items }}" /></td>
                 <td><img src="{{ icons["Mushroom"] }}" class="{{ 'acquired' if "Mushroom" in acquired_items }}" /></td>
             </tr>
             <tr>
-                <td><img src="{{ sword_url }}" class="{{ 'acquired' if sword_acquired }}" /></td>
-                <td><img src="{{ shield_url }}" class="{{ 'acquired' if shield_acquired }}" /></td>
-                <td><img src="{{ mail_url }}" class="acquired" /></td>
+                <td><img src="{{ icons[sword_icon] }}" class="{{ 'acquired' if sword_acquired }}" /></td>
+                <td><img src="{{ icons[shield_icon] }}" class="{{ 'acquired' if shield_acquired }}" /></td>
+                <td><img src="{{ icons[mail_icon] }}" class="acquired" /></td>
                 <td><img src="{{ icons["Shovel"] }}" class="{{ 'acquired' if "Shovel" in acquired_items }}" /></td>
                 <td><img src="{{ icons["Triforce"] }}" class="{{ 'acquired' if "Triforce" in acquired_items }}" /></td>
             </tr>
