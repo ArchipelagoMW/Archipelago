@@ -29,19 +29,25 @@ laser_hexes = [
 ]
 
 
-def _has_lasers(state: CollectionState, amount: int, world: "WitnessWorld", player: int,
-                player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> bool:
-    lasers = 0
+def _has_laser(laser_hex: str, world: "WitnessWorld") -> Callable[[CollectionState], bool]:
+    if laser_hex == "0x012FB":
+        return lambda state: (
+            _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)(state)
+            and state.has("Desert Laser Redirection", world.player)
+        )
+    else:
+        return lambda state: _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)(state)
+
+
+def _has_lasers(amount: int, world: "WitnessWorld") -> Callable[[CollectionState], bool]:
+    laser_lambdas = []
 
     for laser_hex in laser_hexes:
-        has_laser = _can_solve_panel(laser_hex, world, player, player_logic, locat)(state)
+        has_laser_lambda = _has_laser(laser_hex, world)
 
-        if laser_hex == "0x012FB":
-            has_laser = has_laser and state.has("Desert Laser Redirection", player)
+        laser_lambdas.append(has_laser_lambda)
 
-        lasers += int(has_laser)
-
-    return lasers >= amount
+    return lambda state: sum(laser_lambda(state) for laser_lambda in laser_lambdas) > amount
 
 
 def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic,
@@ -59,7 +65,7 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
         return make_lambda(panel, world)
 
 
-def _can_move_either_direction(state: CollectionState, source: str, target: str, regio: WitnessRegions):
+def _can_move_either_direction(state: CollectionState, source: str, target: str, regio: WitnessRegions) -> bool:
     return (
         any(entrance.can_reach(state) for entrance in regio.created_entrances[(source, target)])
         or
@@ -139,15 +145,15 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
 
 
 def _has_item(item: str, world: "WitnessWorld", player: int,
-              player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+              player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> Callable[[CollectionState], bool]:
     if item in StaticWitnessLogic.ALL_REGIONS_BY_NAME:
         return lambda state: world.regio.region_cache[item].can_reach(state)
     if item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
-        return lambda state: _has_lasers(state, laser_req, world, player, player_logic, locat)
+        return _has_lasers(laser_req, world)
     if item == "11 Lasers":
         laser_req = world.options.challenge_lasers.value
-        return lambda state: _has_lasers(state, laser_req, world, player, player_logic, locat)
+        return _has_lasers(laser_req, world)
     elif item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
     elif item == "Theater to Tunnels":
@@ -177,7 +183,7 @@ def _meets_item_requirements(requirements: FrozenSet[FrozenSet[str]],
     )
 
 
-def make_lambda(entity_hex: str, world: "WitnessWorld"):
+def make_lambda(entity_hex: str, world: "WitnessWorld") -> Callable[[CollectionState], bool]:
     """
     Lambdas are created in a for loop so values need to be captured
     """
@@ -186,16 +192,15 @@ def make_lambda(entity_hex: str, world: "WitnessWorld"):
     return _meets_item_requirements(entity_req, world)
 
 
-def set_rules(world: "WitnessWorld", player_logic: WitnessPlayerLogic,
-              locat: WitnessPlayerLocations, location_cache: Dict[str, Location]):
+def set_rules(world: "WitnessWorld", location_cache: Dict[str, Location]):
     """
     Sets all rules for all locations
     """
 
-    for location in locat.CHECK_LOCATION_TABLE:
+    for location in world.locat.CHECK_LOCATION_TABLE:
         real_location = location
 
-        if location in locat.EVENT_LOCATION_TABLE:
+        if location in world.locat.EVENT_LOCATION_TABLE:
             real_location = location[:-7]
 
         panel = StaticWitnessLogic.ENTITIES_BY_NAME[real_location]

@@ -116,7 +116,7 @@ class WitnessWorld(World):
 
         # Set rules early so extra locations can be created based on the results of exploring collection states
 
-        set_rules(self, self.player_logic, self.locat, location_cache)
+        set_rules(self, location_cache)
 
         # Add event items and tie them to event locations (e.g. laser activations).
 
