@@ -203,10 +203,10 @@ def set_rules(world: "WitnessWorld", location_cache: Dict[str, Location]):
         if location in world.locat.EVENT_LOCATION_TABLE:
             real_location = location[:-7]
 
-        panel = StaticWitnessLogic.ENTITIES_BY_NAME[real_location]
-        check_hex = panel["checkHex"]
+        associated_entity = StaticWitnessLogic.ENTITIES_BY_NAME[real_location]
+        entity_hex = associated_entity["entity_hex"]
 
-        rule = make_lambda(check_hex, world)
+        rule = make_lambda(entity_hex, world)
 
         location = location_cache[location] if location in location_cache\
             else world.multiworld.get_location(location, world.player)

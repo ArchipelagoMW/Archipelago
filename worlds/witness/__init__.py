@@ -324,11 +324,11 @@ class WitnessLocation(Location):
     Archipelago Location for The Witness
     """
     game: str = "The Witness"
-    check_hex: int = -1
+    entity_hex: int = -1
 
     def __init__(self, player: int, name: str, address: Optional[int], parent, ch_hex: int = -1):
         super().__init__(player, name, address, parent)
-        self.check_hex = ch_hex
+        self.entity_hex = ch_hex
 
 
 def create_region(world: WitnessWorld, name: str, locat: WitnessPlayerLocations, region_locations=None, exits=None):
@@ -341,13 +341,13 @@ def create_region(world: WitnessWorld, name: str, locat: WitnessPlayerLocations,
         for location in region_locations:
             loc_id = locat.CHECK_LOCATION_TABLE[location]
 
-            check_hex = -1
+            entity_hex = -1
             if location in StaticWitnessLogic.ENTITIES_BY_NAME:
-                check_hex = int(
-                    StaticWitnessLogic.ENTITIES_BY_NAME[location]["checkHex"], 0
+                entity_hex = int(
+                    StaticWitnessLogic.ENTITIES_BY_NAME[location]["entity_hex"], 0
                 )
             location = WitnessLocation(
-                world.player, location, loc_id, ret, check_hex
+                world.player, location, loc_id, ret, entity_hex
             )
 
             ret.locations.append(location)

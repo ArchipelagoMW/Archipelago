@@ -393,10 +393,10 @@ class WitnessPlayerLogic:
             loc_obj = StaticWitnessLogic.ENTITIES_BY_NAME[yaml_disabled_location]
 
             if loc_obj["entityType"] == "EP" and world.options.shuffle_EPs != 0:
-                yaml_disabled_eps.append(loc_obj["checkHex"])
+                yaml_disabled_eps.append(loc_obj["entity_hex"])
 
             if loc_obj["entityType"] in {"EP", "General", "Vault", "Discard"}:
-                self.EXCLUDED_LOCATIONS.add(loc_obj["checkHex"])
+                self.EXCLUDED_LOCATIONS.add(loc_obj["entity_hex"])
 
         adjustment_linesets_in_order.append(["Disabled Locations:"] + yaml_disabled_eps)
 
@@ -422,10 +422,10 @@ class WitnessPlayerLogic:
         Turns dependent check set into semi-independent check set
         """
 
-        for check_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
-            indep_requirement = self.reduce_req_within_region(check_hex)
+        for entity_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
+            indep_requirement = self.reduce_req_within_region(entity_hex)
 
-            self.REQUIREMENTS_BY_HEX[check_hex] = indep_requirement
+            self.REQUIREMENTS_BY_HEX[entity_hex] = indep_requirement
 
         for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
             if item not in self.THEORETICAL_ITEMS:

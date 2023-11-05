@@ -75,7 +75,7 @@ class StaticWitnessLogicObj:
 
             entity_name_full = line_split.pop(0)
 
-            check_hex = entity_name_full[0:7]
+            entity_hex = entity_name_full[0:7]
             entity_name = entity_name_full[9:-1]
 
             required_panel_lambda = line_split.pop(0)
@@ -83,24 +83,24 @@ class StaticWitnessLogicObj:
             full_entity_name = current_region["shortName"] + " " + entity_name
 
             if location_id == "Door" or location_id == "Laser":
-                self.ENTITIES_BY_HEX[check_hex] = {
+                self.ENTITIES_BY_HEX[entity_hex] = {
                     "checkName": full_entity_name,
-                    "checkHex": check_hex,
+                    "entity_hex": entity_hex,
                     "region": None,
                     "id": None,
                     "entityType": location_id
                 }
 
-                self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[check_hex]["checkName"]] = self.ENTITIES_BY_HEX[check_hex]
+                self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
 
-                self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[check_hex] = {
+                self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
                     "panels": parse_lambda(required_panel_lambda)
                 }
 
                 # Lasers and Doors exist in a region, but don't have a regional *requirement*
                 # If a laser is activated, you don't need to physically walk up to it for it to count
                 # As such, logically, they behave more as if they were part of the "Entry" region
-                self.ALL_REGIONS_BY_NAME["Entry"]["panels"].append(check_hex)
+                self.ALL_REGIONS_BY_NAME["Entry"]["panels"].append(entity_hex)
                 continue
 
             required_item_lambda = line_split.pop(0)
@@ -143,24 +143,24 @@ class StaticWitnessLogicObj:
 
                 eps_ints = {int(h, 16) for h in eps}
 
-                self.OBELISK_SIDE_ID_TO_EP_HEXES[int(check_hex, 16)] = eps_ints
+                self.OBELISK_SIDE_ID_TO_EP_HEXES[int(entity_hex, 16)] = eps_ints
                 for ep_hex in eps:
-                    self.EP_TO_OBELISK_SIDE[ep_hex] = check_hex
+                    self.EP_TO_OBELISK_SIDE[ep_hex] = entity_hex
 
-            self.ENTITIES_BY_HEX[check_hex] = {
+            self.ENTITIES_BY_HEX[entity_hex] = {
                 "checkName": full_entity_name,
-                "checkHex": check_hex,
+                "entity_hex": entity_hex,
                 "region": current_region,
                 "id": int(location_id),
                 "entityType": location_type
             }
 
-            self.ENTITY_ID_TO_NAME[check_hex] = full_entity_name
+            self.ENTITY_ID_TO_NAME[entity_hex] = full_entity_name
 
-            self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[check_hex]["checkName"]] = self.ENTITIES_BY_HEX[check_hex]
-            self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[check_hex] = requirement
+            self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
+            self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = requirement
 
-            current_region["panels"].append(check_hex)
+            current_region["panels"].append(entity_hex)
 
     def __init__(self, lines=None):
         if lines is None:
