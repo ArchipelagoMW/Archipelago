@@ -604,27 +604,152 @@ class MultiWorld():
 PathValue = Tuple[str, Optional["PathValue"]]
 
 
-class CollectionState():
-    prog_items: Dict[int, Counter[str]]
+class PlayerState:
+    prog_items: Counter[str]
+    _multiworld: MultiWorld
+    _parent: CollectionState
+    reachable_regions: Set[Region]
+    blocked_connections: Set[Entrance]
+    events: Set[Location]
+    locations_checked: Set[Location]
+    stale: bool
+    player: int
+
+    def __init__(self, player: int, parent: Union[CollectionState, MultiWorld]):
+        if parent is MultiWorld:
+            state = CollectionState(parent, player)
+            self._parent = state
+            self._multiworld = parent
+            return
+        self.prog_items = Counter()
+        self._multiworld = parent.multiworld
+        self._parent = parent
+        self.reachable_regions = set()
+        self.blocked_connections = set()
+        self.events = set()
+        self.locations_checked = set()
+        self.stale = True
+        self.player = player
+
+    def copy(self, state: CollectionState) -> PlayerState:
+        ret = PlayerState(self.player, state)
+        ret.prog_items = self.prog_items.copy()
+        ret.reachable_regions = self.reachable_regions.copy()
+        ret.blocked_connections = self.blocked_connections.copy()
+        ret.locations_checked = self.locations_checked.copy()
+        return ret
+
+    def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
+        if locations is None:
+            locations = self._multiworld.get_filled_locations(self.player)
+        self._parent.sweep_for_events(key_only, locations)
+
+    # these signatures need to match the parent so that player state can be used in place for access rule checks
+    def can_reach(
+            self,
+            spot: Union[Location, Entrance, Region, str],
+            resolve_hint: Optional[str] = None,
+            player: Optional[int] = None) -> bool:
+        return self._parent.can_reach(spot, resolve_hint, player)
+
+    def has(self, item: str, player: Optional[int] = None, count: int = 1) -> bool:
+        return self.prog_items[item] >= count
+
+    def has_all(self, items: Set[str], player: Optional[int] = None) -> bool:
+        return all(self.prog_items[item] for item in items)
+
+    def has_any(self, items: Set[str], player: Optional[int] = None) -> bool:
+        return any(self.prog_items[item] for item in items)
+
+    def count(self, item: str, player: Optional[int] = None) -> int:
+        return self.prog_items[item]
+
+    def has_group(self, item_name_group: str, player: Optional[int] = None, count: int = 1) -> bool:
+        found = 0
+        for item_name in self._multiworld.worlds[self.player].item_name_groups[item_name_group]:
+            found += self.prog_items[item_name]
+            if found >= count:
+                return True
+        return False
+
+    def count_group(self, item_name_group: str, player: Optional[int] = None) -> int:
+        found = 0
+        for item_name in self._multiworld.worlds[self.player].item_name_groups[item_name_group]:
+            found += self.prog_items[item_name]
+        return found
+
+    def item_count(self, item: str, player: Optional[int] = None) -> int:
+        return self.prog_items[item]
+
+    def collect(self, item: Union[Item, Iterable[Item]], event: bool = False, location: Optional[Location] = None) -> bool:
+        if location:
+            self.locations_checked.add(location)
+        if isinstance(item, Iterable):
+            for item_ in item:
+                self.collect(item_, event)
+        changed = self._multiworld.worlds[item.player].collect(self._parent, item)
+        if not changed and event:
+            self.prog_items[item.name] += 1
+            changed = True
+        self.stale = True
+
+        if changed and not event:
+            self.sweep_for_events()
+        return changed
+
+    def remove(self, item: Item) -> bool:
+        changed = self._multiworld.worlds[item.player].remove(self._parent, item)
+        if changed:
+            self.reachable_regions = set()
+            self.blocked_connections = set()
+            self.stale = True
+
+    def get(self, key, default):
+        return self.prog_items.get(key, default)
+
+    def values(self):
+        return self.prog_items.values()
+
+    def keys(self):
+        return self.prog_items.keys()
+
+    def __iter__(self) -> Iterator[str]:
+        return self.prog_items.__iter__()
+
+    def __getitem__(self, item):
+        return self.prog_items[item]
+
+    def __setitem__(self, key, value):
+        return self.prog_items.__setitem__(key, value)
+
+    def __delitem__(self, key):
+        del self.prog_items[key]
+
+
+class CollectionState:
+    prog_items: Dict[int, PlayerState]  # to be removed
+    states: Dict[int, PlayerState]
     multiworld: MultiWorld
-    reachable_regions: Dict[int, Set[Region]]
-    blocked_connections: Dict[int, Set[Entrance]]
     events: Set[Location]
     path: Dict[Union[Region, Entrance], PathValue]
     locations_checked: Set[Location]
-    stale: Dict[int, bool]
     additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
 
-    def __init__(self, parent: MultiWorld):
-        self.prog_items = {player: Counter() for player in parent.player_ids}
+    def __init__(self, parent: MultiWorld, player: Optional[int] = None):
         self.multiworld = parent
-        self.reachable_regions = {player: set() for player in parent.get_all_ids()}
-        self.blocked_connections = {player: set() for player in parent.get_all_ids()}
+        if player:
+            self.states = {player: PlayerState(player, self)}
+        else:
+            self.states = {player: PlayerState(player, self) for player in parent.get_all_ids()}
+        self.prog_items = self.states  # assign as a reference for back compatibility
+        self.reachable_regions = {player: state.reachable_regions
+                                  for player, state in enumerate(self.states.values(), 1)}
+        self.blocked_connections = {player: state.blocked_connections
+                                    for player, state in enumerate(self.states.values(), 1)}
         self.events = set()
         self.path = {}
         self.locations_checked = set()
-        self.stale = {player: True for player in parent.get_all_ids()}
         for function in self.additional_init_functions:
             function(self, parent)
         for items in parent.precollected_items.values():
@@ -632,10 +757,11 @@ class CollectionState():
                 self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
-        self.stale[player] = False
-        rrp = self.reachable_regions[player]
-        bc = self.blocked_connections[player]
-        queue = deque(self.blocked_connections[player])
+        player_state = self.states[player]
+        player_state.stale = False
+        rrp = player_state.reachable_regions
+        bc = player_state.blocked_connections
+        queue = deque(player_state.blocked_connections)
         start = self.multiworld.get_region('Menu', player)
 
         # init on first call - this can't be done on construction since the regions don't exist yet
@@ -665,11 +791,12 @@ class CollectionState():
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.multiworld)
-        ret.prog_items = copy.deepcopy(self.prog_items)
-        ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
-                                 self.reachable_regions}
-        ret.blocked_connections = {player: copy.copy(self.blocked_connections[player]) for player in
-                                   self.blocked_connections}
+        ret.states = {player: state.copy(ret) for player, state in self.states.items()}
+        ret.prog_items = ret.states
+        ret.reachable_regions = {player: self.states[player].reachable_regions.copy() for player in
+                                 self.states}
+        ret.blocked_connections = {player: self.states[player].blocked_connections for player in
+                                   self.states}
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
@@ -709,60 +836,33 @@ class CollectionState():
                 self.collect(event.item, True, event)
 
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.prog_items[player][item] >= count
+        return self.states[player].has(item, count=count)
 
     def has_all(self, items: Set[str], player: int) -> bool:
         """Returns True if each item name of items is in state at least once."""
-        return all(self.prog_items[player][item] for item in items)
+        return self.states[player].has_all(items)
 
     def has_any(self, items: Set[str], player: int) -> bool:
         """Returns True if at least one item name of items is in state at least once."""
-        return any(self.prog_items[player][item] for item in items)
+        return self.states[player].has_any(items)
 
     def count(self, item: str, player: int) -> int:
-        return self.prog_items[player][item]
+        return self.states[player].count(item)
 
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
-        found: int = 0
-        for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += self.prog_items[player][item_name]
-            if found >= count:
-                return True
-        return False
+        return self.states[player].has_group(item_name_group, count=count)
 
     def count_group(self, item_name_group: str, player: int) -> int:
-        found: int = 0
-        for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += self.prog_items[player][item_name]
-        return found
+        return self.states[player].count_group(item_name_group)
 
     def item_count(self, item: str, player: int) -> int:
-        return self.prog_items[player][item]
+        return self.states[player].item_count(item)
 
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
-        if location:
-            self.locations_checked.add(location)
+        return self.states[item.player].collect(item, event, location)
 
-        changed = self.multiworld.worlds[item.player].collect(self, item)
-
-        if not changed and event:
-            self.prog_items[item.player][item.name] += 1
-            changed = True
-
-        self.stale[item.player] = True
-
-        if changed and not event:
-            self.sweep_for_events()
-
-        return changed
-
-    def remove(self, item: Item):
-        changed = self.multiworld.worlds[item.player].remove(self, item)
-        if changed:
-            # invalidate caches, nothing can be trusted anymore now
-            self.reachable_regions[item.player] = set()
-            self.blocked_connections[item.player] = set()
-            self.stale[item.player] = True
+    def remove(self, item: Item) -> None:
+        self.states[item.player].remove(item)
 
 
 class Entrance:
@@ -891,9 +991,9 @@ class Region:
     exits = property(get_exits, set_exits)
 
     def can_reach(self, state: CollectionState) -> bool:
-        if state.stale[self.player]:
+        if state.states[self.player].stale:
             state.update_reachable_regions(self.player)
-        return self in state.reachable_regions[self.player]
+        return self in state.states[self.player].reachable_regions
 
     @property
     def hint_text(self) -> str:

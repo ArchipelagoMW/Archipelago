@@ -1346,7 +1346,7 @@ class OOTWorld(World):
         # If free_scarecrow give Scarecrow Song
         if self.free_scarecrow:
             all_state.collect(self.create_item("Scarecrow Song"), event=True)
-        all_state.stale[self.player] = True
+        all_state.states[self.player].stale = True
 
         return all_state
 
