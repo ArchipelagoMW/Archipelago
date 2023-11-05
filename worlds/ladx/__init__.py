@@ -231,7 +231,9 @@ class LinksAwakeningWorld(World):
                             # Find instrument, lock
                             # TODO: we should be able to pinpoint the region we want, save a lookup table please
                             found = False
-                            for r in self.multiworld.get_regions(self.player):
+                            for r in self.multiworld.get_regions():
+                                if r.player != self.player:
+                                    continue
                                 if r.dungeon_index != item.item_data.dungeon_index:
                                     continue
                                 for loc in r.locations:
@@ -267,7 +269,10 @@ class LinksAwakeningWorld(World):
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
        
         self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
-        for r in self.multiworld.get_regions(self.player):
+        for r in self.multiworld.get_regions():
+            if r.player != self.player:
+                continue
+
             # Set aside dungeon locations
             if r.dungeon_index:
                 self.dungeon_locations_by_dungeon[r.dungeon_index - 1] += r.locations
@@ -513,7 +518,7 @@ class LinksAwakeningWorld(World):
         change = super().collect(state, item)
         if change:
             rupees = self.rupees.get(item.name, 0)
-            state.prog_items[item.player]["RUPEES"] += rupees
+            state.prog_items["RUPEES", item.player] += rupees
 
         return change
 
@@ -521,6 +526,6 @@ class LinksAwakeningWorld(World):
         change = super().remove(state, item)
         if change:
             rupees = self.rupees.get(item.name, 0)
-            state.prog_items[item.player]["RUPEES"] -= rupees
+            state.prog_items["RUPEES", item.player] -= rupees
 
         return change
