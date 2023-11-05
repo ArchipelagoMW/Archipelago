@@ -869,7 +869,7 @@ Treehouse Green Bridge Left House (Treehouse):
 159211 - 0x220A7 (Right Orange Bridge EP) - 0x17DA2 - True
 
 Treehouse Laser Room Front Platform (Treehouse) - Treehouse Laser Room - 0x0C323:
-Door - 0x0C323 (Laser House Entry) - 0x17DA2 & 0x2700B & 0x17DDB | 0x17CBC
+Door - 0x0C323 (Laser House Entry) - 0x17DA2 & 0x2700B & 0x17DEC | 0x17CBC
 
 Treehouse Laser Room Back Platform (Treehouse):
 158611 - 0x17FA0 (Laser Discard) - True - Arrows
