@@ -97,8 +97,6 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
-            # No reason to let this be in the multiworld since it's necessary ten minutes into the game
-            self.multiworld.local_early_items[self.player]['Coiled Sword'] = 1
         if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
             # Make this available early just because it's fun to be able to check boss souls early.
@@ -444,7 +442,6 @@ class DarkSouls3World(World):
     def set_rules(self) -> None:
         # Define the access rules to the entrances
         self._add_entrance_rule("Firelink Shrine Bell Tower", "Tower Key")
-        self._add_entrance_rule("High Wall of Lothric", "Coiled Sword")
         self._add_entrance_rule("Undead Settlement", "Small Lothric Banner")
         self._add_entrance_rule("Lothric Castle", "Basin of Vows")
         self._add_entrance_rule("Irithyll of the Boreal Valley", "Small Doll")
@@ -588,9 +585,9 @@ class DarkSouls3World(World):
 
         # This particular location is bugged, and will drop two copies of whatever item is placed
         # there.
-        # if self.is_location_available("US: Young White Branch #2"):
-        #     add_item_rule(self.multiworld.get_location("US: Young White Branch #2", self.player),
-        #                 lambda item: item.player == self.player and not item.data.unique)
+        if self.is_location_available("US: Young White Branch #2"):
+            add_item_rule(self.multiworld.get_location("US: Young White Branch #2", self.player),
+                        lambda item: item.player == self.player and not item.data.unique)
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location.region:
@@ -648,26 +645,48 @@ class DarkSouls3World(World):
 
 
     def pre_fill(self) -> None:
+        # Don't place this in the multiworld because it's necessary almost immediately, and don't
+        # mark it as a blocker for HWL because having a miniscule Sphere 1 screws with progression
+        # balancing.
+        self._fill_local_item("Coiled Sword", {"Cemetery of Ash", "Firelink Shrine"})
+
         # If upgrade smoothing is enabled, make sure one raw gem is available early for SL1 players
         if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_smooth:
-            candidate_locations = [
-                self.multiworld.get_location(location.name, self.player)
-                for region in ["Cemetery of Ash", "Firelink Shrine", "High Wall of Lothric"]
-                for location in location_tables[region]
-                if self.is_location_available(location)
-                and not location.missable and not location.conditional
-            ]
-            location = self.multiworld.random.choice([
-                location for location in candidate_locations
-                if not location.item and location.progress_type != LocationProgressType.EXCLUDED
-            ])
-            raw_gem = next(
-                item for item in self.multiworld.itempool
-                if item.player == self.player and item.name == "Raw Gem"
-            )
-            location.place_locked_item(raw_gem)
-            self.multiworld.itempool.remove(raw_gem)
+            self._fill_local_item("Raw Gem", {
+                "Cemetery of Ash",
+                "Firelink Shrine",
+                "High Wall of Lothric"
+            })
 
+
+    def _fill_local_item(self, name: str, regions: Set[str]) -> None:
+        """Chooses a valid location for the item with the given name and places it there.
+        
+        This always chooses a local location among the given regions.
+        """
+        item = next(
+            (
+                item for item in self.multiworld.itempool
+                if item.player == self.player and item.name == name
+            ),
+            None
+        )
+        if not item: return
+
+        candidate_locations = [
+            self.multiworld.get_location(location.name, self.player)
+            for region in regions
+            for location in location_tables[region]
+            if self.is_location_available(location)
+            and not location.missable and not location.conditional
+        ]
+        location = self.multiworld.random.choice([
+            location for location in candidate_locations
+            if not location.item and location.progress_type != LocationProgressType.EXCLUDED
+            and location.item_rule(item)
+        ])
+        location.place_locked_item(item)
+        self.multiworld.itempool.remove(item)
 
     def post_fill(self):
         """If item smoothing is enabled, rearrange items so they scale up smoothly through the run.
