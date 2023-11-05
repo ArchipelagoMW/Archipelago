@@ -39,7 +39,7 @@ class WitnessRegions:
 
         return _meets_item_requirements(item_requirement, world)
 
-    def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, player_logic: WitnessPlayerLogic,
+    def connect_if_possible(self, world: "WitnessWorld", source: str, target: str,
                             requirement: FrozenSet[FrozenSet[str]], backwards: bool = False):
         """
         connect two regions and set the corresponding requirement
@@ -121,11 +121,11 @@ class WitnessRegions:
         for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 if connection[1] == frozenset({frozenset({"TrueOneWay"})}):
-                    self.connect_if_possible(world, region_name, connection[0], player_logic, frozenset({frozenset()}))
+                    self.connect_if_possible(world, region_name, connection[0], frozenset({frozenset()}))
                     continue
 
-                self.connect_if_possible(world, region_name, connection[0], player_logic, connection[1])
-                self.connect_if_possible(world, connection[0], region_name, player_logic, connection[1])
+                self.connect_if_possible(world, region_name, connection[0], connection[1])
+                self.connect_if_possible(world, connection[0], region_name, connection[1])
 
         return self.location_cache
 
