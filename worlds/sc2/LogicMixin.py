@@ -327,7 +327,7 @@ class SC2Logic(LogicMixin):
         """
         return (self._sc2_advanced_tactics(multiworld, player)
                 and (self.has_any({ItemNames.GHOST, ItemNames.SPECTRE}, player)
-                     or self.has_all({ItemNames.THOR, ItemNames.THOR_BUTTON_WITH_A_SKULL_ON_IT}), player))
+                     or self.has_all({ItemNames.THOR, ItemNames.THOR_BUTTON_WITH_A_SKULL_ON_IT}, player)))
 
     def _sc2wol_can_respond_to_colony_infestations(self, multiworld: MultiWorld, player: int) -> bool:
         """
