@@ -618,9 +618,8 @@ class PlayerState:
     _parent: CollectionState
     reachable_regions: Set[Region]
     blocked_connections: Set[Entrance]
-    events: Set[Location]
     locations_checked: Set[Location]
-    stale: bool
+    stale: bool = True
     player: int
 
     def __init__(self, player: int, parent: CollectionState):
@@ -629,16 +628,12 @@ class PlayerState:
         self._parent = parent
         self.reachable_regions = set()
         self.blocked_connections = set()
-        self.events = set()
         self.locations_checked = set()
-        self.stale = True
         self.player = player
-        self.states = {player: self}
 
     def copy(self, state: CollectionState) -> PlayerState:
         ret = PlayerState(self.player, state)
         ret.prog_items = self.prog_items.copy()
-        ret.states = self.states.copy()
         ret.reachable_regions = self.reachable_regions.copy()
         ret.blocked_connections = self.blocked_connections.copy()
         ret.locations_checked = self.locations_checked.copy()
@@ -657,19 +652,19 @@ class PlayerState:
             player: Optional[int] = None) -> bool:
         return self._parent.can_reach(spot, resolve_hint, player)
 
-    def has(self, item: str, player: Optional[int] = None, count: int = 1) -> bool:
+    def has(self, item: str, count: int = 1) -> bool:
         return self.prog_items[item] >= count
 
-    def has_all(self, items: Set[str], player: Optional[int] = None) -> bool:
+    def has_all(self, items: Set[str]) -> bool:
         return all(self.prog_items[item] for item in items)
 
-    def has_any(self, items: Set[str], player: Optional[int] = None) -> bool:
+    def has_any(self, items: Set[str]) -> bool:
         return any(self.prog_items[item] for item in items)
 
-    def count(self, item: str, player: Optional[int] = None) -> int:
+    def count(self, item: str) -> int:
         return self.prog_items[item]
 
-    def has_group(self, item_name_group: str, player: Optional[int] = None, count: int = 1) -> bool:
+    def has_group(self, item_name_group: str, count: int = 1) -> bool:
         found = 0
         for item_name in self._multiworld.worlds[self.player].item_name_groups[item_name_group]:
             found += self.prog_items[item_name]
@@ -677,21 +672,22 @@ class PlayerState:
                 return True
         return False
 
-    def count_group(self, item_name_group: str, player: Optional[int] = None) -> int:
+    def count_group(self, item_name_group: str) -> int:
         found = 0
         for item_name in self._multiworld.worlds[self.player].item_name_groups[item_name_group]:
             found += self.prog_items[item_name]
         return found
 
-    def item_count(self, item: str, player: Optional[int] = None) -> int:
+    def item_count(self, item: str) -> int:
         return self.prog_items[item]
 
-    def collect(self, item: Union[Item, Iterable[Item]], event: bool = False, location: Optional[Location] = None) -> bool:
+    def collect(self, item: Union[Item, Iterable[Item]], event: bool = False,
+                location: Optional[Location] = None) -> List[bool] | bool:
         if location:
             self.locations_checked.add(location)
         if isinstance(item, Iterable):
-            for item_ in item:
-                self.collect(item_, event)
+            # not sure what this should return but this at least guarantees they all get called :shrug:
+            return [self.collect(item_, event) for item_ in item]
         changed = self._multiworld.worlds[item.player].collect(self._parent, item)
         if not changed and event:
             self.prog_items[item.name] += 1
@@ -841,7 +837,7 @@ class CollectionState:
                 self.collect(event.item, True, event)
 
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.states[player].has(item, count=count)
+        return self.states[player].has(item, count)
 
     def has_all(self, items: Set[str], player: int) -> bool:
         """Returns True if each item name of items is in state at least once."""
@@ -855,7 +851,7 @@ class CollectionState:
         return self.states[player].count(item)
 
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
-        return self.states[player].has_group(item_name_group, count=count)
+        return self.states[player].has_group(item_name_group, count)
 
     def count_group(self, item_name_group: str, player: int) -> int:
         return self.states[player].count_group(item_name_group)
