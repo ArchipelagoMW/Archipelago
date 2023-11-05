@@ -322,7 +322,7 @@ Door - 0x3865F (Second Barrier) - 0x38663
 158169 - 0x0A3D0 (Back Second Row 3) - 0x0A3CC - Stars & Eraser & Shapers
 159401 - 0x005F6 (Hook EP) - 0x275FA & 0x03852 & 0x3865F - True
 
-Shadows (Shadows) - Main Island - True - Shadows Ledge - 0x19B24 - Shadows Laser Room - 0x194B2 & 0x19665:
+Shadows (Shadows) - Main Island - True - Shadows Ledge - 0x19B24 - Shadows Laser Room - 0x194B2 | 0x19665:
 158170 - 0x334DB (Door Timer Outside) - True - True
 Door - 0x19B24 (Timed Door) - 0x334DB | 0x334DC
 158171 - 0x0AC74 (Intro 6) - 0x0A8DC - True
@@ -358,7 +358,7 @@ Door - 0x1855B (Ledge Barrier) - 0x0A8DC
 Door - 0x19ADE (Ledge Barrier 2) - 0x0A8DC
 
 Shadows Laser Room (Shadows):
-158703 - 0x19650 (Laser Panel) - True - True
+158703 - 0x19650 (Laser Panel) - 0x194B2 & 0x19665 - True
 Laser - 0x181B3 (Laser) - 0x19650
 
 Treehouse Beach (Treehouse Beach) - Main Island - True:
