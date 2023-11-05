@@ -213,5 +213,4 @@ def set_rules(world: "WitnessWorld", location_cache: Dict[str, Location]):
 
         set_rule(location, rule)
 
-    world.multiworld.completion_condition[world.player] = \
-        lambda state: state.has('Victory', world.player)
+    world.multiworld.completion_condition[world.player] = lambda state: state.has('Victory', world.player)
