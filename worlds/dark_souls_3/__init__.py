@@ -241,7 +241,10 @@ class DarkSouls3World(World):
                 )
             else:
                 # Replace non-randomized progression items with events
-                event_item = self.create_item(location.default_item_name)
+                event_item = (
+                    self.create_item(location.default_item_name) if location.default_item_name
+                    else DarkSouls3Item.event(location.name, self.player)
+                )
                 if event_item.classification != ItemClassification.progression:
                     continue
 
@@ -447,8 +450,15 @@ class DarkSouls3World(World):
         # Define the access rules to the entrances
         self._add_entrance_rule("Firelink Shrine Bell Tower", "Tower Key")
         self._add_entrance_rule("Undead Settlement", "Small Lothric Banner")
+        self._add_entrance_rule("Road of Sacrifices", "US -> RS")
+        self._add_entrance_rule("Cathedral of the Deep", "RS -> CD")
+        self._add_entrance_rule("Farron Keep", "RS -> FK")
+        self._add_entrance_rule("Catacombs of Carthus", "FK -> CC")
+        self._add_entrance_rule("Irithyll Dungeon", "IBV -> ID")
         self._add_entrance_rule("Lothric Castle", "Basin of Vows")
+        self._add_entrance_rule("Untended Graves", "CKG -> UG")
         self._add_entrance_rule("Irithyll of the Boreal Valley", "Small Doll")
+        self._add_entrance_rule("Anor Londo", "IBV -> AL")
         self._add_entrance_rule("Archdragon Peak", "Path of the Dragon")
         self._add_entrance_rule("Grand Archives", "Grand Archives Key")
         self._add_entrance_rule(
@@ -496,8 +506,10 @@ class DarkSouls3World(World):
 
         # DLC Access Rules Below
         if self.multiworld.enable_dlc[self.player]:
-            self._add_entrance_rule("Ringed City", "Small Envoy Banner")
+            self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "CD -> PW1")
             self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Contraption Key")
+            self._add_entrance_rule("Dreg Heap", "PW2 -> DH")
+            self._add_entrance_rule("Ringed City", "Small Envoy Banner")
 
             if self.multiworld.late_dlc[self.player]:
                 self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
@@ -623,7 +635,8 @@ class DarkSouls3World(World):
         assert region in location_tables
         if not any(region == reg.name for reg in self.multiworld.regions): return
         if isinstance(rule, str):
-            assert item_dictionary[rule].classification == ItemClassification.progression
+            if " -> " not in rule:
+                assert item_dictionary[rule].classification == ItemClassification.progression
             rule = lambda state, item=rule: state.has(item, self.player)
         add_rule(self.multiworld.get_entrance("Go To " + region, self.player), rule)
 

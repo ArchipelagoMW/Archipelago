@@ -95,7 +95,7 @@ class DS3ItemData():
     """The next item ID to use when creating item data."""
 
     name: str
-    ds3_code: int
+    ds3_code: Optional[int]
     category: DS3ItemCategory
 
     base_name: Optional[str] = None
@@ -208,6 +208,12 @@ class DarkSouls3Item(Item):
             classification = None):
         super().__init__(data.name, classification or data.classification, data.ap_code, player)
         self.data = data
+
+    @staticmethod
+    def event(name: str, player: int) -> "DarkSouls3Item":
+        data = DS3ItemData(name, None, DS3ItemCategory.SKIP, classification = ItemClassification.progression)
+        data.ap_code = None
+        return DarkSouls3Item(player, data)
 
 
 _vanilla_items = flatten([

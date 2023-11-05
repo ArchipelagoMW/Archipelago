@@ -52,7 +52,14 @@ class DS3LocationCategory(IntEnum):
     KEY = 5
     MISC = 6
     HEALTH = 7
+
     EVENT = 8
+    """A special location that's achieved as soon as it's accessible.
+    
+    These are used to mark major region transitions that aren't otherwise gated by items so that
+    progression balancing and item smoothing are better able to track how deep in the game regions
+    are.
+    """
 
     SOUL = 9
     """The original location of a soul item."""
@@ -80,8 +87,11 @@ class DS3LocationData:
     
     This needs to be unique within this world."""
 
-    default_item_name: str
-    """The name of the item that appears by default in this location."""
+    default_item_name: Optional[str]
+    """The name of the item that appears by default in this location.
+    
+    This should only ever by None for DS3LocationCategory.EVENT locations.
+    """
 
     category: DS3LocationCategory
     """The category into which this location falls."""
@@ -200,8 +210,9 @@ class DS3LocationData:
     """
 
     def __post_init__(self):
-        self.ap_code = self.ap_code or DS3LocationData.__location_id
-        DS3LocationData.__location_id += 1
+        if self.category != DS3LocationCategory.EVENT:
+            self.ap_code = self.ap_code or DS3LocationData.__location_id
+            DS3LocationData.__location_id += 1
         if self.miniboss or self.mimic or self.lizard or self.hostile_npc: self.drop = True
 
     def location_groups(self) -> List[str]:
@@ -637,6 +648,7 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("US: Arstor's Spear",                      "Arstor's Spear",                    DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
+        DS3LocationData("US -> RS",                                None,                                DS3LocationCategory.EVENT),
 
         # Yoel/Yuria of Londor
         DS3LocationData("US: Soul Arrow",                          "Soul Arrow",                        DS3LocationCategory.SPELL,
@@ -871,6 +883,8 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("RS: Wolf Knight's Greatsword",            "Wolf Knight's Greatsword",          DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
+        DS3LocationData("RS -> CD",                                None,                                DS3LocationCategory.EVENT),
+        DS3LocationData("RS -> FK",                                None,                                DS3LocationCategory.EVENT),
 
         # Shrine Handmaid after killing Crystal Sage
         DS3LocationData("RS: Sage's Big Hat",                      "Sage's Big Hat",                    DS3LocationCategory.ARMOR,
@@ -1000,6 +1014,7 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("CD: Deep Soul",                           "Deep Soul",                         DS3LocationCategory.SPELL,
                         missable = True, boss = True, shop = True),
+        DS3LocationData("CD -> PW1",                               None,                                DS3LocationCategory.EVENT),
 
         # Longfinger Kirk drops
         DS3LocationData("CD: Barbed Straight Sword",               "Barbed Straight Sword",             DS3LocationCategory.WEAPON,
@@ -1133,6 +1148,7 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("FK: Boulder Heave",                       "Boulder Heave",                     DS3LocationCategory.SPELL,
                         missable = True, boss = True, shop = True),
+        DS3LocationData("FK -> CC",                                None,                                DS3LocationCategory.EVENT),
 
         # Hawkwood after killing Abyss Watchers
         DS3LocationData("RS: Farron Ring",                         "Farron Ring",                       DS3LocationCategory.RING,
@@ -1421,6 +1437,8 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("IBV: Profaned Greatsword",                "Profaned Greatsword",               DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
+        DS3LocationData("IBV -> AL",                               None,                                DS3LocationCategory.EVENT),
+        DS3LocationData("IBV -> ID",                               None,                                DS3LocationCategory.EVENT),
 
         # Anri of Astora
         DS3LocationData("IBV: Anri's Straight Sword",              "Anri's Straight Sword",             DS3LocationCategory.WEAPON,
@@ -1911,6 +1929,7 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("CKG: White Dragon Breath",                "White Dragon Breath",                     DS3LocationCategory.SPELL,
                         missable = True, boss = True, shop = True),
+        DS3LocationData("CKG -> UG",                               None,                                      DS3LocationCategory.EVENT),
     ],
     "Grand Archives": [
         # At the bottom of the shortcut elevator right outside the Twin Princes fight. Requires sending the elevator up to the top from the middle, and then riding the lower elevator down.
@@ -2386,6 +2405,7 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("PW2: Titanite Slab (Corvian)",            "Titanite Slab",                           DS3LocationCategory.UPGRADE,
                         offline = '11,0:50006540::', missable = True, npc = True), # Corvian Settler (quest)
+        DS3LocationData("PW2 -> DH",                               None,                                      DS3LocationCategory.EVENT),
 
         # Shrine Handmaid after killing Sister Friede
         DS3LocationData("PW2: Ordained Hood",                      "Ordained Hood",                           DS3LocationCategory.ARMOR,
@@ -2760,13 +2780,15 @@ for location_name, location_table in location_tables.items():
     location_dictionary.update({location_data.name: location_data for location_data in location_table})
 
     for location_data in location_table:
-        for group_name in location_data.location_groups():
-            location_name_groups[group_name].add(location_data.name)
+        if location_data.category != DS3LocationCategory.EVENT:
+            for group_name in location_data.location_groups():
+                location_name_groups[group_name].add(location_data.name)
 
     # Allow entire locations to be added to location sets.
     if not location_name.endswith(" Shop"):
         location_name_groups[location_name] = frozenset([
             location_data.name for location_data in location_table
+            if location_data.category != DS3LocationCategory.EVENT
         ])
 
 location_name_groups["Painted World of Ariandel"] = (
