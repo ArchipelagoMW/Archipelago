@@ -47,6 +47,8 @@ class WitnessRegions:
 
         # Remove any possibilities where being in the target region would be required anyway.
         real_requirement = frozenset({option for option in requirement if target not in option})
+        if backwards:
+            real_requirement = frozenset({option for option in real_requirement if "TrueOneWay" not in option})
 
         # If there is no way to actually use this connection, don't even bother making it.
         if not real_requirement:
@@ -73,6 +75,10 @@ class WitnessRegions:
         connection.connect(target_region)
 
         self.created_entrances[(source, target)].append(connection)
+
+        if connection_name in self.entrance_cache:
+            warning(f"{connection_name} already present in entrance cache!")
+        self.entrance_cache[connection_name] = connection
 
         # Register any necessary indirect connections
         mentioned_regions = {
@@ -120,12 +126,8 @@ class WitnessRegions:
 
         for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
-                if connection[1] == frozenset({frozenset({"TrueOneWay"})}):
-                    self.connect_if_possible(world, region_name, connection[0], frozenset({frozenset()}))
-                    continue
-
                 self.connect_if_possible(world, region_name, connection[0], connection[1])
-                self.connect_if_possible(world, connection[0], region_name, connection[1])
+                self.connect_if_possible(world, connection[0], region_name, connection[1], backwards=True)
 
         return self.location_cache
 
