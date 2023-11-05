@@ -1,7 +1,6 @@
 from typing import Tuple, List, TYPE_CHECKING
 
 from BaseClasses import Item
-from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -144,7 +143,7 @@ def get_always_hint_items(world: "WitnessWorld"):
     return always
 
 
-def get_always_hint_locations(_: World):
+def get_always_hint_locations(_: "WitnessWorld"):
     return {
         "Challenge Vault Box",
         "Mountain Bottom Floor Discard",
@@ -206,7 +205,7 @@ def get_priority_hint_items(world: "WitnessWorld"):
     return priority
 
 
-def get_priority_hint_locations(_: World):
+def get_priority_hint_locations(_: "WitnessWorld"):
     return {
         "Swamp Purple Underwater",
         "Shipwreck Vault Box",
