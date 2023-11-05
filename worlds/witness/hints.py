@@ -1,8 +1,13 @@
-from typing import Tuple, List
+from typing import Tuple, List, TYPE_CHECKING
 
 from BaseClasses import Item
 from worlds.AutoWorld import World
 from .Options import is_option_enabled, get_option_value
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
+else:
+    WitnessWorld = object
 
 joke_hints = [
     "Quaternions break my brain",
@@ -116,7 +121,7 @@ joke_hints = [
 ]
 
 
-def get_always_hint_items(world: World):
+def get_always_hint_items(world: WitnessWorld):
     always = [
         "Boat",
         "Caves Shortcuts",
@@ -152,7 +157,7 @@ def get_always_hint_locations(_: World):
     }
 
 
-def get_priority_hint_items(world: World):
+def get_priority_hint_items(world: WitnessWorld):
     priority = {
         "Caves Mountain Shortcut (Door)",
         "Caves Swamp Shortcut (Door)",
@@ -222,7 +227,7 @@ def get_priority_hint_locations(_: World):
     }
 
 
-def make_hint_from_item(world: World, item_name: str, own_itempool: List[Item]):
+def make_hint_from_item(world: WitnessWorld, item_name: str, own_itempool: List[Item]):
     locations = [item.location for item in own_itempool if item.name == item_name and item.location]
 
     if not locations:
@@ -237,7 +242,7 @@ def make_hint_from_item(world: World, item_name: str, own_itempool: List[Item]):
     return location_name, item_name, location_obj.address if (location_obj.player == world.player) else -1
 
 
-def make_hint_from_location(world: World, location: str):
+def make_hint_from_location(world: WitnessWorld, location: str):
     location_obj = world.multiworld.get_location(location, world.player)
     item_obj = world.multiworld.get_location(location, world.player).item
     item_name = item_obj.name
@@ -247,7 +252,7 @@ def make_hint_from_location(world: World, location: str):
     return location, item_name, location_obj.address if (location_obj.player == world.player) else -1
 
 
-def make_hints(world: World, hint_amount: int, own_itempool: List[Item]):
+def make_hints(world: WitnessWorld, hint_amount: int, own_itempool: List[Item]):
     hints = list()
 
     prog_items_in_this_world = {
@@ -374,5 +379,5 @@ def make_hints(world: World, hint_amount: int, own_itempool: List[Item]):
     return hints
 
 
-def generate_joke_hints(world: World, amount: int) -> List[Tuple[str, int]]:
+def generate_joke_hints(world: WitnessWorld, amount: int) -> List[Tuple[str, int]]:
     return [(x, -1) for x in world.random.sample(joke_hints, amount)]

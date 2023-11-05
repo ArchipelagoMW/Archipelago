@@ -2,18 +2,22 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
+
 from dataclasses import dataclass
-from typing import Optional, Dict, List, Set
+from typing import Optional, Dict, List, Set, TYPE_CHECKING
 
 from BaseClasses import Item, MultiWorld, ItemClassification
-from worlds.AutoWorld import World
 from .Options import get_option_value, is_option_enabled, the_witness_options
-
 from .locations import ID_START, WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 from .static_logic import ItemDefinition, DoorItemDefinition, ProgressiveItemDefinition, ItemCategory, \
     StaticWitnessLogic, WeightedItemDefinition
 from .utils import build_weighted_int_list
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
+else:
+    WitnessWorld = object
 
 NUM_ENERGY_UPGRADES = 4
 
@@ -91,10 +95,10 @@ class WitnessPlayerItems:
     Class that defines Items for a single world
     """
 
-    def __init__(self, world: World, logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+    def __init__(self, world: WitnessWorld, logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
         """Adds event items after logic changes due to options"""
 
-        self._world: World = world
+        self._world: WitnessWorld = world
         self._multiworld: MultiWorld = world.multiworld
         self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = logic

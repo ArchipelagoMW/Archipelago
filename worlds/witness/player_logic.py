@@ -16,13 +16,17 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
-from typing import cast
+from typing import cast, TYPE_CHECKING
 from logging import warning
 
-from worlds.AutoWorld import World
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .utils import *
 from .Options import is_option_enabled, get_option_value, the_witness_options
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
+else:
+    WitnessWorld = object
 
 
 class WitnessPlayerLogic:
@@ -252,7 +256,7 @@ class WitnessPlayerLogic:
                 line = StaticWitnessLogic.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
-    def make_options_adjustments(self, world: World):
+    def make_options_adjustments(self, world: WitnessWorld):
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
 
@@ -470,7 +474,7 @@ class WitnessPlayerLogic:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-    def __init__(self, world: World, disabled_locations: Set[str], start_inv: Dict[str, int]):
+    def __init__(self, world: WitnessWorld, disabled_locations: Set[str], start_inv: Dict[str, int]):
         self.YAML_DISABLED_LOCATIONS = disabled_locations
         self.YAML_ADDED_ITEMS = start_inv
 

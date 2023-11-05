@@ -3,15 +3,19 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 
-from typing import FrozenSet, Dict
+from typing import FrozenSet, Dict, TYPE_CHECKING
 
 from BaseClasses import Location, CollectionState
-from worlds.AutoWorld import World
 from .player_logic import WitnessPlayerLogic
 from .Options import get_option_value
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic, WitnessRegions
 from worlds.generic.Rules import set_rule
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
+else:
+    WitnessWorld = object
 
 laser_hexes = [
     "0x028A4",
@@ -28,7 +32,7 @@ laser_hexes = [
 ]
 
 
-def _has_lasers(state: CollectionState, amount: int, world: World, player: int,
+def _has_lasers(state: CollectionState, amount: int, world: WitnessWorld, player: int,
                 player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> bool:
     lasers = 0
 
@@ -43,7 +47,7 @@ def _has_lasers(state: CollectionState, amount: int, world: World, player: int,
     return lasers >= amount
 
 
-def _can_solve_panel(state: CollectionState, panel: str, world: World, player: int,
+def _can_solve_panel(state: CollectionState, panel: str, world: WitnessWorld, player: int,
                      player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     """
     Determines whether a panel can be solved
@@ -66,7 +70,7 @@ def _can_move_either_direction(state: CollectionState, source: str, target: str,
     )
 
 
-def _has_item(state: CollectionState, item: str, world: World, player: int,
+def _has_item(state: CollectionState, item: str, world: WitnessWorld, player: int,
               player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     if item in StaticWitnessLogic.ALL_REGIONS_BY_NAME:
         return world.regio.region_cache[item].can_reach(state)
@@ -150,7 +154,7 @@ def _has_item(state: CollectionState, item: str, world: World, player: int,
     return state.has(prog_item, player)
 
 
-def _meets_item_requirements(state: CollectionState, panel: str, world: World, player: int,
+def _meets_item_requirements(state: CollectionState, panel: str, world: WitnessWorld, player: int,
                              player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     """
     Checks whether item and panel requirements are met for
@@ -165,7 +169,7 @@ def _meets_item_requirements(state: CollectionState, panel: str, world: World, p
     )
 
 
-def _can_solve_panels(state: CollectionState, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: World,
+def _can_solve_panels(state: CollectionState, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: WitnessWorld,
                       player: int, player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     """
     Checks whether a set of panels can be solved.
@@ -177,7 +181,7 @@ def _can_solve_panels(state: CollectionState, panel_hex_to_solve_set: FrozenSet[
     )
 
 
-def make_lambda(check_hex: str, world: World, player: int,
+def make_lambda(check_hex: str, world: WitnessWorld, player: int,
                 player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     """
     Lambdas are created in a for loop so values need to be captured
@@ -185,7 +189,7 @@ def make_lambda(check_hex: str, world: World, player: int,
     return lambda state: _meets_item_requirements(state, check_hex, world, player, player_logic, locat)
 
 
-def set_rules(world: World, player_logic: WitnessPlayerLogic,
+def set_rules(world: WitnessWorld, player_logic: WitnessPlayerLogic,
               locat: WitnessPlayerLocations, location_cache: Dict[str, Location]):
     """
     Sets all rules for all locations

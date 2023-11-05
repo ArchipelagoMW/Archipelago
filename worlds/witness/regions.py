@@ -3,15 +3,19 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from logging import warning
-from typing import FrozenSet, Dict, Tuple, List
+from typing import FrozenSet, Dict, Tuple, List, TYPE_CHECKING
 
 from BaseClasses import Entrance, Region, Location
-from worlds.AutoWorld import World
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
 from Utils import KeyedDefaultDict
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
+else:
+    WitnessWorld = object
 
 
 def entity_requires_region(entity: str, region: str, player_logic: WitnessPlayerLogic):
@@ -28,7 +32,7 @@ class WitnessRegions:
     locat = None
     logic = None
 
-    def make_lambda(self, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: World, player: int,
+    def make_lambda(self, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: WitnessWorld, player: int,
                     player_logic: WitnessPlayerLogic):
         from .rules import _can_solve_panels
 
@@ -39,7 +43,7 @@ class WitnessRegions:
 
         return lambda state: _can_solve_panels(state, panel_hex_to_solve_set, world, player, player_logic, self.locat)
 
-    def connect_if_possible(self, world: World, source: str, target: str, player_logic: WitnessPlayerLogic,
+    def connect_if_possible(self, world: WitnessWorld, source: str, target: str, player_logic: WitnessPlayerLogic,
                             panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], backwards: bool = False):
         """
         connect two regions and set the corresponding requirement
@@ -92,7 +96,7 @@ class WitnessRegions:
         for dependent_region in mentioned_regions:
             world.multiworld.register_indirect_condition(self.region_cache[dependent_region], connection)
 
-    def create_regions(self, world: World, player_logic: WitnessPlayerLogic):
+    def create_regions(self, world: WitnessWorld, player_logic: WitnessPlayerLogic):
         """
         Creates all the regions for The Witness
         """
@@ -138,7 +142,7 @@ class WitnessRegions:
 
         return self.location_cache
 
-    def __init__(self, locat: WitnessPlayerLocations, world: World):
+    def __init__(self, locat: WitnessPlayerLocations, world: WitnessWorld):
         self.locat = locat
         player_name = world.multiworld.get_player_name(world.player)
 

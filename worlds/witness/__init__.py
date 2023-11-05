@@ -330,7 +330,7 @@ class WitnessLocation(Location):
         self.check_hex = ch_hex
 
 
-def create_region(world: World, name: str, locat: WitnessPlayerLocations, region_locations=None, exits=None):
+def create_region(world: WitnessWorld, name: str, locat: WitnessPlayerLocations, region_locations=None, exits=None):
     """
     Create an Archipelago Region for The Witness
     """
