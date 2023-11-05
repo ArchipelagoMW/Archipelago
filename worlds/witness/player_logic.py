@@ -18,7 +18,6 @@ When the world has parsed its options, a second function is called to finalize t
 import copy
 from typing import cast, TYPE_CHECKING
 from logging import warning
-from functools import lru_cache
 
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .utils import *
