@@ -1,9 +1,11 @@
 """
 Archipelago init file for The Witness
 """
+import dataclasses
 from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
+from Options import PerGameCommonOptions
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_hints, generate_joke_hints
 from worlds.AutoWorld import World, WebWorld
@@ -292,7 +294,8 @@ class WitnessWorld(World):
 
         slot_data = self._get_slot_data()
 
-        for option_name in self.options.as_dict():
+        for option_name in [attr.name for attr in dataclasses.fields(TheWitnessOptions)
+                            if attr not in dataclasses.fields(PerGameCommonOptions)]:
             slot_data[option_name] = getattr(self.options, option_name).value
 
         return slot_data
