@@ -13,7 +13,7 @@ from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
 from .rules import set_rules
-from .Options import is_option_enabled, the_witness_options, get_option_value
+from .Options import TheWitnessOptions
 from .utils import get_audio_logs
 from logging import warning, error
 
@@ -44,7 +44,9 @@ class WitnessWorld(World):
     StaticWitnessLocations()
     StaticWitnessItems()
     web = WitnessWebWorld()
-    option_definitions = the_witness_options
+
+    options_dataclass = TheWitnessOptions
+    options: TheWitnessOptions
 
     item_name_to_id = {
         name: data.ap_code for name, data in StaticWitnessItems.item_data.items()
@@ -98,9 +100,7 @@ class WitnessWorld(World):
 
         self.log_ids_to_hints = dict()
 
-        if not (is_option_enabled(self, "shuffle_symbols")
-                or get_option_value(self, "shuffle_doors")
-                or is_option_enabled(self, "shuffle_lasers")):
+        if not (self.options.shuffle_symbols or self.options.shuffle_doors or self.options.shuffle_lasers):
             if self.multiworld.players == 1:
                 warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
                         f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't"
@@ -142,7 +142,7 @@ class WitnessWorld(World):
         early_items = [item for item in self.items.get_early_items() if item in self.items.get_mandatory_items()]
         if early_items:
             random_early_item = self.multiworld.random.choice(early_items)
-            if get_option_value(self, "puzzle_randomization") == 1:
+            if self.options.puzzle_randomization == 1:
                 # In Expert, only tag the item as early, rather than forcing it onto the gate.
                 self.multiworld.local_early_items[self.player][random_early_item] = 1
             else:
@@ -165,9 +165,9 @@ class WitnessWorld(World):
         # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
 
         needed_size = 3
-        needed_size += get_option_value(self, "puzzle_randomization") == 1
-        needed_size += is_option_enabled(self, "shuffle_symbols")
-        needed_size += get_option_value(self, "shuffle_doors") != 0
+        needed_size += self.options.puzzle_randomization == 1
+        needed_size += self.options.shuffle_symbols
+        needed_size += self.options.shuffle_doors > 0
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
@@ -231,7 +231,7 @@ class WitnessWorld(World):
         remaining_item_slots = pool_size - sum(item_pool.values())
 
         # Add puzzle skips.
-        num_puzzle_skips = get_option_value(self, "puzzle_skip_amount")
+        num_puzzle_skips = self.options.puzzle_skip_amount
 
         if num_puzzle_skips > remaining_item_slots:
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world has insufficient locations"
@@ -254,7 +254,7 @@ class WitnessWorld(World):
                 self.multiworld.local_items[self.player].value.add(item_name)
 
     def fill_slot_data(self) -> dict:
-        hint_amount = get_option_value(self, "hint_amount")
+        hint_amount = self.options.hint_amount.value
 
         credits_hint = (
             "This Randomizer is brought to you by",
@@ -292,10 +292,8 @@ class WitnessWorld(World):
 
         slot_data = self._get_slot_data()
 
-        for option_name in the_witness_options:
-            slot_data[option_name] = get_option_value(
-                self, option_name
-            )
+        for option_name in self.options.as_dict():
+            slot_data[option_name] = getattr(self.options, option_name).value
 
         return slot_data
 

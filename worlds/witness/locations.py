@@ -3,7 +3,6 @@ Defines constants for different types of locations in the game
 """
 from typing import TYPE_CHECKING
 
-from .Options import is_option_enabled, get_option_value
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
 
@@ -504,15 +503,15 @@ class WitnessPlayerLocations:
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
         self.CHECK_LOCATIONS = StaticWitnessLocations.GENERAL_LOCATIONS.copy()
 
-        if is_option_enabled(world, "shuffle_discarded_panels"):
+        if world.options.shuffle_discarded_panels:
             self.PANEL_TYPES_TO_SHUFFLE.add("Discard")
 
-        if is_option_enabled(world, "shuffle_vault_boxes"):
+        if world.options.shuffle_vault_boxes:
             self.PANEL_TYPES_TO_SHUFFLE.add("Vault")
 
-        if get_option_value(world, "shuffle_EPs") == 1:
+        if world.options.shuffle_EPs == 1:
             self.PANEL_TYPES_TO_SHUFFLE.add("EP")
-        elif get_option_value(world, "shuffle_EPs") == 2:
+        elif world.options.shuffle_EPs == 2:
             self.PANEL_TYPES_TO_SHUFFLE.add("Obelisk Side")
 
             for obelisk_loc in StaticWitnessLocations.OBELISK_SIDES:

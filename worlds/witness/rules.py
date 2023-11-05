@@ -7,7 +7,6 @@ from typing import FrozenSet, Dict, TYPE_CHECKING
 
 from BaseClasses import Location, CollectionState
 from .player_logic import WitnessPlayerLogic
-from .Options import get_option_value
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic, WitnessRegions
 from worlds.generic.Rules import set_rule
@@ -73,10 +72,10 @@ def _has_item(state: CollectionState, item: str, world: "WitnessWorld", player: 
     if item in StaticWitnessLogic.ALL_REGIONS_BY_NAME:
         return world.regio.region_cache[item].can_reach(state)
     if item == "7 Lasers":
-        laser_req = get_option_value(world, "mountain_lasers")
+        laser_req = world.options.mountain_lasers.value
         return _has_lasers(state, laser_req, world, player, player_logic, locat)
     if item == "11 Lasers":
-        laser_req = get_option_value(world, "challenge_lasers")
+        laser_req = world.options.challenge_lasers.value
         return _has_lasers(state, laser_req, world, player, player_logic, locat)
     elif item == "PP2 Weirdness":
         hedge_2_access = (

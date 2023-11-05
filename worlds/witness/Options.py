@@ -1,13 +1,5 @@
-from typing import Dict, Union, TYPE_CHECKING
-from Options import Toggle, DefaultOnToggle, Range, Choice
-
-if TYPE_CHECKING:
-    from . import WitnessWorld
-
-
-# class HardMode(Toggle):
-#    "Play the randomizer in hardmode"
-#    display_name = "Hard Mode"
+from dataclasses import dataclass
+from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions
 
 
 class DisableNonRandomizedPuzzles(Toggle):
@@ -194,41 +186,26 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
-the_witness_options: Dict[str, type] = {
-    "puzzle_randomization": PuzzleRandomization,
-    "shuffle_symbols": ShuffleSymbols,
-    "shuffle_doors": ShuffleDoors,
-    "door_groupings": DoorGroupings,
-    "shuffle_boat": ShuffleBoat,
-    "shuffle_lasers": ShuffleLasers,
-    "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
-    "shuffle_discarded_panels": ShuffleDiscardedPanels,
-    "shuffle_vault_boxes": ShuffleVaultBoxes,
-    "shuffle_EPs": ShuffleEnvironmentalPuzzles,
-    "EP_difficulty": EnvironmentalPuzzlesDifficulty,
-    "shuffle_postgame": ShufflePostgame,
-    "victory_condition": VictoryCondition,
-    "mountain_lasers": MountainLasers,
-    "challenge_lasers": ChallengeLasers,
-    "early_caves": EarlyCaves,
-    "elevators_come_to_you": ElevatorsComeToYou,
-    "trap_percentage": TrapPercentage,
-    "puzzle_skip_amount": PuzzleSkipAmount,
-    "hint_amount": HintAmount,
-    "death_link": DeathLink,
-}
-
-
-def is_option_enabled(world: "WitnessWorld", name: str) -> bool:
-    return getattr(world.options, name) > 0
-
-
-def get_option_value(world: "WitnessWorld", name: str) -> Union[bool, int]:
-    option = getattr(world.options, name)
-
-    if option is None:
-        return 0
-
-    if issubclass(the_witness_options[name], Toggle) or issubclass(the_witness_options[name], DefaultOnToggle):
-        return bool(option.value)
-    return option.value
+@dataclass
+class TheWitnessOptions(PerGameCommonOptions):
+    puzzle_randomization: PuzzleRandomization
+    shuffle_symbols: ShuffleSymbols
+    shuffle_doors: ShuffleDoors
+    door_groupings: DoorGroupings
+    shuffle_boat: ShuffleBoat
+    shuffle_lasers: ShuffleLasers
+    disable_non_randomized_puzzles: DisableNonRandomizedPuzzles
+    shuffle_discarded_panels: ShuffleDiscardedPanels
+    shuffle_vault_boxes: ShuffleVaultBoxes
+    shuffle_EPs: ShuffleEnvironmentalPuzzles
+    EP_difficulty: EnvironmentalPuzzlesDifficulty
+    shuffle_postgame: ShufflePostgame
+    victory_condition: VictoryCondition
+    mountain_lasers: MountainLasers
+    challenge_lasers: ChallengeLasers
+    early_caves: EarlyCaves
+    elevators_come_to_you: ElevatorsComeToYou
+    trap_percentage: TrapPercentage
+    puzzle_skip_amount: PuzzleSkipAmount
+    hint_amount: HintAmount
+    death_link: DeathLink

@@ -2,7 +2,6 @@ from typing import Tuple, List, TYPE_CHECKING
 
 from BaseClasses import Item
 from worlds.AutoWorld import World
-from .Options import is_option_enabled, get_option_value
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -126,9 +125,9 @@ def get_always_hint_items(world: "WitnessWorld"):
         "Progressive Dots",
     ]
 
-    difficulty = get_option_value(world, "puzzle_randomization")
-    discards = is_option_enabled(world, "shuffle_discarded_panels")
-    wincon = get_option_value(world, "victory_condition")
+    difficulty = world.options.puzzle_randomization
+    discards = world.options.shuffle_discarded_panels
+    wincon = world.options.victory_condition
 
     if discards:
         if difficulty == 1:
@@ -163,7 +162,7 @@ def get_priority_hint_items(world: "WitnessWorld"):
         "Swamp Laser Shortcut (Door)",
     }
 
-    if is_option_enabled(world, "shuffle_symbols"):
+    if world.options.shuffle_symbols:
         symbols = [
             "Progressive Dots",
             "Progressive Stars",
@@ -182,7 +181,7 @@ def get_priority_hint_items(world: "WitnessWorld"):
 
         priority.update(world.random.sample(symbols, 5))
 
-    if is_option_enabled(world, "shuffle_lasers"):
+    if world.options.shuffle_lasers:
         lasers = [
             "Symmetry Laser",
             "Town Laser",
@@ -196,7 +195,7 @@ def get_priority_hint_items(world: "WitnessWorld"):
             "Shadows Laser",
         ]
 
-        if get_option_value(world, "shuffle_doors") >= 2:
+        if world.options.shuffle_doors >= 2:
             priority.add("Desert Laser")
             priority.update(world.random.sample(lasers, 5))
 

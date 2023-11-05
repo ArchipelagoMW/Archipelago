@@ -7,7 +7,6 @@ from typing import FrozenSet, Dict, Tuple, List, TYPE_CHECKING
 
 from BaseClasses import Entrance, Region, Location
 from .static_logic import StaticWitnessLogic
-from .Options import get_option_value
 from Utils import KeyedDefaultDict
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
@@ -100,7 +99,7 @@ class WitnessRegions:
         """
         from . import create_region
 
-        difficulty = get_option_value(world, "puzzle_randomization")
+        difficulty = world.options.puzzle_randomization
 
         if difficulty == 1:
             reference_logic = StaticWitnessLogic.sigma_expert

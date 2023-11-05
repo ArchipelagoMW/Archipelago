@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from typing import Optional, Dict, List, Set, TYPE_CHECKING
 
 from BaseClasses import Item, MultiWorld, ItemClassification
-from .Options import get_option_value, is_option_enabled, the_witness_options
 from .locations import ID_START, WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 from .static_logic import ItemDefinition, DoorItemDefinition, ProgressiveItemDefinition, ItemCategory, \
@@ -114,8 +113,8 @@ class WitnessPlayerItems:
         }
 
         # Adjust item classifications based on game settings.
-        eps_shuffled = get_option_value(self._world, "shuffle_EPs") != 0
-        come_to_you = get_option_value(self._world, "elevators_come_to_you") != 0
+        eps_shuffled = self._world.options.shuffle_EPs
+        come_to_you = self._world.options.elevators_come_to_you
         for item_name, item_data in self.item_data.items():
             if not eps_shuffled and item_name in {"Monastery Garden Entry (Door)",
                                                   "Monastery Shortcuts",
@@ -191,7 +190,7 @@ class WitnessPlayerItems:
         remaining_quantity -= len(output)
 
         # Read trap configuration data.
-        trap_weight = get_option_value(self._world, "trap_percentage") / 100
+        trap_weight = self._world.options.trap_percentage / 100
         filler_weight = 1 - trap_weight
 
         # Add filler items to the list.
@@ -219,15 +218,14 @@ class WitnessPlayerItems:
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
         output: Set[str] = set()
-        if "shuffle_symbols" not in the_witness_options.keys() \
-                or is_option_enabled(self._world, "shuffle_symbols"):
-            if get_option_value(self._world, "shuffle_doors") > 0:
+        if self._world.options.shuffle_symbols:
+            if self._world.options.shuffle_doors:
                 output = {"Dots", "Black/White Squares", "Symmetry"}
             else:
                 output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
-            if is_option_enabled(self._world, "shuffle_discarded_panels"):
-                if get_option_value(self._world, "puzzle_randomization") == 1:
+            if self._world.options.shuffle_discarded_panels:
+                if self._world.options.puzzle_randomization == 1:
                     output.add("Arrows")
                 else:
                     output.add("Triangles")

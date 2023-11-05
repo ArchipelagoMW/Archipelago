@@ -21,7 +21,6 @@ from logging import warning
 
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .utils import *
-from .Options import is_option_enabled, get_option_value, the_witness_options
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -260,16 +259,16 @@ class WitnessPlayerLogic:
 
         # Postgame
 
-        doors = get_option_value(world, "shuffle_doors") >= 2
-        lasers = is_option_enabled(world, "shuffle_lasers")
-        early_caves = get_option_value(world, "early_caves") > 0
-        victory = get_option_value(world, "victory_condition")
-        mnt_lasers = get_option_value(world, "mountain_lasers")
-        chal_lasers = get_option_value(world, "challenge_lasers")
+        doors = world.options.shuffle_doors >= 2
+        lasers = world.options.shuffle_lasers
+        early_caves = world.options.early_caves > 0
+        victory = world.options.victory_condition
+        mnt_lasers = world.options.mountain_lasers
+        chal_lasers = world.options.challenge_lasers
 
         mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mnt_lasers)
 
-        if not is_option_enabled(world, "shuffle_postgame"):
+        if not world.options.shuffle_postgame:
             if not (early_caves or doors):
                 adjustment_linesets_in_order.append(get_caves_exclusion_list())
                 if not victory == 1:
@@ -299,85 +298,85 @@ class WitnessPlayerLogic:
 
         # Exclude Discards / Vaults
 
-        if not is_option_enabled(world, "shuffle_discarded_panels"):
+        if not world.options.shuffle_discarded_panels:
             # In disable_non_randomized, the discards are needed for alternate activation triggers, UNLESS both
             # (remote) doors and lasers are shuffled.
-            if not is_option_enabled(world, "disable_non_randomized_puzzles") or (doors and lasers):
+            if not world.options.disable_non_randomized_puzzles or (doors and lasers):
                 adjustment_linesets_in_order.append(get_discard_exclusion_list())
 
             if doors:
                 adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
 
-        if not is_option_enabled(world, "shuffle_vault_boxes"):
+        if not world.options.shuffle_vault_boxes:
             adjustment_linesets_in_order.append(get_vault_exclusion_list())
             if not victory == 1:
                 adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
 
         # Victory Condition
 
-        if get_option_value(world, "victory_condition") == 0:
+        if victory == 0:
             self.VICTORY_LOCATION = "0x3D9A9"
-        elif get_option_value(world, "victory_condition") == 1:
+        elif victory == 1:
             self.VICTORY_LOCATION = "0x0356B"
-        elif get_option_value(world, "victory_condition") == 2:
+        elif victory == 2:
             self.VICTORY_LOCATION = "0x09F7F"
-        elif get_option_value(world, "victory_condition") == 3:
+        elif victory == 3:
             self.VICTORY_LOCATION = "0xFFF00"
 
-        if get_option_value(world, "challenge_lasers") <= 7:
+        if chal_lasers <= 7:
             adjustment_linesets_in_order.append([
                 "Requirement Changes:",
                 "0xFFF00 - 11 Lasers - True",
             ])
 
-        if is_option_enabled(world, "disable_non_randomized_puzzles"):
+        if world.options.disable_non_randomized_puzzles:
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
 
-        if is_option_enabled(world, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
+        if world.options.shuffle_symbols:
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
-        if get_option_value(world, "EP_difficulty") == 0:
+        if world.options.EP_difficulty == 0:
             adjustment_linesets_in_order.append(get_ep_easy())
-        elif get_option_value(world, "EP_difficulty") == 1:
+        elif world.options.EP_difficulty == 1:
             adjustment_linesets_in_order.append(get_ep_no_eclipse())
 
-        if get_option_value(world, "door_groupings") == 1:
-            if get_option_value(world, "shuffle_doors") == 1:
+        if world.options.door_groupings == 1:
+            if world.options.shuffle_doors == 1:
                 adjustment_linesets_in_order.append(get_simple_panels())
-            elif get_option_value(world, "shuffle_doors") == 2:
+            elif world.options.shuffle_doors == 2:
                 adjustment_linesets_in_order.append(get_simple_doors())
-            elif get_option_value(world, "shuffle_doors") == 3:
+            elif world.options.shuffle_doors == 3:
                 adjustment_linesets_in_order.append(get_simple_doors())
                 adjustment_linesets_in_order.append(get_simple_additional_panels())
         else:
-            if get_option_value(world, "shuffle_doors") == 1:
+            if world.options.shuffle_doors == 1:
                 adjustment_linesets_in_order.append(get_complex_door_panels())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
-            elif get_option_value(world, "shuffle_doors") == 2:
+            elif world.options.shuffle_doors == 2:
                 adjustment_linesets_in_order.append(get_complex_doors())
-            elif get_option_value(world, "shuffle_doors") == 3:
+            elif world.options.shuffle_doors == 3:
                 adjustment_linesets_in_order.append(get_complex_doors())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
 
-        if is_option_enabled(world, "shuffle_boat"):
+        if world.options.shuffle_boat:
             adjustment_linesets_in_order.append(get_boat())
 
-        if get_option_value(world, "early_caves") == 2:
+        if world.options.early_caves == 2:
             adjustment_linesets_in_order.append(get_early_caves_start_list())
 
-        if get_option_value(world, "early_caves") == 1 and not doors:
+        if world.options.early_caves == 1 and not doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
-        if is_option_enabled(world, "elevators_come_to_you"):
+        if world.options.elevators_come_to_you:
             adjustment_linesets_in_order.append(get_elevators_come_to_you())
 
         for item in self.YAML_ADDED_ITEMS:
             adjustment_linesets_in_order.append(["Items:", item])
 
-        if is_option_enabled(world, "shuffle_lasers"):
+        if lasers:
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
-        if get_option_value(world, "shuffle_EPs") == 2:
+        if world.options.shuffle_EPs:
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in StaticWitnessLogic.ENTITIES_BY_HEX.items()
                       if ep_obj["entityType"] == "EP")
 
@@ -388,7 +387,7 @@ class WitnessPlayerLogic:
         else:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
-        if get_option_value(world, "shuffle_EPs") == 0:
+        if world.options.shuffle_EPs == 0:
             adjustment_linesets_in_order.append(["Irrelevant Locations:"] + get_ep_all_individual()[1:])
 
         yaml_disabled_eps = []
@@ -399,7 +398,7 @@ class WitnessPlayerLogic:
 
             loc_obj = StaticWitnessLogic.ENTITIES_BY_NAME[yaml_disabled_location]
 
-            if loc_obj["entityType"] == "EP" and get_option_value(world, "shuffle_EPs") != 0:
+            if loc_obj["entityType"] == "EP" and world.options.shuffle_EPs != 0:
                 yaml_disabled_eps.append(loc_obj["checkHex"])
 
             if loc_obj["entityType"] in {"EP", "General", "Vault", "Discard"}:
@@ -490,7 +489,7 @@ class WitnessPlayerLogic:
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
         self.STARTING_INVENTORY = set()
 
-        self.DIFFICULTY = get_option_value(world, "puzzle_randomization")
+        self.DIFFICULTY = world.options.puzzle_randomization.value
 
         if self.DIFFICULTY == 0:
             self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_normal
