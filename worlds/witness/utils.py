@@ -231,6 +231,9 @@ def get_items() -> List[str]:
 
 
 def dnf_remove_redundancies(dnf_requirement: FrozenSet[FrozenSet[str]]) -> FrozenSet[FrozenSet[str]]:
+    """Removes any redundant terms from a logical formula in disjunctive normal form.
+    This means removing any terms that are a superset of any other term, get removed.
+    This is possible because of the boolean absorption law: a | (a & b) = a"""
     to_remove = set()
 
     for option1 in dnf_requirement:
@@ -245,6 +248,7 @@ def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]) -> FrozenSet[Froz
     """
     performs the "and" operator on a list of logical formula in disjunctive normal form, represented as a set of sets.
     A logical formula might look like this: {{a, b}, {c, d}}, which would mean "a & b | c & d".
+    These can be easily and-ed by just using the boolean distributive law: (a | b) & c = a & c | a & b.
     """
     current_overall_requirement = frozenset({frozenset()})
 
