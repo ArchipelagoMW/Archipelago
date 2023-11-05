@@ -89,7 +89,7 @@ class WorldSource(NamedTuple):
 
 
 # find potential world containers, currently folders and zip-importable .apworld's
-world_sources: typing.List[WorldSource] = []
+world_sources: List[WorldSource] = []
 for folder in (folder for folder in (user_folder, local_folder) if folder):
     relative = folder == local_folder
     for entry in os.scandir(folder):
