@@ -65,7 +65,7 @@ item_table = {
     # Gems are a way to generate filler items and limit use of Pocket items
     # Gems are generated 1/turn and Pocket pieces cost 1 Gem per their material value
     # Turn off Pocket entirely to hide this item. Also you can't yet EleGiggle
-    # You should probably use excluded items though.
+    # WARNING: Do not set all your filler items to local_only or generation will fail
     "Progressive Pocket Gems": CMItemData(4_023, ItemClassification.filler, quantity=math.inf),
     # Allows the player to deploy pocket items one rank further from the home row, but not the opponent's home row
     "Progressive Pocket Range": CMItemData(4_024, ItemClassification.filler, quantity=6),

@@ -197,7 +197,7 @@ class MinorPieceTypeLimit(Range):
     """
     display_name = "Minor Piece Limit by Type"
     range_start = 0
-    range_end = 15
+    range_end = 9
     default = 0
 
 
@@ -210,7 +210,7 @@ class MajorPieceTypeLimit(Range):
     """
     display_name = "Major Piece Limit by Type"
     range_start = 0
-    range_end = 15
+    range_end = 9
     default = 0
 
 
@@ -223,21 +223,21 @@ class QueenPieceTypeLimit(Range):
     """
     display_name = "Queen Piece Limit by Type"
     range_start = 0
-    range_end = 15
+    range_end = 5
     default = 0
 
 
 class QueenPieceLimit(Range):
     """
-    How many Queen-equivalent pieces you might play with. If set to 1, you will never start with more than 1 piece
-    upgraded to a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still promote pawns
-    during a game. If set to 0, this setting is disabled.
+    How many Queen-equivalent pieces you might play with. If set to 1, you will never have more than 1 piece upgraded to
+    a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still promote pawns during a
+    game. If set to 0, this setting is disabled.
 
     Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Queen Piece Limit"
     range_start = 0
-    range_end = 15
+    range_end = 7
     default = 0
 
 

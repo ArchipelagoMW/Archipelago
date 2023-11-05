@@ -55,10 +55,10 @@ class CMWorld(World):
     piece_type_limit_options = {
         "Progressive Minor Piece": "minor_piece_limit_by_type",
         "Progressive Major Piece": "major_piece_limit_by_type",
-        "Progressive Queen Piece": "queen_piece_limit_by_type",
+        "Progressive Major To Queen": "queen_piece_limit_by_type",
     }
     piece_limit_options = {
-        "Progressive Queen Piece": "queen_piece_limit",
+        "Progressive Major To Queen": "queen_piece_limit",
     }
     piece_limits_by_army = {
         # Vanilla
