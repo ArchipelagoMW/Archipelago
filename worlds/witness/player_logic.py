@@ -444,16 +444,12 @@ class WitnessPlayerLogic:
             new_connections = []
 
             for connection in connections:
-                if connection[1] == frozenset({frozenset({"TrueOneWay"})}):
-                    new_connections.append(connection)
-                    continue
-
                 overall_requirement = frozenset()
 
                 for option in connection[1]:
                     individual_entity_requirements = []
                     for entity in option:
-                        if entity in self.EVENT_NAMES_BY_HEX:
+                        if entity in self.EVENT_NAMES_BY_HEX or entity not in StaticWitnessLogic.ENTITIES_BY_HEX:
                             individual_entity_requirements.append(frozenset({frozenset({entity})}))
                         else:
                             entity_req = self.reduce_req_within_region(entity)
