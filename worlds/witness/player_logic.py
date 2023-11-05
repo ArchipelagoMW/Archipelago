@@ -111,13 +111,7 @@ class WitnessPlayerLogic:
                             for possibility in new_items
                         )
 
-                updated_items = set()
-
-                for items_option in dependent_items_for_option:
-                    for items_option2 in new_items:
-                        updated_items.add(items_option.union(items_option2))
-
-                dependent_items_for_option = updated_items
+                dependent_items_for_option = dnf_and([dependent_items_for_option, new_items])
 
             for items_option in these_items:
                 for dependentItem in dependent_items_for_option:

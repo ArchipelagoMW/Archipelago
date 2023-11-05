@@ -230,7 +230,18 @@ def get_items() -> List[str]:
     return get_adjustment_file("WitnessItems.txt")
 
 
-def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]):
+def dnf_remove_redundancies(dnf_requirement: FrozenSet[FrozenSet[str]]) -> FrozenSet[FrozenSet[str]]:
+    to_remove = set()
+
+    for option1 in dnf_requirement:
+        for option2 in dnf_requirement:
+            if option2 < option1:
+                to_remove.add(option1)
+
+    return dnf_requirement - to_remove
+
+
+def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]) -> FrozenSet[FrozenSet[str]]:
     current_overall_requirement = frozenset({frozenset()})
 
     for next_dnf_requirement in dnf_requirements:
@@ -242,4 +253,4 @@ def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]):
 
         current_overall_requirement = frozenset(new_requirement)
 
-    return current_overall_requirement
+    return dnf_remove_redundancies(current_overall_requirement)
