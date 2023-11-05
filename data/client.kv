@@ -48,7 +48,7 @@
 <HintLabel>:
     canvas.before:
         Color:
-            rgba: (.0, 0.9, .1, .3) if self.selected else (0.2, 0.2, 0.2, 1)
+            rgba: (.0, 0.9, .1, .3) if self.selected else (0.2, 0.2, 0.2, 1) if self.striped else (0.18, 0.18, 0.18, 1)
         Rectangle:
             size: self.size
             pos: self.pos
@@ -64,31 +64,37 @@
         text: root.receiving_text
         halign: 'center'
         valign: 'center'
+        pos_hint: {"center_y": 0.5}
     TooltipLabel:
         id: item
         text: root.item_text
         halign: 'center'
         valign: 'center'
+        pos_hint: {"center_y": 0.5}
     TooltipLabel:
         id: finding
         text: root.finding_text
         halign: 'center'
         valign: 'center'
+        pos_hint: {"center_y": 0.5}
     TooltipLabel:
         id: location
         text: root.location_text
         halign: 'center'
         valign: 'center'
+        pos_hint: {"center_y": 0.5}
     TooltipLabel:
         id: entrance
         text: root.entrance_text
         halign: 'center'
         valign: 'center'
+        pos_hint: {"center_y": 0.5}
     TooltipLabel:
         id: found
         text: root.found_text
         halign: 'center'
         valign: 'center'
+        pos_hint: {"center_y": 0.5}
 <HintLog>:
     cols: 1
     viewclass: 'HintLabel'

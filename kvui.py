@@ -288,6 +288,7 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
 
 class HintLabel(RecycleDataViewBehavior, BoxLayout):
     selected = BooleanProperty(False)
+    striped = BooleanProperty(False)
     index = None
     no_select = []
 
@@ -307,8 +308,9 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
-        if "select" in data and not data['select']:
+        if "select" in data and not data['select'] and index not in self.no_select:
             self.no_select.append(index)
+        self.striped = data['striped']
         self.receiving_text = data['receiving']['text']
         self.item_text = data['item']['text']
         self.finding_text = data['finding']['text']
@@ -451,7 +453,7 @@ class GameManager(App):
                 self.tabs.add_widget(panel)
 
         hint_panel = TabbedPanelItem(text="Hints")
-        self.log_panels["Hints"] = hint_panel.content = HintLog()
+        self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
         self.tabs.add_widget(hint_panel)
 
         if len(self.logging_pairs) == 1:
@@ -566,7 +568,7 @@ class GameManager(App):
 
     def update_hints(self):
         hints = self.ctx.stored_data[f"_read_hints_{self.ctx.team}_{self.ctx.slot}"]
-        self.log_panels["Hints"].refresh_hints(hints, self.json_to_kivy_parser)
+        self.log_panels["Hints"].refresh_hints(hints)
 
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
     def open_settings(self, *largs):
@@ -622,35 +624,38 @@ class UILog(RecycleView):
 
 
 class HintLog(RecycleView):
-    def __init__(self):
+    def __init__(self, parser):
         super(HintLog, self).__init__()
-        self.data = []
-        self.hints = dict()
         self.header = {
-            "receiving": {'text': "Receiving Player:"},
-            "item": {'text': "Item:"},
-            "finding": {'text': "Finding Player:"},
-            "location": {'text': "Location:"},
-            "entrance": {'text': "Entrance:"},
-            "found": {'text': "Status:"},
-            "select": False
+            "receiving": {'text': "[u]Receiving Player[/u]"},
+            "item": {'text': "[u]Item[/u]"},
+            "finding": {'text': "[u]Finding Player[/u]"},
+            "location": {'text': "[u]Location[/u]"},
+            "entrance": {'text': "[u]Entrance[/u]"},
+            "found": {'text': "[u]Status[/u]"},
+            "striped": True,
+            "select": False,
         }
+        self.data = [self.header]
+        self.parser = parser
 
-    def refresh_hints(self, hints, parser):
-        self.data = []
-        self.data.append(self.header)
+    def refresh_hints(self, hints):
+        self.data = [self.header]
+        striped = False
         for hint in hints:
             self.data.append({
-                'receiving': {'text': parser.handle_node({'type': "player_id", 'text': hint['receiving_player']})},
-                'item': {'text': parser.handle_node({'type': "item_id", 'text': hint['item'], 'flags': hint['item_flags']})},
-                'finding': {'text': parser.handle_node({'type': "player_id", 'text': hint['finding_player']})},
-                'location': {'text': parser.handle_node({'type': "location_id", 'text': hint['location']})},
-                'entrance': {'text': parser.handle_node({'type': "color" if hint['entrance'] else "text",
+                'striped': striped,
+                'receiving': {'text': self.parser.handle_node({'type': "player_id", 'text': hint['receiving_player']})},
+                'item': {'text': self.parser.handle_node({'type': "item_id", 'text': hint['item'], 'flags': hint['item_flags']})},
+                'finding': {'text': self.parser.handle_node({'type': "player_id", 'text': hint['finding_player']})},
+                'location': {'text': self.parser.handle_node({'type': "location_id", 'text': hint['location']})},
+                'entrance': {'text': self.parser.handle_node({'type': "color" if hint['entrance'] else "text",
                                                          'color': "blue", 'text': hint['entrance']
                                                          if hint['entrance'] else "Vanilla"})},
-                'found': {'text': parser.handle_node({'type': "color", 'color': "green" if hint['found'] else "red",
-                                                      'text': "Found" if hint['found'] else "Not Found"})}
+                'found': {'text': self.parser.handle_node({'type': "color", 'color': "green" if hint['found'] else "red",
+                                                      'text': "Found" if hint['found'] else "Not Found"})},
             })
+            striped = not striped
 
 class E(ExceptionHandler):
     logger = logging.getLogger("Client")
