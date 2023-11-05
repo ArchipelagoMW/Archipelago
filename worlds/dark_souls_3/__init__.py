@@ -280,8 +280,8 @@ class DarkSouls3World(World):
             elif not item.unique:
                 itempool_by_category[location.category].append(location.default_item_name)
             else:
-                # For non-miscellaneous non-skip items, make sure there aren't duplicates in the
-                # item set even if there are multiple in-game locations that provide them.
+                # For unique items, make sure there aren't duplicates in the item set even if there
+                # are multiple in-game locations that provide them.
                 item_set = item_set_by_category[location.category]
                 if location.default_item_name in item_set:
                     num_required_extra_items += 1
@@ -574,7 +574,7 @@ class DarkSouls3World(World):
                     add_item_rule(self.multiworld.get_location(location.name, self.player),
                                     lambda item: (
                                         item.player != self.player or
-                                        (item.count == 1 and not item.souls)
+                                        (item.data.count == 1 and not item.data.souls)
                                     ))
                 elif location.drop:
                     # TODO: I'm not sure this is precisely the rule for where this can and can't
@@ -588,9 +588,9 @@ class DarkSouls3World(World):
 
         # This particular location is bugged, and will drop two copies of whatever item is placed
         # there.
-        if self.is_location_available("US: Young White Branch #2"):
-            add_item_rule(self.multiworld.get_location("US: Young White Branch #2", self.player),
-                        lambda item: item.player == self.player and not item.unique)
+        # if self.is_location_available("US: Young White Branch #2"):
+        #     add_item_rule(self.multiworld.get_location("US: Young White Branch #2", self.player),
+        #                 lambda item: item.player == self.player and not item.data.unique)
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location.region:
@@ -704,7 +704,7 @@ class DarkSouls3World(World):
             if self.is_location_available(location)
         ]
 
-        # Full DarkSouls3Items, grouped by name
+        # All DarkSouls3Items that have been assigned anywhere, grouped by name
         full_items_by_name = defaultdict(list)
         for location in self.multiworld.get_filled_locations():
             full_items_by_name[location.item.name].append(location.item)
@@ -816,8 +816,8 @@ class DarkSouls3World(World):
         ap_ids_to_ds3_ids: Dict[str, int] = {}
         item_counts: Dict[str, int] = {}
         for item in our_items:
-            ap_ids_to_ds3_ids[str(item.code)] = item.ds3_code
-            if item.count != 1: item_counts[str(item.code)] = item.count
+            ap_ids_to_ds3_ids[str(item.code)] = item.data.ds3_code
+            if item.data.count != 1: item_counts[str(item.code)] = item.data.count
 
         # A map from Archipelago's location IDs to the keys the offline
         # randomizer uses to identify locations.

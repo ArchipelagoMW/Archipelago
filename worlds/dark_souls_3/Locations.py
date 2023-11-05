@@ -326,6 +326,8 @@ location_tables = {
                         ngp = True),
         DS3LocationData("CA: Titanite Scale",                      "Titanite Scale",                    DS3LocationCategory.UPGRADE,
                         miniboss = True),
+        DS3LocationData("CA: Coiled Sword",                        "Coiled Sword",                      DS3LocationCategory.KEY,
+                        prominent = True, progression = True, boss = True),
     ],
     "Firelink Shrine": [
         DS3LocationData("FS: Skull Ring",                          "Skull Ring",                        DS3LocationCategory.RING,
@@ -1191,8 +1193,10 @@ location_tables = {
                         drop = True, hidden = True), # Guaranteed drop from a normal-looking Elder Ghru
         DS3LocationData("FK: Titanite Scale",                      "Titanite Scale x2",                 DS3LocationCategory.UPGRADE,
                         miniboss = True), # Ravenous Crystal Lizard drop
-        DS3LocationData("FK: Large Titanite Shard #1",             "Large Titanite Shard",              DS3LocationCategory.UPGRADE),
-        DS3LocationData("FK: Large Titanite Shard #2",             "Large Titanite Shard",              DS3LocationCategory.UPGRADE),
+        DS3LocationData("FK: Large Titanite Shard #1",             "Large Titanite Shard",              DS3LocationCategory.UPGRADE,
+                        lizard = True),
+        DS3LocationData("FK: Large Titanite Shard #2",             "Large Titanite Shard",              DS3LocationCategory.UPGRADE,
+                        lizard = True),
         DS3LocationData("FK: Heavy Gem",                           "Heavy Gem",                         DS3LocationCategory.UPGRADE,
                         lizard = True),
         DS3LocationData("FK: Twinkling Titanite",                  "Twinkling Titanite",                DS3LocationCategory.UPGRADE,

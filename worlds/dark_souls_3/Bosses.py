@@ -28,7 +28,8 @@ class DS3BossInfo:
 # Note: the offline randomizer splits up some bosses into separate fights for separate phases, each
 # of which can be individually replaced by Yhorm.
 all_bosses = [
-    DS3BossInfo("Iudex Gundyr", 4000800, region = "Firelink Shrine"),
+    DS3BossInfo("Iudex Gundyr", 4000800, region = "Firelink Shrine",
+        locations = {"CA: Coiled Sword"}),
     DS3BossInfo("Vordt of the Boreal Valley", 3000800, region = "Undead Settlement",
         locations = {"HWL: Soul of Boreal Valley Vordt"}),
     DS3BossInfo("Curse-Rotted Greatwood", 3100800, locations = {

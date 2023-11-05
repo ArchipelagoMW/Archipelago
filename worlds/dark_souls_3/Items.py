@@ -140,7 +140,7 @@ class DS3ItemData():
     @property
     def unique(self):
         """Whether this item should be unique, appearing only once in the randomizer."""
-        return item.category != DS3ItemCategory.MISC or item.force_unique
+        return self.category != DS3ItemCategory.MISC or self.force_unique
 
     def __post_init__(self):
         self.ap_code = self.ap_code or DS3ItemData.__item_id
@@ -194,16 +194,12 @@ class DS3ItemData():
 
 class DarkSouls3Item(Item):
     game: str = "Dark Souls III"
-    ds3_code: int
-    count: int
-    souls: Optional[int]
-    category: DS3ItemCategory
-    base_name: str
+    data: DS3ItemData
 
     @property
     def level(self) -> Union[int, None]:
         """This item's upgrade level, if it's a weapon."""
-        return self.ds3_code % 100 if self.category.upgrade_level else None
+        return self.data.ds3_code % 100 if self.data.category.upgrade_level else None
 
     def __init__(
             self,
@@ -211,11 +207,7 @@ class DarkSouls3Item(Item):
             data: DS3ItemData,
             classification = None):
         super().__init__(data.name, classification or data.classification, data.ap_code, player)
-        self.ds3_code = data.ds3_code
-        self.count = data.count
-        self.souls = data.souls
-        self.category = data.category
-        self.base_name = data.base_name
+        self.data = data
 
 
 _vanilla_items = flatten([
