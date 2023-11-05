@@ -15,14 +15,6 @@ if TYPE_CHECKING:
     from . import WitnessWorld
 
 
-def entity_requires_region(entity: str, region: str, player_logic: WitnessPlayerLogic):
-    if all(region in requirement for requirement in player_logic.REQUIREMENTS_BY_HEX[entity]):
-        return True
-    if entity in StaticWitnessLogic.ENTITIES_BY_HEX and StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]:
-        return StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]["name"] == region
-    return False
-
-
 class WitnessRegions:
     """Class that defines Witness Regions"""
 
