@@ -232,7 +232,7 @@ def get_items() -> List[str]:
 
 def dnf_remove_redundancies(dnf_requirement: FrozenSet[FrozenSet[str]]) -> FrozenSet[FrozenSet[str]]:
     """Removes any redundant terms from a logical formula in disjunctive normal form.
-    This means removing any terms that are a superset of any other term, get removed.
+    This means removing any terms that are a superset of any other term get removed.
     This is possible because of the boolean absorption law: a | (a & b) = a"""
     to_remove = set()
 
