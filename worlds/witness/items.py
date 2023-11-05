@@ -16,8 +16,6 @@ from .utils import build_weighted_int_list
 
 if TYPE_CHECKING:
     from . import WitnessWorld
-else:
-    WitnessWorld = object
 
 NUM_ENERGY_UPGRADES = 4
 
@@ -95,10 +93,10 @@ class WitnessPlayerItems:
     Class that defines Items for a single world
     """
 
-    def __init__(self, world: WitnessWorld, logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+    def __init__(self, world: "WitnessWorld", logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
         """Adds event items after logic changes due to options"""
 
-        self._world: WitnessWorld = world
+        self._world: "WitnessWorld" = world
         self._multiworld: MultiWorld = world.multiworld
         self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = logic

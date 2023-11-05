@@ -3,8 +3,6 @@ from Options import Toggle, DefaultOnToggle, Range, Choice
 
 if TYPE_CHECKING:
     from . import WitnessWorld
-else:
-    WitnessWorld = object
 
 
 # class HardMode(Toggle):
@@ -221,11 +219,11 @@ the_witness_options: Dict[str, type] = {
 }
 
 
-def is_option_enabled(world: WitnessWorld, name: str) -> bool:
+def is_option_enabled(world: "WitnessWorld", name: str) -> bool:
     return getattr(world.options, name) > 0
 
 
-def get_option_value(world: WitnessWorld, name: str) -> Union[bool, int]:
+def get_option_value(world: "WitnessWorld", name: str) -> Union[bool, int]:
     option = getattr(world.options, name)
 
     if option is None:

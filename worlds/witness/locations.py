@@ -9,8 +9,6 @@ from .static_logic import StaticWitnessLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld
-else:
-    WitnessWorld = object
 
 
 ID_START = 158000
@@ -500,7 +498,7 @@ class WitnessPlayerLocations:
     Class that defines locations for a single player
     """
 
-    def __init__(self, world: WitnessWorld, player_logic: WitnessPlayerLogic):
+    def __init__(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic):
         """Defines locations AFTER logic changes due to options"""
 
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
