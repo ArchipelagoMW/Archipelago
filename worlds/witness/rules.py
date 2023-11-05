@@ -36,7 +36,7 @@ def _has_laser(laser_hex: str, world: "WitnessWorld", player: int) -> Callable[[
             and state.has("Desert Laser Redirection", player)
         )
     else:
-        return lambda state: _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)(state)
+        return _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)
 
 
 def _has_lasers(amount: int, world: "WitnessWorld") -> Callable[[CollectionState], bool]:
