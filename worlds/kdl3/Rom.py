@@ -936,10 +936,10 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
                               0xBD, 0x20, 0x90,  # LDA $9020, X
                               0x3A,  # DEC
                               0xAA,  # TAX
-                              0xC9, 0x07, 0x00,  # CMP #$0007
+                              0xC9, 0x06, 0x00,  # CMP #$0006
                               0x30, 0x07,  # BMI $07A495
                               0xE8,  # INX
-                              0x18,  # CLC
+                              0x38,  # SEC
                               0xE9, 0x06, 0x00,  # SBC #$0006
                               0x80, 0xF4,  # BRA $07A489
                               0xBD, 0xA7, 0x53,  # LDA $53A7, X
