@@ -85,6 +85,10 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.NPC)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
+            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_anywhere:
+                self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
+            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_self:
+                self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
         if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.BOSS)
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
@@ -93,10 +97,6 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
         if self.multiworld.enable_progressive_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.PROGRESSIVE_ITEM)
-        if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_anywhere:
-            self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
-        if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_self:
-            self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
 
 
     def create_regions(self):
