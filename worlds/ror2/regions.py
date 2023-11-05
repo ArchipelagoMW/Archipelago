@@ -1,6 +1,6 @@
 from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
-from BaseClasses import Region, Entrance
+from BaseClasses import Region, Entrance, MultiWorld
 from .locations import location_table, RiskOfRainLocation
 
 if TYPE_CHECKING:
@@ -126,8 +126,8 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
         create_connections_in_regions(multiworld, player, name, data)
 
 
-def create_region(world, player: int, name: str, data: RoRRegionData) -> Region:
-    region = Region(name, player, world)
+def create_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData) -> Region:
+    region = Region(name, player, multiworld)
     if data.locations:
         for location_name in data.locations:
             location_data = location_table.get(location_name)
@@ -137,11 +137,11 @@ def create_region(world, player: int, name: str, data: RoRRegionData) -> Region:
     return region
 
 
-def create_connections_in_regions(world, player: int, name: str, data: RoRRegionData):
-    region = world.get_region(name, player)
+def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData):
+    region = multiworld.get_region(name, player)
     if data.region_exits:
         for region_exit in data.region_exits:
             r_exit_stage = Entrance(player, region_exit, region)
-            exit_region = world.get_region(region_exit, player)
+            exit_region = multiworld.get_region(region_exit, player)
             r_exit_stage.connect(exit_region)
             region.exits.append(r_exit_stage)

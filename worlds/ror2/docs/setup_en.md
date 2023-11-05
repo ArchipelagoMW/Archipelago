@@ -66,4 +66,4 @@ These commands are to be used in-game by using ``Ctrl + Alt + ` `` and then typi
 
 Explore Mode only
  - `archipelago_show_unlocked_stages` Show which stages have been received.
- - `archipelago_highlight_satellite true/false` This will highlight the satellite to make it easier to see (Default off).
+ - `archipelago_highlight_satellite true/false` This will highlight the satellite to make it easier to see (Default false).

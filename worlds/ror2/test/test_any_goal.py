@@ -24,4 +24,3 @@ class DLCTest(RoR2TestBase):
         self.assertBeatable(False)
         self.collect_by_name("Hidden Realm: A Moment, Whole")
         self.assertBeatable(True)
-

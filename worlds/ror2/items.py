@@ -1,7 +1,7 @@
 from BaseClasses import Item, ItemClassification
 from .options import ItemWeights
 from .ror2environments import *
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, Set
 
 
 class RiskOfRainItem(Item):
@@ -15,8 +15,8 @@ class RiskOfRainItemData(NamedTuple):
     weight: Optional[int] = None
 
 
-def get_items_by_category(category: str) -> Dict[str, RiskOfRainItemData]:
-    item_dict: Dict[str, RiskOfRainItemData] = {}
+def get_items_by_category(category: str) -> Dict[str, Set[str]]:
+    item_dict: Dict[str, Set[str]]
     for name, data in item_table.items():
         if data.category == category:
             item_dict.setdefault(name, data)
@@ -28,7 +28,7 @@ offset: int = 37000
 filler_offset: int = offset + 300
 trap_offset: int = offset + 400
 stage_offset: int = offset + 500
-# 37000 - 37499, 38000
+# Upgrade item ids 37002 - 37012
 upgrade_table: Dict[str, RiskOfRainItemData] = {
     "Common Item":          RiskOfRainItemData("Upgrade", 2 + offset, ItemClassification.filler, 64),
     "Uncommon Item":        RiskOfRainItemData("Upgrade", 3 + offset, ItemClassification.filler, 32),
@@ -41,23 +41,27 @@ upgrade_table: Dict[str, RiskOfRainItemData] = {
     "Item Scrap, Yellow":   RiskOfRainItemData("Upgrade", 11 + offset, ItemClassification.filler, 1),
     "Void Item":            RiskOfRainItemData("Upgrade", 12 + offset, ItemClassification.filler, 16),
 }
+# Other item ids 37001, 37013-37014
 other_table: Dict[str, RiskOfRainItemData] = {
     "Dio's Best Friend":    RiskOfRainItemData("ExtraLife", 1 + offset, ItemClassification.filler),
     "Beads of Fealty":      RiskOfRainItemData("Beads", 13 + offset, ItemClassification.progression),
-    "Radar Scanner":        RiskOfRainItemData("Radar", 14 + offset, ItemClassification.useful)
+    "Radar Scanner":        RiskOfRainItemData("Radar", 14 + offset, ItemClassification.useful),
 }
+# Filler item ids 37301 - 37303
 filler_table: Dict[str, RiskOfRainItemData] = {
     "Money":                RiskOfRainItemData("Filler", 1 + filler_offset, ItemClassification.filler, 64),
     "Lunar Coin":           RiskOfRainItemData("Filler", 2 + filler_offset, ItemClassification.filler, 20),
-    "1000 Exp":             RiskOfRainItemData("Filler", 3 + filler_offset, ItemClassification.filler, 40)
+    "1000 Exp":             RiskOfRainItemData("Filler", 3 + filler_offset, ItemClassification.filler, 40),
 }
+# Trap item ids 37401 - 37404 (Lunar items used to be part of the upgrade item list, so keeping the id the same)
 trap_table: Dict[str, RiskOfRainItemData] = {
     "Lunar Item":           RiskOfRainItemData("Trap", 6 + offset, ItemClassification.trap, 16),
     "Mountain Trap":        RiskOfRainItemData("Trap", 1 + trap_offset, ItemClassification.trap, 5),
     "Time Warp Trap":       RiskOfRainItemData("Trap", 2 + trap_offset, ItemClassification.trap, 20),
     "Combat Trap":          RiskOfRainItemData("Trap", 3 + trap_offset, ItemClassification.trap, 20),
-    "Teleport Trap":        RiskOfRainItemData("Trap", 4 + trap_offset, ItemClassification.trap, 10)
+    "Teleport Trap":        RiskOfRainItemData("Trap", 4 + trap_offset, ItemClassification.trap, 10),
 }
+# Stage item ids 37501 - 37504
 stage_table: Dict[str, RiskOfRainItemData] = {
     "Stage 1":              RiskOfRainItemData("Stage", 1 + stage_offset, ItemClassification.progression),
     "Stage 2":              RiskOfRainItemData("Stage", 2 + stage_offset, ItemClassification.progression),
@@ -67,7 +71,7 @@ stage_table: Dict[str, RiskOfRainItemData] = {
 }
 
 item_table = {**upgrade_table, **other_table, **filler_table, **trap_table, **stage_table}
-# 37700 - 37699
+# Environment item ids 37700 - 37746
 ##################################################
 # environments
 
@@ -312,5 +316,3 @@ item_pool_weights: Dict[int, Dict[str, int]] = {
     ItemWeights.option_lunartic:    lunartic_weights,
     ItemWeights.option_void:        void_weights,
 }
-
-lookup_id_to_name: Dict[int, str] = {id: name for name, id in item_table.items()}

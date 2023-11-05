@@ -1,4 +1,5 @@
 from worlds.generic.Rules import set_rule, add_rule
+from BaseClasses import MultiWorld
 from .locations import orderedstage_location
 from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table
 from typing import Set, TYPE_CHECKING
@@ -8,26 +9,26 @@ if TYPE_CHECKING:
 
 
 # Rule to see if it has access to the previous stage
-def has_entrance_access_rule(world, stage: str, entrance: str, player: int):
-    world.get_entrance(entrance, player).access_rule = \
+def has_entrance_access_rule(multiworld: MultiWorld, stage: str, entrance: str, player: int):
+    multiworld.get_entrance(entrance, player).access_rule = \
         lambda state: state.has(entrance, player) and state.has(stage, player)
 
 
-def has_all_items(world, items: Set, entrance: str, player: int):
-    world.get_entrance(entrance, player).access_rule = \
+def has_all_items(multiworld: MultiWorld, items: Set, entrance: str, player: int):
+    multiworld.get_entrance(entrance, player).access_rule = \
         lambda state: state.has_all(items, player) and state.has(entrance, player)
 
 
 # Checks to see if chest/shrine are accessible
-def has_location_access_rule(world, environment: str, player: int, item_number: int, item_type: str):
+def has_location_access_rule(multiworld: MultiWorld, environment: str, player: int, item_number: int, item_type: str):
     if item_number == 1:
-        world.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
+        multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
             lambda state: state.has(environment, player)
         if item_type == "Scavenger":
-            world.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
+            multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
                 lambda state: state.has(environment, player) and state.has("Stage 5", player)
     else:
-        world.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
+        multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
             lambda state: check_location(state, environment, player, item_number, item_type)
 
 
@@ -36,10 +37,10 @@ def check_location(state, environment: str, player: int, item_number: int, item_
 
 
 # unlock event to next set of stages
-def get_stage_event(world, player: int, stage_number: int):
+def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int):
     if stage_number == 4:
         return
-    world.get_entrance(f"OrderedStage_{stage_number + 1}", player).access_rule = \
+    multiworld.get_entrance(f"OrderedStage_{stage_number + 1}", player).access_rule = \
         lambda state: state.has(f"Stage {stage_number + 1}", player)
 
 
