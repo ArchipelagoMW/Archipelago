@@ -111,9 +111,6 @@ class WitnessPlayerLogic:
 
                 dependent_items_for_option = dnf_and([dependent_items_for_option, new_items])
 
-            if not dependent_items_for_option:
-                continue
-
             for items_option in these_items:
                 for dependentItem in dependent_items_for_option:
                     all_options.add(items_option.union(dependentItem))
