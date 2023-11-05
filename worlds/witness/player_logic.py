@@ -464,10 +464,12 @@ class WitnessPlayerLogic:
                             individual_entity_requirements.append(frozenset({frozenset({entity})}))
                         else:
                             entity_req = self.reduce_req_within_region(entity)
+
                             if StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]:
                                 region_name = StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]["name"]
-                                entity_req_with_region = dnf_and([entity_req, frozenset({frozenset({region_name})})])
-                                individual_entity_requirements.append(entity_req_with_region)
+                                entity_req = dnf_and([entity_req, frozenset({frozenset({region_name})})])
+
+                            individual_entity_requirements.append(entity_req)
 
                     overall_requirement |= dnf_and(individual_entity_requirements)
 
