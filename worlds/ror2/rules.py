@@ -1,6 +1,6 @@
 from worlds.generic.Rules import set_rule, add_rule
 from BaseClasses import MultiWorld
-from .locations import orderedstage_location
+from .locations import get_locations
 from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table
 from typing import Set, TYPE_CHECKING
 
@@ -54,7 +54,7 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
     else:
         # explore mode
         total_locations = len(
-            orderedstage_location.get_locations(
+            get_locations(
                 chests=ror2_options.chests_per_stage.value,
                 shrines=ror2_options.shrines_per_stage.value,
                 scavengers=ror2_options.scavengers_per_stage.value,

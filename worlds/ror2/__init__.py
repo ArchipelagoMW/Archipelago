@@ -2,7 +2,7 @@ import string
 
 from .items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, get_items_by_category, \
     filler_table
-from .locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
+from .locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, get_locations
 from .rules import set_rules
 from .ror2environments import *
 
@@ -54,7 +54,7 @@ class RiskOfRainWorld(World):
             total_locations = self.options.total_locations.value
         else:
             total_locations = len(
-                orderedstage_location.get_locations(
+                get_locations(
                     chests=self.options.chests_per_stage.value,
                     shrines=self.options.shrines_per_stage.value,
                     scavengers=self.options.scavengers_per_stage.value,
@@ -141,7 +141,7 @@ class RiskOfRainWorld(World):
             # explore mode
             itempool += ["Stage 1", "Stage 2", "Stage 3", "Stage 4"]
             total_locations = len(
-                orderedstage_location.get_locations(
+                get_locations(
                     chests=self.options.chests_per_stage.value,
                     shrines=self.options.shrines_per_stage.value,
                     scavengers=self.options.scavengers_per_stage.value,
