@@ -265,7 +265,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if any(world.item_links.values()):
         world._all_state = None
 
-    logger.info("Running Item Plando")
+    logger.info("Running Item Plando.")
 
     distribute_planned(world)
 
