@@ -9,7 +9,7 @@ import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence
+from collections.abc import Collection, MutableSequence, dict_keys, dict_values
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
     Type, ClassVar
@@ -698,32 +698,32 @@ class PlayerState:
             self.sweep_for_events()
         return changed
 
-    def remove(self, item: Item) -> bool:
+    def remove(self, item: Item) -> None:
         changed = self._multiworld.worlds[item.player].remove(self._parent, item)
         if changed:
             self.reachable_regions = set()
             self.blocked_connections = set()
             self.stale = True
 
-    def get(self, key, default):
+    def get(self, key, default) -> Any:
         return self.prog_items.get(key, default)
 
-    def values(self):
+    def values(self) -> dict_values:
         return self.prog_items.values()
 
-    def keys(self):
+    def keys(self) -> dict_keys:
         return self.prog_items.keys()
 
     def __iter__(self) -> Iterator[str]:
         return self.prog_items.__iter__()
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> int:
         return self.prog_items[item]
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value) -> None:
         return self.prog_items.__setitem__(key, value)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key) -> None:
         del self.prog_items[key]
 
 
