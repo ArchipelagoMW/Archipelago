@@ -156,6 +156,7 @@ class CMWorld(World):
             max_material_option = min_material_option
         max_material_actual = (
                 self.multiworld.per_slot_randoms[self.player].random() * (max_material_option - min_material_option) + max_material_option)
+        max_material_actual += progression_items["Play as White"].material
 
         my_progression_items = list(progression_items.keys())
         my_progression_items.remove("Victory")
@@ -169,11 +170,11 @@ class CMWorld(World):
                 my_progression_items) > 0:
             chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_progression_items)
             # obey user's wishes
-            if progression_items[chosen_item].material + material > max_material_option:
+            if (material > min_material_option and
+                    progression_items[chosen_item].material + material > max_material_option):
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
-            #print(material)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
@@ -185,11 +186,7 @@ class CMWorld(World):
                 material += progression_items[chosen_item].material
             else:
                 my_progression_items.remove(chosen_item)
-                #print(chosen_item)
 
-        #print("Ended")
-        #print(material)
-        #print(self.items_used)
         my_useful_items = list(useful_items.keys())
         while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
             chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_useful_items)

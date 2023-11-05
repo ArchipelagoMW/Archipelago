@@ -107,7 +107,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture 5 Of Each": 2350,
         "Capture 6 Of Each": 2850,
         "Capture 7 Of Each": 3350,
-        "Capture Everything": 3800,
+        "Capture Everything": 3850,
         "Fork, Sacrificial": 700,
         "Fork, True": 1950,
         "Fork, Sacrificial Triple": 1700,
@@ -116,6 +116,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Fork, True Royal": 4150,  # I sincerely believe this should be filler
         # "Pin": 600,
         # "Skewer": 600,
+        "Threaten Queen": 300,
         "Threaten King": 400,
         "Bongcloud Center": 100,
         "Bongcloud A File": 150,
