@@ -40,7 +40,7 @@ from Utils import version_tuple, restricted_loads, Version, async_start
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore
 
-min_client_version = Version(0, 4, 3)  # TODO: Increment this.
+min_client_version = Version(0, 1, 6)
 colorama.init()
 
 
