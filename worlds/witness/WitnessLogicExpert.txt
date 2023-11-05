@@ -324,7 +324,7 @@ Door - 0x3865F (Second Barrier) - 0x38663
 
 Shadows (Shadows) - Main Island - True - Shadows Ledge - 0x19B24 - Shadows Laser Room - 0x194B2 & 0x19665:
 158170 - 0x334DB (Door Timer Outside) - True - True
-Door - 0x19B24 (Timed Door) - 0x334DB
+Door - 0x19B24 (Timed Door) - 0x334DB | 0x334DC
 158171 - 0x0AC74 (Intro 6) - 0x0A8DC - True
 158172 - 0x0AC7A (Intro 7) - 0x0AC74 - True
 158173 - 0x0A8E0 (Intro 8) - 0x0AC7A - True
@@ -800,7 +800,7 @@ Treehouse After Yellow Bridge (Treehouse) - Treehouse Junction - 0x0A181:
 Door - 0x0A181 (Third Door) - 0x0A182
 
 Treehouse Junction (Treehouse) - Treehouse Right Orange Bridge - True - Treehouse First Purple Bridge - True - Treehouse Green Bridge - True:
-158356 - 0x2700B (Laser House Door Timer Outside Control) - True - True
+158356 - 0x2700B (Laser House Door Timer Outside) - True - True
 
 Treehouse First Purple Bridge (Treehouse) - Treehouse Second Purple Bridge - 0x17D6C:
 158357 - 0x17DC8 (First Purple Bridge 1) - True - Stars & Dots & Full Dots
@@ -869,7 +869,7 @@ Treehouse Green Bridge Left House (Treehouse):
 159211 - 0x220A7 (Right Orange Bridge EP) - 0x17DA2 - True
 
 Treehouse Laser Room Front Platform (Treehouse) - Treehouse Laser Room - 0x0C323:
-Door - 0x0C323 (Laser House Entry) - 0x17DA2 & 0x2700B & 0x17DEC
+Door - 0x0C323 (Laser House Entry) - 0x17DA2 & 0x2700B & 0x17DDB | 0x2700B
 
 Treehouse Laser Room Back Platform (Treehouse):
 158611 - 0x17FA0 (Laser Discard) - True - Arrows
