@@ -175,7 +175,7 @@ Treehouse Third Door Panel
 Treehouse Drawbridge Panel
 Treehouse Left Orange Bridge 15
 Treehouse Right Orange Bridge 12
-Treehouse Laser House Door Timer Outside Control
+Treehouse Laser House Door Timer Outside
 Treehouse Laser House Door Timer Inside
 Mountain Floor 1 Left Row 7
 Mountain Floor 1 Right Row 5
