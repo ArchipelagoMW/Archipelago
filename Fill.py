@@ -941,7 +941,7 @@ def distribute_planned(world: MultiWorld) -> None:
                                     successful_pairs.append((item, location))
                                     candidates.remove(location)
                                     count = count + 1
-                                    if index_to_delete:
+                                    if index_to_delete is not None:
                                         world.itempool.pop(index_to_delete)
                                     break
                                 else:
