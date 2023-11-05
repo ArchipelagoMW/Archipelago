@@ -43,8 +43,8 @@ class RiskOfRainWorld(World):
     }
     location_name_to_id = item_pickups
 
-    data_version = 7
-    required_client_version = (0, 4, 3)
+    data_version = 8
+    required_client_version = (0, 4, 4)
     web = RiskOfWeb()
     total_revivals: int
 
@@ -126,7 +126,7 @@ class RiskOfRainWorld(World):
                 self.multiworld.push_precollected(self.create_item(unlock[0]))
                 environments_pool.pop(unlock[0])
         else:
-            item_table["Dio's Best Friend"] = RiskOfRainItemData("Upgrade", 1 + offset,
+            item_table["Dio's Best Friend"] = RiskOfRainItemData("ExtraLife", 1 + offset,
                                                                  ItemClassification.progression_skip_balancing)
 
         # Generate item pool
