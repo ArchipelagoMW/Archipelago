@@ -60,7 +60,6 @@ Output Logs/
 /installdelete.iss
 /data/user.kv
 /datapackage
-/oot/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
