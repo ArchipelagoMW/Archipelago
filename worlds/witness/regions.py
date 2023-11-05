@@ -47,6 +47,8 @@ class WitnessRegions:
 
         # Remove any possibilities where being in the target region would be required anyway.
         real_requirement = frozenset({option for option in requirement if target not in option})
+
+        # There are some connections that should only be done one way. If this is a backwards connection, check for that
         if backwards:
             real_requirement = frozenset({option for option in real_requirement if "TrueOneWay" not in option})
 
