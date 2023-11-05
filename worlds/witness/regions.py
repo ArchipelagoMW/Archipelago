@@ -29,19 +29,15 @@ class WitnessRegions:
     locat = None
     logic = None
 
-    def make_lambda(self, item_requirement: FrozenSet[FrozenSet[str]], world: "WitnessWorld", player: int,
-                    player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
-        from .rules import _has_item
+    def make_lambda(self, item_requirement: FrozenSet[FrozenSet[str]], world: "WitnessWorld"):
+        from .rules import _meets_item_requirements
 
         """
         Lambdas are made in a for loop, so the values have to be captured
         This function is for that purpose
         """
 
-        return lambda state: any(
-            all(_has_item(state, item, world, player, player_logic, locat) for item in sub_requirement)
-            for sub_requirement in item_requirement
-        )
+        return _meets_item_requirements(item_requirement, world)
 
     def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, player_logic: WitnessPlayerLogic,
                             requirement: FrozenSet[FrozenSet[str]], backwards: bool = False):
@@ -71,7 +67,7 @@ class WitnessRegions:
             source_region
         )
 
-        connection.access_rule = self.make_lambda(final_requirement, world, world.player, player_logic, self.locat)
+        connection.access_rule = self.make_lambda(final_requirement, world)
 
         source_region.exits.append(connection)
         connection.connect(target_region)
