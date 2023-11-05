@@ -924,6 +924,7 @@ def distribute_planned(world: MultiWorld) -> None:
                 index_to_delete: typing.Optional[int] = None
                 if from_pool:
                     try:
+                        # If from_pool, try to find an existing item with this name & player in the itempool and use it
                         index_to_delete, item = next(
                             (i, item) for i, item in enumerate(world.itempool)
                             if item.name == item_name and item.player == player and i not in claimed_indices
