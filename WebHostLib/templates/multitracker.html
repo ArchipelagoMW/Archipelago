@@ -8,9 +8,9 @@
 
 {% block body %}
     {% include "header/dirtHeader.html" %}
-    {% include "multitracker-navigation.html" %}
+    {% include "multitrackerNavigation.html" %}
 
-    <div id="tracker-wrapper" data-tracker="{{ room_data.room.tracker | suuid }}">
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker | suuid }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search" />
             <span {% if not videos %}hidden{% endif %} id="multi-stream-link">
@@ -23,90 +23,109 @@
             </span>
             <span class="info">Clicking on a slot&apos;s number will bring up the slot-specific tracker. This tracker will automatically update itself periodically.</span>
         </div>
+
         <div id="tables-container">
-            {% for team, players in locations_complete.items() %}
-                <div class="table-wrapper">
-                    <table id="checks-table" class="table non-unique-item-table">
-                        <thead>
+
+        {%- for team, players in room_players.items() -%}
+            <div class="table-wrapper">
+                <table id="checks-table" class="table non-unique-item-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            {% if current_tracker == "Generic" %}<th>Game</th>{% endif %}
+                            <th>Status</th>
+                            {% block custom_table_headers %}
+                            {# Implement this block in game-specific multi-trackers. #}
+                            {% endblock %}
+                            <th class="center-column">Checks</th>
+                            <th class="center-column">&percnt;</th>
+                            <th class="center-column hours last-activity">Last<br>Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {%- for player in players -%}
+                        {%- if current_tracker == "Generic" or games[(team, player)] == current_tracker -%}
                             <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                {% if current_tracker == "Generic" %}<th>Game</th>{% endif %}
-                                <th>Status</th>
-                                {% block custom_table_headers %}
+                                <td>
+                                    <a href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">
+                                        {{ player }}
+                                    </a>
+                                </td>
+                                <td>{{ player_names_with_alias[(team, player)] | e }}</td>
+                                {%- if current_tracker == "Generic" -%}
+                                    <td>{{ games[(team, player)] }}</td>
+                                {%- endif -%}
+                                <td>
+                                    {{
+                                        {
+                                            0: "Disconnected",
+                                            5: "Connected",
+                                            10: "Ready",
+                                            20: "Playing",
+                                            30: "Goal Completed"
+                                        }.get(states[(team, player)], "Unknown State")
+                                    }}
+                                </td>
+
+                                {% block custom_table_row scoped %}
                                 {# Implement this block in game-specific multi-trackers. #}
                                 {% endblock %}
-                                <th class="center-column">Checks</th>
-                                <th class="center-column">&percnt;</th>
-                                <th class="center-column hours last-activity">Last<br>Activity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {%- for player, checks in players.items() -%}
-                                {%- if current_tracker == "Generic" or room_data.games[player] == current_tracker -%}
-                                    <tr>
-                                        <td>
-                                            <a href="{{ url_for("get_player_tracker", tracker=room_data.room.tracker, tracked_team=team, tracked_player=player) }}">
-                                                {{ loop.index }}
-                                            </a>
-                                        </td>
-                                        <td>{{ player_names_with_alias[(team, loop.index)] | e }}</td>
-                                        {%- if current_tracker == "Generic" -%}
-                                        <td>{{ room_data.games[player] }}</td>
-                                        {%- endif -%}
-                                        <td>
-                                            {{ {
-                                                0: "Disconnected",
-                                                5: "Connected",
-                                                10: "Ready",
-                                                20: "Playing",
-                                                30: "Goal Completed"
-                                            }.get(states[(team, player)], "Unknown State") }}
-                                        </td>
-                                        {% block custom_table_row scoped %}
-                                        {# Implement this block in game-specific multi-trackers. #}
-                                        {% endblock %}
-                                        <td class="center-column" data-sort="{{ checks }}">
-                                          {{ checks }}/{{ room_data.locations[player] | length }}
-                                        </td>
-                                        <td class="center-column">{{ "{0:.2f}".format(percentage_of_locations_complete[team][player]) }}</td>
-                                        {%- if activity_timers[(team, player)] -%}
-                                            <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>
-                                        {%- else -%}
-                                            <td class="center-column">None</td>
-                                        {%- endif -%}
-                                    </tr>
+
+                                {% set location_count = locations[(team, player)] | length %}
+                                <td class="center-column" data-sort="{{ locations_complete[(team, player)] }}">
+                                    {{ locations_complete[(team, player)] }}/{{ location_count }}
+                                </td>
+
+                                <td class="center-column">
+                                {%- if locations[(team, player)] | length > 0 -%}
+                                    {% set percentage_of_completion = locations_complete[(team, player)] / location_count * 100 %}
+                                    {{ "{0:.2f}".format(percentage_of_completion) }}
+                                {%- else -%}
+                                    100.00
                                 {%- endif -%}
-                            {%- endfor -%}
-                        </tbody>
-                        {% if not self.custom_table_headers() | trim %}
-                            <tfoot>
-                                <tr>
-                                    <td></td>
-                                    <td>Total</td>
-                                    <td>All Games</td>
-                                    <td>{{ completed_worlds }}/{{ players | length }} Complete</td>
-                                    <td class="center-column">{{ players.values() | sum }}/{{ total_team_locations[team] }}</td>
-                                    <td class="center-column">
-                                        {% if total_team_locations[team] == 0 %}
-                                            100
-                                        {% else %}
-                                            {{ "{0:.2f}".format(players.values() | sum / total_team_locations[team] * 100) }}
-                                        {% endif %}
-                                    </td>
-                                    <td class="center-column last-activity"></td>
-                                </tr>
-                            </tfoot>
-                        {% endif %}
-                    </table>
-                </div>
-            {% endfor %}
+                                </td>
 
-            {% block custom_tables %}
-            {# Implement this block to create custom tables in game-specific multi-trackers. #}
-            {% endblock %}
+                                {%- if activity_timers[(team, player)] -%}
+                                    <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>
+                                {%- else -%}
+                                    <td class="center-column">None</td>
+                                {%- endif -%}
+                            </tr>
+                        {%- endif -%}
+                    {%- endfor -%}
+                    </tbody>
 
-            {% include "multitracker-hint-table.html" with context %}
+                    {%- if not self.custom_table_headers() | trim -%}
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" style="text-align: right">Total</td>
+                                <td>All Games</td>
+                                <td>{{ completed_worlds[team] }}/{{ players | length }} Complete</td>
+                                <td class="center-column">
+                                    {{ total_team_locations_complete[team] }}/{{ total_team_locations[team] }}
+                                </td>
+                                <td class="center-column">
+                                    {%- if total_team_locations[team] == 0 -%}
+                                        100
+                                    {%- else -%}
+                                        {{ "{0:.2f}".format(total_team_locations_complete[team] / total_team_locations[team] * 100) }}
+                                    {%- endif -%}
+                                </td>
+                                <td class="center-column last-activity"></td>
+                            </tr>
+                        </tfoot>
+                    {%- endif -%}
+                </table>
+            </div>
+
+        {%- endfor -%}
+
+        {% block custom_tables %}
+        {# Implement this block to create custom tables in game-specific multi-trackers. #}
+        {% endblock %}
+
+        {% include "multitrackerHintTable.html" with context %}
         </div>
     </div>
 {% endblock %}

@@ -1,11 +1,3 @@
-{% extends "multitracker.html" %}
-{% block head %}
-    {{ super() }}
-    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/lttpMultiTracker.js") }}"></script>
-{% endblock %}
-
-{# List all tracker-relevant icons. Format: (Name, Image URL) #}
 {%- set icons = {
     "Blue Shield": "https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
     "Red Shield": "https://www.zeldadungeon.net/wiki/images/5/55/Fire-Shield.png",
@@ -70,136 +62,89 @@
     "Ganons Tower": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Ganon_Sprite.png?version=956f51f054954dfff53c1a9d4f929c74",
 } -%}
 
-{%- block custom_table_headers %}
-{#- macro that creates a table header with display name and image -#}
-{%- macro make_header(name, img_src) %}
-    <th class="center-column">
-        <img height="24" src="{{ img_src }}" title="{{ name }}" alt="{{ name }}" />
-    </th>
-{% endmacro -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/globalStyles.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/lttp-tracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/lttp-tracker.js") }}"></script>
+</head>
 
-{#- call the macro to build the table header -#}
-{%- for name in tracking_names %}
-    {%- if name in icons -%}
-        <th class="center-column">
-            <img class="alttp-sprite" src="{{ icons[name] }}" alt="{{ name | e }}" title="{{ name | e }}" />
-        </th>
-    {%- endif %}
-{% endfor -%}
-{% endblock %}
-
-{# build each row of custom entries #}
-{% block custom_table_row scoped %}
-    {%- for id in tracking_ids -%}
-{#        {{ checks }}#}
-        {%- if inventories[(team, player)][id] -%}
-            <td class="center-column item-acquired">
-                {% if id in multi_items %}{{ inventories[(team, player)][id] }}{% else %}✔️{% endif %}
-            </td>
-        {%- else -%}
-            <td></td>
-        {%- endif -%}
-    {% endfor %}
-{% endblock %}
-
-{% block custom_tables %}
-
-{% for team, _ in total_team_locations.items() %}
-<div class="table-wrapper">
-    <table id="area-table" class="table non-unique-item-table">
-        <thead>
+<body>
+    <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
+        <table id="inventory-table">
             <tr>
-                <th rowspan="2">#</th>
-                <th rowspan="2">Name</th>
-                {% for area in ordered_areas %}
-                    {% set colspan = 1 %}
-                    {% if area in key_locations %}
-                    {% set colspan = colspan + 1 %}
-                    {% endif %}
-                    {% if area in big_key_locations %}
-                    {% set colspan = colspan + 1 %}
-                    {% endif %}
-                    {% if area in icons %}
-                        <th colspan="{{ colspan }}" class="center-column upper-row">
-                            <img class="alttp-sprite" src="{{ icons[area] }}" alt="{{ area }}" title="{{ area }}"></th>
-                    {%- else -%}
-                        <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
-                    {%- endif -%}
-                {%- endfor -%}
-                <th rowspan="2" class="center-column">&percnt;</th>
-                <th rowspan="2" class="center-column hours">Last<br>Activity</th>
+                <td><img src="{{ bow_url }}" class="{{ 'acquired' if bow_acquired }}" /></td>
+                <td><img src="{{ icons["Blue Boomerang"] }}" class="{{ 'acquired' if 'Blue Boomerang' in acquired_items }}" /></td>
+                <td><img src="{{ icons["Red Boomerang"] }}" class="{{ 'acquired' if 'Red Boomerang' in acquired_items }}" /></td>
+                <td><img src="{{ icons["Hookshot"] }}" class="{{ 'acquired' if 'Hookshot' in acquired_items }}" /></td>
+                <td><img src="{{ icons["Magic Powder"] }}" class="powder-fix {{ 'acquired' if 'Magic Powder' in acquired_items }}" /></td>
             </tr>
             <tr>
-                {% for area in ordered_areas %}
-                    <th class="center-column lower-row fraction">
-                        <img class="alttp-sprite" src="{{ icons["Chest"] }}" alt="Checks" title="Checks Complete">
-                    </th>
-                    {% if area in key_locations %}
-                        <th class="center-column lower-row number">
-                            <img class="alttp-sprite" src="{{ icons["Small Key"] }}" alt="Small Key" title="Small Keys">
-                        </th>
-                    {% endif %}
-                    {% if area in big_key_locations %}
-                        <th class="center-column lower-row number">
-                            <img class="alttp-sprite" src="{{ icons["Big Key"] }}" alt="Big Key" title="Big Keys">
-                        </th>
-                    {%- endif -%}
-                {%- endfor -%}
+                <td><img src="{{ icons["Fire Rod"] }}" class="{{ 'acquired' if "Fire Rod" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Ice Rod"] }}" class="{{ 'acquired' if "Ice Rod" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Bombos"] }}" class="{{ 'acquired' if "Bombos" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Ether"] }}" class="{{ 'acquired' if "Ether" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Quake"] }}" class="{{ 'acquired' if "Quake" in acquired_items }}" /></td>
             </tr>
-        </thead>
-        <tbody>
-        {%- for (checks_team, player), area_checks in checks_done.items() if games[(team, player)] == current_tracker and team == checks_team -%}
             <tr>
-                <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker,
-                tracked_team=team, tracked_player=player)}}">{{ player }}</a></td>
-                <td>{{ player_names_with_alias[(team, player)] | e }}</td>
-                {%- for area in ordered_areas -%}
-                    {% if (team, player) in checks_in_area and area in checks_in_area[(team, player)] %}
-                        {%- set checks_done = area_checks[area] -%}
-                        {%- set checks_total = checks_in_area[(team, player)][area] -%}
-                        {%- if checks_done == checks_total -%}
-                            <td class="item-acquired center-column">
-                                {{ checks_done }}/{{ checks_total }}</td>
-                        {%- else -%}
-                            <td class="center-column">{{ checks_done }}/{{ checks_total }}</td>
-                        {%- endif -%}
-                        {%- if area in key_locations -%}
-                            <td class="center-column">{{ inventories[(team, player)][small_key_ids[area]] }}</td>
-                        {%- endif -%}
-                        {%- if area in big_key_locations -%}
-                            <td class="center-column">{% if inventories[(team, player)][big_key_ids[area]] %}✔️{% endif %}</td>
-                        {%- endif -%}
-                    {% else %}
-                        <td class="center-column"></td>
-                        {%- if area in key_locations -%}
-                            <td class="center-column"></td>
-                        {%- endif -%}
-                        {%- if area in big_key_locations -%}
-                            <td class="center-column"></td>
-                        {%- endif -%}
-                    {% endif %}
-                {%- endfor -%}
-
-                <td class="center-column">
-                {% set location_count = locations[(team, player)] | length %}
-                {%- if locations[(team, player)] | length > 0 -%}
-                    {% set percentage_of_completion = locations_complete[(team, player)] / location_count * 100 %}
-                    {{ "{0:.2f}".format(percentage_of_completion) }}
-                {%- else -%}
-                    100.00
-                {%- endif -%}
-                </td>
-
-                {%- if activity_timers[(team, player)] -%}
-                    <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>
-                {%- else -%}
-                    <td class="center-column">None</td>
-                {%- endif -%}
+                <td><img src="{{ icons["Lamp"] }}" class="{{ 'acquired' if "Lamp" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Hammer"] }}" class="{{ 'acquired' if "Hammer" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Flute"] }}" class="{{ 'acquired' if "Flute" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Bug Catching Net"] }}" class="{{ 'acquired' if "Bug Catching Net" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Book of Mudora"] }}" class="{{ 'acquired' if "Book of Mudora" in acquired_items }}" /></td>
             </tr>
-        {%- endfor -%}
-        </tbody>
-    </table>
-</div>
-{% endfor %}
-
-{% endblock %}
+            <tr>
+                <td><img src="{{ icons["Bottle"] }}" class="{{ 'acquired' if "Bottle" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Cane of Somaria"] }}" class="{{ 'acquired' if "Cane of Somaria" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Cane of Byrna"] }}" class="{{ 'acquired' if "Cane of Byrna" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Cape"] }}" class="{{ 'acquired' if "Cape" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Magic Mirror"] }}" class="{{ 'acquired' if "Magic Mirror" in acquired_items }}" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ icons["Pegasus Boots"] }}" class="{{ 'acquired' if "Pegasus Boots" in acquired_items }}" /></td>
+                <td><img src="{{ glove_url }}" class="{{ 'acquired' if glove_acquired }}" /></td>
+                <td><img src="{{ icons["Flippers"] }}" class="{{ 'acquired' if "Flippers" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Moon Pearl"] }}" class="{{ 'acquired' if "Moon Pearl" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Mushroom"] }}" class="{{ 'acquired' if "Mushroom" in acquired_items }}" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ sword_url }}" class="{{ 'acquired' if sword_acquired }}" /></td>
+                <td><img src="{{ shield_url }}" class="{{ 'acquired' if shield_acquired }}" /></td>
+                <td><img src="{{ mail_url }}" class="acquired" /></td>
+                <td><img src="{{ icons["Shovel"] }}" class="{{ 'acquired' if "Shovel" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Triforce"] }}" class="{{ 'acquired' if "Triforce" in acquired_items }}" /></td>
+            </tr>
+        </table>
+        <table id="location-table">
+            <tr>
+                <th></th>
+                <th class="counter"><img src="{{ icons["Chest"] }}" /></th>
+                {% if key_locations and "Universal" not in key_locations %}
+                    <th class="counter"><img src="{{ icons["Small Key"] }}" /></th>
+                {% endif %}
+                {% if big_key_locations %}
+                    <th><img src="{{ icons["Big Key"] }}" /></th>
+                {% endif %}
+            </tr>
+            {% for area in sp_areas %}
+                <tr>
+                    <td>{{ area }}</td>
+                    <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
+                    {% if key_locations and "Universal" not in key_locations %}
+                        <td class="counter">
+                            {{ inventory[small_key_ids[area]] if area in key_locations else '—' }}
+                        </td>
+                    {% endif %}
+                    {% if big_key_locations %}
+                        <td>
+                            {{ '✔' if area in big_key_locations and inventory[big_key_ids[area]] else ('—' if area not in big_key_locations else '') }}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
