@@ -19,6 +19,27 @@ TeamPlayer = Tuple[int, int]
 ItemMetadata = Tuple[int, int, int]
 
 
+# TODO: When py 3.8 and 3.9 support is dropped, can move this and _cache_results into TrackerData as @staticmethod.
+_cache: Dict[str, Any]
+
+
+def _cache_results(func: Callable[..., Any]):
+    """Stores the results of any computationally expensive methods after the initial call.
+    If called again, returns the cached result instead, as results will not change for the lifetime of TrackerData.
+    """
+
+    def method_wrapper(self, *args):
+        cache_key = f"{func.__name__}{''.join(f'_[{arg.__repr__()}]' for arg in args)}"
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+
+        result = func(self, *args)
+        self._cache[cache_key] = result
+        return result
+
+    return method_wrapper
+
+
 @dataclass
 class TrackerData:
     """A helper dataclass that is instantiated each time an HTTP request comes in for tracker data.
@@ -29,7 +50,6 @@ class TrackerData:
     room: Room
     _multidata: Dict[str, Any]
     _multisave: Dict[str, Any]
-    _cache: Dict[str, Any]
 
     def __init__(self, room: Room):
         """Initialize a new RoomMultidata object for the current room."""
@@ -42,7 +62,6 @@ class TrackerData:
         self.location_name_to_id: Dict[str, Dict[str, int]] = {}
 
         # Generate inverse lookup tables from data package, useful for trackers.
-        # TODO: Cache this per room and pull from database?
         self.item_id_to_name: Dict[str, Dict[int, str]] = {}
         self.location_id_to_name: Dict[str, Dict[int, str]] = {}
         for game, game_package in self._multidata["datapackage"].items():
@@ -53,23 +72,6 @@ class TrackerData:
             # Normal lookup tables as well.
             self.item_name_to_id[game] = game_package["item_name_to_id"]
             self.location_name_to_id[game] = game_package["item_name_to_id"]
-
-    @staticmethod
-    def _cache_results(func: Callable[..., Any]):
-        """Stores the results of any computationally expensive methods after the initial call.
-        If called again, returns the cached result instead, as results will not change for the lifetime of TrackerData.
-        """
-
-        def method_wrapper(self, *args):
-            cache_key = f"{func.__name__}{''.join(f'_[{arg.__repr__()}]' for arg in args)}"
-            if cache_key in self._cache:
-                return self._cache[cache_key]
-
-            result = func(self, *args)
-            self._cache[cache_key] = result
-            return result
-
-        return method_wrapper
 
     def get_seed_name(self) -> str:
         """Retrieves the seed name."""
