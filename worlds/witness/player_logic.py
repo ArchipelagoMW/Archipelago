@@ -94,17 +94,15 @@ class WitnessPlayerLogic:
         for option in these_panels:
             dependent_items_for_option = frozenset({frozenset()})
 
-            for option_panel in option:
-                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_panel)
+            for option_entity in option:
+                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
 
-                if option_panel in self.COMPLETELY_DISABLED_ENTITIES:
-                    new_items = frozenset()
-                elif option_panel in self.EVENT_NAMES_BY_HEX:
-                    new_items = frozenset({frozenset([option_panel])})
-                elif option_panel in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
-                    new_items = frozenset({frozenset([option_panel])})
+                if option_entity in self.EVENT_NAMES_BY_HEX:
+                    new_items = frozenset({frozenset([option_entity])})
+                elif option_entity in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
+                    new_items = frozenset({frozenset([option_entity])})
                 else:
-                    new_items = self.reduce_req_within_region(option_panel)
+                    new_items = self.reduce_req_within_region(option_entity)
                     if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
                         new_items = frozenset(
                             frozenset(possibility | {dep_obj["region"]["name"]})
@@ -112,6 +110,9 @@ class WitnessPlayerLogic:
                         )
 
                 dependent_items_for_option = dnf_and([dependent_items_for_option, new_items])
+
+            if not dependent_items_for_option:
+                continue
 
             for items_option in these_items:
                 for dependentItem in dependent_items_for_option:
