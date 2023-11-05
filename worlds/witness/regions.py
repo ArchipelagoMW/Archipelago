@@ -59,9 +59,6 @@ class WitnessRegions:
         if not panel_hex_to_solve_set:
             return
 
-        if source == "Treehouse Laser Room" or target == "Treehouse Laser Room":
-            print(source, target, panel_hex_to_solve_set)
-
         source_region = self.region_cache[source]
         target_region = self.region_cache[target]
 
