@@ -9,7 +9,7 @@ import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence, dict_keys, dict_values
+from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
     Type, ClassVar
@@ -708,10 +708,10 @@ class PlayerState:
     def get(self, key, default) -> Any:
         return self.prog_items.get(key, default)
 
-    def values(self) -> dict_values:
+    def values(self):
         return self.prog_items.values()
 
-    def keys(self) -> dict_keys:
+    def keys(self):
         return self.prog_items.keys()
 
     def __iter__(self) -> Iterator[str]:
