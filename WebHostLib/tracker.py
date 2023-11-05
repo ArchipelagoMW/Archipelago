@@ -16,7 +16,6 @@ from .models import GameDataPackage, Room
 # Multisave is currently updated, at most, every minute.
 TRACKER_CACHE_TIMEOUT_IN_SECONDS = 60
 
-__tracker_cache: Dict[str, Any] = {}
 __multidata_cache = {}
 __multiworld_trackers: Dict[str, Callable] = {}
 __player_trackers: Dict[str, Callable] = {
@@ -38,11 +37,11 @@ def _cache_results(func: Callable) -> Callable:
     """
     def method_wrapper(self: "TrackerData", *args):
         cache_key = f"{func.__name__}{''.join(f'_[{arg.__repr__()}]' for arg in args)}"
-        if cache_key in __tracker_cache:
-            return __tracker_cache[cache_key]
+        if cache_key in self._tracker_cache:
+            return self._tracker_cache[cache_key]
 
         result = func(self, *args)
-        __tracker_cache[cache_key] = result
+        self._tracker_cache[cache_key] = result
         return result
 
     return method_wrapper
@@ -58,13 +57,14 @@ class TrackerData:
     room: Room
     _multidata: Dict[str, Any]
     _multisave: Dict[str, Any]
+    _tracker_cache: Dict[str, Any]
 
     def __init__(self, room: Room):
         """Initialize a new RoomMultidata object for the current room."""
         self.room = room
         self._multidata = Context.decompress(room.seed.multidata)
         self._multisave = restricted_loads(room.multisave) if room.multisave else {}
-        self._cache = {}
+        self._tracker_cache = {}
 
         self.item_name_to_id: Dict[str, Dict[str, int]] = {}
         self.location_name_to_id: Dict[str, Dict[str, int]] = {}
@@ -1519,7 +1519,7 @@ if "ChecksFinder" in network_data_package["games"]:
         game_state = tracker_data.get_player_client_status(team, player)
         display_data["game_finished"] = game_state == 30
 
-        lookup_any_item_id_to_name = tracker_data.item_id_to_name["ChecksFinder"].items()
+        lookup_any_item_id_to_name = tracker_data.item_id_to_name["ChecksFinder"]
         return render_template(
             "tracker__ChecksFinder.html",
             inventory=inventory, icons=icons,
