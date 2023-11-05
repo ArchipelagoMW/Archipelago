@@ -376,7 +376,7 @@ class MultiWorld():
             if cached:
                 return cached.copy()
 
-        ret = PlayerState(player, self) if player else CollectionState(self)
+        ret = CollectionState(self, player)
 
         for item in self.itempool:
             self.worlds[item.player].collect(ret, item)
@@ -623,12 +623,7 @@ class PlayerState:
     stale: bool
     player: int
 
-    def __init__(self, player: int, parent: Union[CollectionState, MultiWorld]):
-        if isinstance(parent, MultiWorld):
-            state = CollectionState(parent, player)
-            self._parent = state
-            self._multiworld = parent
-            return
+    def __init__(self, player: int, parent: CollectionState):
         self.prog_items = Counter()
         self._multiworld = parent.multiworld
         self._parent = parent
@@ -638,10 +633,12 @@ class PlayerState:
         self.locations_checked = set()
         self.stale = True
         self.player = player
+        self.states = {player: self}
 
     def copy(self, state: CollectionState) -> PlayerState:
         ret = PlayerState(self.player, state)
         ret.prog_items = self.prog_items.copy()
+        ret.states = self.states.copy()
         ret.reachable_regions = self.reachable_regions.copy()
         ret.blocked_connections = self.blocked_connections.copy()
         ret.locations_checked = self.locations_checked.copy()
