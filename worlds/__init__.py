@@ -14,8 +14,6 @@ local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else None
 
 __all__ = {
-    "lookup_world_item_id_to_name",
-    "lookup_world_location_id_to_name",
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
@@ -111,12 +109,4 @@ from .AutoWorld import AutoWorldRegister
 
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
-}
-
-lookup_world_item_id_to_name = {
-    world_name: world.item_id_to_name for world_name, world in AutoWorldRegister.world_types.items()
-}
-
-lookup_world_location_id_to_name = {
-    world_name: world.location_id_to_name for world_name, world in AutoWorldRegister.world_types.items()
 }
