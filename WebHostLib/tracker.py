@@ -1,8 +1,7 @@
 import collections
 import datetime
-import time
 from dataclasses import dataclass
-from typing import Any, Callable, Counter, Dict, List, NamedTuple, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from uuid import UUID
 
 from flask import render_template
@@ -11,30 +10,29 @@ from werkzeug.exceptions import abort
 from MultiServer import Context, get_saving_second
 from NetUtils import ClientStatus, Hint, NetworkItem, NetworkSlot, SlotType
 from Utils import restricted_loads
-from worlds import DataPackage, network_data_package
+from worlds import network_data_package
 from . import app, cache
 from .models import GameDataPackage, Room
 
 TeamPlayer = Tuple[int, int]
 ItemMetadata = Tuple[int, int, int]
 
-
-# TODO: When py 3.8 and 3.9 support is dropped, can move this and _cache_results into TrackerData as @staticmethod.
-_cache: Dict[str, Any]
+__tracker_cache: Dict[str, Any] = {}
+__multidata_cache = {}
 
 
 def _cache_results(func: Callable[..., Any]):
-    """Stores the results of any computationally expensive methods after the initial call.
+    """Stores the results of any computationally expensive methods after the initial call in TrackerData.
     If called again, returns the cached result instead, as results will not change for the lifetime of TrackerData.
     """
 
     def method_wrapper(self, *args):
         cache_key = f"{func.__name__}{''.join(f'_[{arg.__repr__()}]' for arg in args)}"
-        if cache_key in self._cache:
-            return self._cache[cache_key]
+        if cache_key in __tracker_cache:
+            return __tracker_cache[cache_key]
 
         result = func(self, *args)
-        self._cache[cache_key] = result
+        __tracker_cache[cache_key] = result
         return result
 
     return method_wrapper
@@ -272,7 +270,7 @@ class TrackerData:
 # Multisave is currently updated, at most, every minute.
 TRACKER_CACHE_TIMEOUT_IN_SECONDS = 60
 
-__multidata_cache = {}
+
 __multiworld_trackers: Dict[str, Callable] = {}
 __player_trackers: Dict[str, Callable[[TrackerData, int, int], str]] = {
     # "Minecraft": __renderMinecraftTracker,
