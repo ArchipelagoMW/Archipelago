@@ -29,6 +29,7 @@ if TYPE_CHECKING:
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
+    @lru_cache(maxsize=None)
     def reduce_req_within_region(self, panel_hex: str) -> FrozenSet[FrozenSet[str]]:
         """
         Panels in this game often only turn on when other panels are solved.
