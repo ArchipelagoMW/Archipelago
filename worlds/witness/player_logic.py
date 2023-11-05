@@ -447,6 +447,34 @@ class WitnessPlayerLogic:
             else:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
+        for region, connections in self.CONNECTIONS_BY_REGION_NAME.items():
+            new_connections = []
+
+            for connection in connections:
+                if connection[1] == frozenset({frozenset({"TrueOneWay"})}):
+                    new_connections.append(connection)
+                    continue
+
+                overall_requirement = frozenset()
+
+                for option in connection[1]:
+                    individual_entity_requirements = []
+                    for entity in option:
+                        if entity in self.EVENT_NAMES_BY_HEX:
+                            individual_entity_requirements.append(frozenset({frozenset({entity})}))
+                        else:
+                            entity_req = self.reduce_req_within_region(entity)
+                            if StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]:
+                                region_name = StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]["name"]
+                                entity_req_with_region = dnf_and([entity_req, frozenset({frozenset({region_name})})])
+                                individual_entity_requirements.append(entity_req_with_region)
+
+                    overall_requirement |= dnf_and(individual_entity_requirements)
+
+                new_connections.append((connection[0], overall_requirement))
+
+            self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
+
     def make_event_item_pair(self, panel: str):
         """
         Makes a pair of an event panel and its event item

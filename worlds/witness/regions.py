@@ -29,35 +29,35 @@ class WitnessRegions:
     locat = None
     logic = None
 
-    def make_lambda(self, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: "WitnessWorld", player: int,
-                    player_logic: WitnessPlayerLogic):
-        from .rules import _can_solve_panels
+    def make_lambda(self, item_requirement: FrozenSet[FrozenSet[str]], world: "WitnessWorld", player: int,
+                    player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+        from .rules import _has_item
 
         """
         Lambdas are made in a for loop, so the values have to be captured
         This function is for that purpose
         """
 
-        return lambda state: _can_solve_panels(state, panel_hex_to_solve_set, world, player, player_logic, self.locat)
+        return lambda state: any(
+            all(_has_item(state, item, world, player, player_logic, locat) for item in sub_requirement)
+            for sub_requirement in item_requirement
+        )
 
     def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, player_logic: WitnessPlayerLogic,
-                            panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], backwards: bool = False):
+                            requirement: FrozenSet[FrozenSet[str]], backwards: bool = False):
         """
         connect two regions and set the corresponding requirement
         """
 
         # Remove any possibilities where being in the target region would be required anyway.
-        for subset in panel_hex_to_solve_set:
-            if any(
-                entity_requires_region(entity, target, player_logic)
-                or not player_logic.REQUIREMENTS_BY_HEX[entity]
-                for entity in subset
-            ):
-                panel_hex_to_solve_set = panel_hex_to_solve_set - {subset}
+        real_requirement = frozenset({option for option in requirement if target not in option})
 
         # If there is no way to actually use this connection, don't even bother making it.
-        if not panel_hex_to_solve_set:
+        if not real_requirement:
             return
+
+        # We don't need to check for the accessibility of the source region.
+        final_requirement = frozenset({option - frozenset({source}) for option in real_requirement})
 
         source_region = self.region_cache[source]
         target_region = self.region_cache[target]
@@ -71,7 +71,7 @@ class WitnessRegions:
             source_region
         )
 
-        connection.access_rule = self.make_lambda(panel_hex_to_solve_set, world, world.player, player_logic)
+        connection.access_rule = self.make_lambda(final_requirement, world, world.player, player_logic, self.locat)
 
         source_region.exits.append(connection)
         connection.connect(target_region)
@@ -79,15 +79,9 @@ class WitnessRegions:
         self.created_entrances[(source, target)].append(connection)
 
         # Register any necessary indirect connections
-
-        entities = {entity for sub in panel_hex_to_solve_set for entity in sub}
         mentioned_regions = {
-                                single_unlock
-                                for entity in entities
-                                for requirement in player_logic.REQUIREMENTS_BY_HEX[entity]
-                                for single_unlock in requirement
-                                if single_unlock in StaticWitnessLogic.ALL_REGIONS_BY_NAME
-                                and single_unlock != source
+            single_unlock for option in final_requirement for single_unlock in option
+            if single_unlock in StaticWitnessLogic.ALL_REGIONS_BY_NAME
         }
 
         for dependent_region in mentioned_regions:
@@ -130,7 +124,7 @@ class WitnessRegions:
 
         for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
-                if connection[1] == frozenset({frozenset(["TrueOneWay"])}):
+                if connection[1] == frozenset({frozenset({"TrueOneWay"})}):
                     self.connect_if_possible(world, region_name, connection[0], player_logic, frozenset({frozenset()}))
                     continue
 

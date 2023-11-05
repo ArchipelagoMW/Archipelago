@@ -228,3 +228,18 @@ def get_vanilla_logic() -> List[str]:
 
 def get_items() -> List[str]:
     return get_adjustment_file("WitnessItems.txt")
+
+
+def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]):
+    current_overall_requirement = frozenset({frozenset()})
+
+    for next_dnf_requirement in dnf_requirements:
+        new_requirement: Set[FrozenSet[str]] = set()
+
+        for option1 in current_overall_requirement:
+            for option2 in next_dnf_requirement:
+                new_requirement.add(option1 | option2)
+
+        current_overall_requirement = frozenset(new_requirement)
+
+    return current_overall_requirement
