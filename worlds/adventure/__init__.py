@@ -113,7 +113,6 @@ class AdventureWorld(World):
     settings: ClassVar[AdventureSettings]
     item_name_to_id: ClassVar[Dict[str, int]] = {name: data.id for name, data in item_table.items()}
     location_name_to_id: ClassVar[Dict[str, int]] = {name: data.location_id for name, data in location_table.items()}
-    data_version: ClassVar[int] = 1
     required_client_version: Tuple[int, int, int] = (0, 3, 9)
 
     def __init__(self, world: MultiWorld, player: int):
