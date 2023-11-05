@@ -166,18 +166,6 @@ def _meets_item_requirements(state: CollectionState, panel: str, world: "Witness
     )
 
 
-def _can_solve_panels(state: CollectionState, panel_hex_to_solve_set: FrozenSet[FrozenSet[str]], world: "WitnessWorld",
-                      player: int, player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
-    """
-    Checks whether a set of panels can be solved.
-    """
-
-    return any(
-        all(_can_solve_panel(state, panel, world, player, player_logic, locat) for panel in subset)
-        for subset in panel_hex_to_solve_set
-    )
-
-
 def make_lambda(check_hex: str, world: "WitnessWorld", player: int,
                 player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     """
