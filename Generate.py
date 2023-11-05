@@ -7,8 +7,8 @@ import random
 import string
 import urllib.parse
 import urllib.request
-from collections import ChainMap, Counter
-from typing import Any, Callable, Dict, Tuple, Union
+from collections import Counter
+from typing import Any, Dict, Tuple, Union
 
 import ModuleUpdate
 
@@ -225,7 +225,7 @@ def main(args=None, callback=ERmain):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    callback(erargs, seed)
+    return callback(erargs, seed)
 
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
@@ -639,6 +639,15 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
-    main()
+    multiworld = main()
+    if __debug__:
+        import gc
+        import sys
+        import weakref
+        weak = weakref.ref(multiworld)
+        del multiworld
+        gc.collect()  # need to collect to deref all hard references
+        assert not weak(), f"MultiWorld object was not de-allocated, it's referenced {sys.getrefcount(weak())} times." \
+                           " This would be a memory leak."
     # in case of error-free exit should not need confirmation
     atexit.unregister(confirmation)
