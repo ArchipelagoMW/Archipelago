@@ -5,7 +5,7 @@ import warnings
 import zipimport
 from typing import Dict, List, NamedTuple, TYPE_CHECKING, TypedDict
 
-from Utils import user_path, local_path
+from Utils import local_path, user_path
 
 if TYPE_CHECKING:
     from .AutoWorld import World
@@ -105,7 +105,6 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
 world_sources.sort()
 for world_source in world_sources:
     world_source.load()
-
 
 # Build the data package for each game.
 from .AutoWorld import AutoWorldRegister
