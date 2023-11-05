@@ -148,7 +148,7 @@ def _has_item(state: CollectionState, item: str, world: "WitnessWorld", player: 
         return _can_solve_panel(state, item, world, player, player_logic, locat)
 
     prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
-    return state.has(prog_item, player)
+    return state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])
 
 
 def _meets_item_requirements(state: CollectionState, panel: str, world: "WitnessWorld", player: int,

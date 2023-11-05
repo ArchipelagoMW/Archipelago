@@ -16,6 +16,7 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
+from collections import defaultdict
 from typing import cast, TYPE_CHECKING
 from logging import warning
 
@@ -513,7 +514,7 @@ class WitnessPlayerLogic:
 
         self.THEORETICAL_ITEMS = set()
         self.THEORETICAL_ITEMS_NO_MULTI = set()
-        self.MULTI_AMOUNTS = dict()
+        self.MULTI_AMOUNTS = defaultdict(lambda: 1)
         self.MULTI_LISTS = dict()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
