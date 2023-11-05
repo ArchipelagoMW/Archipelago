@@ -29,11 +29,11 @@ laser_hexes = [
 ]
 
 
-def _has_laser(laser_hex: str, world: "WitnessWorld") -> Callable[[CollectionState], bool]:
+def _has_laser(laser_hex: str, world: "WitnessWorld", player: int) -> Callable[[CollectionState], bool]:
     if laser_hex == "0x012FB":
         return lambda state: (
             _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)(state)
-            and state.has("Desert Laser Redirection", world.player)
+            and state.has("Desert Laser Redirection", player)
         )
     else:
         return lambda state: _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)(state)
@@ -43,11 +43,11 @@ def _has_lasers(amount: int, world: "WitnessWorld") -> Callable[[CollectionState
     laser_lambdas = []
 
     for laser_hex in laser_hexes:
-        has_laser_lambda = _has_laser(laser_hex, world)
+        has_laser_lambda = _has_laser(laser_hex, world, world.player)
 
         laser_lambdas.append(has_laser_lambda)
 
-    return lambda state: sum(laser_lambda(state) for laser_lambda in laser_lambdas) > amount
+    return lambda state: sum(laser_lambda(state) for laser_lambda in laser_lambdas) >= amount
 
 
 def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic,
