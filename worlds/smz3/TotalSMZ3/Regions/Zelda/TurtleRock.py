@@ -1,8 +1,8 @@
 ﻿from typing import List
-from worlds.smz3.TotalSMZ3.Region import Z3Region, RewardType, IReward, IMedallionAccess
-from worlds.smz3.TotalSMZ3.Config import Config
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import Progression, ItemType
+from ...Region import Z3Region, RewardType, IReward, IMedallionAccess
+from ...Config import Config
+from ...Location import Location, LocationType
+from ...Item import Progression, ItemType
 
 class TurtleRock(Z3Region, IReward, IMedallionAccess):
     Name = "Turtle Rock"
@@ -47,7 +47,7 @@ class TurtleRock(Z3Region, IReward, IMedallionAccess):
         return items.Firerod and items.Icerod
 
     def CanEnter(self, items: Progression):
-        from worlds.smz3.TotalSMZ3.WorldState import Medallion
+        from ...WorldState import Medallion
         return (items.Bombos if self.Medallion == Medallion.Bombos else (
                     items.Ether if self.Medallion == Medallion.Ether else items.Quake)) and items.Sword and \
             items.MoonPearl and items.CanLiftHeavy() and items.Hammer and items.Somaria and \

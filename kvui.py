@@ -1,7 +1,16 @@
 import os
 import logging
+import sys
 import typing
-import asyncio
+
+if sys.platform == "win32":
+    import ctypes
+    # kivy 2.2.0 introduced DPI awareness on Windows, but it makes the UI enter an infinitely recursive re-layout
+    # by setting the application to not DPI Aware, Windows handles scaling the entire window on its own, ignoring kivy's
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(0)
+    except FileNotFoundError:  # shcore may not be found on <= Windows 7
+        pass # TODO: remove silent except when Python 3.8 is phased out.
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -26,6 +35,8 @@ from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
+from kivy.metrics import dp
+from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
@@ -148,12 +159,14 @@ class ServerLabel(HovererableLabel):
                     for permission_name, permission_data in ctx.permissions.items():
                         text += f"\n    {permission_name}: {permission_data}"
                 if ctx.hint_cost is not None and ctx.total_locations:
+                    min_cost = int(ctx.server_version >= (0, 3, 9))
                     text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
-                            f"For you this means every {max(0, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
-                            "location checks."
+                            f"For you this means every " \
+                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
+                            "location checks." \
+                            f"\nYou currently have {ctx.hint_points} points."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
-
             else:
                 text += f"\nYou are not authenticated yet."
 
@@ -341,18 +354,18 @@ class GameManager(App):
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
+        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
         self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:", size_hint_y=None,
-                                                      height=30, multiline=False, write_tab=False)
+                                                      height=dp(30), multiline=False, write_tab=False)
         def connect_bar_validate(sender):
             if not self.ctx.server:
                 self.connect_button_action(sender)
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
-        self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
+        self.server_connect_button = Button(text="Connect", size=(dp(100), dp(30)), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_button)
         self.grid.add_widget(self.connect_layout)
@@ -385,11 +398,11 @@ class GameManager(App):
             self.tabs.tab_height = 0
 
         # bottom part
-        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
-        info_button = Button(height=30, text="Command:", size_hint_x=None)
+        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
+        info_button = Button(size=(dp(100), dp(30)), text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
+        self.textinput = TextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
@@ -486,6 +499,10 @@ class GameManager(App):
         if hasattr(self, "energy_link_label"):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
+    # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
+    def open_settings(self, *largs):
+        pass
+
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
@@ -508,7 +525,7 @@ class LogtoUI(logging.Handler):
 
 
 class UILog(RecycleView):
-    cols = 1
+    messages: typing.ClassVar[int]  # comes from kv file
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)
@@ -518,9 +535,15 @@ class UILog(RecycleView):
 
     def on_log(self, record: str) -> None:
         self.data.append({"text": escape_markup(record)})
+        self.clean_old()
 
     def on_message_markup(self, text):
         self.data.append({"text": text})
+        self.clean_old()
+
+    def clean_old(self):
+        if len(self.data) > self.messages:
+            self.data.pop(0)
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
@@ -538,6 +561,19 @@ class E(ExceptionHandler):
 
 
 class KivyJSONtoTextParser(JSONtoTextParser):
+    # dummy class to absorb kvlang definitions
+    class TextColors(Widget):
+        pass
+
+    def __init__(self, *args, **kwargs):
+        # we grab the color definitions from the .kv file, then overwrite the JSONtoTextParser default entries
+        colors = self.TextColors()
+        color_codes = self.color_codes.copy()
+        for name, code in color_codes.items():
+            color_codes[name] = getattr(colors, name, code)
+        self.color_codes = color_codes
+        super().__init__(*args, **kwargs)
+
     def __call__(self, *args, **kwargs):
         self.ref_count = 0
         return super(KivyJSONtoTextParser, self).__call__(*args, **kwargs)
@@ -587,3 +623,8 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 ExceptionManager.add_handler(E())
 
 Builder.load_file(Utils.local_path("data", "client.kv"))
+user_file = Utils.user_path("data", "user.kv")
+if os.path.exists(user_file):
+    logging.info("Loading user.kv into builder.")
+    Builder.load_file(user_file)
+

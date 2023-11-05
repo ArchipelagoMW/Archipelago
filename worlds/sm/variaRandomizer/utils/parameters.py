@@ -1,4 +1,4 @@
-from logic.smbool import SMBool
+from ..logic.smbool import SMBool
 import os
 import sys
 from pathlib import Path
@@ -46,22 +46,22 @@ text2diff = {
 
 def diff4solver(difficulty):
     if difficulty == -1:
-        return "break"
+        return ("break", "break")
     elif difficulty < medium:
-        return "easy"
+        return ("easy", "easy")
     elif difficulty < hard:
-        return "medium"
+        return ("medium", "medium")
     elif difficulty < harder:
-        return "hard"
+        return ("hard", "hard")
     elif difficulty < hardcore:
-        return "harder"
+        return ("harder", "very hard")
     elif difficulty < mania:
-        return "hardcore"
+        return ("hardcore", "hardcore")
     else:
-        return "mania"
+        return ("mania", "mania")
 
 # allow multiple local repo
-appDir = Path(__file__).parents[4]
+appDir = str(Path(__file__).parents[4])
 
 def isKnows(knows):
     return knows[0:len('__')] != '__' and knows[0] == knows[0].upper()
@@ -120,7 +120,7 @@ class Knows:
 
     Mockball = SMBool(True, easy, ['Mockball'])
     desc['Mockball'] = {'display': 'Mockball',
-                        'title': 'Morph from runing without loosing momentum to get Early Super and Ice Beam',
+                        'title': 'Morph from running without loosing momentum to get Early Super and Ice Beam',
                         'href': 'https://wiki.supermetroid.run/index.php?title=Mockball',
                         'rooms': ['Early Supers Room', 'Ice Beam Gate Room']}
 
@@ -161,7 +161,7 @@ class Knows:
     SpringBallJump = SMBool(True, hard, ['SpringBallJump'])
     desc['SpringBallJump'] = {'display': 'SpringBall-Jump',
                               'title': 'Do a SpringBall Jump from a jump to Access to Wrecked Ship Etank without anything else, Suitless Maridia navigation',
-                              'href': 'https://www.youtube.com/watch?v=8ldQUIgBavw&t=49s',
+                              'href': 'https://www.twitch.tv/videos/147442861',
                               'rooms': ['Sponge Bath', 'East Ocean',
                                         'Main Street', 'Crab Shaft', 'Pseudo Plasma Spark Room',
                                         'Mama Turtle Room', 'The Precious Room', 'Spring Ball Room', 'East Sand Hole',

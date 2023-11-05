@@ -2,8 +2,9 @@
 
 ## What is this game?
 
-ArchipIDLE is the 2022 Archipelago April Fools' Day joke. It is an idle game that sends a location check every
-thirty seconds, up to one hundred checks.
+ArchipIDLE was originally the 2022 Archipelago April Fools' Day joke. It is an idle game that sends a location check
+on regular intervals. Updated annually with more items, gimmicks, and features, the game is visible
+only during the month of April.
 
 ## Where is the settings page?
 

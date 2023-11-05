@@ -1,6 +1,6 @@
 from typing import Dict, List, NamedTuple, Optional
 
-from BaseClasses import MultiWorld, Region, RegionType, Entrance
+from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import RLLocation, location_table, get_locations_by_category
 
 
@@ -96,7 +96,7 @@ def create_regions(multiworld: MultiWorld, player: int):
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, data: RLRegionData):
-    region = Region(name, RegionType.Generic, name, player, multiworld)
+    region = Region(name, player, multiworld)
     if data.locations:
         for loc_name in data.locations:
             loc_data = location_table.get(loc_name)

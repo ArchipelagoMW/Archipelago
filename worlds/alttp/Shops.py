@@ -3,11 +3,13 @@ from enum import unique, IntEnum
 from typing import List, Optional, Set, NamedTuple, Dict
 import logging
 
-from worlds.alttp.SubClasses import ALttPLocation
-from worlds.alttp.EntranceShuffle import door_addresses
-from worlds.alttp.Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
-from worlds.alttp.Options import smallkey_shuffle
 from Utils import int16_as_bytes
+
+from .SubClasses import ALttPLocation
+from .EntranceShuffle import door_addresses
+from .Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
+from .Options import smallkey_shuffle
+
 
 logger = logging.getLogger("Shops")
 
@@ -148,6 +150,7 @@ class TakeAny(Shop):
         2: ""
     }
 
+
 class UpgradeShop(Shop):
     type = ShopType.UpgradeShop
     # Potions break due to VRAM flags set in UpgradeShop.
@@ -169,11 +172,12 @@ def FillDisabledShopSlots(world):
         shop: Shop = location.parent_region.shop
         location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
+        location.locked = True
 
 
-def ShopSlotFill(world):
+def ShopSlotFill(multiworld):
     shop_slots: Set[ALttPLocation] = {location for shop_locations in
-                                      (shop.region.locations for shop in world.shops if shop.type != ShopType.TakeAny)
+                                      (shop.region.locations for shop in multiworld.shops if shop.type != ShopType.TakeAny)
                                       for location in shop_locations if location.shop_slot is not None}
 
     removed = set()
@@ -197,8 +201,8 @@ def ShopSlotFill(world):
             blacklist_word in item_name for blacklist_word in blacklist_words)}
         blacklist_words.add("Bee")
 
-        locations_per_sphere = list(
-            sorted(sphere, key=lambda location: location.name) for sphere in world.get_spheres())
+        locations_per_sphere = [sorted(sphere, key=lambda location: (location.name, location.player))
+                                for sphere in multiworld.get_spheres()]
 
         # currently special care needs to be taken so that Shop.region.locations.item is identical to Shop.inventory
         # Potentially create Locations as needed and make inventory the only source, to prevent divergence
@@ -224,7 +228,7 @@ def ShopSlotFill(world):
                 x = 0
             cumu_weights.append(len(current_candidates) + x)
 
-            world.random.shuffle(current_candidates)
+            multiworld.random.shuffle(current_candidates)
 
         del locations_per_sphere
 
@@ -233,13 +237,13 @@ def ShopSlotFill(world):
                 # getting all candidates and shuffling them feels cpu expensive, there may be a better method
                 candidates = [(location, i) for i, candidates in enumerate(candidates_per_sphere[i:], start=i)
                               for location in candidates]
-                world.random.shuffle(candidates)
+                multiworld.random.shuffle(candidates)
                 for location in current_shop_slots:
                     shop: Shop = location.parent_region.shop
                     for index, (c, swapping_sphere_id) in enumerate(candidates):  # chosen item locations
                         if c.item_rule(location.item) and location.item_rule(c.item):
                             swap_location_item(c, location, check_locked=False)
-                            logger.debug(f'Swapping {c} into {location}:: {location.item}')
+                            logger.debug(f"Swapping {c} into {location}:: {location.item}")
                             # remove candidate
                             candidates_per_sphere[swapping_sphere_id].remove(c)
                             candidates.pop(index)
@@ -254,26 +258,28 @@ def ShopSlotFill(world):
                     item_name = location.item.name
                     if location.item.game != "A Link to the Past":
                         if location.item.advancement:
-                            price = world.random.randrange(8, 56)
+                            price = multiworld.random.randrange(8, 56)
                         elif location.item.useful:
-                            price = world.random.randrange(4, 28)
+                            price = multiworld.random.randrange(4, 28)
                         else:
-                            price = world.random.randrange(2, 14)
+                            price = multiworld.random.randrange(2, 14)
                     elif any(x in item_name for x in
                              ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
-                        price = world.random.randrange(1, 7)
+                        price = multiworld.random.randrange(1, 7)
                     elif any(x in item_name for x in ['Arrow', 'Bomb', 'Clock']):
-                        price = world.random.randrange(2, 14)
+                        price = multiworld.random.randrange(2, 14)
                     elif any(x in item_name for x in ['Small Key', 'Heart']):
-                        price = world.random.randrange(4, 28)
+                        price = multiworld.random.randrange(4, 28)
                     else:
-                        price = world.random.randrange(8, 56)
+                        price = multiworld.random.randrange(8, 56)
 
                     shop.push_inventory(location.shop_slot, item_name,
-                                        min(int(price * world.shop_price_modifier[location.player] / 100) * 5, 9999), 1,
+                                        min(int(price * multiworld.shop_price_modifier[location.player] / 100) * 5, 9999), 1,
                                         location.item.player if location.item.player != location.player else 0)
-                    if 'P' in world.shop_shuffle[location.player]:
-                        price_to_funny_price(world, shop.inventory[location.shop_slot], location.player)
+                    if 'P' in multiworld.shop_shuffle[location.player]:
+                        price_to_funny_price(multiworld, shop.inventory[location.shop_slot], location.player)
+
+    FillDisabledShopSlots(multiworld)
 
 
 def create_shops(world, player: int):
@@ -342,7 +348,6 @@ def create_shops(world, player: int):
                     loc.item = ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player)
                     loc.shop_slot_disabled = True
                 shop.region.locations.append(loc)
-                world.clear_location_cache()
 
 
 class ShopData(NamedTuple):
@@ -613,6 +618,4 @@ def create_dynamic_shop_locations(world, player):
                     if shop.type == ShopType.TakeAny:
                         loc.shop_slot_disabled = True
                     shop.region.locations.append(loc)
-                    world.clear_location_cache()
-
                     loc.shop_slot = i

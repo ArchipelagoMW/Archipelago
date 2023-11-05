@@ -2,16 +2,17 @@ from enum import auto, Enum
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
-from . import Locations
 
-start_id: int = Locations.start_id
+start_id: int = 0xAC0000
 
 
 class ItemType(Enum):
     BLUE_CHEST = auto()
+    BOSS = auto()
     CAPSULE_MONSTER = auto()
     ENEMY_DROP = auto()
     ENTRANCE_CHEST = auto()
+    IRIS_TREASURE = auto()
     PARTY_MEMBER = auto()
     RED_CHEST = auto()
     RED_CHEST_PATCH = auto()
@@ -451,15 +452,15 @@ l2ac_item_table: Dict[str, ItemData] = {
     # 0x0199: "Bunnysuit"
     # 0x019A: "Seethru cape"
     # 0x019B: "Seethru silk"
-    # 0x019C: "Iris sword"
-    # 0x019D: "Iris shield"
-    # 0x019E: "Iris helmet"
-    # 0x019F: "Iris armor"
-    # 0x01A0: "Iris ring"
-    # 0x01A1: "Iris jewel"
-    # 0x01A2: "Iris staff"
-    # 0x01A3: "Iris pot"
-    # 0x01A4: "Iris tiara"
+    "Iris sword": ItemData(0x039C, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
+    "Iris shield": ItemData(0x039D, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
+    "Iris helmet": ItemData(0x039E, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
+    "Iris armor": ItemData(0x039F, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
+    "Iris ring": ItemData(0x03A0, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
+    "Iris jewel": ItemData(0x03A1, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
+    "Iris staff": ItemData(0x03A2, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
+    "Iris pot": ItemData(0x03A3, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
+    "Iris tiara": ItemData(0x03A4, ItemType.IRIS_TREASURE, ItemClassification.progression_skip_balancing),
     # 0x01A5: "Power jelly"
     # 0x01A6: "Jewel sonar"
     # 0x01A7: "Hook"
@@ -489,7 +490,7 @@ l2ac_item_table: Dict[str, ItemData] = {
     # 0x01BF: "Truth key"
     # 0x01C0: "Mermaid jade"
     # 0x01C1: "Engine"
-    # 0x01C2: "Ancient key"
+    "Ancient key": ItemData(0x01C2, ItemType.BOSS, ItemClassification.progression_skip_balancing),
     # 0x01C3: "Pretty flwr."
     # 0x01C4: "Glass angel"
     # 0x01C5: "VIP card"
@@ -498,7 +499,7 @@ l2ac_item_table: Dict[str, ItemData] = {
     # 0x01C8: "Key28"
     # 0x01C9: "Key29"
     # 0x01CA: "AP item"  # replaces "Key30"
-    # 0x01CB: "Crown"
+    # 0x01CB: "SOLD OUT"  # replaces "Crown"
     # 0x01CC: "Ruby apple"
     # 0x01CD: "PURIFIA"
     # 0x01CE: "Tag ring"

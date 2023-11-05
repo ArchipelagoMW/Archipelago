@@ -1,16 +1,18 @@
 import random
+from enum import IntEnum,IntFlag
 import copy
-from logic.smbool import SMBool
-from rom.rom_patches import RomPatches
-import utils.log, logging
+from ..logic.smbool import SMBool
+from ..rom.rom_patches import RomPatches
+import logging
 
-LOG = utils.log.get('DoorsManager')
+from ..utils import log
+LOG = log.get('DoorsManager')
 
 colorsList = ['red', 'green', 'yellow', 'wave', 'spazer', 'plasma', 'ice']
 # 1/15 chance to have the door set to grey
 colorsListGrey = colorsList * 2 + ['grey']
 
-class Facing:
+class Facing(IntEnum):
     Left = 0
     Right = 1
     Top = 2
@@ -37,9 +39,48 @@ colors2plm = {
     'ice': plmIce
 }
 
+# door color indicators PLMs (flashing on the other side of colored doors)
+indicatorsDirection = {
+    Facing.Left: Facing.Right,
+    Facing.Right: Facing.Left,
+    Facing.Top: Facing.Bottom,
+    Facing.Bottom: Facing.Top
+}
+
+# door facing        left -   right - top   - bottom
+plmRedIndicator    = [0xFBB0, 0xFBB6, 0xFBBC, 0xFBC2]
+plmGreenIndicator  = [0xFBC8, 0xFBCE, 0xFBD4, 0xFBDA]
+plmYellowIndicator = [0xFBE0, 0xFBE6, 0xFBEC, 0xFBF2]
+plmGreyIndicator   = [0xFBF8, 0xFBFE, 0xFC04, 0xFC0A]
+plmWaveIndicator   = [0xF60B, 0xF611, 0xF617, 0xF61D]
+plmSpazerIndicator = [0xF63B, 0xF641, 0xF647, 0xF64D]
+plmPlasmaIndicator = [0xF623, 0xF629, 0xF62F, 0xF635]
+plmIceIndicator    = [0xF653, 0xF659, 0xF65F, 0xF665]
+
+colors2plmIndicator = {
+    'red': plmRedIndicator,
+    'green': plmGreenIndicator,
+    'yellow': plmYellowIndicator,
+    'grey': plmGreyIndicator,
+    'wave': plmWaveIndicator,
+    'spazer': plmSpazerIndicator,
+    'plasma': plmPlasmaIndicator,
+    'ice': plmIceIndicator
+}
+
+class IndicatorFlag(IntFlag):
+    Standard = 1
+    AreaRando = 2
+    DoorRando = 4
+
+# indicator always there
+IndicatorAll = IndicatorFlag.Standard | IndicatorFlag.AreaRando | IndicatorFlag.DoorRando
+# indicator there when not in area rando
+IndicatorDoor = IndicatorFlag.Standard | IndicatorFlag.DoorRando
+
 class Door(object):
-    __slots__ = ('name', 'address', 'vanillaColor', 'color', 'forced', 'facing', 'hidden', 'id', 'canGrey', 'forbiddenColors')
-    def __init__(self, name, address, vanillaColor, facing, id=None, canGrey=False, forbiddenColors=None):
+    __slots__ = ('name', 'address', 'vanillaColor', 'color', 'forced', 'facing', 'hidden', 'id', 'canGrey', 'forbiddenColors','indicator')
+    def __init__(self, name, address, vanillaColor, facing, id=None, canGrey=False, forbiddenColors=None,indicator=0):
         self.name = name
         self.address = address
         self.vanillaColor = vanillaColor
@@ -51,6 +92,7 @@ class Door(object):
         self.id = id
         # list of forbidden colors
         self.forbiddenColors = forbiddenColors
+        self.indicator = indicator
 
     def forceBlue(self):
         # custom start location, area, patches can force doors to blue
@@ -114,21 +156,21 @@ class Door(object):
     def isRefillSave(self):
         return self.address is None
 
-    def writeColor(self, rom):
+    def writeColor(self, rom, writeWordFunc):
         if self.isBlue() or self.isRefillSave():
             return
 
-        rom.writeWord(colors2plm[self.color][self.facing], self.address)
+        writeWordFunc(colors2plm[self.color][self.facing], self.address)
 
         # also set plm args high byte to never opened, even during escape
         if self.color == 'grey':
             rom.writeByte(0x90, self.address+5)
 
-    def readColor(self, rom):
+    def readColor(self, rom, readWordFunc):
         if self.forced or self.isRefillSave():
             return
 
-        plm = rom.readWord(self.address)
+        plm = readWordFunc(self.address)
         if plm in plmRed:
             self.setColor('red')
         elif plm in plmGreen:
@@ -146,7 +188,15 @@ class Door(object):
         elif plm in plmIce:
             self.setColor('ice')
         else:
-            raise Exception("Unknown color {} for {}".format(hex(plm), self.name))
+            # we can't read the color, handle as grey door (can happen in race protected seeds)
+            self.setColor('grey')
+
+    # gives the PLM ID for matching indicator door
+    def getIndicatorPLM(self, indicatorFlags):
+        ret = None
+        if (indicatorFlags & self.indicator) != 0 and self.color in colors2plmIndicator:
+            ret = colors2plmIndicator[self.color][indicatorsDirection[self.facing]]
+        return ret
 
     # for tracker
     def canHide(self):
@@ -178,10 +228,10 @@ class DoorsManager():
     doorsDict = {}
     doors = {
         # crateria
-        'LandingSiteRight': Door('LandingSiteRight', 0x78018, 'green', Facing.Left, canGrey=True),
+        'LandingSiteRight': Door('LandingSiteRight', 0x78018, 'green', Facing.Left, canGrey=True, indicator=IndicatorAll),
         'LandingSiteTopRight': Door('LandingSiteTopRight', 0x07801e, 'yellow', Facing.Left),
-        'KihunterBottom': Door('KihunterBottom', 0x78228, 'yellow', Facing.Top, canGrey=True),
-        'KihunterRight': Door('KihunterRight', 0x78222, 'yellow', Facing.Left, canGrey=True),
+        'KihunterBottom': Door('KihunterBottom', 0x78228, 'yellow', Facing.Top, canGrey=True, indicator=IndicatorDoor),
+        'KihunterRight': Door('KihunterRight', 0x78222, 'yellow', Facing.Left, canGrey=True, indicator=IndicatorAll),
         'FlywayRight': Door('FlywayRight', 0x78420, 'red', Facing.Left),
         'GreenPiratesShaftBottomRight': Door('GreenPiratesShaftBottomRight', 0x78470, 'red', Facing.Left, canGrey=True),
         'RedBrinstarElevatorTop': Door('RedBrinstarElevatorTop', 0x78256, 'yellow', Facing.Bottom),
@@ -189,34 +239,34 @@ class DoorsManager():
         # blue brinstar
         'ConstructionZoneRight': Door('ConstructionZoneRight', 0x78784, 'red', Facing.Left),
         # green brinstar
-        'GreenHillZoneTopRight': Door('GreenHillZoneTopRight', 0x78670, 'yellow', Facing.Left, canGrey=True),
-        'NoobBridgeRight': Door('NoobBridgeRight', 0x787a6, 'green', Facing.Left, canGrey=True),
+        'GreenHillZoneTopRight': Door('GreenHillZoneTopRight', 0x78670, 'yellow', Facing.Left, canGrey=True, indicator=IndicatorFlag.DoorRando),
+        'NoobBridgeRight': Door('NoobBridgeRight', 0x787a6, 'green', Facing.Left, canGrey=True, indicator=IndicatorDoor),
         'MainShaftRight': Door('MainShaftRight', 0x784be, 'red', Facing.Left),
-        'MainShaftBottomRight': Door('MainShaftBottomRight', 0x784c4, 'red', Facing.Left, canGrey=True),
+        'MainShaftBottomRight': Door('MainShaftBottomRight', 0x784c4, 'red', Facing.Left, canGrey=True, indicator=IndicatorAll),
         'EarlySupersRight': Door('EarlySupersRight', 0x78512, 'red', Facing.Left),
         'EtecoonEnergyTankLeft': Door('EtecoonEnergyTankLeft', 0x787c8, 'green', Facing.Right),
         # pink brinstar
         'BigPinkTopRight': Door('BigPinkTopRight', 0x78626, 'red', Facing.Left),
         'BigPinkRight': Door('BigPinkRight', 0x7861a, 'yellow', Facing.Left),
-        'BigPinkBottomRight': Door('BigPinkBottomRight', 0x78620, 'green', Facing.Left, canGrey=True),
+        'BigPinkBottomRight': Door('BigPinkBottomRight', 0x78620, 'green', Facing.Left, canGrey=True, indicator=IndicatorAll),
         'BigPinkBottomLeft': Door('BigPinkBottomLeft', 0x7862c, 'red', Facing.Right),
         # red brinstar
         'RedTowerLeft': Door('RedTowerLeft', 0x78866, 'yellow', Facing.Right),
         'RedBrinstarFirefleaLeft': Door('RedBrinstarFirefleaLeft', 0x7886e, 'red', Facing.Right),
         'RedTowerElevatorTopLeft': Door('RedTowerElevatorTopLeft', 0x788aa, 'green', Facing.Right),
-        'RedTowerElevatorLeft': Door('RedTowerElevatorLeft', 0x788b0, 'yellow', Facing.Right),
+        'RedTowerElevatorLeft': Door('RedTowerElevatorLeft', 0x788b0, 'yellow', Facing.Right, indicator=IndicatorAll),
         'RedTowerElevatorBottomLeft': Door('RedTowerElevatorBottomLeft', 0x788b6, 'green', Facing.Right),
         'BelowSpazerTopRight': Door('BelowSpazerTopRight', 0x78966, 'green', Facing.Left),
         # Wrecked ship
-        'WestOceanRight': Door('WestOceanRight', 0x781e2, 'green', Facing.Left, canGrey=True),
-        'LeCoudeBottom': Door('LeCoudeBottom', 0x7823e, 'yellow', Facing.Top, canGrey=True),
-        'WreckedShipMainShaftBottom': Door('WreckedShipMainShaftBottom', 0x7c277, 'green', Facing.Top),
+        'WestOceanRight': Door('WestOceanRight', 0x781e2, 'green', Facing.Left, canGrey=True, indicator=IndicatorAll),
+        'LeCoudeBottom': Door('LeCoudeBottom', 0x7823e, 'yellow', Facing.Top, canGrey=True, indicator=IndicatorDoor),
+        'WreckedShipMainShaftBottom': Door('WreckedShipMainShaftBottom', 0x7c277, 'green', Facing.Top, indicator=IndicatorFlag.AreaRando),
         'ElectricDeathRoomTopLeft': Door('ElectricDeathRoomTopLeft', 0x7c32f, 'red', Facing.Right),
         # Upper Norfair
         'BusinessCenterTopLeft': Door('BusinessCenterTopLeft', 0x78b00, 'green', Facing.Right),
         'BusinessCenterBottomLeft': Door('BusinessCenterBottomLeft', 0x78b0c, 'red', Facing.Right),
-        'CathedralEntranceRight': Door('CathedralEntranceRight', 0x78af2, 'red', Facing.Left, canGrey=True),
-        'CathedralRight': Door('CathedralRight', 0x78aea, 'green', Facing.Left),
+        'CathedralEntranceRight': Door('CathedralEntranceRight', 0x78af2, 'red', Facing.Left, canGrey=True, indicator=IndicatorAll),
+        'CathedralRight': Door('CathedralRight', 0x78aea, 'green', Facing.Left, indicator=IndicatorAll),
         'BubbleMountainTopRight': Door('BubbleMountainTopRight', 0x78c60, 'green', Facing.Left),
         'BubbleMountainTopLeft': Door('BubbleMountainTopLeft', 0x78c5a, 'green', Facing.Right),
         'SpeedBoosterHallRight': Door('SpeedBoosterHallRight', 0x78c7a, 'red', Facing.Left),
@@ -228,13 +278,13 @@ class DoorsManager():
         'PostCrocomireUpperLeft': Door('PostCrocomireUpperLeft', 0x78bf4, 'red', Facing.Right),
         'PostCrocomireShaftRight': Door('PostCrocomireShaftRight', 0x78c0c, 'red', Facing.Left),
         # Lower Norfair
-        'RedKihunterShaftBottom': Door('RedKihunterShaftBottom', 0x7902e, 'yellow', Facing.Top),
-        'WastelandLeft': Door('WastelandLeft', 0x790ba, 'green', Facing.Right, forbiddenColors=['yellow']),
+        'RedKihunterShaftBottom': Door('RedKihunterShaftBottom', 0x7902e, 'yellow', Facing.Top, indicator=IndicatorFlag.AreaRando),
+        'WastelandLeft': Door('WastelandLeft', 0x790ba, 'green', Facing.Right, forbiddenColors=['yellow'], indicator=IndicatorFlag.AreaRando),
         # Maridia
-        'MainStreetBottomRight': Door('MainStreetBottomRight', 0x7c431, 'red', Facing.Left),
+        'MainStreetBottomRight': Door('MainStreetBottomRight', 0x7c431, 'red', Facing.Left, indicator=IndicatorAll),
         'FishTankRight': Door('FishTankRight', 0x7c475, 'red', Facing.Left),
-        'CrabShaftRight': Door('CrabShaftRight', 0x7c4fb, 'green', Facing.Left),
-        'ColosseumBottomRight': Door('ColosseumBottomRight', 0x7c6fb, 'green', Facing.Left),
+        'CrabShaftRight': Door('CrabShaftRight', 0x7c4fb, 'green', Facing.Left, indicator=IndicatorDoor),
+        'ColosseumBottomRight': Door('ColosseumBottomRight', 0x7c6fb, 'green', Facing.Left, indicator=IndicatorFlag.AreaRando),
         'PlasmaSparkBottom': Door('PlasmaSparkBottom', 0x7c577, 'green', Facing.Top),
         'OasisTop': Door('OasisTop', 0x7c5d3, 'green', Facing.Bottom),
         # refill/save
@@ -309,12 +359,12 @@ class DoorsManager():
 
     # call from rom loader
     @staticmethod
-    def loadDoorsColor(rom):
+    def loadDoorsColor(rom, readWordFunc):
         # force to blue some doors depending on patches
         DoorsManager.setDoorsColor()
         # for each door store it's color
         for door in DoorsManager.doors.values():
-            door.readColor(rom)
+            door.readColor(rom, readWordFunc)
         DoorsManager.debugDoorsColor()
 
         # tell that we have randomized doors
@@ -341,12 +391,23 @@ class DoorsManager():
 
     # call from rom patcher
     @staticmethod
-    def writeDoorsColor(rom, doors, player):
+    def writeDoorsColor(rom, doors, player, readWordFunc):
         for door in DoorsManager.doorsDict[player].values():
-            door.writeColor(rom)
+            door.writeColor(rom, readWordFunc)
             # also set save/refill doors to blue
             if door.id is not None:
                 doors.append(door.id)
+
+    # returns a dict {'DoorName': indicatorPlmType }
+    @staticmethod
+    def getIndicatorPLMs(player, indicatorFlags):
+        ret = {}
+        for doorName,door in DoorsManager.doorsDict[player].items():
+            plm = door.getIndicatorPLM(indicatorFlags)
+            if plm is not None:
+                ret[doorName] = plm
+        return ret
+
 
     # call from web
     @staticmethod

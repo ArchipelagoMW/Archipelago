@@ -35,7 +35,7 @@ flowchart LR
     subgraph Final Fantasy 1
         FF1[FF1Client]
         FFLUA[Lua Connector]
-        BZFF[BizHawk with Final Fantasy Loaded]
+        BZFF[EmuHawk with Final Fantasy Loaded]
         FF1 <-- LuaSockets --> FFLUA
         FFLUA <--> BZFF
     end
@@ -45,7 +45,7 @@ flowchart LR
     subgraph Ocarina of Time
         OC[OoTClient] 
         LC[Lua Connector]
-        OCB[BizHawk with Ocarina of Time Loaded]
+        OCB[EmuHawk with Ocarina of Time Loaded]
         OC <-- LuaSockets --> LC
         LC <--> OCB
     end
@@ -74,6 +74,18 @@ flowchart LR
         DK3[SNES]
     end
     SNI <-- Various, depending on SNES device --> DK3
+
+    %% Super Mario World
+    subgraph Super Mario World
+        SMW[SNES]
+    end
+    SNI <-- Various, depending on SNES device --> SMW
+
+    %% Lufia II Ancient Cave
+    subgraph Lufia II Ancient Cave
+        L2AC[SNES]
+    end
+    SNI <-- Various, depending on SNES device --> L2AC
 
     %% Native Clients or Games
     %% Games or clients which compile to native or which the client is integrated in the game.

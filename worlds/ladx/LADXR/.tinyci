@@ -1,0 +1,18 @@
+[tinyci]
+enabled = True
+
+[build-test]
+directory = _test
+commands =
+    python3 ../main.py ../input.gbc --timeout 120 --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 -s seashells=0 -s heartpiece=0 -s dungeon_items=keysanity --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 -s logic=glitched -s dungeon_items=keysanity -s heartpiece=0 -s seashells=0 -s heartcontainers=0 -s instruments=1 -s owlstatues=both -s dungeonshuffle=1 -s witch=0 -s boomerang=gift -s steal=never -s goal=random --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 -s logic=casual -s dungeon_items=keysy -s itempool=casual --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 -s textmode=none --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 -s overworld=dungeondive --output /dev/null
+ignore =
+    python3 ../main.py ../input.gbc --timeout 120 --seashells --heartpiece --entranceshuffle simple --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 --seashells --heartpiece --entranceshuffle advanced --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 --seashells --heartpiece --entranceshuffle insanity --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 --seashells --heartpiece --spoilerformat text --spoilerfilename /dev/null --output /dev/null
+    python3 ../main.py ../input.gbc --timeout 120 --seashells --heartpiece --spoilerformat json --spoilerfilename /dev/null --output /dev/null

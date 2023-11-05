@@ -119,6 +119,28 @@
                                         </select>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <label for="spoiler">Spoiler Log:
+                                            <span class="interactive" data-tooltip="Generates a text listing all randomized elements.
+Warning: playthrough can take a significant amount of time for larger multiworlds.">
+                                                (?)
+                                            </span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select name="spoiler" id="spoiler">
+                                            {% if race -%}
+                                                <option value="0">Disabled in Race mode</option>
+                                            {%- else -%}
+                                                <option value="3">Enabled with playthrough and traversal</option>
+                                                <option value="2">Enabled with playthrough</option>
+                                                <option value="1">Enabled</option>
+                                                <option value="0">Disabled</option>
+                                            {%- endif -%}
+                                        </select>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         </div>
@@ -181,10 +203,10 @@
                         </div>
                     </div>
                     <div id="generate-form-button-row">
-                        <input id="file-input" type="file" name="file">
+                        <input id="file-input" type="file" name="file" multiple>
                     </div>
                 </form>
-                <button id="generate-game-button">Upload File</button>
+                <button id="generate-game-button">Upload File(s)</button>
             </div>
         </div>
     </div>

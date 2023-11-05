@@ -7,35 +7,35 @@ from .Names import LocationName, ItemName
 
 
 def create_regions(world, player: int, active_locations):
-    menu_region = create_region(world, player, active_locations, 'Menu', None, None)
+    menu_region = create_region(world, player, active_locations, 'Menu', None)
 
     overworld_1_region_locations = {}
     if world.goal[player] != "knautilus":
         overworld_1_region_locations.update({LocationName.banana_bird_mother: []})
     overworld_1_region = create_region(world, player, active_locations, LocationName.overworld_1_region,
-                                       overworld_1_region_locations, None)
+                                       overworld_1_region_locations)
 
     overworld_2_region_locations = {}
     overworld_2_region = create_region(world, player, active_locations, LocationName.overworld_2_region,
-                                       overworld_2_region_locations, None)
+                                       overworld_2_region_locations)
 
     overworld_3_region_locations = {}
     overworld_3_region = create_region(world, player, active_locations, LocationName.overworld_3_region,
-                                       overworld_3_region_locations, None)
+                                       overworld_3_region_locations)
 
     overworld_4_region_locations = {}
     overworld_4_region = create_region(world, player, active_locations, LocationName.overworld_4_region,
-                                       overworld_4_region_locations, None)
+                                       overworld_4_region_locations)
 
 
-    lake_orangatanga_region = create_region(world, player, active_locations, LocationName.lake_orangatanga_region, None, None)
-    kremwood_forest_region = create_region(world, player, active_locations, LocationName.kremwood_forest_region, None, None)
-    cotton_top_cove_region = create_region(world, player, active_locations, LocationName.cotton_top_cove_region, None, None)
-    mekanos_region = create_region(world, player, active_locations, LocationName.mekanos_region, None, None)
-    k3_region = create_region(world, player, active_locations, LocationName.k3_region, None, None)
-    razor_ridge_region = create_region(world, player, active_locations, LocationName.razor_ridge_region, None, None)
-    kaos_kore_region = create_region(world, player, active_locations, LocationName.kaos_kore_region, None, None)
-    krematoa_region = create_region(world, player, active_locations, LocationName.krematoa_region, None, None)
+    lake_orangatanga_region = create_region(world, player, active_locations, LocationName.lake_orangatanga_region, None)
+    kremwood_forest_region = create_region(world, player, active_locations, LocationName.kremwood_forest_region, None)
+    cotton_top_cove_region = create_region(world, player, active_locations, LocationName.cotton_top_cove_region, None)
+    mekanos_region = create_region(world, player, active_locations, LocationName.mekanos_region, None)
+    k3_region = create_region(world, player, active_locations, LocationName.k3_region, None)
+    razor_ridge_region = create_region(world, player, active_locations, LocationName.razor_ridge_region, None)
+    kaos_kore_region = create_region(world, player, active_locations, LocationName.kaos_kore_region, None)
+    krematoa_region = create_region(world, player, active_locations, LocationName.krematoa_region, None)
 
 
     lakeside_limbo_region_locations = {
@@ -47,7 +47,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         lakeside_limbo_region_locations[LocationName.lakeside_limbo_kong] = []
     lakeside_limbo_region = create_region(world, player, active_locations, LocationName.lakeside_limbo_region,
-                                          lakeside_limbo_region_locations, None)
+                                          lakeside_limbo_region_locations)
 
     doorstop_dash_region_locations = {
         LocationName.doorstop_dash_flag    : [0x65A, 1],
@@ -58,7 +58,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         doorstop_dash_region_locations[LocationName.doorstop_dash_kong] = []
     doorstop_dash_region = create_region(world, player, active_locations, LocationName.doorstop_dash_region,
-                                         doorstop_dash_region_locations, None)
+                                         doorstop_dash_region_locations)
 
     tidal_trouble_region_locations = {
         LocationName.tidal_trouble_flag    : [0x659, 1],
@@ -69,7 +69,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         tidal_trouble_region_locations[LocationName.tidal_trouble_kong] = []
     tidal_trouble_region = create_region(world, player, active_locations, LocationName.tidal_trouble_region,
-                                         tidal_trouble_region_locations, None)
+                                         tidal_trouble_region_locations)
 
     skiddas_row_region_locations = {
         LocationName.skiddas_row_flag    : [0x65D, 1],
@@ -80,7 +80,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         skiddas_row_region_locations[LocationName.skiddas_row_kong] = []
     skiddas_row_region = create_region(world, player, active_locations, LocationName.skiddas_row_region,
-                                       skiddas_row_region_locations, None)
+                                       skiddas_row_region_locations)
 
     murky_mill_region_locations = {
         LocationName.murky_mill_flag    : [0x65C, 1],
@@ -91,7 +91,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         murky_mill_region_locations[LocationName.murky_mill_kong] = []
     murky_mill_region = create_region(world, player, active_locations, LocationName.murky_mill_region,
-                                      murky_mill_region_locations, None)
+                                      murky_mill_region_locations)
 
     barrel_shield_bust_up_region_locations = {
         LocationName.barrel_shield_bust_up_flag     : [0x662, 1],
@@ -101,8 +101,9 @@ def create_regions(world, player: int, active_locations):
     }
     if world.kongsanity[player]:
         barrel_shield_bust_up_region_locations[LocationName.barrel_shield_bust_up_kong] = []
-    barrel_shield_bust_up_region = create_region(world, player, active_locations, LocationName.barrel_shield_bust_up_region,
-                                                 barrel_shield_bust_up_region_locations, None)
+    barrel_shield_bust_up_region = create_region(world, player, active_locations,
+                                                 LocationName.barrel_shield_bust_up_region,
+                                                 barrel_shield_bust_up_region_locations)
 
     riverside_race_region_locations = {
         LocationName.riverside_race_flag    : [0x664, 1],
@@ -113,7 +114,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         riverside_race_region_locations[LocationName.riverside_race_kong] = []
     riverside_race_region = create_region(world, player, active_locations, LocationName.riverside_race_region,
-                                          riverside_race_region_locations, None)
+                                          riverside_race_region_locations)
 
     squeals_on_wheels_region_locations = {
         LocationName.squeals_on_wheels_flag    : [0x65B, 1],
@@ -124,7 +125,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         squeals_on_wheels_region_locations[LocationName.squeals_on_wheels_kong] = []
     squeals_on_wheels_region = create_region(world, player, active_locations, LocationName.squeals_on_wheels_region,
-                                             squeals_on_wheels_region_locations, None)
+                                             squeals_on_wheels_region_locations)
 
     springin_spiders_region_locations = {
         LocationName.springin_spiders_flag    : [0x661, 1],
@@ -135,7 +136,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         springin_spiders_region_locations[LocationName.springin_spiders_kong] = []
     springin_spiders_region = create_region(world, player, active_locations, LocationName.springin_spiders_region,
-                                            springin_spiders_region_locations, None)
+                                            springin_spiders_region_locations)
 
     bobbing_barrel_brawl_region_locations = {
         LocationName.bobbing_barrel_brawl_flag     : [0x666, 1],
@@ -145,8 +146,9 @@ def create_regions(world, player: int, active_locations):
     }
     if world.kongsanity[player]:
         bobbing_barrel_brawl_region_locations[LocationName.bobbing_barrel_brawl_kong] = []
-    bobbing_barrel_brawl_region = create_region(world, player, active_locations, LocationName.bobbing_barrel_brawl_region,
-                                                bobbing_barrel_brawl_region_locations, None)
+    bobbing_barrel_brawl_region = create_region(world, player, active_locations,
+                                                LocationName.bobbing_barrel_brawl_region,
+                                                bobbing_barrel_brawl_region_locations)
 
     bazzas_blockade_region_locations = {
         LocationName.bazzas_blockade_flag    : [0x667, 1],
@@ -157,7 +159,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         bazzas_blockade_region_locations[LocationName.bazzas_blockade_kong] = []
     bazzas_blockade_region = create_region(world, player, active_locations, LocationName.bazzas_blockade_region,
-                                           bazzas_blockade_region_locations, None)
+                                           bazzas_blockade_region_locations)
 
     rocket_barrel_ride_region_locations = {
         LocationName.rocket_barrel_ride_flag    : [0x66A, 1],
@@ -168,7 +170,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         rocket_barrel_ride_region_locations[LocationName.rocket_barrel_ride_kong] = []
     rocket_barrel_ride_region = create_region(world, player, active_locations, LocationName.rocket_barrel_ride_region,
-                                              rocket_barrel_ride_region_locations, None)
+                                              rocket_barrel_ride_region_locations)
 
     kreeping_klasps_region_locations = {
         LocationName.kreeping_klasps_flag     : [0x658, 1],
@@ -179,7 +181,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         kreeping_klasps_region_locations[LocationName.kreeping_klasps_kong] = []
     kreeping_klasps_region = create_region(world, player, active_locations, LocationName.kreeping_klasps_region,
-                                           kreeping_klasps_region_locations, None)
+                                           kreeping_klasps_region_locations)
 
     tracker_barrel_trek_region_locations = {
         LocationName.tracker_barrel_trek_flag    : [0x66B, 1],
@@ -190,7 +192,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         tracker_barrel_trek_region_locations[LocationName.tracker_barrel_trek_kong] = []
     tracker_barrel_trek_region = create_region(world, player, active_locations, LocationName.tracker_barrel_trek_region,
-                                               tracker_barrel_trek_region_locations, None)
+                                               tracker_barrel_trek_region_locations)
 
     fish_food_frenzy_region_locations = {
         LocationName.fish_food_frenzy_flag    : [0x668, 1],
@@ -201,7 +203,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         fish_food_frenzy_region_locations[LocationName.fish_food_frenzy_kong] = []
     fish_food_frenzy_region = create_region(world, player, active_locations, LocationName.fish_food_frenzy_region,
-                                            fish_food_frenzy_region_locations, None)
+                                            fish_food_frenzy_region_locations)
 
     fire_ball_frenzy_region_locations = {
         LocationName.fire_ball_frenzy_flag    : [0x66D, 1],
@@ -212,7 +214,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         fire_ball_frenzy_region_locations[LocationName.fire_ball_frenzy_kong] = []
     fire_ball_frenzy_region = create_region(world, player, active_locations, LocationName.fire_ball_frenzy_region,
-                                            fire_ball_frenzy_region_locations, None)
+                                            fire_ball_frenzy_region_locations)
 
     demolition_drain_pipe_region_locations = {
         LocationName.demolition_drain_pipe_flag    : [0x672, 1],
@@ -222,8 +224,9 @@ def create_regions(world, player: int, active_locations):
     }
     if world.kongsanity[player]:
         demolition_drain_pipe_region_locations[LocationName.demolition_drain_pipe_kong] = []
-    demolition_drain_pipe_region = create_region(world, player, active_locations, LocationName.demolition_drain_pipe_region,
-                                                 demolition_drain_pipe_region_locations, None)
+    demolition_drain_pipe_region = create_region(world, player, active_locations,
+                                                 LocationName.demolition_drain_pipe_region,
+                                                 demolition_drain_pipe_region_locations)
 
     ripsaw_rage_region_locations = {
         LocationName.ripsaw_rage_flag    : [0x660, 1],
@@ -234,7 +237,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         ripsaw_rage_region_locations[LocationName.ripsaw_rage_kong] = []
     ripsaw_rage_region = create_region(world, player, active_locations, LocationName.ripsaw_rage_region,
-                                       ripsaw_rage_region_locations, None)
+                                       ripsaw_rage_region_locations)
 
     blazing_bazookas_region_locations = {
         LocationName.blazing_bazookas_flag    : [0x66E, 1],
@@ -245,7 +248,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         blazing_bazookas_region_locations[LocationName.blazing_bazookas_kong] = []
     blazing_bazookas_region = create_region(world, player, active_locations, LocationName.blazing_bazookas_region,
-                                            blazing_bazookas_region_locations, None)
+                                            blazing_bazookas_region_locations)
 
     low_g_labyrinth_region_locations = {
         LocationName.low_g_labyrinth_flag     : [0x670, 1],
@@ -256,7 +259,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         low_g_labyrinth_region_locations[LocationName.low_g_labyrinth_kong] = []
     low_g_labyrinth_region = create_region(world, player, active_locations, LocationName.low_g_labyrinth_region,
-                                           low_g_labyrinth_region_locations, None)
+                                           low_g_labyrinth_region_locations)
 
     krevice_kreepers_region_locations = {
         LocationName.krevice_kreepers_flag    : [0x673, 1],
@@ -267,7 +270,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         krevice_kreepers_region_locations[LocationName.krevice_kreepers_kong] = []
     krevice_kreepers_region = create_region(world, player, active_locations, LocationName.krevice_kreepers_region,
-                                            krevice_kreepers_region_locations, None)
+                                            krevice_kreepers_region_locations)
 
     tearaway_toboggan_region_locations = {
         LocationName.tearaway_toboggan_flag    : [0x65F, 1],
@@ -278,7 +281,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         tearaway_toboggan_region_locations[LocationName.tearaway_toboggan_kong] = []
     tearaway_toboggan_region = create_region(world, player, active_locations, LocationName.tearaway_toboggan_region,
-                                             tearaway_toboggan_region_locations, None)
+                                             tearaway_toboggan_region_locations)
 
     barrel_drop_bounce_region_locations = {
         LocationName.barrel_drop_bounce_flag    : [0x66C, 1],
@@ -289,7 +292,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         barrel_drop_bounce_region_locations[LocationName.barrel_drop_bounce_kong] = []
     barrel_drop_bounce_region = create_region(world, player, active_locations, LocationName.barrel_drop_bounce_region,
-                                              barrel_drop_bounce_region_locations, None)
+                                              barrel_drop_bounce_region_locations)
 
     krack_shot_kroc_region_locations = {
         LocationName.krack_shot_kroc_flag    : [0x66F, 1],
@@ -300,7 +303,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         krack_shot_kroc_region_locations[LocationName.krack_shot_kroc_kong] = []
     krack_shot_kroc_region = create_region(world, player, active_locations, LocationName.krack_shot_kroc_region,
-                                           krack_shot_kroc_region_locations, None)
+                                           krack_shot_kroc_region_locations)
 
     lemguin_lunge_region_locations = {
         LocationName.lemguin_lunge_flag    : [0x65E, 1],
@@ -311,7 +314,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         lemguin_lunge_region_locations[LocationName.lemguin_lunge_kong] = []
     lemguin_lunge_region = create_region(world, player, active_locations, LocationName.lemguin_lunge_region,
-                                         lemguin_lunge_region_locations, None)
+                                         lemguin_lunge_region_locations)
 
     buzzer_barrage_region_locations = {
         LocationName.buzzer_barrage_flag    : [0x676, 1],
@@ -322,7 +325,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         buzzer_barrage_region_locations[LocationName.buzzer_barrage_kong] = []
     buzzer_barrage_region = create_region(world, player, active_locations, LocationName.buzzer_barrage_region,
-                                          buzzer_barrage_region_locations, None)
+                                          buzzer_barrage_region_locations)
 
     kong_fused_cliffs_region_locations = {
         LocationName.kong_fused_cliffs_flag    : [0x674, 1],
@@ -333,7 +336,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         kong_fused_cliffs_region_locations[LocationName.kong_fused_cliffs_kong] = []
     kong_fused_cliffs_region = create_region(world, player, active_locations, LocationName.kong_fused_cliffs_region,
-                                             kong_fused_cliffs_region_locations, None)
+                                             kong_fused_cliffs_region_locations)
 
     floodlit_fish_region_locations = {
         LocationName.floodlit_fish_flag    : [0x669, 1],
@@ -344,7 +347,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         floodlit_fish_region_locations[LocationName.floodlit_fish_kong] = []
     floodlit_fish_region = create_region(world, player, active_locations, LocationName.floodlit_fish_region,
-                                         floodlit_fish_region_locations, None)
+                                         floodlit_fish_region_locations)
 
     pothole_panic_region_locations = {
         LocationName.pothole_panic_flag    : [0x677, 1],
@@ -355,7 +358,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         pothole_panic_region_locations[LocationName.pothole_panic_kong] = []
     pothole_panic_region = create_region(world, player, active_locations, LocationName.pothole_panic_region,
-                                         pothole_panic_region_locations, None)
+                                         pothole_panic_region_locations)
 
     ropey_rumpus_region_locations = {
         LocationName.ropey_rumpus_flag    : [0x675, 1],
@@ -366,7 +369,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         ropey_rumpus_region_locations[LocationName.ropey_rumpus_kong] = []
     ropey_rumpus_region = create_region(world, player, active_locations, LocationName.ropey_rumpus_region,
-                                        ropey_rumpus_region_locations, None)
+                                        ropey_rumpus_region_locations)
 
     konveyor_rope_clash_region_locations = {
         LocationName.konveyor_rope_clash_flag     : [0x657, 1],
@@ -377,7 +380,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         konveyor_rope_clash_region_locations[LocationName.konveyor_rope_clash_kong] = []
     konveyor_rope_clash_region = create_region(world, player, active_locations, LocationName.konveyor_rope_clash_region,
-                                               konveyor_rope_clash_region_locations, None)
+                                               konveyor_rope_clash_region_locations)
 
     creepy_caverns_region_locations = {
         LocationName.creepy_caverns_flag    : [0x678, 1],
@@ -388,7 +391,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         creepy_caverns_region_locations[LocationName.creepy_caverns_kong] = []
     creepy_caverns_region = create_region(world, player, active_locations, LocationName.creepy_caverns_region,
-                                          creepy_caverns_region_locations, None)
+                                          creepy_caverns_region_locations)
 
     lightning_lookout_region_locations = {
         LocationName.lightning_lookout_flag     : [0x665, 1],
@@ -399,7 +402,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         lightning_lookout_region_locations[LocationName.lightning_lookout_kong] = []
     lightning_lookout_region = create_region(world, player, active_locations, LocationName.lightning_lookout_region,
-                                             lightning_lookout_region_locations, None)
+                                             lightning_lookout_region_locations)
 
     koindozer_klamber_region_locations = {
         LocationName.koindozer_klamber_flag     : [0x679, 1],
@@ -410,7 +413,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         koindozer_klamber_region_locations[LocationName.koindozer_klamber_kong] = []
     koindozer_klamber_region = create_region(world, player, active_locations, LocationName.koindozer_klamber_region,
-                                             koindozer_klamber_region_locations, None)
+                                             koindozer_klamber_region_locations)
 
     poisonous_pipeline_region_locations = {
         LocationName.poisonous_pipeline_flag    : [0x671, 1],
@@ -421,7 +424,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         poisonous_pipeline_region_locations[LocationName.poisonous_pipeline_kong] = []
     poisonous_pipeline_region = create_region(world, player, active_locations, LocationName.poisonous_pipeline_region,
-                                              poisonous_pipeline_region_locations, None)
+                                              poisonous_pipeline_region_locations)
 
     stampede_sprint_region_locations = {
         LocationName.stampede_sprint_flag     : [0x67B, 1],
@@ -433,7 +436,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         stampede_sprint_region_locations[LocationName.stampede_sprint_kong] = []
     stampede_sprint_region = create_region(world, player, active_locations, LocationName.stampede_sprint_region,
-                                           stampede_sprint_region_locations, None)
+                                           stampede_sprint_region_locations)
 
     criss_cross_cliffs_region_locations = {
         LocationName.criss_cross_cliffs_flag    : [0x67C, 1],
@@ -444,7 +447,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         criss_cross_cliffs_region_locations[LocationName.criss_cross_cliffs_kong] = []
     criss_cross_cliffs_region = create_region(world, player, active_locations, LocationName.criss_cross_cliffs_region,
-                                              criss_cross_cliffs_region_locations, None)
+                                              criss_cross_cliffs_region_locations)
 
     tyrant_twin_tussle_region_locations = {
         LocationName.tyrant_twin_tussle_flag    : [0x67D, 1],
@@ -456,7 +459,7 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         tyrant_twin_tussle_region_locations[LocationName.tyrant_twin_tussle_kong] = []
     tyrant_twin_tussle_region = create_region(world, player, active_locations, LocationName.tyrant_twin_tussle_region,
-                                              tyrant_twin_tussle_region_locations, None)
+                                              tyrant_twin_tussle_region_locations)
 
     swoopy_salvo_region_locations = {
         LocationName.swoopy_salvo_flag    : [0x663, 1],
@@ -468,140 +471,140 @@ def create_regions(world, player: int, active_locations):
     if world.kongsanity[player]:
         swoopy_salvo_region_locations[LocationName.swoopy_salvo_kong] = []
     swoopy_salvo_region = create_region(world, player, active_locations, LocationName.swoopy_salvo_region,
-                                        swoopy_salvo_region_locations, None)
+                                        swoopy_salvo_region_locations)
 
     rocket_rush_region_locations = {
         LocationName.rocket_rush_flag : [0x67E, 1],
         LocationName.rocket_rush_dk   : [0x67E, 5],
     }
     rocket_rush_region = create_region(world, player, active_locations, LocationName.rocket_rush_region,
-                                       rocket_rush_region_locations, None)
+                                       rocket_rush_region_locations)
 
     belchas_barn_region_locations = {
         LocationName.belchas_barn: [0x64F, 1],
     }
     belchas_barn_region = create_region(world, player, active_locations, LocationName.belchas_barn_region,
-                                        belchas_barn_region_locations, None)
+                                        belchas_barn_region_locations)
 
     arichs_ambush_region_locations = {
         LocationName.arichs_ambush: [0x650, 1],
     }
     arichs_ambush_region = create_region(world, player, active_locations, LocationName.arichs_ambush_region,
-                                         arichs_ambush_region_locations, None)
+                                         arichs_ambush_region_locations)
 
     squirts_showdown_region_locations = {
         LocationName.squirts_showdown: [0x651, 1],
     }
     squirts_showdown_region = create_region(world, player, active_locations, LocationName.squirts_showdown_region,
-                                            squirts_showdown_region_locations, None)
+                                            squirts_showdown_region_locations)
 
     kaos_karnage_region_locations = {
         LocationName.kaos_karnage: [0x652, 1],
     }
     kaos_karnage_region = create_region(world, player, active_locations, LocationName.kaos_karnage_region,
-                                        kaos_karnage_region_locations, None)
+                                        kaos_karnage_region_locations)
 
     bleaks_house_region_locations = {
         LocationName.bleaks_house: [0x653, 1],
     }
     bleaks_house_region = create_region(world, player, active_locations, LocationName.bleaks_house_region,
-                                        bleaks_house_region_locations, None)
+                                        bleaks_house_region_locations)
 
     barboss_barrier_region_locations = {
         LocationName.barboss_barrier: [0x654, 1],
     }
     barboss_barrier_region = create_region(world, player, active_locations, LocationName.barboss_barrier_region,
-                                           barboss_barrier_region_locations, None)
+                                           barboss_barrier_region_locations)
 
     kastle_kaos_region_locations = {
         LocationName.kastle_kaos: [0x655, 1],
     }
     kastle_kaos_region = create_region(world, player, active_locations, LocationName.kastle_kaos_region,
-                                       kastle_kaos_region_locations, None)
+                                       kastle_kaos_region_locations)
 
     knautilus_region_locations = {
         LocationName.knautilus: [0x656, 1],
     }
     knautilus_region = create_region(world, player, active_locations, LocationName.knautilus_region,
-                                     knautilus_region_locations, None)
+                                     knautilus_region_locations)
 
     belchas_burrow_region_locations = {
         LocationName.belchas_burrow: [0x647, 1],
     }
     belchas_burrow_region = create_region(world, player, active_locations, LocationName.belchas_burrow_region,
-                                          belchas_burrow_region_locations, None)
+                                          belchas_burrow_region_locations)
 
     kong_cave_region_locations = {
         LocationName.kong_cave: [0x645, 1],
     }
     kong_cave_region = create_region(world, player, active_locations, LocationName.kong_cave_region,
-                                     kong_cave_region_locations, None)
+                                     kong_cave_region_locations)
 
     undercover_cove_region_locations = {
         LocationName.undercover_cove: [0x644, 1],
     }
     undercover_cove_region = create_region(world, player, active_locations, LocationName.undercover_cove_region,
-                                          undercover_cove_region_locations, None)
+                                           undercover_cove_region_locations)
 
     ks_cache_region_locations = {
         LocationName.ks_cache: [0x642, 1],
     }
     ks_cache_region = create_region(world, player, active_locations, LocationName.ks_cache_region,
-                                    ks_cache_region_locations, None)
+                                    ks_cache_region_locations)
 
     hill_top_hoard_region_locations = {
         LocationName.hill_top_hoard: [0x643, 1],
     }
     hill_top_hoard_region = create_region(world, player, active_locations, LocationName.hill_top_hoard_region,
-                                          hill_top_hoard_region_locations, None)
+                                          hill_top_hoard_region_locations)
 
     bounty_beach_region_locations = {
         LocationName.bounty_beach: [0x646, 1],
     }
     bounty_beach_region = create_region(world, player, active_locations, LocationName.bounty_beach_region,
-                                        bounty_beach_region_locations, None)
+                                        bounty_beach_region_locations)
 
     smugglers_cove_region_locations = {
         LocationName.smugglers_cove: [0x648, 1],
     }
     smugglers_cove_region = create_region(world, player, active_locations, LocationName.smugglers_cove_region,
-                                          smugglers_cove_region_locations, None)
+                                          smugglers_cove_region_locations)
 
     arichs_hoard_region_locations = {
         LocationName.arichs_hoard: [0x649, 1],
     }
     arichs_hoard_region = create_region(world, player, active_locations, LocationName.arichs_hoard_region,
-                                        arichs_hoard_region_locations, None)
+                                        arichs_hoard_region_locations)
 
     bounty_bay_region_locations = {
         LocationName.bounty_bay: [0x64A, 1],
     }
     bounty_bay_region = create_region(world, player, active_locations, LocationName.bounty_bay_region,
-                                      bounty_bay_region_locations, None)
+                                      bounty_bay_region_locations)
 
     sky_high_secret_region_locations = {}
     if False:#world.include_trade_sequence[player]:
         sky_high_secret_region_locations[LocationName.sky_high_secret] = [0x64B, 1]
     sky_high_secret_region = create_region(world, player, active_locations, LocationName.sky_high_secret_region,
-                                           sky_high_secret_region_locations, None)
+                                           sky_high_secret_region_locations)
 
     glacial_grotto_region_locations = {
         LocationName.glacial_grotto: [0x64C, 1],
     }
     glacial_grotto_region = create_region(world, player, active_locations, LocationName.glacial_grotto_region,
-                                          glacial_grotto_region_locations, None)
+                                          glacial_grotto_region_locations)
 
     cifftop_cache_region_locations = {}
     if False:#world.include_trade_sequence[player]:
         cifftop_cache_region_locations[LocationName.cifftop_cache] = [0x64D, 1]
     cifftop_cache_region = create_region(world, player, active_locations, LocationName.cifftop_cache_region,
-                                         cifftop_cache_region_locations, None)
+                                         cifftop_cache_region_locations)
 
     sewer_stockpile_region_locations = {
         LocationName.sewer_stockpile: [0x64E, 1],
     }
     sewer_stockpile_region = create_region(world, player, active_locations, LocationName.sewer_stockpile_region,
-                                           sewer_stockpile_region_locations, None)
+                                           sewer_stockpile_region_locations)
 
 
     # Set up the regions correctly.
@@ -710,20 +713,17 @@ def create_regions(world, player: int, active_locations):
 
         blizzard_region_locations[LocationName.blizzards_basecamp] = [0x625, 4, True]
 
-    bazaar_region = create_region(world, player, active_locations, LocationName.bazaar_region,
-                                  bazaar_region_locations, None)
+    bazaar_region = create_region(world, player, active_locations, LocationName.bazaar_region, bazaar_region_locations)
     bramble_region = create_region(world, player, active_locations, LocationName.bramble_region,
-                                   bramble_region_locations, None)
+                                   bramble_region_locations)
     flower_spot_region = create_region(world, player, active_locations, LocationName.flower_spot_region,
-                                       flower_spot_region_locations, None)
-    barter_region = create_region(world, player, active_locations, LocationName.barter_region,
-                                  barter_region_locations, None)
+                                       flower_spot_region_locations)
+    barter_region = create_region(world, player, active_locations, LocationName.barter_region, barter_region_locations)
     barnacle_region = create_region(world, player, active_locations, LocationName.barnacle_region,
-                                    barnacle_region_locations, None)
-    blue_region = create_region(world, player, active_locations, LocationName.blue_region,
-                                blue_region_locations, None)
+                                    barnacle_region_locations)
+    blue_region = create_region(world, player, active_locations, LocationName.blue_region, blue_region_locations)
     blizzard_region = create_region(world, player, active_locations, LocationName.blizzard_region,
-                                    blizzard_region_locations, None)
+                                    blizzard_region_locations)
 
     world.regions += [
         bazaar_region,
@@ -910,10 +910,9 @@ def connect_regions(world, player, level_list):
                 lambda state: (state.has(ItemName.krematoa_cog, player, 5)))
 
 
-def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
+def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):
     # Shamelessly stolen from the ROR2 definition
-    ret = Region(name, None, name, player)
-    ret.multiworld = world
+    ret = Region(name, player, world)
     if locations:
         for locationName, locationData in locations.items():
             loc_id = active_locations.get(locationName, 0)
@@ -924,9 +923,6 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
 
                 location = DKC3Location(player, locationName, loc_id, ret, loc_byte, loc_bit, loc_invert)
                 ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
 
     return ret
 

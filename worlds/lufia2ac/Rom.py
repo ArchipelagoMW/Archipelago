@@ -3,7 +3,7 @@ import os
 from typing import Optional
 
 import Utils
-from Utils import OptionsType
+from settings import get_settings
 from worlds.Files import APDeltaPatch
 
 L2USHASH: str = "6efc477d6203ed2b3b9133c1cd9e9c5d"
@@ -22,22 +22,21 @@ class L2ACDeltaPatch(APDeltaPatch):
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes: Optional[bytes] = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
-        file_name: str = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(Utils.read_snes_rom(open(file_name, "rb")))
+        file_path: str = get_base_rom_path(file_name)
+        base_rom_bytes = bytes(Utils.read_snes_rom(open(file_path, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if L2USHASH != basemd5.hexdigest():
             raise Exception("Supplied Base Rom does not match known MD5 for US release. "
                             "Get the correct game and version, then dump it")
-        get_base_rom_bytes.base_rom_bytes = base_rom_bytes
+        setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
     return base_rom_bytes
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: OptionsType = Utils.get_options()
     if not file_name:
-        file_name = options["lufia2ac_options"]["rom_file"]
+        file_name = get_settings()["lufia2ac_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name

@@ -54,10 +54,11 @@ class V6World(World):
     def create_item(self, name: str) -> Item:
         return V6Item(name, ItemClassification.progression, item_table[name], self.player)
 
-    def generate_basic(self):
+    def create_items(self):
         trinkets = [self.create_item("Trinket " + str(i+1).zfill(2)) for i in range(0,20)]
         self.multiworld.itempool += trinkets
 
+    def generate_basic(self):
         musiclist_o = [1,2,3,4,9,12]
         musiclist_s = musiclist_o.copy()
         if self.multiworld.MusicRandomizer[self.player].value:

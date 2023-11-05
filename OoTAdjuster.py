@@ -44,7 +44,7 @@ def adjustGUI():
         StringVar, IntVar, Checkbutton, Frame, Label, X, Entry, Button, \
         OptionMenu, filedialog, messagebox, ttk
     from argparse import Namespace
-    from Main import __version__ as MWVersion
+    from Utils import __version__ as MWVersion
 
     window = tk.Tk()
     window.wm_title(f"Archipelago {MWVersion} OoT Adjuster")
@@ -197,7 +197,7 @@ def set_icon(window):
 def adjust(args):
     # Create a fake world and OOTWorld to use as a base
     world = MultiWorld(1)
-    world.slot_seeds = {1: random}
+    world.per_slot_randoms = {1: random}
     ootworld = OOTWorld(world, 1)
     # Set options in the fake OOTWorld
     for name, option in chain(cosmetic_options.items(), sfx_options.items()):

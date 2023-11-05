@@ -50,7 +50,7 @@ def getHint(item, clearer_hint=False):
             return Hint(item, clearText, hintType)
         else:
             return Hint(item, textOptions, hintType)
-    elif type(item) is str:
+    elif isinstance(item, str):
         return Hint(item, item, 'generic')
     else: # is an Item
         return Hint(item.name, item.hint_text, 'item')
