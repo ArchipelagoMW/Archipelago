@@ -624,7 +624,7 @@ class PlayerState:
     player: int
 
     def __init__(self, player: int, parent: Union[CollectionState, MultiWorld]):
-        if parent is MultiWorld:
+        if isinstance(parent, MultiWorld):
             state = CollectionState(parent, player)
             self._parent = state
             self._multiworld = parent
