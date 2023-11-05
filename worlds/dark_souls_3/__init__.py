@@ -97,6 +97,8 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
+            # No reason to let this be in the multiworld since it's necessary ten minutes into the game
+            self.multiworld.local_early_items[self.player]['Coiled Sword'] = 1
         if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
             # Make this available early just because it's fun to be able to check boss souls early.
@@ -275,7 +277,7 @@ class DarkSouls3World(World):
             item = item_dictionary[location.default_item_name]
             if item.category == DS3ItemCategory.SKIP:
                 num_required_extra_items += 1
-            elif item.category == DS3ItemCategory.MISC and not item.force_unique:
+            elif not item.unique:
                 itempool_by_category[location.category].append(location.default_item_name)
             else:
                 # For non-miscellaneous non-skip items, make sure there aren't duplicates in the
@@ -410,6 +412,9 @@ class DarkSouls3World(World):
         if (
             self.multiworld.randomize_weapon_level[self.player] != RandomizeWeaponLevelOption.option_none
             and data.category.upgrade_level
+            # Because we require the Pyromancy Flame to be available early, don't upgrade it so it
+            # doesn't get shuffled around by weapon smoothing.
+            and not data.name == "Pyromancy FLame"
         ):
             # if the user made an error and set a min higher than the max we default to the max
             max_5 = self.multiworld.max_levels_in_5[self.player]
@@ -439,6 +444,7 @@ class DarkSouls3World(World):
     def set_rules(self) -> None:
         # Define the access rules to the entrances
         self._add_entrance_rule("Firelink Shrine Bell Tower", "Tower Key")
+        self._add_entrance_rule("High Wall of Lothric", "Coiled Sword")
         self._add_entrance_rule("Undead Settlement", "Small Lothric Banner")
         self._add_entrance_rule("Lothric Castle", "Basin of Vows")
         self._add_entrance_rule("Irithyll of the Boreal Valley", "Small Doll")
@@ -580,6 +586,11 @@ class DarkSouls3World(World):
                                         item.name != "Path of the Dragon"
                                     ))
 
+        # This particular location is bugged, and will drop two copies of whatever item is placed
+        # there.
+        if self.is_location_available("US: Young White Branch #2"):
+            add_item_rule(self.multiworld.get_location("US: Young White Branch #2", self.player),
+                        lambda item: item.player == self.player and not item.unique)
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location.region:
@@ -829,6 +840,8 @@ class DarkSouls3World(World):
                 "no_equip_load": self.multiworld.no_equip_load[self.player].value,
                 "enable_dlc": self.multiworld.enable_dlc[self.player].value,
                 "enable_ngp": self.multiworld.enable_ngp[self.player].value,
+                "smooth_soul_locations": self.multiworld.soul_locations[self.player].value == SoulLocationsOption.option_smooth,
+                "smooth_upgrade_locations": self.multiworld.upgrade_locations[self.player].value == UpgradeLocationsOption.option_smooth,
                 "randomize_enemies": self.multiworld.randomize_enemies[self.player].value,
                 "randomize_mimics_with_enemies": self.multiworld.randomize_mimics_with_enemies[self.player].value,
                 "randomize_small_crystal_lizards_with_enemies": self.multiworld.randomize_small_crystal_lizards_with_enemies[self.player].value,

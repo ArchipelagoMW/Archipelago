@@ -137,6 +137,11 @@ class DS3ItemData():
     This is automatically done for non-MISC items, but may be useful for MISC items in some cases.
     """
 
+    @property
+    def unique(self):
+        """Whether this item should be unique, appearing only once in the randomizer."""
+        return item.category != DS3ItemCategory.MISC or item.force_unique
+
     def __post_init__(self):
         self.ap_code = self.ap_code or DS3ItemData.__item_id
         if not self.base_name: self.base_name = self.name
@@ -148,6 +153,7 @@ class DS3ItemData():
         for count in counts:
             yield dataclasses.replace(
                 self,
+                ap_code = None,
                 name = "{} x{}".format(self.base_name, count),
                 base_name = self.base_name,
                 count = count,
@@ -164,7 +170,6 @@ class DS3ItemData():
         # infusion/upgrade combination to that map because it's way too many items.
         return dataclasses.replace(
             self,
-            ap_code = self.ap_code,
             name = self.name,
             ds3_code = self.ds3_code + infusion.value,
             filler = False,
@@ -181,7 +186,6 @@ class DS3ItemData():
         # infusion/upgrade combination to that map because it's way too many items.
         return dataclasses.replace(
             self,
-            ap_code = self.ap_code,
             name = self.name,
             ds3_code = self.ds3_code + level,
             filler = False,
@@ -1005,9 +1009,9 @@ _vanilla_items = flatten([
     DS3ItemData("Prism Stone",                         0x40000172, DS3ItemCategory.SKIP).counts([4, 6, 10]),
     DS3ItemData("Binoculars",                          0x40000173, DS3ItemCategory.MISC),
     DS3ItemData("Proof of a Concord Kept",             0x40000174, DS3ItemCategory.SKIP),
+    # One is needed for Leonhard's quest, others are useful for restatting.
     DS3ItemData("Pale Tongue",                         0x40000175, DS3ItemCategory.MISC,
-                classification = ItemClassification.progression,
-                force_unique = True), # One is needed for Leonhard's quest
+                classification = ItemClassification.progression),
     DS3ItemData("Vertebra Shackle",                    0x40000176, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression, force_unique = True), # Crow trade
     DS3ItemData("Sunlight Medal",                      0x40000177, DS3ItemCategory.SKIP),
@@ -1200,7 +1204,8 @@ _vanilla_items = flatten([
                 classification = ItemClassification.progression),
     DS3ItemData("Transposing Kiln",                    0x40000857, DS3ItemCategory.MISC,
                 classification = ItemClassification.useful),
-    DS3ItemData("Coiled Sword",                        0x40000859, DS3ItemCategory.SKIP), # Useless
+    DS3ItemData("Coiled Sword",                        0x40000859, DS3ItemCategory.KEY,
+                classification = ItemClassification.progression),
     DS3ItemData("Eyes of a Fire Keeper",               0x4000085A, DS3ItemCategory.KEY,
                 classification = ItemClassification.useful), # Allow players to do any ending
     DS3ItemData("Sword of Avowal",                     0x4000085B, DS3ItemCategory.KEY,
