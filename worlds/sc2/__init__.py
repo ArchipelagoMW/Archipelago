@@ -441,22 +441,6 @@ def place_exclusion_item(item_name, location, locked_locations, player):
     locked_locations.append(location.name)
 
 
-def get_plando_locations(multiworld: MultiWorld, player) -> List[str]:
-    """
-
-    :param multiworld:
-    :param player:
-    :return: A list of locations affected by a plando in a world
-    """
-    plando_locations = []
-    for plando_setting in multiworld.plando_items[player]:
-        plando_locations += plando_setting.get("locations", [])
-        plando_setting_location = plando_setting.get("location", None)
-        if plando_setting_location is not None:
-            plando_locations.append(plando_setting_location)
-
-    return plando_locations
-
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
     total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
     if get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available \
