@@ -419,7 +419,7 @@ class PokemonEmeraldClient(BizHawkClient):
             # Exit handler and return to main loop to reconnect
             pass
 
-    async def wonder_trade_acquire(self, ctx: BizHawkClientContext, keep_trying: bool = False) -> Optional[dict]:
+    async def wonder_trade_acquire(self, ctx: "BizHawkClientContext", keep_trying: bool = False) -> Optional[dict]:
         """
         Acquires a lock on the `pokemon_wonder_trades_{ctx.team}` key in
         datastorage. Locking the key means you have exclusive access
@@ -479,7 +479,7 @@ class PokemonEmeraldClient(BizHawkClient):
             self.wonder_trade_cooldown = 5000
             return reply
 
-    async def wonder_trade_send(self, ctx: BizHawkClientContext, data: str) -> None:
+    async def wonder_trade_send(self, ctx: "BizHawkClientContext", data: str) -> None:
         """
         Sends a wonder trade pokemon to data storage
         """
@@ -503,7 +503,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
         logger.info("Wonder trade sent! We'll notify you here when a trade has been found.")
 
-    async def wonder_trade_receive(self, ctx: BizHawkClientContext) -> Optional[str]:
+    async def wonder_trade_receive(self, ctx: "BizHawkClientContext") -> Optional[str]:
         """
         Tries to pop a pokemon out of the wonder trades. Returns `None` if
         for some reason it can't immediately remove a compatible pokemon.
@@ -546,7 +546,7 @@ class PokemonEmeraldClient(BizHawkClient):
         logger.info("Wonder trade received!")
         return reply["value"][str(wonder_trade_slot)][1]
 
-    def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
+    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if cmd == "Connected":
             Utils.async_start(ctx.send_msgs([{
                 "cmd": "SetNotify",

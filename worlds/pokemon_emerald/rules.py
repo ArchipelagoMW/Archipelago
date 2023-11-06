@@ -89,7 +89,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     elif world.options.goal == Goal.option_norman:
         completion_condition = lambda state: state.has("EVENT_DEFEAT_NORMAN", world.player)
     elif world.options.goal == Goal.option_legendary_hunt:
-        completion_condition = lambda state: encountered_n_legendaries(state, world.player, world.options.legendary_hunt_count.value)
+        completion_condition = lambda state: encountered_n_legendaries(state, world.options.legendary_hunt_count.value)
 
     world.multiworld.completion_condition[world.player] = completion_condition
 

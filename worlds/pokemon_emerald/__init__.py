@@ -100,6 +100,7 @@ class PokemonEmeraldWorld(World):
         self.hm_shuffle_info = None
         self.free_fly_location_id = 0
         self.modified_maps = copy.deepcopy(emerald_data.maps)
+        self.modified_species = copy.deepcopy(emerald_data.species)
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -979,7 +980,6 @@ class PokemonEmeraldWorld(World):
                     trainer_data = self.modified_trainers[emerald_data.constants[trainer_name]]
                     trainer_data.party.pokemon[starter_position].species_id = picked_evolution if is_evolved else starter.species_id
 
-        self.modified_species = copy.deepcopy(emerald_data.species)
         self.modified_trainers = copy.deepcopy(emerald_data.trainers)
         self.modified_tmhm_moves = copy.deepcopy(emerald_data.tmhm_moves)
         self.modified_static_encounters = copy.deepcopy(emerald_data.static_encounters)

@@ -650,7 +650,7 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray
                     )
 
 
-def _randomize_move_tutor_moves(world: PokemonEmeraldWorld, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for i in range(30):
         if i == 24:
             continue  # Don't overwrite the Dig tutor
