@@ -8,7 +8,7 @@ import os
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
-from Fill import fill_restrictive
+from Fill import FillError, fill_restrictive
 from Options import Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
@@ -18,7 +18,8 @@ from .data import (SpeciesData, MapData, EncounterTableData, LearnsetMove, Train
                    TrainerData, data as emerald_data)
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
                     offset_item_value)
-from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
+from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
+                        create_locations_with_tags)
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, ReceiveItemMessages,
@@ -77,6 +78,7 @@ class PokemonEmeraldWorld(World):
     item_name_to_id = create_item_label_to_code_map()
     location_name_to_id = create_location_label_to_id_map()
     item_name_groups = ITEM_GROUPS
+    location_name_groups = LOCATION_GROUPS
 
     data_version = 1
     required_client_version = (0, 4, 3)
@@ -508,16 +510,18 @@ class PokemonEmeraldWorld(World):
 
             # Sort order makes `fill_restrictive` try to place important badges later, which
             # makes it less likely to have to swap at all, and more likely for swaps to work.
+            # In the case of vanilla HMs, navigating Granite Cave is required to access more than 2 gyms,
+            # so Knuckle Badge deserves highest priority if Flash is logically required.
             badge_locations, badge_items = [list(l) for l in zip(*self.badge_shuffle_info)]
             badge_priority = {
-                "Balance Badge": 0,
-                "Dynamo Badge": 0,
-                "Mind Badge": 1,
-                "Heat Badge": 1,
-                "Rain Badge": 2,
-                "Knuckle Badge": 2,
-                "Stone Badge": 3,
-                "Feather Badge": 4
+                "Knuckle Badge": 0 if (self.options.hms == RandomizeHms.option_vanilla and self.options.require_flash) else 3,
+                "Balance Badge": 1,
+                "Dynamo Badge": 1,
+                "Mind Badge": 2,
+                "Heat Badge": 2,
+                "Rain Badge": 3,
+                "Stone Badge": 4,
+                "Feather Badge": 5
             }
             badge_items.sort(key=lambda item: badge_priority.get(item.name, 0))
 
@@ -531,9 +535,23 @@ class PokemonEmeraldWorld(World):
                 for _, item in self.hm_shuffle_info:
                     collection_state.collect(item)
 
-            self.random.shuffle(badge_locations)
-            fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items,
-                             single_player_placement=True, lock=True, allow_excluded=True)
+            # In specific very constrained conditions, fill_restrictive may run
+            # out of swaps before it finds a valid solution if it gets unlucky.
+            # This is a band-aid until fill/swap can reliably find those solutions.
+            attempts_remaining = 2
+            while attempts_remaining > 0:
+                attempts_remaining -= 1
+                self.random.shuffle(badge_locations)
+                try:
+                    fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items,
+                                     single_player_placement=True, lock=True, allow_excluded=True)
+                    break
+                except FillError as exc:
+                    if attempts_remaining == 0:
+                        raise exc
+
+                    logging.debug(f"Failed to shuffle badges for player {self.player}. Retrying.")
+                    continue
 
         # Badges are guaranteed to be either placed or in the multiworld's itempool now
         if self.options.hms == RandomizeHms.option_shuffle:
@@ -542,24 +560,40 @@ class PokemonEmeraldWorld(World):
 
             # Sort order makes `fill_restrictive` try to place important HMs later, which
             # makes it less likely to have to swap at all, and more likely for swaps to work.
+            # In the case of vanilla badges, navigating Granite Cave is required to access more than 2 gyms,
+            # so Flash deserves highest priority if it's logically required.
             hm_locations, hm_items = [list(l) for l in zip(*self.hm_shuffle_info)]
             hm_priority = {
-                "HM03 Surf": 0,
-                "HM06 Rock Smash": 0,
-                "HM08 Dive": 1,
-                "HM04 Strength": 1,
-                "HM07 Waterfall": 2,
-                "HM05 Flash": 2,
-                "HM01 Cut": 3,
-                "HM02 Fly": 4
+                "HM05 Flash": 0 if (self.options.badges == RandomizeBadges.option_vanilla and self.options.require_flash) else 3,
+                "HM03 Surf": 1,
+                "HM06 Rock Smash": 1,
+                "HM08 Dive": 2,
+                "HM04 Strength": 2,
+                "HM07 Waterfall": 3,
+                "HM01 Cut": 4,
+                "HM02 Fly": 5
             }
             hm_items.sort(key=lambda item: hm_priority.get(item.name, 0))
 
             collection_state = self.multiworld.get_all_state(False)
 
-            self.random.shuffle(hm_locations)
-            fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items,
-                             single_player_placement=True, lock=True, allow_excluded=True)
+            # In specific very constrained conditions, fill_restrictive may run
+            # out of swaps before it finds a valid solution if it gets unlucky.
+            # This is a band-aid until fill/swap can reliably find those solutions.
+            attempts_remaining = 2
+            while attempts_remaining > 0:
+                attempts_remaining -= 1
+                self.random.shuffle(hm_locations)
+                try:
+                    fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items,
+                                     single_player_placement=True, lock=True, allow_excluded=True)
+                    break
+                except FillError as exc:
+                    if attempts_remaining == 0:
+                        raise exc
+
+                    logging.debug(f"Failed to shuffle HMs for player {self.player}. Retrying.")
+                    continue
 
     def generate_output(self, output_directory: str) -> None:
         def randomize_abilities() -> None:
@@ -803,6 +837,8 @@ class PokemonEmeraldWorld(World):
             }
             allow_legendaries = self.options.allow_trainer_legendaries == Toggle.option_true
 
+            per_species_tmhm_moves: Dict[int, List[int]] = {}
+
             for trainer in self.modified_trainers:
                 new_party = []
                 for pokemon in trainer.party.pokemon:
@@ -818,12 +854,15 @@ class PokemonEmeraldWorld(World):
                         LEGENDARY_POKEMON if allow_legendaries else set()
                     )
 
+                    if new_species.species_id not in per_species_tmhm_moves:
+                        per_species_tmhm_moves[new_species.species_id] = list({
+                            self.modified_tmhm_moves[i]
+                            for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
+                            if is_compatible
+                        })
+
                     # TMs and HMs compatible with the species. Could cache this per species
-                    tm_hm_movepool = list({
-                        self.modified_tmhm_moves[i]
-                        for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
-                        if is_compatible
-                    })
+                    tm_hm_movepool = per_species_tmhm_moves[new_species.species_id]
 
                     # Moves the pokemon could have learned by now
                     level_up_movepool = list({

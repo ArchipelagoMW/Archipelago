@@ -414,16 +414,16 @@ class World(metaclass=AutoWorldRegister):
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
         if name:
-            state.prog_items[name, self.player] += 1
+            state.prog_items[self.player][name] += 1
             return True
         return False
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item, True)
         if name:
-            state.prog_items[name, self.player] -= 1
-            if state.prog_items[name, self.player] < 1:
-                del (state.prog_items[name, self.player])
+            state.prog_items[self.player][name] -= 1
+            if state.prog_items[self.player][name] < 1:
+                del (state.prog_items[self.player][name])
             return True
         return False
 

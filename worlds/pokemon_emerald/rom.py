@@ -19,8 +19,6 @@ from .util import encode_string, get_easter_egg
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
-else:
-    PokemonEmeraldWorld = object
 
 
 _LOOPING_MUSIC = [
@@ -116,7 +114,7 @@ cave_event_to_id_map = {
 }
 
 
-def generate_output(world: PokemonEmeraldWorld, output_directory: str) -> None:
+def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
@@ -509,7 +507,7 @@ def _set_bytes_little_endian(byte_array: bytearray, address: int, size: int, val
         size -= 1
 
 
-def _set_encounter_tables(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+def _set_encounter_tables(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     """
     Encounter tables are lists of
     struct {
@@ -527,7 +525,7 @@ def _set_encounter_tables(world: PokemonEmeraldWorld, rom: bytearray) -> None:
                     _set_bytes_little_endian(rom, address, 2, species_id)
 
 
-def _set_species_info(world: PokemonEmeraldWorld, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _set_species_info(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for species in world.modified_species:
         if species is not None:
             _set_bytes_little_endian(rom, species.address + 6, 1, species.types[0])
@@ -548,7 +546,7 @@ def _set_species_info(world: PokemonEmeraldWorld, rom: bytearray, easter_egg: Tu
                 _set_bytes_little_endian(rom, species.learnset_address + (i * 2), 2, level_move)
 
 
-def _set_opponents(world: PokemonEmeraldWorld, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _set_opponents(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for trainer in world.modified_trainers:
         party_address = trainer.party.address
 
@@ -589,12 +587,12 @@ def _set_opponents(world: PokemonEmeraldWorld, rom: bytearray, easter_egg: Tuple
                     _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
 
 
-def _set_static_encounters(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+def _set_static_encounters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     for encounter in world.modified_static_encounters:
         _set_bytes_little_endian(rom, encounter.address, 2, encounter.species_id)
 
 
-def _set_starters(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+def _set_starters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     address = data.rom_addresses["sStarterMon"]
     (starter_1, starter_2, starter_3) = world.modified_starters
 
@@ -603,7 +601,7 @@ def _set_starters(world: PokemonEmeraldWorld, rom: bytearray) -> None:
     _set_bytes_little_endian(rom, address + 4, 2, starter_3)
 
 
-def _set_tm_moves(world: PokemonEmeraldWorld, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _set_tm_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     tmhm_list_address = data.rom_addresses["sTMHMMoves"]
 
     for i, move in enumerate(world.modified_tmhm_moves):
@@ -616,7 +614,7 @@ def _set_tm_moves(world: PokemonEmeraldWorld, rom: bytearray, easter_egg: Tuple[
             _set_bytes_little_endian(rom, tmhm_list_address + (i * 2), 2, easter_egg[1])
 
 
-def _set_tmhm_compatibility(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+def _set_tmhm_compatibility(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     learnsets_address = data.rom_addresses["gTMHMLearnsets"]
 
     for species in world.modified_species:
@@ -624,7 +622,7 @@ def _set_tmhm_compatibility(world: PokemonEmeraldWorld, rom: bytearray) -> None:
             _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
 
 
-def _randomize_opponent_battle_type(world: PokemonEmeraldWorld, rom: bytearray) -> None:
+def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     probability = world.options.double_battle_chance.value / 100
 
     battle_type_map = {

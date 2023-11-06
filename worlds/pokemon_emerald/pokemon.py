@@ -1,8 +1,9 @@
 """
 Functions related to pokemon species and moves
 """
+import time
 from random import Random
-from typing import List, Set, Optional, Tuple
+from typing import Dict, List, Set, Optional, Tuple
 
 from .data import SpeciesData, data
 
@@ -52,6 +53,10 @@ _move_types = [
     11, 12,  2, 15,  8,  0,  0, 16, 12,  1,  2,  4,  3,  0, 13,
     12, 11, 14, 12, 16,  5, 13, 11,  8, 14
 ]
+
+_moves_by_type: Dict[int, List[int]] = {}
+for move, type in enumerate(_move_types):
+    _moves_by_type.setdefault(type, []).append(move)
 
 _move_blacklist = frozenset({
     0,    # MOVE_NONE
@@ -144,32 +149,41 @@ def get_random_move(
         type_target: Optional[Tuple[int, int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
 
-    match_type = False
-    match_normal = False
     bias = random.random() * 100
     if bias < type_bias:
-        match_type = True
+        pass  # Keep type_target unchanged
     elif bias < type_bias + ((100 - type_bias) * (normal_bias / 100)):
-        match_normal = True
+        type_target = (0, 0)
+    else:
+        type_target = None
 
-    possible_moves = []
-    for i in range(data.constants["MOVES_COUNT"]):
-        if i not in expanded_blacklist:
-            if match_type:
-                if _move_types[i] in type_target:
-                    possible_moves.append(i)
-            elif match_normal:
-                if _move_types[i] == 0:
-                    possible_moves.append(i)
-            else:
-                possible_moves.append(i)
+    chosen_move = None
+
+    # The blacklist is relatively small, so if we don't need to restrict
+    # ourselves to any particular types, it's usually much faster to pick
+    # a random number and hope it works. Limit this to 5 tries in case the
+    # blacklist is actually significant enough to make this unlikely to work.
+    if type_target is None:
+        remaining_attempts = 5
+        while remaining_attempts > 0:
+            remaining_attempts -= 1
+            chosen_move = random.randrange(0, data.constants["MOVES_COUNT"])
+            if chosen_move not in expanded_blacklist:
+                return chosen_move
+        else:
+            chosen_move = None
+
+    # We're either matching types or failed to pick a move above
+    if type_target is None:
+        possible_moves = [i for i in range(data.constants["MOVE_COUNT"]) if i not in expanded_blacklist]
+    else:
+        possible_moves = [move for move in _moves_by_type[type_target[0]] if move not in expanded_blacklist] + \
+                            [move for move in _moves_by_type[type_target[1]] if move not in expanded_blacklist]
 
     if len(possible_moves) == 0:
         return get_random_move(random, None, type_bias, normal_bias, type_target)
 
-    move = random.choice(possible_moves)
-
-    return move
+    return random.choice(possible_moves)
 
 
 def get_random_damaging_move(random: Random, blacklist: Optional[Set[int]] = None) -> int:

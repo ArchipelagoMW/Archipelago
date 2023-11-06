@@ -10,8 +10,6 @@ from .items import offset_item_value
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
-else:
-    PokemonEmeraldWorld = object
 
 
 class PokemonEmeraldLocation(Location):
@@ -53,7 +51,7 @@ def reverse_offset_flag(location_id: int) -> int:
     return location_id - BASE_OFFSET
 
 
-def create_locations_with_tags(world: PokemonEmeraldWorld, regions: Dict[str, Region], tags: Iterable[str]) -> None:
+def create_locations_with_tags(world: "PokemonEmeraldWorld", regions: Dict[str, Region], tags: Iterable[str]) -> None:
     """
     Iterates through region data and adds locations to the multiworld if
     those locations include any of the provided tags.
@@ -98,3 +96,36 @@ def create_location_label_to_id_map() -> Dict[str, int]:
                 label_to_id_map[location_data.label] = offset_flag(location_data.flag)
 
     return label_to_id_map
+
+
+LOCATION_GROUPS = {
+    "Badges": {
+        "Rustboro Gym - Stone Badge",
+        "Dewford Gym - Knuckle Badge",
+        "Mauville Gym - Dynamo Badge",
+        "Lavaridge Gym - Heat Badge",
+        "Petalburg Gym - Balance Badge",
+        "Fortree Gym - Feather Badge",
+        "Mossdeep Gym - Mind Badge",
+        "Sootopolis Gym - Rain Badge",
+    },
+    "Gym TMs": {
+        "Rustboro Gym - TM39 from Roxanne",
+        "Dewford Gym - TM08 from Brawly",
+        "Mauville Gym - TM34 from Wattson",
+        "Lavaridge Gym - TM50 from Flannery",
+        "Petalburg Gym - TM42 from Norman",
+        "Fortree Gym - TM40 from Winona",
+        "Mossdeep Gym - TM04 from Tate and Liza",
+        "Sootopolis Gym - TM03 from Juan",
+    },
+    "Postgame Locations": {
+        "Littleroot Town - S.S. Ticket from Norman",
+        "SS Tidal - Hidden Item in Lower Deck Trash Can",
+        "SS Tidal - TM49 from Thief",
+        "Safari Zone NE - Hidden Item North",
+        "Safari Zone NE - Hidden Item East",
+        "Safari Zone SE - Hidden Item in South Grass 1",
+        "Safari Zone SE - Hidden Item in South Grass 2",
+    }
+}
