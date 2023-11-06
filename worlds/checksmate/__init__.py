@@ -137,17 +137,8 @@ class CMWorld(World):
                 self.items_used[self.player][item.name] = 0
             self.items_used[self.player][item.name] += 1
 
-        # print(self.items_used)
-        # starter_dict = {item.name: 1 for item in starter_items}
-        # excluded_dict = {
-        #     item: excluded_items[item] for item in excluded_items if not (
-        #             not (item not in self.item_name_groups["Enemy Pawn"]) or not (
-        #             item not in self.item_name_groups["Enemy Piece"]))}
-        # user_items = {key: starter_dict.get(key, 0) + excluded_dict.get(key, 0)
-        #               for key in set(starter_dict) | set(excluded_dict)}
-        # user_item_count = sum([user_items[item] for item in user_items])
-        user_item_count = len(starter_items)
-        user_item_count += 1  # Victory item is counted as part of the pool
+        user_location_count = len(starter_items)
+        user_location_count += 1  # Victory item is counted as part of the pool
         items = []
 
         material = sum([
@@ -170,7 +161,7 @@ class CMWorld(World):
         my_progression_items.append("Progressive Pocket")
         # halve chance of queen promotion - with an equal distribution, user will end up with no majors and only queens
         my_progression_items.extend([item for item in my_progression_items if item != "Progressive Major To Queen"])
-        while (len(items) + user_item_count) < len(location_table) and material < max_material_actual and len(
+        while (len(items) + user_location_count) < len(location_table) and material < max_material_actual and len(
                 my_progression_items) > 0:
             chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_progression_items)
             # obey user's wishes
@@ -192,7 +183,7 @@ class CMWorld(World):
                 my_progression_items.remove(chosen_item)
 
         my_useful_items = list(useful_items.keys())
-        while (len(items) + user_item_count) < len(location_table) and len(my_useful_items) > 0:
+        while (len(items) + user_location_count) < len(location_table) and len(my_useful_items) > 0:
             chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_useful_items)
             if not self.has_prereqs(chosen_item):
                 continue
@@ -206,7 +197,7 @@ class CMWorld(World):
                 my_useful_items.remove(chosen_item)
 
         my_filler_items = list(filler_items.keys())
-        while (len(items) + user_item_count) < len(location_table):
+        while (len(items) + user_location_count) < len(location_table):
             chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_filler_items)
             if not self.has_prereqs(chosen_item):
                 continue
