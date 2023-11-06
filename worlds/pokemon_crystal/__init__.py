@@ -1,7 +1,15 @@
 import settings
+import typing
 
 from BaseClasses import Tutorial
 from ..AutoWorld import World, WebWorld
+from .options import pokemon_crystal_options
+from .regions import create_regions
+from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification
+from .rules import set_rules
+from .data import data as crystal_data
+from .rom import generate_output
+from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 
 
 class PokemonCrystalSettings(settings.Group):
@@ -35,17 +43,51 @@ class PokemonCrystalWebWorld(WebWorld):
 class PokemonCrystalWorld(World):
     """the only good pokemon game"""
     game = "Pokemon Crystal"
-    # option_definitions = pokemon_rb_options
-    # settings: typing.ClassVar[PokemonSettings]
+    option_definitions = pokemon_crystal_options
+    settings: typing.ClassVar[PokemonCrystalSettings]
+    topology_present = True
+
+    settings_key = "pokemon_crystal_settings"
+    settings: typing.ClassVar[PokemonCrystalSettings]
 
     data_version = 0
     required_client_version = (0, 4, 3)
 
-    topology_present = True
-
-    # item_name_to_id = {name: data.id for name, data in item_table.items()}
-    # location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"
-    # and location.address is not None}
-    # item_name_groups = item_groups
+    item_name_to_id = create_item_label_to_code_map()
+    location_name_to_id = create_location_label_to_id_map()
+    item_name_groups = {}  # item_groups
 
     web = PokemonCrystalWebWorld()
+
+    def create_regions(self) -> None:
+        regions = create_regions(self)
+        create_locations(self, regions, self.options.randomize_hidden_items)
+        self.multiworld.regions.extend(regions.values())
+
+    def create_items(self) -> None:
+        item_locations: List[PokemonEmeraldLocation] = [
+            location
+            for location in self.multiworld.get_locations(self.player)
+            if location.address is not None
+        ]
+
+        default_itempool = [self.create_item_by_code(
+            location.default_item_code) for location in item_locations]
+        self.multiworld.itempool += default_itempool
+
+    def set_rules(self) -> None:
+        set_rules(self)
+
+    def generate_output(self, output_directory: str) -> None:
+        generate_output(self, output_directory)
+
+    def create_item(self, name: str) -> PokemonCrystalItem:
+        return self.create_item_by_code(self.item_name_to_id[name])
+
+    def create_item_by_code(self, item_code: int) -> PokemonCrystalItem:
+        return PokemonCrystalItem(
+            self.item_id_to_name[item_code],
+            get_item_classification(item_code),
+            item_code,
+            self.player
+        )
