@@ -731,7 +731,7 @@ class ALTTPWorld(World):
                 if item["replacement"] is None:
                     continue
                 shop_data["item_{}".format(index)] +=\
-                    f", {item['replacement']} - {item['replacement_price']}" \
+                    f", {item['replacement']} - {item['replacement_price'] // price_rate_display.get(item['replacement_price_type'], 1)}" \
                     f" {price_type_display_name[item['replacement_price_type']]}"
 
             return shop_data
