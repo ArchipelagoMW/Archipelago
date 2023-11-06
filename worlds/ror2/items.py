@@ -15,15 +15,6 @@ class RiskOfRainItemData(NamedTuple):
     weight: Optional[int] = None
 
 
-def get_items_by_category(category: str) -> Dict[str, Set[str]]:
-    item_dict: Dict[str, Set[str]]
-    for name, data in item_table.items():
-        if data.category == category:
-            item_dict.setdefault(name, data)
-
-    return item_dict
-
-
 offset: int = 37000
 filler_offset: int = offset + 300
 trap_offset: int = offset + 400

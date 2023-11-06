@@ -1,7 +1,6 @@
 import string
 
-from .items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, get_items_by_category, \
-    filler_table
+from .items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, filler_table
 from .locations import RiskOfRainLocation, item_pickups, get_locations
 from .rules import set_rules
 from .ror2environments import environment_vanilla_table, environment_vanilla_orderedstages_table, \
