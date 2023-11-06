@@ -295,7 +295,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()
-    with (output as temp_dir):
+    with output as temp_dir:
         output_players = [player for player in world.player_ids if AutoWorld.World.generate_output.__code__
                           is not world.worlds[player].generate_output.__code__]
         with concurrent.futures.ThreadPoolExecutor(len(output_players) + 2) as pool:
