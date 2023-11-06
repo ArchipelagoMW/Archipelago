@@ -18,7 +18,8 @@ from .data import (SpeciesData, MapData, EncounterTableData, LearnsetMove, Train
                    TrainerData, data as emerald_data)
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
                     offset_item_value)
-from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
+from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
+                        create_locations_with_tags)
 from .options import (ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, PokemonEmeraldOptions)
@@ -76,6 +77,7 @@ class PokemonEmeraldWorld(World):
     item_name_to_id = create_item_label_to_code_map()
     location_name_to_id = create_location_label_to_id_map()
     item_name_groups = ITEM_GROUPS
+    location_name_groups = LOCATION_GROUPS
 
     data_version = 1
     required_client_version = (0, 4, 3)

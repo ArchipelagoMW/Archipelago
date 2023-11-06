@@ -170,11 +170,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.norman_requirement == NormanRequirement.option_badges:
         set_rule(
             get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3"),
-            lambda state: state.has_group("Badge", world.player, world.options.norman_count.value)
+            lambda state: state.has_group("Badges", world.player, world.options.norman_count.value)
         )
         set_rule(
             get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6"),
-            lambda state: state.has_group("Badge", world.player, world.options.norman_count.value)
+            lambda state: state.has_group("Badges", world.player, world.options.norman_count.value)
         )
     else:
         set_rule(
@@ -1113,7 +1113,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.elite_four_requirement == EliteFourRequirement.option_badges:
         set_rule(
             get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS"),
-            lambda state: state.has_group("Badge", world.player, world.options.elite_four_count.value)
+            lambda state: state.has_group("Badges", world.player, world.options.elite_four_count.value)
         )
     else:
         set_rule(
