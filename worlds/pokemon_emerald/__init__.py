@@ -8,7 +8,7 @@ import os
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
-from Fill import fill_restrictive
+from Fill import FillError, fill_restrictive
 from Options import Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
@@ -316,9 +316,23 @@ class PokemonEmeraldWorld(World):
                 for _, item in self.hm_shuffle_info:
                     collection_state.collect(item)
 
-            self.random.shuffle(badge_locations)
-            fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items,
-                             single_player_placement=True, lock=True, allow_excluded=True)
+            # In specific very constrained conditions, fill_restrictive may run
+            # out of swaps before it finds a valid solution if it gets unlucky.
+            # This is a band-aid until fill/swap can reliably find those solutions.
+            attempts_remaining = 2
+            while attempts_remaining > 0:
+                attempts_remaining -= 1
+                self.random.shuffle(badge_locations)
+                try:
+                    fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items,
+                                     single_player_placement=True, lock=True, allow_excluded=True)
+                    break
+                except FillError as exc:
+                    if attempts_remaining == 0:
+                        raise exc
+
+                    logging.debug(f"Failed to shuffle badges for player {self.player}. Retrying.")
+                    continue
 
         if self.options.hms == RandomizeHms.option_shuffle:
             hm_locations: List[PokemonEmeraldLocation]
@@ -343,9 +357,23 @@ class PokemonEmeraldWorld(World):
 
             collection_state = self.multiworld.get_all_state(False)
 
-            self.random.shuffle(hm_locations)
-            fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items,
-                             single_player_placement=True, lock=True, allow_excluded=True)
+            # In specific very constrained conditions, fill_restrictive may run
+            # out of swaps before it finds a valid solution if it gets unlucky.
+            # This is a band-aid until fill/swap can reliably find those solutions.
+            attempts_remaining = 2
+            while attempts_remaining > 0:
+                attempts_remaining -= 1
+                self.random.shuffle(hm_locations)
+                try:
+                    fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items,
+                                     single_player_placement=True, lock=True, allow_excluded=True)
+                    break
+                except FillError as exc:
+                    if attempts_remaining == 0:
+                        raise exc
+
+                    logging.debug(f"Failed to shuffle HMs for player {self.player}. Retrying.")
+                    continue
 
     def generate_output(self, output_directory: str) -> None:
         def randomize_abilities() -> None:
