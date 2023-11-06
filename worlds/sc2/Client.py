@@ -23,7 +23,7 @@ from worlds.sc2 import ItemNames
 from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed, \
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
     KerriganChecksPerLevelPack, \
-    LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit, \
+    LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, \
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics
 
 if __name__ == "__main__":
@@ -303,7 +303,6 @@ class SC2Context(CommonContext):
     generic_upgrade_items = 0
     location_inclusions: typing.Dict[LocationType, LocationInclusion] = {}
     plando_locations: typing.List[str] = []
-    early_unit = 1
     current_tooltip = None
     last_loc_list = None
     difficulty_override = -1
@@ -383,7 +382,6 @@ class SC2Context(CommonContext):
                 LocationType.OPTIONAL_BOSS: args["slot_data"].get("optional_boss_locations", OptionalBossLocations.default),
             }
             self.plando_locations = args["slot_data"].get("plando_locations", [])
-            self.early_unit = args["slot_data"].get("early_unit", EarlyUnit.default)
 
             self.build_location_to_mission_mapping()
 
