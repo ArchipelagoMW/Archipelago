@@ -372,6 +372,9 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
         if world.options.shuffle_EPs:
+            if world.options.obelisk_keys:
+                adjustment_linesets_in_order.append(get_obelisk_keys())
+
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
                       if ep_obj["entityType"] == "EP")
 
