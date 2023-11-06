@@ -74,6 +74,8 @@ def snes_to_pc(value: int) -> int:
 
 
 RetType = typing.TypeVar("RetType")
+S = typing.TypeVar("S")
+T = typing.TypeVar("T")
 
 
 def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
@@ -89,6 +91,31 @@ def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[]
         return typing.cast(RetType, result)
 
     return _wrap
+
+
+def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[S, T], RetType]:
+    """Specialized cache for self + 1 arg. Does not keep global ref to self and skips building a dict key tuple."""
+
+    assert function.__code__.co_argcount == 2, "Can only cache 2 argument functions with this cache."
+
+    cache_name = f"__cache_{function.__name__}__"
+
+    @functools.wraps(function)
+    def wrap(self: S, arg: T) -> RetType:
+        cache: Optional[Dict[T, RetType]] = typing.cast(Optional[Dict[T, RetType]],
+                                                        getattr(self, cache_name, None))
+        if cache is None:
+            res = function(self, arg)
+            setattr(self, cache_name, {arg: res})
+            return res
+        try:
+            return cache[arg]
+        except KeyError:
+            res = function(self, arg)
+            cache[arg] = res
+            return res
+
+    return wrap
 
 
 def is_frozen() -> bool:
@@ -147,12 +174,16 @@ def user_path(*path: str) -> str:
         if user_path.cached_path != local_path():
             import filecmp
             if not os.path.exists(user_path("manifest.json")) or \
+                    not os.path.exists(local_path("manifest.json")) or \
                     not filecmp.cmp(local_path("manifest.json"), user_path("manifest.json"), shallow=True):
                 import shutil
-                for dn in ("Players", "data/sprites"):
+                for dn in ("Players", "data/sprites", "data/lua"):
                     shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
-                for fn in ("manifest.json",):
-                    shutil.copy2(local_path(fn), user_path(fn))
+                if not os.path.exists(local_path("manifest.json")):
+                    warnings.warn(f"Upgrading {user_path()} from something that is not a proper install")
+                else:
+                    shutil.copy2(local_path("manifest.json"), user_path("manifest.json"))
+            os.makedirs(user_path("worlds"), exist_ok=True)
 
     return os.path.join(user_path.cached_path, *path)
 
