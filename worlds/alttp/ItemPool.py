@@ -5,7 +5,7 @@ from BaseClasses import ItemClassification
 from Fill import FillError
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
-from .Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, create_dynamic_shop_locations
+from .Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, shop_table_by_location
 from .Bosses import place_bosses
 from .Dungeons import get_dungeon_item_pool_player
 from .EntranceShuffle import connect_entrance
@@ -469,15 +469,6 @@ def generate_itempool(world):
                 multiworld.push_precollected(item)
                 multiworld.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
         multiworld.itempool.extend([item for item in dungeon_items])
-    # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
-    # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
-    # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
-    if multiworld.goal[player] != 'ice_rod_hunt' and multiworld.item_pool[player] in ['easy', 'normal', 'hard'] and not (multiworld.custom and multiworld.customitemarray[30] == 0):
-        next(item for item in items if item.name == 'Boss Heart Container').classification = ItemClassification.progression
-    elif multiworld.goal[player] != 'ice_rod_hunt' and multiworld.item_pool[player] in ['expert'] and not (multiworld.custom and multiworld.customitemarray[29] < 4):
-        adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
-        for i in range(4):
-            next(adv_heart_pieces).classification = ItemClassification.progression
 
 
     shop_items = multiworld.shop_item_slots[player]
@@ -568,10 +559,22 @@ def generate_itempool(world):
     if len(items) < pool_count:
         items += removed_filler[len(items) - pool_count:]
 
-    # for i, item in enumerate(items):
-    #     if not (item.advancement or item.type):
-    #         items[i] = GetBeemizerItem(multiworld, item.player, item)
-
+    if multiworld.randomize_cost_types[player]:
+        # Heart and Arrow costs require all Heart Container/Pieces and Arrow Upgrades to be advancement items for logic
+        for item in items:
+            if (item.name in ("Boss Heart Container", "Sanctuary Heart Container", "Piece of Heart")
+                    or "Arrow Upgrade" in item.name):
+                item.classification = ItemClassification.progression
+    else:
+        # Otherwise, logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
+        # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
+        # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
+        if multiworld.goal[player] != 'ice_rod_hunt' and multiworld.item_pool[player] in ['easy', 'normal', 'hard'] and not (multiworld.custom and multiworld.customitemarray[30] == 0):
+            next(item for item in items if item.name == 'Boss Heart Container').classification = ItemClassification.progression
+        elif multiworld.goal[player] != 'ice_rod_hunt' and multiworld.item_pool[player] in ['expert'] and not (multiworld.custom and multiworld.customitemarray[29] < 4):
+            adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
+            for i in range(4):
+                next(adv_heart_pieces).classification = ItemClassification.progression
 
     multiworld.required_medallions[player] = (multiworld.misery_mire_medallion[player].current_key.title(),
                                               multiworld.turtle_rock_medallion[player].current_key.title())
@@ -628,9 +631,14 @@ def set_up_take_anys(world, player):
         sword = world.random.choice(swords)
         world.itempool.remove(sword)
         world.itempool.append(ItemFactory('Rupees (20)', player))
-        old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
+        old_man_take_any.shop.add_inventory(0, sword.name, 0, 0)
+        loc_name = "Old Man Sword Cave"
+        location = ALttPLocation(player, loc_name, shop_table_by_location[loc_name], parent=old_man_take_any)
+        location.shop_slot = 0
+        old_man_take_any.locations.append(location)
+        location.place_locked_item(sword)
     else:
-        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0, create_location=True)
+        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
 
     for num in range(4):
         take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, world)
@@ -644,7 +652,11 @@ def set_up_take_anys(world, player):
         take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True, total_shop_slots + num + 1)
         world.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
-        take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0, create_location=True)
+        take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
+        location = ALttPLocation(player, take_any.name, shop_table_by_location[take_any.name], parent=take_any)
+        location.shop_slot = 1
+        take_any.locations.append(location)
+        location.place_locked_item(ItemFactory("Boss Heart Container", player))
 
 
 def get_pool_core(world, player: int):

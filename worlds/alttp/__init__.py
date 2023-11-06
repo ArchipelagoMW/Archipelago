@@ -20,7 +20,7 @@ from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
-from .Shops import create_shops, Shop, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
+from .Shops import create_shops, Shop, push_shop_inventories, ShopType, price_rate_display, price_type_display_name
 from .SubClasses import ALttPItem, LTTPRegionType
 from worlds.AutoWorld import World, WebWorld, LogicMixin
 from .StateHelpers import can_buy_unlimited
@@ -491,10 +491,9 @@ class ALTTPWorld(World):
         from .Dungeons import fill_dungeons_restrictive
         fill_dungeons_restrictive(world)
 
-
     @classmethod
     def stage_post_fill(cls, world):
-        ShopSlotFill(world)
+        push_shop_inventories(world)
 
     @property
     def use_enemizer(self) -> bool:

@@ -5,11 +5,14 @@ import logging
 
 from Utils import int16_as_bytes
 
+from worlds.generic.Rules import add_rule
+
+from BaseClasses import CollectionState
 from .SubClasses import ALttPLocation
 from .EntranceShuffle import door_addresses
-from .Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
+from .Items import item_name_groups
 from .Options import smallkey_shuffle, RandomizeShopInventories
-
+from .StateHelpers import has_hearts, can_use_bombs, can_hold_arrows
 
 logger = logging.getLogger("Shops")
 
@@ -157,32 +160,34 @@ shop_class_mapping = {ShopType.UpgradeShop: UpgradeShop,
                       ShopType.TakeAny: TakeAny}
 
 
-def FillDisabledShopSlots(world):
-    shop_slots: Set[ALttPLocation] = {location for shop_locations in (shop.region.locations for shop in world.shops)
-                                      for location in shop_locations
-                                      if location.shop_slot is not None and location.shop_slot_disabled
-                                      and "Capacity" not in location.name}
-    for location in shop_slots:
-        location.shop_slot_disabled = True
-        shop: Shop = location.parent_region.shop
-        location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
-        location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
-        location.locked = True
+# def FillDisabledShopSlots(world):
+#     shop_slots: Set[ALttPLocation] = {location for shop_locations in (shop.region.locations for shop in world.shops)
+#                                       for location in shop_locations
+#                                       if location.shop_slot is not None and location.shop_slot_disabled
+#                                       and "Capacity" not in location.name}
+#     for location in shop_slots:
+#         location.shop_slot_disabled = True
+#         shop: Shop = location.parent_region.shop
+#         location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
+#         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
+#         location.locked = True
 
 
-def ShopSlotFill(multiworld):
-    shop_slots: Set[ALttPLocation] = {location for shop_locations in
-                                      (shop.region.locations for shop in multiworld.shops if shop.type != ShopType.TakeAny)
-                                      for location in shop_locations if location.shop_slot is not None}
+def push_shop_inventories(multiworld):
+    shop_slots = [location for shop_locations in (shop.region.locations for shop in multiworld.shops if shop.type
+                  != ShopType.TakeAny) for location in shop_locations if location.shop_slot is not None]
 
     for location in shop_slots:
         item_name = location.item.name
-        location.shop.push_inventory(location.shop_slot, item_name,
-                                     int(location.shop_price * get_price_modifier(location.item)),
+        location.shop.push_inventory(location.shop_slot, item_name, location.shop_price,
                                      1, location.item.player if location.item.player != location.player else 0,
                                      location.shop_price_type)
+        location.shop_price = location.shop.inventory[location.shop_slot]["price"] = min(location.shop_price,
+            get_price(multiworld, location.shop.inventory[location.shop_slot], location.player,
+                      location.shop_price_type)[1])
+        # location.shop_price = int(location.shop_price * get_price_modifier(location.item))
 
-    FillDisabledShopSlots(multiworld)
+    # FillDisabledShopSlots(multiworld)
 
 
 def create_shops(multiworld, player: int):
@@ -221,7 +226,6 @@ def create_shops(multiworld, player: int):
         # make sure that blue potion is available in inverted, special case locked = None; lock when done.
         player_shop_table["Dark Lake Hylia Shop"] = \
             player_shop_table["Dark Lake Hylia Shop"]._replace(items=_inverted_hylia_shop_defaults, locked=None)
-
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory, sram_offset) in player_shop_table.items():
         region = multiworld.get_region(region_name, player)
         shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked, sram_offset)
@@ -237,8 +241,8 @@ def create_shops(multiworld, player: int):
                 loc = ALttPLocation(player, slot_name, address=shop_table_by_location[slot_name],
                                     parent=region, hint_text="for sale")
                 loc.shop_price_type, loc.shop_price = get_price(multiworld, None, player)
-                if not multiworld.randomize_cost_types[player]:
-                    loc.item_rule = lambda item: "Rupee" not in item.name
+                loc.item_rule = lambda item: not any(i for i in price_blacklist[loc.shop_price_type] if i in item.name)
+                add_rule(loc, lambda state, spot=loc: shop_price_rules(state, player, spot))
                 loc.shop = shop
                 loc.shop_slot = index
                 if ((not (multiworld.shuffle_capacity_upgrades[player] and type == ShopType.UpgradeShop))
@@ -359,30 +363,9 @@ def shuffle_shops(multiworld, player: int):
                     shops.append(shop)
                     total_inventory.extend(shop.inventory)
 
-        if multiworld.randomize_shop_prices[player]:
-            def price_adjust(price: int) -> int:
-                # it is important that a base price of 0 always returns 0 as new price!
-                adjust = 2 if price < 100 else 5
-                return int((price / adjust) * (0.5 + multiworld.random.random() * 1.5)) * adjust
-
-            def adjust_item(item):
-                if item:
-                    item["price"] = price_adjust(item["price"])
-                    item['replacement_price'] = price_adjust(item["price"])
-
-            for item in total_inventory:
-                adjust_item(item)
-            for shop in upgrade_shops:
-                for item in shop.inventory:
-                    adjust_item(item)
-
-        if multiworld.randomize_cost_types[player]:
-            for item in total_inventory:
-                item["price_type"], item["price"] = get_price(multiworld, item, player)
-            # Don't apply to upgrade shops
-            # Upgrade shop is only one place, and will generally be too easy to
-            # replenish hearts and bombs
-
+        for item in total_inventory:
+            item["price_type"], item["price"] = get_price(multiworld, item, player)
+            print(f"{item['price_type'], item['price']}")
         if multiworld.shuffle_shop_inventories[player]:
             multiworld.random.shuffle(total_inventory)
 
@@ -407,16 +390,18 @@ price_blacklist = {
 }
 
 price_chart = {
-    ShopPriceType.Rupees: lambda p: p,
-    ShopPriceType.Hearts: lambda p: min(5, p // 5) * 8,  # Each heart is 0x8 in memory, Max of 5 hearts (20 total??)
-    ShopPriceType.Magic: lambda p: min(15, p // 5) * 8,  # Each pip is 0x8 in memory, Max of 15 pips (16 total...)
-    ShopPriceType.Bombs: lambda p: max(1, min(10, p // 5)),  # 10 Bombs max
-    ShopPriceType.Arrows: lambda p: max(1, min(30, p // 5)),  # 30 Arrows Max
-    ShopPriceType.HeartContainer: lambda p: 0x8,
-    ShopPriceType.BombUpgrade: lambda p: 0x1,
-    ShopPriceType.ArrowUpgrade: lambda p: 0x1,
-    ShopPriceType.Keys: lambda p: min(3, (p // 100) + 1),  # Max of 3 keys for a price
-    ShopPriceType.Potion: lambda p: (p // 5) % 5,
+    ShopPriceType.Rupees: lambda p, d: p,
+    # Each heart is 0x8 in memory, Max of 19 hearts on easy/normal, 9 on hard, 7 on expert
+    ShopPriceType.Hearts: lambda p, d: max(8, min([19, 19, 9, 7][d], p // 14) * 8),
+    # Each pip is 0x8 in memory, Max of 15 pips (16 total)
+    ShopPriceType.Magic: lambda p, d: max(8, min(15, p // 18) * 8),
+    ShopPriceType.Bombs: lambda p, d: max(1, min(50, p // 5)),  # 50 Bombs max
+    ShopPriceType.Arrows: lambda p, d: max(1, min(70, p // 4)),  # 70 Arrows Max
+    ShopPriceType.HeartContainer: lambda p, d: 0x8,
+    ShopPriceType.BombUpgrade: lambda p, d: 0x1,
+    ShopPriceType.ArrowUpgrade: lambda p, d: 0x1,
+    ShopPriceType.Keys: lambda p, d: max(1, min(3, (p // 90) + 1)),  # Max of 3 keys for a price
+    ShopPriceType.Potion: lambda p, d: (p // 5) % 5,
 }
 
 price_type_display_name = {
@@ -435,31 +420,19 @@ price_rate_display = {
     ShopPriceType.Magic: 8,
 }
 
-# prices with no? logic requirements
-simple_price_types = [
-    ShopPriceType.Rupees,
-    ShopPriceType.Hearts,
-    ShopPriceType.Bombs,
-    ShopPriceType.Arrows,
-    ShopPriceType.Keys
-]
-
-
-def get_lttp_item_price_modifier(item_name):
-    if any(x in item_name for x in
-             ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
-        return 0.125
-    elif any(x in item_name for x in ['Arrow', 'Bomb', 'Clock']) and item_name != "Bombos" and "(50)" not in item_name:
-        return 0.25
-    elif any(x in item_name for x in ['Small Key', 'Heart']):
-        return 0.5
-    else:
-        return 1
-
 
 def get_price_modifier(item):
     if item.game == "A Link to the Past":
-        return get_lttp_item_price_modifier(item.name)
+        if any(x in item.name for x in
+               ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
+            return 0.125
+        elif any(x in item.name for x in
+                 ['Arrow', 'Bomb', 'Clock']) and item.name != "Bombos" and "(50)" not in item.name:
+            return 0.25
+        elif any(x in item.name for x in ['Small Key', 'Heart']):
+            return 0.5
+        else:
+            return 1
     if item.advancement:
         return 1
     elif item.useful:
@@ -467,53 +440,54 @@ def get_price_modifier(item):
     else:
         return 0.25
 
-def get_price(multiworld, item, player: int):
-    """
-    Converts a raw Rupee price into a special price type
-    """
 
-    price_types = [
-        ShopPriceType.Rupees,  # included as a chance to not change price type
-        ShopPriceType.Hearts,
-        ShopPriceType.Bombs,
-        ShopPriceType.Magic,
-    ]
-    if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-        price_types.append(ShopPriceType.Keys)
-    if not multiworld.retro_bow[player]:
-        price_types.append(ShopPriceType.Arrows)
+def get_price(multiworld, item, player: int, price_type=None):
+    """Converts a raw Rupee price into a special price type"""
+
+    if price_type:
+        price_types = [price_type]
+    else:
+        price_types = [ShopPriceType.Rupees]  # included as a chance to not change price
+        if multiworld.randomize_cost_types[player]:
+            price_types += [
+                ShopPriceType.Hearts,
+                ShopPriceType.Bombs,
+                ShopPriceType.Magic,
+            ]
+            if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+                if item and item["item"] == "Small Key (Universal)":
+                    price_types = [ShopPriceType.Rupees, ShopPriceType.Magic]  # no logical requirements for repeatable keys
+                else:
+                    price_types.append(ShopPriceType.Keys)
+            if multiworld.retro_bow[player]:
+                if item and item["item"] == "Single Arrow":
+                    price_types = [ShopPriceType.Rupees, ShopPriceType.Magic]  # no logical requirements for arrows
+            else:
+                price_types.append(ShopPriceType.Arrows)
+    diff = multiworld.item_pool[player].value
     if item:
-        # This is for a shop's regular inventory, the item is already determined and we will decide the price here
-        m = get_lttp_item_price_modifier(item["item"])
+        # This is for a shop's regular inventory, the item is already determined, and we will decide the price here
+        price = item["price"]
+        if multiworld.randomize_shop_prices[player]:
+            adjust = 2 if price < 100 else 5
+            price = int((price / adjust) * (0.5 + multiworld.random.random() * 1.5)) * adjust
         multiworld.random.shuffle(price_types)
         for p_type in price_types:
             if any(x in item['item'] for x in price_blacklist[p_type]):
                 continue
-            break
+            return p_type, price_chart[p_type](price, diff)
     else:
-        m = 1  # This is an AP location and the price will be adjusted after an item is shuffled into it
+        # This is an AP location and the price will be adjusted after an item is shuffled into it
         p_type = multiworld.random.choice(price_types)
-
-    return p_type, price_chart[p_type](min(int(multiworld.random.randint(8 * m, 56 * m)
-                                       * multiworld.shop_price_modifier[player] / 100) * 5, 9999))
-
+        return p_type, price_chart[p_type](min(int(multiworld.random.randint(8, 56)
+                                           * multiworld.shop_price_modifier[player] / 100) * 5, 9999), diff)
 
 
-
-def create_dynamic_shop_locations(world, player):
-    for shop in world.shops:
-        if shop.region.player == player:
-            for i, item in enumerate(shop.inventory):
-                if item is None:
-                    continue
-                if item['create_location']:
-                    slot_name = f"{shop.region.name}{shop.slot_names[i]}"
-                    loc = ALttPLocation(player, slot_name,
-                                        address=shop_table_by_location[slot_name], parent=shop.region)
-                    loc.place_locked_item(ItemFactory(item['item'], player))
-                    if shop.type == ShopType.TakeAny:
-                        loc.shop_slot_disabled = True
-                    shop.region.locations.append(loc)
-                    world.clear_location_cache()
-
-                    loc.shop_slot = i
+def shop_price_rules(state: CollectionState, player: int, location: ALttPLocation):
+    if location.shop_price_type == ShopPriceType.Hearts:
+        return has_hearts(state, player, (location.shop_price / 8) + 1)
+    elif location.shop_price_type == ShopPriceType.Bombs:
+        return can_use_bombs(state, player, location.shop_price)
+    elif location.shop_price_type == ShopPriceType.Arrows:
+        return can_hold_arrows(state, player, location.shop_price)
+    return True
