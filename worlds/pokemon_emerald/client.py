@@ -9,8 +9,6 @@ from .options import Goal
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
-else:
-    BizHawkClientContext = object
 
 
 EXPECTED_ROM_NAME = "pokemon emerald version / AP 2"
@@ -97,7 +95,7 @@ class PokemonEmeraldClient(BizHawkClient):
         self.local_found_key_items = {}
         self.goal_flag = IS_CHAMPION_FLAG
 
-    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
 
         try:
@@ -127,11 +125,11 @@ class PokemonEmeraldClient(BizHawkClient):
 
         return True
 
-    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["gArchipelagoInfo"], 64, "ROM")]))[0]
         ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
 
-    async def game_watcher(self, ctx: BizHawkClientContext) -> None:
+    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if ctx.slot_data is not None:
             if ctx.slot_data["goal"] == Goal.option_champion:
                 self.goal_flag = IS_CHAMPION_FLAG

@@ -11,13 +11,11 @@ from .options import EliteFourRequirement, NormanRequirement, Goal
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
-else:
-    PokemonEmeraldWorld = object
 
 
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
-def set_rules(world: PokemonEmeraldWorld) -> None:
+def set_rules(world: "PokemonEmeraldWorld") -> None:
     def can_cut(state: CollectionState):
         return state.has("HM01 Cut", world.player) and state.has("Stone Badge", world.player)
 

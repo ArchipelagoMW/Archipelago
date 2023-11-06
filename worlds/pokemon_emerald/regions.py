@@ -11,11 +11,9 @@ from .locations import PokemonEmeraldLocation
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
-else:
-    PokemonEmeraldWorld = object
 
 
-def create_regions(world: PokemonEmeraldWorld) -> Dict[str, Region]:
+def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
     """
     Iterates through regions created from JSON to create regions and adds them to the multiworld.
     Also creates and places events and connects regions via warps and the exits defined in the JSON.

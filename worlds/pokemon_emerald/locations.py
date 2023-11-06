@@ -10,8 +10,6 @@ from .items import offset_item_value
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
-else:
-    PokemonEmeraldWorld = object
 
 
 class PokemonEmeraldLocation(Location):
@@ -53,7 +51,7 @@ def reverse_offset_flag(location_id: int) -> int:
     return location_id - BASE_OFFSET
 
 
-def create_locations_with_tags(world: PokemonEmeraldWorld, regions: Dict[str, Region], tags: Iterable[str]) -> None:
+def create_locations_with_tags(world: "PokemonEmeraldWorld", regions: Dict[str, Region], tags: Iterable[str]) -> None:
     """
     Iterates through region data and adds locations to the multiworld if
     those locations include any of the provided tags.
