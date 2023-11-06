@@ -1,7 +1,7 @@
 from BaseClasses import Item, ItemClassification
 from .options import ItemWeights
-from .ror2environments import *
-from typing import NamedTuple, Optional, Set
+from .ror2environments import environment_ALL_table
+from typing import NamedTuple, Optional, Set, Dict
 
 
 class RiskOfRainItem(Item):

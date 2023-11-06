@@ -4,12 +4,14 @@ from .items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_wei
     filler_table
 from .locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, get_locations
 from .rules import set_rules
-from .ror2environments import *
+from .ror2environments import environment_vanilla_table, environment_vanilla_orderedstages_table, \
+    environment_sotv_orderedstages_table, environment_sotv_table, collapse_dict_list_vertical, shift_by_offset
 
 from BaseClasses import Region, Entrance, Item, ItemClassification, Tutorial
 from .options import ItemWeights, ROR2Options
 from worlds.AutoWorld import World, WebWorld
 from .regions import create_regions
+from typing import List, Dict
 
 
 class RiskOfWeb(WebWorld):

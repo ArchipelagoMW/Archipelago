@@ -1,8 +1,9 @@
-from typing import Tuple
+from typing import Tuple, Dict
 from BaseClasses import Location
 from .options import TotalLocations, ChestsPerEnvironment, ShrinesPerEnvironment, ScavengersPerEnvironment, \
     ScannersPerEnvironment, AltarsPerEnvironment
-from .ror2environments import *
+from .ror2environments import environment_orderedstages_table, compress_dict_list_horizontal,\
+    environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table
 
 
 class RiskOfRainLocation(Location):
