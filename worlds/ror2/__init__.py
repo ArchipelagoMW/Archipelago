@@ -210,8 +210,6 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
-        if self.options.goal == "classic" and name == "Dio's Best Friend":
-            return RiskOfRainItem(name, ItemClassification.progression_skip_balancing, data.code, self.player)
         return RiskOfRainItem(name, data.item_type, data.code, self.player)
 
     def set_rules(self) -> None:

@@ -43,7 +43,7 @@ upgrade_table: Dict[str, RiskOfRainItemData] = {
 }
 # Other item ids 37001, 37013-37014
 other_table: Dict[str, RiskOfRainItemData] = {
-    "Dio's Best Friend":    RiskOfRainItemData("ExtraLife", 1 + offset, ItemClassification.filler),
+    "Dio's Best Friend":    RiskOfRainItemData("ExtraLife", 1 + offset, ItemClassification.progression_skip_balancing),
     "Beads of Fealty":      RiskOfRainItemData("Beads", 13 + offset, ItemClassification.progression),
     "Radar Scanner":        RiskOfRainItemData("Radar", 14 + offset, ItemClassification.useful),
 }
