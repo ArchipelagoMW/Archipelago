@@ -1,6 +1,6 @@
 import math
 import random
-from typing import List, Dict, ClassVar
+from typing import List, Dict, ClassVar, Callable
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item
 from worlds.AutoWorld import WebWorld, World
@@ -17,7 +17,7 @@ class CMWeb(WebWorld):
         "A guide to setting up the ChecksMate software on your computer. This guide covers single-player, "
         "multiworld, and related software.",
         "English",
-        "checks_mate_en.md",
+        "checksmate_en.md",
         "checks-mate/en",
         ["roty", "rft50"]
     )]
@@ -25,7 +25,7 @@ class CMWeb(WebWorld):
 
 class CMWorld(World):
     """
-    Checksmate is a game where you play chess, but all of your pieces were scattered across the multiworld.
+    ChecksMate is a game where you play chess, but all of your pieces were scattered across the multiworld.
     You win when you checkmate the opposing king!
     """
     game: ClassVar[str] = "ChecksMate"
@@ -60,17 +60,17 @@ class CMWorld(World):
     piece_limit_options = {
         "Progressive Major To Queen": "queen_piece_limit",
     }
-    piece_limits_by_army = {
+    piece_types_by_army = {
         # Vanilla
-        0: {"Progressive Minor Piece": 4, "Progressive Major Piece": 3, "Progressive Major To Queen": 1},
+        0: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
         # Colorbound Clobberers (the War Elephant is rather powerful)
-        1: {"Progressive Minor Piece": 2, "Progressive Major Piece": 5, "Progressive Major To Queen": 1},
+        1: {"Progressive Minor Piece": 1, "Progressive Major Piece": 2, "Progressive Major To Queen": 1},
         # Remarkable Rookies
-        2: {"Progressive Minor Piece": 4, "Progressive Major Piece": 3, "Progressive Major To Queen": 1},
+        2: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
         # Nutty Knights (although the Short Rook and Half Duck swap potency)
-        3: {"Progressive Minor Piece": 4, "Progressive Major Piece": 3, "Progressive Major To Queen": 1},
+        3: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
         # Eurasian pieces
-        4: {"Progressive Minor Piece": 4, "Progressive Major Piece": 3, "Progressive Major To Queen": 1},
+        4: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
     }
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -136,12 +136,12 @@ class CMWorld(World):
                 self.items_used[self.player][item.name] = 0
             self.items_used[self.player][item.name] += 1
 
-        #print(self.items_used)
+        # print(self.items_used)
         starter_dict = {item.name: 1 for item in starter_items}
         excluded_dict = {
             item: excluded_items[item] for item in excluded_items if not (
-                        not (item not in self.item_name_groups["Enemy Pawn"]) or not (
-                            item not in self.item_name_groups["Enemy Piece"]))}
+                    not (item not in self.item_name_groups["Enemy Pawn"]) or not (
+                    item not in self.item_name_groups["Enemy Piece"]))}
         user_items = {key: starter_dict.get(key, 0) + excluded_dict.get(key, 0)
                       for key in set(starter_dict) | set(excluded_dict)}
         user_item_count = len(user_items)
@@ -155,7 +155,8 @@ class CMWorld(World):
         if max_material_option < min_material_option:
             max_material_option = min_material_option
         max_material_actual = (
-                self.multiworld.per_slot_randoms[self.player].random() * (max_material_option - min_material_option) + max_material_option)
+                self.multiworld.per_slot_randoms[self.player].random() * (
+                max_material_option - min_material_option) + max_material_option)
         max_material_actual += progression_items["Play as White"].material
 
         my_progression_items = list(progression_items.keys())
@@ -228,8 +229,7 @@ class CMWorld(World):
         self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
     def has_prereqs(self, chosen_item: str) -> bool:
-        parents = [item for item in item_table
-                   if item_table[chosen_item].parents is not None and item in item_table[chosen_item].parents]
+        parents = get_parents(chosen_item)
         if parents:
             fewest_parents = min([self.items_used[self.player].get(item, 0) for item in parents])
             enough_parents = fewest_parents > self.items_used[self.player].get(chosen_item, 0)
@@ -245,26 +245,11 @@ class CMWorld(World):
             self.items_used[self.player][chosen_item] < item_table[chosen_item].quantity
 
     def under_piece_limit(self, chosen_item: str) -> bool:
-        is_army_constrained = get_option_value(self.multiworld, self.player, "fairy_chess_army")
-        # Limit pieces placed by individual variety
-        if chosen_item in self.piece_type_limit_options:
-            piece_limit: int = get_option_value(
-                self.multiworld, self.player, self.piece_type_limit_options[chosen_item])
-            # Chaos: Chooses random enabled options.
-            if is_army_constrained == 0:
-                piece_limit = piece_limit * self.known_pieces[chosen_item]
-            # Limited: Chooses within your army, but in any distribution.
-            elif is_army_constrained == 1:
-                army = self.army[self.player]
-                piece_limit = math.ceil(piece_limit * self.piece_limits_by_army[army][chosen_item] / 2.0)
-            # Fair: Chooses within your army
-            elif is_army_constrained == 2:
-                army = self.army[self.player]
-                piece_limit = self.piece_limits_by_army[army][chosen_item]
-            pieces_used = self.items_used[self.player].get(chosen_item, 0)
-            if 0 < piece_limit <= pieces_used:
-                # Intentionally ignore "parents" property: player might receive parent items after all children
-                return False
+        piece_limit = self.find_piece_limit(chosen_item)
+        pieces_used = self.items_used[self.player].get(chosen_item, 0)
+        if 0 < piece_limit <= pieces_used:
+            # Intentionally ignore "parents" property: player might receive parent items after all children
+            return False
         # Limit pieces placed by total number
         if chosen_item in self.piece_limit_options:
             piece_total_limit = get_option_value(self.multiworld, self.player, self.piece_limit_options[chosen_item])
@@ -272,6 +257,47 @@ class CMWorld(World):
             if 0 < piece_total_limit <= pieces_used:
                 return False
         return True
+
+    def find_piece_limit(self, chosen_item: str) -> int:
+        # Limit pieces placed by individual variety
+        if chosen_item not in self.piece_type_limit_options:
+            return 0
+
+        piece_limit: int = self.piece_limit_of(chosen_item)
+        limit_multiplier = get_limit_multiplier_for_item({chosen_item: 1})
+        is_army_constrained = get_option_value(self.multiworld, self.player, "fairy_chess_army")
+        # Chaos: Chooses random enabled options.
+        if is_army_constrained == 0:
+            limit_multiplier = get_limit_multiplier_for_item(self.known_pieces)
+        # Limited: Chooses within your army, but in any distribution.
+        if is_army_constrained == 1:
+            army = self.army[self.player]
+            limit_multiplier = get_limit_multiplier_for_item(self.piece_types_by_army[army])
+        piece_limit = piece_limit * limit_multiplier(chosen_item)
+        if piece_limit > 0:
+            children = get_children(chosen_item)
+            if children:
+                piece_limit = piece_limit + (sum([
+                    self.find_piece_limit(child)
+                    for child in children]))
+        return piece_limit
+
+    def piece_limit_of(self, chosen_item: str):
+        return get_option_value(self.multiworld, self.player, self.piece_type_limit_options[chosen_item])
+
+
+def get_limit_multiplier_for_item(item_dictionary: Dict[str, int]) -> Callable[[str], int]:
+    return lambda item_name: item_dictionary[item_name]
+
+
+def get_parents(chosen_item: str) -> list[str]:
+    return [item for item in item_table
+            if item_table[chosen_item].parents is not None and item in item_table[chosen_item].parents]
+
+
+def get_children(chosen_item: str) -> list[str]:
+    return [item for item in item_table
+            if item_table[item].parents is not None and chosen_item in item_table[item].parents]
 
 
 def get_excluded_items(multiworld: MultiWorld, player: int) -> Dict[str, int]:

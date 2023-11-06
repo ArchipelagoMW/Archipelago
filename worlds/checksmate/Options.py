@@ -144,25 +144,23 @@ class FairyChessPieces(Choice):
     Eurasian: Adds the Cannon and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
     """
     display_name = "Fairy Chess Pieces"
-    # option_vanilla = 0
+    option_vanilla = 0
     option_full = 1
-    # option_cw_d_a = 2
-    # option_cannon = 3
-    # option_eurasian = 4
+    option_cw_d_a = 2
+    option_cannon = 3
+    option_eurasian = 4
     default = 1
 
 
 class FairyChessArmy(Choice):
     """
-    Whether to mix pieces between the Different Armies. Disables Piece Type Limits. Does not affect pawns. Note that the
-    Eurasian pieces, which replace the Bishop and Knight with a Vao and Cannon, constitute a very powerful Different
-    Army.
+    Whether to mix pieces between the Different Armies. Does not affect pawns. Note that the Eurasian pieces, which
+    replace the Bishop and Knight with a Vao and Cannon, constitute a very powerful yet flawed Different Army.
 
     Chaos: Chooses random enabled options.
 
-    Limited: Chooses within your army, but in any distribution.
-
-    Fair: Chooses within your army. Further limited to 2 pieces of most types, and 1 Queen-equivalent piece.
+    Limited: Chooses within your army. (If you want at most 2 Bishops, 2 Knights, 2 Rooks, and 1 Queen, add Piece Type
+    Limits below: 2 Minor, 2 Major, and 1 Queen.)
     """
     display_name = "Fairy Chess Army"
     option_chaos = 0
