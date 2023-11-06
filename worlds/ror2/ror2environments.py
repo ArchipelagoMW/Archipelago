@@ -50,17 +50,6 @@ environment_sotv_orderedstage_3_table: Dict[str, int] = {
 environment_sotv_orderedstage_4_table: Dict[str, int] = {}
 environment_sotv_orderedstage_5_table: Dict[str, int] = {}
 
-# TODO idk much and idc much about simulacrum, is there a forced order or something?
-environment_sotv_simulacrum_table: Dict[str, int] = {
-    "The Simulacrum (Aphelian Sanctuary)":     20,  # itancientloft
-    "The Simulacrum (Abyssal Depths)":         21,  # itdampcave
-    "The Simulacrum (Rallypoint Delta)":       22,  # itfrozenwall
-    "The Simulacrum (Titanic Plains)":         23,  # itgolemplains
-    "The Simulacrum (Abandoned Aqueduct)":     24,  # itgoolake
-    "The Simulacrum (Commencement)":           25,  # itmoon
-    "The Simulacrum (Sky Meadow)":             26,  # itskymeadow
-}
-
 environment_sotv_special_table: Dict[str, int] = {
     "Void Locus":                              46,  # voidstage
     "The Planetarium":                         45,  # voidraid
@@ -117,13 +106,11 @@ environment_sotv_orderedstages_table = \
     [environment_sotv_orderedstage_1_table, environment_sotv_orderedstage_2_table,
      environment_sotv_orderedstage_3_table, environment_sotv_orderedstage_4_table,
      environment_sotv_orderedstage_5_table]
-environment_sotv_non_simulacrum_table = \
+environment_sotv_table = \
     {**compress_dict_list_horizontal(environment_sotv_orderedstages_table), **environment_sotv_special_table}
-environment_sotv_table = {**environment_sotv_non_simulacrum_table}
 
 environment_non_orderedstages_table = \
-    {**environment_vanilla_hidden_realm_table, **environment_vanilla_special_table, **environment_sotv_simulacrum_table,
-     **environment_sotv_special_table}
+    {**environment_vanilla_hidden_realm_table, **environment_vanilla_special_table, **environment_sotv_special_table}
 environment_orderedstages_table = \
     collapse_dict_list_vertical(environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table)
 environment_ALL_table = {**environment_vanilla_table,  **environment_sotv_table}
