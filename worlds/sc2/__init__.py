@@ -8,10 +8,10 @@ from . import ItemNames
 from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
     kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units
-from .Locations import get_locations, LocationType
+from .Locations import get_locations, LocationType, get_location_types, get_plando_locations
 from .Regions import create_regions
 from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
-    KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, EarlyUnit
+    KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, StarterUnit
 from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS, missions_in_mission_table, get_used_races
 from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
     SC2Race
@@ -73,9 +73,9 @@ class SC2World(World):
 
         excluded_items = get_excluded_items(self.multiworld, self.player)
 
-        starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
+        starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations, self.location_cache)
 
-        filter_locations(self.multiworld, self.player, self.locked_locations, self.location_cache)
+        fill_resource_locations(self.multiworld, self.player, self.locked_locations, self.location_cache)
 
         pool = get_item_pool(self.multiworld, self.player, self.mission_req_table, starter_items, excluded_items, self.location_cache)
 
@@ -226,12 +226,21 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     return excluded_items
 
 
-def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
+def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], location_cache: typing.List[Location]) -> List[Item]:
     starter_items: List[Item] = []
     non_local_items = multiworld.non_local_items[player].value
-    early_unit = get_option_value(multiworld, player, "early_unit")
-    if early_unit != EarlyUnit.option_off:
-        first_mission = get_first_mission(multiworld.worlds[player].mission_req_table)
+    starter_unit = get_option_value(multiworld, player, "starter_unit")
+    first_mission = get_first_mission(multiworld.worlds[player].mission_req_table)
+    # Ensuring that first mission is completable
+    if starter_unit == StarterUnit.option_off:
+        starter_mission_locations = [location.name for location in location_cache
+                                     if location.parent_region.name == first_mission
+                                     and location.access_rule == Location.access_rule]
+        if not starter_mission_locations:
+            # Force early unit if first mission is impossible without one
+            starter_unit = StarterUnit.option_any_starter_unit
+
+    if starter_unit != StarterUnit.option_off:
         first_race = lookup_name_to_mission[first_mission].race
 
         if first_race == SC2Race.ANY:
@@ -249,7 +258,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
         if first_race != SC2Race.ANY:
             # The race of the early unit has been chosen
             basic_units = get_basic_units(multiworld, player, first_race)
-            if early_unit == EarlyUnit.option_balanced:
+            if starter_unit == StarterUnit.option_balanced:
                 basic_units = basic_units.difference(not_balanced_starting_units)
             local_basic_unit = sorted(item for item in basic_units if item not in non_local_items and item not in excluded_items)
             if not local_basic_unit:
@@ -260,7 +269,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
             first_location = get_early_unit_location_name(first_mission)
 
-            starter_items.append(assign_starter_item(multiworld, player, excluded_items, locked_locations, first_location, local_basic_unit))
+            starter_items.append(add_starter_item(multiworld, player, excluded_items, local_basic_unit))
     
     starter_abilities = get_option_value(multiworld, player, 'start_primary_abilities')
     assert isinstance(starter_abilities, int)
@@ -276,11 +285,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                 abilities = kerrigan_actives[tier].union(kerrigan_passives[tier]).difference(excluded_items)
             if abilities:
                 ability_count -= 1
-                ability = multiworld.random.choice(sorted(abilities))
-                ability_item = create_item_with_correct_settings(player, ability)
-                multiworld.push_precollected(ability_item)
-                excluded_items.add(ability)
-                starter_items.append(ability_item)
+                starter_items.append(add_starter_item(multiworld, player, excluded_items, abilities))
                 if ability_count == 0:
                     break
 
@@ -303,18 +308,15 @@ def get_early_unit_location_name(first_mission: str) -> str:
         first_location = first_mission + ": Victory"
     return first_location
 
-def assign_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
-                        location: str, item_list: Sequence[str]) -> Item:
+def add_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], item_list: Sequence[str]) -> Item:
 
-    item_name = multiworld.random.choice(item_list)
+    item_name = multiworld.random.choice(sorted(item_list))
 
     excluded_items.add(item_name)
 
     item = create_item_with_correct_settings(player, item_name)
 
-    multiworld.get_location(location, player).place_locked_item(item)
-
-    locked_locations.append(location)
+    multiworld.push_precollected(item)
 
     return item
 
@@ -408,7 +410,7 @@ def pool_contains_parent(item: Item, pool: Iterable[Item]):
     return parent_item in [pool_item.name for pool_item in pool]
 
 
-def filter_locations(multiworld: MultiWorld, player, locked_locations: List[str], location_cache: List[Location]):
+def fill_resource_locations(multiworld: MultiWorld, player, locked_locations: List[str], location_cache: List[Location]):
     """
     Filters the locations in the world using a trash or Nothing item
     :param multiworld:
@@ -419,58 +421,24 @@ def filter_locations(multiworld: MultiWorld, player, locked_locations: List[str]
     """
     open_locations = [location for location in location_cache if location.item is None]
     plando_locations = get_plando_locations(multiworld, player)
-    mission_progress_locations = get_option_value(multiworld, player, "mission_progress_locations")
-    bonus_locations = get_option_value(multiworld, player, "bonus_locations")
-    challenge_locations = get_option_value(multiworld, player, "challenge_locations")
-    optional_boss_locations = get_option_value(multiworld, player, "optional_boss_locations")
+    resource_location_types = get_location_types(multiworld, player, LocationInclusion.option_resources)
     location_data = get_locations(multiworld, player)
     for location in open_locations:
         # Go through the locations that aren't locked yet (early unit, etc)
         if location.name not in plando_locations:
             # The location is not plando'd
             sc2_location = [sc2_location for sc2_location in location_data if sc2_location.name == location.name][0]
-            location_type = sc2_location.type
-
-            if location_type == LocationType.MISSION_PROGRESS \
-                    and mission_progress_locations != LocationInclusion.option_enabled:
-                item_name = get_exclusion_item(multiworld, mission_progress_locations)
-                place_exclusion_item(item_name, location, locked_locations, player)
-
-            if location_type == LocationType.BONUS \
-                    and bonus_locations != LocationInclusion.option_enabled:
-                item_name = get_exclusion_item(multiworld, bonus_locations)
-                place_exclusion_item(item_name, location, locked_locations, player)
-
-            if location_type == LocationType.CHALLENGE \
-                    and challenge_locations != LocationInclusion.option_enabled:
-                item_name = get_exclusion_item(multiworld, challenge_locations)
-                place_exclusion_item(item_name, location, locked_locations, player)
-
-            if location_type == LocationType.OPTIONAL_BOSS \
-                    and optional_boss_locations != LocationInclusion.option_enabled:
-                item_name = get_exclusion_item(multiworld, optional_boss_locations)
-                place_exclusion_item(item_name, location, locked_locations, player)
+            if sc2_location.type in resource_location_types:
+                item_name = multiworld.random.choice(filler_items)
+                item = create_item_with_correct_settings(player, item_name)
+                location.place_locked_item(item)
+                locked_locations.append(item)
 
 
 def place_exclusion_item(item_name, location, locked_locations, player):
     item = create_item_with_correct_settings(player, item_name)
     location.place_locked_item(item)
     locked_locations.append(location.name)
-
-
-def get_exclusion_item(multiworld: MultiWorld, option) -> str:
-    """
-    Gets the exclusion item according to settings (trash/nothing)
-    :param multiworld:
-    :param option:
-    :return: Item used for location exclusion
-    """
-    if option == LocationInclusion.option_nothing:
-        return "Nothing"
-    elif option == LocationInclusion.option_trash:
-        item = multiworld.random.choice(filler_items)
-        return item
-    raise Exception(f"Unsupported option type: {option}")
 
 
 def get_plando_locations(multiworld: MultiWorld, player) -> List[str]:

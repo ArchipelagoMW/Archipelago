@@ -161,7 +161,7 @@ class SC2Manager(GameManager):
                             mission_obj: SC2Mission = lookup_name_to_mission[mission]
                             mission_id: int = mission_obj.id
                             mission_data = self.ctx.mission_req_table[campaign][mission]
-                            remaining_locations, plando_locations, early_unit, remaining_count = self.sort_unfinished_locations(mission)
+                            remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission)
                             # Map has uncollected locations
                             if mission in unfinished_missions:
                                 if self.any_valuable_locations(remaining_locations):
@@ -204,8 +204,6 @@ class SC2Manager(GameManager):
                                         else:
                                             tooltip += f"\n{self.get_location_type_title(loctype)}:\n- "
                                             tooltip += "\n- ".join(remaining_locations[loctype])
-                                if early_unit:
-                                    tooltip += f"\nEarly Unit:\n- {early_unit}"
                                 if len(plando_locations) > 0:
                                     tooltip += f"\nPlando:\n- "
                                     tooltip += "\n- ".join(plando_locations)
@@ -255,13 +253,6 @@ class SC2Manager(GameManager):
                 count += 1
                 locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names[loc])
 
-        early_unit = None
-        if self.ctx.early_unit != EarlyUnit.option_off and mission_name == self.first_mission:
-            early_unit = get_early_unit_location_name(mission_name)
-            for loctype in LocationType:
-                if early_unit in locations[loctype]:
-                    locations[loctype].remove(early_unit)
-
         plando_locations = []
         for plando_loc in self.ctx.plando_locations:
             for loctype in LocationType:
@@ -269,7 +260,7 @@ class SC2Manager(GameManager):
                     locations[loctype].remove(plando_loc)
                     plando_locations.append(plando_loc)
 
-        return locations, plando_locations, early_unit, count
+        return locations, plando_locations, count
 
     def any_valuable_locations(self, locations: Dict[LocationType, List[str]]) -> bool:
         for loctype in LocationType:
@@ -279,10 +270,10 @@ class SC2Manager(GameManager):
 
     def get_location_type_title(self, location_type: LocationType) -> str:
         title = location_type.name.title().replace("_", " ")
-        if self.ctx.location_inclusions[location_type] == LocationInclusion.option_nothing:
+        if self.ctx.location_inclusions[location_type] == LocationInclusion.option_disabled:
             title += " (Nothing)"
-        elif self.ctx.location_inclusions[location_type] == LocationInclusion.option_trash:
-            title += " (Trash)"
+        elif self.ctx.location_inclusions[location_type] == LocationInclusion.option_resources:
+            title += " (Resources)"
         else:
             title += ""
         return title
