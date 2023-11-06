@@ -982,7 +982,7 @@ Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
 Mountain Pink Bridge EP (Mountain Floor 2):
 159312 - 0x09D63 (Pink Bridge EP) - 0x09E39 - True
 
-Mountain Path to Caves (Mountain Bottom Floor) - Mountain Bottom Floor - 0x17F33 - Caves - 0x2D77D:
+Mountain Path to Caves (Mountain Bottom Floor) - Caves - 0x2D77D:
 158447 - 0x00FF8 (Caves Entry Panel) - True - Triangles & Black/White Squares
 Door - 0x2D77D (Caves Entry) - 0x00FF8
 158448 - 0x334E1 (Rock Control) - True - True
