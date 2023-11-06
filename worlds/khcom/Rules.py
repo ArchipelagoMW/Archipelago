@@ -70,7 +70,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Floor 10"                                             , player).access_rule = lambda state: has_room_of_beginnings(state, player, "10")
     multiworld.get_entrance("Floor 11"                                             , player).access_rule = lambda state: has_room_of_beginnings(state, player, "11")
     multiworld.get_entrance("Floor 12"                                             , player).access_rule = lambda state: has_room_of_beginnings(state, player, "12")
-    multiworld.get_entrance("Floor 13"                                             , player).access_rule = lambda state: has_room_of_guidance  (state, player, "12")
+    multiworld.get_entrance("Floor 13"                                             , player).access_rule = lambda state: has_room_of_beginnings(state, player, "13")
     
     # Options
     if not multiworld.enemy_cards[player]:

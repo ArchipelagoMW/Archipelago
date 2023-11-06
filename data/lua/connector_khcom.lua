@@ -632,7 +632,7 @@ function can_complete_floor(floor_number)
         return get_stored_gold_cards("Key of Beginnings", floor_number) > 0 and get_stored_gold_cards("Key of Guidance", floor_number) > 0 and get_stored_gold_cards("Key to Truth", floor_number) > 0
     elseif floor_number == 12 then
         return get_stored_gold_cards("Key of Beginnings", floor_number) > 0 and get_stored_gold_cards("Key of Guidance", floor_number) > 0
-    elseif floor_number == 11 or floor_number == 10 then
+    elseif floor_number == 11 or floor_number == 10 or floor_number == 13 then
         return get_stored_gold_cards("Key of Beginnings", floor_number) > 0
     else
         return false
@@ -665,13 +665,7 @@ function update_world_cards(current_floor)
 end
 
 function update_highest_warp_floor()
-    if can_complete_floor(12) then
-        memory.writebyte(highest_warp_floor_address, (14-1)*2)
-        return
-    else
-        memory.writebyte(highest_warp_floor_address, (12-1)*2)
-        return
-    end
+    memory.writebyte(highest_warp_floor_address, (14-1)*2)
 end
 
 function update_current_floor()
@@ -692,7 +686,6 @@ function update_world_assignments()
         end
         i = i + 1
     end
-    memory.writebyte(floor_assignment_addresses[13], floor_assignment_values[13])
 end
 
 function update_map_cards()
@@ -1009,11 +1002,11 @@ end
 
 function update_floor_status()
     i = 2
-    while i < 13 do
+    while i <= 13 do
         if get_stored_gold_cards("Key of Beginnings", i) < 1 then
-            if i == 12 then
+            if i == 13 then 
                 memory.writebyte(floor_progress_addresses[i], 0x17)
-                memory.writebyte(floor_doors_addresses[i], 0x00)
+                memory.writebyte(floor_doors_addresses[i], 0x02)
             else
                 memory.writebyte(floor_progress_addresses[i], 0x77)
                 memory.writebyte(floor_doors_addresses[i], 0x03)
