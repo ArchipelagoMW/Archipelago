@@ -245,7 +245,7 @@ class SC2Manager(GameManager):
     def finish_launching(self, dt):
         self.launching = False
     
-    def sort_unfinished_locations(self, mission_name: str) -> (Dict[LocationType, List[str]], List[str], str | None, int):
+    def sort_unfinished_locations(self, mission_name: str) -> Tuple[Dict[LocationType, List[str]], List[str], str | None, int]:
         locations: Dict[LocationType, List[str]] = {loctype: [] for loctype in LocationType}
         count = 0
         for loc in self.ctx.locations_for_mission(mission_name):
