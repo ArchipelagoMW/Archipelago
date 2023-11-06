@@ -649,6 +649,8 @@ class PokemonEmeraldWorld(World):
             }
             allow_legendaries = self.options.allow_trainer_legendaries == Toggle.option_true
 
+            per_species_tmhm_moves: Dict[int, List[int]] = {}
+
             for trainer in self.modified_trainers:
                 new_party = []
                 for pokemon in trainer.party.pokemon:
@@ -664,12 +666,14 @@ class PokemonEmeraldWorld(World):
                         allow_legendaries
                     )
 
-                    # Could cache this per species
-                    tm_hm_movepool = list({
-                        self.modified_tmhm_moves[i]
-                        for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
-                        if is_compatible
-                    })
+                    if new_species.species_id not in per_species_tmhm_moves:
+                        per_species_tmhm_moves[new_species.species_id] = list({
+                            self.modified_tmhm_moves[i]
+                            for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
+                            if is_compatible
+                        })
+
+                    tm_hm_movepool = per_species_tmhm_moves[new_species.species_id]
                     level_up_movepool = list({
                         move.move_id
                         for move in new_species.learnset
