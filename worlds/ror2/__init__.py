@@ -70,7 +70,7 @@ class RiskOfRainWorld(World):
         if self.options.start_with_revive:
             self.total_revivals -= 1
         if self.options.victory == "voidling" and not self.options.dlc_sotv:
-            self.options.victory.value = "any"
+            self.options.victory.value = self.options.victory.option_any
 
     def create_regions(self) -> None:
 
