@@ -175,13 +175,13 @@ class DungeonItem(Choice):
         return self.value in {1, 2, 3, 4}
 
 
-class bigkey_shuffle(DungeonItem):
+class big_key_shuffle(DungeonItem):
     """Big Key Placement"""
     item_name_group = "Big Keys"
     display_name = "Big Key Shuffle"
 
 
-class smallkey_shuffle(DungeonItem):
+class small_key_shuffle(DungeonItem):
     """Small Key Placement"""
     option_universal = 5
     item_name_group = "Small Keys"
@@ -726,8 +726,8 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,
-    "bigkey_shuffle": bigkey_shuffle,
-    "smallkey_shuffle": smallkey_shuffle,
+    "big_key_shuffle": big_key_shuffle,
+    "small_key_shuffle": small_key_shuffle,
     "key_drop_shuffle": key_drop_shuffle,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,

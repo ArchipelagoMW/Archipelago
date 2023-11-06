@@ -9,7 +9,7 @@ from worlds.generic.Rules import (add_item_rule, add_rule, forbid_item,
 from . import OverworldGlitchRules
 from .Bosses import GanonDefeatRule
 from .Items import ItemFactory, item_name_groups, item_table, progression_items
-from .Options import smallkey_shuffle
+from .Options import small_key_shuffle
 from .OverworldGlitchRules import no_logic_rules, overworld_glitches_rules
 from .Regions import LTTPRegionType, location_table
 from .StateHelpers import (can_extend_magic, can_kill_most_things,
@@ -286,7 +286,7 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Sewers Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) or (
-                         world.smallkey_shuffle[player] == smallkey_shuffle.option_universal and world.mode[
+                         world.small_key_shuffle[player] == small_key_shuffle.option_universal and world.mode[
                      player] == 'standard'))  # standard universal small keys cannot access the shop
     set_rule(world.get_entrance('Sewers Back Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4))
@@ -341,7 +341,7 @@ def global_rules(world, player):
     add_rule(world.get_location('Desert Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
 
     # logic patch to prevent placing a crystal in Desert that's required to reach the required keys
-    if not (world.smallkey_shuffle[player] and world.bigkey_shuffle[player]):
+    if not (world.small_key_shuffle[player] and world.big_key_shuffle[player]):
         add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state.multiworld.get_region('Desert Palace Main (Outer)', player).can_reach(state))
 
     set_rule(world.get_entrance('Tower of Hera Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Tower of Hera)', player) or location_item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player))
@@ -374,7 +374,7 @@ def global_rules(world, player):
     if world.accessibility[player] != 'locations':
         allow_self_locking_items(world.get_location('Swamp Palace - Big Chest', player), 'Big Key (Swamp Palace)')
     set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
-    if not world.smallkey_shuffle[player] and world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
+    if not world.small_key_shuffle[player] and world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
         forbid_item(world.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
     add_rule(world.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     add_rule(world.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
@@ -1052,7 +1052,7 @@ def standard_rules(world, player):
     set_rule(world.get_entrance('Links House S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Sanctuary S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
 
-    if world.smallkey_shuffle[player] != smallkey_shuffle.option_universal:
+    if world.small_key_shuffle[player] != small_key_shuffle.option_universal:
         set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
         set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
@@ -1157,7 +1157,7 @@ def set_trock_key_rules(world, player):
             return 6
 
         # If TR is only accessible from the middle, the big key must be further restricted to prevent softlock potential
-        if not can_reach_front and not world.smallkey_shuffle[player]:
+        if not can_reach_front and not world.small_key_shuffle[player]:
             # Must not go in the Big Key Chest - only 1 other chest available and 2+ keys required for all other chests
             forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Big Key (Turtle Rock)', player)
             if not can_reach_big_chest:
@@ -1165,7 +1165,7 @@ def set_trock_key_rules(world, player):
                 forbid_item(world.get_location('Turtle Rock - Chain Chomps', player), 'Big Key (Turtle Rock)', player)
                 forbid_item(world.get_location('Turtle Rock - Pokey 2 Key Drop', player), 'Big Key (Turtle Rock)', player)
             if world.accessibility[player] == 'locations' and world.goal[player] != 'ice_rod_hunt':
-                if world.bigkey_shuffle[player] and can_reach_big_chest:
+                if world.big_key_shuffle[player] and can_reach_big_chest:
                     # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
                     for location in ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest',
                                      'Turtle Rock - Pokey 1 Key Drop', 'Turtle Rock - Pokey 2 Key Drop',

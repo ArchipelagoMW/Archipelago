@@ -36,7 +36,7 @@ from .Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmith
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from .Items import ItemFactory, item_table, item_name_groups, progression_items
 from .EntranceShuffle import door_addresses
-from .Options import smallkey_shuffle
+from .Options import small_key_shuffle
 
 try:
     from maseya import z3pr
@@ -1541,10 +1541,10 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     # block HC upstairs doors in rain state in standard mode
     rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" and world.entrance_shuffle[player] != 'vanilla' else 0x00)
 
-    rom.write_byte(0x18016A, 0x10 | ((0x01 if world.smallkey_shuffle[player] else 0x00)
+    rom.write_byte(0x18016A, 0x10 | ((0x01 if world.small_key_shuffle[player] else 0x00)
                                      | (0x02 if world.compass_shuffle[player] else 0x00)
                                      | (0x04 if world.map_shuffle[player] else 0x00)
-                                     | (0x08 if world.bigkey_shuffle[
+                                     | (0x08 if world.big_key_shuffle[
                 player] else 0x00)))  # free roaming item text boxes
     rom.write_byte(0x18003B, 0x01 if world.map_shuffle[player] else 0x00)  # maps showing crystals on overworld
 
@@ -1566,9 +1566,9 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     # b - Big Key
     # a - Small Key
     #
-    rom.write_byte(0x180045, ((0x00 if (world.smallkey_shuffle[player] == smallkey_shuffle.option_original_dungeon or
-                                        world.smallkey_shuffle[player] == smallkey_shuffle.option_universal) else 0x01)
-                              | (0x02 if world.bigkey_shuffle[player] else 0x00)
+    rom.write_byte(0x180045, ((0x00 if (world.small_key_shuffle[player] == small_key_shuffle.option_original_dungeon or
+                                        world.small_key_shuffle[player] == small_key_shuffle.option_universal) else 0x01)
+                              | (0x02 if world.big_key_shuffle[player] else 0x00)
                               | (0x04 if world.map_shuffle[player] else 0x00)
                               | (0x08 if world.compass_shuffle[player] else 0x00)))  # free roaming items in menu
 
@@ -1600,8 +1600,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_int16(0x18017C, get_reveal_bytes('Crystal 5') | get_reveal_bytes('Crystal 6') if world.map_shuffle[
         player] else 0x0000)  # Bomb Shop Reveal
 
-    rom.write_byte(0x180172, 0x01 if world.smallkey_shuffle[
-                                         player] == smallkey_shuffle.option_universal else 0x00)  # universal keys
+    rom.write_byte(0x180172, 0x01 if world.small_key_shuffle[
+                                         player] == small_key_shuffle.option_universal else 0x00)  # universal keys
     rom.write_byte(0x18637E, 0x01 if world.retro_bow[player] else 0x00)  # Skip quiver in item shops once bought
     rom.write_byte(0x180175, 0x01 if world.retro_bow[player] else 0x00)  # rupee bow
     rom.write_byte(0x180176, 0x0A if world.retro_bow[player] else 0x00)  # wood arrow cost
@@ -2386,9 +2386,9 @@ def write_strings(rom, world, player):
 
             # Lastly we write hints to show where certain interesting items are.
             items_to_hint = RelevantItems.copy()
-            if world.smallkey_shuffle[player].hints_useful:
+            if world.small_key_shuffle[player].hints_useful:
                 items_to_hint |= item_name_groups["Small Keys"]
-            if world.bigkey_shuffle[player].hints_useful:
+            if world.big_key_shuffle[player].hints_useful:
                 items_to_hint |= item_name_groups["Big Keys"]
 
             if world.hints[player] == "full":

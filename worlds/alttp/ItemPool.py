@@ -10,7 +10,7 @@ from .Bosses import place_bosses
 from .Dungeons import get_dungeon_item_pool_player
 from .EntranceShuffle import connect_entrance
 from .Items import ItemFactory, GetBeemizerItem, trap_replaceable, item_name_groups
-from .Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, LTTPBosses
+from .Options import small_key_shuffle, compass_shuffle, big_key_shuffle, map_shuffle, LTTPBosses
 from .StateHelpers import has_triforce_pieces, has_melee_weapon
 from .Regions import key_drop_data
 
@@ -312,7 +312,7 @@ def generate_itempool(world):
         itempool.extend(['Rupees (300)'] * 34)
         itempool.extend(['Bombs (10)'] * 5)
         itempool.extend(['Arrows (10)'] * 7)
-        if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
             itempool.extend(itemdiff.universal_keys)
 
         for item in itempool:
@@ -448,7 +448,7 @@ def generate_itempool(world):
             # key drop item removed because of ice_rod_hunt
             multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), player))
             multiworld.push_precollected(drop_item)
-        elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        elif "Small" in key_data[3] and multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
             multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Small Key (Universal)'), player))
     dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
@@ -460,8 +460,8 @@ def generate_itempool(world):
     else:
         for x in range(len(dungeon_items)-1, -1, -1):
             item = dungeon_items[x]
-            if ((multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_start_with and item.type == 'SmallKey')
-                    or (multiworld.bigkey_shuffle[player] == bigkey_shuffle.option_start_with and item.type == 'BigKey')
+            if ((multiworld.small_key_shuffle[player] == small_key_shuffle.option_start_with and item.type == 'SmallKey')
+                    or (multiworld.big_key_shuffle[player] == big_key_shuffle.option_start_with and item.type == 'BigKey')
                     or (multiworld.compass_shuffle[player] == compass_shuffle.option_start_with and item.type == 'Compass')
                     or (multiworld.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
                 dungeon_items.pop(x)
@@ -474,7 +474,7 @@ def generate_itempool(world):
     if multiworld.shuffle_capacity_upgrades[player]:
         shop_items += 2
     chance_100 = int(multiworld.retro_bow[player]) * 0.25 + int(
-        multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal) * 0.5
+        multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal) * 0.5
     for _ in range(shop_items):
         if multiworld.goal[player] != 'ice_rod_hunt':
             if multiworld.random.random() < chance_100:
@@ -784,7 +784,7 @@ def get_pool_core(world, player: int):
     if retro_bow:
         replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)', 'Arrow Upgrade (50)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
-    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+    if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         if mode == 'standard':
             if world.key_drop_shuffle[player] and world.goal[player] != 'ice_rod_hunt':
@@ -933,7 +933,7 @@ def make_custom_item_pool(world, player):
         itemtotal = itemtotal + 1
 
     if mode == 'standard':
-        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
             key_location = world.random.choice(
                 ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
                  'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
@@ -956,7 +956,7 @@ def make_custom_item_pool(world, player):
         pool.extend(['Magic Mirror'] * customitemarray[22])
         pool.extend(['Moon Pearl'] * customitemarray[28])
 
-    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+    if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
         itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in universal Mode
         if world.key_drop_shuffle[player]:
             itemtotal = itemtotal - (len(key_drop_data) - 1)

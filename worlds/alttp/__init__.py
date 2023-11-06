@@ -13,7 +13,7 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
-from .Options import alttp_options, smallkey_shuffle
+from .Options import alttp_options, small_key_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
 from .Client import ALTTPSNIClient
@@ -276,10 +276,10 @@ class ALTTPWorld(World):
         world = self.multiworld
 
         if world.mode[player] == 'standard' \
-                and world.smallkey_shuffle[player] \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_start_with:
+                and world.small_key_shuffle[player] \
+                and world.small_key_shuffle[player] != small_key_shuffle.option_universal \
+                and world.small_key_shuffle[player] != small_key_shuffle.option_own_dungeons \
+                and world.small_key_shuffle[player] != small_key_shuffle.option_start_with:
             self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
 
         # system for sharing ER layouts
@@ -298,7 +298,7 @@ class ALTTPWorld(World):
         elif world.entrance_shuffle[player] == "vanilla":
             self.er_seed = "vanilla"
 
-        for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
+        for dungeon_item in ["small_key_shuffle", "big_key_shuffle", "compass_shuffle", "map_shuffle"]:
             option = getattr(world, dungeon_item)[player]
             if option == "own_world":
                 world.local_items[player].value |= self.item_name_groups[option.item_name_group]
@@ -482,9 +482,9 @@ class ALTTPWorld(World):
             break
         else:
             raise FillError('Unable to place dungeon prizes')
-        if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
-                world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
+        if world.mode[player] == 'standard' and world.small_key_shuffle[player] \
+                and world.small_key_shuffle[player] != small_key_shuffle.option_universal and \
+                world.small_key_shuffle[player] != small_key_shuffle.option_own_dungeons:
             world.local_early_items[player]["Small Key (Hyrule Castle)"] = 1
 
     @classmethod
@@ -767,7 +767,7 @@ class ALTTPWorld(World):
             # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
 
             slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
-                            "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
+                            "big_key_shuffle", "small_key_shuffle", "compass_shuffle", "map_shuffle",
                             "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
                             "boss_shuffle", "pot_shuffle", "enemy_shuffle", "key_drop_shuffle", "bombless_start",
                             "randomize_shop_inventories", "shuffle_shop_inventories", "shuffle_capacity_upgrades",
@@ -796,6 +796,6 @@ class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
         if self.multiworld.glitches_required[player] == 'no_logic':
             return True
-        if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if self.multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
             return can_buy_unlimited(self, 'Small Key (Universal)', player)
         return self.prog_items[player][item] >= count

@@ -11,7 +11,7 @@ from BaseClasses import CollectionState
 from .SubClasses import ALttPLocation
 from .EntranceShuffle import door_addresses
 from .Items import item_name_groups
-from .Options import smallkey_shuffle, RandomizeShopInventories
+from .Options import small_key_shuffle, RandomizeShopInventories
 from .StateHelpers import has_hearts, can_use_bombs, can_hold_arrows
 
 logger = logging.getLogger("Shops")
@@ -308,13 +308,13 @@ def set_up_shops(world, player: int):
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
                              ['Blue Shield', 50], ['Small Heart',
                                                    10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
-        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
             replacement_items.append(['Small Key (Universal)', 100])
         replacement_item = world.random.choice(replacement_items)
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
-    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal or world.retro_bow[player]:
+    if world.small_key_shuffle[player] == small_key_shuffle.option_universal or world.retro_bow[player]:
         for shop in world.random.sample([s for s in world.shops if
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
                                         5):
@@ -322,7 +322,7 @@ def set_up_shops(world, player: int):
             slots = [0, 1, 2]
             world.random.shuffle(slots)
             slots = iter(slots)
-            if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
             if world.retro_bow[player]:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
@@ -440,7 +440,7 @@ def get_price(multiworld, item, player: int, price_type=None):
                 ShopPriceType.Bombs,
                 ShopPriceType.Magic,
             ]
-            if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
                 if item and item["item"] == "Small Key (Universal)":
                     price_types = [ShopPriceType.Rupees, ShopPriceType.Magic]  # no logical requirements for repeatable keys
                 else:
