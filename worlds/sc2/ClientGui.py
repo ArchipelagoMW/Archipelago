@@ -18,7 +18,7 @@ from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
 from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, SC2Mission, MissionInfo
 from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
 from worlds.sc2.Options import LocationInclusion
-from worlds.sc2 import SC2World, get_first_mission, get_early_unit_location_name
+from worlds.sc2 import SC2World, get_first_mission
 
 
 class HoverableButton(HoverBehavior, Button):
