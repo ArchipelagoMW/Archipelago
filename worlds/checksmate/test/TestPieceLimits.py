@@ -15,21 +15,21 @@ class PieceLimitTestBase(CMTestBase):
         self.POTENTIAL_CHILDREN = self.world.PieceLimitCascade.POTENTIAL_CHILDREN
 
     def assert_matches(self, expected_minors: int, expected_majors: int, expected_queens: int):
-        self.assertEquals(0, self.world.find_piece_limit("Progressive Pawn", self.NO_CHILDREN
-                                                         ))
-        self.assertEquals(expected_minors, self.world.find_piece_limit("Progressive Minor Piece", self.NO_CHILDREN
-                                                                       ))
-        self.assertEquals(expected_majors, self.world.find_piece_limit("Progressive Major Piece", self.NO_CHILDREN
-                                                                       ))
-        self.assertEquals(expected_queens, self.world.find_piece_limit("Progressive Major To Queen", self.NO_CHILDREN
-                                                                       ))
+        self.assertEqual(0, self.world.find_piece_limit("Progressive Pawn", self.NO_CHILDREN
+                                                        ))
+        self.assertEqual(expected_minors, self.world.find_piece_limit("Progressive Minor Piece", self.NO_CHILDREN
+                                                                      ))
+        self.assertEqual(expected_majors, self.world.find_piece_limit("Progressive Major Piece", self.NO_CHILDREN
+                                                                      ))
+        self.assertEqual(expected_queens, self.world.find_piece_limit("Progressive Major To Queen", self.NO_CHILDREN
+                                                                      ))
 
     def assert_actuals(self, expected_majors, expected_queens):
         actual_queens = self.world.items_used[self.player].get("Progressive Major To Queen", 0)
-        self.assertEquals(expected_majors + actual_queens,
-                          self.world.find_piece_limit("Progressive Major Piece", self.ACTUAL_CHILDREN))
-        self.assertEquals(expected_majors + expected_queens,
-                          self.world.find_piece_limit("Progressive Major Piece", self.POTENTIAL_CHILDREN))
+        self.assertEqual(expected_majors + actual_queens,
+                         self.world.find_piece_limit("Progressive Major Piece", self.ACTUAL_CHILDREN))
+        self.assertEqual(expected_majors + expected_queens,
+                         self.world.find_piece_limit("Progressive Major Piece", self.POTENTIAL_CHILDREN))
 
 
 class TestChaosPieceLimits(PieceLimitTestBase):

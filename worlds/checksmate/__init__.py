@@ -138,20 +138,21 @@ class CMWorld(World):
             self.items_used[self.player][item.name] += 1
 
         # print(self.items_used)
-        starter_dict = {item.name: 1 for item in starter_items}
-        excluded_dict = {
-            item: excluded_items[item] for item in excluded_items if not (
-                    not (item not in self.item_name_groups["Enemy Pawn"]) or not (
-                    item not in self.item_name_groups["Enemy Piece"]))}
-        user_items = {key: starter_dict.get(key, 0) + excluded_dict.get(key, 0)
-                      for key in set(starter_dict) | set(excluded_dict)}
-        user_item_count = len(user_items)
+        # starter_dict = {item.name: 1 for item in starter_items}
+        # excluded_dict = {
+        #     item: excluded_items[item] for item in excluded_items if not (
+        #             not (item not in self.item_name_groups["Enemy Pawn"]) or not (
+        #             item not in self.item_name_groups["Enemy Piece"]))}
+        # user_items = {key: starter_dict.get(key, 0) + excluded_dict.get(key, 0)
+        #               for key in set(starter_dict) | set(excluded_dict)}
+        # user_item_count = sum([user_items[item] for item in user_items])
+        user_item_count = len(starter_items)
         user_item_count += 1  # Victory item is counted as part of the pool
         items = []
 
         material = sum([
             progression_items[item].material * self.items_used[self.player][item]
-            for item in self.items_used[self.player].keys() if item in progression_items])
+            for item in self.items_used[self.player] if item in progression_items])
         min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
         max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
         if max_material_option < min_material_option:
