@@ -17,7 +17,7 @@ class CMWeb(WebWorld):
         "A guide to setting up the ChecksMate software on your computer. This guide covers single-player, "
         "multiworld, and related software.",
         "English",
-        "checks-mate_en.md",
+        "checks_mate_en.md",
         "checks-mate/en",
         ["roty", "rft50"]
     )]
