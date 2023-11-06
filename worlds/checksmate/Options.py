@@ -190,8 +190,6 @@ class MinorPieceTypeLimit(Range):
     """
     How many of any given type of minor piece you might play with. If set to 1, you will never start with more than 1
     Knight, nor 1 Bishop, but you may have both 1 Knight and 1 Bishop. If set to 0, this setting is disabled.
-
-    Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Minor Piece Limit by Type"
     range_start = 0
@@ -203,8 +201,6 @@ class MajorPieceTypeLimit(Range):
     """
     How many of any given type of major piece you might play with. If set to 1, you will never start with more than 1
     Rook. If set to 0, this setting is disabled.
-
-    Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Major Piece Limit by Type"
     range_start = 0
@@ -216,8 +212,6 @@ class QueenPieceTypeLimit(Range):
     """
     How many of any given type of Queen-equivalent piece you might play with. If set to 1, you will never start with
     more than 1 Queen. You may have both 1 Queen and 1 Amazon. If set to 0, this setting is disabled.
-
-    Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Queen Piece Limit by Type"
     range_start = 0
@@ -230,8 +224,6 @@ class QueenPieceLimit(Range):
     How many Queen-equivalent pieces you might play with. If set to 1, you will never have more than 1 piece upgraded to
     a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still promote pawns during a
     game. If set to 0, this setting is disabled.
-
-    Ignored when Fairy Chess Army is set to the Fair option.
     """
     display_name = "Queen Piece Limit"
     range_start = 0

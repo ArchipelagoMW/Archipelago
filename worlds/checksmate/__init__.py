@@ -1,5 +1,6 @@
 import math
 import random
+from enum import Enum
 from typing import List, Dict, ClassVar, Callable
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item
@@ -145,6 +146,7 @@ class CMWorld(World):
         user_items = {key: starter_dict.get(key, 0) + excluded_dict.get(key, 0)
                       for key in set(starter_dict) | set(excluded_dict)}
         user_item_count = len(user_items)
+        user_item_count += 1  # Victory item is counted as part of the pool
         items = []
 
         material = sum([
@@ -155,7 +157,7 @@ class CMWorld(World):
         if max_material_option < min_material_option:
             max_material_option = min_material_option
         max_material_actual = (
-                self.multiworld.per_slot_randoms[self.player].random() * (
+            self.multiworld.per_slot_randoms[self.player].random() * (
                 max_material_option - min_material_option) + max_material_option)
         max_material_actual += progression_items["Play as White"].material
 
@@ -235,20 +237,26 @@ class CMWorld(World):
             enough_parents = fewest_parents > self.items_used[self.player].get(chosen_item, 0)
             if not enough_parents:
                 return False
-        return True
+        return self.under_piece_limit(chosen_item, self.PieceLimitCascade.ACTUAL_CHILDREN)
+
+    class PieceLimitCascade(Enum):
+        NO_CHILDREN = 1
+        ACTUAL_CHILDREN = 2
+        POTENTIAL_CHILDREN = 3
 
     def can_add_more(self, chosen_item: str) -> bool:
-        if not self.under_piece_limit(chosen_item):
+        if not self.under_piece_limit(chosen_item, self.PieceLimitCascade.POTENTIAL_CHILDREN):
             return False
         return chosen_item not in self.items_used[self.player] or \
             item_table[chosen_item].quantity == -1 or \
             self.items_used[self.player][chosen_item] < item_table[chosen_item].quantity
 
-    def under_piece_limit(self, chosen_item: str) -> bool:
-        piece_limit = self.find_piece_limit(chosen_item)
+    def under_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade) -> bool:
+        piece_limit = self.find_piece_limit(chosen_item, with_children)
         pieces_used = self.items_used[self.player].get(chosen_item, 0)
         if 0 < piece_limit <= pieces_used:
             # Intentionally ignore "parents" property: player might receive parent items after all children
+            # The player ending up with bounded parents on the upper end is handled in has_prereqs
             return False
         # Limit pieces placed by total number
         if chosen_item in self.piece_limit_options:
@@ -258,8 +266,8 @@ class CMWorld(World):
                 return False
         return True
 
-    def find_piece_limit(self, chosen_item: str) -> int:
-        # Limit pieces placed by individual variety
+    def find_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade) -> int:
+        """Limit pieces placed by individual variety. This applies the Piece Type Limit setting."""
         if chosen_item not in self.piece_type_limit_options:
             return 0
 
@@ -274,12 +282,13 @@ class CMWorld(World):
             army = self.army[self.player]
             limit_multiplier = get_limit_multiplier_for_item(self.piece_types_by_army[army])
         piece_limit = piece_limit * limit_multiplier(chosen_item)
-        if piece_limit > 0:
+        if piece_limit > 0 and with_children != self.PieceLimitCascade.NO_CHILDREN:
             children = get_children(chosen_item)
             if children:
-                piece_limit = piece_limit + (sum([
-                    self.find_piece_limit(child)
-                    for child in children]))
+                if with_children == self.PieceLimitCascade.ACTUAL_CHILDREN:
+                    piece_limit = piece_limit + sum([self.items_used[self.player].get(child, 0) for child in children])
+                elif with_children == self.PieceLimitCascade.POTENTIAL_CHILDREN:
+                    piece_limit = piece_limit + sum([self.find_piece_limit(child, with_children) for child in children])
         return piece_limit
 
     def piece_limit_of(self, chosen_item: str):
