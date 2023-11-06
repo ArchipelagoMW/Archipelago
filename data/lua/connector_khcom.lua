@@ -401,8 +401,8 @@ world_card_addresses = {0x02039D30, 0x02039D31}
 world_card_values = {{0x00,0x02}, {0x08,0x00}, {0x04,0x00}, {0x10,0x00}, {0x01,0x00}, {0x20,0x00}
        ,{0x02,0x00}, {0x40,0x00}, {0x80,0x00}, {0x00,0x04}, {0x00,0x08}, {0x00,0x01}, {0x00,0x10}}
 floor_assignment_addresses = {0x02039D36,0x02039D3A,0x02039D3E,0x02039D42,0x02039D46,0x02039D4A,0x02039D4E,0x02039D52,0x02039D56,0x02039D5A,0x02039D5E,0x02039D62,0x02039D66}
-floor_progress_addresses = {0x02039D34,0x02039D38,0x02039D3C,0x02039D40,0x02039D44,0x02039D48,0x02039D4C,0x02039D50,0x02039D54,0x02039D58,0x02039D5C,0x02039D60}
-floor_doors_addresses = {0x02039D37,0x02039D3B,0x02039D3F,0x02039D43,0x02039D47,0x02039D4B,0x02039D4F,0x02039D53,0x02039D57,0x02039D5B,0x02039D5F,0x02039D63}
+floor_progress_addresses = {0x02039D34,0x02039D38,0x02039D3C,0x02039D40,0x02039D44,0x02039D48,0x02039D4C,0x02039D50,0x02039D54,0x02039D58,0x02039D5C,0x02039D60, 0x02039D64}
+floor_doors_addresses = {0x02039D37,0x02039D3B,0x02039D3F,0x02039D43,0x02039D47,0x02039D4B,0x02039D4F,0x02039D53,0x02039D57,0x02039D5B,0x02039D5F,0x02039D63, 0x02039D67}
 floor_assignment_values = {0x0A, 0x04, 0x03, 0x05, 0x01, 0x06, 0x02, 0x07, 0x08, 0x0D, 0x0B, 0x09, 0x0C}
 
 bronze_pack_attack_cards = {"Kingdom Key", "Three Wishes", "Pumpkinhead", "Olympia", "Wishing Star", "Lady Luck"}
@@ -1011,8 +1011,13 @@ function update_floor_status()
     i = 2
     while i < 13 do
         if get_stored_gold_cards("Key of Beginnings", i) < 1 then
-            memory.writebyte(floor_progress_addresses[i], 0x77)
-            memory.writebyte(floor_doors_addresses[i], 0x03)
+            if i == 12 then
+                memory.writebyte(floor_progress_addresses[i], 0x17)
+                memory.writebyte(floor_doors_addresses[i], 0x00)
+            else
+                memory.writebyte(floor_progress_addresses[i], 0x77)
+                memory.writebyte(floor_doors_addresses[i], 0x03)
+            end
         elseif memory.readbyte(floor_assignment_addresses[i]) == 0x0A and i > 1 then
             memory.writebyte(floor_progress_addresses[i], 0x00)
             memory.writebyte(floor_doors_addresses[i], 0x00)
@@ -1026,13 +1031,13 @@ function update_post_floor_cutscene_valid()
     while i < 13 do
         if can_complete_floor(i) then
             x = memory.readbyte(floor_progress_addresses[i])
-            x = bit.clear(x, 2) --Turns on the post floor cutscene
-            x = bit.clear(x, 0) --Turns on the 2nd post floor cutscene
+            x = bit.clear(x, 2)
+            x = bit.clear(x, 0)
             memory.writebyte(floor_progress_addresses[i],x)
         else
             x = memory.readbyte(floor_progress_addresses[i])
-            x = bit.set(x, 2) --Turns off the post floor cutscene
-            x = bit.set(x, 0) --Turns off the post floor cutscene
+            x = bit.set(x, 2)
+            x = bit.set(x, 0)
             memory.writebyte(floor_progress_addresses[i],x)
         end
         i = i + 1
