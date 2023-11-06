@@ -160,19 +160,6 @@ shop_class_mapping = {ShopType.UpgradeShop: UpgradeShop,
                       ShopType.TakeAny: TakeAny}
 
 
-# def FillDisabledShopSlots(world):
-#     shop_slots: Set[ALttPLocation] = {location for shop_locations in (shop.region.locations for shop in world.shops)
-#                                       for location in shop_locations
-#                                       if location.shop_slot is not None and location.shop_slot_disabled
-#                                       and "Capacity" not in location.name}
-#     for location in shop_slots:
-#         location.shop_slot_disabled = True
-#         shop: Shop = location.parent_region.shop
-#         location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
-#         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
-#         location.locked = True
-
-
 def push_shop_inventories(multiworld):
     shop_slots = [location for shop_locations in (shop.region.locations for shop in multiworld.shops if shop.type
                   != ShopType.TakeAny) for location in shop_locations if location.shop_slot is not None]
@@ -251,7 +238,6 @@ def create_shops(multiworld, player: int):
                     loc.locked = True
                 else:
                     shop.region.locations.append(loc)
-                multiworld.clear_location_cache()
 
 
 class ShopData(NamedTuple):

@@ -31,7 +31,7 @@ def fake_pearl_state(state, player):
     if state.has('Moon Pearl', player):
         return state
     fake_state = state.copy()
-    fake_state.prog_items['Moon Pearl', player] += 1
+    fake_state.prog_items[player]['Moon Pearl'] += 1
     return fake_state
 
 
