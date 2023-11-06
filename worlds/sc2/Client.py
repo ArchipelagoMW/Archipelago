@@ -23,7 +23,7 @@ from worlds.sc2 import ItemNames
 from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed, \
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
     KerriganChecksPerLevelPack, \
-    LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit, \
+    LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, \
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics
 
 if __name__ == "__main__":
