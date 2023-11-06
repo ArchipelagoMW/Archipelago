@@ -2,7 +2,7 @@ import string
 
 from .items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, get_items_by_category, \
     filler_table
-from .locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, get_locations
+from .locations import RiskOfRainLocation, item_pickups, get_locations
 from .rules import set_rules
 from .ror2environments import environment_vanilla_table, environment_vanilla_orderedstages_table, \
     environment_sotv_orderedstages_table, environment_sotv_table, collapse_dict_list_vertical, shift_by_offset
@@ -10,7 +10,7 @@ from .ror2environments import environment_vanilla_table, environment_vanilla_ord
 from BaseClasses import Region, Entrance, Item, ItemClassification, Tutorial
 from .options import ItemWeights, ROR2Options
 from worlds.AutoWorld import World, WebWorld
-from .regions import create_regions
+from .regions import create_explore_regions, create_classic_regions
 from typing import List, Dict
 
 
@@ -76,27 +76,10 @@ class RiskOfRainWorld(World):
 
         if self.options.goal == "classic":
             # classic mode
-            menu = create_region(self, "Menu")
-            self.multiworld.regions.append(menu)
-            # By using a victory region, we can define it as being connected to by several regions
-            #   which can then determine the availability of the victory.
-            victory_region = create_region(self, "Victory")
-            self.multiworld.regions.append(victory_region)
-            petrichor = create_region(self, "Petrichor V",
-                                      get_classic_item_pickups(self.options.total_locations.value))
-            self.multiworld.regions.append(petrichor)
-
-            # classic mode can get to victory from the beginning of the game
-            to_victory = Entrance(self.player, "beating game", petrichor)
-            petrichor.exits.append(to_victory)
-            to_victory.connect(victory_region)
-
-            connection = Entrance(self.player, "Lobby", menu)
-            menu.exits.append(connection)
-            connection.connect(petrichor)
+            create_classic_regions(self)
         else:
             # explore mode
-            create_regions(self)
+            create_explore_regions(self)
 
         self.create_events()
 
@@ -260,10 +243,3 @@ class RiskOfRainWorld(World):
         victory_event = RiskOfRainLocation(self.player, "Victory", None, victory_region)
         victory_event.place_locked_item(RiskOfRainItem("Victory", ItemClassification.progression, None, self.player))
         victory_region.locations.append(victory_event)
-
-
-def create_region(world: RiskOfRainWorld, name: str, locations: Dict[str, int] = {}) -> Region:
-    ret = Region(name, world.player, world.multiworld)
-    for location_name, location_id in locations.items():
-        ret.locations.append(RiskOfRainLocation(world.player, location_name, location_id, ret))
-    return ret

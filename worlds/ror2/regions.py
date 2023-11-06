@@ -1,7 +1,7 @@
 from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Region, Entrance, MultiWorld
-from .locations import location_table, RiskOfRainLocation
+from .locations import location_table, RiskOfRainLocation, get_classic_item_pickups
 
 if TYPE_CHECKING:
     from . import RiskOfRainWorld
@@ -12,7 +12,7 @@ class RoRRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(ror2_world: "RiskOfRainWorld"):
+def create_explore_regions(ror2_world: "RiskOfRainWorld"):
     player = ror2_world.player
     ror2_options = ror2_world.options
     multiworld = ror2_world.multiworld
@@ -119,14 +119,14 @@ def create_regions(ror2_world: "RiskOfRainWorld"):
 
     # Create all the regions
     for name, data in regions_pool.items():
-        multiworld.regions.append(create_region(multiworld, player, name, data))
+        multiworld.regions.append(create_explore_region(multiworld, player, name, data))
 
     # Connect all the regions to their exits
     for name, data in regions_pool.items():
         create_connections_in_regions(multiworld, player, name, data)
 
 
-def create_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData) -> Region:
+def create_explore_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData) -> Region:
     region = Region(name, player, multiworld)
     if data.locations:
         for location_name in data.locations:
@@ -145,3 +145,34 @@ def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str
             exit_region = multiworld.get_region(region_exit, player)
             r_exit_stage.connect(exit_region)
             region.exits.append(r_exit_stage)
+
+
+def create_classic_regions(ror2_world: "RiskOfRainWorld"):
+    player = ror2_world.player
+    ror2_options = ror2_world.options
+    multiworld = ror2_world.multiworld
+    menu = create_classic_region(multiworld, player, "Menu")
+    multiworld.regions.append(menu)
+    # By using a victory region, we can define it as being connected to by several regions
+    #   which can then determine the availability of the victory.
+    victory_region = create_classic_region(multiworld, player, "Victory")
+    multiworld.regions.append(victory_region)
+    petrichor = create_classic_region(multiworld, player, "Petrichor V",
+                                      get_classic_item_pickups(ror2_options.total_locations.value))
+    multiworld.regions.append(petrichor)
+
+    # classic mode can get to victory from the beginning of the game
+    to_victory = Entrance(player, "beating game", petrichor)
+    petrichor.exits.append(to_victory)
+    to_victory.connect(victory_region)
+
+    connection = Entrance(player, "Lobby", menu)
+    menu.exits.append(connection)
+    connection.connect(petrichor)
+
+
+def create_classic_region(multiworld: MultiWorld, player: int, name: str, locations: Dict[str, int] = {}) -> Region:
+    ret = Region(name, player, multiworld)
+    for location_name, location_id in locations.items():
+        ret.locations.append(RiskOfRainLocation(player, location_name, location_id, ret))
+    return ret
