@@ -70,13 +70,16 @@ class WitnessPlayerLogic:
                 for items_option in these_items:
                     all_options.add(items_option.union(dependentItem))
 
-            # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved...
-            if panel_hex != "0x28A0D":
-                return frozenset(all_options)
-            # ...except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
-            # In the future, it would be wise to make a distinction between "power dependencies" and other dependencies.
-            if any("0x28998" in option for option in these_panels):
-                return frozenset(all_options)
+            # If this entity is not an EP and it has an associated door item, ignore the original power dependencies
+            if StaticWitnessLogic.ENTITIES_BY_HEX[panel_hex]["entityType"] != "EP":
+                # Unless this is 0x28A0D, which depends on another entity for *non-power* reasons
+                if panel_hex != "0x28A0D":
+                    return frozenset(all_options)
+                # ...EXCEPT in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
+                # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
+                if any("0x28998" in option for option in these_panels):
+                    print(panel_hex)
+                    return frozenset(all_options)
 
             these_items = all_options
 
