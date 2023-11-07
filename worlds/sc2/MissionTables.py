@@ -527,6 +527,11 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
     },
 }
 
+# In the future, use this to store Epilogue mission races
+campaign_race_exceptions: Dict[SC2Mission, SC2Race] = {
+    SC2Mission.WITH_FRIENDS_LIKE_THESE: SC2Race.TERRAN
+}
+
 
 def get_goal_location(mission: SC2Mission) -> str | None:
     """

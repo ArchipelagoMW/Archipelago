@@ -15,7 +15,8 @@ from kivy.properties import StringProperty
 
 from CommonClient import CommonContext
 from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
-from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, SC2Mission, MissionInfo
+from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
+    SC2Mission, MissionInfo, SC2Campaign, SC2Race
 from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
 from worlds.sc2.Options import LocationInclusion
 from worlds.sc2 import SC2World, get_first_mission
@@ -212,8 +213,15 @@ class SC2Manager(GameManager):
                             for pad in range(mission_data.ui_vertical_padding):
                                 column_spacer = Label(text='', size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
                                 category_panel.add_widget(column_spacer)
-
                             mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
+                            race = campaign_race_exceptions.get(mission_data.mission, mission_obj.campaign.race)
+                            racial_colors = {
+                                SC2Race.TERRAN: (0.24, 0.84, 0.68),
+                                SC2Race.ZERG: (1, 0.65, 0.37),
+                                SC2Race.PROTOSS: (0.55, 0.7, 1)
+                            }
+                            if race in racial_colors:
+                                mission_button.background_color = racial_colors[race]
                             mission_button.tooltip_text = tooltip
                             mission_button.bind(on_press=self.mission_callback)
                             self.mission_id_to_button[mission_id] = mission_button
