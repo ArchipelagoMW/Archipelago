@@ -209,19 +209,6 @@ class SC2Logic(LogicMixin):
                 or self._sc2_advanced_tactics(multiworld, player)
         )
 
-    def _sc2wol_has_protoss_common_units(self, multiworld: MultiWorld, player: int) -> bool:
-        return (self.has_any({ItemNames.ZEALOT, ItemNames.IMMORTAL, ItemNames.STALKER, ItemNames.DARK_TEMPLAR}, player)
-                or self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.HIGH_TEMPLAR, player)
-        )
-
-    def _sc2wol_has_protoss_medium_units(self, multiworld: MultiWorld, player: int) -> bool:
-        return (
-            self._sc2wol_has_protoss_common_units(multiworld, player)
-                and self.has_any({ItemNames.STALKER, ItemNames.VOID_RAY, ItemNames.CARRIER}, player)
-            or self._sc2_advanced_tactics(multiworld, player)
-                and self.has(ItemNames.DARK_TEMPLAR, player)
-        )
-
     def _sc2wol_beats_protoss_deathball(self, multiworld: MultiWorld, player: int) -> bool:
         """
         Ability to deal with Immortals, Colossi with some air support
@@ -468,3 +455,13 @@ class SC2Logic(LogicMixin):
         else:
             return self._sc2hots_has_competent_comp(multiworld, player) \
                 and self._sc2hots_has_good_antiair(multiworld, player)
+
+    def _sc2lotv_has_common_unit(self, multiworld: MultiWorld, player: int) -> bool:
+        return self.has_any(get_basic_units(multiworld, player, SC2Race.PROTOSS), player)
+
+    def _sc2lotv_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
+        return self.has_any(
+            {ItemNames.STALKER, ItemNames.SLAYER, ItemNames.INSTIGATOR, ItemNames.DRAGOON, ItemNames.ADEPT,
+             ItemNames.VOID_RAY, ItemNames.DESTROYER}, player) \
+            or (self.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER}, player)
+                and self.has(ItemNames.SCOUT, player))

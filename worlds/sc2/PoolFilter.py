@@ -397,7 +397,7 @@ class ValidInventory:
         # General
         self._sc2_cleared_missions = lambda world, player, mission_count: False
         self._sc2_advanced_tactics = lambda world, player: SC2Logic._sc2_advanced_tactics(self, world, player)
-        # WoL
+        # Terran
         self._sc2wol_has_common_unit = lambda world, player: SC2Logic._sc2wol_has_common_unit(self, world, player)
         self._sc2wol_has_early_tech = lambda world, player: SC2Logic._sc2wol_has_early_tech(self, world, player)
         self._sc2wol_has_air = lambda world, player: SC2Logic._sc2wol_has_air(self, world, player)
@@ -415,14 +415,12 @@ class ValidInventory:
         self._sc2wol_has_bio_heal = lambda world, player: SC2Logic._sc2wol_has_bio_heal(self, world, player)
         self._sc2wol_has_competent_base_trasher = lambda world, player: SC2Logic._sc2wol_has_competent_base_trasher(self, world, player)
         self._sc2wol_has_nukes = lambda world, player: SC2Logic._sc2wol_has_nukes(self, world, player)
-        self._sc2wol_has_protoss_common_units = lambda world, player: SC2Logic._sc2wol_has_protoss_common_units(self, world, player)
-        self._sc2wol_has_protoss_medium_units = lambda world, player: SC2Logic._sc2wol_has_protoss_medium_units(self, world, player)
         self._sc2wol_has_mm_upgrade = lambda world, player: SC2Logic._sc2wol_has_mm_upgrade(self, world, player)
         self._sc2wol_welcome_to_the_jungle_requirement = lambda world, player: SC2Logic._sc2wol_welcome_to_the_jungle_requirement(self, world, player)
         self._sc2wol_can_respond_to_colony_infestations = lambda world, player: SC2Logic._sc2wol_can_respond_to_colony_infestations(self, world, player)
         self._sc2wol_final_mission_requirements = lambda world, player: SC2Logic._sc2wol_final_mission_requirements(self, world, player)
         self._sc2wol_cleared_missions = lambda world, player: SC2Logic._sc2wol_cleared_missions(self, world, player)
-        # HotS
+        # Zerg
         self._sc2hots_has_common_unit = lambda world, player: SC2Logic._sc2hots_has_common_unit(self, world, player)
         self._sc2hots_has_good_antiair = lambda world, player: SC2Logic._sc2hots_has_good_antiair(self, world, player)
         self._sc2hots_has_minimal_antiair = lambda world, player: SC2Logic._sc2hots_has_minimal_antiair(self, world, player)
@@ -437,6 +435,9 @@ class ValidInventory:
         self._sc2hots_can_pass_vents = lambda world, player: SC2Logic._sc2hots_can_pass_vents(self, world, player)
         self._sc2hots_can_pass_supreme = lambda world, player: SC2Logic._sc2hots_can_pass_supreme(self, world, player)
         self._sc2hots_final_mission_requirements = lambda world, player: SC2Logic._sc2hots_final_mission_requirements(self, world, player)
+        # Protoss
+        self._sc2lotv_has_common_unit = lambda world, player: SC2Logic._sc2lotv_has_common_unit(self, world, player)
+        self._sc2lotv_has_competent_anti_air = lambda world, player: SC2Logic._sc2lotv_has_competent_anti_air(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],

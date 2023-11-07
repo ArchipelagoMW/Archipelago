@@ -1217,7 +1217,7 @@ item_table = {
     ItemNames.DARK_TEMPLAR: ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
     ItemNames.IMMORTAL: ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
     ItemNames.COLOSSUS: ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PHOENIX: ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"wol", "lotv"}),
+    ItemNames.PHOENIX: ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
     ItemNames.VOID_RAY: ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
     ItemNames.CARRIER: ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
 
