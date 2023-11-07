@@ -3419,5 +3419,2126 @@
   "POKEDEX_REWARD_386": {
     "label": "Pokedex - Deoxys",
     "tags": ["Pokedex"]
+  },
+
+  "TRAINER_AARON_REWARD": {
+    "label": "TRAINER_AARON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ABIGAIL_1_REWARD": {
+    "label": "TRAINER_ABIGAIL_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AIDAN_REWARD": {
+    "label": "TRAINER_AIDAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AISHA_REWARD": {
+    "label": "TRAINER_AISHA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALAN_REWARD": {
+    "label": "TRAINER_ALAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALBERTO_REWARD": {
+    "label": "TRAINER_ALBERTO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALBERT_REWARD": {
+    "label": "TRAINER_ALBERT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALEXA_REWARD": {
+    "label": "TRAINER_ALEXA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALEXIA_REWARD": {
+    "label": "TRAINER_ALEXIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALEXIS_REWARD": {
+    "label": "TRAINER_ALEXIS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALEX_REWARD": {
+    "label": "TRAINER_ALEX_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALICE_REWARD": {
+    "label": "TRAINER_ALICE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALIX_REWARD": {
+    "label": "TRAINER_ALIX_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALLEN_REWARD": {
+    "label": "TRAINER_ALLEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALLISON_REWARD": {
+    "label": "TRAINER_ALLISON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALVARO_REWARD": {
+    "label": "TRAINER_ALVARO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALYSSA_REWARD": {
+    "label": "TRAINER_ALYSSA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AMY_AND_LIV_1_REWARD": {
+    "label": "TRAINER_AMY_AND_LIV_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANNA_AND_MEG_1_REWARD": {
+    "label": "TRAINER_ANNA_AND_MEG_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANDREA_REWARD": {
+    "label": "TRAINER_ANDREA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANDRES_1_REWARD": {
+    "label": "TRAINER_ANDRES_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANDREW_REWARD": {
+    "label": "TRAINER_ANDREW_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANGELICA_REWARD": {
+    "label": "TRAINER_ANGELICA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANGELINA_REWARD": {
+    "label": "TRAINER_ANGELINA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANGELO_REWARD": {
+    "label": "TRAINER_ANGELO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANNIKA_REWARD": {
+    "label": "TRAINER_ANNIKA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANTHONY_REWARD": {
+    "label": "TRAINER_ANTHONY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ARCHIE_REWARD": {
+    "label": "TRAINER_ARCHIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ASHLEY_REWARD": {
+    "label": "TRAINER_ASHLEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ATHENA_REWARD": {
+    "label": "TRAINER_ATHENA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ATSUSHI_REWARD": {
+    "label": "TRAINER_ATSUSHI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AURON_REWARD": {
+    "label": "TRAINER_AURON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AUSTINA_REWARD": {
+    "label": "TRAINER_AUSTINA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AUTUMN_REWARD": {
+    "label": "TRAINER_AUTUMN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AXLE_REWARD": {
+    "label": "TRAINER_AXLE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BARNY_REWARD": {
+    "label": "TRAINER_BARNY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BARRY_REWARD": {
+    "label": "TRAINER_BARRY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BEAU_REWARD": {
+    "label": "TRAINER_BEAU_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BECKY_REWARD": {
+    "label": "TRAINER_BECKY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BECK_REWARD": {
+    "label": "TRAINER_BECK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BENJAMIN_1_REWARD": {
+    "label": "TRAINER_BENJAMIN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BENNY_REWARD": {
+    "label": "TRAINER_BENNY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BEN_REWARD": {
+    "label": "TRAINER_BEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BERKE_REWARD": {
+    "label": "TRAINER_BERKE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BERNIE_1_REWARD": {
+    "label": "TRAINER_BERNIE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BETHANY_REWARD": {
+    "label": "TRAINER_BETHANY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BETH_REWARD": {
+    "label": "TRAINER_BETH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BEVERLY_REWARD": {
+    "label": "TRAINER_BEVERLY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BIANCA_REWARD": {
+    "label": "TRAINER_BIANCA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BILLY_REWARD": {
+    "label": "TRAINER_BILLY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BLAKE_REWARD": {
+    "label": "TRAINER_BLAKE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRANDEN_REWARD": {
+    "label": "TRAINER_BRANDEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRANDI_REWARD": {
+    "label": "TRAINER_BRANDI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRAWLY_1_REWARD": {
+    "label": "TRAINER_BRAWLY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRAXTON_REWARD": {
+    "label": "TRAINER_BRAXTON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_LILYCOVE_MUDKIP_REWARD": {
+    "label": "TRAINER_BRENDAN_LILYCOVE_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_LILYCOVE_TORCHIC_REWARD": {
+    "label": "TRAINER_BRENDAN_LILYCOVE_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_LILYCOVE_TREECKO_REWARD": {
+    "label": "TRAINER_BRENDAN_LILYCOVE_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_103_MUDKIP_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_103_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_103_TORCHIC_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_103_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_103_TREECKO_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_103_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_110_MUDKIP_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_110_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_110_TORCHIC_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_110_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_110_TREECKO_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_110_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_119_MUDKIP_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_119_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_119_TORCHIC_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_119_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_119_TREECKO_REWARD": {
+    "label": "TRAINER_BRENDAN_ROUTE_119_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_RUSTBORO_MUDKIP_REWARD": {
+    "label": "TRAINER_BRENDAN_RUSTBORO_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_RUSTBORO_TORCHIC_REWARD": {
+    "label": "TRAINER_BRENDAN_RUSTBORO_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_RUSTBORO_TREECKO_REWARD": {
+    "label": "TRAINER_BRENDAN_RUSTBORO_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDA_REWARD": {
+    "label": "TRAINER_BRENDA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDEN_REWARD": {
+    "label": "TRAINER_BRENDEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENT_REWARD": {
+    "label": "TRAINER_BRENT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRIANNA_REWARD": {
+    "label": "TRAINER_BRIANNA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRICE_REWARD": {
+    "label": "TRAINER_BRICE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRIDGET_REWARD": {
+    "label": "TRAINER_BRIDGET_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BROOKE_1_REWARD": {
+    "label": "TRAINER_BROOKE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRYANT_REWARD": {
+    "label": "TRAINER_BRYANT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRYAN_REWARD": {
+    "label": "TRAINER_BRYAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CALE_REWARD": {
+    "label": "TRAINER_CALE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CALLIE_REWARD": {
+    "label": "TRAINER_CALLIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CALVIN_1_REWARD": {
+    "label": "TRAINER_CALVIN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAMDEN_REWARD": {
+    "label": "TRAINER_CAMDEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAMERON_1_REWARD": {
+    "label": "TRAINER_CAMERON_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAMRON_REWARD": {
+    "label": "TRAINER_CAMRON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CARLEE_REWARD": {
+    "label": "TRAINER_CARLEE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAROLINA_REWARD": {
+    "label": "TRAINER_CAROLINA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAROLINE_REWARD": {
+    "label": "TRAINER_CAROLINE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAROL_REWARD": {
+    "label": "TRAINER_CAROL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CARTER_REWARD": {
+    "label": "TRAINER_CARTER_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CATHERINE_1_REWARD": {
+    "label": "TRAINER_CATHERINE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CEDRIC_REWARD": {
+    "label": "TRAINER_CEDRIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CELIA_REWARD": {
+    "label": "TRAINER_CELIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CELINA_REWARD": {
+    "label": "TRAINER_CELINA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHAD_REWARD": {
+    "label": "TRAINER_CHAD_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHANDLER_REWARD": {
+    "label": "TRAINER_CHANDLER_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHARLIE_REWARD": {
+    "label": "TRAINER_CHARLIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHARLOTTE_REWARD": {
+    "label": "TRAINER_CHARLOTTE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHASE_REWARD": {
+    "label": "TRAINER_CHASE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHESTER_REWARD": {
+    "label": "TRAINER_CHESTER_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHIP_REWARD": {
+    "label": "TRAINER_CHIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHRIS_REWARD": {
+    "label": "TRAINER_CHRIS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CINDY_1_REWARD": {
+    "label": "TRAINER_CINDY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLARENCE_REWARD": {
+    "label": "TRAINER_CLARENCE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLARISSA_REWARD": {
+    "label": "TRAINER_CLARISSA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLARK_REWARD": {
+    "label": "TRAINER_CLARK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLAUDE_REWARD": {
+    "label": "TRAINER_CLAUDE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLIFFORD_REWARD": {
+    "label": "TRAINER_CLIFFORD_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_COBY_REWARD": {
+    "label": "TRAINER_COBY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_COLE_REWARD": {
+    "label": "TRAINER_COLE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_COLIN_REWARD": {
+    "label": "TRAINER_COLIN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_COLTON_REWARD": {
+    "label": "TRAINER_COLTON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CONNIE_REWARD": {
+    "label": "TRAINER_CONNIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CONOR_REWARD": {
+    "label": "TRAINER_CONOR_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CORA_REWARD": {
+    "label": "TRAINER_CORA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CORY_1_REWARD": {
+    "label": "TRAINER_CORY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CRISSY_REWARD": {
+    "label": "TRAINER_CRISSY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CRISTIAN_REWARD": {
+    "label": "TRAINER_CRISTIAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CRISTIN_1_REWARD": {
+    "label": "TRAINER_CRISTIN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CYNDY_1_REWARD": {
+    "label": "TRAINER_CYNDY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAISUKE_REWARD": {
+    "label": "TRAINER_DAISUKE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAISY_REWARD": {
+    "label": "TRAINER_DAISY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DALE_REWARD": {
+    "label": "TRAINER_DALE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DALTON_1_REWARD": {
+    "label": "TRAINER_DALTON_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DANA_REWARD": {
+    "label": "TRAINER_DANA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DANIELLE_REWARD": {
+    "label": "TRAINER_DANIELLE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAPHNE_REWARD": {
+    "label": "TRAINER_DAPHNE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DARCY_REWARD": {
+    "label": "TRAINER_DARCY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DARIAN_REWARD": {
+    "label": "TRAINER_DARIAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DARIUS_REWARD": {
+    "label": "TRAINER_DARIUS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DARRIN_REWARD": {
+    "label": "TRAINER_DARRIN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAVID_REWARD": {
+    "label": "TRAINER_DAVID_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAVIS_REWARD": {
+    "label": "TRAINER_DAVIS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAWSON_REWARD": {
+    "label": "TRAINER_DAWSON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAYTON_REWARD": {
+    "label": "TRAINER_DAYTON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEANDRE_REWARD": {
+    "label": "TRAINER_DEANDRE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEAN_REWARD": {
+    "label": "TRAINER_DEAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEBRA_REWARD": {
+    "label": "TRAINER_DEBRA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DECLAN_REWARD": {
+    "label": "TRAINER_DECLAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEMETRIUS_REWARD": {
+    "label": "TRAINER_DEMETRIUS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DENISE_REWARD": {
+    "label": "TRAINER_DENISE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEREK_REWARD": {
+    "label": "TRAINER_DEREK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEVAN_REWARD": {
+    "label": "TRAINER_DEVAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DIANA_1_REWARD": {
+    "label": "TRAINER_DIANA_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DIANNE_REWARD": {
+    "label": "TRAINER_DIANNE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DILLON_REWARD": {
+    "label": "TRAINER_DILLON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DOMINIK_REWARD": {
+    "label": "TRAINER_DOMINIK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DONALD_REWARD": {
+    "label": "TRAINER_DONALD_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DONNY_REWARD": {
+    "label": "TRAINER_DONNY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DOUGLAS_REWARD": {
+    "label": "TRAINER_DOUGLAS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DOUG_REWARD": {
+    "label": "TRAINER_DOUG_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DRAKE_REWARD": {
+    "label": "TRAINER_DRAKE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DREW_REWARD": {
+    "label": "TRAINER_DREW_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DUNCAN_REWARD": {
+    "label": "TRAINER_DUNCAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DUSTY_1_REWARD": {
+    "label": "TRAINER_DUSTY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DWAYNE_REWARD": {
+    "label": "TRAINER_DWAYNE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DYLAN_1_REWARD": {
+    "label": "TRAINER_DYLAN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEZ_AND_LUKE_REWARD": {
+    "label": "TRAINER_DEZ_AND_LUKE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDDIE_REWARD": {
+    "label": "TRAINER_EDDIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDGAR_REWARD": {
+    "label": "TRAINER_EDGAR_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDMOND_REWARD": {
+    "label": "TRAINER_EDMOND_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDWARDO_REWARD": {
+    "label": "TRAINER_EDWARDO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDWARD_REWARD": {
+    "label": "TRAINER_EDWARD_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDWIN_1_REWARD": {
+    "label": "TRAINER_EDWIN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ED_REWARD": {
+    "label": "TRAINER_ED_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ELIJAH_REWARD": {
+    "label": "TRAINER_ELIJAH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ELI_REWARD": {
+    "label": "TRAINER_ELI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ELLIOT_1_REWARD": {
+    "label": "TRAINER_ELLIOT_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ERIC_REWARD": {
+    "label": "TRAINER_ERIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ERNEST_1_REWARD": {
+    "label": "TRAINER_ERNEST_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ETHAN_1_REWARD": {
+    "label": "TRAINER_ETHAN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FABIAN_REWARD": {
+    "label": "TRAINER_FABIAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FELIX_REWARD": {
+    "label": "TRAINER_FELIX_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FERNANDO_1_REWARD": {
+    "label": "TRAINER_FERNANDO_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FLANNERY_1_REWARD": {
+    "label": "TRAINER_FLANNERY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FLINT_REWARD": {
+    "label": "TRAINER_FLINT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FOSTER_REWARD": {
+    "label": "TRAINER_FOSTER_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FRANKLIN_REWARD": {
+    "label": "TRAINER_FRANKLIN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FREDRICK_REWARD": {
+    "label": "TRAINER_FREDRICK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GABRIELLE_1_REWARD": {
+    "label": "TRAINER_GABRIELLE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GARRET_REWARD": {
+    "label": "TRAINER_GARRET_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GARRISON_REWARD": {
+    "label": "TRAINER_GARRISON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GEORGE_REWARD": {
+    "label": "TRAINER_GEORGE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GEORGIA_REWARD": {
+    "label": "TRAINER_GEORGIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GERALD_REWARD": {
+    "label": "TRAINER_GERALD_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GILBERT_REWARD": {
+    "label": "TRAINER_GILBERT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GINA_AND_MIA_1_REWARD": {
+    "label": "TRAINER_GINA_AND_MIA_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GLACIA_REWARD": {
+    "label": "TRAINER_GLACIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRACE_REWARD": {
+    "label": "TRAINER_GRACE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GREG_REWARD": {
+    "label": "TRAINER_GREG_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_1_REWARD": {
+    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_2_REWARD": {
+    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_3_REWARD": {
+    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_3_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_4_REWARD": {
+    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_4_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_5_REWARD": {
+    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_5_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_6_REWARD": {
+    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_6_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_7_REWARD": {
+    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_7_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_8_REWARD": {
+    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_8_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_JAGGED_PASS_REWARD": {
+    "label": "TRAINER_GRUNT_JAGGED_PASS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_10_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_10_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_11_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_11_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_12_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_12_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_13_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_13_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_14_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_14_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_15_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_15_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_16_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_16_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_1_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_2_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_3_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_3_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_4_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_4_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_5_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_5_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_6_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_6_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_7_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_7_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_8_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_8_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_9_REWARD": {
+    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_9_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_CHIMNEY_1_REWARD": {
+    "label": "TRAINER_GRUNT_MT_CHIMNEY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_CHIMNEY_2_REWARD": {
+    "label": "TRAINER_GRUNT_MT_CHIMNEY_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_PYRE_1_REWARD": {
+    "label": "TRAINER_GRUNT_MT_PYRE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_PYRE_2_REWARD": {
+    "label": "TRAINER_GRUNT_MT_PYRE_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_PYRE_3_REWARD": {
+    "label": "TRAINER_GRUNT_MT_PYRE_3_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_PYRE_4_REWARD": {
+    "label": "TRAINER_GRUNT_MT_PYRE_4_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MUSEUM_1_REWARD": {
+    "label": "TRAINER_GRUNT_MUSEUM_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MUSEUM_2_REWARD": {
+    "label": "TRAINER_GRUNT_MUSEUM_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_PETALBURG_WOODS_REWARD": {
+    "label": "TRAINER_GRUNT_PETALBURG_WOODS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_RUSTURF_TUNNEL_REWARD": {
+    "label": "TRAINER_GRUNT_RUSTURF_TUNNEL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_1_REWARD": {
+    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_2_REWARD": {
+    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_3_REWARD": {
+    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_3_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_4_REWARD": {
+    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_4_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_5_REWARD": {
+    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_5_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_1_REWARD": {
+    "label": "TRAINER_GRUNT_SPACE_CENTER_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_2_REWARD": {
+    "label": "TRAINER_GRUNT_SPACE_CENTER_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_3_REWARD": {
+    "label": "TRAINER_GRUNT_SPACE_CENTER_3_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_4_REWARD": {
+    "label": "TRAINER_GRUNT_SPACE_CENTER_4_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_5_REWARD": {
+    "label": "TRAINER_GRUNT_SPACE_CENTER_5_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_6_REWARD": {
+    "label": "TRAINER_GRUNT_SPACE_CENTER_6_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_7_REWARD": {
+    "label": "TRAINER_GRUNT_SPACE_CENTER_7_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_1_REWARD": {
+    "label": "TRAINER_GRUNT_WEATHER_INST_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_2_REWARD": {
+    "label": "TRAINER_GRUNT_WEATHER_INST_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_3_REWARD": {
+    "label": "TRAINER_GRUNT_WEATHER_INST_3_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_4_REWARD": {
+    "label": "TRAINER_GRUNT_WEATHER_INST_4_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_5_REWARD": {
+    "label": "TRAINER_GRUNT_WEATHER_INST_5_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GWEN_REWARD": {
+    "label": "TRAINER_GWEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HAILEY_REWARD": {
+    "label": "TRAINER_HAILEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HALEY_1_REWARD": {
+    "label": "TRAINER_HALEY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HALLE_REWARD": {
+    "label": "TRAINER_HALLE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HANNAH_REWARD": {
+    "label": "TRAINER_HANNAH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HARRISON_REWARD": {
+    "label": "TRAINER_HARRISON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HAYDEN_REWARD": {
+    "label": "TRAINER_HAYDEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HECTOR_REWARD": {
+    "label": "TRAINER_HECTOR_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HEIDI_REWARD": {
+    "label": "TRAINER_HEIDI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HELENE_REWARD": {
+    "label": "TRAINER_HELENE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HENRY_REWARD": {
+    "label": "TRAINER_HENRY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HERMAN_REWARD": {
+    "label": "TRAINER_HERMAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HIDEO_REWARD": {
+    "label": "TRAINER_HIDEO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HITOSHI_REWARD": {
+    "label": "TRAINER_HITOSHI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HOPE_REWARD": {
+    "label": "TRAINER_HOPE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HUDSON_REWARD": {
+    "label": "TRAINER_HUDSON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HUEY_REWARD": {
+    "label": "TRAINER_HUEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HUGH_REWARD": {
+    "label": "TRAINER_HUGH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HUMBERTO_REWARD": {
+    "label": "TRAINER_HUMBERTO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_IMANI_REWARD": {
+    "label": "TRAINER_IMANI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_IRENE_REWARD": {
+    "label": "TRAINER_IRENE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISAAC_1_REWARD": {
+    "label": "TRAINER_ISAAC_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISABELLA_REWARD": {
+    "label": "TRAINER_ISABELLA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISABELLE_REWARD": {
+    "label": "TRAINER_ISABELLE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISABEL_1_REWARD": {
+    "label": "TRAINER_ISABEL_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISAIAH_1_REWARD": {
+    "label": "TRAINER_ISAIAH_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISOBEL_REWARD": {
+    "label": "TRAINER_ISOBEL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_IVAN_REWARD": {
+    "label": "TRAINER_IVAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACE_REWARD": {
+    "label": "TRAINER_JACE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACKI_1_REWARD": {
+    "label": "TRAINER_JACKI_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACKSON_1_REWARD": {
+    "label": "TRAINER_JACKSON_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACK_REWARD": {
+    "label": "TRAINER_JACK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACLYN_REWARD": {
+    "label": "TRAINER_JACLYN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACOB_REWARD": {
+    "label": "TRAINER_JACOB_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JAIDEN_REWARD": {
+    "label": "TRAINER_JAIDEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JAMES_1_REWARD": {
+    "label": "TRAINER_JAMES_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JANICE_REWARD": {
+    "label": "TRAINER_JANICE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JANI_REWARD": {
+    "label": "TRAINER_JANI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JARED_REWARD": {
+    "label": "TRAINER_JARED_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JASMINE_REWARD": {
+    "label": "TRAINER_JASMINE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JAYLEN_REWARD": {
+    "label": "TRAINER_JAYLEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JAZMYN_REWARD": {
+    "label": "TRAINER_JAZMYN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JEFFREY_1_REWARD": {
+    "label": "TRAINER_JEFFREY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JEFF_REWARD": {
+    "label": "TRAINER_JEFF_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JENNA_REWARD": {
+    "label": "TRAINER_JENNA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JENNIFER_REWARD": {
+    "label": "TRAINER_JENNIFER_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JENNY_1_REWARD": {
+    "label": "TRAINER_JENNY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JEROME_REWARD": {
+    "label": "TRAINER_JEROME_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JERRY_1_REWARD": {
+    "label": "TRAINER_JERRY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JESSICA_1_REWARD": {
+    "label": "TRAINER_JESSICA_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOCELYN_REWARD": {
+    "label": "TRAINER_JOCELYN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JODY_REWARD": {
+    "label": "TRAINER_JODY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOEY_REWARD": {
+    "label": "TRAINER_JOEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOHANNA_REWARD": {
+    "label": "TRAINER_JOHANNA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOHN_AND_JAY_1_REWARD": {
+    "label": "TRAINER_JOHN_AND_JAY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOHNSON_REWARD": {
+    "label": "TRAINER_JOHNSON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JONAH_REWARD": {
+    "label": "TRAINER_JONAH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JONAS_REWARD": {
+    "label": "TRAINER_JONAS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JONATHAN_REWARD": {
+    "label": "TRAINER_JONATHAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSEPH_REWARD": {
+    "label": "TRAINER_JOSEPH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSE_REWARD": {
+    "label": "TRAINER_JOSE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSHUA_REWARD": {
+    "label": "TRAINER_JOSHUA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSH_REWARD": {
+    "label": "TRAINER_JOSH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSUE_REWARD": {
+    "label": "TRAINER_JOSUE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JUAN_1_REWARD": {
+    "label": "TRAINER_JUAN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JULIE_REWARD": {
+    "label": "TRAINER_JULIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JULIO_REWARD": {
+    "label": "TRAINER_JULIO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JUSTIN_REWARD": {
+    "label": "TRAINER_JUSTIN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KAI_REWARD": {
+    "label": "TRAINER_KAI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KALEB_REWARD": {
+    "label": "TRAINER_KALEB_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KARA_REWARD": {
+    "label": "TRAINER_KARA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KAREN_1_REWARD": {
+    "label": "TRAINER_KAREN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATE_AND_JOY_REWARD": {
+    "label": "TRAINER_KATE_AND_JOY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATELYNN_REWARD": {
+    "label": "TRAINER_KATELYNN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATELYN_1_REWARD": {
+    "label": "TRAINER_KATELYN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATHLEEN_REWARD": {
+    "label": "TRAINER_KATHLEEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATIE_REWARD": {
+    "label": "TRAINER_KATIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KAYLA_REWARD": {
+    "label": "TRAINER_KAYLA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KAYLEY_REWARD": {
+    "label": "TRAINER_KAYLEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KEEGAN_REWARD": {
+    "label": "TRAINER_KEEGAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KEIGO_REWARD": {
+    "label": "TRAINER_KEIGO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KEIRA_REWARD": {
+    "label": "TRAINER_KEIRA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KELVIN_REWARD": {
+    "label": "TRAINER_KELVIN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KENT_REWARD": {
+    "label": "TRAINER_KENT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KEVIN_REWARD": {
+    "label": "TRAINER_KEVIN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KIM_AND_IRIS_REWARD": {
+    "label": "TRAINER_KIM_AND_IRIS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KINDRA_REWARD": {
+    "label": "TRAINER_KINDRA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KIRA_AND_DAN_1_REWARD": {
+    "label": "TRAINER_KIRA_AND_DAN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KIRK_REWARD": {
+    "label": "TRAINER_KIRK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KIYO_REWARD": {
+    "label": "TRAINER_KIYO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KOICHI_REWARD": {
+    "label": "TRAINER_KOICHI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KOJI_1_REWARD": {
+    "label": "TRAINER_KOJI_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KYLA_REWARD": {
+    "label": "TRAINER_KYLA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KYRA_REWARD": {
+    "label": "TRAINER_KYRA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LAO_1_REWARD": {
+    "label": "TRAINER_LAO_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LARRY_REWARD": {
+    "label": "TRAINER_LARRY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LAURA_REWARD": {
+    "label": "TRAINER_LAURA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LAUREL_REWARD": {
+    "label": "TRAINER_LAUREL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LAWRENCE_REWARD": {
+    "label": "TRAINER_LAWRENCE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEA_AND_JED_REWARD": {
+    "label": "TRAINER_LEA_AND_JED_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEAH_REWARD": {
+    "label": "TRAINER_LEAH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LENNY_REWARD": {
+    "label": "TRAINER_LENNY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEONARDO_REWARD": {
+    "label": "TRAINER_LEONARDO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEONARD_REWARD": {
+    "label": "TRAINER_LEONARD_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEONEL_REWARD": {
+    "label": "TRAINER_LEONEL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEROY_REWARD": {
+    "label": "TRAINER_LEROY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LILA_AND_ROY_1_REWARD": {
+    "label": "TRAINER_LILA_AND_ROY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LILITH_REWARD": {
+    "label": "TRAINER_LILITH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LINDA_REWARD": {
+    "label": "TRAINER_LINDA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LISA_AND_RAY_REWARD": {
+    "label": "TRAINER_LISA_AND_RAY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LOLA_1_REWARD": {
+    "label": "TRAINER_LOLA_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LORENZO_REWARD": {
+    "label": "TRAINER_LORENZO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LUCAS_1_REWARD": {
+    "label": "TRAINER_LUCAS_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LUIS_REWARD": {
+    "label": "TRAINER_LUIS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LUNG_REWARD": {
+    "label": "TRAINER_LUNG_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LYDIA_1_REWARD": {
+    "label": "TRAINER_LYDIA_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LYLE_REWARD": {
+    "label": "TRAINER_LYLE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MACEY_REWARD": {
+    "label": "TRAINER_MACEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MADELINE_1_REWARD": {
+    "label": "TRAINER_MADELINE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAKAYLA_REWARD": {
+    "label": "TRAINER_MAKAYLA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARCEL_REWARD": {
+    "label": "TRAINER_MARCEL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARCOS_REWARD": {
+    "label": "TRAINER_MARCOS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARC_REWARD": {
+    "label": "TRAINER_MARC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARIA_1_REWARD": {
+    "label": "TRAINER_MARIA_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARIELA_REWARD": {
+    "label": "TRAINER_MARIELA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARK_REWARD": {
+    "label": "TRAINER_MARK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARLENE_REWARD": {
+    "label": "TRAINER_MARLENE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARLEY_REWARD": {
+    "label": "TRAINER_MARLEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARTHA_REWARD": {
+    "label": "TRAINER_MARTHA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARY_REWARD": {
+    "label": "TRAINER_MARY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MATTHEW_REWARD": {
+    "label": "TRAINER_MATTHEW_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MATT_REWARD": {
+    "label": "TRAINER_MATT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAURA_REWARD": {
+    "label": "TRAINER_MAURA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAXIE_MAGMA_HIDEOUT_REWARD": {
+    "label": "TRAINER_MAXIE_MAGMA_HIDEOUT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAXIE_MT_CHIMNEY_REWARD": {
+    "label": "TRAINER_MAXIE_MT_CHIMNEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_LILYCOVE_MUDKIP_REWARD": {
+    "label": "TRAINER_MAY_LILYCOVE_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_LILYCOVE_TORCHIC_REWARD": {
+    "label": "TRAINER_MAY_LILYCOVE_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_LILYCOVE_TREECKO_REWARD": {
+    "label": "TRAINER_MAY_LILYCOVE_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_103_MUDKIP_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_103_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_103_TORCHIC_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_103_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_103_TREECKO_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_103_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_110_MUDKIP_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_110_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_110_TORCHIC_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_110_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_110_TREECKO_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_110_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_119_MUDKIP_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_119_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_119_TORCHIC_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_119_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_ROUTE_119_TREECKO_REWARD": {
+    "label": "TRAINER_MAY_ROUTE_119_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_RUSTBORO_MUDKIP_REWARD": {
+    "label": "TRAINER_MAY_RUSTBORO_MUDKIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_RUSTBORO_TORCHIC_REWARD": {
+    "label": "TRAINER_MAY_RUSTBORO_TORCHIC_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAY_RUSTBORO_TREECKO_REWARD": {
+    "label": "TRAINER_MAY_RUSTBORO_TREECKO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MEL_AND_PAUL_REWARD": {
+    "label": "TRAINER_MEL_AND_PAUL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MELINA_REWARD": {
+    "label": "TRAINER_MELINA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MELISSA_REWARD": {
+    "label": "TRAINER_MELISSA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MICAH_REWARD": {
+    "label": "TRAINER_MICAH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MICHELLE_REWARD": {
+    "label": "TRAINER_MICHELLE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MIGUEL_1_REWARD": {
+    "label": "TRAINER_MIGUEL_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MIKE_2_REWARD": {
+    "label": "TRAINER_MIKE_2_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MISSY_REWARD": {
+    "label": "TRAINER_MISSY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MITCHELL_REWARD": {
+    "label": "TRAINER_MITCHELL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MOLLIE_REWARD": {
+    "label": "TRAINER_MOLLIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MYLES_REWARD": {
+    "label": "TRAINER_MYLES_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NANCY_REWARD": {
+    "label": "TRAINER_NANCY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NAOMI_REWARD": {
+    "label": "TRAINER_NAOMI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NATE_REWARD": {
+    "label": "TRAINER_NATE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NED_REWARD": {
+    "label": "TRAINER_NED_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NICHOLAS_REWARD": {
+    "label": "TRAINER_NICHOLAS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NICOLAS_1_REWARD": {
+    "label": "TRAINER_NICOLAS_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NIKKI_REWARD": {
+    "label": "TRAINER_NIKKI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NOB_1_REWARD": {
+    "label": "TRAINER_NOB_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NOLAN_REWARD": {
+    "label": "TRAINER_NOLAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NOLEN_REWARD": {
+    "label": "TRAINER_NOLEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NORMAN_1_REWARD": {
+    "label": "TRAINER_NORMAN_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_OLIVIA_REWARD": {
+    "label": "TRAINER_OLIVIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_OWEN_REWARD": {
+    "label": "TRAINER_OWEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PABLO_1_REWARD": {
+    "label": "TRAINER_PABLO_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PARKER_REWARD": {
+    "label": "TRAINER_PARKER_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PATRICIA_REWARD": {
+    "label": "TRAINER_PATRICIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PAT_REWARD": {
+    "label": "TRAINER_PAT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PAULA_REWARD": {
+    "label": "TRAINER_PAULA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PAUL_REWARD": {
+    "label": "TRAINER_PAUL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PAXTON_REWARD": {
+    "label": "TRAINER_PAXTON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PERRY_REWARD": {
+    "label": "TRAINER_PERRY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PETE_REWARD": {
+    "label": "TRAINER_PETE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PHILLIP_REWARD": {
+    "label": "TRAINER_PHILLIP_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PHIL_REWARD": {
+    "label": "TRAINER_PHIL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PHOEBE_REWARD": {
+    "label": "TRAINER_PHOEBE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PRESLEY_REWARD": {
+    "label": "TRAINER_PRESLEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PRESTON_REWARD": {
+    "label": "TRAINER_PRESTON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_QUINCY_REWARD": {
+    "label": "TRAINER_QUINCY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RACHEL_REWARD": {
+    "label": "TRAINER_RACHEL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RANDALL_REWARD": {
+    "label": "TRAINER_RANDALL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_REED_REWARD": {
+    "label": "TRAINER_REED_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RELI_AND_IAN_REWARD": {
+    "label": "TRAINER_RELI_AND_IAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_REYNA_REWARD": {
+    "label": "TRAINER_REYNA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RHETT_REWARD": {
+    "label": "TRAINER_RHETT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RICHARD_REWARD": {
+    "label": "TRAINER_RICHARD_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RICKY_1_REWARD": {
+    "label": "TRAINER_RICKY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RICK_REWARD": {
+    "label": "TRAINER_RICK_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RILEY_REWARD": {
+    "label": "TRAINER_RILEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROBERT_1_REWARD": {
+    "label": "TRAINER_ROBERT_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROBIN_REWARD": {
+    "label": "TRAINER_ROBIN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RODNEY_REWARD": {
+    "label": "TRAINER_RODNEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROGER_REWARD": {
+    "label": "TRAINER_ROGER_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROLAND_REWARD": {
+    "label": "TRAINER_ROLAND_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RONALD_REWARD": {
+    "label": "TRAINER_RONALD_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROSE_1_REWARD": {
+    "label": "TRAINER_ROSE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROXANNE_1_REWARD": {
+    "label": "TRAINER_ROXANNE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RUBEN_REWARD": {
+    "label": "TRAINER_RUBEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SALLY_REWARD": {
+    "label": "TRAINER_SALLY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SAMANTHA_REWARD": {
+    "label": "TRAINER_SAMANTHA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SAMUEL_REWARD": {
+    "label": "TRAINER_SAMUEL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SANTIAGO_REWARD": {
+    "label": "TRAINER_SANTIAGO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SARAH_REWARD": {
+    "label": "TRAINER_SARAH_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SAWYER_1_REWARD": {
+    "label": "TRAINER_SAWYER_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SEBASTIAN_REWARD": {
+    "label": "TRAINER_SEBASTIAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHANE_REWARD": {
+    "label": "TRAINER_SHANE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHANNON_REWARD": {
+    "label": "TRAINER_SHANNON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHARON_REWARD": {
+    "label": "TRAINER_SHARON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHAWN_REWARD": {
+    "label": "TRAINER_SHAWN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHAYLA_REWARD": {
+    "label": "TRAINER_SHAYLA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHEILA_REWARD": {
+    "label": "TRAINER_SHEILA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHELBY_1_REWARD": {
+    "label": "TRAINER_SHELBY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHELLY_SEAFLOOR_CAVERN_REWARD": {
+    "label": "TRAINER_SHELLY_SEAFLOOR_CAVERN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHELLY_WEATHER_INSTITUTE_REWARD": {
+    "label": "TRAINER_SHELLY_WEATHER_INSTITUTE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHIRLEY_REWARD": {
+    "label": "TRAINER_SHIRLEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SIDNEY_REWARD": {
+    "label": "TRAINER_SIDNEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SIENNA_REWARD": {
+    "label": "TRAINER_SIENNA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SIMON_REWARD": {
+    "label": "TRAINER_SIMON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SOPHIA_REWARD": {
+    "label": "TRAINER_SOPHIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SOPHIE_REWARD": {
+    "label": "TRAINER_SOPHIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SPENCER_REWARD": {
+    "label": "TRAINER_SPENCER_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_STAN_REWARD": {
+    "label": "TRAINER_STAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_STEVEN_REWARD": {
+    "label": "TRAINER_STEVEN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_STEVE_1_REWARD": {
+    "label": "TRAINER_STEVE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SUSIE_REWARD": {
+    "label": "TRAINER_SUSIE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SYLVIA_REWARD": {
+    "label": "TRAINER_SYLVIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TABITHA_MAGMA_HIDEOUT_REWARD": {
+    "label": "TRAINER_TABITHA_MAGMA_HIDEOUT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TABITHA_MT_CHIMNEY_REWARD": {
+    "label": "TRAINER_TABITHA_MT_CHIMNEY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TAKAO_REWARD": {
+    "label": "TRAINER_TAKAO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TAKASHI_REWARD": {
+    "label": "TRAINER_TAKASHI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TALIA_REWARD": {
+    "label": "TRAINER_TALIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TAMMY_REWARD": {
+    "label": "TRAINER_TAMMY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TANYA_REWARD": {
+    "label": "TRAINER_TANYA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TARA_REWARD": {
+    "label": "TRAINER_TARA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TASHA_REWARD": {
+    "label": "TRAINER_TASHA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TAYLOR_REWARD": {
+    "label": "TRAINER_TAYLOR_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TED_REWARD": {
+    "label": "TRAINER_TED_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_THALIA_1_REWARD": {
+    "label": "TRAINER_THALIA_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_THOMAS_REWARD": {
+    "label": "TRAINER_THOMAS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TIANA_REWARD": {
+    "label": "TRAINER_TIANA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TIFFANY_REWARD": {
+    "label": "TRAINER_TIFFANY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TIMMY_REWARD": {
+    "label": "TRAINER_TIMMY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TIMOTHY_1_REWARD": {
+    "label": "TRAINER_TIMOTHY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TISHA_REWARD": {
+    "label": "TRAINER_TISHA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TOMMY_REWARD": {
+    "label": "TRAINER_TOMMY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TONY_1_REWARD": {
+    "label": "TRAINER_TONY_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TORI_AND_TIA_REWARD": {
+    "label": "TRAINER_TORI_AND_TIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TRAVIS_REWARD": {
+    "label": "TRAINER_TRAVIS_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TRENT_1_REWARD": {
+    "label": "TRAINER_TRENT_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TYRON_REWARD": {
+    "label": "TRAINER_TYRON_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VALERIE_1_REWARD": {
+    "label": "TRAINER_VALERIE_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VANESSA_REWARD": {
+    "label": "TRAINER_VANESSA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VICKY_REWARD": {
+    "label": "TRAINER_VICKY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VICTORIA_REWARD": {
+    "label": "TRAINER_VICTORIA_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VICTOR_REWARD": {
+    "label": "TRAINER_VICTOR_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VINCENT_REWARD": {
+    "label": "TRAINER_VINCENT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VIOLET_REWARD": {
+    "label": "TRAINER_VIOLET_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VIRGIL_REWARD": {
+    "label": "TRAINER_VIRGIL_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VITO_REWARD": {
+    "label": "TRAINER_VITO_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VIVIAN_REWARD": {
+    "label": "TRAINER_VIVIAN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VIVI_REWARD": {
+    "label": "TRAINER_VIVI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WADE_REWARD": {
+    "label": "TRAINER_WADE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WALLACE_REWARD": {
+    "label": "TRAINER_WALLACE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WALTER_1_REWARD": {
+    "label": "TRAINER_WALTER_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WALLY_MAUVILLE_REWARD": {
+    "label": "TRAINER_WALLY_MAUVILLE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WALLY_VR_1_REWARD": {
+    "label": "TRAINER_WALLY_VR_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WATTSON_1_REWARD": {
+    "label": "TRAINER_WATTSON_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WARREN_REWARD": {
+    "label": "TRAINER_WARREN_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WAYNE_REWARD": {
+    "label": "TRAINER_WAYNE_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WENDY_REWARD": {
+    "label": "TRAINER_WENDY_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WILLIAM_REWARD": {
+    "label": "TRAINER_WILLIAM_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WILTON_1_REWARD": {
+    "label": "TRAINER_WILTON_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WINONA_1_REWARD": {
+    "label": "TRAINER_WINONA_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WINSTON_1_REWARD": {
+    "label": "TRAINER_WINSTON_1_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WYATT_REWARD": {
+    "label": "TRAINER_WYATT_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_YASU_REWARD": {
+    "label": "TRAINER_YASU_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_YUJI_REWARD": {
+    "label": "TRAINER_YUJI_REWARD",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ZANDER_REWARD": {
+    "label": "TRAINER_ZANDER_REWARD",
+    "tags": ["Trainer"]
   }
 }

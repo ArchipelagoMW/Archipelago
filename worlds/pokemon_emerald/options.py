@@ -113,6 +113,13 @@ class Dexsanity(Toggle):
     display_name = "Dexsanity"
 
 
+class Trainersanity(Toggle):
+    """
+    Defeating a trainer for the first time gives you an item. Trainers are no longer missable.
+    """
+    display_name = "Trainersanity"
+
+
 class ItemPoolType(Choice):
     """
     Determines which non-progression items get put into the item pool
@@ -727,6 +734,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     npc_gifts: RandomizeNpcGifts
     berry_trees: RandomizeBerryTrees
     dexsanity: Dexsanity
+    trainersanity: Trainersanity
     item_pool_type: ItemPoolType
 
     require_itemfinder: HiddenItemsRequireItemfinder

@@ -105,32 +105,35 @@ def get_random_species(
         nearby_bst: Optional[int] = None,
         species_type: Optional[int] = None,
         blacklist: Set[int] = set()) -> SpeciesData:
-    candidates: List[SpeciesData] = [
+    filtered_candidates: List[SpeciesData] = [
         species
         for species in candidates
         if species is not None and species.species_id not in blacklist
     ]
 
     if species_type is not None:
-        candidates = [species for species in candidates if species_type in species.types]
+        filtered_candidates = [species for species in filtered_candidates if species_type in species.types]
 
     if nearby_bst is not None:
         def has_nearby_bst(species: SpeciesData, max_percent_different: int) -> bool:
             return abs(sum(species.base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100)
 
         max_percent_different = 10
-        bst_filtered_candidates = [species for species in candidates if has_nearby_bst(species, max_percent_different)]
+        bst_filtered_candidates = [species for species in filtered_candidates if has_nearby_bst(species, max_percent_different)]
         while len(bst_filtered_candidates) == 0:
             max_percent_different += 10
             bst_filtered_candidates = [
                 species
-                for species in candidates
+                for species in filtered_candidates
                 if has_nearby_bst(species, max_percent_different)
             ]
 
-        candidates = bst_filtered_candidates
+        filtered_candidates = bst_filtered_candidates
 
-    return random.choice(candidates)
+    if len(filtered_candidates) == 0:
+        return get_random_species(random, candidates, nearby_bst, species_type, LEGENDARY_POKEMON)
+
+    return random.choice(filtered_candidates)
 
 
 def get_random_type(random: Random) -> int:

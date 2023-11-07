@@ -563,6 +563,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         lambda state: state.has("Go Goggles", world.player)
     )
     set_rule(
+        get_entrance("REGION_ROUTE111/NORTH -> REGION_ROUTE111/ABOVE_SLOPE"),
+        has_mach_bike
+    )
+    set_rule(
         get_entrance("REGION_ROUTE111/MIDDLE -> REGION_ROUTE111/SOUTH"),
         can_rock_smash
     )
@@ -1489,6 +1493,14 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             set_rule(
                 get_location(f"Pokedex - {species.label}"),
                 lambda state, species_name=species.name: state.has(f"CATCH_{species_name}", world.player)
+            )
+
+        # Legendary hunt prevents Latios from being a wild spawn so the roamer
+        # can be tracked, and also guarantees that the roamer is a Latios.
+        if world.options.goal == Goal.option_legendary_hunt:
+            set_rule(
+                get_location(f"Pokedex - Latios"),
+                lambda state: state.has("EVENT_ENCOUNTER_LATIOS", world.player)
             )
 
     # Overworld Items

@@ -9,7 +9,10 @@
       "ITEM_PETALBURG_WOODS_PARALYZE_HEAL",
       "HIDDEN_ITEM_PETALBURG_WOODS_POTION",
       "HIDDEN_ITEM_PETALBURG_WOODS_POKE_BALL",
-      "NPC_GIFT_RECEIVED_GREAT_BALL_PETALBURG_WOODS"
+      "NPC_GIFT_RECEIVED_GREAT_BALL_PETALBURG_WOODS",
+      "TRAINER_LYLE_REWARD",
+      "TRAINER_GRUNT_PETALBURG_WOODS_REWARD",
+      "TRAINER_JAMES_1_REWARD"
     ],
     "events": [],
     "exits": [
@@ -46,7 +49,8 @@
     "has_fishing": false,
     "locations": [
       "ITEM_RUSTURF_TUNNEL_POKE_BALL",
-      "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL"
+      "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL",
+      "TRAINER_GRUNT_RUSTURF_TUNNEL_REWARD"
     ],
     "events": [
       "EVENT_RECOVER_DEVON_GOODS"
@@ -65,7 +69,8 @@
     "has_fishing": false,
     "locations": [
       "ITEM_RUSTURF_TUNNEL_MAX_ETHER",
-      "NPC_GIFT_RECEIVED_HM_STRENGTH"
+      "NPC_GIFT_RECEIVED_HM_STRENGTH",
+      "TRAINER_MIKE_2_REWARD"
     ],
     "events": [],
     "exits": [
@@ -364,7 +369,9 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_2_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_MAGMA_HIDEOUT_1F/ENTRANCE"
@@ -393,7 +400,8 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY"
+      "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_1_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -420,7 +428,12 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_3_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_4_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_5_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_14_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -436,7 +449,11 @@
     "has_fishing": false,
     "locations": [
       "ITEM_MAGMA_HIDEOUT_2F_2R_MAX_ELIXIR",
-      "ITEM_MAGMA_HIDEOUT_2F_2R_FULL_RESTORE"
+      "ITEM_MAGMA_HIDEOUT_2F_2R_FULL_RESTORE",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_6_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_7_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_8_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_15_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -464,7 +481,9 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MAGMA_HIDEOUT_3F_1R_NUGGET"
+      "ITEM_MAGMA_HIDEOUT_3F_1R_NUGGET",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_9_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_16_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -480,7 +499,8 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MAGMA_HIDEOUT_3F_2R_PP_MAX"
+      "ITEM_MAGMA_HIDEOUT_3F_2R_PP_MAX",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_10_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -509,7 +529,12 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MAGMA_HIDEOUT_4F_MAX_REVIVE"
+      "ITEM_MAGMA_HIDEOUT_4F_MAX_REVIVE",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_11_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_12_REWARD",
+      "TRAINER_GRUNT_MAGMA_HIDEOUT_13_REWARD",
+      "TRAINER_TABITHA_MAGMA_HIDEOUT_REWARD",
+      "TRAINER_MAXIE_MAGMA_HIDEOUT_REWARD"
     ],
     "events": [
       "EVENT_RELEASE_GROUDON"
@@ -737,7 +762,10 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_NICOLAS_1_REWARD",
+      "TRAINER_JOHN_AND_JAY_1_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_METEOR_FALLS_1F_2R/LEFT_SPLIT",
@@ -899,7 +927,9 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_STEVEN_REWARD"
+    ],
     "events": [
       "EVENT_DEFEAT_STEVEN"
     ],
@@ -980,7 +1010,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_CHARLIE_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1012,7 +1044,10 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_THALIA_1_REWARD",
+      "TRAINER_DEMETRIUS_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1041,7 +1076,10 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_ABANDONED_SHIP_ROOMS_2_1F_REVIVE"
+      "ITEM_ABANDONED_SHIP_ROOMS_2_1F_REVIVE",
+      "TRAINER_JANI_REWARD",
+      "TRAINER_GARRISON_REWARD",
+      "TRAINER_KIRA_AND_DAN_1_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -1055,7 +1093,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_DUNCAN_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1367,7 +1407,11 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MT_PYRE_2F_ULTRA_BALL"
+      "ITEM_MT_PYRE_2F_ULTRA_BALL",
+      "TRAINER_MARK_REWARD",
+      "TRAINER_LEAH_REWARD",
+      "TRAINER_ZANDER_REWARD",
+      "TRAINER_DEZ_AND_LUKE_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -1385,7 +1429,10 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MT_PYRE_3F_SUPER_REPEL"
+      "ITEM_MT_PYRE_3F_SUPER_REPEL",
+      "TRAINER_WILLIAM_REWARD",
+      "TRAINER_GABRIELLE_1_REWARD",
+      "TRAINER_KAYLA_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -1404,7 +1451,8 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MT_PYRE_4F_SEA_INCENSE"
+      "ITEM_MT_PYRE_4F_SEA_INCENSE",
+      "TRAINER_TASHA_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -1423,7 +1471,8 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MT_PYRE_5F_LAX_INCENSE"
+      "ITEM_MT_PYRE_5F_LAX_INCENSE",
+      "TRAINER_ATSUSHI_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -1441,7 +1490,9 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_MT_PYRE_6F_TM_SHADOW_BALL"
+      "ITEM_MT_PYRE_6F_TM_SHADOW_BALL",
+      "TRAINER_VALERIE_1_REWARD",
+      "TRAINER_CEDRIC_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -1476,7 +1527,10 @@
     "locations": [
       "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC",
       "HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY",
-      "NPC_GIFT_RECEIVED_MAGMA_EMBLEM"
+      "NPC_GIFT_RECEIVED_MAGMA_EMBLEM",
+      "TRAINER_GRUNT_MT_PYRE_1_REWARD",
+      "TRAINER_GRUNT_MT_PYRE_2_REWARD",
+      "TRAINER_GRUNT_MT_PYRE_3_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -1489,7 +1543,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_AQUA_HIDEOUT_1_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_AQUA_HIDEOUT_1F/WATER"
@@ -1517,7 +1573,12 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_AQUA_HIDEOUT_2_REWARD",
+      "TRAINER_GRUNT_AQUA_HIDEOUT_5_REWARD",
+      "TRAINER_GRUNT_AQUA_HIDEOUT_7_REWARD"
+
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1531,7 +1592,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_AQUA_HIDEOUT_3_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1728,7 +1791,10 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_AQUA_HIDEOUT_6_REWARD",
+      "TRAINER_GRUNT_AQUA_HIDEOUT_8_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1741,7 +1807,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_AQUA_HIDEOUT_4_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1769,7 +1837,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_MATT_REWARD"
+    ],
     "events": [
       "EVENT_CLEAR_AQUA_HIDEOUT"
     ],
@@ -2135,7 +2205,10 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_SEAFLOOR_CAVERN_1_REWARD",
+      "TRAINER_GRUNT_SEAFLOOR_CAVERN_2_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_SEAFLOOR_CAVERN_ROOM1/SOUTH"
@@ -2221,7 +2294,10 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_SEAFLOOR_CAVERN_5_REWARD",
+      "TRAINER_SHELLY_SEAFLOOR_CAVERN_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2235,7 +2311,10 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_SEAFLOOR_CAVERN_3_REWARD",
+      "TRAINER_GRUNT_SEAFLOOR_CAVERN_4_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_SEAFLOOR_CAVERN_ROOM4/EAST"
@@ -2430,7 +2509,8 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM_EARTHQUAKE"
+      "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM_EARTHQUAKE",
+      "TRAINER_ARCHIE_REWARD"
     ],
     "events": [
       "EVENT_RELEASE_KYOGRE"
@@ -2700,7 +2780,11 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_EDGAR_REWARD",
+      "TRAINER_KATELYNN_REWARD",
+      "TRAINER_QUINCY_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2714,7 +2798,10 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_VICTORY_ROAD_1F_MAX_ELIXIR"
+      "ITEM_VICTORY_ROAD_1F_MAX_ELIXIR",
+      "TRAINER_ALBERT_REWARD",
+      "TRAINER_HOPE_REWARD",
+      "TRAINER_WALLY_VR_1_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -2757,7 +2844,11 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_MICHELLE_REWARD",
+      "TRAINER_MITCHELL_REWARD",
+      "TRAINER_HALLE_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_VICTORY_ROAD_B1F/SOUTH_WEST_LADDER_UP"
@@ -2786,7 +2877,9 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_SHANNON_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_VICTORY_ROAD_B1F/MAIN_LOWER_EAST"
@@ -2801,7 +2894,8 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "ITEM_VICTORY_ROAD_B1F_FULL_RESTORE"
+      "ITEM_VICTORY_ROAD_B1F_FULL_RESTORE",
+      "TRAINER_SAMUEL_REWARD"
     ],
     "events": [],
     "exits": [
@@ -2859,7 +2953,9 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": true,
-    "locations": [],
+    "locations": [
+      "TRAINER_JULIE_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_VICTORY_ROAD_B2F/LOWER_EAST_WATER"
@@ -2902,7 +2998,12 @@
     "has_water": false,
     "has_fishing": true,
     "locations": [
-      "HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL"
+      "HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL",
+      "TRAINER_OWEN_REWARD",
+      "TRAINER_DIANNE_REWARD",
+      "TRAINER_FELIX_REWARD",
+      "TRAINER_CAROLINE_REWARD"
+
     ],
     "events": [],
     "exits": [
@@ -2921,7 +3022,8 @@
     "has_fishing": true,
     "locations": [
       "ITEM_VICTORY_ROAD_B2F_FULL_HEAL",
-      "HIDDEN_ITEM_VICTORY_ROAD_B2F_ELIXIR"
+      "HIDDEN_ITEM_VICTORY_ROAD_B2F_ELIXIR",
+      "TRAINER_VITO_REWARD"
     ],
     "events": [],
     "exits": [

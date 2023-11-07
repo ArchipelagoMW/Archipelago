@@ -193,6 +193,8 @@ class PokemonEmeraldWorld(World):
             tags.add("BerryTree")
         if self.options.dexsanity:
             tags.add("Pokedex")
+        if self.options.trainersanity:
+            tags.add("Trainer")
         create_locations_with_tags(self, regions, tags)
 
         self.multiworld.regions.extend(regions.values())

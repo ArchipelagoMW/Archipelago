@@ -634,14 +634,14 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray
 
     for trainer_data in data.trainers:
         if trainer_data.script_address != 0 and len(trainer_data.party.pokemon) > 1:
-            if world.random.random() < probability:
-                # Set the trainer to be a double battle
-                _set_bytes_little_endian(rom, trainer_data.address + 0x18, 1, 1)
+            original_battle_type = rom[trainer_data.script_address + 1]
+            if original_battle_type in battle_type_map:  # Don't touch anything other than regular single battles
+                if world.random.random() < probability:
+                    # Set the trainer to be a double battle
+                    _set_bytes_little_endian(rom, trainer_data.address + 0x18, 1, 1)
 
-                # Swap the battle type in the script for the purpose of loading the right text
-                # and setting data to the right places
-                original_battle_type = rom[trainer_data.script_address + 1]
-                if original_battle_type in battle_type_map:
+                    # Swap the battle type in the script for the purpose of loading the right text
+                    # and setting data to the right places
                     _set_bytes_little_endian(
                         rom,
                         trainer_data.script_address + 1,

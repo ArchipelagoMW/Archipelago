@@ -713,7 +713,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_MARY_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -727,7 +729,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_RANDALL_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -741,7 +745,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GEORGE_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -754,7 +760,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_ALEXIA_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -769,7 +777,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_PARKER_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -782,7 +792,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_BERKE_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -796,7 +808,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_JODY_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -812,7 +826,8 @@
     "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_FACADE",
-      "BADGE_5"
+      "BADGE_5",
+      "TRAINER_NORMAN_1_REWARD"
     ],
     "events": [
       "EVENT_DEFEAT_NORMAN"
@@ -900,7 +915,11 @@
     "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_ROCK_TOMB",
-      "BADGE_1"
+      "BADGE_1",
+      "TRAINER_JOSH_REWARD",
+      "TRAINER_TOMMY_REWARD",
+      "TRAINER_MARC_REWARD",
+      "TRAINER_ROXANNE_1_REWARD"
     ],
     "events": [
       "EVENT_DEFEAT_ROXANNE"
@@ -1191,7 +1210,14 @@
     "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_BULK_UP",
-      "BADGE_2"
+      "BADGE_2",
+      "TRAINER_LAURA_REWARD",
+      "TRAINER_LILITH_REWARD",
+      "TRAINER_BRENDEN_REWARD",
+      "TRAINER_TAKAO_REWARD",
+      "TRAINER_JOCELYN_REWARD",
+      "TRAINER_CRISTIAN_REWARD",
+      "TRAINER_BRAWLY_1_REWARD"
     ],
     "events": [
       "EVENT_DEFEAT_BRAWLY"
@@ -1372,7 +1398,10 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_MUSEUM_1_REWARD",
+      "TRAINER_GRUNT_MUSEUM_2_REWARD"
+    ],
     "events": [
       "EVENT_RESCUE_CAPT_STERN"
     ],
@@ -1432,7 +1461,8 @@
     "locations": [
       "ITEM_MAUVILLE_CITY_X_SPEED",
       "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON",
-      "NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON"
+      "NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON",
+      "TRAINER_WALLY_MAUVILLE_REWARD"
     ],
     "events": [
       "EVENT_VISITED_MAUVILLE_CITY"
@@ -1460,7 +1490,13 @@
     "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_SHOCK_WAVE",
-      "BADGE_3"
+      "BADGE_3",
+      "TRAINER_VIVIAN_REWARD",
+      "TRAINER_KIRK_REWARD",
+      "TRAINER_BEN_REWARD",
+      "TRAINER_ANGELO_REWARD",
+      "TRAINER_SHAWN_REWARD",
+      "TRAINER_WATTSON_1_REWARD"
     ],
     "events": [
       "EVENT_DEFEAT_WATTSON"
@@ -1842,7 +1878,11 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_AXLE_REWARD",
+      "TRAINER_GERALD_REWARD",
+      "TRAINER_COLE_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1876,7 +1916,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_DANIELLE_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1921,7 +1963,8 @@
     "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_OVERHEAT",
-      "BADGE_4"
+      "BADGE_4",
+      "TRAINER_FLANNERY_1_REWARD"
     ],
     "events": [
       "EVENT_DEFEAT_FLANNERY"
@@ -1953,7 +1996,10 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_JACE_REWARD",
+      "TRAINER_ELI_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1973,7 +2019,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_KEEGAN_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_LAVARIDGE_TOWN_GYM_B1F/BOTTOM_LEFT_LOWER"
@@ -2005,7 +2053,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_JEFF_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2245,7 +2295,14 @@
     "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_AERIAL_ACE",
-      "BADGE_6"
+      "BADGE_6",
+      "TRAINER_HUMBERTO_REWARD",
+      "TRAINER_ASHLEY_REWARD",
+      "TRAINER_JARED_REWARD",
+      "TRAINER_FLINT_REWARD",
+      "TRAINER_EDWARDO_REWARD",
+      "TRAINER_DARIUS_REWARD",
+      "TRAINER_WINONA_1_REWARD"
     ],
     "events": [
       "EVENT_DEFEAT_WINONA"
@@ -2657,7 +2714,13 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "NPC_GIFT_RECEIVED_TM_SNATCH"
+      "NPC_GIFT_RECEIVED_TM_SNATCH",
+      "TRAINER_COLTON_REWARD",
+      "TRAINER_NAOMI_REWARD",
+      "TRAINER_THOMAS_REWARD",
+      "TRAINER_MICAH_REWARD",
+      "TRAINER_GARRET_REWARD",
+      "TRAINER_LEA_AND_JED_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -2678,7 +2741,9 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "HIDDEN_ITEM_SS_TIDAL_LOWER_DECK_LEFTOVERS"
+      "HIDDEN_ITEM_SS_TIDAL_LOWER_DECK_LEFTOVERS",
+      "TRAINER_LEONARD_REWARD",
+      "TRAINER_PHILLIP_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -2733,7 +2798,10 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_MAURA_REWARD",
+      "TRAINER_PRESTON_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2747,7 +2815,10 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_SAMANTHA_REWARD",
+      "TRAINER_BLAKE_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2761,7 +2832,12 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_VIRGIL_REWARD",
+      "TRAINER_NATE_REWARD",
+      "TRAINER_SYLVIA_REWARD",
+      "TRAINER_HANNAH_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2787,7 +2863,12 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_KATHLEEN_REWARD",
+      "TRAINER_NICHOLAS_REWARD",
+      "TRAINER_MACEY_REWARD",
+      "TRAINER_CLIFFORD_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2857,7 +2938,11 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP"
+      "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP",
+      "TRAINER_GRUNT_SPACE_CENTER_1_REWARD",
+      "TRAINER_GRUNT_SPACE_CENTER_2_REWARD",
+      "TRAINER_GRUNT_SPACE_CENTER_3_REWARD",
+      "TRAINER_GRUNT_SPACE_CENTER_4_REWARD"
     ],
     "events": [],
     "exits": [],
@@ -2871,7 +2956,11 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GRUNT_SPACE_CENTER_5_REWARD",
+      "TRAINER_GRUNT_SPACE_CENTER_6_REWARD",
+      "TRAINER_GRUNT_SPACE_CENTER_7_REWARD"
+    ],
     "events": [
       "EVENT_DEFEAT_MAXIE_AT_SPACE_STATION"
     ],
@@ -3176,7 +3265,8 @@
     "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_WATER_PULSE",
-      "BADGE_8"
+      "BADGE_8",
+      "TRAINER_JUAN_1_REWARD"
     ],
     "events": [
       "EVENT_DEFEAT_JUAN"
@@ -3203,7 +3293,10 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_ANDREA_REWARD",
+      "TRAINER_CONNIE_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_SOOTOPOLIS_CITY_GYM_B1F/LEVEL_1"
@@ -3215,7 +3308,10 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_ANNIKA_REWARD",
+      "TRAINER_DAPHNE_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_SOOTOPOLIS_CITY_GYM_B1F/LEVEL_2"
@@ -3227,7 +3323,14 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_CRISSY_REWARD",
+      "TRAINER_TIFFANY_REWARD",
+      "TRAINER_BETHANY_REWARD",
+      "TRAINER_OLIVIA_REWARD",
+      "TRAINER_BRIDGET_REWARD",
+      "TRAINER_BRIANNA_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_SOOTOPOLIS_CITY_GYM_B1F/LEVEL_3"
@@ -3607,7 +3710,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_SIDNEY_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -3633,7 +3738,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_PHOEBE_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -3659,7 +3766,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_GLACIA_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -3685,7 +3794,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_DRAKE_REWARD"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -3698,7 +3809,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "TRAINER_WALLACE_REWARD"
+    ],
     "events": [
       "EVENT_DEFEAT_CHAMPION"
     ],
