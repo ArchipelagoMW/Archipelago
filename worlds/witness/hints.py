@@ -228,8 +228,8 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
         if item.player == player and item.code and item.advancement
     }
     loc_in_this_world = {
-        location.name for location in multiworld.get_locations()
-        if location.player == player and location.address
+        location.name for location in multiworld.get_locations(player)
+        if location.address
     }
 
     always_locations = [
