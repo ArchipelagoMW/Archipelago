@@ -186,7 +186,7 @@ class FairyChessPawns(Choice):
     default = 1
 
 
-class MinorPieceTypeLimit(Range):
+class MinorPieceLimitByType(Range):
     """
     How many of any given type of minor piece you might play with. If set to 1, you will never start with more than 1
     Knight, nor 1 Bishop, but you may have both 1 Knight and 1 Bishop. If set to 0, this setting is disabled.
@@ -197,7 +197,7 @@ class MinorPieceTypeLimit(Range):
     default = 0
 
 
-class MajorPieceTypeLimit(Range):
+class MajorPieceLimitByType(Range):
     """
     How many of any given type of major piece you might play with. If set to 1, you will never start with more than 1
     Rook. If set to 0, this setting is disabled.
@@ -208,7 +208,7 @@ class MajorPieceTypeLimit(Range):
     default = 0
 
 
-class QueenPieceTypeLimit(Range):
+class QueenPieceLimitByType(Range):
     """
     How many of any given type of Queen-equivalent piece you might play with. If set to 1, you will never start with
     more than 1 Queen. You may have both 1 Queen and 1 Amazon. If set to 0, this setting is disabled.
@@ -242,9 +242,9 @@ cm_options: Dict[str, type(Option)] = {
     "fairy_chess_pieces": FairyChessPieces,
     "fairy_chess_army": FairyChessArmy,
     "fairy_chess_pawns": FairyChessPawns,
-    "minor_piece_limit_by_type": MinorPieceTypeLimit,
-    "major_piece_limit_by_type": MajorPieceTypeLimit,
-    "queen_piece_limit_by_type": QueenPieceTypeLimit,
+    "minor_piece_limit_by_type": MinorPieceLimitByType,
+    "major_piece_limit_by_type": MajorPieceLimitByType,
+    "queen_piece_limit_by_type": QueenPieceLimitByType,
     "queen_piece_limit": QueenPieceLimit,
 }
 
