@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 import os
 import pkgutil
 import bsdiff4
-import random
 
 from worlds.Files import APDeltaPatch
 from settings import get_settings
@@ -28,6 +27,7 @@ class PokemonCrystalDeltaPatch(APDeltaPatch):
 
 
 def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
+    random = world.multiworld.per_slot_randoms[world.player]
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/basepatch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
@@ -50,20 +50,26 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 [184],
                 location.rom_address
             )
-    starters = [get_random_poke(), get_random_poke(), get_random_poke()]
+    starters = [get_random_poke(random), get_random_poke(
+        random), get_random_poke(random)]
 
     for address_name, address in data.rom_addresses.items():
         if world.options.randomize_wilds:
             if (address_name.startswith("AP_WildGrass")):
                 cur_address = address + 4
                 for i in range(21):
-                    write_bytes(patched_rom, [get_random_poke()], cur_address)
+                    write_bytes(
+                        patched_rom, [get_random_poke(random)], cur_address)
                     cur_address += 2
             if (address_name.startswith("AP_WildWater")):
                 cur_address = address + 2
                 for i in range(3):
-                    write_bytes(patched_rom, [get_random_poke()], cur_address)
+                    write_bytes(
+                        patched_rom, [get_random_poke(random)], cur_address)
                     cur_address += 2
+            if address_name == "AP_Misc_Intro_Wooper":
+                write_bytes(
+                    patched_rom, [get_random_poke(random)], address + 1)
         if world.options.randomize_starters:
             if (address_name.startswith("AP_Starter_CYNDAQUIL")):
                 cur_address = address + 1
@@ -82,6 +88,15 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                     write_bytes(
                         patched_rom, [255, 255, 255, 255, 255, 255, 255, 15], cur_address)
                     cur_address += 8
+        if world.options.blind_trainers:
+            if address_name == "AP_Setting_Blind_Trainers":
+                continue
+                write_bytes(patched_rom, [0x3E, 0xFF], address)
+
+        # Set slot name
+    for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):
+        write_bytes(patched_rom, [byte],
+                    data.rom_addresses["AP_Seed_Name"] + i)
 
     out_file_name = world.multiworld.get_out_file_name_base(world.player)
     output_path = os.path.join(output_directory, f"{out_file_name}.gbc")
@@ -107,5 +122,5 @@ def write_bytes(data, byte_array, address):
         address += 1
 
 
-def get_random_poke():
+def get_random_poke(random):
     return random.randint(1, 251)

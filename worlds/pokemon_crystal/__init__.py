@@ -2,7 +2,9 @@ import settings
 import typing
 
 from BaseClasses import Tutorial
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
+# Unused, but required to register with BizHawkClient
+from .client import PokemonCrystalClient
 from .options import pokemon_crystal_options
 from .regions import create_regions
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification

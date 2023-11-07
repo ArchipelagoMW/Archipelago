@@ -14,19 +14,19 @@ class PokemonCrystalLocation(Location):
     game: str = "Pokemon Crystal"
     rom_address: Optional[int]
     default_item_code: Optional[int]
+    flag: Optional[int]
     # tags: FrozenSet[str]
 
-# flag: Optional[int],
-# rom_address: Optional[int] = None,
-# tags: FrozenSet[str] = frozenset()) -> None:
     def __init__(
             self,
             player: int,
             name: str,
             parent: Optional[Region] = None,
+            flag: Optional[int] = None,
             rom_address: Optional[int] = None,
-            default_item_value: Optional[int] = None) -> None:
-        super().__init__(player, name, rom_address, parent)
+            default_item_value: Optional[int] = None
+    ) -> None:
+        super().__init__(player, name, None if flag is None else offset_flag(flag), parent)
         self.default_item_code = None if default_item_value is None else offset_item_value(
             default_item_value)
         self.rom_address = rom_address
@@ -64,9 +64,9 @@ def create_locations(world: PokemonCrystalWorld, regions: Dict[str, Region], ran
             location_data = data.locations[location_name]
             location = PokemonCrystalLocation(
                 world.player,
-                location_data.name,
-                # location_data.flag,
+                location_data.label,
                 region,
+                location_data.flag,
                 location_data.rom_address,
                 location_data.default_item,
                 # location_data.tags
@@ -82,7 +82,7 @@ def create_location_label_to_id_map() -> Dict[str, int]:
     for region_data in data.regions.values():
         for location_name in region_data.locations:
             location_data = data.locations[location_name]
-            label_to_id_map[location_data.name] = offset_flag(
-                location_data.rom_address)
+            label_to_id_map[location_data.label] = offset_flag(
+                location_data.flag)
 
     return label_to_id_map

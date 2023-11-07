@@ -29,9 +29,16 @@ class FullTmHmCompatibility(Toggle):
     default = 1
 
 
+class BlindTrainers(Toggle):
+    """"""
+    display_name = "Blind Trainers"
+    default = 1
+
+
 pokemon_crystal_options = {
     "randomize_hidden_items": RandomizeHiddenItems,
     "randomize_starters": RandomizeStarters,
     "randomize_wilds": RandomizeWilds,
-    "full_tmhm_compatibility": FullTmHmCompatibility
+    "full_tmhm_compatibility": FullTmHmCompatibility,
+    "blind_trainers": BlindTrainers
 }

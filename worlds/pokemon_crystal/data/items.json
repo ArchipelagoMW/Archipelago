@@ -64,7 +64,7 @@
 	"ITEM_ELIXER": { "name": "Elixer", "classification": "FILLER" },
 	"ITEM_RED_SCALE": { "name": "Red Scale", "classification": "FILLER" },
 	"ITEM_SECRETPOTION": { "name": "Secretpotion", "classification": "PROGRESSION" },
-	"ITEM_S_S_TICKET": { "name": "SS Ticket", "classification": "PROGRESSION" },
+	"ITEM_S_S_TICKET": { "name": "S.S. Ticket", "classification": "PROGRESSION" },
 	"ITEM_MYSTERY_EGG": { "name": "Mystery Egg", "classification": "PROGRESSION" },
 	"ITEM_CLEAR_BELL": { "name": "Clear Bell", "classification": "FILLER" },
 	"ITEM_SILVER_WING": { "name": "Silver Wing", "classification": "FILLER" },

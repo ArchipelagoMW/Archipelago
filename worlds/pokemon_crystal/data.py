@@ -16,11 +16,11 @@ class ItemData(NamedTuple):
 
 class LocationData(NamedTuple):
     name: str
-    # label: str
+    label: str
     parent_region: str
     default_item: int
     rom_address: int
-    # flag: int
+    flag: int
     # tags: FrozenSet[str]
     location_type: str
     script: str
@@ -48,12 +48,16 @@ class RegionData:
 
 class PokemonCrystalData:
     rom_addresses: Dict[str, int]
+    ram_addresses: Dict[str, int]
+    event_flags: Dict[str, int]
     regions: Dict[str, RegionData]
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
 
     def __init__(self) -> None:
         self.rom_addresses = {}
+        self.ram_addresses = {}
+        self.event_flags = {}
         self.regions = {}
         self.locations = {}
         self.items = {}
@@ -69,9 +73,14 @@ data = PokemonCrystalData()
 def _init() -> None:
     location_data = load_json_data("locations.json")
     regions_json = load_json_data("regions.json")
-    rom_address_data = load_json_data("rom_addresses.json")
+
     items_json = load_json_data("items.json")
     item_codes_json = load_json_data("item_codes.json")
+
+    data_json = load_json_data("data.json")
+    rom_address_data = data_json["rom_addresses"]
+    ram_address_data = data_json["ram_addresses"]
+    event_flag_data = data_json["event_flags"]
 
     claimed_locations: Set[str] = set()
     claimed_warps: Set[str] = set()
@@ -89,9 +98,11 @@ def _init() -> None:
             location_json = location_data[location_name]
             new_location = LocationData(
                 location_name,
+                location_json["label"],
                 region_name,
                 item_codes_json[location_json["default_item"]],
                 rom_address_data[location_json["script"]],
+                event_flag_data[location_json["flag"]],
                 location_json["type"],
                 location_json["script"]
             )
@@ -133,9 +144,17 @@ def _init() -> None:
             item_classification
         )
 
+    data.ram_addresses = {}
+    for address_name, address in ram_address_data.items():
+        data.ram_addresses[address_name] = address
+
     data.rom_addresses = {}
     for address_name, address in rom_address_data.items():
         data.rom_addresses[address_name] = address
+
+    data.event_flags = {}
+    for event_name, event_number in event_flag_data.items():
+        data.event_flags[event_name] = event_number
 
 
 _init()

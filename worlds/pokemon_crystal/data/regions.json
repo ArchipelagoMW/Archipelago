@@ -615,7 +615,7 @@
 			"EVERSTONE_FROM_ELM",
 			"MASTER_BALL_FROM_ELM",
 			"SS_TICKET_FROM_ELM",
-			"POTION_FROM_OAKS_AIDE"
+			"POTION_FROM_ELMS_AIDE"
 		],
 		"events": [
 			"EVENT_GOT_CYNDAQUIL_FROM_ELM",
@@ -710,8 +710,8 @@
 	},
 	"REGION_GOLDENROD_BIKE_SHOP": {
 		"exits": ["REGION_GOLDENROD_CITY"],
-		"locations": [],
-		"events": ["EVENT_GOT_BICYCLE"]
+		"locations": ["BICYCLE"],
+		"events": []
 	},
 	"REGION_GOLDENROD_CITY": {
 		"exits": [
@@ -860,7 +860,7 @@
 			"REGION_POKECOM_CENTER_ADMIN_OFFICE_MOBILE",
 			"REGION_POKECENTER_2F"
 		],
-		"locations": ["GS_BALL_FROM_GOLDENROD_POKEMON_CENTER"],
+		"locations": [],
 		"events": ["EVENT_CAN_GIVE_GS_BALL_TO_KURT"]
 	},
 	"REGION_GOLDENROD_PP_SPEECH_HOUSE": {
@@ -1522,7 +1522,7 @@
 	},
 	"REGION_RADIO_TOWER_2F": {
 		"exits": ["REGION_RADIO_TOWER_3F", "REGION_RADIO_TOWER_1F"],
-		"locations": [],
+		"locations": ["BUENA_BLUE_CARD"],
 		"events": [
 			"EVENT_MET_BUENA",
 			"EVENT_BUENA_OFFERED_HER_PHONE_NUMBER_NO_BLUE_CARD",
@@ -2412,7 +2412,7 @@
 	"REGION_SILVER_CAVE_ROOM_3": {
 		"exits": ["REGION_SILVER_CAVE_ROOM_2"],
 		"locations": [],
-		"events": [""]
+		"events": []
 	},
 	"REGION_SLOWPOKE_WELL_B1F": {
 		"exits": ["REGION_AZALEA_TOWN", "REGION_SLOWPOKE_WELL_B2F"],
