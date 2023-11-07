@@ -48,7 +48,7 @@ class SC2Campaign(Enum):
     PROPHECY = 2, "Prophecy", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
     HOTS = 3, "Heart of the Swarm", SC2CampaignGoalPriority.HARD, SC2Race.ZERG
     PROLOGUE = 4, "Legacy of the Void (Prologue)", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
-    LOTV = 5, "Legacy of the Void (Main Campaign", SC2CampaignGoalPriority.VERY_HARD, SC2Race.PROTOSS
+    LOTV = 5, "Legacy of the Void (Main Campaign)", SC2CampaignGoalPriority.VERY_HARD, SC2Race.PROTOSS
 
 
 class SC2Mission(Enum):
