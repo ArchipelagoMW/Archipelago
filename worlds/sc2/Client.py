@@ -24,7 +24,8 @@ from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
     KerriganChecksPerLevelPack, \
     LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, EarlyUnit, \
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence, \
+    SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, SpearOfAdunAutonomouslyCastPresentInNoBuild
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -314,6 +315,10 @@ class SC2Context(CommonContext):
     grant_story_tech = False
     required_tactics = RequiredTactics.option_standard
     take_over_ai_allies = TakeOverAIAllies.option_false
+    spear_of_adun_presence = SpearOfAdunPresence.option_not_present
+    spear_of_adun_present_in_no_build = SpearOfAdunPresentInNoBuild.option_false
+    spear_of_adun_autonomously_cast_ability_presence = SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
+    spear_of_adun_autonomously_cast_present_in_no_build = SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false
 
     def __init__(self, *args, **kwargs) -> None:
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -370,6 +375,10 @@ class SC2Context(CommonContext):
             self.grant_story_tech = args["slot_data"].get("grant_story_tech", GrantStoryTech.option_false)
             self.required_tactics = args["slot_data"].get("required_tactics", RequiredTactics.option_standard)
             self.take_over_ai_allies = args["slot_data"].get("take_over_ai_allies", TakeOverAIAllies.option_false)
+            self.spear_of_adun_presence = args["slot_data"].get("spear_of_adun_presence", SpearOfAdunPresence.option_not_present)
+            self.spear_of_adun_present_in_no_build = args["slot_data"].get("spear_of_adun_present_in_no_build", SpearOfAdunPresentInNoBuild.option_false)
+            self.spear_of_adun_autonomously_cast_ability_presence = args["slot_data"].get("spear_of_adun_autonomously_cast_ability_presence", SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present)
+            self.spear_of_adun_autonomously_cast_present_in_no_build = args["slot_data"].get("spear_of_adun_autonomously_cast_present_in_no_build", SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech if no logic
@@ -485,6 +494,11 @@ class SC2Context(CommonContext):
             yield SC2WOL_LOC_ID_OFFSET + mission_id * 100 + objective
 
 
+class CompatItemHolder(typing.NamedTuple):
+    name: str
+    quantity: int = 1
+
+
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
@@ -504,10 +518,39 @@ async def main():
 
     await ctx.shutdown()
 
+# These items must be given to the player if the game is generated on version 2
+API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
+    CompatItemHolder(ItemNames.PHOTON_CANNON),
+    CompatItemHolder(ItemNames.OBSERVER),
+    CompatItemHolder(ItemNames.WARP_HARMONIZATION),
+    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_GROUND_WEAPON, 3),
+    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_GROUND_ARMOR, 3),
+    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_SHIELDS, 3),
+    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_AIR_WEAPON, 3),
+    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_AIR_ARMOR, 3),
+    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
+}
+
+
+def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[NetworkItem]:
+    item_id = get_full_item_list()[compat_item].code
+    network_item = NetworkItem(item_id, 0, 0, 0)
+    return compat_item.quantity * [network_item]
+
+
 def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
-    items = ctx.items_received
+    items = ctx.items_received.copy()
+    # Items unlocked in API2 by default (Prophecy default items)
+    if ctx.slot_data_version < 3:
+        for compat_item in API2_TO_API3_COMPAT_ITEMS:
+            items.extend(compat_item_to_network_items(compat_item))
+
     network_item: NetworkItem
     accumulators: typing.Dict[SC2Race, typing.List[int]] = {race: [0 for _ in type_flaggroups[race]] for race in SC2Race}
+
+    # Protoss Shield grouped item specific logic
+    shields_from_ground_upgrade: int = 0
+    shields_from_air_upgrade: int = 0
 
     item_list = get_full_item_list()
     for network_item in items:
@@ -526,6 +569,10 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             if item_data.type != "Upgrade" or ctx.generic_upgrade_items == 0:
                 accumulators[item_data.race][flaggroup] += 1 << item_data.number
             else:
+                if name == ItemNames.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
+                    shields_from_ground_upgrade += 1
+                if name == ItemNames.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
+                    shields_from_air_upgrade += 1
                 for bundled_number in upgrade_numbers[item_data.number]:
                     accumulators[item_data.race][flaggroup] += 1 << bundled_number
 
@@ -538,6 +585,13 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         # sum
         else:
             accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += item_data.number
+
+    # Fix Shields from generic upgrades by unit class (Maximum of ground/air upgrades)
+    if shields_from_ground_upgrade > 0 or shields_from_air_upgrade > 0:
+        shield_upgrade_level = max(shields_from_ground_upgrade, shields_from_air_upgrade)
+        shield_upgrade_item = item_list[ItemNames.PROGRESSIVE_PROTOSS_SHIELDS]
+        for _ in range(0, shield_upgrade_level):
+            accumulators[shield_upgrade_item.race][type_flaggroups[shield_upgrade_item.race][shield_upgrade_item.type]] += 1 << shield_upgrade_item.number
 
     # Kerrigan levels per check
     accumulators[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]] += (len(ctx.checked_locations) // ctx.checks_per_level) * ctx.levels_per_check
@@ -593,11 +647,52 @@ def calculate_kerrigan_options(ctx: SC2Context) -> int:
     if ctx.kerrigan_presence in kerrigan_unit_available:
         options |= 1 << 0
     
-    # Bits 1, 2
+    # Bit 2
     # Kerrigan primal status by map
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_vanilla:
         options |= 1 << 2
     
+    return options
+
+def caclulate_soa_options(ctx: SC2Context) -> int:
+    options = 0
+
+    # Bits 0, 1
+    # SoA Calldowns available
+    soa_presence_value = 0
+    if ctx.spear_of_adun_presence == SpearOfAdunPresence.option_not_present:
+        soa_presence_value = 0
+    elif ctx.spear_of_adun_presence == SpearOfAdunPresence.option_lotv_protoss:
+        soa_presence_value = 1
+    elif ctx.spear_of_adun_presence == SpearOfAdunPresence.option_protoss:
+        soa_presence_value = 2
+    elif ctx.spear_of_adun_presence == SpearOfAdunPresence.option_everywhere:
+        soa_presence_value = 3
+    options |= soa_presence_value << 0
+
+    # Bit 2
+    # SoA Calldowns for no-builds
+    if ctx.spear_of_adun_present_in_no_build == SpearOfAdunPresentInNoBuild.option_true:
+        options |= 1 << 2
+
+    # Bits 3,4
+    # Autocasts
+    soa_autocasts_presence_value = 0
+    if ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present:
+        soa_autocasts_presence_value = 0
+    elif ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_lotv_protoss:
+        soa_autocasts_presence_value = 1
+    elif ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_protoss:
+        soa_autocasts_presence_value = 2
+    elif ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere:
+        soa_autocasts_presence_value = 3
+    options |= soa_autocasts_presence_value << 3
+
+    # Bit 5
+    # Autocasts in no-builds
+    if ctx.spear_of_adun_autonomously_cast_present_in_no_build == SpearOfAdunAutonomouslyCastPresentInNoBuild.option_true:
+        options |= 1 << 5
+
     return options
 
 def kerrigan_primal(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]]) -> bool:
@@ -657,6 +752,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             start_items = calculate_items(self.ctx)
             self.last_kerrigan_level = start_items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]]
             kerrigan_options = calculate_kerrigan_options(self.ctx)
+            soa_options = caclulate_soa_options(self.ctx)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
@@ -665,7 +761,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
@@ -674,7 +770,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 self.ctx.skip_cutscenes,
                 kerrigan_options,
                 self.ctx.grant_story_tech,
-                self.ctx.take_over_ai_allies
+                self.ctx.take_over_ai_allies,
+                soa_options
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
@@ -683,7 +780,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             ))
             await self.updateTerranTech(start_items)
             await self.updateZergTech(start_items)
-            await self.chat_send("?GiveProtossTech {}".format(start_items[SC2Race.PROTOSS][0]))
+            await self.updateProtossTech(start_items)
             await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
             await self.chat_send("?SetColor ks" + str(self.ctx.player_color_zerg))
             await self.chat_send("?SetColor pz" + str(self.ctx.player_color_zerg_primal))
@@ -710,7 +807,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 current_items = calculate_items(self.ctx)
                 await self.updateTerranTech(current_items)
                 await self.updateZergTech(current_items)
-                await self.chat_send("?GiveProtossTech {}".format(current_items[SC2Race.PROTOSS][0]))
+                await self.updateProtossTech(current_items)
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -765,6 +862,13 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {}".format(
             self.last_kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
             zerg_items[3], zerg_items[4], zerg_items[5]
+        ))
+
+    async def updateProtossTech(self, current_items):
+        protoss_items = current_items[SC2Race.PROTOSS]
+        await self.chat_send("?GiveProtossTech {} {} {} {} {} {} {}".format(
+            protoss_items[0], protoss_items[1], protoss_items[2], protoss_items[3], protoss_items[4],
+            protoss_items[5], protoss_items[6]
         ))
 
 

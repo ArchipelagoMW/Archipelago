@@ -7,11 +7,13 @@ from worlds.AutoWorld import WebWorld, World
 from . import ItemNames
 from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
-    kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units
+    kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units, spear_of_adun_calldowns, \
+    spear_of_adun_castable_passives
 from .Locations import get_locations, LocationType
 from .Regions import create_regions
 from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
-    KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, EarlyUnit
+    KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, EarlyUnit, SpearOfAdunPresence, \
+    get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence
 from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS, missions_in_mission_table, get_used_races
 from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
     SC2Race
@@ -138,6 +140,9 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     item_table = get_full_item_list()
     mutation_count = get_option_value(multiworld, player, "include_mutations")
     strain_count = get_option_value(multiworld, player, "include_strains")
+    soa_presence = get_option_value(multiworld, player, "spear_of_adun_presence")
+    soa_autocast_presence = get_option_value(multiworld, player, "spear_of_adun_autonomously_cast_ability_presence")
+    enabled_campaigns = get_enabled_campaigns(multiworld, player)
 
     assert isinstance(mutation_count, int)
     assert isinstance(strain_count, int)
@@ -222,6 +227,15 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
                                       ItemNames.KERRIGAN_WILD_MUTATION, ItemNames.KERRIGAN_SPAWN_BANELINGS})
     # if Kerrigan exists and all abilities are included,
     # no ability needs to be excluded
+
+    # SOA exclusion, other cases are handled by generic race logic
+    if (soa_presence == SpearOfAdunPresence.option_lotv_protoss and SC2Campaign.LOTV not in enabled_campaigns) \
+            or soa_presence == SpearOfAdunPresence.option_not_present:
+        excluded_items.union(spear_of_adun_calldowns)
+    if soa_autocast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_lotv_protoss \
+            and SC2Campaign.LOTV not in enabled_campaigns \
+            or soa_autocast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present:
+        excluded_items.union(spear_of_adun_castable_passives)
 
     return excluded_items
 
@@ -336,7 +350,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
     assert isinstance(upgrade_items, int)
 
     # Include items from outside main campaigns
-    item_sets = {'wol', 'hots'}
+    item_sets = {'wol', 'hots', 'lotv'}
     if get_option_value(multiworld, player, 'nco_items'):
         item_sets.add('nco')
     if get_option_value(multiworld, player, 'bw_items'):

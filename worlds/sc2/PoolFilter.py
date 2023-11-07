@@ -1,14 +1,14 @@
 from typing import Callable, Dict, List, Set, Union
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
-    progressive_if_ext
+    progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives
 from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
     get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
     campaign_mission_table
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
-    TakeOverAIAllies
+    TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence
 from .LogicMixin import SC2Logic
 from . import ItemNames
 
@@ -447,6 +447,8 @@ class ValidInventory:
         self.locked_items = locked_items[:]
         self.existing_items = existing_items
         self._read_logic()
+        soa_presence = get_option_value(multiworld, player, "spear_of_adun_presence")
+        soa_autocast_presence = get_option_value(multiworld, player, "spear_of_adun_autonomously_cast_ability_presence")
         # Initial filter of item pool
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
@@ -457,6 +459,13 @@ class ValidInventory:
         for item in item_pool:
             item_info = get_full_item_list()[item.name]
             if item_info.race != SC2Race.ANY and item_info.race not in used_races:
+                if soa_presence == SpearOfAdunPresence.option_everywhere \
+                        and item.name in spear_of_adun_calldowns:
+                    # Add SoA powers regardless of used races as it's present everywhere
+                    self.item_pool.append(item)
+                if soa_autocast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere \
+                        and item.name in spear_of_adun_castable_passives:
+                    self.item_pool.append(item)
                 # Drop any item belonging to a race not used in the campaign
                 continue
             if item_info.type == "Upgrade":

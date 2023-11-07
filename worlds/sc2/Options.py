@@ -159,6 +159,20 @@ class EnableHotsMissions(DefaultOnToggle):
     display_name = "Enable Heart of the Swarm missions"
 
 
+class EnableLotVPrologueMissions(DefaultOnToggle):
+    """
+    Enables missions from Heart of the Swarm campaign.
+    """
+    display_name = "Enable Prologue (Legacy of the Void) missions"
+
+
+class EnableLotVMissions(DefaultOnToggle):
+    """
+    Enables missions from Heart of the Swarm campaign.
+    """
+    display_name = "Enable Legacy of the Void (main campaign) missions"
+
+
 class ShuffleCampaigns(DefaultOnToggle):
     """
     Shuffles the missions between campaigns if enabled.
@@ -428,6 +442,78 @@ class KerriganPrimalStatus(Choice):
     option_item = 5
 
 
+class SpearOfAdunPresence(Choice):
+    """
+    Determines in which missions Spear of Adun calldowns will be available.
+    Affects only abilities used from Spear of Adun top menu.
+
+    Not Present: Spear of Adun calldowns are unavailable.
+    LotV Protoss: Spear of Adun calldowns are only available in LotV main campaign
+    Protoss: Spear od Adun calldowns are available in any Protoss mission
+    Everywhere: Spear od Adun calldowns are available in any mission of any race
+    """
+    display_name = "Spear of Adun Presence"
+    option_not_present = 0
+    option_lotv_protoss = 1
+    option_protoss = 2
+    option_everywhere = 3
+    default = option_lotv_protoss
+
+    # Fix case
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value == SpearOfAdunPresence.option_lotv_protoss:
+            return "LotV Protoss"
+        else:
+            return super().get_option_name(value)
+
+
+class SpearOfAdunPresentInNoBuild(Toggle):
+    """
+    Determines if Spear of Adun calldowns are available in no-build missions.
+
+    If turned on, Spear of Adun calldown powers are available in missions specified under "Spear of Adun Presence".
+    If turned off, Spear of Adun calldown powers are unavailable in all no-build missions
+    """
+    display_name = "Spear of Adun Present in No-Build"
+
+
+class SpearOfAdunAutonomouslyCastAbilityPresence(Choice):
+    """
+    Determines availability of Spear of Adun powers, that are autonomously cast.
+    Affects abilities like Reconstruction Beam or Overwatch
+
+    Not Presents: Autocasts are not available.
+    LotV Protoss: Spear of Adun autocasts are only available in LotV main campaign
+    Protoss: Spear od Adun autocasts are available in any Protoss mission
+    Everywhere: Spear od Adun autocasts are available in any mission of any race
+    """
+    display_name = "Spear of Adun Autonomously Cast Powers Presence"
+    option_not_present = 0
+    option_lotv_protoss = 1
+    option_protoss = 2
+    option_everywhere = 3
+    default = option_lotv_protoss
+
+    # Fix case
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value == SpearOfAdunPresence.option_lotv_protoss:
+            return "LotV Protoss"
+        else:
+            return super().get_option_name(value)
+
+
+class SpearOfAdunAutonomouslyCastPresentInNoBuild(Toggle):
+    """
+    Determines if Spear of Adun autocasts are available in no-build missions.
+
+    If turned on, Spear of Adun autocasts are available in missions specified under "Spear of Adun Autonomously Cast Powers Presence".
+    If turned off, Spear of Adun autocasts are unavailable in all no-build missions
+    """
+    display_name = "Spear of Adun Autonomously Cast Powers Present in No-Build"
+
+
 class GrantStoryTech(Toggle):
     """
     If set true, grants special tech required for story mission completion for duration of the mission.
@@ -552,6 +638,8 @@ sc2_options: Dict[str, Option] = {
     "enable_wol_missions": EnableWolMissions,
     "enable_prophecy_missions": EnableProphecyMissions,
     "enable_hots_missions": EnableHotsMissions,
+    "enable_lotv_prologue_missions": EnableLotVPrologueMissions,
+    "enable_lotv_missions": EnableLotVMissions,
     "shuffle_campaigns": ShuffleCampaigns,
     "shuffle_no_build": ShuffleNoBuild,
     "early_unit": EarlyUnit,
@@ -571,6 +659,10 @@ sc2_options: Dict[str, Option] = {
     "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
     "start_primary_abilities": StartPrimaryAbilities,
     "kerrigan_primal_status": KerriganPrimalStatus,
+    "spear_of_adun_presence": SpearOfAdunPresence,
+    "spear_of_adun_present_in_no_build": SpearOfAdunPresentInNoBuild,
+    "spear_of_adun_autonomously_cast_ability_presence": SpearOfAdunAutonomouslyCastAbilityPresence,
+    "spear_of_adun_autonomously_cast_present_in_no_build": SpearOfAdunAutonomouslyCastPresentInNoBuild,
     "grant_story_tech": GrantStoryTech,
     "take_over_ai_allies": TakeOverAIAllies,
     "locked_items": LockedItems,
@@ -603,6 +695,10 @@ def get_enabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaig
         enabled_campaigns.add(SC2Campaign.PROPHECY)
     if get_option_value(multiworld, player, "enable_hots_missions"):
         enabled_campaigns.add(SC2Campaign.HOTS)
+    if get_option_value(multiworld, player, "enable_lotv_prologue_missions"):
+        enabled_campaigns.add(SC2Campaign.PROLOGUE)
+    if get_option_value(multiworld, player, "enable_lotv_missions"):
+        enabled_campaigns.add(SC2Campaign.LOTV)
     return enabled_campaigns
 
 
