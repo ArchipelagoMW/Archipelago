@@ -469,7 +469,7 @@ class ValidInventory:
                 else:
                     self.item_pool.append(item)
             elif item_info.type == "Goal":
-                locked_items.append(item)
+                self.locked_items.append(item)
             else:
                 self.item_pool.append(item)
         self.cascade_removal_map: Dict[Item, List[Item]] = dict()
