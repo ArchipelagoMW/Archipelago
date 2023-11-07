@@ -81,7 +81,7 @@ class WitnessPlayerLogic:
             these_items = all_options
 
         disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_ENTITIES
-                        if StaticWitnessLogic.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
+                        if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
 
         these_panels = frozenset({panels - disabled_eps
                                   for panels in these_panels})
@@ -147,9 +147,9 @@ class WitnessPlayerLogic:
 
             self.THEORETICAL_ITEMS.discard(item_name)
             if isinstance(StaticWitnessLogic.all_items[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_ITEMS_NO_MULTI \
-                    .difference_update(cast(ProgressiveItemDefinition,
-                                            StaticWitnessLogic.all_items[item_name]).child_item_names)
+                self.THEORETICAL_ITEMS_NO_MULTI.difference_update(
+                    cast(ProgressiveItemDefinition, StaticWitnessLogic.all_items[item_name]).child_item_names
+                )
             else:
                 self.THEORETICAL_ITEMS_NO_MULTI.discard(item_name)
 
@@ -185,9 +185,10 @@ class WitnessPlayerLogic:
 
             if len(line_split) > 2:
                 required_items = parse_lambda(line_split[2])
-                items_actually_in_the_game = [item_name for item_name, item_definition
-                                              in StaticWitnessLogic.all_items.items()
-                                              if item_definition.category is ItemCategory.SYMBOL]
+                items_actually_in_the_game = [
+                    item_name for item_name, item_definition in StaticWitnessLogic.all_items.items()
+                    if item_definition.category is ItemCategory.SYMBOL
+                ]
                 required_items = frozenset(
                     subset.intersection(items_actually_in_the_game)
                     for subset in required_items
@@ -244,7 +245,7 @@ class WitnessPlayerLogic:
 
         if adj_type == "Added Locations":
             if "0x" in line:
-                line = StaticWitnessLogic.ENTITIES_BY_HEX[line]["checkName"]
+                line = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
     def make_options_adjustments(self, world: "WitnessWorld"):
@@ -371,13 +372,14 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
         if world.options.shuffle_EPs:
-            ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in StaticWitnessLogic.ENTITIES_BY_HEX.items()
+            ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
                       if ep_obj["entityType"] == "EP")
 
             for ep_hex, ep_obj in ep_gen:
-                obelisk = StaticWitnessLogic.ENTITIES_BY_HEX[StaticWitnessLogic.EP_TO_OBELISK_SIDE[ep_hex]]["checkName"]
-                ep_name = StaticWitnessLogic.ENTITIES_BY_HEX[ep_hex]["checkName"]
-                self.EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk} - {ep_name}"
+                obelisk = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[self.REFERENCE_LOGIC.EP_TO_OBELISK_SIDE[ep_hex]]
+                obelisk_name = obelisk["checkName"]
+                ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
+                self.EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
         else:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
@@ -387,10 +389,10 @@ class WitnessPlayerLogic:
         yaml_disabled_eps = []
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
-            if yaml_disabled_location not in StaticWitnessLogic.ENTITIES_BY_NAME:
+            if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
                 continue
 
-            loc_obj = StaticWitnessLogic.ENTITIES_BY_NAME[yaml_disabled_location]
+            loc_obj = self.REFERENCE_LOGIC.ENTITIES_BY_NAME[yaml_disabled_location]
 
             if loc_obj["entityType"] == "EP" and world.options.shuffle_EPs != 0:
                 yaml_disabled_eps.append(loc_obj["entity_hex"])
@@ -449,13 +451,13 @@ class WitnessPlayerLogic:
                 for option in connection[1]:
                     individual_entity_requirements = []
                     for entity in option:
-                        if entity in self.EVENT_NAMES_BY_HEX or entity not in StaticWitnessLogic.ENTITIES_BY_HEX:
+                        if entity in self.EVENT_NAMES_BY_HEX or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX:
                             individual_entity_requirements.append(frozenset({frozenset({entity})}))
                         else:
                             entity_req = self.reduce_req_within_region(entity)
 
-                            if StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]:
-                                region_name = StaticWitnessLogic.ENTITIES_BY_HEX[entity]["region"]["name"]
+                            if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
+                                region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
                                 entity_req = dnf_and([entity_req, frozenset({frozenset({region_name})})])
 
                             individual_entity_requirements.append(entity_req)
@@ -470,9 +472,9 @@ class WitnessPlayerLogic:
         """
         Makes a pair of an event panel and its event item
         """
-        action = " Opened" if StaticWitnessLogic.ENTITIES_BY_HEX[panel]["entityType"] == "Door" else " Solved"
+        action = " Opened" if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["entityType"] == "Door" else " Solved"
 
-        name = StaticWitnessLogic.ENTITIES_BY_HEX[panel]["checkName"] + action
+        name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["checkName"] + action
         if panel not in self.EVENT_NAMES_BY_HEX:
             warning("Panel \"" + name + "\" does not have an associated event name.")
             self.EVENT_NAMES_BY_HEX[panel] = name + " Event"

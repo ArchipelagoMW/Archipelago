@@ -56,7 +56,7 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
     Determines whether a panel can be solved
     """
 
-    panel_obj = StaticWitnessLogic.ENTITIES_BY_HEX[panel]
+    panel_obj = player_logic.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]
     entity_name = panel_obj["checkName"]
 
     if entity_name + " Solved" in locat.EVENT_LOCATION_TABLE:
@@ -146,7 +146,7 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
 
 def _has_item(item: str, world: "WitnessWorld", player: int,
               player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> Callable[[CollectionState], bool]:
-    if item in StaticWitnessLogic.ALL_REGIONS_BY_NAME:
+    if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         return lambda state: world.regio.region_cache[item].can_reach(state)
     if item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
@@ -203,7 +203,7 @@ def set_rules(world: "WitnessWorld", location_cache: Dict[str, Location]):
         if location in world.locat.EVENT_LOCATION_TABLE:
             real_location = location[:-7]
 
-        associated_entity = StaticWitnessLogic.ENTITIES_BY_NAME[real_location]
+        associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
         entity_hex = associated_entity["entity_hex"]
 
         rule = make_lambda(entity_hex, world)

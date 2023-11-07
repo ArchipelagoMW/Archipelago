@@ -80,7 +80,7 @@ class WitnessRegions:
         # Register any necessary indirect connections
         mentioned_regions = {
             single_unlock for option in final_requirement for single_unlock in option
-            if single_unlock in StaticWitnessLogic.ALL_REGIONS_BY_NAME
+            if single_unlock in self.reference_logic.ALL_REGIONS_BY_NAME
         }
 
         for dependent_region in mentioned_regions:
@@ -92,21 +92,12 @@ class WitnessRegions:
         """
         from . import create_region
 
-        difficulty = world.options.puzzle_randomization
-
-        if difficulty == 1:
-            reference_logic = StaticWitnessLogic.sigma_expert
-        elif difficulty == 0:
-            reference_logic = StaticWitnessLogic.sigma_normal
-        else:
-            reference_logic = StaticWitnessLogic.vanilla
-
         all_locations = set()
 
-        for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
-                reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["panels"]
-                if reference_logic.ENTITIES_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
+                self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["panels"]
+                if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
                 StaticWitnessLocations.get_event_name(panel) for panel in region["panels"]
@@ -121,7 +112,7 @@ class WitnessRegions:
 
             world.multiworld.regions.append(new_region)
 
-        for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 self.connect_if_possible(world, region_name, connection[0], connection[1])
                 self.connect_if_possible(world, connection[0], region_name, connection[1], backwards=True)
@@ -129,6 +120,15 @@ class WitnessRegions:
         return self.location_cache
 
     def __init__(self, locat: WitnessPlayerLocations, world: "WitnessWorld"):
+        difficulty = world.options.puzzle_randomization.value
+
+        if difficulty == 0:
+            self.reference_logic = StaticWitnessLogic.sigma_normal
+        elif difficulty == 1:
+            self.reference_logic = StaticWitnessLogic.sigma_expert
+        elif difficulty == 2:
+            self.reference_logic = StaticWitnessLogic.vanilla
+
         self.locat = locat
         player_name = world.multiworld.get_player_name(world.player)
 
