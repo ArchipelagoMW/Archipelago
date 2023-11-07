@@ -130,6 +130,12 @@ class Region:
     mines_floor_110 = "The Mines - Floor 110"
     mines_floor_115 = "The Mines - Floor 115"
     mines_floor_120 = "The Mines - Floor 120"
+    blacksmith_copper = "Blacksmith Copper Upgrades"
+    blacksmith_iron = "Blacksmith Iron Upgrades"
+    blacksmith_gold = "Blacksmith Gold Upgrades"
+    blacksmith_iridium = "Blacksmith Iridium Upgrades"
+    farming = "Farming"
+    fishing = "Fishing"
 
 
 class DeepWoodsRegion:

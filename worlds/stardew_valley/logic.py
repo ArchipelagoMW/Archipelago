@@ -1059,20 +1059,23 @@ class StardewLogic:
         return self.cached_rules[key]
 
     def can_progress_easily_in_the_mines_from_floor(self, floor: int) -> StardewRule:
-        tier = int(floor / 40) + 1
+        tier = (floor // 40) + 1
         rules = []
         weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
         rules.append(weapon_rule)
         if self.options.tool_progression == ToolProgression.option_progressive:
             rules.append(self.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
         if self.options.skill_progression == SkillProgression.option_progressive:
-            combat_tier = min(10, max(0, tier * 2))
-            rules.append(self.has_skill_level(Skill.combat, combat_tier))
+            skill_tier = min(10, max(0, tier * 2))
+            rules.append(self.has_skill_level(Skill.mining, skill_tier))
+            rules.append(self.has_skill_level(Skill.combat, skill_tier))
         return And(rules)
 
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
         key = f"has_mine_elevator_to_floor {floor}"
         if key not in self.cached_rules:
+            if floor <= 0:
+                floor = 0
             if self.options.elevator_progression != ElevatorProgression.option_vanilla:
                 self.cached_rules[key] = self.received("Progressive Mine Elevator", count=int(floor / 5))
             else:
