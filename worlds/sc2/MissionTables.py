@@ -525,13 +525,6 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
     },
 }
 
-campaign_standard_race: Dict[SC2Campaign, SC2Race] = {
-    SC2Campaign.WOL: SC2Race.TERRAN,
-    SC2Campaign.HOTS: SC2Race.ZERG,
-    SC2Campaign.PROPHECY: SC2Race.PROTOSS,
-    SC2Campaign.GLOBAL: SC2Race.ANY
-}
-
 # In the future, use this to store Epilogue mission races
 campaign_race_exceptions: Dict[SC2Mission, SC2Race] = {
     SC2Mission.WITH_FRIENDS_LIKE_THESE: SC2Race.TERRAN
