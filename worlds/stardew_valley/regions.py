@@ -429,7 +429,7 @@ def create_final_connections(world_options) -> List[ConnectionData]:
 
 
 def create_regions(region_factory: RegionFactory, random: Random, world_options) -> Tuple[
-    Iterable[Region], Dict[str, str]]:
+    Dict[str, Region], Dict[str, str]]:
     final_regions = create_final_regions(world_options)
     regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in
                                   final_regions}
@@ -444,7 +444,7 @@ def create_regions(region_factory: RegionFactory, random: Random, world_options)
         if connection.name in entrances:
             entrances[connection.name].connect(regions[connection.destination])
 
-    return regions.values(), randomized_data
+    return regions, randomized_data
 
 
 def randomize_connections(random: Random, world_options, regions_by_name) -> Tuple[

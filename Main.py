@@ -122,10 +122,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Creating Items.')
     AutoWorld.call_all(world, "create_items")
 
-    # All worlds should have finished creating all regions, locations, and entrances.
-    # Recache to ensure that they are all visible for locality rules.
-    world._recache()
-
     logger.info('Calculating Access Rules.')
 
     for player in world.player_ids:
@@ -233,7 +229,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
         region = Region("Menu", group_id, world, "ItemLink")
         world.regions.append(region)
-        locations = region.locations = []
+        locations = region.locations
         for item in world.itempool:
             count = common_item_count.get(item.player, {}).get(item.name, 0)
             if count:
@@ -267,10 +263,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
     if any(world.item_links.values()):
-        world._recache()
         world._all_state = None
 
-    logger.info("Running Item Plando")
+    logger.info("Running Item Plando.")
 
     distribute_planned(world)
 
@@ -301,15 +296,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
-        with concurrent.futures.ThreadPoolExecutor(world.players + 2) as pool:
+        output_players = [player for player in world.player_ids if AutoWorld.World.generate_output.__code__
+                          is not world.worlds[player].generate_output.__code__]
+        with concurrent.futures.ThreadPoolExecutor(len(output_players) + 2) as pool:
             check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
             output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
-            for player in world.player_ids:
+            for player in output_players:
                 # skip starting a thread for methods that say "pass".
-                if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
-                    output_file_futures.append(
-                        pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
+                output_file_futures.append(
+                    pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
 
             # collect ER hint info
             er_hint_data: Dict[int, Dict[int, str]] = {}
