@@ -26,8 +26,8 @@ if Utils.is_frozen():
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
-Config.set('kivy', 'exit_on_escape', '0')
-Config.set('graphics', 'multisamples', '0')  # multisamples crash old intel drivers
+Config.set("kivy", "exit_on_escape", "0")
+Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -78,8 +78,8 @@ class HoverBehavior(object):
     border_point = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        self.register_event_type('on_enter')
-        self.register_event_type('on_leave')
+        self.register_event_type("on_enter")
+        self.register_event_type("on_leave")
         Window.bind(mouse_pos=self.on_mouse_pos)
         Window.bind(on_cursor_leave=self.on_cursor_leave)
         super(HoverBehavior, self).__init__(**kwargs)
@@ -107,7 +107,7 @@ class HoverBehavior(object):
         self.dispatch("on_leave")
 
 
-Factory.register('HoverBehavior', HoverBehavior)
+Factory.register("HoverBehavior", HoverBehavior)
 
 
 class ToolTip(Label):
@@ -126,7 +126,7 @@ class TooltipLabel(HovererableLabel):
     tooltip = None
 
     def create_tooltip(self, text, x, y):
-        text = text.replace("<br>", "\n").replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']')
+        text = text.replace("<br>", "\n").replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]")
         if self.tooltip:
             # update
             self.tooltip.children[0].text = text
@@ -138,7 +138,7 @@ class TooltipLabel(HovererableLabel):
             App.get_running_app().root.add_widget(self.tooltip)
 
         # handle left-side boundary to not render off-screen
-        x = max(x, 3+self.tooltip.children[0].texture_size[0] / 2)
+        x = max(x, 3 + self.tooltip.children[0].texture_size[0] / 2)
 
         # position float layout
         self.tooltip.x = x - self.tooltip.width / 2
@@ -278,7 +278,7 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                 elif not cmdinput.text and text.startswith("Missing: "):
                     cmdinput.text = text.replace("Missing: ", "!hint_location ")
 
-                Clipboard.copy(text.replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
+                Clipboard.copy(text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                 return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -308,15 +308,15 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
-        if "select" in data and not data['select'] and index not in self.no_select:
+        if "select" in data and not data["select"] and index not in self.no_select:
             self.no_select.append(index)
-        self.striped = data['striped']
-        self.receiving_text = data['receiving']['text']
-        self.item_text = data['item']['text']
-        self.finding_text = data['finding']['text']
-        self.location_text = data['location']['text']
-        self.entrance_text = data['entrance']['text']
-        self.found_text = data['found']['text']
+        self.striped = data["striped"]
+        self.receiving_text = data["receiving"]["text"]
+        self.item_text = data["item"]["text"]
+        self.finding_text = data["finding"]["text"]
+        self.location_text = data["location"]["text"]
+        self.entrance_text = data["entrance"]["text"]
+        self.found_text = data["found"]["text"]
         self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
@@ -334,8 +334,9 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                                     if self.entrance_text != "Vanilla"
                                     else "", ". (", self.found_text.lower(), ")"])
                     temp = MarkupLabel(text).markup
-                    text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
-                    Clipboard.copy(escape_markup(text).replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
+                    text = "".join(
+                        part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                    Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                     return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -346,7 +347,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
 
 class ConnectBarTextInput(TextInput):
     def insert_text(self, substring, from_undo=False):
-        s = substring.replace('\n', '').replace('\r', '')
+        s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
 
 
@@ -489,7 +490,7 @@ class GameManager(App):
         return self.container
 
     def update_texts(self, dt):
-        if hasattr(self.tabs.content.children[0], 'fix_heights'):
+        if hasattr(self.tabs.content.children[0], "fix_heights"):
             self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
@@ -584,12 +585,12 @@ class LogtoUI(logging.Handler):
     def format_compact(record: logging.LogRecord) -> str:
         if isinstance(record.msg, Exception):
             return str(record.msg)
-        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + str(record.msg).split("\n")[0]
+        return (f"{record.exc_info[1]}\n" if record.exc_info else "") + str(record.msg).split("\n")[0]
 
     def handle(self, record: logging.LogRecord) -> None:
-        if getattr(record, 'skip_gui', False):
+        if getattr(record, "skip_gui", False):
             pass  # skip output
-        elif getattr(record, 'compact_gui', False):
+        elif getattr(record, "compact_gui", False):
             self.on_log(self.format_compact(record))
         else:
             self.on_log(self.format(record))
@@ -624,18 +625,19 @@ class UILog(RecycleView):
 
 
 class HintLog(RecycleView):
+    header = {
+        "receiving": {"text": "[u]Receiving Player[/u]"},
+        "item": {"text": "[u]Item[/u]"},
+        "finding": {"text": "[u]Finding Player[/u]"},
+        "location": {"text": "[u]Location[/u]"},
+        "entrance": {"text": "[u]Entrance[/u]"},
+        "found": {"text": "[u]Status[/u]"},
+        "striped": True,
+        "select": False,
+    }
+
     def __init__(self, parser):
         super(HintLog, self).__init__()
-        self.header = {
-            "receiving": {'text': "[u]Receiving Player[/u]"},
-            "item": {'text': "[u]Item[/u]"},
-            "finding": {'text': "[u]Finding Player[/u]"},
-            "location": {'text': "[u]Location[/u]"},
-            "entrance": {'text': "[u]Entrance[/u]"},
-            "found": {'text': "[u]Status[/u]"},
-            "striped": True,
-            "select": False,
-        }
         self.data = [self.header]
         self.parser = parser
 
@@ -644,18 +646,21 @@ class HintLog(RecycleView):
         striped = False
         for hint in hints:
             self.data.append({
-                'striped': striped,
-                'receiving': {'text': self.parser.handle_node({'type': "player_id", 'text': hint['receiving_player']})},
-                'item': {'text': self.parser.handle_node({'type': "item_id", 'text': hint['item'], 'flags': hint['item_flags']})},
-                'finding': {'text': self.parser.handle_node({'type': "player_id", 'text': hint['finding_player']})},
-                'location': {'text': self.parser.handle_node({'type': "location_id", 'text': hint['location']})},
-                'entrance': {'text': self.parser.handle_node({'type': "color" if hint['entrance'] else "text",
-                                                         'color': "blue", 'text': hint['entrance']
-                                                         if hint['entrance'] else "Vanilla"})},
-                'found': {'text': self.parser.handle_node({'type': "color", 'color': "green" if hint['found'] else "red",
-                                                      'text': "Found" if hint['found'] else "Not Found"})},
+                "striped": striped,
+                "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
+                "item": {"text": self.parser.handle_node(
+                    {"type": "item_id", "text": hint["item"], "flags": hint["item_flags"]})},
+                "finding": {"text": self.parser.handle_node({"type": "player_id", "text": hint["finding_player"]})},
+                "location": {"text": self.parser.handle_node({"type": "location_id", "text": hint["location"]})},
+                "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
+                                                              "color": "blue", "text": hint["entrance"]
+                                                              if hint["entrance"] else "Vanilla"})},
+                "found": {
+                    "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
+                                                     "text": "Found" if hint["found"] else "Not Found"})},
             })
             striped = not striped
+
 
 class E(ExceptionHandler):
     logger = logging.getLogger("Client")
@@ -704,7 +709,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
                    f"Type: {SlotType(slot_info.type).name}"
             if slot_info.group_members:
                 text += f"<br>Members:<br> " + \
-                        '<br> '.join(self.ctx.player_names[player] for player in slot_info.group_members)
+                        "<br> ".join(self.ctx.player_names[player] for player in slot_info.group_members)
             node.setdefault("refs", []).append(text)
         return super(KivyJSONtoTextParser, self)._handle_player_id(node)
 
