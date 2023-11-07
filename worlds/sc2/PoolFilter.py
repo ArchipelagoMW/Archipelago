@@ -395,7 +395,7 @@ class ValidInventory:
 
     def _read_logic(self):
         # General
-        self._sc2_cleared_missions = lambda world, player: SC2Logic._sc2_cleared_missions(self, world, player)
+        self._sc2_cleared_missions = lambda world, player, mission_count: False
         self._sc2_advanced_tactics = lambda world, player: SC2Logic._sc2_advanced_tactics(self, world, player)
         # WoL
         self._sc2wol_has_common_unit = lambda world, player: SC2Logic._sc2wol_has_common_unit(self, world, player)
@@ -473,12 +473,12 @@ class ValidInventory:
                 if item.name not in item_quantities:
                     item_quantities[item.name] = 0
                 item_quantities[item.name] += 1
-                if item_quantities[item.name] < min_upgrades:
+                if item_quantities[item.name] <= min_upgrades:
                     self.locked_items.append(item)
                 else:
                     self.item_pool.append(item)
             elif item_info.type == "Goal":
-                locked_items.append(item)
+                self.locked_items.append(item)
             else:
                 self.item_pool.append(item)
         self.cascade_removal_map: Dict[Item, List[Item]] = dict()
