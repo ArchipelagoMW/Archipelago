@@ -17,6 +17,12 @@
     color: "FFFFFF"
 <TabbedPanel>:
     tab_width: root.width / app.tab_count
+<TooltipLabel>:
+    text_size: self.width, None
+    size_hint_y: None
+    height: self.texture_size[1]
+    font_size: dp(20)
+    markup: True
 <SelectableLabel>:
     canvas.before:
         Color:
@@ -24,16 +30,75 @@
         Rectangle:
             size: self.size
             pos: self.pos
-    text_size: self.width, None
-    size_hint_y: None
-    height: self.texture_size[1]
-    font_size: dp(20)
-    markup: True
 <UILog>:
     messages: 1000 # amount of messages stored in client logs.
     cols: 1
     viewclass: 'SelectableLabel'
     scroll_y: 0
+    scroll_type: ["content", "bars"]
+    bar_width: dp(12)
+    effect_cls: "ScrollEffect"
+    SelectableRecycleBoxLayout:
+        default_size: None, dp(20)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+        spacing: dp(3)
+<HintLabel>:
+    canvas.before:
+        Color:
+            rgba: (.0, 0.9, .1, .3) if self.selected else (0.2, 0.2, 0.2, 1) if self.striped else (0.18, 0.18, 0.18, 1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    height: self.minimum_height
+    receiving_text: "Receiving Player"
+    item_text: "Item"
+    finding_text: "Finding Player"
+    location_text: "Location"
+    entrance_text: "Entrance"
+    found_text: "Found?"
+    TooltipLabel:
+        id: receiving
+        text: root.receiving_text
+        halign: 'center'
+        valign: 'center'
+        pos_hint: {"center_y": 0.5}
+    TooltipLabel:
+        id: item
+        text: root.item_text
+        halign: 'center'
+        valign: 'center'
+        pos_hint: {"center_y": 0.5}
+    TooltipLabel:
+        id: finding
+        text: root.finding_text
+        halign: 'center'
+        valign: 'center'
+        pos_hint: {"center_y": 0.5}
+    TooltipLabel:
+        id: location
+        text: root.location_text
+        halign: 'center'
+        valign: 'center'
+        pos_hint: {"center_y": 0.5}
+    TooltipLabel:
+        id: entrance
+        text: root.entrance_text
+        halign: 'center'
+        valign: 'center'
+        pos_hint: {"center_y": 0.5}
+    TooltipLabel:
+        id: found
+        text: root.found_text
+        halign: 'center'
+        valign: 'center'
+        pos_hint: {"center_y": 0.5}
+<HintLog>:
+    cols: 1
+    viewclass: 'HintLabel'
+    scroll_y: self.height
     scroll_type: ["content", "bars"]
     bar_width: dp(12)
     effect_cls: "ScrollEffect"
