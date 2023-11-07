@@ -464,7 +464,7 @@ class ValidInventory:
                 if item.name not in item_quantities:
                     item_quantities[item.name] = 0
                 item_quantities[item.name] += 1
-                if item_quantities[item.name] < min_upgrades:
+                if item_quantities[item.name] <= min_upgrades:
                     self.locked_items.append(item)
                 else:
                     self.item_pool.append(item)
