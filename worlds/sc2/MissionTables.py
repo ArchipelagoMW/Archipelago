@@ -534,7 +534,7 @@ campaign_standard_race: Dict[SC2Campaign, SC2Race] = {
 
 # In the future, use this to store Epilogue mission races
 campaign_race_exceptions: Dict[SC2Mission, SC2Race] = {
-    SC2Mission.WITH_FRIENDS_LIKE_THESE: SC2Race.ZERG
+    SC2Mission.WITH_FRIENDS_LIKE_THESE: SC2Race.TERRAN
 }
 
 
