@@ -41,7 +41,7 @@ class ShopPriceType(IntEnum):
 
 class Shop:
     slots: int = 3  # slot count is not dynamic in asm, however inventory can have None as empty slots
-    blacklist: Set[str] = set()  # items that don't work, todo: actually check against this
+    blacklist: Set[str] = set()  # items that don't work
     type = ShopType.Shop
     slot_names: Dict[int, str] = {
         0: " Left",
@@ -176,7 +176,6 @@ def push_shop_inventories(multiworld):
 
     # FillDisabledShopSlots(multiworld)
 
-
 def create_shops(multiworld, player: int):
 
     player_shop_table = shop_table.copy()
@@ -228,7 +227,7 @@ def create_shops(multiworld, player: int):
                 loc = ALttPLocation(player, slot_name, address=shop_table_by_location[slot_name],
                                     parent=region, hint_text="for sale")
                 loc.shop_price_type, loc.shop_price = get_price(multiworld, None, player)
-                loc.item_rule = lambda item: not any(i for i in price_blacklist[loc.shop_price_type] if i in item.name)
+                loc.item_rule = lambda item, spot=loc: not any(i for i in price_blacklist[spot.shop_price_type] if i in item.name)
                 add_rule(loc, lambda state, spot=loc: shop_price_rules(state, player, spot))
                 loc.shop = shop
                 loc.shop_slot = index
@@ -351,7 +350,6 @@ def shuffle_shops(multiworld, player: int):
 
         for item in total_inventory:
             item["price_type"], item["price"] = get_price(multiworld, item, player)
-            print(f"{item['price_type'], item['price']}")
         if multiworld.shuffle_shop_inventories[player]:
             multiworld.random.shuffle(total_inventory)
 
