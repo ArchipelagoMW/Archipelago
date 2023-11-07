@@ -372,7 +372,7 @@ function define_char_to_hex_map()
     return char_to_hex_map
 end
 
-function define_exceptions():
+function define_exceptions()
     exceptions = {
         0x0AF, --Axel Fire 5
         0x189, --Cloud Hi-Potion 3
@@ -562,7 +562,7 @@ function set_deck_pointer(deck_number, offset, value)
 end
 
 function set_starting_deck()
-    memory.write_u16_le(deck_cp_cost_address, 0x009E)
+    memory.write_u16_le(deck_cp_cost_address, 0x0053)
     
     memory.write_u16_le(battle_cards_address, 0x1008) --Kingdom Key 8
     set_deck_pointer(1, 0, 0x0000)
@@ -570,15 +570,9 @@ function set_starting_deck()
     set_deck_pointer(1, 1, 0x0001)
     memory.write_u16_le(battle_cards_address + 4, 0x1006) --Kingdom Key 6
     set_deck_pointer(1, 2, 0x0002)
-    memory.write_u16_le(battle_cards_address + 6, 0x1005) --Kingdom Key 5
+    memory.write_u16_le(battle_cards_address + 6, 0x10CE) --Cure 6
     set_deck_pointer(1, 3, 0x0003)
-    memory.write_u16_le(battle_cards_address + 8, 0x10B9) --Blizzard 5
-    set_deck_pointer(1, 4, 0x0004)
-    memory.write_u16_le(battle_cards_address + 10, 0x1181) --Potion 5
-    set_deck_pointer(1, 5, 0x0005)
-    memory.write_u16_le(battle_cards_address + 10, 0x10CE) --Cure 6
-    set_deck_pointer(1, 6, 0x0006)
-    local i = 8
+    local i = 5
     while i <= 15 do
         memory.write_u16_le(battle_cards_address + 2*(i-1), 0x0FFF)
         set_deck_pointer(1, i-1, 0xFFFF)
@@ -1070,7 +1064,7 @@ function main_loop(last_variables)
     local frame = emu.framecount()
     local current_playtime = get_playtime()
     if current_playtime == 1 then
-        --set_starting_deck()
+        set_starting_deck()
         last_variables["Last Battle Cards"] = get_battle_cards()
         last_variables["Last Moogle Points"] = get_moogle_points()
         set_stored_gold_cards("Key of Beginnings", 1, 1)
