@@ -48,6 +48,8 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("F12 Destiny Islands Room of Guidance (Darkside)"      , player).access_rule = lambda state: has_room_of_guidance  (state, player, "12")
     multiworld.get_location("F12 Destiny Islands Post Floor (Riku)"                , player).access_rule = lambda state: has_room_of_guidance  (state, player, "12")
     #multiworld.get_location("F12 Destiny Islands Post Floor (Larxene)"             , player).access_rule = lambda state: has_room_of_guidance  (state, player, "12")
+    multiworld.get_location("F12 Destiny Islands Post Floor (Oathkeeper)"          , player).access_rule = lambda state: has_room_of_guidance  (state, player, "12")
+    #multiworld.get_location("F12 Destiny Islands Post Floor (Oblivion)"            , player).access_rule = lambda state: has_room_of_guidance  (state, player, "12")
     multiworld.get_location("F13 Castle Oblivion Room of Beginnings (Axel)"        , player).access_rule = lambda state: has_room_of_beginnings(state, player, "13")
     multiworld.get_location("F13 Castle Oblivion Post Floor (Marluxia)"            , player).access_rule = lambda state: has_room_of_beginnings(state, player, "13")
     multiworld.get_location("F13 Castle Oblivion Post Marluxia (One-Winged Angel)" , player).access_rule = lambda state: has_room_of_beginnings(state, player, "13")

@@ -372,11 +372,38 @@ function define_char_to_hex_map()
     return char_to_hex_map
 end
 
+function define_exceptions():
+    exceptions = {
+        0x0AF, --Axel Fire 5
+        0x189, --Cloud Hi-Potion 3
+        0x19D, --Agrabah RoG Ether 3
+        0x0C5, --Larxene Thunder 7
+        0x0EC, --Riku Aero 6
+        0x192, --Riku Mega Potion 2
+        0x125, --Monstro RoT Dumbo 3
+        0x1A8, --Vexen Mega-Ether 4
+    }
+    return exceptions
+end
+
+local function has_value (tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end
+
 location_ids = define_location_ids()
 item_ids = define_item_ids()
 battle_cards = define_battle_cards()
 win_conditions = define_win_conditions()
 char_to_hex_map = define_char_to_hex_map()
+exceptions = define_exceptions()
+
+pack_size = 3
 
 --Addresses
 current_gold_map_cards_addresses = {}
@@ -405,16 +432,12 @@ floor_progress_addresses = {0x02039D34,0x02039D38,0x02039D3C,0x02039D40,0x02039D
 floor_doors_addresses = {0x02039D37,0x02039D3B,0x02039D3F,0x02039D43,0x02039D47,0x02039D4B,0x02039D4F,0x02039D53,0x02039D57,0x02039D5B,0x02039D5F,0x02039D63, 0x02039D67}
 floor_assignment_values = {0x0A, 0x04, 0x03, 0x05, 0x01, 0x06, 0x02, 0x07, 0x08, 0x0D, 0x0B, 0x09, 0x0C}
 
-bronze_pack_attack_cards = {"Kingdom Key", "Three Wishes", "Pumpkinhead", "Olympia", "Wishing Star", "Lady Luck"}
-bronze_pack_magic_cards = {"Fire", "Blizzard", "Thunder", "Simba", "Genie", "Cloud", "Dumbo"}
-bronze_pack_item_cards = {"Potion", "Hi-Potion", "Ether"}
 
-silver_pack_attack_cards = {"Lionheart", "Metal Chocobo", "Spellbinder", "Divine Rose", "Crabclaw"}
-silver_pack_magic_cards = {"Cure", "Stop", "Gravity", "Aero", "Bambi", "Mushu", "Tinker Bell"}
-silver_pack_item_cards = {"Mega-Potion", "Elixir", "Mega-Ether"}
+bronze_pack_cards = {"Kingdom Key", "Three Wishes", "Pumpkinhead", "Olympia", "Wishing Star", "Lady Luck", "Fire", "Blizzard", "Thunder", "Simba", "Genie", "Cloud", "Dumbo", "Potion", "Hi-Potion", "Ether"}
 
-gold_pack_attack_cards = {"Oathkeeper", "Oblivion", "Diamond Dust", "One-Winged Angel", "Ultima Weapon"}
-gold_pack_item_cards = {"Megalixir"}
+silver_pack_cards = {"Lionheart", "Metal Chocobo", "Spellbinder", "Divine Rose", "Crabclaw", "Cure", "Stop", "Gravity", "Aero", "Bambi", "Mushu", "Tinker Bell", "Mega-Potion", "Elixir", "Mega-Ether"}
+
+gold_pack_cards = {"Oathkeeper", "Oblivion", "Diamond Dust", "One-Winged Angel", "Ultima Weapon", "Megalixir"}
 
 function save_or_savestate_loaded(past_playtime, current_playtime)
     if current_playtime >= past_playtime then
@@ -822,6 +845,9 @@ function add_battle_card(battle_card)
     for k,v in pairs(battle_cards) do 
         if k == battle_card then
             card_value = math.random(0,v[2]-v[1])
+            while has_value(exceptions, v[1]+card_value) do
+                card_value = math.random(0,v[2]-v[1])
+            end
             memory.write_u16_le(battle_cards_address + (2 * offset), v[1]+card_value)
             return
         end
@@ -830,33 +856,24 @@ end
 
 function open_card_pack(card_pack)
     if card_pack == "Bronze Card Pack" then
-        add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
-        add_battle_card(bronze_pack_attack_cards[math.random(1, #bronze_pack_attack_cards)])
-        choice = math.random(1,100)
-        if choice < 30 then
-            add_battle_card(bronze_pack_item_cards[math.random(1, #bronze_pack_item_cards)])
-        else
-            add_battle_card(bronze_pack_magic_cards[math.random(1, #bronze_pack_magic_cards)])
+        i = 0
+        while i < pack_size do
+            add_battle_card(bronze_pack_cards[math.random(1, #bronze_pack_cards)])
+            i = i + 1
         end
     end
     if card_pack == "Silver Card Pack" then
-        add_battle_card(silver_pack_attack_cards[math.random(1, #silver_pack_attack_cards)])
-        add_battle_card(silver_pack_attack_cards[math.random(1, #silver_pack_attack_cards)])
-        choice = math.random(1,100)
-        if choice < 30 then
-            add_battle_card(silver_pack_item_cards[math.random(1, #silver_pack_item_cards)])
-        else
-            add_battle_card(silver_pack_magic_cards[math.random(1, #silver_pack_magic_cards)])
+        i = 0
+        while i < pack_size do
+            add_battle_card(silver_pack_cards[math.random(1, #silver_pack_cards)])
+            i = i + 1
         end
     end
     if card_pack == "Gold Card Pack" then
-        add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
-        add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
-        choice = math.random(1,100)
-        if choice < 30 then
-            add_battle_card(gold_pack_item_cards[math.random(1, #gold_pack_item_cards)])
-        else
-            add_battle_card(gold_pack_attack_cards[math.random(1, #gold_pack_attack_cards)])
+        i = 0
+        while i < pack_size do
+            add_battle_card(gold_pack_cards[math.random(1, #gold_pack_cards)])
+            i = i + 1
         end
     end
 end
