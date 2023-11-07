@@ -40,24 +40,7 @@ def set_rules(world):
 
     set_ginger_island_rules(logic, multiworld, player, world_options)
 
-    # Those checks do not exist if ToolProgression is vanilla
-    if world_options.tool_progression != ToolProgression.option_vanilla:
-        MultiWorldRules.add_rule(multiworld.get_location("Purchase Fiberglass Rod", player),
-                                 (logic.has_skill_level(Skill.fishing, 2) & logic.can_spend_money(1800)).simplify())
-        MultiWorldRules.add_rule(multiworld.get_location("Purchase Iridium Rod", player),
-                                 (logic.has_skill_level(Skill.fishing, 6) & logic.can_spend_money(7500)).simplify())
-
-        materials = [None, "Copper", "Iron", "Gold", "Iridium"]
-        tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.watering_can, Tool.trash_can]
-        for (previous, material), tool in itertools.product(zip(materials[:4], materials[1:]), tool):
-            if previous is None:
-                MultiWorldRules.add_rule(multiworld.get_location(f"{material} {tool} Upgrade", player),
-                                         (logic.has(f"{material} Ore") &
-                                          logic.can_spend_money(tool_upgrade_prices[material])).simplify())
-            else:
-                MultiWorldRules.add_rule(multiworld.get_location(f"{material} {tool} Upgrade", player),
-                                         (logic.has(f"{material} Ore") & logic.has_tool(tool, previous) &
-                                          logic.can_spend_money(tool_upgrade_prices[material])).simplify())
+    set_tools_rules(logic, multiworld, player, world_options)
 
     set_skills_rules(logic, multiworld, player, world_options)
 
@@ -120,6 +103,25 @@ def set_rules(world):
     set_magic_spell_rules(logic, multiworld, player, world_options)
 
 
+def set_tools_rules(logic, multiworld, player, world_options):
+    # Those checks do not exist if ToolProgression is vanilla
+    if world_options.tool_progression == ToolProgression.option_vanilla:
+        return
+
+    MultiWorldRules.add_rule(multiworld.get_location("Purchase Fiberglass Rod", player),
+                             (logic.has_skill_level(Skill.fishing, 2) & logic.can_spend_money(1800)).simplify())
+    MultiWorldRules.add_rule(multiworld.get_location("Purchase Iridium Rod", player),
+                             (logic.has_skill_level(Skill.fishing, 6) & logic.can_spend_money(7500)).simplify())
+
+    materials = [None, "Copper", "Iron", "Gold", "Iridium"]
+    tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.trash_can]
+    for (previous, material), tool in itertools.product(zip(materials[:4], materials[1:]), tool):
+        if previous is None:
+            continue
+        tool_upgrade_location = multiworld.get_location(f"{material} {tool} Upgrade", player)
+        MultiWorldRules.add_rule(tool_upgrade_location, logic.has_tool(tool, previous).simplify())
+
+
 def set_skills_rules(logic, multiworld, player, world_options):
     # Skills
     if world_options.skill_progression != SkillProgression.option_vanilla:
@@ -153,9 +155,10 @@ def set_skill_rule(logic, multiworld, player, skill: str, level: int):
 
 
 def set_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
-    for floor in range(5, 120 + 5, 5):
-        MultiWorldRules.set_rule(multiworld.get_entrance(dig_to_mines_floor(floor), player),
-                                 logic.can_mine_to_floor(floor).simplify())
+    set_mines_floor_entrance_rules(logic, multiworld, player)
+    set_skull_cavern_floor_entrance_rules(logic, multiworld, player)
+    set_blacksmith_entrance_rules(logic, multiworld, player)
+
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_tide_pools, player),
                              logic.received("Beach Bridge") | (magic.can_blink(logic)).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_quarry, player),
@@ -170,11 +173,6 @@ def set_entrance_rules(logic, multiworld, player, world_options: StardewValleyOp
                              logic.received("Bus Repair").simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_skull_cavern, player),
                              logic.received(Wallet.skull_key).simplify())
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_casino, player),
-                             logic.received("Club Card").simplify())
-    for floor in range(25, 200 + 25, 25):
-        MultiWorldRules.set_rule(multiworld.get_entrance(dig_to_skull_floor(floor), player),
-                                 logic.can_mine_to_skull_cavern_floor(floor).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.talk_to_mines_dwarf, player),
                              logic.can_speak_dwarf() & logic.has_tool(Tool.pickaxe, ToolMaterial.iron))
 
@@ -219,6 +217,35 @@ def set_entrance_rules(logic, multiworld, player, world_options: StardewValleyOp
     if ModNames.alec in world_options.mods:
         MultiWorldRules.set_rule(multiworld.get_entrance(AlecEntrance.petshop_to_bedroom, player),
                                  (logic.has_relationship(ModNPC.alec, 2) | magic.can_blink(logic)).simplify())
+
+
+def set_mines_floor_entrance_rules(logic, multiworld, player):
+    for floor in range(5, 120 + 5, 5):
+        rule = logic.has_mine_elevator_to_floor(floor - 10)
+        if floor == 5 or floor == 45 or floor == 85:
+            rule = rule & logic.can_progress_easily_in_the_mines_from_floor(floor)
+        entrance = multiworld.get_entrance(dig_to_mines_floor(floor), player)
+        MultiWorldRules.set_rule(entrance, rule.simplify())
+
+
+
+def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
+    for floor in range(25, 200 + 25, 25):
+        MultiWorldRules.set_rule(multiworld.get_entrance(dig_to_skull_floor(floor), player),
+                                 logic.can_mine_to_skull_cavern_floor(floor).simplify())
+
+
+def set_blacksmith_entrance_rules(logic, multiworld, player):
+    set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
+
+
+def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
+    material_entrance = multiworld.get_entrance(entrance_name, player)
+    upgrade_rule = logic.has(item_name) & logic.can_spend_money(tool_upgrade_prices[tool_material])
+    MultiWorldRules.set_rule(material_entrance, upgrade_rule.simplify())
 
 
 def set_ginger_island_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):

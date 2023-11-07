@@ -161,6 +161,12 @@ class Entrance:
     parrot_express_jungle_to_docks = "Parrot Express Jungle to Docks"
     parrot_express_dig_site_to_docks = "Parrot Express Dig Site to Docks"
     parrot_express_volcano_to_docks = "Parrot Express Volcano to Docks"
+    blacksmith_copper = "Upgrade Copper Tools"
+    blacksmith_iron = "Upgrade Iron Tools"
+    blacksmith_gold = "Upgrade Gold Tools"
+    blacksmith_iridium = "Upgrade Iridium Tools"
+    farming = "Start Farming"
+    fishing = "Start Fishing"
 
 # Skull Cavern Elevator
 
