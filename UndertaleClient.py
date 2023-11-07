@@ -27,7 +27,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             self.ctx.syncing = True
 
     def _cmd_patch(self):
-        """Patch the game. Only use this command if `/autopatch` fails."""
+        """Patch the game. Only use this command if /auto_patch fails."""
         if isinstance(self.ctx, UndertaleContext):
             os.makedirs(name=os.path.join(os.getcwd(), "Undertale"), exist_ok=True)
             self.ctx.patch_game()
