@@ -395,7 +395,7 @@ class ValidInventory:
 
     def _read_logic(self):
         # General
-        self._sc2_cleared_missions = lambda world, player: SC2Logic._sc2_cleared_missions(self, world, player)
+        self._sc2_cleared_missions = lambda world, player, mission_count: False
         self._sc2_advanced_tactics = lambda world, player: SC2Logic._sc2_advanced_tactics(self, world, player)
         # WoL
         self._sc2wol_has_common_unit = lambda world, player: SC2Logic._sc2wol_has_common_unit(self, world, player)
