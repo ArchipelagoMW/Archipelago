@@ -189,18 +189,15 @@ class ShuffleNoBuild(DefaultOnToggle):
     display_name = "Shuffle No-Build Missions"
 
 
-class EarlyUnit(Choice):
+class StarterUnit(Choice):
     """
-    Guarantees that the first mission will contain a unit.
+    Unlocks a random unit at the start of the game.
 
-    Each mission available to be the first mission has a pre-defined location where the unit should spawn.
-    This location gets overriden over any exclusion. It's guaranteed to be reachable with an empty inventory.
-
-    Off: No unit guaranteed in the first mission
-    Balanced: A unit that doesn't give the player too much power early on is spawned
-    Any Starter Unit: Any starter unit can be spawned
+    Off: No units are provided, the first unit must be obtained from the randomizer
+    Balanced: A unit that doesn't give the player too much power early on is given
+    Any Starter Unit: Any starter unit can be given
     """
-    display_name = "Early Unit"
+    display_name = "Starter Unit"
     option_off = 0
     option_balanced = 1
     option_any_starter_unit = 2
@@ -552,8 +549,8 @@ class ExcludedMissions(OptionSet):
 
 class LocationInclusion(Choice):
     option_enabled = 0
-    option_trash = 1
-    option_nothing = 2
+    option_resources = 1
+    option_disabled = 2
 
 
 class MissionProgressLocations(LocationInclusion):
@@ -563,8 +560,8 @@ class MissionProgressLocations(LocationInclusion):
     Clearing an expansion base also counts here.
 
     Enabled: All locations fitting into this do their normal rewards
-    Trash: Forces a trash item in
-    Nothing: No rewards for this type of tasks, effectively disabling such locations
+    Resources: Forces these locations to contain Starting Resources
+    Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
@@ -579,8 +576,8 @@ class BonusLocations(LocationInclusion):
     Research, credits, bonus units or resources, etc.
 
     Enabled: All locations fitting into this do their normal rewards
-    Trash: Forces a trash item in
-    Nothing: No rewards for this type of tasks, effectively disabling such locations
+    Resources: Forces these locations to contain Starting Resources
+    Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
@@ -596,8 +593,8 @@ class ChallengeLocations(LocationInclusion):
     You might be required to visit the same mission later when getting stronger in order to finish these tasks.
 
     Enabled: All locations fitting into this do their normal rewards
-    Trash: Forces a trash item in
-    Nothing: No rewards for this type of tasks, effectively disabling such locations
+    Resources: Forces these locations to contain Starting Resources
+    Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
@@ -612,8 +609,8 @@ class OptionalBossLocations(LocationInclusion):
     All Brutalisks, Loki, etc. belongs here.
 
     Enabled: All locations fitting into this do their normal rewards
-    Trash: Forces a trash item in
-    Nothing: No rewards for this type of tasks, effectively disabling such locations
+    Resources: Forces these locations to contain Starting Resources
+    Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
@@ -642,7 +639,7 @@ sc2_options: Dict[str, Option] = {
     "enable_lotv_missions": EnableLotVMissions,
     "shuffle_campaigns": ShuffleCampaigns,
     "shuffle_no_build": ShuffleNoBuild,
-    "early_unit": EarlyUnit,
+    "starter_unit": StarterUnit,
     "required_tactics": RequiredTactics,
     "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
     "max_number_of_upgrades": MaxNumberOfUpgrades,

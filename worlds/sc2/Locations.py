@@ -1,8 +1,8 @@
 from enum import IntEnum
-from typing import List, Tuple, Optional, Callable, NamedTuple
+from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any
 from BaseClasses import MultiWorld
 from . import ItemNames
-from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech
+from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech, LocationInclusion
 
 from BaseClasses import Location
 
@@ -21,13 +21,53 @@ class LocationType(IntEnum):
     CHALLENGE = 3 # Challenging objectives, often harder than just completing a mission
     OPTIONAL_BOSS = 4 # Any boss that's not required to win the mission. All Brutalisks, Loki, etc.
 
+
 class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
     type: LocationType
-    rule: Callable = lambda state: True
+    rule: Optional[Callable[[Any], bool]] = Location.access_rule
 
+
+def get_location_types(multiworld: MultiWorld, player: int, inclusion_type: LocationInclusion) -> Set[LocationInclusion]:
+    """
+
+    :param multiworld:
+    :param player:
+    :param inclusion_type: Level of inclusion to check for
+    :return: A list of location types that match the inclusion type
+    """
+    exclusion_options = [
+        ("mission_progress_locations", LocationType.MISSION_PROGRESS),
+        ("bonus_locations", LocationType.BONUS),
+        ("challenge_locations", LocationType.CHALLENGE),
+        ("optional_boss_locations", LocationType.OPTIONAL_BOSS)
+    ]
+    excluded_location_types = set()
+    for option_name, location_type in exclusion_options:
+        if get_option_value(multiworld, player, option_name) is inclusion_type:
+            excluded_location_types.add(location_type)
+    return excluded_location_types
+
+
+def get_plando_locations(multiworld: MultiWorld, player) -> List[str]:
+    """
+
+    :param multiworld:
+    :param player:
+    :return: A list of locations affected by a plando in a world
+    """
+    if multiworld is None:
+        return []
+    plando_locations = []
+    for plando_setting in multiworld.plando_items[player]:
+        plando_locations += plando_setting.get("locations", [])
+        plando_setting_location = plando_setting.get("location", None)
+        if plando_setting_location is not None:
+            plando_locations.append(plando_setting_location)
+
+    return plando_locations
 
 def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
@@ -741,7 +781,15 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
     ]
 
     beat_events = []
-
+    # Filtering out excluded locations
+    if multiworld is not None:
+        excluded_location_types = get_location_types(multiworld, player, LocationInclusion.option_disabled)
+        plando_locations = get_plando_locations(multiworld, player)
+        exclude_locations = get_option_value(multiworld, player, "exclude_locations")
+        location_table = [location for location in location_table
+                          if (LocationType is LocationType.VICTORY or location.name not in exclude_locations)
+                          and location.type not in excluded_location_types
+                          or location.name in plando_locations]
     for i, location_data in enumerate(location_table):
         # Removing all item-based logic on No Logic
         if logic_level == RequiredTactics.option_no_logic:
