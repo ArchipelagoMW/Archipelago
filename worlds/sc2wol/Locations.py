@@ -68,10 +68,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
                                    (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
-        LocationData("Evacuation", "Evacuation: First Chrysalis", SC2WOL_LOC_ID_OFFSET + 401, LocationType.BONUS),
-        LocationData("Evacuation", "Evacuation: Second Chrysalis", SC2WOL_LOC_ID_OFFSET + 402, LocationType.BONUS,
+        LocationData("Evacuation", "Evacuation: North Chrysalis", SC2WOL_LOC_ID_OFFSET + 401, LocationType.BONUS),
+        LocationData("Evacuation", "Evacuation: West Chrysalis", SC2WOL_LOC_ID_OFFSET + 402, LocationType.BONUS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player)),
-        LocationData("Evacuation", "Evacuation: Third Chrysalis", SC2WOL_LOC_ID_OFFSET + 403, LocationType.BONUS,
+        LocationData("Evacuation", "Evacuation: East Chrysalis", SC2WOL_LOC_ID_OFFSET + 403, LocationType.BONUS,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player)),
         LocationData("Evacuation", "Evacuation: Reach Hanson", SC2WOL_LOC_ID_OFFSET + 404, LocationType.MISSION_PROGRESS),
         LocationData("Evacuation", "Evacuation: Secret Resource Stash", SC2WOL_LOC_ID_OFFSET + 405, LocationType.BONUS),
@@ -419,7 +419,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Northeast Base", SC2WOL_LOC_ID_OFFSET + 2304, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
-        LocationData("A Sinister Turn", "A Sinister Turn: Southeast Base", SC2WOL_LOC_ID_OFFSET + 2305, LocationType.MISSION_PROGRESS,
+        LocationData("A Sinister Turn", "A Sinister Turn: Southwest Base", SC2WOL_LOC_ID_OFFSET + 2305, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("A Sinister Turn", "A Sinister Turn: Maar", SC2WOL_LOC_ID_OFFSET + 2306, LocationType.MISSION_PROGRESS,
                      lambda state: logic_level > 0 or state._sc2wol_has_protoss_medium_units(multiworld, player)),
