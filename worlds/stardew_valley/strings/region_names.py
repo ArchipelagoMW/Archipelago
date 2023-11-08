@@ -143,6 +143,15 @@ class Region:
     blacksmith_iridium = "Blacksmith Iridium Upgrades"
     farming = "Farming"
     fishing = "Fishing"
+    egg_festival = "Egg Festival"
+    flower_dance = "Flower Dance"
+    luau = "Luau"
+    moonlight_jellies = "Dance of the Moonlight Jellies"
+    fair = "Stardew Valley Fair"
+    spirit_eve = "Spirit's Eve"
+    festival_of_ice = "Festival of Ice"
+    night_market = "Night Market"
+    winter_star = "Feast of the Winter Star"
 
 
 class DeepWoodsRegion:
