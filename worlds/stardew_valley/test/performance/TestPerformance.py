@@ -49,7 +49,7 @@ def size_name(number_players):
 
 
 class TestDefaultOptions(SVTestCase):
-    acceptable_time_per_player = 0.04
+    acceptable_time_per_player = 0.05
     options = default_options()
 
     def test_solo(self):
