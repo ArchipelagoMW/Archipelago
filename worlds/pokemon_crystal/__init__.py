@@ -95,6 +95,19 @@ class PokemonCrystalWorld(World):
     def generate_output(self, output_directory: str) -> None:
         generate_output(self, output_directory)
 
+    def fill_slot_data(self) -> Dict[str, Any]:
+        slot_data = self.options.as_dict(
+            "randomize_hidden_items",
+            "randomize_starters",
+            "randomize_wilds",
+            "randomize_learnsets",
+            "full_tmhm_compatibility",
+            "blind_trainers",
+            "better_marts",
+            "goal"
+        )
+        return slot_data
+
     def create_item(self, name: str) -> PokemonCrystalItem:
         return self.create_item_by_code(self.item_name_to_id[name])
 

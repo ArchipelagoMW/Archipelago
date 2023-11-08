@@ -93,13 +93,11 @@ class PokemonCrystalClient(BizHawkClient):
             [byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
-        # if ctx.slot_data is not None:
-        #     if ctx.slot_data["goal"] == Goal.option_champion:
-        #         self.goal_flag = IS_CHAMPION_FLAG
-        #     elif ctx.slot_data["goal"] == Goal.option_steven:
-        #         self.goal_flag = DEFEATED_STEVEN_FLAG
-        #     elif ctx.slot_data["goal"] == Goal.option_norman:
-        #         self.goal_flag = DEFEATED_NORMAN_FLAG
+        if ctx.slot_data is not None:
+            if ctx.slot_data["goal"] == 0:
+                data.event_flags["EVENT_BEAT_ELITE_FOUR"]
+            else:
+                data.event_flags["EVENT_BEAT_RED"]
         try:
             overworld_guard = (
                 data.ram_addresses["wArchipelagoSafeWrite"], [1], "WRAM")
