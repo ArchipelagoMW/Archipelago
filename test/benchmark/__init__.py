@@ -94,7 +94,7 @@ if __name__ == "__main__":
                             t.end()
                             summary_data["empty_state"][location.name] = t.dif
 
-                        with TimeIt(f"{game} {self.rule_iterations} runs of {location}.access_rule(all_state)"):
+                        with TimeIt(f"{game} {self.rule_iterations} runs of {location}.access_rule(all_state)") as t:
                             for _ in range(self.rule_iterations):
                                 location.access_rule(all_state)
                             # if time is taken to disentangle complex ref chains,
