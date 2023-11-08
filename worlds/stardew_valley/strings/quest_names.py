@@ -6,6 +6,7 @@ class Quest:
     raising_animals = "Raising Animals"
     advancement = "Advancement"
     archaeology = "Archaeology"
+    rat_problem = "Rat Problem"
     meet_the_wizard = "Meet The Wizard"
     forging_ahead = "Forging Ahead"
     smelting = "Smelting"
