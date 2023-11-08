@@ -64,12 +64,12 @@ class LingoWorld(World):
 
         item_difference = len(self.player_logic.REAL_LOCATIONS) - len(pool)
         if item_difference:
-            trap_percentage = self.options.trap_percentage.value
+            trap_percentage = self.options.trap_percentage
             traps = int(item_difference * trap_percentage / 100.0)
             non_traps = item_difference - traps
 
             if non_traps:
-                skip_percentage = self.options.puzzle_skip_percentage.value
+                skip_percentage = self.options.puzzle_skip_percentage
                 skips = int(non_traps * skip_percentage / 100.0)
                 non_skips = non_traps - skips
 
@@ -106,7 +106,7 @@ class LingoWorld(World):
             **{name: int(value) for name, value in self.options.as_dict(*slot_options).items()},
         }
 
-        if self.options.shuffle_paintings.value:
+        if self.options.shuffle_paintings:
             slot_data["painting_entrance_to_exit"] = self.player_logic.PAINTING_MAPPING
 
         return slot_data

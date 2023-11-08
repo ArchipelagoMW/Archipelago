@@ -12,17 +12,17 @@ if TYPE_CHECKING:
 
 
 def create_region(room: Room, world: "LingoWorld", player_logic: LingoPlayerLogic) -> Region:
-    region = Region(room.name, world.player, world.multiworld)
+    new_region = Region(room.name, world.player, world.multiworld)
     for location in player_logic.LOCATIONS_BY_ROOM.get(room.name, {}):
-        new_location = LingoLocation(world.player, location.name, location.code, region)
+        new_location = LingoLocation(world.player, location.name, location.code, new_region)
         new_location.access_rule = make_location_lambda(location, room.name, world, player_logic)
-        region.locations.append(new_location)
+        new_region.locations.append(new_location)
         if location.name in player_logic.EVENT_LOC_TO_ITEM:
             event_name = player_logic.EVENT_LOC_TO_ITEM[location.name]
             event_item = LingoItem(event_name, ItemClassification.progression, None, world.player)
             new_location.place_locked_item(event_item)
 
-    return region
+    return new_region
 
 
 def handle_pilgrim_room(regions: Dict[str, Region], world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
@@ -70,7 +70,7 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
             regions[entrance.room].connect(
                 regions[room.name],
                 f"{entrance.room} to {room.name}",
-                lambda state: lingo_can_use_entrance(state, room.name, entrance.door, world.player, player_logic))
+                lambda state, r=room, e=entrance: lingo_can_use_entrance(state, r.name, e.door, world.player, player_logic))
 
     handle_pilgrim_room(regions, world, player_logic)
 

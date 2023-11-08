@@ -27,13 +27,11 @@ def lingo_can_use_pilgrimage(state: CollectionState, player: int, player_logic: 
         ["Art Gallery", "Exit"], ["The Tenacious", "Shortcut to Hub Room"],
         ["Outside The Agreeable", "Tenacious Entrance"]
     ]
-    viable_option = True
     for entrance in fake_pilgrimage:
         if not state.has(player_logic.ITEM_BY_DOOR[entrance[0]][entrance[1]], player):
-            viable_option = False
-            break
+            return False
 
-    return viable_option
+    return True
 
 
 def lingo_can_use_location(state: CollectionState, location: PlayerLocation, room_name: str, world: "LingoWorld",

@@ -68,12 +68,12 @@ class LingoPlayerLogic:
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
 
-        door_shuffle = world.options.shuffle_doors.value
-        color_shuffle = world.options.shuffle_colors.value
-        painting_shuffle = world.options.shuffle_paintings.value
-        location_checks = world.options.location_checks.value
-        victory_condition = world.options.victory_condition.value
-        early_color_hallways = world.options.early_color_hallways.value
+        door_shuffle = world.options.shuffle_doors
+        color_shuffle = world.options.shuffle_colors
+        painting_shuffle = world.options.shuffle_paintings
+        location_checks = world.options.location_checks
+        victory_condition = world.options.victory_condition
+        early_color_hallways = world.options.early_color_hallways
 
         if location_checks == LocationChecks.option_reduced and door_shuffle != ShuffleDoors.option_none:
             raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
@@ -118,7 +118,7 @@ class LingoPlayerLogic:
                                                                 [RoomAndPanel(room_name, panel_name)]))
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
-                if not panel_data.non_counting and victory_condition == 2:
+                if not panel_data.non_counting and victory_condition == VictoryCondition.option_level_2:
                     event_name = room_name + " - " + panel_name + " (Counted)"
                     self.add_location(room_name, PlayerLocation(event_name, None,
                                                                 [RoomAndPanel(room_name, panel_name)]))
@@ -239,7 +239,7 @@ class LingoPlayerLogic:
     def randomize_paintings(self, world: "LingoWorld") -> bool:
         self.PAINTING_MAPPING.clear()
 
-        door_shuffle = world.options.shuffle_doors.value
+        door_shuffle = world.options.shuffle_doors
 
         # Determine the set of exit paintings. All required-exit paintings are included, as are all
         # required-when-no-doors paintings if door shuffle is off. We then fill the set with random other paintings.
