@@ -81,23 +81,27 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance("New Home Exit", player),
              lambda state: (state.has("Left Home Key", player) and
                             state.has("Right Home Key", player)) or
-                           state.has("Key Piece", player, state.multiworld.key_pieces[player]))
+                           state.has("Key Piece", player, state.multiworld.key_pieces[player].value))
     if _undertale_is_route(multiworld.state, player, 1):
         set_rule(multiworld.get_entrance("Papyrus\" Home Entrance", player),
                  lambda state: _undertale_has_plot(state, player, "Complete Skeleton"))
         set_rule(multiworld.get_entrance("Undyne\"s Home Entrance", player),
                  lambda state: _undertale_has_plot(state, player, "Fish") and state.has("Papyrus Date", player))
         set_rule(multiworld.get_entrance("Lab Elevator", player),
-                 lambda state: state.has("Alphys Date", player) and _undertale_has_plot(state, player, "DT Extractor"))
+                 lambda state: state.has("Alphys Date", player) and state.has("DT Extractor", player) and
+                                ((state.has("Left Home Key", player) and state.has("Right Home Key", player)) or
+                                state.has("Key Piece", player, state.multiworld.key_pieces[player].value)))
         set_rule(multiworld.get_location("Alphys Date", player),
-                 lambda state: state.has("Undyne Letter EX", player) and state.has("Undyne Date", player))
+                 lambda state: state.can_reach("New Home", "Region", player) and state.has("Undyne Letter EX", player)
+                               and state.has("Undyne Date", player))
         set_rule(multiworld.get_location("Papyrus Plot", player),
                  lambda state: state.can_reach("Snowdin Town", "Region", player))
         set_rule(multiworld.get_location("Undyne Plot", player),
                  lambda state: state.can_reach("Waterfall", "Region", player))
         set_rule(multiworld.get_location("True Lab Plot", player),
                  lambda state: state.can_reach("New Home", "Region", player)
-                               and state.can_reach("Letter Quest", "Location", player))
+                               and state.can_reach("Letter Quest", "Location", player)
+                               and state.can_reach("Alphys Date", "Location", player))
         set_rule(multiworld.get_location("Chisps Machine", player),
                  lambda state: state.can_reach("True Lab", "Region", player))
         set_rule(multiworld.get_location("Dog Sale 1", player),
@@ -113,7 +117,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_location("Hush Trade", player),
                  lambda state: state.can_reach("News Show", "Region", player) and state.has("Hot Dog...?", player, 1))
         set_rule(multiworld.get_location("Letter Quest", player),
-                 lambda state: state.can_reach("New Home Exit", "Entrance", player) and state.has("Undyne Date", player))
+                 lambda state: state.can_reach("Last Corridor", "Region", player) and state.has("Undyne Date", player))
     if (not _undertale_is_route(multiworld.state, player, 2)) or _undertale_is_route(multiworld.state, player, 3):
         set_rule(multiworld.get_location("Nicecream Punch Card", player),
                  lambda state: state.has("Punch Card", player, 3) and state.can_reach("Waterfall", "Region", player))
@@ -126,7 +130,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_location("Apron Hidden", player),
                  lambda state: state.can_reach("Cooking Show", "Region", player))
     if _undertale_is_route(multiworld.state, player, 2) and \
-            (multiworld.rando_love[player] or multiworld.rando_stats[player]):
+            (bool(multiworld.rando_love[player].value) or bool(multiworld.rando_stats[player].value)):
         maxlv = 1
         exp = 190
         curarea = "Old Home"
@@ -304,7 +308,7 @@ def set_rules(multiworld: MultiWorld, player: int):
 
 # Sets rules on completion condition
 def set_completion_rules(multiworld: MultiWorld, player: int):
-    completion_requirements = lambda state: state.can_reach("New Home Exit", "Entrance", player)
+    completion_requirements = lambda state: state.can_reach("Barrier", "Region", player)
     if _undertale_is_route(multiworld.state, player, 1):
         completion_requirements = lambda state: state.can_reach("True Lab", "Region", player)
 
