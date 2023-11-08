@@ -1,11 +1,12 @@
-from typing import Dict, NamedTuple, Optional, List
+from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from worlds.AutoWorld import World
-
 from .options import ShuffleDoors
-from .static_logic import get_special_item_id, DOORS_BY_ROOM, PROGRESSION_BY_ROOM, get_door_item_id, \
-    get_door_group_item_id, PROGRESSIVE_ITEMS, get_progressive_item_id
+from .static_logic import DOORS_BY_ROOM, PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, \
+    get_door_item_id, get_progressive_item_id, get_special_item_id
+
+if TYPE_CHECKING:
+    from . import LingoWorld
 
 
 class ItemData(NamedTuple):
@@ -18,19 +19,19 @@ class ItemData(NamedTuple):
     door_ids: List[str]
     painting_ids: List[str]
 
-    def should_include(self, world: World) -> bool:
+    def should_include(self, world: "LingoWorld") -> bool:
         if self.mode == "colors":
-            return world.options.shuffle_colors.value > 0
+            return world.options.shuffle_colors > 0
         elif self.mode == "doors":
-            return world.options.shuffle_doors.value != ShuffleDoors.option_none
+            return world.options.shuffle_doors != ShuffleDoors.option_none
         elif self.mode == "orange tower":
             # door shuffle is on and tower isn't progressive
-            return world.options.shuffle_doors.value != ShuffleDoors.option_none \
-                and not world.options.progressive_orange_tower.value
+            return world.options.shuffle_doors != ShuffleDoors.option_none \
+                and not world.options.progressive_orange_tower
         elif self.mode == "complex door":
-            return world.options.shuffle_doors.value == ShuffleDoors.option_complex
+            return world.options.shuffle_doors == ShuffleDoors.option_complex
         elif self.mode == "door group":
-            return world.options.shuffle_doors.value == ShuffleDoors.option_simple
+            return world.options.shuffle_doors == ShuffleDoors.option_simple
         elif self.mode == "special":
             return False
         else:
@@ -82,14 +83,14 @@ def load_item_data():
                                          ItemClassification.progression, "door group", group_door_ids, [])
 
     special_items: Dict[str, ItemClassification] = {
-        ":)": ItemClassification.filler,
+        ":)":                        ItemClassification.filler,
         "The Feeling of Being Lost": ItemClassification.filler,
-        "Wanderlust": ItemClassification.filler,
-        "Empty White Hallways": ItemClassification.filler,
-        "Slowness Trap": ItemClassification.trap,
-        "Iceland Trap": ItemClassification.trap,
-        "Atbash Trap": ItemClassification.trap,
-        "Puzzle Skip": ItemClassification.useful,
+        "Wanderlust":                ItemClassification.filler,
+        "Empty White Hallways":      ItemClassification.filler,
+        "Slowness Trap":             ItemClassification.trap,
+        "Iceland Trap":              ItemClassification.trap,
+        "Atbash Trap":               ItemClassification.trap,
+        "Puzzle Skip":               ItemClassification.useful,
     }
 
     for item_name, classification in special_items.items():

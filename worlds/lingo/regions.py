@@ -1,87 +1,84 @@
-from BaseClasses import Region, Entrance, ItemClassification
-from worlds.AutoWorld import World
-from worlds.generic.Rules import set_rule
+from typing import Dict, TYPE_CHECKING
 
+from BaseClasses import ItemClassification, Region
 from .items import LingoItem
 from .locations import LingoLocation
 from .player_logic import LingoPlayerLogic
-from .rules import make_location_lambda
-from .static_logic import Room, RoomEntrance, PAINTINGS, ALL_ROOMS
+from .rules import lingo_can_use_entrance, lingo_can_use_pilgrimage, make_location_lambda
+from .static_logic import ALL_ROOMS, PAINTINGS, Room
+
+if TYPE_CHECKING:
+    from . import LingoWorld
 
 
-def create_region(room: Room, world: World, player_logic: LingoPlayerLogic):
+def create_region(room: Room, world: "LingoWorld", player_logic: LingoPlayerLogic) -> Region:
     new_region = Region(room.name, world.player, world.multiworld)
+    for location in player_logic.LOCATIONS_BY_ROOM.get(room.name, {}):
+        new_location = LingoLocation(world.player, location.name, location.code, new_region)
+        new_location.access_rule = make_location_lambda(location, room.name, world, player_logic)
+        new_region.locations.append(new_location)
+        if location.name in player_logic.EVENT_LOC_TO_ITEM:
+            event_name = player_logic.EVENT_LOC_TO_ITEM[location.name]
+            event_item = LingoItem(event_name, ItemClassification.progression, None, world.player)
+            new_location.place_locked_item(event_item)
 
-    if room.name in player_logic.LOCATIONS_BY_ROOM.keys():
-        for location in player_logic.LOCATIONS_BY_ROOM[room.name]:
-            new_loc = LingoLocation(world.player, location.name, location.code, new_region)
-            set_rule(new_loc, make_location_lambda(location, room.name, world, player_logic))
-
-            if location.name in player_logic.EVENT_LOC_TO_ITEM:
-                event_item = LingoItem(player_logic.EVENT_LOC_TO_ITEM[location.name], ItemClassification.progression,
-                                       None, player=world.player)
-                new_loc.place_locked_item(event_item)
-
-            new_region.locations.append(new_loc)
-
-    world.multiworld.regions.append(new_region)
+    return new_region
 
 
-def connect(target: Room, entrance: RoomEntrance, world: World, player_logic: LingoPlayerLogic):
-    target_region = world.multiworld.get_region(target.name, world.player)
-    source_region = world.multiworld.get_region(entrance.room, world.player)
-
-    source_region.connect(target_region, f"{entrance.room} to {target.name}",
-                          lambda state: state.lingo_can_use_entrance(target.name, entrance.door, world.player,
-                                                                     player_logic))
-
-
-def handle_pilgrim_room(world: World, player_logic: LingoPlayerLogic):
-    target_region = world.multiworld.get_region("Pilgrim Antechamber", world.player)
-    source_region = world.multiworld.get_region("Outside The Agreeable", world.player)
-
-    source_region.connect(target_region, "Pilgrimage", lambda state: state.lingo_can_use_pilgrimage(world.player,
-                                                                                                    player_logic))
+def handle_pilgrim_room(regions: Dict[str, Region], world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
+    target_region = regions["Pilgrim Antechamber"]
+    source_region = regions["Outside The Agreeable"]
+    source_region.connect(
+        target_region,
+        "Pilgrimage",
+        lambda state: lingo_can_use_pilgrimage(state, world.player, player_logic))
 
 
-def connect_painting(warp_enter: str, warp_exit: str, world: World, player_logic: LingoPlayerLogic):
+def connect_painting(regions: Dict[str, Region], warp_enter: str, warp_exit: str, world: "LingoWorld",
+                     player_logic: LingoPlayerLogic) -> None:
     source_painting = PAINTINGS[warp_enter]
     target_painting = PAINTINGS[warp_exit]
 
-    target_region = world.multiworld.get_region(target_painting.room, world.player)
-    source_region = world.multiworld.get_region(source_painting.room, world.player)
+    target_region = regions[target_painting.room]
+    source_region = regions[source_painting.room]
+    source_region.connect(
+        target_region,
+        f"{source_painting.room} to {target_painting.room} (Painting)",
+        lambda state: lingo_can_use_entrance(state, target_painting.room, source_painting.required_door, world.player,
+                                             player_logic))
 
-    source_region.connect(target_region, f"{source_painting.room} to {target_painting.room} (Painting)",
-                          lambda state: state.lingo_can_use_entrance(target_painting.room,
-                                                                     source_painting.required_door, world.player,
-                                                                     player_logic))
 
+def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
+    regions = {
+        "Menu": Region("Menu", world.player, world.multiworld)
+    }
 
-def create_regions(world: World, player_logic: LingoPlayerLogic):
-    world.multiworld.regions += [
-        Region("Menu", world.player, world.multiworld)
-    ]
+    painting_shuffle = world.options.shuffle_paintings
+    early_color_hallways = world.options.early_color_hallways
 
+    # Instantiate all rooms as regions with their locations first.
     for room in ALL_ROOMS:
-        create_region(room, world, player_logic)
+        regions[room.name] = create_region(room, world, player_logic)
 
-    painting_shuffle = bool(world.options.shuffle_paintings.value)
-    early_color_hallways = bool(world.options.early_color_hallways.value)
-
+    # Connect all created regions now that they exist.
     for room in ALL_ROOMS:
         for entrance in room.entrances:
+            # Don't use the vanilla painting connections if we are shuffling paintings.
             if entrance.painting and painting_shuffle:
-                # Don't use the vanilla painting connections if we are shuffling paintings.
                 continue
 
-            connect(room, entrance, world, player_logic)
+            regions[entrance.room].connect(
+                regions[room.name],
+                f"{entrance.room} to {room.name}",
+                lambda state, r=room, e=entrance: lingo_can_use_entrance(state, r.name, e.door, world.player, player_logic))
 
-    handle_pilgrim_room(world, player_logic)
+    handle_pilgrim_room(regions, world, player_logic)
 
     if early_color_hallways:
-        world.multiworld.get_region("Starting Room", world.player)\
-            .connect(world.multiworld.get_region("Outside The Undeterred", world.player), "Early Color Hallways")
+        regions["Starting Room"].connect(regions["Outside The Undeterred"], "Early Color Hallways")
 
     if painting_shuffle:
         for warp_enter, warp_exit in player_logic.PAINTING_MAPPING.items():
-            connect_painting(warp_enter, warp_exit, world, player_logic)
+            connect_painting(regions, warp_enter, warp_exit, world, player_logic)
+
+    world.multiworld.regions += regions.values()

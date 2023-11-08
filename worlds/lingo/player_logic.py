@@ -1,14 +1,15 @@
-from typing import Dict, List, Optional, NamedTuple
-
-from worlds.AutoWorld import World
+from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from .items import ALL_ITEM_TABLE
-from .locations import LocationClassification, ALL_LOCATION_TABLE
-from .static_logic import RoomAndPanel, Door, PROGRESSION_BY_ROOM, ROOMS, DOORS_BY_ROOM, PANELS_BY_ROOM, \
-    PAINTINGS_BY_ROOM, PAINTINGS, PAINTING_EXITS, PAINTING_ENTRANCES, REQUIRED_PAINTING_ROOMS, \
-    REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
-from .options import ShuffleDoors, VictoryCondition, LocationChecks
+from .locations import ALL_LOCATION_TABLE, LocationClassification
+from .options import LocationChecks, ShuffleDoors, VictoryCondition
+from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
+    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, ROOMS, \
+    RoomAndPanel
 from .testing import LingoTestOptions
+
+if TYPE_CHECKING:
+    from . import LingoWorld
 
 
 class PlayerLocation(NamedTuple):
@@ -44,9 +45,9 @@ class LingoPlayerLogic:
     def set_door_item(self, room: str, door: str, item: str):
         self.ITEM_BY_DOOR.setdefault(room, {})[door] = item
 
-    def handle_non_grouped_door(self, room_name: str, door_data: Door, world: World):
+    def handle_non_grouped_door(self, room_name: str, door_data: Door, world: "LingoWorld"):
         if room_name in PROGRESSION_BY_ROOM and door_data.name in PROGRESSION_BY_ROOM[room_name]:
-            if room_name == "Orange Tower" and not world.options.progressive_orange_tower.value:
+            if room_name == "Orange Tower" and not world.options.progressive_orange_tower:
                 self.set_door_item(room_name, door_data.name, door_data.item_name)
             else:
                 progressive_item_name = PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
@@ -55,7 +56,7 @@ class LingoPlayerLogic:
         else:
             self.set_door_item(room_name, door_data.name, door_data.item_name)
 
-    def __init__(self, world: World):
+    def __init__(self, world: "LingoWorld"):
         self.ITEM_BY_DOOR = {}
         self.LOCATIONS_BY_ROOM = {}
         self.REAL_LOCATIONS = []
@@ -67,12 +68,12 @@ class LingoPlayerLogic:
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
 
-        door_shuffle = world.options.shuffle_doors.value
-        color_shuffle = world.options.shuffle_colors.value
-        painting_shuffle = world.options.shuffle_paintings.value
-        location_checks = world.options.location_checks.value
-        victory_condition = world.options.victory_condition.value
-        early_color_hallways = world.options.early_color_hallways.value
+        door_shuffle = world.options.shuffle_doors
+        color_shuffle = world.options.shuffle_colors
+        painting_shuffle = world.options.shuffle_paintings
+        location_checks = world.options.location_checks
+        victory_condition = world.options.victory_condition
+        early_color_hallways = world.options.early_color_hallways
 
         if location_checks == LocationChecks.option_reduced and door_shuffle != ShuffleDoors.option_none:
             raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
@@ -117,7 +118,7 @@ class LingoPlayerLogic:
                                                                 [RoomAndPanel(room_name, panel_name)]))
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
-                if not panel_data.non_counting and victory_condition == 2:
+                if not panel_data.non_counting and victory_condition == VictoryCondition.option_level_2:
                     event_name = room_name + " - " + panel_name + " (Counted)"
                     self.add_location(room_name, PlayerLocation(event_name, None,
                                                                 [RoomAndPanel(room_name, panel_name)]))
@@ -235,10 +236,10 @@ class LingoPlayerLogic:
                 self.REAL_ITEMS.remove(self.FORCED_GOOD_ITEM)
                 self.REAL_LOCATIONS.remove("Second Room - Good Luck")
 
-    def randomize_paintings(self, world: World) -> bool:
+    def randomize_paintings(self, world: "LingoWorld") -> bool:
         self.PAINTING_MAPPING.clear()
 
-        door_shuffle = world.options.shuffle_doors.value
+        door_shuffle = world.options.shuffle_doors
 
         # Determine the set of exit paintings. All required-exit paintings are included, as are all
         # required-when-no-doors paintings if door shuffle is off. We then fill the set with random other paintings.

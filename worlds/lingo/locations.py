@@ -1,9 +1,8 @@
 from enum import Flag, auto
-from typing import Dict, NamedTuple, List
+from typing import Dict, List, NamedTuple
 
 from BaseClasses import Location
-
-from .static_logic import RoomAndPanel, PANELS_BY_ROOM, get_panel_location_id, DOORS_BY_ROOM, get_door_location_id
+from .static_logic import DOORS_BY_ROOM, PANELS_BY_ROOM, RoomAndPanel, get_door_location_id, get_panel_location_id
 
 
 class LocationClassification(Flag):
@@ -45,7 +44,7 @@ def load_location_data():
 
     for room_name, panels in PANELS_BY_ROOM.items():
         for panel_name, panel in panels.items():
-            locat_name = f"{room_name} - {panel_name}"
+            location_name = f"{room_name} - {panel_name}"
 
             classification = LocationClassification.insanity
             if panel.check:
@@ -54,7 +53,7 @@ def load_location_data():
                 if not panel.exclude_reduce:
                     classification |= LocationClassification.reduced
 
-            ALL_LOCATION_TABLE[locat_name] = \
+            ALL_LOCATION_TABLE[location_name] = \
                 LocationData(get_panel_location_id(room_name, panel_name), room_name,
                              [RoomAndPanel(None, panel_name)], classification)
 
@@ -63,18 +62,18 @@ def load_location_data():
             if door.skip_location or door.event or door.panels is None:
                 continue
 
-            locat_name = door.location_name
+            location_name = door.location_name
             classification = LocationClassification.normal
             if door.include_reduce:
                 classification |= LocationClassification.reduced
 
-            if locat_name in ALL_LOCATION_TABLE:
-                new_id = ALL_LOCATION_TABLE[locat_name].code
-                classification |= ALL_LOCATION_TABLE[locat_name].classification
+            if location_name in ALL_LOCATION_TABLE:
+                new_id = ALL_LOCATION_TABLE[location_name].code
+                classification |= ALL_LOCATION_TABLE[location_name].classification
             else:
                 new_id = get_door_location_id(room_name, door_name)
 
-            ALL_LOCATION_TABLE[locat_name] = LocationData(new_id, room_name, door.panels, classification)
+            ALL_LOCATION_TABLE[location_name] = LocationData(new_id, room_name, door.panels, classification)
 
 
 # Initialize location data on the module scope.

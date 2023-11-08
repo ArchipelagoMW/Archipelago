@@ -1,5 +1,6 @@
 from typing import ClassVar
-from test.TestBase import WorldTestBase
+
+from test.bases import WorldTestBase
 from .. import LingoTestOptions
 
 

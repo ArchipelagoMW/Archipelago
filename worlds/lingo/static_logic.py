@@ -1,6 +1,6 @@
-import yaml
+from typing import Dict, List, NamedTuple, Optional, Set
 
-from typing import Dict, NamedTuple, Optional, List, Set
+import yaml
 
 
 class RoomAndDoor(NamedTuple):
@@ -98,8 +98,8 @@ PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
 
 
 def load_static_data():
-    global PAINTING_EXITS, SPECIAL_ITEM_IDS, PANEL_LOCATION_IDS, DOOR_LOCATION_IDS, DOOR_ITEM_IDS, DOOR_GROUP_ITEM_IDS,\
-        PROGRESSIVE_ITEM_IDS
+    global PAINTING_EXITS, SPECIAL_ITEM_IDS, PANEL_LOCATION_IDS, DOOR_LOCATION_IDS, DOOR_ITEM_IDS, \
+        DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS
 
     try:
         from importlib.resources import files

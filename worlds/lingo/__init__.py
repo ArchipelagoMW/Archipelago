@@ -1,12 +1,9 @@
 """
 Archipelago init file for Lingo
 """
-from dataclasses import asdict
-
 from BaseClasses import Item, Tutorial
-from worlds.AutoWorld import World, WebWorld
-
-from .items import LingoItem, ALL_ITEM_TABLE
+from worlds.AutoWorld import WebWorld, World
+from .items import ALL_ITEM_TABLE, LingoItem
 from .locations import ALL_LOCATION_TABLE
 from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
@@ -49,6 +46,8 @@ class LingoWorld(World):
         name: data.code for name, data in ALL_LOCATION_TABLE.items()
     }
 
+    player_logic: LingoPlayerLogic
+
     def generate_early(self):
         self.player_logic = LingoPlayerLogic(self)
 
@@ -65,12 +64,12 @@ class LingoWorld(World):
 
         item_difference = len(self.player_logic.REAL_LOCATIONS) - len(pool)
         if item_difference:
-            trap_percentage = self.options.trap_percentage.value
+            trap_percentage = self.options.trap_percentage
             traps = int(item_difference * trap_percentage / 100.0)
             non_traps = item_difference - traps
 
             if non_traps:
-                skip_percentage = self.options.puzzle_skip_percentage.value
+                skip_percentage = self.options.puzzle_skip_percentage
                 skips = int(non_traps * skip_percentage / 100.0)
                 non_skips = non_traps - skips
 
@@ -91,21 +90,23 @@ class LingoWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = ALL_ITEM_TABLE[name]
-        return LingoItem(name, item.classification, item.code, player=self.player)
+        return LingoItem(name, item.classification, item.code, self.player)
 
     def set_rules(self):
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has("Victory", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def fill_slot_data(self):
-        slot_data = {"seed": self.random.randint(0, 1000000)}
+        slot_options = [
+            "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
+            "mastery_achievements", "level_2_requirement", "location_checks", "early_color_hallways"
+        ]
 
-        for option_name in ["death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings",
-                            "shuffle_panels", "mastery_achievements", "level_2_requirement", "location_checks",
-                            "early_color_hallways"]:
-            slot_data[option_name] = int(asdict(self.options).get(option_name).value)
+        slot_data = {
+            "seed": self.random.randint(0, 1000000),
+            **{name: int(value) for name, value in self.options.as_dict(*slot_options).items()},
+        }
 
-        if self.options.shuffle_paintings.value:
+        if self.options.shuffle_paintings:
             slot_data["painting_entrance_to_exit"] = self.player_logic.PAINTING_MAPPING
 
         return slot_data
