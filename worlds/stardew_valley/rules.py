@@ -472,7 +472,7 @@ def set_museum_individual_donations_rules(all_location_names, logic: StardewLogi
         if museum_location.name in all_location_names:
             donation_name = museum_location.name[len(museum_prefix):]
             required_detectors = counter * 5 // number_donations
-            rule = logic.can_donate_museum_item(all_museum_items_by_name[donation_name]) & logic.received("Traveling Merchant Metal Detector",
+            rule = logic.can_find_museum_item(all_museum_items_by_name[donation_name]) & logic.received("Traveling Merchant Metal Detector",
                                                                                                           required_detectors)
             MultiWorldRules.set_rule(multiworld.get_location(museum_location.name, player),
                                      rule.simplify())
@@ -488,21 +488,21 @@ def set_museum_milestone_rule(logic: StardewLogic, multiworld: MultiWorld, museu
     metal_detector = "Traveling Merchant Metal Detector"
     rule = None
     if milestone_name.endswith(donations_suffix):
-        rule = get_museum_item_count_rule(logic, donations_suffix, milestone_name, all_museum_items, logic.can_donate_museum_items)
+        rule = get_museum_item_count_rule(logic, donations_suffix, milestone_name, all_museum_items, logic.can_find_museum_items)
     elif milestone_name.endswith(minerals_suffix):
-        rule = get_museum_item_count_rule(logic, minerals_suffix, milestone_name, all_museum_minerals, logic.can_donate_museum_minerals)
+        rule = get_museum_item_count_rule(logic, minerals_suffix, milestone_name, all_museum_minerals, logic.can_find_museum_minerals)
     elif milestone_name.endswith(artifacts_suffix):
-        rule = get_museum_item_count_rule(logic, artifacts_suffix, milestone_name, all_museum_artifacts, logic.can_donate_museum_artifacts)
+        rule = get_museum_item_count_rule(logic, artifacts_suffix, milestone_name, all_museum_artifacts, logic.can_find_museum_artifacts)
     elif milestone_name == "Dwarf Scrolls":
-        rule = And([logic.can_donate_museum_item(item) for item in dwarf_scrolls]) & logic.received(metal_detector, 4)
+        rule = And([logic.can_find_museum_item(item) for item in dwarf_scrolls]) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Front":
-        rule = And([logic.can_donate_museum_item(item) for item in skeleton_front]) & logic.received(metal_detector, 4)
+        rule = And([logic.can_find_museum_item(item) for item in skeleton_front]) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Middle":
-        rule = And([logic.can_donate_museum_item(item) for item in skeleton_middle]) & logic.received(metal_detector, 4)
+        rule = And([logic.can_find_museum_item(item) for item in skeleton_middle]) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Back":
-        rule = And([logic.can_donate_museum_item(item) for item in skeleton_back]) & logic.received(metal_detector, 4)
+        rule = And([logic.can_find_museum_item(item) for item in skeleton_back]) & logic.received(metal_detector, 4)
     elif milestone_name == "Ancient Seed":
-        rule = logic.can_donate_museum_item(Artifact.ancient_seed) & logic.received(metal_detector, 4)
+        rule = logic.can_find_museum_item(Artifact.ancient_seed) & logic.received(metal_detector, 4)
     if rule is None:
         return
     MultiWorldRules.set_rule(multiworld.get_location(museum_milestone.name, player), rule.simplify())
