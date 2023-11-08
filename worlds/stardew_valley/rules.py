@@ -159,10 +159,7 @@ def set_entrance_rules(logic, multiworld, player, world_options: StardewValleyOp
     set_mines_floor_entrance_rules(logic, multiworld, player)
     set_skull_cavern_floor_entrance_rules(logic, multiworld, player)
     set_blacksmith_entrance_rules(logic, multiworld, player)
-
-
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farming, player),
-                             logic.can_earn_farming_xp().simplify())
+    set_skill_entrance_rules(logic, multiworld, player)
 
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_tide_pools, player),
                              logic.received("Beach Bridge") | (magic.can_blink(logic)).simplify())
@@ -247,6 +244,13 @@ def set_blacksmith_entrance_rules(logic, multiworld, player):
     set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
     set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
     set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
+
+
+def set_skill_entrance_rules(logic, multiworld, player):
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farming, player),
+                             logic.can_get_farming_xp().simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.fishing, player),
+                             logic.can_get_fishing_xp().simplify())
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):

@@ -673,18 +673,16 @@ class StardewLogic:
         previous_level_rule = self.has_skill_level(skill, level - 1)
 
         if skill == Skill.fishing:
-            xp_rule = self.can_get_fishing_xp() & self.has_tool(Tool.fishing_rod, ToolMaterial.tiers[max(tool_level, 3)])
+            xp_rule = self.has_tool(Tool.fishing_rod, ToolMaterial.tiers[max(tool_level, 3)])
         elif skill == Skill.farming:
-            xp_rule = self.can_get_farming_xp() & self.has_tool(Tool.hoe, tool_material) & self.can_water(tool_level)
+            xp_rule = self.has_tool(Tool.hoe, tool_material) & self.can_water(tool_level)
         elif skill == Skill.foraging:
-            xp_rule = self.can_get_foraging_xp() & \
-                      (self.has_tool(Tool.axe, tool_material) | magic.can_use_clear_debris_instead_of_tool_level(self, tool_level))
+            xp_rule = self.has_tool(Tool.axe, tool_material) | magic.can_use_clear_debris_instead_of_tool_level(self, tool_level)
         elif skill == Skill.mining:
-            xp_rule = self.can_get_mining_xp() & \
-                      (self.has_tool(Tool.pickaxe, tool_material) | magic.can_use_clear_debris_instead_of_tool_level(self, tool_level))
+            xp_rule = self.has_tool(Tool.pickaxe, tool_material) | magic.can_use_clear_debris_instead_of_tool_level(self, tool_level)
         elif skill == Skill.combat:
             combat_tier = Performance.tiers[tool_level]
-            xp_rule = self.can_get_combat_xp() & self.can_do_combat_at_level(combat_tier)
+            xp_rule = self.can_do_combat_at_level(combat_tier)
         else:
             xp_rule = skills.can_earn_mod_skill_level(self, skill, level)
 
@@ -780,30 +778,6 @@ class StardewLogic:
             for crop in all_crops:
                 crop_rules.append(self.can_grow_crop(crop))
             self.cached_rules[key] = Or(crop_rules)
-        return self.cached_rules[key]
-
-    def can_get_foraging_xp(self) -> StardewRule:
-        key = f"can_get_foraging_xp"
-        if key not in self.cached_rules:
-            tool_rule = self.has_tool(Tool.axe)
-            tree_rule = self.can_reach_region(Region.forest) & self.has_any_season_not_winter()
-            self.cached_rules[key] = tool_rule & tree_rule
-        return self.cached_rules[key]
-
-    def can_get_mining_xp(self) -> StardewRule:
-        key = f"can_get_mining_xp"
-        if key not in self.cached_rules:
-            tool_rule = self.has_tool(Tool.pickaxe)
-            stone_rule = self.can_reach_any_region([Region.mines_floor_5, Region.quarry, Region.skull_cavern_25, Region.volcano_floor_5])
-            self.cached_rules[key] = tool_rule & stone_rule
-        return self.cached_rules[key]
-
-    def can_get_combat_xp(self) -> StardewRule:
-        key = f"can_get_combat_xp"
-        if key not in self.cached_rules:
-            tool_rule = self.has_any_weapon()
-            enemy_rule = self.can_reach_any_region([Region.mines_floor_5, Region.skull_cavern_25, Region.volcano_floor_5])
-            self.cached_rules[key] = tool_rule & enemy_rule
         return self.cached_rules[key]
 
     def can_get_fishing_xp(self) -> StardewRule:
