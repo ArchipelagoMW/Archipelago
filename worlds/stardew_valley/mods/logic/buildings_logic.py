@@ -1,5 +1,6 @@
-from typing import Iterable
+from typing import Iterable, Dict
 
+from ... import StardewRule
 from ...logic.has_logic import HasLogic
 from ...logic.money_logic import MoneyLogic
 from ...options import Mods
@@ -22,8 +23,8 @@ class ModBuildingLogic:
         self.money = money
         self.mods_option = mods_option
 
-    def get_modded_building_rules(self):
-        buildings = {}
+    def get_modded_building_rules(self) -> Dict[str, StardewRule]:
+        buildings = dict()
         if ModNames.tractor in self.mods_option:
             tractor_rule = self.money.can_spend_at(Region.carpenter, 150000) & self.has(MetalBar.iron) & self.has(MetalBar.iridium) & self.has(ArtisanGood.battery_pack)
             buildings.update({ModBuilding.tractor_garage: tractor_rule})

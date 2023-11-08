@@ -452,8 +452,8 @@ class StardewLogic:
         self.buildings.initialize_rules()
         self.buildings.update_rules(self.mod.buildings.get_modded_building_rules())
 
-        self.quest_rules.update(self.quest.set_quest_rules())
-        self.quest_rules.update(self.mod.quests.get_modded_quest_rules())
+        self.quest.initialize_rules()
+        self.quest.update_rules(self.mod.quests.get_modded_quest_rules())
 
         self.festival_rules.update({
             FestivalCheck.egg_hunt: self.can_win_egg_hunt(),

@@ -51,6 +51,7 @@ class QuestLogic:
     combat: CombatLogic
     season: SeasonLogic
     skill: SkillLogic
+    quest_rules: Dict[str, StardewRule]
 
     def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, mine: MineLogic, region: RegionLogic, action: ActionLogic,
                  relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
@@ -71,10 +72,10 @@ class QuestLogic:
         self.money = money
         self.combat = combat
         self.season = season
+        self.quest_rules = dict()
 
-    def set_quest_rules(self):
-        quest_rules = Dict[self, StardewRule] = field(default_factory=dict)
-        quest_rules.update({
+    def initialize_rules(self):
+        self.quest_rules.update({
             Quest.introductions: self.region.can_reach(Region.town),
             Quest.how_to_win_friends: self.can_complete_quest(Quest.introductions),
             Quest.getting_started: self.has(Vegetable.parsnip) & self.tool.has_tool(Tool.hoe) & self.tool.can_water(0),
@@ -128,7 +129,9 @@ class QuestLogic:
                                     self.relationship.can_meet(NPC.gus) & self.relationship.can_meet(NPC.sandy) & self.relationship.can_meet(NPC.george) &
                                     self.relationship.can_meet(NPC.wizard) & self.relationship.can_meet(NPC.willy),
         })
-        return quest_rules
+
+    def update_rules(self, new_rules: Dict[str, StardewRule]):
+        self.quest_rules.update(new_rules)
 
     def can_complete_quest(self, quest: str) -> StardewRule:
-        return Has(quest, self.set_quest_rules())
+        return Has(quest, self.quest_rules)

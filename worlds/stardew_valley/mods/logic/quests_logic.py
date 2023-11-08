@@ -42,7 +42,7 @@ class ModQuestLogic:
         self.time = time
 
     def get_modded_quest_rules(self) -> Dict[str, StardewRule]:
-        quests = {}
+        quests = dict()
         if ModNames.juna in self.mods:
             quests.update({
                 ModQuest.JunaCola: self.relationship.has_hearts(ModNPC.juna, 3) & self.has(Beverage.joja_cola),
