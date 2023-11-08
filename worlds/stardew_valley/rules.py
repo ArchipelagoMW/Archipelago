@@ -98,7 +98,6 @@ def set_rules(world):
     MultiWorldRules.add_rule(multiworld.get_location("Have Another Baby", player),
                              logic.can_reproduce(2).simplify())
 
-    set_traveling_merchant_rules(logic, multiworld, player)
     set_arcade_machine_rules(logic, multiworld, player, world_options)
     set_deepwoods_rules(logic, multiworld, player, world_options)
     set_magic_spell_rules(logic, multiworld, player, world_options)
@@ -160,6 +159,7 @@ def set_entrance_rules(logic, multiworld, player, world_options: StardewValleyOp
     set_skull_cavern_floor_entrance_rules(logic, multiworld, player)
     set_blacksmith_entrance_rules(logic, multiworld, player)
     set_skill_entrance_rules(logic, multiworld, player)
+    set_traveling_merchant_day_rules(logic, multiworld, player)
 
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_tide_pools, player),
                              logic.received("Beach Bridge") | (magic.can_blink(logic)).simplify())
@@ -417,9 +417,9 @@ def set_help_wanted_quests_rules(logic: StardewLogic, multiworld, player, world_
             quest_number = set_number * 4 + quest_number_in_set + 1
             set_help_wanted_delivery_rule(multiworld, player, month_rule, quest_number)
         elif quest_number_in_set == 4:
-            set_help_wanted_fishing_rule(logic, multiworld, player, month_rule, quest_number)
+            set_help_wanted_fishing_rule(multiworld, player, month_rule, quest_number)
         elif quest_number_in_set == 5:
-            set_help_wanted_slay_monsters_rule(logic, multiworld, player, month_rule, quest_number)
+            set_help_wanted_slay_monsters_rule(multiworld, player, month_rule, quest_number)
         elif quest_number_in_set == 6:
             set_help_wanted_gathering_rule(multiworld, player, month_rule, quest_number)
 
@@ -434,16 +434,14 @@ def set_help_wanted_gathering_rule(multiworld, player, month_rule, quest_number)
     MultiWorldRules.set_rule(multiworld.get_location(location_name, player), month_rule)
 
 
-def set_help_wanted_fishing_rule(logic: StardewLogic, multiworld, player, month_rule, quest_number):
+def set_help_wanted_fishing_rule(multiworld, player, month_rule, quest_number):
     location_name = f"{help_wanted_prefix} {fishing} {quest_number}"
-    fishing_rule = month_rule & logic.can_fish()
-    MultiWorldRules.set_rule(multiworld.get_location(location_name, player), fishing_rule.simplify())
+    MultiWorldRules.set_rule(multiworld.get_location(location_name, player), month_rule.simplify())
 
 
-def set_help_wanted_slay_monsters_rule(logic: StardewLogic, multiworld, player, month_rule, quest_number):
+def set_help_wanted_slay_monsters_rule(multiworld, player, month_rule, quest_number):
     location_name = f"{help_wanted_prefix} {slay_monsters} {quest_number}"
-    slay_rule = month_rule & logic.can_do_combat_at_level("Basic")
-    MultiWorldRules.set_rule(multiworld.get_location(location_name, player), slay_rule.simplify())
+    MultiWorldRules.set_rule(multiworld.get_location(location_name, player), month_rule.simplify())
 
 
 def set_fishsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld: MultiWorld, player: int):
@@ -540,13 +538,11 @@ def set_festival_rules(all_location_names: List[str], logic: StardewLogic, multi
                                      logic.festival_rules[festival.name].simplify())
 
 
-def set_traveling_merchant_rules(logic: StardewLogic, multiworld: MultiWorld, player: int):
+def set_traveling_merchant_day_rules(logic: StardewLogic, multiworld: MultiWorld, player: int):
     for day in Weekday.all_days:
         item_for_day = f"Traveling Merchant: {day}"
-        for i in range(1, 4):
-            location_name = f"Traveling Merchant {day} Item {i}"
-            MultiWorldRules.set_rule(multiworld.get_location(location_name, player),
-                                     logic.received(item_for_day))
+        entrance_name = f"Buy from Traveling Merchant {day}"
+        MultiWorldRules.set_rule(multiworld.get_entrance(entrance_name, player), logic.received(item_for_day))
 
 
 def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
