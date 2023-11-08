@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Dict
+from typing import TYPE_CHECKING, Optional, Dict, FrozenSet
 from BaseClasses import Location, Region
 
 from .items import offset_item_value
@@ -15,7 +15,7 @@ class PokemonCrystalLocation(Location):
     rom_address: Optional[int]
     default_item_code: Optional[int]
     flag: Optional[int]
-    # tags: FrozenSet[str]
+    tags: FrozenSet[str]
 
     def __init__(
             self,
@@ -24,13 +24,14 @@ class PokemonCrystalLocation(Location):
             parent: Optional[Region] = None,
             flag: Optional[int] = None,
             rom_address: Optional[int] = None,
-            default_item_value: Optional[int] = None
+            default_item_value: Optional[int] = None,
+            tags: FrozenSet[str] = frozenset()
     ) -> None:
         super().__init__(player, name, None if flag is None else offset_flag(flag), parent)
         self.default_item_code = None if default_item_value is None else offset_item_value(
             default_item_value)
         self.rom_address = rom_address
-        # self.tags = tags
+        self.tags = tags
 
 
 def offset_flag(flag: int) -> int:
@@ -57,7 +58,7 @@ def create_locations(world: PokemonCrystalWorld, regions: Dict[str, Region], ran
         filtered_locations = {}
         if not randomize_hidden_items:
             filtered_locations = [
-                loc for loc in region_data.locations if data.locations[loc].location_type != "Hidden"]
+                loc for loc in region_data.locations if not "Hidden" in data.locations[loc].tags]
         else:
             filtered_locations = region_data.locations
         for location_name in filtered_locations:
@@ -69,7 +70,7 @@ def create_locations(world: PokemonCrystalWorld, regions: Dict[str, Region], ran
                 location_data.flag,
                 location_data.rom_address,
                 location_data.default_item,
-                # location_data.tags
+                location_data.tags
             )
             region.locations.append(location)
 

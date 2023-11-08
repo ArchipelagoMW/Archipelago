@@ -1,4 +1,5 @@
-import orjson
+import json
+# import orjson
 import pkgutil
 from typing import Dict, List, NamedTuple, Optional, Set, FrozenSet, Tuple, Any, Union
 
@@ -11,7 +12,7 @@ class ItemData(NamedTuple):
     label: str
     item_id: int
     classification: ItemClassification
-    # tags: FrozenSet[str]
+    tags: FrozenSet[str]
 
 
 class LocationData(NamedTuple):
@@ -21,8 +22,8 @@ class LocationData(NamedTuple):
     default_item: int
     rom_address: int
     flag: int
-    # tags: FrozenSet[str]
-    location_type: str
+    tags: FrozenSet[str]
+    # location_type: str
     script: str
 
 
@@ -73,7 +74,8 @@ class PokemonCrystalData:
 
 
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
-    return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
+    return json.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
+    # return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
 
 
 data = PokemonCrystalData()
@@ -112,7 +114,7 @@ def _init() -> None:
                 item_codes_json[location_json["default_item"]],
                 rom_address_data[location_json["script"]],
                 event_flag_data[location_json["flag"]],
-                location_json["type"],
+                frozenset(location_json["tags"]),
                 location_json["script"]
             )
             new_region.locations.append(location_name)
@@ -150,7 +152,8 @@ def _init() -> None:
         data.items[item_codes_json[item_constant_name]] = ItemData(
             attributes["name"],
             item_codes_json[item_constant_name],
-            item_classification
+            item_classification,
+            frozenset(attributes["tags"])
         )
 
     data.ram_addresses = {}

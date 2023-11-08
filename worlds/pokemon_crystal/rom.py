@@ -74,12 +74,21 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             if (address_name.startswith("AP_Starter_CYNDAQUIL")):
                 cur_address = address + 1
                 write_bytes(patched_rom, [starters[0]], cur_address)
+                if address_name.endswith("4"):
+                    write_bytes(
+                        patched_rom, [get_random_helditem(random)], cur_address + 2)
             if (address_name.startswith("AP_Starter_TOTODILE")):
                 cur_address = address + 1
                 write_bytes(patched_rom, [starters[1]], cur_address)
+                if address_name.endswith("4"):
+                    write_bytes(
+                        patched_rom, [get_random_helditem(random)], cur_address + 2)
             if (address_name.startswith("AP_Starter_CHIKORITA")):
                 cur_address = address + 1
                 write_bytes(patched_rom, [starters[2]], cur_address)
+                if address_name.endswith("4"):
+                    write_bytes(
+                        patched_rom, [get_random_helditem(random)], cur_address + 2)
         if world.options.full_tmhm_compatibility:
             if (address_name == "BaseData"):
                 cur_address = address
@@ -90,7 +99,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                     cur_address += 8
         if world.options.blind_trainers:
             if address_name == "AP_Setting_Blind_Trainers":
-                write_bytes(patched_rom, [0xC9], address)
+                write_bytes(patched_rom, [0xC9], address)  # 0xC9 = ret
         if world.options.randomize_learnsets:
             if address_name.endswith("EvosAttacks"):
                 pkmn_name = address_name[0:-11].upper()
@@ -107,6 +116,17 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 for level in move_levels:
                     write_bytes(
                         patched_rom, [level, get_random_move(random)], cur_address)
+                    cur_address += 2
+        if world.options.better_marts:
+            if address_name == "Marts":
+                better_mart_address = data.rom_addresses["MartBetterMart"] - 0x10000
+                better_mart_bytes = better_mart_address.to_bytes(2, "little")
+                cur_address = address
+                for i in range(33):  # marts before goldenrod
+                    # skip goldenrod and celadon
+                    if i not in [6, 7, 8, 9, 10, 11, 12, 23, 24, 25, 26, 27]:
+                        write_bytes(
+                            patched_rom, better_mart_bytes, cur_address)
                     cur_address += 2
 
         # Set slot name
@@ -144,3 +164,9 @@ def get_random_poke(random):
 
 def get_random_move(random):
     return random.randint(1, 251)
+
+
+def get_random_helditem(random):
+    helditems = [item_id for item_id, item in data.items.items()
+                 if "Unique" not in item.tags and "INVALID" not in item.tags]
+    return random.choice(helditems)

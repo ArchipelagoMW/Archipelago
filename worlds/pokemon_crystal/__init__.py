@@ -1,10 +1,22 @@
 import settings
 import typing
+import os
+import sys
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
-# Unused, but required to register with BizHawkClient
-from .client import PokemonCrystalClient
+if "worlds._bizhawk" not in sys.modules:
+    bh_apworld_path = os.path.join(os.path.dirname(
+        sys.modules["worlds"].__file__), "_bizhawk.apworld")
+    if not os.path.isfile(bh_apworld_path) and not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
+        logging.warning(
+            "Did not find _bizhawk.apworld required to play Pokemon Crystal. Still able to generate.")
+    else:
+        # Unused, but required to register with BizHawkClient
+        from .client import PokemonCrystalClient
+else:
+    # Unused, but required to register with BizHawkClient
+    from .client import PokemonCrystalClient
 from .options import pokemon_crystal_options
 from .regions import create_regions
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification

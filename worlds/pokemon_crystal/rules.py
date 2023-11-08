@@ -89,8 +89,12 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         return world.options.randomize_hidden_items
 
     # Goal
-    world.multiworld.completion_condition[world.player] = lambda state: state.has(
-        "EVENT_BEAT_ELITE_FOUR", world.player)
+    if world.options.goal == 1:
+        world.multiworld.completion_condition[world.player] = lambda state: state.has(
+            "EVENT_BEAT_RED", world.player)
+    else:
+        world.multiworld.completion_condition[world.player] = lambda state: state.has(
+            "EVENT_BEAT_ELITE_FOUR", world.player)
 
     # New Bark Town
     set_rule(
@@ -99,7 +103,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     )
 
     set_rule(
-        get_entrance("REGION_NEW_BARK_TOWN -> REGION_ROUTE_27"),
+        get_entrance("REGION_NEW_BARK_TOWN -> REGION_ROUTE_27:WEST"),
         can_surf
     )
 
@@ -111,7 +115,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(
         get_location("Elm's Lab - Master Ball from Elm"),
-        lambda state: has_n_badges(state, 8)
+        lambda state: state.has("Rising Badge", world.player)
     )
 
     set_rule(
@@ -126,12 +130,6 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         lambda state: state.has(
             "Zephyr Badge", world.player)
     )
-
-    set_rule(
-        get_entrance("REGION_ROUTE_29_ROUTE_46_GATE -> REGION_ROUTE_46"),
-        lambda state: False
-    )
-
     # Route 30
     set_rule(
         get_entrance("REGION_ROUTE_30 -> REGION_ROUTE_31"),
@@ -160,6 +158,22 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     if hidden():
         set_rule(get_location(
             "Dark Cave Violet Entrance - Hidden Item in North"), can_rocksmash)
+
+    set_rule(
+        get_entrance("REGION_DARK_CAVE_VIOLET_ENTRANCE -> REGION_ROUTE_46"),
+        can_rocksmash
+    )
+
+    set_rule(
+        get_entrance("REGION_ROUTE_46 -> REGION_DARK_CAVE_VIOLET_ENTRANCE"),
+        lambda state: can_rocksmash(state) and can_flash(state)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_45 -> REGION_DARK_CAVE_BLACKTHORN_ENTRANCE"),
+        lambda state: can_surf(state) and can_flash(state)
+    )
 
     # Violet City
     if hidden():
@@ -326,6 +340,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         can_whirlpool
     )
 
+    # Whirl Islands
+
     # Cianwood
 
     if hidden():
@@ -358,7 +374,20 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # Route 42
 
     set_rule(
-        get_entrance("REGION_ECRUTEAK_CITY -> REGION_ROUTE_42"),
+        get_entrance("REGION_ROUTE_42:WEST -> REGION_ROUTE_42:CENTER"),
+        can_surf
+    )
+    set_rule(
+        get_entrance("REGION_ROUTE_42:CENTER -> REGION_ROUTE_42:WEST"),
+        can_surf
+    )
+
+    set_rule(
+        get_entrance("REGION_ROUTE_42:EAST -> REGION_ROUTE_42:CENTER"),
+        can_surf
+    )
+    set_rule(
+        get_entrance("REGION_ROUTE_42:CENTER -> REGION_ROUTE_42:EAST"),
         can_surf
     )
 
@@ -368,10 +397,67 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             can_surf
         )
 
+    # Mt Mortar
     set_rule(
-        get_location("Route 42 - Item 1"),
+        get_entrance(
+            "REGION_MOUNT_MORTAR_1F_OUTSIDE:CENTER -> REGION_MOUNT_MORTAR_2F_OUTSIDE"),
+        lambda state: can_surf(state) and can_waterfall(state)
+    )
+
+    # 1F Inside Front
+    set_rule(
+        get_location("Mount Mortar 1F Inside - Item 1"),
+        can_strength
+    )
+    set_rule(
+        get_location("Mount Mortar 1F Inside - Item 2"),
+        can_strength
+    )
+    set_rule(
+        get_location("Mount Mortar 1F Inside - Item 6"),
+        can_strength
+    )
+    set_rule(
+        get_location("Mount Mortar 1F Inside - Item 7"),
+        can_strength
+    )
+
+    # 1F Inside Back, from 2F with waterfall
+
+    set_rule(
+        get_location("Mount Mortar 1F Inside - Item 3"),
+        lambda state: can_surf(state) and can_waterfall(state)
+    )
+    set_rule(
+        get_location("Mount Mortar 1F Inside - Item 4"),
+        lambda state: can_surf(state) and (
+            can_strength(state) or can_waterfall(state))
+    )
+    set_rule(
+        get_location("Mount Mortar 1F Inside - Item 5"),
+        lambda state: can_surf(state) and can_waterfall(state)
+    )
+    if hidden():
+        set_rule(
+            get_location("Mount Mortar 1F Inside - Hidden Item"),
+            lambda state: can_surf(state) and can_waterfall(state)
+        )
+
+    # 1F C -> B1F Everything needs surf so im being lazy
+
+    set_rule(
+        get_entrance(
+            "REGION_MOUNT_MORTAR_1F_OUTSIDE:CENTER -> REGION_MOUNT_MORTAR_B1F"),
         can_surf
     )
+
+    # Behind boulder, need to come down from 2F for this
+
+    if hidden():
+        set_rule(
+            get_location("Mount Mortar B1F - Hidden Item on Boulder"),
+            lambda state: can_surf(state) and can_waterfall(state)
+        )
 
     # Mahogany Town
 
@@ -380,6 +466,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             "REGION_MAHOGANY_TOWN -> REGION_MAHOGANY_MART_1F"),
         lambda state: state.has(
             "EVENT_DECIDED_TO_HELP_LANCE", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_MAHOGANY_TOWN -> REGION_MAHOGANY_GYM"),
+        lambda state: state.has(
+            "EVENT_CLEARED_ROCKET_HIDEOUT", world.player)
     )
 
     set_rule(
@@ -417,25 +510,449 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Route 44
 
+    if hidden():
+        set_rule(
+            get_location("Route 44 - Hidden Item Across Water"),
+            can_surf
+        )
+
+    set_rule(
+        get_location("Route 44 - Item 2"),
+        can_surf
+    )
+
     # Ice Path
     set_rule(
-        get_entrance("REGION_ROUTE_44 -> REGION_ICE_PATH_1F"),
+        get_entrance(
+            "REGION_ICE_PATH_B2F_MAHOGANY_SIDE -> REGION_ICE_PATH_B3F"),
+        can_strength
+    )
+
+    set_rule(
+        get_location("Ice Path B2F - Item 1"),
+        can_strength
+    )
+
+    # Blackthorn
+
+    set_rule(
+        get_entrance(
+            "REGION_BLACKTHORN_CITY -> REGION_BLACKTHORN_GYM_1F"),
+        lambda state: state.has(
+            "EVENT_CLEARED_RADIO_TOWER", world.player)
+    )
+
+    set_rule(
+        get_location("EVENT_BEAT_CLAIR"),
         can_strength
     )
 
     set_rule(
         get_entrance(
-            "REGION_INDIGO_PLATEAU_POKECENTER_1F -> REGION_WILLS_ROOM"),
+            "REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"),
+        lambda state: state.has(
+            "EVENT_BEAT_CLAIR", world.player)
+    )
+
+    # Dragons Den
+
+    set_rule(
+        get_location("Dragon's Den B1F - Item 3"),
+        can_surf
+    )
+    set_rule(
+        get_location("Dragon's Den B1F - Item 3"),
+        lambda state: can_surf(state) and can_whirlpool(state)
+    )
+
+    if hidden():
+        set_rule(
+            get_location("Dragon's Den B1F - Hidden Item in Water 1"),
+            can_surf
+        )
+        set_rule(
+            get_location("Dragon's Den B1F - Hidden Item in Water 2"),
+            lambda state: can_surf(state) and can_whirlpool(state)
+        )
+        set_rule(
+            get_location("Dragon's Den B1F - Hidden Item in SE Corner"),
+            lambda state: can_surf(state) and can_whirlpool(state)
+        )
+
+    # Route 45
+
+    if hidden():
+        set_rule(
+            get_location("Route 45 - Hidden Item in Southeast Pond"),
+            can_surf
+        )
+
+    # Route 27
+
+    set_rule(
+        get_entrance("REGION_ROUTE_27:WEST -> REGION_NEW_BARK_TOWN"),
+        can_surf
+    )
+
+    set_rule(
+        get_entrance("REGION_ROUTE_27:CENTER -> REGION_ROUTE_27:EAST"),
+        can_surf
+    )
+
+    set_rule(
+        get_entrance("REGION_ROUTE_27:EAST -> REGION_ROUTE_27:CENTER"),
+        can_surf
+    )
+
+    set_rule(
+        get_location("Route 27 - Item 1"),
+        can_surf
+    )
+
+    set_rule(
+        get_location("Route 27 - Item 2"),
+        lambda state: can_surf(state) and can_whirlpool(state)
+    )
+
+    set_rule(
+        get_location("Tohjo Falls - Item"),
+        can_surf
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_TOHJO_FALLS:WEST -> REGION_TOHJO_FALLS:EAST"),
+        lambda state: can_surf(state) and can_waterfall(state)
+    )
+    set_rule(
+        get_entrance(
+            "REGION_TOHJO_FALLS:EAST -> REGION_TOHJO_FALLS:WEST"),
+        lambda state: can_surf(state) and can_waterfall(state)
+    )
+
+    # Victory Road
+
+    set_rule(
+        get_entrance(
+            "REGION_VICTORY_ROAD_GATE -> REGION_VICTORY_ROAD"),
         lambda state: has_n_badges(state, 8)
     )
 
     set_rule(
         get_entrance(
-            "REGION_DARK_CAVE_VIOLET_ENTRANCE -> REGION_DARK_CAVE_BLACKTHORN_ENTRANCE"),
-        lambda state: False
+            "REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_26"),
+        lambda state: has_n_badges(state, 8)
     )
 
     set_rule(
-        get_entrance("REGION_DARK_CAVE_VIOLET_ENTRANCE -> REGION_ROUTE_46"),
-        can_rocksmash
+        get_entrance(
+            "REGION_ROUTE_28 -> REGION_VICTORY_ROAD_GATE"),
+        lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_28"),
+        lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_22 -> REGION_VICTORY_ROAD_GATE"),
+        lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_22"),
+        lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player)
+    )
+
+    # Route 28
+    if hidden():
+        set_rule(
+            get_location(
+                "Route 28 - Hidden Item Behind Cut Tree"),
+            can_cut
+        )
+
+    # Silver Cave
+
+    set_rule(
+        get_location(
+            "Outside Silver Cave - Hidden Item Across Water"),
+        can_surf
+    )
+
+    set_rule(
+        get_location(
+            "Silver Cave 2F - Item 1"),
+        lambda state: can_surf(state) and can_waterfall(state)
+    )
+
+    set_rule(
+        get_location(
+            "Silver Cave 2F - Item 2"),
+        lambda state: can_surf(state) and can_waterfall(state)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_SILVER_CAVE_ROOM_2 -> REGION_SILVER_CAVE_ITEM_ROOMS"),
+        lambda state: can_surf(state) and can_waterfall(state)
+    )
+
+    # Viridian
+    set_rule(
+        get_location(
+            "Viridian City - TM42 from Sleepy Guy"),
+        lambda state: can_surf(state) or can_cut(state)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_VIRIDIAN_CITY -> REGION_VIRIDIAN_GYM"),
+        lambda state: state.has("EVENT_VIRIDIAN_GYM_BLUE", world.player)
+    )
+
+    # Route 2
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_2:WEST -> REGION_ROUTE_2:NORTHEAST"),
+        can_cut
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_2:WEST -> REGION_ROUTE_2:SOUTHEAST"),
+        can_cut
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_2:SOUTHEAST -> REGION_ROUTE_2:WEST"),
+        can_cut
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_2:SOUTHEAST -> REGION_ROUTE_2:NORTHEAST"),
+        can_cut
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_2:NORTHEAST -> REGION_ROUTE_2:SOUTHEAST"),
+        can_cut
+    )
+
+    # Cerulean
+    if hidden():
+        set_rule(
+            get_location(
+                "Cerulean City - Hidden Item in Water"),
+            can_cut
+        )
+
+    set_rule(
+        get_entrance(
+            "REGION_CERULEAN_CITY -> REGION_ROUTE_9"),
+        can_cut
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_9 -> REGION_CERULEAN_CITY"),
+        can_cut
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_10_NORTH -> REGION_POWER_PLANT"),
+        can_surf
+    )
+
+    # Route 25
+    set_rule(
+        get_location(
+            "Route 25 - Item"),
+        can_cut
+    )
+
+    # Power Plant
+    set_rule(
+        get_location(
+            "EVENT_RESTORED_POWER_TO_KANTO"),
+        lambda state: state.has("Machine Part", world.player)
+    )
+
+    set_rule(
+        get_location(
+            "Power Plant - TM07 from Manager"),
+        lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player)
+    )
+
+    # Rock Tunnel
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_9 -> REGION_ROCK_TUNNEL_1F"),
+        can_flash
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_10_SOUTH -> REGION_ROCK_TUNNEL_1F"),
+        can_flash
+    )
+
+    # Lavendar
+    set_rule(
+        get_location(
+            "EVENT_GOT_EXPN_CARD"),
+        lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player)
+    )
+
+    # Route 12
+
+    set_rule(
+        get_location(
+            "Route 12 - Item 1"),
+        can_cut
+    )
+
+    set_rule(
+        get_location(
+            "Route 12 - Item 2"),
+        lambda state: can_cut(state) and can_surf(state)
+    )
+
+    if hidden():
+        set_rule(
+            get_location(
+                "Route 12 - Hidden Item on Island"),
+            can_cut
+        )
+
+    # Vermilion
+    set_rule(
+        get_entrance(
+            "REGION_VERMILION_CITY -> REGION_VERMILION_GYM"),
+        lambda state: can_cut(state) or can_surf(state)
+    )
+
+    set_rule(
+        get_location(
+            "Vermilion Port - Hidden Item in Buoy"),
+        can_surf
+    )
+
+    set_rule(
+        get_location(
+            "EVENT_FOUGHT_SNORLAX"),
+        lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_VERMILION_CITY -> REGION_ROUTE_11"),
+        lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_11 -> REGION_VERMILION_CITY"),
+        lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_VERMILION_CITY -> REGION_DIGLETTS_CAVE"),
+        lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_DIGLETTS_CAVE -> REGION_VERMILION_CITY"),
+        lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player)
+    )
+
+    set_rule(
+        get_entrance("REGION_VERMILION_PORT -> REGION_FAST_SHIP_1F"),
+        lambda state: state.has(
+            "S.S. Ticket", world.player)
+    )
+
+    # Saffron
+    set_rule(
+        get_location(
+            "Copycat's House - Pass from Copycat"),
+        lambda state: state.has("Lost Item", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_SAFFRON_MAGNET_TRAIN_STATION -> REGION_GOLDENROD_MAGNET_TRAIN_STATION"),
+        lambda state: state.has(
+            "Pass", world.player)
+    )
+
+    # Celadon
+
+    set_rule(
+        get_entrance(
+            "REGION_CELADON_CITY -> REGION_CELADON_GYM"),
+        can_cut
+    )
+
+    # Cycling Road
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_16 -> REGION_ROUTE_17"),
+        lambda state: state.has("Bicycle", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_17_ROUTE_18_GATE -> REGION_ROUTE_17"),
+        lambda state: state.has("Bicycle", world.player)
+    )
+
+    # Route 15
+    set_rule(
+        get_location(
+            "Route 15 - Item"),
+        can_cut
+    )
+
+    # Route 20
+    set_rule(
+        get_entrance(
+            "REGION_ROUTE_19 -> REGION_ROUTE_20"),
+        can_surf
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_CINNABAR_ISLAND -> REGION_ROUTE_20"),
+        can_surf
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_CINNABAR_ISLAND -> REGION_ROUTE_21"),
+        can_surf
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_PALLET_TOWN -> REGION_ROUTE_21"),
+        can_surf
+    )
+
+    # Pallet
+
+    set_rule(
+        get_location(
+            "EVENT_OPENED_MT_SILVER"),
+        lambda state: has_n_badges(state, 16)
     )

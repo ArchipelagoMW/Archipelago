@@ -1,6 +1,28 @@
+from typing import TYPE_CHECKING, Dict, Set
+import sys
+
+# NOTE: This code is not necessary if the bizhawk client code is merged
+if "worlds._bizhawk" not in sys.modules:
+    import importlib
+    import os
+    import zipimport
+
+    bh_apworld_path = os.path.join(os.path.dirname(
+        sys.modules["worlds"].__file__), "_bizhawk.apworld")
+    if os.path.isfile(bh_apworld_path):
+        importer = zipimport.zipimporter(bh_apworld_path)
+        spec = importer.find_spec(os.path.basename(
+            bh_apworld_path).rsplit(".", 1)[0])
+        mod = importlib.util.module_from_spec(spec)
+        mod.__package__ = f"worlds.{mod.__package__}"
+        mod.__name__ = f"worlds.{mod.__name__}"
+        sys.modules[mod.__name__] = mod
+        importer.exec_module(mod)
+    elif not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
+        raise AssertionError("Could not import worlds._bizhawk")
+
 
 from NetUtils import ClientStatus
-from typing import TYPE_CHECKING, Dict, Set
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
@@ -11,6 +33,15 @@ if TYPE_CHECKING:
 else:
     BizHawkClientContext = object
 
+# Add .apemerald suffix to bizhawk client
+from worlds.LauncherComponents import SuffixIdentifier, components
+for component in components:
+    if component.script_name == "BizHawkClient":
+        component.file_identifier = SuffixIdentifier(
+            *(*component.file_identifier.suffixes, ".apcrystal"))
+        break
+
+
 EXPECTED_ROM_NAME = "CGB-APV0-00pokemon_crystal"
 
 
@@ -18,7 +49,7 @@ class PokemonCrystalClient(BizHawkClient):
     game = "Pokemon Crystal"
     system = "GBC"
     local_checked_locations: Set[int]
-    patch_suffix = ".apcrystal"
+    # patch_suffix = ".apcrystal"
     local_checked_locations: Set[int]
 
     def __init__(self) -> None:

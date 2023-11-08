@@ -6,10 +6,15 @@ from .data import data, BASE_OFFSET
 
 class PokemonCrystalItem(Item):
     game: str = "Pokemon Crystal"
-    # tags: FrozenSet[str]
+    ags: FrozenSet[str]
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int) -> None:
         super().__init__(name, classification, code, player)
+
+        if code is None:
+            self.tags = frozenset(["Event"])
+        else:
+            self.tags = data.items[reverse_offset_item_value(code)].tags
 
 
 def offset_item_value(item_value: int) -> int:

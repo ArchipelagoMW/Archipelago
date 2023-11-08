@@ -27,7 +27,7 @@ class RandomizeLearnsets(Choice):
     randomize: Random movesets
     vanilla: Vanilla movesets"""
     display_name = "Randomize Learnsets"
-    default = 2
+    default = 0
     option_start_with_four_moves = 2
     option_randomize = 1
     option_vanilla = 0
@@ -37,13 +37,27 @@ class FullTmHmCompatibility(Toggle):
     """Enabled: All Pokemon are compatible with all TMs and HMs 
         Disabled: TM and HM compatibility is vanilla"""
     display_name = "Full TM/HM Compatibility"
-    default = 1
+    default = 0
 
 
 class BlindTrainers(Toggle):
     """"""
     display_name = "Blind Trainers"
-    default = 1
+    default = 0
+
+
+class BetterMarts(Toggle):
+    """"""
+    display_name = "Better Marts"
+    default = 0
+
+
+class Goal(Choice):
+    """"""
+    display_name = "Goal"
+    default = 0
+    option_elite_four = 0
+    option_red = 1
 
 
 pokemon_crystal_options = {
@@ -52,5 +66,7 @@ pokemon_crystal_options = {
     "randomize_wilds": RandomizeWilds,
     "randomize_learnsets": RandomizeLearnsets,
     "full_tmhm_compatibility": FullTmHmCompatibility,
-    "blind_trainers": BlindTrainers
+    "blind_trainers": BlindTrainers,
+    "better_marts": BetterMarts,
+    "goal": Goal
 }
