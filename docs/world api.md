@@ -110,12 +110,11 @@ or boss drops for RPG-like games but could also be progress in a research tree.
 
 Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
 in a Region, has access rules and a classification.
-The name needs to be unique in each game and must not be numeric (has to
-contain least 1 letter or symbol). The ID needs to be unique across all games
-and is best in the same range as the item IDs.
-World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
-Special locations with ID `None` can hold events.
+- The `name` and `id` must be unique per game. Names must also not be numeric (has to contain least 1 letter or symbol).
+- Allowed world IDs are in the range of [1 to 2<sup>53</sup> - 1] (inclusive). IDs ≤ 0 are global and reserved.
+- Location `id`s can overlap with Item `ids` as they are considered separate.
+- Special locations with ID: `None` can hold events.
 
 Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED`.
 The Fill algorithm will force progression items to be placed at priority locations, giving a higher chance of them being
@@ -133,10 +132,10 @@ their world. Progression items will be assigned to locations with higher
 priority and moved around to meet defined rules and accomplish progression
 balancing.
 
-The name needs to be unique in each game, meaning a duplicate item has the
-same ID. Name must not be numeric (has to contain at least 1 letter or symbol).
-
-Special items with ID `None` can mark events (read below).
+- The `name` and `id` must be unique per game. Names must also not be numeric (has to contain least 1 letter or symbol).
+- Allowed world IDs are in the range of [1 to 2<sup>53</sup> - 1] (inclusive). IDs ≤ 0 are global and reserved.
+- Item `id`s can overlap with Locations `ids` as they are considered separate.
+- Special items with ID: `None` can mark events (see below).
 
 Other classifications include
 * `filler`: a regular item or trash item
@@ -646,6 +645,8 @@ More advanced uses could be to add additional variables to the state object,
 override `World.collect(self, state, item)` and `remove(self, state, item)`
 to update the state object, and check those added variables in added methods.
 Please do this with caution and only when necessary.
+
+***Note***: `LogicMixin` does not work for zipped (`.apworld`) worlds in Python versions before 3.10.
 
 #### Sample
 

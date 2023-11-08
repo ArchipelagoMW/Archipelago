@@ -1,10 +1,10 @@
 from typing import NamedTuple, Union
 import logging
+from typing import NamedTuple, Union
 
-from BaseClasses import Item, Tutorial, ItemClassification
-
-from ..AutoWorld import World, WebWorld
+from BaseClasses import Item, ItemClassification, Tutorial
 from NetUtils import SlotType
+from worlds.AutoWorld import WebWorld, World
 
 
 class GenericWeb(WebWorld):
@@ -40,7 +40,6 @@ class GenericWorld(World):
     }
     hidden = True
     web = GenericWeb()
-    data_version = 1
 
     def generate_early(self):
         self.multiworld.player_types[self.player] = SlotType.spectator  # mark as spectator

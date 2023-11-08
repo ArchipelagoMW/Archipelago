@@ -7,7 +7,8 @@ See [world api.md](world%20api.md) for details.
 apworld provides a way to package and ship a world that is not part of the main distribution by placing a `*.apworld`
 file into the worlds folder.
 
-**Warning:** apworlds have to be all lower case, otherwise they raise a bogus Exception when trying to import in frozen python 3.10+!
+**Warning:** apworlds have to be all lower case, otherwise they raise a bogus Exception when trying to import in frozen 
+python 3.10+!
 
 
 ## File Format

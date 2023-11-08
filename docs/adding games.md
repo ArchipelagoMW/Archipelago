@@ -250,8 +250,8 @@ A world implementation requires a few key things from its implementation
   and the following requirements:
     - Your items and locations need a `item_name_to_id` and `location_name_to_id`,
       respectively, mapping.
-    - An `option_definitions` mapping of your game options with the format
-      `{name: Class}`, where `name` uses Python snake_case.
+    - An `options_dataclass` of your game options. See [options api doc](/docs/options%20api.md) for additional 
+      information.
     - You must define your world's `create_item` method, because this may be called
       by the generator in certain circumstances
     - When creating your world you submit items and regions to the Multiworld.

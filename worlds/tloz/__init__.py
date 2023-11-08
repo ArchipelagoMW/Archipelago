@@ -67,7 +67,6 @@ class TLoZWorld(World):
     settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
-    data_version = 1
     base_id = 7000
     web = TLoZWeb()
 

@@ -44,8 +44,6 @@ class MeritousWorld(World):
     location_name_to_id = location_table
     item_name_groups = item_groups
 
-    data_version = 2
-
     # NOTE: Remember to change this before this game goes live
     required_client_version = (0, 2, 4)
 

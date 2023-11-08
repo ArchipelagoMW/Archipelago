@@ -99,7 +99,6 @@ class SMWorld(World):
 
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 3
     option_definitions = sm_options
     settings: typing.ClassVar[SMSettings]
 

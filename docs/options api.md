@@ -12,8 +12,9 @@ Option parsing in AP is done using different Option classes. For each option you
 need to create:
 - A new option class with a docstring detailing what the option will do to your user.
 - A `display_name` to be displayed on the webhost.
-- A new entry in the `option_definitions` dict for your World.
-By style and convention, the internal names should be snake_case.
+- An `option_dataclass` dataclass containing all your options to be assigned to your World.
+
+By style and convention, the internal names should be in `snake_case`.
 
 ### Option Creation
 - If the option supports having multiple sub_options, such as Choice options, these can be defined with
@@ -51,6 +52,7 @@ This will create a `Toggle` option, internally called `starting_sword`. To then 
 to our world's `__init__.py`:
 
 ```python
+# __init__.py
 from worlds.AutoWorld import World
 from .Options import ExampleGameOptions
 

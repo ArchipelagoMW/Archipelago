@@ -53,7 +53,6 @@ class SMWWorld(World):
     option_definitions = smw_options
     settings: typing.ClassVar[SMWSettings]
     topology_present = False
-    data_version = 3
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
