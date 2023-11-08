@@ -1,96 +1,106 @@
-from worlds.AutoWorld import LogicMixin, World
+from typing import TYPE_CHECKING
 
+from BaseClasses import CollectionState
 from .options import VictoryCondition
 from .player_logic import LingoPlayerLogic, PlayerLocation
-from .static_logic import RoomAndDoor, PROGRESSIVE_ITEMS, PROGRESSION_BY_ROOM, PANELS_BY_ROOM
+from .static_logic import PANELS_BY_ROOM, PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, RoomAndDoor
+
+if TYPE_CHECKING:
+    from . import LingoWorld
 
 
-class LingoLogic(LogicMixin):
-    """
-    Logic macros that get reused
-    """
-
-    def lingo_can_use_entrance(self, room: str, door: RoomAndDoor, player: int, player_logic: LingoPlayerLogic):
-        if door is None:
-            return True
-        else:
-            if self._lingo_can_open_door(room, room if door.room is None else door.room, door.door, player,
-                                         player_logic):
-                return True
-            return False
-
-    def lingo_can_use_pilgrimage(self, player: int, player_logic: LingoPlayerLogic):
-        fake_pilgrimage = [
-            ["Second Room", "Exit Door"], ["Crossroads", "Tower Entrance"],
-            ["Orange Tower Fourth Floor", "Hot Crusts Door"], ["Outside The Initiated", "Shortcut to Hub Room"],
-            ["Orange Tower First Floor", "Shortcut to Hub Room"], ["Directional Gallery", "Shortcut to The Undeterred"],
-            ["Orange Tower First Floor", "Salt Pepper Door"], ["Hub Room", "Crossroads Entrance"],
-            ["Champion's Rest", "Shortcut to The Steady"], ["The Bearer", "Shortcut to The Bold"],
-            ["Art Gallery", "Exit"], ["The Tenacious", "Shortcut to Hub Room"],
-            ["Outside The Agreeable", "Tenacious Entrance"]
-        ]
-        viable_option = True
-        for entrance in fake_pilgrimage:
-            if not self.has(player_logic.ITEM_BY_DOOR[entrance[0]][entrance[1]], player):
-                viable_option = False
-                break
-        return viable_option
-
-    def lingo_can_use_location(self, location: PlayerLocation, room_name: str, world: World,
-                               player_logic: LingoPlayerLogic):
-        for panel in location.panels:
-            panel_room = room_name if panel.room is None else panel.room
-            if not self._lingo_can_solve_panel(room_name, panel_room, panel.panel, world, player_logic):
-                return False
+def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor, player: int,
+                           player_logic: LingoPlayerLogic):
+    if door is None:
         return True
 
-    def lingo_can_use_mastery_location(self, world: World):
-        return self.has("Mastery Achievement", world.player, world.options.mastery_achievements.value)
+    return _lingo_can_open_door(state, room, room if door.room is None else door.room, door.door, player, player_logic)
 
-    def _lingo_can_open_door(self, start_room: str, room: str, door: str, player: int, player_logic: LingoPlayerLogic):
-        """
-        Determines whether a door can be opened
-        """
-        item_name = player_logic.ITEM_BY_DOOR[room][door]
-        if item_name in PROGRESSIVE_ITEMS:
-            progression = PROGRESSION_BY_ROOM[room][door]
-            return self.has(item_name, player, progression.index)
-        else:
-            return self.has(item_name, player)
 
-    def _lingo_can_solve_panel(self, start_room: str, room: str, panel: str, world: World,
-                               player_logic: LingoPlayerLogic):
-        """
-        Determines whether a panel can be solved
-        """
-        if start_room != room and not self.has(f"{room} (Reached)", world.player):
+def lingo_can_use_pilgrimage(state: CollectionState, player: int, player_logic: LingoPlayerLogic):
+    fake_pilgrimage = [
+        ["Second Room", "Exit Door"], ["Crossroads", "Tower Entrance"],
+        ["Orange Tower Fourth Floor", "Hot Crusts Door"], ["Outside The Initiated", "Shortcut to Hub Room"],
+        ["Orange Tower First Floor", "Shortcut to Hub Room"], ["Directional Gallery", "Shortcut to The Undeterred"],
+        ["Orange Tower First Floor", "Salt Pepper Door"], ["Hub Room", "Crossroads Entrance"],
+        ["Champion's Rest", "Shortcut to The Steady"], ["The Bearer", "Shortcut to The Bold"],
+        ["Art Gallery", "Exit"], ["The Tenacious", "Shortcut to Hub Room"],
+        ["Outside The Agreeable", "Tenacious Entrance"]
+    ]
+    viable_option = True
+    for entrance in fake_pilgrimage:
+        if not state.has(player_logic.ITEM_BY_DOOR[entrance[0]][entrance[1]], player):
+            viable_option = False
+            break
+
+    return viable_option
+
+
+def lingo_can_use_location(state: CollectionState, location: PlayerLocation, room_name: str, world: "LingoWorld",
+                           player_logic: LingoPlayerLogic):
+    for panel in location.panels:
+        panel_room = room_name if panel.room is None else panel.room
+        if not _lingo_can_solve_panel(state, room_name, panel_room, panel.panel, world, player_logic):
             return False
-        if room == "Second Room" and panel == "ANOTHER TRY"\
-                and world.options.victory_condition.value == VictoryCondition.option_level_2\
-                and not self.has("Counting Panel Solved", world.player,
-                                 world.options.level_2_requirement.value - 1):
+
+    return True
+
+
+def lingo_can_use_mastery_location(state: CollectionState, world: "LingoWorld"):
+    return state.has("Mastery Achievement", world.player, world.options.mastery_achievements.value)
+
+
+def _lingo_can_open_door(state: CollectionState, start_room: str, room: str, door: str, player: int,
+                         player_logic: LingoPlayerLogic):
+    """
+    Determines whether a door can be opened
+    """
+    item_name = player_logic.ITEM_BY_DOOR[room][door]
+    if item_name in PROGRESSIVE_ITEMS:
+        progression = PROGRESSION_BY_ROOM[room][door]
+        return state.has(item_name, player, progression.index)
+
+    return state.has(item_name, player)
+
+
+def _lingo_can_solve_panel(state: CollectionState, start_room: str, room: str, panel: str, world: "LingoWorld",
+                           player_logic: LingoPlayerLogic):
+    """
+    Determines whether a panel can be solved
+    """
+    if start_room != room and not state.has(f"{room} (Reached)", world.player):
+        return False
+
+    if room == "Second Room" and panel == "ANOTHER TRY" \
+            and world.options.victory_condition == VictoryCondition.option_level_2 \
+            and not state.has("Counting Panel Solved", world.player, world.options.level_2_requirement.value - 1):
+        return False
+
+    panel_object = PANELS_BY_ROOM[room][panel]
+    for req_room in panel_object.required_rooms:
+        if not state.has(f"{req_room} (Reached)", world.player):
             return False
-        panel_object = PANELS_BY_ROOM[room][panel]
-        for req_room in panel_object.required_rooms:
-            if not self.has(f"{req_room} (Reached)", world.player):
+
+    for req_door in panel_object.required_doors:
+        if not _lingo_can_open_door(state, start_room, room if req_door.room is None else req_door.room,
+                                    req_door.door, world.player, player_logic):
+            return False
+
+    for req_panel in panel_object.required_panels:
+        if not _lingo_can_solve_panel(state, start_room, room if req_panel.room is None else req_panel.room,
+                                      req_panel.panel, world, player_logic):
+            return False
+
+    if len(panel_object.colors) > 0 and world.options.shuffle_colors:
+        for color in panel_object.colors:
+            if not state.has(color.capitalize(), world.player):
                 return False
-        for req_door in panel_object.required_doors:
-            if not self._lingo_can_open_door(start_room, room if req_door.room is None else req_door.room,
-                                             req_door.door, world.player, player_logic):
-                return False
-        for req_panel in panel_object.required_panels:
-            if not self._lingo_can_solve_panel(start_room, room if req_panel.room is None else req_panel.room,
-                                               req_panel.panel, world, player_logic):
-                return False
-        if len(panel_object.colors) > 0 and world.options.shuffle_colors.value:
-            for color in panel_object.colors:
-                if not self.has(color.capitalize(), world.player):
-                    return False
-        return True
+
+    return True
 
 
-def make_location_lambda(location: PlayerLocation, room_name: str, world: World, player_logic: LingoPlayerLogic):
+def make_location_lambda(location: PlayerLocation, room_name: str, world: "LingoWorld", player_logic: LingoPlayerLogic):
     if location.name == player_logic.MASTERY_LOCATION:
-        return lambda state: state.lingo_can_use_mastery_location(world)
-    else:
-        return lambda state: state.lingo_can_use_location(location, room_name, world, player_logic)
+        return lambda state: lingo_can_use_mastery_location(state, world)
+
+    return lambda state: lingo_can_use_location(state, location, room_name, world, player_logic)
