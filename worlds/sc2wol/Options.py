@@ -41,6 +41,10 @@ class FinalMap(Choice):
 
     Vanilla mission order always ends with All in mission!
 
+    Warning: Using All-in with a short mission order (7 or fewer missions) is not recommended,
+        as there might not be enough locations to place all the required items,
+        any excess required items will be placed into the player's starting inventory!
+
     This option is short-lived. It may be changed in the future
     """
     display_name = "Final Map"
@@ -265,7 +269,6 @@ class MissionProgressLocations(LocationInclusion):
     Nothing: No rewards for this type of tasks, effectively disabling such locations
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
-    Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Mission Progress Locations"
@@ -282,7 +285,6 @@ class BonusLocations(LocationInclusion):
     Nothing: No rewards for this type of tasks, effectively disabling such locations
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
-    Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Bonus Locations"
@@ -300,7 +302,6 @@ class ChallengeLocations(LocationInclusion):
     Nothing: No rewards for this type of tasks, effectively disabling such locations
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
-    Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Challenge Locations"
@@ -317,7 +318,6 @@ class OptionalBossLocations(LocationInclusion):
     Nothing: No rewards for this type of tasks, effectively disabling such locations
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
-    Warning: The generation may fail if too many locations are excluded by this way.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Optional Boss Locations"
