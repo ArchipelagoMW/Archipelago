@@ -79,7 +79,6 @@ class Group(enum.Enum):
     CRAFTSANITY = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
-    TEMPERED_GALAXY_WEAPONS = enum.auto()
     MOD_WARP = enum.auto()
 
 @dataclass(frozen=True)

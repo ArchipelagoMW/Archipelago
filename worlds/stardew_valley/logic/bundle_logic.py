@@ -15,7 +15,6 @@ class BundleLogic:
     has: HasLogic
     money: MoneyLogic
     region: RegionLogic
-    crop: CropLogic
 
     def __init__(self, player: int, crop: CropLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
         self.player = player

@@ -3,7 +3,6 @@ from typing import Union, Iterable
 from .has_logic import HasLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
-from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
 from ..data import CropItem
 from ..stardew_rule import StardewRule, True_
@@ -17,15 +16,13 @@ class CropLogic:
     has: HasLogic
     region: RegionLogic
     season: SeasonLogic
-    skill: SkillLogic
     tool: ToolLogic
 
-    def __init__(self, player: int, has: HasLogic, region: RegionLogic, season: SeasonLogic, skill: SkillLogic, tool: ToolLogic):
+    def __init__(self, player: int, has: HasLogic, region: RegionLogic, season: SeasonLogic, tool: ToolLogic):
         self.player = player
         self.has = has
         self.region = region
         self.season = season
-        self.skill = skill
         self.tool = tool
 
     def can_grow(self, crop: CropItem) -> StardewRule:
@@ -56,17 +53,3 @@ class CropLogic:
             return self.has(Fertilizer.quality)
         if tier >= 3:
             return self.has(Fertilizer.deluxe)
-
-    def can_grow_gold_quality(self, quality: int) -> StardewRule:
-        if quality <= 0:
-            return True_()
-        if quality == 1:
-            return self.skill.has_farming_level(5) | (self.has_fertilizer(1) & self.skill.has_farming_level(2)) | (
-                    self.has_fertilizer(2) & self.skill.has_farming_level(1)) | self.has_fertilizer(3)
-        if quality == 2:
-            return self.skill.has_farming_level(10) | (self.has_fertilizer(1) & self.skill.has_farming_level(5)) | (
-                    self.has_fertilizer(2) & self.skill.has_farming_level(3)) | (
-                           self.has_fertilizer(3) & self.skill.has_farming_level(2))
-        if quality >= 3:
-            return self.has_fertilizer(3) & self.skill.has_farming_level(4)
-
