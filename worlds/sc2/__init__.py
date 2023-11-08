@@ -15,7 +15,7 @@ from .Options import sc2_options, get_option_value, LocationInclusion, KerriganL
     KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence, \
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence
 from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS, missions_in_mission_table, get_used_races
-from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
+from .MissionTables import MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
     SC2Race
 
 
@@ -274,14 +274,17 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
             basic_units = get_basic_units(multiworld, player, first_race)
             if starter_unit == StarterUnit.option_balanced:
                 basic_units = basic_units.difference(not_balanced_starting_units)
+            if first_mission == SC2Mission.DARK_WHISPERS:
+                # Special case - you don't have a logicless location but need an AA
+                basic_units = basic_units.difference(
+                    {ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL, ItemNames.BLOOD_HUNTER,
+                     ItemNames.AVENGER, ItemNames.IMMORTAL, ItemNames.ANNIHILATOR, ItemNames.VANGUARD})
             local_basic_unit = sorted(item for item in basic_units if item not in non_local_items and item not in excluded_items)
             if not local_basic_unit:
                 # Drop non_local_items constraint
                 local_basic_unit = sorted(item for item in basic_units if item not in excluded_items)
                 if not local_basic_unit:
                     raise Exception("Early Unit: At least one basic unit must be included")
-
-            first_location = get_early_unit_location_name(first_mission)
 
             starter_items.append(add_starter_item(multiworld, player, excluded_items, local_basic_unit))
     
@@ -305,6 +308,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
     return starter_items
 
+
 def get_first_mission(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> str:
     # The first world should also be the starting world
     campaigns = mission_req_table.keys()
@@ -313,14 +317,6 @@ def get_first_mission(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo
     first_mission = list(mission_req_table[first_campaign])[0]
     return first_mission
 
-def get_early_unit_location_name(first_mission: str) -> str:
-    if first_mission in starting_mission_locations:
-        first_location = starting_mission_locations[first_mission]
-    elif first_mission == "In Utter Darkness":
-        first_location = first_mission + ": Defeat"
-    else:
-        first_location = first_mission + ": Victory"
-    return first_location
 
 def add_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], item_list: Sequence[str]) -> Item:
 

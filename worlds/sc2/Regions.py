@@ -181,6 +181,13 @@ def create_vanilla_regions(
         connect(multiworld, player, names, 'Death From Above', 'The Reckoning',
                 lambda state: state.has("Beat Death From Above", player)),
 
+    if SC2Campaign.PROLOGUE in enabled_campaigns:
+        connect(multiworld, player, names, "Menu", "Dark Whispers")
+        connect(multiworld, player, names, "Dark Whispers", "Ghosts in the Fog",
+                lambda state: state.has("Beat Dark Whispers", player))
+        connect(multiworld, player, names, "Dark Whispers", "Evil Awoken",
+                lambda state: state.has("Beat Ghosts in the Fog", player))
+
     goal_location = get_goal_location(final_mission)
     assert goal_location, f"Unable to find a goal location for mission {final_mission}"
     setup_final_location(goal_location, location_cache)

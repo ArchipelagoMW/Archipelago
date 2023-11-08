@@ -459,9 +459,29 @@ class SC2Logic(LogicMixin):
     def _sc2lotv_has_common_unit(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any(get_basic_units(multiworld, player, SC2Race.PROTOSS), player)
 
+    def _sc2lotv_has_basic_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_competent_anti_air(multiworld, player) \
+            or self.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER, ItemNames.SCOUT,
+                             ItemNames.DARK_ARCHON, ItemNames.WRATHWALKER, ItemNames.MOTHERSHIP}, player) \
+            or self._sc2_advanced_tactics(multiworld, player) and self._has_any(
+                {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT, ItemNames.DARK_TEMPLAR,
+                 ItemNames.SENTRY, ItemNames.ENERGIZER}, player)
+
+    def _sc2lotv_has_anti_armor_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_competent_anti_air(multiworld, player) \
+            or self.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, player)
+
     def _sc2lotv_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any(
             {ItemNames.STALKER, ItemNames.SLAYER, ItemNames.INSTIGATOR, ItemNames.DRAGOON, ItemNames.ADEPT,
-             ItemNames.VOID_RAY, ItemNames.DESTROYER}, player) \
+             ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.TEMPEST}, player) \
             or (self.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER}, player)
-                and self.has(ItemNames.SCOUT, player))
+                and self.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, player))
+
+    def _sc2lotv_can_attack_behind_chasm(self, multiworld: MultiWorld, player: int) -> bool:
+        return self.has_any(
+            {ItemNames.STALKER, ItemNames.SLAYER, ItemNames.INSTIGATOR, ItemNames.SCOUT, ItemNames.TEMPEST,
+             ItemNames.CARRIER, ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.MOTHERSHIP}, player) \
+            or self.has(ItemNames.WARP_PRISM, player) and self._sc2lotv_has_common_unit(multiworld, player) \
+            or (self._sc2_advanced_tactics(multiworld, player)
+                and self.has_any({ItemNames.ORACLE, ItemNames.ARBITER}, player))

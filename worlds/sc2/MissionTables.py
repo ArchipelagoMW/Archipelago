@@ -47,8 +47,8 @@ class SC2Campaign(Enum):
     WOL = 1, "Wings of Liberty", SC2CampaignGoalPriority.VERY_HARD, SC2Race.TERRAN
     PROPHECY = 2, "Prophecy", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
     HOTS = 3, "Heart of the Swarm", SC2CampaignGoalPriority.HARD, SC2Race.ZERG
-    PROLOGUE = 4, "Legacy of the Void (Prologue)", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
-    LOTV = 5, "Legacy of the Void (Main Campaign)", SC2CampaignGoalPriority.VERY_HARD, SC2Race.PROTOSS
+    PROLOGUE = 4, "Whispers of Oblivion (Legacy of the Void: Prologue)", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
+    LOTV = 5, "Legacy of the Void", SC2CampaignGoalPriority.VERY_HARD, SC2Race.PROTOSS
 
 
 class SC2Mission(Enum):
@@ -123,6 +123,10 @@ class SC2Mission(Enum):
     PLANETFALL = 47, "Planetfall", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_planetfall"
     DEATH_FROM_ABOVE = 48, "Death From Above", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_death_from_above"
     THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_the_reckoning"
+    # Prologue
+    DARK_WHISPERS = 50, "Dark Whispers", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers"
+    GHOSTS_IN_THE_FOG = 51, "Ghosts in the Fog", SC2Campaign.PROLOGUE, "_2", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_ghosts_in_the_fog"
+    EVIL_AWOKEN = 52, "Evil Awoken", SC2Campaign.PROLOGUE, "_3", SC2Race.PROTOSS, MissionPools.STARTER, "ap_evil_awoken", False
 
 class MissionConnection:
     campaign: SC2Campaign
@@ -213,7 +217,12 @@ vanilla_shuffle_order: Dict[SC2Campaign, List[FillMission]] = {
         FillMission(MissionPools.HARD, [MissionConnection(14, SC2Campaign.HOTS), MissionConnection(16, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
         FillMission(MissionPools.HARD, [MissionConnection(17, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
         FillMission(MissionPools.FINAL, [MissionConnection(18, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
-    ]
+    ],
+    SC2Campaign.PROLOGUE: [
+        FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_2", completion_critical=True, removal_priority=1),
+        FillMission(MissionPools.FINAL, [MissionConnection(1, SC2Campaign.PROLOGUE)], "_3", completion_critical=True)
+    ],
 }
 
 mini_campaign_order: Dict[SC2Campaign, List[FillMission]] = {
@@ -250,7 +259,11 @@ mini_campaign_order: Dict[SC2Campaign, List[FillMission]] = {
         FillMission(MissionPools.HARD, [MissionConnection(9, SC2Campaign.HOTS)], "Dominion Space"),
         FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.HOTS)], "Korhal", completion_critical=True, number=8),
         FillMission(MissionPools.FINAL, [MissionConnection(11, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
-    ]
+    ],
+    SC2Campaign.PROLOGUE: [
+        FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_3", completion_critical=True)
+    ],
 }
 
 gauntlet_order: Dict[SC2Campaign, List[FillMission]] = {
@@ -405,6 +418,11 @@ vanilla_mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {
         SC2Mission.DEATH_FROM_ABOVE.mission_name: MissionInfo(SC2Mission.DEATH_FROM_ABOVE, [MissionConnection(18, SC2Campaign.HOTS)], SC2Mission.DEATH_FROM_ABOVE.area, completion_critical=True),
         SC2Mission.THE_RECKONING.mission_name: MissionInfo(SC2Mission.THE_RECKONING, [MissionConnection(19, SC2Campaign.HOTS)], SC2Mission.THE_RECKONING.area, completion_critical=True),
     },
+    SC2Campaign.PROLOGUE: {
+        SC2Mission.DARK_WHISPERS.mission_name: MissionInfo(SC2Mission.DARK_WHISPERS, [], SC2Mission.DARK_WHISPERS.area, completion_critical=True),
+        SC2Mission.GHOSTS_IN_THE_FOG.mission_name: MissionInfo(SC2Mission.GHOSTS_IN_THE_FOG, [MissionConnection(1, SC2Campaign.PROLOGUE)], SC2Mission.GHOSTS_IN_THE_FOG.area, completion_critical=True),
+        SC2Mission.EVIL_AWOKEN.mission_name: MissionInfo(SC2Mission.EVIL_AWOKEN, [MissionConnection(2, SC2Campaign.PROLOGUE)], SC2Mission.EVIL_AWOKEN.area, completion_critical=True)
+    }
 }
 
 lookup_id_to_mission: Dict[int, SC2Mission] = {
@@ -468,35 +486,6 @@ def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: Iterabl
             return campaign.goal_priority
 
 
-starting_mission_locations = {
-    # WoL
-    "Liberation Day": "Liberation Day: Victory",
-    "Breakout": "Breakout: Victory",
-    "Ghost of a Chance": "Ghost of a Chance: Victory",
-    "Piercing the Shroud": "Piercing the Shroud: Victory",
-    "Whispers of Doom": "Whispers of Doom: Victory",
-    "Belly of the Beast": "Belly of the Beast: Victory",
-    "Zero Hour": "Zero Hour: First Group Rescued",
-    "Evacuation": "Evacuation: Reach Hanson",
-    "Devil's Playground": "Devil's Playground: Tosh's Miners",
-    "Smash and Grab": "Smash and Grab: First Relic",
-    "The Great Train Robbery": "The Great Train Robbery: North Defiler",
-    # HotS
-    "Lab Rat": "Lab Rat: Gather Minerals",
-    "Back in the Saddle": "Back in the Saddle: Victory",
-    "Harvest of Screams": "Harvest of Screams: First Ursadon Matriarch",
-    "Shoot the Messenger": "Shoot the Messenger: Center Stasis Chamber",
-    "Domination": "Domination: Repel Zagara",
-    "Fire in the Sky": "Fire in the Sky: West Biomass",
-    "Old Soldiers": "Old Soldiers: Get Nuked",
-    "Enemy Within": "Enemy Within: Victory",
-    "Waking the Ancient": "Waking the Ancient: Center Essence Pool",
-    "Supreme": "Supreme: Victory",
-    "With Friends Like These": "With Friends Like These: Victory",
-    "Conviction": "Conviction: Victory",
-}
-
-
 class SC2CampaignGoal(NamedTuple):
     mission: SC2Mission
     location: str
@@ -506,6 +495,7 @@ campaign_final_mission_locations: Dict[SC2Campaign, SC2CampaignGoal] = {
     SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
     SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),
     SC2Campaign.HOTS: None,
+    SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, "Evil Awoken: Victory")
 }
 
 campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] = {
@@ -525,6 +515,9 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
         SC2Mission.PLANETFALL: "Planetfall: Victory",
         SC2Mission.DEATH_FROM_ABOVE: "Death From Above: Victory"
     },
+    SC2Campaign.PROLOGUE: {
+        SC2Mission.GHOSTS_IN_THE_FOG: "Ghosts in the Fog: Victory"
+    }
 }
 
 # In the future, use this to store Epilogue mission races

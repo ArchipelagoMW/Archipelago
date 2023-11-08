@@ -8,6 +8,7 @@ from BaseClasses import Location
 
 SC2WOL_LOC_ID_OFFSET = 1000
 SC2HOTS_LOC_ID_OFFSET = SC2WOL_LOC_ID_OFFSET + 2900
+SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
 
 
 class SC2Location(Location):
@@ -778,6 +779,42 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2hots_final_mission_requirements(multiworld, player)),
         LocationData("The Reckoning", "The Reckoning: East Lane", SC2HOTS_LOC_ID_OFFSET + 2003, LocationType.BONUS,
                      lambda state: state._sc2hots_final_mission_requirements(multiworld, player)),
+
+        # LotV Prologue
+        LocationData("Dark Whispers", "Dark Whispers: Victory", SC2LOTV_LOC_ID_OFFSET + 100, LocationType.VICTORY,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_basic_anti_air(multiworld, player)),
+        LocationData("Dark Whispers", "Dark Whispers: First Prisoner Group", SC2LOTV_LOC_ID_OFFSET + 101, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_basic_anti_air(multiworld, player)),
+        LocationData("Dark Whispers", "Dark Whispers: Second Prisoner Group", SC2LOTV_LOC_ID_OFFSET + 102, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_basic_anti_air(multiworld, player)),
+        LocationData("Dark Whispers", "Dark Whispers: First Pylon", SC2LOTV_LOC_ID_OFFSET + 103, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_basic_anti_air(multiworld, player)),
+        LocationData("Dark Whispers", "Dark Whispers: Second Pylon", SC2LOTV_LOC_ID_OFFSET + 104, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_basic_anti_air(multiworld, player)),
+        LocationData("Ghosts in the Fog", "Ghosts in the Fog: Victory", SC2LOTV_LOC_ID_OFFSET + 200, LocationType.VICTORY,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_anti_armor_anti_air(multiworld, player)),
+        LocationData("Ghosts in the Fog", "Ghosts in the Fog: South Rock Formation", SC2LOTV_LOC_ID_OFFSET + 201, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_anti_armor_anti_air(multiworld, player)),
+        LocationData("Ghosts in the Fog", "Ghosts in the Fog: West Rock Formation", SC2LOTV_LOC_ID_OFFSET + 202, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_anti_armor_anti_air(multiworld, player)),
+        LocationData("Ghosts in the Fog", "Ghosts in the Fog: East Rock Formation", SC2LOTV_LOC_ID_OFFSET + 203, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player) \
+                                   and state._sc2lotv_has_anti_armor_anti_air(multiworld, player) \
+                                   and state._sc2lotv_can_attack_behind_chasm(multiworld, player)),
+        LocationData("Evil Awoken", "Evil Awoken: Victory", SC2LOTV_LOC_ID_OFFSET + 300, LocationType.VICTORY),
+        LocationData("Evil Awoken", "Evil Awoken: Temple Investigated", SC2LOTV_LOC_ID_OFFSET + 301, LocationType.MISSION_PROGRESS),
+        LocationData("Evil Awoken", "Evil Awoken: Void Catalyst", SC2LOTV_LOC_ID_OFFSET + 302, LocationType.MISSION_PROGRESS),
+        LocationData("Evil Awoken", "Evil Awoken: First Particle Cannon", SC2LOTV_LOC_ID_OFFSET + 303, LocationType.BONUS),
+        LocationData("Evil Awoken", "Evil Awoken: Second Particle Cannon", SC2LOTV_LOC_ID_OFFSET + 304, LocationType.BONUS),
+        LocationData("Evil Awoken", "Evil Awoken: Third Particle Cannon", SC2LOTV_LOC_ID_OFFSET + 305, LocationType.BONUS),
     ]
 
     beat_events = []

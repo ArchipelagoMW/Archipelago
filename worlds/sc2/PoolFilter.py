@@ -438,6 +438,9 @@ class ValidInventory:
         # Protoss
         self._sc2lotv_has_common_unit = lambda world, player: SC2Logic._sc2lotv_has_common_unit(self, world, player)
         self._sc2lotv_has_competent_anti_air = lambda world, player: SC2Logic._sc2lotv_has_competent_anti_air(self, world, player)
+        self._sc2lotv_has_basic_anti_air = lambda world, player: SC2Logic._sc2lotv_has_basic_anti_air(self, world, player)
+        self._sc2lotv_has_anti_armor_anti_air = lambda world, player: SC2Logic._sc2lotv_has_anti_armor_anti_air(self, world, player)
+        self._sc2lotv_can_attack_behind_chasm = lambda world, player: SC2Logic._sc2lotv_can_attack_behind_chasm(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
