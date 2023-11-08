@@ -30,7 +30,6 @@ from ...strings.villager_names import NPC
 from ...stardew_rule import StardewRule, Or
 
 
-@dataclass(frozen=False, repr=False)
 class SVELogic:
     player: int
     received: ReceivedLogic
@@ -45,8 +44,7 @@ class SVELogic:
     money: MoneyLogic
     combat: CombatLogic
     season: SeasonLogic
-
-    sve_location_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    sve_location_rules: Dict[str, StardewRule]
 
     def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, quest: QuestLogic, region: RegionLogic, action: ActionLogic,
                  relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
@@ -67,7 +65,9 @@ class SVELogic:
         self.money = money
         self.combat = combat
         self.season = season
+        self.sve_location_rules = dict()
 
+    def initialize_rules(self):
         self.sve_location_rules.update({
             "Bear: Baked Berry Oatmeal Recipe": self.quest.can_complete_quest("Strange Note") & self.money.can_spend(
                 12500),
