@@ -206,7 +206,7 @@ id,region,name,tags,mod_name
 536,Fishing,Catch A Squid,"MANDATORY,QUEST",
 537,Saloon,Fish Stew,"MANDATORY,QUEST",
 538,Pierre's General Store,Pierre's Notice,"MANDATORY,QUEST",
-539,Blacksmith,Clint's Attempt,"MANDATORY,QUEST",
+539,Clint's Blacksmith,Clint's Attempt,"MANDATORY,QUEST",
 540,Haley's House,A Favor For Clint,"MANDATORY,QUEST",
 541,Wizard Tower,Staff Of Power,"MANDATORY,QUEST",
 542,Alex's House,Granny's Gift,"MANDATORY,QUEST",
