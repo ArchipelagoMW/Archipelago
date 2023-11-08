@@ -9,7 +9,7 @@ from ...strings.machine_names import Machine
 from ...strings.tool_names import Tool, ToolMaterial
 from ...mods.mod_data import ModNames
 from ...data.villagers_data import all_villagers
-from ...stardew_rule import Count, StardewRule, False_
+from ...stardew_rule import Count, StardewRule, False_, True_
 from ... import options
 
 
@@ -59,7 +59,7 @@ def can_earn_magic_skill_level(vanilla_logic, level: int) -> StardewRule:
                    vanilla_logic.received(MagicSpell.shockwave),
                    vanilla_logic.received(MagicSpell.meteor),
                    vanilla_logic.received(MagicSpell.spirit)]
-    return magic.can_use_altar(vanilla_logic) & Count(level, spell_count)
+    return Count(level, spell_count)
 
 
 def can_earn_socializing_skill_level(vanilla_logic, level: int) -> StardewRule:
@@ -87,8 +87,6 @@ def can_earn_cooking_skill_level(vanilla_logic, level: int) -> StardewRule:
 
 def can_earn_binning_skill_level(vanilla_logic, level: int) -> StardewRule:
     if level >= 6:
-        return vanilla_logic.can_reach_region(Region.town) & vanilla_logic.has(Machine.recycling_machine) & \
-            (vanilla_logic.can_fish() | vanilla_logic.can_crab_pot())
+        return vanilla_logic.has(Machine.recycling_machine) & (vanilla_logic.can_fish() | vanilla_logic.can_crab_pot())
     else:
-        return vanilla_logic.can_reach_region(Region.town) | (vanilla_logic.has(Machine.recycling_machine) &
-                                                     (vanilla_logic.can_fish() | vanilla_logic.can_crab_pot()))
+        return True_() # You can always earn levels 1-5 with trash cans

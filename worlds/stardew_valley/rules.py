@@ -625,65 +625,55 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
                              (logic.has_relationship(NPC.wizard, 3) &
                               logic.can_reach_region(Region.wizard_tower)).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Clear Debris", player),
-                             ((logic.has_tool("Axe", "Basic") | logic.has_tool("Pickaxe", "Basic"))
-                              & magic.can_use_altar(logic)).simplify())
+                             (logic.has_tool("Axe", "Basic") | logic.has_tool("Pickaxe", "Basic")).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Till", player),
-                             (logic.has_tool("Hoe", "Basic") & magic.can_use_altar(logic)).simplify())
+                             logic.has_tool("Hoe", "Basic").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Water", player),
-                             (logic.has_tool("Watering Can", "Basic") & magic.can_use_altar(logic)).simplify())
+                             logic.has_tool("Watering Can", "Basic").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Toil School Locations", player),
                              (logic.has_tool("Watering Can", "Basic") & logic.has_tool("Hoe", "Basic")
-                              & (logic.has_tool("Axe", "Basic") | logic.has_tool("Pickaxe", "Basic"))
-                              & magic.can_use_altar(logic)).simplify())
+                              & (logic.has_tool("Axe", "Basic") | logic.has_tool("Pickaxe", "Basic"))).simplify())
     # Do I *want* to add boots into logic when you get them even in vanilla without effort?  idk
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Evac", player),
-                             (logic.can_mine_perfectly() & magic.can_use_altar(logic)).simplify())
+                             logic.can_mine_perfectly().simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Haste", player),
-                             (logic.has("Coffee") & magic.can_use_altar(logic)).simplify())
+                             logic.has("Coffee").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Heal", player),
-                             (logic.has("Life Elixir") & magic.can_use_altar(logic)).simplify())
+                             logic.has("Life Elixir").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Life School Locations", player),
                              (logic.has("Coffee") & logic.has("Life Elixir")
-                              & logic.can_mine_perfectly() & magic.can_use_altar(logic)).simplify())
+                              & logic.can_mine_perfectly()).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Descend", player),
-                             (logic.can_reach_region(Region.mines) & magic.can_use_altar(logic)).simplify())
+                             logic.can_reach_region(Region.mines).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Fireball", player),
-                             (logic.has("Fire Quartz") & magic.can_use_altar(logic)).simplify())
+                             logic.has("Fire Quartz").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Frostbite", player),
-                             (logic.can_fish(85) & magic.can_use_altar(logic)).simplify())
+                             (logic.can_reach_region(Region.mines_floor_60) & logic.can_fish(85)).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Elemental School Locations", player),
-                             (logic.can_reach_region(Region.mines) & logic.has("Fire Quartz")
-                              & logic.can_reach_region(Region.mines_floor_70) & logic.can_fish(85) &
-                              magic.can_use_altar(logic)).simplify())
-    MultiWorldRules.add_rule(multiworld.get_location("Analyze: Lantern", player),
-                             magic.can_use_altar(logic).simplify())
+                             (logic.has("Fire Quartz") & logic.can_reach_region(Region.mines_floor_60) & logic.can_fish(85)).simplify())
+    # MultiWorldRules.add_rule(multiworld.get_location("Analyze: Lantern", player),)
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Tendrils", player),
-                             (logic.can_reach_region(Region.farm) & magic.can_use_altar(logic)).simplify())
+                             logic.can_reach_region(Region.farm).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Shockwave", player),
-                             (logic.has("Earth Crystal") & magic.can_use_altar(logic)).simplify())
+                             logic.has("Earth Crystal").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Nature School Locations", player),
-                             (logic.has("Earth Crystal") & logic.can_reach_region("Farm") &
-                              magic.can_use_altar(logic)).simplify()),
+                             (logic.has("Earth Crystal") & logic.can_reach_region("Farm")).simplify()),
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Meteor", player),
-                             (logic.can_reach_region(Region.farm) & logic.has_lived_months(12)
-                              & magic.can_use_altar(logic)).simplify()),
+                             (logic.can_reach_region(Region.farm) & logic.has_lived_months(12)).simplify()),
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Lucksteal", player),
-                             (logic.can_reach_region(Region.witch_hut) & magic.can_use_altar(logic)).simplify())
+                             logic.can_reach_region(Region.witch_hut).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Bloodmana", player),
-                             (logic.can_reach_region(Region.mines_floor_100) & magic.can_use_altar(logic)).simplify())
+                             logic.can_reach_region(Region.mines_floor_100).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Eldritch School Locations", player),
                              (logic.can_reach_region(Region.witch_hut) &
                               logic.can_reach_region(Region.mines_floor_100) &
-                              logic.can_reach_region(Region.farm) & logic.has_lived_months(12) &
-                              magic.can_use_altar(logic)).simplify())
+                              logic.can_reach_region(Region.farm) & logic.has_lived_months(12)).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze Every Magic School Location", player),
                              (logic.has_tool("Watering Can", "Basic") & logic.has_tool("Hoe", "Basic")
                               & (logic.has_tool("Axe", "Basic") | logic.has_tool("Pickaxe", "Basic")) &
                               logic.has("Coffee") & logic.has("Life Elixir")
                               & logic.can_mine_perfectly() & logic.has("Earth Crystal") &
-                              logic.can_reach_region(Region.mines) &
                               logic.has("Fire Quartz") & logic.can_fish(85) &
                               logic.can_reach_region(Region.witch_hut) &
                               logic.can_reach_region(Region.mines_floor_100) &
-                              logic.can_reach_region(Region.farm) & logic.has_lived_months(12) &
-                              magic.can_use_altar(logic)).simplify())
+                              logic.can_reach_region(Region.farm) & logic.has_lived_months(12)).simplify())
