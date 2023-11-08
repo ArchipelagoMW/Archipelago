@@ -186,8 +186,7 @@ class StardewValleyWorld(World):
                                        "Victory")
         elif self.options.goal == Goal.option_bottom_of_the_mines:
             self.create_event_location(location_table[GoalName.bottom_of_the_mines],
-                                       self.logic.can_mine_to_floor(120).simplify(),
-                                       "Victory")
+                                       item="Victory")
         elif self.options.goal == Goal.option_cryptic_note:
             self.create_event_location(location_table[GoalName.cryptic_note],
                                        self.logic.can_complete_quest("Cryptic Note").simplify(),
@@ -223,7 +222,9 @@ class StardewValleyWorld(World):
             self.all_progression_items.add(item.name)
         return StardewItem(item.name, item.classification, item.code, self.player)
 
-    def create_event_location(self, location_data: LocationData, rule: StardewRule, item: Optional[str] = None):
+    def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
+        if rule is None:
+            rule = True_()
         if item is None:
             item = location_data.name
 

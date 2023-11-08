@@ -947,7 +947,7 @@ id,region,name,tags,mod_name
 2030,Town,The Legend of the Winter Star,FESTIVAL,
 2031,Farm,Collect All Rarecrows,FESTIVAL,
 2101,Town,Island Ingredients,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
-2102,Town,Cave Patrol,SPECIAL_ORDER_BOARD,
+2102,The Mines - Floor 75,Cave Patrol,SPECIAL_ORDER_BOARD,
 2103,Town,Aquatic Overpopulation,SPECIAL_ORDER_BOARD,
 2104,Town,Biome Balance,SPECIAL_ORDER_BOARD,
 2105,Town,Rock Rejuvenation,SPECIAL_ORDER_BOARD,
@@ -962,8 +962,8 @@ id,region,name,tags,mod_name
 2114,Town,Robin's Resource Rush,SPECIAL_ORDER_BOARD,
 2115,Town,Juicy Bugs Wanted!,SPECIAL_ORDER_BOARD,
 2116,Town,Tropical Fish,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
-2117,Town,A Curious Substance,SPECIAL_ORDER_BOARD,
-2118,Town,Prismatic Jelly,SPECIAL_ORDER_BOARD,
+2117,The Mines - Floor 75,A Curious Substance,SPECIAL_ORDER_BOARD,
+2118,The Mines - Floor 35,Prismatic Jelly,SPECIAL_ORDER_BOARD,
 2151,Qi's Walnut Room,Qi's Crop,"GINGER_ISLAND,SPECIAL_ORDER_QI",
 2152,Qi's Walnut Room,Let's Play A Game,"GINGER_ISLAND,SPECIAL_ORDER_QI,JUNIMO_KART",
 2153,Qi's Walnut Room,Four Precious Stones,"GINGER_ISLAND,SPECIAL_ORDER_QI",
@@ -1107,7 +1107,7 @@ id,region,name,tags,mod_name
 5508,Stardew Valley,Analyze All Life School Locations,MANDATORY,Magic
 5509,Stardew Valley,Analyze: Descend,MANDATORY,Magic
 5510,Stardew Valley,Analyze: Fireball,MANDATORY,Magic
-5511,Stardew Valley,Analyze: Frostbite,MANDATORY,Magic
+5511,The Mines - Floor 60,Analyze: Frostbite,MANDATORY,Magic
 5512,Stardew Valley,Analyze All Elemental School Locations,MANDATORY,Magic
 5513,Stardew Valley,Analyze: Lantern,MANDATORY,Magic
 5514,Stardew Valley,Analyze: Tendrils,MANDATORY,Magic

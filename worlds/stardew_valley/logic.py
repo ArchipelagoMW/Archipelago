@@ -496,7 +496,7 @@ class StardewLogic:
         self.special_order_rules.update({
             SpecialOrder.island_ingredients: self.can_meet(NPC.caroline) & self.has_island_transport() & self.can_farm_perfectly() &
                                              self.can_ship(Vegetable.taro_root) & self.can_ship(Fruit.pineapple) & self.can_ship(Forageable.ginger),
-            SpecialOrder.cave_patrol: self.can_meet(NPC.clint) & self.can_mine_perfectly() & self.can_mine_to_floor(120),
+            SpecialOrder.cave_patrol: self.can_meet(NPC.clint),
             SpecialOrder.aquatic_overpopulation: self.can_meet(NPC.demetrius) & self.can_fish_perfectly(),
             SpecialOrder.biome_balance: self.can_meet(NPC.demetrius) & self.can_fish_perfectly(),
             SpecialOrder.rock_rejuivenation: self.has_relationship(NPC.emily, 4) & self.has(Mineral.ruby) & self.has(Mineral.topaz) &
@@ -516,8 +516,8 @@ class StardewLogic:
             SpecialOrder.juicy_bugs_wanted_yum: self.can_reach_region(Region.beach) & self.has(Loot.bug_meat),
             SpecialOrder.tropical_fish: self.can_meet(NPC.willy) & self.received("Island Resort") & self.has_island_transport() &
                                         self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
-            SpecialOrder.a_curious_substance: self.can_reach_region(Region.wizard_tower) & self.can_mine_perfectly() & self.can_mine_to_floor(80),
-            SpecialOrder.prismatic_jelly: self.can_reach_region(Region.wizard_tower) & self.can_mine_perfectly() & self.can_mine_to_floor(40),
+            SpecialOrder.a_curious_substance: self.can_reach_region(Region.wizard_tower),
+            SpecialOrder.prismatic_jelly: self.can_reach_region(Region.wizard_tower),
             SpecialOrder.qis_crop: self.can_farm_perfectly() & self.can_reach_region(Region.greenhouse) &
                          self.can_reach_region(Region.island_west) & self.has_total_skill_level(50) &
                          self.has(Machine.seed_maker) & self.has_building(Building.shipping_bin),
@@ -1046,7 +1046,7 @@ class StardewLogic:
     def can_progress_in_the_mines_from_floor(self, floor: int) -> StardewRule:
         key = f"can_progress_in_the_mines_from_floor {floor}"
         if key not in self.cached_rules:
-            tier = int(floor / 40)
+            tier = floor // 40
             rules = []
             weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
             rules.append(weapon_rule)
@@ -1058,19 +1058,6 @@ class StardewLogic:
             self.cached_rules[key] = And(rules)
         return self.cached_rules[key]
 
-    def can_progress_easily_in_the_mines_from_floor(self, floor: int) -> StardewRule:
-        tier = (floor // 40) + 1
-        rules = []
-        weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
-        rules.append(weapon_rule)
-        if self.options.tool_progression == ToolProgression.option_progressive:
-            rules.append(self.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
-        if self.options.skill_progression == SkillProgression.option_progressive:
-            skill_tier = min(10, max(0, tier * 2))
-            rules.append(self.has_skill_level(Skill.mining, skill_tier))
-            rules.append(self.has_skill_level(Skill.combat, skill_tier))
-        return And(rules)
-
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
         key = f"has_mine_elevator_to_floor {floor}"
         if key not in self.cached_rules:
@@ -1081,16 +1068,6 @@ class StardewLogic:
             else:
                 self.cached_rules[key] = True_()
         return self.cached_rules[key]
-
-
-
-    def can_mine_to_floor(self, floor: int) -> StardewRule:
-        previous_elevator = max(floor - 5, 0)
-        previous_previous_elevator = max(floor - 10, 0)
-        return ((self.has_mine_elevator_to_floor(previous_elevator) &
-                 self.can_progress_in_the_mines_from_floor(previous_elevator)) |
-                (self.has_mine_elevator_to_floor(previous_previous_elevator) &
-                 self.can_progress_easily_in_the_mines_from_floor(previous_previous_elevator)))
 
     def can_progress_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
         tier = floor // 50
@@ -1105,18 +1082,6 @@ class StardewLogic:
             rules.extend({self.has_skill_level(Skill.combat, skill_tier),
                           self.has_skill_level(Skill.mining, skill_tier)})
         return And(rules)
-
-    def can_progress_easily_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
-        return self.can_progress_in_the_skull_cavern_from_floor(floor + 50)
-
-    def can_mine_to_skull_cavern_floor(self, floor: int) -> StardewRule:
-        previous_elevator = max(floor - 25, 0)
-        previous_previous_elevator = max(floor - 50, 0)
-        has_mine_elevator = self.has_mine_elevator_to_floor(5) # Skull Cavern Elevator menu needs a normal elevator...
-        return ((has_skull_cavern_elevator_to_floor(self, previous_elevator) &
-                 self.can_progress_in_the_skull_cavern_from_floor(previous_elevator)) |
-                (has_skull_cavern_elevator_to_floor(self, previous_previous_elevator) &
-                 self.can_progress_easily_in_the_skull_cavern_from_floor(previous_previous_elevator))) & has_mine_elevator
 
     def has_jotpk_power_level(self, power_level: int) -> StardewRule:
         if self.options.arcade_machine_locations != ArcadeMachineLocations.option_full_shuffling:

@@ -3,6 +3,7 @@ from typing import List
 
 from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
+from .mods.logic.skullcavernelevator import has_skull_cavern_elevator_to_floor
 from .options import StardewValleyOptions, ToolProgression, BuildingProgression, SkillProgression, ExcludeGingerIsland, Cropsanity, SpecialOrderLocations, Museumsanity, \
     BackpackProgression, ArcadeMachineLocations
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \
@@ -159,6 +160,10 @@ def set_entrance_rules(logic, multiworld, player, world_options: StardewValleyOp
     set_skull_cavern_floor_entrance_rules(logic, multiworld, player)
     set_blacksmith_entrance_rules(logic, multiworld, player)
 
+
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farming, player),
+                             logic.can_earn_farming_xp().simplify())
+
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_tide_pools, player),
                              logic.received("Beach Bridge") | (magic.can_blink(logic)).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_quarry, player),
@@ -223,16 +228,18 @@ def set_mines_floor_entrance_rules(logic, multiworld, player):
     for floor in range(5, 120 + 5, 5):
         rule = logic.has_mine_elevator_to_floor(floor - 10)
         if floor == 5 or floor == 45 or floor == 85:
-            rule = rule & logic.can_progress_easily_in_the_mines_from_floor(floor)
+            rule = rule & logic.can_progress_in_the_mines_from_floor(floor)
         entrance = multiworld.get_entrance(dig_to_mines_floor(floor), player)
         MultiWorldRules.set_rule(entrance, rule.simplify())
 
 
-
 def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
     for floor in range(25, 200 + 25, 25):
-        MultiWorldRules.set_rule(multiworld.get_entrance(dig_to_skull_floor(floor), player),
-                                 logic.can_mine_to_skull_cavern_floor(floor).simplify())
+        rule = has_skull_cavern_elevator_to_floor(logic, floor - 25)
+        if floor == 5 or floor == 45 or floor == 85:
+            rule = rule & logic.can_progress_in_the_skull_cavern_from_floor(floor)
+        entrance = multiworld.get_entrance(dig_to_skull_floor(floor), player)
+        MultiWorldRules.set_rule(entrance, rule.simplify())
 
 
 def set_blacksmith_entrance_rules(logic, multiworld, player):
@@ -623,7 +630,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Fireball", player),
                              (logic.has("Fire Quartz") & magic.can_use_altar(logic)).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Frostbite", player),
-                             (logic.can_mine_to_floor(70) & logic.can_fish(85) & magic.can_use_altar(logic)).simplify())
+                             (logic.can_fish(85) & magic.can_use_altar(logic)).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Elemental School Locations", player),
                              (logic.can_reach_region(Region.mines) & logic.has("Fire Quartz")
                               & logic.can_reach_region(Region.mines_floor_70) & logic.can_fish(85) &
