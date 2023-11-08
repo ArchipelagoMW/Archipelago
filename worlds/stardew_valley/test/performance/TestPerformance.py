@@ -49,7 +49,7 @@ def size_name(number_players):
 
 
 class TestDefaultOptions(SVTestCase):
-    acceptable_time_per_player = 0.05
+    acceptable_time_per_player = 0.04
     options = default_options()
 
     def test_solo(self):
@@ -87,7 +87,7 @@ class TestDefaultOptions(SVTestCase):
 
 
 class TestMinLocationMaxItems(SVTestCase):
-    acceptable_time_per_player = 0.6
+    acceptable_time_per_player = 0.08
     options = minimal_locations_maximal_items()
 
     def test_solo(self):
@@ -124,7 +124,7 @@ class TestMinLocationMaxItems(SVTestCase):
 
 
 class TestAllsanityWithoutMods(SVTestCase):
-    acceptable_time_per_player = 0.1
+    acceptable_time_per_player = 0.07
     options = allsanity_options_without_mods()
 
     def test_solo(self):

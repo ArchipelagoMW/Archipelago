@@ -502,19 +502,19 @@ class StardewLogic:
             SpecialOrder.biome_balance: self.can_meet(NPC.demetrius) & self.can_fish_perfectly(),
             SpecialOrder.rock_rejuivenation: self.has_relationship(NPC.emily, 4) & self.has(Mineral.ruby) & self.has(Mineral.topaz) &
                                              self.has(Mineral.emerald) & self.has(Mineral.jade) & self.has(Mineral.amethyst) &
-                                             self.has(ArtisanGood.cloth) & self.can_reach_region(Region.haley_house),
-            SpecialOrder.gifts_for_george: self.can_reach_region(Region.alex_house) & self.has_season(Season.spring) & self.has(Forageable.leek),
-            SpecialOrder.fragments_of_the_past: self.can_reach_region(Region.museum) & self.can_reach_region(Region.dig_site) & self.has_tool(Tool.pickaxe),
-            SpecialOrder.gus_famous_omelet: self.can_reach_region(Region.saloon) & self.has(AnimalProduct.any_egg),
+                                             self.has(ArtisanGood.cloth),
+            SpecialOrder.gifts_for_george: self.has_season(Season.spring) & self.has(Forageable.leek),
+            SpecialOrder.fragments_of_the_past: self.can_reach_region(Region.dig_site) & self.has_tool(Tool.pickaxe),
+            SpecialOrder.gus_famous_omelet: self.has(AnimalProduct.any_egg),
             SpecialOrder.crop_order: self.can_farm_perfectly() & self.can_ship(),
-            SpecialOrder.community_cleanup: self.can_reach_region(Region.railroad) & self.can_crab_pot(),
-            SpecialOrder.the_strong_stuff: self.can_reach_region(Region.trailer) & self.can_keg(Vegetable.potato),
-            SpecialOrder.pierres_prime_produce: self.can_reach_region(Region.pierre_store) & self.can_farm_perfectly(),
-            SpecialOrder.robins_project: self.can_meet(NPC.robin) & self.can_reach_region(Region.carpenter) & self.can_chop_perfectly() &
+            SpecialOrder.community_cleanup: self.can_crab_pot(),
+            SpecialOrder.the_strong_stuff: self.can_keg(Vegetable.potato),
+            SpecialOrder.pierres_prime_produce: self.can_farm_perfectly(),
+            SpecialOrder.robins_project: self.can_meet(NPC.robin) & self.can_chop_perfectly() &
                                          self.has(Material.hardwood),
-            SpecialOrder.robins_resource_rush: self.can_meet(NPC.robin) & self.can_reach_region(Region.carpenter) & self.can_chop_perfectly() &
+            SpecialOrder.robins_resource_rush: self.can_meet(NPC.robin) & self.can_chop_perfectly() &
                                                self.has(Fertilizer.tree) & self.can_mine_perfectly(),
-            SpecialOrder.juicy_bugs_wanted_yum: self.can_reach_region(Region.beach) & self.has(Loot.bug_meat),
+            SpecialOrder.juicy_bugs_wanted_yum: self.has(Loot.bug_meat),
             SpecialOrder.tropical_fish: self.can_meet(NPC.willy) & self.received("Island Resort") & self.has_island_transport() &
                                         self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
             SpecialOrder.a_curious_substance: self.can_reach_region(Region.wizard_tower),

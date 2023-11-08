@@ -23,9 +23,8 @@ def get_modded_quest_rules(vanilla_logic, active_mods):
 
     if ModNames.ayeisha in active_mods:
         quests.update({
-            ModQuest.AyeishaEnvelope: (vanilla_logic.has_season(Season.spring) | vanilla_logic.has_season(Season.fall)) &
-                                      vanilla_logic.can_reach_region(Region.mountain),
-            ModQuest.AyeishaRing: vanilla_logic.has_season(Season.winter) & vanilla_logic.can_reach_region(Region.forest)
+            ModQuest.AyeishaEnvelope: vanilla_logic.has_season(Season.spring) | vanilla_logic.has_season(Season.fall),
+            ModQuest.AyeishaRing: vanilla_logic.has_season(Season.winter)
         })
 
     return quests

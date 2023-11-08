@@ -915,8 +915,6 @@ id,region,name,tags,mod_name
 1726,Town,Friendsanity: Spouse 12 <3,FRIENDSANITY,
 1727,Town,Friendsanity: Spouse 13 <3,FRIENDSANITY,
 1728,Town,Friendsanity: Spouse 14 <3,FRIENDSANITY,
-2001,Town,Egg Hunt Victory,FESTIVAL,
-2002,Town,Egg Festival: Strawberry Seeds,FESTIVAL,
 2001,Egg Festival,Egg Hunt Victory,FESTIVAL,
 2002,Egg Festival,Egg Festival: Strawberry Seeds,FESTIVAL,
 2003,Flower Dance,Dance with someone,FESTIVAL,
@@ -950,19 +948,19 @@ id,region,name,tags,mod_name
 2031,Farm,Collect All Rarecrows,FESTIVAL,
 2101,Town,Island Ingredients,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
 2102,The Mines - Floor 75,Cave Patrol,SPECIAL_ORDER_BOARD,
-2103,Town,Aquatic Overpopulation,SPECIAL_ORDER_BOARD,
-2104,Town,Biome Balance,SPECIAL_ORDER_BOARD,
-2105,Town,Rock Rejuvenation,SPECIAL_ORDER_BOARD,
-2106,Town,Gifts for George,SPECIAL_ORDER_BOARD,
-2107,Town,Fragments of the past,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
-2108,Town,Gus' Famous Omelet,SPECIAL_ORDER_BOARD,
-2109,Town,Crop Order,SPECIAL_ORDER_BOARD,
-2110,Town,Community Cleanup,SPECIAL_ORDER_BOARD,
-2111,Town,The Strong Stuff,SPECIAL_ORDER_BOARD,
-2112,Town,Pierre's Prime Produce,SPECIAL_ORDER_BOARD,
-2113,Town,Robin's Project,SPECIAL_ORDER_BOARD,
-2114,Town,Robin's Resource Rush,SPECIAL_ORDER_BOARD,
-2115,Town,Juicy Bugs Wanted!,SPECIAL_ORDER_BOARD,
+2103,Fishing,Aquatic Overpopulation,SPECIAL_ORDER_BOARD,
+2104,Fishing,Biome Balance,SPECIAL_ORDER_BOARD,
+2105,Haley's House,Rock Rejuvenation,SPECIAL_ORDER_BOARD,
+2106,Alex's House,Gifts for George,SPECIAL_ORDER_BOARD,
+2107,Museum,Fragments of the past,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
+2108,Saloon,Gus' Famous Omelet,SPECIAL_ORDER_BOARD,
+2109,Farm,Crop Order,SPECIAL_ORDER_BOARD,
+2110,Railroad,Community Cleanup,SPECIAL_ORDER_BOARD,
+2111,Trailer,The Strong Stuff,SPECIAL_ORDER_BOARD,
+2112,Pierre's General Store,Pierre's Prime Produce,SPECIAL_ORDER_BOARD,
+2113,Carpenter Shop,Robin's Project,SPECIAL_ORDER_BOARD,
+2114,Carpenter Shop,Robin's Resource Rush,SPECIAL_ORDER_BOARD,
+2115,Beach,Juicy Bugs Wanted!,SPECIAL_ORDER_BOARD,
 2116,Town,Tropical Fish,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
 2117,The Mines - Floor 75,A Curious Substance,SPECIAL_ORDER_BOARD,
 2118,The Mines - Floor 35,Prismatic Jelly,SPECIAL_ORDER_BOARD,
@@ -992,53 +990,53 @@ id,region,name,tags,mod_name
 2214,Island West,Parrot Express,"GINGER_ISLAND,WALNUT_PURCHASE",
 2215,Dig Site,Open Professor Snail Cave,"GINGER_ISLAND",
 2216,Field Office,Complete Island Field Office,"GINGER_ISLAND",
-2301,Farm,Harvest Amaranth,"CROPSANITY",
-2302,Farm,Harvest Artichoke,"CROPSANITY",
-2303,Farm,Harvest Beet,"CROPSANITY",
-2304,Farm,Harvest Blue Jazz,"CROPSANITY",
-2305,Farm,Harvest Blueberry,"CROPSANITY",
-2306,Farm,Harvest Bok Choy,"CROPSANITY",
-2307,Farm,Harvest Cauliflower,"CROPSANITY",
-2308,Farm,Harvest Corn,"CROPSANITY",
-2309,Farm,Harvest Cranberries,"CROPSANITY",
-2310,Farm,Harvest Eggplant,"CROPSANITY",
-2311,Farm,Harvest Fairy Rose,"CROPSANITY",
-2312,Farm,Harvest Garlic,"CROPSANITY",
-2313,Farm,Harvest Grape,"CROPSANITY",
-2314,Farm,Harvest Green Bean,"CROPSANITY",
-2315,Farm,Harvest Hops,"CROPSANITY",
-2316,Farm,Harvest Hot Pepper,"CROPSANITY",
-2317,Farm,Harvest Kale,"CROPSANITY",
-2318,Farm,Harvest Melon,"CROPSANITY",
-2319,Farm,Harvest Parsnip,"CROPSANITY",
-2320,Farm,Harvest Poppy,"CROPSANITY",
-2321,Farm,Harvest Potato,"CROPSANITY",
-2322,Farm,Harvest Pumpkin,"CROPSANITY",
-2323,Farm,Harvest Radish,"CROPSANITY",
-2324,Farm,Harvest Red Cabbage,"CROPSANITY",
-2325,Farm,Harvest Rhubarb,"CROPSANITY",
-2326,Farm,Harvest Starfruit,"CROPSANITY",
-2327,Farm,Harvest Strawberry,"CROPSANITY",
-2328,Farm,Harvest Summer Spangle,"CROPSANITY",
-2329,Farm,Harvest Sunflower,"CROPSANITY",
-2330,Farm,Harvest Tomato,"CROPSANITY",
-2331,Farm,Harvest Tulip,"CROPSANITY",
-2332,Farm,Harvest Unmilled Rice,"CROPSANITY",
-2333,Farm,Harvest Wheat,"CROPSANITY",
-2334,Farm,Harvest Yam,"CROPSANITY",
-2335,Farm,Harvest Cactus Fruit,"CROPSANITY",
-2336,Farm,Harvest Pineapple,"CROPSANITY,GINGER_ISLAND",
-2337,Farm,Harvest Taro Root,"CROPSANITY,GINGER_ISLAND",
-2338,Farm,Harvest Sweet Gem Berry,"CROPSANITY",
-2339,Farm,Harvest Apple,"CROPSANITY",
-2340,Farm,Harvest Apricot,"CROPSANITY",
-2341,Farm,Harvest Cherry,"CROPSANITY",
-2342,Farm,Harvest Orange,"CROPSANITY",
-2343,Farm,Harvest Pomegranate,"CROPSANITY",
-2344,Farm,Harvest Peach,"CROPSANITY",
-2345,Farm,Harvest Banana,"CROPSANITY,GINGER_ISLAND",
-2346,Farm,Harvest Mango,"CROPSANITY,GINGER_ISLAND",
-2347,Farm,Harvest Coffee Bean,"CROPSANITY",
+2301,Farming,Harvest Amaranth,"CROPSANITY",
+2302,Farming,Harvest Artichoke,"CROPSANITY",
+2303,Farming,Harvest Beet,"CROPSANITY",
+2304,Farming,Harvest Blue Jazz,"CROPSANITY",
+2305,Farming,Harvest Blueberry,"CROPSANITY",
+2306,Farming,Harvest Bok Choy,"CROPSANITY",
+2307,Farming,Harvest Cauliflower,"CROPSANITY",
+2308,Farming,Harvest Corn,"CROPSANITY",
+2309,Farming,Harvest Cranberries,"CROPSANITY",
+2310,Farming,Harvest Eggplant,"CROPSANITY",
+2311,Farming,Harvest Fairy Rose,"CROPSANITY",
+2312,Farming,Harvest Garlic,"CROPSANITY",
+2313,Farming,Harvest Grape,"CROPSANITY",
+2314,Farming,Harvest Green Bean,"CROPSANITY",
+2315,Farming,Harvest Hops,"CROPSANITY",
+2316,Farming,Harvest Hot Pepper,"CROPSANITY",
+2317,Farming,Harvest Kale,"CROPSANITY",
+2318,Farming,Harvest Melon,"CROPSANITY",
+2319,Farming,Harvest Parsnip,"CROPSANITY",
+2320,Farming,Harvest Poppy,"CROPSANITY",
+2321,Farming,Harvest Potato,"CROPSANITY",
+2322,Farming,Harvest Pumpkin,"CROPSANITY",
+2323,Farming,Harvest Radish,"CROPSANITY",
+2324,Farming,Harvest Red Cabbage,"CROPSANITY",
+2325,Farming,Harvest Rhubarb,"CROPSANITY",
+2326,Farming,Harvest Starfruit,"CROPSANITY",
+2327,Farming,Harvest Strawberry,"CROPSANITY",
+2328,Farming,Harvest Summer Spangle,"CROPSANITY",
+2329,Farming,Harvest Sunflower,"CROPSANITY",
+2330,Farming,Harvest Tomato,"CROPSANITY",
+2331,Farming,Harvest Tulip,"CROPSANITY",
+2332,Farming,Harvest Unmilled Rice,"CROPSANITY",
+2333,Farming,Harvest Wheat,"CROPSANITY",
+2334,Farming,Harvest Yam,"CROPSANITY",
+2335,Farming,Harvest Cactus Fruit,"CROPSANITY",
+2336,Farming,Harvest Pineapple,"CROPSANITY,GINGER_ISLAND",
+2337,Farming,Harvest Taro Root,"CROPSANITY,GINGER_ISLAND",
+2338,Farming,Harvest Sweet Gem Berry,"CROPSANITY",
+2339,Farming,Harvest Apple,"CROPSANITY",
+2340,Farming,Harvest Apricot,"CROPSANITY",
+2341,Farming,Harvest Cherry,"CROPSANITY",
+2342,Farming,Harvest Orange,"CROPSANITY",
+2343,Farming,Harvest Pomegranate,"CROPSANITY",
+2344,Farming,Harvest Peach,"CROPSANITY",
+2345,Farming,Harvest Banana,"CROPSANITY,GINGER_ISLAND",
+2346,Farming,Harvest Mango,"CROPSANITY,GINGER_ISLAND",
+2347,Farming,Harvest Coffee Bean,"CROPSANITY",
 5001,Stardew Valley,Level 1 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5002,Stardew Valley,Level 2 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5003,Stardew Valley,Level 3 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
@@ -1059,26 +1057,26 @@ id,region,name,tags,mod_name
 5018,Stardew Valley,Level 8 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
 5019,Stardew Valley,Level 9 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
 5020,Stardew Valley,Level 10 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
-5021,Stardew Valley,Level 1 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5022,Stardew Valley,Level 2 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5023,Stardew Valley,Level 3 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5024,Stardew Valley,Level 4 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5025,Stardew Valley,Level 5 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5026,Stardew Valley,Level 6 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5027,Stardew Valley,Level 7 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5028,Stardew Valley,Level 8 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5029,Stardew Valley,Level 9 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5030,Stardew Valley,Level 10 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
-5031,Stardew Valley,Level 1 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5032,Stardew Valley,Level 2 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5033,Stardew Valley,Level 3 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5034,Stardew Valley,Level 4 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5035,Stardew Valley,Level 5 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5036,Stardew Valley,Level 6 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5037,Stardew Valley,Level 7 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5038,Stardew Valley,Level 8 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5039,Stardew Valley,Level 9 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
-5040,Stardew Valley,Level 10 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5021,Magic Altar,Level 1 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5022,Magic Altar,Level 2 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5023,Magic Altar,Level 3 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5024,Magic Altar,Level 4 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5025,Magic Altar,Level 5 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5026,Magic Altar,Level 6 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5027,Magic Altar,Level 7 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5028,Magic Altar,Level 8 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5029,Magic Altar,Level 9 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5030,Magic Altar,Level 10 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5031,Town,Level 1 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5032,Town,Level 2 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5033,Town,Level 3 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5034,Town,Level 4 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5035,Town,Level 5 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5036,Town,Level 6 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5037,Town,Level 7 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5038,Town,Level 8 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5039,Town,Level 9 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5040,Town,Level 10 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
 5041,Stardew Valley,Level 1 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
 5042,Stardew Valley,Level 2 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
 5043,Stardew Valley,Level 3 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
@@ -1099,61 +1097,61 @@ id,region,name,tags,mod_name
 5058,Stardew Valley,Level 8 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
 5059,Stardew Valley,Level 9 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
 5060,Stardew Valley,Level 10 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
-5501,Stardew Valley,Analyze: Clear Debris,MANDATORY,Magic
-5502,Stardew Valley,Analyze: Till,MANDATORY,Magic
-5503,Stardew Valley,Analyze: Water,MANDATORY,Magic
-5504,Stardew Valley,Analyze All Toil School Locations,MANDATORY,Magic
-5505,Stardew Valley,Analyze: Evac,MANDATORY,Magic
-5506,Stardew Valley,Analyze: Haste,MANDATORY,Magic
-5507,Stardew Valley,Analyze: Heal,MANDATORY,Magic
-5508,Stardew Valley,Analyze All Life School Locations,MANDATORY,Magic
-5509,Stardew Valley,Analyze: Descend,MANDATORY,Magic
-5510,Stardew Valley,Analyze: Fireball,MANDATORY,Magic
-5511,The Mines - Floor 60,Analyze: Frostbite,MANDATORY,Magic
-5512,Stardew Valley,Analyze All Elemental School Locations,MANDATORY,Magic
-5513,Stardew Valley,Analyze: Lantern,MANDATORY,Magic
-5514,Stardew Valley,Analyze: Tendrils,MANDATORY,Magic
-5515,Stardew Valley,Analyze: Shockwave,MANDATORY,Magic
-5516,Stardew Valley,Analyze All Nature School Locations,MANDATORY,Magic
-5517,Stardew Valley,Analyze: Meteor,MANDATORY,Magic
-5518,Stardew Valley,Analyze: Lucksteal,MANDATORY,Magic
-5519,Stardew Valley,Analyze: Bloodmana,MANDATORY,Magic
-5520,Stardew Valley,Analyze All Eldritch School Locations,MANDATORY,Magic
-5521,Stardew Valley,Analyze Every Magic School Location,MANDATORY,Magic
-6001,Town,Friendsanity: Jasper 1 <3,FRIENDSANITY,Professor Jasper Thomas
-6002,Town,Friendsanity: Jasper 2 <3,FRIENDSANITY,Professor Jasper Thomas
-6003,Town,Friendsanity: Jasper 3 <3,FRIENDSANITY,Professor Jasper Thomas
-6004,Town,Friendsanity: Jasper 4 <3,FRIENDSANITY,Professor Jasper Thomas
-6005,Town,Friendsanity: Jasper 5 <3,FRIENDSANITY,Professor Jasper Thomas
-6006,Town,Friendsanity: Jasper 6 <3,FRIENDSANITY,Professor Jasper Thomas
-6007,Town,Friendsanity: Jasper 7 <3,FRIENDSANITY,Professor Jasper Thomas
-6008,Town,Friendsanity: Jasper 8 <3,FRIENDSANITY,Professor Jasper Thomas
-6009,Town,Friendsanity: Jasper 9 <3,FRIENDSANITY,Professor Jasper Thomas
-6010,Town,Friendsanity: Jasper 10 <3,FRIENDSANITY,Professor Jasper Thomas
-6011,Town,Friendsanity: Jasper 11 <3,FRIENDSANITY,Professor Jasper Thomas
-6012,Town,Friendsanity: Jasper 12 <3,FRIENDSANITY,Professor Jasper Thomas
-6013,Town,Friendsanity: Jasper 13 <3,FRIENDSANITY,Professor Jasper Thomas
-6014,Town,Friendsanity: Jasper 14 <3,FRIENDSANITY,Professor Jasper Thomas
-6015,Secret Woods,Friendsanity: Yoba 1 <3,FRIENDSANITY,Custom NPC - Yoba
-6016,Secret Woods,Friendsanity: Yoba 2 <3,FRIENDSANITY,Custom NPC - Yoba
-6017,Secret Woods,Friendsanity: Yoba 3 <3,FRIENDSANITY,Custom NPC - Yoba
-6018,Secret Woods,Friendsanity: Yoba 4 <3,FRIENDSANITY,Custom NPC - Yoba
-6019,Secret Woods,Friendsanity: Yoba 5 <3,FRIENDSANITY,Custom NPC - Yoba
-6020,Secret Woods,Friendsanity: Yoba 6 <3,FRIENDSANITY,Custom NPC - Yoba
-6021,Secret Woods,Friendsanity: Yoba 7 <3,FRIENDSANITY,Custom NPC - Yoba
-6022,Secret Woods,Friendsanity: Yoba 8 <3,FRIENDSANITY,Custom NPC - Yoba
-6023,Secret Woods,Friendsanity: Yoba 9 <3,FRIENDSANITY,Custom NPC - Yoba
-6024,Secret Woods,Friendsanity: Yoba 10 <3,FRIENDSANITY,Custom NPC - Yoba
-6025,Forest,Friendsanity: Mr. Ginger 1 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6026,Forest,Friendsanity: Mr. Ginger 2 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6027,Forest,Friendsanity: Mr. Ginger 3 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6028,Forest,Friendsanity: Mr. Ginger 4 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6029,Forest,Friendsanity: Mr. Ginger 5 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6030,Forest,Friendsanity: Mr. Ginger 6 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6031,Forest,Friendsanity: Mr. Ginger 7 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6032,Forest,Friendsanity: Mr. Ginger 8 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6033,Forest,Friendsanity: Mr. Ginger 9 <3,FRIENDSANITY,Mister Ginger (cat npc)
-6034,Forest,Friendsanity: Mr. Ginger 10 <3,FRIENDSANITY,Mister Ginger (cat npc)
+5501,Magic Altar,Analyze: Clear Debris,MANDATORY,Magic
+5502,Magic Altar,Analyze: Till,MANDATORY,Magic
+5503,Magic Altar,Analyze: Water,MANDATORY,Magic
+5504,Magic Altar,Analyze All Toil School Locations,MANDATORY,Magic
+5505,Magic Altar,Analyze: Evac,MANDATORY,Magic
+5506,Magic Altar,Analyze: Haste,MANDATORY,Magic
+5507,Magic Altar,Analyze: Heal,MANDATORY,Magic
+5508,Magic Altar,Analyze All Life School Locations,MANDATORY,Magic
+5509,Magic Altar,Analyze: Descend,MANDATORY,Magic
+5510,Magic Altar,Analyze: Fireball,MANDATORY,Magic
+5511,Magic Altar,Analyze: Frostbite,MANDATORY,Magic
+5512,Magic Altar,Analyze All Elemental School Locations,MANDATORY,Magic
+5513,Magic Altar,Analyze: Lantern,MANDATORY,Magic
+5514,Magic Altar,Analyze: Tendrils,MANDATORY,Magic
+5515,Magic Altar,Analyze: Shockwave,MANDATORY,Magic
+5516,Magic Altar,Analyze All Nature School Locations,MANDATORY,Magic
+5517,Magic Altar,Analyze: Meteor,MANDATORY,Magic
+5518,Magic Altar,Analyze: Lucksteal,MANDATORY,Magic
+5519,Magic Altar,Analyze: Bloodmana,MANDATORY,Magic
+5520,Magic Altar,Analyze All Eldritch School Locations,MANDATORY,Magic
+5521,Magic Altar,Analyze Every Magic School Location,MANDATORY,Magic
+6001,Museum,Friendsanity: Jasper 1 <3,FRIENDSANITY,Professor Jasper Thomas
+6002,Museum,Friendsanity: Jasper 2 <3,FRIENDSANITY,Professor Jasper Thomas
+6003,Museum,Friendsanity: Jasper 3 <3,FRIENDSANITY,Professor Jasper Thomas
+6004,Museum,Friendsanity: Jasper 4 <3,FRIENDSANITY,Professor Jasper Thomas
+6005,Museum,Friendsanity: Jasper 5 <3,FRIENDSANITY,Professor Jasper Thomas
+6006,Museum,Friendsanity: Jasper 6 <3,FRIENDSANITY,Professor Jasper Thomas
+6007,Museum,Friendsanity: Jasper 7 <3,FRIENDSANITY,Professor Jasper Thomas
+6008,Museum,Friendsanity: Jasper 8 <3,FRIENDSANITY,Professor Jasper Thomas
+6009,Museum,Friendsanity: Jasper 9 <3,FRIENDSANITY,Professor Jasper Thomas
+6010,Museum,Friendsanity: Jasper 10 <3,FRIENDSANITY,Professor Jasper Thomas
+6011,Museum,Friendsanity: Jasper 11 <3,FRIENDSANITY,Professor Jasper Thomas
+6012,Museum,Friendsanity: Jasper 12 <3,FRIENDSANITY,Professor Jasper Thomas
+6013,Museum,Friendsanity: Jasper 13 <3,FRIENDSANITY,Professor Jasper Thomas
+6014,Museum,Friendsanity: Jasper 14 <3,FRIENDSANITY,Professor Jasper Thomas
+6015,Yoba's Clearing,Friendsanity: Yoba 1 <3,FRIENDSANITY,Custom NPC - Yoba
+6016,Yoba's Clearing,Friendsanity: Yoba 2 <3,FRIENDSANITY,Custom NPC - Yoba
+6017,Yoba's Clearing,Friendsanity: Yoba 3 <3,FRIENDSANITY,Custom NPC - Yoba
+6018,Yoba's Clearing,Friendsanity: Yoba 4 <3,FRIENDSANITY,Custom NPC - Yoba
+6019,Yoba's Clearing,Friendsanity: Yoba 5 <3,FRIENDSANITY,Custom NPC - Yoba
+6020,Yoba's Clearing,Friendsanity: Yoba 6 <3,FRIENDSANITY,Custom NPC - Yoba
+6021,Yoba's Clearing,Friendsanity: Yoba 7 <3,FRIENDSANITY,Custom NPC - Yoba
+6022,Yoba's Clearing,Friendsanity: Yoba 8 <3,FRIENDSANITY,Custom NPC - Yoba
+6023,Yoba's Clearing,Friendsanity: Yoba 9 <3,FRIENDSANITY,Custom NPC - Yoba
+6024,Yoba's Clearing,Friendsanity: Yoba 10 <3,FRIENDSANITY,Custom NPC - Yoba
+6025,Marnie's Ranch,Friendsanity: Mr. Ginger 1 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6026,Marnie's Ranch,Friendsanity: Mr. Ginger 2 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6027,Marnie's Ranch,Friendsanity: Mr. Ginger 3 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6028,Marnie's Ranch,Friendsanity: Mr. Ginger 4 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6029,Marnie's Ranch,Friendsanity: Mr. Ginger 5 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6030,Marnie's Ranch,Friendsanity: Mr. Ginger 6 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6031,Marnie's Ranch,Friendsanity: Mr. Ginger 7 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6032,Marnie's Ranch,Friendsanity: Mr. Ginger 8 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6033,Marnie's Ranch,Friendsanity: Mr. Ginger 9 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6034,Marnie's Ranch,Friendsanity: Mr. Ginger 10 <3,FRIENDSANITY,Mister Ginger (cat npc)
 6035,Town,Friendsanity: Ayeisha 1 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
 6036,Town,Friendsanity: Ayeisha 2 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
 6037,Town,Friendsanity: Ayeisha 3 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
@@ -1164,34 +1162,34 @@ id,region,name,tags,mod_name
 6042,Town,Friendsanity: Ayeisha 8 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
 6043,Town,Friendsanity: Ayeisha 9 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
 6044,Town,Friendsanity: Ayeisha 10 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
-6045,Town,Friendsanity: Shiko 1 <3,FRIENDSANITY,Shiko - New Custom NPC
-6046,Town,Friendsanity: Shiko 2 <3,FRIENDSANITY,Shiko - New Custom NPC
-6047,Town,Friendsanity: Shiko 3 <3,FRIENDSANITY,Shiko - New Custom NPC
-6048,Town,Friendsanity: Shiko 4 <3,FRIENDSANITY,Shiko - New Custom NPC
-6049,Town,Friendsanity: Shiko 5 <3,FRIENDSANITY,Shiko - New Custom NPC
-6050,Town,Friendsanity: Shiko 6 <3,FRIENDSANITY,Shiko - New Custom NPC
-6051,Town,Friendsanity: Shiko 7 <3,FRIENDSANITY,Shiko - New Custom NPC
-6052,Town,Friendsanity: Shiko 8 <3,FRIENDSANITY,Shiko - New Custom NPC
-6053,Town,Friendsanity: Shiko 9 <3,FRIENDSANITY,Shiko - New Custom NPC
-6054,Town,Friendsanity: Shiko 10 <3,FRIENDSANITY,Shiko - New Custom NPC
-6055,Town,Friendsanity: Shiko 11 <3,FRIENDSANITY,Shiko - New Custom NPC
-6056,Town,Friendsanity: Shiko 12 <3,FRIENDSANITY,Shiko - New Custom NPC
-6057,Town,Friendsanity: Shiko 13 <3,FRIENDSANITY,Shiko - New Custom NPC
-6058,Town,Friendsanity: Shiko 14 <3,FRIENDSANITY,Shiko - New Custom NPC
-6059,Forest,Friendsanity: Wellwick 1 <3,FRIENDSANITY,'Prophet' Wellwick
-6060,Forest,Friendsanity: Wellwick 2 <3,FRIENDSANITY,'Prophet' Wellwick
-6061,Forest,Friendsanity: Wellwick 3 <3,FRIENDSANITY,'Prophet' Wellwick
-6062,Forest,Friendsanity: Wellwick 4 <3,FRIENDSANITY,'Prophet' Wellwick
-6063,Forest,Friendsanity: Wellwick 5 <3,FRIENDSANITY,'Prophet' Wellwick
-6064,Forest,Friendsanity: Wellwick 6 <3,FRIENDSANITY,'Prophet' Wellwick
-6065,Forest,Friendsanity: Wellwick 7 <3,FRIENDSANITY,'Prophet' Wellwick
-6066,Forest,Friendsanity: Wellwick 8 <3,FRIENDSANITY,'Prophet' Wellwick
-6067,Forest,Friendsanity: Wellwick 9 <3,FRIENDSANITY,'Prophet' Wellwick
-6068,Forest,Friendsanity: Wellwick 10 <3,FRIENDSANITY,'Prophet' Wellwick
-6069,Forest,Friendsanity: Wellwick 11 <3,FRIENDSANITY,'Prophet' Wellwick
-6070,Forest,Friendsanity: Wellwick 12 <3,FRIENDSANITY,'Prophet' Wellwick
-6071,Forest,Friendsanity: Wellwick 13 <3,FRIENDSANITY,'Prophet' Wellwick
-6072,Forest,Friendsanity: Wellwick 14 <3,FRIENDSANITY,'Prophet' Wellwick
+6045,Saloon,Friendsanity: Shiko 1 <3,FRIENDSANITY,Shiko - New Custom NPC
+6046,Saloon,Friendsanity: Shiko 2 <3,FRIENDSANITY,Shiko - New Custom NPC
+6047,Saloon,Friendsanity: Shiko 3 <3,FRIENDSANITY,Shiko - New Custom NPC
+6048,Saloon,Friendsanity: Shiko 4 <3,FRIENDSANITY,Shiko - New Custom NPC
+6049,Saloon,Friendsanity: Shiko 5 <3,FRIENDSANITY,Shiko - New Custom NPC
+6050,Saloon,Friendsanity: Shiko 6 <3,FRIENDSANITY,Shiko - New Custom NPC
+6051,Saloon,Friendsanity: Shiko 7 <3,FRIENDSANITY,Shiko - New Custom NPC
+6052,Saloon,Friendsanity: Shiko 8 <3,FRIENDSANITY,Shiko - New Custom NPC
+6053,Saloon,Friendsanity: Shiko 9 <3,FRIENDSANITY,Shiko - New Custom NPC
+6054,Saloon,Friendsanity: Shiko 10 <3,FRIENDSANITY,Shiko - New Custom NPC
+6055,Saloon,Friendsanity: Shiko 11 <3,FRIENDSANITY,Shiko - New Custom NPC
+6056,Saloon,Friendsanity: Shiko 12 <3,FRIENDSANITY,Shiko - New Custom NPC
+6057,Saloon,Friendsanity: Shiko 13 <3,FRIENDSANITY,Shiko - New Custom NPC
+6058,Saloon,Friendsanity: Shiko 14 <3,FRIENDSANITY,Shiko - New Custom NPC
+6059,Wizard Tower,Friendsanity: Wellwick 1 <3,FRIENDSANITY,'Prophet' Wellwick
+6060,Wizard Tower,Friendsanity: Wellwick 2 <3,FRIENDSANITY,'Prophet' Wellwick
+6061,Wizard Tower,Friendsanity: Wellwick 3 <3,FRIENDSANITY,'Prophet' Wellwick
+6062,Wizard Tower,Friendsanity: Wellwick 4 <3,FRIENDSANITY,'Prophet' Wellwick
+6063,Wizard Tower,Friendsanity: Wellwick 5 <3,FRIENDSANITY,'Prophet' Wellwick
+6064,Wizard Tower,Friendsanity: Wellwick 6 <3,FRIENDSANITY,'Prophet' Wellwick
+6065,Wizard Tower,Friendsanity: Wellwick 7 <3,FRIENDSANITY,'Prophet' Wellwick
+6066,Wizard Tower,Friendsanity: Wellwick 8 <3,FRIENDSANITY,'Prophet' Wellwick
+6067,Wizard Tower,Friendsanity: Wellwick 9 <3,FRIENDSANITY,'Prophet' Wellwick
+6068,Wizard Tower,Friendsanity: Wellwick 10 <3,FRIENDSANITY,'Prophet' Wellwick
+6069,Wizard Tower,Friendsanity: Wellwick 11 <3,FRIENDSANITY,'Prophet' Wellwick
+6070,Wizard Tower,Friendsanity: Wellwick 12 <3,FRIENDSANITY,'Prophet' Wellwick
+6071,Wizard Tower,Friendsanity: Wellwick 13 <3,FRIENDSANITY,'Prophet' Wellwick
+6072,Wizard Tower,Friendsanity: Wellwick 14 <3,FRIENDSANITY,'Prophet' Wellwick
 6073,Forest,Friendsanity: Delores 1 <3,FRIENDSANITY,Delores - Custom NPC
 6074,Forest,Friendsanity: Delores 2 <3,FRIENDSANITY,Delores - Custom NPC
 6075,Forest,Friendsanity: Delores 3 <3,FRIENDSANITY,Delores - Custom NPC
@@ -1206,34 +1204,34 @@ id,region,name,tags,mod_name
 6084,Forest,Friendsanity: Delores 12 <3,FRIENDSANITY,Delores - Custom NPC
 6085,Forest,Friendsanity: Delores 13 <3,FRIENDSANITY,Delores - Custom NPC
 6086,Forest,Friendsanity: Delores 14 <3,FRIENDSANITY,Delores - Custom NPC
-6087,Forest,Friendsanity: Alec 1 <3,FRIENDSANITY,Alec Revisited
-6088,Forest,Friendsanity: Alec 2 <3,FRIENDSANITY,Alec Revisited
-6089,Forest,Friendsanity: Alec 3 <3,FRIENDSANITY,Alec Revisited
-6090,Forest,Friendsanity: Alec 4 <3,FRIENDSANITY,Alec Revisited
-6091,Forest,Friendsanity: Alec 5 <3,FRIENDSANITY,Alec Revisited
-6092,Forest,Friendsanity: Alec 6 <3,FRIENDSANITY,Alec Revisited
-6093,Forest,Friendsanity: Alec 7 <3,FRIENDSANITY,Alec Revisited
-6094,Forest,Friendsanity: Alec 8 <3,FRIENDSANITY,Alec Revisited
-6095,Forest,Friendsanity: Alec 9 <3,FRIENDSANITY,Alec Revisited
-6096,Forest,Friendsanity: Alec 10 <3,FRIENDSANITY,Alec Revisited
-6097,Forest,Friendsanity: Alec 11 <3,FRIENDSANITY,Alec Revisited
-6098,Forest,Friendsanity: Alec 12 <3,FRIENDSANITY,Alec Revisited
-6099,Forest,Friendsanity: Alec 13 <3,FRIENDSANITY,Alec Revisited
-6100,Forest,Friendsanity: Alec 14 <3,FRIENDSANITY,Alec Revisited
-6101,Forest,Friendsanity: Eugene 1 <3,FRIENDSANITY,Custom NPC Eugene
-6102,Forest,Friendsanity: Eugene 2 <3,FRIENDSANITY,Custom NPC Eugene
-6103,Forest,Friendsanity: Eugene 3 <3,FRIENDSANITY,Custom NPC Eugene
-6104,Forest,Friendsanity: Eugene 4 <3,FRIENDSANITY,Custom NPC Eugene
-6105,Forest,Friendsanity: Eugene 5 <3,FRIENDSANITY,Custom NPC Eugene
-6106,Forest,Friendsanity: Eugene 6 <3,FRIENDSANITY,Custom NPC Eugene
-6107,Forest,Friendsanity: Eugene 7 <3,FRIENDSANITY,Custom NPC Eugene
-6108,Forest,Friendsanity: Eugene 8 <3,FRIENDSANITY,Custom NPC Eugene
-6109,Forest,Friendsanity: Eugene 9 <3,FRIENDSANITY,Custom NPC Eugene
-6110,Forest,Friendsanity: Eugene 10 <3,FRIENDSANITY,Custom NPC Eugene
-6111,Forest,Friendsanity: Eugene 11 <3,FRIENDSANITY,Custom NPC Eugene
-6112,Forest,Friendsanity: Eugene 12 <3,FRIENDSANITY,Custom NPC Eugene
-6113,Forest,Friendsanity: Eugene 13 <3,FRIENDSANITY,Custom NPC Eugene
-6114,Forest,Friendsanity: Eugene 14 <3,FRIENDSANITY,Custom NPC Eugene
+6087,Alec's Pet Shop,Friendsanity: Alec 1 <3,FRIENDSANITY,Alec Revisited
+6088,Alec's Pet Shop,Friendsanity: Alec 2 <3,FRIENDSANITY,Alec Revisited
+6089,Alec's Pet Shop,Friendsanity: Alec 3 <3,FRIENDSANITY,Alec Revisited
+6090,Alec's Pet Shop,Friendsanity: Alec 4 <3,FRIENDSANITY,Alec Revisited
+6091,Alec's Pet Shop,Friendsanity: Alec 5 <3,FRIENDSANITY,Alec Revisited
+6092,Alec's Pet Shop,Friendsanity: Alec 6 <3,FRIENDSANITY,Alec Revisited
+6093,Alec's Pet Shop,Friendsanity: Alec 7 <3,FRIENDSANITY,Alec Revisited
+6094,Alec's Pet Shop,Friendsanity: Alec 8 <3,FRIENDSANITY,Alec Revisited
+6095,Alec's Pet Shop,Friendsanity: Alec 9 <3,FRIENDSANITY,Alec Revisited
+6096,Alec's Pet Shop,Friendsanity: Alec 10 <3,FRIENDSANITY,Alec Revisited
+6097,Alec's Pet Shop,Friendsanity: Alec 11 <3,FRIENDSANITY,Alec Revisited
+6098,Alec's Pet Shop,Friendsanity: Alec 12 <3,FRIENDSANITY,Alec Revisited
+6099,Alec's Pet Shop,Friendsanity: Alec 13 <3,FRIENDSANITY,Alec Revisited
+6100,Alec's Pet Shop,Friendsanity: Alec 14 <3,FRIENDSANITY,Alec Revisited
+6101,Eugene's Garden,Friendsanity: Eugene 1 <3,FRIENDSANITY,Custom NPC Eugene
+6102,Eugene's Garden,Friendsanity: Eugene 2 <3,FRIENDSANITY,Custom NPC Eugene
+6103,Eugene's Garden,Friendsanity: Eugene 3 <3,FRIENDSANITY,Custom NPC Eugene
+6104,Eugene's Garden,Friendsanity: Eugene 4 <3,FRIENDSANITY,Custom NPC Eugene
+6105,Eugene's Garden,Friendsanity: Eugene 5 <3,FRIENDSANITY,Custom NPC Eugene
+6106,Eugene's Garden,Friendsanity: Eugene 6 <3,FRIENDSANITY,Custom NPC Eugene
+6107,Eugene's Garden,Friendsanity: Eugene 7 <3,FRIENDSANITY,Custom NPC Eugene
+6108,Eugene's Garden,Friendsanity: Eugene 8 <3,FRIENDSANITY,Custom NPC Eugene
+6109,Eugene's Garden,Friendsanity: Eugene 9 <3,FRIENDSANITY,Custom NPC Eugene
+6110,Eugene's Garden,Friendsanity: Eugene 10 <3,FRIENDSANITY,Custom NPC Eugene
+6111,Eugene's Garden,Friendsanity: Eugene 11 <3,FRIENDSANITY,Custom NPC Eugene
+6112,Eugene's Garden,Friendsanity: Eugene 12 <3,FRIENDSANITY,Custom NPC Eugene
+6113,Eugene's Garden,Friendsanity: Eugene 13 <3,FRIENDSANITY,Custom NPC Eugene
+6114,Eugene's Garden,Friendsanity: Eugene 14 <3,FRIENDSANITY,Custom NPC Eugene
 6115,Forest,Friendsanity: Juna 1 <3,FRIENDSANITY,Juna - Roommate NPC
 6116,Forest,Friendsanity: Juna 2 <3,FRIENDSANITY,Juna - Roommate NPC
 6117,Forest,Friendsanity: Juna 3 <3,FRIENDSANITY,Juna - Roommate NPC
@@ -1244,20 +1242,20 @@ id,region,name,tags,mod_name
 6122,Forest,Friendsanity: Juna 8 <3,FRIENDSANITY,Juna - Roommate NPC
 6123,Forest,Friendsanity: Juna 9 <3,FRIENDSANITY,Juna - Roommate NPC
 6124,Forest,Friendsanity: Juna 10 <3,FRIENDSANITY,Juna - Roommate NPC
-6125,Town,Friendsanity: Riley 1 <3,FRIENDSANITY,Custom NPC - Riley
-6126,Town,Friendsanity: Riley 2 <3,FRIENDSANITY,Custom NPC - Riley
-6127,Town,Friendsanity: Riley 3 <3,FRIENDSANITY,Custom NPC - Riley
-6128,Town,Friendsanity: Riley 4 <3,FRIENDSANITY,Custom NPC - Riley
-6129,Town,Friendsanity: Riley 5 <3,FRIENDSANITY,Custom NPC - Riley
-6130,Town,Friendsanity: Riley 6 <3,FRIENDSANITY,Custom NPC - Riley
-6131,Town,Friendsanity: Riley 7 <3,FRIENDSANITY,Custom NPC - Riley
-6132,Town,Friendsanity: Riley 8 <3,FRIENDSANITY,Custom NPC - Riley
-6133,Town,Friendsanity: Riley 9 <3,FRIENDSANITY,Custom NPC - Riley
-6134,Town,Friendsanity: Riley 10 <3,FRIENDSANITY,Custom NPC - Riley
-6135,Town,Friendsanity: Riley 11 <3,FRIENDSANITY,Custom NPC - Riley
-6136,Town,Friendsanity: Riley 12 <3,FRIENDSANITY,Custom NPC - Riley
-6137,Town,Friendsanity: Riley 13 <3,FRIENDSANITY,Custom NPC - Riley
-6138,Town,Friendsanity: Riley 14 <3,FRIENDSANITY,Custom NPC - Riley
+6125,Riley's House,Friendsanity: Riley 1 <3,FRIENDSANITY,Custom NPC - Riley
+6126,Riley's House,Friendsanity: Riley 2 <3,FRIENDSANITY,Custom NPC - Riley
+6127,Riley's House,Friendsanity: Riley 3 <3,FRIENDSANITY,Custom NPC - Riley
+6128,Riley's House,Friendsanity: Riley 4 <3,FRIENDSANITY,Custom NPC - Riley
+6129,Riley's House,Friendsanity: Riley 5 <3,FRIENDSANITY,Custom NPC - Riley
+6130,Riley's House,Friendsanity: Riley 6 <3,FRIENDSANITY,Custom NPC - Riley
+6131,Riley's House,Friendsanity: Riley 7 <3,FRIENDSANITY,Custom NPC - Riley
+6132,Riley's House,Friendsanity: Riley 8 <3,FRIENDSANITY,Custom NPC - Riley
+6133,Riley's House,Friendsanity: Riley 9 <3,FRIENDSANITY,Custom NPC - Riley
+6134,Riley's House,Friendsanity: Riley 10 <3,FRIENDSANITY,Custom NPC - Riley
+6135,Riley's House,Friendsanity: Riley 11 <3,FRIENDSANITY,Custom NPC - Riley
+6136,Riley's House,Friendsanity: Riley 12 <3,FRIENDSANITY,Custom NPC - Riley
+6137,Riley's House,Friendsanity: Riley 13 <3,FRIENDSANITY,Custom NPC - Riley
+6138,Riley's House,Friendsanity: Riley 14 <3,FRIENDSANITY,Custom NPC - Riley
 7001,Pierre's General Store,Premium Pack,BACKPACK,Bigger Backpack
 7002,Carpenter Shop,Tractor Garage Blueprint,BUILDING_BLUEPRINT,Tractor Mod
 7003,The Deep Woods Depth 100,Pet the Deep Woods Unicorn,MANDATORY,DeepWoods
@@ -1285,8 +1283,8 @@ id,region,name,tags,mod_name
 7025,Skull Cavern Floor 150,Skull Cavern: Floor 150,ELEVATOR,Skull Cavern Elevator
 7026,Skull Cavern Floor 175,Skull Cavern: Floor 175,ELEVATOR,Skull Cavern Elevator
 7027,Skull Cavern Floor 200,Skull Cavern: Floor 200,ELEVATOR,Skull Cavern Elevator
-7501,Town,Missing Envelope,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
-7502,Town,Lost Emerald Ring,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7501,Mountain,Missing Envelope,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7502,Forest,Lost Emerald Ring,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
 7503,Forest,Mr.Ginger's request,"MANDATORY,QUEST",Mister Ginger (cat npc)
 7504,Forest,Juna's Drink Request,"MANDATORY,QUEST",Juna - Roommate NPC
 7505,Forest,Juna's BFF Request,"MANDATORY,QUEST",Juna - Roommate NPC
