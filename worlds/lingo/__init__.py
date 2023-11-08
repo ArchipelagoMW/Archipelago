@@ -103,7 +103,7 @@ class LingoWorld(World):
 
         slot_data = {
             "seed": self.random.randint(0, 1000000),
-            **self.options.as_dict(*slot_options).items(),
+            **self.options.as_dict(*slot_options),
         }
 
         if self.options.shuffle_paintings:
