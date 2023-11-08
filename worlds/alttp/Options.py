@@ -276,7 +276,7 @@ class EnemyDamage(Choice):
 
 class ShufflePrizes(Choice):
     """Shuffle "general" prize packs, as in enemy, tree pull, dig etc.; "bonk" prizes; or both."""
-    display_name = "ShufflePrizes"
+    display_name = "Shuffle Prizes"
     default = 1
     option_off = 0
     option_general = 1
@@ -403,8 +403,8 @@ class RandomizeCostTypes(Toggle):
 
 
 class ShopPriceModifier(Range):
-    """Percentage modifier for shuffled item rupee prices in shops"""
-    display_name = "Shop Price Cost Percent"
+    """Percentage modifier for shuffled item prices in shops"""
+    display_name = "Shop Price Modifier"
     range_start = 0
     default = 100
     range_end = 400

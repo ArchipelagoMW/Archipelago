@@ -172,9 +172,7 @@ def push_shop_inventories(multiworld):
         location.shop_price = location.shop.inventory[location.shop_slot]["price"] = min(location.shop_price,
             get_price(multiworld, location.shop.inventory[location.shop_slot], location.player,
                       location.shop_price_type)[1])
-        # location.shop_price = int(location.shop_price * get_price_modifier(location.item))
 
-    # FillDisabledShopSlots(multiworld)
 
 def create_shops(multiworld, player: int):
 
@@ -338,18 +336,16 @@ def shuffle_shops(multiworld, player: int):
     if (multiworld.shuffle_shop_inventories[player] or multiworld.randomize_shop_prices[player]
             or multiworld.randomize_cost_types[player]):
         shops = []
-        upgrade_shops = []
         total_inventory = []
         for shop in multiworld.shops:
             if shop.region.player == player:
-                if shop.type == ShopType.UpgradeShop:
-                    upgrade_shops.append(shop)
-                elif shop.type == ShopType.Shop and not shop.locked:
+                if shop.type == ShopType.Shop and not shop.locked:
                     shops.append(shop)
                     total_inventory.extend(shop.inventory)
 
         for item in total_inventory:
             item["price_type"], item["price"] = get_price(multiworld, item, player)
+
         if multiworld.shuffle_shop_inventories[player]:
             multiworld.random.shuffle(total_inventory)
 
