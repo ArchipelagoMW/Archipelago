@@ -8,7 +8,7 @@ from typing import Dict, List, Protocol, Union, Set, Optional
 
 from BaseClasses import Item, ItemClassification
 from . import data
-from .data.villagers_data import all_villagers, all_modified_villagers_by_name_by_mod
+from .data.villagers_data import all_villagers_for_current_mods
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
     Friendsanity, Museumsanity, \
@@ -364,12 +364,7 @@ def create_friendsanity_items(item_factory: StardewItemFactory, options: Stardew
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     mods = options.mods
     heart_size = options.friendsanity_heart_size
-    for villager in all_villagers:
-        if villager.mod_name not in mods and villager.mod_name is not None:
-            continue
-        if villager.name in all_modified_villagers_by_name_by_mod and all_modified_villagers_by_name_by_mod[villager.name] in mods:
-            modified_villager_mod = all_modified_villagers_by_name_by_mod[villager.name]
-            villager = modified_villager_mod[villager.name]
+    for villager in all_villagers_for_current_mods(mods.value):
         if not villager.available and exclude_locked_villagers:
             continue
         if not villager.bachelor and exclude_non_bachelors:
