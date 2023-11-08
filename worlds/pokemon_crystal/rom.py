@@ -90,8 +90,24 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                     cur_address += 8
         if world.options.blind_trainers:
             if address_name == "AP_Setting_Blind_Trainers":
-                continue
-                write_bytes(patched_rom, [0x3E, 0xFF], address)
+                write_bytes(patched_rom, [0xC9], address)
+        if world.options.randomize_learnsets:
+            if address_name.endswith("EvosAttacks"):
+                pkmn_name = address_name[0:-11].upper()
+                learnset_data = data.evo_attacks[pkmn_name]
+                cur_address = address + (3 * len(learnset_data.evolutions)) + 1
+                move_levels = []
+                if world.options.randomize_learnsets > 1:
+                    for move in learnset_data.moves:
+                        if move[1] == "NO_MOVE":
+                            move_levels.append(1)
+                for move in learnset_data.moves:
+                    if move[1] != "NO_MOVE":
+                        move_levels.append(move[0])
+                for level in move_levels:
+                    write_bytes(
+                        patched_rom, [level, get_random_move(random)], cur_address)
+                    cur_address += 2
 
         # Set slot name
     for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):
@@ -123,4 +139,8 @@ def write_bytes(data, byte_array, address):
 
 
 def get_random_poke(random):
+    return random.randint(1, 251)
+
+
+def get_random_move(random):
     return random.randint(1, 251)

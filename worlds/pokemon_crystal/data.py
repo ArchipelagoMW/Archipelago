@@ -46,6 +46,11 @@ class RegionData:
         self.events = []
 
 
+class EvoAttackData(NamedTuple):
+    evolutions: List[str]
+    moves: List[str]
+
+
 class PokemonCrystalData:
     rom_addresses: Dict[str, int]
     ram_addresses: Dict[str, int]
@@ -53,6 +58,8 @@ class PokemonCrystalData:
     regions: Dict[str, RegionData]
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
+    evo_attacks: Dict[str, EvoAttackData]
+    move_ids: Dict[str, int]
 
     def __init__(self) -> None:
         self.rom_addresses = {}
@@ -61,6 +68,8 @@ class PokemonCrystalData:
         self.regions = {}
         self.locations = {}
         self.items = {}
+        self.evo_attacks = {}
+        self.move_ids = {}
 
 
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
@@ -155,6 +164,15 @@ def _init() -> None:
     data.event_flags = {}
     for event_name, event_number in event_flag_data.items():
         data.event_flags[event_name] = event_number
+
+    data.evo_attacks = {}
+    for pokemon_name, pokemon_data in data_json["evos_attacks"].items():
+        data.evo_attacks[pokemon_name] = EvoAttackData(
+            pokemon_data["evolutions"], pokemon_data["moves"])
+
+    data.move_ids = {}
+    for move_name, move_id in data_json["constants"]["move_ids"].items():
+        data.move_ids[move_name] = move_id
 
 
 _init()

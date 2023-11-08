@@ -1,4 +1,4 @@
-from Options import Toggle
+from Options import Toggle, Choice
 
 
 class RandomizeHiddenItems(Toggle):
@@ -22,6 +22,17 @@ class RandomizeWilds(Toggle):
     default = 1
 
 
+class RandomizeLearnsets(Choice):
+    """start_with_four_moves: Random movesets with 4 starting moves
+    randomize: Random movesets
+    vanilla: Vanilla movesets"""
+    display_name = "Randomize Learnsets"
+    default = 2
+    option_start_with_four_moves = 2
+    option_randomize = 1
+    option_vanilla = 0
+
+
 class FullTmHmCompatibility(Toggle):
     """Enabled: All Pokemon are compatible with all TMs and HMs 
         Disabled: TM and HM compatibility is vanilla"""
@@ -39,6 +50,7 @@ pokemon_crystal_options = {
     "randomize_hidden_items": RandomizeHiddenItems,
     "randomize_starters": RandomizeStarters,
     "randomize_wilds": RandomizeWilds,
+    "randomize_learnsets": RandomizeLearnsets,
     "full_tmhm_compatibility": FullTmHmCompatibility,
     "blind_trainers": BlindTrainers
 }
