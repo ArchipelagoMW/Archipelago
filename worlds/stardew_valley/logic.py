@@ -16,7 +16,6 @@ from .items import all_items, Group
 from .mods.logic.buildings import get_modded_building_rules
 from .mods.logic.quests import get_modded_quest_rules
 from .mods.logic.special_orders import get_modded_special_orders_rules
-from .mods.logic.skullcavernelevator import has_skull_cavern_elevator_to_floor
 from .mods.mod_data import ModNames
 from .mods.logic import magic, skills
 from .options import Museumsanity, SeasonRandomization, StardewValleyOptions, BuildingProgression, SkillProgression, ToolProgression, Friendsanity, Cropsanity, \
@@ -479,8 +478,8 @@ class StardewLogic:
             FestivalCheck.mermaid_pearl: self.has_season(Season.winter) & self.can_reach_region(Region.beach),
             FestivalCheck.cone_hat: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(2500),
             FestivalCheck.iridium_fireplace: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(15000),
-            FestivalCheck.rarecrow_7: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_donate_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_donate_museum_items(40),
+            FestivalCheck.rarecrow_7: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_artifacts(20),
+            FestivalCheck.rarecrow_8: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_items(40),
             FestivalCheck.lupini_red_eagle: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
             FestivalCheck.lupini_portrait_mermaid: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
             FestivalCheck.lupini_solar_kingdom: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
@@ -1357,21 +1356,6 @@ class StardewLogic:
 
     def can_speak_dwarf(self) -> StardewRule:
         return self.received("Dwarvish Translation Guide")
-
-    def can_donate_museum_item(self, item: MuseumItem) -> StardewRule:
-        key = f"can_donate_museum_item {item.name}"
-        if key not in self.cached_rules:
-            self.cached_rules[key] = self.can_reach_region(Region.museum) & self.can_find_museum_item(item)
-        return self.cached_rules[key]
-
-    def can_donate_museum_items(self, number: int) -> StardewRule:
-        return self.can_reach_region(Region.museum) & self.can_find_museum_items(number)
-
-    def can_donate_museum_artifacts(self, number: int) -> StardewRule:
-        return self.can_reach_region(Region.museum) & self.can_find_museum_artifacts(number)
-
-    def can_donate_museum_minerals(self, number: int) -> StardewRule:
-        return self.can_reach_region(Region.museum) & self.can_find_museum_minerals(number)
 
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         key = f"can_find_museum_item {item.name}"
