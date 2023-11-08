@@ -1,6 +1,5 @@
 from typing import Dict
 
-from ...logic.bundle_logic import BundleLogic
 from ...logic.has_logic import HasLogic
 from ...logic.region_logic import RegionLogic
 from ...logic.relationship_logic import RelationshipLogic
@@ -23,9 +22,8 @@ from ...strings.wallet_item_names import Wallet
 from ...stardew_rule import StardewRule
 
 
-class QuestLogic:
+class ModQuestLogic:
     mods: Mods
-    bundle: BundleLogic
     has: HasLogic
     region: RegionLogic
     season: SeasonLogic
@@ -33,9 +31,8 @@ class QuestLogic:
     received: ReceivedLogic
     time: TimeLogic
 
-    def __init__(self, bundle: BundleLogic, mods: Mods, has: HasLogic, region: RegionLogic, season: SeasonLogic, relationship: RelationshipLogic,
+    def __init__(self, mods: Mods, has: HasLogic, region: RegionLogic, season: SeasonLogic, relationship: RelationshipLogic,
                  received: ReceivedLogic, time: TimeLogic):
-        self.bundle = bundle
         self.mods = mods
         self.has = has
         self.region = region
@@ -68,11 +65,10 @@ class QuestLogic:
                 ModQuest.RailroadBoulder: self.received(Wallet.skull_key) & self.has([Ore.iridium, Material.coal]) &
                                           self.region.can_reach(Region.blacksmith) & self.region.can_reach(Region.railroad),
                 ModQuest.GrandpasShed: self.has([Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone]) &
-                                  self.region.can_reach(SVERegion.grandpas_shed_interior),
+                                       self.region.can_reach(SVERegion.grandpas_shed_interior),
                 ModQuest.MarlonsBoat: self.has([Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat]) &
-                                 self.relationship.can_meet(ModNPC.lance) & self.region.can_reach(SVERegion.guild_summit),
-                ModQuest.AuroraVineyard: self.bundle.can_complete_community_center() & self.has(Fruit.starfruit) &
-                                   self.region.can_reach(SVERegion.aurora_vineyard) & self.time.has_year_two(),
+                                      self.relationship.can_meet(ModNPC.lance) & self.region.can_reach(SVERegion.guild_summit),
+                ModQuest.AuroraVineyard: self.has(Fruit.starfruit) & self.region.can_reach(SVERegion.aurora_vineyard),
                 ModQuest.MonsterCrops: self.has([ModLoot.monster_mushroom, ModLoot.slime_berry, ModLoot.monster_fruit, ModLoot.void_root]),
                 ModQuest.VoidSoul: self.region.can_reach(Region.sewer) & self.has(ModQuest.VoidSoul),
             })

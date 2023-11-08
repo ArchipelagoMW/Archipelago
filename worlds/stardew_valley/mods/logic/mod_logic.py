@@ -4,7 +4,7 @@ from .buildings_logic import ModBuildingLogic
 from .deepwoods_logic import DeepWoodsLogic
 from .elevator_logic import ModElevatorLogic
 from .magic_logic import MagicLogic
-from .quests_logic import QuestLogic
+from .quests_logic import ModQuestLogic
 from .skills_logic import ModSkillLogic
 from .special_orders_logic import ModSpecialOrderLogic
 from .sve_logic import SVELogic
@@ -32,7 +32,7 @@ from ...options import SkillProgression, ElevatorProgression, Mods
 
 
 class ModLogic:
-    quests: QuestLogic
+    quests: ModQuestLogic
     region: RegionLogic
     magic: MagicLogic
     buildings: ModBuildingLogic
@@ -47,7 +47,7 @@ class ModLogic:
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
                  time: TimeLogic, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
         self.magic = MagicLogic(player, mods, received, region)
-        self.quests = QuestLogic(mods, has, region, season, relationship)
+        self.quests = ModQuestLogic(mods, has, region, season, relationship, received, time)
         self.buildings = ModBuildingLogic(player, has, money, mods)
         self.special_orders = ModSpecialOrderLogic(player, action, crafting, crop, has, region, relationship, season, wallet, mods)
         self.elevator = ModElevatorLogic(player, elevator_option, mods, received)
