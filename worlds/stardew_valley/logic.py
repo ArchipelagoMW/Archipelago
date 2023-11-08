@@ -774,7 +774,7 @@ class StardewLogic:
         return Has(specialorder, self.special_order_rules)
 
     def can_get_farming_xp(self) -> StardewRule:
-        key = f"can_get_foraging_xp"
+        key = f"can_get_farming_xp"
         if key not in self.cached_rules:
             crop_rules = []
             for crop in all_crops:
