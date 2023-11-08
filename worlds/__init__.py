@@ -16,12 +16,12 @@ __all__ = {
     "world_sources",
     "local_folder",
     "user_folder",
-    "GamePackage",
+    "GamesPackage",
     "DataPackage",
 }
 
 
-class GamePackage(TypedDict, total=False):
+class GamesPackage(TypedDict, total=False):
     item_name_groups: Dict[str, List[str]]
     item_name_to_id: Dict[str, int]
     location_name_groups: Dict[str, List[str]]
@@ -31,7 +31,7 @@ class GamePackage(TypedDict, total=False):
 
 
 class DataPackage(TypedDict):
-    games: Dict[str, GamePackage]
+    games: Dict[str, GamesPackage]
 
 
 class WorldSource(NamedTuple):
