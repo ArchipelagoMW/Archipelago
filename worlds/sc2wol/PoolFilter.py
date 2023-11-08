@@ -1,6 +1,7 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, filler_items
+from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, filler_items, \
+    progressive_if_nco
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
 from .Options import get_option_value, MissionOrder, FinalMap, MissionProgressLocations, LocationInclusion
@@ -15,7 +16,7 @@ UPGRADABLE_ITEMS = [
 ]
 
 BARRACKS_UNITS = {"Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre"}
-FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine"}
+FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine", "Cyclone"}
 STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven", "Liberator", "Valkyrie"}
 
 PROTOSS_REGIONS = {"A Sinister Turn", "Echoes of the Future", "In Utter Darkness"}
@@ -93,7 +94,10 @@ def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
     ]
 
 
-def get_item_quantity(item):
+def get_item_quantity(item: Item, multiworld: MultiWorld, player: int):
+    if (not get_option_value(multiworld, player, "nco_items")) \
+            and item.name in progressive_if_nco:
+        return 1
     return get_full_item_list()[item.name].quantity
 
 
@@ -138,13 +142,13 @@ class ValidInventory:
                 if not all(requirement(self) for requirement in requirements):
                     # If item cannot be removed, lock or revert
                     self.logical_inventory.add(item.name)
-                    for _ in range(get_item_quantity(item)):
+                    for _ in range(get_item_quantity(item, self.multiworld, self.player)):
                         locked_items.append(copy_item(item))
                     return False
             return True
-        
+
         # Limit the maximum number of upgrades 
-        maxUpgrad = get_option_value(self.multiworld, self.player, 
+        maxUpgrad = get_option_value(self.multiworld, self.player,
                             "max_number_of_upgrades")
         if maxUpgrad != -1:
             unit_avail_upgrades = {}
@@ -197,15 +201,16 @@ class ValidInventory:
                     # Don't process general upgrades, they may have been pre-locked per-level
                     for item in items_to_lock:
                         if item in inventory:
+                            item_quantity = inventory.count(item)
                             # Unit upgrades, lock all levels
-                            for _ in range(inventory.count(item)):
+                            for _ in range(item_quantity):
                                 inventory.remove(item)
                             if item not in locked_items:
                                 # Lock all the associated items if not already locked
-                                for _ in range(get_item_quantity(item)):
+                                for _ in range(item_quantity):
                                     locked_items.append(copy_item(item))
-                    if item in existing_items:
-                        existing_items.remove(item)
+                        if item in existing_items:
+                            existing_items.remove(item)
 
         if self.min_units_per_structure > 0 and self.has_units_per_structure():
             requirements.append(lambda state: state.has_units_per_structure())
@@ -216,7 +221,13 @@ class ValidInventory:
 
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
-                raise Exception("Reduced item pool generation failed - not enough locations available to place items.")
+                # There are more items than locations and all of them are already locked due to YAML or logic.
+                # Random items from locked ones will go to starting items
+                self.multiworld.random.shuffle(locked_items)
+                while len(locked_items) > inventory_size:
+                    item: Item = locked_items.pop()
+                    self.multiworld.push_precollected(item)
+                break
             # Select random item from removable items
             item = self.multiworld.random.choice(inventory)
             # Cascade removals to associated items
@@ -245,7 +256,7 @@ class ValidInventory:
                             for _ in range(inventory.count(transient_item)):
                                 inventory.remove(transient_item)
                         if transient_item not in locked_items:
-                            for _ in range(get_item_quantity(transient_item)):
+                            for _ in range(get_item_quantity(transient_item, self.multiworld, self.player)):
                                 locked_items.append(copy_item(transient_item))
                         if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
                             self.logical_inventory.add(transient_item.name)
