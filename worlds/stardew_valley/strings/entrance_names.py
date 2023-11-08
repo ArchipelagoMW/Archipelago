@@ -174,6 +174,15 @@ class Entrance:
     blacksmith_iridium = "Upgrade Iridium Tools"
     farming = "Start Farming"
     fishing = "Start Fishing"
+    attend_egg_festival = "Attend Egg Festival"
+    attend_flower_dance = "Attend Flower Dance"
+    attend_luau = "Attend Luau"
+    attend_moonlight_jellies = "Attend Dance of the Moonlight Jellies"
+    attend_fair = "Attend Stardew Valley Fair"
+    attend_spirit_eve = "Attend Spirit's Eve"
+    attend_festival_of_ice = "Attend Festival of Ice"
+    attend_night_market = "Attend Night Market"
+    attend_winter_star = "Attend Feast of the Winter Star"
 
 # Skull Cavern Elevator
 

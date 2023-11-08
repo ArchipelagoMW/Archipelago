@@ -22,6 +22,7 @@ from .strings.calendar_names import Weekday
 from .strings.craftable_names import Craftable
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
+from .strings.season_names import Season
 from .strings.skill_names import ModSkill, Skill
 from .strings.tool_names import Tool, ToolMaterial
 from .strings.villager_names import NPC, ModNPC
@@ -199,6 +200,10 @@ def set_entrance_rules(logic, multiworld, player, world_options: StardewValleyOp
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_mutant_bug_lair, player),
                              ((logic.has_rusty_key() & logic.can_reach_region(Region.railroad) &
                                logic.can_meet(NPC.krobus) | magic.can_blink(logic)).simplify()))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_casino, player),
+                             logic.received("Club Card"))
+
+    set_festival_entrance_rules(logic, multiworld, player)
 
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_harvey_room, player),
                              logic.has_relationship(NPC.harvey, 2))
@@ -257,6 +262,21 @@ def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, i
     material_entrance = multiworld.get_entrance(entrance_name, player)
     upgrade_rule = logic.has(item_name) & logic.can_spend_money(tool_upgrade_prices[tool_material])
     MultiWorldRules.set_rule(material_entrance, upgrade_rule.simplify())
+
+
+def set_festival_entrance_rules(logic, multiworld, player):
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_egg_festival, player), logic.has_season(Season.spring))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_flower_dance, player), logic.has_season(Season.spring))
+
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_luau, player), logic.has_season(Season.summer))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_moonlight_jellies, player), logic.has_season(Season.summer))
+
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_fair, player), logic.has_season(Season.fall))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_spirit_eve, player), logic.has_season(Season.fall))
+
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_festival_of_ice, player), logic.has_season(Season.winter))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_night_market, player), logic.has_season(Season.winter))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_winter_star, player), logic.has_season(Season.winter))
 
 
 def set_ginger_island_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):

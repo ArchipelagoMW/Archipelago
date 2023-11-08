@@ -461,36 +461,36 @@ class StardewLogic:
         self.quest_rules.update(get_modded_quest_rules(self, self.options.mods))
 
         self.festival_rules.update({
-            FestivalCheck.egg_hunt: self.has_season(Season.spring) & self.can_reach_region(Region.town) & self.can_win_egg_hunt(),
-            FestivalCheck.strawberry_seeds: self.has_season(Season.spring) & self.can_reach_region(Region.town) & self.can_spend_money(1000),
-            FestivalCheck.dance: self.has_season(Season.spring) & self.can_reach_region(Region.forest) & self.has_relationship(Generic.bachelor, 4),
-            FestivalCheck.rarecrow_5: self.has_season(Season.spring) & self.can_reach_region(Region.forest) & self.can_spend_money(2500),
-            FestivalCheck.luau_soup: self.has_season(Season.summer) & self.can_reach_region(Region.beach) & self.can_succeed_luau_soup(),
-            FestivalCheck.moonlight_jellies: self.has_season(Season.summer) & self.can_reach_region(Region.beach),
-            FestivalCheck.smashing_stone: self.has_season(Season.fall) & self.can_reach_region(Region.town),
-            FestivalCheck.grange_display: self.has_season(Season.fall) & self.can_reach_region(Region.town) & self.can_succeed_grange_display(),
-            FestivalCheck.rarecrow_1: self.has_season(Season.fall) & self.can_reach_region(Region.town),  # only cost star tokens
-            FestivalCheck.fair_stardrop: self.has_season(Season.fall) & self.can_reach_region(Region.town),  # only cost star tokens
-            FestivalCheck.spirit_eve_maze: self.has_season(Season.fall) & self.can_reach_region(Region.town),
-            FestivalCheck.rarecrow_2: self.has_season(Season.fall) & self.can_reach_region(Region.town) & self.can_spend_money(5000),
-            FestivalCheck.fishing_competition: self.has_season(Season.winter) & self.can_reach_region(Region.forest) & self.can_win_fishing_competition(),
-            FestivalCheck.rarecrow_4: self.has_season(Season.winter) & self.can_reach_region(Region.forest) & self.can_spend_money(5000),
-            FestivalCheck.mermaid_pearl: self.has_season(Season.winter) & self.can_reach_region(Region.beach),
-            FestivalCheck.cone_hat: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(2500),
-            FestivalCheck.iridium_fireplace: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(15000),
-            FestivalCheck.rarecrow_7: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_items(40),
-            FestivalCheck.lupini_red_eagle: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
-            FestivalCheck.lupini_portrait_mermaid: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
-            FestivalCheck.lupini_solar_kingdom: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
-            FestivalCheck.lupini_clouds: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_two() & self.can_spend_money(1200),
-            FestivalCheck.lupini_1000_years: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_two() & self.can_spend_money(1200),
-            FestivalCheck.lupini_three_trees: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_two() & self.can_spend_money(1200),
-            FestivalCheck.lupini_the_serpent: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
-            FestivalCheck.lupini_tropical_fish: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
-            FestivalCheck.lupini_land_of_clay: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
-            FestivalCheck.secret_santa: self.has_season(Season.winter) & self.can_reach_region(Region.town) & self.has_any_universal_love(),
-            FestivalCheck.legend_of_the_winter_star: self.has_season(Season.winter) & self.can_reach_region(Region.town),
+            FestivalCheck.egg_hunt: self.can_win_egg_hunt(),
+            FestivalCheck.strawberry_seeds: self.can_spend_money(1000),
+            FestivalCheck.dance: self.has_relationship(Generic.bachelor, 4),
+            FestivalCheck.rarecrow_5: self.can_spend_money(2500),
+            FestivalCheck.luau_soup: self.can_succeed_luau_soup(),
+            FestivalCheck.moonlight_jellies: True_(),
+            FestivalCheck.smashing_stone: True_(),
+            FestivalCheck.grange_display: self.can_succeed_grange_display(),
+            FestivalCheck.rarecrow_1: True_(),  # only cost star tokens
+            FestivalCheck.fair_stardrop: True_(),  # only cost star tokens
+            FestivalCheck.spirit_eve_maze: True_(),
+            FestivalCheck.rarecrow_2: self.can_spend_money(5000),
+            FestivalCheck.fishing_competition: self.can_win_fishing_competition(),
+            FestivalCheck.rarecrow_4: self.can_spend_money(5000),
+            FestivalCheck.mermaid_pearl: self.has(Forageable.secret_note),
+            FestivalCheck.cone_hat: self.can_spend_money(2500),
+            FestivalCheck.iridium_fireplace: self.can_spend_money(15000),
+            FestivalCheck.rarecrow_7: self.can_spend_money(5000) & self.can_donate_museum_artifacts(20),
+            FestivalCheck.rarecrow_8: self.can_spend_money(5000) & self.can_donate_museum_items(40),
+            FestivalCheck.lupini_red_eagle: self.can_spend_money(1200),
+            FestivalCheck.lupini_portrait_mermaid: self.can_spend_money(1200),
+            FestivalCheck.lupini_solar_kingdom: self.can_spend_money(1200),
+            FestivalCheck.lupini_clouds: self.has_year_two() & self.can_spend_money(1200),
+            FestivalCheck.lupini_1000_years: self.has_year_two() & self.can_spend_money(1200),
+            FestivalCheck.lupini_three_trees: self.has_year_two() & self.can_spend_money(1200),
+            FestivalCheck.lupini_the_serpent: self.has_year_three() & self.can_spend_money(1200),
+            FestivalCheck.lupini_tropical_fish: self.has_year_three() & self.can_spend_money(1200),
+            FestivalCheck.lupini_land_of_clay: self.has_year_three() & self.can_spend_money(1200),
+            FestivalCheck.secret_santa: self.has_any_universal_love(),
+            FestivalCheck.legend_of_the_winter_star: True_(),
             FestivalCheck.all_rarecrows: self.can_reach_region(Region.farm) & self.has_all_rarecrows(),
         })
 
@@ -813,7 +813,7 @@ class StardewLogic:
         return self.has_max_fishing_rod() & skill_rule
 
     def can_fish_chests(self) -> StardewRule:
-        skill_rule = self.has_skill_level(Skill.fishing, 4)
+        skill_rule = self.has_skill_level(Skill.fishing, 6)
         return self.has_max_fishing_rod() & skill_rule
 
     def can_buy_seed(self, seed: SeedItem) -> StardewRule:
@@ -1370,6 +1370,9 @@ class StardewLogic:
             self.cached_rules[key] = pan_rule | (region_rule & geodes_rule)  # & monster_rule & extra_rule
         return self.cached_rules[key]
 
+    def can_donate_museum_artifacts(self, number: int) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_artifacts(number)
+
     def can_find_museum_artifacts(self, number: int) -> StardewRule:
         rules = []
         for artifact in all_museum_artifacts:
@@ -1383,6 +1386,9 @@ class StardewLogic:
             rules.append(self.can_find_museum_item(mineral))
 
         return Count(number, rules)
+
+    def can_donate_museum_items(self, number: int) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_items(number)
 
     def can_find_museum_items(self, number: int) -> StardewRule:
         rules = []
