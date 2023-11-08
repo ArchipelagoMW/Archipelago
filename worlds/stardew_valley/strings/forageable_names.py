@@ -33,4 +33,8 @@ class Forageable:
     spring_onion = "Spring Onion"
 
 
-
+class SVEForage:
+    ornate_treasure_chest = "Ornate Treasure Chest"
+    swirl_stone = "Swirl Stone"
+    void_pebble = "Void Pebble"
+    void_soul = "Void Soul"

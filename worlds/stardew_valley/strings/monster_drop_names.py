@@ -7,7 +7,7 @@ class Loot:
 
 
 class ModLoot:
-    monster_mushroom = "Monster Mushroom"
-    slime_berry = "Slime Berry"
-    monster_fruit = "Monster Fruit"
-    void_root = "Void Root"
+    stalk_seed = "Stalk Seed"
+    fungus_seed = "Fungus Seed"
+    slime_seed = "Slime Seed"
+    void_seed = "Void Seed"
