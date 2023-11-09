@@ -1,7 +1,7 @@
 from typing import Dict, Union, List, FrozenSet
 
 from BaseClasses import MultiWorld
-from Options import Range, Option, Choice
+from Options import Range, Option, Choice, Toggle
 
 """
 Most of these are not implemented yet
@@ -231,6 +231,11 @@ class QueenPieceLimit(Range):
     default = 0
 
 
+class DeathLink(Toggle):
+    """If on: Whenever you are checkmated or resign (close the game window), everyone who is also on Death Link dies."""
+    display_name = "Death Link"
+
+
 cm_options: Dict[str, type(Option)] = {
     "goal": Goal,
     "piece_locations": PieceLocations,
@@ -246,6 +251,7 @@ cm_options: Dict[str, type(Option)] = {
     "major_piece_limit_by_type": MajorPieceLimitByType,
     "queen_piece_limit_by_type": QueenPieceLimitByType,
     "queen_piece_limit": QueenPieceLimit,
+    "death_link": DeathLink,
 }
 
 
