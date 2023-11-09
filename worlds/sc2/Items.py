@@ -1112,7 +1112,7 @@ item_table = {
         ItemData(512 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 12, SC2Race.TERRAN,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Mercenary Valkyries"),
-    ItemNames.BLACKHAMMER:
+    ItemNames.JOTUN:
         ItemData(513 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 13, SC2Race.TERRAN,
                  origin={"ext"},
                  description="Mercenary Thor"),
@@ -1564,7 +1564,7 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     ItemNames.WINGED_NIGHTMARES,
     ItemNames.RAID_LIBERATORS,
     ItemNames.BRYNHILDS,
-    ItemNames.BLACKHAMMER
+    ItemNames.JOTUN
 )
 
 

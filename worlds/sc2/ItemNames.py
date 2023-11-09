@@ -76,7 +76,7 @@ DEATH_HEADS       = "Death Heads"
 WINGED_NIGHTMARES = "Winged Nightmares"
 RAID_LIBERATORS   = "Raid Liberators"
 BRYNHILDS         = "Brynhilds"
-BLACKHAMMER       = "Blackhammer"
+JOTUN             = "Jotun"
 
 # Lab / Global
 ULTRA_CAPACITORS                    = "Ultra-Capacitors"
