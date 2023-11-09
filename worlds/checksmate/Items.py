@@ -34,6 +34,8 @@ item_table = {
     # "Progressive Enemy Pawn": CMItemData(4_007, ItemClassification.trap, quantity=8),
     # "Progressive Enemy Piece": CMItemData(4_008, ItemClassification.trap, quantity=7),
     # "Progressive Opening Move": CMItemData(4_010, ItemClassification.useful, quantity=3),
+    "King Promotion": CMItemData(4_020, ItemClassification.progression, quantity=2, material=300),
+    "Progressive Consul": CMItemData(4_021, ItemClassification.progression, quantity=2, material=220),
     "Enemy Pawn A": CMItemData(4_030, ItemClassification.progression),
     "Enemy Pawn B": CMItemData(4_031, ItemClassification.progression),
     "Enemy Pawn C": CMItemData(4_032, ItemClassification.progression),

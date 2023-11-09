@@ -154,7 +154,13 @@ class CMWorld(World):
         max_material_actual += progression_items["Play as White"].material
 
         my_progression_items = list(progression_items.keys())
+        # prevent victory event from being added to general pool
         my_progression_items.remove("Victory")
+        # remove kings player does not want
+        self.items_used[self.player]["Progressive Consul"] = (
+                2 - get_option_value(self.multiworld, self.player, "roman_kings"))
+        self.items_used[self.player]["King Promotion"] = (
+                2 - get_option_value(self.multiworld, self.player, "fairy_kings"))
         # more pawn chance (1 major:1 minor:2 pawn distribution)
         my_progression_items.append("Progressive Pawn")
         # I am proud of this feature, so I want players to see more of it. Fight me.

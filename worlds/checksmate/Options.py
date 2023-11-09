@@ -1,7 +1,7 @@
 from typing import Dict, Union, List, FrozenSet
 
 from BaseClasses import MultiWorld
-from Options import Range, Option, Choice, Toggle
+from Options import Range, Option, Choice, Toggle, SpecialRange
 
 """
 Most of these are not implemented yet
@@ -186,7 +186,29 @@ class FairyChessPawns(Choice):
     default = 1
 
 
-class MinorPieceLimitByType(Range):
+class FairyKings(SpecialRange):
+    """
+    Whether to use fairy king upgrades, such as the Knight's moves.
+    """
+    display_name = "Fairy Kings"
+    range_start = 0
+    range_end = 2
+    default = 0
+    special_range_cutoff = 1
+
+
+class RomanKings(SpecialRange):
+    """
+    How many additional Royal pieces to add, which must all be captured before one experiences defeat.
+    """
+    display_name = "Roman Kings"
+    range_start = 0
+    range_end = 2
+    default = 0
+    special_range_cutoff = 1
+
+
+class MinorPieceLimitByType(SpecialRange):
     """
     How many of any given type of minor piece you might play with. If set to 1, you will never start with more than 1
     Knight, nor 1 Bishop, but you may have both 1 Knight and 1 Bishop. If set to 0, this setting is disabled.
@@ -195,9 +217,10 @@ class MinorPieceLimitByType(Range):
     range_start = 0
     range_end = 9
     default = 0
+    special_range_cutoff = 1
 
 
-class MajorPieceLimitByType(Range):
+class MajorPieceLimitByType(SpecialRange):
     """
     How many of any given type of major piece you might play with. If set to 1, you will never start with more than 1
     Rook. If set to 0, this setting is disabled.
@@ -206,9 +229,10 @@ class MajorPieceLimitByType(Range):
     range_start = 0
     range_end = 9
     default = 0
+    special_range_cutoff = 1
 
 
-class QueenPieceLimitByType(Range):
+class QueenPieceLimitByType(SpecialRange):
     """
     How many of any given type of Queen-equivalent piece you might play with. If set to 1, you will never start with
     more than 1 Queen. You may have both 1 Queen and 1 Amazon. If set to 0, this setting is disabled.
@@ -217,9 +241,10 @@ class QueenPieceLimitByType(Range):
     range_start = 0
     range_end = 5
     default = 0
+    special_range_cutoff = 1
 
 
-class QueenPieceLimit(Range):
+class QueenPieceLimit(SpecialRange):
     """
     How many Queen-equivalent pieces you might play with. If set to 1, you will never have more than 1 piece upgraded to
     a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still promote pawns during a
@@ -229,6 +254,7 @@ class QueenPieceLimit(Range):
     range_start = 0
     range_end = 7
     default = 0
+    special_range_cutoff = 1
 
 
 class DeathLink(Toggle):
@@ -244,9 +270,11 @@ cm_options: Dict[str, type(Option)] = {
     "early_material": EarlyMaterial,
     "max_material": MaterialMaxLimit,
     "min_material": MaterialMinLimit,
+    "fairy_kings": FairyKings,
     "fairy_chess_pieces": FairyChessPieces,
     "fairy_chess_army": FairyChessArmy,
     "fairy_chess_pawns": FairyChessPawns,
+    "roman_kings": RomanKings,
     "minor_piece_limit_by_type": MinorPieceLimitByType,
     "major_piece_limit_by_type": MajorPieceLimitByType,
     "queen_piece_limit_by_type": QueenPieceLimitByType,
