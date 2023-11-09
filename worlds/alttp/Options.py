@@ -80,6 +80,9 @@ class EntranceShuffle(Choice):
     option_full = 6
     option_crossed = 7
     option_insanity = 8
+    alias_dungeonssimple = 1
+    alias_dungeonsfull = 2
+    alias_dungeonscrossed = 3
 
 
 class EntranceShuffleSeed(FreeText):
