@@ -7,7 +7,16 @@ from .Locations import KHCOMLocation, location_table
 from .Options import khcom_options
 from .Regions import create_regions
 from .Rules import set_rules
+from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
+
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="KHCOM Client")
+
+
+components.append(Component("KHCOM Client", "KHCOMClient", func=launch_client, component_type=Type.CLIENT))
 
 class KHCOMWeb(WebWorld):
     theme = "stone"
