@@ -271,12 +271,8 @@ class LingoPlayerLogic:
             if door_shuffle == ShuffleDoors.option_none:
                 required_painting_rooms += REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
 
-            if warp_exit_room in required_painting_rooms and warp_enter_room in required_painting_rooms:
-                # This shuffling is non-workable. Start over.
-                return False
-
-            # Check whether the exit painting is blocked from being an entrance to a required painting.
-            if PAINTINGS[warp_enter].req_blocked:
+            if warp_exit_room in required_painting_rooms and (warp_enter_room in required_painting_rooms or
+                                                              PAINTINGS[warp_enter].req_blocked):
                 # This shuffling is non-workable. Start over.
                 return False
 
