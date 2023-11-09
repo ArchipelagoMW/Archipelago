@@ -8,14 +8,13 @@ import hashlib
 import os
 import struct
 
+import settings
 from BaseClasses import MultiWorld
 from worlds.Files import APDeltaPatch
 from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
     get_gooey_palette
 from .Compression import hal_decompress
 import bsdiff4
-
-from .Room import KDL3Room
 
 if TYPE_CHECKING:
     from . import KDL3World
@@ -1009,7 +1008,7 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
                               0x8F, 0x16, 0x21, 0x00,  # STA VMADDL
                               0xBF, 0x40, 0xE0, 0x07,  # LDA $07E040, X
                               0x8F, 0x18, 0x21, 0x00,  # STA VMDATAL
-                              0x80, 0xDF,  # BRA $07A5AF - retun to loop head
+                              0x80, 0xDF,  # BRA $07A5AF - return to loop head
                               0x7A,  # PLY
                               0xFA,  # PLX
                               0x6B,  # RTL
@@ -1184,7 +1183,7 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
                                   0x6B,  # RTL
                                   ])
 
-    rooms = [region for region in multiworld.get_regions(player) if isinstance(region, KDL3Room)]
+    rooms = world.rooms
     if world.options.music_shuffle > 0:
         if world.options.music_shuffle == 1:
             shuffled_music = music_choices.copy()
@@ -1311,13 +1310,13 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
     if world.options.kirby_flavor_preset.value != 0:
         for addr in kirby_target_palettes:
             target = kirby_target_palettes[addr]
-            palette = get_kirby_palette(world, player)
+            palette = get_kirby_palette(world)
             rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
     if world.options.gooey_flavor_preset.value != 0:
         for addr in gooey_target_palettes:
             target = gooey_target_palettes[addr]
-            palette = get_gooey_palette(world, player)
+            palette = get_gooey_palette(world)
             rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
 
@@ -1337,7 +1336,7 @@ def get_base_rom_bytes() -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: Utils.OptionsType = Utils.get_options()
+    options: settings.Settings = settings.get_settings()
     if not file_name:
         file_name = options["kdl3_options"]["rom_file"]
     if not os.path.exists(file_name):

@@ -131,8 +131,8 @@ class AnimalRandomization(Choice):
 class CopyAbilityRandomization(Choice):
     """
     Disabled: enemies give regular copy abilities and health.
-    Enabled: all enemies (except minibosses) will have the copy ability received from them randomized.
-    Enabled Plus Minus: enemies can additionally give you anywhere from +3 health to -3 health when eaten.
+    Enabled: all enemies will have the copy ability received from them randomized.
+    Enabled Plus Minus: enemies (except minibosses) can additionally give you anywhere from +2 health to -1 health when eaten.
     """
     display_name = "Copy Ability Randomization"
     option_disabled = 0
@@ -286,7 +286,23 @@ class KirbyFlavor(OptionDict):
     A custom color for Kirby. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
     "15", with their values being an HTML hex color.
     """
-    default = {}
+    default = {
+      "1": "B01810",
+      "2": "F0E0E8",
+      "3": "C8A0A8",
+      "4": "A87070",
+      "5": "E02018",
+      "6": "F0A0B8",
+      "7": "D07880",
+      "8": "A85048",
+      "9": "E8D0D0",
+      "10": "E85048",
+      "11": "D0C0C0",
+      "12": "B08888",
+      "13": "E87880",
+      "14": "F8F8F8",
+      "15": "B03830",
+    }
 
 
 class GooeyFlavorPreset(Choice):
@@ -326,7 +342,17 @@ class GooeyFlavor(OptionDict):
     A custom color for Gooey. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
     "15", with their values being an HTML hex color.
     """
-    default = {}
+    default = {
+        "1": "000808",
+        "2": "102838",
+        "3": "183048",
+        "4": "183878",
+        "5": "1838A0",
+        "6": "B01810",
+        "7": "E85048",
+        "8": "D0C0C0",
+        "9": "F8F8F8",
+    }
 
 
 class MusicShuffle(Choice):

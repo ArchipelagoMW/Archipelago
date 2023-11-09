@@ -398,7 +398,7 @@ gooey_target_palettes = {
 }
 
 
-def get_kirby_palette(world, player):
+def get_kirby_palette(world):
     palette = world.options.kirby_flavor_preset.value
     if palette in kirby_flavor_presets:
         return kirby_flavor_presets[palette]
@@ -408,7 +408,7 @@ def get_kirby_palette(world, player):
         return None
 
 
-def get_gooey_palette(world, player):
+def get_gooey_palette(world):
     palette = world.options.gooey_flavor_preset.value
     if palette in gooey_flavor_presets:
         return gooey_flavor_presets[palette]
@@ -429,7 +429,10 @@ def rgb888_to_bgr555(red, green, blue) -> bytes:
 def get_palette_bytes(palette, target, offset, factor):
     output_data = bytearray()
     for color in target:
-        colint = int(palette[color], 16)
+        hexcol = palette[color]
+        if hexcol.startswith("#"):
+            hexcol = hexcol.replace("#", "")
+        colint = int(hexcol, 16)
         col = ((colint & 0xFF0000) >> 16, (colint & 0xFF00) >> 8, colint & 0xFF)
         col = tuple(int(int(factor*x) + offset) for x in col)
         byte_data = rgb888_to_bgr555(col[0], col[1], col[2])

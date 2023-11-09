@@ -13,6 +13,7 @@ from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrict
 from .Regions import create_levels, default_levels
 from .Options import KDL3Options
 from .Names import LocationName
+from .Room import KDL3Room
 from .Rules import set_rules
 from .Rom import KDL3DeltaPatch, get_base_rom_path, RomData, patch_rom, KDL3JHASH, KDL3UHASH
 from .Client import KDL3SNIClient
@@ -23,13 +24,8 @@ import math
 import threading
 import base64
 import settings
-from worlds.LauncherComponents import components
 
 logger = logging.getLogger("Kirby's Dream Land 3")
-
-
-# SNIComponent = next(x for x in components if x.display_name == "SNI Client")
-# SNIComponent.file_identifier.suffixes.append(".apkdl3")
 
 
 class KDL3Settings(settings.Group):
@@ -72,16 +68,17 @@ class KDL3World(World):
     web = KDL3WebWorld()
     settings: typing.ClassVar[KDL3Settings]
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name = None
         self.rom_name_available_event = threading.Event()
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
         self.copy_abilities: Dict[str, str] = vanilla_enemies.copy()
         self.required_heart_stars: int = 0  # we fill this during create_items
         self.boss_requirements: Dict[int, int] = dict()
         self.player_levels = default_levels.copy()
         self.stage_shuffle_enabled = False
         self.boss_butch_bosses: List[Optional[bool]] = list()
+        self.rooms: Optional[List[KDL3Room]] = None
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:

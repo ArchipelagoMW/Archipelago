@@ -41,12 +41,12 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
     room_data = json.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
     rooms: typing.Dict[str, KDL3Room] = dict()
     for room_entry in room_data:
-        room = KDL3Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"], room_entry["stage"],
-                    room_entry["room"], room_entry["pointer"], room_entry["music"], room_entry["default_exits"],
-                    room_entry["animal_pointers"], room_entry["enemies"], room_entry["entity_load"],
-                    room_entry["consumables"], room_entry["consumables_pointer"])
+        room = KDL3Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"],
+                        room_entry["stage"], room_entry["room"], room_entry["pointer"], room_entry["music"],
+                        room_entry["default_exits"], room_entry["animal_pointers"], room_entry["enemies"],
+                        room_entry["entity_load"], room_entry["consumables"], room_entry["consumables_pointer"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
-        None for location in room_entry["locations"]
+                            None for location in room_entry["locations"]
                             if not any([x in location for x in ["1-Up", "Maxim"]]) or
                             world.options.consumables}, KDL3Location)
         rooms[room.name] = room
@@ -55,7 +55,9 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                 add_item_rule(location, lambda item: item.name in {
                     "Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"
                 })
-    world.multiworld.regions.extend([rooms[room] for room in rooms])
+    world.rooms = [rooms[room] for room in rooms]
+    world.multiworld.regions.extend(world.rooms)
+
     first_rooms: typing.Dict[int, KDL3Room] = dict()
     if door_shuffle:
         # first, we need to generate the notable edge cases
