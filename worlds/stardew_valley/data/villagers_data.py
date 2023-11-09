@@ -308,7 +308,6 @@ starfruit = ("Starfruit",)
 bruschetta = ("Brushetta",)
 apricot = ("Apricot",)
 ocean_stone = ("Ocean Stone",)
-galaxy_soul = ("Galaxy Soul",)
 fairy_stone = ("Fairy Stone",)
 lunarite = ("Lunarite",)
 bean_hotpot = ("Bean Hotpot",)
@@ -326,7 +325,7 @@ cookie = ("Cookie",)
 blueberry_tart = ("Blueberry Tart",)
 
 claire_loves = green_tea + sunflower + energy_tonic + bruschetta + apricot + ocean_stone + glazed_butterfish
-lance_loves = aged_blue_moon_wine + daggerfish + galaxy_soul + gemfish + golden_pumpkin + \
+lance_loves = aged_blue_moon_wine + daggerfish + gemfish + golden_pumpkin + \
               green_mushroom + monster_mushroom + swirl_stone + torpedo_trout + tropical_curry + void_shard + \
               ornate_treasure_chest
 olivia_loves = wine + chocolate_cake + pink_cake + golden_mask + golden_relic + \

@@ -10,7 +10,7 @@ from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
 from .time_logic import TimeLogic
 from .. import options
-from ..data.villagers_data import all_villagers_by_name, Villager
+from ..data.villagers_data import all_villagers_by_name, all_villagers_for_current_mods, Villager
 from ..options import Friendsanity, FriendsanityHeartSize, Mods
 from ..stardew_rule import StardewRule, True_, And, Or, Count
 from ..strings.generic_names import Generic
@@ -168,8 +168,8 @@ class RelationshipLogic:
 
     def npc_is_in_current_slot(self, name: str) -> bool:
         npc = all_villagers_by_name[name]
-        mod = npc.mod_name
-        return mod is None or mod in self.mods_option
+        mod = npc.mod_names
+        return not mod or npc in all_villagers_for_current_mods(self.mods_option.value)
 
     def heart(self, npc: Union[str, Villager]) -> str:
         if isinstance(npc, str):
