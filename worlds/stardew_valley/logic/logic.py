@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import field, dataclass
-from typing import Dict, List, Set
+from typing import Dict, Set
 
 from .ability_logic import AbilityLogic
 from .action_logic import ActionLogic
@@ -38,7 +38,7 @@ from ..data.crops_data import crops_by_name
 from ..data.monster_data import all_monsters_by_category, all_monsters_by_name
 from ..mods.logic.mod_logic import ModLogic
 from ..data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops
-from ..data.fish_data import island_fish, legendary_fish, extended_family
+from ..data.fish_data import island_fish, legendary_fish, extended_family, get_fish_for_mods
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
@@ -99,7 +99,6 @@ class StardewLogic:
     crop_rules: Dict[str, StardewRule] = field(default_factory=dict)
     fish_rules: Dict[str, StardewRule] = field(default_factory=dict)
     museum_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    quest_rules: Dict[str, StardewRule] = field(default_factory=dict)
     festival_rules: Dict[str, StardewRule] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -147,7 +146,7 @@ class StardewLogic:
         self.crafting = CraftingLogic(self.player, self.options.craftsanity, self.options.festival_locations,
                                       self.options.special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
-        self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.season, self.money,
+        self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.artisan, self.season, self.money,
                             self.relationship, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing, self.cooking, self.mine, self.ability,
                             self.time, self.quest, self.crafting, self.crop)
 
@@ -425,8 +424,8 @@ class StardewLogic:
             TreeSeed.mushroom: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 5),
             TreeSeed.pine: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             Vegetable.tea_leaves: self.has(Sapling.tea) & self.time.has_lived_months(2) & self.season.has_any_not_winter(),
-            WaterItem.clam: self.tool.can_forage(Generic.any, Region.beach),
-            WaterItem.cockle: self.tool.can_forage(Generic.any, Region.beach),
+            Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
+            Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
             WaterItem.coral: self.tool.can_forage(Generic.any, Region.tide_pools) | self.tool.can_forage(Season.summer, Region.beach),
             WaterItem.green_algae: self.fishing.can_fish_in_freshwater(),
             WaterItem.nautilus_shell: self.tool.can_forage(Season.winter, Region.beach),
@@ -500,9 +499,6 @@ class StardewLogic:
         self.special_order.initialize_rules()
         self.special_order.update_rules(self.mod.special_orders.get_modded_special_orders_rules(self.special_order.special_order_rules))
 
-    def can_complete_quest(self, quest: str) -> StardewRule:
-        return Has(quest, self.quest_rules)
-
     def can_buy_seed(self, seed: SeedItem) -> StardewRule:
         if self.options.cropsanity == Cropsanity.option_disabled or seed.name == Seed.qi_bean:
             item_rule = True_()
@@ -556,7 +552,7 @@ class StardewLogic:
         rules = [self.skill.has_level(Skill.fishing, 10), self.tool.has_fishing_rod(4)]
         exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
         exclude_extended_family = self.options.special_order_locations != SpecialOrderLocations.option_board_qi
-        for fish in all_fish:
+        for fish in get_fish_for_mods(self.options.mods.value):
             if exclude_island and fish in island_fish:
                 continue
             if exclude_extended_family and fish in extended_family:
@@ -612,9 +608,9 @@ class StardewLogic:
                                self.relationship.has_hearts("5", 8),  # 5 Friends
                                self.relationship.has_hearts("10", 8),  # 10 friends
                                self.pet.has_hearts(5),  # Max Pet
-                               self.can_complete_community_center(),  # Community Center Completion
-                               self.can_complete_community_center(),  # CC Ceremony first point
-                               self.can_complete_community_center(),  # CC Ceremony second point
+                               self.bundle.can_complete_community_center(),  # Community Center Completion
+                               self.bundle.can_complete_community_center(),  # CC Ceremony first point
+                               self.bundle.can_complete_community_center(),  # CC Ceremony second point
                                self.received(Wallet.skull_key),  # Skull Key obtained
                                self.wallet.has_rusty_key(),  # Rusty key obtained
                                ]
@@ -795,14 +791,5 @@ class StardewLogic:
         return self.received(CommunityUpgrade.movie_theater, 2)
 
     def can_use_obelisk(self, obelisk: str) -> StardewRule:
-        return self.region.can_reach(Region.wizard_tower) & self.region.can_reach(Region.farm) & self.received(obelisk)
-
-    def has_abandoned_jojamart(self) -> StardewRule:
-        return self.received(CommunityUpgrade.movie_theater, 1)
-
-    def has_movie_theater(self) -> StardewRule:
-        return self.received(CommunityUpgrade.movie_theater, 2)
-
-    def can_use_obelisk(self, obelisk: str) -> StardewRule:
-        return self.region.can_reach(Region.wizard_tower) & self.region.can_reach(Region.farm) & self.received(obelisk)
+        return self.region.can_reach(Region.wizard_tower) & self.received(obelisk)
 

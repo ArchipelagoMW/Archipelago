@@ -8,7 +8,7 @@ from typing import Dict, List, Protocol, Union, Set, Optional
 
 from BaseClasses import Item, ItemClassification
 from . import data
-from .data.villagers_data import all_villagers_for_current_mods
+from .data.villagers_data import get_villagers_for_mods
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
     Friendsanity, Museumsanity, \
@@ -194,9 +194,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory("Beach Bridge"))
     items.append(item_factory("Dark Talisman"))
     create_tv_channels(item_factory, items)
-    create_special_quest_rewards(item_factory, items)
-    if ModNames.sve in options.mods:
-        create_special_quest_rewards_sve(item_factory, items)
+    create_special_quest_rewards(item_factory, options, items)
     create_stardrops(item_factory, options, items)
     create_museum_items(item_factory, options, items)
     create_arcade_machine_items(item_factory, options, items)
@@ -322,13 +320,15 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, options: Starde
         items.append(item_factory("Tractor Garage"))
 
 
-def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[Item]):
+def create_special_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     items.append(item_factory("Adventurer's Guild"))
     items.append(item_factory("Club Card"))
     items.append(item_factory("Magnifying Glass"))
     items.append(item_factory("Bear's Knowledge"))
     items.append(item_factory("Iridium Snake Milk"))
     items.append(item_factory("Fairy Dust Recipe"))
+    if ModNames.sve in options.mods:
+        create_special_quest_rewards_sve(item_factory, options, items)
 
 
 def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -364,7 +364,7 @@ def create_friendsanity_items(item_factory: StardewItemFactory, options: Stardew
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     mods = options.mods
     heart_size = options.friendsanity_heart_size
-    for villager in all_villagers_for_current_mods(mods.value):
+    for villager in get_villagers_for_mods(mods.value):
         if not villager.available and exclude_locked_villagers:
             continue
         if not villager.bachelor and exclude_non_bachelors:

@@ -16,14 +16,14 @@ class Villager:
     birthday: str
     gifts: Tuple[str]
     available: bool
-    mod_names: List[str]
+    mod_name: str
 
     def __repr__(self):
         return f"{self.name} [Bachelor: {self.bachelor}] [Available from start: {self.available}]" \
                f"(Locations: {self.locations} |" \
                f" Birthday: {self.birthday} |" \
                f" Gifts: {self.gifts}) |" \
-               f" Mod: {self.mod_names}"
+               f" Mod: {self.mod_name}"
 
 
 town = (Region.town,)
@@ -353,13 +353,15 @@ villager_modifications_by_mod: Dict[str, Dict[str, Callable[[str, Villager], Vil
 
 def villager(name: str, bachelor: bool, locations: Tuple[str, ...], birthday: str, gifts: Tuple[str, ...],
              available: bool, mod_name: Optional[str] = None) -> Villager:
-    npc = Villager(name, bachelor, locations, birthday, gifts, available, [mod_name] if mod_name is not None else [])
+    npc = Villager(name, bachelor, locations, birthday, gifts, available, mod_name)
     all_villagers.append(npc)
     return npc
 
 
 def make_bachelor(mod_name: str, npc: Villager):
-    return Villager(npc.name, True, npc.locations, npc.birthday, npc.gifts, npc.available, [*npc.mod_names, mod_name])
+    if npc.mod_name:
+        mod_name = npc.mod_name
+    return Villager(npc.name, True, npc.locations, npc.birthday, npc.gifts, npc.available, mod_name)
 
 
 def register_villager_modification(mod_name: str, npc: Villager, modification_function):
@@ -441,22 +443,21 @@ all_villagers_by_mod: Dict[str, List[Villager]] = {}
 all_villagers_by_mod_by_name: Dict[str, Dict[str, Villager]] = {}
 
 for npc in all_villagers:
-    mods = npc.mod_names
+    mod = npc.mod_name
     name = npc.name
-    for mod in mods:
-        if mod in all_villagers_by_mod:
-            all_villagers_by_mod[mod].append(npc)
-            all_villagers_by_mod_by_name[mod][name] = npc
-        else:
-            all_villagers_by_mod[mod] = [npc]
-            all_villagers_by_mod_by_name[mod] = {}
-            all_villagers_by_mod_by_name[mod][name] = npc
+    if mod in all_villagers_by_mod:
+        all_villagers_by_mod[mod].append(npc)
+        all_villagers_by_mod_by_name[mod][name] = npc
+    else:
+        all_villagers_by_mod[mod] = [npc]
+        all_villagers_by_mod_by_name[mod] = {}
+        all_villagers_by_mod_by_name[mod][name] = npc
 
 
-def all_villagers_for_current_mods(mods: Set[str]) -> List[Villager]:
+def get_villagers_for_mods(mods: Set[str]) -> List[Villager]:
     villagers_for_current_mods = []
     for npc in all_villagers:
-        if npc.mod_names and not all([mod in mods for mod in npc.mod_names]):
+        if npc.mod_name and npc.mod_name not in mods:
             continue
         modified_npc = npc
         for active_mod in mods:

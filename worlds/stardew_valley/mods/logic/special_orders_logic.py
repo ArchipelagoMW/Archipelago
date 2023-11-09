@@ -1,6 +1,7 @@
 from typing import Iterable
 
 from ...logic.action_logic import ActionLogic
+from ...logic.artisan_logic import ArtisanLogic
 from ...logic.crafting_logic import CraftingLogic
 from ...logic.crop_logic import CropLogic
 from ...logic.has_logic import HasLogic
@@ -28,6 +29,8 @@ from ..mod_data import ModNames
 
 class ModSpecialOrderLogic:
     player: int
+    action: ActionLogic
+    artisan: ArtisanLogic
     crafting: CraftingLogic
     crop: CropLogic
     has: HasLogic
@@ -37,10 +40,11 @@ class ModSpecialOrderLogic:
     wallet: WalletLogic
     mods_option: Mods
 
-    def __init__(self, player: int, action: ActionLogic, crafting: CraftingLogic, crop: CropLogic, has: HasLogic, region: RegionLogic, relationship: RelationshipLogic,
+    def __init__(self, player: int, action: ActionLogic, artisan: ArtisanLogic, crafting: CraftingLogic, crop: CropLogic, has: HasLogic, region: RegionLogic, relationship: RelationshipLogic,
                  season: SeasonLogic, wallet: WalletLogic, mods_option: Mods):
         self.player = player
         self.action = action
+        self.artisan = artisan
         self.crafting = crafting
         self.crop = crop
         self.has = has
@@ -67,12 +71,12 @@ class ModSpecialOrderLogic:
                                               self.region.can_reach(SVERegion.fairhaven_farm),
                 ModSpecialOrder.a_mysterious_venture: self.has(Bomb.cherry_bomb) & self.has(Bomb.bomb) & self.has(Bomb.mega_bomb) &
                                                       self.region.can_reach(Region.adventurer_guild),
-                ModSpecialOrder.an_elegant_reception: self.crop.can_grow(Fruit.starfruit) & self.has(Machine.keg) & self.has(ArtisanGood.cheese) &
+                ModSpecialOrder.an_elegant_reception: self.artisan.can_keg(Fruit.starfruit) & self.has(ArtisanGood.cheese) &
                                                       self.has(ArtisanGood.goat_cheese) & self.season.has_any_not_winter() & self.region.can_reach(SVERegion.jenkins_cellar),
-                ModSpecialOrder.fairy_garden: self.crop.can_grow(Flower.fairy_rose) & self.crafting.can_craft(Consumable.fairy_dust) &
-                                              self.region.can_reach(Region.island_south) & [self.action.can_open_geode(Geode.frozen) | self.action.can_open_geode(Geode.omni)] &
+                ModSpecialOrder.fairy_garden: self.has(Consumable.fairy_dust) &
+                                              self.region.can_reach(Region.island_south) & (self.action.can_open_geode(Geode.frozen) | self.action.can_open_geode(Geode.omni)) &
                                               self.region.can_reach(SVERegion.blue_moon_vineyard),
-                ModSpecialOrder.homemade_fertilizer: self.crafting.can_craft(Fertilizer.quality) & self.region.can_reach(SVERegion.susans_house)
+                ModSpecialOrder.homemade_fertilizer: self.has(Fertilizer.quality) & self.region.can_reach(SVERegion.susans_house)
             })
 
         return special_orders

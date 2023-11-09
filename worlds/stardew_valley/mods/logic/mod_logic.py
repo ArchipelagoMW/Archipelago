@@ -10,6 +10,7 @@ from .special_orders_logic import ModSpecialOrderLogic
 from .sve_logic import SVELogic
 from ...logic.ability_logic import AbilityLogic
 from ...logic.action_logic import ActionLogic
+from ...logic.artisan_logic import ArtisanLogic
 from ...logic.building_logic import BuildingLogic
 from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
@@ -43,13 +44,13 @@ class ModLogic:
     sve: SVELogic
 
     def __init__(self, player: int, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
-                 action: ActionLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, building: BuildingLogic, wallet: WalletLogic,
+                 action: ActionLogic, artisan: ArtisanLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, building: BuildingLogic, wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
                  time: TimeLogic, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
         self.magic = MagicLogic(player, mods, received, region)
         self.quests = ModQuestLogic(mods, has, region, season, relationship, received, time)
         self.buildings = ModBuildingLogic(player, has, money, mods)
-        self.special_orders = ModSpecialOrderLogic(player, action, crafting, crop, has, region, relationship, season, wallet, mods)
+        self.special_orders = ModSpecialOrderLogic(player, action, artisan, crafting, crop, has, region, relationship, season, wallet, mods)
         self.elevator = ModElevatorLogic(player, elevator_option, mods, received)
         self.deepwoods = DeepWoodsLogic(player, skill_option, elevator_option, received, has, combat, tool, skill, cooking)
         self.skill = ModSkillLogic(player, skill_option, received, has, region, action, relationship, building, tool, fishing, cooking, self.magic, mods)

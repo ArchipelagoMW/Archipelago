@@ -133,7 +133,7 @@ def set_building_rules(logic: StardewLogic, multiworld, player, world_options: S
 def set_bundle_rules(current_bundles, logic: StardewLogic, multiworld, player):
     for bundle in current_bundles.values():
         location = multiworld.get_location(bundle.get_name_with_bundle(), player)
-        rules = logic.can_complete_bundle(bundle.requirements, bundle.number_required)
+        rules = logic.bundle.can_complete_bundle(bundle.requirements, bundle.number_required)
         simplified_rules = rules.simplify()
         MultiWorldRules.set_rule(location, simplified_rules)
     MultiWorldRules.add_rule(multiworld.get_location("Complete Crafts Room", player),
@@ -469,7 +469,7 @@ def set_story_quests_rules(all_location_names: List[str], logic: StardewLogic, m
     for quest in locations.locations_by_tag[LocationTags.QUEST]:
         if quest.name in all_location_names and (quest.mod_name is None or quest.mod_name in world_options.mods):
             MultiWorldRules.set_rule(multiworld.get_location(quest.name, player),
-                                     logic.quest_rules[quest.name].simplify())
+                                     logic.quest.quest_rules[quest.name].simplify())
 
 
 def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player,

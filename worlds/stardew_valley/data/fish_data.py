@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Union, Optional
+from typing import List, Tuple, Union, Optional, Set
 
 from . import season_data as season
 from .game_item import GameItem
@@ -129,33 +129,33 @@ glacierfish_jr = create_fish(Fish.glacierfish_jr, 775, forest_river, season.wint
 legend_ii = create_fish(Fish.legend_ii, 163, mountain_lake, season.spring, 110, True, True)
 radioactive_carp = create_fish(Fish.radioactive_carp, 682, sewers, season.all_seasons, 80, True, True)
 
-baby_lunaloo = create_fish(SVEFish.baby_lunaloo, 3006, ginger_island_ocean, season.all_seasons, 15, ModNames.sve)
-bonefish = create_fish(SVEFish.bonefish, 3013, crimson_badlands, season.all_seasons, 70, ModNames.sve)
-bull_trout = create_fish(SVEFish.bull_trout, 3014, forest_river, season.not_spring, 45, ModNames.sve)
-butterfish = create_fish(SVEFish.butterfish, 3015, shearwater, season.not_winter, 75, ModNames.sve)
-clownfish = create_fish(SVEFish.clownfish, 3016, ginger_island_ocean, season.all_seasons, 45, ModNames.sve)
-daggerfish = create_fish(SVEFish.daggerfish, 3017, highlands, season.all_seasons, 50, ModNames.sve)
-frog = create_fish(SVEFish.frog, 3023, mountain_lake, (season.spring, season.summer), 70, ModNames.sve)
-gemfish = create_fish(SVEFish.gemfish, 3027, highlands, season.all_seasons, 100, ModNames.sve)
-goldenfish = create_fish(SVEFish.goldenfish, 3031, sprite_spring, season.all_seasons, 60, ModNames.sve)
-grass_carp = create_fish(SVEFish.grass_carp, 3034, secret_woods, (season.spring, season.summer), 85, ModNames.sve)
-king_salmon = create_fish(SVEFish.king_salmon, 3044, forest_river, (season.spring, season.summer), 80, ModNames.sve)
-kittyfish = create_fish(SVEFish.kittyfish, 3045, shearwater, (season.fall, season.winter), 85, ModNames.sve)
-lunaloo = create_fish(SVEFish.lunaloo, 3049, ginger_island_ocean, season.all_seasons, 70, ModNames.sve)
-meteor_carp = create_fish(SVEFish.meteor_carp, 3051, sprite_spring, season.all_seasons, 80, ModNames.sve)
-minnow = create_fish(SVEFish.minnow, 3052, town_river, season.all_seasons, 1, ModNames.sve)
-puppyfish = create_fish(SVEFish.puppyfish, 3061, shearwater, season.not_winter, 85, ModNames.sve)
-radioactive_bass = create_fish(SVEFish.radioactive_bass, 3062, sewers, season.all_seasons, 90, ModNames.sve)
-seahorse = create_fish(SVEFish.seahorse, 3068, ginger_island_ocean, season.all_seasons, 25, ModNames.sve)
-shiny_lunaloo = create_fish(SVEFish.shiny_lunaloo, 3070, ginger_island_ocean, season.all_seasons, 110, ModNames.sve)
-snatcher_worm = create_fish(SVEFish.snatcher_worm, 3075, mutant_bug_lair, season.all_seasons, 75, ModNames.sve)
-starfish = create_fish(SVEFish.starfish, 3079, ginger_island_ocean, season.all_seasons, 75, ModNames.sve)
-torpedo_trout = create_fish(SVEFish.torpedo_trout, 3084, fable_reef, season.all_seasons, 70, ModNames.sve)
-undeadfish = create_fish(SVEFish.undeadfish, 3085, crimson_badlands, season.all_seasons, 80, ModNames.sve)
-void_eel = create_fish(SVEFish.void_eel, 3087, witch_swamp, season.all_seasons, 100, ModNames.sve)
-water_grub = create_fish(SVEFish.water_grub, 3094, mutant_bug_lair, season.all_seasons, 60, ModNames.sve)
-sea_sponge = create_fish(SVEFish.sea_sponge, 3067, ginger_island_ocean, season.all_seasons, 40, ModNames.sve)
-dulse_seaweed = create_fish(SVEFish.dulse_seaweed, 3020, vineyard, season.all_seasons, 50, ModNames.sve)
+baby_lunaloo = create_fish(SVEFish.baby_lunaloo, 3006, ginger_island_ocean, season.all_seasons, 15, mod_name=ModNames.sve)
+bonefish = create_fish(SVEFish.bonefish, 3013, crimson_badlands, season.all_seasons, 70, mod_name=ModNames.sve)
+bull_trout = create_fish(SVEFish.bull_trout, 3014, forest_river, season.not_spring, 45, mod_name=ModNames.sve)
+butterfish = create_fish(SVEFish.butterfish, 3015, shearwater, season.not_winter, 75, mod_name=ModNames.sve)
+clownfish = create_fish(SVEFish.clownfish, 3016, ginger_island_ocean, season.all_seasons, 45, mod_name=ModNames.sve)
+daggerfish = create_fish(SVEFish.daggerfish, 3017, highlands, season.all_seasons, 50, mod_name=ModNames.sve)
+frog = create_fish(SVEFish.frog, 3023, mountain_lake, (season.spring, season.summer), 70, mod_name=ModNames.sve)
+gemfish = create_fish(SVEFish.gemfish, 3027, highlands, season.all_seasons, 100, mod_name=ModNames.sve)
+goldenfish = create_fish(SVEFish.goldenfish, 3031, sprite_spring, season.all_seasons, 60, mod_name=ModNames.sve)
+grass_carp = create_fish(SVEFish.grass_carp, 3034, secret_woods, (season.spring, season.summer), 85, mod_name=ModNames.sve)
+king_salmon = create_fish(SVEFish.king_salmon, 3044, forest_river, (season.spring, season.summer), 80, mod_name=ModNames.sve)
+kittyfish = create_fish(SVEFish.kittyfish, 3045, shearwater, (season.fall, season.winter), 85, mod_name=ModNames.sve)
+lunaloo = create_fish(SVEFish.lunaloo, 3049, ginger_island_ocean, season.all_seasons, 70, mod_name=ModNames.sve)
+meteor_carp = create_fish(SVEFish.meteor_carp, 3051, sprite_spring, season.all_seasons, 80, mod_name=ModNames.sve)
+minnow = create_fish(SVEFish.minnow, 3052, town_river, season.all_seasons, 1, mod_name=ModNames.sve)
+puppyfish = create_fish(SVEFish.puppyfish, 3061, shearwater, season.not_winter, 85, mod_name=ModNames.sve)
+radioactive_bass = create_fish(SVEFish.radioactive_bass, 3062, sewers, season.all_seasons, 90, mod_name=ModNames.sve)
+seahorse = create_fish(SVEFish.seahorse, 3068, ginger_island_ocean, season.all_seasons, 25, mod_name=ModNames.sve)
+shiny_lunaloo = create_fish(SVEFish.shiny_lunaloo, 3070, ginger_island_ocean, season.all_seasons, 110, mod_name=ModNames.sve)
+snatcher_worm = create_fish(SVEFish.snatcher_worm, 3075, mutant_bug_lair, season.all_seasons, 75, mod_name=ModNames.sve)
+starfish = create_fish(SVEFish.starfish, 3079, ginger_island_ocean, season.all_seasons, 75, mod_name=ModNames.sve)
+torpedo_trout = create_fish(SVEFish.torpedo_trout, 3084, fable_reef, season.all_seasons, 70, mod_name=ModNames.sve)
+undeadfish = create_fish(SVEFish.undeadfish, 3085, crimson_badlands, season.all_seasons, 80, mod_name=ModNames.sve)
+void_eel = create_fish(SVEFish.void_eel, 3087, witch_swamp, season.all_seasons, 100, mod_name=ModNames.sve)
+water_grub = create_fish(SVEFish.water_grub, 3094, mutant_bug_lair, season.all_seasons, 60, mod_name=ModNames.sve)
+sea_sponge = create_fish(SVEFish.sea_sponge, 3067, ginger_island_ocean, season.all_seasons, 40, mod_name=ModNames.sve)
+dulse_seaweed = create_fish(SVEFish.dulse_seaweed, 3020, vineyard, season.all_seasons, 50, mod_name=ModNames.sve)
 
 
 clam = create_fish("Clam", 372, ocean, season.all_seasons, -1)
@@ -175,3 +175,12 @@ special_fish = [*legendary_fish, blob_fish, lava_eel, octopus, scorpion_carp, ic
 island_fish = [lionfish, blue_discus, stingray, *extended_family]
 
 all_fish_by_name = {fish.name: fish for fish in all_fish}
+
+
+def get_fish_for_mods(mods: Set[str]) -> List[FishItem]:
+    fish_for_mods = []
+    for fish in all_fish:
+        if fish.mod_name and fish.mod_name not in mods:
+            continue
+        fish_for_mods.append(fish)
+    return fish_for_mods

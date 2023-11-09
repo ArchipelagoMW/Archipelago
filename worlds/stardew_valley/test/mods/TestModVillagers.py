@@ -1,7 +1,7 @@
 import unittest
 from typing import Set
 
-from ...data.villagers_data import all_villagers_for_current_mods
+from ...data.villagers_data import get_villagers_for_mods
 from ...mods.mod_data import ModNames
 from ...strings.villager_names import NPC, ModNPC
 
@@ -12,7 +12,7 @@ sve: Set[str] = {ModNames.sve}
 class TestGetVillagersForMods(unittest.TestCase):
 
     def test_no_mods_all_vanilla_villagers(self):
-        villagers = all_villagers_for_current_mods(no_mods)
+        villagers = get_villagers_for_mods(no_mods)
         villager_names = {villager.name for villager in villagers}
 
         self.assertIn(NPC.alex, villager_names)
@@ -51,7 +51,7 @@ class TestGetVillagersForMods(unittest.TestCase):
         self.assertIn(NPC.wizard, villager_names)
 
     def test_no_mods_no_mod_villagers(self):
-        villagers = all_villagers_for_current_mods(no_mods)
+        villagers = get_villagers_for_mods(no_mods)
         villager_names = {villager.name for villager in villagers}
 
         self.assertNotIn(ModNPC.alec, villager_names)
@@ -81,7 +81,7 @@ class TestGetVillagersForMods(unittest.TestCase):
         self.assertNotIn(ModNPC.susan, villager_names)
 
     def test_sve_has_sve_villagers(self):
-        villagers = all_villagers_for_current_mods(sve)
+        villagers = get_villagers_for_mods(sve)
         villager_names = {villager.name for villager in villagers}
 
         self.assertIn(ModNPC.lance, villager_names)
@@ -100,7 +100,7 @@ class TestGetVillagersForMods(unittest.TestCase):
         self.assertIn(ModNPC.susan, villager_names)
 
     def test_sve_has_no_other_mod_villagers(self):
-        villagers = all_villagers_for_current_mods(sve)
+        villagers = get_villagers_for_mods(sve)
         villager_names = {villager.name for villager in villagers}
 
         self.assertNotIn(ModNPC.alec, villager_names)
@@ -116,14 +116,13 @@ class TestGetVillagersForMods(unittest.TestCase):
         self.assertNotIn(ModNPC.yoba, villager_names)
 
     def test_no_mods_wizard_is_not_bachelor(self):
-        villagers = all_villagers_for_current_mods(no_mods)
+        villagers = get_villagers_for_mods(no_mods)
         villagers_by_name = {villager.name: villager for villager in villagers}
         self.assertFalse(villagers_by_name[NPC.wizard].bachelor)
-        self.assertEqual(len(villagers_by_name[NPC.wizard].mod_names), 0)
+        self.assertEqual(villagers_by_name[NPC.wizard].mod_name, ModNames.vanilla)
 
     def test_sve_wizard_is_bachelor(self):
-        villagers = all_villagers_for_current_mods(sve)
+        villagers = get_villagers_for_mods(sve)
         villagers_by_name = {villager.name: villager for villager in villagers}
         self.assertTrue(villagers_by_name[NPC.wizard].bachelor)
-        self.assertEqual(len(villagers_by_name[NPC.wizard].mod_names), 1)
-        self.assertIn(ModNames.sve, villagers_by_name[NPC.wizard].mod_names)
+        self.assertEqual(villagers_by_name[NPC.wizard].mod_name, ModNames.sve)
