@@ -17,8 +17,6 @@ class MessengerRegion(Region):
         super().__init__(name, world.player, world.multiworld)
         locations = [loc for loc in REGIONS[self.name]]
         if self.name == "The Shop":
-            if world.options.goal:  # since 0 is music box goal
-                locations.append("Shop Chest")
             shop_locations = {f"The Shop - {shop_loc}": world.location_name_to_id[f"The Shop - {shop_loc}"]
                               for shop_loc in SHOP_ITEMS}
             shop_locations.update(**{figurine: world.location_name_to_id[figurine] for figurine in FIGURINES})

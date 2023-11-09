@@ -38,7 +38,7 @@ class MessengerRules:
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
             "Music Box": lambda state: (state.has_all(set(NOTES), self.player)
-                                        or state.has("Shop Chest", self.player))
+                                        or state.has("Power Seal", self.player, max(1, self.world.required_seals)))
                                        and self.has_dart(state),
         }
 
@@ -94,8 +94,6 @@ class MessengerRules:
             # corrupted future
             "Corrupted Future - Key of Courage": lambda state: state.has_all({"Demon King Crown", "Magic Firefly"},
                                                                              self.player),
-            # the shop
-            "Shop Chest": self.has_enough_seals,
             # tower hq
             "Money Wrench": self.can_shop,
         }
@@ -147,9 +145,6 @@ class MessengerRules:
             if region.name == "The Shop":
                 for loc in [location for location in region.locations if isinstance(location, MessengerShopLocation)]:
                     loc.access_rule = loc.can_afford
-        if self.world.options.goal == Goal.option_power_seal_hunt:
-            set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
-                     lambda state: state.has("Shop Chest", self.player))
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
         if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
