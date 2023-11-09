@@ -1,10 +1,9 @@
 from typing import Callable, Dict, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, allow_self_locking_items, set_rule
+from worlds.generic.Rules import add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
-from .options import Goal, MessengerAccessibility
-from .subclasses import MessengerShopLocation
+from .options import MessengerAccessibility
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -143,11 +142,11 @@ class MessengerRules:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
             if region.name == "The Shop":
-                for loc in [location for location in region.locations if isinstance(location, MessengerShopLocation)]:
+                for loc in region.locations:
                     loc.access_rule = loc.can_afford
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
-        if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
+        if multiworld.accessibility[self.player]:  # not locations accessibility
             set_self_locking_items(self.world, self.player)
 
 
