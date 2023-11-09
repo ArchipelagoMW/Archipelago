@@ -2454,9 +2454,9 @@ id,region,name,tags,mod_name
 7503,Forest,Fishsanity: Bull Trout,FISHSANITY,Stardew Valley Expanded
 7504,Forest West,Fishsanity: Butterfish,FISHSANITY,Stardew Valley Expanded
 7505,Island South,Fishsanity: Clownfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-7506,Highlands,Fishsanity: Daggerfish,FISHSANITY,Stardew Valley Expanded
+7506,Highlands,Fishsanity: Daggerfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7507,Mountain,Fishsanity: Frog,FISHSANITY,Stardew Valley Expanded
-7508,Highlands,Fishsanity: Gemfish,FISHSANITY,Stardew Valley Expanded
+7508,Highlands,Fishsanity: Gemfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 8001,Sprite Spring,Fishsanity: Goldenfish,FISHSANITY,Stardew Valley Expanded
 8002,Secret Woods,Fishsanity: Grass Carp,FISHSANITY,Stardew Valley Expanded
 8003,Forest West,Fishsanity: King Salmon,FISHSANITY,Stardew Valley Expanded
@@ -2470,7 +2470,7 @@ id,region,name,tags,mod_name
 8011,Island South,Fishsanity: Shiny Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 8012,Mutant Bug Lair,Fishsanity: Snatcher Worm,FISHSANITY,Stardew Valley Expanded
 8013,Beach,Fishsanity: Starfish,FISHSANITY,Stardew Valley Expanded
-8014,Fable Reef,Fishsanity: Torpedo Trout,FISHSANITY,Stardew Valley Expanded
+8014,Fable Reef,Fishsanity: Torpedo Trout,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 8015,Witch's Swamp,Fishsanity: Void Eel,FISHSANITY,Stardew Valley Expanded
 8016,Mutant Bug Lair,Fishsanity: Water Grub,FISHSANITY,Stardew Valley Expanded
 8017,Crimson Badlands,Fishsanity: Undeadfish,FISHSANITY,Stardew Valley Expanded
