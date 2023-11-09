@@ -59,16 +59,22 @@ class Goal(Choice):
 
 
 class EntranceShuffle(Choice):
-    """Dungeonssimple: Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon.
-    Dungeonsfull: Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world.
-    Dungeonscrossed: like Dungeonsfull, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal."""
+    """Dungeons Simple: Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon.
+    Dungeons Full: Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world.
+    Dungeons Crossed: like dungeons_full, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal.
+    Simple: Entrances are grouped together before being randomized. Interiors with two entrances are grouped shuffled together with each other,
+    and Death Mountain entrances are shuffled only on Death Mountain. Dungeons are swapped entirely.
+    Restricted: Like Simple, but single entrance interiors, multi entrance interiors, and Death Mountain interior entrances are all shuffled with each other.
+    Full: Like Restricted, but all Dungeon entrances are shuffled with all non-Dungeon entrances.
+    Crossed: Like Full, but interiors with multiple entrances are no longer confined to the same world, which may allow crossing worlds.
+    Insanity: Like Crossed, but entrances and exits may be decoupled from each other, so that leaving through an exit may not return you to the entrance you entered from."""
     display_name = "Entrance Shuffle"
     default = 0
     alias_none = 0
     option_vanilla = 0
-    option_dungeonssimple = 1
-    option_dungeonsfull = 2
-    option_dungeonscrossed = 3
+    option_dungeons_simple = 1
+    option_dungeons_full = 2
+    option_dungeons_crossed = 3
     option_simple = 4
     option_restricted = 5
     option_full = 6
@@ -78,7 +84,8 @@ class EntranceShuffle(Choice):
 
 class EntranceShuffleSeed(FreeText):
     """You can specify a number to use as an entrance shuffle seed, or a group name. Everyone with the same group name
-    will get the same random seed."""
+    will get the same entrance shuffle result as long as their Entrance Shuffle, Mode, Retro Caves, and Glitches
+    Required options are the same."""
     default = "random"
     display_name = "Entrance Shuffle Seed"
 
@@ -146,7 +153,7 @@ class OpenPyramid(Choice):
             return world.goal[player] in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
         elif self.value == self.option_auto:
             return world.goal[player] in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
-            and (world.entrance_shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
+            and (world.entrance_shuffle[player] in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
                  world.shuffle_ganon)
         elif self.value == self.option_open:
             return True

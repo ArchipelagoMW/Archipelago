@@ -26,12 +26,12 @@ def link_entrances(world, player):
             connect_simple(world, exitname, regionname, player)
         for exitname, regionname in default_dungeon_connections:
             connect_simple(world, exitname, regionname, player)
-    elif world.entrance_shuffle[player] == 'dungeonssimple':
+    elif world.entrance_shuffle[player] == 'dungeons_simple':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname, player)
 
         simple_shuffle_dungeons(world, player)
-    elif world.entrance_shuffle[player] == 'dungeonsfull':
+    elif world.entrance_shuffle[player] == 'dungeons_full':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname, player)
 
@@ -63,7 +63,7 @@ def link_entrances(world, player):
             connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit), player)
         connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit), player)
         connect_caves(world, lw_entrances, dw_entrances, dungeon_exits, player)
-    elif world.entrance_shuffle[player] == 'dungeonscrossed':
+    elif world.entrance_shuffle[player] == 'dungeons_crossed':
         crossed_shuffle_dungeons(world, player)
     elif world.entrance_shuffle[player] == 'simple':
         simple_shuffle_dungeons(world, player)
@@ -586,12 +586,12 @@ def link_inverted_entrances(world, player):
             connect_simple(world, exitname, regionname, player)
         for exitname, regionname in inverted_default_dungeon_connections:
             connect_simple(world, exitname, regionname, player)
-    elif world.entrance_shuffle[player] == 'dungeonssimple':
+    elif world.entrance_shuffle[player] == 'dungeons_simple':
         for exitname, regionname in inverted_default_connections:
             connect_simple(world, exitname, regionname, player)
 
         simple_shuffle_dungeons(world, player)
-    elif world.entrance_shuffle[player] == 'dungeonsfull':
+    elif world.entrance_shuffle[player] == 'dungeons_full':
         for exitname, regionname in inverted_default_connections:
             connect_simple(world, exitname, regionname, player)
 
@@ -646,7 +646,7 @@ def link_inverted_entrances(world, player):
         connect_mandatory_exits(world, lw_entrances, dungeon_exits, lw_dungeon_entrances_must_exit, player)
 
         connect_caves(world, lw_entrances, dw_entrances, dungeon_exits, player)
-    elif world.entrance_shuffle[player] == 'dungeonscrossed':
+    elif world.entrance_shuffle[player] == 'dungeons_crossed':
         inverted_crossed_shuffle_dungeons(world, player)
     elif world.entrance_shuffle[player] == 'simple':
         simple_shuffle_dungeons(world, player)

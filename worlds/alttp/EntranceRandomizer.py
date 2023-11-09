@@ -151,7 +151,7 @@ def parse_arguments(argv, no_defaults=False):
                                           slightly biased to placing progression items with
                                           less restrictions.
                              ''')
-    parser.add_argument('--shuffle', default=defval('vanilla'), const='vanilla', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple', 'dungeonscrossed'],
+    parser.add_argument('--shuffle', default=defval('vanilla'), const='vanilla', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeons_full', 'dungeons_simple', 'dungeons_crossed'],
                         help='''\
                              Select Entrance Shuffling Algorithm. (default: %(default)s)
                              Full:       Mix cave and dungeon entrances freely while limiting
@@ -180,7 +180,7 @@ def parse_arguments(argv, no_defaults=False):
                             Depending on goal, you might still need to beat Agahnim 2 in order to beat ganon.
                             fast ganon goals are crystals, ganon_triforce_hunt, local_ganon_triforce_hunt, pedestalganon
                             auto - Only opens pyramid hole if the goal specifies a fast ganon, and entrance shuffle
-                                   is vanilla, dungeonssimple or dungeonsfull.
+                                   is vanilla, dungeons_simple or dungeons_full.
                             goal - Opens pyramid hole if the goal specifies a fast ganon.
                             yes - Always opens the pyramid hole.
                             no - Never opens the pyramid hole.

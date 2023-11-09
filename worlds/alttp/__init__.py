@@ -338,7 +338,7 @@ class ALTTPWorld(World):
         self.create_dungeons()
 
         if world.glitches_required[player] not in ["no_glitches", "minor_glitches"] and world.entrance_shuffle[player] in \
-                {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
+                {"vanilla", "dungeons_simple", "dungeons_full", "simple", "restricted", "full"}:
             world.fix_fake_world[player] = False
 
         # seeded entrance shuffle
