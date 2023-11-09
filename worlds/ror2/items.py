@@ -1,7 +1,7 @@
 from BaseClasses import Item, ItemClassification
 from .options import ItemWeights
-from .ror2environments import environment_ALL_table
-from typing import NamedTuple, Optional, Set, Dict
+from .ror2environments import environment_all_table
+from typing import NamedTuple, Optional, Dict
 
 
 class RiskOfRainItem(Item):
@@ -10,7 +10,7 @@ class RiskOfRainItem(Item):
 
 class RiskOfRainItemData(NamedTuple):
     category: str
-    code: Optional[int] = None
+    code: int
     item_type: ItemClassification = ItemClassification.filler
     weight: Optional[int] = None
 
@@ -19,6 +19,7 @@ offset: int = 37000
 filler_offset: int = offset + 300
 trap_offset: int = offset + 400
 stage_offset: int = offset + 500
+environment_offset: int = offset + 700
 # Upgrade item ids 37002 - 37012
 upgrade_table: Dict[str, RiskOfRainItemData] = {
     "Common Item":          RiskOfRainItemData("Upgrade", 2 + offset, ItemClassification.filler, 64),
@@ -70,16 +71,15 @@ item_table = {**upgrade_table, **other_table, **filler_table, **trap_table, **st
 # add ALL environments into the item table
 def create_environment_table(name: str, environment_id: int, environment_classification: ItemClassification) \
         -> Dict[str, RiskOfRainItemData]:
-    return {name: RiskOfRainItemData("Environment", 700 + offset + environment_id, environment_classification)}
+    return {name: RiskOfRainItemData("Environment", environment_offset + environment_id, environment_classification)}
 
 
 environment_table: Dict[str, RiskOfRainItemData] = {}
 # use the sotv dlc in the item table so that all names can be looked up regardless of use
-for data, key in environment_ALL_table.items():
+for data, key in environment_all_table.items():
     classification = ItemClassification.progression
-    if data in {"Hidden Realm: Bulwark's Ambry", "Hidden Realm: Gilded Coast,"}:
+    if data in {"Hidden Realm: Bulwark's Ambry", "Hidden Realm: Gilded Coast"}:
         classification = ItemClassification.useful
-
     environment_table.update(create_environment_table(data, key, classification))
 
 item_table.update(environment_table)

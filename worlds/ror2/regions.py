@@ -12,7 +12,7 @@ class RoRRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_explore_regions(ror2_world: "RiskOfRainWorld"):
+def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
     player = ror2_world.player
     ror2_options = ror2_world.options
     multiworld = ror2_world.multiworld
@@ -137,7 +137,7 @@ def create_explore_region(multiworld: MultiWorld, player: int, name: str, data: 
     return region
 
 
-def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData):
+def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData) -> None:
     region = multiworld.get_region(name, player)
     if data.region_exits:
         for region_exit in data.region_exits:
@@ -147,7 +147,7 @@ def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str
             region.exits.append(r_exit_stage)
 
 
-def create_classic_regions(ror2_world: "RiskOfRainWorld"):
+def create_classic_regions(ror2_world: "RiskOfRainWorld") -> None:
     player = ror2_world.player
     ror2_options = ror2_world.options
     multiworld = ror2_world.multiworld

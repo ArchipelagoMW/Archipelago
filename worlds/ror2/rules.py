@@ -9,21 +9,26 @@ if TYPE_CHECKING:
 
 
 # Rule to see if it has access to the previous stage
-def has_entrance_access_rule(multiworld: MultiWorld, stage: str, entrance: str, player: int):
+def has_entrance_access_rule(multiworld: MultiWorld, stage: str, entrance: str, player: int) -> None:
     multiworld.get_entrance(entrance, player).access_rule = \
         lambda state: state.has(entrance, player) and state.has(stage, player)
 
 
-def has_all_items(multiworld: MultiWorld, items: Set, entrance: str, player: int):
+def has_all_items(multiworld: MultiWorld, items: Set[str], entrance: str, player: int) -> None:
     multiworld.get_entrance(entrance, player).access_rule = \
         lambda state: state.has_all(items, player) and state.has(entrance, player)
 
 
 # Checks to see if chest/shrine are accessible
-def has_location_access_rule(multiworld: MultiWorld, environment: str, player: int, item_number: int, item_type: str):
+def has_location_access_rule(multiworld: MultiWorld, environment: str, player: int, item_number: int, item_type: str)\
+        -> None:
     if item_number == 1:
         multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
             lambda state: state.has(environment, player)
+        #  scavengers need to be locked till after a full loop since that is when they are capable of spawning.
+        # (While technically the requirement is just beating 5 stages, this will ensure that the player will have
+        #  a long enough run to have enough director credits for scavengers and
+        #  help prevent being stuck in the same stages until that point).
         if item_type == "Scavenger":
             multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
                 lambda state: state.has(environment, player) and state.has("Stage 5", player)
@@ -32,12 +37,12 @@ def has_location_access_rule(multiworld: MultiWorld, environment: str, player: i
             lambda state: check_location(state, environment, player, item_number, item_type)
 
 
-def check_location(state, environment: str, player: int, item_number: int, item_name: str):
+def check_location(state, environment: str, player: int, item_number: int, item_name: str) -> bool:
     return state.can_reach(f"{environment}: {item_name} {item_number - 1}", "Location", player)
 
 
 # unlock event to next set of stages
-def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int):
+def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int) -> None:
     if stage_number == 4:
         return
     multiworld.get_entrance(f"OrderedStage_{stage_number + 1}", player).access_rule = \
@@ -94,14 +99,8 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                      lambda state: state.has("Dio's Best Friend", player,
                                              total_revivals + ror2_options.start_with_revive))
 
-    elif ror2_options.goal == "explore":
-        # When explore_mode is used,
-        #   scavengers need to be locked till after a full loop since that is when they are capable of spawning.
-        # (While technically the requirement is just beating 5 stages, this will ensure that the player will have
-        #   a long enough run to have enough director credits for scavengers and
-        #   help prevent being stuck in the same stages until that point.)
-
-        # Regions
+    else:
+        # explore mode
         chests = ror2_options.chests_per_stage.value
         shrines = ror2_options.shrines_per_stage.value
         newts = ror2_options.altars_per_stage.value

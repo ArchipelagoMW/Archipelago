@@ -47,8 +47,6 @@ environment_sotv_orderedstage_2_table: Dict[str, int] = {
 environment_sotv_orderedstage_3_table: Dict[str, int] = {
     "Sulfur Pools":                            41,  # sulfurpools
 }
-environment_sotv_orderedstage_4_table: Dict[str, int] = {}
-environment_sotv_orderedstage_5_table: Dict[str, int] = {}
 
 environment_sotv_special_table: Dict[str, int] = {
     "Void Locus":                              46,  # voidstage
@@ -67,26 +65,26 @@ def compress_dict_list_horizontal(list_of_dict: List[Dict[X, Y]]) -> Dict[X, Y]:
     return compressed
 
 
-def collapse_dict_list_vertical(list_of_dict1: List[Dict[X, Y]], *args: List[Dict[X, Y]]) -> List[Dict[X, Y]]:
+def collapse_dict_list_vertical(list_of_dict_1: List[Dict[X, Y]], *args: List[Dict[X, Y]]) -> List[Dict[X, Y]]:
     """Combine all parallel dictionaries in lists together to make a new list of dictionaries of the same length."""
     # find the length of the longest list
-    length = len(list_of_dict1)
-    for list_of_dictN in args:
-        length = max(length, len(list_of_dictN))
+    length = len(list_of_dict_1)
+    for list_of_dict_n in args:
+        length = max(length, len(list_of_dict_n))
 
     # create a combined list with a length the same as the longest list
-    collapsed = [{}] * length
-    # The reason the list_of_dict1 is not directly used to make collapsed is
+    collapsed: List[Dict[X, Y]] = [{}] * length
+    # The reason the list_of_dict_1 is not directly used to make collapsed is
     #   side effects can occur if all the dictionaries are not manually unioned.
 
-    # merge contents from list_of_dict1
-    for i in range(len(list_of_dict1)):
-        collapsed[i] = {**collapsed[i],  **list_of_dict1[i]}
+    # merge contents from list_of_dict_1
+    for i in range(len(list_of_dict_1)):
+        collapsed[i] = {**collapsed[i], **list_of_dict_1[i]}
 
     # merge contents of remaining lists_of_dicts
-    for list_of_dictN in args:
-        for i in range(len(list_of_dictN)):
-            collapsed[i] = {**collapsed[i], **list_of_dictN[i]}
+    for list_of_dict_n in args:
+        for i in range(len(list_of_dict_n)):
+            collapsed[i] = {**collapsed[i], **list_of_dict_n[i]}
 
     return collapsed
 
@@ -104,8 +102,7 @@ environment_vanilla_table = \
 
 environment_sotv_orderedstages_table = \
     [environment_sotv_orderedstage_1_table, environment_sotv_orderedstage_2_table,
-     environment_sotv_orderedstage_3_table, environment_sotv_orderedstage_4_table,
-     environment_sotv_orderedstage_5_table]
+     environment_sotv_orderedstage_3_table]
 environment_sotv_table = \
     {**compress_dict_list_horizontal(environment_sotv_orderedstages_table), **environment_sotv_special_table}
 
@@ -113,7 +110,7 @@ environment_non_orderedstages_table = \
     {**environment_vanilla_hidden_realm_table, **environment_vanilla_special_table, **environment_sotv_special_table}
 environment_orderedstages_table = \
     collapse_dict_list_vertical(environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table)
-environment_ALL_table = {**environment_vanilla_table,  **environment_sotv_table}
+environment_all_table = {**environment_vanilla_table, **environment_sotv_table}
 
 
 def shift_by_offset(dictionary: Dict[str, int], offset: int) -> Dict[str, int]:

@@ -1,16 +1,16 @@
 import string
 
-from .items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset, filler_table
+from .items import RiskOfRainItem, item_table, item_pool_weights, offset, filler_table, environment_offset
 from .locations import RiskOfRainLocation, item_pickups, get_locations
 from .rules import set_rules
 from .ror2environments import environment_vanilla_table, environment_vanilla_orderedstages_table, \
     environment_sotv_orderedstages_table, environment_sotv_table, collapse_dict_list_vertical, shift_by_offset
 
-from BaseClasses import Region, Entrance, Item, ItemClassification, Tutorial
+from BaseClasses import Item, ItemClassification, Tutorial
 from .options import ItemWeights, ROR2Options
 from worlds.AutoWorld import World, WebWorld
 from .regions import create_explore_regions, create_classic_regions
-from typing import List, Dict
+from typing import List, Dict, Any
 
 
 class RiskOfWeb(WebWorld):
@@ -98,10 +98,10 @@ class RiskOfRainWorld(World):
                     collapse_dict_list_vertical(environment_available_orderedstages_table,
                                                 environment_sotv_orderedstages_table)
 
-            environments_pool = shift_by_offset(environment_vanilla_table, offset + 700)
+            environments_pool = shift_by_offset(environment_vanilla_table, environment_offset)
 
             if self.options.dlc_sotv:
-                environment_offset_table = shift_by_offset(environment_sotv_table, offset + 700)
+                environment_offset_table = shift_by_offset(environment_sotv_table, environment_offset)
                 environments_pool = {**environments_pool, **environment_offset_table}
             environments_to_precollect = 5 if self.options.begin_with_loop else 1
             # percollect environments for each stage (or just stage 1)
@@ -123,6 +123,7 @@ class RiskOfRainWorld(World):
             total_locations = self.options.total_locations.value
         else:
             # explore mode
+            # Add Stage items for logic gates
             itempool += ["Stage 1", "Stage 2", "Stage 3", "Stage 4"]
             total_locations = len(
                 get_locations(
@@ -141,10 +142,9 @@ class RiskOfRainWorld(World):
         itempool.extend(filler)
 
         # Convert itempool into real items
-        itempool = list(map(lambda name: self.create_item(name), itempool))
-        self.multiworld.itempool += itempool
+        self.multiworld.itempool += map(self.create_item, itempool)
 
-    def create_junk_pool(self) -> Dict:
+    def create_junk_pool(self) -> Dict[str, int]:
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.options.item_weights.value
         junk_pool: Dict[str, int] = {}
@@ -176,6 +176,7 @@ class RiskOfRainWorld(World):
                 "Combat Trap": self.options.combat_trap.value,
                 "Teleport Trap": self.options.teleport_trap.value,
             }
+        # remove trap items from the pool (excluding lunar items)
         if not self.options.enable_trap:
             junk_pool.pop("Mountain Trap")
             junk_pool.pop("Time Warp Trap")
@@ -199,11 +200,11 @@ class RiskOfRainWorld(World):
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in filler_table.values()]
-        filler = self.random.choices([filler for filler in filler_table.keys()], weights,
-                                     k=1)[0]
+        filler = self.multiworld.random.choices([filler for filler in filler_table.keys()], weights,
+                                                k=1)[0]
         return filler
 
-    def fill_slot_data(self):
+    def fill_slot_data(self) -> Dict[str, Any]:
         options_dict = self.options.as_dict("item_pickup_step", "shrine_use_step", "goal", "victory", "total_locations",
                                             "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
                                             "scanner_per_stage", "altars_per_stage", "total_revivals",
@@ -222,15 +223,18 @@ class RiskOfRainWorld(World):
             num_of_events -= 1
         world_region = self.multiworld.get_region("Petrichor V", self.player)
         if self.options.goal == "classic":
+            # classic mode
             # only setup Pickups when using classic_mode
             for i in range(num_of_events):
                 event_loc = RiskOfRainLocation(self.player, f"Pickup{(i + 1) * 25}", None, world_region)
-                event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None,
-                                                           self.player))
+                event_loc.place_locked_item(
+                    RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None,
+                                   self.player))
                 event_loc.access_rule = \
                     lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", "Location", self.player)
                 world_region.locations.append(event_loc)
-        elif self.options.goal == "explore":
+        else:
+            # explore mode
             event_region = self.multiworld.get_region("OrderedStage_5", self.player)
             event_loc = RiskOfRainLocation(self.player, "Stage 5", None, event_region)
             event_loc.place_locked_item(RiskOfRainItem("Stage 5", ItemClassification.progression, None, self.player))
