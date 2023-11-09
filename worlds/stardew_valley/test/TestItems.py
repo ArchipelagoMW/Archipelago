@@ -53,7 +53,7 @@ class TestItems(SVTestCase):
 
     def test_no_duplicate_rings(self):
         seed = random.randrange(sys.maxsize)
-        allsanity_options = self.allsanity_options_without_mods()
+        allsanity_options = allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options, seed=seed)
         ring_items = [item.name for item in multiworld.get_items() if Group.RING in item_table[item.name].groups]
         self.assertEqual(len(ring_items), len(set(ring_items)))

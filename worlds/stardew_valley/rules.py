@@ -249,8 +249,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
 
     set_farm_buildings_entrance_rules(logic, multiworld, player)
 
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.mountain_to_adventurer_guild, player),
-                             logic.received("Adventurer's Guild"))
+    set_adventure_guild_entrance_rules(logic, multiworld, player, world_options)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.mountain_to_railroad, player),
                              logic.time.has_lived_months(2))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_witch_warp_cave, player),
@@ -269,6 +268,14 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.farmhouse_cooking, player), logic.cooking.can_cook_in_kitchen().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.shipping, player), logic.shipping.can_use_shipping_bin().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.watch_queen_of_sauce, player), logic.action.can_watch(Channel.queen_of_sauce).simplify())
+
+
+def set_adventure_guild_entrance_rules(logic, multiworld, player, world_options):
+    if ModNames.sve in world_options.mods:
+        entrance = multiworld.get_entrance(SVEEntrance.guild_to_interior, player)
+    else:
+        entrance = multiworld.get_entrance(Entrance.mountain_to_adventurer_guild, player)
+    MultiWorldRules.set_rule(entrance, logic.received("Adventurer's Guild"))
 
 
 def set_farm_buildings_entrance_rules(logic, multiworld, player):
