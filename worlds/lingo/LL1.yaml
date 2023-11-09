@@ -97,6 +97,9 @@
   #                   Use "required_when_no_doors" instead if it would be
   #                   possible to enter the room without the painting in door
   #                   shuffle mode.
+  # - req_blocked:    Marks that a painting cannot be an entrance leading to a
+  #                   required painting. Paintings within a room that has a
+  #                   required painting are automatically req blocked.
   # - move:           Denotes that the painting is able to move.
   Starting Room:
     entrances:
@@ -5760,6 +5763,7 @@
         exit_only: True
       - id: symmetry_painting_b_6
         orientation: north
+        req_blocked: True
   Arrow Garden:
     entrances:
       The Wondrous:
@@ -6914,6 +6918,7 @@
     paintings:
       - id: clock_painting_3
         orientation: east
+        req_blocked: True
   The Red:
     entrances:
       Roof: True

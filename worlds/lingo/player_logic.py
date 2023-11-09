@@ -275,17 +275,17 @@ class LingoPlayerLogic:
                 # This shuffling is non-workable. Start over.
                 return False
 
+            # Check whether the exit painting is blocked from being an entrance to a required painting.
+            if PAINTINGS[warp_enter].req_blocked:
+                # This shuffling is non-workable. Start over.
+                return False
+
             chosen_entrances.remove(warp_enter)
             self.PAINTING_MAPPING[warp_enter] = warp_exit
 
         for warp_enter in chosen_entrances:
             warp_exit = world.random.choice(chosen_exits)
             self.PAINTING_MAPPING[warp_enter] = warp_exit
-
-        if self.PAINTING_MAPPING.get("clock_painting_3", "") == "clock_painting_2":
-            # If the painting inside The Wise leads to the required painting Outside The Wise, it may be impossible to
-            # reach this area. Start over.
-            return False
 
         # The Eye Wall painting is unique in that it is both double-sided and also enter only (because it moves).
         # There is only one eligible double-sided exit painting, which is the vanilla exit for this warp. If the
