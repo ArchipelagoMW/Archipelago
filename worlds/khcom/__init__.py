@@ -19,19 +19,16 @@ def launch_client():
 components.append(Component("KHCOM Client", "KHCOMClient", func=launch_client, component_type=Type.CLIENT))
 
 class KHCOMWeb(WebWorld):
-    theme = "stone"
+    theme = "ocean"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Kingdom Hearts Chain of Memories Randomizer software on your computer. This guide covers single-player, "
         "multiworld, and related software.",
         "English",
-        "rogue-legacy_en.md",
-        "rogue-legacy/en",
-        ["Phar"]
+        "khcom_en.md",
+        "khcom/en",
+        ["Gicu"]
     )]
-    bug_report_page = "https://github.com/ThePhar/RogueLegacyRandomizer/issues/new?assignees=&labels=bug&template=" \
-                      "report-an-issue---.md&title=%5BIssue%5D"
-
 
 class KHCOMWorld(World):
     """
