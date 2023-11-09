@@ -354,7 +354,7 @@ def create_museum_items(item_factory: StardewItemFactory, options: StardewValley
 
 
 def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item], random):
-    island_villagers = [NPC.Leo, ModNPC.lance]
+    island_villagers = [NPC.leo, ModNPC.lance]
     if options.friendsanity == Friendsanity.option_none:
         return
     exclude_non_bachelors = options.friendsanity == Friendsanity.option_bachelors

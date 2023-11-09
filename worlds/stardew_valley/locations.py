@@ -11,6 +11,7 @@ from .data.museum_data import all_museum_items
 from .data.villagers_data import all_villagers_for_current_mods
 from .options import ExcludeGingerIsland, Friendsanity, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
 from .strings.goal_names import Goal
+from .strings.villager_names import NPC, ModNPC
 from .strings.region_names import Region
 
 LOCATION_CODE_OFFSET = 717000
@@ -222,10 +223,11 @@ def extend_museumsanity_locations(randomized_locations: List[LocationData], opti
 
 
 def extend_friendsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    island_villagers = [NPC.leo, ModNPC.lance]
     if options.friendsanity == Friendsanity.option_none:
         return
 
-    exclude_leo = options.exclude_ginger_island == ExcludeGingerIsland.option_true
+    exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     exclude_non_bachelors = options.friendsanity == Friendsanity.option_bachelors
     exclude_locked_villagers = options.friendsanity == Friendsanity.option_starting_npcs or \
                                options.friendsanity == Friendsanity.option_bachelors
@@ -236,7 +238,7 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], opti
             continue
         if not villager.bachelor and exclude_non_bachelors:
             continue
-        if villager.name == "Leo" and exclude_leo:
+        if villager.name in island_villagers and exclude_ginger_island:
             continue
         heart_cap = 8 if villager.bachelor else 10
         if include_post_marriage_hearts and villager.bachelor:
