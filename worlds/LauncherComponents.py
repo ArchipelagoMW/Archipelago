@@ -116,7 +116,7 @@ components: List[Component] = [
               file_identifier=SuffixIdentifier('.apzl')),
     # Kingdom Hearts 2
     Component('KH2 Client', "KH2Client"),
-    # Kingdom Chain of Memories
+    # Kingdom Hearts Chain of Memories
     Component('KHCOM Client', "KHCOMClient"),
 
     #MegaMan Battle Network 3
