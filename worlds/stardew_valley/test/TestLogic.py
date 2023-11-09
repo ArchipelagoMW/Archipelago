@@ -40,7 +40,7 @@ class TestLogic(unittest.TestCase):
     def test_given_quest_rule_then_can_be_resolved(self):
         for quest in logic.quest.quest_rules.keys():
             with self.subTest(msg=quest):
-                rule = logic.quest_rules[quest]
+                rule = logic.quest.quest_rules[quest]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
                 self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve quest rule for {quest} {rule}")
 
