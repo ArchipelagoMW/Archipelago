@@ -89,15 +89,15 @@ class TestBase(unittest.TestCase):
             items = self.multiworld.itempool[:]
             items = [item for item in items if
                      item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
-            items.extend(ItemFactory(item_pool[0], 1))
+            items.extend(ItemFactory(item_pool[0], self.multiworld.worlds[1]))
         else:
-            items = ItemFactory(item_pool[0], 1)
+            items = ItemFactory(item_pool[0], self.multiworld.worlds[1])
         return self.get_state(items)
 
     def _get_items_partial(self, item_pool, missing_item):
         new_items = item_pool[0].copy()
         new_items.remove(missing_item)
-        items = ItemFactory(new_items, 1)
+        items = ItemFactory(new_items, self.multiworld.worlds[1])
         return self.get_state(items)
 
 
