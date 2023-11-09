@@ -47,22 +47,24 @@ MoveBit_GrabHeavy equ 7
 ; locations that don't exist
 .align 4
 ItemLocationTable:
-    Jewel1LocationTable: .fill @levels, ItemID_None
-    Jewel2LocationTable: .fill @levels, ItemID_None
-    Jewel3LocationTable: .fill @levels, ItemID_None
-    Jewel4LocationTable: .fill @levels, ItemID_None
-    CDLocationTable:     .fill @levels, ItemID_None
-    HealthLocationTable: .fill @levels, ItemID_None
+    Jewel1LocationTable:  .fill @levels, ItemID_None
+    Jewel2LocationTable:  .fill @levels, ItemID_None
+    Jewel3LocationTable:  .fill @levels, ItemID_None
+    Jewel4LocationTable:  .fill @levels, ItemID_None
+    CDLocationTable:      .fill @levels, ItemID_None
+    HealthLocationTable:  .fill @levels, ItemID_None
+    Health2LocationTable: .fill @levels, ItemID_None
 
 ; Maps locations to pointers toward the item's multiworld data.
 .align 4
 ItemExtDataTable:
-    Jewel1ExtDataTable: .fill @levels * 4, 0
-    Jewel2ExtDataTable: .fill @levels * 4, 0
-    Jewel3ExtDataTable: .fill @levels * 4, 0
-    Jewel4ExtDataTable: .fill @levels * 4, 0
-    CDExtDataTable:     .fill @levels * 4, 0
-    HealthExtDataTable: .fill @levels * 4, 0
+    Jewel1ExtDataTable:  .fill @levels * 4, 0
+    Jewel2ExtDataTable:  .fill @levels * 4, 0
+    Jewel3ExtDataTable:  .fill @levels * 4, 0
+    Jewel4ExtDataTable:  .fill @levels * 4, 0
+    CDExtDataTable:      .fill @levels * 4, 0
+    HealthExtDataTable:  .fill @levels * 4, 0
+    Health2ExtDataTable: .fill @levels * 4, 0
 
 
 ; Starting inventory.

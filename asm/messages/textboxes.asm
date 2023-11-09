@@ -426,6 +426,16 @@ ResultsScreenShowNextItem:
         ldr r0, =HasFullHealthItem
         ldrb r1, [r0]
         cmp r1, #1
+        bne @@FullHealth2
+        strb r2, [r0]
+        ldr r4, [r3, #20]
+        cmp r4, #0
+        beq @@FullHealth2
+
+    @@FullHealth2:
+        ldr r0, =HasFullHealthItem2
+        ldrb r1, [r0]
+        cmp r1, #1
         bne @@NoMore
         strb r2, [r0]
         ldr r4, [r3, #20]

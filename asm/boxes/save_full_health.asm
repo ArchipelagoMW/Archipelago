@@ -35,10 +35,24 @@ ItemGetFlags:
         ldr r2, =HasFullHealthItem
         mov r1, #2
         strb r1, [r2]
-        b @@CheckKeyzer
+        b @@FullHealth2
 
     @@NoFullhealth:
         ldr r1, =HasFullHealthItem
+        strb r2, [r1]
+
+    @@FullHealth2:
+        get_bit r2, r1, 7
+        cmp r2, #0
+        beq @@NoFullHealth2
+
+        ldr r2, =HasFullHealthItem2
+        mov r1, #2
+        strb r1, [r2]
+        b @@CheckKeyzer
+
+    @@NoFullHealth2:
+        ldr r1, =HasFullHealthItem2
         strb r2, [r1]
 
     ; Reset the abilities that have been marked as found in the level
@@ -79,7 +93,7 @@ SeisanSaveFullHealthItem:
         cmp r0, #0
         beq @@FullHealthItem
         ldrb r0, [r1]
-        mov r2, #0x20
+        mov r2, #1 << 5
         orr r0, r2
         strb r0, [r1]
 
@@ -87,9 +101,19 @@ SeisanSaveFullHealthItem:
         ldr r0, =HasFullHealthItem
         ldrb r0, [r0]
         cmp r0, #0
+        beq @@FullHealth2
+        ldrb r0, [r1, #1]
+        mov r2, #1 << 6
+        orr r0, r2
+        strb r0, [r1, #1]
+
+    @@FullHealth2:
+        ldr r0, =HasFullHealthItem2
+        ldrb r0, [r0]
+        cmp r0, #0
         beq @@Return
         ldrb r0, [r1, #1]
-        mov r2, #0x40
+        mov r2, #1 << 7
         orr r0, r2
         strb r0, [r1, #1]
 

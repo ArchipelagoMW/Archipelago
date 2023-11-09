@@ -91,9 +91,7 @@ class WL4World(World):
     def create_items(self):
         diamond_pieces = 18 * 4
         cds = 16
-        # FIXME: Hard and S-Hard have two heart boxes in Pinball Zone, but the
-        # two aren't distinguishable, so this should be 9, 8, 6.
-        full_health_items = (9, 7, 5)[self.multiworld.difficulty[self.player].value]
+        full_health_items = (9, 7, 6)[self.multiworld.difficulty[self.player].value]
         total_required_locations = diamond_pieces + cds + full_health_items
 
         itempool = []

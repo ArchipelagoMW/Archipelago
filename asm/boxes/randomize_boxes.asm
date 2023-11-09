@@ -64,7 +64,11 @@ SpawnRandomizedItemFromBox:
         b @@CheckLocation
 
     @@FullHealthBox:
+        mov r6, r0
+        bl GetFullHealthBoxID
         ldr r5, =HasFullHealthItem
+        add r5, r0
+        mov r0, r6
         ldr r2, =zako_takara_box_Anm_11
         b @@SetAnimation
 
@@ -363,7 +367,9 @@ CollectRandomItem:
         b @@GetItem
 
     @@FullHealthCheck:
+        bl GetFullHealthBoxID
         ldr r6, =HasFullHealthItem
+        add r6, r0
 
     @@GetItem:
     ; Kill the item entity
