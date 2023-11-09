@@ -5759,6 +5759,7 @@
         move: True
         required_door:
           door: Exit
+        req_blocked: True # the wondrous (table) in vanilla doors
       - id: symmetry_painting_a_6
         orientation: west
         exit_only: True
