@@ -2213,6 +2213,7 @@
       - id: map_painting2
         orientation: north
         enter_only: True # otherwise you might just skip the whole game!
+        req_blocked: True # owl hallway in vanilla doors
   Roof:
     entrances:
       Orange Tower Seventh Floor: True
@@ -5763,7 +5764,7 @@
         exit_only: True
       - id: symmetry_painting_b_6
         orientation: north
-        req_blocked: True
+        req_blocked: True # the wondrous (table) in vanilla doors
   Arrow Garden:
     entrances:
       The Wondrous:
@@ -6918,7 +6919,7 @@
     paintings:
       - id: clock_painting_3
         orientation: east
-        req_blocked: True
+        req_blocked: True # outside the wise (with or without door shuffle)
   The Red:
     entrances:
       Roof: True
@@ -7367,6 +7368,7 @@
     paintings:
       - id: hi_solved_painting4
         orientation: south
+        req_blocked: True # owl hallway in vanilla doors
   Challenge Room:
     entrances:
       Welcome Back Area:
