@@ -555,14 +555,18 @@ def create_magic_mod_spells(item_factory: StardewItemFactory, options: StardewVa
 
 
 def create_special_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     if ModNames.sve not in options.mods:
         return []
-    items.append(item_factory("Diamond Wand"))
-    items.append(item_factory("Marlon's Boat Paddle"))
     items.append(item_factory("Iridium Bomb"))
     items.append(item_factory("Krobus' Protection"))
     items.append(item_factory("Kittyfish Spell"))
     items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP]])
+    if exclude_ginger_island:
+        return
+    items.append(item_factory("Diamond Wand"))
+    items.append(item_factory("Marlon's Boat Paddle"))
+    items.append(item_factory("Fable Reef Portal"))
 
 
 def create_unique_filler_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,

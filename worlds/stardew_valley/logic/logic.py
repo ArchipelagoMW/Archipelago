@@ -439,6 +439,7 @@ class StardewLogic:
         self.item_rules.update(self.tree_fruit_rules)
         self.item_rules.update(self.seed_rules)
         self.item_rules.update(self.crop_rules)
+        self.item_rules.update(self.mod.item.get_modded_item_rules())
 
         # For some recipes, the cooked item can be obtained directly, so we either cook it or get it
         for recipe in self.cooking_rules:

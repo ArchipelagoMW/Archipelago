@@ -3,6 +3,7 @@ from typing import List, Iterable
 from .buildings_logic import ModBuildingLogic
 from .deepwoods_logic import DeepWoodsLogic
 from .elevator_logic import ModElevatorLogic
+from .item_logic import ModItemLogic
 from .magic_logic import MagicLogic
 from .quests_logic import ModQuestLogic
 from .skills_logic import ModSkillLogic
@@ -33,6 +34,7 @@ from ...options import SkillProgression, ElevatorProgression, Mods
 
 
 class ModLogic:
+    items: ModItemLogic
     quests: ModQuestLogic
     region: RegionLogic
     magic: MagicLogic
@@ -47,6 +49,7 @@ class ModLogic:
                  action: ActionLogic, artisan: ArtisanLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, building: BuildingLogic, wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
                  time: TimeLogic, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
+        self.item = ModItemLogic(mods,combat, cooking, has, money, region, season, relationship, tool)
         self.magic = MagicLogic(player, mods, received, region)
         self.quests = ModQuestLogic(mods, has, region, season, relationship, received, time)
         self.buildings = ModBuildingLogic(player, has, money, mods)

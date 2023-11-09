@@ -12,6 +12,7 @@ from ..mod_data import ModNames
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.crop_names import Fruit
 from ...strings.food_names import Meal, Beverage
+from ...strings.forageable_names import SVEForage
 from ...strings.monster_drop_names import Loot, ModLoot
 from ...strings.villager_names import ModNPC
 from ...strings.season_names import Season
@@ -70,7 +71,7 @@ class ModQuestLogic:
                                       self.relationship.can_meet(ModNPC.lance) & self.region.can_reach(SVERegion.guild_summit),
                 ModQuest.AuroraVineyard: self.has(Fruit.starfruit) & self.region.can_reach(SVERegion.aurora_vineyard),
                 ModQuest.MonsterCrops: self.has([ModLoot.monster_mushroom, ModLoot.slime_berry, ModLoot.monster_fruit, ModLoot.void_root]),
-                ModQuest.VoidSoul: self.region.can_reach(Region.sewer) & self.has(ModQuest.VoidSoul),
+                ModQuest.VoidSoul: self.region.can_reach(Region.sewer) & self.has(SVEForage.void_soul),
             })
 
         return quests
