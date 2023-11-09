@@ -106,7 +106,7 @@ class Shop:
         self.inventory = [None] * self.slots
 
     def add_inventory(self, slot: int, item: str, price: int, max: int = 0,
-                      replacement: Optional[str] = None, replacement_price: int = 0, create_location: bool = False,
+                      replacement: Optional[str] = None, replacement_price: int = 0,
                       player: int = 0, price_type: int = ShopPriceType.Rupees,
                       replacement_price_type: int = ShopPriceType.Rupees):
         self.inventory[slot] = {
@@ -166,12 +166,15 @@ def push_shop_inventories(multiworld):
 
     for location in shop_slots:
         item_name = location.item.name
-        location.shop.push_inventory(location.shop_slot, item_name, location.shop_price,
-                                     1, location.item.player if location.item.player != location.player else 0,
-                                     location.shop_price_type)
-        location.shop_price = location.shop.inventory[location.shop_slot]["price"] = min(location.shop_price,
-            get_price(multiworld, location.shop.inventory[location.shop_slot], location.player,
-                      location.shop_price_type)[1])
+        # Retro Bow arrows will already have been pushed
+        if (not multiworld.retro_bow[location.player]) or ((item_name, location.item.player)
+                                                           != ("Single Arrow", location.player)):
+            location.shop.push_inventory(location.shop_slot, item_name, location.shop_price,
+                                         1, location.item.player if location.item.player != location.player else 0,
+                                         location.shop_price_type)
+            location.shop_price = location.shop.inventory[location.shop_slot]["price"] = min(location.shop_price,
+                get_price(multiworld, location.shop.inventory[location.shop_slot], location.player,
+                          location.shop_price_type)[1])
 
 
 def create_shops(multiworld, player: int):
@@ -297,35 +300,32 @@ shop_generation_types = {
 }
 
 
-def set_up_shops(world, player: int):
+def set_up_shops(multiworld, player: int):
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
-    if world.retro_bow[player]:
-        rss = world.get_region('Red Shield Shop', player).shop
+    if multiworld.retro_bow[player]:
+        rss = multiworld.get_region('Red Shield Shop', player).shop
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
                              ['Blue Shield', 50], ['Small Heart',
                                                    10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
-        if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
+        if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
             replacement_items.append(['Small Key (Universal)', 100])
-        replacement_item = world.random.choice(replacement_items)
+        replacement_item = multiworld.random.choice(replacement_items)
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
-    if world.small_key_shuffle[player] == small_key_shuffle.option_universal or world.retro_bow[player]:
-        for shop in world.random.sample([s for s in world.shops if
-                                         s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
-                                        5):
+    if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal or multiworld.retro_bow[player]:
+        for shop in multiworld.random.sample([s for s in multiworld.shops if
+                                              s.custom and not s.locked and s.type == ShopType.Shop
+                                              and s.region.player == player], 5):
             shop.locked = True
             slots = [0, 1, 2]
-            world.random.shuffle(slots)
+            multiworld.random.shuffle(slots)
             slots = iter(slots)
-            if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
+            if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
-            if world.retro_bow[player]:
+            if multiworld.retro_bow[player]:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
-
-
-def shuffle_shops(multiworld, player: int):
 
     if multiworld.shuffle_capacity_upgrades[player]:
         for shop in multiworld.shops:

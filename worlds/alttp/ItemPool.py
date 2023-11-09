@@ -5,7 +5,7 @@ from BaseClasses import ItemClassification
 from Fill import FillError
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
-from .Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, shop_table_by_location
+from .Shops import TakeAny, total_shop_slots, set_up_shops, shop_table_by_location, ShopType
 from .Bosses import place_bosses
 from .Dungeons import get_dungeon_item_pool_player
 from .EntranceShuffle import connect_entrance
@@ -469,8 +469,20 @@ def generate_itempool(world):
                 multiworld.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
         multiworld.itempool.extend([item for item in dungeon_items])
 
+    set_up_shops(multiworld, player)
 
-    shop_items = multiworld.shop_item_slots[player]
+    if multiworld.retro_bow[player]:
+        shop_items = 0
+        shop_locations = [location for shop_locations in (shop.region.locations for shop in multiworld.shops if
+                          shop.type == ShopType.Shop) for location in shop_locations if location.shop_slot is not None]
+        for location in shop_locations:
+            if location.shop.inventory[location.shop_slot]["item"] == "Single Arrow":
+                location.place_locked_item(ItemFactory("Single Arrow", player))
+            else:
+                shop_items += 1
+    else:
+        shop_items = multiworld.shop_item_slots[player]
+
     if multiworld.shuffle_capacity_upgrades[player]:
         shop_items += 2
     chance_100 = int(multiworld.retro_bow[player]) * 0.25 + int(
@@ -579,9 +591,6 @@ def generate_itempool(world):
                                               multiworld.turtle_rock_medallion[player].current_key.title())
 
     place_bosses(world)
-    set_up_shops(multiworld, player)
-
-    shuffle_shops(multiworld, player)
 
     multiworld.itempool += items
 
