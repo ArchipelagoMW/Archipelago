@@ -80,6 +80,7 @@ def set_rules(world):
 
     set_deepwoods_rules(logic, multiworld, player, world_options)
     set_magic_spell_rules(logic, multiworld, player, world_options)
+    set_sve_rules(logic, multiworld, player, world_options)
     # 1min52 - 1min53 # These times are for TestOptions
     # 1min36 - 1min38 # After the combat not duplicating a bunch of stuff
     # 1min28 - 1min30 # with the caching of combat rules
@@ -911,11 +912,11 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.enter_summit, player),
                              logic.received("Iridium Bomb").simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_bear_shop, player),
-                             logic.can_complete_quest(Quest.strange_note).simplify())
+                             logic.quest.can_complete_quest(Quest.strange_note).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.backwoods_to_grove, player),
                              logic.mod.sve.has_any_rune().simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.forest_west_to_spring, player),
-                             logic.can_complete_quest(Quest.magic_ink).simplify())
+                             logic.quest.can_complete_quest(Quest.magic_ink).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.secret_woods_to_west, player),
                              logic.tool.has_tool(Tool.axe, ToolMaterial.iron).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_to_fable_reef, player),
@@ -939,7 +940,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_purple_junimo, player),
                              logic.relationship.has_hearts(ModNPC.apples, 10).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.to_grandpa_upstairs, player),
-                             logic.special_order.can_complete_special_order("Grandpa's Shed").simplify())
+                             logic.quest.can_complete_quest("Grandpa's Shed").simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
                              logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron).simplify())
     for location in logic.mod.sve.sve_location_rules:
