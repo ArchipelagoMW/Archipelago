@@ -3,7 +3,6 @@ from typing import Optional, TYPE_CHECKING, cast
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
 from .constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
-from .options import Goal
 from .regions import MEGA_SHARDS, REGIONS, SEALS
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
 
@@ -21,8 +20,10 @@ class MessengerRegion(Region):
                 locations.append("Shop Chest")
             shop_locations = {f"The Shop - {shop_loc}": world.location_name_to_id[f"The Shop - {shop_loc}"]
                               for shop_loc in SHOP_ITEMS}
-            shop_locations.update(**{figurine: world.location_name_to_id[figurine] for figurine in FIGURINES})
             self.add_locations(shop_locations, MessengerShopLocation)
+        elif self.name == "The Craftsman's Corner":
+            self.add_locations({figurine: world.location_name_to_id[figurine] for figurine in FIGURINES},
+                               MessengerLocation)
         elif self.name == "Tower HQ":
             locations.append("Money Wrench")
         if world.options.shuffle_seals and self.name in SEALS:
@@ -48,10 +49,6 @@ class MessengerShopLocation(MessengerLocation):
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
         world = cast("MessengerWorld", self.parent_region.multiworld.worlds[self.player])
-        # short circuit figurines which all require demon's bane be purchased, but nothing else
-        if "Figurine" in name:
-            return world.figurine_prices[name] +\
-                cast(MessengerShopLocation, world.multiworld.get_location("The Shop - Demon's Bane", self.player)).cost
         shop_data = SHOP_ITEMS[name]
         if shop_data.prerequisite:
             prereq_cost = 0
@@ -70,9 +67,6 @@ class MessengerShopLocation(MessengerLocation):
     def can_afford(self, state: CollectionState) -> bool:
         world = cast("MessengerWorld", state.multiworld.worlds[self.player])
         can_afford = state.has("Shards", self.player, min(self.cost, world.total_shards))
-        if "Figurine" in self.name:
-            can_afford = state.has("Money Wrench", self.player) and can_afford\
-                and state.can_reach("Money Wrench", "Location", self.player)
         return can_afford
 
 
