@@ -1,6 +1,6 @@
-from typing import Iterable, Dict
+from typing import Dict
 
-from ... import StardewRule
+from ...stardew_rule import StardewRule
 from ...logic.has_logic import HasLogic
 from ...logic.money_logic import MoneyLogic
 from ...options import Mods

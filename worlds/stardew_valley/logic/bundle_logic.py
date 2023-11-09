@@ -2,9 +2,10 @@ from typing import List
 
 from ..data.bundle_data import BundleItem
 from .crop_logic import CropLogic
-from ..logic.has_logic import HasLogic
-from ..logic.money_logic import MoneyLogic
-from ..logic.region_logic import RegionLogic
+from .farming_logic import FarmingLogic
+from .has_logic import HasLogic
+from .money_logic import MoneyLogic
+from .region_logic import RegionLogic
 from ..stardew_rule import StardewRule
 from ..strings.region_names import Region
 
@@ -12,13 +13,15 @@ from ..strings.region_names import Region
 class BundleLogic:
     player: int
     crop: CropLogic
+    farming: FarmingLogic
     has: HasLogic
-    money: MoneyLogic
     region: RegionLogic
+    money: MoneyLogic
 
-    def __init__(self, player: int, crop: CropLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
+    def __init__(self, player: int, crop: CropLogic, farming: FarmingLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
         self.player = player
         self.crop = crop
+        self.farming = farming
         self.has = has
         self.region = region
         self.money = money
@@ -34,7 +37,7 @@ class BundleLogic:
                 item_rules.append(bundle_item.item.name)
                 if bundle_item.quality > highest_quality_yet:
                     highest_quality_yet = bundle_item.quality
-        return can_speak_junimo & self.has(item_rules, number_required) & self.crop.can_grow_gold_quality(highest_quality_yet)
+        return can_speak_junimo & self.has(item_rules, number_required) & self.farming.can_grow_gold_quality(highest_quality_yet)
 
     def can_complete_community_center(self) -> StardewRule:
         return (self.region.can_reach_location("Complete Crafts Room") &

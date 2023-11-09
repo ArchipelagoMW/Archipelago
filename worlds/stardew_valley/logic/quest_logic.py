@@ -14,7 +14,9 @@ from .region_logic import RegionLogic
 from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
 from .skill_logic import SkillLogic
+from .time_logic import TimeLogic
 from .tool_logic import ToolLogic
+from .wallet_logic import WalletLogic
 from ..options import SkillProgression, Mods
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
@@ -51,13 +53,14 @@ class QuestLogic:
     combat: CombatLogic
     season: SeasonLogic
     skill: SkillLogic
+    wallet: WalletLogic
     quest_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, mine: MineLogic, region: RegionLogic, action: ActionLogic,
-                 relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
-                 money: MoneyLogic, combat: CombatLogic, season: SeasonLogic, mods_option: Mods):
+    def __init__(self, player: int, skill: SkillLogic, received: ReceivedLogic, has: HasLogic, mine: MineLogic, region: RegionLogic, action: ActionLogic,
+                 relationship: RelationshipLogic, building: BuildingLogic, time: TimeLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
+                 money: MoneyLogic, combat: CombatLogic, season: SeasonLogic, wallet: WalletLogic, mods_option: Mods):
         self.player = player
-        self.skill_option = skill_option
+        self.skill = skill
         self.received = received
         self.has = has
         self.mine = mine
@@ -65,6 +68,7 @@ class QuestLogic:
         self.action = action
         self.relationship = relationship
         self.building = building
+        self.time = time
         self.tool = tool
         self.fishing = fishing
         self.cooking = cooking
@@ -72,6 +76,7 @@ class QuestLogic:
         self.money = money
         self.combat = combat
         self.season = season
+        self.wallet = wallet
         self.quest_rules = dict()
 
     def initialize_rules(self):
@@ -90,7 +95,7 @@ class QuestLogic:
             Quest.robins_lost_axe: self.season.has(Season.spring) & self.region.can_reach(Region.forest) & self.relationship.can_meet(NPC.robin),
             Quest.jodis_request: self.season.has(Season.spring) & self.has(Vegetable.cauliflower) & self.relationship.can_meet(NPC.jodi),
             Quest.mayors_shorts: self.season.has(Season.summer) & self.region.can_reach(Region.ranch) &
-                                 (self.relationship.has_hearts(NPC.marnie, 2) | (self.mod.magic.can_blink())) & self.relationship.can_meet(NPC.lewis),
+                                 self.relationship.has_hearts(NPC.marnie, 2) & self.relationship.can_meet(NPC.lewis),
             Quest.blackberry_basket: self.season.has(Season.fall) & self.relationship.can_meet(NPC.linus),
             Quest.marnies_request: self.relationship.has_hearts(NPC.marnie, 3) & self.has(Forageable.cave_carrot) & self.region.can_reach(Region.ranch),
             Quest.pam_is_thirsty: self.season.has(Season.summer) & self.has(ArtisanGood.pale_ale) & self.relationship.can_meet(NPC.pam),

@@ -8,10 +8,12 @@ from .action_logic import ActionLogic
 from .arcade_logic import ArcadeLogic
 from .artisan_logic import ArtisanLogic
 from .building_logic import BuildingLogic
+from .bundle_logic import BundleLogic
 from .combat_logic import CombatLogic
 from .cooking_logic import CookingLogic
 from .crafting_logic import CraftingLogic
 from .crop_logic import CropLogic
+from .farming_logic import FarmingLogic
 from .fishing_logic import FishingLogic
 from .gift_logic import GiftLogic
 from .mine_logic import MineLogic
@@ -130,6 +132,8 @@ class StardewLogic:
         self.pet = PetLogic(self.player, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
         self.crop = CropLogic(self.player, self.has, self.region, self.season, self.tool)
         self.skill = SkillLogic(self.player, skill_option, self.received, self.has, self.region, self.season, self.time, self.tool, self.combat, self.crop)
+        self.farming = FarmingLogic(self.player, self.crop, self.skill)
+        self.bundle = BundleLogic(self.player, self.crop, self.farming, self.has, self.region, self.money)
         self.fishing = FishingLogic(self.player, self.region, self.tool, self.skill)
         self.mine = MineLogic(self.player, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
@@ -138,8 +142,8 @@ class StardewLogic:
                                     self.region, self.tool, self.skill, self.mine)
         self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
-        self.quest = QuestLogic(self.player, skill_option, self.received, self.has, self.mine, self.region, self.action, self.relationship, self.buildings,
-                                self.tool, self.fishing, self.cooking, self.money, self.combat, self.season, mods_option)
+        self.quest = QuestLogic(self.player, self.skill, self.received, self.has, self.mine, self.region, self.action, self.relationship, self.buildings,
+                                self.time, self.tool, self.fishing, self.cooking, self.money, self.combat, self.season, self.wallet, mods_option)
         self.crafting = CraftingLogic(self.player, self.options.craftsanity, self.options.festival_locations,
                                       self.options.special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
@@ -576,19 +580,6 @@ class StardewLogic:
         tier = min(7, max(1, tier))
         traveling_merchant_days = [f"Traveling Merchant: {day}" for day in Weekday.all_days]
         return self.received(traveling_merchant_days, tier)
-
-    def can_grow_gold_quality(self, quality: int) -> StardewRule:
-        if quality <= 0:
-            return True_()
-        if quality == 1:
-            return self.skill.has_farming_level(5) | (self.crop.has_fertilizer(1) & self.skill.has_farming_level(2)) | (
-                    self.crop.has_fertilizer(2) & self.skill.has_farming_level(1)) | self.crop.has_fertilizer(3)
-        if quality == 2:
-            return self.skill.has_farming_level(10) | (self.crop.has_fertilizer(1) & self.skill.has_farming_level(5)) | (
-                    self.crop.has_fertilizer(2) & self.skill.has_farming_level(3)) | (
-                           self.crop.has_fertilizer(3) & self.skill.has_farming_level(2))
-        if quality >= 3:
-            return self.crop.has_fertilizer(3) & self.skill.has_farming_level(4)
 
     def can_complete_field_office(self) -> StardewRule:
         field_office = self.region.can_reach(Region.field_office)
