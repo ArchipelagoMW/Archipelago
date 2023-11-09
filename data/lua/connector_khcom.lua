@@ -435,7 +435,7 @@ floor_assignment_values = {0x0A, 0x04, 0x03, 0x05, 0x01, 0x06, 0x02, 0x07, 0x08,
 
 bronze_pack_cards = {"Kingdom Key", "Three Wishes", "Pumpkinhead", "Olympia", "Wishing Star", "Lady Luck", "Fire", "Blizzard", "Thunder", "Simba", "Genie", "Cloud", "Dumbo", "Potion", "Hi-Potion", "Ether"}
 silver_pack_cards = {"Lionheart", "Metal Chocobo", "Spellbinder", "Divine Rose", "Crabclaw", "Cure", "Stop", "Gravity", "Aero", "Bambi", "Mushu", "Tinker Bell", "Mega-Potion", "Elixir", "Mega-Ether"}
-gold_pack_cards = {"Oathkeeper", "Oblivion", "Diamond Dust", "One-Winged Angel", "Ultima Weapon", "Megalixir"}
+gold_pack_cards = {"Oathkeeper", "Oblivion", "Diamond Dust", "One Winged Angel", "Ultima Weapon", "Megalixir"}
 
 function save_or_savestate_loaded(past_playtime, current_playtime)
     if current_playtime >= past_playtime then
