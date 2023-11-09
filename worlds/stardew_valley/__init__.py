@@ -200,7 +200,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_cryptic_note:
             self.create_event_location(location_table[GoalName.cryptic_note],
-                                       self.logic.can_complete_quest("Cryptic Note").simplify(),
+                                       self.logic.quest.can_complete_quest("Cryptic Note").simplify(),
                                        Event.victory)
         elif self.options.goal == Goal.option_master_angler:
             self.create_event_location(location_table[GoalName.master_angler],

@@ -50,7 +50,89 @@ def get_minsanity_options():
     return minsanity
 
 
-class SVTestCase(unittest.TestCase):
+def minimal_locations_maximal_items():
+    min_max_options = {
+        Goal.internal_name: Goal.option_bottom_of_the_mines,
+        BundleRandomization.internal_name: BundleRandomization.option_vanilla,
+        BundlePrice.internal_name: BundlePrice.option_very_cheap,
+        SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
+        Cropsanity.internal_name: Cropsanity.option_shuffled,
+        BackpackProgression.internal_name: BackpackProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_vanilla,
+        SkillProgression.internal_name: SkillProgression.option_vanilla,
+        BuildingProgression.internal_name: BuildingProgression.option_vanilla,
+        FestivalLocations.internal_name: FestivalLocations.option_disabled,
+        ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
+        ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_disabled,
+        HelpWantedLocations.internal_name: 0,
+        Fishsanity.internal_name: Fishsanity.option_none,
+        Museumsanity.internal_name: Museumsanity.option_none,
+        Monstersanity.internal_name: Monstersanity.option_none,
+        Shipsanity.internal_name: Shipsanity.option_none,
+        Friendsanity.internal_name: Friendsanity.option_none,
+        FriendsanityHeartSize.internal_name: 8,
+        NumberOfMovementBuffs.internal_name: 12,
+        NumberOfLuckBuffs.internal_name: 12,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        TrapItems.internal_name: TrapItems.option_nightmare,
+        Mods.internal_name: (),
+    }
+    return min_max_options
+
+
+def allsanity_options_without_mods():
+    allsanity = {
+        Goal.internal_name: Goal.option_perfection,
+        BundleRandomization.internal_name: BundleRandomization.option_thematic,
+        BundlePrice.internal_name: BundlePrice.option_expensive,
+        SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
+        Cropsanity.internal_name: Cropsanity.option_shuffled,
+        BackpackProgression.internal_name: BackpackProgression.option_progressive,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
+        SkillProgression.internal_name: SkillProgression.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        FestivalLocations.internal_name: FestivalLocations.option_hard,
+        ElevatorProgression.internal_name: ElevatorProgression.option_progressive,
+        ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_full_shuffling,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        HelpWantedLocations.internal_name: 56,
+        Fishsanity.internal_name: Fishsanity.option_all,
+        Museumsanity.internal_name: Museumsanity.option_all,
+        Monstersanity.internal_name: Monstersanity.option_progressive_goals,
+        Shipsanity.internal_name: Shipsanity.option_everything,
+        Cooksanity.internal_name: Cooksanity.option_all,
+        Chefsanity.internal_name: Chefsanity.option_all,
+        Craftsanity.internal_name: Craftsanity.option_all,
+        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
+        FriendsanityHeartSize.internal_name: 1,
+        NumberOfMovementBuffs.internal_name: 12,
+        NumberOfLuckBuffs.internal_name: 12,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        TrapItems.internal_name: TrapItems.option_nightmare,
+    }
+    return allsanity
+
+
+def allsanity_options_with_mods():
+    allsanity = {}
+    allsanity.update(allsanity_options_without_mods())
+    all_mods = (
+        ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+        ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+        ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+        ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+        ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+        ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator,
+        ModNames.sve
+    )
+    allsanity.update({Mods.internal_name: all_mods})
+    return allsanity
+
+
+class SVTestBase(WorldTestBase):
+    game = "Stardew Valley"
+    world: StardewValleyWorld
     player: ClassVar[int] = 1
     """Set to False to not skip some 'extra' tests"""
     skip_extra_tests: bool = True

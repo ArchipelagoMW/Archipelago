@@ -1,10 +1,11 @@
 from typing import List
 
 from BaseClasses import ItemClassification, MultiWorld, Item
-from . import setup_solo_multiworld, SVTestBase, get_minsanity_options
+from . import setup_solo_multiworld, SVTestBase, get_minsanity_options, allsanity_options_without_mods, \
+    allsanity_options_with_mods, minimal_locations_maximal_items
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
-from ..items import items_by_group, Group, item_table
+from ..items import Group, item_table
 from ..locations import LocationTags
 from ..mods.mod_data import ModNames
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
