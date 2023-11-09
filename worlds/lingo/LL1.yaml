@@ -100,6 +100,8 @@
   # - req_blocked:    Marks that a painting cannot be an entrance leading to a
   #                   required painting. Paintings within a room that has a
   #                   required painting are automatically req blocked.
+  #                   Use "req_blocked_when_no_doors" instead if it would be
+  #                   fine in door shuffle mode.
   # - move:           Denotes that the painting is able to move.
   Starting Room:
     entrances:
@@ -2213,7 +2215,7 @@
       - id: map_painting2
         orientation: north
         enter_only: True # otherwise you might just skip the whole game!
-        req_blocked: True # owl hallway in vanilla doors
+        req_blocked_when_no_doors: True # owl hallway in vanilla doors
   Roof:
     entrances:
       Orange Tower Seventh Floor: True
@@ -5759,13 +5761,13 @@
         move: True
         required_door:
           door: Exit
-        req_blocked: True # the wondrous (table) in vanilla doors
+        req_blocked_when_no_doors: True # the wondrous (table) in vanilla doors
       - id: symmetry_painting_a_6
         orientation: west
         exit_only: True
       - id: symmetry_painting_b_6
         orientation: north
-        req_blocked: True # the wondrous (table) in vanilla doors
+        req_blocked_when_no_doors: True # the wondrous (table) in vanilla doors
   Arrow Garden:
     entrances:
       The Wondrous:
@@ -7369,7 +7371,7 @@
     paintings:
       - id: hi_solved_painting4
         orientation: south
-        req_blocked: True # owl hallway in vanilla doors
+        req_blocked_when_no_doors: True # owl hallway in vanilla doors
   Challenge Room:
     entrances:
       Welcome Back Area:
