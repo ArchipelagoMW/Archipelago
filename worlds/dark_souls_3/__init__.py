@@ -501,7 +501,7 @@ class DarkSouls3World(World):
         self._add_location_rule([
             "FS: Xanthous Overcoat", "FS: Xanthous Gloves", "FS: Xanthous Trousers"
         ], "Xanthous Ashes")
-        self._add_location_rule("Ember (Dragon Chaser)", "Dragon Chaser's Ashes")
+        self._add_location_rule("FS: Ember (Dragon Chaser)", "Dragon Chaser's Ashes")
         self._add_location_rule([
             "FS: Washing Pole", "FS: Eastern Helm", "FS: Eastern Armor", "FS: Eastern Gauntlets",
             "FS: Eastern Leggings", "FS: Wood Grain Ring",
