@@ -1597,7 +1597,7 @@ location_tables = {
                         missable = True, boss = True, shop = True),
 
         # Siegward drops (kill or quest)
-        DS3LocationData("PC: Storm Ruler (Siegward)",              "Storm Ruler",                         DS3LocationCategory.WEAPON,
+        DS3LocationData("PC: Storm Ruler (Siegward)",              "Storm Ruler",                         DS3LocationCategory.KEY,
                         offline = '02,0:50006218::', missable = True, drop = True, npc = True),
         DS3LocationData("PC: Pierce Shield",                       "Pierce Shield",                       DS3LocationCategory.SHIELD,
                         missable = True, drop = True, npc = True),
