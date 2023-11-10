@@ -243,8 +243,8 @@ class DarkSouls3Location(Location):
             self,
             player: int,
             data: DS3LocationData,
-            event: bool = False,
-            parent: Optional[Region] = None):
+            parent: Optional[Region] = None, 
+            event: bool = False):
         super().__init__(player, data.name, None if event else data.ap_code, parent)
         self.data = data
         if data.missable: self.progress_type = LocationProgressType.EXCLUDED
@@ -1600,7 +1600,7 @@ location_tables = {
                         lizard = True),
         DS3LocationData("PC: Twinkling Titanite #2",               "Twinkling Titanite",                  DS3LocationCategory.UPGRADE,
                         lizard = True),
-        DS3LocationData("US: Siegbräu",                            "Siegbräu",                            DS3LocationCategory.MISC,
+        DS3LocationData("PC: Siegbräu",                            "Siegbräu",                            DS3LocationCategory.MISC,
                         missable = True, npc = True),
         DS3LocationData("PC: Yhorm's Great Machete",               "Yhorm's Great Machete",               DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),

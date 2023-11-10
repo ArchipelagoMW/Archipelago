@@ -236,7 +236,6 @@ class DarkSouls3World(World):
                 new_location = DarkSouls3Location(
                     self.player,
                     location,
-                    self.location_name_to_id[location.name],
                     new_region
                 )
             else:
@@ -251,7 +250,8 @@ class DarkSouls3World(World):
                 new_location = DarkSouls3Location(
                     self.player,
                     location,
-                    parent = new_region
+                    parent = new_region,
+                    event = True,
                 )
                 event_item.code = None
                 new_location.place_locked_item(event_item)
@@ -858,10 +858,10 @@ class DarkSouls3World(World):
         # A map from Archipelago's location IDs to the keys the offline
         # randomizer uses to identify locations.
         location_ids_to_keys: Dict[str, str] = {}
-        for location in self.multiworld.get_filled_locations():
+        for location in self.multiworld.get_filled_locations(self.player):
             # Skip events and only look at this world's locations
             if (location.address is not None and location.item.code is not None
-                    and location.player == self.player and location.data.offline):
+                    and location.data.offline):
                 location_ids_to_keys[location.address] = location.data.offline
 
         slot_data = {
