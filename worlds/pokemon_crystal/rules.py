@@ -13,8 +13,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     def can_cut(state: CollectionState):
         return state.has("HM01 Cut", world.player) and state.has("Hive Badge", world.player)
 
-    def can_cut(state: CollectionState):
-        return state.has("HM02 Fly", world.player) and state.has("Storm Badge", world.player)
+    # def can_cut(state: CollectionState):
+    #     return state.has("HM02 Fly", world.player) and state.has("Storm Badge", world.player)
 
     def can_surf(state: CollectionState):
         return state.has("HM03 Surf", world.player) and state.has("Fog Badge", world.player)
@@ -739,12 +739,12 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         )
 
     # Silver Cave
-
-    set_rule(
-        get_location(
-            "Outside Silver Cave - Hidden Item Across Water"),
-        can_surf
-    )
+    if hidden():
+        set_rule(
+            get_location(
+                "Outside Silver Cave - Hidden Item Across Water"),
+            can_surf
+        )
 
     set_rule(
         get_location(
@@ -910,9 +910,17 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(
         get_location(
-            "Vermilion Port - Hidden Item in Buoy"),
-        can_surf
+            "Vermilion City - HP Up from Lance"),
+        lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player) and state.has(
+            "EVENT_MET_COPYCAT_FOUND_OUT_ABOUT_LOST_ITEM", world.player)
     )
+
+    if hidden():
+        set_rule(
+            get_location(
+                "Vermilion Port - Hidden Item in Buoy"),
+            can_surf
+        )
 
     set_rule(
         get_location(

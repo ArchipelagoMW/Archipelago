@@ -56,11 +56,11 @@
 		"script": "CeruleanCityHiddenBerserkGene"
 	},
 	"CERULEAN_GYM_MACHINE_PART": {
-		"label": "Cerulean Gym - Hidden Item",
+		"label": "Cerulean Gym - Machine Part in Water",
 		"flag": "EVENT_FOUND_MACHINE_PART_IN_CERULEAN_GYM",
 		"default_item": "ITEM_MACHINE_PART",
 		"type": "hiddenitem",
-		"tags": ["Hidden"],
+		"tags": ["KeyIyem"],
 		"script": "CeruleanGymHiddenMachinePart"
 	},
 	"CIANWOOD_CITY_HIDDEN_MAX_ETHER": {
@@ -2456,6 +2456,14 @@
 		"tags": ["NPCGift"],
 		"default_item": "ITEM_RARE_CANDY",
 		"script": "AP_NPC_PokemonFanClub_RARE_CANDY"
+	},
+	"LOST_ITEM_FROM_FAN_CLUB": {
+		"label": "Vermilion City - Lost Item from Guy in Fan Club",
+		"flag": "EVENT_GOT_LOST_ITEM_FROM_FAN_CLUB",
+		"type": "giveitem",
+		"tags": ["KeyItem"],
+		"default_item": "ITEM_LOST_ITEM",
+		"script": "AP_NPC_PokemonFanClub_LOST_ITEM"
 	},
 	"TM07_ZAP_CANNON": {
 		"label": "Power Plant - TM07 from Manager",
