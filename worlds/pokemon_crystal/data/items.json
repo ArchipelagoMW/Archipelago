@@ -70,7 +70,11 @@
 	"ITEM_ETHER": { "name": "Ether", "classification": "FILLER", "tags": [] },
 	"ITEM_MAX_ETHER": { "name": "Max Ether", "classification": "FILLER", "tags": [] },
 	"ITEM_ELIXER": { "name": "Elixer", "classification": "FILLER", "tags": [] },
-	"ITEM_RED_SCALE": { "name": "Red Scale", "classification": "FILLER", "tags": [] },
+	"ITEM_RED_SCALE": {
+		"name": "Red Scale",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
 	"ITEM_SECRETPOTION": {
 		"name": "Secretpotion",
 		"classification": "PROGRESSION",
@@ -86,7 +90,11 @@
 		"classification": "PROGRESSION",
 		"tags": ["KeyItem", "Unique"]
 	},
-	"ITEM_CLEAR_BELL": { "name": "Clear Bell", "classification": "FILLER", "tags": [] },
+	"ITEM_CLEAR_BELL": {
+		"name": "Clear Bell",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
 	"ITEM_SILVER_WING": {
 		"name": "Silver Wing",
 		"classification": "PROGRESSION",

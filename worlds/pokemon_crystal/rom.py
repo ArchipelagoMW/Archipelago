@@ -53,6 +53,25 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     starters = [get_random_poke(random), get_random_poke(
         random), get_random_poke(random)]
 
+    # static = {
+    # 	"RedGyarados": get_random_poke(random),
+    # 	"Sudowoodo": get_random_poke(random),
+    # 	"Suicune": get_random_poke(random),
+    # 	"Ho_Oh": get_random_poke(random),
+    # 	"UnionCaveLapras": get_random_poke(random),
+    # 	"Snorlax": get_random_poke(random),
+    # 	"Lugia": get_random_poke(random),
+    # 	"CatchTutorial_1": get_random_poke(random),
+    # 	"CatchTutorial_2": get_random_poke(random),
+    # 	"CatchTutorial_3": get_random_poke(random),
+    # 	"RocketHQTrap_1": get_random_poke(random),
+    # 	"RocketHQTrap_2": get_random_poke(random),
+    # 	"RocketHQTrap_3": get_random_poke(random),
+    # 	"RocketHQElectrode_1": get_random_poke(random),
+    # 	"RocketHQElectrode_2": get_random_poke(random),
+    # 	"RocketHQElectrode_3": get_random_poke(random)
+    # }
+
     for address_name, address in data.rom_addresses.items():
         if world.options.randomize_wilds:
             if (address_name.startswith("AP_WildGrass")):

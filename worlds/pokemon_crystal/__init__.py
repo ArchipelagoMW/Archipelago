@@ -95,7 +95,7 @@ class PokemonCrystalWorld(World):
     def generate_output(self, output_directory: str) -> None:
         generate_output(self, output_directory)
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         slot_data = self.options.as_dict(
             "randomize_hidden_items",
             "randomize_starters",

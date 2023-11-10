@@ -1153,7 +1153,7 @@
 		"default_item": "ITEM_TM_ROLLOUT"
 	},
 	"ROUTE_37_HIDDEN_ETHER": {
-		"label": "Route 37 - Item",
+		"label": "Route 37 - Hidden Item",
 		"flag": "EVENT_ROUTE_37_HIDDEN_ETHER",
 		"default_item": "ITEM_ETHER",
 		"type": "hiddenitem",
@@ -2154,7 +2154,7 @@
 		"script": "AP_NPC_BlackthornCity_SPELL_TAG"
 	},
 	"TM19_GIGA_DRAIN": {
-		"label": "Celadon Gym - TM19 from Erika ?",
+		"label": "Celadon Gym - TM19 from Erika",
 		"flag": "EVENT_GOT_TM19_GIGA_DRAIN",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
@@ -2322,7 +2322,7 @@
 		"script": "AP_NPC_GoldenrodPokecenter1F_GS_BALL"
 	},
 	"RECEIVED_CARD_KEY": {
-		"label": "Goldenrod UG Warehouse - Card Key from ?",
+		"label": "Goldenrod UG Warehouse - Card Key from Director",
 		"flag": "EVENT_RECEIVED_CARD_KEY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
@@ -2384,6 +2384,14 @@
 		"tags": ["NPCGift"],
 		"default_item": "ITEM_MYSTERY_EGG",
 		"script": "AP_NPC_MrPokemonsHouse_MYSTERY_EGG"
+	},
+	"EXP_SHARE": {
+		"label": "Route 30 - Exp Share from Mr Pokemon",
+		"flag": "EVENT_GOT_EXP_SHARE",
+		"type": "giveitem",
+		"tags": ["NPCGift"],
+		"default_item": "ITEM_EXP_SHARE",
+		"script": "AP_NPC_MrPokemonsHouse_EXP_SHARE"
 	},
 	"TM29_PSYCHIC": {
 		"label": "Saffron City - TM29 from Mr Psychic",
@@ -2488,6 +2496,14 @@
 		"tags": ["NPCGift"],
 		"default_item": "ITEM_BASEMENT_KEY",
 		"script": "AP_NPC_RadioTower5F_BASEMENT_KEY"
+	},
+	"CLEAR_BELL": {
+		"label": "Radio Tower 5F - Clear Bell from Director",
+		"flag": "EVENT_GOT_CLEAR_BELL",
+		"type": "giveitem",
+		"tags": ["NPCGift"],
+		"default_item": "ITEM_CLEAR_BELL",
+		"script": "AP_NPC_RadioTower5F_CLEAR_BELL"
 	},
 	"SUPER_ROD": {
 		"label": "Route 12 - Super Rod from Fishing Guru",
@@ -2922,5 +2938,13 @@
 		"tags": ["Badge"],
 		"default_item": "ITEM_EARTH_BADGE",
 		"script": "AP_Badge_ViridianGym_EARTH_BADGE"
+	},
+	"RED_SCALE": {
+		"label": "Lake of Rage - Red Scale from Gyarados",
+		"flag": "EVENT_GOT_RED_SCALE",
+		"type": "giveitem",
+		"tags": ["KeyItem"],
+		"default_item": "ITEM_RED_SCALE",
+		"script": "AP_KeyItem_LakeOfRage_RED_SCALE"
 	}
 }

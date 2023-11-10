@@ -137,6 +137,12 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             "EVENT_GOT_MYSTERY_EGG_FROM_MR_POKEMON", world.player)
     )
 
+    set_rule(
+        get_location("Route 30 - Exp Share from Mr Pokemon"),
+        lambda state: state.has(
+            "Red Scale", world.player)
+    )
+
     # Cherrygrove
     set_rule(get_location(
         "Cherrygrove City - Mystic Water from Island Man"), can_surf)
@@ -202,6 +208,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Union Cave
 
+    set_rule(get_entrance(
+        "REGION_UNION_CAVE_B1F -> REGION_UNION_CAVE_B2F"), can_surf)
+
     # Azalea Town
     set_rule(get_location("Slowpoke Well B2F - Kings Rock from Man"),
              lambda state: can_strength(state) and can_surf(state))
@@ -220,12 +229,6 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             "EVENT_CLEARED_SLOWPOKE_WELL", world.player)
     )
 
-    set_rule(
-        get_entrance("REGION_AZALEA_TOWN -> REGION_ILEX_FOREST_AZALEA_GATE"),
-        lambda state: state.has(
-            "EVENT_BEAT_BUGSY", world.player)
-    )
-
     # Route 34
     set_rule(get_location("Route 34 - Soft Sand from Kate"), can_surf)
     if hidden():
@@ -241,6 +244,43 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             "REGION_GOLDENROD_MAGNET_TRAIN_STATION -> REGION_SAFFRON_MAGNET_TRAIN_STATION"),
         lambda state: state.has(
             "Pass", world.player)
+    )
+
+    # Underground
+
+    set_rule(
+        get_entrance(
+            "REGION_GOLDENROD_UNDERGROUND -> REGION_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES"),
+        lambda state: state.has(
+            "Basement Key", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_GOLDENROD_DEPT_STORE_B1F -> REGION_GOLDENROD_DEPT_STORE_B1F:WAREHOUSE"),
+        lambda state: state.has(
+            "Card Key", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_GOLDENROD_DEPT_STORE_B1F:WAREHOUSE -> REGION_GOLDENROD_DEPT_STORE_B1F"),
+        lambda state: state.has(
+            "Card Key", world.player)
+    )
+
+    # Radio Tower
+
+    set_rule(
+        get_entrance(
+            "REGION_RADIO_TOWER_2F -> REGION_RADIO_TOWER_3F"),
+        lambda state: has_n_badges(state, 7)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_RADIO_TOWER_3F -> REGION_RADIO_TOWER_4F:CARDKEY"),
+        lambda state: state.has("Card Key", world.player)
     )
 
     # Route 35
@@ -271,6 +311,12 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_location("Burned Tower 1F - Item"), can_rocksmash)
     set_rule(get_location("Burned Tower B1F - Item"), can_strength)
+
+    set_rule(
+        get_entrance("REGION_ECRUTEAK_CITY -> REGION_TIN_TOWER_1F"),
+        lambda state: state.has("Clear Bell", world.player) and state.has(
+            "EVENT_CLEARED_RADIO_TOWER", world.player)
+    )
 
     # Olivine City
     set_rule(
@@ -362,6 +408,12 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             "Cianwood City - HM02 from Chuck's Wife"),
         lambda state: state.has(
             "EVENT_BEAT_CHUCK", world.player)
+    )
+
+    set_rule(
+        get_entrance(
+            "REGION_CIANWOOD_CITY -> REGION_CIANWOOD_GYM"),
+        can_strength
     )
 
     set_rule(
@@ -481,6 +533,16 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     )
 
     # Lake of Rage
+
+    set_rule(
+        get_location("EVENT_DECIDED_TO_HELP_LANCE"),
+        can_surf
+    )
+
+    set_rule(
+        get_location("Lake of Rage - Red Scale from Gyarados"),
+        can_surf
+    )
 
     set_rule(
         get_location("Lake of Rage - Blackbelt from Wesley"),
@@ -838,6 +900,12 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         get_entrance(
             "REGION_VERMILION_CITY -> REGION_VERMILION_GYM"),
         lambda state: can_cut(state) or can_surf(state)
+    )
+
+    set_rule(
+        get_location(
+            "Vermilion City - HP Up from Lance"),
+        lambda state: has_n_badges(state, 16)
     )
 
     set_rule(
