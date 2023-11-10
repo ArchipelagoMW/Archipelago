@@ -38,6 +38,9 @@ def lingo_can_use_location(state: CollectionState, location: PlayerLocation, wor
     for req_room in location.access.rooms:
         if not state.can_reach(req_room, "Region", world.player):
             return False
+    if location.color is not None and world.options.shuffle_colors:
+        if not state.has(location.color.capitalize(), world.player):
+            return False
 
     for req_door in location.access.doors:
         if not _lingo_can_open_door(state, req_door.room, req_door.door, world.player, player_logic):
@@ -56,7 +59,7 @@ def lingo_can_use_mastery_location(state: CollectionState, world: "LingoWorld"):
 
 
 def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld"):
-    return state.has("Counting Panel Solved", world.player, world.options.level_2_requirement.value - 1)
+    return sum([location.counting_panels for location in state.locations_checked]) >= world.options.level_2_requirement.value - 1
 
 
 def _lingo_can_open_door(state: CollectionState, room: str, door: str, player: int, player_logic: LingoPlayerLogic):
