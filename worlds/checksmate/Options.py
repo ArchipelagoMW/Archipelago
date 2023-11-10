@@ -165,7 +165,6 @@ class FairyChessArmy(Choice):
     display_name = "Fairy Chess Army"
     option_chaos = 0
     option_limited = 1
-    option_fair = 2
     default = 0
 
 

@@ -1,5 +1,7 @@
 # ChecksMate Chess Randomizer Setup Guide
 
+![A chess piece with several blurry opposing pieces in the background](https://cdn.discordapp.com/attachments/1033159819114319892/1172304885530763304/00116-705382628.png)
+
 ## Required Software
 
 - Any ChecksMate client. Currently, a modified ChessV client is supported and can be accessed via
