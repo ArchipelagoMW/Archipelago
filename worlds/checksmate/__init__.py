@@ -112,7 +112,6 @@ class CMWorld(World):
             "pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"]}
         if self.player in self.army:
             cursed_knowledge["army"] = self.army[self.player]
-        print(dict(cursed_knowledge, **{option_name: self.setting(option_name).value for option_name in cm_options}))
         return dict(cursed_knowledge, **{option_name: self.setting(option_name).value for option_name in cm_options})
 
     def create_item(self, name: str) -> CMItem:
