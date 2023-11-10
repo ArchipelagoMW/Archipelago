@@ -66,7 +66,7 @@ def _lingo_can_solve_panel(state: CollectionState, start_room: str, room: str, p
     """
     Determines whether a panel can be solved
     """
-    if start_room != room and not state.has(f"{room} (Reached)", world.player):
+    if start_room != room and not state.can_reach(room, "Region", world.player):
         return False
 
     if room == "Second Room" and panel == "ANOTHER TRY" \
@@ -76,7 +76,7 @@ def _lingo_can_solve_panel(state: CollectionState, start_room: str, room: str, p
 
     panel_object = PANELS_BY_ROOM[room][panel]
     for req_room in panel_object.required_rooms:
-        if not state.has(f"{req_room} (Reached)", world.player):
+        if not state.can_reach(req_room, "Region", world.player):
             return False
 
     for req_door in panel_object.required_doors:

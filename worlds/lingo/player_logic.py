@@ -79,12 +79,6 @@ class LingoPlayerLogic:
             raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
                             "be enough locations for all of the door items.")
 
-        # Create an event for every room that represents being able to reach that room.
-        for room_name in ROOMS.keys():
-            roomloc_name = f"{room_name} (Reached)"
-            self.add_location(room_name, PlayerLocation(roomloc_name, None, []))
-            self.EVENT_LOC_TO_ITEM[roomloc_name] = roomloc_name
-
         # Create an event for every door, representing whether that door has been opened. Also create event items for
         # doors that are event-only.
         for room_name, room_data in DOORS_BY_ROOM.items():
