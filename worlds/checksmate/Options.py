@@ -185,7 +185,7 @@ class FairyChessPawns(Choice):
     default = 1
 
 
-class FairyKings(SpecialRange):
+class FairyKings(Range):
     """
     Whether to use fairy king upgrades, such as the Knight's moves.
     """
@@ -193,10 +193,9 @@ class FairyKings(SpecialRange):
     range_start = 0
     range_end = 2
     default = 0
-    special_range_cutoff = 1
 
 
-class RomanKings(SpecialRange):
+class RomanKings(Range):
     """
     How many additional Royal pieces to add, which must all be captured before one experiences defeat.
     """
@@ -204,7 +203,6 @@ class RomanKings(SpecialRange):
     range_start = 0
     range_end = 2
     default = 0
-    special_range_cutoff = 1
 
 
 class MinorPieceLimitByType(SpecialRange):
