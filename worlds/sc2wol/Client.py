@@ -9,6 +9,7 @@ import multiprocessing
 import os.path
 import re
 import sys
+import tempfile
 import typing
 import queue
 import zipfile
@@ -286,6 +287,8 @@ class SC2Context(CommonContext):
             await super(SC2Context, self).server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
+        if self.ui:
+            self.ui.first_check = True
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
@@ -1166,10 +1169,12 @@ def download_latest_release_zip(owner: str, repo: str, api_version: str, metadat
 
     r2 = requests.get(download_url, headers=headers)
     if r2.status_code == 200 and zipfile.is_zipfile(io.BytesIO(r2.content)):
-        with open(f"{repo}.zip", "wb") as fh:
+        tempdir = tempfile.gettempdir()
+        file = tempdir + os.sep + f"{repo}.zip"
+        with open(file, "wb") as fh:
             fh.write(r2.content)
         sc2_logger.info(f"Successfully downloaded {repo}.zip.")
-        return f"{repo}.zip", latest_metadata
+        return file, latest_metadata
     else:
         sc2_logger.warning(f"Status code: {r2.status_code}")
         sc2_logger.warning("Download failed.")
