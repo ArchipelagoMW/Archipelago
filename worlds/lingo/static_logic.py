@@ -63,6 +63,8 @@ class Painting(NamedTuple):
     required_door: Optional[RoomAndDoor]
     disable: bool
     move: bool
+    req_blocked: bool
+    req_blocked_when_no_doors: bool
 
 
 class Progression(NamedTuple):
@@ -471,6 +473,16 @@ def process_painting(room_name, painting_data):
     else:
         enter_only = False
 
+    if "req_blocked" in painting_data:
+        req_blocked = painting_data["req_blocked"]
+    else:
+        req_blocked = False
+
+    if "req_blocked_when_no_doors" in painting_data:
+        req_blocked_when_no_doors = painting_data["req_blocked_when_no_doors"]
+    else:
+        req_blocked_when_no_doors = False
+
     required_door = None
     if "required_door" in painting_data:
         door = painting_data["required_door"]
@@ -480,7 +492,8 @@ def process_painting(room_name, painting_data):
         )
 
     painting_obj = Painting(painting_id, room_name, enter_only, exit_only, orientation,
-                            required_painting, rwnd, required_door, disable_painting, move_painting)
+                            required_painting, rwnd, required_door, disable_painting, move_painting, req_blocked,
+                            req_blocked_when_no_doors)
     PAINTINGS[painting_id] = painting_obj
     PAINTINGS_BY_ROOM[room_name].append(painting_obj)
 
