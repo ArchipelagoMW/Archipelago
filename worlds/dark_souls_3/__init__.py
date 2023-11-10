@@ -468,39 +468,6 @@ class DarkSouls3World(World):
                           state.has("Cinders of a Lord - Aldrich", self.player) and
                           state.has("Cinders of a Lord - Lothric Prince", self.player))
 
-        ashes = {
-            "Mortician's Ashes": ["Alluring Skull", "Ember (Mortician)", "Grave Key"],
-            "Dreamchaser's Ashes": ["Life Ring"],
-            "Paladin's Ashes": ["Lloyd's Shield Ring"],
-            "Grave Warden's Ashes": ["Ember (Grave Warden)"],
-            "Prisoner Chief's Ashes": [
-                "Karla's Pointed Hat",
-                "Karla's Coat",
-                "Karla's Gloves",
-                "Karla's Trousers",
-            ],
-            "Xanthous Ashes": ["Xanthous Overcoat", "Xanthous Gloves", "Xanthous Trousers"],
-            "Dragon Chaser's Ashes": ["Ember (Dragon Chaser)"],
-            "Easterner's Ashes": [
-                "Washing Pole",
-                "Eastern Helm",
-                "Eastern Armor",
-                "Eastern Gauntlets",
-                "Eastern Leggings",
-                "Wood Grain Ring",
-            ],
-            "Captain's Ashes": [
-                "Millwood Knight Helm",
-                "Millwood Knight Armor",
-                "Millwood Knight Gauntlets",
-                "Millwood Knight Leggings",
-                "Refined Gem",
-            ]
-        }
-        for ash, items in ashes.items():
-            for item in items:
-                self._add_location_rule("FS: " + item, ash)
-
         if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
             self._add_entrance_rule("Lothric Castle", "Small Lothric Banner")
 
@@ -521,8 +488,79 @@ class DarkSouls3World(World):
         self._add_location_rule("UG: Hornet Ring", "Small Lothric Banner")
         self._add_entrance_rule("Karla's Shop", "Jailer's Key Ring")
 
-        # List crow trades even though they never contain progression items so that the game knows
-        # what sphere they're in. This is especially useful for item smoothing.
+        # Ashes
+        self._add_location_rule(["FS: Alluring Skull", "FS: Ember (Mortician)", "FS: Grave Key"],
+                                "Mortician's Ashes")
+        self._add_location_rule(["FS: Life Ring", "FS: Hidden Blessing #2"], "Dreamchaser's Ashes")
+        self._add_location_rule("FS: Lloyd's Shield Ring", "Paladin's Ashes")
+        self._add_location_rule("FS: Ember (Grave Warden)", "Grave Warden's Ashes")
+        self._add_location_rule([
+            "FS: Karla's Pointed Hat", "FS: Karla's Coat", "FS: Karla's Gloves",
+            "FS: Karla's Trousers"
+        ], "Prisoner Chief's Ashes")
+        self._add_location_rule([
+            "FS: Xanthous Overcoat", "FS: Xanthous Gloves", "FS: Xanthous Trousers"
+        ], "Xanthous Ashes")
+        self._add_location_rule("Ember (Dragon Chaser)", "Dragon Chaser's Ashes")
+        self._add_location_rule([
+            "FS: Washing Pole", "FS: Eastern Helm", "FS: Eastern Armor", "FS: Eastern Gauntlets",
+            "FS: Eastern Leggings", "FS: Wood Grain Ring",
+        ], "Easterner's Ashes")
+        self._add_location_rule([
+            "FS: Millwood Knight Helm", "FS: Millwood Knight Armor",
+            "FS: Millwood Knight Gauntlets", "FS: Millwood Knight Leggings", "FS: Refined Gem",
+        ], "Captain's Ashes")
+
+        # List missable locations even though they never contain progression items so that the game
+        # knows what sphere they're in. This is especially useful for item smoothing. We could add
+        # rules for boss transposition items as well, but then we couldn't freely reorder boss soul
+        # locations for smoothing.
+
+        self._add_location_rule("FS: Lift Chamber Key", "Pale Tongue")
+        self._add_location_rule(["AP: Twinkling Dragon Head Stone", "AP: Hawkwood's Swordgrass"],
+                                "Twinkling Dragon Torso Stone")
+
+        # Shop unlocks
+        self._add_location_rule([
+            "US: Poison Mist", "US: Fire Orb", "US: Profuse Sweat", "US: Bursting Fireball"
+        ], "Great Swamp Pyromancy Tome")
+        self._add_location_rule(["US: Acid Surge", "US: Carthus Flame Arc", "US: Carthus Beacon"],
+                                "Carthus Pyromancy Tome")
+        self._add_location_rule(["US: Great Chaos Fire Orb", "US: Chaos Storm"],
+                                "Izalith Pyromancy Tome")
+        self._add_location_rule(["US: Med Heal", "US: Tears of Denial", "US: Force"],
+                                "Braille Divine Tome of Carim")
+        self._add_location_rule(["US: Bountiful Light", "US: Magic Barrier", "US: Blessed Weapon"],
+                                "Braille Divine Tome of Lothric")
+        self._add_location_rule(["RS: Great Farron Dart", "RS: Farron Hail"], "Sage's Scroll")
+        self._add_location_rule([
+            "RS: Cast Light", "RS: Repair", "RS: Hidden Weapon", "RS: Hidden Body",
+            "RS: Twisted Wall of Light"
+        ], "Golden Scroll")
+        self._add_location_rule(["RS: Homing Soulmass", "RS: Soul Spear"], "Logan's Scroll")
+        self._add_location_rule([
+            "RS: Homing Crystal Soulmass", "RS: Crystal Soul Spear", "RS: Crystal Magic Weapon"
+        ], "Logan's Scroll")
+        self._add_location_rule([
+            "Greirat: Divine Blessing #1", "Greirat: Ember #2", "Greirat: Divine Blessing #2",
+            "Greirat: Hidden Blessing", "Greirat: Titanite Scale", "Greirat: Twinkling Titanite",
+            "Greirat: Ember #3"
+        ], "Loretta's Bone")
+        self._add_location_rule([
+            "Greirat: Divine Blessing #2", "Greirat: Hidden Blessing", "Greirat: Titanite Scale",
+            "Greirat: Twinkling Titanite", "Greirat: Ember #3"
+        ], "Small Doll")
+        self._add_location_rule("Greirat: Ember #3", "Grand Archives Key")
+        self._add_location_rule(["Karla: Firestorm", "Karla: Rapport", "Karla: Fire Whip"],
+                                "Quelana Pyromancy Tome")
+        self._add_location_rule(["Karla: Black Flame", "Karla: Black Fire Orb"],
+                                "Grave Warden Pyromancy Tome")
+        self._add_location_rule(["Karla: Gnaw", "Karla: Deep Protection"],
+                                "Deep Braille Divine Tome")
+        self._add_location_rule(["Karla: Vow of Silence", "Karla: Dark Blade", "Karla: Dead Again"],
+                                "Londor Braille Divine Tome")
+
+        # Crow items
         self._add_location_rule("FSBT: Ring of Sacrifice", "Loretta's Bone")
         self._add_location_rule("FSBT: Titanite Scale #1", "Avelyn")
         self._add_location_rule("FSBT: Titanite Slab", "Coiled Sword Fragment")
@@ -618,16 +656,18 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Lothric Prince", self.player)
 
 
-    def _add_location_rule(self, location: str, rule: Union[CollectionRule, str]) -> None:
+    def _add_location_rule(self, location: Union[str, List[str]], rule: Union[CollectionRule, str]) -> None:
         """Sets a rule for the given location if it that location is randomized.
 
         The rule can just be a single item/event name as well as an explicit rule lambda.
         """
-        if not self.is_location_available(location): return
-        if isinstance(rule, str):
-            assert item_dictionary[rule].classification == ItemClassification.progression
-            rule = lambda state, item=rule: state.has(item, self.player)
-        add_rule(self.multiworld.get_location(location, self.player), rule)
+        locations = location if type(location) is list else [location]
+        for location in locations:
+            if not self.is_location_available(location): return
+            if isinstance(rule, str):
+                assert item_dictionary[rule].classification == ItemClassification.progression
+                rule = lambda state, item=rule: state.has(item, self.player)
+            add_rule(self.multiworld.get_location(location, self.player), rule)
 
 
     def _add_entrance_rule(self, region: str, rule: Union[CollectionRule, str]) -> None:
@@ -695,7 +735,7 @@ class DarkSouls3World(World):
             for region in regions
             for location in location_tables[region]
             if self.is_location_available(location)
-            and not location.missable and not location.conditional
+            and not location.missable
         ]
         location = self.multiworld.random.choice([
             location for location in candidate_locations
