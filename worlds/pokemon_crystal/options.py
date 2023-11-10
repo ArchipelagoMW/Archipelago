@@ -2,22 +2,19 @@ from Options import Toggle, Choice
 
 
 class RandomizeHiddenItems(Toggle):
-    """Enabled: Hidden Items are shuffled into the pool
-        Disabled: Hidden Items are vanilla"""
+    """Shuffles hidden items into the pool"""
     display_name = "Randomize Hidden Items"
     default = 0
 
 
 class RandomizeStarters(Toggle):
-    """Enabled: Starter Pokemon species are random
-        Disabled: Starter Pokemon species are vanilla"""
+    """Randomizes species of starter Pokemon"""
     display_name = "Randomize Starters"
     default = 1
 
 
 class RandomizeWilds(Toggle):
-    """Enabled: Wild Pokemon species are random
-        Disabled: Wild Pokemon species are vanilla"""
+    """Randomizes species of wild Pokemon"""
     display_name = "Randomize Wilds"
     default = 1
 
@@ -34,26 +31,26 @@ class RandomizeLearnsets(Choice):
 
 
 class FullTmHmCompatibility(Toggle):
-    """Enabled: All Pokemon are compatible with all TMs and HMs 
-        Disabled: TM and HM compatibility is vanilla"""
+    """All Pokemon can learn any TM/HM"""
     display_name = "Full TM/HM Compatibility"
     default = 0
 
 
 class BlindTrainers(Toggle):
-    """"""
+    """Trainers have no vision and will not start battles unless interacted with"""
     display_name = "Blind Trainers"
     default = 0
 
 
 class BetterMarts(Toggle):
-    """"""
+    """Improves the selection of items at Pokemarts"""
     display_name = "Better Marts"
     default = 0
 
 
 class Goal(Choice):
-    """"""
+    """Elite Four: collect 8 badges and enter the Hall of Fame
+        Red: collect 16 badges and defeat Red at Mt. Silver"""
     display_name = "Goal"
     default = 0
     option_elite_four = 0
