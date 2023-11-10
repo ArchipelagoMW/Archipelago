@@ -192,8 +192,8 @@ def generate_mod(world: "Factorio", output_directory: str):
 
     info = base_info.copy()
     info["name"] = mod_name
-    with open(os.path.join(mod_dir, "info.json"), "wt") as f:
-        json.dump(info, f, indent=4)
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/info.json",
+                                      json.dumps(info, indent=4)))
 
     # write the mod file
     mod.write()
