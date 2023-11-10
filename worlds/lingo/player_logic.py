@@ -241,43 +241,46 @@ class LingoPlayerLogic:
 
         door_shuffle = world.options.shuffle_doors
 
-        # Determine the set of exit paintings. All required-exit paintings are included, as are all
-        # required-when-no-doors paintings if door shuffle is off. We then fill the set with random other paintings.
-        chosen_exits = []
+        # First, assign mappings to the required-exit paintings. We ensure that req-blocked paintings do not lead to
+        # required paintings.
+        req_exits = []
+        required_painting_rooms = REQUIRED_PAINTING_ROOMS
         if door_shuffle == ShuffleDoors.option_none:
-            chosen_exits = [painting_id for painting_id, painting in PAINTINGS.items()
-                            if painting.required_when_no_doors]
-        chosen_exits += [painting_id for painting_id, painting in PAINTINGS.items()
-                         if painting.exit_only and painting.required]
+            required_painting_rooms += REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
+            req_exits = [painting_id for painting_id, painting in PAINTINGS.items() if painting.required_when_no_doors]
+            req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
+                             if not painting.exit_only and not painting.disable and not painting.req_blocked and
+                             not painting.req_blocked_when_no_doors and painting.room not in required_painting_rooms]
+        else:
+            req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
+                             if not painting.exit_only and not painting.disable and not painting.req_blocked and
+                             painting.room not in required_painting_rooms]
+        req_exits += [painting_id for painting_id, painting in PAINTINGS.items()
+                      if painting.exit_only and painting.required]
+        req_entrances = world.random.sample(req_enterable, len(req_exits))
+
+        self.PAINTING_MAPPING = dict(zip(req_entrances, req_exits))
+
+        # Next, determine the rest of the exit paintings.
         exitable = [painting_id for painting_id, painting in PAINTINGS.items()
-                    if not painting.enter_only and not painting.disable and not painting.required]
-        chosen_exits += world.random.sample(exitable, PAINTING_EXITS - len(chosen_exits))
+                    if not painting.enter_only and not painting.disable and painting_id not in req_exits and
+                    painting_id not in req_entrances]
+        nonreq_exits = world.random.sample(exitable, PAINTING_EXITS - len(req_exits))
+        chosen_exits = req_exits + nonreq_exits
 
-        # Determine the set of entrance paintings.
+        # Determine the rest of the entrance paintings.
         enterable = [painting_id for painting_id, painting in PAINTINGS.items()
-                     if not painting.exit_only and not painting.disable and painting_id not in chosen_exits]
-        chosen_entrances = world.random.sample(enterable, PAINTING_ENTRANCES)
+                     if not painting.exit_only and not painting.disable and painting_id not in chosen_exits and
+                     painting_id not in req_entrances]
+        chosen_entrances = world.random.sample(enterable, PAINTING_ENTRANCES - len(req_entrances))
 
-        # Create a mapping from entrances to exits.
-        for warp_exit in chosen_exits:
+        # Assign one entrance to each non-required exit, to ensure that the total number of exits is achieved.
+        for warp_exit in nonreq_exits:
             warp_enter = world.random.choice(chosen_entrances)
-
-            # Check whether this is a warp from a required painting room to another (or the same) required painting
-            # room. This could cause a cycle that would make certain regions inaccessible.
-            warp_exit_room = PAINTINGS[warp_exit].room
-            warp_enter_room = PAINTINGS[warp_enter].room
-
-            required_painting_rooms = REQUIRED_PAINTING_ROOMS
-            if door_shuffle == ShuffleDoors.option_none:
-                required_painting_rooms += REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
-
-            if warp_exit_room in required_painting_rooms and warp_enter_room in required_painting_rooms:
-                # This shuffling is non-workable. Start over.
-                return False
-
             chosen_entrances.remove(warp_enter)
             self.PAINTING_MAPPING[warp_enter] = warp_exit
 
+        # Assign each of the remaining entrances to any required or non-required exit.
         for warp_enter in chosen_entrances:
             warp_exit = world.random.choice(chosen_exits)
             self.PAINTING_MAPPING[warp_enter] = warp_exit
@@ -292,7 +295,8 @@ class LingoPlayerLogic:
         # Just for sanity's sake, ensure that all required painting rooms are accessed.
         for painting_id, painting in PAINTINGS.items():
             if painting_id not in self.PAINTING_MAPPING.values() \
-                    and (painting.required or (painting.required_when_no_doors and door_shuffle == 0)):
+                    and (painting.required or (painting.required_when_no_doors and
+                                               door_shuffle == ShuffleDoors.option_none)):
                 return False
 
         return True
