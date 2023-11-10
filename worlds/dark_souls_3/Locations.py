@@ -527,8 +527,6 @@ location_tables = {
                         offline = '02,0:50006141::', missable = True, npc = True),
         DS3LocationData("US: Tower Key",                           "Tower Key",                         DS3LocationCategory.KEY,
                         missable = True, npc = True, key = True),
-        DS3LocationData("US: Hawk Ring",                           "Hawk Ring",                         DS3LocationCategory.RING,
-                        drop = True, npc = True), # Giant archer (kill or quest)
         DS3LocationData("US: Flynn's Ring",                        "Flynn's Ring",                      DS3LocationCategory.RING),
         DS3LocationData("US: Undead Bone Shard",                   "Undead Bone Shard",                 DS3LocationCategory.HEALTH),
         DS3LocationData("US: Alluring Skull #1",                   "Alluring Skull x2",                 DS3LocationCategory.MISC),
@@ -1137,6 +1135,10 @@ location_tables = {
                         missable = True, boss = True, shop = True),
         DS3LocationData("FK: Wolf Knight's Greatsword",            "Wolf Knight's Greatsword",          DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
+        DS3LocationData("FK: Hawk Ring",                           "Hawk Ring",                         DS3LocationCategory.RING,
+                        drop = True, npc = True), # Giant archer (kill or quest), here because you
+                                                  # need to collect all seven White Branch locations
+                                                  # to get it peacefully
         DS3LocationData("FK -> CC",                                None,                                DS3LocationCategory.EVENT),
 
         # Hawkwood after killing Abyss Watchers
