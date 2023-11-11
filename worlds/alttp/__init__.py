@@ -744,10 +744,7 @@ class ALTTPWorld(World):
                 item)))
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.goal[self.player] == "ice_rod_hunt":
-            item = "Nothing"
-        else:
-            item = self.multiworld.random.choice(extras_list)
+        item = self.multiworld.random.choice(extras_list)
         return GetBeemizerItem(self.multiworld, self.player, item)
 
     def get_pre_fill_items(self):

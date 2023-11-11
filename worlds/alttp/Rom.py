@@ -1514,7 +1514,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                               (0x02 if 'bombs' in world.escape_assist[player] else 0x00) |
                               (0x04 if 'magic' in world.escape_assist[player] else 0x00)))  # Escape assist
 
-    if world.goal[player] in ['pedestal', 'triforce_hunt', 'local_triforce_hunt', 'ice_rod_hunt']:
+    if world.goal[player] in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
     elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
         rom.write_byte(0x18003E, 0x05)  # make ganon invincible until enough triforce pieces are collected
@@ -2461,14 +2461,6 @@ def write_strings(rom, world, player):
         else:
             tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon and ' \
                                f'have beaten Agahnim atop Ganons Tower'
-    elif world.goal[player] == "ice_rod_hunt":
-        tt['sign_ganon'] = 'Go find the Ice Rod and Kill Trinexx, then talk to Murahdahla... Ganon is invincible!'
-        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Go kill Trinexx instead.'
-        tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
-        tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
-                           "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
-                           "hidden in  a hollow tree. " \
-                           "If you bring me the Triforce piece from Turtle Rock, I can reassemble it."
     else:
         if world.crystals_needed_for_ganon[player] == 1:
             tt['sign_ganon'] = 'You need a crystal to beat Ganon.'
@@ -2483,7 +2475,7 @@ def write_strings(rom, world, player):
     tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[local_random.randint(0, len(Sahasrahla2_texts) - 1)]
     tt['blind_by_the_light'] = Blind_texts[local_random.randint(0, len(Blind_texts) - 1)]
 
-    if world.goal[player] in ['triforce_hunt', 'local_triforce_hunt', 'ice_rod_hunt']:
+    if world.goal[player] in ['triforce_hunt', 'local_triforce_hunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
         if world.goal[player] == 'triforce_hunt' and world.players > 1:

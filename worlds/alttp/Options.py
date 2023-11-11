@@ -55,7 +55,6 @@ class Goal(Choice):
     option_local_triforce_hunt = 6
     option_ganon_triforce_hunt = 7
     option_local_ganon_triforce_hunt = 8
-    #option_ice_rod_hunt = 9
 
 
 class EntranceShuffle(Choice):
