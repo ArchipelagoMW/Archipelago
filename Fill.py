@@ -112,7 +112,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
                         location.item = None
                         placed_item.location = None
-                        swap_state = sweep_from_pool(base_state, [placed_item] if unsafe else [])
+                        swap_state = sweep_from_pool(base_state, [placed_item, *item_pool] if unsafe else item_pool)
                         # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
                         # by continuing to swap, which is not guaranteed. This is unsafe because there is no mechanic
                         # to clean that up later, so there is a chance generation fails.
