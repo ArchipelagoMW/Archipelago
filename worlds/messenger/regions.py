@@ -68,7 +68,6 @@ MEGA_SHARDS: Dict[str, List[str]] = {
     "Quillshroom Marsh": ["Quillshroom Marsh Mega Shard"],
     "Searing Crags Upper": ["Searing Crags Mega Shard"],
     "Glacial Peak": ["Glacial Peak Mega Shard"],
-    "Tower of Time": [],
     "Cloud Ruins": ["Cloud Entrance Mega Shard", "Time Warp Mega Shard"],
     "Cloud Ruins Right": ["Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2"],
     "Underworld": ["Under Entrance Mega Shard", "Hot Tub Mega Shard", "Projectile Pit Mega Shard"],
@@ -84,8 +83,6 @@ REGION_CONNECTIONS: Dict[str, Set[str]] = {
     "Menu": {"Tower HQ"},
     "Tower HQ": {"Autumn Hills", "Howling Grotto", "Searing Crags", "Glacial Peak", "Tower of Time",
                  "Riviere Turquoise Entrance", "Sunken Shrine", "Corrupted Future", "The Shop", "Music Box"},
-    "Tower of Time": set(),
-    "Ninja Village": set(),
     "Autumn Hills": {"Ninja Village", "Forlorn Temple", "Catacombs"},
     "Forlorn Temple": {"Catacombs", "Bamboo Creek"},
     "Catacombs": {"Autumn Hills", "Bamboo Creek", "Dark Cave"},
@@ -97,11 +94,8 @@ REGION_CONNECTIONS: Dict[str, Set[str]] = {
     "Glacial Peak": {"Searing Crags Upper", "Tower HQ", "Cloud Ruins", "Elemental Skylands"},
     "Cloud Ruins": {"Cloud Ruins Right"},
     "Cloud Ruins Right": {"Underworld"},
-    "Underworld": set(),
     "Dark Cave": {"Catacombs", "Riviere Turquoise Entrance"},
     "Riviere Turquoise Entrance": {"Riviere Turquoise"},
-    "Riviere Turquoise": set(),
     "Sunken Shrine": {"Howling Grotto"},
-    "Elemental Skylands": set(),
 }
 """Vanilla layout mapping with all Tower HQ portals open. from -> to"""

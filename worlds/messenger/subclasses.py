@@ -17,8 +17,6 @@ class MessengerRegion(Region):
         super().__init__(name, world.player, world.multiworld)
         locations = [loc for loc in REGIONS[self.name]]
         if self.name == "The Shop":
-            if world.options.goal > Goal.option_open_music_box:
-                locations.append("Shop Chest")
             shop_locations = {f"The Shop - {shop_loc}": world.location_name_to_id[f"The Shop - {shop_loc}"]
                               for shop_loc in SHOP_ITEMS}
             shop_locations.update(**{figurine: world.location_name_to_id[figurine] for figurine in FIGURINES})
@@ -29,9 +27,9 @@ class MessengerRegion(Region):
             locations += [seal_loc for seal_loc in SEALS[self.name]]
         if world.options.shuffle_shards and self.name in MEGA_SHARDS:
             locations += [shard for shard in MEGA_SHARDS[self.name]]
-        loc_dict = {loc: world.location_name_to_id[loc] if loc in world.location_name_to_id else None
-                    for loc in locations}
+        loc_dict = {loc: world.location_name_to_id.get(loc, None) for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
+        world.multiworld.regions.append(self)
 
 
 class MessengerLocation(Location):
