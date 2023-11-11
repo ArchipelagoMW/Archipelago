@@ -265,7 +265,8 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks_bitfield)
 
     # Set slot name
-    for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):
+    player_name = world.multiworld.get_player_name(world.player)
+    for i, byte in enumerate(player_name.encode("utf-8")):
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
 
     # Write Output
@@ -274,7 +275,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     with open(output_path, "wb") as out_file:
         out_file.write(patched_rom)
     patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=world.player,
-                                     player_name=world.multiworld.player_name[world.player], patched_path=output_path)
+                                     player_name=player_name, patched_path=output_path)
 
     patch.write()
     os.unlink(output_path)
