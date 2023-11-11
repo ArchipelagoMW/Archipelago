@@ -10,6 +10,7 @@ import hashlib
 import inspect
 import itertools
 import logging
+import math
 import operator
 import pickle
 import random
@@ -67,22 +68,26 @@ def update_dict(dictionary, entries):
 
 # functions callable on storable data on the server by clients
 modify_functions = {
+    # generic:
+    "replace": lambda old, new: new,
+    "default": lambda old, new: old,
+    # numeric:
     "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
     "mul": operator.mul,
     "floor_div": operator.floordiv,
+    "pow": operator.pow,
     "mod": operator.mod,
+    "floor": lambda value, _: math.floor(value),
+    "ceil": lambda value, _: math.ceil(value),
     "max": max,
     "min": min,
-    "replace": lambda old, new: new,
-    "default": lambda old, new: old,
-    "pow": operator.pow,
     # bitwise:
     "xor": operator.xor,
     "or": operator.or_,
     "and": operator.and_,
     "left_shift": operator.lshift,
     "right_shift": operator.rshift,
-    # lists/dicts
+    # lists/dicts:
     "remove": remove_from_list,
     "pop": pop_from_container,
     "update": update_dict,
