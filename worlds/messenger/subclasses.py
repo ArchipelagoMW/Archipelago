@@ -16,8 +16,6 @@ class MessengerRegion(Region):
         super().__init__(name, world.player, world.multiworld)
         locations = [loc for loc in REGIONS[self.name]]
         if self.name == "The Shop":
-            if world.options.goal > Goal.option_open_music_box:
-                locations.append("Shop Chest")
             shop_locations = {f"The Shop - {shop_loc}": world.location_name_to_id[f"The Shop - {shop_loc}"]
                               for shop_loc in SHOP_ITEMS}
             self.add_locations(shop_locations, MessengerShopLocation)
@@ -64,7 +62,7 @@ class MessengerShopLocation(MessengerLocation):
             return world.shop_prices[name] + prereq_cost
         return world.shop_prices[name]
 
-    def can_afford(self, state: CollectionState) -> bool:
+    def access_rule(self, state: CollectionState) -> bool:
         world = cast("MessengerWorld", state.multiworld.worlds[self.player])
         can_afford = state.has("Shards", self.player, min(self.cost, world.total_shards))
         return can_afford

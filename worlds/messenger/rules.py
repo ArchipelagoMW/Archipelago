@@ -128,6 +128,7 @@ class MessengerRules:
         return True
 
     def can_shop(self, state: CollectionState) -> bool:
+        # these locations are at the top of the shop tree, and the entire shop tree needs to be purchased
         price = sum([
             self.world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost,
             self.world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost,
@@ -145,9 +146,6 @@ class MessengerRules:
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
-            if region.name == "The Shop":
-                for loc in region.locations:
-                    loc.access_rule = loc.can_afford
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
         if multiworld.accessibility[self.player]:  # not locations accessibility
@@ -227,6 +225,7 @@ class MessengerOOBRules(MessengerRules):
             "Elemental Skylands":
                 lambda state: state.has_any({"Windmill Shuriken", "Wingsuit", "Rope Dart", "Magic Firefly"}, self.player),
             "Music Box": lambda state: state.has_all(set(NOTES), self.player)
+                                       or state.has("Power Seal", self.player, max(1, self.world.required_seals))
         }
 
         self.location_rules = {
@@ -242,12 +241,10 @@ class MessengerOOBRules(MessengerRules):
             "Underworld Seal - Fireball Wave": lambda state: state.has_any({"Wingsuit", "Windmill Shuriken"},
                                                                            self.player),
             "Tower of Time Seal - Time Waster": self.has_dart,
-            "Shop Chest": self.has_enough_seals
         }
 
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
-        self.world.multiworld.completion_condition[self.player] = lambda state: True
         self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
