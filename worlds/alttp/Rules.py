@@ -330,6 +330,14 @@ def global_rules(world, player):
         add_rule(ep_boss, lambda state: can_shoot_arrows(state, player))
         add_rule(ep_prize, lambda state: can_shoot_arrows(state, player))
 
+    # You can always kill the Stalfos' with the pots on easy/normal
+    if world.enemy_health[player] in ("hard", "expert") or world.enemy_shuffle[player]:
+        stalfos_rule = lambda state: can_kill_most_things(state, player, 4)
+        for location in ['Eastern Palace - Compass Chest', 'Eastern Palace - Big Chest',
+                         'Eastern Palace - Dark Square Pot Key', 'Eastern Palace - Dark Eyegore Key Drop',
+                         'Eastern Palace - Big Key Chest', 'Eastern Palace - Boss', 'Eastern Palace - Prize']:
+            add_rule(world.get_location(location, player), stalfos_rule)
+
     set_rule(world.get_location('Desert Palace - Big Chest', player), lambda state: state.has('Big Key (Desert Palace)', player))
     set_rule(world.get_location('Desert Palace - Torch', player), lambda state: state.has('Pegasus Boots', player))
 
