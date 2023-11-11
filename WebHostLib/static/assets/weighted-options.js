@@ -1024,12 +1024,18 @@ class GameSettings {
 
   // Builds a div for a setting whose value is a list of locations.
   #buildLocationsDiv(setting) {
-    return this.#buildListDiv(setting, this.data.gameLocations, this.data.gameLocationGroups);
+    return this.#buildListDiv(setting, this.data.gameLocations, {
+      groups: this.data.gameLocationGroups,
+      descriptions: this.data.gameLocationDescriptions,
+    });
   }
 
   // Builds a div for a setting whose value is a list of items.
   #buildItemsDiv(setting) {
-    return this.#buildListDiv(setting, this.data.gameItems, this.data.gameItemGroups);
+    return this.#buildListDiv(setting, this.data.gameItems, {
+      groups: this.data.gameItemGroups,
+      descriptions: this.data.gameItemDescriptions
+    });
   }
 
   // Builds a div for a setting named `setting` with a list value that can
@@ -1038,12 +1044,15 @@ class GameSettings {
   // The `groups` option can be a list of additional options for this list
   // (usually `item_name_groups` or `location_name_groups`) that are displayed
   // in a special section at the top of the list.
-  #buildListDiv(setting, items, groups = []) {
+  //
+  // The `descriptions` option can be a map from item names or group names to
+  // descriptions for the user's benefit.
+  #buildListDiv(setting, items, {groups = [], descriptions = {}} = {}) {
     const div = document.createElement('div');
     div.classList.add('simple-list');
 
     groups.forEach((group) => {
-      const row = this.#addListRow(setting, group);
+      const row = this.#addListRow(setting, group, descriptions[group]);
       div.appendChild(row);
     });
 
@@ -1052,7 +1061,7 @@ class GameSettings {
     }
 
     items.forEach((item) => {
-      const row = this.#addListRow(setting, item);
+      const row = this.#addListRow(setting, item, descriptions[item]);
       div.appendChild(row);
     });
 
@@ -1060,7 +1069,9 @@ class GameSettings {
   }
 
   // Builds and returns a row for a list of checkboxes.
-  #addListRow(setting, item) {
+  //
+  // If `help` is passed, it's displayed as a help tooltip for this list item.
+  #addListRow(setting, item, help = undefined) {
     const row = document.createElement('div');
     row.classList.add('list-row');
 
@@ -1081,6 +1092,23 @@ class GameSettings {
 
     const name = document.createElement('span');
     name.innerText = item;
+
+    if (help) {
+      const helpSpan = document.createElement('span');
+      helpSpan.classList.add('interactive');
+      helpSpan.setAttribute('data-tooltip', help);
+      helpSpan.innerText = '(?)';
+      name.innerText += ' ';
+      name.appendChild(helpSpan);
+
+      // Put the first 7 tooltips below their rows. CSS tooltips in scrolling
+      // containers can't be visible outside those containers, so this helps
+      // ensure they won't be pushed out the top.
+      if (helpSpan.parentNode.childNodes.length < 7) {
+        helpSpan.classList.add('tooltip-bottom');
+      }
+    }
+
     label.appendChild(name);
 
     row.appendChild(label);

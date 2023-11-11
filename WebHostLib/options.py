@@ -136,16 +136,20 @@ def create():
                         option["defaultValue"] = "random"
 
             weighted_options["baseOptions"]["game"][game_name] = 0
-            weighted_options["games"][game_name] = {}
-            weighted_options["games"][game_name]["gameSettings"] = game_options
-            weighted_options["games"][game_name]["gameItems"] = tuple(world.item_names)
-            weighted_options["games"][game_name]["gameItemGroups"] = [
-                group for group in world.item_name_groups.keys() if group != "Everything"
-            ]
-            weighted_options["games"][game_name]["gameLocations"] = tuple(world.location_names)
-            weighted_options["games"][game_name]["gameLocationGroups"] = [
-                group for group in world.location_name_groups.keys() if group != "Everywhere"
-            ]
+            weighted_options["games"][game_name] = {
+                "gameSettings": game_options,
+                "gameItems": tuple(world.item_names),
+                "gameItemGroups": [
+                    group for group in world.item_name_groups.keys() if group != "Everything"
+                ],
+                "gameItemDescriptions": world.item_descriptions,
+                "gameLocations": tuple(world.location_names),
+                "gameLocationGroups": [
+                    group for group in world.location_name_groups.keys() if group != "Everywhere"
+                ],
+                "gameLocationDescriptions": world.location_descriptions,
+            }
 
     with open(os.path.join(target_folder, 'weighted-options.json'), "w") as f:
         json.dump(weighted_options, f, indent=2, separators=(',', ': '))
+
