@@ -159,7 +159,7 @@ class CMWorld(World):
         # remove kings player does not want
         self.items_used[self.player]["Progressive Consul"] = (
                 2 - get_option_value(self.multiworld, self.player, "roman_kings"))
-        self.items_used[self.player]["King Promotion"] = (
+        self.items_used[self.player]["Progressive King Promotion"] = (
                 2 - get_option_value(self.multiworld, self.player, "fairy_kings"))
         # more pawn chance (1 major:1 minor:2 pawn distribution)
         my_progression_items.append("Progressive Pawn")
