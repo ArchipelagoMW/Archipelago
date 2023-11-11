@@ -216,9 +216,18 @@ def set_rules(world):
             lambda state: state.has("Fairy Box", player) and state.yugioh06_difficulty(player, 1),
         "TD03 Normal Summon":
             lambda state: only_normal(state, player) and state.yugioh06_difficulty(player, 3),
-        # TODO: Need Specific deck
         "TD04 Ritual Summon":
-            lambda state: state.yugioh06_difficulty(player, 18),
+            lambda state: state.yugioh06_difficulty(player, 8) and
+                          state.has_all(["Contract with the Abyss",
+                                         "Manju of the Ten Thousand Hands",
+                                         "Senju of the Thousand Hands",
+                                         "Sonic Bird",
+                                         "Pot of Avarice",
+                                         "Dark Master - Zorc",
+                                         "Demise, King of Armageddon",
+                                         "The Masked Beast",
+                                         "Magician of Black Chaos",
+                                         "Dark Magic Ritual"], player),
         "TD05 Special Summon A":
             lambda state: state.yugioh06_difficulty(player, 3),
         "TD06 20x Spell":

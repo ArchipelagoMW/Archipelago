@@ -85,7 +85,9 @@ booster_contents = {
         "Toon Summoned Skull",
         "Toon World",
         "Rush Recklessly",
-        "The Reliable Guardian"
+        "The Reliable Guardian",
+        "Senju of the Thousand Hands",
+        "Sonic Bird"
     },
     "LABYRINTH OF NIGHTMARE": {
         "Destiny Board",
@@ -109,7 +111,8 @@ booster_contents = {
         "Cure Mermaid",
         "The Last Warrior from Another Planet",
         "United We Stand",
-        "Earthbound Spirit"
+        "Earthbound Spirit",
+        "The Masked Beast"
     },
     "LEGACY OF DARKNESS": {
         "Last Turn",
@@ -201,7 +204,9 @@ booster_contents = {
         "Vampire Lord",
         "Metallizing Parasite - Lunatite",
         "D. D. Trainer",
-        "Spell Reproduction"
+        "Spell Reproduction",
+        "Contract with the Abyss",
+        "Dark Master - Zorc"
     },
     "INVASION OF CHAOS": {
         "Ojama Delta Hurricane",
@@ -228,7 +233,8 @@ booster_contents = {
         "Stealth Bird",
         "Reload",
         "Cursed Seal of the Forbidden Spell",
-        "Stray Lambs"
+        "Stray Lambs",
+        "Manju of the Ten Thousand Hands"
     },
     "ANCIENT SANCTUARY": {
         "Monster Gate",
@@ -328,7 +334,8 @@ booster_contents = {
         "Elemental Hero Shining Flare Wingman",
         "Elemental Hero WildEdge",
         "Elemental Hero Wildheart",
-        "Elemental Hero Bladedge"
+        "Elemental Hero Bladedge",
+        "Pot of Avarice"
     },
     "SHADOW OF INFINITY": {
         "Hamon, Lord of Striking Thunder",
@@ -339,7 +346,8 @@ booster_contents = {
         "Saber Beetle",
         "Tenkabito Shien",
         "Princess Pikeru",
-        "Gokipon"
+        "Gokipon",
+        "Demise, King of Armageddon"
     },
     "GAME GIFT COLLECTION": {
         "Ritual",
@@ -363,7 +371,8 @@ booster_contents = {
         "Graceful Dice",
         "Negate Attack",
         "Foolish Burial",
-        "Card Destruction"
+        "Card Destruction",
+        "Dark Magic Ritual"
     },
     "Special Gift Collection": {
         "Gate Guardian",
@@ -377,7 +386,8 @@ booster_contents = {
         "Dandylion",
         "Blade Knight",
         "Curse of Vampire",
-        "Elemental Hero Flame Wingman"
+        "Elemental Hero Flame Wingman",
+        "Magician of Black Chaos"
     },
     "Fairy Collection": {
         "Silpheed",
@@ -393,7 +403,9 @@ booster_contents = {
         "Protective Soul Ailin",
         "Marshmallon",
         "Goddess with the Third Eye",
-        "Asura Priest"
+        "Asura Priest",
+        "Manju of the Ten Thousand Hands",
+        "Senju of the Thousand Hands"
     },
     "Dragon Collection": {
         "Victory D.",
@@ -519,7 +531,8 @@ booster_contents = {
         "Dark Elf",
         "Gemini Elf",
         "Injection Fairy Lily",
-        "Cosmo Queen"
+        "Cosmo Queen",
+        "Magician of Black Chaos"
     },
     "Spellcaster Collection B": {
         "Jowgen the Spiritualist",
