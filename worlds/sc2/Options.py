@@ -219,16 +219,6 @@ class RequiredTactics(Choice):
     option_no_logic = 2
 
 
-class UnitsAlwaysHaveUpgrades(DefaultOnToggle):
-    """
-    If turned on, all upgrades will be present for each unit and structure in the seed.
-    This usually results in fewer units.
-
-    See also: Max Number of Upgrades
-    """
-    display_name = "Units Always Have Upgrades"
-
-
 class GenericUpgradeMissions(Range):
     """Determines the percentage of missions in the mission order that must be completed before
     level 1 of all weapon and armor upgrades is unlocked.  Level 2 upgrades require double the amount of missions,
@@ -297,19 +287,30 @@ class ExtendedItems(Toggle):
     default = Toggle.option_true
 
 
+# Current maximum number of upgrades for a unit
+MAX_UPGRADES_OPTION = 12
+
+
+class MinNumberOfUpgrades(Range):
+    """
+    Set a minimum to the number of upgrades a unit/structure can have.
+    Note that most units have 4 or 6 upgrades.
+    If a unit has fewer upgrades than the minimum, it will have all of its upgrades.
+    """
+    display_name = "Minimum number of upgrades per unit/structure"
+    range_start = 0
+    range_end = MAX_UPGRADES_OPTION
+    default = 2
+
+
 class MaxNumberOfUpgrades(Range):
     """
     Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited.
     Note that most unit have 4 or 6 upgrades.
-
-    If used with Units Always Have Upgrades, each unit has this given amount of upgrades (if there enough upgrades exist)
-
-    See also: Units Always Have Upgrades
     """
     display_name = "Maximum number of upgrades per unit/structure"
     range_start = -1
-    # Do not know the maximum, but it is less than 123!
-    range_end = 123
+    range_end = MAX_UPGRADES_OPTION
     default = -1
 
 
@@ -641,7 +642,7 @@ sc2_options: Dict[str, Option] = {
     "shuffle_no_build": ShuffleNoBuild,
     "starter_unit": StarterUnit,
     "required_tactics": RequiredTactics,
-    "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
+    "min_number_of_upgrades": MinNumberOfUpgrades,
     "max_number_of_upgrades": MaxNumberOfUpgrades,
     "generic_upgrade_missions": GenericUpgradeMissions,
     "generic_upgrade_research": GenericUpgradeResearch,
