@@ -474,14 +474,15 @@ def generate_itempool(world):
     if multiworld.retro_bow[player]:
         shop_items = 0
         shop_locations = [location for shop_locations in (shop.region.locations for shop in multiworld.shops if
-                          shop.type == ShopType.Shop) for location in shop_locations if location.shop_slot is not None]
+                          shop.type == ShopType.Shop and shop.region.player == player) for location in shop_locations if
+                          location.shop_slot is not None]
         for location in shop_locations:
             if location.shop.inventory[location.shop_slot]["item"] == "Single Arrow":
                 location.place_locked_item(ItemFactory("Single Arrow", player))
             else:
                 shop_items += 1
     else:
-        shop_items = multiworld.shop_item_slots[player]
+        shop_items = min(multiworld.shop_item_slots[player], 30 if multiworld.include_witch_hut[player] else 27)
 
     if multiworld.shuffle_capacity_upgrades[player]:
         shop_items += 2
