@@ -69,6 +69,7 @@ def update_dict(dictionary, entries):
 modify_functions = {
     "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
     "mul": operator.mul,
+    "floor_div": operator.floordiv,
     "mod": operator.mod,
     "max": max,
     "min": min,
