@@ -88,13 +88,13 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture Piece C": 300,  # bishop
         "Capture Piece F": 300,  # bishop
         "Capture Piece D": 900,  # queen
-        "Capture 2 Pawns": 150,
-        "Capture 3 Pawns": 250,
-        "Capture 4 Pawns": 360,
-        "Capture 5 Pawns": 490,
-        "Capture 6 Pawns": 625,
-        "Capture 7 Pawns": 735,
-        "Capture 8 Pawns": 850,
+        "Capture 2 Pawns": 550,
+        "Capture 3 Pawns": 750,
+        "Capture 4 Pawns": 940,
+        "Capture 5 Pawns": 1120,
+        "Capture 6 Pawns": 1275,
+        "Capture 7 Pawns": 1425,
+        "Capture 8 Pawns": 1575,
         "Capture 2 Pieces": 750,
         "Capture 3 Pieces": 1150,
         "Capture 4 Pieces": 1500,
