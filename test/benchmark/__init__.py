@@ -60,9 +60,9 @@ if __name__ == "__main__":
         def format_times_from_counter(counter: collections.Counter[str], top: int = 5) -> str:
             return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
 
-        def location_test(self, test_location: Location, state: CollectionState) -> float:
+        def location_test(self, test_location: Location, state: CollectionState, state_name: str) -> float:
             with TimeIt(f"{test_location.game} {self.rule_iterations} "
-                        f"runs of {test_location}.access_rule(empty_state)", logger) as t:
+                        f"runs of {test_location}.access_rule({state_name})", logger) as t:
                 for _ in range(self.rule_iterations):
                     test_location.access_rule(state)
                 # if time is taken to disentangle complex ref chains,
@@ -103,10 +103,10 @@ if __name__ == "__main__":
                         continue
 
                     for location in locations:
-                        time_taken = self.location_test(location, multiworld.state)
+                        time_taken = self.location_test(location, multiworld.state, "empty_state")
                         summary_data["empty_state"][location.name] = time_taken
 
-                        time_taken = self.location_test(location, all_state)
+                        time_taken = self.location_test(location, all_state, "all_state")
                         summary_data["all_state"][location.name] = time_taken
 
                     total_empty_state = sum(summary_data["empty_state"].values())
