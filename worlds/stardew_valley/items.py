@@ -550,14 +550,14 @@ def create_filler_festival_rewards(item_factory: StardewItemFactory, options: St
 
 def create_magic_mod_spells(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     if ModNames.magic not in options.mods:
-        return []
+        return
     items.extend([item_factory(item) for item in items_by_group[Group.MAGIC_SPELL]])
 
 
 def create_special_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     if ModNames.sve not in options.mods:
-        return []
+        return
     items.append(item_factory("Iridium Bomb"))
     items.append(item_factory("Krobus' Protection"))
     items.append(item_factory("Kittyfish Spell"))
