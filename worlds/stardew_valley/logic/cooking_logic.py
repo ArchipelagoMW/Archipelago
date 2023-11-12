@@ -8,7 +8,7 @@ from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
 from .skill_logic import SkillLogic
 from .time_logic import TimeLogic
-from ..options import ExcludeGingerIsland
+from ..options import ExcludeGingerIsland, Mods
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, QueenOfSauceSource, CookingRecipe, \
     all_cooking_recipes_by_name
 from ..data.recipe_source import CutsceneSource, ShopTradeSource
@@ -22,6 +22,7 @@ from ..strings.tv_channel_names import Channel
 
 class CookingLogic:
     player: int
+    mods: Mods
     chefsanity_option: Chefsanity
     exclude_ginger_island: ExcludeGingerIsland
     received: ReceivedLogic
@@ -35,9 +36,10 @@ class CookingLogic:
     relationship: RelationshipLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
+    def __init__(self, player: int, mods: Mods, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
                  action: ActionLogic, buildings: BuildingLogic, relationship: RelationshipLogic, skill: SkillLogic):
         self.player = player
+        self.mods = mods
         self.chefsanity_option = chefsanity_option
         self.exclude_ginger_island = exclude_ginger_island
         self.received = received
@@ -107,9 +109,13 @@ class CookingLogic:
 
     def can_cook_everything(self) -> StardewRule:
         cooksanity_prefix = "Cook "
-        all_recipes_to_cook = []
-        include_island = self.exclude_ginger_island == ExcludeGingerIsland.option_false
+        all_recipes_names = []
+        exclude_island = self.exclude_ginger_island == ExcludeGingerIsland.option_true
         for location in locations_by_tag[LocationTags.COOKSANITY]:
-            if include_island or LocationTags.GINGER_ISLAND not in location.tags:
-                all_recipes_to_cook.append(location.name[len(cooksanity_prefix):])
-        return And([self.can_cook(all_cooking_recipes_by_name[recipe_name]) for recipe_name in all_recipes_to_cook])
+            if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
+                continue
+            if location.mod_name and location.mod_name not in self.mods:
+                continue
+            all_recipes_names.append(location.name[len(cooksanity_prefix):])
+        all_recipes = [all_cooking_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
+        return And([self.can_cook(recipe) for recipe in all_recipes])

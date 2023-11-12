@@ -136,7 +136,7 @@ class StardewLogic:
         self.fishing = FishingLogic(self.player, self.region, self.tool, self.skill)
         self.mine = MineLogic(self.player, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
-        self.cooking = CookingLogic(self.player, self.options.chefsanity, self.options.exclude_ginger_island, self.received, self.has, self.region, self.season, self.time, self.money, self.action, self.buildings, self.relationship, self.skill)
+        self.cooking = CookingLogic(self.player, mods_option, self.options.chefsanity, self.options.exclude_ginger_island, self.received, self.has, self.region, self.season, self.time, self.money, self.action, self.buildings, self.relationship, self.skill)
         self.ability = AbilityLogic(self.player, self.options.movement_buff_number, self.options.luck_buff_number, self.received,
                                     self.region, self.tool, self.skill, self.mine)
         self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
