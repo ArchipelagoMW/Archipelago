@@ -169,7 +169,7 @@ class RelationshipLogic:
     def npc_is_in_current_slot(self, name: str) -> bool:
         npc = all_villagers_by_name[name]
         mod = npc.mod_name
-        return not mod or npc in get_villagers_for_mods(self.mods_option.value)
+        return mod is None or mod in self.mods_option
 
     def heart(self, npc: Union[str, Villager]) -> str:
         if isinstance(npc, str):
