@@ -92,16 +92,15 @@ if __name__ == "__main__":
 
                     gc.collect()
                     for step in self.gen_steps:
-                        with TimeIt(f"{game} step {step}"):
+                        with TimeIt(f"{game} step {step}", logger):
                             call_all(multiworld, step)
                             gc.collect()
 
-                    all_state = multiworld.get_all_state(False)
                     locations = sorted(multiworld.get_unfilled_locations())
-
                     if not locations:
                         continue
 
+                    all_state = multiworld.get_all_state(False)
                     for location in locations:
                         time_taken = self.location_test(location, multiworld.state, "empty_state")
                         summary_data["empty_state"][location.name] = time_taken
