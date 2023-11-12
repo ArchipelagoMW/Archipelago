@@ -376,7 +376,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
             else:
                 pool.append(item)
 
-    existing_items = starter_items + [item for item in multiworld.precollected_items[player]]
+    existing_items = starter_items + [item for item in multiworld.precollected_items[player] if item not in starter_items]
     existing_names = [item.name for item in existing_items]
 
     # Check the parent item integrity, exclude items
