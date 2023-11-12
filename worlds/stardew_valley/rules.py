@@ -315,8 +315,8 @@ def set_island_entrances_rules(logic: StardewLogic, multiworld, player):
                              logic.received("Island Farmhouse").simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.island_west_to_gourmand_cave, player),
                              logic.received("Island Farmhouse").simplify())
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.island_north_to_dig_site, player),
-                             logic.received("Dig Site Bridge").simplify())
+    dig_site_rule = logic.received("Dig Site Bridge").simplify()
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.island_north_to_dig_site, player), dig_site_rule)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.dig_site_to_professor_snail_cave, player),
                              logic.received("Open Professor Snail Cave").simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.talk_to_island_trader, player),
@@ -344,8 +344,13 @@ def set_island_entrances_rules(logic: StardewLogic, multiworld, player):
                Entrance.parrot_express_docks_to_jungle, Entrance.parrot_express_dig_site_to_jungle,
                Entrance.parrot_express_volcano_to_jungle, Entrance.parrot_express_jungle_to_docks,
                Entrance.parrot_express_dig_site_to_docks, Entrance.parrot_express_volcano_to_docks]
+    parrot_express_rule = logic.received(Transportation.parrot_express).simplify()
+    parrot_express_to_dig_site_rule = dig_site_rule & parrot_express_rule
     for parrot in parrots:
-        MultiWorldRules.set_rule(multiworld.get_entrance(parrot, player), logic.received(Transportation.parrot_express).simplify())
+        if "Dig Site" in parrot:
+            MultiWorldRules.set_rule(multiworld.get_entrance(parrot, player), parrot_express_to_dig_site_rule)
+        else:
+            MultiWorldRules.set_rule(multiworld.get_entrance(parrot, player), parrot_express_rule)
 
 
 def set_island_parrot_rules(logic: StardewLogic, multiworld, player):
