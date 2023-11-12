@@ -2,7 +2,7 @@
 	"AZALEA_TOWN_HIDDEN_FULL_HEAL": {
 		"label": "Azalea Town - Hidden Item By Well",
 		"flag": "EVENT_AZALEA_TOWN_HIDDEN_FULL_HEAL",
-		"default_item": "ITEM_FULL_HEAL",
+		"default_item": "FULL_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "AzaleaTownHiddenFullHeal"
@@ -10,7 +10,7 @@
 	"BURNED_TOWER_1F_HIDDEN_ETHER": {
 		"label": "Burned Tower 1F - Hidden Item 1",
 		"flag": "EVENT_BURNED_TOWER_1F_HIDDEN_ETHER",
-		"default_item": "ITEM_ETHER",
+		"default_item": "ETHER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "BurnedTower1FHiddenEther"
@@ -18,7 +18,7 @@
 	"BURNED_TOWER_1F_HIDDEN_ULTRA_BALL": {
 		"label": "Burned Tower 1F - Hidden Item 2",
 		"flag": "EVENT_BURNED_TOWER_1F_HIDDEN_ULTRA_BALL",
-		"default_item": "ITEM_ULTRA_BALL",
+		"default_item": "ULTRA_BALL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "BurnedTower1FHiddenUltraBall"
@@ -29,7 +29,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "BurnedTower1FHPUp",
-		"default_item": "ITEM_HP_UP"
+		"default_item": "HP_UP"
 	},
 	"BURNED_TOWER_B1F_TM_ENDURE": {
 		"label": "Burned Tower B1F - Item",
@@ -37,12 +37,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "BurnedTowerB1FTMEndure",
-		"default_item": "ITEM_TM_ENDURE"
+		"default_item": "TM_ENDURE"
 	},
 	"CELADON_CITY_HIDDEN_PP_UP": {
 		"label": "Celadon City - Hidden Item At Dead End",
 		"flag": "EVENT_CELADON_CITY_HIDDEN_PP_UP",
-		"default_item": "ITEM_PP_UP",
+		"default_item": "PP_UP",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "CeladonCityHiddenPpUp"
@@ -50,7 +50,7 @@
 	"CERULEAN_CITY_BERSERK_GENE": {
 		"label": "Cerulean City - Hidden Item in Water",
 		"flag": "EVENT_FOUND_BERSERK_GENE_IN_CERULEAN_CITY",
-		"default_item": "ITEM_BERSERK_GENE",
+		"default_item": "BERSERK_GENE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "CeruleanCityHiddenBerserkGene"
@@ -58,7 +58,7 @@
 	"CERULEAN_GYM_MACHINE_PART": {
 		"label": "Cerulean Gym - Machine Part in Water",
 		"flag": "EVENT_FOUND_MACHINE_PART_IN_CERULEAN_GYM",
-		"default_item": "ITEM_MACHINE_PART",
+		"default_item": "MACHINE_PART",
 		"type": "hiddenitem",
 		"tags": ["KeyIyem"],
 		"script": "CeruleanGymHiddenMachinePart"
@@ -66,7 +66,7 @@
 	"CIANWOOD_CITY_HIDDEN_MAX_ETHER": {
 		"label": "Cianwood City - Hidden Item in West Rock",
 		"flag": "EVENT_CIANWOOD_CITY_HIDDEN_MAX_ETHER",
-		"default_item": "ITEM_MAX_ETHER",
+		"default_item": "MAX_ETHER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "CianwoodCityHiddenMaxEther"
@@ -74,7 +74,7 @@
 	"CIANWOOD_CITY_HIDDEN_REVIVE": {
 		"label": "Cianwood City - Hidden Item in North Rock",
 		"flag": "EVENT_CIANWOOD_CITY_HIDDEN_REVIVE",
-		"default_item": "ITEM_REVIVE",
+		"default_item": "REVIVE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "CianwoodCityHiddenRevive"
@@ -82,7 +82,7 @@
 	"CINNABAR_ISLAND_HIDDEN_RARE_CANDY": {
 		"label": "Cinnabar Island - Hidden Item in North",
 		"flag": "EVENT_CINNABAR_ISLAND_HIDDEN_RARE_CANDY",
-		"default_item": "ITEM_RARE_CANDY",
+		"default_item": "RARE_CANDY",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "CinnabarIslandHiddenRareCandy"
@@ -93,7 +93,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DarkCaveBlackthornEntranceRevive",
-		"default_item": "ITEM_REVIVE"
+		"default_item": "REVIVE"
 	},
 	"DARK_CAVE_BLACKTHORN_ENTRANCE_TM_SNORE": {
 		"label": "Dark Cave Blackthorn Entrance - Item 2",
@@ -101,7 +101,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DarkCaveBlackthornEntranceTMSnore",
-		"default_item": "ITEM_TM_SNORE"
+		"default_item": "TM_SNORE"
 	},
 	"DARK_CAVE_VIOLET_ENTRANCE_DIRE_HIT": {
 		"label": "Dark Cave Violet Entrance - Item 1",
@@ -109,7 +109,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DarkCaveVioletEntranceDireHit",
-		"default_item": "ITEM_DIRE_HIT"
+		"default_item": "DIRE_HIT"
 	},
 	"DARK_CAVE_VIOLET_ENTRANCE_FULL_HEAL": {
 		"label": "Dark Cave Violet Entrance - Item 2",
@@ -117,12 +117,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DarkCaveVioletEntranceFullHeal",
-		"default_item": "ITEM_FULL_HEAL"
+		"default_item": "FULL_HEAL"
 	},
 	"DARK_CAVE_VIOLET_ENTRANCE_HIDDEN_ELIXER": {
 		"label": "Dark Cave Violet Entrance - Hidden Item in North",
 		"flag": "EVENT_DARK_CAVE_VIOLET_ENTRANCE_HIDDEN_ELIXER",
-		"default_item": "ITEM_ELIXER",
+		"default_item": "ELIXER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "DarkCaveVioletEntranceHiddenElixer"
@@ -133,7 +133,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DarkCaveVioletEntranceHyperPotion",
-		"default_item": "ITEM_HYPER_POTION"
+		"default_item": "HYPER_POTION"
 	},
 	"DARK_CAVE_VIOLET_ENTRANCE_POTION": {
 		"label": "Dark Cave Violet Entrance - Item 4",
@@ -141,12 +141,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DarkCaveVioletEntrancePotion",
-		"default_item": "ITEM_POTION"
+		"default_item": "POTION"
 	},
 	"DIGLETTS_CAVE_HIDDEN_MAX_REVIVE": {
 		"label": "Diglett's Cave - Hidden Item on Boulder",
 		"flag": "EVENT_DIGLETTS_CAVE_HIDDEN_MAX_REVIVE",
-		"default_item": "ITEM_MAX_REVIVE",
+		"default_item": "MAX_REVIVE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "DiglettsCaveHiddenMaxRevive"
@@ -157,7 +157,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DragonsDenB1FCalcium",
-		"default_item": "ITEM_CALCIUM"
+		"default_item": "CALCIUM"
 	},
 	"DRAGONS_DEN_B1F_DRAGON_FANG": {
 		"label": "Dragon's Den B1F - Item 2",
@@ -165,12 +165,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DragonsDenB1FDragonFangScript",
-		"default_item": "ITEM_DRAGON_FANG"
+		"default_item": "DRAGON_FANG"
 	},
 	"DRAGONS_DEN_B1F_HIDDEN_MAX_ELIXER": {
 		"label": "Dragon's Den B1F - Hidden Item in Water 1",
 		"flag": "EVENT_DRAGONS_DEN_B1F_HIDDEN_MAX_ELIXER",
-		"default_item": "ITEM_MAX_ELIXER",
+		"default_item": "MAX_ELIXER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "DragonsDenB1FHiddenMaxElixer"
@@ -178,7 +178,7 @@
 	"DRAGONS_DEN_B1F_HIDDEN_MAX_POTION": {
 		"label": "Dragon's Den B1F - Hidden Item in Water 2",
 		"flag": "EVENT_DRAGONS_DEN_B1F_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "DragonsDenB1FHiddenMaxPotion"
@@ -186,7 +186,7 @@
 	"DRAGONS_DEN_B1F_HIDDEN_REVIVE": {
 		"label": "Dragon's Den B1F - Hidden Item in SE Corner",
 		"flag": "EVENT_DRAGONS_DEN_B1F_HIDDEN_REVIVE",
-		"default_item": "ITEM_REVIVE",
+		"default_item": "REVIVE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "DragonsDenB1FHiddenRevive"
@@ -197,12 +197,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "DragonsDenB1FMaxElixer",
-		"default_item": "ITEM_MAX_ELIXER"
+		"default_item": "MAX_ELIXER"
 	},
 	"ECRUTEAK_CITY_HIDDEN_HYPER_POTION": {
 		"label": "Ecruteak City - Hidden Item by Pond",
 		"flag": "EVENT_ECRUTEAK_CITY_HIDDEN_HYPER_POTION",
-		"default_item": "ITEM_HYPER_POTION",
+		"default_item": "HYPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "EcruteakCityHiddenHyperPotion"
@@ -214,7 +214,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "FightingDojoFocusBand",
-		"default_item": "ITEM_FOCUS_BAND"
+		"default_item": "FOCUS_BAND"
 	},
 	"GOLDENROD_DEPT_STORE_B1F_AMULET_COIN": {
 		"label": "Goldenrod Dept. Store B1F - Item 1",
@@ -222,7 +222,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodDeptStoreB1FAmuletCoin",
-		"default_item": "ITEM_AMULET_COIN"
+		"default_item": "AMULET_COIN"
 	},
 	"GOLDENROD_DEPT_STORE_B1F_BURN_HEAL": {
 		"label": "Goldenrod Dept. Store B1F - Item 2",
@@ -230,7 +230,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodDeptStoreB1FBurnHeal",
-		"default_item": "ITEM_BURN_HEAL"
+		"default_item": "BURN_HEAL"
 	},
 	"GOLDENROD_DEPT_STORE_B1F_ETHER": {
 		"label": "Goldenrod Dept. Store B1F - Item 3",
@@ -238,7 +238,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodDeptStoreB1FEther",
-		"default_item": "ITEM_ETHER"
+		"default_item": "ETHER"
 	},
 	"GOLDENROD_DEPT_STORE_B1F_ULTRA_BALL": {
 		"label": "Goldenrod Dept. Store B1F - Item 4",
@@ -246,7 +246,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodDeptStoreB1FUltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_FULL_HEAL": {
 		"label": "Goldenrod UG B2F - Item 1",
@@ -254,12 +254,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodUndergroundSwitchRoomEntrancesFullHeal",
-		"default_item": "ITEM_FULL_HEAL"
+		"default_item": "FULL_HEAL"
 	},
 	"GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_HIDDEN_MAX_POTION": {
 		"label": "Goldenrod UG B2F - Hidden Item 1",
 		"flag": "EVENT_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "GoldenrodUndergroundSwitchRoomEntrancesHiddenMaxPotion"
@@ -267,7 +267,7 @@
 	"GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_HIDDEN_REVIVE": {
 		"label": "Goldenrod UG B2F - Hidden Item 2",
 		"flag": "EVENT_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_HIDDEN_REVIVE",
-		"default_item": "ITEM_REVIVE",
+		"default_item": "REVIVE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "GoldenrodUndergroundSwitchRoomEntrancesHiddenRevive"
@@ -278,7 +278,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodUndergroundSwitchRoomEntrancesSmokeBall",
-		"default_item": "ITEM_SMOKE_BALL"
+		"default_item": "SMOKE_BALL"
 	},
 	"GOLDENROD_UNDERGROUND_WAREHOUSE_MAX_ETHER": {
 		"label": "Goldenrod UG Warehouse - Item 1",
@@ -286,7 +286,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodUndergroundWarehouseMaxEther",
-		"default_item": "ITEM_MAX_ETHER"
+		"default_item": "MAX_ETHER"
 	},
 	"GOLDENROD_UNDERGROUND_WAREHOUSE_TM_SLEEP_TALK": {
 		"label": "Goldenrod UG Warehouse - Item 2",
@@ -294,7 +294,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodUndergroundWarehouseTMSleepTalk",
-		"default_item": "ITEM_TM_SLEEP_TALK"
+		"default_item": "TM_SLEEP_TALK"
 	},
 	"GOLDENROD_UNDERGROUND_WAREHOUSE_ULTRA_BALL": {
 		"label": "Goldenrod UG Warehouse - Item 3",
@@ -302,7 +302,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodUndergroundWarehouseUltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"GOLDENROD_UNDERGROUND_COIN_CASE": {
 		"label": "Goldenrod UG - Item 1",
@@ -310,12 +310,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "GoldenrodUndergroundCoinCase",
-		"default_item": "ITEM_COIN_CASE"
+		"default_item": "COIN_CASE"
 	},
 	"GOLDENROD_UNDERGROUND_HIDDEN_ANTIDOTE": {
 		"label": "Goldenrod UG - Hidden Item by Blue Door",
 		"flag": "EVENT_GOLDENROD_UNDERGROUND_HIDDEN_ANTIDOTE",
-		"default_item": "ITEM_ANTIDOTE",
+		"default_item": "ANTIDOTE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "GoldenrodUndergroundHiddenAntidote"
@@ -323,7 +323,7 @@
 	"GOLDENROD_UNDERGROUND_HIDDEN_PARLYZ_HEAL": {
 		"label": "Goldenrod UG - Hidden Item Between Tables",
 		"flag": "EVENT_GOLDENROD_UNDERGROUND_HIDDEN_PARLYZ_HEAL",
-		"default_item": "ITEM_PARLYZ_HEAL",
+		"default_item": "PARLYZ_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "GoldenrodUndergroundHiddenParlyzHeal"
@@ -331,7 +331,7 @@
 	"GOLDENROD_UNDERGROUND_HIDDEN_SUPER_POTION": {
 		"label": "Goldenrod UG - Hidden Item in Center",
 		"flag": "EVENT_GOLDENROD_UNDERGROUND_HIDDEN_SUPER_POTION",
-		"default_item": "ITEM_SUPER_POTION",
+		"default_item": "SUPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "GoldenrodUndergroundHiddenSuperPotion"
@@ -342,7 +342,7 @@
 		"type": "itemball",
 		"tags": ["HM"],
 		"script": "IcePath1FHMWaterfall",
-		"default_item": "ITEM_HM_WATERFALL"
+		"default_item": "HM_WATERFALL"
 	},
 	"ICE_PATH_1F_PP_UP": {
 		"label": "Ice Path 1F - Item 1",
@@ -350,7 +350,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IcePath1FPPUp",
-		"default_item": "ITEM_PP_UP"
+		"default_item": "PP_UP"
 	},
 	"ICE_PATH_1F_PROTEIN": {
 		"label": "Ice Path 1F - Item 2",
@@ -358,12 +358,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IcePath1FProtein",
-		"default_item": "ITEM_PROTEIN"
+		"default_item": "PROTEIN"
 	},
 	"ICE_PATH_B1F_HIDDEN_MAX_POTION": {
 		"label": "Ice Path B1F - Hidden Item on Boulder",
 		"flag": "EVENT_ICE_PATH_B1F_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "IcePathB1FHiddenMaxPotion"
@@ -374,12 +374,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IcePathB1FIron",
-		"default_item": "ITEM_IRON"
+		"default_item": "IRON"
 	},
 	"ICE_PATH_B2F_BLACKTHORN_SIDE_HIDDEN_ICE_HEAL": {
 		"label": "Ice Path B2F - Hidden Item on Boulder",
 		"flag": "EVENT_ICE_PATH_B2F_BLACKTHORN_SIDE_HIDDEN_ICE_HEAL",
-		"default_item": "ITEM_ICE_HEAL",
+		"default_item": "ICE_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "IcePathB2FBlackthornSideHiddenIceHeal"
@@ -390,7 +390,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IcePathB2FBlackthornSideTMRest",
-		"default_item": "ITEM_TM_REST"
+		"default_item": "TM_REST"
 	},
 	"ICE_PATH_B2F_MAHOGANY_SIDE_FULL_HEAL": {
 		"label": "Ice Path B2F - Item 2",
@@ -398,12 +398,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IcePathB2FMahoganySideFullHeal",
-		"default_item": "ITEM_FULL_HEAL"
+		"default_item": "FULL_HEAL"
 	},
 	"ICE_PATH_B2F_MAHOGANY_SIDE_HIDDEN_CARBOS": {
 		"label": "Ice Path B2F - Hidden Item in Corner",
 		"flag": "EVENT_ICE_PATH_B2F_MAHOGANY_SIDE_HIDDEN_CARBOS",
-		"default_item": "ITEM_CARBOS",
+		"default_item": "CARBOS",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "IcePathB2FMahoganySideHiddenCarbos"
@@ -414,7 +414,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IcePathB2FMahoganySideMaxPotion",
-		"default_item": "ITEM_MAX_POTION"
+		"default_item": "MAX_POTION"
 	},
 	"ICE_PATH_B3F_NEVERMELTICE": {
 		"label": "Ice Path B3F - Item",
@@ -422,7 +422,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IcePathB3FNevermeltice",
-		"default_item": "ITEM_NEVERMELTICE"
+		"default_item": "NEVERMELTICE"
 	},
 	"ILEX_FOREST_ANTIDOTE": {
 		"label": "Ilex Forest - Item 1",
@@ -430,7 +430,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IlexForestAntidote",
-		"default_item": "ITEM_ANTIDOTE"
+		"default_item": "ANTIDOTE"
 	},
 	"ILEX_FOREST_ETHER": {
 		"label": "Ilex Forest - Item 2",
@@ -438,12 +438,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IlexForestEther",
-		"default_item": "ITEM_ETHER"
+		"default_item": "ETHER"
 	},
 	"ILEX_FOREST_HIDDEN_ETHER": {
 		"label": "Ilex Forest - Hidden Item 1",
 		"flag": "EVENT_ILEX_FOREST_HIDDEN_ETHER",
-		"default_item": "ITEM_ETHER",
+		"default_item": "ETHER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "IlexForestHiddenEther"
@@ -451,7 +451,7 @@
 	"ILEX_FOREST_HIDDEN_FULL_HEAL": {
 		"label": "Ilex Forest - Hidden Item 2",
 		"flag": "EVENT_ILEX_FOREST_HIDDEN_FULL_HEAL",
-		"default_item": "ITEM_FULL_HEAL",
+		"default_item": "FULL_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "IlexForestHiddenFullHeal"
@@ -459,7 +459,7 @@
 	"ILEX_FOREST_HIDDEN_SUPER_POTION": {
 		"label": "Ilex Forest - Hidden Item 3",
 		"flag": "EVENT_ILEX_FOREST_HIDDEN_SUPER_POTION",
-		"default_item": "ITEM_SUPER_POTION",
+		"default_item": "SUPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "IlexForestHiddenSuperPotion"
@@ -470,7 +470,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IlexForestRevive",
-		"default_item": "ITEM_REVIVE"
+		"default_item": "REVIVE"
 	},
 	"ILEX_FOREST_X_ATTACK": {
 		"label": "Ilex Forest - Item 4",
@@ -478,7 +478,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "IlexForestXAttack",
-		"default_item": "ITEM_X_ATTACK"
+		"default_item": "X_ATTACK"
 	},
 	"LAKE_OF_RAGE_ELIXER": {
 		"label": "Lake of Rage - Item 1",
@@ -486,12 +486,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "LakeOfRageElixer",
-		"default_item": "ITEM_ELIXER"
+		"default_item": "ELIXER"
 	},
 	"LAKE_OF_RAGE_HIDDEN_FULL_RESTORE": {
 		"label": "Lake of Rage - Hidden Item in West Path",
 		"flag": "EVENT_LAKE_OF_RAGE_HIDDEN_FULL_RESTORE",
-		"default_item": "ITEM_FULL_RESTORE",
+		"default_item": "FULL_RESTORE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "LakeOfRageHiddenFullRestore"
@@ -499,7 +499,7 @@
 	"LAKE_OF_RAGE_HIDDEN_MAX_POTION": {
 		"label": "Lake of Rage - Hidden Item in Northeast",
 		"flag": "EVENT_LAKE_OF_RAGE_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "LakeOfRageHiddenMaxPotion"
@@ -507,7 +507,7 @@
 	"LAKE_OF_RAGE_HIDDEN_RARE_CANDY": {
 		"label": "Lake of Rage - Hidden Item Behind Cut Tree",
 		"flag": "EVENT_LAKE_OF_RAGE_HIDDEN_RARE_CANDY",
-		"default_item": "ITEM_RARE_CANDY",
+		"default_item": "RARE_CANDY",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "LakeOfRageHiddenRareCandy"
@@ -518,12 +518,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "LakeOfRageTMDetect",
-		"default_item": "ITEM_TM_DETECT"
+		"default_item": "TM_DETECT"
 	},
 	"MOUNT_MOON_SQUARE_HIDDEN_MOON_STONE": {
 		"label": "Mount Moon Square - Hidden Item on Monday Night",
 		"flag": "EVENT_MOUNT_MOON_SQUARE_HIDDEN_MOON_STONE",
-		"default_item": "ITEM_MOON_STONE",
+		"default_item": "MOON_STONE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "MountMoonSquareHiddenMoonStone"
@@ -534,7 +534,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FInsideEscapeRope",
-		"default_item": "ITEM_ESCAPE_ROPE"
+		"default_item": "ESCAPE_ROPE"
 	},
 	"MOUNT_MORTAR_1F_INSIDE_HYPER_POTION": {
 		"label": "Mount Mortar 1F Inside - Item 2",
@@ -542,7 +542,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FInsideHyperPotion",
-		"default_item": "ITEM_HYPER_POTION"
+		"default_item": "HYPER_POTION"
 	},
 	"MOUNT_MORTAR_1F_INSIDE_IRON": {
 		"label": "Mount Mortar 1F Inside - Item 3",
@@ -550,7 +550,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FInsideIron",
-		"default_item": "ITEM_IRON"
+		"default_item": "IRON"
 	},
 	"MOUNT_MORTAR_1F_INSIDE_MAX_POTION": {
 		"label": "Mount Mortar 1F Inside - Item 4",
@@ -558,7 +558,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FInsideMaxPotion",
-		"default_item": "ITEM_MAX_POTION"
+		"default_item": "MAX_POTION"
 	},
 	"MOUNT_MORTAR_1F_INSIDE_MAX_REVIVE": {
 		"label": "Mount Mortar 1F Inside - Item 5",
@@ -566,7 +566,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FInsideMaxRevive",
-		"default_item": "ITEM_MAX_REVIVE"
+		"default_item": "MAX_REVIVE"
 	},
 	"MOUNT_MORTAR_1F_INSIDE_NUGGET": {
 		"label": "Mount Mortar 1F Inside - Item 6",
@@ -574,7 +574,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FInsideNugget",
-		"default_item": "ITEM_NUGGET"
+		"default_item": "NUGGET"
 	},
 	"MOUNT_MORTAR_1F_INSIDE_ULTRA_BALL": {
 		"label": "Mount Mortar 1F Inside - Item 7",
@@ -582,7 +582,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FInsideUltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"MOUNT_MORTAR_1F_OUTSIDE_ETHER": {
 		"label": "Mount Mortar 2F Outside - Item Up West Ladder",
@@ -590,7 +590,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FOutsideEther",
-		"default_item": "ITEM_ETHER"
+		"default_item": "ETHER"
 	},
 	"MOUNT_MORTAR_1F_OUTSIDE_REVIVE": {
 		"label": "Mount Mortar 2F Outside - Item Up East Ladder",
@@ -598,7 +598,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar1FOutsideRevive",
-		"default_item": "ITEM_REVIVE"
+		"default_item": "REVIVE"
 	},
 	"MOUNT_MORTAR_2F_INSIDE_DRAGON_SCALE": {
 		"label": "Mount Mortar 2F - Inside Item 1",
@@ -606,7 +606,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar2FInsideDragonScale",
-		"default_item": "ITEM_DRAGON_SCALE"
+		"default_item": "DRAGON_SCALE"
 	},
 	"MOUNT_MORTAR_2F_INSIDE_ELIXER": {
 		"label": "Mount Mortar 2F - Inside Item 1",
@@ -614,7 +614,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar2FInsideElixer",
-		"default_item": "ITEM_ELIXER"
+		"default_item": "ELIXER"
 	},
 	"MOUNT_MORTAR_2F_INSIDE_ESCAPE_ROPE": {
 		"label": "Mount Mortar 2F - Inside Item 3",
@@ -622,7 +622,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar2FInsideEscapeRope",
-		"default_item": "ITEM_ESCAPE_ROPE"
+		"default_item": "ESCAPE_ROPE"
 	},
 	"MOUNT_MORTAR_2F_INSIDE_MAX_POTION": {
 		"label": "Mount Mortar 2F - Inside Item 4",
@@ -630,7 +630,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar2FInsideMaxPotion",
-		"default_item": "ITEM_MAX_POTION"
+		"default_item": "MAX_POTION"
 	},
 	"MOUNT_MORTAR_2F_INSIDE_RARE_CANDY": {
 		"label": "Mount Mortar 2F - Inside Item 5",
@@ -638,7 +638,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar2FInsideRareCandy",
-		"default_item": "ITEM_RARE_CANDY"
+		"default_item": "RARE_CANDY"
 	},
 	"MOUNT_MORTAR_2F_INSIDE_TM_DEFENSE_CURL": {
 		"label": "Mount Mortar 2F - Inside Item 6",
@@ -646,7 +646,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortar2FInsideTMDefenseCurl",
-		"default_item": "ITEM_TM_DEFENSE_CURL"
+		"default_item": "TM_DEFENSE_CURL"
 	},
 	"MOUNT_MORTAR_B1F_CARBOS": {
 		"label": "Mount Mortar B1F - Item 1",
@@ -654,7 +654,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortarB1FCarbos",
-		"default_item": "ITEM_CARBOS"
+		"default_item": "CARBOS"
 	},
 	"MOUNT_MORTAR_B1F_FULL_RESTORE": {
 		"label": "Mount Mortar B1F - Item 2",
@@ -662,12 +662,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortarB1FFullRestore",
-		"default_item": "ITEM_FULL_RESTORE"
+		"default_item": "FULL_RESTORE"
 	},
 	"MOUNT_MORTAR_B1F_HIDDEN_MAX_REVIVE": {
 		"label": "Mount Mortar B1F - Hidden Item on Boulder",
 		"flag": "EVENT_MOUNT_MORTAR_B1F_HIDDEN_MAX_REVIVE",
-		"default_item": "ITEM_MAX_REVIVE",
+		"default_item": "MAX_REVIVE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "MountMortarB1FHiddenMaxRevive"
@@ -678,7 +678,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortarB1FHyperPotion",
-		"default_item": "ITEM_HYPER_POTION"
+		"default_item": "HYPER_POTION"
 	},
 	"MOUNT_MORTAR_B1F_MAX_ETHER": {
 		"label": "Mount Mortar B1F - Item 4",
@@ -686,7 +686,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortarB1FMaxEther",
-		"default_item": "ITEM_MAX_ETHER"
+		"default_item": "MAX_ETHER"
 	},
 	"MOUNT_MORTAR_B1F_PP_UP": {
 		"label": "Mount Mortar B1F - Item 5",
@@ -694,12 +694,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "MountMortarB1FPPUp",
-		"default_item": "ITEM_PP_UP"
+		"default_item": "PP_UP"
 	},
 	"MOUNT_MORTAR_1F_INSIDE_HIDDEN_MAX_REPEL": {
 		"label": "Mount Mortar 1F Inside - Hidden Item",
 		"flag": "EVENT_MOUNT_MORTAR_1F_INSIDE_HIDDEN_MAX_REPEL",
-		"default_item": "ITEM_MAX_REPEL",
+		"default_item": "MAX_REPEL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "MountMortar1FInsideHiddenMaxRepel"
@@ -707,7 +707,7 @@
 	"MOUNT_MORTAR_1F_OUTSIDE_HIDDEN_HYPER_POTION": {
 		"label": "Mount Mortar 1F Outside - Hidden Item",
 		"flag": "EVENT_MOUNT_MORTAR_1F_OUTSIDE_HIDDEN_HYPER_POTION",
-		"default_item": "ITEM_HYPER_POTION",
+		"default_item": "HYPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "MountMortar1FOutsideHiddenHyperPotion"
@@ -715,7 +715,7 @@
 	"MOUNT_MORTAR_2F_INSIDE_HIDDEN_FULL_RESTORE": {
 		"label": "Mount Mortar 2F Inside - Hidden Item",
 		"flag": "EVENT_MOUNT_MORTAR_2F_INSIDE_HIDDEN_FULL_RESTORE",
-		"default_item": "ITEM_FULL_RESTORE",
+		"default_item": "FULL_RESTORE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "MountMortar2FInsideHiddenFullRestore"
@@ -723,7 +723,7 @@
 	"NATIONAL_PARK_HIDDEN_FULL_HEAL": {
 		"label": "National Park - Hidden Item Behind Fence",
 		"flag": "EVENT_NATIONAL_PARK_HIDDEN_FULL_HEAL",
-		"default_item": "ITEM_FULL_HEAL",
+		"default_item": "FULL_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "NationalParkHiddenFullHeal"
@@ -734,7 +734,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "NationalParkParlyzHeal",
-		"default_item": "ITEM_PARLYZ_HEAL"
+		"default_item": "PARLYZ_HEAL"
 	},
 	"NATIONAL_PARK_TM_DIG": {
 		"label": "National Park - Item 2",
@@ -742,7 +742,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "NationalParkTMDig",
-		"default_item": "ITEM_TM_DIG"
+		"default_item": "TM_DIG"
 	},
 	"OLIVINE_LIGHTHOUSE_3F_ETHER": {
 		"label": "Olivine Lighthouse 3F - Item",
@@ -750,7 +750,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "OlivineLighthouse3FEther",
-		"default_item": "ITEM_ETHER"
+		"default_item": "ETHER"
 	},
 	"OLIVINE_LIGHTHOUSE_5F_RARE_CANDY": {
 		"label": "Olivine Lighthouse 5F - Item 1",
@@ -758,7 +758,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "OlivineLighthouse5FRareCandy",
-		"default_item": "ITEM_RARE_CANDY"
+		"default_item": "RARE_CANDY"
 	},
 	"OLIVINE_LIGHTHOUSE_5F_SUPER_REPEL": {
 		"label": "Olivine Lighthouse 5F - Item 2",
@@ -766,7 +766,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "OlivineLighthouse5FSuperRepel",
-		"default_item": "ITEM_SUPER_REPEL"
+		"default_item": "SUPER_REPEL"
 	},
 	"OLIVINE_LIGHTHOUSE_5F_TM_SWAGGER": {
 		"label": "Olivine Lighthouse 5F - Item 3",
@@ -774,7 +774,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "OlivineLighthouse5FTMSwagger",
-		"default_item": "ITEM_TM_SWAGGER"
+		"default_item": "TM_SWAGGER"
 	},
 	"OLIVINE_LIGHTHOUSE_6F_SUPER_POTION": {
 		"label": "Olivine Lighthouse 6F - Item",
@@ -782,12 +782,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "OlivineLighthouse6FSuperPotion",
-		"default_item": "ITEM_SUPER_POTION"
+		"default_item": "SUPER_POTION"
 	},
 	"OLIVINE_LIGHTHOUSE_5F_HIDDEN_HYPER_POTION": {
 		"label": "Olivine Lighthouse 5F - Hidden Item",
 		"flag": "EVENT_OLIVINE_LIGHTHOUSE_5F_HIDDEN_HYPER_POTION",
-		"default_item": "ITEM_HYPER_POTION",
+		"default_item": "HYPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "OlivineLighthouse5FHiddenHyperPotion"
@@ -795,7 +795,7 @@
 	"OLIVINE_PORT_HIDDEN_PROTEIN": {
 		"label": "Olivine Port - Hidden Item in Southeast Buoy",
 		"flag": "EVENT_OLIVINE_PORT_HIDDEN_PROTEIN",
-		"default_item": "ITEM_PROTEIN",
+		"default_item": "PROTEIN",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "OlivinePortHiddenProtein"
@@ -806,7 +806,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RadioTower5FUltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"ROCK_TUNNEL_1F_ELIXER": {
 		"label": "Rock Tunnel 1F - Item 1",
@@ -814,12 +814,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RockTunnel1FElixer",
-		"default_item": "ITEM_ELIXER"
+		"default_item": "ELIXER"
 	},
 	"ROCK_TUNNEL_1F_HIDDEN_X_ACCURACY": {
 		"label": "Rock Tunnel 1F - Hidden Item 1",
 		"flag": "EVENT_ROCK_TUNNEL_1F_HIDDEN_X_ACCURACY",
-		"default_item": "ITEM_X_ACCURACY",
+		"default_item": "X_ACCURACY",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "RockTunnel1FHiddenXAccuracy"
@@ -827,7 +827,7 @@
 	"ROCK_TUNNEL_1F_HIDDEN_X_DEFEND": {
 		"label": "Rock Tunnel 1F - Hidden Item 2",
 		"flag": "EVENT_ROCK_TUNNEL_1F_HIDDEN_X_DEFEND",
-		"default_item": "ITEM_X_DEFEND",
+		"default_item": "X_DEFEND",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "RockTunnel1FHiddenXDefend"
@@ -838,12 +838,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RockTunnel1FTMSteelWing",
-		"default_item": "ITEM_TM_STEEL_WING"
+		"default_item": "TM_STEEL_WING"
 	},
 	"ROCK_TUNNEL_B1F_HIDDEN_MAX_POTION": {
 		"label": "Rock Tunnel B1F - Hidden Item",
 		"flag": "EVENT_ROCK_TUNNEL_B1F_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "RockTunnelB1FHiddenMaxPotion"
@@ -854,7 +854,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RockTunnelB1FIron",
-		"default_item": "ITEM_IRON"
+		"default_item": "IRON"
 	},
 	"ROCK_TUNNEL_B1F_PP_UP": {
 		"label": "Rock Tunnel B1F - Item 2",
@@ -862,7 +862,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RockTunnelB1FPPUp",
-		"default_item": "ITEM_PP_UP"
+		"default_item": "PP_UP"
 	},
 	"ROCK_TUNNEL_B1F_REVIVE": {
 		"label": "Rock Tunnel B1F - Item 3",
@@ -870,12 +870,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RockTunnelB1FRevive",
-		"default_item": "ITEM_REVIVE"
+		"default_item": "REVIVE"
 	},
 	"ROUTE_11_HIDDEN_REVIVE": {
 		"label": "Route 11 - Hidden Item in Tree",
 		"flag": "EVENT_ROUTE_11_HIDDEN_REVIVE",
-		"default_item": "ITEM_REVIVE",
+		"default_item": "REVIVE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route11HiddenRevive"
@@ -886,12 +886,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route12Calcium",
-		"default_item": "ITEM_CALCIUM"
+		"default_item": "CALCIUM"
 	},
 	"ROUTE_12_HIDDEN_ELIXER": {
 		"label": "Route 12 - Hidden Item on Island",
 		"flag": "EVENT_ROUTE_12_HIDDEN_ELIXER",
-		"default_item": "ITEM_ELIXER",
+		"default_item": "ELIXER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route12HiddenElixer"
@@ -902,12 +902,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route12Nugget",
-		"default_item": "ITEM_NUGGET"
+		"default_item": "NUGGET"
 	},
 	"ROUTE_13_HIDDEN_CALCIUM": {
 		"label": "Route 13 - Hidden Item in Fence Maze",
 		"flag": "EVENT_ROUTE_13_HIDDEN_CALCIUM",
-		"default_item": "ITEM_CALCIUM",
+		"default_item": "CALCIUM",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route13HiddenCalcium"
@@ -918,12 +918,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route15PPUp",
-		"default_item": "ITEM_PP_UP"
+		"default_item": "PP_UP"
 	},
 	"ROUTE_17_HIDDEN_MAX_ELIXER": {
 		"label": "Route 17 - Hidden Item in Fence",
 		"flag": "EVENT_ROUTE_17_HIDDEN_MAX_ELIXER",
-		"default_item": "ITEM_MAX_ELIXER",
+		"default_item": "MAX_ELIXER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route17HiddenMaxElixer"
@@ -931,7 +931,7 @@
 	"ROUTE_17_HIDDEN_MAX_ETHER": {
 		"label": "Route 17 - Hidden Item at Corner",
 		"flag": "EVENT_ROUTE_17_HIDDEN_MAX_ETHER",
-		"default_item": "ITEM_MAX_ETHER",
+		"default_item": "MAX_ETHER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route17HiddenMaxEther"
@@ -942,7 +942,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route2Carbos",
-		"default_item": "ITEM_CARBOS"
+		"default_item": "CARBOS"
 	},
 	"ROUTE_2_DIRE_HIT": {
 		"label": "Route 2 - Item 2",
@@ -950,7 +950,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route2DireHit",
-		"default_item": "ITEM_DIRE_HIT"
+		"default_item": "DIRE_HIT"
 	},
 	"ROUTE_2_ELIXER": {
 		"label": "Route 2 - Item 3",
@@ -958,12 +958,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route2Elixer",
-		"default_item": "ITEM_ELIXER"
+		"default_item": "ELIXER"
 	},
 	"ROUTE_2_HIDDEN_FULL_HEAL": {
 		"label": "Route 2 - Hidden Item 1",
 		"flag": "EVENT_ROUTE_2_HIDDEN_FULL_HEAL",
-		"default_item": "ITEM_FULL_HEAL",
+		"default_item": "FULL_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route2HiddenFullHeal"
@@ -971,7 +971,7 @@
 	"ROUTE_2_HIDDEN_FULL_RESTORE": {
 		"label": "Route 2 - Hidden Item 2",
 		"flag": "EVENT_ROUTE_2_HIDDEN_FULL_RESTORE",
-		"default_item": "ITEM_FULL_RESTORE",
+		"default_item": "FULL_RESTORE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route2HiddenFullRestore"
@@ -979,7 +979,7 @@
 	"ROUTE_2_HIDDEN_MAX_ETHER": {
 		"label": "Route 2 - Hidden Item 3",
 		"flag": "EVENT_ROUTE_2_HIDDEN_MAX_ETHER",
-		"default_item": "ITEM_MAX_ETHER",
+		"default_item": "MAX_ETHER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route2HiddenMaxEther"
@@ -987,7 +987,7 @@
 	"ROUTE_2_HIDDEN_REVIVE": {
 		"label": "Route 2 - Hidden Item 4",
 		"flag": "EVENT_ROUTE_2_HIDDEN_REVIVE",
-		"default_item": "ITEM_REVIVE",
+		"default_item": "REVIVE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route2HiddenRevive"
@@ -998,12 +998,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route2MaxPotion",
-		"default_item": "ITEM_MAX_POTION"
+		"default_item": "MAX_POTION"
 	},
 	"ROUTE_25_HIDDEN_POTION": {
 		"label": "Route 25 - Hidden Item in Tree",
 		"flag": "EVENT_ROUTE_25_HIDDEN_POTION",
-		"default_item": "ITEM_POTION",
+		"default_item": "POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route25HiddenPotion"
@@ -1014,7 +1014,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route25Protein",
-		"default_item": "ITEM_PROTEIN"
+		"default_item": "PROTEIN"
 	},
 	"ROUTE_26_MAX_ELIXER": {
 		"label": "Route 26 - Item",
@@ -1022,7 +1022,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route26MaxElixer",
-		"default_item": "ITEM_MAX_ELIXER"
+		"default_item": "MAX_ELIXER"
 	},
 	"ROUTE_27_RARE_CANDY": {
 		"label": "Route 27 - Item 1",
@@ -1030,7 +1030,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route27RareCandy",
-		"default_item": "ITEM_RARE_CANDY"
+		"default_item": "RARE_CANDY"
 	},
 	"ROUTE_27_TM_SOLARBEAM": {
 		"label": "Route 27 - Item 2",
@@ -1038,12 +1038,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route27TMSolarbeam",
-		"default_item": "ITEM_TM_SOLARBEAM"
+		"default_item": "TM_SOLARBEAM"
 	},
 	"ROUTE_28_HIDDEN_RARE_CANDY": {
 		"label": "Route 28 - Hidden Item Behind Cut Tree",
 		"flag": "EVENT_ROUTE_28_HIDDEN_RARE_CANDY",
-		"default_item": "ITEM_RARE_CANDY",
+		"default_item": "RARE_CANDY",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route28HiddenRareCandy"
@@ -1054,7 +1054,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route29Potion",
-		"default_item": "ITEM_POTION"
+		"default_item": "POTION"
 	},
 	"ROUTE_30_ANTIDOTE": {
 		"label": "Route 30 - Item",
@@ -1062,12 +1062,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route30Antidote",
-		"default_item": "ITEM_ANTIDOTE"
+		"default_item": "ANTIDOTE"
 	},
 	"ROUTE_30_HIDDEN_POTION": {
 		"label": "Route 30 - Hidden Item in Flowers",
 		"flag": "EVENT_ROUTE_30_HIDDEN_POTION",
-		"default_item": "ITEM_POTION",
+		"default_item": "POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route30HiddenPotion"
@@ -1078,7 +1078,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route31PokeBall",
-		"default_item": "ITEM_POKE_BALL"
+		"default_item": "POKE_BALL"
 	},
 	"ROUTE_31_POTION": {
 		"label": "Route 31 - Item 2",
@@ -1086,7 +1086,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route31Potion",
-		"default_item": "ITEM_POTION"
+		"default_item": "POTION"
 	},
 	"ROUTE_32_GREAT_BALL": {
 		"label": "Route 32 - Item 1",
@@ -1094,12 +1094,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route32GreatBall",
-		"default_item": "ITEM_GREAT_BALL"
+		"default_item": "GREAT_BALL"
 	},
 	"ROUTE_32_HIDDEN_GREAT_BALL": {
 		"label": "Route 32 - Hidden Item by Frieda",
 		"flag": "EVENT_ROUTE_32_HIDDEN_GREAT_BALL",
-		"default_item": "ITEM_GREAT_BALL",
+		"default_item": "GREAT_BALL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route32HiddenGreatBall"
@@ -1107,7 +1107,7 @@
 	"ROUTE_32_HIDDEN_SUPER_POTION": {
 		"label": "Route 32 - Hidden Item North of Bridge",
 		"flag": "EVENT_ROUTE_32_HIDDEN_SUPER_POTION",
-		"default_item": "ITEM_SUPER_POTION",
+		"default_item": "SUPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route32HiddenSuperPotion"
@@ -1118,12 +1118,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route32Repel",
-		"default_item": "ITEM_REPEL"
+		"default_item": "REPEL"
 	},
 	"ROUTE_34_HIDDEN_RARE_CANDY": {
 		"label": "Route 34 - Hidden Item Across Water",
 		"flag": "EVENT_ROUTE_34_HIDDEN_RARE_CANDY",
-		"default_item": "ITEM_RARE_CANDY",
+		"default_item": "RARE_CANDY",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route34HiddenRareCandy"
@@ -1131,7 +1131,7 @@
 	"ROUTE_34_HIDDEN_SUPER_POTION": {
 		"label": "Route 34 - Hidden Item in Day-Care Yard",
 		"flag": "EVENT_ROUTE_34_HIDDEN_SUPER_POTION",
-		"default_item": "ITEM_SUPER_POTION",
+		"default_item": "SUPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route34HiddenSuperPotion"
@@ -1142,7 +1142,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route34Nugget",
-		"default_item": "ITEM_NUGGET"
+		"default_item": "NUGGET"
 	},
 	"ROUTE_35_TM_ROLLOUT": {
 		"label": "Route 35 - Item",
@@ -1150,12 +1150,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route35TMRollout",
-		"default_item": "ITEM_TM_ROLLOUT"
+		"default_item": "TM_ROLLOUT"
 	},
 	"ROUTE_37_HIDDEN_ETHER": {
 		"label": "Route 37 - Hidden Item",
 		"flag": "EVENT_ROUTE_37_HIDDEN_ETHER",
-		"default_item": "ITEM_ETHER",
+		"default_item": "ETHER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route37HiddenEther"
@@ -1163,7 +1163,7 @@
 	"ROUTE_39_HIDDEN_NUGGET": {
 		"label": "Route 39 - Hidden Item Between Miltank",
 		"flag": "EVENT_ROUTE_39_HIDDEN_NUGGET",
-		"default_item": "ITEM_NUGGET",
+		"default_item": "NUGGET",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route39HiddenNugget"
@@ -1171,7 +1171,7 @@
 	"ROUTE_4_HIDDEN_ULTRA_BALL": {
 		"label": "Route 4 - Hidden Item on Plateau",
 		"flag": "EVENT_ROUTE_4_HIDDEN_ULTRA_BALL",
-		"default_item": "ITEM_ULTRA_BALL",
+		"default_item": "ULTRA_BALL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route4HiddenUltraBall"
@@ -1182,12 +1182,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route4HPUp",
-		"default_item": "ITEM_HP_UP"
+		"default_item": "HP_UP"
 	},
 	"ROUTE_40_HIDDEN_HYPER_POTION": {
 		"label": "Route 40 - Hidden Item in Rock",
 		"flag": "EVENT_ROUTE_40_HIDDEN_HYPER_POTION",
-		"default_item": "ITEM_HYPER_POTION",
+		"default_item": "HYPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route40HiddenHyperPotion"
@@ -1195,7 +1195,7 @@
 	"ROUTE_41_HIDDEN_MAX_ETHER": {
 		"label": "Route 41 - Hidden Item on Southwest Island",
 		"flag": "EVENT_ROUTE_41_HIDDEN_MAX_ETHER",
-		"default_item": "ITEM_MAX_ETHER",
+		"default_item": "MAX_ETHER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route41HiddenMaxEther"
@@ -1203,7 +1203,7 @@
 	"ROUTE_42_HIDDEN_MAX_POTION": {
 		"label": "Route 42 - Hidden Item in Pond Rock",
 		"flag": "EVENT_ROUTE_42_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route42HiddenMaxPotion"
@@ -1214,7 +1214,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route42SuperPotion",
-		"default_item": "ITEM_SUPER_POTION"
+		"default_item": "SUPER_POTION"
 	},
 	"ROUTE_42_ULTRA_BALL": {
 		"label": "Route 42 - Item 2",
@@ -1222,7 +1222,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route42UltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"ROUTE_43_MAX_ETHER": {
 		"label": "Route 43 - Item",
@@ -1230,12 +1230,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route43MaxEther",
-		"default_item": "ITEM_MAX_ETHER"
+		"default_item": "MAX_ETHER"
 	},
 	"ROUTE_44_HIDDEN_ELIXER": {
 		"label": "Route 44 - Hidden Item Across Water",
 		"flag": "EVENT_ROUTE_44_HIDDEN_ELIXER",
-		"default_item": "ITEM_ELIXER",
+		"default_item": "ELIXER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route44HiddenElixer"
@@ -1246,7 +1246,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route44MaxRepel",
-		"default_item": "ITEM_MAX_REPEL"
+		"default_item": "MAX_REPEL"
 	},
 	"ROUTE_44_MAX_REVIVE": {
 		"label": "Route 44 - Item 2",
@@ -1254,7 +1254,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route44MaxRevive",
-		"default_item": "ITEM_MAX_REVIVE"
+		"default_item": "MAX_REVIVE"
 	},
 	"ROUTE_44_ULTRA_BALL": {
 		"label": "Route 44 - Item 3",
@@ -1262,7 +1262,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route44UltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"ROUTE_45_ELIXER": {
 		"label": "Route 45 - Item 1",
@@ -1270,12 +1270,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route45Elixer",
-		"default_item": "ITEM_ELIXER"
+		"default_item": "ELIXER"
 	},
 	"ROUTE_45_HIDDEN_PP_UP": {
 		"label": "Route 45 - Hidden Item in Southeast Pond",
 		"flag": "EVENT_ROUTE_45_HIDDEN_PP_UP",
-		"default_item": "ITEM_PP_UP",
+		"default_item": "PP_UP",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route45HiddenPpUp"
@@ -1286,7 +1286,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route45MaxPotion",
-		"default_item": "ITEM_MAX_POTION"
+		"default_item": "MAX_POTION"
 	},
 	"ROUTE_45_NUGGET": {
 		"label": "Route 45 - Item 3",
@@ -1294,7 +1294,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route45Nugget",
-		"default_item": "ITEM_NUGGET"
+		"default_item": "NUGGET"
 	},
 	"ROUTE_45_REVIVE": {
 		"label": "Route 45 - Item 4",
@@ -1302,7 +1302,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route45Revive",
-		"default_item": "ITEM_REVIVE"
+		"default_item": "REVIVE"
 	},
 	"ROUTE_46_X_SPEED": {
 		"label": "Route 46 - Item",
@@ -1310,12 +1310,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "Route46XSpeed",
-		"default_item": "ITEM_X_SPEED"
+		"default_item": "X_SPEED"
 	},
 	"ROUTE_9_HIDDEN_ETHER": {
 		"label": "Route 9 - Hidden Item in Southeast Corner",
 		"flag": "EVENT_ROUTE_9_HIDDEN_ETHER",
-		"default_item": "ITEM_ETHER",
+		"default_item": "ETHER",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "Route9HiddenEther"
@@ -1326,7 +1326,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphAerodactylItemRoomEnergyRoot",
-		"default_item": "ITEM_ENERGY_ROOT"
+		"default_item": "ENERGY_ROOT"
 	},
 	"PICKED_UP_GOLD_BERRY_FROM_AERODACTYL_ITEM_ROOM": {
 		"label": "Ruins of Alph - Aerodactyl Room Item 2",
@@ -1334,7 +1334,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphAerodactylItemRoomGoldBerry",
-		"default_item": "ITEM_GOLD_BERRY"
+		"default_item": "GOLD_BERRY"
 	},
 	"PICKED_UP_HEAL_POWDER_FROM_AERODACTYL_ITEM_ROOM": {
 		"label": "Ruins of Alph - Aerodactyl Room Item 3",
@@ -1342,7 +1342,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphAerodactylItemRoomHealPowder",
-		"default_item": "ITEM_HEAL_POWDER"
+		"default_item": "HEAL_POWDER"
 	},
 	"PICKED_UP_MOON_STONE_FROM_AERODACTYL_ITEM_ROOM": {
 		"label": "Ruins of Alph - Aerodactyl Room Item 4",
@@ -1350,7 +1350,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphAerodactylItemRoomMoonStone",
-		"default_item": "ITEM_MOON_STONE"
+		"default_item": "MOON_STONE"
 	},
 	"PICKED_UP_CHARCOAL_FROM_HO_OH_ITEM_ROOM": {
 		"label": "Ruins of Alph - Ho-Oh Room Item 1",
@@ -1358,7 +1358,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphHoOhItemRoomCharcoal",
-		"default_item": "ITEM_CHARCOAL"
+		"default_item": "CHARCOAL"
 	},
 	"PICKED_UP_GOLD_BERRY_FROM_HO_OH_ITEM_ROOM": {
 		"label": "Ruins of Alph - Ho-Oh Room Item 2",
@@ -1366,7 +1366,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphHoOhItemRoomGoldBerry",
-		"default_item": "ITEM_GOLD_BERRY"
+		"default_item": "GOLD_BERRY"
 	},
 	"PICKED_UP_MYSTERYBERRY_FROM_HO_OH_ITEM_ROOM": {
 		"label": "Ruins of Alph - Ho-Oh Room Item 3",
@@ -1374,7 +1374,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphHoOhItemRoomMysteryberry",
-		"default_item": "ITEM_MYSTERYBERRY"
+		"default_item": "MYSTERYBERRY"
 	},
 	"PICKED_UP_REVIVAL_HERB_FROM_HO_OH_ITEM_ROOM": {
 		"label": "Ruins of Alph - Ho-Oh Room Item 4",
@@ -1382,7 +1382,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphHoOhItemRoomRevivalHerb",
-		"default_item": "ITEM_REVIVAL_HERB"
+		"default_item": "REVIVAL_HERB"
 	},
 	"PICKED_UP_BERRY_FROM_KABUTO_ITEM_ROOM": {
 		"label": "Ruins of Alph - Kabuto Room Item 1",
@@ -1390,7 +1390,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphKabutoItemRoomBerry",
-		"default_item": "ITEM_BERRY"
+		"default_item": "BERRY"
 	},
 	"PICKED_UP_ENERGYPOWDER_FROM_KABUTO_ITEM_ROOM": {
 		"label": "Ruins of Alph - Kabuto Room Item 2",
@@ -1398,7 +1398,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphKabutoItemRoomEnergypowder",
-		"default_item": "ITEM_ENERGYPOWDER"
+		"default_item": "ENERGYPOWDER"
 	},
 	"PICKED_UP_HEAL_POWDER_FROM_KABUTO_ITEM_ROOM": {
 		"label": "Ruins of Alph - Kabuto Room Item 3",
@@ -1406,7 +1406,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphKabutoItemRoomHealPowder",
-		"default_item": "ITEM_HEAL_POWDER"
+		"default_item": "HEAL_POWDER"
 	},
 	"PICKED_UP_PSNCUREBERRY_FROM_KABUTO_ITEM_ROOM": {
 		"label": "Ruins of Alph - Kabuto Room Item 4",
@@ -1414,7 +1414,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphKabutoItemRoomPsncureberry",
-		"default_item": "ITEM_PSNCUREBERRY"
+		"default_item": "PSNCUREBERRY"
 	},
 	"PICKED_UP_MYSTERYBERRY_FROM_OMANYTE_ITEM_ROOM": {
 		"label": "Ruins of Alph - Omanyte Room Item 1",
@@ -1422,7 +1422,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphOmanyteItemRoomMysteryberry",
-		"default_item": "ITEM_MYSTERYBERRY"
+		"default_item": "MYSTERYBERRY"
 	},
 	"PICKED_UP_MYSTIC_WATER_FROM_OMANYTE_ITEM_ROOM": {
 		"label": "Ruins of Alph - Omanyte Room Item 2",
@@ -1430,7 +1430,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphOmanyteItemRoomMysticWater",
-		"default_item": "ITEM_MYSTIC_WATER"
+		"default_item": "MYSTIC_WATER"
 	},
 	"PICKED_UP_STAR_PIECE_FROM_OMANYTE_ITEM_ROOM": {
 		"label": "Ruins of Alph - Omanyte Room Item 3",
@@ -1438,7 +1438,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphOmanyteItemRoomStarPiece",
-		"default_item": "ITEM_STAR_PIECE"
+		"default_item": "STAR_PIECE"
 	},
 	"PICKED_UP_STARDUST_FROM_OMANYTE_ITEM_ROOM": {
 		"label": "Ruins of Alph - Omanyte Room Item 4",
@@ -1446,7 +1446,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "RuinsOfAlphOmanyteItemRoomStardust",
-		"default_item": "ITEM_STARDUST"
+		"default_item": "STARDUST"
 	},
 	"SILVER_CAVE_ITEM_ROOMS_FULL_RESTORE": {
 		"label": "Silver Cave 2F - Chambers Item 1",
@@ -1454,7 +1454,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveItemRoomsFullRestore",
-		"default_item": "ITEM_FULL_RESTORE"
+		"default_item": "FULL_RESTORE"
 	},
 	"SILVER_CAVE_ITEM_ROOMS_MAX_REVIVE": {
 		"label": "Silver Cave 2F - Chambers Item 2",
@@ -1462,12 +1462,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveItemRoomsMaxRevive",
-		"default_item": "ITEM_MAX_REVIVE"
+		"default_item": "MAX_REVIVE"
 	},
 	"SILVER_CAVE_OUTSIDE_HIDDEN_FULL_RESTORE": {
 		"label": "Outside Silver Cave - Hidden Item Across Water",
 		"flag": "EVENT_SILVER_CAVE_OUTSIDE_HIDDEN_FULL_RESTORE",
-		"default_item": "ITEM_FULL_RESTORE",
+		"default_item": "FULL_RESTORE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "SilverCaveOutsideHiddenFullRestore"
@@ -1478,12 +1478,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveRoom1EscapeRope",
-		"default_item": "ITEM_ESCAPE_ROPE"
+		"default_item": "ESCAPE_ROPE"
 	},
 	"SILVER_CAVE_ROOM_1_HIDDEN_DIRE_HIT": {
 		"label": "Silver Cave 1F - Hidden Item 1",
 		"flag": "EVENT_SILVER_CAVE_ROOM_1_HIDDEN_DIRE_HIT",
-		"default_item": "ITEM_DIRE_HIT",
+		"default_item": "DIRE_HIT",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "SilverCaveRoom1HiddenDireHit"
@@ -1491,7 +1491,7 @@
 	"SILVER_CAVE_ROOM_1_HIDDEN_ULTRA_BALL": {
 		"label": "Silver Cave 1F - Hidden Item 2",
 		"flag": "EVENT_SILVER_CAVE_ROOM_1_HIDDEN_ULTRA_BALL",
-		"default_item": "ITEM_ULTRA_BALL",
+		"default_item": "ULTRA_BALL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "SilverCaveRoom1HiddenUltraBall"
@@ -1502,7 +1502,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveRoom1MaxElixer",
-		"default_item": "ITEM_MAX_ELIXER"
+		"default_item": "MAX_ELIXER"
 	},
 	"SILVER_CAVE_ROOM_1_PROTEIN": {
 		"label": "Silver Cave 1F - Item 3",
@@ -1510,7 +1510,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveRoom1Protein",
-		"default_item": "ITEM_PROTEIN"
+		"default_item": "PROTEIN"
 	},
 	"SILVER_CAVE_ROOM_1_ULTRA_BALL": {
 		"label": "Silver Cave 1F - Item 4",
@@ -1518,7 +1518,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveRoom1UltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"SILVER_CAVE_ROOM_2_CALCIUM": {
 		"label": "Silver Cave 2F - Item 1",
@@ -1526,12 +1526,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveRoom2Calcium",
-		"default_item": "ITEM_CALCIUM"
+		"default_item": "CALCIUM"
 	},
 	"SILVER_CAVE_ROOM_2_HIDDEN_MAX_POTION": {
 		"label": "Silver Cave 2F - Hidden Item",
 		"flag": "EVENT_SILVER_CAVE_ROOM_2_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "SilverCaveRoom2HiddenMaxPotion"
@@ -1542,7 +1542,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveRoom2PPUp",
-		"default_item": "ITEM_PP_UP"
+		"default_item": "PP_UP"
 	},
 	"SILVER_CAVE_ROOM_2_ULTRA_BALL": {
 		"label": "Silver Cave 2F - Item 3",
@@ -1550,7 +1550,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SilverCaveRoom2UltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"SLOWPOKE_WELL_B1F_SUPER_POTION": {
 		"label": "Slowpoke Well B1F - Item 1",
@@ -1558,7 +1558,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SlowpokeWellB1FSuperPotion",
-		"default_item": "ITEM_SUPER_POTION"
+		"default_item": "SUPER_POTION"
 	},
 	"SLOWPOKE_WELL_B2F_TM_RAIN_DANCE": {
 		"label": "Slowpoke Well B2F - Item 1",
@@ -1566,7 +1566,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SlowpokeWellB2FTMRainDance",
-		"default_item": "ITEM_TM_RAIN_DANCE"
+		"default_item": "TM_RAIN_DANCE"
 	},
 	"SPROUT_TOWER_1F_PARLYZ_HEAL": {
 		"label": "Sprout Tower 1F - Item",
@@ -1574,7 +1574,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SproutTower1FParlyzHeal",
-		"default_item": "ITEM_PARLYZ_HEAL"
+		"default_item": "PARLYZ_HEAL"
 	},
 	"SPROUT_TOWER_2F_X_ACCURACY": {
 		"label": "Sprout Tower 2F - Item",
@@ -1582,7 +1582,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SproutTower2FXAccuracy",
-		"default_item": "ITEM_X_ACCURACY"
+		"default_item": "X_ACCURACY"
 	},
 	"SPROUT_TOWER_3F_ESCAPE_ROPE": {
 		"label": "Sprout Tower 3F - Item 1",
@@ -1590,7 +1590,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SproutTower3FEscapeRope",
-		"default_item": "ITEM_ESCAPE_ROPE"
+		"default_item": "ESCAPE_ROPE"
 	},
 	"SPROUT_TOWER_3F_POTION": {
 		"label": "Sprout Tower 3F - Item 2",
@@ -1598,7 +1598,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "SproutTower3FPotion",
-		"default_item": "ITEM_POTION"
+		"default_item": "POTION"
 	},
 	"TEAM_ROCKET_BASE_B1F_GUARD_SPEC": {
 		"label": "Rocket HQ B1F - Item 1",
@@ -1606,12 +1606,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB1FGuardSpec",
-		"default_item": "ITEM_GUARD_SPEC"
+		"default_item": "GUARD_SPEC"
 	},
 	"TEAM_ROCKET_BASE_B1F_HIDDEN_REVIVE": {
 		"label": "Rocket HQ B1F - Hidden Item in West",
 		"flag": "EVENT_TEAM_ROCKET_BASE_B1F_HIDDEN_REVIVE",
-		"default_item": "ITEM_REVIVE",
+		"default_item": "REVIVE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "TeamRocketBaseB1FHiddenRevive"
@@ -1622,7 +1622,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB1FHyperPotion",
-		"default_item": "ITEM_HYPER_POTION"
+		"default_item": "HYPER_POTION"
 	},
 	"TEAM_ROCKET_BASE_B1F_NUGGET": {
 		"label": "Rocket HQ B1F - Item 3",
@@ -1630,12 +1630,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB1FNugget",
-		"default_item": "ITEM_NUGGET"
+		"default_item": "NUGGET"
 	},
 	"TEAM_ROCKET_BASE_B2F_HIDDEN_FULL_HEAL": {
 		"label": "Rocket HQ B2F - Hidden Item",
 		"flag": "EVENT_TEAM_ROCKET_BASE_B2F_HIDDEN_FULL_HEAL",
-		"default_item": "ITEM_FULL_HEAL",
+		"default_item": "FULL_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "TeamRocketBaseB2FHiddenFullHeal"
@@ -1646,7 +1646,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB2FTMThief",
-		"default_item": "ITEM_TM_THIEF"
+		"default_item": "TM_THIEF"
 	},
 	"TEAM_ROCKET_BASE_B3F_FULL_HEAL": {
 		"label": "Rocket HQ B3F - Item 1",
@@ -1654,7 +1654,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB3FFullHeal",
-		"default_item": "ITEM_FULL_HEAL"
+		"default_item": "FULL_HEAL"
 	},
 	"TEAM_ROCKET_BASE_B3F_ICE_HEAL": {
 		"label": "Rocket HQ B3F - Item 2",
@@ -1662,7 +1662,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB3FIceHeal",
-		"default_item": "ITEM_ICE_HEAL"
+		"default_item": "ICE_HEAL"
 	},
 	"TEAM_ROCKET_BASE_B3F_PROTEIN": {
 		"label": "Rocket HQ B3F - Item 3",
@@ -1670,7 +1670,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB3FProtein",
-		"default_item": "ITEM_PROTEIN"
+		"default_item": "PROTEIN"
 	},
 	"TEAM_ROCKET_BASE_B3F_ULTRA_BALL": {
 		"label": "Rocket HQ B3F - Item 4",
@@ -1678,7 +1678,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB3FUltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"TEAM_ROCKET_BASE_B3F_X_SPECIAL": {
 		"label": "Rocket HQ B3F - Item 5",
@@ -1686,7 +1686,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TeamRocketBaseB3FXSpecial",
-		"default_item": "ITEM_X_SPECIAL"
+		"default_item": "X_SPECIAL"
 	},
 	"TIN_TOWER_3F_FULL_HEAL": {
 		"label": "Tin Tower 3F - Item",
@@ -1694,7 +1694,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower3FFullHeal",
-		"default_item": "ITEM_FULL_HEAL"
+		"default_item": "FULL_HEAL"
 	},
 	"TIN_TOWER_4F_ESCAPE_ROPE": {
 		"label": "Tin Tower 4F - Item 1",
@@ -1702,12 +1702,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower4FEscapeRope",
-		"default_item": "ITEM_ESCAPE_ROPE"
+		"default_item": "ESCAPE_ROPE"
 	},
 	"TIN_TOWER_4F_HIDDEN_MAX_POTION": {
 		"label": "Tin Tower 4F - Hidden Item in Center",
 		"flag": "EVENT_TIN_TOWER_4F_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "TinTower4FHiddenMaxPotion"
@@ -1718,7 +1718,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower4FPPUp",
-		"default_item": "ITEM_PP_UP"
+		"default_item": "PP_UP"
 	},
 	"TIN_TOWER_4F_ULTRA_BALL": {
 		"label": "Tin Tower 4F - Item 3",
@@ -1726,12 +1726,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower4FUltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"TIN_TOWER_5F_HIDDEN_CARBOS": {
 		"label": "Tin Tower 5F - Hidden Item in Southwest",
 		"flag": "EVENT_TIN_TOWER_5F_HIDDEN_CARBOS",
-		"default_item": "ITEM_CARBOS",
+		"default_item": "CARBOS",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "TinTower5FHiddenCarbos"
@@ -1739,7 +1739,7 @@
 	"TIN_TOWER_5F_HIDDEN_FULL_RESTORE": {
 		"label": "Tin Tower 5F - Hidden Item in Southeast",
 		"flag": "EVENT_TIN_TOWER_5F_HIDDEN_FULL_RESTORE",
-		"default_item": "ITEM_FULL_RESTORE",
+		"default_item": "FULL_RESTORE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "TinTower5FHiddenFullRestore"
@@ -1750,7 +1750,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower5FRareCandy",
-		"default_item": "ITEM_RARE_CANDY"
+		"default_item": "RARE_CANDY"
 	},
 	"TIN_TOWER_6F_MAX_POTION": {
 		"label": "Tin Tower 6F - Item",
@@ -1758,7 +1758,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower6FMaxPotion",
-		"default_item": "ITEM_MAX_POTION"
+		"default_item": "MAX_POTION"
 	},
 	"TIN_TOWER_7F_MAX_REVIVE": {
 		"label": "Tin Tower 7F - Item",
@@ -1766,7 +1766,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower7FMaxRevive",
-		"default_item": "ITEM_MAX_REVIVE"
+		"default_item": "MAX_REVIVE"
 	},
 	"TIN_TOWER_8F_FULL_RESTORE": {
 		"label": "Tin Tower 8F - Item 1",
@@ -1774,7 +1774,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower8FFullRestore",
-		"default_item": "ITEM_FULL_RESTORE"
+		"default_item": "FULL_RESTORE"
 	},
 	"TIN_TOWER_8F_MAX_ELIXER": {
 		"label": "Tin Tower 8F - Item 2",
@@ -1782,7 +1782,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower8FMaxElixer",
-		"default_item": "ITEM_MAX_ELIXER"
+		"default_item": "MAX_ELIXER"
 	},
 	"TIN_TOWER_8F_NUGGET": {
 		"label": "Tin Tower 8F - Item 3",
@@ -1790,7 +1790,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower8FNugget",
-		"default_item": "ITEM_NUGGET"
+		"default_item": "NUGGET"
 	},
 	"TIN_TOWER_9F_HP_UP": {
 		"label": "Tin Tower 9F - Item",
@@ -1798,7 +1798,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TinTower9FHPUp",
-		"default_item": "ITEM_HP_UP"
+		"default_item": "HP_UP"
 	},
 	"TOHJO_FALLS_MOON_STONE": {
 		"label": "Tohjo Falls - Item",
@@ -1806,12 +1806,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "TohjoFallsMoonStone",
-		"default_item": "ITEM_MOON_STONE"
+		"default_item": "MOON_STONE"
 	},
 	"UNDERGROUND_PATH_HIDDEN_FULL_RESTORE": {
 		"label": "Underground Path - Hidden Item in North",
 		"flag": "EVENT_UNDERGROUND_PATH_HIDDEN_FULL_RESTORE",
-		"default_item": "ITEM_FULL_RESTORE",
+		"default_item": "FULL_RESTORE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "UndergroundPathHiddenFullRestore"
@@ -1819,7 +1819,7 @@
 	"UNDERGROUND_PATH_HIDDEN_X_SPECIAL": {
 		"label": "Underground Path - Hidden Item in South",
 		"flag": "EVENT_UNDERGROUND_PATH_HIDDEN_X_SPECIAL",
-		"default_item": "ITEM_X_SPECIAL",
+		"default_item": "X_SPECIAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "UndergroundPathHiddenXSpecial"
@@ -1830,7 +1830,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "UnionCave1FAwakening",
-		"default_item": "ITEM_AWAKENING"
+		"default_item": "AWAKENING"
 	},
 	"UNION_CAVE_1F_GREAT_BALL": {
 		"label": "Union Cave 1F - Item 2",
@@ -1838,7 +1838,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "UnionCave1FGreatBall",
-		"default_item": "ITEM_GREAT_BALL"
+		"default_item": "GREAT_BALL"
 	},
 	"UNION_CAVE_1F_POTION": {
 		"label": "Union Cave 1F - Item 3",
@@ -1846,7 +1846,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "UnionCave1FPotion",
-		"default_item": "ITEM_POTION"
+		"default_item": "POTION"
 	},
 	"UNION_CAVE_1F_X_ATTACK": {
 		"label": "Union Cave 1F - Item 4",
@@ -1854,7 +1854,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "UnionCave1FXAttack",
-		"default_item": "ITEM_X_ATTACK"
+		"default_item": "X_ATTACK"
 	},
 	"UNION_CAVE_B1F_TM_SWIFT": {
 		"label": "Union Cave B1F - Item 1",
@@ -1862,7 +1862,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "UnionCaveB1FTMSwift",
-		"default_item": "ITEM_TM_SWIFT"
+		"default_item": "TM_SWIFT"
 	},
 	"UNION_CAVE_B1F_X_DEFEND": {
 		"label": "Union Cave B1F - Item 2",
@@ -1870,7 +1870,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "UnionCaveB1FXDefend",
-		"default_item": "ITEM_X_DEFEND"
+		"default_item": "X_DEFEND"
 	},
 	"UNION_CAVE_B2F_ELIXER": {
 		"label": "Union Cave B2F - Item 1",
@@ -1878,7 +1878,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "UnionCaveB2FElixer",
-		"default_item": "ITEM_ELIXER"
+		"default_item": "ELIXER"
 	},
 	"UNION_CAVE_B2F_HYPER_POTION": {
 		"label": "Union Cave B2F - Item 2",
@@ -1886,12 +1886,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "UnionCaveB2FHyperPotion",
-		"default_item": "ITEM_HYPER_POTION"
+		"default_item": "HYPER_POTION"
 	},
 	"VERMILION_CITY_HIDDEN_FULL_HEAL": {
 		"label": "Vermilion City - Hidden Item by Gym",
 		"flag": "EVENT_VERMILION_CITY_HIDDEN_FULL_HEAL",
-		"default_item": "ITEM_FULL_HEAL",
+		"default_item": "FULL_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "VermilionCityHiddenFullHeal"
@@ -1899,7 +1899,7 @@
 	"VERMILION_PORT_HIDDEN_IRON": {
 		"label": "Vermilion Port - Hidden Item in Buoy",
 		"flag": "EVENT_VERMILION_PORT_HIDDEN_IRON",
-		"default_item": "ITEM_IRON",
+		"default_item": "IRON",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "VermilionPortHiddenIron"
@@ -1910,7 +1910,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "VictoryRoadFullHeal",
-		"default_item": "ITEM_FULL_HEAL"
+		"default_item": "FULL_HEAL"
 	},
 	"VICTORY_ROAD_FULL_RESTORE": {
 		"label": "Victory Road 2F - Item 1",
@@ -1918,12 +1918,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "VictoryRoadFullRestore",
-		"default_item": "ITEM_FULL_RESTORE"
+		"default_item": "FULL_RESTORE"
 	},
 	"VICTORY_ROAD_HIDDEN_FULL_HEAL": {
 		"label": "Victory Road 1F - Hidden Item on Southwest Boulder",
 		"flag": "EVENT_VICTORY_ROAD_HIDDEN_FULL_HEAL",
-		"default_item": "ITEM_FULL_HEAL",
+		"default_item": "FULL_HEAL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "VictoryRoadHiddenFullHeal"
@@ -1931,7 +1931,7 @@
 	"VICTORY_ROAD_HIDDEN_MAX_POTION": {
 		"label": "Victory Road 2F - Hidden Item on Northwest Boulder",
 		"flag": "EVENT_VICTORY_ROAD_HIDDEN_MAX_POTION",
-		"default_item": "ITEM_MAX_POTION",
+		"default_item": "MAX_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "VictoryRoadHiddenMaxPotion"
@@ -1942,7 +1942,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "VictoryRoadHPUp",
-		"default_item": "ITEM_HP_UP"
+		"default_item": "HP_UP"
 	},
 	"VICTORY_ROAD_MAX_REVIVE": {
 		"label": "Victory Road 1F - Item 2",
@@ -1950,7 +1950,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "VictoryRoadMaxRevive",
-		"default_item": "ITEM_MAX_REVIVE"
+		"default_item": "MAX_REVIVE"
 	},
 	"VICTORY_ROAD_TM_EARTHQUAKE": {
 		"label": "Victory Road 2F - Item 3",
@@ -1958,12 +1958,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "VictoryRoadTMEarthquake",
-		"default_item": "ITEM_TM_EARTHQUAKE"
+		"default_item": "TM_EARTHQUAKE"
 	},
 	"VIOLET_CITY_HIDDEN_HYPER_POTION": {
 		"label": "Violet City - Hidden Item Behind Cut Tree",
 		"flag": "EVENT_VIOLET_CITY_HIDDEN_HYPER_POTION",
-		"default_item": "ITEM_HYPER_POTION",
+		"default_item": "HYPER_POTION",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "VioletCityHiddenHyperPotion"
@@ -1974,7 +1974,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "VioletCityPPUp",
-		"default_item": "ITEM_PP_UP"
+		"default_item": "PP_UP"
 	},
 	"VIOLET_CITY_RARE_CANDY": {
 		"label": "Violet City - Item 2",
@@ -1982,7 +1982,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "VioletCityRareCandy",
-		"default_item": "ITEM_RARE_CANDY"
+		"default_item": "RARE_CANDY"
 	},
 	"WHIRL_ISLAND_B1F_CALCIUM": {
 		"label": "Whirl Island B1F - Item 1",
@@ -1990,7 +1990,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandB1FCalcium",
-		"default_item": "ITEM_CALCIUM"
+		"default_item": "CALCIUM"
 	},
 	"WHIRL_ISLAND_B1F_CARBOS": {
 		"label": "Whirl Island B1F - Item 2",
@@ -1998,7 +1998,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandB1FCarbos",
-		"default_item": "ITEM_CARBOS"
+		"default_item": "CARBOS"
 	},
 	"WHIRL_ISLAND_B1F_ESCAPE_ROPE": {
 		"label": "Whirl Island B1F - Item 3",
@@ -2006,7 +2006,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandB1FEscapeRope",
-		"default_item": "ITEM_ESCAPE_ROPE"
+		"default_item": "ESCAPE_ROPE"
 	},
 	"WHIRL_ISLAND_B1F_FULL_RESTORE": {
 		"label": "Whirl Island B1F - Item 4",
@@ -2014,12 +2014,12 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandB1FFullRestore",
-		"default_item": "ITEM_FULL_RESTORE"
+		"default_item": "FULL_RESTORE"
 	},
 	"WHIRL_ISLAND_B1F_HIDDEN_FULL_RESTORE": {
 		"label": "Whirl Island B1F - Hiddden Item on Boulder in West",
 		"flag": "EVENT_WHIRL_ISLAND_B1F_HIDDEN_FULL_RESTORE",
-		"default_item": "ITEM_FULL_RESTORE",
+		"default_item": "FULL_RESTORE",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "WhirlIslandB1FHiddenFullRestore"
@@ -2027,7 +2027,7 @@
 	"WHIRL_ISLAND_B1F_HIDDEN_RARE_CANDY": {
 		"label": "Whirl Island B1F - Hiddden Item in Northeast",
 		"flag": "EVENT_WHIRL_ISLAND_B1F_HIDDEN_RARE_CANDY",
-		"default_item": "ITEM_RARE_CANDY",
+		"default_item": "RARE_CANDY",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "WhirlIslandB1FHiddenRareCandy"
@@ -2035,7 +2035,7 @@
 	"WHIRL_ISLAND_B1F_HIDDEN_ULTRA_BALL": {
 		"label": "Whirl Island B1F - Hiddden Item in Northwest",
 		"flag": "EVENT_WHIRL_ISLAND_B1F_HIDDEN_ULTRA_BALL",
-		"default_item": "ITEM_ULTRA_BALL",
+		"default_item": "ULTRA_BALL",
 		"type": "hiddenitem",
 		"tags": ["Hidden"],
 		"script": "WhirlIslandB1FHiddenUltraBall"
@@ -2046,7 +2046,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandB1FNugget",
-		"default_item": "ITEM_NUGGET"
+		"default_item": "NUGGET"
 	},
 	"WHIRL_ISLAND_B2F_FULL_RESTORE": {
 		"label": "Whirl Island B2F - Item 1",
@@ -2054,7 +2054,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandB2FFullRestore",
-		"default_item": "ITEM_FULL_RESTORE"
+		"default_item": "FULL_RESTORE"
 	},
 	"WHIRL_ISLAND_B2F_MAX_ELIXER": {
 		"label": "Whirl Island B2F - Item 2",
@@ -2062,7 +2062,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandB2FMaxElixer",
-		"default_item": "ITEM_MAX_ELIXER"
+		"default_item": "MAX_ELIXER"
 	},
 	"WHIRL_ISLAND_B2F_MAX_REVIVE": {
 		"label": "Whirl Island B2F - Item 3",
@@ -2070,7 +2070,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandB2FMaxRevive",
-		"default_item": "ITEM_MAX_REVIVE"
+		"default_item": "MAX_REVIVE"
 	},
 	"WHIRL_ISLAND_NE_ULTRA_BALL": {
 		"label": "Whirl Island 1F - Item in Northeast",
@@ -2078,7 +2078,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandNEUltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 	"WHIRL_ISLAND_SW_ULTRA_BALL": {
 		"label": "Whirl Island 1F - Item in Southwest",
@@ -2086,7 +2086,7 @@
 		"type": "itemball",
 		"tags": ["Overworld"],
 		"script": "WhirlIslandSWUltraBall",
-		"default_item": "ITEM_ULTRA_BALL"
+		"default_item": "ULTRA_BALL"
 	},
 
 	"TM49_FURY_CUTTER": {
@@ -2094,7 +2094,7 @@
 		"flag": "EVENT_GOT_TM49_FURY_CUTTER",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_FURY_CUTTER",
+		"default_item": "TM_FURY_CUTTER",
 		"script": "AP_NPC_AzaleaGym_TM_FURY_CUTTER"
 	},
 	"ROUTE_34_ILEX_FOREST_GATE_LASS": {
@@ -2102,7 +2102,7 @@
 		"flag": "EVENT_ROUTE_34_ILEX_FOREST_GATE_LASS",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_GS_BALL",
+		"default_item": "GS_BALL",
 		"script": "AP_NPC_AzaleaTown_GS_BALL"
 	},
 	"EVERSTONE_FROM_BILLS_GRANDPA": {
@@ -2110,7 +2110,7 @@
 		"flag": "EVENT_GOT_EVERSTONE_FROM_BILLS_GRANDPA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_EVERSTONE",
+		"default_item": "EVERSTONE",
 		"script": "AP_NPC_BillsHouse_EVERSTONE"
 	},
 	"LEAF_STONE_FROM_BILLS_GRANDPA": {
@@ -2118,7 +2118,7 @@
 		"flag": "EVENT_GOT_LEAF_STONE_FROM_BILLS_GRANDPA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_LEAF_STONE",
+		"default_item": "LEAF_STONE",
 		"script": "AP_NPC_BillsHouse_LEAF_STONE"
 	},
 	"WATER_STONE_FROM_BILLS_GRANDPA": {
@@ -2126,7 +2126,7 @@
 		"flag": "EVENT_GOT_WATER_STONE_FROM_BILLS_GRANDPA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_WATER_STONE",
+		"default_item": "WATER_STONE",
 		"script": "AP_NPC_BillsHouse_WATER_STONE"
 	},
 	"FIRE_STONE_FROM_BILLS_GRANDPA": {
@@ -2134,7 +2134,7 @@
 		"flag": "EVENT_GOT_FIRE_STONE_FROM_BILLS_GRANDPA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_FIRE_STONE",
+		"default_item": "FIRE_STONE",
 		"script": "AP_NPC_BillsHouse_FIRE_STONE"
 	},
 	"THUNDERSTONE_FROM_BILLS_GRANDPA": {
@@ -2142,7 +2142,7 @@
 		"flag": "EVENT_GOT_THUNDERSTONE_FROM_BILLS_GRANDPA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_THUNDERSTONE",
+		"default_item": "THUNDERSTONE",
 		"script": "AP_NPC_BillsHouse_THUNDERSTONE"
 	},
 	"SPELL_TAG_FROM_SANTOS": {
@@ -2150,7 +2150,7 @@
 		"flag": "EVENT_GOT_SPELL_TAG_FROM_SANTOS",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_SPELL_TAG",
+		"default_item": "SPELL_TAG",
 		"script": "AP_NPC_BlackthornCity_SPELL_TAG"
 	},
 	"TM19_GIGA_DRAIN": {
@@ -2158,7 +2158,7 @@
 		"flag": "EVENT_GOT_TM19_GIGA_DRAIN",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_GIGA_DRAIN",
+		"default_item": "TM_GIGA_DRAIN",
 		"script": "AP_NPC_CeladonGym_TM_GIGA_DRAIN"
 	},
 	"TM03_CURSE": {
@@ -2166,7 +2166,7 @@
 		"flag": "EVENT_GOT_TM03_CURSE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_CURSE",
+		"default_item": "TM_CURSE",
 		"script": "AP_NPC_CeladonMansionRoofHouse_TM_CURSE"
 	},
 	"CHARCOAL_IN_CHARCOAL_KILN": {
@@ -2174,7 +2174,7 @@
 		"flag": "EVENT_GOT_CHARCOAL_IN_CHARCOAL_KILN",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_CHARCOAL",
+		"default_item": "CHARCOAL",
 		"script": "AP_NPC_CharcoalKiln_CHARCOAL"
 	},
 	"MYSTIC_WATER_IN_CHERRYGROVE": {
@@ -2182,7 +2182,7 @@
 		"flag": "EVENT_GOT_MYSTIC_WATER_IN_CHERRYGROVE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_MYSTIC_WATER",
+		"default_item": "MYSTIC_WATER",
 		"script": "AP_NPC_CherrygroveCity_MYSTIC_WATER"
 	},
 	"HM02_FLY": {
@@ -2190,7 +2190,7 @@
 		"flag": "EVENT_GOT_HM02_FLY",
 		"type": "giveitem",
 		"tags": ["HM"],
-		"default_item": "ITEM_HM_FLY",
+		"default_item": "HM_FLY",
 		"script": "AP_NPC_CianwoodCity_HM_FLY"
 	},
 	"TM01_DYNAMICPUNCH": {
@@ -2198,7 +2198,7 @@
 		"flag": "EVENT_GOT_TM01_DYNAMICPUNCH",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_DYNAMICPUNCH",
+		"default_item": "TM_DYNAMICPUNCH",
 		"script": "AP_NPC_CianwoodGym_TM_DYNAMICPUNCH"
 	},
 	"SECRETPOTION_FROM_PHARMACY": {
@@ -2206,7 +2206,7 @@
 		"flag": "EVENT_GOT_SECRETPOTION_FROM_PHARMACY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_SECRETPOTION",
+		"default_item": "SECRETPOTION",
 		"script": "AP_NPC_CianwoodPharmacy_SECRETPOTION"
 	},
 	"PASS_FROM_COPYCAT": {
@@ -2214,7 +2214,7 @@
 		"flag": "EVENT_GOT_PASS_FROM_COPYCAT",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_PASS",
+		"default_item": "PASS",
 		"script": "AP_NPC_CopycatsHouse2F_PASS"
 	},
 	"HM03_SURF": {
@@ -2222,7 +2222,7 @@
 		"flag": "EVENT_GOT_HM03_SURF",
 		"type": "giveitem",
 		"tags": ["HM"],
-		"default_item": "ITEM_HM_SURF",
+		"default_item": "HM_SURF",
 		"script": "AP_NPC_DanceTheater_HM_SURF"
 	},
 	"BLACKGLASSES_IN_DARK_CAVE": {
@@ -2230,7 +2230,7 @@
 		"flag": "EVENT_GOT_BLACKGLASSES_IN_DARK_CAVE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_BLACKGLASSES",
+		"default_item": "BLACKGLASSES",
 		"script": "AP_NPC_DarkCaveBlackthornEntrance_BLACKGLASSES"
 	},
 	"TM30_SHADOW_BALL": {
@@ -2238,7 +2238,7 @@
 		"flag": "EVENT_GOT_TM30_SHADOW_BALL",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_SHADOW_BALL",
+		"default_item": "TM_SHADOW_BALL",
 		"script": "AP_NPC_EcruteakGym_TM_SHADOW_BALL"
 	},
 	"ITEMFINDER": {
@@ -2246,7 +2246,7 @@
 		"flag": "EVENT_GOT_ITEMFINDER",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_ITEMFINDER",
+		"default_item": "ITEMFINDER",
 		"script": "AP_NPC_EcruteakItemfinderHouse_ITEMFINDER"
 	},
 	"EVERSTONE_FROM_ELM": {
@@ -2254,7 +2254,7 @@
 		"flag": "EVENT_GOT_EVERSTONE_FROM_ELM",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_EVERSTONE",
+		"default_item": "EVERSTONE",
 		"script": "AP_NPC_ElmsLab_EVERSTONE"
 	},
 	"MASTER_BALL_FROM_ELM": {
@@ -2262,7 +2262,7 @@
 		"flag": "EVENT_GOT_MASTER_BALL_FROM_ELM",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_MASTER_BALL",
+		"default_item": "MASTER_BALL",
 		"script": "AP_NPC_ElmsLab_MASTER_BALL"
 	},
 	"SS_TICKET_FROM_ELM": {
@@ -2270,7 +2270,7 @@
 		"flag": "EVENT_GOT_SS_TICKET_FROM_ELM",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_S_S_TICKET",
+		"default_item": "S_S_TICKET",
 		"script": "AP_NPC_ElmsLab_S_S_TICKET"
 	},
 	"METAL_COAT_FROM_GRANDPA_ON_SS_AQUA": {
@@ -2278,7 +2278,7 @@
 		"flag": "EVENT_GOT_METAL_COAT_FROM_GRANDPA_ON_SS_AQUA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_METAL_COAT",
+		"default_item": "METAL_COAT",
 		"script": "AP_NPC_FastShipCabins_SE_SSE_CaptainsCabin_METAL_COAT"
 	},
 	"TM06_TOXIC": {
@@ -2286,7 +2286,7 @@
 		"flag": "EVENT_GOT_TM06_TOXIC",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_TOXIC",
+		"default_item": "TM_TOXIC",
 		"script": "AP_NPC_FuchsiaGym_TM_TOXIC"
 	},
 	"BICYCLE": {
@@ -2294,7 +2294,7 @@
 		"flag": "EVENT_GOT_BICYCLE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_BICYCLE",
+		"default_item": "BICYCLE",
 		"script": "AP_NPC_GoldenrodBikeShop_BICYCLE"
 	},
 	"SQUIRTBOTTLE": {
@@ -2302,7 +2302,7 @@
 		"flag": "EVENT_GOT_SQUIRTBOTTLE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_SQUIRTBOTTLE",
+		"default_item": "SQUIRTBOTTLE",
 		"script": "AP_NPC_GoldenrodFlowerShop_SQUIRTBOTTLE"
 	},
 	"TM45_ATTRACT": {
@@ -2310,7 +2310,7 @@
 		"flag": "EVENT_GOT_TM45_ATTRACT",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_ATTRACT",
+		"default_item": "TM_ATTRACT",
 		"script": "AP_NPC_GoldenrodGym_TM_ATTRACT"
 	},
 	"GS_BALL_FROM_GOLDENROD_POKEMON_CENTER": {
@@ -2318,7 +2318,7 @@
 		"flag": "EVENT_GOT_GS_BALL_FROM_GOLDENROD_POKEMON_CENTER",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_GS_BALL",
+		"default_item": "GS_BALL",
 		"script": "AP_NPC_GoldenrodPokecenter1F_GS_BALL"
 	},
 	"RECEIVED_CARD_KEY": {
@@ -2326,7 +2326,7 @@
 		"flag": "EVENT_RECEIVED_CARD_KEY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_CARD_KEY",
+		"default_item": "CARD_KEY",
 		"script": "AP_NPC_GoldenrodUndergroundWarehouse_CARD_KEY"
 	},
 	"HM01_CUT": {
@@ -2334,7 +2334,7 @@
 		"flag": "EVENT_GOT_HM01_CUT",
 		"type": "giveitem",
 		"tags": ["HM"],
-		"default_item": "ITEM_HM_CUT",
+		"default_item": "HM_CUT",
 		"script": "AP_NPC_IlexForest_HM_CUT"
 	},
 	"TM02_HEADBUTT": {
@@ -2342,7 +2342,7 @@
 		"flag": "EVENT_GOT_TM02_HEADBUTT",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_HEADBUTT",
+		"default_item": "TM_HEADBUTT",
 		"script": "AP_NPC_IlexForest_TM_HEADBUTT"
 	},
 	"KURT_GAVE_YOU_LURE_BALL": {
@@ -2350,7 +2350,7 @@
 		"flag": "EVENT_KURT_GAVE_YOU_LURE_BALL",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_LURE_BALL",
+		"default_item": "LURE_BALL",
 		"script": "AP_NPC_KurtsHouse_LURE_BALL"
 	},
 	"BLACKBELT_FROM_WESLEY": {
@@ -2358,7 +2358,7 @@
 		"flag": "EVENT_GOT_BLACKBELT_FROM_WESLEY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_BLACKBELT_I",
+		"default_item": "BLACKBELT_I",
 		"script": "AP_NPC_LakeOfRage_BLACKBELT_I"
 	},
 	"TM10_HIDDEN_POWER": {
@@ -2366,7 +2366,7 @@
 		"flag": "EVENT_GOT_TM10_HIDDEN_POWER",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_HIDDEN_POWER",
+		"default_item": "TM_HIDDEN_POWER",
 		"script": "AP_NPC_LakeOfRageHiddenPowerHouse_TM_HIDDEN_POWER"
 	},
 	"TM16_ICY_WIND": {
@@ -2374,7 +2374,7 @@
 		"flag": "EVENT_GOT_TM16_ICY_WIND",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_ICY_WIND",
+		"default_item": "TM_ICY_WIND",
 		"script": "AP_NPC_MahoganyGym_TM_ICY_WIND"
 	},
 	"MYSTERY_EGG": {
@@ -2382,7 +2382,7 @@
 		"flag": "EVENT_GOT_MYSTERY_EGG",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_MYSTERY_EGG",
+		"default_item": "MYSTERY_EGG",
 		"script": "AP_NPC_MrPokemonsHouse_MYSTERY_EGG"
 	},
 	"EXP_SHARE": {
@@ -2390,7 +2390,7 @@
 		"flag": "EVENT_GOT_EXP_SHARE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_EXP_SHARE",
+		"default_item": "EXP_SHARE",
 		"script": "AP_NPC_MrPokemonsHouse_EXP_SHARE"
 	},
 	"TM29_PSYCHIC": {
@@ -2398,7 +2398,7 @@
 		"flag": "EVENT_GOT_TM29_PSYCHIC",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_PSYCHIC_M",
+		"default_item": "TM_PSYCHIC_M",
 		"script": "AP_NPC_MrPsychicsHouse_TM_PSYCHIC_M"
 	},
 	"QUICK_CLAW": {
@@ -2406,7 +2406,7 @@
 		"flag": "EVENT_GOT_QUICK_CLAW",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_QUICK_CLAW",
+		"default_item": "QUICK_CLAW",
 		"script": "AP_NPC_NationalPark_QUICK_CLAW"
 	},
 	"HM04_STRENGTH": {
@@ -2414,7 +2414,7 @@
 		"flag": "EVENT_GOT_HM04_STRENGTH",
 		"type": "giveitem",
 		"tags": ["HM"],
-		"default_item": "ITEM_HM_STRENGTH",
+		"default_item": "HM_STRENGTH",
 		"script": "AP_NPC_OlivineCafe_HM_STRENGTH"
 	},
 	"GOOD_ROD": {
@@ -2422,7 +2422,7 @@
 		"flag": "EVENT_GOT_GOOD_ROD",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_GOOD_ROD",
+		"default_item": "GOOD_ROD",
 		"script": "AP_NPC_OlivineGoodRodHouse_GOOD_ROD"
 	},
 	"TM23_IRON_TAIL": {
@@ -2430,7 +2430,7 @@
 		"flag": "EVENT_GOT_TM23_IRON_TAIL",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_IRON_TAIL",
+		"default_item": "TM_IRON_TAIL",
 		"script": "AP_NPC_OlivineGym_TM_IRON_TAIL"
 	},
 	"PROTEIN_FROM_HUEY": {
@@ -2438,7 +2438,7 @@
 		"flag": "EVENT_GOT_PROTEIN_FROM_HUEY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_PROTEIN",
+		"default_item": "PROTEIN",
 		"script": "AP_NPC_OlivineLighthouse2F_PROTEIN"
 	},
 	"SILVER_WING": {
@@ -2446,7 +2446,7 @@
 		"flag": "EVENT_GOT_SILVER_WING",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_SILVER_WING",
+		"default_item": "SILVER_WING",
 		"script": "AP_NPC_PewterCity_SILVER_WING"
 	},
 	"LISTENED_TO_FAN_CLUB_PRESIDENT": {
@@ -2454,7 +2454,7 @@
 		"flag": "EVENT_LISTENED_TO_FAN_CLUB_PRESIDENT",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_RARE_CANDY",
+		"default_item": "RARE_CANDY",
 		"script": "AP_NPC_PokemonFanClub_RARE_CANDY"
 	},
 	"LOST_ITEM_FROM_FAN_CLUB": {
@@ -2462,7 +2462,7 @@
 		"flag": "EVENT_GOT_LOST_ITEM_FROM_FAN_CLUB",
 		"type": "giveitem",
 		"tags": ["KeyItem"],
-		"default_item": "ITEM_LOST_ITEM",
+		"default_item": "LOST_ITEM",
 		"script": "AP_NPC_PokemonFanClub_LOST_ITEM"
 	},
 	"TM07_ZAP_CANNON": {
@@ -2470,7 +2470,7 @@
 		"flag": "EVENT_GOT_TM07_ZAP_CANNON",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_ZAP_CANNON",
+		"default_item": "TM_ZAP_CANNON",
 		"script": "AP_NPC_PowerPlant_TM_ZAP_CANNON"
 	},
 	"BUENA_BLUE_CARD": {
@@ -2478,7 +2478,7 @@
 		"flag": "EVENT_MET_BUENA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_BLUE_CARD",
+		"default_item": "BLUE_CARD",
 		"script": "AP_NPC_RadioTower2F_BLUE_CARD"
 	},
 	"SUNNY_DAY_FROM_RADIO_TOWER": {
@@ -2486,7 +2486,7 @@
 		"flag": "EVENT_GOT_SUNNY_DAY_FROM_RADIO_TOWER",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_SUNNY_DAY",
+		"default_item": "TM_SUNNY_DAY",
 		"script": "AP_NPC_RadioTower3F_TM_SUNNY_DAY"
 	},
 	"PINK_BOW_FROM_MARY": {
@@ -2494,7 +2494,7 @@
 		"flag": "EVENT_GOT_PINK_BOW_FROM_MARY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_PINK_BOW",
+		"default_item": "PINK_BOW",
 		"script": "AP_NPC_RadioTower4F_PINK_BOW"
 	},
 	"BEAT_ROCKET_EXECUTIVEM_3": {
@@ -2502,7 +2502,7 @@
 		"flag": "EVENT_BEAT_ROCKET_EXECUTIVEM_3",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_BASEMENT_KEY",
+		"default_item": "BASEMENT_KEY",
 		"script": "AP_NPC_RadioTower5F_BASEMENT_KEY"
 	},
 	"CLEAR_BELL": {
@@ -2510,7 +2510,7 @@
 		"flag": "EVENT_GOT_CLEAR_BELL",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_CLEAR_BELL",
+		"default_item": "CLEAR_BELL",
 		"script": "AP_NPC_RadioTower5F_CLEAR_BELL"
 	},
 	"SUPER_ROD": {
@@ -2518,7 +2518,7 @@
 		"flag": "EVENT_GOT_SUPER_ROD",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_SUPER_ROD",
+		"default_item": "SUPER_ROD",
 		"script": "AP_NPC_Route12SuperRodHouse_SUPER_ROD"
 	},
 	"CLEARED_NUGGET_BRIDGE": {
@@ -2526,7 +2526,7 @@
 		"flag": "EVENT_CLEARED_NUGGET_BRIDGE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_NUGGET",
+		"default_item": "NUGGET",
 		"script": "AP_NPC_Route25_NUGGET"
 	},
 	"TM37_SANDSTORM": {
@@ -2534,7 +2534,7 @@
 		"flag": "EVENT_GOT_TM37_SANDSTORM",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_SANDSTORM",
+		"default_item": "TM_SANDSTORM",
 		"script": "AP_NPC_Route27SandstormHouse_TM_SANDSTORM"
 	},
 	"TM47_STEEL_WING": {
@@ -2542,7 +2542,7 @@
 		"flag": "EVENT_GOT_TM47_STEEL_WING",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_STEEL_WING",
+		"default_item": "TM_STEEL_WING",
 		"script": "AP_NPC_Route28SteelWingHouse_TM_STEEL_WING"
 	},
 	"PINK_BOW_FROM_TUSCANY": {
@@ -2550,7 +2550,7 @@
 		"flag": "EVENT_GOT_PINK_BOW_FROM_TUSCANY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_PINK_BOW",
+		"default_item": "PINK_BOW",
 		"script": "AP_NPC_Route29_PINK_BOW"
 	},
 	"NUGGET_FROM_GUY": {
@@ -2558,7 +2558,7 @@
 		"flag": "EVENT_GOT_NUGGET_FROM_GUY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_NUGGET",
+		"default_item": "NUGGET",
 		"script": "AP_NPC_Route2NuggetHouse_NUGGET"
 	},
 	"HP_UP_FROM_JOEY": {
@@ -2566,7 +2566,7 @@
 		"flag": "EVENT_GOT_HP_UP_FROM_JOEY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_HP_UP",
+		"default_item": "HP_UP",
 		"script": "AP_NPC_Route30_HP_UP"
 	},
 	"BERRY_FROM_ROUTE_30_HOUSE": {
@@ -2574,7 +2574,7 @@
 		"flag": "EVENT_GOT_BERRY_FROM_ROUTE_30_HOUSE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_BERRY",
+		"default_item": "BERRY",
 		"script": "AP_NPC_Route30BerryHouse_BERRY"
 	},
 	"TM50_NIGHTMARE": {
@@ -2582,7 +2582,7 @@
 		"flag": "EVENT_GOT_TM50_NIGHTMARE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_NIGHTMARE",
+		"default_item": "TM_NIGHTMARE",
 		"script": "AP_NPC_Route31_TM_NIGHTMARE"
 	},
 	"MIRACLE_SEED_IN_ROUTE_32": {
@@ -2590,7 +2590,7 @@
 		"flag": "EVENT_GOT_MIRACLE_SEED_IN_ROUTE_32",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_MIRACLE_SEED",
+		"default_item": "MIRACLE_SEED",
 		"script": "AP_NPC_Route32_MIRACLE_SEED"
 	},
 	"TM05_ROAR": {
@@ -2598,7 +2598,7 @@
 		"flag": "EVENT_GOT_TM05_ROAR",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_ROAR",
+		"default_item": "TM_ROAR",
 		"script": "AP_NPC_Route32_TM_ROAR"
 	},
 	"POISON_BARB_FROM_FRIEDA": {
@@ -2606,7 +2606,7 @@
 		"flag": "EVENT_GOT_POISON_BARB_FROM_FRIEDA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_POISON_BARB",
+		"default_item": "POISON_BARB",
 		"script": "AP_NPC_Route32_POISON_BARB"
 	},
 	"OLD_ROD": {
@@ -2614,7 +2614,7 @@
 		"flag": "EVENT_GOT_OLD_ROD",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_OLD_ROD",
+		"default_item": "OLD_ROD",
 		"script": "AP_NPC_Route32Pokecenter1F_OLD_ROD"
 	},
 	"GINA_GAVE_LEAF_STONE": {
@@ -2622,7 +2622,7 @@
 		"flag": "EVENT_GINA_GAVE_LEAF_STONE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_LEAF_STONE",
+		"default_item": "LEAF_STONE",
 		"script": "AP_NPC_Route34_LEAF_STONE"
 	},
 	"SOFT_SAND_FROM_KATE": {
@@ -2630,7 +2630,7 @@
 		"flag": "EVENT_GOT_SOFT_SAND_FROM_KATE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_SOFT_SAND",
+		"default_item": "SOFT_SAND",
 		"script": "AP_NPC_Route34_SOFT_SAND"
 	},
 	"TM12_SWEET_SCENT": {
@@ -2638,7 +2638,7 @@
 		"flag": "EVENT_GOT_TM12_SWEET_SCENT",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_SWEET_SCENT",
+		"default_item": "TM_SWEET_SCENT",
 		"script": "AP_NPC_Route34IlexForestGate_TM_SWEET_SCENT"
 	},
 	"HP_UP_FROM_RANDY": {
@@ -2646,7 +2646,7 @@
 		"flag": "EVENT_GOT_HP_UP_FROM_RANDY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_HP_UP",
+		"default_item": "HP_UP",
 		"script": "AP_NPC_Route35GoldenrodGate_HP_UP"
 	},
 	"TM08_ROCK_SMASH": {
@@ -2654,7 +2654,7 @@
 		"flag": "EVENT_GOT_TM08_ROCK_SMASH",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_ROCK_SMASH",
+		"default_item": "TM_ROCK_SMASH",
 		"script": "AP_NPC_Route36_TM_ROCK_SMASH"
 	},
 	"ALAN_GAVE_FIRE_STONE": {
@@ -2662,7 +2662,7 @@
 		"flag": "EVENT_ALAN_GAVE_FIRE_STONE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_FIRE_STONE",
+		"default_item": "FIRE_STONE",
 		"script": "AP_NPC_Route36_FIRE_STONE"
 	},
 	"HARD_STONE_FROM_ARTHUR": {
@@ -2670,7 +2670,7 @@
 		"flag": "EVENT_GOT_HARD_STONE_FROM_ARTHUR",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_HARD_STONE",
+		"default_item": "HARD_STONE",
 		"script": "AP_NPC_Route36_HARD_STONE"
 	},
 	"MAGNET_FROM_SUNNY": {
@@ -2678,7 +2678,7 @@
 		"flag": "EVENT_GOT_MAGNET_FROM_SUNNY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_MAGNET",
+		"default_item": "MAGNET",
 		"script": "AP_NPC_Route37_MAGNET"
 	},
 	"DANA_GAVE_THUNDERSTONE": {
@@ -2686,7 +2686,7 @@
 		"flag": "EVENT_DANA_GAVE_THUNDERSTONE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_THUNDERSTONE",
+		"default_item": "THUNDERSTONE",
 		"script": "AP_NPC_Route38_THUNDERSTONE"
 	},
 	"TM13_SNORE_FROM_MOOMOO_FARM": {
@@ -2694,7 +2694,7 @@
 		"flag": "EVENT_GOT_TM13_SNORE_FROM_MOOMOO_FARM",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_SNORE",
+		"default_item": "TM_SNORE",
 		"script": "AP_NPC_Route39Farmhouse_TM_SNORE"
 	},
 	"SHARP_BEAK_FROM_MONICA": {
@@ -2702,7 +2702,7 @@
 		"flag": "EVENT_GOT_SHARP_BEAK_FROM_MONICA",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_SHARP_BEAK",
+		"default_item": "SHARP_BEAK",
 		"script": "AP_NPC_Route40_SHARP_BEAK"
 	},
 	"TULLY_GAVE_WATER_STONE": {
@@ -2710,7 +2710,7 @@
 		"flag": "EVENT_TULLY_GAVE_WATER_STONE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_WATER_STONE",
+		"default_item": "WATER_STONE",
 		"script": "AP_NPC_Route42_WATER_STONE"
 	},
 	"TIFFANY_GAVE_PINK_BOW": {
@@ -2718,7 +2718,7 @@
 		"flag": "EVENT_TIFFANY_GAVE_PINK_BOW",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_PINK_BOW",
+		"default_item": "PINK_BOW",
 		"script": "AP_NPC_Route43_PINK_BOW"
 	},
 	"TM36_SLUDGE_BOMB": {
@@ -2726,7 +2726,7 @@
 		"flag": "EVENT_GOT_TM36_SLUDGE_BOMB",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_SLUDGE_BOMB",
+		"default_item": "TM_SLUDGE_BOMB",
 		"script": "AP_NPC_Route43Gate_TM_SLUDGE_BOMB"
 	},
 	"CARBOS_FROM_VANCE": {
@@ -2734,7 +2734,7 @@
 		"flag": "EVENT_GOT_CARBOS_FROM_VANCE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_CARBOS",
+		"default_item": "CARBOS",
 		"script": "AP_NPC_Route44_CARBOS"
 	},
 	"CLEANSE_TAG": {
@@ -2742,7 +2742,7 @@
 		"flag": "EVENT_GOT_CLEANSE_TAG",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_CLEANSE_TAG",
+		"default_item": "CLEANSE_TAG",
 		"script": "AP_NPC_Route5CleanseTagHouse_CLEANSE_TAG"
 	},
 	"UP_GRADE": {
@@ -2750,7 +2750,7 @@
 		"flag": "EVENT_GOT_UP_GRADE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_UP_GRADE",
+		"default_item": "UP_GRADE",
 		"script": "AP_NPC_SilphCo1F_UP_GRADE"
 	},
 	"KINGS_ROCK_IN_SLOWPOKE_WELL": {
@@ -2758,7 +2758,7 @@
 		"flag": "EVENT_GOT_KINGS_ROCK_IN_SLOWPOKE_WELL",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_KINGS_ROCK",
+		"default_item": "KINGS_ROCK",
 		"script": "AP_NPC_SlowpokeWellB2F_KINGS_ROCK"
 	},
 	"HM05_FLASH": {
@@ -2766,7 +2766,7 @@
 		"flag": "EVENT_GOT_HM05_FLASH",
 		"type": "giveitem",
 		"tags": ["HM"],
-		"default_item": "ITEM_HM_FLASH",
+		"default_item": "HM_FLASH",
 		"script": "AP_NPC_SproutTower3F_HM_FLASH"
 	},
 	"HM06_WHIRLPOOL": {
@@ -2774,7 +2774,7 @@
 		"flag": "EVENT_GOT_HM06_WHIRLPOOL",
 		"type": "giveitem",
 		"tags": ["HM"],
-		"default_item": "ITEM_HM_WHIRLPOOL",
+		"default_item": "HM_WHIRLPOOL",
 		"script": "AP_NPC_TeamRocketBaseB2F_HM_WHIRLPOOL"
 	},
 	"HP_UP_FROM_VERMILION_GUY": {
@@ -2782,7 +2782,7 @@
 		"flag": "EVENT_GOT_HP_UP_FROM_VERMILION_GUY",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_HP_UP",
+		"default_item": "HP_UP",
 		"script": "AP_NPC_VermilionCity_HP_UP"
 	},
 	"TM31_MUD_SLAP": {
@@ -2790,7 +2790,7 @@
 		"flag": "EVENT_GOT_TM31_MUD_SLAP",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_MUD_SLAP",
+		"default_item": "TM_MUD_SLAP",
 		"script": "AP_NPC_VioletGym_TM_MUD_SLAP"
 	},
 	"TM42_DREAM_EATER": {
@@ -2798,7 +2798,7 @@
 		"flag": "EVENT_GOT_TM42_DREAM_EATER",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_DREAM_EATER",
+		"default_item": "TM_DREAM_EATER",
 		"script": "AP_NPC_ViridianCity_TM_DREAM_EATER"
 	},
 	"TM24_DRAGONBREATH": {
@@ -2806,7 +2806,7 @@
 		"flag": "EVENT_GOT_TM24_DRAGONBREATH",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_TM_DRAGONBREATH",
+		"default_item": "TM_DRAGONBREATH",
 		"script": "AP_NPC_BlackthornGym_TM_DRAGONBREATH"
 	},
 	"POTION_FROM_ELMS_AIDE": {
@@ -2814,7 +2814,7 @@
 		"flag": "EVENT_GOT_POTION_FROM_ELMS_AIDE",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
-		"default_item": "ITEM_POTION",
+		"default_item": "POTION",
 		"script": "AP_NPC_ElmsLab_POTION"
 	},
 
@@ -2823,7 +2823,7 @@
 		"flag": "EVENT_ZEPHYR_BADGE_FROM_FALKNER",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_ZEPHYR_BADGE",
+		"default_item": "ZEPHYR_BADGE",
 		"script": "AP_Badge_VioletGym_ZEPHYR_BADGE"
 	},
 	"HIVE_BADGE_FROM_BUGSY": {
@@ -2831,7 +2831,7 @@
 		"flag": "EVENT_HIVE_BADGE_FROM_BUGSY",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_HIVE_BADGE",
+		"default_item": "HIVE_BADGE",
 		"script": "AP_Badge_AzaleaGym_HIVE_BADGE"
 	},
 	"PLAIN_BADGE_FROM_WHITNEY": {
@@ -2839,7 +2839,7 @@
 		"flag": "EVENT_PLAIN_BADGE_FROM_WHITNEY",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_PLAIN_BADGE",
+		"default_item": "PLAIN_BADGE",
 		"script": "AP_Badge_GoldenrodGym_PLAIN_BADGE"
 	},
 	"FOG_BADGE_FROM_MORTY": {
@@ -2847,7 +2847,7 @@
 		"flag": "EVENT_FOG_BADGE_FROM_MORTY",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_FOG_BADGE",
+		"default_item": "FOG_BADGE",
 		"script": "AP_Badge_EcruteakGym_FOG_BADGE"
 	},
 	"STORM_BADGE_FROM_CHUCK": {
@@ -2855,7 +2855,7 @@
 		"flag": "EVENT_STORM_BADGE_FROM_CHUCK",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_STORM_BADGE",
+		"default_item": "STORM_BADGE",
 		"script": "AP_Badge_CianwoodGym_STORM_BADGE"
 	},
 	"MINERAL_BADGE_FROM_JASMINE": {
@@ -2863,7 +2863,7 @@
 		"flag": "EVENT_MINERAL_BADGE_FROM_JASMINE",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_MINERAL_BADGE",
+		"default_item": "MINERAL_BADGE",
 		"script": "AP_Badge_OlivineGym_MINERAL_BADGE"
 	},
 	"GLACIER_BADGE_FROM_PRYCE": {
@@ -2871,7 +2871,7 @@
 		"flag": "EVENT_GLACIER_BADGE_FROM_PRYCE",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_GLACIER_BADGE",
+		"default_item": "GLACIER_BADGE",
 		"script": "AP_Badge_MahoganyGym_GLACIER_BADGE"
 	},
 	"RISING_BADGE_FROM_CLAIR": {
@@ -2879,7 +2879,7 @@
 		"flag": "EVENT_RISING_BADGE_FROM_CLAIR",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_RISING_BADGE",
+		"default_item": "RISING_BADGE",
 		"script": "AP_Badge_BlackthornGym_RISING_BADGE"
 	},
 
@@ -2888,7 +2888,7 @@
 		"flag": "EVENT_BOULDER_BADGE_FROM_BROCK",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_BOULDER_BADGE",
+		"default_item": "BOULDER_BADGE",
 		"script": "AP_Badge_PewterGym_BOULDER_BADGE"
 	},
 	"CASCADE_BADGE_FROM_MISTY": {
@@ -2896,7 +2896,7 @@
 		"flag": "EVENT_CASCADE_BADGE_FROM_MISTY",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_CASCADE_BADGE",
+		"default_item": "CASCADE_BADGE",
 		"script": "AP_Badge_CeruleanGym_CASCADE_BADGE"
 	},
 	"THUNDER_BADGE_FROM_LTSURGE": {
@@ -2904,7 +2904,7 @@
 		"flag": "EVENT_THUNDER_BADGE_FROM_LTSURGE",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_THUNDER_BADGE",
+		"default_item": "THUNDER_BADGE",
 		"script": "AP_Badge_VermillionGym_THUNDER_BADGE"
 	},
 	"RAINBOW_BADGE_FROM_ERIKA": {
@@ -2912,7 +2912,7 @@
 		"flag": "EVENT_RAINBOW_BADGE_FROM_ERIKA",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_RAINBOW_BADGE",
+		"default_item": "RAINBOW_BADGE",
 		"script": "AP_Badge_CeladonGym_RAINBOW_BADGE"
 	},
 	"SOUL_BADGE_FROM_JANINE": {
@@ -2920,7 +2920,7 @@
 		"flag": "EVENT_SOUL_BADGE_FROM_JANINE",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_SOUL_BADGE",
+		"default_item": "SOUL_BADGE",
 		"script": "AP_Badge_FuschiaGym_SOUL_BADGE"
 	},
 	"MARSH_BADGE_FROM_SABRINA": {
@@ -2928,7 +2928,7 @@
 		"flag": "EVENT_MARSH_BADGE_FROM_SABRINA",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_MARSH_BADGE",
+		"default_item": "MARSH_BADGE",
 		"script": "AP_Badge_SaffronGym_MARSH_BADGE"
 	},
 	"VOLCANO_BADGE_FROM_BLAINE": {
@@ -2936,7 +2936,7 @@
 		"flag": "EVENT_VOLCANO_BADGE_FROM_BLAINE",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_VOLCANO_BADGE",
+		"default_item": "VOLCANO_BADGE",
 		"script": "AP_Badge_SeafoamGym_VOLCANO_BADGE"
 	},
 	"EARTH_BADGE_FROM_BLUE": {
@@ -2944,7 +2944,7 @@
 		"flag": "EVENT_EARTH_BADGE_FROM_BLUE",
 		"type": "giveitem",
 		"tags": ["Badge"],
-		"default_item": "ITEM_EARTH_BADGE",
+		"default_item": "EARTH_BADGE",
 		"script": "AP_Badge_ViridianGym_EARTH_BADGE"
 	},
 	"RED_SCALE": {
@@ -2952,7 +2952,7 @@
 		"flag": "EVENT_GOT_RED_SCALE",
 		"type": "giveitem",
 		"tags": ["KeyItem"],
-		"default_item": "ITEM_RED_SCALE",
+		"default_item": "RED_SCALE",
 		"script": "AP_KeyItem_LakeOfRage_RED_SCALE"
 	}
 }

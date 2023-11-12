@@ -42,7 +42,7 @@ for component in components:
         break
 
 
-EXPECTED_ROM_NAME = "CGB-APV0-00pokemon_crystal"
+EXPECTED_ROM_NAME = "CGB-APV0-01pokemon_crystal"
 
 
 class PokemonCrystalClient(BizHawkClient):
@@ -127,7 +127,7 @@ class PokemonCrystalClient(BizHawkClient):
                 [overworld_guard]
             )
 
-            if read_result is None:  # Not in overworld, or save block moved
+            if read_result is None:
                 return
 
             game_clear = False

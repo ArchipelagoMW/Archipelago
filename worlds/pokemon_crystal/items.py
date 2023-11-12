@@ -47,3 +47,8 @@ def get_item_classification(item_code: int) -> ItemClassification:
     Returns the item classification for a given AP item id (code)
     """
     return data.items[reverse_offset_item_value(item_code)].classification
+
+
+def item_const_name_to_id(const_name):
+    ids = [item_id for item_id, item_data in data.items.items() if item_data.item_const == const_name]
+    return ids[0] if len(ids) else 0

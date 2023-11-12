@@ -1,4 +1,13 @@
-from Options import Toggle, Choice
+from Options import Toggle, Choice, DefaultOnToggle, Range
+
+
+class Goal(Choice):
+    """Elite Four: collect 8 badges and enter the Hall of Fame
+        Red: collect 16 badges and defeat Red at Mt. Silver"""
+    display_name = "Goal"
+    default = 0
+    option_elite_four = 0
+    option_red = 1
 
 
 class RandomizeHiddenItems(Toggle):
@@ -7,16 +16,35 @@ class RandomizeHiddenItems(Toggle):
     default = 0
 
 
+class RequireItemfinder(DefaultOnToggle):
+    """Hidden items require Itemfinder in logic"""
+    display_name = "Require Itemfinder"
+
+
 class RandomizeStarters(Toggle):
     """Randomizes species of starter Pokemon"""
     display_name = "Randomize Starters"
-    default = 1
+    default = 0
 
 
 class RandomizeWilds(Toggle):
     """Randomizes species of wild Pokemon"""
     display_name = "Randomize Wilds"
-    default = 1
+    default = 0
+
+
+class RandomizeStaticPokemon(Toggle):
+    """Randomizes species of static Pokemon encounters"""
+    display_name = "Randomize Static Pokemon"
+
+
+class RandomizeTrainerParties(Choice):
+    """Randomizes Pokemon in emey trainer parties"""
+    display_name = "Randomize Trainer Parties"
+    default = 0
+    option_vanilla = 0
+    option_match_types = 1
+    option_completely_random = 2
 
 
 class RandomizeLearnsets(Choice):
@@ -25,9 +53,9 @@ class RandomizeLearnsets(Choice):
     vanilla: Vanilla movesets"""
     display_name = "Randomize Learnsets"
     default = 0
-    option_start_with_four_moves = 2
-    option_randomize = 1
     option_vanilla = 0
+    option_randomize = 1
+    option_start_with_four_moves = 2
 
 
 class FullTmHmCompatibility(Toggle):
@@ -48,22 +76,33 @@ class BetterMarts(Toggle):
     default = 0
 
 
-class Goal(Choice):
-    """Elite Four: collect 8 badges and enter the Hall of Fame
-        Red: collect 16 badges and defeat Red at Mt. Silver"""
-    display_name = "Goal"
-    default = 0
-    option_elite_four = 0
-    option_red = 1
+class ExpModifier(Range):
+    """Scale the amount of Experience Points given in battle.
+    Default is 20, for double set to 40, for half set to 10, etc.
+    Must be between 1 and 255"""
+    display_name = "Experience Modifier"
+    default = 20
+    range_start = 1
+    range_end = 255
+
+
+class ItemReceiveSound(DefaultOnToggle):
+    """Play item received sound on receiving a remote item"""
+    display_name = "Item Receive Sound"
 
 
 pokemon_crystal_options = {
+    "goal": Goal,
     "randomize_hidden_items": RandomizeHiddenItems,
+    "require_itemfinder": RequireItemfinder,
     "randomize_starters": RandomizeStarters,
     "randomize_wilds": RandomizeWilds,
+    "randomize_static_pokemon": RandomizeStaticPokemon,
+    "randomize_trainer_parties": RandomizeTrainerParties,
     "randomize_learnsets": RandomizeLearnsets,
     "full_tmhm_compatibility": FullTmHmCompatibility,
     "blind_trainers": BlindTrainers,
     "better_marts": BetterMarts,
-    "goal": Goal
+    "experience_modifier": ExpModifier,
+    "item_receive_sound": ItemReceiveSound
 }

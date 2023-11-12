@@ -461,71 +461,26 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         get_location("Mount Mortar 1F Inside - Item 1"),
         can_strength
     )
-    set_rule(
-        get_location("Mount Mortar 1F Inside - Item 2"),
-        can_strength
-    )
-    set_rule(
-        get_location("Mount Mortar 1F Inside - Item 6"),
-        can_strength
-    )
-    set_rule(
-        get_location("Mount Mortar 1F Inside - Item 7"),
-        can_strength
-    )
-
-    # 1F Inside Back, from 2F with waterfall
-
-    set_rule(
-        get_location("Mount Mortar 1F Inside - Item 3"),
-        lambda state: can_surf(state) and can_waterfall(state)
-    )
-    set_rule(
-        get_location("Mount Mortar 1F Inside - Item 4"),
-        lambda state: can_surf(state) and (
-            can_strength(state) or can_waterfall(state))
-    )
-    set_rule(
-        get_location("Mount Mortar 1F Inside - Item 5"),
-        lambda state: can_surf(state) and can_waterfall(state)
-    )
-    if hidden():
-        set_rule(
-            get_location("Mount Mortar 1F Inside - Hidden Item"),
-            lambda state: can_surf(state) and can_waterfall(state)
-        )
+    set_rule(get_location("Mount Mortar 1F Inside - Item 2"), can_strength)
+    set_rule(get_location("Mount Mortar 1F Inside - Item 6"), can_strength)
+    set_rule(get_location("Mount Mortar 1F Inside - Item 7"), can_strength)
 
     # 1F C -> B1F Everything needs surf so im being lazy
 
-    set_rule(
-        get_entrance(
-            "REGION_MOUNT_MORTAR_1F_OUTSIDE:CENTER -> REGION_MOUNT_MORTAR_B1F"),
-        can_surf
-    )
+    set_rule(get_entrance("REGION_MOUNT_MORTAR_1F_OUTSIDE:CENTER -> REGION_MOUNT_MORTAR_B1F"), can_surf)
 
     # Behind boulder, need to come down from 2F for this
 
-    if hidden():
-        set_rule(
-            get_location("Mount Mortar B1F - Hidden Item on Boulder"),
-            lambda state: can_surf(state) and can_waterfall(state)
-        )
+    set_rule(get_entrance("REGION_MOUNT_MORTAR_B1F:BACK -> REGION_MOUNT_MORTAR_B1F"),
+             lambda state: can_strength(state) and can_surf(state))
 
     # Mahogany Town
 
-    set_rule(
-        get_entrance(
-            "REGION_MAHOGANY_TOWN -> REGION_MAHOGANY_MART_1F"),
-        lambda state: state.has(
-            "EVENT_DECIDED_TO_HELP_LANCE", world.player)
-    )
+    set_rule(get_entrance("REGION_MAHOGANY_TOWN -> REGION_MAHOGANY_MART_1F"),
+             lambda state: state.has("EVENT_DECIDED_TO_HELP_LANCE", world.player))
 
-    set_rule(
-        get_entrance(
-            "REGION_MAHOGANY_TOWN -> REGION_MAHOGANY_GYM"),
-        lambda state: state.has(
-            "EVENT_CLEARED_ROCKET_HIDEOUT", world.player)
-    )
+    set_rule(get_entrance("REGION_MAHOGANY_TOWN -> REGION_MAHOGANY_GYM"),
+             lambda state: state.has("EVENT_CLEARED_ROCKET_HIDEOUT", world.player))
 
     set_rule(
         get_entrance("REGION_MAHOGANY_TOWN -> REGION_ROUTE_44"),
@@ -1032,3 +987,11 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             "EVENT_OPENED_MT_SILVER"),
         lambda state: has_n_badges(state, 16)
     )
+
+    if world.options.require_itemfinder:
+        for location in world.multiworld.get_locations(world.player):
+            if "Hidden" in location.tags:
+                add_rule(
+                    location,
+                    lambda state: state.has("Itemfinder", world.player)
+                )

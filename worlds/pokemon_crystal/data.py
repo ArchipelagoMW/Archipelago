@@ -11,6 +11,7 @@ BASE_OFFSET = 7680000
 class ItemData(NamedTuple):
     label: str
     item_id: int
+    item_const: str
     classification: ItemClassification
     tags: FrozenSet[str]
 
@@ -47,9 +48,33 @@ class RegionData:
         self.events = []
 
 
-class EvoAttackData(NamedTuple):
-    evolutions: List[str]
-    moves: List[str]
+class LearnsetData(NamedTuple):
+    level: int
+    move: str
+
+
+class PokemonData(NamedTuple):
+    id: int
+    base_stats: List[int]
+    types: List[str]
+    evolutions: List[List[str]]
+    learnset: List[LearnsetData]
+    tm_hm: List[str]
+
+
+class MoveData(NamedTuple):
+    id: int
+    type: str
+    power: int
+    accuracy: int
+    pp: int
+    is_hm: bool
+
+
+class TrainerData(NamedTuple):
+    trainer_type: str
+    pokemon: List[List[str]]
+    name_length: int
 
 
 class PokemonCrystalData:
@@ -59,8 +84,9 @@ class PokemonCrystalData:
     regions: Dict[str, RegionData]
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
-    evo_attacks: Dict[str, EvoAttackData]
-    move_ids: Dict[str, int]
+    trainers: Dict[str, TrainerData]
+    pokemon: Dict[str, PokemonData]
+    moves: Dict[str, MoveData]
 
     def __init__(self) -> None:
         self.rom_addresses = {}
@@ -69,8 +95,9 @@ class PokemonCrystalData:
         self.regions = {}
         self.locations = {}
         self.items = {}
-        self.evo_attacks = {}
-        self.move_ids = {}
+        self.trainers = {}
+        self.pokemon = {}
+        self.moves = {}
 
 
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
@@ -86,12 +113,15 @@ def _init() -> None:
     regions_json = load_json_data("regions.json")
 
     items_json = load_json_data("items.json")
-    item_codes_json = load_json_data("item_codes.json")
 
     data_json = load_json_data("data.json")
     rom_address_data = data_json["rom_addresses"]
     ram_address_data = data_json["ram_addresses"]
     event_flag_data = data_json["event_flags"]
+    item_codes = data_json["items"]
+    pokemon_data = data_json["pokemon"]
+    move_data = data_json["moves"]
+    trainer_data = data_json["trainers"]
 
     claimed_locations: Set[str] = set()
     claimed_warps: Set[str] = set()
@@ -111,7 +141,7 @@ def _init() -> None:
                 location_name,
                 location_json["label"],
                 region_name,
-                item_codes_json[location_json["default_item"]],
+                item_codes[location_json["default_item"]],
                 rom_address_data[location_json["script"]],
                 event_flag_data[location_json["flag"]],
                 frozenset(location_json["tags"]),
@@ -149,9 +179,10 @@ def _init() -> None:
             item_classification = ItemClassification.filler
             # raise ValueError(f"Unknown classification {attributes['classification']} for item {item_constant_name}")
 
-        data.items[item_codes_json[item_constant_name]] = ItemData(
+        data.items[item_codes[item_constant_name]] = ItemData(
             attributes["name"],
-            item_codes_json[item_constant_name],
+            item_codes[item_constant_name],
+            item_constant_name,
             item_classification,
             frozenset(attributes["tags"])
         )
@@ -168,14 +199,35 @@ def _init() -> None:
     for event_name, event_number in event_flag_data.items():
         data.event_flags[event_name] = event_number
 
-    data.evo_attacks = {}
-    for pokemon_name, pokemon_data in data_json["evos_attacks"].items():
-        data.evo_attacks[pokemon_name] = EvoAttackData(
-            pokemon_data["evolutions"], pokemon_data["moves"])
+    data.pokemon = {}
+    for pokemon_name, pokemon_data in data_json["pokemon"].items():
+        data.pokemon[pokemon_name] = PokemonData(
+            pokemon_data["id"],
+            pokemon_data["base_stats"],
+            pokemon_data["types"],
+            pokemon_data["evolutions"],
+            [LearnsetData(move[0], move[1])
+             for move in pokemon_data["learnset"]],
+            pokemon_data["tm_hm"])
 
-    data.move_ids = {}
-    for move_name, move_id in data_json["constants"]["move_ids"].items():
-        data.move_ids[move_name] = move_id
+    data.moves = {}
+    for move_name, move_attributes in move_data.items():
+        data.moves[move_name] = MoveData(
+            move_attributes["id"],
+            move_attributes["type"],
+            move_attributes["power"],
+            move_attributes["accuracy"],
+            move_attributes["pp"],
+            move_attributes["is_hm"],
+        )
+
+    data.trainers = {}
+    for trainer_name, trainer_attributes in trainer_data.items():
+        data.trainers[trainer_name] = TrainerData(
+            trainer_attributes["trainer_type"],
+            trainer_attributes["pokemon"],
+            trainer_attributes["name_length"]
+        )
 
 
 _init()

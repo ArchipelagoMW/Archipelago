@@ -6,7 +6,7 @@ import bsdiff4
 from worlds.Files import APDeltaPatch
 from settings import get_settings
 
-from .items import reverse_offset_item_value
+from .items import reverse_offset_item_value, item_const_name_to_id
 from .data import data
 
 if TYPE_CHECKING:
@@ -50,115 +50,139 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 [184],
                 location.rom_address
             )
-    starters = [get_random_poke(random), get_random_poke(
-        random), get_random_poke(random)]
 
-    # static = {
-    # 	"RedGyarados": get_random_poke(random),
-    # 	"Sudowoodo": get_random_poke(random),
-    # 	"Suicune": get_random_poke(random),
-    # 	"Ho_Oh": get_random_poke(random),
-    # 	"UnionCaveLapras": get_random_poke(random),
-    # 	"Snorlax": get_random_poke(random),
-    # 	"Lugia": get_random_poke(random),
-    # 	"CatchTutorial_1": get_random_poke(random),
-    # 	"CatchTutorial_2": get_random_poke(random),
-    # 	"CatchTutorial_3": get_random_poke(random),
-    # 	"RocketHQTrap_1": get_random_poke(random),
-    # 	"RocketHQTrap_2": get_random_poke(random),
-    # 	"RocketHQTrap_3": get_random_poke(random),
-    # 	"RocketHQElectrode_1": get_random_poke(random),
-    # 	"RocketHQElectrode_2": get_random_poke(random),
-    # 	"RocketHQElectrode_3": get_random_poke(random)
-    # }
+    static = {
+        "RedGyarados": 2,
+        "Sudowoodo": 0,
+        "Suicune": 2,
+        "Ho_Oh": 2,
+        "UnionCaveLapras": 2,
+        "Snorlax": 2,
+        "Lugia": 2,
+        "CatchTutorial_1": 0,
+        "CatchTutorial_2": 0,
+        "CatchTutorial_3": 0,
+        "RocketHQTrap_1": 0,
+        "RocketHQTrap_2": 0,
+        "RocketHQTrap_3": 0,
+        "RocketHQElectrode_1": 2,
+        "RocketHQElectrode_2": 2,
+        "RocketHQElectrode_3": 2
+    }
 
-    for address_name, address in data.rom_addresses.items():
-        if world.options.randomize_wilds:
+    if world.options.randomize_static_pokemon:
+        for pokemon, count in static.items():
+            new_pokemon = get_random_poke(random)
+            base_flag = "AP_Static_" + pokemon
+            if count == 0:
+                address = data.rom_addresses[base_flag] + 1
+                write_bytes(patched_rom, [new_pokemon], address)
+            else:
+                for i in range(1, count + 1):
+                    address = data.rom_addresses[base_flag + "_" + str(i)] + 1
+                    write_bytes(patched_rom, [new_pokemon], address)
+
+    if world.options.randomize_starters:
+        for i in range(1, 5):
+            cyndaquil_address = data.rom_addresses["AP_Starter_CYNDAQUIL_" + str(i)] + 1
+            cyndaquil_mon = data.pokemon[world.generated_starters[0][0]].id
+            totodile_address = data.rom_addresses["AP_Starter_TOTODILE_" + str(i)] + 1
+            totodile_mon = data.pokemon[world.generated_starters[1][0]].id
+            chikorita_address = data.rom_addresses["AP_Starter_CHIKORITA_" + str(i)] + 1
+            chikorita_mon = data.pokemon[world.generated_starters[2][0]].id
+            write_bytes(patched_rom, [cyndaquil_mon], cyndaquil_address)
+            write_bytes(patched_rom, [totodile_mon], totodile_address)
+            write_bytes(patched_rom, [chikorita_mon], chikorita_address)
+            if i == 4:
+                write_bytes(patched_rom, [get_random_helditem(random)], cyndaquil_address + 2)
+                write_bytes(patched_rom, [get_random_helditem(random)], totodile_address + 2)
+                write_bytes(patched_rom, [get_random_helditem(random)], chikorita_address + 2)
+
+    if world.options.randomize_wilds:
+        for address_name, address in data.rom_addresses.items():
             if (address_name.startswith("AP_WildGrass")):
                 cur_address = address + 4
                 for i in range(21):
-                    write_bytes(
-                        patched_rom, [get_random_poke(random)], cur_address)
+                    write_bytes(patched_rom, [get_random_poke(random)], cur_address)
                     cur_address += 2
             if (address_name.startswith("AP_WildWater")):
                 cur_address = address + 2
                 for i in range(3):
-                    write_bytes(
-                        patched_rom, [get_random_poke(random)], cur_address)
+                    write_bytes(patched_rom, [get_random_poke(random)], cur_address)
                     cur_address += 2
             if address_name == "AP_Misc_Intro_Wooper":
-                write_bytes(
-                    patched_rom, [get_random_poke(random)], address + 1)
-        if world.options.randomize_starters:
-            if (address_name.startswith("AP_Starter_CYNDAQUIL")):
-                cur_address = address + 1
-                write_bytes(patched_rom, [starters[0]], cur_address)
-                if address_name.endswith("4"):
-                    write_bytes(
-                        patched_rom, [get_random_helditem(random)], cur_address + 2)
-            if (address_name.startswith("AP_Starter_TOTODILE")):
-                cur_address = address + 1
-                write_bytes(patched_rom, [starters[1]], cur_address)
-                if address_name.endswith("4"):
-                    write_bytes(
-                        patched_rom, [get_random_helditem(random)], cur_address + 2)
-            if (address_name.startswith("AP_Starter_CHIKORITA")):
-                cur_address = address + 1
-                write_bytes(patched_rom, [starters[2]], cur_address)
-                if address_name.endswith("4"):
-                    write_bytes(
-                        patched_rom, [get_random_helditem(random)], cur_address + 2)
-        if world.options.full_tmhm_compatibility:
-            if (address_name == "BaseData"):
-                cur_address = address
-                for i in range(251):
-                    cur_address += 24
-                    write_bytes(
-                        patched_rom, [255, 255, 255, 255, 255, 255, 255, 15], cur_address)
-                    cur_address += 8
-        if world.options.blind_trainers:
-            if address_name == "AP_Setting_Blind_Trainers":
-                write_bytes(patched_rom, [0xC9], address)  # 0xC9 = ret
-        if world.options.randomize_learnsets:
-            if address_name.endswith("EvosAttacks"):
-                pkmn_name = address_name[0:-11].upper()
-                learnset_data = data.evo_attacks[pkmn_name]
-                cur_address = address + (3 * len(learnset_data.evolutions)) + 1
-                move_levels = []
-                if world.options.randomize_learnsets > 1:
-                    for move in learnset_data.moves:
-                        if move[1] == "NO_MOVE":
-                            move_levels.append(1)
-                for move in learnset_data.moves:
-                    if move[1] != "NO_MOVE":
-                        move_levels.append(move[0])
-                for level in move_levels:
-                    write_bytes(
-                        patched_rom, [level, get_random_move(random)], cur_address)
-                    cur_address += 2
-        if world.options.better_marts:
-            if address_name == "Marts":
-                better_mart_address = data.rom_addresses["MartBetterMart"] - 0x10000
-                better_mart_bytes = better_mart_address.to_bytes(2, "little")
-                cur_address = address
-                for i in range(33):  # marts before goldenrod
-                    # skip goldenrod and celadon
-                    if i not in [6, 7, 8, 9, 10, 11, 12, 23, 24, 25, 26, 27]:
-                        write_bytes(
-                            patched_rom, better_mart_bytes, cur_address)
-                    cur_address += 2
+                write_bytes(patched_rom, [get_random_poke(random)], address + 1)
 
-        # Set slot name
+    if world.options.full_tmhm_compatibility:
+        address = data.rom_addresses["BaseData"]
+        for i in range(251):
+            address += 24
+            write_bytes(patched_rom, [255, 255, 255, 255, 255, 255, 255, 15], address)
+            address += 8
+
+    if world.options.randomize_learnsets > 0:
+        for pkmn_name, pkmn_data in world.generated_pokemon.items():
+            address = data.rom_addresses["AP_EvosAttacks_" + pkmn_name]
+            address = address + (3 * len(pkmn_data.evolutions)) + 1
+            for move in pkmn_data.learnset:
+                move_id = data.moves[move.move].id
+                write_bytes(patched_rom, [move.level, move_id], address)
+                address += 2
+
+    for trainer_name, trainer_data in world.generated_trainers.items():
+        address = data.rom_addresses["AP_TrainerParty_" + trainer_name]
+        address += trainer_data.name_length + 1  # skip name and type
+        for pokemon in trainer_data.pokemon:
+            pokemon_data = [pokemon[0]]
+            pokemon_data.append(data.pokemon[pokemon[1]].id)
+            if trainer_data.trainer_type in ["TRAINERTYPE_ITEM_MOVES", "TRAINERTYPE_ITEM"]:
+                item_id = item_const_name_to_id(pokemon[2])
+                pokemon_data.append(item_id)
+            if trainer_data.trainer_type in ["TRAINERTYPE_ITEM_MOVES", "TRAINERTYPE_MOVES"]:
+                for i in range(-4, 0):
+                    if pokemon[i] != "NO_MOVE":
+                        move_id = data.moves[pokemon[i]].id
+                        pokemon_data.append(move_id)
+            write_bytes(patched_rom, pokemon_data, address)
+            address += len(pokemon)
+
+    if world.options.blind_trainers:
+        address = data.rom_addresses["AP_Setting_Blind_Trainers"]
+        write_bytes(patched_rom, [0xC9], address)  # 0xC9 = ret
+
+    if not world.options.item_receive_sound:
+        address = data.rom_addresses["AP_Setting_ItemSFX"] + 1
+        write_bytes(patched_rom, [0], address)
+
+    if world.options.better_marts:
+        mart_address = data.rom_addresses["Marts"]
+        better_mart_address = data.rom_addresses["MartBetterMart"] - 0x10000
+        better_mart_bytes = better_mart_address.to_bytes(2, "little")
+        for i in range(33):
+            # skip goldenrod and celadon
+            if i not in [6, 7, 8, 9, 10, 11, 12, 23, 24, 25, 26, 27]:
+                write_bytes(
+                    patched_rom, better_mart_bytes, mart_address)
+            mart_address += 2
+
+    exp_modifier_address = data.rom_addresses["AP_Setting_ExpModifier"] + 1
+    write_bytes(patched_rom, [world.options.experience_modifier], exp_modifier_address)
+
+    pc_items_address = data.rom_addresses["sPCItems"]
+    write_bytes(patched_rom, [25, 26], pc_items_address)
+    badges_address = data.rom_addresses["sBadges"]
+    write_bytes(patched_rom, [15, 240], badges_address)
+
+    # Set slot name
     for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):
-        write_bytes(patched_rom, [byte],
-                    data.rom_addresses["AP_Seed_Name"] + i)
+        write_bytes(patched_rom, [byte], data.rom_addresses["AP_Seed_Name"] + i)
 
     out_file_name = world.multiworld.get_out_file_name_base(world.player)
     output_path = os.path.join(output_directory, f"{out_file_name}.gbc")
     with open(output_path, "wb") as out_file:
         out_file.write(patched_rom)
-    patch = PokemonCrystalDeltaPatch(os.path.splitext(output_path)[0] + ".apcrystal", player=world.player,
-                                     player_name=world.multiworld.player_name[world.player], patched_path=output_path)
+    patch = PokemonCrystalDeltaPatch(os.path.splitext(output_path)[0] +
+                                     ".apcrystal", player=world.player, player_name=world.multiworld.player_name[world.player], patched_path=output_path)
 
     patch.write()
     os.unlink(output_path)
@@ -182,10 +206,12 @@ def get_random_poke(random):
 
 
 def get_random_move(random):
-    return random.randint(1, 251)
+    randommoves = [move.id for _name, move in data.moves.items()
+                   if not move.is_hm and move.id > 0]
+    return random.choice(randommoves)
 
 
 def get_random_helditem(random):
-    helditems = [item_id for item_id, item in data.items.items()
-                 if "Unique" not in item.tags and "INVALID" not in item.tags]
+    helditems = [item_id for item_id, item in data.items.items(
+    ) if "Unique" not in item.tags and "INVALID" not in item.tags]
     return random.choice(helditems)
