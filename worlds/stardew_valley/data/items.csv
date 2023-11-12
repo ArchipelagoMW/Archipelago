@@ -769,6 +769,16 @@ id,name,classification,groups,mod_name
 10125,Morris <3,progression,FRIENDSANITY,Stardew Valley Expanded
 10301,Progressive Woods Obelisk Sigils,progression,,DeepWoods
 10302,Progressive Skull Cavern Elevator,progression,,Skull Cavern Elevator
+10401,Baked Berry Oatmeal Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10402,Big Bark Burger Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10403,Flower Cookie Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10404,Frog Legs Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10405,Glazed Butterfish Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10406,Mixed Berry Pie Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10407,Mushroom Berry Rice Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10408,Seaweed Salad Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10409,Void Delight Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10410,Void Salmon Sushi Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 10501,Marlon's Boat Paddle,progression,GINGER_ISLAND,Stardew Valley Expanded
 10502,Diamond Wand,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
 10503,Iridium Bomb,progression,,Stardew Valley Expanded
@@ -780,8 +790,7 @@ id,name,classification,groups,mod_name
 10509,Nexus: Sprite Spring Runes,progression,MOD_WARP,Stardew Valley Expanded
 10510,Nexus: Outpost Runes,progression,MOD_WARP,Stardew Valley Expanded
 10511,Fable Reef Portal,progression,"GINGER_ISLAND",Stardew Valley Expanded
-10512,Super Starfruit,useful,,Stardew Valley Expanded
-10513,Tempered Galaxy Sword,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
-10514,Tempered Galaxy Dagger,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
-10515,Tempered Galaxy Hammer,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
-10516,Abandoned House Outskirts Clean-up,progression,MOD_WARP,Stardew Valley Expanded
+10512,Tempered Galaxy Sword,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
+10513,Tempered Galaxy Dagger,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
+10514,Tempered Galaxy Hammer,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
+10515,Abandoned House Outskirts Clean-up,progression,MOD_WARP,Stardew Valley Expanded

@@ -943,6 +943,9 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
                              logic.quest.can_complete_quest(ModQuest.GrandpasShed).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
                              logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron).simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_bear_shop, player),
+                             (logic.quest.can_complete_quest(Quest.strange_note) & logic.tool.has_tool(Tool.axe,ToolMaterial.basic) &
+                              logic.tool.has_tool(Tool.pickaxe,ToolMaterial.basic)).simplify)
     for location in logic.mod.sve.sve_location_rules:
         MultiWorldRules.set_rule(multiworld.get_location(location, player),
                                  logic.mod.sve.sve_location_rules[location].simplify())

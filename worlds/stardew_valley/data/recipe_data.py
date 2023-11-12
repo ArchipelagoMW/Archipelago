@@ -1,16 +1,17 @@
-from typing import Dict, List
-
+from typing import Dict, List, Optional
+from ..mods.mod_data import ModNames
 from .recipe_source import RecipeSource, FriendshipSource, SkillSource, QueenOfSauceSource, ShopSource, StarterSource, ShopTradeSource
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
-from ..strings.crop_names import Fruit, Vegetable
-from ..strings.fish_names import Fish, WaterItem
+from ..strings.crop_names import Fruit, Vegetable, SVEFruit
+from ..strings.fish_names import Fish, SVEFish, WaterItem
 from ..strings.flower_names import Flower
-from ..strings.forageable_names import Forageable
+from ..strings.forageable_names import Forageable, SVEForage
 from ..strings.ingredient_names import Ingredient
-from ..strings.food_names import Meal, Beverage
+from ..strings.food_names import Meal, SVEMeal, Beverage
 from ..strings.metal_names import Fossil
-from ..strings.region_names import Region
+from ..strings.monster_drop_names import Loot
+from ..strings.region_names import Region, SVERegion
 from ..strings.season_names import Season
 from ..strings.skill_names import Skill
 from ..strings.villager_names import NPC
@@ -21,11 +22,13 @@ class CookingRecipe:
     meal: str
     ingredients: Dict[str, int]
     source: RecipeSource
+    mod_name: Optional[str] = None
 
-    def __init__(self, meal: str, ingredients: Dict[str, int], source: RecipeSource):
+    def __init__(self, meal: str, ingredients: Dict[str, int], source: RecipeSource, mod_name: Optional[str] = None):
         self.meal = meal
         self.ingredients = ingredients
         self.source = source
+        self.mod_name = mod_name
 
     def __repr__(self):
         return f"{self.meal} (Source: {self.source} |" \
@@ -45,9 +48,9 @@ def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int])
     return create_recipe(name, ingredients, source)
 
 
-def shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int]) -> CookingRecipe:
+def shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CookingRecipe:
     source = ShopSource(region, price)
-    return create_recipe(name, ingredients, source)
+    return create_recipe(name, ingredients, source, mod_name)
 
 
 def shop_trade_recipe(name: str, region: str, currency: str, price: int, ingredients: Dict[str, int]) -> CookingRecipe:
@@ -65,8 +68,8 @@ def starter_recipe(name: str, ingredients: Dict[str, int]) -> CookingRecipe:
     return create_recipe(name, ingredients, source)
 
 
-def create_recipe(name: str, ingredients: Dict[str, int], source: RecipeSource) -> CookingRecipe:
-    recipe = CookingRecipe(name, ingredients, source)
+def create_recipe(name: str, ingredients: Dict[str, int], source: RecipeSource, mod_name: Optional[str] = None) -> CookingRecipe:
+    recipe = CookingRecipe(name, ingredients, source, mod_name)
     all_cooking_recipes.append(recipe)
     return recipe
 
@@ -165,5 +168,24 @@ triple_shot_espresso = shop_recipe(Beverage.triple_shot_espresso, Region.saloon,
 tropical_curry = shop_recipe(Meal.tropical_curry, Region.island_resort, 2000, {Forageable.coconut: 1, Fruit.pineapple: 1, Fruit.hot_pepper: 1})
 trout_soup = queen_of_sauce_recipe(Meal.trout_soup, 1, Season.fall, 14, {Fish.rainbow_trout: 1, WaterItem.green_algae: 1})
 vegetable_medley = friendship_recipe(Meal.vegetable_medley, NPC.caroline, 7, {Vegetable.tomato: 1, Vegetable.beet: 1})
+
+baked_berry_oatmeal = shop_recipe(SVEMeal.baked_berry_oatmeal, SVERegion.bear_shop, 12500, {Forageable.salmonberry: 15, Forageable.blackberry: 15,
+                                                                                            Ingredient.sugar: 1, Ingredient.wheat_flour: 2}, ModNames.sve)
+big_bark_burger = shop_recipe(SVEMeal.big_bark_burger, Region.saloon, 5500, {SVEFish.puppyfish: 1, Meal.bread: 1, Ingredient.oil: 1}, ModNames.sve)
+flower_cookie = shop_recipe(SVEMeal.flower_cookie, SVERegion.bear_shop, 8750, {SVEForage.ferngill_primrose: 1, SVEForage.goldenrod: 1,
+                                                                               SVEForage.winter_star_rose: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1,
+                                                                               AnimalProduct.large_egg: 1}, ModNames.sve)
+frog_legs = shop_recipe(SVEMeal.frog_legs, Region.adventurer_guild, 2000, {SVEFish.frog: 1, Ingredient.oil: 1, Ingredient.wheat_flour: 1}, ModNames.sve)
+glazed_butterfish = shop_recipe(SVEMeal.glazed_butterfish, Region.saloon, 4000, {SVEFish.butterfish: 1, Ingredient.wheat_flour: 1, Ingredient.oil: 1},
+                                ModNames.sve)
+mixed_berry_pie = shop_recipe(SVEMeal.mixed_berry_pie, Region.saloon, 3500, {Fruit.strawberry: 6, SVEFruit.salal_berry: 6, Forageable.blackberry: 6,
+                                                                             SVEForage.bearberry: 6, Ingredient.sugar: 1, Ingredient.wheat_flour: 1},
+                              ModNames.sve)
+mushroom_berry_rice = shop_recipe(SVEMeal.mushroom_berry_rice, Region.adventurer_guild, 1500, {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10,
+                                                                                               Ingredient.rice: 1, Ingredient.sugar: 2}, ModNames.sve)
+seaweed_salad = shop_recipe(SVEMeal.seaweed_salad, Region.fish_shop, 1250, {SVEFish.dulse_seaweed: 2, WaterItem.seaweed: 2, Ingredient.oil: 1}, ModNames.sve)
+void_delight = shop_recipe(SVEMeal.void_delight, Region.sewer, 5000, {SVEFish.void_eel: 1, Loot.void_essence: 50, Loot.solar_essence: 20}, ModNames.sve)
+void_salmon_sushi = shop_recipe(SVEMeal.void_salmon_sushi, Region.sewer, 5000, {Fish.void_salmon: 1, ArtisanGood.void_mayonnaise: 1, WaterItem.seaweed: 3},
+                                ModNames.sve)
 
 all_cooking_recipes_by_name = {recipe.meal: recipe for recipe in all_cooking_recipes}

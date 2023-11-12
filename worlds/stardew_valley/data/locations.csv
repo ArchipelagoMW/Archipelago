@@ -2442,37 +2442,54 @@ id,region,name,tags,mod_name
 7510,Aurora Vineyard,Aurora Vineyard,"MANDATORY,QUEST",Stardew Valley Expanded
 7511,Adventurer's Guild,Monster Crops,"MANDATORY,QUEST,GINGER_ISLAND",Stardew Valley Expanded
 7512,Sewer,Void Soul,"MANDATORY,QUEST",Stardew Valley Expanded
-7601,Bear Shop,Bear: Baked Berry Oatmeal Recipe,MANDATORY,Stardew Valley Expanded
-7602,Bear Shop,Bear: Flower Cookie Recipe,MANDATORY,Stardew Valley Expanded
-7603,Purple Junimo Shop,Purple Junimo: Super Starfruit,MANDATORY,Stardew Valley Expanded
-7604,Alesia Shop,Alesia: Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
-7605,Issac Shop,Issac: Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
-7606,Issac Shop,Issac: Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
-7607,Highlands,Lance's Diamond Wand,"MANDATORY,GINGER_ISLAND",Stardew Valley Expanded
-7501,Island South,Fishsanity: Baby Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-7502,Crimson Badlands,Fishsanity: Bonefish,FISHSANITY,Stardew Valley Expanded
-7503,Forest,Fishsanity: Bull Trout,FISHSANITY,Stardew Valley Expanded
-7504,Forest West,Fishsanity: Butterfish,FISHSANITY,Stardew Valley Expanded
-7505,Island South,Fishsanity: Clownfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-7506,Highlands,Fishsanity: Daggerfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-7507,Mountain,Fishsanity: Frog,FISHSANITY,Stardew Valley Expanded
-7508,Highlands,Fishsanity: Gemfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-8001,Sprite Spring,Fishsanity: Goldenfish,FISHSANITY,Stardew Valley Expanded
-8002,Secret Woods,Fishsanity: Grass Carp,FISHSANITY,Stardew Valley Expanded
-8003,Forest West,Fishsanity: King Salmon,FISHSANITY,Stardew Valley Expanded
-8004,Island West,Fishsanity: Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-8005,Sprite Spring,Fishsanity: Meteor Carp,FISHSANITY,Stardew Valley Expanded
-8006,Town,Fishsanity: Minnow,FISHSANITY,Stardew Valley Expanded
-8007,Forest West,Fishsanity: Puppyfish,FISHSANITY,Stardew Valley Expanded
-8008,Sewer,Fishsanity: Radioactive Bass,FISHSANITY,Stardew Valley Expanded
-8009,Island West,Fishsanity: Seahorse,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-8010,Island West,Fishsanity: Sea Sponge,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-8011,Island South,Fishsanity: Shiny Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-8012,Mutant Bug Lair,Fishsanity: Snatcher Worm,FISHSANITY,Stardew Valley Expanded
-8013,Beach,Fishsanity: Starfish,FISHSANITY,Stardew Valley Expanded
-8014,Fable Reef,Fishsanity: Torpedo Trout,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-8015,Witch's Swamp,Fishsanity: Void Eel,FISHSANITY,Stardew Valley Expanded
-8016,Mutant Bug Lair,Fishsanity: Water Grub,FISHSANITY,Stardew Valley Expanded
-8017,Crimson Badlands,Fishsanity: Undeadfish,FISHSANITY,Stardew Valley Expanded
-8018,Shearwater Bridge,Fishsanity: Kittyfish,FISHSANITY,Stardew Valley Expanded
-8019,Blue Moon Vineyard,Fishsanity: Dulse Seaweed,FISHSANITY,Stardew Valley Expanded
+7551,Kitchen,Cook Baked Berry Oatmeal,"COOKSANITY",Stardew Valley Expanded
+7552,Kitchen,Cook Flower Cookie,"COOKSANITY",Stardew Valley Expanded
+7553,Kitchen,Cook Big Bark Burger,"COOKSANITY",Stardew Valley Expanded
+7554,Kitchen,Cook Frog Legs,"COOKSANITY",Stardew Valley Expanded
+7555,Kitchen,Cook Glazed Butterfish,"COOKSANITY",Stardew Valley Expanded
+7556,Kitchen,Cook Mixed Berry Pie,"COOKSANITY",Stardew Valley Expanded
+7557,Kitchen,Cook Mushroom Berry Rice,"COOKSANITY",Stardew Valley Expanded
+7558,Kitchen,Cook Seaweed Salad,"COOKSANITY",Stardew Valley Expanded
+7559,Kitchen,Cook Void Delight,"COOKSANITY",Stardew Valley Expanded
+7560,Kitchen,Cook Void Salmon Sushi,"COOKSANITY",Stardew Valley Expanded
+7601,Bear Shop,Learn Recipe Baked Berry Oatmeal,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7602,Bear Shop,Learn Recipe Flower Cookie,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7603,Saloon,Learn Recipe Big Bark Burger,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7604,Adventurer's Guild,Learn Recipe Frog Legs,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7605,Saloon,Learn Recipe Glazed Butterfish,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7606,Saloon,Learn Recipe Mixed Berry Pie,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7607,Adventurer's Guild,Learn Recipe Mushroom Berry Rice,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7608,Adventurer's Guild,Learn Recipe Seaweed Salad,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7609,Sewer,Learn Recipe Void Delight,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7610,Sewer,Learn Recipe Void Salmon Sushi,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7651,Alesia Shop,Purchase Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
+7652,Issac Shop,Purchase Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
+7653,Issac Shop,Purchase Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
+7654,Highlands,Lance's Diamond Wand,"MANDATORY,GINGER_ISLAND",Stardew Valley Expanded
+7701,Island South,Fishsanity: Baby Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7702,Crimson Badlands,Fishsanity: Bonefish,FISHSANITY,Stardew Valley Expanded
+7703,Forest,Fishsanity: Bull Trout,FISHSANITY,Stardew Valley Expanded
+7704,Forest West,Fishsanity: Butterfish,FISHSANITY,Stardew Valley Expanded
+7705,Island South,Fishsanity: Clownfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7706,Highlands,Fishsanity: Daggerfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7707,Mountain,Fishsanity: Frog,FISHSANITY,Stardew Valley Expanded
+7708,Highlands,Fishsanity: Gemfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7709,Sprite Spring,Fishsanity: Goldenfish,FISHSANITY,Stardew Valley Expanded
+7710,Secret Woods,Fishsanity: Grass Carp,FISHSANITY,Stardew Valley Expanded
+7711,Forest West,Fishsanity: King Salmon,FISHSANITY,Stardew Valley Expanded
+7712,Island West,Fishsanity: Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7713,Sprite Spring,Fishsanity: Meteor Carp,FISHSANITY,Stardew Valley Expanded
+7714,Town,Fishsanity: Minnow,FISHSANITY,Stardew Valley Expanded
+7715,Forest West,Fishsanity: Puppyfish,FISHSANITY,Stardew Valley Expanded
+7716,Sewer,Fishsanity: Radioactive Bass,FISHSANITY,Stardew Valley Expanded
+7717,Island West,Fishsanity: Seahorse,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7718,Island West,Fishsanity: Sea Sponge,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7719,Island South,Fishsanity: Shiny Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7720,Mutant Bug Lair,Fishsanity: Snatcher Worm,FISHSANITY,Stardew Valley Expanded
+7721,Beach,Fishsanity: Starfish,FISHSANITY,Stardew Valley Expanded
+7722,Fable Reef,Fishsanity: Torpedo Trout,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7723,Witch's Swamp,Fishsanity: Void Eel,FISHSANITY,Stardew Valley Expanded
+7724,Mutant Bug Lair,Fishsanity: Water Grub,FISHSANITY,Stardew Valley Expanded
+7725,Crimson Badlands,Fishsanity: Undeadfish,FISHSANITY,Stardew Valley Expanded
+7726,Shearwater Bridge,Fishsanity: Kittyfish,FISHSANITY,Stardew Valley Expanded
+7727,Blue Moon Vineyard,Fishsanity: Dulse Seaweed,FISHSANITY,Stardew Valley Expanded

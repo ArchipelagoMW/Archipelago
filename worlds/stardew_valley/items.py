@@ -637,11 +637,24 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     return items
 
 
-def remove_excluded_items(packs, exclude_ginger_island: bool):
-    included_packs = [pack for pack in packs if Group.DEPRECATED not in pack.groups]
-    if exclude_ginger_island:
-        included_packs = [pack for pack in included_packs if Group.GINGER_ISLAND not in pack.groups]
-    return included_packs
+def filter_deprecated_items(options: StardewValleyOptions, items: List[ItemData]) -> List[ItemData]:
+    return [item for item in items if  Group.DEPRECATED not in item.groups]
+
+
+def filter_ginger_island_items(options: StardewValleyOptions, items: List[ItemData]) -> List[ItemData]:
+    include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
+    return [item for item in items if include_island or Group.GINGER_ISLAND not in item.groups]
+
+
+def filter_mod_items(options: StardewValleyOptions, items: List[ItemData]) -> List[ItemData]:
+    return [item for item in items if item.mod_name is None or item.mod_name in options.mods]
+
+
+def remove_excluded_items(packs, options):
+    deprecated_filter = filter_deprecated_items(options, packs)
+    ginger_island_filter = filter_ginger_island_items(options, deprecated_filter)
+    mod_filter = filter_mod_items(options, ginger_island_filter)
+    return mod_filter
 
 
 def remove_limited_amount_packs(packs):
