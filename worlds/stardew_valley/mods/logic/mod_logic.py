@@ -51,7 +51,7 @@ class ModLogic:
                  time: TimeLogic, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
         self.item = ModItemLogic(mods,combat, cooking, has, money, region, season, relationship, tool)
         self.magic = MagicLogic(player, mods, received, region)
-        self.quests = ModQuestLogic(mods, has, region, season, relationship, received, time)
+        self.quests = ModQuestLogic(mods, received, has, region, time, season, relationship)
         self.buildings = ModBuildingLogic(player, has, money, mods)
         self.special_orders = ModSpecialOrderLogic(player, action, artisan, crafting, crop, has, region, relationship, season, wallet, mods)
         self.elevator = ModElevatorLogic(player, elevator_option, mods, received)

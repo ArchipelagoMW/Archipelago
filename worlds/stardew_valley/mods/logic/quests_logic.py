@@ -25,53 +25,69 @@ from ...stardew_rule import StardewRule
 
 class ModQuestLogic:
     mods: Mods
+    received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
+    time: TimeLogic
     season: SeasonLogic
     relationship: RelationshipLogic
-    received: ReceivedLogic
-    time: TimeLogic
 
-    def __init__(self, mods: Mods, has: HasLogic, region: RegionLogic, season: SeasonLogic, relationship: RelationshipLogic,
-                 received: ReceivedLogic, time: TimeLogic):
+    def __init__(self, mods: Mods, received: ReceivedLogic, has: HasLogic, region: RegionLogic, time: TimeLogic, season: SeasonLogic,
+                 relationship: RelationshipLogic,):
         self.mods = mods
+        self.received = received
         self.has = has
         self.region = region
+        self.time = time
         self.season = season
         self.relationship = relationship
-        self.received = received
-        self.time = time
 
     def get_modded_quest_rules(self) -> Dict[str, StardewRule]:
         quests = dict()
-        if ModNames.juna in self.mods:
-            quests.update({
-                ModQuest.JunaCola: self.relationship.has_hearts(ModNPC.juna, 3) & self.has(Beverage.joja_cola),
-                ModQuest.JunaSpaghetti: self.relationship.has_hearts(ModNPC.juna, 6) & self.has(Meal.spaghetti)
-            })
-
-        if ModNames.ginger in self.mods:
-            quests.update({
-                ModQuest.MrGinger: self.relationship.has_hearts(ModNPC.mr_ginger, 6) & self.has(Loot.void_essence)
-            })
-
-        if ModNames.ayeisha in self.mods:
-            quests.update({
-                ModQuest.AyeishaEnvelope: (self.season.has(Season.spring) | self.season.has(Season.fall)) & self.region.can_reach(Region.mountain),
-                ModQuest.AyeishaRing: self.season.has(Season.winter) & self.region.can_reach(Region.forest)
-            })
-
-        if ModNames.sve in self.mods:
-            quests.update({
-                ModQuest.RailroadBoulder: self.received(Wallet.skull_key) & self.has([Ore.iridium, Material.coal]) &
-                                          self.region.can_reach(Region.blacksmith) & self.region.can_reach(Region.railroad),
-                ModQuest.GrandpasShed: self.has([Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone]) &
-                                       self.region.can_reach(SVERegion.grandpas_shed_interior),
-                ModQuest.MarlonsBoat: self.has([Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat]) &
-                                      self.relationship.can_meet(ModNPC.lance) & self.region.can_reach(SVERegion.guild_summit),
-                ModQuest.AuroraVineyard: self.has(Fruit.starfruit) & self.region.can_reach(SVERegion.aurora_vineyard),
-                ModQuest.MonsterCrops: self.has([ModLoot.monster_mushroom, ModLoot.slime_berry, ModLoot.monster_fruit, ModLoot.void_root]),
-                ModQuest.VoidSoul: self.region.can_reach(Region.sewer) & self.has(SVEForage.void_soul),
-            })
-
+        quests.update(self._get_juna_quest_rules())
+        quests.update(self._get_mr_ginger_quest_rules())
+        quests.update(self._get_ayeisha_quest_rules())
+        quests.update(self._get_sve_quest_rules())
         return quests
+
+    def _get_juna_quest_rules(self):
+        if ModNames.juna not in self.mods:
+            return {}
+
+        return {
+            ModQuest.JunaCola: self.relationship.has_hearts(ModNPC.juna, 3) & self.has(Beverage.joja_cola),
+            ModQuest.JunaSpaghetti: self.relationship.has_hearts(ModNPC.juna, 6) & self.has(Meal.spaghetti)
+        }
+
+    def _get_mr_ginger_quest_rules(self):
+        if ModNames.ginger not in self.mods:
+            return {}
+
+        return {
+            ModQuest.MrGinger: self.relationship.has_hearts(ModNPC.mr_ginger, 6) & self.has(Loot.void_essence)
+        }
+
+    def _get_ayeisha_quest_rules(self):
+        if ModNames.ayeisha not in self.mods:
+            return {}
+
+        return {
+            ModQuest.AyeishaEnvelope: (self.season.has(Season.spring) | self.season.has(Season.fall)) & self.region.can_reach(Region.mountain),
+            ModQuest.AyeishaRing: self.season.has(Season.winter) & self.region.can_reach(Region.forest)
+        }
+
+    def _get_sve_quest_rules(self):
+        if ModNames.sve not in self.mods:
+            return {}
+
+        return {
+            ModQuest.RailroadBoulder: self.received(Wallet.skull_key) & self.has([Ore.iridium, Material.coal]) &
+                                      self.region.can_reach(Region.blacksmith) & self.region.can_reach(Region.railroad),
+            ModQuest.GrandpasShed: self.has([Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone]) &
+                                   self.region.can_reach(SVERegion.grandpas_shed_interior),
+            ModQuest.MarlonsBoat: self.has([Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat]) &
+                                  self.relationship.can_meet(ModNPC.lance) & self.region.can_reach(SVERegion.guild_summit),
+            ModQuest.AuroraVineyard: self.has(Fruit.starfruit) & self.region.can_reach(SVERegion.aurora_vineyard),
+            ModQuest.MonsterCrops: self.has([ModLoot.monster_mushroom, ModLoot.slime_berry, ModLoot.monster_fruit, ModLoot.void_root]),
+            ModQuest.VoidSoul: self.region.can_reach(Region.sewer) & self.has(SVEForage.void_soul),
+        }
