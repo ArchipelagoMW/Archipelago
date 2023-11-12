@@ -113,6 +113,11 @@ class MultiWorld():
             for region in regions:
                 self.region_cache[region.player][region.name] = region
 
+        def add_group(self, new_id: int):
+            self.region_cache.update({new_id: {}})
+            self.entrance_cache.update({new_id: {}})
+            self.location_cache.update({new_id: {}})
+
         def __iter__(self) -> Iterator[Region]:
             for regions in self.region_cache.values():
                 yield from regions.values()
@@ -220,6 +225,7 @@ class MultiWorld():
                 return group_id, group
         new_id: int = self.players + len(self.groups) + 1
 
+        self.regions.add_group(new_id)
         self.game[new_id] = game
         self.player_types[new_id] = NetUtils.SlotType.group
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
