@@ -205,7 +205,7 @@ class StarterUnit(Choice):
 
 class RequiredTactics(Choice):
     """
-    Determines the maximum tactical difficulty of the seed (separate from mission difficulty).  Higher settings
+    Determines the maximum tactical difficulty of the world (separate from mission difficulty).  Higher settings
     increase randomness.
 
     Standard:  All missions can be completed with good micro and macro.
@@ -291,6 +291,19 @@ class ExtendedItems(Toggle):
 MAX_UPGRADES_OPTION = 12
 
 
+class EnsureGenericItems(Range):
+    """
+    Specifies a minimum percentage of the generic item pool that will be present for the slot.
+    The generic item pool is the pool of all generically useful items after all exclusions.
+    Generically-useful items include: Worker upgrades, Building upgrades, economy upgrades,
+    Mercenaries, Kerrigan levels and abilities, and Spear of Adun abilities
+    Increasing this percentage will make units less common.
+    """
+    range_start = 0
+    range_end = 100
+    default = 25
+
+
 class MinNumberOfUpgrades(Range):
     """
     Set a minimum to the number of upgrades a unit/structure can have.
@@ -365,7 +378,7 @@ class KerriganCheckLevelPackSize(Range):
 
 
 class KerriganLevelItemSum(Range):
-    """Determines the sum of the level items in the seed.  This does not affect levels gained from checks."""
+    """Determines the sum of the level items in the world.  This does not affect levels gained from checks."""
     display_name = "Kerrigan Level Item Sum"
     range_start = 0
     range_end = 140
@@ -428,7 +441,7 @@ class KerriganPrimalStatus(Choice):
     Always Zerg:  Kerrigan is always zerg.
     Always Human:  Kerrigan is always human.
     Level 35:  Kerrigan is human until reaching level 35, and zerg thereafter.
-    Half Completion:  Kerrigan is human until half of the missions in the seed are completed,
+    Half Completion:  Kerrigan is human until half of the missions in the world are completed,
     and zerg thereafter.
     Item:  Kerrigan's Primal Form is an item. She is human until it is found, and zerg thereafter."""
     display_name = "Kerrigan Primal Status"
@@ -642,6 +655,7 @@ sc2_options: Dict[str, Option] = {
     "shuffle_no_build": ShuffleNoBuild,
     "starter_unit": StarterUnit,
     "required_tactics": RequiredTactics,
+    "ensure_generic_items": EnsureGenericItems,
     "min_number_of_upgrades": MinNumberOfUpgrades,
     "max_number_of_upgrades": MaxNumberOfUpgrades,
     "generic_upgrade_missions": GenericUpgradeMissions,
