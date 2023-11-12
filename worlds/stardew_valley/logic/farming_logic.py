@@ -13,7 +13,7 @@ class FarmingLogic:
         self.crop = crop
         self.skill = skill
 
-    def can_grow_gold_quality(self, quality: int) -> StardewRule:
+    def can_grow_crop_quality(self, quality: int) -> StardewRule:
         if quality <= 0:
             return True_()
         if quality == 1:
