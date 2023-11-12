@@ -5,8 +5,7 @@ from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
 from .tool_logic import ToolLogic
 from ..data import CropItem
-from ..stardew_rule import StardewRule, True_
-from ..strings.fertilizer_names import Fertilizer
+from ..stardew_rule import StardewRule
 from ..strings.region_names import Region
 from ..strings.tool_names import Tool
 
@@ -43,13 +42,3 @@ class CropLogic:
 
     def has_island_farm(self) -> StardewRule:
         return self.region.can_reach(Region.island_south)
-
-    def has_fertilizer(self, tier: int) -> StardewRule:
-        if tier <= 0:
-            return True_()
-        if tier == 1:
-            return self.has(Fertilizer.basic)
-        if tier == 2:
-            return self.has(Fertilizer.quality)
-        if tier >= 3:
-            return self.has(Fertilizer.deluxe)

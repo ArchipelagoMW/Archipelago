@@ -1,7 +1,6 @@
 from typing import List
 
 from ..data.bundle_data import BundleItem
-from .crop_logic import CropLogic
 from .farming_logic import FarmingLogic
 from .has_logic import HasLogic
 from .money_logic import MoneyLogic
@@ -15,15 +14,13 @@ class BundleLogic:
     has: HasLogic
     region: RegionLogic
     money: MoneyLogic
-    crop: CropLogic
     farming: FarmingLogic
 
-    def __init__(self, player: int, has: HasLogic, region: RegionLogic, money: MoneyLogic, crop: CropLogic, farming: FarmingLogic):
+    def __init__(self, player: int, has: HasLogic, region: RegionLogic, money: MoneyLogic, farming: FarmingLogic):
         self.player = player
         self.has = has
         self.region = region
         self.money = money
-        self.crop = crop
         self.farming = farming
 
     def can_complete_bundle(self, bundle_requirements: List[BundleItem], number_required: int) -> StardewRule:

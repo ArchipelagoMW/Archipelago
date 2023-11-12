@@ -131,8 +131,8 @@ class StardewLogic:
         self.pet = PetLogic(self.player, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
         self.crop = CropLogic(self.player, self.has, self.region, self.season, self.tool)
         self.skill = SkillLogic(self.player, skill_option, self.received, self.has, self.region, self.season, self.time, self.tool, self.combat, self.crop)
-        self.farming = FarmingLogic(self.player, self.crop, self.skill)
-        self.bundle = BundleLogic(self.player, self.crop, self.farming, self.has, self.region, self.money)
+        self.farming = FarmingLogic(self.player, self.has, self.skill)
+        self.bundle = BundleLogic(self.player, self.has, self.region, self.money, self.farming)
         self.fishing = FishingLogic(self.player, self.region, self.tool, self.skill)
         self.mine = MineLogic(self.player, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
