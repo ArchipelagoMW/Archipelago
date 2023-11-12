@@ -107,10 +107,14 @@ class MultiWorld():
             return self
 
         def append(self, region: Region):
+            assert region.name not in self.region_cache[region.player], \
+                f"{region.name} already exists in region cache."
             self.region_cache[region.player][region.name] = region
 
         def extend(self, regions: Iterable[Region]):
             for region in regions:
+                assert region.name not in self.region_cache[region.player], \
+                    f"{region.name} already exists in region cache."
                 self.region_cache[region.player][region.name] = region
 
         def __iter__(self) -> Iterator[Region]:
@@ -843,6 +847,8 @@ class Region:
             del(self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
+            assert value.name not in self.region_manager.location_cache[value.player], \
+                f"{value.name} already exists in the location cache."
             self._list.insert(index, value)
             self.region_manager.location_cache[value.player][value.name] = value
 
@@ -853,6 +859,8 @@ class Region:
             del(self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
+            assert value.name not in self.region_manager.entrance_cache[value.player], \
+                f"{value.name} already exists in the entrance cache."
             self._list.insert(index, value)
             self.region_manager.entrance_cache[value.player][value.name] = value
 
