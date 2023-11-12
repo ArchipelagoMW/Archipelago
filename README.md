@@ -52,6 +52,7 @@ Currently, the following games are supported:
 * DOOM 1993
 * Terraria
 * Lingo
+* Pokémon Emerald
 * Kirby's Dream Land 3
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
