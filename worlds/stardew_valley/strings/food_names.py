@@ -86,3 +86,17 @@ class Beverage:
     triple_shot_espresso = "Triple Shot Espresso"
     beer = "Beer"
     joja_cola = "Joja Cola"
+
+
+class SVEMeal:
+    baked_berry_oatmeal = "Baked Berry Oatmeal"
+    big_bark_burger = "Big Bark Burger"
+    flower_cookie = "Flower Cookie"
+    frog_legs = "Frog Legs"
+    glazed_butterfish = "Glazed Butterfish"
+    mixed_berry_pie = "Mixed Berry Pie"
+    mushroom_berry_rice = "Mushroom Berry Rice"
+    seaweed_salad = "Seaweed Salad"
+    void_delight = "Void Delight"
+    void_salmon_sushi = "Void Salmon Sushi"
+

@@ -1,5 +1,4 @@
 from typing import Dict
-from dataclasses import field, dataclass
 
 from ...logic.action_logic import ActionLogic
 from ...logic.building_logic import BuildingLogic
@@ -59,12 +58,6 @@ class SVELogic:
 
     def initialize_rules(self):
         self.sve_location_rules.update({
-            "Bear: Baked Berry Oatmeal Recipe": self.quest.can_complete_quest("Strange Note") & self.money.can_spend(
-                12500),
-            "Bear: Flower Cookie Recipe": self.quest.can_complete_quest("Strange Note") & self.money.can_spend(8750),
-            "Purple Junimo: Super Starfruit": self.relationship.has_hearts("Apples", 10) &
-                                              self.region.can_reach(
-                                                  SVERegion.purple_junimo_shop) & self.money.can_spend(80000),
             "Alesia: Tempered Galaxy Dagger": self.region.can_reach(
                 SVERegion.alesia_shop) & self.combat.has_galaxy_weapon() &
                                               self.money.can_spend(350000) & self.time.has_lived_months(3),

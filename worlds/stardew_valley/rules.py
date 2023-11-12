@@ -940,7 +940,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_purple_junimo, player),
                              logic.relationship.has_hearts(ModNPC.apples, 10).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.to_grandpa_upstairs, player),
-                             logic.quest.can_complete_quest("Grandpa's Shed").simplify())
+                             logic.quest.can_complete_quest(ModQuest.GrandpasShed).simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
                              logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron).simplify())
     for location in logic.mod.sve.sve_location_rules:
