@@ -66,6 +66,27 @@ class ChecksMateLogic(LogicMixin):
                                                                                                          "Major To "
                                                                                                          "Queen"]))
 
+    enemy_locations_to_items: dict[str, str] = {
+        "Capture Pawn A": "Enemy Pawn A",
+        "Capture Pawn B": "Enemy Pawn B",
+        "Capture Pawn C": "Enemy Pawn C",
+        "Capture Pawn D": "Enemy Pawn D",
+        "Capture Pawn E": "Enemy Pawn E",
+        "Capture Pawn F": "Enemy Pawn F",
+        "Capture Pawn G": "Enemy Pawn G",
+        "Capture Pawn H": "Enemy Pawn H",
+        "Capture Piece A": "Enemy Piece A",
+        "Capture Piece B": "Enemy Piece B",
+        "Capture Piece C": "Enemy Piece C",
+        "Capture Piece D": "Enemy Piece D",
+        "Capture Piece F": "Enemy Piece F",
+        "Capture Piece G": "Enemy Piece G",
+        "Capture Piece H": "Enemy Piece H",
+    }
+
+    def has_enemy(self: CollectionState, location_name: str, player: int) -> bool:
+        return self.has(self.enemy_locations_to_items[location_name], player)
+
 
 def set_rules(multiworld: MultiWorld, player: int):
     # TODO: handle other goals
@@ -134,7 +155,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     # inelegance is malleable
     ###
 
-    # piece must exist to be captured
+    # pieces must exist to be captured
     # and player must have (a king plus) that many chessmen to capture any given number of chessmen
     set_rule(multiworld.get_location("Capture 2 Pieces", player),
              lambda state: state.has_chessmen(player) > 0 and state.count_enemy_pieces(player) > 1)
@@ -183,24 +204,36 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Capture Everything", player),
              lambda state: state.has_chessmen(player) > 13 and state.count_enemy_pawns(player) > 7
                            and state.count_enemy_pieces(player) > 6)
-    # ensure all pieces exist before requiring any (this is the easiest logic break ever)
-    # TODO: I have no idea what I'm doing
-    set_rule(multiworld.get_location("Capture Piece A", player), lambda state: state.count_enemy_pieces(player) > 6)
-    set_rule(multiworld.get_location("Capture Piece B", player), lambda state: state.count_enemy_pieces(player) > 6)
-    set_rule(multiworld.get_location("Capture Piece C", player), lambda state: state.count_enemy_pieces(player) > 6)
-    set_rule(multiworld.get_location("Capture Piece D", player), lambda state: state.count_enemy_pieces(player) > 6)
-    set_rule(multiworld.get_location("Capture Piece F", player), lambda state: state.count_enemy_pieces(player) > 6)
-    set_rule(multiworld.get_location("Capture Piece G", player), lambda state: state.count_enemy_pieces(player) > 6)
-    set_rule(multiworld.get_location("Capture Piece H", player), lambda state: state.count_enemy_pieces(player) > 6)
-    set_rule(multiworld.get_location("Capture Pawn A", player), lambda state: state.count_enemy_pawns(player) > 7)
-    set_rule(multiworld.get_location("Capture Pawn B", player), lambda state: state.count_enemy_pawns(player) > 7)
-    set_rule(multiworld.get_location("Capture Pawn C", player), lambda state: state.count_enemy_pawns(player) > 7)
-    set_rule(multiworld.get_location("Capture Pawn D", player), lambda state: state.count_enemy_pawns(player) > 7)
-    set_rule(multiworld.get_location("Capture Pawn E", player), lambda state: state.count_enemy_pawns(player) > 7)
-    set_rule(multiworld.get_location("Capture Pawn F", player), lambda state: state.count_enemy_pawns(player) > 7)
-    set_rule(multiworld.get_location("Capture Pawn G", player), lambda state: state.count_enemy_pawns(player) > 7)
-    set_rule(multiworld.get_location("Capture Pawn H", player), lambda state: state.count_enemy_pawns(player) > 7)
-    set_rule(multiworld.get_location("Capture Piece A", player), lambda state: state.count_enemy_pieces(player) > 6)
+    set_rule(multiworld.get_location("Capture Piece A", player),
+             lambda state: state.has_enemy("Capture Piece A", player))
+    set_rule(multiworld.get_location("Capture Piece B", player),
+             lambda state: state.has_enemy("Capture Piece B", player))
+    set_rule(multiworld.get_location("Capture Piece C", player),
+             lambda state: state.has_enemy("Capture Piece C", player))
+    set_rule(multiworld.get_location("Capture Piece D", player),
+             lambda state: state.has_enemy("Capture Piece D", player))
+    set_rule(multiworld.get_location("Capture Piece F", player),
+             lambda state: state.has_enemy("Capture Piece F", player))
+    set_rule(multiworld.get_location("Capture Piece G", player),
+             lambda state: state.has_enemy("Capture Piece G", player))
+    set_rule(multiworld.get_location("Capture Piece H", player),
+             lambda state: state.has_enemy("Capture Piece H", player))
+    set_rule(multiworld.get_location("Capture Pawn A", player),
+             lambda state: state.has_enemy("Capture Pawn A", player))
+    set_rule(multiworld.get_location("Capture Pawn B", player),
+             lambda state: state.has_enemy("Capture Pawn B", player))
+    set_rule(multiworld.get_location("Capture Pawn C", player),
+             lambda state: state.has_enemy("Capture Pawn C", player))
+    set_rule(multiworld.get_location("Capture Pawn D", player),
+             lambda state: state.has_enemy("Capture Pawn D", player))
+    set_rule(multiworld.get_location("Capture Pawn E", player),
+             lambda state: state.has_enemy("Capture Pawn E", player))
+    set_rule(multiworld.get_location("Capture Pawn F", player),
+             lambda state: state.has_enemy("Capture Pawn F", player))
+    set_rule(multiworld.get_location("Capture Pawn G", player),
+             lambda state: state.has_enemy("Capture Pawn G", player))
+    set_rule(multiworld.get_location("Capture Pawn H", player),
+             lambda state: state.has_enemy("Capture Pawn H", player))
     # tactics
     # set_rule(multiworld.get_location("Pin", player), lambda state: state.has_pin(player))
     set_rule(multiworld.get_location("Fork, Sacrificial", player), lambda state: state.has_pin(player))
