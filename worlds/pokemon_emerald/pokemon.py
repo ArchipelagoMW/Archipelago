@@ -2,10 +2,12 @@
 Functions related to pokemon species and moves
 """
 import time
-from random import Random
-from typing import Dict, List, Set, Optional, Tuple
+from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
 
 from .data import SpeciesData, data
+
+if TYPE_CHECKING:
+    from random import Random
 
 
 _damaging_moves = frozenset({
@@ -97,7 +99,7 @@ _legendary_pokemon = frozenset({
 
 
 def get_random_species(
-        random: Random,
+        random: "Random",
         candidates: List[Optional[SpeciesData]],
         nearby_bst: Optional[int] = None,
         species_type: Optional[int] = None,
@@ -129,7 +131,7 @@ def get_random_species(
     return random.choice(candidates)
 
 
-def get_random_type(random: Random) -> int:
+def get_random_type(random: "Random") -> int:
     picked_type = random.randrange(0, 18)
     while picked_type == 9:  # Don't pick the ??? type
         picked_type = random.randrange(0, 18)
@@ -138,7 +140,7 @@ def get_random_type(random: Random) -> int:
 
 
 def get_random_move(
-        random: Random,
+        random: "Random",
         blacklist: Optional[Set[int]] = None,
         type_bias: int = 0,
         normal_bias: int = 0,
@@ -182,7 +184,7 @@ def get_random_move(
     return random.choice(possible_moves)
 
 
-def get_random_damaging_move(random: Random, blacklist: Optional[Set[int]] = None) -> int:
+def get_random_damaging_move(random: "Random", blacklist: Optional[Set[int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
 
     move_options = list(_damaging_moves)
