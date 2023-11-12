@@ -129,10 +129,8 @@ class MessengerRules:
 
     def can_shop(self, state: CollectionState) -> bool:
         # these locations are at the top of the shop tree, and the entire shop tree needs to be purchased
-        price = sum([
-            self.world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost,
-            self.world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost,
-        ])
+        price = (self.world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost +
+                 self.world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost)
         can_afford = state.has("Shards", self.player, min(price, self.world.total_shards))
         return can_afford
 
