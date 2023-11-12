@@ -28,9 +28,9 @@ class MessengerRegion(Region):
             locations += [seal_loc for seal_loc in SEALS[self.name]]
         if world.options.shuffle_shards and self.name in MEGA_SHARDS:
             locations += [shard for shard in MEGA_SHARDS[self.name]]
-        loc_dict = {loc: world.location_name_to_id[loc] if loc in world.location_name_to_id else None
-                    for loc in locations}
+        loc_dict = {loc: world.location_name_to_id.get(loc, None) for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
+        world.multiworld.regions.append(self)
 
 
 class MessengerLocation(Location):
