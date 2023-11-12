@@ -1009,7 +1009,7 @@
 		"script": "Route25HiddenPotion"
 	},
 	"ROUTE_25_PROTEIN": {
-		"label": "Route 25 - Item",
+		"label": "Route 25 - Item Behind Cut Tree",
 		"flag": "EVENT_ROUTE_25_PROTEIN",
 		"type": "itemball",
 		"tags": ["Overworld"],

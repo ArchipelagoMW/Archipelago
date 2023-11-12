@@ -123,7 +123,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     if world.options.randomize_learnsets > 0:
         for pkmn_name, pkmn_data in world.generated_pokemon.items():
             address = data.rom_addresses["AP_EvosAttacks_" + pkmn_name]
-            address = address + (3 * len(pkmn_data.evolutions)) + 1
+            address = address + sum([len(evo) for evo in pkmn_data.evolutions]) + 1
             for move in pkmn_data.learnset:
                 move_id = data.moves[move.move].id
                 write_bytes(patched_rom, [move.level, move_id], address)

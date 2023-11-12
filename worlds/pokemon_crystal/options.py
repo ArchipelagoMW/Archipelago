@@ -1,4 +1,5 @@
-from Options import Toggle, Choice, DefaultOnToggle, Range
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class Goal(Choice):
@@ -91,18 +92,18 @@ class ItemReceiveSound(DefaultOnToggle):
     display_name = "Item Receive Sound"
 
 
-pokemon_crystal_options = {
-    "goal": Goal,
-    "randomize_hidden_items": RandomizeHiddenItems,
-    "require_itemfinder": RequireItemfinder,
-    "randomize_starters": RandomizeStarters,
-    "randomize_wilds": RandomizeWilds,
-    "randomize_static_pokemon": RandomizeStaticPokemon,
-    "randomize_trainer_parties": RandomizeTrainerParties,
-    "randomize_learnsets": RandomizeLearnsets,
-    "full_tmhm_compatibility": FullTmHmCompatibility,
-    "blind_trainers": BlindTrainers,
-    "better_marts": BetterMarts,
-    "experience_modifier": ExpModifier,
-    "item_receive_sound": ItemReceiveSound
-}
+@dataclass
+class PokemonCrystalOptions(PerGameCommonOptions):
+    goal: Goal
+    randomize_hidden_items: RandomizeHiddenItems
+    require_itemfinder: RequireItemfinder
+    randomize_starters: RandomizeStarters
+    randomize_wilds: RandomizeWilds
+    randomize_static_pokemon: RandomizeStaticPokemon
+    randomize_trainer_parties: RandomizeTrainerParties
+    randomize_learnsets: RandomizeLearnsets
+    full_tmhm_compatibility: FullTmHmCompatibility
+    blind_trainers: BlindTrainers
+    better_marts: BetterMarts
+    experience_modifier: ExpModifier
+    item_receive_sound: ItemReceiveSound

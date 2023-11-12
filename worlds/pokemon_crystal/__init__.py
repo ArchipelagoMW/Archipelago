@@ -18,7 +18,7 @@ if "worlds._bizhawk" not in sys.modules:
 else:
     # Unused, but required to register with BizHawkClient
     from .client import PokemonCrystalClient
-from .options import pokemon_crystal_options
+from .options import PokemonCrystalOptions
 from .regions import create_regions
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification
 from .rules import set_rules
@@ -59,12 +59,15 @@ class PokemonCrystalWebWorld(WebWorld):
 class PokemonCrystalWorld(World):
     """the only good pokemon game"""
     game = "Pokemon Crystal"
-    option_definitions = pokemon_crystal_options
-    settings: ClassVar[PokemonCrystalSettings]
+
     topology_present = True
     web = PokemonCrystalWebWorld()
 
     settings_key = "pokemon_crystal_settings"
+    settings: ClassVar[PokemonCrystalSettings]
+
+    options_dataclass = PokemonCrystalOptions
+    options: PokemonCrystalOptions
 
     data_version = 0
     required_client_version = (0, 4, 3)
@@ -161,7 +164,7 @@ class PokemonCrystalWorld(World):
                     "RIVAL_"+evo_line[1])]
 
                 first_evolutions = crystal_data.pokemon[evo_line[0]].evolutions
-                evo_line[1] = self.random.choice(first_evolutions)[2] if len(
+                evo_line[1] = self.random.choice(first_evolutions)[-1] if len(
                     first_evolutions) else evo_line[0]
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[1])
@@ -170,7 +173,7 @@ class PokemonCrystalWorld(World):
                     "RIVAL_"+evo_line[2])]
 
                 second_evolutions = crystal_data.pokemon[evo_line[1]].evolutions
-                evo_line[2] = self.random.choice(second_evolutions)[2] if len(
+                evo_line[2] = self.random.choice(second_evolutions)[-1] if len(
                     second_evolutions) else evo_line[1]
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[2])

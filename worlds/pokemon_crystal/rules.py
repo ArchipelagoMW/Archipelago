@@ -792,7 +792,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # Route 25
     set_rule(
         get_location(
-            "Route 25 - Item"),
+            "Route 25 - Item Behind Cut Tree"),
         can_cut
     )
 
