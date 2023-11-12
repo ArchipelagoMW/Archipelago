@@ -49,7 +49,7 @@ class ModLogic:
                  action: ActionLogic, artisan: ArtisanLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, building: BuildingLogic, wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
                  time: TimeLogic, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
-        self.item = ModItemLogic(mods,combat, cooking, has, money, region, season, relationship, tool)
+        self.item = ModItemLogic(mods, combat, crop, cooking, has, money, region, season, relationship, tool)
         self.magic = MagicLogic(player, mods, received, region)
         self.quests = ModQuestLogic(mods, received, has, region, time, season, relationship)
         self.buildings = ModBuildingLogic(player, has, money, mods)

@@ -2,6 +2,7 @@ from typing import Dict
 
 from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
+from ...logic.crop_logic import CropLogic
 from ...logic.has_logic import HasLogic
 from ...logic.money_logic import MoneyLogic
 from ...logic.region_logic import RegionLogic
@@ -18,13 +19,14 @@ from ...strings.forageable_names import SVEForage
 from ...strings.monster_drop_names import ModLoot
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed
-from ...strings.region_names import SVERegion
+from ...strings.region_names import Region, SVERegion
 from ...stardew_rule import StardewRule
 
 
 class ModItemLogic:
     mods: Mods
     combat: CombatLogic
+    crop: CropLogic
     cooking: CookingLogic
     has: HasLogic
     money: MoneyLogic
@@ -34,9 +36,10 @@ class ModItemLogic:
     received: ReceivedLogic
     tool: ToolLogic
 
-    def __init__(self, mods: Mods, combat: CombatLogic, cooking: CookingLogic, has: HasLogic, money: MoneyLogic, region: RegionLogic,
+    def __init__(self, mods: Mods, combat: CombatLogic, crop: CropLogic, cooking: CookingLogic, has: HasLogic, money: MoneyLogic, region: RegionLogic,
                  season: SeasonLogic, relationship: RelationshipLogic, tool: ToolLogic):
         self.combat = combat
+        self.crop = crop
         self.cooking = cooking
         self.mods = mods
         self.has = has
@@ -69,4 +72,12 @@ class ModItemLogic:
                 SVEVegetable.void_root: self.season.has(Season.winter) & self.has(SVESeed.void_seed),
                 SVESeed.void_seed: self.region.can_reach(SVERegion.highlands_cavern) & self.combat.has_good_weapon(),
                 SVEForage.void_soul: self.region.can_reach(SVERegion.crimson_badlands) & self.combat.has_good_weapon() & self.cooking.can_cook(),
-            }
+                SVEForage.winter_star_rose: self.region.can_reach(SVERegion.summit) & self.season.has(Season.winter),
+                SVEForage.bearberry: self.region.can_reach(Region.secret_woods) & self.season.has(Season.winter),
+                SVEForage.poison_mushroom: self.region.can_reach(Region.secret_woods) & (self.season.has(Season.summer) | self.season.has(Season.fall)),
+                SVEForage.red_baneberry: self.region.can_reach(Region.secret_woods) & self.season.has(Season.summer),
+                SVEForage.ferngill_primrose: self.region.can_reach(SVERegion.summit) & self.season.has(Season.spring),
+                SVEForage.goldenrod: self.region.can_reach(SVERegion.summit) & (self.season.has(Season.summer) | self.season.has(Season.fall)),
+                SVESeed.shrub_seed: self.region.can_reach(Region.secret_woods) & self.tool.has_tool(Tool.hoe, ToolMaterial.basic),
+                SVEFruit.salal_berry: self.crop.can_plant_and_grow_item([Season.spring,Season.summer]) & self.has(SVESeed.shrub_seed),
+                }
