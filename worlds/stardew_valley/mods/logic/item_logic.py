@@ -57,15 +57,13 @@ class ModItemLogic:
 
     def _get_sve_item_rules(self):
         return {
-            "Aged Blue Moon Wine": self.region.can_reach(SVERegion.sophias_house) & self.money.can_spend(28000),
+            "Aged Blue Moon Wine": self.money.can_spend_at(SVERegion.sophias_house, 28000),
             "Big Bark Burger": self.cooking.can_cook() & self.has([SVEFish.puppyfish, Meal.bread, Ingredient.oil]) &
-                               self.relationship.has_hearts(NPC.gus, 5) & self.money.can_spend(5500) &
-                               self.region.can_reach(Region.saloon),
-            "Blue Moon Wine": self.region.can_reach(SVERegion.sophias_house) & self.money.can_spend(3000),
+                               self.relationship.has_hearts(NPC.gus, 5) & self.money.can_spend_at(Region.saloon, 5500),
+            "Blue Moon Wine": self.money.can_spend_at(SVERegion.sophias_house, 3000),
             ModLoot.fungus_seed: self.region.can_reach(SVERegion.highlands_cavern) & self.combat.has_good_weapon(),
             "Glazed Butterfish": self.cooking.can_cook() & self.has([SVEFish.butterfish, Ingredient.wheat_flour, Ingredient.oil]) &
-                                 self.relationship.has_hearts(NPC.gus, 10) & self.money.can_spend(
-                4000) & self.region.can_reach(Region.saloon),
+                                 self.relationship.has_hearts(NPC.gus, 10) & self.money.can_spend_at(Region.saloon, 4000),
             "Green Mushroom": self.region.can_reach(SVERegion.highlands) & self.tool.has_tool(Tool.axe, ToolMaterial.iron),
             SVEFruit.monster_fruit: self.season.has(Season.summer) & self.has(ModLoot.stalk_seed),
             SVEVegetable.monster_mushroom: self.season.has(Season.fall) & self.has(ModLoot.fungus_seed),
@@ -76,11 +74,9 @@ class ModItemLogic:
             ModLoot.stalk_seed: self.region.can_reach(SVERegion.highlands) & self.combat.has_good_weapon(),
             SVEForage.swirl_stone: self.region.can_reach(SVERegion.crimson_badlands) & self.combat.has_great_weapon(),
             "Void Delight": self.has(SVEFish.void_eel) & self.has(Loot.void_essence) & self.has(Loot.solar_essence),
-            SVEForage.void_pebble: self.region.can_reach(
-                SVERegion.crimson_badlands) & self.combat.has_galaxy_weapon(),
+            SVEForage.void_pebble: self.region.can_reach(SVERegion.crimson_badlands) & self.combat.has_galaxy_weapon(),
             SVEVegetable.void_root: self.season.has(Season.winter) & self.has(ModLoot.void_seed),
             "Void Salmon Sushi": self.has(Fish.void_salmon) & self.has("Void Mayonnaise") & self.has("Seaweed"),
             ModLoot.void_seed: self.region.can_reach(SVERegion.highlands_cavern) & self.combat.has_good_weapon(),
-            SVEForage.void_soul: self.region.can_reach(SVERegion.crimson_badlands) & self.combat.has_good_weapon() &
-                                 self.cooking.can_cook(),
+            SVEForage.void_soul: self.region.can_reach(SVERegion.crimson_badlands) & self.combat.has_good_weapon() & self.cooking.can_cook(),
         }
