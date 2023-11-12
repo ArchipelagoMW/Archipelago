@@ -287,7 +287,7 @@ class StardewLogic:
             Fertilizer.deluxe: False_(),
             Fertilizer.quality: (self.skill.has_farming_level(9) & self.has(Material.sap) & self.has(Fish.any)) | (self.time.has_year_two() & self.money.can_spend_at(Region.pierre_store, 150)),
             Fertilizer.tree: self.skill.has_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
-            Fish.any: Or([self.can_catch_fish(fish) for fish in all_fish]),
+            Fish.any: Or([self.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)]),
             Fish.crab: self.skill.can_crab_pot(Region.beach),
             Fish.crayfish: self.skill.can_crab_pot(Region.town),
             Fish.lobster: self.skill.can_crab_pot(Region.beach),

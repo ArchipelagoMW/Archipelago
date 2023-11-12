@@ -6,7 +6,7 @@ from .options import EntranceRandomization, ExcludeGingerIsland, Museumsanity
 from .strings.entrance_names import Entrance
 from .strings.region_names import Region
 from .region_classes import RegionData, ConnectionData, RandomizationFlag, ModificationFlag
-from .mods.mod_regions import ModDataList, remove_vanilla_connections
+from .mods.mod_regions import ModDataList, vanilla_connections_to_remove_by_mod
 
 
 class RegionFactory(Protocol):
@@ -497,8 +497,8 @@ def create_final_connections(world_options) -> List[ConnectionData]:
     for mod in world_options.mods.value:
         if mod not in ModDataList:
             continue
-        if mod in remove_vanilla_connections:
-            for connection_data in remove_vanilla_connections[mod]:
+        if mod in vanilla_connections_to_remove_by_mod:
+            for connection_data in vanilla_connections_to_remove_by_mod[mod]:
                 final_connections.remove(connection_data)
         final_connections.extend(ModDataList[mod].connections)
     return final_connections

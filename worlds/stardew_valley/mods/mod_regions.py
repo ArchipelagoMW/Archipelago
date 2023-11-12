@@ -242,7 +242,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.to_dwarf_prison, SVERegion.dwarf_prison, flag=RandomizationFlag.NON_PROGRESSION),
 ]
 
-remove_vanilla_connections = {
+vanilla_connections_to_remove_by_mod = {
     ModNames.sve: [ConnectionData(Entrance.mountain_to_the_mines, Region.mines,
                    flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
                    ConnectionData(Entrance.mountain_to_adventurer_guild, Region.adventurer_guild,
