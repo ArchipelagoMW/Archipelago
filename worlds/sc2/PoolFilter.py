@@ -301,10 +301,21 @@ class ValidInventory:
         if not all(requirement(self) for requirement in requirements):
             raise Exception("Too many items excluded - campaign is impossible to complete.")
 
+        # Reserving space for generic items
+        generic_item_count = sum(1 if item.name in second_pass_placeable_items else 0 for item in inventory)
+        reserved_generic_percent = get_option_value(self.multiworld, self.player, "ensure_generic_items") / 100
+        reserved_generic_space = int(generic_item_count * reserved_generic_percent)
+        inventory_size -= reserved_generic_space
+
+        # Main cull process
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
                 # There are more items than locations and all of them are already locked due to YAML or logic.
-                # Random items from locked ones will go to starting items
+                # First, transfer reserved space to the inventory
+                while reserved_generic_space > 0 and len(locked_items) > inventory_size:
+                    reserved_generic_space -= 1
+                    inventory_size += 1
+                # If there still isn't enough space, push locked items into start inventory
                 self.multiworld.random.shuffle(locked_items)
                 while len(locked_items) > inventory_size:
                     item: Item = locked_items.pop()
@@ -380,6 +391,7 @@ class ValidInventory:
                                  and item not in self.locked_items
                                  and item.name in second_pass_placeable_items)]
         self.multiworld.random.shuffle(replacement_items)
+        inventory_size += reserved_generic_space
         while len(inventory) < inventory_size and len(replacement_items) > 0:
             item = replacement_items.pop()
             inventory.append(item)
