@@ -32,7 +32,7 @@ all_bosses = [
         locations = {"CA: Coiled Sword"}),
     DS3BossInfo("Vordt of the Boreal Valley", 3000800, region = "Undead Settlement",
         locations = {"HWL: Soul of Boreal Valley Vordt"}),
-    DS3BossInfo("Curse-Rotted Greatwood", 3100800, locations = {
+    DS3BossInfo("Curse-rotted Greatwood", 3100800, locations = {
         "US: Soul of the Rotted Greatwood",
         "US: Transposing Kiln",
         "US: Wargod Wooden Shield",

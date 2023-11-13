@@ -114,10 +114,6 @@ class DarkSouls3World(World):
         if self.multiworld.soul_locations[self.player] != SoulLocationsOption.option_not_randomized:
             self.enabled_location_categories.add(DS3LocationCategory.SOUL)
 
-        # The offline randomizer's clever code for converting an item into a gesture only works for
-        # items in the local world.
-        self.multiworld.local_items[self.player].value.add("Path of the Dragon")
-
         # Randomize Yhorm manually so that we know where to place the Storm Ruler
         if self.multiworld.randomize_enemies[self.player] == Toggle.option_true:
             self.yhorm_location = self.multiworld.random.choice(
@@ -627,15 +623,6 @@ class DarkSouls3World(World):
                                         item.player != self.player or
                                         (item.data.count == 1 and not item.data.souls)
                                     ))
-                elif location.drop:
-                    # TODO: I'm not sure this is precisely the rule for where this can and can't
-                    # go, but I've seen the offline randomizer reject it as a Ravenous Crystal
-                    # Lizard drop. Should consult thefifthmatt.
-                    add_item_rule(self.multiworld.get_location(location.name, self.player),
-                                    lambda item: (
-                                        item.player != self.player or
-                                        item.name != "Path of the Dragon"
-                                    ))
 
         # This particular location is bugged, and will drop two copies of whatever item is placed
         # there.
@@ -892,7 +879,7 @@ class DarkSouls3World(World):
         ap_ids_to_ds3_ids: Dict[str, int] = {}
         item_counts: Dict[str, int] = {}
         for item in our_items:
-            ap_ids_to_ds3_ids[str(item.code)] = item.data.ds3_code
+            if item.data.ds3_code: ap_ids_to_ds3_ids[str(item.code)] = item.data.ds3_code
             if item.data.count != 1: item_counts[str(item.code)] = item.data.count
 
         # A map from Archipelago's location IDs to the keys the offline

@@ -1233,7 +1233,7 @@ _vanilla_items = flatten([
     DS3ItemData("Easterner's Ashes",                   0x40000868, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression),
 
-    # Fake item supported by the offline randomizer for controlling access to Archdragon Peak
+    # Fake item for controlling access to Archdragon Peak
     DS3ItemData("Path of the Dragon",                  0x40002346, DS3ItemCategory.KEY,
                 classification = ItemClassification.progression),
 
