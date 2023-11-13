@@ -14,6 +14,17 @@ const adjustTableHeight = () => {
     }
 };
 
+/**
+ * Convert an integer number of seconds into a human readable HH:MM format
+ * @param {Number} seconds
+ * @returns {string}
+ */
+const secondsToHours = (seconds) => {
+    let hours   = Math.floor(seconds / 3600);
+    let minutes = Math.floor((seconds - (hours * 3600)) / 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+};
+
 window.addEventListener('load', () => {
     const tables = $(".table").DataTable({
         paging: false,
@@ -27,24 +38,31 @@ window.addEventListener('load', () => {
         stateLoadCallback: function(settings) {
             return JSON.parse(localStorage.getItem(`DataTables_${settings.sInstance}_/tracker`));
         },
+        footerCallback: function(tfoot, data, start, end, display) {
+            if (tfoot) {
+                const activityData = this.api().column('lastActivity:name').data().toArray().filter(x => !isNaN(x));
+                Array.from(tfoot?.children).find(td => td.classList.contains('last-activity')).innerText =
+                  (activityData.length) ? secondsToHours(Math.min(...activityData)) : 'None';
+            }
+        },
         columnDefs: [
+            {
+                targets: 'last-activity',
+                name: 'lastActivity'
+            },
             {
                 targets: 'hours',
                 render: function (data, type, row) {
                     if (type === "sort" || type === 'type') {
                         if (data === "None")
-                            return -1;
+                            return Number.MAX_VALUE;
 
                         return parseInt(data);
                     }
                     if (data === "None")
                         return data;
 
-                    let hours   = Math.floor(data / 3600);
-                    let minutes = Math.floor((data - (hours * 3600)) / 60);
-
-                    if (minutes < 10) {minutes = "0"+minutes;}
-                    return hours+':'+minutes;
+                    return secondsToHours(data);
                 }
             },
             {
@@ -114,11 +132,16 @@ window.addEventListener('load', () => {
             if (status === "success") {
                 target.find(".table").each(function (i, new_table) {
                     const new_trs = $(new_table).find("tbody>tr");
+                    const footer_tr = $(new_table).find("tfoot>tr");
                     const old_table = tables.eq(i);
                     const topscroll = $(old_table.settings()[0].nScrollBody).scrollTop();
                     const leftscroll = $(old_table.settings()[0].nScrollBody).scrollLeft();
                     old_table.clear();
-                    old_table.rows.add(new_trs).draw();
+                    if (footer_tr.length) {
+                        $(old_table.table).find("tfoot").html(footer_tr);
+                    }
+                    old_table.rows.add(new_trs);
+                    old_table.draw();
                     $(old_table.settings()[0].nScrollBody).scrollTop(topscroll);
                     $(old_table.settings()[0].nScrollBody).scrollLeft(leftscroll);
                 });

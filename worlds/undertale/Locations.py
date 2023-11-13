@@ -77,7 +77,6 @@ advancement_table = {
     "True Lab Plot": AdvData(79063, "Hotland"),
     "Left New Home Key": AdvData(79064, "New Home"),
     "Right New Home Key": AdvData(79065, "New Home"),
-    "Starting Key": AdvData(79067, "Hub"),
     "LOVE 2": AdvData(79902, "???"),
     "LOVE 3": AdvData(79903, "???"),
     "LOVE 4": AdvData(79904, "???"),

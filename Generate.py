@@ -7,8 +7,8 @@ import random
 import string
 import urllib.parse
 import urllib.request
-from collections import ChainMap, Counter
-from typing import Any, Callable, Dict, Tuple, Union
+from collections import Counter
+from typing import Any, Dict, Tuple, Union
 
 import ModuleUpdate
 
@@ -157,7 +157,8 @@ def main(args=None, callback=ERmain):
                         for yaml in weights_cache[path]:
                             if category_name is None:
                                 for category in yaml:
-                                    if category in AutoWorldRegister.world_types and key in Options.common_options:
+                                    if category in AutoWorldRegister.world_types and \
+                                            key in Options.CommonOptions.type_hints:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
@@ -168,7 +169,7 @@ def main(args=None, callback=ERmain):
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
     name_counter = Counter()
-    erargs.player_settings = {}
+    erargs.player_options = {}
 
     player = 1
     while player <= args.multi:
@@ -224,7 +225,7 @@ def main(args=None, callback=ERmain):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    callback(erargs, seed)
+    return callback(erargs, seed)
 
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
@@ -340,7 +341,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         return get_choice(option_key, category_dict)
     if game in AutoWorldRegister.world_types:
         game_world = AutoWorldRegister.world_types[game]
-        options = ChainMap(game_world.option_definitions, Options.per_game_common_options)
+        options = game_world.options_dataclass.type_hints
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
@@ -445,8 +446,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                                 f"which is not enabled.")
 
     ret = argparse.Namespace()
-    for option_key in Options.per_game_common_options:
-        if option_key in weights and option_key not in Options.common_options:
+    for option_key in Options.PerGameCommonOptions.type_hints:
+        if option_key in weights and option_key not in Options.CommonOptions.type_hints:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
     ret.game = get_choice("game", weights)
@@ -466,16 +467,11 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
-    for option_key, option in Options.common_options.items():
+    for option_key, option in Options.CommonOptions.type_hints.items():
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
-    for option_key, option in world_type.option_definitions.items():
+    for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
-    for option_key, option in Options.per_game_common_options.items():
-        # skip setting this option if already set from common_options, defaulting to root option
-        if option_key not in world_type.option_definitions and \
-                (option_key not in Options.common_options or option_key in game_weights):
-            handle_option(ret, game_weights, option_key, option, plando_options)
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
@@ -643,6 +639,15 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
-    main()
+    multiworld = main()
+    if __debug__:
+        import gc
+        import sys
+        import weakref
+        weak = weakref.ref(multiworld)
+        del multiworld
+        gc.collect()  # need to collect to deref all hard references
+        assert not weak(), f"MultiWorld object was not de-allocated, it's referenced {sys.getrefcount(weak())} times." \
+                           " This would be a memory leak."
     # in case of error-free exit should not need confirmation
     atexit.unregister(confirmation)
