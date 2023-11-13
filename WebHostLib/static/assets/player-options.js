@@ -101,8 +101,11 @@ const buildUI = (optionData) => {
   const leftGameOpts = {};
   const rightGameOpts = {};
   Object.keys(optionData.gameOptions).forEach((key, index) => {
-    if (index < Object.keys(optionData.gameOptions).length / 2) { leftGameOpts[key] = optionData.gameOptions[key]; }
-    else { rightGameOpts[key] = optionData.gameOptions[key]; }
+    if (index < Object.keys(optionData.gameOptions).length / 2) {
+      leftGameOpts[key] = optionData.gameOptions[key];
+    } else {
+      rightGameOpts[key] = optionData.gameOptions[key];
+    }
   });
   document.getElementById('game-options-left').appendChild(buildOptionsTable(leftGameOpts));
   document.getElementById('game-options-right').appendChild(buildOptionsTable(rightGameOpts));
@@ -137,7 +140,7 @@ const buildOptionsTable = (options, romOpts = false) => {
 
     const randomButton = document.createElement('button');
 
-    switch(options[option].type){
+    switch(options[option].type) {
       case 'select':
         element = document.createElement('div');
         element.classList.add('select-container');
@@ -146,16 +149,17 @@ const buildOptionsTable = (options, romOpts = false) => {
         select.setAttribute('data-key', option);
         if (romOpts) { select.setAttribute('data-romOpt', '1'); }
         options[option].options.forEach((opt) => {
-          const option = document.createElement('option');
-          option.setAttribute('value', opt.value);
-          option.innerText = opt.name;
+          const optionElement = document.createElement('option');
+          optionElement.setAttribute('value', opt.value);
+          optionElement.innerText = opt.name;
+
           if ((isNaN(currentOptions[gameName][option]) &&
             (parseInt(opt.value, 10) === parseInt(currentOptions[gameName][option]))) ||
             (opt.value === currentOptions[gameName][option]))
           {
-            option.selected = true;
+            optionElement.selected = true;
           }
-          select.appendChild(option);
+          select.appendChild(optionElement);
         });
         select.addEventListener('change', (event) => updateGameOption(event.target));
         element.appendChild(select);
@@ -323,6 +327,22 @@ const setPresets = (optionsData, presetName) => {
     return;
   }
 
+  const updateOptionElement = (option, presetValue) => {
+    const optionElement = document.querySelector(`#${option}[data-key='${option}']`);
+    const randomElement = document.querySelector(`.randomize-button[data-key='${option}']`);
+
+    if (presetValue === 'random') {
+      randomElement.classList.add('active');
+      optionElement.disabled = true;
+      updateGameOption(randomElement, false);
+    } else {
+      optionElement.value = presetValue;
+      randomElement.classList.remove('active');
+      optionElement.disabled = undefined;
+      updateGameOption(optionElement, false);
+    }
+  };
+
   for (const option in defaults) {
     let presetValue = preset[option];
     if (presetValue === undefined) {
@@ -332,21 +352,20 @@ const setPresets = (optionsData, presetName) => {
 
     switch (defaults[option].type) {
       case 'range':
-      case 'select': {
-        const optionElement = document.querySelector(`#${option}[data-key='${option}']`);
-        const randomElement = document.querySelector(`.randomize-button[data-key='${option}']`);
-
+        const numberElement = document.querySelector(`#${option}-value`);
         if (presetValue === 'random') {
-          randomElement.classList.add('active');
-          optionElement.disabled = true;
-          updateGameOption(randomElement, false);
+          numberElement.innerText = defaults[option]['defaultValue'] === 'random'
+              ? defaults[option]['min'] // A fallback so we don't print 'random' in the UI.
+              : defaults[option]['defaultValue'];
         } else {
-          optionElement.value = presetValue;
-          randomElement.classList.remove('active');
-          optionElement.disabled = undefined;
-          updateGameOption(optionElement, false);
+          numberElement.innerText = presetValue;
         }
 
+        updateOptionElement(option, presetValue);
+        break;
+
+      case 'select': {
+        updateOptionElement(option, presetValue);
         break;
       }
 
