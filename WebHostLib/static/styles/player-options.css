@@ -94,6 +94,7 @@ html{
     display: flex;
     justify-content: space-between;
     gap: 20px;
+    padding: 3px;
 }
 
 #player-options div {
