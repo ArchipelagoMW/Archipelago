@@ -114,9 +114,9 @@ class MultiWorld():
                 self.region_cache[region.player][region.name] = region
 
         def add_group(self, new_id: int):
-            self.region_cache.update({new_id: {}})
-            self.entrance_cache.update({new_id: {}})
-            self.location_cache.update({new_id: {}})
+            self.region_cache[new_id] = {}
+            self.entrance_cache[new_id] = {}
+            self.location_cache[new_id] = {}
 
         def __iter__(self) -> Iterator[Region]:
             for regions in self.region_cache.values():
