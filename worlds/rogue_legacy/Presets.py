@@ -1,7 +1,9 @@
 from typing import Any, Dict
 
+
 rl_option_presets: Dict[str, Dict[str, Any]] = {
-    "All Random": {
+    # Example preset.
+    "Unknown Fate": {
         "progression_balancing":    "random",
         "accessibility":            "random",
         "starting_gender":          "random",
@@ -32,12 +34,14 @@ rl_option_presets: Dict[str, Dict[str, Any]] = {
         "equip_pool":               "random",
         "crit_chance_pool":         "random",
         "crit_damage_pool":         "random",
-        "allow_default_names":      True,
+        "allow_default_names":      1,
         "death_link":               "random",
     },
-    "Limited Resources": {
+    # A preset I actually use.
+    "Limited Potential": {
         "progression_balancing":    0,
         "fairy_chests_per_zone":    2,
+        "starting_class":           "random",
         "chests_per_zone":          30,
         "vendors":                  "normal",
         "architect":                "disabled",
@@ -50,7 +54,7 @@ rl_option_presets: Dict[str, Dict[str, Any]] = {
         "magic_damage_pool":        10,
         "armor_pool":               5,
         "equip_pool":               10,
-        "crit_chance_pool":         0,
-        "crit_damage_pool":         0,
+        "crit_chance_pool":         5,
+        "crit_damage_pool":         5,
     }
 }

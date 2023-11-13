@@ -118,7 +118,19 @@ def create():
 
         player_options["gameOptions"] = game_options
 
-        player_options["presetOptions"] = world.web.options_presets
+        player_options["presetOptions"] = {}
+        for preset_name, presets in world.web.options_presets.items():
+            player_options["presetOptions"][preset_name] = {}
+            for option_name, option_value in presets.items():
+                if option_value == "random":
+                    player_options["presetOptions"][preset_name][option_name] = option_value
+                    continue
+
+                option = world.options_dataclass.type_hints[option_name].from_any(option_value)
+                if issubclass(option.__class__, Options.Range):
+                    player_options["presetOptions"][preset_name][option_name] = option.value
+                else:
+                    player_options["presetOptions"][preset_name][option_name] = option.current_key
 
         os.makedirs(os.path.join(target_folder, 'player-options'), exist_ok=True)
 
