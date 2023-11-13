@@ -3,7 +3,7 @@ from typing import Union
 from BaseClasses import Tutorial, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from . import Options
-from .Items import DLCQuestItem, ItemData, create_items, item_table
+from .Items import DLCQuestItem, ItemData, create_items, item_table, items_by_group, Group
 from .Locations import DLCQuestLocation, location_table
 from .Options import DLCQuestOptions
 from .Regions import create_regions
@@ -60,7 +60,9 @@ class DLCqworld(World):
         created_items = create_items(self, self.options, locations_count + len(items_to_exclude), self.multiworld.random)
 
         self.multiworld.itempool += created_items
-        self.multiworld.early_items[self.player]["Movement Pack"] = 1
+
+        if self.options.campaign == Options.Campaign.option_basic or self.options.campaign == Options.Campaign.option_both:
+            self.multiworld.early_items[self.player]["Movement Pack"] = 1
 
         for item in items_to_exclude:
             if item in self.multiworld.itempool:
@@ -76,6 +78,10 @@ class DLCqworld(World):
             item = item_table[item]
 
         return DLCQuestItem(item.name, item.classification, item.code, self.player)
+
+    def get_filler_item_name(self) -> str:
+        trap = self.multiworld.random.choice(items_by_group[Group.Trap])
+        return trap.name
 
     def fill_slot_data(self):
         options_dict = self.options.as_dict(
