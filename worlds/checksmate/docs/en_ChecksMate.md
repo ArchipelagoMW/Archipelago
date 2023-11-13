@@ -28,6 +28,9 @@ The player will receive either:
    - Powerful pieces cannot be played onto the board at the start of the game. One must wait turns equal to their material value before playing such a piece.
    - In addition, the player may receive "Pocket Gems", which grant "turns passed" toward pocket pieces
    - Finally, "Pocket Range" allows these pocket pieces to deploy onto ranks beyond the home rank, from 1st up to the 7th rank
+ - A Consul, adding an extra King piece. You lose when all of your Kings are captured.
+ - A King Upgrade, where your primary King (not Consuls) becomes a Mounted King and gains Knight movement.
+   - When you gain both King Upgrades, your primary King becomes a Hyper King and gains Nightrider (Knight slider) and Elephant (2x diagonal leaper) movement.
 
 ## What is the victory condition?
 

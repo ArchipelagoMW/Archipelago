@@ -128,6 +128,21 @@ class MaterialMaxLimit(Range):
     default = 46
 
 
+class MaximumEnginePenalties(Range):
+    """
+    The number of times the engine will receive a reduction to their skill level. These reductions are currently named
+    "Progressive ELO Engine Lobotomy," and each level reduces the AI's access to both analysis and information.
+
+    Before calculation penalties are applied, the current supported engines have an approximate ELO of ...
+
+    ChessV: 2030. See: https://www.computerchess.org.uk/ccrl/404/
+    """
+    display_name = "Maximum Engine Penalties"
+    range_start = 0
+    range_end = 5
+    default = 5
+
+
 class FairyChessPieces(Choice):
     """
     Whether to use fairy chess pieces.
@@ -265,8 +280,9 @@ cm_options: Dict[str, type(Option)] = {
     "piece_types": PieceTypes,
     "enemy_piece_types": EnemyPieceTypes,
     "early_material": EarlyMaterial,
-    "max_material": MaterialMaxLimit,
     "min_material": MaterialMinLimit,
+    "max_material": MaterialMaxLimit,
+    "max_engine_penalties": MaximumEnginePenalties,
     "fairy_kings": FairyKings,
     "fairy_chess_pieces": FairyChessPieces,
     "fairy_chess_army": FairyChessArmy,
