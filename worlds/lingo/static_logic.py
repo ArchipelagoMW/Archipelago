@@ -2,6 +2,8 @@ from typing import Dict, List, NamedTuple, Optional, Set
 
 import yaml
 
+import Utils
+
 
 class RoomAndDoor(NamedTuple):
     room: Optional[str]
@@ -112,7 +114,7 @@ def load_static_data():
 
     # Load in all item and location IDs. These are broken up into groups based on the type of item/location.
     with files(data).joinpath("ids.yaml").open() as file:
-        config = yaml.load(file, Loader=yaml.Loader)
+        config = yaml.load(file, Loader=Utils.SafeLoader)
 
         if "special_items" in config:
             for item_name, item_id in config["special_items"].items():
@@ -147,7 +149,7 @@ def load_static_data():
 
     # Process the main world file.
     with files(data).joinpath("LL1.yaml").open() as file:
-        config = yaml.load(file, Loader=yaml.Loader)
+        config = yaml.load(file, Loader=Utils.SafeLoader)
 
         for room_name, room_data in config.items():
             process_room(room_name, room_data)
