@@ -4,17 +4,21 @@ import hashlib
 import logging
 import pathlib
 import sys
-from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
+import time
+from dataclasses import make_dataclass
+from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
     Union
 
+from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
-from Options import AssembleOptions
 
 if TYPE_CHECKING:
     import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
     from settings import Group
+
+perf_logger = logging.getLogger("performance")
 
 
 class AutoWorldRegister(type):
@@ -63,6 +67,12 @@ class AutoWorldRegister(type):
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
 
+        # create missing options_dataclass from legacy option_definitions
+        # TODO - remove this once all worlds use options dataclasses
+        if "options_dataclass" not in dct and "option_definitions" in dct:
+            dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
+                                                      bases=(PerGameCommonOptions,))
+
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
@@ -96,10 +106,24 @@ class AutoLogicRegister(type):
         return new_class
 
 
+def _timed_call(method: Callable[..., Any], *args: Any,
+                multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
+    start = time.perf_counter()
+    ret = method(*args)
+    taken = time.perf_counter() - start
+    if taken > 1.0:
+        if player and multiworld:
+            perf_logger.info(f"Took {taken} seconds in {method.__qualname__} for player {player}, "
+                             f"named {multiworld.player_name[player]}.")
+        else:
+            perf_logger.info(f"Took {taken} seconds in {method.__qualname__}.")
+    return ret
+
+
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
     try:
-        ret = method(*args)
+        ret = _timed_call(method, *args, multiworld=multiworld, player=player)
     except Exception as e:
         message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
         if sys.version_info >= (3, 11, 0):
@@ -125,24 +149,21 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
                         f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
                         f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
-    for world_type in sorted(world_types, key=lambda world: world.__name__):
-        stage_callable = getattr(world_type, f"stage_{method_name}", None)
-        if stage_callable:
-            stage_callable(multiworld, *args)
+    call_stage(multiworld, method_name, *args)
 
 
 def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}
-    for world_type in world_types:
+    for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(multiworld, *args)
+            _timed_call(stage_callable, multiworld, *args)
 
 
 class WebWorld:
     """Webhost integration"""
 
-    settings_page: Union[bool, str] = True
+    options_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
 
     game_info_languages: List[str] = ['en']
@@ -163,8 +184,11 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: ClassVar[Dict[str, AssembleOptions]] = {}
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
     """link your Options mapping"""
+    options: PerGameCommonOptions
+    """resulting options for the player of this world"""
+
     game: ClassVar[str]
     """name the game"""
     topology_present: ClassVar[bool] = False
@@ -358,6 +382,19 @@ class World(metaclass=AutoWorldRegister):
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
+    @classmethod
+    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+        """Creates a group, which is an instance of World that is responsible for multiple others.
+        An example case is ItemLinks creating these."""
+        # TODO remove loop when worlds use options dataclass
+        for option_key, option in cls.options_dataclass.type_hints.items():
+            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+        group = cls(multiworld, new_player_id)
+        group.options = cls.options_dataclass(**{option_key: option(option.default)
+                                                 for option_key, option in cls.options_dataclass.type_hints.items()})
+
+        return group
+
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
@@ -377,16 +414,16 @@ class World(metaclass=AutoWorldRegister):
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
         if name:
-            state.prog_items[name, self.player] += 1
+            state.prog_items[self.player][name] += 1
             return True
         return False
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item, True)
         if name:
-            state.prog_items[name, self.player] -= 1
-            if state.prog_items[name, self.player] < 1:
-                del (state.prog_items[name, self.player])
+            state.prog_items[self.player][name] -= 1
+            if state.prog_items[self.player][name] < 1:
+                del (state.prog_items[self.player][name])
             return True
         return False
 
