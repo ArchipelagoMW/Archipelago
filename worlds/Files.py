@@ -64,7 +64,7 @@ class APContainer:
         zip_file = file if file else self.path
         if not zip_file:
             raise FileNotFoundError(f"Cannot write {self.__class__.__name__} due to no path provided.")
-        with semaphore:
+        with semaphore:  # TODO: remove semaphore once generate_output has a thread limit
             with zipfile.ZipFile(
                     zip_file, "w", self.compression_method, True, self.compression_level) as zf:
                 if file:
