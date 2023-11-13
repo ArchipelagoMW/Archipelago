@@ -148,7 +148,7 @@ def create():
 
             weighted_options["baseOptions"]["game"][game_name] = 0
             weighted_options["games"][game_name] = {
-                "gameOptions": game_options,
+                "gameSettings": game_options,
                 "gameItems": tuple(world.item_names),
                 "gameItemGroups": [
                     group for group in world.item_name_groups.keys() if group != "Everything"
