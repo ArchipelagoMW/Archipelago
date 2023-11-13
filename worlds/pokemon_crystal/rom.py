@@ -39,17 +39,9 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             continue
 
         if location.item and location.item.player == world.player:
-            write_bytes(
-                patched_rom,
-                [reverse_offset_item_value(location.item.code)],
-                location.rom_address
-            )
+            write_bytes(patched_rom, [reverse_offset_item_value(location.item.code)], location.rom_address)
         else:
-            write_bytes(
-                patched_rom,
-                [184],
-                location.rom_address
-            )
+            write_bytes(patched_rom, [184], location.rom_address)
 
     static = {
         "RedGyarados": 2,
@@ -161,17 +153,11 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         for i in range(33):
             # skip goldenrod and celadon
             if i not in [6, 7, 8, 9, 10, 11, 12, 23, 24, 25, 26, 27]:
-                write_bytes(
-                    patched_rom, better_mart_bytes, mart_address)
+                write_bytes(patched_rom, better_mart_bytes, mart_address)
             mart_address += 2
 
     exp_modifier_address = data.rom_addresses["AP_Setting_ExpModifier"] + 1
     write_bytes(patched_rom, [world.options.experience_modifier], exp_modifier_address)
-
-    pc_items_address = data.rom_addresses["sPCItems"]
-    write_bytes(patched_rom, [25, 26], pc_items_address)
-    badges_address = data.rom_addresses["sBadges"]
-    write_bytes(patched_rom, [15, 240], badges_address)
 
     # Set slot name
     for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):
@@ -181,8 +167,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     output_path = os.path.join(output_directory, f"{out_file_name}.gbc")
     with open(output_path, "wb") as out_file:
         out_file.write(patched_rom)
-    patch = PokemonCrystalDeltaPatch(os.path.splitext(output_path)[0] +
-                                     ".apcrystal", player=world.player, player_name=world.multiworld.player_name[world.player], patched_path=output_path)
+    patch = PokemonCrystalDeltaPatch(os.path.splitext(output_path)[0] + ".apcrystal",
+                                     player=world.player, player_name=world.multiworld.player_name[world.player], patched_path=output_path)
 
     patch.write()
     os.unlink(output_path)
@@ -206,8 +192,7 @@ def get_random_poke(random):
 
 
 def get_random_move(random):
-    randommoves = [move.id for _name, move in data.moves.items()
-                   if not move.is_hm and move.id > 0]
+    randommoves = [move.id for _name, move in data.moves.items() if not move.is_hm and move.id > 0]
     return random.choice(randommoves)
 
 

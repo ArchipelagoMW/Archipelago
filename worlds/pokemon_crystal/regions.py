@@ -31,27 +31,18 @@ def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
         regions[region_name] = new_region
 
         for event_data in region_data.events:
-            event = PokemonCrystalLocation(
-                world.player, event_data.name, new_region)
+            event = PokemonCrystalLocation(world.player, event_data.name, new_region)
             event.place_locked_item(PokemonCrystalItem(
                 event_data.name, ItemClassification.progression, None, world.player))
             new_region.locations.append(event)
 
         for region_exit in region_data.exits:
-            connections.append(
-                (f"{region_name} -> {region_exit}", region_name, region_exit))
+            connections.append((f"{region_name} -> {region_exit}", region_name, region_exit))
 
     for name, source, dest in connections:
         regions[source].connect(regions[dest], name)
 
     regions["Menu"] = Region("Menu", world.player, world.multiworld)
     regions["Menu"].connect(regions["REGION_PLAYERS_HOUSE_2F"], "Start Game")
-    # location = Location(world.player, "Beat the game",
-    #                     None, regions["REGION_HALL_OF_FAME"])
-    # victory_item = Item(
-    #     "EVENT_BECOME_CHAMPION", ItemClassification.progression_skip_balancing, None, world.player)
-    # location.place_locked_item(victory_item)
-
-    # regions["REGION_HALL_OF_FAME"].locations.append(location)
 
     return regions

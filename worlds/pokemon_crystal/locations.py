@@ -28,8 +28,7 @@ class PokemonCrystalLocation(Location):
             tags: FrozenSet[str] = frozenset()
     ) -> None:
         super().__init__(player, name, None if flag is None else offset_flag(flag), parent)
-        self.default_item_code = None if default_item_value is None else offset_item_value(
-            default_item_value)
+        self.default_item_code = None if default_item_value is None else offset_item_value(default_item_value)
         self.rom_address = rom_address
         self.tags = tags
 
@@ -57,8 +56,7 @@ def create_locations(world: PokemonCrystalWorld, regions: Dict[str, Region], ran
         region = regions[region_name]
         filtered_locations = {}
         if not randomize_hidden_items:
-            filtered_locations = [
-                loc for loc in region_data.locations if not "Hidden" in data.locations[loc].tags]
+            filtered_locations = [loc for loc in region_data.locations if not "Hidden" in data.locations[loc].tags]
         else:
             filtered_locations = region_data.locations
         for location_name in filtered_locations:
@@ -83,7 +81,6 @@ def create_location_label_to_id_map() -> Dict[str, int]:
     for region_data in data.regions.values():
         for location_name in region_data.locations:
             location_data = data.locations[location_name]
-            label_to_id_map[location_data.label] = offset_flag(
-                location_data.flag)
+            label_to_id_map[location_data.label] = offset_flag(location_data.flag)
 
     return label_to_id_map

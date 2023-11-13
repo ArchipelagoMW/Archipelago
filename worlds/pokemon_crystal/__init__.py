@@ -1,29 +1,15 @@
 import settings
 from typing import List, Union, ClassVar, Dict, Any, Tuple
-import os
-import sys
 import copy
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
-if "worlds._bizhawk" not in sys.modules:
-    bh_apworld_path = os.path.join(os.path.dirname(
-        sys.modules["worlds"].__file__), "_bizhawk.apworld")
-    if not os.path.isfile(bh_apworld_path) and not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
-        logging.warning(
-            "Did not find _bizhawk.apworld required to play Pokemon Crystal. Still able to generate.")
-    else:
-        # Unused, but required to register with BizHawkClient
-        from .client import PokemonCrystalClient
-else:
-    # Unused, but required to register with BizHawkClient
-    from .client import PokemonCrystalClient
+from .client import PokemonCrystalClient
 from .options import PokemonCrystalOptions
 from .regions import create_regions
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification
 from .rules import set_rules
-from .data import (PokemonData, MoveData, TrainerData,
-                   LearnsetData, data as crystal_data)
+from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data)
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 
@@ -92,8 +78,7 @@ class PokemonCrystalWorld(World):
             if location.address is not None
         ]
 
-        default_itempool = [self.create_item_by_code(
-            location.default_item_code) for location in item_locations]
+        default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
         self.multiworld.itempool += default_itempool
 
     def set_rules(self) -> None:
@@ -103,30 +88,28 @@ class PokemonCrystalWorld(World):
         def get_random_move(type=None):
             move_pool = []
             if type is None:
-                move_pool = [move_name for move_name,
-                             move_data in crystal_data.moves.items() if move_data.id > 0 and not move_data.is_hm]
+                move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if move_data.id >
+                             0 and not move_data.is_hm]
             else:
-                move_pool = [move_name for move_name,
-                             move_data in crystal_data.moves.items() if move_data.id > 0 and not move_data.is_hm and move_data.type == type]
+                move_pool = [move_name for move_name, move_data in crystal_data.moves.items(
+                ) if move_data.id > 0 and not move_data.is_hm and move_data.type == type]
             return self.random.choice(move_pool)
 
         def get_random_move_from_learnset(pokemon, level):
-            move_pool = [
-                move.move for move in crystal_data.pokemon[pokemon].learnset if move.level <= level]
+            move_pool = [move.move for move in crystal_data.pokemon[pokemon].learnset if move.level <= level]
             return self.random.choice(move_pool)
 
         def get_random_pokemon(types=None):
             pokemon_pool = []
             if types is None or types[0] is None:
-                pokemon_pool = [pkmn_name for pkmn_name,
-                                _data in crystal_data.pokemon.items()]
+                pokemon_pool = [pkmn_name for pkmn_name, _data in crystal_data.pokemon.items()]
             else:
-                pokemon_pool = [pkmn_name for pkmn_name,
-                                pkmn_data in crystal_data.pokemon.items() if pkmn_data.types == types]
+                pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in crystal_data.pokemon.items()
+                                if pkmn_data.types == types]
             return self.random.choice(pokemon_pool)
 
         def get_random_helditem():
-            helditems = [item_id for item_id, item in crystal_data.items.items()
+            helditems = [item.item_const for item_id, item in crystal_data.items.items()
                          if "Unique" not in item.tags and "INVALID" not in item.tags]
             return self.random.choice(helditems)
 
@@ -135,8 +118,9 @@ class PokemonCrystalWorld(World):
             self.generated_trainers[trainer_name] = trainer
 
         self.generated_pokemon = copy.deepcopy(crystal_data.pokemon)
-        self.generated_starters = (["CYNDAQUIL", "QUILAVA", "TYPHLOSION"], [
-                                   "TOTODILE", "CROCONAW", "FERALIGATR"], ["CHIKORITA", "BAYLEEF", "MEGANIUM"])
+        self.generated_starters = (["CYNDAQUIL", "QUILAVA", "TYPHLOSION"],
+                                   ["TOTODILE", "CROCONAW", "FERALIGATR"],
+                                   ["CHIKORITA", "BAYLEEF", "MEGANIUM"])
         self.generated_trainers = copy.deepcopy(crystal_data.trainers)
 
         if self.options.randomize_learnsets:
@@ -146,31 +130,28 @@ class PokemonCrystalWorld(World):
                 for move in pkmn_data.learnset:
                     if move.move != "NO_MOVE":
                         learn_levels.append(move.level)
-                new_learnset = [
-                    LearnsetData(level, get_random_move()) for level in learn_levels]
-                self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(
-                    learnset=new_learnset)
+                new_learnset = [LearnsetData(level, get_random_move()) for level in learn_levels]
+                self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(learnset=new_learnset)
 
         if self.options.randomize_starters:
             for evo_line in self.generated_starters:
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in crystal_data.trainers.items() if trainer_name.startswith(
-                    "RIVAL_"+evo_line[0])]
+                rival_fights = [(trainer_name, trainer) for trainer_name,
+                                trainer in crystal_data.trainers.items() if trainer_name.startswith("RIVAL_"+evo_line[0])]
 
                 evo_line[0] = get_random_pokemon()
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[0])
 
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in crystal_data.trainers.items() if trainer_name.startswith(
-                    "RIVAL_"+evo_line[1])]
+                rival_fights = [(trainer_name, trainer) for trainer_name,
+                                trainer in crystal_data.trainers.items() if trainer_name.startswith("RIVAL_"+evo_line[1])]
 
                 first_evolutions = crystal_data.pokemon[evo_line[0]].evolutions
-                evo_line[1] = self.random.choice(first_evolutions)[-1] if len(
-                    first_evolutions) else evo_line[0]
+                evo_line[1] = self.random.choice(first_evolutions)[-1] if len(first_evolutions) else evo_line[0]
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[1])
 
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in crystal_data.trainers.items() if trainer_name.startswith(
-                    "RIVAL_"+evo_line[2])]
+                rival_fights = [(trainer_name, trainer) for trainer_name,
+                                trainer in crystal_data.trainers.items() if trainer_name.startswith("RIVAL_"+evo_line[2])]
 
                 second_evolutions = crystal_data.pokemon[evo_line[1]].evolutions
                 evo_line[2] = self.random.choice(second_evolutions)[-1] if len(

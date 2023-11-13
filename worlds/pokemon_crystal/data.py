@@ -134,8 +134,7 @@ def _init() -> None:
         # Locations
         for location_name in region_json["locations"]:
             if location_name in claimed_locations:
-                raise AssertionError(
-                    f"Location [{location_name}] was claimed by multiple regions")
+                raise AssertionError(f"Location [{location_name}] was claimed by multiple regions")
             location_json = location_data[location_name]
             new_location = LocationData(
                 location_name,
@@ -206,8 +205,7 @@ def _init() -> None:
             pokemon_data["base_stats"],
             pokemon_data["types"],
             pokemon_data["evolutions"],
-            [LearnsetData(move[0], move[1])
-             for move in pokemon_data["learnset"]],
+            [LearnsetData(move[0], move[1]) for move in pokemon_data["learnset"]],
             pokemon_data["tm_hm"])
 
     data.moves = {}
