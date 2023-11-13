@@ -7,17 +7,15 @@ from .options import MessengerAccessibility
 
 if TYPE_CHECKING:
     from . import MessengerWorld
-else:
-    MessengerWorld = object
 
 
 class MessengerRules:
     player: int
-    world: MessengerWorld
+    world: "MessengerWorld"
     region_rules: Dict[str, CollectionRule]
     location_rules: Dict[str, CollectionRule]
 
-    def __init__(self, world: MessengerWorld) -> None:
+    def __init__(self, world: "MessengerWorld") -> None:
         self.player = world.player
         self.world = world
 
@@ -153,7 +151,7 @@ class MessengerRules:
 class MessengerHardRules(MessengerRules):
     extra_rules: Dict[str, CollectionRule]
 
-    def __init__(self, world: MessengerWorld) -> None:
+    def __init__(self, world: "MessengerWorld") -> None:
         super().__init__(world)
 
         self.region_rules.update({
@@ -215,7 +213,7 @@ class MessengerHardRules(MessengerRules):
 
 
 class MessengerOOBRules(MessengerRules):
-    def __init__(self, world: MessengerWorld) -> None:
+    def __init__(self, world: "MessengerWorld") -> None:
         self.world = world
         self.player = world.player
 
@@ -246,7 +244,7 @@ class MessengerOOBRules(MessengerRules):
         self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
-def set_self_locking_items(world: MessengerWorld, player: int) -> None:
+def set_self_locking_items(world: "MessengerWorld", player: int) -> None:
     multiworld = world.multiworld
 
     # do the ones for seal shuffle on and off first
