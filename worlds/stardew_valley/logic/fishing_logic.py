@@ -1,5 +1,4 @@
-from .cached_logic import cache_rule, CachedLogic
-from .logic_cache import CachedRules
+from .cached_logic import cache_rule, CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic

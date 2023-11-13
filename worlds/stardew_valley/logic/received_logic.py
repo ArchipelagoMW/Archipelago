@@ -1,7 +1,6 @@
 from typing import Iterable, Union, Optional
 
-from .cached_logic import CachedLogic, cache_rule
-from .logic_cache import CachedRules
+from .cached_logic import CachedLogic, cache_rule, CachedRules
 from ..stardew_rule import StardewRule, True_, Received, And, Or, TotalReceived
 
 

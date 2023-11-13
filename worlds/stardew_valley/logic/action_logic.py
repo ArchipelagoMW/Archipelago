@@ -1,6 +1,5 @@
-from .cached_logic import CachedLogic, cache_rule
-from .has_logic import HasLogic
-from .logic_cache import CachedRules
+from .cached_logic import CachedLogic, cache_rule, profile_rule
+from .has_logic import HasLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from ..stardew_rule import StardewRule, True_, Or
@@ -20,15 +19,18 @@ class ActionLogic(CachedLogic):
         self.has = has
         self.region = region
 
+    @profile_rule
     def can_watch(self, channel: str = None):
         tv_rule = True_()
         if channel is None:
             return tv_rule
         return self.received(channel) & tv_rule
 
+    @profile_rule
     def can_pan(self) -> StardewRule:
         return self.received("Glittering Boulder Removed") & self.region.can_reach(Region.mountain)
 
+    @profile_rule
     def can_pan_at(self, region: str) -> StardewRule:
         return self.region.can_reach(region) & self.can_pan()
 

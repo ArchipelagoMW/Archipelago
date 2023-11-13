@@ -1,8 +1,7 @@
 from typing import Dict
 
 from .cached_logic import cache_rule, CachedLogic
-from .has_logic import HasLogic
-from .logic_cache import CachedRules
+from .has_logic import HasLogic, CachedRules
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic

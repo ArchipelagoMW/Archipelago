@@ -2,8 +2,7 @@ import math
 
 from typing import Union
 
-from .cached_logic import CachedLogic
-from .logic_cache import CachedRules
+from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .time_logic import TimeLogic

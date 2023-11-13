@@ -1,6 +1,5 @@
 from .cached_logic import CachedLogic, cache_rule
-from .combat_logic import CombatLogic
-from .logic_cache import CachedRules
+from .combat_logic import CombatLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .skill_logic import SkillLogic

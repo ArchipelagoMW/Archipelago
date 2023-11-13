@@ -1,7 +1,6 @@
 from typing import Iterable
 
-from .cached_logic import cache_rule, CachedLogic
-from .logic_cache import CachedRules
+from .cached_logic import cache_rule, CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .time_logic import TimeLogic
 from ..options import SeasonRandomization

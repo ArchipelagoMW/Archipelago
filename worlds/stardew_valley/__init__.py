@@ -8,6 +8,7 @@ from . import rules
 from .bundles import get_all_bundles, Bundle
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData
+from .logic.cached_logic import function_total_times, function_call_numbers
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.bundle_logic import BundleLogic
@@ -297,6 +298,15 @@ class StardewValleyWorld(World):
         set_rule(first_month_end, first_month_require_all_early_items)
 
     def generate_basic(self):
+        function_call_numbers_sorted = sorted(function_call_numbers, key=lambda x: function_call_numbers[x], reverse=True)
+        function_total_times_sorted = sorted(function_total_times, key=lambda x: function_total_times[x], reverse=True)
+
+        for function_call_number in function_call_numbers_sorted:
+            print(f"{function_call_number}: {function_call_numbers[function_call_number]}")
+        print("\n\n\n\n")
+        for function_total_time in function_total_times_sorted:
+            print(f"{function_total_time}: {function_total_times[function_total_time]}")
+
         pass
 
     def get_filler_item_name(self) -> str:

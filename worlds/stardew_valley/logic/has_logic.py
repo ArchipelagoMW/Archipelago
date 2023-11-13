@@ -1,7 +1,6 @@
 from typing import Dict, Union, Optional, List
 
-from .cached_logic import CachedLogic, cache_rule
-from .logic_cache import CachedRules
+from .cached_logic import CachedLogic, cache_rule, CachedRules
 from ..stardew_rule import StardewRule, True_, And, Or, Has, Count
 
 

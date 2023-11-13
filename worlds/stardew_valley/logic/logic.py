@@ -15,8 +15,7 @@ from .crafting_logic import CraftingLogic
 from .crop_logic import CropLogic
 from .farming_logic import FarmingLogic
 from .fishing_logic import FishingLogic
-from .gift_logic import GiftLogic
-from .logic_cache import CachedRules
+from .gift_logic import GiftLogic, CachedRules
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogic
 from .monster_logic import MonsterLogic

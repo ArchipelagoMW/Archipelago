@@ -1,6 +1,5 @@
 from .cached_logic import CachedLogic, cache_rule
-from .has_logic import HasLogic
-from .logic_cache import CachedRules
+from .has_logic import HasLogic, CachedRules
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.gift_names import Gift
