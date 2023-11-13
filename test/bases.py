@@ -1,3 +1,4 @@
+import sys
 import typing
 import unittest
 from argparse import Namespace
@@ -107,10 +108,35 @@ class WorldTestBase(unittest.TestCase):
     game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
     auto_construct: typing.ClassVar[bool] = True
     """ automatically set up a world for each test in this class """
+    memory_leak_tested: typing.ClassVar[bool] = False
+    """ remember if memory leak test was already done for this class """
 
     def setUp(self) -> None:
         if self.auto_construct:
             self.world_setup()
+
+    def tearDown(self) -> None:
+        if self.__class__.memory_leak_tested or not self.options or not self.constructed or \
+                sys.version_info < (3, 11, 0):  # the leak check in tearDown fails in py<3.11 for an unknown reason
+            # only run memory leak test once per class, only for constructed with non-default options
+            # default options will be tested in test/general
+            super().tearDown()
+            return
+
+        import gc
+        import weakref
+        weak = weakref.ref(self.multiworld)
+        for attr_name in dir(self):  # delete all direct references to MultiWorld and World
+            attr: object = typing.cast(object, getattr(self, attr_name))
+            if type(attr) is MultiWorld or isinstance(attr, AutoWorld.World):
+                delattr(self, attr_name)
+        state_cache: typing.Optional[typing.Dict[typing.Any, typing.Any]] = getattr(self, "_state_cache", None)
+        if state_cache is not None:  # in case of multiple inheritance with TestBase, we need to clear its cache
+            state_cache.clear()
+        gc.collect()
+        self.__class__.memory_leak_tested = True
+        self.assertFalse(weak(), f"World {getattr(self, 'game', '')} leaked MultiWorld object")
+        super().tearDown()
 
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
         if type(self) is WorldTestBase or \
@@ -284,7 +310,7 @@ class WorldTestBase(unittest.TestCase):
 
         # basically a shortened reimplementation of this method from core, in order to force the check is done
         def fulfills_accessibility() -> bool:
-            locations = self.multiworld.get_locations(1).copy()
+            locations = list(self.multiworld.get_locations(1))
             state = CollectionState(self.multiworld)
             while locations:
                 sphere: typing.List[Location] = []
@@ -307,3 +333,24 @@ class WorldTestBase(unittest.TestCase):
             placed_items = [loc.item for loc in self.multiworld.get_locations() if loc.item and loc.item.code]
             self.assertLessEqual(len(self.multiworld.itempool), len(placed_items),
                                  "Unplaced Items remaining in itempool")
+
+    def test_descriptions_have_valid_names(self):
+        """Ensure all item and location descriptions match a name of the corresponding type"""
+        if not (self.run_default_tests and self.constructed):
+            return
+        with self.subTest("Game", game=self.game):
+            with self.subTest("Items"):
+                world = self.multiworld.worlds[1]
+                valid_names = world.item_names.union(world.item_name_groups)
+                for name in world.item_descriptions.keys():
+                    with self.subTest("Name should be valid", name=name):
+                        self.assertIn(name, valid_names,
+                                      """All item descriptions must match defined item names""")
+
+            with self.subTest("Locations"):
+                world = self.multiworld.worlds[1]
+                valid_names = world.location_names.union(world.location_name_groups)
+                for name in world.location_descriptions.keys():
+                    with self.subTest("Name should be valid", name=name):
+                        self.assertIn(name, valid_names,
+                                      """All item descriptions must match defined item names""")

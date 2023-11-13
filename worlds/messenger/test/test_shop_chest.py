@@ -17,18 +17,18 @@ class AllSealsRequired(MessengerTestBase):
         with self.subTest("Access Dependency"):
             self.assertEqual(len([seal for seal in self.multiworld.itempool if seal.name == "Power Seal"]),
                              self.multiworld.total_seals[self.player])
-            locations = ["Shop Chest"]
+            locations = ["Rescue Phantom"]
             items = [["Power Seal"]]
             self.assertAccessDependency(locations, items)
             self.multiworld.state = CollectionState(self.multiworld)
 
-        self.assertEqual(self.can_reach_location("Shop Chest"), False)
+        self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.assertBeatable(False)
-        self.collect_all_but(["Power Seal", "Shop Chest", "Rescue Phantom"])
-        self.assertEqual(self.can_reach_location("Shop Chest"), False)
+        self.collect_all_but(["Power Seal", "Rescue Phantom"])
+        self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.assertBeatable(False)
         self.collect_by_name("Power Seal")
-        self.assertEqual(self.can_reach_location("Shop Chest"), True)
+        self.assertEqual(self.can_reach_location("Rescue Phantom"), True)
         self.assertBeatable(True)
 
 
