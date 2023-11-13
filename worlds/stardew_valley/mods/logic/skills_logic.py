@@ -91,7 +91,7 @@ class ModSkillLogic:
                        self.received(MagicSpell.shockwave),
                        self.received(MagicSpell.meteor),
                        self.received(MagicSpell.spirit)]
-        return self.magic.can_use_altar() & Count(level, spell_count)
+        return Count(level, spell_count)
 
     def can_earn_socializing_skill_level(self, level: int) -> StardewRule:
         villager_count = []
@@ -115,6 +115,6 @@ class ModSkillLogic:
 
     def can_earn_binning_skill_level(self, level: int) -> StardewRule:
         if level >= 6:
-            return self.region.can_reach(Region.town) & self.has(Machine.recycling_machine)
+            return self.has(Machine.recycling_machine)
         else:
-            return self.region.can_reach(Region.town) | self.has(Machine.recycling_machine)
+            return True_()  # You can always earn levels 1-5 with trash cans

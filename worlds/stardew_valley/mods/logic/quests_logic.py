@@ -72,8 +72,8 @@ class ModQuestLogic:
             return {}
 
         return {
-            ModQuest.AyeishaEnvelope: (self.season.has(Season.spring) | self.season.has(Season.fall)) & self.region.can_reach(Region.mountain),
-            ModQuest.AyeishaRing: self.season.has(Season.winter) & self.region.can_reach(Region.forest)
+            ModQuest.AyeishaEnvelope: (self.season.has(Season.spring) | self.season.has(Season.fall)),
+            ModQuest.AyeishaRing: self.season.has(Season.winter)
         }
 
     def _get_sve_quest_rules(self):
