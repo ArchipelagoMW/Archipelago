@@ -36,9 +36,4 @@ def create_regions(world: MultiWorld, player: int):
 def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
-
-    connection = Entrance(player,'', sourceRegion)
-    connection.access_rule = rule
-
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)
+    sourceRegion.connect(targetRegion, rule=rule)

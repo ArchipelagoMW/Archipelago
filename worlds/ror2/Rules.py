@@ -7,7 +7,7 @@ from .RoR2Environments import environment_vanilla_orderedstages_table, environme
 
 # Rule to see if it has access to the previous stage
 def has_entrance_access_rule(multiworld: MultiWorld, stage: str, entrance: str, player: int):
-    multiworld.get_entrance(entrance, player).access_rule = \
+    multiworld.get_region(entrance, player).entrances[0].access_rule = \
         lambda state: state.has(entrance, player) and state.has(stage, player)
 
 

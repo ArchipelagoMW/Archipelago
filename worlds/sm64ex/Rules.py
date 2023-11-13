@@ -64,7 +64,7 @@ def set_rules(world, player: int, area_connections):
     connect_regions(world, player, "Second Floor", sm64courses[temp_assign[10]]) # WDW
     connect_regions(world, player, "Second Floor", sm64courses[temp_assign[11]]) # TTM
     connect_regions(world, player, "Second Floor", sm64courses[temp_assign[12]]) # THI Tiny
-    connect_regions(world, player, "Second Floor", sm64courses[temp_assign[13]]) # THI Huge
+    connect_regions(world, player, "Second Floor", sm64courses[temp_assign[13]], name="Second Floor -> Tiny-Huge Island Huge") # THI Huge
 
     connect_regions(world, player, "Second Floor", "Third Floor", lambda state: state.has("Power Star", player, world.SecondFloorStarDoorCost[player].value))
 

@@ -90,13 +90,7 @@ class Overcooked2World(World):
     def connect_regions(self, source: str, target: str, rule: Optional[Callable[[CollectionState], bool]] = None):
         sourceRegion = self.multiworld.get_region(source, self.player)
         targetRegion = self.multiworld.get_region(target, self.player)
-
-        connection = Entrance(self.player, '', sourceRegion)
-        if rule:
-            connection.access_rule = rule
-
-        sourceRegion.exits.append(connection)
-        connection.connect(targetRegion)
+        sourceRegion.connect(targetRegion, rule=rule)
 
     def add_level_location(
         self,
