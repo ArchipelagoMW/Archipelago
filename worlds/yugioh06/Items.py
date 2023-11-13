@@ -363,3 +363,10 @@ excluded_items = {
     "5000DP",
     "Remote"
 }
+
+useful = {
+    "Banlist March 2004",
+    "Banlist September 2004",
+    "Banlist March 2005",
+    "Banlist September 2005",
+}

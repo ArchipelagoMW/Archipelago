@@ -13,7 +13,7 @@ from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassi
 from .utils import openFile
 from ..AutoWorld import World, WebWorld
 from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster, \
-    challenges
+    challenges, useful
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special
 from .Opponents import get_opponents, get_opponent_locations
@@ -124,7 +124,7 @@ class Yugioh06World(World):
                 continue
             item = Yugioh2006Item(
                 name,
-                ItemClassification.progression,
+                ItemClassification.useful if name in useful else ItemClassification.progression,
                 self.item_name_to_id[name],
                 self.player
             )
