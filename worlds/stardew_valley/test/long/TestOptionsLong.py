@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld
 from Options import NamedRange
 from .option_names import options_to_include
 from worlds.stardew_valley.test.checks.world_checks import assert_can_win, assert_same_number_items_locations
-from .. import setup_solo_multiworld, SVTestCase
+from .. import setup_solo_multiworld, SVTestCase, SVTestBase
 
 
 def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):

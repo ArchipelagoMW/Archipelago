@@ -1,9 +1,10 @@
+from .cached_logic import CachedLogic, cache_rule
 from .has_logic import HasLogic
+from .logic_cache import CachedRules
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
-from .. import options
 from ..mods.logic.magic_logic import MagicLogic
 from ..options import ToolProgression
 from ..stardew_rule import StardewRule, True_
@@ -28,8 +29,7 @@ tool_upgrade_prices = {
 }
 
 
-class ToolLogic:
-    player: int
+class ToolLogic(CachedLogic):
     tool_option = ToolProgression
     received: ReceivedLogic
     has: HasLogic
@@ -38,9 +38,9 @@ class ToolLogic:
     money: MoneyLogic
     magic: MagicLogic
 
-    def __init__(self, player: int, tool_option: ToolProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+    def __init__(self, player: int, cached_rules: CachedRules, tool_option: ToolProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  season: SeasonLogic, money: MoneyLogic):
-        self.player = player
+        super().__init__(player, cached_rules)
         self.tool_option = tool_option
         self.received = received
         self.has = has
@@ -51,6 +51,7 @@ class ToolLogic:
     def set_magic(self, magic: MagicLogic):
         self.magic = magic
 
+    @cache_rule
     def has_tool(self, tool: str, material: str = ToolMaterial.basic) -> StardewRule:
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
@@ -60,6 +61,7 @@ class ToolLogic:
 
         return self.has(f"{material} Bar") & self.money.can_spend(tool_upgrade_prices[material])
 
+    @cache_rule
     def has_fishing_rod(self, level: int) -> StardewRule:
         if self.tool_option & ToolProgression.option_progressive:
             return self.received(f"Progressive {Tool.fishing_rod}", level)
@@ -70,6 +72,7 @@ class ToolLogic:
         level = min(level, 4)
         return self.money.can_spend_at(Region.fish_shop, prices[level])
 
+    @cache_rule
     def can_forage(self, season: str, region: str = Region.forest, need_hoe: bool = False) -> StardewRule:
         season_rule = self.season.has(season)
         region_rule = self.region.can_reach(region)
@@ -77,6 +80,7 @@ class ToolLogic:
             return season_rule & region_rule & self.has_tool(Tool.hoe)
         return season_rule & region_rule
 
+    @cache_rule
     def can_water(self, level: int) -> StardewRule:
         tool_rule = self.has_tool(Tool.watering_can, ToolMaterial.tiers[level])
         spell_rule = self.received(MagicSpell.water) & self.magic.can_use_altar() & self.received(f"{ModSkill.magic} Level", level)

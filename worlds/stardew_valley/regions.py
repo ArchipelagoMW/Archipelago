@@ -28,6 +28,7 @@ vanilla_regions = [
                 Entrance.enter_coop, Entrance.enter_barn,
                 Entrance.enter_shed, Entrance.enter_slime_hutch,
                 Entrance.farming, Entrance.shipping]),
+    RegionData(Region.farming),
     RegionData(Region.shipping),
     RegionData(Region.backwoods, [Entrance.backwoods_to_mountain]),
     RegionData(Region.bus_stop,
@@ -603,8 +604,7 @@ def randomize_chosen_connections(connections_to_randomize: List[ConnectionData],
     return randomized_connections
 
 
-def create_connections_for_generation(randomized_connections: Dict[ConnectionData, ConnectionData]) -> List[
-    ConnectionData]:
+def create_connections_for_generation(randomized_connections: Dict[ConnectionData, ConnectionData]) -> List[ConnectionData]:
     connections = []
     for connection in randomized_connections:
         destination = randomized_connections[connection]
@@ -621,6 +621,7 @@ def create_data_for_mod(randomized_connections: Dict[ConnectionData, ConnectionD
         destination = randomized_connections[connection]
         add_to_mod_data(connection, destination, randomized_data_for_mod)
     return randomized_data_for_mod
+
 
 def add_to_mod_data(connection: ConnectionData, destination: ConnectionData, randomized_data_for_mod: Dict[str, str]):
     randomized_data_for_mod[connection.name] = destination.name

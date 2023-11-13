@@ -1,7 +1,9 @@
 from typing import List
 
 from .action_logic import ActionLogic
+from .cached_logic import CachedLogic, cache_rule
 from .has_logic import HasLogic
+from .logic_cache import CachedRules
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
 from ..options import Museumsanity
@@ -11,7 +13,7 @@ from .region_logic import RegionLogic
 from ..strings.region_names import Region
 
 
-class MuseumLogic:
+class MuseumLogic(CachedLogic):
     player: int
     museum_option: Museumsanity
     received = ReceivedLogic
@@ -19,16 +21,14 @@ class MuseumLogic:
     region: RegionLogic
     action: ActionLogic
 
-    def __init__(self, player: int, museum_option: Museumsanity, received: ReceivedLogic, has: HasLogic, region: RegionLogic, action: ActionLogic):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, museum_option: Museumsanity, received: ReceivedLogic, has: HasLogic,
+                 region: RegionLogic, action: ActionLogic):
+        super().__init__(player, cached_rules)
         self.museum_option = museum_option
         self.received = received
         self.has = has
         self.region = region
         self.action = action
-
-    def can_donate_museum_item(self, item: MuseumItem) -> StardewRule:
-        return self.region.can_reach(Region.museum) & self.can_find_museum_item(item)
 
     def can_donate_museum_items(self, number: int) -> StardewRule:
         return self.region.can_reach(Region.museum) & self.can_find_museum_items(number)
@@ -36,9 +36,7 @@ class MuseumLogic:
     def can_donate_museum_artifacts(self, number: int) -> StardewRule:
         return self.region.can_reach(Region.museum) & self.can_find_museum_artifacts(number)
 
-    def can_donate_museum_minerals(self, number: int) -> StardewRule:
-        return self.region.can_reach(Region.museum) & self.can_find_museum_minerals(number)
-
+    @cache_rule
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         region_rule = self.region.can_reach_all_except_one(item.locations)
         geodes_rule = And([self.action.can_open_geode(geode) for geode in item.geodes])

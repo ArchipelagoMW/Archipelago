@@ -1,6 +1,8 @@
 from .action_logic import ActionLogic
 from .building_logic import BuildingLogic
+from .cached_logic import CachedLogic, cache_rule
 from .has_logic import HasLogic
+from .logic_cache import CachedRules
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -20,8 +22,7 @@ from ..strings.skill_names import Skill
 from ..strings.tv_channel_names import Channel
 
 
-class CookingLogic:
-    player: int
+class CookingLogic(CachedLogic):
     mods: Mods
     chefsanity_option: Chefsanity
     exclude_ginger_island: ExcludeGingerIsland
@@ -36,9 +37,10 @@ class CookingLogic:
     relationship: RelationshipLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, mods: Mods, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
-                 action: ActionLogic, buildings: BuildingLogic, relationship: RelationshipLogic, skill: SkillLogic):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, mods: Mods, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, received: ReceivedLogic,
+                 has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic, action: ActionLogic, buildings: BuildingLogic,
+                 relationship: RelationshipLogic, skill: SkillLogic):
+        super().__init__(player, cached_rules)
         self.mods = mods
         self.chefsanity_option = chefsanity_option
         self.exclude_ginger_island = exclude_ginger_island
@@ -56,6 +58,7 @@ class CookingLogic:
     def can_cook_in_kitchen(self) -> StardewRule:
         return self.buildings.has_house(1) | self.skill.has_level(Skill.foraging, 9)
 
+    @cache_rule
     def can_cook(self, recipe: CookingRecipe = None) -> StardewRule:
         cook_rule = self.region.can_reach(Region.kitchen)
         if recipe is None:
@@ -67,6 +70,7 @@ class CookingLogic:
         time_rule = self.time.has_lived_months(number_ingredients)
         return cook_rule & recipe_rule & ingredients_rule & time_rule
 
+    @cache_rule
     def knows_recipe(self, source: RecipeSource, meal_name: str) -> StardewRule:
         if self.chefsanity_option == Chefsanity.option_none:
             return self.can_learn_recipe(source)
@@ -86,6 +90,7 @@ class CookingLogic:
             return self.received_recipe(meal_name)
         return self.can_learn_recipe(source)
 
+    @cache_rule
     def can_learn_recipe(self, source: RecipeSource) -> StardewRule:
         if isinstance(source, StarterSource):
             return True_()

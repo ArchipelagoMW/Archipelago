@@ -1,29 +1,48 @@
 from typing import Union, Iterable
 
+from .cached_logic import CachedLogic, cache_rule
 from .has_logic import HasLogic
+from .logic_cache import CachedRules
+from .money_logic import MoneyLogic
+from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
 from .tool_logic import ToolLogic
-from ..data import CropItem
-from ..stardew_rule import StardewRule
+from .traveling_merchant_logic import TravelingMerchantLogic
+from ..data import CropItem, SeedItem
+from ..options import Cropsanity
+from ..stardew_rule import StardewRule, True_
+from ..strings.forageable_names import Forageable
+from ..strings.metal_names import Fossil
 from ..strings.region_names import Region
+from ..strings.seed_names import Seed
 from ..strings.tool_names import Tool
 
 
-class CropLogic:
+class CropLogic(CachedLogic):
     player: int
+    cropsanity_option: Cropsanity
+    received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
+    traveling_merchant: TravelingMerchantLogic
     season: SeasonLogic
+    money: MoneyLogic
     tool: ToolLogic
 
-    def __init__(self, player: int, has: HasLogic, region: RegionLogic, season: SeasonLogic, tool: ToolLogic):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, cropsanity_option: Cropsanity, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+                 traveling_merchant: TravelingMerchantLogic, season: SeasonLogic, money: MoneyLogic, tool: ToolLogic):
+        super().__init__(player, cached_rules)
+        self.cropsanity_option = cropsanity_option
+        self.received = received
         self.has = has
         self.region = region
+        self.traveling_merchant = traveling_merchant
         self.season = season
+        self.money = money
         self.tool = tool
 
+    @cache_rule
     def can_grow(self, crop: CropItem) -> StardewRule:
         season_rule = self.season.has_any(crop.farm_growth_seasons)
         seed_rule = self.has(crop.seed.name)
@@ -42,3 +61,20 @@ class CropLogic:
 
     def has_island_farm(self) -> StardewRule:
         return self.region.can_reach(Region.island_south)
+
+    @cache_rule
+    def can_buy_seed(self, seed: SeedItem) -> StardewRule:
+        if self.cropsanity_option == Cropsanity.option_disabled or seed.name == Seed.qi_bean:
+            item_rule = True_()
+        else:
+            item_rule = self.received(seed.name)
+        if seed.name == Seed.coffee:
+            item_rule = item_rule & self.traveling_merchant.has_days(3)
+        season_rule = self.season.has_any(seed.seasons)
+        region_rule = self.region.can_reach_all(seed.regions)
+        currency_rule = self.money.can_spend(1000)
+        if seed.name == Seed.pineapple:
+            currency_rule = self.has(Forageable.magma_cap)
+        if seed.name == Seed.taro:
+            currency_rule = self.has(Fossil.bone_fragment)
+        return season_rule & region_rule & item_rule & currency_rule

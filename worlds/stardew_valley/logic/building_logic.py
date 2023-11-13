@@ -1,6 +1,8 @@
 from typing import Dict
 
+from .cached_logic import cache_rule, CachedLogic
 from .has_logic import HasLogic
+from .logic_cache import CachedRules
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -15,7 +17,7 @@ from ..strings.metal_names import MetalBar
 from ..strings.region_names import Region
 
 
-class BuildingLogic:
+class BuildingLogic(CachedLogic):
     player: int
     building_option: BuildingProgression
     received: ReceivedLogic
@@ -24,7 +26,8 @@ class BuildingLogic:
     money: MoneyLogic
     building_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, building_option: BuildingProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
+    def __init__(self, player: int, cached_rules: CachedRules, building_option: BuildingProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
+        super().__init__(player, cached_rules)
         self.player = player
         self.building_option = building_option
         self.received = received
@@ -74,6 +77,7 @@ class BuildingLogic:
             building = " ".join(["Progressive", *building.split(" ")[1:]])
         return self.received(f"{building}", count) & carpenter_rule
 
+    @cache_rule
     def has_house(self, upgrade_level: int) -> StardewRule:
         if upgrade_level < 1:
             return True_()

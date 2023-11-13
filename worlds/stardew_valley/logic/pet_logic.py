@@ -2,6 +2,8 @@ import math
 
 from typing import Union
 
+from .cached_logic import CachedLogic
+from .logic_cache import CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .time_logic import TimeLogic
@@ -14,8 +16,7 @@ from ..strings.region_names import Region
 from ..strings.villager_names import NPC
 
 
-class PetLogic:
-    player: int
+class PetLogic(CachedLogic):
     friendsanity_option: Friendsanity
     heart_size_option: FriendsanityHeartSize
     received: ReceivedLogic
@@ -23,9 +24,9 @@ class PetLogic:
     time: TimeLogic
     tool: ToolLogic
 
-    def __init__(self, player: int, friendsanity_option: Friendsanity, heart_size_option: FriendsanityHeartSize, received_logic: ReceivedLogic, region: RegionLogic,
-                 time: TimeLogic, tool: ToolLogic):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, friendsanity_option: Friendsanity, heart_size_option: FriendsanityHeartSize,
+                 received_logic: ReceivedLogic, region: RegionLogic, time: TimeLogic, tool: ToolLogic):
+        super().__init__(player, cached_rules)
         self.friendsanity_option = friendsanity_option
         self.heart_size_option = heart_size_option
         self.received = received_logic

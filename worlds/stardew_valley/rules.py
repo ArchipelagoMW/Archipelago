@@ -44,27 +44,20 @@ def set_rules(world):
     current_bundles = world.modified_bundles
 
     all_location_names = list(location.name for location in multiworld.get_locations(player))
-    # 22.756 - 23.789
+
     set_entrance_rules(logic, multiworld, player, world_options)
-    # 34.761 - 35.568
     set_ginger_island_rules(logic, multiworld, player, world_options)
-    # 36.281 - 38.453
 
     set_tool_rules(logic, multiworld, player, world_options)
-    # 36.980 - 37.228
-
     set_skills_rules(logic, multiworld, player, world_options)
     set_bundle_rules(current_bundles, logic, multiworld, player)
     set_building_rules(logic, multiworld, player, world_options)
     set_cropsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
-    # 1min09 - 1min14
-
     set_special_order_rules(all_location_names, logic, multiworld, player, world_options)
     set_help_wanted_quests_rules(logic, multiworld, player, world_options)
     set_fishsanity_rules(all_location_names, logic, multiworld, player)
     set_museumsanity_rules(all_location_names, logic, multiworld, player, world_options)
-    # 1min34 - 1min46
 
     set_friendsanity_rules(all_location_names, logic, multiworld, player)
     set_backpack_rules(logic, multiworld, player, world_options)
@@ -75,20 +68,12 @@ def set_rules(world):
     set_chefsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_craftsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_isolated_locations_rules(logic, multiworld, player)
-    set_traveling_merchant_rules(logic, multiworld, player)
+    set_traveling_merchant_day_rules(logic, multiworld, player)
     set_arcade_machine_rules(logic, multiworld, player, world_options)
 
     set_deepwoods_rules(logic, multiworld, player, world_options)
     set_magic_spell_rules(logic, multiworld, player, world_options)
     set_sve_rules(logic, multiworld, player, world_options)
-    # 1min52 - 1min53 # These times are for TestOptions
-    # 1min36 - 1min38 # After the combat not duplicating a bunch of stuff
-    # 1min28 - 1min30 # with the caching of combat rules
-    # 1min25 - 1min26 # after caching seasons
-    # 1min19 - 1min25 # moved some progression items to useful
-    # 1min30 - 1min32 # with the flattening
-    # 1min25 - 1min36 # with zero flattening
-    # 1min36 - 1min40 # with complex flattening only in simplify
 
 
 def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
@@ -117,7 +102,7 @@ def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: Stard
         if previous is None:
             continue
         tool_upgrade_location = multiworld.get_location(f"{material} {tool} Upgrade", player)
-        MultiWorldRules.set_rule(tool_upgrade_location, logic.has_tool(tool, previous).simplify())
+        MultiWorldRules.set_rule(tool_upgrade_location, logic.tool.has_tool(tool, previous).simplify())
 
 
 def set_building_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -246,7 +231,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.talk_to_mines_dwarf, player),
                              logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.buy_from_traveling_merchant, player),
-                             logic.has_traveling_merchant())
+                             logic.traveling_merchant.has_days())
 
     set_farm_buildings_entrance_rules(logic, multiworld, player)
 
@@ -263,12 +248,12 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_casino, player),
                              logic.received("Club Card"))
 
-    set_bedroom_entrance_rules(logic, multi_world, player, world_options)
+    set_bedroom_entrance_rules(logic, multiworld, player, world_options)
     set_festival_entrance_rules(logic, multiworld, player)
-    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_cooking, player), logic.cooking.can_cook_in_kitchen().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.farmhouse_cooking, player), logic.cooking.can_cook_in_kitchen().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.shipping, player), logic.shipping.can_use_shipping_bin().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.watch_queen_of_sauce, player), logic.action.can_watch(Channel.queen_of_sauce).simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.island_cooking, player), logic.cooking.can_cook_in_kitchen().simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farmhouse_cooking, player), logic.cooking.can_cook_in_kitchen().simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.shipping, player), logic.shipping.can_use_shipping_bin().simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.watch_queen_of_sauce, player), logic.action.can_watch(Channel.queen_of_sauce).simplify())
 
 
 def set_adventure_guild_entrance_rules(logic, multiworld, player, world_options):
@@ -305,18 +290,18 @@ def set_bedroom_entrance_rules(logic, multiworld, player, world_options: Stardew
 
 def set_mines_floor_entrance_rules(logic, multiworld, player):
     for floor in range(5, 120 + 5, 5):
-        rule = logic.has_mine_elevator_to_floor(floor - 10)
+        rule = logic.mine.has_mine_elevator_to_floor(floor - 10)
         if floor == 5 or floor == 45 or floor == 85:
-            rule = rule & logic.can_progress_in_the_mines_from_floor(floor)
+            rule = rule & logic.mine.can_progress_in_the_mines_from_floor(floor)
         entrance = multiworld.get_entrance(dig_to_mines_floor(floor), player)
         MultiWorldRules.set_rule(entrance, rule.simplify())
 
 
 def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
     for floor in range(25, 200 + 25, 25):
-        rule = has_skull_cavern_elevator_to_floor(logic, floor - 25)
-        if floor == 5 or floor == 45 or floor == 85:
-            rule = rule & logic.can_progress_in_the_skull_cavern_from_floor(floor)
+        rule = logic.mod.elevator.has_skull_cavern_elevator_to_floor(floor - 25)
+        if floor == 25 or floor == 75 or floor == 125:
+            rule = rule & logic.mine.can_progress_in_the_skull_cavern_from_floor(floor)
         entrance = multiworld.get_entrance(dig_to_skull_floor(floor), player)
         MultiWorldRules.set_rule(entrance, rule.simplify())
 
@@ -330,30 +315,30 @@ def set_blacksmith_entrance_rules(logic, multiworld, player):
 
 def set_skill_entrance_rules(logic, multiworld, player):
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farming, player),
-                             logic.can_get_farming_xp().simplify())
+                             logic.skill.can_get_farming_xp().simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.fishing, player),
-                             logic.can_get_fishing_xp().simplify())
+                             logic.skill.can_get_fishing_xp().simplify())
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
     material_entrance = multiworld.get_entrance(entrance_name, player)
-    upgrade_rule = logic.has(item_name) & logic.can_spend_money(tool_upgrade_prices[tool_material])
+    upgrade_rule = logic.has(item_name) & logic.money.can_spend(tool_upgrade_prices[tool_material])
     MultiWorldRules.set_rule(material_entrance, upgrade_rule.simplify())
 
 
 def set_festival_entrance_rules(logic, multiworld, player):
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_egg_festival, player), logic.has_season(Season.spring))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_flower_dance, player), logic.has_season(Season.spring))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_egg_festival, player), logic.season.has(Season.spring))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_flower_dance, player), logic.season.has(Season.spring))
 
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_luau, player), logic.has_season(Season.summer))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_moonlight_jellies, player), logic.has_season(Season.summer))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_luau, player), logic.season.has(Season.summer))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_moonlight_jellies, player), logic.season.has(Season.summer))
 
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_fair, player), logic.has_season(Season.fall))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_spirit_eve, player), logic.has_season(Season.fall))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_fair, player), logic.season.has(Season.fall))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_spirit_eve, player), logic.season.has(Season.fall))
 
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_festival_of_ice, player), logic.has_season(Season.winter))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_night_market, player), logic.has_season(Season.winter))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_winter_star, player), logic.has_season(Season.winter))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_festival_of_ice, player), logic.season.has(Season.winter))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_night_market, player), logic.season.has(Season.winter))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.attend_winter_star, player), logic.season.has(Season.winter))
 
 
 def set_ginger_island_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -873,9 +858,9 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Fireball", player),
                              logic.has("Fire Quartz").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Frostbite", player),
-                             (logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(85)).simplify())
+                             (logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish([], 85)).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Elemental School Locations", player),
-                             (logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(85)).simplify())
+                             (logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish([], 85)).simplify())
     # MultiWorldRules.add_rule(multiworld.get_location("Analyze: Lantern", player),)
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Tendrils", player),
                              logic.region.can_reach(Region.farm).simplify())
@@ -884,7 +869,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Nature School Locations", player),
                              (logic.has("Earth Crystal") & logic.region.can_reach("Farm")).simplify()),
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Meteor", player),
-                             (logic.region.can_reach(Region.farm) & logic.has_lived_months(12)).simplify()),
+                             (logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)).simplify()),
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Lucksteal", player),
                              logic.region.can_reach(Region.witch_hut).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Bloodmana", player),
@@ -892,7 +877,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Eldritch School Locations", player),
                              (logic.region.can_reach(Region.witch_hut) &
                               logic.region.can_reach(Region.mines_floor_100) &
-                              logic.region.can_reach(Region.farm) & logic.has_lived_months(12)).simplify())
+                              logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze Every Magic School Location", player),
                              (logic.tool.has_tool("Watering Can", "Basic") & logic.tool.has_tool("Hoe", "Basic")
                               & (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")) &
@@ -901,7 +886,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
                               logic.has("Fire Quartz") & logic.skill.can_fish([], 85) &
                               logic.region.can_reach(Region.witch_hut) &
                               logic.region.can_reach(Region.mines_floor_100) &
-                              logic.region.can_reach(Region.farm) & logic.has_lived_months(12)).simplify())
+                              logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)).simplify())
 
 
 def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):

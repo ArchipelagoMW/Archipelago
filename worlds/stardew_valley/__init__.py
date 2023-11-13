@@ -196,7 +196,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_bottom_of_the_mines:
             self.create_event_location(location_table[GoalName.bottom_of_the_mines],
-                                       self.logic.mine.can_mine_to_floor(120).simplify(),
+                                       True_(),
                                        Event.victory)
         elif self.options.goal == Goal.option_cryptic_note:
             self.create_event_location(location_table[GoalName.cryptic_note],

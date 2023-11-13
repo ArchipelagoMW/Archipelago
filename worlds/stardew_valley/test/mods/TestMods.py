@@ -44,8 +44,8 @@ class TestGenerateModsOptions(SVTestCase):
                     multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: option, Mods: mod})
                     basic_checks(self, multiworld)
                     check_stray_mod_items(mod, self, multiworld)
-                    if self.skip_extra_tests:
-                        return  # assume the rest will work as well
+                    # if self.skip_extra_tests:
+                    #     return  # assume the rest will work as well
 
 
 class TestBaseItemGeneration(SVTestBase):

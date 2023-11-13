@@ -18,6 +18,7 @@ from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.event_names import Event
 from .strings.villager_names import NPC, ModNPC
+from .strings.wallet_item_names import Wallet
 
 ITEM_CODE_OFFSET = 717000
 
@@ -342,8 +343,8 @@ def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOpt
 
 
 def create_museum_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    items.append(item_factory("Rusty Key"))
-    items.append(item_factory("Dwarvish Translation Guide"))
+    items.append(item_factory(Wallet.rusty_key))
+    items.append(item_factory(Wallet.dwarvish_translation_guide))
     items.append(item_factory("Ancient Seeds Recipe"))
     if options.museumsanity == Museumsanity.option_none:
         return
@@ -412,8 +413,8 @@ def create_arcade_machine_items(item_factory: StardewItemFactory, options: Stard
 
 
 def create_player_buffs(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    movement_buffs: int = options.number_of_movement_buffs.value
-    luck_buffs: int = options.number_of_luck_buffs.value
+    movement_buffs: int = options.movement_buff_number.value
+    luck_buffs: int = options.luck_buff_number.value
     need_all_buffs = options.special_order_locations == SpecialOrderLocations.option_board_qi
     need_half_buffs = options.festival_locations == FestivalLocations.option_easy
     create_player_buff(item_factory, Buff.movement, movement_buffs, need_all_buffs, need_half_buffs, items)

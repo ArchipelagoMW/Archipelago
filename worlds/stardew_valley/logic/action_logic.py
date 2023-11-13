@@ -1,4 +1,6 @@
+from .cached_logic import CachedLogic, cache_rule
 from .has_logic import HasLogic
+from .logic_cache import CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from ..stardew_rule import StardewRule, True_, Or
@@ -7,14 +9,13 @@ from ..strings.geode_names import Geode
 from ..strings.region_names import Region
 
 
-class ActionLogic:
-    player: int
+class ActionLogic(CachedLogic):
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
 
-    def __init__(self, player: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, received: ReceivedLogic, has: HasLogic, region: RegionLogic):
+        super().__init__(player, cached_rules)
         self.received = received
         self.has = has
         self.region = region
@@ -31,6 +32,7 @@ class ActionLogic:
     def can_pan_at(self, region: str) -> StardewRule:
         return self.region.can_reach(region) & self.can_pan()
 
+    @cache_rule
     def can_open_geode(self, geode: str) -> StardewRule:
         blacksmith_access = self.region.can_reach(Region.blacksmith)
         geodes = [Geode.geode, Geode.frozen, Geode.magma, Geode.omni]

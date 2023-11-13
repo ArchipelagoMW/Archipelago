@@ -1,14 +1,15 @@
-from typing import Dict, Union, Optional, Iterable, Sized, List
+from typing import Dict, Union, Optional, List
 
+from .cached_logic import CachedLogic, cache_rule
+from .logic_cache import CachedRules
 from ..stardew_rule import StardewRule, True_, And, Or, Has, Count
 
 
-class HasLogic:
-    player: int
+class HasLogic(CachedLogic):
     item_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, item_rules: Dict[str, StardewRule]):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, item_rules: Dict[str, StardewRule]):
+        super().__init__(player, cached_rules)
         self.item_rules = item_rules
 
     def __call__(self, *args, **kwargs) -> StardewRule:
@@ -17,6 +18,7 @@ class HasLogic:
             count = args[1]
         return self.has(args[0], count)
 
+    @cache_rule
     def has(self, items: Union[str, List[str]], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
             return Has(items, self.item_rules)

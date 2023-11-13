@@ -377,5 +377,4 @@ class Has(StardewRule):
         return hash(self.item)
 
     def simplify(self) -> StardewRule:
-        return self
-        # return self.other_rules[self.item].simplify()
+        return self.other_rules[self.item].simplify()

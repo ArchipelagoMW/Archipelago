@@ -1,3 +1,5 @@
+from .cached_logic import CachedLogic, cache_rule
+from .logic_cache import CachedRules
 from .received_logic import ReceivedLogic
 from ..stardew_rule import StardewRule
 from ..strings.ap_names.event_names import Event
@@ -5,14 +7,14 @@ from ..strings.ap_names.event_names import Event
 MAX_MONTHS = 12
 
 
-class TimeLogic:
-    player: int
+class TimeLogic(CachedLogic):
     received: ReceivedLogic
 
-    def __init__(self, player: int, received_logic: ReceivedLogic):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, received_logic: ReceivedLogic):
+        super().__init__(player, cached_rules)
         self.received = received_logic
 
+    @cache_rule
     def has_lived_months(self, number: int) -> StardewRule:
         number = max(0, min(number, MAX_MONTHS))
         return self.received(Event.month_end, number)

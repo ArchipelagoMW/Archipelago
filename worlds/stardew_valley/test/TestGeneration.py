@@ -1,8 +1,9 @@
+import typing
 from typing import List
 
 from BaseClasses import ItemClassification, MultiWorld, Item
 from . import setup_solo_multiworld, SVTestBase, get_minsanity_options, allsanity_options_without_mods, \
-    allsanity_options_with_mods, minimal_locations_maximal_items
+    allsanity_options_with_mods, minimal_locations_maximal_items, SVTestCase
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import Group, item_table
@@ -10,6 +11,7 @@ from ..locations import LocationTags
 from ..mods.mod_data import ModNames
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
     FriendsanityHeartSize
+from ..strings.region_names import Region
 
 
 def get_real_locations(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
@@ -237,24 +239,6 @@ class TestProgressiveElevator(SVTestBase):
 
         self.assertTrue(floor_120.can_reach(self.multiworld.state))
 
-
-    def test_given_access_to_floor_115_when_find_another_pickaxe_and_dagger_then_does_not_have_access_to_floor_120(self):
-        items_for_115 = self.generate_items_for_mine_115()
-        items_for_120 = self.generate_items_for_extra_mine_levels("Progressive Dagger")
-        self.collect(items_for_115)
-
-        can_reach = self.multiworld.get_region("The Mines - Floor 115", self.player).can_reach(self.multiworld.state)
-        self.assertTrue(can_reach)
-        self.assertFalse(self.multiworld.get_region("The Mines - Floor 120", self.player).can_reach(self.multiworld.state))
-
-        self.collect(items_for_120)
-
-        self.assertTrue(self.multiworld.get_region("The Mines - Floor 115", self.player).can_reach(self.multiworld.state))
-        self.assertFalse(self.multiworld.get_region("The Mines - Floor 120", self.player).can_reach(self.multiworld.state))
-
-        self.remove(items_for_115)
-        self.remove(items_for_120)
-
     def generate_items_for_mine_115(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
         elevators = [self.get_item_by_name("Progressive Mine Elevator")] * 21
@@ -272,6 +256,71 @@ class TestProgressiveElevator(SVTestBase):
         second_last_mining_level = self.get_item_by_name("Mining Level")
         last_mining_level = self.get_item_by_name("Mining Level")
         return [last_pickaxe, last_weapon, second_last_combat_level, last_combat_level, second_last_mining_level, last_mining_level]
+
+
+class TestSkullCavernLogic(SVTestBase):
+    options = {
+        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+    }
+
+    def test_given_access_to_floor_115_when_find_more_tools_then_has_access_to_skull_cavern_25(self):
+        items_for_115 = self.generate_items_for_mine_115()
+        items_for_skull_50 = self.generate_items_for_skull_50()
+        items_for_skull_100 = self.generate_items_for_skull_100()
+        self.collect(items_for_115)
+        floor_115 = self.multiworld.get_region(Region.mines_floor_115, self.player)
+        skull_25 = self.multiworld.get_region(Region.skull_cavern_25, self.player)
+        skull_75 = self.multiworld.get_region(Region.skull_cavern_75, self.player)
+
+        self.assertTrue(floor_115.can_reach(self.multiworld.state))
+        self.assertFalse(skull_25.can_reach(self.multiworld.state))
+        self.assertFalse(skull_75.can_reach(self.multiworld.state))
+
+        self.remove(items_for_115)
+        self.collect(items_for_skull_50)
+
+        self.assertTrue(floor_115.can_reach(self.multiworld.state))
+        self.assertTrue(skull_25.can_reach(self.multiworld.state))
+        self.assertFalse(skull_75.can_reach(self.multiworld.state))
+
+        self.remove(items_for_skull_50)
+        self.collect(items_for_skull_100)
+
+        self.assertTrue(floor_115.can_reach(self.multiworld.state))
+        self.assertTrue(skull_25.can_reach(self.multiworld.state))
+        self.assertTrue(skull_75.can_reach(self.multiworld.state))
+
+    def generate_items_for_mine_115(self) -> List[Item]:
+        pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
+        swords = [self.get_item_by_name("Progressive Sword")] * 3
+        combat_levels = [self.get_item_by_name("Combat Level")] * 4
+        mining_levels = [self.get_item_by_name("Mining Level")] * 4
+        guild = self.get_item_by_name("Adventurer's Guild")
+        bus = self.get_item_by_name("Bus Repair")
+        skull_key = self.get_item_by_name("Skull Key")
+        return [*combat_levels, *mining_levels, guild, *pickaxes, *swords, bus, skull_key]
+
+    def generate_items_for_skull_50(self) -> List[Item]:
+        pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 3
+        swords = [self.get_item_by_name("Progressive Sword")] * 4
+        combat_levels = [self.get_item_by_name("Combat Level")] * 6
+        mining_levels = [self.get_item_by_name("Mining Level")] * 6
+        guild = self.get_item_by_name("Adventurer's Guild")
+        bus = self.get_item_by_name("Bus Repair")
+        skull_key = self.get_item_by_name("Skull Key")
+        return [*combat_levels, *mining_levels, guild, *pickaxes, *swords, bus, skull_key]
+
+    def generate_items_for_skull_100(self) -> List[Item]:
+        pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 4
+        swords = [self.get_item_by_name("Progressive Sword")] * 5
+        combat_levels = [self.get_item_by_name("Combat Level")] * 8
+        mining_levels = [self.get_item_by_name("Mining Level")] * 8
+        guild = self.get_item_by_name("Adventurer's Guild")
+        bus = self.get_item_by_name("Bus Repair")
+        skull_key = self.get_item_by_name("Skull Key")
+        return [*combat_levels, *mining_levels, guild, *pickaxes, *swords, bus, skull_key]
 
 
 class TestLocationGeneration(SVTestBase):

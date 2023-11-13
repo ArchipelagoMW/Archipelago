@@ -57,7 +57,7 @@ def get_number_log_steps(number_worlds: int) -> int:
     return 100
 
 
-def generate_and_check_many_worlds(tester: SVTestBase, number_worlds: int, start_index: int) -> Dict[int, MultiWorld]:
+def generate_and_check_many_worlds(tester: SVTestCase, number_worlds: int, start_index: int) -> Dict[int, MultiWorld]:
     num_steps = get_number_log_steps(number_worlds)
     log_step = number_worlds / num_steps
     multiworlds = dict()

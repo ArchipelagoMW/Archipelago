@@ -8,7 +8,7 @@ from Utils import cache_argsless
 from test.TestBase import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from .. import StardewValleyWorld
-from ..mods.mod_data import ModNames, all_mods
+from ..mods.mod_data import all_mods
 from worlds.AutoWorld import call_all
 from ..options import Cropsanity, SkillProgression, SpecialOrderLocations, Friendsanity, NumberOfLuckBuffs, SeasonRandomization, ToolProgression, \
     ElevatorProgression, Museumsanity, BackpackProgression, BuildingProgression, ArcadeMachineLocations, HelpWantedLocations, Fishsanity, NumberOfMovementBuffs, \
@@ -131,7 +131,7 @@ def allsanity_options_with_mods():
     return allsanity
 
 
-class SVTestCase(WorldTestBase):
+class SVTestCase(unittest.TestCase):
     game = "Stardew Valley"
     world: StardewValleyWorld
     player: ClassVar[int] = 1

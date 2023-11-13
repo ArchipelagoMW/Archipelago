@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
 from .world_checks import get_all_item_names, get_all_location_names
 from .. import SVTestBase
-from ... import StardewValleyWorld, options, item_table, Group, location_table
+from ... import StardewValleyWorld, options, item_table, Group, location_table, ExcludeGingerIsland
 from ...locations import LocationTags
 from ...strings.ap_names.transport_names import Transportation
 
