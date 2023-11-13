@@ -1,22 +1,23 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import item_table
+from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, filler_items, \
+    progressive_if_nco
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
-from .Options import get_option_value
+from .Options import get_option_value, MissionOrder, FinalMap, MissionProgressLocations, LocationInclusion
 from .LogicMixin import SC2WoLLogic
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = [
     "Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre",
-    "Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor",
-    "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser",
+    "Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine", "Cyclone",
+    "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Raven", "Science Vessel", "Liberator", "Valkyrie",
     "Bunker", "Missile Turret"
 ]
 
 BARRACKS_UNITS = {"Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre"}
-FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator"}
-STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven"}
+FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine", "Cyclone"}
+STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven", "Liberator", "Valkyrie"}
 
 PROTOSS_REGIONS = {"A Sinister Turn", "Echoes of the Future", "In Utter Darkness"}
 
@@ -30,7 +31,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
     excluded_missions = get_option_value(multiworld, player, "excluded_missions")
-    mission_count = len(mission_orders[mission_order_type]) - 1
+    final_map = get_option_value(multiworld, player, "final_map")
     mission_pools = {
         MissionPools.STARTER: no_build_regions_list[:],
         MissionPools.EASY: easy_regions_list[:],
@@ -38,21 +39,18 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         MissionPools.HARD: hard_regions_list[:],
         MissionPools.FINAL: []
     }
-    if mission_order_type == 0:
+    if mission_order_type == MissionOrder.option_vanilla:
         # Vanilla uses the entire mission pool
         mission_pools[MissionPools.FINAL] = ['All-In']
         return mission_pools
-    elif mission_order_type == 1:
-        # Vanilla Shuffled ignores the player-provided excluded missions
-        excluded_missions = set()
     # Omitting No-Build missions if not shuffling no-build
     if not shuffle_no_build:
         excluded_missions = excluded_missions.union(no_build_regions_list)
     # Omitting Protoss missions if not shuffling protoss
     if not shuffle_protoss:
         excluded_missions = excluded_missions.union(PROTOSS_REGIONS)
-    # Replacing All-In on low mission counts
-    if mission_count < 14:
+    # Replacing All-In with alternate ending depending on option
+    if final_map == FinalMap.option_random_hard:
         final_mission = multiworld.random.choice([mission for mission in alt_final_mission_locations.keys() if mission not in excluded_missions])
         excluded_missions.add(final_mission)
     else:
@@ -92,8 +90,19 @@ def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
     item_name = parent_item.name if isinstance(parent_item, Item) else parent_item
     return [
         inv_item for inv_item in inventory
-        if item_table[inv_item.name].parent_item == item_name
+        if get_full_item_list()[inv_item.name].parent_item == item_name
     ]
+
+
+def get_item_quantity(item: Item, multiworld: MultiWorld, player: int):
+    if (not get_option_value(multiworld, player, "nco_items")) \
+            and item.name in progressive_if_nco:
+        return 1
+    return get_full_item_list()[item.name].quantity
+
+
+def copy_item(item: Item):
+    return Item(item.name, item.classification, item.code, item.player)
 
 
 class ValidInventory:
@@ -124,22 +133,6 @@ class ValidInventory:
         cascade_keys = self.cascade_removal_map.keys()
         units_always_have_upgrades = get_option_value(self.multiworld, self.player, "units_always_have_upgrades")
 
-        # Locking associated items for items that have already been placed when units_always_have_upgrades is on
-        if units_always_have_upgrades:
-            existing_items = self.existing_items[:]
-            while existing_items:
-                existing_item = existing_items.pop()
-                items_to_lock = self.cascade_removal_map.get(existing_item, [existing_item])
-                for item in items_to_lock:
-                    if item in inventory:
-                        inventory.remove(item)
-                        locked_items.append(item)
-                    if item in existing_items:
-                        existing_items.remove(item)
-
-        if self.min_units_per_structure > 0 and self.has_units_per_structure():
-            requirements.append(lambda state: state.has_units_per_structure())
-
         def attempt_removal(item: Item) -> bool:
             # If item can be removed and has associated items, remove them as well
             inventory.remove(item)
@@ -149,9 +142,78 @@ class ValidInventory:
                 if not all(requirement(self) for requirement in requirements):
                     # If item cannot be removed, lock or revert
                     self.logical_inventory.add(item.name)
-                    locked_items.append(item)
+                    for _ in range(get_item_quantity(item, self.multiworld, self.player)):
+                        locked_items.append(copy_item(item))
                     return False
             return True
+
+        # Limit the maximum number of upgrades 
+        maxUpgrad = get_option_value(self.multiworld, self.player,
+                            "max_number_of_upgrades")
+        if maxUpgrad != -1:
+            unit_avail_upgrades = {}
+            # Needed to take into account locked/existing items
+            unit_nb_upgrades = {}
+            for item in inventory:
+                cItem = get_full_item_list()[item.name]
+                if cItem.type in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
+                    unit_avail_upgrades[item.name] = []
+                    unit_nb_upgrades[item.name] = 0
+                elif cItem.parent_item is not None:
+                    if cItem.parent_item not in unit_avail_upgrades:
+                        unit_avail_upgrades[cItem.parent_item] = [item]
+                        unit_nb_upgrades[cItem.parent_item] = 1
+                    else:
+                        unit_avail_upgrades[cItem.parent_item].append(item)
+                        unit_nb_upgrades[cItem.parent_item] += 1
+            # For those two categories, we count them but dont include them in removal
+            for item in locked_items + self.existing_items:
+                cItem = get_full_item_list()[item.name]
+                if cItem.type in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
+                    unit_avail_upgrades[item.name] = []
+                    unit_nb_upgrades[item.name] = 0
+                elif cItem.parent_item is not None:
+                    if cItem.parent_item not in unit_avail_upgrades:
+                        unit_nb_upgrades[cItem.parent_item] = 1
+                    else:
+                        unit_nb_upgrades[cItem.parent_item] += 1
+            # Making sure that the upgrades being removed is random 
+            # Currently, only for combat shield vs Stabilizer Medpacks...
+            shuffled_unit_upgrade_list = list(unit_avail_upgrades.keys())
+            self.multiworld.random.shuffle(shuffled_unit_upgrade_list)
+            for unit in shuffled_unit_upgrade_list:
+                while (unit_nb_upgrades[unit] > maxUpgrad) \
+                         and (len(unit_avail_upgrades[unit]) > 0):
+                    itemCandidate = self.multiworld.random.choice(unit_avail_upgrades[unit])
+                    _ = attempt_removal(itemCandidate)
+                    # Whatever it succeed to remove the iventory or it fails and thus 
+                    # lock it, the upgrade is no longer available for removal
+                    unit_avail_upgrades[unit].remove(itemCandidate)
+                    unit_nb_upgrades[unit] -= 1
+
+        # Locking associated items for items that have already been placed when units_always_have_upgrades is on
+        if units_always_have_upgrades:
+            existing_items = set(self.existing_items[:] + locked_items)
+            while existing_items:
+                existing_item = existing_items.pop()
+                items_to_lock = self.cascade_removal_map.get(existing_item, [existing_item])
+                if get_full_item_list()[existing_item.name].type != "Upgrade":
+                    # Don't process general upgrades, they may have been pre-locked per-level
+                    for item in items_to_lock:
+                        if item in inventory:
+                            item_quantity = inventory.count(item)
+                            # Unit upgrades, lock all levels
+                            for _ in range(item_quantity):
+                                inventory.remove(item)
+                            if item not in locked_items:
+                                # Lock all the associated items if not already locked
+                                for _ in range(item_quantity):
+                                    locked_items.append(copy_item(item))
+                        if item in existing_items:
+                            existing_items.remove(item)
+
+        if self.min_units_per_structure > 0 and self.has_units_per_structure():
+            requirements.append(lambda state: state.has_units_per_structure())
 
         # Determining if the full-size inventory can complete campaign
         if not all(requirement(self) for requirement in requirements):
@@ -159,7 +221,13 @@ class ValidInventory:
 
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
-                raise Exception("Reduced item pool generation failed - not enough locations available to place items.")
+                # There are more items than locations and all of them are already locked due to YAML or logic.
+                # Random items from locked ones will go to starting items
+                self.multiworld.random.shuffle(locked_items)
+                while len(locked_items) > inventory_size:
+                    item: Item = locked_items.pop()
+                    self.multiworld.push_precollected(item)
+                break
             # Select random item from removable items
             item = self.multiworld.random.choice(inventory)
             # Cascade removals to associated items
@@ -185,21 +253,47 @@ class ValidInventory:
                 if cascade_failure:
                     for transient_item in transient_items:
                         if transient_item in inventory:
-                            inventory.remove(transient_item)
+                            for _ in range(inventory.count(transient_item)):
+                                inventory.remove(transient_item)
                         if transient_item not in locked_items:
-                            locked_items.append(transient_item)
+                            for _ in range(get_item_quantity(transient_item, self.multiworld, self.player)):
+                                locked_items.append(copy_item(transient_item))
                         if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
                             self.logical_inventory.add(transient_item.name)
             else:
                 attempt_removal(item)
 
-        return inventory + locked_items
+        if not spider_mine_sources & self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
+        if not BARRACKS_UNITS & self.logical_inventory:
+            inventory = [item for item in inventory if
+                         not (item.name.startswith("Progressive Infantry") or item.name == "Orbital Strike")]
+        if not FACTORY_UNITS & self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Vehicle")]
+        if not STARPORT_UNITS & self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Ship")]
+
+        # Cull finished, adding locked items back into inventory
+        inventory += locked_items
+
+        # Replacing empty space with generically useful items
+        replacement_items = [item for item in self.item_pool
+                             if (item not in inventory
+                                 and item not in self.locked_items
+                                 and item.name in second_pass_placeable_items)]
+        self.multiworld.random.shuffle(replacement_items)
+        while len(inventory) < inventory_size and len(replacement_items) > 0:
+            item = replacement_items.pop()
+            inventory.append(item)
+
+        return inventory
 
     def _read_logic(self):
         self._sc2wol_has_common_unit = lambda world, player: SC2WoLLogic._sc2wol_has_common_unit(self, world, player)
         self._sc2wol_has_air = lambda world, player: SC2WoLLogic._sc2wol_has_air(self, world, player)
         self._sc2wol_has_air_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_air_anti_air(self, world, player)
         self._sc2wol_has_competent_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_competent_anti_air(self, world, player)
+        self._sc2wol_has_competent_ground_to_air = lambda world, player: SC2WoLLogic._sc2wol_has_competent_ground_to_air(self, world, player)
         self._sc2wol_has_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_anti_air(self, world, player)
         self._sc2wol_defense_rating = lambda world, player, zerg_enemy, air_enemy=False: SC2WoLLogic._sc2wol_defense_rating(self, world, player, zerg_enemy, air_enemy)
         self._sc2wol_has_competent_comp = lambda world, player: SC2WoLLogic._sc2wol_has_competent_comp(self, world, player)
@@ -210,6 +304,8 @@ class ValidInventory:
         self._sc2wol_has_protoss_common_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_common_units(self, world, player)
         self._sc2wol_has_protoss_medium_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_medium_units(self, world, player)
         self._sc2wol_has_mm_upgrade = lambda world, player: SC2WoLLogic._sc2wol_has_mm_upgrade(self, world, player)
+        self._sc2wol_welcome_to_the_jungle_requirement = lambda world, player: SC2WoLLogic._sc2wol_welcome_to_the_jungle_requirement(self, world, player)
+        self._sc2wol_can_respond_to_colony_infestations = lambda world, player: SC2WoLLogic._sc2wol_can_respond_to_colony_infestations(self, world, player)
         self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,
@@ -230,7 +326,7 @@ class ValidInventory:
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
-            item_info = item_table[item.name]
+            item_info = get_full_item_list()[item.name]
             if item_info.type == "Upgrade":
                 # Locking upgrades based on mission duration
                 if item.name not in item_quantities:

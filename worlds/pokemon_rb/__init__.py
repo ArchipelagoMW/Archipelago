@@ -49,14 +49,25 @@ class PokemonSettings(settings.Group):
 
 
 class PokemonWebWorld(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Pokemon Red and Blue with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Alchav"]
-    )]
+    )
+
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["Shiny"]
+    )
+
+    tutorials = [setup_en, setup_es]
 
 
 class PokemonRedBlueWorld(World):
@@ -138,7 +149,7 @@ class PokemonRedBlueWorld(World):
 
         if self.multiworld.key_items_only[self.player]:
             self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
-            self.multiworld.dexsanity[self.player] = self.multiworld.dexsanity[self.player].from_text("false")
+            self.multiworld.dexsanity[self.player].value = 0
             self.multiworld.randomize_hidden_items[self.player] = \
                 self.multiworld.randomize_hidden_items[self.player].from_text("off")
 
@@ -434,13 +445,9 @@ class PokemonRedBlueWorld(World):
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
         # fail. Re-use test_state from previous final loop.
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
-        clear_cache = False
         for location in evolutions_region.locations.copy():
             if not test_state.can_reach(location, player=self.player):
                 evolutions_region.locations.remove(location)
-                clear_cache = True
-        if clear_cache:
-            self.multiworld.clear_location_cache()
 
         if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
@@ -456,13 +463,17 @@ class PokemonRedBlueWorld(World):
         locs = {self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)}
 
-        for loc in locs:
+        if not self.multiworld.key_items_only[self.player]:
+            rule = None
             if self.multiworld.fossil_check_item_types[self.player] == "key_items":
-                add_item_rule(loc, lambda i: i.advancement)
+                rule = lambda i: i.advancement
             elif self.multiworld.fossil_check_item_types[self.player] == "unique_items":
-                add_item_rule(loc, lambda i: i.name in item_groups["Unique"])
+                rule = lambda i: i.name in item_groups["Unique"]
             elif self.multiworld.fossil_check_item_types[self.player] == "no_key_items":
-                add_item_rule(loc, lambda i: not i.advancement)
+                rule = lambda i: not i.advancement
+            if rule:
+                for loc in locs:
+                    add_item_rule(loc, rule)
 
         for mon in ([" ".join(self.multiworld.get_location(
                 f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
@@ -548,7 +559,6 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
-            self.multiworld._recache()
 
         if self.multiworld.door_shuffle[self.player] == "decoupled":
             swept_state = self.multiworld.state.copy()
@@ -717,6 +727,15 @@ class PokemonRedBlueWorld(World):
             "death_link": self.multiworld.death_link[self.player].value,
             "prizesanity": self.multiworld.prizesanity[self.player].value,
             "key_items_only": self.multiworld.key_items_only[self.player].value,
+            "poke_doll_skip": self.multiworld.poke_doll_skip[self.player].value,
+            "bicycle_gate_skips": self.multiworld.bicycle_gate_skips[self.player].value,
+            "stonesanity": self.multiworld.stonesanity[self.player].value,
+            "door_shuffle": self.multiworld.door_shuffle[self.player].value,
+            "warp_tile_shuffle": self.multiworld.warp_tile_shuffle[self.player].value,
+            "dark_rock_tunnel_logic": self.multiworld.dark_rock_tunnel_logic[self.player].value,
+            "split_card_key": self.multiworld.split_card_key[self.player].value,
+            "all_elevators_locked": self.multiworld.all_elevators_locked[self.player].value,
+
         }
 
 
