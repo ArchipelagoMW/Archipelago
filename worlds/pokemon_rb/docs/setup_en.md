@@ -11,7 +11,6 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
   - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (select `Pokemon Client` during installation).
 - Pokémon Red and/or Blue ROM files. The Archipelago community cannot provide these.
 
 ## Optional Software
@@ -25,8 +24,8 @@ Once BizHawk has been installed, open EmuHawk and change the following settings:
 
 - (If using 2.8 or earlier) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
   "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
-  **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
+  **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs**
+  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load**
   **"NLua+KopiLua" until this step is done.**
 - Under Config > Customize > Advanced, make sure the box for AutoSaveRAM is checked, and click the 5s button.
   This reduces the possibility of losing save data in emulator crashes.
@@ -98,8 +97,8 @@ Now you are ready to start your adventure in Kanto.
 Pokémon Red and Blue has a fully functional map tracker that supports auto-tracking.
 
 1. Download [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/j-imbo/pkmnrb_jim/releases/latest) and [PopTracker](https://github.com/black-sliver/PopTracker/releases).
-2. Open PopTracker, and load the Pokémon Red and Blue pack. 
+2. Open PopTracker, and load the Pokémon Red and Blue pack.
 3. Click on the "AP" symbol at the top.
-4. Enter the AP address, slot name and password. 
+4. Enter the AP address, slot name and password.
 
 The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly.

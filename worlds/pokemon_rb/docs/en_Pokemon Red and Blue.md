@@ -83,6 +83,6 @@ you until these have ended.
 
 ## Unique Local Commands
 
-The following command is only available when using the PokemonClient to play with Archipelago.
+The following command is only available when using the PokemonRedBlueClient to play with Archipelago.
 
 - `/gb` Check Gameboy Connection State

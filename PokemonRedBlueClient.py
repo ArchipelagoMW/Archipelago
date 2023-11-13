@@ -117,7 +117,7 @@ class GBContext(CommonContext):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
-            base_title = "Archipelago Pokémon Client"
+            base_title = "Archipelago Pokémon Red and Blue Client"
 
         self.ui = GBManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
@@ -216,7 +216,7 @@ async def gb_sync_task(ctx: GBContext):
                     data_decoded = json.loads(data.decode())
                     if 'scriptVersion' not in data_decoded or data_decoded['scriptVersion'] != SCRIPT_VERSION:
                         msg = "You are connecting with an incompatible Lua script version. Ensure your connector Lua " \
-                            "and PokemonClient are from the same Archipelago installation."
+                            "and PokemonRedBlueClient are from the same Archipelago installation."
                         logger.info(msg, extra={'compact_gui': True})
                         ctx.gui_error('Error', msg)
                         error_status = CONNECTION_RESET_STATUS
@@ -337,7 +337,7 @@ async def patch_and_run_game(game_version, patch_file, ctx):
 
 if __name__ == '__main__':
 
-    Utils.init_logging("PokemonClient")
+    Utils.init_logging("PokemonRedBlueClient")
 
     options = Utils.get_options()
 

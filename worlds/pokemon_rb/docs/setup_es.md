@@ -9,10 +9,9 @@ Al usar BizHawk, esta guía solo es aplicable en los sistemas de Windows y Linux
 - BizHawk: [BizHawk Releases en TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
   - La versión 2.3.1 y posteriores son soportadas. Se recomienda la versión 2.9.1.
   - Instrucciones de instalación detalladas para BizHawk se pueden encontrar en el enlace de arriba.
-  - Los usuarios de Windows deben ejecutar el instalador de prerrequisitos (prereq installer) primero, que también se 
+  - Los usuarios de Windows deben ejecutar el instalador de prerrequisitos (prereq installer) primero, que también se
     encuentra en el enlace de arriba.
 - El cliente incorporado de Archipelago, que se puede encontrar [aquí](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (selecciona `Pokemon Client` durante la instalación).
 - Los ROMs originales de Pokémon Red y/o Blue. La comunidad de Archipelago no puede proveerlos.
 
 ## Software Opcional
@@ -99,9 +98,9 @@ Ahora ya estás listo para tu aventura en Kanto.
 
 ## Auto-Tracking
 
-Pokémon Red and Blue tiene un mapa completamente funcional que soporta seguimiento automático. 
+Pokémon Red and Blue tiene un mapa completamente funcional que soporta seguimiento automático.
 
-1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/j-imbo/pkmnrb_jim/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases). 
+1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/j-imbo/pkmnrb_jim/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 2. Abre PopTracker, y carga el pack de Pokémon Red and Blue.
 3. Haz clic en el símbolo "AP" en la parte superior.
 4. Ingresa la dirección de AP, nombre del slot y contraseña (si es que hay).
