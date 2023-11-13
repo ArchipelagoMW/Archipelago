@@ -423,6 +423,7 @@ check_count_address = 0x02039D22
 highest_warp_floor_address = 0x0203C590
 moogle_points_address = 0x02039D24
 deck_cp_cost_address = 0x02039EBA
+deck_card_count_address = 0x02039EBC
 deck_card_pointers_addresses = {0x02039DE0, 0x02039EC0, 0x02039FA0}
 world_card_addresses = {0x02039D30, 0x02039D31}
 world_card_values = {{0x00,0x02}, {0x08,0x00}, {0x04,0x00}, {0x10,0x00}, {0x01,0x00}, {0x20,0x00}
@@ -563,6 +564,7 @@ end
 
 function set_starting_deck()
     memory.write_u16_le(deck_cp_cost_address, 0x0053)
+    memory.write_u16_le(deck_card_count_address, 0x04)
     
     memory.write_u16_le(battle_cards_address, 0x1008) --Kingdom Key 8
     set_deck_pointer(1, 0, 0x0000)
@@ -841,12 +843,14 @@ function add_battle_card(battle_card)
                 card_value = math.random(0,v[2]-v[1])
             end
             memory.write_u16_le(battle_cards_address + (2 * offset), v[1]+card_value)
+            print("Got Card: " .. battle_card .. " " .. tostring(card_value))
             return
         end
     end
 end
 
 function open_card_pack(card_pack)
+    print("Opening " .. card_pack)
     if card_pack == "Bronze Card Pack" then
         i = 0
         while i < pack_size do
