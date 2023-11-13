@@ -25,7 +25,7 @@ from . import logic
 from . import poke_data
 
 
-def launch_client():
+def launch_client(*args):
     from .client import launch
     launch_subprocess(launch, name="PokemonRedBlueClient")
 
