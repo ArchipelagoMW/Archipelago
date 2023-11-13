@@ -1,7 +1,7 @@
 from typing import Callable, Dict, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, allow_self_locking_items
+from worlds.generic.Rules import add_rule, allow_self_locking_items, CollectionRule
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
 
@@ -14,8 +14,8 @@ else:
 class MessengerRules:
     player: int
     world: MessengerWorld
-    region_rules: Dict[str, Callable[[CollectionState], bool]]
-    location_rules: Dict[str, Callable[[CollectionState], bool]]
+    region_rules: Dict[str, CollectionRule]
+    location_rules: Dict[str, CollectionRule]
 
     def __init__(self, world: MessengerWorld) -> None:
         self.player = world.player
@@ -151,7 +151,7 @@ class MessengerRules:
 
 
 class MessengerHardRules(MessengerRules):
-    extra_rules: Dict[str, Callable[[CollectionState], bool]]
+    extra_rules: Dict[str, CollectionRule]
 
     def __init__(self, world: MessengerWorld) -> None:
         super().__init__(world)
