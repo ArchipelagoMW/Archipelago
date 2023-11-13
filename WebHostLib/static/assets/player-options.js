@@ -16,8 +16,9 @@ window.addEventListener('load', () => {
     }
 
     if (optionHash !== md5(JSON.stringify(results))) {
-      showUserMessage("Your options are out of date! Click here to update them! Be aware this will reset " +
-        "them all to default.");
+      showUserMessage(
+          'Your options are out of date! Click here to update them! Be aware this will reset them all to default.'
+      );
       document.getElementById('user-message').addEventListener('click', resetOptions);
     }
 
@@ -38,15 +39,15 @@ window.addEventListener('load', () => {
     nameInput.value = playerOptions.name;
 
     // Presets
-    const presetSelect = document.getElementById("game-options-preset");
-    presetSelect.addEventListener("change", (event) => setPresets(results, event.target.value));
-    for (const preset in results["presetOptions"]) {
-      const presetOption = document.createElement("option");
+    const presetSelect = document.getElementById('game-options-preset');
+    presetSelect.addEventListener('change', (event) => setPresets(results, event.target.value));
+    for (const preset in results['presetOptions']) {
+      const presetOption = document.createElement('option');
       presetOption.innerText = preset;
       presetSelect.appendChild(presetOption);
     }
     presetSelect.value = localStorage.getItem(`${gameName}-preset`);
-    results["presetOptions"]["__default"] = {};
+    results['presetOptions']['__default'] = {};
   }).catch((e) => {
     console.error(e);
     const url = new URL(window.location.href);
@@ -91,7 +92,7 @@ const createDefaultOptions = (optionData) => {
   }
 
   if (!localStorage.getItem(`${gameName}-preset`)) {
-    localStorage.setItem(`${gameName}-preset`, "__default");
+    localStorage.setItem(`${gameName}-preset`, '__default');
   }
 };
 
@@ -178,7 +179,7 @@ const buildOptionsTable = (options, romOpts = false) => {
         element.classList.add('range-container');
 
         let range = document.createElement('input');
-        range.setAttribute('id', setting);
+        range.setAttribute('id', option);
         range.setAttribute('type', 'range');
         range.setAttribute('data-key', option);
         range.setAttribute('min', options[option].min);
@@ -226,7 +227,7 @@ const buildOptionsTable = (options, romOpts = false) => {
           for (let i = 0; i < words.length; i++) {
             words[i] = words[i][0].toUpperCase() + words[i].substring(1);
           }
-          presetOption.innerText = words.join(" ");
+          presetOption.innerText = words.join(' ');
           specialRangeSelect.appendChild(presetOption);
         });
         let customOption = document.createElement('option');
@@ -312,13 +313,13 @@ const buildOptionsTable = (options, romOpts = false) => {
 };
 
 const setPresets = (optionsData, presetName) => {
-  const defaults = optionsData["gameOptions"];
-  const preset = optionsData["presetOptions"][presetName];
+  const defaults = optionsData['gameOptions'];
+  const preset = optionsData['presetOptions'][presetName];
 
   localStorage.setItem(`${gameName}-preset`, presetName);
 
   if (!preset) {
-    console.error(`No presets defined for preset name: "${presetName}"`);
+    console.error(`No presets defined for preset name: '${presetName}'`);
     return;
   }
 
@@ -326,22 +327,22 @@ const setPresets = (optionsData, presetName) => {
     let presetValue = preset[option];
     if (presetValue === undefined) {
       // Using the default value if not set in presets.
-      presetValue = defaults[option]["defaultValue"];
+      presetValue = defaults[option]['defaultValue'];
     }
 
     switch (defaults[option].type) {
-      case "range":
-      case "select": {
-        const optionElement = document.querySelector(`#${option}[data-key="${option}"]`);
-        const randomElement = document.querySelector(`.randomize-button[data-key="${option}"]`);
+      case 'range':
+      case 'select': {
+        const optionElement = document.querySelector(`#${option}[data-key='${option}']`);
+        const randomElement = document.querySelector(`.randomize-button[data-key='${option}']`);
 
-        if (presetValue === "random") {
-          randomElement.classList.add("active");
+        if (presetValue === 'random') {
+          randomElement.classList.add('active');
           optionElement.disabled = true;
           updateGameOption(randomElement, false);
         } else {
           optionElement.value = presetValue;
-          randomElement.classList.remove("active");
+          randomElement.classList.remove('active');
           optionElement.disabled = undefined;
           updateGameOption(optionElement, false);
         }
@@ -349,23 +350,23 @@ const setPresets = (optionsData, presetName) => {
         break;
       }
 
-      case "special_range": {
-        const selectElement = document.querySelector(`select[data-key="${option}"]`);
-        const rangeElement = document.querySelector(`input[data-key="${option}"]`);
-        const randomElement = document.querySelector(`.randomize-button[data-key="${option}"]`);
+      case 'special_range': {
+        const selectElement = document.querySelector(`select[data-key='${option}']`);
+        const rangeElement = document.querySelector(`input[data-key='${option}']`);
+        const randomElement = document.querySelector(`.randomize-button[data-key='${option}']`);
 
-        if (presetValue === "random") {
-          randomElement.classList.add("active");
+        if (presetValue === 'random') {
+          randomElement.classList.add('active');
           selectElement.disabled = true;
           rangeElement.disabled = true;
           updateGameOption(randomElement, false);
         } else {
           rangeElement.value = presetValue;
-          selectElement.value = Object.values(defaults[option]["value_names"]).includes(parseInt(presetValue)) ?
-              parseInt(presetValue) : "custom";
+          selectElement.value = Object.values(defaults[option]['value_names']).includes(parseInt(presetValue)) ?
+              parseInt(presetValue) : 'custom';
           document.getElementById(`${option}-value`).innerText = presetValue;
 
-          randomElement.classList.remove("active");
+          randomElement.classList.remove('active');
           selectElement.disabled = undefined;
           rangeElement.disabled = undefined;
           updateGameOption(rangeElement, false);
@@ -411,7 +412,7 @@ const updateGameOption = (optionElement, toggleCustomPreset = true) => {
   const options = JSON.parse(localStorage.getItem(gameName));
 
   if (toggleCustomPreset) {
-    localStorage.setItem(`${gameName}-preset`, "__custom");
+    localStorage.setItem(`${gameName}-preset`, '__custom');
     const presetElement = document.getElementById('game-options-preset');
     presetElement.value = '__custom';
   }
@@ -431,16 +432,16 @@ const exportOptions = () => {
   const options = JSON.parse(localStorage.getItem(gameName));
   const preset = localStorage.getItem(`${gameName}-preset`);
   switch (preset) {
-    case "__default":
-      options["description"] = `Generated by https://archipelago.gg with the default preset.`;
+    case '__default':
+      options['description'] = `Generated by https://archipelago.gg with the default preset.`;
       break;
 
-    case "__custom":
-      options["description"] = `Generated by https://archipelago.gg.`;
+    case '__custom':
+      options['description'] = `Generated by https://archipelago.gg.`;
       break;
 
     default:
-      options["description"] = `Generated by https://archipelago.gg with the ${preset} preset.`;
+      options['description'] = `Generated by https://archipelago.gg with the ${preset} preset.`;
   }
 
   if (!options.name || options.name.trim().length === 0) {

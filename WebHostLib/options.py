@@ -118,7 +118,7 @@ def create():
 
         player_options["gameOptions"] = game_options
 
-        player_settings["presetOptions"] = world.web.options_presets
+        player_options["presetOptions"] = world.web.options_presets
 
         os.makedirs(os.path.join(target_folder, 'player-options'), exist_ok=True)
 
@@ -136,7 +136,7 @@ def create():
 
             weighted_options["baseOptions"]["game"][game_name] = 0
             weighted_options["games"][game_name] = {
-                "gameSettings": game_options,
+                "gameOptions": game_options,
                 "gameItems": tuple(world.item_names),
                 "gameItemGroups": [
                     group for group in world.item_name_groups.keys() if group != "Everything"
