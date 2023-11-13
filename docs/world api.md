@@ -77,15 +77,17 @@ prefixed with the same string as defined here. Default already has 'en'.
 are the options to be set for that preset. The options are defined as a `Dict[str, Any]` where the keys are the names of
 the options and the values are the values to be set for that option. These presets will be available for users to select from on the game's options page.
 
-Note: The values must be valid for the option type and can only include the following option types:
+Note: The values must be a non-aliased value for the option type and can only include the following option types:
 
   - If you have a `Range`/`SpecialRange` option, the value should be an `int` between the `range_start` and `range_end`
-    values. 
+    values.
+    - If you have a `SpecialRange` option, the value can alternatively be a `str` that is one of the 
+      `special_range_names` keys.
   - If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values. 
   - If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
   - `random` is also a valid value for any of these option types.
 
-`OptionDict`, `OptionList`, `OptionSet`, and `FreeText` are not supported. 
+`OptionDict`, `OptionList`, `OptionSet`, and `FreeText` are not supported for presets on the webhost.
 
 Here is an example of a defined preset:
 ```python

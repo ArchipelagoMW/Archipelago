@@ -1,10 +1,7 @@
 import unittest
-from typing import TYPE_CHECKING
 
 from worlds import AutoWorldRegister
-
-if TYPE_CHECKING:
-    from Options import Option
+from Options import Choice, SpecialRange, Toggle, Range
 
 
 class TestOptionPresets(unittest.TestCase):
@@ -12,12 +9,56 @@ class TestOptionPresets(unittest.TestCase):
         """Test that all predefined option presets are valid options."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             presets = world_type.web.options_presets
-            for preset_name, presets in presets.items():
-                with self.subTest(game=game_name, presets=preset_name):
-                    for option_name, option_value in presets.items():
+            for preset_name, preset in presets.items():
+                with self.subTest(game=game_name, preset=preset_name):
+                    for option_name, option_value in preset.items():
                         try:
-                            # We don't need to assign the return, as we're only interested if this raises an error.
-                            world_type.options_dataclass.type_hints[option_name].from_any(option_value)
+                            option = world_type.options_dataclass.type_hints[option_name].from_any(option_value)
+                            supported_types = [Choice, Toggle, Range, SpecialRange]
+                            if not any([issubclass(option.__class__, t) for t in supported_types]):
+                                self.fail(f"'{option_name}' in preset '{preset_name}' for game '{game_name}' "
+                                          f"is not a supported type for webhost. "
+                                          f"Supported types: {', '.join([t.__name__ for t in supported_types])}")
                         except AssertionError as ex:
                             self.fail(f"Option '{option_name}': '{option_value}' in preset '{preset_name}' for game "
                                       f"'{game_name}' is not valid. Error: {ex}")
+                        except KeyError as ex:
+                            self.fail(f"Option '{option_name}' in preset '{preset_name}' for game '{game_name}' is "
+                                      f"not a defined option. Error: {ex}")
+
+    def test_option_preset_values_are_explicitly_defined(self):
+        """Test that option preset values are not a special flavor of 'random' or use from_text to resolve another
+        value.
+        """
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            presets = world_type.web.options_presets
+            for preset_name, preset in presets.items():
+                with self.subTest(game=game_name, preset=preset_name):
+                    for option_name, option_value in preset.items():
+                        # Check for non-standard random values.
+                        self.assertTrue(
+                            option_value not in ["random-low", "random-high", "random-middle"] and
+                            not str(option_value).startswith("random-"),
+                            f"'{option_name}': '{option_value}' in preset '{preset_name}' for game '{game_name}' "
+                            f"is not supported for webhost. Special random values are not supported for presets."
+                        )
+
+                        option = world_type.options_dataclass.type_hints[option_name].from_any(option_value)
+
+                        # Check for from_text resolving to a different value. ("random" is allowed though.)
+                        if option_value != "random" and isinstance(option_value, str):
+                            # Allow special named values for SpecialRange option presets.
+                            if isinstance(option, SpecialRange):
+                                self.assertTrue(
+                                    option_value in option.special_range_names,
+                                    f"Invalid preset '{option_name}': '{option_value}' in preset '{preset_name}' "
+                                    f"for game '{game_name}'. Expected {option.special_range_names.keys()} or "
+                                    f"{option.range_start}-{option.range_end}."
+                                )
+                            else:
+                                self.assertTrue(
+                                    option.name_lookup[option.value] == option_value,
+                                    f"'{option_name}': '{option_value}' in preset '{preset_name}' for game "
+                                    f"'{game_name}' is not supported for webhost. Values must not be resolved to a "
+                                    f"different option via option.from_text (or an alias)."
+                                )

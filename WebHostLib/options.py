@@ -119,17 +119,40 @@ def create():
         player_options["gameOptions"] = game_options
 
         player_options["presetOptions"] = {}
-        for preset_name, presets in world.web.options_presets.items():
+        for preset_name, preset in world.web.options_presets.items():
             player_options["presetOptions"][preset_name] = {}
-            for option_name, option_value in presets.items():
+            for option_name, option_value in preset.items():
+                # Random range type settings are not valid.
+                assert (option_value not in ["random-low", "random-high", "random-middle"] and
+                        not str(option_value).startswith("random-")), \
+                    f"Invalid preset value '{option_value}' for '{option_name}' in '{preset_name}'. Special random " \
+                    f"values are not supported for presets."
+
+                # Normal random is supported, but needs to be handled explicitly.
                 if option_value == "random":
                     player_options["presetOptions"][preset_name][option_name] = option_value
                     continue
 
                 option = world.options_dataclass.type_hints[option_name].from_any(option_value)
-                if issubclass(option.__class__, Options.Range):
+                if isinstance(option, Options.SpecialRange) and isinstance(option_value, str):
+                    assert option_value in option.special_range_names, \
+                        f"Invalid preset value '{option_value}' for '{option_name}' in '{preset_name}'. " \
+                        f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
+
+                    # Still use the true value for the option, not the name.
                     player_options["presetOptions"][preset_name][option_name] = option.value
+                elif isinstance(option, Options.Range):
+                    player_options["presetOptions"][preset_name][option_name] = option.value
+                elif isinstance(option_value, str):
+                    # For Choice and Toggle options, the value should be the name of the option. This is to prevent
+                    # setting a preset for an option with an overridden from_text method that would normally be okay,
+                    # but would not be okay for the webhost's current implementation of player options UI.
+                    assert option.name_lookup[option.value] == option_value, \
+                        f"Invalid option value '{option_value}' for '{option_name}' in preset '{preset_name}'. " \
+                        f"Values must not be resolved to a different option via option.from_text (or an alias)."
+                    player_options["presetOptions"][preset_name][option_name] = option.current_key
                 else:
+                    # int and bool values are fine, just resolve them to the current key for webhost.
                     player_options["presetOptions"][preset_name][option_name] = option.current_key
 
         os.makedirs(os.path.join(target_folder, 'player-options'), exist_ok=True)

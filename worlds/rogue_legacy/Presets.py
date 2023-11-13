@@ -1,8 +1,9 @@
 from typing import Any, Dict
 
+from .Options import Architect, GoldGainMultiplier, Vendors
 
-rl_option_presets: Dict[str, Dict[str, Any]] = {
-    # Example preset.
+rl_options_presets: Dict[str, Dict[str, Any]] = {
+    # Example preset using only literal values.
     "Unknown Fate": {
         "progression_balancing":    "random",
         "accessibility":            "random",
@@ -34,18 +35,18 @@ rl_option_presets: Dict[str, Dict[str, Any]] = {
         "equip_pool":               "random",
         "crit_chance_pool":         "random",
         "crit_damage_pool":         "random",
-        "allow_default_names":      1,
+        "allow_default_names":      False,
         "death_link":               "random",
     },
-    # A preset I actually use.
+    # A preset I actually use, using some literal values and some from the option itself.
     "Limited Potential": {
-        "progression_balancing":    0,
+        "progression_balancing":    "disabled",
         "fairy_chests_per_zone":    2,
         "starting_class":           "random",
         "chests_per_zone":          30,
-        "vendors":                  "normal",
-        "architect":                "disabled",
-        "gold_gain_multiplier":     "half",
+        "vendors":                  Vendors.option_normal,
+        "architect":                Architect.option_disabled,
+        "gold_gain_multiplier":     GoldGainMultiplier.option_half,
         "number_of_children":       2,
         "free_diary_on_generation": False,
         "health_pool":              10,
