@@ -12,9 +12,6 @@ class TimeIt:
         self.timer = time.perf_counter()
         return self
 
-    def end(self):
-        self.end_timer = time.perf_counter()
-
     @property
     def dif(self):
         return self.end_timer - self.timer
@@ -68,7 +65,6 @@ if __name__ == "__main__":
                 # if time is taken to disentangle complex ref chains,
                 # this time should be attributed to the rule.
                 gc.collect()
-                t.end()
             return t.dif
 
         def main(self):
