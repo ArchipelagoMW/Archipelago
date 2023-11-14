@@ -1,17 +1,16 @@
 import math
-from typing import Iterable, Union
+from typing import Union
 
 from Utils import cache_self1
 from .building_logic import BuildingLogic
-from .cached_logic import CachedLogic, cache_rule, profile_rule
+from .cached_logic import CachedLogic, cache_rule
 from .gift_logic import GiftLogic
 from .has_logic import HasLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
 from .time_logic import TimeLogic
-from .. import options
-from ..data.villagers_data import all_villagers_by_name, get_villagers_for_mods, Villager
+from ..data.villagers_data import all_villagers_by_name, Villager
 from ..options import Friendsanity, FriendsanityHeartSize, Mods
 from ..stardew_rule import StardewRule, True_, And, Or, Count
 from ..strings.generic_names import Generic
@@ -71,7 +70,7 @@ class RelationshipLogic(CachedLogic):
             return True_()
         baby_rules = [self.can_get_married(), self.buildings.has_house(2), self.has_hearts(Generic.bachelor, 12),
                       self.has_children(number_children - 1)]
-        return And(baby_rules)
+        return And(*baby_rules)
 
     # Should be cached
     def has_hearts(self, npc: str, hearts: int = 1) -> StardewRule:
@@ -87,14 +86,14 @@ class RelationshipLogic(CachedLogic):
                         continue
                     if npc == Generic.any or all_villagers_by_name[name].bachelor:
                         possible_friends.append(self.has_hearts(name, hearts))
-                return Or(possible_friends)
+                return Or(*possible_friends)
             if npc == Generic.all:
                 mandatory_friends = []
                 for name in all_villagers_by_name:
                     if not self.npc_is_in_current_slot(name):
                         continue
                     mandatory_friends.append(self.has_hearts(name, hearts))
-                return And(mandatory_friends)
+                return And(*mandatory_friends)
             if npc.isnumeric():
                 possible_friends = []
                 for name in all_villagers_by_name:
@@ -133,7 +132,7 @@ class RelationshipLogic(CachedLogic):
         elif npc == ModNPC.lance:
             rules.append(self.region.can_reach(Region.volcano_floor_10))
 
-        return And(rules)
+        return And(*rules)
 
     def can_give_loved_gifts_to_everyone(self) -> StardewRule:
         rules = []

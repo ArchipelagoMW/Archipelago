@@ -40,7 +40,7 @@ class MuseumLogic(CachedLogic):
     @cache_self1
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         region_rule = self.region.can_reach_all_except_one(item.locations)
-        geodes_rule = And([self.action.can_open_geode(geode) for geode in item.geodes])
+        geodes_rule = And(*(self.action.can_open_geode(geode) for geode in item.geodes))
         # monster_rule = self.can_farm_monster(item.monsters)
         # extra_rule = True_()
         pan_rule = False_()
@@ -77,7 +77,7 @@ class MuseumLogic(CachedLogic):
 
         for donation in all_museum_items:
             rules.append(self.can_find_museum_item(donation))
-        return And(rules) & self.region.can_reach(Region.museum)
+        return And(*rules) & self.region.can_reach(Region.museum)
 
     def can_donate(self, item: str) -> StardewRule:
         return self.has(item) & self.region.can_reach(Region.museum)

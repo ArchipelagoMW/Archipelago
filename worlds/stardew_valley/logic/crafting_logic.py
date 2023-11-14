@@ -59,15 +59,12 @@ class CraftingLogic(CachedLogic):
 
     @cache_self1
     def can_craft(self, recipe: CraftingRecipe = None) -> StardewRule:
-        craft_rule = True_()
         if recipe is None:
-            return craft_rule
+            return True_()
 
         learn_rule = self.knows_recipe(recipe)
-        ingredients_rule = And([self.has(ingredient) for ingredient in recipe.ingredients])
-        number_ingredients = sum(recipe.ingredients[ingredient] for ingredient in recipe.ingredients) // 10
-        time_rule = self.time.has_lived_months(number_ingredients)
-        return craft_rule & learn_rule & ingredients_rule & time_rule
+        ingredients_rule = And(*(self.has(ingredient) for ingredient in recipe.ingredients))
+        return learn_rule & ingredients_rule
 
     @cache_self1
     def knows_recipe(self, recipe: CraftingRecipe) -> StardewRule:

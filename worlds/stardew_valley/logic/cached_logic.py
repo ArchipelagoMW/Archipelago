@@ -61,7 +61,7 @@ class CachedLogic:
 
 def cache_rule(func):
     @functools.wraps(func)
-    def wrapper(self, *args, **kwargs):
+    def wrapper(self, *args):
         key = self.get_cache_key(func, *args, **kwargs)
         return self.cached_rules.try_get_rule(key, func, self, *args, **kwargs)
     return wrapper

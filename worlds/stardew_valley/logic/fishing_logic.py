@@ -72,5 +72,4 @@ class FishingLogic(CachedLogic):
             return False_()
         if self.special_order_locations != SpecialOrderLocations.option_board_qi:
             return False_()
-        return self.region.can_reach(Region.qi_walnut_room) & And(
-            *(self.can_catch_fish(fish) for fish in legendary_fish))
+        return self.region.can_reach(Region.qi_walnut_room) & And(*(self.can_catch_fish(fish) for fish in legendary_fish))

@@ -49,7 +49,7 @@ class DeepWoodsLogic:
         if self.skill_option == SkillProgression.option_progressive:
             combat_tier = min(10, max(0, tier + 5))
             rules.append(self.skill.has_level(Skill.combat, combat_tier))
-        return And(rules)
+        return And(*rules)
 
     def has_woods_rune_to_depth(self, floor: int) -> StardewRule:
         if self.elevator_option == ElevatorProgression.option_vanilla:

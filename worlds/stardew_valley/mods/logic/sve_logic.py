@@ -74,5 +74,5 @@ class SVELogic:
     def has_any_rune(self):
         rune_list = ["Nexus: Adventurer's Guild Runes", "Nexus: Junimo Woods Runes", "Nexus: Aurora Vineyard Runes", "Nexus: Sprite Spring Runes",
                      "Nexus: Outpost Runes"]
-        return Or([self.received(rune) for rune in rune_list])
+        return Or(*(self.received(rune) for rune in rune_list))
 

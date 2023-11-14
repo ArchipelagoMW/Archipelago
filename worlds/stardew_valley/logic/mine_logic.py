@@ -81,7 +81,7 @@ class MineLogic(CachedLogic):
             skill_tier = min(10, max(0, tier * 2))
             rules.append(self.skill.has_level(Skill.combat, skill_tier))
             rules.append(self.skill.has_level(Skill.mining, skill_tier))
-        return And(rules)
+        return And(*rules)
 
     @cache_self1
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
@@ -103,4 +103,4 @@ class MineLogic(CachedLogic):
             skill_tier = min(10, max(0, tier * 2 + 6))
             rules.extend({self.skill.has_level(Skill.combat, skill_tier),
                           self.skill.has_level(Skill.mining, skill_tier)})
-        return And(rules)
+        return And(*rules)

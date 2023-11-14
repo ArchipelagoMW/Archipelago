@@ -155,6 +155,7 @@ class SVTestCase(unittest.TestCase):
         performance_tests_key = "performance"
         if performance_tests_key in os.environ:
             self.skip_performance_tests = not bool(os.environ[performance_tests_key])
+        self.skip_performance_tests = False
 
 
 class SVTestBase(WorldTestBase, SVTestCase):

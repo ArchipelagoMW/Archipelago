@@ -38,5 +38,5 @@ class ActionLogic(CachedLogic):
         blacksmith_access = self.region.can_reach(Region.blacksmith)
         geodes = [Geode.geode, Geode.frozen, Geode.magma, Geode.omni]
         if geode == Generic.any:
-            return blacksmith_access & Or([self.has(geode_type) for geode_type in geodes])
+            return blacksmith_access & Or(*(self.has(geode_type) for geode_type in geodes))
         return blacksmith_access & self.has(geode)

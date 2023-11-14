@@ -24,9 +24,9 @@ class ReceivedLogic(CachedLogic):
             return Received(items, self.player, count)
 
         if count is None:
-            return And(self.received(item) for item in items)
+            return And(*(self.received(item) for item in items))
 
         if count == 1:
-            return Or(self.received(item) for item in items)
+            return Or(*(self.received(item) for item in items))
 
         return TotalReceived(count, items, self.player)

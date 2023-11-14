@@ -26,9 +26,9 @@ class HasLogic(CachedLogic):
             return True_()
 
         if count is None or count == len(items):
-            return And(self.has(item) for item in items)
+            return And(*(self.has(item) for item in items))
 
         if count == 1:
-            return Or(self.has(item) for item in items)
+            return Or(*(self.has(item) for item in items))
 
         return Count(count, (self.has(item) for item in items))

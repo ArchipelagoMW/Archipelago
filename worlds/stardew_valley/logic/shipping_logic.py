@@ -59,4 +59,4 @@ class ShippingLogic(CachedLogic):
             if location.mod_name and location.mod_name not in mod_list:
                 continue
             all_items_to_ship.append(location.name[len(shipsanity_prefix):])
-        return self.buildings.has_building(Building.shipping_bin) & And([self.has(item) for item in all_items_to_ship])
+        return self.buildings.has_building(Building.shipping_bin) & And(*(self.has(item) for item in all_items_to_ship))

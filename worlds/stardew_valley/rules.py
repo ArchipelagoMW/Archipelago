@@ -579,13 +579,13 @@ def set_museum_milestone_rule(logic: StardewLogic, multiworld: MultiWorld, museu
     elif milestone_name.endswith(artifacts_suffix):
         rule = get_museum_item_count_rule(logic, artifacts_suffix, milestone_name, all_museum_artifacts, logic.museum.can_find_museum_artifacts)
     elif milestone_name == "Dwarf Scrolls":
-        rule = And([logic.museum.can_find_museum_item(item) for item in dwarf_scrolls]) & logic.received(metal_detector, 4)
+        rule = And(*(logic.museum.can_find_museum_item(item) for item in dwarf_scrolls)) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Front":
-        rule = And([logic.museum.can_find_museum_item(item) for item in skeleton_front]) & logic.received(metal_detector, 4)
+        rule = And(*(logic.museum.can_find_museum_item(item) for item in skeleton_front)) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Middle":
-        rule = And([logic.museum.can_find_museum_item(item) for item in skeleton_middle]) & logic.received(metal_detector, 4)
+        rule = And(*(logic.museum.can_find_museum_item(item) for item in skeleton_middle)) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Back":
-        rule = And([logic.museum.can_find_museum_item(item) for item in skeleton_back]) & logic.received(metal_detector, 4)
+        rule = And(*(logic.museum.can_find_museum_item(item) for item in skeleton_back)) & logic.received(metal_detector, 4)
     elif milestone_name == "Ancient Seed":
         rule = logic.museum.can_find_museum_item(Artifact.ancient_seed) & logic.received(metal_detector, 4)
     if rule is None:

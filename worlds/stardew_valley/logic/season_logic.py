@@ -38,7 +38,7 @@ class SeasonLogic(CachedLogic):
     def has_any(self, seasons: Iterable[str]):
         if not seasons:
             return True_()
-        return Or([self.has(season) for season in seasons])
+        return Or(*(self.has(season) for season in seasons))
 
     def has_any_not_winter(self):
         return self.has_any([Season.spring, Season.summer, Season.fall])
@@ -46,4 +46,4 @@ class SeasonLogic(CachedLogic):
     def has_all(self, seasons: Iterable[str]):
         if not seasons:
             return True_()
-        return And([self.has(season) for season in seasons])
+        return And(*(self.has(season) for season in seasons))

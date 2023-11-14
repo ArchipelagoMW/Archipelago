@@ -71,10 +71,8 @@ class CookingLogic(CachedLogic):
             return cook_rule
 
         recipe_rule = self.knows_recipe(recipe.source, recipe.meal)
-        ingredients_rule = And([self.has(ingredient) for ingredient in recipe.ingredients])
-        number_ingredients = sum(recipe.ingredients[ingredient] for ingredient in recipe.ingredients)
-        time_rule = self.time.has_lived_months(number_ingredients)
-        return cook_rule & recipe_rule & ingredients_rule & time_rule
+        ingredients_rule = And(*(self.has(ingredient) for ingredient in recipe.ingredients))
+        return cook_rule & recipe_rule & ingredients_rule
 
     # Should be cached
     def knows_recipe(self, source: RecipeSource, meal_name: str) -> StardewRule:
@@ -130,4 +128,4 @@ class CookingLogic(CachedLogic):
                 continue
             all_recipes_names.append(location.name[len(cooksanity_prefix):])
         all_recipes = [all_cooking_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
-        return And([self.can_cook(recipe) for recipe in all_recipes])
+        return And(*(self.can_cook(recipe) for recipe in all_recipes))

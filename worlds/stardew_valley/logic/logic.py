@@ -301,7 +301,7 @@ class StardewLogic:
             Fertilizer.deluxe: False_(),
             Fertilizer.quality: (self.skill.has_farming_level(9) & self.has(Material.sap) & self.has(Fish.any)) | (self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150)),
             Fertilizer.tree: self.skill.has_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
-            Fish.any: Or([self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)]),
+            Fish.any: Or(*(self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value))),
             Fish.crab: self.skill.can_crab_pot_at(Region.beach),
             Fish.crayfish: self.skill.can_crab_pot_at(Region.town),
             Fish.lobster: self.skill.can_crab_pot_at(Region.beach),
@@ -542,7 +542,7 @@ class StardewLogic:
             if exclude_extended_family and fish in extended_family:
                 continue
             rules.append(self.fishing.can_catch_fish(fish))
-        return And(rules)
+        return And(*rules)
 
     def can_smelt(self, item: str) -> StardewRule:
         return self.has(Machine.furnace) & self.has(item)
@@ -595,7 +595,7 @@ class StardewLogic:
                 continue
             rules.append(self.monster.can_kill_any(all_monsters_by_category[category]))
 
-        return And(rules)
+        return And(*rules)
 
     def can_win_egg_hunt(self) -> StardewRule:
         number_of_movement_buffs = self.options.movement_buff_number
@@ -614,9 +614,9 @@ class StardewLogic:
                              Forageable.cactus_fruit, Fruit.cherry, Fruit.cranberries, Fruit.grape, Forageable.spice_berry, Forageable.wild_plum,
                              Vegetable.hops, Vegetable.wheat]
         keg_rules = [self.artisan.can_keg(kegable) for kegable in eligible_kegables]
-        aged_rule = self.has(Machine.cask) & Or(keg_rules)
+        aged_rule = self.has(Machine.cask) & Or(*keg_rules)
         # There are a few other valid items but I don't feel like coding them all
-        return Or(fish_rule) | Or(aged_rule)
+        return Or(*fish_rule) | aged_rule
 
     def can_succeed_grange_display(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
@@ -629,10 +629,10 @@ class StardewLogic:
         mineral_rule = self.action.can_open_geode(Generic.any)  # More than half the minerals are good enough
         good_fruits = [Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.orange, Fruit.peach, Fruit.pomegranate,
                        Fruit.strawberry, Fruit.melon, Fruit.rhubarb, Fruit.pineapple, Fruit.ancient_fruit, Fruit.starfruit, ]
-        fruit_rule = Or([self.has(fruit) for fruit in good_fruits])
+        fruit_rule = Or(*(self.has(fruit) for fruit in good_fruits))
         good_vegetables = [Vegetable.amaranth, Vegetable.artichoke, Vegetable.beet, Vegetable.cauliflower, Forageable.fiddlehead_fern, Vegetable.kale,
                            Vegetable.radish, Vegetable.taro_root, Vegetable.yam, Vegetable.red_cabbage, Vegetable.pumpkin]
-        vegetable_rule = Or([self.has(vegetable) for vegetable in good_vegetables])
+        vegetable_rule = Or(*(self.has(vegetable) for vegetable in good_vegetables))
 
         return animal_rule & artisan_rule & cooking_rule & fish_rule & \
             forage_rule & fruit_rule & mineral_rule & vegetable_rule
@@ -684,11 +684,11 @@ class StardewLogic:
         return self.has_any_coop_animal() | self.has_any_barn_animal()
 
     def has_any_coop_animal(self) -> StardewRule:
-        coop_rule = Or([self.has_animal(coop_animal) for coop_animal in coop_animals])
+        coop_rule = Or(*(self.has_animal(coop_animal) for coop_animal in coop_animals))
         return coop_rule
 
     def has_any_barn_animal(self) -> StardewRule:
-        barn_rule = Or([self.has_animal(barn_animal) for barn_animal in barn_animals])
+        barn_rule = Or(*(self.has_animal(barn_animal) for barn_animal in barn_animals))
         return barn_rule
 
     def has_island_trader(self) -> StardewRule:
@@ -713,8 +713,8 @@ class StardewLogic:
                                  self.region.can_reach(Region.volcano_secret_beach),
                                  self.region.can_reach(Region.volcano_floor_5),
                                  self.region.can_reach(Region.volcano_floor_10)]
-        reach_volcano = Or(reach_volcano_regions)
-        reach_all_volcano = And(reach_volcano_regions)
+        reach_volcano = Or(*reach_volcano_regions)
+        reach_all_volcano = And(*reach_volcano_regions)
         reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano]
         reach_caves = And(self.region.can_reach(Region.qi_walnut_room), self.region.can_reach(Region.dig_site),
                           self.region.can_reach(Region.gourmand_frog_cave),
@@ -729,7 +729,7 @@ class StardewLogic:
         if number <= 15:
             return Count(3, reach_walnut_regions)
         if number <= 20:
-            return And(reach_walnut_regions)
+            return And(*reach_walnut_regions)
         if number <= 50:
             return reach_entire_island
         gems = (Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
@@ -773,7 +773,7 @@ class StardewLogic:
         rules = []
         for rarecrow_number in range(1, 9):
             rules.append(self.received(f"Rarecrow #{rarecrow_number}"))
-        return And(rules)
+        return And(*rules)
 
     def has_abandoned_jojamart(self) -> StardewRule:
         return self.received(CommunityUpgrade.movie_theater, 1)
