@@ -124,9 +124,17 @@ required, and will prevent progression and useful items from being placed at exc
 #### Documenting Locations
 
 Worlds can optionally provide a `location_descriptions` map which contains
-human-friendly descriptions of locations or location groups. These descriptions
-will show up in location-selection options in the Weighted Options page. Extra
-indentation and single newlines will be collapsed into spaces.
+human-friendly descriptions of locations or location groups. Extra indentation
+and single newlines will be collapsed into spaces. These descriptions are used
+in various places:
+
+* They appear next to the location-selection options in the Weighted Options
+  page.
+
+* They appear next to locations on the built-in tracker page.
+
+* By default, they appear in location hints, although these can be customized by
+  overriding `World.extend_hint_information`.
 
 ```python
 # Locations.py
