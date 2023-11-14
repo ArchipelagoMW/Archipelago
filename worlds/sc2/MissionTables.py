@@ -273,7 +273,7 @@ vanilla_shuffle_order: Dict[SC2Campaign, List[FillMission]] = {
     ],
     SC2Campaign.EPILOGUE: [
         FillMission(MissionPools.VERY_HARD, [MissionConnection(24, SC2Campaign.WOL), MissionConnection(19, SC2Campaign.HOTS), MissionConnection(18, SC2Campaign.LOTV)], "_1", completion_critical=True),
-        FillMission(MissionPools.VERY_HARD, [MissionConnection(0, SC2Campaign.EPILOGUE)], "_2", completion_critical=True),
+        FillMission(MissionPools.VERY_HARD, [MissionConnection(0, SC2Campaign.EPILOGUE)], "_2", completion_critical=True, removal_priority=1),
         FillMission(MissionPools.FINAL, [MissionConnection(1, SC2Campaign.EPILOGUE)], "_3", completion_critical=True),
     ]
 }

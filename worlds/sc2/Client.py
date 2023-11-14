@@ -39,7 +39,7 @@ from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from worlds.sc2.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
-from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType
+from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
 from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race, get_no_build_missions
 from worlds.sc2.Regions import MissionInfo
@@ -479,7 +479,9 @@ class SC2Context(CommonContext):
         }
 
         for loc in self.server_locations:
-            mission_id, objective = divmod(loc - SC2WOL_LOC_ID_OFFSET, victory_modulo)
+            offset = SC2WOL_LOC_ID_OFFSET if loc < SC2HOTS_LOC_ID_OFFSET \
+                else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * victory_modulo)
+            mission_id, objective = divmod(loc - offset, victory_modulo)
             mission_id_to_location_ids[mission_id].add(objective)
         self.mission_id_to_location_ids = {mission_id: sorted(objectives) for mission_id, objectives in
                                            mission_id_to_location_ids.items()}
@@ -489,7 +491,7 @@ class SC2Context(CommonContext):
         mission_id: int = mission.id
         objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
-            yield SC2WOL_LOC_ID_OFFSET + mission_id * 100 + objective
+            yield get_location_offset(mission_id) + mission_id * victory_modulo + objective
 
 
 class CompatItemHolder(typing.NamedTuple):
@@ -608,7 +610,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                 3 * num_missions // 100
             ]
             upgrade_count = 0
-            completed = len([id for id in ctx.mission_id_to_location_ids if SC2WOL_LOC_ID_OFFSET + victory_modulo * id in ctx.checked_locations])
+            completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + victory_modulo * id in ctx.checked_locations])
             for amount in amounts:
                 if completed >= amount:
                     upgrade_count += 1
@@ -702,8 +704,8 @@ def kerrigan_primal(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int
             return items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]] >= 35
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_half_completion:
         total_missions = len(ctx.mission_id_to_location_ids)
-        completed = len([(mission_id * victory_modulo + SC2WOL_LOC_ID_OFFSET) in ctx.checked_locations
-            for mission_id in ctx.mission_id_to_location_ids])
+        completed = len([(mission_id * victory_modulo + get_location_offset(mission_id)) in ctx.checked_locations
+                         for mission_id in ctx.mission_id_to_location_ids])
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
         codes = [item.item for item in ctx.items_received]
@@ -819,7 +821,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                             print("Mission Completed")
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
-                                  "locations": [SC2WOL_LOC_ID_OFFSET + victory_modulo * self.mission_id]}])
+                                  "locations": [get_location_offset(self.mission_id) + victory_modulo * self.mission_id]}])
                             self.mission_completed = True
                         else:
                             print("Game Complete")
@@ -832,7 +834,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                             checks = len(self.ctx.checked_locations)
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
-                                  "locations": [SC2WOL_LOC_ID_OFFSET + victory_modulo * self.mission_id + x + 1]}])
+                                  "locations": [get_location_offset(self.mission_id) + victory_modulo * self.mission_id + x + 1]}])
                             self.boni[x] = True
                             # Kerrigan level needs manual updating if the check's receiver isn't the local player
                             if self.ctx.levels_per_check > 0 and self.last_received_update == len(self.ctx.items_received):
@@ -1049,8 +1051,9 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
             parsed_req_mission = parse_unlock(req_mission)
 
             # Check if required mission has been completed
-            if not (ctx.mission_req_table[parsed_req_mission.campaign][list(ctx.mission_req_table[parsed_req_mission.campaign])[parsed_req_mission.connect_to - 1]].mission.id *
-                    victory_modulo + SC2WOL_LOC_ID_OFFSET) in ctx.checked_locations:
+            mission_id = ctx.mission_req_table[parsed_req_mission.campaign][
+                list(ctx.mission_req_table[parsed_req_mission.campaign])[parsed_req_mission.connect_to - 1]].mission.id
+            if not (mission_id * victory_modulo + get_location_offset(mission_id)) in ctx.checked_locations:
                 if not ctx.mission_req_table[campaign][mission_name].or_requirements:
                     return False
                 else:
@@ -1309,6 +1312,11 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
         sc2_logger.warning(f"Status code: {r1.status_code}")
         sc2_logger.warning(f"text: {r1.text}")
         return False
+
+
+def get_location_offset(mission_id):
+    return SC2WOL_LOC_ID_OFFSET if mission_id <= SC2Mission.ALL_IN.id \
+        else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * victory_modulo)
 
 
 def launch():

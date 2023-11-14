@@ -9,7 +9,7 @@ from .Rules import SC2Logic
 from BaseClasses import Location
 
 SC2WOL_LOC_ID_OFFSET = 1000
-SC2HOTS_LOC_ID_OFFSET = SC2WOL_LOC_ID_OFFSET + 2900
+SC2HOTS_LOC_ID_OFFSET = 20000000 # Avoid clashes with The Legend of Zelda
 SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
 
 
@@ -900,45 +900,45 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
         LocationData("Brothers in Arms", "Brothers in Arms: Victory", SC2LOTV_LOC_ID_OFFSET + 800, LocationType.VICTORY,
-                     lambda state: logic.brothers_in_arms_requirement(state)),
-        LocationData("Brothers in Arms", "Brothers in Arms: Mid Science Facility", SC2LOTV_LOC_ID_OFFSET + 801, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                    or logic.take_over_ai_allies),
-        LocationData("Brothers in Arms", "Brothers in Arms: North Science Facility", SC2LOTV_LOC_ID_OFFSET + 802, LocationType.VICTORY,
-                     lambda state: logic.brothers_in_arms_requirement(state)
-                                   or logic.take_over_ai_allies
-                                   and logic.advanced_tactics
+                     lambda state: state._sc2lotv_has_brothers_in_arms_comp(multiworld, player)),
+        LocationData("Brothers in Arms", "Brothers in Arms: Mid Science Facility", SC2LOTV_LOC_ID_OFFSET + 801, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                    or get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true),
+        LocationData("Brothers in Arms", "Brothers in Arms: North Science Facility", SC2LOTV_LOC_ID_OFFSET + 802, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_brothers_in_arms_comp(multiworld, player)
+                                   or get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true
+                                   and state._sc2_advanced_tactics(multiworld, player)
                                    and (
                                            logic.terran_common_unit(state)
                                            or logic.protoss_common_unit(state)
                                    )
                      ),
-        LocationData("Brothers in Arms", "Brothers in Arms: South Science Facility", SC2LOTV_LOC_ID_OFFSET + 803, LocationType.VICTORY,
-                     lambda state: logic.brothers_in_arms_requirement(state)),
+        LocationData("Brothers in Arms", "Brothers in Arms: South Science Facility", SC2LOTV_LOC_ID_OFFSET + 803, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_brothers_in_arms_comp(multiworld, player)),
         LocationData("Amon's Reach", "Amon's Reach: Victory", SC2LOTV_LOC_ID_OFFSET + 900, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
-        LocationData("Amon's Reach", "Amon's Reach: Close Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 901, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
-        LocationData("Amon's Reach", "Amon's Reach: North Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 902, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
-        LocationData("Amon's Reach", "Amon's Reach: East Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 903, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
-        LocationData("Amon's Reach", "Amon's Reach: West Launch Bay", SC2LOTV_LOC_ID_OFFSET + 904, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
-        LocationData("Amon's Reach", "Amon's Reach: South Launch Bay", SC2LOTV_LOC_ID_OFFSET + 905, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
-        LocationData("Amon's Reach", "Amon's Reach: Northwest Launch Bay", SC2LOTV_LOC_ID_OFFSET + 906, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
-        LocationData("Amon's Reach", "Amon's Reach: East Launch Bay", SC2LOTV_LOC_ID_OFFSET + 907, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
+        LocationData("Amon's Reach", "Amon's Reach: Close Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 901, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
+        LocationData("Amon's Reach", "Amon's Reach: North Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 902, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
+        LocationData("Amon's Reach", "Amon's Reach: East Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 903, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
+        LocationData("Amon's Reach", "Amon's Reach: West Launch Bay", SC2LOTV_LOC_ID_OFFSET + 904, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
+        LocationData("Amon's Reach", "Amon's Reach: South Launch Bay", SC2LOTV_LOC_ID_OFFSET + 905, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
+        LocationData("Amon's Reach", "Amon's Reach: Northwest Launch Bay", SC2LOTV_LOC_ID_OFFSET + 906, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
+        LocationData("Amon's Reach", "Amon's Reach: East Launch Bay", SC2LOTV_LOC_ID_OFFSET + 907, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
         LocationData("Last Stand", "Last Stand: Victory", SC2LOTV_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
                      lambda state: logic.last_stand_requirement(state)),
         LocationData("Last Stand", "Last Stand: West Zenith Stone", SC2LOTV_LOC_ID_OFFSET + 1001, LocationType.MISSION_PROGRESS,
@@ -952,17 +952,17 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Last Stand", "Last Stand: 1.5 Billion Zerg", SC2LOTV_LOC_ID_OFFSET + 1005, LocationType.BONUS,
                      lambda state: logic.last_stand_requirement(state)),
         LocationData("Forbidden Weapon", "Forbidden Weapon: Victory", SC2LOTV_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_armor_anti_air(state)),
-        LocationData("Forbidden Weapon", "Forbidden Weapon: South Solarite", SC2LOTV_LOC_ID_OFFSET + 1101, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_armor_anti_air(state)),
-        LocationData("Forbidden Weapon", "Forbidden Weapon: North Solarite", SC2LOTV_LOC_ID_OFFSET + 1102, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_armor_anti_air(state)),
-        LocationData("Forbidden Weapon", "Forbidden Weapon: Northwest Solarite", SC2LOTV_LOC_ID_OFFSET + 1103, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_armor_anti_air(state)),
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_armor_anti_air(multiworld, player)),
+        LocationData("Forbidden Weapon", "Forbidden Weapon: South Solarite", SC2LOTV_LOC_ID_OFFSET + 1101, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_armor_anti_air(multiworld, player)),
+        LocationData("Forbidden Weapon", "Forbidden Weapon: North Solarite", SC2LOTV_LOC_ID_OFFSET + 1102, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_armor_anti_air(multiworld, player)),
+        LocationData("Forbidden Weapon", "Forbidden Weapon: Northwest Solarite", SC2LOTV_LOC_ID_OFFSET + 1103, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_common_unit(multiworld, player)
+                                   and state._sc2lotv_has_anti_armor_anti_air(multiworld, player)),
         LocationData("Temple of Unification", "Temple of Unification: Victory", SC2LOTV_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_anti_armor_anti_air(state)),
@@ -1077,13 +1077,13 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Steps of the Rite", "Steps of the Rite: South Mothership", SC2LOTV_LOC_ID_OFFSET + 1707, LocationType.OPTIONAL_BOSS,
                      lambda state: logic.steps_of_the_rite_requirement(state)),
         LocationData("Rak'Shir", "Rak'Shir: Victory", SC2LOTV_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
-                     lambda state: logic.protoss_competent_comp(state)),
-        LocationData("Rak'Shir", "Rak'Shir: North Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1801, LocationType.VICTORY,
-                     lambda state: logic.protoss_competent_comp(state)),
-        LocationData("Rak'Shir", "Rak'Shir: Southwest Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1802, LocationType.VICTORY,
-                     lambda state: logic.protoss_competent_comp(state)),
-        LocationData("Rak'Shir", "Rak'Shir: East Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1803, LocationType.VICTORY,
-                     lambda state: logic.protoss_competent_comp(state)),
+                     lambda state: state._sc2lotv_has_competent_comp(multiworld, player)),
+        LocationData("Rak'Shir", "Rak'Shir: North Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1801, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_competent_comp(multiworld, player)),
+        LocationData("Rak'Shir", "Rak'Shir: Southwest Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1802, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_competent_comp(multiworld, player)),
+        LocationData("Rak'Shir", "Rak'Shir: East Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1803, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_competent_comp(multiworld, player)),
         LocationData("Templar's Charge", "Templar's Charge: Victory", SC2LOTV_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
                      lambda state: logic.templars_charge_requirement(state)),
         LocationData("Templar's Charge", "Templar's Charge: Northwest Power Core", SC2LOTV_LOC_ID_OFFSET + 1901, LocationType.MISSION_PROGRESS,
@@ -1112,21 +1112,21 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Host", "The Host: Victory", SC2LOTV_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
                      lambda state: logic.the_host_requirement(state)),
         LocationData("The Host", "The Host: Southeast Void Shard", SC2LOTV_LOC_ID_OFFSET + 2101, LocationType.VICTORY,
-                     lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: South Void Shard", SC2LOTV_LOC_ID_OFFSET + 2102, LocationType.VICTORY,
-                     lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: Southwest Void Shard", SC2LOTV_LOC_ID_OFFSET + 2103, LocationType.VICTORY,
-                     lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: North Void Shard", SC2LOTV_LOC_ID_OFFSET + 2104, LocationType.VICTORY,
-                     lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: Northwest Void Shard", SC2LOTV_LOC_ID_OFFSET + 2105, LocationType.VICTORY,
-                     lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: Nerazim Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2106, LocationType.VICTORY,
-                     lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: Tal'darim Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2107, LocationType.VICTORY,
-                     lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: Purifier Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2108, LocationType.VICTORY,
-                     lambda state: logic.the_host_requirement(state)),
+                     lambda state: state._sc2lotv_has_the_host_comp(multiworld, player)),
+        LocationData("The Host", "The Host: South Void Shard", SC2LOTV_LOC_ID_OFFSET + 2102, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_the_host_comp(multiworld, player)),
+        LocationData("The Host", "The Host: Southwest Void Shard", SC2LOTV_LOC_ID_OFFSET + 2103, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_the_host_comp(multiworld, player)),
+        LocationData("The Host", "The Host: North Void Shard", SC2LOTV_LOC_ID_OFFSET + 2104, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_the_host_comp(multiworld, player)),
+        LocationData("The Host", "The Host: Northwest Void Shard", SC2LOTV_LOC_ID_OFFSET + 2105, LocationType.MISSION_PROGRESS,
+                     lambda state: state._sc2lotv_has_the_host_comp(multiworld, player)),
+        LocationData("The Host", "The Host: Nerazim Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2106, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_the_host_comp(multiworld, player)),
+        LocationData("The Host", "The Host: Tal'darim Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2107, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_the_host_comp(multiworld, player)),
+        LocationData("The Host", "The Host: Purifier Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2108, LocationType.BONUS,
+                     lambda state: state._sc2lotv_has_the_host_comp(multiworld, player)),
         LocationData("Salvation", "Salvation: Victory", SC2LOTV_LOC_ID_OFFSET + 2200, LocationType.VICTORY,
                      lambda state: logic.salvation_requirement(state)),
         LocationData("Salvation", "Salvation: Fabrication Matrix", SC2LOTV_LOC_ID_OFFSET + 2201, LocationType.MISSION_PROGRESS,
