@@ -35,7 +35,7 @@ class SecretOfEvermoreLogic(LogicMixin):
             for pvd in item.provides:
                 if pvd[1] == progress:
                     if self.has(item.name, player):
-                        n += self.item_count(item.name, player) * pvd[0]
+                        n += self.count(item.name, player) * pvd[0]
                         if n >= max_count > 0:
                             return n
         for rule in rules:
