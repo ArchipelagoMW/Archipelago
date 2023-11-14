@@ -1,3 +1,4 @@
+from .cached_logic import profile_rule
 from .museum_logic import MuseumLogic
 from ..stardew_rule import StardewRule
 from .received_logic import ReceivedLogic

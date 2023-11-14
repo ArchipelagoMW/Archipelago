@@ -1,5 +1,6 @@
 from typing import List
 
+from .cached_logic import profile_rule, cache_rule, CachedLogic, CachedRules
 from ..data.bundle_data import BundleItem
 from .farming_logic import FarmingLogic
 from .has_logic import HasLogic
@@ -9,20 +10,20 @@ from ..stardew_rule import StardewRule
 from ..strings.region_names import Region
 
 
-class BundleLogic:
-    player: int
+class BundleLogic(CachedLogic):
     has: HasLogic
     region: RegionLogic
     money: MoneyLogic
     farming: FarmingLogic
 
-    def __init__(self, player: int, has: HasLogic, region: RegionLogic, money: MoneyLogic, farming: FarmingLogic):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, has: HasLogic, region: RegionLogic, money: MoneyLogic, farming: FarmingLogic):
+        super().__init__(player, cached_rules)
         self.has = has
         self.region = region
         self.money = money
         self.farming = farming
 
+    @cache_rule
     def can_complete_bundle(self, bundle_requirements: List[BundleItem], number_required: int) -> StardewRule:
         item_rules = []
         highest_quality_yet = 0
@@ -36,6 +37,7 @@ class BundleLogic:
                     highest_quality_yet = bundle_item.quality
         return can_speak_junimo & self.has(item_rules, number_required) & self.farming.can_grow_crop_quality(highest_quality_yet)
 
+    @cache_rule
     def can_complete_community_center(self) -> StardewRule:
         return (self.region.can_reach_location("Complete Crafts Room") &
                 self.region.can_reach_location("Complete Pantry") &

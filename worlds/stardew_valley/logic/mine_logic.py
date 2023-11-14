@@ -1,4 +1,4 @@
-from .cached_logic import CachedLogic, cache_rule
+from .cached_logic import CachedLogic, cache_rule, profile_rule
 from .combat_logic import CombatLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic

@@ -1,3 +1,4 @@
+from .cached_logic import profile_rule
 from .has_logic import HasLogic
 from ..stardew_rule import StardewRule, True_
 from .skill_logic import SkillLogic

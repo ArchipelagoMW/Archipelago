@@ -123,20 +123,20 @@ class StardewLogic:
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
         self.buildings = BuildingLogic(self.player, self.cached_rules, self.options.building_progression, self.received, self.has, self.region, self.money)
-        self.shipping = ShippingLogic(self.player, exclude_ginger_island, special_order_locations, self.has,
+        self.shipping = ShippingLogic(self.player, self.cached_rules, exclude_ginger_island, special_order_locations, self.has,
                                       self.region, self.buildings)
         self.relationship = RelationshipLogic(self.player, self.cached_rules, friendsanity_option, heart_size_option,
                                               self.received, self.has, self.region, self.time, self.season, self.gifts, self.buildings, mods_option)
         self.museum = MuseumLogic(self.player, self.cached_rules, self.options.museumsanity, self.received, self.has, self.region, self.action)
         self.wallet = WalletLogic(self.player, self.received, self.museum)
         self.combat = CombatLogic(self.player, self.cached_rules, self.received, self.region)
-        self.monster = MonsterLogic(self.player, self.region, self.time, self.combat)
+        self.monster = MonsterLogic(self.player, self.cached_rules, self.region, self.time, self.combat)
         self.tool = ToolLogic(self.player, self.cached_rules, tool_option, self.received, self.has, self.region, self.season, self.money)
         self.pet = PetLogic(self.player, self.cached_rules, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
         self.crop = CropLogic(self.player, self.cached_rules, self.options.cropsanity, self.received, self.has, self.region, self.traveling_merchant, self.season, self.money, self.tool)
         self.skill = SkillLogic(self.player, self.cached_rules, skill_option, self.received, self.has, self.region, self.season, self.time, self.tool, self.combat, self.crop)
         self.farming = FarmingLogic(self.player, self.has, self.skill)
-        self.bundle = BundleLogic(self.player, self.has, self.region, self.money, self.farming)
+        self.bundle = BundleLogic(self.player, self.cached_rules, self.has, self.region, self.money, self.farming)
         self.fishing = FishingLogic(self.player, self.cached_rules, exclude_ginger_island, special_order_locations, self.received, self.region, self.season, self.tool, self.skill)
         self.mine = MineLogic(self.player, self.cached_rules, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
@@ -147,7 +147,7 @@ class StardewLogic:
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
         self.quest = QuestLogic(self.player, self.skill, self.received, self.has, self.mine, self.region, self.action, self.relationship, self.buildings,
                                 self.time, self.tool, self.fishing, self.cooking, self.money, self.combat, self.season, self.wallet, mods_option)
-        self.crafting = CraftingLogic(self.player, self.options.craftsanity, self.options.festival_locations,
+        self.crafting = CraftingLogic(self.player, self.cached_rules, self.options.craftsanity, self.options.festival_locations,
                                       special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
         self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.artisan, self.season, self.money,
@@ -603,7 +603,7 @@ class StardewLogic:
                              Fruit.starfruit, Fruit.strawberry, Forageable.cactus_fruit,
                              Fruit.cherry, Fruit.cranberries, Fruit.grape, Forageable.spice_berry, Forageable.wild_plum, Vegetable.hops, Vegetable.wheat]
         keg_rules = [self.artisan.can_keg(kegable) for kegable in eligible_kegables]
-        aged_rule = [self.artisan.can_age(rule, "Iridium") for rule in keg_rules]
+        aged_rule = self.has(Machine.cask) & Or(keg_rules)
         # There are a few other valid items but I don't feel like coding them all
         return Or(fish_rule) | Or(aged_rule)
 

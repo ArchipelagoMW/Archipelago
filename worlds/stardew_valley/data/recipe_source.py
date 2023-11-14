@@ -22,7 +22,7 @@ class ArchipelagoSource(RecipeSource):
         self.ap_item = ap_item
 
     def __repr__(self):
-        return f"ArchipelagoSource {ap_item}"
+        return f"ArchipelagoSource {self.ap_item}"
 
 
 class LogicSource(RecipeSource):
@@ -32,7 +32,7 @@ class LogicSource(RecipeSource):
         self.logic_rule = logic_rule
 
     def __repr__(self):
-        return f"LogicSource {logic_rule}"
+        return f"LogicSource {self.logic_rule}"
 
 
 class QueenOfSauceSource(RecipeSource):
@@ -69,7 +69,7 @@ class CutsceneSource(FriendshipSource):
         self.region = region
 
     def __repr__(self):
-        return f"CutsceneSource at {region}"
+        return f"CutsceneSource at {self.region}"
 
 
 class SkillSource(RecipeSource):
@@ -113,7 +113,6 @@ class ShopTradeSource(ShopSource):
         return f"ShopTradeSource at {self.region} costing {self.price} {self.currency}"
 
 
-
 class SpecialOrderSource(RecipeSource):
     special_order: str
 
@@ -122,4 +121,4 @@ class SpecialOrderSource(RecipeSource):
 
 
     def __repr__(self):
-        return f"SpecialOrderSource from {special_order}"
+        return f"SpecialOrderSource from {self.special_order}"

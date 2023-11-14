@@ -1,3 +1,4 @@
+from .cached_logic import profile_rule
 from .received_logic import ReceivedLogic
 from ..stardew_rule import True_
 from ..strings.calendar_names import Weekday

@@ -1,6 +1,6 @@
 from typing import Union, Iterable
 
-from .cached_logic import CachedLogic, cache_rule
+from .cached_logic import CachedLogic, cache_rule, profile_rule
 from .has_logic import HasLogic, CachedRules
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic

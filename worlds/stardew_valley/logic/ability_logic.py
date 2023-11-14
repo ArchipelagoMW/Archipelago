@@ -41,30 +41,24 @@ class AbilityLogic:
         self.magic = magic
         self.mod_skill = mod_skill
 
-    @profile_rule
     def can_mine_perfectly(self) -> StardewRule:
         return self.mine.can_progress_in_the_mines_from_floor(160)
 
-    @profile_rule
     def can_mine_perfectly_in_the_skull_cavern(self) -> StardewRule:
         return (self.can_mine_perfectly() &
                 self.region.can_reach(Region.skull_cavern))
 
-    @profile_rule
     def can_farm_perfectly(self) -> StardewRule:
         tool_rule = self.tool.has_tool(Tool.hoe, ToolMaterial.iridium) & self.tool.can_water(4)
         return tool_rule & self.skill.has_farming_level(10)
 
-    @profile_rule
     def can_fish_perfectly(self) -> StardewRule:
         skill_rule = self.skill.has_level(Skill.fishing, 10)
         return skill_rule & self.tool.has_fishing_rod(4)
 
-    @profile_rule
     def can_chop_trees(self) -> StardewRule:
         return self.tool.has_tool(Tool.axe) & self.region.can_reach(Region.forest)
 
-    @profile_rule
     def can_chop_perfectly(self) -> StardewRule:
         magic_rule = (self.magic.can_use_clear_debris_instead_of_tool_level(3)) & self.mod_skill.has_mod_level(ModSkill.magic, 10)
         tool_rule = self.tool.has_tool(Tool.axe, ToolMaterial.iridium)
@@ -72,6 +66,5 @@ class AbilityLogic:
         region_rule = self.region.can_reach(Region.forest)
         return region_rule & ((tool_rule & foraging_rule) | magic_rule)
 
-    @profile_rule
     def has_max_buffs(self) -> StardewRule:
         return self.received(Buff.movement, self.movement_buff_option.value) & self.received(Buff.luck, self.luck_buff_option.value)

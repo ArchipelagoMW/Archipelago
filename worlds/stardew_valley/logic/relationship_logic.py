@@ -3,7 +3,7 @@ import math
 from typing import Iterable, Union
 
 from .building_logic import BuildingLogic
-from .cached_logic import CachedLogic, cache_rule
+from .cached_logic import CachedLogic, cache_rule, profile_rule
 from .gift_logic import GiftLogic
 from .has_logic import HasLogic, CachedRules
 from .received_logic import ReceivedLogic

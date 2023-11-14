@@ -3,6 +3,7 @@ from dataclasses import field
 
 from .action_logic import ActionLogic
 from .building_logic import BuildingLogic
+from .cached_logic import profile_rule
 from .combat_logic import CombatLogic
 from .cooking_logic import CookingLogic
 from .fishing_logic import FishingLogic

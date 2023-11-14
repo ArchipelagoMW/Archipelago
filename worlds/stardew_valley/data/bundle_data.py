@@ -23,7 +23,7 @@ class BundleItem:
 
     @staticmethod
     def money_bundle(amount: int):
-        return BundleItem.item_bundle("Money", -1, amount, amount)
+        return BundleItem.item_bundle("Money", -1, amount, 0)
 
     def as_amount(self, amount: int):
         return BundleItem.item_bundle(self.item.name, self.item.item_id, amount, self.quality)

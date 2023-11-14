@@ -1,5 +1,6 @@
 from typing import Union
 
+from .cached_logic import profile_rule
 from .has_logic import HasLogic
 from .time_logic import TimeLogic
 from ..stardew_rule import StardewRule
@@ -49,18 +50,6 @@ class ArtisanLogic:
         if item == Vegetable.any:
             return machine_rule & self.has(all_vegetables, 1)
         return machine_rule & self.has(item)
-
-    def can_age(self, item: Union[str, StardewRule], quality: str) -> StardewRule:
-        months = 1
-        if quality == "Gold":
-            months = 2
-        elif quality == "Iridium":
-            months = 3
-        if isinstance(item, str):
-            rule = self.has(item)
-        else:
-            rule: StardewRule = item
-        return self.has(Machine.cask) & self.time.has_lived_months(months) & rule
 
     def can_mayonnaise(self, item: str) -> StardewRule:
         return self.has(Machine.mayonnaise_machine) & self.has(item)

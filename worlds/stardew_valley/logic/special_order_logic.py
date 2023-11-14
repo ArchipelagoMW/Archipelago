@@ -3,6 +3,7 @@ from typing import Dict
 from .ability_logic import AbilityLogic
 from .arcade_logic import ArcadeLogic
 from .artisan_logic import ArtisanLogic
+from .cached_logic import profile_rule
 from .cooking_logic import CookingLogic
 from .has_logic import HasLogic
 from .mine_logic import MineLogic

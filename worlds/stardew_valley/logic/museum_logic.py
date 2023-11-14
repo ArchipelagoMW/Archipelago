@@ -1,7 +1,7 @@
 from typing import List
 
 from .action_logic import ActionLogic
-from .cached_logic import CachedLogic, cache_rule
+from .cached_logic import CachedLogic, cache_rule, profile_rule
 from .has_logic import HasLogic, CachedRules
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals

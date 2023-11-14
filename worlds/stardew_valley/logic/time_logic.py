@@ -1,4 +1,4 @@
-from .cached_logic import CachedLogic, cache_rule, CachedRules
+from .cached_logic import CachedLogic, cache_rule, CachedRules, profile_rule
 from .received_logic import ReceivedLogic
 from ..stardew_rule import StardewRule
 from ..strings.ap_names.event_names import Event

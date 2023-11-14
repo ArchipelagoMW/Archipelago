@@ -298,15 +298,6 @@ class StardewValleyWorld(World):
         set_rule(first_month_end, first_month_require_all_early_items)
 
     def generate_basic(self):
-        function_call_numbers_sorted = sorted(function_call_numbers, key=lambda x: function_call_numbers[x], reverse=True)
-        function_total_times_sorted = sorted(function_total_times, key=lambda x: function_total_times[x], reverse=True)
-
-        for function_call_number in function_call_numbers_sorted:
-            print(f"{function_call_number}: {function_call_numbers[function_call_number]}")
-        print("\n\n\n\n")
-        for function_total_time in function_total_times_sorted:
-            print(f"{function_total_time}: {function_total_times[function_total_time]}")
-
         pass
 
     def get_filler_item_name(self) -> str:

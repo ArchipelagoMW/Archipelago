@@ -1,3 +1,4 @@
+from .cached_logic import profile_rule
 from .. import options
 from ..options import ArcadeMachineLocations
 from ..stardew_rule import StardewRule, True_

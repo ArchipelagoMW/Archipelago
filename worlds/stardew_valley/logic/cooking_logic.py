@@ -1,6 +1,6 @@
 from .action_logic import ActionLogic
 from .building_logic import BuildingLogic
-from .cached_logic import CachedLogic, cache_rule
+from .cached_logic import CachedLogic, cache_rule, profile_rule
 from .has_logic import HasLogic, CachedRules
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
@@ -54,6 +54,7 @@ class CookingLogic(CachedLogic):
         self.relationship = relationship
         self.skill = skill
 
+    @cache_rule
     def can_cook_in_kitchen(self) -> StardewRule:
         return self.buildings.has_house(1) | self.skill.has_level(Skill.foraging, 9)
 
@@ -108,9 +109,11 @@ class CookingLogic(CachedLogic):
             return self.action.can_watch(Channel.queen_of_sauce) & self.season.has(source.season) & year_rule
         return False_()
 
+    @cache_rule
     def received_recipe(self, meal_name: str):
         return self.received(f"{meal_name} Recipe")
 
+    @cache_rule
     def can_cook_everything(self) -> StardewRule:
         cooksanity_prefix = "Cook "
         all_recipes_names = []

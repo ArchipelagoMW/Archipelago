@@ -1,3 +1,4 @@
+from .cached_logic import profile_rule, cache_rule, CachedLogic, CachedRules
 from .has_logic import HasLogic
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
@@ -15,8 +16,7 @@ from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.region_names import Region
 
 
-class CraftingLogic:
-    player: int
+class CraftingLogic(CachedLogic):
     craftsanity_option: Craftsanity
     festivals_option: FestivalLocations
     special_orders_option: SpecialOrderLocations
@@ -29,9 +29,10 @@ class CraftingLogic:
     skill: SkillLogic
     special_orders: SpecialOrderLogic
 
-    def __init__(self, player: int, craftsanity_option: Craftsanity, festivals_option: FestivalLocations, special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
-                 time: TimeLogic, money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
-        self.player = player
+    def __init__(self, player: int, cached_rules: CachedRules, craftsanity_option: Craftsanity, festivals_option: FestivalLocations,
+                 special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic, region: RegionLogic, time: TimeLogic,
+                 money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
+        super().__init__(player, cached_rules)
         self.craftsanity_option = craftsanity_option
         self.festivals_option = festivals_option
         self.special_orders_option = special_orders_option
@@ -44,6 +45,7 @@ class CraftingLogic:
         self.skill = skill
         self.special_orders = special_orders
 
+    @cache_rule
     def can_craft(self, recipe: CraftingRecipe = None) -> StardewRule:
         craft_rule = True_()
         if recipe is None:
@@ -55,6 +57,7 @@ class CraftingLogic:
         time_rule = self.time.has_lived_months(number_ingredients)
         return craft_rule & learn_rule & ingredients_rule & time_rule
 
+    @cache_rule
     def knows_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, ArchipelagoSource):
             return self.received(recipe.source.ap_item, len(recipe.source.ap_item))
@@ -71,6 +74,7 @@ class CraftingLogic:
             return self.received_recipe(recipe.item)
         return self.can_learn_recipe(recipe)
 
+    @cache_rule
     def can_learn_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, StarterSource):
             return True_()
@@ -96,5 +100,6 @@ class CraftingLogic:
 
         return False_()
 
+    @cache_rule
     def received_recipe(self, item_name: str):
         return self.received(f"{item_name} Recipe")
