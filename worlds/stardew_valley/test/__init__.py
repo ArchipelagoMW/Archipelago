@@ -5,7 +5,7 @@ from typing import Dict, FrozenSet, Tuple, Any, ClassVar, Iterable
 
 from BaseClasses import MultiWorld, CollectionState
 from Utils import cache_argsless
-from test.TestBase import WorldTestBase
+from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from .. import StardewValleyWorld
 from ..mods.mod_data import all_mods
