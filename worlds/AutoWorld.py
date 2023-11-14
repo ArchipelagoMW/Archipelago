@@ -368,9 +368,21 @@ class World(metaclass=AutoWorldRegister):
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
-        """Fill in additional entrance information text into locations, which is displayed when hinted.
-        structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
-        pass
+        """Add additional information to display when locations are hinted.
+
+        The structure of hint_data is {player_id: {location_id: text}}. You will need to insert
+        your own player_id.
+
+        By default, if this world specifies location_descriptions, those are added for each location
+        ID. Otherwise, the hint_data is left unchanged.
+        """
+
+        if self.location_descriptions:
+            hint_data[self.player] = {
+                self.location_name_to_id[name]: description
+                for name, description in self.location_descriptions.items()
+                if name in self.location_name_to_id
+            }
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """For deeper modification of server multidata."""
