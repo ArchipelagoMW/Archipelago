@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Union, Optional
+from typing import List, Tuple
 
-from . import season_data as season
-from .game_item import GameItem
 from ..strings.monster_names import Monster, MonsterCategory
 from ..strings.performance_names import Performance
 from ..strings.region_names import Region
@@ -65,7 +63,7 @@ bat = create_monster(Monster.bat, MonsterCategory.bats, mines_floor_20, Performa
 bat_dangerous = create_monster(Monster.bat_dangerous, MonsterCategory.bats, dangerous_mines_20, Performance.galaxy)
 frost_bat = create_monster(Monster.frost_bat, MonsterCategory.bats, mines_floor_60, Performance.decent)
 frost_bat_dangerous = create_monster(Monster.frost_bat_dangerous, MonsterCategory.bats, dangerous_mines_60, Performance.galaxy)
-lava_bat = create_monster(Monster.lava_bat, MonsterCategory.bats,mines_floor_100, Performance.good)
+lava_bat = create_monster(Monster.lava_bat, MonsterCategory.bats, mines_floor_100, Performance.good)
 iridium_bat = create_monster(Monster.iridium_bat, MonsterCategory.bats, skull_cavern_high, Performance.great)
 
 skeleton = create_monster(Monster.skeleton, MonsterCategory.skeletons, mines_floor_100, Performance.good)
@@ -80,8 +78,9 @@ grub = create_monster(Monster.grub, MonsterCategory.cave_insects, mines_floor_20
 grub_dangerous = create_monster(Monster.grub_dangerous, MonsterCategory.cave_insects, dangerous_mines_60, Performance.galaxy)
 mutant_fly = create_monster(Monster.mutant_fly, MonsterCategory.cave_insects, mutant_bug_lair, Performance.good)
 mutant_grub = create_monster(Monster.mutant_grub, MonsterCategory.cave_insects, mutant_bug_lair, Performance.good)
-armored_bug = create_monster(Monster.armored_bug, MonsterCategory.cave_insects, skull_cavern, Performance.basic) # Requires 'Bug Killer' enchantment
-armored_bug_dangerous = create_monster(Monster.armored_bug_dangerous, MonsterCategory.cave_insects, skull_cavern, Performance.good) # Requires 'Bug Killer' enchantment
+armored_bug = create_monster(Monster.armored_bug, MonsterCategory.cave_insects, skull_cavern, Performance.basic)  # Requires 'Bug Killer' enchantment
+armored_bug_dangerous = create_monster(Monster.armored_bug_dangerous, MonsterCategory.cave_insects, skull_cavern,
+                                       Performance.good)  # Requires 'Bug Killer' enchantment
 
 duggy = create_monster(Monster.duggy, MonsterCategory.duggies, mines_floor_20, Performance.basic)
 duggy_dangerous = create_monster(Monster.duggy_dangerous, MonsterCategory.duggies, dangerous_mines_20, Performance.great)
@@ -96,8 +95,9 @@ lava_crab = create_monster(Monster.lava_crab, MonsterCategory.rock_crabs, mines_
 lava_crab_dangerous = create_monster(Monster.lava_crab_dangerous, MonsterCategory.rock_crabs, dangerous_mines_100, Performance.galaxy)
 iridium_crab = create_monster(Monster.iridium_crab, MonsterCategory.rock_crabs, skull_cavern, Performance.great)
 
-mummy = create_monster(Monster.mummy, MonsterCategory.mummies, skull_cavern, Performance.great) # Requires bombs or "Crusader" enchantment
-mummy_dangerous = create_monster(Monster.mummy_dangerous, MonsterCategory.mummies, skull_cavern_dangerous, Performance.maximum) # Requires bombs or "Crusader" enchantment
+mummy = create_monster(Monster.mummy, MonsterCategory.mummies, skull_cavern, Performance.great)  # Requires bombs or "Crusader" enchantment
+mummy_dangerous = create_monster(Monster.mummy_dangerous, MonsterCategory.mummies, skull_cavern_dangerous,
+                                 Performance.maximum)  # Requires bombs or "Crusader" enchantment
 
 pepper_rex = create_monster(Monster.pepper_rex, MonsterCategory.pepper_rex, skull_cavern, Performance.great)
 
@@ -111,5 +111,5 @@ all_monsters_by_name = {monster.name: monster for monster in all_monsters}
 all_monsters_by_category = {}
 for monster in all_monsters:
     if monster.category not in all_monsters_by_category:
-        all_monsters_by_category[monster.category] = []
-    all_monsters_by_category[monster.category].append(monster)
+        all_monsters_by_category[monster.category] = ()
+    all_monsters_by_category[monster.category] = () + (monster,)

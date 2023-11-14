@@ -1,6 +1,7 @@
-from typing import Dict, Union, Optional, List
+from functools import lru_cache
+from typing import Dict, Union, Optional, Tuple
 
-from .cached_logic import CachedLogic, cache_rule, CachedRules
+from .cached_logic import CachedLogic, CachedRules
 from ..stardew_rule import StardewRule, True_, And, Or, Has, Count
 
 
@@ -17,8 +18,8 @@ class HasLogic(CachedLogic):
             count = args[1]
         return self.has(args[0], count)
 
-    @cache_rule
-    def has(self, items: Union[str, List[str]], count: Optional[int] = None) -> StardewRule:
+    @lru_cache(maxsize=None)
+    def has(self, items: Union[str, Tuple[str]], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
             return Has(items, self.item_rules)
 
@@ -32,4 +33,3 @@ class HasLogic(CachedLogic):
             return Or(self.has(item) for item in items)
 
         return Count(count, (self.has(item) for item in items))
-

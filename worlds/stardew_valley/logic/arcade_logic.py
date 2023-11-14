@@ -1,9 +1,8 @@
-from .cached_logic import profile_rule
+from .received_logic import ReceivedLogic
+from .region_logic import RegionLogic
 from .. import options
 from ..options import ArcadeMachineLocations
 from ..stardew_rule import StardewRule, True_
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
 from ..strings.region_names import Region
 
 
@@ -22,8 +21,7 @@ class ArcadeLogic:
     def has_jotpk_power_level(self, power_level: int) -> StardewRule:
         if self.arcade_option != options.ArcadeMachineLocations.option_full_shuffling:
             return True_()
-        jotpk_buffs = ["JotPK: Progressive Boots", "JotPK: Progressive Gun",
-                       "JotPK: Progressive Ammo", "JotPK: Extra Life", "JotPK: Increased Drop Rate"]
+        jotpk_buffs = ("JotPK: Progressive Boots", "JotPK: Progressive Gun", "JotPK: Progressive Ammo", "JotPK: Extra Life", "JotPK: Increased Drop Rate")
         return self.received(jotpk_buffs, power_level)
 
     def has_junimo_kart_power_level(self, power_level: int) -> StardewRule:

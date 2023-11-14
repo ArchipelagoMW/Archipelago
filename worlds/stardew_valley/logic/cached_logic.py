@@ -1,7 +1,7 @@
 import functools
 import random
 import time
-from typing import Dict, Callable
+from typing import Dict, Callable, Hashable, Iterable
 
 from ..stardew_rule import StardewRule
 
@@ -11,7 +11,7 @@ time_creating_rules = 0
 
 
 class CachedRules:
-    cached_rules: Dict[str, StardewRule]
+    cached_rules: Dict[Hashable, StardewRule]
 
     def __init__(self):
         self.cached_rules = dict()
@@ -21,10 +21,10 @@ class CachedRules:
             self.cached_rules[key] = create_rule(*args, **kwargs)
         return self.cached_rules[key]
 
-    def try_get_rule_without_cache(self, key: str, create_rule: Callable[[], StardewRule]) -> StardewRule:
+    def try_get_rule_without_cache(self, key: Hashable, create_rule: Callable[[], StardewRule]) -> StardewRule:
         return create_rule()
 
-    def try_get_rule_with_stats(self, key: str, create_rule: Callable[[], StardewRule]) -> StardewRule:
+    def try_get_rule_with_stats(self, key: Hashable, create_rule: Callable[[], StardewRule]) -> StardewRule:
         global rule_calls, rule_creations, time_creating_rules
         rule_calls += 1
         if key not in self.cached_rules:
@@ -38,8 +38,9 @@ class CachedRules:
             percent_cached_calls = round((cached_calls / rule_calls) * 100)
             percent_real_calls = 100 - percent_cached_calls
             time_saved = (time_creating_rules / percent_real_calls) * 100
-            print(f"Rule Creations/Calls: {rule_creations}/{rule_calls} ({cached_calls} cached calls [{percent_cached_calls}%] saving {time_saved}s"
-                  f" for a total of {time_creating_rules}s creating rules)")
+            print(
+                f"Rule Creations/Calls: {rule_creations}/{rule_calls} ({cached_calls} cached calls [{percent_cached_calls}%] saving {time_saved}s"
+                f" for a total of {time_creating_rules}s creating rules)")
         return self.cached_rules[key]
 
 
@@ -52,8 +53,9 @@ class CachedLogic:
         self.cached_rules = cached_rules
         self.name = type(self).__name__
 
-    def get_cache_key(self, method: Callable, *parameters, **kwargs) -> str:
-        return f"{self.name} {method.__name__} {parameters} {kwargs}"
+    def get_cache_key(self, method: Callable, *parameters) -> Hashable:
+        assert not any(isinstance(p, Iterable) for p in parameters)
+        return self.name, method.__name__, str(parameters)
         # return f"{type(self).__name__} {method.__name__} {' '.join(map(str, parameters))}"
 
 
@@ -84,6 +86,7 @@ def cache_rule_with_profiling(func):
             print(f"Time Getting Keys: {time_getting_keys} seconds")
             print(f"Time Getting Rules: {time_getting_rules} seconds")
         return rule
+
     return wrapper
 
 
@@ -117,5 +120,5 @@ def profile_rule(func):
         function_total_times[key_params] += time_used
 
         return result
-    return wrapper
 
+    return wrapper

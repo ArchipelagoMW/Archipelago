@@ -1,6 +1,7 @@
-from typing import Iterable, Union, Optional
+from functools import lru_cache
+from typing import Union, Optional, Tuple
 
-from .cached_logic import CachedLogic, cache_rule, CachedRules
+from .cached_logic import CachedLogic, CachedRules
 from ..stardew_rule import StardewRule, True_, Received, And, Or, TotalReceived
 
 
@@ -15,8 +16,8 @@ class ReceivedLogic(CachedLogic):
             count = args[1]
         return self.received(args[0], count)
 
-    @cache_rule
-    def received(self, items: Union[str, Iterable[str]], count: Optional[int] = 1) -> StardewRule:
+    @lru_cache(maxsize=None)
+    def received(self, items: Union[str, Tuple[str, ...]], count: Optional[int] = 1) -> StardewRule:
         if count <= 0 or not items:
             return True_()
 
@@ -30,4 +31,3 @@ class ReceivedLogic(CachedLogic):
             return Or(self.received(item) for item in items)
 
         return TotalReceived(count, items, self.player)
-

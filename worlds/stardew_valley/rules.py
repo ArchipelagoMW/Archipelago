@@ -5,7 +5,6 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from worlds.stardew_valley.strings.craftable_names import Bomb
 from . import locations
-from .options import StardewValleyOptions
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.monster_data import all_monsters_by_category, all_monsters_by_name
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
@@ -15,6 +14,7 @@ from .locations import LocationTags
 from .logic.logic import StardewLogic
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
+from .options import StardewValleyOptions
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
 from .stardew_rule import And
@@ -119,7 +119,7 @@ def set_building_rules(logic: StardewLogic, multiworld, player, world_options: S
 def set_bundle_rules(current_bundles, logic: StardewLogic, multiworld, player):
     for bundle in current_bundles.values():
         location = multiworld.get_location(bundle.get_name_with_bundle(), player)
-        rules = logic.bundle.can_complete_bundle(bundle.requirements, bundle.number_required)
+        rules = logic.bundle.can_complete_bundle(tuple(bundle.requirements), bundle.number_required)
         simplified_rules = rules
         MultiWorldRules.set_rule(location, simplified_rules)
     MultiWorldRules.add_rule(multiworld.get_location("Complete Crafts Room", player),
@@ -559,7 +559,8 @@ def set_museum_individual_donations_rules(all_location_names, logic: StardewLogi
         if museum_location.name in all_location_names:
             donation_name = museum_location.name[len(museum_prefix):]
             required_detectors = counter * 5 // number_donations
-            rule = logic.museum.can_find_museum_item(all_museum_items_by_name[donation_name]) & logic.received("Traveling Merchant Metal Detector", required_detectors)
+            rule = logic.museum.can_find_museum_item(all_museum_items_by_name[donation_name]) & logic.received("Traveling Merchant Metal Detector",
+                                                                                                               required_detectors)
             MultiWorldRules.set_rule(multiworld.get_location(museum_location.name, player),
                                      rule)
         counter += 1
@@ -858,9 +859,9 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Fireball", player),
                              logic.has("Fire Quartz"))
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Frostbite", player),
-                             (logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish([], 85)))
+                             (logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85)).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Elemental School Locations", player),
-                             (logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish([], 85)))
+                             (logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85)).simplify())
     # MultiWorldRules.add_rule(multiworld.get_location("Analyze: Lantern", player),)
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Tendrils", player),
                              logic.region.can_reach(Region.farm))
@@ -883,7 +884,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
                               & (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")) &
                               logic.has("Coffee") & logic.has("Life Elixir")
                               & logic.ability.can_mine_perfectly() & logic.has("Earth Crystal") &
-                              logic.has("Fire Quartz") & logic.skill.can_fish([], 85) &
+                              logic.has("Fire Quartz") & logic.skill.can_fish(difficulty=85) &
                               logic.region.can_reach(Region.witch_hut) &
                               logic.region.can_reach(Region.mines_floor_100) &
                               logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)))
@@ -942,4 +943,3 @@ def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, pla
                              logic.received("Marlon's Boat Paddle"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_to_fable_reef, player),
                              logic.received("Fable Reef Portal"))
-

@@ -1,6 +1,7 @@
+from functools import lru_cache
 from typing import Iterable
 
-from .cached_logic import cache_rule, CachedLogic, CachedRules
+from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .time_logic import TimeLogic
 from ..options import SeasonRandomization
@@ -14,13 +15,14 @@ class SeasonLogic(CachedLogic):
     received: ReceivedLogic
     time: TimeLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, season_option: SeasonRandomization, received_logic: ReceivedLogic, time: TimeLogic):
+    def __init__(self, player: int, cached_rules: CachedRules, season_option: SeasonRandomization,
+                 received_logic: ReceivedLogic, time: TimeLogic):
         super().__init__(player, cached_rules)
         self.season_option = season_option
         self.received = received_logic
         self.time = time
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def has(self, season: str) -> StardewRule:
         if season == Generic.any:
             return True_()
@@ -45,4 +47,3 @@ class SeasonLogic(CachedLogic):
         if not seasons:
             return True_()
         return And([self.has(season) for season in seasons])
-

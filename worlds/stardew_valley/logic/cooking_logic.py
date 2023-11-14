@@ -1,6 +1,8 @@
+from functools import lru_cache
+
 from .action_logic import ActionLogic
 from .building_logic import BuildingLogic
-from .cached_logic import CachedLogic, cache_rule, profile_rule
+from .cached_logic import CachedLogic
 from .has_logic import HasLogic, CachedRules
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
@@ -9,12 +11,13 @@ from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
 from .skill_logic import SkillLogic
 from .time_logic import TimeLogic
-from ..options import ExcludeGingerIsland, Mods
-from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, QueenOfSauceSource, CookingRecipe, \
+from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, \
+    QueenOfSauceSource, CookingRecipe, \
     all_cooking_recipes_by_name
 from ..data.recipe_source import CutsceneSource, ShopTradeSource
 from ..locations import locations_by_tag, LocationTags
 from ..options import Chefsanity
+from ..options import ExcludeGingerIsland, Mods
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
@@ -36,8 +39,10 @@ class CookingLogic(CachedLogic):
     relationship: RelationshipLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, mods: Mods, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, received: ReceivedLogic,
-                 has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic, action: ActionLogic, buildings: BuildingLogic,
+    def __init__(self, player: int, cached_rules: CachedRules, mods: Mods, chefsanity_option: Chefsanity,
+                 exclude_ginger_island: ExcludeGingerIsland, received: ReceivedLogic,
+                 has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
+                 action: ActionLogic, buildings: BuildingLogic,
                  relationship: RelationshipLogic, skill: SkillLogic):
         super().__init__(player, cached_rules)
         self.mods = mods
@@ -54,11 +59,11 @@ class CookingLogic(CachedLogic):
         self.relationship = relationship
         self.skill = skill
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_cook_in_kitchen(self) -> StardewRule:
         return self.buildings.has_house(1) | self.skill.has_level(Skill.foraging, 9)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_cook(self, recipe: CookingRecipe = None) -> StardewRule:
         cook_rule = self.region.can_reach(Region.kitchen)
         if recipe is None:
@@ -70,7 +75,7 @@ class CookingLogic(CachedLogic):
         time_rule = self.time.has_lived_months(number_ingredients)
         return cook_rule & recipe_rule & ingredients_rule & time_rule
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def knows_recipe(self, source: RecipeSource, meal_name: str) -> StardewRule:
         if self.chefsanity_option == Chefsanity.option_none:
             return self.can_learn_recipe(source)
@@ -90,7 +95,7 @@ class CookingLogic(CachedLogic):
             return self.received_recipe(meal_name)
         return self.can_learn_recipe(source)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_learn_recipe(self, source: RecipeSource) -> StardewRule:
         if isinstance(source, StarterSource):
             return True_()
@@ -109,11 +114,11 @@ class CookingLogic(CachedLogic):
             return self.action.can_watch(Channel.queen_of_sauce) & self.season.has(source.season) & year_rule
         return False_()
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def received_recipe(self, meal_name: str):
         return self.received(f"{meal_name} Recipe")
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_cook_everything(self) -> StardewRule:
         cooksanity_prefix = "Cook "
         all_recipes_names = []

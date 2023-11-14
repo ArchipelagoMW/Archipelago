@@ -1,12 +1,14 @@
-from .cached_logic import cache_rule, CachedLogic, CachedRules, profile_rule
+from functools import lru_cache
+
+from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
 from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
-from ..options import ExcludeGingerIsland
 from ..data import FishItem
 from ..data.fish_data import legendary_fish
+from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.fish_names import SVEFish
@@ -23,7 +25,8 @@ class FishingLogic(CachedLogic):
     tool: ToolLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, exclude_ginger_island: ExcludeGingerIsland, special_order_locations: SpecialOrderLocations,
+    def __init__(self, player: int, cached_rules: CachedRules, exclude_ginger_island: ExcludeGingerIsland,
+                 special_order_locations: SpecialOrderLocations,
                  received: ReceivedLogic, region: RegionLogic, season: SeasonLogic, tool: ToolLogic, skill: SkillLogic):
         super().__init__(player, cached_rules)
         self.exclude_ginger_island = exclude_ginger_island
@@ -35,7 +38,7 @@ class FishingLogic(CachedLogic):
         self.skill = skill
 
     def can_fish_in_freshwater(self) -> StardewRule:
-        return self.skill.can_fish() & self.region.can_reach_any([Region.forest, Region.town, Region.mountain])
+        return self.skill.can_fish() & self.region.can_reach_any((Region.forest, Region.town, Region.mountain))
 
     def has_max_fishing(self) -> StardewRule:
         skill_rule = self.skill.has_level(Skill.fishing, 10)
@@ -48,7 +51,7 @@ class FishingLogic(CachedLogic):
     def can_fish_at(self, region: str) -> StardewRule:
         return self.skill.can_fish() & self.region.can_reach(region)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_catch_fish(self, fish: FishItem) -> StardewRule:
         quest_rule = True_()
         if fish.extended_family:
@@ -70,4 +73,5 @@ class FishingLogic(CachedLogic):
             return False_()
         if self.special_order_locations != SpecialOrderLocations.option_board_qi:
             return False_()
-        return self.region.can_reach(Region.qi_walnut_room) & And([self.can_catch_fish(fish) for fish in legendary_fish])
+        return self.region.can_reach(Region.qi_walnut_room) & And(
+            *(self.can_catch_fish(fish) for fish in legendary_fish))

@@ -71,3 +71,6 @@ class SVEVegetable:
     void_root = "Void Root"
     ancient_fiber = "Ancient Fiber"
 
+
+all_vegetables = tuple(all_vegetables)
+all_fruits = tuple(all_fruits)

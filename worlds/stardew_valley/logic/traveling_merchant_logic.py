@@ -1,4 +1,3 @@
-from .cached_logic import profile_rule
 from .received_logic import ReceivedLogic
 from ..stardew_rule import True_
 from ..strings.calendar_names import Weekday
@@ -16,6 +15,5 @@ class TravelingMerchantLogic:
         if number_days <= 0:
             return True_()
         tier = min(7, max(1, number_days))
-        traveling_merchant_days = [f"Traveling Merchant: {day}" for day in Weekday.all_days]
+        traveling_merchant_days = tuple(f"Traveling Merchant: {day}" for day in Weekday.all_days)
         return self.received(traveling_merchant_days, tier)
-

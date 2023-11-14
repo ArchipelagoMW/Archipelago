@@ -1,4 +1,6 @@
-from .cached_logic import profile_rule, cache_rule, CachedLogic, CachedRules
+from functools import lru_cache
+
+from .cached_logic import CachedLogic, CachedRules
 from .has_logic import HasLogic
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
@@ -9,8 +11,9 @@ from .special_order_logic import SpecialOrderLogic
 from .time_logic import TimeLogic
 from .. import options
 from ..data.craftable_data import CraftingRecipe
-from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource
-from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource
+from ..data.recipe_data import StarterSource, ShopSource, SkillSource, FriendshipSource
+from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
+    FestivalShopSource
 from ..options import Craftsanity, FestivalLocations, SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.region_names import Region
@@ -29,9 +32,12 @@ class CraftingLogic(CachedLogic):
     skill: SkillLogic
     special_orders: SpecialOrderLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, craftsanity_option: Craftsanity, festivals_option: FestivalLocations,
-                 special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic, region: RegionLogic, time: TimeLogic,
-                 money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
+    def __init__(self, player: int, cached_rules: CachedRules, craftsanity_option: Craftsanity,
+                 festivals_option: FestivalLocations,
+                 special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic,
+                 region: RegionLogic, time: TimeLogic,
+                 money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic,
+                 special_orders: SpecialOrderLogic):
         super().__init__(player, cached_rules)
         self.craftsanity_option = craftsanity_option
         self.festivals_option = festivals_option
@@ -45,7 +51,7 @@ class CraftingLogic(CachedLogic):
         self.skill = skill
         self.special_orders = special_orders
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_craft(self, recipe: CraftingRecipe = None) -> StardewRule:
         craft_rule = True_()
         if recipe is None:
@@ -57,7 +63,7 @@ class CraftingLogic(CachedLogic):
         time_rule = self.time.has_lived_months(number_ingredients)
         return craft_rule & learn_rule & ingredients_rule & time_rule
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def knows_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, ArchipelagoSource):
             return self.received(recipe.source.ap_item, len(recipe.source.ap_item))
@@ -68,13 +74,15 @@ class CraftingLogic(CachedLogic):
                 return self.received_recipe(recipe.item)
         if self.craftsanity_option == Craftsanity.option_none:
             return self.can_learn_recipe(recipe)
-        if isinstance(recipe.source, StarterSource) or isinstance(recipe.source, ShopTradeSource) or isinstance(recipe.source, ShopSource):
+        if isinstance(recipe.source, StarterSource) or isinstance(recipe.source, ShopTradeSource) or isinstance(
+                recipe.source, ShopSource):
             return self.received_recipe(recipe.item)
-        if isinstance(recipe.source, SpecialOrderSource) and self.special_orders_option != SpecialOrderLocations.option_disabled:
+        if isinstance(recipe.source,
+                      SpecialOrderSource) and self.special_orders_option != SpecialOrderLocations.option_disabled:
             return self.received_recipe(recipe.item)
         return self.can_learn_recipe(recipe)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_learn_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, StarterSource):
             return True_()
@@ -87,7 +95,8 @@ class CraftingLogic(CachedLogic):
         if isinstance(recipe.source, SkillSource):
             return self.skill.has_level(recipe.source.skill, recipe.source.level)
         if isinstance(recipe.source, CutsceneSource):
-            return self.region.can_reach(recipe.source.region) & self.relationship.has_hearts(recipe.source.friend, recipe.source.hearts)
+            return self.region.can_reach(recipe.source.region) & self.relationship.has_hearts(recipe.source.friend,
+                                                                                              recipe.source.hearts)
         if isinstance(recipe.source, FriendshipSource):
             return self.relationship.has_hearts(recipe.source.friend, recipe.source.hearts)
         if isinstance(recipe.source, SpecialOrderSource):
@@ -100,6 +109,6 @@ class CraftingLogic(CachedLogic):
 
         return False_()
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def received_recipe(self, item_name: str):
         return self.received(f"{item_name} Recipe")

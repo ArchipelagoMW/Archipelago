@@ -1,4 +1,6 @@
-from .cached_logic import CachedLogic, cache_rule, CachedRules
+from functools import lru_cache
+
+from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from ..mods.logic.magic_logic import MagicLogic
@@ -6,7 +8,7 @@ from ..stardew_rule import StardewRule, Or, False_
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.performance_names import Performance
 
-valid_weapons = [APWeapon.weapon, APWeapon.sword, APWeapon.club, APWeapon.dagger]
+valid_weapons = (APWeapon.weapon, APWeapon.sword, APWeapon.club, APWeapon.dagger)
 
 
 class CombatLogic(CachedLogic):
@@ -22,7 +24,7 @@ class CombatLogic(CachedLogic):
     def set_magic(self, magic: MagicLogic):
         self.magic = magic
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_fight_at_level(self, level: str) -> StardewRule:
         if level == Performance.basic:
             return self.has_any_weapon() | self.magic.has_any_spell()
@@ -38,22 +40,22 @@ class CombatLogic(CachedLogic):
             return self.has_galaxy_weapon() | self.magic.has_amazing_spells()  # Someday we will have the ascended weapons in AP
         return False_()
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def has_any_weapon(self) -> StardewRule:
         return self.received(valid_weapons, 1)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def has_decent_weapon(self) -> StardewRule:
         return Or(self.received(weapon, 2) for weapon in valid_weapons)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def has_good_weapon(self) -> StardewRule:
         return Or(self.received(weapon, 3) for weapon in valid_weapons)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def has_great_weapon(self) -> StardewRule:
         return Or(self.received(weapon, 4) for weapon in valid_weapons)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def has_galaxy_weapon(self) -> StardewRule:
         return Or(self.received(weapon, 5) for weapon in valid_weapons)

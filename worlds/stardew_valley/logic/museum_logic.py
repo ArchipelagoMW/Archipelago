@@ -1,14 +1,15 @@
+from functools import lru_cache
 from typing import List
 
 from .action_logic import ActionLogic
-from .cached_logic import CachedLogic, cache_rule, profile_rule
+from .cached_logic import CachedLogic
 from .has_logic import HasLogic, CachedRules
+from .received_logic import ReceivedLogic
+from .region_logic import RegionLogic
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
 from ..options import Museumsanity
 from ..stardew_rule import StardewRule, And, False_, Count
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
 from ..strings.region_names import Region
 
 
@@ -20,7 +21,8 @@ class MuseumLogic(CachedLogic):
     region: RegionLogic
     action: ActionLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, museum_option: Museumsanity, received: ReceivedLogic, has: HasLogic,
+    def __init__(self, player: int, cached_rules: CachedRules, museum_option: Museumsanity, received: ReceivedLogic,
+                 has: HasLogic,
                  region: RegionLogic, action: ActionLogic):
         super().__init__(player, cached_rules)
         self.museum_option = museum_option
@@ -35,7 +37,7 @@ class MuseumLogic(CachedLogic):
     def can_donate_museum_artifacts(self, number: int) -> StardewRule:
         return self.region.can_reach(Region.museum) & self.can_find_museum_artifacts(number)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         region_rule = self.region.can_reach_all_except_one(item.locations)
         geodes_rule = And([self.action.can_open_geode(geode) for geode in item.geodes])

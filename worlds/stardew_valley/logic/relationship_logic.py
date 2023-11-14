@@ -1,5 +1,5 @@
 import math
-
+from functools import lru_cache
 from typing import Iterable, Union
 
 from .building_logic import BuildingLogic
@@ -16,8 +16,10 @@ from ..options import Friendsanity, FriendsanityHeartSize, Mods
 from ..stardew_rule import StardewRule, True_, And, Or, Count
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
-from ..strings.villager_names import NPC, ModNPC
 from ..strings.region_names import Region
+from ..strings.villager_names import NPC, ModNPC
+
+possible_kids = ("Cute Baby", "Ugly Baby")
 
 
 class RelationshipLogic(CachedLogic):
@@ -32,7 +34,8 @@ class RelationshipLogic(CachedLogic):
     buildings: BuildingLogic
     mods_option: Mods
 
-    def __init__(self, player: int, cached_rules: CachedRules, friendsanity_option: Friendsanity, heart_size_option: FriendsanityHeartSize,
+    def __init__(self, player: int, cached_rules: CachedRules, friendsanity_option: Friendsanity,
+                 heart_size_option: FriendsanityHeartSize,
                  received_logic: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  time: TimeLogic, season: SeasonLogic, gifts: GiftLogic, buildings: BuildingLogic, mods_option: Mods):
         super().__init__(player, cached_rules)
@@ -59,16 +62,16 @@ class RelationshipLogic(CachedLogic):
     def has_children(self, number_children: int) -> StardewRule:
         if number_children <= 0:
             return True_()
-        possible_kids = ["Cute Baby", "Ugly Baby"]
         return self.received(possible_kids, number_children) & self.buildings.has_house(2)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         if number_children <= 0:
             return True_()
-        baby_rules = [self.can_get_married(), self.buildings.has_house(2), self.has_hearts(Generic.bachelor, 12), self.has_children(number_children - 1)]
+        baby_rules = [self.can_get_married(), self.buildings.has_house(2), self.has_hearts(Generic.bachelor, 12),
+                      self.has_children(number_children - 1)]
         return And(baby_rules)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def has_hearts(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
             return True_()
@@ -111,11 +114,11 @@ class RelationshipLogic(CachedLogic):
             return self.received_hearts(villager.name, 8) & self.can_earn_relationship(npc, hearts)
         return self.received_hearts(villager.name, hearts)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def received_hearts(self, npc: str, hearts: int) -> StardewRule:
         return self.received(self.heart(npc), math.ceil(hearts / self.heart_size_option))
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_meet(self, npc: str) -> StardewRule:
         if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
             return True_()
@@ -140,7 +143,7 @@ class RelationshipLogic(CachedLogic):
         loved_gifts_rules = And(rules) & self.gifts.has_any_universal_love()
         return loved_gifts_rules
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
         if hearts <= 0:
             return True_()
@@ -176,4 +179,3 @@ class RelationshipLogic(CachedLogic):
         if isinstance(npc, str):
             return f"{npc} <3"
         return self.heart(npc.name)
-

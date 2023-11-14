@@ -1,4 +1,6 @@
-from .cached_logic import CachedLogic, cache_rule, profile_rule
+from functools import lru_cache
+
+from .cached_logic import CachedLogic
 from .combat_logic import CombatLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -25,7 +27,9 @@ class MineLogic(CachedLogic):
     skill: SkillLogic
     mod_elevator: ModElevatorLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, tool_option: ToolProgression, skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogic, region: RegionLogic,
+    def __init__(self, player: int, cached_rules: CachedRules, tool_option: ToolProgression,
+                 skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogic,
+                 region: RegionLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic):
         super().__init__(player, cached_rules)
         self.tool_option = tool_option
@@ -65,7 +69,7 @@ class MineLogic(CachedLogic):
             return self.combat.can_fight_at_level(Performance.decent)
         return self.combat.can_fight_at_level(Performance.basic)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_progress_in_the_mines_from_floor(self, floor: int) -> StardewRule:
         tier = floor // 40
         rules = []
@@ -79,7 +83,7 @@ class MineLogic(CachedLogic):
             rules.append(self.skill.has_level(Skill.mining, skill_tier))
         return And(rules)
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
         if floor < 0:
             floor = 0
@@ -87,7 +91,7 @@ class MineLogic(CachedLogic):
             return self.received("Progressive Mine Elevator", floor // 5)
         return True_()
 
-    @cache_rule
+    @lru_cache(maxsize=None)
     def can_progress_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
         tier = floor // 50
         rules = []
@@ -100,4 +104,3 @@ class MineLogic(CachedLogic):
             rules.extend({self.skill.has_level(Skill.combat, skill_tier),
                           self.skill.has_level(Skill.mining, skill_tier)})
         return And(rules)
-

@@ -1,4 +1,4 @@
-from typing import Iterable, Union, List
+from typing import Union, List, Tuple
 
 
 class RecipeSource:
@@ -14,12 +14,12 @@ class StarterSource(RecipeSource):
 
 
 class ArchipelagoSource(RecipeSource):
-    ap_item: List[str]
+    ap_item: Tuple[str]
 
     def __init__(self, ap_item: Union[str, List[str]]):
         if isinstance(ap_item, str):
             ap_item = [ap_item]
-        self.ap_item = ap_item
+        self.ap_item = tuple(ap_item)
 
     def __repr__(self):
         return f"ArchipelagoSource {self.ap_item}"
@@ -118,7 +118,6 @@ class SpecialOrderSource(RecipeSource):
 
     def __init__(self, special_order: str):
         self.special_order = special_order
-
 
     def __repr__(self):
         return f"SpecialOrderSource from {self.special_order}"

@@ -1,9 +1,7 @@
 from typing import Dict
-from dataclasses import field
 
 from .action_logic import ActionLogic
 from .building_logic import BuildingLogic
-from .cached_logic import profile_rule
 from .combat_logic import CombatLogic
 from .cooking_logic import CookingLogic
 from .fishing_logic import FishingLogic
@@ -18,7 +16,8 @@ from .skill_logic import SkillLogic
 from .time_logic import TimeLogic
 from .tool_logic import ToolLogic
 from .wallet_logic import WalletLogic
-from ..options import SkillProgression, Mods
+from ..options import Mods
+from ..stardew_rule import StardewRule, Has, True_
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.craftable_names import Craftable
@@ -27,16 +26,15 @@ from ..strings.fish_names import Fish
 from ..strings.food_names import Meal
 from ..strings.forageable_names import Forageable
 from ..strings.machine_names import Machine
-from ..strings.monster_drop_names import Loot
 from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar, Ore, Mineral
+from ..strings.monster_drop_names import Loot
+from ..strings.quest_names import Quest
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.tool_names import Tool
-from ..strings.quest_names import Quest
 from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
-from ..stardew_rule import StardewRule, Has, True_
 
 
 class QuestLogic:
@@ -89,7 +87,7 @@ class QuestLogic:
             Quest.raising_animals: self.can_complete_quest(Quest.getting_started) & self.building.has_building(Building.coop),
             Quest.advancement: self.can_complete_quest(Quest.getting_started) & self.has(Craftable.scarecrow),
             Quest.archaeology: self.tool.has_tool(Tool.hoe) | self.mine.can_mine_in_the_mines_floor_1_40() | self.skill.can_fish(),
-            Quest.rat_problem: self.region.can_reach_all([Region.town, Region.community_center]),
+            Quest.rat_problem: self.region.can_reach_all((Region.town, Region.community_center)),
             Quest.meet_the_wizard: self.can_complete_quest(Quest.rat_problem),
             Quest.forging_ahead: self.has(Ore.copper) & self.has(Machine.furnace),
             Quest.smelting: self.has(MetalBar.copper),
@@ -107,7 +105,7 @@ class QuestLogic:
             Quest.knee_therapy: self.season.has(Season.summer) & self.has(Fruit.hot_pepper) & self.relationship.can_meet(NPC.george),
             Quest.robins_request: self.season.has(Season.winter) & self.has(Material.hardwood) & self.relationship.can_meet(NPC.robin),
             Quest.qis_challenge: True_(),  # The skull cavern floor 25 already has rules
-            Quest.the_mysterious_qi: self.region.can_reach_all([Region.bus_tunnel, Region.railroad, Region.mayor_house]) &
+            Quest.the_mysterious_qi: self.region.can_reach_all((Region.bus_tunnel, Region.railroad, Region.mayor_house)) &
                                      self.has(ArtisanGood.battery_pack) & self.has(Forageable.rainbow_shell) &
                                      self.has(Vegetable.beet) & self.has(Loot.solar_essence),
             Quest.carving_pumpkins: self.season.has(Season.fall) & self.has(Vegetable.pumpkin) & self.relationship.can_meet(NPC.caroline),
