@@ -13,10 +13,9 @@
     cursor: pointer;
 }
 
-.table-wrapper{
-    overflow-y: auto;
-    overflow-x: auto;
-    margin-bottom: 1rem;
+#tracker-wrapper .table-wrapper{
+    /* Necessary so location descriptions aren't cut off. */
+    overflow: visible;
 }
 
 #tracker-header-bar{
@@ -66,6 +65,10 @@ table.dataTable tbody tr:hover, table.dataTable tfoot tr:hover{
 
 table.dataTable tbody td, table.dataTable tfoot td{
     padding: 4px 6px;
+}
+
+table.dataTable .interactive{
+    color: rgb(47, 96, 0);
 }
 
 table.dataTable, table.dataTable.no-footer{

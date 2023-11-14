@@ -34,3 +34,8 @@ table.dataTable tbody tr{
 table.dataTable tbody tr:hover{
     /* background-color: #e2eabb; */
 }
+
+.table-wrapper{
+    overflow: auto;
+    margin-bottom: 1rem;
+}
