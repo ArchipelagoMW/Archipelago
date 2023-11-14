@@ -826,7 +826,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("For Aiur!", "For Aiur!: East Hive", SC2LOTV_LOC_ID_OFFSET + 404, LocationType.BONUS),
         LocationData("For Aiur!", "For Aiur!: West Conduit", SC2LOTV_LOC_ID_OFFSET + 405, LocationType.MISSION_PROGRESS),
         LocationData("For Aiur!", "For Aiur!: Middle Conduit", SC2LOTV_LOC_ID_OFFSET + 406, LocationType.MISSION_PROGRESS),
-        LocationData("For Aiur!", "For Aiur!: Northeast Conduit", SC2LOTV_LOC_ID_OFFSET + 406, LocationType.MISSION_PROGRESS),
+        LocationData("For Aiur!", "For Aiur!: Northeast Conduit", SC2LOTV_LOC_ID_OFFSET + 407, LocationType.MISSION_PROGRESS),
         LocationData("The Growing Shadow", "The Growing Shadow: Victory", SC2LOTV_LOC_ID_OFFSET + 500, LocationType.VICTORY,
                      lambda state: state._sc2lotv_has_common_unit(multiworld, player)
                                    and state._sc2lotv_has_basic_anti_air(multiworld, player)),
