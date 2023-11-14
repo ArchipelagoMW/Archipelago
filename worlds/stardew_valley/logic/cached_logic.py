@@ -16,9 +16,9 @@ class CachedRules:
     def __init__(self):
         self.cached_rules = dict()
 
-    def try_get_rule(self, key: str, create_rule: Callable[[], StardewRule]) -> StardewRule:
+    def try_get_rule(self, key: str, create_rule, *args, **kwargs) -> StardewRule:
         if key not in self.cached_rules:
-            self.cached_rules[key] = create_rule()
+            self.cached_rules[key] = create_rule(*args, **kwargs)
         return self.cached_rules[key]
 
     def try_get_rule_without_cache(self, key: str, create_rule: Callable[[], StardewRule]) -> StardewRule:
@@ -52,16 +52,16 @@ class CachedLogic:
         self.cached_rules = cached_rules
         self.name = type(self).__name__
 
-    def get_cache_key(self, method: Callable, *parameters) -> str:
-        return f"{self.name} {method.__name__} {parameters}"
+    def get_cache_key(self, method: Callable, *parameters, **kwargs) -> str:
+        return f"{self.name} {method.__name__} {parameters} {kwargs}"
         # return f"{type(self).__name__} {method.__name__} {' '.join(map(str, parameters))}"
 
 
 def cache_rule(func):
     @functools.wraps(func)
     def wrapper(self, *args, **kwargs):
-        key = self.get_cache_key(func, *args)
-        return self.cached_rules.try_get_rule(key, lambda: func(self, *args, **kwargs))
+        key = self.get_cache_key(func, *args, **kwargs)
+        return self.cached_rules.try_get_rule(key, func, self, *args, **kwargs)
     return wrapper
 
 
