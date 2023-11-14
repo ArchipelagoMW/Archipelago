@@ -106,6 +106,7 @@ class key_drop_shuffle(Toggle):
     display_name = "Key Drop Shuffle"
     default = False
 
+
 class Crystals(Range):
     range_start = 0
     range_end = 7
@@ -214,7 +215,7 @@ class Enemies(Choice):
 
 
 class Progressive(Choice):
-    """How item types that have multiple tiers (armor, bows, gloves, shields, and swords) should be rewarded. 
+    """How item types that have multiple tiers (armor, bows, gloves, shields, and swords) should be rewarded.
     If an individual item group is toggled on, it will override whatever this setting may be."""
     display_name = "Progressive Items"
     option_off = 0
@@ -227,45 +228,42 @@ class Progressive(Choice):
 
 
 class ProgressiveSwords(Toggle):
-    """How swords will be rewarded. If progressive, each sword item will be the next level from what is 
+    """How swords will be rewarded. If progressive, each sword item will be the next level from what is
     currently in the player's possession. If not, the player will receive the items in any order and
     use the highest level of the item they have obtained."""
     display_name = "Progressive Swords"
 
-    def want_progressive_sword(self):
-        return 
-
 
 class ProgressiveShields(Toggle):
-    """How shields will be rewarded. If progressive, each shield item will be the next level from what is 
+    """How shields will be rewarded. If progressive, each shield item will be the next level from what is
     currently in the player's possession. If not, the player will receive the items in any order and
     use the highest level of the item they have obtained."""
     display_name = "Progressive Shields"
 
 
 class ProgressiveGloves(Toggle):
-    """How gloves will be rewarded. If progressive, each glove item will be the next level from what is 
+    """How gloves will be rewarded. If progressive, each glove item will be the next level from what is
     currently in the player's possession. If not, the player will receive the items in any order and
     use the highest level of the item they have obtained."""
     display_name = "Progressive Gloves"
 
 
 class ProgressiveArmor(Toggle):
-    """How armor will be rewarded. If progressive, each armor item will be the next level from what is 
+    """How armor will be rewarded. If progressive, each armor item will be the next level from what is
     currently in the player's possession. If not, the player will receive the items in any order and
     use the highest level of the item they have obtained."""
     display_name = "Progressive Armor"
 
 
 class ProgressiveMagic(Toggle):
-    """How magic will be rewarded. If progressive, each magic item will be the next level from what is 
+    """How magic will be rewarded. If progressive, each magic item will be the next level from what is
     currently in the player's possession. If not, the player will receive the items in any order and
     use the highest level of the item they have obtained."""
     display_name = "Progressive Magic"
 
 
 class ProgressiveBows(Toggle):
-    """How bows will be rewarded. If progressive, each bow item will be the next level from what is 
+    """How bows will be rewarded. If progressive, each bow item will be the next level from what is
     currently in the player's possession. If not, the player will receive the items in any order and
     use the highest level of the item they have obtained."""
     display_name = "Progressive Bows"
@@ -447,7 +445,8 @@ class TriforceHud(Choice):
 
 
 class GlitchBoots(DefaultOnToggle):
-    """If this is enabled, the player will start with Pegasus Boots when playing with overworld glitches or harder logic."""
+    """If this is enabled, the player will start with Pegasus Boots when playing with overworld glitches
+    or harder logic."""
     display_name = "Glitched Starting Boots"
 
 
