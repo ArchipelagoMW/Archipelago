@@ -723,6 +723,10 @@ class CollectionState():
     def count(self, item: str, player: int) -> int:
         return self.prog_items[player][item]
 
+    def item_count(self, item: str, player: int) -> int:
+        Utils.deprecate("Use count instead.")
+        return self.count(item, player)
+
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
         found: int = 0
