@@ -544,6 +544,11 @@ def get_pool_core(world, player: int):
     swordless = world.swordless[player]
     retro_bow = world.retro_bow[player]
     logic = world.logic[player]
+    progressive_shields = world.progressive_shields[player]
+    progressive_gloves = world.progressive_gloves[player]
+    progressive_armor = world.progressive_armor[player]
+    progressive_magic = world.progressive_magic[player]
+    progressive_bow = world.progressive_bow[player]
 
     pool = []
     placed_items = {}
@@ -566,7 +571,7 @@ def get_pool_core(world, player: int):
         pool.append('Rupees (20)')
     want_progressives = world.progressive[player].want_progressives
 
-    if want_progressives(world.random):
+    if want_progressives(world.random) or progressive_gloves:
         pool.extend(diff.progressiveglove)
     else:
         pool.extend(diff.basicglove)
@@ -593,22 +598,22 @@ def get_pool_core(world, player: int):
             thisbottle = world.random.choice(diff.bottles)
         pool.append(thisbottle)
 
-    if want_progressives(world.random):
+    if want_progressives(world.random) or progressive_shields:
         pool.extend(diff.progressiveshield)
     else:
         pool.extend(diff.basicshield)
 
-    if want_progressives(world.random):
+    if want_progressives(world.random) or progressive_armor:
         pool.extend(diff.progressivearmor)
     else:
         pool.extend(diff.basicarmor)
 
-    if want_progressives(world.random):
+    if want_progressives(world.random) or progressive_magic:
         pool.extend(diff.progressivemagic)
     else:
         pool.extend(diff.basicmagic)
 
-    if want_progressives(world.random):
+    if want_progressives(world.random) or progressive_bow:
         pool.extend(diff.progressivebow)
         world.worlds[player].has_progressive_bows = True
     elif (swordless or logic == 'noglitches') and goal != 'icerodhunt':
@@ -622,7 +627,7 @@ def get_pool_core(world, player: int):
     if swordless:
         pool.extend(diff.swordless)
     else:
-        progressive_swords = want_progressives(world.random)
+        progressive_swords = want_progressives(world.random) or world.progressive_swords[player]
         pool.extend(diff.progressivesword if progressive_swords else diff.basicsword)
 
     extraitems = total_items_to_place - len(pool) - len(placed_items)
