@@ -228,11 +228,12 @@ class ValidInventory:
             if item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing)
         ]
         requirements = mission_requirements
-        cascade_keys = self.cascade_removal_map.keys()
-        units_always_have_upgrades = get_option_value(self.multiworld, self.player, "units_always_have_upgrades")
+        parent_items = self.item_children.keys()
+        parent_lookup = {child: parent for parent, children in self.item_children.items() for child in children}
+        minimum_upgrades = get_option_value(self.multiworld, self.player, "min_number_of_upgrades")
+        item_list = get_full_item_list()
 
         def attempt_removal(item: Item) -> bool:
-            # If item can be removed and has associated items, remove them as well
             inventory.remove(item)
             # Only run logic checks when removing logic items
             if item.name in self.logical_inventory:
@@ -245,7 +246,7 @@ class ValidInventory:
                     return False
             return True
 
-        # Limit the maximum number of upgrades 
+        # Limit the maximum number of upgrades
         maxUpgrad = get_option_value(self.multiworld, self.player,
                             "max_number_of_upgrades")
         if maxUpgrad != -1:
@@ -253,7 +254,7 @@ class ValidInventory:
             # Needed to take into account locked/existing items
             unit_nb_upgrades = {}
             for item in inventory:
-                cItem = get_full_item_list()[item.name]
+                cItem = item_list[item.name]
                 if cItem.type in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
                     unit_nb_upgrades[item.name] = 0
@@ -266,7 +267,7 @@ class ValidInventory:
                         unit_nb_upgrades[cItem.parent_item] += 1
             # For those two categories, we count them but dont include them in removal
             for item in locked_items + self.existing_items:
-                cItem = get_full_item_list()[item.name]
+                cItem = item_list[item.name]
                 if cItem.type in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
                     unit_nb_upgrades[item.name] = 0
@@ -275,7 +276,7 @@ class ValidInventory:
                         unit_nb_upgrades[cItem.parent_item] = 1
                     else:
                         unit_nb_upgrades[cItem.parent_item] += 1
-            # Making sure that the upgrades being removed is random 
+            # Making sure that the upgrades being removed is random
             # Currently, only for combat shield vs Stabilizer Medpacks...
             shuffled_unit_upgrade_list = list(unit_avail_upgrades.keys())
             self.multiworld.random.shuffle(shuffled_unit_upgrade_list)
@@ -283,32 +284,27 @@ class ValidInventory:
                 while (unit_nb_upgrades[unit] > maxUpgrad) \
                          and (len(unit_avail_upgrades[unit]) > 0):
                     itemCandidate = self.multiworld.random.choice(unit_avail_upgrades[unit])
-                    _ = attempt_removal(itemCandidate)
-                    # Whatever it succeed to remove the iventory or it fails and thus 
+                    success = attempt_removal(itemCandidate)
+                    # Whatever it succeed to remove the iventory or it fails and thus
                     # lock it, the upgrade is no longer available for removal
                     unit_avail_upgrades[unit].remove(itemCandidate)
-                    unit_nb_upgrades[unit] -= 1
+                    if success:
+                        unit_nb_upgrades[unit] -= 1
 
-        # Locking associated items for items that have already been placed when units_always_have_upgrades is on
-        if units_always_have_upgrades:
-            existing_items = set(self.existing_items[:] + locked_items)
-            while existing_items:
-                existing_item = existing_items.pop()
-                items_to_lock = self.cascade_removal_map.get(existing_item, [existing_item])
-                if get_full_item_list()[existing_item.name].type != "Upgrade":
-                    # Don't process general upgrades, they may have been pre-locked per-level
-                    for item in items_to_lock:
-                        if item in inventory:
-                            item_quantity = inventory.count(item)
-                            # Unit upgrades, lock all levels
-                            for _ in range(item_quantity):
-                                inventory.remove(item)
-                            if item not in locked_items:
-                                # Lock all the associated items if not already locked
-                                for _ in range(item_quantity):
-                                    locked_items.append(copy_item(item))
-                        if item in existing_items:
-                            existing_items.remove(item)
+        # Locking minimum upgrades for items that have already been locked/placed when minimum required
+        if minimum_upgrades > 0:
+            known_items = self.existing_items + locked_items
+            known_parents = [item for item in known_items if item in parent_items]
+            for parent in known_parents:
+                child_items = self.item_children[parent]
+                removable_upgrades = [item for item in inventory if item in child_items]
+                locked_upgrade_count = sum(1 if item in child_items else 0 for item in known_items)
+                self.multiworld.random.shuffle(removable_upgrades)
+                while len(removable_upgrades) > 0 and locked_upgrade_count < minimum_upgrades:
+                    item_to_lock = removable_upgrades.pop()
+                    inventory.remove(item_to_lock)
+                    locked_items.append(item_to_lock)
+                    locked_upgrade_count += 1
 
         if self.min_units_per_structure > 0 and self.has_units_per_structure():
             requirements.append(lambda state: state.has_units_per_structure())
@@ -317,10 +313,21 @@ class ValidInventory:
         if not all(requirement(self) for requirement in requirements):
             raise Exception("Too many items excluded - campaign is impossible to complete.")
 
+        # Reserving space for generic items
+        generic_item_count = sum(1 if item.name in second_pass_placeable_items else 0 for item in inventory)
+        reserved_generic_percent = get_option_value(self.multiworld, self.player, "ensure_generic_items") / 100
+        reserved_generic_space = int(generic_item_count * reserved_generic_percent)
+        inventory_size -= reserved_generic_space
+
+        # Main cull process
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
                 # There are more items than locations and all of them are already locked due to YAML or logic.
-                # Random items from locked ones will go to starting items
+                # First, transfer reserved space to the inventory
+                while reserved_generic_space > 0 and len(locked_items) > inventory_size:
+                    reserved_generic_space -= 1
+                    inventory_size += 1
+                # If there still isn't enough space, push locked items into start inventory
                 self.multiworld.random.shuffle(locked_items)
                 while len(locked_items) > inventory_size:
                     item: Item = locked_items.pop()
@@ -328,36 +335,33 @@ class ValidInventory:
                 break
             # Select random item from removable items
             item = self.multiworld.random.choice(inventory)
-            # Cascade removals to associated items
-            if item in cascade_keys:
-                items_to_remove = self.cascade_removal_map[item]
-                transient_items = []
-                cascade_failure = False
-                while len(items_to_remove) > 0:
-                    item_to_remove = items_to_remove.pop()
-                    transient_items.append(item_to_remove)
-                    if item_to_remove not in inventory:
-                        if units_always_have_upgrades and item_to_remove in locked_items:
-                            cascade_failure = True
-                            break
+            # Do not remove item if it would drop upgrades below minimum
+            if minimum_upgrades > 0:
+                parent_item = parent_lookup.get(item, None)
+                if parent_item:
+                    count = sum(1 if item in self.item_children[parent_item] else 0 for item in inventory + locked_items)
+                    if count <= minimum_upgrades:
+                        if parent_item in inventory:
+                            # Attempt to remove parent instead, if possible
+                            item = parent_item
                         else:
+                            # Lock remaining upgrades
+                            for item in self.item_children[parent_item]:
+                                if item in inventory:
+                                    inventory.remove(item)
+                                    locked_items.append(item)
                             continue
-                    success = attempt_removal(item_to_remove)
-                    if not success and units_always_have_upgrades:
-                        cascade_failure = True
-                        transient_items += items_to_remove
-                        break
-                # Lock all associated items if any of them cannot be removed on Units Always Have Upgrades
-                if cascade_failure:
-                    for transient_item in transient_items:
-                        if transient_item in inventory:
-                            for _ in range(inventory.count(transient_item)):
-                                inventory.remove(transient_item)
-                        if transient_item not in locked_items:
-                            for _ in range(get_item_quantity(transient_item, self.multiworld, self.player)):
-                                locked_items.append(copy_item(transient_item))
-                        if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
-                            self.logical_inventory.append(transient_item.name)
+
+            # Drop child items when removing a parent
+            if item in parent_items:
+                items_to_remove = [item for item in self.item_children[item] if item in inventory]
+                success = attempt_removal(item)
+                if success:
+                    while len(items_to_remove) > 0:
+                        item_to_remove = items_to_remove.pop()
+                        if item_to_remove not in inventory:
+                            continue
+                        attempt_removal(item_to_remove)
             else:
                 attempt_removal(item)
 
@@ -399,6 +403,7 @@ class ValidInventory:
                                  and item not in self.locked_items
                                  and item.name in second_pass_placeable_items)]
         self.multiworld.random.shuffle(replacement_items)
+        inventory_size += reserved_generic_space
         while len(inventory) < inventory_size and len(replacement_items) > 0:
             item = replacement_items.pop()
             inventory.append(item)
@@ -516,15 +521,10 @@ class ValidInventory:
                 self.locked_items.append(item)
             else:
                 self.item_pool.append(item)
-        self.cascade_removal_map: Dict[Item, List[Item]] = dict()
+        self.item_children: Dict[Item, List[Item]] = dict()
         for item in self.item_pool + locked_items + existing_items:
             if item.name in UPGRADABLE_ITEMS:
-                upgrades = get_item_upgrades(self.item_pool, item)
-                associated_items = [*upgrades, item]
-                self.cascade_removal_map[item] = associated_items
-                if get_option_value(multiworld, player, "units_always_have_upgrades"):
-                    for upgrade in upgrades:
-                        self.cascade_removal_map[upgrade] = associated_items
+                self.item_children[item] = get_item_upgrades(self.item_pool, item)
 
 
 def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], location_cache: List[Location],

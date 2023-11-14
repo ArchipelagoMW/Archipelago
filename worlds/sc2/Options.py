@@ -212,7 +212,7 @@ class StarterUnit(Choice):
 
 class RequiredTactics(Choice):
     """
-    Determines the maximum tactical difficulty of the seed (separate from mission difficulty).  Higher settings
+    Determines the maximum tactical difficulty of the world (separate from mission difficulty).  Higher settings
     increase randomness.
 
     Standard:  All missions can be completed with good micro and macro.
@@ -224,16 +224,6 @@ class RequiredTactics(Choice):
     option_standard = 0
     option_advanced = 1
     option_no_logic = 2
-
-
-class UnitsAlwaysHaveUpgrades(DefaultOnToggle):
-    """
-    If turned on, all upgrades will be present for each unit and structure in the seed.
-    This usually results in fewer units.
-
-    See also: Max Number of Upgrades
-    """
-    display_name = "Units Always Have Upgrades"
 
 
 class GenericUpgradeMissions(Range):
@@ -304,19 +294,43 @@ class ExtendedItems(Toggle):
     default = Toggle.option_true
 
 
+# Current maximum number of upgrades for a unit
+MAX_UPGRADES_OPTION = 12
+
+
+class EnsureGenericItems(Range):
+    """
+    Specifies a minimum percentage of the generic item pool that will be present for the slot.
+    The generic item pool is the pool of all generically useful items after all exclusions.
+    Generically-useful items include: Worker upgrades, Building upgrades, economy upgrades,
+    Mercenaries, Kerrigan levels and abilities, and Spear of Adun abilities
+    Increasing this percentage will make units less common.
+    """
+    range_start = 0
+    range_end = 100
+    default = 25
+
+
+class MinNumberOfUpgrades(Range):
+    """
+    Set a minimum to the number of upgrades a unit/structure can have.
+    Note that most units have 4 or 6 upgrades.
+    If a unit has fewer upgrades than the minimum, it will have all of its upgrades.
+    """
+    display_name = "Minimum number of upgrades per unit/structure"
+    range_start = 0
+    range_end = MAX_UPGRADES_OPTION
+    default = 2
+
+
 class MaxNumberOfUpgrades(Range):
     """
     Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited.
     Note that most unit have 4 or 6 upgrades.
-
-    If used with Units Always Have Upgrades, each unit has this given amount of upgrades (if there enough upgrades exist)
-
-    See also: Units Always Have Upgrades
     """
     display_name = "Maximum number of upgrades per unit/structure"
     range_start = -1
-    # Do not know the maximum, but it is less than 123!
-    range_end = 123
+    range_end = MAX_UPGRADES_OPTION
     default = -1
 
 
@@ -371,7 +385,7 @@ class KerriganCheckLevelPackSize(Range):
 
 
 class KerriganLevelItemSum(Range):
-    """Determines the sum of the level items in the seed.  This does not affect levels gained from checks."""
+    """Determines the sum of the level items in the world.  This does not affect levels gained from checks."""
     display_name = "Kerrigan Level Item Sum"
     range_start = 0
     range_end = 140
@@ -434,7 +448,7 @@ class KerriganPrimalStatus(Choice):
     Always Zerg:  Kerrigan is always zerg.
     Always Human:  Kerrigan is always human.
     Level 35:  Kerrigan is human until reaching level 35, and zerg thereafter.
-    Half Completion:  Kerrigan is human until half of the missions in the seed are completed,
+    Half Completion:  Kerrigan is human until half of the missions in the world are completed,
     and zerg thereafter.
     Item:  Kerrigan's Primal Form is an item. She is human until it is found, and zerg thereafter."""
     display_name = "Kerrigan Primal Status"
@@ -649,7 +663,8 @@ sc2_options: Dict[str, Option] = {
     "shuffle_no_build": ShuffleNoBuild,
     "starter_unit": StarterUnit,
     "required_tactics": RequiredTactics,
-    "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
+    "ensure_generic_items": EnsureGenericItems,
+    "min_number_of_upgrades": MinNumberOfUpgrades,
     "max_number_of_upgrades": MaxNumberOfUpgrades,
     "generic_upgrade_missions": GenericUpgradeMissions,
     "generic_upgrade_research": GenericUpgradeResearch,

@@ -1527,12 +1527,23 @@ item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission i
 # General upgrades and Mercs
 # TODO needs zerg items
 second_pass_placeable_items: typing.Tuple[str, ...] = (
-    # Buildings without upgrades
+    # Global weapon/armor upgrades
+    ItemNames.PROGRESSIVE_TERRAN_ARMOR_UPGRADE,
+    ItemNames.PROGRESSIVE_TERRAN_WEAPON_UPGRADE,
+    ItemNames.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
+    ItemNames.PROGRESSIVE_ZERG_ARMOR_UPGRADE,
+    ItemNames.PROGRESSIVE_ZERG_WEAPON_UPGRADE,
+    ItemNames.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE,
+    ItemNames.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE,
+    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE,
+    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE,
+    ItemNames.PROGRESSIVE_PROTOSS_SHIELDS,
+    # Terran Buildings without upgrades
     ItemNames.SENSOR_TOWER,
     ItemNames.HIVE_MIND_EMULATOR,
     ItemNames.PSI_DISRUPTER,
     ItemNames.PERDITION_TURRET,
-    # General upgrades without any dependencies
+    # General Terran upgrades without any dependencies
     ItemNames.SCV_ADVANCED_CONSTRUCTION,
     ItemNames.SCV_DUAL_FUSION_WELDERS,
     ItemNames.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,
@@ -1550,21 +1561,41 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     ItemNames.HI_SEC_AUTO_TRACKING,
     ItemNames.ADVANCED_OPTICS,
     ItemNames.ROGUE_FORCES,
-    # Mercenaries
-    ItemNames.WAR_PIGS,
-    ItemNames.DEVIL_DOGS,
-    ItemNames.HAMMER_SECURITIES,
-    ItemNames.SPARTAN_COMPANY,
-    ItemNames.SIEGE_BREAKERS,
-    ItemNames.HELS_ANGELS,
-    ItemNames.DUSK_WINGS,
-    ItemNames.JACKSONS_REVENGE,
-    ItemNames.SKIBIS_ANGELS,
-    ItemNames.DEATH_HEADS,
-    ItemNames.WINGED_NIGHTMARES,
-    ItemNames.RAID_LIBERATORS,
-    ItemNames.BRYNHILDS,
-    ItemNames.JOTUN
+    # Mercenaries (All races)
+    *[item_name for item_name, item_data in get_full_item_list().items()
+      if item_data.type == "Mercenary"],
+    # Kerrigan levels and abilities
+    *[item_name for item_name, item_data in get_full_item_list().items()
+      if item_data.type in ("Level", "Ability") and "hots" in item_data.origin],
+    # Zerg static defenses
+    ItemNames.SPORE_CRAWLER,
+    ItemNames.SPINE_CRAWLER,
+    # Spear of Adun Abilities
+    ItemNames.SOA_CHRONO_SURGE,
+    ItemNames.SOA_PROGRESSIVE_PROXY_PYLON,
+    ItemNames.SOA_PYLON_OVERCHARGE,
+    ItemNames.SOA_ORBITAL_STRIKE,
+    ItemNames.SOA_TEMPORAL_FIELD,
+    ItemNames.SOA_SOLAR_LANCE,
+    ItemNames.SOA_MASS_RECALL,
+    ItemNames.SOA_SHIELD_OVERCHARGE,
+    ItemNames.SOA_DEPLOY_FENIX,
+    ItemNames.SOA_PURIFIER_BEAM,
+    ItemNames.SOA_TIME_STOP,
+    ItemNames.SOA_SOLAR_BOBMARDMENT,
+    ItemNames.MATRIX_OVERLOAD,
+    ItemNames.QUATRO,
+    ItemNames.NEXUS_OVERCHARGE,
+    ItemNames.ORBITAL_ASSIMILATORS,
+    ItemNames.WARP_HARMONIZATION,
+    ItemNames.GUARDIAN_SHELL,
+    ItemNames.RECONSTRUCTION_BEAM,
+    ItemNames.OVERWATCH,
+    ItemNames.SUPERIOR_WARP_GATES,
+    # Protoss static defenses
+    ItemNames.PHOTON_CANNON,
+    ItemNames.KHAYDARIN_MONOLITH,
+    ItemNames.SHIELD_BATTERY
 )
 
 

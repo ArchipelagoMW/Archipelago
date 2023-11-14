@@ -376,7 +376,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
             else:
                 pool.append(item)
 
-    existing_items = starter_items + [item for item in multiworld.precollected_items[player]]
+    existing_items = starter_items + [item for item in multiworld.precollected_items[player] if item not in starter_items]
     existing_names = [item.name for item in existing_items]
 
     # Check the parent item integrity, exclude items
@@ -432,12 +432,12 @@ def fill_resource_locations(multiworld: MultiWorld, player, locked_locations: Li
     open_locations = [location for location in location_cache if location.item is None]
     plando_locations = get_plando_locations(multiworld, player)
     resource_location_types = get_location_types(multiworld, player, LocationInclusion.option_resources)
-    location_data = get_locations(multiworld, player)
+    location_data = {sc2_location.name: sc2_location for sc2_location in get_locations(multiworld, player)}
     for location in open_locations:
         # Go through the locations that aren't locked yet (early unit, etc)
         if location.name not in plando_locations:
             # The location is not plando'd
-            sc2_location = [sc2_location for sc2_location in location_data if sc2_location.name == location.name][0]
+            sc2_location = location_data[location.name]
             if sc2_location.type in resource_location_types:
                 item_name = multiworld.random.choice(filler_items)
                 item = create_item_with_correct_settings(player, item_name)
