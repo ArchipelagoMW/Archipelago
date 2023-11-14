@@ -81,13 +81,13 @@ class ModQuestLogic:
             return {}
 
         return {
-            ModQuest.RailroadBoulder: self.received(Wallet.skull_key) & self.has([Ore.iridium, Material.coal]) &
+            ModQuest.RailroadBoulder: self.received(Wallet.skull_key) & self.has((Ore.iridium, Material.coal)) &
                                       self.region.can_reach(Region.blacksmith) & self.region.can_reach(Region.railroad),
-            ModQuest.GrandpasShed: self.has([Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone]) &
+            ModQuest.GrandpasShed: self.has((Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone)) &
                                    self.region.can_reach(SVERegion.grandpas_shed_interior),
-            ModQuest.MarlonsBoat: self.has([Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat]) &
+            ModQuest.MarlonsBoat: self.has((Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
                                   self.relationship.can_meet(ModNPC.lance) & self.region.can_reach(SVERegion.guild_summit),
             ModQuest.AuroraVineyard: self.has(Fruit.starfruit) & self.region.can_reach(SVERegion.aurora_vineyard),
-            ModQuest.MonsterCrops: self.has([SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root]),
+            ModQuest.MonsterCrops: self.has((SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
             ModQuest.VoidSoul: self.region.can_reach(Region.sewer) & self.has(SVEForage.void_soul),
         }

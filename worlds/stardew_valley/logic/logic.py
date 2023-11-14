@@ -726,7 +726,7 @@ class StardewLogic:
             return And(reach_walnut_regions)
         if number <= 50:
             return reach_entire_island
-        gems = [Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz]
+        gems = (Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
         return reach_entire_island & self.has(Fruit.banana) & self.has(gems) & self.ability.can_mine_perfectly() & \
             self.ability.can_fish_perfectly() & self.has(Furniture.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic)
 
