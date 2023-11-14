@@ -56,6 +56,9 @@ def create_vanilla_regions(
     multiworld.regions += regions
     vanilla_mission_reqs = {campaign: missions for campaign, missions in vanilla_mission_req_table.items() if campaign in enabled_campaigns}
 
+    def wol_cleared_missions(state: CollectionState, mission_count: int) -> bool:
+        return state.has_group("WoL Missions", player, mission_count)
+    
     if SC2Campaign.WOL in enabled_campaigns:
         connect(multiworld, player, names, 'Menu', 'Liberation Day')
         connect(multiworld, player, names, 'Liberation Day', 'The Outlaws',
@@ -67,38 +70,29 @@ def create_vanilla_regions(
         connect(multiworld, player, names, 'Evacuation', 'Outbreak',
                 lambda state: state.has("Beat Evacuation", player))
         connect(multiworld, player, names, "Outbreak", "Safe Haven",
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 7) and
-                                state.has("Beat Outbreak", player))
+                lambda state: wol_cleared_missions(7) and state.has("Beat Outbreak", player))
         connect(multiworld, player, names, "Outbreak", "Haven's Fall",
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 7) and
-                                state.has("Beat Outbreak", player))
+                lambda state: wol_cleared_missions(7) and state.has("Beat Outbreak", player))
         connect(multiworld, player, names, 'Zero Hour', 'Smash and Grab',
                 lambda state: state.has("Beat Zero Hour", player))
         connect(multiworld, player, names, 'Smash and Grab', 'The Dig',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
-                                state.has("Beat Smash and Grab", player))
+                lambda state: wol_cleared_missions(8) and state.has("Beat Smash and Grab", player))
         connect(multiworld, player, names, 'The Dig', 'The Moebius Factor',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 11) and
-                                state.has("Beat The Dig", player))
+                lambda state: wol_cleared_missions(11) and state.has("Beat The Dig", player))
         connect(multiworld, player, names, 'The Moebius Factor', 'Supernova',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 14) and
-                                state.has("Beat The Moebius Factor", player))
+                lambda state: wol_cleared_missions(14) and state.has("Beat The Moebius Factor", player))
         connect(multiworld, player, names, 'Supernova', 'Maw of the Void',
                 lambda state: state.has("Beat Supernova", player))
         connect(multiworld, player, names, 'Zero Hour', "Devil's Playground",
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 4) and
-                                state.has("Beat Zero Hour", player))
+                lambda state: wol_cleared_missions(4) and state.has("Beat Zero Hour", player))
         connect(multiworld, player, names, "Devil's Playground", 'Welcome to the Jungle',
                 lambda state: state.has("Beat Devil's Playground", player))
         connect(multiworld, player, names, "Welcome to the Jungle", 'Breakout',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
-                                state.has("Beat Welcome to the Jungle", player))
+                lambda state: wol_cleared_missions(8) and state.has("Beat Welcome to the Jungle", player))
         connect(multiworld, player, names, "Welcome to the Jungle", 'Ghost of a Chance',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
-                                state.has("Beat Welcome to the Jungle", player))
+                lambda state: wol_cleared_missions(8) and state.has("Beat Welcome to the Jungle", player))
         connect(multiworld, player, names, "Zero Hour", 'The Great Train Robbery',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 6) and
-                                state.has("Beat Zero Hour", player))
+                lambda state: wol_cleared_missions(6) and state.has("Beat Zero Hour", player))
         connect(multiworld, player, names, 'The Great Train Robbery', 'Cutthroat',
                 lambda state: state.has("Beat The Great Train Robbery", player))
         connect(multiworld, player, names, 'Cutthroat', 'Engine of Destruction',
@@ -534,10 +528,10 @@ def create_structured_regions(
     def build_connection_rule(mission_names: List[str], missions_req: int) -> Callable:
         if len(mission_names) > 1:
             return lambda state: state.has_all({f"Beat {name}" for name in mission_names}, player) \
-                                 and state._sc2_cleared_missions(multiworld, player, missions_req)
+                                 and state.has_group("Missions", player, missions_req)
         else:
             return lambda state: state.has(f"Beat {mission_names[0]}", player) \
-                                 and state._sc2_cleared_missions(multiworld, player, missions_req)
+                                 and state.has_group("Missions", player, missions_req)
 
     for campaign in campaigns:
         # Loop through missions to create requirements table and connect regions
