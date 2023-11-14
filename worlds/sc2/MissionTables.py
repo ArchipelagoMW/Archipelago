@@ -49,6 +49,7 @@ class SC2Campaign(Enum):
     HOTS = 3, "Heart of the Swarm", SC2CampaignGoalPriority.HARD, SC2Race.ZERG
     PROLOGUE = 4, "Whispers of Oblivion (Legacy of the Void: Prologue)", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
     LOTV = 5, "Legacy of the Void", SC2CampaignGoalPriority.VERY_HARD, SC2Race.PROTOSS
+    EPILOGUE = 6, "Into the Void (Legacy of the Void: Epilogue)", SC2CampaignGoalPriority.EPILOGUE, SC2Race.ANY
 
 
 class SC2Mission(Enum):
@@ -127,6 +128,31 @@ class SC2Mission(Enum):
     DARK_WHISPERS = 50, "Dark Whispers", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers"
     GHOSTS_IN_THE_FOG = 51, "Ghosts in the Fog", SC2Campaign.PROLOGUE, "_2", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_ghosts_in_the_fog"
     EVIL_AWOKEN = 52, "Evil Awoken", SC2Campaign.PROLOGUE, "_3", SC2Race.PROTOSS, MissionPools.STARTER, "ap_evil_awoken", False
+    # LotV
+    FOR_AIUR = 53, "For Aiur!", SC2Campaign.LOTV, "Aiur", SC2Race.ANY, MissionPools.STARTER, "ap_for_aiur", False
+    THE_GROWING_SHADOW = 54, "The Growing Shadow", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_growing_shadow"
+    THE_SPEAR_OF_ADUN = 55, "The Spear of Adun", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_spear_of_adun"
+    SKY_SHIELD = 56, "Sky Shield", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.EASY, "ap_sky_shield"
+    BROTHERS_IN_ARMS = 57, "Brothers in Arms", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_brothers_in_arms"
+    AMON_S_REACH = 58, "Amon's Reach", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.EASY, "ap_amon_s_reach"
+    LAST_STAND = 59, "Last Stand", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.HARD, "ap_last_stand"
+    FORBIDDEN_WEAPON = 60, "Forbidden Weapon", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_forbidden_weapon"
+    TEMPLE_OF_UNIFICATION = 61, "Temple of Unification", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_temple_of_unification"
+    THE_INFINITE_CYCLE = 62, "The Infinite Cycle", SC2Campaign.LOTV, "Ulnar", SC2Race.ANY, MissionPools.MEDIUM, "ap_the_infinite_cycle", False
+    HARBINGER_OF_OBLIVION = 63, "Harbinger of Oblivion", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_harbinger_of_oblivion"
+    UNSEALING_THE_PAST = 64, "Unsealing the Past", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_unsealing_the_past"
+    PURIFICATION = 65, "Purification", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.HARD, "ap_purification"
+    STEPS_OF_THE_RITE = 66, "Steps of the Rite", SC2Campaign.LOTV, "Tal'darim", SC2Race.PROTOSS, MissionPools.HARD, "ap_steps_of_the_rite"
+    RAK_SHIR = 67, "Rak'Shir", SC2Campaign.LOTV, "Tal'darim", SC2Race.PROTOSS, MissionPools.HARD, "ap_rak_shir"
+    TEMPLAR_S_CHARGE = 68, "Templar's Charge", SC2Campaign.LOTV, "Moebius", SC2Race.PROTOSS, MissionPools.HARD, "ap_templar_s_charge"
+    TEMPLAR_S_RETURN = 69, "Templar's Return", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_templar_s_return", False
+    THE_HOST = 70, "The Host", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.HARD, "ap_the_host",
+    SALVATION = 71, "Salvation", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_salvation"
+    # Epilogue
+    INTO_THE_VOID = 72, "Into the Void", SC2Campaign.EPILOGUE, "_1", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_into_the_void"
+    THE_ESSENCE_OF_ETERNITY = 73, "The Essence of Eternity", SC2Campaign.EPILOGUE, "_2", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_the_essence_of_eternity"
+    AMON_S_FALL = 74, "Amon's Fall", SC2Campaign.EPILOGUE, "_3", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_amon_s_fall"
+
 
 class MissionConnection:
     campaign: SC2Campaign
@@ -160,6 +186,7 @@ class FillMission(NamedTuple):
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
     removal_priority: int = 0  # how many missions missing from the pool required to remove this mission
+
 
 
 vanilla_shuffle_order: Dict[SC2Campaign, List[FillMission]] = {
@@ -219,12 +246,37 @@ vanilla_shuffle_order: Dict[SC2Campaign, List[FillMission]] = {
         FillMission(MissionPools.FINAL, [MissionConnection(18, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
     ],
     SC2Campaign.PROLOGUE: [
-        FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1", completion_critical=True),
+        FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1", completion_critical=True),
         FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_2", completion_critical=True, removal_priority=1),
         FillMission(MissionPools.FINAL, [MissionConnection(1, SC2Campaign.PROLOGUE)], "_3", completion_critical=True)
     ],
+    SC2Campaign.LOTV: [
+        FillMission(MissionPools.STARTER, [MissionConnection(2, SC2Campaign.PROLOGUE)], "Aiur", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.LOTV)], "Aiur", completion_critical=True, removal_priority=3),
+        FillMission(MissionPools.EASY, [MissionConnection(1, SC2Campaign.LOTV)], "Aiur", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(2, SC2Campaign.LOTV)], "Korhal", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(3, SC2Campaign.LOTV)], "Korhal", completion_critical=True, removal_priority=7),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(2, SC2Campaign.LOTV)], "Shakuras", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(5, SC2Campaign.LOTV)], "Shakuras", completion_critical=True, removal_priority=6),
+        FillMission(MissionPools.HARD, [MissionConnection(4, SC2Campaign.LOTV), MissionConnection(6, SC2Campaign.LOTV)], "Purifier", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(7, SC2Campaign.LOTV)], "Ulnar", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(8, SC2Campaign.LOTV)], "Ulnar", completion_critical=True, removal_priority=1),
+        FillMission(MissionPools.HARD, [MissionConnection(9, SC2Campaign.LOTV)], "Ulnar", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(10, SC2Campaign.LOTV)], "Purifier", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(11, SC2Campaign.LOTV)], "Purifier", completion_critical=True, removal_priority=5),
+        FillMission(MissionPools.HARD, [MissionConnection(10, SC2Campaign.LOTV)], "Tal'darim", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(13, SC2Campaign.LOTV)], "Tal'darim", completion_critical=True, removal_priority=4),
+        FillMission(MissionPools.HARD, [MissionConnection(12, SC2Campaign.LOTV), MissionConnection(14, SC2Campaign.LOTV)], "Moebius", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(15, SC2Campaign.LOTV)], "Return to Aiur", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(16, SC2Campaign.LOTV)], "Return to Aiur", completion_critical=True, removal_priority=2),
+        FillMission(MissionPools.FINAL, [MissionConnection(17, SC2Campaign.LOTV)], "Return to Aiur", completion_critical=True),
+    ],
+    SC2Campaign.EPILOGUE: [
+        FillMission(MissionPools.VERY_HARD, [MissionConnection(24, SC2Campaign.WOL), MissionConnection(19, SC2Campaign.HOTS), MissionConnection(18, SC2Campaign.LOTV)], "_1", completion_critical=True),
+        FillMission(MissionPools.VERY_HARD, [MissionConnection(0, SC2Campaign.EPILOGUE)], "_2", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(1, SC2Campaign.EPILOGUE)], "_3", completion_critical=True),
+    ]
 }
-
 mini_campaign_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.WOL: [
         FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.WOL)], "Mar Sara", completion_critical=True),
@@ -262,8 +314,24 @@ mini_campaign_order: Dict[SC2Campaign, List[FillMission]] = {
     ],
     SC2Campaign.PROLOGUE: [
         FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1", completion_critical=True),
-        FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_3", completion_critical=True)
+        FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_2", completion_critical=True)
     ],
+    SC2Campaign.LOTV: [
+        FillMission(MissionPools.STARTER, [MissionConnection(1, SC2Campaign.PROLOGUE)], "Aiur", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.LOTV)], "Aiur", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(1, SC2Campaign.LOTV)], "Korhal", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1, SC2Campaign.LOTV)], "Shakuras", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(2, SC2Campaign.LOTV), MissionConnection(3, SC2Campaign.LOTV)], "Purifier", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.LOTV)], "Purifier", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(4, SC2Campaign.LOTV)], "Ulnar", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.LOTV)], "Tal'darim", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(5, SC2Campaign.LOTV), MissionConnection(7, SC2Campaign.LOTV)], "Return to Aiur", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(8, SC2Campaign.LOTV)], "Return to Aiur", completion_critical=True),
+    ],
+    SC2Campaign.EPILOGUE: [
+        FillMission(MissionPools.VERY_HARD, [MissionConnection(12, SC2Campaign.WOL), MissionConnection(12, SC2Campaign.HOTS), MissionConnection(9, SC2Campaign.LOTV)], "_1", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.EPILOGUE)], "_2", completion_critical=True),
+    ]
 }
 
 gauntlet_order: Dict[SC2Campaign, List[FillMission]] = {
@@ -422,6 +490,32 @@ vanilla_mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {
         SC2Mission.DARK_WHISPERS.mission_name: MissionInfo(SC2Mission.DARK_WHISPERS, [], SC2Mission.DARK_WHISPERS.area, completion_critical=True),
         SC2Mission.GHOSTS_IN_THE_FOG.mission_name: MissionInfo(SC2Mission.GHOSTS_IN_THE_FOG, [MissionConnection(1, SC2Campaign.PROLOGUE)], SC2Mission.GHOSTS_IN_THE_FOG.area, completion_critical=True),
         SC2Mission.EVIL_AWOKEN.mission_name: MissionInfo(SC2Mission.EVIL_AWOKEN, [MissionConnection(2, SC2Campaign.PROLOGUE)], SC2Mission.EVIL_AWOKEN.area, completion_critical=True)
+    },
+    SC2Campaign.LOTV: {
+        SC2Mission.FOR_AIUR.mission_name: MissionInfo(SC2Mission.FOR_AIUR, [MissionConnection(3, SC2Campaign.PROLOGUE)], SC2Mission.FOR_AIUR.area, completion_critical=True),
+        SC2Mission.THE_GROWING_SHADOW.mission_name: MissionInfo(SC2Mission.THE_GROWING_SHADOW, [MissionConnection(1, SC2Campaign.LOTV)], SC2Mission.THE_GROWING_SHADOW.area, completion_critical=True),
+        SC2Mission.THE_SPEAR_OF_ADUN.mission_name: MissionInfo(SC2Mission.THE_SPEAR_OF_ADUN, [MissionConnection(2, SC2Campaign.LOTV)], SC2Mission.THE_SPEAR_OF_ADUN.area, completion_critical=True),
+        SC2Mission.SKY_SHIELD.mission_name: MissionInfo(SC2Mission.SKY_SHIELD, [MissionConnection(3, SC2Campaign.LOTV)], SC2Mission.SKY_SHIELD.area, completion_critical=True),
+        SC2Mission.BROTHERS_IN_ARMS.mission_name: MissionInfo(SC2Mission.BROTHERS_IN_ARMS, [MissionConnection(4, SC2Campaign.LOTV)], SC2Mission.BROTHERS_IN_ARMS.area, completion_critical=True),
+        SC2Mission.AMON_S_REACH.mission_name: MissionInfo(SC2Mission.AMON_S_REACH, [MissionConnection(3, SC2Campaign.LOTV)], SC2Mission.AMON_S_REACH.area, completion_critical=True),
+        SC2Mission.LAST_STAND.mission_name: MissionInfo(SC2Mission.LAST_STAND, [MissionConnection(6, SC2Campaign.LOTV)], SC2Mission.LAST_STAND.area, completion_critical=True),
+        SC2Mission.FORBIDDEN_WEAPON.mission_name: MissionInfo(SC2Mission.FORBIDDEN_WEAPON, [MissionConnection(5, SC2Campaign.LOTV), MissionConnection(7, SC2Campaign.LOTV)], SC2Mission.FORBIDDEN_WEAPON.area, completion_critical=True),
+        SC2Mission.TEMPLE_OF_UNIFICATION.mission_name: MissionInfo(SC2Mission.TEMPLE_OF_UNIFICATION, [MissionConnection(8, SC2Campaign.LOTV)], SC2Mission.TEMPLE_OF_UNIFICATION.area, completion_critical=True),
+        SC2Mission.THE_INFINITE_CYCLE.mission_name: MissionInfo(SC2Mission.THE_INFINITE_CYCLE, [MissionConnection(9, SC2Campaign.LOTV)], SC2Mission.THE_INFINITE_CYCLE.area, completion_critical=True),
+        SC2Mission.HARBINGER_OF_OBLIVION.mission_name: MissionInfo(SC2Mission.HARBINGER_OF_OBLIVION, [MissionConnection(10, SC2Campaign.LOTV)], SC2Mission.HARBINGER_OF_OBLIVION.area, completion_critical=True),
+        SC2Mission.UNSEALING_THE_PAST.mission_name: MissionInfo(SC2Mission.UNSEALING_THE_PAST, [MissionConnection(11, SC2Campaign.LOTV)], SC2Mission.UNSEALING_THE_PAST.area, completion_critical=True),
+        SC2Mission.PURIFICATION.mission_name: MissionInfo(SC2Mission.PURIFICATION, [MissionConnection(12, SC2Campaign.LOTV)], SC2Mission.PURIFICATION.area, completion_critical=True),
+        SC2Mission.STEPS_OF_THE_RITE.mission_name: MissionInfo(SC2Mission.STEPS_OF_THE_RITE, [MissionConnection(11, SC2Campaign.LOTV)], SC2Mission.STEPS_OF_THE_RITE.area, completion_critical=True),
+        SC2Mission.RAK_SHIR.mission_name: MissionInfo(SC2Mission.RAK_SHIR, [MissionConnection(14, SC2Campaign.LOTV)], SC2Mission.RAK_SHIR.area, completion_critical=True),
+        SC2Mission.TEMPLAR_S_CHARGE.mission_name: MissionInfo(SC2Mission.TEMPLAR_S_CHARGE, [MissionConnection(12, SC2Campaign.LOTV), MissionConnection(15, SC2Campaign.LOTV)], SC2Mission.TEMPLAR_S_CHARGE.area, completion_critical=True),
+        SC2Mission.TEMPLAR_S_RETURN.mission_name: MissionInfo(SC2Mission.TEMPLAR_S_RETURN, [MissionConnection(16, SC2Campaign.LOTV)], SC2Mission.TEMPLAR_S_RETURN.area, completion_critical=True),
+        SC2Mission.THE_HOST.mission_name: MissionInfo(SC2Mission.THE_HOST, [MissionConnection(17, SC2Campaign.LOTV)], SC2Mission.THE_HOST.area, completion_critical=True),
+        SC2Mission.SALVATION.mission_name: MissionInfo(SC2Mission.SALVATION, [MissionConnection(18, SC2Campaign.LOTV)], SC2Mission.SALVATION.area, completion_critical=True),
+    },
+    SC2Campaign.EPILOGUE: {
+        SC2Mission.INTO_THE_VOID.mission_name: MissionInfo(SC2Mission.INTO_THE_VOID, [MissionConnection(25, SC2Campaign.WOL), MissionConnection(20, SC2Campaign.HOTS), MissionConnection(19, SC2Campaign.LOTV)], SC2Mission.INTO_THE_VOID.area, completion_critical=True),
+        SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name: MissionInfo(SC2Mission.THE_ESSENCE_OF_ETERNITY, [MissionConnection(1, SC2Campaign.EPILOGUE)], SC2Mission.THE_ESSENCE_OF_ETERNITY.area, completion_critical=True),
+        SC2Mission.AMON_S_FALL.mission_name: MissionInfo(SC2Mission.AMON_S_FALL, [MissionConnection(2, SC2Campaign.EPILOGUE)], SC2Mission.AMON_S_FALL.area, completion_critical=True),
     }
 }
 
@@ -495,7 +589,9 @@ campaign_final_mission_locations: Dict[SC2Campaign, SC2CampaignGoal] = {
     SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
     SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),
     SC2Campaign.HOTS: None,
-    SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, "Evil Awoken: Victory")
+    SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, "Evil Awoken: Victory"),
+    SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, "Salvation: Victory"),
+    SC2Campaign.EPILOGUE: None,
 }
 
 campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] = {
@@ -517,6 +613,15 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
     },
     SC2Campaign.PROLOGUE: {
         SC2Mission.GHOSTS_IN_THE_FOG: "Ghosts in the Fog: Victory"
+    },
+    SC2Campaign.LOTV: {
+        SC2Mission.THE_HOST: "The Host: Victory",
+        SC2Mission.TEMPLAR_S_CHARGE: "Templar's Charge: Victory"
+    },
+    SC2Campaign.EPILOGUE: {
+        SC2Mission.INTO_THE_VOID: "Into the Void: Victory",
+        SC2Mission.THE_ESSENCE_OF_ETERNITY: "The Essence of Eternity: Victory",
+        SC2Mission.AMON_S_FALL: "Amon's Fall: Victory"
     }
 }
 

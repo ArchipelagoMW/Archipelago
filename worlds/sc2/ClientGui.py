@@ -214,7 +214,10 @@ class SC2Manager(GameManager):
                                 column_spacer = Label(text='', size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
                                 category_panel.add_widget(column_spacer)
                             mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
-                            race = campaign_race_exceptions.get(mission_data.mission, mission_obj.campaign.race)
+                            mission_race = mission_obj.race
+                            if mission_race == SC2Race.ANY:
+                                mission_race = mission_obj.campaign.race
+                            race = campaign_race_exceptions.get(mission_obj, mission_race)
                             racial_colors = {
                                 SC2Race.TERRAN: (0.24, 0.84, 0.68),
                                 SC2Race.ZERG: (1, 0.65, 0.37),

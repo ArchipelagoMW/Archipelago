@@ -188,6 +188,65 @@ def create_vanilla_regions(
         connect(multiworld, player, names, "Dark Whispers", "Evil Awoken",
                 lambda state: state.has("Beat Ghosts in the Fog", player))
 
+    if SC2Campaign.LOTV in enabled_campaigns:
+        if SC2Campaign.PROLOGUE in enabled_campaigns:
+            connect(multiworld, player, names, "Evil Awoken", "For Aiur!",
+                    lambda state: state.has("Beat Evil Awoken", player))
+        else:
+            vanilla_mission_reqs[SC2Campaign.LOTV] = vanilla_mission_reqs[SC2Campaign.LOTV].copy()
+            vanilla_mission_reqs[SC2Campaign.LOTV][SC2Mission.FOR_AIUR.mission_name] = MissionInfo(
+                SC2Mission.FOR_AIUR, [], SC2Mission.FOR_AIUR.area)
+            connect(multiworld, player, names, "Menu", "For Aiur!")
+        connect(multiworld, player, names, "For Aiur!", "The Growing Shadow",
+                lambda state: state.has("Beat For Aiur!", player)),
+        connect(multiworld, player, names, "The Growing Shadow", "The Spear of Adun",
+                lambda state: state.has("Beat The Growing Shadow", player)),
+        connect(multiworld, player, names, "The Spear of Adun", "Sky Shield",
+                lambda state: state.has("Beat The Spear of Adun", player)),
+        connect(multiworld, player, names, "Sky Shield", "Brothers in Arms",
+                lambda state: state.has("Beat Sky Shield", player)),
+        connect(multiworld, player, names, "The Spear of Adun", "Amon's Reach",
+                lambda state: state.has("Beat The Spear of Adun", player)),
+        connect(multiworld, player, names, "Amon's Reach", "Last Stand",
+                lambda state: state.has("Beat Amon's Reach", player)),
+        connect(multiworld, player, names, "Last Stand", "Forbidden Weapon",
+                lambda state: state.has("Beat Last Stand", player)
+                              and state.has("Beat Brothers in Arms", player)),
+        connect(multiworld, player, names, "Forbidden Weapon", "Temple of Unification",
+                lambda state: state.has("Beat Forbidden Weapon", player)),
+        connect(multiworld, player, names, "Temple of Unification", "The Infinite Cycle",
+                lambda state: state.has("Beat Temple of Unification", player)),
+        connect(multiworld, player, names, "The Infinite Cycle", "Harbinger of Oblivion",
+                lambda state: state.has("Beat The Infinite Cycle", player)),
+        connect(multiworld, player, names, "Harbinger of Oblivion", "Unsealing the Past",
+                lambda state: state.has("Beat Harbinger of Oblivion", player)),
+        connect(multiworld, player, names, "Unsealing the Past", "Purification",
+                lambda state: state.has("Beat Unsealing the Past", player)),
+        connect(multiworld, player, names, "Harbinger of Oblivion", "Steps of the Rite",
+                lambda state: state.has("Beat Harbinger of Oblivion", player)),
+        connect(multiworld, player, names, "Steps of the Rite", "Rak'Shir",
+                lambda state: state.has("Beat Steps of the Rite", player)),
+        connect(multiworld, player, names, "Rak'Shir", "Templar's Charge",
+                lambda state: state.has("Beat Rak'Shir", player)
+                              and state.has("Beat Purification", player)),
+        connect(multiworld, player, names, "Templar's Charge", "Templar's Return",
+                lambda state: state.has("Beat Templar's Charge", player)),
+        connect(multiworld, player, names, "Templar's Return", "The Host",
+                lambda state: state.has("Beat Templar's Return", player)),
+        connect(multiworld, player, names, "The Host", "Salvation",
+                lambda state: state.has("Beat The Host", player)),
+
+    if SC2Campaign.EPILOGUE in enabled_campaigns:
+        # TODO: Make this aware about excluded campaigns
+        connect(multiworld, player, names, "Salvation", "Into the Void",
+                lambda state: state.has("Beat Salvation", player)
+                              and state.has("Beat The Reckoning", player)
+                              and state.has("Beat All-in", player)),
+        connect(multiworld, player, names, "Into the Void", "The Essence of Eternity",
+                lambda state: state.has("Beat Into the Void", player)),
+        connect(multiworld, player, names, "The Essence of Eternity", "Amon's Fall",
+                lambda state: state.has("Beat The Essence of Eternity", player)),
+
     goal_location = get_goal_location(final_mission)
     assert goal_location, f"Unable to find a goal location for mission {final_mission}"
     setup_final_location(goal_location, location_cache)

@@ -1346,7 +1346,7 @@ item_table = {
     ItemNames.SLAYER: ItemData(5 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 14, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.SENTRY: ItemData(6 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 15, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.ENERGIZER: ItemData(7 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 16, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
-    ItemNames.HAVOC: ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 17, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
+    ItemNames.HAVOC: ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 17, SC2Race.PROTOSS, classification=ItemClassification.useful, origin={"lotv"}),
     ItemNames.SIGNIFIER: ItemData(9 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 18, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.ASCENDANT: ItemData(10 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 19, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.AVENGER: ItemData(11 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 20, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
@@ -1398,7 +1398,7 @@ item_table = {
     ItemNames.SOA_SHIELD_OVERCHARGE: ItemData(707 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 6, SC2Race.PROTOSS, origin={"lotv"}),
     ItemNames.SOA_DEPLOY_FENIX: ItemData(708 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 7, SC2Race.PROTOSS, origin={"lotv"}),
     ItemNames.SOA_PURIFIER_BEAM: ItemData(709 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 8, SC2Race.PROTOSS, origin={"lotv"}),
-    ItemNames.SOA_TIME_STOP: ItemData(710 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 9, SC2Race.PROTOSS, origin={"lotv"}),
+    ItemNames.SOA_TIME_STOP: ItemData(710 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 9, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.SOA_SOLAR_BOBMARDMENT: ItemData(711 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 10, SC2Race.PROTOSS, origin={"lotv"}),
 
     # Generic Protoss Upgrades
@@ -1408,7 +1408,7 @@ item_table = {
     ItemNames.ORBITAL_ASSIMILATORS: ItemData(803 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 3, SC2Race.PROTOSS, origin={"lotv"}),
     ItemNames.WARP_HARMONIZATION: ItemData(804 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 4, SC2Race.PROTOSS, origin={"lotv"}),
     ItemNames.GUARDIAN_SHELL: ItemData(805 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 5, SC2Race.PROTOSS, origin={"lotv"}),
-    ItemNames.RECONSTRUCTION_BEAM: ItemData(806 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 6, SC2Race.PROTOSS, origin={"lotv"}),
+    ItemNames.RECONSTRUCTION_BEAM: ItemData(806 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 6, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.OVERWATCH: ItemData(807 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 7, SC2Race.PROTOSS, origin={"ext"}),
     ItemNames.SUPERIOR_WARP_GATES: ItemData(808 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 8, SC2Race.PROTOSS, origin={"ext"}),
 }

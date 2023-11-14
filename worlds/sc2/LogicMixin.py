@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
 from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, GameDifficulty, \
-    GrantStoryTech, TakeOverAIAllies
+    GrantStoryTech, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence
 from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings
 from .MissionTables import SC2Race
 from . import ItemNames
@@ -463,7 +463,7 @@ class SC2Logic(LogicMixin):
         return self._sc2lotv_has_competent_anti_air(multiworld, player) \
             or self.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER, ItemNames.SCOUT,
                              ItemNames.DARK_ARCHON, ItemNames.WRATHWALKER, ItemNames.MOTHERSHIP}, player) \
-            or self._sc2_advanced_tactics(multiworld, player) and self._has_any(
+            or self._sc2_advanced_tactics(multiworld, player) and self.has_any(
                 {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT, ItemNames.DARK_TEMPLAR,
                  ItemNames.SENTRY, ItemNames.ENERGIZER}, player)
 
@@ -471,12 +471,17 @@ class SC2Logic(LogicMixin):
         return self._sc2lotv_has_competent_anti_air(multiworld, player) \
             or self.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, player)
 
+    def _sc2lotv_has_anti_light_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_competent_anti_air(multiworld, player) \
+            or self.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER}, player)
+
     def _sc2lotv_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any(
             {ItemNames.STALKER, ItemNames.SLAYER, ItemNames.INSTIGATOR, ItemNames.DRAGOON, ItemNames.ADEPT,
              ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.TEMPEST}, player) \
             or (self.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER}, player)
-                and self.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, player))
+                and self.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, player)) \
+            or self._sc2_advanced_tactics(multiworld, player) and self.has(ItemNames.DARK_ARCHON, player)
 
     def _sc2lotv_can_attack_behind_chasm(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any(
@@ -485,3 +490,183 @@ class SC2Logic(LogicMixin):
             or self.has(ItemNames.WARP_PRISM, player) and self._sc2lotv_has_common_unit(multiworld, player) \
             or (self._sc2_advanced_tactics(multiworld, player)
                 and self.has_any({ItemNames.ORACLE, ItemNames.ARBITER}, player))
+
+    def _sc2lotv_has_fleet(self, multiworld: MultiWorld, player: int) -> bool:
+        return self.has_any({ItemNames.CARRIER, ItemNames.TEMPEST, ItemNames.VOID_RAY, ItemNames.DESTROYER}, player)
+
+    def _sc2lotv_has_templar_return_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        return get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true \
+            or (
+                self.has_any({ItemNames.IMMORTAL, ItemNames.ANNIHILATOR}, player)
+                and self.has_any({ItemNames.COLOSSUS, ItemNames.VANGUARD, ItemNames.REAVER, ItemNames.DARK_TEMPLAR}, player)
+                and self.has_any({ItemNames.SENTRY, ItemNames.HIGH_TEMPLAR}, player)
+            )
+
+    def _sc2lotv_has_brothers_in_arms_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        return (
+                self._sc2lotv_has_common_unit(multiworld, player)
+                and self._sc2lotv_has_anti_armor_anti_air(multiworld, player)
+                and self._sc2lotv_has_hybrid_counter(multiworld, player)
+        ) or (
+                get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true
+                and (
+                        self._sc2wol_has_common_unit(multiworld, player)
+                        or self._sc2lotv_has_common_unit(multiworld, player)
+                )
+                and (
+                        self._sc2wol_has_competent_anti_air(multiworld, player)
+                        or self._sc2lotv_has_anti_armor_anti_air(multiworld, player)
+                )
+                and (
+                        self._sc2lotv_has_hybrid_counter(multiworld, player)
+                        or self.has_any({ItemNames.BATTLECRUISER, ItemNames.LIBERATOR, ItemNames.SIEGE_TANK}, player)
+                        or self.has_all({ItemNames.SPECTRE, ItemNames.SPECTRE_PSIONIC_LASH}, player)
+                        or (self.has(ItemNames.IMMORTAL, player)
+                            and self.has_any({ItemNames.MARINE, ItemNames.MARAUDER}, player)
+                            and self._sc2wol_has_bio_heal(multiworld, player))
+                )
+        )
+
+    def _sc2lotv_has_hybrid_counter(self, multiworld: MultiWorld, player: int) -> bool:
+        """
+        Ground Hybrids
+        """
+        return self.has_any(
+            {ItemNames.ANNIHILATOR, ItemNames.ASCENDANT, ItemNames.TEMPEST, ItemNames.CARRIER, ItemNames.VOID_RAY,
+             ItemNames.WRATHWALKER, ItemNames.VANGUARD}, player) \
+            or (self.has(ItemNames.IMMORTAL, player) or self._sc2_advanced_tactics(multiworld, player)) and self.has_any(
+                {ItemNames.STALKER, ItemNames.DRAGOON, ItemNames.ADEPT, ItemNames.INSTIGATOR, ItemNames.SLAYER}, player)
+
+    def _sc2lotv_the_infinite_cycle_requirements(self, multiworld: MultiWorld, player: int) -> bool:
+        return (get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true) \
+            or (get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available) \
+            or (
+                self._sc2hots_has_two_kerrigan_actives(multiworld, player)
+                and self._sc2hots_has_basic_kerrigan(multiworld, player)
+            )
+
+    def _sc2lotv_has_basic_splash(self, multiworld: MultiWorld, player: int) -> bool:
+        return self.has_any(
+            {ItemNames.ZEALOT, ItemNames.COLOSSUS, ItemNames.VANGUARD, ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER,
+             ItemNames.DARK_TEMPLAR, ItemNames.REAVER, ItemNames.ASCENDANT}, player)
+
+    def _sc2lotv_has_static_defense(self, multiworld: MultiWorld, player: int) -> bool:
+        return self.has_any({ItemNames.PHOTON_CANNON, ItemNames.KHAYDARIN_MONOLITH}, player)
+
+    def _sc2lotv_last_stand_requirements(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_common_unit(multiworld, player) \
+            and self._sc2lotv_has_competent_anti_air(multiworld, player) \
+            and self._sc2lotv_has_static_defense(multiworld, player) \
+            and (
+                self._sc2_advanced_tactics(multiworld, player)
+                or self._sc2lotv_has_basic_splash(multiworld, player)
+            )
+
+    def _sc2lotv_harbinger_of_oblivion_requirement(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_anti_armor_anti_air(multiworld, player) \
+            and (get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true
+                 or (
+                         self._sc2lotv_has_common_unit(multiworld, player)
+                         and self._sc2lotv_has_hybrid_counter(multiworld, player)
+                 )
+                 )
+
+    def _sc2lotv_has_competent_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_common_unit(multiworld, player) \
+            and self._sc2lotv_has_competent_anti_air(multiworld, player) \
+            and self._sc2lotv_has_hybrid_counter(multiworld, player) \
+            and self._sc2lotv_has_basic_splash(multiworld, player)
+
+    def _sc2lotv_steps_of_the_rite_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_competent_comp(multiworld, player) \
+            or (
+                    self._sc2lotv_has_common_unit(multiworld, player)
+                    and self._sc2lotv_has_competent_anti_air(multiworld, player)
+                    and self._sc2lotv_has_static_defense(multiworld, player)
+            )
+
+    def _sc2lotv_has_heal(self, multiworld: MultiWorld, player: int) -> bool:
+        return self.has_any({ItemNames.CARRIER, ItemNames.SENTRY, ItemNames.SHIELD_BATTERY, ItemNames.RECONSTRUCTION_BEAM}, player)
+
+    def _sc2lotv_has_templar_charge_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_heal(multiworld, player) \
+            and self._sc2lotv_has_anti_armor_anti_air(multiworld, player) \
+            and (
+                    self._sc2lotv_has_fleet(multiworld, player)
+                    or (self._sc2_advanced_tactics(multiworld, player)
+                        and self._sc2lotv_has_competent_comp(multiworld, player)
+                        )
+            )
+
+    def _sc2lotv_has_the_host_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        return (self._sc2lotv_has_fleet(multiworld, player)
+                and self._sc2lotv_has_static_defense(multiworld, player)
+                ) or (
+                self._sc2lotv_has_competent_comp(multiworld, player)
+                and self.has(ItemNames.SOA_TIME_STOP, player)
+        )
+
+    def _sc2lotv_final_mission_requirements(self, multiworld: MultiWorld, player: int) -> bool:
+        return [
+            self._sc2lotv_has_competent_comp(multiworld, player),
+            self._sc2lotv_has_fleet(multiworld, player),
+            self._sc2lotv_has_static_defense(multiworld, player)
+        ].count(True) >= 2
+
+    def _sc2lotv_into_the_void_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2lotv_has_competent_comp(multiworld, player) \
+            or (
+                    get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true
+                    and (
+                        self.has(ItemNames.BATTLECRUISER, player)
+                    )
+                    or (self.has(ItemNames.ULTRALISK, player)
+                        and self._sc2lotv_has_competent_anti_air(multiworld, player))
+            )
+
+    def _sc2wol_essence_of_eternity_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        defense_score = self._sc2wol_defense_rating(multiworld, player, False, True)
+        if get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true \
+                and self._sc2lotv_has_static_defense(multiworld, player):
+            defense_score += 2
+        return defense_score >= 10 \
+            and (
+                    self._sc2wol_has_competent_anti_air(multiworld, player)
+                    or get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true
+                    and self._sc2lotv_has_competent_anti_air(multiworld, player)
+            ) \
+            and (
+                    self.has(ItemNames.BATTLECRUISER, player)
+                    or (self.has(ItemNames.BANSHEE, player) and self.has_any({ItemNames.VIKING, ItemNames.VALKYRIE},
+                                                                             player))
+                    or get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true
+                    and self._sc2lotv_has_fleet(multiworld, player)
+            ) \
+            and self.has_any({ItemNames.SIEGE_TANK, ItemNames.LIBERATOR}, player)
+
+    def _sc2hots_amon_s_fall_comp(self, multiworld: MultiWorld, player: int) -> bool:
+        if get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true:
+            return (
+                    (
+                        self.has_any({ItemNames.BATTLECRUISER, ItemNames.CARRIER}, player)
+                    )
+                    or (self.has(ItemNames.ULTRALISK, player)
+                        and self._sc2lotv_has_competent_anti_air(multiworld, player)
+                        and (
+                                self.has_any({ItemNames.LIBERATOR, ItemNames.BANSHEE, ItemNames.VALKYRIE, ItemNames.VIKING}, player)
+                                or self.has_all({ItemNames.WRAITH, ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY}, player)
+                                or self._sc2lotv_has_fleet(multiworld, player)
+                        )
+                        and (self._sc2wol_has_sustainable_mech_heal(multiworld, player)
+                             or (get_option_value(multiworld, player,
+                                                  "spear_of_adun_autonomously_cast_ability_presence") ==
+                                 SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere
+                                 and self.has(ItemNames.RECONSTRUCTION_BEAM, player))
+                             )
+                        )
+            ) \
+                and self._sc2wol_has_competent_anti_air(multiworld, player) \
+                and self._sc2lotv_has_competent_comp(multiworld, player) \
+                and self._sc2hots_has_competent_comp(multiworld, player)
+        else:
+            self.has(ItemNames.MUTALISK, player) and self._sc2hots_has_competent_comp(multiworld, player)

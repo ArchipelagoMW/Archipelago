@@ -83,8 +83,8 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 49
-    default = 49
+    range_end = 74
+    default = 74
 
 
 class GridTwoStartPositions(Toggle):
@@ -161,16 +161,23 @@ class EnableHotsMissions(DefaultOnToggle):
 
 class EnableLotVPrologueMissions(DefaultOnToggle):
     """
-    Enables missions from Heart of the Swarm campaign.
+    Enables missions from Prologue campaign.
     """
     display_name = "Enable Prologue (Legacy of the Void) missions"
 
 
 class EnableLotVMissions(DefaultOnToggle):
     """
-    Enables missions from Heart of the Swarm campaign.
+    Enables missions from Legacy of the Void campaign.
     """
     display_name = "Enable Legacy of the Void (main campaign) missions"
+
+
+class EnableEpilogueMissions(DefaultOnToggle):
+    """
+    Enables missions from Epilogue campaign.
+    """
+    display_name = "Enable Epilogue missions"
 
 
 class ShuffleCampaigns(DefaultOnToggle):
@@ -637,6 +644,7 @@ sc2_options: Dict[str, Option] = {
     "enable_hots_missions": EnableHotsMissions,
     "enable_lotv_prologue_missions": EnableLotVPrologueMissions,
     "enable_lotv_missions": EnableLotVMissions,
+    "enable_epilogue_missions": EnableEpilogueMissions,
     "shuffle_campaigns": ShuffleCampaigns,
     "shuffle_no_build": ShuffleNoBuild,
     "starter_unit": StarterUnit,
@@ -696,6 +704,8 @@ def get_enabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaig
         enabled_campaigns.add(SC2Campaign.PROLOGUE)
     if get_option_value(multiworld, player, "enable_lotv_missions"):
         enabled_campaigns.add(SC2Campaign.LOTV)
+    if get_option_value(multiworld, player, "enable_epilogue_missions"):
+        enabled_campaigns.add(SC2Campaign.EPILOGUE)
     return enabled_campaigns
 
 

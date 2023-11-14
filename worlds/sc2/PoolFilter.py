@@ -8,7 +8,8 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     campaign_mission_table
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
-    TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence
+    TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
+    ShuffleCampaigns
 from .LogicMixin import SC2Logic
 from . import ItemNames
 
@@ -121,6 +122,11 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     # Prophecy needs to be adjusted on tiny grid
     if enabled_campaigns == {SC2Campaign.PROPHECY} and mission_order_type == MissionOrder.option_tiny_grid:
         move_mission(SC2Mission.A_SINISTER_TURN, MissionPools.MEDIUM, MissionPools.EASY)
+    # Prologue's only valid starter is the goal mission
+    if enabled_campaigns == {SC2Campaign.PROLOGUE} \
+            or mission_order_type in campaign_depending_orders \
+            and get_option_value(multiworld, player, "shuffle_campaigns") == ShuffleCampaigns.option_false:
+        move_mission(SC2Mission.DARK_WHISPERS, MissionPools.EASY, MissionPools.STARTER)
     # HotS
     kerriganless = get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available
     if adv_tactics:
@@ -135,13 +141,19 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     if grant_story_tech:
         # Additional starter mission if player is granted story tech
         move_mission(SC2Mission.ENEMY_WITHIN, MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.TEMPLAR_S_RETURN, MissionPools.EASY, MissionPools.STARTER)
     if grant_story_tech or kerriganless:
         # The player has, all the stuff he needs, provided under these settings
         move_mission(SC2Mission.SUPREME, MissionPools.MEDIUM, MissionPools.STARTER)
+        move_mission(SC2Mission.THE_INFINITE_CYCLE, MissionPools.MEDIUM, MissionPools.STARTER)
+    if get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true:
+        move_mission(SC2Mission.HARBINGER_OF_OBLIVION, MissionPools.MEDIUM, MissionPools.STARTER)
     if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
         # Conditionally moving Easy missions to Starter
         move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.DOMINATION, MissionPools.EASY, MissionPools.STARTER)
+    if len(mission_pools[MissionPools.STARTER]) < 2:
+        move_mission(SC2Mission.TEMPLAR_S_RETURN, MissionPools.EASY, MissionPools.STARTER)
 
     remove_final_mission_from_other_pools(mission_pools)
     return mission_pools
@@ -420,6 +432,7 @@ class ValidInventory:
         self._sc2wol_can_respond_to_colony_infestations = lambda world, player: SC2Logic._sc2wol_can_respond_to_colony_infestations(self, world, player)
         self._sc2wol_final_mission_requirements = lambda world, player: SC2Logic._sc2wol_final_mission_requirements(self, world, player)
         self._sc2wol_cleared_missions = lambda world, player: SC2Logic._sc2wol_cleared_missions(self, world, player)
+        self._sc2wol_essence_of_eternity_comp = lambda world, player: SC2Logic._sc2wol_essence_of_eternity_comp(self, world, player)
         # Zerg
         self._sc2hots_has_common_unit = lambda world, player: SC2Logic._sc2hots_has_common_unit(self, world, player)
         self._sc2hots_has_good_antiair = lambda world, player: SC2Logic._sc2hots_has_good_antiair(self, world, player)
@@ -435,12 +448,30 @@ class ValidInventory:
         self._sc2hots_can_pass_vents = lambda world, player: SC2Logic._sc2hots_can_pass_vents(self, world, player)
         self._sc2hots_can_pass_supreme = lambda world, player: SC2Logic._sc2hots_can_pass_supreme(self, world, player)
         self._sc2hots_final_mission_requirements = lambda world, player: SC2Logic._sc2hots_final_mission_requirements(self, world, player)
+        self._sc2hots_amon_s_fall_comp = lambda world, player: SC2Logic._sc2hots_amon_s_fall_comp(self, world, player)
         # Protoss
         self._sc2lotv_has_common_unit = lambda world, player: SC2Logic._sc2lotv_has_common_unit(self, world, player)
         self._sc2lotv_has_competent_anti_air = lambda world, player: SC2Logic._sc2lotv_has_competent_anti_air(self, world, player)
         self._sc2lotv_has_basic_anti_air = lambda world, player: SC2Logic._sc2lotv_has_basic_anti_air(self, world, player)
         self._sc2lotv_has_anti_armor_anti_air = lambda world, player: SC2Logic._sc2lotv_has_anti_armor_anti_air(self, world, player)
+        self._sc2lotv_has_anti_light_anti_air = lambda world, player: SC2Logic._sc2lotv_has_anti_light_anti_air(self, world, player)
         self._sc2lotv_can_attack_behind_chasm = lambda world, player: SC2Logic._sc2lotv_can_attack_behind_chasm(self, world, player)
+        self._sc2lotv_has_fleet = lambda world, player: SC2Logic._sc2lotv_has_fleet(self, world, player)
+        self._sc2lotv_has_templar_return_comp = lambda world, player: SC2Logic._sc2lotv_has_templar_return_comp(self, world, player)
+        self._sc2lotv_has_brothers_in_arms_comp = lambda world, player: SC2Logic._sc2lotv_has_brothers_in_arms_comp(self, world, player)
+        self._sc2lotv_has_hybrid_counter = lambda world, player: SC2Logic._sc2lotv_has_hybrid_counter(self, world, player)
+        self._sc2lotv_the_infinite_cycle_requirements = lambda world, player: SC2Logic._sc2lotv_the_infinite_cycle_requirements(self, world, player)
+        self._sc2lotv_has_basic_splash = lambda world, player: SC2Logic._sc2lotv_has_basic_splash(self, world, player)
+        self._sc2lotv_has_static_defense = lambda world, player: SC2Logic._sc2lotv_has_static_defense(self, world, player)
+        self._sc2lotv_last_stand_requirements = lambda world, player: SC2Logic._sc2lotv_last_stand_requirements(self, world, player)
+        self._sc2lotv_harbinger_of_oblivion_requirement = lambda world, player: SC2Logic._sc2lotv_harbinger_of_oblivion_requirement(self, world, player)
+        self._sc2lotv_has_competent_comp = lambda world, player: SC2Logic._sc2lotv_has_competent_comp(self, world, player)
+        self._sc2lotv_steps_of_the_rite_comp = lambda world, player: SC2Logic._sc2lotv_steps_of_the_rite_comp(self, world, player)
+        self._sc2lotv_has_templar_charge_comp = lambda world, player: SC2Logic._sc2lotv_has_templar_charge_comp(self, world, player)
+        self._sc2lotv_has_the_host_comp = lambda world, player: SC2Logic._sc2lotv_has_the_host_comp(self, world, player)
+        self._sc2lotv_has_heal = lambda world, player: SC2Logic._sc2lotv_has_heal(self, world, player)
+        self._sc2lotv_final_mission_requirements = lambda world, player: SC2Logic._sc2lotv_final_mission_requirements(self, world, player)
+        self._sc2lotv_into_the_void_comp = lambda world, player: SC2Logic._sc2lotv_into_the_void_comp(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
@@ -527,7 +558,7 @@ def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
             # Zerg units need to be unlocked
             races.add(SC2Race.ZERG)
         if kerrigan_presence in kerrigan_unit_available \
-                and not missions.isdisjoint({SC2Mission.BACK_IN_THE_SADDLE, SC2Mission.SUPREME, SC2Mission.CONVICTION}):
+                and not missions.isdisjoint({SC2Mission.BACK_IN_THE_SADDLE, SC2Mission.SUPREME, SC2Mission.CONVICTION, SC2Mission.THE_INFINITE_CYCLE}):
             # You need some Kerrigan abilities (they're granted if Kerriganless or story tech granted)
             races.add(SC2Race.ZERG)
 
