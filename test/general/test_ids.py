@@ -59,27 +59,24 @@ class TestIDs(unittest.TestCase):
         """Test that a game doesn't have item id overlap within its own datapackage"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
-                overlap = ""
+                overlap = False
                 if len(world_type.item_id_to_name) != len(world_type.item_name_to_id):
                     overlap = \
                         set(world_type.item_id_to_name.values()) \
                             .symmetric_difference(set(world_type.item_name_to_id.keys())) or \
-                        set(world_type.item_name_to_id.keys()) \
-                            .symmetric_difference(set(world_type.item_id_to_name.values()))
-                self.assertEqual(len(world_type.item_id_to_name), len(world_type.item_name_to_id), 
-                                 f"Game: {gamename}, Overlap: {overlap}")
+                        set(world_type.item_id_to_name.keys()) \
+                            .symmetric_difference(set(world_type.item_name_to_id.values()))
+                self.assertFalse(overlap)
 
     def test_duplicate_location_ids(self):
         """Test that a game doesn't have location id overlap within its own datapackage"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
-                overlap = ""
+                overlap = False
                 if len(world_type.item_id_to_name) != len(world_type.item_name_to_id):
                     overlap = \
                         set(world_type.location_id_to_name.values()) \
                             .symmetric_difference(set(world_type.location_name_to_id.keys())) or \
-                        set(world_type.location_name_to_id.keys()) \
-                            .symmetric_difference(set(world_type.location_id_to_name.values()))
-
-                self.assertEqual(len(world_type.location_id_to_name), len(world_type.location_name_to_id),
-                                 f"Game: {gamename}, Overlap: {overlap}")
+                        set(world_type.location_id_to_name.keys()) \
+                            .symmetric_difference(set(world_type.location_name_to_id.values()))
+                self.assertFalse(overlap)
