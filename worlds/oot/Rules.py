@@ -93,7 +93,7 @@ class OOTLogic(LogicMixin):
 
     # Store the age before calling this!
     def _oot_update_age_reachable_regions(self, player): 
-        self.stale[player] = False
+        self.states[player].stale = False
         for age in ['child', 'adult']: 
             self.age[player] = age
             rrp = getattr(self, f'{age}_reachable_regions')[player]
