@@ -1389,7 +1389,7 @@ item_table = {
 
     # SoA Calldown powers
     ItemNames.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 0, SC2Race.PROTOSS, origin={"lotv"}),
-    ItemNames.SOA_PROGRESSIVE_PROXY_PYLON: ItemData(701 + SC2LOTV_ITEM_ID_OFFSET, "Progressive Upgrade", 0, SC2Race.PROTOSS, origin={"lotv"}),
+    ItemNames.SOA_PROGRESSIVE_PROXY_PYLON: ItemData(701 + SC2LOTV_ITEM_ID_OFFSET, "Progressive Upgrade", 0, SC2Race.PROTOSS, origin={"lotv"}, quantity=2),
     ItemNames.SOA_PYLON_OVERCHARGE: ItemData(702 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 1, SC2Race.PROTOSS, origin={"ext"}),
     ItemNames.SOA_ORBITAL_STRIKE: ItemData(703 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 2, SC2Race.PROTOSS, origin={"lotv"}),
     ItemNames.SOA_TEMPORAL_FIELD: ItemData(704 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 3, SC2Race.PROTOSS, origin={"lotv"}),
