@@ -669,4 +669,4 @@ class SC2Logic(LogicMixin):
                 and self._sc2lotv_has_competent_comp(multiworld, player) \
                 and self._sc2hots_has_competent_comp(multiworld, player)
         else:
-            self.has(ItemNames.MUTALISK, player) and self._sc2hots_has_competent_comp(multiworld, player)
+            return self.has(ItemNames.MUTALISK, player) and self._sc2hots_has_competent_comp(multiworld, player)
