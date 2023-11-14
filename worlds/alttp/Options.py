@@ -215,7 +215,7 @@ class Enemies(Choice):
 
 class Progressive(Choice):
     """How item types that have multiple tiers (armor, bows, gloves, shields, and swords) should be rewarded. 
-    This setting will be overwritten by any of the individual progressive items that are toggled ON."""
+    If an individual item group is toggled on, it will override whatever this setting may be."""
     display_name = "Progressive Items"
     option_off = 0
     option_grouped_random = 1
