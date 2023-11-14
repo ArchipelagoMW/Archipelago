@@ -2,7 +2,7 @@ from typing import Dict, List, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.generic.Rules import set_rule
 from . import Exits, Items, Locations, Options, Rules
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 
 
 class Hylics2Web(WebWorld):
@@ -193,7 +193,7 @@ class Hylics2World(World):
                 if j == i:
                     for k in exits:
                         # create entrance and connect it to parent and destination regions
-                        ent = Entrance(self.player, k, reg)
+                        ent = Entrance(self.player, f"{reg.name} {k}", reg)
                         reg.exits.append(ent)
                         if k == "New Game" and self.multiworld.random_start[self.player]:
                             if self.start_location == "Waynehouse":
