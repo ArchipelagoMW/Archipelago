@@ -58,7 +58,7 @@ class FishingLogic(CachedLogic):
         if fish.difficulty == -1:
             difficulty_rule = self.skill.can_crab_pot()
         else:
-            difficulty_rule = self.skill.can_fish([], 120 if fish.legendary else fish.difficulty)
+            difficulty_rule = self.skill.can_fish(difficulty=(120 if fish.legendary else fish.difficulty))
         if fish.name == SVEFish.kittyfish:
             item_rule = self.received("Kittyfish Spell")
         else:

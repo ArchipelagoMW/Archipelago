@@ -1,0 +1,93 @@
+﻿name: Seto Undertale
+
+description: Undertale Genocide
+
+game: Undertale
+requires:
+  version: 0.4.2
+
+Undertale:
+  progression_balancing:
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 1
+    normal: 0
+    extreme: 0
+
+  accessibility:
+    locations: 1
+    items: 0
+    minimal: 0
+
+  local_items:
+    []
+
+  non_local_items:
+    []
+
+  start_inventory:
+    {Butterscotch Pie: 8}
+
+  start_hints:
+    []
+
+  start_location_hints:
+    []
+
+  exclude_locations:
+    []
+
+  priority_locations:
+    []
+
+  item_links:
+    []
+
+  route_required:
+    neutral: 0
+    pacifist: 0
+    genocide: 1
+    all_routes: 0
+
+  key_hunt:
+    false: 1
+    true: 0
+
+  key_pieces:
+    5: 1
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  rando_love:
+    false: 50
+    true: 0
+
+  rando_stats:
+    false: 0
+    true: 1
+
+  temy_include:
+    false: 0
+    true: 1
+
+  no_equips:
+    false: 1
+    true: 0
+
+  only_flakes:
+    false: 1
+    true: 0
+
+  prog_armor:
+    false: 1
+    true: 0
+
+  prog_weapons:
+    false: 0
+    true: 1
+
+  rando_item_button:
+    false: 1
+    true: 0

@@ -180,7 +180,7 @@ class StardewValleyWorld(World):
                 self.create_event_location(month_end, True_(), Event.month_end)
                 continue
 
-            self.create_event_location(month_end, self.logic.received(Event.month_end, i).simplify(), Event.month_end)
+            self.create_event_location(month_end, self.logic.received(Event.month_end, i), Event.month_end)
 
     def setup_construction_events(self):
         can_construct_buildings = LocationData(None, "Carpenter Shop", Event.can_construct_buildings)
@@ -189,11 +189,11 @@ class StardewValleyWorld(World):
     def setup_victory(self):
         if self.options.goal == Goal.option_community_center:
             self.create_event_location(location_table[GoalName.community_center],
-                                       self.logic.bundle.can_complete_community_center().simplify(),
+                                       self.logic.bundle.can_complete_community_center(),
                                        Event.victory)
         elif self.options.goal == Goal.option_grandpa_evaluation:
             self.create_event_location(location_table[GoalName.grandpa_evaluation],
-                                       self.logic.can_finish_grandpa_evaluation().simplify(),
+                                       self.logic.can_finish_grandpa_evaluation(),
                                        Event.victory)
         elif self.options.goal == Goal.option_bottom_of_the_mines:
             self.create_event_location(location_table[GoalName.bottom_of_the_mines],
@@ -201,39 +201,39 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_cryptic_note:
             self.create_event_location(location_table[GoalName.cryptic_note],
-                                       self.logic.quest.can_complete_quest("Cryptic Note").simplify(),
+                                       self.logic.quest.can_complete_quest("Cryptic Note"),
                                        Event.victory)
         elif self.options.goal == Goal.option_master_angler:
             self.create_event_location(location_table[GoalName.master_angler],
-                                       self.logic.can_catch_every_fish().simplify(),
+                                       self.logic.can_catch_every_fish(),
                                        Event.victory)
         elif self.options.goal == Goal.option_complete_collection:
             self.create_event_location(location_table[GoalName.complete_museum],
-                                       self.logic.museum.can_complete_museum().simplify(),
+                                       self.logic.museum.can_complete_museum(),
                                        Event.victory)
         elif self.options.goal == Goal.option_full_house:
             self.create_event_location(location_table[GoalName.full_house],
-                                       (self.logic.relationship.has_children(2) & self.logic.relationship.can_reproduce()).simplify(),
+                                       (self.logic.relationship.has_children(2) & self.logic.relationship.can_reproduce()),
                                        Event.victory)
         elif self.options.goal == Goal.option_greatest_walnut_hunter:
             self.create_event_location(location_table[GoalName.greatest_walnut_hunter],
-                                       self.logic.has_walnut(130).simplify(),
+                                       self.logic.has_walnut(130),
                                        Event.victory)
         elif self.options.goal == options.Goal.option_protector_of_the_valley:
             self.create_event_location(location_table[GoalName.protector_of_the_valley],
-                                       self.logic.can_complete_all_monster_slaying_goals().simplify(),
+                                       self.logic.can_complete_all_monster_slaying_goals(),
                                        Event.victory)
         elif self.options.goal == options.Goal.option_full_shipment:
             self.create_event_location(location_table[GoalName.full_shipment],
-                                       self.logic.shipping.can_ship_everything().simplify(),
+                                       self.logic.shipping.can_ship_everything(),
                                        Event.victory)
         elif self.options.goal == options.Goal.option_gourmet_chef:
             self.create_event_location(location_table[GoalName.gourmet_chef],
-                                       self.logic.cooking.can_cook_everything().simplify(),
+                                       self.logic.cooking.can_cook_everything(),
                                        Event.victory)
         elif self.options.goal == options.Goal.option_perfection:
             self.create_event_location(location_table[GoalName.perfection],
-                                       self.logic.has_everything(self.all_progression_items).simplify(),
+                                       self.logic.has_everything(self.all_progression_items),
                                        Event.victory)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Event.victory, self.player)

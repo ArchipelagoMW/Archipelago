@@ -1,0 +1,155 @@
+description: Stardew Mage Knight
+game: Stardew Valley
+name: sheen_sdv
+Stardew Valley:
+  progression_balancing: 50
+  accessibility: items
+  goal: greatest_walnut_hunter
+    # community_center: Complete the community center
+    # grandpa_evaluation: Get four candles on grandpa's shrine. You do not have to wait for Year3 to get evaluated
+    # bottom_of_the_mines: Reach the bottom of the local mineshaft
+    # cryptic_note: Complete the "Cryptic Note" quest, which is to reach level 100 in the Skull Cavern
+    # master_angler: Catch every fish in the game
+    # complete_collection: Complete the museum's collection by donating all 95 minerals and artifacts
+    # full_house: Get married and have two children
+    # greatest_walnut_hunter: Find all 130 golden walnuts
+    # perfection: Attain perfection in your world, based on how the vanilla game defines it, using the perfection tracker. This goal is extremely long
+  starting_money: unlimited
+    # 0-50000: How much money to start with. The vanilla game starts you with 500, but having more can really streamline Archipelago
+    # vanilla: 500
+    # extra: 2000
+    # rich: 5000
+    # very rich: 20000
+    # filthy rich: 50000
+    # unlimited: Play with unlimited money
+  profit_margin: 200
+    # 25-400: Multiplier over all earned money in-game. When below 100, some crops are no longer profitable to grow.
+    # quarter: 25
+    # half: 50
+    # normal: 100
+    # double: 200
+    # triple: 300
+    # quadruple: 400
+  bundle_randomization: shuffled
+    # vanilla: The bundles in the Community Center will be the ones from the vanilla game (not remixed)
+    # thematic: The bundles are randomized while following their original theme. Summer Crops Bundle will contain random summer crops, etc
+    # shuffled: The bundles are randomized with no regard for their individual themes or even rooms. Any bundle can contain any bundle item
+  bundle_price: very_cheap
+    # very_cheap: Every bundle will require two fewer items (capped at 1 item) from their list of accepted items. For Vault bundles, it is a 2/5th discount on the amount
+    # cheap: Every bundle will require one fewer item (capped at 1 item) from their list of accepted items. For Vault bundles, it is a 1/5th discount on the amount
+    # normal: Every bundle will require the vanilla number of items. For Vault bundles, it is the vanilla amount
+    # expensive: Every bundle will require one extra item (capped at the number of possible items) from their list of accepted items. For Vault bundles, it is a 1/5th increase on the amount
+  entrance_randomization: buildings # This includes entrances from supported mods
+    # disabled: Entrances are normal
+    # pelican_town: Entrances in the main Pelican Town map are shuffled with each other
+    # non_progression: Entrances to all of the areas that are always accessible without needing an archipelago unlock, will be shuffled with each other
+    # buildings: Every area that is "inside" can be shuffled with one another, included areas that are not immediately accessible
+    # chaos: Same as "buildings", but entrances are re-shuffled EVERY SINGLE DAY.
+  season_randomization: randomized # In archipelago, at the end of every in game season, you can choose which season will be next from the ones you have unlocked
+    # disabled: Seasons are all immediately available and you will start in spring
+    # randomized: You will start with a random season, and will earn the other 3 in a random order as Archipelago items
+    # randomized_not_winter: Same as randomized, but you are garanteed not to start in Winter
+    # progressive: You will start in spring, and unlock season as Archipelago items, but in the vanilla order, as "Progressive Season" items.
+  cropsanity: disabled # Pierre and Jojamart have been reworked for better lore compatibility and game balance
+    # disabled: All seeds and saplings can be purchased normally
+    # shuffled: You need to unlock the ability to purchase individual seed and sapling types as archipelago items. Every unlock comes with a free sample of 1. Growing and harvesting the resulting crop is a check.
+  backpack_progression: early_progressive # This includes backpacks from supported mods
+    # vanilla: You buy your backpack upgrades at Pierre's
+    # progressive: Backpack uprades are in the pool, you can buy two checks at Pierre's
+    # early_progressive: Backpack uprades are in the pool, but one of them is place early in the multiworld
+  tool_progression: progressive
+    # vanilla: You buy your tool upgrades at Clint's
+    # progressive: Tool upgrades are in the pool, you can go ask Clint for checks using money and metal bars
+  elevator_progression: progressive # This includes elevators from supported mods
+    # vanilla: The mineshaft elevator is unlocked normally, as you progress through the mineshaft levels
+    # progressive: The mineshaft elevator is unlocked by Archipelago progressive items, and every 5 level in the mineshaft is a check.
+    # progressive_from_previous_floor: Same as progressive, but you need to reach that level by using a ladder from the previous floor. You cannot unlock an elevator check using the elevator
+  skill_progression: progressive # This includes skills from supported mods
+    # vanilla: The player skills will gain experience locally, normally
+    # progressive: The player skills are upgraded through received progressive levels, and earned experience sends checks accordingly
+  building_progression: progressive # This includes buildings from supported mods
+    # vanilla: Carpenter buildings are constructed normally
+    # progressive: Robin sells one-time checks for each buildings, and you receive free buildings as Archipelago items.
+    #       Once received and constructed once, you can pay the vanilla price to construct more iterations of the same building
+    # progressive_early_shipping_bin: Same as progressive, but the shipping bin will be placed early in the multiworld
+  festival_locations: disabled
+  # disabled: There are no checks to be obtained at the festivals
+  # easy: Participating in the festivals will check locations, but they are easy to do and just showing up is usually enough
+  # hard: The festival checks are only granted when the player performs well enough in them, so they need to take them seriously
+  arcade_machine_locations: disabled
+    # disabled: The Arcade Machines are not included.
+    # victories: Both Arcade Machines contain one check, obtainable by winning the default gamemode once, with no modifications
+    # victories_easy: Same as victories, except both arcade machines are made considerably easier through in-game buffs
+    #       Junimo Kart will have 8 Extra lives for every level
+    #       Journey of the Prairie King will start with one of each upgrade, 2 extra lives, and the drop rate of powerups and money is considerable increased
+    # full_shuffling: Both of the Arcade Machines contain many checks, and many buffs (including the ones from victories_easy) will be received as Archipelago Items, making the games easier over time
+  special_order_locations: disabled
+    # disabled: Special orders are not included in the multiworld
+    # board_only: The Special order board and rewards are items, and completing orders for the first time grants a check
+    # board_qi: In addition to the board, the difficult Qi Special Orders from the walnut room are also included
+  help_wanted_locations: 0
+    # 0-56 [MUST BE A MULTIPLE OF 7]: The number of help wanted quests that are archipelago checks. For every 7, 4 are item deliveries, and 1 of each [fishing, gathering, slaying]
+  fishsanity: none
+    # none: None of the caught fish are AP locations
+    # legendaries: Catching legendary fish are AP locations
+    # special: Catching a pre-defined selection of important fish are AP locations
+    # random_selection: A random selection of fish are chosen and need to be caught as AP locations
+    # all: Fishsanity! Every single fish being caught is an AP location.
+    # exclude_legendaries: Every fish except legendary fish
+    # exclude_hard_fish: Every fish except the ones considered difficult
+    # only_easy_fish: Only the easy fish are checks
+  museumsanity: none # On all settings except none, the traveling merchant will assist you in completing your museum
+    # none: Museum donations are not included in the Archipelago shuffling
+    # milestones: Every donation milestone that gives a vanilla reward will instead give a check. Museum rewards are in the item pool
+    # randomized: A random selection of minerals and artifacts are chosen and need to be donated to the museum as AP locations. Museum rewards are in the item pool
+    # all: Museumsanity! Every single mineral and artifact being donated is an AP location.
+  friendsanity: all # This includes friendship hearts from supported mod NPCs
+    # none: Relationships are not included in the Archipelago shuffling
+    # bachelors: Friendship up to 8 hearts with the town bachelors are shuffled
+    # starting_npcs: Friendship up to 10 hearts (8 for bachelors) with the starting NPCs are shuffled. This excludes NPCs that require an event or item to be reached, like Sandy, Krobus, Kent, etc.
+    # all: Friendship up to 10 hearts (8 for bachelors) with every NPC in the game are shuffled.
+    # all_with_marriage: Same as all, but bachelors must each be befriended up to 14 hearts, which includes marrying every single one in succession. Not recommended for new players
+  friendsanity_heart_size: 2 # This setting does not do anything if not friendsanity is "none"
+    # 1-8: How many hearts are granted per heart item, and how many hearts must be earned to send a single check. A higher number reduces heart item clutter in the pool. The last heart is bounded to the relationship maximum.
+  movement_buff_number: 8
+    # 0-12: Number of movement speed buffs in the pool
+  luck_buff_number: 12
+    # 0-12: Number of luck buffs in the pool
+  exclude_ginger_island: 'false'
+    # true/false: Forcefully excludes every item and location that is related to Ginger Island, and removes both the Obelisk and the Boat repair from the item pool.
+    # When activating this setting, you will never need to, nor be able to, go to Ginger Island. This includes island quests, special orders, fish, and Leo's friendsanity hearts.
+  trap_items: hard # On any setting with traps, the number of traps is semi-random, with a bias towards having one of each, then rolling for more randomly side by side with filler resource packs. 
+    # no_traps: There are no trap items in the pool. Filler items are only resource packs.
+    # easy: Trap items are intended to be funny and not very punishing
+    # medium: Trap items are minor annoyances that a competent player will deal with reasonably easily
+    # hard: Trap items are major annoyances that can be fairly punishing
+    # hell: trap items are extremely punishing and difficult and will severely impact gameplay
+    # nightmare: Just, don't. Trust me.
+  multiple_day_sleep_enabled: 'true'
+    # true/false: New feature allowing you to sleep several days at once. It is recommended to turn this on to avoid the game taking too long
+    # It allows the player to quickly skip long periods of time, to reach specific seasons or events. All decay mechanics (friends, animals, fences) will apply.
+  multiple_day_sleep_cost: 0
+    # 0-200: The cost of the multisleep feature, in in-game money, per day skipped. The default value of zero is very strong, so this allows you to customize your experience
+  experience_multiplier: 800
+    # 25-400: Multiplier to the experience gained on player skills. 100 is the vanilla experience gain, 200 is double, and so on. 
+  friendship_multiplier: 800
+    # 25-400: Multiplier to the friendship points gained from interactions with NPCs. 100 is vanilla, 200 is double, and so on.
+  debris_multiplier: half
+    # vanilla: The farm will start with, and generate over time, the normal amount of debris. Debris are natural grass, weeds, stones, twigs, and trees that are not grown from a seed
+    # half: Starting and spawned debris are halved
+    # quarter: Starting and spawned debris are reduced to 25% of their normal rate
+    # none: The farm will start fully cleared, and no debris will ever spawn on it. You can still plant grass and trees yourself.
+    # start_clear: The farm is completely cleared at the beginning of the game, but will spawn debris normally afterwards
+  quick_start: 'true'
+    # true/false: Starting a new game will give you several quality of life items as gifts when starting the game.
+  gifting: 'true'
+    # true/false: Allows sending items as gifts to other Stardew players and receiving gifts from other Stardew players
+  mods: ["Magic", "Bigger Backpack"] # Choose any combination of the following list of supported mods. Items and locations are added for custom npcs and skills, if using friendsanity and progressive skills. Bigger mods have some unique checks as well. All mod regions can be randomized with the entrance randomizer
+    # ["DeepWoods", "Tractor Mod", "Bigger Backpack", "Skull Cavern Elevator",
+    #  "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
+    #  "Cooking Skill", "Binning Skill", "Juna - Roommate NPC",
+    #  "Professor Jasper Thomas", "Alec Revisited", "Custom NPC - Yoba", "Custom NPC Eugene",
+    #  "'Prophet' Wellwick", "Mister Ginger (cat npc)", "Shiko - New Custom NPC", "Delores - Custom NPC",
+    #  "Ayeisha - The Postal Worker (Custom NPC)", "Custom NPC - Riley"]
+  start_inventory: {"Dwarvish Translation Guide": 1, "Rusty Key": 1, "Golden Walnut": 30}
+  death_link: 'false'

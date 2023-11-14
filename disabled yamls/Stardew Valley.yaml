@@ -1,0 +1,469 @@
+﻿# Q. What is this file?
+# A. This file contains options which allow you to configure your multiworld experience while allowing
+#    others to play how they want as well.
+#
+# Q. How do I use it?
+# A. The options in this file are weighted. This means the higher number you assign to a value, the
+#    more chances you have for that option to be chosen. For example, an option like this:
+#
+#    map_shuffle:
+#      on: 5
+#      off: 15
+#
+#    Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned
+#    off.
+#
+# Q. I've never seen a file like this before. What characters am I allowed to use?
+# A. This is a .yaml file. You are allowed to use most characters.
+#    To test if your yaml is valid or not, you can use this website:
+#        http://www.yamllint.com/
+#    You can also verify your Archipelago settings are valid at this site:
+#        https://archipelago.gg/check
+
+# Your name in-game. Spaces will be replaced with underscores and there is a 16-character limit.
+#     {player} will be replaced with the player's slot number.
+#     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
+#     {number} will be replaced with the counter value of the name.
+#     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
+name: Player{number}
+
+# Used to describe your yaml. Useful if you have multiple files.
+description: Default Stardew Valley Template
+
+game: Stardew Valley
+requires:
+  version: 0.4.2 # Version of Archipelago required for this yaml to work as expected.
+
+Stardew Valley:
+  progression_balancing:
+    # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    # A lower setting means more getting stuck. A higher setting means less getting stuck.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 99
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # Set rules for reachability of your items/locations.
+    # Locations: ensure everything can be reached and acquired.
+    # Items: ensure all logically relevant items can be acquired.
+    # Minimal: ensure what is needed to reach your goal can be acquired.
+    locations: 0
+    items: 50
+    minimal: 0
+
+  local_items:
+    # Forces these items to be in their native world.
+    []
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    []
+
+  start_inventory:
+    # Start with these items.
+    {}
+
+  start_hints:
+    # Start with these item's locations prefilled into the !hint command.
+    []
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the !hint command
+    []
+
+  exclude_locations:
+    # Prevent these locations from having an important item
+    []
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item
+    []
+
+  goal:
+    # What's your goal with this play-through?
+    # Community Center: The world will be completed once you complete the Community Center.
+    # Grandpa's Evaluation: The world will be completed once 4 candles are lit at Grandpa's Shrine.
+    # Bottom of the Mines: The world will be completed once you reach level 120 in the mineshaft.
+    # Cryptic Note: The world will be completed once you complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern.
+    # Master Angler: The world will be completed once you have caught every fish in the game. Pairs well with Fishsanity.
+    # Complete Collection: The world will be completed once you have completed the museum by donating every possible item. Pairs well with Museumsanity.
+    # Full House: The world will be completed once you get married and have two kids. Pairs well with Friendsanity.
+    # Greatest Walnut Hunter: The world will be completed once you find all 130 Golden Walnuts
+    # Perfection: The world will be completed once you attain Perfection, based on the vanilla definition.
+    community_center: 50
+    grandpa_evaluation: 0
+    bottom_of_the_mines: 0
+    cryptic_note: 0
+    master_angler: 0
+    complete_collection: 0
+    full_house: 0
+    greatest_walnut_hunter: 0
+    perfection: 0
+
+  starting_money:
+    # Amount of gold when arriving at the farm.
+    # Set to -1 or unlimited for infinite money in this playthrough
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is -1
+    # Maximum value is 50000
+    random: 0
+    random-low: 0
+    random-high: 0
+    unlimited: 0 # equivalent to -1
+    vanilla: 0 # equivalent to 500
+    extra: 0 # equivalent to 2000
+    rich: 50 # equivalent to 5000
+    very rich: 0 # equivalent to 20000
+    filthy rich: 0 # equivalent to 50000
+
+  profit_margin:
+    # Multiplier over all gold earned in-game by the player.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 25
+    # Maximum value is 400
+    random: 0
+    random-low: 0
+    random-high: 0
+    quarter: 0 # equivalent to 25
+    half: 0 # equivalent to 50
+    normal: 50 # equivalent to 100
+    double: 0 # equivalent to 200
+    triple: 0 # equivalent to 300
+    quadruple: 0 # equivalent to 400
+
+  bundle_randomization:
+    # What items are needed for the community center bundles?
+    # Vanilla: Standard bundles from the vanilla game
+    # Thematic: Every bundle will require random items compatible with their original theme
+    # Shuffled: Every bundle will require random items and follow no particular structure
+    vanilla: 0
+    thematic: 50
+    shuffled: 0
+
+  bundle_price:
+    # How many items are needed for the community center bundles?
+    # Very Cheap: Every bundle will require 2 items fewer than usual
+    # Cheap: Every bundle will require 1 item fewer than usual
+    # Normal: Every bundle will require the vanilla number of items
+    # Expensive: Every bundle will require 1 extra item when applicable
+    very_cheap: 0
+    cheap: 0
+    normal: 50
+    expensive: 0
+
+  entrance_randomization:
+    # Should area entrances be randomized?
+    # Disabled: No entrance randomization is done
+    # Pelican Town: Only buildings in the main town area are randomized among each other
+    # Non Progression: Only buildings that are always available are randomized with each other
+    # Buildings: All Entrances that Allow you to enter a building using a door are randomized with each other
+    # Chaos: Same as above, but the entrances get reshuffled every single day!
+    disabled: 0
+    pelican_town: 0
+    non_progression: 0
+    buildings: 50
+    chaos: 0
+
+  season_randomization:
+    # Should seasons be randomized?
+    # All settings allow you to choose which season you want to play next (from those unlocked) at the end of a season.
+    # Disabled: You will start in Spring with all seasons unlocked.
+    # Randomized: The seasons will be unlocked randomly as Archipelago items.
+    # Randomized Not Winter: The seasons are randomized, but you're guaranteed not to start with winter.
+    # Progressive: You will start in Spring and unlock the seasons in their original order.
+    disabled: 0
+    randomized: 50
+    randomized_not_winter: 0
+    progressive: 0
+
+  cropsanity:
+    # Formerly named "Seed Shuffle"
+    # Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
+    # Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
+    # Shuffled: Seeds are unlocked as archipelago item, for each seed there is a location check for growing and harvesting that crop
+    disabled: 50
+    shuffled: 50
+
+  backpack_progression:
+    # How is the backpack progression handled?
+    # Vanilla: You can buy them at Pierre's General Store.
+    # Progressive: You will randomly find Progressive Backpack upgrades.
+    # Early Progressive: You can expect your first Backpack in sphere 1.
+    vanilla: 0
+    progressive: 0
+    early_progressive: 50
+
+  tool_progression:
+    # How is the tool progression handled?
+    # Vanilla: Clint will upgrade your tools with ore.
+    # Progressive: You will randomly find Progressive Tool upgrades.
+    vanilla: 0
+    progressive: 50
+
+  skill_progression:
+    # How is the skill progression handled?
+    # Vanilla: You will level up and get the normal reward at each level.
+    # Progressive: The xp will be earned internally, locations will be sent when you earn a level. Your real
+    #     levels will be scattered around the multiworld.
+    vanilla: 0
+    progressive: 50
+
+  building_progression:
+    # How is the building progression handled?
+    # Vanilla: You will buy each building normally.
+    # Progressive: You will receive the buildings and will be able to build the first one of each type for free,
+    #     once it is received. If you want more of the same building, it will cost the vanilla price.
+    # Progressive early shipping bin: You can expect your shipping bin in sphere 1.
+    vanilla: 0
+    progressive: 0
+    progressive_early_shipping_bin: 50
+
+  festival_locations:
+    # Locations for attending and participating in festivals
+    # With Disabled, you do not need to attend festivals
+    # With Easy, there are checks for participating in festivals
+    # With Hard, the festival checks are only granted when the player performs well in the festival
+    disabled: 50
+    easy: 0
+    hard: 0
+
+  elevator_progression:
+    # How is Elevator progression handled?
+    # Vanilla: You will unlock new elevator floors for yourself.
+    # Progressive: You will randomly find Progressive Mine Elevators to go deeper. Locations are sent for reaching
+    #     every elevator level.
+    # Progressive from previous floor: Same as progressive, but you must reach elevator floors on your own,
+    #     you cannot use the elevator to check elevator locations
+    vanilla: 0
+    progressive: 0
+    progressive_from_previous_floor: 50
+
+  arcade_machine_locations:
+    # How are the Arcade Machines handled?
+    # Disabled: The arcade machines are not included in the Archipelago shuffling.
+    # Victories: Each Arcade Machine will contain one check on victory
+    # Victories Easy: The arcade machines are both made considerably easier to be more accessible for the average
+    #     player.
+    # Full Shuffling: The arcade machines will contain multiple checks each, and different buffs that make the game
+    #     easier are in the item pool. Junimo Kart has one check at the end of each level.
+    #     Journey of the Prairie King has one check after each boss, plus one check for each vendor equipment.
+    disabled: 0
+    victories: 0
+    victories_easy: 0
+    full_shuffling: 50
+
+  special_order_locations:
+    # How are the Special Orders handled?
+    # Disabled: The special orders are not included in the Archipelago shuffling.
+    # Board Only: The Special Orders on the board in town are location checks
+    # Board and Qi: The Special Orders from Qi's walnut room are checks, as well as the board in town
+    disabled: 0
+    board_only: 00
+    board_qi: 50
+
+  help_wanted_locations:
+    # How many "Help Wanted" quests need to be completed as Archipelago Locations
+    # Out of every 7 quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
+    # Choosing a multiple of 7 is recommended.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 56
+    random: 0
+    random-low: 0
+    random-high: 0
+    none: 0 # equivalent to 0
+    minimum: 0 # equivalent to 7
+    normal: 0 # equivalent to 14
+    lots: 0 # equivalent to 28
+    maximum: 50 # equivalent to 56
+
+  fishsanity:
+    # Locations for catching fish?
+    # None: There are no locations for catching fish
+    # Legendaries: Each of the 5 legendary fish are checks
+    # Special: A curated selection of strong fish are checks
+    # Randomized: A random selection of fish are checks
+    # All: Every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal
+    # Exclude Legendaries: Every fish except legendaries
+    # Exclude Hard Fish: Every fish under difficulty 80
+    # Only Easy Fish: Every fish under difficulty 50
+    none: 0
+    legendaries: 0
+    special: 0
+    randomized: 0
+    all: 50
+    exclude_legendaries: 0
+    exclude_hard_fish: 0
+    only_easy_fish: 0
+
+  museumsanity:
+    # Locations for museum donations?
+    # None: There are no locations for donating artifacts and minerals to the museum
+    # Milestones: The donation milestones from the vanilla game are checks
+    # Randomized: A random selection of minerals and artifacts are checks
+    # All: Every single donation will be a check
+    none: 0
+    milestones: 0
+    randomized: 0
+    all: 50
+
+  friendsanity:
+    # Locations for friendships?
+    # None: There are no checks for befriending villagers
+    # Bachelors: Each heart of a bachelor is a check
+    # Starting NPCs: Each heart for npcs that are immediately available is a check
+    # All: Every heart with every NPC is a check, including Leo, Kent, Sandy, etc
+    # All With Marriage: Marriage candidates must also be dated, married, and befriended up to 14 hearts.
+    none: 0
+    bachelors: 0
+    starting_npcs: 0
+    all: 50
+    all_with_marriage: 0
+
+  friendsanity_heart_size:
+    # If using friendsanity, how many hearts are received per item, and how many hearts must be earned to send a check
+    # A higher value will lead to fewer heart items in the item pool, reducing bloat
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 1
+    # Maximum value is 8
+    2: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  movement_buff_number:
+    # Number of movement speed buffs to the player that exist as items in the pool.
+    # Each movement speed buff is a +25% multiplier that stacks additively
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 12
+    4: 0
+    random: 0
+    random-low: 0
+    random-high: 20
+
+  luck_buff_number:
+    # Number of luck buffs to the player that exist as items in the pool.
+    # Each luck buff is a bonus to daily luck of 0.025
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 12
+    4: 0
+    random: 0
+    random-low: 0
+    random-high: 50
+
+  exclude_ginger_island:
+    # Exclude Ginger Island?
+    # This option will forcefully exclude everything related to Ginger Island from the slot.
+    # If you pick a goal that requires Ginger Island, you cannot exclude it and it will get included anyway
+    false: 50
+    true: 0
+
+  trap_items:
+    # When rolling filler items, including resource packs, the game can also roll trap items.
+    # This setting is for choosing if traps will be in the item pool, and if so, how punishing they will be.
+    no_traps: 0
+    easy: 0
+    medium: 50
+    hard: 0
+    hell: 0
+    nightmare: 0
+
+  multiple_day_sleep_enabled:
+    # Enable the ability to sleep automatically for multiple days straight?
+    false: 0
+    true: 50
+
+  multiple_day_sleep_cost:
+    # How much gold it will cost to use MultiSleep. You will have to pay that amount for each day skipped.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 200
+    random: 0
+    random-low: 0
+    random-high: 0
+    free: 50 # equivalent to 0
+    cheap: 0 # equivalent to 25
+    medium: 0 # equivalent to 50
+    expensive: 0 # equivalent to 100
+
+  experience_multiplier:
+    # How fast you want to earn skill experience. A lower setting mean less experience.
+    # A higher setting means more experience.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 25
+    # Maximum value is 800
+    random: 0
+    random-low: 0
+    random-high: 0
+    half: 0 # equivalent to 50
+    vanilla: 0 # equivalent to 100
+    double: 50 # equivalent to 200
+    triple: 0 # equivalent to 300
+    quadruple: 0 # equivalent to 400
+
+  friendship_multiplier:
+    # How fast you want to earn friendship points with villagers.
+    # A lower setting mean less friendship per action.
+    # A higher setting means more friendship per action.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 25
+    # Maximum value is 800
+    random: 0
+    random-low: 0
+    random-high: 0
+    half: 0 # equivalent to 50
+    vanilla: 0 # equivalent to 100
+    double: 50 # equivalent to 200
+    triple: 0 # equivalent to 300
+    quadruple: 0 # equivalent to 400
+
+  debris_multiplier:
+    # How much debris will spawn on the player's farm?
+    # Vanilla: debris spawns normally
+    # Half: debris will spawn at half the normal rate
+    # Quarter: debris will spawn at one quarter of the normal rate
+    # None: No debris will spawn on the farm, ever
+    # Start Clear: debris will spawn at the normal rate, but the farm will be completely clear when starting the game
+    vanilla: 0
+    half: 50
+    quarter: 0
+    none: 0
+    start_clear: 0
+
+  quick_start:
+    # Do you want the quick start package? You will get a few items to help early game automation,
+    # so you can use the multiple day sleep at its maximum.
+    false: 0
+    true: 50
+
+  gifting:
+    # Do you want to enable gifting items to and from other Stardew Valley worlds?
+    false: 0
+    true: 50
+
+  mods:
+    # List of mods that will be considered for shuffling.
+    []
+
+  death_link:
+    # When you die, everyone dies. Of course the reverse is true too.
+    false: 50
+    true: 0
