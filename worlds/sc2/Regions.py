@@ -235,7 +235,7 @@ def create_vanilla_regions(
         connect(multiworld, player, names, "Salvation", "Into the Void",
                 lambda state: state.has("Beat Salvation", player)
                               and state.has("Beat The Reckoning", player)
-                              and state.has("Beat All-in", player)),
+                              and state.has("Beat All-In", player)),
         connect(multiworld, player, names, "Into the Void", "The Essence of Eternity",
                 lambda state: state.has("Beat Into the Void", player)),
         connect(multiworld, player, names, "The Essence of Eternity", "Amon's Fall",
