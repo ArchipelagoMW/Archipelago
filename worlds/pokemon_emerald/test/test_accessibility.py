@@ -11,6 +11,37 @@ class TestBasic(PokemonEmeraldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_SUPER_POTION")))
 
 
+class TestScorchedSlabPond(PokemonEmeraldTestBase):
+    options = {
+        "enable_ferry": Toggle.option_true,
+        "require_flash": Toggle.option_false
+    }
+
+    def test_with_neither(self) -> None:
+        self.collect_by_name(["S.S. Ticket", "Letter", "Stone Badge", "HM01 Cut"])
+        self.assertTrue(self.can_reach_region("REGION_ROUTE120/NORTH"))
+        self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_ROUTE_120_NEST_BALL")))
+        self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_SCORCHED_SLAB_TM11")))
+
+    def test_with_surf(self) -> None:
+        self.collect_by_name(["S.S. Ticket", "Letter", "Stone Badge", "HM01 Cut", "HM03 Surf", "Balance Badge"])
+        self.assertTrue(self.can_reach_region("REGION_ROUTE120/NORTH"))
+        self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_ROUTE_120_NEST_BALL")))
+        self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_SCORCHED_SLAB_TM11")))
+
+    def test_with_scope(self) -> None:
+        self.collect_by_name(["S.S. Ticket", "Letter", "Stone Badge", "HM01 Cut", "Devon Scope"])
+        self.assertTrue(self.can_reach_region("REGION_ROUTE120/NORTH"))
+        self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_120_NEST_BALL")))
+        self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_SCORCHED_SLAB_TM11")))
+
+    def test_with_both(self) -> None:
+        self.collect_by_name(["S.S. Ticket", "Letter", "Stone Badge", "HM01 Cut", "Devon Scope", "HM03 Surf", "Balance Badge"])
+        self.assertTrue(self.can_reach_region("REGION_ROUTE120/NORTH"))
+        self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_120_NEST_BALL")))
+        self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_SCORCHED_SLAB_TM11")))
+
+
 class TestSurf(PokemonEmeraldTestBase):
     options = {
         "npc_gifts": Toggle.option_true
