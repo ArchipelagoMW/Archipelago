@@ -226,7 +226,7 @@ use multiple files and use relative imports to access them.
 e.g. `from .options import MyGameOptions` from your `__init__.py` will load
 `world/[world_name]/options.py` and make its `MyGameOptions` accessible.
 
-When imported names pile up it may be easier to use `from . import Options`
+When imported names pile up it may be easier to use `from . import options`
 and access the variable as `options.MyGameOptions`.
 
 Imports from directories outside your world should use absolute imports.
