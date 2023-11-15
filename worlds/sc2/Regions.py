@@ -297,7 +297,7 @@ def create_grid_regions(
                 mission_index = multiworld.random.randint(0, len(missions_to_add) - 1)
                 missions[grid_coords] = missions_to_add.pop(mission_index)
 
-        if diagonal_difficulty < MissionPools.HARD:
+        if diagonal_difficulty < MissionPools.VERY_HARD:
             diagonal_difficulty = MissionPools(diagonal_difficulty.value + 1)
             missions_to_add.extend(mission_pools[diagonal_difficulty])
 
