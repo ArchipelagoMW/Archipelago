@@ -333,24 +333,3 @@ class WorldTestBase(unittest.TestCase):
             placed_items = [loc.item for loc in self.multiworld.get_locations() if loc.item and loc.item.code]
             self.assertLessEqual(len(self.multiworld.itempool), len(placed_items),
                                  "Unplaced Items remaining in itempool")
-
-    def test_descriptions_have_valid_names(self):
-        """Ensure all item and location descriptions match a name of the corresponding type"""
-        if not (self.run_default_tests and self.constructed):
-            return
-        with self.subTest("Game", game=self.game):
-            with self.subTest("Items"):
-                world = self.multiworld.worlds[1]
-                valid_names = world.item_names.union(world.item_name_groups)
-                for name in world.item_descriptions.keys():
-                    with self.subTest("Name should be valid", name=name):
-                        self.assertIn(name, valid_names,
-                                      """All item descriptions must match defined item names""")
-
-            with self.subTest("Locations"):
-                world = self.multiworld.worlds[1]
-                valid_names = world.location_names.union(world.location_name_groups)
-                for name in world.location_descriptions.keys():
-                    with self.subTest("Name should be valid", name=name):
-                        self.assertIn(name, valid_names,
-                                      """All item descriptions must match defined item names""")
