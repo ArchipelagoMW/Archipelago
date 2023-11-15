@@ -210,6 +210,9 @@ class ValidInventory:
     def has_all(self, items: Set[str], player: int):
         return all(item in self.logical_inventory for item in items)
 
+    def has_group(self, item_group: str, player: int):
+        return False  # Currently only used for Marine Medic logic, deliberately fails here
+
     def count(self, item: str, player: int) -> int:
         return len([inventory_item for inventory_item in self.logical_inventory if inventory_item == item])
 

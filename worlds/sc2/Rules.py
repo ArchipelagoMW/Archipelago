@@ -205,7 +205,7 @@ class SC2Logic:
             ItemNames.MARINE_COMBAT_SHIELD, ItemNames.MARINE_MAGRAIL_MUNITIONS, ItemNames.MEDIC_STABILIZER_MEDPACKS
         }, self.player) \
             or (state.count(ItemNames.MARINE_PROGRESSIVE_STIMPACK, self.player) >= 2
-                and self.cleared_missions(state, 1))
+                and state.has_group("Missions", self.player, 1))
 
     def terran_survives_rip_field(self, state: CollectionState) -> bool:
         """
