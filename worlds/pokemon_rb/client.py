@@ -117,7 +117,6 @@ class PokemonRBClient(BizHawkClient):
               or data["CrashCheck4"][0] > 2):
             # Should mean game crashed
             logger.warning("Pokémon Red/Blue game may have crashed. Disconnecting from server.")
-            logger.warning(f"{data}")
             self.game_state = False
             await ctx.disconnect()
             return
@@ -243,9 +242,6 @@ class PokemonRBClient(BizHawkClient):
         elif cmd == "Retrieved":
             if f"EnergyLink{ctx.team}" in args["keys"]:
                 ctx.current_energy_link_value = args["keys"][f"EnergyLink{ctx.team}"]
-        # elif cmd == "SetReply":
-        #     if args["key"].startswith("EnergyLink"):
-        #         self.energylink_energy = args["value"]
         elif cmd == 'RoomInfo':
             if ctx.seed_name and ctx.seed_name != args["seed_name"]:
                 self.game_state = False
