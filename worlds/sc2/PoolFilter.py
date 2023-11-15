@@ -10,7 +10,6 @@ from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
     ShuffleCampaigns
-from .LogicMixin import SC2Logic
 from . import ItemNames
 
 # Items with associated upgrades
@@ -211,6 +210,9 @@ class ValidInventory:
     def has_all(self, items: Set[str], player: int):
         return all(item in self.logical_inventory for item in items)
 
+    def has_group(self, item_group: str, player: int):
+        return False  # Currently only used for Marine Medic logic, deliberately fails here
+
     def count(self, item: str, player: int) -> int:
         return len([inventory_item for inventory_item in self.logical_inventory if inventory_item == item])
 
@@ -410,74 +412,6 @@ class ValidInventory:
 
         return inventory
 
-    def _read_logic(self):
-        # General
-        self._sc2_cleared_missions = lambda world, player, mission_count: False
-        self._sc2_advanced_tactics = lambda world, player: SC2Logic._sc2_advanced_tactics(self, world, player)
-        # Terran
-        self._sc2wol_has_common_unit = lambda world, player: SC2Logic._sc2wol_has_common_unit(self, world, player)
-        self._sc2wol_has_early_tech = lambda world, player: SC2Logic._sc2wol_has_early_tech(self, world, player)
-        self._sc2wol_has_air = lambda world, player: SC2Logic._sc2wol_has_air(self, world, player)
-        self._sc2wol_has_air_anti_air = lambda world, player: SC2Logic._sc2wol_has_air_anti_air(self, world, player)
-        self._sc2wol_has_competent_anti_air = lambda world, player: SC2Logic._sc2wol_has_competent_anti_air(self, world, player)
-        self._sc2wol_has_competent_ground_to_air = lambda world, player: SC2Logic._sc2wol_has_competent_ground_to_air(self, world, player)
-        self._sc2wol_has_anti_air = lambda world, player: SC2Logic._sc2wol_has_anti_air(self, world, player)
-        self._sc2wol_defense_rating = lambda world, player, zerg_enemy, air_enemy=False: SC2Logic._sc2wol_defense_rating(self, world, player, zerg_enemy, air_enemy)
-        self._sc2wol_has_competent_comp = lambda world, player: SC2Logic._sc2wol_has_competent_comp(self, world, player)
-        self._sc2wol_has_train_killers = lambda world, player: SC2Logic._sc2wol_has_train_killers(self, world, player)
-        self._sc2wol_able_to_rescue = lambda world, player: SC2Logic._sc2wol_able_to_rescue(self, world, player)
-        self._sc2wol_beats_protoss_deathball = lambda world, player: SC2Logic._sc2wol_beats_protoss_deathball(self, world, player)
-        self._sc2wol_survives_rip_field = lambda world, player: SC2Logic._sc2wol_survives_rip_field(self, world, player)
-        self._sc2wol_has_sustainable_mech_heal = lambda world, player: SC2Logic._sc2wol_has_sustainable_mech_heal(self, world, player)
-        self._sc2wol_has_bio_heal = lambda world, player: SC2Logic._sc2wol_has_bio_heal(self, world, player)
-        self._sc2wol_has_competent_base_trasher = lambda world, player: SC2Logic._sc2wol_has_competent_base_trasher(self, world, player)
-        self._sc2wol_has_nukes = lambda world, player: SC2Logic._sc2wol_has_nukes(self, world, player)
-        self._sc2wol_has_mm_upgrade = lambda world, player: SC2Logic._sc2wol_has_mm_upgrade(self, world, player)
-        self._sc2wol_welcome_to_the_jungle_requirement = lambda world, player: SC2Logic._sc2wol_welcome_to_the_jungle_requirement(self, world, player)
-        self._sc2wol_can_respond_to_colony_infestations = lambda world, player: SC2Logic._sc2wol_can_respond_to_colony_infestations(self, world, player)
-        self._sc2wol_final_mission_requirements = lambda world, player: SC2Logic._sc2wol_final_mission_requirements(self, world, player)
-        self._sc2wol_cleared_missions = lambda world, player: SC2Logic._sc2wol_cleared_missions(self, world, player)
-        self._sc2wol_essence_of_eternity_comp = lambda world, player: SC2Logic._sc2wol_essence_of_eternity_comp(self, world, player)
-        # Zerg
-        self._sc2hots_has_common_unit = lambda world, player: SC2Logic._sc2hots_has_common_unit(self, world, player)
-        self._sc2hots_has_good_antiair = lambda world, player: SC2Logic._sc2hots_has_good_antiair(self, world, player)
-        self._sc2hots_has_minimal_antiair = lambda world, player: SC2Logic._sc2hots_has_minimal_antiair(self, world, player)
-        self._sc2hots_has_brood_lord = lambda world, player: SC2Logic._sc2hots_has_brood_lord(self, world, player)
-        self._sc2hots_has_viper = lambda world, player: SC2Logic._sc2hots_has_viper(self, world, player)
-        self._sc2hots_has_impaler_or_lurker = lambda world, player: SC2Logic._sc2hots_has_impaler_or_lurker(self, world, player)
-        self._sc2hots_has_competent_comp = lambda world, player: SC2Logic._sc2hots_has_competent_comp(self, world, player)
-        self._sc2hots_can_spread_creep = lambda world, player: SC2Logic._sc2hots_can_spread_creep(self, world, player)
-        self._sc2hots_has_competent_defense = lambda world, player: SC2Logic._sc2hots_has_competent_defense(self, world, player)
-        self._sc2hots_has_basic_kerrigan = lambda world, player: SC2Logic._sc2hots_has_basic_kerrigan(self, world, player)
-        self._sc2hots_has_two_kerrigan_actives = lambda world, player: SC2Logic._sc2hots_has_two_kerrigan_actives(self, world, player)
-        self._sc2hots_can_pass_vents = lambda world, player: SC2Logic._sc2hots_can_pass_vents(self, world, player)
-        self._sc2hots_can_pass_supreme = lambda world, player: SC2Logic._sc2hots_can_pass_supreme(self, world, player)
-        self._sc2hots_final_mission_requirements = lambda world, player: SC2Logic._sc2hots_final_mission_requirements(self, world, player)
-        self._sc2hots_amon_s_fall_comp = lambda world, player: SC2Logic._sc2hots_amon_s_fall_comp(self, world, player)
-        # Protoss
-        self._sc2lotv_has_common_unit = lambda world, player: SC2Logic._sc2lotv_has_common_unit(self, world, player)
-        self._sc2lotv_has_competent_anti_air = lambda world, player: SC2Logic._sc2lotv_has_competent_anti_air(self, world, player)
-        self._sc2lotv_has_basic_anti_air = lambda world, player: SC2Logic._sc2lotv_has_basic_anti_air(self, world, player)
-        self._sc2lotv_has_anti_armor_anti_air = lambda world, player: SC2Logic._sc2lotv_has_anti_armor_anti_air(self, world, player)
-        self._sc2lotv_has_anti_light_anti_air = lambda world, player: SC2Logic._sc2lotv_has_anti_light_anti_air(self, world, player)
-        self._sc2lotv_can_attack_behind_chasm = lambda world, player: SC2Logic._sc2lotv_can_attack_behind_chasm(self, world, player)
-        self._sc2lotv_has_fleet = lambda world, player: SC2Logic._sc2lotv_has_fleet(self, world, player)
-        self._sc2lotv_has_templar_return_comp = lambda world, player: SC2Logic._sc2lotv_has_templar_return_comp(self, world, player)
-        self._sc2lotv_has_brothers_in_arms_comp = lambda world, player: SC2Logic._sc2lotv_has_brothers_in_arms_comp(self, world, player)
-        self._sc2lotv_has_hybrid_counter = lambda world, player: SC2Logic._sc2lotv_has_hybrid_counter(self, world, player)
-        self._sc2lotv_the_infinite_cycle_requirements = lambda world, player: SC2Logic._sc2lotv_the_infinite_cycle_requirements(self, world, player)
-        self._sc2lotv_has_basic_splash = lambda world, player: SC2Logic._sc2lotv_has_basic_splash(self, world, player)
-        self._sc2lotv_has_static_defense = lambda world, player: SC2Logic._sc2lotv_has_static_defense(self, world, player)
-        self._sc2lotv_last_stand_requirements = lambda world, player: SC2Logic._sc2lotv_last_stand_requirements(self, world, player)
-        self._sc2lotv_harbinger_of_oblivion_requirement = lambda world, player: SC2Logic._sc2lotv_harbinger_of_oblivion_requirement(self, world, player)
-        self._sc2lotv_has_competent_comp = lambda world, player: SC2Logic._sc2lotv_has_competent_comp(self, world, player)
-        self._sc2lotv_steps_of_the_rite_comp = lambda world, player: SC2Logic._sc2lotv_steps_of_the_rite_comp(self, world, player)
-        self._sc2lotv_has_templar_charge_comp = lambda world, player: SC2Logic._sc2lotv_has_templar_charge_comp(self, world, player)
-        self._sc2lotv_has_the_host_comp = lambda world, player: SC2Logic._sc2lotv_has_the_host_comp(self, world, player)
-        self._sc2lotv_has_heal = lambda world, player: SC2Logic._sc2lotv_has_heal(self, world, player)
-        self._sc2lotv_final_mission_requirements = lambda world, player: SC2Logic._sc2lotv_final_mission_requirements(self, world, player)
-        self._sc2lotv_into_the_void_comp = lambda world, player: SC2Logic._sc2lotv_into_the_void_comp(self, world, player)
-
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
                  used_races: Set[SC2Race]):
@@ -486,7 +420,6 @@ class ValidInventory:
         self.logical_inventory = list()
         self.locked_items = locked_items[:]
         self.existing_items = existing_items
-        self._read_logic()
         soa_presence = get_option_value(multiworld, player, "spear_of_adun_presence")
         soa_autocast_presence = get_option_value(multiworld, player, "spear_of_adun_autonomously_cast_ability_presence")
         # Initial filter of item pool
