@@ -123,8 +123,7 @@ def create():
             player_options["presetOptions"][preset_name] = {}
             for option_name, option_value in preset.items():
                 # Random range type settings are not valid.
-                assert (option_value not in ["random-low", "random-high", "random-middle"] and
-                        not str(option_value).startswith("random-")), \
+                assert (not str(option_value).startswith("random-")), \
                     f"Invalid preset value '{option_value}' for '{option_name}' in '{preset_name}'. Special random " \
                     f"values are not supported for presets."
 

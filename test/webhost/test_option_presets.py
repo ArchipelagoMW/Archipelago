@@ -36,9 +36,8 @@ class TestOptionPresets(unittest.TestCase):
                 with self.subTest(game=game_name, preset=preset_name):
                     for option_name, option_value in preset.items():
                         # Check for non-standard random values.
-                        self.assertTrue(
-                            option_value not in ["random-low", "random-high", "random-middle"] and
-                            not str(option_value).startswith("random-"),
+                        self.assertFalse(
+                            str(option_value).startswith("random-"),
                             f"'{option_name}': '{option_value}' in preset '{preset_name}' for game '{game_name}' "
                             f"is not supported for webhost. Special random values are not supported for presets."
                         )
