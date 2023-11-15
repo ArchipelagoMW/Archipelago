@@ -1,6 +1,6 @@
-from functools import lru_cache
 from typing import Union, Iterable
 
+from Utils import cache_self1
 from .cached_logic import CachedLogic
 from .has_logic import HasLogic, CachedRules
 from .money_logic import MoneyLogic
@@ -42,7 +42,7 @@ class CropLogic(CachedLogic):
         self.money = money
         self.tool = tool
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_grow(self, crop: CropItem) -> StardewRule:
         season_rule = self.season.has_any(crop.farm_growth_seasons)
         seed_rule = self.has(crop.seed.name)
@@ -62,7 +62,7 @@ class CropLogic(CachedLogic):
     def has_island_farm(self) -> StardewRule:
         return self.region.can_reach(Region.island_south)
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_buy_seed(self, seed: SeedItem) -> StardewRule:
         if self.cropsanity_option == Cropsanity.option_disabled or seed.name == Seed.qi_bean:
             item_rule = True_()

@@ -1,5 +1,4 @@
-from functools import lru_cache
-
+from Utils import cache_self1
 from .cached_logic import CachedLogic
 from .has_logic import HasLogic, CachedRules
 from .received_logic import ReceivedLogic
@@ -33,23 +32,23 @@ class MoneyLogic(CachedLogic):
         self.region = region
         self.time = time
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
         if self.starting_money_option == -1:
             return True_()
         return self.time.has_lived_months(amount // MONEY_PER_MONTH)
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_spend(self, amount: int) -> StardewRule:
         if self.starting_money_option == -1:
             return True_()
         return self.time.has_lived_months(amount // (MONEY_PER_MONTH // DISPOSABLE_INCOME_DIVISOR))
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def can_spend_at(self, region: str, amount: int) -> StardewRule:
         return self.region.can_reach(region) & self.can_spend(amount)
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def can_trade_at(self, region: str, currency: str, amount: int) -> StardewRule:
         if amount == 0:
             return True_()

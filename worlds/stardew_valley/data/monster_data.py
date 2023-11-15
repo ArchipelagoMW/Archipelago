@@ -112,4 +112,4 @@ all_monsters_by_category = {}
 for monster in all_monsters:
     if monster.category not in all_monsters_by_category:
         all_monsters_by_category[monster.category] = ()
-    all_monsters_by_category[monster.category] = () + (monster,)
+    all_monsters_by_category[monster.category] = all_monsters_by_category[monster.category] + (monster,)

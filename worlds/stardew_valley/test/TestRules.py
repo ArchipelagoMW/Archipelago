@@ -625,10 +625,9 @@ class TestFriendsanityDatingRules(SVTestBase):
     }
 
     def test_earning_dating_heart_requires_dating(self):
-        month_name = "Month End"
         for i in range(12):
-            month_item = self.world.create_item(month_name)
-            self.multiworld.state.collect(month_item, event=True)
+            self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
         self.multiworld.state.collect(self.world.create_item("Beach Bridge"), event=False)
         self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)
         self.multiworld.state.collect(self.world.create_item("Adventurer's Guild"), event=False)

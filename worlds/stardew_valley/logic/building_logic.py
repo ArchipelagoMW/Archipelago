@@ -1,6 +1,6 @@
-from functools import lru_cache
 from typing import Dict
 
+from Utils import cache_self1
 from .cached_logic import CachedLogic
 from .has_logic import HasLogic, CachedRules
 from .money_logic import MoneyLogic
@@ -64,6 +64,7 @@ class BuildingLogic(CachedLogic):
     def update_rules(self, new_rules: Dict[str, StardewRule]):
         self.building_rules.update(new_rules)
 
+    @cache_self1
     def has_building(self, building: str) -> StardewRule:
         carpenter_rule = self.received(Event.can_construct_buildings)
         if not self.building_option & BuildingProgression.option_progressive:
@@ -80,7 +81,7 @@ class BuildingLogic(CachedLogic):
             building = " ".join(["Progressive", *building.split(" ")[1:]])
         return self.received(f"{building}", count) & carpenter_rule
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def has_house(self, upgrade_level: int) -> StardewRule:
         if upgrade_level < 1:
             return True_()

@@ -212,9 +212,9 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_secret_woods, player),
                              logic.tool.has_tool(Tool.axe, "Iron") | (logic.mod.magic.can_blink()))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.forest_to_sewer, player),
-                             logic.wallet.has_rusty_key())
+                             logic.wallet.has_rusty_key)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.town_to_sewer, player),
-                             logic.wallet.has_rusty_key())
+                             logic.wallet.has_rusty_key)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_abandoned_jojamart, player),
                              logic.has_abandoned_jojamart())
     movie_theater_rule = logic.has_movie_theater()
@@ -229,7 +229,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_dangerous_skull_cavern, player),
                              (logic.received(Wallet.skull_key) & logic.region.can_reach(Region.qi_walnut_room)))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.talk_to_mines_dwarf, player),
-                             logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
+                             logic.wallet.can_speak_dwarf & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.buy_from_traveling_merchant, player),
                              logic.traveling_merchant.has_days())
 
@@ -243,16 +243,16 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_witch_hut, player),
                              (logic.has(ArtisanGood.void_mayonnaise) | logic.mod.magic.can_blink()))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_mutant_bug_lair, player),
-                             ((logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) &
+                             ((logic.wallet.has_rusty_key & logic.region.can_reach(Region.railroad) &
                                logic.relationship.can_meet(NPC.krobus) | logic.mod.magic.can_blink())))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_casino, player),
                              logic.received("Club Card"))
 
     set_bedroom_entrance_rules(logic, multiworld, player, world_options)
     set_festival_entrance_rules(logic, multiworld, player)
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.island_cooking, player), logic.cooking.can_cook_in_kitchen())
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farmhouse_cooking, player), logic.cooking.can_cook_in_kitchen())
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.shipping, player), logic.shipping.can_use_shipping_bin())
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.island_cooking, player), logic.cooking.can_cook_in_kitchen)
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farmhouse_cooking, player), logic.cooking.can_cook_in_kitchen)
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.shipping, player), logic.shipping.can_use_shipping_bin)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.watch_queen_of_sauce, player), logic.action.can_watch(Channel.queen_of_sauce))
 
 
@@ -315,9 +315,9 @@ def set_blacksmith_entrance_rules(logic, multiworld, player):
 
 def set_skill_entrance_rules(logic, multiworld, player):
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farming, player),
-                             logic.skill.can_get_farming_xp())
+                             logic.skill.can_get_farming_xp)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.fishing, player),
-                             logic.skill.can_get_fishing_xp())
+                             logic.skill.can_get_fishing_xp)
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
@@ -397,7 +397,7 @@ def set_island_entrances_rules(logic: StardewLogic, multiworld, player):
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.climb_to_volcano_5, player),
                              (logic.ability.can_mine_perfectly() & logic.tool.can_water(1)))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.talk_to_volcano_dwarf, player),
-                             logic.wallet.can_speak_dwarf())
+                             logic.wallet.can_speak_dwarf)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.climb_to_volcano_10, player),
                              (logic.ability.can_mine_perfectly() & logic.tool.can_water(1)))
     parrots = [Entrance.parrot_express_docks_to_volcano, Entrance.parrot_express_jungle_to_volcano,

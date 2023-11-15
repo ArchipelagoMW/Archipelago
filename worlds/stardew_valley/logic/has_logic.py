@@ -1,4 +1,3 @@
-from functools import lru_cache
 from typing import Dict, Union, Optional, Tuple
 
 from .cached_logic import CachedLogic, CachedRules
@@ -18,7 +17,7 @@ class HasLogic(CachedLogic):
             count = args[1]
         return self.has(args[0], count)
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def has(self, items: Union[str, Tuple[str]], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
             return Has(items, self.item_rules)

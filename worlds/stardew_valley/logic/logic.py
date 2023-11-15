@@ -293,18 +293,18 @@ class StardewLogic:
             Decoration.rotten_plant: self.has(Lighting.jack_o_lantern) & self.season.has(Season.winter),
             Fertilizer.basic: (self.has(Material.sap) & self.skill.has_farming_level(1)) | (self.time.has_lived_months(1) & self.money.can_spend_at(Region.pierre_store, 100)),
             Fertilizer.deluxe: False_(),
-            Fertilizer.quality: (self.skill.has_farming_level(9) & self.has(Material.sap) & self.has(Fish.any)) | (self.time.has_year_two() & self.money.can_spend_at(Region.pierre_store, 150)),
+            Fertilizer.quality: (self.skill.has_farming_level(9) & self.has(Material.sap) & self.has(Fish.any)) | (self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150)),
             Fertilizer.tree: self.skill.has_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
             Fish.any: Or([self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)]),
-            Fish.crab: self.skill.can_crab_pot(Region.beach),
-            Fish.crayfish: self.skill.can_crab_pot(Region.town),
-            Fish.lobster: self.skill.can_crab_pot(Region.beach),
+            Fish.crab: self.skill.can_crab_pot_at(Region.beach),
+            Fish.crayfish: self.skill.can_crab_pot_at(Region.town),
+            Fish.lobster: self.skill.can_crab_pot_at(Region.beach),
             Fish.mussel: self.tool.can_forage(Generic.any, Region.beach) or self.has(Fish.mussel_node),
             Fish.mussel_node: self.region.can_reach(Region.island_west),
             Fish.oyster: self.tool.can_forage(Generic.any, Region.beach),
-            Fish.periwinkle: self.skill.can_crab_pot(Region.town),
-            Fish.shrimp: self.skill.can_crab_pot(Region.beach),
-            Fish.snail: self.skill.can_crab_pot(Region.town),
+            Fish.periwinkle: self.skill.can_crab_pot_at(Region.town),
+            Fish.shrimp: self.skill.can_crab_pot_at(Region.beach),
+            Fish.snail: self.skill.can_crab_pot_at(Region.town),
             Fishing.curiosity_lure: self.monster.can_kill(all_monsters_by_name[Monster.mummy]),
             Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
             Forageable.blackberry: self.tool.can_forage(Season.fall),
@@ -360,7 +360,7 @@ class StardewLogic:
             Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts(Generic.bachelor, 10) & self.buildings.has_house(1) & self.has(Consumable.rain_totem),
             Gift.movie_ticket: self.money.can_spend_at(Region.movie_ticket_stand, 1000),
             Gift.pearl: (self.has(Fish.blobfish) & self.buildings.has_building(Building.fish_pond)) | self.action.can_open_geode(Geode.artifact_trove),
-            Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months(),
+            Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months,
             Gift.void_ghost_pendant: self.money.can_trade_at(Region.desert, Loot.void_essence, 200),
             Gift.wilted_bouquet: self.has(Machine.furnace) & self.has(Gift.bouquet) & self.has(Material.coal),
             Ingredient.oil: self.money.can_spend_at(Region.pierre_store, 200) | (self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower))),
@@ -420,12 +420,12 @@ class StardewLogic:
             Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
             Sapling.tea: self.relationship.has_hearts(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
             Seed.mixed: self.tool.has_tool(Tool.scythe) & self.region.can_reach_all((Region.farm, Region.forest, Region.town)),
-            Trash.broken_cd: self.skill.can_crab_pot(),
-            Trash.broken_glasses: self.skill.can_crab_pot(),
-            Trash.driftwood: self.skill.can_crab_pot(),
+            Trash.broken_cd: self.skill.can_crab_pot,
+            Trash.broken_glasses: self.skill.can_crab_pot,
+            Trash.driftwood: self.skill.can_crab_pot,
             Trash.joja_cola: self.money.can_spend_at(Region.saloon, 75),
-            Trash.soggy_newspaper: self.skill.can_crab_pot(),
-            Trash.trash: self.skill.can_crab_pot(),
+            Trash.soggy_newspaper: self.skill.can_crab_pot,
+            Trash.trash: self.skill.can_crab_pot,
             TreeSeed.acorn: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             TreeSeed.mahogany: self.region.can_reach(Region.secret_woods) & self.tool.has_tool(Tool.axe, ToolMaterial.iron) & self.skill.has_level(Skill.foraging, 1),
             TreeSeed.maple: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
@@ -495,13 +495,13 @@ class StardewLogic:
             FestivalCheck.lupini_red_eagle: self.money.can_spend(1200),
             FestivalCheck.lupini_portrait_mermaid: self.money.can_spend(1200),
             FestivalCheck.lupini_solar_kingdom: self.money.can_spend(1200),
-            FestivalCheck.lupini_clouds: self.time.has_year_two() & self.money.can_spend(1200),
-            FestivalCheck.lupini_1000_years: self.time.has_year_two() & self.money.can_spend(1200),
-            FestivalCheck.lupini_three_trees: self.time.has_year_two() & self.money.can_spend(1200),
-            FestivalCheck.lupini_the_serpent: self.time.has_year_three() & self.money.can_spend(1200),
-            FestivalCheck.lupini_tropical_fish: self.time.has_year_three() & self.money.can_spend(1200),
-            FestivalCheck.lupini_land_of_clay: self.time.has_year_three() & self.money.can_spend(1200),
-            FestivalCheck.secret_santa: self.gifts.has_any_universal_love(),
+            FestivalCheck.lupini_clouds: self.time.has_year_two & self.money.can_spend(1200),
+            FestivalCheck.lupini_1000_years: self.time.has_year_two & self.money.can_spend(1200),
+            FestivalCheck.lupini_three_trees: self.time.has_year_two & self.money.can_spend(1200),
+            FestivalCheck.lupini_the_serpent: self.time.has_year_three & self.money.can_spend(1200),
+            FestivalCheck.lupini_tropical_fish: self.time.has_year_three & self.money.can_spend(1200),
+            FestivalCheck.lupini_land_of_clay: self.time.has_year_three & self.money.can_spend(1200),
+            FestivalCheck.secret_santa: self.gifts.has_any_universal_love,
             FestivalCheck.legend_of_the_winter_star: True_(),
             FestivalCheck.all_rarecrows: self.region.can_reach(Region.farm) & self.has_all_rarecrows(),
         })
@@ -572,20 +572,20 @@ class StardewLogic:
                                self.relationship.has_hearts("5", 8),  # 5 Friends
                                self.relationship.has_hearts("10", 8),  # 10 friends
                                self.pet.has_hearts(5),  # Max Pet
-                               self.bundle.can_complete_community_center(),  # Community Center Completion
-                               self.bundle.can_complete_community_center(),  # CC Ceremony first point
-                               self.bundle.can_complete_community_center(),  # CC Ceremony second point
+                               self.bundle.can_complete_community_center,  # Community Center Completion
+                               self.bundle.can_complete_community_center,  # CC Ceremony first point
+                               self.bundle.can_complete_community_center,  # CC Ceremony second point
                                self.received(Wallet.skull_key),  # Skull Key obtained
-                               self.wallet.has_rusty_key(),  # Rusty key obtained
+                               self.wallet.has_rusty_key,  # Rusty key obtained
                                ]
         return Count(12, rules_worth_a_point)
 
     def can_complete_all_monster_slaying_goals(self) -> StardewRule:
-        rules = [self.time.has_lived_max_months()]
+        rules = [self.time.has_lived_max_months]
         exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-        island_regions = [Region.volcano_floor_5, Region.volcano_floor_10, Region.island_west]
+        island_regions = [Region.volcano_floor_5, Region.volcano_floor_10, Region.island_west, Region.dangerous_skull_cavern]
         for category in all_monsters_by_category:
-            if exclude_island and all(monster.locations[0] in island_regions for monster in all_monsters_by_category[category]):
+            if exclude_island and all(all(location in island_regions for location in monster.locations) for monster in all_monsters_by_category[category]):
                 continue
             rules.append(self.monster.can_kill_any(all_monsters_by_category[category]))
 

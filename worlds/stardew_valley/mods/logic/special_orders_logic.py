@@ -60,7 +60,7 @@ class ModSpecialOrderLogic:
             special_orders.update({
                 ModSpecialOrder.junas_monster_mash: self.relationship.has_hearts(ModNPC.juna, 4) &
                                                     vanilla_rules[SpecialOrder.a_curious_substance] &
-                                                    self.wallet.has_rusty_key() &
+                                                    self.wallet.has_rusty_key &
                                                     self.region.can_reach(Region.forest) & self.has(Consumable.monster_musk) &
                                                     self.has("Energy Tonic") & self.has(Material.sap) & self.has(Loot.bug_meat) &
                                                     self.has(Edible.oil_of_garlic) & self.has(Meal.strange_bun)

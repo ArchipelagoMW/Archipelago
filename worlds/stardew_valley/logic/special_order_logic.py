@@ -3,7 +3,6 @@ from typing import Dict
 from .ability_logic import AbilityLogic
 from .arcade_logic import ArcadeLogic
 from .artisan_logic import ArtisanLogic
-from .cached_logic import profile_rule
 from .cooking_logic import CookingLogic
 from .has_logic import HasLogic
 from .mine_logic import MineLogic
@@ -88,8 +87,8 @@ class SpecialOrderLogic:
             SpecialOrder.gifts_for_george: self.season.has(Season.spring) & self.has(Forageable.leek),
             SpecialOrder.fragments_of_the_past: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe),
             SpecialOrder.gus_famous_omelet: self.has(AnimalProduct.any_egg),
-            SpecialOrder.crop_order: self.ability.can_farm_perfectly() & self.shipping.can_ship(),
-            SpecialOrder.community_cleanup: self.skill.can_crab_pot(),
+            SpecialOrder.crop_order: self.ability.can_farm_perfectly() & self.shipping.can_ship_items,
+            SpecialOrder.community_cleanup: self.skill.can_crab_pot,
             SpecialOrder.the_strong_stuff: self.artisan.can_keg(Vegetable.potato),
             SpecialOrder.pierres_prime_produce: self.ability.can_farm_perfectly(),
             SpecialOrder.robins_project: self.relationship.can_meet(NPC.robin) & self.ability.can_chop_perfectly() & self.has(Material.hardwood),
@@ -102,12 +101,12 @@ class SpecialOrderLogic:
             SpecialOrder.prismatic_jelly: self.region.can_reach(Region.wizard_tower),
             SpecialOrder.qis_crop: self.ability.can_farm_perfectly() & self.region.can_reach(Region.greenhouse) &
                                    self.region.can_reach(Region.island_west) & self.skill.has_total_level(50) &
-                                   self.has(Machine.seed_maker) & self.shipping.can_ship(),
+                                   self.has(Machine.seed_maker) & self.shipping.can_ship_items,
             SpecialOrder.lets_play_a_game: self.arcade.has_junimo_kart_max_level(),
-            SpecialOrder.four_precious_stones: self.time.has_lived_max_months() & self.has("Prismatic Shard") &
+            SpecialOrder.four_precious_stones: self.time.has_lived_max_months & self.has("Prismatic Shard") &
                                                self.ability.can_mine_perfectly_in_the_skull_cavern(),
             SpecialOrder.qis_hungry_challenge: self.ability.can_mine_perfectly_in_the_skull_cavern() & self.ability.has_max_buffs(),
-            SpecialOrder.qis_cuisine: self.cooking.can_cook() & self.shipping.can_ship() &
+            SpecialOrder.qis_cuisine: self.cooking.can_cook() & self.shipping.can_ship_items &
                                       (self.money.can_spend_at(Region.saloon, 205000) | self.money.can_spend_at(Region.pierre_store, 170000)),
             SpecialOrder.qis_kindness: self.relationship.can_give_loved_gifts_to_everyone(),
             SpecialOrder.extended_family: self.ability.can_fish_perfectly() & self.has(Fish.angler) & self.has(Fish.glacierfish) &

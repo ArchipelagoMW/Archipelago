@@ -1,4 +1,5 @@
 import unittest
+from random import random
 from typing import Dict
 
 from BaseClasses import MultiWorld
@@ -34,10 +35,12 @@ class TestGenerateDynamicOptions(SVTestCase):
                 option2_choices = get_option_choices(option2)
                 for key1 in option1_choices:
                     for key2 in option2_choices:
-                        with self.subTest(f"{option1.internal_name}: {key1}, {option2.internal_name}: {key2}"):
+                        # seed = int(random() * pow(10, 18) - 1)
+                        seed = 738592514038774912
+                        with self.subTest(f"{option1.internal_name}: {key1}, {option2.internal_name}: {key2} [SEED: {seed}]"):
                             choices = {option1.internal_name: option1_choices[key1],
                                        option2.internal_name: option2_choices[key2]}
-                            multiworld = setup_solo_multiworld(choices)
+                            multiworld = setup_solo_multiworld(choices, seed)
                             basic_checks(self, multiworld)
 
 

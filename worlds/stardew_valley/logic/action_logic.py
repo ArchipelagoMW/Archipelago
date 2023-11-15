@@ -1,5 +1,4 @@
-from functools import lru_cache
-
+from Utils import cache_self1
 from .cached_logic import CachedLogic
 from .has_logic import HasLogic, CachedRules
 from .received_logic import ReceivedLogic
@@ -34,7 +33,7 @@ class ActionLogic(CachedLogic):
     def can_pan_at(self, region: str) -> StardewRule:
         return self.region.can_reach(region) & self.can_pan()
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_open_geode(self, geode: str) -> StardewRule:
         blacksmith_access = self.region.can_reach(Region.blacksmith)
         geodes = [Geode.geode, Geode.frozen, Geode.magma, Geode.omni]

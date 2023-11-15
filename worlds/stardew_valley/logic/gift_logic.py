@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import cached_property
 
 from .cached_logic import CachedLogic
 from .has_logic import HasLogic, CachedRules
@@ -14,7 +14,7 @@ class GiftLogic(CachedLogic):
         super().__init__(player, cached_rules)
         self.has = has
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def has_any_universal_love(self) -> StardewRule:
         return self.has(Gift.golden_pumpkin) | self.has(Gift.pearl) | self.has("Prismatic Shard") | self.has(
             AnimalProduct.rabbit_foot)

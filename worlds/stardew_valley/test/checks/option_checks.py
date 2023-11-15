@@ -92,7 +92,8 @@ def assert_festivals_give_access_to_deluxe_scarecrow(tester: SVTestBase, multiwo
 
 
 def assert_has_festival_recipes(tester: SVTestBase, multiworld: MultiWorld):
-    has_festivals = is_not_setting(multiworld, options.FestivalLocations.internal_name, options.FestivalLocations.option_disabled)
+    stardew_options = get_stardew_options(multiworld)
+    has_festivals = stardew_options.festival_locations.value != options.FestivalLocations.option_disabled
     festival_items = ["Tub o' Flowers Recipe", "Jack-O-Lantern Recipe", "Moonlight Jellies Banner", "Starport Decal"]
     for festival_item in festival_items:
         if has_festivals:

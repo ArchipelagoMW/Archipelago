@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import cached_property
 from typing import Tuple
 
 from .cached_logic import CachedLogic, CachedRules
@@ -25,7 +25,7 @@ class BundleLogic(CachedLogic):
         self.money = money
         self.farming = farming
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def can_complete_bundle(self, bundle_requirements: Tuple[BundleItem], number_required: int) -> StardewRule:
         item_rules = []
         highest_quality_yet = 0
@@ -40,7 +40,7 @@ class BundleLogic(CachedLogic):
         return can_speak_junimo & self.has(tuple(item_rules), number_required) & self.farming.can_grow_crop_quality(
             highest_quality_yet)
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def can_complete_community_center(self) -> StardewRule:
         return (self.region.can_reach_location("Complete Crafts Room") &
                 self.region.can_reach_location("Complete Pantry") &

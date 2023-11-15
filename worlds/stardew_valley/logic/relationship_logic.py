@@ -1,7 +1,7 @@
 import math
-from functools import lru_cache
 from typing import Iterable, Union
 
+from Utils import cache_self1
 from .building_logic import BuildingLogic
 from .cached_logic import CachedLogic, cache_rule, profile_rule
 from .gift_logic import GiftLogic
@@ -71,7 +71,7 @@ class RelationshipLogic(CachedLogic):
                       self.has_children(number_children - 1)]
         return And(baby_rules)
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def has_hearts(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
             return True_()
@@ -114,18 +114,18 @@ class RelationshipLogic(CachedLogic):
             return self.received_hearts(villager.name, 8) & self.can_earn_relationship(npc, hearts)
         return self.received_hearts(villager.name, hearts)
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def received_hearts(self, npc: str, hearts: int) -> StardewRule:
         return self.received(self.heart(npc), math.ceil(hearts / self.heart_size_option))
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_meet(self, npc: str) -> StardewRule:
         if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
             return True_()
         villager = all_villagers_by_name[npc]
         rules = [self.region.can_reach_any(villager.locations)]
         if npc == NPC.kent:
-            rules.append(self.time.has_year_two())
+            rules.append(self.time.has_year_two)
         elif npc == NPC.leo:
             rules.append(self.received("Island West Turtle"))
         elif npc == ModNPC.lance:
@@ -140,10 +140,10 @@ class RelationshipLogic(CachedLogic):
                 continue
             meet_rule = self.can_meet(npc)
             rules.append(meet_rule)
-        loved_gifts_rules = And(rules) & self.gifts.has_any_universal_love()
-        return loved_gifts_rules
+        rules.append(self.gifts.has_any_universal_love)
+        return And(*rules)
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
         if hearts <= 0:
             return True_()
@@ -168,8 +168,17 @@ class RelationshipLogic(CachedLogic):
         else:
             earn_rule = self.time.has_lived_months(min(hearts // 2, 8))
 
-        return previous_heart_rule & earn_rule
+        rules = [previous_heart_rule, self.can_meet(npc)]
+        villager = all_villagers_by_name[npc]
+        if hearts > 2 or hearts > self.heart_size_option:
+            rules.append(self.season.has(villager.birthday))
+        if villager.bachelor:
+            if hearts > 8:
+                rules.append(self.can_date(npc))
+            if hearts > 10:
+                rules.append(self.can_marry(npc))
 
+    @cache_self1
     def npc_is_in_current_slot(self, name: str) -> bool:
         npc = all_villagers_by_name[name]
         mod = npc.mod_name

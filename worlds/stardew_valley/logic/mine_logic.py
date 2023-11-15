@@ -1,5 +1,4 @@
-from functools import lru_cache
-
+from Utils import cache_self1
 from .cached_logic import CachedLogic
 from .combat_logic import CombatLogic, CachedRules
 from .received_logic import ReceivedLogic
@@ -58,6 +57,7 @@ class MineLogic(CachedLogic):
         return (self.can_progress_in_the_mines_from_floor(120) &
                 self.region.can_reach(Region.skull_cavern))
 
+    @cache_self1
     def get_weapon_rule_for_floor_tier(self, tier: int):
         if tier >= 4:
             return self.combat.can_fight_at_level(Performance.galaxy)
@@ -69,7 +69,7 @@ class MineLogic(CachedLogic):
             return self.combat.can_fight_at_level(Performance.decent)
         return self.combat.can_fight_at_level(Performance.basic)
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_progress_in_the_mines_from_floor(self, floor: int) -> StardewRule:
         tier = floor // 40
         rules = []
@@ -83,7 +83,7 @@ class MineLogic(CachedLogic):
             rules.append(self.skill.has_level(Skill.mining, skill_tier))
         return And(rules)
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
         if floor < 0:
             floor = 0
@@ -91,11 +91,11 @@ class MineLogic(CachedLogic):
             return self.received("Progressive Mine Elevator", floor // 5)
         return True_()
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_progress_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
         tier = floor // 50
         rules = []
-        weapon_rule = self.combat.has_great_weapon()
+        weapon_rule = self.combat.has_great_weapon
         rules.append(weapon_rule)
         if self.tool_option & ToolProgression.option_progressive:
             rules.append(self.received("Progressive Pickaxe", min(4, max(0, tier + 2))))

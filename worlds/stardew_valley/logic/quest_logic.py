@@ -114,7 +114,7 @@ class QuestLogic:
             Quest.cryptic_note: self.has(Forageable.secret_note),
             Quest.fresh_fruit: self.season.has(Season.spring) & self.has(Fruit.apricot) & self.relationship.can_meet(NPC.emily),
             Quest.aquatic_research: self.season.has(Season.summer) & self.has(Fish.pufferfish) & self.relationship.can_meet(NPC.demetrius),
-            Quest.a_soldiers_star: self.season.has(Season.summer) & self.time.has_year_two() & self.has(Fruit.starfruit) & self.relationship.can_meet(NPC.kent),
+            Quest.a_soldiers_star: self.season.has(Season.summer) & self.time.has_year_two & self.has(Fruit.starfruit) & self.relationship.can_meet(NPC.kent),
             Quest.mayors_need: self.season.has(Season.summer) & self.has(ArtisanGood.truffle_oil) & self.relationship.can_meet(NPC.lewis),
             Quest.wanted_lobster: self.season.has(Season.fall) & self.season.has(Season.fall) & self.has(Fish.lobster) & self.relationship.can_meet(NPC.gus),
             Quest.pam_needs_juice: self.season.has(Season.fall) & self.has(ArtisanGood.battery_pack) & self.relationship.can_meet(NPC.pam),
@@ -128,7 +128,7 @@ class QuestLogic:
             Quest.grannys_gift: self.season.has(Season.spring) & self.has(Forageable.leek) & self.relationship.can_meet(NPC.evelyn),
             Quest.exotic_spirits: self.season.has(Season.winter) & self.has(Forageable.coconut) & self.relationship.can_meet(NPC.gus),
             Quest.catch_a_lingcod: self.season.has(Season.winter) & self.has(Fish.lingcod) & self.relationship.can_meet(NPC.willy),
-            Quest.dark_talisman: self.region.can_reach(Region.railroad) & self.wallet.has_rusty_key() & self.relationship.can_meet(NPC.krobus),
+            Quest.dark_talisman: self.region.can_reach(Region.railroad) & self.wallet.has_rusty_key & self.relationship.can_meet(NPC.krobus),
             Quest.goblin_problem: self.region.can_reach(Region.witch_swamp),
             Quest.magic_ink: self.relationship.can_meet(NPC.wizard),
             Quest.the_pirates_wife: self.relationship.can_meet(NPC.kent) & self.relationship.can_meet(NPC.gus) &

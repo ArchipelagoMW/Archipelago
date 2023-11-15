@@ -1,5 +1,6 @@
-from functools import lru_cache
+from functools import cached_property
 
+from Utils import cache_self1
 from .building_logic import BuildingLogic
 from .cached_logic import CachedLogic, CachedRules
 from .has_logic import HasLogic
@@ -29,15 +30,17 @@ class ShippingLogic(CachedLogic):
         self.region = region
         self.buildings = buildings
 
-    def can_use_shipping_bin(self, item: str = "") -> StardewRule:
+    @cached_property
+    def can_use_shipping_bin(self) -> StardewRule:
         return self.buildings.has_building(Building.shipping_bin)
 
-    @lru_cache(maxsize=None)
-    def can_ship(self, item: str = "") -> StardewRule:
-        shipping_rule = self.region.can_reach(Region.shipping)
-        if item == "":
-            return shipping_rule
-        return shipping_rule & self.has(item)
+    @cache_self1
+    def can_ship(self, item: str) -> StardewRule:
+        return self.can_ship_items & self.has(item)
+
+    @cached_property
+    def can_ship_items(self) -> StardewRule:
+        return self.region.can_reach(Region.shipping)
 
     def can_ship_everything(self) -> StardewRule:
         shipsanity_prefix = "Shipsanity: "

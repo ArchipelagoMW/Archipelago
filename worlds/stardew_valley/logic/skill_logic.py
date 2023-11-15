@@ -1,6 +1,7 @@
-from functools import lru_cache
+from functools import cached_property
 from typing import Union, Tuple
 
+from Utils import cache_self1
 from worlds.stardew_valley.strings.craftable_names import Fishing
 from .cached_logic import CachedLogic
 from .combat_logic import CombatLogic
@@ -58,7 +59,7 @@ class SkillLogic(CachedLogic):
         self.magic = magic
         self.mods = mods
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def can_earn_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
             return True_()
@@ -89,7 +90,7 @@ class SkillLogic(CachedLogic):
 
         return previous_level_rule & months_rule & xp_rule
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def has_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
             return True_()
@@ -99,11 +100,11 @@ class SkillLogic(CachedLogic):
 
         return self.can_earn_level(skill, level)
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def has_farming_level(self, level: int) -> StardewRule:
         return self.has_level(Skill.farming, level)
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def has_total_level(self, level: int, allow_modded_skills: bool = False) -> StardewRule:
         if level <= 0:
             return True_()
@@ -116,45 +117,45 @@ class SkillLogic(CachedLogic):
 
         months_with_4_skills = max(1, (level // 4) - 1)
         months_with_5_skills = max(1, (level // 5) - 1)
-        rule_with_fishing = self.time.has_lived_months(months_with_5_skills) & self.can_get_fishing_xp()
+        rule_with_fishing = self.time.has_lived_months(months_with_5_skills) & self.can_get_fishing_xp
         if level > 40:
             return rule_with_fishing
         return self.time.has_lived_months(months_with_4_skills) | rule_with_fishing
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def can_get_farming_xp(self) -> StardewRule:
         crop_rules = []
         for crop in all_crops:
             crop_rules.append(self.crop.can_grow(crop))
         return Or(crop_rules)
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def can_get_foraging_xp(self) -> StardewRule:
         tool_rule = self.tool.has_tool(Tool.axe)
         tree_rule = self.region.can_reach(Region.forest) & self.season.has_any_not_winter()
         stump_rule = self.region.can_reach(Region.secret_woods) & self.tool.has_tool(Tool.axe, ToolMaterial.copper)
         return tool_rule & (tree_rule | stump_rule)
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def can_get_mining_xp(self) -> StardewRule:
         tool_rule = self.tool.has_tool(Tool.pickaxe)
         stone_rule = self.region.can_reach_any((Region.mines_floor_5, Region.quarry, Region.skull_cavern_25, Region.volcano_floor_5))
         return tool_rule & stone_rule
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def can_get_combat_xp(self) -> StardewRule:
         tool_rule = self.combat.has_any_weapon()
         enemy_rule = self.region.can_reach_any((Region.mines_floor_5, Region.skull_cavern_25, Region.volcano_floor_5))
         return tool_rule & enemy_rule
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def can_get_fishing_xp(self) -> StardewRule:
         if self.skill_option == options.SkillProgression.option_progressive:
-            return self.can_fish() | self.can_crab_pot()
+            return self.can_fish() | self.can_crab_pot
 
         return self.can_fish()
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def can_fish(self, regions: Union[str, Tuple[str, ...]] = None, difficulty: int = 0) -> StardewRule:
         if isinstance(regions, str):
             regions = regions,
@@ -168,16 +169,17 @@ class SkillLogic(CachedLogic):
         number_fishing_rod_required = 1 if difficulty < 50 else (2 if difficulty < 80 else 4)
         return self.tool.has_fishing_rod(number_fishing_rod_required) & skill_rule & region_rule
 
-    @lru_cache(maxsize=None)
-    def can_crab_pot(self, region: str = Generic.any) -> StardewRule:
+    @cache_self1
+    def can_crab_pot_at(self, region: str) -> StardewRule:
+        return self.can_crab_pot & self.region.can_reach(region)
+
+    @cached_property
+    def can_crab_pot(self) -> StardewRule:
         crab_pot_rule = self.has(Fishing.bait)
         if self.skill_option == options.SkillProgression.option_progressive:
             crab_pot_rule = crab_pot_rule & self.has(Machine.crab_pot)
         else:
-            crab_pot_rule = crab_pot_rule & self.can_get_fishing_xp()
-
-        if region != Generic.any:
-            return crab_pot_rule & self.region.can_reach(region)
+            crab_pot_rule = crab_pot_rule & self.can_get_fishing_xp
 
         water_region_rules = self.region.can_reach_any(fishing_regions)
         return crab_pot_rule & water_region_rules

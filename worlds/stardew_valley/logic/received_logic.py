@@ -1,4 +1,3 @@
-from functools import lru_cache
 from typing import Union, Optional, Tuple
 
 from .cached_logic import CachedLogic, CachedRules
@@ -16,7 +15,7 @@ class ReceivedLogic(CachedLogic):
             count = args[1]
         return self.received(args[0], count)
 
-    @lru_cache(maxsize=None)
+    # Should be cached
     def received(self, items: Union[str, Tuple[str, ...]], count: Optional[int] = 1) -> StardewRule:
         if count <= 0 or not items:
             return True_()

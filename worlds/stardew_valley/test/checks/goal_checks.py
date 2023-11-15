@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
 from .option_checks import get_stardew_options
-from ... import options
+from ... import options, ExcludeGingerIsland
 from .. import SVTestBase
 
 

@@ -1,5 +1,4 @@
-from functools import lru_cache
-
+from Utils import cache_self1
 from .cached_logic import CachedLogic, CachedRules
 from .has_logic import HasLogic
 from .money_logic import MoneyLogic
@@ -51,7 +50,7 @@ class CraftingLogic(CachedLogic):
         self.skill = skill
         self.special_orders = special_orders
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_craft(self, recipe: CraftingRecipe = None) -> StardewRule:
         craft_rule = True_()
         if recipe is None:
@@ -63,7 +62,7 @@ class CraftingLogic(CachedLogic):
         time_rule = self.time.has_lived_months(number_ingredients)
         return craft_rule & learn_rule & ingredients_rule & time_rule
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def knows_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, ArchipelagoSource):
             return self.received(recipe.source.ap_item, len(recipe.source.ap_item))
@@ -82,7 +81,7 @@ class CraftingLogic(CachedLogic):
             return self.received_recipe(recipe.item)
         return self.can_learn_recipe(recipe)
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_learn_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, StarterSource):
             return True_()
@@ -109,6 +108,6 @@ class CraftingLogic(CachedLogic):
 
         return False_()
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def received_recipe(self, item_name: str):
         return self.received(f"{item_name} Recipe")

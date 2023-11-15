@@ -1,5 +1,4 @@
-from functools import lru_cache
-
+from Utils import cache_self1
 from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -51,7 +50,7 @@ class FishingLogic(CachedLogic):
     def can_fish_at(self, region: str) -> StardewRule:
         return self.skill.can_fish() & self.region.can_reach(region)
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_catch_fish(self, fish: FishItem) -> StardewRule:
         quest_rule = True_()
         if fish.extended_family:
@@ -59,7 +58,7 @@ class FishingLogic(CachedLogic):
         region_rule = self.region.can_reach_any(fish.locations)
         season_rule = self.season.has_any(fish.seasons)
         if fish.difficulty == -1:
-            difficulty_rule = self.skill.can_crab_pot()
+            difficulty_rule = self.skill.can_crab_pot
         else:
             difficulty_rule = self.skill.can_fish(difficulty=(120 if fish.legendary else fish.difficulty))
         if fish.name == SVEFish.kittyfish:

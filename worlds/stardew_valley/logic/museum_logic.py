@@ -1,6 +1,6 @@
-from functools import lru_cache
 from typing import List
 
+from Utils import cache_self1
 from .action_logic import ActionLogic
 from .cached_logic import CachedLogic
 from .has_logic import HasLogic, CachedRules
@@ -37,7 +37,7 @@ class MuseumLogic(CachedLogic):
     def can_donate_museum_artifacts(self, number: int) -> StardewRule:
         return self.region.can_reach(Region.museum) & self.can_find_museum_artifacts(number)
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         region_rule = self.region.can_reach_all_except_one(item.locations)
         geodes_rule = And([self.action.can_open_geode(geode) for geode in item.geodes])

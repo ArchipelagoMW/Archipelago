@@ -1,6 +1,6 @@
-from functools import lru_cache
 from typing import Iterable
 
+from Utils import cache_self1
 from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .time_logic import TimeLogic
@@ -22,7 +22,7 @@ class SeasonLogic(CachedLogic):
         self.received = received_logic
         self.time = time
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def has(self, season: str) -> StardewRule:
         if season == Generic.any:
             return True_()

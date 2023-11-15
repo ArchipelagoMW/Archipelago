@@ -1,5 +1,6 @@
-from functools import lru_cache
+from functools import cached_property
 
+from Utils import cache_self1
 from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -24,38 +25,38 @@ class CombatLogic(CachedLogic):
     def set_magic(self, magic: MagicLogic):
         self.magic = magic
 
-    @lru_cache(maxsize=None)
+    @cache_self1
     def can_fight_at_level(self, level: str) -> StardewRule:
         if level == Performance.basic:
-            return self.has_any_weapon() | self.magic.has_any_spell()
+            return self.has_any_weapon | self.magic.has_any_spell()
         if level == Performance.decent:
-            return self.has_decent_weapon() | self.magic.has_decent_spells()
+            return self.has_decent_weapon | self.magic.has_decent_spells()
         if level == Performance.good:
-            return self.has_good_weapon() | self.magic.has_good_spells()
+            return self.has_good_weapon | self.magic.has_good_spells()
         if level == Performance.great:
-            return self.has_great_weapon() | self.magic.has_great_spells()
+            return self.has_great_weapon | self.magic.has_great_spells()
         if level == Performance.galaxy:
-            return self.has_galaxy_weapon() | self.magic.has_amazing_spells()
+            return self.has_galaxy_weapon | self.magic.has_amazing_spells()
         if level == Performance.maximum:
-            return self.has_galaxy_weapon() | self.magic.has_amazing_spells()  # Someday we will have the ascended weapons in AP
+            return self.has_galaxy_weapon | self.magic.has_amazing_spells()  # Someday we will have the ascended weapons in AP
         return False_()
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def has_any_weapon(self) -> StardewRule:
         return self.received(valid_weapons, 1)
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def has_decent_weapon(self) -> StardewRule:
         return Or(self.received(weapon, 2) for weapon in valid_weapons)
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def has_good_weapon(self) -> StardewRule:
         return Or(self.received(weapon, 3) for weapon in valid_weapons)
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def has_great_weapon(self) -> StardewRule:
         return Or(self.received(weapon, 4) for weapon in valid_weapons)
 
-    @lru_cache(maxsize=None)
+    @cached_property
     def has_galaxy_weapon(self) -> StardewRule:
         return Or(self.received(weapon, 5) for weapon in valid_weapons)
