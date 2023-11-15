@@ -354,6 +354,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         assert location.item.code is not None, "item code None should be event, " \
                                                                "location.address should then also be None. Location: " \
                                                                f" {location}"
+                        assert location.address not in locations_data[location.player], (
+                            f"Locations with duplicate address. {location} and "
+                            f"{locations_data[location.player][location.address]}")
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
                         if location.name in world.worlds[location.player].options.start_location_hints:
