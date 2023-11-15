@@ -70,29 +70,29 @@ def create_vanilla_regions(
         connect(multiworld, player, names, 'Evacuation', 'Outbreak',
                 lambda state: state.has("Beat Evacuation", player))
         connect(multiworld, player, names, "Outbreak", "Safe Haven",
-                lambda state: wol_cleared_missions(7) and state.has("Beat Outbreak", player))
+                lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
         connect(multiworld, player, names, "Outbreak", "Haven's Fall",
-                lambda state: wol_cleared_missions(7) and state.has("Beat Outbreak", player))
+                lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
         connect(multiworld, player, names, 'Zero Hour', 'Smash and Grab',
                 lambda state: state.has("Beat Zero Hour", player))
         connect(multiworld, player, names, 'Smash and Grab', 'The Dig',
-                lambda state: wol_cleared_missions(8) and state.has("Beat Smash and Grab", player))
+                lambda state: wol_cleared_missions(state, 8) and state.has("Beat Smash and Grab", player))
         connect(multiworld, player, names, 'The Dig', 'The Moebius Factor',
-                lambda state: wol_cleared_missions(11) and state.has("Beat The Dig", player))
+                lambda state: wol_cleared_missions(state, 11) and state.has("Beat The Dig", player))
         connect(multiworld, player, names, 'The Moebius Factor', 'Supernova',
-                lambda state: wol_cleared_missions(14) and state.has("Beat The Moebius Factor", player))
+                lambda state: wol_cleared_missions(state, 14) and state.has("Beat The Moebius Factor", player))
         connect(multiworld, player, names, 'Supernova', 'Maw of the Void',
                 lambda state: state.has("Beat Supernova", player))
         connect(multiworld, player, names, 'Zero Hour', "Devil's Playground",
-                lambda state: wol_cleared_missions(4) and state.has("Beat Zero Hour", player))
+                lambda state: wol_cleared_missions(state, 4) and state.has("Beat Zero Hour", player))
         connect(multiworld, player, names, "Devil's Playground", 'Welcome to the Jungle',
                 lambda state: state.has("Beat Devil's Playground", player))
         connect(multiworld, player, names, "Welcome to the Jungle", 'Breakout',
-                lambda state: wol_cleared_missions(8) and state.has("Beat Welcome to the Jungle", player))
+                lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
         connect(multiworld, player, names, "Welcome to the Jungle", 'Ghost of a Chance',
-                lambda state: wol_cleared_missions(8) and state.has("Beat Welcome to the Jungle", player))
+                lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
         connect(multiworld, player, names, "Zero Hour", 'The Great Train Robbery',
-                lambda state: wol_cleared_missions(6) and state.has("Beat Zero Hour", player))
+                lambda state: wol_cleared_missions(state, 6) and state.has("Beat Zero Hour", player))
         connect(multiworld, player, names, 'The Great Train Robbery', 'Cutthroat',
                 lambda state: state.has("Beat The Great Train Robbery", player))
         connect(multiworld, player, names, 'Cutthroat', 'Engine of Destruction',
@@ -235,7 +235,7 @@ def create_vanilla_regions(
         connect(multiworld, player, names, "Salvation", "Into the Void",
                 lambda state: state.has("Beat Salvation", player)
                               and state.has("Beat The Reckoning", player)
-                              and state.has("Beat All-in", player)),
+                              and state.has("Beat All-In", player)),
         connect(multiworld, player, names, "Into the Void", "The Essence of Eternity",
                 lambda state: state.has("Beat Into the Void", player)),
         connect(multiworld, player, names, "The Essence of Eternity", "Amon's Fall",
