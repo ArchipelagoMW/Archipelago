@@ -69,4 +69,4 @@ Pokémon Emerald has a fully functional map tracker that supports auto-tracking.
 2. Put the tracker pack into packs/ in your PopTracker install.
 3. Open PopTracker, and load the Pokémon Emerald pack.
 4. For autotracking, click on the "AP" symbol at the top.
-5. Enter the AP address, slot name, and password.
+5. Enter the Archipelago server address (the one you connected your client to), slot name, and password.

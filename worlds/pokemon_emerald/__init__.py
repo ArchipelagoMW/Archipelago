@@ -176,7 +176,7 @@ class PokemonEmeraldWorld(World):
 
         if self.options.norman_count.value > max_norman_count:
             logging.warning("Pokemon Emerald: Norman requirements for Player %s (%s) are unsafe in combination with "
-                            "other settings. Reducing to 4.", self.player, self.multiworld.player_name[self.player])
+                            "other settings. Reducing to 4.", self.player, self.multiworld.get_player_name(self.player))
             self.options.norman_count.value = max_norman_count
 
     def create_regions(self) -> None:
