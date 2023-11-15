@@ -514,6 +514,7 @@ def modify_vanilla_regions(existing_region: RegionData, modified_region: RegionD
 
     return updated_region
 
+
 def create_regions(region_factory: RegionFactory, random: Random, world_options) -> Tuple[
     Dict[str, Region], Dict[str, str]]:
     final_regions = create_final_regions(world_options)
