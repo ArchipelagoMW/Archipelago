@@ -1958,7 +1958,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Chomp Rock'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 2) or self.combat_item(state))
         else:
-            return state.has_all({'Chomp Rock'}, self.player)
+            return True
 
     def _65Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1966,7 +1966,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Chomp Rock'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 2) or self.combat_item(state))
         else:
-            return state.has_all({'Chomp Rock'}, self.player)
+            return True
 
     def _65Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1974,7 +1974,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Chomp Rock'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 2) or self.combat_item(state)) and self.has_midring(state)
         else:
-            return state.has_all({'Chomp Rock'}, self.player) and self.has_midring(state)
+            return self.has_midring(state)
 
     def _65Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
