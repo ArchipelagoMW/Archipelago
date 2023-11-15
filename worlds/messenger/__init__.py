@@ -82,7 +82,10 @@ class MessengerWorld(World):
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
     def create_regions(self) -> None:
-        self.multiworld.regions += [MessengerRegion(reg_name, self) for reg_name in REGIONS]
+        # MessengerRegion adds itself to the multiworld
+        for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
+            if region.name in REGION_CONNECTIONS:
+                region.add_exits(REGION_CONNECTIONS[region.name])
 
     def create_items(self) -> None:
         # create items that are always in the item pool
@@ -136,8 +139,6 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        for reg_name, connections in REGION_CONNECTIONS.items():
-            self.multiworld.get_region(reg_name, self.player).add_exits(connections)
         logic = self.options.logic_level
         if logic == Logic.option_normal:
             MessengerRules(self).set_messenger_rules()
