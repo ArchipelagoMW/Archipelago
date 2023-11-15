@@ -846,11 +846,11 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Spear of Adun", "The Spear of Adun: Victory", SC2LOTV_LOC_ID_OFFSET + 600, LocationType.VICTORY,
                      lambda state: state._sc2lotv_has_common_unit(multiworld, player)
                                     and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
-        LocationData("The Spear of Adun", "The Spear of Adun: Close Warp Gate", SC2LOTV_LOC_ID_OFFSET + 601, LocationType.VICTORY),
-        LocationData("The Spear of Adun", "The Spear of Adun: West Warp Gate", SC2LOTV_LOC_ID_OFFSET + 602, LocationType.VICTORY,
+        LocationData("The Spear of Adun", "The Spear of Adun: Close Warp Gate", SC2LOTV_LOC_ID_OFFSET + 601, LocationType.BONUS),
+        LocationData("The Spear of Adun", "The Spear of Adun: West Warp Gate", SC2LOTV_LOC_ID_OFFSET + 602, LocationType.BONUS,
                      lambda state: state._sc2lotv_has_common_unit(multiworld, player)
                                    and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
-        LocationData("The Spear of Adun", "The Spear of Adun: North Warp Gate", SC2LOTV_LOC_ID_OFFSET + 603, LocationType.VICTORY,
+        LocationData("The Spear of Adun", "The Spear of Adun: North Warp Gate", SC2LOTV_LOC_ID_OFFSET + 603, LocationType.BONUS,
                      lambda state: state._sc2lotv_has_common_unit(multiworld, player)
                                    and state._sc2lotv_has_anti_light_anti_air(multiworld, player)),
         LocationData("The Spear of Adun", "The Spear of Adun: North Power Cell", SC2LOTV_LOC_ID_OFFSET + 604, LocationType.MISSION_PROGRESS,
