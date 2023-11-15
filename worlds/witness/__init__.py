@@ -5,7 +5,7 @@ import dataclasses
 from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
-from Options import PerGameCommonOptions, DefaultOnToggle, Toggle
+from Options import PerGameCommonOptions, Toggle
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_hints, generate_joke_hints
 from worlds.AutoWorld import World, WebWorld
