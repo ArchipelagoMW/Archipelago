@@ -608,15 +608,13 @@ class SC2Logic:
                                 or state.has_all({ItemNames.WRAITH, ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
                                 or self.protoss_fleet(state)
                         )
-                        and (self.terran_has_sustainable_mech_heal(state)
-                             or (get_option_value(state,
-                                                  "spear_of_adun_autonomously_cast_ability_presence") ==
-                                 SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere
+                        and (self.terran_sustainable_mech_heal(state)
+                             or (self.spear_of_adun_autonomously_cast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere
                                  and state.has(ItemNames.RECONSTRUCTION_BEAM, self.player))
                              )
                         )
             ) \
-                and self.terran_has_competent_anti_air(state) \
+                and self.terran_competent_anti_air(state) \
                 and self.protoss_competent_comp(state) \
                 and self.zerg_competent_comp(state)
         else:
@@ -633,3 +631,4 @@ class SC2Logic:
         self.basic_terran_units = get_basic_units(self.multiworld, self.player, SC2Race.TERRAN)
         self.basic_zerg_units = get_basic_units(self.multiworld, self.player, SC2Race.ZERG)
         self.basic_protoss_units = get_basic_units(self.multiworld, self.player, SC2Race.PROTOSS)
+        self.spear_of_adun_autonomously_cast_presence = get_option_value(multiworld, player, "spear_of_adun_autonomously_cast_ability_presence")
