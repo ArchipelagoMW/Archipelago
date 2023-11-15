@@ -55,7 +55,7 @@ window.addEventListener('load', () => {
                 render: function (data, type, row) {
                     if (type === "sort" || type === 'type') {
                         if (data === "None")
-                            return -1;
+                            return Number.MAX_VALUE;
 
                         return parseInt(data);
                     }
