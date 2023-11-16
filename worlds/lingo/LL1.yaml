@@ -1650,7 +1650,9 @@
       The Observant: True # Assuming that access to The Observant includes access to the right entrance
       Eight Room: True
       Eight Alcove:
-        door: Eight Painting
+        door: Eight Door
+      Orange Tower Sixth Floor:
+        painting: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_incomparable_incomparable
@@ -1715,7 +1717,7 @@
         colors: blue
         tag: forbid
     doors:
-      Eight Painting:
+      Eight Door:
         id: Red Blue Purple Room Area Doors/Door_a_strands
         location_name: Giant Sevens
         group: Observant Doors
@@ -1725,11 +1727,17 @@
             panel: I
           - room: Elements Area
             panel: A
+    paintings:
+      - id: crown_painting
+        orientation: east
   Eight Alcove:
     entrances:
       The Incomparable:
         room: The Incomparable
-        door: Eight Painting
+        door: Eight Door
+      Outside The Initiated:
+        room: Outside The Initiated
+        door: Eight Door
     paintings:
       - id: eight_painting2
         orientation: north
@@ -2126,7 +2134,7 @@
         orientation: north
       - id: panda_painting_2
         orientation: south
-      - id: pencil_painting
+      - id: crown_painting2
         orientation: north
       - id: colors_painting2
         orientation: south
@@ -2638,10 +2646,8 @@
       Hub Room: True
       Outside The Wondrous: True
       Outside The Undeterred: True
-      Outside The Initiated: True
       Outside The Agreeable: True
       Outside The Wanderer: True
-      Eight Alcove: True
       Orange Tower Fifth Floor:
         room: Orange Tower Fifth Floor
         door: Welcome Back
@@ -2713,6 +2719,8 @@
       Orange Tower Fifth Floor:
         room: Art Gallery
         door: Exit
+      Eight Alcove:
+        door: Eight Door
     panels:
       SEVEN (1):
         id: Backside Room/Panel_seven_seven_5
@@ -2878,6 +2886,16 @@
             panel: BACKSIDE
           - room: The Bearer
             panel: BACKSIDE
+      Eight Door:
+        id: Red Blue Purple Room Area Doors/Door_a_strands2
+        skip_location: True
+        panels:
+          - room: The Incomparable
+            panel: I (Seven)
+          - room: Courtyard
+            panel: I
+          - room: Elements Area
+            panel: A
     paintings:
       - id: clock_painting_5
         orientation: east
