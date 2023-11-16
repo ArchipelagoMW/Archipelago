@@ -60,7 +60,7 @@ def get_minsanity_options():
 @cache_argsless
 def minimal_locations_maximal_items():
     min_max_options = {
-        Goal.internal_name: Goal.option_bottom_of_the_mines,
+        Goal.internal_name: Goal.option_craft_master,
         BundleRandomization.internal_name: BundleRandomization.option_vanilla,
         BundlePrice.internal_name: BundlePrice.option_very_cheap,
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,

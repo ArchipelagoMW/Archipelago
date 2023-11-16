@@ -419,7 +419,7 @@ id,name,classification,groups,mod_name
 441,Crystal Path Recipe,progression,"CRAFTSANITY",
 442,Wedding Ring Recipe,progression,"CRAFTSANITY",
 443,Warp Totem: Desert Recipe,progression,"CRAFTSANITY",
-444,Warp Totem: Island Recipe,progression,"CRAFTSANITY",
+444,Warp Totem: Island Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",
 445,Torch Recipe,progression,"CRAFTSANITY",
 446,Campfire Recipe,progression,"CRAFTSANITY",
 447,Wooden Brazier Recipe,progression,"CRAFTSANITY",

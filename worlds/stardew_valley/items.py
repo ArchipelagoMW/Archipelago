@@ -511,7 +511,8 @@ def create_tv_channels(item_factory: StardewItemFactory, items: List[Item]):
 def create_crafting_recipes(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     has_shipsanity = options.shipsanity == Shipsanity.option_everything
     has_craftsanity = options.craftsanity == Craftsanity.option_all
-    need_qi_recipes = has_shipsanity or has_craftsanity
+    has_craft_master = options.goal == Goal.option_craft_master
+    need_qi_recipes = has_shipsanity or has_craftsanity or has_craft_master
     crafting_recipes = []
     if need_qi_recipes:
         crafting_recipes.extend([recipe for recipe in items_by_group[Group.QI_CRAFTING_RECIPE]])
