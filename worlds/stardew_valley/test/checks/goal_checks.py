@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
 from .option_checks import get_stardew_options
 from ... import options, ExcludeGingerIsland
-from .. import SVTestBase
+from .. import SVTestCase
 
 
 def is_goal(multiworld: MultiWorld, goal: int) -> bool:
@@ -32,24 +32,24 @@ def is_not_perfection(multiworld: MultiWorld) -> bool:
     return not is_perfection(multiworld)
 
 
-def assert_ginger_island_is_included(tester: SVTestBase, multiworld: MultiWorld):
+def assert_ginger_island_is_included(tester: SVTestCase, multiworld: MultiWorld):
     tester.assertEqual(get_stardew_options(multiworld).exclude_ginger_island, ExcludeGingerIsland.option_false)
 
 
-def assert_walnut_hunter_world_is_valid(tester: SVTestBase, multiworld: MultiWorld):
+def assert_walnut_hunter_world_is_valid(tester: SVTestCase, multiworld: MultiWorld):
     if is_not_walnut_hunter(multiworld):
         return
 
     assert_ginger_island_is_included(tester, multiworld)
 
 
-def assert_perfection_world_is_valid(tester: SVTestBase, multiworld: MultiWorld):
+def assert_perfection_world_is_valid(tester: SVTestCase, multiworld: MultiWorld):
     if is_not_perfection(multiworld):
         return
 
     assert_ginger_island_is_included(tester, multiworld)
 
 
-def assert_goal_world_is_valid(tester: SVTestBase, multiworld: MultiWorld):
+def assert_goal_world_is_valid(tester: SVTestCase, multiworld: MultiWorld):
     assert_walnut_hunter_world_is_valid(tester, multiworld)
     assert_perfection_world_is_valid(tester, multiworld)
