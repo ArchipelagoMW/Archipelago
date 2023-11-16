@@ -402,7 +402,7 @@ id,name,classification,groups,mod_name
 419,Vegetable Medley Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
 425,Gate Recipe,progression,"CRAFTSANITY",
 426,Wood Fence Recipe,progression,"CRAFTSANITY",
-427,Deluxe Retaining Soil Recipe,progression,"CRAFTSANITY",
+427,Deluxe Retaining Soil Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",
 428,Grass Starter Recipe,progression,"CRAFTSANITY",
 429,Wood Floor Recipe,progression,"CRAFTSANITY",
 430,Rustic Plank Floor Recipe,progression,"CRAFTSANITY",
