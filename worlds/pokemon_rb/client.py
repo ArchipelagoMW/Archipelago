@@ -2,6 +2,7 @@ import base64
 import logging
 import time
 
+from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
 
@@ -21,6 +22,7 @@ DATA_LOCATIONS = {
     "Rod": (0x1716, 0x01),
     "DexSanityFlag": (0x1A71, 19),
     "GameStatus": (0x1A84, 0x01),
+    "Money": (0x141F, 3),
     "ResetCheck": (0x0100, 4),
     # First and second Vermilion Gym trash can selection. Second is not used, so should always be 0.
     # First should never be above 0x0F. This is just before Event Flags.
@@ -72,7 +74,7 @@ class PokemonRBClient(BizHawkClient):
             ctx.items_handling = 0b001
             ctx.command_processor.commands["bank"] = cmd_bank
             seed_name = await read(ctx.bizhawk_ctx, [(0xFFDB, 21, "ROM")])
-            ctx.seed_name = seed_name[0].split(bytes([0]))[0].decode("ascii")
+            ctx.seed_name = seed_name[0].split(b"\0")[0].decode("ascii")
             self.set_deathlink = False
             self.banking_command = None
             self.locations_array = None
@@ -196,10 +198,9 @@ class PokemonRBClient(BizHawkClient):
         # BANK
 
         if self.banking_command:
-            original_money = await read(ctx.bizhawk_ctx, [(0x141F, 3, "WRAM")])
-            original_money = original_money[0]
-            original_money = [int(byte) for byte in original_money]
-            money = [int(hex(byte).split("x")[1]) for byte in original_money]
+            original_money = data["Money"]
+            # Money is stored as binary-coded decimal.
+            money = [int(hex(byte)[2:]) for byte in original_money]
             money = (money[0] * 10000) + (money[1] * 100) + money[2]
             if self.banking_command > money:
                 logger.warning(f"You do not have ${self.banking_command} to deposit!")
@@ -216,7 +217,7 @@ class PokemonRBClient(BizHawkClient):
                     if self.banking_command >= 0:
                         deposit = self.banking_command - int(self.banking_command / 4)
                         tax = self.banking_command - deposit
-                        logger.info(f"Deposited ${deposit}, and charged a tax of {tax}.")
+                        logger.info(f"Deposited ${deposit}, and charged a tax of ${tax}.")
                         self.banking_command = deposit
                     else:
                         logger.info(f"Withdrew ${-self.banking_command}.")
@@ -230,7 +231,7 @@ class PokemonRBClient(BizHawkClient):
         # VICTORY
 
         if data["EventFlag"][280] & 1 and not ctx.finished_game:
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": 30}])
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 
     def on_package(self, ctx, cmd, args):
