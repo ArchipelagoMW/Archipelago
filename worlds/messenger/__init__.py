@@ -1,7 +1,7 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Counter, Dict, List, Optional
 
-from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
+from BaseClasses import CollectionState, Item, ItemClassification, Location, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
 from .options import Goal, Logic, MessengerOptions, NotesNeeded, PowerSeals
@@ -146,6 +146,22 @@ class MessengerWorld(World):
             MessengerHardRules(self).set_messenger_rules()
         else:
             MessengerOOBRules(self).set_messenger_rules()
+
+    def stage_fill_hook(self, prog_items: List[Item], useful_items: List[Item], filler_items: List[Item],
+                        locations: List[Location]) -> None:
+        players = self.multiworld.get_game_players(self.game)
+        total_items = len(prog_items)
+        items = {}
+        for index in range(int((total_items * .9)), total_items):
+            item = prog_items[index]
+            if item.player in players and item.name in {"Wingsuit", "Rope Dart"}:
+                items.setdefault(prog_items[index].player, []).append((index, prog_items[index]))
+        for player, item_pairs in items.items():
+            if len(item_pairs) > 1:
+                item_to_move = self.random.choice(item_pairs)
+                new_index = self.random.randrange(0, int((total_items * .1)))
+                prog_items.pop(item_to_move[0])
+                prog_items.insert(new_index, item_to_move[1])
 
     def fill_slot_data(self) -> Dict[str, Any]:
         shop_prices = {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()}
