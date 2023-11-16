@@ -14,7 +14,7 @@ from .locations import LocationTags
 from .logic.logic import StardewLogic
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions
+from .options import StardewValleyOptions, Friendsanity
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
 from .stardew_rule import And
@@ -59,7 +59,7 @@ def set_rules(world):
     set_fishsanity_rules(all_location_names, logic, multiworld, player)
     set_museumsanity_rules(all_location_names, logic, multiworld, player, world_options)
 
-    set_friendsanity_rules(all_location_names, logic, multiworld, player)
+    set_friendsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_backpack_rules(logic, multiworld, player, world_options)
     set_festival_rules(all_location_names, logic, multiworld, player)
     set_monstersanity_rules(all_location_names, logic, multiworld, player, world_options)
@@ -81,10 +81,6 @@ def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
                              logic.has("Sweet Gem Berry"))
     MultiWorldRules.add_rule(multiworld.get_location("Galaxy Sword Shrine", player),
                              logic.has("Prismatic Shard"))
-    MultiWorldRules.add_rule(multiworld.get_location("Have a Baby", player),
-                             logic.relationship.can_reproduce(1))
-    MultiWorldRules.add_rule(multiworld.get_location("Have Another Baby", player),
-                             logic.relationship.can_reproduce(2))
 
 
 def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -800,7 +796,14 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
                              logic.has("JotPK Max Buff"))
 
 
-def set_friendsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld: MultiWorld, player: int):
+def set_friendsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
+    if world_options.friendsanity == Friendsanity.option_none:
+        return
+    MultiWorldRules.add_rule(multiworld.get_location("Have a Baby", player),
+                             logic.relationship.can_reproduce(1))
+    MultiWorldRules.add_rule(multiworld.get_location("Have Another Baby", player),
+                             logic.relationship.can_reproduce(2))
+
     friend_prefix = "Friendsanity: "
     friend_suffix = " <3"
     for friend_location in locations.locations_by_tag[LocationTags.FRIENDSANITY]:

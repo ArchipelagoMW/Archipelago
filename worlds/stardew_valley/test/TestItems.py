@@ -9,6 +9,7 @@ from BaseClasses import ItemClassification, MultiWorld
 from . import setup_solo_multiworld, SVTestCase, allsanity_options_without_mods
 from .. import ItemData, StardewValleyWorld
 from ..items import Group, item_table
+from ..options import Friendsanity
 
 
 class TestItems(SVTestCase):
@@ -33,12 +34,13 @@ class TestItems(SVTestCase):
 
     def test_babies_come_in_all_shapes_and_sizes(self):
         baby_permutations = set()
+        options = {Friendsanity.internal_name: Friendsanity.option_bachelors}
         for attempt_number in range(50):
             if len(baby_permutations) >= 4:
                 print(f"Already got all 4 baby permutations, breaking early [{attempt_number} generations]")
                 break
             seed = random.randrange(sys.maxsize)
-            multiworld = setup_solo_multiworld(seed=seed)
+            multiworld = setup_solo_multiworld(options, seed=seed)
             baby_items = [item for item in multiworld.get_items() if "Baby" in item.name]
             self.assertEqual(len(baby_items), 2)
             baby_permutations.add(f"{baby_items[0]} - {baby_items[1]}")

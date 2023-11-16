@@ -62,6 +62,8 @@ class RelationshipLogic(CachedLogic):
     def has_children(self, number_children: int) -> StardewRule:
         if number_children <= 0:
             return True_()
+        if self.friendsanity_option == Friendsanity.option_none:
+            return self.can_reproduce(number_children)
         return self.received(possible_kids, number_children) & self.buildings.has_house(2)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:

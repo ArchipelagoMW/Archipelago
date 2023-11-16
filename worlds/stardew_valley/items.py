@@ -206,7 +206,6 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_seeds(item_factory, options, items)
     create_friendsanity_items(item_factory, options, items, random)
     create_festival_rewards(item_factory, options, items)
-    create_babies(item_factory, items, random)
     create_special_order_board_rewards(item_factory, options, items)
     create_special_order_qi_rewards(item_factory, options, items)
     create_walnut_purchase_rewards(item_factory, options, items)
@@ -354,10 +353,11 @@ def create_museum_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory("Stardrop", get_stardrop_classification(options)))
 
 
-def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item], random):
+def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item], random: Random):
     island_villagers = [NPC.leo, ModNPC.lance]
     if options.friendsanity == Friendsanity.option_none:
         return
+    create_babies(item_factory, items, random)
     exclude_non_bachelors = options.friendsanity == Friendsanity.option_bachelors
     exclude_locked_villagers = options.friendsanity == Friendsanity.option_starting_npcs or \
                                options.friendsanity == Friendsanity.option_bachelors
