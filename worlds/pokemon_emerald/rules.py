@@ -615,12 +615,16 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     # Route 120
     set_rule(
-        get_entrance("REGION_ROUTE120/NORTH -> REGION_ROUTE120/NORTH_POND"),
+        get_entrance("REGION_ROUTE120/NORTH -> REGION_ROUTE120/NORTH_POND_SHORE"),
         lambda state: state.has("Devon Scope", world.player)
     )
     set_rule(
-        get_entrance("REGION_ROUTE120/NORTH_POND -> REGION_ROUTE120/NORTH"),
+        get_entrance("REGION_ROUTE120/NORTH_POND_SHORE -> REGION_ROUTE120/NORTH"),
         lambda state: state.has("Devon Scope", world.player)
+    )
+    set_rule(
+        get_entrance("REGION_ROUTE120/NORTH_POND_SHORE -> REGION_ROUTE120/NORTH_POND"),
+        can_surf
     )
 
     # Route 121
