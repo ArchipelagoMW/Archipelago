@@ -176,8 +176,8 @@ class EarlySmallLothricBanner(Choice):
     into an early sphere across all worlds."""
     display_name = "Early Small Lothric Banner"
     option_off = 0
-    option_early_anywhere = 1
-    option_early_self = 2
+    option_early_global = 1
+    option_early_local = 2
     default = option_off
 
 
