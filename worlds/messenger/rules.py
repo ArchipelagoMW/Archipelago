@@ -1,10 +1,9 @@
 from typing import Callable, Dict, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, allow_self_locking_items, set_rule
+from worlds.generic.Rules import add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
-from .options import Goal, MessengerAccessibility
-from .subclasses import MessengerShopLocation
+from .options import MessengerAccessibility
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -37,7 +36,9 @@ class MessengerRules:
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player) and self.can_dboost(state),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_dart(state),
+            "Music Box": lambda state: (state.has_all(set(NOTES), self.player)
+                                        or state.has("Power Seal", self.player, max(1, self.world.required_seals)))
+                                       and self.has_dart(state),
         }
 
         self.location_rules = {
@@ -92,8 +93,6 @@ class MessengerRules:
             # corrupted future
             "Corrupted Future - Key of Courage": lambda state: state.has_all({"Demon King Crown", "Magic Firefly"},
                                                                              self.player),
-            # the shop
-            "Shop Chest": self.has_enough_seals,
             # tower hq
             "Money Wrench": self.can_shop,
         }
@@ -143,14 +142,11 @@ class MessengerRules:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
             if region.name == "The Shop":
-                for loc in [location for location in region.locations if isinstance(location, MessengerShopLocation)]:
+                for loc in region.locations:
                     loc.access_rule = loc.can_afford
-        if self.world.options.goal == Goal.option_power_seal_hunt:
-            set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
-                     lambda state: state.has("Shop Chest", self.player))
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
-        if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
+        if multiworld.accessibility[self.player]:  # not locations accessibility
             set_self_locking_items(self.world, self.player)
 
 
@@ -201,8 +197,7 @@ class MessengerHardRules(MessengerRules):
         self.extra_rules = {
             "Searing Crags - Key of Strength": lambda state: self.has_dart(state) or self.has_windmill(state),
             "Elemental Skylands - Key of Symbiosis": lambda state: self.has_windmill(state) or self.can_dboost(state),
-            "Autumn Hills Seal - Spike Ball Darts": lambda state: (self.has_dart(state) and self.has_windmill(state))
-                                                                  or self.has_wingsuit(state),
+            "Autumn Hills Seal - Spike Ball Darts": lambda state: self.has_dart(state) or self.has_windmill(state),
             "Underworld Seal - Fireball Wave": self.has_windmill,
         }
 
