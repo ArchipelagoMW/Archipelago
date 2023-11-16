@@ -44,6 +44,8 @@ class CraftingLogic(CachedLogic):
                  special_orders: SpecialOrderLogic):
         super().__init__(player, cached_rules)
         self.craftsanity_option = craftsanity_option
+        self.exclude_ginger_island = exclude_ginger_island
+        self.mods = mods
         self.festivals_option = festivals_option
         self.special_orders_option = special_orders_option
         self.received = received
@@ -123,6 +125,8 @@ class CraftingLogic(CachedLogic):
         all_recipes_names = []
         exclude_island = self.exclude_ginger_island == ExcludeGingerIsland.option_true
         for location in locations_by_tag[LocationTags.CRAFTSANITY]:
+            if not location.name.startswith(craftsanity_prefix):
+                continue
             if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
                 continue
             if location.mod_name and location.mod_name not in self.mods:
