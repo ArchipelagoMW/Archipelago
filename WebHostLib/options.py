@@ -133,7 +133,7 @@ def create():
                     continue
 
                 option = world.options_dataclass.type_hints[option_name].from_any(option_value)
-                if isinstance(option, Options.SpecialRange) and isinstance(option_value, str):
+                if isinstance(option, Options.NamedRange) and isinstance(option_value, str):
                     assert option_value in option.special_range_names, \
                         f"Invalid preset value '{option_value}' for '{option_name}' in '{preset_name}'. " \
                         f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
