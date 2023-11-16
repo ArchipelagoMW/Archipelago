@@ -3,9 +3,9 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 
-from typing import Dict, TYPE_CHECKING, Callable, FrozenSet
+from typing import TYPE_CHECKING, Callable, FrozenSet
 
-from BaseClasses import Location, CollectionState
+from BaseClasses import CollectionState
 from .player_logic import WitnessPlayerLogic
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic, WitnessRegions
@@ -147,7 +147,7 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
 def _has_item(item: str, world: "WitnessWorld", player: int,
               player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> Callable[[CollectionState], bool]:
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
-        return lambda state: world.regio.region_cache[item].can_reach(state)
+        return lambda state: state.can_reach(item, "Region", player)
     if item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
         return _has_lasers(laser_req, world)
@@ -192,7 +192,7 @@ def make_lambda(entity_hex: str, world: "WitnessWorld") -> Callable[[CollectionS
     return _meets_item_requirements(entity_req, world)
 
 
-def set_rules(world: "WitnessWorld", location_cache: Dict[str, Location]):
+def set_rules(world: "WitnessWorld"):
     """
     Sets all rules for all locations
     """
@@ -208,8 +208,7 @@ def set_rules(world: "WitnessWorld", location_cache: Dict[str, Location]):
 
         rule = make_lambda(entity_hex, world)
 
-        location = location_cache[location] if location in location_cache\
-            else world.multiworld.get_location(location, world.player)
+        location = world.multiworld.get_location(location, world.player)
 
         set_rule(location, rule)
 
