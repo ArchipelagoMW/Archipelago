@@ -737,7 +737,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         elif 'InvalidGame' in errors:
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
-            raise Exception('Server reported your client version as incompatible')
+            raise Exception('Server reported your client version as incompatible. '
+                            'This probably means you have to update.')
         elif 'InvalidItemsHandling' in errors:
             raise Exception('The item handling flags requested by the client are not supported')
         # last to check, recoverable problem
