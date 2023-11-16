@@ -31,7 +31,7 @@ As an example, suppose we want an option that lets the user start their game wit
 create our option class (with a docstring), give it a `display_name`, and add it to our game's options dataclass:
 
 ```python
-# Options.py
+# options.py
 from dataclasses import dataclass
 
 from Options import Toggle, PerGameCommonOptions

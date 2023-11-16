@@ -36,7 +36,6 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
-                multiworld._recache()
                 region_count = len(multiworld.get_regions())
                 location_count = len(multiworld.get_locations())
 
@@ -46,14 +45,12 @@ class TestBase(unittest.TestCase):
                 self.assertEqual(location_count, len(multiworld.get_locations()),
                                  f"{game_name} modified locations count during rule creation")
 
-                multiworld._recache()
                 call_all(multiworld, "generate_basic")
                 self.assertEqual(region_count, len(multiworld.get_regions()),
                                  f"{game_name} modified region count during generate_basic")
                 self.assertGreaterEqual(location_count, len(multiworld.get_locations()),
                                         f"{game_name} modified locations count during generate_basic")
 
-                multiworld._recache()
                 call_all(multiworld, "pre_fill")
                 self.assertEqual(region_count, len(multiworld.get_regions()),
                                  f"{game_name} modified region count during pre_fill")
@@ -69,3 +66,12 @@ class TestBase(unittest.TestCase):
                         for location in locations:
                             self.assertIn(location, world_type.location_name_to_id)
                         self.assertNotIn(group_name, world_type.location_name_to_id)
+
+    def test_location_descriptions_have_valid_names(self):
+        """Ensure all location descriptions match a location name or location group name"""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            valid_names = world_type.location_names.union(world_type.location_name_groups)
+            for name in world_type.location_descriptions:
+                with self.subTest("Name should be valid", game=game_name, location=name):
+                    self.assertIn(name, valid_names,
+                                  "All location descriptions must match defined location names")
