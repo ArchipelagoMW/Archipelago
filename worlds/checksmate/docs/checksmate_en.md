@@ -1,6 +1,6 @@
 # ChecksMate Chess Randomizer Setup Guide
 
-![A chess piece with several blurry opposing pieces in the background](https://cdn.discordapp.com/attachments/1033159819114319892/1172304885530763304/00116-705382628.png)
+![A chess piece with several blurry opposing pieces in the background](https://i.imgur.com/fqng206.png)
 
 ## Required Software
 
@@ -30,7 +30,8 @@ When you join a multiworld game, you will be asked to provide your YAML file to 
 the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
 files. You do not have a file inside that zip though!
 
-You need to start the ChecksMate client yourself, it is located within the Archipelago folder.
+You need to start a ChecksMate client yourself, which are available from the Releases page (see above). Generally, these
+need to be extracted to a folder before they are run, due to dependency on asset files and dynamic libraries.
 
 ### Connect to the MultiServer
 

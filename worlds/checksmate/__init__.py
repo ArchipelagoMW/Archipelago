@@ -165,9 +165,11 @@ class CMWorld(World):
         self.items_used[self.player]["Progressive Engine ELO Lobotomy"] = (
                 5 - get_option_value(self.multiworld, self.player, "max_engine_penalties"))
 
-        # more pawn chance (1 major:1 minor:2 pawn distribution)
+        # more pawn chance (2 major:2 minor:6 pawn distribution)
+        my_progression_items.append("Progressive Pawn")
         my_progression_items.append("Progressive Pawn")
         # I am proud of this feature, so I want players to see more of it. Fight me.
+        my_progression_items.append("Progressive Pocket")
         my_progression_items.append("Progressive Pocket")
         # halve chance of queen promotion - with an equal distribution, user will end up with no majors and only queens
         my_progression_items.extend([item for item in my_progression_items if item != "Progressive Major To Queen"])

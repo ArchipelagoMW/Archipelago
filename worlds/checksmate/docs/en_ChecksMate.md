@@ -5,7 +5,7 @@
 The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
 config file.
 
-## What is considered a location check in ChecksFinder?
+## What is considered a location check in ChecksMate?
 
 Perform various feats of style, grace, and conquest.
 

@@ -97,22 +97,22 @@ def set_rules(multiworld: MultiWorld, player: int):
     # b. capture series of pieces and pawns within 1 game
     # c. fork/pin
     capture_expectations = {
-        "Checkmate Maxima": 3920,
         "Capture Pawn A": 190,  # AI prefers not to use edge pawns early - thus they stay defended longer
         "Capture Pawn B": 140,
         "Capture Pawn C": 100,
         "Capture Pawn D": 100,
         "Capture Pawn E": 100,
-        "Capture Pawn F": 100,
-        "Capture Pawn G": 140,
-        "Capture Pawn H": 190,  # AI prefers not to use edge pawns early - thus they stay defended longer
+        "Capture Pawn F": 140,  # AI prefers not to open kingside as developing queen has more tempo
+        "Capture Pawn G": 240,
+        "Capture Pawn H": 290,  # AI prefers not to use edge pawns early - thus they stay defended longer
         "Capture Piece A": 500,  # rook
-        "Capture Piece H": 590,  # rook - AI prefers not to use kingside pieces as developing queen has more tempo
         "Capture Piece B": 300,  # knight
-        "Capture Piece G": 390,  # knight - AI prefers not to use kingside pieces as developing queen has more tempo
         "Capture Piece C": 300,  # bishop
-        "Capture Piece F": 390,  # bishop - AI prefers not to use kingside pieces as developing queen has more tempo
         "Capture Piece D": 900,  # queen
+        "Checkmate Maxima": 3920,  # king (this is the game's goal / completion condition)
+        "Capture Piece F": 640,  # bishop - AI prefers not to open kingside as developing queen has more tempo
+        "Capture Piece G": 640,  # knight - AI prefers not to open kingside as developing queen has more tempo
+        "Capture Piece H": 840,  # rook - AI prefers not to open kingside as developing queen has more tempo
         "Capture 2 Pawns": 550,
         "Capture 3 Pawns": 750,
         "Capture 4 Pawns": 940,
@@ -143,9 +143,9 @@ def set_rules(multiworld: MultiWorld, player: int):
         # "Skewer": 600,
         "Threaten Queen": 300,
         "Threaten King": 400,
-        "Bongcloud Center": 100,
+        "Bongcloud Center": 50,
         "Bongcloud A File": 150,
-        "Bongcloud Capture": 50,
+        "Bongcloud Capture": 200,
         "Bongcloud Promotion": 1950,  # requires reaching a rather late-game state
     }
     for piece, material in capture_expectations.items():
