@@ -19,6 +19,11 @@ class MessengerRules:
         self.player = world.player
         self.world = world
 
+        # these locations are at the top of the shop tree, and the entire shop tree needs to be purchased
+        maximum_price = (world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost +
+                         world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost)
+        self.maximum_price = min(maximum_price, world.total_shards)
+
         self.region_rules = {
             "Ninja Village": self.has_wingsuit,
             "Autumn Hills": self.has_wingsuit,
@@ -35,9 +40,8 @@ class MessengerRules:
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
             "Music Box": lambda state: (state.has_all(set(NOTES), self.player)
-                                        or state.has("Power Seal", self.player, max(1, self.world.required_seals)))
-                                       and self.has_dart(state),
-            "The Craftsman's Corner": lambda state: state.has("Money Wrench", self.player) and self.can_shop(state)
+                                        or self.has_enough_seals(state)) and self.has_dart(state),
+            "The Craftsman's Corner": lambda state: state.has("Money Wrench", self.player) and self.can_shop(state),
         }
 
         self.location_rules = {
@@ -126,11 +130,7 @@ class MessengerRules:
         return True
 
     def can_shop(self, state: CollectionState) -> bool:
-        # these locations are at the top of the shop tree, and the entire shop tree needs to be purchased
-        price = (self.world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost +
-                 self.world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost)
-        can_afford = state.has("Shards", self.player, min(price, self.world.total_shards))
-        return can_afford
+        return state.has("Shards", self.player, self.maximum_price)
 
     def set_messenger_rules(self) -> None:
         multiworld = self.world.multiworld
@@ -220,8 +220,7 @@ class MessengerOOBRules(MessengerRules):
         self.region_rules = {
             "Elemental Skylands":
                 lambda state: state.has_any({"Windmill Shuriken", "Wingsuit", "Rope Dart", "Magic Firefly"}, self.player),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player)
-                                       or state.has("Power Seal", self.player, max(1, self.world.required_seals))
+            "Music Box": lambda state: state.has_all(set(NOTES), self.player) or self.has_enough_seals(state),
         }
 
         self.location_rules = {

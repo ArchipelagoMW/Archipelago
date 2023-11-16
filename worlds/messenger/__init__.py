@@ -152,7 +152,7 @@ class MessengerWorld(World):
             "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
             "max_price": self.total_shards,
             "required_seals": self.required_seals,
-            **self.options.as_dict("music_box", "death_link", "logic_level")
+            **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
 
     def get_filler_item_name(self) -> str:
