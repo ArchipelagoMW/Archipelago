@@ -10,8 +10,8 @@ class TestOptionPresets(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             presets = world_type.web.options_presets
             for preset_name, preset in presets.items():
-                with self.subTest(game=game_name, preset=preset_name):
-                    for option_name, option_value in preset.items():
+                for option_name, option_value in preset.items():
+                    with self.subTest(game=game_name, preset=preset_name, option=option_name):
                         try:
                             option = world_type.options_dataclass.type_hints[option_name].from_any(option_value)
                             supported_types = [Choice, Toggle, Range, SpecialRange]
@@ -33,8 +33,8 @@ class TestOptionPresets(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             presets = world_type.web.options_presets
             for preset_name, preset in presets.items():
-                with self.subTest(game=game_name, preset=preset_name):
-                    for option_name, option_value in preset.items():
+                for option_name, option_value in preset.items():
+                    with self.subTest(game=game_name, preset=preset_name, option=option_name):
                         # Check for non-standard random values.
                         self.assertFalse(
                             str(option_value).startswith("random-"),
@@ -56,7 +56,7 @@ class TestOptionPresets(unittest.TestCase):
                                 )
                             else:
                                 self.assertTrue(
-                                    option.name_lookup[option.value] == option_value,
+                                    option.name_lookup.get(option.value, None) == option_value,
                                     f"'{option_name}': '{option_value}' in preset '{preset_name}' for game "
                                     f"'{game_name}' is not supported for webhost. Values must not be resolved to a "
                                     f"different option via option.from_text (or an alias)."
