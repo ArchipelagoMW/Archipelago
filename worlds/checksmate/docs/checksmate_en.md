@@ -22,6 +22,25 @@ Some releases of the ChecksMate client include an example YAML file demonstratin
 
 You can customize your settings by visiting the [ChecksMate Player Settings Page](/games/ChecksMate/player-settings)
 
+#### Warning: Locations Accessibility not supported
+
+It is strongly recommended that you **do not use *Accessibility: Locations***. Most testing is at *Minimal*, although
+*Items* should also function. (Generation will often fail. The custom item pool generation does not guarantee that you
+will receive the combinations the logic believes necessary to access every location. Once location distribution begins,
+there is no way to revisit item pool generation.)
+
+#### Opinion: Material Balancing
+
+One of the most important settings determines how many pieces will be distributed through your multiworld, defined in
+terms of material value. Although your multiworld's item pool may contain more than 39 material, you should not expect
+to have all of your material before reaching your goal: The logic requires that you equal the CPU army, not that you
+complete your collection.
+
+A normal (FIDE) army has 8 points of pawns plus 31 points of pieces (12 from 4 minor pieces, 10 from 2 rooks, and 9 from
+1 queen). Material isn't everything: An army of 27 pawns plus 4 Knights is considered to be extremely powerful.
+Conversely, having no pawns whatsoever opens your position dramatically, allowing your pieces to make very aggressive
+moves and to maintain a very high tempo.
+
 ### Generating a ChecksMate game
 
 **ChecksMate is a short game! You might restart many times, but you should expect no more than an hour of gameplay!**
@@ -40,6 +59,9 @@ First start ChecksMate.
 Once ChecksMate is started. In the client at the top type in the spot labeled `Server` type the `Ip Address` and `Port`
 separated with a `:` symbol. Then input your slot name in the next box. The third box can be used for any password,
 which is often left empty.
+
+These connection settings will be saved in a simple text file for the next time you start the client. (You may safely
+delete this convenience file.)
 
 ### Play the game
 
