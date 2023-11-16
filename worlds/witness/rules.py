@@ -66,14 +66,19 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
 
 
 def _can_move_either_direction(state: CollectionState, source: str, target: str, regio: WitnessRegions) -> bool:
+    entrance_forward = regio.created_entrances[(source, target)]
+    entrance_backward = regio.created_entrances[(source, target)]
+
     return (
-        any(entrance.can_reach(state) for entrance in regio.created_entrances[(source, target)])
+        any(entrance.can_reach(state) for entrance in entrance_forward)
         or
-        any(entrance.can_reach(state) for entrance in regio.created_entrances[(target, source)])
+        any(entrance.can_reach(state) for entrance in entrance_backward)
     )
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
+    player = world.player
+
     hedge_2_access = (
         _can_move_either_direction(state, "Keep 2nd Maze", "Keep", world.regio)
     )
@@ -92,12 +97,12 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     hedge_access = (
             _can_move_either_direction(state, "Keep 4th Maze", "Keep Tower", world.regio)
-            and world.regio.region_cache["Keep"].can_reach(state)
+            and state.can_reach("Keep", "Region", player)
             and hedge_4_access
     )
 
     backwards_to_fourth = (
-            world.regio.region_cache["Keep"].can_reach(state)
+            state.can_reach("Keep", "Region", player)
             and _can_move_either_direction(state, "Keep 4th Pressure Plate", "Keep Tower", world.regio)
             and (
                     _can_move_either_direction(state, "Keep", "Keep Tower", world.regio)
@@ -106,7 +111,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     )
 
     shadows_shortcut = (
-            world.regio.region_cache["Main Island"].can_reach(state)
+            state.can_reach("Main Island", "Region", player)
             and _can_move_either_direction(state, "Keep 4th Pressure Plate", "Shadows", world.regio)
     )
 
@@ -117,7 +122,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     front_access = (
             _can_move_either_direction(state, "Keep 2nd Pressure Plate", "Keep", world.regio)
-            and world.regio.region_cache["Keep"].can_reach(state)
+            and state.can_reach("Keep", "Region", player)
     )
 
     return front_access and backwards_access
