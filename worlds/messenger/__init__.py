@@ -150,6 +150,9 @@ class MessengerWorld(World):
     @classmethod
     def stage_fill_hook(cls, multiworld: MultiWorld, prog_items: List[Item], useful_items: List[Item],
                         filler_items: List[Item], locations: List[Location]) -> None:
+        # it's possible for both items to get placed near the end of the itempool causing swap to be entered early
+        # as more than half of the player's locations become unavailable immediately.
+        # Please don't copy this nightmare
         players = multiworld.get_game_players(cls.game)
         total_items = len(prog_items)
         items = {}
