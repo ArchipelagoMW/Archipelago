@@ -200,8 +200,7 @@ class PokemonRBClient(BizHawkClient):
         if self.banking_command:
             original_money = data["Money"]
             # Money is stored as binary-coded decimal.
-            money = [int(hex(byte)[2:]) for byte in original_money]
-            money = (money[0] * 10000) + (money[1] * 100) + money[2]
+            money = int(original_money.hex())
             if self.banking_command > money:
                 logger.warning(f"You do not have ${self.banking_command} to deposit!")
             elif (-self.banking_command * BANK_EXCHANGE_RATE) > ctx.current_energy_link_value:
