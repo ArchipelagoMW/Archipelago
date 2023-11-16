@@ -980,6 +980,9 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Temple of Unification", "Temple of Unification: North Celestial Lock", SC2LOTV_LOC_ID_OFFSET + 1205, LocationType.MISSION_PROGRESS,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_anti_armor_anti_air(state)),
+        LocationData("Temple of Unification", "Temple of Unification: Titanic Warp Prism", SC2LOTV_LOC_ID_OFFSET + 1206, LocationType.BONUS,
+                     lambda state: logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state)),
         LocationData("The Infinite Cycle", "The Infinite Cycle: Victory", SC2LOTV_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
                      lambda state: logic.the_infinite_cycle_requirement(state)),
         LocationData("The Infinite Cycle", "The Infinite Cycle: First Hall of Revelation", SC2LOTV_LOC_ID_OFFSET + 1301, LocationType.MISSION_PROGRESS,
