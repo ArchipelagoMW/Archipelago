@@ -413,7 +413,6 @@ The following operations can be applied to a datastorage key
 | default | If the key has no value yet, sets the current value of the key to `default` of the [Set](#Set)'s package (`value` is ignored). |
 | add | Adds `value` to the current value of the key, if both the current value and `value` are arrays then `value` will be appended to the current value. |
 | mul | Multiplies the current value of the key by `value`. |
-| floor_div | Divides the current values of the key by `value` and floors it. |
 | pow | Multiplies the current value of the key to the power of `value`. |
 | mod | Sets the current value of the key to the remainder after division by `value`. |
 | floor | Floors the current value (`value` is ignored). |

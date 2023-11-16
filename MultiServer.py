@@ -74,7 +74,6 @@ modify_functions = {
     # numeric:
     "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
     "mul": operator.mul,
-    "floor_div": operator.floordiv,
     "pow": operator.pow,
     "mod": operator.mod,
     "floor": lambda value, _: math.floor(value),
