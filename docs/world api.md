@@ -73,6 +73,53 @@ for your world specifically on the webhost:
 `game_info_languages` (optional) List of strings for defining the existing gameinfo pages your game supports. The documents must be
 prefixed with the same string as defined here. Default already has 'en'.
 
+`options_presets` (optional) A `Dict[str, Dict[str, Any]]` where the keys are the names of the presets and the values 
+are the options to be set for that preset. The options are defined as a `Dict[str, Any]` where the keys are the names of
+the options and the values are the values to be set for that option. These presets will be available for users to select from on the game's options page.
+
+Note: The values must be a non-aliased value for the option type and can only include the following option types:
+
+  - If you have a `Range`/`SpecialRange` option, the value should be an `int` between the `range_start` and `range_end`
+    values.
+    - If you have a `SpecialRange` option, the value can alternatively be a `str` that is one of the 
+      `special_range_names` keys.
+  - If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values. 
+  - If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
+  - `random` is also a valid value for any of these option types.
+
+`OptionDict`, `OptionList`, `OptionSet`, `FreeText`, or custom `Option`-derived classes are not supported for presets on the webhost at this time.
+
+Here is an example of a defined preset:
+```python
+# presets.py
+options_presets = {
+    "Limited Potential": {
+        "progression_balancing":    0,
+        "fairy_chests_per_zone":    2,
+        "starting_class":           "random",
+        "chests_per_zone":          30,
+        "vendors":                  "normal",
+        "architect":                "disabled",
+        "gold_gain_multiplier":     "half",
+        "number_of_children":       2,
+        "free_diary_on_generation": False,
+        "health_pool":              10,
+        "mana_pool":                10,
+        "attack_pool":              10,
+        "magic_damage_pool":        10,
+        "armor_pool":               5,
+        "equip_pool":               10,
+        "crit_chance_pool":         5,
+        "crit_damage_pool":         5,
+    }
+}
+
+# __init__.py
+class RLWeb(WebWorld):
+    options_presets = options_presets
+    # ...
+```
+
 ### MultiWorld Object
 
 The `MultiWorld` object references the whole multiworld (all items and locations
