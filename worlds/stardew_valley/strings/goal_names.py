@@ -10,4 +10,5 @@ class Goal:
     protector_of_the_valley = "Protector of the Valley"
     full_shipment = "Full Shipment"
     gourmet_chef = "Gourmet Chef"
+    craft_master = "Craft Master"
     perfection = "Perfection"

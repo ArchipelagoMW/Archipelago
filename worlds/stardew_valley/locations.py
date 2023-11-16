@@ -140,6 +140,7 @@ events_locations = [
     LocationData(None, Region.adventurer_guild, Goal.protector_of_the_valley),
     LocationData(None, Region.shipping, Goal.full_shipment),
     LocationData(None, Region.kitchen, Goal.gourmet_chef),
+    LocationData(None, Region.farm, Goal.craft_master),
     LocationData(None, Region.qi_walnut_room, Goal.perfection),
 ]
 

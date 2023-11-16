@@ -1,3 +1,5 @@
+from functools import cached_property
+
 from Utils import cache_self1
 from .cached_logic import CachedLogic, CachedRules
 from .has_logic import HasLogic
@@ -9,17 +11,20 @@ from .skill_logic import SkillLogic
 from .special_order_logic import SpecialOrderLogic
 from .time_logic import TimeLogic
 from .. import options
-from ..data.craftable_data import CraftingRecipe
+from ..data.craftable_data import CraftingRecipe, all_crafting_recipes_by_name
 from ..data.recipe_data import StarterSource, ShopSource, SkillSource, FriendshipSource
 from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
     FestivalShopSource
-from ..options import Craftsanity, FestivalLocations, SpecialOrderLocations
+from ..locations import locations_by_tag, LocationTags
+from ..options import Craftsanity, FestivalLocations, SpecialOrderLocations, ExcludeGingerIsland, Mods
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.region_names import Region
 
 
 class CraftingLogic(CachedLogic):
     craftsanity_option: Craftsanity
+    exclude_ginger_island: ExcludeGingerIsland
+    mods: Mods
     festivals_option: FestivalLocations
     special_orders_option: SpecialOrderLocations
     received: ReceivedLogic
@@ -32,7 +37,7 @@ class CraftingLogic(CachedLogic):
     special_orders: SpecialOrderLogic
 
     def __init__(self, player: int, cached_rules: CachedRules, craftsanity_option: Craftsanity,
-                 festivals_option: FestivalLocations,
+                 exclude_ginger_island: ExcludeGingerIsland, mods: Mods, festivals_option: FestivalLocations,
                  special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic,
                  region: RegionLogic, time: TimeLogic,
                  money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic,
@@ -111,3 +116,17 @@ class CraftingLogic(CachedLogic):
     @cache_self1
     def received_recipe(self, item_name: str):
         return self.received(f"{item_name} Recipe")
+
+    @cached_property
+    def can_craft_everything(self) -> StardewRule:
+        craftsanity_prefix = "Craft "
+        all_recipes_names = []
+        exclude_island = self.exclude_ginger_island == ExcludeGingerIsland.option_true
+        for location in locations_by_tag[LocationTags.CRAFTSANITY]:
+            if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
+                continue
+            if location.mod_name and location.mod_name not in self.mods:
+                continue
+            all_recipes_names.append(location.name[len(craftsanity_prefix):])
+        all_recipes = [all_crafting_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
+        return And(*(self.can_craft(recipe) for recipe in all_recipes))

@@ -18,6 +18,7 @@ class Goal(Choice):
     Protector of the Valley: Complete all the monster slayer goals. Pairs well with Monstersanity
     Full Shipment: Ship every item in the collection tab. Pairs well with Shipsanity
     Gourmet Chef: Cook every recipe. Pairs well with Chefsanity and Cooksanity
+    Craft Master: Craft every item. Pairs well with Craftsanity
     Perfection: Attain Perfection, based on the vanilla definition.
     """
     internal_name = "goal"
@@ -34,12 +35,11 @@ class Goal(Choice):
     option_protector_of_the_valley = 8
     option_full_shipment = 9
     option_gourmet_chef = 10
+    option_craft_master = 11
     # option_junimo_kart =
     # option_prairie_king =
     # option_fector_challenge =
-    # option_craft_master =
     # option_mystery_of_the_stardrops =
-    # option_full_shipment =
     # option_legend =
     # option_beloved_farmer =
     # option_master_of_the_five_ways =

@@ -26,9 +26,9 @@ from ..strings.tv_channel_names import Channel
 
 
 class CookingLogic(CachedLogic):
-    mods: Mods
     chefsanity_option: Chefsanity
     exclude_ginger_island: ExcludeGingerIsland
+    mods: Mods
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
@@ -40,15 +40,15 @@ class CookingLogic(CachedLogic):
     relationship: RelationshipLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, mods: Mods, chefsanity_option: Chefsanity,
-                 exclude_ginger_island: ExcludeGingerIsland, received: ReceivedLogic,
+    def __init__(self, player: int, cached_rules: CachedRules, chefsanity_option: Chefsanity,
+                 exclude_ginger_island: ExcludeGingerIsland, mods: Mods, received: ReceivedLogic,
                  has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
                  action: ActionLogic, buildings: BuildingLogic,
                  relationship: RelationshipLogic, skill: SkillLogic):
         super().__init__(player, cached_rules)
-        self.mods = mods
         self.chefsanity_option = chefsanity_option
         self.exclude_ginger_island = exclude_ginger_island
+        self.mods = mods
         self.received = received
         self.has = has
         self.region = region

@@ -232,6 +232,10 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table[GoalName.gourmet_chef],
                                        self.logic.cooking.can_cook_everything,
                                        Event.victory)
+        elif self.options.goal == options.Goal.option_craft_master:
+            self.create_event_location(location_table[GoalName.craft_master],
+                                       self.logic.crafting.can_craft_everything,
+                                       Event.victory)
         elif self.options.goal == options.Goal.option_perfection:
             self.create_event_location(location_table[GoalName.perfection],
                                        self.logic.has_everything(frozenset(self.all_progression_items)).simplify(),

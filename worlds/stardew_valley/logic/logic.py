@@ -142,7 +142,7 @@ class StardewLogic:
                                     self.tool, self.skill)
         self.mine = MineLogic(self.player, self.cached_rules, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
-        self.cooking = CookingLogic(self.player, self.cached_rules, mods_option, self.options.chefsanity, exclude_ginger_island, self.received, self.has,
+        self.cooking = CookingLogic(self.player, self.cached_rules, self.options.chefsanity, exclude_ginger_island, mods_option, self.received, self.has,
                                     self.region, self.season, self.time, self.money, self.action, self.buildings, self.relationship, self.skill)
         self.ability = AbilityLogic(self.player, self.options.movement_buff_number, self.options.luck_buff_number, self.received,
                                     self.region, self.tool, self.skill, self.mine)
@@ -150,8 +150,8 @@ class StardewLogic:
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
         self.quest = QuestLogic(self.player, self.skill, self.received, self.has, self.mine, self.region, self.action, self.relationship, self.buildings,
                                 self.time, self.tool, self.fishing, self.cooking, self.money, self.combat, self.season, self.wallet, mods_option)
-        self.crafting = CraftingLogic(self.player, self.cached_rules, self.options.craftsanity, self.options.festival_locations,
-                                      special_order_locations, self.received, self.has, self.region, self.time, self.money,
+        self.crafting = CraftingLogic(self.player, self.cached_rules, self.options.craftsanity, exclude_ginger_island, mods_option,
+                                      self.options.festival_locations, special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
         self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.artisan,
                             self.season, self.money, self.relationship, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing,
