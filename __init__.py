@@ -26,9 +26,9 @@ components.append(Component('Wario Land 4 Client', 'WL4Client', component_type=T
 
 class WL4Settings(settings.Group):
     class RomFile(settings.UserFilePath):
-        '''File name of the Wario Land 4 NA/EU ROM'''
-        description = 'Wario Land 4 (U/E) ROM File'
-        copy_to = 'Wario Land 4 (UE) [!].gba'
+        '''File name of the Wario Land 4 ROM'''
+        description = 'Wario Land 4 ROM File'
+        copy_to = 'Wario Land 4.gba'
         md5s = [WL4DeltaPatch.hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
