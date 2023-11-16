@@ -17,7 +17,7 @@ for your world tests can be created in this file that you can then import into o
 ### WorldTestBase
 
 In order to test basic functionality of varying options, as well as to test specific edge cases or that certain
-interactions in the world interact as expected, you will want to use the [worldTestBase](/test/bases.py). This class
+interactions in the world interact as expected, you will want to use the [WorldTestBase](/test/bases.py). This class
 comes with the basics for test setup as well as a few preloaded tests that most worlds might want to check on varying
 options combinations.
 
@@ -37,6 +37,8 @@ reachable, with no collected items at least something is reachable, and that a v
 all steps being called, respectively.
 
 ### Writing Tests
+
+#### Using WorldTestBase
 
 Adding runs for the basic tests for a different option combination is as easy as making a new module in the test
 package, creating a class that inherits from your game's TestBase, and defining the options in a dict as a field on the
@@ -71,7 +73,14 @@ When tests are run, this class will create a multiworld with a single player hav
 generic tests, as well as the new custom test. Each test method definition will create its own separate solo multiworld
 that will be cleaned up after. If you don't want to run the generic tests on a base, `run_default_tests` can be
 overridden. For more information on what methods are available to your class, check the
-[WorldTestBase definition](/test/bases.py).
+[WorldTestBase definition](/test/bases.py#L104).
+
+#### Alternatives to WorldTestBase
+
+Unit tests can also be created using [TestBase](/test/bases.py#L14) or
+[unittest.TestCase](https://docs.python.org/3/library/unittest.html#unittest.TestCase) depending on your use case. These
+may be useful for generating a multiworld under very specific constraints without using the generic world setup, or for
+testing portions of your code that can be tested without relying on a multiworld to be created first.
 
 ## Running Tests
 
