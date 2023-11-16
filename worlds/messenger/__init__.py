@@ -156,7 +156,7 @@ class MessengerWorld(World):
         for index in range(int((total_items * .9)), total_items):
             item = prog_items[index]
             if item.player in players and item.name in {"Wingsuit", "Rope Dart"}:
-                items.setdefault(prog_items[index].player, []).append((index, prog_items[index]))
+                items.setdefault(item.player, []).append((index, item))
         for player, item_pairs in items.items():
             if len(item_pairs) > 1:
                 item_to_move = multiworld.random.choice(item_pairs)
