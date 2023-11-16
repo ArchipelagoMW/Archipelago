@@ -32,7 +32,7 @@ AllowNoIcons=yes
 SetupIconFile={#MyAppIcon}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 ; you will likely have to remove the following signtool line when testing/debugging locally. Don't include that change in PRs.
-;SignTool= signtool
+SignTool= signtool
 LicenseFile= LICENSE
 WizardStyle= modern
 SetupLogging=yes
