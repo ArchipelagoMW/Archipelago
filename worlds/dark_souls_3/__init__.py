@@ -86,9 +86,9 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.NPC)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
-            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_anywhere:
+            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_global:
                 self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
-            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_self:
+            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_local:
                 self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
         if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.BOSS)
