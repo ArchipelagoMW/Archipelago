@@ -87,11 +87,11 @@ Note: The values must be a non-aliased value for the option type and can only in
   - If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
   - `random` is also a valid value for any of these option types.
 
-`OptionDict`, `OptionList`, `OptionSet`, and `FreeText` are not supported for presets on the webhost.
+`OptionDict`, `OptionList`, `OptionSet`, `FreeText`, or custom `Option`-derived classes are not supported for presets on the webhost at this time.
 
 Here is an example of a defined preset:
 ```python
-# Presets.py
+# presets.py
 options_presets = {
     "Limited Potential": {
         "progression_balancing":    0,
