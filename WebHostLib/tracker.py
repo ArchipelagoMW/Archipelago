@@ -11,7 +11,7 @@ from werkzeug.exceptions import abort
 from MultiServer import Context, get_saving_second
 from NetUtils import ClientStatus, SlotType, NetworkSlot
 from Utils import restricted_loads
-from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package, games
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_description, lookup_any_location_id_to_name, network_data_package, games
 from worlds.alttp import Items
 from . import app, cache
 from .models import GameDataPackage, Room
@@ -235,12 +235,18 @@ def get_location_name(context: runtime.Context, loc: int) -> str:
 
 
 @pass_context
+def get_location_description(context: runtime.Context, loc: int) -> str:
+    return lookup_any_location_id_to_description.get(loc, None)
+
+
+@pass_context
 def get_item_name(context: runtime.Context, item: int) -> str:
     context_items = context.get("custom_items", {})
     return collections.ChainMap(context_items, lookup_any_item_id_to_name).get(item, item)
 
 
 app.jinja_env.filters["location_name"] = get_location_name
+app.jinja_env.filters["location_description"] = get_location_description
 app.jinja_env.filters["item_name"] = get_item_name
 
 

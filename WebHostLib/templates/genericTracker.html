@@ -45,15 +45,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                        {% for name in checked_locations %}
+                        {% for id in checked_locations %}
                         <tr>
-                            <td>{{ name | location_name}}</td>
+                            <td>{{ id | location_name}}
+                              {%- if id | location_description %}
+                                <span class="interactive"
+                                      data-tooltip="{{ id | location_description }}">(?)</span>
+                              {%- endif %}
+                            </td>
                             <td>✔</td>
                         </tr>
                         {%- endfor -%}
-                        {% for name in not_checked_locations %}
+                        {% for id in not_checked_locations %}
                         <tr>
-                            <td>{{ name | location_name}}</td>
+                            <td>{{ id | location_name}}
+                              {%- if id | location_description %}
+                                <span class="interactive"
+                                      data-tooltip="{{ id | location_description }}">(?)</span>
+                              {%- endif %}
+                            </td>
                             <td></td>
                         </tr>
                         {%- endfor -%}

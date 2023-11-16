@@ -107,6 +107,7 @@ for world_source in world_sources:
 
 lookup_any_item_id_to_name = {}
 lookup_any_location_id_to_name = {}
+lookup_any_location_id_to_description = {}
 games: typing.Dict[str, GamesPackage] = {}
 
 from .AutoWorld import AutoWorldRegister  # noqa: E402
@@ -116,6 +117,11 @@ for world_name, world in AutoWorldRegister.world_types.items():
     games[world_name] = world.get_data_package_data()
     lookup_any_item_id_to_name.update(world.item_id_to_name)
     lookup_any_location_id_to_name.update(world.location_id_to_name)
+    lookup_any_location_id_to_description.update({
+        world.location_name_to_id[name]: description
+        for name, description in world.location_descriptions.items()
+        if name in world.location_name_to_id
+    })
 
 network_data_package: DataPackage = {
     "games": games,
