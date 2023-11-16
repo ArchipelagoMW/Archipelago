@@ -67,7 +67,7 @@ class MessengerWorld(World):
     web = MessengerWeb()
 
     total_seals: int = 0
-    required_seals: int = 1
+    required_seals: int = 0
     total_shards: int = 0
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]

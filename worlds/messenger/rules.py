@@ -23,6 +23,7 @@ class MessengerRules:
         maximum_price = (world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost +
                          world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost)
         self.maximum_price = min(maximum_price, world.total_shards)
+        self.required_seals = max(1, world.required_seals)
 
         self.region_rules = {
             "Ninja Village": self.has_wingsuit,
@@ -39,7 +40,7 @@ class MessengerRules:
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player) and self.can_dboost(state),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
-            "Music Box": lambda state: (state.has_all(set(NOTES), self.player)
+            "Music Box": lambda state: (state.has_all(NOTES, self.player)
                                         or self.has_enough_seals(state)) and self.has_dart(state),
             "The Craftsman's Corner": lambda state: state.has("Money Wrench", self.player) and self.can_shop(state),
         }
@@ -113,7 +114,7 @@ class MessengerRules:
         return self.has_wingsuit(state) or self.has_dart(state)
 
     def has_enough_seals(self, state: CollectionState) -> bool:
-        return state.has("Power Seal", self.player, self.world.required_seals)
+        return state.has("Power Seal", self.player, self.required_seals)
 
     def can_destroy_projectiles(self, state: CollectionState) -> bool:
         return state.has("Strike of the Ninja", self.player)
@@ -160,7 +161,7 @@ class MessengerHardRules(MessengerRules):
             "Catacombs": self.has_vertical,
             "Bamboo Creek": self.has_vertical,
             "Riviere Turquoise": self.true,
-            "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player),
+            "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(PHOBEKINS, self.player),
             "Searing Crags Upper": lambda state: self.can_destroy_projectiles(state) or self.has_windmill(state)
                                                  or self.has_vertical(state),
             "Glacial Peak": lambda state: self.can_destroy_projectiles(state) or self.has_windmill(state)
