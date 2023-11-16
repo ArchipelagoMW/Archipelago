@@ -344,7 +344,7 @@ class TestLocationAndItemCount(SVTestCase):
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items}")
 
     def test_minsanity_has_fewer_than_locations(self):
-        expected_locations = 123
+        expected_locations = 121
         minsanity_options = get_minsanity_options()
         multiworld = setup_solo_multiworld(minsanity_options)
         real_locations = get_real_locations(self, multiworld)
