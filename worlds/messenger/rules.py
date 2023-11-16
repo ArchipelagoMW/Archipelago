@@ -1,4 +1,4 @@
-from typing import Callable, Dict, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, allow_self_locking_items, CollectionRule
@@ -14,6 +14,8 @@ class MessengerRules:
     world: "MessengerWorld"
     region_rules: Dict[str, CollectionRule]
     location_rules: Dict[str, CollectionRule]
+    maximum_price: int
+    required_seals: int
 
     def __init__(self, world: "MessengerWorld") -> None:
         self.player = world.player
@@ -218,6 +220,7 @@ class MessengerOOBRules(MessengerRules):
         self.world = world
         self.player = world.player
 
+        self.required_seals = max(1, world.required_seals)
         self.region_rules = {
             "Elemental Skylands":
                 lambda state: state.has_any({"Windmill Shuriken", "Wingsuit", "Rope Dart", "Magic Firefly"}, self.player),
