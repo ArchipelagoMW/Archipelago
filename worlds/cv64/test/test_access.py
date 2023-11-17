@@ -240,7 +240,6 @@ class DraculaBossTest(CV64TestBase):
 
 
 class LizardTest(CV64TestBase):
-    seed = 75759656509851321015
     options = {
         "stage_shuffle": True,
         "draculas_condition": 2,
