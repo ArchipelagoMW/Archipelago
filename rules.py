@@ -113,6 +113,8 @@ location_rules_all = {
     'The Toxic Landfill - Current Circle Box':        [['Swim']],
     'The Toxic Landfill - Transformation Puzzle Box': [['Heavy Grab'], ['Enemy Jump']],
     '40 Below Fridge - CD Box':                       [['Head Smash']],
+    'Pinball Zone - Full Health Item Box':            [['Super Ground Pound']],
+    'Pinball Zone - Pink Room Full Health Item Box':  [['Super Ground Pound']],
 
     'Toy Block Tower - Digging Room Box':             [['Dash Attack']],
     'Toy Block Tower - Full Health Item Box':         [['Dash Attack']],
@@ -135,14 +137,8 @@ location_rules_all = {
 location_rules_normal = {
     **location_rules_all,
 
-    'Mystic Lake - Full Health Item Box':  [['Grab']],
-
-    # FIXME: This box actually exists on all difficulties, but on Hard and
-    # S-Hard, its access rule is superceded by the existence of another box that
-    # doesn't need the second level of ground pound.
-    'Pinball Zone - Full Health Item Box': [['Super Ground Pound']],
-
-    'Doodle Woods - CD Box':               [['Ground Pound'], ['Grab']],
+    'Mystic Lake - Full Health Item Box': [['Grab']],
+    'Doodle Woods - CD Box':              [['Ground Pound'], ['Grab']],
 }
 
 location_rules_hard = {

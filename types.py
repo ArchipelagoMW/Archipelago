@@ -35,6 +35,7 @@ class ItemFlag(IntFlag):
     CD = 1 << 4
     KEYZER = 1 << 5
     FULL_HEALTH = 1 << 6
+    FULL_HEALTH_2 = 1 << 7
 
 
 class Passage(IntEnum):

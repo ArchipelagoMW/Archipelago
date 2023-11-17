@@ -133,27 +133,21 @@ class TestRubyPassageSHard(TestSHard):
             ['Pinball Zone - CD Box', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
 
-            # Pinball Zone has two of these. One is where the NE jewel would be
-            # on the other difficulties, accessible with no extra items. The
-            # other is in a pink room which needs both levels of Ground Pound to
-            # access. Both of them are currently the same check, so account for
-            # the one with less requirements.
-            ['Pinball Zone - Full Health Item Box', False, []],
-            ['Pinball Zone - Full Health Item Box', False, [], ['Progressive Grab']],
-            ['Pinball Zone - Full Health Item Box', False, [], ['Progressive Ground Pound']],
-            ['Pinball Zone - Full Health Item Box', False, [], ['Head Smash']],
-            ['Pinball Zone - Full Health Item Box', True,
+            ['Pinball Zone - Pink Room Full Health Item Box', False, []],
+            ['Pinball Zone - Pink Room Full Health Item Box', False, [], ['Progressive Grab']],
+            ['Pinball Zone - Pink Room Full Health Item Box', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['Pinball Zone - Pink Room Full Health Item Box', False, [], ['Head Smash']],
+            ['Pinball Zone - Pink Room Full Health Item Box', False,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
+            ['Pinball Zone - Pink Room Full Health Item Box', True,
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Head Smash']],
 
-            # ['Pinball Zone - Full Health Item Box', False, []],
-            # ['Pinball Zone - Full Health Item Box', False, [], ['Progressive Grab']],
-            # ['Pinball Zone - Full Health Item Box', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            # ['Pinball Zone - Full Health Item Box', False, [], ['Head Smash']],
-            # ['Pinball Zone - Full Health Item Box', False,
-             # ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
-            # ['Pinball Zone - Full Health Item Box', True,
-             # ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Head Smash']],
-
+            ['Pinball Zone - Rolling Room Full Health Item Box', False, []],
+            ['Pinball Zone - Rolling Room Full Health Item Box', False, [], ['Progressive Grab']],
+            ['Pinball Zone - Rolling Room Full Health Item Box', False, [], ['Progressive Ground Pound']],
+            ['Pinball Zone - Rolling Room Full Health Item Box', False, [], ['Head Smash']],
+            ['Pinball Zone - Rolling Room Full Health Item Box', True,
+             ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
         ])
 
     def test_cuckoo_condor(self):
