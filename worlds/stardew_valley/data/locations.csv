@@ -242,6 +242,8 @@ id,region,name,tags,mod_name
 703,Desert,Galaxy Sword Shrine,MANDATORY,
 704,Farmhouse,Have a Baby,"BABY",
 705,Farmhouse,Have Another Baby,"BABY",
+706,Farmhouse,Spouse Stardrop,,
+707,Sewer,Krobus Stardrop,"MANDATORY",
 801,The Mines - Floor 5,Help Wanted: Gathering 1,HELP_WANTED,
 802,The Mines - Floor 20,Help Wanted: Gathering 2,HELP_WANTED,
 803,The Mines - Floor 35,Help Wanted: Gathering 3,HELP_WANTED,

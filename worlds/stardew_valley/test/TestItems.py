@@ -54,7 +54,7 @@ class TestItems(SVTestCase):
         allsanity_options = allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options, seed=seed)
         stardrop_items = [item for item in multiworld.get_items() if "Stardrop" in item.name]
-        self.assertEqual(len(stardrop_items), 5)
+        self.assertEqual(len(stardrop_items), 7)
 
     def test_no_duplicate_rings(self):
         seed = random.randrange(sys.maxsize)

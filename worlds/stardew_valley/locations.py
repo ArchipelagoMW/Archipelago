@@ -142,6 +142,9 @@ events_locations = [
     LocationData(None, Region.shipping, Goal.full_shipment),
     LocationData(None, Region.kitchen, Goal.gourmet_chef),
     LocationData(None, Region.farm, Goal.craft_master),
+    LocationData(None, Region.shipping, Goal.legend),
+    LocationData(None, Region.farm, Goal.mystery_of_the_stardrops),
+    LocationData(None, Region.farm, Goal.allsanity),
     LocationData(None, Region.qi_walnut_room, Goal.perfection),
 ]
 
@@ -230,6 +233,7 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], opti
     if options.friendsanity == Friendsanity.option_none:
         return
 
+    randomized_locations.append(location_table[f"Spouse Stardrop"])
     extend_baby_locations(randomized_locations)
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     exclude_non_bachelors = options.friendsanity == Friendsanity.option_bachelors

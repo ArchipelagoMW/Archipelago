@@ -3,7 +3,7 @@ from typing import List
 
 from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
-from worlds.stardew_valley.strings.craftable_names import Bomb
+from .strings.craftable_names import Bomb
 from . import locations
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.monster_data import all_monsters_by_category, all_monsters_by_name
@@ -24,6 +24,7 @@ from .strings.building_names import Building
 from .strings.calendar_names import Weekday
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, MagicEntrance, \
     SVEEntrance
+from .strings.generic_names import Generic
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
 from .strings.quest_names import Quest, ModQuest
@@ -81,6 +82,8 @@ def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
                              logic.has("Sweet Gem Berry"))
     MultiWorldRules.add_rule(multiworld.get_location("Galaxy Sword Shrine", player),
                              logic.has("Prismatic Shard"))
+    MultiWorldRules.add_rule(multiworld.get_location("Krobus Stardrop", player),
+                             logic.money.can_spend(20000))
 
 
 def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -799,6 +802,8 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
 def set_friendsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if world_options.friendsanity == Friendsanity.option_none:
         return
+    MultiWorldRules.add_rule(multiworld.get_location("Spouse Stardrop", player),
+                             logic.relationship.has_hearts(Generic.bachelor, 13))
     MultiWorldRules.add_rule(multiworld.get_location("Have a Baby", player),
                              logic.relationship.can_reproduce(1))
     MultiWorldRules.add_rule(multiworld.get_location("Have Another Baby", player),

@@ -336,22 +336,25 @@ def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOpt
     stardrops_classification = get_stardrop_classification(options)
     items.append(item_factory("Stardrop", stardrops_classification))  # The Mines level 100
     items.append(item_factory("Stardrop", stardrops_classification))  # Old Master Cannoli
+    items.append(item_factory("Stardrop", stardrops_classification))  # Krobus Stardrop
     if options.fishsanity != Fishsanity.option_none:
         items.append(item_factory("Stardrop", stardrops_classification))  # Master Angler Stardrop
     if ModNames.deepwoods in options.mods:
         items.append(item_factory("Stardrop", stardrops_classification))  # Petting the Unicorn
+    if options.friendsanity != Friendsanity.option_none:
+        items.append(item_factory("Stardrop", stardrops_classification))  # Spouse Stardrop
 
 
 def create_museum_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     items.append(item_factory(Wallet.rusty_key))
     items.append(item_factory(Wallet.dwarvish_translation_guide))
     items.append(item_factory("Ancient Seeds Recipe"))
+    items.append(item_factory("Stardrop", get_stardrop_classification(options)))
     if options.museumsanity == Museumsanity.option_none:
         return
     items.extend(item_factory(item) for item in ["Magic Rock Candy"] * 10)
     items.extend(item_factory(item) for item in ["Ancient Seeds"] * 5)
     items.extend(item_factory(item) for item in ["Traveling Merchant Metal Detector"] * 4)
-    items.append(item_factory("Stardrop", get_stardrop_classification(options)))
 
 
 def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item], random: Random):
@@ -653,8 +656,8 @@ def filter_mod_items(options: StardewValleyOptions, items: List[ItemData]) -> Li
     return [item for item in items if item.mod_name is None or item.mod_name in options.mods]
 
 
-def remove_excluded_items(packs, options):
-    deprecated_filter = filter_deprecated_items(options, packs)
+def remove_excluded_items(items, options):
+    deprecated_filter = filter_deprecated_items(options, items)
     ginger_island_filter = filter_ginger_island_items(options, deprecated_filter)
     mod_filter = filter_mod_items(options, ginger_island_filter)
     return mod_filter
@@ -679,3 +682,7 @@ def get_stardrop_classification(world_options) -> ItemClassification:
 
 def world_is_perfection(options) -> bool:
     return options.goal == Goal.option_perfection
+
+
+def world_is_stardrops(options) -> bool:
+    return options.goal == Goal.option_mystery_of_the_stardrops

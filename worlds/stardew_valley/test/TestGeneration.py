@@ -40,6 +40,7 @@ class TestBaseItemGeneration(SVTestBase):
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
+        items_to_ignore.extend(farm_type.name for farm_type in items.items_by_group[Group.FARM_TYPE])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression and item.name not in items_to_ignore]
         for progression_item in progression_items:
@@ -90,6 +91,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
+        items_to_ignore.extend(farm_type.name for farm_type in items.items_by_group[Group.FARM_TYPE])
         progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression and item.name not in items_to_ignore]
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
@@ -344,7 +346,7 @@ class TestLocationAndItemCount(SVTestCase):
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items}")
 
     def test_minsanity_has_fewer_than_locations(self):
-        expected_locations = 121
+        expected_locations = 122
         minsanity_options = get_minsanity_options()
         multiworld = setup_solo_multiworld(minsanity_options)
         real_locations = get_real_locations(self, multiworld)
@@ -358,7 +360,7 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_without_mods_has_at_least_locations(self):
-        expected_locations = 1950
+        expected_locations = 1952
         allsanity_options = allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         real_locations = get_real_locations(self, multiworld)
@@ -372,7 +374,7 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 2423
+        expected_locations = 2425
         allsanity_options = allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         real_locations = get_real_locations(self, multiworld)

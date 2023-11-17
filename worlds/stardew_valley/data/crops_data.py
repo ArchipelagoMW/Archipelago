@@ -9,6 +9,7 @@ class SeedItem:
     name: str
     seasons: Tuple[str]
     regions: Tuple[str]
+    requires_island: bool
 
 
 @dataclass(frozen=True)
@@ -35,10 +36,11 @@ def load_crop_csv():
                                   tuple(season for season in item["seed_seasons"].split(","))
                                   if item["seed_seasons"] else tuple(),
                                   tuple(region for region in item["seed_regions"].split(","))
-                                  if item["seed_regions"] else tuple()))
+                                  if item["seed_regions"] else tuple(),
+                                  item["requires_island"] == "True"))
             crops.append(CropItem(item["crop"],
                                   tuple(season for season in item["farm_growth_seasons"].split(","))
-                                  if item["farm_growth_seasons"] else (),
+                                  if item["farm_growth_seasons"] else tuple(),
                                   seeds[-1]))
         return crops, seeds
 

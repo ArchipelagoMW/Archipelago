@@ -10,8 +10,8 @@ from .season_logic import SeasonLogic
 from .tool_logic import ToolLogic
 from .traveling_merchant_logic import TravelingMerchantLogic
 from ..data import CropItem, SeedItem
-from ..options import Cropsanity
-from ..stardew_rule import StardewRule, True_
+from ..options import Cropsanity, ExcludeGingerIsland
+from ..stardew_rule import StardewRule, True_, False_
 from ..strings.forageable_names import Forageable
 from ..strings.metal_names import Fossil
 from ..strings.region_names import Region
@@ -22,6 +22,7 @@ from ..strings.tool_names import Tool
 class CropLogic(CachedLogic):
     player: int
     cropsanity_option: Cropsanity
+    exclude_ginger_island_option: ExcludeGingerIsland
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
@@ -30,10 +31,11 @@ class CropLogic(CachedLogic):
     money: MoneyLogic
     tool: ToolLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, cropsanity_option: Cropsanity, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+    def __init__(self, player: int, cached_rules: CachedRules, cropsanity_option: Cropsanity, exclude_ginger_island_option: ExcludeGingerIsland, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  traveling_merchant: TravelingMerchantLogic, season: SeasonLogic, money: MoneyLogic, tool: ToolLogic):
         super().__init__(player, cached_rules)
         self.cropsanity_option = cropsanity_option
+        self.exclude_ginger_island_option = exclude_ginger_island_option
         self.received = received
         self.has = has
         self.region = region
@@ -48,7 +50,7 @@ class CropLogic(CachedLogic):
         seed_rule = self.has(crop.seed.name)
         farm_rule = self.region.can_reach(Region.farm) & season_rule
         tool_rule = self.tool.has_tool(Tool.hoe) & self.tool.has_tool(Tool.watering_can)
-        region_rule = farm_rule | self.region.can_reach(Region.greenhouse) | self.region.can_reach(Region.island_west)
+        region_rule = farm_rule | self.region.can_reach(Region.greenhouse) | self.has_island_farm()
         return seed_rule & region_rule & tool_rule
 
     def can_plant_and_grow_item(self, seasons: Union[str, Iterable[str]]) -> StardewRule:
@@ -60,10 +62,14 @@ class CropLogic(CachedLogic):
         return season_rule & farm_rule
 
     def has_island_farm(self) -> StardewRule:
-        return self.region.can_reach(Region.island_south)
+        if self.exclude_ginger_island_option == ExcludeGingerIsland.option_false:
+            return self.region.can_reach(Region.island_west)
+        return False_()
 
     @cache_self1
     def can_buy_seed(self, seed: SeedItem) -> StardewRule:
+        if seed.requires_island and self.exclude_ginger_island_option == ExcludeGingerIsland.option_true:
+            return False_()
         if self.cropsanity_option == Cropsanity.option_disabled or seed.name == Seed.qi_bean:
             item_rule = True_()
         else:

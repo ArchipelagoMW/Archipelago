@@ -252,6 +252,18 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table[GoalName.craft_master],
                                        self.logic.crafting.can_craft_everything,
                                        Event.victory)
+        elif self.options.goal == options.Goal.option_legend:
+            self.create_event_location(location_table[GoalName.legend],
+                                       self.logic.money.can_have_earned_total(10_000_000),
+                                       Event.victory)
+        elif self.options.goal == options.Goal.option_mystery_of_the_stardrops:
+            self.create_event_location(location_table[GoalName.mystery_of_the_stardrops],
+                                       self.logic.has_all_stardrops(),
+                                       Event.victory)
+        elif self.options.goal == options.Goal.option_allsanity:
+            self.create_event_location(location_table[GoalName.allsanity],
+                                       self.logic.has_everything(frozenset(self.all_progression_items)),
+                                       Event.victory)
         elif self.options.goal == options.Goal.option_perfection:
             self.create_event_location(location_table[GoalName.perfection],
                                        self.logic.has_everything(frozenset(self.all_progression_items)).simplify(),

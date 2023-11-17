@@ -2,7 +2,7 @@ from random import Random
 from typing import Iterable, Dict, Protocol, List, Tuple, Set
 
 from BaseClasses import Region, Entrance
-from .options import EntranceRandomization, ExcludeGingerIsland, Museumsanity
+from .options import EntranceRandomization, ExcludeGingerIsland, Museumsanity, StardewValleyOptions
 from .strings.entrance_names import Entrance
 from .strings.region_names import Region
 from .region_classes import RegionData, ConnectionData, RandomizationFlag, ModificationFlag
@@ -382,9 +382,9 @@ vanilla_connections = [
     ConnectionData(Entrance.dig_to_mines_floor_110, Region.mines_floor_110),
     ConnectionData(Entrance.dig_to_mines_floor_115, Region.mines_floor_115),
     ConnectionData(Entrance.dig_to_mines_floor_120, Region.mines_floor_120),
-    ConnectionData(Entrance.dig_to_dangerous_mines_20, Region.dangerous_mines_20),
-    ConnectionData(Entrance.dig_to_dangerous_mines_60, Region.dangerous_mines_60),
-    ConnectionData(Entrance.dig_to_dangerous_mines_100, Region.dangerous_mines_100),
+    ConnectionData(Entrance.dig_to_dangerous_mines_20, Region.dangerous_mines_20, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.dig_to_dangerous_mines_60, Region.dangerous_mines_60, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.dig_to_dangerous_mines_100, Region.dangerous_mines_100, flag=RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.enter_skull_cavern_entrance, Region.skull_cavern_entrance,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.enter_oasis, Region.oasis,
@@ -399,7 +399,7 @@ vanilla_connections = [
     ConnectionData(Entrance.mine_to_skull_cavern_floor_150, Region.skull_cavern_150),
     ConnectionData(Entrance.mine_to_skull_cavern_floor_175, Region.skull_cavern_175),
     ConnectionData(Entrance.mine_to_skull_cavern_floor_200, Region.skull_cavern_200),
-    ConnectionData(Entrance.enter_dangerous_skull_cavern, Region.dangerous_skull_cavern),
+    ConnectionData(Entrance.enter_dangerous_skull_cavern, Region.dangerous_skull_cavern, flag=RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.enter_witch_warp_cave, Region.witch_warp_cave, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(Entrance.enter_witch_swamp, Region.witch_swamp, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(Entrance.enter_witch_hut, Region.witch_hut, flag=RandomizationFlag.BUILDINGS),
@@ -423,8 +423,7 @@ vanilla_connections = [
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.island_west_to_shipwreck, Region.shipwreck,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(Entrance.island_west_to_qi_walnut_room, Region.qi_walnut_room,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.island_west_to_qi_walnut_room, Region.qi_walnut_room, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.island_east_to_leo_hut, Region.leo_hut,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.island_east_to_island_shrine, Region.island_shrine,
@@ -440,21 +439,21 @@ vanilla_connections = [
     ConnectionData(Entrance.volcano_to_secret_beach, Region.volcano_secret_beach,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.talk_to_island_trader, Region.island_trader, flag=RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(Entrance.climb_to_volcano_5, Region.volcano_floor_5),
-    ConnectionData(Entrance.talk_to_volcano_dwarf, Region.volcano_dwarf_shop),
-    ConnectionData(Entrance.climb_to_volcano_10, Region.volcano_floor_10),
-    ConnectionData(Entrance.parrot_express_jungle_to_docks, Region.island_south),
-    ConnectionData(Entrance.parrot_express_dig_site_to_docks, Region.island_south),
-    ConnectionData(Entrance.parrot_express_volcano_to_docks, Region.island_south),
-    ConnectionData(Entrance.parrot_express_volcano_to_jungle, Region.island_west),
-    ConnectionData(Entrance.parrot_express_docks_to_jungle, Region.island_west),
-    ConnectionData(Entrance.parrot_express_dig_site_to_jungle, Region.island_west),
-    ConnectionData(Entrance.parrot_express_docks_to_dig_site, Region.dig_site),
-    ConnectionData(Entrance.parrot_express_volcano_to_dig_site, Region.dig_site),
-    ConnectionData(Entrance.parrot_express_jungle_to_dig_site, Region.dig_site),
-    ConnectionData(Entrance.parrot_express_dig_site_to_volcano, Region.island_north),
-    ConnectionData(Entrance.parrot_express_docks_to_volcano, Region.island_north),
-    ConnectionData(Entrance.parrot_express_jungle_to_volcano, Region.island_north),
+    ConnectionData(Entrance.climb_to_volcano_5, Region.volcano_floor_5, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.talk_to_volcano_dwarf, Region.volcano_dwarf_shop, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.climb_to_volcano_10, Region.volcano_floor_10, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_jungle_to_docks, Region.island_south, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_dig_site_to_docks, Region.island_south, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_volcano_to_docks, Region.island_south, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_volcano_to_jungle, Region.island_west, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_docks_to_jungle, Region.island_west, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_dig_site_to_jungle, Region.island_west, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_docks_to_dig_site, Region.dig_site, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_volcano_to_dig_site, Region.dig_site, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_jungle_to_dig_site, Region.dig_site, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_dig_site_to_volcano, Region.island_north, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_docks_to_volcano, Region.island_north, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(Entrance.parrot_express_jungle_to_volcano, Region.island_north, flag=RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.attend_egg_festival, Region.egg_festival),
     ConnectionData(Entrance.attend_flower_dance, Region.flower_dance),
     ConnectionData(Entrance.attend_luau, Region.luau),
@@ -515,14 +514,11 @@ def modify_vanilla_regions(existing_region: RegionData, modified_region: RegionD
     return updated_region
 
 
-def create_regions(region_factory: RegionFactory, random: Random, world_options) -> Tuple[
+def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewValleyOptions) -> Tuple[
     Dict[str, Region], Dict[str, str]]:
     final_regions = create_final_regions(world_options)
-    regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in
-                                  final_regions}
-    entrances: Dict[str: Entrance] = {entrance.name: entrance
-                                      for region in regions.values()
-                                      for entrance in region.exits}
+    regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in final_regions}
+    entrances: Dict[str: Entrance] = {entrance.name: entrance for region in regions.values() for entrance in region.exits}
 
     regions_by_name: Dict[str, RegionData] = {region.name: region for region in final_regions}
     connections, randomized_data = randomize_connections(random, world_options, regions_by_name)
@@ -530,13 +526,12 @@ def create_regions(region_factory: RegionFactory, random: Random, world_options)
     for connection in connections:
         if connection.name in entrances:
             entrances[connection.name].connect(regions[connection.destination])
-
     return regions, randomized_data
 
 
-def randomize_connections(random: Random, world_options, regions_by_name) -> Tuple[
-    List[ConnectionData], Dict[str, str]]:
-    connections_to_randomize = []
+def randomize_connections(random: Random, world_options: StardewValleyOptions, regions_by_name: Dict[str, RegionData])\
+        -> Tuple[List[ConnectionData], Dict[str, str]]:
+    connections_to_randomize: List[ConnectionData] = []
     final_connections = create_final_connections(world_options)
     connections_by_name: Dict[str, ConnectionData] = {connection.name: connection for connection in final_connections}
     if world_options.entrance_randomization == EntranceRandomization.option_pelican_town:
@@ -551,7 +546,7 @@ def randomize_connections(random: Random, world_options, regions_by_name) -> Tup
     elif world_options.entrance_randomization == EntranceRandomization.option_chaos:
         connections_to_randomize = [connection for connection in final_connections if
                                     RandomizationFlag.BUILDINGS in connection.flag]
-        connections_to_randomize = exclude_island_if_necessary(connections_to_randomize, world_options)
+        connections_to_randomize = remove_excluded_entrances(connections_to_randomize, world_options)
 
         # On Chaos, we just add the connections to randomize, unshuffled, and the client does it every day
         randomized_data_for_mod = {}
@@ -561,7 +556,6 @@ def randomize_connections(random: Random, world_options, regions_by_name) -> Tup
         return final_connections, randomized_data_for_mod
 
     connections_to_randomize = remove_excluded_entrances(connections_to_randomize, world_options)
-
     random.shuffle(connections_to_randomize)
     destination_pool = list(connections_to_randomize)
     random.shuffle(destination_pool)
@@ -576,22 +570,11 @@ def randomize_connections(random: Random, world_options, regions_by_name) -> Tup
     return randomized_connections_for_generation, randomized_data_for_mod
 
 
-def remove_excluded_entrances(connections_to_randomize, world_options):
+def remove_excluded_entrances(connections_to_randomize: List[ConnectionData], world_options: StardewValleyOptions) -> List[ConnectionData]:
     exclude_island = world_options.exclude_ginger_island == ExcludeGingerIsland.option_true
-    exclude_sewers = world_options.museumsanity == Museumsanity.option_none
     if exclude_island:
         connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.GINGER_ISLAND not in connection.flag]
-    if exclude_sewers:
-        connections_to_randomize = [connection for connection in connections_to_randomize if Region.sewer not in connection.name or Region.sewer not in connection.reverse]
 
-    return connections_to_randomize
-
-
-def exclude_island_if_necessary(connections_to_randomize: List[ConnectionData], world_options) -> List[ConnectionData]:
-    exclude_island = world_options.exclude_ginger_island == ExcludeGingerIsland.option_true
-    if exclude_island:
-        connections_to_randomize = [connection for connection in connections_to_randomize if
-                                    RandomizationFlag.GINGER_ISLAND not in connection.flag]
     return connections_to_randomize
 
 
@@ -628,15 +611,15 @@ def add_to_mod_data(connection: ConnectionData, destination: ConnectionData, ran
     randomized_data_for_mod[destination.reverse] = connection.reverse
 
 
-def add_non_randomized_connections(connections, connections_to_randomize: List[ConnectionData],
+def add_non_randomized_connections(all_connections: List[ConnectionData], connections_to_randomize: List[ConnectionData],
                                    randomized_connections: Dict[ConnectionData, ConnectionData]):
-    for connection in connections:
+    for connection in all_connections:
         if connection in connections_to_randomize:
             continue
         randomized_connections[connection] = connection
 
 
-def swap_connections_until_valid(regions_by_name, connections_by_name, randomized_connections: Dict[ConnectionData, ConnectionData],
+def swap_connections_until_valid(regions_by_name, connections_by_name: Dict[str, ConnectionData], randomized_connections: Dict[ConnectionData, ConnectionData],
                                  connections_to_randomize: List[ConnectionData], random: Random):
     while True:
         reachable_regions, unreachable_regions = find_reachable_regions(regions_by_name, connections_by_name, randomized_connections)
@@ -646,14 +629,26 @@ def swap_connections_until_valid(regions_by_name, connections_by_name, randomize
                                    unreachable_regions, connections_to_randomize, random)
 
 
+def region_should_be_reachable(region_name: str, connections_in_slot: Iterable[ConnectionData]) -> bool:
+    if region_name == Region.menu:
+        return True
+    for connection in connections_in_slot:
+        if region_name == connection.destination:
+            return True
+    return False
+
+
 def find_reachable_regions(regions_by_name, connections_by_name,
                            randomized_connections: Dict[ConnectionData, ConnectionData]):
     reachable_regions = {Region.menu}
     unreachable_regions = {region for region in regions_by_name.keys()}
+    # unreachable_regions = {region for region in regions_by_name.keys() if region_should_be_reachable(region, connections_by_name.values())}
     unreachable_regions.remove(Region.menu)
     exits_to_explore = list(regions_by_name[Region.menu].exits)
     while exits_to_explore:
         exit_name = exits_to_explore.pop()
+        # if exit_name not in connections_by_name:
+        #     continue
         exit_connection = connections_by_name[exit_name]
         replaced_connection = randomized_connections[exit_connection]
         target_region_name = replaced_connection.destination

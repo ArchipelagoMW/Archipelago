@@ -19,6 +19,9 @@ class Goal(Choice):
     Full Shipment: Ship every item in the collection tab. Pairs well with Shipsanity
     Gourmet Chef: Cook every recipe. Pairs well with Chefsanity and Cooksanity
     Craft Master: Craft every item. Pairs well with Craftsanity
+    Legend: Earn 10 000 000g
+    Mystery of the Stardrops: Find every stardrop
+    Allsanity: Complete every check in your slot
     Perfection: Attain Perfection, based on the vanilla definition.
     """
     internal_name = "goal"
@@ -36,13 +39,14 @@ class Goal(Choice):
     option_full_shipment = 9
     option_gourmet_chef = 10
     option_craft_master = 11
+    option_legend = 12
+    option_mystery_of_the_stardrops = 13
     # option_junimo_kart =
     # option_prairie_king =
     # option_fector_challenge =
-    # option_mystery_of_the_stardrops =
-    # option_legend =
     # option_beloved_farmer =
     # option_master_of_the_five_ways =
+    option_allsanity = 24
     option_perfection = 25
 
     @classmethod

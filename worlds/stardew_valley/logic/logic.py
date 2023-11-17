@@ -43,7 +43,8 @@ from ..data.monster_data import all_monsters_by_category, all_monsters_by_name
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.mod_logic import ModLogic
-from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
+from ..mods.mod_data import ModNames
+from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions, Fishsanity, Museumsanity, Friendsanity
 from ..regions import vanilla_regions
 from ..stardew_rule import False_, Or, True_, Count, And, StardewRule
 from ..strings.animal_names import Animal, coop_animals, barn_animals
@@ -132,7 +133,7 @@ class StardewLogic:
         self.monster = MonsterLogic(self.player, self.cached_rules, self.region, self.time, self.combat)
         self.tool = ToolLogic(self.player, self.cached_rules, tool_option, self.received, self.has, self.region, self.season, self.money)
         self.pet = PetLogic(self.player, self.cached_rules, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
-        self.crop = CropLogic(self.player, self.cached_rules, self.options.cropsanity, self.received, self.has, self.region, self.traveling_merchant,
+        self.crop = CropLogic(self.player, self.cached_rules, self.options.cropsanity, exclude_ginger_island, self.received, self.has, self.region, self.traveling_merchant,
                               self.season, self.money, self.tool)
         self.skill = SkillLogic(self.player, self.cached_rules, skill_option, self.received, self.has, self.region, self.season, self.time, self.tool,
                                 self.combat, self.crop)
@@ -730,10 +731,36 @@ class StardewLogic:
         return reach_entire_island & self.has(Fruit.banana) & self.has(gems) & self.ability.can_mine_perfectly() & \
             self.ability.can_fish_perfectly() & self.has(Furniture.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic)
 
+    def has_all_stardrops(self) -> StardewRule:
+        other_rules = []
+        number_of_stardrops_to_receive = 0
+        number_of_stardrops_to_receive += 1  # The Mines level 100
+        number_of_stardrops_to_receive += 1  # Old Master Cannoli
+        number_of_stardrops_to_receive += 1  # Museum Stardrop
+        number_of_stardrops_to_receive += 1  # Krobus Stardrop
+
+        if self.options.fishsanity == Fishsanity.option_none:  # Master Angler Stardrop
+            other_rules.append(self.can_catch_every_fish())
+        else:
+            number_of_stardrops_to_receive += 1
+
+        if self.options.festival_locations == FestivalLocations.option_disabled:  # Fair Stardrop
+            other_rules.append(self.season.has(Season.fall))
+        else:
+            number_of_stardrops_to_receive += 1
+
+        if self.options.friendsanity == Friendsanity.option_none:  # Spouse Stardrop
+            other_rules.append(self.relationship.has_hearts(Generic.bachelor, 13))
+        else:
+            number_of_stardrops_to_receive += 1
+
+        if ModNames.deepwoods in self.options.mods:  # Petting the Unicorn
+            number_of_stardrops_to_receive += 1
+
+        return self.received("Stardrop", number_of_stardrops_to_receive) & And(*other_rules)
+
     def has_everything(self, all_progression_items: frozenset[str]) -> StardewRule:
-        all_regions = tuple(region.name for region in vanilla_regions)
-        rules = self.received(all_progression_items, len(all_progression_items)) & \
-                self.region.can_reach_all(all_regions)
+        rules = self.received(all_progression_items, len(all_progression_items))
         return rules
 
     def has_prismatic_jelly_reward_access(self) -> StardewRule:

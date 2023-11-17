@@ -11,4 +11,7 @@ class Goal:
     full_shipment = "Full Shipment"
     gourmet_chef = "Gourmet Chef"
     craft_master = "Craft Master"
+    legend = "Legend"
+    mystery_of_the_stardrops = "Mystery of the Stardrops"
+    allsanity = "Allsanity"
     perfection = "Perfection"
