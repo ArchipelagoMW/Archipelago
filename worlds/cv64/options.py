@@ -1,7 +1,5 @@
-from typing import Dict
-from Options import Option, Choice, DefaultOnToggle, Range, Toggle, OptionList
-from .Names import RName
-from .Stages import vanilla_stage_order
+from dataclasses import dataclass
+from Options import Choice, DefaultOnToggle, Range, Toggle, PerGameCommonOptions
 
 
 class CharacterStages(Choice):
@@ -21,19 +19,23 @@ class StageShuffle(Toggle):
     display_name = "Stage Shuffle"
 
 
-# class CustomStageOrder(OptionList):
-#     """Make a custom order for Castlevania 64's stages to be in.
-#     Format as a comma-separated list of "nice" names: ["Tunnel", "Castle Wall", "Tower of Science", etc.].
-#     Must include all "main path" stages and Reinhardt and/or Carrie stages to be considered valid.
-#     Do not include Castle Keep; it will always be at the end.
-#     Branching paths will be considered on the following conditions:
-#    -All stages are included.
-#     -Two stages follow Villa and four stages follow Castle Center (not counting Castle Keep).
-#     -Character Stages is not set to both_no_branches.
-#     """
-#     display_name = "Custom Stage Order"
-#     valid_keys = frozenset({stage.casefold() for stage in vanilla_stage_order if stage != RName.castle_keep})
-#     valid_keys_casefold = True
+class StartingStage(Choice):
+    """Which stage to start at if Stage Shuffle is turned on."""
+    display_name = "Starting Stage"
+    option_forest_of_silence = 0
+    option_castle_wall = 1
+    option_villa = 2
+    option_tunnel = 3
+    option_underground_waterway = 4
+    option_castle_center = 5
+    option_duel_tower = 6
+    option_tower_of_execution = 7
+    option_tower_of_science = 8
+    option_tower_of_sorcery = 9
+    option_room_of_clocks = 10
+    option_clock_tower = 11
+    option_mystery = 12
+    default = 12
 
 
 class WarpOrder(Choice):
@@ -71,7 +73,7 @@ class Special1sPerWarp(Range):
     range_start = 1
     range_end = 10
     default = 1
-    display_name = "Special1 Jewels Per Warp"
+    display_name = "Special1s Per Warp"
 
 
 class TotalSpecial1s(Range):
@@ -79,7 +81,7 @@ class TotalSpecial1s(Range):
     range_start = 1
     range_end = 70
     default = 7
-    display_name = "Total Special1 Jewels"
+    display_name = "Total Special1s"
 
 
 class DraculasCondition(Choice):
@@ -92,22 +94,20 @@ class DraculasCondition(Choice):
     default = 1
 
 
-class Special2sRequired(Range):
-    """Sets how many Special2 jewels are needed to enter Dracula's chamber. Only applies if Dracula's Chamber Condition
-    is set to Special2s."""
-    range_start = 1
-    range_end = 70
-    default = 10
-    display_name = "Special2 Jewels Required"
+class PercentSpecial2sRequired(Range):
+    """Percentage of Special2s required to enter Dracula's chamber when Dracula's Condition is Special2s."""
+    range_start = 10
+    range_end = 100
+    default = 100
+    display_name = "Percent Special2s Required"
 
 
 class TotalSpecial2s(Range):
-    """Sets how many Speical2 jewels are in the pool in total. This cannot be less than 'Special2s Required'. Only
-    applies if Dracula's Chamber Condition is set to Special2s."""
+    """How many Speical2 jewels are in the pool in total when Dracula's Condition is Special2s."""
     range_start = 1
     range_end = 70
     default = 10
-    display_name = "Total Special2 Jewels"
+    display_name = "Total Special2s"
 
 
 class BossesRequired(Range):
@@ -303,10 +303,10 @@ class SkipGondolas(Toggle):
     display_name = "Skip Gondolas"
 
 
-class SkipBrickPlatforms(Toggle):
+class SkipWaterwayBlocks(Toggle):
     """Opens the door to the third switch in Underground Waterway from the start so that the jumping across floating
     brick platforms won't have to be done."""
-    display_name = "Skip Brick Platforms"
+    display_name = "Skip Waterway Blocks"
 
 
 class Countdown(Choice):
@@ -365,6 +365,38 @@ class CinematicExperience(Toggle):
     display_name = "Cinematic Experience"
 
 
+class WindowColorR(Range):
+    """The red color value for the text windows during gameplay."""
+    display_name = "Window Color R"
+    range_start = 0
+    range_end = 15
+    default = 1
+
+
+class WindowColorG(Range):
+    """The green color value for the text windows during gameplay."""
+    display_name = "Window Color G"
+    range_start = 0
+    range_end = 15
+    default = 5
+
+
+class WindowColorB(Range):
+    """The blue color value for the text windows during gameplay."""
+    display_name = "Window Color B"
+    range_start = 0
+    range_end = 15
+    default = 15
+
+
+class WindowColorA(Range):
+    """The alpha value for the text windows during gameplay."""
+    display_name = "Window Color A"
+    range_start = 0
+    range_end = 15
+    default = 8
+
+
 class DeathLink(Choice):
     """When you die, everyone dies. Of course the reverse is true too.
     explosive: Makes received DeathLinks kill you via the Magical Nitro explosion rather than the normal death
@@ -378,50 +410,55 @@ class DeathLink(Choice):
     option_explosive = 2
 
 
-cv64_options: Dict[str, Option] = {
-    "character_stages": CharacterStages,
-    "stage_shuffle": StageShuffle,
-    # "custom_stage_order": CustomStageOrder,
-    "warp_order": WarpOrder,
-    "sub_weapon_shuffle": SubWeaponShuffle,
-    "spare_keys": SpareKeys,
-    "special1s_per_warp": Special1sPerWarp,
-    "total_special1s": TotalSpecial1s,
-    "draculas_condition": DraculasCondition,
-    "special2s_required": Special2sRequired,
-    "total_special2s": TotalSpecial2s,
-    "bosses_required": BossesRequired,
-    "carrie_logic": CarrieLogic,
-    "hard_logic": HardLogic,
-    "multi_hit_breakables": MultiHitBreakables,
-    "empty_breakables": EmptyBreakables,
-    "lizard_locker_items": LizardLockerItems,
-    "shopsanity": Shopsanity,
-    "shop_prices": ShopPrices,
-    "minimum_gold_price": MinimumGoldPrice,
-    "maximum_gold_price": MaximumGoldPrice,
-    "post_behemoth_boss": PostBehemothBoss,
-    "room_of_clocks_boss": RoomOfClocksBoss,
-    "renon_fight_condition": RenonFightCondition,
-    "vincent_fight_condition": VincentFightCondition,
-    "bad_ending_condition": BadEndingCondition,
-    "increase_item_limit": IncreaseItemLimit,
-    "nerf_healing_items": NerfHealingItems,
-    "loading_zone_heals": LoadingZoneHeals,
-    "invisible_items": InvisibleItems,
-    "drop_previous_sub_weapon": DropPreviousSubWeapon,
-    "permanent_powerups": PermanentPowerUps,
-    "ice_trap_percentage": IceTrapPercentage,
-    "ice_trap_appearance": IceTrapAppearance,
-    "disable_time_restrictions": DisableTimeRestrictions,
-    "skip_gondolas": SkipGondolas,
-    "skip_brick_platforms": SkipBrickPlatforms,
-    "countdown": Countdown,
-    "panther_dash": PantherDash,
-    "increase_shimmy_speed": IncreaseShimmySpeed,
-    "background_music": BackgroundMusic,
-    "map_lighting": MapLighting,
-    "fall_guard": FallGuard,
-    "cinematic_experience": CinematicExperience,
-    "death_link": DeathLink,
-}
+@dataclass
+class CV64Options(PerGameCommonOptions):
+    character_stages: CharacterStages
+    stage_shuffle: StageShuffle
+    starting_stage: StartingStage
+    # custom_stage_order: CustomStageOrder
+    warp_order: WarpOrder
+    sub_weapon_shuffle: SubWeaponShuffle
+    spare_keys: SpareKeys
+    special1s_per_warp: Special1sPerWarp
+    total_special1s: TotalSpecial1s
+    draculas_condition: DraculasCondition
+    percent_special2s_required: PercentSpecial2sRequired
+    total_special2s: TotalSpecial2s
+    bosses_required: BossesRequired
+    carrie_logic: CarrieLogic
+    hard_logic: HardLogic
+    multi_hit_breakables: MultiHitBreakables
+    empty_breakables: EmptyBreakables
+    lizard_locker_items: LizardLockerItems
+    shopsanity: Shopsanity
+    shop_prices: ShopPrices
+    minimum_gold_price: MinimumGoldPrice
+    maximum_gold_price: MaximumGoldPrice
+    post_behemoth_boss: PostBehemothBoss
+    room_of_clocks_boss: RoomOfClocksBoss
+    renon_fight_condition: RenonFightCondition
+    vincent_fight_condition: VincentFightCondition
+    bad_ending_condition: BadEndingCondition
+    increase_item_limit: IncreaseItemLimit
+    nerf_healing_items: NerfHealingItems
+    loading_zone_heals: LoadingZoneHeals
+    invisible_items: InvisibleItems
+    drop_previous_sub_weapon: DropPreviousSubWeapon
+    permanent_powerups: PermanentPowerUps
+    ice_trap_percentage: IceTrapPercentage
+    ice_trap_appearance: IceTrapAppearance
+    disable_time_restrictions: DisableTimeRestrictions
+    skip_gondolas: SkipGondolas
+    skip_waterway_blocks: SkipWaterwayBlocks
+    countdown: Countdown
+    panther_dash: PantherDash
+    increase_shimmy_speed: IncreaseShimmySpeed
+    background_music: BackgroundMusic
+    map_lighting: MapLighting
+    fall_guard: FallGuard
+    cinematic_experience: CinematicExperience
+    window_color_r: WindowColorR
+    window_color_g: WindowColorG
+    window_color_b: WindowColorB
+    window_color_a: WindowColorA
+    death_link: DeathLink

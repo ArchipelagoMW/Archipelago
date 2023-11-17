@@ -151,7 +151,7 @@ remote_item_giver = [
     0x256B0002,  # ADDIU T3, T3, 0x0002
     0x2409000F,  # ADDIU T1, R0, 0x000F
     0xA1690001,  # SB	 T1, 0x0001 (T3)
-    0x080FF8DE,  # J	 0x803FE374
+    0x080FF8DD,  # J	 0x803FE374
     0xA1600000,  # SB	 R0, 0x0000 (T3)
     0x91640000,  # LBU	 A0, 0x0000 (T3)
     0x14800002,  # BNEZ	 A0,     [forward 0x02]
@@ -2229,7 +2229,7 @@ special_descriptions_redirector = [
     0x0804B39F,  # J     0x8012CE7C
     0x00000000,  # NOP
     0x3C04803F,  # LUI   A0, 0x803F
-    0x3484DC5C,  # ORI   A0, A0, 0xDC5C
+    0x3484E53C,  # ORI   A0, A0, 0xE53C
     0x24A5FFFD,  # ADDIU A1, A1, 0xFFFD
     0x0804B39F   # J     0x8012CE7C
 ]
@@ -2702,4 +2702,17 @@ freeze_verifier = [
     0x00000000,  # NOP
     0x35799640,  # ORI   T9, T3, 0x9640
     0x03200008,  # JR    T9
+]
+
+countdown_extra_safety_check = [
+    # Checks to see if the multiworld message is a red flashing trap before then truly deciding to decrement the
+    # Countdown number. This was a VERY last minute thing I caught, since Ice Traps for other CV64 players can take the
+    # appearance of majors with no other way of the game knowing.
+    0x3C0B8019,  # LUI   T3, 0x8019
+    0x956BBF98,  # LHU   T3, 0xBF98 (T3)
+    0x240C0000,  # ADDIU T4, R0, 0x0000
+    0x358CA20B,  # ORI   T4, T4, 0xA20B
+    0x556C0001,  # BNEL  T3, T4, [forward 0x01]
+    0xA1099CA4,  # SB    T1, 0x9CA4 (T0)
+    0x03E00008   # JR    RA
 ]

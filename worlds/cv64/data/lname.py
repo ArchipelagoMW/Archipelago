@@ -1,7 +1,7 @@
 # Forest of Silence definitions
 forest_pillars_right = "Forest of Silence: Grab practice pillars - Right"
 forest_pillars_top = "Forest of Silence: Grab practice pillars - Top"
-forest_bone_mom = "Forest of Silence: King Skeleton's bridge"
+forest_king_skeleton = "Forest of Silence: King Skeleton's bridge"
 forest_lgaz_in = "Forest of Silence: Moon gazebo inside"
 forest_lgaz_top = "Forest of Silence: Moon gazebo roof"
 forest_hgaz_in = "Forest of Silence: Sun gazebo inside"
@@ -363,8 +363,8 @@ roc_cont_l = "Room of Clocks: Left of contract"
 roc_exit = "Room of Clocks: Left of exit"
 
 # Clock Tower definitions
-ct_gearclimb_side = "Clock Tower: Gear climb room corner"
-ct_gearclimb_mid = "Clock Tower: Gear climb room side"
+ct_gearclimb_corner = "Clock Tower: Gear climb room corner"
+ct_gearclimb_side = "Clock Tower: Gear climb room side"
 ct_finalroom_platform = "Clock Tower: Final room key ledge"
 
 ct_gearclimb_battery_slab1 = "Clock Tower: Gear climb room battery underside slab - Item 1"
