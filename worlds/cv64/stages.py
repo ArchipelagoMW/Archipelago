@@ -1,6 +1,7 @@
 from .data import rname
 from .options import CV64Options
 from .regions import get_region_info
+from .locations import get_location_info
 
 stage_info = {
     "Forest of Silence": {
@@ -191,6 +192,9 @@ def get_locations_from_stage(stage: str) -> list:
     for region in get_stage_info(stage, "regions"):
         stage_locations = get_region_info(region, "locations")
         if stage_locations is not None:
+            for loc in stage_locations:
+                if get_location_info(loc, "code") is None:
+                    stage_locations.remove(loc)
             overall_locations += get_region_info(region, "locations")
     return overall_locations
 
