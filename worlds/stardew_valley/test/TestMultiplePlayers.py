@@ -65,12 +65,12 @@ class TestDifferentSettings(SVTestCase):
         player_2_rarecrow_4 = get_access_rule(multiworld, 2, FestivalCheck.rarecrow_4)
 
         with self.subTest("Rules are not cached between players"):
-            self.assertNotEquals(id(player_1_rarecrow_2), id(player_2_rarecrow_2))
-            self.assertNotEquals(id(player_1_rarecrow_4), id(player_2_rarecrow_4))
+            self.assertNotEqual(id(player_1_rarecrow_2), id(player_2_rarecrow_2))
+            self.assertNotEqual(id(player_1_rarecrow_4), id(player_2_rarecrow_4))
 
         with self.subTest("Rules are cached for the same player"):
-            self.assertEquals(id(player_1_rarecrow_2), id(player_1_rarecrow_4))
-            self.assertEquals(id(player_2_rarecrow_2), id(player_2_rarecrow_4))
+            self.assertEqual(id(player_1_rarecrow_2), id(player_1_rarecrow_4))
+            self.assertEqual(id(player_2_rarecrow_2), id(player_2_rarecrow_4))
 
     def check_location_rule(self, multiworld, player: int, location_name: str, should_exist: bool, should_be_true: bool = False):
         has = "has" if should_exist else "doesn't have"
