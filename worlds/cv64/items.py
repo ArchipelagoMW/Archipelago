@@ -109,7 +109,7 @@ def get_item_counts(world, options: CV64Options, active_locations):
         if loc.address is None:
             continue
 
-        if options.hard_logic.value and get_location_info(loc.name, "hard item") is not None:
+        if options.hard_item_pool.value and get_location_info(loc.name, "hard item") is not None:
             item_to_add = get_location_info(loc.name, "hard item")
         else:
             item_to_add = get_location_info(loc.name, "normal item")

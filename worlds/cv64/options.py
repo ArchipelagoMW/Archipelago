@@ -68,6 +68,12 @@ class SpareKeys(Choice):
     default = 0
 
 
+class HardItemPool(Toggle):
+    """Replaces some items in the item pool with less valuable ones, to make the item pool sort of resemble Hard Mode
+    in the PAL version."""
+    display_name = "Hard Item Pool"
+
+
 class Special1sPerWarp(Range):
     """Sets how many Special1 jewels are needed per warp menu option unlock."""
     range_start = 1
@@ -419,6 +425,7 @@ class CV64Options(PerGameCommonOptions):
     warp_order: WarpOrder
     sub_weapon_shuffle: SubWeaponShuffle
     spare_keys: SpareKeys
+    hard_item_pool: HardItemPool
     special1s_per_warp: Special1sPerWarp
     total_special1s: TotalSpecial1s
     draculas_condition: DraculasCondition
