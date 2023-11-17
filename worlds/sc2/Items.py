@@ -1370,17 +1370,17 @@ item_table = {
     ItemNames.ORACLE: ItemData(29 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
 
     # Protoss Upgrades
-    ItemNames.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PROGRESSIVE_PROTOSS_GROUND_ARMOR: ItemData(101 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PROGRESSIVE_PROTOSS_SHIELDS: ItemData(102 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PROGRESSIVE_PROTOSS_AIR_WEAPON: ItemData(103 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 6, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PROGRESSIVE_PROTOSS_AIR_ARMOR: ItemData(104 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 8, SC2Race.PROTOSS, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_GROUND_ARMOR: ItemData(101 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_SHIELDS: ItemData(102 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 4, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_AIR_WEAPON: ItemData(103 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 6, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_AIR_ARMOR: ItemData(104 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 8, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
     # Upgrade bundle 'number' values are used as indices to get affected 'number's
-    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: ItemData(105 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 11, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: ItemData(106 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 12, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: ItemData(107 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 13, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PROGRESSIVE_PROTOSS_AIR_UPGRADE: ItemData(108 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 14, SC2Race.PROTOSS, origin={"wol", "lotv"}),
-    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 15, SC2Race.PROTOSS, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: ItemData(105 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 11, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: ItemData(106 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 12, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: ItemData(107 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 13, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_AIR_UPGRADE: ItemData(108 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 14, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2LOTV_ITEM_ID_OFFSET, "Upgrade", 15, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
 
     # Protoss Buildings
     ItemNames.PHOTON_CANNON: ItemData(200 + SC2LOTV_ITEM_ID_OFFSET, "Building", 0, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
