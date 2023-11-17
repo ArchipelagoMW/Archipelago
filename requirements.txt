@@ -10,3 +10,4 @@ platformdirs>=3.9.1
 certifi>=2023.7.22
 cython>=3.0.5
 cymem>=2.0.8
+orjson>=3.9.7
