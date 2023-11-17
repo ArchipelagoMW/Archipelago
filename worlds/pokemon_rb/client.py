@@ -206,7 +206,7 @@ class PokemonRBClient(BizHawkClient):
             money = int(original_money.hex())
             if self.banking_command > money:
                 logger.warning(f"You do not have ${self.banking_command} to deposit!")
-            elif (-self.banking_command * BANK_EXCHANGE_RATE) > ctx.current_energy_link_value:
+            elif (-self.banking_command * BANK_EXCHANGE_RATE) > ctx.stored_data[f"EnergyLink{ctx.team}"]:
                 logger.warning("Not enough money in the EnergyLink storage!")
             else:
                 if self.banking_command + money > 999999:
@@ -242,11 +242,9 @@ class PokemonRBClient(BizHawkClient):
                 self.set_deathlink = True
                 self.last_death_link = time.time()
             ctx.set_notify(f"EnergyLink{ctx.team}")
-        elif cmd == "Retrieved":
-            if f"EnergyLink{ctx.team}" in args["keys"]:
-                ctx.current_energy_link_value = args["keys"][f"EnergyLink{ctx.team}"]
         elif cmd == 'RoomInfo':
             if ctx.seed_name and ctx.seed_name != args["seed_name"]:
+                # CommonClient's on_package displays an error to the user in this case, but connection is not cancelled.
                 self.game_state = False
                 self.disconnect_pending = True
         super().on_package(ctx, cmd, args)
@@ -261,7 +259,7 @@ def cmd_bank(self, cmd: str = "", amount: str = ""):
         logger.warning("This command can only be used while playing Pokémon Red and Blue")
         return
     if not cmd:
-        logger.info(f"Money available: {int(self.ctx.current_energy_link_value / BANK_EXCHANGE_RATE)}")
+        logger.info(f"Money available: {int(self.ctx.stored_data[f'EnergyLink{self.ctx.team}'] / BANK_EXCHANGE_RATE)}")
         return
     elif (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
         logger.info(f"Must be connected to server and in game.")
