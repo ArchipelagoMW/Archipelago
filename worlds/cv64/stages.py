@@ -192,11 +192,13 @@ def get_locations_from_stage(stage: str) -> list:
     for region in get_stage_info(stage, "regions"):
         stage_locations = get_region_info(region, "locations")
         if stage_locations is not None:
-            for loc in stage_locations:
-                if get_location_info(loc, "code") is None:
-                    stage_locations.remove(loc)
-            overall_locations += get_region_info(region, "locations")
-    return overall_locations
+            overall_locations += stage_locations
+
+    final_locations = []
+    for loc in overall_locations:
+        if get_location_info(loc, "code") is not None:
+            final_locations.append(loc)
+    return final_locations
 
 
 def get_warp_destination_region(active_warp_list: list, index: int) -> str:
