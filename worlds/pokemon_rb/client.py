@@ -129,8 +129,11 @@ class PokemonRBClient(BizHawkClient):
         if data["APItem"][0] == 0:
             item_index = int.from_bytes(data["ItemIndex"], "little")
             if len(ctx.items_received) > item_index:
+                item_code = ctx.items_received[item_index].item - 172000000
+                if item_code > 255:
+                    item_code -= 256
                 await write(ctx.bizhawk_ctx, [(DATA_LOCATIONS["APItem"][0],
-                                               [ctx.items_received[item_index].item - 172000000], "WRAM")])
+                                               [item_code], "WRAM")])
 
         # LOCATION CHECKS
 
