@@ -121,6 +121,7 @@ class StardewValleyWorld(World):
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
+        self.precollect_farm_type()
         self.precollect_starting_season()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
@@ -145,7 +146,22 @@ class StardewValleyWorld(World):
         self.setup_construction_events()
         self.setup_victory()
 
-    def precollect_starting_season(self) -> Optional[StardewItem]:
+    def precollect_farm_type(self):
+        all_farm_types = items_by_group[Group.FARM_TYPE]
+        all_farm_type_names = [farm_type.name for farm_type in all_farm_types]
+
+        chosen_farm_types = []
+        for item in self.multiworld.precollected_items[self.player]:
+            if item.name in all_farm_type_names:
+                chosen_farm_types.append(item.name)
+
+        if not chosen_farm_types:
+            chosen_farm_types = all_farm_type_names
+
+        starting_season = self.create_item(self.multiworld.random.choice(chosen_farm_types))
+        self.multiworld.push_precollected(starting_season)
+
+    def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:
             return
 
