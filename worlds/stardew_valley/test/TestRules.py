@@ -329,7 +329,7 @@ class TestRecipeLogic(SVTestBase):
     options = {
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
-        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
     }
 
     # I wanted to make a test for different ways to obtain a pizza, but I'm stuck not knowing how to block the immediate purchase from Gus

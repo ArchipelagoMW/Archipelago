@@ -300,15 +300,15 @@ def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOpt
 
 
 def create_museum_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.museumsanity == Museumsanity.option_none:
-        return
-    items.extend(item_factory(item) for item in ["Magic Rock Candy"] * 5)
-    items.extend(item_factory(item) for item in ["Ancient Seeds"] * 5)
-    items.extend(item_factory(item) for item in ["Traveling Merchant Metal Detector"] * 4)
-    items.append(item_factory("Ancient Seeds Recipe"))
-    items.append(item_factory("Stardrop"))
     items.append(item_factory("Rusty Key"))
     items.append(item_factory("Dwarvish Translation Guide"))
+    items.append(item_factory("Ancient Seeds Recipe"))
+    if options.museumsanity == Museumsanity.option_none:
+        return
+    items.extend(item_factory(item) for item in ["Magic Rock Candy"] * 10)
+    items.extend(item_factory(item) for item in ["Ancient Seeds"] * 5)
+    items.extend(item_factory(item) for item in ["Traveling Merchant Metal Detector"] * 4)
+    items.append(item_factory("Stardrop"))
 
 
 def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

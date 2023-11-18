@@ -40,7 +40,7 @@ def assert_can_reach_island_if_should(tester: SVTestBase, multiworld: MultiWorld
 
 
 def assert_cropsanity_same_number_items_and_locations(tester: SVTestBase, multiworld: MultiWorld):
-    is_cropsanity = get_stardew_options(multiworld).cropsanity.value == options.Cropsanity.option_shuffled
+    is_cropsanity = get_stardew_options(multiworld).cropsanity.value == options.Cropsanity.option_enabled
     if not is_cropsanity:
         return
 
