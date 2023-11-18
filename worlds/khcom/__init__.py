@@ -3,11 +3,12 @@ from typing import List
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import KHCOMItem, KHCOMItemData, event_item_table, get_items_by_category, item_table
-from .Locations import KHCOMLocation, location_table
+from .Locations import KHCOMLocation, location_table, get_locations_by_category
 from .Options import khcom_options
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+import random
 
 
 
@@ -54,6 +55,14 @@ class KHCOMWorld(World):
 
     def create_items(self):
         item_pool: List[KHCOMItem] = []
+        starting_locations = get_locations_by_category("Starting")
+        starting_locations = random.sample(starting_locations.keys(),3)
+        starting_worlds = get_items_by_category("World Unlocks")
+        starting_worlds = random.sample(starting_worlds.keys(),3)
+        i = 0
+        while i < 3:
+            self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
+            i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         for name, data in item_table.items():
             quantity = data.max_quantity
@@ -61,8 +70,8 @@ class KHCOMWorld(World):
             # Ignore filler, it will be added in a later stage.
             if data.category == "Filler":
                 continue
-
-            item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            if name not in starting_worlds:
+                item_pool += [self.create_item(name) for _ in range(0, quantity)]
 
         # Fill any empty locations with filler items.
         while len(item_pool) < total_locations:
@@ -74,7 +83,7 @@ class KHCOMWorld(World):
         fillers = get_items_by_category("Filler")
         weights = [data.weight for data in fillers.values()]
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
-
+        
     def create_item(self, name: str) -> KHCOMItem:
         data = item_table[name]
         return KHCOMItem(name, data.classification, data.code, self.player)

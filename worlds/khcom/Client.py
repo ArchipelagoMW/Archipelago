@@ -156,7 +156,8 @@ async def game_watcher(ctx: KHCOMContext):
             for file in files:
                 if file.find("send") > -1:
                     st = file.split("send", -1)[1]
-                    sending = sending+[(int(st))]
+                    if st != "nil":
+                        sending = sending+[(int(st))]
                 if file.find("victory") > -1:
                     victory = True
         ctx.locations_checked = sending

@@ -2,181 +2,110 @@ console.clear()
 math.randomseed(os.time())
 client_communication_path = os.getenv('LOCALAPPDATA') .. "\\KHCOM\\"
 
-function define_location_ids()
-    location_ids = {}
-    location_ids["Kingdom Key"]           = 2670106
-    location_ids["Three Wishes"]          = 2670505
-    location_ids["Crabclaw"]              = 2670703
-    location_ids["Pumpkinhead"]           = 2670603
-    location_ids["Fairy Harp"]            = 2670803
-    location_ids["Wishing Star"]          = 2670406
-    location_ids["Spellbinder"]           = 2671002
-    location_ids["Metal Chocobo"]         = 2670309
-    location_ids["Olympia"]               = 2670304
-    location_ids["Lionheart"]             = 2670116
-    location_ids["Lady Luck"]             = 2670207
-    location_ids["Divine Rose"]           = 2670903
-    location_ids["Oathkeeper"]            = 2671203
-    location_ids["Oblivion"]              = 2671204
-    location_ids["Diamond Dust"]          = 2671304
-    location_ids["One Winged Angel"]      = 2671305
-    location_ids["Fire"]                  = 2670112
-    location_ids["Blizzard"]              = 2670103
-    location_ids["Thunder"]               = 2670605
-    location_ids["Cure"]                  = 2670105
-    location_ids["Gravity"]               = 2670501
-    location_ids["Stop"]                  = 2670201
-    location_ids["Aero"]                  = 2670707
-    location_ids["Simba"]                 = 2670114
-    location_ids["Genie"]                 = 2670509
-    location_ids["Bambi"]                 = 2671001
-    location_ids["Dumbo"]                 = 2670411
-    location_ids["Tinker Bell"]           = 2670808
-    location_ids["Mushu"]                 = 2670908
-    location_ids["Cloud"]                 = 2670310
-    location_ids["Potion"]                = 2670107
-    location_ids["Hi-Potion"]             = 2670308
-    location_ids["Mega-Potion"]           = 2671102
-    location_ids["Ether"]                 = 2670508
-    location_ids["Mega-Ether"]            = 2671003
-    location_ids["Elixir"]                = 2671004
-    location_ids["Megalixir"]             = 2671208
-    location_ids["Guard Armor"]           = 2670117
-    location_ids["Parasite Cage"]         = 2670410
-    location_ids["Trickmaster"]           = 2670211
-    location_ids["Darkside"]              = 2671207
-    location_ids["Card Soldier (Red)"]    = 2670209
-    location_ids["Hades"]                 = 2670311
-    location_ids["Jafar"]                 = 2670510
-    location_ids["Oogie Boogie"]          = 2670608
-    location_ids["Ursula"]                = 2670710
-    location_ids["Hook"]                  = 2670807
-    location_ids["Dragon Maleficent"]     = 2670909
-    location_ids["Riku"]                  = 2671205
-    location_ids["Axel"]                  = 2671306
-    location_ids["Larxene"]               = 2671202
-    location_ids["Vexen"]                 = 2671103
-    location_ids["Marluxia"]              = 2671303
-    location_ids["Shadow"]                = 2670109
-    location_ids["Soldier"]               = 2670110
-    location_ids["Large Body"]            = 2670206
-    location_ids["Red Nocturne"]          = 2670108
-    location_ids["Blue Rhapsody"]         = 2670104
-    location_ids["Yellow Opera"]          = 2670407
-    location_ids["Green Requiem"]         = 2670403
-    location_ids["Powerwild"]             = 2670305
-    location_ids["Bouncywild"]            = 2670303
-    location_ids["Air Soldier"]           = 2670402
-    location_ids["Bandit"]                = 2670503
-    location_ids["Fat Bandit"]            = 2670504
-    location_ids["Barrel Spider"]         = 2670302
-    location_ids["Search Ghost"]          = 2670404
-    location_ids["Sea Neon"]              = 2670706
-    location_ids["Screwdriver"]           = 2670705
-    location_ids["Aquatank"]              = 2670702
-    location_ids["Wight Knight"]          = 2670604
-    location_ids["Gargoyle"]              = 2670602
-    location_ids["Pirate"]                = 2670804
-    location_ids["Air Pirate"]            = 2670802
-    location_ids["Darkball"]              = 2670704
-    location_ids["Defender"]              = 2670902
-    location_ids["Wyvern"]                = 2670905
-    location_ids["Neoshadow"]             = 2671302
-    location_ids["White Mushroom"]        = 2670111
-    location_ids["Black Fungus"]          = 2670102
-    location_ids["Creeper Plant"]         = 2670204
-    location_ids["Tornado Step"]          = 2670405
-    location_ids["Crescendo"]             = 2670205
-    location_ids["Wizard"]                = 2670904
-    location_ids["Card Soldier (Black)"]  = 2670203
-    location_ids["Key of Beginnings F01"] = 2670101
-    location_ids["Key of Beginnings F02"] = 2670202
-    location_ids["Key of Beginnings F03"] = 2670301
-    location_ids["Key of Beginnings F04"] = 2670401
-    location_ids["Key of Beginnings F05"] = 2670502
-    location_ids["Key of Beginnings F06"] = 2670601
-    location_ids["Key of Beginnings F07"] = 2670701
-    location_ids["Key of Beginnings F08"] = 2670801
-    location_ids["Key of Beginnings F09"] = 2670901
-    location_ids["Key of Beginnings F11"] = 2671101
-    location_ids["Key of Beginnings F12"] = 2671201
-    location_ids["Key of Beginnings F13"] = 2671301
-    location_ids["Key of Guidance F01"]   = 2670113
-    location_ids["Key of Guidance F02"]   = 2670208
-    location_ids["Key of Guidance F03"]   = 2670306
-    location_ids["Key of Guidance F04"]   = 2670408
-    location_ids["Key of Guidance F05"]   = 2670506
-    location_ids["Key of Guidance F06"]   = 2670606
-    location_ids["Key of Guidance F07"]   = 2670708
-    location_ids["Key of Guidance F08"]   = 2670805
-    location_ids["Key of Guidance F09"]   = 2670906
-    location_ids["Key of Guidance F12"]   = 2671206
-    location_ids["Key to Truth F01"]      = 2670115
-    location_ids["Key to Truth F02"]      = 2670210
-    location_ids["Key to Truth F03"]      = 2670307
-    location_ids["Key to Truth F04"]      = 2670409
-    location_ids["Key to Truth F05"]      = 2670507
-    location_ids["Key to Truth F06"]      = 2670607
-    location_ids["Key to Truth F07"]      = 2670709
-    location_ids["Key to Truth F08"]      = 2670806
-    location_ids["Key to Truth F09"]      = 2670907
-    return location_ids
-end
-
 function define_item_ids()
     item_ids = {}
-    item_ids["Bronze Card Pack"]      = 2661001
-    item_ids["Silver Card Pack"]      = 2661002
-    item_ids["Gold Card Pack"]        = 2661003
-    item_ids["Key of Beginnings F02"] = 2663002
-    item_ids["Key of Beginnings F03"] = 2663003
-    item_ids["Key of Beginnings F04"] = 2663004
-    item_ids["Key of Beginnings F05"] = 2663005
-    item_ids["Key of Beginnings F06"] = 2663006
-    item_ids["Key of Beginnings F07"] = 2663007
-    item_ids["Key of Beginnings F08"] = 2663008
-    item_ids["Key of Beginnings F09"] = 2663009
-    item_ids["Key of Beginnings F10"] = 2663010
-    item_ids["Key of Beginnings F11"] = 2663011
-    item_ids["Key of Beginnings F12"] = 2663012
-    item_ids["Key of Beginnings F13"] = 2663013
-    item_ids["Key of Guidance F02"]   = 2663102
-    item_ids["Key of Guidance F03"]   = 2663103
-    item_ids["Key of Guidance F04"]   = 2663104
-    item_ids["Key of Guidance F05"]   = 2663105
-    item_ids["Key of Guidance F06"]   = 2663106
-    item_ids["Key of Guidance F07"]   = 2663107
-    item_ids["Key of Guidance F08"]   = 2663108
-    item_ids["Key of Guidance F09"]   = 2663109
-    item_ids["Key of Guidance F12"]   = 2663112
-    item_ids["Key to Truth F02"]      = 2663202
-    item_ids["Key to Truth F03"]      = 2663203
-    item_ids["Key to Truth F04"]      = 2663204
-    item_ids["Key to Truth F05"]      = 2663205
-    item_ids["Key to Truth F06"]      = 2663206
-    item_ids["Key to Truth F07"]      = 2663207
-    item_ids["Key to Truth F08"]      = 2663208
-    item_ids["Key to Truth F09"]      = 2663209
-    item_ids["Key to Rewards F01"]    = 2663301
-    item_ids["Key to Rewards F02"]    = 2663302
-    item_ids["Key to Rewards F03"]    = 2663303
-    item_ids["Key to Rewards F04"]    = 2663304
-    item_ids["Key to Rewards F05"]    = 2663305
-    item_ids["Key to Rewards F06"]    = 2663306
-    item_ids["Key to Rewards F07"]    = 2663307
-    item_ids["Key to Rewards F08"]    = 2663308
-    item_ids["Key to Rewards F09"]    = 2663309
-    item_ids["Key to Rewards F11"]    = 2663311
-    item_ids["Key to Rewards F12"]    = 2663312
-    item_ids["Key to Rewards F13"]    = 2663313
-    item_ids["Donald"]                = 2665001
-    item_ids["Goofy"]                 = 2665002
-    item_ids["Aladdin"]               = 2665003
-    item_ids["Ariel"]                 = 2665004
-    item_ids["Beast"]                 = 2665005
-    item_ids["Peter Pan"]             = 2665006
-    item_ids["Jack"]                  = 2665007
-    item_ids["Progressive Warp"]      = 2666001
+    item_ids["Bronze Card Pack"]                 = 2661001
+    item_ids["Silver Card Pack"]                 = 2661002
+    item_ids["Gold Card Pack"]                   = 2661003
+    
+    item_ids["Enemy Card Shadow"]                = 2662001
+    item_ids["Enemy Card Soldier"]               = 2662002
+    item_ids["Enemy Card Large Body"]            = 2662003
+    item_ids["Enemy Card Red Nocturne"]          = 2662004
+    item_ids["Enemy Card Blue Rhapsody"]         = 2662005
+    item_ids["Enemy Card Yellow Opera"]          = 2662006
+    item_ids["Enemy Card Green Requiem"]         = 2662007
+    item_ids["Enemy Card Powerwild"]             = 2662008
+    item_ids["Enemy Card Bouncywild"]            = 2662009
+    item_ids["Enemy Card Air Soldier"]           = 2662010
+    item_ids["Enemy Card Bandit"]                = 2662011
+    item_ids["Enemy Card Fat Bandit"]            = 2662012
+    item_ids["Enemy Card Barrel Spider"]         = 2662013
+    item_ids["Enemy Card Search Ghost"]          = 2662014
+    item_ids["Enemy Card Sea Neon"]              = 2662015
+    item_ids["Enemy Card Screwdriver"]           = 2662016
+    item_ids["Enemy Card Aquatank"]              = 2662017
+    item_ids["Enemy Card Wight Knight"]          = 2662018
+    item_ids["Enemy Card Gargoyle"]              = 2662019
+    item_ids["Enemy Card Pirate"]                = 2662020
+    item_ids["Enemy Card Air Pirate"]            = 2662021
+    item_ids["Enemy Card Darkball"]              = 2662022
+    item_ids["Enemy Card Defender"]              = 2662023
+    item_ids["Enemy Card Wyvern"]                = 2662024
+    item_ids["Enemy Card Neoshadow"]             = 2662025
+    item_ids["Enemy Card White Mushroom"]        = 2662026
+    item_ids["Enemy Card Black Fungus"]          = 2662027
+    item_ids["Enemy Card Creeper Plant"]         = 2662028
+    item_ids["Enemy Card Tornado Step"]          = 2662029
+    item_ids["Enemy Card Crescendo"]             = 2662030
+    item_ids["Enemy Card Guard Armor"]           = 2662031
+    item_ids["Enemy Card Parasite Cage"]         = 2662032
+    item_ids["Enemy Card Trickmaster"]           = 2662033
+    item_ids["Enemy Card Darkside"]              = 2662034
+    item_ids["Enemy Card Card Soldier (Red)"]    = 2662035
+    item_ids["Enemy Card Card Soldier (Black)"]  = 2662036
+    item_ids["Enemy Card Hades"]                 = 2662037
+    item_ids["Enemy Card Jafar"]                 = 2662039
+    item_ids["Enemy Card Oogie Boogie"]          = 2662040
+    item_ids["Enemy Card Ursula"]                = 2662041
+    item_ids["Enemy Card Hook"]                  = 2662042
+    item_ids["Enemy Card Dragon Maleficent"]     = 2662043
+    item_ids["Enemy Card Riku"]                  = 2662044
+    item_ids["Enemy Card Axel"]                  = 2662044
+    item_ids["Enemy Card Larxene"]               = 2662045
+    item_ids["Enemy Card Vexen"]                 = 2662046
+    item_ids["Enemy Card Marluxia"]              = 2662047
+    item_ids["Enemy Card Lexaeus"]               = 2662048
+    item_ids["Enemy Card Ansem"]                 = 2662049
+    
+    item_ids["Key of Beginnings F02"]            = 2663002
+    item_ids["Key of Beginnings F03"]            = 2663003
+    item_ids["Key of Beginnings F04"]            = 2663004
+    item_ids["Key of Beginnings F05"]            = 2663005
+    item_ids["Key of Beginnings F06"]            = 2663006
+    item_ids["Key of Beginnings F07"]            = 2663007
+    item_ids["Key of Beginnings F08"]            = 2663008
+    item_ids["Key of Beginnings F09"]            = 2663009
+    item_ids["Key of Beginnings F10"]            = 2663010
+    item_ids["Key of Beginnings F11"]            = 2663011
+    item_ids["Key of Beginnings F12"]            = 2663012
+    item_ids["Key of Beginnings F13"]            = 2663013
+    item_ids["Key of Guidance F02"]              = 2663102
+    item_ids["Key of Guidance F03"]              = 2663103
+    item_ids["Key of Guidance F04"]              = 2663104
+    item_ids["Key of Guidance F05"]              = 2663105
+    item_ids["Key of Guidance F06"]              = 2663106
+    item_ids["Key of Guidance F07"]              = 2663107
+    item_ids["Key of Guidance F08"]              = 2663108
+    item_ids["Key of Guidance F09"]              = 2663109
+    item_ids["Key of Guidance F12"]              = 2663112
+    item_ids["Key to Truth F02"]                 = 2663202
+    item_ids["Key to Truth F03"]                 = 2663203
+    item_ids["Key to Truth F04"]                 = 2663204
+    item_ids["Key to Truth F05"]                 = 2663205
+    item_ids["Key to Truth F06"]                 = 2663206
+    item_ids["Key to Truth F07"]                 = 2663207
+    item_ids["Key to Truth F08"]                 = 2663208
+    item_ids["Key to Truth F09"]                 = 2663209
+    item_ids["Key to Rewards F01"]               = 2663301
+    item_ids["Key to Rewards F02"]               = 2663302
+    item_ids["Key to Rewards F03"]               = 2663303
+    item_ids["Key to Rewards F04"]               = 2663304
+    item_ids["Key to Rewards F05"]               = 2663305
+    item_ids["Key to Rewards F06"]               = 2663306
+    item_ids["Key to Rewards F07"]               = 2663307
+    item_ids["Key to Rewards F08"]               = 2663308
+    item_ids["Key to Rewards F09"]               = 2663309
+    item_ids["Key to Rewards F11"]               = 2663311
+    item_ids["Key to Rewards F12"]               = 2663312
+    item_ids["Key to Rewards F13"]               = 2663313
+    item_ids["Donald"]                           = 2665001
+    item_ids["Goofy"]                            = 2665002
+    item_ids["Aladdin"]                          = 2665003
+    item_ids["Ariel"]                            = 2665004
+    item_ids["Beast"]                            = 2665005
+    item_ids["Peter Pan"]                        = 2665006
+    item_ids["Jack"]                             = 2665007
     return item_ids
 end
 
@@ -386,6 +315,31 @@ function define_exceptions()
     return exceptions
 end
 
+function define_journal_bit_location_ids()
+    journal_bit_location_ids = {}
+    journal_bit_location_ids[0x02039CE4] = {2670107, 2670608, 2670907, 2671208, 2670108, 2670211, 2670306, 2670509}
+    journal_bit_location_ids[0x02039CE5] = {2670607, 2670404, 2670706, 2670806, 2670906, 2671013, 2671102, 2671207}
+    journal_bit_location_ids[0x02039CE6] = {2671302, 2670007, 2670002, 2670003, 2670004, 2670006, 2670005, 2670109}
+    journal_bit_location_ids[0x02039CE7] = {2670406, 2671001, 2670908, nil    , 2670104, 2670105, 2670101, 2670103}
+    journal_bit_location_ids[0x02039CE8] = {2670302, 2671203, 2671204, 2671202, 2671206, 2670105, 2670102, nil    }
+    journal_bit_location_ids[0x02039CE9] = {2671010, 2671301, 2670203, 2670207, 2670208, 2670204, 2670205, 2670206}
+    journal_bit_location_ids[0x02039CEA] = {2670305, 2670304, 2670303, 2670503, 2670504, nil    , 2670508, 2670505}
+    journal_bit_location_ids[0x02039CEB] = {2670506, 2670507, 2670603, 2670605, 2670602, 2670604, 2670403, 2670402}
+    journal_bit_location_ids[0x02039CEC] = {2670702, 2670705, 2670703, 2670704, nil    , 2670803, 2670804, 2670805}
+    journal_bit_location_ids[0x02039CED] = {2670802, 2670905, 2670902, 2670904, 2670903, 2671011, 2671006, 2671005}
+    journal_bit_location_ids[0x02039CEE] = {2671008, 2671004, 2671009, 2671007, 2671424, 2671425, 2671416, 2671420}
+    journal_bit_location_ids[0x02039CEF] = {2671407, 2671431, 2671415, 2671419, 2671408, 2671402, 2671404, 2671413}
+    journal_bit_location_ids[0x02039CF0] = {2671405, 2671423, 2671422, 2671421, 2671403, 2671428, 2671414, 2671418}
+    journal_bit_location_ids[0x02039CF1] = {2671401, 2671411, 2671412, 2671430, 2671429, 2671417, 2671427, 2671406}
+    journal_bit_location_ids[0x02039CF2] = {2671409, 2671426, 2671410, 2670112, 2670405, 2670210, 2671209, 2670001}
+    journal_bit_location_ids[0x02039CF3] = {2670502, 2670701, 2670601, 2670801, 2670401, 2671003, 2670308, 2670301}
+    journal_bit_location_ids[0x02039CF4] = {2670111, 2670202, 2670901, 2671201, 2671210, nil    , 2671303, 2671304}
+    journal_bit_location_ids[0x02039CF5] = {2670106, 2670009, 2670606, 2670010, 2670501, 2670201, 2670707, 2670110}
+    journal_bit_location_ids[0x02039CF6] = {2670511, 2671002, 2670407, 2670807, 2670909, 2670309, 2670008, 2670307}
+    journal_bit_location_ids[0x02039CF7] = {2671101, 2670510, 2671012, 2671014, 2671211, nil    , nil    , nil    }
+    return journal_bit_location_ids
+end
+
 local function has_value (tab, val)
     for index, value in ipairs(tab) do
         if value == val then
@@ -396,14 +350,25 @@ local function has_value (tab, val)
     return false
 end
 
-location_ids = define_location_ids()
+function toBits(num)
+    -- returns a table of bits, least significant first.
+    local t={} -- will contain the bits
+    while num>0 do
+        rest=math.fmod(num,2)
+        t[#t+1]=rest
+        num=(num-rest)/2
+    end
+    return t
+end
+
 item_ids = define_item_ids()
 battle_cards = define_battle_cards()
 win_conditions = define_win_conditions()
 char_to_hex_map = define_char_to_hex_map()
 exceptions = define_exceptions()
+journal_bit_location_ids = define_journal_bit_location_ids()
 
-pack_size = 3
+pack_size = 2
 
 --Addresses
 current_gold_map_cards_addresses = {}
@@ -563,18 +528,14 @@ function set_deck_pointer(deck_number, offset, value)
 end
 
 function set_starting_deck()
-    memory.write_u16_le(deck_cp_cost_address, 0x0053)
-    memory.write_u16_le(deck_card_count_address, 0x04)
+    memory.write_u16_le(deck_cp_cost_address, 0x0034)
+    memory.write_u16_le(deck_card_count_address, 0x02)
     
     memory.write_u16_le(battle_cards_address, 0x1008) --Kingdom Key 8
     set_deck_pointer(1, 0, 0x0000)
-    memory.write_u16_le(battle_cards_address + 2, 0x1007) --Kingdom Key 7
+    memory.write_u16_le(battle_cards_address + 2, 0x10CE) --Cure 6
     set_deck_pointer(1, 1, 0x0001)
-    memory.write_u16_le(battle_cards_address + 4, 0x1006) --Kingdom Key 6
-    set_deck_pointer(1, 2, 0x0002)
-    memory.write_u16_le(battle_cards_address + 6, 0x10CE) --Cure 6
-    set_deck_pointer(1, 3, 0x0003)
-    local i = 5
+    local i = 3
     while i <= 15 do
         memory.write_u16_le(battle_cards_address + 2*(i-1), 0x0FFF)
         set_deck_pointer(1, i-1, 0xFFFF)
@@ -708,7 +669,11 @@ end
 function update_map_cards()
     address = 0x0203A8C0
     while address <= 0x0203A99B do
-        memory.writebyte(address, 9)
+        if address < 0x0203A992 or address > 0x0203A99B then --skip Moogle Rooms
+            memory.writebyte(address, 9)
+        else
+            memory.writebyte(address, 0)
+        end
         address = address + 1
     end
 end
@@ -733,20 +698,7 @@ function reassign_deck_pointers(old_deck_pointers)
     end
 end
 
-function find_new_keys(old_keys, current_keys, gold_card_type, floor_number)
-    local new_keys = {}
-    if current_keys > old_keys then
-        if floor_number < 10 then
-            new_key = gold_card_type .. " F0" .. floor_number
-        else
-            new_key = gold_card_type .. " F" .. floor_number
-        end
-        set_current_gold_card_qty(gold_card_type, get_current_gold_card_qty(gold_card_type) - 1, floor_number)
-        check_location(new_key)
-    end
-end
-
-function find_new_battle_cards(old_battle_cards, current_battle_cards)
+function remove_new_battle_cards(old_battle_cards, current_battle_cards)
     new_battle_card_types = {}
     old_battle_card_counts = {}
     current_battle_card_counts = {}
@@ -767,11 +719,10 @@ function find_new_battle_cards(old_battle_cards, current_battle_cards)
     for card_value, cnt in pairs(current_battle_card_counts) do
         if cnt > old_battle_card_counts[card_value] then
             i = 0
-            while i < cnt - old_battle_card_counts[card_value] and (card_value % 0x1000) < 0x01C2 do --don't remove enemy cards
+            while i < cnt - old_battle_card_counts[card_value] do
                 remove_battle_card(card_value)
                 i = i + 1
             end
-            check_location(get_battle_card_type(card_value))
         end
     end
 end
@@ -804,18 +755,12 @@ function file_exists(name)
    if f~=nil then io.close(f) return true else return false end
 end
 
-function check_location(location_name)
-    location_id = location_ids[location_name]
-    file = io.open(client_communication_path .. "send" .. tostring(location_id), "w")
-    io.output(file)
-    io.write("")
-    io.close(file)
-end
-
 function add_gold_card(gold_card_name)
     floor_number = tonumber(string.sub(gold_card_name, -2))
     if string.sub(gold_card_name,1,17) == "Key of Beginnings" then
         set_stored_gold_cards("Key of Beginnings", floor_number, 1)
+        set_stored_gold_cards("Key of Guidance", floor_number, 1)
+        set_stored_gold_cards("Key to Truth", floor_number, 1)
     end
     if string.sub(gold_card_name,1,15) == "Key of Guidance" then
         set_stored_gold_cards("Key of Guidance", floor_number, 1)
@@ -874,6 +819,19 @@ function open_card_pack(card_pack)
     end
 end
 
+function check_journal()
+    for k,v in pairs(journal_bit_location_ids) do
+        for ik, iv in pairs(journal_bit_location_ids[k]) do
+            if toBits(memory.readbyte(k))[ik] == 1 and iv ~= nil then
+                file = io.open(client_communication_path .. "send" .. tostring(iv), "w")
+                io.output(file)
+                io.write("")
+                io.close(file)
+            end
+        end
+    end
+end
+
 function receive_items()
     number_of_items_received = 0
     while file_exists(client_communication_path .. "AP_" .. get_moogle_points() + 1 .. ".item") do
@@ -893,6 +851,10 @@ function receive_items()
         end
         if string.sub(received_item_name, -4) == "Pack" and not item_found then
             open_card_pack(received_item_name)
+            item_found = true
+        end
+        if string.sub(received_item_name, 1, 10) == "Enemy Card" and not item_found then
+            add_battle_card(received_item_name:sub(12))
             item_found = true
         end
         for k,v in pairs(win_conditions) do
@@ -1081,40 +1043,25 @@ function main_loop(last_variables)
         if current_floor ~= last_variables["Last Floor"] then
             update_world_cards(get_floor_number())
             update_highest_warp_floor()
-            last_variables["Last Key of Beginnings"] = get_current_gold_card_qty("Key of Beginnings")
-            last_variables["Last Key of Guidance"] = get_current_gold_card_qty("Key of Guidance")
-            last_variables["Last Key to Truth"] = get_current_gold_card_qty("Key to Truth")
-            last_variables["Last Key to Rewards"] = get_current_gold_card_qty("Key to Rewards")
             last_variables["Last Moogle Points"] = get_moogle_points()
         end
-        local current_key_of_beginnings = get_current_gold_card_qty("Key of Beginnings")
-        local current_key_of_guidance = get_current_gold_card_qty("Key of Guidance")
-        local current_key_to_truth = get_current_gold_card_qty("Key to Truth")
-        local current_key_to_rewards = get_current_gold_card_qty("Key to Rewards")
-        local new_key_of_beginnings = find_new_keys(last_variables["Last Key of Beginnings"], current_key_of_beginnings, "Key of Beginnings", current_floor)
-        find_new_keys(last_variables["Last Key of Guidance"], current_key_of_guidance, "Key of Guidance", current_floor)
-        find_new_keys(last_variables["Last Key to Truth"], current_key_to_truth, "Key to Truth", current_floor)
-        find_new_keys(last_variables["Last Key to Rewards"], current_key_to_rewards, "Key to Rewards", current_floor)
         local current_battle_cards = get_battle_cards()
         last_deck_pointers = get_deck_pointers()
-        find_new_battle_cards(last_variables["Last Battle Cards"], current_battle_cards)
+        remove_new_battle_cards(last_variables["Last Battle Cards"], current_battle_cards)
         reassign_deck_pointers(last_deck_pointers)
         set_moogle_points(last_variables["Last Moogle Points"])
     end
-    if frame % 300 and current_playtime > 3 then
+    if frame % 180 and current_playtime > 3 then
+        check_journal()
         last_deck_pointers = get_deck_pointers()
         receive_items()
         reassign_deck_pointers(last_deck_pointers)
-        update_current_gold_card_qty(get_floor_number())
         set_key_description_text()
         check_if_victorious()
         remove_premium_cards()
     end
+    update_current_gold_card_qty(get_floor_number())
     last_variables["Last Floor"] = get_floor_number()
-    last_variables["Last Key of Beginnings"] = get_current_gold_card_qty("Key of Beginnings")
-    last_variables["Last Key of Guidance"] = get_current_gold_card_qty("Key of Guidance")
-    last_variables["Last Key to Truth"] = get_current_gold_card_qty("Key to Truth")
-    last_variables["Last Key to Rewards"] = get_current_gold_card_qty("Key to Rewards")
     last_variables["Last Battle Cards"] = get_battle_cards()
     last_variables["Last Playtime"] = get_playtime()
     last_variables["Last Highest Warp Floor"] = get_highest_warp_floor()
