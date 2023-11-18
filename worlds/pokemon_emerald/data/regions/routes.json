@@ -1074,19 +1074,29 @@
     "events": [],
     "exits": [
       "REGION_FORTREE_CITY/MAIN",
-      "REGION_ROUTE120/NORTH_POND",
+      "REGION_ROUTE120/NORTH_POND_SHORE",
       "REGION_ROUTE120/SOUTH"
     ],
     "warps": []
   },
-  "REGION_ROUTE120/NORTH_POND": {
+  "REGION_ROUTE120/NORTH_POND_SHORE": {
     "parent_map": "MAP_ROUTE120",
     "locations": [
       "ITEM_ROUTE_120_NEST_BALL"
     ],
     "events": [],
     "exits": [
-      "REGION_ROUTE120/NORTH"
+      "REGION_ROUTE120/NORTH",
+      "REGION_ROUTE120/NORTH_POND"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE120/NORTH_POND": {
+    "parent_map": "MAP_ROUTE120",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE120/NORTH_POND_SHORE"
     ],
     "warps": [
       "MAP_ROUTE120:1/MAP_SCORCHED_SLAB:0"
