@@ -154,6 +154,7 @@ class StardewValleyWorld(World):
         for item in self.multiworld.precollected_items[self.player]:
             if item.name in all_farm_type_names:
                 chosen_farm_types.append(item.name)
+                self.multiworld.precollected_items[self.player].remove(item)
 
         if not chosen_farm_types:
             chosen_farm_types = all_farm_type_names
