@@ -8,6 +8,11 @@
 </head>
 
 <body>
+    {# TODO: Replace this with a proper wrapper for each tracker when developing TrackerAPI. #}
+    <div style="margin-bottom: 0.5rem">
+        <a href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">Switch To Generic Tracker</a>
+    </div>
+
     <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <table id="inventory-table">
             <tr>

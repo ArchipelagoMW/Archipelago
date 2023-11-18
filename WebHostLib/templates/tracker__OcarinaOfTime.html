@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/ootTracker.css') }}"/>
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/ootTracker.js') }}"></script>
+</head>
+
+<body>
+    {# TODO: Replace this with a proper wrapper for each tracker when developing TrackerAPI. #}
+    <div style="margin-bottom: 0.5rem">
+        <a href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">Switch To Generic Tracker</a>
+    </div>
+
+    <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
+        <table id="inventory-table">
+            <tr>
+                <td><img src="{{ ocarina_url }}" class="{{ 'acquired' if 'Ocarina' in acquired_items }}" title="Ocarina" /></td>
+                <td><img src="{{ icons['Bombs'] }}" class="{{ 'acquired' if 'Bomb Bag' in acquired_items }}" title="Bombs" /></td>
+                <td><img src="{{ icons['Bow'] }}" class="{{ 'acquired' if 'Bow' in acquired_items }}" title="Fairy Bow" /></td>
+                <td><img src="{{ icons['Fire Arrows'] }}" class="{{ 'acquired' if 'Fire Arrows' in acquired_items }}" title="Fire Arrows" /></td>
+                <td><img src="{{ icons['Kokiri Sword'] }}" class="{{ 'acquired' if 'Kokiri Sword' in acquired_items }}" title="Kokiri Sword" /></td>
+                <td><img src="{{ icons['Biggoron Sword'] }}" class="{{ 'acquired' if 'Biggoron Sword' in acquired_items }}" title="Biggoron's Sword" /></td>
+                <td><img src="{{ icons['Mirror Shield'] }}" class="{{ 'acquired' if 'Mirror Shield' in acquired_items }}" title="Mirror Shield" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ icons['Slingshot'] }}" class="{{ 'acquired' if 'Slingshot' in acquired_items }}" title="Slingshot" /></td>
+                <td><img src="{{ icons['Bombchus'] }}" class="{{ 'acquired' if has_bombchus }}" title="Bombchus" /></td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ hookshot_url }}" class="{{ 'acquired' if 'Progressive Hookshot' in acquired_items }}" title="Progressive Hookshot" />
+                        <div class="item-count">{{ hookshot_length }}</div>
+                    </div>
+                </td>
+                <td><img src="{{ icons['Ice Arrows'] }}" class="{{ 'acquired' if 'Ice Arrows' in acquired_items }}" title="Ice Arrows" /></td>
+                <td><img src="{{ strength_upgrade_url }}" class="{{ 'acquired' if 'Progressive Strength Upgrade' in acquired_items }}" title="Progressive Strength Upgrade" /></td>
+                <td><img src="{{ icons['Goron Tunic'] }}" class="{{ 'acquired' if 'Goron Tunic' in acquired_items }}" title="Goron Tunic" /></td>
+                <td><img src="{{ icons['Zora Tunic'] }}" class="{{ 'acquired' if 'Zora Tunic' in acquired_items }}" title="Zora Tunic" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ icons['Boomerang'] }}" class="{{ 'acquired' if 'Boomerang' in acquired_items }}" title="Boomerang" /></td>
+                <td><img src="{{ icons['Lens of Truth'] }}" class="{{ 'acquired' if 'Lens of Truth' in acquired_items }}" title="Lens of Truth" /></td>
+                <td><img src="{{ icons['Megaton Hammer'] }}" class="{{ 'acquired' if 'Megaton Hammer' in acquired_items }}" title="Megaton Hammer" /></td>
+                <td><img src="{{ icons['Light Arrows'] }}" class="{{ 'acquired' if 'Light Arrows' in acquired_items }}" title="Light Arrows" /></td>
+                <td><img src="{{ scale_url }}" class="{{ 'acquired' if 'Progressive Scale' in acquired_items }}" title="Progressive Scale" /></td>
+                <td><img src="{{ icons['Iron Boots'] }}" class="{{ 'acquired' if 'Iron Boots' in acquired_items }}" title="Iron Boots" /></td>
+                <td><img src="{{ icons['Hover Boots'] }}" class="{{ 'acquired' if 'Hover Boots' in acquired_items }}" title="Hover Boots" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ bottle_url }}" class="{{ 'acquired' if bottle_count > 0 }}" title="Bottles" />
+                        <div class="item-count">{{ bottle_count if bottle_count > 0 else '' }}</div>
+                    </div>
+                </td>
+                <td><img src="{{ icons['Dins Fire'] }}" class="{{ 'acquired' if 'Dins Fire' in acquired_items }}" title="Din's Fire" /></td>
+                <td><img src="{{ icons['Farores Wind'] }}" class="{{ 'acquired' if 'Farores Wind' in acquired_items }}" title="Farore's Wind" /></td>
+                <td><img src="{{ icons['Nayrus Love'] }}" class="{{ 'acquired' if 'Nayrus Love' in acquired_items }}" title="Nayru's Love" /></td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ wallet_url }}" class="{{ 'acquired' if 'Progressive Wallet' in acquired_items }}" title="Progressive Wallet" />
+                        <div class="item-count">{{ wallet_size }}</div>
+                    </div>
+                </td>
+                <td><img src="{{ magic_meter_url }}" class="{{ 'acquired' if 'Magic Meter' in acquired_items }}" title="Magic Meter" /></td>
+                <td><img src="{{ icons['Gerudo Membership Card'] }}" class="{{ 'acquired' if 'Gerudo Membership Card' in acquired_items }}" title="Gerudo Membership Card" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Zeldas Lullaby'] }}" class="{{ 'acquired' if 'Zeldas Lullaby' in acquired_items }}" title="Zelda's Lullaby" id="lullaby"/>
+                        <div class="item-count">Zelda</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Eponas Song'] }}" class="{{ 'acquired' if 'Eponas Song' in acquired_items }}" title="Epona's Song" id="epona" />
+                        <div class="item-count">Epona</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Sarias Song'] }}" class="{{ 'acquired' if 'Sarias Song' in acquired_items }}" title="Saria's Song" id="saria"/>
+                        <div class="item-count">Saria</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Suns Song'] }}" class="{{ 'acquired' if 'Suns Song' in acquired_items }}" title="Sun's Song" id="sun"/>
+                        <div class="item-count">Sun</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Song of Time'] }}" class="{{ 'acquired' if 'Song of Time' in acquired_items }}" title="Song of Time" id="time"/>
+                        <div class="item-count">Time</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Song of Storms'] }}" class="{{ 'acquired' if 'Song of Storms' in acquired_items }}" title="Song of Storms" />
+                        <div class="item-count">Storms</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Gold Skulltula Token'] }}" class="{{ 'acquired' if token_count > 0 }}" title="Gold Skulltula Tokens" />
+                        <div class="item-count">{{ token_count }}</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Minuet of Forest'] }}" class="{{ 'acquired' if 'Minuet of Forest' in acquired_items }}" title="Minuet of Forest" />
+                        <div class="item-count">Min</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Bolero of Fire'] }}" class="{{ 'acquired' if 'Bolero of Fire' in acquired_items }}" title="Bolero of Fire" />
+                        <div class="item-count">Bol</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Serenade of Water'] }}" class="{{ 'acquired' if 'Serenade of Water' in acquired_items }}" title="Serenade of Water" />
+                        <div class="item-count">Ser</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Requiem of Spirit'] }}" class="{{ 'acquired' if 'Requiem of Spirit' in acquired_items }}" title="Requiem of Spirit" />
+                        <div class="item-count">Req</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Nocturne of Shadow'] }}" class="{{ 'acquired' if 'Nocturne of Shadow' in acquired_items }}" title="Nocturne of Shadow" />
+                        <div class="item-count">Noc</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Prelude of Light'] }}" class="{{ 'acquired' if 'Prelude of Light' in acquired_items }}" title="Prelude of Light" />
+                        <div class="item-count">Pre</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Triforce'] if game_finished else icons['Triforce Piece'] }}" class="{{ 'acquired' if game_finished or piece_count > 0 }}" title="{{ 'Triforce' if game_finished else 'Triforce Pieces' }}" id=triforce />
+                        <div class="item-count">{{ piece_count if piece_count > 0 else '' }}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table id="location-table">
+            <tr>
+                <td></td>
+                <td><img src="{{ icons['Small Key'] }}" title="Small Keys" /></td>
+                <td><img src="{{ icons['Boss Key'] }}" title="Boss Key" /></td>
+                <td class="right-align">Items</td>
+            </tr>
+            {% for area in checks_done %}
+            <tr class="location-category" id="{{area}}-header">
+                <td>{{ area }} {{'▼' if area != 'Total'}}</td>
+                <td class="smallkeys">{{ small_key_counts.get(area, '-') }}</td>
+                <td class="bosskeys">{{ boss_key_counts.get(area, '-') }}</td>
+                <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
+            </tr>
+            <tbody class="locations hide" id="{{area}}">
+                {% for location in location_info[area] %}
+                <tr>
+                    <td class="location-name">{{ location }}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="counter">{{ '✔' if location_info[area][location] else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
