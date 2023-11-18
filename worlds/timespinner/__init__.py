@@ -226,15 +226,18 @@ class TimespinnerWorld(World):
 
     def assign_starter_items(self, excluded_items: Set[str]) -> None:
         non_local_items: Set[str] = self.multiworld.non_local_items[self.player].value
+        local_items: Set[str] = self.multiworld.local_items[self.player].value
 
-        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if item not in non_local_items)
+        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if 
+                                            item in local_items or not item in non_local_items)
         if not local_starter_melee_weapons:
             if 'Plasma Orb' in non_local_items:
                 raise Exception("Atleast one melee orb must be local")
             else:
                 local_starter_melee_weapons = ('Plasma Orb',)
 
-        local_starter_spells = tuple(item for item in starter_spells if item not in non_local_items)
+        local_starter_spells = tuple(item for item in starter_spells if
+                                     item in local_items or not item in non_local_items)
         if not local_starter_spells:
             if 'Lightwall' in non_local_items:
                 raise Exception("Atleast one spell must be local")
