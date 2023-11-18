@@ -56,9 +56,9 @@ class KHCOMWorld(World):
     def create_items(self):
         item_pool: List[KHCOMItem] = []
         starting_locations = get_locations_by_category("Starting")
-        starting_locations = random.sample(starting_locations.keys(),3)
+        starting_locations = random.sample(list(starting_locations.keys()),3)
         starting_worlds = get_items_by_category("World Unlocks")
-        starting_worlds = random.sample(starting_worlds.keys(),3)
+        starting_worlds = random.sample(list(starting_worlds.keys()),3)
         i = 0
         while i < 3:
             self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
