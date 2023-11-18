@@ -7,6 +7,11 @@
 </head>
 
 <body>
+    {# TODO: Replace this with a proper wrapper for each tracker when developing TrackerAPI. #}
+    <div style="margin-bottom: 0.5rem">
+        <a href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">Switch To Generic Tracker</a>
+    </div>
+
     <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <div id="inventory-table">
             <div class="table-row">
@@ -51,16 +56,16 @@
                 <div class="C4"><img src="{{ icons['Security Keycard D'] }}" class="{{ 'acquired' if 'Security Keycard D' in acquired_items }}" title="Security Keycard D" /></div>
             {% if 'DownloadableItems' in options %}
                 <div class="C5"><img src="{{ icons['Library Keycard V'] }}" class="{{ 'acquired' if 'Library Keycard V' in acquired_items }}" title="Library Keycard V" /></div>
-            {% endif %}   
+            {% endif %}
             </div>
             <div class="table-row">
             {% if 'DownloadableItems' in options %}
                 <div class="C1"><img src="{{ icons['Tablet'] }}" class="{{ 'acquired' if 'Tablet' in acquired_items }}" title="Tablet" /></div>
-            {% endif %}    
+            {% endif %}
                 <div class="C2"><img src="{{ icons['Elevator Keycard'] }}" class="{{ 'acquired' if 'Elevator Keycard' in acquired_items }}" title="Elevator Keycard" /></div>
             {% if 'EyeSpy' in options %}
                 <div class="C3"><img src="{{ icons['Oculus Ring'] }}" class="{{ 'acquired' if 'Oculus Ring' in acquired_items }}" title="Oculus Ring" /></div>
-            {% endif %}   
+            {% endif %}
                 <div class="C4"><img src="{{ icons['Water Mask'] }}" class="{{ 'acquired' if 'Water Mask' in acquired_items }}" title="Water Mask" /></div>
                 <div class="C5"><img src="{{ icons['Gas Mask'] }}" class="{{ 'acquired' if 'Gas Mask' in acquired_items }}" title="Gas Mask" /></div>
             </div>
