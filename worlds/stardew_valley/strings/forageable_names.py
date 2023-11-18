@@ -41,7 +41,7 @@ class SVEForage:
     ferngill_primrose = "Ferngill Primrose"
     goldenrod = "Goldenrod"
     winter_star_rose = "Winter Star Rose"
-    bearberry = "Bearberry"
+    bearberrys = "Bearberrys"
     poison_mushroom = "Poison Mushroom"
     red_baneberry = "Red Baneberry"
     big_conch = "Big Conch"

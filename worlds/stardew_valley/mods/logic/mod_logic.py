@@ -21,6 +21,7 @@ from ...logic.fishing_logic import FishingLogic
 from ...logic.has_logic import HasLogic
 from ...logic.mine_logic import MineLogic
 from ...logic.money_logic import MoneyLogic
+from ...logic.museum_logic import MuseumLogic
 from ...logic.quest_logic import QuestLogic
 from ...logic.received_logic import ReceivedLogic
 from ...logic.region_logic import RegionLogic
@@ -46,10 +47,10 @@ class ModLogic:
     sve: SVELogic
 
     def __init__(self, player: int, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
-                 action: ActionLogic, artisan: ArtisanLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, building: BuildingLogic, wallet: WalletLogic,
+                 action: ActionLogic, artisan: ArtisanLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, museum: MuseumLogic, building: BuildingLogic, wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
                  time: TimeLogic, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
-        self.item = ModItemLogic(mods, combat, crop, cooking, has, money, region, season, relationship, tool)
+        self.item = ModItemLogic(mods, combat, crop, cooking, has, money, region, season, relationship, museum, tool, crafting)
         self.magic = MagicLogic(player, mods, received, region)
         self.quests = ModQuestLogic(mods, received, has, region, time, season, relationship)
         self.buildings = ModBuildingLogic(player, has, money, mods)

@@ -137,3 +137,41 @@ class Craftable:
     farm_computer = "Farm Computer"
     hopper = "Hopper"
     cookout_kit = "Cookout Kit"
+
+
+class ModEdible:
+    magic_elixir = "Magic Elixir"
+    aegis_elixir = "Aegis Elixir"
+    armor_elixir = "Armor Elixir"
+    barbarian_elixir = "Barbarian Elixir"
+    lightning_elixir = "Lightning Elixir"
+    gravity_elixir = "Gravity Elixir"
+    hero_elixir = "Hero Elixir"
+    haste_elixir = "Haste Elixir"
+
+
+class ModCraftable:
+    travel_core = "Travel Core"
+    glass_bazier = "Glass Bazier"
+    water_strainer = "Water Strainer"
+    glass_fence = "Glass Fence"
+    wooden_display = "Wooden Display"
+    hardwood_display = "Hardwood Display"
+
+
+class ModMachine:
+    preservation_chamber = "Preservation Chamber"
+    preservation_chamber_h = "hardwood Preservation Chamber"
+    grinder = "Grinder"
+    ancient_battery = "Ancient Battery Creator"
+
+
+class ModFloor:
+    glass_path = "Glass Path"
+    bone_path = "Bone Path"
+
+
+class ModConsumable:
+    volcano_totem = "Warp Totem: Volcano"
+
+

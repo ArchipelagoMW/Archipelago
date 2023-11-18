@@ -1,23 +1,26 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
+from ..mods.mod_data import ModNames
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
     ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource
 from ..strings.artisan_good_names import ArtisanGood
-from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, Craftable
+from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, Craftable, \
+    ModEdible, ModCraftable, ModMachine, ModFloor, ModConsumable
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ..strings.fish_names import Fish, WaterItem
 from ..strings.flower_names import Flower
-from ..strings.forageable_names import Forageable
+from ..strings.food_names import Meal
+from ..strings.forageable_names import Forageable, SVEForage
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
 from ..strings.metal_names import Ore, MetalBar, Fossil, Artifact, Mineral
 from ..strings.monster_drop_names import Loot
-from ..strings.region_names import Region
+from ..strings.region_names import Region, SVERegion
 from ..strings.seed_names import Seed, TreeSeed
-from ..strings.skill_names import Skill
+from ..strings.skill_names import Skill, ModSkill
 from ..strings.special_order_names import SpecialOrder
 from ..strings.villager_names import NPC
 
@@ -26,11 +29,13 @@ class CraftingRecipe:
     item: str
     ingredients: Dict[str, int]
     source: RecipeSource
+    mod_name: Optional[str] = None
 
-    def __init__(self, item: str, ingredients: Dict[str, int], source: RecipeSource):
+    def __init__(self, item: str, ingredients: Dict[str, int], source: RecipeSource, mod_name: Optional[str] = None):
         self.item = item
         self.ingredients = ingredients
         self.source = source
+        self.mod_name = mod_name
 
     def __repr__(self):
         return f"{self.item} (Source: {self.source} |" \
@@ -50,14 +55,14 @@ def cutscene_recipe(name: str, region: str, friend: str, hearts: int, ingredient
     return create_recipe(name, ingredients, source)
 
 
-def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int]) -> CraftingRecipe:
+def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
     source = SkillSource(skill, level)
-    return create_recipe(name, ingredients, source)
+    return create_recipe(name, ingredients, source, mod_name)
 
 
-def shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int]) -> CraftingRecipe:
+def shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
     source = ShopSource(region, price)
-    return create_recipe(name, ingredients, source)
+    return create_recipe(name, ingredients, source, mod_name)
 
 
 def festival_shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int]) -> CraftingRecipe:
@@ -97,8 +102,8 @@ def cellar_recipe(name: str, ingredients: Dict[str, int]) -> CraftingRecipe:
     return create_recipe(name, ingredients, source)
 
 
-def create_recipe(name: str, ingredients: Dict[str, int], source: RecipeSource) -> CraftingRecipe:
-    recipe = CraftingRecipe(name, ingredients, source)
+def create_recipe(name: str, ingredients: Dict[str, int], source: RecipeSource, mod_name: Optional[str] = None) -> CraftingRecipe:
+    recipe = CraftingRecipe(name, ingredients, source, mod_name)
     all_crafting_recipes.append(recipe)
     return recipe
 
@@ -251,5 +256,29 @@ farm_computer = special_order_recipe(Craftable.farm_computer, SpecialOrder.aquat
 hopper = ap_recipe(Craftable.hopper, {Material.hardwood: 10, MetalBar.iridium: 1, MetalBar.radioactive: 1})
 cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 9, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
 
+magic_elixir = shop_recipe(ModEdible.magic_elixir, Region.adventurer_guild, 3000, {Edible.life_elixir: 1, Forageable.purple_mushroom: 1}, ModNames.magic)
+travel_charm = shop_recipe(ModCraftable.travel_core, Region.adventurer_guild, 250, {Loot.solar_essence: 1, Loot.void_essence: 1}, ModNames.magic)
+preservation_chamber = skill_recipe(ModMachine.preservation_chamber, ModSkill.archaeology, 2, {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 30},
+                                    ModNames.archaeology)
+preservation_chamber_h = skill_recipe(ModMachine.preservation_chamber_h, ModSkill.archaeology, 7, {MetalBar.copper: 1, Material.hardwood: 15,
+                                                                                                   ArtisanGood.oak_resin: 30}, ModNames.archaeology)
+grinder = skill_recipe(ModMachine.grinder, ModSkill.archaeology, 8, {Artifact.rusty_cog: 10, MetalBar.iron: 5, ArtisanGood.battery_pack: 1}, ModNames.archaeology)
+ancient_battery = skill_recipe(ModMachine.ancient_battery, ModSkill.archaeology, 6, {Material.stone: 40, MetalBar.copper: 10, MetalBar.iron: 5},
+                               ModNames.archaeology)
+glass_bazier = skill_recipe(ModCraftable.glass_bazier, ModSkill.archaeology, 1, {Artifact.glass_shards: 10}, ModNames.archaeology)
+glass_path = skill_recipe(ModFloor.glass_path, ModSkill.archaeology, 1, {Artifact.glass_shards: 1}, ModNames.archaeology)
+glass_fence = skill_recipe(ModCraftable.glass_fence, ModSkill.archaeology, 1, {Artifact.glass_shards: 5}, ModNames.archaeology)
+bone_path = skill_recipe(ModFloor.bone_path, ModSkill.archaeology, 3, {Fossil.bone_fragment: 1}, ModNames.archaeology)
+water_strainer = skill_recipe(ModCraftable.water_strainer, ModSkill.archaeology, 4, {Material.wood: 40, MetalBar.copper: 4}, ModNames.archaeology)
+wooden_display = skill_recipe(ModCraftable.wooden_display, ModSkill.archaeology, 2, {Material.wood: 25}, ModNames.archaeology)
+hardwood_display = skill_recipe(ModCraftable.hardwood_display, ModSkill.archaeology, 7, {Material.hardwood: 10}, ModNames.archaeology)
+volcano_totem = skill_recipe(ModConsumable.volcano_totem, ModSkill.archaeology, 9, {Material.cinder_shard: 5, Artifact.rare_disc: 1, Artifact.dwarf_gadget: 1},
+                             ModNames.archaeology)
+haste_elixir = shop_recipe(ModEdible.haste_elixir, SVERegion.alesia_shop, 35000, {Loot.void_essence: 35, SVEForage.void_soul: 5, Ingredient.sugar: 1,
+                                                                                  Meal.spicy_eel: 1}, ModNames.sve)
+hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.issac_shop, 65000, {SVEForage.void_pebble: 3, SVEForage.void_soul: 5, Ingredient.oil: 1,
+                                                                               Loot.slime: 10}, ModNames.sve)
+armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000, {Loot.solar_essence: 30, SVEForage.void_soul: 5, Ingredient.vinegar: 5,
+                                                                                  Fossil.bone_fragment: 5}, ModNames.sve)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}

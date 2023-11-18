@@ -17,7 +17,6 @@ from ..strings.skill_names import Skill
 from ..strings.villager_names import NPC
 
 
-
 class CookingRecipe:
     meal: str
     ingredients: Dict[str, int]
@@ -179,7 +178,7 @@ frog_legs = shop_recipe(SVEMeal.frog_legs, Region.adventurer_guild, 2000, {SVEFi
 glazed_butterfish = shop_recipe(SVEMeal.glazed_butterfish, Region.saloon, 4000, {SVEFish.butterfish: 1, Ingredient.wheat_flour: 1, Ingredient.oil: 1},
                                 ModNames.sve)
 mixed_berry_pie = shop_recipe(SVEMeal.mixed_berry_pie, Region.saloon, 3500, {Fruit.strawberry: 6, SVEFruit.salal_berry: 6, Forageable.blackberry: 6,
-                                                                             SVEForage.bearberry: 6, Ingredient.sugar: 1, Ingredient.wheat_flour: 1},
+                                                                             SVEForage.bearberrys: 6, Ingredient.sugar: 1, Ingredient.wheat_flour: 1},
                               ModNames.sve)
 mushroom_berry_rice = shop_recipe(SVEMeal.mushroom_berry_rice, Region.adventurer_guild, 1500, {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10,
                                                                                                Ingredient.rice: 1, Ingredient.sugar: 2}, ModNames.sve)

@@ -99,4 +99,9 @@ class SVEMeal:
     seaweed_salad = "Seaweed Salad"
     void_delight = "Void Delight"
     void_salmon_sushi = "Void Salmon Sushi"
+    grampleton_orange_chicken = "Grampleton Orange Chicken"
+
+
+class SVEBeverage:
+    sports_drink = "Sports Drink"
 

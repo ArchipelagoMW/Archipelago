@@ -33,6 +33,16 @@ class Mineral:
 class Artifact:
     dwarf_gadget = "Dwarf Gadget"
     ancient_seed = "Ancient Seed"
+    glass_shards = "Glass Shards"
+    rusty_cog = "Rusty Cog"
+    rare_disc = "Rare Disc"
+    ancient_doll = "Ancient Doll"
+    ancient_drum = "Ancient Drum"
+    ancient_sword = "Ancient Sword"
+    arrowhead = "Arrowhead"
+    bone_flute = "Bone Flute"
+    chewing_stick = "Chewing Stick"
+    chicken_statue = "Chicken Statue"
 
 
 class Fossil:
@@ -46,4 +56,5 @@ class Fossil:
     mummified_frog = "Mummified Frog"
     snake_skull = "Snake Skull"
     snake_vertebrae = "Snake Vertebrae"
+    amphibian_fossil = "Amphibian Fossil"
 
