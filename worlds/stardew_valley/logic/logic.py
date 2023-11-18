@@ -124,7 +124,8 @@ class StardewLogic:
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
         self.buildings = BuildingLogic(self.player, self.cached_rules, self.options.building_progression, self.received, self.has, self.region, self.money)
-        self.shipping = ShippingLogic(self.player, self.cached_rules, exclude_ginger_island, special_order_locations, self.has, self.region, self.buildings)
+        self.shipping = ShippingLogic(self.player, self.cached_rules, exclude_ginger_island, special_order_locations, mods_option, self.has, self.region,
+                                      self.buildings)
         self.relationship = RelationshipLogic(self.player, self.cached_rules, friendsanity_option, heart_size_option,
                                               self.received, self.has, self.region, self.time, self.season, self.gifts, self.buildings, mods_option)
         self.museum = MuseumLogic(self.player, self.cached_rules, self.options.museumsanity, self.received, self.has, self.region, self.action)

@@ -1,5 +1,6 @@
 from typing import Dict
 
+from ...data.craftable_data import all_crafting_recipes_by_name
 from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
 from ...logic.crop_logic import CropLogic
@@ -14,16 +15,28 @@ from ...logic.tool_logic import ToolLogic
 from ...logic.crafting_logic import CraftingLogic
 from ...options import Mods
 from ..mod_data import ModNames
+from ...strings.craftable_names import ModCraftable, ModEdible, ModFloor, ModMachine
 from ...strings.crop_names import SVEVegetable, SVEFruit
 from ...strings.food_names import SVEMeal, SVEBeverage
 from ...strings.gift_names import SVEGift
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.forageable_names import SVEForage
+from ...strings.metal_names import Artifact, Fossil
 from ...strings.monster_drop_names import ModLoot
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed
 from ...strings.region_names import Region, SVERegion
-from ...stardew_rule import StardewRule
+from ...strings.villager_names import ModNPC
+from ...stardew_rule import StardewRule, True_
+
+display_types = ["Wooden Display: ", "Hardwood Display: "]
+display_items = ["Amphibian Fossil", "Anchor", "Ancient Doll", "Ancient Drum", "Ancient Seed", "Ancient Sword", "Arrowhead", "Bone Flute", "Chewing Stick",
+                 "Chicken Statue", "Chipped Amphora", "Dinosaur Egg", "Dried Starfish", "Dwarf Gadget", "Dwarf Scroll I", "Dwarf Scroll II", "Dwarf Scroll III",
+                 "Dwarf Scroll IV", "Dwarvish Helm", "Elvish Jewelry", "Fossilized Leg", "Fossilized Ribs", "Fossilized Skull", "Fossilized Spine",
+                 "Fossilized Tail", "Glass Shards", "Golden Mask", "Golden Relic", "Mummified Bat", "Mummified Frog", "Nautilus Fossil", "Ornamental Fan",
+                 "Palm Fossil", "Prehistoric Handaxe", "Prehistoric Rib", "Prehistoric Scapula", "Prehistoric Skull", "Prehistoric Tibia", "Prehistoric Tool",
+                 "Prehistoric Vertebra", "Rare Disc", "Rusty Cog", "Rusty Spoon", "Rusty Spur", "Skeletal Hand", "Skeletal Tail", "Snake Skull", "Snake Vertebrae",
+                 "Strange Doll (Green)", "Strange Doll", "Trilobite"]
 
 
 class ModItemLogic:
@@ -59,11 +72,12 @@ class ModItemLogic:
     def get_modded_item_rules(self) -> Dict[str, StardewRule]:
         items = dict()
         if ModNames.sve in self.mods:
-            items.update(self._get_sve_item_rules())
-
+            items.update(self.get_sve_item_rules())
+        if ModNames.archaeology in self.mods:
+            items.update(self.get_archaeology_item_rules())
         return items
 
-    def _get_sve_item_rules(self):
+    def get_sve_item_rules(self):
         return {SVEGift.aged_blue_moon_wine: self.money.can_spend_at(SVERegion.sophias_house, 28000),
                 SVEGift.blue_moon_wine: self.money.can_spend_at(SVERegion.sophias_house, 3000),
                 SVESeed.fungus_seed: self.region.can_reach(SVERegion.highlands_cavern) & self.combat.has_good_weapon,
@@ -113,3 +127,20 @@ class ModItemLogic:
                 SVEForage.void_pebble: self.region.can_reach(SVERegion.crimson_badlands) & self.combat.has_great_weapon,
                 ModLoot.void_shard: self.region.can_reach(SVERegion.crimson_badlands) & self.combat.has_galaxy_weapon
                 }
+
+    def get_archaeology_item_rules(self):
+        archaeology_item_rules = {}
+
+        for item in display_items:
+            for display_type in display_types:
+                display_item = display_type[:-2]
+                location_name = display_type + item
+                if "Wooden" in display_item:
+                    archaeology_item_rules[location_name] = (self.crafting.can_craft(all_crafting_recipes_by_name[display_item]) &
+                                                             self.crafting.can_craft(all_crafting_recipes_by_name[ModMachine.preservation_chamber]) & \
+                                                             self.has(item))
+                else:
+                    archaeology_item_rules[location_name] = (self.crafting.can_craft(all_crafting_recipes_by_name[display_item]) &
+                                                             self.crafting.can_craft(all_crafting_recipes_by_name[ModMachine.preservation_chamber_h]) & \
+                                                             self.has(item))
+        return archaeology_item_rules
