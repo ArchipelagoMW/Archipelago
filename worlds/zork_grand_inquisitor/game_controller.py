@@ -10,20 +10,13 @@ from .enums import ZorkGrandInquisitorItems, ZorkGrandInquisitorLocations, ZorkG
 from .game_state_manager import GameStateManager
 
 
-### PROBLEMS
-# Dying in Old Scratch caused Plants are mans best friend to be completed and game crash
-
-# Skip old scratch not working
+### PROBLEMS / TODO
+# Need Repro: Dying in Old Scratch caused Plants are mans best friend to be completed and game crash
 
 # Detect when the game is not running and prompt to /zork again
 
-# Alternate way to deduplicate: Pick up duplicate and free cursor item
-# Higher effort to not have to rely on deduplication
-# Having Rope forced takes away the need for GLORF. I don't mind forcing items back that normally should be gone, but it can't affect logic
-
-### TODO
-# ...
-
+# Alternate Goals: 3 artifacts placed, full spell book, totem hunt
+#   Same Logic for all, just different victory conditions
 
 class GameController:
     def __init__(self, logger=None):
@@ -217,7 +210,8 @@ class GameController:
 
         # Skip Old Scratch Minigame
         if self.option_skip_old_scratch_minigame:
-            self._write_game_state_value_for(7912, 1)  # Needs Testing
+            self._write_game_state_value_for(7833, 1)
+            self._write_game_state_value_for(7865, 41)
 
     def _check_for_completed_locations(self):
         for location, data in location_data.items():
@@ -268,6 +262,8 @@ class GameController:
             self.available_inventory_slots = self._determine_available_inventory_slots()
 
             received_inventory_items = self.received_items & self.possible_inventory_items
+            received_inventory_items = self._filter_received_inventory_items(received_inventory_items)
+
             game_state_inventory_items = self._determine_game_state_inventory()
 
             inventory_items_to_add = received_inventory_items - game_state_inventory_items
@@ -279,26 +275,14 @@ class GameController:
             for item in inventory_items_to_remove:
                 self._remove_from_inventory(item)
 
-        # Remove Duplicate Inventory Items
-        inventory_slot_state_values = dict()
+        # Remove Duplicate Inventory Items on Cursor - Unstable?
+        inventory_item_values = set()
 
         for i in range(151, 171):
-            inventory_slot_state_values[i] = self._read_game_state_value_for(i)
+            inventory_item_values.add(self._read_game_state_value_for(i))
 
-        duplicate_state_values = list()
-
-        for value in inventory_slot_state_values.values():
-            if list(inventory_slot_state_values.values()).count(value) > 1:
-                duplicate_state_values.append(value)
-
-        duplicate_slots = [
-            slot
-            for slot, value in inventory_slot_state_values.items()
-            if value in duplicate_state_values
-        ]
-
-        for duplicate_slot in duplicate_slots:
-            self._write_game_state_value_for(duplicate_slot, 0)
+        if self._read_game_state_value_for(9) in inventory_item_values:
+            self._write_game_state_value_for(9, 0)
 
     def _apply_conditional_teleports(self):
         if self._player_is_at("uw1k") and self._read_game_state_value_for(10304) == 1:
@@ -311,9 +295,18 @@ class GameController:
         game_state_inventory = set()
 
         # Item on Cursor
-        if self._read_game_state_value_for(9) != 0:
-            if self._read_game_state_value_for(9) in self.game_id_to_items:
-                game_state_inventory.add(self.game_id_to_items[self._read_game_state_value_for(9)])
+        item_on_cursor = self._read_game_state_value_for(9)
+
+        if item_on_cursor != 0:
+            if item_on_cursor in self.game_id_to_items:
+                game_state_inventory.add(self.game_id_to_items[item_on_cursor])
+
+        # Item in Inspector
+        item_in_inspector = self._read_game_state_value_for(4512)
+
+        if item_in_inspector != 0:
+            if item_in_inspector in self.game_id_to_items:
+                game_state_inventory.add(self.game_id_to_items[item_in_inspector])
 
         # Items in Inventory Slots
         for i in range(151, 171):
@@ -394,7 +387,100 @@ class GameController:
         if self._read_game_state_value_for(9) == data.game_state_keys[0]:
             return 9
 
+        if self._read_game_state_value_for(4512) == data.game_state_keys[0]:
+            return 4512
+
         return None
+
+    def _filter_received_inventory_items(self, received_inventory_items):
+        to_filter_inventory_items = set()
+
+        inventory_item_values = set()
+
+        for i in range(151, 171):
+            inventory_item_values.add(self._read_game_state_value_for(i))
+
+        cursor_item_value = self._read_game_state_value_for(9)
+        inspector_item_value = self._read_game_state_value_for(4512)
+
+        inventory_item_values.add(cursor_item_value)
+        inventory_item_values.add(inspector_item_value)
+
+        for item in received_inventory_items:
+            if item == ZorkGrandInquisitorItems.FLATHEADIA_FUDGE:
+                if self._read_game_state_value_for(4766) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.HUNGUS_LARD:
+                if self._read_game_state_value_for(4870) == 1:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(4244) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.JAR_OF_HOTBUGS:
+                if self._read_game_state_value_for(4750) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.LANTERN:
+                if self._read_game_state_value_for(5221) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.LARGE_TELEGRAPH_HAMMER:
+                if self._read_game_state_value_for(9491) == 3:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.MEAD_LIGHT:
+                if self._read_game_state_value_for(17620) > 0:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.MOSS_OF_MAREILON:
+                if self._read_game_state_value_for(4763) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.MUG:
+                if self._read_game_state_value_for(4772) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.OLD_SCRATCH_CARD:
+                if 32 in inventory_item_values:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(12892) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.PERMA_SUCK_MACHINE:
+                if self._read_game_state_value_for(12218) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.PLASTIC_SIX_PACK_HOLDER:
+                if self._read_game_state_value_for(15150) == 3:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(10421) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.PROZORK_TABLET:
+                if self._read_game_state_value_for(4115) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.QUELBEE_HONEYCOMB:
+                if self._read_game_state_value_for(4769) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.ROPE:
+                if 22 in inventory_item_values:
+                    to_filter_inventory_items.add(item)
+                elif 111 in inventory_item_values:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(10304) == 1:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(15150) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.SNAPDRAGON:
+                if self._read_game_state_value_for(4199) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.SUBWAY_TOKEN:
+                if self._read_game_state_value_for(13165) == 1:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.ZIMDOR_SCROLL:
+                if self._read_game_state_value_for(17620) == 3:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.ZORK_ROCKS:
+                if self._read_game_state_value_for(12486) == 1:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(12487) == 1:
+                    to_filter_inventory_items.add(item)
+                elif 52 in inventory_item_values:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(11769) == 1:
+                    to_filter_inventory_items.add(item)
+
+        return received_inventory_items - to_filter_inventory_items
 
     def _read_game_state_value_for(self, key):
         try:

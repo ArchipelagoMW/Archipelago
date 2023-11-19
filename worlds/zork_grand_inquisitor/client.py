@@ -113,7 +113,7 @@ async def controller(ctx):
                 }
             ])
 
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.2)
 
 
 async def process_package(ctx: ZorkGrandInquisitorContext, cmd, _args):
