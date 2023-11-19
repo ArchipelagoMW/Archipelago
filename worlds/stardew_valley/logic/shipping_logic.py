@@ -48,11 +48,15 @@ class ShippingLogic(CachedLogic):
     def can_ship_everything(self) -> StardewRule:
         shipsanity_prefix = "Shipsanity: "
         all_items_to_ship = []
-        include_island = self.exclude_ginger_island == ExcludeGingerIsland.option_false
-        include_qi = self.special_orders_option == SpecialOrderLocations.option_board_qi
+        exclude_island = self.exclude_ginger_island == ExcludeGingerIsland.option_true
+        exclude_qi = self.special_orders_option != SpecialOrderLocations.option_board_qi
         mod_list = self.mods.value
         for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
-            if (include_island or LocationTags.GINGER_ISLAND not in location.tags) and \
-                    (include_qi or LocationTags.REQUIRES_QI_ORDERS not in location.tags) and location.mod_name in mod_list:
-                all_items_to_ship.append(location.name[len(shipsanity_prefix):])
+            if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
+                continue
+            if exclude_qi and LocationTags.REQUIRES_QI_ORDERS in location.tags:
+                continue
+            if location.mod_name and location.mod_name not in mod_list:
+                continue
+            all_items_to_ship.append(location.name[len(shipsanity_prefix):])
         return self.buildings.has_building(Building.shipping_bin) & And([self.has(item) for item in all_items_to_ship])
