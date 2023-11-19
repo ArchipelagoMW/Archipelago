@@ -16,6 +16,7 @@
 *.z64
 *.n64
 *.nes
+*.smc
 *.sms
 *.gb
 *.gbc
