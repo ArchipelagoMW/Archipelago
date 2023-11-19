@@ -27,7 +27,7 @@ def lingo_can_use_pilgrimage(state: CollectionState, player: int, player_logic: 
         ["Outside The Agreeable", "Tenacious Entrance"]
     ]
     for entrance in fake_pilgrimage:
-        if not state.has(player_logic.ITEM_BY_DOOR[entrance[0]][entrance[1]], player):
+        if not state.has(player_logic.item_by_door[entrance[0]][entrance[1]], player):
             return False
 
     return True
@@ -64,7 +64,7 @@ def _lingo_can_open_door(state: CollectionState, room: str, door: str, player: i
     """
     Determines whether a door can be opened
     """
-    item_name = player_logic.ITEM_BY_DOOR[room][door]
+    item_name = player_logic.item_by_door[room][door]
     if item_name in PROGRESSIVE_ITEMS:
         progression = PROGRESSION_BY_ROOM[room][door]
         return state.has(item_name, player, progression.index)
@@ -73,10 +73,10 @@ def _lingo_can_open_door(state: CollectionState, room: str, door: str, player: i
 
 
 def make_location_lambda(location: PlayerLocation, world: "LingoWorld", player_logic: LingoPlayerLogic):
-    if location.name == player_logic.MASTERY_LOCATION:
+    if location.name == player_logic.mastery_location:
         return lambda state: lingo_can_use_mastery_location(state, world)
 
-    if location.name == player_logic.LEVEL_2_LOCATION:
+    if location.name == player_logic.level_2_location:
         return lambda state: lingo_can_use_level_2_location(state, world)
 
     return lambda state: lingo_can_use_location(state, location, world, player_logic)

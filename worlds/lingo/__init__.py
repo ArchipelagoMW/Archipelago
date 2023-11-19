@@ -55,14 +55,14 @@ class LingoWorld(World):
         create_regions(self, self.player_logic)
 
     def create_items(self):
-        pool = [self.create_item(name) for name in self.player_logic.REAL_ITEMS]
+        pool = [self.create_item(name) for name in self.player_logic.real_items]
 
-        if self.player_logic.FORCED_GOOD_ITEM != "":
-            new_item = self.create_item(self.player_logic.FORCED_GOOD_ITEM)
+        if self.player_logic.forced_good_item != "":
+            new_item = self.create_item(self.player_logic.forced_good_item)
             location_obj = self.multiworld.get_location("Second Room - Good Luck", self.player)
             location_obj.place_locked_item(new_item)
 
-        item_difference = len(self.player_logic.REAL_LOCATIONS) - len(pool)
+        item_difference = len(self.player_logic.real_locations) - len(pool)
         if item_difference:
             trap_percentage = self.options.trap_percentage
             traps = int(item_difference * trap_percentage / 100.0)
@@ -107,6 +107,6 @@ class LingoWorld(World):
         }
 
         if self.options.shuffle_paintings:
-            slot_data["painting_entrance_to_exit"] = self.player_logic.PAINTING_MAPPING
+            slot_data["painting_entrance_to_exit"] = self.player_logic.painting_mapping
 
         return slot_data

@@ -13,13 +13,13 @@ if TYPE_CHECKING:
 
 def create_region(room: Room, world: "LingoWorld", player_logic: LingoPlayerLogic) -> Region:
     new_region = Region(room.name, world.player, world.multiworld)
-    for location in player_logic.LOCATIONS_BY_ROOM.get(room.name, {}):
+    for location in player_logic.locations_by_room.get(room.name, {}):
         new_location = LingoLocation(world.player, location.name, location.code, new_region)
         new_location.counting_panels = location.counting_panels
         new_location.access_rule = make_location_lambda(location, world, player_logic)
         new_region.locations.append(new_location)
-        if location.name in player_logic.EVENT_LOC_TO_ITEM:
-            event_name = player_logic.EVENT_LOC_TO_ITEM[location.name]
+        if location.name in player_logic.event_loc_to_item:
+            event_name = player_logic.event_loc_to_item[location.name]
             event_item = LingoItem(event_name, ItemClassification.progression, None, world.player)
             new_location.place_locked_item(event_item)
 
@@ -86,7 +86,7 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
         regions["Starting Room"].connect(regions["Outside The Undeterred"], "Early Color Hallways")
 
     if painting_shuffle:
-        for warp_enter, warp_exit in player_logic.PAINTING_MAPPING.items():
+        for warp_enter, warp_exit in player_logic.painting_mapping.items():
             connect_painting(regions, warp_enter, warp_exit, world, player_logic)
 
     world.multiworld.regions += regions.values()
