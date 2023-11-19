@@ -51,12 +51,12 @@ function define_item_ids()
     item_ids["Enemy Card Hook"]                  = 2662042
     item_ids["Enemy Card Dragon Maleficent"]     = 2662043
     item_ids["Enemy Card Riku"]                  = 2662044
-    item_ids["Enemy Card Axel"]                  = 2662044
     item_ids["Enemy Card Larxene"]               = 2662045
     item_ids["Enemy Card Vexen"]                 = 2662046
     item_ids["Enemy Card Marluxia"]              = 2662047
     item_ids["Enemy Card Lexaeus"]               = 2662048
     item_ids["Enemy Card Ansem"]                 = 2662049
+    item_ids["Enemy Card Axel"]                  = 2662050
     
     item_ids["Key of Beginnings F02"]            = 2663002
     item_ids["Key of Beginnings F03"]            = 2663003
