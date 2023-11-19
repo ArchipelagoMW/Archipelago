@@ -249,6 +249,24 @@ Response:
     - `err` (`string`): A description of the problem
 ]]
 
+local bizhawk_version = client.getversion()
+local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")
+bizhawk_major = tonumber(bizhawk_major)
+bizhawk_minor = tonumber(bizhawk_minor)
+if bizhawk_patch == "" then
+    bizhawk_patch = 0
+else
+    bizhawk_patch = tonumber(bizhawk_patch)
+end
+
+local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
+lua_major = tonumber(lua_major)
+lua_minor = tonumber(lua_minor)
+
+if lua_major > 5 or (lua_major == 5 and lua_minor >= 3) then
+    require("lua_5_3_compat")
+end
+
 local base64 = require("base64")
 local socket = require("socket")
 local json = require("json")
@@ -257,7 +275,9 @@ local json = require("json")
 -- Will cause lag due to large console output
 local DEBUG = false
 
-local SOCKET_PORT = 43055
+local SOCKET_PORT_FIRST = 43055
+local SOCKET_PORT_RANGE_SIZE = 10
+local SOCKET_PORT_LAST = SOCKET_PORT_FIRST + SOCKET_PORT_RANGE_SIZE
 
 local STATE_NOT_CONNECTED = 0
 local STATE_CONNECTED = 1
@@ -276,24 +296,6 @@ local current_time = 0
 local locked = false
 
 local rom_hash = nil
-
-local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
-lua_major = tonumber(lua_major)
-lua_minor = tonumber(lua_minor)
-
-if lua_major > 5 or (lua_major == 5 and lua_minor >= 3) then
-    require("lua_5_3_compat")
-end
-
-local bizhawk_version = client.getversion()
-local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")
-bizhawk_major = tonumber(bizhawk_major)
-bizhawk_minor = tonumber(bizhawk_minor)
-if bizhawk_patch == "" then
-    bizhawk_patch = 0
-else
-    bizhawk_patch = tonumber(bizhawk_patch)
-end
 
 function queue_push (self, value)
     self[self.right] = value
@@ -465,7 +467,29 @@ end
 
 function main ()
     local err
-    server, err = socket.bind("localhost", SOCKET_PORT)
+    local port = SOCKET_PORT_FIRST
+    local res = nil
+
+    server, err = socket.socket.tcp4()
+    while res == nil and port <= SOCKET_PORT_LAST do
+        res, err = server:bind("localhost", port)
+        if res == nil and err ~= "address already in use" then
+            print(err)
+            return
+        end
+
+        if res == nil then
+            port = port + 1
+        end
+    end
+
+    if port > SOCKET_PORT_LAST then
+        print("Too many instances of connector script already running. Exiting.")
+        return
+    end
+
+    res, err = server:listen(0)
+
     if err ~= nil then
         print(err)
         return
@@ -528,7 +552,7 @@ else
             emu.frameadvance()
         end
     end
-    
+
     rom_hash = gameinfo.getromhash()
 
     print("Waiting for client to connect. Emulation will freeze intermittently until a client is found.\n")
@@ -536,15 +560,15 @@ else
     local co = coroutine.create(main)
     function tick ()
         local status, err = coroutine.resume(co)
-    
-        if not status then
+
+        if not status and err ~= "cannot resume dead coroutine" then
             print("\nERROR: "..err)
             print("Consider reporting this crash.\n")
     
             if server ~= nil then
                 server:close()
             end
-    
+
             co = coroutine.create(main)
         end
     end
