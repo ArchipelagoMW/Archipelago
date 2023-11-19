@@ -150,7 +150,7 @@ class LingoPlayerLogic:
         # Handle the victory condition. Victory conditions other than the chosen one become regular checks, so we need
         # to prevent the actual victory condition from becoming a check.
         self.MASTERY_LOCATION = "Orange Tower Seventh Floor - THE MASTER"
-        self.LEVEL_2_LOCATION = "Second Room - LEVEL 2"
+        self.LEVEL_2_LOCATION = "N/A"
 
         if victory_condition == VictoryCondition.option_the_end:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE END"
@@ -169,7 +169,7 @@ class LingoPlayerLogic:
             self.add_location("Second Room", self.LEVEL_2_LOCATION, None, [RoomAndPanel("Second Room", "LEVEL 2")])
             self.EVENT_LOC_TO_ITEM[self.LEVEL_2_LOCATION] = "Victory"
 
-        self.create_panel_hunt_events(world)
+            self.create_panel_hunt_events(world)
 
         # Instantiate all real locations.
         location_classification = LocationClassification.normal
