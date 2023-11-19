@@ -276,7 +276,7 @@ local json = require("json")
 local DEBUG = false
 
 local SOCKET_PORT_FIRST = 43055
-local SOCKET_PORT_RANGE_SIZE = 10
+local SOCKET_PORT_RANGE_SIZE = 5
 local SOCKET_PORT_LAST = SOCKET_PORT_FIRST + SOCKET_PORT_RANGE_SIZE
 
 local STATE_NOT_CONNECTED = 0
@@ -465,7 +465,7 @@ function send_receive ()
     end
 end
 
-function main ()
+function initialize_server ()
     local err
     local port = SOCKET_PORT_FIRST
     local res = nil
@@ -495,7 +495,15 @@ function main ()
         return
     end
 
+    server:settimeout(0)
+end
+
+function main ()
     while true do
+        if server == nil then
+            initialize_server()
+        end
+
         current_time = socket.socket.gettime()
         timeout_timer = timeout_timer - (current_time - prev_time)
         message_timer = message_timer - (current_time - prev_time)
@@ -507,13 +515,14 @@ function main ()
         end
 
         if current_state == STATE_NOT_CONNECTED then
-            if emu.framecount() % 60 == 0 then
-                server:settimeout(2)
+            if emu.framecount() % 30 == 0 then
                 local client, timeout = server:accept()
                 if timeout == nil then
                     print("Client connected")
                     current_state = STATE_CONNECTED
                     client_socket = client
+                    server:close()
+                    server = nil
                     client_socket:settimeout(0)
                 else
                     print("No client found. Trying again...")
