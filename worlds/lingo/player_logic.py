@@ -4,8 +4,8 @@ from .items import ALL_ITEM_TABLE
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
-    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, ROOMS, \
-    RoomAndDoor, RoomAndPanel
+    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
+    RoomAndPanel
 from .testing import LingoTestOptions
 
 if TYPE_CHECKING:
@@ -62,15 +62,21 @@ class LingoPlayerLogic:
     PANEL_REQS: Dict[str, Dict[str, AccessRequirements]]
 
     def add_location(self, room: str, name: str, code: Optional[int], panels: List[RoomAndPanel]):
+        counting_panels = 0
         access_reqs = AccessRequirements()
         for panel in panels:
             if panel.room is not None and panel.room != room:
                 access_reqs.rooms.add(panel.room)
 
-            sub_access_reqs = self.calculate_panel_requirements(room if panel.room is None else panel.room, panel.panel)
+            panel_room = room if panel.room is None else panel.room
+            panel_object = PANELS_BY_ROOM[panel_room][panel.panel]
+            if not panel_object.non_counting:
+                counting_panels += 1
+
+            sub_access_reqs = self.calculate_panel_requirements(panel_room, panel.panel)
             access_reqs.merge(sub_access_reqs)
 
-        self.LOCATIONS_BY_ROOM.setdefault(room, []).append(PlayerLocation(name, code, access_reqs))
+        self.LOCATIONS_BY_ROOM.setdefault(room, []).append(PlayerLocation(name, code, access_reqs, counting_panels))
 
     def set_door_item(self, room: str, door: str, item: str):
         self.ITEM_BY_DOOR.setdefault(room, {})[door] = item
@@ -144,7 +150,7 @@ class LingoPlayerLogic:
         # Handle the victory condition. Victory conditions other than the chosen one become regular checks, so we need
         # to prevent the actual victory condition from becoming a check.
         self.MASTERY_LOCATION = "Orange Tower Seventh Floor - THE MASTER"
-        self.LEVEL_2_LOCATION = "N/A"
+        self.LEVEL_2_LOCATION = "Second Room - LEVEL 2"
 
         if victory_condition == VictoryCondition.option_the_end:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE END"
@@ -345,7 +351,7 @@ class LingoPlayerLogic:
 
     def create_panel_hunt_events(self, world: "LingoWorld"):
         for room_name, room_data in PANELS_BY_ROOM.items():
-            unhindered_panels_by_color: dict[Optional[str], int] = {}
+            unhindered_panels_by_color: dict[Optional[str], List[str]] = {}
 
             for panel_name, panel_data in room_data.items():
                 # We won't count non-counting panels.
@@ -358,8 +364,7 @@ class LingoPlayerLogic:
                         or len(panel_data.required_rooms) > 0\
                         or (world.options.shuffle_colors and len(panel_data.colors) > 1):
                     event_name = room_name + " - " + panel_name + " (Counted)"
-                    self.add_location(room_name, PlayerLocation(event_name, None,
-                                                                [RoomAndPanel(room_name, panel_name)], None, 1))
+                    self.add_location(room_name, event_name, None, [RoomAndPanel(room_name, panel_name)])
                     self.EVENT_LOC_TO_ITEM[event_name] = "Counting Panel Solved"
                 else:
                     if len(panel_data.colors) == 0 or not world.options.shuffle_colors:
@@ -367,12 +372,13 @@ class LingoPlayerLogic:
                     else:
                         color = panel_data.colors[0]
 
-                    unhindered_panels_by_color[color] = unhindered_panels_by_color.get(color, 0) + 1
+                    unhindered_panels_by_color.setdefault(color, []).append(panel_name)
 
             for color, panel_count in unhindered_panels_by_color.items():
                 if color is None:
                     event_name = room_name + " - " + str(panel_count) + " White Panels (Counted)"
                 else:
                     event_name = room_name + " - " + str(panel_count) + " " + color.capitalize() + " Panels (Counted)"
-                self.add_location(room_name, PlayerLocation(event_name, None, [], color, panel_count))
+                self.add_location(room_name, event_name, None,
+                                  [RoomAndPanel(room_name, panel_name) for panel_name in panel_count])
                 self.EVENT_LOC_TO_ITEM[event_name] = "Counting Panels Solved"
