@@ -60,6 +60,7 @@ class LingoPlayerLogic:
     FORCED_GOOD_ITEM: str
 
     PANEL_REQS: Dict[str, Dict[str, AccessRequirements]]
+    DOOR_REQS: Dict[str, Dict[str, AccessRequirements]]
 
     def add_location(self, room: str, name: str, code: Optional[int], panels: List[RoomAndPanel]):
         counting_panels = 0
@@ -104,6 +105,7 @@ class LingoPlayerLogic:
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
         self.PANEL_REQS = {}
+        self.DOOR_REQS = {}
 
         door_shuffle = world.options.shuffle_doors
         color_shuffle = world.options.shuffle_colors
@@ -334,7 +336,13 @@ class LingoPlayerLogic:
                 access_reqs.rooms.add(req_room)
 
             for req_door in panel_object.required_doors:
-                access_reqs.doors.add(RoomAndDoor(room if req_door.room is None else req_door.room, req_door.door))
+                door_object = DOORS_BY_ROOM[room if req_door.room is None else req_door.room][req_door.door]
+                if door_object.event:
+                    sub_access_reqs = self.calculate_door_requirements(
+                        room if req_door.room is None else req_door.room, req_door.door)
+                    access_reqs.merge(sub_access_reqs)
+                else:
+                    access_reqs.doors.add(RoomAndDoor(room if req_door.room is None else req_door.room, req_door.door))
 
             for color in panel_object.colors:
                 access_reqs.colors.add(color)
@@ -343,12 +351,30 @@ class LingoPlayerLogic:
                 if req_panel.room is not None and req_panel.room != room:
                     access_reqs.rooms.add(req_panel.room)
 
-                sub_access_reqs = self.calculate_panel_requirements(room if req_panel.room is None else req_panel.room, req_panel.panel)
+                sub_access_reqs = self.calculate_panel_requirements(room if req_panel.room is None else req_panel.room,
+                                                                    req_panel.panel)
                 access_reqs.merge(sub_access_reqs)
 
             self.PANEL_REQS[room][panel] = access_reqs
 
         return self.PANEL_REQS[room][panel]
+
+    def calculate_door_requirements(self, room: str, door: str):
+        if door not in self.DOOR_REQS.setdefault(room, {}):
+            access_reqs = AccessRequirements()
+            door_object = DOORS_BY_ROOM[room][door]
+
+            for req_panel in door_object.panels:
+                if req_panel.room is not None and req_panel.room != room:
+                    access_reqs.rooms.add(req_panel.room)
+
+                sub_access_reqs = self.calculate_panel_requirements(room if req_panel.room is None else req_panel.room,
+                                                                    req_panel.panel)
+                access_reqs.merge(sub_access_reqs)
+
+            self.DOOR_REQS[room][door] = access_reqs
+
+        return self.DOOR_REQS[room][door]
 
     def create_panel_hunt_events(self, world: "LingoWorld"):
         for room_name, room_data in PANELS_BY_ROOM.items():
