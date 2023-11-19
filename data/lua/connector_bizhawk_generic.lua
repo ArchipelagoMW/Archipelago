@@ -516,6 +516,7 @@ function main ()
 
         if current_state == STATE_NOT_CONNECTED then
             if emu.framecount() % 30 == 0 then
+                print("Looking for client...")
                 local client, timeout = server:accept()
                 if timeout == nil then
                     print("Client connected")
@@ -524,8 +525,6 @@ function main ()
                     server:close()
                     server = nil
                     client_socket:settimeout(0)
-                else
-                    print("No client found. Trying again...")
                 end
             end
         else
@@ -564,7 +563,7 @@ else
 
     rom_hash = gameinfo.getromhash()
 
-    print("Waiting for client to connect. Emulation will freeze intermittently until a client is found.\n")
+    print("Waiting for client to connect. This may take longer the more instances of this script you have open at once.\n")
 
     local co = coroutine.create(main)
     function tick ()
