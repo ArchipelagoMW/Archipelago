@@ -815,7 +815,9 @@ class ALTTPWorld(World):
 
             slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
                             "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
-                            "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
+                            "progressive_swords", "progressive_shields", "progressive_gloves",
+                            "progressive_armor", "progressive_magic", "progressive_bow",
+                            "swordless", "retro_bow", "retro_caves", "shop_item_slots",
                             "boss_shuffle", "pot_shuffle", "enemy_shuffle", "key_drop_shuffle"]
 
             slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}

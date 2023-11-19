@@ -214,20 +214,6 @@ class Enemies(Choice):
     option_chaos = 2
 
 
-class Progressive(Choice):
-    """How item types that have multiple tiers (armor, bows, gloves, shields, and swords) should be rewarded.
-    This setting will only apply to progressive item groups that are not toggled on in their individual
-    settings below."""
-    display_name = "Progressive Items"
-    option_off = 0
-    option_grouped_random = 1
-    option_on = 2
-    default = 2
-
-    def want_progressives(self, random):
-        return random.choice([True, False]) if self.value == self.option_grouped_random else bool(self.value)
-
-
 class ProgressiveSwords(Toggle):
     """How swords will be rewarded. If progressive, each sword item will be the next level from what is
     currently in the player's possession. If not, the player will receive the items in any order and
@@ -486,7 +472,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "key_drop_shuffle": key_drop_shuffle,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
-    "progressive": Progressive,
     "progressive_swords": ProgressiveSwords,
     "progressive_shields": ProgressiveShields,
     "progressive_gloves": ProgressiveGloves,
