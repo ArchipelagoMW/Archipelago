@@ -110,3 +110,15 @@ class LingoWorld(World):
             slot_data["painting_entrance_to_exit"] = self.player_logic.painting_mapping
 
         return slot_data
+
+    def collect(self, state, item: Item) -> bool:
+        if item.name.endswith("Counting Panels Solved"):
+            state.prog_items[self.player]["COUNTING PANELS"] += int(item.name.rstrip(" Counting Panels Solved"))
+            return True
+        return super().collect(state, item)
+
+    def remove(self, state, item: Item) -> bool:
+        if item.name.endswith("Counting Panels Solved"):
+            state.prog_items[self.player]["COUNTING PANELS"] -= int(item.name.rstrip(" Counting Panels Solved"))
+            return True
+        return super().remove(state, item)

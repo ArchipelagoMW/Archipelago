@@ -15,7 +15,6 @@ def create_region(room: Room, world: "LingoWorld", player_logic: LingoPlayerLogi
     new_region = Region(room.name, world.player, world.multiworld)
     for location in player_logic.locations_by_room.get(room.name, {}):
         new_location = LingoLocation(world.player, location.name, location.code, new_region)
-        new_location.counting_panels = location.counting_panels
         new_location.access_rule = make_location_lambda(location, world, player_logic)
         new_region.locations.append(new_location)
         if location.name in player_logic.event_loc_to_item:

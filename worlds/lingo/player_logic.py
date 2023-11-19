@@ -35,7 +35,6 @@ class PlayerLocation(NamedTuple):
     name: str
     code: Optional[int]
     access: AccessRequirements
-    counting_panels: int
 
 
 class LingoPlayerLogic:
@@ -76,7 +75,7 @@ class LingoPlayerLogic:
             sub_access_reqs = self.calculate_panel_requirements(panel_room, panel.panel)
             access_reqs.merge(sub_access_reqs)
 
-        self.locations_by_room.setdefault(room, []).append(PlayerLocation(name, code, access_reqs, 0))
+        self.locations_by_room.setdefault(room, []).append(PlayerLocation(name, code, access_reqs))
 
     def set_door_item(self, room: str, door: str, item: str):
         self.item_by_door.setdefault(room, {})[door] = item
@@ -410,9 +409,9 @@ class LingoPlayerLogic:
                         or len(panel_data.required_rooms) > 0\
                         or (world.options.shuffle_colors and len(panel_data.colors) > 1):
                     event_name = f"{room_name} - {panel_name} (Counted)"
-                    self.event_loc_to_item[event_name] = "Counting Panel Solved"
+                    self.event_loc_to_item[event_name] = "1 Counting Panels Solved"
                     self.locations_by_room.setdefault(room_name, []).append(
-                        PlayerLocation(event_name, None, self.calculate_panel_requirements(room_name, panel_name), 1))
+                        PlayerLocation(event_name, None, self.calculate_panel_requirements(room_name, panel_name)))
                 else:
                     if len(panel_data.colors) == 0 or not world.options.shuffle_colors:
                         color = None
@@ -429,6 +428,5 @@ class LingoPlayerLogic:
                     event_name = f"{room_name} - {panel_count} {color.capitalize()} Panels (Counted)"
                     access_reqs.colors.add(color)
 
-                self.locations_by_room.setdefault(room_name, []).append(PlayerLocation(event_name, None, access_reqs,
-                                                                                       panel_count))
-                self.event_loc_to_item[event_name] = "Counting Panels Solved"
+                self.locations_by_room.setdefault(room_name, []).append(PlayerLocation(event_name, None, access_reqs))
+                self.event_loc_to_item[event_name] = f"{panel_count} Counting Panels Solved"

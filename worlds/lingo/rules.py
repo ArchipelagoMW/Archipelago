@@ -56,8 +56,7 @@ def lingo_can_use_mastery_location(state: CollectionState, world: "LingoWorld"):
 
 
 def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld"):
-    return sum(location.counting_panels for location in state.locations_checked)\
-        >= world.options.level_2_requirement.value
+    return state.has("COUNTING PANELS", world.player, world.options.level_2_requirement.value)
 
 
 def _lingo_can_open_door(state: CollectionState, room: str, door: str, player: int, player_logic: LingoPlayerLogic):

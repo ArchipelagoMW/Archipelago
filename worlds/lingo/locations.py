@@ -34,7 +34,6 @@ class LingoLocation(Location):
     Location from the game Lingo
     """
     game: str = "Lingo"
-    counting_panels: int = 0
 
 
 ALL_LOCATION_TABLE: Dict[str, LocationData] = {}
