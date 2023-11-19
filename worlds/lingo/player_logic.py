@@ -1,21 +1,40 @@
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import Dict, List, NamedTuple, Optional, Set, TYPE_CHECKING
 
 from .items import ALL_ITEM_TABLE
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, ROOMS, \
-    RoomAndPanel
+    RoomAndDoor, RoomAndPanel
 from .testing import LingoTestOptions
 
 if TYPE_CHECKING:
     from . import LingoWorld
 
 
+class AccessRequirements:
+    rooms: Set[str]
+    doors: Set[RoomAndDoor]
+    colors: Set[str]
+
+    def __init__(self):
+        self.rooms = set()
+        self.doors = set()
+        self.colors = set()
+
+    def merge(self, other: "AccessRequirements"):
+        self.rooms |= other.rooms
+        self.doors |= other.doors
+        self.colors |= other.colors
+
+    def __str__(self):
+        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors})"
+
+
 class PlayerLocation(NamedTuple):
     name: str
     code: Optional[int] = None
-    panels: List[RoomAndPanel] = []
+    access: AccessRequirements = ()
 
 
 class LingoPlayerLogic:
@@ -39,8 +58,18 @@ class LingoPlayerLogic:
 
     FORCED_GOOD_ITEM: str
 
-    def add_location(self, room: str, loc: PlayerLocation):
-        self.LOCATIONS_BY_ROOM.setdefault(room, []).append(loc)
+    PANEL_REQS: Dict[str, Dict[str, AccessRequirements]]
+
+    def add_location(self, room: str, name: str, code: Optional[int], panels: List[RoomAndPanel]):
+        access_reqs = AccessRequirements()
+        for panel in panels:
+            if panel.room is not None and panel.room != room:
+                access_reqs.rooms.add(panel.room)
+
+            sub_access_reqs = self.calculate_panel_requirements(room if panel.room is None else panel.room, panel.panel)
+            access_reqs.merge(sub_access_reqs)
+
+        self.LOCATIONS_BY_ROOM.setdefault(room, []).append(PlayerLocation(name, code, access_reqs))
 
     def set_door_item(self, room: str, door: str, item: str):
         self.ITEM_BY_DOOR.setdefault(room, {})[door] = item
@@ -67,6 +96,7 @@ class LingoPlayerLogic:
         self.LEVEL_2_LOCATION = ""
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
+        self.PANEL_REQS = {}
 
         door_shuffle = world.options.shuffle_doors
         color_shuffle = world.options.shuffle_colors
@@ -85,7 +115,7 @@ class LingoPlayerLogic:
             for door_name, door_data in room_data.items():
                 if door_shuffle == ShuffleDoors.option_none:
                     itemloc_name = f"{room_name} - {door_name} (Opened)"
-                    self.add_location(room_name, PlayerLocation(itemloc_name, None, door_data.panels))
+                    self.add_location(room_name, itemloc_name, None, door_data.panels)
                     self.EVENT_LOC_TO_ITEM[itemloc_name] = itemloc_name
                     self.set_door_item(room_name, door_name, itemloc_name)
                 else:
@@ -98,7 +128,7 @@ class LingoPlayerLogic:
                             self.handle_non_grouped_door(room_name, door_data, world)
 
                 if door_data.event:
-                    self.add_location(room_name, PlayerLocation(door_data.item_name, None, door_data.panels))
+                    self.add_location(room_name, door_data.item_name, None, door_data.panels)
                     self.EVENT_LOC_TO_ITEM[door_data.item_name] = door_data.item_name + " (Opened)"
                     self.set_door_item(room_name, door_name, door_data.item_name + " (Opened)")
 
@@ -108,14 +138,12 @@ class LingoPlayerLogic:
             for panel_name, panel_data in room_data.items():
                 if panel_data.achievement:
                     event_name = room_name + " - " + panel_name + " (Achieved)"
-                    self.add_location(room_name, PlayerLocation(event_name, None,
-                                                                [RoomAndPanel(room_name, panel_name)]))
+                    self.add_location(room_name, event_name, None, [RoomAndPanel(room_name, panel_name)])
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
                 if not panel_data.non_counting and victory_condition == VictoryCondition.option_level_2:
                     event_name = room_name + " - " + panel_name + " (Counted)"
-                    self.add_location(room_name, PlayerLocation(event_name, None,
-                                                                [RoomAndPanel(room_name, panel_name)]))
+                    self.add_location(room_name, event_name, None, [RoomAndPanel(room_name, panel_name)])
                     self.EVENT_LOC_TO_ITEM[event_name] = "Counting Panel Solved"
 
         # Handle the victory condition. Victory conditions other than the chosen one become regular checks, so we need
@@ -125,20 +153,19 @@ class LingoPlayerLogic:
 
         if victory_condition == VictoryCondition.option_the_end:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE END"
-            self.add_location("Orange Tower Seventh Floor", PlayerLocation("The End (Solved)"))
+            self.add_location("Orange Tower Seventh Floor", "The End (Solved)", None, [])
             self.EVENT_LOC_TO_ITEM["The End (Solved)"] = "Victory"
         elif victory_condition == VictoryCondition.option_the_master:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE MASTER"
             self.MASTERY_LOCATION = "Orange Tower Seventh Floor - Mastery Achievements"
 
-            self.add_location("Orange Tower Seventh Floor", PlayerLocation(self.MASTERY_LOCATION, None, []))
+            self.add_location("Orange Tower Seventh Floor", self.MASTERY_LOCATION, None, [])
             self.EVENT_LOC_TO_ITEM[self.MASTERY_LOCATION] = "Victory"
         elif victory_condition == VictoryCondition.option_level_2:
             self.VICTORY_CONDITION = "Second Room - LEVEL 2"
             self.LEVEL_2_LOCATION = "Second Room - Unlock Level 2"
 
-            self.add_location("Second Room", PlayerLocation(self.LEVEL_2_LOCATION, None,
-                                                            [RoomAndPanel("Second Room", "LEVEL 2")]))
+            self.add_location("Second Room", self.LEVEL_2_LOCATION, None, [RoomAndPanel("Second Room", "LEVEL 2")])
             self.EVENT_LOC_TO_ITEM[self.LEVEL_2_LOCATION] = "Victory"
 
         # Instantiate all real locations.
@@ -153,8 +180,7 @@ class LingoPlayerLogic:
                 if location_classification not in location_data.classification:
                     continue
 
-                self.add_location(location_data.room, PlayerLocation(location_name, location_data.code,
-                                                                     location_data.panels))
+                self.add_location(location_data.room, location_name, location_data.code, location_data.panels)
                 self.REAL_LOCATIONS.append(location_name)
 
         # Instantiate all real items.
@@ -294,3 +320,29 @@ class LingoPlayerLogic:
                 return False
 
         return True
+
+    def calculate_panel_requirements(self, room: str, panel: str):
+        if panel not in self.PANEL_REQS.setdefault(room, {}):
+            access_reqs = AccessRequirements()
+            panel_object = PANELS_BY_ROOM[room][panel]
+
+            for req_room in panel_object.required_rooms:
+                access_reqs.rooms.add(req_room)
+
+            for req_door in panel_object.required_doors:
+                access_reqs.doors.add(RoomAndDoor(room if req_door.room is None else req_door.room, req_door.door))
+
+            for color in panel_object.colors:
+                access_reqs.colors.add(color)
+
+            for req_panel in panel_object.required_panels:
+                if req_panel.room is not None and req_panel.room != room:
+                    access_reqs.rooms.add(req_panel.room)
+
+                sub_access_reqs = self.calculate_panel_requirements(room if req_panel.room is None else req_panel.room, req_panel.panel)
+                access_reqs.merge(sub_access_reqs)
+
+            self.PANEL_REQS[room][panel] = access_reqs
+
+        return self.PANEL_REQS[room][panel]
+
