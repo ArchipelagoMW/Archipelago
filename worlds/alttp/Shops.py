@@ -440,8 +440,13 @@ def set_up_shops(world, player: int):
 def shuffle_shops(world, items, player: int):
     option = world.shop_shuffle[player]
     if 'u' in option:
-        progressive = world.progressive[player]
-        progressive = world.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
+        if (world.progressive_swords or
+                world.progressive_shields or
+                world.progressive_gloves or
+                world.progressive_armor or
+                world.progressive_magic or
+                world.progressive_bows):
+            progressive = True
         progressive &= world.goal == 'icerodhunt'
         new_items = ["Bomb Upgrade (+5)"] * 6
         new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
