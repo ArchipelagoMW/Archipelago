@@ -1,7 +1,6 @@
 from functools import cached_property
 
 from Utils import cache_self1
-from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from ..mods.logic.magic_logic import MagicLogic
@@ -12,13 +11,13 @@ from ..strings.performance_names import Performance
 valid_weapons = (APWeapon.weapon, APWeapon.sword, APWeapon.club, APWeapon.dagger)
 
 
-class CombatLogic(CachedLogic):
+class CombatLogic:
     received: ReceivedLogic
     region: RegionLogic
     magic: MagicLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, received: ReceivedLogic, region: RegionLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, received: ReceivedLogic, region: RegionLogic):
+        self.player = player
         self.region = region
         self.received = received
 

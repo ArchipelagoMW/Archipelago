@@ -1,7 +1,6 @@
 from typing import Iterable
 
 from Utils import cache_self1
-from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .time_logic import TimeLogic
 from ..options import SeasonRandomization
@@ -10,14 +9,13 @@ from ..strings.generic_names import Generic
 from ..strings.season_names import Season
 
 
-class SeasonLogic(CachedLogic):
+class SeasonLogic:
     season_option: SeasonRandomization
     received: ReceivedLogic
     time: TimeLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, season_option: SeasonRandomization,
-                 received_logic: ReceivedLogic, time: TimeLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, season_option: SeasonRandomization, received_logic: ReceivedLogic, time: TimeLogic):
+        self.player = player
         self.season_option = season_option
         self.received = received_logic
         self.time = time

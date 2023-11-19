@@ -1,5 +1,4 @@
 from Utils import cache_self1
-from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
@@ -15,7 +14,7 @@ from ..strings.region_names import Region
 from ..strings.skill_names import Skill
 
 
-class FishingLogic(CachedLogic):
+class FishingLogic:
     exclude_ginger_island: ExcludeGingerIsland
     special_order_locations: SpecialOrderLocations
     received: ReceivedLogic
@@ -24,10 +23,9 @@ class FishingLogic(CachedLogic):
     tool: ToolLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, exclude_ginger_island: ExcludeGingerIsland,
-                 special_order_locations: SpecialOrderLocations,
-                 received: ReceivedLogic, region: RegionLogic, season: SeasonLogic, tool: ToolLogic, skill: SkillLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, exclude_ginger_island: ExcludeGingerIsland, special_order_locations: SpecialOrderLocations, received: ReceivedLogic,
+                 region: RegionLogic, season: SeasonLogic, tool: ToolLogic, skill: SkillLogic):
+        self.player = player
         self.exclude_ginger_island = exclude_ginger_island
         self.special_order_locations = special_order_locations
         self.received = received

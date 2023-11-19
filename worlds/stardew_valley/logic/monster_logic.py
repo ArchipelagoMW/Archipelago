@@ -1,7 +1,6 @@
 from typing import Iterable, Union, Hashable
 
 from Utils import cache_self1
-from .cached_logic import CachedLogic, CachedRules
 from .combat_logic import CombatLogic
 from .region_logic import RegionLogic
 from .time_logic import TimeLogic, MAX_MONTHS
@@ -9,14 +8,13 @@ from ..data.monster_data import StardewMonster, all_monsters_by_name
 from ..stardew_rule import StardewRule, Or, And
 
 
-class MonsterLogic(CachedLogic):
+class MonsterLogic:
     region: RegionLogic
     time: TimeLogic
     combat: CombatLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, region: RegionLogic, time: TimeLogic,
-                 combat: CombatLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, region: RegionLogic, time: TimeLogic, combat: CombatLogic):
+        self.player = player
         self.region = region
         self.time = time
         self.combat = combat

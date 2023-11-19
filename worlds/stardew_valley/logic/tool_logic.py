@@ -1,6 +1,5 @@
 from Utils import cache_self1
-from .cached_logic import CachedLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -28,7 +27,7 @@ tool_upgrade_prices = {
 }
 
 
-class ToolLogic(CachedLogic):
+class ToolLogic:
     tool_option = ToolProgression
     received: ReceivedLogic
     has: HasLogic
@@ -37,10 +36,9 @@ class ToolLogic(CachedLogic):
     money: MoneyLogic
     magic: MagicLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, tool_option: ToolProgression, received: ReceivedLogic,
-                 has: HasLogic, region: RegionLogic,
-                 season: SeasonLogic, money: MoneyLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, tool_option: ToolProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic,
+                 money: MoneyLogic):
+        self.player = player
         self.tool_option = tool_option
         self.received = received
         self.has = has

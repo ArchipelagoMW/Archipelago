@@ -1,7 +1,6 @@
 from functools import cached_property
 from typing import Tuple
 
-from .cached_logic import CachedLogic, CachedRules
 from .farming_logic import FarmingLogic
 from .has_logic import HasLogic
 from .money_logic import MoneyLogic
@@ -11,15 +10,14 @@ from ..stardew_rule import StardewRule
 from ..strings.region_names import Region
 
 
-class BundleLogic(CachedLogic):
+class BundleLogic:
     has: HasLogic
     region: RegionLogic
     money: MoneyLogic
     farming: FarmingLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, has: HasLogic, region: RegionLogic, money: MoneyLogic,
-                 farming: FarmingLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, has: HasLogic, region: RegionLogic, money: MoneyLogic, farming: FarmingLogic):
+        self.player = player
         self.has = has
         self.region = region
         self.money = money

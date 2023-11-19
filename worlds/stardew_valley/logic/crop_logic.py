@@ -1,8 +1,7 @@
 from typing import Union, Iterable
 
 from Utils import cache_self1
-from .cached_logic import CachedLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -19,7 +18,7 @@ from ..strings.seed_names import Seed
 from ..strings.tool_names import Tool
 
 
-class CropLogic(CachedLogic):
+class CropLogic:
     player: int
     cropsanity_option: Cropsanity
     exclude_ginger_island_option: ExcludeGingerIsland
@@ -31,9 +30,9 @@ class CropLogic(CachedLogic):
     money: MoneyLogic
     tool: ToolLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, cropsanity_option: Cropsanity, exclude_ginger_island_option: ExcludeGingerIsland, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
-                 traveling_merchant: TravelingMerchantLogic, season: SeasonLogic, money: MoneyLogic, tool: ToolLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, cropsanity_option: Cropsanity, exclude_ginger_island_option: ExcludeGingerIsland, received: ReceivedLogic, has: HasLogic,
+                 region: RegionLogic, traveling_merchant: TravelingMerchantLogic, season: SeasonLogic, money: MoneyLogic, tool: ToolLogic):
+        self.player = player
         self.cropsanity_option = cropsanity_option
         self.exclude_ginger_island_option = exclude_ginger_island_option
         self.received = received

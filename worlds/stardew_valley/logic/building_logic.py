@@ -1,8 +1,7 @@
 from typing import Dict
 
 from Utils import cache_self1
-from .cached_logic import CachedLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -17,7 +16,7 @@ from ..strings.metal_names import MetalBar
 from ..strings.region_names import Region
 
 
-class BuildingLogic(CachedLogic):
+class BuildingLogic:
     player: int
     building_option: BuildingProgression
     received: ReceivedLogic
@@ -26,9 +25,8 @@ class BuildingLogic(CachedLogic):
     money: MoneyLogic
     building_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, cached_rules: CachedRules, building_option: BuildingProgression,
-                 received: ReceivedLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, building_option: BuildingProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
+        self.player = player
         self.player = player
         self.building_option = building_option
         self.received = received

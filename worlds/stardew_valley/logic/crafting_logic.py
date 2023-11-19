@@ -1,7 +1,6 @@
 from functools import cached_property
 
 from Utils import cache_self1
-from .cached_logic import CachedLogic, CachedRules
 from .has_logic import HasLogic
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
@@ -21,7 +20,7 @@ from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.region_names import Region
 
 
-class CraftingLogic(CachedLogic):
+class CraftingLogic:
     craftsanity_option: Craftsanity
     exclude_ginger_island: ExcludeGingerIsland
     mods: Mods
@@ -36,13 +35,10 @@ class CraftingLogic(CachedLogic):
     skill: SkillLogic
     special_orders: SpecialOrderLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, craftsanity_option: Craftsanity,
-                 exclude_ginger_island: ExcludeGingerIsland, mods: Mods, festivals_option: FestivalLocations,
-                 special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic,
-                 region: RegionLogic, time: TimeLogic,
-                 money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic,
-                 special_orders: SpecialOrderLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, craftsanity_option: Craftsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods,
+                 festivals_option: FestivalLocations, special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+                 time: TimeLogic, money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
+        self.player = player
         self.craftsanity_option = craftsanity_option
         self.exclude_ginger_island = exclude_ginger_island
         self.mods = mods

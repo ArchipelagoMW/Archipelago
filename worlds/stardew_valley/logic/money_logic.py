@@ -1,6 +1,5 @@
 from Utils import cache_self1
-from .cached_logic import CachedLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .time_logic import TimeLogic
@@ -13,17 +12,15 @@ qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Q
                   "25 Qi Gems", "20 Qi Gems", "10 Qi Gems")
 
 
-class MoneyLogic(CachedLogic):
+class MoneyLogic:
     starting_money_option: StartingMoney
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
     time: TimeLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, starting_money_option: StartingMoney,
-                 received: ReceivedLogic,
-                 has: HasLogic, region: RegionLogic, time: TimeLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, starting_money_option: StartingMoney, received: ReceivedLogic, has: HasLogic, region: RegionLogic, time: TimeLogic):
+        self.player = player
         self.starting_money_option = starting_money_option
         self.received = received
         self.has = has

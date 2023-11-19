@@ -3,9 +3,8 @@ from typing import Union
 
 from Utils import cache_self1
 from .building_logic import BuildingLogic
-from .cached_logic import CachedLogic
 from .gift_logic import GiftLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
@@ -21,7 +20,7 @@ from ..strings.villager_names import NPC, ModNPC
 possible_kids = ("Cute Baby", "Ugly Baby")
 
 
-class RelationshipLogic(CachedLogic):
+class RelationshipLogic:
     friendsanity_option: Friendsanity
     heart_size_option: FriendsanityHeartSize
     received: ReceivedLogic
@@ -33,11 +32,11 @@ class RelationshipLogic(CachedLogic):
     buildings: BuildingLogic
     mods_option: Mods
 
-    def __init__(self, player: int, cached_rules: CachedRules, friendsanity_option: Friendsanity,
+    def __init__(self, player: int, friendsanity_option: Friendsanity,
                  heart_size_option: FriendsanityHeartSize,
                  received_logic: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  time: TimeLogic, season: SeasonLogic, gifts: GiftLogic, buildings: BuildingLogic, mods_option: Mods):
-        super().__init__(player, cached_rules)
+        self.player = player
         self.friendsanity_option = friendsanity_option
         self.heart_size_option = heart_size_option
         self.received = received_logic

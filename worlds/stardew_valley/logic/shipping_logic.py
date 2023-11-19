@@ -2,7 +2,6 @@ from functools import cached_property
 
 from Utils import cache_self1
 from .building_logic import BuildingLogic
-from .cached_logic import CachedLogic, CachedRules
 from .has_logic import HasLogic
 from .region_logic import RegionLogic
 from ..locations import LocationTags, locations_by_tag
@@ -14,7 +13,7 @@ from ..strings.building_names import Building
 from ..strings.region_names import Region
 
 
-class ShippingLogic(CachedLogic):
+class ShippingLogic:
     exclude_ginger_island: ExcludeGingerIsland
     special_orders_option: SpecialOrderLocations
     mods: Mods
@@ -22,10 +21,9 @@ class ShippingLogic(CachedLogic):
     region: RegionLogic
     buildings: BuildingLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, exclude_ginger_island: ExcludeGingerIsland,
-                 special_orders_option: SpecialOrderLocations, mods: Mods,
-                 has: HasLogic, region: RegionLogic, buildings: BuildingLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, exclude_ginger_island: ExcludeGingerIsland, special_orders_option: SpecialOrderLocations,mods: Mods, has: HasLogic,
+                 region: RegionLogic, buildings: BuildingLogic):
+        self.player = player
         self.exclude_ginger_island = exclude_ginger_island
         self.special_orders_option = special_orders_option
         self.mods = mods

@@ -3,8 +3,7 @@ from functools import cached_property
 from Utils import cache_self1
 from .action_logic import ActionLogic
 from .building_logic import BuildingLogic
-from .cached_logic import CachedLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .money_logic import MoneyLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
@@ -25,7 +24,7 @@ from ..strings.skill_names import Skill
 from ..strings.tv_channel_names import Channel
 
 
-class CookingLogic(CachedLogic):
+class CookingLogic:
     chefsanity_option: Chefsanity
     exclude_ginger_island: ExcludeGingerIsland
     mods: Mods
@@ -40,12 +39,10 @@ class CookingLogic(CachedLogic):
     relationship: RelationshipLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, chefsanity_option: Chefsanity,
-                 exclude_ginger_island: ExcludeGingerIsland, mods: Mods, received: ReceivedLogic,
-                 has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
-                 action: ActionLogic, buildings: BuildingLogic,
+    def __init__(self, player: int, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods, received: ReceivedLogic,
+                 has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic, action: ActionLogic, buildings: BuildingLogic,
                  relationship: RelationshipLogic, skill: SkillLogic):
-        super().__init__(player, cached_rules)
+        self.player = player
         self.chefsanity_option = chefsanity_option
         self.exclude_ginger_island = exclude_ginger_island
         self.mods = mods

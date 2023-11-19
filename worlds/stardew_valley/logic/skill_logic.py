@@ -3,10 +3,9 @@ from typing import Union, Tuple
 
 from Utils import cache_self1
 from worlds.stardew_valley.strings.craftable_names import Fishing
-from .cached_logic import CachedLogic
 from .combat_logic import CombatLogic
 from .crop_logic import CropLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .season_logic import SeasonLogic
@@ -18,7 +17,6 @@ from ..mods.logic.magic_logic import MagicLogic
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
 from ..options import SkillProgression, Mods
 from ..stardew_rule import StardewRule, True_, Or
-from ..strings.generic_names import Generic
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
 from ..strings.region_names import Region
@@ -28,7 +26,7 @@ from ..strings.tool_names import ToolMaterial, Tool
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
 
 
-class SkillLogic(CachedLogic):
+class SkillLogic:
     skill_option: SkillProgression
     received: ReceivedLogic
     has: HasLogic
@@ -41,10 +39,9 @@ class SkillLogic(CachedLogic):
     magic: MagicLogic
     mods: Mods
 
-    def __init__(self, player: int, cached_rules: CachedRules, skill_option: SkillProgression, received: ReceivedLogic,
-                 has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic,
-                 tool: ToolLogic, combat: CombatLogic, crop: CropLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic,
+                 time: TimeLogic, tool: ToolLogic, combat: CombatLogic, crop: CropLogic):
+        self.player = player
         self.skill_option = skill_option
         self.received = received
         self.has = has

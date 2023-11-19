@@ -1,6 +1,5 @@
 from Utils import cache_self1
-from .cached_logic import CachedLogic
-from .combat_logic import CombatLogic, CachedRules
+from .combat_logic import CombatLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .skill_logic import SkillLogic
@@ -15,7 +14,7 @@ from ..strings.skill_names import Skill
 from ..strings.tool_names import Tool, ToolMaterial
 
 
-class MineLogic(CachedLogic):
+class MineLogic:
     tool_option: ToolProgression
     skill_option: SkillProgression
     elevator_option: ElevatorProgression
@@ -26,11 +25,9 @@ class MineLogic(CachedLogic):
     skill: SkillLogic
     mod_elevator: ModElevatorLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, tool_option: ToolProgression,
-                 skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogic,
-                 region: RegionLogic,
-                 combat: CombatLogic, tool: ToolLogic, skill: SkillLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, tool_option: ToolProgression, skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogic,
+                 region: RegionLogic, combat: CombatLogic, tool: ToolLogic, skill: SkillLogic):
+        self.player = player
         self.tool_option = tool_option
         self.skill_option = skill_option
         self.elevator_option = elevator_option

@@ -2,8 +2,7 @@ from typing import List
 
 from Utils import cache_self1
 from .action_logic import ActionLogic
-from .cached_logic import CachedLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .. import options
@@ -13,7 +12,7 @@ from ..stardew_rule import StardewRule, And, False_, Count
 from ..strings.region_names import Region
 
 
-class MuseumLogic(CachedLogic):
+class MuseumLogic:
     player: int
     museum_option: Museumsanity
     received = ReceivedLogic
@@ -21,10 +20,8 @@ class MuseumLogic(CachedLogic):
     region: RegionLogic
     action: ActionLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, museum_option: Museumsanity, received: ReceivedLogic,
-                 has: HasLogic,
-                 region: RegionLogic, action: ActionLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, museum_option: Museumsanity, received: ReceivedLogic, has: HasLogic, region: RegionLogic, action: ActionLogic):
+        self.player = player
         self.museum_option = museum_option
         self.received = received
         self.has = has

@@ -1,6 +1,5 @@
 from Utils import cache_self1
-from .cached_logic import CachedLogic
-from .has_logic import HasLogic, CachedRules
+from .has_logic import HasLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from ..stardew_rule import StardewRule, True_, Or
@@ -9,14 +8,13 @@ from ..strings.geode_names import Geode
 from ..strings.region_names import Region
 
 
-class ActionLogic(CachedLogic):
+class ActionLogic:
     received: ReceivedLogic
     has: HasLogic
     region: RegionLogic
 
-    def __init__(self, player: int, cached_rules: CachedRules, received: ReceivedLogic, has: HasLogic,
-                 region: RegionLogic):
-        super().__init__(player, cached_rules)
+    def __init__(self, player: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic):
+        self.player = player
         self.received = received
         self.has = has
         self.region = region

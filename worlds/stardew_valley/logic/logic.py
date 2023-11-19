@@ -16,7 +16,7 @@ from .crafting_logic import CraftingLogic
 from .crop_logic import CropLogic
 from .farming_logic import FarmingLogic
 from .fishing_logic import FishingLogic
-from .gift_logic import GiftLogic, CachedRules
+from .gift_logic import GiftLogic
 from .has_logic import HasLogic
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogic
@@ -44,8 +44,7 @@ from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.mod_logic import ModLogic
 from ..mods.mod_data import ModNames
-from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions, Fishsanity, Museumsanity, Friendsanity
-from ..regions import vanilla_regions
+from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions, Fishsanity, Friendsanity
 from ..stardew_rule import False_, Or, True_, Count, And, StardewRule
 from ..strings.animal_names import Animal, coop_animals, barn_animals
 from ..strings.animal_product_names import AnimalProduct
@@ -103,18 +102,17 @@ class StardewLogic:
     festival_rules: Dict[str, StardewRule] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.cached_rules = CachedRules()
-        self.received = ReceivedLogic(self.player, self.cached_rules)
-        self.has = HasLogic(self.player, self.cached_rules, self.item_rules)
-        self.region = RegionLogic(self.player, self.cached_rules)
+        self.received = ReceivedLogic(self.player)
+        self.has = HasLogic(self.player, self.item_rules)
+        self.region = RegionLogic(self.player)
         self.traveling_merchant = TravelingMerchantLogic(self.player, self.received)
-        self.time = TimeLogic(self.player, self.cached_rules, self.received)
-        self.season = SeasonLogic(self.player, self.cached_rules, self.options.season_randomization, self.received, self.time)
-        self.money = MoneyLogic(self.player, self.cached_rules, self.options.starting_money, self.received, self.has, self.region, self.time)
-        self.action = ActionLogic(self.player, self.cached_rules, self.received, self.has, self.region)
+        self.time = TimeLogic(self.player, self.received)
+        self.season = SeasonLogic(self.player, self.options.season_randomization, self.received, self.time)
+        self.money = MoneyLogic(self.player, self.options.starting_money, self.received, self.has, self.region, self.time)
+        self.action = ActionLogic(self.player, self.received, self.has, self.region)
         self.arcade = ArcadeLogic(self.player, self.options.arcade_machine_locations, self.received, self.region)
         self.artisan = ArtisanLogic(self.player, self.has, self.time)
-        self.gifts = GiftLogic(self.player, self.cached_rules, self.has)
+        self.gifts = GiftLogic(self.player, self.has)
         tool_option = self.options.tool_progression
         skill_option = self.options.skill_progression
         elevator_option = self.options.elevator_progression
@@ -123,28 +121,29 @@ class StardewLogic:
         special_order_locations = self.options.special_order_locations
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
-        self.buildings = BuildingLogic(self.player, self.cached_rules, self.options.building_progression, self.received, self.has, self.region, self.money)
-        self.shipping = ShippingLogic(self.player, self.cached_rules, exclude_ginger_island, special_order_locations, mods_option, self.has, self.region,
+        self.buildings = BuildingLogic(self.player, self.options.building_progression, self.received, self.has, self.region, self.money)
+        self.shipping = ShippingLogic(self.player, exclude_ginger_island, special_order_locations, mods_option, self.has, self.region,
                                       self.buildings)
-        self.relationship = RelationshipLogic(self.player, self.cached_rules, friendsanity_option, heart_size_option,
+        self.relationship = RelationshipLogic(self.player, friendsanity_option, heart_size_option,
                                               self.received, self.has, self.region, self.time, self.season, self.gifts, self.buildings, mods_option)
-        self.museum = MuseumLogic(self.player, self.cached_rules, self.options.museumsanity, self.received, self.has, self.region, self.action)
+        self.museum = MuseumLogic(self.player, self.options.museumsanity, self.received, self.has, self.region, self.action)
         self.wallet = WalletLogic(self.player, self.received, self.museum)
-        self.combat = CombatLogic(self.player, self.cached_rules, self.received, self.region)
-        self.monster = MonsterLogic(self.player, self.cached_rules, self.region, self.time, self.combat)
-        self.tool = ToolLogic(self.player, self.cached_rules, tool_option, self.received, self.has, self.region, self.season, self.money)
-        self.pet = PetLogic(self.player, self.cached_rules, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
-        self.crop = CropLogic(self.player, self.cached_rules, self.options.cropsanity, exclude_ginger_island, self.received, self.has, self.region, self.traveling_merchant,
+        self.combat = CombatLogic(self.player, self.received, self.region)
+        self.monster = MonsterLogic(self.player, self.region, self.time, self.combat)
+        self.tool = ToolLogic(self.player, tool_option, self.received, self.has, self.region, self.season, self.money)
+        self.pet = PetLogic(self.player, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
+        self.crop = CropLogic(self.player, self.options.cropsanity, exclude_ginger_island, self.received, self.has, self.region,
+                              self.traveling_merchant,
                               self.season, self.money, self.tool)
-        self.skill = SkillLogic(self.player, self.cached_rules, skill_option, self.received, self.has, self.region, self.season, self.time, self.tool,
+        self.skill = SkillLogic(self.player, skill_option, self.received, self.has, self.region, self.season, self.time, self.tool,
                                 self.combat, self.crop)
         self.farming = FarmingLogic(self.player, self.has, self.skill)
-        self.bundle = BundleLogic(self.player, self.cached_rules, self.has, self.region, self.money, self.farming)
-        self.fishing = FishingLogic(self.player, self.cached_rules, exclude_ginger_island, special_order_locations, self.received, self.region, self.season,
+        self.bundle = BundleLogic(self.player, self.has, self.region, self.money, self.farming)
+        self.fishing = FishingLogic(self.player, exclude_ginger_island, special_order_locations, self.received, self.region, self.season,
                                     self.tool, self.skill)
-        self.mine = MineLogic(self.player, self.cached_rules, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
+        self.mine = MineLogic(self.player, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
-        self.cooking = CookingLogic(self.player, self.cached_rules, self.options.chefsanity, exclude_ginger_island, mods_option, self.received, self.has,
+        self.cooking = CookingLogic(self.player, self.options.chefsanity, exclude_ginger_island, mods_option, self.received, self.has,
                                     self.region, self.season, self.time, self.money, self.action, self.buildings, self.relationship, self.skill)
         self.ability = AbilityLogic(self.player, self.options.movement_buff_number, self.options.luck_buff_number, self.received,
                                     self.region, self.tool, self.skill, self.mine)
@@ -152,7 +151,7 @@ class StardewLogic:
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
         self.quest = QuestLogic(self.player, self.skill, self.received, self.has, self.mine, self.region, self.action, self.relationship, self.buildings,
                                 self.time, self.tool, self.fishing, self.cooking, self.money, self.combat, self.season, self.wallet, mods_option)
-        self.crafting = CraftingLogic(self.player, self.cached_rules, self.options.craftsanity, exclude_ginger_island, mods_option,
+        self.crafting = CraftingLogic(self.player, self.options.craftsanity, exclude_ginger_island, mods_option,
                                       self.options.festival_locations, special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
         self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.artisan,
