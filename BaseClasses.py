@@ -17,6 +17,7 @@ from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Op
 import NetUtils
 import Options
 import Utils
+from EntranceRando import ERType, ERPlacementState
 
 
 class Group(TypedDict, total=False):
@@ -766,20 +767,26 @@ class CollectionState():
 
 
 class Entrance:
+
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     hide_path: bool = False
     player: int
     name: str
     parent_region: Optional[Region]
     connected_region: Optional[Region] = None
+    er_group: str
+    er_type: ERType
     # LttP specific, TODO: should make a LttPEntrance
     addresses = None
     target = None
 
-    def __init__(self, player: int, name: str = '', parent: Region = None):
+    def __init__(self, player: int, name: str = '', parent: Region = None,
+                 er_group: str = 'Default', er_type: ERType = ERType.ONE_WAY):
         self.name = name
         self.parent_region = parent
         self.player = player
+        self.er_group = er_group
+        self.er_type = er_type
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
@@ -794,6 +801,28 @@ class Entrance:
         self.target = target
         self.addresses = addresses
         region.entrances.append(self)
+
+    def is_valid_source_transition(self, state: ERPlacementState) -> bool:
+        """
+        Determines whether this is a valid source transition, that is, whether the entrance
+        randomizer is allowed to pair it to place any other regions. By default, this is the
+        same as a reachability check, but can be modified by Entrance implementations to add
+        other restrictions based on the placement state.
+
+        :param state: The current (partial) state of the ongoing entrance randomization
+        """
+        return self.can_reach(state.collection_state)
+
+    def can_connect_to(self, other: Entrance, state: ERPlacementState) -> bool:
+        """
+        Determines whether a given Entrance is a valid target transition, that is, whether
+        the entrance randomizer is allowed to pair this Entrance to that Entrance.
+
+        :param other: The proposed Entrance to connect to
+        :param state: The current (partial) state of the ongoing entrance randomization
+        :param group_one_ways: Whether to enforce that one-ways are paired together.
+        """
+        return self.er_type == other.er_type
 
     def __repr__(self):
         return self.__str__()
@@ -942,6 +971,16 @@ class Region:
         exit_ = self.entrance_type(self.player, name, self)
         self.exits.append(exit_)
         return exit_
+
+    def create_er_entrance(self, name: str) -> Entrance:
+        """
+        Creates and returns an Entrance object as an entrance to this region
+
+        :param name: name of the Entrance being created
+        """
+        entrance = self.entrance_type(self.player, name)
+        entrance.connect(self)
+        return entrance
 
     def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
                   rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
