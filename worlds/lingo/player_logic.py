@@ -33,9 +33,9 @@ class AccessRequirements:
 
 class PlayerLocation(NamedTuple):
     name: str
-    code: Optional[int] = None
-    access: AccessRequirements = ()
-    counting_panels: int = 0
+    code: Optional[int]
+    access: AccessRequirements
+    counting_panels: int
 
 
 class LingoPlayerLogic:
