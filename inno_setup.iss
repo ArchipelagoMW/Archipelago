@@ -80,6 +80,7 @@ Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringC
 Type: dirifempty; Name: "{app}"
 
 [InstallDelete]
+Type: files; Name: "{app}\lib\worlds\_bizhawk.apworld"
 Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
 Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy*"
 Type: filesandordirs; Name: "{app}\SNI\lua*"
