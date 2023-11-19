@@ -67,21 +67,16 @@ class LingoPlayerLogic:
         Creates a location. This function determines the access requirements for the location by combining and
         flattening the requirements for each of the given panels.
         """
-        counting_panels = 0
         access_reqs = AccessRequirements()
         for panel in panels:
             if panel.room is not None and panel.room != room:
                 access_reqs.rooms.add(panel.room)
 
             panel_room = room if panel.room is None else panel.room
-            panel_object = PANELS_BY_ROOM[panel_room][panel.panel]
-            if not panel_object.non_counting:
-                counting_panels += 1
-
             sub_access_reqs = self.calculate_panel_requirements(panel_room, panel.panel)
             access_reqs.merge(sub_access_reqs)
 
-        self.LOCATIONS_BY_ROOM.setdefault(room, []).append(PlayerLocation(name, code, access_reqs, counting_panels))
+        self.LOCATIONS_BY_ROOM.setdefault(room, []).append(PlayerLocation(name, code, access_reqs, 0))
 
     def set_door_item(self, room: str, door: str, item: str):
         self.ITEM_BY_DOOR.setdefault(room, {})[door] = item
@@ -402,7 +397,7 @@ class LingoPlayerLogic:
         receive their own event.
         """
         for room_name, room_data in PANELS_BY_ROOM.items():
-            unhindered_panels_by_color: dict[Optional[str], List[str]] = {}
+            unhindered_panels_by_color: dict[Optional[str], int] = {}
 
             for panel_name, panel_data in room_data.items():
                 # We won't count non-counting panels.
@@ -415,21 +410,25 @@ class LingoPlayerLogic:
                         or len(panel_data.required_rooms) > 0\
                         or (world.options.shuffle_colors and len(panel_data.colors) > 1):
                     event_name = f"{room_name} - {panel_name} (Counted)"
-                    self.add_location(room_name, event_name, None, [RoomAndPanel(room_name, panel_name)])
                     self.EVENT_LOC_TO_ITEM[event_name] = "Counting Panel Solved"
+                    self.LOCATIONS_BY_ROOM.setdefault(room_name, []).append(
+                        PlayerLocation(event_name, None, self.calculate_panel_requirements(room_name, panel_name), 1))
                 else:
                     if len(panel_data.colors) == 0 or not world.options.shuffle_colors:
                         color = None
                     else:
                         color = panel_data.colors[0]
 
-                    unhindered_panels_by_color.setdefault(color, []).append(panel_name)
+                    unhindered_panels_by_color[color] = unhindered_panels_by_color.get(color, 0) + 1
 
             for color, panel_count in unhindered_panels_by_color.items():
+                access_reqs = AccessRequirements()
                 if color is None:
-                    event_name = f"{room_name} - {len(panel_count)} White Panels (Counted)"
+                    event_name = f"{room_name} - {panel_count} White Panels (Counted)"
                 else:
-                    event_name = f"{room_name} - {len(panel_count)} {color.capitalize()} Panels (Counted)"
-                self.add_location(room_name, event_name, None,
-                                  [RoomAndPanel(room_name, panel_name) for panel_name in panel_count])
+                    event_name = f"{room_name} - {panel_count} {color.capitalize()} Panels (Counted)"
+                    access_reqs.colors.add(color)
+
+                self.LOCATIONS_BY_ROOM.setdefault(room_name, []).append(PlayerLocation(event_name, None, access_reqs,
+                                                                                       panel_count))
                 self.EVENT_LOC_TO_ITEM[event_name] = "Counting Panels Solved"
