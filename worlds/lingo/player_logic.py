@@ -135,15 +135,16 @@ class LingoPlayerLogic:
                             self.handle_non_grouped_door(room_name, door_data, world)
 
                 if door_data.event:
+                    event_item_name = f"{door_data.item_name} (Opened)"
                     self.add_location(room_name, door_data.item_name, None, door_data.panels)
-                    self.EVENT_LOC_TO_ITEM[door_data.item_name] = door_data.item_name + " (Opened)"
-                    self.set_door_item(room_name, door_name, door_data.item_name + " (Opened)")
+                    self.EVENT_LOC_TO_ITEM[door_data.item_name] = event_item_name
+                    self.set_door_item(room_name, door_name, event_item_name)
 
         # Create events for each achievement panel, so that we can determine when THE MASTER is accessible.
         for room_name, room_data in PANELS_BY_ROOM.items():
             for panel_name, panel_data in room_data.items():
                 if panel_data.achievement:
-                    event_name = room_name + " - " + panel_name + " (Achieved)"
+                    event_name = f"{room_name} - {panel_name} (Achieved)"
                     self.add_location(room_name, event_name, None, [RoomAndPanel(room_name, panel_name)])
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
@@ -363,7 +364,7 @@ class LingoPlayerLogic:
                 if len(panel_data.required_panels) > 0 or len(panel_data.required_doors) > 0\
                         or len(panel_data.required_rooms) > 0\
                         or (world.options.shuffle_colors and len(panel_data.colors) > 1):
-                    event_name = room_name + " - " + panel_name + " (Counted)"
+                    event_name = f"{room_name} - {panel_name} (Counted)"
                     self.add_location(room_name, event_name, None, [RoomAndPanel(room_name, panel_name)])
                     self.EVENT_LOC_TO_ITEM[event_name] = "Counting Panel Solved"
                 else:
@@ -376,9 +377,9 @@ class LingoPlayerLogic:
 
             for color, panel_count in unhindered_panels_by_color.items():
                 if color is None:
-                    event_name = room_name + " - " + str(panel_count) + " White Panels (Counted)"
+                    event_name = f"{room_name} - {len(panel_count)} White Panels (Counted)"
                 else:
-                    event_name = room_name + " - " + str(panel_count) + " " + color.capitalize() + " Panels (Counted)"
+                    event_name = f"{room_name} - {len(panel_count)} {color.capitalize()} Panels (Counted)"
                 self.add_location(room_name, event_name, None,
                                   [RoomAndPanel(room_name, panel_name) for panel_name in panel_count])
                 self.EVENT_LOC_TO_ITEM[event_name] = "Counting Panels Solved"
