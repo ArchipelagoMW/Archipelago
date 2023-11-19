@@ -1,6 +1,3 @@
-from typing import Union
-
-from .cached_logic import profile_rule
 from .has_logic import HasLogic
 from .time_logic import TimeLogic
 from ..stardew_rule import StardewRule

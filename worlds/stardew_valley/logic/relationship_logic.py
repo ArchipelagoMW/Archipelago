@@ -3,7 +3,7 @@ from typing import Union
 
 from Utils import cache_self1
 from .building_logic import BuildingLogic
-from .cached_logic import CachedLogic, cache_rule
+from .cached_logic import CachedLogic
 from .gift_logic import GiftLogic
 from .has_logic import HasLogic, CachedRules
 from .received_logic import ReceivedLogic

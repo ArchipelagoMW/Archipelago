@@ -1,12 +1,11 @@
-from .cached_logic import profile_rule
 from .mine_logic import MineLogic
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
-from ..options import NumberOfMovementBuffs, NumberOfLuckBuffs
 from ..mods.logic.magic_logic import MagicLogic
 from ..mods.logic.skills_logic import ModSkillLogic
+from ..options import NumberOfMovementBuffs, NumberOfLuckBuffs
 from ..stardew_rule import StardewRule
 from ..strings.ap_names.buff_names import Buff
 from ..strings.region_names import Region
@@ -26,8 +25,8 @@ class AbilityLogic:
     magic: MagicLogic
     mod_skill: ModSkillLogic
 
-    def __init__(self, player: int, movement_buff_option: NumberOfMovementBuffs, luck_buff_option: NumberOfLuckBuffs, received: ReceivedLogic, region: RegionLogic, tool: ToolLogic,
-                 skill: SkillLogic, mine: MineLogic):
+    def __init__(self, player: int, movement_buff_option: NumberOfMovementBuffs, luck_buff_option: NumberOfLuckBuffs, received: ReceivedLogic,
+                 region: RegionLogic, tool: ToolLogic, skill: SkillLogic, mine: MineLogic):
         self.player = player
         self.movement_buff_option = movement_buff_option
         self.luck_buff_option = luck_buff_option

@@ -9,7 +9,6 @@ from .bundles import get_all_bundles, Bundle
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData
 from .logic.bundle_logic import BundleLogic
-from .logic.cached_logic import function_total_times, function_call_numbers
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \

@@ -1,7 +1,6 @@
-from .cached_logic import profile_rule
 from .has_logic import HasLogic
-from ..stardew_rule import StardewRule, True_
 from .skill_logic import SkillLogic
+from ..stardew_rule import StardewRule, True_
 from ..strings.fertilizer_names import Fertilizer
 
 
@@ -33,9 +32,8 @@ class FarmingLogic:
                     self.has_fertilizer(2) & self.skill.has_farming_level(1)) | self.has_fertilizer(3)
         if quality == 2:
             return self.skill.has_farming_level(10) | (
-                        self.has_fertilizer(1) & self.skill.has_farming_level(5)) | (
+                    self.has_fertilizer(1) & self.skill.has_farming_level(5)) | (
                     self.has_fertilizer(2) & self.skill.has_farming_level(3)) | (
                     self.has_fertilizer(3) & self.skill.has_farming_level(2))
         if quality >= 3:
             return self.has_fertilizer(3) & self.skill.has_farming_level(4)
-

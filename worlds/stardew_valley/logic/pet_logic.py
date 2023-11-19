@@ -1,13 +1,11 @@
 import math
-
 from typing import Union
 
-from .cached_logic import CachedLogic, CachedRules, profile_rule
+from .cached_logic import CachedLogic, CachedRules
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .time_logic import TimeLogic
 from .tool_logic import ToolLogic
-from .. import options
 from ..data.villagers_data import Villager
 from ..options import Friendsanity, FriendsanityHeartSize
 from ..stardew_rule import StardewRule, True_
@@ -61,4 +59,3 @@ class PetLogic(CachedLogic):
         if isinstance(npc, str):
             return f"{npc} <3"
         return self.heart(npc.name)
-
