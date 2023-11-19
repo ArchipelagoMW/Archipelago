@@ -1,6 +1,7 @@
 import typing
 
 from BaseClasses import Location, MultiWorld
+from worlds.AutoWorld import World
 from .Names import LocationName
 from .Missions import stage_name_prefixes, mission_orders
 
@@ -1066,6 +1067,7 @@ animal_location_table = {
     LocationName.final_rush_animal_11: 0xFF0C4F,
 
     LocationName.iron_gate_animal_11: 0xFF0C50,
+    LocationName.dry_lagoon_animal_11: 0xFF0C51,
     LocationName.sand_ocean_animal_11: 0xFF0C52,
     LocationName.radical_highway_animal_11: 0xFF0C53,
     LocationName.lost_colony_animal_11: 0xFF0C55,
@@ -1241,7 +1243,7 @@ boss_rush_location_table = {
     LocationName.boss_rush_16: 0xFF0114,
 }
 
-chao_garden_beginner_location_table = {
+chao_race_beginner_location_table = {
     LocationName.chao_race_crab_pool_1: 0xFF0200,
     LocationName.chao_race_crab_pool_2: 0xFF0201,
     LocationName.chao_race_crab_pool_3: 0xFF0202,
@@ -1254,11 +1256,17 @@ chao_garden_beginner_location_table = {
     LocationName.chao_race_block_canyon_1: 0xFF0209,
     LocationName.chao_race_block_canyon_2: 0xFF020A,
     LocationName.chao_race_block_canyon_3: 0xFF020B,
-
-    LocationName.chao_beginner_karate: 0xFF0300,
 }
 
-chao_garden_intermediate_location_table = {
+chao_karate_beginner_location_table = {
+    LocationName.chao_beginner_karate_1: 0xFF0300,
+    LocationName.chao_beginner_karate_2: 0xFF0301,
+    LocationName.chao_beginner_karate_3: 0xFF0302,
+    LocationName.chao_beginner_karate_4: 0xFF0303,
+    LocationName.chao_beginner_karate_5: 0xFF0304,
+}
+
+chao_race_intermediate_location_table = {
     LocationName.chao_race_challenge_1: 0xFF022A,
     LocationName.chao_race_challenge_2: 0xFF022B,
     LocationName.chao_race_challenge_3: 0xFF022C,
@@ -1281,11 +1289,17 @@ chao_garden_intermediate_location_table = {
     LocationName.chao_race_dark_2: 0xFF023B,
     LocationName.chao_race_dark_3: 0xFF023C,
     LocationName.chao_race_dark_4: 0xFF023D,
-
-    LocationName.chao_standard_karate: 0xFF0301,
 }
 
-chao_garden_expert_location_table = {
+chao_karate_intermediate_location_table = {
+    LocationName.chao_standard_karate_1: 0xFF0305,
+    LocationName.chao_standard_karate_2: 0xFF0306,
+    LocationName.chao_standard_karate_3: 0xFF0307,
+    LocationName.chao_standard_karate_4: 0xFF0308,
+    LocationName.chao_standard_karate_5: 0xFF0309,
+}
+
+chao_race_expert_location_table = {
     LocationName.chao_race_aquamarine_1: 0xFF020C,
     LocationName.chao_race_aquamarine_2: 0xFF020D,
     LocationName.chao_race_aquamarine_3: 0xFF020E,
@@ -1316,10 +1330,186 @@ chao_garden_expert_location_table = {
     LocationName.chao_race_diamond_3: 0xFF0227,
     LocationName.chao_race_diamond_4: 0xFF0228,
     LocationName.chao_race_diamond_5: 0xFF0229,
-
-    LocationName.chao_expert_karate: 0xFF0302,
-    LocationName.chao_super_karate: 0xFF0303,
 }
+
+chao_karate_expert_location_table = {
+    LocationName.chao_expert_karate_1: 0xFF030A,
+    LocationName.chao_expert_karate_2: 0xFF030B,
+    LocationName.chao_expert_karate_3: 0xFF030C,
+    LocationName.chao_expert_karate_4: 0xFF030D,
+    LocationName.chao_expert_karate_5: 0xFF030E,
+}
+
+chao_karate_super_location_table = {
+    LocationName.chao_super_karate_1: 0xFF030F,
+    LocationName.chao_super_karate_2: 0xFF0310,
+    LocationName.chao_super_karate_3: 0xFF0311,
+    LocationName.chao_super_karate_4: 0xFF0312,
+    LocationName.chao_super_karate_5: 0xFF0313,
+}
+
+chao_stat_swim_table         = { LocationName.chao_stat_swim_base         + str(index): (0xFF0E00 + index) for index in range(1,100) }
+chao_stat_fly_table          = { LocationName.chao_stat_fly_base          + str(index): (0xFF0E80 + index) for index in range(1,100) }
+chao_stat_run_table          = { LocationName.chao_stat_run_base          + str(index): (0xFF0F00 + index) for index in range(1,100) }
+chao_stat_power_table        = { LocationName.chao_stat_power_base        + str(index): (0xFF0F80 + index) for index in range(1,100) }
+chao_stat_stamina_table      = { LocationName.chao_stat_stamina_base      + str(index): (0xFF1000 + index) for index in range(1,100) }
+chao_stat_luck_table         = { LocationName.chao_stat_luck_base         + str(index): (0xFF1080 + index) for index in range(1,100) }
+chao_stat_intelligence_table = { LocationName.chao_stat_intelligence_base + str(index): (0xFF1100 + index) for index in range(1,100) }
+
+chao_animal_event_location_table = {
+    LocationName.animal_penguin:      None,
+    LocationName.animal_seal:         None,
+    LocationName.animal_otter:        None,
+    LocationName.animal_rabbit:       None,
+    LocationName.animal_cheetah:      None,
+    LocationName.animal_warthog:      None,
+    LocationName.animal_bear:         None,
+    LocationName.animal_tiger:        None,
+    LocationName.animal_gorilla:      None,
+    LocationName.animal_peacock:      None,
+    LocationName.animal_parrot:       None,
+    LocationName.animal_condor:       None,
+    LocationName.animal_skunk:        None,
+    LocationName.animal_sheep:        None,
+    LocationName.animal_raccoon:      None,
+    LocationName.animal_halffish:     None,
+    LocationName.animal_skeleton_dog: None,
+    LocationName.animal_bat:          None,
+    LocationName.animal_dragon:       None,
+    LocationName.animal_unicorn:      None,
+    LocationName.animal_phoenix:      None,
+}
+
+chao_animal_part_location_table = {
+    LocationName.chao_penguin_arms:     0xFF1220,
+    LocationName.chao_penguin_forehead: 0xFF1222,
+    LocationName.chao_penguin_legs:     0xFF1224,
+
+    LocationName.chao_seal_arms: 0xFF1228,
+    LocationName.chao_seal_tail: 0xFF122E,
+
+    LocationName.chao_otter_arms: 0xFF1230,
+    LocationName.chao_otter_ears: 0xFF1231,
+    LocationName.chao_otter_face: 0xFF1233,
+    LocationName.chao_otter_legs: 0xFF1234,
+    LocationName.chao_otter_tail: 0xFF1236,
+
+    LocationName.chao_rabbit_arms: 0xFF1238,
+    LocationName.chao_rabbit_ears: 0xFF1239,
+    LocationName.chao_rabbit_legs: 0xFF123C,
+    LocationName.chao_rabbit_tail: 0xFF123E,
+
+    LocationName.chao_cheetah_arms: 0xFF1240,
+    LocationName.chao_cheetah_ears: 0xFF1241,
+    LocationName.chao_cheetah_legs: 0xFF1244,
+    LocationName.chao_cheetah_tail: 0xFF1246,
+
+    LocationName.chao_warthog_arms: 0xFF1248,
+    LocationName.chao_warthog_ears: 0xFF1249,
+    LocationName.chao_warthog_face: 0xFF124B,
+    LocationName.chao_warthog_legs: 0xFF124C,
+    LocationName.chao_warthog_tail: 0xFF124E,
+
+    LocationName.chao_bear_arms: 0xFF1250,
+    LocationName.chao_bear_ears: 0xFF1251,
+    LocationName.chao_bear_legs: 0xFF1254,
+
+    LocationName.chao_tiger_arms: 0xFF1258,
+    LocationName.chao_tiger_ears: 0xFF1259,
+    LocationName.chao_tiger_legs: 0xFF125C,
+    LocationName.chao_tiger_tail: 0xFF125E,
+
+    LocationName.chao_gorilla_arms:     0xFF1260,
+    LocationName.chao_gorilla_ears:     0xFF1261,
+    LocationName.chao_gorilla_forehead: 0xFF1262,
+    LocationName.chao_gorilla_legs:     0xFF1264,
+
+    LocationName.chao_peacock_forehead: 0xFF126A,
+    LocationName.chao_peacock_legs:     0xFF126C,
+    LocationName.chao_peacock_tail:     0xFF126E,
+    LocationName.chao_peacock_wings:    0xFF126F,
+
+    LocationName.chao_parrot_forehead: 0xFF1272,
+    LocationName.chao_parrot_legs:     0xFF1274,
+    LocationName.chao_parrot_tail:     0xFF1276,
+    LocationName.chao_parrot_wings:    0xFF1277,
+
+    LocationName.chao_condor_ears:  0xFF1279,
+    LocationName.chao_condor_legs:  0xFF127C,
+    LocationName.chao_condor_tail:  0xFF127E,
+    LocationName.chao_condor_wings: 0xFF127F,
+
+    LocationName.chao_skunk_arms:     0xFF1280,
+    LocationName.chao_skunk_forehead: 0xFF1282,
+    LocationName.chao_skunk_legs:     0xFF1284,
+    LocationName.chao_skunk_tail:     0xFF1286,
+
+    LocationName.chao_sheep_arms: 0xFF1288,
+    LocationName.chao_sheep_ears: 0xFF1289,
+    LocationName.chao_sheep_legs: 0xFF128C,
+    LocationName.chao_sheep_horn: 0xFF128D,
+    LocationName.chao_sheep_tail: 0xFF128E,
+
+    LocationName.chao_raccoon_arms: 0xFF1290,
+    LocationName.chao_raccoon_ears: 0xFF1291,
+    LocationName.chao_raccoon_legs: 0xFF1294,
+
+    LocationName.chao_dragon_arms:  0xFF12A0,
+    LocationName.chao_dragon_ears:  0xFF12A1,
+    LocationName.chao_dragon_legs:  0xFF12A4,
+    LocationName.chao_dragon_horn:  0xFF12A5,
+    LocationName.chao_dragon_tail:  0xFF12A6,
+    LocationName.chao_dragon_wings: 0xFF12A7,
+
+    LocationName.chao_unicorn_arms:     0xFF12A8,
+    LocationName.chao_unicorn_ears:     0xFF12A9,
+    LocationName.chao_unicorn_forehead: 0xFF12AA,
+    LocationName.chao_unicorn_legs:     0xFF12AC,
+    LocationName.chao_unicorn_tail:     0xFF12AE,
+
+    LocationName.chao_phoenix_forehead: 0xFF12B2,
+    LocationName.chao_phoenix_legs:     0xFF12B4,
+    LocationName.chao_phoenix_tail:     0xFF12B6,
+    LocationName.chao_phoenix_wings:    0xFF12B7,
+}
+
+chao_kindergarten_location_table = {
+    LocationName.chao_kindergarten_drawing_1: 0xFF12D0,
+    LocationName.chao_kindergarten_drawing_2: 0xFF12D1,
+    LocationName.chao_kindergarten_drawing_3: 0xFF12D2,
+    LocationName.chao_kindergarten_drawing_4: 0xFF12D3,
+    LocationName.chao_kindergarten_drawing_5: 0xFF12D4,
+
+    LocationName.chao_kindergarten_shake_dance: 0xFF12D8,
+    LocationName.chao_kindergarten_spin_dance:  0xFF12D9,
+    LocationName.chao_kindergarten_step_dance:  0xFF12DA,
+    LocationName.chao_kindergarten_gogo_dance:  0xFF12DB,
+    LocationName.chao_kindergarten_exercise:    0xFF12DC,
+
+    LocationName.chao_kindergarten_song_1: 0xFF12E0,
+    LocationName.chao_kindergarten_song_2: 0xFF12E1,
+    LocationName.chao_kindergarten_song_3: 0xFF12E2,
+    LocationName.chao_kindergarten_song_4: 0xFF12E3,
+    LocationName.chao_kindergarten_song_5: 0xFF12E4,
+
+    LocationName.chao_kindergarten_bell:       0xFF12E8,
+    LocationName.chao_kindergarten_castanets:  0xFF12E9,
+    LocationName.chao_kindergarten_cymbals:    0xFF12EA,
+    LocationName.chao_kindergarten_drum:       0xFF12EB,
+    LocationName.chao_kindergarten_flute:      0xFF12EC,
+    LocationName.chao_kindergarten_maracas:    0xFF12ED,
+    LocationName.chao_kindergarten_trumpet:    0xFF12EE,
+    LocationName.chao_kindergarten_tambourine: 0xFF12EF,
+}
+
+chao_kindergarten_basics_location_table = {
+    LocationName.chao_kindergarten_any_drawing:    0xFF12F0,
+    LocationName.chao_kindergarten_any_dance:      0xFF12F1,
+    LocationName.chao_kindergarten_any_song:       0xFF12F2,
+    LocationName.chao_kindergarten_any_instrument: 0xFF12F3,
+}
+
+black_market_location_table = { LocationName.chao_black_market_base + str(index): (0xFF1300 + index) for index in range(1,65) }
 
 kart_race_beginner_location_table = {
     LocationName.kart_race_beginner_sonic: 0xFF0A00,
@@ -1375,6 +1565,10 @@ grand_prix_location_table = {
     LocationName.grand_prix: 0xFF007F,
 }
 
+chaos_chao_location_table = {
+    LocationName.chaos_chao: 0xFF009F,
+}
+
 all_locations = {
     **mission_location_table,
     **upgrade_location_table,
@@ -1386,9 +1580,13 @@ all_locations = {
     **beetle_location_table,
     **omochao_location_table,
     **animal_location_table,
-    **chao_garden_beginner_location_table,
-    **chao_garden_intermediate_location_table,
-    **chao_garden_expert_location_table,
+    **chao_race_beginner_location_table,
+    **chao_karate_beginner_location_table,
+    **chao_race_intermediate_location_table,
+    **chao_karate_intermediate_location_table,
+    **chao_race_expert_location_table,
+    **chao_karate_expert_location_table,
+    **chao_karate_super_location_table,
     **kart_race_beginner_location_table,
     **kart_race_standard_location_table,
     **kart_race_expert_location_table,
@@ -1398,6 +1596,18 @@ all_locations = {
     **green_hill_animal_location_table,
     **final_boss_location_table,
     **grand_prix_location_table,
+    **chaos_chao_location_table,
+    **chao_stat_swim_table,
+    **chao_stat_fly_table,
+    **chao_stat_run_table,
+    **chao_stat_power_table,
+    **chao_stat_stamina_table,
+    **chao_stat_luck_table,
+    **chao_stat_intelligence_table,
+    **chao_animal_part_location_table,
+    **chao_kindergarten_location_table,
+    **chao_kindergarten_basics_location_table,
+    **black_market_location_table,
 }
 
 boss_gate_set = [
@@ -1406,13 +1616,6 @@ boss_gate_set = [
     LocationName.gate_3_boss,
     LocationName.gate_4_boss,
     LocationName.gate_5_boss,
-]
-
-chao_karate_set = [
-    LocationName.chao_beginner_karate,
-    LocationName.chao_standard_karate,
-    LocationName.chao_expert_karate,
-    LocationName.chao_super_karate,
 ]
 
 chao_race_prize_set = [
@@ -1437,19 +1640,24 @@ chao_race_prize_set = [
 
     LocationName.chao_race_dark_2,
     LocationName.chao_race_dark_4,
+
+    LocationName.chao_beginner_karate_5,
+    LocationName.chao_standard_karate_5,
+    LocationName.chao_expert_karate_5,
+    LocationName.chao_super_karate_5,
 ]
 
 
-def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
+def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
     location_table = {}
     chao_location_table = {}
 
-    if world.goal[player] == 3:
-        if world.kart_race_checks[player] == 2:
+    if world.options.goal == 3:
+        if world.options.kart_race_checks == 2:
             location_table.update({**kart_race_beginner_location_table})
             location_table.update({**kart_race_standard_location_table})
             location_table.update({**kart_race_expert_location_table})
-        elif world.kart_race_checks[player] == 1:
+        elif world.options.kart_race_checks == 1:
             location_table.update({**kart_race_mini_location_table})
         location_table.update({**grand_prix_location_table})
     else:
@@ -1465,67 +1673,100 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
 
         location_table.update({**upgrade_location_table})
 
-        if world.keysanity[player]:
+        if world.options.keysanity:
             location_table.update({**chao_key_location_table})
 
-        if world.whistlesanity[player].value == 1:
+        if world.options.whistlesanity.value == 1:
             location_table.update({**pipe_location_table})
-        elif world.whistlesanity[player].value == 2:
+        elif world.options.whistlesanity.value == 2:
             location_table.update({**hidden_whistle_location_table})
-        elif world.whistlesanity[player].value == 3:
+        elif world.options.whistlesanity.value == 3:
             location_table.update({**pipe_location_table})
             location_table.update({**hidden_whistle_location_table})
 
-        if world.beetlesanity[player]:
+        if world.options.beetlesanity:
             location_table.update({**beetle_location_table})
 
-        if world.omosanity[player]:
+        if world.options.omosanity:
             location_table.update({**omochao_location_table})
 
-        if world.animalsanity[player]:
+        if world.options.animalsanity:
             location_table.update({**animal_location_table})
 
-        if world.kart_race_checks[player] == 2:
+        if world.options.kart_race_checks == 2:
             location_table.update({**kart_race_beginner_location_table})
             location_table.update({**kart_race_standard_location_table})
             location_table.update({**kart_race_expert_location_table})
-        elif world.kart_race_checks[player] == 1:
+        elif world.options.kart_race_checks == 1:
             location_table.update({**kart_race_mini_location_table})
 
-        if world.goal[player].value in [0, 2, 4, 5, 6]:
+        if world.options.goal.value in [0, 2, 4, 5, 6]:
             location_table.update({**final_boss_location_table})
+        elif world.options.goal.value in [7]:
+            location_table.update({**chaos_chao_location_table})
 
-        if world.goal[player].value in [1, 2]:
+        if world.options.goal.value in [1, 2]:
             location_table.update({**green_hill_location_table})
 
-            if world.keysanity[player]:
+            if world.options.keysanity:
                 location_table.update({**green_hill_chao_location_table})
 
-            if world.animalsanity[player]:
+            if world.options.animalsanity:
                 location_table.update({**green_hill_animal_location_table})
 
-        if world.goal[player].value in [4, 5, 6]:
+        if world.options.goal.value in [4, 5, 6]:
             location_table.update({**boss_rush_location_table})
 
-        if world.chao_garden_difficulty[player].value >= 1:
-            chao_location_table.update({**chao_garden_beginner_location_table})
-        if world.chao_garden_difficulty[player].value >= 2:
-            chao_location_table.update({**chao_garden_intermediate_location_table})
-        if world.chao_garden_difficulty[player].value >= 3:
-            chao_location_table.update({**chao_garden_expert_location_table})
+        if world.options.chao_race_difficulty.value >= 1:
+            chao_location_table.update({**chao_race_beginner_location_table})
+        if world.options.chao_race_difficulty.value >= 2:
+            chao_location_table.update({**chao_race_intermediate_location_table})
+        if world.options.chao_race_difficulty.value >= 3:
+            chao_location_table.update({**chao_race_expert_location_table})
+
+        if world.options.chao_karate_difficulty.value >= 1:
+            chao_location_table.update({**chao_karate_beginner_location_table})
+        if world.options.chao_karate_difficulty.value >= 2:
+            chao_location_table.update({**chao_karate_intermediate_location_table})
+        if world.options.chao_karate_difficulty.value >= 3:
+            chao_location_table.update({**chao_karate_expert_location_table})
+        if world.options.chao_karate_difficulty.value >= 4:
+            chao_location_table.update({**chao_karate_super_location_table})
 
         for key, value in chao_location_table.items():
-            if key in chao_karate_set:
-                if world.include_chao_karate[player]:
-                    location_table[key] = value
-            elif key not in chao_race_prize_set:
-                if world.chao_race_checks[player] == "all":
+            if key not in chao_race_prize_set:
+                if world.options.chao_stadium_checks == "all":
                     location_table[key] = value
             else:
                 location_table[key] = value
 
+        for index in range(1, world.options.chao_stats.value + 1):
+            if (index % world.options.chao_stats_frequency.value) == (world.options.chao_stats.value % world.options.chao_stats_frequency.value):
+                location_table[LocationName.chao_stat_swim_base    + str(index)] = chao_stat_swim_table[   LocationName.chao_stat_swim_base    + str(index)]
+                location_table[LocationName.chao_stat_fly_base     + str(index)] = chao_stat_fly_table[    LocationName.chao_stat_fly_base     + str(index)]
+                location_table[LocationName.chao_stat_run_base     + str(index)] = chao_stat_run_table[    LocationName.chao_stat_run_base     + str(index)]
+                location_table[LocationName.chao_stat_power_base   + str(index)] = chao_stat_power_table[  LocationName.chao_stat_power_base   + str(index)]
+
+                if world.options.chao_stats_stamina:
+                    location_table[LocationName.chao_stat_stamina_base + str(index)] = chao_stat_stamina_table[LocationName.chao_stat_stamina_base + str(index)]
+
+                if world.options.chao_stats_hidden:
+                    location_table[LocationName.chao_stat_luck_base         + str(index)] = chao_stat_luck_table[        LocationName.chao_stat_luck_base         + str(index)]
+                    location_table[LocationName.chao_stat_intelligence_base + str(index)] = chao_stat_intelligence_table[LocationName.chao_stat_intelligence_base + str(index)]
+
+        if world.options.chao_animal_parts:
+            location_table.update({**chao_animal_part_location_table})
+
+        if world.options.chao_kindergarten.value == 1:
+            location_table.update({**chao_kindergarten_basics_location_table})
+        elif world.options.chao_kindergarten.value == 2:
+            location_table.update({**chao_kindergarten_location_table})
+
+        for index in range(1, world.options.black_market_slots.value + 1):
+            location_table[LocationName.chao_black_market_base + str(index)] = black_market_location_table[LocationName.chao_black_market_base + str(index)]
+
         for x in range(len(boss_gate_set)):
-            if x < world.number_of_level_gates[player].value:
+            if x < world.options.number_of_level_gates.value:
                 location_table[boss_gate_set[x]] = boss_gate_location_table[boss_gate_set[x]]
 
     return location_table

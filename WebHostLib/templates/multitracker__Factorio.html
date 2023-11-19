@@ -1,4 +1,4 @@
-{% extends "multiTracker.html" %}
+{% extends "multitracker.html" %}
 {# establish the to be tracked data. Display Name, factorio/AP internal name, display image #}
 {%- set science_packs = [
     ("Logistic Science Pack", "logistic-science-pack",
@@ -14,12 +14,12 @@
     ("Space Science Pack", "space-science-pack",
     "https://wiki.factorio.com/images/thumb/Space_science_pack.png/32px-Space_science_pack.png"),
 ] -%}
+
 {%- block custom_table_headers %}
 {#- macro that creates a table header with display name and image -#}
 {%- macro make_header(name, img_src) %}
 <th class="center-column">
-    <img src="{{ img_src}}"
-         alt="{{ name }}">
+    <img class="icon-sprite" src="{{ img_src }}" alt="{{ name }}" title="{{ name }}" />
 </th>
 {% endmacro -%}
 {#- call the macro to build the table header -#}
@@ -27,16 +27,15 @@
     {{ make_header(name, img_src) }}
 {% endfor -%}
 {% endblock %}
+
 {% block custom_table_row scoped  %}
-{% if games[player] == "Factorio" %}
-    {%- set player_inventory = named_inventory[team][player] -%}
+    {%- set player_inventory = inventories[(team, player)] -%}
     {%- set prog_science = player_inventory["progressive-science-pack"] -%}
     {%- for name, internal_name, img_src in science_packs %}
-        <td class="center-column">{% if player_inventory[internal_name] or prog_science > loop.index0 %}✔{% endif %}</td>
+        {% if player_inventory[internal_name] or prog_science > loop.index0 %}
+            <td class="center-column item-acquired">✔️</td>
+        {% else %}
+            <td class="center-column"></td>
+        {% endif %}
     {% endfor -%}
-{% else %}
-    {%- for _ in science_packs %}
-        <td class="center-column">❌</td>
-    {% endfor -%}
-{% endif %}
 {% endblock%}
