@@ -110,6 +110,9 @@ class CMWorld(World):
     def fill_slot_data(self) -> dict:
         cursed_knowledge = {name: self.multiworld.per_slot_randoms[self.player].getrandbits(31) for name in [
             "pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"]}
+        potential_pockets = [0,0,0,0,1,1,1,1,2,2,2,2]
+        self.multiworld.per_slot_randoms[self.player].shuffle(potential_pockets)
+        cursed_knowledge["pocket_order"] = potential_pockets
         if self.player in self.army:
             cursed_knowledge["army"] = self.army[self.player]
         return dict(cursed_knowledge, **{option_name: self.setting(option_name).value for option_name in cm_options})
@@ -127,6 +130,18 @@ class CMWorld(World):
         #                             for item, item_data in progression_items]0
         excluded_items = get_excluded_items(self.multiworld, self.player)
         self.items_used[self.player] = {}
+        # remove items player does not want
+        self.items_used[self.player]["Progressive Consul"] = (
+                3 - get_option_value(self.multiworld, self.player, "max_kings"))
+        self.items_used[self.player]["Progressive King Promotion"] = (
+                2 - get_option_value(self.multiworld, self.player, "fairy_kings"))
+        self.items_used[self.player]["Progressive Engine ELO Lobotomy"] = (
+                5 - get_option_value(self.multiworld, self.player, "max_engine_penalties"))
+        self.items_used[self.player]["Progressive Pocket"] = (
+                12 - min(get_option_value(self.multiworld, self.player, "max_pocket"),
+                         get_option_value(self.multiworld, self.player, "pocket_limit_by_pocket") * 3))
+
+        # setup for starting_inventory generic collection and then for early_material custom option
         for item_name in excluded_items:
             if item_name not in self.items_used[self.player]:
                 self.items_used[self.player][item_name] = 0
@@ -137,10 +152,12 @@ class CMWorld(World):
                 self.items_used[self.player][item.name] = 0
             self.items_used[self.player][item.name] += 1
 
+        # determine how many items we need to add to the custom item_pool
         user_location_count = len(starter_items)
         user_location_count += 1  # Victory item is counted as part of the pool
         items = []
 
+        # find the material value the user's army should provide once fully collected
         material = sum([
             progression_items[item].material * self.items_used[self.player][item]
             for item in self.items_used[self.player] if item in progression_items])
@@ -153,19 +170,22 @@ class CMWorld(World):
                 max_material_option - min_material_option) + max_material_option)
         max_material_actual += progression_items["Play as White"].material
 
+        # add items player really wants
+        yaml_locked_items = get_option_value(self.multiworld, self.player, 'locked_items')
+        for item in yaml_locked_items:
+            if item not in self.items_used[self.player]:
+                self.items_used[self.player][item] = 0
+            self.items_used[self.player][item] += yaml_locked_items[item]
+            items.extend([self.create_item(item) for i in range(yaml_locked_items[item])])
+            material += progression_items[item].material
+        # TODO(chesslogic): Validate locked items has enough parents
+
         my_progression_items = list(progression_items.keys())
 
         # prevent victory event from being added to general pool
         my_progression_items.remove("Victory")
-        # remove items player does not want
-        self.items_used[self.player]["Progressive Consul"] = (
-                2 - get_option_value(self.multiworld, self.player, "roman_kings"))
-        self.items_used[self.player]["Progressive King Promotion"] = (
-                2 - get_option_value(self.multiworld, self.player, "fairy_kings"))
-        self.items_used[self.player]["Progressive Engine ELO Lobotomy"] = (
-                5 - get_option_value(self.multiworld, self.player, "max_engine_penalties"))
 
-        # more pawn chance (2 major:2 minor:6 pawn distribution)
+        # more pawn chance
         my_progression_items.append("Progressive Pawn")
         my_progression_items.append("Progressive Pawn")
         # I am proud of this feature, so I want players to see more of it. Fight me.
@@ -173,6 +193,12 @@ class CMWorld(World):
         my_progression_items.append("Progressive Pocket")
         # halve chance of queen promotion - with an equal distribution, user will end up with no majors and only queens
         my_progression_items.extend([item for item in my_progression_items if item != "Progressive Major To Queen"])
+        # add an extra minor piece... there are so many types ...
+        my_progression_items.append("Progressive Minor Piece")
+        my_progression_items.append("Progressive Pawn")
+
+        # items are now in a distribution of 1 queen:1 major:3 minor:7 pawn:6 pocket (material 9 + 5 + 9 + 7 + 6 = 36)
+        # note that queens require that a major precede them, which increases the likelihood of the other types
 
         while (len(items) + user_location_count) < len(location_table) and material < max_material_actual and len(
                 my_progression_items) > 0:

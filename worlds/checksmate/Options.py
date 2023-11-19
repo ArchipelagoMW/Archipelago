@@ -1,7 +1,7 @@
 from typing import Dict, Union, List, FrozenSet
 
 from BaseClasses import MultiWorld
-from Options import Range, Option, Choice, Toggle, SpecialRange
+from Options import Range, Option, Choice, Toggle, SpecialRange, ItemDict
 
 """
 Most of these are not implemented yet
@@ -83,9 +83,11 @@ class EnemyPieceTypes(Choice):
 
 class EarlyMaterial(Choice):
     """
-    Guarantees that the first few King moves will provide a piece or pawn (chessman).
+    Guarantees that a King move directly onto the second rank within the first few moves will provide a piece or pawn
+    (chessman). When this option is set, this location (Bongcloud Once) gets overridden over any exclusion.
 
-    This location gets overridden over any exclusion. It's guaranteed to be reachable with an empty inventory.
+    The other Bongcloud moves also involve the King, but are not altered by this setting. (A File: Move to the leftmost
+    File; Capture: Any capturing move; Center: Move to any of the center 4 squares; Promotion: Move to enemy back rank)
 
     Pawn, Minor, Major: You will get an early chessman of the specified type (i.e. a pawn, minor piece, or major piece).
 
@@ -141,6 +143,37 @@ class MaximumEnginePenalties(Range):
     range_start = 0
     range_end = 5
     default = 5
+
+
+class MaximumKings(Range):
+    """
+    How many Royal pieces (Kings) to place, which must all be captured before one experiences defeat.
+
+    The player always starts with 1 King, but may find Progressive Consuls if this is set higher than 1. Progressive
+    Consuls add additional Kings to the player's starting board.
+    """
+    display_name = "Maximum Kings"
+    range_start = 1
+    range_end = 3
+    default = 1
+
+
+class MaximumPocket(Range):
+    """
+    The number of Progressive Pocket Pieces the game is allowed to add to the multiworld.
+
+    Each Progressive Pocket Piece will improve your 1st, 2nd, or 3rd pocket slot up to 4 times, from Nothing to Pawn, to
+    Minor Piece (like a pocket Knight), to Major Piece (like a pocket Rook), to Queen.
+
+    This setting does not alter filler item distribution. (Even if you have 0 Progressive Pockets, the item pool may
+    contain Progressive Pocket Gems and Progressive Pocket Range.)
+
+    Pocket Pieces are inspired by the Dutch game of paard in de zak (pocket knight).
+    """
+    display_name = "Maximum Pocket"
+    range_start = 0
+    range_end = 12
+    default = 12
 
 
 class FairyChessPieces(Choice):
@@ -210,16 +243,6 @@ class FairyKings(Range):
     default = 0
 
 
-class RomanKings(Range):
-    """
-    How many additional Royal pieces to add, which must all be captured before one experiences defeat.
-    """
-    display_name = "Roman Kings"
-    range_start = 0
-    range_end = 2
-    default = 0
-
-
 class MinorPieceLimitByType(SpecialRange):
     """
     How many of any given type of minor piece you might play with. If set to 1, you will never start with more than 1
@@ -256,6 +279,20 @@ class QueenPieceLimitByType(SpecialRange):
     special_range_cutoff = 1
 
 
+class PocketLimitByPocket(SpecialRange):
+    """
+    How many Progressive Pocket items might be allocated to any given pocket. If this is set to 1, any given Pocket will
+    never hold anything more substantial than a Pawn. If this is set to 3, any given Pocket will never hold a Queen.
+
+    The default of 4 allows each of the 3 spaces to hold between 0-4 progressive items.
+    """
+    display_name = "Pocket Limit by Pocket"
+    range_start = 0
+    range_end = 4
+    default = 4
+    special_range_cutoff = 1
+
+
 class QueenPieceLimit(SpecialRange):
     """
     How many Queen-equivalent pieces you might play with. If set to 1, you will never have more than 1 piece upgraded to
@@ -267,6 +304,57 @@ class QueenPieceLimit(SpecialRange):
     range_end = 7
     default = 0
     special_range_cutoff = 1
+
+
+class ItemLimitByType(ItemDict):
+    """
+    NOT IMPLEMENTED
+
+    For Minor Pieces, Major Pieces, and Major To Queens, limits the amount of any given type of equivalent piece you
+    might play with. For example, if you limit Progressive Queen To Major to 1, you will never see 2 Amazons, although
+    you might see 1 Amazon and 1 Colonel.
+
+    For Progressive Pocket, limits the amount which might be distributed to an individual pocket. If this is set to 1,
+    any given Pocket will never hold anything more substantial than a Pawn. If this is set to 3, any given Pocket will
+    never hold a Queen. The default of 4 allows each of the 3 spaces to hold between 0-4 progressive items.
+
+    No effect on other settings.
+
+    NOT IMPLEMENTED
+    """
+    display_name = "Item Limit By Type"
+
+
+class MaximumItems(ItemDict):
+    """
+    NOT IMPLEMENTED
+
+    For Major To Queen, how many Queen-equivalent pieces you might play with. If set to 1, you will never have more than
+    1 piece upgraded to a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still
+    promote pawns during a game. If set to 0, this setting is disabled.
+
+    For Progressive Consul, how many Royal pieces (Kings) to place, which must all be captured before one experiences
+    defeat. The player always starts with 1 King, but may find Progressive Consuls if this is set. Progressive Consuls
+    add additional Kings to the player's starting board.
+
+    For Progressive Pocket, the number of Progressive Pocket Pieces the game is allowed to add to the multiworld. Each
+    Progressive Pocket Piece will improve your 1st, 2nd, or 3rd pocket slot up to 4 times, from Nothing to Pawn, to
+    Minor Piece (like a pocket Knight), to Major Piece (like a pocket Rook), to Queen. This setting does not alter
+    filler item distribution. (Even if you have 0 Progressive Pockets, the item pool may contain Progressive Pocket Gems
+    and Progressive Pocket Range.)
+
+    No effect on other settings.
+
+    NOT IMPLEMENTED
+    """
+    display_name = "Maximum Items"
+
+
+class LockedItems(ItemDict):
+    """
+    Guarantees that these items will be unlockable.
+    """
+    display_name = "Locked Items"
 
 
 class DeathLink(Toggle):
@@ -283,15 +371,20 @@ cm_options: Dict[str, type(Option)] = {
     "min_material": MaterialMinLimit,
     "max_material": MaterialMaxLimit,
     "max_engine_penalties": MaximumEnginePenalties,
+    "max_pocket": MaximumPocket,
+    "max_kings": MaximumKings,
     "fairy_kings": FairyKings,
     "fairy_chess_pieces": FairyChessPieces,
     "fairy_chess_army": FairyChessArmy,
     "fairy_chess_pawns": FairyChessPawns,
-    "roman_kings": RomanKings,
     "minor_piece_limit_by_type": MinorPieceLimitByType,
     "major_piece_limit_by_type": MajorPieceLimitByType,
     "queen_piece_limit_by_type": QueenPieceLimitByType,
     "queen_piece_limit": QueenPieceLimit,
+    "pocket_limit_by_pocket": PocketLimitByPocket,
+    "item_limit_by_type": ItemLimitByType,
+    "maximum_items": MaximumItems,
+    "locked_items": LockedItems,
     "death_link": DeathLink,
 }
 

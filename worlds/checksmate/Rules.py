@@ -1,5 +1,4 @@
 from functools import reduce
-from typing import Set
 
 from BaseClasses import MultiWorld, CollectionState
 
@@ -58,13 +57,9 @@ class ChecksMateLogic(LogicMixin):
 
     # TODO(chesslogic): Ensure the current (and next?) sphere have more majors than queens
     def has_castle(self: CollectionState, player: int) -> bool:
-        return (self.count("Progressive Major Piece", player) > self.count("Progressive Major To Queen", player) and
-                len([item for item in self.multiworld.itempool if item.player == player and item.name == "Progressive "
-                                                                                                         "Major Piece"])
-                > len(
-                    [item for item in self.multiworld.itempool if item.player == player and item.name == "Progressive "
-                                                                                                         "Major To "
-                                                                                                         "Queen"]))
+        return (self.count("Progressive Major Piece", player) >= 2 + len(
+            [item for item in self.multiworld.itempool if
+             item.player == player and item.name == "Progressive Major To Queen"]))
 
     enemy_locations_to_items: dict[str, str] = {
         "Capture Pawn A": "Enemy Pawn A",
@@ -248,8 +243,8 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Threaten Queen", player), lambda state: state.count_enemy_pieces(player) > 6)
     set_rule(multiworld.get_location("Threaten King", player), lambda state: state.has_pin(player))
     # special moves
-    # set_rule(multiworld.get_location("00 Castle", player), lambda state: state.has_castle(player))
-    # set_rule(multiworld.get_location("000 Castle", player), lambda state: state.has_castle(player))
+    set_rule(multiworld.get_location("O-O Castle", player), lambda state: state.has_castle(player))
+    set_rule(multiworld.get_location("O-O-O Castle", player), lambda state: state.has_castle(player))
     # set_rule(multiworld.get_location("French Move", player), lambda state: state.has_french_move(player))
 
     # goal materials
