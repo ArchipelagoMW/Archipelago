@@ -74,12 +74,12 @@ item_table: Dict[str, KHCOMItemData] = {
     "Enemy Card Hook":                  KHCOMItemData("Filler",             266_2042, ItemClassification.filler, weight=5),
     "Enemy Card Dragon Maleficent":     KHCOMItemData("Filler",             266_2043, ItemClassification.filler, weight=5),
     "Enemy Card Riku":                  KHCOMItemData("Filler",             266_2044, ItemClassification.filler, weight=5),
-    "Enemy Card Axel":                  KHCOMItemData("Filler",             266_2044, ItemClassification.filler, weight=5),
     "Enemy Card Larxene":               KHCOMItemData("Filler",             266_2045, ItemClassification.filler, weight=5),
     "Enemy Card Vexen":                 KHCOMItemData("Filler",             266_2046, ItemClassification.filler, weight=5),
     "Enemy Card Marluxia":              KHCOMItemData("Filler",             266_2047, ItemClassification.filler, weight=5),
     "Enemy Card Lexaeus":               KHCOMItemData("Filler",             266_2048, ItemClassification.filler, weight=5),
     "Enemy Card Ansem":                 KHCOMItemData("Filler",             266_2049, ItemClassification.filler, weight=5),
+    "Enemy Card Axel":                  KHCOMItemData("Filler",             266_2050, ItemClassification.filler, weight=5),
     
     #Gold Map Cards
    #"Key of Beginnings F01":            KHCOMItemData("Gold Map Cards",     266_3001, ItemClassification.progression, 1,  1),
