@@ -63,6 +63,10 @@ class LingoPlayerLogic:
     DOOR_REQS: Dict[str, Dict[str, AccessRequirements]]
 
     def add_location(self, room: str, name: str, code: Optional[int], panels: List[RoomAndPanel]):
+        """
+        Creates a location. This function determines the access requirements for the location by combining and
+        flattening the requirements for each of the given panels.
+        """
         counting_panels = 0
         access_reqs = AccessRequirements()
         for panel in panels:
@@ -328,6 +332,11 @@ class LingoPlayerLogic:
         return True
 
     def calculate_panel_requirements(self, room: str, panel: str):
+        """
+        Calculate and return the access requirements for solving a given panel. The goal is to eliminate recursion in
+        the access rule function by collecting the rooms, doors, and colors needed by this panel and any panel required
+        by this panel. Memoization is used so that no panel is evaluated more than once.
+        """
         if panel not in self.PANEL_REQS.setdefault(room, {}):
             access_reqs = AccessRequirements()
             panel_object = PANELS_BY_ROOM[room][panel]
@@ -360,6 +369,9 @@ class LingoPlayerLogic:
         return self.PANEL_REQS[room][panel]
 
     def calculate_door_requirements(self, room: str, door: str):
+        """
+        Similar to calculate_panel_requirements, but for event doors.
+        """
         if door not in self.DOOR_REQS.setdefault(room, {}):
             access_reqs = AccessRequirements()
             door_object = DOORS_BY_ROOM[room][door]
@@ -377,6 +389,18 @@ class LingoPlayerLogic:
         return self.DOOR_REQS[room][door]
 
     def create_panel_hunt_events(self, world: "LingoWorld"):
+        """
+        Creates the event locations/items used for determining access to the LEVEL 2 panel. Instead of creating an event
+        for every single counting panel in the game, we try to coalesce panels with identical access rules into the same
+        event. Right now, this means the following:
+
+        When color shuffle is off, panels in a room with no extra access requirements (room, door, or other panel) are
+        all coalesced into one event.
+
+        When color shuffle is on, single-colored panels (including white) in a room are combined into one event per
+        color. Multicolored panels and panels with any extra access requirements are not coalesced, and will each
+        receive their own event.
+        """
         for room_name, room_data in PANELS_BY_ROOM.items():
             unhindered_panels_by_color: dict[Optional[str], List[str]] = {}
 
