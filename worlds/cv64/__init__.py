@@ -2,6 +2,7 @@ import os
 import typing
 import base64
 import threading
+import settings
 
 from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
 from .items import CV64Item, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
@@ -20,7 +21,14 @@ from .rom import LocalRom, patch_rom, get_base_rom_path, get_item_text_color, CV
 from .client import Castlevania64Client
 
 
-# import math
+class CV64Settings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the CV64 US 1.0 rom"""
+        copy_to = "Castlevania (USA).z64"
+        description = "CV64 (US 1.0) ROM File"
+        md5s = [CV64DeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class CV64Web(WebWorld):
@@ -52,6 +60,7 @@ class CV64World(World):
     location_name_groups = {stage: set(get_locations_from_stage(stage)) for stage in vanilla_stage_order}
     options_dataclass = CV64Options
     options: CV64Options
+    settings: typing.ClassVar[CV64Settings]
     topology_present = True
     data_version = 1
     remote_items = False
