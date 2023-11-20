@@ -1065,6 +1065,25 @@ Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Path to Caves - 0x17F33
 Door - 0x0C141 (Final Room Entry) - 0x01983 & 0x01987
 Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
 
+Final Room (Mountain Final Room) - Elevator - 0x339BB & 0x33961:
+158522 - 0x0383A (Right Pillar 1) - True - Stars
+158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Stars & Dots
+158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Full Dots
+158525 - 0x33961 (Right Pillar 4) - 0x09E5A - Dots & Symmetry
+158526 - 0x0383D (Left Pillar 1) - True - Dots
+158527 - 0x0383F (Left Pillar 2) - 0x0383D - Black/White Squares
+158528 - 0x03859 (Left Pillar 3) - 0x0383F - Shapers
+158529 - 0x339BB (Left Pillar 4) - 0x03859 - Black/White Squares & Stars & Symmetry
+
+Elevator (Mountain Final Room):
+158530 - 0x3D9A6 (Elevator Door Closer Left) - True - True
+158531 - 0x3D9A7 (Elevator Door Close Right) - True - True
+158532 - 0x3C113 (Elevator Entry Left) - 0x3D9A6 | 0x3D9A7 - True
+158533 - 0x3C114 (Elevator Entry Right) - 0x3D9A6 | 0x3D9A7 - True
+158534 - 0x3D9AA (Back Wall Left) - 0x3D9A6 | 0x3D9A7 - True
+158535 - 0x3D9A8 (Back Wall Right) - 0x3D9A6 | 0x3D9A7 - True
+158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA & 7 Lasers | 0x3D9A8 & 7 Lasers - True
+
 Mountain Pink Bridge EP (Mountain Floor 2):
 159312 - 0x09D63 (Pink Bridge EP) - 0x09E39 - True
 
@@ -1175,25 +1194,6 @@ Door - 0x27263 (Desert Shortcut) - 0x2773D
 158521 - 0x09E85 (Town Shortcut Panel) - True - Triangles
 Door - 0x09E87 (Town Shortcut) - 0x09E85
 159557 - 0x33A20 (Theater Flowers EP) - 0x03553 & Theater to Tunnels - True
-
-Final Room (Mountain Final Room) - Elevator - 0x339BB & 0x33961:
-158522 - 0x0383A (Right Pillar 1) - True - Stars
-158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Stars & Dots
-158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Full Dots
-158525 - 0x33961 (Right Pillar 4) - 0x09E5A - Dots & Symmetry
-158526 - 0x0383D (Left Pillar 1) - True - Dots
-158527 - 0x0383F (Left Pillar 2) - 0x0383D - Black/White Squares
-158528 - 0x03859 (Left Pillar 3) - 0x0383F - Shapers
-158529 - 0x339BB (Left Pillar 4) - 0x03859 - Black/White Squares & Stars & Symmetry
-
-Elevator (Mountain Final Room):
-158530 - 0x3D9A6 (Elevator Door Closer Left) - True - True
-158531 - 0x3D9A7 (Elevator Door Close Right) - True - True
-158532 - 0x3C113 (Elevator Entry Left) - 0x3D9A6 | 0x3D9A7 - True
-158533 - 0x3C114 (Elevator Entry Right) - 0x3D9A6 | 0x3D9A7 - True
-158534 - 0x3D9AA (Back Wall Left) - 0x3D9A6 | 0x3D9A7 - True
-158535 - 0x3D9A8 (Back Wall Right) - 0x3D9A6 | 0x3D9A7 - True
-158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA & 7 Lasers | 0x3D9A8 & 7 Lasers - True
 
 ==The Ocean==
 

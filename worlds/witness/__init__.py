@@ -2,6 +2,7 @@
 Archipelago init file for The Witness
 """
 import dataclasses
+import logging
 from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
@@ -266,22 +267,28 @@ class WitnessWorld(World):
 
         audio_logs = get_audio_logs().copy()
 
-        if hint_amount != 0:
+        if hint_amount:
             if self.options.hint_type == 0:
                 generated_hints = make_direct_hints(self, hint_amount, self.own_itempool)
             else:
                 generated_hints = make_area_hints(self, hint_amount)
 
-            self.random.shuffle(audio_logs)
+            hint_amount = len(generated_hints)
 
-            duplicates = min(3, len(audio_logs) // hint_amount)
+            if hint_amount:
+                self.random.shuffle(audio_logs)
 
-            for _ in range(0, hint_amount):
-                hint = generated_hints.pop(0)
+                duplicates = min(3, len(audio_logs) // hint_amount)
 
-                for _ in range(0, duplicates):
-                    audio_log = audio_logs.pop()
-                    self.log_ids_to_hints[int(audio_log, 16)] = hint
+                for _ in range(0, hint_amount):
+                    hint = generated_hints.pop(0)
+
+                    for _ in range(0, duplicates):
+                        audio_log = audio_logs.pop()
+                        self.log_ids_to_hints[int(audio_log, 16)] = hint
+            else:
+                player_name = self.multiworld.get_player_name(self.player)
+                logging.warning(f"For some reason, no hints were able to be generated for {player_name}'s world.")
 
         if audio_logs:
             audio_log = audio_logs.pop()

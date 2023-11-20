@@ -1,7 +1,7 @@
 import logging
 from typing import Tuple, List, TYPE_CHECKING
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 from . import StaticWitnessLogic
 
 if TYPE_CHECKING:
@@ -383,23 +383,98 @@ def generate_joke_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, i
 
 def make_area_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]:
     potential_areas = list(StaticWitnessLogic.ALL_AREAS_BY_NAME.keys())
-    actual_amount = min(amount, len(potential_areas))
+    items_per_area = dict()
+
+    for area in potential_areas:
+        regions = [
+            world.multiworld.get_region(region, world.player)
+            for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
+        ]
+        items = [location.item for region in regions for location in region.get_locations() if location.address]
+
+        if items:
+            items_per_area[area] = items
+
+    actual_amount = min(amount, len(items_per_area))
 
     if actual_amount != amount:
         player_name = world.multiworld.get_player_name(world.player)
         logging.warning(f"There are not enough areas in the game to make {amount} area hints for player {player_name}.")
 
-    hinted_areas = world.random.sample(potential_areas, actual_amount)
+    hinted_areas = world.random.sample(sorted(items_per_area), actual_amount)
 
     hints = []
 
-    for area in hinted_areas:
-        regions = [
-                     world.multiworld.get_region(region, world.player)
-                     for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
-        ]
-        locations = [location for region in regions for location in region.get_locations() if location.address]
+    for hinted_area in hinted_areas:
+        corresponding_items = items_per_area[hinted_area]
+        local_progression = sum(
+            item.player == world.player
+            and item.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+            for item in corresponding_items
+        )
 
-        print(area, locations)
+        non_local_progression = sum(
+            item.player != world.player
+            and item.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+            for item in corresponding_items
+        )
+
+        local_lasers = sum(
+            item.player == world.player and "Laser" in item.name
+            for item in corresponding_items
+        )
+
+        total_progression = non_local_progression + local_progression
+
+        is_multiworld = len(world.multiworld.player_ids) > 1
+
+        if not total_progression:
+            hint_string = f"In the {hinted_area} area, you will find no progression items."
+
+        elif total_progression == 1:
+            hint_string = f"In the {hinted_area} area, you will find 1 progression item."
+
+            if is_multiworld:
+                if local_lasers:
+                    hint_string += "\nThis item is a laser for this world."
+                elif non_local_progression:
+                    hint_string += "\nThis item is for another player."
+                else:
+                    hint_string += "\nThis item is for this world."
+            else:
+                if local_lasers:
+                    hint_string += "\nThis item is a laser."
+
+        else:
+            hint_string = f"In the {hinted_area} area, you will find {total_progression} progression items."
+
+            if local_lasers == total_progression:
+                hint_string = f"All of them are lasers" + " for this world." if is_multiworld else "."
+
+            elif is_multiworld:
+                if local_progression and non_local_progression:
+                    if non_local_progression == 1:
+                        hint_string += f"\nOf them, one is for another player."
+                    else:
+                        hint_string += f"\nOf them, {non_local_progression} are for other players."
+                elif non_local_progression:
+                    hint_string += "\nAll of them are for other players."
+                elif local_progression:
+                    hint_string += "\nAll of them are for this world."
+
+                if local_lasers == 1:
+                    hint_string += "\nAlso, one of them is a laser for this world."
+                elif local_lasers:
+                    hint_string += f"\nAlso, {local_lasers} of them are lasers for this world."
+
+            else:
+                if local_lasers == 1:
+                    hint_string += "\nOne of them is a laser."
+                elif local_lasers:
+                    hint_string += f"\n{local_lasers} of them are lasers."
+
+        hints.append((hint_string, -1))
+
+    print("\n".join(hint[0] for hint in hints))
 
     return hints
