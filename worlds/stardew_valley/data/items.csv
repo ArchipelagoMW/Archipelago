@@ -268,7 +268,7 @@ id,name,classification,groups,mod_name
 283,Ostrich Incubator Recipe,progression,"GINGER_ISLAND",
 284,Cute Baby,progression,"BABY",
 285,Ugly Baby,progression,"BABY",
-286,Deluxe Scarecrow Recipe,progression,"FESTIVAL,RARECROW",
+286,Deluxe Scarecrow Recipe,progression,"RARECROW",
 287,Treehouse,progression,"GINGER_ISLAND",
 288,Coffee Bean,progression,CROPSANITY,
 289,Progressive Weapon,progression,"WEAPON,WEAPON_GENERIC",

@@ -187,7 +187,7 @@ bug_steak = skill_recipe(Edible.bug_steak, Skill.combat, 1, {Loot.bug_meat: 10})
 life_elixir = skill_recipe(Edible.life_elixir, Skill.combat, 2, {Forageable.red_mushroom: 1, Forageable.purple_mushroom: 1, Forageable.morel: 1, Forageable.chanterelle: 1})
 oil_of_garlic = skill_recipe(Edible.oil_of_garlic, Skill.combat, 6, {Vegetable.garlic: 10, Ingredient.oil: 1})
 
-monster_musk = ap_recipe(Consumable.monster_musk, {Loot.bat_wing: 30, Loot.slime: 30})
+monster_musk = special_order_recipe(Consumable.monster_musk, SpecialOrder.prismatic_jelly, {Loot.bat_wing: 30, Loot.slime: 30})
 fairy_dust = ap_recipe(Consumable.fairy_dust, {Mineral.diamond: 1, Flower.fairy_rose: 1})
 warp_totem_beach = skill_recipe(Consumable.warp_totem_beach, Skill.foraging, 6, {Material.hardwood: 1, WaterItem.coral: 2, Material.fiber: 10})
 warp_totem_mountains = skill_recipe(Consumable.warp_totem_mountains, Skill.foraging, 7, {Material.hardwood: 1, MetalBar.iron: 1, Material.stone: 25})
@@ -210,11 +210,11 @@ wood_lamp_post = shop_recipe(Lighting.wood_lamp_post, Region.carpenter, 500, {Ma
 iron_lamp_post = shop_recipe(Lighting.iron_lamp_post, Region.carpenter, 1000, {MetalBar.iron: 1, ArtisanGood.battery_pack: 1})
 jack_o_lantern = festival_shop_recipe(Lighting.jack_o_lantern, Region.spirit_eve, 2000, {Vegetable.pumpkin: 1, Lighting.torch: 1})
 
-bone_mill = ap_recipe(Machine.bone_mill, {Fossil.bone_fragment: 10, Material.clay: 3, Material.stone: 20})
+bone_mill = special_order_recipe(Machine.bone_mill, SpecialOrder.fragments_of_the_past, {Fossil.bone_fragment: 10, Material.clay: 3, Material.stone: 20})
 charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 4, {Material.wood: 20, MetalBar.copper: 2})
 crystalarium = skill_recipe(Machine.crystalarium, Skill.mining, 9, {Material.stone: 99, MetalBar.gold: 5, MetalBar.iridium: 2, ArtisanGood.battery_pack: 1})
 furnace = starter_recipe(Machine.furnace, {Ore.copper: 20, Material.stone: 25})
-geode_crusher = ap_recipe(Machine.geode_crusher, {MetalBar.gold: 2, Material.stone: 50, Mineral.diamond: 1})
+geode_crusher = special_order_recipe(Machine.geode_crusher, SpecialOrder.cave_patrol, {MetalBar.gold: 2, Material.stone: 50, Mineral.diamond: 1})
 heavy_tapper = ap_recipe(Machine.heavy_tapper, {Material.hardwood: 30, MetalBar.radioactive: 1})
 lightning_rod = skill_recipe(Machine.lightning_rod, Skill.foraging, 6, {MetalBar.iron: 1, MetalBar.quartz: 1, Loot.bat_wing: 5})
 ostrich_incubator = ap_recipe(Machine.ostrich_incubator, {Fossil.bone_fragment: 50, Material.hardwood: 50, Currency.cinder_shard: 20})
@@ -222,7 +222,7 @@ recycling_machine = skill_recipe(Machine.recycling_machine, Skill.fishing, 4, {M
 seed_maker = skill_recipe(Machine.seed_maker, Skill.farming, 9, {Material.wood: 25, Material.coal: 10, MetalBar.gold: 1})
 slime_egg_press = skill_recipe(Machine.slime_egg_press, Skill.combat, 6, {Material.coal: 25, Mineral.fire_quartz: 1, ArtisanGood.battery_pack: 1})
 slime_incubator = skill_recipe(Machine.slime_incubator, Skill.combat, 8, {MetalBar.iridium: 2, Loot.slime: 100})
-solar_panel = ap_recipe(Machine.solar_panel, {MetalBar.quartz: 10, MetalBar.iron: 5, MetalBar.gold: 5})
+solar_panel = special_order_recipe(Machine.solar_panel, SpecialOrder.island_ingredients, {MetalBar.quartz: 10, MetalBar.iron: 5, MetalBar.gold: 5})
 tapper = skill_recipe(Machine.tapper, Skill.foraging, 3, {Material.wood: 40, MetalBar.copper: 2})
 worm_bin = skill_recipe(Machine.worm_bin, Skill.fishing, 8, {Material.hardwood: 25, MetalBar.gold: 1, MetalBar.iron: 1, Material.fiber: 50})
 
@@ -232,7 +232,7 @@ flute_block = cutscene_recipe(Furniture.flute_block, Region.carpenter, NPC.robin
 drum_block = cutscene_recipe(Furniture.drum_block, Region.carpenter, NPC.robin, 6, {Material.stone: 10, Ore.copper: 2, Material.fiber: 20})
 
 chest = starter_recipe(Storage.chest, {Material.wood: 50})
-stone_chest = ap_recipe(Storage.stone_chest, {Material.stone: 50})
+stone_chest = special_order_recipe(Storage.stone_chest, SpecialOrder.robins_resource_rush, {Material.stone: 50})
 
 wood_sign = starter_recipe(Sign.wood, {Material.wood: 25})
 stone_sign = starter_recipe(Sign.stone, {Material.stone: 25})
@@ -246,8 +246,8 @@ explosive_ammo = skill_recipe(Craftable.explosive_ammo, Skill.combat, 8, {MetalB
 transmute_fe = skill_recipe(Craftable.transmute_fe, Skill.mining, 4, {MetalBar.copper: 3})
 transmute_au = skill_recipe(Craftable.transmute_au, Skill.mining, 7, {MetalBar.iron: 2})
 mini_jukebox = cutscene_recipe(Craftable.mini_jukebox, Region.saloon, NPC.gus, 5, {MetalBar.iron: 2, ArtisanGood.battery_pack: 1})
-mini_obelisk = ap_recipe(Craftable.mini_obelisk, {Material.hardwood: 30, Loot.solar_essence: 20, MetalBar.gold: 3})
-farm_computer = ap_recipe(Craftable.farm_computer, {Artifact.dwarf_gadget: 1, ArtisanGood.battery_pack: 1, MetalBar.quartz: 10})
+mini_obelisk = special_order_recipe(Craftable.mini_obelisk, SpecialOrder.a_curious_substance, {Material.hardwood: 30, Loot.solar_essence: 20, MetalBar.gold: 3})
+farm_computer = special_order_recipe(Craftable.farm_computer, SpecialOrder.aquatic_overpopulation, {Artifact.dwarf_gadget: 1, ArtisanGood.battery_pack: 1, MetalBar.quartz: 10})
 hopper = ap_recipe(Craftable.hopper, {Material.hardwood: 10, MetalBar.iridium: 1, MetalBar.radioactive: 1})
 cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 9, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
 

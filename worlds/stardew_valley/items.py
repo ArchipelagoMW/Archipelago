@@ -459,6 +459,7 @@ def create_seeds(item_factory: StardewItemFactory, options: StardewValleyOptions
 
 
 def create_festival_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    items.append(item_factory("Deluxe Scarecrow Recipe"))
     if options.festival_locations == FestivalLocations.option_disabled:
         return
 
