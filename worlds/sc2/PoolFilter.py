@@ -322,7 +322,7 @@ class ValidInventory:
         removable_generic_items = []
         self.multiworld.random.shuffle(generic_items)
         for item in generic_items[:reserved_generic_amount]:
-            locked_items.append(item)
+            locked_items.append(copy_item(item))
             inventory.remove(item)
             if item.name not in self.logical_inventory and item.name not in self.locked_items:
                 removable_generic_items.append(item)
