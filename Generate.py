@@ -175,28 +175,28 @@ def main(args=None, callback=ERmain):
     while player <= args.multi:
         path = player_path_cache[player]
         if path:
-            try:
-                settings: Tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
-                    tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
-                for settingsObject in settings:
-                    for k, v in vars(settingsObject).items():
-                        if v is not None:
-                            try:
-                                getattr(erargs, k)[player] = v
-                            except AttributeError:
-                                setattr(erargs, k, {player: v})
-                            except Exception as e:
-                                raise Exception(f"Error setting {k} to {v} for player {player}") from e
+            # try:
+            settings: Tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
+                tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
+            for settingsObject in settings:
+                for k, v in vars(settingsObject).items():
+                    if v is not None:
+                        try:
+                            getattr(erargs, k)[player] = v
+                        except AttributeError:
+                            setattr(erargs, k, {player: v})
+                        except Exception as e:
+                            raise Exception(f"Error setting {k} to {v} for player {player}") from e
 
-                    if path == args.weights_file_path:  # if name came from the weights file, just use base player name
-                        erargs.name[player] = f"Player{player}"
-                    elif not erargs.name[player]:  # if name was not specified, generate it from filename
-                        erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-                    erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
+                if path == args.weights_file_path:  # if name came from the weights file, just use base player name
+                    erargs.name[player] = f"Player{player}"
+                elif not erargs.name[player]:  # if name was not specified, generate it from filename
+                    erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
+                erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
-                    player += 1
-            except Exception as e:
-                raise ValueError(f"File {path} is invalid. Please fix your yaml.") from e
+                player += 1
+        #     except Exception as e:
+        #         raise ValueError(f"File {path} is invalid. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 

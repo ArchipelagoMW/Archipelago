@@ -40,10 +40,10 @@ class Goal(Choice):
     Bosses: Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
     Pedestal: Pull the Triforce from the Master Sword pedestal
     Ganon Pedestal: Pull the Master Sword pedestal, then kill Ganon
-    Triforce Hunt: Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
-    Local Triforce Hunt: Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
-    Ganon Triforce Hunt: Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
-    Local Ganon Triforce Hunt: Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
+    Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
+    Local Triforce Hunt: Collect Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
+    Ganon Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then kill Ganon
+    Local Ganon Triforce Hunt: Collect Triforce pieces spread throughout your world, then kill Ganon
     Ice Rod Hunt: You start with everything except Ice Rod. Find the Ice rod, then kill Trinexx at Turtle rock."""
     display_name = "Goal"
     default = 0
