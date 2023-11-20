@@ -29,6 +29,9 @@ class TestGridGeneration(Sc2TestBase):
         "excluded_missions": [MissionTables.SC2Mission.ZERO_HOUR.mission_name,],
         "enable_hots_missions": False,
         "enable_prophecy_missions": True,
+        "enable_lotv_prologue_missions": False,
+        "enable_lotv_missions": False,
+        "enable_epilogue_missions": False
     }
 
     def test_size_matches_exclusions(self):

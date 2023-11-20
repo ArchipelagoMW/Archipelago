@@ -478,7 +478,7 @@ class SC2Logic:
                         or state.has_all({ItemNames.SPECTRE, ItemNames.SPECTRE_PSIONIC_LASH}, self.player)
                         or (state.has(ItemNames.IMMORTAL, self.player)
                             and state.has_any({ItemNames.MARINE, ItemNames.MARAUDER}, self.player)
-                            and self.terran_has_bio_heal(state))
+                            and self.terran_bio_heal(state))
                 )
         )
 
@@ -518,11 +518,13 @@ class SC2Logic:
             )
 
     def harbinger_of_oblivion_requirement(self, state: CollectionState) -> bool:
-        return self.protoss_anti_armor_anti_air(state) and self.take_over_ai_allies \
-                 or (
-                         self.protoss_common_unit(state)
-                         and self.protoss_hybrid_counter(state)
-                 )
+        return self.protoss_anti_armor_anti_air(state) and (
+                self.take_over_ai_allies
+                or (
+                        self.protoss_common_unit(state)
+                        and self.protoss_hybrid_counter(state)
+                )
+        )
 
     def protoss_competent_comp(self, state: CollectionState) -> bool:
         return self.protoss_common_unit(state) \

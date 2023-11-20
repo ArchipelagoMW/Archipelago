@@ -210,7 +210,7 @@ class ValidInventory:
     def has_all(self, items: Set[str], player: int):
         return all(item in self.logical_inventory for item in items)
 
-    def has_group(self, item_group: str, player: int):
+    def has_group(self, item_group: str, player: int, count: int = 1):
         return False  # Currently only used for Marine Medic logic, deliberately fails here
 
     def count(self, item: str, player: int) -> int:
@@ -315,20 +315,26 @@ class ValidInventory:
         if not all(requirement(self) for requirement in requirements):
             raise Exception("Too many items excluded - campaign is impossible to complete.")
 
-        # Reserving space for generic items
-        generic_item_count = sum(1 if item.name in second_pass_placeable_items else 0 for item in inventory)
+        # Optionally locking generic items
+        generic_items = [item for item in inventory if item.name in second_pass_placeable_items]
         reserved_generic_percent = get_option_value(self.multiworld, self.player, "ensure_generic_items") / 100
-        reserved_generic_space = int(generic_item_count * reserved_generic_percent)
-        inventory_size -= reserved_generic_space
+        reserved_generic_amount = int(len(generic_items) * reserved_generic_percent)
+        removable_generic_items = []
+        self.multiworld.random.shuffle(generic_items)
+        for item in generic_items[:reserved_generic_amount]:
+            locked_items.append(item)
+            inventory.remove(item)
+            if item.name not in self.logical_inventory and item.name not in self.locked_items:
+                removable_generic_items.append(item)
 
         # Main cull process
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
                 # There are more items than locations and all of them are already locked due to YAML or logic.
-                # First, transfer reserved space to the inventory
-                while reserved_generic_space > 0 and len(locked_items) > inventory_size:
-                    reserved_generic_space -= 1
-                    inventory_size += 1
+                # First, drop non-logic generic items to free up space
+                while len(removable_generic_items) > 0 and len(locked_items) > inventory_size:
+                    removed_item = removable_generic_items.pop()
+                    locked_items.remove(removed_item)
                 # If there still isn't enough space, push locked items into start inventory
                 self.multiworld.random.shuffle(locked_items)
                 while len(locked_items) > inventory_size:
@@ -405,7 +411,6 @@ class ValidInventory:
                                  and item not in self.locked_items
                                  and item.name in second_pass_placeable_items)]
         self.multiworld.random.shuffle(replacement_items)
-        inventory_size += reserved_generic_space
         while len(inventory) < inventory_size and len(replacement_items) > 0:
             item = replacement_items.pop()
             inventory.append(item)

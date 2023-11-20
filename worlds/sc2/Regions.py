@@ -199,15 +199,18 @@ def create_vanilla_regions(
                 lambda state: state.has("Beat The Spear of Adun", player)),
         connect(multiworld, player, names, "Sky Shield", "Brothers in Arms",
                 lambda state: state.has("Beat Sky Shield", player)),
+        connect(multiworld, player, names, "Brothers in Arms", "Forbidden Weapon",
+                lambda state: state.has("Beat Brothers in Arms", player)),
         connect(multiworld, player, names, "The Spear of Adun", "Amon's Reach",
                 lambda state: state.has("Beat The Spear of Adun", player)),
         connect(multiworld, player, names, "Amon's Reach", "Last Stand",
                 lambda state: state.has("Beat Amon's Reach", player)),
         connect(multiworld, player, names, "Last Stand", "Forbidden Weapon",
-                lambda state: state.has("Beat Last Stand", player)
-                              and state.has("Beat Brothers in Arms", player)),
+                lambda state: state.has("Beat Last Stand", player)),
         connect(multiworld, player, names, "Forbidden Weapon", "Temple of Unification",
-                lambda state: state.has("Beat Forbidden Weapon", player)),
+                lambda state: state.has("Beat Brothers in Arms", player)
+                              and state.has("Beat Last Stand", player)
+                              and state.has("Beat Forbidden Weapon", player)),
         connect(multiworld, player, names, "Temple of Unification", "The Infinite Cycle",
                 lambda state: state.has("Beat Temple of Unification", player)),
         connect(multiworld, player, names, "The Infinite Cycle", "Harbinger of Oblivion",
@@ -216,15 +219,18 @@ def create_vanilla_regions(
                 lambda state: state.has("Beat Harbinger of Oblivion", player)),
         connect(multiworld, player, names, "Unsealing the Past", "Purification",
                 lambda state: state.has("Beat Unsealing the Past", player)),
+        connect(multiworld, player, names, "Purification", "Templar's Charge",
+                lambda state: state.has("Beat Purification", player)),
         connect(multiworld, player, names, "Harbinger of Oblivion", "Steps of the Rite",
                 lambda state: state.has("Beat Harbinger of Oblivion", player)),
         connect(multiworld, player, names, "Steps of the Rite", "Rak'Shir",
                 lambda state: state.has("Beat Steps of the Rite", player)),
         connect(multiworld, player, names, "Rak'Shir", "Templar's Charge",
-                lambda state: state.has("Beat Rak'Shir", player)
-                              and state.has("Beat Purification", player)),
+                lambda state: state.has("Beat Rak'Shir", player)),
         connect(multiworld, player, names, "Templar's Charge", "Templar's Return",
-                lambda state: state.has("Beat Templar's Charge", player)),
+                lambda state: state.has("Beat Purification", player)
+                              and state.has("Beat Rak Shir", player)
+                              and state.has("Beat Templar's Charge", player)),
         connect(multiworld, player, names, "Templar's Return", "The Host",
                 lambda state: state.has("Beat Templar's Return", player)),
         connect(multiworld, player, names, "The Host", "Salvation",
@@ -297,7 +303,7 @@ def create_grid_regions(
                 mission_index = multiworld.random.randint(0, len(missions_to_add) - 1)
                 missions[grid_coords] = missions_to_add.pop(mission_index)
 
-        if diagonal_difficulty < MissionPools.HARD:
+        if diagonal_difficulty < MissionPools.VERY_HARD:
             diagonal_difficulty = MissionPools(diagonal_difficulty.value + 1)
             missions_to_add.extend(mission_pools[diagonal_difficulty])
 

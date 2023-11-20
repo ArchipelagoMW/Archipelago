@@ -880,17 +880,18 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Sky Shield", "Sky Shield: North EMP Scrambler", SC2LOTV_LOC_ID_OFFSET + 703, LocationType.BONUS,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
-        LocationData("Sky Shield", "Sky Shield: Mid Stabilizer", SC2LOTV_LOC_ID_OFFSET + 704, LocationType.BONUS),
-        LocationData("Sky Shield", "Sky Shield: Southwest Stabilizer", SC2LOTV_LOC_ID_OFFSET + 705, LocationType.BONUS,
+        LocationData("Sky Shield", "Sky Shield: Mid Stabilizer", SC2LOTV_LOC_ID_OFFSET + 704, LocationType.MISSION_PROGRESS
+                     ),
+        LocationData("Sky Shield", "Sky Shield: Southwest Stabilizer", SC2LOTV_LOC_ID_OFFSET + 705, LocationType.MISSION_PROGRESS,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
-        LocationData("Sky Shield", "Sky Shield: Northwest Stabilizer", SC2LOTV_LOC_ID_OFFSET + 706, LocationType.BONUS,
+        LocationData("Sky Shield", "Sky Shield: Northwest Stabilizer", SC2LOTV_LOC_ID_OFFSET + 706, LocationType.MISSION_PROGRESS,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
-        LocationData("Sky Shield", "Sky Shield: Northeast Stabilizer", SC2LOTV_LOC_ID_OFFSET + 707, LocationType.BONUS,
+        LocationData("Sky Shield", "Sky Shield: Northeast Stabilizer", SC2LOTV_LOC_ID_OFFSET + 707, LocationType.MISSION_PROGRESS,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
-        LocationData("Sky Shield", "Sky Shield: Southeast Stabilizer", SC2LOTV_LOC_ID_OFFSET + 708, LocationType.BONUS,
+        LocationData("Sky Shield", "Sky Shield: Southeast Stabilizer", SC2LOTV_LOC_ID_OFFSET + 708, LocationType.MISSION_PROGRESS,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
         LocationData("Sky Shield", "Sky Shield: West Raynor Base", SC2LOTV_LOC_ID_OFFSET + 709, LocationType.BONUS,
@@ -949,7 +950,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Last Stand", "Last Stand: 1 Billion Zerg", SC2LOTV_LOC_ID_OFFSET + 1004, LocationType.MISSION_PROGRESS,
                      lambda state: logic.last_stand_requirement(state)),
         LocationData("Last Stand", "Last Stand: 1.5 Billion Zerg", SC2LOTV_LOC_ID_OFFSET + 1005, LocationType.BONUS,
-                     lambda state: logic.last_stand_requirement(state)),
+                     lambda state: state.has(ItemNames.KHAYDARIN_MONOLITH, player) and logic.last_stand_requirement(state)), # TODO: Look into another ways around when Protoss unit upgrades land
         LocationData("Forbidden Weapon", "Forbidden Weapon: Victory", SC2LOTV_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_anti_armor_anti_air(state)),
@@ -980,17 +981,20 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Temple of Unification", "Temple of Unification: North Celestial Lock", SC2LOTV_LOC_ID_OFFSET + 1205, LocationType.MISSION_PROGRESS,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_anti_armor_anti_air(state)),
+        LocationData("Temple of Unification", "Temple of Unification: Titanic Warp Prism", SC2LOTV_LOC_ID_OFFSET + 1206, LocationType.BONUS,
+                     lambda state: logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state)),
         LocationData("The Infinite Cycle", "The Infinite Cycle: Victory", SC2LOTV_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
                      lambda state: logic.the_infinite_cycle_requirement(state)),
         LocationData("The Infinite Cycle", "The Infinite Cycle: First Hall of Revelation", SC2LOTV_LOC_ID_OFFSET + 1301, LocationType.MISSION_PROGRESS,
                      lambda state: logic.the_infinite_cycle_requirement(state)),
         LocationData("The Infinite Cycle", "The Infinite Cycle: Second Hall of Revelation", SC2LOTV_LOC_ID_OFFSET + 1302, LocationType.MISSION_PROGRESS,
                      lambda state: logic.the_infinite_cycle_requirement(state)),
-        LocationData("The Infinite Cycle", "The Infinite Cycle: First Xel'Naga Device", SC2LOTV_LOC_ID_OFFSET + 1303, LocationType.MISSION_PROGRESS,
+        LocationData("The Infinite Cycle", "The Infinite Cycle: First Xel'Naga Device", SC2LOTV_LOC_ID_OFFSET + 1303, LocationType.BONUS,
                      lambda state: logic.the_infinite_cycle_requirement(state)),
-        LocationData("The Infinite Cycle", "The Infinite Cycle: Second Xel'Naga Device", SC2LOTV_LOC_ID_OFFSET + 1304, LocationType.MISSION_PROGRESS,
+        LocationData("The Infinite Cycle", "The Infinite Cycle: Second Xel'Naga Device", SC2LOTV_LOC_ID_OFFSET + 1304, LocationType.BONUS,
                      lambda state: logic.the_infinite_cycle_requirement(state)),
-        LocationData("The Infinite Cycle", "The Infinite Cycle: Third Xel'Naga Device", SC2LOTV_LOC_ID_OFFSET + 1305, LocationType.MISSION_PROGRESS,
+        LocationData("The Infinite Cycle", "The Infinite Cycle: Third Xel'Naga Device", SC2LOTV_LOC_ID_OFFSET + 1305, LocationType.BONUS,
                      lambda state: logic.the_infinite_cycle_requirement(state)),
         LocationData("Harbinger of Oblivion", "Harbinger of Oblivion: Victory", SC2LOTV_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
                      lambda state: logic.harbinger_of_oblivion_requirement(state)),
@@ -1091,9 +1095,9 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.templars_charge_requirement(state)),
         LocationData("Templar's Charge", "Templar's Charge: Southeast Power Core", SC2LOTV_LOC_ID_OFFSET + 1903, LocationType.MISSION_PROGRESS,
                      lambda state: logic.templars_charge_requirement(state)),
-        LocationData("Templar's Charge", "Templar's Charge: West Hybrid Statis Chamber", SC2LOTV_LOC_ID_OFFSET + 1904, LocationType.MISSION_PROGRESS,
+        LocationData("Templar's Charge", "Templar's Charge: West Hybrid Statis Chamber", SC2LOTV_LOC_ID_OFFSET + 1904, LocationType.BONUS,
                      lambda state: logic.templars_charge_requirement(state)),
-        LocationData("Templar's Charge", "Templar's Charge: Southeast Hybrid Statis Chamber", SC2LOTV_LOC_ID_OFFSET + 1905, LocationType.MISSION_PROGRESS,
+        LocationData("Templar's Charge", "Templar's Charge: Southeast Hybrid Statis Chamber", SC2LOTV_LOC_ID_OFFSET + 1905, LocationType.BONUS,
                      lambda state: logic.protoss_fleet(state)),
         LocationData("Templar's Return", "Templar's Return: Victory", SC2LOTV_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
                      lambda state: logic.templars_return_requirement(state)),
