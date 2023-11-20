@@ -6,11 +6,11 @@ from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
-from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
-    get_priority_hint_items, make_hints, generate_joke_hints
 from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
+from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
+    get_priority_hint_items, make_direct_hints, generate_joke_hints, make_area_hints
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
@@ -267,7 +267,10 @@ class WitnessWorld(World):
         audio_logs = get_audio_logs().copy()
 
         if hint_amount != 0:
-            generated_hints = make_hints(self, hint_amount, self.own_itempool)
+            if self.options.hint_type == 0:
+                generated_hints = make_direct_hints(self, hint_amount, self.own_itempool)
+            else:
+                generated_hints = make_area_hints(self, hint_amount)
 
             self.random.shuffle(audio_logs)
 

@@ -56,6 +56,11 @@ class StaticWitnessLogicObj:
         """
 
         current_region = dict()
+        current_area = {
+            "name": "Misc",
+            "regions": [],
+        }
+        self.ALL_AREAS_BY_NAME["Misc"] = current_area
 
         for line in lines:
             if line == "" or line[0] == "#":
@@ -67,6 +72,16 @@ class StaticWitnessLogicObj:
                 region_name = current_region["name"]
                 self.ALL_REGIONS_BY_NAME[region_name] = current_region
                 self.STATIC_CONNECTIONS_BY_REGION_NAME[region_name] = new_region_and_connections[1]
+                current_area["regions"].append(region_name)
+                continue
+
+            if line[0] == "=":
+                area_name = line[2:-2]
+                current_area = {
+                    "name": area_name,
+                    "regions": [],
+                }
+                self.ALL_AREAS_BY_NAME[area_name] = current_area
                 continue
 
             line_split = line.split(" - ")
@@ -121,7 +136,6 @@ class StaticWitnessLogicObj:
                 location_type = "Laser"
             elif "Obelisk Side" in entity_name:
                 location_type = "Obelisk Side"
-                full_entity_name = entity_name
             elif "EP" in entity_name:
                 location_type = "EP"
             else:
@@ -168,6 +182,7 @@ class StaticWitnessLogicObj:
 
         # All regions with a list of panels in them and the connections to other regions, before logic adjustments
         self.ALL_REGIONS_BY_NAME = dict()
+        self.ALL_AREAS_BY_NAME = dict()
         self.STATIC_CONNECTIONS_BY_REGION_NAME = dict()
 
         self.ENTITIES_BY_HEX = dict()
@@ -189,6 +204,7 @@ class StaticWitnessLogic:
     _progressive_lookup: Dict[str, str] = {}
 
     ALL_REGIONS_BY_NAME = dict()
+    ALL_AREAS_BY_NAME = dict()
     STATIC_CONNECTIONS_BY_REGION_NAME = dict()
 
     OBELISK_SIDE_ID_TO_EP_HEXES = dict()
@@ -266,6 +282,7 @@ class StaticWitnessLogic:
         self.parse_items()
 
         self.ALL_REGIONS_BY_NAME.update(self.sigma_normal.ALL_REGIONS_BY_NAME)
+        self.ALL_AREAS_BY_NAME.update(self.sigma_normal.ALL_AREAS_BY_NAME)
         self.STATIC_CONNECTIONS_BY_REGION_NAME.update(self.sigma_normal.STATIC_CONNECTIONS_BY_REGION_NAME)
 
         self.ENTITIES_BY_HEX.update(self.sigma_normal.ENTITIES_BY_HEX)

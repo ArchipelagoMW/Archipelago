@@ -180,6 +180,13 @@ class HintAmount(Range):
     default = 10
 
 
+class HintType(Choice):
+    display_name = "Hint Type"
+    option_locations = 0
+    option_areas = 1
+    default = 1
+
+
 class DeathLink(Toggle):
     """If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
     The effect of a "death" in The Witness is a Power Surge."""
@@ -208,4 +215,5 @@ class TheWitnessOptions(PerGameCommonOptions):
     trap_percentage: TrapPercentage
     puzzle_skip_amount: PuzzleSkipAmount
     hint_amount: HintAmount
+    hint_type: HintType
     death_link: DeathLink

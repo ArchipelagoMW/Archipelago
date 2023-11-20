@@ -1,6 +1,8 @@
+import logging
 from typing import Tuple, List, TYPE_CHECKING
 
 from BaseClasses import Item
+from . import StaticWitnessLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -248,7 +250,7 @@ def make_hint_from_location(world: "WitnessWorld", location: str):
     return location, item_name, location_obj.address if (location_obj.player == world.player) else -1
 
 
-def make_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item]):
+def make_direct_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item]):
     hints = list()
 
     prog_items_in_this_world = {
@@ -377,3 +379,27 @@ def make_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item]
 
 def generate_joke_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]:
     return [(x, -1) for x in world.random.sample(joke_hints, amount)]
+
+
+def make_area_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]:
+    potential_areas = list(StaticWitnessLogic.ALL_AREAS_BY_NAME.keys())
+    actual_amount = min(amount, len(potential_areas))
+
+    if actual_amount != amount:
+        player_name = world.multiworld.get_player_name(world.player)
+        logging.warning(f"There are not enough areas in the game to make {amount} area hints for player {player_name}.")
+
+    hinted_areas = world.random.sample(potential_areas, actual_amount)
+
+    hints = []
+
+    for area in hinted_areas:
+        regions = [
+                     world.multiworld.get_region(region, world.player)
+                     for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
+        ]
+        locations = [location for region in regions for location in region.get_locations() if location.address]
+
+        print(area, locations)
+
+    return hints
