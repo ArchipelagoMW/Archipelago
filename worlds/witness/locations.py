@@ -185,7 +185,7 @@ class StaticWitnessLocations:
         "Outside Tutorial Town Sewer EP",
         "Outside Tutorial Path EP",
         "Outside Tutorial Tractor EP",
-        "Keep Thundercloud EP",
+        "Outside Keep Thundercloud EP",
         "Glass Factory Vase EP",
         "Symmetry Island Glass Factory Black Line Reflection EP",
         "Symmetry Island Glass Factory Black Line EP",

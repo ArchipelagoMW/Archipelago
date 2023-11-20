@@ -477,6 +477,4 @@ def make_area_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]
 
         hints.append((hint_string, -1))
 
-    print("\n".join(hint[0] for hint in hints))
-
     return hints
