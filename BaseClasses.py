@@ -654,17 +654,18 @@ class CollectionState():
             if new_region in rrp:
                 bc.remove(connection)
             elif connection.can_reach(self):
-                assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
-                rrp.add(new_region)
-                bc.remove(connection)
-                bc.update(new_region.exits)
-                queue.extend(new_region.exits)
-                self.path[new_region] = (new_region.name, self.path.get(connection, None))
+                if new_region:
+                # assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
+                    rrp.add(new_region)
+                    bc.remove(connection)
+                    bc.update(new_region.exits)
+                    queue.extend(new_region.exits)
+                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
-                # Retry connections if the new region can unblock them
-                for new_entrance in self.multiworld.indirect_connections.get(new_region, set()):
-                    if new_entrance in bc and new_entrance not in queue:
-                        queue.append(new_entrance)
+                    # Retry connections if the new region can unblock them
+                    for new_entrance in self.multiworld.indirect_connections.get(new_region, set()):
+                        if new_entrance in bc and new_entrance not in queue:
+                            queue.append(new_entrance)
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.multiworld)
