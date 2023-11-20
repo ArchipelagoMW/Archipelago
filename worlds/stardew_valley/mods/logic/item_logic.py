@@ -11,7 +11,7 @@ from ...logic.money_logic import MoneyLogicMixin
 from ...logic.museum_logic import MuseumLogic
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogic
+from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.tool_logic import ToolLogic
 from ...options import Mods
@@ -42,7 +42,7 @@ class ModItemLogic:
     money: MoneyLogicMixin
     region: RegionLogicMixin
     season: SeasonLogicMixin
-    relationship: RelationshipLogic
+    relationship: RelationshipLogicMixin
     museum: MuseumLogic
     received: ReceivedLogicMixin
     tool: ToolLogic
@@ -50,7 +50,7 @@ class ModItemLogic:
 
     def __init__(self, mods: Mods, combat: CombatLogic, crop: CropLogic, cooking: CookingLogic, has: HasLogicMixin, money: MoneyLogicMixin,
                  region: RegionLogicMixin,
-                 season: SeasonLogicMixin, relationship: RelationshipLogic, museum: MuseumLogic, tool: ToolLogic, crafting: CraftingLogic):
+                 season: SeasonLogicMixin, relationship: RelationshipLogicMixin, museum: MuseumLogic, tool: ToolLogic, crafting: CraftingLogic):
         self.combat = combat
         self.crop = crop
         self.cooking = cooking

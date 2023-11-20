@@ -1,4 +1,5 @@
 from Utils import cache_self1
+from .base_logic import BaseLogic
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
@@ -8,10 +9,13 @@ from ..strings.geode_names import Geode
 from ..strings.region_names import Region
 
 
-class ActionLogicMixin(RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
+class ActionLogicMixin(BaseLogic):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.action = self
+        self.action = ActionLogic(*args, **kwargs)
+
+
+class ActionLogic(RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
 
     def can_watch(self, channel: str = None):
         tv_rule = True_()

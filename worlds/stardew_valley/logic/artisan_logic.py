@@ -1,3 +1,4 @@
+from .base_logic import BaseLogic
 from .has_logic import HasLogicMixin
 from .time_logic import TimeLogicMixin
 from ..stardew_rule import StardewRule
@@ -6,16 +7,19 @@ from ..strings.generic_names import Generic
 from ..strings.machine_names import Machine
 
 
-class ArtisanLogicMixin(TimeLogicMixin, HasLogicMixin):
+class ArtisanLogicMixin(BaseLogic):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.artisan = self
+        self.artisan = ArtisanLogic(*args, **kwargs)
+
+
+class ArtisanLogic(TimeLogicMixin, HasLogicMixin):
 
     def has_jelly(self) -> StardewRule:
-        return self.artisan.can_preserves_jar(Fruit.any)
+        return self.can_preserves_jar(Fruit.any)
 
     def has_pickle(self) -> StardewRule:
-        return self.artisan.can_preserves_jar(Vegetable.any)
+        return self.can_preserves_jar(Vegetable.any)
 
     def can_preserves_jar(self, item: str) -> StardewRule:
         machine_rule = self.has(Machine.preserves_jar)
@@ -28,10 +32,10 @@ class ArtisanLogicMixin(TimeLogicMixin, HasLogicMixin):
         return machine_rule & self.has(item)
 
     def has_wine(self) -> StardewRule:
-        return self.artisan.can_keg(Fruit.any)
+        return self.can_keg(Fruit.any)
 
     def has_juice(self) -> StardewRule:
-        return self.artisan.can_keg(Vegetable.any)
+        return self.can_keg(Vegetable.any)
 
     def can_keg(self, item: str) -> StardewRule:
         machine_rule = self.has(Machine.keg)

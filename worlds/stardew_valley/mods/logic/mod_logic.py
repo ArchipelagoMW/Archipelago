@@ -24,7 +24,7 @@ from ...logic.museum_logic import MuseumLogic
 from ...logic.quest_logic import QuestLogic
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogic
+from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.skill_logic import SkillLogic
 from ...logic.time_logic import TimeLogicMixin
@@ -48,7 +48,7 @@ class ModLogic(BaseLogic):
     def __init__(self, player: int, registry: LogicRegistry, options, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods,
                  received: ReceivedLogicMixin,
                  has: HasLogicMixin, region: RegionLogicMixin,
-                 action: ActionLogicMixin, artisan: ArtisanLogicMixin, season: SeasonLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogic,
+                 action: ActionLogicMixin, artisan: ArtisanLogicMixin, season: SeasonLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogicMixin,
                 museum: MuseumLogic, building: BuildingLogicMixin,
                  wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,

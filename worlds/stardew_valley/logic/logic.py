@@ -26,7 +26,7 @@ from .pet_logic import PetLogic
 from .quest_logic import QuestLogic
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogic
+from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogic
@@ -97,15 +97,15 @@ class StardewLogic(BaseLogic, LogicRegistry):
 
         self.received = ReceivedLogicMixin(self.player, self.registry, self.options)
         self.has = HasLogicMixin(self.player, self.registry, self.options)
-        self.region = RegionLogicMixin(self.player, self.registry, self.options)
-        self.traveling_merchant = TravelingMerchantLogicMixin(self.player, self.registry, self.options)
-        self.time = TimeLogicMixin(self.player, self.registry, self.options)
-        self.season = SeasonLogicMixin(self.player, self.registry, self.options)
-        self.money = MoneyLogicMixin(self.player, self.registry, self.options)
-        self.action = ActionLogicMixin(self.player, self.registry, self.options)
-        self.arcade = ArcadeLogicMixin(self.player, self.registry, self.options)
-        self.artisan = ArtisanLogicMixin(self.player, self.registry, self.options)
-        self.gifts = GiftLogicMixin(self.player, self.registry, self.options)
+        self.region = RegionLogicMixin(self.player, self.registry, self.options).region
+        self.traveling_merchant = TravelingMerchantLogicMixin(self.player, self.registry, self.options).traveling_merchant
+        self.time = TimeLogicMixin(self.player, self.registry, self.options).time
+        self.season = SeasonLogicMixin(self.player, self.registry, self.options).season
+        self.money = MoneyLogicMixin(self.player, self.registry, self.options).money
+        self.action = ActionLogicMixin(self.player, self.registry, self.options).action
+        self.arcade = ArcadeLogicMixin(self.player, self.registry, self.options).arcade
+        self.artisan = ArtisanLogicMixin(self.player, self.registry, self.options).artisan
+        self.gifts = GiftLogicMixin(self.player, self.registry, self.options).gifts
         tool_option = self.options.tool_progression
         skill_option = self.options.skill_progression
         elevator_option = self.options.elevator_progression
@@ -114,10 +114,9 @@ class StardewLogic(BaseLogic, LogicRegistry):
         special_order_locations = self.options.special_order_locations
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
-        self.buildings = BuildingLogicMixin(self.player, self.registry, self.options)
-        self.shipping = ShippingLogicMixin(self.player, self.registry, self.options)
-        self.relationship = RelationshipLogic(self.player, friendsanity_option, heart_size_option,
-                                              self.received, self.has, self.region, self.time, self.season, self.gifts, self.buildings, mods_option)
+        self.buildings = BuildingLogicMixin(self.player, self.registry, self.options).buildings
+        self.shipping = ShippingLogicMixin(self.player, self.registry, self.options).shipping
+        self.relationship = RelationshipLogicMixin(self.player, self.registry, self.options).relationship
         self.museum = MuseumLogic(self.player, self.options.museumsanity, self.received, self.has, self.region, self.action)
         self.wallet = WalletLogic(self.player, self.received, self.museum)
         self.combat = CombatLogic(self.player, self.received, self.region)

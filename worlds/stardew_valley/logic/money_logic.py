@@ -14,7 +14,10 @@ qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Q
 class MoneyLogicMixin(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.money = self
+        self.money = MoneyLogic(*args, **kwargs)
+
+
+class MoneyLogic(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
@@ -35,14 +38,14 @@ class MoneyLogicMixin(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasL
 
     # Should be cached
     def can_spend_at(self, region: str, amount: int) -> StardewRule:
-        return self.region.can_reach(region) & self.money.can_spend(amount)
+        return self.region.can_reach(region) & self.can_spend(amount)
 
     # Should be cached
     def can_trade_at(self, region: str, currency: str, amount: int) -> StardewRule:
         if amount == 0:
             return True_()
         if currency == Currency.money:
-            return self.money.can_spend_at(region, amount)
+            return self.can_spend_at(region, amount)
         if currency == Currency.qi_gem:
             number_rewards = min(10, max(1, (amount // 10) + 2))
             return self.received(qi_gem_rewards, number_rewards)

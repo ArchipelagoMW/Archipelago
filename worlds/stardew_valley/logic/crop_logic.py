@@ -5,7 +5,7 @@ from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
+from .season_logic import SeasonLogic
 from .tool_logic import ToolLogic
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from ..data import CropItem, SeedItem
@@ -26,13 +26,13 @@ class CropLogic:
     has: HasLogicMixin
     region: RegionLogicMixin
     traveling_merchant: TravelingMerchantLogicMixin
-    season: SeasonLogicMixin
+    season: SeasonLogic
     money: MoneyLogicMixin
     tool: ToolLogic
 
     def __init__(self, player: int, cropsanity_option: Cropsanity, exclude_ginger_island_option: ExcludeGingerIsland, received: ReceivedLogicMixin,
                  has: HasLogicMixin,
-                 region: RegionLogicMixin, traveling_merchant: TravelingMerchantLogicMixin, season: SeasonLogicMixin, money: MoneyLogicMixin, tool: ToolLogic):
+                 region: RegionLogicMixin, traveling_merchant: TravelingMerchantLogicMixin, season: SeasonLogic, money: MoneyLogicMixin, tool: ToolLogic):
         self.player = player
         self.cropsanity_option = cropsanity_option
         self.exclude_ginger_island_option = exclude_ginger_island_option

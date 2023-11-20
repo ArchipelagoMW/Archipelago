@@ -5,7 +5,7 @@ from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogic
+from .relationship_logic import RelationshipLogicMixin
 from .skill_logic import SkillLogic
 from .special_order_logic import SpecialOrderLogic
 from .time_logic import TimeLogicMixin
@@ -31,14 +31,14 @@ class CraftingLogic:
     region: RegionLogicMixin
     time: TimeLogicMixin
     money: MoneyLogicMixin
-    relationship: RelationshipLogic
+    relationship: RelationshipLogicMixin
     skill: SkillLogic
     special_orders: SpecialOrderLogic
 
     def __init__(self, player: int, craftsanity_option: Craftsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods,
                  festivals_option: FestivalLocations, special_orders_option: SpecialOrderLocations, received: ReceivedLogicMixin, has: HasLogicMixin,
                  region: RegionLogicMixin,
-                 time: TimeLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
+                 time: TimeLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogicMixin, skill: SkillLogic, special_orders: SpecialOrderLogic):
         self.player = player
         self.craftsanity_option = craftsanity_option
         self.exclude_ginger_island = exclude_ginger_island

@@ -4,7 +4,7 @@ from ..mod_data import ModNames
 from ...logic.has_logic import HasLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogic
+from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...options import Mods
@@ -30,10 +30,10 @@ class ModQuestLogic:
     region: RegionLogicMixin
     time: TimeLogicMixin
     season: SeasonLogicMixin
-    relationship: RelationshipLogic
+    relationship: RelationshipLogicMixin
 
     def __init__(self, mods: Mods, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, time: TimeLogicMixin, season: SeasonLogicMixin,
-                 relationship: RelationshipLogic, ):
+                 relationship: RelationshipLogicMixin, ):
         self.mods = mods
         self.received = received
         self.has = has

@@ -2,6 +2,7 @@ import math
 from typing import Union
 
 from Utils import cache_self1
+from .base_logic import BaseLogic
 from .building_logic import BuildingLogicMixin
 from .gift_logic import GiftLogicMixin
 from .has_logic import HasLogicMixin
@@ -10,7 +11,7 @@ from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from ..data.villagers_data import all_villagers_by_name, Villager
-from ..options import Friendsanity, FriendsanityHeartSize, Mods
+from ..options import Friendsanity
 from ..stardew_rule import StardewRule, True_, And, Or, Count
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
@@ -20,33 +21,13 @@ from ..strings.villager_names import NPC, ModNPC
 possible_kids = ("Cute Baby", "Ugly Baby")
 
 
-class RelationshipLogic:
-    friendsanity_option: Friendsanity
-    heart_size_option: FriendsanityHeartSize
-    received: ReceivedLogicMixin
-    has: HasLogicMixin
-    region: RegionLogicMixin
-    time: TimeLogicMixin
-    season: SeasonLogicMixin
-    gifts: GiftLogicMixin
-    buildings: BuildingLogicMixin
-    mods_option: Mods
+class RelationshipLogicMixin(BaseLogic):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.relationship = RelationshipLogic(*args, **kwargs)
 
-    def __init__(self, player: int, friendsanity_option: Friendsanity,
-                 heart_size_option: FriendsanityHeartSize,
-                 received_logic: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 time: TimeLogicMixin, season: SeasonLogicMixin, gifts: GiftLogicMixin, buildings: BuildingLogicMixin, mods_option: Mods):
-        self.player = player
-        self.friendsanity_option = friendsanity_option
-        self.heart_size_option = heart_size_option
-        self.received = received_logic
-        self.has = has
-        self.region = region
-        self.time = time
-        self.season = season
-        self.gifts = gifts
-        self.buildings = buildings
-        self.mods_option = mods_option
+
+class RelationshipLogic(BuildingLogicMixin, SeasonLogicMixin, TimeLogicMixin, GiftLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
 
     def can_date(self, npc: str) -> StardewRule:
         return self.has_hearts(npc, 8) & self.has(Gift.bouquet)
@@ -60,7 +41,7 @@ class RelationshipLogic:
     def has_children(self, number_children: int) -> StardewRule:
         if number_children <= 0:
             return True_()
-        if self.friendsanity_option == Friendsanity.option_none:
+        if self.options.friendsanity == Friendsanity.option_none:
             return self.can_reproduce(number_children)
         return self.received(possible_kids, number_children) & self.buildings.has_house(2)
 
@@ -75,7 +56,7 @@ class RelationshipLogic:
     def has_hearts(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
             return True_()
-        if self.friendsanity_option == Friendsanity.option_none:
+        if self.options.friendsanity == Friendsanity.option_none:
             return self.can_earn_relationship(npc, hearts)
         if npc not in all_villagers_by_name:
             if npc == Generic.any or npc == Generic.bachelor:
@@ -105,18 +86,18 @@ class RelationshipLogic:
         if not self.npc_is_in_current_slot(npc):
             return True_()
         villager = all_villagers_by_name[npc]
-        if self.friendsanity_option == Friendsanity.option_bachelors and not villager.bachelor:
+        if self.options.friendsanity == Friendsanity.option_bachelors and not villager.bachelor:
             return self.can_earn_relationship(npc, hearts)
-        if self.friendsanity_option == Friendsanity.option_starting_npcs and not villager.available:
+        if self.options.friendsanity == Friendsanity.option_starting_npcs and not villager.available:
             return self.can_earn_relationship(npc, hearts)
-        is_capped_at_8 = villager.bachelor and self.friendsanity_option != Friendsanity.option_all_with_marriage
+        is_capped_at_8 = villager.bachelor and self.options.friendsanity != Friendsanity.option_all_with_marriage
         if is_capped_at_8 and hearts > 8:
             return self.received_hearts(villager.name, 8) & self.can_earn_relationship(npc, hearts)
         return self.received_hearts(villager.name, hearts)
 
     # Should be cached
     def received_hearts(self, npc: str, hearts: int) -> StardewRule:
-        return self.received(self.heart(npc), math.ceil(hearts / self.heart_size_option))
+        return self.received(self.heart(npc), math.ceil(hearts / self.options.friendsanity_heart_size))
 
     @cache_self1
     def can_meet(self, npc: str) -> StardewRule:
@@ -148,7 +129,7 @@ class RelationshipLogic:
         if hearts <= 0:
             return True_()
 
-        previous_heart = hearts - self.heart_size_option
+        previous_heart = hearts - self.options.friendsanity_heart_size
         previous_heart_rule = self.has_hearts(npc, previous_heart)
 
         if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
@@ -156,7 +137,7 @@ class RelationshipLogic:
 
         rules = [previous_heart_rule, self.can_meet(npc)]
         villager = all_villagers_by_name[npc]
-        if hearts > 2 or hearts > self.heart_size_option:
+        if hearts > 2 or hearts > self.options.friendsanity_heart_size:
             rules.append(self.season.has(villager.birthday))
         if villager.bachelor:
             if hearts > 8:
@@ -170,7 +151,7 @@ class RelationshipLogic:
     def npc_is_in_current_slot(self, name: str) -> bool:
         npc = all_villagers_by_name[name]
         mod = npc.mod_name
-        return mod is None or mod in self.mods_option
+        return mod is None or mod in self.options.mods
 
     def heart(self, npc: Union[str, Villager]) -> str:
         if isinstance(npc, str):

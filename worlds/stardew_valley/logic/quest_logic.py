@@ -10,7 +10,7 @@ from .mine_logic import MineLogic
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogic
+from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogic
 from .time_logic import TimeLogicMixin
@@ -43,7 +43,7 @@ class QuestLogic:
     has: HasLogicMixin
     mine: MineLogic
     region: RegionLogicMixin
-    relationship: RelationshipLogic
+    relationship: RelationshipLogicMixin
     tool: ToolLogic
     fishing: FishingLogic
     cooking: CookingLogic
@@ -57,7 +57,7 @@ class QuestLogic:
 
     def __init__(self, player: int, skill: SkillLogic, received: ReceivedLogicMixin, has: HasLogicMixin, mine: MineLogic, region: RegionLogicMixin,
                  action: ActionLogicMixin,
-                 relationship: RelationshipLogic, building: BuildingLogicMixin, time: TimeLogicMixin, tool: ToolLogic, fishing: FishingLogic,
+                 relationship: RelationshipLogicMixin, building: BuildingLogicMixin, time: TimeLogicMixin, tool: ToolLogic, fishing: FishingLogic,
                  cooking: CookingLogic,
                  money: MoneyLogicMixin, combat: CombatLogic, season: SeasonLogicMixin, wallet: WalletLogic, mods_option: Mods):
         self.player = player

@@ -11,7 +11,7 @@ from ...logic.money_logic import MoneyLogicMixin
 from ...logic.quest_logic import QuestLogic
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogic
+from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogic
@@ -25,7 +25,7 @@ class SVELogic:
     has: HasLogicMixin
     quest: QuestLogic
     region: RegionLogicMixin
-    relationship: RelationshipLogic
+    relationship: RelationshipLogicMixin
     time: TimeLogicMixin
     tool: ToolLogic
     fishing: FishingLogic
@@ -38,7 +38,7 @@ class SVELogic:
     def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogicMixin, has: HasLogicMixin, quest: QuestLogic,
                  region: RegionLogicMixin,
                  action: ActionLogicMixin,
-                 relationship: RelationshipLogic, building: BuildingLogicMixin, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
+                 relationship: RelationshipLogicMixin, building: BuildingLogicMixin, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
                  money: MoneyLogicMixin, combat: CombatLogic, season: SeasonLogicMixin, time: TimeLogicMixin):
         self.player = player
         self.skill_option = skill_option

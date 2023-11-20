@@ -1,6 +1,7 @@
 from typing import Iterable
 
 from Utils import cache_self1
+from .base_logic import BaseLogic
 from .received_logic import ReceivedLogicMixin
 from .time_logic import TimeLogicMixin
 from ..options import SeasonRandomization
@@ -9,10 +10,13 @@ from ..strings.generic_names import Generic
 from ..strings.season_names import Season
 
 
-class SeasonLogicMixin(TimeLogicMixin, ReceivedLogicMixin):
+class SeasonLogicMixin(BaseLogic):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.season = self
+        self.season = SeasonLogic(*args, **kwargs)
+
+
+class SeasonLogic(TimeLogicMixin, ReceivedLogicMixin):
 
     @cache_self1
     def has(self, season: str) -> StardewRule:
@@ -30,12 +34,12 @@ class SeasonLogicMixin(TimeLogicMixin, ReceivedLogicMixin):
     def has_any(self, seasons: Iterable[str]):
         if not seasons:
             return True_()
-        return Or(*(self.season.has(season) for season in seasons))
+        return Or(*(self.has(season) for season in seasons))
 
     def has_any_not_winter(self):
-        return self.season.has_any([Season.spring, Season.summer, Season.fall])
+        return self.has_any([Season.spring, Season.summer, Season.fall])
 
     def has_all(self, seasons: Iterable[str]):
         if not seasons:
             return True_()
-        return And(*(self.season.has(season) for season in seasons))
+        return And(*(self.has(season) for season in seasons))

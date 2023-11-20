@@ -7,7 +7,7 @@ from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogic
+from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogic
 from .time_logic import TimeLogicMixin
@@ -36,13 +36,13 @@ class CookingLogic:
     money: MoneyLogicMixin
     action: ActionLogicMixin
     buildings: BuildingLogicMixin
-    relationship: RelationshipLogic
+    relationship: RelationshipLogicMixin
     skill: SkillLogic
 
     def __init__(self, player: int, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods, received: ReceivedLogicMixin,
                  has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogicMixin, time: TimeLogicMixin, money: MoneyLogicMixin, action: ActionLogicMixin,
                  buildings: BuildingLogicMixin,
-                 relationship: RelationshipLogic, skill: SkillLogic):
+                 relationship: RelationshipLogicMixin, skill: SkillLogic):
         self.player = player
         self.chefsanity_option = chefsanity_option
         self.exclude_ginger_island = exclude_ginger_island

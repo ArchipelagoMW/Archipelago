@@ -1,6 +1,7 @@
 from functools import cached_property
 
 from Utils import cache_self1
+from .base_logic import BaseLogic
 from .building_logic import BuildingLogicMixin
 from .has_logic import HasLogicMixin
 from .region_logic import RegionLogicMixin
@@ -12,10 +13,13 @@ from ..strings.building_names import Building
 from ..strings.region_names import Region
 
 
-class ShippingLogicMixin(BuildingLogicMixin, RegionLogicMixin, HasLogicMixin):
+class ShippingLogicMixin(BaseLogic):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.shipping = self
+        self.shipping = ShippingLogic(*args, **kwargs)
+
+
+class ShippingLogic(BuildingLogicMixin, RegionLogicMixin, HasLogicMixin):
 
     @cached_property
     def can_use_shipping_bin(self) -> StardewRule:
@@ -23,7 +27,7 @@ class ShippingLogicMixin(BuildingLogicMixin, RegionLogicMixin, HasLogicMixin):
 
     @cache_self1
     def can_ship(self, item: str) -> StardewRule:
-        return self.shipping.can_ship_items & self.has(item)
+        return self.can_ship_items & self.has(item)
 
     @cached_property
     def can_ship_items(self) -> StardewRule:
