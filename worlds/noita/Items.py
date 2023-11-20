@@ -51,7 +51,7 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
 
 def create_random_items(world: NoitaWorld, random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
-    if world.options.bad_effects.value == 0:
+    if not world.options.bad_effects:
         del filler_pool["Trap"]
 
     return world.random.choices(

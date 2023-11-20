@@ -1,6 +1,11 @@
-from typing import Dict
+from typing import Dict, TYPE_CHECKING
 from BaseClasses import Item, ItemClassification, Location, Region
 from . import Items, Locations
+
+if TYPE_CHECKING:
+    from . import NoitaWorld
+else:
+    NoitaWorld = object
 
 
 def create_event(player: int, name: str) -> Item:
@@ -19,7 +24,7 @@ def create_locked_location_event(player: int, region: Region, item: str) -> Loca
     return new_location
 
 
-def create_all_events(world, created_regions: Dict[str, Region]) -> None:
+def create_all_events(world: NoitaWorld, created_regions: Dict[str, Region]) -> None:
     for region_name, event in event_locks.items():
         region = created_regions[region_name]
         create_locked_location_event(world.player, region, event)
