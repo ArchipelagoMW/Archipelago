@@ -1,4 +1,7 @@
+from typing import Union
+
 from Utils import cache_self1
+from .base_logic import BaseLogicMixin, BaseLogic
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
@@ -11,19 +14,19 @@ qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Q
                   "25 Qi Gems", "20 Qi Gems", "10 Qi Gems")
 
 
-class MoneyLogicMixin(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
+class MoneyLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.money = MoneyLogic(*args, **kwargs)
 
 
-class MoneyLogic(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
+class MoneyLogic(BaseLogic[Union[MoneyLogicMixin, TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin]]):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
         if amount < 2000:
             return True_()
-        shipping_bin_rule = self.region.can_reach(Region.shipping)
+        shipping_bin_rule = self.logic.region.can_reach(Region.shipping)
         if amount < 10000:
             return shipping_bin_rule
 
@@ -34,20 +37,20 @@ class MoneyLogic(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicM
     def can_spend(self, amount: int) -> StardewRule:
         if self.options.starting_money == -1:
             return True_()
-        return self.can_have_earned_total(amount * 5)
+        return self.logic.money.can_have_earned_total(amount * 5)
 
     # Should be cached
     def can_spend_at(self, region: str, amount: int) -> StardewRule:
-        return self.region.can_reach(region) & self.can_spend(amount)
+        return self.logic.region.can_reach(region) & self.logic.money.can_spend(amount)
 
     # Should be cached
     def can_trade_at(self, region: str, currency: str, amount: int) -> StardewRule:
         if amount == 0:
             return True_()
         if currency == Currency.money:
-            return self.can_spend_at(region, amount)
+            return self.logic.money.can_spend_at(region, amount)
         if currency == Currency.qi_gem:
             number_rewards = min(10, max(1, (amount // 10) + 2))
-            return self.received(qi_gem_rewards, number_rewards)
+            return self.logic.received(qi_gem_rewards, number_rewards)
 
-        return self.region.can_reach(region) & self.has(currency)
+        return self.logic.region.can_reach(region) & self.logic.has(currency)

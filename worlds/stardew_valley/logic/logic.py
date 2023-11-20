@@ -85,9 +85,9 @@ MISSING_ITEM = "THIS ITEM IS MISSING"
 fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west]
 
 
-# FIXME this should not extend LogicRegistry, but it's a step in the migration.
 @dataclass(frozen=False, repr=False)
-class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin, SeasonLogicMixin):
+class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin, SeasonLogicMixin, MoneyLogicMixin,
+                   ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin):
     player: int
     options: StardewValleyOptions
 
@@ -108,11 +108,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.quest_rules = self.registry.quest_rules
         self.building_rules = self.registry.building_rules
 
-        self.money = MoneyLogicMixin(self.player, self.registry, self.options, self).money
-        self.action = ActionLogicMixin(self.player, self.registry, self.options, self).action
-        self.arcade = ArcadeLogicMixin(self.player, self.registry, self.options, self).arcade
-        self.artisan = ArtisanLogicMixin(self.player, self.registry, self.options, self).artisan
-        self.gifts = GiftLogicMixin(self.player, self.registry, self.options, self).gifts
         tool_option = self.options.tool_progression
         skill_option = self.options.skill_progression
         elevator_option = self.options.elevator_progression
