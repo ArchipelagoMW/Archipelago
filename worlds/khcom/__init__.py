@@ -56,12 +56,15 @@ class KHCOMWorld(World):
     def create_items(self):
         item_pool: List[KHCOMItem] = []
         starting_locations = get_locations_by_category("Starting")
-        starting_locations = random.sample(list(starting_locations.keys()),3)
+        starting_locations = random.sample(list(starting_locations.keys()),7)
         starting_worlds = get_items_by_category("World Unlocks")
         starting_worlds = random.sample(list(starting_worlds.keys()),3)
         i = 0
-        while i < 3:
-            self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
+        while i < 7:
+            if i < 3:
+                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
+            else:
+                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Bronze Card Pack"))
             i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         for name, data in item_table.items():
