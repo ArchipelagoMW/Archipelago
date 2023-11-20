@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
+from .options import VictoryCondition
 from .player_logic import LingoPlayerLogic, PlayerLocation
 from .static_logic import PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, RoomAndDoor
 
@@ -56,7 +57,7 @@ def lingo_can_use_mastery_location(state: CollectionState, world: "LingoWorld"):
 
 
 def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld"):
-    return state.has("COUNTING PANELS", world.player, world.options.level_2_requirement.value)
+    return state.has("COUNTING PANELS", world.player, world.options.level_2_requirement.value - 1)
 
 
 def _lingo_can_open_door(state: CollectionState, room: str, door: str, player: int, player_logic: LingoPlayerLogic):
@@ -75,7 +76,8 @@ def make_location_lambda(location: PlayerLocation, world: "LingoWorld", player_l
     if location.name == player_logic.mastery_location:
         return lambda state: lingo_can_use_mastery_location(state, world)
 
-    if location.name == player_logic.level_2_location:
+    if world.options.victory_condition == VictoryCondition.option_level_2\
+            and (location.name == "Second Room - ANOTHER TRY" or location.name == player_logic.level_2_location):
         return lambda state: lingo_can_use_level_2_location(state, world)
 
     return lambda state: lingo_can_use_location(state, location, world, player_logic)
