@@ -1,7 +1,7 @@
 from typing import List
 
 from Utils import cache_self1
-from .action_logic import ActionLogic
+from .action_logic import ActionLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
@@ -18,10 +18,10 @@ class MuseumLogic:
     received = ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    action: ActionLogic
+    action: ActionLogicMixin
 
     def __init__(self, player: int, museum_option: Museumsanity, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 action: ActionLogic):
+                 action: ActionLogicMixin):
         self.player = player
         self.museum_option = museum_option
         self.received = received

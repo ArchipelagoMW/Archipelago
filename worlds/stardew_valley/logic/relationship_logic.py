@@ -2,8 +2,8 @@ import math
 from typing import Union
 
 from Utils import cache_self1
-from .building_logic import BuildingLogic
-from .gift_logic import GiftLogic
+from .building_logic import BuildingLogicMixin
+from .gift_logic import GiftLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
@@ -28,14 +28,14 @@ class RelationshipLogic:
     region: RegionLogicMixin
     time: TimeLogicMixin
     season: SeasonLogicMixin
-    gifts: GiftLogic
-    buildings: BuildingLogic
+    gifts: GiftLogicMixin
+    buildings: BuildingLogicMixin
     mods_option: Mods
 
     def __init__(self, player: int, friendsanity_option: Friendsanity,
                  heart_size_option: FriendsanityHeartSize,
                  received_logic: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 time: TimeLogicMixin, season: SeasonLogicMixin, gifts: GiftLogic, buildings: BuildingLogic, mods_option: Mods):
+                 time: TimeLogicMixin, season: SeasonLogicMixin, gifts: GiftLogicMixin, buildings: BuildingLogicMixin, mods_option: Mods):
         self.player = player
         self.friendsanity_option = friendsanity_option
         self.heart_size_option = heart_size_option

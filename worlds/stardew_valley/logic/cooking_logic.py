@@ -1,8 +1,8 @@
 from functools import cached_property
 
 from Utils import cache_self1
-from .action_logic import ActionLogic
-from .building_logic import BuildingLogic
+from .action_logic import ActionLogicMixin
+from .building_logic import BuildingLogicMixin
 from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
@@ -34,14 +34,14 @@ class CookingLogic:
     season: SeasonLogicMixin
     time: TimeLogicMixin
     money: MoneyLogicMixin
-    action: ActionLogic
-    buildings: BuildingLogic
+    action: ActionLogicMixin
+    buildings: BuildingLogicMixin
     relationship: RelationshipLogic
     skill: SkillLogic
 
     def __init__(self, player: int, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods, received: ReceivedLogicMixin,
-                 has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogicMixin, time: TimeLogicMixin, money: MoneyLogicMixin, action: ActionLogic,
-                 buildings: BuildingLogic,
+                 has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogicMixin, time: TimeLogicMixin, money: MoneyLogicMixin, action: ActionLogicMixin,
+                 buildings: BuildingLogicMixin,
                  relationship: RelationshipLogic, skill: SkillLogic):
         self.player = player
         self.chefsanity_option = chefsanity_option

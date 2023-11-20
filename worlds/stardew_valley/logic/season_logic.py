@@ -1,7 +1,6 @@
 from typing import Iterable
 
 from Utils import cache_self1
-from .base_logic import LogicRegistry
 from .received_logic import ReceivedLogicMixin
 from .time_logic import TimeLogicMixin
 from ..options import SeasonRandomization
@@ -11,12 +10,8 @@ from ..strings.season_names import Season
 
 
 class SeasonLogicMixin(TimeLogicMixin, ReceivedLogicMixin):
-    season_option: SeasonRandomization
-
-    def __init__(self, player: int, registry: LogicRegistry, season_option: SeasonRandomization):
-        super().__init__(player, registry)
-        self.player = player
-        self.season_option = season_option
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.season = self
 
     @cache_self1
@@ -24,9 +19,9 @@ class SeasonLogicMixin(TimeLogicMixin, ReceivedLogicMixin):
         if season == Generic.any:
             return True_()
         seasons_order = [Season.spring, Season.summer, Season.fall, Season.winter]
-        if self.season_option == SeasonRandomization.option_progressive:
+        if self.options.season_randomization == SeasonRandomization.option_progressive:
             return self.received(Season.progressive, seasons_order.index(season))
-        if self.season_option == SeasonRandomization.option_disabled:
+        if self.options.season_randomization == SeasonRandomization.option_disabled:
             if season == Season.spring:
                 return True_()
             return self.time.has_lived_months(1)

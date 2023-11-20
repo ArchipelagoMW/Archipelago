@@ -6,21 +6,16 @@ from ..strings.generic_names import Generic
 from ..strings.machine_names import Machine
 
 
-class ArtisanLogic:
-    player: int
-    has: HasLogicMixin
-    time: TimeLogicMixin
-
-    def __init__(self, player: int, has: HasLogicMixin, time: TimeLogicMixin):
-        self.player = player
-        self.has = has
-        self.time = time
+class ArtisanLogicMixin(TimeLogicMixin, HasLogicMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.artisan = self
 
     def has_jelly(self) -> StardewRule:
-        return self.can_preserves_jar(Fruit.any)
+        return self.artisan.can_preserves_jar(Fruit.any)
 
     def has_pickle(self) -> StardewRule:
-        return self.can_preserves_jar(Vegetable.any)
+        return self.artisan.can_preserves_jar(Vegetable.any)
 
     def can_preserves_jar(self, item: str) -> StardewRule:
         machine_rule = self.has(Machine.preserves_jar)
@@ -33,10 +28,10 @@ class ArtisanLogic:
         return machine_rule & self.has(item)
 
     def has_wine(self) -> StardewRule:
-        return self.can_keg(Fruit.any)
+        return self.artisan.can_keg(Fruit.any)
 
     def has_juice(self) -> StardewRule:
-        return self.can_keg(Vegetable.any)
+        return self.artisan.can_keg(Vegetable.any)
 
     def can_keg(self, item: str) -> StardewRule:
         machine_rule = self.has(Machine.keg)

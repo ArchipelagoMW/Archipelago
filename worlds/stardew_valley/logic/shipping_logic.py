@@ -1,35 +1,21 @@
 from functools import cached_property
 
 from Utils import cache_self1
-from .building_logic import BuildingLogic
+from .building_logic import BuildingLogicMixin
 from .has_logic import HasLogicMixin
 from .region_logic import RegionLogicMixin
 from ..locations import LocationTags, locations_by_tag
 from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
-from ..options import Mods
 from ..stardew_rule import StardewRule, And
 from ..strings.building_names import Building
 from ..strings.region_names import Region
 
 
-class ShippingLogic:
-    exclude_ginger_island: ExcludeGingerIsland
-    special_orders_option: SpecialOrderLocations
-    mods: Mods
-    has: HasLogicMixin
-    region: RegionLogicMixin
-    buildings: BuildingLogic
-
-    def __init__(self, player: int, exclude_ginger_island: ExcludeGingerIsland, special_orders_option: SpecialOrderLocations,mods: Mods, has: HasLogicMixin,
-                 region: RegionLogicMixin, buildings: BuildingLogic):
-        self.player = player
-        self.exclude_ginger_island = exclude_ginger_island
-        self.special_orders_option = special_orders_option
-        self.mods = mods
-        self.has = has
-        self.region = region
-        self.buildings = buildings
+class ShippingLogicMixin(BuildingLogicMixin, RegionLogicMixin, HasLogicMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.shipping = self
 
     @cached_property
     def can_use_shipping_bin(self) -> StardewRule:
@@ -37,7 +23,7 @@ class ShippingLogic:
 
     @cache_self1
     def can_ship(self, item: str) -> StardewRule:
-        return self.can_ship_items & self.has(item)
+        return self.shipping.can_ship_items & self.has(item)
 
     @cached_property
     def can_ship_items(self) -> StardewRule:
@@ -46,9 +32,9 @@ class ShippingLogic:
     def can_ship_everything(self) -> StardewRule:
         shipsanity_prefix = "Shipsanity: "
         all_items_to_ship = []
-        exclude_island = self.exclude_ginger_island == ExcludeGingerIsland.option_true
-        exclude_qi = self.special_orders_option != SpecialOrderLocations.option_board_qi
-        mod_list = self.mods.value
+        exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
+        exclude_qi = self.options.special_order_locations != SpecialOrderLocations.option_board_qi
+        mod_list = self.options.mods.value
         for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
             if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
                 continue

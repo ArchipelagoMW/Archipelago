@@ -11,6 +11,7 @@ class LogicRegistry:
     options: StardewValleyOptions
 
     item_rules: Dict[str, StardewRule] = field(default_factory=dict)
+
     sapling_rules: Dict[str, StardewRule] = field(default_factory=dict)
     tree_fruit_rules: Dict[str, StardewRule] = field(default_factory=dict)
     seed_rules: Dict[str, StardewRule] = field(default_factory=dict)
@@ -21,12 +22,15 @@ class LogicRegistry:
     museum_rules: Dict[str, StardewRule] = field(default_factory=dict)
     festival_rules: Dict[str, StardewRule] = field(default_factory=dict)
     quest_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    building_rules: Dict[str, StardewRule] = field(default_factory=dict)
 
 
 class BaseLogic:
     player: int
     registry: LogicRegistry
+    options: StardewValleyOptions
 
-    def __init__(self, player: int, registry: LogicRegistry):
+    def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions):
         self.player = player
         self.registry = registry
+        self.options = options

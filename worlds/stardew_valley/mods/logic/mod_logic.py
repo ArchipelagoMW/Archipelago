@@ -8,10 +8,10 @@ from .skills_logic import ModSkillLogic
 from .special_orders_logic import ModSpecialOrderLogic
 from .sve_logic import SVELogic
 from ...logic.ability_logic import AbilityLogic
-from ...logic.action_logic import ActionLogic
-from ...logic.artisan_logic import ArtisanLogic
+from ...logic.action_logic import ActionLogicMixin
+from ...logic.artisan_logic import ArtisanLogicMixin
 from ...logic.base_logic import LogicRegistry, BaseLogic
-from ...logic.building_logic import BuildingLogic
+from ...logic.building_logic import BuildingLogicMixin
 from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
 from ...logic.crafting_logic import CraftingLogic
@@ -45,19 +45,19 @@ class ModLogic(BaseLogic):
     skill: ModSkillLogic
     sve: SVELogic
 
-    def __init__(self, player: int, registry: LogicRegistry, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods,
+    def __init__(self, player: int, registry: LogicRegistry, options, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods,
                  received: ReceivedLogicMixin,
                  has: HasLogicMixin, region: RegionLogicMixin,
-                 action: ActionLogic, artisan: ArtisanLogic, season: SeasonLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogic,
-                museum: MuseumLogic, building: BuildingLogic,
+                 action: ActionLogicMixin, artisan: ArtisanLogicMixin, season: SeasonLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogic,
+                museum: MuseumLogic, building: BuildingLogicMixin,
                  wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
                  time: TimeLogicMixin, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
-        super().__init__(player, registry)
+        super().__init__(player, registry, options)
         self.item = ModItemLogic(mods, combat, crop, cooking, has, money, region, season, relationship, museum, tool, crafting)
         self.magic = MagicLogic(player, mods, received, region)
         self.quests = ModQuestLogic(mods, received, has, region, time, season, relationship)
-        self.buildings = ModBuildingLogic(player, registry, money, mods)
+        self.buildings = ModBuildingLogic(player, registry, options)
         self.special_orders = ModSpecialOrderLogic(player, action, artisan, crafting, crop, has, region, relationship, season, wallet, mods)
         self.elevator = ModElevatorLogic(player, elevator_option, mods, received)
         self.deepwoods = DeepWoodsLogic(player, skill_option, elevator_option, received, has, combat, tool, skill, cooking)

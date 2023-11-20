@@ -1,8 +1,8 @@
 from typing import Dict
 
 from .ability_logic import AbilityLogic
-from .arcade_logic import ArcadeLogic
-from .artisan_logic import ArtisanLogic
+from .arcade_logic import ArcadeLogicMixin
+from .artisan_logic import ArtisanLogicMixin
 from .cooking_logic import CookingLogic
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
@@ -11,7 +11,7 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogicMixin
-from .shipping_logic import ShippingLogic
+from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogic
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogic
@@ -42,9 +42,9 @@ class SpecialOrderLogic:
     season: SeasonLogicMixin
     time: TimeLogicMixin
     money: MoneyLogicMixin
-    shipping: ShippingLogic
-    arcade: ArcadeLogic
-    artisan: ArtisanLogic
+    shipping: ShippingLogicMixin
+    arcade: ArcadeLogicMixin
+    artisan: ArtisanLogicMixin
     relationship: RelationshipLogic
     tool: ToolLogic
     skill: SkillLogic
@@ -55,7 +55,8 @@ class SpecialOrderLogic:
 
     def __init__(self, player: int, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogicMixin, time: TimeLogicMixin,
                  money: MoneyLogicMixin,
-                 shipping: ShippingLogic, arcade: ArcadeLogic, artisan: ArtisanLogic, relationship: RelationshipLogic, tool: ToolLogic, skill: SkillLogic,
+                 shipping: ShippingLogicMixin, arcade: ArcadeLogicMixin, artisan: ArtisanLogicMixin, relationship: RelationshipLogic, tool: ToolLogic,
+                 skill: SkillLogic,
                  mine: MineLogic, cooking: CookingLogic, ability: AbilityLogic):
         self.player = player
         self.received = received

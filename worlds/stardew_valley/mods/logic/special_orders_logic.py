@@ -1,6 +1,6 @@
 from ..mod_data import ModNames
-from ...logic.action_logic import ActionLogic
-from ...logic.artisan_logic import ArtisanLogic
+from ...logic.action_logic import ActionLogicMixin
+from ...logic.artisan_logic import ArtisanLogicMixin
 from ...logic.crafting_logic import CraftingLogic
 from ...logic.crop_logic import CropLogic
 from ...logic.has_logic import HasLogicMixin
@@ -25,8 +25,8 @@ from ...strings.villager_names import ModNPC
 
 class ModSpecialOrderLogic:
     player: int
-    action: ActionLogic
-    artisan: ArtisanLogic
+    action: ActionLogicMixin
+    artisan: ArtisanLogicMixin
     crafting: CraftingLogic
     crop: CropLogic
     has: HasLogicMixin
@@ -36,7 +36,7 @@ class ModSpecialOrderLogic:
     wallet: WalletLogic
     mods_option: Mods
 
-    def __init__(self, player: int, action: ActionLogic, artisan: ArtisanLogic, crafting: CraftingLogic, crop: CropLogic, has: HasLogicMixin,
+    def __init__(self, player: int, action: ActionLogicMixin, artisan: ArtisanLogicMixin, crafting: CraftingLogic, crop: CropLogic, has: HasLogicMixin,
                  region: RegionLogicMixin, relationship: RelationshipLogic,
                  season: SeasonLogicMixin, wallet: WalletLogic, mods_option: Mods):
         self.player = player

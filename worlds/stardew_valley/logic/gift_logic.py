@@ -6,12 +6,10 @@ from ..strings.animal_product_names import AnimalProduct
 from ..strings.gift_names import Gift
 
 
-class GiftLogic:
-    has: HasLogicMixin
-
-    def __init__(self, player: int, has: HasLogicMixin):
-        self.player = player
-        self.has = has
+class GiftLogicMixin(HasLogicMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.gifts = self
 
     @cached_property
     def has_any_universal_love(self) -> StardewRule:

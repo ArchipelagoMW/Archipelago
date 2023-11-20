@@ -1,13 +1,12 @@
-from .base_logic import LogicRegistry
 from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import True_
 from ..strings.calendar_names import Weekday
 
 
 class TravelingMerchantLogicMixin(ReceivedLogicMixin):
-
-    def __init__(self, player: int, registry: LogicRegistry):
-        super().__init__(player, registry)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.traveling_merchant = self
 
     def has_days(self, number_days: int = 1):
         if number_days <= 0:

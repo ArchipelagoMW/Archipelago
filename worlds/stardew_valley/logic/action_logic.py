@@ -8,16 +8,10 @@ from ..strings.geode_names import Geode
 from ..strings.region_names import Region
 
 
-class ActionLogic:
-    received: ReceivedLogicMixin
-    has: HasLogicMixin
-    region: RegionLogicMixin
-
-    def __init__(self, player: int, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin):
-        self.player = player
-        self.received = received
-        self.has = has
-        self.region = region
+class ActionLogicMixin(RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.action = self
 
     def can_watch(self, channel: str = None):
         tv_rule = True_()

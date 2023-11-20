@@ -1,14 +1,10 @@
 from typing import Union, Optional, Tuple
 
-from .base_logic import BaseLogic, LogicRegistry
+from .base_logic import BaseLogic
 from ..stardew_rule import StardewRule, True_, And, Or, Has, Count
 
 
 class HasLogicMixin(BaseLogic):
-
-    def __init__(self, player: int, registry: LogicRegistry):
-        super().__init__(player, registry)
-
     def __call__(self, *args, **kwargs) -> StardewRule:
         count = None
         if len(args) >= 2:
@@ -16,7 +12,7 @@ class HasLogicMixin(BaseLogic):
         return self.has(args[0], count)
 
     # Should be cached
-    def has(self, items: Union[str, Tuple[str]], count: Optional[int] = None) -> StardewRule:
+    def has(self, items: Union[str, Tuple[str, ...]], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
             return Has(items, self.registry.item_rules)
 

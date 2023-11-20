@@ -3,7 +3,6 @@ from typing import List
 
 from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
-from .strings.craftable_names import Bomb
 from . import locations
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.monster_data import all_monsters_by_category, all_monsters_by_name
@@ -23,6 +22,7 @@ from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building
 from .strings.calendar_names import Weekday
+from .strings.craftable_names import Bomb
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, MagicEntrance, \
     SVEEntrance
 from .strings.generic_names import Generic
@@ -113,7 +113,7 @@ def set_building_rules(logic: StardewLogic, multiworld, player, world_options: S
         if building.mod_name is not None and building.mod_name not in world_options.mods:
             continue
         MultiWorldRules.set_rule(multiworld.get_location(building.name, player),
-                                 logic.buildings.building_rules[building.name.replace(" Blueprint", "")])
+                                 logic.registry.building_rules[building.name.replace(" Blueprint", "")])
 
 
 def set_bundle_rules(current_bundles, logic: StardewLogic, multiworld, player):
@@ -124,22 +124,23 @@ def set_bundle_rules(current_bundles, logic: StardewLogic, multiworld, player):
         MultiWorldRules.set_rule(location, simplified_rules)
     MultiWorldRules.add_rule(multiworld.get_location("Complete Crafts Room", player),
                              And(*(logic.region.can_reach_location(bundle.name)
-                                 for bundle in locations.locations_by_tag[LocationTags.CRAFTS_ROOM_BUNDLE])))
+                                   for bundle in locations.locations_by_tag[LocationTags.CRAFTS_ROOM_BUNDLE])))
     MultiWorldRules.add_rule(multiworld.get_location("Complete Pantry", player),
                              And(*(logic.region.can_reach_location(bundle.name)
-                                 for bundle in locations.locations_by_tag[LocationTags.PANTRY_BUNDLE])))
+                                   for bundle in locations.locations_by_tag[LocationTags.PANTRY_BUNDLE])))
     MultiWorldRules.add_rule(multiworld.get_location("Complete Fish Tank", player),
                              And(*(logic.region.can_reach_location(bundle.name)
-                                 for bundle in locations.locations_by_tag[LocationTags.FISH_TANK_BUNDLE])))
+                                   for bundle in locations.locations_by_tag[LocationTags.FISH_TANK_BUNDLE])))
     MultiWorldRules.add_rule(multiworld.get_location("Complete Boiler Room", player),
                              And(*(logic.region.can_reach_location(bundle.name)
-                                 for bundle in locations.locations_by_tag[LocationTags.BOILER_ROOM_BUNDLE])))
+                                   for bundle in locations.locations_by_tag[LocationTags.BOILER_ROOM_BUNDLE])))
     MultiWorldRules.add_rule(multiworld.get_location("Complete Bulletin Board", player),
                              And(*(logic.region.can_reach_location(bundle.name)
-                                 for bundle in locations.locations_by_tag[LocationTags.BULLETIN_BOARD_BUNDLE])))
+                                   for bundle
+                                   in locations.locations_by_tag[LocationTags.BULLETIN_BOARD_BUNDLE])))
     MultiWorldRules.add_rule(multiworld.get_location("Complete Vault", player),
                              And(*(logic.region.can_reach_location(bundle.name)
-                                 for bundle in locations.locations_by_tag[LocationTags.VAULT_BUNDLE])))
+                                   for bundle in locations.locations_by_tag[LocationTags.VAULT_BUNDLE])))
 
 
 def set_skills_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -276,14 +277,16 @@ def set_farm_buildings_entrance_rules(logic, multiworld, player):
 def set_bedroom_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_harvey_room, player), logic.relationship.has_hearts(NPC.harvey, 2))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.mountain_to_maru_room, player), logic.relationship.has_hearts(NPC.maru, 2))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_sebastian_room, player), (logic.relationship.has_hearts(NPC.sebastian, 2) | logic.mod.magic.can_blink()))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_sebastian_room, player),
+                             (logic.relationship.has_hearts(NPC.sebastian, 2) | logic.mod.magic.can_blink()))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.forest_to_leah_cottage, player), logic.relationship.has_hearts(NPC.leah, 2))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_elliott_house, player), logic.relationship.has_hearts(NPC.elliott, 2))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_sunroom, player), logic.relationship.has_hearts(NPC.caroline, 2))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_wizard_basement, player), logic.relationship.has_hearts(NPC.wizard, 4))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.mountain_to_leo_treehouse, player), logic.received("Treehouse"))
     if ModNames.alec in world_options.mods:
-        MultiWorldRules.set_rule(multiworld.get_entrance(AlecEntrance.petshop_to_bedroom, player), (logic.relationship.has_hearts(ModNPC.alec, 2) | logic.mod.magic.can_blink()))
+        MultiWorldRules.set_rule(multiworld.get_entrance(AlecEntrance.petshop_to_bedroom, player),
+                                 (logic.relationship.has_hearts(ModNPC.alec, 2) | logic.mod.magic.can_blink()))
 
 
 def set_mines_floor_entrance_rules(logic, multiworld, player):

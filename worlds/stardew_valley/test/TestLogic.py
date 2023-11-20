@@ -31,9 +31,9 @@ class TestLogic(unittest.TestCase):
                 self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve item rule for {item} {rule}")
 
     def test_given_building_rule_then_can_be_resolved(self):
-        for building in logic.buildings.building_rules.keys():
+        for building in logic.registry.building_rules.keys():
             with self.subTest(msg=building):
-                rule = logic.buildings.building_rules[building]
+                rule = logic.registry.building_rules[building]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
                 self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve building rule for {building} {rule}")
 

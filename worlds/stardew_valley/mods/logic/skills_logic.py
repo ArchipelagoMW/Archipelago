@@ -1,7 +1,7 @@
 from .magic_logic import MagicLogic
 from ...data.villagers_data import all_villagers
-from ...logic.action_logic import ActionLogic
-from ...logic.building_logic import BuildingLogic
+from ...logic.action_logic import ActionLogicMixin
+from ...logic.building_logic import BuildingLogicMixin
 from ...logic.cooking_logic import CookingLogic
 from ...logic.fishing_logic import FishingLogic
 from ...logic.has_logic import HasLogicMixin
@@ -27,9 +27,9 @@ class ModSkillLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    action: ActionLogic
+    action: ActionLogicMixin
     relationship: RelationshipLogic
-    building: BuildingLogic
+    building: BuildingLogicMixin
     tool: ToolLogic
     fishing: FishingLogic
     cooking: CookingLogic
@@ -37,8 +37,8 @@ class ModSkillLogic:
     mods_option: Mods
 
     def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 action: ActionLogic,
-                 relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
+                 action: ActionLogicMixin,
+                 relationship: RelationshipLogic, building: BuildingLogicMixin, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
                  magic: MagicLogic, mods_option: Mods):
         self.player = player
         self.skill_option = skill_option

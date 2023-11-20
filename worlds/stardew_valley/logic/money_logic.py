@@ -1,10 +1,8 @@
 from Utils import cache_self1
-from .base_logic import LogicRegistry
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .time_logic import TimeLogicMixin
-from ..options import StartingMoney
 from ..stardew_rule import StardewRule, True_, CountPercent
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region
@@ -14,11 +12,8 @@ qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Q
 
 
 class MoneyLogicMixin(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
-    starting_money_option: StartingMoney
-
-    def __init__(self, player: int, registry: LogicRegistry, starting_money_option: StartingMoney):
-        super().__init__(player, registry)
-        self.starting_money_option = starting_money_option
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.money = self
 
     @cache_self1
@@ -34,20 +29,20 @@ class MoneyLogicMixin(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasL
 
     @cache_self1
     def can_spend(self, amount: int) -> StardewRule:
-        if self.starting_money_option == -1:
+        if self.options.starting_money == -1:
             return True_()
         return self.can_have_earned_total(amount * 5)
 
     # Should be cached
     def can_spend_at(self, region: str, amount: int) -> StardewRule:
-        return self.region.can_reach(region) & self.can_spend(amount)
+        return self.region.can_reach(region) & self.money.can_spend(amount)
 
     # Should be cached
     def can_trade_at(self, region: str, currency: str, amount: int) -> StardewRule:
         if amount == 0:
             return True_()
         if currency == Currency.money:
-            return self.can_spend_at(region, amount)
+            return self.money.can_spend_at(region, amount)
         if currency == Currency.qi_gem:
             number_rewards = min(10, max(1, (amount // 10) + 2))
             return self.received(qi_gem_rewards, number_rewards)

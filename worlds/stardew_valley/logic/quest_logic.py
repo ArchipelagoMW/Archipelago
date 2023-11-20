@@ -1,7 +1,7 @@
 from typing import Dict
 
-from .action_logic import ActionLogic
-from .building_logic import BuildingLogic
+from .action_logic import ActionLogicMixin
+from .building_logic import BuildingLogicMixin
 from .combat_logic import CombatLogic
 from .cooking_logic import CookingLogic
 from .fishing_logic import FishingLogic
@@ -56,8 +56,9 @@ class QuestLogic:
     quest_rules: Dict[str, StardewRule]
 
     def __init__(self, player: int, skill: SkillLogic, received: ReceivedLogicMixin, has: HasLogicMixin, mine: MineLogic, region: RegionLogicMixin,
-                 action: ActionLogic,
-                 relationship: RelationshipLogic, building: BuildingLogic, time: TimeLogicMixin, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
+                 action: ActionLogicMixin,
+                 relationship: RelationshipLogic, building: BuildingLogicMixin, time: TimeLogicMixin, tool: ToolLogic, fishing: FishingLogic,
+                 cooking: CookingLogic,
                  money: MoneyLogicMixin, combat: CombatLogic, season: SeasonLogicMixin, wallet: WalletLogic, mods_option: Mods):
         self.player = player
         self.skill = skill

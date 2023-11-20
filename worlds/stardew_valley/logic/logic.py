@@ -4,11 +4,11 @@ from dataclasses import dataclass
 
 from worlds.stardew_valley.strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
 from .ability_logic import AbilityLogic
-from .action_logic import ActionLogic
-from .arcade_logic import ArcadeLogic
-from .artisan_logic import ArtisanLogic
+from .action_logic import ActionLogicMixin
+from .arcade_logic import ArcadeLogicMixin
+from .artisan_logic import ArtisanLogicMixin
 from .base_logic import LogicRegistry, BaseLogic
-from .building_logic import BuildingLogic
+from .building_logic import BuildingLogicMixin
 from .bundle_logic import BundleLogic
 from .combat_logic import CombatLogic
 from .cooking_logic import CookingLogic
@@ -16,7 +16,7 @@ from .crafting_logic import CraftingLogic
 from .crop_logic import CropLogic
 from .farming_logic import FarmingLogic
 from .fishing_logic import FishingLogic
-from .gift_logic import GiftLogic
+from .gift_logic import GiftLogicMixin
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogicMixin
@@ -28,7 +28,7 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogicMixin
-from .shipping_logic import ShippingLogic
+from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogic
 from .special_order_logic import SpecialOrderLogic
 from .time_logic import TimeLogicMixin
@@ -44,7 +44,7 @@ from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.mod_logic import ModLogic
 from ..mods.mod_data import ModNames
-from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity
+from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity, StardewValleyOptions
 from ..stardew_rule import False_, Or, True_, Count, And, StardewRule
 from ..strings.animal_names import Animal, coop_animals, barn_animals
 from ..strings.animal_product_names import AnimalProduct
@@ -89,22 +89,23 @@ fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Re
 @dataclass(frozen=False, repr=False)
 class StardewLogic(BaseLogic, LogicRegistry):
     player: int
+    options: StardewValleyOptions
 
     def __post_init__(self):
-        # FIXME this is awful
+        # FIXME
         self.registry = self
 
-        self.received = ReceivedLogicMixin(self.player, self.registry)
-        self.has = HasLogicMixin(self.player, self.registry)
-        self.region = RegionLogicMixin(self.player, self.registry)
-        self.traveling_merchant = TravelingMerchantLogicMixin(self.player, self.registry)
-        self.time = TimeLogicMixin(self.player, self.registry)
-        self.season = SeasonLogicMixin(self.player, self.registry, self.options.season_randomization)
-        self.money = MoneyLogicMixin(self.player, self.registry, self.options.starting_money)
-        self.action = ActionLogic(self.player, self.received, self.has, self.region)
-        self.arcade = ArcadeLogic(self.player, self.options.arcade_machine_locations, self.received, self.region)
-        self.artisan = ArtisanLogic(self.player, self.has, self.time)
-        self.gifts = GiftLogic(self.player, self.has)
+        self.received = ReceivedLogicMixin(self.player, self.registry, self.options)
+        self.has = HasLogicMixin(self.player, self.registry, self.options)
+        self.region = RegionLogicMixin(self.player, self.registry, self.options)
+        self.traveling_merchant = TravelingMerchantLogicMixin(self.player, self.registry, self.options)
+        self.time = TimeLogicMixin(self.player, self.registry, self.options)
+        self.season = SeasonLogicMixin(self.player, self.registry, self.options)
+        self.money = MoneyLogicMixin(self.player, self.registry, self.options)
+        self.action = ActionLogicMixin(self.player, self.registry, self.options)
+        self.arcade = ArcadeLogicMixin(self.player, self.registry, self.options)
+        self.artisan = ArtisanLogicMixin(self.player, self.registry, self.options)
+        self.gifts = GiftLogicMixin(self.player, self.registry, self.options)
         tool_option = self.options.tool_progression
         skill_option = self.options.skill_progression
         elevator_option = self.options.elevator_progression
@@ -113,9 +114,8 @@ class StardewLogic(BaseLogic, LogicRegistry):
         special_order_locations = self.options.special_order_locations
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
-        self.buildings = BuildingLogic(self.player, self.options.building_progression, self.received, self.has, self.region, self.money)
-        self.shipping = ShippingLogic(self.player, exclude_ginger_island, special_order_locations, mods_option, self.has, self.region,
-                                      self.buildings)
+        self.buildings = BuildingLogicMixin(self.player, self.registry, self.options)
+        self.shipping = ShippingLogicMixin(self.player, self.registry, self.options)
         self.relationship = RelationshipLogic(self.player, friendsanity_option, heart_size_option,
                                               self.received, self.has, self.region, self.time, self.season, self.gifts, self.buildings, mods_option)
         self.museum = MuseumLogic(self.player, self.options.museumsanity, self.received, self.has, self.region, self.action)
@@ -146,7 +146,8 @@ class StardewLogic(BaseLogic, LogicRegistry):
         self.crafting = CraftingLogic(self.player, self.options.craftsanity, exclude_ginger_island, mods_option,
                                       self.options.festival_locations, special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
-        self.mod = ModLogic(self.player, self.registry, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action,
+        self.mod = ModLogic(self.player, self.registry, self.options, skill_option, elevator_option, mods_option, self.received, self.has, self.region,
+                            self.action,
                             self.artisan,
                             self.season, self.money, self.relationship, self.museum, self.buildings, self.wallet, self.combat, self.tool, self.skill,
                             self.fishing,
