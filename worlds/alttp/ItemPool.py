@@ -421,7 +421,7 @@ def generate_itempool(world):
         elif multiworld.shuffle_capacity_upgrades[player] == "on":
             new_items += ["Bomb Upgrade (+5)"] * 6
             new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
-        if multiworld.bombless_start[player]:
+        if multiworld.shuffle_capacity_upgrades[player] != "on_combined" and multiworld.bombless_start[player]:
             new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
 
         if multiworld.shuffle_capacity_upgrades[player] and not multiworld.retro_bow[player]:
