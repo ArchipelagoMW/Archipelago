@@ -1,21 +1,18 @@
 from functools import cached_property
 
-from .museum_logic import MuseumLogic
+from .base_logic import BaseLogic
 from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule
 from ..strings.wallet_item_names import Wallet
 
 
-class WalletLogic:
-    player: int
-    received = ReceivedLogicMixin
-    museum: MuseumLogic
+class WalletLogicMixin(BaseLogic):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.wallet = WalletLogic(*args, **kwargs)
 
-    def __init__(self, player: int, received: ReceivedLogicMixin, museum: MuseumLogic):
-        self.player = player
-        self.received = received
-        self.museum = museum
 
+class WalletLogic(ReceivedLogicMixin):
     @cached_property
     def can_speak_dwarf(self) -> StardewRule:
         return self.received(Wallet.dwarvish_translation_guide)

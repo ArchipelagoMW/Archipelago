@@ -29,7 +29,7 @@ from ...logic.season_logic import SeasonLogicMixin
 from ...logic.skill_logic import SkillLogic
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogic
-from ...logic.wallet_logic import WalletLogic
+from ...logic.wallet_logic import WalletLogicMixin
 from ...options import SkillProgression, ElevatorProgression, Mods
 
 
@@ -50,7 +50,7 @@ class ModLogic(BaseLogic):
                  has: HasLogicMixin, region: RegionLogicMixin,
                  action: ActionLogicMixin, artisan: ArtisanLogicMixin, season: SeasonLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogicMixin,
                 museum: MuseumLogic, building: BuildingLogicMixin,
-                 wallet: WalletLogic,
+                 wallet: WalletLogicMixin,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
                  time: TimeLogicMixin, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
         super().__init__(player, registry, options)

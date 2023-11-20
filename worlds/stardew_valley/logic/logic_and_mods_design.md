@@ -1,0 +1,33 @@
+# Logic mixin
+
+Mixins are used to split the logic building methods in multiple classes, so it's more scoped and easier to extend specific methods.
+
+One single instance of Logic is necessary so mods can change the logics.
+
+Creating the rules for actual items has to be outside the `logic` instance. Once the vanilla logic builder is created, mods will be able to replace the logic
+implementations by their own modified version. For instance, the `combat` logic can be replaced by the magic mod to extends its methods to add spells in the
+combat logic.
+
+# Content pack (future)
+
+Instead of using modules to hold the data, and have each mods adding their data to existing content, each mod data should be in a `ContentPack`. Vanilla, Ginger
+Island, or anything that could be disabled would be in a content pack as well.
+
+Eventually, Vanilla content could even be disabled (a split would be required for items that are necessary to all content packs) to have a Ginger Island only
+play through created without the heavy vanilla logic computation.
+
+## Unpacking
+
+Steps to unpack content follows the same steps has the world initialisation. Content pack however need to be unpacked in a specific order, based on their
+dependencies. Vanilla would always be first, then anything that depends only on Vanilla, etc.
+
+1. In `generate_early`, content packs are selected. The logic builders are created and content packs are unpacked so all their content is in the proper
+   item/npc/weapon lists.
+    - `ContentPack` instances are shared across players. However, some mods need to modify content of other packs. In that case, an instance of the content is
+      created specifically for that player (For instance, SVE changes the Wizard). This probably does not happen enough to require sharing those instances. If
+      necessary, a FlyWeight design pattern could be used.
+2. In `create_regions`, AP regions and entrances are unpacked, and randomized if needed.
+3. In `create_items`, AP items are unpacked, and randomized.
+4. In `set_rules`, the rules are applied to the AP entrances and locations. Each content pack have to apply the proper rules for their entrances and locations.
+    - (future) To begin this step, sphere 0 could be simplified instantly as sphere 0 regions and items are already known.
+5. Nothing to do in `generate_basic`. 

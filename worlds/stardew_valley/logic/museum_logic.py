@@ -2,32 +2,23 @@ from typing import List
 
 from Utils import cache_self1
 from .action_logic import ActionLogicMixin
+from .base_logic import BaseLogic
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
-from ..options import Museumsanity
 from ..stardew_rule import StardewRule, And, False_, Count
 from ..strings.region_names import Region
 
 
-class MuseumLogic:
-    player: int
-    museum_option: Museumsanity
-    received = ReceivedLogicMixin
-    has: HasLogicMixin
-    region: RegionLogicMixin
-    action: ActionLogicMixin
+class MuseumLogicMixin(BaseLogic):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.museum = MuseumLogic(*args, **kwargs)
 
-    def __init__(self, player: int, museum_option: Museumsanity, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 action: ActionLogicMixin):
-        self.player = player
-        self.museum_option = museum_option
-        self.received = received
-        self.has = has
-        self.region = region
-        self.action = action
+
+class MuseumLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, ActionLogicMixin):
 
     def can_donate_museum_items(self, number: int) -> StardewRule:
         return self.region.can_reach(Region.museum) & self.can_find_museum_items(number)
@@ -70,7 +61,7 @@ class MuseumLogic:
     def can_complete_museum(self) -> StardewRule:
         rules = [self.region.can_reach(Region.museum)]
 
-        if self.museum_option != options.Museumsanity.option_none:
+        if self.options.museumsanity != options.Museumsanity.option_none:
             rules.append(self.received("Traveling Merchant Metal Detector", 4))
 
         for donation in all_museum_items:

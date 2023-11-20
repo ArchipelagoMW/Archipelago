@@ -21,7 +21,7 @@ from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogic
-from .museum_logic import MuseumLogic
+from .museum_logic import MuseumLogicMixin
 from .pet_logic import PetLogic
 from .quest_logic import QuestLogic
 from .received_logic import ReceivedLogicMixin
@@ -34,7 +34,7 @@ from .special_order_logic import SpecialOrderLogic
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogic
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
-from .wallet_logic import WalletLogic
+from .wallet_logic import WalletLogicMixin
 from ..data import all_fish, all_purchasable_seeds, all_crops
 from ..data.craftable_data import all_crafting_recipes
 from ..data.crops_data import crops_by_name
@@ -117,8 +117,8 @@ class StardewLogic(BaseLogic, LogicRegistry):
         self.buildings = BuildingLogicMixin(self.player, self.registry, self.options).buildings
         self.shipping = ShippingLogicMixin(self.player, self.registry, self.options).shipping
         self.relationship = RelationshipLogicMixin(self.player, self.registry, self.options).relationship
-        self.museum = MuseumLogic(self.player, self.options.museumsanity, self.received, self.has, self.region, self.action)
-        self.wallet = WalletLogic(self.player, self.received, self.museum)
+        self.museum = MuseumLogicMixin(self.player, self.registry, self.options).museum
+        self.wallet = WalletLogicMixin(self.player, self.registry, self.options).wallet
         self.combat = CombatLogic(self.player, self.received, self.region)
         self.monster = MonsterLogic(self.player, self.region, self.time, self.combat)
         self.tool = ToolLogic(self.player, tool_option, self.received, self.has, self.region, self.season, self.money)

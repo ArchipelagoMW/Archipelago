@@ -15,7 +15,7 @@ from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogic
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogic
-from .wallet_logic import WalletLogic
+from .wallet_logic import WalletLogicMixin
 from ..options import Mods
 from ..stardew_rule import StardewRule, Has, True_
 from ..strings.artisan_good_names import ArtisanGood
@@ -52,14 +52,14 @@ class QuestLogic:
     combat: CombatLogic
     season: SeasonLogicMixin
     skill: SkillLogic
-    wallet: WalletLogic
+    wallet: WalletLogicMixin
     quest_rules: Dict[str, StardewRule]
 
     def __init__(self, player: int, skill: SkillLogic, received: ReceivedLogicMixin, has: HasLogicMixin, mine: MineLogic, region: RegionLogicMixin,
                  action: ActionLogicMixin,
                  relationship: RelationshipLogicMixin, building: BuildingLogicMixin, time: TimeLogicMixin, tool: ToolLogic, fishing: FishingLogic,
                  cooking: CookingLogic,
-                 money: MoneyLogicMixin, combat: CombatLogic, season: SeasonLogicMixin, wallet: WalletLogic, mods_option: Mods):
+                 money: MoneyLogicMixin, combat: CombatLogic, season: SeasonLogicMixin, wallet: WalletLogicMixin, mods_option: Mods):
         self.player = player
         self.skill = skill
         self.received = received
