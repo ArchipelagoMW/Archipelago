@@ -5,18 +5,23 @@ from .data.location_data import location_data
 
 from .data_funcs import game_id_to_items, items_with_tag
 
-from .enums import ZorkGrandInquisitorItems, ZorkGrandInquisitorLocations, ZorkGrandInquisitorTags
+from .enums import (
+    ZorkGrandInquisitorGoals,
+    ZorkGrandInquisitorItems,
+    ZorkGrandInquisitorLocations,
+    ZorkGrandInquisitorTags,
+)
 
 from .game_state_manager import GameStateManager
 
 
 ### PROBLEMS / TODO
 # Need Repro: Dying in Old Scratch caused Plants are mans best friend to be completed and game crash
+#   Maybe only when done on the surface without dalboz? Not reproduced in DML
+
+# 2 Ropes sometimes... after messing with sword + rope? Minor?
 
 # Detect when the game is not running and prompt to /zork again
-
-# Alternate Goals: 3 artifacts placed, full spell book, totem hunt
-#   Same Logic for all, just different victory conditions
 
 class GameController:
     def __init__(self, logger=None):
@@ -42,7 +47,7 @@ class GameController:
 
         self.goal_completed = False
 
-        self.option_skip_old_scratch_minigame = False
+        self.option_goal = None
         self.option_deathsanity = False
 
     def log(self, message):
@@ -178,25 +183,25 @@ class GameController:
 
         # Brog's Time Tunnel Items
         if self._player_has(ZorkGrandInquisitorItems.REVEALED_BROGS_TIME_TUNNEL_ITEMS):
-            self._write_game_state_value_for(15065, 1)
-            self._write_game_state_value_for(15088, 1)
-            self._write_game_state_value_for(2628, 4)
-        else:
             self._write_game_state_value_for(15065, 0)
             self._write_game_state_value_for(15088, 0)
             self._write_game_state_value_for(2628, 0)
+        else:
+            self._write_game_state_value_for(15065, 1)
+            self._write_game_state_value_for(15088, 1)
+            self._write_game_state_value_for(2628, 4)
 
         # Griff's Time Tunnel Items
         if self._player_has(ZorkGrandInquisitorItems.REVEALED_GRIFFS_TIME_TUNNEL_ITEMS):
-            self._write_game_state_value_for(1340, 1)
-            self._write_game_state_value_for(1341, 1)
-            self._write_game_state_value_for(1477, 1)
-            self._write_game_state_value_for(1814, 1)
-        else:
             self._write_game_state_value_for(1340, 0)
             self._write_game_state_value_for(1341, 0)
             self._write_game_state_value_for(1477, 0)
             self._write_game_state_value_for(1814, 0)
+        else:
+            self._write_game_state_value_for(1340, 1)
+            self._write_game_state_value_for(1341, 1)
+            self._write_game_state_value_for(1477, 1)
+            self._write_game_state_value_for(1814, 1)
 
         # Lucy's Time Tunnel Items
         if self._player_has(ZorkGrandInquisitorItems.REVEALED_LUCYS_TIME_TUNNEL_ITEMS):
@@ -208,10 +213,9 @@ class GameController:
         if self._read_game_state_value_for(4115) == 1:
             self._write_game_state_value_for(4114, 1)
 
-        # Skip Old Scratch Minigame
-        if self.option_skip_old_scratch_minigame:
-            self._write_game_state_value_for(7833, 1)
-            self._write_game_state_value_for(7865, 41)
+        # Lower Volume of the Bees (SO LOUD!)
+        if self._read_game_state_value_for(19294) > 0:
+            self._write_game_state_value_for(19294, 35)
 
     def _check_for_completed_locations(self):
         for location, data in location_data.items():
@@ -256,13 +260,14 @@ class GameController:
                 continue
 
             self.received_items.add(item)
-
         # Manage Inventory Items
         if self._player_is_afgncaap():
             self.available_inventory_slots = self._determine_available_inventory_slots()
 
             received_inventory_items = self.received_items & self.possible_inventory_items
-            received_inventory_items = self._filter_received_inventory_items(received_inventory_items)
+            received_inventory_items = self._filter_received_inventory_items(
+                received_inventory_items
+            )
 
             game_state_inventory_items = self._determine_game_state_inventory()
 
@@ -275,21 +280,20 @@ class GameController:
             for item in inventory_items_to_remove:
                 self._remove_from_inventory(item)
 
-        # Remove Duplicate Inventory Items on Cursor - Unstable?
-        inventory_item_values = set()
-
-        for i in range(151, 171):
-            inventory_item_values.add(self._read_game_state_value_for(i))
-
-        if self._read_game_state_value_for(9) in inventory_item_values:
-            self._write_game_state_value_for(9, 0)
-
     def _apply_conditional_teleports(self):
-        if self._player_is_at("uw1k") and self._read_game_state_value_for(10304) == 1:
+        if self._player_is_at("uw1k") and self._read_game_state_value_for(13938) == 0:
             self.game_state_manager.set_game_location("pc10", 250)
 
+        if self._player_is_at("ej10"):
+            self.game_state_manager.set_game_location("uc10", 1200)
+
     def _check_for_victory(self):
-        self.goal_completed = self._read_game_state_value_for(5582) == 1
+        if self.option_goal == ZorkGrandInquisitorGoals.THREE_ARTIFACTS:
+            coconut_is_placed = self._read_game_state_value_for(2200) == 1
+            cube_is_placed = self._read_game_state_value_for(2322) == 1
+            skull_is_placed = self._read_game_state_value_for(2321) == 1
+
+            self.goal_completed = coconut_is_placed and cube_is_placed and skull_is_placed
 
     def _determine_game_state_inventory(self):
         game_state_inventory = set()
@@ -339,6 +343,9 @@ class GameController:
         return game_state_inventory
 
     def _add_to_inventory(self, item):
+        if item == ZorkGrandInquisitorItems.POUCH_OF_ZORKMIDS:
+            return None
+
         data = item_data[item]
 
         if ZorkGrandInquisitorTags.INVENTORY_ITEM in data.tags:
@@ -350,6 +357,9 @@ class GameController:
             self._write_game_state_value_for(data.game_state_keys[0], 1)
 
     def _remove_from_inventory(self, item):
+        if item == ZorkGrandInquisitorItems.POUCH_OF_ZORKMIDS:
+            return None
+
         data = item_data[item]
 
         if ZorkGrandInquisitorTags.INVENTORY_ITEM in data.tags:
@@ -413,19 +423,23 @@ class GameController:
             elif item == ZorkGrandInquisitorItems.HUNGUS_LARD:
                 if self._read_game_state_value_for(4870) == 1:
                     to_filter_inventory_items.add(item)
-                elif self._read_game_state_value_for(4244) == 1:
+                elif self._read_game_state_value_for(4309) == 0:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.JAR_OF_HOTBUGS:
                 if self._read_game_state_value_for(4750) == 1:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.LANTERN:
-                if self._read_game_state_value_for(5221) == 1:
+                if self._read_game_state_value_for(10477) == 1:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(5221) == 1:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.LARGE_TELEGRAPH_HAMMER:
                 if self._read_game_state_value_for(9491) == 3:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.MEAD_LIGHT:
                 if self._read_game_state_value_for(17620) > 0:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(4034) == 1:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.MOSS_OF_MAREILON:
                 if self._read_game_state_value_for(4763) == 1:
@@ -457,18 +471,23 @@ class GameController:
                     to_filter_inventory_items.add(item)
                 elif 111 in inventory_item_values:
                     to_filter_inventory_items.add(item)
-                elif self._read_game_state_value_for(10304) == 1:
+                elif (
+                    self._read_game_state_value_for(10304) == 1
+                    and not self._read_game_state_value_for(13938) == 1
+                ):
                     to_filter_inventory_items.add(item)
-                elif self._read_game_state_value_for(15150) == 1:
+                elif self._read_game_state_value_for(15150) == 83:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.SNAPDRAGON:
                 if self._read_game_state_value_for(4199) == 1:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.SUBWAY_TOKEN:
-                if self._read_game_state_value_for(13165) == 1:
+                if self._read_game_state_value_for(13163) == 2:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.ZIMDOR_SCROLL:
                 if self._read_game_state_value_for(17620) == 3:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(4034) == 1:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.ZORK_ROCKS:
                 if self._read_game_state_value_for(12486) == 1:
@@ -478,6 +497,8 @@ class GameController:
                 elif 52 in inventory_item_values:
                     to_filter_inventory_items.add(item)
                 elif self._read_game_state_value_for(11769) == 1:
+                    to_filter_inventory_items.add(item)
+                elif self._read_game_state_value_for(11840) == 1:
                     to_filter_inventory_items.add(item)
 
         return received_inventory_items - to_filter_inventory_items

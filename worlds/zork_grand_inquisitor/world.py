@@ -152,8 +152,8 @@ class ZorkGrandInquisitorWorld(World):
 
     def fill_slot_data(self):
         return self.options.as_dict(
+            "goal",
             "early_rope_and_lantern",
-            "skip_old_scratch_minigame",
             "deathsanity",
         )
 

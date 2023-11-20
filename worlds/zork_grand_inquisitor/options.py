@@ -1,6 +1,18 @@
 from dataclasses import dataclass
 
-from Options import Toggle, DefaultOnToggle, PerGameCommonOptions
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Toggle
+
+
+class Goal(Choice):
+    """
+    Determines the victory condition
+
+    Three Artifacts: Retrieve the three artifacts of magic and place them in the walking castle
+    """
+    display_name = "Goal"
+
+    default = 0
+    option_three_artifacts = 0
 
 
 class EarlyRopeAndLantern(DefaultOnToggle):
@@ -9,21 +21,14 @@ class EarlyRopeAndLantern(DefaultOnToggle):
     display_name = "Early Rope & Lantern"
 
 
-class SkipOldScratchMinigame(Toggle):
-    """If true, allows the player to simply click on the winning square on the Old Scratch card instead of having to
-    find the correct path"""
-
-    display_name = "Skip Old Scratch Minigame"
-
-
 class Deathsanity(Toggle):
-    """If true, adds 17 player death locations to the world"""
+    """If true, adds 16 player death locations to the world"""
 
     display_name = "Deathsanity"
 
 
 @dataclass
 class ZorkGrandInquisitorOptions(PerGameCommonOptions):
+    goal: Goal
     early_rope_and_lantern: EarlyRopeAndLantern
-    skip_old_scratch_minigame: SkipOldScratchMinigame
     deathsanity: Deathsanity

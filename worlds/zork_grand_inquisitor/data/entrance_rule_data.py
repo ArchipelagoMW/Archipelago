@@ -104,10 +104,6 @@ entrance_rule_data: Dict[
     ),
     (ZorkGrandInquisitorRegions.DRAGON_ARCHIPELAGO, ZorkGrandInquisitorRegions.ENDGAME): (
         (
-            ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,
-            ZorkGrandInquisitorItems.SPELL_VOXAM,
-            ZorkGrandInquisitorItems.SPELL_REZROV,
-            ZorkGrandInquisitorItems.SPELL_IGRAM,
             ZorkGrandInquisitorRegions.PORT_FOOZLE_PAST,
             ZorkGrandInquisitorRegions.WHITE_HOUSE,
         ),
@@ -195,7 +191,7 @@ entrance_rule_data: Dict[
         (ZorkGrandInquisitorItems.SUBWAY_DESTINATION_MONASTERY,),
     ),
     (ZorkGrandInquisitorRegions.MENU, ZorkGrandInquisitorRegions.PORT_FOOZLE): None,
-    (ZorkGrandInquisitorRegions.MONASTERY, ZorkGrandInquisitorRegions.HADES): None,
+    (ZorkGrandInquisitorRegions.MONASTERY, ZorkGrandInquisitorRegions.HADES_SHORE): None,
     (ZorkGrandInquisitorRegions.MONASTERY, ZorkGrandInquisitorRegions.PORT_FOOZLE_PAST): (
         (
             ZorkGrandInquisitorItems.LARGE_TELEGRAPH_HAMMER,
@@ -218,10 +214,6 @@ entrance_rule_data: Dict[
     (ZorkGrandInquisitorRegions.PORT_FOOZLE_JACKS_SHOP, ZorkGrandInquisitorRegions.PORT_FOOZLE): None,
     (ZorkGrandInquisitorRegions.PORT_FOOZLE_PAST, ZorkGrandInquisitorRegions.ENDGAME): (
         (
-            ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,
-            ZorkGrandInquisitorItems.SPELL_VOXAM,
-            ZorkGrandInquisitorItems.SPELL_REZROV,
-            ZorkGrandInquisitorItems.SPELL_IGRAM,
             ZorkGrandInquisitorRegions.DRAGON_ARCHIPELAGO,
             ZorkGrandInquisitorRegions.WHITE_HOUSE,
         ),
@@ -306,10 +298,6 @@ entrance_rule_data: Dict[
     (ZorkGrandInquisitorRegions.WHITE_HOUSE, ZorkGrandInquisitorRegions.DM_LAIR_INTERIOR): None,
     (ZorkGrandInquisitorRegions.WHITE_HOUSE, ZorkGrandInquisitorRegions.ENDGAME): (
         (
-            ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,
-            ZorkGrandInquisitorItems.SPELL_VOXAM,
-            ZorkGrandInquisitorItems.SPELL_REZROV,
-            ZorkGrandInquisitorItems.SPELL_IGRAM,
             ZorkGrandInquisitorRegions.DRAGON_ARCHIPELAGO,
             ZorkGrandInquisitorRegions.PORT_FOOZLE_PAST,
         ),

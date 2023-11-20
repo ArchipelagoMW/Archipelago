@@ -94,7 +94,7 @@ class GameStateManager:
             if offset_value > 1:
                 if self.process.read_int(offset_value + 0x4) == key:
                     break
-            else:
+            elif offset_value == 0:
                 is_new_offset = True
                 break
 

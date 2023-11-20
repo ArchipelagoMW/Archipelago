@@ -4,6 +4,7 @@ from .data.location_data import location_data
 
 from .enums import (
     ZorkGrandInquisitorEvents,
+    ZorkGrandInquisitorGoals,
     ZorkGrandInquisitorItems,
     ZorkGrandInquisitorLocations,
     ZorkGrandInquisitorRegions,
@@ -21,6 +22,10 @@ def location_names_to_id():
         for location, data in location_data.items()
         if data.archipelago_id is not None
     }
+
+
+def id_to_goals():
+    return {goal.value: goal for goal in ZorkGrandInquisitorGoals}
 
 
 def id_to_items():

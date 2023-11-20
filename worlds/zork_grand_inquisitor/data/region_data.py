@@ -88,7 +88,7 @@ region_data: Dict[ZorkGrandInquisitorRegions, ZorkGrandInquisitorRegionData] = {
     ),
     ZorkGrandInquisitorRegions.MONASTERY: ZorkGrandInquisitorRegionData(
         exits=(
-            ZorkGrandInquisitorRegions.HADES,
+            ZorkGrandInquisitorRegions.HADES_SHORE,
             ZorkGrandInquisitorRegions.PORT_FOOZLE_PAST,
             ZorkGrandInquisitorRegions.SUBWAY_MONASTERY,
         )

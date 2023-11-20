@@ -3,7 +3,7 @@ import asyncio
 import CommonClient
 import Utils
 
-from .data_funcs import item_names_to_id, location_names_to_id, id_to_items, id_to_locations
+from .data_funcs import item_names_to_id, location_names_to_id, id_to_items, id_to_locations, id_to_goals
 from .game_controller import GameController
 
 
@@ -24,9 +24,6 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
     command_processor = ZorkGrandInquisitorCommandProcessor
     items_handling = 0b111
     want_slot_data = True
-
-    option_skip_old_scratch_minigame = False
-    option_deathsanity = False
 
     item_name_to_id = item_names_to_id()
     location_name_to_id = location_names_to_id()
@@ -119,7 +116,7 @@ async def controller(ctx):
 async def process_package(ctx: ZorkGrandInquisitorContext, cmd, _args):
     if cmd == "Connected":
         # Slot Data - Options
-        ctx.game_controller.option_skip_old_scratch_minigame = _args["slot_data"]["skip_old_scratch_minigame"] == 1
+        ctx.game_controller.option_goal = id_to_goals()[_args["slot_data"]["goal"]]
         ctx.game_controller.option_deathsanity = _args["slot_data"]["deathsanity"] == 1
 
 

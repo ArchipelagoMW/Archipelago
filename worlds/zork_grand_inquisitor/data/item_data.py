@@ -27,7 +27,7 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(23,),
         archipelago_id=ITEM_OFFSET + 1,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM,),
     ),
     ZorkGrandInquisitorItems.HUNGUS_LARD: ZorkGrandInquisitorItemData(
         game_state_keys=(55,),
@@ -45,13 +45,13 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(4,),
         archipelago_id=ITEM_OFFSET + 4,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM,),
     ),
     ZorkGrandInquisitorItems.LARGE_TELEGRAPH_HAMMER: ZorkGrandInquisitorItemData(
         game_state_keys=(88,),
         archipelago_id=ITEM_OFFSET + 5,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM,),
     ),
     ZorkGrandInquisitorItems.LETTER_OPENER: ZorkGrandInquisitorItemData(
         game_state_keys=(64,),
@@ -63,7 +63,7 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(2,),
         archipelago_id=ITEM_OFFSET + 7,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM,),
     ),
     ZorkGrandInquisitorItems.MOSS_OF_MAREILON: ZorkGrandInquisitorItemData(
         game_state_keys=(57,),
@@ -117,7 +117,7 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(83,),
         archipelago_id=ITEM_OFFSET + 16,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM,),
     ),
     ZorkGrandInquisitorItems.SHOVEL: ZorkGrandInquisitorItemData(
         game_state_keys=(49,),
@@ -129,13 +129,13 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(50,),
         archipelago_id=ITEM_OFFSET + 18,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM,),
     ),
     ZorkGrandInquisitorItems.STUDENT_ID: ZorkGrandInquisitorItemData(
         game_state_keys=(39,),
         archipelago_id=ITEM_OFFSET + 19,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM,),
     ),
     ZorkGrandInquisitorItems.SUBWAY_TOKEN: ZorkGrandInquisitorItemData(
         game_state_keys=(20,),
@@ -147,7 +147,7 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(25,),
         archipelago_id=ITEM_OFFSET + 21,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.INVENTORY_ITEM,),
     ),
     ZorkGrandInquisitorItems.ZORK_ROCKS: ZorkGrandInquisitorItemData(
         game_state_keys=(37,),
@@ -160,19 +160,19 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(15065, 15088, 2628),
         archipelago_id=ITEM_OFFSET + 100 + 0,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.REVEALED, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.REVEALED,),
     ),
     ZorkGrandInquisitorItems.REVEALED_GRIFFS_TIME_TUNNEL_ITEMS: ZorkGrandInquisitorItemData(
         game_state_keys=(1340, 1341, 1477, 1814),
         archipelago_id=ITEM_OFFSET + 100 + 1,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.REVEALED, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.REVEALED,),
     ),
     ZorkGrandInquisitorItems.REVEALED_LUCYS_TIME_TUNNEL_ITEMS: ZorkGrandInquisitorItemData(
         game_state_keys=(15405,),
         archipelago_id=ITEM_OFFSET + 100 + 2,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.REVEALED, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.REVEALED,),
     ),
     # Unlocked
     ZorkGrandInquisitorItems.UNLOCKED_BLANK_SCROLL_BOX_ACCESS: ZorkGrandInquisitorItemData(
@@ -186,19 +186,19 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(202,),
         archipelago_id=ITEM_OFFSET + 300 + 0,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SPELL, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     ZorkGrandInquisitorItems.SPELL_GOLGATEM: ZorkGrandInquisitorItemData(
         game_state_keys=(192,),
         archipelago_id=ITEM_OFFSET + 300 + 1,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SPELL, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     ZorkGrandInquisitorItems.SPELL_IGRAM: ZorkGrandInquisitorItemData(
         game_state_keys=(199,),
         archipelago_id=ITEM_OFFSET + 300 + 2,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SPELL, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     ZorkGrandInquisitorItems.SPELL_KENDALL: ZorkGrandInquisitorItemData(
         game_state_keys=(196,),
@@ -210,7 +210,7 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(197,),
         archipelago_id=ITEM_OFFSET + 300 + 4,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SPELL, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     ZorkGrandInquisitorItems.SPELL_OBIDIL: ZorkGrandInquisitorItemData(
         game_state_keys=(193,),
@@ -222,32 +222,32 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(195,),
         archipelago_id=ITEM_OFFSET + 300 + 6,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SPELL, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     ZorkGrandInquisitorItems.SPELL_THROCK: ZorkGrandInquisitorItemData(
         game_state_keys=(200,),
         archipelago_id=ITEM_OFFSET + 300 + 7,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SPELL, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     ZorkGrandInquisitorItems.SPELL_VOXAM: ZorkGrandInquisitorItemData(
         game_state_keys=(191,),
         archipelago_id=ITEM_OFFSET + 300 + 8,
-        classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SPELL, ZorkGrandInquisitorTags.GO_MODE),
+        classification=ItemClassification.filler,
+        tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     ZorkGrandInquisitorItems.SPELL_YASTARD: ZorkGrandInquisitorItemData(
         game_state_keys=(198,),
         archipelago_id=ITEM_OFFSET + 300 + 9,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SPELL, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     # Subway Destinations
     ZorkGrandInquisitorItems.SUBWAY_DESTINATION_FLOOD_CONTROL_DAM: ZorkGrandInquisitorItemData(
         game_state_keys=None,  # This is more complicated. Will be handled in GameController
         archipelago_id=ITEM_OFFSET + 400 + 0,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.SUBWAY_DESTINATION, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.SUBWAY_DESTINATION,),
     ),
     ZorkGrandInquisitorItems.SUBWAY_DESTINATION_HADES: ZorkGrandInquisitorItemData(
         game_state_keys=None,  # This is more complicated. Will be handled in GameController
@@ -284,32 +284,32 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         game_state_keys=(7148,),
         archipelago_id=ITEM_OFFSET + 500 + 3,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.TELEPORTER_DESTINATION, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.TELEPORTER_DESTINATION,),
     ),
     ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_SPELL_LAB: ZorkGrandInquisitorItemData(
         game_state_keys=(16545,),
         archipelago_id=ITEM_OFFSET + 500 + 4,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.TELEPORTER_DESTINATION, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.TELEPORTER_DESTINATION,),
     ),
     # Totems
     ZorkGrandInquisitorItems.TOTEM_BROG: ZorkGrandInquisitorItemData(
         game_state_keys=(4853,),
         archipelago_id=ITEM_OFFSET + 600 + 0,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.TOTEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.TOTEM,),
     ),
     ZorkGrandInquisitorItems.TOTEM_GRIFF: ZorkGrandInquisitorItemData(
         game_state_keys=(4315,),
         archipelago_id=ITEM_OFFSET + 600 + 1,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.TOTEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.TOTEM,),
     ),
     ZorkGrandInquisitorItems.TOTEM_LUCY: ZorkGrandInquisitorItemData(
         game_state_keys=(5223,),
         archipelago_id=ITEM_OFFSET + 600 + 2,
         classification=ItemClassification.progression,
-        tags=(ZorkGrandInquisitorTags.TOTEM, ZorkGrandInquisitorTags.GO_MODE),
+        tags=(ZorkGrandInquisitorTags.TOTEM,),
     ),
     # Filler
     ZorkGrandInquisitorItems.FILLER_INQUISITION_PROPAGANDA_FLYER: ZorkGrandInquisitorItemData(

@@ -22,6 +22,10 @@ class ZorkGrandInquisitorEvents(enum.Enum):
     ZORK_ROCKS_SUCKABLE = "Event: Zork Rocks Suckable"
 
 
+class ZorkGrandInquisitorGoals(enum.Enum):
+    THREE_ARTIFACTS = 0
+
+
 class ZorkGrandInquisitorItems(enum.Enum):
     FILLER_FROBOZZ_ELECTRIC_GADGET = "Frobozz Electric Gadget"
     FILLER_INQUISITION_PROPAGANDA_FLYER = "Inquisition Propaganda Flyer"
@@ -91,7 +95,6 @@ class ZorkGrandInquisitorLocations(enum.Enum):
     DEATH_ATTACKED_THE_QUELBEES = "Death: Attacked the Quelbees"
     DEATH_CLIMBED_OUT_OF_THE_WELL = "Death: Climbed Out of the Well"
     DEATH_EATEN_BY_A_GRUE = "Death: Eaten by a Grue"
-    DEATH_EATEN_BY_A_GRUE_AGAIN = "Death: Eaten by a Grue... Again"
     DEATH_JUMPED_IN_BOTTOMLESS_PIT = "Death: Jumped in Bottomless Pit"
     DEATH_LOST_GAME_OF_STRIP_GRUE_FIRE_WATER = "Death: Lost Game of Strip Grue, Fire, Water"
     DEATH_LOST_SOUL_TO_OLD_SCRATCH = "Death: Lost Soul to Old Scratch"
@@ -178,7 +181,6 @@ class ZorkGrandInquisitorTags(enum.Enum):
     CORE = "Core"
     DEATHSANITY = "Deathsanity"
     FILLER = "Filler"
-    GO_MODE = "Go Mode"
     INVENTORY_ITEM = "Inventory Item"
     REVEALED = "Revealed"
     SPELL = "Spell"

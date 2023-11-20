@@ -79,7 +79,7 @@ location_data: Dict[
         tags=(ZorkGrandInquisitorTags.CORE,),
     ),
     ZorkGrandInquisitorLocations.MAGIC_FOREVER: ZorkGrandInquisitorLocationData(
-        game_state_trigger=((10304, 1), (5221, 1)),
+        game_state_trigger=(("location", "pc1e"), (10304, 1), (5221, 1)),
         archipelago_id=LOCATION_OFFSET + 6,
         region=ZorkGrandInquisitorRegions.PORT_FOOZLE,
         tags=(ZorkGrandInquisitorTags.CORE,),
@@ -299,7 +299,7 @@ location_data: Dict[
         ),
     ),
     ZorkGrandInquisitorLocations.PLANTS_ARE_MANS_BEST_FRIEND: ZorkGrandInquisitorLocationData(
-        game_state_trigger=((3765, 0), (3766, 0), (3767, 0), (3768, 0)),
+        game_state_trigger=((4224, 8),),
         archipelago_id=LOCATION_OFFSET + 35,
         region=ZorkGrandInquisitorRegions.DM_LAIR,
         tags=(ZorkGrandInquisitorTags.CORE,),
@@ -369,7 +369,7 @@ location_data: Dict[
         tags=(ZorkGrandInquisitorTags.CORE,),
     ),
     ZorkGrandInquisitorLocations.STRIP_GRUE_FIRE_WATER: ZorkGrandInquisitorLocationData(
-        game_state_trigger=((14511, 1), (14524, 1)),
+        game_state_trigger=((14511, 1), (14524, 5)),
         archipelago_id=LOCATION_OFFSET + 44,
         region=ZorkGrandInquisitorRegions.PORT_FOOZLE_PAST,
         tags=(ZorkGrandInquisitorTags.CORE,),
@@ -463,12 +463,6 @@ location_data: Dict[
         game_state_trigger=(("location", "gjde"), (2201, 11)),
         archipelago_id=LOCATION_OFFSET + 100 + 7,
         region=ZorkGrandInquisitorRegions.DRAGON_ARCHIPELAGO,
-        tags=(ZorkGrandInquisitorTags.DEATHSANITY,),
-    ),
-    ZorkGrandInquisitorLocations.DEATH_EATEN_BY_A_GRUE_AGAIN: ZorkGrandInquisitorLocationData(
-        game_state_trigger=(("location", "gjde"), (2201, 2)),
-        archipelago_id=LOCATION_OFFSET + 100 + 8,
-        region=ZorkGrandInquisitorRegions.WHITE_HOUSE,
         tags=(ZorkGrandInquisitorTags.DEATHSANITY,),
     ),
     ZorkGrandInquisitorLocations.DEATH_ZORK_ROCKS_EXPLODED: ZorkGrandInquisitorLocationData(
