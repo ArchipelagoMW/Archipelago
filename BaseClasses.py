@@ -17,7 +17,9 @@ from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Op
 import NetUtils
 import Options
 import Utils
-from EntranceRando import ERType, ERPlacementState
+
+if typing.TYPE_CHECKING:
+    from EntranceRando import ERPlacementState
 
 
 class Group(TypedDict, total=False):
@@ -767,6 +769,9 @@ class CollectionState():
 
 
 class Entrance:
+    class Type(IntEnum):
+        ONE_WAY = 1
+        TWO_WAY = 2
 
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     hide_path: bool = False
@@ -775,13 +780,13 @@ class Entrance:
     parent_region: Optional[Region]
     connected_region: Optional[Region] = None
     er_group: str
-    er_type: ERType
+    er_type: Type
     # LttP specific, TODO: should make a LttPEntrance
     addresses = None
     target = None
 
     def __init__(self, player: int, name: str = '', parent: Region = None,
-                 er_group: str = 'Default', er_type: ERType = ERType.ONE_WAY):
+                 er_group: str = 'Default', er_type: Type = Type.ONE_WAY):
         self.name = name
         self.parent_region = parent
         self.player = player

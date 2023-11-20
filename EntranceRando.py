@@ -1,17 +1,10 @@
 import functools
 import queue
 import random
-from dataclasses import dataclass
-from enum import IntEnum
 from typing import Set, Tuple, List, Dict, Iterable, Callable, Union
 
 from BaseClasses import Region, Entrance, CollectionState
 from worlds.AutoWorld import World
-
-
-class ERType(IntEnum):
-    ONE_WAY = 1
-    TWO_WAY = 2
 
 
 class EntranceLookup:
@@ -44,6 +37,7 @@ class EntranceLookup:
         self.dead_ends = EntranceLookup.GroupLookup()
         self.others = EntranceLookup.GroupLookup()
 
+    # todo - investigate whether this might leak memory (holds references to Entrances)?
     @staticmethod
     @functools.cache
     def _is_dead_end(entrance: Entrance):
@@ -192,7 +186,7 @@ class ERPlacementState:
 
         self._connect_one_way(source_exit, target_entrance)
         # if we're doing coupled randomization place the reverse transition as well.
-        if self.coupled and source_exit.er_type == ERType.TWO_WAY:
+        if self.coupled and source_exit.er_type == Entrance.Type.TWO_WAY:
             # todo - better exceptions here
             for reverse_entrance in source_region.entrances:
                 if reverse_entrance.name == source_exit.name:
