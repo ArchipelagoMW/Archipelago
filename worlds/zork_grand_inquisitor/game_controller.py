@@ -21,6 +21,11 @@ from .game_state_manager import GameStateManager
 
 # 2 Ropes sometimes... after messing with sword + rope? Minor?
 
+# Subway token conditionals are not working properly
+# Still a problem with hungus lard and plug in out states. It disappears after plugging it and taking it ouj
+# Possible to do messy stuff with sword / map that are supposed to disappear after glass breaks. Clicking fast on them
+# Map needs duplication prevention
+
 # Detect when the game is not running and prompt to /zork again
 
 class GameController:
@@ -75,7 +80,7 @@ class GameController:
             self._check_for_victory()
 
     def _apply_permanent_game_state(self):
-        self._write_game_state_value_for(10934, 1)  # Noose Taken
+        self._write_game_state_value_for(10934, 1)  # Rope Taken
         self._write_game_state_value_for(10418, 1)  # Mead Light Taken
         self._write_game_state_value_for(10275, 0)  # Lantern in Crate
         self._write_game_state_value_for(13929, 1)  # Great Underground Door Open
@@ -209,13 +214,14 @@ class GameController:
         else:
             self._write_game_state_value_for(15405, 0)
 
+        # Sword and Map Taken After Glass Broken
+        if self._read_game_state_value_for(12931) == 1:
+            self._write_game_state_value_for(12933, 1)
+            self._write_game_state_value_for(12932, 1)
+
         # Snapdragon Taken After Prozorked
         if self._read_game_state_value_for(4115) == 1:
             self._write_game_state_value_for(4114, 1)
-
-        # Lower Volume of the Bees (SO LOUD!)
-        if self._read_game_state_value_for(19294) > 0:
-            self._write_game_state_value_for(19294, 35)
 
     def _check_for_completed_locations(self):
         for location, data in location_data.items():
@@ -423,7 +429,7 @@ class GameController:
             elif item == ZorkGrandInquisitorItems.HUNGUS_LARD:
                 if self._read_game_state_value_for(4870) == 1:
                     to_filter_inventory_items.add(item)
-                elif self._read_game_state_value_for(4309) == 0:
+                elif self._read_game_state_value_for(4309) == 1:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.JAR_OF_HOTBUGS:
                 if self._read_game_state_value_for(4750) == 1:
@@ -481,8 +487,18 @@ class GameController:
             elif item == ZorkGrandInquisitorItems.SNAPDRAGON:
                 if self._read_game_state_value_for(4199) == 1:
                     to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.STUDENT_ID:
+                if self._read_game_state_value_for(11838) == 1:
+                    to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.SUBWAY_TOKEN:
                 if self._read_game_state_value_for(13163) == 2:
+                    to_filter_inventory_items.add(item)
+            elif item == ZorkGrandInquisitorItems.SWORD:
+                if 22 in inventory_item_values:
+                    to_filter_inventory_items.add(item)
+                elif 100 in inventory_item_values:
+                    to_filter_inventory_items.add(item)
+                elif 111 in inventory_item_values:
                     to_filter_inventory_items.add(item)
             elif item == ZorkGrandInquisitorItems.ZIMDOR_SCROLL:
                 if self._read_game_state_value_for(17620) == 3:

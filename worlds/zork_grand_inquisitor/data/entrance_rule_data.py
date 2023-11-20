@@ -24,29 +24,29 @@ entrance_rule_data: Dict[
     ],
 ] = {
     (ZorkGrandInquisitorRegions.CROSSROADS, ZorkGrandInquisitorRegions.DM_LAIR): (
-        (ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,),
+        (ZorkGrandInquisitorItems.SWORD,),
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_DM_LAIR,
         ),
     ),
     (ZorkGrandInquisitorRegions.CROSSROADS, ZorkGrandInquisitorRegions.GUE_TECH): (
         (ZorkGrandInquisitorItems.SPELL_REZROV,),
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_GUE_TECH,
         ),
     ),
     (ZorkGrandInquisitorRegions.CROSSROADS, ZorkGrandInquisitorRegions.HADES_SHORE): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_HADES,
         ),
     ),
     (ZorkGrandInquisitorRegions.CROSSROADS, ZorkGrandInquisitorRegions.PORT_FOOZLE): None,
     (ZorkGrandInquisitorRegions.CROSSROADS, ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_SPELL_LAB,
         ),
     ),
@@ -55,7 +55,7 @@ entrance_rule_data: Dict[
     ),
     (ZorkGrandInquisitorRegions.CROSSROADS, ZorkGrandInquisitorRegions.SUBWAY_MONASTERY): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_MONASTERY,
         ),
     ),
@@ -68,25 +68,25 @@ entrance_rule_data: Dict[
     ),
     (ZorkGrandInquisitorRegions.DM_LAIR, ZorkGrandInquisitorRegions.GUE_TECH): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_GUE_TECH,
         ),
     ),
     (ZorkGrandInquisitorRegions.DM_LAIR, ZorkGrandInquisitorRegions.HADES_SHORE): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_HADES,
         ),
     ),
     (ZorkGrandInquisitorRegions.DM_LAIR, ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_SPELL_LAB,
         ),
     ),
     (ZorkGrandInquisitorRegions.DM_LAIR, ZorkGrandInquisitorRegions.SUBWAY_MONASTERY): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_MONASTERY,
         ),
     ),
@@ -112,7 +112,7 @@ entrance_rule_data: Dict[
     (ZorkGrandInquisitorRegions.GUE_TECH, ZorkGrandInquisitorRegions.CROSSROADS): None,
     (ZorkGrandInquisitorRegions.GUE_TECH, ZorkGrandInquisitorRegions.DM_LAIR): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_DM_LAIR,
         ),
     ),
@@ -121,19 +121,19 @@ entrance_rule_data: Dict[
     ),
     (ZorkGrandInquisitorRegions.GUE_TECH, ZorkGrandInquisitorRegions.HADES_SHORE): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_HADES,
         ),
     ),
     (ZorkGrandInquisitorRegions.GUE_TECH, ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_SPELL_LAB,
         ),
     ),
     (ZorkGrandInquisitorRegions.GUE_TECH, ZorkGrandInquisitorRegions.SUBWAY_MONASTERY): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_MONASTERY,
         ),
     ),
@@ -160,17 +160,17 @@ entrance_rule_data: Dict[
     ),
     (ZorkGrandInquisitorRegions.HADES_BEYOND_GATES, ZorkGrandInquisitorRegions.HADES): None,
     (ZorkGrandInquisitorRegions.HADES_SHORE, ZorkGrandInquisitorRegions.CROSSROADS): (
-        (ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,),
+        (ZorkGrandInquisitorItems.MAP,),
     ),
     (ZorkGrandInquisitorRegions.HADES_SHORE, ZorkGrandInquisitorRegions.DM_LAIR): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_DM_LAIR,
         ),
     ),
     (ZorkGrandInquisitorRegions.HADES_SHORE, ZorkGrandInquisitorRegions.GUE_TECH): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_GUE_TECH,
         ),
     ),
@@ -179,7 +179,7 @@ entrance_rule_data: Dict[
     ),
     (ZorkGrandInquisitorRegions.HADES_SHORE, ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_SPELL_LAB,
         ),
     ),
@@ -221,37 +221,37 @@ entrance_rule_data: Dict[
     (ZorkGrandInquisitorRegions.PORT_FOOZLE_PAST, ZorkGrandInquisitorRegions.MONASTERY): None,
     (ZorkGrandInquisitorRegions.SPELL_LAB, ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE): None,
     (ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE, ZorkGrandInquisitorRegions.CROSSROADS): (
-        (ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,),
+        (ZorkGrandInquisitorItems.MAP,),
     ),
     (ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE, ZorkGrandInquisitorRegions.DM_LAIR): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_DM_LAIR,
         ),
     ),
     (ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE, ZorkGrandInquisitorRegions.GUE_TECH): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_GUE_TECH,
         ),
     ),
     (ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE, ZorkGrandInquisitorRegions.GUE_TECH_HALLWAY): None,
     (ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE, ZorkGrandInquisitorRegions.HADES_SHORE): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_HADES,
         ),
     ),
     (ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE, ZorkGrandInquisitorRegions.SPELL_LAB): (
         (
-            ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,
+            ZorkGrandInquisitorItems.SWORD,
             ZorkGrandInquisitorEvents.DAM_DESTROYED,
             ZorkGrandInquisitorItems.SPELL_GOLGATEM,
         ),
     ),
     (ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE, ZorkGrandInquisitorRegions.SUBWAY_MONASTERY): (
         (
-            ZorkGrandInquisitorEvents.MAP_ACCESSIBLE,
+            ZorkGrandInquisitorItems.MAP,
             ZorkGrandInquisitorItems.TELEPORTER_DESTINATION_MONASTERY,
         ),
     ),
@@ -286,7 +286,7 @@ entrance_rule_data: Dict[
     ),
     (ZorkGrandInquisitorRegions.SUBWAY_MONASTERY, ZorkGrandInquisitorRegions.MONASTERY): (
         (
-            ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,
+            ZorkGrandInquisitorItems.SWORD,
             ZorkGrandInquisitorEvents.ROPE_GLORFABLE,
         ),
     ),

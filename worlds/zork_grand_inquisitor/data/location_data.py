@@ -100,7 +100,7 @@ location_data: Dict[
         archipelago_id=LOCATION_OFFSET + 8,
         region=ZorkGrandInquisitorRegions.CROSSROADS,
         tags=(ZorkGrandInquisitorTags.CORE,),
-        requirements=(ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,),
+        requirements=(ZorkGrandInquisitorItems.SWORD,),
     ),
     ZorkGrandInquisitorLocations.IN_MAGIC_WE_TRUST: ZorkGrandInquisitorLocationData(
         game_state_trigger=((13062, 1),),
@@ -237,7 +237,7 @@ location_data: Dict[
         archipelago_id=LOCATION_OFFSET + 27,
         region=ZorkGrandInquisitorRegions.SPELL_LAB_BRIDGE,
         tags=(ZorkGrandInquisitorTags.CORE,),
-        requirements=(ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,),
+        requirements=(ZorkGrandInquisitorItems.SWORD,),
     ),
     ZorkGrandInquisitorLocations.I_LIKE_YOUR_STYLE: ZorkGrandInquisitorLocationData(
         game_state_trigger=((16374, 1),),
@@ -295,7 +295,7 @@ location_data: Dict[
         tags=(ZorkGrandInquisitorTags.CORE,),
         requirements=(
             ZorkGrandInquisitorItems.HUNGUS_LARD,
-            ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,
+            ZorkGrandInquisitorItems.SWORD,
         ),
     ),
     ZorkGrandInquisitorLocations.PLANTS_ARE_MANS_BEST_FRIEND: ZorkGrandInquisitorLocationData(
@@ -348,7 +348,7 @@ location_data: Dict[
         region=ZorkGrandInquisitorRegions.SUBWAY_MONASTERY,
         tags=(ZorkGrandInquisitorTags.CORE,),
         requirements=(
-            ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,
+            ZorkGrandInquisitorItems.SWORD,
             ZorkGrandInquisitorEvents.ROPE_GLORFABLE,
         ),
     ),
@@ -477,7 +477,7 @@ location_data: Dict[
         archipelago_id=LOCATION_OFFSET + 100 + 10,
         region=ZorkGrandInquisitorRegions.DM_LAIR,
         tags=(ZorkGrandInquisitorTags.DEATHSANITY,),
-        requirements=(ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE,),
+        requirements=(ZorkGrandInquisitorItems.SWORD,),
     ),
     ZorkGrandInquisitorLocations.DEATH_CLIMBED_OUT_OF_THE_WELL: ZorkGrandInquisitorLocationData(
         game_state_trigger=(("location", "gjde"), (2201, 21)),
@@ -532,20 +532,6 @@ location_data: Dict[
         region=ZorkGrandInquisitorRegions.PORT_FOOZLE,
         requirements=(ZorkGrandInquisitorEvents.CIGAR_ACCESSIBLE,),
         event_item_name=ZorkGrandInquisitorEvents.LANTERN_DALBOZ_ACCESSIBLE.value,
-    ),
-    ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE: ZorkGrandInquisitorLocationData(
-        game_state_trigger=None,
-        archipelago_id=None,
-        region=ZorkGrandInquisitorRegions.CROSSROADS,
-        requirements=(ZorkGrandInquisitorItems.HAMMER,),
-        event_item_name=ZorkGrandInquisitorEvents.SWORD_ACCESSIBLE.value,
-    ),
-    ZorkGrandInquisitorEvents.MAP_ACCESSIBLE: ZorkGrandInquisitorLocationData(
-        game_state_trigger=None,
-        archipelago_id=None,
-        region=ZorkGrandInquisitorRegions.CROSSROADS,
-        requirements=(ZorkGrandInquisitorItems.HAMMER,),
-        event_item_name=ZorkGrandInquisitorEvents.MAP_ACCESSIBLE.value,
     ),
     ZorkGrandInquisitorEvents.ZORKMID_BILL_ACCESSIBLE: ZorkGrandInquisitorLocationData(
         game_state_trigger=None,
