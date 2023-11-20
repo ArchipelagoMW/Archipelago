@@ -3,7 +3,7 @@ from typing import Tuple
 
 from .farming_logic import FarmingLogic
 from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogic
+from .money_logic import MoneyLogicMixin
 from .region_logic import RegionLogicMixin
 from ..data.bundle_data import BundleItem
 from ..stardew_rule import StardewRule
@@ -13,10 +13,10 @@ from ..strings.region_names import Region
 class BundleLogic:
     has: HasLogicMixin
     region: RegionLogicMixin
-    money: MoneyLogic
+    money: MoneyLogicMixin
     farming: FarmingLogic
 
-    def __init__(self, player: int, has: HasLogicMixin, region: RegionLogicMixin, money: MoneyLogic, farming: FarmingLogic):
+    def __init__(self, player: int, has: HasLogicMixin, region: RegionLogicMixin, money: MoneyLogicMixin, farming: FarmingLogic):
         self.player = player
         self.has = has
         self.region = region

@@ -6,7 +6,7 @@ from ...logic.crop_logic import CropLogic
 from ...logic.has_logic import HasLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
-from ...logic.season_logic import SeasonLogic
+from ...logic.season_logic import SeasonLogicMixin
 from ...logic.wallet_logic import WalletLogic
 from ...options import Mods
 from ...strings.artisan_good_names import ArtisanGood
@@ -32,13 +32,13 @@ class ModSpecialOrderLogic:
     has: HasLogicMixin
     region: RegionLogicMixin
     relationship: RelationshipLogic
-    season: SeasonLogic
+    season: SeasonLogicMixin
     wallet: WalletLogic
     mods_option: Mods
 
     def __init__(self, player: int, action: ActionLogic, artisan: ArtisanLogic, crafting: CraftingLogic, crop: CropLogic, has: HasLogicMixin,
                  region: RegionLogicMixin, relationship: RelationshipLogic,
-                 season: SeasonLogic, wallet: WalletLogic, mods_option: Mods):
+                 season: SeasonLogicMixin, wallet: WalletLogic, mods_option: Mods):
         self.player = player
         self.action = action
         self.artisan = artisan

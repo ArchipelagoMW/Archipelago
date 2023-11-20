@@ -7,13 +7,13 @@ from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
 from ...logic.fishing_logic import FishingLogic
 from ...logic.has_logic import HasLogicMixin
-from ...logic.money_logic import MoneyLogic
+from ...logic.money_logic import MoneyLogicMixin
 from ...logic.quest_logic import QuestLogic
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
-from ...logic.season_logic import SeasonLogic
-from ...logic.time_logic import TimeLogic
+from ...logic.season_logic import SeasonLogicMixin
+from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogic
 from ...options import SkillProgression
 from ...stardew_rule import StardewRule, Or
@@ -26,20 +26,20 @@ class SVELogic:
     quest: QuestLogic
     region: RegionLogicMixin
     relationship: RelationshipLogic
-    time: TimeLogic
+    time: TimeLogicMixin
     tool: ToolLogic
     fishing: FishingLogic
     cooking: CookingLogic
-    money: MoneyLogic
+    money: MoneyLogicMixin
     combat: CombatLogic
-    season: SeasonLogic
+    season: SeasonLogicMixin
     sve_location_rules: Dict[str, StardewRule]
 
     def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogicMixin, has: HasLogicMixin, quest: QuestLogic,
                  region: RegionLogicMixin,
                  action: ActionLogic,
                  relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
-                 money: MoneyLogic, combat: CombatLogic, season: SeasonLogic, time: TimeLogic):
+                 money: MoneyLogicMixin, combat: CombatLogic, season: SeasonLogicMixin, time: TimeLogicMixin):
         self.player = player
         self.skill_option = skill_option
         self.received = received

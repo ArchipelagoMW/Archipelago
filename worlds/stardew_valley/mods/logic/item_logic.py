@@ -7,12 +7,12 @@ from ...logic.cooking_logic import CookingLogic
 from ...logic.crafting_logic import CraftingLogic
 from ...logic.crop_logic import CropLogic
 from ...logic.has_logic import HasLogicMixin
-from ...logic.money_logic import MoneyLogic
+from ...logic.money_logic import MoneyLogicMixin
 from ...logic.museum_logic import MuseumLogic
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
-from ...logic.season_logic import SeasonLogic
+from ...logic.season_logic import SeasonLogicMixin
 from ...logic.tool_logic import ToolLogic
 from ...options import Mods
 from ...stardew_rule import StardewRule
@@ -39,17 +39,18 @@ class ModItemLogic:
     crop: CropLogic
     cooking: CookingLogic
     has: HasLogicMixin
-    money: MoneyLogic
+    money: MoneyLogicMixin
     region: RegionLogicMixin
-    season: SeasonLogic
+    season: SeasonLogicMixin
     relationship: RelationshipLogic
     museum: MuseumLogic
     received: ReceivedLogicMixin
     tool: ToolLogic
     crafting: CraftingLogic
 
-    def __init__(self, mods: Mods, combat: CombatLogic, crop: CropLogic, cooking: CookingLogic, has: HasLogicMixin, money: MoneyLogic,
-                 region: RegionLogicMixin, season: SeasonLogic, relationship: RelationshipLogic, museum: MuseumLogic, tool: ToolLogic, crafting: CraftingLogic):
+    def __init__(self, mods: Mods, combat: CombatLogic, crop: CropLogic, cooking: CookingLogic, has: HasLogicMixin, money: MoneyLogicMixin,
+                 region: RegionLogicMixin,
+                 season: SeasonLogicMixin, relationship: RelationshipLogic, museum: MuseumLogic, tool: ToolLogic, crafting: CraftingLogic):
         self.combat = combat
         self.crop = crop
         self.cooking = cooking

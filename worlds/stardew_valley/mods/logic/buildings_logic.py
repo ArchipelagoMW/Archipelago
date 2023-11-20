@@ -3,7 +3,7 @@ from typing import Dict
 from ..mod_data import ModNames
 from ...logic.base_logic import LogicRegistry
 from ...logic.has_logic import HasLogicMixin
-from ...logic.money_logic import MoneyLogic
+from ...logic.money_logic import MoneyLogicMixin
 from ...options import Mods
 from ...stardew_rule import StardewRule
 from ...strings.artisan_good_names import ArtisanGood
@@ -14,10 +14,10 @@ from ...strings.region_names import Region
 
 class ModBuildingLogic(HasLogicMixin):
     player: int
-    money: MoneyLogic
+    money: MoneyLogicMixin
     mods_option: Mods
 
-    def __init__(self, player: int, registry: LogicRegistry, money: MoneyLogic, mods_option: Mods):
+    def __init__(self, player: int, registry: LogicRegistry, money: MoneyLogicMixin, mods_option: Mods):
         super().__init__(player, registry)
         self.money = money
         self.mods_option = mods_option

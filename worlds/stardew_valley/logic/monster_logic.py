@@ -3,17 +3,17 @@ from typing import Iterable, Union, Hashable
 from Utils import cache_self1
 from .combat_logic import CombatLogic
 from .region_logic import RegionLogicMixin
-from .time_logic import TimeLogic, MAX_MONTHS
+from .time_logic import TimeLogicMixin, MAX_MONTHS
 from ..data.monster_data import StardewMonster, all_monsters_by_name
 from ..stardew_rule import StardewRule, Or, And
 
 
 class MonsterLogic:
     region: RegionLogicMixin
-    time: TimeLogic
+    time: TimeLogicMixin
     combat: CombatLogic
 
-    def __init__(self, player: int, region: RegionLogicMixin, time: TimeLogic, combat: CombatLogic):
+    def __init__(self, player: int, region: RegionLogicMixin, time: TimeLogicMixin, combat: CombatLogic):
         self.player = player
         self.region = region
         self.time = time

@@ -7,8 +7,8 @@ from .gift_logic import GiftLogic
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogic
-from .time_logic import TimeLogic
+from .season_logic import SeasonLogicMixin
+from .time_logic import TimeLogicMixin
 from ..data.villagers_data import all_villagers_by_name, Villager
 from ..options import Friendsanity, FriendsanityHeartSize, Mods
 from ..stardew_rule import StardewRule, True_, And, Or, Count
@@ -26,8 +26,8 @@ class RelationshipLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    time: TimeLogic
-    season: SeasonLogic
+    time: TimeLogicMixin
+    season: SeasonLogicMixin
     gifts: GiftLogic
     buildings: BuildingLogic
     mods_option: Mods
@@ -35,7 +35,7 @@ class RelationshipLogic:
     def __init__(self, player: int, friendsanity_option: Friendsanity,
                  heart_size_option: FriendsanityHeartSize,
                  received_logic: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 time: TimeLogic, season: SeasonLogic, gifts: GiftLogic, buildings: BuildingLogic, mods_option: Mods):
+                 time: TimeLogicMixin, season: SeasonLogicMixin, gifts: GiftLogic, buildings: BuildingLogic, mods_option: Mods):
         self.player = player
         self.friendsanity_option = friendsanity_option
         self.heart_size_option = heart_size_option

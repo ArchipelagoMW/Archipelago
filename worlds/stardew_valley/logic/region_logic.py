@@ -9,6 +9,7 @@ class RegionLogicMixin(BaseLogic):
 
     def __init__(self, player: int, registry: LogicRegistry):
         super().__init__(player, registry)
+        self.region = self
 
     @cache_self1
     def can_reach(self, region_name: str) -> StardewRule:

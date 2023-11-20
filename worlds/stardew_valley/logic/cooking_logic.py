@@ -4,13 +4,13 @@ from Utils import cache_self1
 from .action_logic import ActionLogic
 from .building_logic import BuildingLogic
 from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogic
+from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
-from .season_logic import SeasonLogic
+from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogic
-from .time_logic import TimeLogic
+from .time_logic import TimeLogicMixin
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, \
     QueenOfSauceSource, CookingRecipe, \
     all_cooking_recipes_by_name
@@ -31,16 +31,16 @@ class CookingLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    season: SeasonLogic
-    time: TimeLogic
-    money: MoneyLogic
+    season: SeasonLogicMixin
+    time: TimeLogicMixin
+    money: MoneyLogicMixin
     action: ActionLogic
     buildings: BuildingLogic
     relationship: RelationshipLogic
     skill: SkillLogic
 
     def __init__(self, player: int, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods, received: ReceivedLogicMixin,
-                 has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogic, time: TimeLogic, money: MoneyLogic, action: ActionLogic,
+                 has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogicMixin, time: TimeLogicMixin, money: MoneyLogicMixin, action: ActionLogic,
                  buildings: BuildingLogic,
                  relationship: RelationshipLogic, skill: SkillLogic):
         self.player = player

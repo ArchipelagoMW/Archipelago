@@ -1,8 +1,9 @@
 from Utils import cache_self1
+from .base_logic import LogicRegistry
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .time_logic import TimeLogic
+from .time_logic import TimeLogicMixin
 from ..options import StartingMoney
 from ..stardew_rule import StardewRule, True_, CountPercent
 from ..strings.currency_names import Currency
@@ -12,21 +13,13 @@ qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Q
                   "25 Qi Gems", "20 Qi Gems", "10 Qi Gems")
 
 
-class MoneyLogic:
+class MoneyLogicMixin(TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin):
     starting_money_option: StartingMoney
-    received: ReceivedLogicMixin
-    has: HasLogicMixin
-    region: RegionLogicMixin
-    time: TimeLogic
 
-    def __init__(self, player: int, starting_money_option: StartingMoney, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 time: TimeLogic):
-        self.player = player
+    def __init__(self, player: int, registry: LogicRegistry, starting_money_option: StartingMoney):
+        super().__init__(player, registry)
         self.starting_money_option = starting_money_option
-        self.received = received
-        self.has = has
-        self.region = region
-        self.time = time
+        self.money = self
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:

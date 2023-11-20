@@ -2,12 +2,12 @@ from typing import Union, Iterable
 
 from Utils import cache_self1
 from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogic
+from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogic
+from .season_logic import SeasonLogicMixin
 from .tool_logic import ToolLogic
-from .traveling_merchant_logic import TravelingMerchantLogic
+from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from ..data import CropItem, SeedItem
 from ..options import Cropsanity, ExcludeGingerIsland
 from ..stardew_rule import StardewRule, True_, False_
@@ -25,14 +25,14 @@ class CropLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    traveling_merchant: TravelingMerchantLogic
-    season: SeasonLogic
-    money: MoneyLogic
+    traveling_merchant: TravelingMerchantLogicMixin
+    season: SeasonLogicMixin
+    money: MoneyLogicMixin
     tool: ToolLogic
 
     def __init__(self, player: int, cropsanity_option: Cropsanity, exclude_ginger_island_option: ExcludeGingerIsland, received: ReceivedLogicMixin,
                  has: HasLogicMixin,
-                 region: RegionLogicMixin, traveling_merchant: TravelingMerchantLogic, season: SeasonLogic, money: MoneyLogic, tool: ToolLogic):
+                 region: RegionLogicMixin, traveling_merchant: TravelingMerchantLogicMixin, season: SeasonLogicMixin, money: MoneyLogicMixin, tool: ToolLogic):
         self.player = player
         self.cropsanity_option = cropsanity_option
         self.exclude_ginger_island_option = exclude_ginger_island_option

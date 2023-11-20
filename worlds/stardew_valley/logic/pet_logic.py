@@ -3,7 +3,7 @@ from typing import Union
 
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .time_logic import TimeLogic
+from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogic
 from ..data.villagers_data import Villager
 from ..options import Friendsanity, FriendsanityHeartSize
@@ -17,11 +17,11 @@ class PetLogic:
     heart_size_option: FriendsanityHeartSize
     received: ReceivedLogicMixin
     region: RegionLogicMixin
-    time: TimeLogic
+    time: TimeLogicMixin
     tool: ToolLogic
 
     def __init__(self, player: int, friendsanity_option: Friendsanity, heart_size_option: FriendsanityHeartSize,
-                 received_logic: ReceivedLogicMixin, region: RegionLogicMixin, time: TimeLogic, tool: ToolLogic):
+                 received_logic: ReceivedLogicMixin, region: RegionLogicMixin, time: TimeLogicMixin, tool: ToolLogic):
         self.player = player
         self.friendsanity_option = friendsanity_option
         self.heart_size_option = heart_size_option

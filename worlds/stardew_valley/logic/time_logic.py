@@ -1,6 +1,7 @@
 from functools import cached_property
 
 from Utils import cache_self1
+from .base_logic import LogicRegistry
 from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule, CountPercent, True_
 from ..strings.ap_names.event_names import Event
@@ -9,12 +10,10 @@ MAX_MONTHS = 12
 MONTH_COEFFICIENT = 100 // MAX_MONTHS
 
 
-class TimeLogic:
-    received: ReceivedLogicMixin
-
-    def __init__(self, player: int, received_logic: ReceivedLogicMixin):
-        self.player = player
-        self.received = received_logic
+class TimeLogicMixin(ReceivedLogicMixin):
+    def __init__(self, player: int, registry: LogicRegistry):
+        super().__init__(player, registry)
+        self.time = self
 
     @cache_self1
     def has_lived_months(self, number: int) -> StardewRule:

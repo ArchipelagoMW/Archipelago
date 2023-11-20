@@ -2,13 +2,13 @@ from functools import cached_property
 
 from Utils import cache_self1
 from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogic
+from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
 from .skill_logic import SkillLogic
 from .special_order_logic import SpecialOrderLogic
-from .time_logic import TimeLogic
+from .time_logic import TimeLogicMixin
 from .. import options
 from ..data.craftable_data import CraftingRecipe, all_crafting_recipes_by_name
 from ..data.recipe_data import StarterSource, ShopSource, SkillSource, FriendshipSource
@@ -29,8 +29,8 @@ class CraftingLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    time: TimeLogic
-    money: MoneyLogic
+    time: TimeLogicMixin
+    money: MoneyLogicMixin
     relationship: RelationshipLogic
     skill: SkillLogic
     special_orders: SpecialOrderLogic
@@ -38,7 +38,7 @@ class CraftingLogic:
     def __init__(self, player: int, craftsanity_option: Craftsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods,
                  festivals_option: FestivalLocations, special_orders_option: SpecialOrderLocations, received: ReceivedLogicMixin, has: HasLogicMixin,
                  region: RegionLogicMixin,
-                 time: TimeLogic, money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
+                 time: TimeLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
         self.player = player
         self.craftsanity_option = craftsanity_option
         self.exclude_ginger_island = exclude_ginger_island

@@ -5,8 +5,8 @@ from ...logic.has_logic import HasLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
-from ...logic.season_logic import SeasonLogic
-from ...logic.time_logic import TimeLogic
+from ...logic.season_logic import SeasonLogicMixin
+from ...logic.time_logic import TimeLogicMixin
 from ...options import Mods
 from ...stardew_rule import StardewRule
 from ...strings.artisan_good_names import ArtisanGood
@@ -28,11 +28,11 @@ class ModQuestLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    time: TimeLogic
-    season: SeasonLogic
+    time: TimeLogicMixin
+    season: SeasonLogicMixin
     relationship: RelationshipLogic
 
-    def __init__(self, mods: Mods, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, time: TimeLogic, season: SeasonLogic,
+    def __init__(self, mods: Mods, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, time: TimeLogicMixin, season: SeasonLogicMixin,
                  relationship: RelationshipLogic, ):
         self.mods = mods
         self.received = received

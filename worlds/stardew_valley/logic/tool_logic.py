@@ -1,9 +1,9 @@
 from Utils import cache_self1
 from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogic
+from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogic
+from .season_logic import SeasonLogicMixin
 from ..mods.logic.magic_logic import MagicLogic
 from ..options import ToolProgression
 from ..stardew_rule import StardewRule, True_
@@ -32,13 +32,13 @@ class ToolLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    season: SeasonLogic
-    money: MoneyLogic
+    season: SeasonLogicMixin
+    money: MoneyLogicMixin
     magic: MagicLogic
 
     def __init__(self, player: int, tool_option: ToolProgression, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 season: SeasonLogic,
-                 money: MoneyLogic):
+                 season: SeasonLogicMixin,
+                 money: MoneyLogicMixin):
         self.player = player
         self.tool_option = tool_option
         self.received = received

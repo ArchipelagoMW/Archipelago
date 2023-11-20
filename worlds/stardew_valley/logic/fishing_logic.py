@@ -1,7 +1,7 @@
 from Utils import cache_self1
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogic
+from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
 from ..data import FishItem
@@ -19,12 +19,12 @@ class FishingLogic:
     special_order_locations: SpecialOrderLocations
     received: ReceivedLogicMixin
     region: RegionLogicMixin
-    season: SeasonLogic
+    season: SeasonLogicMixin
     tool: ToolLogic
     skill: SkillLogic
 
     def __init__(self, player: int, exclude_ginger_island: ExcludeGingerIsland, special_order_locations: SpecialOrderLocations, received: ReceivedLogicMixin,
-                 region: RegionLogicMixin, season: SeasonLogic, tool: ToolLogic, skill: SkillLogic):
+                 region: RegionLogicMixin, season: SeasonLogicMixin, tool: ToolLogic, skill: SkillLogic):
         self.player = player
         self.exclude_ginger_island = exclude_ginger_island
         self.special_order_locations = special_order_locations

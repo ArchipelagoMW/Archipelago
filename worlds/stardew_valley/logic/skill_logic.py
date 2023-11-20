@@ -8,8 +8,8 @@ from .crop_logic import CropLogic
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogic
-from .time_logic import TimeLogic
+from .season_logic import SeasonLogicMixin
+from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogic
 from .. import options
 from ..data import all_crops
@@ -31,8 +31,8 @@ class SkillLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    season: SeasonLogic
-    time: TimeLogic
+    season: SeasonLogicMixin
+    time: TimeLogicMixin
     tool: ToolLogic
     combat: CombatLogic
     crop: CropLogic
@@ -40,8 +40,8 @@ class SkillLogic:
     mods: Mods
 
     def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 season: SeasonLogic,
-                 time: TimeLogic, tool: ToolLogic, combat: CombatLogic, crop: CropLogic):
+                 season: SeasonLogicMixin,
+                 time: TimeLogicMixin, tool: ToolLogic, combat: CombatLogic, crop: CropLogic):
         self.player = player
         self.skill_option = skill_option
         self.received = received

@@ -2,7 +2,7 @@ from typing import Dict
 
 from Utils import cache_self1
 from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogic
+from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from ..options import BuildingProgression
@@ -22,11 +22,11 @@ class BuildingLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    money: MoneyLogic
+    money: MoneyLogicMixin
     building_rules: Dict[str, StardewRule]
 
     def __init__(self, player: int, building_option: BuildingProgression, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
-                 money: MoneyLogic):
+                 money: MoneyLogicMixin):
         self.player = player
         self.player = player
         self.building_option = building_option

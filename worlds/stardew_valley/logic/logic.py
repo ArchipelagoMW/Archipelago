@@ -19,7 +19,7 @@ from .fishing_logic import FishingLogic
 from .gift_logic import GiftLogic
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
-from .money_logic import MoneyLogic
+from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogic
 from .museum_logic import MuseumLogic
 from .pet_logic import PetLogic
@@ -27,13 +27,13 @@ from .quest_logic import QuestLogic
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
-from .season_logic import SeasonLogic
+from .season_logic import SeasonLogicMixin
 from .shipping_logic import ShippingLogic
 from .skill_logic import SkillLogic
 from .special_order_logic import SpecialOrderLogic
-from .time_logic import TimeLogic
+from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogic
-from .traveling_merchant_logic import TravelingMerchantLogic
+from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogic
 from ..data import all_fish, all_purchasable_seeds, all_crops
 from ..data.craftable_data import all_crafting_recipes
@@ -97,10 +97,10 @@ class StardewLogic(BaseLogic, LogicRegistry):
         self.received = ReceivedLogicMixin(self.player, self.registry)
         self.has = HasLogicMixin(self.player, self.registry)
         self.region = RegionLogicMixin(self.player, self.registry)
-        self.traveling_merchant = TravelingMerchantLogic(self.player, self.received)
-        self.time = TimeLogic(self.player, self.received)
-        self.season = SeasonLogic(self.player, self.options.season_randomization, self.received, self.time)
-        self.money = MoneyLogic(self.player, self.options.starting_money, self.received, self.has, self.region, self.time)
+        self.traveling_merchant = TravelingMerchantLogicMixin(self.player, self.registry)
+        self.time = TimeLogicMixin(self.player, self.registry)
+        self.season = SeasonLogicMixin(self.player, self.registry, self.options.season_randomization)
+        self.money = MoneyLogicMixin(self.player, self.registry, self.options.starting_money)
         self.action = ActionLogic(self.player, self.received, self.has, self.region)
         self.arcade = ArcadeLogic(self.player, self.options.arcade_machine_locations, self.received, self.region)
         self.artisan = ArtisanLogic(self.player, self.has, self.time)
@@ -148,7 +148,8 @@ class StardewLogic(BaseLogic, LogicRegistry):
                                       self.relationship, self.skill, self.special_order)
         self.mod = ModLogic(self.player, self.registry, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action,
                             self.artisan,
-                            self.season, self.money, self.relationship, self.museum, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing,
+                            self.season, self.money, self.relationship, self.museum, self.buildings, self.wallet, self.combat, self.tool, self.skill,
+                            self.fishing,
                             self.cooking, self.mine, self.ability, self.time, self.quest, self.crafting, self.crop)
 
         self.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})

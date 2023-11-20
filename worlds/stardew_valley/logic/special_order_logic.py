@@ -6,14 +6,14 @@ from .artisan_logic import ArtisanLogic
 from .cooking_logic import CookingLogic
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
-from .money_logic import MoneyLogic
+from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
-from .season_logic import SeasonLogic
+from .season_logic import SeasonLogicMixin
 from .shipping_logic import ShippingLogic
 from .skill_logic import SkillLogic
-from .time_logic import TimeLogic
+from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogic
 from ..stardew_rule import StardewRule, Has
 from ..strings.animal_product_names import AnimalProduct
@@ -39,9 +39,9 @@ class SpecialOrderLogic:
     received: ReceivedLogicMixin
     has: HasLogicMixin
     region: RegionLogicMixin
-    season: SeasonLogic
-    time: TimeLogic
-    money: MoneyLogic
+    season: SeasonLogicMixin
+    time: TimeLogicMixin
+    money: MoneyLogicMixin
     shipping: ShippingLogic
     arcade: ArcadeLogic
     artisan: ArtisanLogic
@@ -53,8 +53,8 @@ class SpecialOrderLogic:
     ability: AbilityLogic
     special_order_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogic, time: TimeLogic,
-                 money: MoneyLogic,
+    def __init__(self, player: int, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogicMixin, time: TimeLogicMixin,
+                 money: MoneyLogicMixin,
                  shipping: ShippingLogic, arcade: ArcadeLogic, artisan: ArtisanLogic, relationship: RelationshipLogic, tool: ToolLogic, skill: SkillLogic,
                  mine: MineLogic, cooking: CookingLogic, ability: AbilityLogic):
         self.player = player

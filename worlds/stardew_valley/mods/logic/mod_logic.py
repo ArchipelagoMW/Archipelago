@@ -19,15 +19,15 @@ from ...logic.crop_logic import CropLogic
 from ...logic.fishing_logic import FishingLogic
 from ...logic.has_logic import HasLogicMixin
 from ...logic.mine_logic import MineLogic
-from ...logic.money_logic import MoneyLogic
+from ...logic.money_logic import MoneyLogicMixin
 from ...logic.museum_logic import MuseumLogic
 from ...logic.quest_logic import QuestLogic
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
-from ...logic.season_logic import SeasonLogic
+from ...logic.season_logic import SeasonLogicMixin
 from ...logic.skill_logic import SkillLogic
-from ...logic.time_logic import TimeLogic
+from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogic
 from ...logic.wallet_logic import WalletLogic
 from ...options import SkillProgression, ElevatorProgression, Mods
@@ -48,10 +48,11 @@ class ModLogic(BaseLogic):
     def __init__(self, player: int, registry: LogicRegistry, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods,
                  received: ReceivedLogicMixin,
                  has: HasLogicMixin, region: RegionLogicMixin,
-                 action: ActionLogic, artisan: ArtisanLogic, season: SeasonLogic, money: MoneyLogic, relationship: RelationshipLogic, museum: MuseumLogic, building: BuildingLogic,
+                 action: ActionLogic, artisan: ArtisanLogic, season: SeasonLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogic,
+                museum: MuseumLogic, building: BuildingLogic,
                  wallet: WalletLogic,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
-                 time: TimeLogic, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
+                 time: TimeLogicMixin, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
         super().__init__(player, registry)
         self.item = ModItemLogic(mods, combat, crop, cooking, has, money, region, season, relationship, museum, tool, crafting)
         self.magic = MagicLogic(player, mods, received, region)
