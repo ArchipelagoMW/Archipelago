@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from Utils import cache_self1
-from .received_logic import ReceivedLogic
+from .received_logic import ReceivedLogicMixin
 from .time_logic import TimeLogic
 from ..options import SeasonRandomization
 from ..stardew_rule import StardewRule, True_, And, Or
@@ -11,10 +11,10 @@ from ..strings.season_names import Season
 
 class SeasonLogic:
     season_option: SeasonRandomization
-    received: ReceivedLogic
+    received: ReceivedLogicMixin
     time: TimeLogic
 
-    def __init__(self, player: int, season_option: SeasonRandomization, received_logic: ReceivedLogic, time: TimeLogic):
+    def __init__(self, player: int, season_option: SeasonRandomization, received_logic: ReceivedLogicMixin, time: TimeLogic):
         self.player = player
         self.season_option = season_option
         self.received = received_logic

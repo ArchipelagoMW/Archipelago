@@ -1,10 +1,10 @@
 from typing import Union, Iterable
 
 from Utils import cache_self1
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogic
 from .tool_logic import ToolLogic
 from .traveling_merchant_logic import TravelingMerchantLogic
@@ -22,16 +22,17 @@ class CropLogic:
     player: int
     cropsanity_option: Cropsanity
     exclude_ginger_island_option: ExcludeGingerIsland
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     traveling_merchant: TravelingMerchantLogic
     season: SeasonLogic
     money: MoneyLogic
     tool: ToolLogic
 
-    def __init__(self, player: int, cropsanity_option: Cropsanity, exclude_ginger_island_option: ExcludeGingerIsland, received: ReceivedLogic, has: HasLogic,
-                 region: RegionLogic, traveling_merchant: TravelingMerchantLogic, season: SeasonLogic, money: MoneyLogic, tool: ToolLogic):
+    def __init__(self, player: int, cropsanity_option: Cropsanity, exclude_ginger_island_option: ExcludeGingerIsland, received: ReceivedLogicMixin,
+                 has: HasLogicMixin,
+                 region: RegionLogicMixin, traveling_merchant: TravelingMerchantLogic, season: SeasonLogic, money: MoneyLogic, tool: ToolLogic):
         self.player = player
         self.cropsanity_option = cropsanity_option
         self.exclude_ginger_island_option = exclude_ginger_island_option

@@ -1,5 +1,5 @@
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .. import options
 from ..options import ArcadeMachineLocations
 from ..stardew_rule import StardewRule, True_
@@ -9,10 +9,10 @@ from ..strings.region_names import Region
 class ArcadeLogic:
     player: int
     arcade_option: ArcadeMachineLocations
-    received = ReceivedLogic
-    region: RegionLogic
+    received = ReceivedLogicMixin
+    region: RegionLogicMixin
 
-    def __init__(self, player: int, arcade_option: ArcadeMachineLocations, received: ReceivedLogic, region: RegionLogic):
+    def __init__(self, player: int, arcade_option: ArcadeMachineLocations, received: ReceivedLogicMixin, region: RegionLogicMixin):
         self.player = player
         self.arcade_option = arcade_option
         self.received = received

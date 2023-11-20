@@ -5,11 +5,11 @@ from .building_logic import BuildingLogic
 from .combat_logic import CombatLogic
 from .cooking_logic import CookingLogic
 from .fishing_logic import FishingLogic
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
 from .skill_logic import SkillLogic
@@ -39,10 +39,10 @@ from ..strings.wallet_item_names import Wallet
 
 class QuestLogic:
     player: int
-    received: ReceivedLogic
-    has: HasLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
     mine: MineLogic
-    region: RegionLogic
+    region: RegionLogicMixin
     relationship: RelationshipLogic
     tool: ToolLogic
     fishing: FishingLogic
@@ -55,7 +55,8 @@ class QuestLogic:
     wallet: WalletLogic
     quest_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, skill: SkillLogic, received: ReceivedLogic, has: HasLogic, mine: MineLogic, region: RegionLogic, action: ActionLogic,
+    def __init__(self, player: int, skill: SkillLogic, received: ReceivedLogicMixin, has: HasLogicMixin, mine: MineLogic, region: RegionLogicMixin,
+                 action: ActionLogic,
                  relationship: RelationshipLogic, building: BuildingLogic, time: TimeLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
                  money: MoneyLogic, combat: CombatLogic, season: SeasonLogic, wallet: WalletLogic, mods_option: Mods):
         self.player = player

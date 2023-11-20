@@ -5,9 +5,9 @@ from Utils import cache_self1
 from worlds.stardew_valley.strings.craftable_names import Fishing
 from .combat_logic import CombatLogic
 from .crop_logic import CropLogic
-from .has_logic import HasLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .has_logic import HasLogicMixin
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogic
 from .time_logic import TimeLogic
 from .tool_logic import ToolLogic
@@ -28,9 +28,9 @@ fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Re
 
 class SkillLogic:
     skill_option: SkillProgression
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     season: SeasonLogic
     time: TimeLogic
     tool: ToolLogic
@@ -39,7 +39,8 @@ class SkillLogic:
     magic: MagicLogic
     mods: Mods
 
-    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic,
+    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
+                 season: SeasonLogic,
                  time: TimeLogic, tool: ToolLogic, combat: CombatLogic, crop: CropLogic):
         self.player = player
         self.skill_option = skill_option

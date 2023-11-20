@@ -1,13 +1,13 @@
-from .received_logic import ReceivedLogic
+from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import True_
 from ..strings.calendar_names import Weekday
 
 
 class TravelingMerchantLogic:
     player: int
-    received: ReceivedLogic
+    received: ReceivedLogicMixin
 
-    def __init__(self, player: int, received_logic: ReceivedLogic):
+    def __init__(self, player: int, received_logic: ReceivedLogicMixin):
         self.player = player
         self.received = received_logic
 

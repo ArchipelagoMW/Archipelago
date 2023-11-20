@@ -1,16 +1,16 @@
-from ...logic.received_logic import ReceivedLogic
+from ...logic.received_logic import ReceivedLogicMixin
+from ...mods.mod_data import ModNames
 from ...options import ElevatorProgression, Mods
 from ...stardew_rule import StardewRule, True_
-from ...mods.mod_data import ModNames
 
 
 class ModElevatorLogic:
     player: int
     elevator_option: ElevatorProgression
     mods: Mods
-    received: ReceivedLogic
+    received: ReceivedLogicMixin
 
-    def __init__(self, player: int, elevator_option: ElevatorProgression, mods: Mods, received: ReceivedLogic):
+    def __init__(self, player: int, elevator_option: ElevatorProgression, mods: Mods, received: ReceivedLogicMixin):
         self.player = player
         self.elevator_option = elevator_option
         self.mods = mods

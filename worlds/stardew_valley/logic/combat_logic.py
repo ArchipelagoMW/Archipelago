@@ -1,8 +1,8 @@
 from functools import cached_property
 
 from Utils import cache_self1
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from ..mods.logic.magic_logic import MagicLogic
 from ..stardew_rule import StardewRule, Or, False_
 from ..strings.ap_names.ap_weapon_names import APWeapon
@@ -12,11 +12,11 @@ valid_weapons = (APWeapon.weapon, APWeapon.sword, APWeapon.club, APWeapon.dagger
 
 
 class CombatLogic:
-    received: ReceivedLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    region: RegionLogicMixin
     magic: MagicLogic
 
-    def __init__(self, player: int, received: ReceivedLogic, region: RegionLogic):
+    def __init__(self, player: int, received: ReceivedLogicMixin, region: RegionLogicMixin):
         self.player = player
         self.region = region
         self.received = received

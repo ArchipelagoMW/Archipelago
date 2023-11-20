@@ -1,10 +1,10 @@
 from functools import cached_property
 
 from Utils import cache_self1
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
 from .skill_logic import SkillLogic
 from .special_order_logic import SpecialOrderLogic
@@ -26,9 +26,9 @@ class CraftingLogic:
     mods: Mods
     festivals_option: FestivalLocations
     special_orders_option: SpecialOrderLocations
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     time: TimeLogic
     money: MoneyLogic
     relationship: RelationshipLogic
@@ -36,7 +36,8 @@ class CraftingLogic:
     special_orders: SpecialOrderLogic
 
     def __init__(self, player: int, craftsanity_option: Craftsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods,
-                 festivals_option: FestivalLocations, special_orders_option: SpecialOrderLocations, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+                 festivals_option: FestivalLocations, special_orders_option: SpecialOrderLocations, received: ReceivedLogicMixin, has: HasLogicMixin,
+                 region: RegionLogicMixin,
                  time: TimeLogic, money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
         self.player = player
         self.craftsanity_option = craftsanity_option

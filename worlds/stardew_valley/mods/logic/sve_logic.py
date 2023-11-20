@@ -1,30 +1,30 @@
 from typing import Dict
 
+from ..mod_regions import SVERegion
 from ...logic.action_logic import ActionLogic
 from ...logic.building_logic import BuildingLogic
 from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
 from ...logic.fishing_logic import FishingLogic
-from ...logic.has_logic import HasLogic
+from ...logic.has_logic import HasLogicMixin
 from ...logic.money_logic import MoneyLogic
 from ...logic.quest_logic import QuestLogic
-from ...logic.received_logic import ReceivedLogic
-from ...logic.region_logic import RegionLogic
+from ...logic.received_logic import ReceivedLogicMixin
+from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
 from ...logic.season_logic import SeasonLogic
 from ...logic.time_logic import TimeLogic
 from ...logic.tool_logic import ToolLogic
-from ..mod_regions import SVERegion
 from ...options import SkillProgression
 from ...stardew_rule import StardewRule, Or
 
 
 class SVELogic:
     player: int
-    received: ReceivedLogic
-    has: HasLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
     quest: QuestLogic
-    region: RegionLogic
+    region: RegionLogicMixin
     relationship: RelationshipLogic
     time: TimeLogic
     tool: ToolLogic
@@ -35,7 +35,9 @@ class SVELogic:
     season: SeasonLogic
     sve_location_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, quest: QuestLogic, region: RegionLogic, action: ActionLogic,
+    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogicMixin, has: HasLogicMixin, quest: QuestLogic,
+                 region: RegionLogicMixin,
+                 action: ActionLogic,
                  relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
                  money: MoneyLogic, combat: CombatLogic, season: SeasonLogic, time: TimeLogic):
         self.player = player
@@ -75,4 +77,3 @@ class SVELogic:
         rune_list = ["Nexus: Adventurer's Guild Runes", "Nexus: Junimo Woods Runes", "Nexus: Aurora Vineyard Runes", "Nexus: Sprite Spring Runes",
                      "Nexus: Outpost Runes"]
         return Or(*(self.received(rune) for rune in rune_list))
-

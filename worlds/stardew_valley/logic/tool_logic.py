@@ -1,8 +1,8 @@
 from Utils import cache_self1
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogic
 from ..mods.logic.magic_logic import MagicLogic
 from ..options import ToolProgression
@@ -29,14 +29,15 @@ tool_upgrade_prices = {
 
 class ToolLogic:
     tool_option = ToolProgression
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     season: SeasonLogic
     money: MoneyLogic
     magic: MagicLogic
 
-    def __init__(self, player: int, tool_option: ToolProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic,
+    def __init__(self, player: int, tool_option: ToolProgression, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
+                 season: SeasonLogic,
                  money: MoneyLogic):
         self.player = player
         self.tool_option = tool_option

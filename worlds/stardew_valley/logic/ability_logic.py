@@ -1,6 +1,6 @@
 from .mine_logic import MineLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
 from ..mods.logic.magic_logic import MagicLogic
@@ -17,16 +17,16 @@ class AbilityLogic:
     player: int
     movement_buff_option: NumberOfMovementBuffs
     luck_buff_option: NumberOfLuckBuffs
-    received: ReceivedLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    region: RegionLogicMixin
     tool: ToolLogic
     skill: SkillLogic
     mine: MineLogic
     magic: MagicLogic
     mod_skill: ModSkillLogic
 
-    def __init__(self, player: int, movement_buff_option: NumberOfMovementBuffs, luck_buff_option: NumberOfLuckBuffs, received: ReceivedLogic,
-                 region: RegionLogic, tool: ToolLogic, skill: SkillLogic, mine: MineLogic):
+    def __init__(self, player: int, movement_buff_option: NumberOfMovementBuffs, luck_buff_option: NumberOfLuckBuffs, received: ReceivedLogicMixin,
+                 region: RegionLogicMixin, tool: ToolLogic, skill: SkillLogic, mine: MineLogic):
         self.player = player
         self.movement_buff_option = movement_buff_option
         self.luck_buff_option = luck_buff_option

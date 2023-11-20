@@ -1,30 +1,31 @@
 from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
-from ...logic.has_logic import HasLogic
-from ...logic.received_logic import ReceivedLogic
+from ...logic.has_logic import HasLogicMixin
+from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.skill_logic import SkillLogic
 from ...logic.tool_logic import ToolLogic
 from ...options import SkillProgression, ElevatorProgression
+from ...stardew_rule import StardewRule, True_, And
+from ...strings.ap_names.transport_names import ModTransportation
 from ...strings.craftable_names import Bomb
 from ...strings.performance_names import Performance
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
-from ...strings.ap_names.transport_names import ModTransportation
-from ...stardew_rule import StardewRule, True_, And
 
 
 class DeepWoodsLogic:
     player: int
     skill_option: SkillProgression
     elevator_option: ElevatorProgression
-    received: ReceivedLogic
-    has: HasLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
     combat: CombatLogic
     tool: ToolLogic
     skill: SkillLogic
     cooking: CookingLogic
 
-    def __init__(self, player: int, skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogic, has: HasLogic, combat: CombatLogic, tool: ToolLogic,
+    def __init__(self, player: int, skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogicMixin, has: HasLogicMixin,
+                 combat: CombatLogic, tool: ToolLogic,
                  skill: SkillLogic, cooking: CookingLogic):
         self.player = player
         self.skill_option = skill_option

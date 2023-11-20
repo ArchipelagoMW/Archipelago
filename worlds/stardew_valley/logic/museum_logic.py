@@ -2,9 +2,9 @@ from typing import List
 
 from Utils import cache_self1
 from .action_logic import ActionLogic
-from .has_logic import HasLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .has_logic import HasLogicMixin
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
 from ..options import Museumsanity
@@ -15,12 +15,13 @@ from ..strings.region_names import Region
 class MuseumLogic:
     player: int
     museum_option: Museumsanity
-    received = ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received = ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     action: ActionLogic
 
-    def __init__(self, player: int, museum_option: Museumsanity, received: ReceivedLogic, has: HasLogic, region: RegionLogic, action: ActionLogic):
+    def __init__(self, player: int, museum_option: Museumsanity, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
+                 action: ActionLogic):
         self.player = player
         self.museum_option = museum_option
         self.received = received

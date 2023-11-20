@@ -1,13 +1,14 @@
 from typing import Tuple
 
 from Utils import cache_self1
+from .base_logic import BaseLogic, LogicRegistry
 from ..stardew_rule import StardewRule, And, Or, Reach, Count
 
 
-class RegionLogic:
+class RegionLogicMixin(BaseLogic):
 
-    def __init__(self, player: int):
-        self.player = player
+    def __init__(self, player: int, registry: LogicRegistry):
+        super().__init__(player, registry)
 
     @cache_self1
     def can_reach(self, region_name: str) -> StardewRule:

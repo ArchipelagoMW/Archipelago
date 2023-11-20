@@ -1,17 +1,17 @@
 from functools import cached_property
 
 from .museum_logic import MuseumLogic
+from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule
-from .received_logic import ReceivedLogic
 from ..strings.wallet_item_names import Wallet
 
 
 class WalletLogic:
     player: int
-    received = ReceivedLogic
+    received = ReceivedLogicMixin
     museum: MuseumLogic
 
-    def __init__(self, player: int, received: ReceivedLogic, museum: MuseumLogic):
+    def __init__(self, player: int, received: ReceivedLogicMixin, museum: MuseumLogic):
         self.player = player
         self.received = received
         self.museum = museum

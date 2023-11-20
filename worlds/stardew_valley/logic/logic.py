@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import field, dataclass
-from typing import Dict
+from dataclasses import dataclass
 
 from worlds.stardew_valley.strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
 from .ability_logic import AbilityLogic
 from .action_logic import ActionLogic
 from .arcade_logic import ArcadeLogic
 from .artisan_logic import ArtisanLogic
+from .base_logic import LogicRegistry, BaseLogic
 from .building_logic import BuildingLogic
 from .bundle_logic import BundleLogic
 from .combat_logic import CombatLogic
@@ -17,15 +17,15 @@ from .crop_logic import CropLogic
 from .farming_logic import FarmingLogic
 from .fishing_logic import FishingLogic
 from .gift_logic import GiftLogic
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogic
 from .monster_logic import MonsterLogic
 from .museum_logic import MuseumLogic
 from .pet_logic import PetLogic
 from .quest_logic import QuestLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
 from .shipping_logic import ShippingLogic
@@ -44,7 +44,7 @@ from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.mod_logic import ModLogic
 from ..mods.mod_data import ModNames
-from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions, Fishsanity, Friendsanity
+from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity
 from ..stardew_rule import False_, Or, True_, Count, And, StardewRule
 from ..strings.animal_names import Animal, coop_animals, barn_animals
 from ..strings.animal_product_names import AnimalProduct
@@ -85,26 +85,18 @@ MISSING_ITEM = "THIS ITEM IS MISSING"
 fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west]
 
 
+# FIXME this should not extend LogicRegistry, but it's a step in the migration.
 @dataclass(frozen=False, repr=False)
-class StardewLogic:
+class StardewLogic(BaseLogic, LogicRegistry):
     player: int
-    options: StardewValleyOptions
-
-    item_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    sapling_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    tree_fruit_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    seed_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    cooking_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    crafting_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    crop_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    fish_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    museum_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    festival_rules: Dict[str, StardewRule] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.received = ReceivedLogic(self.player)
-        self.has = HasLogic(self.player, self.item_rules)
-        self.region = RegionLogic(self.player)
+        # FIXME this is awful
+        self.registry = self
+
+        self.received = ReceivedLogicMixin(self.player, self.registry)
+        self.has = HasLogicMixin(self.player, self.registry)
+        self.region = RegionLogicMixin(self.player, self.registry)
         self.traveling_merchant = TravelingMerchantLogic(self.player, self.received)
         self.time = TimeLogic(self.player, self.received)
         self.season = SeasonLogic(self.player, self.options.season_randomization, self.received, self.time)
@@ -154,7 +146,8 @@ class StardewLogic:
         self.crafting = CraftingLogic(self.player, self.options.craftsanity, exclude_ginger_island, mods_option,
                                       self.options.festival_locations, special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
-        self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.artisan,
+        self.mod = ModLogic(self.player, self.registry, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action,
+                            self.artisan,
                             self.season, self.money, self.relationship, self.museum, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing,
                             self.cooking, self.mine, self.ability, self.time, self.quest, self.crafting, self.crop)
 

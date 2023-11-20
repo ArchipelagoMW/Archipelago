@@ -4,11 +4,11 @@ from .ability_logic import AbilityLogic
 from .arcade_logic import ArcadeLogic
 from .artisan_logic import ArtisanLogic
 from .cooking_logic import CookingLogic
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
 from .shipping_logic import ShippingLogic
@@ -36,9 +36,9 @@ from ..strings.villager_names import NPC
 
 class SpecialOrderLogic:
     player: int
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     season: SeasonLogic
     time: TimeLogic
     money: MoneyLogic
@@ -53,7 +53,8 @@ class SpecialOrderLogic:
     ability: AbilityLogic
     special_order_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
+    def __init__(self, player: int, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogic, time: TimeLogic,
+                 money: MoneyLogic,
                  shipping: ShippingLogic, arcade: ArcadeLogic, artisan: ArtisanLogic, relationship: RelationshipLogic, tool: ToolLogic, skill: SkillLogic,
                  mine: MineLogic, cooking: CookingLogic, ability: AbilityLogic):
         self.player = player

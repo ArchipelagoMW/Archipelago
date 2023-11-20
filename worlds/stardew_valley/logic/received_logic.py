@@ -1,12 +1,13 @@
 from typing import Union, Optional, Tuple
 
+from .base_logic import BaseLogic, LogicRegistry
 from ..stardew_rule import StardewRule, True_, Received, And, Or, TotalReceived
 
 
-class ReceivedLogic:
+class ReceivedLogicMixin(BaseLogic):
 
-    def __init__(self, player: int):
-        self.player = player
+    def __init__(self, player: int, registry: LogicRegistry):
+        super().__init__(player, registry)
 
     def __call__(self, *args, **kwargs) -> StardewRule:
         count = 1

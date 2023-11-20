@@ -1,39 +1,39 @@
 from typing import Dict
 
-from ...logic.has_logic import HasLogic
-from ...logic.region_logic import RegionLogic
+from ..mod_data import ModNames
+from ...logic.has_logic import HasLogicMixin
+from ...logic.received_logic import ReceivedLogicMixin
+from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
 from ...logic.season_logic import SeasonLogic
-from ...logic.received_logic import ReceivedLogic
 from ...logic.time_logic import TimeLogic
 from ...options import Mods
-from ...strings.quest_names import ModQuest
-from ..mod_data import ModNames
+from ...stardew_rule import StardewRule
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.crop_names import Fruit, SVEFruit, SVEVegetable
 from ...strings.food_names import Meal, Beverage
 from ...strings.forageable_names import SVEForage
-from ...strings.monster_drop_names import Loot
-from ...strings.villager_names import ModNPC
-from ...strings.season_names import Season
-from ...strings.region_names import Region, SVERegion
 from ...strings.material_names import Material
 from ...strings.metal_names import Ore, MetalBar
+from ...strings.monster_drop_names import Loot
+from ...strings.quest_names import ModQuest
+from ...strings.region_names import Region, SVERegion
+from ...strings.season_names import Season
+from ...strings.villager_names import ModNPC
 from ...strings.wallet_item_names import Wallet
-from ...stardew_rule import StardewRule
 
 
 class ModQuestLogic:
     mods: Mods
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     time: TimeLogic
     season: SeasonLogic
     relationship: RelationshipLogic
 
-    def __init__(self, mods: Mods, received: ReceivedLogic, has: HasLogic, region: RegionLogic, time: TimeLogic, season: SeasonLogic,
-                 relationship: RelationshipLogic,):
+    def __init__(self, mods: Mods, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, time: TimeLogic, season: SeasonLogic,
+                 relationship: RelationshipLogic, ):
         self.mods = mods
         self.received = received
         self.has = has

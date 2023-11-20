@@ -1,7 +1,7 @@
 from Utils import cache_self1
-from .has_logic import HasLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .has_logic import HasLogicMixin
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from ..stardew_rule import StardewRule, True_, Or
 from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
@@ -9,11 +9,11 @@ from ..strings.region_names import Region
 
 
 class ActionLogic:
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
 
-    def __init__(self, player: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic):
+    def __init__(self, player: int, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin):
         self.player = player
         self.received = received
         self.has = has

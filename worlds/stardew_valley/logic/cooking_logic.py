@@ -3,10 +3,10 @@ from functools import cached_property
 from Utils import cache_self1
 from .action_logic import ActionLogic
 from .building_logic import BuildingLogic
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
 from .skill_logic import SkillLogic
@@ -28,9 +28,9 @@ class CookingLogic:
     chefsanity_option: Chefsanity
     exclude_ginger_island: ExcludeGingerIsland
     mods: Mods
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     season: SeasonLogic
     time: TimeLogic
     money: MoneyLogic
@@ -39,8 +39,9 @@ class CookingLogic:
     relationship: RelationshipLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods, received: ReceivedLogic,
-                 has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic, action: ActionLogic, buildings: BuildingLogic,
+    def __init__(self, player: int, chefsanity_option: Chefsanity, exclude_ginger_island: ExcludeGingerIsland, mods: Mods, received: ReceivedLogicMixin,
+                 has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogic, time: TimeLogic, money: MoneyLogic, action: ActionLogic,
+                 buildings: BuildingLogic,
                  relationship: RelationshipLogic, skill: SkillLogic):
         self.player = player
         self.chefsanity_option = chefsanity_option

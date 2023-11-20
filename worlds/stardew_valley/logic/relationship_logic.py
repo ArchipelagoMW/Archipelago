@@ -4,9 +4,9 @@ from typing import Union
 from Utils import cache_self1
 from .building_logic import BuildingLogic
 from .gift_logic import GiftLogic
-from .has_logic import HasLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .has_logic import HasLogicMixin
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogic
 from .time_logic import TimeLogic
 from ..data.villagers_data import all_villagers_by_name, Villager
@@ -23,9 +23,9 @@ possible_kids = ("Cute Baby", "Ugly Baby")
 class RelationshipLogic:
     friendsanity_option: Friendsanity
     heart_size_option: FriendsanityHeartSize
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     time: TimeLogic
     season: SeasonLogic
     gifts: GiftLogic
@@ -34,7 +34,7 @@ class RelationshipLogic:
 
     def __init__(self, player: int, friendsanity_option: Friendsanity,
                  heart_size_option: FriendsanityHeartSize,
-                 received_logic: ReceivedLogic, has: HasLogic, region: RegionLogic,
+                 received_logic: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
                  time: TimeLogic, season: SeasonLogic, gifts: GiftLogic, buildings: BuildingLogic, mods_option: Mods):
         self.player = player
         self.friendsanity_option = friendsanity_option

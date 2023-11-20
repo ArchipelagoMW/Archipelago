@@ -2,8 +2,8 @@ from functools import cached_property
 
 from Utils import cache_self1
 from .building_logic import BuildingLogic
-from .has_logic import HasLogic
-from .region_logic import RegionLogic
+from .has_logic import HasLogicMixin
+from .region_logic import RegionLogicMixin
 from ..locations import LocationTags, locations_by_tag
 from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
@@ -17,12 +17,12 @@ class ShippingLogic:
     exclude_ginger_island: ExcludeGingerIsland
     special_orders_option: SpecialOrderLocations
     mods: Mods
-    has: HasLogic
-    region: RegionLogic
+    has: HasLogicMixin
+    region: RegionLogicMixin
     buildings: BuildingLogic
 
-    def __init__(self, player: int, exclude_ginger_island: ExcludeGingerIsland, special_orders_option: SpecialOrderLocations,mods: Mods, has: HasLogic,
-                 region: RegionLogic, buildings: BuildingLogic):
+    def __init__(self, player: int, exclude_ginger_island: ExcludeGingerIsland, special_orders_option: SpecialOrderLocations,mods: Mods, has: HasLogicMixin,
+                 region: RegionLogicMixin, buildings: BuildingLogic):
         self.player = player
         self.exclude_ginger_island = exclude_ginger_island
         self.special_orders_option = special_orders_option

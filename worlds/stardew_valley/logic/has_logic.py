@@ -1,14 +1,13 @@
-from typing import Dict, Union, Optional, Tuple
+from typing import Union, Optional, Tuple
 
+from .base_logic import BaseLogic, LogicRegistry
 from ..stardew_rule import StardewRule, True_, And, Or, Has, Count
 
 
-class HasLogic:
-    item_rules: Dict[str, StardewRule]
+class HasLogicMixin(BaseLogic):
 
-    def __init__(self, player: int, item_rules: Dict[str, StardewRule]):
-        self.player = player
-        self.item_rules = item_rules
+    def __init__(self, player: int, registry: LogicRegistry):
+        super().__init__(player, registry)
 
     def __call__(self, *args, **kwargs) -> StardewRule:
         count = None
@@ -19,7 +18,7 @@ class HasLogic:
     # Should be cached
     def has(self, items: Union[str, Tuple[str]], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
-            return Has(items, self.item_rules)
+            return Has(items, self.registry.item_rules)
 
         if len(items) == 0:
             return True_()

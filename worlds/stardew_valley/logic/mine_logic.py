@@ -1,7 +1,7 @@
 from Utils import cache_self1
 from .combat_logic import CombatLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
 from .. import options
@@ -18,15 +18,16 @@ class MineLogic:
     tool_option: ToolProgression
     skill_option: SkillProgression
     elevator_option: ElevatorProgression
-    received: ReceivedLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    region: RegionLogicMixin
     combat: CombatLogic
     tool: ToolLogic
     skill: SkillLogic
     mod_elevator: ModElevatorLogic
 
-    def __init__(self, player: int, tool_option: ToolProgression, skill_option: SkillProgression, elevator_option: ElevatorProgression, received: ReceivedLogic,
-                 region: RegionLogic, combat: CombatLogic, tool: ToolLogic, skill: SkillLogic):
+    def __init__(self, player: int, tool_option: ToolProgression, skill_option: SkillProgression, elevator_option: ElevatorProgression,
+                 received: ReceivedLogicMixin,
+                 region: RegionLogicMixin, combat: CombatLogic, tool: ToolLogic, skill: SkillLogic):
         self.player = player
         self.tool_option = tool_option
         self.skill_option = skill_option

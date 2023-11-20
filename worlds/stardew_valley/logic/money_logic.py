@@ -1,7 +1,7 @@
 from Utils import cache_self1
-from .has_logic import HasLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .has_logic import HasLogicMixin
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from .time_logic import TimeLogic
 from ..options import StartingMoney
 from ..stardew_rule import StardewRule, True_, CountPercent
@@ -14,12 +14,13 @@ qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Q
 
 class MoneyLogic:
     starting_money_option: StartingMoney
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     time: TimeLogic
 
-    def __init__(self, player: int, starting_money_option: StartingMoney, received: ReceivedLogic, has: HasLogic, region: RegionLogic, time: TimeLogic):
+    def __init__(self, player: int, starting_money_option: StartingMoney, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
+                 time: TimeLogic):
         self.player = player
         self.starting_money_option = starting_money_option
         self.received = received

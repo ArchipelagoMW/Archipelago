@@ -1,4 +1,4 @@
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .time_logic import TimeLogic
 from ..stardew_rule import StardewRule
 from ..strings.crop_names import all_vegetables, all_fruits, Vegetable, Fruit
@@ -8,10 +8,10 @@ from ..strings.machine_names import Machine
 
 class ArtisanLogic:
     player: int
-    has: HasLogic
+    has: HasLogicMixin
     time: TimeLogic
 
-    def __init__(self, player: int, has: HasLogic, time: TimeLogic):
+    def __init__(self, player: int, has: HasLogicMixin, time: TimeLogic):
         self.player = player
         self.has = has
         self.time = time

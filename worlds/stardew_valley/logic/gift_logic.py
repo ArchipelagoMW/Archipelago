@@ -1,15 +1,15 @@
 from functools import cached_property
 
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.gift_names import Gift
 
 
 class GiftLogic:
-    has: HasLogic
+    has: HasLogicMixin
 
-    def __init__(self, player: int, has: HasLogic):
+    def __init__(self, player: int, has: HasLogicMixin):
         self.player = player
         self.has = has
 

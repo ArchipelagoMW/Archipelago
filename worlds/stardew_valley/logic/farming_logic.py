@@ -1,4 +1,4 @@
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .skill_logic import SkillLogic
 from ..stardew_rule import StardewRule, True_
 from ..strings.fertilizer_names import Fertilizer
@@ -6,10 +6,10 @@ from ..strings.fertilizer_names import Fertilizer
 
 class FarmingLogic:
     player: int
-    has: HasLogic
+    has: HasLogicMixin
     skill: SkillLogic
 
-    def __init__(self, player: int, has: HasLogic, skill: SkillLogic):
+    def __init__(self, player: int, has: HasLogicMixin, skill: SkillLogic):
         self.player = player
         self.has = has
         self.skill = skill

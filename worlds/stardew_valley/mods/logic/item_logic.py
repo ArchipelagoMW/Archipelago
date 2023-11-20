@@ -1,33 +1,33 @@
 from typing import Dict
 
+from ..mod_data import ModNames
 from ...data.craftable_data import all_crafting_recipes_by_name
 from ...logic.combat_logic import CombatLogic
 from ...logic.cooking_logic import CookingLogic
+from ...logic.crafting_logic import CraftingLogic
 from ...logic.crop_logic import CropLogic
-from ...logic.has_logic import HasLogic
+from ...logic.has_logic import HasLogicMixin
 from ...logic.money_logic import MoneyLogic
 from ...logic.museum_logic import MuseumLogic
-from ...logic.region_logic import RegionLogic
+from ...logic.received_logic import ReceivedLogicMixin
+from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
 from ...logic.season_logic import SeasonLogic
-from ...logic.received_logic import ReceivedLogic
 from ...logic.tool_logic import ToolLogic
-from ...logic.crafting_logic import CraftingLogic
 from ...options import Mods
-from ..mod_data import ModNames
+from ...stardew_rule import StardewRule
 from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
 from ...strings.crop_names import SVEVegetable, SVEFruit
 from ...strings.food_names import SVEMeal, SVEBeverage
-from ...strings.gift_names import SVEGift
-from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.forageable_names import SVEForage
+from ...strings.gift_names import SVEGift
 from ...strings.metal_names import all_fossils, all_artifacts
 from ...strings.monster_drop_names import ModLoot
+from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed
-from ...strings.region_names import Region, SVERegion
+from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.villager_names import ModNPC
-from ...stardew_rule import StardewRule
 
 display_types = [ModCraftable.wooden_display, ModCraftable.hardwood_display]
 display_items = all_artifacts + all_fossils
@@ -38,18 +38,18 @@ class ModItemLogic:
     combat: CombatLogic
     crop: CropLogic
     cooking: CookingLogic
-    has: HasLogic
+    has: HasLogicMixin
     money: MoneyLogic
-    region: RegionLogic
+    region: RegionLogicMixin
     season: SeasonLogic
     relationship: RelationshipLogic
     museum: MuseumLogic
-    received: ReceivedLogic
+    received: ReceivedLogicMixin
     tool: ToolLogic
     crafting: CraftingLogic
 
-    def __init__(self, mods: Mods, combat: CombatLogic, crop: CropLogic, cooking: CookingLogic, has: HasLogic, money: MoneyLogic,
-                 region: RegionLogic, season: SeasonLogic, relationship: RelationshipLogic, museum: MuseumLogic, tool: ToolLogic, crafting: CraftingLogic):
+    def __init__(self, mods: Mods, combat: CombatLogic, crop: CropLogic, cooking: CookingLogic, has: HasLogicMixin, money: MoneyLogic,
+                 region: RegionLogicMixin, season: SeasonLogic, relationship: RelationshipLogic, museum: MuseumLogic, tool: ToolLogic, crafting: CraftingLogic):
         self.combat = combat
         self.crop = crop
         self.cooking = cooking
@@ -79,7 +79,7 @@ class ModItemLogic:
                 SVEFruit.monster_fruit: self.season.has(Season.summer) & self.has(SVESeed.stalk_seed),
                 SVEVegetable.monster_mushroom: self.season.has(Season.fall) & self.has(SVESeed.fungus_seed),
                 SVEForage.ornate_treasure_chest: self.region.can_reach(SVERegion.highlands) & self.combat.has_galaxy_weapon &
-                                                 self.tool.has_tool(Tool.axe,ToolMaterial.iron),
+                                                 self.tool.has_tool(Tool.axe, ToolMaterial.iron),
                 SVEFruit.slime_berry: self.season.has(Season.spring) & self.has(SVESeed.slime_seed),
                 SVESeed.slime_seed: self.region.can_reach(SVERegion.highlands) & self.combat.has_good_weapon,
                 SVESeed.stalk_seed: self.region.can_reach(SVERegion.highlands) & self.combat.has_good_weapon,

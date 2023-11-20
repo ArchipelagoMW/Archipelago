@@ -1,20 +1,20 @@
-from ...logic.received_logic import ReceivedLogic
-from ...logic.region_logic import RegionLogic
-from ...options import Mods
-from ...strings.region_names import MagicRegion
+from ...logic.received_logic import ReceivedLogicMixin
+from ...logic.region_logic import RegionLogicMixin
 from ...mods.mod_data import ModNames
-from ...strings.spells import MagicSpell
-from ...strings.ap_names.skill_level_names import ModSkillLevel
+from ...options import Mods
 from ...stardew_rule import Count, StardewRule, False_
+from ...strings.ap_names.skill_level_names import ModSkillLevel
+from ...strings.region_names import MagicRegion
+from ...strings.spells import MagicSpell
 
 
 class MagicLogic:
     player: int
     mods: Mods
-    received: ReceivedLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    region: RegionLogicMixin
 
-    def __init__(self, player: int, mods: Mods, received: ReceivedLogic, region: RegionLogic):
+    def __init__(self, player: int, mods: Mods, received: ReceivedLogicMixin, region: RegionLogicMixin):
         self.player = player
         self.mods = mods
         self.received = received

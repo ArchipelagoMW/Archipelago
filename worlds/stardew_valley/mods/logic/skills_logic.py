@@ -1,32 +1,32 @@
 from .magic_logic import MagicLogic
+from ...data.villagers_data import all_villagers
 from ...logic.action_logic import ActionLogic
 from ...logic.building_logic import BuildingLogic
 from ...logic.cooking_logic import CookingLogic
 from ...logic.fishing_logic import FishingLogic
-from ...logic.has_logic import HasLogic
-from ...logic.received_logic import ReceivedLogic
-from ...logic.region_logic import RegionLogic
+from ...logic.has_logic import HasLogicMixin
+from ...logic.received_logic import ReceivedLogicMixin
+from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogic
 from ...logic.tool_logic import ToolLogic
+from ...mods.mod_data import ModNames
 from ...options import SkillProgression, Mods
+from ...stardew_rule import Count, StardewRule, False_, True_
 from ...strings.building_names import Building
 from ...strings.geode_names import Geode
+from ...strings.machine_names import Machine
 from ...strings.region_names import Region
 from ...strings.skill_names import ModSkill
 from ...strings.spells import MagicSpell
-from ...strings.machine_names import Machine
 from ...strings.tool_names import Tool, ToolMaterial
-from ...mods.mod_data import ModNames
-from ...data.villagers_data import all_villagers
-from ...stardew_rule import Count, StardewRule, False_, True_
 
 
 class ModSkillLogic:
     player: int
     skill_option: SkillProgression
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     action: ActionLogic
     relationship: RelationshipLogic
     building: BuildingLogic
@@ -36,7 +36,8 @@ class ModSkillLogic:
     magic: MagicLogic
     mods_option: Mods
 
-    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, action: ActionLogic,
+    def __init__(self, player: int, skill_option: SkillProgression, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
+                 action: ActionLogic,
                  relationship: RelationshipLogic, building: BuildingLogic, tool: ToolLogic, fishing: FishingLogic, cooking: CookingLogic,
                  magic: MagicLogic, mods_option: Mods):
         self.player = player

@@ -1,10 +1,10 @@
 from typing import Dict
 
 from Utils import cache_self1
-from .has_logic import HasLogic
+from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogic
-from .received_logic import ReceivedLogic
-from .region_logic import RegionLogic
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 from ..options import BuildingProgression
 from ..stardew_rule import StardewRule, True_, False_, Has
 from ..strings.ap_names.event_names import Event
@@ -19,13 +19,14 @@ from ..strings.region_names import Region
 class BuildingLogic:
     player: int
     building_option: BuildingProgression
-    received: ReceivedLogic
-    has: HasLogic
-    region: RegionLogic
+    received: ReceivedLogicMixin
+    has: HasLogicMixin
+    region: RegionLogicMixin
     money: MoneyLogic
     building_rules: Dict[str, StardewRule]
 
-    def __init__(self, player: int, building_option: BuildingProgression, received: ReceivedLogic, has: HasLogic, region: RegionLogic, money: MoneyLogic):
+    def __init__(self, player: int, building_option: BuildingProgression, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin,
+                 money: MoneyLogic):
         self.player = player
         self.player = player
         self.building_option = building_option
