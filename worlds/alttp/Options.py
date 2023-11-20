@@ -20,6 +20,7 @@ class GlitchesRequired(Choice):
     option_no_logic = 4
     alias_owg = 2
     alias_hmg = 3
+    alias_none = 0
 
 
 class DarkRoomLogic(Choice):
