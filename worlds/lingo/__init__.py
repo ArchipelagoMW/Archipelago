@@ -92,8 +92,9 @@ class LingoWorld(World):
         item = ALL_ITEM_TABLE[name]
 
         classification = item.classification
-        if self.options.shuffle_paintings and len(item.painting_ids) > 0 and len(item.door_ids) == 0\
-                and all(painting_id not in self.player_logic.PAINTING_MAPPING for painting_id in item.painting_ids):
+        if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0\
+                and len(item.door_ids) == 0 and all(painting_id not in self.player_logic.PAINTING_MAPPING
+                                                    for painting_id in item.painting_ids):
             # If this is a "door" that just moves one or more paintings, and painting shuffle is on and those paintings
             # go nowhere, then this item should not be progression.
             classification = ItemClassification.filler
