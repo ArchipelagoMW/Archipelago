@@ -44,8 +44,8 @@ class Yugioh06Web(WebWorld):
         "multiworld/en",
         ["Rensen"]
     )
-
     tutorials = [setup]
+
 
 class Yugioh2006Setting(settings.Group):
     class Yugioh2006RomFile(settings.UserFilePath):
@@ -55,6 +55,7 @@ class Yugioh2006Setting(settings.Group):
         md5s = [MD5Europe, MD5America]
 
     rom_file: Yugioh2006RomFile = Yugioh2006RomFile(Yugioh2006RomFile.copy_to)
+
 
 class Yugioh06World(World):
     """

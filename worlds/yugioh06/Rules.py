@@ -40,7 +40,7 @@ def set_rules(world):
                                         state.yugioh06_difficulty(player, 3),
         "Extremely Low Deck Bonus":
             lambda state: state.has_any(["Reasoning", "Monster Gate", "Magical Merchant"], player) and
-                          state.yugioh06_difficulty(player, 5),
+                          state.yugioh06_difficulty(player, 2),
         "Exactly 0 LP Bonus": lambda state: state.yugioh06_difficulty(player, 2),
         "Quick Finish Bonus": lambda state: state.has("Quick-Finish", player),
         "Exodia Finish Bonus": lambda state: state.yugioh06_can_exodia_win(player),
@@ -110,44 +110,44 @@ def set_rules(world):
     access_rules = {
         # Limited
         "LD01 All except Level 4 forbidden":
-            lambda state: state.yugioh06_difficulty(player, 3),
+            lambda state: state.yugioh06_difficulty(player, 2),
         "LD02 Medium/high Level forbidden":
-            lambda state: state.yugioh06_difficulty(player, 2),
+            lambda state: state.yugioh06_difficulty(player, 1),
         "LD03 ATK 1500 or more forbidden":
-            lambda state: state.yugioh06_difficulty(player, 6),
-        "LD04 Flip Effects forbidden":
             lambda state: state.yugioh06_difficulty(player, 4),
+        "LD04 Flip Effects forbidden":
+            lambda state: state.yugioh06_difficulty(player, 1),
         "LD05 Tributes forbidden":
-            lambda state: state.yugioh06_difficulty(player, 2),
+            lambda state: state.yugioh06_difficulty(player, 1),
         "LD06 Traps forbidden":
-            lambda state: state.yugioh06_difficulty(player, 2),
+            lambda state: state.yugioh06_difficulty(player, 1),
         "LD07 Large Deck A":
-            lambda state: state.yugioh06_difficulty(player, 2),
+            lambda state: state.yugioh06_difficulty(player, 4),
         "LD08 Large Deck B":
-            lambda state: state.yugioh06_difficulty(player, 5),
+            lambda state: state.yugioh06_difficulty(player, 4),
         "LD09 Sets Forbidden":
-            lambda state: state.yugioh06_difficulty(player, 2),
+            lambda state: state.yugioh06_difficulty(player, 1),
         "LD10 All except LV monsters forbidden":
-            lambda state: only_level(state, player) and state.yugioh06_difficulty(player, 4),
+            lambda state: only_level(state, player) and state.yugioh06_difficulty(player, 2),
         "LD11 All except Fairies forbidden":
-            lambda state: only_fairy(state, player) and state.yugioh06_difficulty(player, 5),
+            lambda state: only_fairy(state, player) and state.yugioh06_difficulty(player, 2),
         "LD12 All except Wind forbidden":
-            lambda state: only_wind(state, player) and state.yugioh06_difficulty(player, 3),
+            lambda state: only_wind(state, player) and state.yugioh06_difficulty(player, 2),
         "LD13 All except monsters forbidden":
             lambda state: state.yugioh06_difficulty(player, 3),
         "LD14 Level 3 or below forbidden":
-            lambda state: state.yugioh06_difficulty(player, 6),
+            lambda state: state.yugioh06_difficulty(player, 1),
         "LD15 DEF 1500 or less forbidden":
-            lambda state: state.yugioh06_difficulty(player, 5),
+            lambda state: state.yugioh06_difficulty(player, 3),
         "LD16 Effect Monsters forbidden":
-            lambda state: state.yugioh06_difficulty(player, 5),
+            lambda state: state.yugioh06_difficulty(player, 4),
         "LD17 Spells forbidden":
             lambda state: state.yugioh06_difficulty(player, 3),
         "LD18 Attacks forbidden":
             lambda state: state.has_all(["Wave-Motion Cannon", "Stealth Bird"], player)
                           and state.yugioh06_has_individual(["Dark World Lightning", "Nobleman of Crossout",
                                                              "Shield Crash", "Tribute to the Doomed"], player) >= 2
-                          and state.yugioh06_difficulty(player, 5),
+                          and state.yugioh06_difficulty(player, 3),
         "LD19 All except E-Hero's forbidden":
             lambda state: state.has_any(["Polymerization", "Fusion Gate"], player) and
                           count_has_materials(state, ["Elemental Hero Flame Wingman",
@@ -156,35 +156,35 @@ def set_rules(world):
                                                       "Elemental Hero Steam Healer",
                                                       "Elemental Hero Shining Flare Wingman",
                                                       "Elemental Hero Wildedge"], player) >= 3 and
-                          state.yugioh06_difficulty(player, 5),
+                          state.yugioh06_difficulty(player, 3),
         "LD20 All except Warriors forbidden":
-            lambda state: only_warrior(state, player) and state.yugioh06_difficulty(player, 4),
+            lambda state: only_warrior(state, player) and state.yugioh06_difficulty(player, 2),
         "LD21 All except Dark forbidden":
             lambda state: only_dark(state, player) and state.yugioh06_difficulty(player, 2),
         "LD22 All limited cards forbidden":
-            lambda state: state.yugioh06_difficulty(player, 4),
+            lambda state: state.yugioh06_difficulty(player, 3),
         "LD23 Refer to Mar 05 Banlist":
-            lambda state: state.yugioh06_difficulty(player, 7),
+            lambda state: state.yugioh06_difficulty(player, 5),
         "LD24 Refer to Sept 04 Banlist":
-            lambda state: state.yugioh06_difficulty(player, 7),
+            lambda state: state.yugioh06_difficulty(player, 5),
         "LD25 Low Life Points":
             lambda state: state.yugioh06_difficulty(player, 5),
         "LD26 All except Toons forbidden":
-            lambda state: only_toons(state, player) and state.yugioh06_difficulty(player, 4),
+            lambda state: only_toons(state, player) and state.yugioh06_difficulty(player, 2),
         "LD27 All except Spirits forbidden":
-            lambda state: only_spirit(state, player) and state.yugioh06_difficulty(player, 7),
+            lambda state: only_spirit(state, player) and state.yugioh06_difficulty(player, 2),
         "LD28 All except Dragons forbidden":
-            lambda state: only_dragon(state, player) and state.yugioh06_difficulty(player, 5),
+            lambda state: only_dragon(state, player) and state.yugioh06_difficulty(player, 2),
         "LD29 All except Spellcasters forbidden":
-            lambda state: only_spellcaster(state, player) and state.yugioh06_difficulty(player, 9),
+            lambda state: only_spellcaster(state, player) and state.yugioh06_difficulty(player, 2),
         "LD30 All except Light forbidden":
-            lambda state: only_light(state, player) and state.yugioh06_difficulty(player, 4),
+            lambda state: only_light(state, player) and state.yugioh06_difficulty(player, 2),
         "LD31 All except Fire forbidden":
-            lambda state: only_fire(state, player) and state.yugioh06_difficulty(player, 4),
+            lambda state: only_fire(state, player) and state.yugioh06_difficulty(player, 2),
         "LD32 Decks with multiples forbidden":
-            lambda state: state.yugioh06_difficulty(player, 7),
+            lambda state: state.yugioh06_difficulty(player, 4),
         "LD33 Special Summons forbidden":
-            lambda state: state.yugioh06_difficulty(player, 7),
+            lambda state: state.yugioh06_difficulty(player, 2),
         "LD34 Normal Summons forbidden":
             lambda state: state.has_all(["Polymerization", "King of the Swamp"], player) and
                           count_has_materials(state, ["Elemental Hero Flame Wingman",
@@ -193,22 +193,22 @@ def set_rules(world):
                                                       "Elemental Hero Steam Healer",
                                                       "Elemental Hero Shining Flare Wingman",
                                                       "Elemental Hero Wildedge"], player) >= 3 and
-                          state.yugioh06_difficulty(player, 7),
+                          state.yugioh06_difficulty(player, 4),
         "LD35 All except Zombies forbidden":
-            lambda state: only_zombie(state, player) and state.yugioh06_difficulty(player, 5),
+            lambda state: only_zombie(state, player) and state.yugioh06_difficulty(player, 2),
         "LD36 All except Earth forbidden":
-            lambda state: only_earth(state, player) and state.yugioh06_difficulty(player, 4),
+            lambda state: only_earth(state, player) and state.yugioh06_difficulty(player, 2),
         "LD37 All except Water forbidden":
-            lambda state: only_water(state, player) and state.yugioh06_difficulty(player, 4),
+            lambda state: only_water(state, player) and state.yugioh06_difficulty(player, 2),
         "LD38 Refer to Mar 04 Banlist":
-            lambda state: state.yugioh06_difficulty(player, 8),
+            lambda state: state.yugioh06_difficulty(player, 4),
         "LD39 Monsters forbidden":
             lambda state: state.has_all(["Skull Zoma", "Embodiment of Apophis"], player)
                           and state.yugioh06_difficulty(player, 5),
         "LD40 Refer to Sept 05 Banlist":
-            lambda state: state.yugioh06_difficulty(player, 8),
+            lambda state: state.yugioh06_difficulty(player, 5),
         "LD41 Refer to Sept 03 Banlist":
-            lambda state: state.yugioh06_difficulty(player, 8),
+            lambda state: state.yugioh06_difficulty(player, 5),
         # Theme Duels
         "TD01 Battle Damage":
             lambda state: state.yugioh06_difficulty(player, 1),
@@ -217,7 +217,7 @@ def set_rules(world):
         "TD03 Normal Summon":
             lambda state: only_normal(state, player) and state.yugioh06_difficulty(player, 3),
         "TD04 Ritual Summon":
-            lambda state: state.yugioh06_difficulty(player, 8) and
+            lambda state: state.yugioh06_difficulty(player, 3) and
                           state.has_all(["Contract with the Abyss",
                                          "Manju of the Ten Thousand Hands",
                                          "Senju of the Thousand Hands",
@@ -251,16 +251,16 @@ def set_rules(world):
         "TD11 Recover":
             lambda state: can_gain_lp_every_turn(state, player) and state.yugioh06_difficulty(player, 3),
         "TD12 Remove Monsters by Effect":
-            lambda state: state.has("Soul Release", player) and state.yugioh06_difficulty(player, 5),
+            lambda state: state.has("Soul Release", player) and state.yugioh06_difficulty(player, 2),
         "TD13 Flip Summon":
-            lambda state: pacman_deck(state, player) and state.yugioh06_difficulty(player, 5),
+            lambda state: pacman_deck(state, player) and state.yugioh06_difficulty(player, 2),
         "TD14 Special Summon B":
             lambda state: state.has_any(["Manticore of Darkness", "Treeborn Frog"], player) and
                           state.has("Foolish Burial", player) and
-                          state.yugioh06_difficulty(player, 5),
+                          state.yugioh06_difficulty(player, 2),
         "TD15 Token":
             lambda state: state.has_all(["Dandylion", "Ojama Trio", "Stray Lambs"], player) and
-                          state.yugioh06_difficulty(player, 5),
+                          state.yugioh06_difficulty(player, 3),
         "TD16 Union":
             lambda state: equip_unions(state, player) and
                           state.yugioh06_difficulty(player, 2),
@@ -275,10 +275,10 @@ def set_rules(world):
         "TD20 Deck Destruction":
             lambda state: state.has_any(["Cyber Jar", "Morphing Jar", "Morphing Jar #2", "Needle Worm"], player)
                           and state.has_any(["The Shallow Grave", "Spear Cretin"],
-                                            player) and state.yugioh06_difficulty(player, 5),
+                                            player) and state.yugioh06_difficulty(player, 2),
         "TD21 Victory D.":
             lambda state: state.has("Victory D.", player) and only_dragon(state, player)
-                          and state.yugioh06_difficulty(player, 5),
+                          and state.yugioh06_difficulty(player, 3),
         "TD22 The Preventers Fight Back":
             lambda state: state.yugioh06_has_ojama_delta_hurricane(player) and
                           state.has_all(["Rescue Cat", "Enchanting Fitting Room", "Jerry Beans Man"], player) and
@@ -288,33 +288,33 @@ def set_rules(world):
                           state.has_all(["Enchanting Fitting Room", "Jerry Beans Man"], player) and
                           state.yugioh06_difficulty(player, 3),
         "TD24 Victory in 5 Turns":
-            lambda state: state.yugioh06_difficulty(player, 6),
+            lambda state: state.yugioh06_difficulty(player, 3),
         "TD25 Moth Grows Up":
             lambda state: state.yugioh06_has_perfectly_ultimate_great_moth(player) and
                           state.has_all(["Gokipon", "Howling Insect"], player) and
-                          state.yugioh06_difficulty(player, 5),
+                          state.yugioh06_difficulty(player, 3),
         "TD26 Magnetic Power":
             lambda state: state.yugioh06_has_valkyrion_the_magna_warrior(player) and
-                          state.yugioh06_difficulty(player, 4),
+                          state.yugioh06_difficulty(player, 2),
         "TD27 Dark Sage":
             lambda state: state.yugioh06_has_dark_sage(player) and
                           state.has_any(["Skilled Dark Magician", "Dark Magic Curtain"], player) and
-                          state.yugioh06_difficulty(player, 5),
+                          state.yugioh06_difficulty(player, 2),
         "TD28 Direct Damage":
-            lambda state: state.yugioh06_difficulty(player, 5),
+            lambda state: state.yugioh06_difficulty(player, 2),
         "TD29 Destroy Monsters in Battle":
-            lambda state: state.yugioh06_difficulty(player, 5),
+            lambda state: state.yugioh06_difficulty(player, 2),
         "TD30 Tribute Summon":
-            lambda state: state.has("Treeborn Frog", player) and state.yugioh06_difficulty(player, 5),
+            lambda state: state.has("Treeborn Frog", player) and state.yugioh06_difficulty(player, 2),
         "TD31 Special Summon C":
             lambda state: state.yugioh06_has_individual(
                 ["Aqua Spirit", "Rock Spirit", "Spirit of Flames",
                  "Garuda the Wind Spirit", "Gigantes", "Inferno", "Megarock Dragon", "Silpheed"],
                 player) > 4 and state.yugioh06_difficulty(player, 3),
         "TD32 Toon":
-            lambda state: only_toons(state, player) and state.yugioh06_difficulty(player, 5),
+            lambda state: only_toons(state, player) and state.yugioh06_difficulty(player, 3),
         "TD33 10x Counter":
-            lambda state: counter_traps(state, player) and state.yugioh06_difficulty(player, 5),
+            lambda state: counter_traps(state, player) and state.yugioh06_difficulty(player, 2),
         "TD34 Destiny Board":
             lambda state: state.yugioh06_has_destiny_board(player)
                           and state.yugioh06_can_stall_with_monsters(player)
@@ -323,19 +323,19 @@ def set_rules(world):
         # TODO: Add more OTKs
         "TD35 Huge Damage in a Turn":
             lambda state: state.has_all(["Cyber-Stein", "Cyber Twin Dragon", "Megamorph"], player)
-                          and state.yugioh06_difficulty(player, 7),
+                          and state.yugioh06_difficulty(player, 3),
         "TD36 V-Z In the House":
             lambda state: state.yugioh06_has_vwxyz_dragon_catapult_cannon(player)
-                          and state.yugioh06_difficulty(player, 7),
+                          and state.yugioh06_difficulty(player, 3),
         "TD37 Uria, Lord of Searing Flames":
             lambda state: state.has_all(["Uria, Lord of Searing Flames",
                                          "Embodiment of Apophis",
                                          "Skull Zoma",
                                          "Metal Reflect Slime"], player)
-                          and state.yugioh06_difficulty(player, 5),
+                          and state.yugioh06_difficulty(player, 3),
         "TD38 Hamon, Lord of Striking Thunder":
             lambda state: state.has("Hamon, Lord of Striking Thunder", player)
-                          and state.yugioh06_difficulty(player, 7),
+                          and state.yugioh06_difficulty(player, 3),
         "TD39 Raviel, Lord of Phantasms":
             lambda state: state.has_all(["Raviel, Lord of Phantasms", "Giant Germ"], player) and
                           state.yugioh06_has_individual(["Archfiend Soldier",
@@ -343,19 +343,19 @@ def set_rules(world):
                                                          "Slate Warrior",
                                                          "D. D. Trainer",
                                                          "Earthbound Spirit"], player) >= 3
-                          and state.yugioh06_difficulty(player, 5),
+                          and state.yugioh06_difficulty(player, 3),
         "TD40 Make a Chain":
             lambda state: state.has("Ultimate Offering", player)
-                          and state.yugioh06_difficulty(player, 7),
+                          and state.yugioh06_difficulty(player, 4),
         "TD41 The Gatekeeper Stands Tall":
             lambda state: state.yugioh06_has_gate_guardian(player) and
                           state.has_all(["Treeborn Frog", "Tribute Doll"], player)
-                          and state.yugioh06_difficulty(player, 9),
+                          and state.yugioh06_difficulty(player, 4),
         "TD42 Serious Damage":
-            lambda state: state.yugioh06_difficulty(player, 9),
+            lambda state: state.yugioh06_difficulty(player, 3),
         "TD43 Return Monsters with Effects":
             lambda state: state.has_all(["Penguin Soldier", "Messenger of Peace"], player)
-                          and state.yugioh06_difficulty(player, 9),
+                          and state.yugioh06_difficulty(player, 4),
         "TD44 Fusion Summon":
             lambda state: state.has_all(["Fusion Gate", "Terraforming", "Dimension Fusion",
                                          "Return from the Different Dimension"], player) and
@@ -368,7 +368,7 @@ def set_rules(world):
                           state.yugioh06_difficulty(player, 7),
         "TD45 Big Damage at once":
             lambda state: state.has("Wave-Motion Cannon", player)
-                          and state.yugioh06_difficulty(player, 7),
+                          and state.yugioh06_difficulty(player, 3),
         "TD46 XYZ In the House":
             lambda state: state.yugioh06_has_all_xyz_dragon_cannon_fusions(player)
                           and state.has("Dimension Fusion", player),
@@ -377,13 +377,13 @@ def set_rules(world):
         "TD48 Destroy Monsters with Effects":
             lambda state: state.has_all(["Blade Rabbit", "Dream Clown"], player) and
                           state.yugioh06_can_stall_with_st(player) and
-                          state.yugioh06_difficulty(player, 5),
+                          state.yugioh06_difficulty(player, 3),
         "TD49 Plunder":
-            lambda state: take_control(state, player) and state.yugioh06_difficulty(player, 7),
+            lambda state: take_control(state, player) and state.yugioh06_difficulty(player, 5),
         "TD50 Dark Scorpion Combination":
             lambda state: state.yugioh06_has_dark_scorpion_combination(player) and
                           state.has_all(["Reinforcement of the Army", "Mystic Tomato"], player) and
-                          state.yugioh06_difficulty(player, 4)
+                          state.yugioh06_difficulty(player, 3)
     }
     world.completion_condition[player] = lambda state: state.has("Goal", player)
 

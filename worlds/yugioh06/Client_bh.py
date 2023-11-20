@@ -21,10 +21,9 @@ if "worlds._bizhawk" not in sys.modules:
         sys.modules[mod.__name__] = mod
         importer.exec_module(mod)
     elif not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
-        raise Exception("Did not find _bizhawk.apworld required to play Yu-Gi-Oh! 2006.")
+        raise AssertionError("Did not find _bizhawk.apworld required to play Yu-Gi-Oh! 2006.")
 
 
-from worlds.LauncherComponents import SuffixIdentifier, components
 from NetUtils import ClientStatus, NetworkItem
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -35,9 +34,10 @@ else:
     BizHawkClientContext = object
 
 # Add .apygo06 suffix to bizhawk client
+from worlds.LauncherComponents import SuffixIdentifier, components
 for component in components:
     if component.script_name == "BizHawkClient":
-        component.file_identifier = SuffixIdentifier((*component.file_identifier.suffixes, ".apygo06"))
+        component.file_identifier = SuffixIdentifier(*(*component.file_identifier.suffixes, ".apygo06"))
         break
 
 class YuGiOh2006Client(BizHawkClient):
