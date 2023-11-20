@@ -428,6 +428,8 @@ def make_area_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]
 
         is_multiworld = len(world.multiworld.player_ids) > 1
 
+        correct_word = "Both" if total_progression == 2 else "All"
+
         if not total_progression:
             hint_string = f"In the {hinted_area} area, you will find no progression items."
 
@@ -449,7 +451,7 @@ def make_area_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]
             hint_string = f"In the {hinted_area} area, you will find {total_progression} progression items."
 
             if local_lasers == total_progression:
-                hint_string = f"All of them are lasers" + " for this world." if is_multiworld else "."
+                hint_string = f"{correct_word} of them are lasers" + " for this world." if is_multiworld else "."
 
             elif is_multiworld:
                 if local_progression and non_local_progression:
@@ -458,9 +460,9 @@ def make_area_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]
                     else:
                         hint_string += f"\nOf them, {non_local_progression} are for other players."
                 elif non_local_progression:
-                    hint_string += "\nAll of them are for other players."
+                    hint_string += f"\n{correct_word} of them are for other players."
                 elif local_progression:
-                    hint_string += "\nAll of them are for this world."
+                    hint_string += f"\n{correct_word} of them are for this world."
 
                 if local_lasers == 1:
                     hint_string += "\nAlso, one of them is a laser for this world."
