@@ -4,7 +4,7 @@ from .base_logic import BaseLogic
 from ..stardew_rule import StardewRule, True_, And, Or, Has, Count
 
 
-class HasLogicMixin(BaseLogic):
+class HasLogicMixin(BaseLogic[None]):
     def __call__(self, *args, **kwargs) -> StardewRule:
         count = None
         if len(args) >= 2:

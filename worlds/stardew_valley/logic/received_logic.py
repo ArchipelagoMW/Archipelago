@@ -1,10 +1,10 @@
 from typing import Union, Optional, Tuple
 
-from .base_logic import BaseLogic
+from .base_logic import BaseLogic, BaseLogicMixin
 from ..stardew_rule import StardewRule, True_, Received, And, Or, TotalReceived
 
 
-class ReceivedLogicMixin(BaseLogic):
+class ReceivedLogicMixin(BaseLogic[None], BaseLogicMixin):
     def __call__(self, *args, **kwargs) -> StardewRule:
         count = 1
         if len(args) >= 2:

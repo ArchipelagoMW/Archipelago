@@ -1,36 +1,44 @@
-from dataclasses import dataclass, field
-from typing import Dict
+from __future__ import annotations
+
+from typing import TypeVar, Generic
 
 from ..options import StardewValleyOptions
-from ..stardew_rule import StardewRule
 
 
-@dataclass(frozen=False)
 class LogicRegistry:
-    player: int
-    options: StardewValleyOptions
 
-    item_rules: Dict[str, StardewRule] = field(default_factory=dict)
-
-    sapling_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    tree_fruit_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    seed_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    cooking_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    crafting_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    crop_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    fish_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    museum_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    festival_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    quest_rules: Dict[str, StardewRule] = field(default_factory=dict)
-    building_rules: Dict[str, StardewRule] = field(default_factory=dict)
+    def __init__(self):
+        self.item_rules = {}
+        self.sapling_rules = {}
+        self.tree_fruit_rules = {}
+        self.seed_rules = {}
+        self.cooking_rules = {}
+        self.crafting_rules = {}
+        self.crop_rules = {}
+        self.fish_rules = {}
+        self.museum_rules = {}
+        self.festival_rules = {}
+        self.quest_rules = {}
+        self.building_rules = {}
 
 
-class BaseLogic:
+class BaseLogicMixin:
+    def __init__(self, *args, **kwargs):
+        pass
+
+
+T = TypeVar("T", bound=BaseLogicMixin)
+
+
+class BaseLogic(BaseLogicMixin, Generic[T]):
     player: int
     registry: LogicRegistry
     options: StardewValleyOptions
+    logic: T
 
-    def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions):
+    def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions, logic: T):
+        super().__init__(player, registry, options, logic)
         self.player = player
         self.registry = registry
         self.options = options
+        self.logic = logic

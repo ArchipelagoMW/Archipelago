@@ -45,19 +45,19 @@ class ModLogic(BaseLogic):
     skill: ModSkillLogic
     sve: SVELogic
 
-    def __init__(self, player: int, registry: LogicRegistry, options, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods,
+    def __init__(self, player: int, registry: LogicRegistry, options, logic, skill_option: SkillProgression, elevator_option: ElevatorProgression, mods: Mods,
                  received: ReceivedLogicMixin,
                  has: HasLogicMixin, region: RegionLogicMixin,
                  action: ActionLogicMixin, artisan: ArtisanLogicMixin, season: SeasonLogicMixin, money: MoneyLogicMixin, relationship: RelationshipLogicMixin,
-                museum: MuseumLogic, building: BuildingLogicMixin,
+                 museum: MuseumLogic, building: BuildingLogicMixin,
                  wallet: WalletLogicMixin,
                  combat: CombatLogic, tool: ToolLogic, skill: SkillLogic, fishing: FishingLogic, cooking: CookingLogic, mine: MineLogic, ability: AbilityLogic,
                  time: TimeLogicMixin, quest: QuestLogic, crafting: CraftingLogic, crop: CropLogic):
-        super().__init__(player, registry, options)
+        super().__init__(player, registry, options, logic)
         self.item = ModItemLogic(mods, combat, crop, cooking, has, money, region, season, relationship, museum, tool, crafting)
         self.magic = MagicLogic(player, mods, received, region)
         self.quests = ModQuestLogic(mods, received, has, region, time, season, relationship)
-        self.buildings = ModBuildingLogic(player, registry, options)
+        self.buildings = ModBuildingLogic(player, registry, options, logic)
         self.special_orders = ModSpecialOrderLogic(player, action, artisan, crafting, crop, has, region, relationship, season, wallet, mods)
         self.elevator = ModElevatorLogic(player, elevator_option, mods, received)
         self.deepwoods = DeepWoodsLogic(player, skill_option, elevator_option, received, has, combat, tool, skill, cooking)
