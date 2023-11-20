@@ -23,7 +23,7 @@ function define_item_ids()
     item_ids["Enemy Card Barrel Spider"]         = 2662013
     item_ids["Enemy Card Search Ghost"]          = 2662014
     item_ids["Enemy Card Sea Neon"]              = 2662015
-    item_ids["Enemy Card Screwdriver"]           = 2662016
+    item_ids["Enemy Card Screwdiver"]            = 2662016
     item_ids["Enemy Card Aquatank"]              = 2662017
     item_ids["Enemy Card Wight Knight"]          = 2662018
     item_ids["Enemy Card Gargoyle"]              = 2662019
@@ -174,7 +174,7 @@ function define_battle_cards()
     battle_cards["Barrel Spider"] = {0x1E6, 0x1E8}
     battle_cards["Search Ghost"] = {0x1E9, 0x1EB}
     battle_cards["Sea Neon"] = {0x1EC, 0x1EE}
-    battle_cards["Screwdriver"] = {0x1EF, 0x1F1}
+    battle_cards["Screwdiver"] = {0x1EF, 0x1F1}
     battle_cards["Aquatank"] = {0x1F2, 0x1F4}
     battle_cards["Wight Knight"] = {0x1F5, 0x1F7}
     battle_cards["Gargoyle"] = {0x1F8, 0x1FA}
