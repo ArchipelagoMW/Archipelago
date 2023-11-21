@@ -1,8 +1,8 @@
 from random import Random
 from typing import List, Dict, Union
 
-from .logic.logic import StardewLogic
 from .data.bundle_data import *
+from .logic.logic import StardewLogic
 from .options import BundleRandomization, BundlePrice
 
 vanilla_bundles = {
@@ -188,7 +188,7 @@ def shuffle_bundles_completely(random: Random, logic: StardewLogic, bundles: Dic
                                                  random.sample(quality_crops_items, 10)
     choices = random.sample(all_bundle_items_without_quality_and_money, total_required_item_number - 4)
 
-    items_sorted = sorted(choices, key=lambda x: logic.item_rules[x.item.name].get_difficulty())
+    items_sorted = sorted(choices, key=lambda x: logic.registry.item_rules[x.item.name].get_difficulty())
 
     keys = sorted(bundles.keys())
     random.shuffle(keys)

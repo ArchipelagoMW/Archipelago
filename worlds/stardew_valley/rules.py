@@ -623,7 +623,7 @@ def set_festival_rules(all_location_names: List[str], logic: StardewLogic, multi
     for festival in festival_locations:
         if festival.name in all_location_names:
             MultiWorldRules.set_rule(multiworld.get_location(festival.name, player),
-                                     logic.festival_rules[festival.name])
+                                     logic.registry.festival_rules[festival.name])
 
 
 monster_eradication_prefix = "Monster Eradication: "
@@ -940,9 +940,9 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_bear_shop, player),
                              (logic.quest.can_complete_quest(Quest.strange_note) & logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
                               logic.tool.has_tool(Tool.pickaxe, ToolMaterial.basic)))
-    for location in logic.mod.sve.sve_location_rules:
+    for location in logic.registry.sve_location_rules:
         MultiWorldRules.set_rule(multiworld.get_location(location, player),
-                                 logic.mod.sve.sve_location_rules[location])
+                                 logic.registry.sve_location_rules[location])
     set_sve_ginger_island_rules(logic, multiworld, player, world_options)
 
 

@@ -1,14 +1,16 @@
+from typing import Union
+
 from ..mod_data import ModNames
 from ...logic.action_logic import ActionLogicMixin
 from ...logic.artisan_logic import ArtisanLogicMixin
-from ...logic.crafting_logic import CraftingLogic
-from ...logic.crop_logic import CropLogic
+from ...logic.base_logic import BaseLogicMixin, BaseLogic
+from ...logic.crafting_logic import CraftingLogicMixin
+from ...logic.crop_logic import CropLogicMixin
 from ...logic.has_logic import HasLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.wallet_logic import WalletLogicMixin
-from ...options import Mods
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import Consumable, Edible, Bomb
 from ...strings.crop_names import Fruit
@@ -23,59 +25,40 @@ from ...strings.special_order_names import SpecialOrder, ModSpecialOrder
 from ...strings.villager_names import ModNPC
 
 
-class ModSpecialOrderLogic:
-    player: int
-    action: ActionLogicMixin
-    artisan: ArtisanLogicMixin
-    crafting: CraftingLogic
-    crop: CropLogic
-    has: HasLogicMixin
-    region: RegionLogicMixin
-    relationship: RelationshipLogicMixin
-    season: SeasonLogicMixin
-    wallet: WalletLogicMixin
-    mods_option: Mods
+class ModSpecialOrderLogicMixin(BaseLogicMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.special_order = ModSpecialOrderLogic(*args, **kwargs)
 
-    def __init__(self, player: int, action: ActionLogicMixin, artisan: ArtisanLogicMixin, crafting: CraftingLogic, crop: CropLogic, has: HasLogicMixin,
-                 region: RegionLogicMixin, relationship: RelationshipLogicMixin,
-                 season: SeasonLogicMixin, wallet: WalletLogicMixin, mods_option: Mods):
-        self.player = player
-        self.action = action
-        self.artisan = artisan
-        self.crafting = crafting
-        self.crop = crop
-        self.has = has
-        self.region = region
-        self.relationship = relationship
-        self.season = season
-        self.wallet = wallet
-        self.mods_option = mods_option
 
-    def get_modded_special_orders_rules(self, vanilla_rules):
+class ModSpecialOrderLogic(BaseLogic[Union[ActionLogicMixin, ArtisanLogicMixin, CraftingLogicMixin, CropLogicMixin, HasLogicMixin, RegionLogicMixin,
+RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
+    def get_modded_special_orders_rules(self):
         special_orders = {}
-        if ModNames.juna in self.mods_option:
+        if ModNames.juna in self.options.mods:
             special_orders.update({
-                ModSpecialOrder.junas_monster_mash: self.relationship.has_hearts(ModNPC.juna, 4) &
-                                                    vanilla_rules[SpecialOrder.a_curious_substance] &
-                                                    self.wallet.has_rusty_key &
-                                                    self.region.can_reach(Region.forest) & self.has(Consumable.monster_musk) &
-                                                    self.has("Energy Tonic") & self.has(Material.sap) & self.has(Loot.bug_meat) &
-                                                    self.has(Edible.oil_of_garlic) & self.has(Meal.strange_bun)
+                ModSpecialOrder.junas_monster_mash: self.logic.relationship.has_hearts(ModNPC.juna, 4) &
+                                                    self.registry.special_order_rules[SpecialOrder.a_curious_substance] &
+                                                    self.logic.wallet.has_rusty_key &
+                                                    self.logic.region.can_reach(Region.forest) & self.logic.has(Consumable.monster_musk) &
+                                                    self.logic.has("Energy Tonic") & self.logic.has(Material.sap) & self.logic.has(Loot.bug_meat) &
+                                                    self.logic.has(Edible.oil_of_garlic) & self.logic.has(Meal.strange_bun)
             })
-        if ModNames.sve in self.mods_option:
+        if ModNames.sve in self.options.mods:
             special_orders.update({
-                ModSpecialOrder.andys_cellar: self.has(Material.stone) & self.has(Material.wood) & self.has(Material.hardwood) & self.has(MetalBar.iron) &
-                                              self.region.can_reach(SVERegion.fairhaven_farm),
-                ModSpecialOrder.a_mysterious_venture: self.has(Bomb.cherry_bomb) & self.has(Bomb.bomb) & self.has(Bomb.mega_bomb) &
-                                                      self.region.can_reach(Region.adventurer_guild),
-                ModSpecialOrder.an_elegant_reception: self.artisan.can_keg(Fruit.starfruit) & self.has(ArtisanGood.cheese) &
-                                                      self.has(ArtisanGood.goat_cheese) & self.season.has_any_not_winter() & self.region.can_reach(
-                    SVERegion.jenkins_cellar),
-                ModSpecialOrder.fairy_garden: self.has(Consumable.fairy_dust) &
-                                              self.region.can_reach(Region.island_south) & (
-                                                      self.action.can_open_geode(Geode.frozen) | self.action.can_open_geode(Geode.omni)) &
-                                              self.region.can_reach(SVERegion.blue_moon_vineyard),
-                ModSpecialOrder.homemade_fertilizer: self.has(Fertilizer.quality) & self.region.can_reach(SVERegion.susans_house)
+                ModSpecialOrder.andys_cellar: self.logic.has(Material.stone) & self.logic.has(Material.wood) & self.logic.has(Material.hardwood) &
+                                              self.logic.has(MetalBar.iron) &
+                                              self.logic.region.can_reach(SVERegion.fairhaven_farm),
+                ModSpecialOrder.a_mysterious_venture: self.logic.has(Bomb.cherry_bomb) & self.logic.has(Bomb.bomb) & self.logic.has(Bomb.mega_bomb) &
+                                                      self.logic.region.can_reach(Region.adventurer_guild),
+                ModSpecialOrder.an_elegant_reception: self.logic.artisan.can_keg(Fruit.starfruit) & self.logic.has(ArtisanGood.cheese) &
+                                                      self.logic.has(ArtisanGood.goat_cheese) & self.logic.season.has_any_not_winter() &
+                                                      self.logic.region.can_reach(SVERegion.jenkins_cellar),
+                ModSpecialOrder.fairy_garden: self.logic.has(Consumable.fairy_dust) &
+                                              self.logic.region.can_reach(Region.island_south) & (
+                                                      self.logic.action.can_open_geode(Geode.frozen) | self.logic.action.can_open_geode(Geode.omni)) &
+                                              self.logic.region.can_reach(SVERegion.blue_moon_vineyard),
+                ModSpecialOrder.homemade_fertilizer: self.logic.has(Fertilizer.quality) & self.logic.region.can_reach(SVERegion.susans_house)
             })
 
         return special_orders

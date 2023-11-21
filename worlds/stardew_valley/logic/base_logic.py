@@ -23,6 +23,8 @@ class LogicRegistry:
         self.building_rules: Dict[str, StardewRule] = {}
         self.special_order_rules: Dict[str, StardewRule] = {}
 
+        self.sve_location_rules: Dict[str, StardewRule] = {}
+
 
 class BaseLogicMixin:
     def __init__(self, *args, **kwargs):

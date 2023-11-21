@@ -43,7 +43,7 @@ from ..data.monster_data import all_monsters_by_category, all_monsters_by_name
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
-from ..mods.logic.mod_logic import ModLogic
+from ..mods.logic.mod_logic import ModLogicMixin
 from ..mods.mod_data import ModNames
 from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity, StardewValleyOptions
 from ..stardew_rule import False_, Or, True_, Count, And, StardewRule
@@ -91,7 +91,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin, BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin,
                    MuseumLogicMixin, WalletLogicMixin, CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, CropLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
-                   SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin):
+                   SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin):
     player: int
     options: StardewValleyOptions
 
@@ -99,50 +99,26 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.registry = LogicRegistry()
         super().__init__(player, self.registry, options, self)
 
-        self.item_rules = self.registry.item_rules
-        self.sapling_rules = self.registry.sapling_rules
-        self.tree_fruit_rules = self.registry.tree_fruit_rules
-        self.seed_rules = self.registry.seed_rules
-        self.cooking_rules = self.registry.cooking_rules
-        self.crafting_rules = self.registry.crafting_rules
-        self.crop_rules = self.registry.crop_rules
-        self.fish_rules = self.registry.fish_rules
-        self.museum_rules = self.registry.museum_rules
-        self.festival_rules = self.registry.festival_rules
-        self.quest_rules = self.registry.quest_rules
-        self.building_rules = self.registry.building_rules
-
-        tool_option = self.options.tool_progression
-        skill_option = self.options.skill_progression
-        elevator_option = self.options.elevator_progression
-        friendsanity_option = self.options.friendsanity
-        heart_size_option = self.options.friendsanity_heart_size
-        special_order_locations = self.options.special_order_locations
-        mods_option = self.options.mods
-        exclude_ginger_island = self.options.exclude_ginger_island
-        self.mod = ModLogic(self.player, self.registry, self.options, self, skill_option, elevator_option, mods_option, self.skill,
-                            self.fishing, self.cooking, self.mine, self.ability, self.quest, self.crafting)
-
-        self.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})
-        self.museum_rules.update({donation.name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
+        self.registry.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})
+        self.registry.museum_rules.update({donation.name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
         for recipe in all_cooking_recipes:
-            if recipe.mod_name and recipe.mod_name not in mods_option:
+            if recipe.mod_name and recipe.mod_name not in self.options.mods:
                 continue
             can_cook_rule = self.cooking.can_cook(recipe)
-            if recipe.meal in self.cooking_rules:
-                can_cook_rule = can_cook_rule | self.cooking_rules[recipe.meal]
-            self.cooking_rules[recipe.meal] = can_cook_rule
+            if recipe.meal in self.registry.cooking_rules:
+                can_cook_rule = can_cook_rule | self.registry.cooking_rules[recipe.meal]
+            self.registry.cooking_rules[recipe.meal] = can_cook_rule
 
         for recipe in all_crafting_recipes:
-            if recipe.mod_name and recipe.mod_name not in mods_option:
+            if recipe.mod_name and recipe.mod_name not in self.options.mods:
                 continue
             can_craft_rule = self.crafting.can_craft(recipe)
-            if recipe.item in self.crafting_rules:
-                can_craft_rule = can_craft_rule | self.crafting_rules[recipe.item]
-            self.crafting_rules[recipe.item] = can_craft_rule
+            if recipe.item in self.registry.crafting_rules:
+                can_craft_rule = can_craft_rule | self.registry.crafting_rules[recipe.item]
+            self.registry.crafting_rules[recipe.item] = can_craft_rule
 
-        self.sapling_rules.update({
+        self.registry.sapling_rules.update({
             Sapling.apple: self.can_buy_sapling(Fruit.apple),
             Sapling.apricot: self.can_buy_sapling(Fruit.apricot),
             Sapling.cherry: self.can_buy_sapling(Fruit.cherry),
@@ -153,7 +129,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Sapling.mango: self.can_buy_sapling(Fruit.mango),
         })
 
-        self.tree_fruit_rules.update({
+        self.registry.tree_fruit_rules.update({
             Fruit.apple: self.crop.can_plant_and_grow_item(Season.fall),
             Fruit.apricot: self.crop.can_plant_and_grow_item(Season.spring),
             Fruit.cherry: self.crop.can_plant_and_grow_item(Season.spring),
@@ -164,21 +140,21 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fruit.mango: self.crop.can_plant_and_grow_item(Season.summer),
         })
 
-        for tree_fruit in self.tree_fruit_rules:
-            existing_rules = self.tree_fruit_rules[tree_fruit]
+        for tree_fruit in self.registry.tree_fruit_rules:
+            existing_rules = self.registry.tree_fruit_rules[tree_fruit]
             sapling = f"{tree_fruit} Sapling"
-            self.tree_fruit_rules[tree_fruit] = existing_rules & self.has(sapling) & self.time.has_lived_months(1)
+            self.registry.tree_fruit_rules[tree_fruit] = existing_rules & self.has(sapling) & self.time.has_lived_months(1)
 
-        self.seed_rules.update({seed.name: self.crop.can_buy_seed(seed) for seed in all_purchasable_seeds})
-        self.crop_rules.update({crop.name: self.crop.can_grow(crop) for crop in all_crops})
-        self.crop_rules.update({
+        self.registry.seed_rules.update({seed.name: self.crop.can_buy_seed(seed) for seed in all_purchasable_seeds})
+        self.registry.crop_rules.update({crop.name: self.crop.can_grow(crop) for crop in all_crops})
+        self.registry.crop_rules.update({
             Seed.coffee: (self.season.has(Season.spring) | self.season.has(Season.summer)) & self.crop.can_buy_seed(crops_by_name[Seed.coffee].seed),
             Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
                                  self.region.can_reach(Region.greenhouse) & self.has(Machine.seed_maker),
         })
 
         # @formatter:off
-        self.item_rules.update({
+        self.registry.item_rules.update({
             "Energy Tonic": self.money.can_spend_at(Region.hospital, 1000),
             WaterChest.fishing_chest: self.fishing.can_fish_chests(),
             WaterChest.treasure: self.fishing.can_fish_chests(),
@@ -412,33 +388,33 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20),
         })
         # @formatter:on
-        self.item_rules.update(self.fish_rules)
-        self.item_rules.update(self.museum_rules)
-        self.item_rules.update(self.sapling_rules)
-        self.item_rules.update(self.tree_fruit_rules)
-        self.item_rules.update(self.seed_rules)
-        self.item_rules.update(self.crop_rules)
-        self.item_rules.update(self.mod.item.get_modded_item_rules())
+        self.registry.item_rules.update(self.registry.fish_rules)
+        self.registry.item_rules.update(self.registry.museum_rules)
+        self.registry.item_rules.update(self.registry.sapling_rules)
+        self.registry.item_rules.update(self.registry.tree_fruit_rules)
+        self.registry.item_rules.update(self.registry.seed_rules)
+        self.registry.item_rules.update(self.registry.crop_rules)
+        self.registry.item_rules.update(self.mod.item.get_modded_item_rules())
 
         # For some recipes, the cooked item can be obtained directly, so we either cook it or get it
-        for recipe in self.cooking_rules:
-            cooking_rule = self.cooking_rules[recipe]
-            obtention_rule = self.item_rules[recipe] if recipe in self.item_rules else False_()
-            self.item_rules[recipe] = obtention_rule | cooking_rule
+        for recipe in self.registry.cooking_rules:
+            cooking_rule = self.registry.cooking_rules[recipe]
+            obtention_rule = self.registry.item_rules[recipe] if recipe in self.registry.item_rules else False_()
+            self.registry.item_rules[recipe] = obtention_rule | cooking_rule
 
         # For some recipes, the crafted item can be obtained directly, so we either craft it or get it
-        for recipe in self.crafting_rules:
-            crafting_rule = self.crafting_rules[recipe]
-            obtention_rule = self.item_rules[recipe] if recipe in self.item_rules else False_()
-            self.item_rules[recipe] = obtention_rule | crafting_rule
+        for recipe in self.registry.crafting_rules:
+            crafting_rule = self.registry.crafting_rules[recipe]
+            obtention_rule = self.registry.item_rules[recipe] if recipe in self.registry.item_rules else False_()
+            self.registry.item_rules[recipe] = obtention_rule | crafting_rule
 
         self.building.initialize_rules()
-        self.building.update_rules(self.mod.buildings.get_modded_building_rules())
+        self.building.update_rules(self.mod.building.get_modded_building_rules())
 
         self.quest.initialize_rules()
-        self.quest.update_rules(self.mod.quests.get_modded_quest_rules())
+        self.quest.update_rules(self.mod.quest.get_modded_quest_rules())
 
-        self.festival_rules.update({
+        self.registry.festival_rules.update({
             FestivalCheck.egg_hunt: self.can_win_egg_hunt(),
             FestivalCheck.strawberry_seeds: self.money.can_spend(1000),
             FestivalCheck.dance: self.relationship.has_hearts(Generic.bachelor, 4),
@@ -477,7 +453,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         })
 
         self.special_order.initialize_rules()
-        self.special_order.update_rules(self.mod.special_orders.get_modded_special_orders_rules(self.registry.special_order_rules))
+        self.special_order.update_rules(self.mod.special_order.get_modded_special_orders_rules())
 
     def can_buy_sapling(self, fruit: str) -> StardewRule:
         sapling_prices = {Fruit.apple: 4000, Fruit.apricot: 2000, Fruit.cherry: 3400, Fruit.orange: 4000,
