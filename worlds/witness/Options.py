@@ -184,7 +184,7 @@ class HintType(Choice):
     """Specify the type of hints you want find on audio logs.
     "Location" means that each hint will refer to one location in your world or containing an item for your world.
     "Areas" means that any given hint will tell you some general info about the items you can find in one of the
-    general geographic areas on the island."""
+    main geographic areas on the island."""
     display_name = "Hint Type"
     option_locations = 0
     option_areas = 1
