@@ -40,7 +40,7 @@ class EntranceLookup:
     # todo - investigate whether this might leak memory (holds references to Entrances)?
     @staticmethod
     @functools.cache
-    def _is_dead_end(entrance: Entrance, visited_regions=""):
+    def _is_dead_end(entrance: Entrance):
         """
         Checks whether a entrance is an unconditional dead end, that is, no matter what you have,
         it will never lead to new randomizable exits.
@@ -48,13 +48,8 @@ class EntranceLookup:
         # obviously if this is an unpaired exit, then leads to unpaired exits!
         if not entrance.connected_region:
             return False
-        for region in visited_regions.split("::"):
-            if region == entrance.connected_region.name:
-                return True
-            else:
-                visited_regions += "::" + entrance.connected_region.name
         # if the connected region has no exits, it's a dead end. otherwise its exits must all be dead ends.
-        return not entrance.connected_region.exits or all(EntranceLookup._is_dead_end(exit, visited_regions)
+        return not entrance.connected_region.exits or all(EntranceLookup._is_dead_end(exit)
                                                           for exit in entrance.connected_region.exits
                                                           if exit.name != entrance.name)
 
@@ -149,7 +144,7 @@ class ERPlacementState:
                             self._pending_exits.add(exit)
                 elif exit.connected_region not in self.placed_regions:
                     # traverse unseen static connections
-                    if exit.can_reach(self.collection_state):
+                    if exit.can_reach(self.collection_state, True):
                         q.put(exit.connected_region)
                     else:
                         self._pending_exits.add(exit)
@@ -161,7 +156,7 @@ class ERPlacementState:
         """
         no_longer_pending_exits = []
         for exit in self._pending_exits:
-            if exit.connected_region and exit.can_reach(self.collection_state):
+            if exit.connected_region and exit.can_reach(self.collection_state, True):
                 # this is an unrandomized entrance, so place it and propagate
                 self.place(exit.connected_region)
                 no_longer_pending_exits.append(exit)
@@ -290,7 +285,7 @@ def randomize_entrances(
         # none of the existing targets can pair to the existing sources. Since dead ends will never add new sources
         # this means the current targets can never be paired (in most cases)
         # todo - investigate ways to prevent this case
-        return state
+        return state  # this short circuts the exception for testing purposes in order to see how far ER got.
         raise Exception("Unable to place all non-dead-end entrances with available source exits")
 
     # anything we couldn't place before might be placeable now
