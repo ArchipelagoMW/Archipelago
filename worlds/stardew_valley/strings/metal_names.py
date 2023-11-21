@@ -1,3 +1,17 @@
+all_fossils = []
+all_artifacts = []
+
+
+def fossil(name: str):
+    all_fossils.append(name)
+    return name
+
+
+def artifact(name: str):
+    all_artifacts.append(name)
+    return name
+
+
 class Ore:
     copper = "Copper Ore"
     iron = "Iron Ore"
@@ -31,30 +45,58 @@ class Mineral:
 
 
 class Artifact:
-    dwarf_gadget = "Dwarf Gadget"
-    ancient_seed = "Ancient Seed"
-    glass_shards = "Glass Shards"
-    rusty_cog = "Rusty Cog"
-    rare_disc = "Rare Disc"
-    ancient_doll = "Ancient Doll"
-    ancient_drum = "Ancient Drum"
-    ancient_sword = "Ancient Sword"
-    arrowhead = "Arrowhead"
-    bone_flute = "Bone Flute"
-    chewing_stick = "Chewing Stick"
-    chicken_statue = "Chicken Statue"
+    dwarf_gadget = artifact("Dwarf Gadget")
+    ancient_seed = artifact("Ancient Seed")
+    glass_shards = artifact("Glass Shards")
+    rusty_cog = artifact("Rusty Cog")
+    rare_disc = artifact("Rare Disc")
+    ancient_doll = artifact("Ancient Doll")
+    ancient_drum = artifact("Ancient Drum")
+    ancient_sword = artifact("Ancient Sword")
+    arrowhead = artifact("Arrowhead")
+    bone_flute = artifact("Bone Flute")
+    chewing_stick = artifact("Chewing Stick")
+    chicken_statue = artifact("Chicken Statue")
+    anchor = artifact("Anchor")
+    chipped_amphora = artifact("Chipped Amphora")
+    dwarf_scroll_i = artifact("Dwarf Scroll I")
+    dwarf_scroll_ii = artifact("Dwarf Scroll II")
+    dwarf_scroll_iii = artifact("Dwarf Scroll III")
+    dwarf_scroll_iv = artifact("Dwarf Scroll IV")
+    dwarvish_helm = artifact("Dwarvish Helm")
+    elvish_jewelry = artifact("Elvish Jewelry")
+    golden_mask = artifact("Golden Mask")
+    golden_relic = artifact("Golden Relic")
+    ornamental_fan = artifact("Ornamental Fan")
+    prehistoric_hammer = artifact("Prehistoric Handaxe")
+    prehistoric_tool = artifact("Prehistoric Tool")
+    rusty_spoon = artifact("Rusty Spoon")
+    rusty_spur = artifact("Rusty Spur")
+    strange_doll_green = artifact("Strange Doll (Green)")
+    strange_doll = artifact("Strange Doll")
 
 
 class Fossil:
     bone_fragment = "Bone Fragment"
-    fossilized_leg = "Fossilized Leg"
-    fossilized_ribs = "Fossilized Ribs"
-    fossilized_skull = "Fossilized Skull"
-    fossilized_spine = "Fossilized Spine"
-    fossilized_tail = "Fossilized Tail"
-    mummified_bat = "Mummified Bat"
-    mummified_frog = "Mummified Frog"
-    snake_skull = "Snake Skull"
-    snake_vertebrae = "Snake Vertebrae"
-    amphibian_fossil = "Amphibian Fossil"
-
+    fossilized_leg = fossil("Fossilized Leg")
+    fossilized_ribs = fossil("Fossilized Ribs")
+    fossilized_skull = fossil("Fossilized Skull")
+    fossilized_spine = fossil("Fossilized Spine")
+    fossilized_tail = fossil("Fossilized Tail")
+    mummified_bat = fossil("Mummified Bat")
+    mummified_frog = fossil("Mummified Frog")
+    snake_skull = fossil("Snake Skull")
+    snake_vertebrae = fossil("Snake Vertebrae")
+    amphibian_fossil = fossil("Amphibian Fossil")
+    dinosaur_egg = fossil("Dinosaur Egg")
+    dried_starfish = fossil("Dried Starfish")
+    nautilus_fossil = fossil("Nautilus Fossil")
+    palm_fossil = fossil("Palm Fossil")
+    prehistoric_rib = fossil("Prehistoric Rib")
+    prehistoric_scapula = fossil("Prehistoric Scapula")
+    prehistoric_skull = fossil("Prehistoric Skull")
+    prehistoric_tibia = fossil("Prehistoric Tibia")
+    prehistoric_hand = fossil("Skeletal Hand")
+    skeletal_tail = fossil("Skeletal Tail")
+    trilobite = fossil("Trilobite")
+    prehistoric_vertebra = fossil("Prehistoric Vertebra")

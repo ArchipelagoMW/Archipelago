@@ -15,28 +15,22 @@ from ...logic.tool_logic import ToolLogic
 from ...logic.crafting_logic import CraftingLogic
 from ...options import Mods
 from ..mod_data import ModNames
-from ...strings.craftable_names import ModCraftable, ModEdible, ModFloor, ModMachine
+from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
 from ...strings.crop_names import SVEVegetable, SVEFruit
 from ...strings.food_names import SVEMeal, SVEBeverage
 from ...strings.gift_names import SVEGift
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.forageable_names import SVEForage
-from ...strings.metal_names import Artifact, Fossil
+from ...strings.metal_names import all_fossils, all_artifacts
 from ...strings.monster_drop_names import ModLoot
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed
 from ...strings.region_names import Region, SVERegion
 from ...strings.villager_names import ModNPC
-from ...stardew_rule import StardewRule, True_
+from ...stardew_rule import StardewRule
 
-display_types = ["Wooden Display: ", "Hardwood Display: "]
-display_items = ["Amphibian Fossil", "Anchor", "Ancient Doll", "Ancient Drum", "Ancient Seed", "Ancient Sword", "Arrowhead", "Bone Flute", "Chewing Stick",
-                 "Chicken Statue", "Chipped Amphora", "Dinosaur Egg", "Dried Starfish", "Dwarf Gadget", "Dwarf Scroll I", "Dwarf Scroll II", "Dwarf Scroll III",
-                 "Dwarf Scroll IV", "Dwarvish Helm", "Elvish Jewelry", "Fossilized Leg", "Fossilized Ribs", "Fossilized Skull", "Fossilized Spine",
-                 "Fossilized Tail", "Glass Shards", "Golden Mask", "Golden Relic", "Mummified Bat", "Mummified Frog", "Nautilus Fossil", "Ornamental Fan",
-                 "Palm Fossil", "Prehistoric Handaxe", "Prehistoric Rib", "Prehistoric Scapula", "Prehistoric Skull", "Prehistoric Tibia", "Prehistoric Tool",
-                 "Prehistoric Vertebra", "Rare Disc", "Rusty Cog", "Rusty Spoon", "Rusty Spur", "Skeletal Hand", "Skeletal Tail", "Snake Skull", "Snake Vertebrae",
-                 "Strange Doll (Green)", "Strange Doll", "Trilobite"]
+display_types = [ModCraftable.wooden_display, ModCraftable.hardwood_display]
+display_items = all_artifacts + all_fossils
 
 
 class ModItemLogic:
@@ -130,17 +124,14 @@ class ModItemLogic:
 
     def get_archaeology_item_rules(self):
         archaeology_item_rules = {}
-
+        preservation_chamber_rule = self.has(ModMachine.preservation_chamber)
+        hardwood_preservation_chamber_rule = self.has(ModMachine.hardwood_preservation_chamber)
         for item in display_items:
             for display_type in display_types:
-                display_item = display_type[:-2]
-                location_name = display_type + item
-                if "Wooden" in display_item:
-                    archaeology_item_rules[location_name] = (self.crafting.can_craft(all_crafting_recipes_by_name[display_item]) &
-                                                             self.crafting.can_craft(all_crafting_recipes_by_name[ModMachine.preservation_chamber]) & \
-                                                             self.has(item))
+                location_name = display_type + ": " + item
+                chamber_rule = self.crafting.can_craft(all_crafting_recipes_by_name[display_type]) & self.has(item)
+                if "Wooden" in display_type:
+                    archaeology_item_rules[location_name] = chamber_rule & preservation_chamber_rule
                 else:
-                    archaeology_item_rules[location_name] = (self.crafting.can_craft(all_crafting_recipes_by_name[display_item]) &
-                                                             self.crafting.can_craft(all_crafting_recipes_by_name[ModMachine.preservation_chamber_h]) & \
-                                                             self.has(item))
+                    archaeology_item_rules[location_name] = chamber_rule & hardwood_preservation_chamber_rule
         return archaeology_item_rules

@@ -260,8 +260,8 @@ magic_elixir = shop_recipe(ModEdible.magic_elixir, Region.adventurer_guild, 3000
 travel_charm = shop_recipe(ModCraftable.travel_core, Region.adventurer_guild, 250, {Loot.solar_essence: 1, Loot.void_essence: 1}, ModNames.magic)
 preservation_chamber = skill_recipe(ModMachine.preservation_chamber, ModSkill.archaeology, 2, {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 30},
                                     ModNames.archaeology)
-preservation_chamber_h = skill_recipe(ModMachine.preservation_chamber_h, ModSkill.archaeology, 7, {MetalBar.copper: 1, Material.hardwood: 15,
-                                                                                                   ArtisanGood.oak_resin: 30}, ModNames.archaeology)
+preservation_chamber_h = skill_recipe(ModMachine.hardwood_preservation_chamber, ModSkill.archaeology, 7, {MetalBar.copper: 1, Material.hardwood: 15,
+                                                                                                          ArtisanGood.oak_resin: 30}, ModNames.archaeology)
 grinder = skill_recipe(ModMachine.grinder, ModSkill.archaeology, 8, {Artifact.rusty_cog: 10, MetalBar.iron: 5, ArtisanGood.battery_pack: 1}, ModNames.archaeology)
 ancient_battery = skill_recipe(ModMachine.ancient_battery, ModSkill.archaeology, 6, {Material.stone: 40, MetalBar.copper: 10, MetalBar.iron: 5},
                                ModNames.archaeology)

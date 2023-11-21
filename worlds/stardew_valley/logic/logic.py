@@ -163,7 +163,7 @@ class StardewLogic:
         self.museum_rules.update({donation.name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
         for recipe in all_cooking_recipes:
-            if recipe.mod_name is not None and recipe.mod_name not in mods_option:
+            if recipe.mod_name and recipe.mod_name not in mods_option:
                 continue
             can_cook_rule = self.cooking.can_cook(recipe)
             if recipe.meal in self.cooking_rules:
@@ -171,7 +171,7 @@ class StardewLogic:
             self.cooking_rules[recipe.meal] = can_cook_rule
 
         for recipe in all_crafting_recipes:
-            if recipe.mod_name is not None and recipe.mod_name not in mods_option:
+            if recipe.mod_name and recipe.mod_name not in mods_option:
                 continue
             can_craft_rule = self.crafting.can_craft(recipe)
             if recipe.item in self.crafting_rules:
