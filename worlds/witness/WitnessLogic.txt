@@ -1197,7 +1197,7 @@ Door - 0x27263 (Desert Shortcut) - 0x2773D
 Door - 0x09E87 (Town Shortcut) - 0x09E85
 159557 - 0x33A20 (Theater Flowers EP) - 0x03553 & Theater to Tunnels - True
 
-==The Ocean==
+==Boat==
 
 The Ocean (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse Behind Staircase - TrueOneWay - Inside Glass Factory Behind Back Wall - TrueOneWay:
 159042 - 0x22106 (Desert EP) - True - True
