@@ -9,13 +9,13 @@ from .arcade_logic import ArcadeLogicMixin
 from .artisan_logic import ArtisanLogicMixin
 from .base_logic import LogicRegistry
 from .building_logic import BuildingLogicMixin
-from .bundle_logic import BundleLogic
+from .bundle_logic import BundleLogicMixin
 from .combat_logic import CombatLogicMixin
 from .cooking_logic import CookingLogic
 from .crafting_logic import CraftingLogic
 from .crop_logic import CropLogicMixin
 from .farming_logic import FarmingLogicMixin
-from .fishing_logic import FishingLogic
+from .fishing_logic import FishingLogicMixin
 from .gift_logic import GiftLogicMixin
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
@@ -90,7 +90,7 @@ fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Re
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin, SeasonLogicMixin, MoneyLogicMixin,
                    ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin, BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin,
                    MuseumLogicMixin, WalletLogicMixin, CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, CropLogicMixin,
-                   SkillLogicMixin, FarmingLogicMixin):
+                   SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin):
     player: int
     options: StardewValleyOptions
 
@@ -119,9 +119,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         special_order_locations = self.options.special_order_locations
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
-        self.bundle = BundleLogic(self.player, self.has, self.region, self.money, self.farming)
-        self.fishing = FishingLogic(self.player, exclude_ginger_island, special_order_locations, self.received, self.region, self.season,
-                                    self.tool, self.skill)
         self.mine = MineLogic(self.player, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
         self.cooking = CookingLogic(self.player, self.options.chefsanity, exclude_ginger_island, mods_option, self.received, self.has,
