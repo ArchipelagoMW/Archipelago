@@ -64,7 +64,7 @@ def minimal_locations_maximal_items():
         BundleRandomization.internal_name: BundleRandomization.option_vanilla,
         BundlePrice.internal_name: BundlePrice.option_very_cheap,
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
-        Cropsanity.internal_name: Cropsanity.option_enabled,
+        Cropsanity.internal_name: Cropsanity.option_disabled,
         BackpackProgression.internal_name: BackpackProgression.option_vanilla,
         ToolProgression.internal_name: ToolProgression.option_vanilla,
         SkillProgression.internal_name: SkillProgression.option_vanilla,

@@ -3,7 +3,7 @@ from typing import List
 
 from BaseClasses import ItemClassification, MultiWorld, Item
 from . import setup_solo_multiworld, SVTestBase, get_minsanity_options, allsanity_options_without_mods, \
-    allsanity_options_with_mods, minimal_locations_maximal_items, SVTestCase
+    allsanity_options_with_mods, minimal_locations_maximal_items, SVTestCase, default_options
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import Group, item_table
@@ -359,6 +359,18 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tExpected: {expected_locations}"
                   f"\n\t\tActual: {number_locations}")
 
+    def test_default_settings_has_exactly_locations(self):
+        expected_locations = 420
+        multiworld = setup_solo_multiworld(default_options())
+        real_locations = get_real_locations(self, multiworld)
+        number_locations = len(real_locations)
+        print(f"Stardew Valley - Default options locations: {number_locations}")
+        if number_locations != expected_locations:
+            print(f"\tNew locations detected!"
+                  f"\n\tPlease update test_default_settings_has_exactly_locations"
+                  f"\n\t\tExpected: {expected_locations}"
+                  f"\n\t\tActual: {number_locations}")
+
     def test_allsanity_without_mods_has_at_least_locations(self):
         expected_locations = 1952
         allsanity_options = allsanity_options_without_mods()
@@ -374,7 +386,7 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 2425
+        expected_locations = 2652
         allsanity_options = allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         real_locations = get_real_locations(self, multiworld)
