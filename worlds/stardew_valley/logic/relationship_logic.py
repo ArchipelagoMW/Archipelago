@@ -153,22 +153,8 @@ class RelationshipLogic(CachedLogic):
         previous_heart = hearts - self.heart_size_option
         previous_heart_rule = self.has_hearts(npc, previous_heart)
 
-        # if npc == NPC.wizard and ModNames.magic in self.options.mods:
-        #     earn_rule = self.can_meet(npc) & self.time.has_lived_months(hearts)
-        if npc in all_villagers_by_name:
-            if not self.npc_is_in_current_slot(npc):
-                return previous_heart_rule
-            villager = all_villagers_by_name[npc]
-            rule_if_birthday = self.season.has(villager.birthday) & self.time.has_lived_months(hearts // 2)
-            rule_if_not_birthday = self.time.has_lived_months(hearts)
-            earn_rule = self.can_meet(npc) & (rule_if_birthday | rule_if_not_birthday)
-            if villager.bachelor:
-                if hearts > 8:
-                    earn_rule = earn_rule & self.can_date(npc)
-                if hearts > 10:
-                    earn_rule = earn_rule & self.can_marry(npc)
-        else:
-            earn_rule = self.time.has_lived_months(min(hearts // 2, 8))
+        if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
+            return previous_heart_rule
 
         rules = [previous_heart_rule, self.can_meet(npc)]
         villager = all_villagers_by_name[npc]
@@ -179,6 +165,8 @@ class RelationshipLogic(CachedLogic):
                 rules.append(self.can_date(npc))
             if hearts > 10:
                 rules.append(self.can_marry(npc))
+
+        return And(*rules)
 
     @cache_self1
     def npc_is_in_current_slot(self, name: str) -> bool:

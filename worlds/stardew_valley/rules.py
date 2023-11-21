@@ -134,9 +134,8 @@ def set_bundle_rules(current_bundles, logic: StardewLogic, multiworld, player):
                              And(*(logic.region.can_reach_location(bundle.name)
                                  for bundle in locations.locations_by_tag[LocationTags.BOILER_ROOM_BUNDLE])))
     MultiWorldRules.add_rule(multiworld.get_location("Complete Bulletin Board", player),
-                             And(logic.region.can_reach_location(bundle.name)
-                                 for bundle
-                                 in locations.locations_by_tag[LocationTags.BULLETIN_BOARD_BUNDLE])))
+                             And(*(logic.region.can_reach_location(bundle.name)
+                                 for bundle in locations.locations_by_tag[LocationTags.BULLETIN_BOARD_BUNDLE])))
     MultiWorldRules.add_rule(multiworld.get_location("Complete Vault", player),
                              And(*(logic.region.can_reach_location(bundle.name)
                                  for bundle in locations.locations_by_tag[LocationTags.VAULT_BUNDLE])))
