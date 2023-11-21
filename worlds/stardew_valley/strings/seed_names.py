@@ -7,3 +7,4 @@ class Seed:
     pineapple = "Pineapple Seeds"
     taro = "Taro Tuber"
     coffee = "Coffee Bean"
+    qi_bean = "Qi Bean"

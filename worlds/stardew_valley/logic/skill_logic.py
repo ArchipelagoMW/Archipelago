@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, List, Union
 
 from .combat_logic import CombatLogic
 from .crop_logic import CropLogic
@@ -141,13 +141,17 @@ class SkillLogic:
 
         return self.can_fish()
 
-    def can_fish(self, difficulty: int = 0) -> StardewRule:
-        skill_required = max(0, int((difficulty / 10) - 1))
+    def can_fish(self, regions: Union[str, List[str]] = None, difficulty: int = 0) -> StardewRule:
+        if isinstance(regions, str):
+            regions = [regions]
+        if regions is None or len(regions) == 0:
+            regions = fishing_regions
+        skill_required = min(10, max(0, int((difficulty / 10) - 1)))
         if difficulty <= 40:
             skill_required = 0
         skill_rule = self.has_level(Skill.fishing, skill_required)
-        region_rule = self.region.can_reach_any(fishing_regions)
-        number_fishing_rod_required = 1 if difficulty < 50 else 2
+        region_rule = self.region.can_reach_any(regions)
+        number_fishing_rod_required = 1 if difficulty < 50 else (2 if difficulty < 80 else 4)
         return self.tool.has_fishing_rod(number_fishing_rod_required) & skill_rule & region_rule
 
     def can_crab_pot(self, region: str = Generic.any) -> StardewRule:

@@ -595,14 +595,15 @@ class TestShipsanityEverything(SVTestBase):
     }
 
     def test_all_shipsanity_locations_require_shipping_bin(self):
-        bin_item = "Shipping Bin"
-        collect_all_except(self.multiworld, bin_item)
+        bin_name = "Shipping Bin"
+        collect_all_except(self.multiworld, bin_name)
         shipsanity_locations = [location for location in self.multiworld.get_locations() if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags]
-
+        bin_item = self.world.create_item(bin_name)
         for location in shipsanity_locations:
-            self.assertFalse(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
+            with self.subTest(location.name):
+                self.remove(bin_item)
+                self.assertFalse(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
+                self.multiworld.state.collect(bin_item, event=False)
+                self.assertTrue(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
+                self.remove(bin_item)
 
-        self.multiworld.state.collect(self.world.create_item(bin_item), event=False)
-
-        for location in shipsanity_locations:
-            self.assertTrue(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))

@@ -604,3 +604,343 @@ class TestFriendsanityHeartSize5(SVTestBase):
                 self.assertTrue(hearts == 5 or hearts == 10 or hearts == 14)
             else:
                 self.assertTrue(hearts == 5 or hearts == 10)
+
+
+class TestShipsanityNone(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_none
+    }
+
+    def test_no_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event:
+                with self.subTest(location.name):
+                    self.assertFalse("Shipsanity" in location.name)
+                    self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
+
+
+class TestShipsanityCrops(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_crops,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi
+    }
+
+    def test_only_crop_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
+
+    def test_include_island_crop_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Banana", location_names)
+        self.assertIn("Shipsanity: Mango", location_names)
+        self.assertIn("Shipsanity: Pineapple", location_names)
+        self.assertIn("Shipsanity: Taro Root", location_names)
+        self.assertIn("Shipsanity: Ginger", location_names)
+        self.assertIn("Shipsanity: Magma Cap", location_names)
+        self.assertIn("Shipsanity: Qi Fruit", location_names)
+
+
+class TestShipsanityCropsExcludeIsland(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_crops,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
+    }
+
+    def test_only_crop_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
+
+    def test_only_mainland_crop_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertNotIn("Shipsanity: Banana", location_names)
+        self.assertNotIn("Shipsanity: Mango", location_names)
+        self.assertNotIn("Shipsanity: Pineapple", location_names)
+        self.assertNotIn("Shipsanity: Taro Root", location_names)
+        self.assertNotIn("Shipsanity: Ginger", location_names)
+        self.assertNotIn("Shipsanity: Magma Cap", location_names)
+        self.assertNotIn("Shipsanity: Qi Fruit", location_names)
+
+
+class TestShipsanityCropsNoQiCropWithoutSpecialOrders(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_crops,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_only
+    }
+
+    def test_only_crop_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
+
+    def test_island_crops_without_qi_fruit_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Banana", location_names)
+        self.assertIn("Shipsanity: Mango", location_names)
+        self.assertIn("Shipsanity: Pineapple", location_names)
+        self.assertIn("Shipsanity: Taro Root", location_names)
+        self.assertIn("Shipsanity: Ginger", location_names)
+        self.assertIn("Shipsanity: Magma Cap", location_names)
+        self.assertNotIn("Shipsanity: Qi Fruit", location_names)
+
+
+class TestShipsanityFish(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_fish,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi
+    }
+
+    def test_only_fish_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
+
+    def test_include_island_fish_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Blue Discus", location_names)
+        self.assertIn("Shipsanity: Lionfish", location_names)
+        self.assertIn("Shipsanity: Stingray", location_names)
+        self.assertIn("Shipsanity: Glacierfish Jr.", location_names)
+        self.assertIn("Shipsanity: Legend II", location_names)
+        self.assertIn("Shipsanity: Ms. Angler", location_names)
+        self.assertIn("Shipsanity: Radioactive Carp", location_names)
+        self.assertIn("Shipsanity: Son of Crimsonfish", location_names)
+
+
+class TestShipsanityFishExcludeIsland(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_fish,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
+    }
+
+    def test_only_fish_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
+
+    def test_exclude_island_fish_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertNotIn("Shipsanity: Blue Discus", location_names)
+        self.assertNotIn("Shipsanity: Lionfish", location_names)
+        self.assertNotIn("Shipsanity: Stingray", location_names)
+        self.assertNotIn("Shipsanity: Glacierfish Jr.", location_names)
+        self.assertNotIn("Shipsanity: Legend II", location_names)
+        self.assertNotIn("Shipsanity: Ms. Angler", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Carp", location_names)
+        self.assertNotIn("Shipsanity: Son of Crimsonfish", location_names)
+
+
+class TestShipsanityFishExcludeQiOrders(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_fish,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_only
+    }
+
+    def test_only_fish_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
+
+    def test_include_island_fish_no_extended_family_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Blue Discus", location_names)
+        self.assertIn("Shipsanity: Lionfish", location_names)
+        self.assertIn("Shipsanity: Stingray", location_names)
+        self.assertNotIn("Shipsanity: Glacierfish Jr.", location_names)
+        self.assertNotIn("Shipsanity: Legend II", location_names)
+        self.assertNotIn("Shipsanity: Ms. Angler", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Carp", location_names)
+        self.assertNotIn("Shipsanity: Son of Crimsonfish", location_names)
+
+
+class TestShipsanityFullShipment(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_full_shipment,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi
+    }
+
+    def test_only_full_shipment_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
+                    self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
+
+    def test_include_island_items_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Cinder Shard", location_names)
+        self.assertIn("Shipsanity: Bone Fragment", location_names)
+        self.assertIn("Shipsanity: Radioactive Ore", location_names)
+        self.assertIn("Shipsanity: Radioactive Bar", location_names)
+        self.assertIn("Shipsanity: Banana", location_names)
+        self.assertIn("Shipsanity: Mango", location_names)
+        self.assertIn("Shipsanity: Pineapple", location_names)
+        self.assertIn("Shipsanity: Taro Root", location_names)
+        self.assertIn("Shipsanity: Ginger", location_names)
+        self.assertIn("Shipsanity: Magma Cap", location_names)
+
+
+class TestShipsanityFullShipmentExcludeIsland(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_full_shipment,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
+    }
+
+    def test_only_full_shipment_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
+                    self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
+
+    def test_exclude_island_items_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertNotIn("Shipsanity: Cinder Shard", location_names)
+        self.assertNotIn("Shipsanity: Bone Fragment", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Ore", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Bar", location_names)
+        self.assertNotIn("Shipsanity: Banana", location_names)
+        self.assertNotIn("Shipsanity: Mango", location_names)
+        self.assertNotIn("Shipsanity: Pineapple", location_names)
+        self.assertNotIn("Shipsanity: Taro Root", location_names)
+        self.assertNotIn("Shipsanity: Ginger", location_names)
+        self.assertNotIn("Shipsanity: Magma Cap", location_names)
+
+
+class TestShipsanityFullShipmentExcludeQiBoard(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_full_shipment,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled
+    }
+
+    def test_only_full_shipment_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
+                    self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
+
+    def test_exclude_qi_board_items_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Cinder Shard", location_names)
+        self.assertIn("Shipsanity: Bone Fragment", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Ore", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Bar", location_names)
+        self.assertIn("Shipsanity: Banana", location_names)
+        self.assertIn("Shipsanity: Mango", location_names)
+        self.assertIn("Shipsanity: Pineapple", location_names)
+        self.assertIn("Shipsanity: Taro Root", location_names)
+        self.assertIn("Shipsanity: Ginger", location_names)
+        self.assertIn("Shipsanity: Magma Cap", location_names)
+
+
+class TestShipsanityFullShipmentWithFish(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_full_shipment_with_fish,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi
+    }
+
+    def test_only_full_shipment_and_fish_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
+                                    LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
+
+    def test_include_island_items_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Cinder Shard", location_names)
+        self.assertIn("Shipsanity: Bone Fragment", location_names)
+        self.assertIn("Shipsanity: Radioactive Ore", location_names)
+        self.assertIn("Shipsanity: Radioactive Bar", location_names)
+        self.assertIn("Shipsanity: Banana", location_names)
+        self.assertIn("Shipsanity: Mango", location_names)
+        self.assertIn("Shipsanity: Pineapple", location_names)
+        self.assertIn("Shipsanity: Taro Root", location_names)
+        self.assertIn("Shipsanity: Ginger", location_names)
+        self.assertIn("Shipsanity: Magma Cap", location_names)
+        self.assertIn("Shipsanity: Blue Discus", location_names)
+        self.assertIn("Shipsanity: Lionfish", location_names)
+        self.assertIn("Shipsanity: Stingray", location_names)
+        self.assertIn("Shipsanity: Glacierfish Jr.", location_names)
+        self.assertIn("Shipsanity: Legend II", location_names)
+        self.assertIn("Shipsanity: Ms. Angler", location_names)
+        self.assertIn("Shipsanity: Radioactive Carp", location_names)
+        self.assertIn("Shipsanity: Son of Crimsonfish", location_names)
+
+
+class TestShipsanityFullShipmentWithFishExcludeIsland(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_full_shipment_with_fish,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
+    }
+
+    def test_only_full_shipment_and_fish_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
+                                    LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
+
+    def test_exclude_island_items_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertNotIn("Shipsanity: Cinder Shard", location_names)
+        self.assertNotIn("Shipsanity: Bone Fragment", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Ore", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Bar", location_names)
+        self.assertNotIn("Shipsanity: Banana", location_names)
+        self.assertNotIn("Shipsanity: Mango", location_names)
+        self.assertNotIn("Shipsanity: Pineapple", location_names)
+        self.assertNotIn("Shipsanity: Taro Root", location_names)
+        self.assertNotIn("Shipsanity: Ginger", location_names)
+        self.assertNotIn("Shipsanity: Magma Cap", location_names)
+        self.assertNotIn("Shipsanity: Blue Discus", location_names)
+        self.assertNotIn("Shipsanity: Lionfish", location_names)
+        self.assertNotIn("Shipsanity: Stingray", location_names)
+        self.assertNotIn("Shipsanity: Glacierfish Jr.", location_names)
+        self.assertNotIn("Shipsanity: Legend II", location_names)
+        self.assertNotIn("Shipsanity: Ms. Angler", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Carp", location_names)
+        self.assertNotIn("Shipsanity: Son of Crimsonfish", location_names)
+
+
+class TestShipsanityFullShipmentWithFishExcludeQiBoard(SVTestBase):
+    options = {
+        options.Shipsanity.internal_name: options.Shipsanity.option_full_shipment_with_fish,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_only
+    }
+
+    def test_only_full_shipment_and_fish_shipsanity_locations(self):
+        for location in self.multiworld.get_locations(self.player):
+            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
+                                    LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
+
+    def test_exclude_qi_board_items_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Cinder Shard", location_names)
+        self.assertIn("Shipsanity: Bone Fragment", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Ore", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Bar", location_names)
+        self.assertIn("Shipsanity: Banana", location_names)
+        self.assertIn("Shipsanity: Mango", location_names)
+        self.assertIn("Shipsanity: Pineapple", location_names)
+        self.assertIn("Shipsanity: Taro Root", location_names)
+        self.assertIn("Shipsanity: Ginger", location_names)
+        self.assertIn("Shipsanity: Magma Cap", location_names)
+        self.assertIn("Shipsanity: Blue Discus", location_names)
+        self.assertIn("Shipsanity: Lionfish", location_names)
+        self.assertIn("Shipsanity: Stingray", location_names)
+        self.assertNotIn("Shipsanity: Glacierfish Jr.", location_names)
+        self.assertNotIn("Shipsanity: Legend II", location_names)
+        self.assertNotIn("Shipsanity: Ms. Angler", location_names)
+        self.assertNotIn("Shipsanity: Radioactive Carp", location_names)
+        self.assertNotIn("Shipsanity: Son of Crimsonfish", location_names)

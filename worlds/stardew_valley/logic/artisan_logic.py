@@ -61,3 +61,6 @@ class ArtisanLogic:
         else:
             rule: StardewRule = item
         return self.has(Machine.cask) & self.time.has_lived_months(months) & rule
+
+    def can_mayonnaise(self, item: str) -> StardewRule:
+        return self.has(Machine.mayonnaise_machine) & self.has(item)

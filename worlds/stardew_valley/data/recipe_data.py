@@ -134,17 +134,22 @@ def create_recipe(name: str, ingredients: Dict[str, int], source: RecipeSource) 
 
 algae_soup = friendship_recipe(Meal.algae_soup, NPC.clint, 3, {WaterItem.green_algae: 4})
 artichoke_dip = queen_of_sauce_recipe(Meal.artichoke_dip, 1, Season.fall, 28, {Vegetable.artichoke: 1, AnimalProduct.cow_milk: 1})
+autumn_bounty = friendship_recipe(Meal.autumn_bounty, NPC.demetrius, 7, {Vegetable.yam: 1, Vegetable.pumpkin: 1})
 baked_fish = queen_of_sauce_recipe(Meal.baked_fish, 1, Season.summer, 7, {Fish.sunfish: 1, Fish.bream: 1, Ingredient.wheat_flour: 1})
 bean_hotpot = friendship_recipe(Meal.bean_hotpot, NPC.clint, 7, {Vegetable.green_bean: 2})
 blackberry_cobbler_ingredients = {Forageable.blackberry: 2, Ingredient.sugar: 1, Ingredient.wheat_flour: 1}
 blackberry_cobbler_qos = queen_of_sauce_recipe(Meal.blackberry_cobbler, 2, Season.fall, 14, blackberry_cobbler_ingredients)
 blueberry_tart = friendship_recipe(Meal.blueberry_tart, NPC.pierre, 3, {Fruit.blueberry: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.any_egg: 1})
 bread = queen_of_sauce_recipe(Meal.bread, 1, Season.summer, 28, {Ingredient.wheat_flour: 1})
+bruschetta = queen_of_sauce_recipe(Meal.bruschetta, 2, Season.winter, 21, {Meal.bread: 1, Ingredient.oil: 1, Vegetable.tomato: 1})
+carp_surprise = queen_of_sauce_recipe(Meal.carp_surprise, 2, Season.summer, 7, {Fish.carp: 4})
 cheese_cauliflower = friendship_recipe(Meal.cheese_cauliflower, NPC.pam, 3, {Vegetable.cauliflower: 1, ArtisanGood.cheese: 1})
 chocolate_cake_ingredients = {Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.chicken_egg: 1}
 chocolate_cake_qos = queen_of_sauce_recipe(Meal.chocolate_cake, 1, Season.winter, 14, chocolate_cake_ingredients)
 chowder = friendship_recipe(Meal.chowder, NPC.willy, 3, {WaterItem.clam: 1, AnimalProduct.cow_milk: 1})
+coleslaw = queen_of_sauce_recipe(Meal.coleslaw, 14, Season.spring, 14, {Vegetable.red_cabbage: 1, Ingredient.vinegar: 1, ArtisanGood.mayonnaise: 1})
 complete_breakfast = queen_of_sauce_recipe(Meal.complete_breakfast, 2, Season.spring, 21, {Meal.fried_egg: 1, AnimalProduct.milk: 1, Meal.hashbrowns: 1, Meal.pancakes: 1})
+cookie = friendship_recipe(Meal.cookie, NPC.evelyn, 4, {Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.chicken_egg: 1})
 crab_cakes_ingredients = {Fish.crab: 1, Ingredient.wheat_flour: 1, AnimalProduct.chicken_egg: 1, Ingredient.oil: 1}
 crab_cakes_qos = queen_of_sauce_recipe(Meal.crab_cakes, 2, Season.fall, 21, crab_cakes_ingredients)
 cranberry_candy = queen_of_sauce_recipe(Meal.cranberry_candy, 1, Season.winter, 28, {Fruit.cranberries: 1, Fruit.apple: 1, Ingredient.sugar: 1})

@@ -824,7 +824,7 @@ def set_magic_spell_rules(logic: StardewLogic, multi_world: MultiWorld, player: 
                               & (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")) &
                               logic.has("Coffee") & logic.has("Life Elixir")
                               & logic.ability.can_mine_perfectly() & logic.has("Earth Crystal") &
-                              logic.has("Fire Quartz") & logic.skill.can_fish(85) &
+                              logic.has("Fire Quartz") & logic.skill.can_fish([], 85) &
                               logic.region.can_reach(Region.witch_hut) &
                               logic.region.can_reach(Region.mines_floor_100) &
                               logic.region.can_reach(Region.farm) & logic.has_lived_months(12)).simplify())

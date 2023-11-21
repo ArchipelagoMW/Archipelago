@@ -3,6 +3,7 @@ from typing import List, Tuple, Union, Optional
 
 from . import season_data as season
 from .game_item import GameItem
+from ..strings.fish_names import Fish
 from ..strings.region_names import Region
 
 
@@ -11,6 +12,8 @@ class FishItem(GameItem):
     locations: Tuple[str]
     seasons: Tuple[str]
     difficulty: int
+    legendary: bool
+    extended_family: bool
     mod_name: Optional[str]
 
     def __repr__(self):
@@ -43,11 +46,11 @@ all_fish: List[FishItem] = []
 
 
 def create_fish(name: str, item_id: int, locations: Tuple[str, ...], seasons: Union[str, Tuple[str, ...]],
-                difficulty: int, mod_name: Optional[str] = None) -> FishItem:
+                difficulty: int, legendary: bool = False, extended_family: bool = False, mod_name: Optional[str] = None) -> FishItem:
     if isinstance(seasons, str):
         seasons = (seasons,)
 
-    fish_item = FishItem(name, item_id, locations, seasons, difficulty, mod_name)
+    fish_item = FishItem(name, item_id, locations, seasons, difficulty, legendary, extended_family, mod_name)
     all_fish.append(fish_item)
     return fish_item
 
@@ -57,7 +60,7 @@ anchovy = create_fish("Anchovy", 129, ocean, (season.spring, season.fall), 30)
 blue_discus = create_fish("Blue Discus", 838, ginger_island_river, season.all_seasons, 60)
 bream = create_fish("Bream", 132, town_river + forest_river, season.all_seasons, 35)
 bullhead = create_fish("Bullhead", 700, mountain_lake, season.all_seasons, 46)
-carp = create_fish("Carp", 142, mountain_lake + secret_woods + sewers + mutant_bug_lair, season.not_winter, 15)
+carp = create_fish(Fish.carp, 142, mountain_lake + secret_woods + sewers + mutant_bug_lair, season.not_winter, 15)
 catfish = create_fish("Catfish", 143, town_river + forest_river + secret_woods, (season.spring, season.fall), 75)
 chub = create_fish("Chub", 702, forest_river + mountain_lake, season.all_seasons, 35)
 dorado = create_fish("Dorado", 704, forest_river, season.summer, 78)
@@ -106,11 +109,17 @@ blob_fish = create_fish("Blobfish", 800, night_market, season.winter, 75)
 midnight_squid = create_fish("Midnight Squid", 798, night_market, season.winter, 55)
 spook_fish = create_fish("Spook Fish", 799, night_market, season.winter, 60)
 
-angler = create_fish("Angler", 160, town_river, season.fall, 85)
-crimsonfish = create_fish("Crimsonfish", 159, ocean, season.summer, 95)
-glacierfish = create_fish("Glacierfish", 775, forest_river, season.winter, 100)
-legend = create_fish("Legend", 163, mountain_lake, season.spring, 110)
-mutant_carp = create_fish("Mutant Carp", 682, sewers, season.all_seasons, 80)
+angler = create_fish(Fish.angler, 160, town_river, season.fall, 85, True, False)
+crimsonfish = create_fish(Fish.crimsonfish, 159, ocean, season.summer, 95, True, False)
+glacierfish = create_fish(Fish.glacierfish, 775, forest_river, season.winter, 100, True, False)
+legend = create_fish(Fish.legend, 163, mountain_lake, season.spring, 110, True, False)
+mutant_carp = create_fish(Fish.mutant_carp, 682, sewers, season.all_seasons, 80, True, False)
+
+ms_angler = create_fish(Fish.ms_angler, 160, town_river, season.fall, 85, True, True)
+son_of_crimsonfish = create_fish(Fish.son_of_crimsonfish, 159, ocean, season.summer, 95, True, True)
+glacierfish_jr = create_fish(Fish.glacierfish_jr, 775, forest_river, season.winter, 100, True, True)
+legend_ii = create_fish(Fish.legend_ii, 163, mountain_lake, season.spring, 110, True, True)
+radioactive_carp = create_fish(Fish.radioactive_carp, 682, sewers, season.all_seasons, 80, True, True)
 
 clam = create_fish("Clam", 372, ocean, season.all_seasons, -1)
 cockle = create_fish("Cockle", 718, ocean, season.all_seasons, -1)
@@ -123,7 +132,8 @@ periwinkle = create_fish("Periwinkle", 722, fresh_water, season.all_seasons, -1)
 shrimp = create_fish("Shrimp", 720, ocean, season.all_seasons, -1)
 snail = create_fish("Snail", 721, fresh_water, season.all_seasons, -1)
 
-legendary_fish = [crimsonfish, angler, legend, glacierfish, mutant_carp]
+legendary_fish = [angler, crimsonfish, glacierfish, legend, mutant_carp]
+extended_family = [ms_angler, son_of_crimsonfish, glacierfish_jr, legend_ii, radioactive_carp]
 special_fish = [*legendary_fish, blob_fish, lava_eel, octopus, scorpion_carp, ice_pip, super_cucumber, dorado]
 island_fish = [lionfish, blue_discus, stingray]
 

@@ -60,6 +60,7 @@ class LocationTags(enum.Enum):
     FESTIVAL_HARD = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
+    REQUIRES_QI_ORDERS = enum.auto()
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
     REQUIRES_MUSEUM = enum.auto()
@@ -180,19 +181,19 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], option
         randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
     elif options.fishsanity == Fishsanity.option_randomized:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if random.random() < 0.4]
-        randomized_locations.extend(filter_ginger_island(options, fish_locations))
-    elif options.fishsanity == Fishsanity.option_all:
+        randomized_locations.extend(filter_disabled_locations(world_options, fish_locations))
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_all:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish]
-        randomized_locations.extend(filter_ginger_island(options, fish_locations))
-    elif options.fishsanity == Fishsanity.option_exclude_legendaries:
+        randomized_locations.extend(filter_disabled_locations(world_options, fish_locations))
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_exclude_legendaries:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish not in legendary_fish]
-        randomized_locations.extend(filter_ginger_island(options, fish_locations))
-    elif options.fishsanity == Fishsanity.option_exclude_hard_fish:
+        randomized_locations.extend(filter_disabled_locations(world_options, fish_locations))
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_exclude_hard_fish:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish.difficulty < 80]
-        randomized_locations.extend(filter_ginger_island(options, fish_locations))
-    elif options.fishsanity == Fishsanity.option_only_easy_fish:
+        randomized_locations.extend(filter_disabled_locations(world_options, fish_locations))
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_only_easy_fish:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish.difficulty < 50]
-        randomized_locations.extend(filter_ginger_island(options, fish_locations))
+        randomized_locations.extend(filter_disabled_locations(world_options, fish_locations))
 
 
 def extend_museumsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
@@ -400,13 +401,19 @@ def filter_ginger_island(options: StardewValleyOptions, locations: List[Location
     return [location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags]
 
 
-def filter_modded_locations(options: StardewValleyOptions, locations: List[LocationData]) -> List[LocationData]:
-    current_mod_names = options.mods
+def filter_qi_order_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
+    include_qi_orders = world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi
+    return [location for location in locations if include_qi_orders or LocationTags.REQUIRES_QI_ORDERS not in location.tags]
+
+
+def filter_modded_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
+    current_mod_names = world_options[options.Mods]
     return [location for location in locations if location.mod_name is None or location.mod_name in current_mod_names]
 
 
-def filter_disabled_locations(options: StardewValleyOptions, locations: List[LocationData]) -> List[LocationData]:
-    locations_museum_filter = filter_museum_locations(options, locations)
-    locations_island_filter = filter_ginger_island(options, locations_museum_filter)
-    locations_mod_filter = filter_modded_locations(options, locations_island_filter)
+def filter_disabled_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
+    locations_museum_filter = filter_museum_locations(world_options, locations)
+    locations_island_filter = filter_ginger_island(world_options, locations_museum_filter)
+    locations_qi_filter = filter_qi_order_locations(world_options, locations_island_filter)
+    locations_mod_filter = filter_modded_locations(world_options, locations_qi_filter)
     return locations_mod_filter
