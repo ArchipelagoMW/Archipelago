@@ -128,10 +128,10 @@ class ModItemLogic:
         hardwood_preservation_chamber_rule = self.has(ModMachine.hardwood_preservation_chamber)
         for item in display_items:
             for display_type in display_types:
-                location_name = display_type + ": " + item
-                chamber_rule = self.crafting.can_craft(all_crafting_recipes_by_name[display_type]) & self.has(item)
+                location_name = f"{display_type}: {item}"
+                display_item_rule = self.crafting.can_craft(all_crafting_recipes_by_name[display_type]) & self.has(item)
                 if "Wooden" in display_type:
-                    archaeology_item_rules[location_name] = chamber_rule & preservation_chamber_rule
+                    archaeology_item_rules[location_name] = display_item_rule & preservation_chamber_rule
                 else:
-                    archaeology_item_rules[location_name] = chamber_rule & hardwood_preservation_chamber_rule
+                    archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
         return archaeology_item_rules
