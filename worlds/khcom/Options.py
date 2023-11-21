@@ -2,7 +2,7 @@ from typing import Dict
 
 from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
 
-class PrioritizeBosses(Toggle):
+class PrioritizeBosses(DefaultOnToggle):
     """
     Should boss location prioritize holding progression items?
     """
@@ -18,25 +18,25 @@ class PacksOrSets(Choice):
     option_packs  = 2
     default       = 1
 
-class Zeroes(Toggle):
+class Zeroes(DefaultOnToggle):
     """
     Toggle whether 0's should be included.  Does nothing if you are using card packs
     """
     display_name = "Zeroes"
 
-class Cure(Toggle):
+class Cure(DefaultOnToggle):
     """
     Toggle whether Cure cards should be included.  Does nothing if you are using card packs
     """
     display_name = "Cure"
 
-class EarlyCure(Toggle):
+class EarlyCure(DefaultOnToggle):
     """
     Should one of the starting checks contain Cure 4-6?
     """
     display_name = "Early Cure"
 
-class EnemyCards(Toggle):
+class EnemyCards(DefaultOnToggle):
     """
     Should enemy cards be shuffled into the pool?
     """
