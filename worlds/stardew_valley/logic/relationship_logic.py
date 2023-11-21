@@ -63,7 +63,7 @@ class RelationshipLogic(BaseLogic[Union[
             if npc == Generic.any or npc == Generic.bachelor:
                 possible_friends = []
                 for name in all_villagers_by_name:
-                    if not self.logic.relationship.npc_is_in_current_slot(name):
+                    if not self.npc_is_in_current_slot(name):
                         continue
                     if npc == Generic.any or all_villagers_by_name[name].bachelor:
                         possible_friends.append(self.logic.relationship.has_hearts(name, hearts))
@@ -71,14 +71,14 @@ class RelationshipLogic(BaseLogic[Union[
             if npc == Generic.all:
                 mandatory_friends = []
                 for name in all_villagers_by_name:
-                    if not self.logic.relationship.npc_is_in_current_slot(name):
+                    if not self.npc_is_in_current_slot(name):
                         continue
                     mandatory_friends.append(self.logic.relationship.has_hearts(name, hearts))
                 return And(*mandatory_friends)
             if npc.isnumeric():
                 possible_friends = []
                 for name in all_villagers_by_name:
-                    if not self.logic.relationship.npc_is_in_current_slot(name):
+                    if not self.npc_is_in_current_slot(name):
                         continue
                     possible_friends.append(self.logic.relationship.has_hearts(name, hearts))
                 return Count(int(npc), possible_friends)
@@ -98,11 +98,11 @@ class RelationshipLogic(BaseLogic[Union[
 
     # Should be cached
     def received_hearts(self, npc: str, hearts: int) -> StardewRule:
-        return self.logic.received(self.logic.relationship.heart(npc), math.ceil(hearts / self.options.friendsanity_heart_size))
+        return self.logic.received(self.heart(npc), math.ceil(hearts / self.options.friendsanity_heart_size))
 
     @cache_self1
     def can_meet(self, npc: str) -> StardewRule:
-        if npc not in all_villagers_by_name or not self.logic.relationship.npc_is_in_current_slot(npc):
+        if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
             return True_()
         villager = all_villagers_by_name[npc]
         rules = [self.logic.region.can_reach_any(villager.locations)]
@@ -118,7 +118,7 @@ class RelationshipLogic(BaseLogic[Union[
     def can_give_loved_gifts_to_everyone(self) -> StardewRule:
         rules = []
         for npc in all_villagers_by_name:
-            if not self.logic.relationship.npc_is_in_current_slot(npc):
+            if not self.npc_is_in_current_slot(npc):
                 continue
             meet_rule = self.logic.relationship.can_meet(npc)
             rules.append(meet_rule)
@@ -133,7 +133,7 @@ class RelationshipLogic(BaseLogic[Union[
         previous_heart = hearts - self.options.friendsanity_heart_size
         previous_heart_rule = self.logic.relationship.has_hearts(npc, previous_heart)
 
-        if npc not in all_villagers_by_name or not self.logic.relationship.npc_is_in_current_slot(npc):
+        if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
             return previous_heart_rule
 
         rules = [previous_heart_rule, self.logic.relationship.can_meet(npc)]
@@ -157,4 +157,4 @@ class RelationshipLogic(BaseLogic[Union[
     def heart(self, npc: Union[str, Villager]) -> str:
         if isinstance(npc, str):
             return f"{npc} <3"
-        return self.logic.relationship.heart(npc.name)
+        return self.heart(npc.name)

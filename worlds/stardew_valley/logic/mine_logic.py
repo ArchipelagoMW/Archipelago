@@ -5,7 +5,6 @@ from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogic
 from .tool_logic import ToolLogic
 from .. import options
-from ..mods.logic.elevator_logic import ModElevatorLogic
 from ..options import ToolProgression, SkillProgression, ElevatorProgression
 from ..stardew_rule import StardewRule, And, True_
 from ..strings.performance_names import Performance
@@ -23,7 +22,6 @@ class MineLogic:
     combat: CombatLogic
     tool: ToolLogic
     skill: SkillLogic
-    mod_elevator: ModElevatorLogic
 
     def __init__(self, player: int, tool_option: ToolProgression, skill_option: SkillProgression, elevator_option: ElevatorProgression,
                  received: ReceivedLogicMixin,
@@ -37,9 +35,6 @@ class MineLogic:
         self.combat = combat
         self.tool = tool
         self.skill = skill
-
-    def set_modded_elevator(self, mod_elevator: ModElevatorLogic):
-        self.mod_elevator = mod_elevator
 
     # Regions
     def can_mine_in_the_mines_floor_1_40(self) -> StardewRule:
