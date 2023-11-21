@@ -135,7 +135,7 @@ class StardewLogic:
         self.mine = MineLogic(self.player, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
         self.cooking = CookingLogic(self.player, self.options.chefsanity, self.options.exclude_ginger_island, self.received, self.has, self.region, self.season, self.time, self.money, self.action, self.buildings, self.relationship, self.skill)
-        self.ability = AbilityLogic(self.player, self.options.number_of_movement_buffs, self.options.number_of_luck_buffs, self.received,
+        self.ability = AbilityLogic(self.player, self.options.movement_buff_number, self.options.luck_buff_number, self.received,
                                     self.region, self.tool, self.skill, self.mine)
         self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
@@ -721,7 +721,7 @@ class StardewLogic:
         return And(rules)
 
     def can_win_egg_hunt(self) -> StardewRule:
-        number_of_movement_buffs = self.options.number_of_movement_buffs
+        number_of_movement_buffs = self.options.luck_buff_number
         if self.options.festival_locations == FestivalLocations.option_hard or number_of_movement_buffs < 2:
             return True_()
         return self.received(Buff.movement, number_of_movement_buffs // 2)
