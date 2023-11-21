@@ -358,7 +358,13 @@ class LockedItems(ItemDict):
 
 
 class DeathLink(Toggle):
-    """If on: Whenever you are checkmated or resign (close the game window), everyone who is also on Death Link dies."""
+    """
+    If on:
+
+    - Whenever you are checkmated or resign (close the game window), everyone who is also on Death Link dies.
+
+    - Whenever you receive a Death Link event, your game window closes. (You cannot undo or review.)
+    """
     display_name = "Death Link"
 
 
