@@ -375,7 +375,7 @@ class TestRecipeLearnLogic(SVTestBase):
 class TestRecipeReceiveLogic(SVTestBase):
     options = {
         BuildingProgression.internal_name: BuildingProgression.option_progressive,
-        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         Chefsanity.internal_name: Chefsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
