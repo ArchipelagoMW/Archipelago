@@ -56,34 +56,52 @@ class KHCOMWorld(World):
     def create_items(self):
         item_pool: List[KHCOMItem] = []
         starting_locations = get_locations_by_category("Starting")
-        starting_locations = random.sample(list(starting_locations.keys()),7)
-        starting_worlds = get_items_by_category("World Unlocks")
+        starting_locations = random.sample(list(starting_locations.keys()),8)
+        starting_worlds = get_items_by_category("World Unlocks", [])
         starting_worlds = random.sample(list(starting_worlds.keys()),3)
         i = 0
-        while i < 7:
+        while i < 8:
             if i < 3:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
-            else:
-                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Bronze Card Pack"))
+            elif i < 7:
+                if self.get_setting("packs_or_sets") == "packs":
+                    self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Bronze Card Pack"))
+            elif self.get_setting("early_cure"):
+                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Cure 4-6"))
             i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         for name, data in item_table.items():
             quantity = data.max_quantity
             
             # Ignore filler, it will be added in a later stage.
-            if data.category == "Filler":
+            if data.category not in ["World Unlocks", "Gold Map Cards", "Friend Cards"]:
                 continue
             if name not in starting_worlds:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
 
         # Fill any empty locations with filler items.
+        item_names = []
         while len(item_pool) < total_locations:
-            item_pool.append(self.create_item(self.get_filler_item_name()))
+            item_name = self.get_filler_item_name()
+            if item_name not in item_names or "Pack" in item_name:
+                item_names.append(item_name)
+                item_pool.append(self.create_item(item_name))
 
         self.multiworld.itempool += item_pool
 
     def get_filler_item_name(self) -> str:
-        fillers = get_items_by_category("Filler")
+        fillers = {}
+        disclude = []
+        if not self.get_setting("zeroes"):
+            disclude.append("0")
+        if not self.get_setting("cure"):
+            disclude.append("Cure")
+        if self.get_setting("enemy_cards"):
+            fillers.update(get_items_by_category("Enemy Cards", disclude))
+        if self.get_setting("packs_or_sets") == "packs":
+            fillers.update(get_items_by_category("Packs", disclude))
+        elif self.get_setting("packs_or_sets") == "sets":
+            fillers.update(get_items_by_category("Sets", disclude))
         weights = [data.weight for data in fillers.values()]
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
         
