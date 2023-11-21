@@ -29,7 +29,7 @@ class CraftingRecipe:
     item: str
     ingredients: Dict[str, int]
     source: RecipeSource
-    mod_name: Optional[str] = None
+    mod_name: Optional[str]
 
     def __init__(self, item: str, ingredients: Dict[str, int], source: RecipeSource, mod_name: Optional[str] = None):
         self.item = item
