@@ -100,14 +100,15 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture Pawn F": 140,  # AI prefers not to open kingside as developing queen has more tempo
         "Capture Pawn G": 240,
         "Capture Pawn H": 290,  # AI prefers not to use edge pawns early - thus they stay defended longer
-        "Capture Piece A": 500,  # rook
-        "Capture Piece B": 300,  # knight
-        "Capture Piece C": 300,  # bishop
-        "Capture Piece D": 900,  # queen
+        # Specific pieces should not be guaranteed to be accessible early, so we add +4 material (1piece+1pawn more)
+        "Capture Piece A": 900,  # rook
+        "Capture Piece B": 700,  # knight
+        "Capture Piece C": 700,  # bishop
+        "Capture Piece D": 1300,  # queen
         "Checkmate Maxima": 3920,  # king (this is the game's goal / completion condition)
-        "Capture Piece F": 640,  # bishop - AI prefers not to open kingside as developing queen has more tempo
-        "Capture Piece G": 640,  # knight - AI prefers not to open kingside as developing queen has more tempo
-        "Capture Piece H": 840,  # rook - AI prefers not to open kingside as developing queen has more tempo
+        "Capture Piece F": 1040,  # bishop - AI prefers not to open kingside as developing queen has more tempo
+        "Capture Piece G": 1040,  # knight - AI prefers not to open kingside as developing queen has more tempo
+        "Capture Piece H": 1240,  # rook - AI prefers not to open kingside as developing queen has more tempo
         "Capture 2 Pawns": 550,
         "Capture 3 Pawns": 750,
         "Capture 4 Pawns": 940,
@@ -117,7 +118,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture 8 Pawns": 1575,
         "Capture 2 Pieces": 750,
         "Capture 3 Pieces": 1150,
-        "Capture 4 Pieces": 1500,
+        "Capture 4 Pieces": 1550,
         "Capture 5 Pieces": 2050,
         "Capture 6 Pieces": 2600,
         "Capture 7 Pieces": 3500,

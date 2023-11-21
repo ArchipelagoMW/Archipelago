@@ -352,7 +352,10 @@ class MaximumItems(ItemDict):
 
 class LockedItems(ItemDict):
     """
-    Guarantees that these items will be unlockable.
+    Guarantees that these progression and filler items will be unlockable.
+
+    Implementation note: Currently forces this many items into the item pool before distribution begins. This behaviour
+    is not guaranteed - a future version may simply validate the pool contains these items.
     """
     display_name = "Locked Items"
 
