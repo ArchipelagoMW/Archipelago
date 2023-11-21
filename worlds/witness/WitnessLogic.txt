@@ -392,6 +392,8 @@ Laser - 0x181B3 (Laser) - 0x19650
 
 Outside Keep (Outside Keep) - Main Island - True:
 159550 - 0x28B91 (Thundercloud EP) - 0x09F98 & 0x012FB - True
+159430 - 0x03E77 (Red Flowers EP) - True - True
+159431 - 0x03E7C (Purple Flowers EP) - True - True
 
 Keep (Keep) - Outside Keep - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure Plate - 0x01BEC:
 158193 - 0x00139 (Hedge Maze 1) - True - True
@@ -399,8 +401,6 @@ Keep (Keep) - Outside Keep - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure 
 158198 - 0x033EA (Pressure Plates 1) - 0x0A3A8 - Dots
 Door - 0x01954 (Hedge Maze 1 Exit) - 0x00139
 Door - 0x01BEC (Pressure Plates 1 Exit) - 0x033EA
-159430 - 0x03E77 (Red Flowers EP) - True - True
-159431 - 0x03E7C (Purple Flowers EP) - True - True
 
 Keep 2nd Maze (Keep) - Keep - 0x018CE - Keep 3rd Maze - 0x019D8:
 Door - 0x018CE (Hedge Maze 2 Shortcut) - 0x00139
