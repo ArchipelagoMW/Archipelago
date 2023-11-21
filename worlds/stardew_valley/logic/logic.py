@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from worlds.stardew_valley.strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
-from .ability_logic import AbilityLogic
+from .ability_logic import AbilityLogicMixin
 from .action_logic import ActionLogicMixin
 from .arcade_logic import ArcadeLogicMixin
 from .artisan_logic import ArtisanLogicMixin
@@ -90,7 +90,7 @@ fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Re
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin, SeasonLogicMixin, MoneyLogicMixin,
                    ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin, BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin,
                    MuseumLogicMixin, WalletLogicMixin, CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, CropLogicMixin,
-                   SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin):
+                   SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin):
     player: int
     options: StardewValleyOptions
 
@@ -119,8 +119,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         special_order_locations = self.options.special_order_locations
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
-        self.ability = AbilityLogic(self.player, self.options.movement_buff_number, self.options.luck_buff_number, self.received,
-                                    self.region, self.tool, self.skill, self.mine)
         self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
         self.quest = QuestLogic(self.player, self.skill, self.received, self.has, self.mine, self.region, self.action, self.relationship, self.buildings,
