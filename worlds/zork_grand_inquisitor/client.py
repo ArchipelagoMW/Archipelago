@@ -13,6 +13,7 @@ class ZorkGrandInquisitorCommandProcessor(CommonClient.ClientCommandProcessor):
         result = self.ctx.game_controller.open_process_handle()
 
         if result:
+            self.ctx.process_attached_at_least_once = True
             self.output("Successfully attached to Zork Grand Inquisitor process.")
         else:
             self.output("Failed to attach to Zork Grand Inquisitor process.")
@@ -35,6 +36,11 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
         super().__init__(server_address, password)
 
         self.game_controller = GameController(logger=CommonClient.logger)
+
+        self.controller_task = None
+
+        self.process_attached_at_least_once = False
+        self.can_display_process_message = True
 
     def run_gui(self):
         from kvui import GameManager
@@ -62,55 +68,70 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
 
         CommonClient.async_start(process_package(self, cmd, _args))
 
+    async def controller(self):
+        while not self.exit_event.is_set():
+            await asyncio.sleep(0.1)
 
-async def controller(ctx):
-    while not ctx.exit_event.is_set():
-        # Update Completed Locations
-        completed_locations = set()
+            # Update Completed Locations
+            completed_locations = set()
 
-        for location_id in ctx.checked_locations:
-            location = ctx.id_to_locations[location_id]
-            completed_locations.add(location)
+            for location_id in self.checked_locations:
+                location = self.id_to_locations[location_id]
+                completed_locations.add(location)
 
-        ctx.game_controller.completed_locations = completed_locations
+            self.game_controller.completed_locations = completed_locations
 
-        # Enqueue Received Item Delta
-        for network_item in ctx.items_received:
-            item = ctx.id_to_items[network_item.item]
+            # Enqueue Received Item Delta
+            for network_item in self.items_received:
+                item = self.id_to_items[network_item.item]
 
-            if item not in ctx.game_controller.received_items:
-                if item not in ctx.game_controller.received_items_queue:
-                    ctx.game_controller.received_items_queue.append(item)
+                if item not in self.game_controller.received_items:
+                    if item not in self.game_controller.received_items_queue:
+                        self.game_controller.received_items_queue.append(item)
 
-        # Game Controller Update
-        ctx.game_controller.update()
+            # Game Controller Update
+            if self.game_controller.is_process_running():
+                self.game_controller.update()
+                self.can_display_process_message = True
+            else:
+                if self.process_attached_at_least_once:
+                    process_message = (
+                        "Lost connection to Zork Grand Inquisitor process. Please restart the game and use the /zork "
+                        "command to reattach."
+                    )
+                else:
+                    process_message = (
+                        "Please use the /zork command to attach to a running Zork Grand Inquisitor process."
+                    )
 
-        # Send Checked Locations
-        checked_location_ids = list()
+                if self.can_display_process_message:
+                    CommonClient.logger.info(process_message)
+                    self.can_display_process_message = False
 
-        while len(ctx.game_controller.completed_locations_queue) > 0:
-            location = ctx.game_controller.completed_locations_queue.popleft()
-            location_id = ctx.location_name_to_id[location.value]
+            # Send Checked Locations
+            checked_location_ids = list()
 
-            checked_location_ids.append(location_id)
+            while len(self.game_controller.completed_locations_queue) > 0:
+                location = self.game_controller.completed_locations_queue.popleft()
+                location_id = self.location_name_to_id[location.value]
 
-        await ctx.send_msgs([
-            {
-                "cmd": "LocationChecks",
-                "locations": checked_location_ids
-            }
-        ])
+                checked_location_ids.append(location_id)
 
-        # Check for Goal Completion
-        if ctx.game_controller.goal_completed:
-            await ctx.send_msgs([
+            await self.send_msgs([
                 {
-                    "cmd": "StatusUpdate",
-                    "status": CommonClient.ClientStatus.CLIENT_GOAL
+                    "cmd": "LocationChecks",
+                    "locations": checked_location_ids
                 }
             ])
 
-        await asyncio.sleep(0.2)
+            # Check for Goal Completion
+            if self.game_controller.goal_completed:
+                await self.send_msgs([
+                    {
+                        "cmd": "StatusUpdate",
+                        "status": CommonClient.ClientStatus.CLIENT_GOAL
+                    }
+                ])
 
 
 async def process_package(ctx: ZorkGrandInquisitorContext, cmd, _args):
@@ -125,9 +146,9 @@ def main():
 
     async def _main():
         ctx = ZorkGrandInquisitorContext(None, None)
-        ctx.server_task = asyncio.create_task(CommonClient.server_loop(ctx), name="server loop")
 
-        asyncio.create_task(controller(ctx), name="ZorkGrandInquisitorController")
+        ctx.server_task = asyncio.create_task(CommonClient.server_loop(ctx), name="server loop")
+        ctx.controller_task = asyncio.create_task(ctx.controller(), name="ZorkGrandInquisitorController")
 
         if CommonClient.gui_enabled:
             ctx.run_gui()
