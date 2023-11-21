@@ -20,7 +20,7 @@ from ..strings.region_names import Region
 class BuildingLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.buildings = BuildingLogic(*args, **kwargs)
+        self.building = BuildingLogic(*args, **kwargs)
 
 
 class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin]]):
@@ -28,23 +28,23 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
         self.registry.building_rules.update({
             # @formatter:off
             Building.barn: self.logic.money.can_spend(6000) & self.logic.has((Material.wood, Material.stone)),
-            Building.big_barn: self.logic.money.can_spend(12000) & self.logic.has((Material.wood, Material.stone)) & self.logic.buildings.has_building(Building.barn),
-            Building.deluxe_barn: self.logic.money.can_spend(25000) & self.logic.has((Material.wood, Material.stone)) & self.logic.buildings.has_building(Building.big_barn),
+            Building.big_barn: self.logic.money.can_spend(12000) & self.logic.has((Material.wood, Material.stone)) & self.logic.building.has_building(Building.barn),
+            Building.deluxe_barn: self.logic.money.can_spend(25000) & self.logic.has((Material.wood, Material.stone)) & self.logic.building.has_building(Building.big_barn),
             Building.coop: self.logic.money.can_spend(4000) & self.logic.has((Material.wood, Material.stone)),
-            Building.big_coop: self.logic.money.can_spend(10000) & self.logic.has((Material.wood, Material.stone)) & self.logic.buildings.has_building(Building.coop),
-            Building.deluxe_coop: self.logic.money.can_spend(20000) & self.logic.has((Material.wood, Material.stone)) & self.logic.buildings.has_building(Building.big_coop),
+            Building.big_coop: self.logic.money.can_spend(10000) & self.logic.has((Material.wood, Material.stone)) & self.logic.building.has_building(Building.coop),
+            Building.deluxe_coop: self.logic.money.can_spend(20000) & self.logic.has((Material.wood, Material.stone)) & self.logic.building.has_building(Building.big_coop),
             Building.fish_pond: self.logic.money.can_spend(5000) & self.logic.has((Material.stone, WaterItem.seaweed, WaterItem.green_algae)),
             Building.mill: self.logic.money.can_spend(2500) & self.logic.has((Material.stone, Material.wood, ArtisanGood.cloth)),
             Building.shed: self.logic.money.can_spend(15000) & self.logic.has(Material.wood),
-            Building.big_shed: self.logic.money.can_spend(20000) & self.logic.has((Material.wood, Material.stone)) & self.logic.buildings.has_building(Building.shed),
+            Building.big_shed: self.logic.money.can_spend(20000) & self.logic.has((Material.wood, Material.stone)) & self.logic.building.has_building(Building.shed),
             Building.silo: self.logic.money.can_spend(100) & self.logic.has((Material.stone, Material.clay, MetalBar.copper)),
             Building.slime_hutch: self.logic.money.can_spend(10000) & self.logic.has((Material.stone, MetalBar.quartz, MetalBar.iridium)),
             Building.stable: self.logic.money.can_spend(10000) & self.logic.has((Material.hardwood, MetalBar.iron)),
             Building.well: self.logic.money.can_spend(1000) & self.logic.has(Material.stone),
             Building.shipping_bin: self.logic.money.can_spend(250) & self.logic.has(Material.wood),
-            Building.kitchen: self.logic.money.can_spend(10000) & self.logic.has(Material.wood) & self.logic.buildings.has_house(0),
-            Building.kids_room: self.logic.money.can_spend(50000) & self.logic.has(Material.hardwood) & self.logic.buildings.has_house(1),
-            Building.cellar: self.logic.money.can_spend(100000) & self.logic.buildings.has_house(2),
+            Building.kitchen: self.logic.money.can_spend(10000) & self.logic.has(Material.wood) & self.logic.building.has_house(0),
+            Building.kids_room: self.logic.money.can_spend(50000) & self.logic.has(Material.hardwood) & self.logic.building.has_house(1),
+            Building.cellar: self.logic.money.can_spend(100000) & self.logic.building.has_house(2),
             # @formatter:on
         })
 

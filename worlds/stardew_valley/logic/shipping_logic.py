@@ -24,7 +24,7 @@ class ShippingLogic(BaseLogic[Union[ShippingLogicMixin, BuildingLogicMixin, Regi
 
     @cached_property
     def can_use_shipping_bin(self) -> StardewRule:
-        return self.logic.buildings.has_building(Building.shipping_bin)
+        return self.logic.building.has_building(Building.shipping_bin)
 
     @cache_self1
     def can_ship(self, item: str) -> StardewRule:
@@ -48,4 +48,4 @@ class ShippingLogic(BaseLogic[Union[ShippingLogicMixin, BuildingLogicMixin, Regi
             if location.mod_name and location.mod_name not in mod_list:
                 continue
             all_items_to_ship.append(location.name[len(shipsanity_prefix):])
-        return self.logic.buildings.has_building(Building.shipping_bin) & And(*(self.logic.has(item) for item in all_items_to_ship))
+        return self.logic.building.has_building(Building.shipping_bin) & And(*(self.logic.has(item) for item in all_items_to_ship))

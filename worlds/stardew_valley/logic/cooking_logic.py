@@ -36,7 +36,7 @@ class CookingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogi
 BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]):
     @cached_property
     def can_cook_in_kitchen(self) -> StardewRule:
-        return self.logic.buildings.has_house(1) | self.logic.skill.has_level(Skill.foraging, 9)
+        return self.logic.building.has_house(1) | self.logic.skill.has_level(Skill.foraging, 9)
 
     # Should be cached
     def can_cook(self, recipe: CookingRecipe = None) -> StardewRule:

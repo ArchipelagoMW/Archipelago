@@ -44,5 +44,5 @@ class ModLogic(ModElevatorLogicMixin, MagicLogicMixin, ModSkillLogicMixin):
         self.special_orders = ModSpecialOrderLogic(player, logic.action, logic.artisan, crafting, logic.crop, logic.has, logic.region, logic.relationship,
                                                    logic.season, logic.wallet, mods)
         self.deepwoods = DeepWoodsLogic(player, skill_option, elevator_option, logic.received, logic.has, logic.combat, logic.tool, skill, cooking)
-        self.sve = SVELogic(player, skill_option, logic.received, logic.has, quest, logic.region, logic.action, logic.relationship, logic.buildings, logic.tool,
+        self.sve = SVELogic(player, skill_option, logic.received, logic.has, quest, logic.region, logic.action, logic.relationship, logic.building, logic.tool,
                             fishing, cooking, logic.money, logic.combat, logic.season, logic.time)

@@ -44,12 +44,12 @@ class RelationshipLogic(BaseLogic[Union[
             return True_()
         if self.options.friendsanity == Friendsanity.option_none:
             return self.logic.relationship.can_reproduce(number_children)
-        return self.logic.received(possible_kids, number_children) & self.logic.buildings.has_house(2)
+        return self.logic.received(possible_kids, number_children) & self.logic.building.has_house(2)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         if number_children <= 0:
             return True_()
-        baby_rules = [self.logic.relationship.can_get_married(), self.logic.buildings.has_house(2), self.logic.relationship.has_hearts(Generic.bachelor, 12),
+        baby_rules = [self.logic.relationship.can_get_married(), self.logic.building.has_house(2), self.logic.relationship.has_hearts(Generic.bachelor, 12),
                       self.logic.relationship.has_children(number_children - 1)]
         return And(*baby_rules)
 

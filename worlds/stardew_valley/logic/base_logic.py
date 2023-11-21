@@ -1,25 +1,27 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic
+from typing import TypeVar, Generic, Dict
 
 from ..options import StardewValleyOptions
+from ..stardew_rule import StardewRule
 
 
 class LogicRegistry:
 
     def __init__(self):
-        self.item_rules = {}
-        self.sapling_rules = {}
-        self.tree_fruit_rules = {}
-        self.seed_rules = {}
-        self.cooking_rules = {}
-        self.crafting_rules = {}
-        self.crop_rules = {}
-        self.fish_rules = {}
-        self.museum_rules = {}
-        self.festival_rules = {}
-        self.quest_rules = {}
-        self.building_rules = {}
+        self.item_rules: Dict[str, StardewRule] = {}
+        self.sapling_rules: Dict[str, StardewRule] = {}
+        self.tree_fruit_rules: Dict[str, StardewRule] = {}
+        self.seed_rules: Dict[str, StardewRule] = {}
+        self.cooking_rules: Dict[str, StardewRule] = {}
+        self.crafting_rules: Dict[str, StardewRule] = {}
+        self.crop_rules: Dict[str, StardewRule] = {}
+        self.fish_rules: Dict[str, StardewRule] = {}
+        self.museum_rules: Dict[str, StardewRule] = {}
+        self.festival_rules: Dict[str, StardewRule] = {}
+        self.quest_rules: Dict[str, StardewRule] = {}
+        self.building_rules: Dict[str, StardewRule] = {}
+        self.special_order_rules: Dict[str, StardewRule] = {}
 
 
 class BaseLogicMixin:

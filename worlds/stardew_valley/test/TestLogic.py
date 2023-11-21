@@ -38,16 +38,16 @@ class TestLogic(unittest.TestCase):
                 self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve building rule for {building} {rule}")
 
     def test_given_quest_rule_then_can_be_resolved(self):
-        for quest in logic.quest.quest_rules.keys():
+        for quest in logic.registry.quest_rules.keys():
             with self.subTest(msg=quest):
-                rule = logic.quest.quest_rules[quest]
+                rule = logic.registry.quest_rules[quest]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
                 self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve quest rule for {quest} {rule}")
 
     def test_given_special_order_rule_then_can_be_resolved(self):
-        for special_order in logic.special_order.special_order_rules.keys():
+        for special_order in logic.registry.special_order_rules.keys():
             with self.subTest(msg=special_order):
-                rule = logic.special_order.special_order_rules[special_order]
+                rule = logic.registry.special_order_rules[special_order]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
                 self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve special order rule for {special_order} {rule}")
 

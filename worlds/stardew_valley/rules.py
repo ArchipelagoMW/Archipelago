@@ -268,10 +268,10 @@ def set_farm_buildings_entrance_rules(logic, multiworld, player):
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.use_island_obelisk, player), logic.can_use_obelisk(Transportation.island_obelisk))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.use_farm_obelisk, player), logic.can_use_obelisk(Transportation.farm_obelisk))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_greenhouse, player), logic.received("Greenhouse"))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_coop, player), logic.buildings.has_building(Building.coop))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_barn, player), logic.buildings.has_building(Building.barn))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_shed, player), logic.buildings.has_building(Building.shed))
-    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_slime_hutch, player), logic.buildings.has_building(Building.slime_hutch))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_coop, player), logic.building.has_building(Building.coop))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_barn, player), logic.building.has_building(Building.barn))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_shed, player), logic.building.has_building(Building.shed))
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_slime_hutch, player), logic.building.has_building(Building.slime_hutch))
 
 
 def set_bedroom_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
@@ -463,7 +463,7 @@ def set_story_quests_rules(all_location_names: List[str], logic: StardewLogic, m
     for quest in locations.locations_by_tag[LocationTags.QUEST]:
         if quest.name in all_location_names and (quest.mod_name is None or quest.mod_name in world_options.mods):
             MultiWorldRules.set_rule(multiworld.get_location(quest.name, player),
-                                     logic.quest.quest_rules[quest.name])
+                                     logic.registry.quest_rules[quest.name])
 
 
 def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player,
@@ -473,7 +473,7 @@ def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, 
     board_rule = logic.received("Special Order Board") & logic.time.has_lived_months(4)
     for board_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
         if board_order.name in all_location_names:
-            order_rule = board_rule & logic.special_order.special_order_rules[board_order.name]
+            order_rule = board_rule & logic.registry.special_order_rules[board_order.name]
             MultiWorldRules.set_rule(multiworld.get_location(board_order.name, player), order_rule)
 
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
@@ -483,7 +483,7 @@ def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, 
     qi_rule = logic.region.can_reach(Region.qi_walnut_room) & logic.time.has_lived_months(8)
     for qi_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
         if qi_order.name in all_location_names:
-            order_rule = qi_rule & logic.special_order.special_order_rules[qi_order.name]
+            order_rule = qi_rule & logic.registry.special_order_rules[qi_order.name]
             MultiWorldRules.set_rule(multiworld.get_location(qi_order.name, player), order_rule)
 
 

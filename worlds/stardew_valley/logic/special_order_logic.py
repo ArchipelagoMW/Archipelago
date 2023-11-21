@@ -1,20 +1,21 @@
-from typing import Dict
+from typing import Dict, Union
 
-from .ability_logic import AbilityLogic
+from .ability_logic import AbilityLogicMixin
 from .arcade_logic import ArcadeLogicMixin
 from .artisan_logic import ArtisanLogicMixin
-from .cooking_logic import CookingLogic
+from .base_logic import BaseLogicMixin, BaseLogic
+from .cooking_logic import CookingLogicMixin
 from .has_logic import HasLogicMixin
-from .mine_logic import MineLogic
+from .mine_logic import MineLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .shipping_logic import ShippingLogicMixin
-from .skill_logic import SkillLogic
+from .skill_logic import SkillLogicMixin
 from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogic
+from .tool_logic import ToolLogicMixin
 from ..stardew_rule import StardewRule, Has
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.transport_names import Transportation
@@ -34,101 +35,72 @@ from ..strings.tool_names import Tool
 from ..strings.villager_names import NPC
 
 
-class SpecialOrderLogic:
-    player: int
-    received: ReceivedLogicMixin
-    has: HasLogicMixin
-    region: RegionLogicMixin
-    season: SeasonLogicMixin
-    time: TimeLogicMixin
-    money: MoneyLogicMixin
-    shipping: ShippingLogicMixin
-    arcade: ArcadeLogicMixin
-    artisan: ArtisanLogicMixin
-    relationship: RelationshipLogicMixin
-    tool: ToolLogic
-    skill: SkillLogic
-    mine: MineLogic
-    cooking: CookingLogic
-    ability: AbilityLogic
-    special_order_rules: Dict[str, StardewRule]
+class SpecialOrderLogicMixin(BaseLogicMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.special_order = SpecialOrderLogic(*args, **kwargs)
 
-    def __init__(self, player: int, received: ReceivedLogicMixin, has: HasLogicMixin, region: RegionLogicMixin, season: SeasonLogicMixin, time: TimeLogicMixin,
-                 money: MoneyLogicMixin,
-                 shipping: ShippingLogicMixin, arcade: ArcadeLogicMixin, artisan: ArtisanLogicMixin, relationship: RelationshipLogicMixin, tool: ToolLogic,
-                 skill: SkillLogic,
-                 mine: MineLogic, cooking: CookingLogic, ability: AbilityLogic):
-        self.player = player
-        self.received = received
-        self.has = has
-        self.region = region
-        self.season = season
-        self.time = time
-        self.money = money
-        self.shipping = shipping
-        self.arcade = arcade
-        self.artisan = artisan
-        self.relationship = relationship
-        self.tool = tool
-        self.skill = skill
-        self.mine = mine
-        self.cooking = cooking
-        self.ability = ability
-        self.special_order_rules = dict()
+
+class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, MoneyLogicMixin,
+ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin, MineLogicMixin, CookingLogicMixin,
+AbilityLogicMixin, SpecialOrderLogicMixin]]):
 
     def initialize_rules(self):
-        self.special_order_rules.update({
-            SpecialOrder.island_ingredients: self.relationship.can_meet(NPC.caroline) & self.has_island_transport() & self.ability.can_farm_perfectly() &
-                                             self.shipping.can_ship(Vegetable.taro_root) & self.shipping.can_ship(Fruit.pineapple) & self.shipping.can_ship(
-                Forageable.ginger),
-            SpecialOrder.cave_patrol: self.relationship.can_meet(NPC.clint),
-            SpecialOrder.aquatic_overpopulation: self.relationship.can_meet(NPC.demetrius) & self.ability.can_fish_perfectly(),
-            SpecialOrder.biome_balance: self.relationship.can_meet(NPC.demetrius) & self.ability.can_fish_perfectly(),
-            SpecialOrder.rock_rejuivenation: self.relationship.has_hearts(NPC.emily, 4) & self.has(Mineral.ruby) & self.has(Mineral.topaz) &
-                                             self.has(Mineral.emerald) & self.has(Mineral.jade) & self.has(Mineral.amethyst) & self.has(ArtisanGood.cloth),
-            SpecialOrder.gifts_for_george: self.season.has(Season.spring) & self.has(Forageable.leek),
-            SpecialOrder.fragments_of_the_past: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe),
-            SpecialOrder.gus_famous_omelet: self.has(AnimalProduct.any_egg),
-            SpecialOrder.crop_order: self.ability.can_farm_perfectly() & self.shipping.can_ship_items,
-            SpecialOrder.community_cleanup: self.skill.can_crab_pot,
-            SpecialOrder.the_strong_stuff: self.artisan.can_keg(Vegetable.potato),
-            SpecialOrder.pierres_prime_produce: self.ability.can_farm_perfectly(),
-            SpecialOrder.robins_project: self.relationship.can_meet(NPC.robin) & self.ability.can_chop_perfectly() & self.has(Material.hardwood),
-            SpecialOrder.robins_resource_rush: self.relationship.can_meet(NPC.robin) & self.ability.can_chop_perfectly() &
-                                               self.has(Fertilizer.tree) & self.ability.can_mine_perfectly(),
-            SpecialOrder.juicy_bugs_wanted: self.has(Loot.bug_meat),
-            SpecialOrder.tropical_fish: self.relationship.can_meet(NPC.willy) & self.received("Island Resort") & self.has_island_transport() &
-                                        self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
-            SpecialOrder.a_curious_substance: self.region.can_reach(Region.wizard_tower),
-            SpecialOrder.prismatic_jelly: self.region.can_reach(Region.wizard_tower),
-            SpecialOrder.qis_crop: self.ability.can_farm_perfectly() & self.region.can_reach(Region.greenhouse) &
-                                   self.region.can_reach(Region.island_west) & self.skill.has_total_level(50) &
-                                   self.has(Machine.seed_maker) & self.shipping.can_ship_items,
-            SpecialOrder.lets_play_a_game: self.arcade.has_junimo_kart_max_level(),
-            SpecialOrder.four_precious_stones: self.time.has_lived_max_months & self.has("Prismatic Shard") &
-                                               self.ability.can_mine_perfectly_in_the_skull_cavern(),
-            SpecialOrder.qis_hungry_challenge: self.ability.can_mine_perfectly_in_the_skull_cavern() & self.ability.has_max_buffs(),
-            SpecialOrder.qis_cuisine: self.cooking.can_cook() & self.shipping.can_ship_items &
-                                      (self.money.can_spend_at(Region.saloon, 205000) | self.money.can_spend_at(Region.pierre_store, 170000)),
-            SpecialOrder.qis_kindness: self.relationship.can_give_loved_gifts_to_everyone(),
-            SpecialOrder.extended_family: self.ability.can_fish_perfectly() & self.has(Fish.angler) & self.has(Fish.glacierfish) &
-                                          self.has(Fish.crimsonfish) & self.has(Fish.mutant_carp) & self.has(Fish.legend),
-            SpecialOrder.danger_in_the_deep: self.ability.can_mine_perfectly() & self.mine.has_mine_elevator_to_floor(120),
-            SpecialOrder.skull_cavern_invasion: self.ability.can_mine_perfectly_in_the_skull_cavern() & self.ability.has_max_buffs(),
-            SpecialOrder.qis_prismatic_grange: self.has(Loot.bug_meat) &  # 100 Bug Meat
-                                               self.money.can_spend_at(Region.saloon, 24000) &  # 100 Spaghetti
-                                               self.money.can_spend_at(Region.blacksmith, 15000) &  # 100 Copper Ore
-                                               self.money.can_spend_at(Region.ranch, 5000) &  # 100 Hay
-                                               self.money.can_spend_at(Region.saloon, 22000) &  # 100 Salads
-                                               self.money.can_spend_at(Region.saloon, 7500) &  # 100 Joja Cola
-                                               self.money.can_spend(80000),  # I need this extra rule because money rules aren't additive...
+        self.update_rules({
+            SpecialOrder.island_ingredients: self.logic.relationship.can_meet(NPC.caroline) & self.logic.special_order.has_island_transport() &
+                                             self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_ship(Vegetable.taro_root) &
+                                             self.logic.shipping.can_ship(Fruit.pineapple) & self.logic.shipping.can_ship(Forageable.ginger),
+            SpecialOrder.cave_patrol: self.logic.relationship.can_meet(NPC.clint),
+            SpecialOrder.aquatic_overpopulation: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
+            SpecialOrder.biome_balance: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
+            SpecialOrder.rock_rejuivenation: self.logic.relationship.has_hearts(NPC.emily, 4) & self.logic.has(Mineral.ruby) & self.logic.has(Mineral.topaz) &
+                                             self.logic.has(Mineral.emerald) & self.logic.has(Mineral.jade) & self.logic.has(Mineral.amethyst) &
+                                             self.logic.has(ArtisanGood.cloth),
+            SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek),
+            SpecialOrder.fragments_of_the_past: self.logic.region.can_reach(Region.dig_site) & self.logic.tool.has_tool(Tool.pickaxe),
+            SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
+            SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_ship_items,
+            SpecialOrder.community_cleanup: self.logic.skill.can_crab_pot,
+            SpecialOrder.the_strong_stuff: self.logic.artisan.can_keg(Vegetable.potato),
+            SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly(),
+            SpecialOrder.robins_project: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
+                                         self.logic.has(Material.hardwood),
+            SpecialOrder.robins_resource_rush: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
+                                               self.logic.has(Fertilizer.tree) & self.logic.ability.can_mine_perfectly(),
+            SpecialOrder.juicy_bugs_wanted: self.logic.has(Loot.bug_meat),
+            SpecialOrder.tropical_fish: self.logic.relationship.can_meet(NPC.willy) & self.logic.received("Island Resort") &
+                                        self.logic.special_order.has_island_transport() &
+                                        self.logic.has(Fish.stingray) & self.logic.has(Fish.blue_discus) & self.logic.has(Fish.lionfish),
+            SpecialOrder.a_curious_substance: self.logic.region.can_reach(Region.wizard_tower),
+            SpecialOrder.prismatic_jelly: self.logic.region.can_reach(Region.wizard_tower),
+            SpecialOrder.qis_crop: self.logic.ability.can_farm_perfectly() & self.logic.region.can_reach(Region.greenhouse) &
+                                   self.logic.region.can_reach(Region.island_west) & self.logic.skill.has_total_level(50) &
+                                   self.logic.has(Machine.seed_maker) & self.logic.shipping.can_ship_items,
+            SpecialOrder.lets_play_a_game: self.logic.arcade.has_junimo_kart_max_level(),
+            SpecialOrder.four_precious_stones: self.logic.time.has_lived_max_months & self.logic.has("Prismatic Shard") &
+                                               self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
+            SpecialOrder.qis_hungry_challenge: self.logic.ability.can_mine_perfectly_in_the_skull_cavern() & self.logic.ability.has_max_buffs(),
+            SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.shipping.can_ship_items &
+                                      (self.logic.money.can_spend_at(Region.saloon, 205000) | self.logic.money.can_spend_at(Region.pierre_store, 170000)),
+            SpecialOrder.qis_kindness: self.logic.relationship.can_give_loved_gifts_to_everyone(),
+            SpecialOrder.extended_family: self.logic.ability.can_fish_perfectly() & self.logic.has(Fish.angler) & self.logic.has(Fish.glacierfish) &
+                                          self.logic.has(Fish.crimsonfish) & self.logic.has(Fish.mutant_carp) & self.logic.has(Fish.legend),
+            SpecialOrder.danger_in_the_deep: self.logic.ability.can_mine_perfectly() & self.logic.mine.has_mine_elevator_to_floor(120),
+            SpecialOrder.skull_cavern_invasion: self.logic.ability.can_mine_perfectly_in_the_skull_cavern() & self.logic.ability.has_max_buffs(),
+            SpecialOrder.qis_prismatic_grange: self.logic.has(Loot.bug_meat) &  # 100 Bug Meat
+                                               self.logic.money.can_spend_at(Region.saloon, 24000) &  # 100 Spaghetti
+                                               self.logic.money.can_spend_at(Region.blacksmith, 15000) &  # 100 Copper Ore
+                                               self.logic.money.can_spend_at(Region.ranch, 5000) &  # 100 Hay
+                                               self.logic.money.can_spend_at(Region.saloon, 22000) &  # 100 Salads
+                                               self.logic.money.can_spend_at(Region.saloon, 7500) &  # 100 Joja Cola
+                                               self.logic.money.can_spend(80000),  # I need this extra rule because money rules aren't additive...
         })
 
     def update_rules(self, new_rules: Dict[str, StardewRule]):
-        self.special_order_rules.update(new_rules)
+        self.registry.special_order_rules.update(new_rules)
 
     def can_complete_special_order(self, special_order: str) -> StardewRule:
-        return Has(special_order, self.special_order_rules)
+        return Has(special_order, self.registry.special_order_rules)
 
     def has_island_transport(self) -> StardewRule:
-        return self.received(Transportation.island_obelisk) | self.received(Transportation.boat_repair)
+        return self.logic.received(Transportation.island_obelisk) | self.logic.received(Transportation.boat_repair)

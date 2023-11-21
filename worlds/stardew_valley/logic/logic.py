@@ -12,7 +12,7 @@ from .building_logic import BuildingLogicMixin
 from .bundle_logic import BundleLogicMixin
 from .combat_logic import CombatLogicMixin
 from .cooking_logic import CookingLogicMixin
-from .crafting_logic import CraftingLogic
+from .crafting_logic import CraftingLogicMixin
 from .crop_logic import CropLogicMixin
 from .farming_logic import FarmingLogicMixin
 from .fishing_logic import FishingLogicMixin
@@ -23,14 +23,14 @@ from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogicMixin
 from .museum_logic import MuseumLogicMixin
 from .pet_logic import PetLogicMixin
-from .quest_logic import QuestLogic
+from .quest_logic import QuestLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogicMixin
-from .special_order_logic import SpecialOrderLogic
+from .special_order_logic import SpecialOrderLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
@@ -90,7 +90,8 @@ fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Re
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin, SeasonLogicMixin, MoneyLogicMixin,
                    ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin, BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin,
                    MuseumLogicMixin, WalletLogicMixin, CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, CropLogicMixin,
-                   SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin):
+                   SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
+                   SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin):
     player: int
     options: StardewValleyOptions
 
@@ -119,13 +120,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         special_order_locations = self.options.special_order_locations
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
-        self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
-                                               self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
-        self.quest = QuestLogic(self.player, self.skill, self.received, self.has, self.mine, self.region, self.action, self.relationship, self.buildings,
-                                self.time, self.tool, self.fishing, self.cooking, self.money, self.combat, self.season, self.wallet, mods_option)
-        self.crafting = CraftingLogic(self.player, self.options.craftsanity, exclude_ginger_island, mods_option,
-                                      self.options.festival_locations, special_order_locations, self.received, self.has, self.region, self.time, self.money,
-                                      self.relationship, self.skill, self.special_order)
         self.mod = ModLogic(self.player, self.registry, self.options, self, skill_option, elevator_option, mods_option, self.skill,
                             self.fishing, self.cooking, self.mine, self.ability, self.quest, self.crafting)
 
@@ -206,10 +200,10 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             # | (self.ability.can_cook() & self.relationship.has_hearts(NPC.jodi, 7) & self.has(AnimalProduct.cow_milk) & self.has(Ingredient.sugar)),
             Animal.chicken: self.can_buy_animal(Animal.chicken),
             Animal.cow: self.can_buy_animal(Animal.cow),
-            Animal.dinosaur: self.buildings.has_building(Building.big_coop) & self.has(AnimalProduct.dinosaur_egg),
+            Animal.dinosaur: self.building.has_building(Building.big_coop) & self.has(AnimalProduct.dinosaur_egg),
             Animal.duck: self.can_buy_animal(Animal.duck),
             Animal.goat: self.can_buy_animal(Animal.goat),
-            Animal.ostrich: self.buildings.has_building(Building.barn) & self.has(AnimalProduct.ostrich_egg) & self.has(Machine.ostrich_incubator),
+            Animal.ostrich: self.building.has_building(Building.barn) & self.has(AnimalProduct.ostrich_egg) & self.has(Machine.ostrich_incubator),
             Animal.pig: self.can_buy_animal(Animal.pig),
             Animal.rabbit: self.can_buy_animal(Animal.rabbit),
             Animal.sheep: self.can_buy_animal(Animal.sheep),
@@ -229,17 +223,17 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.milk: self.has_animal(Animal.cow),
             AnimalProduct.ostrich_egg: self.tool.can_forage(Generic.any, Region.island_north, True),
             AnimalProduct.rabbit_foot: self.has_happy_animal(Animal.rabbit),
-            AnimalProduct.roe: self.skill.can_fish() & self.buildings.has_building(Building.fish_pond),
-            AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.buildings.has_building(Building.fish_pond) & self.has(Fish.squid)),
-            AnimalProduct.sturgeon_roe: self.has(Fish.sturgeon) & self.buildings.has_building(Building.fish_pond),
+            AnimalProduct.roe: self.skill.can_fish() & self.building.has_building(Building.fish_pond),
+            AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.building.has_building(Building.fish_pond) & self.has(Fish.squid)),
+            AnimalProduct.sturgeon_roe: self.has(Fish.sturgeon) & self.building.has_building(Building.fish_pond),
             AnimalProduct.truffle: self.has_animal(Animal.pig) & self.season.has_any_not_winter(),
-            AnimalProduct.void_egg: self.money.can_spend_at(Region.sewer, 5000) | (self.buildings.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
+            AnimalProduct.void_egg: self.money.can_spend_at(Region.sewer, 5000) | (self.building.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
             AnimalProduct.wool: self.has_animal(Animal.rabbit) | self.has_animal(Animal.sheep),
             AnimalProduct.slime_egg_green: self.has(Machine.slime_egg_press) & self.has(Loot.slime),
             AnimalProduct.slime_egg_blue: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(3),
             AnimalProduct.slime_egg_red: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(6),
             AnimalProduct.slime_egg_purple: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(9),
-            AnimalProduct.slime_egg_tiger: self.has(Fish.lionfish) & self.buildings.has_building(Building.fish_pond),
+            AnimalProduct.slime_egg_tiger: self.has(Fish.lionfish) & self.building.has_building(Building.fish_pond),
             ArtisanGood.aged_roe: self.artisan.can_preserves_jar(AnimalProduct.roe),
             ArtisanGood.battery_pack: (self.has(Machine.lightning_rod) & self.season.has_any_not_winter()) | self.has(Machine.solar_panel),
             ArtisanGood.caviar: self.artisan.can_preserves_jar(AnimalProduct.sturgeon_roe),
@@ -296,7 +290,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Forageable.dragon_tooth: self.tool.can_forage(Generic.any, Region.volcano_floor_10),
             Forageable.fiddlehead_fern: self.tool.can_forage(Season.summer, Region.secret_woods),
             Forageable.ginger: self.tool.can_forage(Generic.any, Region.island_west, True),
-            Forageable.hay: self.buildings.has_building(Building.silo) & self.tool.has_tool(Tool.scythe),
+            Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_tool(Tool.scythe),
             Forageable.hazelnut: self.tool.can_forage(Season.fall),
             Forageable.holly: self.tool.can_forage(Season.winter),
             Forageable.journal_scrap: self.region.can_reach_all((Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10)) & self.received(Wallet.magnifying_glass) & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),
@@ -329,29 +323,29 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Geode.frozen: self.mine.can_mine_in_the_mines_floor_41_80(),
             Geode.geode: self.mine.can_mine_in_the_mines_floor_1_40(),
             Geode.golden_coconut: self.region.can_reach(Region.island_north),
-            Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120() | (self.has(Fish.lava_eel) & self.buildings.has_building(Building.fish_pond)),
-            Geode.omni: self.mine.can_mine_in_the_mines_floor_41_80() | self.region.can_reach(Region.desert) | self.action.can_pan() | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.buildings.has_building(Building.fish_pond)) | self.region.can_reach(Region.volcano_floor_10),
+            Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120() | (self.has(Fish.lava_eel) & self.building.has_building(Building.fish_pond)),
+            Geode.omni: self.mine.can_mine_in_the_mines_floor_41_80() | self.region.can_reach(Region.desert) | self.action.can_pan() | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.building.has_building(Building.fish_pond)) | self.region.can_reach(Region.volcano_floor_10),
             Gift.bouquet: self.relationship.has_hearts(Generic.bachelor, 8) & self.money.can_spend_at(Region.pierre_store, 100),
             Gift.golden_pumpkin: self.season.has(Season.fall) | self.action.can_open_geode(Geode.artifact_trove),
-            Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts(Generic.bachelor, 10) & self.buildings.has_house(1) & self.has(Consumable.rain_totem),
+            Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts(Generic.bachelor, 10) & self.building.has_house(1) & self.has(Consumable.rain_totem),
             Gift.movie_ticket: self.money.can_spend_at(Region.movie_ticket_stand, 1000),
-            Gift.pearl: (self.has(Fish.blobfish) & self.buildings.has_building(Building.fish_pond)) | self.action.can_open_geode(Geode.artifact_trove),
+            Gift.pearl: (self.has(Fish.blobfish) & self.building.has_building(Building.fish_pond)) | self.action.can_open_geode(Geode.artifact_trove),
             Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months,
             Gift.void_ghost_pendant: self.money.can_trade_at(Region.desert, Loot.void_essence, 200),
             Gift.wilted_bouquet: self.has(Machine.furnace) & self.has(Gift.bouquet) & self.has(Material.coal),
             Ingredient.oil: self.money.can_spend_at(Region.pierre_store, 200) | (self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower))),
             Ingredient.qi_seasoning: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 10),
-            Ingredient.rice: self.money.can_spend_at(Region.pierre_store, 200) | (self.buildings.has_building(Building.mill) & self.has(Vegetable.unmilled_rice)),
-            Ingredient.sugar: self.money.can_spend_at(Region.pierre_store, 100) | (self.buildings.has_building(Building.mill) & self.has(Vegetable.beet)),
+            Ingredient.rice: self.money.can_spend_at(Region.pierre_store, 200) | (self.building.has_building(Building.mill) & self.has(Vegetable.unmilled_rice)),
+            Ingredient.sugar: self.money.can_spend_at(Region.pierre_store, 100) | (self.building.has_building(Building.mill) & self.has(Vegetable.beet)),
             Ingredient.vinegar: self.money.can_spend_at(Region.pierre_store, 200),
-            Ingredient.wheat_flour: self.money.can_spend_at(Region.pierre_store, 100) | (self.buildings.has_building(Building.mill) & self.has(Vegetable.wheat)),
+            Ingredient.wheat_flour: self.money.can_spend_at(Region.pierre_store, 100) | (self.building.has_building(Building.mill) & self.has(Vegetable.wheat)),
             Loot.bat_wing: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern(),
             Loot.bug_meat: self.mine.can_mine_in_the_mines_floor_1_40(),
             Loot.slime: self.mine.can_mine_in_the_mines_floor_1_40(),
             Loot.solar_essence: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern(),
             Loot.void_essence: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern(),
             Machine.bee_house: self.skill.has_farming_level(3) & self.has(MetalBar.iron) & self.has(ArtisanGood.maple_syrup) & self.has(Material.coal) & self.has(Material.wood),
-            Machine.cask: self.buildings.has_house(3) & self.region.can_reach(Region.cellar) & self.has(Material.wood) & self.has(Material.hardwood),
+            Machine.cask: self.building.has_house(3) & self.region.can_reach(Region.cellar) & self.has(Material.wood) & self.has(Material.hardwood),
             Machine.cheese_press: self.skill.has_farming_level(6) & self.has(Material.wood) & self.has(Material.stone) & self.has(Material.hardwood) & self.has(MetalBar.copper),
             Machine.coffee_maker: self.received(Machine.coffee_maker),
             Machine.crab_pot: self.skill.has_level(Skill.fishing, 3) & (self.money.can_spend_at(Region.fish_shop, 1500) | (self.has(MetalBar.iron) & self.has(Material.wood))),
@@ -438,8 +432,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             obtention_rule = self.item_rules[recipe] if recipe in self.item_rules else False_()
             self.item_rules[recipe] = obtention_rule | crafting_rule
 
-        self.buildings.initialize_rules()
-        self.buildings.update_rules(self.mod.buildings.get_modded_building_rules())
+        self.building.initialize_rules()
+        self.building.update_rules(self.mod.buildings.get_modded_building_rules())
 
         self.quest.initialize_rules()
         self.quest.update_rules(self.mod.quests.get_modded_quest_rules())
@@ -483,7 +477,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         })
 
         self.special_order.initialize_rules()
-        self.special_order.update_rules(self.mod.special_orders.get_modded_special_orders_rules(self.special_order.special_order_rules))
+        self.special_order.update_rules(self.mod.special_orders.get_modded_special_orders_rules(self.registry.special_order_rules))
 
     def can_buy_sapling(self, fruit: str) -> StardewRule:
         sapling_prices = {Fruit.apple: 4000, Fruit.apricot: 2000, Fruit.cherry: 3400, Fruit.orange: 4000,
@@ -544,7 +538,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                                self.museum.can_complete_museum(),  # Completing the museum for a point
                                # Catching every fish not expected
                                # Shipping every item not expected
-                               self.relationship.can_get_married() & self.buildings.has_house(2),
+                               self.relationship.can_get_married() & self.building.has_house(2),
                                self.relationship.has_hearts("5", 8),  # 5 Friends
                                self.relationship.has_hearts("10", 8),  # 10 friends
                                self.pet.has_hearts(5),  # Max Pet
@@ -636,7 +630,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             building = Building.deluxe_barn
         else:
             return True_()
-        return self.money.can_spend_at(Region.ranch, price) & self.buildings.has_building(building)
+        return self.money.can_spend_at(Region.ranch, price) & self.building.has_building(building)
 
     def has_animal(self, animal: str) -> StardewRule:
         if animal == Generic.any:
