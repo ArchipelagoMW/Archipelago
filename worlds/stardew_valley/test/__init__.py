@@ -173,6 +173,11 @@ class SVTestBase(WorldTestBase, SVTestCase):
         should_run_default_tests = is_not_stardew_test and super().run_default_tests
         return should_run_default_tests
 
+    def collect_lots_of_money(self):
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
+        for i in range(30):
+            self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+
 
 pre_generated_worlds = {}
 

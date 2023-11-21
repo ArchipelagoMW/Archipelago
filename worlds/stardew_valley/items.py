@@ -129,7 +129,6 @@ def load_item_csv():
 
 events = [
     ItemData(None, Event.victory, ItemClassification.progression),
-    ItemData(None, Event.month_end, ItemClassification.progression),
     ItemData(None, Event.can_construct_buildings, ItemClassification.progression),
 ]
 

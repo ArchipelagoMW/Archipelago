@@ -391,3 +391,35 @@ class Has(StardewRule):
 
     def simplify(self) -> StardewRule:
         return self.other_rules[self.item].simplify()
+
+
+class CountPercent(StardewRule):
+    player: int
+    percent: int
+
+    def __init__(self, player: int, percent: int):
+
+        assert percent > 0, "CountPercent rule must be above 0%"
+        assert percent <= 100, "CountPercent rule can't require more than 100% of items"
+
+        self.player = player
+        self.percent = percent
+
+    def __call__(self, state: CollectionState) -> bool:
+        stardew_world = state.multiworld.worlds[self.player]
+        total_count = stardew_world.total_progression_items
+        needed_count = (total_count * self.percent) // 100
+        total_count = 0
+        for item in state.prog_items[self.player]:
+            item_count = state.prog_items[self.player][item]
+            total_count += item_count
+            if total_count >= needed_count:
+                return True
+        return False
+
+
+    def __repr__(self):
+        return f"CountPercent {self.percent}"
+
+    def get_difficulty(self):
+        return self.percent

@@ -5,11 +5,9 @@ from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
 from .time_logic import TimeLogic
 from ..options import StartingMoney
-from ..stardew_rule import StardewRule, True_
+from ..stardew_rule import StardewRule, True_, CountPercent
 from ..strings.currency_names import Currency
-
-MONEY_PER_MONTH = 15000
-DISPOSABLE_INCOME_DIVISOR = 5
+from ..strings.region_names import Region
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "25 Qi Gems", "20 Qi Gems", "10 Qi Gems")
@@ -34,15 +32,20 @@ class MoneyLogic(CachedLogic):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
-        if self.starting_money_option == -1:
+        if amount < 2000:
             return True_()
-        return self.time.has_lived_months(amount // MONEY_PER_MONTH)
+        shipping_bin_rule = self.region.can_reach(Region.shipping)
+        if amount < 10000:
+            return shipping_bin_rule
+
+        percent_progression_items_needed = min(100, amount // 10000)
+        return shipping_bin_rule & CountPercent(self.player, percent_progression_items_needed)
 
     @cache_self1
     def can_spend(self, amount: int) -> StardewRule:
         if self.starting_money_option == -1:
             return True_()
-        return self.time.has_lived_months(amount // (MONEY_PER_MONTH // DISPOSABLE_INCOME_DIVISOR))
+        return self.can_have_earned_total(amount * 5)
 
     # Should be cached
     def can_spend_at(self, region: str, amount: int) -> StardewRule:

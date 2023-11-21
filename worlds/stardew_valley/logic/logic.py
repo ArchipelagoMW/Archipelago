@@ -759,10 +759,6 @@ class StardewLogic:
 
         return self.received("Stardrop", number_of_stardrops_to_receive) & And(*other_rules)
 
-    def has_everything(self, all_progression_items: frozenset[str]) -> StardewRule:
-        rules = self.received(all_progression_items, len(all_progression_items))
-        return rules
-
     def has_prismatic_jelly_reward_access(self) -> StardewRule:
         if self.options.special_order_locations == SpecialOrderLocations.option_disabled:
             return self.special_order.can_complete_special_order("Prismatic Jelly")

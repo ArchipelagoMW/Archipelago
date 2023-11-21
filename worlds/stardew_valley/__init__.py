@@ -1,10 +1,9 @@
 import logging
-from typing import Dict, Any, Iterable, Optional, Union, Set, List
+from typing import Dict, Any, Iterable, Optional, Union, List
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification, MultiWorld, Group as ItemLinkGroup
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule
 from . import rules
 from .bundles import get_all_bundles, Bundle
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
@@ -18,7 +17,7 @@ from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRand
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
-from .stardew_rule import True_, StardewRule
+from .stardew_rule import True_, StardewRule, CountPercent
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
 
@@ -75,11 +74,10 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: Dict[str, Bundle]
     randomized_entrances: Dict[str, str]
-    all_progression_items: Set[str]
+    total_progression_items: int
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
-        self.all_progression_items = set()
         self.filler_item_pool_names = []
 
     def generate_early(self):
@@ -121,6 +119,7 @@ class StardewValleyWorld(World):
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
+        self.total_progression_items = 0
         self.precollect_farm_type()
         self.precollect_starting_season()
         items_to_exclude = [excluded_items
@@ -142,7 +141,6 @@ class StardewValleyWorld(World):
         self.multiworld.itempool += created_items
 
         self.setup_early_items()
-        self.setup_month_events()
         self.setup_construction_events()
         self.setup_victory()
 
@@ -184,21 +182,11 @@ class StardewValleyWorld(World):
         self.multiworld.push_precollected(starting_season)
 
     def setup_early_items(self):
-        if (self.options.building_progression ==
-                BuildingProgression.option_progressive_early_shipping_bin):
+        if self.options.building_progression & BuildingProgression.option_progressive_early_shipping_bin:
             self.multiworld.early_items[self.player]["Shipping Bin"] = 1
 
         if self.options.backpack_progression == BackpackProgression.option_early_progressive:
             self.multiworld.early_items[self.player]["Progressive Backpack"] = 1
-
-    def setup_month_events(self):
-        for i in range(0, MAX_MONTHS):
-            month_end = LocationData(None, "Stardew Valley", f"{Event.month_end} {i + 1}")
-            if i == 0:
-                self.create_event_location(month_end, True_(), Event.month_end)
-                continue
-
-            self.create_event_location(month_end, self.logic.received(Event.month_end, i), Event.month_end)
 
     def setup_construction_events(self):
         can_construct_buildings = LocationData(None, "Carpenter Shop", Event.can_construct_buildings)
@@ -263,11 +251,11 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == options.Goal.option_allsanity:
             self.create_event_location(location_table[GoalName.allsanity],
-                                       self.logic.has_everything(frozenset(self.all_progression_items)),
+                                       CountPercent(self.player, 100),
                                        Event.victory)
         elif self.options.goal == options.Goal.option_perfection:
             self.create_event_location(location_table[GoalName.perfection],
-                                       self.logic.has_everything(frozenset(self.all_progression_items)).simplify(),
+                                       CountPercent(self.player, 100),
                                        Event.victory)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Event.victory, self.player)
@@ -280,7 +268,7 @@ class StardewValleyWorld(World):
             override_classification = item.classification
 
         if override_classification == ItemClassification.progression:
-            self.all_progression_items.add(item.name)
+            self.total_progression_items += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
 
     def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
@@ -297,39 +285,6 @@ class StardewValleyWorld(World):
 
     def set_rules(self):
         set_rules(self)
-        self.force_first_month_once_all_early_items_are_found()
-
-    def force_first_month_once_all_early_items_are_found(self):
-        """
-        The Fill algorithm sweeps all event when calculating the early location. This causes an issue where
-        location only locked behind event are considered early, which they are not really...
-
-        This patches the issue, by adding a dependency to the first month end on all early items, so all the locations
-        that depends on it will not be considered early. This requires at least one early item to be progression, or
-        it just won't work...
-
-        We do this for all early items, not just ours, to avoid them getting stuck behind late stardew months and not feeling early at all
-        """
-
-        early_items = []
-        for player, item_count in self.multiworld.early_items.items():
-            for item, count in item_count.items():
-                if self.multiworld.worlds[player].create_item(item).advancement:
-                    early_items.append((player, item, count))
-
-        for item, count in self.multiworld.local_early_items[self.player].items():
-            if self.create_item(item).advancement:
-                early_items.append((self.player, item, count))
-
-        def first_month_require_all_early_items(state: CollectionState) -> bool:
-            for player, item, count in early_items:
-                if not state.has(item, player, count):
-                    return False
-
-            return True
-
-        first_month_end = self.multiworld.get_location("Month End 1", self.player)
-        set_rule(first_month_end, first_month_require_all_early_items)
 
     def generate_basic(self):
         pass

@@ -58,6 +58,7 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=False)
         self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=False)
         self.multiworld.state.collect(self.world.create_item("Summer"), event=False)
+        self.collect_lots_of_money()
 
         self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
@@ -95,6 +96,9 @@ class TestBundlesLogic(SVTestBase):
     }
 
     def test_vault_2500g_bundle(self):
+        self.assertFalse(self.world.logic.region.can_reach_location("2,500g Bundle")(self.multiworld.state))
+
+        self.collect_lots_of_money()
         self.assertTrue(self.world.logic.region.can_reach_location("2,500g Bundle")(self.multiworld.state))
 
 
@@ -106,34 +110,30 @@ class TestBuildingLogic(SVTestBase):
     def test_coop_blueprint(self):
         self.assertFalse(self.world.logic.region.can_reach_location("Coop Blueprint")(self.multiworld.state))
 
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.collect_lots_of_money()
         self.assertTrue(self.world.logic.region.can_reach_location("Coop Blueprint")(self.multiworld.state))
 
     def test_big_coop_blueprint(self):
-        self.assertFalse(self.world.logic.region.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
+        big_coop_blueprint_rule = self.world.logic.region.can_reach_location("Big Coop Blueprint")
+        self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.collect_lots_of_money()
+        self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
+            f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
+
         self.multiworld.state.collect(self.world.create_item("Can Construct Buildings"), event=True)
-        self.assertFalse(self.world.logic.region.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
+        self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
-        self.multiworld.state.collect(self.world.create_item("Progressive Coop"), event=True)
-        self.assertTrue(self.world.logic.region.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
+        self.multiworld.state.collect(self.world.create_item("Progressive Coop"), event=False)
+        self.assertTrue(big_coop_blueprint_rule(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
     def test_deluxe_coop_blueprint(self):
         self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.collect_lots_of_money()
         self.multiworld.state.collect(self.world.create_item("Can Construct Buildings"), event=True)
         self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
@@ -144,21 +144,20 @@ class TestBuildingLogic(SVTestBase):
         self.assertTrue(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
     def test_big_shed_blueprint(self):
-        self.assertFalse(self.world.logic.region.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
+        big_shed_rule = self.world.logic.region.can_reach_location("Big Shed Blueprint")
+        self.assertFalse(big_shed_rule(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.collect_lots_of_money()
+        self.assertFalse(big_shed_rule(self.multiworld.state),
+            f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
+
         self.multiworld.state.collect(self.world.create_item("Can Construct Buildings"), event=True)
-        self.assertFalse(self.world.logic.region.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
+        self.assertFalse(big_shed_rule(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
         self.multiworld.state.collect(self.world.create_item("Progressive Shed"), event=True)
-        self.assertTrue(self.world.logic.region.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
+        self.assertTrue(big_shed_rule(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
 
@@ -366,7 +365,7 @@ class TestRecipeLearnLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Radish Seeds"), event=False)
         self.multiworld.state.collect(self.world.create_item("Spring"), event=False)
         self.multiworld.state.collect(self.world.create_item("Summer"), event=False)
-        self.collect([self.world.create_item("Month End")] * 10)
+        self.collect_lots_of_money()
         self.assertFalse(rule(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item("The Queen of Sauce"), event=False)
@@ -390,7 +389,7 @@ class TestRecipeReceiveLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)
         self.multiworld.state.collect(self.world.create_item("Radish Seeds"), event=False)
         self.multiworld.state.collect(self.world.create_item("Summer"), event=False)
-        self.collect([self.world.create_item("Month End")] * 10)
+        self.collect_lots_of_money()
         self.assertFalse(rule(self.multiworld.state))
 
         spring = self.world.create_item("Spring")
@@ -410,7 +409,7 @@ class TestRecipeReceiveLogic(SVTestBase):
         self.assertFalse(rule(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item("Spring"), event=False)
-        self.collect([self.world.create_item("Month End")] * 10)
+        self.collect_lots_of_money()
         self.assertFalse(rule(self.multiworld.state))
 
         seeds = self.world.create_item("Radish Seeds")
@@ -446,7 +445,7 @@ class TestCraftsanityLogic(SVTestBase):
         self.collect([self.world.create_item("Mining Level")] * 10)
         self.collect([self.world.create_item("Combat Level")] * 10)
         self.collect([self.world.create_item("Fishing Level")] * 10)
-        self.collect([self.world.create_item("Month End")] * 12)
+        self.collect_lots_of_money()
         self.multiworld.state.collect(self.world.create_item("Adventurer's Guild"), event=False)
         self.assertFalse(rule(self.multiworld.state))
 
@@ -458,13 +457,14 @@ class TestCraftsanityLogic(SVTestBase):
         rule = self.world.logic.region.can_reach_location(location)
         self.assertFalse(rule(self.multiworld.state))
 
-        self.multiworld.state.collect(self.world.create_item("Month End"), event=False)
+        self.collect_lots_of_money()
         self.assertTrue(rule(self.multiworld.state))
 
     def test_can_craft_festival_recipe(self):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
         self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
         self.multiworld.state.collect(self.world.create_item("Torch Recipe"), event=False)
+        self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         self.assertFalse(rule(self.multiworld.state))
 
@@ -488,6 +488,7 @@ class TestCraftsanityWithFestivalsLogic(SVTestBase):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
         self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
         self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
+        self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         self.assertFalse(rule(self.multiworld.state))
 
@@ -516,6 +517,7 @@ class TestNoCraftsanityLogic(SVTestBase):
     def test_can_craft_festival_recipe(self):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
         self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
+        self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         result = rule(self.multiworld.state)
         self.assertFalse(result)
@@ -537,6 +539,7 @@ class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
         self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
         self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
+        self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         self.assertFalse(rule(self.multiworld.state))
 
@@ -625,8 +628,7 @@ class TestFriendsanityDatingRules(SVTestBase):
     }
 
     def test_earning_dating_heart_requires_dating(self):
-        for i in range(12):
-            self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.collect_lots_of_money()
         self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
         self.multiworld.state.collect(self.world.create_item("Beach Bridge"), event=False)
         self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)

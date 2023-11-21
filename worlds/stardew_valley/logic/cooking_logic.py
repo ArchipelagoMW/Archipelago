@@ -111,8 +111,7 @@ class CookingLogic(CachedLogic):
         if isinstance(source, FriendshipSource):
             return self.relationship.has_hearts(source.friend, source.hearts)
         if isinstance(source, QueenOfSauceSource):
-            year_rule = self.time.has_year_two if source.year == 2 else self.time.has_year_three
-            return self.action.can_watch(Channel.queen_of_sauce) & self.season.has(source.season) & year_rule
+            return self.action.can_watch(Channel.queen_of_sauce) & self.season.has(source.season)
         return False_()
 
     @cache_self1
