@@ -175,7 +175,12 @@ class SVTestBase(WorldTestBase, SVTestCase):
 
     def collect_lots_of_money(self):
         self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
-        for i in range(30):
+        for i in range(100):
+            self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+
+    def collect_all_the_money(self):
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
+        for i in range(1000):
             self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
 
 

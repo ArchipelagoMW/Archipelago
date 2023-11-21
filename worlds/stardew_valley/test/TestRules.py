@@ -430,7 +430,7 @@ class TestRecipeReceiveLogic(SVTestBase):
 class TestCraftsanityLogic(SVTestBase):
     options = {
         BuildingProgression.internal_name: BuildingProgression.option_progressive,
-        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         Craftsanity.internal_name: Craftsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
     }
@@ -445,7 +445,7 @@ class TestCraftsanityLogic(SVTestBase):
         self.collect([self.world.create_item("Mining Level")] * 10)
         self.collect([self.world.create_item("Combat Level")] * 10)
         self.collect([self.world.create_item("Fishing Level")] * 10)
-        self.collect_lots_of_money()
+        self.collect_all_the_money()
         self.multiworld.state.collect(self.world.create_item("Adventurer's Guild"), event=False)
         self.assertFalse(rule(self.multiworld.state))
 
@@ -478,7 +478,7 @@ class TestCraftsanityLogic(SVTestBase):
 class TestCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
         BuildingProgression.internal_name: BuildingProgression.option_progressive,
-        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
         Craftsanity.internal_name: Craftsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
@@ -503,7 +503,7 @@ class TestNoCraftsanityLogic(SVTestBase):
     options = {
         BuildingProgression.internal_name: BuildingProgression.option_progressive,
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
-        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
         Craftsanity.internal_name: Craftsanity.option_none,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
@@ -529,7 +529,7 @@ class TestNoCraftsanityLogic(SVTestBase):
 class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
         BuildingProgression.internal_name: BuildingProgression.option_progressive,
-        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
         Craftsanity.internal_name: Craftsanity.option_none,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
@@ -628,7 +628,7 @@ class TestFriendsanityDatingRules(SVTestBase):
     }
 
     def test_earning_dating_heart_requires_dating(self):
-        self.collect_lots_of_money()
+        self.collect_all_the_money()
         self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
         self.multiworld.state.collect(self.world.create_item("Beach Bridge"), event=False)
         self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)
