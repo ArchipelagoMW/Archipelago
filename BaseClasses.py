@@ -664,17 +664,16 @@ class CollectionState():
                 self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
-        new_connection: bool = True
         self.stale[player] = False
-        reachable_regions = self.reachable_regions[player]
-        blocked_connections = self.blocked_connections[player]
+        rrp = self.reachable_regions[player]
+        bc = self.blocked_connections[player]
         queue = deque(self.blocked_connections[player])
-        start = self.multiworld.get_region("Menu", player)
+        start = self.multiworld.get_region('Menu', player)
 
         # init on first call - this can't be done on construction since the regions don't exist yet
-        if start not in reachable_regions:
-            reachable_regions.add(start)
-            blocked_connections.update(start.exits)
+        if start not in rrp:
+            rrp.add(start)
+            bc.update(start.exits)
             queue.extend(start.exits)
 
         # run BFS on all connections, and keep track of those blocked by missing items
