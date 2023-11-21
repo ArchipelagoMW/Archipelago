@@ -10,7 +10,7 @@ from .artisan_logic import ArtisanLogicMixin
 from .base_logic import LogicRegistry
 from .building_logic import BuildingLogicMixin
 from .bundle_logic import BundleLogic
-from .combat_logic import CombatLogic
+from .combat_logic import CombatLogicMixin
 from .cooking_logic import CookingLogic
 from .crafting_logic import CraftingLogic
 from .crop_logic import CropLogic
@@ -20,7 +20,7 @@ from .gift_logic import GiftLogicMixin
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogicMixin
-from .monster_logic import MonsterLogic
+from .monster_logic import MonsterLogicMixin
 from .museum_logic import MuseumLogicMixin
 from .pet_logic import PetLogic
 from .quest_logic import QuestLogic
@@ -42,6 +42,7 @@ from ..data.fish_data import island_fish, extended_family, get_fish_for_mods
 from ..data.monster_data import all_monsters_by_category, all_monsters_by_name
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
+from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogic
 from ..mods.mod_data import ModNames
 from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity, StardewValleyOptions
@@ -87,7 +88,8 @@ fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Re
 
 @dataclass(frozen=False, repr=False)
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin, SeasonLogicMixin, MoneyLogicMixin,
-                   ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin):
+                   ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin, BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin,
+                   MuseumLogicMixin, WalletLogicMixin, CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin):
     player: int
     options: StardewValleyOptions
 
@@ -116,13 +118,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         special_order_locations = self.options.special_order_locations
         mods_option = self.options.mods
         exclude_ginger_island = self.options.exclude_ginger_island
-        self.buildings = BuildingLogicMixin(self.player, self.registry, self.options, self).buildings
-        self.shipping = ShippingLogicMixin(self.player, self.registry, self.options, self).shipping
-        self.relationship = RelationshipLogicMixin(self.player, self.registry, self.options, self).relationship
-        self.museum = MuseumLogicMixin(self.player, self.registry, self.options, self).museum
-        self.wallet = WalletLogicMixin(self.player, self.registry, self.options, self).wallet
-        self.combat = CombatLogic(self.player, self.received, self.region)
-        self.monster = MonsterLogic(self.player, self.region, self.time, self.combat)
         self.tool = ToolLogic(self.player, tool_option, self.received, self.has, self.region, self.season, self.money)
         self.pet = PetLogic(self.player, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
         self.crop = CropLogic(self.player, self.options.cropsanity, exclude_ginger_island, self.received, self.has, self.region,
@@ -147,13 +142,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.crafting = CraftingLogic(self.player, self.options.craftsanity, exclude_ginger_island, mods_option,
                                       self.options.festival_locations, special_order_locations, self.received, self.has, self.region, self.time, self.money,
                                       self.relationship, self.skill, self.special_order)
-        self.mod = ModLogic(self.player, self.registry, self.options, self,
-                            skill_option, elevator_option, mods_option, self.received, self.has, self.region,
-                            self.action,
-                            self.artisan,
-                            self.season, self.money, self.relationship, self.museum, self.buildings, self.wallet, self.combat, self.tool, self.skill,
-                            self.fishing,
-                            self.cooking, self.mine, self.ability, self.time, self.quest, self.crafting, self.crop)
+        self.mod = ModLogic(self.player, self.registry, self.options, self, skill_option, elevator_option, mods_option, self.tool, self.skill,
+                            self.fishing, self.cooking, self.mine, self.ability, self.quest, self.crafting, self.crop)
 
         self.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})
         self.museum_rules.update({donation.name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
