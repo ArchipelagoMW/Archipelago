@@ -31,6 +31,8 @@ if "worlds._bizhawk" not in sys.modules:
         logging.warning("Did not find _bizhawk.apworld required to play Yu-Gi-Oh! 2006. Still able to generate.")
     else:
         from .Client_bh import YuGiOh2006Client  # Unused, but required to register with BizHawkClient
+else:
+    from .Client_bh import YuGiOh2006Client  # Unused, but required to register with BizHawkClient
 
 
 class Yugioh06Web(WebWorld):
