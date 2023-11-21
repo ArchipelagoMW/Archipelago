@@ -11,6 +11,7 @@ from .locations import location_table, create_locations, LocationData
 from .logic import StardewLogic, StardewRule, True_, MAX_MONTHS
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
     BackpackProgression, BuildingProgression, ExcludeGingerIsland
+from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
 from worlds.generic.Rules import set_rule
@@ -34,6 +35,7 @@ class StardewItem(Item):
 class StardewWebWorld(WebWorld):
     theme = "dirt"
     bug_report_page = "https://github.com/agilbert1412/StardewArchipelago/issues/new?labels=bug&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
+    options_presets = sv_options_presets
 
     tutorials = [
         Tutorial(

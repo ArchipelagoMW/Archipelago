@@ -61,6 +61,9 @@
 # Kingdom Hearts 2
 /worlds/kh2/ @JaredWeakStrike
 
+# Lingo
+/worlds/lingo/ @hatkirby
+
 # Links Awakening DX
 /worlds/ladx/ @zig-for
 
@@ -91,6 +94,9 @@
 
 # Overcooked! 2
 /worlds/overcooked2/ @toasterparty
+
+# Pokemon Emerald
+/worlds/pokemon_emerald/ @Zunawe
 
 # Pokemon Red and Blue
 /worlds/pokemon_rb/ @Alchav
