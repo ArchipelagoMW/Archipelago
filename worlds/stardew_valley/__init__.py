@@ -79,6 +79,7 @@ class StardewValleyWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.filler_item_pool_names = []
+        self.total_progression_items = 0
 
     def generate_early(self):
         self.force_change_options_if_incompatible()
