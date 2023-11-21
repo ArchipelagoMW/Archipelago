@@ -604,7 +604,7 @@ Door - 0x3873B (Laser Shortcut) - 0x337FA
 159350 - 0x035CB (Bamboo CCW EP) - True - True
 159351 - 0x035CF (Bamboo CW EP) - True - True
 
-Outside Jungle River (River) - Main Island - True - Monastery Garden - 0x0CF2A - River Vault - 0x15287:
+Outside Jungle River (Jungle) - Main Island - True - Monastery Garden - 0x0CF2A - River Vault - 0x15287:
 158267 - 0x17CAA (Monastery Garden Shortcut Panel) - True - True
 Door - 0x0CF2A (Monastery Garden Shortcut) - 0x17CAA
 158663 - 0x15ADD (Vault Panel) - True - Black/White Squares & Dots
@@ -614,7 +614,7 @@ Door - 0x15287 (Vault Door) - 0x15ADD
 159121 - 0x03BE3 (Monastery Garden Right EP) - True - True
 159122 - 0x0A409 (Monastery Wall EP) - True - True
 
-River Vault (River):
+River Vault (Jungle):
 158664 - 0x03702 (Vault Box) - True - True
 
 Outside Bunker (Bunker) - Main Island - True - Bunker - 0x0C2A4:
