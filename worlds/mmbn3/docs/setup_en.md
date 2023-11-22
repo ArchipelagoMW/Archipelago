@@ -12,7 +12,8 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
   (select `MegaMan Battle Network 3 Client` during installation).
-- A US MegaMan Battle Network 3 Blue Rom
+- A US MegaMan Battle Network 3 Blue Rom. If you have the [MegaMan Battle Network Legacy Collection Vol. 1](https://store.steampowered.com/app/1798010/Mega_Man_Battle_Network_Legacy_Collection_Vol_1/)
+on Steam, you can obtain a copy of this ROM from the game's files, see instructions below.
 
 ## Configuring Bizhawk
 
@@ -34,6 +35,14 @@ It is strongly recommended to associate GBA rom extensions (\*.gba) to the Bizha
 To do so, we simply have to search any GBA rom we happened to own, right click and select "Open with...", unfold
 the list that appears and select the bottom option "Look for another application", then browse to the Bizhawk folder
 and select EmuHawk.exe.
+
+## Extracting a ROM from the Legacy Collection
+
+The Steam version of the Legacy Collection contains unmodified GBA ROMs in its files. You can extract these for use with Archipelago.
+
+1. Open the Legacy Collection Vol. 1's Game Files (Right click on the game in your Library, then open Properties -> Installed Files -> Browse)
+2. Open the file `exe/data/exe3b.dat` in a zip-extracting program such as 7-Zip or WinRAR.
+3. Extract the file `rom_b_e.srl` somewhere and rename it to `Mega Man Battle Network 3 - Blue Version (USA).gba`
 
 ## Configuring your YAML file
 
