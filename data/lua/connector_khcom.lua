@@ -8,6 +8,159 @@ function define_item_ids()
     item_ids["Silver Card Pack"]                 = 2661002
     item_ids["Gold Card Pack"]                   = 2661003
     
+    item_ids["Kingdom Key 1-3"]                  = 2661011
+    item_ids["Kingdom Key 4-6"]                  = 2661012
+    item_ids["Kingdom Key 7-9"]                  = 2661013
+    item_ids["Kingdom Key 0"]                    = 2661014
+    item_ids["Three Wishes 1-3"]                 = 2661021
+    item_ids["Three Wishes 4-6"]                 = 2661022
+    item_ids["Three Wishes 7-9"]                 = 2661023
+    item_ids["Three Wishes 0"]                   = 2661024
+    item_ids["Crabclaw 1-3"]                     = 2661031
+    item_ids["Crabclaw 4-6"]                     = 2661032
+    item_ids["Crabclaw 7-9"]                     = 2661033
+    item_ids["Crabclaw 0"]                       = 2661034
+    item_ids["Pumpkinhead 1-3"]                  = 2661041
+    item_ids["Pumpkinhead 4-6"]                  = 2661042
+    item_ids["Pumpkinhead 7-9"]                  = 2661043
+    item_ids["Pumpkinhead 0"]                    = 2661044
+    item_ids["Fairy Harp 1-3"]                   = 2661051
+    item_ids["Fairy Harp 4-6"]                   = 2661052
+    item_ids["Fairy Harp 7-9"]                   = 2661053
+    item_ids["Fairy Harp 0"]                     = 2661054
+    item_ids["Wishing Star 1-3"]                 = 2661061
+    item_ids["Wishing Star 4-6"]                 = 2661062
+    item_ids["Wishing Star 7-9"]                 = 2661063
+    item_ids["Wishing Star 0"]                   = 2661064
+    item_ids["Spellbinder 1-3"]                  = 2661071
+    item_ids["Spellbinder 4-6"]                  = 2661072
+    item_ids["Spellbinder 7-9"]                  = 2661073
+    item_ids["Spellbinder 0"]                    = 2661074
+    item_ids["Metal Chocobo 1-3"]                = 2661081
+    item_ids["Metal Chocobo 4-6"]                = 2661082
+    item_ids["Metal Chocobo 7-9"]                = 2661083
+    item_ids["Metal Chocobo 0"]                  = 2661084
+    item_ids["Olympia 1-3"]                      = 2661091
+    item_ids["Olympia 4-6"]                      = 2661092
+    item_ids["Olympia 7-9"]                      = 2661093
+    item_ids["Olympia 0"]                        = 2661094
+    item_ids["Lionheart 1-3"]                    = 2661101
+    item_ids["Lionheart 4-6"]                    = 2661102
+    item_ids["Lionheart 7-9"]                    = 2661103
+    item_ids["Lionheart 0"]                      = 2661104
+    item_ids["Lady Luck 1-3"]                    = 2661111
+    item_ids["Lady Luck 4-6"]                    = 2661112
+    item_ids["Lady Luck 7-9"]                    = 2661113
+    item_ids["Lady Luck 0"]                      = 2661114
+    item_ids["Divine Rose 1-3"]                  = 2661121
+    item_ids["Divine Rose 4-6"]                  = 2661122
+    item_ids["Divine Rose 7-9"]                  = 2661123
+    item_ids["Divine Rose 0"]                    = 2661124
+    item_ids["Oathkeeper 1-3"]                   = 2661131
+    item_ids["Oathkeeper 4-6"]                   = 2661132
+    item_ids["Oathkeeper 7-9"]                   = 2661133
+    item_ids["Oathkeeper 0"]                     = 2661134
+    item_ids["Oblivion 1-3"]                     = 2661141
+    item_ids["Oblivion 4-6"]                     = 2661142
+    item_ids["Oblivion 7-9"]                     = 2661143
+    item_ids["Oblivion 0"]                       = 2661144
+    item_ids["Diamond Dust 1-3"]                 = 2661151
+    item_ids["Diamond Dust 4-6"]                 = 2661152
+    item_ids["Diamond Dust 7-9"]                 = 2661153
+    item_ids["Diamond Dust 0"]                   = 2661154
+    item_ids["One Winged Angel 1-3"]             = 2661161
+    item_ids["One Winged Angel 4-6"]             = 2661162
+    item_ids["One Winged Angel 7-9"]             = 2661163
+    item_ids["One Winged Angel 0"]               = 2661164
+    item_ids["Ultima Weapon 1-3"]                = 2661171
+    item_ids["Ultima Weapon 4-6"]                = 2661172
+    item_ids["Ultima Weapon 7-9"]                = 2661173
+    item_ids["Ultima Weapon 0"]                  = 2661174
+    item_ids["Fire 1-3"]                         = 2661181
+    item_ids["Fire 4-6"]                         = 2661182
+    item_ids["Fire 7-9"]                         = 2661183
+    item_ids["Fire 0"]                           = 2661184
+    item_ids["Blizzard 1-3"]                     = 2661191
+    item_ids["Blizzard 4-6"]                     = 2661192
+    item_ids["Blizzard 7-9"]                     = 2661193
+    item_ids["Blizzard 0"]                       = 2661194
+    item_ids["Thunder 1-3"]                      = 2661201
+    item_ids["Thunder 4-6"]                      = 2661202
+    item_ids["Thunder 7-9"]                      = 2661203
+    item_ids["Thunder 0"]                        = 2661204
+    item_ids["Cure 1-3"]                         = 2661211
+    item_ids["Cure 4-6"]                         = 2661212
+    item_ids["Cure 7-9"]                         = 2661213
+    item_ids["Cure 0"]                           = 2661214
+    item_ids["Gravity 1-3"]                      = 2661221
+    item_ids["Gravity 4-6"]                      = 2661222
+    item_ids["Gravity 7-9"]                      = 2661223
+    item_ids["Gravity 0"]                        = 2661224
+    item_ids["Stop 1-3"]                         = 2661231
+    item_ids["Stop 4-6"]                         = 2661232
+    item_ids["Stop 7-9"]                         = 2661233
+    item_ids["Stop 0"]                           = 2661234
+    item_ids["Aero 1-3"]                         = 2661241
+    item_ids["Aero 4-6"]                         = 2661242
+    item_ids["Aero 7-9"]                         = 2661243
+    item_ids["Aero 0"]                           = 2661244
+    item_ids["Simba 1-3"]                        = 2661251
+    item_ids["Simba 4-6"]                        = 2661252
+    item_ids["Simba 7-9"]                        = 2661253
+    item_ids["Simba 0"]                          = 2661254
+    item_ids["Genie 1-3"]                        = 2661261
+    item_ids["Genie 4-6"]                        = 2661262
+    item_ids["Genie 7-9"]                        = 2661263
+    item_ids["Genie 0"]                          = 2661264
+    item_ids["Bambi 1-3"]                        = 2661271
+    item_ids["Bambi 4-6"]                        = 2661272
+    item_ids["Bambi 7-9"]                        = 2661273
+    item_ids["Bambi 0"]                          = 2661274
+    item_ids["Dumbo 1-3"]                        = 2661281
+    item_ids["Dumbo 4-6"]                        = 2661282
+    item_ids["Dumbo 7-9"]                        = 2661283
+    item_ids["Dumbo 0"]                          = 2661284
+    item_ids["Tinker Bell 1-3"]                  = 2661291
+    item_ids["Tinker Bell 4-6"]                  = 2661292
+    item_ids["Tinker Bell 7-9"]                  = 2661293
+    item_ids["Tinker Bell 0"]                    = 2661294
+    item_ids["Mushu 1-3"]                        = 2661301
+    item_ids["Mushu 4-6"]                        = 2661302
+    item_ids["Mushu 7-9"]                        = 2661303
+    item_ids["Mushu 0"]                          = 2661304
+    item_ids["Cloud 1-3"]                        = 2661311
+    item_ids["Cloud 4-6"]                        = 2661312
+    item_ids["Cloud 7-9"]                        = 2661313
+    item_ids["Cloud 0"]                          = 2661314
+    item_ids["Potion 1-3"]                       = 2661321
+    item_ids["Potion 4-6"]                       = 2661322
+    item_ids["Potion 7-9"]                       = 2661323
+    item_ids["Potion 0"]                         = 2661324
+    item_ids["Hi-Potion 1-3"]                    = 2661331
+    item_ids["Hi-Potion 4-6"]                    = 2661332
+    item_ids["Hi-Potion 7-9"]                    = 2661333
+    item_ids["Hi-Potion 0"]                      = 2661334
+    item_ids["Mega-Potion 1-3"]                  = 2661341
+    item_ids["Mega-Potion 4-6"]                  = 2661342
+    item_ids["Mega-Potion 7-9"]                  = 2661343
+    item_ids["Mega-Potion 0"]                    = 2661344
+    item_ids["Ether 1-3"]                        = 2661351
+    item_ids["Ether 4-6"]                        = 2661352
+    item_ids["Ether 7-9"]                        = 2661353
+    item_ids["Ether 0"]                          = 2661354
+    item_ids["Mega-Ether 1-3"]                   = 2661361
+    item_ids["Mega-Ether 4-6"]                   = 2661362
+    item_ids["Mega-Ether 7-9"]                   = 2661363
+    item_ids["Mega-Ether 0"]                     = 2661364
+    item_ids["Elixir 1-3"]                       = 2661371
+    item_ids["Elixir 4-6"]                       = 2661372
+    item_ids["Elixir 7-9"]                       = 2661373
+    item_ids["Elixir 0"]                         = 2661374
+    item_ids["Megalixir 1-3"]                    = 2661381
+    item_ids["Megalixir 4-6"]                    = 2661382
+    item_ids["Megalixir 7-9"]                    = 2661383
+    item_ids["Megalixir 0"]                      = 2661384
+    
     item_ids["Enemy Card Shadow"]                = 2662001
     item_ids["Enemy Card Soldier"]               = 2662002
     item_ids["Enemy Card Large Body"]            = 2662003
@@ -368,7 +521,7 @@ char_to_hex_map = define_char_to_hex_map()
 exceptions = define_exceptions()
 journal_bit_location_ids = define_journal_bit_location_ids()
 
-pack_size = 2
+pack_size = 3
 
 --Addresses
 current_gold_map_cards_addresses = {}
@@ -528,14 +681,16 @@ function set_deck_pointer(deck_number, offset, value)
 end
 
 function set_starting_deck()
-    memory.write_u16_le(deck_cp_cost_address, 0x0034)
-    memory.write_u16_le(deck_card_count_address, 0x02)
+    memory.write_u16_le(deck_cp_cost_address, 43)
+    memory.write_u16_le(deck_card_count_address, 0x03)
     
     memory.write_u16_le(battle_cards_address, 0x1008) --Kingdom Key 8
     set_deck_pointer(1, 0, 0x0000)
-    memory.write_u16_le(battle_cards_address + 2, 0x10CE) --Cure 6
+    memory.write_u16_le(battle_cards_address + 2, 0x1007) --Kingdom Key 7
     set_deck_pointer(1, 1, 0x0001)
-    local i = 3
+    memory.write_u16_le(battle_cards_address + 4, 0x1006) --Kingdom Key 6
+    set_deck_pointer(1, 2, 0x0002)
+    local i = 4
     while i <= 15 do
         memory.write_u16_le(battle_cards_address + 2*(i-1), 0x0FFF)
         set_deck_pointer(1, i-1, 0xFFFF)
@@ -794,6 +949,27 @@ function add_battle_card(battle_card)
     end
 end
 
+function add_battle_card_specific_value(battle_card, value)
+    offset = find_empty_battle_card_offset()
+    for k,v in pairs(win_conditions) do 
+        if k == battle_card then
+            memory.write_u16_le(battle_cards_address + (2 * offset), v)
+            return
+        end
+    end
+    for k,v in pairs(battle_cards) do 
+        if k == battle_card then
+            card_value = value
+            if not has_value(exceptions, v[1]+card_value) then
+                memory.write_u16_le(battle_cards_address + (2 * offset), v[1]+card_value)
+                print("Got Card: " .. battle_card .. " " .. tostring(card_value))
+            else
+                print(battle_card .. " " .. tostring(value) .. " is an exception card, skipping.")
+            end
+        end
+    end
+end
+
 function open_card_pack(card_pack)
     print("Opening " .. card_pack)
     if card_pack == "Bronze Card Pack" then
@@ -855,6 +1031,28 @@ function receive_items()
         end
         if string.sub(received_item_name, 1, 10) == "Enemy Card" and not item_found then
             add_battle_card(received_item_name:sub(12))
+            item_found = true
+        end
+        if string.sub(received_item_name, -3) == "1-3" and not item_found then
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 1)
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 2)
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 3)
+            item_found = true
+        end
+        if string.sub(received_item_name, -3) == "4-6" and not item_found then
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 4)
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 5)
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 6)
+            item_found = true
+        end
+        if string.sub(received_item_name, -3) == "7-9" and not item_found then
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 7)
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 8)
+            add_battle_card_specific_value(received_item_name:sub(1, -5), 9)
+            item_found = true
+        end
+        if string.sub(received_item_name, -1) == "0" and not item_found then
+            add_battle_card_specific_value(received_item_name:sub(1, -3), 0)
             item_found = true
         end
         for k,v in pairs(win_conditions) do
