@@ -129,9 +129,9 @@ class WitnessRegions:
                 regions_to_check.add(target.name)
                 reachable_regions.add(target.name)
 
-        regions_by_name = {k: v for k, v in regions_by_name.items() if k in reachable_regions}
+        final_regions_list = [v for k, v in regions_by_name.items() if k in reachable_regions]
 
-        world.multiworld.regions += regions_by_name.values()
+        world.multiworld.regions += final_regions_list
 
     def __init__(self, locat: WitnessPlayerLocations, world: "WitnessWorld"):
         difficulty = world.options.puzzle_randomization.value
