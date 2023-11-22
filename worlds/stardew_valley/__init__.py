@@ -288,7 +288,8 @@ class StardewValleyWorld(World):
             exclude_island = False
             for player in link_group["players"]:
                 player_options = self.multiworld.worlds[player].options
-                if not isinstance(player_options, StardewValleyOptions):
+                if self.multiworld.game[player] != self.game:
+
                     continue
                 if player_options.trap_items == TrapItems.option_no_traps:
                     include_traps = False
