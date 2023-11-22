@@ -293,7 +293,6 @@ def generate_itempool(world):
         loc.access_rule = lambda state: has_triforce_pieces(state, player)
 
         region.locations.append(loc)
-        multiworld.clear_location_cache()
 
         multiworld.push_item(loc, ItemFactory('Triforce', player), False)
         loc.event = True
@@ -534,8 +533,6 @@ def set_up_take_anys(world, player):
         world.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0, create_location=True)
-
-    world.initialize_regions()
 
 
 def get_pool_core(world, player: int):
