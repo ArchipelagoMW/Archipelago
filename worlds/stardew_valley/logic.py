@@ -8,7 +8,7 @@ from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops
 from .data.bundle_data import BundleItem
 from .data.crops_data import crops_by_name
 from .data.fish_data import island_fish
-from .data.museum_data import all_museum_items, MuseumItem, all_museum_artifacts, dwarf_scrolls, all_museum_minerals
+from .data.museum_data import all_museum_items, MuseumItem, all_museum_artifacts, all_museum_minerals
 from .data.recipe_data import all_cooking_recipes, CookingRecipe, RecipeSource, FriendshipSource, QueenOfSauceSource, \
     StarterSource, ShopSource, SkillSource
 from .data.villagers_data import all_villagers_by_name, Villager
@@ -927,7 +927,7 @@ class StardewLogic:
         return region_rule & ((tool_rule & foraging_rule) | magic_rule)
 
     def has_max_buffs(self) -> StardewRule:
-        return self.received(Buff.movement, self.options.number_of_movement_buffs.value) & self.received(Buff.luck, self.options.number_of_luck_buffs.value)
+        return self.received(Buff.movement, self.options.movement_buff_number.value) & self.received(Buff.luck, self.options.luck_buff_number.value)
 
     def get_weapon_rule_for_floor_tier(self, tier: int):
         if tier >= 4:
@@ -1283,8 +1283,6 @@ class StardewLogic:
         return self.has_lived_months(8)
 
     def can_speak_dwarf(self) -> StardewRule:
-        if self.options.museumsanity == Museumsanity.option_none:
-            return And([self.can_donate_museum_item(item) for item in dwarf_scrolls])
         return self.received("Dwarvish Translation Guide")
 
     def can_donate_museum_item(self, item: MuseumItem) -> StardewRule:
@@ -1370,13 +1368,10 @@ class StardewLogic:
         return self.received("Month End", number)
 
     def has_rusty_key(self) -> StardewRule:
-        if self.options.museumsanity == Museumsanity.option_none:
-            required_donations = 80  # It's 60, but without a metal detector I'd rather overshoot so players don't get screwed by RNG
-            return self.has([item.name for item in all_museum_items], required_donations) & self.can_reach_region(Region.museum)
         return self.received(Wallet.rusty_key)
 
     def can_win_egg_hunt(self) -> StardewRule:
-        number_of_movement_buffs = self.options.number_of_movement_buffs.value
+        number_of_movement_buffs = self.options.movement_buff_number.value
         if self.options.festival_locations == FestivalLocations.option_hard or number_of_movement_buffs < 2:
             return True_()
         return self.received(Buff.movement, number_of_movement_buffs // 2)

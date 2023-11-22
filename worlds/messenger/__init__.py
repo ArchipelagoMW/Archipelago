@@ -82,6 +82,7 @@ class MessengerWorld(World):
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
     def create_regions(self) -> None:
+        # MessengerRegion adds itself to the multiworld
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
             if region.name in REGION_CONNECTIONS:
                 region.add_exits(REGION_CONNECTIONS[region.name])
@@ -188,6 +189,6 @@ class MessengerWorld(World):
             shard_count = int(item.name.strip("Time Shard ()"))
             if remove:
                 shard_count = -shard_count
-            state.prog_items["Shards", self.player] += shard_count
+            state.prog_items[self.player]["Shards"] += shard_count
 
         return super().collect_item(state, item, remove)
