@@ -1,5 +1,7 @@
 class Flower:
-    fairy_rose = "Fairy Rose"
-    sunflower = "Sunflower"
-    poppy = "Poppy"
     blue_jazz = "Blue Jazz"
+    fairy_rose = "Fairy Rose"
+    poppy = "Poppy"
+    summer_spangle = "Summer Spangle"
+    sunflower = "Sunflower"
+    tulip = "Tulip"

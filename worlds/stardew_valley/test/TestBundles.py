@@ -1,6 +1,7 @@
 import unittest
 
 from ..data.bundle_data import all_bundle_items, quality_crops_items
+from ..strings.crop_names import Fruit
 
 
 class TestBundles(unittest.TestCase):
@@ -18,7 +19,7 @@ class TestBundles(unittest.TestCase):
         for bundle_item in quality_crops_items:
             with self.subTest(bundle_item.item.name):
                 name = bundle_item.item.name
-                if name == "Sweet Gem Berry" or name == "Ancient Fruit":
+                if name == Fruit.sweet_gem_berry or name == Fruit.ancient_fruit:
                     self.assertEqual(bundle_item.amount, 1)
                 else:
                     self.assertEqual(bundle_item.amount, 5)

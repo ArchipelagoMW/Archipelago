@@ -13,6 +13,7 @@ def fruity(name: str) -> str:
 
 
 class Fruit:
+    sweet_gem_berry = fruity("Sweet Gem Berry")
     any = "Any Fruit"
     blueberry = fruity("Blueberry")
     melon = fruity("Melon")

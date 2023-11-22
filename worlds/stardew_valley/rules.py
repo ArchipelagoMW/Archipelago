@@ -23,6 +23,7 @@ from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building
 from .strings.calendar_names import Weekday
 from .strings.craftable_names import Bomb
+from .strings.crop_names import Fruit
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, MagicEntrance, \
     SVEEntrance
 from .strings.generic_names import Generic
@@ -80,7 +81,7 @@ def set_rules(world):
 
 def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
     MultiWorldRules.add_rule(multiworld.get_location("Old Master Cannoli", player),
-                             logic.has("Sweet Gem Berry"))
+                             logic.has(Fruit.sweet_gem_berry))
     MultiWorldRules.add_rule(multiworld.get_location("Galaxy Sword Shrine", player),
                              logic.has("Prismatic Shard"))
     MultiWorldRules.add_rule(multiworld.get_location("Krobus Stardrop", player),
