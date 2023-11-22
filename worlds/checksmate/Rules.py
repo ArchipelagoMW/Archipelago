@@ -36,7 +36,8 @@ class ChecksMateLogic(LogicMixin):
 
     def has_chessmen(self: CollectionState, player: int) -> int:
         return len([item for item in self.owned_items(player) if item in [
-            "Progressive Minor Piece", "Progressive Major Piece", "Progressive Pawn"]])
+            "Progressive Minor Piece", "Progressive Major Piece", "Progressive Pawn",
+            "Progressive Consul"]]) + (1 if self.has_any({"Progressive Pocket"}, player) else 0)
 
     def count_enemy_pieces(self: CollectionState, player: int) -> int:
         owned_item_ids = [item_id for item_id, item in item_table.items() if self.has(item_id, player)]
@@ -110,30 +111,30 @@ def set_rules(multiworld: MultiWorld, player: int):
         "Capture Piece G": 1040,  # knight - AI prefers not to open kingside as developing queen has more tempo
         "Capture Piece H": 1240,  # rook - AI prefers not to open kingside as developing queen has more tempo
         "Capture 2 Pawns": 550,
-        "Capture 3 Pawns": 750,
-        "Capture 4 Pawns": 940,
-        "Capture 5 Pawns": 1120,
-        "Capture 6 Pawns": 1275,
-        "Capture 7 Pawns": 1425,
-        "Capture 8 Pawns": 1575,
-        "Capture 2 Pieces": 750,
-        "Capture 3 Pieces": 1150,
-        "Capture 4 Pieces": 1550,
-        "Capture 5 Pieces": 2050,
-        "Capture 6 Pieces": 2600,
-        "Capture 7 Pieces": 3500,
-        "Capture 2 Of Each": 1000,
-        "Capture 3 Of Each": 1500,
-        "Capture 4 Of Each": 1900,
-        "Capture 5 Of Each": 2550,
-        "Capture 6 Of Each": 3200,
+        "Capture 3 Pawns": 950,
+        "Capture 4 Pawns": 1240,
+        "Capture 5 Pawns": 1520,
+        "Capture 6 Pawns": 1875,
+        "Capture 7 Pawns": 2225,
+        "Capture 8 Pawns": 2575,
+        "Capture 2 Pieces": 1300,
+        "Capture 3 Pieces": 1600,
+        "Capture 4 Pieces": 1950,
+        "Capture 5 Pieces": 2350,
+        "Capture 6 Pieces": 2800,
+        "Capture 7 Pieces": 3600,
+        "Capture 2 Of Each": 1600,
+        "Capture 3 Of Each": 1950,
+        "Capture 4 Of Each": 2350,
+        "Capture 5 Of Each": 2800,
+        "Capture 6 Of Each": 3350,
         "Capture 7 Of Each": 3850,
         "Capture Everything": 3950,
         "Fork, Sacrificial": 700,
-        "Fork, True": 2150,
         "Fork, Sacrificial Triple": 1700,
-        "Fork, True Triple": 3150,
         "Fork, Sacrificial Royal": 3200,  # AI really hates getting royal forked
+        "Fork, True": 2550,
+        "Fork, True Triple": 3450,
         "Fork, True Royal": 4150,  # I sincerely believe this should be filler
         # "Pin": 600,
         # "Skewer": 600,
