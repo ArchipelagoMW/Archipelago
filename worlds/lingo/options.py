@@ -75,11 +75,12 @@ class Level2Requirement(Range):
     """The number of panel solves required to unlock LEVEL 2.
     In the base game, 223 are needed.
     Note that this count includes ANOTHER TRY.
+    When set to 1, the panel hunt is disabled, and you can access LEVEL 2 for free.
     """
     display_name = "Level 2 Requirement"
-    range_start = 2
+    range_start = 1
     range_end = 800
-    default = 223
+    default = 1
 
 
 class EarlyColorHallways(Toggle):

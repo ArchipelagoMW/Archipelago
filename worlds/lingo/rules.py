@@ -76,7 +76,7 @@ def make_location_lambda(location: PlayerLocation, world: "LingoWorld", player_l
     if location.name == player_logic.mastery_location:
         return lambda state: lingo_can_use_mastery_location(state, world)
 
-    if world.options.victory_condition == VictoryCondition.option_level_2\
+    if world.options.level_2_requirement > 1\
             and (location.name == "Second Room - ANOTHER TRY" or location.name == player_logic.level_2_location):
         return lambda state: lingo_can_use_level_2_location(state, world)
 
