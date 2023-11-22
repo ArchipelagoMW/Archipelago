@@ -273,7 +273,7 @@ class StardewValleyWorld(World):
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
             self.generate_filler_item_pool_names()
-        return self.multiworld.random.choice(self.filler_item_pool_names)
+        return self.random.choice(self.filler_item_pool_names)
 
     def generate_filler_item_pool_names(self):
         include_traps, exclude_island = self.get_filler_item_rules()
