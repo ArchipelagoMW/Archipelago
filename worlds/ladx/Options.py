@@ -43,6 +43,12 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     display_name = "Trade Quest"
     ladxr_name = "tradequest"
 
+class TextShuffle(DefaultOffToggle):
+    """
+    [On] Shuffles all the text in the game
+    [Off] (default) doesn't shuffle them.
+    """
+
 class Rooster(DefaultOnToggle, LADXROption):
     """
     [On] Adds the rooster to the item pool. 
@@ -431,6 +437,7 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'trendy_game': TrendyGame,
     'gfxmod': GfxMod,
     'palette': Palette,
+    'text_shuffle': TextShuffle,
     'shuffle_nightmare_keys': ShuffleNightmareKeys,
     'shuffle_small_keys': ShuffleSmallKeys,
     'shuffle_maps': ShuffleMaps,
@@ -439,4 +446,5 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,
+    
 }
