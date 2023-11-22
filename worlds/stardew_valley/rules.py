@@ -4,7 +4,7 @@ from typing import List
 from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from .strings.craftable_names import Bomb
-from . import locations, Event
+from . import locations
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.monster_data import all_monsters_by_category, all_monsters_by_name
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
@@ -18,6 +18,7 @@ from .options import StardewValleyOptions, Friendsanity
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
 from .stardew_rule import And
+from .strings.ap_names.event_names import Event
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building
