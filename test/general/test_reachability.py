@@ -28,7 +28,7 @@ class TestBase(unittest.TestCase):
             "Ceres",
             "Gauntlet Top",
             "Mama Turtle"
-        },
+        }
     }
 
     def test_default_all_state_can_reach_everything(self):
