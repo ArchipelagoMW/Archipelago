@@ -230,35 +230,35 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table[GoalName.greatest_walnut_hunter],
                                        self.logic.has_walnut(130),
                                        Event.victory)
-        elif self.options.goal == options.Goal.option_protector_of_the_valley:
+        elif self.options.goal == Goal.option_protector_of_the_valley:
             self.create_event_location(location_table[GoalName.protector_of_the_valley],
                                        self.logic.can_complete_all_monster_slaying_goals(),
                                        Event.victory)
-        elif self.options.goal == options.Goal.option_full_shipment:
+        elif self.options.goal == Goal.option_full_shipment:
             self.create_event_location(location_table[GoalName.full_shipment],
                                        self.logic.shipping.can_ship_everything(),
                                        Event.victory)
-        elif self.options.goal == options.Goal.option_gourmet_chef:
+        elif self.options.goal == Goal.option_gourmet_chef:
             self.create_event_location(location_table[GoalName.gourmet_chef],
                                        self.logic.cooking.can_cook_everything,
                                        Event.victory)
-        elif self.options.goal == options.Goal.option_craft_master:
+        elif self.options.goal == Goal.option_craft_master:
             self.create_event_location(location_table[GoalName.craft_master],
                                        self.logic.crafting.can_craft_everything,
                                        Event.victory)
-        elif self.options.goal == options.Goal.option_legend:
+        elif self.options.goal == Goal.option_legend:
             self.create_event_location(location_table[GoalName.legend],
                                        self.logic.money.can_have_earned_total(10_000_000),
                                        Event.victory)
-        elif self.options.goal == options.Goal.option_mystery_of_the_stardrops:
+        elif self.options.goal == Goal.option_mystery_of_the_stardrops:
             self.create_event_location(location_table[GoalName.mystery_of_the_stardrops],
                                        self.logic.has_all_stardrops(),
                                        Event.victory)
-        elif self.options.goal == options.Goal.option_allsanity:
+        elif self.options.goal == Goal.option_allsanity:
             self.create_event_location(location_table[GoalName.allsanity],
                                        CountPercent(self.player, 100),
                                        Event.victory)
-        elif self.options.goal == options.Goal.option_perfection:
+        elif self.options.goal == Goal.option_perfection:
             self.create_event_location(location_table[GoalName.perfection],
                                        CountPercent(self.player, 100),
                                        Event.victory)
