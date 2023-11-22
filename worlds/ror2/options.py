@@ -4,7 +4,7 @@ from Options import Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCo
 
 # NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
 # Be careful when changing the range_end values not to go into another game's IDs
-# NOTE that these changes to range_end must also be reflected in the RoR2 client so it understands the same ids.
+# NOTE that these changes to range_end must also be reflected in the RoR2 client, so it understands the same ids.
 
 class Goal(Choice):
     """
@@ -17,6 +17,21 @@ class Goal(Choice):
     option_classic = 0
     option_explore = 1
     default = 1
+
+
+class Victory(Choice):
+    """
+    Mithrix: Defeat Mithrix in Commencement
+    Voidling: Defeat the Voidling in The Planetarium (DLC required! Will select any if not enabled.)
+    Limbo: Defeat the Scavenger in Hidden Realm: A Moment, Whole
+    Any: Any victory in the game will count. See Final Stage Death for additional ways.
+    """
+    display_name = "Victory Condition"
+    option_any = 0
+    option_mithrix = 1
+    option_voidling = 2
+    option_limbo = 3
+    default = 0
 
 
 class TotalLocations(Range):
@@ -100,6 +115,11 @@ class ShrineUseStep(Range):
     default = 0
 
 
+class AllowTrapItems(Toggle):
+    """Allows Trap items in the item pool."""
+    display_name = "Enable Trap Items"
+
+
 class AllowLunarItems(DefaultOnToggle):
     """Allows Lunar items in the item pool."""
     display_name = "Enable Lunar Item Shuffling"
@@ -111,10 +131,14 @@ class StartWithRevive(DefaultOnToggle):
 
 
 class FinalStageDeath(Toggle):
-    """The following will count as a win if set to true:
+    """The following will count as a win if set to "true", and victory is set to "any":
     Dying in Commencement.
     Dying in The Planetarium.
-    Obliterating yourself"""
+    Obliterating yourself
+    If not use the following to tell if final stage death will count:
+    Victory: mithrix - only dying in Commencement will count.
+    Victory: voidling - only dying in The Planetarium will count.
+    Victory: limbo - Obliterating yourself will count."""
     display_name = "Final Stage Death is Win"
 
 
@@ -247,6 +271,76 @@ class Equipment(Range):
     default = 32
 
 
+class Money(Range):
+    """Weight of money items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Money"
+    range_start = 0
+    range_end = 100
+    default = 64
+
+
+class LunarCoin(Range):
+    """Weight of lunar coin items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Lunar Coins"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class Experience(Range):
+    """Weight of 1000 exp items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "1000 Exp"
+    range_start = 0
+    range_end = 100
+    default = 40
+
+
+class MountainTrap(Range):
+    """Weight of mountain trap items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Mountain Trap"
+    range_start = 0
+    range_end = 100
+    default = 5
+
+
+class TimeWarpTrap(Range):
+    """Weight of time warp trap items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Time Warp Trap"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class CombatTrap(Range):
+    """Weight of combat trap items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Combat Trap"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class TeleportTrap(Range):
+    """Weight of teleport trap items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')"""
+    display_name = "Teleport Trap"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
 class ItemPoolPresetToggle(Toggle):
     """Will use the item weight presets when set to true, otherwise will use the custom set item pool weights."""
     display_name = "Use Item Weight Presets"
@@ -258,28 +352,30 @@ class ItemWeights(Choice):
     - New is a test for a potential adjustment to the default weights.
     - Uncommon puts a large number of uncommon items in the pool.
     - Legendary puts a large number of legendary items in the pool.
-    - Lunartic makes everything a lunar item.
-    - Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.
+    - Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being
+    too easy.
     - No Scraps removes all scrap items from the item pool.
     - Even generates the item pool with every item having an even weight.
     - Scraps Only will be only scrap items in the item pool.
+    - Lunartic makes everything a lunar item.
     - Void makes everything a void item."""
     display_name = "Item Weights"
     option_default = 0
     option_new = 1
     option_uncommon = 2
     option_legendary = 3
-    option_lunartic = 4
-    option_chaos = 5
-    option_no_scraps = 6
-    option_even = 7
-    option_scraps_only = 8
+    option_chaos = 4
+    option_no_scraps = 5
+    option_even = 6
+    option_scraps_only = 7
+    option_lunartic = 8
     option_void = 9
 
 
 @dataclass
 class ROR2Options(PerGameCommonOptions):
     goal: Goal
+    victory: Victory
     total_locations: TotalLocations
     chests_per_stage: ChestsPerEnvironment
     shrines_per_stage: ShrinesPerEnvironment
@@ -294,6 +390,7 @@ class ROR2Options(PerGameCommonOptions):
     death_link: DeathLink
     item_pickup_step: ItemPickupStep
     shrine_use_step: ShrineUseStep
+    enable_trap: AllowTrapItems
     enable_lunar: AllowLunarItems
     item_weights: ItemWeights
     item_pool_presets: ItemPoolPresetToggle
@@ -309,3 +406,10 @@ class ROR2Options(PerGameCommonOptions):
     lunar_item: LunarItem
     void_item: VoidItem
     equipment: Equipment
+    money: Money
+    lunar_coin: LunarCoin
+    experience: Experience
+    mountain_trap: MountainTrap
+    time_warp_trap: TimeWarpTrap
+    combat_trap: CombatTrap
+    teleport_trap: TeleportTrap
