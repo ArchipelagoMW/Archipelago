@@ -24,7 +24,7 @@ Then continue to `Using the Launcher`
 *Linux Preparations*
 
 You will need to install some dependencies before using the launcher.
-The launcher itself needs `Qt6`, and building the game requires `sdl2 glew cmake python make` (If you install `jsoncpp` as well, it will be linked dynamically).
+The launcher itself needs `qt6`, `patch` and `git`, and building the game requires `sdl2 glew cmake python make` (If you install `jsoncpp` as well, it will be linked dynamically).
 Then continue to `Using the Launcher`
 
 *Using the Launcher*
@@ -55,7 +55,7 @@ Continue to `Compiling`.
 
 *Linux Preparations*
 
-Install the relevant dependencies `sdl2 glew cmake python make`. SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
+Install the relevant dependencies `sdl2 glew cmake python make patch git`. SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
 
 Continue to `Compiling`.
 
