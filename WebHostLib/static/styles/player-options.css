@@ -1,0 +1,244 @@
+html{
+    background-image: url('../static/backgrounds/grass.png');
+    background-repeat: repeat;
+    background-size: 650px 650px;
+}
+
+#player-options{
+    box-sizing: border-box;
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #eeffeb;
+}
+
+#player-options #player-options-button-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+#player-options code{
+    background-color: #d9cd8e;
+    border-radius: 4px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: #000000;
+}
+
+#player-options #user-message{
+    display: none;
+    width: calc(100% - 8px);
+    background-color: #ffe86b;
+    border-radius: 4px;
+    color: #000000;
+    padding: 4px;
+    text-align: center;
+}
+
+#player-options #user-message.visible{
+    display: block;
+    cursor: pointer;
+}
+
+#player-options h1{
+    font-size: 2.5rem;
+    font-weight: normal;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 4px #000000;
+}
+
+#player-options h2{
+    font-size: 40px;
+    font-weight: normal;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    text-transform: lowercase;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+#player-options h3, #player-options h4, #player-options h5, #player-options h6{
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+#player-options input:not([type]){
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
+    min-width: 150px;
+}
+
+#player-options input:not([type]):focus{
+    border: 1px solid #ffffff;
+}
+
+#player-options select{
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
+    min-width: 150px;
+    background-color: #ffffff;
+}
+
+#player-options #game-options, #player-options #rom-options{
+    display: flex;
+    flex-direction: row;
+}
+
+#player-options #meta-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 3px;
+}
+
+#player-options div {
+    display: flex;
+    flex-grow: 1;
+}
+
+#player-options #meta-options label {
+    display: inline-block;
+    min-width: 180px;
+    flex-grow: 1;
+}
+
+#player-options #meta-options input,
+#player-options #meta-options select {
+    box-sizing: border-box;
+    min-width: 150px;
+    width: 50%;
+}
+
+#player-options .left, #player-options .right{
+    flex-grow: 1;
+}
+
+#player-options .left{
+    margin-right: 10px;
+}
+
+#player-options .right{
+    margin-left: 10px;
+}
+
+#player-options table{
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+#player-options table .select-container{
+    display: flex;
+    flex-direction: row;
+}
+
+#player-options table .select-container select{
+    min-width: 200px;
+    flex-grow: 1;
+}
+
+#player-options table select:disabled{
+    background-color: lightgray;
+}
+
+#player-options table .range-container{
+    display: flex;
+    flex-direction: row;
+}
+
+#player-options table .range-container input[type=range]{
+    flex-grow: 1;
+}
+
+#player-options table .range-value{
+    min-width: 20px;
+    margin-left: 0.25rem;
+}
+
+#player-options table .special-range-container{
+    display: flex;
+    flex-direction: column;
+}
+
+#player-options table .special-range-wrapper{
+    display: flex;
+    flex-direction: row;
+    margin-top: 0.25rem;
+}
+
+#player-options table .special-range-wrapper input[type=range]{
+    flex-grow: 1;
+}
+
+#player-options table .randomize-button {
+    max-height: 24px;
+    line-height: 16px;
+    padding: 2px 8px;
+    margin: 0 0 0 0.25rem;
+    font-size: 12px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+#player-options table .randomize-button.active {
+    background-color: #ffef00; /* Same as .interactive in globalStyles.css */
+}
+
+#player-options table .randomize-button[data-tooltip]::after {
+    left: unset;
+    right: 0;
+}
+
+#player-options table label{
+    display: block;
+    min-width: 200px;
+    margin-right: 4px;
+    cursor: default;
+}
+
+#player-options th, #player-options td{
+    border: none;
+    padding: 3px;
+    font-size: 17px;
+    vertical-align: top;
+}
+
+@media all and (max-width: 1024px) {
+    #player-options {
+        border-radius: 0;
+    }
+
+    #player-options #meta-options {
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 6px;
+    }
+
+    #player-options #game-options{
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    #player-options .left,
+    #player-options .right {
+        margin: 0;
+    }
+
+    #game-options table {
+        margin-bottom: 0;
+    }
+
+    #game-options table label{
+        display: block;
+        min-width: 200px;
+    }
+
+    #game-options table tr td {
+        width: 50%;
+    }
+}
