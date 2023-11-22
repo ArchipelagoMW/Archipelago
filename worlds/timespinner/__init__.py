@@ -39,9 +39,9 @@ class TimespinnerWorld(World):
     options: TimespinnerOptions
     game = "Timespinner"
     topology_present = True
-    data_version = 11
+    data_version = 12
     web = TimespinnerWebWorld()
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 4, 2)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_location_datas(-1, None, None)}
@@ -135,7 +135,9 @@ class TimespinnerWorld(World):
             "CastleMoat": self.precalculated_weights.flood_moat,
             "CastleCourtyard": self.precalculated_weights.flood_courtyard,
             "LakeDesolation": self.precalculated_weights.flood_lake_desolation,
-            "DryLakeSerene": self.precalculated_weights.dry_lake_serene,
+            "DryLakeSerene": not self.precalculated_weights.flood_lake_serene,
+            "LakeSereneBridge": self.precalculated_weights.flood_lake_serene_bridge,
+            "Lab": self.precalculated_weights.flood_lab
         }
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
@@ -170,8 +172,12 @@ class TimespinnerWorld(World):
                 flooded_areas.append("Castle Courtyard")
             if self.precalculated_weights.flood_lake_desolation:
                 flooded_areas.append("Lake Desolation")
-            if not self.precalculated_weights.dry_lake_serene:
+            if self.precalculated_weights.flood_lake_serene:
                 flooded_areas.append("Lake Serene")
+            if self.precalculated_weights.flood_lake_serene_bridge:
+                flooded_areas.append("Lake Serene Bridge")
+            if self.precalculated_weights.flood_lab:
+                flooded_areas.append("Lab")
 
             if len(flooded_areas) == 0:
                 flooded_areas_string: str = "None"
@@ -246,15 +252,18 @@ class TimespinnerWorld(World):
 
     def assign_starter_items(self, excluded_items: Set[str]) -> None:
         non_local_items: Set[str] = self.multiworld.non_local_items[self.player].value
+        local_items: Set[str] = self.multiworld.local_items[self.player].value
 
-        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if item not in non_local_items)
+        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if 
+                                            item in local_items or not item in non_local_items)
         if not local_starter_melee_weapons:
             if 'Plasma Orb' in non_local_items:
                 raise Exception("Atleast one melee orb must be local")
             else:
                 local_starter_melee_weapons = ('Plasma Orb',)
 
-        local_starter_spells = tuple(item for item in starter_spells if item not in non_local_items)
+        local_starter_spells = tuple(item for item in starter_spells if
+                                     item in local_items or not item in non_local_items)
         if not local_starter_spells:
             if 'Lightwall' in non_local_items:
                 raise Exception("Atleast one spell must be local")

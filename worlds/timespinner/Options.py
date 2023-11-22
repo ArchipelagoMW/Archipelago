@@ -54,14 +54,23 @@ class LoreChecks(Toggle):
     display_name = "Lore Checks"
 
 
-class BossRando(Toggle):
-    "Shuffles the positions of all bosses."
+class BossRando(Choice):
+    "Wheter all boss locations are shuffled, and if their damage/hp should be scaled."
     display_name = "Boss Randomization"
+    option_off = 0
+    option_scaled = 1
+    option_unscaled = 2
+    alias_true = 1
 
 
-class BossScaling(DefaultOnToggle):
-    "When Boss Rando is enabled, scales the bosses' HP, XP, and ATK to the stats of the location they replace (Recommended)"
-    display_name = "Scale Random Boss Stats"
+class EnemyRando(Choice):
+    "Wheter enemies will be randomized, and if their damage/hp should be scaled."
+    display_name = "Enemy Randomization"
+    option_off = 0
+    option_scaled = 1
+    option_unscaled = 2
+    option_ryshia = 3
+    alias_true = 1
 
 
 class DamageRando(Choice):
@@ -336,6 +345,7 @@ def rising_tide_option(location: str, with_save_point_option: bool = False) -> D
 class RisingTidesOverrides(OptionDict):
     """Odds for specific areas to be flooded or drained, only has effect when RisingTides is on.
     Areas that are not specified will roll with the default 33% chance of getting flooded or drained"""
+    display_name = "Rising Tides Overrides"
     schema = Schema({
         **rising_tide_option("Xarion"),
         **rising_tide_option("Maw"),
@@ -345,9 +355,10 @@ class RisingTidesOverrides(OptionDict):
         **rising_tide_option("CastleBasement", with_save_point_option=True),
         **rising_tide_option("CastleCourtyard"),
         **rising_tide_option("LakeDesolation"),
-        **rising_tide_option("LakeSerene")
+        **rising_tide_option("LakeSerene"),
+        **rising_tide_option("LakeSereneBridge"),
+        **rising_tide_option("Lab"),
     })
-    display_name = "Rising Tides Overrides"
     default = {
         "Xarion": { "Dry": 67, "Flooded": 33 },
         "Maw": { "Dry": 67, "Flooded": 33 },
@@ -358,6 +369,8 @@ class RisingTidesOverrides(OptionDict):
         "CastleCourtyard": { "Dry": 67, "Flooded": 33 },
         "LakeDesolation": { "Dry": 67, "Flooded": 33 },
         "LakeSerene": { "Dry": 33, "Flooded": 67 },
+        "LakeSereneBridge": { "Dry": 67, "Flooded": 33 },
+        "Lab": { "Dry": 67, "Flooded": 33 },
     }
 
 
@@ -381,6 +394,12 @@ class Traps(OptionList):
     display_name = "Traps Types"
     valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
     default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
+
+
+class PresentAccessWithWheelAndSpindle(Toggle):
+    """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
+    display_name = "Past Wheel & Spindle Warp"
+
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions):
@@ -416,6 +435,7 @@ class TimespinnerOptions(PerGameCommonOptions):
     rising_tides: RisingTides
     rising_tides_overrides: RisingTidesOverrides
     unchained_keys: UnchainedKeys
+    present_access_with_wheel_and_spindle: PresentAccessWithWheelAndSpindle
     trap_chance: TrapChance
     traps: Traps
     death_link: DeathLink
