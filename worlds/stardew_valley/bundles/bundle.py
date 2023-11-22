@@ -1,11 +1,12 @@
+from typing import List
+
+from worlds.stardew_valley.bundles.bundle_item import BundleItem
+
+
 class Bundle:
     room: str
-    sprite: str
-    original_name: str
     name: str
-    rewards: List[str]
-    requirements: List[BundleItem]
-    color: str
+    items: List[BundleItem]
     number_required: int
 
     def __init__(self, key: str, value: str):
