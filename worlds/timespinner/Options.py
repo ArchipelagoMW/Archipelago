@@ -414,7 +414,6 @@ class TimespinnerOptions(PerGameCommonOptions):
     cantoran: Cantoran
     lore_checks: LoreChecks
     boss_rando: BossRando
-    boss_scaling: BossScaling
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
     hp_cap: HpCap
