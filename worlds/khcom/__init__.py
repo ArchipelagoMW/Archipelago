@@ -81,11 +81,18 @@ class KHCOMWorld(World):
 
         # Fill any empty locations with filler items.
         item_names = []
+        attempts = 0 #If we ever try to add items 200 times, and all the items are used up, lets clear the item_names array, we probably don't have enough items
         while len(item_pool) < total_locations:
             item_name = self.get_filler_item_name()
             if item_name not in item_names or "Pack" in item_name:
                 item_names.append(item_name)
                 item_pool.append(self.create_item(item_name))
+                attempts = 0
+            elif attempts >= 200:
+                item_names = []
+                attempts = 0
+            else:
+                attempts = attempts + 1
 
         self.multiworld.itempool += item_pool
 
