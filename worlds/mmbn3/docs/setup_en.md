@@ -41,7 +41,7 @@ and select EmuHawk.exe.
 The Steam version of the Legacy Collection contains unmodified GBA ROMs in its files. You can extract these for use with Archipelago.
 
 1. Open the Legacy Collection Vol. 1's Game Files (Right click on the game in your Library, then open Properties -> Installed Files -> Browse)
-2. Open the file `exe/data/exe3b.dat` in a Zip extracting program such as 7Zip or WinRAR.
+2. Open the file `exe/data/exe3b.dat` in a zip-extracting program such as 7-Zip or WinRAR.
 3. Extract the file `rom_b_e.srl` somewhere and rename it to `Mega Man Battle Network 3 - Blue Version (USA).gba`
 
 ## Configuring your YAML file
