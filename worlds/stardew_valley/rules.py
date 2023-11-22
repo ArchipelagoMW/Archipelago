@@ -4,7 +4,7 @@ from typing import List
 from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from .strings.craftable_names import Bomb
-from . import locations
+from . import locations, Event
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.monster_data import all_monsters_by_category, all_monsters_by_name
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
@@ -241,8 +241,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_witch_hut, player),
                              (logic.has(ArtisanGood.void_mayonnaise) | logic.mod.magic.can_blink()))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_mutant_bug_lair, player),
-                             ((logic.wallet.has_rusty_key & logic.region.can_reach(Region.railroad) &
-                               logic.relationship.can_meet(NPC.krobus) | logic.mod.magic.can_blink())))
+                             (logic.received(Event.start_dark_talisman_quest) & logic.relationship.can_meet(NPC.krobus)) | logic.mod.magic.can_blink())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_casino, player),
                              logic.received("Club Card"))
 

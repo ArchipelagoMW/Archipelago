@@ -143,6 +143,7 @@ class StardewValleyWorld(World):
 
         self.setup_early_items()
         self.setup_construction_events()
+        self.setup_quest_events()
         self.setup_victory()
 
     def precollect_farm_type(self):
@@ -192,6 +193,10 @@ class StardewValleyWorld(World):
     def setup_construction_events(self):
         can_construct_buildings = LocationData(None, "Carpenter Shop", Event.can_construct_buildings)
         self.create_event_location(can_construct_buildings, True_(), Event.can_construct_buildings)
+
+    def setup_quest_events(self):
+        start_dark_talisman_quest = LocationData(None, "Railroad", Event.start_dark_talisman_quest)
+        self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key, Event.start_dark_talisman_quest)
 
     def setup_victory(self):
         if self.options.goal == Goal.option_community_center:
