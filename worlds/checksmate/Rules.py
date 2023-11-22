@@ -1,4 +1,5 @@
 from functools import reduce
+from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState
 
@@ -35,9 +36,11 @@ class ChecksMateLogic(LogicMixin):
         return self.total_piece_material(player) >= amount
 
     def has_chessmen(self: CollectionState, player: int) -> int:
-        return len([item for item in self.owned_items(player) if item in [
+        return (len([item for item in self.owned_items(player) if item in [
             "Progressive Minor Piece", "Progressive Major Piece", "Progressive Pawn",
-            "Progressive Consul"]]) + (1 if self.has_any({"Progressive Pocket"}, player) else 0)
+            "Progressive Consul"]]) +
+                ceil(self.count("Progressive Pocket", player) /
+                     get_option_value(self.multiworld, player, "pocket_limit_by_pocket")))
 
     def count_enemy_pieces(self: CollectionState, player: int) -> int:
         owned_item_ids = [item_id for item_id, item in item_table.items() if self.has(item_id, player)]
@@ -48,7 +51,9 @@ class ChecksMateLogic(LogicMixin):
         return sum(1 if x.startswith("Enemy Pawn") else 0 for x in owned_item_ids)
 
     def has_french_move(self: CollectionState, player: int) -> bool:
-        return self.has_pawn(player)  # and self.has("Play En Passant", player)
+        return len([item for item in self.owned_items(player) if item == "Progressive Pawn"]) > len(
+            [item for item in self.multiworld.itempool if item.player == player and
+             item.name == "Progressive Pawn Forwardness"])  # and self.has("Play En Passant", player)
 
     def has_pawn(self: CollectionState, player: int) -> bool:
         return self.has_any({"Progressive Pawn"}, player)
