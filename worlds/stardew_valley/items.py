@@ -192,6 +192,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_skills(item_factory, options, items)
     create_wizard_buildings(item_factory, options, items)
     create_carpenter_buildings(item_factory, options, items)
+    items.append(item_factory("Railroad Boulder Removed"))
     items.append(item_factory("Beach Bridge"))
     items.append(item_factory("Dark Talisman"))
     create_tv_channels(item_factory, items)

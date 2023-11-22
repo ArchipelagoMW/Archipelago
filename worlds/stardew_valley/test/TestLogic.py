@@ -77,7 +77,8 @@ class TestLogic(unittest.TestCase):
             with self.subTest(msg=fish):
                 rule = logic.fish_rules[fish]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve fish rule for {fish} {rule}")
+                rule_result = rule(multi_world.state)
+                self.assertTrue(rule == False_() or rule_result, f"Could not resolve fish rule for {fish} {rule}")
 
     def test_given_museum_rule_then_can_be_resolved(self):
         for donation in logic.museum_rules.keys():

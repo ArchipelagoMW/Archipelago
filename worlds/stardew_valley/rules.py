@@ -235,7 +235,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
 
     set_adventure_guild_entrance_rules(logic, multiworld, player, world_options)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.mountain_to_railroad, player),
-                             logic.time.has_lived_months(2))
+                             logic.received("Railroad Boulder Removed"))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_witch_warp_cave, player),
                              logic.received(Wallet.dark_talisman) | (logic.mod.magic.can_blink()))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_witch_hut, player),

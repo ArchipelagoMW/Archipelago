@@ -159,7 +159,7 @@ class StardewLogic:
                             self.season, self.money, self.relationship, self.museum, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing,
                             self.cooking, self.mine, self.ability, self.time, self.quest, self.crafting, self.crop)
 
-        self.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in all_fish})
+        self.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})
         self.museum_rules.update({donation.name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
         for recipe in all_cooking_recipes:
