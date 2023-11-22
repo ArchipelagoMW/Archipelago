@@ -1,7 +1,7 @@
 id,name,classification,groups,mod_name
 0,Joja Cola,filler,TRASH,
-15,Rusty Key,progression,MUSEUM,
-16,Dwarvish Translation Guide,progression,MUSEUM,
+15,Rusty Key,progression,,
+16,Dwarvish Translation Guide,progression,,
 17,Bridge Repair,progression,COMMUNITY_REWARD,
 18,Greenhouse,progression,COMMUNITY_REWARD,
 19,Glittering Boulder Removed,progression,COMMUNITY_REWARD,
@@ -272,6 +272,7 @@ id,name,classification,groups,mod_name
 285,Ugly Baby,progression,"BABY",
 286,Deluxe Scarecrow Recipe,progression,"FESTIVAL,RARECROW",
 287,Treehouse,progression,"GINGER_ISLAND",
+288,Coffee Bean,progression,CROPSANITY,
 4001,Burnt,trap,TRAP,
 4002,Darkness,trap,TRAP,
 4003,Frozen,trap,TRAP,

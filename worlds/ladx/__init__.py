@@ -228,9 +228,7 @@ class LinksAwakeningWorld(World):
                             # Find instrument, lock
                             # TODO: we should be able to pinpoint the region we want, save a lookup table please
                             found = False
-                            for r in self.multiworld.get_regions():
-                                if r.player != self.player:
-                                    continue
+                            for r in self.multiworld.get_regions(self.player):
                                 if r.dungeon_index != item.item_data.dungeon_index:
                                     continue
                                 for loc in r.locations:
@@ -266,10 +264,7 @@ class LinksAwakeningWorld(World):
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
        
         self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
-        for r in self.multiworld.get_regions():
-            if r.player != self.player:
-                continue
-
+        for r in self.multiworld.get_regions(self.player):
             # Set aside dungeon locations
             if r.dungeon_index:
                 self.dungeon_locations_by_dungeon[r.dungeon_index - 1] += r.locations
@@ -512,13 +507,13 @@ class LinksAwakeningWorld(World):
         multidata["connect_names"][binascii.hexlify(self.multi_key).decode()] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def collect(self, state, item: Item) -> bool:
-        if item.name in self.rupees and item.advancement:
-            state.prog_items["RUPEES", self.player] += self.rupees[item.name]
-            return True
-        return super().collect(state, item)
+        change = super().collect(state, item)
+        if change and item.name in self.rupees:
+            state.prog_items[self.player]["RUPEES"] += self.rupees[item.name]
+        return change
 
     def remove(self, state, item: Item) -> bool:
-        if item.name in self.rupees and item.advancement:
-            state.prog_items["RUPEES", self.player] -= self.rupees[item.name]
-            return True
-        return super().remove(state, item)
+        change = super().collect(state, item)
+        if change and item.name in self.rupees:
+            state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
+        return change
