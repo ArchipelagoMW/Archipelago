@@ -187,11 +187,11 @@ class MessengerWorld(World):
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
         if change and "Time Shard" in item.name:
-            state.prog_items["Shards", self.player] += int(item.name.strip("Time Shard ()"))
+            state.prog_items[self.player]["Shards"] += int(item.name.strip("Time Shard ()"))
         return change
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
         if change and "Time Shard" in item.name:
-            state.prog_items["Shards", self.player] -= int(item.name.strip("Time Shard ()"))
+            state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
         return change
