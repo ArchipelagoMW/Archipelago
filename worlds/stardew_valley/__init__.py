@@ -10,7 +10,7 @@ from .items import item_table, create_items, ItemData, Group, items_by_group, ge
 from .locations import location_table, create_locations, LocationData
 from .logic import StardewLogic, StardewRule, True_, MAX_MONTHS
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland
+    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
@@ -287,14 +287,16 @@ class StardewValleyWorld(World):
             include_traps = True
             exclude_island = False
             for player in link_group["players"]:
-                player_options = fetch_options(self.multiworld, player)
-                if player_options[options.TrapItems] == options.TrapItems.option_no_traps:
+                player_options = self.multiworld.worlds[player].options
+                if not isinstance(player_options, StardewValleyOptions):
+                    continue
+                if player_options.trap_items == TrapItems.option_no_traps:
                     include_traps = False
-                if player_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+                if player_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
                     exclude_island = True
             return include_traps, exclude_island
         else:
-            return self.options[options.TrapItems] != options.TrapItems.option_no_traps, self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+            return self.options.trap_items != TrapItems.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     def fill_slot_data(self) -> Dict[str, Any]:
 
