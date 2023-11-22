@@ -129,7 +129,7 @@ def main(args=None, callback=ERmain):
     args.multi = max(player_id - 1, args.multi)
 
     if args.multi == 0:
-        raise Exception("No individual player files found and number of players is 0. "
+        raise ValueError("No individual player files found and number of players is 0. "
                         "Provide individual player files or specify the number of players via host.yaml or --multi.")
 
     logging.info(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, "
