@@ -480,7 +480,7 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     if include_traps:
         priority_filler_items.extend(trap_items)
 
-    exclude_ginger_island = options.excludeGingerIsland == ExcludeGingerIsland.option_true
+    exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     all_filler_packs = get_all_filler_items(include_traps, exclude_ginger_island)
     priority_filler_items = remove_excluded_packs(priority_filler_items, exclude_ginger_island)
 
