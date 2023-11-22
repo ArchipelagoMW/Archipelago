@@ -170,7 +170,6 @@ class HKWorld(World):
         charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
         self.charm_costs = world.PlandoCharmCosts[self.player].get_costs(charm_costs)
         # world.exclude_locations[self.player].value.update(white_palace_locations)
-        world.local_items[self.player].value.add("Mimic_Grub")
         for term, data in cost_terms.items():
             mini = getattr(world, f"Minimum{data.option}Price")[self.player]
             maxi = getattr(world, f"Maximum{data.option}Price")[self.player]
