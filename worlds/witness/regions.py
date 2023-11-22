@@ -4,7 +4,7 @@ and connects them with the proper requirements
 """
 from typing import FrozenSet, TYPE_CHECKING, Dict, Tuple, List
 
-from BaseClasses import Entrance
+from BaseClasses import Entrance, Region
 from Utils import KeyedDefaultDict
 from .static_logic import StaticWitnessLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
@@ -31,14 +31,14 @@ class WitnessRegions:
 
         return _meets_item_requirements(item_requirement, world)
 
-    def connect_if_possible(self, world: "WitnessWorld", source: str, target: str,
-                            requirement: FrozenSet[FrozenSet[str]], backwards: bool = False):
+    def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, req: FrozenSet[FrozenSet[str]],
+                            regions_by_name: Dict[str, Region], backwards: bool = False):
         """
         connect two regions and set the corresponding requirement
         """
 
         # Remove any possibilities where being in the target region would be required anyway.
-        real_requirement = frozenset({option for option in requirement if target not in option})
+        real_requirement = frozenset({option for option in req if target not in option})
 
         # There are some connections that should only be done one way. If this is a backwards connection, check for that
         if backwards:
@@ -54,8 +54,8 @@ class WitnessRegions:
         # We don't need to check for the accessibility of the source region.
         final_requirement = frozenset({option - frozenset({source}) for option in real_requirement})
 
-        source_region = world.multiworld.get_region(source, world.player)
-        target_region = world.multiworld.get_region(target, world.player)
+        source_region = regions_by_name[source]
+        target_region = regions_by_name[target]
 
         backwards = " Backwards" if backwards else ""
         connection_name = source + " to " + target + backwards
@@ -80,9 +80,7 @@ class WitnessRegions:
         }
 
         for dependent_region in mentioned_regions:
-            world.multiworld.register_indirect_condition(
-                world.multiworld.get_region(dependent_region, world.player), connection
-            )
+            world.multiworld.register_indirect_condition(regions_by_name[dependent_region], connection)
 
     def create_regions(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic):
         """
@@ -91,6 +89,7 @@ class WitnessRegions:
         from . import create_region
 
         all_locations = set()
+        regions_by_name = dict()
 
         for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
@@ -106,12 +105,33 @@ class WitnessRegions:
 
             new_region = create_region(world, region_name, self.locat, locations_for_this_region)
 
-            world.multiworld.regions.append(new_region)
+            regions_by_name[region_name] = new_region
 
         for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
-                self.connect_if_possible(world, region_name, connection[0], connection[1])
-                self.connect_if_possible(world, connection[0], region_name, connection[1], backwards=True)
+                self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)
+                self.connect_if_possible(world, connection[0], region_name, connection[1], regions_by_name, True)
+
+        # find regions that are completely disconnected from the start node and remove them
+        regions_to_check = {"Menu"}
+        reachable_regions = {"Menu"}
+
+        while regions_to_check:
+            next_region = regions_to_check.pop()
+            region_obj = regions_by_name[next_region]
+
+            for exit in region_obj.exits:
+                target = exit.connected_region
+
+                if target.name in reachable_regions:
+                    continue
+
+                regions_to_check.add(target.name)
+                reachable_regions.add(target.name)
+
+        regions_by_name = {k: v for k, v in regions_by_name.items() if k in reachable_regions}
+
+        world.multiworld.regions += regions_by_name.values()
 
     def __init__(self, locat: WitnessPlayerLocations, world: "WitnessWorld"):
         difficulty = world.options.puzzle_randomization.value
