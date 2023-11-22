@@ -35,7 +35,7 @@ overriding their logic afterward. Might be too complicated for no real gain tho.
 
 # Content pack (idea)
 
-Instead of using modules to hold the data, and have each mods adding their data to existing content, each mod data should be in a `ContentPack`. Vanilla, Ginger
+Instead of using modules to hold the data, and have each mod adding their data to existing content, each mod data should be in a `ContentPack`. Vanilla, Ginger
 Island, or anything that could be disabled would be in a content pack as well.
 
 Eventually, Vanilla content could even be disabled (a split would be required for items that are necessary to all content packs) to have a Ginger Island only

@@ -374,7 +374,6 @@ class CountPercent(StardewRule):
                 return True
         return False
 
-
     def __repr__(self):
         return f"CountPercent {self.percent}"
 
