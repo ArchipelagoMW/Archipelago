@@ -244,15 +244,15 @@ class TimespinnerWorld(World):
             excluded_items.add('Modern Warp Beacon')
             excluded_items.add('Mysterious Warp Beacon')
 
-        for item in self.multiworld.precollected_items[self.player]:
-            if item.name not in self.item_name_groups['UseItem']:
-                excluded_items.add(item.name)
+        for item_name in self.options.start_inventory.value.keys():
+            if item_name not in self.item_name_groups['UseItem']:
+                excluded_items.add(item_name)
 
         return excluded_items
 
     def assign_starter_items(self, excluded_items: Set[str]) -> None:
-        non_local_items: Set[str] = self.multiworld.non_local_items[self.player].value
-        local_items: Set[str] = self.multiworld.local_items[self.player].value
+        non_local_items: Set[str] = self.options.non_local_items.value
+        local_items: Set[str] = self.options.local_items.value
 
         local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if 
                                             item in local_items or not item in non_local_items)
@@ -274,7 +274,7 @@ class TimespinnerWorld(World):
         self.assign_starter_item(excluded_items, 'Tutorial: Yo Momma 2', local_starter_spells)
 
     def assign_starter_item(self, excluded_items: Set[str], location: str, item_list: Tuple[str, ...]) -> None:
-        item_name = self.multiworld.random.choice(item_list)
+        item_name = self.random.choice(item_list)
 
         self.place_locked_item(excluded_items, location, item_name)
 
@@ -282,8 +282,8 @@ class TimespinnerWorld(World):
         if self.options.quick_seed or self.options.inverted or self.precalculated_weights.flood_lake_desolation:
             return
 
-        for item in self.multiworld.precollected_items[self.player]:
-            if item.name in starter_progression_items and not item.name in excluded_items:
+        for item_name in self.options.start_inventory.value.keys():
+            if item_name in starter_progression_items:
                 return
 
         local_starter_progression_items = tuple(
