@@ -1,8 +1,10 @@
 from . import fish_data
 from .museum_data import Mineral
+from ..bundles.bundle import BundleTemplate, IslandBundleTemplate
 from ..bundles.bundle_item import BundleItem, IslandBundleItem
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
+from ..strings.bundle_names import CCRoom, BundleName
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.fish_names import Fish, WaterItem, Trash
 from ..strings.flower_names import Flower
@@ -273,29 +275,52 @@ magma_cap = IslandBundleItem(Forageable.magma_cap)
 
 spring_foraging_items_vanilla = [wild_horseradish, daffodil, leek, dandelion]
 spring_foraging_items_thematic = [*spring_foraging_items_vanilla, spring_onion, salmonberry, morel]
-spring_foraging_bundle_vanilla = Bundle()
+spring_foraging_bundle_vanilla = BundleTemplate(CCRoom.crafts_room, BundleName.spring_foraging, spring_foraging_items_vanilla, 4, 4)
+spring_foraging_bundle_thematic = BundleTemplate.extend_from(spring_foraging_bundle_vanilla, spring_foraging_items_thematic)
 
 summer_foraging_items_vanilla = [grape, spice_berry, sweet_pea]
 summer_foraging_items_thematic = [*summer_foraging_items_vanilla, fiddlehead_fern, red_mushroom, rainbow_shell]
+summer_foraging_bundle_vanilla = BundleTemplate(CCRoom.crafts_room, BundleName.summer_foraging, summer_foraging_items_vanilla, 3, 3)
+summer_foraging_bundle_thematic = BundleTemplate.extend_from(summer_foraging_bundle_vanilla, summer_foraging_items_thematic)
 
 fall_foraging_items_vanilla = [common_mushroom, wild_plum, hazelnut, blackberry]
 fall_foraging_items_thematic = [*fall_foraging_items_vanilla, chanterelle]
+fall_foraging_bundle_vanilla = BundleTemplate(CCRoom.crafts_room, BundleName.fall_foraging, fall_foraging_items_vanilla, 4, 4)
+fall_foraging_bundle_thematic = BundleTemplate.extend_from(fall_foraging_bundle_vanilla, fall_foraging_items_thematic)
 
 winter_foraging_items_vanilla = [winter_root, crystal_fruit, snow_yam, crocus]
 winter_foraging_items_thematic = [*winter_foraging_items_vanilla, holly, nautilus_shell]
+winter_foraging_bundle_vanilla = BundleTemplate(CCRoom.crafts_room, BundleName.winter_foraging, winter_foraging_items_vanilla, 4, 4)
+winter_foraging_bundle_thematic = BundleTemplate.extend_from(winter_foraging_bundle_vanilla, winter_foraging_items_thematic)
 
 construction_items_vanilla = [wood, stone, hardwood]
 construction_items_thematic = [*construction_items_vanilla, clay, fiber, sap.as_amount(50)]
+construction_bundle_vanilla = BundleTemplate(CCRoom.crafts_room, BundleName.construction, construction_items_vanilla, 4, 4)
+construction_bundle_thematic = BundleTemplate.extend_from(construction_bundle_vanilla, construction_items_thematic)
 
 exotic_foraging_items_vanilla = [coconut, cactus_fruit, cave_carrot, red_mushroom, purple_mushroom, maple_syrup, oak_resin, pine_tar, morel]
 exotic_foraging_items_thematic = [*exotic_foraging_items_vanilla, coral, sea_urchin, clam, cockle, mussel, oyster, seaweed]
+exotic_foraging_bundle_vanilla = BundleTemplate(CCRoom.crafts_room, BundleName.exotic_foraging, exotic_foraging_items_vanilla, 4, 4)
+exotic_foraging_bundle_thematic = BundleTemplate.extend_from(exotic_foraging_bundle_vanilla, exotic_foraging_items_thematic)
 
 beach_foraging_items = [nautilus_shell, coral, sea_urchin, rainbow_shell, clam, cockle, mussel, oyster, seaweed]
+beach_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.beach_foraging, beach_foraging_items, 4, 4)
+
 mines_foraging_items = [quartz, earth_crystal, frozen_tear, fire_quartz, red_mushroom, purple_mushroom, cave_carrot]
+mines_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.mines_foraging, mines_foraging_items, 4, 4)
+
 desert_foraging_items = [cactus_fruit.as_gold_quality(), cactus_fruit.as_amount(5), coconut.as_gold_quality(), coconut.as_amount(5)]
+desert_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.desert_foraging, desert_foraging_items, 2, 2)
+
 island_foraging_items = [ginger.as_amount(5), magma_cap.as_gold_quality(), magma_cap.as_amount(5)]
+island_foraging_bundle = IslandBundleTemplate(CCRoom.crafts_room, BundleName.island_foraging, island_foraging_items, 2, 2)
+
 sticky_items = [sap.as_amount(500), sap.as_amount(500)]
+sticky_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.sticky, sticky_items, 1, 1)
+
 wild_medicine_items = [item.as_amount(5) for item in [purple_mushroom, fiddlehead_fern, white_algae, hops, blackberry, dandelion]]
+wild_medicine_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.wild_medicine, wild_medicine_items, 2, 2)
+
 quality_foraging_items = sorted({item.as_gold_quality().as_amount(1)
                                  for item in
                                  [*spring_foraging_items_thematic, *summer_foraging_items_thematic, *fall_foraging_items_thematic,
@@ -400,6 +425,7 @@ forager_items = [salmonberry.as_amount(50), blackberry.as_amount(50), wild_plum.
                  common_mushroom.as_amount(20), grape.as_amount(20), spring_onion.as_amount(20)]
 home_cook_items = [egg.as_amount(10), milk.as_amount(10), wheat_flour.as_amount(100), sugar.as_amount(100), vinegar.as_amount(100),
                    chocolate_cake, pancakes, rhubarb_pie]
+bartender_items = [shrimp_cocktail, triple_shot_espresso, ginger_ale, green_tea, cranberry_candy]
 
 
 missing_bundle_items = [wine.as_silver_quality(), pale_ale.as_silver_quality(), beer.as_silver_quality(), mead.as_silver_quality(), cheese.as_silver_quality(),
