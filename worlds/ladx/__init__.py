@@ -513,7 +513,7 @@ class LinksAwakeningWorld(World):
         return change
 
     def remove(self, state, item: Item) -> bool:
-        change = super().collect(state, item)
+        change = super().remove(state, item)
         if change and item.name in self.rupees:
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
