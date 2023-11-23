@@ -476,6 +476,24 @@ specialty_fish_items_thematic = [*specialty_fish_items_vanilla, scorpion_carp, e
 specialty_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.specialty_fish, specialty_fish_items_vanilla, 4, 4)
 specialty_fish_bundle_thematic = BundleTemplate.extend_from(specialty_fish_bundle_vanilla, specialty_fish_items_thematic)
 
+spring_fish_items = [herring, halibut, shad, flounder, sunfish, sardine, catfish, anchovy, smallmouth_bass, eel, legend]
+spring_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.spring_fish, spring_fish_items, 4, 4)
+
+summer_fish_items = [tuna, pike, red_mullet, sturgeon, red_snapper, super_cucumber, tilapia, pufferfish, rainbow_trout,
+                     octopus, dorado, halibut, shad, flounder, sunfish, crimsonfish]
+summer_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.summer_fish, summer_fish_items, 4, 4)
+
+fall_fish_items = [red_snapper, super_cucumber, tilapia, shad, sardine, catfish, anchovy, smallmouth_bass, eel, midnight_carp,
+                   walleye, sea_cucumber, tiger_trout, albacore, salmon, angler]
+fall_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.fall_fish, fall_fish_items, 4, 4)
+
+winter_fish_items = [perch, squid, lingcod, tuna, pike, red_mullet, sturgeon, red_snapper, herring, halibut, sardine,
+                     midnight_carp, sea_cucumber, tiger_trout, albacore, glacierfish]
+winter_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.winter_fish, winter_fish_items, 4, 4)
+
+rain_fish_items = [red_snapper, shad, catfish, eel, walleye]
+rain_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.rain_fish, rain_fish_items, 3, 3)
+
 quality_fish_items = list({item.as_quality(FishQuality.gold) for item in [*river_fish_items_thematic, *lake_fish_items_thematic, *ocean_fish_items_thematic]})
 quality_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.quality_fish, quality_fish_items, 4, 4)
 
@@ -492,7 +510,8 @@ fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla
                              night_fish_bundle_vanilla, crab_pot_bundle_vanilla, specialty_fish_bundle_vanilla]
 fish_tank_bundles_thematic = [river_fish_bundle_thematic, lake_fish_bundle_thematic, ocean_fish_bundle_thematic,
                               night_fish_bundle_thematic, crab_pot_bundle_thematic, specialty_fish_bundle_thematic]
-fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle]
+fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle,
+                             winter_fish_bundle, rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle]
 fish_tank_vanilla = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_vanilla, 6)
 fish_tank_thematic = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_thematic, 6)
 fish_tank_remixed = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_remixed, 6)

@@ -323,6 +323,15 @@ class StardewValleyWorld(World):
             return self.options.trap_items != TrapItems.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     def fill_slot_data(self) -> Dict[str, Any]:
+
+        bundles = dict()
+        for room in self.modified_bundles:
+            bundles[room.name] = dict()
+            for bundle in room.bundles:
+                bundles[room.name][bundle.name] = {"number_required": bundle.number_required}
+                for item in bundle.items:
+                    bundles[room.name][bundle.name][item.item_name] = f"{item.amount} of {item.quality}"
+
         excluded_options = [BundleRandomization, BundlePrice, NumberOfMovementBuffs, NumberOfLuckBuffs]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
@@ -332,7 +341,7 @@ class StardewValleyWorld(World):
         slot_data.update({
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
-            "modified_bundles": self.modified_bundles,
+            "modified_bundles": bundles,
             "client_version": "5.0.0",
         })
 

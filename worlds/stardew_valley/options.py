@@ -99,10 +99,11 @@ class BundleRandomization(Choice):
     """What items are needed for the community center bundles?
     Vanilla: Standard bundles from the vanilla game
     Thematic: Every bundle will require random items compatible with their original theme
+    Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones
     Shuffled: Every bundle will require random items and follow no particular structure"""
     internal_name = "bundle_randomization"
     display_name = "Bundle Randomization"
-    default = 1
+    default = 2
     option_vanilla = 0
     option_thematic = 1
     option_remixed = 2
