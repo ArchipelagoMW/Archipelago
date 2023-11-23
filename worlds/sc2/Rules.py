@@ -316,7 +316,7 @@ class SC2Logic:
         return state.has_any(self.basic_zerg_units, self.player)
 
     def zerg_competent_anti_air(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.HYDRALISK, ItemNames.MUTALISK}, self.player) or \
+        return state.has_any({ItemNames.HYDRALISK, ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) or \
             state.has_all({ItemNames.SWARM_HOST, ItemNames.SWARM_HOST_PRESSURIZED_GLANDS}, self.player) or \
             (self.advanced_tactics and state.has(ItemNames.INFESTOR, self.player))
 
@@ -325,13 +325,15 @@ class SC2Logic:
                state.has(ItemNames.SWARM_QUEEN, self.player) or (self.advanced_tactics and state.has(ItemNames.SPORE_CRAWLER, self.player))
     
     def morph_brood_lord(self, state: CollectionState) -> bool:
-        return state.has_all({ItemNames.MUTALISK, ItemNames.MUTALISK_BROOD_LORD_STRAIN}, self.player)
+        return state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) \
+            and state.has(ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, self.player)
     
     def morph_viper(self, state: CollectionState) -> bool:
-        return state.has_all({ItemNames.MUTALISK, ItemNames.MUTALISK_VIPER_STRAIN}, self.player)
+        return state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) \
+            and state.has(ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, self.player)
 
     def morph_impaler_or_lurker(self, state: CollectionState) -> bool:
-        return state.has(ItemNames.HYDRALISK, self.player) and state.has_any({ItemNames.HYDRALISK_IMPALER_STRAIN, ItemNames.HYDRALISK_LURKER_STRAIN}, self.player)
+        return state.has(ItemNames.HYDRALISK, self.player) and state.has_any({ItemNames.HYDRALISK_IMPALER_ASPECT, ItemNames.HYDRALISK_LURKER_ASPECT}, self.player)
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         advanced = self.advanced_tactics
