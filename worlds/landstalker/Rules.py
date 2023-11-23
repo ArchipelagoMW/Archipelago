@@ -112,7 +112,7 @@ def make_shop_location_requirement_lambda(player: int, location: LandstalkerLoca
     other_locations_in_shop = [loc for loc in location.parent_region.locations if loc != location]
     return lambda item: \
         item.player != player \
-        or (' Gold' not in item.name
+        or (" Gold" not in item.name
             and item.name not in [loc.item.name for loc in other_locations_in_shop if loc.item is not None])
 
 
@@ -125,7 +125,7 @@ def add_location_rules(world: "LandstalkerWorld"):
     location: LandstalkerLocation
     for location in world.multiworld.get_locations(world.player):
         if location.type_string == "ground":
-            location.item_rule = lambda item: not (item.player == world.player and ' Gold' in item.name)
+            location.item_rule = lambda item: not (item.player == world.player and " Gold" in item.name)
         elif location.type_string == "shop":
             location.item_rule = make_shop_location_requirement_lambda(world.player, location)
 
