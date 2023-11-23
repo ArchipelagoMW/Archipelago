@@ -195,7 +195,7 @@ class ALTTPWorld(World):
         "Ganons Tower": {"Ganons Tower - Bob's Torch", "Ganons Tower - Hope Room - Left",
                          "Ganons Tower - Hope Room - Right", "Ganons Tower - Tile Room",
                          "Ganons Tower - Compass Room - Top Left", "Ganons Tower - Compass Room - Top Right",
-                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Left",
+                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Right",
                          "Ganons Tower - DMs Room - Top Left", "Ganons Tower - DMs Room - Top Right",
                          "Ganons Tower - DMs Room - Bottom Left", "Ganons Tower - DMs Room - Bottom Right",
                          "Ganons Tower - Map Chest", "Ganons Tower - Firesnake Room",
