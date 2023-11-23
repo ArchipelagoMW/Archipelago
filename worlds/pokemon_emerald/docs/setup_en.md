@@ -52,8 +52,8 @@ you can re-open it from the launcher.
 3. In EmuHawk, go to `Tools > Lua Console`. This window must stay open while playing.
 4. In the Lua Console window, go to `Script > Open Script…`.
 5. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
-6. The emulator may freeze every few seconds until it manages to connect to the client. This is expected. The BizHawk
-Client window should indicate that it connected and recognized Pokemon Emerald.
+6. The emulator and client will eventually connect to each other. The BizHawk Client window should indicate that it
+connected and recognized Pokemon Emerald.
 7. To connect the client to the server, enter your room's address and port (e.g. `archipelago.gg:38281`) into the
 top text field of the client and click Connect.
 
