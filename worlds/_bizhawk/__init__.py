@@ -123,7 +123,7 @@ async def send_requests(ctx: BizHawkContext, req_list: typing.List[typing.Dict[s
 
     if errors:
         if sys.version_info >= (3, 11, 0):
-            raise ExceptionGroup("Connector script returned errors", errors)
+            raise ExceptionGroup("Connector script returned errors", errors)  # noqa
         else:
             raise errors[0]
 
