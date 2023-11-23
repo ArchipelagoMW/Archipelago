@@ -87,7 +87,7 @@ def generate_random_hints(world: "LandstalkerWorld"):
     # Hint-type #3: Own progression item in remote location
     for item in remote_own_progression_items:
         other_player = multiworld.get_player_name(item.location.player)
-        if item.location.game == "Landstalker":
+        if item.location.game == "Landstalker - The Treasures of King Nole":
             region_hint_name = item.location.parent_region.hint_text
             hint_texts.append(f"If you need {item.name}, tell {other_player} to look {region_hint_name}.")
         else:

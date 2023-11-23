@@ -6,7 +6,7 @@ BASE_ITEM_ID = 4000
 
 
 class LandstalkerItem(Item):
-    game: str = "Landstalker"
+    game: str = "Landstalker - The Treasures of King Nole"
     price_in_shops: int
 
 

@@ -11,7 +11,7 @@ BASE_REWARD_LOCATION_ID = BASE_SHOP_LOCATION_ID + 50
 
 
 class LandstalkerLocation(Location):
-    game: str = "Landstalker"
+    game: str = "Landstalker - The Treasures of King Nole"
     type_string: str
     price: int = 0
 

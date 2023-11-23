@@ -232,7 +232,8 @@ class LandstalkerWorld(World):
                 current_playthrough_progression = sphere_id / sphere_count
                 progression_price_factor = earlygame_price_factor + (current_playthrough_progression * factor_diff)
 
-                price = location.item.price_in_shops if location.item.game == "Landstalker" else unknown_items_price
+                price = location.item.price_in_shops \
+                    if location.item.game == "Landstalker - The Treasures of King Nole" else unknown_items_price
                 price *= progression_price_factor
                 price *= global_price_factor
                 price -= price % 5
