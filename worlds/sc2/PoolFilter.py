@@ -322,7 +322,7 @@ class ValidInventory:
         removable_generic_items = []
         self.multiworld.random.shuffle(generic_items)
         for item in generic_items[:reserved_generic_amount]:
-            locked_items.append(item)
+            locked_items.append(copy_item(item))
             inventory.remove(item)
             if item.name not in self.logical_inventory and item.name not in self.locked_items:
                 removable_generic_items.append(item)
@@ -398,9 +398,10 @@ class ValidInventory:
             and ItemNames.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
         ):
             inventory = [item for item in inventory if item.name != ItemNames.BANELING]
-        if ItemNames.MUTALISK not in self.logical_inventory:
+        if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
             locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
+            inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items

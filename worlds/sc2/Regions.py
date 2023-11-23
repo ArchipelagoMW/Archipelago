@@ -229,7 +229,7 @@ def create_vanilla_regions(
                 lambda state: state.has("Beat Rak'Shir", player)),
         connect(multiworld, player, names, "Templar's Charge", "Templar's Return",
                 lambda state: state.has("Beat Purification", player)
-                              and state.has("Beat Rak Shir", player)
+                              and state.has("Beat Rak'Shir", player)
                               and state.has("Beat Templar's Charge", player)),
         connect(multiworld, player, names, "Templar's Return", "The Host",
                 lambda state: state.has("Beat Templar's Return", player)),

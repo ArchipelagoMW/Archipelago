@@ -279,6 +279,8 @@ MUTALISK      = "Mutalisk"
 SWARM_HOST    = "Swarm Host"
 INFESTOR      = "Infestor"
 ULTRALISK     = "Ultralisk"
+CORRUPTOR     = "Corruptor"
+
 SPORE_CRAWLER = "Spore Crawler"
 SPINE_CRAWLER = "Spine Crawler"
 
@@ -319,22 +321,26 @@ SWARM_HOST_PRESSURIZED_GLANDS = "Pressurized Glands (Swarm Host)"
 ULTRALISK_BURROW_CHARGE       = "Burrow Charge (Ultralisk)"
 ULTRALISK_TISSUE_ANIMATION    = "Tissue Animation (Ultralisk)"
 ULTRALISK_MONARCH_BLADES      = "Monarch Blades (Ultralisk)"
+CORRUPTOR_CORRUPTION          = "Corruption (Corruptor)"
+CORRUPTOR_CAUSTIC_SPRAY       = "Caustic Spray (Corruptor)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
 ZERGLING_SWARMLING_STRAIN  = "Swarmling Strain (Zergling)"
 ROACH_VILE_STRAIN          = "Vile Strain (Roach)"
 ROACH_CORPSER_STRAIN       = "Corpser Strain (Roach)"
-HYDRALISK_IMPALER_STRAIN   = "Impaler Strain (Hydralisk)"
-HYDRALISK_LURKER_STRAIN    = "Lurker Strain (Hydralisk)"
 BANELING_SPLITTER_STRAIN   = "Splitter Strain (Baneling)"
 BANELING_HUNTER_STRAIN     = "Hunter Strain (Baneling)"
-MUTALISK_BROOD_LORD_STRAIN = "Brood Lord Strain (Mutalisk)"
-MUTALISK_VIPER_STRAIN      = "Viper Strain (Mutalisk)"
 SWARM_HOST_CARRION_STRAIN  = "Carrion Strain (Swarm Host)"
 SWARM_HOST_CREEPER_STRAIN  = "Creeper Strain (Swarm Host)"
 ULTRALISK_NOXIOUS_STRAIN   = "Noxious Strain (Ultralisk)"
 ULTRALISK_TORRASQUE_STRAIN = "Torrasque Strain (Ultralisk)"
+
+# Morphs
+HYDRALISK_IMPALER_ASPECT                = "Impaler Aspect (Hydralisk)"
+HYDRALISK_LURKER_ASPECT                 = "Lurker Aspect (Hydralisk)"
+MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT    = "Brood Lord Aspect (Mutalisk/Corruptor)"
+MUTALISK_CORRUPTOR_VIPER_ASPECT         = "Viper Aspect (Mutalisk/Corruptor)"
 
 # Zerg Mercs
 INFESTED_MEDICS      = "Infested Medics"
