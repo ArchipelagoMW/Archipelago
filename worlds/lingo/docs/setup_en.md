@@ -3,7 +3,7 @@
 ## Required Software
 
 - [Lingo](https://store.steampowered.com/app/1814170/Lingo/)
-- [Lingo Archipelago Randomizer](https://code.fourisland.com/lingo-archipelago/about/CHANGELOG.md)
+- [Lingo Archipelago Randomizer](https://steamcommunity.com/sharedfiles/filedetails/?id=3092505110)
 
 ## Optional Software
 
@@ -12,14 +12,12 @@
 
 ## Installation
 
-1. Download the Lingo Archipelago Randomizer from the above link.
-2. Open up Lingo, go to settings, and click View Game Data. This should open up
-   a folder in Windows Explorer.
-3. Unzip the contents of the randomizer into the "maps" folder. You may need to
-   create the "maps" folder if you have not played a custom Lingo map before.
-4. Installation complete! You may have to click Return to go back to the main
-   menu and then click Settings again in order to get the randomizer to show up
-   in the level selection list.
+You can use the above Steam Workshop link to subscribe to the Lingo Archipelago Randomizer. This will automatically
+download the client, as well as update it whenever an update is available.
+
+If you don't want to use Steam Workshop, you can also
+[download the randomizer manually](https://code.fourisland.com/lingo-archipelago/about/) using the instructions on the
+linked page.
 
 ## Joining a Multiworld game
 
