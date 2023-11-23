@@ -171,7 +171,7 @@ relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%
 
 ## Connections Plando
 
-This is currently only supported by Minecraft and A Link to the Past. As the way that these games interact with their
+This is currently only supported by Minecraft, A Link to the Past, and Ocarina of Time. As the way that these games interact with their
 connections is different, I will only explain the basics here, while more specifics for A Link to the Past connection
 plando can be found in its plando guide.
 
