@@ -1,0 +1,16 @@
+{% if enabled_trackers | length > 1 %}
+<div id="tracker-navigation">
+    {# Multitracker game navigation. #}
+    <div class="tracker-navigation-bar">
+    {%- for game_tracker in enabled_trackers -%}
+        {%- set tracker_url = url_for("get_multiworld_tracker", tracker=room.tracker, game=game_tracker) -%}
+        <a
+            class="tracker-navigation-button{% if current_tracker == game_tracker %} selected{% endif %}"
+            href="{{ tracker_url }}"
+        >
+            {{ game_tracker }}
+        </a>
+    {%- endfor -%}
+    </div>
+</div>
+{% endif %}
