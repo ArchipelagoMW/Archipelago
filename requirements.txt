@@ -1,12 +1,13 @@
 colorama>=0.4.5
 websockets>=11.0.3
 PyYAML>=6.0.1
-jellyfish>=1.0.1
+jellyfish>=1.0.3
 jinja2>=3.1.2
 schema>=0.7.5
 kivy>=2.2.0
 bsdiff4>=1.2.4
-platformdirs>=3.9.1
-certifi>=2023.7.22
+platformdirs>=4.0.0
+certifi>=2023.11.17
 cython>=3.0.5
 cymem>=2.0.8
+orjson>=3.9.10
