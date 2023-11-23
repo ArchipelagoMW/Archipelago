@@ -1,3 +1,5 @@
+from typing import ClassVar, Set
+
 from BaseClasses import LocationProgressType, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Hints import *
@@ -36,6 +38,8 @@ class LandstalkerWorld(World):
 
     item_name_to_id = build_item_name_to_id_table()
     location_name_to_id = build_location_name_to_id_table()
+
+    cached_spheres: ClassVar[List[Set[Location]]]
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -213,6 +217,16 @@ class LandstalkerWorld(World):
         else:
             return 4
 
+    @classmethod
+    def stage_post_fill(cls, multiworld):
+        # Cache spheres for hint calculation after fill completes.
+        cls.cached_spheres = list(multiworld.get_spheres())
+
+    @classmethod
+    def stage_modify_multidata(cls, *_):
+        # Clean up all references in cached spheres after generation completes.
+        del cls.cached_spheres
+
     def adjust_shop_prices(self):
         # Calculate prices for items in shops once all items have their final position
         unknown_items_price = 250
@@ -222,13 +236,14 @@ class LandstalkerWorld(World):
 
         global_price_factor = self.options.shop_prices_factor / 100.0
 
-        spheres = list(self.multiworld.get_spheres())
-        sphere_id = 0
+        spheres = self.cached_spheres
         sphere_count = len(spheres)
-        for sphere in spheres:
+        for sphere_id, sphere in enumerate(spheres):
+            location: LandstalkerLocation  # after conditional, we guarantee it's this kind of location.
             for location in sphere:
                 if location.player != self.player or location.type_string != "shop":
                     continue
+
                 current_playthrough_progression = sphere_id / sphere_count
                 progression_price_factor = earlygame_price_factor + (current_playthrough_progression * factor_diff)
 
@@ -239,7 +254,6 @@ class LandstalkerWorld(World):
                 price -= price % 5
                 price = max(price, 5)
                 location.price = int(price)
-            sphere_id += 1
 
     @staticmethod
     def get_jewel_names(count: JewelCount):
