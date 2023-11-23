@@ -105,7 +105,8 @@ class BundleRandomization(Choice):
     default = 1
     option_vanilla = 0
     option_thematic = 1
-    option_shuffled = 2
+    option_remixed = 2
+    option_shuffled = 3
 
 
 class BundlePrice(Choice):
@@ -116,11 +117,11 @@ class BundlePrice(Choice):
     Expensive: Every bundle will require 1 extra item when applicable"""
     internal_name = "bundle_price"
     display_name = "Bundle Price"
-    default = 2
-    option_very_cheap = 0
-    option_cheap = 1
-    option_normal = 2
-    option_expensive = 3
+    default = 0
+    option_very_cheap = -2
+    option_cheap = -1
+    option_normal = 0
+    option_expensive = 1
 
 
 class EntranceRandomization(Choice):

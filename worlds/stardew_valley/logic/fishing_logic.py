@@ -13,6 +13,7 @@ from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.fish_names import SVEFish
+from ..strings.quality_names import FishQuality
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
 
@@ -61,3 +62,15 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
         if self.options.special_order_locations != SpecialOrderLocations.option_board_qi:
             return False_()
         return self.logic.region.can_reach(Region.qi_walnut_room) & And(*(self.logic.fishing.can_catch_fish(fish) for fish in legendary_fish))
+
+    def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
+        if fish_quality == FishQuality.basic:
+            return True_()
+        rod_rule = self.logic.tool.has_fishing_rod(2)
+        if fish_quality == FishQuality.silver:
+            return rod_rule
+        if fish_quality == FishQuality.gold:
+            return rod_rule & self.logic.skill.has_level(Skill.fishing, 4)
+        if fish_quality == FishQuality.iridium:
+            return rod_rule & self.logic.skill.has_level(Skill.fishing, 10)
+        return False_()

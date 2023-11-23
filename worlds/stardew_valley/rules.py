@@ -4,6 +4,7 @@ from typing import List
 from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import locations
+from .bundles.bundle_room import BundleRoom
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.monster_data import all_monsters_by_category, all_monsters_by_name
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
@@ -44,7 +45,7 @@ def set_rules(world):
     world_options = world.options
     player = world.player
     logic = world.logic
-    current_bundles = world.modified_bundles
+    bundle_rooms: List[BundleRoom] = world.modified_bundles
 
     all_location_names = list(location.name for location in multiworld.get_locations(player))
 
@@ -53,7 +54,7 @@ def set_rules(world):
 
     set_tool_rules(logic, multiworld, player, world_options)
     set_skills_rules(logic, multiworld, player, world_options)
-    set_bundle_rules(current_bundles, logic, multiworld, player)
+    set_bundle_rules(bundle_rooms, logic, multiworld, player)
     set_building_rules(logic, multiworld, player, world_options)
     set_cropsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
@@ -117,31 +118,16 @@ def set_building_rules(logic: StardewLogic, multiworld, player, world_options: S
                                  logic.registry.building_rules[building.name.replace(" Blueprint", "")])
 
 
-def set_bundle_rules(current_bundles, logic: StardewLogic, multiworld, player):
-    for bundle in current_bundles.values():
-        location = multiworld.get_location(bundle.get_name_with_bundle(), player)
-        rules = logic.bundle.can_complete_bundle(tuple(bundle.requirements), bundle.number_required)
-        simplified_rules = rules
-        MultiWorldRules.set_rule(location, simplified_rules)
-    MultiWorldRules.add_rule(multiworld.get_location("Complete Crafts Room", player),
-                             And(*(logic.region.can_reach_location(bundle.name)
-                                   for bundle in locations.locations_by_tag[LocationTags.CRAFTS_ROOM_BUNDLE])))
-    MultiWorldRules.add_rule(multiworld.get_location("Complete Pantry", player),
-                             And(*(logic.region.can_reach_location(bundle.name)
-                                   for bundle in locations.locations_by_tag[LocationTags.PANTRY_BUNDLE])))
-    MultiWorldRules.add_rule(multiworld.get_location("Complete Fish Tank", player),
-                             And(*(logic.region.can_reach_location(bundle.name)
-                                   for bundle in locations.locations_by_tag[LocationTags.FISH_TANK_BUNDLE])))
-    MultiWorldRules.add_rule(multiworld.get_location("Complete Boiler Room", player),
-                             And(*(logic.region.can_reach_location(bundle.name)
-                                   for bundle in locations.locations_by_tag[LocationTags.BOILER_ROOM_BUNDLE])))
-    MultiWorldRules.add_rule(multiworld.get_location("Complete Bulletin Board", player),
-                             And(*(logic.region.can_reach_location(bundle.name)
-                                   for bundle
-                                   in locations.locations_by_tag[LocationTags.BULLETIN_BOARD_BUNDLE])))
-    MultiWorldRules.add_rule(multiworld.get_location("Complete Vault", player),
-                             And(*(logic.region.can_reach_location(bundle.name)
-                                   for bundle in locations.locations_by_tag[LocationTags.VAULT_BUNDLE])))
+def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiworld, player):
+    for bundle_room in bundle_rooms:
+        room_rules = []
+        for bundle in bundle_room.bundles:
+            location = multiworld.get_location(bundle.name, player)
+            bundle_rules = logic.bundle.can_complete_bundle(bundle).simplify()
+            room_rules.append(bundle_rules)
+            MultiWorldRules.set_rule(location, bundle_rules)
+        room_location = f"Complete {bundle_room.name}"
+        MultiWorldRules.add_rule(multiworld.get_location(room_location, player), And(*room_rules))
 
 
 def set_skills_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):

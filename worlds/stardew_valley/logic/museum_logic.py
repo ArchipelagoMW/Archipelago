@@ -33,7 +33,7 @@ class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogic
         # monster_rule = self.can_farm_monster(item.monsters)
         # extra_rule = True_()
         pan_rule = False_()
-        if item.name == "Earth Crystal" or item.name == "Fire Quartz" or item.name == "Frozen Tear":
+        if item.item_name == "Earth Crystal" or item.item_name == "Fire Quartz" or item.item_name == "Frozen Tear":
             pan_rule = self.logic.action.can_pan()
         return pan_rule | (region_rule & geodes_rule)  # & monster_rule & extra_rule
 

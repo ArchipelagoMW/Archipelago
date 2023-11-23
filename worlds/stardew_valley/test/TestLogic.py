@@ -20,8 +20,8 @@ collect_all(multi_world)
 class TestLogic(unittest.TestCase):
     def test_given_bundle_item_then_is_available_in_logic(self):
         for bundle_item in all_bundle_items_except_money:
-            with self.subTest(msg=bundle_item.item.name):
-                self.assertIn(bundle_item.item.name, logic.registry.item_rules)
+            with self.subTest(msg=bundle_item.item_name):
+                self.assertIn(bundle_item.item_name, logic.registry.item_rules)
 
     def test_given_item_rule_then_can_be_resolved(self):
         for item in logic.registry.item_rules.keys():

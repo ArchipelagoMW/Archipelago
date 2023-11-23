@@ -5,6 +5,7 @@ from random import Random
 from typing import Optional, Dict, Protocol, List, FrozenSet
 
 from . import data
+from .bundles.bundle_room import BundleRoom
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .data.fish_data import legendary_fish, special_fish, get_fish_for_mods
 from .data.museum_data import all_museum_items
@@ -222,10 +223,10 @@ def extend_museumsanity_locations(randomized_locations: List[LocationData], opti
     elif options.museumsanity == Museumsanity.option_milestones:
         randomized_locations.extend(locations_by_tag[LocationTags.MUSEUM_MILESTONES])
     elif options.museumsanity == Museumsanity.option_randomized:
-        randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"]
+        randomized_locations.extend(location_table[f"{prefix}{museum_item.item_name}"]
                                     for museum_item in all_museum_items if random.random() < 0.4)
     elif options.museumsanity == Museumsanity.option_all:
-        randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"] for museum_item in all_museum_items)
+        randomized_locations.extend(location_table[f"{prefix}{museum_item.item_name}"] for museum_item in all_museum_items)
 
 
 def extend_friendsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
@@ -308,10 +309,17 @@ def extend_walnut_purchase_locations(randomized_locations: List[LocationData], o
     randomized_locations.extend(locations_by_tag[LocationTags.WALNUT_PURCHASE])
 
 
-def extend_mandatory_locations(randomized_locations: List[LocationData], options):
+def extend_mandatory_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
     mandatory_locations = [location for location in locations_by_tag[LocationTags.MANDATORY]]
     filtered_mandatory_locations = filter_disabled_locations(options, mandatory_locations)
     randomized_locations.extend(filtered_mandatory_locations)
+
+
+def extend_bundle_locations(randomized_locations: List[LocationData], bundle_rooms: List[BundleRoom]):
+    for room in bundle_rooms:
+        randomized_locations.append(location_table[f"Complete {room.name}"])
+        for bundle in room.bundles:
+            randomized_locations.append(location_table[bundle.name])
 
 
 def extend_backpack_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
@@ -413,11 +421,13 @@ def extend_craftsanity_locations(randomized_locations: List[LocationData], optio
 
 
 def create_locations(location_collector: StardewLocationCollector,
+                     bundle_rooms: List[BundleRoom],
                      options: StardewValleyOptions,
                      random: Random):
     randomized_locations = []
 
     extend_mandatory_locations(randomized_locations, options)
+    extend_bundle_locations(randomized_locations, bundle_rooms)
     extend_backpack_locations(randomized_locations, options)
 
     if options.tool_progression & ToolProgression.option_progressive:

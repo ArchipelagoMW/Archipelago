@@ -1,7 +1,8 @@
 from random import Random
 from typing import List
 
-from worlds.stardew_valley.bundles.bundle_item import BundleItem
+from .bundle_item import BundleItem
+from ..strings.currency_names import Currency
 
 
 class Bundle:
@@ -40,6 +41,9 @@ class BundleTemplate:
 
     def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
         number_required = self.number_required_items + price_difference
+        if price_difference > 0 and self.number_possible_items > 10:
+            number_required += price_difference
+        number_required = max(1, number_required)
         filtered_items = [item for item in self.items if allow_island_items or not item.requires_island]
         number_items = len(filtered_items)
         number_chosen_items = self.number_possible_items
@@ -47,7 +51,7 @@ class BundleTemplate:
             number_chosen_items = number_required
 
         if number_chosen_items > number_items:
-            chosen_items = random.choices(filtered_items, k=number_chosen_items)
+            chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
         else:
             chosen_items = random.sample(filtered_items, number_chosen_items)
         return Bundle(self.room, self.name, chosen_items, number_required)
@@ -57,9 +61,57 @@ class BundleTemplate:
         return False
 
 
+class CurrencyBundleTemplate(BundleTemplate):
+    item: BundleItem
+
+    def __init__(self, room: str, item: BundleItem):
+        super().__init__(room, "", [item], 1, 1)
+        self.item = item
+
+    def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
+        price_multiplier = round(1 + (price_difference * 0.4), 2)
+        currency_amount = int(self.item.amount * price_multiplier)
+        currency_name = "g" if self.item.item_name == Currency.money else f" {self.item.item_name}"
+        if currency_amount >= 1000:
+            unit_amount = currency_amount % 1000
+            unit_amount = "000" if unit_amount == 0 else unit_amount
+            currency_display = f"{currency_amount // 1000},{unit_amount}"
+        else:
+            currency_display = f"{currency_amount}"
+        name = f"{currency_display}{currency_name} Bundle"
+        return Bundle(self.room, name, [BundleItem(self.item.item_name, currency_amount)], 1)
+
+
 class IslandBundleTemplate(BundleTemplate):
 
     @property
     def requires_island(self) -> bool:
         return True
+
+
+class DeepBundleTemplate(BundleTemplate):
+    categories: List[List[BundleItem]]
+
+    def __init__(self, room: str, name: str, categories: List[List[BundleItem]], number_possible_items: int, number_required_items: int):
+        super().__init__(room, name, [], number_possible_items, number_required_items)
+        self.categories = categories
+
+    def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
+        number_required = self.number_required_items + price_difference
+        number_categories = len(self.categories)
+        number_chosen_categories = self.number_possible_items
+        if number_chosen_categories < number_required:
+            number_chosen_categories = number_required
+
+        if number_chosen_categories > number_categories:
+            chosen_categories = self.categories + random.choices(self.categories, k=number_chosen_categories - number_categories)
+        else:
+            chosen_categories = random.sample(self.categories, number_chosen_categories)
+
+        chosen_items = []
+        for category in chosen_categories:
+            filtered_items = [item for item in category if allow_island_items or not item.requires_island]
+            chosen_items.append(random.choice(filtered_items))
+
+        return Bundle(self.room, self.name, chosen_items, number_required)
 

@@ -5,7 +5,8 @@ from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassifi
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
-from .bundles import get_all_bundles, Bundle
+from .bundles.bundle_room import BundleRoom
+from .bundles.bundles import get_all_bundles
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData
 from .logic.bundle_logic import BundleLogic
@@ -67,11 +68,10 @@ class StardewValleyWorld(World):
 
     options_dataclass = StardewValleyOptions
     options: StardewValleyOptions
-    bundle: BundleLogic
     logic: StardewLogic
 
     web = StardewWebWorld()
-    modified_bundles: Dict[str, Bundle]
+    modified_bundles: List[BundleRoom]
     randomized_entrances: Dict[str, str]
     total_progression_items: int
 
@@ -86,8 +86,7 @@ class StardewValleyWorld(World):
         self.logic = StardewLogic(self.player, self.options)
         self.modified_bundles = get_all_bundles(self.multiworld.random,
                                                 self.logic,
-                                                self.options.bundle_randomization,
-                                                self.options.bundle_price)
+                                                self.options)
 
     def force_change_options_if_incompatible(self):
         goal_is_walnut_hunter = self.options.goal == Goal.option_greatest_walnut_hunter
@@ -115,7 +114,7 @@ class StardewValleyWorld(World):
             location.access_rule = lambda _: True
             region.locations.append(location)
 
-        create_locations(add_location, self.options, self.multiworld.random)
+        create_locations(add_location, self.modified_bundles, self.options, self.multiworld.random)
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
@@ -324,12 +323,6 @@ class StardewValleyWorld(World):
             return self.options.trap_items != TrapItems.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     def fill_slot_data(self) -> Dict[str, Any]:
-
-        modified_bundles = {}
-        for bundle_key in self.modified_bundles:
-            key, value = self.modified_bundles[bundle_key].to_pair()
-            modified_bundles[key] = value
-
         excluded_options = [BundleRandomization, BundlePrice, NumberOfMovementBuffs, NumberOfLuckBuffs]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
@@ -339,7 +332,7 @@ class StardewValleyWorld(World):
         slot_data.update({
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
-            "modified_bundles": modified_bundles,
+            "modified_bundles": self.modified_bundles,
             "client_version": "5.0.0",
         })
 

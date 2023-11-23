@@ -26,7 +26,7 @@ class CropLogicMixin(BaseLogicMixin):
 
 
 class CropLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, SeasonLogicMixin, MoneyLogicMixin,
-ToolLogicMixin, CropLogicMixin]]):
+                                ToolLogicMixin, CropLogicMixin]]):
     @cache_self1
     def can_grow(self, crop: CropItem) -> StardewRule:
         season_rule = self.logic.season.has_any(crop.farm_growth_seasons)

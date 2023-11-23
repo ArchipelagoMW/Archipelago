@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from worlds.stardew_valley.strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
+from ..strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
 from .ability_logic import AbilityLogicMixin
 from .action_logic import ActionLogicMixin
 from .arcade_logic import ArcadeLogicMixin
@@ -35,7 +35,7 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
-from ..data import all_fish, all_purchasable_seeds, all_crops
+from ..data import all_purchasable_seeds, all_crops
 from ..data.craftable_data import all_crafting_recipes
 from ..data.crops_data import crops_by_name
 from ..data.fish_data import island_fish, extended_family, get_fish_for_mods
@@ -100,7 +100,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         super().__init__(player, self.registry, options, self)
 
         self.registry.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})
-        self.registry.museum_rules.update({donation.name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
+        self.registry.museum_rules.update({donation.item_name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
         for recipe in all_cooking_recipes:
             if recipe.mod_name and recipe.mod_name not in self.options.mods:
@@ -357,7 +357,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             MetalBar.gold: self.can_smelt(Ore.gold),
             MetalBar.iridium: self.can_smelt(Ore.iridium),
             MetalBar.iron: self.can_smelt(Ore.iron),
-            MetalBar.quartz: self.can_smelt("Quartz") | self.can_smelt("Fire Quartz") | (self.has(Machine.recycling_machine) & (self.has(Trash.broken_cd) | self.has(Trash.broken_glasses))),
+            MetalBar.quartz: self.can_smelt(Mineral.quartz) | self.can_smelt("Fire Quartz") | (self.has(Machine.recycling_machine) & (self.has(Trash.broken_cd) | self.has(Trash.broken_glasses))),
             MetalBar.radioactive: self.can_smelt(Ore.radioactive),
             Ore.copper: self.mine.can_mine_in_the_mines_floor_1_40() | self.mine.can_mine_in_the_skull_cavern() | self.action.can_pan(),
             Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.action.can_pan(),

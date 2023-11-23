@@ -163,13 +163,14 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
                     check_no_ginger_island(self, multiworld)
 
     def test_given_choice_when_generate_exclude_ginger_island(self):
-        seed = int(random() * pow(10, 18) - 1)
         options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
             if not option.options or option_name == ExcludeGingerIsland.internal_name:
                 continue
             for value in option.options:
+                seed = int(random() * pow(10, 18) - 1)
                 with self.subTest(f"{option_name}: {value} [Seed: {seed}]"):
+                    # print(seed)
                     multiworld = setup_solo_multiworld(
                         {ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
                          option_name: option.options[value]}, seed)

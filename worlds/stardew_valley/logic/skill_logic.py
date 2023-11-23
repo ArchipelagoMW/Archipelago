@@ -2,7 +2,7 @@ from functools import cached_property
 from typing import Union, Tuple
 
 from Utils import cache_self1
-from worlds.stardew_valley.strings.craftable_names import Fishing
+from ..strings.craftable_names import Fishing
 from .base_logic import BaseLogicMixin, BaseLogic
 from .combat_logic import CombatLogicMixin
 from .crop_logic import CropLogicMixin
@@ -19,6 +19,7 @@ from ..mods.logic.mod_skills_levels import get_mod_skill_levels
 from ..stardew_rule import StardewRule, True_, Or
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
+from ..strings.quality_names import ForageQuality
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
 from ..strings.tool_names import ToolMaterial, Tool
@@ -158,3 +159,12 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
 
         water_region_rules = self.logic.region.can_reach_any(fishing_regions)
         return crab_pot_rule & water_region_rules
+
+    def can_forage_quality(self, quality: str) -> StardewRule:
+        if quality == ForageQuality.basic:
+            return True_()
+        if quality == ForageQuality.silver:
+            return self.has_level(Skill.foraging, 5)
+        if quality == ForageQuality.gold:
+            return self.has_level(Skill.foraging, 9)
+        return False_()
