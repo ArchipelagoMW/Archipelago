@@ -9,6 +9,7 @@ import asyncio
 import base64
 import enum
 import json
+import sys
 import typing
 
 
@@ -125,7 +126,20 @@ async def send_requests(ctx: BizHawkContext, req_list: typing.List[typing.Dict[s
     """Sends a list of requests to the BizHawk connector and returns their responses.
 
     It's likely you want to use the wrapper functions instead of this."""
-    return json.loads(await ctx._send_message(json.dumps(req_list)))
+    responses = json.loads(await ctx._send_message(json.dumps(req_list)))
+    errors: typing.List[ConnectorError] = []
+
+    for response in responses:
+        if response["type"] == "ERROR":
+            errors.append(ConnectorError(response["err"]))
+
+    if errors:
+        if sys.version_info >= (3, 11, 0):
+            raise ExceptionGroup("Connector script returned errors", errors)  # noqa
+        else:
+            raise errors[0]
+
+    return responses
 
 
 async def ping(ctx: BizHawkContext) -> None:
