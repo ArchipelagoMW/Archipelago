@@ -203,15 +203,16 @@ class TimespinnerWorld(World):
         if not item.advancement:
             return item
 
-        if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
-            item.classification = ItemClassification.filler
-        elif name == 'Oculus Ring' and not self.options.eye_spy:
-            item.classification = ItemClassification.filler
-        elif (name == 'Kobo' or name == 'Merchant Crow') and not self.options.gyre_archives:
-            item.classification = ItemClassification.filler
-        elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
-                and not self.options.unchained_keys:
-            item.classification = ItemClassification.filler
+        if hasattr(self, 'options'): # self.options is not always available in this method
+            if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
+                item.classification = ItemClassification.filler
+            elif name == 'Oculus Ring' and not self.options.eye_spy:
+                item.classification = ItemClassification.filler
+            elif (name == 'Kobo' or name == 'Merchant Crow') and not self.options.gyre_archives:
+                item.classification = ItemClassification.filler
+            elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
+                    and not self.options.unchained_keys:
+                item.classification = ItemClassification.filler
 
         return item
 
