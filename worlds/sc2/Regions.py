@@ -414,7 +414,7 @@ def create_structured_regions(
         mission_pool_size = sum(len(mission_pool) for mission_pool in mission_pools.values())
         removals = len(order) - mission_pool_size
 
-        # Initial fill out of mission list and marking all-in mission
+        # Initial fill out of mission list and marking All-In mission
         for mission in order:
             # Removing extra missions if mission pool is too small
             if 0 < mission.removal_priority <= removals:
