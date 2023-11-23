@@ -44,10 +44,14 @@ class LandstalkerWorld(World):
         self.dark_region_ids = []
         self.teleport_tree_pairs = []
         self.jewel_items = []
-        self.hints = {}
-        self.locations: List[LandstalkerLocation] = []
 
     def fill_slot_data(self) -> dict:
+        # Generate hints.
+        self.adjust_shop_prices()
+        hints = Hints.generate_random_hints(self)
+        hints["Lithograph"] = Hints.generate_lithograph_hint(self)
+        hints["Oracle Stone"] = f"It shows {self.dark_dungeon_id}\nenshrouded in darkness."
+
         # Put options, locations' contents and some additional data inside slot data
         options = [
             "goal", "jewel_count", "progressive_armors", "use_record_book", "use_spell_book", "shop_prices_factor",
@@ -61,9 +65,13 @@ class LandstalkerWorld(World):
         slot_data["spawn_region"] = self.options.spawn_region.current_key
         slot_data["seed"] = self.random.randint(0, 2 ** 32 - 1)
         slot_data["dark_region"] = self.dark_dungeon_id
-        slot_data["location_prices"] = {location.name: location.price for location in self.locations if location.price}
-        slot_data["hints"] = self.hints
+        slot_data["hints"] = hints
         slot_data["teleport_tree_pairs"] = [[pair[0]["name"], pair[1]["name"]] for pair in self.teleport_tree_pairs]
+
+        # Type hinting for location.
+        location: LandstalkerLocation
+        slot_data["location_prices"] = {
+            location.name: location.price for location in self.multiworld.get_locations(self.player) if location.price}
 
         return slot_data
 
@@ -204,13 +212,6 @@ class LandstalkerWorld(World):
             return 10
         else:
             return 4
-
-    def generate_output(self, output_directory: str) -> None:
-        self.adjust_shop_prices()
-
-        self.hints = Hints.generate_random_hints(self)
-        self.hints["Lithograph"] = Hints.generate_lithograph_hint(self)
-        self.hints["Oracle Stone"] = f"It shows {self.dark_dungeon_id}\nenshrouded in darkness."
 
     def adjust_shop_prices(self):
         # Calculate prices for items in shops once all items have their final position
