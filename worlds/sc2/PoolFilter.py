@@ -305,7 +305,7 @@ class ValidInventory:
                 while len(removable_upgrades) > 0 and locked_upgrade_count < minimum_upgrades:
                     item_to_lock = removable_upgrades.pop()
                     inventory.remove(item_to_lock)
-                    locked_items.append(item_to_lock)
+                    locked_items.append(copy_item(item_to_lock))
                     locked_upgrade_count += 1
 
         if self.min_units_per_structure > 0 and self.has_units_per_structure():
@@ -357,7 +357,7 @@ class ValidInventory:
                             for item in self.item_children[parent_item]:
                                 if item in inventory:
                                     inventory.remove(item)
-                                    locked_items.append(item)
+                                    locked_items.append(copy_item(item))
                             continue
 
             # Drop child items when removing a parent
