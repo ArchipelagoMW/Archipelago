@@ -1,5 +1,7 @@
 from typing import Dict, Optional
-from BaseClasses import Location, Region
+
+from BaseClasses import Location
+from .Regions import LandstalkerRegion
 from .data.item_source import ITEM_SOURCES_JSON
 
 BASE_LOCATION_ID = 4000
@@ -13,12 +15,12 @@ class LandstalkerLocation(Location):
     type_string: str
     price: int = 0
 
-    def __init__(self, player: int, name: str, location_id: Optional[int], region: Region, type_string: str):
+    def __init__(self, player: int, name: str, location_id: Optional[int], region: LandstalkerRegion, type_string: str):
         super().__init__(player, name, location_id, region)
         self.type_string = type_string
 
 
-def create_locations(player: int, regions_table: Dict[str, Region], name_to_id_table: Dict[str, int]):
+def create_locations(player: int, regions_table: Dict[str, LandstalkerRegion], name_to_id_table: Dict[str, int]):
     # Create real locations from the data inside the corresponding JSON file
     for data in ITEM_SOURCES_JSON:
         region_id = data["nodeId"]
@@ -27,8 +29,8 @@ def create_locations(player: int, regions_table: Dict[str, Region], name_to_id_t
         region.locations.append(new_location)
 
     # Create a specific end location that will contain a fake win-condition item
-    end_location = LandstalkerLocation(player, "End", None, regions_table['end'], "reward")
-    regions_table['end'].locations.append(end_location)
+    end_location = LandstalkerLocation(player, "End", None, regions_table["end"], "reward")
+    regions_table["end"].locations.append(end_location)
 
 
 def build_location_name_to_id_table():

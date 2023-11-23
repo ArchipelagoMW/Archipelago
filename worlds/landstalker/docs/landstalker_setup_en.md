@@ -44,15 +44,15 @@ To do so, run `randstalker_archipelago.exe` inside the folder you created while 
 A window will open with a few settings to enter:
 - **Host**: Put the server address and port in this field (e.g. `archipelago.gg:12345`)
 - **Slot name**: Put the player name you specified in your YAML config file in this field.
-- **Password**: If server has a password, put it there.
+- **Password**: If the server has a password, put it there.
 
 ![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_ap.png)
 
-Once all those fields were filled appropriately, click on the `Connect to Archipelago` button below to try connecting to the
-Archipelago server.
+Once all those fields were filled appropriately, click on the `Connect to Archipelago` button below to try connecting to
+the Archipelago server.
 
 If this didn't work, double-check your credentials. An error message should be displayed on the console log to the 
-right that might help you finding the cause of the issue.
+right that might help you find the cause of the issue.
 
 ### ROM Generation
 
@@ -70,7 +70,7 @@ You should see a window with settings to fill:
 There also a few cosmetic options you can fill before clicking the `Build ROM` button which should create your 
 randomized seed if everything went right.
 
-If it didn't, double-check your `Input ROM file` and `Output ROM path`, then retry  building the ROM by clicking 
+If it didn't, double-check your `Input ROM file` and `Output ROM path`, then retry building the ROM by clicking 
 the same button again.
 
 ### Connecting to the emulator
@@ -83,8 +83,8 @@ You should see the following window:
 
 ![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_emu.png)
 
-As written, you have to open the newly generated ROM inside either Retroarch or Bizhawk using the Genesis Plus GX core. Be careful to
-select that core, because any other core (e.g. BlastEm) won't work.
+As written, you have to open the newly generated ROM inside either Retroarch or Bizhawk using the Genesis Plus GX core. 
+Be careful to select that core, because any other core (e.g. BlastEm) won't work.
 
 The easiest way to do so is to:
 - open the emu of your choice
@@ -98,15 +98,16 @@ Then, you can click on the `Connect to emulator` button below and it should work
 If this didn't work, try the following:
 - ensure you have loaded your ROM and reached the save select screen
 - ensure you are using Genesis Plus GX and not another core (e.g. BlastEm will not work)
-- try launching the client in Administrator Mode (right click on `randstalker_archipelago.exe`, then `Run as administrator`)
+- try launching the client in Administrator Mode (right-click on `randstalker_archipelago.exe`, then 
+ `Run as administrator`)
 - if all else fails, try using one of those specific emulator versions:
   - RetroArch 1.9.0 and Genesis Plus GX 1.7.4
   - Bizhawk 2.9.1 (x64)
 
 ### Play the game
 
-If all indicators are green and show "Connected", you're good to go! Just play the game and enjoy the wonders of 
-isometric perspective. 
+If all indicators are green and show "Connected," you're good to go! Play the game and enjoy the wonders of isometric 
+perspective. 
 
 The client is packaged with both an **automatic item tracker** and an **automatic map tracker** for your comfort. 
 
