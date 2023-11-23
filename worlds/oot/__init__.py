@@ -1220,6 +1220,8 @@ class OOTWorld(World):
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         required_trials_str = ", ".join(t for t in self.skipped_trials if not self.skipped_trials[t])
+        if required_trials_str == "":
+            required_trials_str = "None"
         spoiler_handle.write(f"\n\nTrials ({self.multiworld.get_player_name(self.player)}): {required_trials_str}\n")
 
         if self.shopsanity != 'off':
