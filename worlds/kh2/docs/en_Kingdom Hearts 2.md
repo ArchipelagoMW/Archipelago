@@ -77,7 +77,7 @@ The list of possible locations that can contain a bounty:
 - Lingering Will
 - Starry Hill
 - Transport to Remembrance
-- Each of the Goddess of Fate and Paradox Cups
+- Godess of Fate cup and Hades Paradox cup
 
 <h2 style="text-transform:none";>Quality of life:</h2>
 
