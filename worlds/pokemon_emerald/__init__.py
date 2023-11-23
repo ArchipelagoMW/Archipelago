@@ -677,7 +677,7 @@ class PokemonEmeraldWorld(World):
                     level_up_movepool = list({
                         move.move_id
                         for move in new_species.learnset
-                        if move.level <= pokemon.level
+                        if move.move_id != 0 and move.level <= pokemon.level
                     })
 
                     new_moves = (
