@@ -13,8 +13,8 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
-from settings import get_settings
 from Utils import __version__, output_path, version_tuple
+from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
 
@@ -101,7 +101,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     del item_digits, location_digits, item_count, location_count
 
-    AutoWorld.call_stage(world, "assert_generate")
+    # This assertion method should not be necessary to run if we are not outputting any multidata.
+    if not args.skip_output:
+        AutoWorld.call_stage(world, "assert_generate")
 
     AutoWorld.call_all(world, "generate_early")
 
@@ -287,11 +289,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         logger.info("Progression balancing skipped.")
 
-    logger.info(f'Beginning output...')
-
     # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
     world.random.passthrough = False
 
+    if args.skip_output:
+        logger.info('Done. Skipped output/spoiler generation. Total Time: %s', time.perf_counter() - start)
+        return world
+
+    logger.info(f'Beginning output...')
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()
