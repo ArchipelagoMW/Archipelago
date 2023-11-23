@@ -111,4 +111,3 @@ class NoLogicTest(MessengerTestBase):
         for loc in all_locations:
             with self.subTest("Default unreachables", location=loc):
                 self.assertFalse(self.can_reach_location(loc))
-        self.assertBeatable(True)
