@@ -1,11 +1,10 @@
 from test.TestBase import WorldTestBase
 from ... import ALTTPWorld
-from ...Items import ItemFactory
+from ...Items import item_factory
 
 
 class PyramidTestBase(WorldTestBase):
     game = "A Link to the Past"
-    world: ALTTPWorld
 
 
 class OpenPyramidTest(PyramidTestBase):
@@ -34,6 +33,6 @@ class GoalPyramidTest(PyramidTestBase):
         self.assertFalse(self.can_reach_entrance("Pyramid Hole"))
         self.collect_by_name(["Hammer", "Progressive Glove", "Moon Pearl"])
         self.assertFalse(self.can_reach_entrance("Pyramid Hole"))
-        self.collect(ItemFactory("Beat Agahnim 2", self.multiworld.worlds[1]))
+        self.collect(item_factory("Beat Agahnim 2", self.multiworld.worlds[1]))
         self.assertTrue(self.can_reach_entrance("Pyramid Hole"))
 

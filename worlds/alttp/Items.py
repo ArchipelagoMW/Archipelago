@@ -1,8 +1,7 @@
 import typing
 
 from BaseClasses import ItemClassification as IC
-if typing.TYPE_CHECKING:
-    from . import ALTTPWorld
+from worlds.AutoWorld import World
 
 
 def GetBeemizerItem(world, player: int, item):
@@ -22,8 +21,7 @@ def GetBeemizerItem(world, player: int, item):
         return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)
 
 
-# should be replaced with direct world.create_item(item) call in the future
-def ItemFactory(items: typing.Union[str, typing.Iterable[str]], world: "ALTTPWorld"):
+def item_factory(items: typing.Union[str, typing.Iterable[str]], world: World):
     ret = []
     singleton = False
     if isinstance(items, str):
