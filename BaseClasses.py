@@ -113,6 +113,11 @@ class MultiWorld():
             for region in regions:
                 self.region_cache[region.player][region.name] = region
 
+        def add_group(self, new_id: int):
+            self.region_cache[new_id] = {}
+            self.entrance_cache[new_id] = {}
+            self.location_cache[new_id] = {}
+
         def __iter__(self) -> Iterator[Region]:
             for regions in self.region_cache.values():
                 yield from regions.values()
@@ -220,6 +225,7 @@ class MultiWorld():
                 return group_id, group
         new_id: int = self.players + len(self.groups) + 1
 
+        self.regions.add_group(new_id)
         self.game[new_id] = game
         self.player_types[new_id] = NetUtils.SlotType.group
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
@@ -617,7 +623,7 @@ class CollectionState():
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
 
     def __init__(self, parent: MultiWorld):
-        self.prog_items = {player: Counter() for player in parent.player_ids}
+        self.prog_items = {player: Counter() for player in parent.get_all_ids()}
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
         self.blocked_connections = {player: set() for player in parent.get_all_ids()}
@@ -711,11 +717,11 @@ class CollectionState():
     def has(self, item: str, player: int, count: int = 1) -> bool:
         return self.prog_items[player][item] >= count
 
-    def has_all(self, items: Set[str], player: int) -> bool:
+    def has_all(self, items: Iterable[str], player: int) -> bool:
         """Returns True if each item name of items is in state at least once."""
         return all(self.prog_items[player][item] for item in items)
 
-    def has_any(self, items: Set[str], player: int) -> bool:
+    def has_any(self, items: Iterable[str], player: int) -> bool:
         """Returns True if at least one item name of items is in state at least once."""
         return any(self.prog_items[player][item] for item in items)
 
@@ -724,16 +730,18 @@ class CollectionState():
 
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
         found: int = 0
+        player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += self.prog_items[player][item_name]
+            found += player_prog_items[item_name]
             if found >= count:
                 return True
         return False
 
     def count_group(self, item_name_group: str, player: int) -> int:
         found: int = 0
+        player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += self.prog_items[player][item_name]
+            found += player_prog_items[item_name]
         return found
 
     def item_count(self, item: str, player: int) -> int:
