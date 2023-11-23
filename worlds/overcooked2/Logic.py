@@ -18,7 +18,7 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
         return state.has(level_name, player)
 
     # Must have enough stars to purchase level
-    star_count = state.item_count("Star", player) + state.item_count("Bonus Star", player)
+    star_count = state.count("Star", player) + state.count("Bonus Star", player)
     if star_count < required_star_count:
         return False
 
@@ -64,7 +64,7 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
 
     total: float = 0.0
     for (item_name, weight) in additive_reqs:
-        for _ in range(0, state.item_count(item_name, player)):
+        for _ in range(0, state.count(item_name, player)):
             total += weight
             if total >= 0.99:  # be nice to rounding errors :)
                 return True

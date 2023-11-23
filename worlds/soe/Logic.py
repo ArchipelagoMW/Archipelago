@@ -18,7 +18,7 @@ items = [item for item in filter(lambda item: item.progression, pyevermizer.get_
 
 class LogicProtocol(Protocol):
     def has(self, name: str, player: int) -> bool: ...
-    def item_count(self, name: str, player: int) -> int: ...
+    def count(self, name: str, player: int) -> int: ...
     def soe_has(self, progress: int, world: MultiWorld, player: int, count: int) -> bool: ...
     def _soe_count(self, progress: int, world: MultiWorld, player: int, max_count: int) -> int: ...
 
@@ -35,7 +35,7 @@ class SecretOfEvermoreLogic(LogicMixin):
             for pvd in item.provides:
                 if pvd[1] == progress:
                     if self.has(item.name, player):
-                        n += self.item_count(item.name, player) * pvd[0]
+                        n += self.count(item.name, player) * pvd[0]
                         if n >= max_count > 0:
                             return n
         for rule in rules:

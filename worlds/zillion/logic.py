@@ -38,7 +38,7 @@ def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
 
     ((item_name, count), (item_name, count), ...)
     """
-    return tuple((item_name, cs.item_count(item_name, p)) for item_name in item_name_to_id)
+    return tuple((item_name, cs.count(item_name, p)) for item_name in item_name_to_id)
 
 
 LogicCacheType = Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]]
