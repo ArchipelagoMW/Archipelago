@@ -859,9 +859,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         zerg_items = current_items[SC2Race.ZERG]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, current_items)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
-        await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {}".format(
+        await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {} {}".format(
             self.last_kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
-            zerg_items[3], zerg_items[4], zerg_items[5]
+            zerg_items[3], zerg_items[4], zerg_items[5], zerg_items[6]
         ))
 
     async def updateProtossTech(self, current_items):
