@@ -1,7 +1,7 @@
 """
 Archipelago init file for Lingo
 """
-from BaseClasses import Item, Tutorial
+from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .items import ALL_ITEM_TABLE, LingoItem
 from .locations import ALL_LOCATION_TABLE
@@ -90,7 +90,16 @@ class LingoWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = ALL_ITEM_TABLE[name]
-        return LingoItem(name, item.classification, item.code, self.player)
+
+        classification = item.classification
+        if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0\
+                and len(item.door_ids) == 0 and all(painting_id not in self.player_logic.PAINTING_MAPPING
+                                                    for painting_id in item.painting_ids):
+            # If this is a "door" that just moves one or more paintings, and painting shuffle is on and those paintings
+            # go nowhere, then this item should not be progression.
+            classification = ItemClassification.filler
+
+        return LingoItem(name, classification, item.code, self.player)
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)

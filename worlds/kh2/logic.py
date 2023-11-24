@@ -63,7 +63,7 @@ class KH2Logic(LogicMixin):
                      ItemName.MembershipCard,
                      ItemName.IceCream, ItemName.WaytotheDawn,
                      ItemName.IdentityDisk, ItemName.NamineSketches}:
-            visit += self.item_count(item, player)
+            visit += self.count(item, player)
         return visit >= amount
 
     def kh_three_proof_unlocked(self, player):
