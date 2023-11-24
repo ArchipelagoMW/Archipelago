@@ -1,4 +1,4 @@
-from Options import Toggle, Choice, Range, SpecialRange, TextChoice, DeathLink
+from Options import Toggle, Choice, Range, NamedRange, TextChoice, DeathLink
 
 
 class GameVersion(Choice):
@@ -285,7 +285,7 @@ class AllPokemonSeen(Toggle):
     display_name = "All Pokemon Seen"
 
 
-class DexSanity(SpecialRange):
+class DexSanity(NamedRange):
     """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify a percentage of Pokemon to
     have checks added. If Accessibility is set to locations, this will be the percentage of all logically reachable
     Pokemon that will get a location check added to it. With items or minimal Accessibility, it will be the percentage
@@ -412,7 +412,7 @@ class LevelScaling(Choice):
     default = 1
 
 
-class ExpModifier(SpecialRange):
+class ExpModifier(NamedRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
     default = 16
@@ -607,8 +607,8 @@ class RandomizeTMMoves(Toggle):
     display_name = "Randomize TM Moves"
 
 
-class TMHMCompatibility(SpecialRange):
-    range_start = -1
+class TMHMCompatibility(NamedRange):
+    range_start = 0
     range_end = 100
     special_range_names = {
         "vanilla": -1,
@@ -675,12 +675,12 @@ class RandomizeMoveTypes(Toggle):
     default = 0
 
 
-class SecondaryTypeChance(SpecialRange):
+class SecondaryTypeChance(NamedRange):
     """If randomize_pokemon_types is on, this is the chance each Pokemon will have a secondary type. If follow_evolutions
     is selected, it is the chance a second type will be added at each evolution stage. vanilla will give secondary types
     to Pokemon that normally have a secondary type."""
     display_name = "Secondary Type Chance"
-    range_start = -1
+    range_start = 0
     range_end = 100
     default = -1
     special_range_names = {

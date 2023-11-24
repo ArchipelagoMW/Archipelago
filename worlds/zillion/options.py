@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Dict, Tuple
 from typing_extensions import TypeGuard  # remove when Python >= 3.10
 
-from Options import DefaultOnToggle, PerGameCommonOptions, Range, SpecialRange, Toggle, Choice
+from Options import DefaultOnToggle, NamedRange, PerGameCommonOptions, Range, Toggle, Choice
 
 from zilliandomizer.options import \
     Options as ZzOptions, char_to_gun, char_to_jump, ID, \
@@ -11,7 +11,7 @@ from zilliandomizer.options import \
 from zilliandomizer.options.parsing import validate as zz_validate
 
 
-class ZillionContinues(SpecialRange):
+class ZillionContinues(NamedRange):
     """
     number of continues before game over
 
@@ -218,7 +218,7 @@ class ZillionSkill(Range):
     default = 2
 
 
-class ZillionStartingCards(SpecialRange):
+class ZillionStartingCards(NamedRange):
     """
     how many ID Cards to start the game with
 
