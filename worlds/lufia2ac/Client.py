@@ -113,7 +113,7 @@ class L2ACSNIClient(SNIClient):
                         }],
                     }])
 
-            total_blue_chests_checked: int = min(sum(blue_chests_checked.values()), BlueChestCount.range_end)
+            total_blue_chests_checked: int = min(sum(blue_chests_checked.values()), BlueChestCount.overall_max)
             snes_buffered_write(ctx, L2AC_TX_ADDR + 8, total_blue_chests_checked.to_bytes(2, "little"))
             location_ids: List[int] = [locations_start_id + i for i in range(total_blue_chests_checked)]
 
