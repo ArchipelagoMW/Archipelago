@@ -54,6 +54,7 @@ Currently, the following games are supported:
 * Lingo
 * Pokémon Emerald
 * DOOM II
+* Shivers
 
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
