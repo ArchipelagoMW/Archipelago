@@ -43,7 +43,7 @@ def connect_painting(regions: Dict[str, Region], warp_enter: str, warp_exit: str
     source_region = regions[source_painting.room]
     source_region.connect(
         target_region,
-        f"{source_painting.room} to {target_painting.room} (Painting)",
+        f"{source_painting.room} to {target_painting.room} ({source_painting.id} Painting)",
         lambda state: lingo_can_use_entrance(state, target_painting.room, source_painting.required_door, world.player,
                                              player_logic))
 
@@ -67,10 +67,17 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
             if entrance.painting and painting_shuffle:
                 continue
 
+            entrance_name = f"{entrance.room} to {room.name}"
+            if entrance.door is not None:
+                if entrance.door.room is not None:
+                    entrance_name += f" (through {entrance.door.room} - {entrance.door.door})"
+                else:
+                    entrance_name += f" (through {room.name} - {entrance.door.door})"
+
             regions[entrance.room].connect(
-                regions[room.name],
-                f"{entrance.room} to {room.name}",
-                lambda state, r=room, e=entrance: lingo_can_use_entrance(state, r.name, e.door, world.player, player_logic))
+                regions[room.name], entrance_name,
+                lambda state, r=room, e=entrance: lingo_can_use_entrance(state, r.name, e.door, world.player,
+                                                                         player_logic))
 
     handle_pilgrim_room(regions, world, player_logic)
 
