@@ -387,8 +387,9 @@ def make_area_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]
 
     for area in potential_areas:
         regions = [
-            world.multiworld.get_region(region, world.player)
+            world.regio.created_regions[region]
             for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
+            if region in world.regio.created_regions
         ]
         items = [location.item for region in regions for location in region.get_locations() if location.address]
 
