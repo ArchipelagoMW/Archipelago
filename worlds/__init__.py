@@ -1,43 +1,40 @@
 import importlib
 import os
 import sys
-import typing
 import warnings
 import zipimport
+from typing import Dict, List, NamedTuple, TypedDict
 
-from Utils import user_path, local_path
+from Utils import local_path, user_path
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else None
 
-__all__ = (
-    "lookup_any_item_id_to_name",
-    "lookup_any_location_id_to_name",
+__all__ = {
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
     "local_folder",
     "user_folder",
-)
+    "GamesPackage",
+    "DataPackage",
+}
 
 
-class GamesData(typing.TypedDict):
-    item_name_groups: typing.Dict[str, typing.List[str]]
-    item_name_to_id: typing.Dict[str, int]
-    location_name_groups: typing.Dict[str, typing.List[str]]
-    location_name_to_id: typing.Dict[str, int]
-    version: int
-
-
-class GamesPackage(GamesData, total=False):
+class GamesPackage(TypedDict, total=False):
+    item_name_groups: Dict[str, List[str]]
+    item_name_to_id: Dict[str, int]
+    location_name_groups: Dict[str, List[str]]
+    location_name_to_id: Dict[str, int]
     checksum: str
+    version: int  # TODO: Remove support after per game data packages API change.
 
 
-class DataPackage(typing.TypedDict):
-    games: typing.Dict[str, GamesPackage]
+class DataPackage(TypedDict):
+    games: Dict[str, GamesPackage]
 
 
-class WorldSource(typing.NamedTuple):
+class WorldSource(NamedTuple):
     path: str  # typically relative path from this module
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
@@ -88,7 +85,7 @@ class WorldSource(typing.NamedTuple):
 
 
 # find potential world containers, currently folders and zip-importable .apworld's
-world_sources: typing.List[WorldSource] = []
+world_sources: List[WorldSource] = []
 for folder in (folder for folder in (user_folder, local_folder) if folder):
     relative = folder == local_folder
     for entry in os.scandir(folder):
@@ -105,25 +102,9 @@ world_sources.sort()
 for world_source in world_sources:
     world_source.load()
 
-lookup_any_item_id_to_name = {}
-lookup_any_location_id_to_name = {}
-games: typing.Dict[str, GamesPackage] = {}
-
-from .AutoWorld import AutoWorldRegister  # noqa: E402
-
 # Build the data package for each game.
-for world_name, world in AutoWorldRegister.world_types.items():
-    games[world_name] = world.get_data_package_data()
-    lookup_any_item_id_to_name.update(world.item_id_to_name)
-    lookup_any_location_id_to_name.update(world.location_id_to_name)
+from .AutoWorld import AutoWorldRegister
 
 network_data_package: DataPackage = {
-    "games": games,
+    "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
-
-# Set entire datapackage to version 0 if any of them are set to 0
-if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
-    import logging
-
-    logging.warning(f"Datapackage is in custom mode. Custom Worlds: "
-                    f"{[world for world in AutoWorldRegister.world_types.values() if not world.data_version]}")
