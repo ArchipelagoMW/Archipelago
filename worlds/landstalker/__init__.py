@@ -32,7 +32,6 @@ class LandstalkerWorld(World):
     game = "Landstalker - The Treasures of King Nole"
     options_dataclass = LandstalkerOptions
     options: LandstalkerOptions
-    topology_present = True
     required_client_version = (0, 4, 4)
     web = LandstalkerWeb()
 
