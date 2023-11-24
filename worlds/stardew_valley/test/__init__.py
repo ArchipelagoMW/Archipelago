@@ -7,9 +7,9 @@ from BaseClasses import MultiWorld, CollectionState
 from Utils import cache_argsless
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
+from worlds.AutoWorld import call_all
 from .. import StardewValleyWorld
 from ..mods.mod_data import all_mods
-from worlds.AutoWorld import call_all
 from ..options import Cropsanity, SkillProgression, SpecialOrderLocations, Friendsanity, NumberOfLuckBuffs, SeasonRandomization, ToolProgression, \
     ElevatorProgression, Museumsanity, BackpackProgression, BuildingProgression, ArcadeMachineLocations, HelpWantedLocations, Fishsanity, NumberOfMovementBuffs, \
     BundleRandomization, BundlePrice, FestivalLocations, FriendsanityHeartSize, ExcludeGingerIsland, TrapItems, Goal, Mods, Monstersanity, Shipsanity, \
@@ -151,6 +151,8 @@ class SVTestCase(unittest.TestCase):
     skip_long_tests: bool = True
     """Set to False to run tests that take long"""
     skip_performance_tests: bool = True
+    """Set to False to not call the fill in the tests"""
+    skip_fill: bool = True
 
     options = get_minsanity_options()
 
@@ -162,6 +164,10 @@ class SVTestCase(unittest.TestCase):
         performance_tests_key = "performance"
         if performance_tests_key in os.environ:
             self.skip_performance_tests = not bool(os.environ[performance_tests_key])
+
+        fill_tests_key = "fill"
+        if fill_tests_key in os.environ:
+            self.skip_fill = not bool(os.environ[fill_tests_key])
 
 
 class SVTestBase(WorldTestBase, SVTestCase):
@@ -235,7 +241,7 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
     for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
         options = {}
         for i in range(1, len(test_options) + 1):
-            player_options = test_options[i-1]
+            player_options = test_options[i - 1]
             value = option(player_options[name]) if name in player_options else option.from_any(option.default)
             options.update({i: value})
         setattr(args, name, options)

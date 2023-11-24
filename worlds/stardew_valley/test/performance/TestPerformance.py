@@ -1,8 +1,9 @@
 import time
 
 from BaseClasses import get_seed
-from .. import SVTestCase, minimal_locations_maximal_items, allsanity_options_without_mods, \
-    allsanity_options_with_mods, setup_multiworld, default_options
+from Fill import distribute_items_restrictive, balance_multiworld_progression
+from worlds import AutoWorld
+from .. import SVTestCase, minimal_locations_maximal_items, allsanity_options_without_mods, setup_multiworld, default_options
 
 number_generations = 25
 acceptable_deviation = 4
@@ -17,7 +18,14 @@ def performance_test_multiworld(tester, options, acceptable_time_per_player):
         seed = get_seed()
         with tester.subTest(f"Seed: {seed}"):
             time_before = time.time()
+
+            print(f"Starting world setup")
             multiworld = setup_multiworld(options, seed)
+            distribute_items_restrictive(multiworld)
+            AutoWorld.call_all(multiworld, 'post_fill')
+            if multiworld.players > 1:
+                balance_multiworld_progression(multiworld)
+
             time_after = time.time()
             elapsed_time = time_after - time_before
             total_time += elapsed_time
@@ -158,7 +166,6 @@ class TestAllsanityWithoutMods(SVTestCase):
         number_players = 10
         multiworld_options = [self.options] * number_players
         performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
-
 
 # class TestAllsanityWithMods(SVTestCase):
 #
