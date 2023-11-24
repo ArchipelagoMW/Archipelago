@@ -1,10 +1,13 @@
 """
 Defines constants for different types of locations in the game
 """
+from typing import TYPE_CHECKING
 
-from .Options import is_option_enabled, get_option_value
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
 
 
 ID_START = 158000
@@ -19,22 +22,29 @@ class StaticWitnessLocations:
         "Tutorial Front Left",
         "Tutorial Back Left",
         "Tutorial Back Right",
+        "Tutorial Patio Floor",
         "Tutorial Gate Open",
 
         "Outside Tutorial Vault Box",
         "Outside Tutorial Discard",
         "Outside Tutorial Shed Row 5",
         "Outside Tutorial Tree Row 9",
+        "Outside Tutorial Outpost Entry Panel",
+        "Outside Tutorial Outpost Exit Panel",
 
         "Glass Factory Discard",
         "Glass Factory Back Wall 5",
         "Glass Factory Front 3",
         "Glass Factory Melting 3",
 
+        "Symmetry Island Lower Panel",
         "Symmetry Island Right 5",
         "Symmetry Island Back 6",
         "Symmetry Island Left 7",
+        "Symmetry Island Upper Panel",
         "Symmetry Island Scenery Outlines 5",
+        "Symmetry Island Laser Yellow 3",
+        "Symmetry Island Laser Blue 3",
         "Symmetry Island Laser Panel",
 
         "Orchard Apple Tree 5",
@@ -49,9 +59,15 @@ class StaticWitnessLocations:
         "Desert Final Bent 3",
         "Desert Laser Panel",
 
+        "Quarry Entry 1 Panel",
+        "Quarry Entry 2 Panel",
+        "Quarry Stoneworks Entry Left Panel",
+        "Quarry Stoneworks Entry Right Panel",
         "Quarry Stoneworks Lower Row 6",
         "Quarry Stoneworks Upper Row 8",
+        "Quarry Stoneworks Control Room Left",
         "Quarry Stoneworks Control Room Right",
+        "Quarry Stoneworks Stairs Panel",
         "Quarry Boathouse Intro Right",
         "Quarry Boathouse Intro Left",
         "Quarry Boathouse Front Row 5",
@@ -84,15 +100,32 @@ class StaticWitnessLocations:
         "Monastery Inside 4",
         "Monastery Laser Panel",
 
+        "Town Cargo Box Entry Panel",
         "Town Cargo Box Discard",
         "Town Tall Hexagonal",
+        "Town Church Entry Panel",
         "Town Church Lattice",
+        "Town Maze Panel",
         "Town Rooftop Discard",
         "Town Red Rooftop 5",
         "Town Wooden Roof Lower Row 5",
         "Town Wooden Rooftop",
+        "Town Windmill Entry Panel",
+        "Town RGB House Entry Panel",
         "Town Laser Panel",
 
+        "Town RGB Room Left",
+        "Town RGB Room Right",
+        "Town Sound Room Right",
+
+        "Windmill Theater Entry Panel",
+        "Theater Exit Left Panel",
+        "Theater Exit Right Panel",
+        "Theater Tutorial Video",
+        "Theater Desert Video",
+        "Theater Jungle Video",
+        "Theater Shipwreck Video",
+        "Theater Mountain Video",
         "Theater Discard",
 
         "Jungle Discard",
@@ -102,24 +135,33 @@ class StaticWitnessLocations:
         "Jungle Laser Panel",
 
         "River Vault Box",
+        "River Monastery Garden Shortcut Panel",
 
+        "Bunker Entry Panel",
         "Bunker Intro Left 5",
         "Bunker Intro Back 4",
         "Bunker Glass Room 3",
         "Bunker UV Room 2",
         "Bunker Laser Panel",
 
+        "Swamp Entry Panel",
         "Swamp Intro Front 6",
         "Swamp Intro Back 8",
         "Swamp Between Bridges Near Row 4",
         "Swamp Cyan Underwater 5",
         "Swamp Platform Row 4",
+        "Swamp Platform Shortcut Right Panel",
         "Swamp Between Bridges Far Row 4",
         "Swamp Red Underwater 4",
+        "Swamp Purple Underwater",
         "Swamp Beyond Rotating Bridge 4",
         "Swamp Blue Underwater 5",
         "Swamp Laser Panel",
+        "Swamp Laser Shortcut Right Panel",
 
+        "Treehouse First Door Panel",
+        "Treehouse Second Door Panel",
+        "Treehouse Third Door Panel",
         "Treehouse Yellow Bridge 9",
         "Treehouse First Purple Bridge 5",
         "Treehouse Second Purple Bridge 7",
@@ -129,22 +171,11 @@ class StaticWitnessLocations:
         "Treehouse Laser Discard",
         "Treehouse Right Orange Bridge 12",
         "Treehouse Laser Panel",
+        "Treehouse Drawbridge Panel",
 
         "Mountainside Discard",
         "Mountainside Vault Box",
-
         "Mountaintop River Shape",
-        "Tutorial Patio Floor",
-        "Quarry Stoneworks Control Room Left",
-        "Theater Tutorial Video",
-        "Theater Desert Video",
-        "Theater Jungle Video",
-        "Theater Shipwreck Video",
-        "Theater Mountain Video",
-        "Town RGB Room Left",
-        "Town RGB Room Right",
-        "Town Sound Room Right",
-        "Swamp Purple Underwater",
 
         "First Hallway EP",
         "Tutorial Cloud EP",
@@ -316,6 +347,77 @@ class StaticWitnessLocations:
         "Town Obelisk Side 4",
         "Town Obelisk Side 5",
         "Town Obelisk Side 6",
+
+        "Caves Mountain Shortcut Panel",
+        "Caves Swamp Shortcut Panel",
+
+        "Caves Blue Tunnel Right First 4",
+        "Caves Blue Tunnel Left First 1",
+        "Caves Blue Tunnel Left Second 5",
+        "Caves Blue Tunnel Right Second 5",
+        "Caves Blue Tunnel Right Third 1",
+        "Caves Blue Tunnel Left Fourth 1",
+        "Caves Blue Tunnel Left Third 1",
+
+        "Caves First Floor Middle",
+        "Caves First Floor Right",
+        "Caves First Floor Left",
+        "Caves First Floor Grounded",
+        "Caves Lone Pillar",
+        "Caves First Wooden Beam",
+        "Caves Second Wooden Beam",
+        "Caves Third Wooden Beam",
+        "Caves Fourth Wooden Beam",
+        "Caves Right Upstairs Left Row 8",
+        "Caves Right Upstairs Right Row 3",
+        "Caves Left Upstairs Single",
+        "Caves Left Upstairs Left Row 5",
+
+        "Caves Challenge Entry Panel",
+        "Challenge Tunnels Entry Panel",
+
+        "Tunnels Vault Box",
+        "Theater Challenge Video",
+
+        "Tunnels Town Shortcut Panel",
+
+        "Caves Skylight EP",
+        "Challenge Water EP",
+        "Tunnels Theater Flowers EP",
+        "Tutorial Gate EP",
+
+        "Mountaintop Mountain Entry Panel",
+
+        "Mountain Floor 1 Light Bridge Controller",
+
+        "Mountain Floor 1 Right Row 5",
+        "Mountain Floor 1 Left Row 7",
+        "Mountain Floor 1 Back Row 3",
+        "Mountain Floor 1 Trash Pillar 2",
+        "Mountain Floor 2 Near Row 5",
+        "Mountain Floor 2 Far Row 6",
+
+        "Mountain Floor 2 Light Bridge Controller Near",
+        "Mountain Floor 2 Light Bridge Controller Far",
+
+        "Mountain Bottom Floor Yellow Bridge EP",
+        "Mountain Bottom Floor Blue Bridge EP",
+        "Mountain Floor 2 Pink Bridge EP",
+
+        "Mountain Floor 2 Elevator Discard",
+        "Mountain Bottom Floor Giant Puzzle",
+
+        "Mountain Bottom Floor Final Room Entry Left",
+        "Mountain Bottom Floor Final Room Entry Right",
+
+        "Mountain Bottom Floor Caves Entry Panel",
+
+        "Mountain Final Room Left Pillar 4",
+        "Mountain Final Room Right Pillar 4",
+
+        "Challenge Vault Box",
+        "Theater Challenge Video",
+        "Mountain Bottom Floor Discard",
     }
 
     OBELISK_SIDES = {
@@ -355,94 +457,30 @@ class StaticWitnessLocations:
         "Town Obelisk Side 6",
     }
 
-    CAVES_LOCATIONS = {
-        "Caves Blue Tunnel Right First 4",
-        "Caves Blue Tunnel Left First 1",
-        "Caves Blue Tunnel Left Second 5",
-        "Caves Blue Tunnel Right Second 5",
-        "Caves Blue Tunnel Right Third 1",
-        "Caves Blue Tunnel Left Fourth 1",
-        "Caves Blue Tunnel Left Third 1",
-
-        "Caves First Floor Middle",
-        "Caves First Floor Right",
-        "Caves First Floor Left",
-        "Caves First Floor Grounded",
-        "Caves Lone Pillar",
-        "Caves First Wooden Beam",
-        "Caves Second Wooden Beam",
-        "Caves Third Wooden Beam",
-        "Caves Fourth Wooden Beam",
-        "Caves Right Upstairs Left Row 8",
-        "Caves Right Upstairs Right Row 3",
-        "Caves Left Upstairs Single",
-        "Caves Left Upstairs Left Row 5",
-
-        "Tunnels Vault Box",
-        "Theater Challenge Video",
-
-        "Caves Skylight EP",
-        "Challenge Water EP",
-        "Tunnels Theater Flowers EP",
-        "Tutorial Gate EP",
-    }
-
-    MOUNTAIN_UNREACHABLE_FROM_BEHIND = {
-        "Mountaintop Trap Door Triple Exit",
-
-        "Mountain Floor 1 Right Row 5",
-        "Mountain Floor 1 Left Row 7",
-        "Mountain Floor 1 Back Row 3",
-        "Mountain Floor 1 Trash Pillar 2",
-        "Mountain Floor 2 Near Row 5",
-        "Mountain Floor 2 Far Row 6",
-
-        "Mountain Floor 2 Light Bridge Controller Near",
-        "Mountain Floor 2 Light Bridge Controller Far",
-
-        "Mountain Bottom Floor Yellow Bridge EP",
-        "Mountain Bottom Floor Blue Bridge EP",
-        "Mountain Floor 2 Pink Bridge EP",
-    }
-
-    MOUNTAIN_REACHABLE_FROM_BEHIND = {
-        "Mountain Floor 2 Elevator Discard",
-        "Mountain Bottom Floor Giant Puzzle",
-
-        "Mountain Final Room Left Pillar 4",
-        "Mountain Final Room Right Pillar 4",
-    }
-
-    MOUNTAIN_EXTRAS = {
-        "Challenge Vault Box",
-        "Theater Challenge Video",
-        "Mountain Bottom Floor Discard"
-    }
-
     ALL_LOCATIONS_TO_ID = dict()
 
     @staticmethod
-    def get_id(chex):
+    def get_id(chex: str):
         """
         Calculates the location ID for any given location
         """
 
-        return StaticWitnessLogic.CHECKS_BY_HEX[chex]["id"]
+        return StaticWitnessLogic.ENTITIES_BY_HEX[chex]["id"]
 
     @staticmethod
-    def get_event_name(panel_hex):
+    def get_event_name(panel_hex: str):
         """
         Returns the event name of any given panel.
         """
 
-        action = " Opened" if StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["panelType"] == "Door" else " Solved"
+        action = " Opened" if StaticWitnessLogic.ENTITIES_BY_HEX[panel_hex]["entityType"] == "Door" else " Solved"
 
-        return StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["checkName"] + action
+        return StaticWitnessLogic.ENTITIES_BY_HEX[panel_hex]["checkName"] + action
 
     def __init__(self):
         all_loc_to_id = {
             panel_obj["checkName"]: self.get_id(chex)
-            for chex, panel_obj in StaticWitnessLogic.CHECKS_BY_HEX.items()
+            for chex, panel_obj in StaticWitnessLogic.ENTITIES_BY_HEX.items()
             if panel_obj["id"]
         }
 
@@ -459,84 +497,44 @@ class WitnessPlayerLocations:
     Class that defines locations for a single player
     """
 
-    def __init__(self, world, player, player_logic: WitnessPlayerLogic):
+    def __init__(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic):
         """Defines locations AFTER logic changes due to options"""
 
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
         self.CHECK_LOCATIONS = StaticWitnessLocations.GENERAL_LOCATIONS.copy()
 
-        doors = get_option_value(world, player, "shuffle_doors") >= 2
-        earlyutm = is_option_enabled(world, player, "early_secret_area")
-        victory = get_option_value(world, player, "victory_condition")
-        mount_lasers = get_option_value(world, player, "mountain_lasers")
-        chal_lasers = get_option_value(world, player, "challenge_lasers")
-        # laser_shuffle = get_option_value(world, player, "shuffle_lasers")
-
-        postgame = set()
-        postgame = postgame | StaticWitnessLocations.CAVES_LOCATIONS
-        postgame = postgame | StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
-        postgame = postgame | StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
-        postgame = postgame | StaticWitnessLocations.MOUNTAIN_EXTRAS
-
-        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | postgame
-
-        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
-
-        if earlyutm or doors:  # in non-doors, there is no way to get symbol-locked by the final pillars (currently)
-            postgame -= StaticWitnessLocations.CAVES_LOCATIONS
-
-        if (doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers)):
-            postgame -= {"Challenge Vault Box", "Theater Challenge Video"}
-
-        if doors or mountain_enterable_from_top:
-            postgame -= StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
-
-        if mountain_enterable_from_top:
-            postgame -= StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
-
-        if (victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors):
-            postgame -= {"Mountain Bottom Floor Discard"}
-
-        if is_option_enabled(world, player, "shuffle_discarded_panels"):
+        if world.options.shuffle_discarded_panels:
             self.PANEL_TYPES_TO_SHUFFLE.add("Discard")
 
-        if is_option_enabled(world, player, "shuffle_vault_boxes"):
+        if world.options.shuffle_vault_boxes:
             self.PANEL_TYPES_TO_SHUFFLE.add("Vault")
 
-        if get_option_value(world, player, "shuffle_EPs") == 1:
+        if world.options.shuffle_EPs == 1:
             self.PANEL_TYPES_TO_SHUFFLE.add("EP")
-        elif get_option_value(world, player, "shuffle_EPs") == 2:
+        elif world.options.shuffle_EPs == 2:
             self.PANEL_TYPES_TO_SHUFFLE.add("Obelisk Side")
 
             for obelisk_loc in StaticWitnessLocations.OBELISK_SIDES:
-                obelisk_loc_hex = StaticWitnessLogic.CHECKS_BY_NAME[obelisk_loc]["checkHex"]
+                obelisk_loc_hex = StaticWitnessLogic.ENTITIES_BY_NAME[obelisk_loc]["entity_hex"]
                 if player_logic.REQUIREMENTS_BY_HEX[obelisk_loc_hex] == frozenset({frozenset()}):
                     self.CHECK_LOCATIONS.discard(obelisk_loc)
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 
-        if not is_option_enabled(world, player, "shuffle_postgame"):
-            self.CHECK_LOCATIONS -= postgame
-
-        self.CHECK_LOCATIONS -= {
-            StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"]
-            for panel in player_logic.PRECOMPLETED_LOCATIONS
-        }
-
-        self.CHECK_LOCATIONS.discard(StaticWitnessLogic.CHECKS_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
+        self.CHECK_LOCATIONS.discard(StaticWitnessLogic.ENTITIES_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
-            StaticWitnessLogic.CHECKS_BY_HEX[check_hex]["checkName"]
-            for check_hex in player_logic.COMPLETELY_DISABLED_CHECKS
+            StaticWitnessLogic.ENTITIES_BY_HEX[entity_hex]["checkName"]
+            for entity_hex in player_logic.COMPLETELY_DISABLED_ENTITIES | player_logic.PRECOMPLETED_LOCATIONS
         }
 
         self.CHECK_PANELHEX_TO_ID = {
-            StaticWitnessLogic.CHECKS_BY_NAME[ch]["checkHex"]: StaticWitnessLocations.ALL_LOCATIONS_TO_ID[ch]
+            StaticWitnessLogic.ENTITIES_BY_NAME[ch]["entity_hex"]: StaticWitnessLocations.ALL_LOCATIONS_TO_ID[ch]
             for ch in self.CHECK_LOCATIONS
-            if StaticWitnessLogic.CHECKS_BY_NAME[ch]["panelType"] in self.PANEL_TYPES_TO_SHUFFLE
+            if StaticWitnessLogic.ENTITIES_BY_NAME[ch]["entityType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
 
-        dog_hex = StaticWitnessLogic.CHECKS_BY_NAME["Town Pet the Dog"]["checkHex"]
+        dog_hex = StaticWitnessLogic.ENTITIES_BY_NAME["Town Pet the Dog"]["entity_hex"]
         dog_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID["Town Pet the Dog"]
         self.CHECK_PANELHEX_TO_ID[dog_hex] = dog_id
 
@@ -554,9 +552,14 @@ class WitnessPlayerLocations:
         }
 
         check_dict = {
-            StaticWitnessLogic.CHECKS_BY_HEX[location]["checkName"]:
-            StaticWitnessLocations.get_id(StaticWitnessLogic.CHECKS_BY_HEX[location]["checkHex"])
+            StaticWitnessLogic.ENTITIES_BY_HEX[location]["checkName"]:
+            StaticWitnessLocations.get_id(StaticWitnessLogic.ENTITIES_BY_HEX[location]["entity_hex"])
             for location in self.CHECK_PANELHEX_TO_ID
         }
 
         self.CHECK_LOCATION_TABLE = {**self.EVENT_LOCATION_TABLE, **check_dict}
+
+    def add_location_late(self, entity_name: str):
+        entity_hex = StaticWitnessLogic.ENTITIES_BY_NAME[entity_name]["entity_hex"]
+        self.CHECK_LOCATION_TABLE[entity_hex] = entity_name
+        self.CHECK_PANELHEX_TO_ID[entity_hex] = StaticWitnessLocations.get_id(entity_hex)

@@ -1,23 +1,25 @@
-from typing import Dict, Union
-from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, Range, Choice
+from dataclasses import dataclass
+from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions
 
-
-# class HardMode(Toggle):
-#    "Play the randomizer in hardmode"
-#    display_name = "Hard Mode"
 
 class DisableNonRandomizedPuzzles(Toggle):
     """Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
-    The lasers for those areas will be activated as you solve optional puzzles throughout the island."""
+    The lasers for those areas will activate as you solve optional puzzles, such as Discarded Panels.
+    Additionally, the panels activating Monastery Laser and Jungle Popup Wall will be on from the start."""
     display_name = "Disable non randomized puzzles"
 
 
-class EarlySecretArea(Toggle):
-    """Opens the Mountainside shortcut to the Caves from the start.
-    (Otherwise known as "UTM", "Caves" or the "Challenge Area")"""
+class EarlyCaves(Choice):
+    """Adds an item that opens the Caves Shortcuts to Swamp and Mountain,
+    allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
+    You can either add this item to the pool to be found on one of your randomized checks,
+    or you can outright start with it and have immediate access to the Caves.
+    If you choose "add_to_pool" and you are already playing a remote Door Shuffle mode, this setting will do nothing."""
     display_name = "Early Caves"
+    option_off = 0
+    option_add_to_pool = 1
+    option_starting_inventory = 2
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -34,27 +36,41 @@ class ShuffleLasers(Toggle):
 
 
 class ShuffleDoors(Choice):
-    """If on, opening doors will require their respective "keys".
-    If set to "panels", those keys will unlock the panels on doors.
-    In "doors_simple" and "doors_complex", the doors will magically open by themselves upon receiving the key.
-    The last option, "max", is a combination of "doors_complex" and "panels"."""
+    """If on, opening doors, moving bridges etc. will require a "key".
+    If set to "panels", the panel on the door will be locked until receiving its corresponding key.
+    If set to "doors", the door will open immediately upon receiving its key. Door panels are added as location checks.
+    "Mixed" includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels"."""
     display_name = "Shuffle Doors"
-    option_none = 0
+    option_off = 0
     option_panels = 1
-    option_doors_simple = 2
-    option_doors_complex = 3
-    option_max = 4
+    option_doors = 2
+    option_mixed = 3
+
+
+class DoorGroupings(Choice):
+    """If set to "none", there will be one key for every door, resulting in up to 120 keys being added to the item pool.
+    If set to "regional", all doors in the same general region will open at once with a single key,
+    reducing the amount of door items and complexity."""
+    display_name = "Door Groupings"
+    option_off = 0
+    option_regional = 1
+
+
+class ShuffleBoat(DefaultOnToggle):
+    """If set, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat."""
+    display_name = "Shuffle Boat"
 
 
 class ShuffleDiscardedPanels(Toggle):
     """Add Discarded Panels into the location pool.
-    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off."""
+    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off - The main example
+    of this being the alternate activation triggers in disable_non_randomized."""
 
     display_name = "Shuffle Discarded Panels"
 
 
 class ShuffleVaultBoxes(Toggle):
-    """Vault Boxes will have items on them."""
+    """Add Vault Boxes to the location pool."""
     display_name = "Shuffle Vault Boxes"
 
 
@@ -132,6 +148,12 @@ class ChallengeLasers(Range):
     default = 11
 
 
+class ElevatorsComeToYou(Toggle):
+    """If true, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
+    This does actually affect logic as it allows unintended backwards / early access into these areas."""
+    display_name = "All Bridges & Elevators come to you"
+
+
 class TrapPercentage(Range):
     """Replaces junk items with traps, at the specified rate."""
     display_name = "Trap Percentage"
@@ -150,8 +172,8 @@ class PuzzleSkipAmount(Range):
 
 
 class HintAmount(Range):
-    """Adds hints to Audio Logs. Hints will have the same number of duplicates, as many as will fit. Remaining Audio
-    Logs will have junk hints."""
+    """Adds hints to Audio Logs. If set to a low amount, up to 2 additional duplicates of each hint will be added.
+    Remaining Audio Logs will have junk hints."""
     display_name = "Hints on Audio Logs"
     range_start = 0
     range_end = 49
@@ -164,38 +186,26 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
-the_witness_options: Dict[str, type] = {
-    "puzzle_randomization": PuzzleRandomization,
-    "shuffle_symbols": ShuffleSymbols,
-    "shuffle_doors": ShuffleDoors,
-    "shuffle_lasers": ShuffleLasers,
-    "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
-    "shuffle_discarded_panels": ShuffleDiscardedPanels,
-    "shuffle_vault_boxes": ShuffleVaultBoxes,
-    "shuffle_EPs": ShuffleEnvironmentalPuzzles,
-    "EP_difficulty": EnvironmentalPuzzlesDifficulty,
-    "shuffle_postgame": ShufflePostgame,
-    "victory_condition": VictoryCondition,
-    "mountain_lasers": MountainLasers,
-    "challenge_lasers": ChallengeLasers,
-    "early_secret_area": EarlySecretArea,
-    "trap_percentage": TrapPercentage,
-    "puzzle_skip_amount": PuzzleSkipAmount,
-    "hint_amount": HintAmount,
-    "death_link": DeathLink,
-}
-
-
-def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
-    return get_option_value(world, player, name) > 0
-
-
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[bool, int]:
-    option = getattr(world, name, None)
-
-    if option is None:
-        return 0
-
-    if issubclass(the_witness_options[name], Toggle) or issubclass(the_witness_options[name], DefaultOnToggle):
-        return bool(option[player].value)
-    return option[player].value
+@dataclass
+class TheWitnessOptions(PerGameCommonOptions):
+    puzzle_randomization: PuzzleRandomization
+    shuffle_symbols: ShuffleSymbols
+    shuffle_doors: ShuffleDoors
+    door_groupings: DoorGroupings
+    shuffle_boat: ShuffleBoat
+    shuffle_lasers: ShuffleLasers
+    disable_non_randomized_puzzles: DisableNonRandomizedPuzzles
+    shuffle_discarded_panels: ShuffleDiscardedPanels
+    shuffle_vault_boxes: ShuffleVaultBoxes
+    shuffle_EPs: ShuffleEnvironmentalPuzzles
+    EP_difficulty: EnvironmentalPuzzlesDifficulty
+    shuffle_postgame: ShufflePostgame
+    victory_condition: VictoryCondition
+    mountain_lasers: MountainLasers
+    challenge_lasers: ChallengeLasers
+    early_caves: EarlyCaves
+    elevators_come_to_you: ElevatorsComeToYou
+    trap_percentage: TrapPercentage
+    puzzle_skip_amount: PuzzleSkipAmount
+    hint_amount: HintAmount
+    death_link: DeathLink
