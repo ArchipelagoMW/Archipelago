@@ -15,7 +15,7 @@ from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
-from ..generic.Rules import add_item_rule
+from worlds.generic.Rules import add_item_rule
 
 
 class MMBN3Settings(settings.Group):
