@@ -273,11 +273,12 @@ class WitnessWorld(World):
             hint_type_amounts = build_weighted_int_list([area_weight / 100, location_weight / 100], hint_amount)
 
             generated_hints = []
-            generated_hints += make_direct_hints(self, hint_type_amounts[1], self.own_itempool)
 
-            already_hinted_locations = {hint[1] for hint in generated_hints if hint[1] != -1}
-
-            generated_hints += make_area_hints(self, hint_type_amounts[0], already_hinted_locations)
+            if hint_type_amounts[1]:
+                generated_hints += make_direct_hints(self, hint_type_amounts[1], self.own_itempool)
+            if hint_type_amounts[0]:
+                already_hinted_locations = {hint[1] for hint in generated_hints if hint[1] != -1}
+                generated_hints += make_area_hints(self, hint_type_amounts[0], already_hinted_locations)
 
             if len(generated_hints):
                 self.random.shuffle(audio_logs)
