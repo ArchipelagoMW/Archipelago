@@ -497,6 +497,9 @@ Laser - 0x17C65 (Laser) - 0x17CA4
 159137 - 0x03DAC (Facade Left Stairs EP) - True - True
 159138 - 0x03DAD (Facade Right Stairs EP) - True - True
 159140 - 0x03E01 (Grass Stairs EP) - True - True
+159120 - 0x03BE2 (Monastery Garden Left EP) - 0x03750 - True
+159121 - 0x03BE3 (Monastery Garden Right EP) - True - True
+159122 - 0x0A409 (Monastery Wall EP) - True - True
 
 Inside Monastery (Monastery):
 158213 - 0x09D9B (Shutters Control) - True - Dots
@@ -665,9 +668,6 @@ Door - 0x0CF2A (Monastery Garden Shortcut) - 0x17CAA
 158663 - 0x15ADD (Vault Panel) - True - Black/White Squares & Dots
 Door - 0x15287 (Vault Door) - 0x15ADD
 159110 - 0x03AC5 (Green Leaf Moss EP) - True - True
-159120 - 0x03BE2 (Monastery Garden Left EP) - 0x03750 - True
-159121 - 0x03BE3 (Monastery Garden Right EP) - True - True
-159122 - 0x0A409 (Monastery Wall EP) - True - True
 
 River Vault (Jungle):
 158664 - 0x03702 (Vault Box) - True - True
