@@ -83,7 +83,7 @@ class Level2Requirement(Range):
     display_name = "Level 2 Requirement"
     range_start = 1
     range_end = 800
-    default = 1
+    default = 223
 
 
 class EarlyColorHallways(Toggle):
