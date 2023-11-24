@@ -121,6 +121,7 @@ class BlueChestCount(Range):
     range_start = 10
     range_end = 100
     default = 25
+    overall_max = range_end + 7 + 6  # Have to account for capsule monster and party member items
 
 
 class Boss(RandomGroupsChoice):

@@ -130,7 +130,18 @@ async def _game_watcher(ctx: BizHawkClientContext):
                     logger.info("Waiting to connect to BizHawk...")
                     showed_connecting_message = True
 
-                if not await connect(ctx.bizhawk_ctx):
+                # Since a call to `connect` can take a while to return, this will cancel connecting
+                # if the user has decided to close the client.
+                connect_task = asyncio.create_task(connect(ctx.bizhawk_ctx), name="BizHawkConnect")
+                exit_task = asyncio.create_task(ctx.exit_event.wait(), name="ExitWait")
+                await asyncio.wait([connect_task, exit_task], return_when=asyncio.FIRST_COMPLETED)
+
+                if exit_task.done():
+                    connect_task.cancel()
+                    return
+
+                if not connect_task.result():
+                    # Failed to connect
                     continue
 
                 showed_no_handler_message = False
