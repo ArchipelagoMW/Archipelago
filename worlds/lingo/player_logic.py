@@ -116,17 +116,16 @@ class LingoPlayerLogic:
             raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
                             "be enough locations for all of the door items.")
 
-        # Create an event for every door, representing whether that door has been opened. Also create event items for
-        # doors that are event-only.
-        for room_name, room_data in DOORS_BY_ROOM.items():
-            for door_name, door_data in room_data.items():
-                if door_data.skip_item is False and door_data.event is False\
-                        and door_shuffle != ShuffleDoors.option_none:
-                    if door_data.group is not None and door_shuffle == ShuffleDoors.option_simple:
-                        # Grouped doors are handled differently if shuffle doors is on simple.
-                        self.set_door_item(room_name, door_name, door_data.group)
-                    else:
-                        self.handle_non_grouped_door(room_name, door_data, world)
+        # Create door items, where needed.
+        if door_shuffle != ShuffleDoors.option_none:
+            for room_name, room_data in DOORS_BY_ROOM.items():
+                for door_name, door_data in room_data.items():
+                    if door_data.skip_item is False and door_data.event is False:
+                        if door_data.group is not None and door_shuffle == ShuffleDoors.option_simple:
+                            # Grouped doors are handled differently if shuffle doors is on simple.
+                            self.set_door_item(room_name, door_name, door_data.group)
+                        else:
+                            self.handle_non_grouped_door(room_name, door_data, world)
 
         # Create events for each achievement panel, so that we can determine when THE MASTER is accessible.
         for room_name, room_data in PANELS_BY_ROOM.items():
