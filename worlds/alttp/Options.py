@@ -101,11 +101,10 @@ class map_shuffle(DungeonItem):
     display_name = "Map Shuffle"
 
 
-class key_drop_shuffle(DefaultOnToggle):
+class key_drop_shuffle(Toggle):
     """Shuffle keys found in pots and dropped from killed enemies,
     respects the small key and big key shuffle options."""
     display_name = "Key Drop Shuffle"
-    default = False
 
 
 class Crystals(Range):
