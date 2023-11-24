@@ -210,7 +210,11 @@ class WeightedSettings {
     let errorMessage = null;
 
     // User must choose a name for their file
-    if (!settings.name || settings.name.trim().length === 0 || settings.name.toLowerCase().trim() === 'player') {
+    if (
+      !settings.name ||
+      settings.name.toString().trim().length === 0 ||
+      settings.name.toString().toLowerCase().trim() === 'player'
+    ) {
       userMessage.innerText = 'You forgot to set your player name at the top of the page!';
       userMessage.classList.add('visible');
       userMessage.scrollIntoView({
@@ -256,7 +260,7 @@ class WeightedSettings {
 
         // Remove empty arrays
         else if (
-          ['exclude_locations', 'priority_locations', 'local_items', 
+          ['exclude_locations', 'priority_locations', 'local_items',
           'non_local_items', 'start_hints', 'start_location_hints'].includes(setting) &&
           settings[game][setting].length === 0
         ) {
