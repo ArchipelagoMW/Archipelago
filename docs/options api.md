@@ -144,13 +144,20 @@ A numeric option allowing a variety of integers including the endpoints. Has a d
 `range_end` of 1. Allows for negative values as well. This will always be an integer and has no methods for string
 comparisons.
 
-### SpecialRange
+### NamedRange
 Like range but also allows you to define a dictionary of special names the user can use to equate to a specific value.
+`special_range_names` can be used to
+- give descriptive names to certain values from within the range 
+- add option values above or below the regular range, to be associated with a special meaning 
+
 For example:
 ```python
+range_start = 1
+range_end = 99
 special_range_names: {
     "normal": 20,
     "extreme": 99,
+    "unlimited": -1,
 }
 ```
 
