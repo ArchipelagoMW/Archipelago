@@ -1,8 +1,10 @@
-import typing
+from typing import Dict, List, TYPE_CHECKING
 from collections.abc import Callable
 from BaseClasses import CollectionState
-from worlds.AutoWorld import World
 from worlds.generic.Rules import forbid_item
+
+if TYPE_CHECKING:
+    from . import ShiversWorld
 
 
 def water_capturable(state: CollectionState, player: int) -> bool:
@@ -70,7 +72,7 @@ def first_nine_ixupi_capturable(state: CollectionState, player: int) -> bool:
 
 
 def get_rules_lookup(player: int):
-    rules_lookup: typing.Dict[str, typing.List[Callable[[CollectionState], bool]]] = {
+    rules_lookup: Dict[str, List[Callable[[CollectionState], bool]]] = {
         "entrances": {
             "To Office Elevator From Underground Blue Tunnels": lambda state: state.has("Key for Office Elevator", player),
             "To Office Elevator From Office": lambda state: state.has("Key for Office Elevator", player),
@@ -165,12 +167,11 @@ def get_rules_lookup(player: int):
     return rules_lookup
 
 
-def set_rules(Shivers: World) -> None:
-    multiworld = Shivers.multiworld
-    player = Shivers.player
+def set_rules(world: "ShiversWorld") -> None:
+    multiworld = world.multiworld
+    player = world.player
 
     rules_lookup = get_rules_lookup(player)
-
     # Set required entrance rules
     for entrance_name, rule in rules_lookup["entrances"].items():
         multiworld.get_entrance(entrance_name, player).access_rule = rule
@@ -179,24 +180,24 @@ def set_rules(Shivers: World) -> None:
     for location_name, rule in rules_lookup["locations_required"].items():
         multiworld.get_location(location_name, player).access_rule = rule
 
-    #Set option location rules
-    if Shivers.options.puzzle_hints_required.value:
+    # Set option location rules
+    if world.options.puzzle_hints_required.value:
         for location_name, rule in rules_lookup["locations_puzzle_hints"].items():
             multiworld.get_location(location_name, player).access_rule = rule
-    if Shivers.options.elevators_stay_solved.value:
+    if world.options.elevators_stay_solved.value:
         for location_name, rule in rules_lookup["elevators"].items():
             multiworld.get_location(location_name, player).access_rule = rule
-    if Shivers.options.early_lightning.value:
+    if world.options.early_lightning.value:
         for location_name, rule in rules_lookup["lightning"].items():
             multiworld.get_location(location_name, player).access_rule = rule
 
-    #forbid cloth in janitor closet and oil in tar river
+    # forbid cloth in janitor closet and oil in tar river
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Bottom DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Top DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Tar River", player), "Oil Pot Bottom DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Tar River", player), "Oil Pot Top DUPE", player)
 
-    #Filler Item Forbids
+    # Filler Item Forbids
     forbid_item(multiworld.get_location("Puzzle Solved Lyre", player), "Easier Lyre", player)
     forbid_item(multiworld.get_location("Ixupi Captured Water", player), "Water Always Available in Lobby", player)
     forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Library", player)
@@ -218,6 +219,9 @@ def set_rules(Shivers: World) -> None:
     forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Projector Room", player)
     forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Bedroom", player)
     forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Prehistoric", player)
+
+    # Set completion condition
+    multiworld.completion_condition[player] = lambda state: (first_nine_ixupi_capturable(state, player) and lightning_capturable(state, player))
 
 
 

@@ -14,12 +14,12 @@ class ShiversWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["GodlFire, Mathx2"]
+        ["GodlFire", "Mathx2"]
     )]
 
 class ShiversWorld(World):
-    """ 
-     Shivers is a horror themed point and click adventure. Explore the mysteries of Windlenot's Museum of the Strange and Unusual.
+    """
+    Shivers is a horror themed point and click adventure. Explore the mysteries of Windlenot's Museum of the Strange and Unusual.
     """
 
     game: str = "Shivers"
@@ -91,8 +91,8 @@ class ShiversWorld(World):
 
         #Place library escape items. Choose a location to place the escape item
         library_region = self.multiworld.get_region("Library", self.player)
-        librarylocation = self.multiworld.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:")])
-        
+        librarylocation = self.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:")])
+
         #Roll for which escape items will be placed in the Library
         library_random = self.random.randint(1, 3)
         if library_random == 1: 
@@ -163,22 +163,16 @@ class ShiversWorld(World):
 
     set_rules = set_rules
 
-    def generate_basic(self):
-        self.multiworld.completion_condition[self.player] = lambda state: (Rules.first_nine_ixupi_capturable(state, self.player)
-                                                                           and Rules.lightning_capturable(state, self.player))
+    def fill_slot_data(self) -> dict:
 
-    def _get_slot_data(self):
         return {
-            'storageplacements': self.storage_placements,
-            'excludedlocations': {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
-            'elevatorsstaysolved': {self.options.elevators_stay_solved.value},
-            'earlybeth': {self.options.early_beth.value},
-            'earlylightning': {self.options.early_lightning.value},
+            "storageplacements": self.storage_placements,
+            "excludedlocations": {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
+            "elevatorsstaysolved": {self.options.elevators_stay_solved.value},
+            "earlybeth": {self.options.early_beth.value},
+            "earlylightning": {self.options.early_lightning.value},
         }
 
-    def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        return slot_data
 
 class ShiversLocation(Location):
     game = "Shivers"
