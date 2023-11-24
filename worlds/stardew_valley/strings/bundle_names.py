@@ -63,4 +63,8 @@ class BundleName:
     forager = "Forager's Bundle"
     home_cook = "Home Cook's Bundle"
     bartender = "Bartender's Bundle"
+    gambler = "Gambler's Bundle"
+    carnival = "Carnival Bundle"
+    walnut_hunter = "Walnut Hunter Bundle"
+    qi_helper = "Qi's Helper Bundle"
     missing_bundle = "The Missing Bundle"

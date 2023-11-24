@@ -64,14 +64,32 @@ class BundleTemplate:
 class CurrencyBundleTemplate(BundleTemplate):
     item: BundleItem
 
-    def __init__(self, room: str, item: BundleItem):
-        super().__init__(room, "", [item], 1, 1)
+    def __init__(self, room: str, name: str, item: BundleItem):
+        super().__init__(room, name, [item], 1, 1)
         self.item = item
 
     def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
+        currency_amount = self.get_currency_amount(price_difference)
+        return Bundle(self.room, self.name, [BundleItem(self.item.item_name, currency_amount)], 1)
+
+    def get_currency_amount(self, price_difference):
         price_multiplier = round(1 + (price_difference * 0.4), 2)
         currency_amount = int(self.item.amount * price_multiplier)
-        currency_name = "g" if self.item.item_name == Currency.money else f" {self.item.item_name}"
+        return currency_amount
+
+    @property
+    def requires_island(self) -> bool:
+        return self.item.item_name == Currency.qi_gem or self.item.item_name == Currency.golden_walnut
+
+
+class MoneyBundleTemplate(CurrencyBundleTemplate):
+
+    def __init__(self, room: str, item: BundleItem):
+        super().__init__(room, "", item)
+
+    def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
+        currency_amount = self.get_currency_amount(price_difference)
+        currency_name = "g"
         if currency_amount >= 1000:
             unit_amount = currency_amount % 1000
             unit_amount = "000" if unit_amount == 0 else unit_amount
@@ -80,6 +98,11 @@ class CurrencyBundleTemplate(BundleTemplate):
             currency_display = f"{currency_amount}"
         name = f"{currency_display}{currency_name} Bundle"
         return Bundle(self.room, name, [BundleItem(self.item.item_name, currency_amount)], 1)
+
+    def get_currency_amount(self, price_difference):
+        price_multiplier = round(1 + (price_difference * 0.4), 2)
+        currency_amount = int(self.item.amount * price_multiplier)
+        return currency_amount
 
 
 class IslandBundleTemplate(BundleTemplate):

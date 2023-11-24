@@ -5,7 +5,7 @@ from .. import options
 from ..data.craftable_data import all_crafting_recipes_by_name
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ToolProgression, BuildingProgression, ExcludeGingerIsland, Chefsanity, Craftsanity, Shipsanity, SeasonRandomization, Friendsanity, \
-    FriendsanityHeartSize
+    FriendsanityHeartSize, BundleRandomization
 from ..strings.entrance_names import Entrance
 from ..strings.region_names import Region
 
@@ -93,6 +93,7 @@ class TestProgressiveToolsLogic(SVTestBase):
 
 class TestBundlesLogic(SVTestBase):
     options = {
+        BundleRandomization.internal_name: BundleRandomization.option_vanilla
     }
 
     def test_vault_2500g_bundle(self):

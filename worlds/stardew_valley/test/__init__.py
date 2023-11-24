@@ -61,8 +61,8 @@ def get_minsanity_options():
 def minimal_locations_maximal_items():
     min_max_options = {
         Goal.internal_name: Goal.option_craft_master,
-        BundleRandomization.internal_name: BundleRandomization.option_vanilla,
-        BundlePrice.internal_name: BundlePrice.option_very_cheap,
+        BundleRandomization.internal_name: BundleRandomization.option_shuffled,
+        BundlePrice.internal_name: BundlePrice.option_expensive,
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
         Cropsanity.internal_name: Cropsanity.option_disabled,
         BackpackProgression.internal_name: BackpackProgression.option_vanilla,

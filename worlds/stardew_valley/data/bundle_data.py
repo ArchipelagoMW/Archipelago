@@ -1,10 +1,11 @@
-from ..bundles.bundle import BundleTemplate, IslandBundleTemplate, DeepBundleTemplate, CurrencyBundleTemplate
+from ..bundles.bundle import BundleTemplate, IslandBundleTemplate, DeepBundleTemplate, CurrencyBundleTemplate, MoneyBundleTemplate
 from ..bundles.bundle_item import BundleItem, IslandBundleItem
 from ..bundles.bundle_room import BundleRoomTemplate
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.bundle_names import CCRoom, BundleName
 from ..strings.crop_names import Fruit, Vegetable
+from ..strings.currency_names import Currency
 from ..strings.fish_names import Fish, WaterItem, Trash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Beverage, Meal
@@ -618,20 +619,34 @@ missing_bundle_vanilla = BundleTemplate(CCRoom.abandoned_joja_mart, BundleName.m
 missing_bundle_thematic = BundleTemplate.extend_from(missing_bundle_vanilla, missing_bundle_items_thematic)
 
 # Make thematic with other currencies
-vault_2500_item = BundleItem.money_bundle(2500)
-vault_5000_item = BundleItem.money_bundle(5000)
-vault_10000_item = BundleItem.money_bundle(10000)
-vault_25000_item = BundleItem.money_bundle(25000)
+vault_2500_gold = BundleItem.money_bundle(2500)
+vault_5000_gold = BundleItem.money_bundle(5000)
+vault_10000_gold = BundleItem.money_bundle(10000)
+vault_25000_gold = BundleItem.money_bundle(25000)
 
-vault_2500_bundle = CurrencyBundleTemplate(CCRoom.vault, vault_2500_item)
-vault_5000_bundle = CurrencyBundleTemplate(CCRoom.vault, vault_5000_item)
-vault_10000_bundle = CurrencyBundleTemplate(CCRoom.vault, vault_10000_item)
-vault_25000_bundle = CurrencyBundleTemplate(CCRoom.vault, vault_25000_item)
+vault_2500_bundle = MoneyBundleTemplate(CCRoom.vault, vault_2500_gold)
+vault_5000_bundle = MoneyBundleTemplate(CCRoom.vault, vault_5000_gold)
+vault_10000_bundle = MoneyBundleTemplate(CCRoom.vault, vault_10000_gold)
+vault_25000_bundle = MoneyBundleTemplate(CCRoom.vault, vault_25000_gold)
 
-vault_bundles = [vault_2500_bundle, vault_5000_bundle, vault_10000_bundle, vault_25000_bundle]
-vault_vanilla = BundleRoomTemplate(CCRoom.vault, vault_bundles, 4)
-vault_thematic = vault_vanilla
-vault_remixed = vault_thematic
+vault_gambler_items = BundleItem(Currency.qi_coin, 10000)
+vault_gambler_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.gambler, vault_gambler_items)
+
+vault_carnival_items = BundleItem(Currency.star_token, 2500)
+vault_carnival_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.carnival, vault_carnival_items)
+
+vault_walnut_hunter_items = BundleItem(Currency.golden_walnut, 25)
+vault_walnut_hunter_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.walnut_hunter, vault_walnut_hunter_items)
+
+vault_qi_helper_items = BundleItem(Currency.qi_gem, 25)
+vault_qi_helper_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.qi_helper, vault_qi_helper_items)
+
+vault_bundles_vanilla = [vault_2500_bundle, vault_5000_bundle, vault_10000_bundle, vault_25000_bundle]
+vault_bundles_thematic = vault_bundles_vanilla
+vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_helper_bundle, vault_carnival_bundle]  # , vault_walnut_hunter_bundle
+vault_vanilla = BundleRoomTemplate(CCRoom.vault, vault_bundles_vanilla, 4)
+vault_thematic = BundleRoomTemplate(CCRoom.vault, vault_bundles_thematic, 4)
+vault_remixed = BundleRoomTemplate(CCRoom.vault, vault_bundles_remixed, 4)
 
 
 all_bundle_items_except_money = []

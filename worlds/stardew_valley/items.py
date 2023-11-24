@@ -13,7 +13,7 @@ from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
     Friendsanity, Museumsanity, \
     Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Shipsanity, Chefsanity, Craftsanity
+    Shipsanity, Chefsanity, Craftsanity, BundleRandomization, BundlePrice
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.event_names import Event
@@ -423,7 +423,7 @@ def create_player_buffs(item_factory: StardewItemFactory, options: StardewValley
     need_all_buffs = options.special_order_locations == SpecialOrderLocations.option_board_qi
     need_half_buffs = options.festival_locations == FestivalLocations.option_easy
     create_player_buff(item_factory, Buff.movement, movement_buffs, need_all_buffs, need_half_buffs, items)
-    create_player_buff(item_factory, Buff.luck, luck_buffs, need_all_buffs, need_half_buffs, items)
+    create_player_buff(item_factory, Buff.luck, luck_buffs, True, need_half_buffs, items)
 
 
 def create_player_buff(item_factory, buff: str, amount: int, need_all_buffs: bool, need_half_buffs: bool, items: List[Item]):
@@ -501,11 +501,19 @@ def special_order_board_item_classification(item: ItemData, need_all_recipes: bo
 
 
 def create_special_order_qi_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if (options.special_order_locations != SpecialOrderLocations.option_board_qi or
-            options.exclude_ginger_island == ExcludeGingerIsland.option_true):
+    if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
         return
-    qi_gem_rewards = ["100 Qi Gems", "10 Qi Gems", "40 Qi Gems", "25 Qi Gems", "25 Qi Gems",
-                      "40 Qi Gems", "20 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems"]
+    qi_gem_rewards = []
+    if options.bundle_randomization >= BundleRandomization.option_remixed:
+        qi_gem_rewards.append("15 Qi Gems")
+        qi_gem_rewards.append("15 Qi Gems")
+        if options.bundle_price >= BundlePrice.option_expensive:
+            qi_gem_rewards.append("15 Qi Gems")
+
+    if options.special_order_locations == SpecialOrderLocations.option_board_qi:
+        qi_gem_rewards.extend(["100 Qi Gems", "10 Qi Gems", "40 Qi Gems", "25 Qi Gems", "25 Qi Gems",
+                               "40 Qi Gems", "20 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems"])
+
     qi_gem_items = [item_factory(reward) for reward in qi_gem_rewards]
     items.extend(qi_gem_items)
 

@@ -8,7 +8,6 @@ from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..stardew_rule import StardewRule
-from ..strings.ap_names.buff_names import Buff
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill, ModSkill
 from ..strings.tool_names import ToolMaterial, Tool
@@ -45,6 +44,3 @@ class AbilityLogic(BaseLogic[Union[AbilityLogicMixin, RegionLogicMixin, Received
         foraging_rule = self.logic.skill.has_level(Skill.foraging, 10)
         region_rule = self.logic.region.can_reach(Region.forest)
         return region_rule & ((tool_rule & foraging_rule) | magic_rule)
-
-    def has_max_buffs(self) -> StardewRule:
-        return self.logic.received(Buff.movement, self.options.movement_buff_number.value) & self.logic.received(Buff.luck, self.options.luck_buff_number.value)

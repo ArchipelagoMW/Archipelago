@@ -63,12 +63,12 @@ class TestGenerateDynamicOptions(SVTestCase):
                     basic_checks(self, multiworld)
 
     def test_given_choice_when_generate_then_basic_checks(self):
-        seed = int(random() * pow(10, 18) - 1)
         options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
             if not option.options:
                 continue
             for value in option.options:
+                seed = int(random() * pow(10, 18) - 1)
                 with self.subTest(f"{option_name}: {value} [Seed: {seed}]"):
                     world_options = {option_name: option.options[value]}
                     multiworld = setup_solo_multiworld(world_options, seed)
