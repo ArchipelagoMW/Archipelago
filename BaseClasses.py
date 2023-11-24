@@ -634,7 +634,7 @@ class CollectionState():
             for item in items:
                 self.collect(item, True)
 
-    def update_reachable_regions(self, player: int):
+    def update_reachable_regions(self, player: int, allow_partial_entrances: bool = False):
         self.stale[player] = False
         rrp = self.reachable_regions[player]
         bc = self.blocked_connections[player]
@@ -654,7 +654,11 @@ class CollectionState():
             if new_region in rrp:
                 bc.remove(connection)
             elif connection.can_reach(self):
-                assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
+                if not allow_partial_entrances:
+                    assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
+                else:
+                    if not new_region:
+                        break
                 rrp.add(new_region)
                 bc.remove(connection)
                 bc.update(new_region.exits)
@@ -793,8 +797,8 @@ class Entrance:
         self.er_group = er_group
         self.er_type = er_type
 
-    def can_reach(self, state: CollectionState) -> bool:
-        if self.parent_region.can_reach(state) and self.access_rule(state):
+    def can_reach(self, state: CollectionState, allow_partial_entrances: bool = False) -> bool:
+        if self.parent_region.can_reach(state, allow_partial_entrances) and self.access_rule(state):
             if not self.hide_path and not self in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
@@ -924,9 +928,9 @@ class Region:
 
     exits = property(get_exits, set_exits)
 
-    def can_reach(self, state: CollectionState) -> bool:
+    def can_reach(self, state: CollectionState, allow_partial_entrances: bool = False) -> bool:
         if state.stale[self.player]:
-            state.update_reachable_regions(self.player)
+            state.update_reachable_regions(self.player, allow_partial_entrances)
         return self in state.reachable_regions[self.player]
 
     @property

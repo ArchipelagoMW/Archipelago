@@ -45,7 +45,6 @@ class EntranceLookup:
         Checks whether a entrance is an unconditional dead end, that is, no matter what you have,
         it will never lead to new randomizable exits.
         """
-
         # obviously if this is an unpaired exit, then leads to unpaired exits!
         if not entrance.connected_region:
             return False
@@ -120,11 +119,11 @@ class ERPlacementState:
         starting_entrance_name = None
         if isinstance(start, Entrance):
             starting_entrance_name = start.name
-            q.put(start.parent_region)
+            q.put(start.connected_region)
         else:
             q.put(start)
 
-        while q:
+        while not q.empty():
             region = q.get()
             if region in self.placed_regions:
                 continue
@@ -145,8 +144,8 @@ class ERPlacementState:
                             self._pending_exits.add(exit)
                 elif exit.connected_region not in self.placed_regions:
                     # traverse unseen static connections
-                    if exit.can_reach(self.collection_state):
-                        q.put(exit)
+                    if exit.can_reach(self.collection_state, True):
+                        q.put(exit.connected_region)
                     else:
                         self._pending_exits.add(exit)
 
@@ -157,7 +156,7 @@ class ERPlacementState:
         """
         no_longer_pending_exits = []
         for exit in self._pending_exits:
-            if exit.connected_region and exit.can_reach(self.collection_state):
+            if exit.connected_region and exit.can_reach(self.collection_state, True):
                 # this is an unrandomized entrance, so place it and propagate
                 self.place(exit.connected_region)
                 no_longer_pending_exits.append(exit)
@@ -255,7 +254,7 @@ def randomize_entrances(
         # todo - this doesn't prioritize placing new rooms like the original did;
         #        that's problematic because early loops would lead to failures
         # this is needed to reduce bias; otherwise newer exits are prioritized
-        rng.shuffle(state._placeable_exits)
+        # rng.shuffle(state._placeable_exits)
         source_exit = state._placeable_exits.pop()
 
         target_groups = get_target_groups(source_exit.er_group)
@@ -286,6 +285,7 @@ def randomize_entrances(
         # none of the existing targets can pair to the existing sources. Since dead ends will never add new sources
         # this means the current targets can never be paired (in most cases)
         # todo - investigate ways to prevent this case
+        return state  # this short circuts the exception for testing purposes in order to see how far ER got.
         raise Exception("Unable to place all non-dead-end entrances with available source exits")
 
     # anything we couldn't place before might be placeable now
