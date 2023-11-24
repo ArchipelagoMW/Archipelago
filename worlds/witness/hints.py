@@ -156,7 +156,7 @@ joke_hints = [
     "R R R U L L U L U R U R D R D R U U",
     "Have you tried checking your tracker?",
     
-    "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi, Jasper Bird, T1mshady"
+    "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi, Jasper Bird, T1mshady,"
     "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch, Rever, Ishigh, snolid.",
 ]
 
