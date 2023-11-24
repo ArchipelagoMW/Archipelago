@@ -1005,7 +1005,7 @@ item_table = {
         ItemData(380 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 29, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.VALKYRIE, origin={"ext"},
                  description="Increases Valkyrie life by 50."),
-    ItemNames.VALKYRIE_ATS_ROCKETS:
+    ItemNames.VALKYRIE_FLECHETTE_MISSILES:
         ItemData(381 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 0, SC2Race.TERRAN,
                  parent_item=ItemNames.VALKYRIE, origin={"ext"},
                  description="Equips Valkyries with Air-to-Surface missiles to attack ground units."),
@@ -1050,9 +1050,9 @@ item_table = {
         ItemData(389 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 7, SC2Race.TERRAN,
                  parent_item=ItemNames.PLANETARY_FORTRESS, origin={"ext"},
                  description="Planetary Fortress can attack air units."),
-    ItemNames.VALKYRIE_ANTI_GRAVITY_DRIVE:
+    ItemNames.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR:
         ItemData(340 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 8, SC2Race.TERRAN,
-                 parent_item=ItemNames.VALKYRIE, origin={"ext"},
+                 classification=ItemClassification.filler, parent_item=ItemNames.VALKYRIE, origin={"ext"},
                  description="Allows Valkyries to shoot air while moving."),
 
     #Buildings
