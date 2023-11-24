@@ -3,6 +3,7 @@ import importlib.util
 import importlib.machinery
 import os
 import pkgutil
+from collections import defaultdict
 
 from .romTables import ROMWithTables
 from . import assembler
@@ -321,6 +322,22 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
+
+    if ap_settings["text_shuffle"]:
+        buckets = defaultdict(list)
+        # For each ROM bank, shuffle text within the bank
+        for n, data in enumerate(rom.texts._PointerTable__data):
+            # Don't muck up which text boxes are questions and which are statements
+            if type(data) != int and data and data != b'\xFF':
+                buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
+        for bucket in buckets.values():
+            # For each bucket, make a copy and shuffle
+            shuffled = bucket.copy()
+            rnd.shuffle(shuffled)
+            # Then put new text in
+            for bucket_idx, (orig_idx, data) in enumerate(bucket):
+                rom.texts[shuffled[bucket_idx][0]] = data
+    
 
     if ap_settings["trendy_game"] != TrendyGame.option_normal:
 
