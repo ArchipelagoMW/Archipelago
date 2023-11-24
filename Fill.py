@@ -471,7 +471,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         raise FillError(
             f"Not enough filler items for excluded locations. There are {len(excludedlocations)} more locations than items")
 
-    restitempool = usefulitempool + filleritempool
+    restitempool = filleritempool + usefulitempool
 
     remaining_fill(world, defaultlocations, restitempool)
 
