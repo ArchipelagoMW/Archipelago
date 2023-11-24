@@ -17,7 +17,7 @@ from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
 from .rules import set_rules
 from .Options import TheWitnessOptions
-from .utils import get_audio_logs
+from .utils import get_audio_logs, build_weighted_int_list
 from logging import warning, error
 
 
@@ -268,14 +268,18 @@ class WitnessWorld(World):
         audio_logs = get_audio_logs().copy()
 
         if hint_amount:
-            if self.options.hint_type == 0:
-                generated_hints = make_direct_hints(self, hint_amount, self.own_itempool)
-            else:
-                generated_hints = make_area_hints(self, hint_amount)
+            area_weight, location_weight = self.options.area_hint_percentage, 100 - self.options.area_hint_percentage
 
-            hint_amount = len(generated_hints)
+            hint_type_amounts = build_weighted_int_list([area_weight / 100, location_weight / 100], hint_amount)
 
-            if hint_amount:
+            generated_hints = []
+            generated_hints += make_direct_hints(self, hint_type_amounts[1], self.own_itempool)
+
+            already_hinted_locations = {hint[1] for hint in generated_hints if hint[1] != -1}
+
+            generated_hints += make_area_hints(self, hint_type_amounts[0], already_hinted_locations)
+
+            if len(generated_hints):
                 self.random.shuffle(audio_logs)
 
                 duplicates = min(3, len(audio_logs) // hint_amount)
