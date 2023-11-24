@@ -248,6 +248,7 @@ VALKYRIE_FLECHETTE_MISSILES                        = "Flechette Missiles (Valkyr
 VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS                = "Enhanced Cluster Launchers (Valkyrie)"
 VALKYRIE_SHAPED_HULL                               = "Shaped Hull (Valkyrie)"
 VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR              = "Launching Vector Compensator (Valkyrie)"
+VALKYRIE_RESOURCE_EFFICIENCY                       = "Resource Efficiency (Valkyrie)"
 VIKING_ANTI_MECHANICAL_MUNITION                    = "Anti-Mechanical Munition (Viking)"
 VIKING_PHOBOS_CLASS_WEAPONS_SYSTEM                 = "Phobos-Class Weapons System (Viking)"
 VIKING_RIPWAVE_MISSILES                            = "Ripwave Missiles (Viking)"

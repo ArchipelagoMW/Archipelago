@@ -1054,6 +1054,10 @@ item_table = {
         ItemData(340 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 8, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.VALKYRIE, origin={"ext"},
                  description="Allows Valkyries to shoot air while moving."),
+    ItemNames.VALKYRIE_RESOURCE_EFFICIENCY:
+        ItemData(341 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 9, SC2Race.TERRAN,
+                 parent_item=ItemNames.VALKYRIE, origin={"ext"},
+                 description=RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE.format("Valkyrie")),
 
     #Buildings
     ItemNames.BUNKER:
