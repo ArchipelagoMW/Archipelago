@@ -524,7 +524,7 @@ Town Obelisk (Town) - Entry - True:
 159755 - 0xFFE55 (Obelisk Side 6) - 0x28B91 & 0x03BCE & 0x03BCF & 0x03BD1 & 0x339B6 & 0x33A20 & 0x33A29 & 0x33A2A & 0x33B06 - True
 159759 - 0x0A16C (Obelisk) - True - True
 
-Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x1845B - Town Inside Cargo Box - 0x0A0C9:
+Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Town Inside Cargo Box - 0x0A0C9 - Outside Windmill - True:
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 158219 - 0x0A0C8 (Cargo Box Entry Panel) - True - Black/White Squares & Shapers
 Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
@@ -545,8 +545,6 @@ Door - 0x28A61 (RGB House Entry) - 0x28998
 Door - 0x03BB0 (Church Entry) - 0x28A0D
 158228 - 0x28A79 (Maze Panel) - True - True
 Door - 0x28AA2 (Maze Stairs) - 0x28A79
-158241 - 0x17F5F (Windmill Entry Panel) - True - Dots
-Door - 0x1845B (Windmill Entry) - 0x17F5F
 159010 - 0x037B6 (Windmill First Blade EP) - 0x17D02 - True
 159011 - 0x037B2 (Windmill Second Blade EP) - 0x17D02 - True
 159012 - 0x000F7 (Windmill Third Blade EP) - 0x17D02 - True
@@ -605,6 +603,10 @@ Laser - 0x032F9 (Laser) - 0x032F5
 159551 - 0x03BCE (Black Line Tower EP) - True - True
 
 ==Windmill & Theater==
+
+Outside Windmill (Windmill) - Windmill Interior - 0x1845B:
+158241 - 0x17F5F (Windmill Entry Panel) - True - Dots
+Door - 0x1845B (Windmill Entry) - 0x17F5F
 
 Windmill Interior (Windmill) - Theater - 0x17F88:
 158247 - 0x17D02 (Turn Control) - True - Dots
