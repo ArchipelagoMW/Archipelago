@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, Optional, Set, TYPE_CHECKING
+from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from .items import ALL_ITEM_TABLE
 from .locations import ALL_LOCATION_TABLE, LocationClassification
@@ -60,6 +60,8 @@ class LingoPlayerLogic:
 
     panel_reqs: Dict[str, Dict[str, AccessRequirements]]
     door_reqs: Dict[str, Dict[str, AccessRequirements]]
+    mastery_reqs: List[AccessRequirements]
+    counting_panel_reqs: Dict[str, List[Tuple[AccessRequirements, int]]]
 
     def add_location(self, room: str, name: str, code: Optional[int], panels: List[RoomAndPanel], world: "LingoWorld"):
         """
@@ -104,6 +106,8 @@ class LingoPlayerLogic:
         self.forced_good_item = ""
         self.panel_reqs = {}
         self.door_reqs = {}
+        self.mastery_reqs = []
+        self.counting_panel_reqs = {}
 
         door_shuffle = world.options.shuffle_doors
         color_shuffle = world.options.shuffle_colors
@@ -131,9 +135,11 @@ class LingoPlayerLogic:
         for room_name, room_data in PANELS_BY_ROOM.items():
             for panel_name, panel_data in room_data.items():
                 if panel_data.achievement:
-                    event_name = f"{room_name} - {panel_name} (Achieved)"
-                    self.add_location(room_name, event_name, None, [RoomAndPanel(room_name, panel_name)], world)
-                    self.event_loc_to_item[event_name] = "Mastery Achievement"
+                    access_req = AccessRequirements()
+                    access_req.merge(self.calculate_panel_requirements(room_name, panel_name, world))
+                    access_req.rooms.add(room_name)
+
+                    self.mastery_reqs.append(access_req)
 
         # Handle the victory condition. Victory conditions other than the chosen one become regular checks, so we need
         # to prevent the actual victory condition from becoming a check.
@@ -161,8 +167,8 @@ class LingoPlayerLogic:
             if world.options.level_2_requirement == 1:
                 raise Exception("The Level 2 requirement must be at least 2 when LEVEL 2 is the victory condition.")
 
-        if world.options.level_2_requirement > 1:
-            self.create_panel_hunt_events(world)
+        # Create groups of counting panel access requirements for the LEVEL 2 check.
+        self.create_panel_hunt_events(world)
 
         # Instantiate all real locations.
         location_classification = LocationClassification.normal
@@ -400,11 +406,8 @@ class LingoPlayerLogic:
                 if len(panel_data.required_panels) > 0 or len(panel_data.required_doors) > 0\
                         or len(panel_data.required_rooms) > 0\
                         or (world.options.shuffle_colors and len(panel_data.colors) > 1):
-                    event_name = f"{room_name} - {panel_name} (Counted)"
-                    self.event_loc_to_item[event_name] = "1 Counting Panels Solved"
-                    self.locations_by_room.setdefault(room_name, []).append(
-                        PlayerLocation(event_name, None, self.calculate_panel_requirements(room_name, panel_name,
-                                                                                           world)))
+                    self.counting_panel_reqs.setdefault(room_name, []).append(
+                        (self.calculate_panel_requirements(room_name, panel_name, world), 1))
                 else:
                     if len(panel_data.colors) == 0 or not world.options.shuffle_colors:
                         color = None
@@ -415,11 +418,7 @@ class LingoPlayerLogic:
 
             for color, panel_count in unhindered_panels_by_color.items():
                 access_reqs = AccessRequirements()
-                if color is None:
-                    event_name = f"{room_name} - {panel_count} White Panels (Counted)"
-                else:
-                    event_name = f"{room_name} - {panel_count} {color.capitalize()} Panels (Counted)"
+                if color is not None:
                     access_reqs.colors.add(color)
 
-                self.locations_by_room.setdefault(room_name, []).append(PlayerLocation(event_name, None, access_reqs))
-                self.event_loc_to_item[event_name] = f"{panel_count} Counting Panels Solved"
+                self.counting_panel_reqs.setdefault(room_name, []).append((access_reqs, panel_count))

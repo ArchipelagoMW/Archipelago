@@ -39,12 +39,24 @@ def lingo_can_use_location(state: CollectionState, location: PlayerLocation, wor
     return _lingo_can_satisfy_requirements(state, location.access, world, player_logic)
 
 
-def lingo_can_use_mastery_location(state: CollectionState, world: "LingoWorld"):
-    return state.has("Mastery Achievement", world.player, world.options.mastery_achievements.value)
+def lingo_can_use_mastery_location(state: CollectionState, world: "LingoWorld", player_logic: LingoPlayerLogic):
+    satisfied_count = 0
+    for access_req in player_logic.mastery_reqs:
+        if _lingo_can_satisfy_requirements(state, access_req, world, player_logic):
+            satisfied_count += 1
+    return satisfied_count >= world.options.mastery_achievements.value
 
 
-def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld"):
-    return state.has("COUNTING PANELS", world.player, world.options.level_2_requirement.value - 1)
+def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld", player_logic: LingoPlayerLogic):
+    counted_panels = 0
+    state.update_reachable_regions(world.player)
+    for region in state.reachable_regions[world.player]:
+        for access_req, panel_count in player_logic.counting_panel_reqs.get(region.name, []):
+            if _lingo_can_satisfy_requirements(state, access_req, world, player_logic):
+                counted_panels += panel_count
+        if counted_panels >= world.options.level_2_requirement.value - 1:
+            return True
+    return False
 
 
 def _lingo_can_satisfy_requirements(state: CollectionState, access: AccessRequirements, world: "LingoWorld",
@@ -83,10 +95,10 @@ def _lingo_can_open_door(state: CollectionState, room: str, door: str, world: "L
 
 def make_location_lambda(location: PlayerLocation, world: "LingoWorld", player_logic: LingoPlayerLogic):
     if location.name == player_logic.mastery_location:
-        return lambda state: lingo_can_use_mastery_location(state, world)
+        return lambda state: lingo_can_use_mastery_location(state, world, player_logic)
 
     if world.options.level_2_requirement > 1\
             and (location.name == "Second Room - ANOTHER TRY" or location.name == player_logic.level_2_location):
-        return lambda state: lingo_can_use_level_2_location(state, world)
+        return lambda state: lingo_can_use_level_2_location(state, world, player_logic)
 
     return lambda state: lingo_can_use_location(state, location, world, player_logic)
