@@ -17,7 +17,7 @@ from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRand
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
-from .stardew_rule import True_, StardewRule, CountPercent
+from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
 
@@ -255,11 +255,11 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_allsanity:
             self.create_event_location(location_table[GoalName.allsanity],
-                                       CountPercent(self.player, 100),
+                                       HasProgressionPercent(self.player, 100),
                                        Event.victory)
         elif self.options.goal == Goal.option_perfection:
             self.create_event_location(location_table[GoalName.perfection],
-                                       CountPercent(self.player, 100),
+                                       HasProgressionPercent(self.player, 100),
                                        Event.victory)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Event.victory, self.player)

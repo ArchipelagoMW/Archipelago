@@ -350,7 +350,7 @@ class Has(StardewRule):
         return self.other_rules[self.item].simplify()
 
 
-class CountPercent(StardewRule):
+class HasProgressionPercent(StardewRule):
     player: int
     percent: int
 

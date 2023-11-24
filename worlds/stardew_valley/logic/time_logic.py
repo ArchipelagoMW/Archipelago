@@ -4,7 +4,7 @@ from typing import Union
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
 from .received_logic import ReceivedLogicMixin
-from ..stardew_rule import StardewRule, CountPercent, True_
+from ..stardew_rule import StardewRule, HasProgressionPercent, True_
 
 MAX_MONTHS = 12
 MONTH_COEFFICIENT = 100 // MAX_MONTHS
@@ -23,7 +23,7 @@ class TimeLogic(BaseLogic[Union[TimeLogicMixin, ReceivedLogicMixin]]):
         if number <= 0:
             return True_()
         number = min(number, MAX_MONTHS)
-        return CountPercent(self.player, number * MONTH_COEFFICIENT)
+        return HasProgressionPercent(self.player, number * MONTH_COEFFICIENT)
 
     @cached_property
     def has_lived_max_months(self) -> StardewRule:

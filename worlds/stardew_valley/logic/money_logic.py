@@ -7,7 +7,7 @@ from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .time_logic import TimeLogicMixin
-from ..stardew_rule import StardewRule, True_, CountPercent, False_
+from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region
 
@@ -32,7 +32,7 @@ class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMix
             return shipping_bin_rule
 
         percent_progression_items_needed = min(100, amount // 10000)
-        return shipping_bin_rule & CountPercent(self.player, percent_progression_items_needed)
+        return shipping_bin_rule & HasProgressionPercent(self.player, percent_progression_items_needed)
 
     @cache_self1
     def can_spend(self, amount: int) -> StardewRule:
