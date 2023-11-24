@@ -1,5 +1,6 @@
 import unittest
-from ..stardew_rule import Received, Has, False_, And, Or, True_
+
+from ..stardew_rule import Received, Has, False_, And, Or, True_, HasProgressionPercent
 
 
 class TestSimplification(unittest.TestCase):
@@ -56,3 +57,23 @@ class TestSimplification(unittest.TestCase):
     def test_simplify_false_in_and(self):
         rule = And(False_(), Received('Summer', 0, 1))
         self.assertEqual(rule.simplify(), False_())
+
+
+class TestHasProgressionPercentSimplification(unittest.TestCase):
+    def test_has_progression_percent_and_uses_max(self):
+        rule = HasProgressionPercent(1, 20) & HasProgressionPercent(1, 10)
+        self.assertEqual(rule, HasProgressionPercent(1, 20))
+
+    def test_has_progression_percent_or_uses_min(self):
+        rule = HasProgressionPercent(1, 20) | HasProgressionPercent(1, 10)
+        self.assertEqual(rule, HasProgressionPercent(1, 10))
+
+    def test_and_between_progression_percent_and_other_progression_percent_uses_max(self):
+        cases = [
+            And(HasProgressionPercent(1, 10)) & HasProgressionPercent(1, 20),
+            HasProgressionPercent(1, 10) & And(HasProgressionPercent(1, 20)),
+            And(HasProgressionPercent(1, 20)) & And(HasProgressionPercent(1, 10)),
+        ]
+        for i, case in enumerate(cases):
+            with self.subTest(f"{i} {repr(case)}"):
+                self.assertEqual(case, And(HasProgressionPercent(1, 20)))
