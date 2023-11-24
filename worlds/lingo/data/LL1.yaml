@@ -42,6 +42,8 @@
   #                  this panel.
   # - non_counting:  If True, this panel does not contribute to the total needed
   #                  to unlock Level 2.
+  # - hunt:          If True, the tracker will show this panel even when it is
+  #                  not a check. Used for hunts like the Number Hunt.
   #
   # doors is an array of doors associated with this room. When door
   # randomization is enabled, each of these is an item. The key is a name that
@@ -449,6 +451,7 @@
       FOUR:
         id: Backside Room/Panel_four_four_3
         tag: midwhite
+        hunt: True
         required_door:
           room: Outside The Undeterred
           door: Fours
@@ -521,12 +524,14 @@
       FOUR:
         id: Backside Room/Panel_four_four_2
         tag: midwhite
+        hunt: True
         required_door:
           room: Outside The Undeterred
           door: Fours
       EIGHT:
         id: Backside Room/Panel_eight_eight_8
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Eights
@@ -551,6 +556,7 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery14
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
@@ -662,6 +668,7 @@
       EIGHT:
         id: Backside Room/Panel_eight_eight_5
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Eights
@@ -843,6 +850,7 @@
       NINE:
         id: Backside Room/Panel_nine_nine_3
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Nines
@@ -1055,17 +1063,20 @@
       PURPLE:
         id: Color Arrow Room/Panel_purple_afar
         tag: midwhite
+        hunt: True
         required_door:
           door: Purple Barrier
       FIVE (1):
         id: Backside Room/Panel_five_five_5
         tag: midwhite
+        hunt: True
         required_door:
           room: Outside The Undeterred
           door: Fives
       FIVE (2):
         id: Backside Room/Panel_five_five_4
         tag: midwhite
+        hunt: True
         required_door:
           room: Outside The Undeterred
           door: Fives
@@ -1296,12 +1307,14 @@
       MASTERY (1):
         id: Master Room/Panel_mastery_mastery5
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (2):
         id: Master Room/Panel_mastery_mastery9
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
@@ -1545,6 +1558,7 @@
       BACKSIDE:
         id: Backside Room/Panel_backside_2
         tag: midwhite
+        hunt: True
         required_door:
           door: Backside Door
       STAIRS:
@@ -1912,6 +1926,7 @@
       RED:
         id: Color Arrow Room/Panel_red_afar
         tag: midwhite
+        hunt: True
         required_door:
           door: Red Barrier
       DEER + WREN:
@@ -2013,6 +2028,7 @@
       EIGHT:
         id: Backside Room/Panel_eight_eight_3
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Eights
@@ -2058,6 +2074,7 @@
       NINE:
         id: Backside Room/Panel_nine_nine_2
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Nines
@@ -2163,6 +2180,7 @@
         # accessed by jumping from the top of the tower.
         id: Master Room/Panel_mastery_mastery8
         tag: midwhite
+        hunt: True
         required_door:
           door: Mastery
     doors:
@@ -2234,36 +2252,42 @@
       MASTERY (1):
         id: Master Room/Panel_mastery_mastery6
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (2):
         id: Master Room/Panel_mastery_mastery7
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (3):
         id: Master Room/Panel_mastery_mastery10
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (4):
         id: Master Room/Panel_mastery_mastery11
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (5):
         id: Master Room/Panel_mastery_mastery12
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (6):
         id: Master Room/Panel_mastery_mastery15
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
@@ -2279,6 +2303,7 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery3
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
@@ -2309,9 +2334,11 @@
         id: Strand Room/Panel_i_staring
         colors: blue
         tag: forbid
+        hunt: True
       GREEN:
         id: Color Arrow Room/Panel_green_afar
         tag: midwhite
+        hunt: True
         required_door:
           door: Green Barrier
       PINECONE:
@@ -2356,9 +2383,11 @@
       BACKSIDE:
         id: Backside Room/Panel_backside_3
         tag: midwhite
+        hunt: True
       NINE:
         id: Backside Room/Panel_nine_nine_8
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Nines
@@ -2725,35 +2754,41 @@
       SEVEN (1):
         id: Backside Room/Panel_seven_seven_5
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Sevens
       SEVEN (2):
         id: Backside Room/Panel_seven_seven_6
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Sevens
       EIGHT:
         id: Backside Room/Panel_eight_eight_7
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Eights
       NINE:
         id: Backside Room/Panel_nine_nine_4
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Nines
       BLUE:
         id: Color Arrow Room/Panel_blue_afar
         tag: midwhite
+        hunt: True
         required_door:
           door: Blue Barrier
       ORANGE:
         id: Color Arrow Room/Panel_orange_afar
         tag: midwhite
+        hunt: True
         required_door:
           door: Orange Barrier
       UNCOVER:
@@ -3077,6 +3112,7 @@
       FOUR:
         id: Backside Room/Panel_four_four_4
         tag: midwhite
+        hunt: True
         required_door:
           room: Outside The Undeterred
           door: Fours
@@ -3135,12 +3171,14 @@
       SIX:
         id: Backside Room/Panel_six_six_4
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Sixes
       NINE:
         id: Backside Room/Panel_nine_nine_5
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Nines
@@ -3804,46 +3842,54 @@
       FIVE (1):
         id: Backside Room/Panel_five_five_3
         tag: midwhite
+        hunt: True
         required_panel:
           panel: LIGHT
       FIVE (2):
         id: Backside Room/Panel_five_five_2
         tag: midwhite
+        hunt: True
         required_panel:
           panel: WARD
       SIX (1):
         id: Backside Room/Panel_six_six_3
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Sixes
       SIX (2):
         id: Backside Room/Panel_six_six_2
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Sixes
       SEVEN:
         id: Backside Room/Panel_seven_seven_2
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Sevens
       EIGHT:
         id: Backside Room/Panel_eight_eight_2
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Eights
       NINE:
         id: Backside Room/Panel_nine_nine_6
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Nines
       BACKSIDE:
         id: Backside Room/Panel_backside_4
         tag: midwhite
+        hunt: True
       "834283054":
         id: Tower Room/Panel_834283054_undaunted
         colors: orange
@@ -3864,6 +3910,7 @@
       YELLOW:
         id: Color Arrow Room/Panel_yellow_afar
         tag: midwhite
+        hunt: True
         required_door:
           door: Yellow Barrier
       WADED + WEE:
@@ -4100,6 +4147,7 @@
       BACKSIDE:
         id: Backside Room/Panel_backside_5
         tag: midwhite
+        hunt: True
         required_door:
           door: Backside Door
       PART:
@@ -4144,6 +4192,7 @@
         colors:
           - red
           - yellow
+        hunt: True
         required_door:
           room: Number Hunt
           door: Sixes
@@ -4221,6 +4270,7 @@
         colors:
           - red
           - yellow
+        hunt: True
         required_door:
           room: Number Hunt
           door: Sixes
@@ -4547,6 +4597,7 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery2
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
@@ -4988,18 +5039,21 @@
       SEVEN (1):
         id: Backside Room/Panel_seven_seven_7
         tag: midwhite
+        hunt: True
         required_door:
           - room: Number Hunt
             door: Sevens
       SEVEN (2):
         id: Backside Room/Panel_seven_seven_3
         tag: midwhite
+        hunt: True
         required_door:
           - room: Number Hunt
             door: Sevens
       SEVEN (3):
         id: Backside Room/Panel_seven_seven_4
         tag: midwhite
+        hunt: True
         required_door:
           - room: Number Hunt
             door: Sevens
@@ -5598,6 +5652,7 @@
       EIGHT:
         id: Backside Room/Panel_eight_eight_4
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Eights
@@ -5797,6 +5852,7 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery4
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
@@ -5915,9 +5971,11 @@
         id: Strand Room/Panel_a_strands
         colors: blue
         tag: forbid
+        hunt: True
       NINE:
         id: Backside Room/Panel_nine_nine_7
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Nines
@@ -5929,6 +5987,7 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery13
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
@@ -6025,6 +6084,7 @@
       EIGHT:
         id: Backside Room/Panel_eight_eight_6
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Eights
@@ -6322,6 +6382,7 @@
       NINE:
         id: Backside Room/Panel_nine_nine_9
         tag: midwhite
+        hunt: True
         required_door:
           room: Number Hunt
           door: Nines
