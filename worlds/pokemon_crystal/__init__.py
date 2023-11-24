@@ -102,10 +102,10 @@ class PokemonCrystalWorld(World):
         def get_random_pokemon(types=None):
             pokemon_pool = []
             if types is None or types[0] is None:
-                pokemon_pool = [pkmn_name for pkmn_name, _data in crystal_data.pokemon.items()]
+                pokemon_pool = [pkmn_name for pkmn_name, _data in crystal_data.pokemon.items() if pkmn_name != "UNOWN"]
             else:
                 pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in crystal_data.pokemon.items()
-                                if pkmn_data.types == types]
+                                if pkmn_name != "UNOWN" and pkmn_data.types == types]
             return self.random.choice(pokemon_pool)
 
         def get_random_helditem():
@@ -196,6 +196,12 @@ class PokemonCrystalWorld(World):
             "goal"
         )
         return slot_data
+
+    def write_spoiler(self, spoiler_handle) -> None:
+        if self.options.randomize_starters:
+            spoiler_handle.write(f"\n\nStarter Pokemon ({self.multiworld.player_name[self.player]}):\n\n")
+            for evo in self.generated_starters:
+                spoiler_handle.write(f"{evo[0]} -> {evo[1]} -> {evo[2]}\n")
 
     def create_item(self, name: str) -> PokemonCrystalItem:
         return self.create_item_by_code(self.item_name_to_id[name])

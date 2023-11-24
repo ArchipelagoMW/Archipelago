@@ -12,12 +12,12 @@ else:
     BizHawkClientContext = object
 
 
-EXPECTED_ROM_NAME = "CGB-APV0-01pokemon_crystal"
+EXPECTED_ROM_VERSION = 0
 
 
 class PokemonCrystalClient(BizHawkClient):
     game = "Pokemon Crystal"
-    system = "GBC"
+    system = ("GB", "GBC")
     local_checked_locations: Set[int]
     patch_suffix = ".apcrystal"
     local_checked_locations: Set[int]
@@ -32,15 +32,20 @@ class PokemonCrystalClient(BizHawkClient):
 
         try:
             # Check ROM name/patch version
-            rom_name_bytes = ((await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["AP_ROM_Version"], 27, "ROM")]))[0])
-            rom_name = bytes([byte for byte in rom_name_bytes if byte != 0]).decode("ascii")
-            if not rom_name.startswith("CGB"):
-                return False
-            if rom_name == "CGB-BXTJ-00pokemon_crystal":
+            rom_info = ((await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["AP_ROM_Header"], 11, "ROM"),
+                                                              (data.rom_addresses["AP_ROM_Version"], 1, "ROM")])))
+
+            rom_name = bytes([byte for byte in rom_info[0] if byte != 0]).decode("ascii")
+            rom_version = int.from_bytes(rom_info[1], "little")
+            # logger.info(rom_name)
+            # logger.info(rom_version)
+            if rom_name == "PM_CRYSTAL":
                 logger.info("ERROR: You appear to be running an unpatched version of Pokemon Crystal. "
                             "You need to generate a patch file and use it to create a patched ROM.")
                 return False
-            if rom_name != EXPECTED_ROM_NAME:
+            if rom_name != "AP_CRYSTAL":
+                return False
+            if rom_version != EXPECTED_ROM_VERSION:
                 logger.info("ERROR: The patch file used to create this ROM is not compatible with "
                             "this client. Double check your client version against the version being "
                             "used by the generator.")
@@ -58,17 +63,17 @@ class PokemonCrystalClient(BizHawkClient):
 
     async def set_auth(self, ctx: BizHawkClientContext) -> None:
         slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["AP_Seed_Name"], 64, "ROM")]))[0]
+        print(bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8"))
         ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
         if ctx.slot_data is not None:
             if ctx.slot_data["goal"] == 0:
-                data.event_flags["EVENT_BEAT_ELITE_FOUR"]
+                self.goal_flag = data.event_flags["EVENT_BEAT_ELITE_FOUR"]
             else:
-                data.event_flags["EVENT_BEAT_RED"]
+                self.goal_flag = data.event_flags["EVENT_BEAT_RED"]
         try:
-            overworld_guard = (
-                data.ram_addresses["wArchipelagoSafeWrite"], [1], "WRAM")
+            overworld_guard = (data.ram_addresses["wArchipelagoSafeWrite"], [1], "WRAM")
 
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx, [(data.ram_addresses["wArchipelagoItemReceived"], 4, "WRAM")], [overworld_guard])

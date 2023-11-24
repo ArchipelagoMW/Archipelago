@@ -32,9 +32,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     base_patch = pkgutil.get_data(__name__, "data/basepatch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
-    # Set item values
     for location in world.multiworld.get_locations(world.player):
-        # Set free fly location
         if location.address is None:
             continue
 
@@ -152,12 +150,24 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         better_mart_bytes = better_mart_address.to_bytes(2, "little")
         for i in range(33):
             # skip goldenrod and celadon
-            if i not in [6, 7, 8, 9, 10, 11, 12, 23, 24, 25, 26, 27]:
+            if i not in [6, 7, 8, 9, 10, 11, 12, 24, 25, 26, 27, 28]:
                 write_bytes(patched_rom, better_mart_bytes, mart_address)
             mart_address += 2
 
     exp_modifier_address = data.rom_addresses["AP_Setting_ExpModifier"] + 1
     write_bytes(patched_rom, [world.options.experience_modifier], exp_modifier_address)
+
+    start_inventory_address = data.rom_addresses["AP_Start_Inventory"]
+    start_inventory = world.options.start_inventory.value.copy()
+    for item, quantity in start_inventory.items():
+        if quantity > 99:
+            quantity = 99
+        elif quantity == 0:
+            quantity = 1
+        item_code = reverse_offset_item_value(world.item_name_to_id[item])
+        if item_code < 256:
+            write_bytes(patched_rom, [item_code, quantity], start_inventory_address)
+            start_inventory_address += 2
 
     # Set slot name
     for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):

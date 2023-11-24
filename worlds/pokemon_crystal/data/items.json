@@ -157,7 +157,7 @@
 	"EVERSTONE": { "name": "Everstone", "classification": "FILLER", "tags": [] },
 	"SPELL_TAG": { "name": "Spell Tag", "classification": "FILLER", "tags": [] },
 	"RAGECANDYBAR": { "name": "Ragecandybar", "classification": "FILLER", "tags": [] },
-	"GS_BALL": { "name": "Gs Ball", "classification": "PROGRESSION", "tags": ["INVALID"] },
+	"GS_BALL": { "name": "Gs Ball", "classification": "FILLER", "tags": ["INVALID"] },
 	"BLUE_CARD": {
 		"name": "Blue Card",
 		"classification": "PROGRESSION",

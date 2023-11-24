@@ -133,7 +133,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
              lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
 
     # Route 32
-    set_rule(get_location("Route 32 - Miracle Seed from Old Man"),
+    set_rule(get_location("Route 32 - Miracle Seed from Man in North"),
              lambda state: state.has("Zephyr Badge", world.player))
 
     set_rule(get_location("Route 32 - TM05 from Roar Guy"), can_cut)

@@ -18,10 +18,6 @@ class RegionData:
 
 
 def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
-    """
-    Iterates through regions created from JSON to create regions and adds them to the multiworld.
-    Also creates and places events and connects regions via warps and the exits defined in the JSON.
-    """
     regions: Dict[str, Region] = {}
     connections: List[Tuple[str, str, str]] = []
 
@@ -32,6 +28,7 @@ def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
 
         for event_data in region_data.events:
             event = PokemonCrystalLocation(world.player, event_data.name, new_region)
+            event.show_in_spoiler = False
             event.place_locked_item(PokemonCrystalItem(
                 event_data.name, ItemClassification.progression, None, world.player))
             new_region.locations.append(event)

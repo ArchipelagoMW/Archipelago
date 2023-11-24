@@ -2586,7 +2586,7 @@
 		"script": "AP_NPC_Route31_TM_NIGHTMARE"
 	},
 	"MIRACLE_SEED_IN_ROUTE_32": {
-		"label": "Route 32 - Miracle Seed from Old Man",
+		"label": "Route 32 - Miracle Seed from Man in North",
 		"flag": "EVENT_GOT_MIRACLE_SEED_IN_ROUTE_32",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
