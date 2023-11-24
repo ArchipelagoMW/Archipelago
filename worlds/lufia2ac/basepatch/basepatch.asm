@@ -1127,6 +1127,53 @@ pullpc
 
 
 
+; door stairs fix
+pushpc
+org $839453
+    ; DB=$7F, x=0, m=1
+    JSL DoorStairsFix       ; overwrites JSR $9B18 : JSR $9D11
+    NOP #2
+pullpc
+
+DoorStairsFix:
+    CLC
+    LDY.w #$0000
+--: LDX.w #$00FF            ; loop through floor layout starting from the bottom right
+-:  LDA $EA00,X             ; read node contents
+    BEQ +                   ; always skip empty nodes
+    BCC ++                  ; 1st pass: skip all blocked nodes (would cause door stairs or rare stairs)
+    LDA $E9F0,X             ; 2nd pass: skip only if the one above is also blocked (would cause door stairs)
+++: BMI +
+    INY                     ; count usable nodes
++:  DEX
+    BPL -
+    TYA
+    BNE ++                  ; all nodes blocked?
+    SEC                     ; set up 2nd, less restrictive pass
+    BRA --
+++: JSL $8082C7             ; advance RNG
+    STA $00211B
+    TDC
+    STA $00211B             ; M7A; first factor = random number from 0 to 255
+    TYA
+    STA $00211C             ; M7B; second factor = number of possible stair positions
+    LDA $002135             ; MPYM; calculate random number from 0 to number of possible stair positions - 1
+    TAY
+    LDX.w #$00FF            ; loop through floor layout starting from the bottom right
+-:  LDA $EA00,X             ; read node contents
+    BEQ +                   ; always skip empty nodes
+    BCC ++                  ; if 1st pass was sufficient: skip all blocked nodes (prevent door stairs and rare stairs)
+    LDA $E9F0,X             ; if 2nd pass was needed: skip only if the one above is also blocked (prevent door stairs)
+++: BMI +
+    DEY                     ; count down to locate the (Y+1)th usable node
+    BMI ++
++:  DEX
+    BPL -
+++: TXA                     ; return selected stair node coordinate
+    RTL
+
+
+
 ; equipment text fix
 pushpc
 org $81F2E3

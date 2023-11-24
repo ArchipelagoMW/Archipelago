@@ -415,6 +415,8 @@ The following operations can be applied to a datastorage key
 | mul | Multiplies the current value of the key by `value`. |
 | pow | Multiplies the current value of the key to the power of `value`. |
 | mod | Sets the current value of the key to the remainder after division by `value`. |
+| floor | Floors the current value (`value` is ignored). |
+| ceil | Ceils the current value (`value` is ignored). |
 | max | Sets the current value of the key to `value` if `value` is bigger. |
 | min | Sets the current value of the key to `value` if `value` is lower. |
 | and | Applies a bitwise AND to the current value of the key with `value`. |
