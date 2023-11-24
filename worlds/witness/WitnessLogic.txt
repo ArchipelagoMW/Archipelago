@@ -497,9 +497,9 @@ Laser - 0x17C65 (Laser) - 0x17CA4
 159137 - 0x03DAC (Facade Left Stairs EP) - True - True
 159138 - 0x03DAD (Facade Right Stairs EP) - True - True
 159140 - 0x03E01 (Grass Stairs EP) - True - True
-159120 - 0x03BE2 (Monastery Garden Left EP) - 0x03750 - True
-159121 - 0x03BE3 (Monastery Garden Right EP) - True - True
-159122 - 0x0A409 (Monastery Wall EP) - True - True
+159120 - 0x03BE2 (Garden Left EP) - 0x03750 - True
+159121 - 0x03BE3 (Garden Right EP) - True - True
+159122 - 0x0A409 (Wall EP) - True - True
 
 Inside Monastery (Monastery):
 158213 - 0x09D9B (Shutters Control) - True - Dots
@@ -605,8 +605,8 @@ Laser - 0x032F9 (Laser) - 0x032F5
 ==Windmill & Theater==
 
 Outside Windmill (Windmill) - Windmill Interior - 0x1845B:
-158241 - 0x17F5F (Windmill Entry Panel) - True - Dots
-Door - 0x1845B (Windmill Entry) - 0x17F5F
+158241 - 0x17F5F (Entry Panel) - True - Dots
+Door - 0x1845B (Entry) - 0x17F5F
 
 Windmill Interior (Windmill) - Theater - 0x17F88:
 158247 - 0x17D02 (Turn Control) - True - Dots
