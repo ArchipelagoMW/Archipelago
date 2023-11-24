@@ -92,7 +92,7 @@ class MMBN3World(World):
                 loc = MMBN3Location(self.player, location, self.location_name_to_id.get(location, None), region)
                 if location in self.excluded_locations:
                     loc.progress_type = LocationProgressType.EXCLUDED
-                # Do not place any progressive items on WWW Island
+                # Do not place any progression items on WWW Island
                 if region_info.name == RegionName.WWW_Island:
                     add_item_rule(loc, lambda item: not item.advancement)
                 region.locations.append(loc)
