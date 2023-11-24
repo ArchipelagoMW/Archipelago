@@ -1,16 +1,19 @@
-import random
-from typing import List
-from BaseClasses import MultiWorld, Location
-from . import LandstalkerItem
+from typing import TYPE_CHECKING
+
+from BaseClasses import Location
 from .data.hint_source import HINT_SOURCES_JSON
 
+if TYPE_CHECKING:
+    from random import Random
+    from . import LandstalkerWorld
 
-def generate_blurry_location_hint(location: Location, random: random.Random):
-    cleaned_location_name = location.hint_text.lower().translate({ord(c): None for c in '(),:'})
-    cleaned_location_name.replace('-', ' ')
-    cleaned_location_name.replace('/', ' ')
-    cleaned_location_name.replace('.', ' ')
-    location_name_words = [w for w in cleaned_location_name.split(' ') if len(w) > 3]
+
+def generate_blurry_location_hint(location: Location, random: "Random"):
+    cleaned_location_name = location.hint_text.lower().translate({ord(c): None for c in "(),:"})
+    cleaned_location_name.replace("-", " ")
+    cleaned_location_name.replace("/", " ")
+    cleaned_location_name.replace(".", " ")
+    location_name_words = [w for w in cleaned_location_name.split(" ") if len(w) > 3]
 
     random_word_1 = "mysterious"
     random_word_2 = "place"
@@ -22,32 +25,36 @@ def generate_blurry_location_hint(location: Location, random: random.Random):
     return [random_word_1, random_word_2]
 
 
-def generate_lithograph_hint(multiworld: MultiWorld, player: int, jewel_items: List[LandstalkerItem]):
+def generate_lithograph_hint(world: "LandstalkerWorld"):
     hint_text = "It's barely readable:\n"
+    jewel_items = world.jewel_items
 
     for item in jewel_items:
         # Jewel hints are composed of 4 'words' shuffled randomly:
         # - the name of the player whose world contains said jewel (if not ours)
         # - the color of the jewel (if relevant)
         # - two random words from the location name
-        words = generate_blurry_location_hint(item.location, multiworld.per_slot_randoms[player])
+        words = generate_blurry_location_hint(item.location, world.random)
         words[0] = words[0].upper()
         words[1] = words[1].upper()
         if len(jewel_items) < 6:
             # Add jewel color if we are not using generic jewels because jewel count is 6 or more
-            words.append(item.name.split(' ')[0].upper())
-        if item.location.player != player:
+            words.append(item.name.split(" ")[0].upper())
+        if item.location.player != world.player:
             # Add player name if it's not in our own world
-            words.append(multiworld.get_player_name(item.location.player).upper())
-        multiworld.per_slot_randoms[player].shuffle(words)
+            player_name = world.multiworld.get_player_name(world.player)
+            words.append(player_name.upper())
+        world.random.shuffle(words)
         hint_text += " ".join(words) + "\n"
-    return hint_text.rstrip('\n')
+    return hint_text.rstrip("\n")
 
 
-def generate_random_hints(multiworld: MultiWorld, this_player: int):
+def generate_random_hints(world: "LandstalkerWorld"):
     hints = {}
     hint_texts = []
-    random = multiworld.per_slot_randoms[this_player]
+    random = world.random
+    multiworld = world.multiworld
+    this_player = world.player
 
     # Exclude Life Stock from the hints as some of them are considered as progression for Fahl, but isn't really
     # exciting when hinted
@@ -80,7 +87,7 @@ def generate_random_hints(multiworld: MultiWorld, this_player: int):
     # Hint-type #3: Own progression item in remote location
     for item in remote_own_progression_items:
         other_player = multiworld.get_player_name(item.location.player)
-        if item.location.game == 'Landstalker':
+        if item.location.game == "Landstalker - The Treasures of King Nole":
             region_hint_name = item.location.parent_region.hint_text
             hint_texts.append(f"If you need {item.name}, tell {other_player} to look {region_hint_name}.")
         else:
@@ -121,7 +128,7 @@ def generate_random_hints(multiworld: MultiWorld, this_player: int):
     hint_texts = list(set(hint_texts))
     random.shuffle(hint_texts)
 
-    hint_count = multiworld.hint_count[this_player].value
+    hint_count = world.options.hint_count.value
     del hint_texts[hint_count:]
 
     hint_source_names = [source["description"] for source in HINT_SOURCES_JSON if

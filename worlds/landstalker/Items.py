@@ -1,11 +1,12 @@
-from typing import Dict, NamedTuple, List
+from typing import Dict, List, NamedTuple
+
 from BaseClasses import Item, ItemClassification
 
 BASE_ITEM_ID = 4000
 
 
 class LandstalkerItem(Item):
-    game: str = "Landstalker"
+    game: str = "Landstalker - The Treasures of King Nole"
     price_in_shops: int
 
 
@@ -96,13 +97,9 @@ def get_weighted_filler_item_names():
     weighted_item_names: List[str] = []
     for name, data in item_table.items():
         if data.classification == ItemClassification.filler:
-            weighted_item_names += [name for _ in range(0, data.quantity)]
+            weighted_item_names += [name for _ in range(data.quantity)]
     return weighted_item_names
 
 
 def build_item_name_to_id_table():
-    item_name_to_id_table = {}
-    for name, data in item_table.items():
-        item_name_to_id_table[name] = data.id + BASE_ITEM_ID
-    return item_name_to_id_table
-
+    return {name: data.id + BASE_ITEM_ID for name, data in item_table.items()}
