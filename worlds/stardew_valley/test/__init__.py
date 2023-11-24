@@ -201,7 +201,7 @@ pre_generated_worlds = {}
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[FrozenSet[Tuple[str, Any]], MultiWorld] = {}) -> MultiWorld:  # noqa
+def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[FrozenSet[Tuple[str, Any]], MultiWorld] = {}, _steps=gen_steps) -> MultiWorld:  # noqa
     if test_options is None:
         test_options = {}
 
@@ -218,7 +218,7 @@ def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[FrozenSet[T
         value = option(test_options[name]) if name in test_options else option.from_any(option.default)
         setattr(args, name, {1: value})
     multiworld.set_options(args)
-    for step in gen_steps:
+    for step in _steps:
         call_all(multiworld, step)
 
     _cache[frozen_options] = multiworld

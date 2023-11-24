@@ -9,7 +9,7 @@ number_generations = 25
 acceptable_deviation = 4
 
 
-def performance_test_multiworld(tester, options, acceptable_time_per_player):
+def performance_test_multiworld(tester, options, acceptable_time_per_player, skip_fill=True):
     number_players = len(options)
     acceptable_average_time = acceptable_time_per_player * number_players
     total_time = 0
@@ -21,10 +21,11 @@ def performance_test_multiworld(tester, options, acceptable_time_per_player):
 
             print(f"Starting world setup")
             multiworld = setup_multiworld(options, seed)
-            distribute_items_restrictive(multiworld)
-            AutoWorld.call_all(multiworld, 'post_fill')
-            if multiworld.players > 1:
-                balance_multiworld_progression(multiworld)
+            if not skip_fill:
+                distribute_items_restrictive(multiworld)
+                AutoWorld.call_all(multiworld, 'post_fill')
+                if multiworld.players > 1:
+                    balance_multiworld_progression(multiworld)
 
             time_after = time.time()
             elapsed_time = time_after - time_before
@@ -67,7 +68,7 @@ class TestDefaultOptions(SVTestCase):
         number_players = 1
         multiworld_options = [self.options] * number_players
         # seed = 47965111899197590996
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_duo(self):
         if self.skip_performance_tests:
@@ -75,7 +76,7 @@ class TestDefaultOptions(SVTestCase):
 
         number_players = 2
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_5_player(self):
         if self.skip_performance_tests:
@@ -83,7 +84,7 @@ class TestDefaultOptions(SVTestCase):
 
         number_players = 5
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_10_player(self):
         if self.skip_performance_tests:
@@ -91,7 +92,7 @@ class TestDefaultOptions(SVTestCase):
 
         number_players = 10
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
 
 class TestMinLocationMaxItems(SVTestCase):
@@ -104,7 +105,7 @@ class TestMinLocationMaxItems(SVTestCase):
 
         number_players = 1
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_duo(self):
         if self.skip_performance_tests:
@@ -112,7 +113,7 @@ class TestMinLocationMaxItems(SVTestCase):
 
         number_players = 2
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_5_player(self):
         if self.skip_performance_tests:
@@ -120,7 +121,7 @@ class TestMinLocationMaxItems(SVTestCase):
 
         number_players = 5
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_10_player(self):
         if self.skip_performance_tests:
@@ -128,7 +129,7 @@ class TestMinLocationMaxItems(SVTestCase):
 
         number_players = 10
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
 
 class TestAllsanityWithoutMods(SVTestCase):
@@ -141,7 +142,7 @@ class TestAllsanityWithoutMods(SVTestCase):
 
         number_players = 1
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_duo(self):
         if self.skip_performance_tests:
@@ -149,7 +150,7 @@ class TestAllsanityWithoutMods(SVTestCase):
 
         number_players = 2
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_5_player(self):
         if self.skip_performance_tests:
@@ -157,7 +158,7 @@ class TestAllsanityWithoutMods(SVTestCase):
 
         number_players = 5
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
     def test_10_player(self):
         if self.skip_performance_tests:
@@ -165,7 +166,7 @@ class TestAllsanityWithoutMods(SVTestCase):
 
         number_players = 10
         multiworld_options = [self.options] * number_players
-        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player)
+        performance_test_multiworld(self, multiworld_options, self.acceptable_time_per_player, self.skip_fill)
 
 # class TestAllsanityWithMods(SVTestCase):
 #
