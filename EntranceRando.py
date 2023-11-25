@@ -1,6 +1,7 @@
 import functools
 import queue
 import random
+from collections import deque
 from typing import Set, Tuple, List, Dict, Iterable, Callable, Union, Optional
 
 from BaseClasses import Region, Entrance, CollectionState
@@ -53,11 +54,11 @@ class EntranceLookup:
             return self._leads_to_exits_cache[entrance]
 
         visited = set()
-        q = queue.Queue()
-        q.put(entrance.connected_region)
+        q = deque()
+        q.append(entrance.connected_region)
 
-        while not q.empty():
-            region = q.get()
+        while q:
+            region = q.popleft()
             visited.add(region)
 
             for exit in region.exits:
@@ -66,7 +67,7 @@ class EntranceLookup:
                     self._leads_to_exits_cache[entrance] = True
                     return True
                 elif exit.connected_region and exit.connected_region not in visited:
-                    q.put(exit.connected_region)
+                    q.append(exit.connected_region)
 
         self._leads_to_exits_cache[entrance] = False
         return False
@@ -134,16 +135,16 @@ class ERPlacementState:
         :param start: The starting region or entrance to traverse from.
         """
 
-        q = queue.Queue[Region]()
+        q = deque()
         starting_entrance_name = None
         if isinstance(start, Entrance):
             starting_entrance_name = start.name
-            q.put(start.connected_region)
+            q.append(start.connected_region)
         else:
-            q.put(start)
+            q.append(start)
 
-        while not q.empty():
-            region = q.get()
+        while q:
+            region = q.popleft()
             if region in self.placed_regions:
                 continue
             self.placed_regions.add(region)
@@ -164,7 +165,7 @@ class ERPlacementState:
                 elif exit.connected_region not in self.placed_regions:
                     # traverse unseen static connections
                     if exit.can_reach(self.collection_state):
-                        q.put(exit.connected_region)
+                        q.append(exit.connected_region)
                     else:
                         self._pending_exits.append(exit)
 
