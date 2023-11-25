@@ -264,11 +264,11 @@ class WitnessPlayerLogic:
         # Goal is "short box" but short box requires more lasers than long box
         reverse_shortbox_goal = victory == "mountain_box_short" and mnt_lasers > chal_lasers
 
-        # Goal is "short box" and long box requires at least as many lasers as short box
-        proper_shortbox = victory == "mountain_box_short" and chal_lasers >= mnt_lasers
+        # Goal is "short box", but long box requires at least as many lasers as short box
+        proper_shortbox_goal = victory == "mountain_box_short" and chal_lasers >= mnt_lasers
 
-        # Goal is "long box" and long box requires more lasers than short box (as god intended)
-        reverse_longbox_goal = victory == "mountain_box_long" and mnt_lasers > chal_lasers
+        # Goal is "long box", but short box requires at least as many lasers than long box.
+        reverse_longbox_goal = victory == "mountain_box_long" and mnt_lasers >= chal_lasers
 
         # If goal is shortbox or "reverse longbox", you will never enter the mountain from the top before winning.
         mountain_enterable_from_top = not (victory == "mountain_box_short" or reverse_longbox_goal)
@@ -317,7 +317,7 @@ class WitnessPlayerLogic:
                 postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
 
         # If we have a proper short box goal, long box will never be activated first.
-        if proper_shortbox:
+        if proper_shortbox_goal:
             postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
 
         return postgame_adjustments
