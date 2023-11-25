@@ -81,8 +81,8 @@ def create():
                     "max": option.range_end,
                 }
 
-                if issubclass(option, Options.SpecialRange):
-                    game_options[option_name]["type"] = 'special_range'
+                if issubclass(option, Options.NamedRange):
+                    game_options[option_name]["type"] = 'named_range'
                     game_options[option_name]["value_names"] = {}
                     for key, val in option.special_range_names.items():
                         game_options[option_name]["value_names"][key] = val
@@ -133,7 +133,7 @@ def create():
                     continue
 
                 option = world.options_dataclass.type_hints[option_name].from_any(option_value)
-                if isinstance(option, Options.SpecialRange) and isinstance(option_value, str):
+                if isinstance(option, Options.NamedRange) and isinstance(option_value, str):
                     assert option_value in option.special_range_names, \
                         f"Invalid preset value '{option_value}' for '{option_name}' in '{preset_name}'. " \
                         f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
