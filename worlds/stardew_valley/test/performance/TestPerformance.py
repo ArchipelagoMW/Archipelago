@@ -1,11 +1,16 @@
 import time
 
-from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
 from .. import SVTestCase, minimal_locations_maximal_items, allsanity_options_without_mods, setup_multiworld, default_options
 
-number_generations = 25
+# [get_seed() for i in range(25)]
+default_seeds = [26726304721450259037, 19493037639362170392, 44164721370906817114, 26474738898839084739, 69120175480542843820, 48149350148064597489,
+                 75234106657911542927, 48255445659788767477, 51403062784428569537, 83505207683697218321, 31443992552358718495, 32042780995456241834,
+                 84919554258352630308, 85389057393026193188, 50198031915976050326, 77769362918960755651, 51141990932126554176, 25055921617426839758,
+                 68571386399161661782, 10489282145478582746, 82013340299462479898, 6654626230008781183, 49570869596326935545, 37049567542350773517,
+                 7595094757324306210]
+number_generations = len(default_seeds)
 acceptable_deviation = 4
 
 
@@ -14,8 +19,7 @@ def performance_test_multiworld(tester, options, acceptable_time_per_player, ski
     acceptable_average_time = acceptable_time_per_player * number_players
     total_time = 0
     all_times = {}
-    for i in range(number_generations):
-        seed = get_seed()
+    for i, seed in enumerate(default_seeds):
         with tester.subTest(f"Seed: {seed}"):
             time_before = time.time()
 
