@@ -8,7 +8,7 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
-from ..stardew_rule import StardewRule, And, False_, Count
+from ..stardew_rule import StardewRule, And, False_, Count, true_
 from ..strings.region_names import Region
 
 
@@ -29,7 +29,7 @@ class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogic
     @cache_self1
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         region_rule = self.logic.region.can_reach_all_except_one(item.locations)
-        geodes_rule = And(*(self.logic.action.can_open_geode(geode) for geode in item.geodes))
+        geodes_rule = And(*(self.logic.action.can_open_geode(geode) for geode in item.geodes)) if item.geodes else true_
         # monster_rule = self.can_farm_monster(item.monsters)
         # extra_rule = True_()
         pan_rule = False_()

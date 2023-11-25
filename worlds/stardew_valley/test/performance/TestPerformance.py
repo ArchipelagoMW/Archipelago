@@ -4,13 +4,13 @@ from dataclasses import dataclass
 from statistics import mean, median, variance, stdev
 from typing import List
 
+from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
 from .. import SVTestCase, minimal_locations_maximal_items, allsanity_options_without_mods, setup_multiworld, default_options
 
-# [get_seed() for i in range(25)]
-default_seeds = [26726304721450259037] * 25
-number_generations = len(default_seeds)
+number_generations = 25
+default_seed = 58754761123126659868
 acceptable_deviation = 4
 
 
@@ -71,7 +71,10 @@ class SVPerformanceTestCase(SVTestCase):
         acceptable_average_time = self.acceptable_time_per_player * amount_of_players
         total_time = 0
         all_times = []
-        for i, seed in enumerate(default_seeds):
+        seeds = [get_seed() if self.skip_fill else default_seed
+                 for _ in range(number_generations)]
+
+        for i, seed in enumerate(seeds):
             with self.subTest(f"Seed: {seed}"):
                 time_before = time.time()
 
