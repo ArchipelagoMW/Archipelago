@@ -314,6 +314,12 @@ class WitnessPlayerLogic:
             else:
                 postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
 
+        # Technically, in Challenge goal + early_caves, you could find something important on bottom floor Discard,
+        # including the Caves Shortcuts themselves if playing "early_caves: start_inventory".
+        # This is another thing that was deemed "unfun" more than fitting the actual definition of post-game.
+        if victory == "challenge" and early_caves and not doors:
+            postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
+
         # If we have a proper short box goal, long box will never be activated first.
         if proper_shortbox_goal:
             postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
