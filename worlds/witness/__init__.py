@@ -276,23 +276,29 @@ class WitnessWorld(World):
 
             generated_hints = []
 
-            amount_of_hintable_areas = len(get_hintable_areas(self)[0])
+            locations_by_area, items_by_area = None, None
 
-            if amount_of_hintable_areas < area_hints:
-                player_name = self.multiworld.get_player_name(self.player)
-                logging.warning(f"There are not enough areas in the game to make {area_hints} area hints for player "
-                                f"{player_name}. Making {amount_of_hintable_areas} area hints, and filling rest with "
-                                f"location hints. This might result in hinting areas that have all locations hinted "
-                                f"individually.")
+            if area_hints:
+                locations_by_area, items_by_area = get_hintable_areas(self)
 
-                area_hints = amount_of_hintable_areas
-                location_hints = hint_amount - area_hints
+                amount_of_hintable_areas = len(locations_by_area)
+
+                if amount_of_hintable_areas < area_hints:
+                    player_name = self.multiworld.get_player_name(self.player)
+                    logging.warning(f"There are not enough areas in the game to make {area_hints} area hints for "
+                                    f"player {player_name}. Making {amount_of_hintable_areas} area hints, and filling "
+                                    f"rest with location hints. This might result in hinting areas that have all "
+                                    f"locations hinted individually, which is usually prevented.")
+
+                    area_hints = amount_of_hintable_areas
+                    location_hints = hint_amount - area_hints
 
             if location_hints:
                 generated_hints += make_direct_hints(self, location_hints, self.own_itempool)
             if area_hints:
                 already_hinted_locations = {hint[1] for hint in generated_hints if hint[1] != -1}
-                generated_hints += make_area_hints(self, area_hints, already_hinted_locations)
+                generated_hints += make_area_hints(self, area_hints, already_hinted_locations,
+                                                   locations_by_area, items_by_area)
 
             if len(generated_hints) != hint_amount:
                 player_name = self.multiworld.get_player_name(self.player)
