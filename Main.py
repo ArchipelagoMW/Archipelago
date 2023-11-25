@@ -289,12 +289,26 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         logger.info("Progression balancing skipped.")
 
-    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
-    world.random.passthrough = False
-
     if args.skip_output:
         logger.info('Done. Skipped output/spoiler generation. Total Time: %s', time.perf_counter() - start)
         return world
+
+    # determine which items should get starting hints and add those location to start_location_hints to be collected
+    # into multidata later
+    filled_locations = world.get_filled_locations()
+    world.random.shuffle(filled_locations)
+    collected_hints = {player: collections.Counter() for player in world.get_all_ids()}
+    for location in filled_locations:
+        if type(location.address) == int:
+            if location.item.name in world.worlds[location.item.player].options.start_hints:
+                item = location.item
+                if (collected_hints[item.player].setdefault(item.name, 0)
+                        < world.worlds[item.player].options.start_hints.value[item.name]):
+                    world.worlds[location.player].options.start_location_hints.value.add(location.name)
+                    collected_hints[item.player][item.name] += 1
+
+    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
+    world.random.passthrough = False
 
     logger.info(f'Beginning output...')
     outfilebase = 'AP_' + world.seed_name
@@ -356,7 +370,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 filled_locations = world.get_filled_locations()
-                world.random.shuffle(filled_locations)
                 for location in filled_locations:
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
@@ -369,12 +382,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             location.item.code, location.item.player, location.item.flags
                         if location.name in world.worlds[location.player].options.start_location_hints:
                             precollect_hint(location)
-                        elif location.item.name in world.worlds[location.item.player].options.start_hints:
-                            received_item = location.item
-                            if collected_hints[received_item.player].setdefault(received_item.name, 0)\
-                                    < world.worlds[received_item.player].options.start_hints.value[received_item.name]:
-                                precollect_hint(location)
-                                collected_hints[received_item.player][received_item.name] += 1
                         elif any([location.item.name in world.worlds[player].options.start_hints
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
