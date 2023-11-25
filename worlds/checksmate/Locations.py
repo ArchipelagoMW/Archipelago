@@ -9,7 +9,7 @@ class CMLocation(Location):
 
 class CMLocationData(NamedTuple):
     code: Optional[int]
-    # suggested material required to
+    # suggested material required to perform task. generally an upper-end estimate. used to:
     # a. capture individual pieces
     # b. capture series of pieces and pawns within 1 game
     # c. fork/pin
@@ -68,8 +68,8 @@ location_table = {
     "Capture 7 Of Each": CMLocationData(4_902_038, 3850),
     "Capture Everything": CMLocationData(4_902_039, 3950),
     "Threaten Pawn": CMLocationData(4_902_040, 0),
-    "Threaten Minor": CMLocationData(4_902_041, 0),
-    "Threaten Major": CMLocationData(4_902_042, 0),
+    "Threaten Minor": CMLocationData(4_902_041, 200),
+    "Threaten Major": CMLocationData(4_902_042, 200),
     "Threaten Queen": CMLocationData(4_902_043, 300),
     "Threaten King": CMLocationData(4_902_044, 400),
     # special moves and tactics

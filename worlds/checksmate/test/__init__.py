@@ -8,6 +8,10 @@ class CMTestBase(WorldTestBase):
     game = "ChecksMate"
     world: CMWorld
     player: ClassVar[int] = 1
+    options = {
+        "accessibility": "minimal",
+        "min_material": 42,
+    }
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)

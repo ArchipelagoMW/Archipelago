@@ -34,6 +34,7 @@ class PieceLimitTestBase(CMTestBase):
 
 class TestChaosPieceLimits(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_pieces": 0
     }
@@ -47,6 +48,7 @@ class TestChaosPieceLimits(PieceLimitTestBase):
 
 class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_pieces": 0,
         "minor_piece_limit_by_type": 2,
@@ -64,6 +66,7 @@ class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
 
 class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_pieces": 0,
         "minor_piece_limit_by_type": 1,
@@ -81,6 +84,7 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
 
 class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_pieces": 0,
         "minor_piece_limit_by_type": 2,
@@ -98,6 +102,7 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
 
 class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_pieces": 0,
         "minor_piece_limit_by_type": 5,
@@ -115,6 +120,7 @@ class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
 
 class TestLimitedPieceLimits(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "limited",
         "fairy_chess_pieces": 0,
     }
@@ -128,6 +134,7 @@ class TestLimitedPieceLimits(PieceLimitTestBase):
 
 class TestLimitedPieceLimitsOfVanilla(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "limited",
         "fairy_chess_pieces": 0,
         "minor_piece_limit_by_type": 2,
@@ -145,6 +152,7 @@ class TestLimitedPieceLimitsOfVanilla(PieceLimitTestBase):
 
 class TestLimitedPieceLimitsOfThree(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "limited",
         "fairy_chess_pieces": 0,
         "minor_piece_limit_by_type": 3,
@@ -162,6 +170,7 @@ class TestLimitedPieceLimitsOfThree(PieceLimitTestBase):
 
 class TestLimitedPieceLimitsByVariety(PieceLimitTestBase):
     options = {
+        "accessibility": "minimal",
         "fairy_chess_army": "limited",
         "fairy_chess_pieces": 0,
         "minor_piece_limit_by_type": 4,
