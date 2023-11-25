@@ -5,7 +5,7 @@ from BaseClasses import Item, Tutorial, ItemClassification
 
 from ..AutoWorld import World, WebWorld
 from NetUtils import SlotType
-
+from Options import PlandoConnection
 
 class GenericWeb(WebWorld):
     advanced_settings = Tutorial('Advanced YAML Guide',
@@ -69,9 +69,3 @@ class PlandoItem(NamedTuple):
             raise exception(warning)
         else:
             self.warn(warning)
-
-
-class PlandoConnection(NamedTuple):
-    entrance: str
-    exit: str
-    direction: str  # entrance, exit or both

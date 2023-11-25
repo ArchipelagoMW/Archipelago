@@ -59,6 +59,7 @@ class AssembleOptions(abc.ABCMeta):
                 def verify(self, *args, **kwargs) -> None:
                     for f in verifiers:
                         f(self, *args, **kwargs)
+
                 attrs["verify"] = verify
             else:
                 assert verifiers, "class Option is supposed to implement def verify"
@@ -183,6 +184,7 @@ class FreeText(Option[str]):
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
+
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
     # (even though isinstance(5, numbers.Integral) == True)
@@ -598,7 +600,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         if isinstance(self.value, int):
             return
         from BaseClasses import PlandoOptions
-        if not(PlandoOptions.bosses & plando_options):
+        if not (PlandoOptions.bosses & plando_options):
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
             self.value = self.options[option]
@@ -878,6 +880,139 @@ class ItemSet(OptionSet):
     convert_name_groups = True
 
 
+class ConnectionsMeta(AssembleOptions):
+    def __new__(mcs, name, bases, attrs):
+        if name != "PlandoConnections":
+            if attrs["shared_connections"]:
+                assert "connections" in attrs, f"Please define valid connections for {name}"
+                attrs["connections"] = frozenset((connection.lower() for connection in attrs["connections"]))
+            else:
+                assert "entrances" in attrs, f"Please define valid entrances for {name}"
+                attrs["entrances"] = frozenset((connection.lower() for connection in attrs["entrances"]))
+                assert "exits" in attrs, f"Please define valid exits for {name}"
+                attrs["exits"] = frozenset((connection.lower() for connection in attrs["exits"]))
+        cls = super().__new__(mcs, name, bases, attrs)
+        return cls
+
+
+class PlandoConnection(typing.NamedTuple):
+    entrance: str
+    exit: str
+    direction: str  # entrance, exit or both
+
+
+class PlandoConnections(Option[typing.List["PlandoConnection"]], metaclass=ConnectionsMeta):
+    """Generic connections plando. Format is:
+    - entrance: "Entrance Name"
+      exit: "Exit Name"
+      direction: "Direction"
+    Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both'.
+    Must override can_connect, which passes an entrance and an exit. Check to see if the connection is valid."""
+    class Direction:
+        Entrance = "entrance"
+        Exit = "exit"
+        Both = "both"
+
+    display_name = "Plando Connections"
+    shared_connections: bool = False
+    """True if all connections can be an entrance or an exit, False otherwise."""
+
+    default: typing.List[PlandoConnection] = []
+    supports_weighting = False
+
+    entrances: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+    exits: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+    connections: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+
+    def __init__(self, value: typing.List[PlandoConnection]):
+        self.value = deepcopy(value)
+        super(PlandoConnections, self).__init__()
+
+    @classmethod
+    def validate_entrance_name(cls, entrance):
+        if cls.shared_connections:
+            return entrance.lower() in cls.connections
+        else:
+            return entrance.lower() in cls.entrances
+
+    @classmethod
+    def validate_exit_name(cls, exit):
+        if cls.shared_connections:
+            return exit.lower() in cls.connections
+        else:
+            return exit.lower() in cls.exits
+
+    @classmethod
+    def can_connect(cls, entrance, exit):
+        raise NotImplementedError
+
+    @classmethod
+    def validate_plando_connections(cls, connections):
+        used_entrances = []
+        used_exits = []
+        for connection in connections:
+                entrance = connection.entrance
+                exit = connection.exit
+                if entrance in used_entrances:
+                    raise ValueError(f"Duplicate Entrance {entrance} not allowed.")
+                if exit in used_exits:
+                    raise ValueError(f"Duplicate Exit {exit} not allowed.")
+                used_entrances.append(entrance)
+                used_exits.append(exit)
+                if not cls.validate_entrance_name(entrance):
+                    raise ValueError(f"{entrance.title()} is not a valid entrance.")
+                if not cls.validate_exit_name(exit):
+                    raise ValueError(f"{exit.title()} is not a valid exit.")
+                if not cls.can_connect(entrance, exit):
+                    raise ValueError(f"Connection between {entrance.title()} and {exit.title()} is invalid.")
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> Option[typing.List[PlandoConnection]]:
+        if type(data) == list:
+            value = []
+            for connection in data:
+                if type(connection) == dict:
+                    entrance = connection.get("entrance", None)
+                    exit = connection.get("exit", None)
+                    direction = connection.get("direction", "both")
+                    if not entrance or not exit:
+                        raise Exception("Plando connection must have an entrance and an exit.")
+                    value.append(PlandoConnection(
+                        entrance,
+                        exit,
+                        direction
+                    ))
+                elif type(connection) == PlandoConnection:
+                    value.append(connection)
+                else:
+                    raise Exception(f"Cannot create connection from non-Dict type, got {type(connection)}.")
+            cls.validate_plando_connections(value)
+            return cls(value)
+        else:
+            raise Exception(f"Cannot create plando connections from non-List value, got {type(data)}.")
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        from BaseClasses import PlandoOptions
+        if not (PlandoOptions.connections & plando_options):
+            # plando is disabled but plando options were given so overwrite the options
+            self.value = []
+            logging.warning(f"The plando connections module is turned off, "
+                            f"so connections for {player_name} will be ignored.")
+
+    def get_option_name(self, value):
+        return ", ".join(["%s %s %s" % (connection.entrance,
+                                        "<=>" if connection.direction == self.Direction.Both else
+                                        "<=" if connection.direction == self.Direction.Exit else
+                                        "=>",
+                                        connection.exit) for connection in value])
+
+    def __iter__(self):
+        yield from self.value
+
+    def __len__(self):
+        return len(self.value)
+
+
 class Accessibility(Choice):
     """Set rules for reachability of your items/locations.
     Locations: ensure everything can be reached and acquired.
@@ -911,7 +1046,7 @@ class OptionsMetaProperty(type):
                 bases: typing.Tuple[type, ...],
                 attrs: typing.Dict[str, typing.Any]) -> "OptionsMetaProperty":
         for attr_type in attrs.values():
-            assert not isinstance(attr_type, AssembleOptions),\
+            assert not isinstance(attr_type, AssembleOptions), \
                 f"Options for {name} should be type hinted on the class, not assigned"
         return super().__new__(mcs, name, bases, attrs)
 
@@ -1029,7 +1164,8 @@ class ItemLinks(OptionList):
     ])
 
     @staticmethod
-    def verify_items(items: typing.List[str], item_link: str, pool_name: str, world, allow_item_groups: bool = True) -> typing.Set:
+    def verify_items(items: typing.List[str], item_link: str, pool_name: str, world,
+                     allow_item_groups: bool = True) -> typing.Set:
         pool = set()
         for item_name in items:
             if item_name not in world.item_names and (not allow_item_groups or item_name not in world.item_name_groups):
