@@ -450,7 +450,8 @@ class KH2World(World):
 
         self.item_quantity_dict[ItemName.LuckyEmblem] = self.options.LuckyEmblemsAmount.value
         # give this proof to unlock the final door once the player has the amount of lucky emblem required
-        del self.item_quantity_dict[ItemName.ProofofNonexistence]
+        if ItemName.ProofofNonexistence in self.item_quantity_dict:
+            del self.item_quantity_dict[ItemName.ProofofNonexistence]
 
     def hitlist_verify(self):
         """
@@ -488,7 +489,8 @@ class KH2World(World):
         if self.options.BountyStartingHintToggle:
             self.multiworld.start_hints[self.player].value.add(ItemName.Bounty)
 
-        del self.item_quantity_dict[ItemName.ProofofNonexistence]
+        if ItemName.ProofofNonexistence in self.item_quantity_dict:
+            del self.item_quantity_dict[ItemName.ProofofNonexistence]
 
     def set_excluded_locations(self):
         """
