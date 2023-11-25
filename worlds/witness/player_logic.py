@@ -314,7 +314,7 @@ class WitnessPlayerLogic:
             else:
                 postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
 
-        # Technically, in Challenge goal + early_caves, you could find something important on bottom floor Discard,
+        # In Challenge goal + early_caves + vanilla doors, you could find something important on Bottom Floor Discard,
         # including the Caves Shortcuts themselves if playing "early_caves: start_inventory".
         # This is another thing that was deemed "unfun" more than fitting the actual definition of post-game.
         if victory == "challenge" and early_caves and not doors:
