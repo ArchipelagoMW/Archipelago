@@ -1,5 +1,4 @@
-from test.TestBase import WorldTestBase
-from ... import ALTTPWorld
+from test.bases import WorldTestBase
 from ...Items import item_factory
 
 
