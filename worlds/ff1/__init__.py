@@ -14,7 +14,7 @@ class FF1Settings(settings.Group):
 
 
 class FF1Web(WebWorld):
-    settings_page = "https://finalfantasyrandomizer.com/"
+    options_page = "https://finalfantasyrandomizer.com/"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
@@ -91,7 +91,7 @@ class FF1World(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(CHAOS_TERMINATED_EVENT, self.player)
 
-    def generate_basic(self):
+    def create_items(self):
         items = get_options(self.multiworld, 'items', self.player)
         if FF1_BRIDGE in items.keys():
             self._place_locked_item_in_sphere0(FF1_BRIDGE)

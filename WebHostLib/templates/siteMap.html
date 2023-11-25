@@ -25,7 +25,7 @@
             <li><a href="{{ url_for('check')}}">Settings Validator</a></li>
             <li><a href="/games">Supported Games Page</a></li>
             <li><a href="/user-content">User Content</a></li>
-            <li><a href="/weighted-settings">Weighted Settings Page</a></li>
+            <li><a href="/weighted-options">Weighted Options Page</a></li>
             <li><a href="{{url_for('stats')}}">Game Statistics</a></li>
             <li><a href="/sitemap">Site Map</a></li>
         </ul>
@@ -47,11 +47,11 @@
             {% endfor %}
         </ul>
 
-        <h2>Game Settings Pages</h2>
+        <h2>Game Options Pages</h2>
         <ul>
             {% for game in games | title_sorted %}
                 {% if game['has_settings'] %}
-                    <li><a href="{{ url_for('player_settings', game=game['title']) }}">{{ game['title'] }}</a></li>
+                    <li><a href="{{ url_for('player_options', game=game['title']) }}">{{ game['title'] }}</a></li>
                 {% endif %} 
             {% endfor %}
         </ul>
