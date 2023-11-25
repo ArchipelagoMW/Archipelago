@@ -373,6 +373,7 @@
       ANOTHER TRY:
         id: Entry Room/Panel_advance
         tag: topwhite
+        non_counting: True # This is a counting panel in-game, but it can never count towards the LEVEL 2 panel hunt.
       LEVEL 2:
         # We will set up special rules for this in code.
         id: EndPanel/Panel_level_2
