@@ -36,15 +36,15 @@ jobs:
           Expand-Archive -Path enemizer.zip -DestinationPath EnemizerCLI -Force
       - name: Build
         run: |
-          python -m pip install --upgrade pip setuptools
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
           python setup.py build_exe --yes
-          $NAME="$(ls build)".Split('.',2)[1]
+          $NAME="$(ls build | Select-String -Pattern 'exe')".Split('.',2)[1]
           $ZIP_NAME="Archipelago_$NAME.7z"
+          echo "$NAME -> $ZIP_NAME"
           echo "ZIP_NAME=$ZIP_NAME" >> $Env:GITHUB_ENV
           New-Item -Path dist -ItemType Directory -Force
           cd build
-          Rename-Item exe.$NAME Archipelago
+          Rename-Item "exe.$NAME" Archipelago
           7z a -mx=9 -mhe=on -ms "../dist/$ZIP_NAME" Archipelago
       - name: Store 7z
         uses: actions/upload-artifact@v3
@@ -53,8 +53,8 @@ jobs:
           path: dist/${{ env.ZIP_NAME }}
           retention-days: 7  # keep for 7 days, should be enough
 
-  build-ubuntu1804:
-    runs-on: ubuntu-18.04
+  build-ubuntu2004:
+    runs-on: ubuntu-20.04
     steps:
       # - copy code below to release.yml -
       - uses: actions/checkout@v3
@@ -66,10 +66,10 @@ jobs:
       - name: Get a recent python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.11'
       - name: Install build-time dependencies
         run: |
-          echo "PYTHON=python3.9" >> $GITHUB_ENV
+          echo "PYTHON=python3.11" >> $GITHUB_ENV
           wget -nv https://github.com/AppImage/AppImageKit/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
           chmod a+rx appimagetool-x86_64.AppImage
           ./appimagetool-x86_64.AppImage --appimage-extract
@@ -85,8 +85,7 @@ jobs:
           # charset-normalizer was somehow incomplete in the github runner
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
-          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject setuptools charset-normalizer
-          pip install -r requirements.txt
+          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject charset-normalizer
           python setup.py build_exe --yes bdist_appimage --yes
           echo -e "setup.py build output:\n `ls build`"
           echo -e "setup.py dist output:\n `ls dist`"
@@ -96,6 +95,10 @@ jobs:
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - copy code above to release.yml -
+      - name: Build Again
+        run: |
+          source venv/bin/activate
+          python setup.py build_exe --yes
       - name: Store AppImage
         uses: actions/upload-artifact@v3
         with:

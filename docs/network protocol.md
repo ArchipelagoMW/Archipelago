@@ -20,12 +20,13 @@ There are also a number of community-supported libraries available that implemen
 | Python                        | [Archipelago CommonClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py) |                                                                                 |
 |                               | [Archipelago SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py)       | For Super Nintendo Game Support; Utilizes [SNI](https://github.com/alttpo/sni). |
 | JVM (Java / Kotlin)           | [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java)      |                                                                                 |
-| .NET (C# / C++ / F# / VB.NET) | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)          |                                                                                 |
+| .NET (C# / F# / VB.NET)       | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)          |                                                                                 |
 | C++                           | [apclientpp](https://github.com/black-sliver/apclientpp)                                           | header-only                                                                     |
 |                               | [APCpp](https://github.com/N00byKing/APCpp)                                                        | CMake                                                                           |
 | JavaScript / TypeScript       | [archipelago.js](https://www.npmjs.com/package/archipelago.js)                                     | Browser and Node.js Supported                                                   |
 | Haxe                          | [hxArchipelago](https://lib.haxe.org/p/hxArchipelago)                                              |                                                                                 |
 | Rust                          | [ArchipelagoRS](https://github.com/ryanisaacg/archipelago_rs)                                      |                                                                                 |
+| Lua                           | [lua-apclientpp](https://github.com/black-sliver/lua-apclientpp)                                   |                                                                                 |
 
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
@@ -67,10 +68,11 @@ Sent to clients when they connect to an Archipelago server.
 | Name                  | Type                                          | Notes                                                                                                                                                                                                                                 |
 |-----------------------|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | version               | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which the server is running.                                                                                                                                                               |
+| generator_version     | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which generated the multiworld.                                                                                                                                                            |
 | tags                  | list\[str\]                                   | Denotes special features or capabilities that the sender is capable of. Example: `WebHost`                                                                                                                                            |
 | password              | bool                                          | Denoted whether a password is required to join this room.                                                                                                                                                                             |
 | permissions           | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
-| hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                                                      |
+| hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                          |
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
 | datapackage_versions  | dict\[str, int\]                              | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). **Deprecated. Use `datapackage_checksums` instead.** |
@@ -128,7 +130,8 @@ Sent to clients when the connection handshake is successfully completed.
 | missing_locations | list\[int\]                              | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things.                                               |
 | checked_locations | list\[int\]                              | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
 | slot_data         | dict\[str, any\]                         | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
-| slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information                                                                                         |
+| slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information.                                                                                        |
+| hint_points       | int                                      | Number of hint points that the current player has.                                                                                                  |
 
 ### ReceivedItems
 Sent to clients when they receive an item.
@@ -146,17 +149,16 @@ Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) pack
 | locations | list\[[NetworkItem](#NetworkItem)\] | Contains list of item(s) in the location(s) scouted. |
 
 ### RoomUpdate
-Sent when there is a need to update information about the present game session. Generally useful for async games.
-Once authenticated (received Connected), this may also contain data from Connected.
+Sent when there is a need to update information about the present game session.
 #### Arguments
-The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
+RoomUpdate may contain the same arguments from [RoomInfo](#RoomInfo) and, once authenticated, arguments from
+[Connected](#Connected) with the following exceptions:
 
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| hint_points | int | New argument. The client's current hint points. |
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Send in the event of an alias rename. Always sends all players, whether connected or not. |
-| checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
-| missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
+| Name              | Type                                    | Notes                                                                                                                 |
+|-------------------|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| players           | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent in the event of an alias rename. Always sends all players, whether connected or not.                             |
+| checked_locations | list\[int\]                             | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
+| missing_locations | -                                       | Never sent in this packet. If needed, it is the inverse of `checked_locations`.                                       |
 
 All arguments for this packet are optional, only changes are sent.
 
@@ -378,11 +380,12 @@ Additional arguments sent in this package will also be added to the [Retrieved](
 
 Some special keys exist with specific return data, all of them have the prefix `_read_`, so `hints_{team}_{slot}` is `_read_hints_{team}_{slot}`.
 
-| Name                          | Type                     | Notes                                             |
-|-------------------------------|--------------------------|---------------------------------------------------|
-| hints_{team}_{slot}           | list\[[Hint](#Hint)\]    | All Hints belonging to the requested Player.      |
-| slot_data_{slot}              | dict\[str, any\]         | slot_data belonging to the requested slot.        |
-| item_name_groups_{game_name}  | dict\[str, list\[str\]\] | item_name_groups belonging to the requested game. |
+| Name                         | Type                          | Notes                                             |
+|------------------------------|-------------------------------|---------------------------------------------------|
+| hints_{team}_{slot}          | list\[[Hint](#Hint)\]         | All Hints belonging to the requested Player.      |
+| slot_data_{slot}             | dict\[str, any\]              | slot_data belonging to the requested slot.        |
+| item_name_groups_{game_name} | dict\[str, list\[str\]\]      | item_name_groups belonging to the requested game. |
+| client_status_{team}_{slot}  | [ClientStatus](#ClientStatus) | The current game status of the requested player.  |
 
 ### Set
 Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
@@ -413,6 +416,8 @@ The following operations can be applied to a datastorage key
 | mul | Multiplies the current value of the key by `value`. |
 | pow | Multiplies the current value of the key to the power of `value`. |
 | mod | Sets the current value of the key to the remainder after division by `value`. |
+| floor | Floors the current value (`value` is ignored). |
+| ceil | Ceils the current value (`value` is ignored). |
 | max | Sets the current value of the key to `value` if `value` is bigger. |
 | min | Sets the current value of the key to `value` if `value` is lower. |
 | and | Applies a bitwise AND to the current value of the key with `value`. |
@@ -554,7 +559,7 @@ Color options:
 `player` marks owning player id for location/item, 
 `flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
-### Client States
+### ClientStatus
 An enumeration containing the possible client states that may be used to inform
 the server in [StatusUpdate](#StatusUpdate). The MultiServer automatically sets
 the client state to `ClientStatus.CLIENT_CONNECTED` on the first active connection

@@ -1,7 +1,8 @@
+from dataclasses import dataclass
 from enum import IntEnum
 from typing import TypedDict
-from Options import Toggle, DefaultOnToggle, Range, Choice
-
+from Options import DefaultOnToggle, PerGameCommonOptions, Toggle, Range, Choice, OptionSet
+from .Overcooked2Levels import Overcooked2Dlc
 
 class LocationBalancingMode(IntEnum):
     disabled = 0
@@ -28,7 +29,7 @@ class OC2Toggle(Toggle):
 
 
 class LocationBalancing(Choice):
-    """Location balancing affects the density of progression items found in your world relative to other wordlds. This setting changes nothing for solo games.
+    """Location balancing affects the density of progression items found in your world relative to other worlds. This setting changes nothing for solo games.
 
     - Disabled: Location density in your world can fluctuate greatly depending on the settings of other players. In extreme cases, your world may be entirely populated with filler items
 
@@ -48,7 +49,7 @@ class RampTricks(OC2Toggle):
     
 
 class DeathLink(Choice):
-    """DeathLink is an opt-in feature for Multiworlds where individual death events are propogated to all games with DeathLink enabled.
+    """DeathLink is an opt-in feature for Multiworlds where individual death events are propagated to all games with DeathLink enabled.
 
     - Disabled: Death will behave as it does in the original game.
 
@@ -87,8 +88,15 @@ class ShuffleLevelOrder(OC2OnToggle):
     display_name = "Shuffle Level Order"
 
 
+class DLCOptionSet(OptionSet):
+    """Which DLCs should be included when 'Shuffle Level Order' is enabled?'"""
+    display_name = "Enabled DLC"
+    default = {"Story", "Seasonal"}
+    valid_keys = [dlc.value for dlc in Overcooked2Dlc]
+
+
 class IncludeHordeLevels(OC2OnToggle):
-    """Includes "Horde Defence" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds
+    """Includes "Horde Defense" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds
     two horde-specific items into the item pool."""
     display_name = "Include Horde Levels"
 
@@ -119,7 +127,7 @@ class ShorterLevelDuration(OC2OnToggle):
 class ShortHordeLevels(OC2OnToggle):
     """Modifies horde levels to contain roughly 1/3rd fewer waves than in the original game.
 
-    The kitchen's health is sacled appropriately to preserve the same approximate difficulty."""
+    The kitchen's health is scaled appropriately to preserve the same approximate difficulty."""
     display_name = "Shorter Horde Levels"
 
 
@@ -160,31 +168,30 @@ class StarThresholdScale(Range):
     default = 35
 
 
-overcooked_options = {
+@dataclass
+class OC2Options(PerGameCommonOptions):
     # generator options
-    "location_balancing": LocationBalancing,
-    "ramp_tricks": RampTricks,
-
+    location_balancing: LocationBalancing
+    ramp_tricks: RampTricks
+    
     # deathlink
-    "deathlink": DeathLink,
-
+    deathlink: DeathLink
+    
     # randomization options
-    "shuffle_level_order": ShuffleLevelOrder,
-    "include_horde_levels": IncludeHordeLevels,
-    "prep_levels": PrepLevels,
-    "kevin_levels": KevinLevels,
-
+    shuffle_level_order: ShuffleLevelOrder
+    include_dlcs: DLCOptionSet
+    include_horde_levels: IncludeHordeLevels
+    prep_levels: PrepLevels
+    kevin_levels: KevinLevels
+    
     # quality of life options
-    "fix_bugs": FixBugs,
-    "shorter_level_duration": ShorterLevelDuration,
-    "short_horde_levels": ShortHordeLevels,
-    "always_preserve_cooking_progress": AlwaysPreserveCookingProgress,
-    "always_serve_oldest_order": AlwaysServeOldestOrder,
-    "display_leaderboard_scores": DisplayLeaderboardScores,
-
+    fix_bugs: FixBugs
+    shorter_level_duration: ShorterLevelDuration
+    short_horde_levels: ShortHordeLevels
+    always_preserve_cooking_progress: AlwaysPreserveCookingProgress
+    always_serve_oldest_order: AlwaysServeOldestOrder
+    display_leaderboard_scores: DisplayLeaderboardScores
+    
     # difficulty settings
-    "stars_to_win": StarsToWin,
-    "star_threshold_scale": StarThresholdScale,
-}
-
-OC2Options = TypedDict("OC2Options", {option.__name__: option for option in overcooked_options.values()})
+    stars_to_win: StarsToWin
+    star_threshold_scale: StarThresholdScale

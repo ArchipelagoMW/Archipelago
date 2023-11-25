@@ -1,29 +1,20 @@
-import unittest
-from argparse import Namespace
-
-from BaseClasses import MultiWorld
 from worlds.alttp.Dungeons import create_dungeons
 from worlds.alttp.EntranceShuffle import connect_entrance, Inverted_LW_Entrances, Inverted_LW_Dungeon_Entrances, Inverted_LW_Single_Cave_Doors, Inverted_Old_Man_Entrances, Inverted_DW_Entrances, Inverted_DW_Dungeon_Entrances, Inverted_DW_Single_Cave_Doors, \
     Inverted_LW_Entrances_Must_Exit, Inverted_LW_Dungeon_Entrances_Must_Exit, Inverted_Bomb_Shop_Multi_Cave_Doors, Inverted_Bomb_Shop_Single_Cave_Doors, Blacksmith_Single_Cave_Doors, Inverted_Blacksmith_Multi_Cave_Doors
 from worlds.alttp.InvertedRegions import create_inverted_regions
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Rules import set_inverted_big_bomb_rules
-from worlds import AutoWorld
+from worlds.alttp.test import LTTPTestBase
 
 
-class TestInvertedBombRules(unittest.TestCase):
+class TestInvertedBombRules(LTTPTestBase):
 
     def setUp(self):
-        self.multiworld = MultiWorld(1)
+        self.world_setup()
         self.multiworld.mode[1] = "inverted"
-        args = Namespace
-        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
-            setattr(args, name, {1: option.from_any(option.default)})
-            self.multiworld.set_options(args)
-        self.multiworld.set_default_common_options()
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.multiworld, 1)
-        create_dungeons(self.multiworld, 1)
+        self.multiworld.worlds[1].create_dungeons()
 
     #TODO: Just making sure I haven't missed an entrance.  It would be good to test the rules make sense as well.
     def testInvertedBombRulesAreComplete(self):

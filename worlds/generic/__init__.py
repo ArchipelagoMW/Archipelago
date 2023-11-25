@@ -19,15 +19,13 @@ class GenericWeb(WebWorld):
                    'English', 'mac_en.md','mac/en', ['Bicoloursnake'])
     plando = Tutorial('Archipelago Plando Guide', 'A guide to understanding and using plando for your game.',
                       'English', 'plando_en.md', 'plando/en', ['alwaysintreble', 'Alchav'])
-    setup = Tutorial('Multiworld Setup Tutorial',
-                     'A guide to setting up the Archipelago software to generate and host multiworld games on your computer.',
+    setup = Tutorial('Getting Started',
+                     'A guide to setting up the Archipelago software, and generating, hosting, and connecting to '
+                     'multiworld games.',
                      'English', 'setup_en.md', 'setup/en', ['alwaysintreble'])
     triggers = Tutorial('Archipelago Triggers Guide', 'A guide to setting up and using triggers in your game settings.',
                         'English', 'triggers_en.md', 'triggers/en', ['alwaysintreble'])
-    using_website = Tutorial('Archipelago Website User Guide',
-                             'A guide to using the Archipelago website to generate multiworlds or host pre-generated multiworlds.',
-                             'English', 'using_website_en.md', 'using_website/en', ['alwaysintreble'])
-    tutorials = [setup, using_website, mac, commands, advanced_settings, triggers, plando]
+    tutorials = [setup, mac, commands, advanced_settings, triggers, plando]
 
 
 class GenericWorld(World):

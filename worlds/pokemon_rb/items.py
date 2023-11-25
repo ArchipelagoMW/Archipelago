@@ -1,11 +1,13 @@
 from BaseClasses import ItemClassification
 from .poke_data import pokemon_data
 
+
 class ItemData:
-    def __init__(self, id, classification, groups):
+    def __init__(self, item_id, classification, groups):
         self.groups = groups
         self.classification = classification
-        self.id = None if id is None else id + 172000000
+        self.id = None if item_id is None else item_id + 172000000
+
 
 item_table = {
     "Master Ball": ItemData(1, ItemClassification.useful, ["Consumables", "Poke Balls"]),
@@ -15,9 +17,9 @@ item_table = {
     "Town Map": ItemData(5, ItemClassification.progression_skip_balancing, ["Unique", "Key Items"]),
     "Bicycle": ItemData(6, ItemClassification.progression, ["Unique", "Key Items"]),
     # "Flippers": ItemData(7, ItemClassification.progression),
-    #"Safari Ball": ItemData(8, ItemClassification.filler),
+    # "Safari Ball": ItemData(8, ItemClassification.filler),
     "Pokedex": ItemData(9, ItemClassification.progression, ["Unique", "Key Items"]),
-    "Moon Stone": ItemData(10, ItemClassification.useful, ["Unique", "Evolution Stones"]),
+    "Moon Stone": ItemData(10, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones", "Key Items"]),
     "Antidote": ItemData(11, ItemClassification.filler, ["Consumables"]),
     "Burn Heal": ItemData(12, ItemClassification.filler, ["Consumables"]),
     "Ice Heal": ItemData(13, ItemClassification.filler, ["Consumables"]),
@@ -38,23 +40,23 @@ item_table = {
     "Earth Badge": ItemData(28, ItemClassification.progression, ["Unique", "Key Items", "Badges"]),
     "Escape Rope": ItemData(29, ItemClassification.filler, ["Consumables"]),
     "Repel": ItemData(30, ItemClassification.filler, ["Consumables"]),
-    "Old Amber": ItemData(31, ItemClassification.progression_skip_balancing, ["Unique", "Fossils"]),
-    "Fire Stone": ItemData(32, ItemClassification.useful, ["Unique", "Evolution Stones"]),
-    "Thunder Stone": ItemData(33, ItemClassification.useful, ["Unique", "Evolution Stones"]),
-    "Water Stone": ItemData(34, ItemClassification.useful, ["Unique", "Evolution Stones"]),
+    "Old Amber": ItemData(31, ItemClassification.progression_skip_balancing, ["Unique", "Fossils", "Key Items"]),
+    "Fire Stone": ItemData(32, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones", "Key Items"]),
+    "Thunder Stone": ItemData(33, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones" "Key Items"]),
+    "Water Stone": ItemData(34, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones", "Key Items"]),
     "HP Up": ItemData(35, ItemClassification.filler, ["Consumables", "Vitamins"]),
     "Protein": ItemData(36, ItemClassification.filler, ["Consumables", "Vitamins"]),
     "Iron": ItemData(37, ItemClassification.filler, ["Consumables", "Vitamins"]),
     "Carbos": ItemData(38, ItemClassification.filler, ["Consumables", "Vitamins"]),
     "Calcium": ItemData(39, ItemClassification.filler, ["Consumables", "Vitamins"]),
-    "Rare Candy": ItemData(40, ItemClassification.useful, ["Consumables"]),
-    "Dome Fossil": ItemData(41, ItemClassification.progression_skip_balancing, ["Unique", "Fossils"]),
-    "Helix Fossil": ItemData(42, ItemClassification.progression_skip_balancing, ["Unique", "Fossils"]),
+    "Rare Candy": ItemData(40, ItemClassification.filler, ["Consumables"]),
+    "Dome Fossil": ItemData(41, ItemClassification.progression_skip_balancing, ["Unique", "Fossils", "Key Items"]),
+    "Helix Fossil": ItemData(42, ItemClassification.progression_skip_balancing, ["Unique", "Fossils", "Key Items"]),
     "Secret Key": ItemData(43, ItemClassification.progression, ["Unique", "Key Items"]),
     "Bike Voucher": ItemData(45, ItemClassification.progression, ["Unique", "Key Items"]),
     "X Accuracy": ItemData(46, ItemClassification.filler, ["Consumables", "Battle Items"]),
-    "Leaf Stone": ItemData(47, ItemClassification.useful, ["Unique", "Evolution Stones"]),
-    "Card Key": ItemData(48, ItemClassification.progression, ["Unique", "Key Items"]),
+    "Leaf Stone": ItemData(47, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones", "Key Items"]),
+    "Card Key": ItemData(48, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
     "Nugget": ItemData(49, ItemClassification.filler, []),
     #"Laptop": ItemData(50, ItemClassification.useful, ["Unique"]),
     "Poke Doll": ItemData(51, ItemClassification.filler, ["Consumables"]),
@@ -75,13 +77,13 @@ item_table = {
     "X Defend": ItemData(66, ItemClassification.filler, ["Consumables", "Battle Items"]),
     "X Speed": ItemData(67, ItemClassification.filler, ["Consumables", "Battle Items"]),
     "X Special": ItemData(68, ItemClassification.filler, ["Consumables", "Battle Items"]),
-    "Coin Case": ItemData(69, ItemClassification.progression_skip_balancing, ["Unique", "Key Items"]),
+    "Coin Case": ItemData(69, ItemClassification.progression, ["Unique", "Key Items"]),
     "Oak's Parcel": ItemData(70, ItemClassification.progression, ["Unique", "Key Items"]),
     "Item Finder": ItemData(71, ItemClassification.progression, ["Unique", "Key Items"]),
     "Silph Scope": ItemData(72, ItemClassification.progression, ["Unique", "Key Items"]),
     "Poke Flute": ItemData(73, ItemClassification.progression, ["Unique", "Key Items"]),
     "Lift Key": ItemData(74, ItemClassification.progression, ["Unique", "Key Items"]),
-    "Exp. All": ItemData(75, ItemClassification.useful, ["Unique"]),
+    "Exp. All": ItemData(75, ItemClassification.progression_skip_balancing, ["Unique", "Key Items"]),
     "Old Rod": ItemData(76, ItemClassification.progression_skip_balancing, ["Unique", "Key Items", "Rods"]),
     "Good Rod": ItemData(77, ItemClassification.progression_skip_balancing, ["Unique", "Key Items", "Rods"]),
     "Super Rod": ItemData(78, ItemClassification.progression_skip_balancing, ["Unique", "Key Items", "Rods"]),
@@ -105,11 +107,23 @@ item_table = {
     "Fire Trap": ItemData(97, ItemClassification.trap, ["Traps"]),
     "20 Coins": ItemData(98, ItemClassification.filler, ["Coins"]),
     "100 Coins": ItemData(99, ItemClassification.filler, ["Coins"]),
-    "HM01 Cut": ItemData(196, ItemClassification.progression, ["Unique", "HMs"]),
-    "HM02 Fly": ItemData(197, ItemClassification.progression, ["Unique", "HMs"]),
-    "HM03 Surf": ItemData(198, ItemClassification.progression, ["Unique", "HMs"]),
-    "HM04 Strength": ItemData(199, ItemClassification.progression, ["Unique", "HMs"]),
-    "HM05 Flash": ItemData(200, ItemClassification.progression, ["Unique", "HMs"]),
+    "Card Key 2F": ItemData(100, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 3F": ItemData(101, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 4F": ItemData(102, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 5F": ItemData(103, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 6F": ItemData(104, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 7F": ItemData(105, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 8F": ItemData(106, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 9F": ItemData(107, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 10F": ItemData(108, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Card Key 11F": ItemData(109, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Progressive Card Key": ItemData(110, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
+    "Sleep Trap": ItemData(111, ItemClassification.trap, ["Traps"]),
+    "HM01 Cut": ItemData(196, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
+    "HM02 Fly": ItemData(197, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
+    "HM03 Surf": ItemData(198, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
+    "HM04 Strength": ItemData(199, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
+    "HM05 Flash": ItemData(200, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
     "TM01 Mega Punch": ItemData(201, ItemClassification.useful, ["Unique", "TMs"]),
     "TM02 Razor Wind": ItemData(202, ItemClassification.filler, ["Unique", "TMs"]),
     "TM03 Swords Dance": ItemData(203, ItemClassification.useful, ["Unique", "TMs"]),
@@ -161,9 +175,27 @@ item_table = {
     "TM49 Tri Attack": ItemData(249, ItemClassification.useful, ["Unique", "TMs"]),
     "TM50 Substitute": ItemData(250, ItemClassification.useful, ["Unique", "TMs"]),
 
+    "Game Corner": ItemData(None, ItemClassification.progression, []),
+    "Cinnabar Island": ItemData(None, ItemClassification.progression, []),
+    "Buy Poke Doll": ItemData(None, ItemClassification.progression, []),
+    "Vending Machine Drinks": ItemData(None, ItemClassification.progression, []),
+    "Help Bill": ItemData(None, ItemClassification.progression, []),
+    "Defeat Brock": ItemData(None, ItemClassification.progression, []),
+    "Defeat Misty": ItemData(None, ItemClassification.progression, []),
+    "Defeat Lt. Surge": ItemData(None, ItemClassification.progression, []),
+    "Defeat Erika": ItemData(None, ItemClassification.progression, []),
+    "Defeat Koga": ItemData(None, ItemClassification.progression, []),
+    "Defeat Blaine": ItemData(None, ItemClassification.progression, []),
+    "Defeat Sabrina": ItemData(None, ItemClassification.progression, []),
+    "Defeat Viridian Gym Giovanni": ItemData(None, ItemClassification.progression, []),
+    "Seafoam Exit Boulder": ItemData(None, ItemClassification.progression, []),
+    "Seafoam Boss Boulders": ItemData(None, ItemClassification.progression, []),
+    "Victory Road Boulder": ItemData(None, ItemClassification.progression, []),
     "Fuji Saved": ItemData(None, ItemClassification.progression, []),
     "Silph Co Liberated": ItemData(None, ItemClassification.progression, []),
-    "Become Champion": ItemData(None, ItemClassification.progression, [])
+    "Become Champion": ItemData(None, ItemClassification.progression, []),
+
+    "Trainer Parties": ItemData(None, ItemClassification.filler, [])
 }
 
 item_table.update({f"TM{str(i).zfill(2)}": ItemData(i + 456, ItemClassification.filler, ["Unique", "TMs"])

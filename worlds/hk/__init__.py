@@ -17,8 +17,8 @@ from .ExtractedData import locations, starts, multi_locations, location_to_regio
     event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification
-from ..AutoWorld import World, LogicMixin, WebWorld
+from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification
+from worlds.AutoWorld import World, LogicMixin, WebWorld
 
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -170,7 +170,6 @@ class HKWorld(World):
         charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
         self.charm_costs = world.PlandoCharmCosts[self.player].get_costs(charm_costs)
         # world.exclude_locations[self.player].value.update(white_palace_locations)
-        world.local_items[self.player].value.add("Mimic_Grub")
         for term, data in cost_terms.items():
             mini = getattr(world, f"Minimum{data.option}Price")[self.player]
             maxi = getattr(world, f"Maximum{data.option}Price")[self.player]
@@ -422,13 +421,15 @@ class HKWorld(World):
         player = self.player
         if world.logic[player] != 'nologic':
             goal = world.Goal[player]
-            if goal == Goal.option_siblings:
+            if goal == Goal.option_hollowknight:
+                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
+            elif goal == Goal.option_siblings:
                 world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
             elif goal == Goal.option_radiance:
                 world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
             else:
-                # Hollow Knight or Any goal.
-                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
+                # Any goal
+                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player) or state._hk_can_beat_radiance(player)
 
         set_rules(self)
 
@@ -515,12 +516,12 @@ class HKWorld(World):
         change = super(HKWorld, self).collect(state, item)
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                state.prog_items[effect_name, item.player] += effect_value
+                state.prog_items[item.player][effect_name] += effect_value
         if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
-            if state.prog_items.get(('RIGHTDASH', item.player), 0) and \
-                    state.prog_items.get(('LEFTDASH', item.player), 0):
-                (state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player]) = \
-                    ([max(state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player])] * 2)
+            if state.prog_items[item.player].get('RIGHTDASH', 0) and \
+                    state.prog_items[item.player].get('LEFTDASH', 0):
+                (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
+                    ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
         return change
 
     def remove(self, state, item: HKItem) -> bool:
@@ -528,9 +529,9 @@ class HKWorld(World):
 
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                if state.prog_items[effect_name, item.player] == effect_value:
-                    del state.prog_items[effect_name, item.player]
-                state.prog_items[effect_name, item.player] -= effect_value
+                if state.prog_items[item.player][effect_name] == effect_value:
+                    del state.prog_items[item.player][effect_name]
+                state.prog_items[item.player][effect_name] -= effect_value
 
         return change
 
@@ -640,7 +641,7 @@ class HKItem(Item):
             classification = ItemClassification.progression_skip_balancing
         elif type in ("Map", "Journal"):
             classification = ItemClassification.filler
-        elif type in ("Mask", "Ore", "Vessel"):
+        elif type in ("Ore", "Vessel"):
             classification = ItemClassification.useful
         elif advancement:
             classification = ItemClassification.progression
@@ -663,7 +664,7 @@ class HKLogicMixin(LogicMixin):
         return self.multiworld.StartLocation[player] == start_location
 
     def _hk_nail_combat(self, player: int) -> bool:
-        return self.has_any({'LFFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
+        return self.has_any({'LEFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
 
     def _hk_can_beat_thk(self, player: int) -> bool:
         return (
@@ -674,6 +675,7 @@ class HKLogicMixin(LogicMixin):
                 self.has_any({'LEFTDASH', 'RIGHTDASH'}, player)
                 or self._hk_option(player, 'ProficientCombat')
             )
+            and self.has('FOCUS', player)
         )
 
     def _hk_siblings_ending(self, player: int) -> bool:
@@ -681,16 +683,15 @@ class HKLogicMixin(LogicMixin):
 
     def _hk_can_beat_radiance(self, player: int) -> bool:
         return (
-            self._hk_siblings_ending(player)
-            and self.has('DREAMNAIL', player, 1)
+            self.has('Opened_Black_Egg_Temple', player)
+            and self._hk_nail_combat(player)
+            and self.has('WHITEFRAGMENT', player, 3)
+            and self.has('DREAMNAIL', player)
             and (
                 (self.has('LEFTCLAW', player) and self.has('RIGHTCLAW', player))
                 or self.has('WINGS', player)
             )
-            and (
-                self.count('FIREBALL', player) + self.count('SCREAM', player)
-                + self.count('QUAKE', player)
-            ) > 1
+            and (self.count('FIREBALL', player) + self.count('SCREAM', player) + self.count('QUAKE', player)) > 1
             and (
                 (self.has('LEFTDASH', player, 2) and self.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
                 or (self._hk_option(player, 'ProficientCombat') and self.has('QUAKE', player))  # or Dive

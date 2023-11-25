@@ -2,26 +2,26 @@
 
 ## Important
 
-Comme nous utilisons Bizhawk, ce guide ne s'applique qu'aux systèmes Windows et Linux.
+Comme nous utilisons BizHawk, ce guide ne s'applique qu'aux systèmes Windows et Linux.
 
 ## Logiciel requis
 
-- Bizhawk : [Bizhawk sort de TASVideos] (https://tasvideos.org/BizHawk/ReleaseHistory)
+- BizHawk : [BizHawk sort de TASVideos] (https://tasvideos.org/BizHawk/ReleaseHistory)
    - Les versions 2.3.1 et ultérieures sont prises en charge. La version 2.7 est recommandée pour la stabilité.
-   - Des instructions d'installation détaillées pour Bizhawk peuvent être trouvées sur le lien ci-dessus.
+   - Des instructions d'installation détaillées pour BizHawk peuvent être trouvées sur le lien ci-dessus.
    - Les utilisateurs Windows doivent d'abord exécuter le programme d'installation prereq, qui peut également être trouvé sur le lien ci-dessus.
 - Le client Archipelago intégré, qui peut être installé [ici](https://github.com/ArchipelagoMW/Archipelago/releases)
    (sélectionnez `Ocarina of Time Client` lors de l'installation).
 - Une ROM Ocarina of Time v1.0.
 
-## Configuration de Bizhawk
+## Configuration de BizHawk
 
-Une fois Bizhawk installé, ouvrez Bizhawk et modifiez les paramètres suivants :
+Une fois BizHawk installé, ouvrez BizHawk et modifiez les paramètres suivants :
 
 - Allez dans Config > Personnaliser. Basculez vers l'onglet Avancé, puis basculez le Lua Core de "NLua+KopiLua" vers
-   "Interface Lua+Lua". Redémarrez ensuite Bizhawk. Ceci est nécessaire pour que le script Lua fonctionne correctement.
+   "Interface Lua+Lua". Redémarrez ensuite BizHawk. Ceci est nécessaire pour que le script Lua fonctionne correctement.
    **REMARQUE : Même si "Lua+LuaInterface" est déjà sélectionné, basculez entre les deux options et resélectionnez-le. Nouvelles installations**
-   ** des versions plus récentes de Bizhawk ont tendance à afficher "Lua+LuaInterface" comme option sélectionnée par défaut mais se chargent toujours **
+   ** des versions plus récentes de BizHawk ont tendance à afficher "Lua+LuaInterface" comme option sélectionnée par défaut mais se chargent toujours **
    **"NLua+KopiLua" jusqu'à ce que cette étape soit terminée.**
 - Sous Config > Personnaliser > Avancé, assurez-vous que la case pour AutoSaveRAM est cochée et cliquez sur le bouton 5s.
    Cela réduit la possibilité de perdre des données de sauvegarde en cas de plantage de l'émulateur.
@@ -34,12 +34,12 @@ Une fois Bizhawk installé, ouvrez Bizhawk et modifiez les paramètres suivants�
 - Sous N64, activez "Utiliser l'emplacement d'extension". Ceci est nécessaire pour que les sauvegardes fonctionnent.
    (Le menu N64 n'apparaît qu'après le chargement d'une ROM.)
 
-Il est fortement recommandé d'associer les extensions de rom N64 (\*.n64, \*.z64) au Bizhawk que nous venons d'installer.
+Il est fortement recommandé d'associer les extensions de rom N64 (\*.n64, \*.z64) au BizHawk que nous venons d'installer.
 Pour ce faire, nous devons simplement rechercher n'importe quelle rom N64 que nous possédons, faire un clic droit et sélectionner "Ouvrir avec ...", dépliez
-la liste qui apparaît et sélectionnez l'option du bas "Rechercher une autre application", puis naviguez jusqu'au dossier Bizhawk
+la liste qui apparaît et sélectionnez l'option du bas "Rechercher une autre application", puis naviguez jusqu'au dossier BizHawk
 et sélectionnez EmuHawk.exe.
 
-Un guide de configuration Bizhawk alternatif ainsi que divers conseils de dépannage peuvent être trouvés
+Un guide de configuration BizHawk alternatif ainsi que divers conseils de dépannage peuvent être trouvés
 [ici](https://wiki.ootrandomizer.com/index.php?title=Bizhawk).
 
 ## Configuration de votre fichier YAML
@@ -414,7 +414,7 @@ Double-cliquez sur votre fichier `.apz5` pour démarrer votre client et démarre
 Une fois le client et l'émulateur démarrés, vous devez les connecter. Dans l'émulateur, cliquez sur "Outils"
 menu et sélectionnez "Console Lua". Cliquez sur le bouton du dossier ou appuyez sur Ctrl+O pour ouvrir un script Lua.
 
-Accédez à votre dossier d'installation Archipelago et ouvrez `data/lua/OOT/oot_connector.lua`.
+Accédez à votre dossier d'installation Archipelago et ouvrez `data/lua/connector_oot.lua`.
 
 Pour connecter le client au multiserveur, mettez simplement `<adresse>:<port>` dans le champ de texte en haut et appuyez sur Entrée (si le
 le serveur utilise un mot de passe, saisissez dans le champ de texte inférieur `/connect <adresse>:<port> [mot de passe]`)

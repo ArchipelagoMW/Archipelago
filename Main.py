@@ -1,34 +1,30 @@
 import collections
+import concurrent.futures
 import logging
 import os
-import time
-import zlib
-import concurrent.futures
 import pickle
 import tempfile
+import time
 import zipfile
-from typing import Dict, List, Tuple, Optional, Set
+import zlib
+from typing import Dict, List, Optional, Set, Tuple, Union
 
-from BaseClasses import Item, MultiWorld, CollectionState, Region, LocationProgressType, Location
 import worlds
-from worlds.alttp.SubClasses import LTTPRegionType
-from worlds.alttp.Regions import is_main_entrance
-from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
-from worlds.alttp.Shops import FillDisabledShopSlots
-from Utils import output_path, get_options, __version__, version_tuple
-from worlds.generic.Rules import locality_rules, exclusion_rules
+from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
+from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Options import StartInventoryPool
+from Utils import __version__, output_path, version_tuple
+from settings import get_settings
 from worlds import AutoWorld
+from worlds.generic.Rules import exclusion_rules, locality_rules
 
-ordered_areas = (
-    'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
-    'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
-    'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total"
-)
+__all__ = ["main"]
 
 
 def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = None):
     if not baked_server_options:
-        baked_server_options = get_options()["server_options"]
+        baked_server_options = get_settings().server_options.as_dict()
+    assert isinstance(baked_server_options, dict)
     if args.outputpath:
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
@@ -105,14 +101,20 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     del item_digits, location_digits, item_count, location_count
 
-    AutoWorld.call_stage(world, "assert_generate")
+    # This assertion method should not be necessary to run if we are not outputting any multidata.
+    if not args.skip_output:
+        AutoWorld.call_stage(world, "assert_generate")
 
     AutoWorld.call_all(world, "generate_early")
 
     logger.info('')
 
     for player in world.player_ids:
-        for item_name, count in world.start_inventory[player].value.items():
+        for item_name, count in world.worlds[player].options.start_inventory.value.items():
+            for _ in range(count):
+                world.push_precollected(world.create_item(item_name, player))
+
+        for item_name, count in world.start_inventory_from_pool.setdefault(player, StartInventoryPool({})).value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
@@ -122,32 +124,68 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Creating Items.')
     AutoWorld.call_all(world, "create_items")
 
-    # All worlds should have finished creating all regions, locations, and entrances.
-    # Recache to ensure that they are all visible for locality rules.
-    world._recache()
-
     logger.info('Calculating Access Rules.')
 
     for player in world.player_ids:
         # items can't be both local and non-local, prefer local
-        world.non_local_items[player].value -= world.local_items[player].value
-        world.non_local_items[player].value -= set(world.local_early_items[player])
-
-    if world.players > 1:
-        locality_rules(world)
-    else:
-        world.non_local_items[1].value = set()
-        world.local_items[1].value = set()
+        world.worlds[player].options.non_local_items.value -= world.worlds[player].options.local_items.value
+        world.worlds[player].options.non_local_items.value -= set(world.local_early_items[player])
 
     AutoWorld.call_all(world, "set_rules")
 
     for player in world.player_ids:
-        exclusion_rules(world, player, world.exclude_locations[player].value)
-        world.priority_locations[player].value -= world.exclude_locations[player].value
-        for location_name in world.priority_locations[player].value:
-            world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
+        exclusion_rules(world, player, world.worlds[player].options.exclude_locations.value)
+        world.worlds[player].options.priority_locations.value -= world.worlds[player].options.exclude_locations.value
+        for location_name in world.worlds[player].options.priority_locations.value:
+            try:
+                location = world.get_location(location_name, player)
+            except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
+                if location_name not in world.worlds[player].location_name_to_id:
+                    raise Exception(f"Unable to prioritize location {location_name} in player {player}'s world.") from e
+            else:
+                location.progress_type = LocationProgressType.PRIORITY
 
+    # Set local and non-local item rules.
+    if world.players > 1:
+        locality_rules(world)
+    else:
+        world.worlds[1].options.non_local_items.value = set()
+        world.worlds[1].options.local_items.value = set()
+    
     AutoWorld.call_all(world, "generate_basic")
+
+    # remove starting inventory from pool items.
+    # Because some worlds don't actually create items during create_items this has to be as late as possible.
+    if any(world.start_inventory_from_pool[player].value for player in world.player_ids):
+        new_items: List[Item] = []
+        depletion_pool: Dict[int, Dict[str, int]] = {
+            player: world.start_inventory_from_pool[player].value.copy() for player in world.player_ids}
+        for player, items in depletion_pool.items():
+            player_world: AutoWorld.World = world.worlds[player]
+            for count in items.values():
+                for _ in range(count):
+                    new_items.append(player_world.create_filler())
+        target: int = sum(sum(items.values()) for items in depletion_pool.values())
+        for i, item in enumerate(world.itempool):
+            if depletion_pool[item.player].get(item.name, 0):
+                target -= 1
+                depletion_pool[item.player][item.name] -= 1
+                # quick abort if we have found all items
+                if not target:
+                    new_items.extend(world.itempool[i+1:])
+                    break
+            else:
+                new_items.append(item)
+
+        # leftovers?
+        if target:
+            for player, remaining_items in depletion_pool.items():
+                remaining_items = {name: count for name, count in remaining_items.items() if count}
+                if remaining_items:
+                    raise Exception(f"{world.get_player_name(player)}"
+                                    f" is trying to remove items from their pool that don't exist: {remaining_items}")
+        assert len(world.itempool) == len(new_items), "Item Pool amounts should not change."
+        world.itempool[:] = new_items
 
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():
@@ -193,7 +231,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
         region = Region("Menu", group_id, world, "ItemLink")
         world.regions.append(region)
-        locations = region.locations = []
+        locations = region.locations
         for item in world.itempool:
             count = common_item_count.get(item.player, {}).get(item.name, 0)
             if count:
@@ -227,10 +265,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
     if any(world.item_links.values()):
-        world._recache()
         world._all_state = None
 
-    logger.info("Running Item Plando")
+    logger.info("Running Item Plando.")
 
     distribute_planned(world)
 
@@ -247,60 +284,37 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, 'post_fill')
 
-    if world.players > 1:
+    if world.players > 1 and not args.skip_prog_balancing:
         balance_multiworld_progression(world)
-
-    logger.info(f'Beginning output...')
+    else:
+        logger.info("Progression balancing skipped.")
 
     # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
     world.random.passthrough = False
 
+    if args.skip_output:
+        logger.info('Done. Skipped output/spoiler generation. Total Time: %s', time.perf_counter() - start)
+        return world
+
+    logger.info(f'Beginning output...')
     outfilebase = 'AP_' + world.seed_name
 
     output = tempfile.TemporaryDirectory()
-    with output as temp_dir:
-        with concurrent.futures.ThreadPoolExecutor(world.players + 2) as pool:
+    with (output as temp_dir):
+        output_players = [player for player in world.player_ids if AutoWorld.World.generate_output.__code__
+                          is not world.worlds[player].generate_output.__code__]
+        with concurrent.futures.ThreadPoolExecutor(len(output_players) + 2) as pool:
             check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
             output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
-            for player in world.player_ids:
+            for player in output_players:
                 # skip starting a thread for methods that say "pass".
-                if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
-                    output_file_futures.append(
-                        pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
+                output_file_futures.append(
+                    pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
 
             # collect ER hint info
             er_hint_data: Dict[int, Dict[int, str]] = {}
             AutoWorld.call_all(world, 'extend_hint_information', er_hint_data)
-
-            checks_in_area = {player: {area: list() for area in ordered_areas}
-                              for player in range(1, world.players + 1)}
-
-            for player in range(1, world.players + 1):
-                checks_in_area[player]["Total"] = 0
-
-            for location in world.get_filled_locations():
-                if type(location.address) is int:
-                    if location.game != "A Link to the Past":
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    else:
-                        main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
-                        if location.parent_region.dungeon:
-                            dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                           'Inverted Ganons Tower': 'Ganons Tower'} \
-                                .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                            checks_in_area[location.player][dungeonname].append(location.address)
-                        elif location.parent_region.type == LTTPRegionType.LightWorld:
-                            checks_in_area[location.player]["Light World"].append(location.address)
-                        elif location.parent_region.type == LTTPRegionType.DarkWorld:
-                            checks_in_area[location.player]["Dark World"].append(location.address)
-                        elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
-                            checks_in_area[location.player]["Light World"].append(location.address)
-                        elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
-                            checks_in_area[location.player]["Dark World"].append(location.address)
-                    checks_in_area[location.player]["Total"] += 1
-
-            FillDisabledShopSlots(world)
 
             def write_multidata():
                 import NetUtils
@@ -348,18 +362,20 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         assert location.item.code is not None, "item code None should be event, " \
                                                                "location.address should then also be None. Location: " \
                                                                f" {location}"
+                        assert location.address not in locations_data[location.player], (
+                            f"Locations with duplicate address. {location} and "
+                            f"{locations_data[location.player][location.address]}")
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
-                        if location.name in world.start_location_hints[location.player]:
+                        if location.name in world.worlds[location.player].options.start_location_hints:
                             precollect_hint(location)
-                        elif location.item.name in world.start_hints[location.item.player]:
+                        elif location.item.name in world.worlds[location.item.player].options.start_hints:
                             received_item = location.item
                             if collected_hints[received_item.player].setdefault(received_item.name, 0)\
-                                    < world.start_hints[received_item.player].value[received_item.name]:
+                                    < world.worlds[received_item.player].options.start_hints.value[received_item.name]:
                                 precollect_hint(location)
                                 collected_hints[received_item.player][received_item.name] += 1
-
-                        elif any([location.item.name in world.start_hints[player]
+                        elif any([location.item.name in world.worlds[player].options.start_hints
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
@@ -369,10 +385,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     for game_world in world.worlds.values()
                 }
 
+                checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
+
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
-                    "names": names,  # TODO: remove after 0.3.9
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
@@ -394,7 +411,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     f.write(bytes([3]))  # version of format
                     f.write(multidata)
 
-            multidata_task = pool.submit(write_multidata)
+            output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():
                 if not world.can_beat_game():
                     raise Exception("Game appears as unbeatable. Aborting.")
@@ -402,7 +419,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
             # retrieve exceptions via .result() if they occurred.
-            multidata_task.result()
             for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
                 if i % 10 == 0 or i == len(output_file_futures):
                     logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')

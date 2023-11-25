@@ -118,7 +118,7 @@ class SMSNIClient(SNIClient):
             snes_buffered_write(ctx, SM_SEND_QUEUE_RCOUNT,
                                 bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
-            from worlds.sm import locations_start_id
+            from . import locations_start_id
             location_id = locations_start_id + item_index
 
             ctx.locations_checked.add(location_id)
@@ -133,8 +133,8 @@ class SMSNIClient(SNIClient):
 
         item_out_ptr = data[0] | (data[1] << 8)
 
-        from worlds.sm import items_start_id
-        from worlds.sm import locations_start_id
+        from . import items_start_id
+        from . import locations_start_id
         if item_out_ptr < len(ctx.items_received):
             item = ctx.items_received[item_out_ptr]
             item_id = item.item - items_start_id

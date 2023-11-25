@@ -1,0 +1,80 @@
+name: Analyze modified files
+
+on:
+  pull_request:
+    paths:
+      - "**.py"
+  push:
+    paths:
+      - "**.py"
+
+env:
+  BASE: ${{ github.event.pull_request.base.sha }}
+  HEAD: ${{ github.event.pull_request.head.sha }}
+  BEFORE: ${{ github.event.before }}
+  AFTER: ${{ github.event.after }}
+
+jobs:
+  flake8-or-mypy:
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [flake8, mypy]
+
+    name: ${{ matrix.task }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Determine modified files (pull_request)"
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin $BASE $HEAD
+          DIFF=$(git diff --diff-filter=d --name-only $BASE...$HEAD -- "*.py")
+          echo "modified files:"
+          echo "$DIFF"
+          echo "diff=${DIFF//$'\n'/$' '}" >> $GITHUB_ENV
+
+      - name: "Determine modified files (push)"
+        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
+        run: |
+          git fetch origin $BEFORE $AFTER
+          DIFF=$(git diff --diff-filter=d --name-only $BEFORE..$AFTER -- "*.py")
+          echo "modified files:"
+          echo "$DIFF"
+          echo "diff=${DIFF//$'\n'/$' '}" >> $GITHUB_ENV
+
+      - name: "Treat all files as modified (new branch)"
+        if: github.event_name == 'push' && github.event.before == '0000000000000000000000000000000000000000'
+        run: |
+          echo "diff=." >> $GITHUB_ENV
+
+      - uses: actions/setup-python@v4
+        if: env.diff != ''
+        with:
+          python-version: 3.8
+
+      - name: "Install dependencies"
+        if: env.diff != ''
+        run: |
+          python -m pip install --upgrade pip ${{ matrix.task }}
+          python ModuleUpdate.py --append "WebHostLib/requirements.txt" --force --yes
+
+      - name: "flake8: Stop the build if there are Python syntax errors or undefined names"
+        continue-on-error: false
+        if: env.diff != '' && matrix.task == 'flake8'
+        run: |
+          flake8 --count --select=E9,F63,F7,F82 --show-source --statistics ${{ env.diff }}
+
+      - name: "flake8: Lint modified files"
+        continue-on-error: true
+        if: env.diff != '' && matrix.task == 'flake8'
+        run: |
+          flake8 --count --max-complexity=10 --max-doc-length=120 --max-line-length=120 --statistics ${{ env.diff }}
+
+      - name: "mypy: Type check modified files"
+        continue-on-error: true
+        if: env.diff != '' && matrix.task == 'mypy'
+        run: |
+          mypy --follow-imports=silent --install-types --non-interactive --strict ${{ env.diff }}

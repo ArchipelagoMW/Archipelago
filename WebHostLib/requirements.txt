@@ -1,7 +1,9 @@
-flask>=2.2.3
-pony>=0.7.16
+flask>=3.0.0
+pony>=0.7.17
 waitress>=2.1.2
-Flask-Caching>=2.0.2
-Flask-Compress>=1.13
-Flask-Limiter>=3.3.0
-bokeh>=3.1.0
+Flask-Caching>=2.1.0
+Flask-Compress>=1.14
+Flask-Limiter>=3.5.0
+bokeh>=3.1.1; python_version <= '3.8'
+bokeh>=3.2.2; python_version >= '3.9'
+markupsafe>=2.1.3

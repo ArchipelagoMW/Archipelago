@@ -673,7 +673,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         end
         return
     elseif progressive_technologies[item_name] ~= nil then
-        if global.index_sync[index] == nil then -- not yet received prog item
+        if global.index_sync[index] ~= item_name then -- not yet received prog item
             global.index_sync[index] = item_name
             local tech_stack = progressive_technologies[item_name]
             for _, item_name in ipairs(tech_stack) do
@@ -697,7 +697,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
             end
         end
     elseif TRAP_TABLE[item_name] ~= nil then
-        if global.index_sync[index] == nil then -- not yet received trap
+        if global.index_sync[index] ~= item_name then -- not yet received trap
             global.index_sync[index] = item_name
             game.print({"", "Received ", item_name, " from ", source})
             TRAP_TABLE[item_name]()

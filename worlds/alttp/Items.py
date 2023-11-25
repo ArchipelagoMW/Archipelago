@@ -2,6 +2,7 @@ import typing
 
 from BaseClasses import ItemClassification as IC
 
+
 def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
@@ -101,7 +102,7 @@ item_table = {'Bow': ItemData(IC.progression, None, 0x0B, 'You have\nchosen the\
               'Red Pendant': ItemData(IC.progression, 'Crystal', (0x01, 0x32, 0x60, 0x00, 0x69, 0x03), None, None, None, None, None, None, "the red pendant"),
               'Triforce': ItemData(IC.progression, None, 0x6A, '\n   YOU WIN!', 'and the triforce', 'victorious kid', 'victory for sale', 'fungus for the win', 'greedy boy wins game again', 'the Triforce'),
               'Power Star': ItemData(IC.progression, None, 0x6B, 'a small victory', 'and the power star', 'star-struck kid', 'star for sale', 'see stars with shroom', 'mario powers up again', 'a Power Star'),
-              'Triforce Piece': ItemData(IC.progression, None, 0x6C, 'a small victory', 'and the thirdforce', 'triangular kid', 'triangle for sale', 'fungus for triangle', 'wise boy has triangle again', 'a Triforce Piece'),
+              'Triforce Piece': ItemData(IC.progression_skip_balancing, None, 0x6C, 'a small victory', 'and the thirdforce', 'triangular kid', 'triangle for sale', 'fungus for triangle', 'wise boy has triangle again', 'a Triforce Piece'),
               'Crystal 1': ItemData(IC.progression, 'Crystal', (0x02, 0x34, 0x64, 0x40, 0x7F, 0x06), None, None, None, None, None, None, "a blue crystal"),
               'Crystal 2': ItemData(IC.progression, 'Crystal', (0x10, 0x34, 0x64, 0x40, 0x79, 0x06), None, None, None, None, None, None, "a blue crystal"),
               'Crystal 3': ItemData(IC.progression, 'Crystal', (0x40, 0x34, 0x64, 0x40, 0x6C, 0x06), None, None, None, None, None, None, "a blue crystal"),

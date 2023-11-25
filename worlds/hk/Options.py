@@ -2,7 +2,7 @@ import typing
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, SpecialRange
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
@@ -111,7 +111,7 @@ shop_to_option = {
     "Iselda": "IseldaShopSlots",
     "Salubra": "SalubraShopSlots",
     "Leg_Eater": "LegEaterShopSlots",
-    "Salubra_(Requires_Charms)": "IseldaShopSlots",
+    "Salubra_(Requires_Charms)": "SalubraCharmShopSlots",
     "Egg_Shop": "EggShopSlots",
 }
 
@@ -242,7 +242,7 @@ class MaximumGeoPrice(Range):
     default = 400
 
 
-class RandomCharmCosts(SpecialRange):
+class RandomCharmCosts(NamedRange):
     """Total Notch Cost of all Charms together. Vanilla sums to 90.
     This value is distributed among all charms in a random fashion.
     Special Cases:
@@ -250,7 +250,7 @@ class RandomCharmCosts(SpecialRange):
     Set to -2 or shuffle to shuffle around the vanilla costs to different charms."""
 
     display_name = "Randomize Charm Notch Costs"
-    range_start = -2
+    range_start = 0
     range_end = 240
     default = -1
     vanilla_costs: typing.List[int] = vanilla_costs

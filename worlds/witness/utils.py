@@ -1,84 +1,39 @@
-import os
-from Utils import cache_argsless
-from itertools import accumulate
-from typing import *
-from fractions import Fraction
-from collections import Counter
+from functools import lru_cache
+from math import floor
+from typing import List, Collection, FrozenSet, Tuple, Dict, Any, Set
+from pkgutil import get_data
 
 
-def make_warning_string(any_j: bool, any_u: bool, any_d: bool, all_j: bool, all_u: bool, all_d: bool) -> str:
-    warning_string = ""
-
-    if any_j:
-        if all_j:
-            warning_string += "all "
-        else:
-            warning_string += "some "
-
-        warning_string += "junk"
-
-    if any_u or any_d:
-        if warning_string:
-            warning_string += " and "
-
-        if all_u:
-            warning_string += "all "
-        else:
-            warning_string += "some "
-
-        warning_string += "usefuls"
-
-    if any_d:
-        warning_string += ", including "
-
-        if all_d:
-            warning_string += "all "
-        else:
-            warning_string += "some "
-
-        warning_string += "non-essential door items"
-
-    return warning_string
-
-
-def best_junk_to_add_based_on_weights(weights: Dict[Any, Fraction], created_junk: Dict[Any, int]):
-    min_error = ("", 2)
-
-    for junk_name, instances in created_junk.items():
-        new_dist = created_junk.copy()
-        new_dist[junk_name] += 1
-        new_dist_length = sum(new_dist.values())
-        new_dist = {key: Fraction(value/1)/new_dist_length for key, value in new_dist.items()}
-
-        errors = {key: abs(new_dist[key] - weights[key]) for key in created_junk.keys()}
-
-        new_min_error = max(errors.values())
-
-        if min_error[1] > new_min_error:
-            min_error = (junk_name, new_min_error)
-
-    return min_error[0]
-
-
-def weighted_list(weights: Dict[Any, Fraction], length):
+def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
     """
-    Example:
-        weights = {A: 0.3, B: 0.3, C: 0.4}
-        length = 10
-
-        returns: [A, A, A, B, B, B, C, C, C, C]
-
-    Makes sure to match length *exactly*, might approximate as a result
+    Converts a list of floats to a list of ints of a given length, using the Largest Remainder Method.
     """
-    vals = accumulate(map(lambda x: x * length, weights.values()), lambda x, y: x + y)
-    output_list = []
-    for k, v in zip(weights.keys(), vals):
-        while len(output_list) < v:
-            output_list.append(k)
-    return output_list
+
+    # Scale the inputs to sum to the desired total.
+    scale_factor: float = total / sum(inputs)
+    scaled_input = [x * scale_factor for x in inputs]
+
+    # Generate whole number counts, always rounding down.
+    rounded_output: List[int] = [floor(x) for x in scaled_input]
+    rounded_sum = sum(rounded_output)
+
+    # If the output's total is insufficient, increment the value that has the largest remainder until we meet our goal.
+    remainders: List[float] = [real - rounded for real, rounded in zip(scaled_input, rounded_output)]
+    while rounded_sum < total:
+        max_remainder = max(remainders)
+        if max_remainder == 0:
+            break
+
+        # Consume the remainder and increment the total for the given target.
+        max_remainder_index = remainders.index(max_remainder)
+        remainders[max_remainder_index] = 0
+        rounded_output[max_remainder_index] += 1
+        rounded_sum += 1
+
+    return rounded_output
 
 
-def define_new_region(region_string):
+def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str, FrozenSet[FrozenSet[str]]]]]:
     """
     Returns a region object by parsing a line in the logic file
     """
@@ -106,12 +61,12 @@ def define_new_region(region_string):
     region_obj = {
         "name": region_name,
         "shortName": region_name_simple,
-        "panels": set()
+        "panels": list()
     }
     return region_obj, options
 
 
-def parse_lambda(lambda_string):
+def parse_lambda(lambda_string) -> FrozenSet[FrozenSet[str]]:
     """
     Turns a lambda String literal like this: a | b & c
     into a set of sets like this: {{a}, {b, c}}
@@ -141,88 +96,169 @@ class lazy(object):
         return res
 
 
-def get_adjustment_file(adjustment_file):
-    path = os.path.join(os.path.dirname(__file__), adjustment_file)
-
-    with open(path) as f:
-        return [line.strip() for line in f.readlines()]
-
-
-@cache_argsless
-def get_disable_unrandomized_list():
-    return get_adjustment_file("settings/Disable_Unrandomized.txt")
+@lru_cache(maxsize=None)
+def get_adjustment_file(adjustment_file: str) -> List[str]:
+    data = get_data(__name__, adjustment_file).decode('utf-8')
+    return [line.strip() for line in data.split("\n")]
 
 
-@cache_argsless
-def get_early_utm_list():
-    return get_adjustment_file("settings/Early_UTM.txt")
+def get_disable_unrandomized_list() -> List[str]:
+    return get_adjustment_file("settings/Exclusions/Disable_Unrandomized.txt")
 
 
-@cache_argsless
-def get_symbol_shuffle_list():
+def get_early_caves_list() -> List[str]:
+    return get_adjustment_file("settings/Early_Caves.txt")
+
+
+def get_early_caves_start_list() -> List[str]:
+    return get_adjustment_file("settings/Early_Caves_Start.txt")
+
+
+def get_symbol_shuffle_list() -> List[str]:
     return get_adjustment_file("settings/Symbol_Shuffle.txt")
 
 
-@cache_argsless
-def get_door_panel_shuffle_list():
-    return get_adjustment_file("settings/Door_Panel_Shuffle.txt")
+def get_complex_doors() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Doors.txt")
 
 
-@cache_argsless
-def get_doors_simple_list():
-    return get_adjustment_file("settings/Doors_Simple.txt")
+def get_simple_doors() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Doors.txt")
 
 
-@cache_argsless
-def get_doors_complex_list():
-    return get_adjustment_file("settings/Doors_Complex.txt")
+def get_complex_door_panels() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Door_Panels.txt")
 
 
-@cache_argsless
-def get_doors_max_list():
-    return get_adjustment_file("settings/Doors_Max.txt")
+def get_complex_additional_panels() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Additional_Panels.txt")
 
 
-@cache_argsless
-def get_laser_shuffle():
+def get_simple_panels() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Panels.txt")
+
+
+def get_simple_additional_panels() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Additional_Panels.txt")
+
+
+def get_boat() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Boat.txt")
+
+
+def get_laser_shuffle() -> List[str]:
     return get_adjustment_file("settings/Laser_Shuffle.txt")
 
 
-@cache_argsless
-def get_audio_logs():
+def get_audio_logs() -> List[str]:
     return get_adjustment_file("settings/Audio_Logs.txt")
 
 
-@cache_argsless
-def get_ep_all_individual():
+def get_ep_all_individual() -> List[str]:
     return get_adjustment_file("settings/EP_Shuffle/EP_All.txt")
 
 
-@cache_argsless
-def get_ep_obelisks():
+def get_ep_obelisks() -> List[str]:
     return get_adjustment_file("settings/EP_Shuffle/EP_Sides.txt")
 
 
-@cache_argsless
-def get_ep_easy():
+def get_ep_easy() -> List[str]:
     return get_adjustment_file("settings/EP_Shuffle/EP_Easy.txt")
 
 
-@cache_argsless
-def get_ep_no_eclipse():
+def get_ep_no_eclipse() -> List[str]:
     return get_adjustment_file("settings/EP_Shuffle/EP_NoEclipse.txt")
 
 
-@cache_argsless
-def get_ep_no_caves():
-    return get_adjustment_file("settings/EP_Shuffle/EP_NoCavesEPs.txt")
+def get_vault_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Exclusions/Vaults.txt")
 
 
-@cache_argsless
-def get_ep_no_mountain():
-    return get_adjustment_file("settings/EP_Shuffle/EP_NoMountainEPs.txt")
+def get_discard_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Exclusions/Discards.txt")
 
 
-@cache_argsless
-def get_ep_no_videos():
-    return get_adjustment_file("settings/EP_Shuffle/EP_Videos.txt")
+def get_caves_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Postgame/Caves.txt")
+
+
+def get_beyond_challenge_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Postgame/Beyond_Challenge.txt")
+
+
+def get_bottom_floor_discard_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard.txt")
+
+
+def get_bottom_floor_discard_nondoors_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard_NonDoors.txt")
+
+
+def get_mountain_upper_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Postgame/Mountain_Upper.txt")
+
+
+def get_challenge_vault_box_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Postgame/Challenge_Vault_Box.txt")
+
+
+def get_path_to_challenge_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Postgame/Path_To_Challenge.txt")
+
+
+def get_mountain_lower_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Postgame/Mountain_Lower.txt")
+
+
+def get_elevators_come_to_you() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Elevators_Come_To_You.txt")
+
+
+def get_sigma_normal_logic() -> List[str]:
+    return get_adjustment_file("WitnessLogic.txt")
+
+
+def get_sigma_expert_logic() -> List[str]:
+    return get_adjustment_file("WitnessLogicExpert.txt")
+
+
+def get_vanilla_logic() -> List[str]:
+    return get_adjustment_file("WitnessLogicVanilla.txt")
+
+
+def get_items() -> List[str]:
+    return get_adjustment_file("WitnessItems.txt")
+
+
+def dnf_remove_redundancies(dnf_requirement: FrozenSet[FrozenSet[str]]) -> FrozenSet[FrozenSet[str]]:
+    """Removes any redundant terms from a logical formula in disjunctive normal form.
+    This means removing any terms that are a superset of any other term get removed.
+    This is possible because of the boolean absorption law: a | (a & b) = a"""
+    to_remove = set()
+
+    for option1 in dnf_requirement:
+        for option2 in dnf_requirement:
+            if option2 < option1:
+                to_remove.add(option1)
+
+    return dnf_requirement - to_remove
+
+
+def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]) -> FrozenSet[FrozenSet[str]]:
+    """
+    performs the "and" operator on a list of logical formula in disjunctive normal form, represented as a set of sets.
+    A logical formula might look like this: {{a, b}, {c, d}}, which would mean "a & b | c & d".
+    These can be easily and-ed by just using the boolean distributive law: (a | b) & c = a & c | a & b.
+    """
+    current_overall_requirement = frozenset({frozenset()})
+
+    for next_dnf_requirement in dnf_requirements:
+        new_requirement: Set[FrozenSet[str]] = set()
+
+        for option1 in current_overall_requirement:
+            for option2 in next_dnf_requirement:
+                new_requirement.add(option1 | option2)
+
+        current_overall_requirement = frozenset(new_requirement)
+
+    return dnf_remove_redundancies(current_overall_requirement)

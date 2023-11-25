@@ -39,9 +39,9 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 ###### Customization options:
 
 - Choose a goal for your world. Possible goals are: 1) Reach the final floor; 2) Defeat the boss on the final floor; 3)
-  Retrieve a (customizable) number of iris treasures from the cave; 4) Retrieve the iris treasures *and* defeat the boss
+  Retrieve a (customizable) number of Iris treasures from the cave; 4) Retrieve the Iris treasures *and* defeat the boss
 - You can also randomize the goal; The blue-haired NPC in front of the cafe can tell you about the selected objective
-- Customize the chances of encountering blue chests, healing tiles, iris treasures, etc.
+- Customize the chances of encountering blue chests, healing tiles, Iris treasures, etc.
 - Customize the default party lineup and capsule monster
 - Customize the party starting level as well as capsule monster level and form
 - Customize the initial and final floor numbers
@@ -49,8 +49,9 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - Customize the multiworld item pool. (By default, your pool is filled with random blue chest items, but you can place
   any cave item you want instead)
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice
-- Adjust how much EXP is gained from enemies
+- Adjust how much EXP and gold is gained from enemies
 - Randomize enemy movement patterns, enemy sprites, and which enemy types can appear at which floor numbers
+- Option to make shops appear in the cave so that you have a way to spend your hard-earned gold
 - Option to shuffle your party members and/or capsule monsters into the multiworld, meaning that someone will have to
   find them in order to unlock them for you to use. While cave diving, you can add newly unlocked members to your party
   by using the character items from your inventory
@@ -61,6 +62,7 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - You can elect to lock the cave layout for the next run, giving you exactly the same floors and red chest contents as
   on your previous attempt. This functionality is accessed via the bald NPC behind the counter at the Ancient Cave
   Entrance
+- Multiple people can connect to the same slot and collaboratively search for Iris treasures and blue chests
 - Always start with Providence already in your inventory. (It is no longer obtained from red chests)
 - (optional) Run button that allows you to move at faster than normal speed
 
@@ -74,7 +76,7 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 
 ###### Bug fixes:
 
-- Vanilla game bugs that could result in softlocks or save file corruption have been fixed
+- Vanilla game bugs that could result in anomalous floors, softlocks, or save file corruption have been fixed
 - (optional) Bugfix for the algorithm that determines the item pool for red chest gear. Enabling this allows the cave to
   generate shields, headgear, rings, and jewels in red chests even after floor B9
 - (optional) Bugfix for the outlandish cravings of capsule monsters in the US version. Enabling this makes feeding work

@@ -71,7 +71,7 @@ class SM64World(World):
 
         return item
 
-    def generate_basic(self):
+    def create_items(self):
         starcount = self.multiworld.AmountOfStars[self.player].value
         if (not self.multiworld.EnableCoinStars[self.player].value):
             starcount = max(35,self.multiworld.AmountOfStars[self.player].value-15)
@@ -154,6 +154,7 @@ class SM64World(World):
             "MIPS2Cost": self.multiworld.MIPS2Cost[self.player].value,
             "StarsToFinish": self.multiworld.StarsToFinish[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
+            "CompletionType" : self.multiworld.CompletionType[self.player].value,
         }
 
     def generate_output(self, output_directory: str):

@@ -1,0 +1,48 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    <title>{{ game }} Options</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weighted-options.css") }}" />
+    <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weighted-options.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/grassHeader.html' %}
+    <div id="weighted-settings" class="markdown" data-game="{{ game }}">
+        <div id="user-message"></div>
+        <h1>Weighted Options</h1>
+        <p>Weighted options allow you to choose how likely a particular option is to be used in game generation.
+            The higher an option is weighted, the more likely the option will be chosen. Think of them like
+            entries in a raffle.</p>
+
+        <p>Choose the games and options you would like to play with! You may generate a single-player game from
+            this page, or download an options file you can use to participate in a MultiWorld.</p>
+
+        <p>A list of all games you have generated can be found on the <a href="/user-content">User Content</a>
+            page.</p>
+
+        <p><label for="player-name">Please enter your player name. This will appear in-game as you send and receive
+            items if you are playing in a MultiWorld.</label><br />
+            <input id="player-name" placeholder="Player Name" data-key="name" maxlength="16" />
+        </p>
+
+        <div id="game-choice">
+            <!-- User chooses games by weight -->
+        </div>
+
+        <!-- To be generated and populated per-game with weight > 0 -->
+        <div id="games-wrapper">
+
+        </div>
+
+        <div id="weighted-settings-button-row">
+            <button id="export-options">Export Options</button>
+            <button id="generate-game">Generate Game</button>
+            <button id="generate-race">Generate Race</button>
+        </div>
+    </div>
+{% endblock %}

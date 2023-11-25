@@ -1,6 +1,7 @@
 import os
 import typing
 import math
+import settings
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
@@ -15,6 +16,16 @@ from .Names import ItemName, LocationName
 from .Client import SMWSNIClient
 from worlds.AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
+
+
+class SMWSettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the SMW US rom"""
+        description = "Super Mario World (USA) ROM File"
+        copy_to = "Super Mario World (USA).sfc"
+        md5s = [SMWDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class SMWWeb(WebWorld):
@@ -40,6 +51,7 @@ class SMWWorld(World):
     """
     game: str = "Super Mario World"
     option_definitions = smw_options
+    settings: typing.ClassVar[SMWSettings]
     topology_present = False
     data_version = 3
     required_client_version = (0, 3, 5)
@@ -78,7 +90,12 @@ class SMWWorld(World):
         if self.multiworld.early_climb[self.player]:
             self.multiworld.local_early_items[self.player][ItemName.mario_climb] = 1
 
-    def generate_basic(self):
+
+    def create_regions(self):
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
+
+        # Not generate basic
         itempool: typing.List[SMWItem] = []
 
         self.active_level_dict = dict(zip(generate_level_list(self.multiworld, self.player), full_level_list))
@@ -235,10 +252,6 @@ class SMWWorld(World):
 
             hint_data[self.player] = er_hint_data
 
-    def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
-        create_regions(self.multiworld, self.player, location_table)
-
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
 
@@ -256,6 +269,9 @@ class SMWWorld(World):
         created_item = SMWItem(name, classification, data.code, self.player)
 
         return created_item
+
+    def get_filler_item_name(self) -> str:
+        return ItemName.one_up_mushroom
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)

@@ -4,11 +4,11 @@ from typing import List
 
 class Overcooked2Dlc(Enum):
     STORY = "Story"
+    SEASONAL = "Seasonal"
     SURF_N_TURF = "Surf 'n' Turf"
     CAMPFIRE_COOK_OFF = "Campfire Cook Off"
     NIGHT_OF_THE_HANGRY_HORDE = "Night of the Hangry Horde"
     CARNIVAL_OF_CHAOS = "Carnival of Chaos"
-    SEASONAL = "Seasonal"
     # CHRISTMAS = "Christmas"
     # CHINESE_NEW_YEAR = "Chinese New Year"
     # WINTER_WONDERLAND = "Winter Wonderland"
@@ -87,31 +87,6 @@ class Overcooked2Dlc(Enum):
 
         return []
 
-    def exclusive_items(self) -> List[str]:
-        """Returns list of items exclusive to this DLC"""
-        if self == Overcooked2Dlc.SURF_N_TURF:
-            return ["Bellows"]
-        if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
-            return ["Wood"]
-        if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
-            return ["Coal Bucket"]
-        if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
-            return ["Faster Condiment/Drink Switch"]
-        if self == Overcooked2Dlc.SEASONAL:
-            return ["Wok Wheels"]
-
-        return []
-
-ITEMS_TO_EXCLUDE_IF_NO_DLC = [
-    "Wood",
-    "Coal Bucket",
-    "Bellows",
-    "Coin Purse",
-    "Wok Wheels",
-    "Lightweight Backpack",
-    "Faster Condiment/Drink Switch",
-    "Calmer Unbread",
-]
 
 class Overcooked2GameWorld(IntEnum):
     ONE = 1
@@ -398,11 +373,11 @@ overworld_region_by_level = {
     "2-4": OverworldRegion.main,
     "2-5": OverworldRegion.main,
     "2-6": OverworldRegion.main,
-    "3-1": OverworldRegion.main,
-    "3-2": OverworldRegion.main,
-    "3-3": OverworldRegion.main,
-    "3-4": OverworldRegion.main,
-    "3-5": OverworldRegion.main,
+    "3-1": OverworldRegion.stonehenge_mountain,
+    "3-2": OverworldRegion.stonehenge_mountain,
+    "3-3": OverworldRegion.stonehenge_mountain,
+    "3-4": OverworldRegion.stonehenge_mountain,
+    "3-5": OverworldRegion.stonehenge_mountain,
     "3-6": OverworldRegion.main,
     "4-1": OverworldRegion.main,
     "4-2": OverworldRegion.main,
