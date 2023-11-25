@@ -10,8 +10,8 @@ import types
 import typing
 import urllib.parse
 import urllib.request
-from collections import ChainMap, Counter
-from typing import Any, Callable, Dict, Tuple, Union
+from collections import Counter
+from typing import Any, Dict, Tuple, Union
 from traceback import format_exception_only, format_exception
 
 import ModuleUpdate
@@ -24,7 +24,7 @@ import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Main import main as ERmain
 from settings import get_settings
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version, user_path, messagebox
+from Utils import parse_yamls, version_tuple, __version__, tuplize_version, messagebox
 from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
@@ -57,6 +57,9 @@ def mystery_argparse():
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
     parser.add_argument("--skip_prog_balancing", action="store_true",
                         help="Skip progression balancing step during generation.")
+    parser.add_argument("--skip_output", action="store_true",
+                        help="Skips generation assertion and output stages and skips multidata and spoiler output. "
+                             "Intended for debugging and testing purposes.")
     args = parser.parse_args()
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
@@ -131,6 +134,13 @@ def main(args=None, callback=ERmain):
                 player_id += 1
 
     args.multi = max(player_id - 1, args.multi)
+
+    if args.multi == 0:
+        raise ValueError(
+            "No individual player files found and number of players is 0. "
+            "Provide individual player files or specify the number of players via host.yaml or --multi."
+        )
+
     logging.info(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, "
                  f"{seed_name} Seed {seed} with plando: {args.plando}")
 
@@ -147,6 +157,7 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
+    erargs.skip_output = args.skip_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
@@ -173,7 +184,7 @@ def main(args=None, callback=ERmain):
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
     name_counter = Counter()
-    erargs.player_settings = {}
+    erargs.player_options = {}
 
     player = 1
     while player <= args.multi:
@@ -229,7 +240,7 @@ def main(args=None, callback=ERmain):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    callback(erargs, seed)
+    return callback(erargs, seed)
 
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
@@ -651,4 +662,13 @@ def parsing_failure_gui(_type: typing.Type[BaseException], value: BaseException,
 if __name__ == '__main__':
     if not __debug__:
         sys.excepthook = parsing_failure_gui
-    main()
+    multiworld = main()
+    if __debug__:
+        import gc
+        import sys
+        import weakref
+        weak = weakref.ref(multiworld)
+        del multiworld
+        gc.collect()  # need to collect to deref all hard references
+        assert not weak(), f"MultiWorld object was not de-allocated, it's referenced {sys.getrefcount(weak())} times." \
+                           " This would be a memory leak."
