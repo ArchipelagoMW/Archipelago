@@ -176,11 +176,14 @@ class MessengerWorld(World):
             self.total_shards += count
         return MessengerItem(name, self.player, item_id, override_prog, count)
 
-    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
-        if item.advancement and "Time Shard" in item.name:
-            shard_count = int(item.name.strip("Time Shard ()"))
-            if remove:
-                shard_count = -shard_count
-            state.prog_items[self.player]["Shards"] += shard_count
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().collect(state, item)
+        if change and "Time Shard" in item.name:
+            state.prog_items[self.player]["Shards"] += int(item.name.strip("Time Shard ()"))
+        return change
 
-        return super().collect_item(state, item, remove)
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().remove(state, item)
+        if change and "Time Shard" in item.name:
+            state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
+        return change
