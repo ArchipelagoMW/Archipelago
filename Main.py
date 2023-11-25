@@ -110,7 +110,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, "generate_early")
 
-    if not __debug__:
+    if not (__debug__ or args.no_gui):
         sys.excepthook = generation_failure_gui
 
     logger.info('')
