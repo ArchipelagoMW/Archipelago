@@ -539,6 +539,10 @@ def generate_output(self, output_directory: str):
         write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
     data[0xFF00] = 2  # client compatibility version
+    rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
+                         'utf8')[:21]
+    rom_name.extend([0] * (21 - len(rom_name)))
+    write_bytes(data, rom_name, 0xFFC6)
     write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
 

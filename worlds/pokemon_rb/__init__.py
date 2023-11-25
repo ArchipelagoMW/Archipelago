@@ -2,9 +2,11 @@ import os
 import settings
 import typing
 import threading
+import base64
 from copy import deepcopy
 from typing import TextIO
 
+from Utils import __version__
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, LocationProgressType
 from Fill import fill_restrictive, FillError, sweep_from_pool
 from worlds.AutoWorld import World, WebWorld
@@ -22,6 +24,7 @@ from .rules import set_rules
 from .level_scaling import level_scaling
 from . import logic
 from . import poke_data
+from . import client
 
 
 class PokemonSettings(settings.Group):
@@ -36,16 +39,8 @@ class PokemonSettings(settings.Group):
         copy_to = "Pokemon Blue (UE) [S][!].gb"
         md5s = [BlueDeltaPatch.hash]
 
-    class RomStart(str):
-        """
-        Set this to false to never autostart a rom (such as after patching)
-        True for operating system default program
-        Alternatively, a path to a program to open the .gb file with
-        """
-
     red_rom_file: RedRomFile = RedRomFile(RedRomFile.copy_to)
     blue_rom_file: BlueRomFile = BlueRomFile(BlueRomFile.copy_to)
-    rom_start: typing.Union[RomStart, bool] = True
 
 
 class PokemonWebWorld(WebWorld):
@@ -140,9 +135,6 @@ class PokemonRedBlueWorld(World):
             self.rival_name = "choose_in_game"
         else:
             self.rival_name = encode_name(self.multiworld.rival_name[self.player].value, "Rival")
-
-        if len(self.multiworld.player_name[self.player].encode()) > 16:
-            raise Exception(f"Player name too long for {self.multiworld.get_player_name(self.player)}. Player name cannot exceed 16 bytes for Pokémon Red and Blue.")
 
         if not self.multiworld.badgesanity[self.player]:
             self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
@@ -620,6 +612,13 @@ class PokemonRedBlueWorld(World):
 
     def generate_output(self, output_directory: str):
         generate_output(self, output_directory)
+
+    def modify_multidata(self, multidata: dict):
+        rom_name = bytearray(f'AP{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
+                             'utf8')[:21]
+        rom_name.extend([0] * (21 - len(rom_name)))
+        new_name = base64.b64encode(bytes(rom_name)).decode()
+        multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
         spoiler_handle.write(f"Cerulean Cave Total Key Items:   {self.multiworld.cerulean_cave_key_items_condition[self.player].total}\n")
