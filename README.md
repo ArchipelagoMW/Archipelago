@@ -53,6 +53,9 @@ Currently, the following games are supported:
 * Terraria
 * Lingo
 * Pokémon Emerald
+* DOOM II
+* Shivers
+* Heretic
 * Landstalker: The Treasures of King Nole
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
