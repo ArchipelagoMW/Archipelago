@@ -279,7 +279,7 @@ class WitnessPlayerLogic:
             postgame_adjustments.append(get_caves_exclusion_list())
             postgame_adjustments.append(get_beyond_challenge_exclusion_list())
 
-            # If Challenge itself is the goal, some panels on the way to it need to be left on.
+            # If Challenge is the goal, some panels on the way need to be left on, as well as Challenge Vault box itself
             if not victory == "challenge":
                 postgame_adjustments.append(get_path_to_challenge_exclusion_list())
                 postgame_adjustments.append(get_challenge_vault_box_exclusion_list())
