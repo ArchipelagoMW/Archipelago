@@ -126,11 +126,11 @@ indentation and single newlines will be collapsed into spaces.
   }
   
   # __init__.py
-  from worlds.AutoWorld import World
-  from .Locations import location_descriptions
+  from worlds.AutoWorld import WebWorld
+  from .locations import location_descriptions
   
   
-  class MyGameWorld(World):
+  class MyGameWeb(WebWorld):
       location_descriptions = location_descriptions
   ```
 
@@ -150,11 +150,11 @@ single newlines will be collapsed into spaces.
   }
   
   # __init__.py
-  from worlds.AutoWorld import World
-  from .Items import item_descriptions
+  from worlds.AutoWorld import WebWorld
+  from .items import item_descriptions
   
   
-  class MyGameWorld(World):
+  class MyGameWeb(WebWorld):
       item_descriptions = item_descriptions
   ```
 
