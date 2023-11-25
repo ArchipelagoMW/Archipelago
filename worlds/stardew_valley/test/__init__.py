@@ -145,29 +145,19 @@ class SVTestCase(unittest.TestCase):
     game = "Stardew Valley"
     world: StardewValleyWorld
     player: ClassVar[int] = 1
-    """Set to False to not skip some 'extra' tests"""
+    # Set False to not skip some 'extra' tests
     skip_extra_tests: bool = True
-    """Set to False to run tests that take long"""
+    # Set False to run tests that take long
     skip_long_tests: bool = True
-    """Set to False to run tests that take long"""
-    skip_performance_tests: bool = True
-    """Set to False to not call the fill in the tests"""
-    skip_fill: bool = True
 
     options = get_minsanity_options()
 
-    def setUp(self) -> None:
-        super().setUp()
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
         long_tests_key = "long"
         if long_tests_key in os.environ:
-            self.skip_long_tests = not bool(os.environ[long_tests_key])
-        performance_tests_key = "performance"
-        if performance_tests_key in os.environ:
-            self.skip_performance_tests = not bool(os.environ[performance_tests_key])
-
-        fill_tests_key = "fill"
-        if fill_tests_key in os.environ:
-            self.skip_fill = not bool(os.environ[fill_tests_key])
+            cls.skip_long_tests = not bool(os.environ[long_tests_key])
 
 
 class SVTestBase(WorldTestBase, SVTestCase):
