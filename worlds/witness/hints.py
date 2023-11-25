@@ -401,7 +401,8 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
     weights = [unhinted_location_percentage_per_area[area] for area in areas]
 
     if len(weights) < amount:
-        logging.error("Attempting to choose more areas than there are available. This should never happen.")
+        logging.error("Attempting to choose more areas than there are available. This should never happen, "
+                      "as the amount of areas to choose is capped to the amount of valid areas.")
         amount = len(weights)
 
     hinted_areas = weighted_sample_use_zero_if_necessary(world.random, areas, weights, amount)
