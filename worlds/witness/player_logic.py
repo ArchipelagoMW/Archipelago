@@ -283,7 +283,6 @@ class WitnessPlayerLogic:
             if not victory == "challenge":
                 postgame_adjustments.append(get_path_to_challenge_exclusion_list())
                 postgame_adjustments.append(get_challenge_vault_box_exclusion_list())
-                postgame_adjustments.append(get_beyond_challenge_exclusion_list())
 
         # Challenge can only have something if the goal is not challenge or longbox itself.
         # In case of shortbox, it'd have to be a "reverse shortbox" situation where shortbox requires *more* lasers.
