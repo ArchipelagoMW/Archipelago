@@ -47,7 +47,7 @@ all_random_settings = {
 
 easy_settings = {
     "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_items,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_community_center,
     StartingMoney.internal_name:            "very rich",
     ProfitMargin.internal_name:             "double",
@@ -85,7 +85,7 @@ easy_settings = {
 
 medium_settings = {
     "progression_balancing":                25,
-    "accessibility":                        Accessibility.option_locations,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_community_center,
     StartingMoney.internal_name:            "rich",
     ProfitMargin.internal_name:             150,
@@ -123,7 +123,7 @@ medium_settings = {
 
 hard_settings = {
     "progression_balancing":                0,
-    "accessibility":                        Accessibility.option_locations,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_grandpa_evaluation,
     StartingMoney.internal_name:            "extra",
     ProfitMargin.internal_name:             "normal",
@@ -161,7 +161,7 @@ hard_settings = {
 
 nightmare_settings = {
     "progression_balancing":                0,
-    "accessibility":                        Accessibility.option_locations,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_community_center,
     StartingMoney.internal_name:            "vanilla",
     ProfitMargin.internal_name:             "half",
@@ -199,7 +199,7 @@ nightmare_settings = {
 
 short_settings = {
     "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_items,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_bottom_of_the_mines,
     StartingMoney.internal_name:            "filthy rich",
     ProfitMargin.internal_name:             "quadruple",
@@ -275,7 +275,7 @@ lowsanity_settings = {
 
 allsanity_settings = {
     "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_locations,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.default,
     StartingMoney.internal_name:            StartingMoney.default,
     ProfitMargin.internal_name:             ProfitMargin.default,
