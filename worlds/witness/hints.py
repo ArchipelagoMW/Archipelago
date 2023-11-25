@@ -1,3 +1,4 @@
+import logging
 from typing import Tuple, List, TYPE_CHECKING, Set, Dict
 from BaseClasses import Item, ItemClassification, Location
 from . import StaticWitnessLogic
@@ -396,12 +397,14 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
     items_per_area = {area_name: [location.item for location in locations]
                       for area_name, locations in locations_per_area.items()}
 
-    actual_amount = min(amount, len(items_per_area))
-
     areas = sorted(items_per_area)
     weights = [unhinted_location_percentage_per_area[area] for area in areas]
 
-    hinted_areas = weighted_sample_use_zero_if_necessary(world.random, areas, weights, actual_amount)
+    if len(weights) < amount:
+        logging.error("Attempting to choose more areas than there are available. This should never happen.")
+        amount = len(weights)
+
+    hinted_areas = weighted_sample_use_zero_if_necessary(world.random, areas, weights, amount)
 
     return hinted_areas
 
