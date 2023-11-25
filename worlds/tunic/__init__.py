@@ -1,11 +1,11 @@
 from typing import Dict, List, Any
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from .Items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
-from .Locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
-from .Rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
-from .Regions import tunic_regions
-from .Options import TunicOptions
+from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
+from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
+from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
+from .regions import tunic_regions
+from .options import TunicOptions
 from worlds.AutoWorld import WebWorld, World
 from decimal import Decimal, ROUND_HALF_UP
 

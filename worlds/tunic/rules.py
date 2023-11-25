@@ -3,7 +3,7 @@ from typing import Dict
 
 from worlds.generic.Rules import set_rule, forbid_item
 from BaseClasses import MultiWorld, CollectionState
-from worlds.tunic.Options import TunicOptions
+from worlds.tunic.options import TunicOptions
 
 laurels = "Hero's Laurels"
 grapple = "Magic Orb"
