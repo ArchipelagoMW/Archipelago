@@ -61,7 +61,6 @@ class ChecksMateLogic(LogicMixin):
     def has_pin(self: CollectionState, player: int) -> bool:
         return self.has_any({"Progressive Minor Piece", "Progressive Major Piece"}, player)
 
-    # TODO(chesslogic): Ensure the current (and next?) sphere have more majors than queens
     def has_castle(self: CollectionState, player: int) -> bool:
         return (self.count("Progressive Major Piece", player) >= 2 + len(
             [item for item in self.multiworld.itempool if
