@@ -262,13 +262,13 @@ class WitnessPlayerLogic:
         chal_lasers = world.options.challenge_lasers
 
         # Goal is "short box" but short box requires more lasers than long box
-        reverse_shortbox_goal = (victory == "mountain_box_short" and mnt_lasers > chal_lasers)
+        reverse_shortbox_goal = victory == "mountain_box_short" and mnt_lasers > chal_lasers
 
         # Goal is "short box" and long box requires at least as many lasers as short box
-        proper_shortbox = (victory == "mountain_box_short" and mnt_lasers >= chal_lasers)
+        proper_shortbox = victory == "mountain_box_short" and chal_lasers >= mnt_lasers
 
         # Goal is "long box" and long box requires more lasers than short box (as god intended)
-        reverse_longbox_goal = (victory == "mountain_box_long" and mnt_lasers > chal_lasers)
+        reverse_longbox_goal = victory == "mountain_box_long" and mnt_lasers > chal_lasers
 
         # If goal is shortbox or "reverse longbox", you will never enter the mountain from the top before winning.
         mountain_enterable_from_top = not (victory == "mountain_box_short" or reverse_longbox_goal)
