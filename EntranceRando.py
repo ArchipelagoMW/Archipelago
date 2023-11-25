@@ -1,7 +1,7 @@
 import functools
 import queue
 import random
-from typing import Set, Tuple, List, Dict, Iterable, Callable, Union
+from typing import Set, Tuple, List, Dict, Iterable, Callable, Union, Optional
 
 from BaseClasses import Region, Entrance, CollectionState
 from worlds.AutoWorld import World
@@ -22,8 +22,10 @@ class EntranceLookup:
             group.append(entrance)
 
         def remove(self, entrance: Entrance) -> None:
-            group = self._lookup.setdefault(entrance.er_group)
+            group = self._lookup.get(entrance.er_group, [])
             group.remove(entrance)
+            if not group:
+                del self._lookup[entrance.er_group]
 
         def __getitem__(self, item: str) -> List[Entrance]:
             return self._lookup.get(item, [])
@@ -31,34 +33,50 @@ class EntranceLookup:
     rng: random.Random
     dead_ends: GroupLookup
     others: GroupLookup
+    _leads_to_exits_cache: Dict[Entrance, bool]
 
     def __init__(self, rng: random.Random):
         self.rng = rng
         self.dead_ends = EntranceLookup.GroupLookup()
         self.others = EntranceLookup.GroupLookup()
+        self._leads_to_exits_cache = {}
 
-    # todo - investigate whether this might leak memory (holds references to Entrances)?
-    @staticmethod
-    @functools.cache
-    def _is_dead_end(entrance: Entrance):
+    def _can_lead_to_randomizable_exits(self, entrance: Entrance):
         """
-        Checks whether a entrance is an unconditional dead end, that is, no matter what you have,
-        it will never lead to new randomizable exits.
+        Checks whether an entrance is able to lead to another randomizable exit
+        with some combination of items
+
+        :param entrance: A randomizable (no parent) region entrance
         """
-        # obviously if this is an unpaired exit, then leads to unpaired exits!
-        if not entrance.connected_region:
-            return False
-        # if the connected region has no exits, it's a dead end. otherwise its exits must all be dead ends.
-        return not entrance.connected_region.exits or all(EntranceLookup._is_dead_end(exit)
-                                                          for exit in entrance.connected_region.exits
-                                                          if exit.name != entrance.name)
+        # we've seen this, return cached result
+        if entrance in self._leads_to_exits_cache:
+            return self._leads_to_exits_cache[entrance]
+
+        visited = set()
+        q = queue.Queue()
+        q.put(entrance.connected_region)
+
+        while not q.empty():
+            region = q.get()
+            visited.add(region)
+
+            for exit in region.exits:
+                # randomizable and not the reverse of the start entrance
+                if not exit.connected_region and exit.name != entrance.name:
+                    self._leads_to_exits_cache[entrance] = True
+                    return True
+                elif exit.connected_region and exit.connected_region not in visited:
+                    q.put(exit.connected_region)
+
+        self._leads_to_exits_cache[entrance] = False
+        return False
 
     def add(self, entrance: Entrance) -> None:
-        lookup = self.dead_ends if self._is_dead_end(entrance) else self.others
+        lookup = self.dead_ends if not self._can_lead_to_randomizable_exits(entrance) else self.others
         lookup.add(entrance)
 
     def remove(self, entrance: Entrance) -> None:
-        lookup = self.dead_ends if self._is_dead_end(entrance) else self.others
+        lookup = self.dead_ends if not self._can_lead_to_randomizable_exits(entrance) else self.others
         lookup.remove(entrance)
 
     def get_targets(
@@ -66,7 +84,7 @@ class EntranceLookup:
             groups: Iterable[str],
             dead_end: bool,
             preserve_group_order: bool
-        ) -> Iterable[Entrance]:
+    ) -> Iterable[Entrance]:
 
         lookup = self.dead_ends if dead_end else self.others
         if preserve_group_order:
@@ -81,10 +99,10 @@ class EntranceLookup:
 
 class ERPlacementState:
     # candidate exits to try and place right now!
-    _placeable_exits: Set[Entrance]
+    _placeable_exits: List[Entrance]
     # exits that are gated by some unmet requirement (either they are not valid source transitions yet
     # or they are static connections with unmet logic restrictions)
-    _pending_exits: Set[Entrance]
+    _pending_exits: List[Entrance]
 
     placed_regions: Set[Region]
     placements: List[Entrance]
@@ -94,14 +112,15 @@ class ERPlacementState:
     coupled: bool
 
     def __init__(self, world: World, coupled: bool):
-        self._placeable_exits = set()
-        self._pending_exits = set()
+        self._placeable_exits = []
+        self._pending_exits = []
 
         self.placed_regions = set()
         self.placements = []
         self.pairings = []
         self.world = world
         self.collection_state = world.multiworld.get_all_state(True)
+        self.collection_state.allow_partial_entrances = True
         self.coupled = coupled
 
     def has_placeable_exits(self) -> bool:
@@ -139,38 +158,41 @@ class ERPlacementState:
                     # don't add it as a candidate. in uncoupled it's fair game.
                     if not self.coupled or exit.name != starting_entrance_name:
                         if exit.is_valid_source_transition(self):
-                            self._placeable_exits.add(exit)
+                            self._placeable_exits.append(exit)
                         else:
-                            self._pending_exits.add(exit)
+                            self._pending_exits.append(exit)
                 elif exit.connected_region not in self.placed_regions:
                     # traverse unseen static connections
-                    if exit.can_reach(self.collection_state, True):
+                    if exit.can_reach(self.collection_state):
                         q.put(exit.connected_region)
                     else:
-                        self._pending_exits.add(exit)
+                        self._pending_exits.append(exit)
 
     def sweep_pending_exits(self) -> None:
         """
         Checks if any exits which previously had unmet restrictions now have those restrictions met,
         and marks them for placement or places them depending on whether they are randomized or not.
         """
-        no_longer_pending_exits = []
-        for exit in self._pending_exits:
-            if exit.connected_region and exit.can_reach(self.collection_state, True):
+        size = len(self._pending_exits)
+        # iterate backwards so that removing items doesn't mess with indices of unprocessed items
+        for j, exit in enumerate(reversed(self._pending_exits)):
+            i = size - j - 1
+            if exit.connected_region and exit.can_reach(self.collection_state):
                 # this is an unrandomized entrance, so place it and propagate
                 self.place(exit.connected_region)
-                no_longer_pending_exits.append(exit)
+                self._pending_exits.pop(i)
             elif not exit.connected_region and exit.is_valid_source_transition(self):
                 # this is randomized so mark it eligible for placement
-                self._placeable_exits.add(exit)
-                no_longer_pending_exits.append(exit)
-        self._pending_exits.difference_update(no_longer_pending_exits)
+                self._placeable_exits.append(exit)
+                self._pending_exits.pop(i)
 
     def _connect_one_way(self, source_exit: Entrance, target_entrance: Entrance) -> None:
         target_region = target_entrance.connected_region
 
         target_region.entrances.remove(target_entrance)
         source_exit.connect(target_region)
+
+        self.collection_state.stale[self.world.player] = True
         self.placements.append(source_exit)
         self.pairings.append((source_exit.name, target_entrance.name))
 
@@ -189,17 +211,26 @@ class ERPlacementState:
             # todo - better exceptions here
             for reverse_entrance in source_region.entrances:
                 if reverse_entrance.name == source_exit.name:
+                    if reverse_entrance.parent_region:
+                        raise Exception("This is very bad")
                     break
             else:
                 raise Exception(f'Two way exit {source_exit.name} had no corresponding entrance in '
                                 f'{source_exit.parent_region.name}')
             for reverse_exit in target_region.exits:
                 if reverse_exit.name == target_entrance.name:
+                    if reverse_exit.connected_region:
+                        raise Exception("this is very bad")
                     break
             else:
                 raise Exception(f'Two way entrance {target_entrance.name} had no corresponding exit in '
                                 f'{target_region.name}')
             self._connect_one_way(reverse_exit, reverse_entrance)
+            # the reverse exit might be in the placeable list so clear that to prevent re-randomization
+            try:
+                self._placeable_exits.remove(reverse_exit)
+            except ValueError:
+                pass
             return [target_entrance, reverse_entrance]
         return [target_entrance]
 
@@ -211,7 +242,7 @@ def randomize_entrances(
         coupled: bool,
         get_target_groups: Callable[[str], List[str]],
         preserve_group_order: bool = False
-    ) -> ERPlacementState:
+) -> ERPlacementState:
     """
     Randomizes Entrances for a single world in the multiworld. This should usually be
     called in pre_fill or possibly set_rules if you know what you're doing.
@@ -254,13 +285,14 @@ def randomize_entrances(
         # todo - this doesn't prioritize placing new rooms like the original did;
         #        that's problematic because early loops would lead to failures
         # this is needed to reduce bias; otherwise newer exits are prioritized
-        # rng.shuffle(state._placeable_exits)
+        rng.shuffle(state._placeable_exits)
         source_exit = state._placeable_exits.pop()
 
         target_groups = get_target_groups(source_exit.er_group)
         # anything can connect to the default group - if people don't like it the fix is to
         # assign a non-default group
-        target_groups.append('Default')
+        if 'Default' not in target_groups:
+            target_groups.append('Default')
         for target_entrance in entrance_lookup.get_targets(target_groups, False, preserve_group_order):
             if source_exit.can_connect_to(target_entrance, state):
                 # we found a valid, connectable target entrance. We'll connect it in a moment
@@ -270,9 +302,9 @@ def randomize_entrances(
             unplaceable_exits.append(source_exit)
             continue
 
-        # place the new pairing
-        state.place(target_entrance)
+        # place the new pairing. it is important to do connections first so that can_reach will function.
         removed_entrances = state.connect(source_exit, target_entrance)
+        state.place(target_entrance)
         state.sweep_pending_exits()
         # remove paired entrances from the lookup so they don't get re-randomized
         for entrance in removed_entrances:
@@ -285,20 +317,24 @@ def randomize_entrances(
         # none of the existing targets can pair to the existing sources. Since dead ends will never add new sources
         # this means the current targets can never be paired (in most cases)
         # todo - investigate ways to prevent this case
+        print("Unable to place all non-dead-end entrances with available source exits")
         return state  # this short circuts the exception for testing purposes in order to see how far ER got.
         raise Exception("Unable to place all non-dead-end entrances with available source exits")
 
     # anything we couldn't place before might be placeable now
-    state._placeable_exits.union(unplaceable_exits)
+    state._placeable_exits.extend(unplaceable_exits)
     unplaceable_exits.clear()
 
     # repeat the above but try to place dead ends
-    while state.has_placeable_exits() and entrance_lookup.others:
+    while state.has_placeable_exits() and entrance_lookup.dead_ends:
         rng.shuffle(state._placeable_exits)
         source_exit = state._placeable_exits.pop()
 
         target_groups = get_target_groups(source_exit.er_group)
-        target_groups.append('Default')
+        # anything can connect to the default group - if people don't like it the fix is to
+        # assign a non-default group
+        if 'Default' not in target_groups:
+            target_groups.append('Default')
         for target_entrance in entrance_lookup.get_targets(target_groups, True, preserve_group_order):
             if source_exit.can_connect_to(target_entrance, state):
                 # we found a valid, connectable target entrance. We'll connect it in a moment
@@ -307,11 +343,13 @@ def randomize_entrances(
             # there were no valid dead-end targets for this source, so give up
             # todo - similar to above we should try and prevent this state.
             #        also it can_connect_to may be stateful.
+            print("Unable to place all dead-end entrances with available source exits")
+            return state  # this short circuts the exception for testing purposes in order to see how far ER got.
             raise Exception("Unable to place all dead-end entrances with available source exits")
 
-        # place the new pairing
-        state.place(target_entrance)
+        # place the new pairing. it is important to do connections first so that can_reach will function.
         removed_entrances = state.connect(source_exit, target_entrance)
+        state.place(target_entrance)
         state.sweep_pending_exits()
         # remove paired entrances from the lookup so they don't get re-randomized
         for entrance in removed_entrances:

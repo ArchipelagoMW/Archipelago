@@ -618,6 +618,7 @@ class CollectionState():
     stale: Dict[int, bool]
     additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
+    allow_partial_entrances: bool = False
 
     def __init__(self, parent: MultiWorld):
         self.prog_items = {player: Counter() for player in parent.player_ids}
@@ -634,7 +635,7 @@ class CollectionState():
             for item in items:
                 self.collect(item, True)
 
-    def update_reachable_regions(self, player: int, allow_partial_entrances: bool = False):
+    def update_reachable_regions(self, player: int):
         self.stale[player] = False
         rrp = self.reachable_regions[player]
         bc = self.blocked_connections[player]
@@ -654,11 +655,10 @@ class CollectionState():
             if new_region in rrp:
                 bc.remove(connection)
             elif connection.can_reach(self):
-                if not allow_partial_entrances:
+                if not self.allow_partial_entrances:
                     assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
-                else:
-                    if not new_region:
-                        break
+                elif not new_region:
+                    continue
                 rrp.add(new_region)
                 bc.remove(connection)
                 bc.update(new_region.exits)
@@ -797,8 +797,8 @@ class Entrance:
         self.er_group = er_group
         self.er_type = er_type
 
-    def can_reach(self, state: CollectionState, allow_partial_entrances: bool = False) -> bool:
-        if self.parent_region.can_reach(state, allow_partial_entrances) and self.access_rule(state):
+    def can_reach(self, state: CollectionState) -> bool:
+        if self.parent_region.can_reach(state) and self.access_rule(state):
             if not self.hide_path and not self in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
@@ -831,7 +831,8 @@ class Entrance:
         :param state: The current (partial) state of the ongoing entrance randomization
         :param group_one_ways: Whether to enforce that one-ways are paired together.
         """
-        return self.er_type == other.er_type
+        # todo - consider allowing self-loops. currently they cause problems in coupled
+        return self.er_type == other.er_type and (not state.coupled or self.name != other.name)
 
     def __repr__(self):
         return self.__str__()
@@ -928,9 +929,9 @@ class Region:
 
     exits = property(get_exits, set_exits)
 
-    def can_reach(self, state: CollectionState, allow_partial_entrances: bool = False) -> bool:
+    def can_reach(self, state: CollectionState) -> bool:
         if state.stale[self.player]:
-            state.update_reachable_regions(self.player, allow_partial_entrances)
+            state.update_reachable_regions(self.player)
         return self in state.reachable_regions[self.player]
 
     @property
