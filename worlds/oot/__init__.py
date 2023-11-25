@@ -1028,8 +1028,7 @@ class OOTWorld(World):
 
         # Write entrances to spoiler log
         all_entrances = self.get_shuffled_entrances()
-        all_entrances.sort(reverse=True, key=lambda x: x.name)
-        all_entrances.sort(reverse=True, key=lambda x: x.type)
+        all_entrances.sort(reverse=True, key=lambda x: (x.type, x.name))
         if not self.decouple_entrances:
             while all_entrances:
                 loadzone = all_entrances.pop()
