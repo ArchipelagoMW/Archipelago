@@ -91,7 +91,11 @@ class TotalSpecial1s(Range):
 
 
 class DraculasCondition(Choice):
-    """Sets the requirements for opening the door to Dracula's chamber."""
+    """Sets the requirement for unlocking and opening the door to Dracula's chamber.
+    None: No requirement. Door is unlocked from the start.
+    Crystal: Activate the big crystal in Castle Center's basement. Neither boss afterwards has to be defeated.
+    Bosses: Kill a specified number of bosses with health bars and claim their Trophies.
+    Specials: Find a specified number of Special2 jewels shuffled in the main item pool."""
     display_name = "Dracula's Condition"
     option_none = 0
     option_crystal = 1

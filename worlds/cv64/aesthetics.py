@@ -1,10 +1,15 @@
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, Location
 from .data import iname, rname
 from .options import CV64Options
 from .stages import vanilla_stage_order, get_stage_info
 from .locations import get_location_info, base_id
 from .regions import get_region_info
 from .items import get_item_info, item_info
+
+from typing import TYPE_CHECKING, Dict
+
+if TYPE_CHECKING:
+    from . import CV64World
 
 rom_sub_weapon_offsets = {
     0x10C6EB: [0x10, rname.forest_of_silence],  # Forest
@@ -260,7 +265,7 @@ renon_item_dialogue = {
 }
 
 
-def randomize_lighting(world) -> dict:
+def randomize_lighting(world: "CV64World") -> Dict[int, int]:
     """Generates randomized data for the map lighting table."""
     randomized_lighting = {}
     for entry in range(67):
@@ -272,7 +277,7 @@ def randomize_lighting(world) -> dict:
     return randomized_lighting
 
 
-def shuffle_sub_weapons(world) -> dict:
+def shuffle_sub_weapons(world: "CV64World") -> Dict[int, int]:
     """Shuffles the sub-weapons amongst themselves."""
     sub_weapon_dict = {offset: rom_sub_weapon_offsets[offset][0] for offset in rom_sub_weapon_offsets if
                        rom_sub_weapon_offsets[offset][1] in world.active_stage_exits}
@@ -286,7 +291,7 @@ def shuffle_sub_weapons(world) -> dict:
     return dict(zip(sub_weapon_dict, sub_bytes))
 
 
-def randomize_music(world, options: CV64Options):
+def randomize_music(world: "CV64World", options: CV64Options) -> Dict[int, int]:
     """Generates randomized or disabled data for all the music in the game."""
     music_list = [0] * 0x7A
     for number in music_sfx_ids:
@@ -339,7 +344,7 @@ def randomize_music(world, options: CV64Options):
     return music_offsets
 
 
-def randomize_shop_prices(world, min_price, max_price):
+def randomize_shop_prices(world: "CV64World", min_price: int, max_price: int) -> Dict[int, int]:
     """Randomize the shop prices based on the minimum and maximum values chosen.
     The minimum price will adjust if it's higher than the max."""
     if min_price > max_price:
@@ -385,7 +390,7 @@ def get_countdown_numbers(options: CV64Options, active_locations):
     return countdown_dict
 
 
-def get_location_data(world, options: CV64Options, active_locations):
+def get_location_data(world: "CV64World", options: CV64Options, active_locations):
     """Gets ALL the item data to go into the ROM. Item data consists of two bytes: the first dictates the appearance of
     the item, the second determines what the item actually is when picked up. All items from other worlds will be AP
     items that do nothing when picked up other than set their flag, and their appearance will depend on whether it's
@@ -497,7 +502,7 @@ def get_location_data(world, options: CV64Options, active_locations):
     return location_bytes, shop_name_list, shop_colors_list, shop_desc_list
 
 
-def get_loading_zone_bytes(options: CV64Options, starting_stage: str, active_stage_exits: dict) -> dict:
+def get_loading_zone_bytes(options: CV64Options, starting_stage: str, active_stage_exits: dict) -> Dict[int, int]:
     """Figure out all the bytes for loading zones and map transitions based on which stages are where in the exit data.
     The same data was used earlier in figuring out the logic. Map transitions consist of two major components: which map
     to send the player to, and which spot within the map to spawn the player at."""
@@ -541,7 +546,7 @@ def get_loading_zone_bytes(options: CV64Options, starting_stage: str, active_sta
     return loading_zone_bytes
 
 
-def get_start_inventory_data(options: CV64Options, start_inventory: dict) -> dict:
+def get_start_inventory_data(options: CV64Options, start_inventory: dict) -> Dict[int, int]:
     """Calculate and return the starting inventory values. Not every Item goes into the menu inventory, so everything
     has to be handled appropriately."""
     start_inventory_data = {0xBFD867: 0,  # Jewels
@@ -603,7 +608,7 @@ def get_start_inventory_data(options: CV64Options, start_inventory: dict) -> dic
     return start_inventory_data
 
 
-def get_item_text_color(loc) -> list:
+def get_item_text_color(loc: Location) -> list:
     if loc.item.advancement:
         return [0xA2, 0x0C]
     elif loc.item.classification == ItemClassification.useful:

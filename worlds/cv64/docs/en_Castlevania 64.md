@@ -61,7 +61,7 @@ locations that can be toggled are:
 - Sub-weapon locations if they have been shuffled anywhere.
 - Seven items sold by the shopkeeper Renon.
 - The two items beyond the crawlspace in Waterway that normally require Carrie, if Carrie Logic is on.
-- The six items inside the lizardman generators in Castle Center that open randomly to spawn Lizard-men. These are particularly annoying!
+- The six items inside the Lizard-man generators in Castle Center that open randomly to spawn Lizard-men. These are particularly annoying!
 
 ## How does the infamous Nitro transport work in this?
 
@@ -115,6 +115,17 @@ Enabling Carrie Logic will also expect the following:
 Library Skip will **never** be logically expected. The downstairs hallway crack will always logically expect two Nitros
 and two Mandragoras even with these settings on due to the possibility of wasting a pair on the upper wall, after managing
 to skip past it. And plus, the RNG manip may not even be possible after picking up all the items in the Nitro room.
+
+## What are the item name groups?
+When you attempt to hint for items in Archipelago you can use either the name for the specific item, or the name of a group
+of items. Hinting for a group will choose a random item from the group that you do not currently have and hint for it.
+The groups you can use for Castlevania 64 are `bomb` and `ingredient`, both of which can be used to hint for a Magical Nitro
+or Mandragora.
+
+## What are the location name groups?
+When you exclude locations in Archipelago, you can either exclude a specific location, or an entire group of locations that
+all fall under a name. In Castlevania 64, every location within a stage is part of a location group under that stage's name.
+So if you want to exclude all of, say, Duel Tower, you can do so by just excluding "Duel Tower" as a whole.
 
 ## How do I set Nitro/Mandragora?
 

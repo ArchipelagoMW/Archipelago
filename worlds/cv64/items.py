@@ -3,6 +3,11 @@ from .data import iname
 from .locations import base_id, get_location_info
 from .options import CV64Options
 
+from typing import TYPE_CHECKING, Dict
+
+if TYPE_CHECKING:
+    from . import CV64World
+
 import math
 
 
@@ -89,11 +94,11 @@ def get_item_info(item: str, info: str):
     return None
 
 
-def get_item_names_to_ids():
+def get_item_names_to_ids() -> Dict[str, int]:
     return {name: get_item_info(name, "code")+base_id for name in item_info if get_item_info(name, "code") is not None}
 
 
-def get_item_counts(world, options: CV64Options, active_locations):
+def get_item_counts(world: "CV64World", options: CV64Options, active_locations) -> Dict[str, Dict[str, int]]:
     item_counts = {
         "progression": {},
         "progression_skip_balancing": {},

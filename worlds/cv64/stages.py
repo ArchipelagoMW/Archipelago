@@ -3,6 +3,11 @@ from .options import CV64Options
 from .regions import get_region_info
 from .locations import get_location_info
 
+from typing import TYPE_CHECKING, Dict
+
+if TYPE_CHECKING:
+    from . import CV64World
+
 stage_info = {
     "Forest of Silence": {
         "start region": rname.forest_start, "start map id": 0x00, "start spawn id": 0x00,
@@ -207,14 +212,14 @@ def get_warp_destination_region(active_warp_list: list, index: int) -> str:
     return stage_info[active_warp_list[index]].mid_region_name
 
 
-def verify_character_stage(world, stage: str) -> bool:
+def verify_character_stage(world: "CV64World", stage: str) -> bool:
     # Verify a character stage is in the world if the given stage is a character stage.
     stage_char = get_stage_info(stage, "character")
     return stage_char is None or (world.reinhardt_stages and stage_char == "Reinhardt") or \
            (world.carrie_stages and stage_char == "Carrie")
 
 
-def get_normal_stage_exits(world) -> dict:
+def get_normal_stage_exits(world: "CV64World") -> Dict[str, dict]:
     exits = {name: vanilla_stage_exits[name].copy() for name in vanilla_stage_exits}
     non_branching_pos = 1
 
@@ -238,7 +243,7 @@ def get_normal_stage_exits(world) -> dict:
     return exits
 
 
-def shuffle_stages(world, stage_1_blacklist: list, starting_stage_value: int, active_stage_exits: dict):
+def shuffle_stages(world: "CV64World", stage_1_blacklist: list, starting_stage_value: int, active_stage_exits: dict):
     """Woah, this is a lot! I should probably summarize what's happening in here, huh?
 
     So, in the vanilla game, all the stages are basically laid out on a linear "timeline" with some stages being
@@ -400,7 +405,7 @@ def shuffle_stages(world, stage_1_blacklist: list, starting_stage_value: int, ac
     return active_stage_exits, starting_stage, new_stage_order
 
 
-def generate_warps(world, options: CV64Options, active_stage_list: list):
+def generate_warps(world: "CV64World", options: CV64Options, active_stage_list: list) -> list:
     # Create a list of warps from the active stage list. They are in a random order by default and will never
     # include the starting stage.
     possible_warps = [stage for stage in active_stage_list]
@@ -431,7 +436,7 @@ def generate_warps(world, options: CV64Options, active_stage_list: list):
     return active_warp_list
 
 
-def get_region_names(active_stage_exits: dict):
+def get_region_names(active_stage_exits: dict) -> list:
     region_names = []
     for stage in active_stage_exits:
         stage_regions = get_stage_info(stage, "regions")

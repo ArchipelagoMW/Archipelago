@@ -2,6 +2,8 @@ from BaseClasses import Location
 from .data import lname, iname
 from .options import CV64Options
 
+from typing import Dict
+
 base_id = 0xC64000
 
 
@@ -646,12 +648,12 @@ def get_location_info(location: str, info: str):
     return None
 
 
-def get_location_names_to_ids():
+def get_location_names_to_ids() -> Dict[str, int]:
     return {name: get_location_info(name, "code")+base_id for name in location_info if get_location_info(name, "code")
             is not None}
 
 
-def verify_locations(options: CV64Options, locations: list) -> dict:
+def verify_locations(options: CV64Options, locations: list) -> Dict[Location, any]:
 
     verified_locations = {}
 

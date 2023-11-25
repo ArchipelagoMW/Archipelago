@@ -34,16 +34,14 @@ class CV64Settings(settings.Group):
 class CV64Web(WebWorld):
     theme = "stone"
 
-    setup_en = Tutorial(
+    tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Castlevania 64 randomizer connected to an Archipelago Multiworld.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Liquid Cat"]
-    )
-
-    tutorials = [setup_en]
+    )]
 
 
 class CV64World(World):
