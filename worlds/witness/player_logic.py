@@ -485,8 +485,9 @@ class WitnessPlayerLogic:
         self.EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
         for event_hex, event_name in self.EVENT_NAMES_BY_HEX.items():
-            if event_hex in self.COMPLETELY_DISABLED_ENTITIES:
+            if event_hex in self.COMPLETELY_DISABLED_ENTITIES or event_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
                 continue
+
             self.EVENT_PANELS.add(event_hex)
 
         for panel in self.EVENT_PANELS:
