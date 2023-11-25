@@ -103,7 +103,11 @@ async def connect(ctx: BizHawkContext) -> bool:
             return True
         except (TimeoutError, ConnectionRefusedError):
             continue
-    
+        except OSError as e:
+            if e.errno == 61:  # Connection refused (darwin raises this error instead)
+                continue
+            raise e
+
     # No ports worked
     ctx.streams = None
     ctx.connection_status = ConnectionStatus.NOT_CONNECTED
