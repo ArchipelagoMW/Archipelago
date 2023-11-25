@@ -363,8 +363,8 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                                         context=context) as download:
                 vc_redist = download.read()
             print(f"Download complete, {len(vc_redist) / 1024 / 1024:.2f} MBytes downloaded.", )
-            with open("VC_redist.x64.exe", "wb") as f:
-                f.write(vc_redist)
+            with open("VC_redist.x64.exe", "wb") as vc_file:
+                vc_file.write(vc_redist)
 
         for data in self.extra_data:
             self.installfile(Path(data))
