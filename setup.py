@@ -71,7 +71,6 @@ non_apworlds: set = {
     "Clique",
     "DLCQuest",
     "Final Fantasy",
-    "Kingdom Hearts 2",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",
