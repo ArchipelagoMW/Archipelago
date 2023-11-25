@@ -16,7 +16,7 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
-from Utils import __version__, output_path, version_tuple, messagebox
+from Utils import __version__, local_path, output_path, version_tuple, messagebox
 from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
@@ -439,7 +439,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     gen_time = time.perf_counter() - start
     logger.info('Done. Enjoy. Total Time: %s', gen_time)
-    if not __debug__:
+    if not (__debug__ or args.no_gui):
         messagebox("Generation Succeeded", f"Done. Enjoy. Total Time: {gen_time}."
                                            f"\nOutput to {zipfilename}")
     return world

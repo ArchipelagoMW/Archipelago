@@ -60,6 +60,8 @@ def mystery_argparse():
     parser.add_argument("--skip_output", action="store_true",
                         help="Skips generation assertion and output stages and skips multidata and spoiler output. "
                              "Intended for debugging and testing purposes.")
+    parser.add_argument("--no_gui", action="store_true",
+                        help="Disables any GUI from being created during the generation process.")
     args = parser.parse_args()
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
@@ -78,6 +80,9 @@ def main(args=None, callback=ERmain):
         args, options = mystery_argparse()
     else:
         options = get_settings()
+
+    if not (__debug__ or args.no_gui):
+        sys.excepthook = parsing_failure_gui
 
     seed = get_seed(args.seed)
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
@@ -158,6 +163,7 @@ def main(args=None, callback=ERmain):
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
+    erargs.no_gui = args.no_gui
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
@@ -660,8 +666,6 @@ def parsing_failure_gui(_type: typing.Type[BaseException], value: BaseException,
 
 
 if __name__ == '__main__':
-    if not __debug__:
-        sys.excepthook = parsing_failure_gui
     multiworld = main()
     if __debug__:
         import gc
