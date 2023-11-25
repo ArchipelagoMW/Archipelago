@@ -20,7 +20,7 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.multiworld.state.prog_items = {1: Counter()}
 
         sturgeon_rule = self.world.logic.has("Sturgeon")
-        self.assertFalse(sturgeon_rule(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state))
 
         summer = self.world.create_item("Summer")
         self.multiworld.state.collect(summer, event=False)
@@ -60,34 +60,35 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Summer"), event=False)
         self.collect_lots_of_money()
 
-        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        rule = self.world.logic.region.can_reach_location("Old Master Cannoli")
+        self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state))
 
         fall = self.world.create_item("Fall")
         self.multiworld.state.collect(fall, event=False)
-        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(rule(self.multiworld.state))
 
         tuesday = self.world.create_item("Traveling Merchant: Tuesday")
         self.multiworld.state.collect(tuesday, event=False)
-        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(rule(self.multiworld.state))
 
         rare_seed = self.world.create_item("Rare Seed")
         self.multiworld.state.collect(rare_seed, event=False)
-        self.assertTrue(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertTrue(rule(self.multiworld.state))
 
         self.remove(fall)
-        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(rule(self.multiworld.state))
         self.remove(tuesday)
 
         green_house = self.world.create_item("Greenhouse")
         self.multiworld.state.collect(green_house, event=False)
-        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(rule(self.multiworld.state))
 
         friday = self.world.create_item("Traveling Merchant: Friday")
         self.multiworld.state.collect(friday, event=False)
         self.assertTrue(self.multiworld.get_location("Old Master Cannoli", 1).access_rule(self.multiworld.state))
 
         self.remove(green_house)
-        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(rule(self.multiworld.state))
         self.remove(friday)
 
 
@@ -769,5 +770,5 @@ class TestVanillaSkillLogicSimplification(SVTestBase):
     def test_skill_logic_has_level_only_uses_one_has_progression_percent(self):
         rule = self.multiworld.worlds[1].logic.skill.has_level("Farming", 8)
         print(rule)
-        self.assertEqual(0, sum(1 for i in rule.rules if type(i) == HasProgressionPercent))
-        self.assertIsNotNone(rule._combinable_rules)
+        self.assertEqual(1, sum(1 for i in rule.rules if type(i) == HasProgressionPercent))
+        self.assertIsNotNone(rule.combinable_rules)
