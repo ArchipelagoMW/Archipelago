@@ -226,7 +226,7 @@ class CMWorld(World):
 
         my_useful_items = list(useful_items.keys())
         while (len(items) + user_location_count) < len(location_table) and len(my_useful_items) > 0:
-            chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_useful_items)
+            chosen_item = self.random.choice(my_useful_items)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
