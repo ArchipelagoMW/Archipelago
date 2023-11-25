@@ -6,7 +6,7 @@ import requests
 import yaml
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial
-from .Regions import create_regions, location_table, set_rules, rooms, non_dead_end_crest_rooms,\
+from .Regions import create_regions, location_table, set_rules, stage_set_rules, rooms, non_dead_end_crest_rooms,\
     non_dead_end_crest_warps
 from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
@@ -55,6 +55,7 @@ class FFMQWorld(World):
     create_items = create_items
     create_regions = create_regions
     set_rules = set_rules
+    stage_set_rules = stage_set_rules
 
     data_version = 1
     
@@ -119,13 +120,19 @@ class FFMQWorld(World):
 
                 errors = []
                 for api_url in api_urls.copy():
-                    response = requests.get(f"{api_url}GenerateRooms?{query}")
-                    if response.ok:
-                        world.rooms = rooms_data[query] = yaml.load(response.text, yaml.Loader)
-                        break
-                    else:
+                    try:
+                        response = requests.get(f"{api_url}GenerateRooms?{query}")
+                    except (ConnectionError, requests.exceptions.HTTPError, requests.exceptions.ConnectionError,
+                            requests.exceptions.RequestException) as err:
                         api_urls.remove(api_url)
-                        errors.append([api_url, response])
+                        errors.append([api_url, err])
+                    else:
+                        if response.ok:
+                            world.rooms = rooms_data[query] = yaml.load(response.text, yaml.Loader)
+                            break
+                        else:
+                            api_urls.remove(api_url)
+                            errors.append([api_url, response])
                 else:
                     error_text = f"Failed to fetch map shuffle data for FFMQ player {world.player}"
                     for error in errors:
@@ -184,7 +191,7 @@ class FFMQWorld(World):
                             overworld_spot.name == "Overworld - Mac Ship Doom" or "Focus Tower" in overworld_spot.name
                             or "Doom Castle" in overworld_spot.name or overworld_spot.name == "Overworld - Giant Tree"):
                         continue
-                    exits = overworld_spot.connected_region.exits + [overworld_spot]
+                    exits = list(overworld_spot.connected_region.exits) + [overworld_spot]
                     checked_regions = set()
                     while exits:
                         exit_check = exits.pop()

@@ -1,4 +1,4 @@
-from BaseClasses import Region, MultiWorld, Entrance, Location
+from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgressType, ItemClassification
 from worlds.generic.Rules import add_rule
 from .Items import item_groups, yaml_item
 import pkgutil
@@ -127,6 +127,9 @@ non_dead_end_crest_warps = [
 ]
 
 
+vendor_locations = ["Aquaria - Vendor", "Fireburg - Vendor", "Windia - Vendor"]
+
+
 def set_rules(self) -> None:
     self.multiworld.completion_condition[self.player] = lambda state: state.has("Dark King", self.player)
 
@@ -205,6 +208,31 @@ def set_rules(self) -> None:
     elif self.multiworld.sky_coin_mode[self.player] in ("standard", "start_with"):
         self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
             lambda state: state.has("Sky Coin", self.player)
+
+
+def stage_set_rules(multiworld):
+    # If there's no enemies, there's no repeatable income sources
+    no_enemies_players = [player for player in multiworld.get_game_players("Final Fantasy Mystic Quest")
+                          if multiworld.enemies_density[player] == "none"]
+    if (len([item for item in multiworld.itempool if item.classification in (ItemClassification.filler,
+            ItemClassification.trap)]) > len([player for player in no_enemies_players if
+                                              multiworld.accessibility[player] == "minimal"]) * 3):
+        for player in no_enemies_players:
+            for location in vendor_locations:
+                if multiworld.accessibility[player] == "locations":
+                    print("exclude")
+                    multiworld.get_location(location, player).progress_type = LocationProgressType.EXCLUDED
+                else:
+                    print("unreachable")
+                    multiworld.get_location(location, player).access_rule = lambda state: False
+    else:
+        # There are not enough junk items to fill non-minimal players' vendors. Just set an item rule not allowing
+        # advancement items so that useful items can be placed.
+        print("no advancement")
+        for player in no_enemies_players:
+            for location in vendor_locations:
+                multiworld.get_location(location, player).item_rule = lambda item: not item.advancement
+
 
 
 
