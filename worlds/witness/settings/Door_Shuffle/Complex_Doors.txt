@@ -154,7 +154,7 @@ Theater Exit Left Panel
 Theater Exit Right Panel
 Jungle Laser Shortcut Panel
 Jungle Popup Wall Control
-River Monastery Garden Shortcut Panel
+Jungle Monastery Garden Shortcut Panel
 Bunker Entry Panel
 Bunker Tinted Glass Door Panel
 Bunker Glass Room 3
