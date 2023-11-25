@@ -77,3 +77,13 @@ class TestHasProgressionPercentSimplification(unittest.TestCase):
         for i, case in enumerate(cases):
             with self.subTest(f"{i} {repr(case)}"):
                 self.assertEqual(case, And(HasProgressionPercent(1, 20)))
+
+    def test_or_between_progression_percent_and_other_progression_percent_uses_max(self):
+        cases = [
+            Or(HasProgressionPercent(1, 20)) | HasProgressionPercent(1, 10),
+            HasProgressionPercent(1, 20) | Or(HasProgressionPercent(1, 10)),
+            Or(HasProgressionPercent(1, 10)) | Or(HasProgressionPercent(1, 20))
+        ]
+        for i, case in enumerate(cases):
+            with self.subTest(f"{i} {repr(case)}"):
+                self.assertEqual(case, Or(HasProgressionPercent(1, 20)))

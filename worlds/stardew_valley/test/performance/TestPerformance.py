@@ -31,8 +31,8 @@ class PerformanceResults:
         stdev_time = stdev(self.results, mean_time)
         variance_time = variance(self.results, mean_time)
 
-        return f"""Generated {len(self.results)} {size} multiworlds in {total_time:.4f} seconds. Average {mean_time:.4f} seconds (Acceptable: {self.acceptable_mean:.2f})
-Mean: {mean_time:.4f} Median: {median_time:.4f} Stdeviation: {stdev_time:.4f} Variance: {variance_time:.4f} Deviation percent: {stdev_time / mean_time:.2%}"""
+        return f"""Generated {len(self.results)} {size} multiworlds in {total_time:.2f} seconds. Average {mean_time:.2f} seconds (Acceptable: {self.acceptable_mean:.2f})
+Mean: {mean_time:.2f} Median: {median_time:.2f} Stdeviation: {stdev_time:.2f} Variance: {variance_time:.4f} Deviation percent: {stdev_time / mean_time:.2%}"""
 
 
 class SVPerformanceTestCase(SVTestCase):

@@ -5,7 +5,7 @@ from typing import Dict
 
 from BaseClasses import ItemClassification, MultiWorld
 from Options import NamedRange
-from . import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods
+from . import setup_solo_multiworld, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods
 from .. import StardewItem, items_by_group, Group, StardewValleyWorld
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
@@ -23,7 +23,7 @@ def assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):
         multiworld.state.collect(item)
     victory = multiworld.find_item("Victory", 1)
     can_reach_victory = victory.can_reach(multiworld.state)
-    tester.assertTrue(can_reach_victory)
+    tester.assertTrue(can_reach_victory, victory.access_rule.explain(multiworld.state))
 
 
 def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):
@@ -188,7 +188,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
                 with self.subTest(f"Goal: {goal}, {island_option.internal_name}: {value}"):
                     multiworld = setup_solo_multiworld(
                         {Goal.internal_name: Goal.options[goal],
-                            island_option.internal_name: island_option.options[value]})
+                         island_option.internal_name: island_option.options[value]})
                     stardew_world: StardewValleyWorld = multiworld.worlds[self.player]
                     self.assertEqual(stardew_world.options.exclude_ginger_island, island_option.option_false)
                     basic_checks(self, multiworld)

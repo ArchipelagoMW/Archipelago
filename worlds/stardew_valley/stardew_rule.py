@@ -1,13 +1,46 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from functools import reduce
+from dataclasses import dataclass, field
+from functools import reduce, cached_property
 from typing import Iterable, Dict, List, Union, FrozenSet, Optional, Sized
 
 from BaseClasses import CollectionState, ItemClassification
 from .items import item_table
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
+
+
+@dataclass
+class StardewRuleExplanation:
+    rule: StardewRule
+    state: CollectionState
+    sub_rules: Iterable[StardewRule] = field(default_factory=set)
+
+    def summary(self, depth=0):
+        return "\t" * depth + f"{str(self.rule)} -> {self.result}"
+
+    def __str__(self, depth=0):
+        if not self.sub_rules:
+            return self.summary(depth)
+
+        return self.summary(depth) + "\n" + "\n".join(StardewRuleExplanation.__str__(i, depth + 1)
+                                                      if i.result is False else i.summary(depth + 1)
+                                                      for i in sorted(self.explained_sub_rules, key=lambda x: x.result))
+
+    def __repr__(self, depth=0):
+        if not self.sub_rules:
+            return self.summary(depth)
+
+        return self.summary(depth) + "\n" + "\n".join(StardewRuleExplanation.__repr__(i, depth + 1)
+                                                      for i in sorted(self.explained_sub_rules, key=lambda x: x.result))
+
+    @cached_property
+    def result(self):
+        return self.rule(self.state)
+
+    @cached_property
+    def explained_sub_rules(self):
+        return [i.explain(self.state) for i in self.sub_rules]
 
 
 class StardewRule:
@@ -31,6 +64,9 @@ class StardewRule:
 
     def simplify(self) -> StardewRule:
         return self
+
+    def explain(self, state: CollectionState) -> StardewRuleExplanation:
+        return StardewRuleExplanation(self, state)
 
 
 class True_(StardewRule):  # noqa
@@ -91,28 +127,49 @@ _default_has_progression_percent = object()
 
 class Or(StardewRule):
     rules: FrozenSet[StardewRule]
-    _simplified: bool
 
-    def __init__(self, *rules: StardewRule):
-        self.rules = frozenset(rules)
-        assert self.rules, "Can't create a Or conditions without rules"
+    _simplified: bool
+    _has_progression_percent: Optional[HasProgressionPercent]
+    _detailed_rules: FrozenSet[StardewRule]
+
+    def __init__(self, *rules: StardewRule, _has_progression_percent=_default_has_progression_percent):
         self._simplified = False
+
+        if _has_progression_percent is _default_has_progression_percent:
+            assert rules, "Can't create a Or conditions without rules"
+            _has_progression_percent = HasProgressionPercent.reduce_or([i for i in rules if type(i) is HasProgressionPercent])
+            if rules is not None:
+                rules = (i for i in rules if type(i) is not HasProgressionPercent)
+
+        self.rules = frozenset(rules)
+        self._detailed_rules = self.rules
+        self._has_progression_percent = _has_progression_percent
 
     def __call__(self, state: CollectionState) -> bool:
         self.simplify()
         return any(rule(state) for rule in self.rules)
 
+    def __str__(self):
+        prefix = str(self._has_progression_percent) + " | " if self._has_progression_percent else ""
+        return f"({prefix}{' | '.join(str(rule) for rule in self._detailed_rules)})"
+
     def __repr__(self):
-        return f"({' | '.join(repr(rule) for rule in self.rules)})"
+        prefix = repr(self._has_progression_percent) + " | " if self._has_progression_percent else ""
+        return f"({prefix}{' | '.join(repr(rule) for rule in self._detailed_rules)})"
 
     def __or__(self, other):
         if other is true_ or other is false_:
             return other | self
 
-        if type(other) is Or:
-            return Or(*self.rules.union(other.rules))
+        if type(other) is HasProgressionPercent:
+            if self._has_progression_percent:
+                return Or(*self.rules, _has_progression_percent=self._has_progression_percent | other)
+            return Or(*self.rules, _has_progression_percent=other)
 
-        return Or(*self.rules.union({other}))
+        if type(other) is Or:
+            return Or(*self.rules.union(other.rules), _has_progression_percent=self._has_progression_percent)
+
+        return Or(*self.rules.union({other}), _has_progression_percent=self._has_progression_percent)
 
     def __eq__(self, other):
         return isinstance(other, self.__class__) and other.rules == self.rules
@@ -129,7 +186,9 @@ class Or(StardewRule):
         if true_ in self.rules:
             return true_
 
-        simplified_rules = [simplified for simplified in {rule.simplify() for rule in self.rules}
+        rules = self.rules.union({self._has_progression_percent}) if self._has_progression_percent else self.rules
+        simplified_rules = [simplified
+                            for simplified in {rule.simplify() for rule in rules}
                             if simplified is not false_]
 
         if not simplified_rules:
@@ -142,11 +201,16 @@ class Or(StardewRule):
         self._simplified = True
         return self
 
+    def explain(self, state: CollectionState) -> StardewRuleExplanation:
+        return StardewRuleExplanation(self, state, self._detailed_rules)
+
 
 class And(StardewRule):
     rules: FrozenSet[StardewRule]
+
     _simplified: bool
     _has_progression_percent: Optional[HasProgressionPercent]
+    _detailed_rules: FrozenSet[StardewRule]
 
     def __init__(self, *rules: StardewRule, _has_progression_percent=_default_has_progression_percent):
         self._simplified = False
@@ -158,6 +222,7 @@ class And(StardewRule):
                 rules = (i for i in rules if type(i) is not HasProgressionPercent)
 
         self.rules = frozenset(rules)
+        self._detailed_rules = self.rules
         self._has_progression_percent = _has_progression_percent
 
     def __call__(self, state: CollectionState) -> bool:
@@ -165,9 +230,13 @@ class And(StardewRule):
         result = all(rule(state) for rule in self.rules)
         return result
 
+    def __str__(self):
+        prefix = str(self._has_progression_percent) + " & " if self._has_progression_percent else ""
+        return f"({prefix}{' & '.join(str(rule) for rule in self._detailed_rules)})"
+
     def __repr__(self):
         prefix = repr(self._has_progression_percent) + " & " if self._has_progression_percent else ""
-        return f"({prefix}{' & '.join(repr(rule) for rule in self.rules)})"
+        return f"({prefix}{' & '.join(repr(rule) for rule in self._detailed_rules)})"
 
     def __and__(self, other):
         if other is true_ or other is false_:
@@ -212,6 +281,9 @@ class And(StardewRule):
         self.rules = frozenset(simplified_rules)
         self._simplified = True
         return self
+
+    def explain(self, state: CollectionState) -> StardewRuleExplanation:
+        return StardewRuleExplanation(self, state, self._detailed_rules)
 
 
 class Count(StardewRule):
@@ -264,6 +336,9 @@ class Count(StardewRule):
         self._simplified = True
         return self
 
+    def explain(self, state: CollectionState) -> StardewRuleExplanation:
+        return StardewRuleExplanation(self, state, self.rules)
+
 
 class TotalReceived(StardewRule):
     count: int
@@ -300,6 +375,9 @@ class TotalReceived(StardewRule):
 
     def get_difficulty(self):
         return self.count
+
+    def explain(self, state: CollectionState) -> StardewRuleExplanation:
+        return StardewRuleExplanation(self, state, [Received(i, self.player, 1) for i in self.items])
 
 
 @dataclass(frozen=True)
@@ -339,6 +417,26 @@ class Reach(StardewRule):
     def get_difficulty(self):
         return 1
 
+    def explain(self, state: CollectionState) -> StardewRuleExplanation:
+        # FIXME this should be in core
+        if self.resolution_hint == 'Location':
+            spot = state.multiworld.get_location(self.spot, self.player)
+            # TODO explain virtual reach for room
+            access_rule = spot.access_rule
+        elif self.resolution_hint == 'Entrance':
+            spot = state.multiworld.get_entrance(self.spot, self.player)
+            access_rule = spot.access_rule
+        else:
+            # default to Region
+            spot = state.multiworld.get_region(self.spot, self.player)
+            # TODO check entrances rules
+            access_rule = None
+
+        if not isinstance(access_rule, StardewRule):
+            return StardewRuleExplanation(self, state)
+
+        return StardewRuleExplanation(self, state, [access_rule])
+
 
 class Has(StardewRule):
     item: str
@@ -352,6 +450,11 @@ class Has(StardewRule):
     def __call__(self, state: CollectionState) -> bool:
         self.simplify()
         return self.other_rules[self.item](state)
+
+    def __str__(self):
+        if self.item not in self.other_rules:
+            return f"Has {self.item} -> {MISSING_ITEM}"
+        return f"Has {self.item}"
 
     def __repr__(self):
         if self.item not in self.other_rules:
@@ -367,11 +470,16 @@ class Has(StardewRule):
     def simplify(self) -> StardewRule:
         return self.other_rules[self.item].simplify()
 
+    def explain(self, state: CollectionState) -> StardewRuleExplanation:
+        return StardewRuleExplanation(self, state, [self.other_rules[self.item]])
+
 
 @dataclass(frozen=True)
 class HasProgressionPercent(StardewRule):
     player: int
     percent: int
+
+    # Cache in __new__
 
     @staticmethod
     def reduce_and(rules: Union[Iterable[HasProgressionPercent], Sized]) -> Optional[HasProgressionPercent]:
@@ -379,7 +487,15 @@ class HasProgressionPercent(StardewRule):
             return None
         if len(rules) == 1:
             return next(iter(rules))
-        return reduce(HasProgressionPercent.__and__, (i for i in rules if type(rules) is HasProgressionPercent))
+        return reduce(HasProgressionPercent.__and__, rules)  # noqa
+
+    @staticmethod
+    def reduce_or(rules: Union[Iterable[HasProgressionPercent], Sized]) -> Optional[HasProgressionPercent]:
+        if not rules:
+            return None
+        if len(rules) == 1:
+            return next(iter(rules))
+        return reduce(HasProgressionPercent.__or__, rules)  # noqa
 
     def __post_init__(self):
         assert self.percent > 0, "HasProgressionPercent rule must be above 0%"
