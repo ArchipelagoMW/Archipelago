@@ -371,7 +371,7 @@ class WitnessPlayerLogic:
         if lasers:
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
-        if world.options.shuffle_EPs:
+        if world.options.shuffle_EPs == 2:
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
                       if ep_obj["entityType"] == "EP")
 
