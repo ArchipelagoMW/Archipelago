@@ -264,7 +264,7 @@ class WitnessPlayerLogic:
         # Goal is "short box" but short box requires more lasers than long box
         reverse_shortbox_goal = victory == "mountain_box_short" and mnt_lasers > chal_lasers
 
-        # Goal is "short box", but long box requires at least as many lasers as short box
+        # Goal is "short box", and long box requires at least as many lasers as short box (as god intended)
         proper_shortbox_goal = victory == "mountain_box_short" and chal_lasers >= mnt_lasers
 
         # Goal is "long box", but short box requires at least as many lasers than long box.
