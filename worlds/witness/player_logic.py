@@ -431,21 +431,17 @@ class WitnessPlayerLogic:
         if not world.options.shuffle_EPs:
             adjustment_linesets_in_order.append(["Irrelevant Locations:"] + get_ep_all_individual()[1:])
 
-        yaml_disabled_eps = []
-
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
             if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
                 continue
 
             loc_obj = self.REFERENCE_LOGIC.ENTITIES_BY_NAME[yaml_disabled_location]
 
-            if loc_obj["entityType"] == "EP" and not world.options.shuffle_EPs:
-                yaml_disabled_eps.append(loc_obj["entity_hex"])
+            if loc_obj["entityType"] == "EP":
+                self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
-            if loc_obj["entityType"] in {"EP", "General", "Vault", "Discard"}:
+            elif loc_obj["entityType"] in {"General", "Vault", "Discard"}:
                 self.EXCLUDED_LOCATIONS.add(loc_obj["entity_hex"])
-
-        adjustment_linesets_in_order.append(["Disabled Locations:"] + yaml_disabled_eps)
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
