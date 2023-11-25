@@ -95,7 +95,7 @@ class CMWorld(World):
             # Vanilla: Disables fairy chess pieces completely.
             else:
                 army_options = [0]
-            self.army[self.player] = self.multiworld.per_slot_randoms[self.player].choice(army_options)
+            self.army[self.player] = self.random.choice(army_options)
         is_single = get_option_value(self.multiworld, self.player, "goal") == 0
         if not is_single:
             return
@@ -108,10 +108,10 @@ class CMWorld(World):
         return getattr(self.multiworld, name)[self.player]
 
     def fill_slot_data(self) -> dict:
-        cursed_knowledge = {name: self.multiworld.per_slot_randoms[self.player].getrandbits(31) for name in [
+        cursed_knowledge = {name: self.random.getrandbits(31) for name in [
             "pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"]}
         potential_pockets = [0,0,0,0,1,1,1,1,2,2,2,2]
-        self.multiworld.per_slot_randoms[self.player].shuffle(potential_pockets)
+        self.random.shuffle(potential_pockets)
         cursed_knowledge["pocket_order"] = potential_pockets
         if self.player in self.army:
             cursed_knowledge["army"] = self.army[self.player]
@@ -166,7 +166,7 @@ class CMWorld(World):
         if max_material_option < min_material_option:
             max_material_option = min_material_option
         max_material_actual = (
-            self.multiworld.per_slot_randoms[self.player].random() * (
+            self.random.random() * (
                 max_material_option - min_material_option) + max_material_option)
         max_material_actual += progression_items["Play as White"].material
 
@@ -205,7 +205,7 @@ class CMWorld(World):
 
         while (len(items) + user_location_count) < len(location_table) and material < max_material_actual and len(
                 my_progression_items) > 0:
-            chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_progression_items)
+            chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
             if (material > min_material_option and
                     progression_items[chosen_item].material + material > max_material_option):
@@ -240,7 +240,7 @@ class CMWorld(World):
 
         my_filler_items = list(filler_items.keys())
         while (len(items) + user_location_count) < len(location_table):
-            chosen_item = self.multiworld.per_slot_randoms[self.player].choice(my_filler_items)
+            chosen_item = self.random.choice(my_filler_items)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):

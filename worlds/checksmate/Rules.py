@@ -34,7 +34,7 @@ def has_piece_material(state: CollectionState, player: int, amount: int) -> bool
 
 
 def has_chessmen(state: CollectionState, player: int) -> int:
-    return (len([item for item in owned_items(player) if item in [
+    return (len([item for item in owned_items(state, player) if item in [
         "Progressive Minor Piece", "Progressive Major Piece", "Progressive Pawn",
         "Progressive Consul"]]) +
             ceil(state.count("Progressive Pocket", player) /

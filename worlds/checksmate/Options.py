@@ -391,8 +391,8 @@ cm_options: Dict[str, type(Option)] = {
     "queen_piece_limit_by_type": QueenPieceLimitByType,
     "queen_piece_limit": QueenPieceLimit,
     "pocket_limit_by_pocket": PocketLimitByPocket,
-    "item_limit_by_type": ItemLimitByType,
-    "maximum_items": MaximumItems,
+    # "item_limit_by_type": ItemLimitByType,
+    # "maximum_items": MaximumItems,
     "locked_items": LockedItems,
     "death_link": DeathLink,
 }
