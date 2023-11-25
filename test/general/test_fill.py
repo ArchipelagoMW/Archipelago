@@ -442,6 +442,47 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertTrue(sphere1_loc.item, "Did not swap required item into Sphere 1")
         self.assertEqual(sphere1_loc.item, allowed_item, "Wrong item in Sphere 1")
 
+    def test_swap_to_earlier_location_with_item_rule2(self):
+        """Test that swap works before all items are placed"""
+        multi_world = generate_multi_world(1)
+        player1 = generate_player_data(multi_world, 1, 5, 5)
+        locations = player1.locations[:]  # copy required
+        items = player1.prog_items[:]  # copy required
+        # Two items provide access to sphere 2.
+        # One of them is forbidden in sphere 1, the other is first placed in sphere 4 because of placement order,
+        # requiring a swap.
+        # There are spheres in between, so for the swap to work, it'll have to assume all other items are collected.
+        one_to_two1 = items[4].name
+        one_to_two2 = items[3].name
+        three_to_four = items[2].name
+        two_to_three1 = items[1].name
+        two_to_three2 = items[0].name
+        # Sphere 4
+        set_rule(locations[0], lambda state: ((state.has(one_to_two1, player1.id) or state.has(one_to_two2, player1.id))
+                                              and state.has(two_to_three1, player1.id)
+                                              and state.has(two_to_three2, player1.id)
+                                              and state.has(three_to_four, player1.id)))
+        # Sphere 3
+        set_rule(locations[1], lambda state: ((state.has(one_to_two1, player1.id) or state.has(one_to_two2, player1.id))
+                                              and state.has(two_to_three1, player1.id)
+                                              and state.has(two_to_three2, player1.id)))
+        # Sphere 2
+        set_rule(locations[2], lambda state: state.has(one_to_two1, player1.id) or state.has(one_to_two2, player1.id))
+        # Sphere 1
+        sphere1_loc1 = locations[3]
+        sphere1_loc2 = locations[4]
+        # forbid one_to_two2 in sphere 1 to make the swap happen as described above
+        add_item_rule(sphere1_loc1, lambda item_to_place: item_to_place.name != one_to_two2)
+        add_item_rule(sphere1_loc2, lambda item_to_place: item_to_place.name != one_to_two2)
+
+        # Now fill should place one_to_two1 in sphere1_loc1 or sphere1_loc2 via swap,
+        # which it will attempt before two_to_three and three_to_four are placed, testing the behavior.
+        fill_restrictive(multi_world, multi_world.state, player1.locations, player1.prog_items)
+        # assert swap happened
+        self.assertTrue(sphere1_loc1.item and sphere1_loc2.item, "Did not swap required item into Sphere 1")
+        self.assertTrue(sphere1_loc1.item.name == one_to_two1 or
+                        sphere1_loc2.item.name == one_to_two1, "Wrong item in Sphere 1")
+
     def test_double_sweep(self):
         """Test that sweep doesn't duplicate Event items when sweeping"""
         # test for PR1114
@@ -455,8 +496,8 @@ class TestFillRestrictive(unittest.TestCase):
         location.place_locked_item(item)
         multi_world.state.sweep_for_events()
         multi_world.state.sweep_for_events()
-        self.assertTrue(multi_world.state.prog_items[item.name, item.player], "Sweep did not collect - Test flawed")
-        self.assertEqual(multi_world.state.prog_items[item.name, item.player], 1, "Sweep collected multiple times")
+        self.assertTrue(multi_world.state.prog_items[item.player][item.name], "Sweep did not collect - Test flawed")
+        self.assertEqual(multi_world.state.prog_items[item.player][item.name], 1, "Sweep collected multiple times")
 
     def test_correct_item_instance_removed_from_pool(self):
         """Test that a placed item gets removed from the submitted pool"""

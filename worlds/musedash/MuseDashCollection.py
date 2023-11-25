@@ -44,8 +44,8 @@ class MuseDashCollections:
     vfx_trap_items: Dict[str, int] = {
         "Bad Apple Trap": STARTING_CODE + 1,
         "Pixelate Trap": STARTING_CODE + 2,
-        "Random Wave Trap": STARTING_CODE + 3,
-        "Shadow Edge Trap": STARTING_CODE + 4,
+        "Ripple Trap": STARTING_CODE + 3,
+        "Vignette Trap": STARTING_CODE + 4,
         "Chromatic Aberration Trap": STARTING_CODE + 5,
         "Background Freeze Trap": STARTING_CODE + 6,
         "Gray Scale Trap": STARTING_CODE + 7,
