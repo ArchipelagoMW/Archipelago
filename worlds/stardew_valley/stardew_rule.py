@@ -479,8 +479,6 @@ class HasProgressionPercent(StardewRule):
     player: int
     percent: int
 
-    # Cache in __new__
-
     @staticmethod
     def reduce_and(rules: Union[Iterable[HasProgressionPercent], Sized]) -> Optional[HasProgressionPercent]:
         if not rules:

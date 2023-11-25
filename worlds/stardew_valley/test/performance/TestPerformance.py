@@ -78,7 +78,7 @@ class SVPerformanceTestCase(SVTestCase):
             with self.subTest(f"Seed: {seed}"):
                 time_before = time.time()
 
-                print(f"Starting world setup")
+                print("Starting world setup")
                 multiworld = setup_multiworld(options, seed)
                 if not self.skip_fill:
                     distribute_items_restrictive(multiworld)
