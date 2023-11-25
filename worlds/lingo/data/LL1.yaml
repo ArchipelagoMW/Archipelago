@@ -379,8 +379,6 @@
         tag: forbid
         non_counting: True
         check: True
-        required_panel:
-          - panel: ANOTHER TRY
     doors:
       Exit Door:
         id: Entry Room Area Doors/Door_hi_high
