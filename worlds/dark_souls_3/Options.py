@@ -171,6 +171,16 @@ class MaxLevelsIn10WeaponPoolOption(Range):
     default = 10
 
 
+class EarlySmallLothricBanner(Choice):
+    """This option makes it so the user can choose to force the Small Lothric Banner into an early sphere in their world or
+    into an early sphere across all worlds."""
+    display_name = "Early Small Lothric Banner"
+    option_off = 0
+    option_early_global = 1
+    option_early_local = 2
+    default = option_off
+
+
 class LateBasinOfVowsOption(Toggle):
     """This option makes it so the Basin of Vows is still randomized, but guarantees you that you wont have to venture into
     Lothric Castle to find your Small Lothric Banner to get out of High Wall of Lothric. So you may find Basin of Vows early, 
@@ -215,6 +225,7 @@ dark_souls_options: typing.Dict[str, Option] = {
     "max_levels_in_5": MaxLevelsIn5WeaponPoolOption,
     "min_levels_in_10": MinLevelsIn10WeaponPoolOption,
     "max_levels_in_10": MaxLevelsIn10WeaponPoolOption,
+    "early_banner": EarlySmallLothricBanner,
     "late_basin_of_vows": LateBasinOfVowsOption,
     "late_dlc": LateDLCOption,
     "no_spell_requirements": NoSpellRequirementsOption,
