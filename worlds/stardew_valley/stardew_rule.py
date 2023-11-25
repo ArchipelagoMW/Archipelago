@@ -14,14 +14,14 @@ class StardewRule:
         raise NotImplementedError
 
     def __or__(self, other) -> StardewRule:
-        if type(other) is Or:
-            return Or(self, *other.rules)
+        if other is true_ or other is false_ or type(other) is Or:
+            return other | self
 
         return Or(self, other)
 
     def __and__(self, other) -> StardewRule:
-        if type(other) is And:
-            return And(*other.rules.union({self}))
+        if other is true_ or other is false_ or type(other) is And:
+            return other & self
 
         return And(self, other)
 
@@ -103,10 +103,9 @@ class Or(StardewRule):
         return f"({' | '.join(repr(rule) for rule in self.rules)})"
 
     def __or__(self, other):
-        if other is true_:
-            return other
-        if other is false_:
-            return self
+        if other is true_ or other is false_:
+            return other | self
+
         if type(other) is Or:
             return Or(*self.rules.union(other.rules))
 
@@ -158,10 +157,9 @@ class And(StardewRule):
         return f"({' & '.join(repr(rule) for rule in self.rules)})"
 
     def __and__(self, other):
-        if other is true_:
-            return self
-        if other is false_:
-            return other
+        if other is true_ or other is false_:
+            return other & self
+
         if type(other) is And:
             return And(*self.rules.union(other.rules))
 
