@@ -208,7 +208,7 @@ overworlds = [
     LocationData(LocationName.ACDC_Class_5B_Bookshelf,            0xb3109e, 0x200024c, 0x40, 0x737634, 235, [5, 6]),
     LocationData(LocationName.SciLab_Garbage_Can,                 0xb3109f, 0x200024c, 0x8, 0x73AC20, 222, [4, 5]),
     LocationData(LocationName.Yoka_Inn_Jars,                      0xb310a0, 0x200024c, 0x80, 0x747B1C, 237, [4, 5]),
-    LocationData(LocationName.Yoka_Zoo_Garbage,                   0xb310a1, 0x200024d, 0x8, 0x749444, 226, [4]),
+    LocationData(LocationName.Yoka_Zoo_Garbage,                   0xb310a1, 0x200024d, 0x8, 0x749444, 226, [5]),
     LocationData(LocationName.Beach_Department_Store,             0xb310a2, 0x2000161, 0x40, 0x74C27C, 196, [0, 1]),
     LocationData(LocationName.Beach_Hospital_Plaque,              0xb310a3, 0x200024c, 0x4, 0x754394, 220, [3, 4]),
     LocationData(LocationName.Beach_Hospital_Pink_Door,           0xb310a4, 0x200024d, 0x4, 0x754D00, 220, [4]),

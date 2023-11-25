@@ -696,10 +696,18 @@ class Range(NumericOption):
         return int(round(random.triangular(lower, end, tri), 0))
 
 
-class SpecialRange(Range):
-    special_range_cutoff = 0
+class NamedRange(Range):
     special_range_names: typing.Dict[str, int] = {}
     """Special Range names have to be all lowercase as matching is done with text.lower()"""
+
+    def __init__(self, value: int) -> None:
+        if value < self.range_start and value not in self.special_range_names.values():
+            raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__} " +
+                            f"and is also not one of the supported named special values: {self.special_range_names}")
+        elif value > self.range_end and value not in self.special_range_names.values():
+            raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__} " +
+                            f"and is also not one of the supported named special values: {self.special_range_names}")
+        self.value = value
 
     @classmethod
     def from_text(cls, text: str) -> Range:
@@ -707,6 +715,19 @@ class SpecialRange(Range):
         if text in cls.special_range_names:
             return cls(cls.special_range_names[text])
         return super().from_text(text)
+
+
+class SpecialRange(NamedRange):
+    special_range_cutoff = 0
+
+    # TODO: remove class SpecialRange, earliest 3 releases after 0.4.3
+    def __new__(cls, value: int) -> SpecialRange:
+        from Utils import deprecate
+        deprecate(f"Option type {cls.__name__} is a subclass of SpecialRange, which is deprecated and pending removal. "
+                  "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
+                  "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
+                  "placed anywhere (below, inside, or above the regular range).")
+        return super().__new__(cls, value)
 
     @classmethod
     def weighted_range(cls, text) -> Range:
@@ -891,7 +912,7 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(SpecialRange):
+class ProgressionBalancing(NamedRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
     A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
@@ -1108,7 +1129,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if os.path.isfile(full_path) and full_path.endswith(".yaml"):
             os.unlink(full_path)
 
-    def dictify_range(option: typing.Union[Range, SpecialRange]):
+    def dictify_range(option: Range):
         data = {option.default: 50}
         for sub_option in ["random", "random-low", "random-high"]:
             if sub_option != option.default:
