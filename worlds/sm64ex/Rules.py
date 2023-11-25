@@ -30,6 +30,8 @@ def set_rules(world, player: int, area_connections):
         fix_reg(entrance_ids, 20, 5, swaplist, world)
         # Guarantee BITFS is not mapped to DDD
         fix_reg(entrance_ids, 22, 8, swaplist, world)
+        if entrance_ids.index(22) == 5: # If BITFS is mapped to HMC...
+            fix_reg(entrance_ids, 20, 8, swaplist, world) # ... then dont allow COTMC to be mapped to DDD
     temp_assign = dict(zip(entrance_ids,destination_regions)) # Used for Rules only
 
     # Destination Format: LVL | AREA with LVL = LEVEL_x, AREA = Area as used in sm64 code
@@ -122,4 +124,9 @@ def set_rules(world, player: int, area_connections):
     add_rule(world.get_location("MIPS 1", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, world.MIPS1Cost[player].value))
     add_rule(world.get_location("MIPS 2", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, world.MIPS2Cost[player].value))
 
-    world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Sky", 'Region', player)
+    if world.CompletionType[player] == "last_bowser_stage":
+        world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Sky", 'Region', player)
+    elif world.CompletionType[player] == "all_bowser_stages":
+        world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Dark World", 'Region', player) and \
+                                                           state.can_reach("Bowser in the Fire Sea", 'Region', player) and \
+                                                           state.can_reach("Bowser in the Sky", 'Region', player)
