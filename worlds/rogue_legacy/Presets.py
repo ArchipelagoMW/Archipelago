@@ -35,7 +35,7 @@ rl_options_presets: Dict[str, Dict[str, Any]] = {
         "equip_pool":               "random",
         "crit_chance_pool":         "random",
         "crit_damage_pool":         "random",
-        "allow_default_names":      False,
+        "allow_default_names":      True,
         "death_link":               "random",
     },
     # A preset I actually use, using some literal values and some from the option itself.
