@@ -2,6 +2,7 @@ from functools import reduce
 from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState
+from .. import checksmate
 
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
@@ -92,65 +93,9 @@ def set_rules(multiworld: MultiWorld, player: int):
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
-    # suggested material required to
-    # a. capture individual pieces
-    # b. capture series of pieces and pawns within 1 game
-    # c. fork/pin
-    capture_expectations = {
-        "Capture Pawn A": 190,  # AI prefers not to use edge pawns early - thus they stay defended longer
-        "Capture Pawn B": 140,
-        "Capture Pawn C": 100,
-        "Capture Pawn D": 100,
-        "Capture Pawn E": 100,
-        "Capture Pawn F": 140,  # AI prefers not to open kingside as developing queen has more tempo
-        "Capture Pawn G": 240,
-        "Capture Pawn H": 290,  # AI prefers not to use edge pawns early - thus they stay defended longer
-        # Specific pieces should not be guaranteed to be accessible early, so we add +4 material (1piece+1pawn more)
-        "Capture Piece A": 900,  # rook
-        "Capture Piece B": 700,  # knight
-        "Capture Piece C": 700,  # bishop
-        "Capture Piece D": 1300,  # queen
-        "Checkmate Maxima": 3920,  # king (this is the game's goal / completion condition)
-        "Capture Piece F": 1040,  # bishop - AI prefers not to open kingside as developing queen has more tempo
-        "Capture Piece G": 1040,  # knight - AI prefers not to open kingside as developing queen has more tempo
-        "Capture Piece H": 1240,  # rook - AI prefers not to open kingside as developing queen has more tempo
-        "Capture 2 Pawns": 550,
-        "Capture 3 Pawns": 950,
-        "Capture 4 Pawns": 1240,
-        "Capture 5 Pawns": 1520,
-        "Capture 6 Pawns": 1875,
-        "Capture 7 Pawns": 2225,
-        "Capture 8 Pawns": 2575,
-        "Capture 2 Pieces": 1300,
-        "Capture 3 Pieces": 1600,
-        "Capture 4 Pieces": 1950,
-        "Capture 5 Pieces": 2350,
-        "Capture 6 Pieces": 2800,
-        "Capture 7 Pieces": 3600,
-        "Capture 2 Of Each": 1600,
-        "Capture 3 Of Each": 1950,
-        "Capture 4 Of Each": 2350,
-        "Capture 5 Of Each": 2800,
-        "Capture 6 Of Each": 3350,
-        "Capture 7 Of Each": 3850,
-        "Capture Everything": 3950,
-        "Fork, Sacrificial": 700,
-        "Fork, Sacrificial Triple": 1700,
-        "Fork, Sacrificial Royal": 3200,  # AI really hates getting royal forked
-        "Fork, True": 2550,
-        "Fork, True Triple": 3450,
-        "Fork, True Royal": 4150,  # I sincerely believe this should be filler
-        # "Pin": 600,
-        # "Skewer": 600,
-        "Threaten Queen": 300,
-        "Threaten King": 400,
-        "Bongcloud Center": 50,
-        "Bongcloud A File": 150,
-        "Bongcloud Capture": 200,
-        "Bongcloud Promotion": 1950,  # requires reaching a rather late-game state
-    }
-    for piece, material in capture_expectations.items():
-        set_rule(multiworld.get_location(piece, player), lambda state, v=material: state.has_piece_material(player, v))
+    for name, item in checksmate.Locations.location_table.items():
+        set_rule(multiworld.get_location(name, player),
+                 lambda state, v=item.material_expectations: state.has_piece_material(player, v))
 
     ###
     # inelegance is malleable
