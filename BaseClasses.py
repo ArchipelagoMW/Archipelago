@@ -714,6 +714,7 @@ class CollectionState():
                 assert isinstance(event.item, Item), "tried to collect Event with no Item"
                 self.collect(event.item, True, event)
 
+    # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
         return self.prog_items[player][item] >= count
 
@@ -728,6 +729,11 @@ class CollectionState():
     def count(self, item: str, player: int) -> int:
         return self.prog_items[player][item]
 
+    def item_count(self, item: str, player: int) -> int:
+        Utils.deprecate("Use count instead.")
+        return self.count(item, player)
+
+    # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
         found: int = 0
         player_prog_items = self.prog_items[player]
@@ -744,9 +750,7 @@ class CollectionState():
             found += player_prog_items[item_name]
         return found
 
-    def item_count(self, item: str, player: int) -> int:
-        return self.prog_items[player][item]
-
+    # Item related
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
         if location:
             self.locations_checked.add(location)
