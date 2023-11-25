@@ -397,8 +397,8 @@ class LingoPlayerLogic:
             unhindered_panels_by_color: dict[Optional[str], int] = {}
 
             for panel_name, panel_data in room_data.items():
-                # We won't count non-counting panels.
-                if panel_data.non_counting:
+                # We won't count non-counting panels. THE MASTER has special access rules and is handled separately.
+                if panel_data.non_counting or panel_name == "THE MASTER":
                     continue
 
                 # We won't coalesce any panels that have requirements beyond colors. To simplify things for now, we will
