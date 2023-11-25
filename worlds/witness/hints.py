@@ -1,9 +1,7 @@
-import logging
 from typing import Tuple, List, TYPE_CHECKING, Set, Dict
-
 from BaseClasses import Item, ItemClassification, Location
 from . import StaticWitnessLogic
-from .utils import weighted_sample_without_replacement
+from .utils import weighted_sample_use_zero_if_necessary
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -396,20 +394,37 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
         unhinted_location_percentage_per_area[area_name] = not_yet_hinted_locations / len(locations)
 
     items_per_area = {area_name: [location.item for location in locations]
-                      for area_name, locations in locations_per_area.items()
-                      if unhinted_location_percentage_per_area[area_name]}
+                      for area_name, locations in locations_per_area.items()}
 
     actual_amount = min(amount, len(items_per_area))
 
-    if actual_amount != amount:
-        player_name = world.multiworld.get_player_name(world.player)
-        logging.warning(f"There are not enough areas in the game to make {amount} area hints for player {player_name}.")
-
     areas = sorted(items_per_area)
     weights = [unhinted_location_percentage_per_area[area] for area in areas]
-    hinted_areas = weighted_sample_without_replacement(world.random, areas, weights, actual_amount)
+
+    hinted_areas = weighted_sample_use_zero_if_necessary(world.random, areas, weights, actual_amount)
 
     return hinted_areas
+
+
+def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]], Dict[str, List[Item]]]:
+    potential_areas = list(StaticWitnessLogic.ALL_AREAS_BY_NAME.keys())
+
+    locations_per_area = dict()
+    items_per_area = dict()
+
+    for area in potential_areas:
+        regions = [
+            world.regio.created_regions[region]
+            for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
+            if region in world.regio.created_regions
+        ]
+        locations = [location for region in regions for location in region.get_locations() if location.address]
+
+        if locations:
+            locations_per_area[area] = locations
+            items_per_area[area] = [location.item for location in locations]
+
+    return locations_per_area, items_per_area
 
 
 def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items: List[Item]) -> str:
@@ -490,22 +505,11 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
     return hint_string
 
 
-def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations: Set[int]) -> List[Tuple[str, int]]:
-    potential_areas = list(StaticWitnessLogic.ALL_AREAS_BY_NAME.keys())
-    locations_per_area = dict()
-    items_per_area = dict()
-
-    for area in potential_areas:
-        regions = [
-            world.regio.created_regions[region]
-            for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
-            if region in world.regio.created_regions
-        ]
-        locations = [location for region in regions for location in region.get_locations() if location.address]
-
-        if locations:
-            locations_per_area[area] = locations
-            items_per_area[area] = [location.item for location in locations]
+def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations: Set[int],
+                    locations_per_area: Dict[str, List[Location]] = None,
+                    items_per_area: Dict[str, List[Item]] = None) -> List[Tuple[str, int]]:
+    if locations_per_area is None or items_per_area is None:
+        locations_per_area, items_per_area = get_hintable_areas(world)
 
     hinted_areas = choose_areas(world, amount, locations_per_area, already_hinted_locations)
 

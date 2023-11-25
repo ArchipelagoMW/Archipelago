@@ -5,13 +5,20 @@ from pkgutil import get_data
 from random import random
 
 
-def weighted_sample_without_replacement(world_random: random, population: List, weights: List[float], k: int):
+def weighted_sample_use_zero_if_necessary(world_random: random, population: List, weights: List[float], k: int):
+    """
+    Get a sample of a given size with weights.
+    Use items with weight 0 if necessary to get the desired size.
+    """
     positions = range(len(population))
     indices = []
     while True:
         needed = k - len(indices)
         if not needed:
             break
+        if not sum(weights):
+            # If it's necessary to use 0 weight items to get the desired amount, do that
+            weights = [1.0 for _ in weights]
         for i in world_random.choices(positions, weights, k=needed):
             if weights[i]:
                 weights[i] = 0.0

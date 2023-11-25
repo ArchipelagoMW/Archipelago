@@ -11,7 +11,7 @@ from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
-    get_priority_hint_items, make_direct_hints, generate_joke_hints, make_area_hints
+    get_priority_hint_items, make_direct_hints, generate_joke_hints, make_area_hints, get_hintable_areas
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
@@ -271,21 +271,41 @@ class WitnessWorld(World):
             area_weight, location_weight = self.options.area_hint_percentage, 100 - self.options.area_hint_percentage
 
             hint_type_amounts = build_weighted_int_list([area_weight / 100, location_weight / 100], hint_amount)
+            area_hints = hint_type_amounts[0]
+            location_hints = hint_type_amounts[1]
 
             generated_hints = []
 
-            if hint_type_amounts[1]:
-                generated_hints += make_direct_hints(self, hint_type_amounts[1], self.own_itempool)
-            if hint_type_amounts[0]:
-                already_hinted_locations = {hint[1] for hint in generated_hints if hint[1] != -1}
-                generated_hints += make_area_hints(self, hint_type_amounts[0], already_hinted_locations)
+            amount_of_hintable_areas = len(get_hintable_areas(self)[0])
 
-            if len(generated_hints):
+            if amount_of_hintable_areas < area_hints:
+                player_name = self.multiworld.get_player_name(self.player)
+                logging.warning(f"There are not enough areas in the game to make {area_hints} area hints for player "
+                                f"{player_name}. Making {amount_of_hintable_areas} area hints, and filling rest with "
+                                f"location hints. This might result in hinting areas that have all locations hinted "
+                                f"individually.")
+
+                area_hints = amount_of_hintable_areas
+                location_hints = hint_amount - area_hints
+
+            if location_hints:
+                generated_hints += make_direct_hints(self, location_hints, self.own_itempool)
+            if area_hints:
+                already_hinted_locations = {hint[1] for hint in generated_hints if hint[1] != -1}
+                generated_hints += make_area_hints(self, area_hints, already_hinted_locations)
+
+            if len(generated_hints) != hint_amount:
+                player_name = self.multiworld.get_player_name(self.player)
+                logging.warning(f"Couldn't generate {hint_amount} hints for player {player_name}. "
+                                f"Generated {len(generated_hints)} instead.")
+                hint_amount = len(generated_hints)
+
+            if hint_amount:
                 self.random.shuffle(audio_logs)
 
                 duplicates = min(3, len(audio_logs) // hint_amount)
 
-                for _ in range(0, hint_amount):
+                for _ in range(0, len(generated_hints)):
                     hint = generated_hints.pop(0)
 
                     for _ in range(0, duplicates):
