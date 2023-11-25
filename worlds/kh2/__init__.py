@@ -50,16 +50,7 @@ class KH2World(World):
     location_name_to_id = {item: location
                            for location, item in enumerate(all_locations.keys(), 0x130000)}
     item_name_groups = item_groups
-    # list of KH2Item
-    keyblade_ability_pool = list()
-    goofy_get_bonus_abilities = list()
-    goofy_weapon_abilities = list()
-    donald_get_bonus_abilities = list()
-    donald_weapon_abilities = list()
 
-    slot_data_goofy_weapon = dict()
-    slot_data_sora_weapon = dict()
-    slot_data_donald_weapon = dict()
     visitlocking_dict: Dict[str, int]
     plando_locations: Dict[str, str]
     lucky_emblem_amount: int
@@ -82,6 +73,17 @@ class KH2World(World):
         # has to be in __init__ or else other players affect each other's bounties
         self.random_super_boss_list = list()
         self.growth_list = list()
+        # lists of KH2Item
+        self.keyblade_ability_pool = list()
+
+        self.goofy_get_bonus_abilities = list()
+        self.goofy_weapon_abilities = list()
+        self.donald_get_bonus_abilities = list()
+        self.donald_weapon_abilities = list()
+
+        self.slot_data_goofy_weapon = dict()
+        self.slot_data_sora_weapon = dict()
+        self.slot_data_donald_weapon = dict()
 
     def fill_slot_data(self) -> dict:
         for ability in self.slot_data_sora_weapon:
@@ -211,10 +213,10 @@ class KH2World(World):
                         f"{self.player} has too many {k} in their CustomItemPool setting. Setting to default quantity")
         # Option to turn off Promise Charm Item
         if not self.options.Promise_Charm:
-            self.item_quantity_dict[ItemName.PromiseCharm] = 0
+            del self.item_quantity_dict[ItemName.PromiseCharm]
 
         if not self.options.AntiForm:
-            self.item_quantity_dict[ItemName.AntiForm] = 0
+            del self.item_quantity_dict[ItemName.AntiForm]
 
         self.set_excluded_locations()
 
@@ -448,7 +450,7 @@ class KH2World(World):
 
         self.item_quantity_dict[ItemName.LuckyEmblem] = self.options.LuckyEmblemsAmount.value
         # give this proof to unlock the final door once the player has the amount of lucky emblem required
-        self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
+        del self.item_quantity_dict[ItemName.ProofofNonexistence]
 
     def hitlist_verify(self):
         """
@@ -486,7 +488,7 @@ class KH2World(World):
         if self.options.BountyStartingHintToggle:
             self.multiworld.start_hints[self.player].value.add(ItemName.Bounty)
 
-        self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
+        del self.item_quantity_dict[ItemName.ProofofNonexistence]
 
     def set_excluded_locations(self):
         """
