@@ -569,8 +569,9 @@ def get_pool_core(world, player: int):
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
+    want_progressives = world.progressive[player].want_progressives
 
-    if progressive_gloves:
+    if progressive_gloves or want_progressives(world.random):
         pool.extend(diff.progressiveglove)
     else:
         pool.extend(diff.basicglove)
@@ -597,22 +598,22 @@ def get_pool_core(world, player: int):
             thisbottle = world.random.choice(diff.bottles)
         pool.append(thisbottle)
 
-    if progressive_shields:
+    if progressive_shields or want_progressives(world.random):
         pool.extend(diff.progressiveshield)
     else:
         pool.extend(diff.basicshield)
 
-    if progressive_armor:
+    if progressive_armor or want_progressives(world.random):
         pool.extend(diff.progressivearmor)
     else:
         pool.extend(diff.basicarmor)
 
-    if progressive_magic:
+    if progressive_magic or want_progressives(world.random):
         pool.extend(diff.progressivemagic)
     else:
         pool.extend(diff.basicmagic)
 
-    if progressive_bow:
+    if progressive_bow or want_progressives(world.random):
         pool.extend(diff.progressivebow)
         world.worlds[player].has_progressive_bows = True
     elif (swordless or logic == 'noglitches') and goal != 'icerodhunt':
@@ -626,7 +627,7 @@ def get_pool_core(world, player: int):
     if swordless:
         pool.extend(diff.swordless)
     else:
-        progressive_swords = world.progressive_swords[player]
+        progressive_swords = world.progressive_swords[player] or want_progressives(world.random)
         pool.extend(diff.progressivesword if progressive_swords else diff.basicsword)
 
     extraitems = total_items_to_place - len(pool) - len(placed_items)
