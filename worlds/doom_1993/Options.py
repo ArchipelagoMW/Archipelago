@@ -1,6 +1,18 @@
 import typing
 
-from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle
+from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+
+
+class Goal(Choice):
+    """
+    Choose the main goal.
+    complete_all_levels: All levels of the selected episodes
+    complete_boss_levels: Boss levels (E#M8) of selected episodes
+    """
+    display_name = "Goal"
+    option_complete_all_levels = 0
+    option_complete_boss_levels = 1
+    default = 0
 
 
 class Difficulty(Choice):
@@ -27,11 +39,13 @@ class RandomMonsters(Choice):
     vanilla: No randomization
     shuffle: Monsters are shuffled within the level
     random_balanced: Monsters are completely randomized, but balanced based on existing ratio in the level. (Small monsters vs medium vs big)
+    random_chaotic: Monsters are completely randomized, but balanced based on existing ratio in the entire game.    
     """
     display_name = "Random Monsters"
     option_vanilla = 0
     option_shuffle = 1
     option_random_balanced = 2
+    option_random_chaotic = 3
     default = 1
 
 
@@ -49,6 +63,34 @@ class RandomPickups(Choice):
     default = 1
 
 
+class RandomMusic(Choice):
+    """
+    Level musics will be randomized.
+    vanilla: No randomization
+    shuffle_selected: Selected episodes' levels will be shuffled
+    shuffle_game: All the music will be shuffled
+    """
+    display_name = "Random Music"
+    option_vanilla = 0
+    option_shuffle_selected = 1
+    option_shuffle_game = 2
+    default = 0
+
+
+class FlipLevels(Choice):
+    """
+    Flip levels on one axis.
+    vanilla: No flipping
+    flipped: All levels are flipped
+    randomly_flipped: Random levels are flipped
+    """
+    display_name = "Flip Levels"
+    option_vanilla = 0
+    option_flipped = 1
+    option_randomly_flipped = 2
+    default = 0
+
+
 class AllowDeathLogic(Toggle):
     """Some locations require a timed puzzle that can only be tried once.
     After which, if the player failed to get it, the location cannot be checked anymore.
@@ -56,10 +98,22 @@ class AllowDeathLogic(Toggle):
     Get killed in the current map. The map will reset, you can now attempt the puzzle again."""
     display_name = "Allow Death Logic"
 
+    
+class Pro(Toggle):
+    """Include difficult tricks into rules. Mostly employed by speed runners.
+    i.e.: Leaps across to a locked area, trigger a switch behind a window at the right angle, etc."""
+    display_name = "Pro Doom"
+
 
 class StartWithComputerAreaMaps(Toggle):
     """Give the player all Computer Area Map items from the start."""
     display_name = "Start With Computer Area Maps"
+
+
+class ResetLevelOnDeath(DefaultOnToggle):
+    """When dying, levels are reset and monsters respawned. But inventory and checks are kept.
+    Turning this setting off is considered easy mode. Good for new players that don't know the levels well."""
+    display_name="Reset Level on Death"
 
 
 class Episode1(DefaultOnToggle):
@@ -87,12 +141,18 @@ class Episode4(Toggle):
 
 
 options: typing.Dict[str, AssembleOptions] = {
+    "start_inventory_from_pool": StartInventoryPool,
+    "goal": Goal,
     "difficulty": Difficulty,
     "random_monsters": RandomMonsters,
     "random_pickups": RandomPickups,
+    "random_music": RandomMusic,
+    "flip_levels": FlipLevels,
     "allow_death_logic": AllowDeathLogic,
+    "pro": Pro,
     "start_with_computer_area_maps": StartWithComputerAreaMaps,
     "death_link": DeathLink,
+    "reset_level_on_death": ResetLevelOnDeath,
     "episode1": Episode1,
     "episode2": Episode2,
     "episode3": Episode3,
