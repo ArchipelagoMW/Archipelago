@@ -375,36 +375,36 @@ class WitnessPlayerLogic:
         if world.options.shuffle_symbols:
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
-        if world.options.EP_difficulty == 0:
+        if world.options.EP_difficulty == "normal":
             adjustment_linesets_in_order.append(get_ep_easy())
-        elif world.options.EP_difficulty == 1:
+        elif world.options.EP_difficulty == "tedious":
             adjustment_linesets_in_order.append(get_ep_no_eclipse())
 
-        if world.options.door_groupings == 1:
-            if world.options.shuffle_doors == 1:
+        if world.options.door_groupings == "regional":
+            if world.options.shuffle_doors == "panels":
                 adjustment_linesets_in_order.append(get_simple_panels())
-            elif world.options.shuffle_doors == 2:
+            elif world.options.shuffle_doors == "doors":
                 adjustment_linesets_in_order.append(get_simple_doors())
-            elif world.options.shuffle_doors == 3:
+            elif world.options.shuffle_doors == "mixed":
                 adjustment_linesets_in_order.append(get_simple_doors())
                 adjustment_linesets_in_order.append(get_simple_additional_panels())
         else:
-            if world.options.shuffle_doors == 1:
+            if world.options.shuffle_doors == "panels":
                 adjustment_linesets_in_order.append(get_complex_door_panels())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
-            elif world.options.shuffle_doors == 2:
+            elif world.options.shuffle_doors == "doors":
                 adjustment_linesets_in_order.append(get_complex_doors())
-            elif world.options.shuffle_doors == 3:
+            elif world.options.shuffle_doors == "mixed":
                 adjustment_linesets_in_order.append(get_complex_doors())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
 
         if world.options.shuffle_boat:
             adjustment_linesets_in_order.append(get_boat())
 
-        if world.options.early_caves == 2:
+        if world.options.early_caves == "starting_inventory":
             adjustment_linesets_in_order.append(get_early_caves_start_list())
 
-        if world.options.early_caves == 1 and not doors:
+        if world.options.early_caves == "add_to_pool" and not doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
         if world.options.elevators_come_to_you:
@@ -428,7 +428,7 @@ class WitnessPlayerLogic:
         else:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
-        if world.options.shuffle_EPs == 0:
+        if not world.options.shuffle_EPs:
             adjustment_linesets_in_order.append(["Irrelevant Locations:"] + get_ep_all_individual()[1:])
 
         yaml_disabled_eps = []
@@ -439,7 +439,7 @@ class WitnessPlayerLogic:
 
             loc_obj = self.REFERENCE_LOGIC.ENTITIES_BY_NAME[yaml_disabled_location]
 
-            if loc_obj["entityType"] == "EP" and world.options.shuffle_EPs != 0:
+            if loc_obj["entityType"] == "EP" and not world.options.shuffle_EPs:
                 yaml_disabled_eps.append(loc_obj["entity_hex"])
 
             if loc_obj["entityType"] in {"EP", "General", "Vault", "Discard"}:
