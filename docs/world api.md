@@ -58,67 +58,105 @@ game.
 A `WebWorld` class contains specific attributes and methods that can be modified
 for your world specifically on the webhost:
 
-`settings_page`, which can be changed to a link instead of an AP generated settings page.
+* `settings_page`, which can be changed to a link instead of an AP generated settings page.
 
-`theme` to be used for your game specific AP pages. Available themes:
+* `theme` to be used for your game specific AP pages. Available themes:
 
-| dirt  | grass (default) | grassFlowers | ice  | jungle  | ocean | partyTime | stone |
-|---|---|---|---|---|---|---|---|
-| <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> | <img src="img/theme_stone.JPG" width="100"> |
+  | dirt                                       | grass (default)                             | grassFlowers                                       | ice                                       | jungle                                       | ocean                                       | partyTime                                       | stone                                       |
+  |--------------------------------------------|---------------------------------------------|----------------------------------------------------|-------------------------------------------|----------------------------------------------|---------------------------------------------|-------------------------------------------------|---------------------------------------------|
+  | <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> | <img src="img/theme_stone.JPG" width="100"> |
 
-`bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be placed by the site to help direct users to report bugs.
+* `bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be placed by the site to help direct users to report bugs.
 
-`tutorials` list of `Tutorial` classes where each class represents a guide to be generated on the webhost.
+* `tutorials` list of `Tutorial` classes where each class represents a guide to be generated on the webhost.
 
-`game_info_languages` (optional) List of strings for defining the existing gameinfo pages your game supports. The documents must be
+* `game_info_languages` (optional) List of strings for defining the existing gameinfo pages your game supports. The documents must be
 prefixed with the same string as defined here. Default already has 'en'.
 
-`options_presets` (optional) A `Dict[str, Dict[str, Any]]` where the keys are the names of the presets and the values 
+* `options_presets` (optional) A `Dict[str, Dict[str, Any]]` where the keys are the names of the presets and the values 
 are the options to be set for that preset. The options are defined as a `Dict[str, Any]` where the keys are the names of
 the options and the values are the values to be set for that option. These presets will be available for users to select from on the game's options page.
 
-Note: The values must be a non-aliased value for the option type and can only include the following option types:
+  **Note: The values must be a non-aliased value for the option type and can only include the following option types:**
 
-  - If you have a `Range`/`NamedRange` option, the value should be an `int` between the `range_start` and `range_end`
+  * If you have a `Range`/`NamedRange` option, the value should be an `int` between the `range_start` and `range_end`
     values.
-    - If you have a `NamedRange` option, the value can alternatively be a `str` that is one of the 
+    * If you have a `NamedRange` option, the value can alternatively be a `str` that is one of the 
       `special_range_names` keys.
-  - If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values. 
-  - If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
-  - `random` is also a valid value for any of these option types.
+    * If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values. 
+  * If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
+  * `random` is also a valid value for any of these option types.
 
-`OptionDict`, `OptionList`, `OptionSet`, `FreeText`, or custom `Option`-derived classes are not supported for presets on the webhost at this time.
+  `OptionDict`, `OptionList`, `OptionSet`, `FreeText`, or custom `Option`-derived classes are not supported for presets on the webhost at this time.
 
-Here is an example of a defined preset:
-```python
-# presets.py
-options_presets = {
-    "Limited Potential": {
-        "progression_balancing":    0,
-        "fairy_chests_per_zone":    2,
-        "starting_class":           "random",
-        "chests_per_zone":          30,
-        "vendors":                  "normal",
-        "architect":                "disabled",
-        "gold_gain_multiplier":     "half",
-        "number_of_children":       2,
-        "free_diary_on_generation": False,
-        "health_pool":              10,
-        "mana_pool":                10,
-        "attack_pool":              10,
-        "magic_damage_pool":        10,
-        "armor_pool":               5,
-        "equip_pool":               10,
-        "crit_chance_pool":         5,
-        "crit_damage_pool":         5,
-    }
-}
+  ```python
+  # presets.py
+  options_presets = {
+      "Example Preset": {
+          "progression_balancing": 0,
+          "difficulty": "hard",
+          "include_traps": False,
+      }
+  }
+  
+  # __init__.py
+  from worlds.AutoWorld import WebWorld
+  from .presets import options_presets
+  
+  
+  class MyGameWeb(WebWorld):
+      options_presets = options_presets
+      # ...
+  ```
 
-# __init__.py
-class RLWeb(WebWorld):
-    options_presets = options_presets
-    # ...
-```
+* `location_descriptions` (optional) WebWorlds can provide a map which contains human-friendly descriptions of locations 
+or location groups. These descriptions will show up in location-selection options in the Weighted Options page. Extra
+indentation and single newlines will be collapsed into spaces.
+
+  ```python
+  # locations.py
+  location_descriptions = {
+      "Red Potion #6": "In a secret destructible block under the second stairway",
+      "L2 Spaceship": """
+        The group of all items in the spaceship in Level 2.
+  
+        This doesn't include the item on the spaceship door, since it can be
+        accessed without the Spaeship Key.
+      """
+  }
+  
+  # __init__.py
+  from worlds.AutoWorld import World
+  from .Locations import location_descriptions
+  
+  
+  class MyGameWorld(World):
+      location_descriptions = location_descriptions
+  ```
+
+* `item_descriptions` (optional) WebWorlds can provide map which contains human-friendly descriptions of items or item 
+groups. These descriptions will show up in item-selection options in the Weighted Options page. Extra indentation and 
+single newlines will be collapsed into spaces.
+
+  ```python
+  # items.py
+  item_descriptions = {
+      "Red Potion": "A standard health potion",
+      "Spaceship Key": """
+        The key to the spaceship in Level 2.
+  
+        This is necessary to get to the Star Realm.
+      """
+  }
+  
+  # __init__.py
+  from worlds.AutoWorld import World
+  from .Items import item_descriptions
+  
+  
+  class MyGameWorld(World):
+      item_descriptions = item_descriptions
+  ```
 
 ### MultiWorld Object
 
@@ -168,38 +206,6 @@ Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED
 The Fill algorithm will force progression items to be placed at priority locations, giving a higher chance of them being
 required, and will prevent progression and useful items from being placed at excluded locations.
 
-#### Documenting Locations
-
-Worlds can optionally provide a `location_descriptions` map which contains
-human-friendly descriptions of locations or location groups. These descriptions
-will show up in location-selection options in the Weighted Options page. Extra
-indentation and single newlines will be collapsed into spaces.
-
-```python
-# Locations.py
-
-location_descriptions = {
-    "Red Potion #6": "In a secret destructible block under the second stairway",
-    "L2 Spaceship": """
-      The group of all items in the spaceship in Level 2.
-
-      This doesn't include the item on the spaceship door, since it can be
-      accessed without the Spaeship Key.
-    """
-}
-```
-
-```python
-# __init__.py
-
-from worlds.AutoWorld import World
-from .Locations import location_descriptions
-
-
-class MyGameWorld(World):
-    location_descriptions = location_descriptions
-```
-
 ### Items
 
 Items are all things that can "drop" for your game. This may be RPG items like
@@ -225,37 +231,6 @@ Other classifications include
   combined with `progression`; see below)
 * `progression_skip_balancing`: the combination of `progression` and `skip_balancing`, i.e., a progression item that
   will not be moved around by progression balancing; used, e.g., for currency or tokens
-
-#### Documenting Items
-
-Worlds can optionally provide an `item_descriptions` map which contains
-human-friendly descriptions of items or item groups. These descriptions will
-show up in item-selection options in the Weighted Options page. Extra
-indentation and single newlines will be collapsed into spaces.
-
-```python
-# Items.py
-
-item_descriptions = {
-    "Red Potion": "A standard health potion",
-    "Spaceship Key": """
-      The key to the spaceship in Level 2.
-
-      This is necessary to get to the Star Realm.
-    """
-}
-```
-
-```python
-# __init__.py
-
-from worlds.AutoWorld import World
-from .Items import item_descriptions
-
-
-class MyGameWorld(World):
-    item_descriptions = item_descriptions
-```
 
 ### Events
 
