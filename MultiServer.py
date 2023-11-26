@@ -425,7 +425,7 @@ class Context:
 
         # load start inventory:
         for slot, items in decoded_obj["precollected_items"].items():
-            # TODO: remove conditionals in version 0.4.4
+            # TODO: remove conditionals in version 0.4.5
             if items and isinstance(items[0], tuple):
                 self.start_inventory[slot] = [NetworkItem(item_code, -2, 0, flags) for item_code, flags in items]
             else:
