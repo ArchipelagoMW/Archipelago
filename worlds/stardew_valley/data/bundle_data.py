@@ -4,6 +4,7 @@ from ..bundles.bundle_room import BundleRoomTemplate
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.bundle_names import CCRoom, BundleName
+from ..strings.craftable_names import Fishing
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
@@ -320,6 +321,20 @@ mutant_carp = BundleItem(Fish.mutant_carp)
 glacierfish = BundleItem(Fish.glacierfish)
 legend = BundleItem(Fish.legend)
 
+spinner = BundleItem(Fishing.spinner)
+dressed_spinner = BundleItem(Fishing.dressed_spinner)
+trap_bobber = BundleItem(Fishing.trap_bobber)
+cork_bobber = BundleItem(Fishing.cork_bobber)
+lead_bobber = BundleItem(Fishing.lead_bobber)
+treasure_hunter = BundleItem(Fishing.treasure_hunter)
+barbed_hook = BundleItem(Fishing.barbed_hook)
+curiosity_lure = BundleItem(Fishing.curiosity_lure)
+quality_bobber = BundleItem(Fishing.quality_bobber)
+bait = BundleItem(Fishing.bait, 100)
+magnet = BundleItem(Fishing.magnet)
+wild_bait = BundleItem(Fishing.wild_bait, 10)
+magic_bait = IslandBundleItem(Fishing.magic_bait, 5)
+
 ginger = IslandBundleItem(Forageable.ginger)
 magma_cap = IslandBundleItem(Forageable.magma_cap)
 
@@ -527,12 +542,18 @@ legendary_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.legendary_fi
 island_fish_items = [lionfish, blue_discus, stingray]
 island_fish_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.island_fish, island_fish_items, 3, 3)
 
+tackle_items = [spinner, dressed_spinner, trap_bobber, cork_bobber, lead_bobber, treasure_hunter, barbed_hook, curiosity_lure, quality_bobber]
+tackle_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.tackle, tackle_items, 3, 2)
+
+bait_items = [bait, magnet, wild_bait, magic_bait]
+bait_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.bait, bait_items, 2, 2)
+
 fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla, ocean_fish_bundle_vanilla,
                              night_fish_bundle_vanilla, crab_pot_bundle_vanilla, specialty_fish_bundle_vanilla]
 fish_tank_bundles_thematic = [river_fish_bundle_thematic, lake_fish_bundle_thematic, ocean_fish_bundle_thematic,
                               night_fish_bundle_thematic, crab_pot_bundle_thematic, specialty_fish_bundle_thematic]
-fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle,
-                             recycling_bundle, rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle]
+fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle, recycling_bundle,
+                             rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle]
 # In Remixed, the trash items are in the recycling bundle, so we don't use the thematic version of the crab pot bundle that added trash items to it
 fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)
 fish_tank_bundles_remixed.append(crab_pot_bundle_vanilla)

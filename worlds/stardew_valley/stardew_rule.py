@@ -17,7 +17,7 @@ class StardewRuleExplanation:
     sub_rules: Iterable[StardewRule] = field(default_factory=set)
 
     def summary(self, depth=0):
-        return "\t" * depth + f"{str(self.rule)} -> {self.result}"
+        return "  " * depth + f"{str(self.rule)} -> {self.result}"
 
     def __str__(self, depth=0):
         if not self.sub_rules:
