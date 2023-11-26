@@ -38,6 +38,12 @@ class OffOnFullChoice(Choice):
     alias_chaos = 2
 
 
+class OffOnLogicChoice(Choice):
+    option_off = 0
+    option_on = 1
+    option_logic = 2
+
+
 # actual options
 class Difficulty(EvermizerFlags, Choice):
     """Changes relative spell cost and stuff"""
@@ -93,10 +99,18 @@ class ExpModifier(Range):
     default = 200
 
 
-class FixSequence(EvermizerFlag, DefaultOnToggle):
-    """Fix some sequence breaks"""
-    display_name = "Fix Sequence"
-    flag = '1'
+class SequenceBreaks(EvermizerFlags, OffOnLogicChoice):
+    """Disable, enable some sequence breaks or put them in logic"""
+    display_name = "Sequence Breaks"
+    default = 0
+    flags = ['', 'j', 'J']
+
+
+class OutOfBounds(EvermizerFlags, OffOnLogicChoice):
+    """Disable, enable the out-of-bounds glitch or put it in logic"""
+    display_name = "Out Of Bounds"
+    default = 0
+    flags = ['', 'u', 'U']
 
 
 class FixCheats(EvermizerFlag, DefaultOnToggle):
@@ -240,7 +254,8 @@ soe_options: typing.Dict[str, AssembleOptions] = {
     "available_fragments":   AvailableFragments,
     "money_modifier":        MoneyModifier,
     "exp_modifier":          ExpModifier,
-    "fix_sequence":          FixSequence,
+    "sequence_breaks":       SequenceBreaks,
+    "out_of_bounds":         OutOfBounds,
     "fix_cheats":            FixCheats,
     "fix_infinite_ammo":     FixInfiniteAmmo,
     "fix_atlas_glitch":      FixAtlasGlitch,
