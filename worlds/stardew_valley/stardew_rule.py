@@ -285,14 +285,19 @@ class AggregatingStardewRule(StardewRule, ABC):
         # TODO merge simplify + __call__
         if self._simplified:
             return self
+
         self.other_rules = frozenset(self.other_rules)
         if self.complement in self.other_rules:
             self.other_rules = (self.complement,)
             return self.complement
 
-        simplified_rules = frozenset(simplified
-                                     for simplified in (rule.simplify() for rule in self.other_rules)
-                                     if simplified is not self.identity)
+        simplified_rules = set()
+
+        for simplified in (rule.simplify() for rule in self.other_rules):
+            if simplified is not self.identity:
+                simplified_rules.add(simplified)
+
+        simplified_rules = frozenset(simplified_rules)
 
         if not simplified_rules and not self.combinable_rules:
             self.other_rules = (self.identity,)
