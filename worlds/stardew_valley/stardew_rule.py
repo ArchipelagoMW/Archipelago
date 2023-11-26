@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
-from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple
+from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
 
 from frozendict import frozendict
 
@@ -77,10 +77,12 @@ class StardewRule(ABC):
 
 
 class LiteralStardewRule(StardewRule, ABC):
+    value: bool
     pass
 
 
 class True_(LiteralStardewRule):  # noqa
+    value = True
 
     def __new__(cls, _cache=[]):  # noqa
         # Only one single instance will be ever created.
@@ -105,6 +107,7 @@ class True_(LiteralStardewRule):  # noqa
 
 
 class False_(LiteralStardewRule):  # noqa
+    value = False
 
     def __new__(cls, _cache=[]):  # noqa
         # Only one single instance will be ever created.
@@ -132,8 +135,6 @@ false_ = False_()
 true_ = True_()
 assert false_ is False_()
 assert true_ is True_()
-
-_default_combinable_rules = object()
 
 
 class CombinableStardewRule(StardewRule, ABC):
@@ -214,12 +215,16 @@ class AggregatingStardewRule(StardewRule, ABC):
     other_rules: Union[Iterable[StardewRule], Sized]
 
     detailed_unique_rules: Union[Iterable[StardewRule], Sized]
+
     _simplified: bool
+    _simplified_rules: Set[StardewRule]
+    _left_to_simplify_rules: Optional[Iterable[StardewRule]]
 
-    def __init__(self, *rules: StardewRule, _combinable_rules=_default_combinable_rules):
+    def __init__(self, *rules: StardewRule, _combinable_rules=None):
         self._simplified = False
+        self._simplified_rules = set()
 
-        if _combinable_rules is _default_combinable_rules:
+        if _combinable_rules is None:
             assert rules, f"Can't create an aggregating condition without rules"
             rules, _combinable_rules = CombinableStardewRule.split_rules(rules, self.combine)
 
@@ -227,6 +232,7 @@ class AggregatingStardewRule(StardewRule, ABC):
         self.combinable_rules = _combinable_rules
 
         self.detailed_unique_rules = self.other_rules
+        self._left_to_simplify_rules = None
 
     @property
     def rules_iterable(self):
@@ -240,6 +246,28 @@ class AggregatingStardewRule(StardewRule, ABC):
     @abstractmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         raise NotImplementedError
+
+    def simplify_while_evaluate(self, state: CollectionState, f) -> bool:
+        # TODO test if inverting would speed up
+        for rule in chain(self.combinable_rules.values()):
+            if rule(state) is self.complement.value:
+                return self.complement.value
+
+        # for rule in self._left_to_simplify_rules:
+        #     simplified = rule.simplify()
+        #
+        #     if simplified is self.identity or simplified in self._simplified_rules:
+        #         continue
+        #     self._simplified_rules.add(simplified)
+        #
+        #     if simplified(state) is self.complement.value:
+        #         return self.complement.value
+        #
+        # self._simplified = True
+        # return self.identity.value
+
+        self.simplify()
+        return f(r(state) for r in self.other_rules)
 
     def __str__(self):
         return f"({self.symbol.join(str(rule) for rule in self.detailed_rules_iterable)})"
@@ -280,6 +308,45 @@ class AggregatingStardewRule(StardewRule, ABC):
         self._simplified = True
         return self
 
+    def simplify2(self) -> StardewRule:
+        # TODO is this needed now that we're using an iterator ?
+        if self._simplified:
+            return self
+
+        self.other_rules = frozenset(self.other_rules)
+        if self.complement in self.other_rules:
+            self.other_rules = (self.complement,)
+            return self.complement
+
+        self._left_to_simplify_rules = iter(self.other_rules)
+
+        for rule in self._left_to_simplify_rules:
+            simplified = rule.simplify()
+
+            if simplified is self.identity or simplified in self._simplified_rules:
+                continue
+
+            if simplified is self.complement:
+                self._simplified = True
+                self._simplified_rules = {self.complement}
+                return self.complement
+
+            self._simplified_rules.add(simplified)
+
+        self._simplified = True
+
+        if not self._simplified_rules and not self.combinable_rules:
+            self._simplified_rules = {self.identity}
+            return self.identity
+
+        if len(self._simplified_rules) == 1 and not self.combinable_rules:
+            return next(iter(self._simplified_rules))
+
+        if not self._simplified_rules and len(self.combinable_rules) == 1:
+            return next(iter(self.combinable_rules.values()))
+
+        return self
+
     def explain(self, state: CollectionState) -> StardewRuleExplanation:
         return StardewRuleExplanation(self, state, frozenset(self.detailed_unique_rules))
 
@@ -290,10 +357,7 @@ class Or(AggregatingStardewRule):
     symbol = " | "
 
     def __call__(self, state: CollectionState) -> bool:
-        if any(rule(state) for rule in self.combinable_rules.values()):
-            return True
-        self.simplify()
-        return any(rule(state) for rule in self.other_rules)
+        return self.simplify_while_evaluate(state, any)
 
     def __or__(self, other):
         if other is true_ or other is false_:
@@ -322,10 +386,7 @@ class And(AggregatingStardewRule):
     symbol = " & "
 
     def __call__(self, state: CollectionState) -> bool:
-        if not all(rule(state) for rule in self.combinable_rules.values()):
-            return False
-        self.simplify()
-        return all(rule(state) for rule in self.other_rules)
+        return self.simplify_while_evaluate(state, all)
 
     def __and__(self, other):
         if other is true_ or other is false_:
