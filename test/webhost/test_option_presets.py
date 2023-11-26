@@ -1,7 +1,7 @@
 import unittest
 
 from worlds import AutoWorldRegister
-from Options import Choice, SpecialRange, Toggle, Range
+from Options import Choice, NamedRange, Toggle, Range
 
 
 class TestOptionPresets(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestOptionPresets(unittest.TestCase):
                     with self.subTest(game=game_name, preset=preset_name, option=option_name):
                         try:
                             option = world_type.options_dataclass.type_hints[option_name].from_any(option_value)
-                            supported_types = [Choice, Toggle, Range, SpecialRange]
+                            supported_types = [Choice, Toggle, Range, NamedRange]
                             if not any([issubclass(option.__class__, t) for t in supported_types]):
                                 self.fail(f"'{option_name}' in preset '{preset_name}' for game '{game_name}' "
                                           f"is not a supported type for webhost. "
@@ -46,8 +46,8 @@ class TestOptionPresets(unittest.TestCase):
 
                         # Check for from_text resolving to a different value. ("random" is allowed though.)
                         if option_value != "random" and isinstance(option_value, str):
-                            # Allow special named values for SpecialRange option presets.
-                            if isinstance(option, SpecialRange):
+                            # Allow special named values for NamedRange option presets.
+                            if isinstance(option, NamedRange):
                                 self.assertTrue(
                                     option_value in option.special_range_names,
                                     f"Invalid preset '{option_name}': '{option_value}' in preset '{preset_name}' "
