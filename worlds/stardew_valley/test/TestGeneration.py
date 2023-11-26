@@ -4,7 +4,7 @@ from typing import List
 from BaseClasses import ItemClassification, MultiWorld, Item
 from . import setup_solo_multiworld, SVTestBase, get_minsanity_options, allsanity_options_without_mods, \
     allsanity_options_with_mods, minimal_locations_maximal_items, SVTestCase, default_options, minimal_locations_maximal_items_with_island
-from .. import locations, items, location_table, options
+from .. import items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import Group, item_table
 from ..locations import LocationTags
@@ -231,7 +231,7 @@ class TestProgressiveElevator(SVTestBase):
         items_for_115 = self.generate_items_for_mine_115()
         last_elevator = self.get_item_by_name("Progressive Mine Elevator")
         self.collect(items_for_115)
-        floor_115 = self.multiworld.get_region("The Mines - Floor 115", self.player)        
+        floor_115 = self.multiworld.get_region("The Mines - Floor 115", self.player)
         floor_120 = self.multiworld.get_region("The Mines - Floor 120", self.player)
 
         self.assertTrue(floor_115.can_reach(self.multiworld.state))

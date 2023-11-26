@@ -161,9 +161,10 @@ class SVTestCase(unittest.TestCase):
 
 
 class SVTestBase(WorldTestBase, SVTestCase):
+    seed = None
 
     def world_setup(self, *args, **kwargs):
-        super().world_setup(*args, **kwargs)
+        super().world_setup(seed=self.seed)
         if self.constructed:
             self.world = self.multiworld.worlds[self.player]  # noqa
 
