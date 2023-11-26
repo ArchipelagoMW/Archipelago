@@ -103,7 +103,7 @@ class RiskOfRainWorld(World):
             if self.options.dlc_sotv:
                 environment_offset_table = shift_by_offset(environment_sotv_table, environment_offset)
                 environments_pool = {**environments_pool, **environment_offset_table}
-            # percollect starting environment for each stage 1
+            # percollect starting environment for stage 1
             unlock = self.random.choices(list(environment_available_orderedstages_table[0].keys()), k=1)
             self.multiworld.push_precollected(self.create_item(unlock[0]))
             environments_pool.pop(unlock[0])
