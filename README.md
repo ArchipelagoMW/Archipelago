@@ -55,6 +55,8 @@ Currently, the following games are supported:
 * Pokémon Emerald
 * DOOM II
 * Shivers
+* Heretic
+* Landstalker: The Treasures of King Nole
 * Castlevania 64
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
