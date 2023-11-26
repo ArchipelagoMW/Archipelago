@@ -4,10 +4,6 @@ from typing import Callable
 from BaseClasses import MultiWorld
 from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict, PerGameCommonOptions
 
-"""
-Most of these are not implemented yet
-"""
-
 
 class Goal(Choice):
     """
