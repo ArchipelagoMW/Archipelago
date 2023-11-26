@@ -1,7 +1,8 @@
+from dataclasses import dataclass
 from typing import Dict, Union, List, FrozenSet
 
 from BaseClasses import MultiWorld
-from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict
+from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict, PerGameCommonOptions
 
 """
 Most of these are not implemented yet
@@ -381,31 +382,31 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
-cm_options: Dict[str, type(Option)] = {
-    "goal": Goal,
-    "piece_locations": PieceLocations,
-    "piece_types": PieceTypes,
-    "enemy_piece_types": EnemyPieceTypes,
-    "early_material": EarlyMaterial,
-    "min_material": MaterialMinLimit,
-    "max_material": MaterialMaxLimit,
-    "max_engine_penalties": MaximumEnginePenalties,
-    "max_pocket": MaximumPocket,
-    "max_kings": MaximumKings,
-    "fairy_kings": FairyKings,
-    "fairy_chess_pieces": FairyChessPieces,
-    "fairy_chess_army": FairyChessArmy,
-    "fairy_chess_pawns": FairyChessPawns,
-    "minor_piece_limit_by_type": MinorPieceLimitByType,
-    "major_piece_limit_by_type": MajorPieceLimitByType,
-    "queen_piece_limit_by_type": QueenPieceLimitByType,
-    "queen_piece_limit": QueenPieceLimit,
-    "pocket_limit_by_pocket": PocketLimitByPocket,
-    # "item_limit_by_type": ItemLimitByType,
-    # "maximum_items": MaximumItems,
-    "locked_items": LockedItems,
-    "death_link": DeathLink,
-}
+@dataclass
+class CMOptions(PerGameCommonOptions):
+    goal: Goal
+    piece_locations: PieceLocations
+    piece_types: PieceTypes
+    enemy_piece_types: EnemyPieceTypes
+    early_material: EarlyMaterial
+    min_material: MaterialMinLimit
+    max_material: MaterialMaxLimit
+    max_engine_penalties: MaximumEnginePenalties
+    max_pocket: MaximumPocket
+    max_kings: MaximumKings
+    fairy_kings: FairyKings
+    fairy_chess_pieces: FairyChessPieces
+    fairy_chess_army: FairyChessArmy
+    fairy_chess_pawns: FairyChessPawns
+    minor_piece_limit_by_type: MinorPieceLimitByType
+    major_piece_limit_by_type: MajorPieceLimitByType
+    queen_piece_limit_by_type: QueenPieceLimitByType
+    queen_piece_limit: QueenPieceLimit
+    pocket_limit_by_pocket: PocketLimitByPocket
+    # item_limit_by_type: ItemLimitByType
+    # maximum_items: MaximumItems
+    locked_items: LockedItems
+    death_link: DeathLink
 
 
 def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:

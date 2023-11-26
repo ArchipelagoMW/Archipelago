@@ -1,15 +1,15 @@
 import math
 import random
 from enum import Enum
-from typing import List, Dict, ClassVar, Callable
+from typing import List, Dict, ClassVar, Callable, Type
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
-from .Options import cm_options, get_option_value
+from .Options import get_option_value, CMOptions
 from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
                     useful_items, item_name_groups)
 from .Locations import CMLocation, location_table
-from .Options import cm_options
 from .Rules import set_rules
 
 
@@ -31,11 +31,11 @@ class CMWorld(World):
     You win when you checkmate the opposing king!
     """
     game: ClassVar[str] = "ChecksMate"
-    option_definitions = cm_options
     data_version = 0
     web = CMWeb()
     required_client_version = (0, 3, 4)
-    # options: CMOptions
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CMOptions
+    options: CMOptions
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
@@ -105,7 +105,12 @@ class CMWorld(World):
         cursed_knowledge["pocket_order"] = potential_pockets
         if self.player in self.army:
             cursed_knowledge["army"] = self.army[self.player]
-        return dict(cursed_knowledge, **{option_name: self.setting(option_name).value for option_name in cm_options})
+        # See Archipelago.APChessV.ApmwConfig#Instantiate to observe requested parameters
+        option_names = ["goal", "enemy_piece_types", "piece_locations", "piece_types",
+                        "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pawns",
+                        "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
+                        "pocket_limit_by_pocket"]
+        return dict(cursed_knowledge, **self.options.as_dict(*option_names))
 
     def create_item(self, name: str) -> CMItem:
         data = item_table[name]
