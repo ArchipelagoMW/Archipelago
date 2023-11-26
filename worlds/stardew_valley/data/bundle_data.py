@@ -4,7 +4,7 @@ from ..bundles.bundle_room import BundleRoomTemplate
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.bundle_names import CCRoom, BundleName
-from ..strings.craftable_names import Fishing
+from ..strings.craftable_names import Fishing, Craftable, Bomb
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
@@ -246,6 +246,11 @@ bug_meat = BundleItem(Loot.bug_meat, 10)
 bat_wing = BundleItem(Loot.bat_wing, 10)
 solar_essence = BundleItem(Loot.solar_essence)
 void_essence = BundleItem(Loot.void_essence)
+
+cherry_bomb = BundleItem(Bomb.cherry_bomb, 5)
+bomb = BundleItem(Bomb.bomb, 2)
+mega_bomb = BundleItem(Bomb.mega_bomb)
+explosive_ammo = BundleItem(Craftable.explosive_ammo, 5)
 
 maki_roll = BundleItem(Meal.maki_roll)
 fried_egg = BundleItem(Meal.fried_egg)
@@ -585,9 +590,12 @@ treasure_hunter_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.treasure_
 engineer_items = [iridium_ore.as_amount(5), battery_pack, refined_quartz.as_amount(5), diamond]
 engineer_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.engineer, engineer_items, 3, 3)
 
+demolition_items = [cherry_bomb, bomb, mega_bomb, explosive_ammo]
+demolition_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.demolition, demolition_items, 3, 3)
+
 boiler_room_bundles_vanilla = [blacksmith_bundle_vanilla, geologist_bundle_vanilla, adventurer_bundle_vanilla]
 boiler_room_bundles_thematic = [blacksmith_bundle_thematic, geologist_bundle_thematic, adventurer_bundle_thematic]
-boiler_room_bundles_remixed = [*boiler_room_bundles_thematic, treasure_hunter_bundle, engineer_bundle]
+boiler_room_bundles_remixed = [*boiler_room_bundles_thematic, treasure_hunter_bundle, engineer_bundle, demolition_bundle]
 boiler_room_vanilla = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_vanilla, 3)
 boiler_room_thematic = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_thematic, 3)
 boiler_room_remixed = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_remixed, 3)
@@ -693,7 +701,7 @@ vault_qi_helper_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.qi_help
 
 vault_bundles_vanilla = [vault_2500_bundle, vault_5000_bundle, vault_10000_bundle, vault_25000_bundle]
 vault_bundles_thematic = vault_bundles_vanilla
-vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_helper_bundle]  # , vault_carnival_bundle , vault_walnut_hunter_bundle
+vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_helper_bundle, vault_carnival_bundle]  # , vault_walnut_hunter_bundle
 vault_vanilla = BundleRoomTemplate(CCRoom.vault, vault_bundles_vanilla, 4)
 vault_thematic = BundleRoomTemplate(CCRoom.vault, vault_bundles_thematic, 4)
 vault_remixed = BundleRoomTemplate(CCRoom.vault, vault_bundles_remixed, 4)
