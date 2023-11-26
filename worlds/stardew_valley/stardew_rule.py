@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
-from typing import Iterable, Dict, List, Union, FrozenSet, Sized, Hashable, Callable
+from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable
 
 from frozendict import frozendict
 
@@ -200,25 +200,22 @@ class AggregatingStardewRule(StardewRule, ABC):
     identity: LiteralStardewRule
     complement: LiteralStardewRule
     symbol: str
-    name: str
 
     combinable_rules: frozendict[Hashable, CombinableStardewRule]
-    unique_rules: FrozenSet[StardewRule]
+    unique_rules: Union[Iterable[StardewRule], Sized]
 
-    detailed_unique_rules: FrozenSet[StardewRule]
-
+    detailed_unique_rules: Union[Iterable[StardewRule], Sized]
     _simplified: bool
 
     def __init__(self, *rules: StardewRule, _combinable_rules=_default_combinable_rules):
         self._simplified = False
-        self._combined_rules = frozenset()
 
         if _combinable_rules is _default_combinable_rules:
-            assert rules, f"Can't create a {self.name} conditions without rules"
-            _combinable_rules = CombinableStardewRule.reduce([i for i in rules if isinstance(i, CombinableStardewRule)], self.combine)
+            assert rules, f"Can't create an aggregating condition without rules"
+            _combinable_rules = CombinableStardewRule.reduce((i for i in rules if isinstance(i, CombinableStardewRule)), self.combine)
             rules = (i for i in rules if not isinstance(i, CombinableStardewRule))
 
-        self.unique_rules = frozenset(rules)
+        self.unique_rules = tuple(rules)
         self.combinable_rules = _combinable_rules
 
         self.detailed_unique_rules = self.unique_rules
@@ -252,7 +249,7 @@ class AggregatingStardewRule(StardewRule, ABC):
         if self._simplified:
             return self
         if self.complement in self.unique_rules:
-            self.unique_rules = frozenset({self.complement})
+            self.unique_rules = (self.complement,)
             return self.complement
 
         simplified_rules = frozenset(simplified
@@ -260,7 +257,7 @@ class AggregatingStardewRule(StardewRule, ABC):
                                      if simplified is not self.identity)
 
         if not simplified_rules and not self.combinable_rules:
-            self.unique_rules = frozenset({self.identity})
+            self.unique_rules = (self.identity,)
             return self.identity
 
         if len(simplified_rules) == 1 and not self.combinable_rules:
@@ -269,19 +266,18 @@ class AggregatingStardewRule(StardewRule, ABC):
         if not simplified_rules and len(self.combinable_rules) == 1:
             return next(iter(self.combinable_rules.values()))
 
-        self.unique_rules = frozenset(simplified_rules)
+        self.unique_rules = simplified_rules
         self._simplified = True
         return self
 
     def explain(self, state: CollectionState) -> StardewRuleExplanation:
-        return StardewRuleExplanation(self, state, self.detailed_unique_rules)
+        return StardewRuleExplanation(self, state, frozenset(self.detailed_unique_rules))
 
 
 class Or(AggregatingStardewRule):
     identity = false_
     complement = true_
     symbol = " | "
-    name = "Or"
 
     def __call__(self, state: CollectionState) -> bool:
         self.simplify()
@@ -295,10 +291,10 @@ class Or(AggregatingStardewRule):
             return Or(*self.unique_rules, _combinable_rules=other.add_into(self.combinable_rules, self.combine))
 
         if type(other) is Or:
-            return Or(*self.unique_rules.union(other.unique_rules),
+            return Or(*self.unique_rules, *other.unique_rules,
                       _combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine))
 
-        return Or(*self.unique_rules.union({other}), _combinable_rules=self.combinable_rules)
+        return Or(*self.unique_rules, other, _combinable_rules=self.combinable_rules)
 
     @staticmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
@@ -312,7 +308,6 @@ class And(AggregatingStardewRule):
     identity = true_
     complement = false_
     symbol = " & "
-    name = "And"
 
     def __call__(self, state: CollectionState) -> bool:
         self.simplify()
@@ -326,10 +321,10 @@ class And(AggregatingStardewRule):
             return And(*self.unique_rules, _combinable_rules=other.add_into(self.combinable_rules, self.combine))
 
         if type(other) is And:
-            return And(*self.unique_rules.union(other.unique_rules),
+            return And(*self.unique_rules, *other.unique_rules,
                        _combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine))
 
-        return And(*self.unique_rules.union({other}), _combinable_rules=self.combinable_rules)
+        return And(*self.unique_rules, other, _combinable_rules=self.combinable_rules)
 
     @staticmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
