@@ -365,8 +365,8 @@ def make_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item]
     remaining_hints = hint_amount - len(hints)
     priority_hint_amount = int(max(0.0, min(len(priority_hint_pairs) / 2, remaining_hints / 2)))
 
-    prog_items_in_this_world = sorted(list(prog_items_in_this_world))
-    locations_in_this_world = sorted(list(loc_in_this_world))
+    prog_items_in_this_world = sorted(prog_items_in_this_world)
+    locations_in_this_world = sorted(loc_in_this_world)
 
     world.random.shuffle(prog_items_in_this_world)
     world.random.shuffle(locations_in_this_world)
