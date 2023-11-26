@@ -20,37 +20,37 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.multiworld.state.prog_items = {1: Counter()}
 
         sturgeon_rule = self.world.logic.has("Sturgeon")
-        self.assertFalse(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state, expected=False))
 
         summer = self.world.create_item("Summer")
         self.multiworld.state.collect(summer, event=False)
-        self.assertFalse(sturgeon_rule(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state, expected=False))
 
         fishing_rod = self.world.create_item("Progressive Fishing Rod")
         self.multiworld.state.collect(fishing_rod, event=False)
         self.multiworld.state.collect(fishing_rod, event=False)
-        self.assertFalse(sturgeon_rule(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state, expected=False))
 
         fishing_level = self.world.create_item("Fishing Level")
         self.multiworld.state.collect(fishing_level, event=False)
-        self.assertFalse(sturgeon_rule(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state, expected=False))
 
         self.multiworld.state.collect(fishing_level, event=False)
         self.multiworld.state.collect(fishing_level, event=False)
         self.multiworld.state.collect(fishing_level, event=False)
         self.multiworld.state.collect(fishing_level, event=False)
         self.multiworld.state.collect(fishing_level, event=False)
-        self.assertTrue(sturgeon_rule(self.multiworld.state))
+        self.assertTrue(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state))
 
         self.remove(summer)
-        self.assertFalse(sturgeon_rule(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state, expected=False))
 
         winter = self.world.create_item("Winter")
         self.multiworld.state.collect(winter, event=False)
-        self.assertTrue(sturgeon_rule(self.multiworld.state))
+        self.assertTrue(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state))
 
         self.remove(fishing_rod)
-        self.assertFalse(sturgeon_rule(self.multiworld.state))
+        self.assertFalse(sturgeon_rule(self.multiworld.state), sturgeon_rule.explain(self.multiworld.state, expected=False))
 
     def test_old_master_cannoli(self):
         self.multiworld.state.prog_items = {1: Counter()}
@@ -299,30 +299,35 @@ class TestWeaponsLogic(SVTestBase):
     def GiveItemAndCheckReachableMine(self, item_name: str, reachable_level: int):
         item = self.multiworld.create_item(item_name, self.player)
         self.multiworld.state.collect(item, event=True)
+        rule = self.world.logic.mine.can_mine_in_the_mines_floor_1_40()
         if reachable_level > 0:
-            self.assertTrue(self.world.logic.mine.can_mine_in_the_mines_floor_1_40()(self.multiworld.state))
+            self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.mine.can_mine_in_the_mines_floor_1_40()(self.multiworld.state))
+            self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state, expected=False))
 
+        rule = self.world.logic.mine.can_mine_in_the_mines_floor_41_80()
         if reachable_level > 1:
-            self.assertTrue(self.world.logic.mine.can_mine_in_the_mines_floor_41_80()(self.multiworld.state))
+            self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.mine.can_mine_in_the_mines_floor_41_80()(self.multiworld.state))
+            self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state, expected=False))
 
+        rule = self.world.logic.mine.can_mine_in_the_mines_floor_81_120()
         if reachable_level > 2:
-            self.assertTrue(self.world.logic.mine.can_mine_in_the_mines_floor_81_120()(self.multiworld.state))
+            self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.mine.can_mine_in_the_mines_floor_81_120()(self.multiworld.state))
+            self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state, expected=False))
 
+        rule = self.world.logic.mine.can_mine_in_the_skull_cavern()
         if reachable_level > 3:
-            self.assertTrue(self.world.logic.mine.can_mine_in_the_skull_cavern()(self.multiworld.state))
+            self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.mine.can_mine_in_the_skull_cavern()(self.multiworld.state))
+            self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state, expected=False))
 
+        rule = self.world.logic.ability.can_mine_perfectly_in_the_skull_cavern()
         if reachable_level > 4:
-            self.assertTrue(self.world.logic.ability.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state))
+            self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.ability.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state))
+            self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state, expected=False))
 
 
 class TestMonstersanityProgressiveRules(SVTestBase):
