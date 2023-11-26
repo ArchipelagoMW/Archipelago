@@ -78,7 +78,12 @@ class StardewRule(ABC):
 
 class LiteralStardewRule(StardewRule, ABC):
     value: bool
-    pass
+
+    def __call__(self, state: CollectionState) -> bool:
+        return self.value
+
+    def __repr__(self):
+        return str(self.value)
 
 
 class True_(LiteralStardewRule):  # noqa
@@ -90,17 +95,11 @@ class True_(LiteralStardewRule):  # noqa
             _cache.append(super(True_, cls).__new__(cls))
         return _cache[0]
 
-    def __call__(self, state: CollectionState) -> bool:
-        return True
-
     def __or__(self, other) -> StardewRule:
         return self
 
     def __and__(self, other) -> StardewRule:
         return other
-
-    def __repr__(self):
-        return "True"
 
     def get_difficulty(self):
         return 0
@@ -115,17 +114,11 @@ class False_(LiteralStardewRule):  # noqa
             _cache.append(super(False_, cls).__new__(cls))
         return _cache[0]
 
-    def __call__(self, state: CollectionState) -> bool:
-        return False
-
     def __or__(self, other) -> StardewRule:
         return other
 
     def __and__(self, other) -> StardewRule:
         return self
-
-    def __repr__(self):
-        return "False"
 
     def get_difficulty(self):
         return 999999999
@@ -247,11 +240,11 @@ class AggregatingStardewRule(StardewRule, ABC):
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         raise NotImplementedError
 
-    def simplify_while_evaluate(self, state: CollectionState, f) -> bool:
+    def simplify_while_evaluate(self, state: CollectionState, f) -> Tuple[StardewRule, bool]:
         # TODO test if inverting would speed up
         for rule in chain(self.combinable_rules.values()):
             if rule(state) is self.complement.value:
-                return self.complement.value
+                return self, self.complement.value
 
         # for rule in self._left_to_simplify_rules:
         #     simplified = rule.simplify()
@@ -271,7 +264,7 @@ class AggregatingStardewRule(StardewRule, ABC):
             if self.complement in self.other_rules:
                 self._simplified = True
                 self.other_rules = (self.complement,)
-                return self.complement.value
+                return self.complement, self.complement.value
 
             self._left_to_simplify_rules = iter(self.other_rules)
 
@@ -283,18 +276,18 @@ class AggregatingStardewRule(StardewRule, ABC):
 
             if simplified is self.complement:
                 self._simplified = True
-                self._simplified_rules = {self.complement}
-                return self.complement.value
+                self.other_rules = (self.complement,)
+                return self.complement, self.complement.value
 
             self._simplified_rules.add(simplified)
 
             if simplified(state) is self.complement.value:
-                return self.complement.value
+                return self, self.complement.value
 
         self._simplified = True
         self.other_rules = frozenset(self._simplified_rules)
 
-        return f(r(state) for r in self.other_rules)
+        return self, f(r(state) for r in self.other_rules)
 
     def __str__(self):
         return f"({self.symbol.join(str(rule) for rule in self.detailed_rules_iterable)})"
@@ -359,7 +352,7 @@ class Or(AggregatingStardewRule):
     symbol = " | "
 
     def __call__(self, state: CollectionState) -> bool:
-        return self.simplify_while_evaluate(state, any)
+        return self.simplify_while_evaluate(state, any)[1]
 
     def __or__(self, other):
         if other is true_ or other is false_:
@@ -388,7 +381,7 @@ class And(AggregatingStardewRule):
     symbol = " & "
 
     def __call__(self, state: CollectionState) -> bool:
-        return self.simplify_while_evaluate(state, all)
+        return self.simplify_while_evaluate(state, all)[1]
 
     def __and__(self, other):
         if other is true_ or other is false_:
