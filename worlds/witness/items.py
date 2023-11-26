@@ -135,7 +135,7 @@ class WitnessPlayerItems:
                 # Downgrade doors that don't gate progress.
                 item_data.classification = ItemClassification.useful
             elif item_name == "Keep Pressure Plates 2 Exit (Door)" and difficulty == "none":
-                # PP2EP requires the door in vanilla puzzles
+                # PP2EP requires the door in vanilla puzzles, otherwise it's unnecessary
                 item_data.classification = ItemClassification.useful
 
         # Build the mandatory item list.
