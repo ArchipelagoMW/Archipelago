@@ -457,7 +457,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
 
     total_progression = non_local_progression + local_progression
 
-    is_multiworld = len(world.multiworld.player_ids) > 1
+    player_count = len(world.multiworld.player_ids)
 
     correct_word = "Both" if total_progression == 2 else "All"
 
@@ -467,11 +467,12 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
     elif total_progression == 1:
         hint_string = f"In the {hinted_area} area, you will find 1 progression item."
 
-        if is_multiworld:
+        if player_count > 1:
             if local_lasers:
                 hint_string += "\nThis item is a laser for this world."
             elif non_local_progression:
-                hint_string += "\nThis item is for another player."
+                other_player_str = "the other player" if player_count == 2 else "another player"
+                hint_string += f"\nThis item is for {other_player_str}."
             else:
                 hint_string += "\nThis item is for this world."
         else:
@@ -484,14 +485,16 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
         if local_lasers == total_progression:
             hint_string = f"{correct_word} of them are lasers" + " for this world." if is_multiworld else "."
 
-        elif is_multiworld:
+        elif player_count > 1:
             if local_progression and non_local_progression:
                 if non_local_progression == 1:
-                    hint_string += f"\nOf them, one is for another player."
+                    other_player_str = "the other player" if player_count == 2 else "another player"
+                    hint_string += f"\nOne of them is for {other_player_str}."
                 else:
-                    hint_string += f"\nOf them, {non_local_progression} are for other players."
+                    hint_string += f"\n{non_local_progression} of them are for other players."
             elif non_local_progression:
-                hint_string += f"\n{correct_word} of them are for other players."
+                other_players_str = "the other player" if player_count == 2 else "other players"
+                hint_string += f"\n{correct_word} of them are for {other_players_str}."
             elif local_progression:
                 hint_string += f"\n{correct_word} of them are for this world."
 
