@@ -224,7 +224,7 @@ class AggregatingStardewRule(StardewRule, ABC):
     symbol: str
 
     combinable_rules: frozendict[Hashable, CombinableStardewRule]
-    unique_rules: Union[Iterable[StardewRule], Sized]
+    other_rules: Union[Iterable[StardewRule], Sized]
 
     detailed_unique_rules: Union[Iterable[StardewRule], Sized]
     _simplified: bool
@@ -236,14 +236,14 @@ class AggregatingStardewRule(StardewRule, ABC):
             assert rules, f"Can't create an aggregating condition without rules"
             rules, _combinable_rules = CombinableStardewRule.split_rules(rules, self.combine)
 
-        self.unique_rules = tuple(rules)
+        self.other_rules = tuple(rules)
         self.combinable_rules = _combinable_rules
 
-        self.detailed_unique_rules = self.unique_rules
+        self.detailed_unique_rules = self.other_rules
 
     @property
     def rules_iterable(self):
-        return chain(self.unique_rules, self.combinable_rules.values())
+        return chain(self.other_rules, self.combinable_rules.values())
 
     @property
     def detailed_rules_iterable(self):
@@ -261,24 +261,25 @@ class AggregatingStardewRule(StardewRule, ABC):
         return f"({self.symbol.join(repr(rule) for rule in self.detailed_rules_iterable)})"
 
     def __eq__(self, other):
-        return isinstance(other, type(self)) and self.combinable_rules == other.combinable_rules and self.unique_rules == self.unique_rules
+        return isinstance(other, type(self)) and self.combinable_rules == other.combinable_rules and self.other_rules == self.other_rules
 
     def __hash__(self):
-        return hash((self.combinable_rules, self.unique_rules))
+        return hash((self.combinable_rules, self.other_rules))
 
     def simplify(self) -> StardewRule:
         if self._simplified:
             return self
-        if self.complement in self.unique_rules:
-            self.unique_rules = (self.complement,)
+        self.other_rules = frozenset(self.other_rules)
+        if self.complement in self.other_rules:
+            self.other_rules = (self.complement,)
             return self.complement
 
         simplified_rules = frozenset(simplified
-                                     for simplified in (rule.simplify() for rule in self.unique_rules)
+                                     for simplified in (rule.simplify() for rule in self.other_rules)
                                      if simplified is not self.identity)
 
         if not simplified_rules and not self.combinable_rules:
-            self.unique_rules = (self.identity,)
+            self.other_rules = (self.identity,)
             return self.identity
 
         if len(simplified_rules) == 1 and not self.combinable_rules:
@@ -287,7 +288,7 @@ class AggregatingStardewRule(StardewRule, ABC):
         if not simplified_rules and len(self.combinable_rules) == 1:
             return next(iter(self.combinable_rules.values()))
 
-        self.unique_rules = simplified_rules
+        self.other_rules = simplified_rules
         self._simplified = True
         return self
 
@@ -309,13 +310,13 @@ class Or(AggregatingStardewRule):
             return other | self
 
         if isinstance(other, CombinableStardewRule):
-            return Or(*self.unique_rules, _combinable_rules=other.add_into(self.combinable_rules, self.combine))
+            return Or(*self.other_rules, _combinable_rules=other.add_into(self.combinable_rules, self.combine))
 
         if type(other) is Or:
-            return Or(*self.unique_rules, *other.unique_rules,
+            return Or(*self.other_rules, *other.other_rules,
                       _combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine))
 
-        return Or(*self.unique_rules, other, _combinable_rules=self.combinable_rules)
+        return Or(*self.other_rules, other, _combinable_rules=self.combinable_rules)
 
     @staticmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
@@ -339,13 +340,13 @@ class And(AggregatingStardewRule):
             return other & self
 
         if isinstance(other, CombinableStardewRule):
-            return And(*self.unique_rules, _combinable_rules=other.add_into(self.combinable_rules, self.combine))
+            return And(*self.other_rules, _combinable_rules=other.add_into(self.combinable_rules, self.combine))
 
         if type(other) is And:
-            return And(*self.unique_rules, *other.unique_rules,
+            return And(*self.other_rules, *other.other_rules,
                        _combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine))
 
-        return And(*self.unique_rules, other, _combinable_rules=self.combinable_rules)
+        return And(*self.other_rules, other, _combinable_rules=self.combinable_rules)
 
     @staticmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
