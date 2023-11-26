@@ -1,7 +1,7 @@
-from functools import reduce
 from math import ceil
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import MultiWorld, CollectionState, Item
+from Utils import cache_self1
 from .. import checksmate
 
 from ..generic.Rules import set_rule
@@ -23,10 +23,11 @@ def individual_piece_material(state: CollectionState, item_id: str, item: CMItem
 
 
 def total_piece_material(state: CollectionState, player: int) -> int:
-    owned_piece_materials = [
-        individual_piece_material(state, item_id, item, player)
-        for item_id, item in owned_items(state, player)]
-    return reduce(lambda a, b: a + b, owned_piece_materials, 0)
+    return state.prog_items[player]["Material"]
+#     owned_piece_materials = [
+#         individual_piece_material(state, item_id, item, player)
+#         for item_id, item in owned_items(state, player)]
+#     return reduce(lambda a, b: a + b, owned_piece_materials, 0)
 
 
 def has_piece_material(state: CollectionState, player: int, amount: int) -> bool:
@@ -34,7 +35,7 @@ def has_piece_material(state: CollectionState, player: int, amount: int) -> bool
 
 
 def has_chessmen(state: CollectionState, player: int) -> int:
-    cmoptions: CMOptions = state.multiworld.worlds[player].options
+    cmoptions: CMOptions = state.multiworld.worlds[player].options  # this is safe. trust me I'm a doctor
     return state.count_group("Chessmen", player) + ceil(
         state.count("Progressive Pocket", player) / cmoptions.pocket_limit_by_pocket)
 
@@ -52,9 +53,14 @@ def has_pin(state: CollectionState, player: int) -> bool:
 
 
 def has_castle(state: CollectionState, player: int) -> bool:
-    return (state.count("Progressive Major Piece", player) >= 2 + len(
-        [item for item in state.multiworld.itempool if
-         item.player == player and item.name == "Progressive Major To Queen"]))
+    return (state.count("Progressive Major Piece", player) >=
+            2 + num_items_in_pool(state.multiworld.itempool, (player, "Progressive Major To Queen")))
+
+
+# @cache does not work due to "MultiWorld object was not de-allocated"
+# TODO: @cache_self1 is very close but needs a 'self' object
+def num_items_in_pool(itempool: list[Item], player_and_item: (int, str)):
+    return len([item for item in itempool if item.player == player_and_item[0] and item.name == player_and_item[1]])
 
 
 def count_enemy_pieces(state: CollectionState, player: int) -> int:

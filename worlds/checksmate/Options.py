@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Union, List, FrozenSet, Callable, ClassVar, Self
+from typing import Callable
 
 from BaseClasses import MultiWorld
 from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict, PerGameCommonOptions
@@ -408,11 +408,14 @@ class CMOptions(PerGameCommonOptions):
     locked_items: LockedItems
     death_link: DeathLink
 
-    piece_type_limit_options: ClassVar[dict[str, Callable[[Self], Option]]] = {
-        "Progressive Minor Piece": lambda cmoptions: cmoptions.minor_piece_limit_by_type,
-        "Progressive Major Piece": lambda cmoptions: cmoptions.major_piece_limit_by_type,
-        "Progressive Major To Queen": lambda cmoptions: cmoptions.queen_piece_limit_by_type,
-    }
-    piece_limit_options: ClassVar[dict[str, Callable[[Self], Option]]] = {
-        "Progressive Major To Queen": lambda cmoptions: cmoptions.queen_piece_limit,
-    }
+
+piece_type_limit_options: dict[str, Callable[[CMOptions], Option]] = {
+    "Progressive Minor Piece": lambda cmoptions: cmoptions.minor_piece_limit_by_type,
+    "Progressive Major Piece": lambda cmoptions: cmoptions.major_piece_limit_by_type,
+    "Progressive Major To Queen": lambda cmoptions: cmoptions.queen_piece_limit_by_type,
+}
+
+
+piece_limit_options: dict[str, Callable[[CMOptions], Option]] = {
+    "Progressive Major To Queen": lambda cmoptions: cmoptions.queen_piece_limit,
+}

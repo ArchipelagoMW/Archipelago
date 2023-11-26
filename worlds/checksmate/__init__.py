@@ -6,7 +6,7 @@ from typing import List, Dict, ClassVar, Callable, Type
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
-from .Options import CMOptions
+from .Options import CMOptions, piece_type_limit_options, piece_limit_options
 from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
                     useful_items, item_name_groups)
 from .Locations import CMLocation, location_table
@@ -289,8 +289,8 @@ class CMWorld(World):
             # The player ending up with bounded parents on the upper end is handled in has_prereqs
             return False
         # Limit pieces placed by total number
-        if chosen_item in self.piece_limit_options:
-            piece_total_limit = CMOptions.piece_limit_options[chosen_item](self.options).value
+        if chosen_item in piece_limit_options:
+            piece_total_limit = piece_limit_options[chosen_item](self.options).value
             pieces_used = self.items_used[self.player].get(chosen_item, 0)
             if 0 < piece_total_limit <= pieces_used:
                 return False
@@ -298,7 +298,7 @@ class CMWorld(World):
 
     def find_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade) -> int:
         """Limit pieces placed by individual variety. This applies the Piece Type Limit setting."""
-        if chosen_item not in self.piece_type_limit_options:
+        if chosen_item not in piece_type_limit_options:
             return 0
 
         piece_limit: int = self.piece_limit_of(chosen_item)
@@ -322,7 +322,7 @@ class CMWorld(World):
         return piece_limit
 
     def piece_limit_of(self, chosen_item: str):
-        return CMOptions.piece_type_limit_options[chosen_item](self.options).value
+        return piece_type_limit_options[chosen_item](self.options).value
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
