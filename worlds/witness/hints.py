@@ -482,7 +482,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
         hint_string = f"In the {hinted_area} area, you will find {total_progression} progression items."
 
         if local_lasers == total_progression:
-            hint_string = f"{correct_word} of them are lasers" + " for this world." if is_multiworld else "."
+            hint_string += f"\n{correct_word} of them are lasers" + (" for this world." if is_multiworld else ".")
 
         elif is_multiworld:
             if local_progression and non_local_progression:
