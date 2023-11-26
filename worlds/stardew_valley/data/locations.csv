@@ -2497,7 +2497,7 @@ id,region,name,tags,mod_name
 7414,Farm,Craft hardwood Preservation Chamber,CRAFTSANITY,Archaeology
 7415,Farm,Craft Wooden Display,CRAFTSANITY,Archaeology
 7416,Farm,Craft Hardwood Display,CRAFTSANITY,Archaeology
-7417,Farm,Craft Warp Totem: Volcano,CRAFTSANITY,Archaeology
+7417,Farm,Craft Warp Totem: Volcano,"CRAFTSANITY,GINGER_ISLAND",Archaeology
 7451,Adventurer's Guild,Magic Elixir Recipe,CRAFTSANITY,Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
@@ -2514,7 +2514,7 @@ id,region,name,tags,mod_name
 7464,Farm,hardwood Preservation Chamber Recipe,CRAFTSANITY,Archaeology
 7465,Farm,Wooden Display Recipe,CRAFTSANITY,Archaeology
 7466,Farm,Hardwood Display Recipe,CRAFTSANITY,Archaeology
-7467,Farm,Warp Totem: Volcano Recipe,CRAFTSANITY,Archaeology
+7467,Farm,Warp Totem: Volcano Recipe,"CRAFTSANITY,GINGER_ISLAND",Archaeology
 7501,Mountain,Missing Envelope,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
 7502,Forest,Lost Emerald Ring,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
 7503,Forest,Mr.Ginger's request,"MANDATORY,QUEST",Mister Ginger (cat npc)
@@ -2571,7 +2571,7 @@ id,region,name,tags,mod_name
 7718,Island West,Fishsanity: Sea Sponge,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7719,Island South,Fishsanity: Shiny Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7720,Mutant Bug Lair,Fishsanity: Snatcher Worm,FISHSANITY,Stardew Valley Expanded
-7721,Beach,Fishsanity: Starfish,FISHSANITY,Stardew Valley Expanded
+7721,Beach,Fishsanity: Starfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7722,Fable Reef,Fishsanity: Torpedo Trout,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7723,Witch's Swamp,Fishsanity: Void Eel,FISHSANITY,Stardew Valley Expanded
 7724,Mutant Bug Lair,Fishsanity: Water Grub,FISHSANITY,Stardew Valley Expanded
@@ -2647,7 +2647,7 @@ id,region,name,tags,mod_name
 8076,Shipping,Shipsanity: Sports Drink,SHIPSANITY,Stardew Valley Expanded
 8077,Shipping,Shipsanity: Stalk Seed,"SHIPSANITY,GINGER_ISLAND",Stardew Valley Expanded
 8078,Shipping,Shipsanity: Stamina Capsule,SHIPSANITY,Stardew Valley Expanded
-8079,Shipping,Shipsanity: Starfish,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
+8079,Shipping,Shipsanity: Starfish,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8080,Shipping,Shipsanity: Swirl Stone,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8081,Shipping,Shipsanity: Thistle,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8082,Shipping,Shipsanity: Torpedo Trout,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
