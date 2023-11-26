@@ -120,8 +120,7 @@ class ERPlacementState:
         self.placements = []
         self.pairings = []
         self.world = world
-        self.collection_state = world.multiworld.get_all_state(True)
-        self.collection_state.allow_partial_entrances = True
+        self.collection_state = world.multiworld.get_all_state(True, True)
         self.coupled = coupled
 
     def has_placeable_exits(self) -> bool:
@@ -245,19 +244,28 @@ def randomize_entrances(
         preserve_group_order: bool = False
 ) -> ERPlacementState:
     """
-    Randomizes Entrances for a single world in the multiworld. This should usually be
-    called in pre_fill or possibly set_rules if you know what you're doing.
+    Randomizes Entrances for a single world in the multiworld.
+
+    Depending on how your world is configured, this may be called as early as create_regions or
+    need to be called as late as pre_fill. In general, earlier is better, ie the best time to
+    randomize entrances is as soon as the preconditions are fulfilled.
 
     Preconditions:
     1. All of your Regions and all of their exits have been created.
     2. Placeholder entrances have been created as the targets of randomization
        (each exit will be randomly paired to an entrance). <explain methods to do this>
-    3. Your Menu region is connected to your starting region
-    4. All the region connections you don't want to randomize are connected; usually this
+    3. All entrances and exits have been correctly labeled as 1 way or 2 way.
+    4. Your Menu region is connected to your starting region.
+    5. All the region connections you don't want to randomize are connected; usually this
        is connecting regions within a "scene" but may also include plando'd transitions.
-    5. Access rules are set on all relevant region exits
-    6. All event items and locations have been placed with access rules applied.
-    7. All non-event items have been added to the item pool.
+    6. Access rules are set on all relevant region exits.
+       * Access rules are used to conservatively prevent cases where, given a switch in region R_s
+         and the gate that it opens being the exit E_g to region R_g, the only way to access R_s
+         is through a connection R_g --(E_g)-> R_s, thus making R_s inaccessible. If you encode
+         this kind of cross-region dependency through events or indirect connections, those must
+         be placed/registered before calling this function if you want them to be respected.
+       * If you set access rules that contain items other than events, those items must be added to
+         the multiworld item pool before randomizing entrances.
 
     Postconditions:
     1. All randomizable Entrances will be connected
