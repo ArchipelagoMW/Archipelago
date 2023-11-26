@@ -266,7 +266,34 @@ class AggregatingStardewRule(StardewRule, ABC):
         # self._simplified = True
         # return self.identity.value
 
-        self.simplify()
+        if self._left_to_simplify_rules is None:
+            self.other_rules = frozenset(self.other_rules)
+            if self.complement in self.other_rules:
+                self._simplified = True
+                self.other_rules = (self.complement,)
+                return self.complement.value
+
+            self._left_to_simplify_rules = iter(self.other_rules)
+
+        for rule in self._left_to_simplify_rules:
+            simplified = rule.simplify()
+
+            if simplified is self.identity or simplified in self._simplified_rules:
+                continue
+
+            if simplified is self.complement:
+                self._simplified = True
+                self._simplified_rules = {self.complement}
+                return self.complement.value
+
+            self._simplified_rules.add(simplified)
+
+            if simplified(state) is self.complement.value:
+                return self.complement.value
+
+        self._simplified = True
+        self.other_rules = frozenset(self._simplified_rules)
+
         return f(r(state) for r in self.other_rules)
 
     def __str__(self):
@@ -282,58 +309,19 @@ class AggregatingStardewRule(StardewRule, ABC):
         return hash((self.combinable_rules, self.other_rules))
 
     def simplify(self) -> StardewRule:
-        # TODO merge simplify + __call__
-        if self._simplified:
-            return self
-
-        self.other_rules = frozenset(self.other_rules)
-        if self.complement in self.other_rules:
-            self.other_rules = (self.complement,)
-            return self.complement
-
-        self._simplified_rules = set()
-
-        self._left_to_simplify_rules = iter(self.other_rules)
-        for rule in self._left_to_simplify_rules:
-            simplified = rule.simplify()
-
-            if simplified is self.identity or simplified in self._simplified_rules:
-                continue
-
-            if simplified is self.complement:
-                self._simplified = True
-                self._simplified_rules = {self.complement}
-                return self.complement
-
-            self._simplified_rules.add(simplified)
-
-        self._simplified_rules = frozenset(self._simplified_rules)
-
-        if not self._simplified_rules and not self.combinable_rules:
-            self.other_rules = (self.identity,)
-            return self.identity
-
-        if len(self._simplified_rules) == 1 and not self.combinable_rules:
-            return next(iter(self._simplified_rules))
-
-        if not self._simplified_rules and len(self.combinable_rules) == 1:
-            return next(iter(self.combinable_rules.values()))
-
-        self.other_rules = self._simplified_rules
-        self._simplified = True
-        return self
-
-    def simplify2(self) -> StardewRule:
         # TODO is this needed now that we're using an iterator ?
         if self._simplified:
             return self
 
-        self.other_rules = frozenset(self.other_rules)
-        if self.complement in self.other_rules:
-            self.other_rules = (self.complement,)
-            return self.complement
+        if self._left_to_simplify_rules is None:
+            self.other_rules = frozenset(self.other_rules)
+            if self.complement in self.other_rules:
+                self._simplified = True
+                self.other_rules = (self.complement,)
+                return self.complement
 
-        self._left_to_simplify_rules = iter(self.other_rules)
+            self._left_to_simplify_rules = iter(self.other_rules)
+
         for rule in self._left_to_simplify_rules:
             simplified = rule.simplify()
 
@@ -348,15 +336,15 @@ class AggregatingStardewRule(StardewRule, ABC):
             self._simplified_rules.add(simplified)
 
         self._simplified = True
+        self.other_rules = frozenset(self._simplified_rules)
 
-        if not self._simplified_rules and not self.combinable_rules:
-            self._simplified_rules = {self.identity}
+        if not self.other_rules and not self.combinable_rules:
             return self.identity
 
-        if len(self._simplified_rules) == 1 and not self.combinable_rules:
-            return next(iter(self._simplified_rules))
+        if len(self.other_rules) == 1 and not self.combinable_rules:
+            return next(iter(self.other_rules))
 
-        if not self._simplified_rules and len(self.combinable_rules) == 1:
+        if not self.other_rules and len(self.combinable_rules) == 1:
             return next(iter(self.combinable_rules.values()))
 
         return self
