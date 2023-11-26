@@ -120,11 +120,11 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
         else:
             playername = world.player_name[playerid]
 
-        location_offset = location.level_offset()
-        item_location = get_symbol(location.rom_item_table(), location_offset)
+        location_offset = location.level_offset() + location.entry_offset()
+        item_location = get_symbol('ItemLocationTable', location_offset)
         rom.write_byte(item_location, itemid)
 
-        ext_data_location = get_symbol(location.rom_ext_data_table(), 4 * location_offset)
+        ext_data_location = get_symbol('ItemExtDataTable', 4 * location_offset)
         if playername is not None:
             multiworld_items[ext_data_location] = MultiworldExtData(playername, itemname)
         else:
@@ -140,7 +140,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
 
 def give_item(rom: LocalRom, item: WL4Item):
     if item.type == ItemType.JEWEL:
-        table_address = get_symbol('StartingInventoryLevelStatus')
+        table_address = get_symbol('StartingInventoryItemStatus')
         for level in range(4):
             index = 6 * item.passage + level
             address = table_address + index
@@ -151,7 +151,7 @@ def give_item(rom: LocalRom, item: WL4Item):
                 break
     elif item.type == ItemType.CD:
         index = 6 * item.passage + item.level
-        address = get_symbol('StartingInventoryLevelStatus', index)
+        address = get_symbol('StartingInventoryItemStatus', index)
         status = rom.read_byte(address)
         status |= 1 << 4
         rom.write_byte(address, status)
