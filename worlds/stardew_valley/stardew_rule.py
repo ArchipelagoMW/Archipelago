@@ -302,8 +302,10 @@ class Or(AggregatingStardewRule):
     symbol = " | "
 
     def __call__(self, state: CollectionState) -> bool:
+        if any(rule(state) for rule in self.combinable_rules.values()):
+            return True
         self.simplify()
-        return any(rule(state) for rule in self.rules_iterable)
+        return any(rule(state) for rule in self.other_rules)
 
     def __or__(self, other):
         if other is true_ or other is false_:
@@ -332,8 +334,10 @@ class And(AggregatingStardewRule):
     symbol = " & "
 
     def __call__(self, state: CollectionState) -> bool:
+        if not all(rule(state) for rule in self.combinable_rules.values()):
+            return False
         self.simplify()
-        return all(rule(state) for rule in self.rules_iterable)
+        return all(rule(state) for rule in self.other_rules)
 
     def __and__(self, other):
         if other is true_ or other is false_:
