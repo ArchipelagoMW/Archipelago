@@ -12,6 +12,7 @@ from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
 from .Regions import create_levels, default_levels
 from .Options import KDL3Options
+from .Presets import kdl3_options_presets
 from .Names import LocationName
 from .Room import KDL3Room
 from .Rules import set_rules
@@ -51,6 +52,7 @@ class KDL3WebWorld(WebWorld):
             ["Silvris"]
         )
     ]
+    options_presets = kdl3_options_presets
 
 
 class KDL3World(World):

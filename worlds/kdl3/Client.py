@@ -2,6 +2,7 @@ import logging
 import struct
 import time
 from struct import unpack, pack
+from collections import defaultdict
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
@@ -31,6 +32,7 @@ KDL3_LIFE_VISUAL = SRAM_1_START + 0x39E3
 KDL3_HEART_STARS = SRAM_1_START + 0x53A7
 KDL3_WORLD_UNLOCK = SRAM_1_START + 0x53CB
 KDL3_LEVEL_UNLOCK = SRAM_1_START + 0x53CD
+KDL3_CURRENT_WORLD = SRAM_1_START + 0x53CF
 KDL3_CURRENT_LEVEL = SRAM_1_START + 0x53D3
 KDL3_BOSS_STATUS = SRAM_1_START + 0x53D5
 KDL3_INVINCIBILITY_TIMER = SRAM_1_START + 0x54B1
@@ -95,6 +97,15 @@ consumable_addrs = {
     42: 1856,
     43: 1857,
 }
+
+deathlink_messages = defaultdict(lambda: " was defeated.", {
+    0x0200: " was bonked by apples from Whispy Woods.",
+    0x0201: " was out-maneuvered by Acro.",
+    0x0202: " was out-numbered by Pon & Con.",
+    0x0203: " was defeated by Ado's powerful paintings.",
+    0x0204: " was clobbered by King Dedede.",
+    0x0205: " lost their battle against Dark Matter."
+})
 
 
 class KDL3SNIClient(SNIClient):
@@ -203,6 +214,15 @@ class KDL3SNIClient(SNIClient):
         if not ctx.server:
             return
         # can't check debug anymore, without going and copying the value. might be important later.
+        if self.levels is None:
+            self.levels = dict()
+            for i in range(5):
+                level_data = await snes_read(ctx, KDL3_LEVEL_ADDR + (14 * i), 14)
+                self.levels[i] = unpack("HHHHHHH", level_data)
+
+        if self.consumables is None:
+            consumables = await snes_read(ctx, KDL3_CONSUMABLE_FLAG, 1)
+            self.consumables = consumables[0] == 0x01
         is_demo = await snes_read(ctx, KDL3_IS_DEMO, 1)  # 1 - recording a demo, 2 - playing back recorded, 3+ is a demo
         if is_demo[0] > 0x00:
             return
@@ -224,19 +244,12 @@ class KDL3SNIClient(SNIClient):
             return  # null, title screen, opening, save select, true and false endings
         game_state = await snes_read(ctx, KDL3_GAME_STATE, 1)
         current_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
+        current_world = struct.unpack("H", await snes_read(ctx, KDL3_CURRENT_WORLD, 2))[0]
+        current_level = struct.unpack("H", await snes_read(ctx, KDL3_CURRENT_LEVEL, 2))[0]
         if "DeathLink" in ctx.tags and game_state[0] == 0x00 and ctx.last_death_link + 1 < time.time():
             currently_dead = current_hp[0] == 0x00
-            await ctx.handle_deathlink_state(currently_dead)
-
-        if self.levels is None:
-            self.levels = dict()
-            for i in range(5):
-                level_data = await snes_read(ctx, KDL3_LEVEL_ADDR + (14 * i), 14)
-                self.levels[i] = unpack("HHHHHHH", level_data)
-
-        if self.consumables is None:
-            consumables = await snes_read(ctx, KDL3_CONSUMABLE_FLAG, 1)
-            self.consumables = consumables[0] == 0x01
+            message = deathlink_messages[self.levels[current_world][current_level-1]]
+            await ctx.handle_deathlink_state(currently_dead, f"{ctx.player_names[ctx.slot]}{message}")
 
         recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 2)
         recv_amount = unpack("H", recv_count)[0]
