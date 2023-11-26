@@ -218,7 +218,6 @@ class AggregatingStardewRule(StardewRule, ABC):
     _left_to_simplify_rules: Optional[Iterable[StardewRule]]
 
     def __init__(self, *rules: StardewRule, _combinable_rules=None):
-        self._simplified = False
         self._simplified_rules = set()
 
         if _combinable_rules is None:
@@ -226,6 +225,7 @@ class AggregatingStardewRule(StardewRule, ABC):
             rules, _combinable_rules = CombinableStardewRule.split_rules(rules, self.combine)
 
         self.other_rules = tuple(rules)
+        self._simplified = not rules
         self.combinable_rules = _combinable_rules
 
         self.detailed_unique_rules = self.other_rules
@@ -249,9 +249,6 @@ class AggregatingStardewRule(StardewRule, ABC):
         for rule in chain(self.combinable_rules.values()):
             if rule(state) is self.complement.value:
                 return self, self.complement.value
-
-        if not self.other_rules:
-            return self, self.identity.value
 
         if self._simplified:
             for rule in self.other_rules:
