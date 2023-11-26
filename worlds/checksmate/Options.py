@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import Callable
 
-from BaseClasses import MultiWorld
 from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict, PerGameCommonOptions
 
 

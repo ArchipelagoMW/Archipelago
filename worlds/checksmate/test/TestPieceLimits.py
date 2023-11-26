@@ -6,7 +6,6 @@ from . import CMTestBase
 
 
 class PieceLimitTestBase(CMTestBase):
-    options = {}
 
     def world_setup(self):
         super().world_setup()
@@ -15,6 +14,7 @@ class PieceLimitTestBase(CMTestBase):
         self.POTENTIAL_CHILDREN = self.world.PieceLimitCascade.POTENTIAL_CHILDREN
 
     def assert_matches(self, expected_minors: int, expected_majors: int, expected_queens: int):
+        self.assertTrue(self.options["min_material"] >= 39)
         self.assertEqual(0, self.world.find_piece_limit("Progressive Pawn", self.NO_CHILDREN
                                                         ))
         self.assertEqual(expected_minors, self.world.find_piece_limit("Progressive Minor Piece", self.NO_CHILDREN
@@ -33,13 +33,9 @@ class PieceLimitTestBase(CMTestBase):
 
 
 class TestChaosPieceLimits(PieceLimitTestBase):
-    options = {
-        "accessibility": "minimal",
-        "fairy_chess_army": "chaos",
-        "fairy_chess_pieces": 0
-    }
-
     def test_no_options(self):
+        self.options["fairy_chess_army"] = "chaos"
+        self.options["fairy_chess_pieces"] = 0
         expected_minors = 0
         expected_majors = 0
         expected_queens = 0
