@@ -4,28 +4,59 @@
     <title>Supported Games</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/supportedGames.css") }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/supportedGames.js") }}"></script>
+    <noscript>
+    <style>
+        /* always un-collapse all and hide arrow and search bar */
+        .js-only{
+          display: none;
+        }
+
+        #games p.collapsed{
+          display: block;
+        }
+
+        #games h2 .collapse-arrow{
+          display: none;
+        }
+
+        #games .collapse-toggle{
+          cursor: unset;
+        }
+    </style>
+    </noscript>
 {% endblock %}
 
 {% block body %}
     {% include 'header/oceanHeader.html' %}
     <div id="games" class="markdown">
         <h1>Currently Supported Games</h1>
+        <div class="js-only">
+            <label for="game-search">Search for your game below!</label><br />
+            <div class="page-controls">
+                <input id="game-search" placeholder="Search by title..." autofocus />
+                <button id="expand-all">Expand All</button>
+                <button id="collapse-all">Collapse All</button>
+            </div>
+        </div>
         {% for game_name in worlds | title_sorted %}
         {% set world = worlds[game_name] %}
-        <h2>{{ game_name }}</h2>
-        <p>
+        <h2 class="collapse-toggle" data-game="{{ game_name }}">
+            <span class="collapse-arrow">▶</span>{{ game_name }}
+        </h2>
+        <p class="collapsed">
             {{ world.__doc__ | default("No description provided.", true) }}<br />
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
             {% if world.web.tutorials %}
             <span class="link-spacer">|</span>
             <a href="{{ url_for("tutorial_landing") }}#{{ game_name }}">Setup Guides</a>
             {% endif %}
-            {% if world.web.settings_page is string %}
+            {% if world.web.options_page is string %}
             <span class="link-spacer">|</span>
-            <a href="{{ world.web.settings_page }}">Settings Page</a>
-            {% elif world.web.settings_page %}
+            <a href="{{ world.web.settings_page }}">Options Page</a>
+            {% elif world.web.options_page %}
             <span class="link-spacer">|</span>
-            <a href="{{ url_for("player_settings", game=game_name) }}">Settings Page</a>
+            <a href="{{ url_for("player_options", game=game_name) }}">Options Page</a>
             {% endif %}
             {% if world.web.bug_report_page %}
             <span class="link-spacer">|</span>

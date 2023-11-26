@@ -51,42 +51,42 @@ Mujinku-Vacuum|0-28|Default Music|False|5|7|11|
 MilK|0-36|Default Music|False|5|7|9|
 umpopoff|0-41|Default Music|False|0|?|0|
 Mopemope|0-45|Default Music|False|4|7|9|11
-The Happycore Idol|43-0|Just as Planned  Plus|True|2|5|7|
-Amatsumikaboshi|43-1|Just as Planned  Plus|True|4|6|8|10
-ARIGA THESIS|43-2|Just as Planned  Plus|True|3|6|10|
-Night of Nights|43-3|Just as Planned  Plus|False|4|7|10|
-#Psychedelic_Meguro_River|43-4|Just as Planned  Plus|False|3|6|8|
-can you feel it|43-5|Just as Planned  Plus|False|4|6|8|9
-Midnight O'clock|43-6|Just as Planned  Plus|True|3|6|8|
-Rin|43-7|Just as Planned  Plus|True|5|7|10|
-Smile-mileS|43-8|Just as Planned  Plus|False|6|8|10|
-Believing and Being|43-9|Just as Planned  Plus|True|4|6|9|
-Catalyst|43-10|Just as Planned  Plus|False|5|7|9|
-don't!stop!eroero!|43-11|Just as Planned  Plus|True|5|7|9|
-pa pi pu pi pu pi pa|43-12|Just as Planned  Plus|False|6|8|10|
-Sand Maze|43-13|Just as Planned  Plus|True|6|8|10|11
-Diffraction|43-14|Just as Planned  Plus|True|5|8|10|
-AKUMU|43-15|Just as Planned  Plus|False|4|6|8|
-Queen Aluett|43-16|Just as Planned  Plus|True|7|9|11|
-DROPS|43-17|Just as Planned  Plus|False|2|5|8|
-Frightfully-insane Flan-chan's frightful song|43-18|Just as Planned  Plus|False|5|7|10|
-snooze|43-19|Just as Planned  Plus|False|5|7|10|
-Kuishinbo Hacker feat.Kuishinbo Akachan|43-20|Just as Planned  Plus|True|5|7|9|
-Inu no outa|43-21|Just as Planned  Plus|True|3|5|7|
-Prism Fountain|43-22|Just as Planned  Plus|True|7|9|11|
-Gospel|43-23|Just as Planned  Plus|False|4|6|9|
+The Happycore Idol|43-0|MD Plus Project|True|2|5|7|
+Amatsumikaboshi|43-1|MD Plus Project|True|4|6|8|10
+ARIGA THESIS|43-2|MD Plus Project|True|3|6|10|
+Night of Nights|43-3|MD Plus Project|False|4|7|10|
+#Psychedelic_Meguro_River|43-4|MD Plus Project|False|3|6|8|
+can you feel it|43-5|MD Plus Project|False|4|6|8|9
+Midnight O'clock|43-6|MD Plus Project|True|3|6|8|
+Rin|43-7|MD Plus Project|True|5|7|10|
+Smile-mileS|43-8|MD Plus Project|False|6|8|10|
+Believing and Being|43-9|MD Plus Project|True|4|6|9|
+Catalyst|43-10|MD Plus Project|False|5|7|9|
+don't!stop!eroero!|43-11|MD Plus Project|True|5|7|9|
+pa pi pu pi pu pi pa|43-12|MD Plus Project|False|6|8|10|
+Sand Maze|43-13|MD Plus Project|True|6|8|10|11
+Diffraction|43-14|MD Plus Project|True|5|8|10|
+AKUMU|43-15|MD Plus Project|False|4|6|8|
+Queen Aluett|43-16|MD Plus Project|True|7|9|11|
+DROPS|43-17|MD Plus Project|False|2|5|8|
+Frightfully-insane Flan-chan's frightful song|43-18|MD Plus Project|False|5|7|10|
+snooze|43-19|MD Plus Project|False|5|7|10|
+Kuishinbo Hacker feat.Kuishinbo Akachan|43-20|MD Plus Project|True|5|7|9|
+Inu no outa|43-21|MD Plus Project|True|3|5|7|
+Prism Fountain|43-22|MD Plus Project|True|7|9|11|
+Gospel|43-23|MD Plus Project|False|4|6|9|
 East Ai Li Lovely|62-0|Happy Otaku Pack Vol.17|False|2|4|7|
 Mori Umi no Fune|62-1|Happy Otaku Pack Vol.17|True|5|7|9|
 Ooi|62-2|Happy Otaku Pack Vol.17|True|5|7|10|
 Numatta!!|62-3|Happy Otaku Pack Vol.17|True|5|7|9|
-SATELLITE|62-4|Happy Otaku Pack Vol.17|False|5|7|9|
+SATELLITE|62-4|Happy Otaku Pack Vol.17|False|5|7|9|10
 Fantasia Sonata Colorful feat. V!C|62-5|Happy Otaku Pack Vol.17|True|6|8|11|
 MuseDash ka nanika hi|61-0|Ola Dash|True|?|?|¿|
 Aleph-0|61-1|Ola Dash|True|7|9|11|
 Buttoba Supernova|61-2|Ola Dash|False|5|7|10|11
 Rush-Hour|61-3|Ola Dash|False|IG|Jh|a2|Eh
 3rd Avenue|61-4|Ola Dash|False|3|5|〇|
-WORLDINVADER|61-5|Ola Dash|True|5|8|10|
+WORLDINVADER|61-5|Ola Dash|True|5|8|10|11
 N3V3R G3T OV3R|60-0|maimai DX Limited-time Suite|True|4|7|10|
 Oshama Scramble!|60-1|maimai DX Limited-time Suite|True|5|7|10|
 Valsqotch|60-2|maimai DX Limited-time Suite|True|5|9|11|
@@ -404,7 +404,7 @@ trippers feeling!|8-4|Give Up TREATMENT Vol.3|True|5|7|9|11
 Lilith ambivalence lovers|8-5|Give Up TREATMENT Vol.3|False|5|8|10|
 Brave My Soul|7-0|Give Up TREATMENT Vol.2|False|4|6|8|
 Halcyon|7-1|Give Up TREATMENT Vol.2|False|4|7|10|
-Crimson Nightingle|7-2|Give Up TREATMENT Vol.2|True|4|7|10|
+Crimson Nightingale|7-2|Give Up TREATMENT Vol.2|True|4|7|10|
 Invader|7-3|Give Up TREATMENT Vol.2|True|3|7|11|
 Lyrith|7-4|Give Up TREATMENT Vol.2|False|5|7|10|
 GOODBOUNCE|7-5|Give Up TREATMENT Vol.2|False|4|6|9|
@@ -450,13 +450,13 @@ Love Patrol|63-2|MUSE RADIO FM104|True|3|5|7|
 Mahorova|63-3|MUSE RADIO FM104|True|3|5|8|
 Yoru no machi|63-4|MUSE RADIO FM104|True|1|4|7|
 INTERNET YAMERO|63-5|MUSE RADIO FM104|True|6|8|10|
-Abracadabra|43-24|Just as Planned  Plus|False|6|8|10|
-Squalldecimator feat. EZ-Ven|43-25|Just as Planned  Plus|True|5|7|9|
-Amateras Rhythm|43-26|Just as Planned  Plus|True|6|8|11|
-Record one's Dream|43-27|Just as Planned  Plus|False|4|7|10|
-Lunatic|43-28|Just as Planned  Plus|True|5|8|10|
-Jiumeng|43-29|Just as Planned  Plus|True|3|6|8|
-The Day We Become Family|43-30|Just as Planned  Plus|True|3|5|8|
+Abracadabra|43-24|MD Plus Project|False|6|8|10|
+Squalldecimator feat. EZ-Ven|43-25|MD Plus Project|True|5|7|9|
+Amateras Rhythm|43-26|MD Plus Project|True|6|8|11|
+Record one's Dream|43-27|MD Plus Project|False|4|7|10|
+Lunatic|43-28|MD Plus Project|True|5|8|10|
+Jiumeng|43-29|MD Plus Project|True|3|6|8|
+The Day We Become Family|43-30|MD Plus Project|True|3|5|8|
 Sutori ma FIRE!?!?|64-0|COSMIC RADIO PEROLIST|True|3|5|8|
 Tanuki Step|64-1|COSMIC RADIO PEROLIST|True|5|7|10|11
 Space Stationery|64-2|COSMIC RADIO PEROLIST|True|5|7|10|
@@ -465,7 +465,40 @@ Kawai Splendid Space Thief|64-4|COSMIC RADIO PEROLIST|False|6|8|10|11
 Night City Runway|64-5|COSMIC RADIO PEROLIST|True|4|6|8|
 Chaos Shotgun feat. ChumuNote|64-6|COSMIC RADIO PEROLIST|True|6|8|10|
 mew mew magical summer|64-7|COSMIC RADIO PEROLIST|False|5|8|10|11
-BrainDance|65-0|Neon Abyss|True|3|6|9|
-My Focus!|65-1|Neon Abyss|True|5|7|10|
-ABABABA BURST|65-2|Neon Abyss|True|5|7|9|
-ULTRA HIGHER|65-3|Neon Abyss|True|4|7|10|
+BrainDance|65-0|NeonAbyss|True|3|6|9|
+My Focus!|65-1|NeonAbyss|True|5|7|10|
+ABABABA BURST|65-2|NeonAbyss|True|5|7|9|
+ULTRA HIGHER|65-3|NeonAbyss|True|4|7|10|
+Silver Bullet|43-31|MD Plus Project|True|5|7|10|
+Random|43-32|MD Plus Project|True|4|7|9|
+OTOGE-BOSS-KYOKU-CHAN|43-33|MD Plus Project|False|6|8|10|11
+Crow Rabbit|43-34|MD Plus Project|True|7|9|11|
+SyZyGy|43-35|MD Plus Project|True|6|8|10|11
+Mermaid Radio|43-36|MD Plus Project|True|3|5|7|
+Helixir|43-37|MD Plus Project|False|6|8|10|
+Highway Cruisin'|43-38|MD Plus Project|False|3|5|8|
+JACK PT BOSS|43-39|MD Plus Project|False|6|8|10|
+Time Capsule|43-40|MD Plus Project|False|7|9|11|
+39 Music!|66-0|Miku in Museland|False|3|5|8|
+Hand in Hand|66-1|Miku in Museland|False|1|3|6|
+Cynical Night Plan|66-2|Miku in Museland|False|4|6|8|
+God-ish|66-3|Miku in Museland|False|4|7|10|
+Darling Dance|66-4|Miku in Museland|False|4|7|9|
+Hatsune Creation Myth|66-5|Miku in Museland|False|6|8|10|
+The Vampire|66-6|Miku in Museland|False|4|6|9|
+Future Eve|66-7|Miku in Museland|False|4|8|11|
+Unknown Mother Goose|66-8|Miku in Museland|False|4|8|10|
+Shun-ran|66-9|Miku in Museland|False|4|7|9|
+NICE TYPE feat. monii|43-41|MD Plus Project|True|3|6|8|
+Rainy Angel|67-0|Happy Otaku Pack Vol.18|True|4|6|9|11
+Gullinkambi|67-1|Happy Otaku Pack Vol.18|True|4|7|10|
+RakiRaki Rebuilders!!!|67-2|Happy Otaku Pack Vol.18|True|5|7|10|
+Laniakea|67-3|Happy Otaku Pack Vol.18|False|5|8|10|
+OTTAMA GAZER|67-4|Happy Otaku Pack Vol.18|True|5|8|10|
+Sleep Tight feat.Macoto|67-5|Happy Otaku Pack Vol.18|True|3|5|8|
+New York Back Raise|68-0|Gambler's Tricks|True|6|8|10|
+slic.hertz|68-1|Gambler's Tricks|True|5|7|9|
+Fuzzy-Navel|68-2|Gambler's Tricks|True|6|8|10|11
+Swing Edge|68-3|Gambler's Tricks|True|4|8|10|
+Twisted Escape|68-4|Gambler's Tricks|True|5|8|10|11
+Swing Sweet Twee Dance|68-5|Gambler's Tricks|False|4|7|10|
