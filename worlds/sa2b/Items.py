@@ -86,6 +86,7 @@ trap_table = {
     ItemName.reverse_trap:    ItemData(0xFF003A, False, True),
 
     ItemName.pong_trap:       ItemData(0xFF0050, False, True),
+    ItemName.platformer_trap: ItemData(0xFF0051, False, True),
 }
 
 emeralds_table = {

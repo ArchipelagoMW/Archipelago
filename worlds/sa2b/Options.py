@@ -154,6 +154,13 @@ class PongTrapWeight(BaseTrapWeight):
     display_name = "Pong Trap Weight"
 
 
+class PlatformerTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Platformer minigame
+    """
+    display_name = "Platformer Trap Weight"
+
+
 class MinigameTrapDifficulty(Choice):
     """
     How difficult any Minigame-style traps are
@@ -828,6 +835,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "cutscene_trap_weight": CutsceneTrapWeight,
     "reverse_trap_weight": ReverseTrapWeight,
     "pong_trap_weight": PongTrapWeight,
+    "platformer_trap_weight": PlatformerTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
 
     "sadx_music": SADXMusic,

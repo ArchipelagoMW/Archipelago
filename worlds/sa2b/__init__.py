@@ -150,12 +150,14 @@ class SA2BWorld(World):
 
             valid_trap_weights = self.options.exposition_trap_weight.value + \
                                  self.options.reverse_trap_weight.value + \
-                                 self.options.pong_trap_weight.value
+                                 self.options.pong_trap_weight.value + \
+                                 self.options.platformer_trap_weight.value
 
             if valid_trap_weights == 0:
                 self.options.exposition_trap_weight.value = 4
                 self.options.reverse_trap_weight.value = 4
                 self.options.pong_trap_weight.value = 4
+                self.options.platformer_trap_weight.value = 4
 
             if self.options.kart_race_checks.value == 0:
                 self.options.kart_race_checks.value = 2
@@ -291,6 +293,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.cutscene_trap] * self.options.cutscene_trap_weight.value)
         trap_weights += ([ItemName.reverse_trap] * self.options.reverse_trap_weight.value)
         trap_weights += ([ItemName.pong_trap] * self.options.pong_trap_weight.value)
+        trap_weights += ([ItemName.platformer_trap] * self.options.platformer_trap_weight.value)
 
         junk_count += extra_junk_count
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))

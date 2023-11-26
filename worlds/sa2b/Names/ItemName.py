@@ -64,6 +64,7 @@ cutscene_trap   = "Cutscene Trap"
 reverse_trap    = "Reverse Trap"
 
 pong_trap       = "Pong Trap"
+platformer_trap = "Platformer Trap"
 
 
 # Chaos Emeralds
