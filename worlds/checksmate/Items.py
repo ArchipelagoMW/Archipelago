@@ -11,8 +11,8 @@ class CMItem(Item):
 class CMItemData(NamedTuple):
     code: Optional[int]
     classification: ItemClassification
-    quantity: float = 1 # maximum, not guaranteed
-    material: int = 0 # pawns=2, minor=6, major=10, queen=18 - doubled to account for 0.5 values
+    quantity: float = 1  # maximum, not guaranteed
+    material: int = 0  # pawns=2, minor=6, major=10, queen=18 - doubled to account for 0.5 values
     parents: list[str] = None
 
 
@@ -87,15 +87,25 @@ item_table = {
 
 lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
 
-
 material_items: Dict[str, CMItemData] = {
     item: item_data for (item, item_data) in item_table.items() if item_data.material > 0}
 progression_items: Dict[str, CMItemData] = {
-    item: item_data for (item, item_data) in item_table.items() if item_data.classification == ItemClassification.progression}
+    item: item_data for (item, item_data) in item_table.items() if
+    item_data.classification == ItemClassification.progression}
 useful_items: Dict[str, CMItemData] = {
-    item: item_data for (item, item_data) in item_table.items() if item_data.classification == ItemClassification.useful}
+    item: item_data for (item, item_data) in item_table.items() if
+    item_data.classification == ItemClassification.useful}
 filler_items: Dict[str, CMItemData] = {
-    item: item_data for (item, item_data) in item_table.items() if item_data.classification == ItemClassification.filler}
+    item: item_data for (item, item_data) in item_table.items() if
+    item_data.classification == ItemClassification.filler}
+item_name_groups = {
+    # "Pawn": {"Pawn A", "Pawn B", "Pawn C", "Pawn D", "Pawn E", "Pawn F", "Pawn G", "Pawn H"},
+    "Enemy Pawn": {"Enemy Pawn A", "Enemy Pawn B", "Enemy Pawn C", "Enemy Pawn D",
+                   "Enemy Pawn E", "Enemy Pawn F", "Enemy Pawn G", "Enemy Pawn H"},
+    "Enemy Piece": {"Enemy Piece A", "Enemy Piece B", "Enemy Piece C", "Enemy Piece D",
+                    "Enemy Piece F", "Enemy Piece G", "Enemy Piece H"},
+    "Chessmen": {"Progressive Pawn", "Progressive Minor Piece", "Progressive Major Piece", "Progressive Consul"},
+}
 
 
 def create_item_with_correct_settings(player: int, name: str) -> Item:

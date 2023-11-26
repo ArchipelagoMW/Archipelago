@@ -3,10 +3,11 @@ import random
 from enum import Enum
 from typing import List, Dict, ClassVar, Callable
 
-from BaseClasses import Tutorial, Region, MultiWorld, Item
+from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from .Options import cm_options, get_option_value
-from .Items import CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items, useful_items
+from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
+                    useful_items, item_name_groups)
 from .Locations import CMLocation, location_table
 from .Options import cm_options
 from .Rules import set_rules
@@ -39,13 +40,7 @@ class CMWorld(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
     locked_locations: List[str]
 
-    item_name_groups = {
-        # "Pawn": {"Pawn A", "Pawn B", "Pawn C", "Pawn D", "Pawn E", "Pawn F", "Pawn G", "Pawn H"},
-        "Enemy Pawn": {"Enemy Pawn A", "Enemy Pawn B", "Enemy Pawn C", "Enemy Pawn D",
-                       "Enemy Pawn E", "Enemy Pawn F", "Enemy Pawn G", "Enemy Pawn H"},
-        "Enemy Piece": {"Enemy Piece A", "Enemy Piece B", "Enemy Piece C", "Enemy Piece D",
-                        "Enemy Piece F", "Enemy Piece G", "Enemy Piece H"},
-    }
+    item_name_groups = item_name_groups
     items_used: Dict[int, Dict[str, int]] = {}
     army: Dict[int, int] = {}
 
@@ -78,6 +73,7 @@ class CMWorld(World):
         super(CMWorld, self).__init__(multiworld, player)
         self.locked_locations = []
 
+    # TODO: this probably can go in some other method now??
     def generate_early(self) -> None:
         army_constraint = get_option_value(self.multiworld, self.player, "fairy_chess_army")
         if army_constraint != 0:
@@ -96,13 +92,6 @@ class CMWorld(World):
             else:
                 army_options = [0]
             self.army[self.player] = self.random.choice(army_options)
-        is_single = get_option_value(self.multiworld, self.player, "goal") == 0
-        if not is_single:
-            return
-        for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
-            self.multiworld.start_inventory[self.player].value[enemy_pawn] = 1
-        for enemy_piece in self.item_name_groups["Enemy Piece"]:
-            self.multiworld.start_inventory[self.player].value[enemy_piece] = 1
 
     def setting(self, name: str):
         return getattr(self.multiworld, name)[self.player]
@@ -125,6 +114,14 @@ class CMWorld(World):
         set_rules(self.multiworld, self.player)
 
     def create_items(self):
+        is_single = get_option_value(self.multiworld, self.player, "goal") == 0
+        if not is_single:
+            return
+        for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
+            self.multiworld.push_precollected(self.create_item(enemy_pawn))
+        for enemy_piece in self.item_name_groups["Enemy Piece"]:
+            self.multiworld.push_precollected(self.create_item(enemy_piece))
+
         # TODO: limit total material
         # items = [[self.create_item(item) for _ in range(item_data.quantity)]
         #                             for item, item_data in progression_items]0
@@ -287,6 +284,9 @@ class CMWorld(World):
 
     def under_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade) -> bool:
         piece_limit = self.find_piece_limit(chosen_item, with_children)
+        if self.player not in self.items_used:
+            # this can be the case during push_precollected
+            return True
         pieces_used = self.items_used[self.player].get(chosen_item, 0)
         if 0 < piece_limit <= pieces_used:
             # Intentionally ignore "parents" property: player might receive parent items after all children
@@ -328,14 +328,33 @@ class CMWorld(World):
     def piece_limit_of(self, chosen_item: str):
         return get_option_value(self.multiworld, self.player, self.piece_type_limit_options[chosen_item])
 
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        change = super().collect(state, item)
+        if self.has_prereqs(item.name):
+            state.prog_items[self.player]["Material"] += item_table[item.name].material
+        children = get_children(item.name)
+        for child in children:
+            if state.count(child, item.player) <= state.count(item.name, item.player):
+                state.prog_items[self.player]["Material"] += item_table[child].material
+        return change
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        change = super().remove(state, item)
+        if self.has_prereqs(item.name):
+            state.prog_items[self.player]["Material"] -= item_table[item.name].material
+        children = get_children(item.name)
+        for child in children:
+            if state.count(child, item.player) > state.count(item.name, item.player):
+                state.prog_items[self.player]["Material"] -= item_table[child].material
+        return change
+
 
 def get_limit_multiplier_for_item(item_dictionary: Dict[str, int]) -> Callable[[str], int]:
     return lambda item_name: item_dictionary[item_name]
 
 
 def get_parents(chosen_item: str) -> list[str]:
-    return [item for item in item_table
-            if item_table[chosen_item].parents is not None and item in item_table[chosen_item].parents]
+    return item_table[chosen_item].parents or []
 
 
 def get_children(chosen_item: str) -> list[str]:

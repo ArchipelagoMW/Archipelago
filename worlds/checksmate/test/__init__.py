@@ -11,6 +11,7 @@ class CMTestBase(WorldTestBase):
     options = {
         "accessibility": "minimal",
         "min_material": 42,
+        "locked_items": {"Progressive Major Piece": 5}
     }
 
     def world_setup(self, *args, **kwargs):
