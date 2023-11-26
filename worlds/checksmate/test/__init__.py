@@ -1,5 +1,6 @@
 from typing import ClassVar
 
+import Options
 from test.bases import WorldTestBase
 from .. import CMWorld
 
@@ -18,3 +19,4 @@ class CMTestBase(WorldTestBase):
         super().world_setup(*args, **kwargs)
         if self.constructed:
             self.world = self.multiworld.worlds[self.player]  # noqa
+            self.multiworld.accessibility[self.player] = Options.Accessibility.option_minimal
