@@ -374,7 +374,7 @@ def make_direct_hints(world: "WitnessWorld", hint_amount: int, own_itempool: Lis
 
         next_random_hint_is_item = not next_random_hint_is_item
 
-    return hints
+    return hints[:hint_amount]
 
 
 def generate_joke_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]:
