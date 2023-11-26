@@ -459,14 +459,6 @@ class Received(CombinableStardewRule):
         assert item_table[self.item].classification & ItemClassification.progression, \
             f"Item [{item_table[self.item].name}] has to be progression to be used in logic"
 
-    def __call__(self, state: CollectionState) -> bool:
-        return state.has(self.item, self.player, self.count)
-
-    def __repr__(self):
-        if self.count == 1:
-            return f"Received {self.item}"
-        return f"Received {self.count} {self.item}"
-
     @property
     def combination_key(self) -> Hashable:
         return self.item
@@ -474,6 +466,14 @@ class Received(CombinableStardewRule):
     @property
     def value(self):
         return self.count
+
+    def __call__(self, state: CollectionState) -> bool:
+        return state.has(self.item, self.player, self.count)
+
+    def __repr__(self):
+        if self.count == 1:
+            return f"Received {self.item}"
+        return f"Received {self.count} {self.item}"
 
     def get_difficulty(self):
         return self.count
