@@ -5,13 +5,14 @@ from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
 from .building_logic import BuildingLogicMixin
 from .has_logic import HasLogicMixin
+from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from ..locations import LocationTags, locations_by_tag
 from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, And
 from ..strings.building_names import Building
-from ..strings.region_names import Region
+from ..strings.ap_names.event_names import Event
 
 
 class ShippingLogicMixin(BaseLogicMixin):
@@ -20,7 +21,7 @@ class ShippingLogicMixin(BaseLogicMixin):
         self.shipping = ShippingLogic(*args, **kwargs)
 
 
-class ShippingLogic(BaseLogic[Union[ShippingLogicMixin, BuildingLogicMixin, RegionLogicMixin, HasLogicMixin]]):
+class ShippingLogic(BaseLogic[Union[ReceivedLogicMixin, ShippingLogicMixin, BuildingLogicMixin, RegionLogicMixin, HasLogicMixin]]):
 
     @cached_property
     def can_use_shipping_bin(self) -> StardewRule:
@@ -28,11 +29,7 @@ class ShippingLogic(BaseLogic[Union[ShippingLogicMixin, BuildingLogicMixin, Regi
 
     @cache_self1
     def can_ship(self, item: str) -> StardewRule:
-        return self.logic.shipping.can_ship_items & self.logic.has(item)
-
-    @cached_property
-    def can_ship_items(self) -> StardewRule:
-        return self.logic.region.can_reach(Region.shipping)
+        return self.logic.received(Event.can_ship_items) & self.logic.has(item)
 
     def can_ship_everything(self) -> StardewRule:
         shipsanity_prefix = "Shipsanity: "

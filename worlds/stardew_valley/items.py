@@ -131,6 +131,7 @@ events = [
     ItemData(None, Event.victory, ItemClassification.progression),
     ItemData(None, Event.can_construct_buildings, ItemClassification.progression),
     ItemData(None, Event.start_dark_talisman_quest, ItemClassification.progression),
+    ItemData(None, Event.can_ship_items, ItemClassification.progression),
 ]
 
 all_items: List[ItemData] = load_item_csv() + events

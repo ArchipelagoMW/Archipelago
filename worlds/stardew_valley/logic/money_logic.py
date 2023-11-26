@@ -10,6 +10,7 @@ from .time_logic import TimeLogicMixin
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region
+from ..strings.ap_names.event_names import Event
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "40 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "25 Qi Gems", "20 Qi Gems", "10 Qi Gems", "15 Qi Gems", "15 Qi Gems", "15 Qi Gems")
@@ -27,12 +28,12 @@ class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMix
     def can_have_earned_total(self, amount: int) -> StardewRule:
         if amount < 2000:
             return True_()
-        shipping_bin_rule = self.logic.region.can_reach(Region.shipping)
+        shipping_rule = self.logic.received(Event.can_ship_items)
         if amount < 10000:
-            return shipping_bin_rule
+            return shipping_rule
 
         percent_progression_items_needed = min(100, amount // 10000)
-        return shipping_bin_rule & HasProgressionPercent(self.player, percent_progression_items_needed)
+        return shipping_rule & HasProgressionPercent(self.player, percent_progression_items_needed)
 
     @cache_self1
     def can_spend(self, amount: int) -> StardewRule:

@@ -20,6 +20,7 @@ from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
+from .strings.region_names import Region as RegionName
 
 client_version = 0
 
@@ -140,8 +141,7 @@ class StardewValleyWorld(World):
         self.multiworld.itempool += created_items
 
         self.setup_early_items()
-        self.setup_construction_events()
-        self.setup_quest_events()
+        self.setup_player_events()
         self.setup_victory()
 
     def precollect_farm_type(self):
@@ -188,13 +188,22 @@ class StardewValleyWorld(World):
         if self.options.backpack_progression == BackpackProgression.option_early_progressive:
             self.multiworld.early_items[self.player]["Progressive Backpack"] = 1
 
+    def setup_player_events(self):
+        self.setup_construction_events()
+        self.setup_quest_events()
+        self.setup_action_events()
+
     def setup_construction_events(self):
-        can_construct_buildings = LocationData(None, "Carpenter Shop", Event.can_construct_buildings)
+        can_construct_buildings = LocationData(None, RegionName.carpenter, Event.can_construct_buildings)
         self.create_event_location(can_construct_buildings, True_(), Event.can_construct_buildings)
 
     def setup_quest_events(self):
-        start_dark_talisman_quest = LocationData(None, "Railroad", Event.start_dark_talisman_quest)
+        start_dark_talisman_quest = LocationData(None, RegionName.railroad, Event.start_dark_talisman_quest)
         self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key, Event.start_dark_talisman_quest)
+
+    def setup_action_events(self):
+        can_ship_event = LocationData(None, RegionName.shipping, Event.can_ship_items)
+        self.create_event_location(can_ship_event, True_(), Event.can_ship_items)
 
     def setup_victory(self):
         if self.options.goal == Goal.option_community_center:
