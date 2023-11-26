@@ -254,7 +254,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     "key": f"pokemon_emerald_events_{ctx.team}_{ctx.slot}",
                     "default": 0,
                     "want_reply": False,
-                    "operations": [{"operation": "replace", "value": event_bitfield}]
+                    "operations": [{"operation": "or", "value": event_bitfield}]
                 }])
                 self.local_set_events = local_set_events
 
@@ -269,7 +269,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     "key": f"pokemon_emerald_keys_{ctx.team}_{ctx.slot}",
                     "default": 0,
                     "want_reply": False,
-                    "operations": [{"operation": "replace", "value": key_bitfield}]
+                    "operations": [{"operation": "or", "value": key_bitfield}]
                 }])
                 self.local_found_key_items = local_found_key_items
         except bizhawk.RequestFailedError:
