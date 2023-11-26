@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
-from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable
+from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple
 
 from frozendict import frozendict
 
@@ -152,7 +152,29 @@ class CombinableStardewRule(StardewRule, ABC):
         return self.combination_key == other.combination_key
 
     @staticmethod
-    def reduce(rules: Union[Iterable[CombinableStardewRule], Sized],
+    def split_rules(rules: Union[Iterable[StardewRule]],
+                    reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
+            -> Tuple[Tuple[StardewRule, ...], frozendict[Hashable, CombinableStardewRule]]:
+        if not rules:
+            return (), frozendict()
+
+        other_rules = []
+        reduced_rules = {}
+        for rule in rules:
+            if isinstance(rule, CombinableStardewRule):
+                key = rule.combination_key
+                if key not in reduced_rules:
+                    reduced_rules[key] = rule
+                    continue
+
+                reduced_rules[key] = reducer(reduced_rules[key], rule)
+            else:
+                other_rules.append(rule)
+
+        return tuple(other_rules), frozendict(reduced_rules)
+
+    @staticmethod
+    def reduce(rules: Union[Iterable[CombinableStardewRule]],
                reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
             -> frozendict[Hashable, CombinableStardewRule]:
         if not rules:
@@ -212,8 +234,7 @@ class AggregatingStardewRule(StardewRule, ABC):
 
         if _combinable_rules is _default_combinable_rules:
             assert rules, f"Can't create an aggregating condition without rules"
-            _combinable_rules = CombinableStardewRule.reduce((i for i in rules if isinstance(i, CombinableStardewRule)), self.combine)
-            rules = (i for i in rules if not isinstance(i, CombinableStardewRule))
+            rules, _combinable_rules = CombinableStardewRule.split_rules(rules, self.combine)
 
         self.unique_rules = tuple(rules)
         self.combinable_rules = _combinable_rules
