@@ -130,6 +130,7 @@ class MultiworldInstance():
         self.cert = config["SELFLAUNCHCERT"]
         self.key = config["SELFLAUNCHKEY"]
         self.host = config["HOST_ADDRESS"]
+        self.game_ports = config["GAME_PORTS"]
 
     def start(self):
         if self.process and self.process.is_alive():
@@ -138,7 +139,7 @@ class MultiworldInstance():
         logging.info(f"Spinning up {self.room_id}")
         process = multiprocessing.Process(group=None, target=run_server_process,
                                           args=(self.room_id, self.ponyconfig, get_static_server_data(),
-                                                self.cert, self.key, self.host),
+                                                self.cert, self.key, self.host, self.game_ports),
                                           name="MultiHost")
         process.start()
         # bind after start to prevent thread sync issues with guardian.
