@@ -35,6 +35,7 @@ class CMWorld(World):
     data_version = 0
     web = CMWeb()
     required_client_version = (0, 3, 4)
+    # options: CMOptions
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
@@ -307,7 +308,7 @@ class CMWorld(World):
 
         piece_limit: int = self.piece_limit_of(chosen_item)
         limit_multiplier = get_limit_multiplier_for_item({chosen_item: 1})
-        is_army_constrained = get_option_value(self.multiworld, self.player, "fairy_chess_army")
+        is_army_constrained = self.options.fairy_chess_army.value
         # Chaos: Chooses random enabled options.
         if is_army_constrained == 0:
             limit_multiplier = get_limit_multiplier_for_item(self.known_pieces)

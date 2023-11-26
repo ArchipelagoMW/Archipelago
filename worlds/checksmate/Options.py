@@ -1,7 +1,7 @@
 from typing import Dict, Union, List, FrozenSet
 
 from BaseClasses import MultiWorld
-from Options import Range, Option, Choice, Toggle, SpecialRange, ItemDict
+from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict
 
 """
 Most of these are not implemented yet
@@ -243,43 +243,49 @@ class FairyKings(Range):
     default = 0
 
 
-class MinorPieceLimitByType(SpecialRange):
+class MinorPieceLimitByType(NamedRange):
     """
     How many of any given type of minor piece you might play with. If set to 1, you will never start with more than 1
     Knight, nor 1 Bishop, but you may have both 1 Knight and 1 Bishop. If set to 0, this setting is disabled.
     """
     display_name = "Minor Piece Limit by Type"
-    range_start = 0
+    range_start = 1
     range_end = 9
     default = 0
-    special_range_cutoff = 1
+    special_range_names = {
+        "disabled": 0,
+    }
 
 
-class MajorPieceLimitByType(SpecialRange):
+class MajorPieceLimitByType(NamedRange):
     """
     How many of any given type of major piece you might play with. If set to 1, you will never start with more than 1
     Rook. If set to 0, this setting is disabled.
     """
     display_name = "Major Piece Limit by Type"
-    range_start = 0
+    range_start = 1
     range_end = 9
     default = 0
-    special_range_cutoff = 1
+    special_range_names = {
+        "disabled": 0,
+    }
 
 
-class QueenPieceLimitByType(SpecialRange):
+class QueenPieceLimitByType(NamedRange):
     """
     How many of any given type of Queen-equivalent piece you might play with. If set to 1, you will never start with
     more than 1 Queen. You may have both 1 Queen and 1 Amazon. If set to 0, this setting is disabled.
     """
     display_name = "Queen Piece Limit by Type"
-    range_start = 0
+    range_start = 1
     range_end = 5
     default = 0
-    special_range_cutoff = 1
+    special_range_names = {
+        "disabled": 0,
+    }
 
 
-class PocketLimitByPocket(SpecialRange):
+class PocketLimitByPocket(NamedRange):
     """
     How many Progressive Pocket items might be allocated to any given pocket. If this is set to 1, any given Pocket will
     never hold anything more substantial than a Pawn. If this is set to 3, any given Pocket will never hold a Queen.
@@ -287,23 +293,27 @@ class PocketLimitByPocket(SpecialRange):
     The default of 4 allows each of the 3 spaces to hold between 0-4 progressive items.
     """
     display_name = "Pocket Limit by Pocket"
-    range_start = 0
+    range_start = 1
     range_end = 4
     default = 4
-    special_range_cutoff = 1
+    special_range_names = {
+        "disabled": 0,
+    }
 
 
-class QueenPieceLimit(SpecialRange):
+class QueenPieceLimit(NamedRange):
     """
     How many Queen-equivalent pieces you might play with. If set to 1, you will never have more than 1 piece upgraded to
     a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still promote pawns during a
     game. If set to 0, this setting is disabled.
     """
     display_name = "Queen Piece Limit"
-    range_start = 0
+    range_start = 1
     range_end = 7
     default = 0
-    special_range_cutoff = 1
+    special_range_names = {
+        "disabled": 0,
+    }
 
 
 class ItemLimitByType(ItemDict):

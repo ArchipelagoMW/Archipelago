@@ -14,10 +14,10 @@ def owned_items(state: CollectionState, player: int):
 
 
 def individual_piece_material(state: CollectionState, item_id: str, item: CMItemData, player: int) -> int:
-    val = state.item_count(item_id, player) * item.material
+    val = state.count(item_id, player) * item.material
     if item.parents is not None:
         parent_items = [item_id] + [parent_name for parent_name in item.parents]
-        val = min(val, min([state.item_count(item_name, player) for item_name in parent_items]) * item.material)
+        val = min(val, min([state.count(item_name, player) for item_name in parent_items]) * item.material)
 
     return val
 
