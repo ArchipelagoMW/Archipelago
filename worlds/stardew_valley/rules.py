@@ -22,6 +22,7 @@ from .strings.ap_names.event_names import Event
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building
+from .strings.bundle_names import CCRoom
 from .strings.calendar_names import Weekday
 from .strings.craftable_names import Bomb
 from .strings.crop_names import Fruit
@@ -126,6 +127,8 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
             bundle_rules = logic.bundle.can_complete_bundle(bundle).simplify()
             room_rules.append(bundle_rules)
             MultiWorldRules.set_rule(location, bundle_rules)
+        if bundle_room.name == CCRoom.abandoned_joja_mart:
+            continue
         room_location = f"Complete {bundle_room.name}"
         MultiWorldRules.add_rule(multiworld.get_location(room_location, player), And(*room_rules))
 

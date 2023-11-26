@@ -93,6 +93,13 @@ def minimal_locations_maximal_items():
 
 
 @cache_argsless
+def minimal_locations_maximal_items_with_island():
+    min_max_options = minimal_locations_maximal_items()
+    min_max_options.update({ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false})
+    return min_max_options
+
+
+@cache_argsless
 def allsanity_options_without_mods():
     allsanity = {
         Goal.internal_name: Goal.option_perfection,

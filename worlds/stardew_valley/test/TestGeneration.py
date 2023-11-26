@@ -3,7 +3,7 @@ from typing import List
 
 from BaseClasses import ItemClassification, MultiWorld, Item
 from . import setup_solo_multiworld, SVTestBase, get_minsanity_options, allsanity_options_without_mods, \
-    allsanity_options_with_mods, minimal_locations_maximal_items, SVTestCase, default_options
+    allsanity_options_with_mods, minimal_locations_maximal_items, SVTestCase, default_options, minimal_locations_maximal_items_with_island
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import Group, item_table
@@ -343,7 +343,17 @@ class TestLocationAndItemCount(SVTestCase):
         number_items = len([item for item in multiworld.itempool
                             if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups])
         self.assertGreaterEqual(number_locations, number_items)
-        print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items}")
+        print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND EXCLUDED]")
+
+    def test_minimal_location_maximal_items_with_island_still_valid(self):
+        min_max_options = minimal_locations_maximal_items_with_island()
+        multiworld = setup_solo_multiworld(min_max_options)
+        valid_locations = get_real_locations(self, multiworld)
+        number_locations = len(valid_locations)
+        number_items = len([item for item in multiworld.itempool
+                            if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups])
+        self.assertGreaterEqual(number_locations, number_items)
+        print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND INCLUDED]")
 
     def test_minsanity_has_fewer_than_locations(self):
         expected_locations = 122

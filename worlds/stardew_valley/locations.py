@@ -317,7 +317,9 @@ def extend_mandatory_locations(randomized_locations: List[LocationData], options
 
 def extend_bundle_locations(randomized_locations: List[LocationData], bundle_rooms: List[BundleRoom]):
     for room in bundle_rooms:
-        randomized_locations.append(location_table[f"Complete {room.name}"])
+        room_location = f"Complete {room.name}"
+        if room_location in location_table:
+            randomized_locations.append(location_table[room_location])
         for bundle in room.bundles:
             randomized_locations.append(location_table[bundle.name])
 

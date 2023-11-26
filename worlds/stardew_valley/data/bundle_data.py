@@ -6,6 +6,7 @@ from ..strings.artisan_good_names import ArtisanGood
 from ..strings.bundle_names import CCRoom, BundleName
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
+from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ..strings.fish_names import Fish, WaterItem, Trash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Beverage, Meal
@@ -151,6 +152,18 @@ pomegranate = BundleItem(Fruit.pomegranate)
 cherry = BundleItem(Fruit.cherry)
 banana = IslandBundleItem(Fruit.banana)
 mango = IslandBundleItem(Fruit.mango)
+
+basic_fertilizer = BundleItem(Fertilizer.basic, 100)
+quality_fertilizer = BundleItem(Fertilizer.quality, 20)
+deluxe_fertilizer = IslandBundleItem(Fertilizer.deluxe, 5)
+basic_retaining_soil = BundleItem(RetainingSoil.basic, 80)
+quality_retaining_soil = BundleItem(RetainingSoil.quality, 50)
+deluxe_retaining_soil = IslandBundleItem(RetainingSoil.deluxe, 20)
+speed_gro = BundleItem(SpeedGro.basic, 40)
+deluxe_speed_gro = BundleItem(SpeedGro.deluxe, 20)
+hyper_speed_gro = IslandBundleItem(SpeedGro.hyper, 5)
+tree_fertilizer = BundleItem(Fertilizer.tree, 20)
+
 lobster = BundleItem(Fish.lobster)
 crab = BundleItem(Fish.crab)
 shrimp = BundleItem(Fish.shrimp)
@@ -433,12 +446,17 @@ orchard_bundle = BundleTemplate(CCRoom.pantry, BundleName.orchard, orchard_items
 island_crops_items = [pineapple, taro_root, banana, mango]
 island_crops_bundle = IslandBundleTemplate(CCRoom.pantry, BundleName.island_crops, island_crops_items, 3, 3)
 
+agronomist_items = [basic_fertilizer, quality_fertilizer, deluxe_fertilizer,
+                    basic_retaining_soil, quality_retaining_soil, deluxe_retaining_soil,
+                    speed_gro, deluxe_speed_gro, hyper_speed_gro, tree_fertilizer]
+agronomist_bundle = BundleTemplate(CCRoom.pantry, BundleName.agronomist, agronomist_items, 4, 3)
+
 pantry_bundles_vanilla = [spring_crops_bundle_vanilla, summer_crops_bundle_vanilla, fall_crops_bundle_vanilla,
                           quality_crops_bundle_vanilla, animal_bundle_vanilla, artisan_bundle_vanilla]
 pantry_bundles_thematic = [spring_crops_bundle_thematic, summer_crops_bundle_thematic, fall_crops_bundle_thematic,
                            quality_crops_bundle_thematic, animal_bundle_thematic, artisan_bundle_thematic]
 pantry_bundles_remixed = [*pantry_bundles_thematic, rare_crops_bundle, fish_farmer_bundle, garden_bundle,
-                          brewer_bundle, orchard_bundle, island_crops_bundle]
+                          brewer_bundle, orchard_bundle, island_crops_bundle, agronomist_bundle]
 pantry_vanilla = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_vanilla, 6)
 pantry_thematic = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_thematic, 6)
 pantry_remixed = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_remixed, 6)
@@ -467,9 +485,11 @@ night_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.night_fi
 night_fish_bundle_thematic = BundleTemplate.extend_from(night_fish_bundle_vanilla, night_fish_items_thematic)
 
 crab_pot_items_vanilla = [lobster, crayfish, crab, cockle, mussel, shrimp, snail, periwinkle, oyster, clam]
-crab_pot_items_thematic = [*crab_pot_items_vanilla, trash, driftwood, soggy_newspaper, broken_cd, broken_glasses]
+crab_pot_trash_items = [trash, driftwood, soggy_newspaper, broken_cd, broken_glasses]
+crab_pot_items_thematic = [*crab_pot_items_vanilla, *crab_pot_trash_items]
 crab_pot_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.crab_pot, crab_pot_items_vanilla, 10, 5)
 crab_pot_bundle_thematic = BundleTemplate.extend_from(crab_pot_bundle_vanilla, crab_pot_items_thematic)
+recycling_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.recycling, crab_pot_trash_items, 4, 4)
 
 specialty_fish_items_vanilla = [pufferfish, ghostfish, sandfish, woodskip]
 specialty_fish_items_thematic = [*specialty_fish_items_vanilla, scorpion_carp, eel, octopus, lava_eel, ice_pip,
@@ -511,8 +531,11 @@ fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla
                              night_fish_bundle_vanilla, crab_pot_bundle_vanilla, specialty_fish_bundle_vanilla]
 fish_tank_bundles_thematic = [river_fish_bundle_thematic, lake_fish_bundle_thematic, ocean_fish_bundle_thematic,
                               night_fish_bundle_thematic, crab_pot_bundle_thematic, specialty_fish_bundle_thematic]
-fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle,
-                             winter_fish_bundle, rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle]
+fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle,
+                             recycling_bundle, rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle]
+# In Remixed, the trash items are in the recycling bundle, so we don't use the thematic version of the crab pot bundle that added trash items to it
+fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)
+fish_tank_bundles_remixed.append(crab_pot_bundle_vanilla)
 fish_tank_vanilla = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_vanilla, 6)
 fish_tank_thematic = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_thematic, 6)
 fish_tank_remixed = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_remixed, 6)
@@ -618,6 +641,12 @@ missing_bundle_items_thematic = [*missing_bundle_items_vanilla, pale_ale.as_qual
 missing_bundle_vanilla = BundleTemplate(CCRoom.abandoned_joja_mart, BundleName.missing_bundle, missing_bundle_items_vanilla, 6, 5)
 missing_bundle_thematic = BundleTemplate.extend_from(missing_bundle_vanilla, missing_bundle_items_thematic)
 
+abandoned_joja_mart_bundles_vanilla = [missing_bundle_vanilla]
+abandoned_joja_mart_bundles_thematic = [missing_bundle_thematic]
+abandoned_joja_mart_vanilla = BundleRoomTemplate(CCRoom.abandoned_joja_mart, abandoned_joja_mart_bundles_vanilla, 1)
+abandoned_joja_mart_thematic = BundleRoomTemplate(CCRoom.abandoned_joja_mart, abandoned_joja_mart_bundles_thematic, 1)
+abandoned_joja_mart_remixed = abandoned_joja_mart_thematic
+
 # Make thematic with other currencies
 vault_2500_gold = BundleItem.money_bundle(2500)
 vault_5000_gold = BundleItem.money_bundle(5000)
@@ -643,7 +672,7 @@ vault_qi_helper_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.qi_help
 
 vault_bundles_vanilla = [vault_2500_bundle, vault_5000_bundle, vault_10000_bundle, vault_25000_bundle]
 vault_bundles_thematic = vault_bundles_vanilla
-vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_helper_bundle, vault_carnival_bundle]  # , vault_walnut_hunter_bundle
+vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_helper_bundle]  # , vault_carnival_bundle , vault_walnut_hunter_bundle
 vault_vanilla = BundleRoomTemplate(CCRoom.vault, vault_bundles_vanilla, 4)
 vault_thematic = BundleRoomTemplate(CCRoom.vault, vault_bundles_thematic, 4)
 vault_remixed = BundleRoomTemplate(CCRoom.vault, vault_bundles_remixed, 4)

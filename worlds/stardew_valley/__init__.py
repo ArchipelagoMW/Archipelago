@@ -329,8 +329,8 @@ class StardewValleyWorld(World):
             bundles[room.name] = dict()
             for bundle in room.bundles:
                 bundles[room.name][bundle.name] = {"number_required": bundle.number_required}
-                for item in bundle.items:
-                    bundles[room.name][bundle.name][item.item_name] = f"{item.amount} of {item.quality}"
+                for i, item in enumerate(bundle.items):
+                    bundles[room.name][bundle.name][i] = f"{item.item_name}|{item.amount}|{item.quality}"
 
         excluded_options = [BundleRandomization, BundlePrice, NumberOfMovementBuffs, NumberOfLuckBuffs]
         excluded_option_names = [option.internal_name for option in excluded_options]
