@@ -6,7 +6,7 @@ from typing import List, Dict, ClassVar, Callable, Type
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
-from .Options import get_option_value, CMOptions
+from .Options import CMOptions
 from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
                     useful_items, item_name_groups)
 from .Locations import CMLocation, location_table
@@ -76,9 +76,9 @@ class CMWorld(World):
 
     # TODO: this probably can go in some other method now??
     def generate_early(self) -> None:
-        army_constraint = get_option_value(self.multiworld, self.player, "fairy_chess_army")
+        army_constraint = self.options.fairy_chess_army
         if army_constraint != 0:
-            which_pieces = get_option_value(self.multiworld, self.player, "fairy_chess_pieces")
+            which_pieces = self.options.fairy_chess_pieces
             # Full: Adds the 12 Chess With Different Armies pieces, the Cannon, and the Vao.
             if which_pieces == 1:
                 army_options = [0, 1, 2, 3, 4]
@@ -100,7 +100,7 @@ class CMWorld(World):
     def fill_slot_data(self) -> dict:
         cursed_knowledge = {name: self.random.getrandbits(31) for name in [
             "pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"]}
-        potential_pockets = [0,0,0,0,1,1,1,1,2,2,2,2]
+        potential_pockets = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]
         self.random.shuffle(potential_pockets)
         cursed_knowledge["pocket_order"] = potential_pockets
         if self.player in self.army:
@@ -120,7 +120,7 @@ class CMWorld(World):
         set_rules(self.multiworld, self.player)
 
     def create_items(self):
-        is_single = get_option_value(self.multiworld, self.player, "goal") == 0
+        is_single = self.options.goal.value == 0
         if not is_single:
             return
         for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
@@ -134,15 +134,12 @@ class CMWorld(World):
         excluded_items = get_excluded_items(self.multiworld, self.player)
         self.items_used[self.player] = {}
         # remove items player does not want
-        self.items_used[self.player]["Progressive Consul"] = (
-                3 - get_option_value(self.multiworld, self.player, "max_kings"))
-        self.items_used[self.player]["Progressive King Promotion"] = (
-                2 - get_option_value(self.multiworld, self.player, "fairy_kings"))
-        self.items_used[self.player]["Progressive Engine ELO Lobotomy"] = (
-                5 - get_option_value(self.multiworld, self.player, "max_engine_penalties"))
-        self.items_used[self.player]["Progressive Pocket"] = (
-                12 - min(get_option_value(self.multiworld, self.player, "max_pocket"),
-                         get_option_value(self.multiworld, self.player, "pocket_limit_by_pocket") * 3))
+        self.items_used[self.player]["Progressive Consul"] = 3 - self.options.max_kings.value
+        self.items_used[self.player]["Progressive King Promotion"] = 2 - self.options.fairy_kings.value
+        self.items_used[self.player]["Progressive Engine ELO Lobotomy"] = 5 - self.options.max_engine_penalties.value
+        self.items_used[self.player]["Progressive Pocket"] = (12 -
+                                                              min(self.options.max_pocket.value,
+                                                                  self.options.pocket_limit_by_pocket.value * 3))
 
         # setup for starting_inventory generic collection and then for early_material custom option
         for item_name in excluded_items:
@@ -164,17 +161,17 @@ class CMWorld(World):
         material = sum([
             progression_items[item].material * self.items_used[self.player][item]
             for item in self.items_used[self.player] if item in progression_items])
-        min_material_option = get_option_value(self.multiworld, self.player, "min_material") * 100
-        max_material_option = get_option_value(self.multiworld, self.player, "max_material") * 100
+        min_material_option = self.options.min_material.value * 100
+        max_material_option = self.options.max_material.value * 100
         if max_material_option < min_material_option:
             max_material_option = min_material_option
         max_material_actual = (
-            self.random.random() * (
+                self.random.random() * (
                 max_material_option - min_material_option) + max_material_option)
         max_material_actual += progression_items["Play as White"].material
 
         # add items player really wants
-        yaml_locked_items = get_option_value(self.multiworld, self.player, 'locked_items')
+        yaml_locked_items = self.options.locked_items.value
         for item in yaml_locked_items:
             if item not in self.items_used[self.player]:
                 self.items_used[self.player][item] = 0
@@ -300,7 +297,8 @@ class CMWorld(World):
             return False
         # Limit pieces placed by total number
         if chosen_item in self.piece_limit_options:
-            piece_total_limit = get_option_value(self.multiworld, self.player, self.piece_limit_options[chosen_item])
+            # TODO: fix, it's super broken
+            piece_total_limit = self.options[self.piece_limit_options[chosen_item]].value
             pieces_used = self.items_used[self.player].get(chosen_item, 0)
             if 0 < piece_total_limit <= pieces_used:
                 return False
@@ -332,7 +330,8 @@ class CMWorld(World):
         return piece_limit
 
     def piece_limit_of(self, chosen_item: str):
-        return get_option_value(self.multiworld, self.player, self.piece_type_limit_options[chosen_item])
+        # TODO: fix, it's super broken
+        return self.options[self.piece_type_limit_options[chosen_item]]
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
@@ -386,7 +385,8 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Dict[str, int]:
 def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Dict[str, int],
                          locked_locations: List[str]) -> List[Item]:
     non_local_items = multiworld.non_local_items[player].value
-    early_material_option = get_option_value(multiworld, player, "early_material")
+    cmoptions: CMOptions = multiworld.worlds[player].options
+    early_material_option = cmoptions.early_material.value
     if early_material_option > 0:
         early_units = []
         if early_material_option == 1 or early_material_option > 4:
