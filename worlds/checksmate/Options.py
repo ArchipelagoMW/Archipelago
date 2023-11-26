@@ -407,20 +407,3 @@ class CMOptions(PerGameCommonOptions):
     # maximum_items: MaximumItems
     locked_items: LockedItems
     death_link: DeathLink
-
-
-def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
-    return get_option_value(world, player, name) > 0
-
-
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List, FrozenSet]:
-    if world is None:
-        return cm_options[name].default
-    option = getattr(world, name, None)
-    if option is None:
-        # TODO(chesslogic): is this necessary when the default for my class isn't 0?
-        if name in cm_options:
-            return cm_options[name].default
-        return 0
-
-    return option[player].value

@@ -6,7 +6,7 @@ from .. import checksmate
 
 from ..generic.Rules import set_rule
 from .Items import item_table, CMItemData
-from .Options import get_option_value
+from .Options import CMOptions
 
 
 def owned_items(state: CollectionState, player: int):
@@ -34,11 +34,9 @@ def has_piece_material(state: CollectionState, player: int, amount: int) -> bool
 
 
 def has_chessmen(state: CollectionState, player: int) -> int:
-    return (len([item for item in owned_items(state, player) if item in [
-        "Progressive Minor Piece", "Progressive Major Piece", "Progressive Pawn",
-        "Progressive Consul"]]) +
-            ceil(state.count("Progressive Pocket", player) /
-                 get_option_value(state.multiworld, player, "pocket_limit_by_pocket")))
+    cmoptions: CMOptions = state.multiworld.worlds[player].options
+    return state.count_group("Chessmen", player) + ceil(
+        state.count("Progressive Pocket", player) / cmoptions.pocket_limit_by_pocket)
 
 
 def has_french_move(state: CollectionState, player: int) -> bool:
