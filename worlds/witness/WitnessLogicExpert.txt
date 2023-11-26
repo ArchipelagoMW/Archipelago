@@ -719,14 +719,14 @@ Bunker Laser Platform (Bunker) - Bunker Elevator - TrueOneWay:
 158710 - 0x09DE0 (Laser Panel) - True - True
 Laser - 0x0C2B2 (Laser) - 0x09DE0
 
+==Swamp==
+
 Outside Swamp (Swamp) - Swamp Entry Area - 0x00C1C - Main Island - True:
 158287 - 0x0056E (Entry Panel) - True - Rotated Shapers & Black/White Squares & Triangles
 Door - 0x00C1C (Entry) - 0x0056E
 159321 - 0x03603 (Purple Sand Middle EP) - 0x17E2B - True
 159322 - 0x03601 (Purple Sand Top EP) - 0x17E2B - True
 159327 - 0x035DE (Purple Sand Bottom EP) - True - True
-
-==Swamp==
 
 Swamp Entry Area (Swamp) - Swamp Sliding Bridge - TrueOneWay:
 158288 - 0x00469 (Intro Front 1) - True - Black/White Squares & Shapers
