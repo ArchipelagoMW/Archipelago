@@ -8,6 +8,7 @@ from .Options import MuseDashOptions
 from .Items import MuseDashSongItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
 from .MuseDashCollection import MuseDashCollections
+from .Presets import MuseDashPresets
 
 
 class MuseDashWebWorld(WebWorld):
@@ -33,6 +34,7 @@ class MuseDashWebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_es]
+    options_presets = MuseDashPresets
 
 
 class MuseDashWorld(World):

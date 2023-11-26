@@ -496,3 +496,9 @@ RakiRaki Rebuilders!!!|67-2|Happy Otaku Pack Vol.18|True|5|7|10|
 Laniakea|67-3|Happy Otaku Pack Vol.18|False|5|8|10|
 OTTAMA GAZER|67-4|Happy Otaku Pack Vol.18|True|5|8|10|
 Sleep Tight feat.Macoto|67-5|Happy Otaku Pack Vol.18|True|3|5|8|
+New York Back Raise|68-0|Gambler's Tricks|True|6|8|10|
+slic.hertz|68-1|Gambler's Tricks|True|5|7|9|
+Fuzzy-Navel|68-2|Gambler's Tricks|True|6|8|10|11
+Swing Edge|68-3|Gambler's Tricks|True|4|8|10|
+Twisted Escape|68-4|Gambler's Tricks|True|5|8|10|11
+Swing Sweet Twee Dance|68-5|Gambler's Tricks|False|4|7|10|
