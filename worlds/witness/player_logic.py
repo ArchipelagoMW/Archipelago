@@ -358,13 +358,13 @@ class WitnessPlayerLogic:
 
         # Victory Condition
 
-        if victory == 0:
+        if victory == "elevator":
             self.VICTORY_LOCATION = "0x3D9A9"
-        elif victory == 1:
+        elif victory == "challenge":
             self.VICTORY_LOCATION = "0x0356B"
-        elif victory == 2:
+        elif victory == "mountain_box_short":
             self.VICTORY_LOCATION = "0x09F7F"
-        elif victory == 3:
+        elif victory == "mountain_box_long":
             self.VICTORY_LOCATION = "0xFFF00"
 
         if chal_lasers <= 7:

@@ -266,7 +266,7 @@ class WitnessWorld(World):
 
         audio_logs = get_audio_logs().copy()
 
-        if hint_amount != 0:
+        if hint_amount:
             generated_hints = make_hints(self, hint_amount, self.own_itempool)
 
             self.random.shuffle(audio_logs)
