@@ -155,9 +155,6 @@ class CombinableStardewRule(StardewRule, ABC):
     def split_rules(rules: Union[Iterable[StardewRule]],
                     reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
             -> Tuple[Tuple[StardewRule, ...], frozendict[Hashable, CombinableStardewRule]]:
-        if not rules:
-            return (), frozendict()
-
         other_rules = []
         reduced_rules = {}
         for rule in rules:
@@ -174,15 +171,12 @@ class CombinableStardewRule(StardewRule, ABC):
         return tuple(other_rules), frozendict(reduced_rules)
 
     @staticmethod
-    def reduce(rules: Union[Iterable[CombinableStardewRule]],
-               reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
+    def merge(left: frozendict[Hashable, CombinableStardewRule],
+              right: frozendict[Hashable, CombinableStardewRule],
+              reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
             -> frozendict[Hashable, CombinableStardewRule]:
-        if not rules:
-            return frozendict()
-
-        reduced_rules = {}
-        for rule in rules:
-            key = rule.combination_key
+        reduced_rules = dict(left)
+        for key, rule in right.items():
             if key not in reduced_rules:
                 reduced_rules[key] = rule
                 continue
@@ -190,13 +184,6 @@ class CombinableStardewRule(StardewRule, ABC):
             reduced_rules[key] = reducer(reduced_rules[key], rule)
 
         return frozendict(reduced_rules)
-
-    @staticmethod
-    def merge(left: frozendict[Hashable, CombinableStardewRule],
-              right: frozendict[Hashable, CombinableStardewRule],
-              reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
-            -> frozendict[Hashable, CombinableStardewRule]:
-        return CombinableStardewRule.reduce({*left.values(), *right.values()}, reducer)
 
     def add_into(self, rules: frozendict[Hashable, CombinableStardewRule],
                  reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
@@ -267,6 +254,7 @@ class AggregatingStardewRule(StardewRule, ABC):
         return hash((self.combinable_rules, self.other_rules))
 
     def simplify(self) -> StardewRule:
+        # TODO merge simplify + __call__
         if self._simplified:
             return self
         self.other_rules = frozenset(self.other_rules)

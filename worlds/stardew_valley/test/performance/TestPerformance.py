@@ -10,7 +10,7 @@ from worlds import AutoWorld
 from .. import SVTestCase, minimal_locations_maximal_items, allsanity_options_without_mods, setup_multiworld, default_options
 
 number_generations = 25
-default_seed = 58754761123126659868
+default_seeds = [10613921641417078811] * number_generations
 acceptable_deviation = 4
 
 
@@ -71,8 +71,7 @@ class SVPerformanceTestCase(SVTestCase):
         acceptable_average_time = self.acceptable_time_per_player * amount_of_players
         total_time = 0
         all_times = []
-        seeds = [get_seed() if self.skip_fill else default_seed
-                 for _ in range(number_generations)]
+        seeds = [get_seed() for _ in range(number_generations)] if self.skip_fill else default_seeds
 
         for i, seed in enumerate(seeds):
             with self.subTest(f"Seed: {seed}"):
