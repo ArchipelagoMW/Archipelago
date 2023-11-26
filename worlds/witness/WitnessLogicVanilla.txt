@@ -395,7 +395,7 @@ Outside Keep (Outside Keep) - Main Island - True:
 159430 - 0x03E77 (Red Flowers EP) - True - True
 159431 - 0x03E7C (Purple Flowers EP) - True - True
 
-Keep (Keep) - Main Island - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure Plate - 0x01BEC:
+Keep (Keep) - Outside Keep - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure Plate - 0x01BEC:
 158193 - 0x00139 (Hedge Maze 1) - True - True
 158197 - 0x0A3A8 (Reset Pressure Plates 1) - True - True
 158198 - 0x033EA (Pressure Plates 1) - 0x0A3A8 - Dots
