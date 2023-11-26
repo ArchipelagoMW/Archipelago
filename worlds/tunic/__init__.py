@@ -6,7 +6,7 @@ from .locations import location_table, location_name_groups, location_name_to_id
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .regions import tunic_regions
 from .options import TunicOptions
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from decimal import Decimal, ROUND_HALF_UP
 
 
