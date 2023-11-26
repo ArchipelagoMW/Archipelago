@@ -261,7 +261,7 @@ class AggregatingStardewRule(StardewRule, ABC):
         return f"({self.symbol.join(repr(rule) for rule in self.detailed_rules_iterable)})"
 
     def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.combinable_rules == other.combinable_rules and self.unique_rules == self.unique_rules
+        return isinstance(other, type(self)) and self.combinable_rules == other.combinable_rules and self.unique_rules == self.unique_rules
 
     def __hash__(self):
         return hash((self.combinable_rules, self.unique_rules))
