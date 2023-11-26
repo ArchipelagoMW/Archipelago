@@ -33,7 +33,7 @@ class CMWorld(World):
     game: ClassVar[str] = "ChecksMate"
     data_version = 0
     web = CMWeb()
-    required_client_version = (0, 3, 4)
+    required_client_version = (0, 4, 4)
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CMOptions
     options: CMOptions
 
@@ -279,10 +279,10 @@ class CMWorld(World):
             self.items_used[self.player][chosen_item] < item_table[chosen_item].quantity
 
     def under_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade) -> bool:
-        piece_limit = self.find_piece_limit(chosen_item, with_children)
         if self.player not in self.items_used:
             # this can be the case during push_precollected
             return True
+        piece_limit = self.find_piece_limit(chosen_item, with_children)
         pieces_used = self.items_used[self.player].get(chosen_item, 0)
         if 0 < piece_limit <= pieces_used:
             # Intentionally ignore "parents" property: player might receive parent items after all children

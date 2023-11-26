@@ -40,9 +40,7 @@ def has_chessmen(state: CollectionState, player: int) -> int:
 
 
 def has_french_move(state: CollectionState, player: int) -> bool:
-    return len([item for item in owned_items(state, player) if item == "Progressive Pawn"]) > len(
-        [item for item in state.multiworld.itempool if item.player == player and
-         item.name == "Progressive Pawn Forwardness"])  # and self.has("Play En Passant", player)
+    return state.count("Progressive Pawn", player) > 6  # and self.has("Play En Passant", player)
 
 
 def has_pawn(state: CollectionState, player: int) -> bool:
