@@ -28,49 +28,49 @@ class TestLogic(unittest.TestCase):
             with self.subTest(msg=item):
                 rule = logic.registry.item_rules[item]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve item rule for {item} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_building_rule_then_can_be_resolved(self):
         for building in logic.registry.building_rules.keys():
             with self.subTest(msg=building):
                 rule = logic.registry.building_rules[building]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve building rule for {building} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_quest_rule_then_can_be_resolved(self):
         for quest in logic.registry.quest_rules.keys():
             with self.subTest(msg=quest):
                 rule = logic.registry.quest_rules[quest]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve quest rule for {quest} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_special_order_rule_then_can_be_resolved(self):
         for special_order in logic.registry.special_order_rules.keys():
             with self.subTest(msg=special_order):
                 rule = logic.registry.special_order_rules[special_order]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve special order rule for {special_order} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_tree_fruit_rule_then_can_be_resolved(self):
         for tree_fruit in logic.registry.tree_fruit_rules.keys():
             with self.subTest(msg=tree_fruit):
                 rule = logic.registry.tree_fruit_rules[tree_fruit]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve tree fruit rule for {tree_fruit} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_seed_rule_then_can_be_resolved(self):
         for seed in logic.registry.seed_rules.keys():
             with self.subTest(msg=seed):
                 rule = logic.registry.seed_rules[seed]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve seed rule for {seed} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_crop_rule_then_can_be_resolved(self):
         for crop in logic.registry.crop_rules.keys():
             with self.subTest(msg=crop):
                 rule = logic.registry.crop_rules[crop]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve crop rule for {crop} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_fish_rule_then_can_be_resolved(self):
         for fish in logic.registry.fish_rules.keys():
@@ -78,21 +78,21 @@ class TestLogic(unittest.TestCase):
                 rule = logic.registry.fish_rules[fish]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
                 rule_result = rule(multi_world.state)
-                self.assertTrue(rule == False_() or rule_result, f"Could not resolve fish rule for {fish} {rule}")
+                self.assertTrue(rule == False_() or rule_result, rule.explain(multi_world.state))
 
     def test_given_museum_rule_then_can_be_resolved(self):
         for donation in logic.registry.museum_rules.keys():
             with self.subTest(msg=donation):
                 rule = logic.registry.museum_rules[donation]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve museum rule for {donation} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_cooking_rule_then_can_be_resolved(self):
         for cooking_rule in logic.registry.cooking_rules.keys():
             with self.subTest(msg=cooking_rule):
                 rule = logic.registry.cooking_rules[cooking_rule]
                 self.assertNotIn(MISSING_ITEM, repr(rule))
-                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve cooking rule for {cooking_rule} {rule}")
+                self.assertTrue(rule == False_() or rule(multi_world.state), rule.explain(multi_world.state))
 
     def test_given_location_rule_then_can_be_resolved(self):
         for location in multi_world.get_locations(1):
