@@ -49,14 +49,7 @@ class CMWorld(World):
     prefill_items: List[CMItem] = []
 
     known_pieces = {"Progressive Minor Piece": 9, "Progressive Major Piece": 5, "Progressive Major To Queen": 4, }
-    piece_type_limit_options = {
-        "Progressive Minor Piece": "minor_piece_limit_by_type",
-        "Progressive Major Piece": "major_piece_limit_by_type",
-        "Progressive Major To Queen": "queen_piece_limit_by_type",
-    }
-    piece_limit_options = {
-        "Progressive Major To Queen": "queen_piece_limit",
-    }
+
     piece_types_by_army = {
         # Vanilla
         0: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
@@ -297,8 +290,7 @@ class CMWorld(World):
             return False
         # Limit pieces placed by total number
         if chosen_item in self.piece_limit_options:
-            # TODO: fix, it's super broken
-            piece_total_limit = self.options[self.piece_limit_options[chosen_item]].value
+            piece_total_limit = CMOptions.piece_limit_options[chosen_item](self.options).value
             pieces_used = self.items_used[self.player].get(chosen_item, 0)
             if 0 < piece_total_limit <= pieces_used:
                 return False
@@ -330,8 +322,7 @@ class CMWorld(World):
         return piece_limit
 
     def piece_limit_of(self, chosen_item: str):
-        # TODO: fix, it's super broken
-        return self.options[self.piece_type_limit_options[chosen_item]]
+        return CMOptions.piece_type_limit_options[chosen_item](self.options).value
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
