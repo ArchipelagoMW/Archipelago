@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .buff_logic import BuffLogicMixin
-from ..strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
 from .ability_logic import AbilityLogicMixin
 from .action_logic import ActionLogicMixin
 from .arcade_logic import ArcadeLogicMixin
 from .artisan_logic import ArtisanLogicMixin
 from .base_logic import LogicRegistry
+from .buff_logic import BuffLogicMixin
 from .building_logic import BuildingLogicMixin
 from .bundle_logic import BundleLogicMixin
 from .combat_logic import CombatLogicMixin
@@ -55,6 +54,7 @@ from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
+from ..strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.decoration_names import Decoration
@@ -703,6 +703,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
 
         if ModNames.deepwoods in self.options.mods:  # Petting the Unicorn
             number_of_stardrops_to_receive += 1
+
+        if not other_rules:
+            return self.received("Stardrop", number_of_stardrops_to_receive)
 
         return self.received("Stardrop", number_of_stardrops_to_receive) & And(*other_rules)
 
