@@ -291,13 +291,13 @@ class AggregatingStardewRule(StardewRule, ABC):
             self.other_rules = (self.complement,)
             return self.complement
 
-        simplified_rules = set()
+        self._simplified_rules = set()
 
         self._left_to_simplify_rules = iter(self.other_rules)
         for rule in self._left_to_simplify_rules:
             simplified = rule.simplify()
 
-            if simplified is self.identity or simplified in simplified_rules:
+            if simplified is self.identity or simplified in self._simplified_rules:
                 continue
 
             if simplified is self.complement:
@@ -305,21 +305,21 @@ class AggregatingStardewRule(StardewRule, ABC):
                 self._simplified_rules = {self.complement}
                 return self.complement
 
-            simplified_rules.add(simplified)
+            self._simplified_rules.add(simplified)
 
-        simplified_rules = frozenset(simplified_rules)
+        self._simplified_rules = frozenset(self._simplified_rules)
 
-        if not simplified_rules and not self.combinable_rules:
+        if not self._simplified_rules and not self.combinable_rules:
             self.other_rules = (self.identity,)
             return self.identity
 
-        if len(simplified_rules) == 1 and not self.combinable_rules:
-            return next(iter(simplified_rules))
+        if len(self._simplified_rules) == 1 and not self.combinable_rules:
+            return next(iter(self._simplified_rules))
 
-        if not simplified_rules and len(self.combinable_rules) == 1:
+        if not self._simplified_rules and len(self.combinable_rules) == 1:
             return next(iter(self.combinable_rules.values()))
 
-        self.other_rules = simplified_rules
+        self.other_rules = self._simplified_rules
         self._simplified = True
         return self
 
@@ -334,7 +334,6 @@ class AggregatingStardewRule(StardewRule, ABC):
             return self.complement
 
         self._left_to_simplify_rules = iter(self.other_rules)
-
         for rule in self._left_to_simplify_rules:
             simplified = rule.simplify()
 
