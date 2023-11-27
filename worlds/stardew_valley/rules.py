@@ -859,9 +859,9 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Fireball", player),
                              logic.has("Fire Quartz"))
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Frostbite", player),
-                             (logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85)).simplify())
+                             logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85))
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Elemental School Locations", player),
-                             (logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85)).simplify())
+                             logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85))
     # MultiWorldRules.add_rule(multiworld.get_location("Analyze: Lantern", player),)
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Tendrils", player),
                              logic.region.can_reach(Region.farm))
