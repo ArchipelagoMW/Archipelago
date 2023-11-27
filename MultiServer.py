@@ -692,6 +692,14 @@ class Context:
             for client in clients:
                 async_start(self.send_msgs(client, client_hints))
 
+    def notify_hints_update(self, team: int, *slots: int):
+        """Broadcast update to read-only hints key for relevant slots."""
+        for slot in slots:
+            key: str = f"_read_hints_{team}_{slot}"
+            targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
+            if targets:
+                self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
+
     # "events"
 
     def on_goal_achieved(self, client: Client):
@@ -705,10 +713,7 @@ class Context:
         self.save()  # save goal completion flag
 
     def on_new_hint(self, team: int, slot: int):
-        key: str = f"_read_hints_{team}_{slot}"
-        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
-        if targets:
-            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
+        self.notify_hints_update(team, slot)
         self.broadcast(self.clients[team][slot], [{
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(self, team, slot)
@@ -955,10 +960,24 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
     if new_locations:
         if count_activity:
             ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
+
+        ctx.location_checks[team, slot] |= new_locations
+        slots_with_updated_hints: typing.Set[int] = set()
+        hint_locations_to_receiver: typing.Dict[int, int] = {
+            hint.location: hint.receiving_player
+            for hint in ctx.get_rechecked_hints(team, slot)
+            if hint.finding_player == slot
+        }
+
         for location in new_locations:
             item_id, target_player, flags = ctx.locations[slot][location]
             new_item = NetworkItem(item_id, location, slot, flags)
             send_items_to(ctx, team, target_player, new_item)
+            if location in hint_locations_to_receiver:
+                slots_with_updated_hints.add(slot)
+                if hint_locations_to_receiver[location] not in slots_with_updated_hints:
+                    ctx.recheck_hints(team, hint_locations_to_receiver[location])
+                    slots_with_updated_hints.add(hint_locations_to_receiver[location])
 
             logging.info('(Team #%d) %s sent %s to %s (%s)' % (
                 team + 1, ctx.player_names[(team, slot)], ctx.item_names[item_id],
@@ -966,7 +985,9 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             info_text = json_format_send_event(new_item, target_player)
             ctx.broadcast_team(team, [info_text])
 
-        ctx.location_checks[team, slot] |= new_locations
+        if slots_with_updated_hints:
+            ctx.notify_hints_update(team, *slots_with_updated_hints)
+
         send_new_items(ctx)
         ctx.broadcast(ctx.clients[team][slot], [{
             "cmd": "RoomUpdate",
