@@ -13,6 +13,7 @@ from .Regions import create_regions
 from .SetupGame import setup_gamevars
 from worlds.AutoWorld import World, WebWorld
 from .Client import YISNIClient
+from .Rules import set_easy_rules, set_normal_rules, set_hard_rules
 from .Rom import LocalRom, patch_rom, get_base_rom_path, YIDeltaPatch, USHASH
 import Patch
 import settings
@@ -85,7 +86,12 @@ class YIWorld(World):
 
     def _get_slot_data(self):
         return {
-            "world_1": self.world_1_stages
+            "world_1": self.world_1_stages,
+            "world_2": self.world_2_stages,
+            "world_3": self.world_3_stages,
+            "world_4": self.world_4_stages,
+            "world_5": self.world_5_stages,
+            "world_6": self.world_6_stages
         }
 
     def fill_slot_data(self) -> dict:
@@ -191,6 +197,12 @@ class YIWorld(World):
             return self.random.choice(filler_items)
 
     def set_rules(self):
+        if self.options.stage_logic == 0:
+            set_easy_rules(self, self.multiworld, self.player, self.boss_order, self.luigi_pieces)
+        elif self.options.stage_logic == 1:
+            set_normal_rules(self, self.multiworld, self.player, self.boss_order, self.luigi_pieces)
+        else:
+            set_hard_rules(self, self.multiworld, self.player, self.boss_order, self.luigi_pieces)
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
         self.multiworld.get_location("Burt The Bashful Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Salvo The Slime Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
