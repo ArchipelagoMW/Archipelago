@@ -1,4 +1,5 @@
 import functools
+import itertools
 import queue
 import random
 from collections import deque
@@ -18,6 +19,18 @@ class EntranceLookup:
         def __bool__(self):
             return bool(self._lookup)
 
+        def __getitem__(self, item: str) -> List[Entrance]:
+            return self._lookup.get(item, [])
+
+        def __iter__(self):
+            return itertools.chain.from_iterable(self._lookup.values())
+
+        def __str__(self):
+            return str(self._lookup)
+
+        def __repr__(self):
+            return self.__str__()
+
         def add(self, entrance: Entrance) -> None:
             group = self._lookup.setdefault(entrance.er_group, [])
             group.append(entrance)
@@ -27,9 +40,6 @@ class EntranceLookup:
             group.remove(entrance)
             if not group:
                 del self._lookup[entrance.er_group]
-
-        def __getitem__(self, item: str) -> List[Entrance]:
-            return self._lookup.get(item, [])
 
     rng: random.Random
     dead_ends: GroupLookup
@@ -272,12 +282,48 @@ def randomize_entrances(
     2. All placeholder entrances to regions will have been removed.
     """
     state = ERPlacementState(world, coupled)
-    # exits which had no candidate exits found in the non-dead-end stage.
-    # they will never be placeable until we start placing dead ends so
-    # hold them here and stop trying.
-    unplaceable_exits: List[Entrance] = []
 
     entrance_lookup = EntranceLookup(rng)
+
+    def find_pairing(dead_end: bool, require_new_regions: bool) -> Optional[Tuple[Entrance, Entrance]]:
+        for source_exit in state._placeable_exits:
+            target_groups = get_target_groups(source_exit.er_group)
+            # anything can connect to the default group - if people don't like it the fix is to
+            # assign a non-default group
+            if 'Default' not in target_groups:
+                target_groups.append('Default')
+            for target_entrance in entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
+                # todo - requiring new regions is a proxy for requiring new entrances to be unlocked, which is
+                #        not quite full fidelity so we may need to revisit this in the future
+                region_requirement_satisfied = (not require_new_regions
+                                                or target_entrance.connected_region not in state.placed_regions)
+                if region_requirement_satisfied and source_exit.can_connect_to(target_entrance, state):
+                    return source_exit, target_entrance
+        else:
+            # no source exits had any valid target so this stage is deadlocked. swap may be implemented if early
+            # deadlocking is a frequent issue.
+            lookup = entrance_lookup.dead_ends if dead_end else entrance_lookup.others
+
+            # if we're in a stage where we're trying to get to new regions, we could also enter this
+            # branch in a success state (when all regions of the preferred type have been placed, but there are still
+            # additional unplaced entrances into those regions)
+            if require_new_regions:
+                if all(e.connected_region in state.placed_regions for e in lookup):
+                    return None
+
+            raise Exception(f"None of the available entrances had valid targets.\n"
+                            f"Available exits: {state._placeable_exits}\n"
+                            f"Available entrances: {lookup}")
+
+    def do_placement(source_exit: Entrance, target_entrance: Entrance):
+        removed_entrances = state.connect(source_exit, target_entrance)
+        # remove the paired items from consideration
+        state._placeable_exits.remove(source_exit)
+        for entrance in removed_entrances:
+            entrance_lookup.remove(entrance)
+        # place and propagate
+        state.place(target_entrance)
+        state.sweep_pending_exits()
 
     for region in regions:
         for entrance in region.entrances:
@@ -287,84 +333,33 @@ def randomize_entrances(
     # place the menu region and connected start region(s)
     state.place(world.multiworld.get_region('Menu', world.player))
 
-    while state.has_placeable_exits() and entrance_lookup.others:
+    # stage 1 - try to place all the non-dead-end entrances
+    while entrance_lookup.others:
         # todo - this access to placeable_exits is ugly
-        # todo - this should iterate placeable exits instead of immediately
-        #        giving up; can_connect_to may be stateful
-        # todo - this doesn't prioritize placing new rooms like the original did;
-        #        that's problematic because early loops would lead to failures
         # this is needed to reduce bias; otherwise newer exits are prioritized
         rng.shuffle(state._placeable_exits)
-        source_exit = state._placeable_exits.pop()
-
-        target_groups = get_target_groups(source_exit.er_group)
-        # anything can connect to the default group - if people don't like it the fix is to
-        # assign a non-default group
-        if 'Default' not in target_groups:
-            target_groups.append('Default')
-        for target_entrance in entrance_lookup.get_targets(target_groups, False, preserve_group_order):
-            if source_exit.can_connect_to(target_entrance, state):
-                # we found a valid, connectable target entrance. We'll connect it in a moment
-                break
-        else:
-            # there were no valid non-dead-end targets for this source, so give up on it for now
-            unplaceable_exits.append(source_exit)
-            continue
-
-        # place the new pairing. it is important to do connections first so that can_reach will function.
-        removed_entrances = state.connect(source_exit, target_entrance)
-        state.place(target_entrance)
-        state.sweep_pending_exits()
-        # remove paired entrances from the lookup so they don't get re-randomized
-        for entrance in removed_entrances:
-            entrance_lookup.remove(entrance)
-
-    if entrance_lookup.others:
-        # this is generally an unsalvagable failure, we would need to implement swap earlier in the process
-        # to prevent it. A stateful can_connect_to implementation may make this recoverable in some worlds as well.
-        # why? there are no placeable exits, which means none of them have valid targets, and conversely
-        # none of the existing targets can pair to the existing sources. Since dead ends will never add new sources
-        # this means the current targets can never be paired (in most cases)
-        # todo - investigate ways to prevent this case
-        print("Unable to place all non-dead-end entrances with available source exits")
-        return state  # this short circuts the exception for testing purposes in order to see how far ER got.
-        raise Exception("Unable to place all non-dead-end entrances with available source exits")
-
-    # anything we couldn't place before might be placeable now
-    state._placeable_exits.extend(unplaceable_exits)
-    unplaceable_exits.clear()
-
-    # repeat the above but try to place dead ends
-    while state.has_placeable_exits() and entrance_lookup.dead_ends:
+        pairing = find_pairing(False, True)
+        if not pairing:
+            break
+        do_placement(*pairing)
+    # stage 2 - try to place all the dead-end entrances
+    while entrance_lookup.dead_ends:
         rng.shuffle(state._placeable_exits)
-        source_exit = state._placeable_exits.pop()
-
-        target_groups = get_target_groups(source_exit.er_group)
-        # anything can connect to the default group - if people don't like it the fix is to
-        # assign a non-default group
-        if 'Default' not in target_groups:
-            target_groups.append('Default')
-        for target_entrance in entrance_lookup.get_targets(target_groups, True, preserve_group_order):
-            if source_exit.can_connect_to(target_entrance, state):
-                # we found a valid, connectable target entrance. We'll connect it in a moment
-                break
-        else:
-            # there were no valid dead-end targets for this source, so give up
-            # todo - similar to above we should try and prevent this state.
-            #        also it can_connect_to may be stateful.
-            print("Unable to place all dead-end entrances with available source exits")
-            return state  # this short circuts the exception for testing purposes in order to see how far ER got.
-            raise Exception("Unable to place all dead-end entrances with available source exits")
-
-        # place the new pairing. it is important to do connections first so that can_reach will function.
-        removed_entrances = state.connect(source_exit, target_entrance)
-        state.place(target_entrance)
-        state.sweep_pending_exits()
-        # remove paired entrances from the lookup so they don't get re-randomized
-        for entrance in removed_entrances:
-            entrance_lookup.remove(entrance)
-
-    if state.has_placeable_exits():
-        raise Exception("There are more exits than entrances")
+        pairing = find_pairing(True, True)
+        if not pairing:
+            break
+        do_placement(*pairing)
+    # todo - stages 3 and 4 should ideally run "together" ie without respect to dead-endedness
+    #        as we are just trying to tie off loose ends rather than get you somewhere new
+    # stage 3 - connect any dangling entrances that remain
+    while entrance_lookup.others:
+        rng.shuffle(state._placeable_exits)
+        pairing = find_pairing(False, False)
+        do_placement(*pairing)
+    # stage 4 - last chance for dead ends
+    while entrance_lookup.dead_ends:
+        rng.shuffle(state._placeable_exits)
+        pairing = find_pairing(True, False)
+        do_placement(*pairing)
 
     return state
