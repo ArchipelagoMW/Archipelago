@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, DeathLink, PerGameCommonOptions, SpecialRange
+from Options import Choice, DeathLink, NamedRange, PerGameCommonOptions
 
 
 class DoubleJumpGlitch(Choice):
@@ -33,7 +33,7 @@ class CoinSanity(Choice):
     default = 0
 
 
-class CoinSanityRange(SpecialRange):
+class CoinSanityRange(NamedRange):
     """This is the amount of coins in a coin bundle
     You need to collect that number of coins to get a location check, and when receiving coin items, you will get bundles of this size
     It is highly recommended to not set this value below 10, as it generates a very large number of boring locations and items.

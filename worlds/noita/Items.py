@@ -44,20 +44,18 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
     return ["Kantele"] if victory_condition.value >= VictoryCondition.option_pure_ending else []
 
 
-def create_random_items(multiworld: MultiWorld, player: int, random_count: int) -> List[str]:
-    filler_pool = filler_weights.copy()
+def create_random_items(multiworld: MultiWorld, player: int, weights: Dict[str, int], count: int) -> List[str]:
+    filler_pool = weights.copy()
     if multiworld.bad_effects[player].value == 0:
         del filler_pool["Trap"]
 
-    return multiworld.random.choices(
-        population=list(filler_pool.keys()),
-        weights=list(filler_pool.values()),
-        k=random_count
-    )
+    return multiworld.random.choices(population=list(filler_pool.keys()),
+                                     weights=list(filler_pool.values()),
+                                     k=count)
 
 
 def create_all_items(multiworld: MultiWorld, player: int) -> None:
-    sum_locations = len(multiworld.get_unfilled_locations(player))
+    locations_to_fill = len(multiworld.get_unfilled_locations(player))
 
     itempool = (
         create_fixed_item_pool()
@@ -66,9 +64,18 @@ def create_all_items(multiworld: MultiWorld, player: int) -> None:
         + create_kantele(multiworld.victory_condition[player])
     )
 
-    random_count = sum_locations - len(itempool)
-    itempool += create_random_items(multiworld, player, random_count)
+    # if there's not enough shop-allowed items in the pool, we can encounter gen issues
+    # 39 is the number of shop-valid items we need to guarantee
+    if len(itempool) < 39:
+        itempool += create_random_items(multiworld, player, shop_only_filler_weights, 39 - len(itempool))
+        # this is so that it passes tests and gens if you have minimal locations and only one player
+        if multiworld.players == 1:
+            for location in multiworld.get_unfilled_locations(player):
+                if "Shop Item" in location.name:
+                    location.item = create_item(player, itempool.pop())
+            locations_to_fill = len(multiworld.get_unfilled_locations(player))
 
+    itempool += create_random_items(multiworld, player, filler_weights, locations_to_fill - len(itempool))
     multiworld.itempool += [create_item(player, name) for name in itempool]
 
 
@@ -84,8 +91,8 @@ item_table: Dict[str, ItemData] = {
     "Wand (Tier 2)":                        ItemData(110007, "Wands", ItemClassification.useful),
     "Wand (Tier 3)":                        ItemData(110008, "Wands", ItemClassification.useful),
     "Wand (Tier 4)":                        ItemData(110009, "Wands", ItemClassification.useful),
-    "Wand (Tier 5)":                        ItemData(110010, "Wands", ItemClassification.useful),
-    "Wand (Tier 6)":                        ItemData(110011, "Wands", ItemClassification.useful),
+    "Wand (Tier 5)":                        ItemData(110010, "Wands", ItemClassification.useful, 1),
+    "Wand (Tier 6)":                        ItemData(110011, "Wands", ItemClassification.useful, 1),
     "Kantele":                              ItemData(110012, "Wands", ItemClassification.useful),
     "Fire Immunity Perk":                   ItemData(110013, "Perks", ItemClassification.progression, 1),
     "Toxic Immunity Perk":                  ItemData(110014, "Perks", ItemClassification.progression, 1),
@@ -95,43 +102,46 @@ item_table: Dict[str, ItemData] = {
     "Tinker with Wands Everywhere Perk":    ItemData(110018, "Perks", ItemClassification.progression, 1),
     "All-Seeing Eye Perk":                  ItemData(110019, "Perks", ItemClassification.progression, 1),
     "Spatial Awareness Perk":               ItemData(110020, "Perks", ItemClassification.progression),
-    "Extra Life Perk":                      ItemData(110021, "Repeatable Perks", ItemClassification.useful),
+    "Extra Life Perk":                      ItemData(110021, "Repeatable Perks", ItemClassification.useful, 1),
     "Orb":                                  ItemData(110022, "Orbs", ItemClassification.progression_skip_balancing),
     "Random Potion":                        ItemData(110023, "Items", ItemClassification.filler),
     "Secret Potion":                        ItemData(110024, "Items", ItemClassification.filler),
     "Powder Pouch":                         ItemData(110025, "Items", ItemClassification.filler),
     "Chaos Die":                            ItemData(110026, "Items", ItemClassification.filler),
     "Greed Die":                            ItemData(110027, "Items", ItemClassification.filler),
-    "Kammi":                                ItemData(110028, "Items", ItemClassification.filler),
-    "Refreshing Gourd":                     ItemData(110029, "Items", ItemClassification.filler),
+    "Kammi":                                ItemData(110028, "Items", ItemClassification.filler, 1),
+    "Refreshing Gourd":                     ItemData(110029, "Items", ItemClassification.filler, 1),
     "Sädekivi":                             ItemData(110030, "Items", ItemClassification.filler),
     "Broken Wand":                          ItemData(110031, "Items", ItemClassification.filler),
+}
 
+shop_only_filler_weights: Dict[str, int] = {
+    "Trap":             15,
+    "Extra Max HP":     25,
+    "Spell Refresher":  20,
+    "Wand (Tier 1)":    10,
+    "Wand (Tier 2)":    8,
+    "Wand (Tier 3)":    7,
+    "Wand (Tier 4)":    6,
+    "Wand (Tier 5)":    5,
+    "Wand (Tier 6)":    4,
+    "Extra Life Perk":  10,
 }
 
 filler_weights: Dict[str, int] = {
-    "Trap":              15,
-    "Extra Max HP":      25,
-    "Spell Refresher":   20,
-    "Potion":            40,
-    "Gold (200)":        15,
-    "Gold (1000)":       6,
-    "Wand (Tier 1)":     10,
-    "Wand (Tier 2)":     8,
-    "Wand (Tier 3)":     7,
-    "Wand (Tier 4)":     6,
-    "Wand (Tier 5)":     5,
-    "Wand (Tier 6)":     4,
-    "Extra Life Perk":   10,
-    "Random Potion":     9,
-    "Secret Potion":     10,
-    "Powder Pouch":      10,
-    "Chaos Die":         4,
-    "Greed Die":         4,
-    "Kammi":             4,
-    "Refreshing Gourd":  4,
-    "Sädekivi":          3,
-    "Broken Wand":       10,
+    **shop_only_filler_weights,
+    "Gold (200)":       15,
+    "Gold (1000)":      6,
+    "Potion":           40,
+    "Random Potion":    9,
+    "Secret Potion":    10,
+    "Powder Pouch":     10,
+    "Chaos Die":        4,
+    "Greed Die":        4,
+    "Kammi":            4,
+    "Refreshing Gourd": 4,
+    "Sädekivi":         3,
+    "Broken Wand":      10,
 }
 
 
