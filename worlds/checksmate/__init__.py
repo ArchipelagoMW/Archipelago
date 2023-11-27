@@ -1,3 +1,4 @@
+import logging
 import math
 import random
 from enum import Enum
@@ -216,6 +217,7 @@ class CMWorld(World):
                 material += progression_items[chosen_item].material
             else:
                 my_progression_items.remove(chosen_item)
+        logging.debug(str(self.player) + " granted total material of " + str(material) + " via items " + str(items))
 
         # exclude inaccessible locations
         # castle
@@ -343,34 +345,55 @@ class CMWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         material = 0
         item_count = state.prog_items[self.player][item.name]
+        # check if there are unused upgrades to this piece which are immediately satisfied
         children = get_children(item.name)
         for child in children:
+            if item_table[child].material == 0:
+                continue
             # TODO: when a child could have multiple parents, check that this is also the least parent
             if item_count < state.prog_items[self.player][child]:
+                # we had an upgrade, so add that upgrade to the material count
                 material += item_table[child].material
-                print("Found child: " + child + " having count: " + str(state.prog_items[self.player][child]))
+                logging.debug("Trying child " + child + " having count: " + str(state.prog_items[self.player][child]))
+            else:
+                # not immediately upgraded, but maybe later
+                logging.debug("Tried item " + item.name + " had insufficient children " + child + " for ")
+        # check if this is an upgrade which is immediately satisfied
         parents = get_parents(item.name)
         if len(parents) == 0 or item_table[item.name].material == 0:
+            # not an upgrade, just a piece, so we can use it immediately
             material += item_table[item.name].material
         else:
             fewest_parents = min([state.prog_items[self.player].get(parent, 0) for parent in parents])
             if item_count < fewest_parents:
+                # found a piece we could upgrade, so apply the upgrade
                 material += item_table[item.name].material
+                logging.debug("Item " + item.name + " had sufficient parents " + str(fewest_parents) + " to be tried")
+            else:
+                # not upgrading anything, but maybe later
+                logging.debug("Tried item " + item.name + " had insufficient parents " + str(fewest_parents))
         change = super().collect(state, item)
         if change:
+            # we actually collected the item, so we must gain the material
             state.prog_items[self.player]["Material"] += material
-        print("Trying " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) + " having " +
-              str(state.prog_items))
+        logging.debug("Trying " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) +
+                      " having " + str(state.prog_items))
         return change
 
+    # TODO: extremely similar - refactor to pass lt/lte comparator and an arithmetic lambda +/-
     def remove(self, state: CollectionState, item: Item) -> bool:
         material = 0
         item_count = state.prog_items[self.player][item.name]
         children = get_children(item.name)
         for child in children:
+            if item_table[child].material == 0:
+                continue
             # TODO: when a child could have multiple parents, check that this is also the least parent
             if item_count <= state.prog_items[self.player][child]:
                 material -= item_table[child].material
+                logging.debug("Removing child " + child + " having count: " + str(state.prog_items[self.player][child]))
+            else:
+                logging.debug("Removed item " + item.name + " had insufficient children " + child)
         parents = get_parents(item.name)
         if len(parents) == 0 or item_table[item.name].material == 0:
             material -= item_table[item.name].material
@@ -378,11 +401,14 @@ class CMWorld(World):
             fewest_parents = min([state.prog_items[self.player].get(parent, 0) for parent in parents])
             if item_count <= fewest_parents:
                 material -= item_table[item.name].material
+                logging.debug("Item " + item.name + " had sufficient parents " + str(fewest_parents) + " to be removed")
+            else:
+                logging.debug("Removed item " + item.name + " had insufficient parents " + str(fewest_parents))
         change = super().remove(state, item)
         if change:
             state.prog_items[self.player]["Material"] -= material
-        print("Removing " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) + " having " +
-              str(state.prog_items))
+        logging.debug("Removing " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) +
+                      " having " + str(state.prog_items))
         return change
 
 
