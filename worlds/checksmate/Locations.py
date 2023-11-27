@@ -87,6 +87,8 @@ location_table = {
     # "Discovered Attack": CMLocationData(4_902_060, 0),
     # "Pin": CMLocationData(4_902_061, 600),
     # "Skewer": CMLocationData(4_902_062, 600),
+    # "Pawn Promotion": CMLocationData(4_902_063, 3000),
+    # "Multiple Queens": CMLocationData(4_902_064, 3900),
     # goal 1+ requires that you successively checkmate your opponent as they gain material
     # "Checkmate Minima": CMLocationData(4_902_084, 0),
     # "Checkmate One Piece": CMLocationData(4_902_085, 0),
