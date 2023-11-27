@@ -368,7 +368,7 @@ class MultiWorld():
 
             region = Region("Menu", group_id, self, "ItemLink")
             self.regions.append(region)
-            locations = region.locations = []
+            locations = region.locations
             for item in self.itempool:
                 count = common_item_count.get(item.player, {}).get(item.name, 0)
                 if count:
