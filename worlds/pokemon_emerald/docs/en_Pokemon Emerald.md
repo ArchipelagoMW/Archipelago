@@ -1,15 +1,15 @@
 # Pokémon Emerald
 
-## Where is the settings page?
+## Where is the options page?
 
-You can read through all the settings and generate a YAML [here](../player-settings).
+You can read through all the options and generate a YAML [here](../player-options).
 
 ## What does randomization do to this game?
 
 This randomizer handles both item randomization and pokémon randomization. Badges, HMs, gifts from NPCs, and items on
 the ground can all be randomized. There are also many options for randomizing wild pokémon, starters, opponent pokémon,
 abilities, types, etc… You can even change a percentage of single battles into double battles. Check the
-[settings page](../player-settings) for a more comprehensive list of what can be changed.
+[options page](../player-options) for a more comprehensive list of what can be changed.
 
 ## What items and locations get randomized?
 
