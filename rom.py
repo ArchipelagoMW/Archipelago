@@ -205,6 +205,23 @@ def write_multiworld_table(rom: LocalRom,
             entry_address += 8
 
 
+def set_difficulty_level(rom: LocalRom, difficulty: int):
+    mov_r0 = 0x2000 | difficulty           # mov r0, #difficulty
+    cmp_r0 = 0x2800 | difficulty           # cmp r0, #difficulty
+
+    # SramtoWork_Load()
+    rom.write_halfword(0x8091558, mov_r0)  # Force difficulty (anti-cheese)
+
+    # ReadySub_Level()
+    rom.write_halfword(0x8091F8E, 0x2001)  # movs r0, r1  ; Allow selecting S-Hard
+    rom.write_halfword(0x8091FCC, 0x46C0)  # nop  ; Force cursor to difficulty
+    rom.write_halfword(0x8091FD2, 0xE007)  # b 0x8091FE4
+    rom.write_halfword(0x8091FE4, cmp_r0)
+
+    # ReadyObj_Win1Set()
+    rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; Display S-Hard
+
+
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
 
@@ -216,17 +233,7 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     # Set deathlink
     rom.write_byte(get_symbol('DeathLinkFlag'), world.death_link[player].value)
 
-    # Force difficulty level
-    mov_r0 = 0x2000 | world.difficulty[player].value # mov r0, #(world.difficulty[player].value)
-    rom.write_halfword(0x8091558, mov_r0)  # SramtoWork_Load(): Force difficulty (anti-cheese)
-
-    rom.write_halfword(0x8091F8E, 0x2001)  # movs r0, r1  ; ReadySub_Level(): Allow selecting S-Hard
-    rom.write_halfword(0x8091FCC, 0x46C0)  # nop  ; ReadySub_Level(): Force cursor to difficulty
-    rom.write_halfword(0x8091FD2, 0xE007)  # b 0x8091FE4
-    cmp_r0 = 0x2800 | world.difficulty[player].value  # cmp r0, #(world.difficulty[player].value)
-    rom.write_halfword(0x8091FE4, cmp_r0)
-
-    rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; ReadyObj_Win1Set(): Display S-Hard
+    set_difficulty_level(rom, world.difficulty[player].value)
 
 
 def get_base_rom_bytes(file_name: str = '') -> bytes:
