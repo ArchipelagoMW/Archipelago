@@ -57,6 +57,7 @@ Currently, the following games are supported:
 * Shivers
 * Heretic
 * Landstalker: The Treasures of King Nole
+* Final Fantasy Mystic Quest
 * Castlevania 64
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
