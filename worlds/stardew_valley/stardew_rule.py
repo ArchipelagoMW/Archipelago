@@ -246,20 +246,27 @@ class AggregatingStardewRule(StardewRule, ABC):
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         # TODO test if inverting would speed up
-        for rule in chain(self.combinable_rules.values()):
+        # Combinable rules are considered already simplified, so we evaluate them right away.
+        for rule in self.combinable_rules.values():
             if rule(state) is self.complement.value:
                 return self, self.complement.value
 
         if self._simplified:
+            # The expression is fully simplified, so we can only evaluate.
             for rule in self.other_rules:
                 if rule(state) is self.complement.value:
                     return self, self.complement.value
             return self, self.identity.value
+
+        # Evaluating what has already been simplified.
+        # The assumption is that the rules that used to evaluate to complement might complement again, so we can leave early.
         elif self._simplified_rules:
             for rule in self._simplified_rules:
                 if rule(state) is self.complement.value:
                     return self, self.complement.value
 
+        # If the iterator is None, it means we have not start simplifying.
+        # Otherwise, we will continue simplification where we left.
         if self._left_to_simplify_rules is None:
             self.other_rules = frozenset(self.other_rules)
             if self.complement in self.other_rules:
@@ -269,25 +276,32 @@ class AggregatingStardewRule(StardewRule, ABC):
 
             self._left_to_simplify_rules = iter(self.other_rules)
 
+        # Start simplification where we left.
         for rule in self._left_to_simplify_rules:
             simplified, value = rule.evaluate_while_simplifying(state)
 
+            # Identity is removed from the resulting simplification.
             if simplified is self.identity or simplified in self._simplified_rules:
                 continue
 
+            # If we find a complement here, we know the rule will always resolve to its value.
+            # TODO need to confirm how often it happens, but we could skip evaluating combinables if the rule has resolved to a complement.
             if simplified is self.complement:
                 self._simplified = True
                 self.other_rules = (self.complement,)
                 return self.complement, self.complement.value
 
+            # Keep the simplified rule to be reused.
             self._simplified_rules.add(simplified)
 
+            # Now we use the value, to exit early if it evaluates to the complement.
             if value is self.complement.value:
                 return self, self.complement.value
 
         self._simplified = True
         self.other_rules = frozenset(self._simplified_rules)
 
+        # The whole rule has been simplified and evaluated without finding complement.
         return self, self.identity.value
 
     def __str__(self):
@@ -300,6 +314,8 @@ class AggregatingStardewRule(StardewRule, ABC):
         return isinstance(other, type(self)) and self.combinable_rules == other.combinable_rules and self.other_rules == self.other_rules
 
     def __hash__(self):
+        # TODO since other_rules will be changed after simplification, a simplified rule will have a different hashcode than its original.
+        # Ideally, two rules with the same simplification would be equal...
         return hash((self.combinable_rules, self.other_rules))
 
     def simplify(self) -> StardewRule:
