@@ -217,6 +217,17 @@ class CMWorld(World):
             else:
                 my_progression_items.remove(chosen_item)
 
+        # exclude inaccessible locations
+        # castle
+        if (len([item for item in items if item.name == "Progressive Major Piece"]) < 2 +
+                len([item for item in items if item.name == "Progressive Major To Queen"])):
+            self.multiworld.exclude_locations[self.player].value.add("O-O Castle")
+            self.multiworld.exclude_locations[self.player].value.add("O-O-O Castle")
+        # material
+        for location in location_table:
+            if material < location_table[location].material_expectations:
+                self.multiworld.exclude_locations[self.player].value.add(location)
+
         my_useful_items = list(useful_items.keys())
         while (len(items) + user_location_count) < len(location_table) and len(my_useful_items) > 0:
             chosen_item = self.random.choice(my_useful_items)
@@ -325,23 +336,31 @@ class CMWorld(World):
         return piece_type_limit_options[chosen_item](self.options).value
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        change = super().collect(state, item)
-        if self.has_prereqs(item.name):
-            state.prog_items[self.player]["Material"] += item_table[item.name].material
+        print("Trying " + item.name)
+        material = 0
         children = get_children(item.name)
         for child in children:
-            if state.count(child, item.player) <= state.count(item.name, item.player):
-                state.prog_items[self.player]["Material"] += item_table[child].material
+            if not self.has_prereqs(child):
+                material += item_table[child].material
+        if self.has_prereqs(item.name):
+            material += item_table[item.name].material
+        change = super().collect(state, item)
+        if change:
+            state.prog_items[self.player]["Material"] += material
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
-        change = super().remove(state, item)
-        if self.has_prereqs(item.name):
-            state.prog_items[self.player]["Material"] -= item_table[item.name].material
+        print("Removing " + item.name)
+        material = 0
         children = get_children(item.name)
         for child in children:
-            if state.count(child, item.player) > state.count(item.name, item.player):
-                state.prog_items[self.player]["Material"] -= item_table[child].material
+            if self.has_prereqs(child):
+                material -= item_table[child].material
+        if self.has_prereqs(item.name):
+            material -= item_table[item.name].material
+        change = super().remove(state, item)
+        if change:
+            state.prog_items[self.player]["Material"] -= material
         return change
 
 
