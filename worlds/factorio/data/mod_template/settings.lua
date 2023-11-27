@@ -26,5 +26,15 @@ data:extend({
         {% else %}
             default_value = false
         {% endif %}
+    },
+    {
+        type = "bool-setting",
+        name = "archipelago-allow-collect-{{ slot_player }}-{{ seed_name }}",
+        setting_type = "runtime-global",
+        {% if allow_collect %}
+            default_value = true
+        {% else %}
+            default_value = false
+        {% endif %}
     }
 })

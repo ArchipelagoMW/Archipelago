@@ -11,6 +11,7 @@ TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
 GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
+ARCHIPELAGO_ALLOW_COLLECT_SETTING = "archipelago-allow-collect-{{ slot_player }}-{{ seed_name }}"
 ENERGY_INCREMENT = {{ energy_link * 10000000 }}
 ENERGY_LINK_EFFICIENCY = 0.75
 
@@ -18,6 +19,12 @@ if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
     DEATH_LINK = 1
 else
     DEATH_LINK = 0
+end
+
+if settings.global[ARCHIPELAGO_ALLOW_COLLECT_SETTING].value then
+    ALLOW_COLLECT = 1
+else
+    ALLOW_COLLECT = 0
 end
 
 CURRENTLY_DEATH_LOCK = 0
@@ -255,6 +262,26 @@ function on_runtime_mod_setting_changed(event)
         end
         if force ~= nil then
             dumpInfo(force)
+        end
+    end
+    if event.setting == ARCHIPELAGO_ALLOW_COLLECT_SETTING then
+        local force = game.forces["player"]
+        if global.received_tech == nil then
+            global.received_tech = {}
+        end
+        if settings.global[ARCHIPELAGO_ALLOW_COLLECT_SETTING].value then
+            ALLOW_COLLECT = 1
+            for item_name, _ in pairs(global.received_tech) do
+                tech = force.technologies[item_name]
+                if tech ~= nil and tech.researched ~= true then
+                    game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
+                    game.play_sound({path="utility/research_completed"})
+                    tech.researched = true
+                end
+            end
+            global.received_tech = {}
+        else
+            ALLOW_COLLECT = 0
         end
     end
 end
@@ -658,18 +685,29 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     if global.index_sync == nil then
         global.index_sync = {}
     end
+    if global.received_tech == nil then
+        global.received_tech = {}
+    end
     local tech
     local force = game.forces["player"]
     chunks = split(call.parameter, "\t")
     local item_name = chunks[1]
-    local index = chunks[2]
+    local index = tonumber(chunks[2]) or chunks[2]
     local source = chunks[3] or "Archipelago"
     if index == -1 then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
+        if tech == nil then
+            game.print("Unknown Item " .. item_name)
+            return
+        end
         if tech.researched ~= true then
-            game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
-            game.play_sound({path="utility/research_completed"})
-            tech.researched = true
+            if ALLOW_COLLECT == 1 then
+                game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
+                game.play_sound({path="utility/research_completed"})
+                tech.researched = true
+            else
+                global.received_tech[item_name] = 1
+            end
         end
         return
     elseif progressive_technologies[item_name] ~= nil then
