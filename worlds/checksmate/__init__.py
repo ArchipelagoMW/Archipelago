@@ -268,13 +268,18 @@ class CMWorld(World):
         victory_item = create_item_with_correct_settings(self.player, "Victory")
         self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
-    def has_prereqs(self, chosen_item: str) -> bool:
+    def fewest_parents(self, chosen_item: str):
         parents = get_parents(chosen_item)
         if parents:
-            fewest_parents = min([self.items_used[self.player].get(item, 0) for item in parents])
-            enough_parents = fewest_parents > self.items_used[self.player].get(chosen_item, 0)
-            if not enough_parents:
-                return False
+            return min([self.items_used[self.player].get(item, 0) for item in parents])
+
+    def has_prereqs(self, chosen_item: str) -> bool:
+        fewest_parents = self.fewest_parents(chosen_item)
+        if fewest_parents is None:
+            return True
+        enough_parents = fewest_parents > self.items_used[self.player].get(chosen_item, 0)
+        if not enough_parents:
+            return False
         return self.under_piece_limit(chosen_item, self.PieceLimitCascade.ACTUAL_CHILDREN)
 
     class PieceLimitCascade(Enum):
@@ -336,31 +341,48 @@ class CMWorld(World):
         return piece_type_limit_options[chosen_item](self.options).value
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        print("Trying " + item.name)
         material = 0
+        item_count = state.prog_items[self.player][item.name]
         children = get_children(item.name)
         for child in children:
-            if not self.has_prereqs(child):
+            # TODO: when a child could have multiple parents, check that this is also the least parent
+            if item_count < state.prog_items[self.player][child]:
                 material += item_table[child].material
-        if self.has_prereqs(item.name):
+                print("Found child: " + child + " having count: " + str(state.prog_items[self.player][child]))
+        parents = get_parents(item.name)
+        if len(parents) == 0 or item_table[item.name].material == 0:
             material += item_table[item.name].material
+        else:
+            fewest_parents = min([state.prog_items[self.player].get(parent, 0) for parent in parents])
+            if item_count < fewest_parents:
+                material += item_table[item.name].material
         change = super().collect(state, item)
         if change:
             state.prog_items[self.player]["Material"] += material
+        print("Trying " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) + " having " +
+              str(state.prog_items))
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
-        print("Removing " + item.name)
         material = 0
+        item_count = state.prog_items[self.player][item.name]
         children = get_children(item.name)
         for child in children:
-            if self.has_prereqs(child):
+            # TODO: when a child could have multiple parents, check that this is also the least parent
+            if item_count <= state.prog_items[self.player][child]:
                 material -= item_table[child].material
-        if self.has_prereqs(item.name):
+        parents = get_parents(item.name)
+        if len(parents) == 0 or item_table[item.name].material == 0:
             material -= item_table[item.name].material
+        else:
+            fewest_parents = min([state.prog_items[self.player].get(parent, 0) for parent in parents])
+            if item_count <= fewest_parents:
+                material -= item_table[item.name].material
         change = super().remove(state, item)
         if change:
             state.prog_items[self.player]["Material"] -= material
+        print("Removing " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) + " having " +
+              str(state.prog_items))
         return change
 
 
