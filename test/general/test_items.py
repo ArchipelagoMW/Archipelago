@@ -96,7 +96,6 @@ class TestBase(unittest.TestCase):
                 call_all(multiworld, step)
             # link the items together and attempt to fill
             multiworld.link_items()
-            multiworld._recache()
             multiworld._all_state = None
             call_all(multiworld, "pre_fill")
             distribute_items_restrictive(multiworld)
