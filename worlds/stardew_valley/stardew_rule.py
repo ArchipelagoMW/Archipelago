@@ -260,19 +260,6 @@ class AggregatingStardewRule(StardewRule, ABC):
                 if rule(state) is self.complement.value:
                     return self, self.complement.value
 
-        # for rule in self._left_to_simplify_rules:
-        #     simplified = rule.simplify()
-        #
-        #     if simplified is self.identity or simplified in self._simplified_rules:
-        #         continue
-        #     self._simplified_rules.add(simplified)
-        #
-        #     if simplified(state) is self.complement.value:
-        #         return self.complement.value
-        #
-        # self._simplified = True
-        # return self.identity.value
-
         if self._left_to_simplify_rules is None:
             self.other_rules = frozenset(self.other_rules)
             if self.complement in self.other_rules:
