@@ -244,6 +244,7 @@ class AggregatingStardewRule(StardewRule, ABC):
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         raise NotImplementedError
 
+    # The idea here is the same as short-circuiting operators, applied to evaluation and rule simplification.
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         # TODO test if inverting would speed up
         # Combinable rules are considered already simplified, so we evaluate them right away.
