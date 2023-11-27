@@ -1,6 +1,7 @@
 import logging
 import math
 import random
+from collections import Counter
 from enum import Enum
 from typing import List, Dict, ClassVar, Callable, Type
 
@@ -127,13 +128,6 @@ class CMWorld(World):
         #                             for item, item_data in progression_items]0
         excluded_items = get_excluded_items(self.multiworld, self.player)
         self.items_used[self.player] = {}
-        # remove items player does not want
-        self.items_used[self.player]["Progressive Consul"] = 3 - self.options.max_kings.value
-        self.items_used[self.player]["Progressive King Promotion"] = 2 - self.options.fairy_kings.value
-        self.items_used[self.player]["Progressive Engine ELO Lobotomy"] = 5 - self.options.max_engine_penalties.value
-        self.items_used[self.player]["Progressive Pocket"] = (12 -
-                                                              min(self.options.max_pocket.value,
-                                                                  self.options.pocket_limit_by_pocket.value * 3))
 
         # setup for starting_inventory generic collection and then for early_material custom option
         for item_name in excluded_items:
@@ -160,9 +154,22 @@ class CMWorld(World):
         if max_material_option < min_material_option:
             max_material_option = min_material_option
         max_material_actual = (
-                self.random.random() * (
-                max_material_option - min_material_option) + max_material_option)
+                self.random.random() * (max_material_option - min_material_option) + max_material_option)
         max_material_actual += progression_items["Play as White"].material
+
+        # remove items player does not want
+        self.items_used[self.player]["Progressive Consul"] = (
+                self.items_used[self.player].get("Progressive Consul", 0) +
+                (3 - self.options.max_kings.value))
+        self.items_used[self.player]["Progressive King Promotion"] = (
+                self.items_used[self.player].get("Progressive King Promotion", 0) +
+                (2 - self.options.fairy_kings.value))
+        self.items_used[self.player]["Progressive Engine ELO Lobotomy"] = (
+                self.items_used[self.player].get("Progressive Engine ELO Lobotomy", 0) +
+                (5 - self.options.max_engine_penalties.value))
+        self.items_used[self.player]["Progressive Pocket"] = (
+                self.items_used[self.player].get("Progressive Pocket", 0) +
+                (12 - min(self.options.max_pocket.value, 3 * self.options.pocket_limit_by_pocket.value)))
 
         # add items player really wants
         yaml_locked_items = self.options.locked_items.value
@@ -176,6 +183,9 @@ class CMWorld(World):
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
         #  locations, e.g. because the locked_items might contain some filler items like Progressive Pocket Range.
+        logging.debug(str(self.player) + " pre-fill granted total material of " + str(material) +
+                      " toward " + str(max_material_actual) + " via items " + str(self.items_used[self.player]) +
+                      " having set " + str(starter_items) + " and generated " + str(Counter(items)))
 
         my_progression_items = list(progression_items.keys())
 
@@ -217,7 +227,9 @@ class CMWorld(World):
                 material += progression_items[chosen_item].material
             else:
                 my_progression_items.remove(chosen_item)
-        logging.debug(str(self.player) + " granted total material of " + str(material) + " via items " + str(items))
+        logging.debug(str(self.player) + " granted total material of " + str(material) +
+                      " toward " + str(max_material_actual) + " via items " + str(self.items_used[self.player]) +
+                      " having generated " + str(Counter(items)))
 
         # exclude inaccessible locations
         # castle
@@ -354,14 +366,14 @@ class CMWorld(World):
             if item_count < state.prog_items[self.player][child]:
                 # we had an upgrade, so add that upgrade to the material count
                 material += item_table[child].material
-                logging.debug("Trying child " + child + " having count: " + str(state.prog_items[self.player][child]))
+                logging.debug("Adding child " + child + " having count: " + str(state.prog_items[self.player][child]))
             else:
                 # not immediately upgraded, but maybe later
-                logging.debug("Tried item " + item.name + " had insufficient children " + child + " for ")
+                logging.debug("Added item " + item.name + " had insufficient children " + child + " to upgrade it")
         # check if this is an upgrade which is immediately satisfied
         parents = get_parents(item.name)
         if len(parents) == 0 or item_table[item.name].material == 0:
-            # not an upgrade, just a piece, so we can use it immediately
+            # this is a root element (like a piece), not an upgrade, so we can use it immediately
             material += item_table[item.name].material
         else:
             fewest_parents = min([state.prog_items[self.player].get(parent, 0) for parent in parents])
@@ -371,12 +383,12 @@ class CMWorld(World):
                 logging.debug("Item " + item.name + " had sufficient parents " + str(fewest_parents) + " to be tried")
             else:
                 # not upgrading anything, but maybe later
-                logging.debug("Tried item " + item.name + " had insufficient parents " + str(fewest_parents))
+                logging.debug("Added item " + item.name + " had insufficient parents " + str(fewest_parents))
         change = super().collect(state, item)
         if change:
             # we actually collected the item, so we must gain the material
             state.prog_items[self.player]["Material"] += material
-        logging.debug("Trying " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) +
+        logging.debug("Adding " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) +
                       " having " + str(state.prog_items))
         return change
 
