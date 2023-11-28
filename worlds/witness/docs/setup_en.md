@@ -27,10 +27,6 @@ To continue an earlier game:
 4. Press "Load Credentials" (or type them in manually)
 5. Press "Connect"
 
-## Archipelago Text Client
-
-It is recommended to have Archipelago's Text Client open on the side to keep track of what items you receive and send, as The Witness has no in-game messages.
-<br/>Or use the Auto-Tracker!
 
 ## Auto-Tracking
 
