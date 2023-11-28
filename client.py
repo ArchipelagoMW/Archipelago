@@ -116,7 +116,7 @@ class WL4Client(BizHawkClient):
         game_name = next(read_result).decode('ascii')
         slot_name_bytes = bytes(filter(None, next(read_result)))
 
-        if game_name != 'WARIOLANDE':
+        if game_name not in ('WARIOLANDE', 'WARIOLAND\0'):
             return False
 
         # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
@@ -149,7 +149,7 @@ class WL4Client(BizHawkClient):
         game_mode_address = get_symbol('GlobalGameMode')
         game_state_address = get_symbol('sGameSeq')
         wario_stop_flag_address = get_symbol('usWarStopFlg')
-        level_status_address = get_symbol('LevelStatusTable')
+        level_status_address = get_symbol('W4ItemStatus')
         received_item_count_address = level_status_address + 14  # Collection status for unused Entry level
         multiworld_state_address = get_symbol('MultiworldState')
         incoming_item_address = get_symbol('IncomingItemID')
