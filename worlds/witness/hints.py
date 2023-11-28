@@ -502,7 +502,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
             if local_lasers == 1:
                 hint_string += "\nAlso, one of them is a laser for this world."
             elif local_lasers:
-                if area_progression_word == "All":
+                if not local_progression:
                     hint_string += f"\nAlso, {local_lasers} of them are lasers."
                 else:
                     hint_string += f"\nAlso, {local_lasers} of them are lasers for this world."
