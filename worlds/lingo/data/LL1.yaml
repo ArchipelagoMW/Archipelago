@@ -3005,8 +3005,7 @@
       PATS:
         id: Rhyme Room/Panel_wrath_path
         colors: purple
-        tag: midpurp and rhyme
-        copy_to_sign: sign15
+        tag: forbid
       KNIGHT:
         id: Rhyme Room/Panel_knight_write
         colors: purple
