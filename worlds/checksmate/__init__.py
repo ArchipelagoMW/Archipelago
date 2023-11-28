@@ -158,6 +158,7 @@ class CMWorld(World):
         max_material_actual += progression_items["Play as White"].material
 
         # remove items player does not want
+        # TODO: tie these "magic numbers" to the corresponding Item.quantity
         self.items_used[self.player]["Progressive Consul"] = (
                 self.items_used[self.player].get("Progressive Consul", 0) +
                 (3 - self.options.max_kings.value))
@@ -357,7 +358,7 @@ class CMWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         material = 0
         item_count = state.prog_items[self.player][item.name]
-        # check if there are unused upgrades to this piece which are immediately satisfied
+        # check if there are existing unused upgrades to this piece which are immediately satisfied
         children = get_children(item.name)
         for child in children:
             if item_table[child].material == 0:
@@ -370,12 +371,13 @@ class CMWorld(World):
             else:
                 # not immediately upgraded, but maybe later
                 logging.debug("Added item " + item.name + " had insufficient children " + child + " to upgrade it")
-        # check if this is an upgrade which is immediately satisfied
+        # check if this is an upgrade which is immediately satisfied by applying it to an existing piece
         parents = get_parents(item.name)
         if len(parents) == 0 or item_table[item.name].material == 0:
             # this is a root element (like a piece), not an upgrade, so we can use it immediately
             material += item_table[item.name].material
         else:
+            # this is an upgrade, so we can only apply it if it can find an unsatisfied parent
             fewest_parents = min([state.prog_items[self.player].get(parent, 0) for parent in parents])
             if item_count < fewest_parents:
                 # found a piece we could upgrade, so apply the upgrade
