@@ -350,7 +350,7 @@ def generate_itempool(ootworld):
     ootworld.itempool = [ootworld.create_item(item) for item in pool]
     for (location_name, item) in placed_items.items():
         location = world.get_location(location_name, player)
-        location.place_locked_item(ootworld.create_item(item))
+        location.place_locked_item(ootworld.create_item(item, allow_arbitrary_name=True))
 
 
 def get_pool_core(world):
@@ -675,7 +675,7 @@ def get_pool_core(world):
         world.remove_from_start_inventory.append('Scarecrow Song')
     
     if world.no_epona_race:
-        world.multiworld.push_precollected(world.create_item('Epona'))
+        world.multiworld.push_precollected(world.create_item('Epona', allow_arbitrary_name=True))
         world.remove_from_start_inventory.append('Epona')
 
     if world.shuffle_smallkeys == 'vanilla':
