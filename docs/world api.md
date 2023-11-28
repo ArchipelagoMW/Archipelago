@@ -79,9 +79,9 @@ the options and the values are the values to be set for that option. These prese
 
 Note: The values must be a non-aliased value for the option type and can only include the following option types:
 
-  - If you have a `Range`/`SpecialRange` option, the value should be an `int` between the `range_start` and `range_end`
+  - If you have a `Range`/`NamedRange` option, the value should be an `int` between the `range_start` and `range_end`
     values.
-    - If you have a `SpecialRange` option, the value can alternatively be a `str` that is one of the 
+    - If you have a `NamedRange` option, the value can alternatively be a `str` that is one of the 
       `special_range_names` keys.
   - If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values. 
   - If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
