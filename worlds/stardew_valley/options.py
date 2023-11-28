@@ -1,21 +1,21 @@
 from dataclasses import dataclass
 from typing import Dict
 
-from Options import Range, SpecialRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option
 from .mods.mod_data import ModNames
 
 
 class Goal(Choice):
     """What's your goal with this play-through?
-    Community Center: The world will be completed once you complete the Community Center.
-    Grandpa's Evaluation: The world will be completed once 4 candles are lit at Grandpa's Shrine.
-    Bottom of the Mines: The world will be completed once you reach level 120 in the mineshaft.
-    Cryptic Note: The world will be completed once you complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern.
-    Master Angler: The world will be completed once you have caught every fish in the game. Pairs well with Fishsanity.
-    Complete Collection: The world will be completed once you have completed the museum by donating every possible item. Pairs well with Museumsanity.
-    Full House: The world will be completed once you get married and have two kids. Pairs well with Friendsanity.
-    Greatest Walnut Hunter: The world will be completed once you find all 130 Golden Walnuts
-    Perfection: The world will be completed once you attain Perfection, based on the vanilla definition.
+    Community Center: Complete the Community Center.
+    Grandpa's Evaluation: Succeed grandpa's evaluation with 4 lit candles.
+    Bottom of the Mines: Reach level 120 in the mineshaft.
+    Cryptic Note: Complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern.
+    Master Angler: Catch every fish in the game. Pairs well with Fishsanity.
+    Complete Collection: Complete the museum by donating every possible item. Pairs well with Museumsanity.
+    Full House: Get married and have two children. Pairs well with Friendsanity.
+    Greatest Walnut Hunter: Find all 130 Golden Walnuts
+    Perfection: Attain Perfection, based on the vanilla definition.
     """
     internal_name = "goal"
     display_name = "Goal"
@@ -48,12 +48,12 @@ class Goal(Choice):
         return super().get_option_name(value)
 
 
-class StartingMoney(SpecialRange):
+class StartingMoney(NamedRange):
     """Amount of gold when arriving at the farm.
-    Set to -1 or unlimited for infinite money in this playthrough"""
+    Set to -1 or unlimited for infinite money"""
     internal_name = "starting_money"
     display_name = "Starting Gold"
-    range_start = -1
+    range_start = 0
     range_end = 50000
     default = 5000
 
@@ -67,7 +67,7 @@ class StartingMoney(SpecialRange):
     }
 
 
-class ProfitMargin(SpecialRange):
+class ProfitMargin(NamedRange):
     """Multiplier over all gold earned in-game by the player."""
     internal_name = "profit_margin"
     display_name = "Profit Margin"
@@ -117,10 +117,10 @@ class BundlePrice(Choice):
 class EntranceRandomization(Choice):
     """Should area entrances be randomized?
     Disabled: No entrance randomization is done
-    Pelican Town: Only buildings in the main town area are randomized among each other
-    Non Progression: Only buildings that are always available are randomized with each other
-    Buildings: All Entrances that Allow you to enter a building using a door are randomized with each other
-    Chaos: Same as above, but the entrances get reshuffled every single day!
+    Pelican Town: Only doors in the main town area are randomized with each other
+    Non Progression: Only entrances that are always available are randomized with each other
+    Buildings: All Entrances that Allow you to enter a building are randomized with each other
+    Chaos: Same as "Buildings", but the entrances get reshuffled every single day!
     """
     # Everything: All buildings and areas are randomized with each other
     # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
@@ -144,11 +144,10 @@ class EntranceRandomization(Choice):
 
 class SeasonRandomization(Choice):
     """Should seasons be randomized?
-    All settings allow you to choose which season you want to play next (from those unlocked) at the end of a season.
-    Disabled: You will start in Spring with all seasons unlocked.
-    Randomized: The seasons will be unlocked randomly as Archipelago items.
-    Randomized Not Winter: The seasons are randomized, but you're guaranteed not to start with winter.
-    Progressive: You will start in Spring and unlock the seasons in their original order.
+    Disabled: Start in Spring with all seasons unlocked.
+    Randomized: Start in a random season and the other 3 must be unlocked randomly.
+    Randomized Not Winter: Same as randomized, but the start season is guaranteed not to be winter.
+    Progressive: Start in Spring and unlock the seasons in their original order.
     """
     internal_name = "season_randomization"
     display_name = "Season Randomization"
@@ -163,20 +162,21 @@ class Cropsanity(Choice):
     """Formerly named "Seed Shuffle"
     Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
     Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
-    Shuffled: Seeds are unlocked as archipelago item, for each seed there is a location check for growing and harvesting that crop
+    Shuffled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
     """
     internal_name = "cropsanity"
     display_name = "Cropsanity"
     default = 1
     option_disabled = 0
-    option_shuffled = 1
+    option_enabled = 1
+    alias_shuffled = option_enabled
 
 
 class BackpackProgression(Choice):
-    """How is the backpack progression handled?
-    Vanilla: You can buy them at Pierre's General Store.
+    """Shuffle the backpack?
+    Vanilla: You can buy backpacks at Pierre's General Store.
     Progressive: You will randomly find Progressive Backpack upgrades.
-    Early Progressive: You can expect your first Backpack in sphere 1.
+    Early Progressive: Same as progressive, but one backpack will be placed early in the multiworld.
     """
     internal_name = "backpack_progression"
     display_name = "Backpack Progression"
@@ -187,8 +187,8 @@ class BackpackProgression(Choice):
 
 
 class ToolProgression(Choice):
-    """How is the tool progression handled?
-    Vanilla: Clint will upgrade your tools with ore.
+    """Shuffle the tool upgrades?
+    Vanilla: Clint will upgrade your tools with metal bars.
     Progressive: You will randomly find Progressive Tool upgrades."""
     internal_name = "tool_progression"
     display_name = "Tool Progression"
@@ -198,12 +198,11 @@ class ToolProgression(Choice):
 
 
 class ElevatorProgression(Choice):
-    """How is Elevator progression handled?
-    Vanilla: You will unlock new elevator floors for yourself.
-    Progressive: You will randomly find Progressive Mine Elevators to go deeper. Locations are sent for reaching
-        every elevator level.
-    Progressive from previous floor: Same as progressive, but you must reach elevator floors on your own,
-        you cannot use the elevator to check elevator locations"""
+    """Shuffle the elevator?
+    Vanilla: Reaching a mineshaft floor unlocks the elevator for it
+    Progressive: You will randomly find Progressive Mine Elevators to go deeper.
+    Progressive from previous floor: Same as progressive, but you cannot use the elevator to check elevator locations.
+        You must reach elevator floors on your own."""
     internal_name = "elevator_progression"
     display_name = "Elevator Progression"
     default = 2
@@ -213,10 +212,9 @@ class ElevatorProgression(Choice):
 
 
 class SkillProgression(Choice):
-    """How is the skill progression handled?
-    Vanilla: You will level up and get the normal reward at each level.
-    Progressive: The xp will be earned internally, locations will be sent when you earn a level. Your real
-        levels will be scattered around the multiworld."""
+    """Shuffle skill levels?
+    Vanilla: Leveling up skills is normal
+    Progressive: Skill levels are unlocked randomly, and earning xp sends checks"""
     internal_name = "skill_progression"
     display_name = "Skill Progression"
     default = 1
@@ -225,11 +223,11 @@ class SkillProgression(Choice):
 
 
 class BuildingProgression(Choice):
-    """How is the building progression handled?
-    Vanilla: You will buy each building normally.
+    """Shuffle Carpenter Buildings?
+    Vanilla: You can buy each building normally.
     Progressive: You will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
-    Progressive early shipping bin: You can expect your shipping bin in sphere 1.
+    Progressive early shipping bin: Same as Progressive, but the shipping bin will be placed early in the multiworld.
     """
     internal_name = "building_progression"
     display_name = "Building Progression"
@@ -240,10 +238,10 @@ class BuildingProgression(Choice):
 
 
 class FestivalLocations(Choice):
-    """Locations for attending and participating in festivals
-    With Disabled, you do not need to attend festivals
-    With Easy, there are checks for participating in festivals
-    With Hard, the festival checks are only granted when the player performs well in the festival
+    """Shuffle Festival Activities?
+    Disabled: You do not need to attend festivals
+    Easy: Every festival has checks, but they are easy and usually only require attendance
+    Hard: Festivals have more checks, and many require performing well, not just attending
     """
     internal_name = "festival_locations"
     display_name = "Festival Locations"
@@ -254,11 +252,10 @@ class FestivalLocations(Choice):
 
 
 class ArcadeMachineLocations(Choice):
-    """How are the Arcade Machines handled?
-    Disabled: The arcade machines are not included in the Archipelago shuffling.
+    """Shuffle the arcade machines?
+    Disabled: The arcade machines are not included.
     Victories: Each Arcade Machine will contain one check on victory
-    Victories Easy: The arcade machines are both made considerably easier to be more accessible for the average
-        player.
+    Victories Easy: Same as Victories, but both games are made considerably easier.
     Full Shuffling: The arcade machines will contain multiple checks each, and different buffs that make the game
         easier are in the item pool. Junimo Kart has one check at the end of each level.
         Journey of the Prairie King has one check after each boss, plus one check for each vendor equipment.
@@ -273,10 +270,10 @@ class ArcadeMachineLocations(Choice):
 
 
 class SpecialOrderLocations(Choice):
-    """How are the Special Orders handled?
+    """Shuffle Special Orders?
     Disabled: The special orders are not included in the Archipelago shuffling.
     Board Only: The Special Orders on the board in town are location checks
-    Board and Qi: The Special Orders from Qi's walnut room are checks, as well as the board in town
+    Board and Qi: The Special Orders from Mr Qi's walnut room are checks, in addition to the board in town
     """
     internal_name = "special_order_locations"
     display_name = "Special Order Locations"
@@ -286,8 +283,8 @@ class SpecialOrderLocations(Choice):
     option_board_qi = 2
 
 
-class HelpWantedLocations(SpecialRange):
-    """How many "Help Wanted" quests need to be completed as Archipelago Locations
+class HelpWantedLocations(NamedRange):
+    """Include location checks for Help Wanted quests
     Out of every 7 quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
     Choosing a multiple of 7 is recommended."""
     internal_name = "help_wanted_locations"
@@ -307,7 +304,7 @@ class HelpWantedLocations(SpecialRange):
 
 
 class Fishsanity(Choice):
-    """Locations for catching fish?
+    """Locations for catching a fish the first time?
     None: There are no locations for catching fish
     Legendaries: Each of the 5 legendary fish are checks
     Special: A curated selection of strong fish are checks
@@ -336,7 +333,7 @@ class Museumsanity(Choice):
     None: There are no locations for donating artifacts and minerals to the museum
     Milestones: The donation milestones from the vanilla game are checks
     Randomized: A random selection of minerals and artifacts are checks
-    All: Every single donation will be a check
+    All: Every single donation is a check
     """
     internal_name = "museumsanity"
     display_name = "Museumsanity"
@@ -348,12 +345,12 @@ class Museumsanity(Choice):
 
 
 class Friendsanity(Choice):
-    """Locations for friendships?
-    None: There are no checks for befriending villagers
-    Bachelors: Each heart of a bachelor is a check
-    Starting NPCs: Each heart for npcs that are immediately available is a check
-    All: Every heart with every NPC is a check, including Leo, Kent, Sandy, etc
-    All With Marriage: Marriage candidates must also be dated, married, and befriended up to 14 hearts.
+    """Shuffle Friendships?
+    None: Friendship hearts are earned normally
+    Bachelors: Hearts with bachelors are shuffled
+    Starting NPCs: Hearts for NPCs available immediately are checks
+    All: Hearts for all npcs are checks, including Leo, Kent, Sandy, etc
+    All With Marriage: Hearts for all npcs are checks, including romance hearts up to 14 when applicable
     """
     internal_name = "friendsanity"
     display_name = "Friendsanity"
@@ -368,7 +365,7 @@ class Friendsanity(Choice):
 
 # Conditional Setting - Friendsanity not None
 class FriendsanityHeartSize(Range):
-    """If using friendsanity, how many hearts are received per item, and how many hearts must be earned to send a check
+    """If using friendsanity, how many hearts are received per heart item, and how many hearts must be earned to send a check
     A higher value will lead to fewer heart items in the item pool, reducing bloat"""
     internal_name = "friendsanity_heart_size"
     display_name = "Friendsanity Heart Size"
@@ -411,6 +408,7 @@ class ExcludeGingerIsland(Toggle):
 
 class TrapItems(Choice):
     """When rolling filler items, including resource packs, the game can also roll trap items.
+    Trap items are negative items that cause problems or annoyances for the player
     This setting is for choosing if traps will be in the item pool, and if so, how punishing they will be.
     """
     internal_name = "trap_items"
@@ -431,7 +429,7 @@ class MultipleDaySleepEnabled(Toggle):
     default = 1
 
 
-class MultipleDaySleepCost(SpecialRange):
+class MultipleDaySleepCost(NamedRange):
     """How much gold it will cost to use MultiSleep. You will have to pay that amount for each day skipped."""
     internal_name = "multiple_day_sleep_cost"
     display_name = "Multiple Day Sleep Cost"
@@ -441,14 +439,16 @@ class MultipleDaySleepCost(SpecialRange):
 
     special_range_names = {
         "free": 0,
-        "cheap": 25,
-        "medium": 50,
-        "expensive": 100,
+        "cheap": 10,
+        "medium": 25,
+        "expensive": 50,
+        "very expensive": 100,
     }
 
 
-class ExperienceMultiplier(SpecialRange):
-    """How fast you want to earn skill experience. A lower setting mean less experience.
+class ExperienceMultiplier(NamedRange):
+    """How fast you want to earn skill experience.
+    A lower setting mean less experience.
     A higher setting means more experience."""
     internal_name = "experience_multiplier"
     display_name = "Experience Multiplier"
@@ -466,7 +466,7 @@ class ExperienceMultiplier(SpecialRange):
     }
 
 
-class FriendshipMultiplier(SpecialRange):
+class FriendshipMultiplier(NamedRange):
     """How fast you want to earn friendship points with villagers.
     A lower setting mean less friendship per action.
     A higher setting means more friendship per action."""
@@ -513,14 +513,15 @@ class QuickStart(Toggle):
 
 
 class Gifting(Toggle):
-    """Do you want to enable gifting items to and from other Stardew Valley worlds?"""
+    """Do you want to enable gifting items to and from other Archipelago slots?
+    Items can only be sent to games that also support gifting"""
     internal_name = "gifting"
     display_name = "Gifting"
     default = 1
 
 
 class Mods(OptionSet):
-    """List of mods that will be considered for shuffling."""
+    """List of mods that will be included in the shuffling."""
     internal_name = "mods"
     display_name = "Mods"
     valid_keys = {

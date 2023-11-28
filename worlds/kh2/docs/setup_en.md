@@ -66,30 +66,33 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
     - If you don't want to have a save in the GoA. Disconnect the client, load the auto save, and then reconnect the client after it loads the auto save.
 - Set fps limit to 60fps.
 - Run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
+- Make sure to save in a different save slot when playing in an async or disconnecting from the server to play a different seed
 
 <h2 style="text-transform:none";>Requirement/logic sheet</h2>
 Have any questions on what's in logic? This spreadsheet has the answer [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1Embae0t7pIrbzvX-NRywk7bTHHEvuFzzQBUUpSUL7Ak/edit?usp=sharing)
 <h2 style="text-transform:none";>F.A.Q.</h2>
 
+- Why is my HP/MP continuously increasing without stopping?
+    - You do not have `JaredWeakStrike/APCompanion` set up correctly. Make sure it is above the `GoA ROM Mod` in the mod manager.
+- Why is my HP/MP continuously increasing without stopping when I have the APCompanion Mod?
+    - You have a leftover GOA lua script in your `Documents\KINGDOM HEARTS HD 1.5+2.5 ReMIX\scripts\KH2`.
+- Why am I missing worlds/portals in the GoA?
+    - You are missing the required visit-locking item to access the world/portal.
+- Why did I not load into the correct visit?
+    - You need to trigger a cutscene or visit The World That Never Was for it to register that you have received the item.
+- What versions of Kingdom Hearts 2 are supported?
+    - Currently `only` the most up to date version on the Epic Game Store is supported: version `1.0.0.8_WW`.
 - Why am I getting wallpapered while going into a world for the first time?
   - Your `Lua Backend` was not configured correctly. Look over the step in the [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/) guide.
 - Why am I not getting magic?
     - If you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
-- Why am I missing worlds/portals in the GoA?
-    - You are missing the required visit locking item to access the world/portal.
-- What versions of Kingdom Hearts 2 are supported?
-    - Currently `only` the most up to date version on the Epic Game Store is supported `1.0.0.8_WW`. Emulator may be added in the future.
 - Why did I crash?
     - The port of Kingdom Hearts 2 can and will randomly crash, this is the fault of the game not the randomizer or the archipelago client.
       - If you have a continuous/constant crash (in the same area/event every time) you will want to reverify your installed files. This can be done by doing the following: Open Epic Game Store --> Library --> Click Triple Dots --> Manage --> Verify
 - Why am I getting dummy items or letters?
     - You will need to get the `JaredWeakStrike/APCompanion` (you can find how to get this if you scroll up)
-- Why is my HP/MP continuously increasing without stopping?
-    - You do not have `JaredWeakStrike/APCompanion` setup correctly. Make Sure it is above the GOA in the mod manager.
 - Why am I not sending or receiving items?
     - Make sure you are connected to the KH2 client and the correct room (for more information scroll up)
-- Why did I not load in to the correct visit
-    - You need to trigger a cutscene or visit The World That Never Was for it to update you have recevied the item.
 - Why should I install the auto save mod at `KH2FM-Mods-equations19/auto-save`?
     - Because Kingdom Hearts 2 is prone to crashes and will keep you from losing your progress.
 - How do I load an auto save?

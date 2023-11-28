@@ -26,6 +26,7 @@ All local and remote items appear the same. Final Fantasy will say that you rece
 emulator will display what was found external to the in-game text box.
 
 ## Unique Local Commands
-The following command is only available when using the FF1Client for the Final Fantasy Randomizer.
+The following commands are only available when using the FF1Client for the Final Fantasy Randomizer.
 
 - `/nes` Shows the current status of the NES connection.
+- `/toggle_msgs` Toggle displaying messages in EmuHawk
