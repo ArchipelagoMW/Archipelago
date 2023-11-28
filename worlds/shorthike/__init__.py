@@ -36,7 +36,7 @@ class ShortHikeWorld(World):
     item_name_groups = group_table
     option_definitions = short_hike_options
 
-    required_client_version = (0, 1, 9)
+    required_client_version = (0, 4, 3)
 
     def __init__(self, multiworld, player):
         super(ShortHikeWorld, self).__init__(multiworld, player)
@@ -49,7 +49,6 @@ class ShortHikeWorld(World):
         id = item_id - base_id - 1
 
         return ShortHikeItem(name, item_table[id]["classification"], item_id, player=self.player)
-
 
     def create_event(self, event: str):
         return ShortHikeItem(event, ItemClassification.progression_skip_balancing, None, self.player)
@@ -64,9 +63,11 @@ class ShortHikeWorld(World):
                 for i in range(count):
                     self.multiworld.itempool.append(self.create_item(item["name"]))
  
-        junk = 21 - self.multiworld.filler_silver_feathers[self.player].value
+        junk = 45 - self.multiworld.silver_feathers[self.player].value - self.multiworld.golden_feathers[self.player].value - self.multiworld.buckets[self.player].value
         self.multiworld.itempool += [self.create_item("13 Coins") for _ in range(junk)]
-        self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.multiworld.filler_silver_feathers[self.player].value)]
+        self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(self.multiworld.golden_feathers[self.player].value)]
+        self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.multiworld.silver_feathers[self.player].value)]
+        self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.multiworld.buckets[self.player].value)]
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -118,10 +119,8 @@ class ShortHikeWorld(World):
     
         return slot_data
 
-
 class ShortHikeItem(Item):
     game: str = "A Short Hike"
-
 
 class ShortHikeLocation(Location):
     game: str = "A Short Hike"
