@@ -208,7 +208,7 @@ async def _run_game(rom: str):
 
     if auto_start is True:
         emuhawk_path = Utils.get_settings().bizhawkclient_options.emuhawk_path
-        subprocess.Popen([emuhawk_path, "--lua=data/lua/connector_bizhawk_generic.lua", os.path.realpath(rom)],
+        subprocess.Popen([emuhawk_path, f"--lua={Utils.local_path(os.path.join('data', 'lua', 'connector_bizhawk_generic.lua'))}", os.path.realpath(rom)],
                          cwd=Utils.local_path("."),
                          stdin=subprocess.DEVNULL,
                          stdout=subprocess.DEVNULL,
