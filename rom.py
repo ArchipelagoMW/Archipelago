@@ -14,7 +14,10 @@ from .items import WL4Item
 from .types import ItemType
 
 
+# The Japanese and international versions have the same ROM mapping and in fact
+# only differ by 25 bytes, so either version is acceptable.
 MD5_US_EU = '5fe47355a33e3fabec2a1607af88a404'
+MD5_JP = '99c8ad779a16be513a9fdff502b6f5c2'
 
 
 class WL4DeltaPatch(APDeltaPatch):
@@ -244,9 +247,10 @@ def get_base_rom_bytes(file_name: str = '') -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if MD5_US_EU != basemd5.hexdigest():
-            raise Exception('Supplied base ROM does not match US/EU version.'
-                            'Please provide the correct ROM version')
+        if basemd5.hexdigest() not in (MD5_US_EU, MD5_JP):
+            raise Exception('Supplied base ROM does not match the US/EU or '
+                            'Japanese version of Wario Land 4. Please provide '
+                            'the correct ROM version')
 
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
