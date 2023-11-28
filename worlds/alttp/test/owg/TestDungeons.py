@@ -6,6 +6,7 @@ class TestDungeons(TestVanillaOWG):
     def testFirstDungeonChests(self):
         self.run_location_tests([
             ["Hyrule Castle - Map Chest", True, []],
+            ["Hyrule Castle - Map Guard Key Drop", True, []],
 
             ["Sanctuary", True, []],
 
