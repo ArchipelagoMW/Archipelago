@@ -459,7 +459,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
 
     player_count = len(world.multiworld.player_ids)
 
-    correct_word = "Both" if total_progression == 2 else "All"
+    area_progression_word = "Both" if total_progression == 2 else "All"
 
     if not total_progression:
         hint_string = f"In the {hinted_area} area, you will find no progression items."
@@ -483,7 +483,8 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
         hint_string = f"In the {hinted_area} area, you will find {total_progression} progression items."
 
         if local_lasers == total_progression:
-            hint_string += f"\n{correct_word} of them are lasers" + (" for this world." if player_count > 1 else ".")
+            sentence_end = (" for this world." if player_count > 1 else ".")
+            hint_string += f"\nAll of them are lasers" + sentence_end
 
         elif player_count > 1:
             if local_progression and non_local_progression:
@@ -494,14 +495,17 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
                     hint_string += f"\n{non_local_progression} of them are for other players."
             elif non_local_progression:
                 other_players_str = "the other player" if player_count == 2 else "other players"
-                hint_string += f"\n{correct_word} of them are for {other_players_str}."
+                hint_string += f"\n{area_progression_word} of them are for {other_players_str}."
             elif local_progression:
-                hint_string += f"\n{correct_word} of them are for this world."
+                hint_string += f"\n{area_progression_word} of them are for this world."
 
             if local_lasers == 1:
                 hint_string += "\nAlso, one of them is a laser for this world."
             elif local_lasers:
-                hint_string += f"\nAlso, {local_lasers} of them are lasers for this world."
+                if area_progression_word == "All":
+                    hint_string += f"\nAlso, {local_lasers} of them are lasers."
+                else:
+                    hint_string += f"\nAlso, {local_lasers} of them are lasers for this world."
 
         else:
             if local_lasers == 1:
