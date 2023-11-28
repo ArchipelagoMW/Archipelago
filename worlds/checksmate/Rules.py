@@ -1,33 +1,14 @@
 from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState, Item
-from Utils import cache_self1
 from .. import checksmate
 
 from ..generic.Rules import set_rule
-from .Items import item_table, CMItemData
 from .Options import CMOptions
-
-
-def owned_items(state: CollectionState, player: int):
-    return [(item_id, item) for item_id, item in item_table.items() if state.has(item_id, player)]
-
-
-def individual_piece_material(state: CollectionState, item_id: str, item: CMItemData, player: int) -> int:
-    val = state.count(item_id, player) * item.material
-    if item.parents is not None:
-        parent_items = [item_id] + [parent_name for parent_name in item.parents]
-        val = min(val, min([state.count(item_name, player) for item_name in parent_items]) * item.material)
-
-    return val
 
 
 def total_piece_material(state: CollectionState, player: int) -> int:
     return state.prog_items[player]["Material"]
-#     owned_piece_materials = [
-#         individual_piece_material(state, item_id, item, player)
-#         for item_id, item in owned_items(state, player)]
-#     return reduce(lambda a, b: a + b, owned_piece_materials, 0)
 
 
 def has_piece_material(state: CollectionState, player: int, amount: int) -> bool:
