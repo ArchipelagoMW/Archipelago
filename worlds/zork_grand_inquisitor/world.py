@@ -8,6 +8,7 @@ from .data.region_data import region_data
 
 from .data_funcs import (
     item_names_to_id,
+    item_names_to_item,
     location_names_to_id,
     item_groups,
     location_groups,
@@ -58,9 +59,11 @@ class ZorkGrandInquisitorWorld(World):
     item_name_groups = item_groups()
     location_name_groups = location_groups()
 
-    required_client_version = (0, 4, 3)  # Technically 0.4.4 but server still reports 0.4.3
+    required_client_version = (0, 4, 4)
 
     web = ZorkGrandInquisitorWebWorld()
+
+    item_name_to_item = item_names_to_item()
 
     def create_regions(self):
         region_mapping = dict()
@@ -118,34 +121,28 @@ class ZorkGrandInquisitorWorld(World):
             if ZorkGrandInquisitorTags.FILLER in (data.tags or tuple()):
                 continue
 
-            item_pool.append(
-                ZorkGrandInquisitorItem(
-                    item.value,
-                    data.classification,
-                    data.archipelago_id,
-                    self.player,
-                )
-            )
+            item_pool.append(self.create_item(item.value))
 
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
 
         for _ in range(total_locations - len(item_pool)):
-            filler_item_name = self.get_filler_item_name()
-
-            item_pool.append(
-                ZorkGrandInquisitorItem(
-                    filler_item_name,
-                    ItemClassification.filler,
-                    self.item_name_to_id[filler_item_name],
-                    self.player,
-                )
-            )
+            item_pool.append(self.create_item(self.get_filler_item_name()))
 
         self.multiworld.itempool += item_pool
 
         if self.options.early_rope_and_lantern.value == 1:
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.ROPE.value] = 1
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.LANTERN.value] = 1
+
+    def create_item(self, name):
+        data = item_data[self.item_name_to_item[name]]
+
+        return ZorkGrandInquisitorItem(
+            name,
+            data.classification,
+            data.archipelago_id,
+            self.player,
+        )
 
     def generate_basic(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)

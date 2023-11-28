@@ -16,6 +16,10 @@ def item_names_to_id():
     return {item.value: data.archipelago_id for item, data in item_data.items()}
 
 
+def item_names_to_item():
+    return {item.value: item for item, _ in item_data.items()}
+
+
 def location_names_to_id():
     return {
         location.value: data.archipelago_id
