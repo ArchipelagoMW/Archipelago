@@ -39,6 +39,7 @@ from .types import Box, ItemFlag, ItemType, Passage
 #  - 1 = Wario form trap
 #  - 2 = Single heart recovery
 #  - 3 = Single heart damage
+#  - 4 = Minigame coin
 
 
 def ap_id_from_wl4_data(data: ItemData) -> int:
@@ -181,6 +182,7 @@ item_table = {
     'Wario Form Trap':                  ItemData(ItemType.ITEM,    0x81,                              IC.trap),
     'Heart':                            ItemData(ItemType.ITEM,    0x82,                              IC.filler),
     'Lightning Trap':                   ItemData(ItemType.ITEM,    0x83,                              IC.trap),
+    'Minigame Coin':                    ItemData(ItemType.ITEM,    0x84,                              IC.filler),
     'Entry Passage Clear':              ItemData(ItemType.EVENT,   None,                              IC.progression),
     'Emerald Passage Clear':            ItemData(ItemType.EVENT,   None,                              IC.progression),
     'Ruby Passage Clear':               ItemData(ItemType.EVENT,   None,                              IC.progression),

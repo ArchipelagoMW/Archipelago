@@ -14,7 +14,10 @@ from .items import WL4Item
 from .types import ItemType
 
 
+# The Japanese and international versions have the same ROM mapping and in fact
+# only differ by 25 bytes, so either version is acceptable.
 MD5_US_EU = '5fe47355a33e3fabec2a1607af88a404'
+MD5_JP = '99c8ad779a16be513a9fdff502b6f5c2'
 
 
 class WL4DeltaPatch(APDeltaPatch):
@@ -120,11 +123,11 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
         else:
             playername = world.player_name[playerid]
 
-        location_offset = location.level_offset()
-        item_location = get_symbol(location.rom_item_table(), location_offset)
+        location_offset = location.level_offset() + location.entry_offset()
+        item_location = get_symbol('ItemLocationTable', location_offset)
         rom.write_byte(item_location, itemid)
 
-        ext_data_location = get_symbol(location.rom_ext_data_table(), 4 * location_offset)
+        ext_data_location = get_symbol('ItemExtDataTable', 4 * location_offset)
         if playername is not None:
             multiworld_items[ext_data_location] = MultiworldExtData(playername, itemname)
         else:
@@ -140,7 +143,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
 
 def give_item(rom: LocalRom, item: WL4Item):
     if item.type == ItemType.JEWEL:
-        table_address = get_symbol('StartingInventoryLevelStatus')
+        table_address = get_symbol('StartingInventoryItemStatus')
         for level in range(4):
             index = 6 * item.passage + level
             address = table_address + index
@@ -151,7 +154,7 @@ def give_item(rom: LocalRom, item: WL4Item):
                 break
     elif item.type == ItemType.CD:
         index = 6 * item.passage + item.level
-        address = get_symbol('StartingInventoryLevelStatus', index)
+        address = get_symbol('StartingInventoryItemStatus', index)
         status = rom.read_byte(address)
         status |= 1 << 4
         rom.write_byte(address, status)
@@ -205,6 +208,23 @@ def write_multiworld_table(rom: LocalRom,
             entry_address += 8
 
 
+def set_difficulty_level(rom: LocalRom, difficulty: int):
+    mov_r0 = 0x2000 | difficulty           # mov r0, #difficulty
+    cmp_r0 = 0x2800 | difficulty           # cmp r0, #difficulty
+
+    # SramtoWork_Load()
+    rom.write_halfword(0x8091558, mov_r0)  # Force difficulty (anti-cheese)
+
+    # ReadySub_Level()
+    rom.write_halfword(0x8091F8E, 0x2001)  # movs r0, r1  ; Allow selecting S-Hard
+    rom.write_halfword(0x8091FCC, 0x46C0)  # nop  ; Force cursor to difficulty
+    rom.write_halfword(0x8091FD2, 0xE007)  # b 0x8091FE4
+    rom.write_halfword(0x8091FE4, cmp_r0)
+
+    # ReadyObj_Win1Set()
+    rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; Display S-Hard
+
+
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
 
@@ -216,17 +236,7 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     # Set deathlink
     rom.write_byte(get_symbol('DeathLinkFlag'), world.death_link[player].value)
 
-    # Force difficulty level
-    mov_r0 = 0x2000 | world.difficulty[player].value # mov r0, #(world.difficulty[player].value)
-    rom.write_halfword(0x8091558, mov_r0)  # SramtoWork_Load(): Force difficulty (anti-cheese)
-
-    rom.write_halfword(0x8091F8E, 0x2001)  # movs r0, r1  ; ReadySub_Level(): Allow selecting S-Hard
-    rom.write_halfword(0x8091FCC, 0x46C0)  # nop  ; ReadySub_Level(): Force cursor to difficulty
-    rom.write_halfword(0x8091FD2, 0xE007)  # b 0x8091FE4
-    cmp_r0 = 0x2800 | world.difficulty[player].value  # cmp r0, #(world.difficulty[player].value)
-    rom.write_halfword(0x8091FE4, cmp_r0)
-
-    rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; ReadyObj_Win1Set(): Display S-Hard
+    set_difficulty_level(rom, world.difficulty[player].value)
 
 
 def get_base_rom_bytes(file_name: str = '') -> bytes:
@@ -237,9 +247,10 @@ def get_base_rom_bytes(file_name: str = '') -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if MD5_US_EU != basemd5.hexdigest():
-            raise Exception('Supplied base ROM does not match US/EU version.'
-                            'Please provide the correct ROM version')
+        if basemd5.hexdigest() not in (MD5_US_EU, MD5_JP):
+            raise Exception('Supplied base ROM does not match the US/EU or '
+                            'Japanese version of Wario Land 4. Please provide '
+                            'the correct ROM version')
 
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
