@@ -10,7 +10,7 @@ from worlds import AutoWorld
 from .. import SVTestCase, minimal_locations_maximal_items, allsanity_options_without_mods, setup_multiworld, default_options
 
 number_generations = 25
-default_seeds = [10613921641417078811] * number_generations
+default_seeds = [87876703343494157696] * number_generations
 acceptable_deviation = 4
 
 

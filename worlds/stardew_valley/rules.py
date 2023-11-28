@@ -124,7 +124,7 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
         room_rules = []
         for bundle in bundle_room.bundles:
             location = multiworld.get_location(bundle.name, player)
-            bundle_rules = logic.bundle.can_complete_bundle(bundle).simplify()
+            bundle_rules = logic.bundle.can_complete_bundle(bundle)
             room_rules.append(bundle_rules)
             MultiWorldRules.set_rule(location, bundle_rules)
         if bundle_room.name == CCRoom.abandoned_joja_mart:

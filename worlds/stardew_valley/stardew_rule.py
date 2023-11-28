@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
-from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
+from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Optional
 
 from frozendict import frozendict
 
@@ -214,11 +214,11 @@ class AggregatingStardewRule(StardewRule, ABC):
     detailed_unique_rules: Union[Iterable[StardewRule], Sized]
 
     _simplified: bool
-    _simplified_rules: Set[StardewRule]
+    _simplified_rules: frozenset[StardewRule]
     _left_to_simplify_rules: Optional[Iterable[StardewRule]]
 
     def __init__(self, *rules: StardewRule, _combinable_rules=None):
-        self._simplified_rules = set()
+        self._simplified_rules = frozenset()
 
         if _combinable_rules is None:
             assert rules, f"Can't create an aggregating condition without rules"
@@ -277,6 +277,7 @@ class AggregatingStardewRule(StardewRule, ABC):
 
             self._left_to_simplify_rules = iter(self.other_rules)
 
+        newly_simplified_rules = set()
         # Start simplification where we left.
         for rule in self._left_to_simplify_rules:
             simplified, value = rule.evaluate_while_simplifying(state)
@@ -293,14 +294,17 @@ class AggregatingStardewRule(StardewRule, ABC):
                 return self.complement, self.complement.value
 
             # Keep the simplified rule to be reused.
-            self._simplified_rules.add(simplified)
+            newly_simplified_rules.add(simplified)
 
             # Now we use the value, to exit early if it evaluates to the complement.
             if value is self.complement.value:
+                # FIXME I hate that this has to be a frozenset... But otherwise we see errors where Set changed size during iteration.
+                # This will need more troubleshooting.
+                self._simplified_rules |= newly_simplified_rules
                 return self, self.complement.value
 
         self._simplified = True
-        self.other_rules = frozenset(self._simplified_rules)
+        self.other_rules = frozenset(self._simplified_rules | newly_simplified_rules)
 
         # The whole rule has been simplified and evaluated without finding complement.
         return self, self.identity.value
@@ -333,6 +337,7 @@ class AggregatingStardewRule(StardewRule, ABC):
 
             self._left_to_simplify_rules = iter(self.other_rules)
 
+        newly_simplified_rules = set()
         for rule in self._left_to_simplify_rules:
             simplified = rule.simplify()
 
@@ -341,13 +346,13 @@ class AggregatingStardewRule(StardewRule, ABC):
 
             if simplified is self.complement:
                 self._simplified = True
-                self._simplified_rules = {self.complement}
+                self._simplified_rules = frozenset((self.complement,))
                 return self.complement
 
-            self._simplified_rules.add(simplified)
+            newly_simplified_rules.add(simplified)
 
         self._simplified = True
-        self.other_rules = frozenset(self._simplified_rules)
+        self.other_rules = frozenset(self._simplified_rules | newly_simplified_rules)
 
         if not self.other_rules and not self.combinable_rules:
             return self.identity
