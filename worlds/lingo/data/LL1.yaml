@@ -6315,17 +6315,22 @@
       SKELETON:
         id: Double Room/Panel_bones_syn
         tag: syn rhyme
+        colors: purple
         subtag: bot
         link: rhyme BONES
       REPENTANCE:
         id: Double Room/Panel_sentence_rhyme
-        colors: purple
+        colors:
+          - purple
+          - blue
         tag: whole rhyme
         subtag: top
         link: rhyme SENTENCE
       WORD:
         id: Double Room/Panel_sentence_whole
-        colors: blue
+        colors:
+          - purple
+          - blue
         tag: whole rhyme
         subtag: bot
         link: rhyme SENTENCE
@@ -6337,6 +6342,7 @@
         link: rhyme DREAM
       FANTASY:
         id: Double Room/Panel_dream_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme DREAM
@@ -6348,6 +6354,7 @@
         link: rhyme MYSTERY
       SECRET:
         id: Double Room/Panel_mystery_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme MYSTERY
@@ -6402,25 +6409,33 @@
           door: Nines
       FERN:
         id: Double Room/Panel_return_rhyme
-        colors: purple
+        colors:
+          - purple
+          - black
         tag: ant rhyme
         subtag: top
         link: rhyme RETURN
       STAY:
         id: Double Room/Panel_return_ant
-        colors: black
+        colors:
+          - purple
+          - black
         tag: ant rhyme
         subtag: bot
         link: rhyme RETURN
       FRIEND:
         id: Double Room/Panel_descend_rhyme
-        colors: purple
+        colors:
+          - purple
+          - black
         tag: ant rhyme
         subtag: top
         link: rhyme DESCEND
       RISE:
         id: Double Room/Panel_descend_ant
-        colors: black
+        colors:
+          - purple
+          - black
         tag: ant rhyme
         subtag: bot
         link: rhyme DESCEND
@@ -6432,6 +6447,7 @@
         link: rhyme JUMP
       BOUNCE:
         id: Double Room/Panel_jump_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme JUMP
@@ -6443,6 +6459,7 @@
         link: rhyme FALL
       PLUNGE:
         id: Double Room/Panel_fall_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme FALL
@@ -6472,13 +6489,17 @@
     panels:
       BIRD:
         id: Double Room/Panel_word_rhyme
-        colors: purple
+        colors:
+          - purple
+          - blue
         tag: whole rhyme
         subtag: top
         link: rhyme WORD
       LETTER:
         id: Double Room/Panel_word_whole
-        colors: blue
+        colors:
+          - purple
+          - blue
         tag: whole rhyme
         subtag: bot
         link: rhyme WORD
@@ -6490,6 +6511,7 @@
         link: rhyme HIDDEN
       CONCEALED:
         id: Double Room/Panel_hidden_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme HIDDEN
@@ -6501,6 +6523,7 @@
         link: rhyme SILENT
       MUTE:
         id: Double Room/Panel_silent_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme SILENT
@@ -6547,6 +6570,7 @@
         link: rhyme BLOCKED
       OBSTRUCTED:
         id: Double Room/Panel_blocked_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme BLOCKED
@@ -6558,6 +6582,7 @@
         link: rhyme RISE
       SWELL:
         id: Double Room/Panel_rise_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme RISE
@@ -6569,6 +6594,7 @@
         link: rhyme ASCEND
       CLIMB:
         id: Double Room/Panel_ascend_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme ASCEND
@@ -6580,6 +6606,7 @@
         link: rhyme DOUBLE
       DUPLICATE:
         id: Double Room/Panel_double_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme DOUBLE
@@ -6658,6 +6685,7 @@
         link: rhyme CHILD
       KID:
         id: Double Room/Panel_child_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme CHILD
@@ -6669,6 +6697,7 @@
         link: rhyme CRYSTAL
       QUARTZ:
         id: Double Room/Panel_crystal_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme CRYSTAL
@@ -6680,6 +6709,7 @@
         link: rhyme CREATIVE
       INNOVATIVE (Bottom):
         id: Double Room/Panel_creative_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme CREATIVE
