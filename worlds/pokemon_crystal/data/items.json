@@ -74,8 +74,8 @@
 	},
 	"SILVER_LEAF": {
 		"name": "Silver Leaf",
-		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"classification": "FILLER",
+		"tags": []
 	},
 	"SUPER_ROD": {
 		"name": "Super Rod",
