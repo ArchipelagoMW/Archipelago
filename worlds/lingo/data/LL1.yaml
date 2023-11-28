@@ -1034,6 +1034,8 @@
       Hallway Room (3): True
       Hallway Room (4): True
       Hedge Maze: True # through the door to the sectioned-off part of the hedge maze
+      Cellar:
+        door: Lookout Entrance
     panels:
       MASSACRED:
         id: Palindrome Room/Panel_massacred_sacred
@@ -1169,11 +1171,21 @@
           - KEEP
           - BAILEY
           - TOWER
+      Lookout Entrance:
+        id: Cross Room Doors/Door_missing
+        location_name: Outside The Agreeable - Lookout Panels
+        panels:
+          - NORTH
+          - WINTER
+          - DIAMONDS
+          - FIRE
     paintings:
       - id: panda_painting
         orientation: south
       - id: eyes_yellow_painting
         orientation: east
+      - id: pencil_painting7
+        orientation: north
     progression:
       Progressive Hallway Room:
         - Hallway Door
@@ -2044,7 +2056,7 @@
         door: Sixth Floor
       Cellar:
         room: Room Room
-        door: Shortcut to Fifth Floor
+        door: Cellar Exit
       Welcome Back Area:
         door: Welcome Back
       Art Gallery:
@@ -2676,6 +2688,7 @@
       The Observant: True
       Art Gallery: True
       The Scientific: True
+      Cellar: True
       Orange Tower Fifth Floor:
         room: Orange Tower Fifth Floor
         door: Welcome Back
@@ -3159,6 +3172,8 @@
         door: Painting Shortcut
         painting: True
       Room Room: True # trapdoor
+      Outside The Agreeable:
+        painting: True
     panels:
       UNOPEN:
         id: Truncate Room/Panel_unopened_open
@@ -6883,7 +6898,7 @@
         event: True
         panels:
           - WALL (1)
-      Shortcut to Fifth Floor:
+      Cellar Exit:
         id:
           - Tower Room Area Doors/Door_panel_basement
           - Tower Room Area Doors/Door_panel_basement2
@@ -6896,7 +6911,10 @@
         door: Excavation
       Orange Tower Fifth Floor:
         room: Room Room
-        door: Shortcut to Fifth Floor
+        door: Cellar Exit
+      Outside The Agreeable:
+        room: Outside The Agreeable
+        door: Lookout Entrance
   Outside The Wise:
     entrances:
       Orange Tower Sixth Floor:
