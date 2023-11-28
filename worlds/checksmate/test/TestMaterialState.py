@@ -25,5 +25,5 @@ class TestCyclicMaterial(MaterialStateTestBase):
         self.remove(self.multiworld.itempool)
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
 
-        self.assertLess(past_material, self.multiworld.state.prog_items[self.player]["Material"])
+        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
 
