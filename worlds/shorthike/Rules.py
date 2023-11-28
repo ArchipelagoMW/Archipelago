@@ -15,21 +15,8 @@ def create_rules(self, location_table):
             forbid_items_for_player(world.get_location(loc["name"], player), self.item_name_groups['Coins'], player)
 
         # Minimum Feather Rules
-        if world.golden_feather_progression[player].value != 2  and loc["minGoldenFeathers"] != 0:
-            min_feathers = loc["minGoldenFeathers"]
-            if world.golden_feather_progression[player].value == 0:
-                min_feathers = loc["minGoldenFeathersEasy"]
-            if min_feathers > world.golden_feathers[player].value:
-                min_feathers = world.golden_feathers[player].value
-
-            if world.buckets[player].value > 0 and min_feathers > loc["minGoldenFeathersBucket"]:
-                add_rule(world.get_location(loc["name"], self.player),
-                    lambda state: state.has("Golden Feather", self.player, min_feathers)
-                        or (state.has("Golden Feather", self.player, loc["minGoldenFeathersBucket"])
-                        and state.has("Bucket", self.player)))
-            else:
-                add_rule(world.get_location(loc["name"], self.player),
-                    lambda state: state.has("Golden Feather", self.player, min_feathers))
+        add_rule(world.get_location(loc["name"], self.player),
+            lambda state: get_feather_state(self, loc["minGoldenFeathers"], loc["minGoldenFeathersEasy"], loc["minGoldenFeathersBucket"], state))
     add_rule(world.get_location("Shovel Kid Trade", player),
         lambda state: state.has("Toy Shovel", self.player))
 
@@ -62,3 +49,23 @@ def create_rules(self, location_table):
         lambda state: state.has("Stick", self.player))
     add_rule(world.get_location("Beachstickball (30 Hits)", player),
         lambda state: state.has("Stick", self.player))
+
+def get_feather_state(self, min_golden_feathers, min_golden_feathers_easy, min_golden_feathers_bucket, state):
+    world = self.multiworld
+    player = self.player
+
+    min_feathers = min_golden_feathers
+    if world.golden_feather_progression[player].value == 0:
+        min_feathers = min_golden_feathers_easy
+    if min_feathers > world.golden_feathers[player].value:
+        min_feathers = world.golden_feathers[player].value
+
+    if world.golden_feather_progression[player].value != 2 and min_golden_feathers != 0:
+        if world.buckets[player].value > 0 and min_feathers > min_golden_feathers_bucket:
+            return (state.has("Golden Feather", self.player, min_feathers)
+                or (state.has("Golden Feather", self.player, min_golden_feathers_bucket)
+                and state.has("Bucket", self.player)))
+        else:
+            return state.has("Golden Feather", self.player, min_feathers)
+    else:
+        return state

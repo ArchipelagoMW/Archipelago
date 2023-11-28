@@ -3,7 +3,7 @@ from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, group_table, base_id
 from .Locations import location_table
-from .Rules import create_rules
+from .Rules import create_rules, get_feather_state
 from .Options import short_hike_options
 
 class ShortHikeWeb(WebWorld):
@@ -81,6 +81,9 @@ class ShortHikeWorld(World):
         self.multiworld.regions.append(main_region)
 
         menu_region.connect(main_region)
+
+        if self.multiworld.goal[self.player].value == 0:
+            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
 
     def set_rules(self):
         create_rules(self, location_table)
