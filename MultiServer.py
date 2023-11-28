@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import copy
 import collections
+import copy
 import datetime
 import functools
 import hashlib
 import inspect
 import itertools
 import logging
+import math
 import operator
 import pickle
 import random
@@ -67,21 +68,25 @@ def update_dict(dictionary, entries):
 
 # functions callable on storable data on the server by clients
 modify_functions = {
-    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
-    "mul": operator.mul,
-    "mod": operator.mod,
-    "max": max,
-    "min": min,
+    # generic:
     "replace": lambda old, new: new,
     "default": lambda old, new: old,
+    # numeric:
+    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
+    "mul": operator.mul,
     "pow": operator.pow,
+    "mod": operator.mod,
+    "floor": lambda value, _: math.floor(value),
+    "ceil": lambda value, _: math.ceil(value),
+    "max": max,
+    "min": min,
     # bitwise:
     "xor": operator.xor,
     "or": operator.or_,
     "and": operator.and_,
     "left_shift": operator.lshift,
     "right_shift": operator.rshift,
-    # lists/dicts
+    # lists/dicts:
     "remove": remove_from_list,
     "pop": pop_from_container,
     "update": update_dict,
@@ -412,6 +417,8 @@ class Context:
             self.player_name_lookup[slot_info.name] = 0, slot_id
             self.read_data[f"hints_{0}_{slot_id}"] = lambda local_team=0, local_player=slot_id: \
                 list(self.get_rechecked_hints(local_team, local_player))
+            self.read_data[f"client_status_{0}_{slot_id}"] = lambda local_team=0, local_player=slot_id: \
+                self.client_game_state[local_team, local_player]
 
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
@@ -706,6 +713,12 @@ class Context:
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(self, team, slot)
         }])
+
+    def on_client_status_change(self, team: int, slot: int):
+        key: str = f"_read_client_status_{team}_{slot}"
+        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
+        if targets:
+            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.client_game_state[team, slot]}])
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1814,6 +1827,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
             ctx.on_goal_achieved(client)
 
         ctx.client_game_state[client.team, client.slot] = new_status
+        ctx.on_client_status_change(client.team, client.slot)
         ctx.save()
 
 

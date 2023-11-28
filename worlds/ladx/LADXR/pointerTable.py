@@ -116,7 +116,10 @@ class PointerTable:
             rom.banks[ptr_bank][ptr_addr] = pointer & 0xFF
             rom.banks[ptr_bank][ptr_addr + 1] = (pointer >> 8) | 0x40
 
-        for n, s in enumerate(self.__data):
+        data = list(enumerate(self.__data))        
+        data.sort(key=lambda t: type(t[1]) == int or -len(t[1]))
+
+        for n, s in data:
             if isinstance(s, int):
                 pointer = s
             else:

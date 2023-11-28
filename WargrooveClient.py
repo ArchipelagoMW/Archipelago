@@ -113,6 +113,9 @@ class WargrooveContext(CommonContext):
     async def connection_closed(self):
         await super(WargrooveContext, self).connection_closed()
         self.remove_communication_files()
+        self.checked_locations.clear()
+        self.server_locations.clear()
+        self.finished_game = False
 
     @property
     def endpoints(self):
@@ -124,6 +127,9 @@ class WargrooveContext(CommonContext):
     async def shutdown(self):
         await super(WargrooveContext, self).shutdown()
         self.remove_communication_files()
+        self.checked_locations.clear()
+        self.server_locations.clear()
+        self.finished_game = False
 
     def remove_communication_files(self):
         for root, dirs, files in os.walk(self.game_communication_path):
@@ -402,8 +408,10 @@ async def game_watcher(ctx: WargrooveContext):
                 if file.find("send") > -1:
                     st = file.split("send", -1)[1]
                     sending = sending+[(int(st))]
+                    os.remove(os.path.join(ctx.game_communication_path, file))
                 if file.find("victory") > -1:
                     victory = True
+                    os.remove(os.path.join(ctx.game_communication_path, file))
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)

@@ -4,6 +4,7 @@ REGIONS: Dict[str, List[str]] = {
     "Menu": [],
     "Tower HQ": [],
     "The Shop": [],
+    "The Craftsman's Corner": [],
     "Tower of Time": [],
     "Ninja Village": ["Ninja Village - Candle", "Ninja Village - Astral Seed"],
     "Autumn Hills": ["Autumn Hills - Climbing Claws", "Autumn Hills - Key of Hope", "Autumn Hills - Leaf Golem"],
@@ -82,7 +83,8 @@ MEGA_SHARDS: Dict[str, List[str]] = {
 REGION_CONNECTIONS: Dict[str, Set[str]] = {
     "Menu": {"Tower HQ"},
     "Tower HQ": {"Autumn Hills", "Howling Grotto", "Searing Crags", "Glacial Peak", "Tower of Time",
-                 "Riviere Turquoise Entrance", "Sunken Shrine", "Corrupted Future", "The Shop", "Music Box"},
+                 "Riviere Turquoise Entrance", "Sunken Shrine", "Corrupted Future", "The Shop",
+                 "The Craftsman's Corner", "Music Box"},
     "Autumn Hills": {"Ninja Village", "Forlorn Temple", "Catacombs"},
     "Forlorn Temple": {"Catacombs", "Bamboo Creek"},
     "Catacombs": {"Autumn Hills", "Bamboo Creek", "Dark Cave"},
