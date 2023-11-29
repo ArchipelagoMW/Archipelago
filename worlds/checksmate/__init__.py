@@ -396,6 +396,8 @@ class CMWorld(World):
 
     # TODO: extremely similar - refactor to pass lt/lte comparator and an arithmetic lambda +/-
     def remove(self, state: CollectionState, item: Item) -> bool:
+        # if state.prog_items[self.player].get(item.name, 0) == 0:
+        #     return False  # TODO(chesslogic): I think this should be base behaviour, and doing this probably breaks it
         material = 0
         item_count = state.prog_items[self.player][item.name]
         children = get_children(item.name)
@@ -431,7 +433,7 @@ def get_limit_multiplier_for_item(item_dictionary: Dict[str, int]) -> Callable[[
 
 
 def get_parents(chosen_item: str) -> list[str]:
-    return item_table[chosen_item].parents or []
+    return item_table[chosen_item].parents
 
 
 def get_children(chosen_item: str) -> list[str]:

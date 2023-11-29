@@ -13,7 +13,7 @@ class CMItemData(NamedTuple):
     classification: ItemClassification
     quantity: float = 1  # maximum, not guaranteed
     material: int = 0  # pawns=2, minor=6, major=10, queen=18 - doubled to account for 0.5 values
-    parents: list[str] = None
+    parents: list[str] = []
 
 
 item_table = {
@@ -41,7 +41,7 @@ item_table = {
     # Pocket pawns are playable onto home row instead of making a move
     # Pocket pieces start as minor pieces (e.g. Knight) - they upgrade in both Gem cost and type
     # Piece upgrades turn minor pieces into major pieces or major pieces into Queen - implementation may decide
-    "Progressive Pocket": CMItemData(4_901_020, ItemClassification.progression, quantity=12, material=100),
+    "Progressive Pocket": CMItemData(4_901_020, ItemClassification.progression, quantity=12, material=110),
 
     # Gems are a way to generate filler items and limit use of Pocket items
     # Gems are generated 1/turn and Pocket pieces cost 1 Gem per their material value
