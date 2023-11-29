@@ -739,7 +739,7 @@ id,name,classification,groups,mod_name
 10016,Spell: Buff,useful,MAGIC_SPELL,Magic
 10017,Spell: Shockwave,progression,MAGIC_SPELL,Magic
 10018,Spell: Fireball,progression,MAGIC_SPELL,Magic
-10019,Spell: Frostbite,progression,MAGIC_SPELL,Magic
+10019,Spell: Frostbolt,progression,MAGIC_SPELL,Magic
 10020,Spell: Teleport,progression,MAGIC_SPELL,Magic
 10021,Spell: Lantern,filler,MAGIC_SPELL,Magic
 10022,Spell: Tendrils,progression,MAGIC_SPELL,Magic
