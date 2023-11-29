@@ -1968,7 +1968,7 @@ location_table: Dict[int, LocationDict] = {
              'map': 2,
              'index': -1,
              'doom_type': -1,
-             'region': "Containment Area (E2M2) Red"},
+             'region': "Containment Area (E2M2) Red Exit"},
     351326: {'name': 'Deimos Anomaly (E2M1) - Exit',
              'episode': 2,
              'map': 1,
