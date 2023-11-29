@@ -299,9 +299,12 @@ class WitnessWorld(World):
                     self, location_hints, self.own_itempool
                 )
 
+                generated_hints += always_and_priority
+
                 remaining_hints = max(0, location_hints - len(always_and_priority))
 
                 generated_hints += make_random_hints(self, remaining_hints, self.own_itempool, hinted_locs)
+
             if area_hints:
                 already_hinted_locations = {hint[1] for hint in generated_hints if hint[1] != -1}
                 generated_hints += make_area_hints(self, area_hints, already_hinted_locations,
