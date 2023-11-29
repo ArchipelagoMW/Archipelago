@@ -51,7 +51,7 @@ class ZorkGrandInquisitorWorld(World):
 
     game = "Zork Grand Inquisitor"
 
-    topology_present = True
+    topology_present = False
 
     item_name_to_id = item_names_to_id()
     location_name_to_id = location_names_to_id()
@@ -89,7 +89,7 @@ class ZorkGrandInquisitorWorld(World):
                     region_mapping[data.region],
                 )
 
-                location.event = type(location_enum_item) == ZorkGrandInquisitorEvents
+                location.event = isinstance(location_enum_item, ZorkGrandInquisitorEvents)
 
                 if location.event:
                     location.place_locked_item(
