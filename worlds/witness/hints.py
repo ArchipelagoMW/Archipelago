@@ -360,6 +360,8 @@ def make_random_hints(world: "WitnessWorld", hint_amount: int, own_itempool: Lis
 
     hints = []
 
+    area_reverse_lookup = {v: k for k, l in unhinted_locations_for_hinted_areas.items() for v in l}
+
     while len(hints) < hint_amount:
         if not prog_items_in_this_world and not locations_in_this_world:
             player_name = world.multiworld.get_player_name(world.player)
@@ -372,6 +374,14 @@ def make_random_hints(world: "WitnessWorld", hint_amount: int, own_itempool: Lis
 
         if not hint_location or hint_location in already_hinted_locations:
             continue
+
+        # Don't hint locations in areas that are almost fully hinted out already
+        if hint_location in area_reverse_lookup:
+            area = area_reverse_lookup[hint_location]
+            if len(unhinted_locations_for_hinted_areas[area]) == 1:
+                continue
+            del area_reverse_lookup[hint_location]
+            unhinted_locations_for_hinted_areas[area] -= {hint_location}
 
         hints.append(word_direct_hint(world, hint_location, next_random_hint_is_location))
         already_hinted_locations.add(hint_location)

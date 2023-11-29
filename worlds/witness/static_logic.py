@@ -103,7 +103,7 @@ class StaticWitnessLogicObj:
                     "entity_hex": entity_hex,
                     "region": None,
                     "id": None,
-                    "entityType": location_id
+                    "entityType": location_id,
                 }
 
                 self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
