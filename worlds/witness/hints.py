@@ -286,7 +286,7 @@ def get_items_and_locations_in_random_order(world: "WitnessWorld", own_itempool:
 
 
 def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int,
-                                   own_itempool: List[Item]) -> List[Tuple[str, Location]]:
+                                   own_itempool: List[Item]) -> Tuple[List[Tuple[str, Location]], List[Location]]:
     hints: List[Tuple[str, Location]] = list()
 
     prog_items_in_this_world, loc_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
@@ -348,11 +348,11 @@ def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int,
         hints.append(word_direct_hint(world, location, hint_came_from_location[location]))
         already_hinted_locations.add(location)
 
-    return hints
+    return hints, always_hints
 
 
 def make_random_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item],
-                      already_hinted_locations: Set[Location],
+                      already_hinted_locations: Set[Location], hints_to_use_first: List[Location],
                       unhinted_locations_for_hinted_areas: Dict[str, Set[Location]]) -> List[Tuple[str, Location]]:
     prog_items_in_this_world, locations_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
 
@@ -367,7 +367,9 @@ def make_random_hints(world: "WitnessWorld", hint_amount: int, own_itempool: Lis
             player_name = world.multiworld.get_player_name(world.player)
             f"Ran out of items/locations to hint for player {player_name}."
             break
-        if next_random_hint_is_location:
+        if hints_to_use_first:
+            hint_location = hints_to_use_first.pop()
+        elif next_random_hint_is_location:
             hint_location = hint_from_location(world, locations_in_this_world.pop())
         else:
             hint_location = hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)

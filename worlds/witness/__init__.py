@@ -275,12 +275,12 @@ class WitnessWorld(World):
             location_hints = hint_type_amounts[1]
 
             generated_hints: List[Tuple[str, Optional[Location]]] = []
-
-            already_hinted_locations = set()
+            already_hinted_locations: Set[Location] = set()
+            unused_always_hints: List[Location] = list()
 
             # First, make always and priority hints.
             if location_hints:
-                always_and_priority = make_always_and_priority_hints(self, location_hints, self.own_itempool)
+                always_and_priority, unused_always_hints = make_always_and_priority_hints(self, location_hints, self.own_itempool)
                 already_hinted_locations = {hint[1] for hint in always_and_priority}
 
                 generated_hints += always_and_priority
@@ -292,11 +292,11 @@ class WitnessWorld(World):
                 area_hints, unhinted_locations_per_area = make_area_hints(self, area_hints, already_hinted_locations)
                 generated_hints += area_hints
 
-            # If we don't have enough hints yet, make random location/item hints.
+            # If we don't have enough hints yet, make random location/item hints, or use remaining always hints.
             if len(generated_hints) < hint_amount:
                 generated_hints += make_random_hints(
                     self, hint_amount - len(generated_hints), self.own_itempool, already_hinted_locations,
-                    unhinted_locations_per_area
+                    unused_always_hints, unhinted_locations_per_area
                 )
 
             # If we still don't have enough for whatever reason, throw a warning, proceed with the lower amount
