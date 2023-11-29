@@ -21,6 +21,9 @@ the player's inventory. This is to prevent issues because they are only meant to
 
 The blank spell scroll crate in the Spell Lab has been locked and requires an item to open it.
 
+As long as the rope is still attached to the well, you can travel back to the surface without dying by looking inside
+the bucket.
+
 ## What item types are distributed in the multiworld?
 
 - Inventory items
