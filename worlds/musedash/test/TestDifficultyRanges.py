@@ -4,6 +4,7 @@ from . import MuseDashTestBase
 class DifficultyRanges(MuseDashTestBase):
     def test_all_difficulty_ranges(self) -> None:
         muse_dash_world = self.multiworld.worlds[1]
+        dlc_set = {x for x in muse_dash_world.md_collection.DLC}
         difficulty_choice = self.multiworld.song_difficulty_mode[1]
         difficulty_min = self.multiworld.song_difficulty_min[1]
         difficulty_max = self.multiworld.song_difficulty_max[1]
@@ -12,7 +13,7 @@ class DifficultyRanges(MuseDashTestBase):
             self.assertEqual(inputRange[0], lower)
             self.assertEqual(inputRange[1], upper)
 
-            songs = muse_dash_world.md_collection.get_songs_with_settings(True, False, inputRange[0], inputRange[1])
+            songs = muse_dash_world.md_collection.get_songs_with_settings(dlc_set, False, inputRange[0], inputRange[1])
             for songKey in songs:
                 song = muse_dash_world.md_collection.song_items[songKey]
                 if (song.easy is not None and inputRange[0] <= song.easy <= inputRange[1]):

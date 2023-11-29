@@ -2,17 +2,19 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
+
 from dataclasses import dataclass
-from typing import Optional, Dict, List, Set
+from typing import Optional, Dict, List, Set, TYPE_CHECKING
 
 from BaseClasses import Item, MultiWorld, ItemClassification
-from .Options import get_option_value, is_option_enabled, the_witness_options
-
 from .locations import ID_START, WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 from .static_logic import ItemDefinition, DoorItemDefinition, ProgressiveItemDefinition, ItemCategory, \
     StaticWitnessLogic, WeightedItemDefinition
 from .utils import build_weighted_int_list
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
 
 NUM_ENERGY_UPGRADES = 4
 
@@ -59,7 +61,7 @@ class StaticWitnessItems:
                 classification = ItemClassification.progression
                 StaticWitnessItems.item_groups.setdefault("Doors", []).append(item_name)
             elif definition.category is ItemCategory.LASER:
-                classification = ItemClassification.progression
+                classification = ItemClassification.progression_skip_balancing
                 StaticWitnessItems.item_groups.setdefault("Lasers", []).append(item_name)
             elif definition.category is ItemCategory.USEFUL:
                 classification = ItemClassification.useful
@@ -90,11 +92,12 @@ class WitnessPlayerItems:
     Class that defines Items for a single world
     """
 
-    def __init__(self, multiworld: MultiWorld, player: int, logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+    def __init__(self, world: "WitnessWorld", logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
         """Adds event items after logic changes due to options"""
 
-        self._world: MultiWorld = multiworld
-        self._player_id: int = player
+        self._world: "WitnessWorld" = world
+        self._multiworld: MultiWorld = world.multiworld
+        self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = logic
         self._locations: WitnessPlayerLocations = locat
 
@@ -102,19 +105,33 @@ class WitnessPlayerItems:
         self.item_data: Dict[str, ItemData] = copy.deepcopy(StaticWitnessItems.item_data)
 
         # Remove all progression items that aren't actually in the game.
-        self.item_data = {name: data for (name, data) in self.item_data.items()
-                          if data.classification is not ItemClassification.progression or
-                          name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME}
+        self.item_data = {
+            name: data for (name, data) in self.item_data.items()
+            if data.classification not in
+            {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+            or name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+        }
 
         # Adjust item classifications based on game settings.
-        eps_shuffled = get_option_value(self._world, self._player_id, "shuffle_EPs") != 0
+        eps_shuffled = self._world.options.shuffle_EPs
+        come_to_you = self._world.options.elevators_come_to_you
         for item_name, item_data in self.item_data.items():
-            if not eps_shuffled and item_name in ["Monastery Garden Entry (Door)", "Monastery Shortcuts"]:
+            if not eps_shuffled and item_name in {"Monastery Garden Entry (Door)",
+                                                  "Monastery Shortcuts",
+                                                  "Quarry Boathouse Hook Control (Panel)",
+                                                  "Windmill Turn Control (Panel)"}:
                 # Downgrade doors that only gate progress in EP shuffle.
                 item_data.classification = ItemClassification.useful
-            elif item_name in ["River Monastery Shortcut (Door)", "Jungle & River Shortcuts",
-                               "Monastery Shortcut (Door)",
-                               "Orchard Second Gate (Door)"]:
+            elif not come_to_you and not eps_shuffled and item_name in {"Quarry Elevator Control (Panel)",
+                                                                        "Swamp Long Bridge (Panel)"}:
+                # These Bridges/Elevators are not logical access because they may leave you stuck.
+                item_data.classification = ItemClassification.useful
+            elif item_name in {"River Monastery Garden Shortcut (Door)",
+                               "Monastery Laser Shortcut (Door)",
+                               "Orchard Second Gate (Door)",
+                               "Jungle Bamboo Laser Shortcut (Door)",
+                               "Keep Pressure Plates 2 Exit (Door)",
+                               "Caves Elevator Controls (Panel)"}:
                 # Downgrade doors that don't gate progress.
                 item_data.classification = ItemClassification.useful
 
@@ -122,8 +139,11 @@ class WitnessPlayerItems:
         self._mandatory_items: Dict[str, int] = {}
 
         # Add progression items to the mandatory item list.
-        for item_name, item_data in {name: data for (name, data) in self.item_data.items()
-                                     if data.classification == ItemClassification.progression}.items():
+        progression_dict = {
+            name: data for (name, data) in self.item_data.items()
+            if data.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+        }
+        for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
                 num_progression = len(self._logic.MULTI_LISTS[item_name])
                 self._mandatory_items[item_name] = num_progression
@@ -170,7 +190,7 @@ class WitnessPlayerItems:
         remaining_quantity -= len(output)
 
         # Read trap configuration data.
-        trap_weight = get_option_value(self._world, self._player_id, "trap_percentage") / 100
+        trap_weight = self._world.options.trap_percentage / 100
         filler_weight = 1 - trap_weight
 
         # Add filler items to the list.
@@ -198,15 +218,14 @@ class WitnessPlayerItems:
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
         output: Set[str] = set()
-        if "shuffle_symbols" not in the_witness_options.keys() \
-                or is_option_enabled(self._world, self._player_id, "shuffle_symbols"):
-            if get_option_value(self._world, self._player_id, "shuffle_doors") > 0:
+        if self._world.options.shuffle_symbols:
+            if self._world.options.shuffle_doors:
                 output = {"Dots", "Black/White Squares", "Symmetry"}
             else:
                 output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
-            if is_option_enabled(self._world, self._player_id, "shuffle_discarded_panels"):
-                if get_option_value(self._world, self._player_id, "puzzle_randomization") == 1:
+            if self._world.options.shuffle_discarded_panels:
+                if self._world.options.puzzle_randomization == 1:
                     output.add("Arrows")
                 else:
                     output.add("Triangles")
@@ -217,7 +236,7 @@ class WitnessPlayerItems:
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
         #   regardless of whether or not they actually wind up being manually placed.
-        for plando_setting in self._world.plando_items[self._player_id]:
+        for plando_setting in self._multiworld.plando_items[self._player_id]:
             if plando_setting.get("from_pool", True):
                 for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
                     if type(plando_setting[item_setting_key]) is str:
@@ -243,6 +262,7 @@ class WitnessPlayerItems:
         for item_name, item_data in {name: data for name, data in self.item_data.items()
                                      if isinstance(data.definition, DoorItemDefinition)}.items():
             output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
+
         return output
 
     def get_symbol_ids_not_in_pool(self) -> List[int]:
