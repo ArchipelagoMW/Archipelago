@@ -279,11 +279,13 @@ class WitnessWorld(World):
             unused_always_hints: List[Location] = list()
 
             # First, make always and priority hints.
-            if location_hints:
-                always_and_priority, unused_always_hints = make_always_and_priority_hints(self, location_hints, self.own_itempool)
-                already_hinted_locations = {hint[1] for hint in always_and_priority}
 
-                generated_hints += always_and_priority
+            always_and_priority, unused_always_hints = make_always_and_priority_hints(
+                self, location_hints, self.own_itempool
+            )
+            already_hinted_locations = {hint[1] for hint in always_and_priority}
+
+            generated_hints += always_and_priority
 
             unhinted_locations_per_area: Dict[str, Set[Location]] = dict()
 
