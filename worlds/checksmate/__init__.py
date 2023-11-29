@@ -420,7 +420,7 @@ class CMWorld(World):
                 logging.debug("Removed item " + item.name + " had insufficient parents " + str(fewest_parents))
         change = super().remove(state, item)
         if change:
-            state.prog_items[self.player]["Material"] -= material
+            state.prog_items[self.player]["Material"] += material
         logging.debug("Removing " + item.name + " with " + str(state.prog_items[self.player].get("Material", 0)) +
                       " having " + str(state.prog_items))
         return change
