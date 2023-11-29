@@ -14,7 +14,9 @@ from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
-from ...stardew_rule import Or
+from ...strings.food_names import SVEMeal
+from ...strings.villager_names import NPC, ModNPC
+from ...stardew_rule import Or, True_
 
 
 class SVELogicMixin(BaseLogicMixin):
