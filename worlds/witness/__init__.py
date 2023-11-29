@@ -275,8 +275,6 @@ class WitnessWorld(World):
             location_hints = hint_type_amounts[1]
 
             generated_hints: List[Tuple[str, Optional[Location]]] = []
-            already_hinted_locations: Set[Location] = set()
-            unused_always_hints: List[Location] = list()
 
             # First, make always and priority hints.
 
