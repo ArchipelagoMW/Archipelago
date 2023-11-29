@@ -903,6 +903,8 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
                              logic.received("Iridium Bomb"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.backwoods_to_grove, player),
                              logic.mod.sve.has_any_rune())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.badlands_to_cave, player),
+                             logic.has("Aegis Elixir"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.forest_west_to_spring, player),
                              logic.quest.can_complete_quest(Quest.magic_ink))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.secret_woods_to_west, player),

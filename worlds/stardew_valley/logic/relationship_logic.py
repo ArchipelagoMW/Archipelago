@@ -13,9 +13,11 @@ from .time_logic import TimeLogicMixin
 from ..data.villagers_data import all_villagers_by_name, Villager
 from ..options import Friendsanity
 from ..stardew_rule import StardewRule, True_, And, Or, Count
+from ..strings.crop_names import Fruit
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
 from ..strings.region_names import Region
+from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
 
 possible_kids = ("Cute Baby", "Ugly Baby")
@@ -112,6 +114,14 @@ class RelationshipLogic(BaseLogic[Union[
             rules.append(self.logic.received("Island West Turtle"))
         elif npc == ModNPC.lance:
             rules.append(self.logic.region.can_reach(Region.volcano_floor_10))
+        elif npc == ModNPC.apples:
+            rules.append(self.logic.has(Fruit.starfruit))
+        elif npc == ModNPC.scarlett:
+            scarlett_job = self.logic.received("Scarlett's Job Offer")
+            scarlett_spring = self.logic.season.has(Season.spring) & self.can_meet(ModNPC.andy)
+            scarlett_summer = self.logic.season.has(Season.summer) & self.can_meet(ModNPC.susan)
+            scarlett_fall = self.logic.season.has(Season.fall) & self.can_meet(ModNPC.sophia)
+            rules.append(scarlett_job & (scarlett_spring | scarlett_summer | scarlett_fall))
 
         return And(*rules)
 

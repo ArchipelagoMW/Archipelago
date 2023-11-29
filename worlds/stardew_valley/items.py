@@ -217,6 +217,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_cooking_recipes(item_factory, options, items)
     create_magic_mod_spells(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
+    create_deepwoods_pendants(item_factory, options, items)
 
     return items
 
@@ -566,6 +567,12 @@ def create_magic_mod_spells(item_factory: StardewItemFactory, options: StardewVa
     if ModNames.magic not in options.mods:
         return
     items.extend([item_factory(item) for item in items_by_group[Group.MAGIC_SPELL]])
+
+
+def create_deepwoods_pendants(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    if ModNames.deepwoods not in options.mods:
+        return
+    items.extend([item_factory(item) for item in ["Pendant of Elders", "Pendant of Community", "Pendant of Depths"]])
 
 
 def create_special_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
