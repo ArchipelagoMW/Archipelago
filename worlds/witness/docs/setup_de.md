@@ -27,6 +27,13 @@ Wenn du ein vorheriges Spiel fortsetzen willst, ist das auch möglich:
 4. Drücke "Load Credentials", um Adresse, Namen und Passwort automatisch zu laden (oder tippe diese manuell ein).
 5. Drücke "Connect".
 
+## Archipelago Text Client
+
+Es ist empfehlenswert, den "Archipelago Text Client", der eine Textansicht für gesendete und erhaltene Items liefert, beim Spielen nebenbei sichtbar zu haben.
+<br/>Diese Nachrichten werden zwar auch im Spiel angezeigt, jedoch nur für ein paar Sekunden. Es ist leicht, eine dieser Nachrichten zu übersehen.
+
+<br/><br/>Alternativ gibt es den visuellen Auto-Tracker mit Kartenansicht, der im nächsten Kapitel beschrieben wird.
+
 ## Auto-Tracking
 
 The Witness hat einen voll funktionsfähigen Tracker mit Kartenansicht und Autotracking.

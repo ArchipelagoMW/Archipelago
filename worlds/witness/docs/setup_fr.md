@@ -27,6 +27,13 @@ Pour continuer un jeu multimonde précedemment commencé:
 4. Cliquez sur "Load Credentials" (ou tapez les manuellement)
 5. Cliquez sur "Connect"
 
+## Archipelago Text Client
+
+Il est recommandé d'utiliser le "Archipelago Text Client" en parallèle afin de suivre quels items vous envoyez et recevez.
+<br/>The Witness affiche également ces informations en jeu, mais seulement pour une courte période et donc il est facile de manquer ces messages.
+
+<br/><br/>Bien sûr, vous pouvez également utiliser l'auto-tracker!
+
 ## Auto-Tracking
 
 The Witness a un tracker fonctionnel qui supporte l'auto-tracking.
