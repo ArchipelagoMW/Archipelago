@@ -261,4 +261,6 @@ def decompress_buffer(file_buffer):
                 write_position += 1
 
     # Return the current position of the write buffer, essentially giving us the size of the write buffer.
+    while write_position % 16 != 0:
+        write_position += 1
     return write_buffer[0:write_position]

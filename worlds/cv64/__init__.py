@@ -239,8 +239,8 @@ class CV64World(World):
                 get_location_data(self, self.options, active_locations)
             # Shop prices
             if self.options.shop_prices.value:
-                offset_data.update(randomize_shop_prices(self, self.options.minimum_gold_price,
-                                                         self.options.maximum_gold_price))
+                offset_data.update(randomize_shop_prices(self, self.options.minimum_gold_price.value,
+                                                         self.options.maximum_gold_price.value))
             # Map lighting
             if self.options.map_lighting.value:
                 offset_data.update(randomize_lighting(self))
