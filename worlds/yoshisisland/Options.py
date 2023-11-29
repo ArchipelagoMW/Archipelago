@@ -1,7 +1,5 @@
-from typing import Dict, Union
-from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict
-from schema import Schema, And, Optional
+from dataclasses import dataclass
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, PerGameCommonOptions
 
 class ExtrasEnabled(Toggle):
     """If enabled, the more difficult Extra stages will be added into logic. Otherwise, they will be inaccessible."""
@@ -236,34 +234,32 @@ class TrapPercent(Range):
 
 
 
-yoshi_options: Dict[str, Option] ={
-    "starting_world": StartingWorld,
-    "starting_lives": StartingLives,
-    "goal": PlayerGoal,
-    "luigi_pieces_required": LuigiPiecesReq,
-    "luigi_pieces_in_pool": LuigiPiecesAmt,
-    "extras_enabled":  ExtrasEnabled,
-    "minigame_checks": MinigameChecks,
-    "split_extras": SplitExtras,
-    "split_bonus": SplitBonus,
-    "hidden_object_visibility": ObjectVis,
-    "add_secretlens": ShuffleSecretLens,
-    "shuffle_midrings": ShuffleMiddleRings,
-    "stage_logic": StageLogic,
-    "item_logic": ItemLogic,
-    "disable_autoscroll": DisableAutoScrollers,
-    "softlock_prevention": SoftlockPrevention,
-    "castle_open_condition": FinalLevelBosses,
-    "castle_clear_condition": FinalBossBosses,
-    "bowser_door_mode": BowserDoor,
-    "level_shuffle": LevelShuffle,
-    "boss_shuffle": BossShuffle,
-    "yoshi_colors": YoshiColors,
-    "yoshi_singularity_color": SinguColor,
-    "baby_mario_sound": BabySound,
-    "traps_enabled": TrapsEnabled,
-    "trap_percent": TrapPercent,
-    "death_link": DeathLink
-
-    
-}
+@dataclass
+class YoshisIslandOptions(PerGameCommonOptions):
+    starting_world: StartingWorld
+    starting_lives: StartingLives
+    goal: PlayerGoal
+    luigi_pieces_required: LuigiPiecesReq
+    luigi_pieces_in_pool: LuigiPiecesAmt
+    extras_enabled:  ExtrasEnabled
+    minigame_checks: MinigameChecks
+    split_extras: SplitExtras
+    split_bonus: SplitBonus
+    hidden_object_visibility: ObjectVis
+    add_secretlens: ShuffleSecretLens
+    shuffle_midrings: ShuffleMiddleRings
+    stage_logic: StageLogic
+    item_logic: ItemLogic
+    disable_autoscroll: DisableAutoScrollers
+    softlock_prevention: SoftlockPrevention
+    castle_open_condition: FinalLevelBosses
+    castle_clear_condition: FinalBossBosses
+    bowser_door_mode: BowserDoor
+    level_shuffle: LevelShuffle
+    boss_shuffle: BossShuffle
+    yoshi_colors: YoshiColors
+    yoshi_singularity_color: SinguColor
+    baby_mario_sound: BabySound
+    traps_enabled: TrapsEnabled
+    trap_percent: TrapPercent
+    death_link: DeathLink

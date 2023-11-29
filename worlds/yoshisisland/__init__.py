@@ -1,22 +1,22 @@
 import os
 import typing
-import math
 import threading
-import pdb
+import dataclasses
 
-from typing import Dict, List, Set, Tuple, TextIO
+from typing import Dict, List, Set, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
+from worlds.AutoWorld import World, WebWorld
+from Options import PerGameCommonOptions
+import Patch
+import settings
 from .Items import get_item_names_per_category, item_table, filler_items, trap_items
 from .Locations import get_locations
-from .Options import yoshi_options
 from .Regions import create_regions
+from .Options import YoshisIslandOptions
 from .SetupGame import setup_gamevars
-from worlds.AutoWorld import World, WebWorld
 from .Client import YISNIClient
 from .Rules import set_easy_rules, set_normal_rules, set_hard_rules
 from .Rom import LocalRom, patch_rom, get_base_rom_path, YIDeltaPatch, USHASH
-import Patch
-import settings
 
 class YISettings(settings.Group):
     class RomFile(settings.SNESRomPath):
@@ -32,7 +32,8 @@ class YIWeb(WebWorld):
 
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Yoshi's Island randomizer and connecting to an Archipelago server.",
+        "A guide to setting up the Yoshi's Island randomizer"
+        "and connecting to an Archipelago server.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -46,7 +47,7 @@ class YIWorld(World):
         During a delivery, Bowser's evil ward, Kamek, attacked the stork, kidnapping Luigi and dropping Mario onto Yoshi's Island.
         As Yoshi, you must run, jump, and throw eggs to escort the baby Mario across the island to defeat Bowser and reunite the two brothers with their parents."""
     game: str = "Yoshi's Island"
-    option_definitions = yoshi_options
+    option_definitions = YoshisIslandOptions
     data_version = 1
     required_client_version = (0, 3, 5)
 
@@ -57,6 +58,9 @@ class YIWorld(World):
     web = YIWeb()
     settings: typing.ClassVar[YISettings]
     #topology_present = True
+
+    options_dataclass = YoshisIslandOptions
+    options: YoshisIslandOptions
 
     locked_locations: List[str]
     location_cache: List[Location]
@@ -79,7 +83,7 @@ class YIWorld(World):
         self.location_cache= []
 
     @classmethod
-    def stage_assert_generate(cls, world):
+    def stage_assert_generate(cls, multiworld):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
@@ -94,13 +98,14 @@ class YIWorld(World):
             "world_6": self.world_6_stages
         }
 
-    def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        for option_name in yoshi_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = option.value
-
-        return slot_data
+    #def fill_slot_data(self) -> dict:
+     #   slot_data = self._get_slot_data()
+      #  for option_name in (attr.name for attr in dataclasses.fields(YoshisIslandOptions)
+       #                     if attr not in dataclasses.fields(PerGameCommonOptions)):
+        #    option = getattr(self.options, option_name)
+         #   slot_data[option_name] = bool(option.value) if isinstance(option, Toggle) else option.value
+#
+ #       return slot_data
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         spoiler_handle.write(f"Burt The Bashful's Boss Door:      {self.boss_order[0]}\n")
@@ -166,7 +171,7 @@ class YIWorld(World):
         spoiler_handle.write(f"6-5: {self.level_name_list[44]}\n")
         spoiler_handle.write(f"6-6: {self.level_name_list[45]}\n")
         spoiler_handle.write(f"6-7: {self.level_name_list[46]}\n")
-        spoiler_handle.write(f"6-8: King Bowser's Castle\n")
+        spoiler_handle.write("6-8: King Bowser's Castle")
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -179,7 +184,7 @@ class YIWorld(World):
             classification = ItemClassification.trap
         else:
             classification = ItemClassification.filler
-            
+
         item = Item(name, classification, data.code, self.player)
 
         return item
@@ -236,8 +241,8 @@ class YIWorld(World):
     def generate_early(self):
         setup_gamevars(self, self.multiworld, self.player)
 
-    
-    def get_excluded_items(self, multiworld: MultiWorld, player: int) -> Set[str]:
+
+    def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
 
         starting_gate = ["World 1 Gate", "World 2 Gate", "World 3 Gate", "World 4 Gate", "World 5 Gate", "World 6 Gate"]
@@ -281,7 +286,7 @@ class YIWorld(World):
 
         return excluded_items
 
-    def create_item_with_correct_settings(self, multiworld: MultiWorld, player: int, name: str) -> Item:
+    def create_item_with_correct_settings(self, player: int, name: str) -> Item:
         data = item_table[name]
         if data.useful:
             classification = ItemClassification.useful
@@ -317,24 +322,24 @@ class YIWorld(World):
 
         return item
 
-    def generate_filler(self, multiworld: MultiWorld, player: int, locked_locations: List[str],
-                                        location_cache: List[Location], pool: List[Item]):
+    def generate_filler(self, multiworld: MultiWorld, player: int,
+                                        pool: List[Item]):
         if self.playergoal == 1:
-            for i in range(self.options.luigi_pieces_in_pool.value):
-                item = self.create_item_with_correct_settings( multiworld, player, "Piece of Luigi")
+            for _ in range(self.options.luigi_pieces_in_pool.value):
+                item = self.create_item_with_correct_settings(player, "Piece of Luigi")
                 pool.append(item)
 
         for _ in range(len(multiworld.get_unfilled_locations(player)) - len(pool) - 16):
-            item = self.create_item_with_correct_settings( multiworld, player, self.get_filler_item_name())
+            item = self.create_item_with_correct_settings(player, self.get_filler_item_name())
             pool.append(item)
 
-    def get_item_pool(self, multiworld: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
+    def get_item_pool(self, player: int, excluded_items: Set[str]) -> List[Item]:
         pool: List[Item] = []
 
         for name, data in item_table.items():
             if name not in excluded_items:
                 for _ in range(data.amount):
-                    item = self.create_item_with_correct_settings(multiworld, player, name)
+                    item = self.create_item_with_correct_settings(player, name)
                     pool.append(item)
 
         return pool
@@ -352,11 +357,11 @@ class YIWorld(World):
             self.multiworld.get_location("Match Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
 
 
-        excluded_items = self.get_excluded_items(self.multiworld, self.player)
+        excluded_items = self.get_excluded_items()
 
-        pool = self.get_item_pool(self.multiworld, self.player, excluded_items)
+        pool = self.get_item_pool(self.player, excluded_items)
 
-        self.generate_filler(self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
+        self.generate_filler(self.multiworld, self.player, pool)
 
         self.multiworld.itempool += pool
 
@@ -376,8 +381,6 @@ class YIWorld(World):
             patch = YIDeltaPatch(os.path.splitext(rompath)[0]+YIDeltaPatch.patch_file_ending, player=player,
                                   player_name=world.player_name[player], patched_path=rompath)
             patch.write()
-        except:
-            raise
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
             if os.path.exists(rompath):

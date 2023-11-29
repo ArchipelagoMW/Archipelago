@@ -1,4 +1,4 @@
-from typing import List, Set, Dict, Tuple, Optional, Callable
+from typing import List, Dict, Tuple
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .LevelLogic import YoshiLogic
@@ -116,8 +116,6 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
     bosses = BossReqs(multiworld, player, world)
 
-    names: Dict[str, int] = {}
-
     multiworld.get_region('Overworld', player).add_exits(['World 1', 'World 2', 'World 3', 'World 4', 'World 5', 'World 6'],
                                                         {'World 1': lambda state: state.has('World 1 Gate', player),
                                                         'World 2': lambda state: state.has('World 2 Gate', player),
@@ -175,10 +173,6 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             {'5-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 5'}, player)})
         multiworld.get_region('World 6', player).add_exits(['6-Bonus'],
             {'6-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 6'}, player)})
-
-    
-
-
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
     location = YILocation(player, location_data.name, location_data.code, region)

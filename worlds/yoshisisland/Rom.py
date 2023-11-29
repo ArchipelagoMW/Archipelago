@@ -1,15 +1,14 @@
 import Utils
 import pdb
+import hashlib
+import os
+import pdb
+import math
 import struct
 from worlds.Files import APDeltaPatch
 from struct import unpack, pack
 USHASH = 'cb472164c5a71ccd3739963390ec6a50'
 ROM_PLAYER_LIMIT = 65535
-
-import hashlib
-import os
-import pdb
-import math
 
 item_values = {
     0x302050: [0x1467, 0x01], #! Switch
@@ -82,6 +81,21 @@ item_values = {
     0x30208D: [0x1467, 0x3E], #2up
     0x30208E: [0x1467, 0x3F], #3up
     0x30208F: [0x1467, 0x40], #10up
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
     0x302090: [0x1467, 0x41], #Fuzzy Trap
     0x302093: [0x1467, 0x42], #Freeze Trap
@@ -430,7 +444,7 @@ class LocalRom(object):
         with open(file, 'rb') as stream:
             self.buffer = bytearray(stream.read())
 
-def Handle_Items(rom):
+def handle_items(rom):
     rom.write_bytes(0x0077B0, bytearray([0xE2, 0x20, 0xAD, 0x40, 0x14, 0xC2, 0x20, 0xF0, 0x08, 0xBD, 0x82, 0x71, 0x18, 0x5C, 0x3B, 0xB6])),
     rom.write_bytes(0x0077C0, bytearray([0x0E, 0x5C, 0x97, 0xB6, 0x0E, 0xA0, 0xFF, 0xAD, 0x74, 0x79, 0x29, 0x01, 0x00, 0xD0, 0x02, 0xA0])),
     rom.write_bytes(0x0077D0, bytearray([0x05, 0x98, 0x9D, 0xA2, 0x74, 0x6B, 0xE2, 0x20, 0xBD, 0x60, 0x73, 0xDA, 0xC2, 0x20, 0xA2, 0x00])),
@@ -1013,8 +1027,7 @@ def ExtendedItemHandler(rom):
 
 
 def patch_rom(world, rom, player: int, multiworld):
-
-    Handle_Items(rom) #Implement main item functionality
+    handle_items(rom) #Implement main item functionality
     Item_Data(rom) #Pointers necessary for item functionality
     write_lives(rom) #Writes the number of lives as set in AP
     CodeHandler(rom) #Jumps to my code
@@ -1197,7 +1210,6 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
-    
 
 def get_base_rom_path(file_name: str = "") -> str:
     options: Utils.OptionsType = Utils.get_options()

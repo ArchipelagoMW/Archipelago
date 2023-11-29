@@ -178,8 +178,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
 
     LocationData("4-6", "Lake Shore Paradise: Red Coins", 0x305095, 0x29),
     LocationData("4-6", "Lake Shore Paradise: Flowers", 0x305096, 0x29),
-    LocationData("4-6", "Lake Shore Paradise: Stars", 0x305097, 0x29, lambda state: logic._46Stars(state)),
-    LocationData("4-6", "Lake Shore Paradise: Level Clear", 0x305098, 0x29, lambda state: logic._46Clear(state)),
+    LocationData("4-6", "Lake Shore Paradise: Stars", 0x305097, 0x29),
+    LocationData("4-6", "Lake Shore Paradise: Level Clear", 0x305098, 0x29),
 
     LocationData("4-7", "Ride Like The Wind: Red Coins", 0x305099, 0x2A),
     LocationData("4-7", "Ride Like The Wind: Flowers", 0x30509A, 0x2A),
@@ -312,7 +312,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
             LocationData("6-Extra", "Castles - Masterpiece Set: Level Clear", 0x3050F7, 0x44),
         )
 
-    if not multiworld or world.options.minigame_checks.value == 1 or world.options.minigame_checks.value == 3:
+    if not world or world.options.minigame_checks.value == 1 or world.options.minigame_checks.value == 3:
         location_table += ( 
             LocationData("1-3", "The Cave Of Chomp Rock: Bandit Game", 0x3050F8, 0x02, lambda state: logic._13Game(state)),
             LocationData("1-7", "Touch Fuzzy Get Dizzy: Bandit Game", 0x3050F9, 0x06, lambda state: logic._17Game(state)),
