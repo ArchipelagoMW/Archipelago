@@ -5,119 +5,6 @@ REQUIRED_JEWELS = 3
 
 
 class TestEntrances(WL4TestBase):
-    options = {'required_jewels': REQUIRED_JEWELS}
-
-    def test_entry_levels(self):
-        self.starting_regions = ['Hall of Hieroglyphs (entrance)']
-        self.run_entrance_tests([
-            ['Hall of Hieroglyphs Gate', False, []],
-            ['Hall of Hieroglyphs Gate', False, [], ['Dash Attack']],
-            ['Hall of Hieroglyphs Gate', False, [], ['Progressive Grab']],
-            ['Hall of Hieroglyphs Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            ['Hall of Hieroglyphs Gate', True,
-             ['Dash Attack', 'Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound']],
-        ])
-
-    def test_emerald_levels(self):
-        self.starting_regions = ['Palm Tree Paradise (entrance)', 'Wildflower Fields (entrance)',
-                                 'Mystic Lake (entrance)', 'Monsoon Jungle (entrance)']
-        self.run_entrance_tests([
-            ['Palm Tree Paradise Gate', True, []],
-
-            ['Wildflower Fields Gate', False, []],
-            ['Wildflower Fields Gate', False, [], ['Swim']],
-            ['Wildflower Fields Gate', False,
-             ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            ['Wildflower Fields Gate', True,
-             ['Swim', 'Progressive Ground Pound', 'Progressive Ground Pound']],
-
-            ['Mystic Lake Gate', False, []],
-            ['Mystic Lake Gate', False, [], ['Swim']],
-            ['Mystic Lake Gate', False, [], ['Head Smash']],
-            ['Mystic Lake Gate', True, ['Swim', 'Head Smash']],
-
-            ['Monsoon Jungle Gate', False, []],
-            ['Monsoon Jungle Gate', False, [], ['Progressive Ground Pound']],
-            ['Monsoon Jungle Gate', True, ['Progressive Ground Pound']],
-        ])
-
-    def test_ruby_levels(self):
-        self.starting_regions = ['The Curious Factory (entrance)', 'The Toxic Landfill (entrance)',
-                                 '40 Below Fridge (entrance)', 'Pinball Zone (entrance)']
-        self.run_entrance_tests([
-            ['The Curious Factory Gate', True, []],
-
-            ['The Toxic Landfill Gate', False, []],
-            ['The Toxic Landfill Gate', False, [], ['Dash Attack']],
-            ['The Toxic Landfill Gate', False, [], ['Head Smash']],
-            ['The Toxic Landfill Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            ['The Toxic Landfill Gate', True,
-             ['Dash Attack', 'Head Smash', 'Progressive Ground Pound', 'Progressive Ground Pound']],
-
-            ['40 Below Fridge Gate', False, []],
-            ['40 Below Fridge Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            ['40 Below Fridge Gate', True, ['Progressive Ground Pound', 'Progressive Ground Pound']],
-
-            ['Pinball Zone', False, []],
-            ['Pinball Zone', False, [], ['Progressive Grab']],
-            ['Pinball Zone', False, [], ['Progressive Ground Pound']],
-            ['Pinball Zone', False, [], ['Head Smash']],
-            ['Pinball Zone', True,
-             ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
-        ])
-
-    def test_topaz_levels(self):
-        self.starting_regions = ['Toy Block Tower (entrance)', 'The Big Board (entrance)',
-                                 'Doodle Woods (entrance)', 'Domino Row (entrance)']
-        self.run_entrance_tests([
-            ['Toy Block Tower Gate', False, []],
-            ['Toy Block Tower Gate', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Toy Block Tower Gate', True, ['Progressive Grab', 'Progressive Grab']],
-
-            ['The Big Board Gate', False, []],
-            ['The Big Board Gate', False, [], ['Progressive Ground Pound']],
-            ['The Big Board Gate', True, ['Progressive Ground Pound']],
-
-            ['Doodle Woods', True, []],
-
-            ['Domino Row', False, []],
-            ['Domino Row', False, [], ['Swim']],
-            ['Domino Row', True, ['Swim']],
-        ])
-
-    def test_sapphire_levels(self):
-        self.starting_regions = ['Crescent Moon Village (entrance)', 'Arabian Night (entrance)',
-                                 'Fiery Cavern (entrance)', 'Hotel Horror (entrance)']
-        self.run_entrance_tests([
-            ['Crescent Moon Village Gate', False, []],
-            ['Crescent Moon Village Gate', False, [], ['Dash Attack']],
-            ['Crescent Moon Village Gate', False, [], ['Head Smash']],
-            ['Crescent Moon Village Gate', True, ['Dash Attack', 'Head Smash']],
-
-            ['Arabian Night Gate', False, []],
-            ['Arabian Night Gate', False, [], ['Swim']],
-            ['Arabian Night Gate', True, ['Swim']],
-
-            ['Fiery Cavern Gate', False, []],
-            ['Fiery Cavern Gate', False, [], ['Dash Attack']],
-            ['Fiery Cavern Gate', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound']],
-
-            ['Hotel Horror', False, []],
-            ['Hotel Horror', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Hotel Horror', True, ['Progressive Grab', 'Progressive Grab']],
-        ])
-
-    def test_golden_pyramid(self):
-        self.starting_regions = ['Golden Passage (entrance)']
-        self.run_entrance_tests([
-            ['Golden Passage Gate', False, []],
-            ['Golden Passage Gate', False, [], ['Swim']],
-            ['Golden Passage Gate', False, [], ['Progressive Ground Pound']],
-            ['Golden Passage Gate', False, [], ['Progressive Grab']],
-            ['Golden Passage Gate', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
-        ])
-
     def test_bosses(self):
         self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
                                  'Ruby Minigame Shop', 'Topaz Minigame Shop',
@@ -200,4 +87,191 @@ class TestEntrances(WL4TestBase):
             ['Golden Minigame Shop -> Golden Pyramid Boss', True,
              ['Top Right Golden Jewel Piece', 'Top Left Golden Jewel Piece',
               'Bottom Right Golden Jewel Piece', 'Bottom Left Golden Jewel Piece']],
+        ])
+
+    def test_passage_access(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Menu -> Entry Passage', True, []],
+            ['Menu -> Emerald Passage', True, []],
+            ['Menu -> Ruby Passage', True, []],
+            ['Menu -> Topaz Passage', True, []],
+            ['Menu -> Sapphire Passage', True, []],
+
+            ['Menu -> Golden Pyramid', False, []],
+            ['Menu -> Golden Pyramid', False, ['Emerald Passage Clear']],
+            ['Menu -> Golden Pyramid', False, ['Ruby Passage Clear']],
+            ['Menu -> Golden Pyramid', False, ['Topaz Passage Clear']],
+            ['Menu -> Golden Pyramid', False, ['Sapphire Passage Clear']],
+            ['Menu -> Golden Pyramid', True,
+             ['Emerald Passage Clear', 'Ruby Passage Clear',
+              'Topaz Passage Clear', 'Sapphire Passage Clear']],
+        ])
+
+
+class TestEntrancesBasic(TestEntrances):
+    options = {'required_jewels': REQUIRED_JEWELS}
+
+    def test_entry_levels(self):
+        self.starting_regions = ['Hall of Hieroglyphs (entrance)']
+        self.run_entrance_tests([
+            ['Hall of Hieroglyphs Gate', False, []],
+            ['Hall of Hieroglyphs Gate', False, [], ['Dash Attack']],
+            ['Hall of Hieroglyphs Gate', False, [], ['Progressive Grab']],
+            ['Hall of Hieroglyphs Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['Hall of Hieroglyphs Gate', True,
+             ['Dash Attack', 'Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound']],
+        ])
+
+    def test_emerald_levels(self):
+        self.starting_regions = ['Palm Tree Paradise (entrance)', 'Wildflower Fields (entrance)',
+                                 'Mystic Lake (entrance)', 'Monsoon Jungle (entrance)']
+        self.run_entrance_tests([
+            ['Palm Tree Paradise Gate', True, []],
+
+            ['Wildflower Fields Gate', False, []],
+            ['Wildflower Fields Gate', False, [], ['Swim']],
+            ['Wildflower Fields Gate', False,
+             ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['Wildflower Fields Gate', True,
+             ['Swim', 'Progressive Ground Pound', 'Progressive Ground Pound']],
+
+            ['Mystic Lake Gate', False, []],
+            ['Mystic Lake Gate', False, [], ['Swim']],
+            ['Mystic Lake Gate', False, [], ['Head Smash']],
+            ['Mystic Lake Gate', True, ['Swim', 'Head Smash']],
+
+            ['Monsoon Jungle Gate', False, []],
+            ['Monsoon Jungle Gate', False, [], ['Progressive Ground Pound']],
+            ['Monsoon Jungle Gate', True, ['Progressive Ground Pound']],
+        ])
+
+    def test_ruby_levels(self):
+        self.starting_regions = ['The Curious Factory (entrance)', 'The Toxic Landfill (entrance)',
+                                 '40 Below Fridge (entrance)', 'Pinball Zone (entrance)']
+        self.run_entrance_tests([
+            ['The Curious Factory Gate', True, []],
+
+            ['The Toxic Landfill Gate', False, []],
+            ['The Toxic Landfill Gate', False, [], ['Dash Attack']],
+            ['The Toxic Landfill Gate', False, [], ['Head Smash']],
+            ['The Toxic Landfill Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['The Toxic Landfill Gate', True,
+             ['Dash Attack', 'Head Smash', 'Progressive Ground Pound', 'Progressive Ground Pound']],
+
+            ['40 Below Fridge Gate', False, []],
+            ['40 Below Fridge Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['40 Below Fridge Gate', True, ['Progressive Ground Pound', 'Progressive Ground Pound']],
+
+            ['Pinball Zone Gate', False, []],
+            ['Pinball Zone Gate', False, [], ['Progressive Grab']],
+            ['Pinball Zone Gate', False, [], ['Progressive Ground Pound']],
+            ['Pinball Zone Gate', False, [], ['Head Smash']],
+            ['Pinball Zone Gate', True,
+             ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
+        ])
+
+    def test_topaz_levels(self):
+        self.starting_regions = ['Toy Block Tower (entrance)', 'The Big Board (entrance)',
+                                 'Doodle Woods (entrance)', 'Domino Row (entrance)']
+        self.run_entrance_tests([
+            ['Toy Block Tower Gate', False, []],
+            ['Toy Block Tower Gate', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['Toy Block Tower Gate', True, ['Progressive Grab', 'Progressive Grab']],
+
+            ['The Big Board Gate', False, []],
+            ['The Big Board Gate', False, [], ['Progressive Ground Pound']],
+            ['The Big Board Gate', True, ['Progressive Ground Pound']],
+
+            ['Doodle Woods Gate', True, []],
+
+            ['Domino Row Gate', False, []],
+            ['Domino Row Gate', False, [], ['Swim']],
+            ['Domino Row Gate', True, ['Swim']],
+        ])
+
+    def test_sapphire_levels(self):
+        self.starting_regions = ['Crescent Moon Village (entrance)', 'Arabian Night (entrance)',
+                                 'Fiery Cavern (entrance)', 'Hotel Horror (entrance)']
+        self.run_entrance_tests([
+            ['Crescent Moon Village Gate', False, []],
+            ['Crescent Moon Village Gate', False, [], ['Dash Attack']],
+            ['Crescent Moon Village Gate', False, [], ['Head Smash']],
+            ['Crescent Moon Village Gate', True, ['Dash Attack', 'Head Smash']],
+
+            ['Arabian Night Gate', False, []],
+            ['Arabian Night Gate', False, [], ['Swim']],
+            ['Arabian Night Gate', True, ['Swim']],
+
+            ['Fiery Cavern Gate', False, []],
+            ['Fiery Cavern Gate', False, [], ['Dash Attack']],
+            ['Fiery Cavern Gate', False, [], ['Progressive Ground Pound']],
+            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound']],
+
+            ['Hotel Horror Gate', False, []],
+            ['Hotel Horror Gate', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['Hotel Horror Gate', True, ['Progressive Grab', 'Progressive Grab']],
+        ])
+
+    def test_golden_pyramid(self):
+        self.starting_regions = ['Golden Passage (entrance)']
+        self.run_entrance_tests([
+            ['Golden Passage Gate', False, []],
+            ['Golden Passage Gate', False, [], ['Swim']],
+            ['Golden Passage Gate', False, [], ['Progressive Ground Pound']],
+            ['Golden Passage Gate', False, [], ['Progressive Grab']],
+            ['Golden Passage Gate', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
+        ])
+
+
+class TestEntrancesOpenDoors(TestEntrances):
+    options = {'required_jewels': REQUIRED_JEWELS,
+               'open_doors': True,}
+
+    def test_entry_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Hall of Hieroglyphs Gate', True, []],
+        ])
+
+    def test_emerald_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Palm Tree Paradise Gate', True, []],
+            ['Wildflower Fields Gate', True, []],
+            ['Mystic Lake Gate', True, []],
+            ['Monsoon Jungle Gate', True, []],
+        ])
+
+    def test_ruby_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['The Curious Factory Gate', True, []],
+            ['The Toxic Landfill Gate', True, []],
+            ['40 Below Fridge Gate', True, []],
+            ['Pinball Zone Gate', True, []],
+        ])
+
+    def test_topaz_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Toy Block Tower Gate', True, []],
+            ['The Big Board Gate', True, []],
+            ['Doodle Woods Gate', True, []],
+            ['Domino Row Gate', True, []],
+        ])
+
+    def test_sapphire_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Crescent Moon Village Gate', True, []],
+            ['Arabian Night Gate', True, []],
+            ['Fiery Cavern Gate', True, []],
+            ['Hotel Horror Gate', True, []],
+        ])
+
+    def test_golden_pyramid(self):
+        self.starting_regions = ['Golden Pyramid']
+        self.run_entrance_tests([
+            ['Golden Passage Gate', True, []],
         ])

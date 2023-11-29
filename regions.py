@@ -187,8 +187,9 @@ def connect_regions(world, player):
     connect('Golden Pyramid', 'Golden Passage (entrance)')
     # Golden Passage is the only level where escaping has different requirements from getting Keyzer
     connect_level_exit('Golden Passage', 'Golden Minigame Shop',
-            lambda state: state.has('Progressive Grab', player) and
-                          state.has('Progressive Ground Pound', player))
+            lambda state: world.open_doors[player] or
+                          (state.has('Progressive Grab', player) and
+                           state.has('Progressive Ground Pound', player)))
     connect('Golden Minigame Shop', 'Golden Pyramid Boss',
             rules.make_boss_access_rule(player, Passage.GOLDEN, required_jewels_entry))
 
