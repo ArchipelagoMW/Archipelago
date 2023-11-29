@@ -130,7 +130,11 @@ def connect_regions(world, player):
         connect_with_name(source, destination, f'{source} -> {destination}', rule)
 
     def connect_level_exit(source, destination, rule: AccessRule = None):
-        connect_with_name(source, destination, f'{source} Gate', rule)
+        level = source
+        # No Keyzer means you can just walk past the actual entrance to the next level
+        if world.open_doors[player].value:
+            source += ' (entrance)'
+        connect_with_name(source, destination, f'{level} Gate', rule)
 
     required_jewels = world.required_jewels[player].value
     required_jewels_entry = min(1, required_jewels)
