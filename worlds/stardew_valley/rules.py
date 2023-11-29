@@ -893,8 +893,8 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
 def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if ModNames.sve not in world_options.mods:
         return
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.forest_to_junimo, player),
-                             logic.received("Abandoned House Outskirts Clean-up"))
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.forest_to_lost_woods, player),
+                             logic.bundle.can_complete_community_center)
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.enter_summit, player),
                              logic.received("Iridium Bomb"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.backwoods_to_grove, player),
@@ -907,23 +907,23 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
                              logic.received("Fable Reef Portal"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_shed_to_interior, player),
                              logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_aurora, player),
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.aurora_warp_to_aurora, player),
                              logic.received("Nexus: Aurora Vineyard Runes"))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_farm, player),
-                             logic.mod.sve.has_any_rune())
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_guild, player),
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.farm_warp_to_farm, player),
+                             logic.received("Nexus: Farm Runes"))
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.guild_warp_to_guild, player),
                              logic.received("Nexus: Adventurer's Guild Runes"))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_junimo, player),
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.junimo_warp_to_junimo, player),
                              logic.received("Nexus: Junimo Woods Runes"))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_spring, player),
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.spring_warp_to_spring, player),
                              logic.received("Nexus: Sprite Spring Runes"))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_outpost, player),
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.outpost_warp_to_outpost, player),
                              logic.received("Nexus: Outpost Runes"))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grove_to_wizard, player),
-                             logic.mod.sve.has_any_rune())
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_warp_to_wizard, player),
+                             logic.received("Nexus: Wizard Runes"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_purple_junimo, player),
                              logic.relationship.has_hearts(ModNPC.apples, 10))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.to_grandpa_upstairs, player),
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_interior_to_upstairs, player),
                              logic.quest.can_complete_quest(ModQuest.GrandpasShed))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
                              logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
@@ -939,7 +939,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
 def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
         return
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.summit_to_boat, player),
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.summit_to_highlands, player),
                              logic.received("Marlon's Boat Paddle"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_to_fable_reef, player),
                              logic.received("Fable Reef Portal"))
