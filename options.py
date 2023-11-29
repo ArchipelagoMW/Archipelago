@@ -1,6 +1,6 @@
 from typing import Dict, Type
 
-from Options import Choice, Option, DefaultOnToggle, DeathLink, Range
+from Options import Choice, Option, Toggle, DeathLink, Range
 
 
 class Difficulty(Choice):
@@ -27,6 +27,14 @@ class RequiredJewels(Range):
     display_name = 'Required Jewels'
 
 
+class OpenDoors(Toggle):
+    '''
+    Start with all doors in the passages unlocked. This skips the requirement
+    to find Keyzer in each level, opening more locations earlier.
+    '''
+    display_name = 'Open Level Doors'
+
+
 class MusicShuffle(Choice):
     '''
     Music shuffle type
@@ -44,6 +52,7 @@ class MusicShuffle(Choice):
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
     'required_jewels': RequiredJewels,
+    'open_doors': OpenDoors,
     'death_link': DeathLink,
     #'music_shuffle': MusicShuffle,
 }

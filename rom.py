@@ -156,21 +156,29 @@ def create_starting_inventory(rom: LocalRom, multiworld: MultiWorld, player: int
         for _ in range(copies):
             give_item(rom, WL4Item.from_name(name, player))
 
+    # Free Keyzer
+    def set_keyzer(passage, level):
+        address = level_to_start_inventory_address(passage, level)
+        rom.write_byte(address, rom.read_byte(address) | 0x20)
+
+    if multiworld.open_doors[player].value:
+        set_keyzer(Passage.ENTRY, 0)
+        for passage, level in itertools.product(range(1, 5), range(4)):
+            set_keyzer(passage, level)
+        set_keyzer(Passage.GOLDEN, 0)
+
 
 def give_item(rom: LocalRom, item: WL4Item):
     if item.type == ItemType.JEWEL:
-        table_address = get_symbol('StartingInventoryItemStatus')
         for level in range(4):
-            index = 6 * item.passage + level
-            address = table_address + index
+            address = level_to_start_inventory_address(item.passage, level)
             status = rom.read_byte(address)
             if not status & item.flag:
                 status |= item.flag
                 rom.write_byte(address, status)
                 break
     elif item.type == ItemType.CD:
-        index = 6 * item.passage + item.level
-        address = get_symbol('StartingInventoryItemStatus', index)
+        address = level_to_start_inventory_address(item.passage, item.level)
         status = rom.read_byte(address)
         status |= 1 << 4
         rom.write_byte(address, status)
@@ -187,6 +195,11 @@ def give_item(rom: LocalRom, item: WL4Item):
         count = rom.read_byte(address)
         count += 1
         rom.write_byte(address, count)
+
+
+def level_to_start_inventory_address(passage: Passage, level: int):
+    index = 6 * passage + level
+    return get_symbol('StartingInventoryItemStatus', index)
 
 
 def create_strings(rom: LocalRom,
