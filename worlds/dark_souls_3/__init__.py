@@ -723,6 +723,7 @@ class DarkSouls3World(World):
             for location in location_tables[region]
             if self.is_location_available(location)
             and not location.missable
+            and not location.conditional
         ]
         location = self.multiworld.random.choice([
             location for location in candidate_locations
