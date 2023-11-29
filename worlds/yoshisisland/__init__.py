@@ -239,7 +239,7 @@ class YIWorld(World):
         self.multiworld.get_location(location, self.player).place_locked_item(item)
 
     def generate_early(self):
-        setup_gamevars(self, self.multiworld, self.player)
+        setup_gamevars(self)
 
 
     def get_excluded_items(self) -> Set[str]:

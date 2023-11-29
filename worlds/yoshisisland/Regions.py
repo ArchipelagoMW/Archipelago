@@ -96,25 +96,25 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
     ]
     if world.options.extras_enabled.value == 1:
-        regions.insert(68, create_region(multiworld, player, locations_per_region, location_cache, "6-Extra")),
-        regions.insert(58, create_region(multiworld, player, locations_per_region, location_cache, "5-Extra")),
-        regions.insert(48, create_region(multiworld, player, locations_per_region, location_cache, "4-Extra")),
-        regions.insert(38, create_region(multiworld, player, locations_per_region, location_cache, "3-Extra")),
-        regions.insert(28, create_region(multiworld, player, locations_per_region, location_cache, "2-Extra")),
+        regions.insert(68, create_region(multiworld, player, locations_per_region, location_cache, "6-Extra"))
+        regions.insert(58, create_region(multiworld, player, locations_per_region, location_cache, "5-Extra"))
+        regions.insert(48, create_region(multiworld, player, locations_per_region, location_cache, "4-Extra"))
+        regions.insert(38, create_region(multiworld, player, locations_per_region, location_cache, "3-Extra"))
+        regions.insert(28, create_region(multiworld, player, locations_per_region, location_cache, "2-Extra"))
         regions.insert(18, create_region(multiworld, player, locations_per_region, location_cache, "1-Extra"))
 
     if world.options.minigame_checks.value >= 2:
-        regions.insert(74, create_region(multiworld, player, locations_per_region, location_cache, "6-Bonus")),
-        regions.insert(63, create_region(multiworld, player, locations_per_region, location_cache, "5-Bonus")),
-        regions.insert(52, create_region(multiworld, player, locations_per_region, location_cache, "4-Bonus")),
-        regions.insert(41, create_region(multiworld, player, locations_per_region, location_cache, "3-Bonus")),
-        regions.insert(29, create_region(multiworld, player, locations_per_region, location_cache, "2-Bonus")),
+        regions.insert(74, create_region(multiworld, player, locations_per_region, location_cache, "6-Bonus"))
+        regions.insert(63, create_region(multiworld, player, locations_per_region, location_cache, "5-Bonus"))
+        regions.insert(52, create_region(multiworld, player, locations_per_region, location_cache, "4-Bonus"))
+        regions.insert(41, create_region(multiworld, player, locations_per_region, location_cache, "3-Bonus"))
+        regions.insert(29, create_region(multiworld, player, locations_per_region, location_cache, "2-Bonus"))
         regions.insert(19, create_region(multiworld, player, locations_per_region, location_cache, "1-Bonus"))
     multiworld.regions += regions
 
     connectStartingRegion(multiworld, player, world)
 
-    bosses = BossReqs(multiworld, player, world)
+    bosses = BossReqs(player, world)
 
     multiworld.get_region('Overworld', player).add_exits(['World 1', 'World 2', 'World 3', 'World 4', 'World 5', 'World 6'],
                                                         {'World 1': lambda state: state.has('World 1 Gate', player),

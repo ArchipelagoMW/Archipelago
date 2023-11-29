@@ -1,11 +1,10 @@
-from typing import Union
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState
 
 class BossReqs:
     player: int
 
 
-    def __init__(self, multiworld, player: int, world):
+    def __init__(self, player: int, world):
         self.player = player
         self.castle_unlock = world.options.castle_open_condition.value
         self.boss_unlock = world.options.castle_clear_condition.value

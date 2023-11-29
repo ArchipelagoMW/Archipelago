@@ -1,8 +1,7 @@
 import struct
-from struct import unpack, pack
 
 
-def setup_gamevars(world, multiworld, player: int):
+def setup_gamevars(world):
     world.playergoal = world.options.goal.value
     if world.options.luigi_pieces_in_pool.value < world.options.luigi_pieces_required.value:
         world.options.luigi_pieces_in_pool.value = world.random.randint(world.options.luigi_pieces_required.value, 100)
@@ -13,11 +12,11 @@ def setup_gamevars(world, multiworld, player: int):
     world.level_colors = []
     world.color_order = []
     for i in range(72):
-            world.level_colors.append(world.random.randint(0,7))
+        world.level_colors.append(world.random.randint(0,7))
     if world.options.yoshi_colors.value == 3:
         singularity_color = world.options.yoshi_singularity_color.value
         for i in range(len(world.level_colors)):
-                    world.level_colors[i] = singularity_color
+            world.level_colors[i] = singularity_color
     elif world.options.yoshi_colors.value == 1:
         world.leader_color = world.random.randint(0,7)
         for i in range(7):
@@ -353,8 +352,8 @@ def setup_gamevars(world, multiworld, player: int):
         if stage_number >= 9:
             world_number += 1
             stage_number = 1
-        for j in range(3):
-            setattr(world, f'_{world_number}{stage_number}StageGFX', level_panel_dict[world.global_level_list[i]])
+        for _ in range(3):
+            setattr(world, f'Stage{world_number}{stage_number}StageGFX', level_panel_dict[world.global_level_list[i]])
 
     world.level_gfx_table = []
     world.palette_panel_list = []
