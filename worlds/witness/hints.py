@@ -1,8 +1,8 @@
 import logging
 from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Union, Optional
-from BaseClasses import Item, ItemClassification, Location
+from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from . import StaticWitnessLogic
-from .utils import weighted_sample_use_zero_if_necessary
+from .utils import weighted_sample
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -227,10 +227,8 @@ def get_priority_hint_locations(_: "WitnessWorld"):
 
 def word_direct_hint(world: "WitnessWorld", location: Location, was_location_hint: bool):
     location_name = location.name
-    location_id_for_client = location.address
     if location.player != world.player:
         location_name += " (" + world.multiworld.get_player_name(location.player) + ")"
-        location_id_for_client = -1
 
     item = location.item
     item_name = item.name
@@ -242,7 +240,7 @@ def word_direct_hint(world: "WitnessWorld", location: Location, was_location_hin
     else:
         hint_text = f"{item_name} can be found at {location_name}."
 
-    return hint_text, location_id_for_client
+    return hint_text, location
 
 
 def hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]) -> Optional[Location]:
@@ -273,10 +271,12 @@ def hint_from_location(world: "WitnessWorld", location: str) -> Optional[Locatio
 
 def get_items_and_locations_in_random_order(world: "WitnessWorld", own_itempool: List[Item]):
     prog_items_in_this_world = sorted(
-        item.name for item in own_itempool if item.advancement and item.code and item.location
+        item.name for item in own_itempool
+        if item.advancement and item.code and item.location
     )
     locations_in_this_world = sorted(
-        location.name for location in world.multiworld.get_locations(world.player) if location.address
+        location.name for location in world.multiworld.get_locations(world.player)
+        if location.address and location.progress_type != LocationProgressType.EXCLUDED
     )
 
     world.random.shuffle(prog_items_in_this_world)
@@ -286,8 +286,8 @@ def get_items_and_locations_in_random_order(world: "WitnessWorld", own_itempool:
 
 
 def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int,
-                                   own_itempool: List[Item]) -> Tuple[List[Tuple[str, int]], Set[Location]]:
-    hints = list()
+                                   own_itempool: List[Item]) -> List[Tuple[str, Location]]:
+    hints: List[Tuple[str, Location]] = list()
 
     prog_items_in_this_world, loc_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
 
@@ -348,11 +348,11 @@ def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int,
         hints.append(word_direct_hint(world, location, hint_came_from_location[location]))
         already_hinted_locations.add(location)
 
-    return hints, already_hinted_locations
+    return hints
 
 
 def make_random_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item],
-                      already_hinted_locations: Set[Location]) -> List[Tuple[str, int]]:
+                      already_hinted_locations: Set[Location]) -> List[Tuple[str, Location]]:
     prog_items_in_this_world, locations_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
 
     next_random_hint_is_location = world.random.randrange(0, 2)
@@ -400,15 +400,12 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
     items_per_area = {area_name: [location.item for location in locations]
                       for area_name, locations in locations_per_area.items()}
 
-    areas = sorted(items_per_area)
+    areas = sorted(area for area in items_per_area if unhinted_location_percentage_per_area[area])
     weights = [unhinted_location_percentage_per_area[area] for area in areas]
 
-    if len(weights) < amount:
-        logging.error("Attempting to choose more areas than there are available. This should never happen, "
-                      "as the amount of areas to choose is capped to the amount of valid areas.")
-        amount = len(weights)
+    amount = min(amount, len(weights))
 
-    hinted_areas = weighted_sample_use_zero_if_necessary(world.random, areas, weights, amount)
+    hinted_areas = weighted_sample(world.random, areas, weights, amount)
 
     return hinted_areas
 
@@ -522,11 +519,8 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
     return hint_string
 
 
-def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations: Set[int],
-                    locations_per_area: Dict[str, List[Location]] = None,
-                    items_per_area: Dict[str, List[Item]] = None) -> List[Tuple[str, int]]:
-    if locations_per_area is None or items_per_area is None:
-        locations_per_area, items_per_area = get_hintable_areas(world)
+def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations: Set[int]) -> List[Tuple[str, None]]:
+    locations_per_area, items_per_area = get_hintable_areas(world)
 
     hinted_areas = choose_areas(world, amount, locations_per_area, already_hinted_locations)
 
@@ -535,6 +529,11 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     for hinted_area in hinted_areas:
         hint_string = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
-        hints.append((hint_string, -1))
+        hints.append((hint_string, None))
+
+    if len(hinted_areas) < amount:
+        player_name = world.multiworld.get_player_name(world.player)
+        logging.warning(f"Was not able to make {amount} area hints for player {player_name}. "
+                        f"Made {len(hinted_areas)} instead, and filled the rest with random location hints.")
 
     return hints
