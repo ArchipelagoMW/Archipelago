@@ -72,7 +72,7 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLog
             ModQuest.RailroadBoulder: self.logic.received(Wallet.skull_key) & self.logic.has((Ore.iridium, Material.coal)) &
                                       self.logic.region.can_reach(Region.blacksmith) & self.logic.region.can_reach(Region.railroad),
             ModQuest.GrandpasShed: self.logic.has((Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone)) &
-                                   self.logic.region.can_reach(SVERegion.grandpas_shed_interior),
+                                   self.logic.region.can_reach(SVERegion.grandpas_shed),
             ModQuest.MarlonsBoat: self.logic.has((Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
                                   self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit),
             ModQuest.AuroraVineyard: self.logic.has(Fruit.starfruit) & self.logic.region.can_reach(SVERegion.aurora_vineyard),

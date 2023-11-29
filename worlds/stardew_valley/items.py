@@ -17,6 +17,7 @@ from .options import StardewValleyOptions, TrapItems, FestivalLocations, Exclude
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.event_names import Event
+from .strings.ap_names.mods.mod_items import SVEQuestItem
 from .strings.villager_names import NPC, ModNPC
 from .strings.wallet_item_names import Wallet
 
@@ -571,15 +572,11 @@ def create_special_quest_rewards_sve(item_factory: StardewItemFactory, options: 
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     if ModNames.sve not in options.mods:
         return
-    items.append(item_factory("Iridium Bomb"))
-    items.append(item_factory("Krobus' Protection"))
-    items.append(item_factory("Kittyfish Spell"))
-    items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP]])
+    items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items])
+    items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP] if item.mod_name == ModNames.sve])
     if exclude_ginger_island:
         return
-    items.append(item_factory("Diamond Wand"))
-    items.append(item_factory("Marlon's Boat Paddle"))
-    items.append(item_factory("Fable Reef Portal"))
+    items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items_ginger_island])
 
 
 def create_unique_filler_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,
