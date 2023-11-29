@@ -261,7 +261,9 @@ renon_item_dialogue = {
     "common": "Every last little bit\n"
               "helps, right?",
     "trap": "I'll teach this fool\n"
-            " a lesson for a price!"
+            " a lesson for a price!",
+    "dlc coin": "1 coin out of... wha!?\n"
+                "You imp, why I oughta!"
 }
 
 
@@ -488,6 +490,13 @@ def get_location_data(world: "CV64World", options: CV64Options, active_locations
                 shop_desc_list.append([get_item_info(loc.item.name, "code"),
                                        world.multiworld.get_player_name(loc.item.player)])
             else:
+                if loc.item.game == "DLCQuest" and loc.item.name in ["DLC Quest: Coin Bundle",
+                                                                     "Live Freemium or Die: Coin Bundle"]:
+                    if getattr(world.multiworld.worlds[loc.item.player].options, "coinbundlequantity") == 1:
+                        shop_desc_list.append(["dlc coin", world.multiworld.get_player_name(loc.item.player)])
+                        shop_colors_list.append(get_item_text_color(loc))
+                        continue
+
                 if loc.item.advancement:
                     shop_desc_list.append(["prog", world.multiworld.get_player_name(loc.item.player)])
                 elif loc.item.classification == ItemClassification.useful:
