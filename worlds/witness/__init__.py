@@ -279,25 +279,30 @@ class WitnessWorld(World):
 
             already_hinted_locations = set()
 
+            # First, make always and priority hints.
             if location_hints:
                 always_and_priority = make_always_and_priority_hints(self, location_hints, self.own_itempool)
                 already_hinted_locations = {hint[1] for hint in always_and_priority}
 
                 generated_hints += always_and_priority
 
+            # Then, make area hints.
             if area_hints:
                 generated_hints += make_area_hints(self, area_hints, already_hinted_locations)
 
+            # If we don't have enough hints yet, make random location/item hints.
             if len(generated_hints) < hint_amount:
                 generated_hints += make_random_hints(
                     self, hint_amount - len(generated_hints), self.own_itempool, already_hinted_locations
                 )
 
+            # If we still don't have enough for whatever reason, throw a warning, proceed with the lower amount
             if len(generated_hints) != hint_amount:
                 player_name = self.multiworld.get_player_name(self.player)
                 logging.warning(f"Couldn't generate {hint_amount} hints for player {player_name}. "
                                 f"Generated {len(generated_hints)} instead.")
-                hint_amount = len(generated_hints)
+
+            hint_amount = len(generated_hints)
 
             if hint_amount:
                 self.random.shuffle(audio_logs)
