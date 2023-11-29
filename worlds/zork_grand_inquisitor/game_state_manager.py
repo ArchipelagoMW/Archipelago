@@ -1,5 +1,5 @@
-from .vendor.pymem import Pymem
-from .vendor.pymem.process import close_handle
+from pymem import Pymem
+from pymem.process import close_handle
 
 
 class GameStateManager:
