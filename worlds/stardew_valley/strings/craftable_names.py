@@ -153,7 +153,7 @@ class ModEdible:
 class ModCraftable:
     travel_core = "Travel Core"
     glass_bazier = "Glass Bazier"
-    water_strainer = "Water Strainer"
+    water_shifter = "Water Shifter"
     glass_fence = "Glass Fence"
     wooden_display = "Wooden Display"
     hardwood_display = "Hardwood Display"
@@ -163,7 +163,7 @@ class ModMachine:
     preservation_chamber = "Preservation Chamber"
     hardwood_preservation_chamber = "hardwood Preservation Chamber"
     grinder = "Grinder"
-    ancient_battery = "Ancient Battery Creator"
+    ancient_battery = "Ancient Battery Production Station"
 
 
 class ModFloor:
@@ -172,6 +172,6 @@ class ModFloor:
 
 
 class ModConsumable:
-    volcano_totem = "Warp Totem: Volcano"
+    volcano_totem = "Dwarf Gadget: Infinite Volcano Simulation"
 
 

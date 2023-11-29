@@ -2490,14 +2490,14 @@ id,region,name,tags,mod_name
 7407,Farm,Craft Bone Path,CRAFTSANITY,Archaeology
 7408,Farm,Craft Glass Bazier,CRAFTSANITY,Archaeology
 7409,Farm,Craft Glass Fence,CRAFTSANITY,Archaeology
-7410,Farm,Craft Water Strainer,CRAFTSANITY,Archaeology
+7410,Farm,Craft Water Shifter,CRAFTSANITY,Archaeology
 7411,Farm,Craft Grinder,CRAFTSANITY,Archaeology
-7412,Farm,Craft Ancient Battery Creator,CRAFTSANITY,Archaeology
+7412,Farm,Craft Ancient Battery Production Station,CRAFTSANITY,Archaeology
 7413,Farm,Craft Preservation Chamber,CRAFTSANITY,Archaeology
 7414,Farm,Craft hardwood Preservation Chamber,CRAFTSANITY,Archaeology
 7415,Farm,Craft Wooden Display,CRAFTSANITY,Archaeology
 7416,Farm,Craft Hardwood Display,CRAFTSANITY,Archaeology
-7417,Farm,Craft Warp Totem: Volcano,"CRAFTSANITY,GINGER_ISLAND",Archaeology
+7417,Farm,Craft Dwarf Gadget: Infinite Volcano Simulation,"CRAFTSANITY,GINGER_ISLAND",Archaeology
 7451,Adventurer's Guild,Magic Elixir Recipe,CRAFTSANITY,Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
@@ -2507,14 +2507,14 @@ id,region,name,tags,mod_name
 7457,Farm,Bone Path Recipe,CRAFTSANITY,Archaeology
 7458,Farm,Glass Bazier Recipe,CRAFTSANITY,Archaeology
 7459,Farm,Glass Fence Recipe,CRAFTSANITY,Archaeology
-7460,Farm,Water Strainer Recipe,CRAFTSANITY,Archaeology
+7460,Farm,Water Shifter Recipe,CRAFTSANITY,Archaeology
 7461,Farm,Grinder Recipe,CRAFTSANITY,Archaeology
-7462,Farm,Ancient Battery Creator Recipe,CRAFTSANITY,Archaeology
+7462,Farm,Ancient Battery Production Station Recipe,CRAFTSANITY,Archaeology
 7463,Farm,Preservation Chamber Recipe,CRAFTSANITY,Archaeology
 7464,Farm,hardwood Preservation Chamber Recipe,CRAFTSANITY,Archaeology
 7465,Farm,Wooden Display Recipe,CRAFTSANITY,Archaeology
 7466,Farm,Hardwood Display Recipe,CRAFTSANITY,Archaeology
-7467,Farm,Warp Totem: Volcano Recipe,"CRAFTSANITY,GINGER_ISLAND",Archaeology
+7467,Farm,Dwarf Gadget: Infinite Volcano Simulation Recipe,"CRAFTSANITY,GINGER_ISLAND",Archaeology
 7501,Mountain,Missing Envelope,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
 7502,Forest,Lost Emerald Ring,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
 7503,Forest,Mr.Ginger's request,"MANDATORY,QUEST",Mister Ginger (cat npc)
@@ -2769,5 +2769,5 @@ id,region,name,tags,mod_name
 8198,Shipping,Shipsanity: Glass Path,SHIPSANITY,Archaeology
 8199,Shipping,Shipsanity: Hardwood Display,SHIPSANITY,Archaeology
 8200,Shipping,Shipsanity: Wooden Display,SHIPSANITY,Archaeology
-8201,Shipping,Shipsanity: Warp Totem: Volcano,"SHIPSANITY,GINGER_ISLAND",Archaeology
-8202,Shipping,Shipsanity: Water Strainer,SHIPSANITY,Archaeology
+8201,Shipping,Shipsanity: Dwarf Gadget: Infinite Volcano Simulation,"SHIPSANITY,GINGER_ISLAND",Archaeology
+8202,Shipping,Shipsanity: Water Shifter,SHIPSANITY,Archaeology

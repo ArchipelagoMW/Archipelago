@@ -44,3 +44,14 @@ FishingLogicMixin, CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonL
         rune_list = ["Nexus: Adventurer's Guild Runes", "Nexus: Junimo Woods Runes", "Nexus: Aurora Vineyard Runes", "Nexus: Sprite Spring Runes",
                      "Nexus: Outpost Runes", "Nexus: Farm Runes", "Nexus: Wizard Runes"]
         return Or(*(self.logic.received(rune) for rune in rune_list))
+
+    def append_sve_recipe_rules(self, recipe: str):
+        if recipe == SVEMeal.glazed_butterfish:
+            return self.logic.relationship.has_hearts(NPC.gus, 10)
+        if recipe == SVEMeal.big_bark_burger:
+            return self.logic.relationship.has_hearts(NPC.gus, 5)
+        if recipe == SVEMeal.mushroom_berry_rice:
+            return self.logic.relationship.has_hearts(ModNPC.marlon, 6)
+        if recipe == SVEMeal.void_delight:
+            return self.logic.relationship.has_hearts(NPC.krobus, 10)
+        return True_()

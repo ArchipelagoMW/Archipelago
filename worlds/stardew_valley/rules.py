@@ -736,7 +736,9 @@ def set_chefsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
         recipe_name = location.name[:-len(chefsanity_suffix)]
         recipe = all_cooking_recipes_by_name[recipe_name]
         learn_rule = logic.cooking.can_learn_recipe(recipe.source)
-        MultiWorldRules.set_rule(multiworld.get_location(location.name, player), learn_rule)
+        friendship_purchase_rule = logic.mod.sve.append_sve_recipe_rules(recipe_name)
+        full_rule = learn_rule & friendship_purchase_rule
+        MultiWorldRules.set_rule(multiworld.get_location(location.name, player), full_rule)
 
 
 def set_craftsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
