@@ -49,3 +49,8 @@ CookingLogicMixin]]):
         previous_elevator = max(floor - 10, 0)
         return (self.has_woods_rune_to_depth(previous_elevator) &
                 self.can_reach_woods_depth(previous_elevator))
+
+    def can_pull_sword(self) -> StardewRule:
+        rules = [self.logic.received("Pendant of Depths") & self.logic.received("Pendant of Community") & self.logic.received("Pendant of Elders"),
+                 self.logic.skill.has_total_level(40)]
+        return And(*rules)

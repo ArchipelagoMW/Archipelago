@@ -828,6 +828,8 @@ def set_deepwoods_rules(logic: StardewLogic, multiworld: MultiWorld, player: int
         for depth in range(10, 100 + 10, 10):
             MultiWorldRules.set_rule(multiworld.get_entrance(move_to_woods_depth(depth), player),
                                      logic.mod.deepwoods.can_chop_to_depth(depth))
+        MultiWorldRules.add_rule(multiworld.get_location("The Sword in the Stone", player),
+                                 logic.mod.deepwoods.can_pull_sword())
 
 
 def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
