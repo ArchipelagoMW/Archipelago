@@ -1,5 +1,5 @@
 import logging
-from typing import Tuple, List, TYPE_CHECKING, Set, Dict
+from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Union, Optional
 from BaseClasses import Item, ItemClassification, Location
 from . import StaticWitnessLogic
 from .utils import weighted_sample_use_zero_if_necessary
@@ -225,7 +225,28 @@ def get_priority_hint_locations(_: "WitnessWorld"):
     }
 
 
-def make_hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]):
+def word_direct_hint(world: "WitnessWorld", location: Location, was_location_hint: bool):
+    location_name = location.name
+    location_id_for_client = location.address
+    if location.player != world.player:
+        location_name += " (" + world.multiworld.get_player_name(location.player) + ")"
+        location_id_for_client = -1
+
+    item = location.item
+    item_name = item.name
+    if item.player != world.player:
+        item_name += " (" + world.multiworld.get_player_name(item.player) + ")"
+
+    if was_location_hint:
+        hint_text = f"{location_name} contains {item_name}."
+    else:
+        hint_text = f"{item_name} can be found at {location_name}."
+
+    return hint_text, location_id_for_client
+
+
+def hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]) -> Optional[Location]:
+
     locations = [item.location for item in own_itempool if item.name == item_name and item.location]
 
     if not locations:
@@ -237,28 +258,38 @@ def make_hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: Lis
     if location_obj.player != world.player:
         location_name += " (" + world.multiworld.get_player_name(location_obj.player) + ")"
 
-    return location_name, item_name, location_obj.address if (location_obj.player == world.player) else -1
+    return location_obj
 
 
-def make_hint_from_location(world: "WitnessWorld", location: str):
+def hint_from_location(world: "WitnessWorld", location: str) -> Optional[Location]:
     location_obj = world.multiworld.get_location(location, world.player)
     item_obj = world.multiworld.get_location(location, world.player).item
     item_name = item_obj.name
     if item_obj.player != world.player:
         item_name += " (" + world.multiworld.get_player_name(item_obj.player) + ")"
 
-    return location, item_name, location_obj.address if (location_obj.player == world.player) else -1
+    return location_obj
 
 
-def make_direct_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item]):
+def get_items_and_locations_in_random_order(world: "WitnessWorld", own_itempool: List[Item]):
+    prog_items_in_this_world = sorted(
+        item.name for item in own_itempool if item.advancement and item.code and item.location
+    )
+    locations_in_this_world = sorted(
+        location.name for location in world.multiworld.get_locations(world.player) if location.address
+    )
+
+    world.random.shuffle(prog_items_in_this_world)
+    world.random.shuffle(locations_in_this_world)
+
+    return prog_items_in_this_world, locations_in_this_world
+
+
+def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int,
+                                   own_itempool: List[Item]) -> Tuple[List[Tuple[str, int]], Set[Location]]:
     hints = list()
 
-    prog_items_in_this_world = {
-        item.name for item in own_itempool if item.advancement and item.code and item.location
-    }
-    loc_in_this_world = {
-        location.name for location in world.multiworld.get_locations(world.player) if location.address
-    }
+    prog_items_in_this_world, loc_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
 
     always_locations = [
         location for location in get_always_hint_locations(world)
@@ -277,104 +308,76 @@ def make_direct_hints(world: "WitnessWorld", hint_amount: int, own_itempool: Lis
         if item in prog_items_in_this_world
     ]
 
-    always_hint_pairs = dict()
+    hint_came_from_location: Dict[Location, bool] = dict()
 
-    for item in always_items:
-        hint_pair = make_hint_from_item(world, item, own_itempool)
+    # Get always and priority location/item hints
+    always_item_hints = {hint_from_item(world, item, own_itempool) for item in always_items}
+    always_location_hints = {hint_from_location(world, location) for location in always_locations}
+    priority_item_hints = {hint_from_item(world, item, own_itempool) for item in priority_items}
+    priority_location_hints = {hint_from_location(world, location) for location in priority_locations}
 
-        if not hint_pair or hint_pair[2] == 158007:  # Tutorial Gate Open
-            continue
+    # Note whether each hint came from item or location. Location takes precedent
+    hint_came_from_location.update({location: False for location in always_item_hints | priority_item_hints})
+    hint_came_from_location.update({location: True for location in always_location_hints | priority_location_hints})
 
-        always_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
+    # Combine the sets. This will get rid of duplicates
+    always_hints_set = always_item_hints | always_location_hints
+    priority_hints_set = priority_item_hints | priority_location_hints
 
-    for location in always_locations:
-        hint_pair = make_hint_from_location(world, location)
-        always_hint_pairs[hint_pair[0]] = (hint_pair[1], False, hint_pair[2])
+    # Make sure priority hints doesn't contain any hints that are already always hints.
+    priority_hints_set -= always_hints_set
 
-    priority_hint_pairs = dict()
+    # Convert both hint types to list and then shuffle. Also, get rid of None and Tutorial Gate Open.
+    always_hints: List[Location] = sorted(hint for hint in always_hints_set if hint and hint.address != 158007)
+    priority_hints: List[Location] = sorted(hint for hint in priority_hints_set if hint and hint.address != 158007)
+    world.random.shuffle(always_hints)
+    world.random.shuffle(priority_hints)
 
-    for item in priority_items:
-        hint_pair = make_hint_from_item(world, item, own_itempool)
+    already_hinted_locations: Set[Location] = set()
 
-        if not hint_pair or hint_pair[2] == 158007:  # Tutorial Gate Open
-            continue
+    for _ in range(min(max_amount, len(always_hints))):
+        location = always_hints.pop()
+        hints.append(word_direct_hint(world, location, hint_came_from_location[location]))
+        already_hinted_locations.add(location)
 
-        priority_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
+    remaining_hints = max_amount - len(hints)
+    priority_hint_amount = int(max(0.0, min(len(priority_hints) / 2, remaining_hints / 2)))
 
-    for location in priority_locations:
-        hint_pair = make_hint_from_location(world, location)
-        priority_hint_pairs[hint_pair[0]] = (hint_pair[1], False, hint_pair[2])
+    for _ in range(priority_hint_amount):
+        location = priority_hints.pop()
+        hints.append(word_direct_hint(world, location, hint_came_from_location[location]))
+        already_hinted_locations.add(location)
 
-    already_hinted_locations = set()
+    return hints, already_hinted_locations
 
-    for loc, item in always_hint_pairs.items():
-        if loc in already_hinted_locations:
-            continue
 
-        if item[1]:
-            hints.append((f"{item[0]} can be found at {loc}.", item[2]))
-        else:
-            hints.append((f"{loc} contains {item[0]}.", item[2]))
+def make_random_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item],
+                      already_hinted_locations: Set[Location]) -> List[Tuple[str, int]]:
+    prog_items_in_this_world, locations_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
 
-        already_hinted_locations.add(loc)
+    next_random_hint_is_location = world.random.randrange(0, 2)
 
-    world.random.shuffle(hints)  # shuffle always hint order in case of low hint amount
-
-    remaining_hints = hint_amount - len(hints)
-    priority_hint_amount = int(max(0.0, min(len(priority_hint_pairs) / 2, remaining_hints / 2)))
-
-    prog_items_in_this_world = sorted(list(prog_items_in_this_world))
-    locations_in_this_world = sorted(list(loc_in_this_world))
-
-    world.random.shuffle(prog_items_in_this_world)
-    world.random.shuffle(locations_in_this_world)
-
-    priority_hint_list = list(priority_hint_pairs.items())
-    world.random.shuffle(priority_hint_list)
-    for _ in range(0, priority_hint_amount):
-        next_priority_hint = priority_hint_list.pop()
-        loc = next_priority_hint[0]
-        item = next_priority_hint[1]
-
-        if loc in already_hinted_locations:
-            continue
-
-        if item[1]:
-            hints.append((f"{item[0]} can be found at {loc}.", item[2]))
-        else:
-            hints.append((f"{loc} contains {item[0]}.", item[2]))
-
-        already_hinted_locations.add(loc)
-
-    next_random_hint_is_item = world.random.randrange(0, 2)
+    hints = []
 
     while len(hints) < hint_amount:
-        if next_random_hint_is_item:
-            if not prog_items_in_this_world:
-                next_random_hint_is_item = not next_random_hint_is_item
-                continue
-
-            hint = make_hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)
-
-            if not hint or hint[0] in already_hinted_locations:
-                continue
-
-            hints.append((f"{hint[1]} can be found at {hint[0]}.", hint[2]))
-
-            already_hinted_locations.add(hint[0])
+        if not prog_items_in_this_world and not locations_in_this_world:
+            player_name = world.multiworld.get_player_name(world.player)
+            f"Ran out of items/locations to hint for player {player_name}."
+            break
+        if next_random_hint_is_location:
+            hint_location = hint_from_location(world, locations_in_this_world.pop())
         else:
-            hint = make_hint_from_location(world, locations_in_this_world.pop())
+            hint_location = hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)
 
-            if hint[0] in already_hinted_locations:
-                continue
+        if not hint_location or hint_location in already_hinted_locations:
+            continue
 
-            hints.append((f"{hint[0]} contains {hint[1]}.", hint[2]))
+        hints.append(word_direct_hint(world, hint_location, next_random_hint_is_location))
+        already_hinted_locations.add(hint_location)
 
-            already_hinted_locations.add(hint[0])
+        next_random_hint_is_location = not next_random_hint_is_location
 
-        next_random_hint_is_item = not next_random_hint_is_item
-
-    return hints[:hint_amount]
+    return hints
 
 
 def generate_joke_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]:
@@ -507,7 +510,6 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
             elif local_lasers:
                 if not non_local_progression:
                     hint_string += f"\nAlso, {local_lasers} of them are lasers."
-                    print(hint_string)
                 else:
                     hint_string += f"\nAlso, {local_lasers} of them are lasers for this world."
 

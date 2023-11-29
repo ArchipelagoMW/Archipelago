@@ -11,7 +11,8 @@ from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
-    get_priority_hint_items, make_direct_hints, generate_joke_hints, make_area_hints, get_hintable_areas
+    get_priority_hint_items, make_always_and_priority_hints, generate_joke_hints, make_area_hints, get_hintable_areas, \
+    make_random_hints
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
@@ -294,7 +295,13 @@ class WitnessWorld(World):
                     location_hints = hint_amount - area_hints
 
             if location_hints:
-                generated_hints += make_direct_hints(self, location_hints, self.own_itempool)
+                always_and_priority, hinted_locs = make_always_and_priority_hints(
+                    self, location_hints, self.own_itempool
+                )
+
+                remaining_hints = max(0, location_hints - len(always_and_priority))
+
+                generated_hints += make_random_hints(self, remaining_hints, self.own_itempool, hinted_locs)
             if area_hints:
                 already_hinted_locations = {hint[1] for hint in generated_hints if hint[1] != -1}
                 generated_hints += make_area_hints(self, area_hints, already_hinted_locations,
