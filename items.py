@@ -110,6 +110,12 @@ class WL4Item(Item):
         else:
             self.passage = self.level = self.flag = None
 
+    @classmethod
+    def from_name(cls, name: str, player: int, force_non_progression: bool = False):
+        data = item_table[name]
+        created_item = cls(name, player, data, force_non_progression)
+        return created_item
+
 
 class ItemData(NamedTuple):
     type: ItemType

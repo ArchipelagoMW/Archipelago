@@ -42,12 +42,7 @@ def get_access_rule(player: int, level: str):
     return needs_items(player, level_rules[level])
 
 
-def make_boss_access_rule(player: int, passage: Passage):
-    if passage in (Passage.ENTRY, Passage.GOLDEN):
-        jewels_needed = 1
-    else:
-        jewels_needed = 4
-
+def make_boss_access_rule(player: int, passage: Passage, jewels_needed: int):
     jewel_list = [[(name, jewels_needed)
                   for name in items.filter_item_names(type=ItemType.JEWEL, passage=passage)]]
     return needs_items(player, jewel_list)
