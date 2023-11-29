@@ -359,6 +359,4 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
         tags=(ZorkGrandInquisitorTags.FILLER,),
         maximum_quantity=None,
     ),
-    # Traps
-    # ...
 }
