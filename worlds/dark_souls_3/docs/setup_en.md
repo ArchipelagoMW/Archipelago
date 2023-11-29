@@ -23,7 +23,7 @@ This client has only been tested with the Official Steam version of the game at 
 
 To downpatch DS3 for use with Archipelago, use the following instructions from the speedsouls wiki database. 
 
-1. Launch Steam (in online mode)
+1. Launch Steam (in online mode).
 2. Press the Windows Key + R. This will open the Run window.
 3. Insert the string of the depot you wish to download. For the AP supported v1.15, you will want to use: download_depot 374320 374321 4471176929659548333.
 4. Steam will now download the depot. Note: There is no progress bar of the download in Steam, but it is still downloading in the background.
