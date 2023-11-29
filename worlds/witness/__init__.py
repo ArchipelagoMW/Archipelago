@@ -2,9 +2,8 @@
 Archipelago init file for The Witness
 """
 import dataclasses
-import logging
-from typing import Dict, Optional, List, Tuple
 
+from typing import Dict, Optional, List, Tuple, Set
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
 from worlds.AutoWorld import World, WebWorld
@@ -286,21 +285,25 @@ class WitnessWorld(World):
 
                 generated_hints += always_and_priority
 
+            unhinted_locations_per_area: Dict[str, Set[Location]] = dict()
+
             # Then, make area hints.
             if area_hints:
-                generated_hints += make_area_hints(self, area_hints, already_hinted_locations)
+                area_hints, unhinted_locations_per_area = make_area_hints(self, area_hints, already_hinted_locations)
+                generated_hints += area_hints
 
             # If we don't have enough hints yet, make random location/item hints.
             if len(generated_hints) < hint_amount:
                 generated_hints += make_random_hints(
-                    self, hint_amount - len(generated_hints), self.own_itempool, already_hinted_locations
+                    self, hint_amount - len(generated_hints), self.own_itempool, already_hinted_locations,
+                    unhinted_locations_per_area
                 )
 
             # If we still don't have enough for whatever reason, throw a warning, proceed with the lower amount
             if len(generated_hints) != hint_amount:
                 player_name = self.multiworld.get_player_name(self.player)
-                logging.warning(f"Couldn't generate {hint_amount} hints for player {player_name}. "
-                                f"Generated {len(generated_hints)} instead.")
+                warning(f"Couldn't generate {hint_amount} hints for player {player_name}. "
+                        f"Generated {len(generated_hints)} instead.")
 
             hint_amount = len(generated_hints)
 
@@ -316,9 +319,6 @@ class WitnessWorld(World):
                         audio_log = audio_logs.pop()
                         location_id = hint[1].address if hint[1] and hint[1].item.player == self.player else -1
                         self.log_ids_to_hints[int(audio_log, 16)] = (hint[0], location_id)
-            else:
-                player_name = self.multiworld.get_player_name(self.player)
-                logging.warning(f"For some reason, no hints were able to be generated for {player_name}'s world.")
 
         if audio_logs:
             audio_log = audio_logs.pop()

@@ -352,7 +352,8 @@ def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int,
 
 
 def make_random_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item],
-                      already_hinted_locations: Set[Location]) -> List[Tuple[str, Location]]:
+                      already_hinted_locations: Set[Location],
+                      unhinted_locations_for_hinted_areas: Dict[str, Set[Location]]) -> List[Tuple[str, Location]]:
     prog_items_in_this_world, locations_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
 
     next_random_hint_is_location = world.random.randrange(0, 2)
@@ -385,16 +386,18 @@ def generate_joke_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, i
 
 
 def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[str, List[Location]],
-                 already_hinted_locations: Set[int]) -> List[str]:
+                 already_hinted_locations: Set[Location]) -> Tuple[List[str], Dict[str, Set[Location]]]:
     """
     Choose areas to hint.
     This takes into account that some areas may already have had items hinted in them through location hints.
     When this happens, they are made less likely to receive an area hint.
     """
 
+    unhinted_locations_per_area = dict()
     unhinted_location_percentage_per_area = dict()
     for area_name, locations in locations_per_area.items():
-        not_yet_hinted_locations = sum(location.address not in already_hinted_locations for location in locations)
+        not_yet_hinted_locations = sum(location not in already_hinted_locations for location in locations)
+        unhinted_locations_per_area[area_name] = {loc for loc in locations if loc not in already_hinted_locations}
         unhinted_location_percentage_per_area[area_name] = not_yet_hinted_locations / len(locations)
 
     items_per_area = {area_name: [location.item for location in locations]
@@ -407,7 +410,7 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
 
     hinted_areas = weighted_sample(world.random, areas, weights, amount)
 
-    return hinted_areas
+    return hinted_areas, unhinted_locations_per_area
 
 
 def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]], Dict[str, List[Item]]]:
@@ -519,10 +522,11 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
     return hint_string
 
 
-def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations: Set[int]) -> List[Tuple[str, None]]:
-    locations_per_area, items_per_area = get_hintable_areas(world)
+def make_area_hints(world: "WitnessWorld", amount: int,
+                    already_hinted_locations: Set[Location]) -> Tuple[List[Tuple[str, None]], Dict[str, Set[Location]]]:
+    locs_per_area, items_per_area = get_hintable_areas(world)
 
-    hinted_areas = choose_areas(world, amount, locations_per_area, already_hinted_locations)
+    hinted_areas, unhinted_locations_per_area = choose_areas(world, amount, locs_per_area, already_hinted_locations)
 
     hints = []
 
@@ -536,4 +540,4 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
         logging.warning(f"Was not able to make {amount} area hints for player {player_name}. "
                         f"Made {len(hinted_areas)} instead, and filled the rest with random location hints.")
 
-    return hints
+    return hints, unhinted_locations_per_area
