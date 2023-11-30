@@ -783,6 +783,15 @@ class DarkSouls3World(World):
             world matching the given names.
             """
 
+            item_order = [
+                item for item in (
+                    full_items_by_name[item.name].pop(0) if isinstance(item, DS3ItemData) else item
+                    for item in item_order
+                )
+                # Never re-order event items, because they weren't randomized in the first place.
+                if item.code is not None
+            ]
+
             names = {item.name for item in item_order}
 
             for i, all_locations in enumerate(locations_by_sphere):
@@ -802,8 +811,6 @@ class DarkSouls3World(World):
                 # Give offworld regions the last (best) items within a given sphere
                 for location in onworld + offworld:
                     new_item = self._pop_item(location, item_order)
-                    if isinstance(new_item, DS3ItemData):
-                        new_item = full_items_by_name[new_item.name].pop(0)
                     location.item = new_item
                     new_item.location = location
 
