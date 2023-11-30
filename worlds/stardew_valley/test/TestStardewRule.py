@@ -187,6 +187,10 @@ class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
     So, there is a situation where a rule kind of calls itself while it's being evaluated, because its evaluation triggers a region cache refresh.
 
     The region cache check every entrance, so if a rule is also used in an entrances, it can be reevaluated.
+
+    For instance, but not limited to
+    Has Melon -> (Farm & Summer) | Greenhouse -> Greenhouse triggers an update of the region cache
+        -> Every entrance are evaluated, for instance "can start farming" -> Look that any crop can be grown (calls Has Melon).
     """
 
     def test_nested_call_in_the_internal_rule_being_evaluated_does_check_the_internal_rule(self):
