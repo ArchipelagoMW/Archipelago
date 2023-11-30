@@ -209,6 +209,8 @@ def get_priority_hint_items(world: "WitnessWorld"):
 
 def get_priority_hint_locations(_: "WitnessWorld"):
     return {
+        "Tutorial Patio Floor",
+        "Tutorial Patio Flowers EP",
         "Swamp Purple Underwater",
         "Shipwreck Vault Box",
         "Town RGB Room Left",
