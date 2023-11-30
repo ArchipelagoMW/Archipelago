@@ -177,7 +177,7 @@ class StaticWitnessLocations:
         "Mountainside Vault Box",
         "Mountaintop River Shape",
 
-        "First Hallway EP",
+        "Tutorial First Hallway EP",
         "Tutorial Cloud EP",
         "Tutorial Patio Flowers EP",
         "Tutorial Gate EP",

@@ -176,8 +176,8 @@ class WitnessWorld(World):
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
         extra_checks = [
-            ("First Hallway Room", "First Hallway Bend"),
-            ("First Hallway", "First Hallway Straight"),
+            ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
+            ("Tutorial First Hallway", "Tutorial First Hallway Straight"),
             ("Desert Outside", "Desert Surface 3"),
         ]
 
