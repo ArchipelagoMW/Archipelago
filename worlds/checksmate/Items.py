@@ -52,8 +52,11 @@ item_table = {
     # WARNING: Do not set all your filler items to local_only or generation will fail
     "Progressive Pocket Range": CMItemData(4_901_024, ItemClassification.filler, quantity=6),
 
-    "Progressive King Promotion": CMItemData(4_901_025, ItemClassification.progression, quantity=2, material=300),
-    "Progressive Consul": CMItemData(4_901_026, ItemClassification.progression, quantity=2, material=300),
+    "Progressive King Promotion": CMItemData(4_901_025, ItemClassification.progression, quantity=2, material=350),
+    # Material is really about your ability to get checks, so here is the material value of a Commoner, but the AI gets
+    # pretty confused when a royal piece isn't subject to check/mate, so this is a more powerful item than indicated for
+    # the purpose of Checkmate Maxima. TODO: Consider adding a property "tactics", used for some complex locations.
+    "Progressive Consul": CMItemData(4_901_026, ItemClassification.progression, quantity=2, material=325),
 
     "Enemy Pawn A": CMItemData(4_901_030, ItemClassification.progression),
     "Enemy Pawn B": CMItemData(4_901_031, ItemClassification.progression),
