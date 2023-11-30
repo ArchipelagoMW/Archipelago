@@ -133,16 +133,6 @@ class RequireOneHandedStartingWeapons(DefaultOnToggle):
     display_name = "Require One-Handed Starting Weapons"
 
 
-class PoolTypeOption(Choice):
-    """Changes which non-progression items you add to the pool
-
-    Shuffle: Items are picked from the locations being randomized
-    Various: Items are picked from a list of all items in the game, but are the same type of item they replace"""
-    display_name = "Pool Type"
-    option_shuffle = 0
-    option_various = 1
-
-
 class GuaranteedItemsOption(ItemDict):
     """Guarantees that the specified items will be in the item pool"""
     display_name = "Guaranteed Items"
@@ -398,7 +388,6 @@ class DarkSouls3Options(PerGameCommonOptions):
     upgraded_weapon_locations: UpgradedWeaponLocationsOption
     random_starting_loadout: RandomizeStartingLoadout
     require_one_handed_starting_weapons: RequireOneHandedStartingWeapons
-    pool_type: PoolTypeOption
     guaranteed_items: GuaranteedItemsOption
     auto_equip: AutoEquipOption
     lock_equip: LockEquipOption

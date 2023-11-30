@@ -13,7 +13,7 @@ from worlds.generic.Rules import CollectionRule, set_rule, add_rule, add_item_ru
 from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups, region_order
-from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, PoolTypeOption, SoulLocationsOption, UpgradeLocationsOption, UpgradedWeaponLocationsOption
+from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, SoulLocationsOption, UpgradeLocationsOption, UpgradedWeaponLocationsOption
 
 
 class DarkSouls3Web(WebWorld):
@@ -153,15 +153,13 @@ class DarkSouls3World(World):
 
         # There are only a few locations before Iudex Gundyr, and none of them are weapons, so if
         # they can't be random don't allow Yhorm in there.
-        if boss.name == "Iudex Gundyr" and (
-            self.multiworld.pool_type[self.player] == PoolTypeOption.option_various
-            or (
-                not self.multiworld.enable_misc_locations[self.player]
-                and self.multiworld.upgrade_locations[self.player] ==
-                    UpgradeLocationsOption.option_not_randomized
-                and self.multiworld.soul_locations[self.player] ==
-                    SoulLocationsOption.option_not_randomized
-            )
+        if (
+            boss.name == "Iudex Gundyr"
+            and not self.multiworld.enable_misc_locations[self.player]
+            and self.multiworld.upgrade_locations[self.player] ==
+                UpgradeLocationsOption.option_not_randomized
+            and self.multiworld.soul_locations[self.player] ==
+                SoulLocationsOption.option_not_randomized
         ):
             return False
 
@@ -325,46 +323,6 @@ class DarkSouls3World(World):
                 else:
                     item_set.add(location.data.default_item_name)
                     itempool_by_category[location.data.category].append(location.data.default_item_name)
-
-        # Replace each item category with a random sample of items of those types
-        if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various:
-            def create_random_replacement_list(item_categories: Set[DS3ItemCategory], num_items: int):
-                candidates = [
-                    item.name for item
-                    in item_dictionary.values()
-                    if (item.category in item_categories and (not item.is_dlc or dlc_enabled))
-                ]
-                return self.multiworld.random.sample(candidates, num_items)
-
-            if DS3LocationCategory.WEAPON in self.enabled_location_categories:
-                itempool_by_category[DS3LocationCategory.WEAPON] = create_random_replacement_list(
-                    {
-                        DS3ItemCategory.WEAPON_UPGRADE_5,
-                        DS3ItemCategory.WEAPON_UPGRADE_10,
-                        DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE
-                    },
-                    len(itempool_by_category[DS3LocationCategory.WEAPON])
-                )
-            if DS3LocationCategory.SHIELD in self.enabled_location_categories:
-                itempool_by_category[DS3LocationCategory.SHIELD] = create_random_replacement_list(
-                    {DS3ItemCategory.SHIELD, DS3ItemCategory.SHIELD_INFUSIBLE},
-                    len(itempool_by_category[DS3LocationCategory.SHIELD])
-                )
-            if DS3LocationCategory.ARMOR in self.enabled_location_categories:
-                itempool_by_category[DS3LocationCategory.ARMOR] = create_random_replacement_list(
-                    {DS3ItemCategory.ARMOR},
-                    len(itempool_by_category[DS3LocationCategory.ARMOR])
-                )
-            if DS3LocationCategory.RING in self.enabled_location_categories:
-                itempool_by_category[DS3LocationCategory.RING] = create_random_replacement_list(
-                    {DS3ItemCategory.RING},
-                    len(itempool_by_category[DS3LocationCategory.RING])
-                )
-            if DS3LocationCategory.SPELL in self.enabled_location_categories:
-                itempool_by_category[DS3LocationCategory.SPELL] = create_random_replacement_list(
-                    {DS3ItemCategory.SPELL},
-                    len(itempool_by_category[DS3LocationCategory.SPELL])
-                )
 
         itempool: List[DarkSouls3Item] = []
         for category in self.enabled_location_categories:
