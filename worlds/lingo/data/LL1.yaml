@@ -7367,49 +7367,65 @@
         link: change GRAVITY
       PART:
         id: Chemistry Room/Panel_physics_2
-        colors: blue
+        colors:
+          - blue
+          - red
         tag: blue mid red bot
         subtag: mid
         link: xur PARTICLE
       MATTER:
         id: Chemistry Room/Panel_physics_1
-        colors: red
+        colors:
+          - blue
+          - red
         tag: blue mid red bot
         subtag: bot
         link: xur PARTICLE
       ELECTRIC:
         id: Chemistry Room/Panel_physics_6
-        colors: purple
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: mid
         link: xpr ELECTRON
       ATOM (1):
         id: Chemistry Room/Panel_physics_3
-        colors: red
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: bot
         link: xpr ELECTRON
       NEUTRAL:
         id: Chemistry Room/Panel_physics_7
-        colors: purple
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: mid
         link: xpr NEUTRON
       ATOM (2):
         id: Chemistry Room/Panel_physics_4
-        colors: red
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: bot
         link: xpr NEUTRON
       PROPEL:
         id: Chemistry Room/Panel_physics_8
-        colors: purple
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: mid
         link: xpr PROTON
       ATOM (3):
         id: Chemistry Room/Panel_physics_5
-        colors: red
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: bot
         link: xpr PROTON
