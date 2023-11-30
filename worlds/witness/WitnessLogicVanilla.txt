@@ -1,4 +1,4 @@
-==Tutorial==
+==Tutorial (Inside)==
 
 Menu (Menu) - Entry - True:
 
@@ -24,6 +24,8 @@ Tutorial (Tutorial) - Outside Tutorial - 0x03629:
 159512 - 0x33530 (Cloud EP) - True - True
 159513 - 0x33600 (Patio Flowers EP) - 0x0C373 - True
 159517 - 0x3352F (Gate EP) - 0x03505 - True
+
+==Tutorial (Outside)==
 
 Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2 - Outside Tutorial Vault - 0x033D0:
 158650 - 0x033D4 (Vault Panel) - True - Dots & Black/White Squares
@@ -390,8 +392,7 @@ Laser - 0x181B3 (Laser) - 0x19650
 
 ==Keep==
 
-Outside Keep (Outside Keep) - Main Island - True:
-159550 - 0x28B91 (Thundercloud EP) - 0x09F98 & 0x012FB - True
+Outside Keep (Keep) - Main Island - True:
 159430 - 0x03E77 (Red Flowers EP) - True - True
 159431 - 0x03E7C (Purple Flowers EP) - True - True
 
@@ -971,6 +972,7 @@ Mountainside Obelisk (Mountainside) - Entry - True:
 159739 - 0x00367 (Obelisk) - True - True
 
 Mountainside (Mountainside) - Main Island - True - Mountaintop - True - Mountainside Vault - 0x00085:
+159550 - 0x28B91 (Thundercloud EP) - 0x09F98 & 0x012FB - True
 158612 - 0x17C42 (Discard) - True - Triangles
 158665 - 0x002A6 (Vault Panel) - True - Symmetry & Colored Dots & Black/White Squares
 Door - 0x00085 (Vault Door) - 0x002A6
