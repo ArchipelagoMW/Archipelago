@@ -28,6 +28,14 @@ def location_names_to_id():
     }
 
 
+def location_names_to_location():
+    return {
+        location.value: location
+        for location, data in location_data.items()
+        if data.archipelago_id is not None
+    }
+
+
 def id_to_goals():
     return {goal.value: goal for goal in ZorkGrandInquisitorGoals}
 
@@ -108,6 +116,16 @@ def locations_by_region(include_deathsanity=False):
         mapping[data.region].add(location)
 
     return mapping
+
+
+def locations_with_tag(tag):
+    locations = set()
+
+    for location, data in location_data.items():
+        if data.tags is not None and tag in data.tags:
+            locations.add(location)
+
+    return locations
 
 
 def location_access_rule_for(location, player):

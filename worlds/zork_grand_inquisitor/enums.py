@@ -13,7 +13,6 @@ class ZorkGrandInquisitorEvents(enum.Enum):
     KNOWS_SNAVIG = "Event: Knows SNAVIG"
     LANTERN_DALBOZ_ACCESSIBLE = "Event: Lantern (Dalboz) Accessible"
     ROPE_GLORFABLE = "Event: Rope GLORFable"
-    SPELL_LAB_ACCESSIBLE = "Event: Spell Lab Accessible"
     VICTORY = "Victory"
     ZORKMID_BILL_ACCESSIBLE = "Event: 500 Zorkmid Bill Accessible"
     ZORK_ROCKS_ACTIVATED = "Event: Zork Rocks Activated"

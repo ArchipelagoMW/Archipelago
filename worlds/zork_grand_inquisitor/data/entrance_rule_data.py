@@ -91,6 +91,9 @@ entrance_rule_data: Dict[
         ),
     ),
     (ZorkGrandInquisitorRegions.DM_LAIR_INTERIOR, ZorkGrandInquisitorRegions.DM_LAIR): None,
+    (ZorkGrandInquisitorRegions.DM_LAIR_INTERIOR, ZorkGrandInquisitorRegions.WALKING_CASTLE): (
+        (ZorkGrandInquisitorItems.SPELL_OBIDIL,),
+    ),
     (ZorkGrandInquisitorRegions.DM_LAIR_INTERIOR, ZorkGrandInquisitorRegions.WHITE_HOUSE): (
         (
             ZorkGrandInquisitorItems.SPELL_NARWILE,
@@ -98,9 +101,6 @@ entrance_rule_data: Dict[
             ZorkGrandInquisitorItems.SPELL_YASTARD,
             ZorkGrandInquisitorItems.REVEALED_BROGS_TIME_TUNNEL_ITEMS,
         ),
-    ),
-    (ZorkGrandInquisitorRegions.DM_LAIR_INTERIOR, ZorkGrandInquisitorRegions.WALKING_CASTLE): (
-        (ZorkGrandInquisitorItems.SPELL_OBIDIL,),
     ),
     (ZorkGrandInquisitorRegions.DRAGON_ARCHIPELAGO, ZorkGrandInquisitorRegions.ENDGAME): (
         (
