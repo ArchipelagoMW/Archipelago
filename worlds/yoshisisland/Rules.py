@@ -294,7 +294,7 @@ def set_normal_rules(world, multiworld, player: int, boss_order, luigi_pieces):
 
     set_rule(multiworld.get_location("Shy-Guys On Stilts: Red Coins", player), lambda state: state.has_all({'Large Spring Ball', 'Flashing Eggs', 'Mole Tank Morph', '! Switch'}, player))
     set_rule(multiworld.get_location("Shy-Guys On Stilts: Flowers", player), lambda state: state.has_all({'Large Spring Ball'}, player))
-    set_rule(multiworld.get_location("Shy-Guys On Stilts: Stars", player), lambda state: (logic.has_midring(state) and state.has('Tulip', player) or logic.has_midring(state) and state.has('Beanstalk', player) or (state.has('Tulip', player and state.has('Beanstalk', player)))) and state.has('Large Spring Ball', player))
+    set_rule(multiworld.get_location("Shy-Guys On Stilts: Stars", player), lambda state: (logic.has_midring(state) and state.has_any(["Tulip", "Beanstalk"], player)) or (state.has_all(["Tulip", "Beanstalk", "Large Spring Ball"], player)))
     set_rule(multiworld.get_location("Shy-Guys On Stilts: Level Clear", player), lambda state: state.has_all({'Large Spring Ball', 'Beanstalk'}, player))
 
     set_rule(multiworld.get_location("Touch Fuzzy Get Dizzy: Red Coins", player), lambda state: state.has_all({'Flashing Eggs', 'Spring Ball', 'Chomp Rock', 'Beanstalk'}, player))
