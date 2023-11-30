@@ -363,13 +363,13 @@ def make_random_hints(world: "WitnessWorld", hint_amount: int, own_itempool: Lis
     area_reverse_lookup = {v: k for k, l in unhinted_locations_for_hinted_areas.items() for v in l}
 
     while len(hints) < hint_amount:
-        if not prog_items_in_this_world and not locations_in_this_world:
+        if not prog_items_in_this_world and not locations_in_this_world and not hints_to_use_first:
             player_name = world.multiworld.get_player_name(world.player)
             f"Ran out of items/locations to hint for player {player_name}."
             break
         if hints_to_use_first:
             hint_location = hints_to_use_first.pop()
-        elif next_random_hint_is_location:
+        elif next_random_hint_is_location or not prog_items_in_this_world:
             hint_location = hint_from_location(world, locations_in_this_world.pop())
         else:
             hint_location = hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)
