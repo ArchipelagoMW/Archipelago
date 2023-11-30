@@ -56,6 +56,7 @@ class WitnessWorld(World):
     }
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
     item_name_groups = StaticWitnessItems.item_groups
+    location_name_groups = StaticWitnessLocations.AREA_LOCATION_GROUPS
 
     required_client_version = (0, 4, 4)
 

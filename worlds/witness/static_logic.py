@@ -104,6 +104,7 @@ class StaticWitnessLogicObj:
                     "region": None,
                     "id": None,
                     "entityType": location_id,
+                    "area": current_area,
                 }
 
                 self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
@@ -166,7 +167,8 @@ class StaticWitnessLogicObj:
                 "entity_hex": entity_hex,
                 "region": current_region,
                 "id": int(location_id),
-                "entityType": location_type
+                "entityType": location_type,
+                "area": current_area,
             }
 
             self.ENTITY_ID_TO_NAME[entity_hex] = full_entity_name

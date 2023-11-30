@@ -459,6 +459,8 @@ class StaticWitnessLocations:
 
     ALL_LOCATIONS_TO_ID = dict()
 
+    AREA_LOCATION_GROUPS = dict()
+
     @staticmethod
     def get_id(chex: str):
         """
@@ -490,6 +492,10 @@ class StaticWitnessLocations:
 
         for key, item in all_loc_to_id.items():
             self.ALL_LOCATIONS_TO_ID[key] = item
+
+        for loc in all_loc_to_id:
+            area = StaticWitnessLogic.ENTITIES_BY_NAME[loc]["area"]["name"]
+            self.AREA_LOCATION_GROUPS.setdefault(area, []).append(loc)
 
 
 class WitnessPlayerLocations:
