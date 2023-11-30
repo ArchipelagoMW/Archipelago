@@ -190,6 +190,25 @@ class LingoPlayerLogic:
             if item.should_include(world):
                 self.real_items.append(name)
 
+        # Calculate the requirements for the fake pilgrimage.
+        fake_pilgrimage = [
+            ["Second Room", "Exit Door"], ["Crossroads", "Tower Entrance"],
+            ["Orange Tower Fourth Floor", "Hot Crusts Door"], ["Outside The Initiated", "Shortcut to Hub Room"],
+            ["Orange Tower First Floor", "Shortcut to Hub Room"], ["Directional Gallery", "Shortcut to The Undeterred"],
+            ["Orange Tower First Floor", "Salt Pepper Door"], ["Hub Room", "Crossroads Entrance"],
+            ["Champion's Rest", "Shortcut to The Steady"], ["The Bearer", "Shortcut to The Bold"],
+            ["Art Gallery", "Exit"], ["The Tenacious", "Shortcut to Hub Room"],
+            ["Outside The Agreeable", "Tenacious Entrance"]
+        ]
+        pilgrimage_reqs = AccessRequirements()
+        for door in fake_pilgrimage:
+            door_object = DOORS_BY_ROOM[door[0]][door[1]]
+            if door_object.event or world.options.shuffle_doors == ShuffleDoors.option_none:
+                pilgrimage_reqs.merge(self.calculate_door_requirements(door[0], door[1], world))
+            else:
+                pilgrimage_reqs.doors.add(RoomAndDoor(door[0], door[1]))
+        self.door_reqs.setdefault("Pilgrim Antechamber", {})["Pilgrimage"] = pilgrimage_reqs
+
         # Create the paintings mapping, if painting shuffle is on.
         if painting_shuffle:
             # Shuffle paintings until we get something workable.
