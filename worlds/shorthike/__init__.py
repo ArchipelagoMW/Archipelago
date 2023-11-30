@@ -1,10 +1,11 @@
-from typing import Dict, Any
+from typing import ClassVar, Dict, Any, Type
 from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, group_table, base_id
 from .Locations import location_table
 from .Rules import create_rules, get_feather_state
-from .Options import short_hike_options
+from .Options import ShortHikeOptions
 
 class ShortHikeWeb(WebWorld):
     theme = "ocean"
@@ -34,9 +35,11 @@ class ShortHikeWorld(World):
     location_name_to_chest_angle = {loc["name"]: loc["chestAngle"] for loc in location_table}
 
     item_name_groups = group_table
-    option_definitions = short_hike_options
+    
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = ShortHikeOptions
+    options: ShortHikeOptions
 
-    required_client_version = (0, 4, 3)
+    required_client_version = (0, 4, 4)
 
     def __init__(self, multiworld, player):
         super(ShortHikeWorld, self).__init__(multiworld, player)
@@ -63,11 +66,11 @@ class ShortHikeWorld(World):
                 for i in range(count):
                     self.multiworld.itempool.append(self.create_item(item["name"]))
  
-        junk = 45 - self.multiworld.silver_feathers[self.player].value - self.multiworld.golden_feathers[self.player].value - self.multiworld.buckets[self.player].value
+        junk = 45 - self.options.silver_feathers - self.options.golden_feathers - self.options.buckets
         self.multiworld.itempool += [self.create_item("13 Coins") for _ in range(junk)]
-        self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(self.multiworld.golden_feathers[self.player].value)]
-        self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.multiworld.silver_feathers[self.player].value)]
-        self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.multiworld.buckets[self.player].value)]
+        self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(self.options.golden_feathers)]
+        self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.options.silver_feathers)]
+        self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.options.buckets)]
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -82,7 +85,7 @@ class ShortHikeWorld(World):
 
         menu_region.connect(main_region)
 
-        if self.multiworld.goal[self.player].value == 0:
+        if self.options.goal == 0:
             self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
 
     def set_rules(self):
@@ -94,6 +97,7 @@ class ShortHikeWorld(World):
 
         world = self.multiworld
         player = self.player
+        options = self.options
 
         for loc in world.get_filled_locations(player):
             if loc.item.code == None:
@@ -110,9 +114,9 @@ class ShortHikeWorld(World):
                 locations[self.location_name_to_game_id[loc.name]] = data
 
         settings = {
-            "goal": world.goal[player].value,
-            "showGoldenChests": bool(world.show_golden_chests[player].value),
-            "skipCutscenes": bool(world.skip_cutscenes[player].value),
+            "goal": options.goal,
+            "showGoldenChests": bool(options.show_golden_chests),
+            "skipCutscenes": bool(options.skip_cutscenes),
         }
     
         slot_data = {

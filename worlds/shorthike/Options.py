@@ -1,5 +1,5 @@
-from typing import Dict
-from Options import AssembleOptions, Choice, Range, Toggle
+from dataclasses import dataclass
+from Options import Choice, PerGameCommonOptions, Range, Toggle, DefaultOnToggle
 
 class Goal(Choice):
     """Choose the end goal.
@@ -8,15 +8,13 @@ class Goal(Choice):
     option_nap = 0
     default = 0
 
-class ShowGoldenChests(Toggle):
+class ShowGoldenChests(DefaultOnToggle):
     """Turns chests that contain items required for progression into golden chests."""
     display_name = "Progression Items in Golden Chests"
-    default = True
 
-class SkipCutscenes(Toggle):
+class SkipCutscenes(DefaultOnToggle):
     """Skip major cutscenes."""
     display_name = "Skip Cutscenes"
-    default = True
 
 class CoinsInShops(Toggle):
     """When enabled, the randomizer can place coins into locations that are purchased, such as shops."""
@@ -48,20 +46,20 @@ class GoldenFeatherProgression(Choice):
     """Determines which locations are considered in logic based on the required amount of golden feathers to reach them.
     Easy: Locations will be considered inaccessible until the player has enough golden feathers to easily reach them
     Normal: Locations will be considered inaccessible until the player has the minimum possible number of golden feathers to reach them
-    Hard: Removes the requirement of golden feathers for progression entirely, and glitches may need to be used to progress"""
+    Hard: Removes the requirement of golden feathers for progression entirely and glitches may need to be used to progress"""
     display_name = "Golden Feather Progression"
     option_easy = 0
     option_normal = 1
     option_hard = 2
     default = 1
 
-short_hike_options: Dict[str, AssembleOptions] = {
-    "goal": Goal,
-    "show_golden_chests": ShowGoldenChests,
-    "skip_cutscenes": SkipCutscenes,
-    "coins_in_shops": CoinsInShops,
-    "golden_feathers": GoldenFeathers,
-    "silver_feathers": SilverFeathers,
-    "buckets": Buckets,
-    "golden_feather_progression": GoldenFeatherProgression,
-}
+@dataclass
+class ShortHikeOptions(PerGameCommonOptions):
+    goal: Goal
+    show_golden_chests: ShowGoldenChests
+    skip_cutscenes: SkipCutscenes
+    coins_in_shops: CoinsInShops
+    golden_feathers: GoldenFeathers
+    silver_feathers: SilverFeathers
+    buckets: Buckets
+    golden_feather_progression: GoldenFeatherProgression
