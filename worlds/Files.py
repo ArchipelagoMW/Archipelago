@@ -44,7 +44,7 @@ current_patch_version: int = 6
 
 class AutoPatchExtensionRegister(type):
     extension_types: ClassVar[Dict[str, AutoPatchExtensionRegister]] = {}
-    required_extensions: List[str]
+    required_extensions: List[str] = []
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoPatchExtensionRegister:
         # construct class
@@ -151,7 +151,7 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
     source_data: bytes
     patch_file_ending: str = ""
     result_file_ending: str = ".sfc"
-    files: Dict[str, bytes] = dict()
+    files: Dict[str, bytes] = {}
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -223,7 +223,7 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
 
 
 class APDeltaPatch(APProcedurePatch):
-    """An APContainer that additionally has delta.bsdiff4
+    """An APProcedurePatch that additionally has delta.bsdiff4
     containing a delta patch to get the desired file, often a rom."""
 
     procedure = [
@@ -303,7 +303,7 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     Patch extension functions must return the changed bytes.
     """
     game: str
-    required_extensions: List[str] = list()
+    required_extensions: List[str] = []
 
     @staticmethod
     def apply_bsdiff4(caller: APProcedurePatch, rom: bytes, patch: str):
