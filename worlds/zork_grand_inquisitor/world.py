@@ -1,9 +1,11 @@
+from typing import Any, Dict, List, Set, Tuple
+
 from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 
 from worlds.AutoWorld import WebWorld, World
 
-from .data.item_data import item_data
-from .data.location_data import location_data
+from .data.item_data import item_data, ZorkGrandInquisitorItemData
+from .data.location_data import location_data, ZorkGrandInquisitorLocationData
 from .data.region_data import region_data
 
 from .data_funcs import (
@@ -17,15 +19,29 @@ from .data_funcs import (
     entrance_access_rule_for,
 )
 
-from .enums import ZorkGrandInquisitorEvents, ZorkGrandInquisitorItems, ZorkGrandInquisitorTags
+from .enums import (
+    ZorkGrandInquisitorEvents,
+    ZorkGrandInquisitorItems,
+    ZorkGrandInquisitorLocations,
+    ZorkGrandInquisitorRegions,
+    ZorkGrandInquisitorTags,
+)
 
 from .options import ZorkGrandInquisitorOptions
 
 
-class ZorkGrandInquisitorWebWorld(WebWorld):
-    theme = "stone"
+class ZorkGrandInquisitorItem(Item):
+    game = "Zork Grand Inquisitor"
 
-    tutorials = [
+
+class ZorkGrandInquisitorLocation(Location):
+    game = "Zork Grand Inquisitor"
+
+
+class ZorkGrandInquisitorWebWorld(WebWorld):
+    theme: str = "stone"
+
+    tutorials: List[Tutorial] = [
         Tutorial(
             "Multiworld Setup Guide",
             "A guide to setting up the Zork Grand Inquisitor randomizer connected to an Archipelago Multiworld",
@@ -59,30 +75,33 @@ class ZorkGrandInquisitorWorld(World):
     item_name_groups = item_groups()
     location_name_groups = location_groups()
 
-    required_client_version = (0, 4, 4)
+    required_client_version: Tuple[int, int, int] = (0, 4, 4)
 
     web = ZorkGrandInquisitorWebWorld()
 
-    item_name_to_item = item_names_to_item()
+    item_name_to_item: Dict[str, ZorkGrandInquisitorItems] = item_names_to_item()
 
-    def create_regions(self):
-        region_mapping = dict()
+    def create_regions(self) -> None:
+        region_mapping: Dict[ZorkGrandInquisitorRegions, Region] = dict()
 
-        for region in region_data.keys():
-            region_mapping[region] = Region(region.value, self.player, self.multiworld)
+        region_enum_item: ZorkGrandInquisitorRegions
+        for region_enum_item in region_data.keys():
+            region_mapping[region_enum_item] = Region(region_enum_item.value, self.player, self.multiworld)
 
-        region_locations_mapping = locations_by_region(
-            include_deathsanity=self.options.deathsanity.value == 1
-        )
+        region_locations_mapping: Dict[ZorkGrandInquisitorRegions, Set[ZorkGrandInquisitorLocations]]
+        region_locations_mapping = locations_by_region(include_deathsanity=self.options.deathsanity.value == 1)
 
+        region_enum_item: ZorkGrandInquisitorRegions
+        region: Region
         for region_enum_item, region in region_mapping.items():
-            regions_locations = region_locations_mapping[region_enum_item]
+            regions_locations: Set[ZorkGrandInquisitorLocations] = region_locations_mapping[region_enum_item]
 
             # Locations
+            location_enum_item: ZorkGrandInquisitorLocations
             for location_enum_item in regions_locations:
-                data = location_data[location_enum_item]
+                data: ZorkGrandInquisitorLocationData = location_data[location_enum_item]
 
-                location = ZorkGrandInquisitorLocation(
+                location: ZorkGrandInquisitorLocation = ZorkGrandInquisitorLocation(
                     self.player,
                     location_enum_item.value,
                     data.archipelago_id,
@@ -106,6 +125,7 @@ class ZorkGrandInquisitorWorld(World):
                 region.locations.append(location)
 
             # Connections
+            region_exit: ZorkGrandInquisitorRegions
             for region_exit in region_data[region_enum_item].exits or tuple():
                 region.connect(
                     region_mapping[region_exit],
@@ -114,16 +134,18 @@ class ZorkGrandInquisitorWorld(World):
 
             self.multiworld.regions.append(region)
 
-    def create_items(self):
-        item_pool = list()
+    def create_items(self) -> None:
+        item_pool: List[ZorkGrandInquisitorItem] = list()
 
+        item: ZorkGrandInquisitorItems
+        data: ZorkGrandInquisitorItemData
         for item, data in item_data.items():
             if ZorkGrandInquisitorTags.FILLER in (data.tags or tuple()):
                 continue
 
             item_pool.append(self.create_item(item.value))
 
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
+        total_locations: int = len(self.multiworld.get_unfilled_locations(self.player))
 
         for _ in range(total_locations - len(item_pool)):
             item_pool.append(self.create_item(self.get_filler_item_name()))
@@ -134,8 +156,8 @@ class ZorkGrandInquisitorWorld(World):
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.ROPE.value] = 1
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.LANTERN.value] = 1
 
-    def create_item(self, name):
-        data = item_data[self.item_name_to_item[name]]
+    def create_item(self, name: str) -> ZorkGrandInquisitorItem:
+        data: ZorkGrandInquisitorItemData = item_data[self.item_name_to_item[name]]
 
         return ZorkGrandInquisitorItem(
             name,
@@ -144,23 +166,15 @@ class ZorkGrandInquisitorWorld(World):
             self.player,
         )
 
-    def generate_basic(self):
+    def generate_basic(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def fill_slot_data(self):
+    def fill_slot_data(self) -> Dict[str, Any]:
         return self.options.as_dict(
             "goal",
             "early_rope_and_lantern",
             "deathsanity",
         )
 
-    def get_filler_item_name(self):
+    def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(list(self.item_name_groups["Filler"]))
-
-
-class ZorkGrandInquisitorItem(Item):
-    game = "Zork Grand Inquisitor"
-
-
-class ZorkGrandInquisitorLocation(Location):
-    game = "Zork Grand Inquisitor"

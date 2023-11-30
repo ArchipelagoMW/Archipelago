@@ -3,7 +3,7 @@ import worlds.LauncherComponents as LauncherComponents
 from .world import ZorkGrandInquisitorWorld
 
 
-def launch_client():
+def launch_client() -> None:
     from .client import main
     LauncherComponents.launch_subprocess(main, name="ZorkGrandInquisitorClient")
 

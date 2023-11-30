@@ -9,22 +9,22 @@ class Goal(Choice):
 
     Three Artifacts: Retrieve the three artifacts of magic and place them in the walking castle
     """
-    display_name = "Goal"
+    display_name: str = "Goal"
 
-    default = 0
-    option_three_artifacts = 0
+    default: int = 0
+    option_three_artifacts: int = 0
 
 
 class EarlyRopeAndLantern(DefaultOnToggle):
     """If true, the rope and lantern will be found in early locations for a smoother early game"""
 
-    display_name = "Early Rope & Lantern"
+    display_name: str = "Early Rope & Lantern"
 
 
 class Deathsanity(Toggle):
     """If true, adds 16 player death locations to the world"""
 
-    display_name = "Deathsanity"
+    display_name: str = "Deathsanity"
 
 
 @dataclass

@@ -1,16 +1,21 @@
 import asyncio
+import argparse
 
 import CommonClient
+import NetUtils
 import Utils
 
+from typing import Any, Dict, List, Optional, Set, Tuple
+
 from .data_funcs import item_names_to_id, location_names_to_id, id_to_items, id_to_locations, id_to_goals
+from .enums import ZorkGrandInquisitorItems, ZorkGrandInquisitorLocations
 from .game_controller import GameController
 
 
 class ZorkGrandInquisitorCommandProcessor(CommonClient.ClientCommandProcessor):
-    def _cmd_zork(self):
+    def _cmd_zork(self) -> None:
         """Attach to an open Zork Grand Inquisitor process."""
-        result = self.ctx.game_controller.open_process_handle()
+        result: bool = self.ctx.game_controller.open_process_handle()
 
         if result:
             self.ctx.process_attached_at_least_once = True
@@ -20,49 +25,46 @@ class ZorkGrandInquisitorCommandProcessor(CommonClient.ClientCommandProcessor):
 
 
 class ZorkGrandInquisitorContext(CommonClient.CommonContext):
-    tags = {"AP"}
-    game = "Zork Grand Inquisitor"
-    command_processor = ZorkGrandInquisitorCommandProcessor
-    items_handling = 0b111
-    want_slot_data = True
+    tags: Set[str] = {"AP"}
+    game: str = "Zork Grand Inquisitor"
+    command_processor: CommonClient.ClientCommandProcessor = ZorkGrandInquisitorCommandProcessor
+    items_handling: int = 0b111
+    want_slot_data: bool = True
 
-    item_name_to_id = item_names_to_id()
-    location_name_to_id = location_names_to_id()
+    item_name_to_id: Dict[str, int] = item_names_to_id()
+    location_name_to_id: Dict[str, int] = location_names_to_id()
 
-    id_to_items = id_to_items()
-    id_to_locations = id_to_locations()
+    id_to_items: Dict[int, ZorkGrandInquisitorItems] = id_to_items()
+    id_to_locations: Dict[int, ZorkGrandInquisitorLocations] = id_to_locations()
 
-    def __init__(self, server_address, password):
+    def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
         super().__init__(server_address, password)
 
-        self.game_controller = GameController(logger=CommonClient.logger)
+        self.game_controller: GameController = GameController(logger=CommonClient.logger)
 
-        self.controller_task = None
+        self.controller_task: Optional[asyncio.Task] = None
 
-        self.process_attached_at_least_once = False
-        self.can_display_process_message = True
+        self.process_attached_at_least_once: bool = False
+        self.can_display_process_message: bool = True
 
-    def run_gui(self):
+    def run_gui(self) -> None:
         from kvui import GameManager
 
         class TextManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-
-            base_title = "Archipelago Zork Grand Inquisitor Client"
+            logging_pairs: List[Tuple[str, str]] = [("Client", "Archipelago")]
+            base_title: str = "Archipelago Zork Grand Inquisitor Client"
 
         self.ui = TextManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    async def server_auth(self, password_requested=False):
+    async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super().server_auth(password_requested)
 
         await self.get_username()
         await self.send_connect()
 
-    def on_package(self, cmd, _args):
+    def on_package(self, cmd: str, _args: Any) -> None:
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
 
@@ -73,17 +75,19 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
             await asyncio.sleep(0.1)
 
             # Update Completed Locations
-            completed_locations = set()
+            completed_locations: Set[ZorkGrandInquisitorLocations] = set()
 
+            location_id: int
             for location_id in self.checked_locations:
-                location = self.id_to_locations[location_id]
+                location: ZorkGrandInquisitorLocations = self.id_to_locations[location_id]
                 completed_locations.add(location)
 
             self.game_controller.completed_locations = completed_locations
 
             # Enqueue Received Item Delta
+            network_item: NetUtils.NetworkItem
             for network_item in self.items_received:
-                item = self.id_to_items[network_item.item]
+                item: ZorkGrandInquisitorItems = self.id_to_items[network_item.item]
 
                 if item not in self.game_controller.received_items:
                     if item not in self.game_controller.received_items_queue:
@@ -94,6 +98,8 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
                 self.game_controller.update()
                 self.can_display_process_message = True
             else:
+                process_message: str
+
                 if self.process_attached_at_least_once:
                     process_message = (
                         "Lost connection to Zork Grand Inquisitor process. Please restart the game and use the /zork "
@@ -109,11 +115,11 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
                     self.can_display_process_message = False
 
             # Send Checked Locations
-            checked_location_ids = list()
+            checked_location_ids: List[int] = list()
 
             while len(self.game_controller.completed_locations_queue) > 0:
-                location = self.game_controller.completed_locations_queue.popleft()
-                location_id = self.location_name_to_id[location.value]
+                location: ZorkGrandInquisitorLocations = self.game_controller.completed_locations_queue.popleft()
+                location_id: int = self.location_name_to_id[location.value]
 
                 checked_location_ids.append(location_id)
 
@@ -134,18 +140,18 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
                 ])
 
 
-async def process_package(ctx: ZorkGrandInquisitorContext, cmd, _args):
+async def process_package(ctx: ZorkGrandInquisitorContext, cmd: str, _args: Any):
     if cmd == "Connected":
         # Slot Data - Options
         ctx.game_controller.option_goal = id_to_goals()[_args["slot_data"]["goal"]]
         ctx.game_controller.option_deathsanity = _args["slot_data"]["deathsanity"] == 1
 
 
-def main():
+def main() -> None:
     Utils.init_logging("ZorkGrandInquisitorClient", exception_logger="Client")
 
     async def _main():
-        ctx = ZorkGrandInquisitorContext(None, None)
+        ctx: ZorkGrandInquisitorContext = ZorkGrandInquisitorContext(None, None)
 
         ctx.server_task = asyncio.create_task(CommonClient.server_loop(ctx), name="server loop")
         ctx.controller_task = asyncio.create_task(ctx.controller(), name="ZorkGrandInquisitorController")
@@ -163,10 +169,9 @@ def main():
     colorama.init()
 
     asyncio.run(_main())
+
     colorama.deinit()
 
 
 if __name__ == "__main__":
-    parser = CommonClient.get_base_parser(description="Zork Grand Inquisitor Client, for text interfacing.")
-    args = parser.parse_args()
     main()

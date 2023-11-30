@@ -1,6 +1,8 @@
+from typing import Dict, Set, Tuple, Union
+
 from .data.entrance_rule_data import entrance_rule_data
-from .data.item_data import item_data
-from .data.location_data import location_data
+from .data.item_data import item_data, ZorkGrandInquisitorItemData
+from .data.location_data import location_data, ZorkGrandInquisitorLocationData
 
 from .enums import (
     ZorkGrandInquisitorEvents,
@@ -12,15 +14,15 @@ from .enums import (
 )
 
 
-def item_names_to_id():
+def item_names_to_id() -> Dict[str, int]:
     return {item.value: data.archipelago_id for item, data in item_data.items()}
 
 
-def item_names_to_item():
+def item_names_to_item() -> Dict[str, ZorkGrandInquisitorItems]:
     return {item.value: item for item, _ in item_data.items()}
 
 
-def location_names_to_id():
+def location_names_to_id() -> Dict[str, int]:
     return {
         location.value: data.archipelago_id
         for location, data in location_data.items()
@@ -28,7 +30,7 @@ def location_names_to_id():
     }
 
 
-def location_names_to_location():
+def location_names_to_location() -> Dict[str, ZorkGrandInquisitorLocations]:
     return {
         location.value: location
         for location, data in location_data.items()
@@ -36,15 +38,15 @@ def location_names_to_location():
     }
 
 
-def id_to_goals():
+def id_to_goals() -> Dict[int, ZorkGrandInquisitorGoals]:
     return {goal.value: goal for goal in ZorkGrandInquisitorGoals}
 
 
-def id_to_items():
+def id_to_items() -> Dict[int, ZorkGrandInquisitorItems]:
     return {data.archipelago_id: item for item, data in item_data.items()}
 
 
-def id_to_locations():
+def id_to_locations() -> Dict[int, ZorkGrandInquisitorLocations]:
     return {
         data.archipelago_id: location
         for location, data in location_data.items()
@@ -52,12 +54,15 @@ def id_to_locations():
     }
 
 
-def item_groups():
-    groups = dict()
+def item_groups() -> Dict[str, Set[str]]:
+    groups: Dict[str, Set[str]] = dict()
 
+    tag: ZorkGrandInquisitorTags
     for tag in ZorkGrandInquisitorTags:
         groups[tag.value] = set()
 
+    item: ZorkGrandInquisitorItems
+    data: ZorkGrandInquisitorItemData
     for item, data in item_data.items():
         if data.tags is not None:
             for tag in data.tags:
@@ -66,9 +71,11 @@ def item_groups():
     return {k: v for k, v in groups.items() if len(v)}
 
 
-def items_with_tag(tag):
-    items = set()
+def items_with_tag(tag) -> Set[ZorkGrandInquisitorItems]:
+    items: Set[ZorkGrandInquisitorItems] = set()
 
+    item: ZorkGrandInquisitorItems
+    data: ZorkGrandInquisitorItemData
     for item, data in item_data.items():
         if data.tags is not None and tag in data.tags:
             items.add(item)
@@ -76,9 +83,11 @@ def items_with_tag(tag):
     return items
 
 
-def game_id_to_items():
-    mapping = dict()
+def game_id_to_items() -> Dict[int, ZorkGrandInquisitorItems]:
+    mapping: Dict[int, ZorkGrandInquisitorItems] = dict()
 
+    item: ZorkGrandInquisitorItems
+    data: ZorkGrandInquisitorItemData
     for item, data in item_data.items():
         if data.game_state_keys is not None:
             for key in data.game_state_keys:
@@ -87,12 +96,15 @@ def game_id_to_items():
     return mapping
 
 
-def location_groups():
-    groups = dict()
+def location_groups() -> Dict[str, Set[str]]:
+    groups: Dict[str, Set[str]] = dict()
 
+    tag: ZorkGrandInquisitorTags
     for tag in ZorkGrandInquisitorTags:
         groups[tag.value] = set()
 
+    location: ZorkGrandInquisitorLocations
+    data: ZorkGrandInquisitorLocationData
     for location, data in location_data.items():
         if data.tags is not None:
             for tag in data.tags:
@@ -101,12 +113,17 @@ def location_groups():
     return {k: v for k, v in groups.items() if len(v)}
 
 
-def locations_by_region(include_deathsanity=False):
-    mapping = dict()
+def locations_by_region(include_deathsanity: bool = False) -> Dict[
+    ZorkGrandInquisitorRegions, Set[ZorkGrandInquisitorLocations]
+]:
+    mapping: Dict[ZorkGrandInquisitorRegions, Set[ZorkGrandInquisitorLocations]] = dict()
 
+    region: ZorkGrandInquisitorRegions
     for region in ZorkGrandInquisitorRegions:
         mapping[region] = set()
 
+    location: ZorkGrandInquisitorLocations
+    data: ZorkGrandInquisitorLocationData
     for location, data in location_data.items():
         if include_deathsanity is False and ZorkGrandInquisitorTags.DEATHSANITY in (
             data.tags or tuple()
@@ -118,9 +135,11 @@ def locations_by_region(include_deathsanity=False):
     return mapping
 
 
-def locations_with_tag(tag):
-    locations = set()
+def locations_with_tag(tag: ZorkGrandInquisitorTags) -> Set[ZorkGrandInquisitorLocations]:
+    locations: Set[ZorkGrandInquisitorLocations] = set()
 
+    location: ZorkGrandInquisitorLocations
+    data: ZorkGrandInquisitorLocationData
     for location, data in location_data.items():
         if data.tags is not None and tag in data.tags:
             locations.add(location)
@@ -128,14 +147,16 @@ def locations_with_tag(tag):
     return locations
 
 
-def location_access_rule_for(location, player):
-    data = location_data[location]
+def location_access_rule_for(location: ZorkGrandInquisitorLocations, player: int) -> str:
+    data: ZorkGrandInquisitorLocationData = location_data[location]
 
     if data.requirements is None:
         return "lambda state: True"
 
-    lambda_string = "lambda state: "
+    lambda_string: str = "lambda state: "
 
+    i: int
+    requirement: Union[ZorkGrandInquisitorEvents, ZorkGrandInquisitorItems]
     for i, requirement in enumerate(data.requirements):
         lambda_string += f"state.has(\"{requirement.value}\", {player})"
 
@@ -145,26 +166,60 @@ def location_access_rule_for(location, player):
     return lambda_string
 
 
-def entrance_access_rule_for(region_origin, region_destination, player):
-    data = entrance_rule_data[(region_origin, region_destination)]
+def entrance_access_rule_for(
+    region_origin: ZorkGrandInquisitorRegions,
+    region_destination: ZorkGrandInquisitorRegions,
+    player: int
+) -> str:
+    data: Union[
+        Tuple[
+            Tuple[
+                Union[
+                    ZorkGrandInquisitorEvents,
+                    ZorkGrandInquisitorItems,
+                    ZorkGrandInquisitorRegions,
+                ],
+                ...,
+            ],
+            ...,
+        ],
+        None,
+    ] = entrance_rule_data[(region_origin, region_destination)]
 
     if data is None:
         return "lambda state: True"
 
-    lambda_string = "lambda state: "
+    lambda_string: str = "lambda state: "
 
+    i: int
+    requirement_group: Tuple[
+        Union[
+            ZorkGrandInquisitorEvents,
+            ZorkGrandInquisitorItems,
+            ZorkGrandInquisitorRegions,
+        ],
+        ...,
+    ]
     for i, requirement_group in enumerate(data):
         lambda_string += "("
 
+        ii: int
+        requirement: Union[
+            ZorkGrandInquisitorEvents,
+            ZorkGrandInquisitorItems,
+            ZorkGrandInquisitorRegions,
+        ]
         for ii, requirement in enumerate(requirement_group):
-            requirement_type = type(requirement)
+            requirement_type: Union[
+                ZorkGrandInquisitorEvents,
+                ZorkGrandInquisitorItems,
+                ZorkGrandInquisitorRegions,
+            ] = type(requirement)
 
             if requirement_type in (ZorkGrandInquisitorEvents, ZorkGrandInquisitorItems):
                 lambda_string += f"state.has(\"{requirement.value}\", {player})"
             elif requirement_type == ZorkGrandInquisitorRegions:
                 lambda_string += f"state.can_reach(\"{requirement.value}\", \"Region\", {player})"
-            elif requirement_type == ZorkGrandInquisitorLocations:
-                lambda_string += f"state.can_reach(\"{requirement.value}\", \"Location\", {player})"
 
             if ii < len(requirement_group) - 1:
                 lambda_string += " and "

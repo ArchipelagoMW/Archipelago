@@ -16,9 +16,7 @@ class LocationsTestNoDeathsanity(ZorkGrandInquisitorTestBase):
             ZorkGrandInquisitorTags.CORE
         )
 
-        location_name_to_location: Dict[
-            str, ZorkGrandInquisitorLocations
-        ] = location_names_to_location()
+        location_name_to_location: Dict[str, ZorkGrandInquisitorLocations] = location_names_to_location()
 
         for location_object in self.multiworld.get_locations(1):
             location: ZorkGrandInquisitorLocations = location_name_to_location.get(

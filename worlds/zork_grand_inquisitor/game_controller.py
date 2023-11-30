@@ -1,7 +1,10 @@
 import collections
+import logging
 
-from .data.item_data import item_data
-from .data.location_data import location_data
+from typing import Dict, Optional, Set, Tuple, Union
+
+from .data.item_data import item_data, ZorkGrandInquisitorItemData
+from .data.location_data import location_data, ZorkGrandInquisitorLocationData
 
 from .data_funcs import game_id_to_items, items_with_tag
 
@@ -16,50 +19,50 @@ from .game_state_manager import GameStateManager
 
 
 class GameController:
-    def __init__(self, logger=None):
-        self.logger = logger
+    def __init__(self, logger=None) -> None:
+        self.logger: Optional[logging.Logger] = logger
 
-        self.game_state_manager = GameStateManager()
+        self.game_state_manager: GameStateManager = GameStateManager()
 
-        self.received_items = set()
-        self.completed_locations = set()
+        self.received_items: Set[ZorkGrandInquisitorItems] = set()
+        self.completed_locations: Set[ZorkGrandInquisitorLocations] = set()
 
-        self.completed_locations_queue = collections.deque()
-        self.received_items_queue = collections.deque()
+        self.completed_locations_queue: collections.deque = collections.deque()
+        self.received_items_queue: collections.deque = collections.deque()
 
-        self.game_id_to_items = game_id_to_items()
+        self.game_id_to_items: Dict[int, ZorkGrandInquisitorItems] = game_id_to_items()
 
-        self.possible_inventory_items = (
+        self.possible_inventory_items: Set[ZorkGrandInquisitorItems] = (
             items_with_tag(ZorkGrandInquisitorTags.INVENTORY_ITEM)
             | items_with_tag(ZorkGrandInquisitorTags.SPELL)
             | items_with_tag(ZorkGrandInquisitorTags.TOTEM)
         )
 
-        self.available_inventory_slots = set()
+        self.available_inventory_slots: Set[int] = set()
 
-        self.goal_completed = False
+        self.goal_completed: bool = False
 
-        self.option_goal = None
-        self.option_deathsanity = False
+        self.option_goal: Optional[ZorkGrandInquisitorGoals] = None
+        self.option_deathsanity: Optional[bool] = None
 
-    def log(self, message):
+    def log(self, message) -> None:
         if self.logger:
             self.logger.info(message)
 
-    def log_debug(self, message):
+    def log_debug(self, message) -> None:
         if self.logger:
             self.logger.debug(message)
 
-    def open_process_handle(self):
+    def open_process_handle(self) -> bool:
         return self.game_state_manager.open_process_handle()
 
-    def close_process_handle(self):
+    def close_process_handle(self) -> bool:
         return self.game_state_manager.close_process_handle()
 
-    def is_process_running(self):
+    def is_process_running(self) -> bool:
         return self.game_state_manager.is_process_running
 
-    def update(self):
+    def update(self) -> None:
         if self.game_state_manager.is_process_still_running():
             try:
                 self.game_state_manager.refresh_game_location()
@@ -76,7 +79,7 @@ class GameController:
             except Exception as e:
                 self.log_debug(e)
 
-    def _apply_permanent_game_state(self):
+    def _apply_permanent_game_state(self) -> None:
         self._write_game_state_value_for(10934, 1)  # Rope Taken
         self._write_game_state_value_for(10418, 1)  # Mead Light Taken
         self._write_game_state_value_for(10275, 0)  # Lantern in Crate
@@ -140,7 +143,7 @@ class GameController:
             self._write_game_state_value_for(7148, 0)
 
         # Subway Destinations
-        subway_destination = max(
+        subway_destination: int = max(
             (
                 self._read_game_state_value_for(13825),  # Crossroads Platform
                 self._read_game_state_value_for(13307),  # Flood Control Dam Platform
@@ -220,27 +223,31 @@ class GameController:
         if self._read_game_state_value_for(4115) == 1:
             self._write_game_state_value_for(4114, 1)
 
-    def _check_for_completed_locations(self):
+    def _check_for_completed_locations(self) -> None:
+        location: ZorkGrandInquisitorLocations
+        data: ZorkGrandInquisitorLocationData
         for location, data in location_data.items():
             if (
                 location in self.completed_locations
-                or type(location) != ZorkGrandInquisitorLocations
+                or not isinstance(location, ZorkGrandInquisitorLocations)
             ):
                 continue
 
-            is_location_completed = True
+            is_location_completed: bool = True
 
+            trigger: [Union[str, int]]
+            value: Union[str, int, Tuple[int, ...]]
             for trigger, value in data.game_state_trigger:
                 if trigger == "location":
                     if not self._player_is_at(value):
                         is_location_completed = False
                         break
-                elif type(trigger) == int:
-                    if type(value) == int:
+                elif isinstance(trigger, int):
+                    if isinstance(value, int):
                         if self._read_game_state_value_for(trigger) != value:
                             is_location_completed = False
                             break
-                    elif type(value) == tuple:
+                    elif isinstance(value, tuple):
                         if self._read_game_state_value_for(trigger) not in value:
                             is_location_completed = False
                             break
@@ -254,29 +261,35 @@ class GameController:
             if is_location_completed:
                 self.completed_locations_queue.append(location)
 
-    def _manage_items(self):
+    def _manage_items(self) -> None:
         # Process Queue
         while len(self.received_items_queue) > 0:
-            item = self.received_items_queue.popleft()
+            item: ZorkGrandInquisitorItems = self.received_items_queue.popleft()
 
             if ZorkGrandInquisitorTags.FILLER in item_data[item].tags:
                 continue
 
             self.received_items.add(item)
+
         # Manage Inventory Items
         if self._player_is_afgncaap():
             self.available_inventory_slots = self._determine_available_inventory_slots()
 
+            received_inventory_item: Set[ZorkGrandInquisitorItems]
             received_inventory_items = self.received_items & self.possible_inventory_items
+
             received_inventory_items = self._filter_received_inventory_items(
                 received_inventory_items
             )
 
-            game_state_inventory_items = self._determine_game_state_inventory()
+            game_state_inventory_items: Set[ZorkGrandInquisitorItems] = self._determine_game_state_inventory()
 
+            inventory_items_to_remove: Set[ZorkGrandInquisitorItems]
             inventory_items_to_remove = game_state_inventory_items - received_inventory_items
+
+            inventory_items_to_add: Set[ZorkGrandInquisitorItems]
             inventory_items_to_add = received_inventory_items - game_state_inventory_items
-            
+
             for item in inventory_items_to_remove:
                 self._remove_from_inventory(item)
 
@@ -284,24 +297,24 @@ class GameController:
                 self._add_to_inventory(item)
 
         # Item Deduplication (Just in Case)
-        seen_items = set()
+        seen_items: Set[int] = set()
 
         for i in range(151, 171):
-            item = self._read_game_state_value_for(i)
+            item: int = self._read_game_state_value_for(i)
 
             if item in seen_items:
                 self._write_game_state_value_for(i, 0)
             else:
                 seen_items.add(item)
 
-    def _apply_conditional_teleports(self):
+    def _apply_conditional_teleports(self) -> None:
         if self._player_is_at("uw1k") and self._read_game_state_value_for(13938) == 0:
             self.game_state_manager.set_game_location("pc10", 250)
 
         if self._player_is_at("ej10"):
             self.game_state_manager.set_game_location("uc10", 1200)
 
-    def _check_for_victory(self):
+    def _check_for_victory(self) -> None:
         if self.option_goal == ZorkGrandInquisitorGoals.THREE_ARTIFACTS:
             coconut_is_placed = self._read_game_state_value_for(2200) == 1
             cube_is_placed = self._read_game_state_value_for(2322) == 1
@@ -309,24 +322,25 @@ class GameController:
 
             self.goal_completed = coconut_is_placed and cube_is_placed and skull_is_placed
 
-    def _determine_game_state_inventory(self):
-        game_state_inventory = set()
+    def _determine_game_state_inventory(self) -> Set[ZorkGrandInquisitorItems]:
+        game_state_inventory: Set[ZorkGrandInquisitorItems] = set()
 
         # Item on Cursor
-        item_on_cursor = self._read_game_state_value_for(9)
+        item_on_cursor: int = self._read_game_state_value_for(9)
 
         if item_on_cursor != 0:
             if item_on_cursor in self.game_id_to_items:
                 game_state_inventory.add(self.game_id_to_items[item_on_cursor])
 
         # Item in Inspector
-        item_in_inspector = self._read_game_state_value_for(4512)
+        item_in_inspector: int = self._read_game_state_value_for(4512)
 
         if item_in_inspector != 0:
             if item_in_inspector in self.game_id_to_items:
                 game_state_inventory.add(self.game_id_to_items[item_in_inspector])
 
         # Items in Inventory Slots
+        i: int
         for i in range(151, 171):
             if self._read_game_state_value_for(i) != 0:
                 if self._read_game_state_value_for(i) in self.game_id_to_items:
@@ -339,6 +353,7 @@ class GameController:
             game_state_inventory.add(ZorkGrandInquisitorItems.POUCH_OF_ZORKMIDS)
 
         # Spells
+        i: int
         for i in range(191, 203):
             if self._read_game_state_value_for(i) == 1:
                 if i in self.game_id_to_items:
@@ -356,29 +371,29 @@ class GameController:
 
         return game_state_inventory
 
-    def _add_to_inventory(self, item):
+    def _add_to_inventory(self, item: ZorkGrandInquisitorItems) -> None:
         if item == ZorkGrandInquisitorItems.POUCH_OF_ZORKMIDS:
             return None
 
-        data = item_data[item]
+        data: ZorkGrandInquisitorItemData = item_data[item]
 
         if ZorkGrandInquisitorTags.INVENTORY_ITEM in data.tags:
             if len(self.available_inventory_slots):  # Inventory slot overflow protection
-                inventory_slot = self.available_inventory_slots.pop()
+                inventory_slot: int = self.available_inventory_slots.pop()
                 self._write_game_state_value_for(inventory_slot, data.game_state_keys[0])
         elif ZorkGrandInquisitorTags.SPELL in data.tags:
             self._write_game_state_value_for(data.game_state_keys[0], 1)
         elif ZorkGrandInquisitorTags.TOTEM in data.tags:
             self._write_game_state_value_for(data.game_state_keys[0], 1)
 
-    def _remove_from_inventory(self, item):
+    def _remove_from_inventory(self, item: ZorkGrandInquisitorItems) -> None:
         if item == ZorkGrandInquisitorItems.POUCH_OF_ZORKMIDS:
             return None
 
-        data = item_data[item]
+        data: ZorkGrandInquisitorItemData = item_data[item]
 
         if ZorkGrandInquisitorTags.INVENTORY_ITEM in data.tags:
-            inventory_slot = self._inventory_slot_for(item)
+            inventory_slot: Optional[int] = self._inventory_slot_for(item)
 
             if inventory_slot is None:
                 return None
@@ -392,19 +407,21 @@ class GameController:
         elif ZorkGrandInquisitorTags.TOTEM in data.tags:
             self._write_game_state_value_for(data.game_state_keys[0], 0)
 
-    def _determine_available_inventory_slots(self):
-        available_inventory_slots = set()
+    def _determine_available_inventory_slots(self) -> Set[int]:
+        available_inventory_slots: Set[int] = set()
 
+        i: int
         for i in range(151, 171):
             if self._read_game_state_value_for(i) == 0:
                 available_inventory_slots.add(i)
 
         return available_inventory_slots
 
-    def _inventory_slot_for(self, item):
-        data = item_data[item]
+    def _inventory_slot_for(self, item) -> Optional[int]:
+        data: ZorkGrandInquisitorItemData = item_data[item]
 
         if ZorkGrandInquisitorTags.INVENTORY_ITEM in data.tags:
+            i: int
             for i in range(151, 171):
                 if self._read_game_state_value_for(i) == data.game_state_keys[0]:
                     return i
@@ -417,20 +434,24 @@ class GameController:
 
         return None
 
-    def _filter_received_inventory_items(self, received_inventory_items):
-        to_filter_inventory_items = set()
+    def _filter_received_inventory_items(
+        self, received_inventory_items: Set[ZorkGrandInquisitorItems]
+    ) -> Set[ZorkGrandInquisitorItems]:
+        to_filter_inventory_items: Set[ZorkGrandInquisitorItems] = set()
 
-        inventory_item_values = set()
+        inventory_item_values: Set[int] = set()
 
+        i: int
         for i in range(151, 171):
             inventory_item_values.add(self._read_game_state_value_for(i))
 
-        cursor_item_value = self._read_game_state_value_for(9)
-        inspector_item_value = self._read_game_state_value_for(4512)
+        cursor_item_value: int = self._read_game_state_value_for(9)
+        inspector_item_value: int = self._read_game_state_value_for(4512)
 
         inventory_item_values.add(cursor_item_value)
         inventory_item_values.add(inspector_item_value)
 
+        item: ZorkGrandInquisitorItems
         for item in received_inventory_items:
             if item == ZorkGrandInquisitorItems.FLATHEADIA_FUDGE:
                 if self._read_game_state_value_for(4766) == 1:
@@ -535,30 +556,28 @@ class GameController:
 
         return received_inventory_items - to_filter_inventory_items
 
-    def _read_game_state_value_for(self, key):
+    def _read_game_state_value_for(self, key: int) -> Optional[int]:
         try:
             return self.game_state_manager.read_game_state_value_for(key)
         except Exception as e:
             self.log_debug(f"Exception: {e} while trying to read {key}")
+            raise e
 
-        return False
-
-    def _write_game_state_value_for(self, key, value):
+    def _write_game_state_value_for(self, key: int, value: int) -> Optional[bool]:
         try:
             return self.game_state_manager.write_game_state_value_for(key, value)
         except Exception as e:
             self.log_debug(f"Exception: {e} while trying to write {key} = {value}")
+            raise e
 
-        return False
-
-    def _player_has(self, item):
+    def _player_has(self, item: ZorkGrandInquisitorItems) -> bool:
         return item in self.received_items
 
-    def _player_doesnt_have(self, item):
+    def _player_doesnt_have(self, item: ZorkGrandInquisitorItems) -> bool:
         return item not in self.received_items
 
-    def _player_is_at(self, game_location):
+    def _player_is_at(self, game_location: str) -> bool:
         return self.game_state_manager.game_location == game_location
 
-    def _player_is_afgncaap(self):
+    def _player_is_afgncaap(self) -> bool:
         return self._read_game_state_value_for(1596) == 1
