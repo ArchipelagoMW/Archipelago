@@ -265,6 +265,14 @@ class DarkSouls3World(World):
                     location,
                     new_region
                 )
+
+                # Mark Red Eye Orb as missable if key locations aren't being randomized, because the
+                # Lift Chamber Key is missable by default.
+                if (
+                    not self.multiworld.enable_key_locations[self.player]
+                    and location.name == "HWL: Red Eye Orb"
+                ):
+                    new_location.progress_type = LocationProgressType.EXCLUDED
             else:
                 # Replace non-randomized progression items with events if their locations aren't
                 # missable. Avoiding missable locations prevents issues where, for example, NPC
@@ -472,7 +480,8 @@ class DarkSouls3World(World):
                 self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
 
         # Define the access rules to some specific locations
-        self._add_location_rule("HWL: Red Eye Orb", "Lift Chamber Key")
+        if self.multiworld.enable_key_locations[self.player]:
+            self._add_location_rule("HWL: Red Eye Orb", "Lift Chamber Key")
         self._add_location_rule("ID: Bellowing Dragoncrest Ring", "Jailbreaker's Key")
         self._add_location_rule("ID: Covetous Gold Serpent Ring", "Old Cell Key")
         self._add_location_rule("UG: Hornet Ring", "Small Lothric Banner")

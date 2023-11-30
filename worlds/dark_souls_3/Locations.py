@@ -1721,14 +1721,15 @@ location_tables = {
                         missable = True, npc = True),
 
         # Shrine Handmaid after killing Ringfinger Leonhard
-        # This is listed here even though you can kill Leonhard immediately because we don't want to
-        # make people do that until they have a chance to complete his quest and Sirris's.
+        # This is listed here even though you can kill Leonhard immediately because we want the
+        # logic to assume people will do his full quest. Missable because he can disappear forever
+        # if you use up all your Pale Tongues.
         DS3LocationData("AL: Leonhard's Garb",                     "Leonhard's Garb",                     DS3LocationCategory.ARMOR,
-                        hidden = True, npc = True, shop = True, conditional = True),
+                        hidden = True, npc = True, shop = True, missable = True),
         DS3LocationData("AL: Leonhard's Gauntlets",                "Leonhard's Gauntlets",                DS3LocationCategory.ARMOR,
-                        hidden = True, npc = True, shop = True, conditional = True),
+                        hidden = True, npc = True, shop = True, missable = True),
         DS3LocationData("AL: Leonhard's Trousers",                 "Leonhard's Trousers",                 DS3LocationCategory.ARMOR,
-                        hidden = True, npc = True, shop = True, conditional = True),
+                        hidden = True, npc = True, shop = True, missable = True),
 
         # Shrine Handmaid after killing Alrich, Devourer of Gods
         DS3LocationData("AL: Smough's Helm",                       "Smough's Helm",                       DS3LocationCategory.ARMOR,
