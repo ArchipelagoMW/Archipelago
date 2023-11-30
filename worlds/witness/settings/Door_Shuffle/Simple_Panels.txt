@@ -1,6 +1,6 @@
 Items:
 Symmetry Island Panels
-Tutorial Outpost Panels
+Outside Tutorial Outpost Panels
 Desert Panels
 Quarry Outside Panels
 Quarry Stoneworks Panels
