@@ -126,7 +126,7 @@ class WitnessPlayerItems:
                                                                         "Swamp Long Bridge (Panel)"}:
                 # These Bridges/Elevators are not logical access because they may leave you stuck.
                 item_data.classification = ItemClassification.useful
-            elif item_name in {"River Monastery Garden Shortcut (Door)",
+            elif item_name in {"Jungle Monastery Garden Shortcut (Door)",
                                "Monastery Laser Shortcut (Door)",
                                "Orchard Second Gate (Door)",
                                "Jungle Bamboo Laser Shortcut (Door)",

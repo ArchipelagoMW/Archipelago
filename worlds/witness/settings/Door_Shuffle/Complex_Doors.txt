@@ -60,7 +60,7 @@ Theater Exit Left (Door)
 Theater Exit Right (Door)
 Jungle Bamboo Laser Shortcut (Door)
 Jungle Popup Wall (Door)
-River Monastery Garden Shortcut (Door)
+Jungle Monastery Garden Shortcut (Door)
 Bunker Entry (Door)
 Bunker Tinted Glass Door
 Bunker UV Room Entry (Door)
