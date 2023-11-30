@@ -738,7 +738,7 @@ location_tables = {
         DS3LocationData("RS: Xanthous Crown",                      "Xanthous Crown",                    DS3LocationCategory.WEAPON,
                         missable = True, hostile_npc = True), # Heysel drop
         DS3LocationData("RS: Butcher Knife",                       "Butcher Knife",                     DS3LocationCategory.WEAPON,
-                        drop = True, hidden = True), # Guaranteed drop from a normal-looking Butcher
+                        hostile_npc = True), # Madwoman
         DS3LocationData("RS: Titanite Shard #1",                   "Titanite Shard",                    DS3LocationCategory.UPGRADE),
         DS3LocationData("RS: Titanite Shard #2",                   "Titanite Shard",                    DS3LocationCategory.UPGRADE),
         DS3LocationData("RS: Green Blossom #1",                    "Green Blossom x4",                  DS3LocationCategory.MISC),
