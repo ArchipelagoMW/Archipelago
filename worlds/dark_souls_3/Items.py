@@ -318,7 +318,7 @@ _vanilla_items = flatten([
     DS3ItemData("Fume Ultra Greatsword",               0x0060E4B0, DS3ItemCategory.WEAPON_UPGRADE_5),
     DS3ItemData("Old Wolf Curved Sword",               0x00610BC0, DS3ItemCategory.WEAPON_UPGRADE_5,
                 inject = True), # Covenant reward
-    DS3ItemData("Storm Ruler",                         0x006132D0, DS3ItemCategory.KEY,
+    DS3ItemData("Storm Ruler",                         0x006132D0, DS3ItemCategory.WEAPON_UPGRADE_5,
                 classification = ItemClassification.progression),
     DS3ItemData("Hand Axe",                            0x006ACFC0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     DS3ItemData("Battle Axe",                          0x006AF6D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),

@@ -18,6 +18,13 @@ class DS3BossInfo:
     dlc: bool = False
     """This boss appears in one of the game's DLCs."""
 
+    before_storm_ruler: bool = False
+    """Whether this location appears before it's possible to get Storm Ruler in vanilla.
+
+    This is used to determine whether it's safe to place Yhorm here if weapons
+    aren't randomized.
+    """
+
     region: Optional[str] = None
     """The name the region that can't be accessed until the boss is dead, if one exists."""
 
@@ -28,10 +35,10 @@ class DS3BossInfo:
 # Note: the offline randomizer splits up some bosses into separate fights for separate phases, each
 # of which can be individually replaced by Yhorm.
 all_bosses = [
-    DS3BossInfo("Iudex Gundyr", 4000800, region = "Firelink Shrine",
+    DS3BossInfo("Iudex Gundyr", 4000800, before_storm_ruler = True, region = "Firelink Shrine",
         locations = {"CA: Coiled Sword"}),
-    DS3BossInfo("Vordt of the Boreal Valley", 3000800, region = "Undead Settlement",
-        locations = {"HWL: Soul of Boreal Valley Vordt"}),
+    DS3BossInfo("Vordt of the Boreal Valley", 3000800, before_storm_ruler = True,
+        region = "Undead Settlement", locations = {"HWL: Soul of Boreal Valley Vordt"}),
     DS3BossInfo("Curse-rotted Greatwood", 3100800, locations = {
         "US: Soul of the Rotted Greatwood",
         "US: Transposing Kiln",
@@ -45,7 +52,8 @@ all_bosses = [
         "CD: Soul of the Deacons of the Deep",
         "CD: Small Doll",
     }),
-    DS3BossInfo("Abyss Watchers", 3300801, region = "Catacombs of Carthus", locations = {
+    DS3BossInfo("Abyss Watchers", 3300801, before_storm_ruler = True,
+            region = "Catacombs of Carthus", locations = {
         "FK: Soul of the Blood of the Wolf",
         "FK: Cinders of a Lord - Abyss Watcher",
         "UG: Hornet Ring",
@@ -58,7 +66,8 @@ all_bosses = [
         "UG: Wolf Knight Gauntlets",
         "UG: Wolf Knight Leggings",
     }),
-    DS3BossInfo("High Lord Wolnir", 3800800, region = "Irithyll of the Boreal Valley", locations = {
+    DS3BossInfo("High Lord Wolnir", 3800800, before_storm_ruler = True,
+            region = "Irithyll of the Boreal Valley", locations = {
         "CC: Soul of High Lord Wolnir",
         "CC: Wolnir's Crown",
         "CC: Homeward Bone",

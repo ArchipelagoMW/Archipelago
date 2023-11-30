@@ -114,13 +114,10 @@ class DarkSouls3World(World):
         if self.multiworld.soul_locations[self.player] != SoulLocationsOption.option_not_randomized:
             self.enabled_location_categories.add(DS3LocationCategory.SOUL)
 
-        # Randomize Yhorm manually so that we know where to place the Storm Ruler
-        if self.multiworld.randomize_enemies[self.player] == Toggle.option_true:
+        # Randomize Yhorm manually so that we know where to place the Storm Ruler.
+        if self.multiworld.randomize_enemies[self.player]:
             self.yhorm_location = self.multiworld.random.choice(
-                [
-                    boss for boss in all_bosses if not boss.dlc
-                ] if not self.multiworld.enable_dlc[self.player] else all_bosses
-            )
+                [boss for boss in all_bosses if self._allow_boss_for_yhorm(boss)])
 
             # If Yhorm is early, make sure the Storm Ruler is easily available to avoid BK
             if (
@@ -134,6 +131,40 @@ class DarkSouls3World(World):
                 self.multiworld.local_items[self.player].value.add('Storm Ruler')
         else:
             self.yhorm_location = default_yhorm_location
+
+
+    def _allow_boss_for_yhorm(self, boss: DS3BossInfo) -> bool:
+        """Returns whether boss is a valid location for Yhorm in this seed."""
+
+        if not self.multiworld.enable_dlc[self.player] and boss.dlc: return False
+
+        if not self.multiworld.enable_weapon_locations[self.player]:
+            # If weapons aren't randomized, make sure the player can get to the normal Storm Ruler
+            # location before they need to get through Yhorm.
+            if boss.before_storm_ruler: return False
+
+            # If keys also aren't randomized, make sure Yhorm isn't blocking access to the Small
+            # Doll or it won't be possible to get into Profaned Capital before beating him.
+            if (
+                not self.multiworld.enable_key_locations[self.player]
+                and boss.name in {"Crystal Sage", "Deacons of the Deep"}
+            ):
+                return False
+
+        # There are only a few locations before Iudex Gundyr, and none of them are weapons, so if
+        # they can't be random don't allow Yhorm in there.
+        if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various or (
+            not self.multiworld.enable_misc_locations[self.player]
+            and self.multiworld.upgrade_locations[self.player] ==
+                UpgradeLocationsOption.option_not_randomized
+            and self.multiworld.soul_locations[self.player] ==
+                SoulLocationsOption.option_not_randomized
+            and boss.name == "Iudex Gundyr"
+        ):
+            return False
+
+        return True
+
 
     def create_regions(self):
         # Create Vanilla Regions
@@ -692,6 +723,11 @@ class DarkSouls3World(World):
 
 
     def pre_fill(self) -> None:
+        # Fill this manually so that, if very few slots are available in Cemetery of Ash, this
+        # doesn't get locked out by bad rolls on the next two fills.
+        if self.yhorm_location.name == 'Iudex Gundyr':
+            self._fill_local_item("Storm Ruler", {"Cemetery of Ash"})
+
         # Don't place this in the multiworld because it's necessary almost immediately, and don't
         # mark it as a blocker for HWL because having a miniscule Sphere 1 screws with progression
         # balancing.

@@ -1577,7 +1577,7 @@ location_tables = {
         DS3LocationData("PC: Court Sorcerer Robe",                 "Court Sorcerer Robe",                 DS3LocationCategory.ARMOR),
         DS3LocationData("PC: Court Sorcerer Gloves",               "Court Sorcerer Gloves",               DS3LocationCategory.ARMOR),
         DS3LocationData("PC: Court Sorcerer Trousers",             "Court Sorcerer Trousers",             DS3LocationCategory.ARMOR),
-        DS3LocationData("PC: Storm Ruler",                         "Storm Ruler",                         DS3LocationCategory.KEY),
+        DS3LocationData("PC: Storm Ruler",                         "Storm Ruler",                         DS3LocationCategory.WEAPON),
         DS3LocationData("PC: Undead Bone Shard",                   "Undead Bone Shard",                   DS3LocationCategory.HEALTH),
         DS3LocationData("PC: Eleonora",                            "Eleonora",                            DS3LocationCategory.WEAPON,
                         drop = True, hidden = True), # Guaranteed drop from a normal-looking Monstrosity of Sin
