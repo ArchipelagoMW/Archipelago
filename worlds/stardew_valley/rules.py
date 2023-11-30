@@ -729,11 +729,11 @@ def set_chefsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
     if chefsanity_option == Chefsanity.option_none:
         return
 
-    chefsanity_prefix = "Learn Recipe "
+    chefsanity_suffix = " Recipe"
     for location in locations.locations_by_tag[LocationTags.CHEFSANITY]:
         if location.name not in all_location_names:
             continue
-        recipe_name = location.name[len(chefsanity_prefix):]
+        recipe_name = location.name[:-len(chefsanity_suffix)]
         recipe = all_cooking_recipes_by_name[recipe_name]
         learn_rule = logic.cooking.can_learn_recipe(recipe.source)
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), learn_rule)

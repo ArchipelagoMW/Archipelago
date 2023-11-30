@@ -411,7 +411,7 @@ class TestRecipeReceiveLogic(SVTestBase):
         self.assertTrue(rule(self.multiworld.state))
 
     def test_get_chefsanity_check_recipe(self):
-        location = "Learn Recipe Radish Salad"
+        location = "Radish Salad Recipe"
         rule = self.world.logic.region.can_reach_location(location)
         self.assertFalse(rule(self.multiworld.state))
 
