@@ -503,8 +503,10 @@ location_tables = {
         DS3LocationData("HWL: Way of Blue",                        "Way of Blue",                       DS3LocationCategory.UNIQUE),
         DS3LocationData("HWL: Raw Gem",                            "Raw Gem",                           DS3LocationCategory.UPGRADE,
                         lizard = True),
+        # Categorize this as an NPC item so that it doesn't get randomized if the Lift Chamber Key
+        # isn't randomized, since in that case it's missable.
         DS3LocationData("HWL: Red Eye Orb",                        "Red Eye Orb",                       DS3LocationCategory.MISC,
-                        miniboss = True),
+                        npc = True, miniboss = True),
         DS3LocationData("HWL: Vordt's Great Hammer",               "Vordt's Great Hammer",              DS3LocationCategory.WEAPON,
                         missable = True, boss = True, shop = True),
         DS3LocationData("HWL: Pontiff's Left Eye",                 "Pontiff's Left Eye",                DS3LocationCategory.RING,
