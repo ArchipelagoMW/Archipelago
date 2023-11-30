@@ -1199,6 +1199,20 @@ class StardewLogic:
         if tier >= 3:
             return self.has(Fertilizer.deluxe)
 
+    def can_complete_field_office(self) -> StardewRule:
+        field_office = self.can_reach_region(Region.field_office)
+        professor_snail = self.received("Open Professor Snail Cave")
+        dig_site = self.can_reach_region(Region.dig_site)
+        tools = self.has_tool(Tool.pickaxe) & self.has_tool(Tool.hoe) & self.has_tool(Tool.scythe)
+        leg_and_snake_skull = dig_site
+        ribs_and_spine = self.can_reach_region(Region.island_south)
+        skull = self.can_open_geode(Geode.golden_coconut)
+        tail = self.can_do_panning() & dig_site
+        frog = self.can_reach_region(Region.island_east)
+        bat = self.can_reach_region(Region.volcano_floor_5)
+        snake_vertebrae = self.can_reach_region(Region.island_west)
+        return field_office & professor_snail & tools & leg_and_snake_skull & ribs_and_spine & skull & tail & frog & bat & snake_vertebrae
+
     def can_complete_community_center(self) -> StardewRule:
         return (self.can_reach_location("Complete Crafts Room") &
                 self.can_reach_location("Complete Pantry") &
@@ -1516,20 +1530,6 @@ class StardewLogic:
         if self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
             return False_()
         return self.can_reach_region(Region.island_trader)
-
-    def can_complete_field_office(self) -> StardewRule:
-        field_office = self.can_reach_region(Region.field_office)
-        professor_snail = self.received("Open Professor Snail Cave")
-        dig_site = self.can_reach_region(Region.dig_site)
-        tools = self.has_tool(Tool.pickaxe) & self.has_tool(Tool.hoe) & self.has_tool(Tool.scythe)
-        leg_and_snake_skull = dig_site
-        ribs_and_spine = self.can_reach_region(Region.island_south)
-        skull = self.can_open_geode(Geode.golden_coconut)
-        tail = self.can_do_panning() & dig_site
-        frog = self.can_reach_region(Region.island_east)
-        bat = self.can_reach_region(Region.volcano_floor_5)
-        snake_vertebrae = self.can_reach_region(Region.island_west)
-        return field_office & professor_snail & tools & leg_and_snake_skull & ribs_and_spine & skull & tail & frog & bat & snake_vertebrae
 
     def has_walnut(self, number: int) -> StardewRule:
         if self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
