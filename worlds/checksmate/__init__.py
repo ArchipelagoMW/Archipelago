@@ -50,7 +50,7 @@ class CMWorld(World):
     item_pool: List[CMItem] = []
     prefill_items: List[CMItem] = []
 
-    known_pieces = {"Progressive Minor Piece": 9, "Progressive Major Piece": 5, "Progressive Major To Queen": 4, }
+    known_pieces = {"Progressive Minor Piece": 10, "Progressive Major Piece": 6, "Progressive Major To Queen": 5, }
 
     piece_types_by_army = {
         # Vanilla
