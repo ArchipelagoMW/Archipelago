@@ -820,7 +820,7 @@ def set_friendsanity_rules(all_location_names: List[str], logic: StardewLogic, m
 def set_deepwoods_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if ModNames.deepwoods in world_options.mods:
         MultiWorldRules.add_rule(multiworld.get_location("Breaking Up Deep Woods Gingerbread House", player),
-                                 logic.tool.has_tool(Tool.axe, "Gold") & logic.mod.deepwoods.can_reach_woods_depth(50))
+                                 logic.tool.has_tool(Tool.axe, "Gold"))
         MultiWorldRules.add_rule(multiworld.get_location("Chop Down a Deep Woods Iridium Tree", player),
                                  logic.tool.has_tool(Tool.axe, "Iridium"))
         MultiWorldRules.set_rule(multiworld.get_entrance(DeepWoodsEntrance.use_woods_obelisk, player),
@@ -829,7 +829,7 @@ def set_deepwoods_rules(logic: StardewLogic, multiworld: MultiWorld, player: int
             MultiWorldRules.set_rule(multiworld.get_entrance(move_to_woods_depth(depth), player),
                                      logic.mod.deepwoods.can_chop_to_depth(depth))
         MultiWorldRules.add_rule(multiworld.get_location("The Sword in the Stone", player),
-                                 logic.mod.deepwoods.can_pull_sword())
+                                 logic.mod.deepwoods.can_pull_sword() & logic.mod.deepwoods.can_chop_to_depth(100))
 
 
 def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):

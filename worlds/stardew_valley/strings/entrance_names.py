@@ -302,7 +302,7 @@ class SVEEntrance:
     to_aurora_basement = "Aurora Vineyard to Aurora Vineyard Basement"
     outpost_to_badlands_entrance = "Galmoran Outpost to Badlands Entrance"
     use_alesia_shop = "Talk to Alesia"
-    use_issac_shop = "Talk to Issac"
+    use_isaac_shop = "Talk to Isaac"
     badlands_entrance_to_badlands = "Badlands Entrance to Crimson Badlands"
     badlands_to_cave = "Crimson Badlands to Badlands Cave"
     to_susan_house = "Railroad to Susan's House"

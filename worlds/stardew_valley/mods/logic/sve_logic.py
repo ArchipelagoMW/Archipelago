@@ -14,6 +14,7 @@ from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
+from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes
 from ...strings.food_names import SVEMeal
 from ...strings.villager_names import NPC, ModNPC
 from ...stardew_rule import Or, True_
@@ -29,22 +30,14 @@ class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixi
 FishingLogicMixin, CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonLogicMixin]]):
     def initialize_rules(self):
         self.registry.sve_location_rules.update({
-            "Alesia: Tempered Galaxy Dagger": self.logic.region.can_reach(
-                SVERegion.alesia_shop) & self.logic.combat.has_galaxy_weapon() &
-                                              self.logic.money.can_spend(350000) & self.logic.time.has_lived_months(3),
-            "Issac: Tempered Galaxy Sword": self.logic.region.can_reach(
-                SVERegion.issac_shop) & self.logic.combat.has_galaxy_weapon() &
-                                            self.logic.money.can_spend(600000),
-            "Issac: Tempered Galaxy Hammer": self.logic.region.can_reach(
-                SVERegion.issac_shop) & self.logic.combat.has_galaxy_weapon() &
-                                             self.logic.money.can_spend(400000),
-            "Lance's Diamond Wand": self.logic.quest.can_complete_quest("Monster Crops") & self.logic.region.can_reach(
-                SVERegion.lances_house),
+            SVELocation.tempered_galaxy_sword: self.logic.money.can_spend_at(SVERegion.alesia_shop, 350000),
+            SVELocation.tempered_galaxy_dagger: self.logic.money.can_spend_at(SVERegion.isaac_shop, 600000),
+            SVELocation.tempered_galaxy_hammer: self.logic.money.can_spend_at(SVERegion.isaac_shop, 400000),
+            SVELocation.diamond_wand: self.logic.quest.can_complete_quest(SVELocation.monster_crops) & self.logic.region.can_reach(SVERegion.lances_house),
         })
 
     def has_any_rune(self):
-        rune_list = ["Nexus: Adventurer's Guild Runes", "Nexus: Junimo Woods Runes", "Nexus: Aurora Vineyard Runes", "Nexus: Sprite Spring Runes",
-                     "Nexus: Outpost Runes", "Nexus: Farm Runes", "Nexus: Wizard Runes"]
+        rune_list = SVERunes.nexus_items
         return Or(*(self.logic.received(rune) for rune in rune_list))
 
     def append_sve_recipe_rules(self, recipe: str):

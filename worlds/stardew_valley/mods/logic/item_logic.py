@@ -89,7 +89,7 @@ SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, ToolLogicMixin, Craf
                 "Galdoran Gem": self.logic.museum.can_complete_museum() & self.logic.relationship.has_hearts(ModNPC.marlon, 8),
                 SVEForage.golden_ocean_flower: self.logic.region.can_reach(SVERegion.fable_reef),
                 SVEMeal.grampleton_orange_chicken: self.logic.money.can_spend_at(Region.saloon, 650) & self.logic.relationship.has_hearts(ModNPC.sophia, 6),
-                ModEdible.hero_elixir: self.logic.money.can_spend_at(SVERegion.issac_shop, 8000),
+                ModEdible.hero_elixir: self.logic.money.can_spend_at(SVERegion.isaac_shop, 8000),
                 SVEForage.lucky_four_leaf_clover: self.logic.region.can_reach_any((Region.secret_woods, SVERegion.forest_west)) &
                                                   self.logic.season.has_any([Season.spring, Season.summer]),
                 SVEForage.mushroom_colony: self.logic.region.can_reach_any((Region.secret_woods, SVERegion.junimo_woods, SVERegion.forest_west)) &

@@ -258,7 +258,7 @@ class SVERegion:
     badlands_entrance = "Badlands Entrance"
     crimson_badlands = "Crimson Badlands"
     alesia_shop = "Alesia Shop"
-    issac_shop = "Issac Shop"
+    isaac_shop = "Isaac Shop"
     summit = "Summit"
     susans_house = "Susan's House"
     marlon_boat = "Marlon's Boat"

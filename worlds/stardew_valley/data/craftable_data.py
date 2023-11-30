@@ -276,7 +276,7 @@ volcano_totem = skill_recipe(ModConsumable.volcano_totem, ModSkill.archaeology, 
                              ModNames.archaeology)
 haste_elixir = shop_recipe(ModEdible.haste_elixir, SVERegion.alesia_shop, 35000, {Loot.void_essence: 35, SVEForage.void_soul: 5, Ingredient.sugar: 1,
                                                                                   Meal.spicy_eel: 1}, ModNames.sve)
-hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.issac_shop, 65000, {SVEForage.void_pebble: 3, SVEForage.void_soul: 5, Ingredient.oil: 1,
+hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.isaac_shop, 65000, {SVEForage.void_pebble: 3, SVEForage.void_soul: 5, Ingredient.oil: 1,
                                                                                Loot.slime: 10}, ModNames.sve)
 armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000, {Loot.solar_essence: 30, SVEForage.void_soul: 5, Ingredient.vinegar: 5,
                                                                                   Fossil.bone_fragment: 5}, ModNames.sve)

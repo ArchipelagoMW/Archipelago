@@ -144,7 +144,7 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.grove_outpost_warp, [SVEEntrance.outpost_warp_to_outpost]),
     RegionData(SVERegion.grove_wizard_warp, [SVEEntrance.wizard_warp_to_wizard]),
     RegionData(SVERegion.galmoran_outpost, [SVEEntrance.outpost_to_badlands_entrance, SVEEntrance.use_alesia_shop,
-                                            SVEEntrance.use_issac_shop]),
+                                            SVEEntrance.use_isaac_shop]),
     RegionData(SVERegion.badlands_entrance, [SVEEntrance.badlands_entrance_to_badlands]),
     RegionData(SVERegion.crimson_badlands, [SVEEntrance.badlands_to_cave]),
     RegionData(SVERegion.badlands_cave),
@@ -194,7 +194,7 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.purple_junimo_shop),
 
     RegionData(SVERegion.alesia_shop),
-    RegionData(SVERegion.issac_shop),
+    RegionData(SVERegion.isaac_shop),
     RegionData(SVERegion.summit),
     RegionData(SVERegion.susans_house),
     RegionData(Region.mountain, [Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines], ModificationFlag.MODIFIED)
@@ -258,7 +258,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.use_bear_shop, SVERegion.bear_shop),
     ConnectionData(SVEEntrance.use_purple_junimo, SVERegion.purple_junimo_shop),
     ConnectionData(SVEEntrance.use_alesia_shop, SVERegion.alesia_shop),
-    ConnectionData(SVEEntrance.use_issac_shop, SVERegion.issac_shop),
+    ConnectionData(SVEEntrance.use_isaac_shop, SVERegion.isaac_shop),
     ConnectionData(SVEEntrance.to_dwarf_prison, SVERegion.dwarf_prison, flag=RandomizationFlag.NON_PROGRESSION),
     ConnectionData(SVEEntrance.railroad_to_grampleton_station, SVERegion.grampleton_station),
     ConnectionData(SVEEntrance.grampleton_station_to_grampleton_suburbs, SVERegion.grampleton_suburbs),

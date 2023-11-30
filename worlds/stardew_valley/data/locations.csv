@@ -2502,7 +2502,7 @@ id,region,name,tags,mod_name
 7451,Adventurer's Guild,Magic Elixir Recipe,CRAFTSANITY,Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
-7454,Issac Shop,Hero Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
+7454,Isaac Shop,Hero Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7455,Alesia Shop,Armor Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7456,Farm,Glass Path Recipe,CRAFTSANITY,Archaeology
 7457,Farm,Bone Path Recipe,CRAFTSANITY,Archaeology
@@ -2554,8 +2554,8 @@ id,region,name,tags,mod_name
 7609,Sewer,Void Delight Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7610,Sewer,Void Salmon Sushi Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7651,Alesia Shop,Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
-7652,Issac Shop,Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
-7653,Issac Shop,Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
+7652,Isaac Shop,Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
+7653,Isaac Shop,Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
 7654,Highlands,Lance's Diamond Wand,"MANDATORY,GINGER_ISLAND",Stardew Valley Expanded
 7701,Island South,Fishsanity: Baby Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7702,Crimson Badlands,Fishsanity: Bonefish,FISHSANITY,Stardew Valley Expanded
