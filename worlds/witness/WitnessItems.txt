@@ -162,7 +162,7 @@ Doors:
 1750 - Theater Entry (Door) - 0x17F88
 1753 - Theater Exit Left (Door) - 0x0A16D
 1756 - Theater Exit Right (Door) - 0x3CCDF
-1759 - Jungle Bamboo Laser Shortcut (Door) - 0x3873B
+1759 - Jungle Laser Shortcut (Door) - 0x3873B
 1760 - Jungle Popup Wall (Door) - 0x1475B
 1762 - Jungle Monastery Garden Shortcut (Door) - 0x0CF2A
 1765 - Bunker Entry (Door) - 0x0C2A4

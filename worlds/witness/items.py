@@ -129,7 +129,7 @@ class WitnessPlayerItems:
             elif item_name in {"Jungle Monastery Garden Shortcut (Door)",
                                "Monastery Laser Shortcut (Door)",
                                "Orchard Second Gate (Door)",
-                               "Jungle Bamboo Laser Shortcut (Door)",
+                               "Jungle Laser Shortcut (Door)",
                                "Keep Pressure Plates 2 Exit (Door)",
                                "Caves Elevator Controls (Panel)"}:
                 # Downgrade doors that don't gate progress.
