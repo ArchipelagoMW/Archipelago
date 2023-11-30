@@ -45,14 +45,15 @@ class CMWorld(World):
 
     item_name_groups = item_name_groups
     items_used: Dict[int, Dict[str, int]] = {}
-    army: Dict[int, List[int]] = {}
+    armies: Dict[int, List[int]] = {}
+    army_piece_types_by_player: Dict[int, Dict[str, int]] = {}
 
     item_pool: List[CMItem] = []
     prefill_items: List[CMItem] = []
 
     known_pieces = {"Progressive Minor Piece": 10, "Progressive Major Piece": 6, "Progressive Major To Queen": 5, }
 
-    piece_types_by_army = {
+    piece_types_by_army: Dict[int, Dict[str, int]] = {
         # Vanilla
         0: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
         # Colorbound Clobberers (the War Elephant is rather powerful)
@@ -97,9 +98,9 @@ class CMWorld(World):
             army_options = [0]
         army_constraint = self.options.fairy_chess_army
         if army_constraint != 0:
-            self.army[self.player] = [self.random.choice(army_options)]
+            self.armies[self.player] = [self.random.choice(army_options)]
         else:
-            self.army[self.player] = army_options
+            self.armies[self.player] = army_options
 
     def setting(self, name: str):
         return getattr(self.multiworld, name)[self.player]
@@ -110,8 +111,8 @@ class CMWorld(World):
         potential_pockets = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]
         self.random.shuffle(potential_pockets)
         cursed_knowledge["pocket_order"] = potential_pockets
-        if self.player in self.army:
-            cursed_knowledge["army"] = self.army[self.player]
+        if self.player in self.armies:
+            cursed_knowledge["army"] = self.armies[self.player]
         # See Archipelago.APChessV.ApmwConfig#Instantiate to observe requested parameters
         option_names = ["goal", "enemy_piece_types", "piece_locations", "piece_types",
                         "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pawns",
@@ -345,15 +346,11 @@ class CMWorld(World):
             return 0
 
         piece_limit: int = self.piece_limit_of(chosen_item)
-        limit_multiplier = get_limit_multiplier_for_item({chosen_item: 1})
-        is_army_constrained = self.options.fairy_chess_army.value
-        # Chaos: Chooses random enabled options.
-        if is_army_constrained == 0:
-            limit_multiplier = get_limit_multiplier_for_item(self.known_pieces)
-        # Limited: Chooses within your army, but in any distribution.
-        if is_army_constrained == 1:
-            army = self.army[self.player]
-            limit_multiplier = get_limit_multiplier_for_item(self.piece_types_by_army[army])
+        if self.player not in self.army_piece_types_by_player:
+            self.army_piece_types_by_player[self.player] =\
+                {piece: sum([self.piece_types_by_army[army][piece] for army in self.armies[self.player]])
+                    for piece in set().union(*self.piece_types_by_army.values())}
+        limit_multiplier = get_limit_multiplier_for_item(self.army_piece_types_by_player[self.player])
         piece_limit = piece_limit * limit_multiplier(chosen_item)
         if piece_limit > 0 and with_children != self.PieceLimitCascade.NO_CHILDREN:
             children = get_children(chosen_item)

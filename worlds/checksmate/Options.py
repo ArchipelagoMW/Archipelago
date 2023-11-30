@@ -208,9 +208,10 @@ class FairyChessArmy(Choice):
     Whether to mix pieces between the Different Armies. Does not affect pawns. Note that the Eurasian pieces, which
     replace the Bishop and Knight with a Vao and Cannon, constitute a very powerful yet flawed Different Army.
 
-    Chaos: Chooses random enabled options.
+    Chaos: Chooses random enabled options. (You can disable armies by setting fairy_chess_pieces, which defaults to {
+    FIDE, Rookies, Clobberers, Nutty, Cannon, Camel }.)
 
-    Limited: Chooses within your army. (If you want at most 2 Bishops, 2 Knights, 2 Rooks, and 1 Queen, add Piece Type
+    Limited: Chooses within one army. (If you want at most 2 Bishops, 2 Knights, 2 Rooks, and 1 Queen, add Piece Type
     Limits below: 2 Minor, 2 Major, and 1 Queen.)
     """
     display_name = "Fairy Chess Army"
