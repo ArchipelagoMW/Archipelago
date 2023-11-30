@@ -63,6 +63,8 @@ class CMWorld(World):
         3: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
         # Eurasian pieces
         4: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
+        # Camel pieces
+        5: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
     }
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -74,18 +76,26 @@ class CMWorld(World):
         army_constraint = self.options.fairy_chess_army
         if army_constraint != 0:
             which_pieces = self.options.fairy_chess_pieces
-            # Full: Adds the 12 Chess With Different Armies pieces, the Cannon, and the Vao.
-            if which_pieces == 1:
-                army_options = [0, 1, 2, 3, 4]
+            army_options = []
+            # FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
+            if "FIDE" in which_pieces.value:
+                army_options += [0]
             # CwDA: Adds the pieces from Ralph Betza's 12 Chess With Different Armies.
-            elif which_pieces == 2:
-                army_options = [0, 1, 2, 3]
-            # Cannon: Adds a Rook-like piece, which captures a distal chessman by leaping over an intervening chessman.
-            # Eurasian: Adds the Cannon and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
-            elif which_pieces > 2:
-                army_options = [0, 4]
+            if "Clobberers" in which_pieces.value:
+                army_options += [1]
+            if "Rookies" in which_pieces.value:
+                army_options += [2]
+            if "Nutty" in which_pieces.value:
+                army_options += [3]
+            # Cannon: Adds the Rook-like Cannon, which captures a distal chessman by leaping over an intervening
+            # chessman, and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
+            if "Cannon" in which_pieces.value:
+                army_options += [4]
+            # Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0).
+            if "Camel" in which_pieces.value:
+                army_options += [5]
             # Vanilla: Disables fairy chess pieces completely.
-            else:
+            if not army_options:
                 army_options = [0]
             self.army[self.player] = self.random.choice(army_options)
 

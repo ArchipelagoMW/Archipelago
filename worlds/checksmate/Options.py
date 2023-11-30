@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Callable
 
-from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict, PerGameCommonOptions
+from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict, PerGameCommonOptions, OptionSet
 
 
 class Goal(Choice):
@@ -172,28 +172,35 @@ class MaximumPocket(Range):
     default = 12
 
 
-class FairyChessPieces(Choice):
+class FairyChessPieces(OptionSet):
     """
-    Whether to use fairy chess pieces.
+    Whether to use fairy chess pieces. Most of these pieces are Ralph Betza's Chess with Different Armies.
 
-    Vanilla: Disables fairy chess pieces completely.
+    FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
 
-    Full: Adds the 12 Chess With Different Armies pieces, the Cannon, and the Vao.
+    Rookies: Adds the CwDA army inspired by Rooks, the Remarkable Rookies. Note that the Half-Duck castles rather than
+    the Short Rook.
 
-    CwDA: Adds the pieces from Ralph Betza's 12 Chess With Different Armies. Note that some castling rules are changed:
-    The Rookies' Half-Duck castles rather than the Short Rook, and the Clobberers' Fad and Bede may both castle.
+    Clobberers: Adds the CwDA army inspired by Rooks, the Colorbound Clobberers. Note that Fad and Bede may both castle.
 
-    Cannon: Adds a Rook-like piece, which captures a distal chessman by leaping over an intervening chessman.
+    Nutty: Adds the CwDA army inspired by Rooks, the Nutty Knights.
 
-    Eurasian: Adds the Cannon and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
+    Cannon: Adds the Rook-like Cannon, which captures a distal chessman by leaping over an intervening chessman, and the
+    Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
+
+    Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0). (The Knight is a 2,1
+    leaper.)
     """
     display_name = "Fairy Chess Pieces"
-    option_vanilla = 0
-    option_full = 1
-    option_cw_d_a = 2
-    option_cannon = 3
-    option_eurasian = 4
-    default = 1
+    valid_keys = frozenset([
+        "FIDE",
+        "Rookies",
+        "Clobberers",
+        "Nutty",
+        "Cannon",
+        "Camel",
+    ])
+    default = valid_keys
 
 
 class FairyChessArmy(Choice):
@@ -312,50 +319,6 @@ class QueenPieceLimit(NamedRange):
     }
 
 
-class ItemLimitByType(ItemDict):
-    """
-    NOT IMPLEMENTED
-
-    For Minor Pieces, Major Pieces, and Major To Queens, limits the amount of any given type of equivalent piece you
-    might play with. For example, if you limit Progressive Queen To Major to 1, you will never see 2 Amazons, although
-    you might see 1 Amazon and 1 Colonel.
-
-    For Progressive Pocket, limits the amount which might be distributed to an individual pocket. If this is set to 1,
-    any given Pocket will never hold anything more substantial than a Pawn. If this is set to 3, any given Pocket will
-    never hold a Queen. The default of 4 allows each of the 3 spaces to hold between 0-4 progressive items.
-
-    No effect on other settings.
-
-    NOT IMPLEMENTED
-    """
-    display_name = "Item Limit By Type"
-
-
-class MaximumItems(ItemDict):
-    """
-    NOT IMPLEMENTED
-
-    For Major To Queen, how many Queen-equivalent pieces you might play with. If set to 1, you will never have more than
-    1 piece upgraded to a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still
-    promote pawns during a game. If set to 0, this setting is disabled.
-
-    For Progressive Consul, how many Royal pieces (Kings) to place, which must all be captured before one experiences
-    defeat. The player always starts with 1 King, but may find Progressive Consuls if this is set. Progressive Consuls
-    add additional Kings to the player's starting board.
-
-    For Progressive Pocket, the number of Progressive Pocket Pieces the game is allowed to add to the multiworld. Each
-    Progressive Pocket Piece will improve your 1st, 2nd, or 3rd pocket slot up to 4 times, from Nothing to Pawn, to
-    Minor Piece (like a pocket Knight), to Major Piece (like a pocket Rook), to Queen. This setting does not alter
-    filler item distribution. (Even if you have 0 Progressive Pockets, the item pool may contain Progressive Pocket Gems
-    and Progressive Pocket Range.)
-
-    No effect on other settings.
-
-    NOT IMPLEMENTED
-    """
-    display_name = "Maximum Items"
-
-
 class LockedItems(ItemDict):
     """
     Guarantees that these progression and filler items will be unlockable.
@@ -398,8 +361,6 @@ class CMOptions(PerGameCommonOptions):
     queen_piece_limit_by_type: QueenPieceLimitByType
     queen_piece_limit: QueenPieceLimit
     pocket_limit_by_pocket: PocketLimitByPocket
-    # item_limit_by_type: ItemLimitByType
-    # maximum_items: MaximumItems
     locked_items: LockedItems
     death_link: DeathLink
 
