@@ -227,41 +227,62 @@ def set_difficulty_level(rom: LocalRom, difficulty: int):
 
 
 level_songs = [
-    (0x2A0,),               # Hall of Hieroglyphs
-    (0x28B, 0x28C, 0x28D),  # Palm Tree Paradise
-    (0x28E,),               # Wildflower Fields
-    (0x28F, 0x290, 0x291),  # Mystic Lake
-    (0x292,),               # Monsoon Jungle
-    (0x293,),               # The Curious Factory
-    (0x294,),               # The Toxic Landfill
-    (0x296,),               # 40 Below Fridge
-    (0x295,),               # Pinball Zone
-    (0x297,),               # Toy Block Tower
-    (0x298,),               # The Big Board
-    (0x299,),               # Doodle Woods
-    (0x29A,),               # Domino Row
-    (0x29B,),               # Crescent Moon Village
-    (0x29C,),               # Arabian Night
-    (0x29E,),               # Fiery Cavern
-    (0x29D,),               # Hotel Horror
-    (0x29F,),               # Golden Passage
+    0x2A0,  # Hall of Hieroglyphs
+    0x28B,  # Palm Tree Paradise
+    0x28E,  # Wildflower Fields
+    0x28F,  # Mystic Lake
+    0x292,  # Monsoon Jungle
+    0x293,  # The Curious Factory
+    0x294,  # The Toxic Landfill
+    0x296,  # 40 Below Fridge
+    0x295,  # Pinball Zone
+    0x297,  # Toy Block Tower
+    0x298,  # The Big Board
+    0x299,  # Doodle Woods
+    0x29A,  # Domino Row
+    0x29B,  # Crescent Moon Village
+    0x29C,  # Arabian Night
+    0x29E,  # Fiery Cavern
+    0x29D,  # Hotel Horror
+    0x29F,  # Golden Passage
 ]
 
 def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
-    if multiworld.music_shuffle[player] == 0:
-        return
-    elif multiworld.music_shuffle[player] == 2:
+    music_shuffle = multiworld.music_shuffle[player].value
+    if music_shuffle == 1:
+        music_pool = list(level_songs)
+    elif music_shuffle == 2:
         raise NotImplementedError
+    else:
+        return
 
-    music_table_address = 0x8098028  # Todo: name symbol
+    music_table_address = 0x8098028
     music_info_table = [rom.read_bytes(music_table_address + 8 * i, 8)
                         for i in range(819)]
 
-    music_pool = list(map(lambda s: s[0], level_songs))
     random.shuffle(music_pool)
     for vanilla, shuffled in zip(level_songs, music_pool):
-        for song in vanilla:
-            rom.write_bytes(music_table_address + 8 * song, music_info_table[shuffled])
+        rom.write_bytes(music_table_address + 8 * vanilla, music_info_table[shuffled])
+
+    # Remove horizontal mixing in Palm Tree Paradise and Mystic Lake
+
+    palm_tree_paradise_doors = range(0x83F30F0, 0x83F3240, 12)
+    # Set most doors' music IDs to 0 (no change)
+    for addr in palm_tree_paradise_doors[1:23]:
+        rom.write_halfword(addr + 10, 0)
+    # Set pink pipes to the same as the portal
+    rom.write_halfword(palm_tree_paradise_doors[23] + 10, 0x28B)
+    rom.write_halfword(palm_tree_paradise_doors[25] + 10, 0x28B)
+    # 2A1 and 2A2 are both the pink room theme, but for some reason it only
+    # crossfades like it should if I change 2A1 to 2A2
+    rom.write_halfword(palm_tree_paradise_doors[24] + 10, 0x2A2)
+
+    mystic_lake_doors = range(0x83F3420, 0x83F3570, 12)
+    for addr in mystic_lake_doors[1:23]:
+        rom.write_halfword(addr + 10, 0)
+    rom.write_halfword(mystic_lake_doors[23] + 10, 0x28F)
+    rom.write_halfword(mystic_lake_doors[25] + 10, 0x28F)
+    rom.write_halfword(mystic_lake_doors[26] + 10, 0x2A2)
 
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
