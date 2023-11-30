@@ -546,9 +546,6 @@ Door - 0x28A61 (RGB House Entry) - 0x28998
 Door - 0x03BB0 (Church Entry) - 0x28A0D
 158228 - 0x28A79 (Maze Panel) - True - True
 Door - 0x28AA2 (Maze Stairs) - 0x28A79
-159010 - 0x037B6 (Windmill First Blade EP) - 0x17D02 - True
-159011 - 0x037B2 (Windmill Second Blade EP) - 0x17D02 - True
-159012 - 0x000F7 (Windmill Third Blade EP) - 0x17D02 - True
 159540 - 0x03335 (Tower Underside Third EP) - True - True
 159541 - 0x03412 (Tower Underside Fourth EP) - True - True
 159542 - 0x038A6 (Tower Underside First EP) - True - True
@@ -606,6 +603,9 @@ Laser - 0x032F9 (Laser) - 0x032F5
 ==Windmill & Theater==
 
 Outside Windmill (Windmill) - Windmill Interior - 0x1845B:
+159010 - 0x037B6 (First Blade EP) - 0x17D02 - True
+159011 - 0x037B2 (Second Blade EP) - 0x17D02 - True
+159012 - 0x000F7 (Third Blade EP) - 0x17D02 - True
 158241 - 0x17F5F (Entry Panel) - True - Dots
 Door - 0x1845B (Entry) - 0x17F5F
 
