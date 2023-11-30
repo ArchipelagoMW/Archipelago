@@ -51,7 +51,7 @@ class CMWorld(World):
     item_pool: List[CMItem] = []
     prefill_items: List[CMItem] = []
 
-    known_pieces = {"Progressive Minor Piece": 10, "Progressive Major Piece": 6, "Progressive Major To Queen": 5, }
+    known_pieces = {"Progressive Minor Piece": 10, "Progressive Major Piece": 6, "Progressive Major To Queen": 6, }
 
     piece_types_by_army: Dict[int, Dict[str, int]] = {
         # Vanilla
