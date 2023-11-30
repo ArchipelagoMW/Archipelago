@@ -417,6 +417,10 @@ class OpenRCT2World(World):
                             if random.random() < .5: intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             unlock["RidePrereq"] = [random.randint(1,7),category,excitement,intensity,nausea,0]
+                        elif category == "transport_rides":
+                            unlock["RidePrereq"] = [random.randint(1,3),category,excitement,intensity,nausea,0]
+                        elif category == "water_rides":
+                            unlock["RidePrereq"] = [random.randint(1,3),category,excitement,intensity,nausea,0]
                         else:
                             unlock["RidePrereq"] = [random.randint(1,10),category,0,0,0,0]
             #Add the shop item to the shop prices
