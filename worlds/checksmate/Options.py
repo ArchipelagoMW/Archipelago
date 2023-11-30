@@ -174,16 +174,16 @@ class MaximumPocket(Range):
 
 class FairyChessPieces(OptionSet):
     """
-    Whether to use fairy chess pieces. Most of these pieces are Ralph Betza's Chess with Different Armies.
+    Whether to use fairy chess pieces. Most pieces below are from Ralph Betza's Chess with Different Armies.
 
     FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
 
-    Rookies: Adds the CwDA army inspired by Rooks, the Remarkable Rookies. Note that the Half-Duck castles rather than
-    the Short Rook.
+    Rookies: Adds the CwDA army inspired by Rooks, the Remarkable Rookies. The Half-Duck castles rather than the Short
+    Rook.
 
-    Clobberers: Adds the CwDA army inspired by Rooks, the Colorbound Clobberers. Note that Fad and Bede may both castle.
+    Clobberers: Adds the CwDA army inspired by Bishops, the Colorbound Clobberers. Fad and Bede may both castle.
 
-    Nutty: Adds the CwDA army inspired by Rooks, the Nutty Knights.
+    Nutty: Adds the CwDA army inspired by Knights, the Nutty Knights.
 
     Cannon: Adds the Rook-like Cannon, which captures a distal chessman by leaping over an intervening chessman, and the
     Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
