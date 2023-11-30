@@ -31,13 +31,15 @@ class MusicShuffle(Choice):
     '''
     Music shuffle type
     None: Music is not shuffled
-    Levels only: Only shuffle music between the main levels besides the Golden Passage
-    Full: Shuffle all music
+    Levels only: Only shuffle music between the main levels
+    Levels and extras: Shuffle any music that plays in levels, including the 'Hurry up!' and boss themes
+    Full: Shuffle all music (Warning: tends to behave strangely)
     '''
     display_name = 'Music Shuffle'
     option_none = 0
     option_levels_only = 1
-    option_full = 2
+    option_levels_and_extras = 2
+    option_full = 3
     default = 0
 
 

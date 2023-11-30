@@ -226,6 +226,8 @@ def set_difficulty_level(rom: LocalRom, difficulty: int):
     rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; Display S-Hard
 
 
+# https://github.com/wario-land/Toge-Docs/blob/master/Steaks/music_and_sound_effects.md#sfx-indices
+
 level_songs = [
     0x2A0,  # Hall of Hieroglyphs
     0x28B,  # Palm Tree Paradise
@@ -247,21 +249,40 @@ level_songs = [
     0x29F,  # Golden Passage
 ]
 
+level_adjacent_songs = [  # Play in levels but aren't a level's main theme
+    0x280,  # Boss corridor
+    0x2A2,  # Bonus Room
+    0x2A9,  # Hurry Up!
+    0x2AF,  # Passage Boss
+    0x2B0,  # Golden Diva
+]
+
+other_songs = [  # Not made to play in levels; these don't play nice
+    0x269,  # Wario's workout (doesn't work quite right for some reason)
+    0x26A,  # Sound Room
+    0x27C,  # Intro
+    0x27F,  # Level select screen
+    0x2AA,  # Item Shop
+    0x2BD,  # Mini-Game Shop
+]
+
+
 def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
     music_shuffle = multiworld.music_shuffle[player].value
-    if music_shuffle == 1:
-        music_pool = list(level_songs)
-    elif music_shuffle == 2:
-        raise NotImplementedError
-    else:
+    if music_shuffle == 0:
         return
+    music_pool = [*level_songs]
+    if music_shuffle >= 2:
+        music_pool += level_adjacent_songs
+    if music_shuffle >= 3:
+        music_pool += other_songs
 
     music_table_address = 0x8098028
-    music_info_table = [rom.read_bytes(music_table_address + 8 * i, 8)
-                        for i in range(819)]
+    music_info_table = [rom.read_bytes(music_table_address + 8 * i, 8) for i in range(819)]
 
-    random.shuffle(music_pool)
-    for vanilla, shuffled in zip(level_songs, music_pool):
+    shuffled_music = list(music_pool)
+    random.shuffle(shuffled_music)
+    for vanilla, shuffled in zip(music_pool, shuffled_music):
         rom.write_bytes(music_table_address + 8 * vanilla, music_info_table[shuffled])
 
     # Remove horizontal mixing in Palm Tree Paradise and Mystic Lake
