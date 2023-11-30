@@ -95,8 +95,14 @@ class DS3ItemData():
     """The next item ID to use when creating item data."""
 
     name: str
-    ds3_code: Optional[int]
+    ds3_code: int
     category: DS3ItemCategory
+
+    base_ds3_code: int = None
+    """If this is an upgradable weapon, the base ID of the weapon it upgrades from.
+
+    Otherwise, or if the weapon isn't upgraded, this is the same as ds3_code.
+    """
 
     base_name: Optional[str] = None
     """The name of the individual item, if this is a multi-item group."""
@@ -145,6 +151,7 @@ class DS3ItemData():
     def __post_init__(self):
         self.ap_code = self.ap_code or DS3ItemData.__item_id
         if not self.base_name: self.base_name = self.name
+        if not self.base_ds3_code: self.base_ds3_code = self.ds3_code
         DS3ItemData.__item_id += 1
 
     def counts(self, counts: List[int]) -> Generator["DS3ItemData", None, None]:
@@ -163,7 +170,8 @@ class DS3ItemData():
     def infuse(self, infusion: Infusion) -> "DS3ItemData":
         """Returns this item with the given infusion applied."""
         if not self.category.is_infusible: raise RuntimeError(f"{self.name} is not infusible.")
-        if self.ds3_code % 10000 >= 100: raise RuntimeError(f"{self.name} is already infused.")
+        if self.ds3_code - self.base_ds3_code >= 100:
+            raise RuntimeError(f"{self.name} is already infused.")
 
         # We can't change the name or AP code when infusing/upgrading weapons, because they both
         # need to match what's in item_name_to_id. We don't want to add every possible
@@ -180,7 +188,8 @@ class DS3ItemData():
         if not self.category.upgrade_level: raise RuntimeError(f"{self.name} is not upgradable.")
         if level > self.category.upgrade_level:
             raise RuntimeError(f"{self.name} can't be upgraded to +{level}.")
-        if self.ds3_code % 100 != 0: raise RuntimeError(f"{self.name} is already upgraded.")
+        if (self.ds3_code - self.base_ds3_code) % 100 != 0:
+            raise RuntimeError(f"{self.name} is already upgraded.")
 
         # We can't change the name or AP code when infusing/upgrading weapons, because they both
         # need to match what's in item_name_to_id. We don't want to add every possible
