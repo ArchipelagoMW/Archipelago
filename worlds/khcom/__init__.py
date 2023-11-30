@@ -67,7 +67,7 @@ class KHCOMWorld(World):
                 if self.get_setting("packs_or_sets") == "packs":
                     self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Bronze Card Pack"))
             elif self.get_setting("early_cure"):
-                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Cure 4-6"))
+                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Card Set Cure 4-6"))
             i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         for name, data in item_table.items():

@@ -43,20 +43,7 @@ class KHCOMContext(CommonContext):
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%/KHCOM")
         else:
-            # not windows. game is an exe so let's see if wine might be around to run it
-            if "WINEPREFIX" in os.environ:
-                wineprefix = os.environ["WINEPREFIX"]
-            elif shutil.which("wine") or shutil.which("wine-stable"):
-                wineprefix = os.path.expanduser("~/.wine") # default root of wine system data, deep in which is app data
-            else:
-                msg = "KHCOMClient couldn't detect system type. Unable to infer required game_communication_path"
-                logger.error("Error: " + msg)
-                Utils.messagebox("Error", msg, error=True)
-                sys.exit(1)
-            self.game_communication_path = os.path.join(
-                wineprefix,
-                "drive_c",
-                os.path.expandvars("users/$USER/Local Settings/Application Data/KHCOM"))
+            self.game_communication_path = os.path.expandvars(r"$HOME/KHCOM")
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:

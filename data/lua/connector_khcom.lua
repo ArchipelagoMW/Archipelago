@@ -1,6 +1,16 @@
 console.clear()
+print("Kingdom Hearts Chain of Memories (GBA) AP Running...")
 math.randomseed(os.time())
-client_communication_path = os.getenv('LOCALAPPDATA') .. "\\KHCOM\\"
+
+if os.getenv('LOCALAPPDATA') ~= nil then
+    client_communication_path = os.getenv('LOCALAPPDATA') .. "\\KHCOM\\"
+else
+    client_communication_path = os.getenv('HOME') .. "/KHCOM/"
+    ok, err, code = os.rename(client_communication_path, client_communication_path)
+    if not ok and code ~= 13 then
+        os.execute("mkdir " .. path)
+    end
+end
 
 function define_item_ids()
     item_ids = {}
