@@ -153,13 +153,15 @@ class DarkSouls3World(World):
 
         # There are only a few locations before Iudex Gundyr, and none of them are weapons, so if
         # they can't be random don't allow Yhorm in there.
-        if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various or (
-            not self.multiworld.enable_misc_locations[self.player]
-            and self.multiworld.upgrade_locations[self.player] ==
-                UpgradeLocationsOption.option_not_randomized
-            and self.multiworld.soul_locations[self.player] ==
-                SoulLocationsOption.option_not_randomized
-            and boss.name == "Iudex Gundyr"
+        if boss.name == "Iudex Gundyr" and (
+            self.multiworld.pool_type[self.player] == PoolTypeOption.option_various
+            or (
+                not self.multiworld.enable_misc_locations[self.player]
+                and self.multiworld.upgrade_locations[self.player] ==
+                    UpgradeLocationsOption.option_not_randomized
+                and self.multiworld.soul_locations[self.player] ==
+                    SoulLocationsOption.option_not_randomized
+            )
         ):
             return False
 
