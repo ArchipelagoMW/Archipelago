@@ -57,7 +57,7 @@ class AutoPatchExtensionRegister(type):
     def get_handler(game: str) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
         for extension_type, handler in AutoPatchExtensionRegister.extension_types.items():
             if extension_type == game:
-                if len(handler.required_extensions) > 0:
+                if handler.required_extensions:
                     handlers = [handler]
                     for required in handler.required_extensions:
                         if required in AutoPatchExtensionRegister.extension_types:
@@ -209,7 +209,7 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
         base_data = self.get_source_data_with_cache()
         patch_extender = AutoPatchExtensionRegister.get_handler(self.game)
         for step, args in self.procedure:
-            if isinstance(patch_extender, List):
+            if isinstance(patch_extender, list):
                 extension = next((item for item in [getattr(extender, step, None) for extender in patch_extender]
                                   if item is not None), None)
             else:
@@ -292,9 +292,14 @@ class APTokenMixin:
 
 class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     """Class that defines patch extension functions for a given game.
-    Patch extension functions must have the following two arguments:
+    Patch extension functions must have the following two arguments in the following order:
+
     caller: APProcedurePatch (used to retrieve files from the patch container)
+
     rom: bytes (the data to patch)
+
+    Further arguments are passed in from the procedure as defined.
+
     Patch extension functions must return the changed bytes.
     """
     game: str
@@ -327,14 +332,12 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
                     rom_data[offset] = rom_data[offset] ^ arg
             elif token_type in [APTokenTypes.COPY, APTokenTypes.RLE]:
                 args = struct.unpack("II", data)
+                length = args[0]
+                value = args[1]
                 if token_type == APTokenTypes.COPY:
-                    length = args[0]
-                    target = args[1]
-                    rom_data[offset: offset + length] = rom_data[target: target + length]
+                    rom_data[offset: offset + length] = rom_data[value: value + length]
                 else:
-                    length = args[0]
-                    val = args[1]
-                    rom_data[offset: offset + length] = bytes([val] * length)
+                    rom_data[offset: offset + length] = bytes([value] * length)
             else:
                 rom_data[offset:offset + len(data)] = data
             bpr += 9 + size
@@ -344,6 +347,8 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     def calc_snes_crc(caller: APProcedurePatch, rom: bytes):
         """Calculates and applies a valid CRC for the SNES rom header."""
         rom_data = bytearray(rom)
+        if len(rom) < 0x8000:
+            raise Exception("Tried to calculate SNES CRC on file too small to be a SNES ROM.")
         crc = (sum(rom_data[:0x7FDC] + rom_data[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         rom_data[0x7FDC:0x7FE0] = [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF]
