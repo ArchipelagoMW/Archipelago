@@ -205,7 +205,7 @@ class FairyChessPieces(OptionSet):
 
 class FairyChessArmy(Choice):
     """
-    Whether to mix pieces between the Different Armies. Does not affect pawns. Note that the Eurasian pieces, which
+    Whether to mix pieces between the Different Armies. Does not affect pawns. Note that the Cannon pieces, which
     replace the Bishop and Knight with a Vao and Cannon, constitute a very powerful yet flawed Different Army.
 
     Chaos: Chooses random enabled options. (You can disable armies by setting fairy_chess_pieces, which defaults to {
