@@ -37,8 +37,8 @@ Jokes:
 
 Doors:
 1100 - Glass Factory Entry (Panel) - 0x01A54
-1101 - Tutorial Outpost Entry (Panel) - 0x0A171
-1102 - Tutorial Outpost Exit (Panel) - 0x04CA4
+1101 - Outside Tutorial Outpost Entry (Panel) - 0x0A171
+1102 - Outside Tutorial Outpost Exit (Panel) - 0x04CA4
 1105 - Symmetry Island Lower (Panel) - 0x000B0
 1107 - Symmetry Island Upper (Panel) - 0x1C349
 1110 - Desert Light Room Entry (Panel) - 0x0C339
