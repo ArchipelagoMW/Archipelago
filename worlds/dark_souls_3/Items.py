@@ -162,8 +162,8 @@ class DS3ItemData():
 
     def infuse(self, infusion: Infusion) -> "DS3ItemData":
         """Returns this item with the given infusion applied."""
-        if not self.category.is_infusible: raise f"{self.name} is not infusible."
-        if self.ds3_code % 10000 >= 100: raise f"{self.name} is already infused."
+        if not self.category.is_infusible: raise RuntimeError(f"{self.name} is not infusible.")
+        if self.ds3_code % 10000 >= 100: raise RuntimeError(f"{self.name} is already infused.")
 
         # We can't change the name or AP code when infusing/upgrading weapons, because they both
         # need to match what's in item_name_to_id. We don't want to add every possible
@@ -177,9 +177,10 @@ class DS3ItemData():
 
     def upgrade(self, level: int) -> "DS3ItemData":
         """Upgrades this item to the given level."""
-        if not self.category.upgrade_level: raise f"{self.name} is not upgradable."
-        if level > self.category.upgrade_level: raise f"{self.name} can't be upgraded to +{level}."
-        if self.ds3_code % 100 != 0: raise f"{self.name} is already upgraded."
+        if not self.category.upgrade_level: raise RuntimeError(f"{self.name} is not upgradable.")
+        if level > self.category.upgrade_level:
+            raise RuntimeError(f"{self.name} can't be upgraded to +{level}.")
+        if self.ds3_code % 100 != 0: raise RuntimeError(f"{self.name} is already upgraded.")
 
         # We can't change the name or AP code when infusing/upgrading weapons, because they both
         # need to match what's in item_name_to_id. We don't want to add every possible
