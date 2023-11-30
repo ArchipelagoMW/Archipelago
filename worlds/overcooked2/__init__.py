@@ -172,7 +172,7 @@ class Overcooked2World(World):
             # random priority locations have no desirable effect on solo seeds
             return list()
 
-        balancing_mode = self.get_options()["LocationBalancing"]
+        balancing_mode = self.options.location_balancing
 
         if balancing_mode == LocationBalancingMode.disabled:
             # Location balancing is disabled, progression density is purely determined by filler
@@ -528,7 +528,7 @@ class Overcooked2World(World):
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
             "Custom66TimerScale": max(0.4, 0.25 + (1.0 - star_threshold_scale)*0.6),
-            "ShortHordeLevels": self.options.short_horde_levels,
+            "ShortHordeLevels": self.options.short_horde_levels.result,
             "CustomLevelOrder": custom_level_order,
 
             # Items (Starting Inventory)
@@ -584,6 +584,7 @@ class Overcooked2World(World):
             "TwoStars": star_threshold_scale * 0.75,
             "OneStar": star_threshold_scale * 0.35,
         }
+        base_data["AlwaysServeOldestOrder"] = self.options.always_serve_oldest_order.result
 
         return base_data
 

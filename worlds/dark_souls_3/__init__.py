@@ -13,7 +13,7 @@ from worlds.generic.Rules import CollectionRule, set_rule, add_rule, add_item_ru
 from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_dictionary
 from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups, region_order
-from .Options import DarkSouls3Options, RandomizeWeaponLevelOption, SoulLocationsOption, UpgradeLocationsOption, UpgradedWeaponLocationsOption
+from .Options import DarkSouls3Options, EarlySmallLothricBanner, RandomizeWeaponLevelOption, SoulLocationsOption, UpgradeLocationsOption, UpgradedWeaponLocationsOption
 
 
 class DarkSouls3Web(WebWorld):
@@ -101,10 +101,10 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
-        if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
-            self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
-            # Make this available early just because it's fun to be able to check boss souls early.
-            self.multiworld.early_items[self.player]['Transposing Kiln'] = 1
+            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_global:
+                self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
+            elif self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_local:
+                self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
         if self.multiworld.enable_health_locations[self.player] == Toggle.option_true:

@@ -19,6 +19,7 @@ In addition, there are other changes to the game that make it better optimized f
 - The Apodictic Heart of Mea Culpa can be unequipped.
 - Dying with the Immaculate Bead is unnecessary, it is automatically upgraded to the Weight of True Guilt.
 - If the option is enabled, the 34 corpses in game will have their messages changed to give hints about certain items and locations. The Shroud of Dreamt Sins is not required to hear them.
+- Talking to Tirso in Albero will tell you the selected ending for the current game.
 
 ## What has been changed about the side quests?
 

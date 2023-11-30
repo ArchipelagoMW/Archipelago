@@ -1596,6 +1596,14 @@ _cut_content_items = [
     DS3ItemData("Dorris Swarm",                        0x40393870, DS3ItemCategory.SKIP),
 ]
 
+item_descriptions = {
+    "Cinders": """
+      All four Cinders of a Lord.
+
+      Once you have these four, you can fight Soul of Cinder and win the game.
+    """,
+}
+
 _all_items = _vanilla_items + _dlc_items
 
 filler_item_names = [item_data.name for item_data in _all_items if item_data.filler]
