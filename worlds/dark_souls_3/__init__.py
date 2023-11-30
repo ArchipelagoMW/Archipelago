@@ -819,13 +819,18 @@ class DarkSouls3World(World):
             world matching the given names.
             """
 
+            # Convert items to full DarkSouls3Items.
             item_order = [
                 item for item in (
-                    full_items_by_name[item.name].pop(0) if isinstance(item, DS3ItemData) else item
+                    (
+                        # full_items_by_name won't contain DLC items if the DLC is disabled.
+                        (full_items_by_name[item.name] or [None]).pop(0)
+                        if isinstance(item, DS3ItemData) else item
+                    )
                     for item in item_order
                 )
                 # Never re-order event items, because they weren't randomized in the first place.
-                if item.code is not None
+                if item and item.code is not None
             ]
 
             names = {item.name for item in item_order}
