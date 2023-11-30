@@ -189,7 +189,7 @@ class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
     The region cache check every entrance, so if a rule is also used in an entrances, it can be reevaluated.
     """
 
-    def test_reentry_in_the_first_rule_being_evaluated_does_check_the_rule(self):
+    def test_nested_call_in_the_internal_rule_being_evaluated_does_check_the_internal_rule(self):
         collection_state = MagicMock()
         internal_rule = MagicMock()
         rule = Or(internal_rule)
@@ -215,7 +215,7 @@ class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
         self.assertTrue(called_once)
         self.assertTrue(internal_call_result)
 
-    def test_reentry_in_already_simplified_rule_does_not_steal_rule_to_simplified_from_parent_call(self):
+    def test_nested_call_to_already_simplified_rule_does_not_steal_rule_to_simplified_from_parent_call(self):
         collection_state = MagicMock()
         an_internal_rule = MagicMock()
         an_internal_rule.evaluate_while_simplifying = Mock(return_value=(an_internal_rule, True))
