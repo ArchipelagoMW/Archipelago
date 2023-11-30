@@ -45,5 +45,5 @@ wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
     'required_jewels': RequiredJewels,
     'death_link': DeathLink,
-    #'music_shuffle': MusicShuffle,
+    'music_shuffle': MusicShuffle,
 }
