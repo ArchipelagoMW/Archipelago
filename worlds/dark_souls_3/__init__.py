@@ -235,12 +235,15 @@ class DarkSouls3World(World):
                     new_region
                 )
             else:
-                # Replace non-randomized progression items with events
+                # Replace non-randomized progression items with events if their locations aren't
+                # missable. Avoiding missable locations prevents issues where, for example, NPC
+                # locations aren't randomized and so Yhorm is technically defeatable without the
+                # normal Storm Ruler drop because you can get it from Siegward.
                 event_item = (
                     self.create_item(location.default_item_name) if location.default_item_name
                     else DarkSouls3Item.event(location.name, self.player)
                 )
-                if event_item.classification != ItemClassification.progression:
+                if location.missable or event_item.classification != ItemClassification.progression:
                     continue
 
                 new_location = DarkSouls3Location(
