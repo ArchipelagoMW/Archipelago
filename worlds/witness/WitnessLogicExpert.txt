@@ -4,11 +4,11 @@ Menu (Menu) - Entry - True:
 
 Entry (Entry):
 
-Tutorial First Hallway (First Hallway) - Entry - True - First Hallway Room - 0x00064:
+Tutorial First Hallway (Tutorial First Hallway) - Entry - True - First Hallway Room - 0x00064:
 158000 - 0x00064 (Straight) - True - True
 159510 - 0x01848 (EP) - 0x00064 - True
 
-Tutorial First Hallway Room (First Hallway) - Tutorial - 0x00182:
+Tutorial First Hallway Room (Tutorial First Hallway) - Tutorial - 0x00182:
 158001 - 0x00182 (Bend) - True - True
 
 Tutorial (Tutorial) - Outside Tutorial - True:
