@@ -1,6 +1,6 @@
 import logging
 from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Union, Optional
-from BaseClasses import Item, ItemClassification, Location, LocationProgressType
+from BaseClasses import Item, ItemClassification, Location, LocationProgressType, CollectionState
 from . import StaticWitnessLogic
 from .utils import weighted_sample
 
@@ -407,8 +407,19 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
 
     unhinted_locations_per_area = dict()
     unhinted_location_percentage_per_area = dict()
+
+    state = CollectionState(world.multiworld)
+    state.sweep_for_events(locations=locations_per_area["Tutorial (Inside)"])
+
+    early_tutorial = {
+        loc for loc in world.multiworld.get_reachable_locations(state, world.player)
+        if loc.address and loc in locations_per_area["Tutorial (Inside)"]
+    }
+
+    already_hinted_plus_tutorial = already_hinted_locations | early_tutorial
+
     for area_name, locations in locations_per_area.items():
-        not_yet_hinted_locations = sum(location not in already_hinted_locations for location in locations)
+        not_yet_hinted_locations = sum(location not in already_hinted_plus_tutorial for location in locations)
         unhinted_locations_per_area[area_name] = {loc for loc in locations if loc not in already_hinted_locations}
         unhinted_location_percentage_per_area[area_name] = not_yet_hinted_locations / len(locations)
 
