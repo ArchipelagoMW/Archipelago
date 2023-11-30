@@ -277,12 +277,20 @@ class WitnessWorld(World):
 
             generated_hints: List[Tuple[str, Optional[Location]]] = []
 
+            state = CollectionState(self.multiworld)
+
+            # Keep track of already hinted locations. Consider early Tutorial as "already hinted"
+
+            already_hinted_locations = {
+                loc for loc in self.multiworld.get_reachable_locations(state, self.player)
+                if loc.address and StaticWitnessLogic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
+            }
+
             # First, make always and priority hints.
 
             always_and_priority, unused_always_hints = make_always_and_priority_hints(
-                self, location_hints, self.own_itempool
+                self, location_hints, self.own_itempool, already_hinted_locations
             )
-            already_hinted_locations = {hint[1] for hint in always_and_priority}
 
             generated_hints += always_and_priority
 

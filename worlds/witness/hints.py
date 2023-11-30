@@ -285,8 +285,9 @@ def get_items_and_locations_in_random_order(world: "WitnessWorld", own_itempool:
     return prog_items_in_this_world, locations_in_this_world
 
 
-def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int,
-                                   own_itempool: List[Item]) -> Tuple[List[Tuple[str, Location]], List[Location]]:
+def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int, own_itempool: List[Item],
+                                   already_hinted_locations: Set[Location]
+                                   ) -> Tuple[List[Tuple[str, Location]], List[Location]]:
     hints: List[Tuple[str, Location]] = list()
 
     prog_items_in_this_world, loc_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
@@ -328,12 +329,10 @@ def make_always_and_priority_hints(world: "WitnessWorld", max_amount: int,
     priority_hints_set -= always_hints_set
 
     # Convert both hint types to list and then shuffle. Also, get rid of None and Tutorial Gate Open.
-    always_hints: List[Location] = sorted(hint for hint in always_hints_set if hint and hint.address != 158007)
-    priority_hints: List[Location] = sorted(hint for hint in priority_hints_set if hint and hint.address != 158007)
+    always_hints = sorted(hint for hint in always_hints_set if hint and hint not in already_hinted_locations)
+    priority_hints = sorted(hint for hint in priority_hints_set if hint and hint not in already_hinted_locations)
     world.random.shuffle(always_hints)
     world.random.shuffle(priority_hints)
-
-    already_hinted_locations: Set[Location] = set()
 
     for _ in range(min(max_amount, len(always_hints))):
         location = always_hints.pop()
@@ -408,18 +407,8 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
     unhinted_locations_per_area = dict()
     unhinted_location_percentage_per_area = dict()
 
-    state = CollectionState(world.multiworld)
-    state.sweep_for_events(locations=locations_per_area["Tutorial (Inside)"])
-
-    early_tutorial = {
-        loc for loc in world.multiworld.get_reachable_locations(state, world.player)
-        if loc.address and loc in locations_per_area["Tutorial (Inside)"]
-    }
-
-    already_hinted_plus_tutorial = already_hinted_locations | early_tutorial
-
     for area_name, locations in locations_per_area.items():
-        not_yet_hinted_locations = sum(location not in already_hinted_plus_tutorial for location in locations)
+        not_yet_hinted_locations = sum(location not in already_hinted_locations for location in locations)
         unhinted_locations_per_area[area_name] = {loc for loc in locations if loc not in already_hinted_locations}
         unhinted_location_percentage_per_area[area_name] = not_yet_hinted_locations / len(locations)
 
