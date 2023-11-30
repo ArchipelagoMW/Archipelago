@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 import dataclasses
 from enum import IntEnum
+import types
 from typing import ClassVar, Generator, List, Optional, Set, Union
 
 from BaseClasses import Item, ItemClassification
-from Utils import flatten
 
 
 class DS3ItemCategory(IntEnum):
@@ -224,6 +224,14 @@ class DarkSouls3Item(Item):
         data = DS3ItemData(name, None, DS3ItemCategory.SKIP, classification = ItemClassification.progression)
         data.ap_code = None
         return DarkSouls3Item(player, data)
+
+
+# TODO: use this from Utils once this is a PR for the main repo and not an APWorld
+def flatten(l):
+    if type(l) is list or type(l) is types.GeneratorType:
+        return [ y for x in l for y in flatten(x) ]
+    else:
+        return [ l ]
 
 
 _vanilla_items = flatten([
