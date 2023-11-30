@@ -2,7 +2,7 @@
 from collections.abc import Sequence
 from collections import defaultdict
 import json
-from typing import Dict, Set, List, Optional, TextIO, Union
+from typing import Callable, Dict, Set, List, Optional, TextIO, Union
 
 from BaseClasses import CollectionState, MultiWorld, Region, Item, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
 from Options import Toggle
@@ -686,7 +686,8 @@ class DarkSouls3World(World):
         # Fill this manually so that, if very few slots are available in Cemetery of Ash, this
         # doesn't get locked out by bad rolls on the next two fills.
         if self.yhorm_location.name == 'Iudex Gundyr':
-            self._fill_local_item("Storm Ruler", {"Cemetery of Ash"})
+            self._fill_local_item("Storm Ruler", {"Cemetery of Ash"},
+                                  lambda location: location.name != "CA: Coiled Sword")
 
         # Don't place this in the multiworld because it's necessary almost immediately, and don't
         # mark it as a blocker for HWL because having a miniscule Sphere 1 screws with progression
@@ -702,10 +703,15 @@ class DarkSouls3World(World):
             })
 
 
-    def _fill_local_item(self, name: str, regions: Set[str]) -> None:
+    def _fill_local_item(
+        self, name: str,
+        regions: Set[str],
+        additional_condition: Optional[Callable[[DarkSouls3Location], bool]] = None
+    ) -> None:
         """Chooses a valid location for the item with the given name and places it there.
         
-        This always chooses a local location among the given regions.
+        This always chooses a local location among the given regions. If additional_condition is
+        passed, only locations meeting that condition will be considered.
         """
         item = next(
             (
@@ -723,6 +729,7 @@ class DarkSouls3World(World):
             if self.is_location_available(location)
             and not location.missable
             and not location.conditional
+            and (not additional_condition or additional_condition(location))
         ]
         location = self.multiworld.random.choice([
             location for location in candidate_locations
