@@ -2454,6 +2454,26 @@ id,region,name,tags,mod_name
 6300,JojaMart,Friendsanity: Morris 8 <3,FRIENDSANITY,Stardew Valley Expanded
 6301,JojaMart,Friendsanity: Morris 9 <3,FRIENDSANITY,Stardew Valley Expanded
 6302,JojaMart,Friendsanity: Morris 10 <3,FRIENDSANITY,Stardew Valley Expanded
+6303,Witch's Swamp,Friendsanity: Goblin 1 <3,FRIENDSANITY,Distant Lands
+6304,Witch's Swamp,Friendsanity: Goblin 2 <3,FRIENDSANITY,Distant Lands
+6305,Witch's Swamp,Friendsanity: Goblin 3 <3,FRIENDSANITY,Distant Lands
+6306,Witch's Swamp,Friendsanity: Goblin 4 <3,FRIENDSANITY,Distant Lands
+6307,Witch's Swamp,Friendsanity: Goblin 5 <3,FRIENDSANITY,Distant Lands
+6308,Witch's Swamp,Friendsanity: Goblin 6 <3,FRIENDSANITY,Distant Lands
+6309,Witch's Swamp,Friendsanity: Goblin 7 <3,FRIENDSANITY,Distant Lands
+6310,Witch's Swamp,Friendsanity: Goblin 8 <3,FRIENDSANITY,Distant Lands
+6311,Witch's Swamp,Friendsanity: Goblin 9 <3,FRIENDSANITY,Distant Lands
+6312,Witch's Swamp,Friendsanity: Goblin 10 <3,FRIENDSANITY,Distant Lands
+6313,Witch's Attic,Friendsanity: Alecto 1 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6314,Witch's Attic,Friendsanity: Alecto 2 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6315,Witch's Attic,Friendsanity: Alecto 3 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6316,Witch's Attic,Friendsanity: Alecto 4 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6317,Witch's Attic,Friendsanity: Alecto 5 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6318,Witch's Attic,Friendsanity: Alecto 6 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6319,Witch's Attic,Friendsanity: Alecto 7 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6320,Witch's Attic,Friendsanity: Alecto 8 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6321,Witch's Attic,Friendsanity: Alecto 9 <3,FRIENDSANITY,Alecto the Witch (New NPC)
+6322,Witch's Attic,Friendsanity: Alecto 10 <3,FRIENDSANITY,Alecto the Witch (New NPC)
 7001,Pierre's General Store,Premium Pack,BACKPACK,Bigger Backpack
 7002,Carpenter Shop,Tractor Garage Blueprint,BUILDING_BLUEPRINT,Tractor Mod
 7003,The Deep Woods Depth 100,Pet the Deep Woods Unicorn,MANDATORY,DeepWoods
@@ -2509,6 +2529,10 @@ id,region,name,tags,mod_name
 7515,Jenkins' Residence,An Elegant Reception,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 7516,Sophia's House,Fairy Garden,"SPECIAL_ORDER_BOARD,GINGER_ISLAND",Stardew Valley Expanded
 7517,Susan's House,Homemade Fertilizer,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
+7519,Witch's Swamp,Corrupted Crops Task,,Distant Lands
+7520,Witch's Swamp,A New Pot,"MANDATORY,QUEST",Distant Lands
+7521,Witch's Swamp,Fancy Blanket Task,"MANDATORY,QUEST",Distant Lands
+7522,Witch's Swamp,Witch's order,,Distant Lands
 7551,Kitchen,Cook Baked Berry Oatmeal,"COOKSANITY",Stardew Valley Expanded
 7552,Kitchen,Cook Flower Cookie,"COOKSANITY",Stardew Valley Expanded
 7553,Kitchen,Cook Big Bark Burger,"COOKSANITY",Stardew Valley Expanded
@@ -2519,6 +2543,10 @@ id,region,name,tags,mod_name
 7558,Kitchen,Cook Seaweed Salad,"COOKSANITY",Stardew Valley Expanded
 7559,Kitchen,Cook Void Delight,"COOKSANITY",Stardew Valley Expanded
 7560,Kitchen,Cook Void Salmon Sushi,"COOKSANITY",Stardew Valley Expanded
+7561,Kitchen,Cook Mushroom Kebab,"COOKSANITY",Distant Lands
+7562,Kitchen,Cook Crayfish Soup,"COOKSANITY",Distant Lands
+7563,Kitchen,Cook Pemmican,"COOKSANITY",Distant Lands
+7564,Kitchen,Cook Void Mint Tea,"COOKSANITY",Distant Lands
 7601,Bear Shop,Baked Berry Oatmeal Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7602,Bear Shop,Flower Cookie Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7603,Saloon,Big Bark Burger Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
@@ -2529,6 +2557,10 @@ id,region,name,tags,mod_name
 7608,Adventurer's Guild,Seaweed Salad Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7609,Sewer,Void Delight Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7610,Sewer,Void Salmon Sushi Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+7611,Witch's Swamp,Mushroom Kebab Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands
+7612,Witch's Swamp,Crayfish Soup Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands
+7613,Witch's Swamp,Pemmican Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands
+7614,Witch's Swamp,Void Mint Tea Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands
 7651,Alesia Shop,Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
 7652,Isaac Shop,Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
 7653,Isaac Shop,Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
@@ -2560,12 +2592,17 @@ id,region,name,tags,mod_name
 7725,Crimson Badlands,Fishsanity: Undeadfish,FISHSANITY,Stardew Valley Expanded
 7726,Shearwater Bridge,Fishsanity: Kittyfish,FISHSANITY,Stardew Valley Expanded
 7727,Blue Moon Vineyard,Fishsanity: Dulse Seaweed,FISHSANITY,Stardew Valley Expanded
+7728,Witch's Swamp,Fishsanity: Void Minnow,FISHSANITY,Distant Lands
+7729,Witch's Swamp,Fishsanity: Swamp Leech,FISHSANITY,Distant Lands
+7730,Witch's Swamp,Fishsanity: Giant Horsehoe Crab,FISHSANITY,Distant Lands
 7901,Farm,Harvest Monster Fruit,"CROPSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7902,Farm,Harvest Salal Berry,CROPSANITY,Stardew Valley Expanded
 7903,Farm,Harvest Slime Berry,"CROPSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7904,Farm,Harvest Ancient Fiber,CROPSANITY,Stardew Valley Expanded
 7905,Farm,Harvest Monster Mushroom,"CROPSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7906,Farm,Harvest Void Root,"CROPSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7907,Farm,Harvest Void Mint Leaves,CROPSANITY,Distant Lands
+7908,Farm,Harvest Vile Ancient Fruit,CROPSANITY,Distant Lands
 8001,Shipping,Shipsanity: Magic Elixir,SHIPSANITY,Magic
 8002,Shipping,Shipsanity: Travel Core,SHIPSANITY,Magic
 8003,Shipping,Shipsanity: Aegis Elixir,SHIPSANITY,Stardew Valley Expanded
@@ -2759,3 +2796,18 @@ id,region,name,tags,mod_name
 8200,Shipping,Shipsanity: Wooden Display,SHIPSANITY,Archaeology
 8201,Shipping,Shipsanity: Dwarf Gadget: Infinite Volcano Simulation,"SHIPSANITY,GINGER_ISLAND",Archaeology
 8202,Shipping,Shipsanity: Water Shifter,SHIPSANITY,Archaeology
+8203,Shipping,Shipsanity: Brown Amanita,SHIPSANITY,Distant Lands
+8204,Shipping,Shipsanity: Swamp Herb,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands
+8205,Shipping,Shipsanity: Void Mint Seeds,SHIPSANITY,Distant Lands
+8206,Shipping,Shipsanity: Vile Ancient Fruit Seeds,SHIPSANITY,Distant Lands
+8207,Shipping,Shipsanity: Void Mint Leaves,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",Distant Lands
+8208,Shipping,Shipsanity: Vile Ancient Fruit,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",Distant Lands
+8209,Shipping,Shipsanity: Void Minnow,"SHIPSANITY,SHIPSANITY_FISH",Distant Lands
+8210,Shipping,Shipsanity: Swamp Leech,"SHIPSANITY,SHIPSANITY_FISH",Distant Lands
+8211,Shipping,Shipsanity: Purple Algae,SHIPSANITY,Distant Lands
+8212,Shipping,Shipsanity: Giant Horsehoe Crab,"SHIPSANITY,SHIPSANITY_FISH",Distant Lands
+8213,Shipping,Shipsanity: Mushroom Kebab,SHIPSANITY,Distant Lands
+8214,Shipping,Shipsanity: Crayfish Soup,SHIPSANITY,Distant Lands
+8215,Shipping,Shipsanity: Pemmican,SHIPSANITY,Distant Lands
+8216,Shipping,Shipsanity: Void Mint Tea,SHIPSANITY,Distant Lands
+8217,Shipping,Shipsanity: Ginger Tincture,"SHIPSANITY,GINGER_ISLAND",Distant Lands

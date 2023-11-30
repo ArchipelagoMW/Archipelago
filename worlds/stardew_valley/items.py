@@ -461,8 +461,9 @@ def create_seeds(item_factory: StardewItemFactory, options: StardewValleyOptions
     if options.cropsanity == Cropsanity.option_disabled:
         return
 
-    include_ginger_island = options.exclude_ginger_island != ExcludeGingerIsland.option_true
-    seed_items = [item_factory(item) for item in items_by_group[Group.CROPSANITY] if include_ginger_island or Group.GINGER_ISLAND not in item.groups]
+    base_seed_items = [item for item in items_by_group[Group.CROPSANITY]]
+    filtered_seed_items = remove_excluded_items(base_seed_items, options)
+    seed_items = [item_factory(item) for item in filtered_seed_items]
     items.extend(seed_items)
 
 
@@ -658,8 +659,8 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     return items
 
 
-def filter_deprecated_items(options: StardewValleyOptions, items: List[ItemData]) -> List[ItemData]:
-    return [item for item in items if  Group.DEPRECATED not in item.groups]
+def filter_deprecated_items(items: List[ItemData]) -> List[ItemData]:
+    return [item for item in items if Group.DEPRECATED not in item.groups]
 
 
 def filter_ginger_island_items(options: StardewValleyOptions, items: List[ItemData]) -> List[ItemData]:
@@ -672,7 +673,7 @@ def filter_mod_items(options: StardewValleyOptions, items: List[ItemData]) -> Li
 
 
 def remove_excluded_items(items, options):
-    deprecated_filter = filter_deprecated_items(options, items)
+    deprecated_filter = filter_deprecated_items(items)
     ginger_island_filter = filter_ginger_island_items(options, deprecated_filter)
     mod_filter = filter_mod_items(options, ginger_island_filter)
     return mod_filter

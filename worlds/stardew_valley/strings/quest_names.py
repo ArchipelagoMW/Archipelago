@@ -63,3 +63,8 @@ class ModQuest:
     AuroraVineyard = "Aurora Vineyard"
     MonsterCrops = "Monster Crops"
     VoidSoul = "Void Soul"
+    WizardInvite = "Wizard's Invite"
+    CorruptedCropsTask = "Corrupted Crops Task"
+    ANewPot = "A New Pot"
+    FancyBlanketTask = "Fancy Blanket Task"
+    WitchOrder = "Witch's order"

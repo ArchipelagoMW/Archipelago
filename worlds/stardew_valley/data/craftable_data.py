@@ -12,7 +12,7 @@ from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ..strings.fish_names import Fish, WaterItem
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal
-from ..strings.forageable_names import Forageable, SVEForage
+from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
@@ -22,7 +22,7 @@ from ..strings.region_names import Region, SVERegion
 from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill, ModSkill
 from ..strings.special_order_names import SpecialOrder
-from ..strings.villager_names import NPC
+from ..strings.villager_names import NPC, ModNPC
 
 
 class CraftingRecipe:
@@ -45,9 +45,9 @@ class CraftingRecipe:
 all_crafting_recipes: List[CraftingRecipe] = []
 
 
-def friendship_recipe(name: str, friend: str, hearts: int, ingredients: Dict[str, int]) -> CraftingRecipe:
+def friendship_recipe(name: str, friend: str, hearts: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
     source = FriendshipSource(friend, hearts)
-    return create_recipe(name, ingredients, source)
+    return create_recipe(name, ingredients, source, mod_name)
 
 
 def cutscene_recipe(name: str, region: str, friend: str, hearts: int, ingredients: Dict[str, int]) -> CraftingRecipe:
@@ -280,5 +280,7 @@ hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.isaac_shop, 65000, {S
                                                                                Loot.slime: 10}, ModNames.sve)
 armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000, {Loot.solar_essence: 30, SVEForage.void_soul: 5, Ingredient.vinegar: 5,
                                                                                   Fossil.bone_fragment: 5}, ModNames.sve)
+ginger_tincture = friendship_recipe(ModConsumable.ginger_tincture, ModNPC.goblin, 4, {DistantLandsForageable.brown_amanita: 1, Forageable.ginger: 5,
+                                                                                      Material.cinder_shard: 1, DistantLandsForageable.swamp_herb: 1}, ModNames.distant_lands)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}

@@ -3,18 +3,19 @@ from ..mods.mod_data import ModNames
 from .recipe_source import RecipeSource, FriendshipSource, SkillSource, QueenOfSauceSource, ShopSource, StarterSource, ShopTradeSource
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
-from ..strings.crop_names import Fruit, Vegetable, SVEFruit
-from ..strings.fish_names import Fish, SVEFish, WaterItem
+from ..strings.crop_names import Fruit, Vegetable, SVEFruit, DistantLandsCrop
+from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish
 from ..strings.flower_names import Flower
-from ..strings.forageable_names import Forageable, SVEForage
+from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable
 from ..strings.ingredient_names import Ingredient
-from ..strings.food_names import Meal, SVEMeal, Beverage
+from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal
+from ..strings.material_names import Material
 from ..strings.metal_names import Fossil
 from ..strings.monster_drop_names import Loot
 from ..strings.region_names import Region, SVERegion
 from ..strings.season_names import Season
 from ..strings.skill_names import Skill
-from ..strings.villager_names import NPC
+from ..strings.villager_names import NPC, ModNPC
 
 
 class CookingRecipe:
@@ -37,9 +38,9 @@ class CookingRecipe:
 all_cooking_recipes: List[CookingRecipe] = []
 
 
-def friendship_recipe(name: str, friend: str, hearts: int, ingredients: Dict[str, int]) -> CookingRecipe:
+def friendship_recipe(name: str, friend: str, hearts: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CookingRecipe:
     source = FriendshipSource(friend, hearts)
-    return create_recipe(name, ingredients, source)
+    return create_recipe(name, ingredients, source, mod_name)
 
 
 def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int]) -> CookingRecipe:
@@ -186,5 +187,14 @@ seaweed_salad = shop_recipe(SVEMeal.seaweed_salad, Region.fish_shop, 1250, {SVEF
 void_delight = shop_recipe(SVEMeal.void_delight, Region.sewer, 5000, {SVEFish.void_eel: 1, Loot.void_essence: 50, Loot.solar_essence: 20}, ModNames.sve)
 void_salmon_sushi = shop_recipe(SVEMeal.void_salmon_sushi, Region.sewer, 5000, {Fish.void_salmon: 1, ArtisanGood.void_mayonnaise: 1, WaterItem.seaweed: 3},
                                 ModNames.sve)
+
+mushroom_kebab = friendship_recipe(DistantLandsMeal.mushroom_kebab, ModNPC.goblin, 2, {Forageable.chanterelle: 1, Forageable.common_mushroom: 1,
+                                                                                       Forageable.red_mushroom: 1, Material.wood: 1}, ModNames.distant_lands)
+void_mint_tea = friendship_recipe(DistantLandsMeal.void_mint_tea, ModNPC.goblin, 4, {DistantLandsCrop.void_mint: 1}, ModNames.distant_lands)
+crayfish_soup = friendship_recipe(DistantLandsMeal.crayfish_soup, ModNPC.goblin, 6, {Forageable.cave_carrot: 1, Fish.crayfish: 1,
+                                                                                     DistantLandsFish.purple_algae: 1, WaterItem.white_algae: 1}, ModNames.distant_lands)
+pemmican = friendship_recipe(DistantLandsMeal.pemmican, ModNPC.goblin, 8, {Loot.bug_meat: 1, Fish.any: 1, Forageable.salmonberry: 3,
+                                                                           Material.stone: 2}, ModNames.distant_lands)
+
 
 all_cooking_recipes_by_name = {recipe.meal: recipe for recipe in all_cooking_recipes}

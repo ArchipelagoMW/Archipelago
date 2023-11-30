@@ -9,8 +9,10 @@ from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...stardew_rule import StardewRule
+from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.crop_names import Fruit, SVEFruit, SVEVegetable
+from ...strings.fertilizer_names import Fertilizer
 from ...strings.food_names import Meal, Beverage
 from ...strings.forageable_names import SVEForage
 from ...strings.material_names import Material
@@ -36,6 +38,7 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLog
         quests.update(self._get_mr_ginger_quest_rules())
         quests.update(self._get_ayeisha_quest_rules())
         quests.update(self._get_sve_quest_rules())
+        quests.update(self._get_distant_lands_quest_rules())
         return quests
 
     def _get_juna_quest_rules(self):
@@ -79,3 +82,25 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLog
             ModQuest.MonsterCrops: self.logic.has((SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
             ModQuest.VoidSoul: self.logic.region.can_reach(Region.sewer) & self.logic.has(SVEForage.void_soul),
         }
+
+    def _get_distant_lands_quest_rules(self):
+        if ModNames.distant_lands not in self.options.mods:
+            return {}
+
+        rules = {
+            ModQuest.ANewPot: self.logic.region.can_reach(Region.witch_swamp) & self.logic.region.can_reach(Region.saloon) &
+                              self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_store) &
+                              self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron),
+            ModQuest.FancyBlanketTask: self.logic.region.can_reach(Region.witch_swamp) & self.logic.region.can_reach(Region.haley_house) & self.logic.has(AnimalProduct.wool) &
+                                       self.logic.has(ArtisanGood.cloth)
+
+        }
+        if ModNames.alecto not in self.options.mods:
+            rules.update({
+                ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.quality),
+            })
+            return rules
+        rules.update({
+            ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.quality),
+        })
+        return rules

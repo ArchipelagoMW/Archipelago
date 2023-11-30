@@ -105,3 +105,9 @@ class SVEMeal:
 class SVEBeverage:
     sports_drink = "Sports Drink"
 
+
+class DistantLandsMeal:
+    mushroom_kebab = "Mushroom Kebab"
+    crayfish_soup = "Crayfish Soup"
+    pemmican = "Pemmican"
+    void_mint_tea = "Void Mint Tea"

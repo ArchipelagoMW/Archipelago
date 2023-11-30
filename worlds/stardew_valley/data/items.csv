@@ -778,6 +778,8 @@ id,name,classification,groups,mod_name
 10123,Scarlett <3,progression,FRIENDSANITY,Stardew Valley Expanded
 10124,Susan <3,progression,FRIENDSANITY,Stardew Valley Expanded
 10125,Morris <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10126,Alecto <3,progression,FRIENDSANITY,Alecto the Witch (New NPC)
+10127,Goblin <3,progression,FRIENDSANITY,Distant Lands
 10301,Progressive Woods Obelisk Sigils,progression,,DeepWoods
 10302,Progressive Skull Cavern Elevator,progression,,Skull Cavern Elevator
 10401,Baked Berry Oatmeal Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
@@ -790,6 +792,12 @@ id,name,classification,groups,mod_name
 10408,Seaweed Salad Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 10409,Void Delight Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 10410,Void Salmon Sushi Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10411,Mushroom Kebab Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands
+10412,Crayfish Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands
+10413,Pemmican Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands
+10414,Void Mint Tea Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands
+10450,Void Mint Seeds,progression,CROPSANITY,Distant Lands
+10451,Vile Ancient Fruit Seeds,progression,CROPSANITY,Distant Lands
 10501,Marlon's Boat Paddle,progression,GINGER_ISLAND,Stardew Valley Expanded
 10502,Diamond Wand,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
 10503,Iridium Bomb,progression,,Stardew Valley Expanded

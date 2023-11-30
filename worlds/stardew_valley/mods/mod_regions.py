@@ -1,7 +1,7 @@
 from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, \
-    JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance, SVEEntrance
+    JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance, SVEEntrance, AlectoEntrance
 from ..strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, \
-    AlecRegion, YobaRegion, JunaRegion, MagicRegion, AyeishaRegion, RileyRegion, SVERegion
+    AlecRegion, YobaRegion, JunaRegion, MagicRegion, AyeishaRegion, RileyRegion, SVERegion, AlectoRegion
 from ..region_classes import RegionData, ConnectionData, ModificationFlag, RandomizationFlag, ModRegionData
 from .mod_data import ModNames
 
@@ -268,6 +268,15 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.sprite_spring_to_cave,  SVERegion.sprite_spring_cave, flag=RandomizationFlag.BUILDINGS)
 ]
 
+alecto_regions = [
+    RegionData(Region.witch_hut, [AlectoEntrance.witch_hut_to_witch_attic]),
+    RegionData(AlectoRegion.witch_attic)
+]
+
+alecto_entrances = [
+    ConnectionData(AlectoEntrance.witch_hut_to_witch_attic, AlectoRegion.witch_attic, flag=RandomizationFlag.BUILDINGS)
+]
+
 vanilla_connections_to_remove_by_mod = {
     ModNames.sve: [ConnectionData(Entrance.mountain_to_the_mines, Region.mines,
                    flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
@@ -287,4 +296,5 @@ ModDataList = {
     ModNames.ayeisha: ModRegionData(ModNames.ayeisha, ayeisha_regions, ayeisha_entrances),
     ModNames.riley: ModRegionData(ModNames.riley, riley_regions, riley_entrances),
     ModNames.sve: ModRegionData(ModNames.sve, stardew_valley_expanded_regions, mandatory_sve_connections),
+    ModNames.alecto: ModRegionData(ModNames.alecto, alecto_regions, alecto_entrances),
 }

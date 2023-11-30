@@ -30,3 +30,8 @@ class SVESeed:
     void_seed = "Void Seed"
     shrub_seed = "Shrub Seed"
     ancient_ferns_seed = "Ancient Ferns Seed"
+
+
+class DistantLandsSeed:
+    void_mint = "Void Mint Seeds"
+    vile_ancient_fruit = "Vile Ancient Fruit Seeds"

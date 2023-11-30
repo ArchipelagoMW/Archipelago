@@ -128,5 +128,9 @@ class SVEFish:
     dulse_seaweed = "Dulse Seaweed"
 
 
-
+class DistantLandsFish:
+    void_minnow = "Void Minnow"
+    swamp_leech = "Swamp Leech"
+    purple_algae = "Purple Algae"
+    giant_horsehoe_crab = "Giant Horsehoe Crab"
 

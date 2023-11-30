@@ -55,3 +55,7 @@ class SVEForage:
     smelly_rafflesia = "Smelly Rafflesia"
     thistle = "Thistle"
 
+
+class DistantLandsForageable:
+    brown_amanita = "Brown Amanita"
+    swamp_herb = "Swamp Herb"

@@ -325,4 +325,6 @@ class SVEEntrance:
     sprite_spring_to_cave = "Sprite Spring to Sprite Spring Cave"
 
 
+class AlectoEntrance:
+    witch_hut_to_witch_attic = "Witch's Hut to Witch's Attic"
 

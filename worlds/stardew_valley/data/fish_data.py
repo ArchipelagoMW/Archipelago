@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List, Tuple, Union, Optional, Set
 
 from . import season_data as season
-from ..strings.fish_names import Fish, SVEFish
+from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
 from ..strings.region_names import Region, SVERegion
 from ..mods.mod_data import ModNames
 
@@ -156,6 +156,10 @@ void_eel = create_fish(SVEFish.void_eel, witch_swamp, season.all_seasons, 100, m
 water_grub = create_fish(SVEFish.water_grub, mutant_bug_lair, season.all_seasons, 60, mod_name=ModNames.sve)
 sea_sponge = create_fish(SVEFish.sea_sponge, ginger_island_ocean, season.all_seasons, 40, mod_name=ModNames.sve)
 dulse_seaweed = create_fish(SVEFish.dulse_seaweed, vineyard, season.all_seasons, 50, mod_name=ModNames.sve)
+
+void_minnow = create_fish(DistantLandsFish.void_minnow, witch_swamp, season.all_seasons, 15, mod_name=ModNames.distant_lands)
+swamp_leech = create_fish(DistantLandsFish.swamp_leech, witch_swamp, season.all_seasons, 15, mod_name=ModNames.distant_lands)
+giant_horsehoe_crab = create_fish(DistantLandsFish.giant_horsehoe_crab, witch_swamp, season.all_seasons, 90, mod_name=ModNames.distant_lands)
 
 
 clam = create_fish("Clam", ocean, season.all_seasons, -1)

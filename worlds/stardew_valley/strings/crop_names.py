@@ -73,5 +73,10 @@ class SVEVegetable:
     ancient_fiber = "Ancient Fiber"
 
 
+class DistantLandsCrop:
+    void_mint = "Void Mint Leaves"
+    vile_ancient_fruit = "Vile Ancient Fruit"
+
+
 all_vegetables = tuple(all_vegetables)
 all_fruits = tuple(all_fruits)

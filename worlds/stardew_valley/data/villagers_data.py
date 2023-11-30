@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List, Tuple, Optional, Dict, Callable, Set
 
 from ..strings.food_names import Beverage
-from ..strings.region_names import Region, SVERegion
+from ..strings.region_names import Region, SVERegion, AlectoRegion
 from ..mods.mod_data import ModNames
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
@@ -52,6 +52,10 @@ museum = (Region.museum,)
 jojamart = (Region.jojamart,)
 railroad = (Region.railroad,)
 junimo = (SVERegion.junimo_woods,)
+
+# Witch Swamp Overhaul Location
+witch_swamp = (Region.witch_swamp,)
+witch_attic = (AlectoRegion.witch_attic,)
 
 golden_pumpkin = ("Golden Pumpkin",)
 # magic_rock_candy = ("Magic Rock Candy",)
@@ -417,6 +421,8 @@ shiko = villager(ModNPC.shiko, True, town, Season.winter, universal_loves + shik
 wellwick = villager(ModNPC.wellwick, True, forest, Season.winter, universal_loves + wellwick_loves, True, ModNames.shiko)
 yoba = villager(ModNPC.yoba, False, secret_woods, Season.spring, universal_loves + yoba_loves, False, ModNames.yoba)
 riley = villager(ModNPC.riley, True, town, Season.spring, universal_loves, True, ModNames.riley)
+zic = villager(ModNPC.goblin, False, witch_swamp, Season.fall, void_mayonnaise, False, ModNames.distant_lands)
+alecto = villager(ModNPC.alecto, False, witch_attic, Season.fall, universal_loves, False, ModNames.alecto)
 
 # SVE Villagers
 claire = villager(ModNPC.claire, True, town + jojamart, Season.fall, universal_loves + claire_loves, True, ModNames.sve)

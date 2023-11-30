@@ -271,3 +271,6 @@ class SVERegion:
     first_slash_spare_room = "First Slash Spare Room"
     sprite_spring_cave = "Sprite Spring Cave"
 
+
+class AlectoRegion:
+    witch_attic = "Witch's Attic"

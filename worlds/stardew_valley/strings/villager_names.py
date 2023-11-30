@@ -61,3 +61,5 @@ class ModNPC:
     morris = "Morris"
     scarlett = "Scarlett"
     susan = "Susan"
+    alecto = "Alecto"
+    goblin = "Goblin"

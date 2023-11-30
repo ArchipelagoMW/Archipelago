@@ -173,5 +173,6 @@ class ModFloor:
 
 class ModConsumable:
     volcano_totem = "Dwarf Gadget: Infinite Volcano Simulation"
+    ginger_tincture = "Ginger Tincture"
 
 

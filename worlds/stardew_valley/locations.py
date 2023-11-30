@@ -10,8 +10,10 @@ from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, 
 from .data.fish_data import legendary_fish, special_fish, get_fish_for_mods
 from .data.museum_data import all_museum_items
 from .data.villagers_data import get_villagers_for_mods
+from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, Friendsanity, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
 from .strings.goal_names import Goal
+from .strings.quest_names import ModQuest
 from .strings.villager_names import NPC, ModNPC
 from .strings.region_names import Region
 
@@ -311,6 +313,11 @@ def extend_walnut_purchase_locations(randomized_locations: List[LocationData], o
 
 def extend_mandatory_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
     mandatory_locations = [location for location in locations_by_tag[LocationTags.MANDATORY]]
+    if ModNames.distant_lands in options.mods:
+        if ModNames.alecto in options.mods:
+            mandatory_locations.append(location_table[ModQuest.WitchOrder])
+        else:
+            mandatory_locations.append(location_table[ModQuest.CorruptedCropsTask])
     filtered_mandatory_locations = filter_disabled_locations(options, mandatory_locations)
     randomized_locations.extend(filtered_mandatory_locations)
 

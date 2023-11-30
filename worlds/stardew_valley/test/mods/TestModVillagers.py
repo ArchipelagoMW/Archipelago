@@ -79,6 +79,8 @@ class TestGetVillagersForMods(unittest.TestCase):
         self.assertNotIn(ModNPC.morris, villager_names)
         self.assertNotIn(ModNPC.scarlett, villager_names)
         self.assertNotIn(ModNPC.susan, villager_names)
+        self.assertNotIn(ModNPC.goblin, villager_names)
+        self.assertNotIn(ModNPC.alecto, villager_names)
 
     def test_sve_has_sve_villagers(self):
         villagers = get_villagers_for_mods(sve)
@@ -114,6 +116,8 @@ class TestGetVillagersForMods(unittest.TestCase):
         self.assertNotIn(ModNPC.shiko, villager_names)
         self.assertNotIn(ModNPC.wellwick, villager_names)
         self.assertNotIn(ModNPC.yoba, villager_names)
+        self.assertNotIn(ModNPC.goblin, villager_names)
+        self.assertNotIn(ModNPC.alecto, villager_names)
 
     def test_no_mods_wizard_is_not_bachelor(self):
         villagers = get_villagers_for_mods(no_mods)

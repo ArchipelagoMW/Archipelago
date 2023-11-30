@@ -7,6 +7,7 @@ from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
 from ...logic.crafting_logic import CraftingLogicMixin
 from ...logic.crop_logic import CropLogicMixin
+from ...logic.fishing_logic import FishingLogicMixin
 from ...logic.has_logic import HasLogicMixin
 from ...logic.money_logic import MoneyLogicMixin
 from ...logic.museum_logic import MuseumLogicMixin
@@ -15,17 +16,19 @@ from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
-from ...stardew_rule import StardewRule
+from ...options import Cropsanity
+from ...stardew_rule import StardewRule, True_
 from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
-from ...strings.crop_names import SVEVegetable, SVEFruit
+from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop
+from ...strings.fish_names import DistantLandsFish
 from ...strings.food_names import SVEMeal, SVEBeverage
-from ...strings.forageable_names import SVEForage
+from ...strings.forageable_names import SVEForage, DistantLandsForageable
 from ...strings.gift_names import SVEGift
 from ...strings.metal_names import all_fossils, all_artifacts
 from ...strings.monster_drop_names import ModLoot
 from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
-from ...strings.seed_names import SVESeed
+from ...strings.seed_names import SVESeed, DistantLandsSeed
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.villager_names import ModNPC
 
@@ -39,8 +42,8 @@ class ModItemLogicMixin(BaseLogicMixin):
         self.item = ModItemLogic(*args, **kwargs)
 
 
-class ModItemLogic(BaseLogic[Union[CombatLogicMixin, ReceivedLogicMixin, CropLogicMixin, CookingLogicMixin, HasLogicMixin, MoneyLogicMixin, RegionLogicMixin,
-SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, ToolLogicMixin, CraftingLogicMixin]]):
+class ModItemLogic(BaseLogic[Union[CombatLogicMixin, ReceivedLogicMixin, CropLogicMixin, CookingLogicMixin, FishingLogicMixin, HasLogicMixin, MoneyLogicMixin,
+RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, ToolLogicMixin, CraftingLogicMixin]]):
 
     def get_modded_item_rules(self) -> Dict[str, StardewRule]:
         items = dict()
@@ -48,6 +51,8 @@ SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, ToolLogicMixin, Craf
             items.update(self.get_sve_item_rules())
         if ModNames.archaeology in self.options.mods:
             items.update(self.get_archaeology_item_rules())
+        if ModNames.distant_lands in self.options.mods:
+            items.update(self.get_distant_lands_item_rules())
         return items
 
     def get_sve_item_rules(self):
@@ -117,3 +122,22 @@ SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, ToolLogicMixin, Craf
                 else:
                     archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
         return archaeology_item_rules
+
+    def get_distant_lands_item_rules(self):
+        return{
+            DistantLandsForageable.swamp_herb: self.logic.region.can_reach(Region.witch_swamp),
+            DistantLandsForageable.brown_amanita: self.logic.region.can_reach(Region.witch_swamp),
+            DistantLandsFish.purple_algae: self.logic.fishing.can_fish_at(Region.witch_swamp),
+            DistantLandsSeed.vile_ancient_fruit: self.logic.money.can_spend_at(Region.oasis, 50) & self.pseudo_cropsanity_check(DistantLandsSeed.vile_ancient_fruit),
+            DistantLandsSeed.void_mint: self.logic.money.can_spend_at(Region.oasis, 80) & self.pseudo_cropsanity_check(DistantLandsSeed.void_mint),
+            DistantLandsCrop.void_mint: self.logic.has(DistantLandsSeed.void_mint),
+            DistantLandsCrop.vile_ancient_fruit: self.logic.has(DistantLandsSeed.vile_ancient_fruit)
+        }
+
+    # Items that don't behave enough like a crop but enough to warrant a portion of the cropsanity logic.
+    def pseudo_cropsanity_check(self, seed_name: str):
+        if self.options.cropsanity == Cropsanity.option_disabled:
+            item_rule = True_()
+        else:
+            item_rule = self.logic.received(seed_name)
+        return item_rule
