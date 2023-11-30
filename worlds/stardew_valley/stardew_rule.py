@@ -261,10 +261,9 @@ class AggregatingStardewRule(StardewRule, ABC):
 
         # Evaluating what has already been simplified.
         # The assumption is that the rules that used to evaluate to complement might complement again, so we can leave early.
-        elif self._simplified_rules:
-            for rule in self._simplified_rules:
-                if rule(state) is self.complement.value:
-                    return self, self.complement.value
+        for rule in self._simplified_rules:
+            if rule(state) is self.complement.value:
+                return self, self.complement.value
 
         # If the iterator is None, it means we have not start simplifying.
         # Otherwise, we will continue simplification where we left.
@@ -272,6 +271,7 @@ class AggregatingStardewRule(StardewRule, ABC):
             self.other_rules = frozenset(self.other_rules)
             if self.complement in self.other_rules:
                 self._simplified = True
+                self.combinable_rules = frozendict()
                 self.other_rules = (self.complement,)
                 return self.complement, self.complement.value
 
@@ -290,6 +290,7 @@ class AggregatingStardewRule(StardewRule, ABC):
             # TODO need to confirm how often it happens, but we could skip evaluating combinables if the rule has resolved to a complement.
             if simplified is self.complement:
                 self._simplified = True
+                self.combinable_rules = frozendict()
                 self.other_rules = (self.complement,)
                 return self.complement, self.complement.value
 
