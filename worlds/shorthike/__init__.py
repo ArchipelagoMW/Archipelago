@@ -86,7 +86,21 @@ class ShortHikeWorld(World):
         menu_region.connect(main_region)
 
         if self.options.goal == 0:
+            # Nap
             self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
+        elif self.options.goal == 1:
+            # Photo - TODO
+            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
+        elif self.options.goal == 2:
+            # Races
+            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
+        elif self.options.goal == 3:
+            # Help Everyone - TODO
+            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
+        elif self.options.goal == 4:
+            # Fishmonger
+            self.multiworld.completion_condition[self.player] = lambda state: (get_feather_state(self, 6, 8, 7, state)
+                and state.has("Fishing Rod", self.player) and state.has("Fishing Journal", self.player))
 
     def set_rules(self):
         create_rules(self, location_table)

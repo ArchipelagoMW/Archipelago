@@ -3,9 +3,17 @@ from Options import Choice, PerGameCommonOptions, Range, Toggle, DefaultOnToggle
 
 class Goal(Choice):
     """Choose the end goal.
-    Nap: Complete the climb to the top of Hawk Peak and take a nap"""
+    Nap: Complete the climb to the top of Hawk Peak and take a nap
+    Photo: Get your picture taken at the top of Hawk Peak
+    Races: Complete all three races with Avery
+    Help Everyone: Travel around Hawk Peak and help every character with their troubles
+    Fishmonger: Catch one of every fish from around Hawk Peak"""
     display_name = "Goal"
     option_nap = 0
+    option_photo = 1
+    option_races = 2
+    option_help_everyone = 3
+    option_fishmonger = 4
     default = 0
 
 class ShowGoldenChests(DefaultOnToggle):
