@@ -521,8 +521,7 @@ _vanilla_items = flatten([
     DS3ItemData("Black Iron Greatshield",              0x0150EA00, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Wolf Knight's Greatshield",           0x01511110, DS3ItemCategory.SHIELD,
                 inject = True), # Covenant reward
-    DS3ItemData("Twin Dragon Greatshield",             0x01513820, DS3ItemCategory.SHIELD_INFUSIBLE,
-                inject = True), # Covenant reward
+    DS3ItemData("Twin Dragon Greatshield",             0x01513820, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Greatshield of Glory",                0x01515F30, DS3ItemCategory.SHIELD),
     DS3ItemData("Curse Ward Greatshield",              0x01518640, DS3ItemCategory.SHIELD),
     DS3ItemData("Bonewheel Shield",                    0x0151AD50, DS3ItemCategory.SHIELD_INFUSIBLE),
