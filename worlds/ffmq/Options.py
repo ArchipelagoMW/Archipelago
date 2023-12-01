@@ -1,4 +1,4 @@
-from Options import Choice, FreeText, Toggle
+from Options import Choice, FreeText, Toggle, Range
 
 
 class Logic(Choice):
@@ -272,6 +272,49 @@ class CompanionSpellbookType(Choice):
     display_name = "Companion Spellbook Type"
 
 
+class StartingCompanion(Choice):
+    """Set a companion to start with.
+    Random Companion: Randomly select one companion.
+    Random Plus None: Randomly select a companion, with the possibility of none selected."""
+    display_name = "Starting Companion"
+    default = 0
+    option_none = 0
+    option_kaeli = 1
+    option_tristam = 2
+    option_phoebe = 3
+    option_reuben = 4
+    option_random_companion = 5
+    option_random_plus_none = 6
+
+
+class AvailableCompanions(Range):
+    """Select randomly which companions will join your party. Unavailable companions can still be reached to get their items and complete their quests if needed.
+    Note: If a Starting Companion is selected, it will always be available, regardless of this setting."""
+    display_name = "Available Companions"
+    default = 4
+    range_start = 0
+    range_end = 4
+
+
+class CompanionsLocations(Choice):
+    """Set the primary location of companions. Their secondary location is always the same.
+    Standard: Companions will be at the same locations as in the original game.
+    Shuffled: Companions' locations are shuffled amongst themselves.
+    Shuffled Extended: Add all the Temples, as well as Phoebe's House and the Rope Bridge as possible locations."""
+    display_name = "Companions' Locations"
+    default = 0
+    option_standard = 0
+    option_shuffled = 1
+    option_shuffled_extended = 2
+
+
+class KaelisMomFightsMinotaur(Toggle):
+    """Transfer Kaeli's requirements (Tree Wither, Elixir) and the two items she's giving to her mom.
+    Kaeli will be available to join the party right away without the Tree Wither."""
+    display_name = "Kaeli's Mom Fights Minotaur"
+    default = 0
+
+
 option_definitions = {
     "logic": Logic,
     "brown_boxes": BrownBoxes,
@@ -280,6 +323,10 @@ option_definitions = {
     "starting_weapon": StartingWeapon,
     "progressive_gear": ProgressiveGear,
     "leveling_curve": LevelingCurve,
+    "starting_companion": StartingCompanion,
+    "available_companions": AvailableCompanions,
+    "companions_locations": CompanionsLocations,
+    "kaelis_mom_fight_minotaur": KaelisMomFightsMinotaur,
     "companion_leveling_type": CompanionLevelingType,
     "companion_spellbook_type": CompanionSpellbookType,
     "enemies_density": EnemiesDensity,
