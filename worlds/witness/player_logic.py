@@ -353,7 +353,7 @@ class WitnessPlayerLogic:
 
         if not world.options.shuffle_vault_boxes:
             adjustment_linesets_in_order.append(get_vault_exclusion_list())
-            if not victory == 1:
+            if not victory == "challenge":
                 adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
 
         # Victory Condition
