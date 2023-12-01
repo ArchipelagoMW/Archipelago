@@ -114,7 +114,7 @@ class ShortHikeWorld(World):
                 locations[self.location_name_to_game_id[loc.name]] = data
 
         settings = {
-            "goal": options.goal,
+            "goal": int(options.goal),
             "showGoldenChests": bool(options.show_golden_chests),
             "skipCutscenes": bool(options.skip_cutscenes),
         }
