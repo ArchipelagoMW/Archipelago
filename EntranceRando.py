@@ -204,7 +204,7 @@ class ERPlacementState:
         self.placements.append(source_exit)
         self.pairings.append((source_exit.name, target_entrance.name))
 
-    def connect(self, source_exit: Entrance, target_entrance: Entrance) -> Iterable[Entrance]:
+    def connect(self, source_exit: Entrance, target_entrance: Entrance) -> Union[Tuple[Entrance], Tuple[Entrance, Entrance]]:
         """
         Connects a source exit to a target entrance in the graph, accounting for coupling
 
@@ -239,8 +239,8 @@ class ERPlacementState:
                 self.placeable_exits.remove(reverse_exit)
             except ValueError:
                 pass
-            return [target_entrance, reverse_entrance]
-        return [target_entrance]
+            return target_entrance, reverse_entrance
+        return target_entrance,
 
 
 def randomize_entrances(
