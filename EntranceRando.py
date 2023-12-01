@@ -287,7 +287,17 @@ def randomize_entrances(
     er_state = ERPlacementState(world, coupled)
     entrance_lookup = EntranceLookup(world.random)
 
-    def find_pairing(dead_end: bool, require_new_regions: bool) -> Optional[Tuple[Entrance, Entrance]]:
+    def do_placement(source_exit: Entrance, target_entrance: Entrance):
+        removed_entrances = er_state.connect(source_exit, target_entrance)
+        # remove the paired items from consideration
+        er_state.placeable_exits.remove(source_exit)
+        for entrance in removed_entrances:
+            entrance_lookup.remove(entrance)
+        # place and propagate
+        er_state.place(target_entrance)
+        er_state.sweep_pending_exits()
+
+    def find_pairing(dead_end: bool, require_new_regions: bool) -> bool:
         world.random.shuffle(er_state.placeable_exits)
         for source_exit in er_state.placeable_exits:
             target_groups = get_target_groups(source_exit.er_group)
@@ -298,10 +308,10 @@ def randomize_entrances(
             for target_entrance in entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
                 # TODO - requiring new regions is a proxy for requiring new entrances to be unlocked, which is
                 #        not quite full fidelity so we may need to revisit this in the future
-                region_requirement_satisfied = (not require_new_regions
-                                                or target_entrance.connected_region not in er_state.placed_regions)
-                if region_requirement_satisfied and source_exit.can_connect_to(target_entrance, er_state):
-                    return source_exit, target_entrance
+                if ((not require_new_regions or target_entrance.connected_region not in er_state.placed_regions)
+                        and source_exit.can_connect_to(target_entrance, er_state)):
+                    do_placement(source_exit, target_entrance)
+                    return True
         else:
             # no source exits had any valid target so this stage is deadlocked. swap may be implemented if early
             # deadlocking is a frequent issue.
@@ -312,21 +322,11 @@ def randomize_entrances(
             # additional unplaced entrances into those regions)
             if require_new_regions:
                 if all(e.connected_region in er_state.placed_regions for e in lookup):
-                    return None
+                    return False
 
             raise RuntimeError(f"None of the available exits are valid targets for the available entrances.\n"
                                f"Available entrances: {lookup}\n"
                                f"Available exits: {er_state.placeable_exits}")
-
-    def do_placement(source_exit: Entrance, target_entrance: Entrance):
-        removed_entrances = er_state.connect(source_exit, target_entrance)
-        # remove the paired items from consideration
-        er_state.placeable_exits.remove(source_exit)
-        for entrance in removed_entrances:
-            entrance_lookup.remove(entrance)
-        # place and propagate
-        er_state.place(target_entrance)
-        er_state.sweep_pending_exits()
 
     for region in regions:
         for entrance in region.entrances:
@@ -338,25 +338,19 @@ def randomize_entrances(
 
     # stage 1 - try to place all the non-dead-end entrances
     while entrance_lookup.others:
-        pairing = find_pairing(False, True)
-        if not pairing:
+        if not find_pairing(False, True):
             break
-        do_placement(*pairing)
     # stage 2 - try to place all the dead-end entrances
     while entrance_lookup.dead_ends:
-        pairing = find_pairing(True, True)
-        if not pairing:
+        if not find_pairing(True, True):
             break
-        do_placement(*pairing)
     # TODO - stages 3 and 4 should ideally run "together"; i.e. without respect to dead-endedness
     #        as we are just trying to tie off loose ends rather than get you somewhere new
     # stage 3 - connect any dangling entrances that remain
     while entrance_lookup.others:
-        pairing = find_pairing(False, False)
-        do_placement(*pairing)
+        find_pairing(False, False)
     # stage 4 - last chance for dead ends
     while entrance_lookup.dead_ends:
-        pairing = find_pairing(True, False)
-        do_placement(*pairing)
+        find_pairing(True, False)
 
     return er_state
