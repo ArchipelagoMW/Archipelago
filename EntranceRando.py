@@ -216,23 +216,23 @@ class ERPlacementState:
         self._connect_one_way(source_exit, target_entrance)
         # if we're doing coupled randomization place the reverse transition as well.
         if self.coupled and source_exit.er_type == Entrance.EntranceType.TWO_WAY:
-            # TODO - better exceptions here
+            # TODO - better exceptions here - maybe a custom Error class?
             for reverse_entrance in source_region.entrances:
                 if reverse_entrance.name == source_exit.name:
                     if reverse_entrance.parent_region:
-                        raise Exception("This is very bad")
+                        raise RuntimeError("This is very bad")
                     break
             else:
-                raise Exception(f"Two way exit {source_exit.name} had no corresponding entrance in "
-                                f"{source_exit.parent_region.name}")
+                raise RuntimeError(f"Two way exit {source_exit.name} had no corresponding entrance in "
+                                   f"{source_exit.parent_region.name}")
             for reverse_exit in target_region.exits:
                 if reverse_exit.name == target_entrance.name:
                     if reverse_exit.connected_region:
-                        raise Exception("this is very bad")
+                        raise RuntimeError("this is very bad")
                     break
             else:
-                raise Exception(f"Two way entrance {target_entrance.name} had no corresponding exit in "
-                                f"{target_region.name}")
+                raise RuntimeError(f"Two way entrance {target_entrance.name} had no corresponding exit in "
+                                   f"{target_region.name}")
             self._connect_one_way(reverse_exit, reverse_entrance)
             # the reverse exit might be in the placeable list so clear that to prevent re-randomization
             try:
@@ -313,9 +313,9 @@ def randomize_entrances(
                 if all(e.connected_region in er_state.placed_regions for e in lookup):
                     return None
 
-            raise Exception(f"None of the available entrances had valid targets.\n"
-                            f"Available exits: {er_state.placeable_exits}\n"
-                            f"Available entrances: {lookup}")
+            raise RuntimeError(f"None of the available exits are valid targets for the available entrances.\n"
+                               f"Available entrances: {lookup}\n"
+                               f"Available exits: {er_state.placeable_exits}")
 
     def do_placement(source_exit: Entrance, target_entrance: Entrance):
         removed_entrances = er_state.connect(source_exit, target_entrance)
