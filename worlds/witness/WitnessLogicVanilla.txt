@@ -1009,7 +1009,7 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Path to Challenge - 0x019A5:
 158469 - 0x009A4 (Blue Tunnel Left Third 1) - True - Shapers
 158470 - 0x018A0 (Blue Tunnel Right Third 1) - True - Shapers & Symmetry
 158471 - 0x00A72 (Blue Tunnel Left Fourth 1) - True - Shapers & Negative Shapers
-158472 - 0x32962 (First Floor Left) - True - Rotated Shapers
+158472 - 0x32962 (First Floor Left) - True - Rotated Shapers & Shapers
 158473 - 0x32966 (First Floor Grounded) - True - Stars & Black/White Squares & Stars + Same Colored Symbol
 158474 - 0x01A31 (First Floor Middle) - True - Colored Squares
 158475 - 0x00B71 (First Floor Right) - True - Colored Squares & Stars & Stars + Same Colored Symbol & Eraser
