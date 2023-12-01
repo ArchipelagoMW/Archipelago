@@ -3,7 +3,7 @@ from typing import Any, Dict
 from Options import Accessibility, ProgressionBalancing, DeathLink
 from .options import Goal, StartingMoney, ProfitMargin, BundleRandomization, BundlePrice, EntranceRandomization, SeasonRandomization, Cropsanity, \
     BackpackProgression, ToolProgression, ElevatorProgression, SkillProgression, BuildingProgression, FestivalLocations, ArcadeMachineLocations, \
-    SpecialOrderLocations, HelpWantedLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize, NumberOfMovementBuffs, NumberOfLuckBuffs, \
+    SpecialOrderLocations, QuestLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize, NumberOfMovementBuffs, NumberOfLuckBuffs, \
     ExcludeGingerIsland, TrapItems, MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier, FriendshipMultiplier, DebrisMultiplier, QuickStart, \
     Gifting
 
@@ -26,7 +26,7 @@ all_random_settings = {
     FestivalLocations.internal_name:        "random",
     ArcadeMachineLocations.internal_name:   "random",
     SpecialOrderLocations.internal_name:    "random",
-    HelpWantedLocations.internal_name:      "random",
+    QuestLocations.internal_name:           "random",
     Fishsanity.internal_name:               "random",
     Museumsanity.internal_name:             "random",
     Friendsanity.internal_name:             "random",
@@ -64,7 +64,7 @@ easy_settings = {
     FestivalLocations.internal_name:        FestivalLocations.option_easy,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_disabled,
     SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_disabled,
-    HelpWantedLocations.internal_name:      "minimum",
+    QuestLocations.internal_name:           "minimum",
     Fishsanity.internal_name:               Fishsanity.option_only_easy_fish,
     Museumsanity.internal_name:             Museumsanity.option_milestones,
     Friendsanity.internal_name:             Friendsanity.option_none,
@@ -102,7 +102,7 @@ medium_settings = {
     FestivalLocations.internal_name:        FestivalLocations.option_hard,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_victories_easy,
     SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_board_only,
-    HelpWantedLocations.internal_name:      "normal",
+    QuestLocations.internal_name:           "normal",
     Fishsanity.internal_name:               Fishsanity.option_exclude_legendaries,
     Museumsanity.internal_name:             Museumsanity.option_milestones,
     Friendsanity.internal_name:             Friendsanity.option_starting_npcs,
@@ -140,7 +140,7 @@ hard_settings = {
     FestivalLocations.internal_name:        FestivalLocations.option_hard,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_full_shuffling,
     SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_board_qi,
-    HelpWantedLocations.internal_name:      "lots",
+    QuestLocations.internal_name:           "lots",
     Fishsanity.internal_name:               Fishsanity.option_all,
     Museumsanity.internal_name:             Museumsanity.option_all,
     Friendsanity.internal_name:             Friendsanity.option_all,
@@ -178,7 +178,7 @@ nightmare_settings = {
     FestivalLocations.internal_name:        FestivalLocations.option_hard,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_full_shuffling,
     SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_board_qi,
-    HelpWantedLocations.internal_name:      "maximum",
+    QuestLocations.internal_name:           "maximum",
     Fishsanity.internal_name:               Fishsanity.option_special,
     Museumsanity.internal_name:             Museumsanity.option_all,
     Friendsanity.internal_name:             Friendsanity.option_all_with_marriage,
@@ -216,7 +216,7 @@ short_settings = {
     FestivalLocations.internal_name:        FestivalLocations.option_disabled,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_disabled,
     SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_disabled,
-    HelpWantedLocations.internal_name:      "none",
+    QuestLocations.internal_name:           "none",
     Fishsanity.internal_name:               Fishsanity.option_none,
     Museumsanity.internal_name:             Museumsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_none,
@@ -254,7 +254,7 @@ lowsanity_settings = {
     FestivalLocations.internal_name:        FestivalLocations.option_disabled,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_disabled,
     SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_disabled,
-    HelpWantedLocations.internal_name:      "none",
+    QuestLocations.internal_name:           "none",
     Fishsanity.internal_name:               Fishsanity.option_none,
     Museumsanity.internal_name:             Museumsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_none,
@@ -292,7 +292,7 @@ allsanity_settings = {
     FestivalLocations.internal_name:        FestivalLocations.option_hard,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_full_shuffling,
     SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_board_qi,
-    HelpWantedLocations.internal_name:      "maximum",
+    QuestLocations.internal_name:           "maximum",
     Fishsanity.internal_name:               Fishsanity.option_all,
     Museumsanity.internal_name:             Museumsanity.option_all,
     Friendsanity.internal_name:             Friendsanity.option_all,

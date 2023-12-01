@@ -49,7 +49,7 @@ class LocationTags(enum.Enum):
     COMBAT_LEVEL = enum.auto()
     MINING_LEVEL = enum.auto()
     BUILDING_BLUEPRINT = enum.auto()
-    QUEST = enum.auto()
+    STORY_QUEST = enum.auto()
     ARCADE_MACHINE = enum.auto()
     ARCADE_MACHINE_VICTORY = enum.auto()
     JOTPK = enum.auto()
@@ -176,8 +176,15 @@ def extend_cropsanity_locations(randomized_locations: List[LocationData], option
     randomized_locations.extend(cropsanity_locations)
 
 
-def extend_help_wanted_quests(randomized_locations: List[LocationData], desired_number_of_quests: int):
-    for i in range(0, desired_number_of_quests):
+def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.quest_locations < 0:
+        return
+
+    story_quest_locations = locations_by_tag[LocationTags.CROPSANITY]
+    story_quest_locations = filter_ginger_island(options, story_quest_locations)
+    randomized_locations.extend(story_quest_locations)
+
+    for i in range(0, options.quest_locations.value):
         batch = i // 7
         index_this_batch = i % 7
         if index_this_batch < 4:
@@ -461,7 +468,6 @@ def create_locations(location_collector: StardewLocationCollector,
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE])
 
     extend_cropsanity_locations(randomized_locations, options)
-    extend_help_wanted_quests(randomized_locations, options.help_wanted_locations.value)
     extend_fishsanity_locations(randomized_locations, options, random)
     extend_museumsanity_locations(randomized_locations, options, random)
     extend_friendsanity_locations(randomized_locations, options)
@@ -475,6 +481,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_cooksanity_locations(randomized_locations, options)
     extend_chefsanity_locations(randomized_locations, options)
     extend_craftsanity_locations(randomized_locations, options)
+    extend_quests_locations(randomized_locations, options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)

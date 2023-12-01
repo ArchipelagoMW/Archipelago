@@ -225,54 +225,54 @@ id,region,name,tags,mod_name
 416,Carpenter Shop,Kitchen Blueprint,BUILDING_BLUEPRINT,
 417,Carpenter Shop,Kids Room Blueprint,BUILDING_BLUEPRINT,
 418,Carpenter Shop,Cellar Blueprint,BUILDING_BLUEPRINT,
-501,Town,Introductions,"MANDATORY,QUEST",
-502,Town,How To Win Friends,"MANDATORY,QUEST",
-503,Farm,Getting Started,"MANDATORY,QUEST",
-504,Farm,Raising Animals,"MANDATORY,QUEST",
-505,Farm,Advancement,"MANDATORY,QUEST",
-506,Museum,Archaeology,"MANDATORY,QUEST",
-507,Wizard Tower,Meet The Wizard,"MANDATORY,QUEST",
-508,The Mines - Floor 5,Forging Ahead,"MANDATORY,QUEST",
-509,The Mines - Floor 10,Smelting,"MANDATORY,QUEST",
-510,The Mines - Floor 15,Initiation,"MANDATORY,QUEST",
-511,Forest,Robin's Lost Axe,"MANDATORY,QUEST",
-512,Sam's House,Jodi's Request,"MANDATORY,QUEST",
-513,Marnie's Ranch,"Mayor's ""Shorts""","MANDATORY,QUEST",
-514,Tunnel Entrance,Blackberry Basket,"MANDATORY,QUEST",
-515,Marnie's Ranch,Marnie's Request,"MANDATORY,QUEST",
-516,Trailer,Pam Is Thirsty,"MANDATORY,QUEST",
-517,Wizard Tower,A Dark Reagent,"MANDATORY,QUEST",
-518,Marnie's Ranch,Cow's Delight,"MANDATORY,QUEST",
-519,Skull Cavern Entrance,The Skull Key,"MANDATORY,QUEST",
-520,Carpenter Shop,Crop Research,"MANDATORY,QUEST",
-521,Alex's House,Knee Therapy,"MANDATORY,QUEST",
-522,Carpenter Shop,Robin's Request,"MANDATORY,QUEST",
-523,Skull Cavern Floor 25,Qi's Challenge,"MANDATORY,QUEST",
-524,Desert,The Mysterious Qi,"MANDATORY,QUEST",
-525,Pierre's General Store,Carving Pumpkins,"MANDATORY,QUEST",
-526,Town,A Winter Mystery,"MANDATORY,QUEST",
-527,Secret Woods,Strange Note,"MANDATORY,QUEST",
-528,Skull Cavern Floor 100,Cryptic Note,"MANDATORY,QUEST",
-529,Haley's House,Fresh Fruit,"MANDATORY,QUEST",
-530,Carpenter Shop,Aquatic Research,"MANDATORY,QUEST",
-531,Sam's House,A Soldier's Star,"MANDATORY,QUEST",
-532,Mayor's Manor,Mayor's Need,"MANDATORY,QUEST",
-533,Saloon,Wanted: Lobster,"MANDATORY,QUEST",
-534,Trailer,Pam Needs Juice,"MANDATORY,QUEST",
-535,Sam's House,Fish Casserole,"MANDATORY,QUEST",
-536,Fishing,Catch A Squid,"MANDATORY,QUEST",
-537,Saloon,Fish Stew,"MANDATORY,QUEST",
-538,Pierre's General Store,Pierre's Notice,"MANDATORY,QUEST",
-539,Clint's Blacksmith,Clint's Attempt,"MANDATORY,QUEST",
-540,Haley's House,A Favor For Clint,"MANDATORY,QUEST",
-541,Wizard Tower,Staff Of Power,"MANDATORY,QUEST",
-542,Alex's House,Granny's Gift,"MANDATORY,QUEST",
-543,Desert,Exotic Spirits,"MANDATORY,QUEST",
-544,Fishing,Catch a Lingcod,"MANDATORY,QUEST",
-545,Island West,The Pirate's Wife,"GINGER_ISLAND,MANDATORY,QUEST",
-546,Mutant Bug Lair,Dark Talisman,"MANDATORY,QUEST",
-547,Witch's Swamp,Goblin Problem,"MANDATORY,QUEST",
-548,Witch's Hut,Magic Ink,"MANDATORY,QUEST",
+501,Town,Introductions,"STORY_QUEST",
+502,Town,How To Win Friends,"STORY_QUEST",
+503,Farm,Getting Started,"STORY_QUEST",
+504,Farm,Raising Animals,"STORY_QUEST",
+505,Farm,Advancement,"STORY_QUEST",
+506,Museum,Archaeology,"STORY_QUEST",
+507,Wizard Tower,Meet The Wizard,"STORY_QUEST",
+508,The Mines - Floor 5,Forging Ahead,"STORY_QUEST",
+509,The Mines - Floor 10,Smelting,"STORY_QUEST",
+510,The Mines - Floor 15,Initiation,"STORY_QUEST",
+511,Forest,Robin's Lost Axe,"STORY_QUEST",
+512,Sam's House,Jodi's Request,"STORY_QUEST",
+513,Marnie's Ranch,"Mayor's ""Shorts""","STORY_QUEST",
+514,Tunnel Entrance,Blackberry Basket,"STORY_QUEST",
+515,Marnie's Ranch,Marnie's Request,"STORY_QUEST",
+516,Trailer,Pam Is Thirsty,"STORY_QUEST",
+517,Wizard Tower,A Dark Reagent,"STORY_QUEST",
+518,Marnie's Ranch,Cow's Delight,"STORY_QUEST",
+519,Skull Cavern Entrance,The Skull Key,"STORY_QUEST",
+520,Carpenter Shop,Crop Research,"STORY_QUEST",
+521,Alex's House,Knee Therapy,"STORY_QUEST",
+522,Carpenter Shop,Robin's Request,"STORY_QUEST",
+523,Skull Cavern Floor 25,Qi's Challenge,"STORY_QUEST",
+524,Desert,The Mysterious Qi,"STORY_QUEST",
+525,Pierre's General Store,Carving Pumpkins,"STORY_QUEST",
+526,Town,A Winter Mystery,"STORY_QUEST",
+527,Secret Woods,Strange Note,"STORY_QUEST",
+528,Skull Cavern Floor 100,Cryptic Note,"STORY_QUEST",
+529,Haley's House,Fresh Fruit,"STORY_QUEST",
+530,Carpenter Shop,Aquatic Research,"STORY_QUEST",
+531,Sam's House,A Soldier's Star,"STORY_QUEST",
+532,Mayor's Manor,Mayor's Need,"STORY_QUEST",
+533,Saloon,Wanted: Lobster,"STORY_QUEST",
+534,Trailer,Pam Needs Juice,"STORY_QUEST",
+535,Sam's House,Fish Casserole,"STORY_QUEST",
+536,Fishing,Catch A Squid,"STORY_QUEST",
+537,Saloon,Fish Stew,"STORY_QUEST",
+538,Pierre's General Store,Pierre's Notice,"STORY_QUEST",
+539,Clint's Blacksmith,Clint's Attempt,"STORY_QUEST",
+540,Haley's House,A Favor For Clint,"STORY_QUEST",
+541,Wizard Tower,Staff Of Power,"STORY_QUEST",
+542,Alex's House,Granny's Gift,"STORY_QUEST",
+543,Desert,Exotic Spirits,"STORY_QUEST",
+544,Fishing,Catch a Lingcod,"STORY_QUEST",
+545,Island West,The Pirate's Wife,"GINGER_ISLAND,STORY_QUEST",
+546,Mutant Bug Lair,Dark Talisman,"STORY_QUEST",
+547,Witch's Swamp,Goblin Problem,"STORY_QUEST",
+548,Witch's Hut,Magic Ink,"STORY_QUEST",
 601,JotPK World 1,JotPK: Boots 1,"ARCADE_MACHINE,JOTPK",
 602,JotPK World 1,JotPK: Boots 2,"ARCADE_MACHINE,JOTPK",
 603,JotPK World 1,JotPK: Gun 1,"ARCADE_MACHINE,JOTPK",
@@ -2522,18 +2522,18 @@ id,region,name,tags,mod_name
 7454,Isaac Shop,Hero Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7455,Alesia Shop,Armor Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7456,Witch's Swamp,Ginger Tincture Recipe,"CRAFTSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
-7501,Mountain,Missing Envelope,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
-7502,Forest,Lost Emerald Ring,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
-7503,Forest,Mr.Ginger's request,"MANDATORY,QUEST",Mister Ginger (cat npc)
-7504,Forest,Juna's Drink Request,"MANDATORY,QUEST",Juna - Roommate NPC
-7505,Forest,Juna's BFF Request,"MANDATORY,QUEST",Juna - Roommate NPC
+7501,Mountain,Missing Envelope,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7502,Forest,Lost Emerald Ring,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7503,Forest,Mr.Ginger's request,"STORY_QUEST",Mister Ginger (cat npc)
+7504,Forest,Juna's Drink Request,"STORY_QUEST",Juna - Roommate NPC
+7505,Forest,Juna's BFF Request,"STORY_QUEST",Juna - Roommate NPC
 7506,Forest,Juna's Monster Mash,SPECIAL_ORDER_BOARD,Juna - Roommate NPC
-7507,Adventurer's Guild,Marlon's Boat,"MANDATORY,QUEST,GINGER_ISLAND",Stardew Valley Expanded
-7508,Railroad,The Railroad Boulder,"MANDATORY,QUEST",Stardew Valley Expanded
-7509,Grandpa's Shed Interior,Grandpa's Shed,"MANDATORY,QUEST",Stardew Valley Expanded
-7510,Aurora Vineyard,Aurora Vineyard,"MANDATORY,QUEST",Stardew Valley Expanded
-7511,Adventurer's Guild,Monster Crops,"MANDATORY,QUEST,GINGER_ISLAND",Stardew Valley Expanded
-7512,Sewer,Void Soul,"MANDATORY,QUEST",Stardew Valley Expanded
+7507,Adventurer's Guild,Marlon's Boat,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
+7508,Railroad,The Railroad Boulder,"STORY_QUEST",Stardew Valley Expanded
+7509,Grandpa's Shed Interior,Grandpa's Shed,"STORY_QUEST",Stardew Valley Expanded
+7510,Aurora Vineyard,Aurora Vineyard,"STORY_QUEST",Stardew Valley Expanded
+7511,Adventurer's Guild,Monster Crops,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
+7512,Sewer,Void Soul,"STORY_QUEST",Stardew Valley Expanded
 7513,Fairhaven Farm,Andy's Cellar,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 7514,Adventurer's Guild,A Mysterious Venture,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 7515,Jenkins' Residence,An Elegant Reception,SPECIAL_ORDER_BOARD,Stardew Valley Expanded

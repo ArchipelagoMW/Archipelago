@@ -450,7 +450,9 @@ def set_cropsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
 
 
 def set_story_quests_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    for quest in locations.locations_by_tag[LocationTags.QUEST]:
+    if world_options.quest_locations < 0:
+        return
+    for quest in locations.locations_by_tag[LocationTags.STORY_QUEST]:
         if quest.name in all_location_names and (quest.mod_name is None or quest.mod_name in world_options.mods):
             MultiWorldRules.set_rule(multiworld.get_location(quest.name, player),
                                      logic.registry.quest_rules[quest.name])
@@ -485,7 +487,9 @@ slay_monsters = "Slay Monsters"
 
 
 def set_help_wanted_quests_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    help_wanted_number = world_options.help_wanted_locations.value
+    help_wanted_number = world_options.quest_locations.value
+    if help_wanted_number < 0:
+        return
     for i in range(0, help_wanted_number):
         set_number = i // 7
         month_rule = logic.time.has_lived_months(set_number)
