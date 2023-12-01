@@ -9,7 +9,7 @@ from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, 
 from Options import PerGameCommonOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import add_rule, set_rule
+from worlds.generic.Rules import add_rule, CollectionRule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
 from .Locations import l2ac_location_name_to_id, L2ACLocation
@@ -66,7 +66,7 @@ class L2ACWorld(World):
         "Party members": {name for name, data in l2ac_item_table.items() if data.type is ItemType.PARTY_MEMBER},
     }
     data_version: ClassVar[int] = 2
-    required_client_version: Tuple[int, int, int] = (0, 4, 2)
+    required_client_version: Tuple[int, int, int] = (0, 4, 4)
 
     # L2ACWorld specific properties
     rom_name: bytearray
@@ -117,6 +117,7 @@ class L2ACWorld(World):
                 L2ACLocation(self.player, f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", None, ancient_dungeon)
             chest_access.place_locked_item(
                 L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player))
+            chest_access.show_in_spoiler = False
             ancient_dungeon.locations.append(chest_access)
         for iris in self.item_name_groups["Iris treasures"]:
             treasure_name: str = f"Iris treasure {self.item_name_to_id[iris] - self.item_name_to_id['Iris sword'] + 1}"
@@ -153,23 +154,23 @@ class L2ACWorld(World):
             self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
-        for i in range(1, self.o.blue_chest_count):
-            if i % CHESTS_PER_SPHERE == 0:
-                set_rule(self.multiworld.get_location(f"Blue chest {i + 1}", self.player),
-                         lambda state, j=i: state.has("Progressive chest access", self.player, j // CHESTS_PER_SPHERE))
-                set_rule(self.multiworld.get_location(f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", self.player),
-                         lambda state, j=i: state.can_reach(f"Blue chest {j}", "Location", self.player))
-            else:
-                set_rule(self.multiworld.get_location(f"Blue chest {i + 1}", self.player),
-                         lambda state, j=i: state.can_reach(f"Blue chest {j}", "Location", self.player))
+        max_sphere: int = (self.o.blue_chest_count - 1) // CHESTS_PER_SPHERE + 1
+        rule_for_sphere: Dict[int, CollectionRule] = \
+            {sphere: lambda state, s=sphere: state.has("Progressive chest access", self.player, s - 1)
+             for sphere in range(2, max_sphere + 1)}
 
-        set_rule(self.multiworld.get_entrance("FinalFloorEntrance", self.player),
-                 lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
+        for i in range(CHESTS_PER_SPHERE * 2, self.o.blue_chest_count, CHESTS_PER_SPHERE):
+            set_rule(self.multiworld.get_location(f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", self.player),
+                     rule_for_sphere[i // CHESTS_PER_SPHERE])
+        for i in range(CHESTS_PER_SPHERE, self.o.blue_chest_count):
+            set_rule(self.multiworld.get_location(f"Blue chest {i + 1}", self.player),
+                     rule_for_sphere[i // CHESTS_PER_SPHERE + 1])
+
+        set_rule(self.multiworld.get_entrance("FinalFloorEntrance", self.player), rule_for_sphere[max_sphere])
         for i in range(9):
-            set_rule(self.multiworld.get_location(f"Iris treasure {i + 1}", self.player),
-                     lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
-        set_rule(self.multiworld.get_location("Boss", self.player),
-                 lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
+            set_rule(self.multiworld.get_location(f"Iris treasure {i + 1}", self.player), rule_for_sphere[max_sphere])
+        set_rule(self.multiworld.get_location("Boss", self.player), rule_for_sphere[max_sphere])
+
         if self.o.shuffle_capsule_monsters:
             add_rule(self.multiworld.get_location("Boss", self.player), lambda state: state.has("DARBI", self.player))
         if self.o.shuffle_party_members:

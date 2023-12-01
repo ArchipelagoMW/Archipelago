@@ -62,8 +62,7 @@ class MessengerWorld(World):
                                "Money Wrench",
                            ], base_offset)}
 
-    data_version = 3
-    required_client_version = (0, 4, 0)
+    required_client_version = (0, 4, 1)
 
     web = MessengerWeb()
 
@@ -148,19 +147,12 @@ class MessengerWorld(World):
             MessengerOOBRules(self).set_messenger_rules()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        shop_prices = {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()}
-        figure_prices = {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()}
-
         return {
-            "deathlink": self.options.death_link.value,
-            "goal": self.options.goal.current_key,
-            "music_box": self.options.music_box.value,
-            "required_seals": self.required_seals,
-            "mega_shards": self.options.shuffle_shards.value,
-            "logic": self.options.logic_level.current_key,
-            "shop": shop_prices,
-            "figures": figure_prices,
+            "shop": {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
+            "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
             "max_price": self.total_shards,
+            "required_seals": self.required_seals,
+            **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
 
     def get_filler_item_name(self) -> str:
@@ -184,11 +176,14 @@ class MessengerWorld(World):
             self.total_shards += count
         return MessengerItem(name, self.player, item_id, override_prog, count)
 
-    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
-        if item.advancement and "Time Shard" in item.name:
-            shard_count = int(item.name.strip("Time Shard ()"))
-            if remove:
-                shard_count = -shard_count
-            state.prog_items[self.player]["Shards"] += shard_count
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().collect(state, item)
+        if change and "Time Shard" in item.name:
+            state.prog_items[self.player]["Shards"] += int(item.name.strip("Time Shard ()"))
+        return change
 
-        return super().collect_item(state, item, remove)
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().remove(state, item)
+        if change and "Time Shard" in item.name:
+            state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
+        return change
