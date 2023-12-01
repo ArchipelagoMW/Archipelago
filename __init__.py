@@ -80,10 +80,11 @@ class WL4World(World):
         golden_diva.show_in_spoiler = False
 
     def create_items(self):
-        diamond_pieces = 18 * 4
+        difficulty = self.multiworld.difficulty[self.player].value
+        gem_pieces = 18 * 4
         cds = 16
-        full_health_items = (9, 7, 6)[self.multiworld.difficulty[self.player].value]
-        total_required_locations = diamond_pieces + cds + full_health_items
+        full_health_items = (9, 7, 6)[difficulty]
+        total_required_locations = gem_pieces + cds + full_health_items
 
         itempool = []
 
@@ -109,6 +110,16 @@ class WL4World(World):
             itempool.append(self.create_item(name))
             if name.startswith('Progressive'):
                 itempool.append(self.create_item(name))
+
+        # Remove full health items to make space for abilities
+        if required_jewels == 4:
+            if difficulty == 0:
+                full_health_items -= 8
+            else:
+                raise ValueError('Not enough locations to place abilities for '
+                                 f'{self.multiworld.player_name[self.player]}. '
+                                 'Set the "Required Jewels" setting to a lower '
+                                 'value and try again.')
 
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
