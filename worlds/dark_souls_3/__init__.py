@@ -272,7 +272,10 @@ class DarkSouls3World(World):
 
                 # Mark Red Eye Orb as missable if key locations aren't being randomized, because the
                 # Lift Chamber Key is missable by default.
-                if not self.options.enable_key_locations and location.name == "HWL: Red Eye Orb":
+                if (
+                    not self.options.enable_key_locations
+                    and location.name == "HWL: Red Eye Orb (wall tower, miniboss)"
+                ):
                     new_location.progress_type = LocationProgressType.EXCLUDED
             else:
                 # Don't allow Siegward's Storm Ruler to mark Yhorm as defeatable.
@@ -472,110 +475,226 @@ class DarkSouls3World(World):
 
         # Define the access rules to some specific locations
         if self.options.enable_key_locations:
-            self._add_location_rule("HWL: Red Eye Orb", "Lift Chamber Key")
-        self._add_location_rule("ID: Bellowing Dragoncrest Ring", "Jailbreaker's Key")
-        self._add_location_rule("ID: Covetous Gold Serpent Ring", "Old Cell Key")
-        self._add_location_rule("UG: Hornet Ring", "Small Lothric Banner")
+            self._add_location_rule("HWL: Red Eye Orb (wall tower, miniboss)",
+                                    "Lift Chamber Key")
+        self._add_location_rule("ID: Bellowing Dragoncrest Ring (drop from B1 towards pit)",
+                                "Jailbreaker's Key")
+        self._add_location_rule("ID: Covetous Gold Serpent Ring (Siegward's cell)", "Old Cell Key")
+        self._add_location_rule("UG: Hornet Ring (environs, right of main path)",
+                                "Small Lothric Banner")
         self._add_entrance_rule("Karla's Shop", "Jailer's Key Ring")
 
         # Ashes
-        self._add_location_rule(["FS: Alluring Skull", "FS: Ember (Mortician)", "FS: Grave Key"],
-                                "Mortician's Ashes")
-        self._add_location_rule(["FS: Life Ring", "FS: Hidden Blessing #2"], "Dreamchaser's Ashes")
-        self._add_location_rule("FS: Lloyd's Shield Ring", "Paladin's Ashes")
-        self._add_location_rule("FS: Ember (Grave Warden)", "Grave Warden's Ashes")
-        self._add_location_rule([
-            "FS: Karla's Pointed Hat", "FS: Karla's Coat", "FS: Karla's Gloves",
-            "FS: Karla's Trousers"
-        ], "Prisoner Chief's Ashes")
-        self._add_location_rule([
-            "FS: Xanthous Overcoat", "FS: Xanthous Gloves", "FS: Xanthous Trousers"
-        ], "Xanthous Ashes")
-        self._add_location_rule("FS: Ember (Dragon Chaser)", "Dragon Chaser's Ashes")
-        self._add_location_rule([
-            "FS: Washing Pole", "FS: Eastern Helm", "FS: Eastern Armor", "FS: Eastern Gauntlets",
-            "FS: Eastern Leggings", "FS: Wood Grain Ring",
-        ], "Easterner's Ashes")
-        self._add_location_rule([
-            "FS: Millwood Knight Helm", "FS: Millwood Knight Armor",
-            "FS: Millwood Knight Gauntlets", "FS: Millwood Knight Leggings", "FS: Refined Gem",
-        ], "Captain's Ashes")
+        ashes = {
+            "Mortician's Ashes": ["Alluring Skull", "Ember", "Grave Key"],
+            "Dreamchaser's Ashes": ["Life Ring", "Hidden Blessing"],
+            "Paladin's Ashes": ["Lloyd's Shield Ring"],
+            "Grave Warden's Ashes": ["Ember"],
+            "Prisoner Chief's Ashes": [
+                "Karla's Pointed Hat", "Karla's Coat", "Karla's Gloves", "Karla's Trousers"
+            ],
+            "Xanthous Ashes": ["Xanthous Overcoat", "Xanthous Gloves", "Xanthous Trousers"],
+            "Dragon Chaser's Ashes": ["Ember"],
+            "Easterner's Ashes": [
+                "Washing Pole", "Eastern Helm", "Eastern Armor", "Eastern Gauntlets",
+                "Eastern Leggings", "Wood Grain Ring",
+            ],
+            "Captain's Ashes": [
+                "Millwood Knight Helm", "Millwood Knight Armor", "Millwood Knight Gauntlets",
+                "Millwood Knight Leggings", "Refined Gem",
+            ]
+        }
+        for (ash, items) in ashes.items():
+            self._add_location_rule([f"FS: {item} ({ash})" for item in items], ash)
+
+        # Soul transposition
+        transpositions = [
+            (
+                "Soul of Boreal Valley Vordt", "Vordt",
+                ["Vordt's Great Hammer", "Pontiff's Left Eye"]
+            ),
+            ("Soul of Rosaria", "Rosaria", ["Bountiful Sunlight"]),
+            ("Soul of Aldrich", "Aldrich", ["Darkmoon Longbow", "Lifehunt Scythe"]),
+            (
+                "Soul of the Rotted Greatwood", "Greatwood",
+                ["Hollowslayer Greatsword", "Arstor's Spear"]
+            ),
+            ("Soul of a Crystal Sage", "Sage", ["Crystal Sage's Rapier", "Crystal Hail"]),
+            ("Soul of the Deacons of the Deep", "Deacons", ["Cleric's Candlestick", "Deep Soul"]),
+            ("Soul of a Stray Demon", "Stray Demon", ["Havel's Ring", "Boulder Heave"]),
+            (
+                "Soul of the Blood of the Wolf", "Abyss Watchers",
+                ["Farron Greatsword", "Wolf Knight's Greatsword"]
+            ),
+            ("Soul of High Lord Wolnir", "Wolnir", ["Wolnir's Holy Sword", "Black Serpent"]),
+            ("Soul of a Demon", "Fire Demon", ["Demon's Greataxe", "Demon's Fist"]),
+            (
+                "Soul of the Old Demon King", "Old Demon King",
+                ["Old King's Great Hammer", "Chaos Bed Vestiges"]
+            ),
+            (
+                "Soul of Pontiff Sulyvahn", "Pontiff",
+                ["Greatsword of Judgment", "Profaned Greatsword"]
+            ),
+            ("Soul of Yhorm the Giant", "Yhorm", ["Yhorm's Great Machete", "Yhorm's Greatshield"]),
+            ("Soul of the Dancer", "Dancer", ["Dancer's Enchanted Swords", "Soothing Sunlight"]),
+            (
+                "Soul of Dragonslayer Armour", "Dragonslayer",
+                ["Dragonslayer Greataxe", "Dragonslayer Greatshield"]
+            ),
+            (
+                "Soul of Consumed Oceiros", "Oceiros",
+                ["Moonlight Greatsword", "White Dragon Breath"]
+            ),
+            (
+                "Soul of the Twin Princes", "Princes",
+                ["Lorian's Greatsword", "Lothric's Holy Sword"]
+            ),
+            ("Soul of Champion Gundyr", "Champion", ["Gundyr's Halberd", "Prisoner's Chain"]),
+            (
+                "Soul of the Nameless King", "Nameless",
+                ["Storm Curved Sword", "Dragonslayer Swordspear", "Lightning Storm"]
+            ),
+            ("Soul of the Lords", "Cinder", ["Firelink Greatsword", "Sunlight Spear"]),
+            ("Soul of Sister Friede", "Friede", ["Friede's Great Scythe", "Rose of Ariandel"]),
+            ("Soul of the Demon Prince", "Demon Prince", ["Demon's Scar", "Seething Chaos"]),
+            ("Soul of Darkeater Midir", "Midir", ["Frayed Blade", "Old Moonlight"]),
+            ("Soul of Slave Knight Gael", "Gael", ["Gael's Greatsword", "Repeating Crossbow"]),
+        ]
+        for (soul, soul_name, items) in transpositions:
+            self._add_location_rule([
+                f"FS: {item} (Ludleth for {soul_name})" for item in items
+            ], soul)
 
         # List missable locations even though they never contain progression items so that the game
         # knows what sphere they're in. This is especially useful for item smoothing. We could add
         # rules for boss transposition items as well, but then we couldn't freely reorder boss soul
         # locations for smoothing.
 
-        self._add_location_rule("FS: Lift Chamber Key", "Pale Tongue")
-        self._add_location_rule(["AP: Twinkling Dragon Head Stone", "AP: Hawkwood's Swordgrass"],
-                                "Twinkling Dragon Torso Stone")
+        self._add_location_rule("FS: Lift Chamber Key (Leonhard)", "Pale Tongue")
+        self._add_location_rule([
+            "FK: Twinkling Dragon Head Stone (Hawkwood drop)",
+            "FS: Hawkwood's Swordgrass (Andre after gesture in AP summit)"
+        ], "Twinkling Dragon Torso Stone")
 
         # Shop unlocks
+        shop_unlocks = {
+            "Cornyx": [
+                (
+                    "Great Swamp Pyromancy Tome", "Great Swamp Tome",
+                    ["Poison Mist", "Fire Orb", "Profuse Sweat", "Bursting Fireball"]
+                ),
+                (
+                    "Carthus Pyromancy Tome", "Carthus Tome",
+                    ["Acid Surge", "Carthus Flame Arc", "Carthus Beacon"]
+                ),
+                ("Izalith Pyromancy Tome", "Izalith Tome", ["Great Chaos Fire Orb", "Chaos Storm"]),
+            ],
+            "Irina": [
+                (
+                    "Braille Divine Tome of Carim", "Tome of Carim",
+                    ["Med Heal", "Tears of Denial", "Force"]
+                ),
+                (
+                    "Braille Divine Tome of Lothric", "Tome of Lothric",
+                    ["Bountiful Light", "Magic Barrier", "Blessed Weapon"]
+                ),
+            ],
+            "Orbeck": [
+                ("Sage's Scroll", "Sage's Scroll", ["Great Farron Dart", "Farron Hail"]),
+                (
+                    "Golden Scroll", "Golden Scroll",
+                    [
+                        "Cast Light", "Repair", "Hidden Weapon", "Hidden Body",
+                        "Twisted Wall of Light"
+                    ],
+                ),
+                ("Logan's Scroll", "Logan's Scroll", ["Homing Soulmass", "Soul Spear"]),
+                (
+                    "Crystal Scroll", "Crystal Scroll",
+                    ["Homing Crystal Soulmass", "Crystal Soul Spear", "Crystal Magic Weapon"]
+                ),
+            ],
+            "Karla": [
+                ("Quelana Pyromancy Tome", "Quelana Tome", ["Firestorm", "Rapport", "Fire Whip"]),
+                (
+                    "Grave Warden Pyromancy Tome", "Grave Warden Tome",
+                    ["Black Flame", "Black Fire Orb"]
+                ),
+                ("Deep Braille Divine Tome", "Deep Braille Tome", ["Gnaw", "Deep Protection"]),
+                (
+                    "Londor Braille Divine Tome", "Londor Tome",
+                    ["Vow of Silence", "Dark Blade", "Dead Again"]
+                ),
+            ],
+        }
+        for (shop, unlocks) in shop_unlocks.items():
+            for (key, key_name, items) in unlocks:
+                self._add_location_rule(
+                    [f"FS: {item} ({shop} for {key_name})" for item in items], key)
+
         self._add_location_rule([
-            "US: Poison Mist", "US: Fire Orb", "US: Profuse Sweat", "US: Bursting Fireball"
-        ], "Great Swamp Pyromancy Tome")
-        self._add_location_rule(["US: Acid Surge", "US: Carthus Flame Arc", "US: Carthus Beacon"],
-                                "Carthus Pyromancy Tome")
-        self._add_location_rule(["US: Great Chaos Fire Orb", "US: Chaos Storm"],
-                                "Izalith Pyromancy Tome")
-        self._add_location_rule(["US: Med Heal", "US: Tears of Denial", "US: Force"],
-                                "Braille Divine Tome of Carim")
-        self._add_location_rule(["US: Bountiful Light", "US: Magic Barrier", "US: Blessed Weapon"],
-                                "Braille Divine Tome of Lothric")
-        self._add_location_rule(["RS: Great Farron Dart", "RS: Farron Hail"], "Sage's Scroll")
+            "FS: Divine Blessing (Greirat from US)",
+            "FS: Ember (Greirat from US)",
+        ], lambda state: state.can_reach("Go To Undead Settlement", "Entrance", self.player))
         self._add_location_rule([
-            "RS: Cast Light", "RS: Repair", "RS: Hidden Weapon", "RS: Hidden Body",
-            "RS: Twisted Wall of Light"
-        ], "Golden Scroll")
-        self._add_location_rule(["RS: Homing Soulmass", "RS: Soul Spear"], "Logan's Scroll")
-        self._add_location_rule([
-            "RS: Homing Crystal Soulmass", "RS: Crystal Soul Spear", "RS: Crystal Magic Weapon"
-        ], "Logan's Scroll")
-        self._add_location_rule([
-            "Greirat: Divine Blessing #1", "Greirat: Ember #2", "Greirat: Divine Blessing #2",
-            "Greirat: Hidden Blessing", "Greirat: Titanite Scale", "Greirat: Twinkling Titanite",
-            "Greirat: Ember #3"
-        ], "Loretta's Bone")
-        self._add_location_rule([
-            "Greirat: Divine Blessing #2", "Greirat: Hidden Blessing", "Greirat: Titanite Scale",
-            "Greirat: Twinkling Titanite", "Greirat: Ember #3"
-        ], "Small Doll")
-        self._add_location_rule("Greirat: Ember #3", "Grand Archives Key")
-        self._add_location_rule(["Karla: Firestorm", "Karla: Rapport", "Karla: Fire Whip"],
-                                "Quelana Pyromancy Tome")
-        self._add_location_rule(["Karla: Black Flame", "Karla: Black Fire Orb"],
-                                "Grave Warden Pyromancy Tome")
-        self._add_location_rule(["Karla: Gnaw", "Karla: Deep Protection"],
-                                "Deep Braille Divine Tome")
-        self._add_location_rule(["Karla: Vow of Silence", "Karla: Dark Blade", "Karla: Dead Again"],
-                                "Londor Braille Divine Tome")
+            "FS: Divine Blessing (Greirat from IBV)",
+            "FS: Hidden Blessing (Greirat from IBV)",
+            "FS: Titanite Scale (Greirat from IBV)",
+            "FS: Twinkling Titanite (Greirat from IBV)",
+            "FS: Ember (shop for Greirat's Ashes)"
+        ], lambda state: state.can_reach(
+            "Go To Irithyll of the Boreal Valley",
+            "Entrance",
+            self.player
+        ))
+        self._add_location_rule(
+            "FS: Ember (shop for Greirat's Ashes)",
+            lambda state: state.can_reach("Go To Grand Archives", "Entrance", self.player)
+        )
 
         # Crow items
-        self._add_location_rule("FSBT: Ring of Sacrifice", "Loretta's Bone")
-        self._add_location_rule("FSBT: Titanite Scale #1", "Avelyn")
-        self._add_location_rule("FSBT: Titanite Slab", "Coiled Sword Fragment")
-        self._add_location_rule("FSBT: Iron Leggings", "Seed of a Giant Tree")
-        self._add_location_rule("FSBT: Armor of the Sun", "Siegbräu")
-        self._add_location_rule("FSBT: Lucatiel's Mask", "Vertebra Shackle")
-        self._add_location_rule("FSBT: Lightning Gem", "Xanthous Crown")
-        self._add_location_rule("FSBT: Sunlight Shield", "Mendicant's Staff")
-        self._add_location_rule("FSBT: Titanite Scale #2", "Blacksmith Hammer")
-        self._add_location_rule("FSBT: Twinkling Titanite #3", "Large Leather Shield")
-        self._add_location_rule("FSBT: Blessed Gem", "Moaning Shield")
-        self._add_location_rule("FSBT: Hollow Gem", "Eleonora")
+        crow = {
+            "Loretta's Bone": "Ring of Sacrifice",
+            # "Avelyn": "Titanite Scale", # Missing from offline randomizer
+            "Coiled Sword Fragment": "Titanite Slab",
+            "Seed of a Giant Tree": "Iron Leggings",
+            "Siegbräu": "Armor of the Sun",
+            "Vertebra Shackle": "Lucatiel's Mask",
+            "Xanthous Crown": "Lightning Gem",
+            "Mendicant's Staff": "Sunlight Shield",
+            "Blacksmith Hammer": "Titanite Scale",
+            "Large Leather Shield": "Twinkling Titanite",
+            "Moaning Shield": "Blessed Gem",
+            "Eleonora": "Hollow Gem",
+        }
+        for (given, received) in crow.items():
+            self._add_location_rule(f"FSBT: {received} (crow for {given})", given)
 
         # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
         # Grand Archives is available, so his shop will always be available one way or another.
         self._add_entrance_rule("Greirat's Shop", "Cell Key")
 
-        for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]:
-            self._add_location_rule("AL: " + item, "Black Eye Orb")
+        self._add_location_rule([
+            f"FS: {item} (shop after killing Leonhard)"
+            for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]
+        ], "Black Eye Orb")
 
         # You could just kill NPCs for these, but it's more fun to ensure the player can do
         # their quests.
-        self._add_location_rule("FS: Lift Chamber Key", "Pale Tongue")
-        self._add_location_rule("AP: Hawkwood's Swordgrass", "Twinkling Dragon Torso Stone")
-        self._add_location_rule("ID: Prisoner Chief's Ashes", "Jailer's Key Ring")
+        self._add_location_rule("HWL: Basin of Vows (Emma)", "Small Doll")
+        self._add_location_rule(
+            "ID: Prisoner Chief's Ashes (B2 near, locked cell by stairs)",
+            "Jailer's Key Ring"
+        )
+        self._add_location_rule([
+            "US: Old Sage's Blindfold (kill Cornyx)", "US: Cornyx's Garb (kill Cornyx)",
+            "US: Cornyx's Wrap (kill Cornyx)", "US: Cornyx's Skirt (kill Cornyx)"
+        ], lambda state: (
+            state.has("Great Swamp Pyromancy Tome", self.player)
+            and state.has("Carthus Pyromancy Tome", self.player)
+            and state.has("Izalith Pyromancy Tome", self.player)
+        ))
 
         # Make sure that the player can keep Orbeck around by giving him at least one scroll
         # before killing Abyss Watchers.
@@ -602,11 +721,53 @@ class DarkSouls3World(World):
             # useful for smooth item placement.
             self._add_location_rule("HWL: Soul of the Dancer", has_any_scroll)
 
-        gotthard_corpse_rule = lambda state: \
-            (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
-             state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player))
-        self._add_location_rule("LC: Grand Archives Key", gotthard_corpse_rule)
-        self._add_location_rule("LC: Gotthard Twinswords", gotthard_corpse_rule)
+        self._add_location_rule([
+            "LC: Grand Archives Key (by Grand Archives door, after PC and AL bosses)",
+            "LC: Gotthard Twinswords (by Grand Archives door, after PC and AL bosses)"
+        ], lambda state: (
+            state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
+            state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player)
+        ))
+
+        self._add_location_rule([
+            "FS: Morne's Great Hammer (Eygon)",
+            "FS: Moaning Shield (Eygon)"
+        ], lambda state: (
+            state.can_reach("LC: Soul of Dragonslayer Armour", "Location", self.player) and
+            state.can_reach("FK: Soul of the Blood of the Wolf", "Location", self.player)
+        ))
+
+        self._add_location_rule([
+            "CKG: Drakeblood Helm (tomb, after killing AP mausoleum NPC)",
+            "CKG: Drakeblood Armor (tomb, after killing AP mausoleum NPC)",
+            "CKG: Drakeblood Gauntlets (tomb, after killing AP mausoleum NPC)",
+            "CKG: Drakeblood Leggings (tomb, after killing AP mausoleum NPC)",
+        ], lambda state: state.can_reach(
+            "AP: Drakeblood Greatsword (mausoleum, NPC drop)",
+            "Location",
+            self.player
+        ))
+
+        self._add_location_rule([
+            "FK: Havel's Helm (upper keep, after killing AP belfry roof NPC)",
+            "FK: Havel's Armor (upper keep, after killing AP belfry roof NPC)",
+            "FK: Havel's Gauntlets (upper keep, after killing AP belfry roof NPC)",
+            "FK: Havel's Leggings (upper keep, after killing AP belfry roof NPC)",
+        ], lambda state: state.can_reach(
+            "AP: Dragon Tooth (belfry roof, NPC drop)",
+            "Location",
+            self.player
+        ))
+
+        self._add_location_rule([
+            "RC: Dragonhead Shield (streets monument, across bridge)",
+            "RC: Large Soul of a Crestfallen Knight (streets monument, across bridge)",
+            "RC: Divine Blessing (streets monument, mob drop)",
+            "RC: Lapp's Helm (Lapp)",
+            "RC: Lapp's Armor (Lapp)",
+            "RC: Lapp's Gauntlets (Lapp)",
+            "RC: Lapp's Leggings (Lapp)",
+        ], "Chameleon")
 
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
         # logic for choosing how many shop items to sell), and from carring soul items.
@@ -621,9 +782,12 @@ class DarkSouls3World(World):
 
         # This particular location is bugged, and will drop two copies of whatever item is placed
         # there.
-        if self.is_location_available("US: Young White Branch #2"):
-            add_item_rule(self.multiworld.get_location("US: Young White Branch #2", self.player),
-                          lambda item: item.player == self.player and not item.data.unique)
+        if self.is_location_available("US: Young White Branch (by white tree #2)"):
+            loc = self.multiworld.get_location(
+                "US: Young White Branch (by white tree #2)",
+                self.player
+            )
+            add_item_rule(loc, lambda item: item.player == self.player and not item.data.unique)
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location.region:
@@ -689,8 +853,8 @@ class DarkSouls3World(World):
         # Fill this manually so that, if very few slots are available in Cemetery of Ash, this
         # doesn't get locked out by bad rolls on the next two fills.
         if self.yhorm_location.name == 'Iudex Gundyr':
-            self._fill_local_item("Storm Ruler", ["Cemetery of Ash"],
-                                  lambda location: location.name != "CA: Coiled Sword",
+            self._fill_local_item("Storm Ruler", {"Cemetery of Ash"},
+                                  lambda location: location.name != "CA: Coiled Sword (boss drop)",
                                   mandatory = True)
 
         # Don't place this in the multiworld because it's necessary almost immediately, and don't

@@ -23,6 +23,10 @@ The goal is to find the four "Cinders of a Lord" items randomized into the multi
 Practically anything can be found in other worlds including pieces of armor, upgraded weapons, key items, consumables,
 spells, upgrade materials, etc...
 
-## What does another world's item look like in Dark Souls III?
+## What do Dark Souls III location names mean?
 
-In Dark Souls III, items which are sent to other worlds appear as Prism Stones.
+Location names have to pack a lot of information into very little space. To better understand them,
+check out the [location guide], which explains all the names used in locations and provides more
+detailed descriptions for each individual location.
+
+[location guide]: /tutorial/Dark Souls III/locations/en
