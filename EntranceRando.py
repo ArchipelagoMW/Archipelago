@@ -288,6 +288,7 @@ def randomize_entrances(
     entrance_lookup = EntranceLookup(world.random)
 
     def find_pairing(dead_end: bool, require_new_regions: bool) -> Optional[Tuple[Entrance, Entrance]]:
+        world.random.shuffle(er_state.placeable_exits)
         for source_exit in er_state.placeable_exits:
             target_groups = get_target_groups(source_exit.er_group)
             # anything can connect to the default group - if people don't like it the fix is to
@@ -337,16 +338,12 @@ def randomize_entrances(
 
     # stage 1 - try to place all the non-dead-end entrances
     while entrance_lookup.others:
-        # TODO - this access to placeable_exits is ugly
-        #  this is needed to reduce bias; otherwise newer exits are prioritized
-        world.random.shuffle(er_state.placeable_exits)
         pairing = find_pairing(False, True)
         if not pairing:
             break
         do_placement(*pairing)
     # stage 2 - try to place all the dead-end entrances
     while entrance_lookup.dead_ends:
-        world.random.shuffle(er_state.placeable_exits)
         pairing = find_pairing(True, True)
         if not pairing:
             break
@@ -355,12 +352,10 @@ def randomize_entrances(
     #        as we are just trying to tie off loose ends rather than get you somewhere new
     # stage 3 - connect any dangling entrances that remain
     while entrance_lookup.others:
-        world.random.shuffle(er_state.placeable_exits)
         pairing = find_pairing(False, False)
         do_placement(*pairing)
     # stage 4 - last chance for dead ends
     while entrance_lookup.dead_ends:
-        world.random.shuffle(er_state.placeable_exits)
         pairing = find_pairing(True, False)
         do_placement(*pairing)
 
