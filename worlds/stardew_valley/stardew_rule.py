@@ -232,6 +232,12 @@ class _SimplificationState:
         self.rules_to_simplify = deque()
         self.simplified_rules = set()
 
+    def try_popleft(self):
+        try:
+            self.rules_to_simplify.popleft()
+        except IndexError:
+            pass
+
     def acquire_copy(self):
         state = _SimplificationState(self.original_simplifiable_rules, self.rules_to_simplify.copy(), self.simplified_rules.copy())
         state.acquire()
@@ -312,6 +318,9 @@ class AggregatingStardewRule(StardewRule, ABC):
                     return self, self.complement.value
             return self, self.identity.value
 
+        return self.evaluate_while_simplifying_stateful(state)
+
+    def evaluate_while_simplifying_stateful(self, state):
         local_state = self.simplification_state
         try:
             # Creating a new copy, so we don't modify the rules while we're already evaluating it.
@@ -336,30 +345,34 @@ class AggregatingStardewRule(StardewRule, ABC):
 
             # Start simplification where we left.
             while local_state.rules_to_simplify:
-                # FIXME this should peek and only commit when leaving
-                rule = local_state.rules_to_simplify.pop()
-                simplified, value = rule.evaluate_while_simplifying(state)
-
-                # Identity is removed from the resulting simplification.
-                # TODO check if the in reduces performances
-                if simplified is self.identity or simplified in local_state.simplified_rules:
-                    continue
-
-                # If we find a complement here, we know the rule will always resolve to its value.
-                # TODO need to confirm how often it happens, but we could skip evaluating combinables if the rule has resolved to a complement.
-                if simplified is self.complement:
-                    return self.short_circuit()
-                # Keep the simplified rule to be reused.
-                local_state.simplified_rules.add(simplified)
-
-                # Now we use the value, to exit early if it evaluates to the complement.
-                if value is self.complement.value:
-                    return self, self.complement.value
+                result = self.evaluate_rule_while_simplifying_stateful(local_state, state)
+                local_state.try_popleft()
+                if result is not None:
+                    return result
 
             # The whole rule has been simplified and evaluated without finding complement.
             return self, self.identity.value
         finally:
             local_state.release()
+
+    def evaluate_rule_while_simplifying_stateful(self, local_state, state):
+        simplified, value = local_state.rules_to_simplify[0].evaluate_while_simplifying(state)
+
+        # Identity is removed from the resulting simplification.
+        # TODO check if the in reduces performances
+        if simplified is self.identity or simplified in local_state.simplified_rules:
+            return
+
+        # If we find a complement here, we know the rule will always resolve to its value.
+        # TODO need to confirm how often it happens, but we could skip evaluating combinables if the rule has resolved to a complement.
+        if simplified is self.complement:
+            return self.short_circuit()
+        # Keep the simplified rule to be reused.
+        local_state.simplified_rules.add(simplified)
+
+        # Now we use the value, to exit early if it evaluates to the complement.
+        if value is self.complement.value:
+            return self, self.complement.value
 
     def __str__(self):
         return f"({self.symbol.join(str(rule) for rule in self.original_rules)})"

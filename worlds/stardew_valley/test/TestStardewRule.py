@@ -182,7 +182,6 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
         not_yet_simplified.evaluate_while_simplifying.assert_called_with(collection_state)
 
 
-@skip("Those two tests validate a bug that has yet to be fixed.")
 class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
     """
     So, there is a situation where a rule kind of calls itself while it's being evaluated, because its evaluation triggers a region cache refresh.
