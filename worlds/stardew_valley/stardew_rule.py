@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import logging
 from abc import ABC, abstractmethod
+from collections import deque
 from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
-from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Optional
+from threading import Lock
+from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
 
 from frozendict import frozendict
 
@@ -12,6 +15,7 @@ from BaseClasses import CollectionState, ItemClassification
 from .items import item_table
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -203,46 +207,95 @@ class CombinableStardewRule(StardewRule, ABC):
         return super().__or__(other)
 
 
+class _SimplificationState:
+    original_simplifiable_rules: Tuple[StardewRule, ...]
+
+    rules_to_simplify: deque[StardewRule]
+    simplified_rules: Set[StardewRule]
+    lock: Lock
+
+    def __init__(self, simplifiable_rules: Tuple[StardewRule, ...], rules_to_simplify: Optional[deque[StardewRule]] = None,
+                 simplified_rules: Optional[Set[StardewRule]] = None):
+        if simplified_rules is None:
+            simplified_rules = set()
+
+        self.original_simplifiable_rules = simplifiable_rules
+        self.rules_to_simplify = rules_to_simplify
+        self.simplified_rules = simplified_rules
+        self.locked = False
+
+    @property
+    def is_simplified(self):
+        return self.rules_to_simplify is not None and not self.rules_to_simplify
+
+    def short_circuit(self):
+        self.rules_to_simplify = deque()
+        self.simplified_rules = set()
+
+    def acquire_copy(self):
+        state = _SimplificationState(self.original_simplifiable_rules, self.rules_to_simplify.copy(), self.simplified_rules.copy())
+        state.acquire()
+        return state
+
+    def merge(self, other: _SimplificationState):
+        # TODO handle WIP simplification
+        return _SimplificationState(self.original_simplifiable_rules + other.original_simplifiable_rules)
+
+    def add(self, rule: StardewRule):
+        return _SimplificationState(self.original_simplifiable_rules + (rule,))
+
+    def acquire(self):
+        """
+        This just set a boolean to True and is absolutely not thread safe. It just works because AP is single-threaded.
+        """
+        if self.locked is True:
+            return False
+
+        self.locked = True
+        return True
+
+    def release(self):
+        assert self.locked
+        self.locked = False
+
+
 class AggregatingStardewRule(StardewRule, ABC):
     identity: LiteralStardewRule
     complement: LiteralStardewRule
     symbol: str
 
     combinable_rules: frozendict[Hashable, CombinableStardewRule]
-    other_rules: Union[Iterable[StardewRule], Sized]
+    _simplification_state: _SimplificationState
 
-    detailed_unique_rules: Union[Iterable[StardewRule], Sized]
-
-    _simplified: bool
-    _simplified_rules: frozenset[StardewRule]
-    _left_to_simplify_rules: Optional[Iterable[StardewRule]]
-
-    def __init__(self, *rules: StardewRule, _combinable_rules=None):
-        self._simplified_rules = frozenset()
-
+    def __init__(self, *rules: StardewRule, _combinable_rules=None, _simplification_state=None):
         if _combinable_rules is None:
             assert rules, f"Can't create an aggregating condition without rules"
             rules, _combinable_rules = CombinableStardewRule.split_rules(rules, self.combine)
+            _simplification_state = _SimplificationState(rules)
 
-        self.other_rules = tuple(rules)
-        self._simplified = not rules
         self.combinable_rules = _combinable_rules
-
-        self.detailed_unique_rules = self.other_rules
-        self._left_to_simplify_rules = None
+        self.simplification_state = _simplification_state
 
     @property
-    def rules_iterable(self):
-        return chain(self.other_rules, self.combinable_rules.values())
+    def original_rules(self):
+        return RepeatableChain(self.combinable_rules.values(), self.simplification_state.original_simplifiable_rules)
 
     @property
-    def detailed_rules_iterable(self):
-        return chain(self.detailed_unique_rules, self.combinable_rules.values())
+    def current_rules(self):
+        if self.simplification_state.rules_to_simplify is None:
+            return self.original_rules
+
+        return RepeatableChain(self.combinable_rules.values(), self.simplification_state.simplified_rules, self.simplification_state.rules_to_simplify)
 
     @staticmethod
     @abstractmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         raise NotImplementedError
+
+    def short_circuit(self):
+        self.simplification_state.short_circuit()
+        self.combinable_rules = frozendict()
+        return self.complement, self.complement.value
 
     # The idea here is the same as short-circuiting operators, applied to evaluation and rule simplification.
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
@@ -252,122 +305,116 @@ class AggregatingStardewRule(StardewRule, ABC):
             if rule(state) is self.complement.value:
                 return self, self.complement.value
 
-        if self._simplified:
+        if self.simplification_state.is_simplified:
             # The expression is fully simplified, so we can only evaluate.
-            for rule in self.other_rules:
+            for rule in self.simplification_state.simplified_rules:
                 if rule(state) is self.complement.value:
                     return self, self.complement.value
             return self, self.identity.value
 
-        # Evaluating what has already been simplified.
-        # The assumption is that the rules that used to evaluate to complement might complement again, so we can leave early.
-        for rule in self._simplified_rules:
-            if rule(state) is self.complement.value:
-                return self, self.complement.value
+        local_state = self.simplification_state
+        try:
+            # Creating a new copy, so we don't modify the rules while we're already evaluating it.
+            # TODO Both copies will need to be merged later when we come back to the parent call.
+            if not local_state.acquire():
+                local_state = local_state.acquire_copy()
+                self.simplification_state = local_state
 
-        # If the iterator is None, it means we have not start simplifying.
-        # Otherwise, we will continue simplification where we left.
-        if self._left_to_simplify_rules is None:
-            self.other_rules = frozenset(self.other_rules)
-            if self.complement in self.other_rules:
-                self._simplified = True
-                self.combinable_rules = frozendict()
-                self.other_rules = (self.complement,)
-                return self.complement, self.complement.value
+            # Evaluating what has already been simplified.
+            # The assumption is that the rules that used to evaluate to complement might complement again, so we can leave early.
+            for rule in local_state.simplified_rules:
+                if rule(state) is self.complement.value:
+                    return self, self.complement.value
 
-            self._left_to_simplify_rules = iter(self.other_rules)
+            # If the iterator is None, it means we have not start simplifying.
+            # Otherwise, we will continue simplification where we left.
+            if local_state.rules_to_simplify is None:
+                rules_to_simplify = frozenset(local_state.original_simplifiable_rules)
+                if self.complement in rules_to_simplify:
+                    return self.short_circuit()
+                local_state.rules_to_simplify = deque(rules_to_simplify)
 
-        newly_simplified_rules = set()
-        # Start simplification where we left.
-        for rule in self._left_to_simplify_rules:
-            simplified, value = rule.evaluate_while_simplifying(state)
+            # Start simplification where we left.
+            while local_state.rules_to_simplify:
+                # FIXME this should peek and only commit when leaving
+                rule = local_state.rules_to_simplify.pop()
+                simplified, value = rule.evaluate_while_simplifying(state)
 
-            # Identity is removed from the resulting simplification.
-            if simplified is self.identity or simplified in self._simplified_rules:
-                continue
+                # Identity is removed from the resulting simplification.
+                # TODO check if the in reduces performances
+                if simplified is self.identity or simplified in local_state.simplified_rules:
+                    continue
 
-            # If we find a complement here, we know the rule will always resolve to its value.
-            # TODO need to confirm how often it happens, but we could skip evaluating combinables if the rule has resolved to a complement.
-            if simplified is self.complement:
-                self._simplified = True
-                self.combinable_rules = frozendict()
-                self.other_rules = (self.complement,)
-                return self.complement, self.complement.value
+                # If we find a complement here, we know the rule will always resolve to its value.
+                # TODO need to confirm how often it happens, but we could skip evaluating combinables if the rule has resolved to a complement.
+                if simplified is self.complement:
+                    return self.short_circuit()
+                # Keep the simplified rule to be reused.
+                local_state.simplified_rules.add(simplified)
 
-            # Keep the simplified rule to be reused.
-            newly_simplified_rules.add(simplified)
+                # Now we use the value, to exit early if it evaluates to the complement.
+                if value is self.complement.value:
+                    return self, self.complement.value
 
-            # Now we use the value, to exit early if it evaluates to the complement.
-            if value is self.complement.value:
-                # FIXME I hate that this has to be a frozenset... But otherwise we see errors where Set changed size during iteration.
-                # This will need more troubleshooting.
-                self._simplified_rules |= newly_simplified_rules
-                return self, self.complement.value
-
-        self._simplified = True
-        self.other_rules = frozenset(self._simplified_rules | newly_simplified_rules)
-
-        # The whole rule has been simplified and evaluated without finding complement.
-        return self, self.identity.value
+            # The whole rule has been simplified and evaluated without finding complement.
+            return self, self.identity.value
+        finally:
+            local_state.release()
 
     def __str__(self):
-        return f"({self.symbol.join(str(rule) for rule in self.detailed_rules_iterable)})"
+        return f"({self.symbol.join(str(rule) for rule in self.original_rules)})"
 
     def __repr__(self):
-        return f"({self.symbol.join(repr(rule) for rule in self.detailed_rules_iterable)})"
+        return f"({self.symbol.join(repr(rule) for rule in self.original_rules)})"
 
     def __eq__(self, other):
-        return isinstance(other, type(self)) and self.combinable_rules == other.combinable_rules and self.other_rules == self.other_rules
+        return (isinstance(other, type(self)) and self.combinable_rules == other.combinable_rules and
+                self.simplification_state.original_simplifiable_rules == self.simplification_state.original_simplifiable_rules)
 
     def __hash__(self):
         # TODO since other_rules will be changed after simplification, a simplified rule will have a different hashcode than its original.
         # Ideally, two rules with the same simplification would be equal...
-        return hash((self.combinable_rules, self.other_rules))
+        return hash((self.combinable_rules, self.simplification_state.original_simplifiable_rules))
 
     def simplify(self) -> StardewRule:
+        logger.debug(f"Unoptimized 'simplified' called on {self}")
         # TODO is this needed now that we're using an iterator ?
-        if self._simplified:
+        if self.simplification_state.is_simplified:
             return self
 
-        if self._left_to_simplify_rules is None:
-            self.other_rules = frozenset(self.other_rules)
-            if self.complement in self.other_rules:
-                self._simplified = True
-                self.other_rules = (self.complement,)
-                return self.complement
+        if self.simplification_state.rules_to_simplify is None:
+            rules_to_simplify = frozenset(self.simplification_state.original_simplifiable_rules)
+            if self.complement in rules_to_simplify:
+                return self.short_circuit()[0]
 
-            self._left_to_simplify_rules = iter(self.other_rules)
+            self.simplification_state.rules_to_simplify = deque(rules_to_simplify)
 
-        newly_simplified_rules = set()
-        for rule in self._left_to_simplify_rules:
+        # TODO this should lock state
+        while self.simplification_state.rules_to_simplify:
+            rule = self.simplification_state.rules_to_simplify.pop()
             simplified = rule.simplify()
 
-            if simplified is self.identity or simplified in self._simplified_rules:
+            if simplified is self.identity or simplified in self.simplification_state.simplified_rules:
                 continue
 
             if simplified is self.complement:
-                self._simplified = True
-                self._simplified_rules = frozenset((self.complement,))
-                return self.complement
+                return self.short_circuit()[0]
 
-            newly_simplified_rules.add(simplified)
+            self.simplification_state.simplified_rules.add(simplified)
 
-        self._simplified = True
-        self.other_rules = frozenset(self._simplified_rules | newly_simplified_rules)
-
-        if not self.other_rules and not self.combinable_rules:
+        if not self.simplification_state.simplified_rules and not self.combinable_rules:
             return self.identity
 
-        if len(self.other_rules) == 1 and not self.combinable_rules:
-            return next(iter(self.other_rules))
+        if len(self.simplification_state.simplified_rules) == 1 and not self.combinable_rules:
+            return next(iter(self.simplification_state.simplified_rules))
 
-        if not self.other_rules and len(self.combinable_rules) == 1:
+        if not self.simplification_state.simplified_rules and len(self.combinable_rules) == 1:
             return next(iter(self.combinable_rules.values()))
 
         return self
 
     def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
-        return StardewRuleExplanation(self, state, expected, frozenset(self.detailed_unique_rules).union(self.combinable_rules.values()))
+        return StardewRuleExplanation(self, state, expected, self.original_rules)
 
 
 class Or(AggregatingStardewRule):
@@ -383,20 +430,20 @@ class Or(AggregatingStardewRule):
             return other | self
 
         if isinstance(other, CombinableStardewRule):
-            return Or(*self.other_rules, _combinable_rules=other.add_into(self.combinable_rules, self.combine))
+            return Or(_combinable_rules=other.add_into(self.combinable_rules, self.combine), _simplification_state=self.simplification_state)
 
         if type(other) is Or:
-            return Or(*self.other_rules, *other.other_rules,
-                      _combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine))
+            return Or(_combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine),
+                      _simplification_state=self.simplification_state.merge(other.simplification_state))
 
-        return Or(*self.other_rules, other, _combinable_rules=self.combinable_rules)
+        return Or(_combinable_rules=self.combinable_rules, _simplification_state=self.simplification_state.add(other))
 
     @staticmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         return min(left, right, key=lambda x: x.value)
 
     def get_difficulty(self):
-        return min(rule.get_difficulty() for rule in self.rules_iterable)
+        return min(rule.get_difficulty() for rule in self.original_rules)
 
 
 class And(AggregatingStardewRule):
@@ -412,20 +459,20 @@ class And(AggregatingStardewRule):
             return other & self
 
         if isinstance(other, CombinableStardewRule):
-            return And(*self.other_rules, _combinable_rules=other.add_into(self.combinable_rules, self.combine))
+            return And(_combinable_rules=other.add_into(self.combinable_rules, self.combine), _simplification_state=self.simplification_state)
 
         if type(other) is And:
-            return And(*self.other_rules, *other.other_rules,
-                       _combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine))
+            return And(_combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine),
+                       _simplification_state=self.simplification_state.merge(other.simplification_state))
 
-        return And(*self.other_rules, other, _combinable_rules=self.combinable_rules)
+        return And(_combinable_rules=self.combinable_rules, _simplification_state=self.simplification_state.add(other))
 
     @staticmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         return max(left, right, key=lambda x: x.value)
 
     def get_difficulty(self):
-        return max(rule.get_difficulty() for rule in self.rules_iterable)
+        return max(rule.get_difficulty() for rule in self.original_rules)
 
 
 class Count(StardewRule):
@@ -662,3 +709,20 @@ class HasProgressionPercent(CombinableStardewRule):
 
     def get_difficulty(self):
         return self.percent
+
+
+class RepeatableChain(Iterable, Sized):
+    def __init__(self, *iterable: Union[Iterable, Sized]):
+        self.iterables = iterable
+
+    def __iter__(self):
+        return chain.from_iterable(self.iterables)
+
+    def __bool__(self):
+        return any(sub_iterable for sub_iterable in self.iterables)
+
+    def __len__(self):
+        return sum(len(iterable) for iterable in self.iterables)
+
+    def __contains__(self, item):
+        return any(item in it for it in self.iterables)

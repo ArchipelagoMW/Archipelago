@@ -127,7 +127,8 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
         rule.evaluate_while_simplifying(collection_state)
 
-        self.assertEqual(0, len(rule.other_rules))
+        self.assertEqual(1, len(rule.current_rules))
+        self.assertIn(HasProgressionPercent(1, 10), rule.current_rules)
 
     def test_complement_replaces_combinable_rules(self):
         collection_state = MagicMock()
@@ -135,7 +136,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
         rule.evaluate_while_simplifying(collection_state)
 
-        self.assertEqual(0, len(rule.combinable_rules))
+        self.assertFalse(rule.current_rules)
 
     def test_simplifying_to_complement_propagates_complement(self):
         expected_simplified = true_
@@ -147,7 +148,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
         self.assertEqual(expected_result, actual_result)
         self.assertEqual(expected_simplified, actual_simplified)
-        self.assertEqual(0, len(rule.combinable_rules))
+        self.assertFalse(rule.current_rules)
 
     def test_already_simplified_rules_are_not_simplified_again(self):
         collection_state = MagicMock()

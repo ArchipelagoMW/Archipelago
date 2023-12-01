@@ -774,5 +774,4 @@ class TestVanillaSkillLogicSimplification(SVTestBase):
 
     def test_skill_logic_has_level_only_uses_one_has_progression_percent(self):
         rule = self.multiworld.worlds[1].logic.skill.has_level("Farming", 8)
-        self.assertEqual(1, sum(1 for i in rule.rules_iterable if type(i) == HasProgressionPercent))
-        self.assertIsNotNone(rule.combinable_rules)
+        self.assertEqual(1, sum(1 for i in rule.current_rules if type(i) == HasProgressionPercent))
