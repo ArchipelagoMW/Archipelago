@@ -1,7 +1,6 @@
 from BaseClasses import ItemClassification
 from typing import TypedDict, Dict, List, Set
 
-
 class ItemDict(TypedDict):
     name: str
     id: int

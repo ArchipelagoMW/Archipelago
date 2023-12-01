@@ -1,6 +1,5 @@
 from typing import List, TypedDict
 
-
 class LocationInfo(TypedDict):
     name: str
     id: int
@@ -11,8 +10,6 @@ class LocationInfo(TypedDict):
     minGoldenFeathers: int
     minGoldenFeathersEasy: int
     minGoldenFeathersBucket: int
-
-# base_ids from 83000 to 83132
 
 base_id = 83000
 
