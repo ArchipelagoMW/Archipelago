@@ -99,6 +99,8 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.RING)
         if self.multiworld.enable_spell_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
+        if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
+            self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
             if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_global:
@@ -341,6 +343,7 @@ class DarkSouls3World(World):
 
         guaranteed_items = {"Path of the Dragon": 1}
         guaranteed_items.update(self.multiworld.guaranteed_items[self.player].value)
+        print(guaranteed_items)
         if len(removable_items) == 0 and num_required_extra_items == 0:
             raise Exception("Can't add Path of the Dragon to the item pool")
 
@@ -631,7 +634,7 @@ class DarkSouls3World(World):
         # there.
         if self.is_location_available("US: Young White Branch #2"):
             add_item_rule(self.multiworld.get_location("US: Young White Branch #2", self.player),
-                        lambda item: item.player == self.player and not item.data.unique)
+                          lambda item: item.player == self.player and not item.data.unique)
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location.region:
