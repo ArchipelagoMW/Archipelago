@@ -120,17 +120,22 @@ class ZorkGrandInquisitorWorld(World):
                         )
                     )
 
-                location.access_rule = eval(location_access_rule_for(location_enum_item, self.player))
+                location_access_rule: str = location_access_rule_for(location_enum_item, self.player)
+
+                if location_access_rule != "lambda state: True":
+                    location.access_rule = eval(location_access_rule)
 
                 region.locations.append(location)
 
             # Connections
             region_exit: ZorkGrandInquisitorRegions
             for region_exit in region_data[region_enum_item].exits or tuple():
-                region.connect(
-                    region_mapping[region_exit],
-                    rule=eval(entrance_access_rule_for(region_enum_item, region_exit, self.player)),
-                )
+                entrance_access_rule: str = entrance_access_rule_for(region_enum_item, region_exit, self.player)
+
+                if entrance_access_rule == "lambda state: True":
+                    region.connect(region_mapping[region_exit])
+                else:
+                    region.connect(region_mapping[region_exit], rule=eval(entrance_access_rule))
 
             self.multiworld.regions.append(region)
 
