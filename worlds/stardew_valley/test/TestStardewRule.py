@@ -230,7 +230,7 @@ class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
         self.assertTrue(called_once)
         self.assertTrue(internal_call_result)
 
-    def test_nested_call_to_already_simplified_rule_does_not_steal_rule_to_simplified_from_parent_call(self):
+    def test_nested_call_to_already_simplified_rule_does_not_steal_rule_to_simplify_from_parent_call(self):
         collection_state = MagicMock()
         an_internal_rule = MagicMock()
         an_internal_rule.evaluate_while_simplifying = Mock(return_value=(an_internal_rule, True))
@@ -259,6 +259,7 @@ class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
             return False
 
         already_simplified.side_effect = call_to_already_simplified
+        not_yet_simplified.return_value = True
 
         _, actual_result = rule.evaluate_while_simplifying(collection_state)
 

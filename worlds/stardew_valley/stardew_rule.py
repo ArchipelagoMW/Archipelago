@@ -237,7 +237,7 @@ class AggregatingStardewRule(StardewRule, ABC):
 
     combinable_rules: frozendict[Hashable, CombinableStardewRule]
     simplification_state: _SimplificationState
-    _last_complementing_rule: Optional[StardewRule] = None
+    _last_short_circuiting_rule: Optional[StardewRule] = None
 
     def __init__(self, *rules: StardewRule, _combinable_rules=None, _simplification_state=None):
         if _combinable_rules is None:
@@ -311,16 +311,16 @@ class AggregatingStardewRule(StardewRule, ABC):
         return self.complement, self.complement.value
 
     def short_circuit_evaluation(self, rule):
-        self._last_complementing_rule = rule
+        self._last_short_circuiting_rule = rule
         return self, self.complement.value
 
     # The idea here is the same as short-circuiting operators, applied to evaluation and rule simplification.
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         # Directly checking last rule that evaluated to complement, in case state has not changed.
-        if self._last_complementing_rule:
-            if self._last_complementing_rule(state) is self.complement.value:
-                return self.short_circuit_evaluation(self._last_complementing_rule)
-            self._last_complementing_rule = None
+        if self._last_short_circuiting_rule:
+            if self._last_short_circuiting_rule(state) is self.complement.value:
+                return self.short_circuit_evaluation(self._last_short_circuiting_rule)
+            self._last_short_circuiting_rule = None
 
         # Combinable rules are considered already simplified, so we evaluate them right away.
         for rule in self.combinable_rules.values():
