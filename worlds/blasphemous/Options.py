@@ -67,6 +67,7 @@ class StartingLocation(ChoiceIsRandom):
 
 class Ending(Choice):
     """Choose which ending is required to complete the game.
+    Talking to Tirso in Albero will tell you the selected ending for the current game.
     Ending A: Collect all thorn upgrades.
     Ending C: Collect all thorn upgrades and the Holy Wound of Abnegation."""
     display_name = "Ending"

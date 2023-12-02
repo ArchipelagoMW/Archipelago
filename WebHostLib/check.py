@@ -1,5 +1,6 @@
 import zipfile
-from typing import *
+import base64
+from typing import Union, Dict, Set, Tuple
 
 from flask import request, flash, redirect, url_for, render_template
 from markupsafe import Markup
@@ -24,13 +25,21 @@ def check():
         if 'file' not in request.files:
             flash('No file part')
         else:
-            file = request.files['file']
-            options = get_yaml_data(file)
+            files = request.files.getlist('file')
+            options = get_yaml_data(files)
             if isinstance(options, str):
                 flash(options)
             else:
                 results, _ = roll_options(options)
-                return render_template("checkResult.html", results=results)
+                if len(options) > 1:
+                    # offer combined file back
+                    combined_yaml = "---\n".join(f"# original filename: {file_name}\n{file_content.decode('utf-8-sig')}"
+                                                 for file_name, file_content in options.items())
+                    combined_yaml = base64.b64encode(combined_yaml.encode("utf-8-sig")).decode()
+                else:
+                    combined_yaml = ""
+                return render_template("checkResult.html",
+                                       results=results, combined_yaml=combined_yaml)
     return render_template("check.html")
 
 
@@ -39,30 +48,34 @@ def mysterycheck():
     return redirect(url_for("check"), 301)
 
 
-def get_yaml_data(file) -> Union[Dict[str, str], str, Markup]:
+def get_yaml_data(files) -> Union[Dict[str, str], str, Markup]:
     options = {}
-    # if user does not select file, browser also
-    # submit an empty part without filename
-    if file.filename == '':
-        return 'No selected file'
-    elif file and allowed_file(file.filename):
-        if file.filename.endswith(".zip"):
+    for uploaded_file in files:
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if uploaded_file.filename == '':
+            return 'No selected file'
+        elif uploaded_file.filename in options:
+            return f'Conflicting files named {uploaded_file.filename} submitted'
+        elif uploaded_file and allowed_file(uploaded_file.filename):
+            if uploaded_file.filename.endswith(".zip"):
 
-            with zipfile.ZipFile(file, 'r') as zfile:
-                infolist = zfile.infolist()
+                with zipfile.ZipFile(uploaded_file, 'r') as zfile:
+                    infolist = zfile.infolist()
 
-                if any(file.filename.endswith(".archipelago") for file in infolist):
-                    return Markup("Error: Your .zip file contains an .archipelago file. "
-                                  'Did you mean to <a href="/uploads">host a game</a>?')
+                    if any(file.filename.endswith(".archipelago") for file in infolist):
+                        return Markup("Error: Your .zip file contains an .archipelago file. "
+                                      'Did you mean to <a href="/uploads">host a game</a>?')
 
-                for file in infolist:
-                    if file.filename.endswith(banned_zip_contents):
-                        return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
-                               "Your file was deleted."
-                    elif file.filename.endswith((".yaml", ".json", ".yml", ".txt")):
-                        options[file.filename] = zfile.open(file, "r").read()
-        else:
-            options = {file.filename: file.read()}
+                    for file in infolist:
+                        if file.filename.endswith(banned_zip_contents):
+                            return ("Uploaded data contained a rom file, "
+                                    "which is likely to contain copyrighted material. "
+                                    "Your file was deleted.")
+                        elif file.filename.endswith((".yaml", ".json", ".yml", ".txt")):
+                            options[file.filename] = zfile.open(file, "r").read()
+            else:
+                options[uploaded_file.filename] = uploaded_file.read()
     if not options:
         return "Did not find a .yaml file to process."
     return options

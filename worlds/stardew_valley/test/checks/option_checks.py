@@ -1,5 +1,3 @@
-from typing import Union
-
 from BaseClasses import MultiWorld
 from .world_checks import get_all_item_names, get_all_location_names
 from .. import SVTestBase
@@ -8,32 +6,16 @@ from ...locations import LocationTags
 from ...strings.ap_names.transport_names import Transportation
 
 
-def get_stardew_world(multiworld: MultiWorld) -> Union[StardewValleyWorld, None]:
+def get_stardew_world(multiworld: MultiWorld) -> StardewValleyWorld:
     for world_key in multiworld.worlds:
         world = multiworld.worlds[world_key]
         if isinstance(world, StardewValleyWorld):
             return world
-    return None
+    raise ValueError("no stardew world in this multiworld")
 
 
-def is_setting(multiworld: MultiWorld, setting_name: str, setting_value: int) -> bool:
-    stardew_world = get_stardew_world(multiworld)
-    if not stardew_world:
-        return False
-    current_value = stardew_world.options[setting_name]
-    return current_value == setting_value
-
-
-def is_not_setting(multiworld: MultiWorld, setting_name: str, setting_value: int) -> bool:
-    return not is_setting(multiworld, setting_name, setting_value)
-
-
-def assert_is_setting(tester: SVTestBase, multiworld: MultiWorld, setting_name: str, setting_value: int) -> bool:
-    stardew_world = get_stardew_world(multiworld)
-    if not stardew_world:
-        return False
-    current_value = stardew_world.options[setting_name]
-    tester.assertEqual(current_value, setting_value)
+def get_stardew_options(multiworld: MultiWorld) -> options.StardewValleyOptions:
+    return get_stardew_world(multiworld).options
 
 
 def assert_can_reach_island(tester: SVTestBase, multiworld: MultiWorld):
@@ -49,7 +31,8 @@ def assert_cannot_reach_island(tester: SVTestBase, multiworld: MultiWorld):
 
 
 def assert_can_reach_island_if_should(tester: SVTestBase, multiworld: MultiWorld):
-    include_island = is_setting(multiworld, options.ExcludeGingerIsland.internal_name, options.ExcludeGingerIsland.option_false)
+    stardew_options = get_stardew_options(multiworld)
+    include_island = stardew_options.exclude_ginger_island.value == options.ExcludeGingerIsland.option_false
     if include_island:
         assert_can_reach_island(tester, multiworld)
     else:
@@ -57,7 +40,7 @@ def assert_can_reach_island_if_should(tester: SVTestBase, multiworld: MultiWorld
 
 
 def assert_cropsanity_same_number_items_and_locations(tester: SVTestBase, multiworld: MultiWorld):
-    is_cropsanity = is_setting(multiworld, options.Cropsanity.internal_name, options.Cropsanity.option_shuffled)
+    is_cropsanity = get_stardew_options(multiworld).cropsanity.value == options.Cropsanity.option_shuffled
     if not is_cropsanity:
         return
 
@@ -80,11 +63,10 @@ def assert_has_deluxe_scarecrow_recipe(tester: SVTestBase, multiworld: MultiWorl
 
 
 def assert_festivals_give_access_to_deluxe_scarecrow(tester: SVTestBase, multiworld: MultiWorld):
-    has_festivals = is_not_setting(multiworld, options.FestivalLocations.internal_name, options.FestivalLocations.option_disabled)
+    stardew_options = get_stardew_options(multiworld)
+    has_festivals = stardew_options.festival_locations.value != options.FestivalLocations.option_disabled
     if not has_festivals:
         return
 
     assert_all_rarecrows_exist(tester, multiworld)
     assert_has_deluxe_scarecrow_recipe(tester, multiworld)
-
-
