@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import functools
 import itertools
-from typing import TYPE_CHECKING, Any, Dict, Iterable, Iterator, List
+from typing import TYPE_CHECKING, Iterable, Iterator, List
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -14,7 +14,7 @@ from .locations import get_level_locations, location_name_to_id, location_table
 from .types import Passage
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext, BizHawkContext
+    from worlds._bizhawk.context import BizHawkClientContext
 
 
 def read(address: int, length: int, *, align: int = 1):
@@ -82,12 +82,16 @@ class DeathLinkCtx:
     enabled: bool = False
     client_override: bool = False
     pending: bool = False
-    received_this_death: bool = False
+    sent_this_death: bool = False
 
+    def __repr__(self):
+        return (f'{type(self)} {{ enabled: {self.enabled}, '
+                f'client_override: {self.client_override}, '
+                f'pending: {self.pending}, '
+                f'sent_this_death: {self.sent_this_death} }}')
 
-def client_on_deathlink(ctx: BizHawkClientContext, data: Dict[str, Any]) -> None:
-    ctx.death_link.pending = True
-    type(ctx).on_deathlink(ctx, data)
+    def __str__(self):
+        return repr(self)
 
 
 class WL4Client(BizHawkClient):
@@ -96,6 +100,8 @@ class WL4Client(BizHawkClient):
     patch_suffix = '.apwl4'
     local_checked_locations: List[int]
     rom_slot_name: str
+
+    death_link: DeathLinkCtx
 
     def __init__(self) -> None:
         super().__init__()
@@ -132,10 +138,7 @@ class WL4Client(BizHawkClient):
         client_ctx.want_slot_data = True
 
         # bizhawk_ctx.command_processor = WL4CommandProcessor(client_ctx)
-        client_ctx.death_link = DeathLinkCtx()
-
-        bound_method = client_on_deathlink.__get__(client_ctx, client_ctx.__class__)
-        setattr(client_ctx, "on_deathlink", bound_method)
+        self.death_link = DeathLinkCtx()
 
         return True
 
@@ -191,10 +194,10 @@ class WL4Client(BizHawkClient):
 
         # Turn on death link if it is on, and if the client hasn't overriden it
         if (death_link_flag
-                and not client_ctx.death_link.enabled
-                and not client_ctx.death_link.client_override):
+                and not self.death_link.enabled
+                and not self.death_link.client_override):
             await client_ctx.update_death_link(True)
-            client_ctx.death_link.enabled = True
+            self.death_link.enabled = True
 
         locations = []
         game_clear = False
@@ -232,14 +235,14 @@ class WL4Client(BizHawkClient):
         # TODO: Send tracker event flags
 
         # Send death link
-        if client_ctx.death_link.enabled:
+        if self.death_link.enabled:
             if gameplay_state == (2, 2) and wario_health == 0:
-                client_ctx.death_link.pending = False
-                if not client_ctx.death_link.sent_this_death:
-                    client_ctx.death_link.sent_this_death = True
+                self.death_link.pending = False
+                if not self.death_link.sent_this_death:
+                    self.death_link.sent_this_death = True
                     await client_ctx.send_death()
             else:
-                client_ctx.death_link.sent_this_death = False
+                self.death_link.sent_this_death = False
 
         write_list = []
         guard_list = [
@@ -254,8 +257,8 @@ class WL4Client(BizHawkClient):
             guard_list.append(guard16(wario_stop_flag_address, 0))
 
         # Receive death link
-        if client_ctx.death_link.enabled and client_ctx.death_link.pending:
-            client_ctx.death_link.sent_this_death = True
+        if self.death_link.enabled and self.death_link.pending:
+            self.death_link.sent_this_death = True
             write_list.append(write8(wario_health_address, 0))
 
         # If the game hasn't received all items yet and the game isn't showing the player
@@ -276,3 +279,10 @@ class WL4Client(BizHawkClient):
             await bizhawk.guarded_write(bizhawk_ctx, write_list, guard_list)
         except RequestFailedError:
             return
+
+    def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
+        if cmd == 'Bounced':
+            tags = args.get('tags', [])
+            if 'DeathLink' in tags:
+                self.death_link.pending = True
+                ctx.on_deathlink(args['data'])
