@@ -164,61 +164,70 @@ class Hylics2World(World):
 
     def create_regions(self) -> None:
 
-        region_table: Dict[str, List[str]] = {
-            "Menu": ["Afterlife"],
-            "Afterlife": ["Waynehouse", "New Muldul", "Viewax", "TV Island", "Shield Facility", "Worm Pod", "Foglast",
-                          "Sage Labyrinth", "Hylemxylem"],
-            "Waynehouse": ["World", "Afterlife"],
-            "World": ["Airship", "Waynehouse", "New Muldul", "Drill Castle", "Viewax", "Arcade Island", "TV Island",
-                      "Juice Ranch", "Shield Facility", "Worm Pod", "Foglast", "Sage Arship", "Hylemxylem"],
-            "New Muldul": ["World", "Afterlife", "New Muldul Vault"],
-            "New Muldul Vault": ["New Muldul"],
-            "Viewax": ["World", "Afterlife"],
-            "Airship": ["World"],
-            "Arcade Island": ["World"],
-            "TV Island": ["World", "Afterlife"],
-            "Juice Ranch": ["World"],
-            "Shield Facility": ["World", "Afterlife", "Worm Pod"],
-            "Worm Pod": ["Shield Facility", "Afterlife"],
-            "Foglast": ["World", "Afterlife"],
-            "Drill Castle": ["World", "Sage Labyrinth"],
-            "Sage Labyrinth": ["Drill Castle", "Afterlife"],
-            "Sage Airship": ["World"],
-            "Hylemxylem": ["World", "Afterlife"],
+        region_table: Dict[int, Region] = {
+            0: Region("Menu", self.player, self.multiworld),
+            1: Region("Afterlife", self.player, self.multiworld),
+            2: Region("Waynehouse", self.player, self.multiworld),
+            3: Region("World", self.player, self.multiworld),
+            4: Region("New Muldul", self.player, self.multiworld),
+            5: Region("New Muldul Vault", self.player, self.multiworld),
+            6: Region("Viewax", self.player, self.multiworld, "Viewax's Edifice"),
+            7: Region("Airship", self.player, self.multiworld),
+            8: Region("Arcade Island", self.player, self.multiworld),
+            9: Region("TV Island", self.player, self.multiworld),
+            10: Region("Juice Ranch", self.player, self.multiworld),
+            11: Region("Shield Facility", self.player, self.multiworld),
+            12: Region("Worm Pod", self.player, self.multiworld),
+            13: Region("Foglast", self.player, self.multiworld),
+            14: Region("Drill Castle", self.player, self.multiworld),
+            15: Region("Sage Labyrinth", self.player, self.multiworld),
+            16: Region("Sage Airship", self.player, self.multiworld),
+            17: Region("Hylemxylem", self.player, self.multiworld)
         }
 
         # create regions from table
-        self.multiworld.regions.extend(Region(name, self.player, self.multiworld) for name in region_table)
-        self.multiworld.get_region("Viewax", self.player)._hint_text = "Viewax's Edifice"
-        if self.multiworld.random_start[self.player]:
-            del region_table["Menu"]
-            self.multiworld.get_region("Menu", self.player).add_exits([self.start_location])
-        for region, exits in region_table.items():
-            self.multiworld.get_region(region, self.player).add_exits(exits)
+        for i, reg in region_table.items():
+            self.multiworld.regions.append(reg)
+            # get all exits per region
+            for j, exits in Exits.region_exit_table.items():
+                if j == i:
+                    for k in exits:
+                        # create entrance and connect it to parent and destination regions
+                        ent = Entrance(self.player, k, reg)
+                        reg.exits.append(ent)
+                        if k == "New Game" and self.multiworld.random_start[self.player]:
+                            if self.start_location == "Waynehouse":
+                                ent.connect(region_table[2])
+                            elif self.start_location == "Viewax's Edifice":
+                                ent.connect(region_table[6])
+                            elif self.start_location == "TV Island":
+                                ent.connect(region_table[9])
+                            elif self.start_location == "Shield Facility":
+                                ent.connect(region_table[11])
+                        else:
+                            for name, num in Exits.exit_lookup_table.items():
+                                if k == name:
+                                    ent.connect(region_table[num])
 
         # add regular locations
         for i, data in Locations.location_table.items():
-            region = self.multiworld.get_region(data["region"], self.player)
-            loc = Hylics2Location(self.player, data["name"], i, region)
-            region.locations.append(loc)
+            region_table[data["region"]].locations\
+                .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
         for i, data in Locations.tv_location_table.items():
-            region = self.multiworld.get_region(data["region"], self.player)
-            loc = Hylics2Location(self.player, data["name"], i, region)
-            region.locations.append(loc)
+            region_table[data["region"]].locations\
+                .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
 
         # add party member locations if option is enabled
         if self.multiworld.party_shuffle[self.player]:
             for i, data in Locations.party_location_table.items():
-                region = self.multiworld.get_region(data["region"], self.player)
-                loc = Hylics2Location(self.player, data["name"], i, region)
-                region.locations.append(loc)
+                region_table[data["region"]].locations\
+                    .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
 
         # add medallion locations if option is enabled
         if self.multiworld.medallion_shuffle[self.player]:
             for i, data in Locations.medallion_location_table.items():
-                region = self.multiworld.get_region(data["region"], self.player)
-                loc = Hylics2Location(self.player, data["name"], i, region)
-                region.locations.append(loc)
+                region_table[data["region"]].locations\
+                    .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
 
         # create location for beating the game and place Victory event there
         loc = Location(self.player, "Defeat Gibby", None, self.multiworld.get_region("Hylemxylem", self.player))
