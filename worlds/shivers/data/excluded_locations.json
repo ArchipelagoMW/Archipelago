@@ -1,0 +1,52 @@
+{
+	"plaques": [
+		"Information Plaque: Transforming Masks (Lobby)",
+		"Information Plaque: Jade Skull (Lobby)",
+		"Information Plaque: Bronze Unicorn (Prehistoric)",
+		"Information Plaque: Griffin (Prehistoric)",
+		"Information Plaque: Eagles Nest (Prehistoric)",
+		"Information Plaque: Large Spider (Prehistoric)",
+		"Information Plaque: Starfish (Prehistoric)",
+		"Information Plaque: Quartz Crystal (Ocean)",
+		"Information Plaque: Poseidon (Ocean)",
+		"Information Plaque: Colossus of Rhodes (Ocean)",
+		"Information Plaque: Poseidon's Temple (Ocean)",
+		"Information Plaque: Subterranean World (Underground Maze)",
+		"Information Plaque: Dero (Underground Maze)",
+		"Information Plaque: Tomb of the Ixupi (Egypt)",
+		"Information Plaque: The Sphinx (Egypt)",
+		"Information Plaque: Curse of Anubis (Egypt)",
+		"Information Plaque: Norse Burial Ship (Burial)",
+		"Information Plaque: Paracas Burial Bundles (Burial)",
+		"Information Plaque: Spectacular Coffins of Ghana (Burial)",
+		"Information Plaque: Cremation (Burial)",
+		"Information Plaque: Animal Crematorium (Burial)",
+		"Information Plaque: Witch Doctors of the Congo (Tiki)",
+		"Information Plaque: Sarombe doctor of Mozambique (Tiki)",
+		"Information Plaque: Fisherman's Canoe God (Gods)",
+		"Information Plaque: Mayan Gods (Gods)",
+		"Information Plaque: Thor (Gods)",
+		"Information Plaque: Celtic Janus Sculpture (Gods)",
+		"Information Plaque: Sumerian Bull God - An (Gods)",
+		"Information Plaque: Sumerian Lyre (Gods)",
+		"Information Plaque: Chuen (Gods)",
+		"Information Plaque: African Creation Myth (Anansi)",
+		"Information Plaque: Apophis the Serpent (Anansi)",
+		"Information Plaque: Death (Anansi)",
+		"Information Plaque: Cyclops (Pegasus)",
+		"Information Plaque: Lycanthropy (Werewolf)",
+		"Information Plaque: Coincidence or Extraterrestrial Visits? (UFO)",
+		"Information Plaque: Planets (UFO)",
+		"Information Plaque: Astronomical Construction (UFO)",
+		"Information Plaque: Guillotine (Torture)",
+		"Information Plaque: Aliens (UFO)"
+	],
+	"elevators": [
+		"Puzzle Solved Underground Elevator",
+		"Puzzle Solved Bedroom Elevator",
+		"Puzzle Solved Three Floor Elevator"
+	],
+	"lightning": [
+		"Ixupi Captured Lightning"
+	]
+}
