@@ -62,9 +62,9 @@ class SMWWorld(World):
     active_level_dict: typing.Dict[int,int]
     web = SMWWeb()
     
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
@@ -87,12 +87,11 @@ class SMWWorld(World):
         return slot_data
 
     def generate_early(self):
-        if self.multiworld.early_climb[self.player]:
+        if self.options.early_climb:
             self.multiworld.local_early_items[self.player][ItemName.mario_climb] = 1
 
-
     def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
+        location_table = setup_locations(self)
         create_regions(self.multiworld, self.player, location_table)
 
         # Not generate basic
@@ -110,12 +109,14 @@ class SMWWorld(World):
         add_rule(self.multiworld.get_region(LocationName.chocolate_island_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 5))
         add_rule(self.multiworld.get_region(LocationName.valley_of_bowser_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 6))
 
-        if self.multiworld.exclude_special_zone[self.player]:
+        if self.options.exclude_special_zone:
             exclusion_pool = set()
-            if self.multiworld.dragon_coin_checks[self.player]:
-                exclusion_pool.update(special_zone_level_names)
+            exclusion_pool.update(special_zone_level_names)
+            if self.options.dragon_coin_checks:
                 exclusion_pool.update(special_zone_dragon_coin_names)
+            if self.options.hidden_1up_checks:
                 exclusion_pool.update(special_zone_hidden_1up_names)
+            if self.options.blocksanity:
                 exclusion_pool.update(special_zone_blocksanity_names)
             elif self.multiworld.number_of_yoshi_eggs[self.player].value <= 72:
                 exclusion_pool.update(special_zone_level_names)
@@ -149,7 +150,7 @@ class SMWWorld(World):
         itempool += [self.create_item(ItemName.blue_switch_palace)]
         itempool += [self.create_item(ItemName.special_world_clear)]
         
-        if self.multiworld.goal[self.player] == "yoshi_egg_hunt":
+        if self.options.goal == "yoshi_egg_hunt":
             itempool += [self.create_item(ItemName.yoshi_egg)
                          for _ in range(self.multiworld.number_of_yoshi_eggs[self.player])]
             self.multiworld.get_location(LocationName.yoshis_house, self.player).place_locked_item(self.create_item(ItemName.victory))
@@ -181,7 +182,7 @@ class SMWWorld(World):
 
         junk_pool = []
         for i in range(junk_count):
-            junk_item = self.multiworld.random.choice(junk_weights)
+            junk_item = self.random.choice(junk_weights)
             junk_pool.append(self.create_item(junk_item))
         
         itempool += junk_pool
@@ -199,18 +200,18 @@ class SMWWorld(World):
     def generate_output(self, output_directory: str):
         rompath = ""  # if variable is not declared finally clause may fail
         try:
-            world = self.multiworld
+            multiworld = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.multiworld, rom, self.player, self.active_level_dict)
+            patch_rom(self, rom, self.player, self.active_level_dict)
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
             patch = SMWDeltaPatch(os.path.splitext(rompath)[0]+SMWDeltaPatch.patch_file_ending, player=player,
-                                  player_name=world.player_name[player], patched_path=rompath)
+                                  player_name=multiworld.player_name[player], patched_path=rompath)
             patch.write()
         except:
             raise
@@ -266,15 +267,15 @@ class SMWWorld(World):
                     if level_index >= world_cutoffs[i]:
                         continue
 
-                    if self.multiworld.dragon_coin_checks[self.player].value == 0 and "Dragon Coins" in loc_name:
+                    if self.options.dragon_coin_checks.value == 0 and "Dragon Coins" in loc_name:
                         continue
-                    if self.multiworld.moon_checks[self.player].value == 0 and "3-Up Moon" in loc_name:
+                    if self.options.moon_checks.value == 0 and "3-Up Moon" in loc_name:
                         continue
-                    if self.multiworld.hidden_1up_checks[self.player].value == 0 and "Hidden 1-Up" in loc_name:
+                    if self.options.hidden_1up_checks.value == 0 and "Hidden 1-Up" in loc_name:
                         continue
-                    if self.multiworld.bonus_block_checks[self.player].value == 0 and "1-Up from Bonus Block" in loc_name:
+                    if self.options.bonus_block_checks.value == 0 and "1-Up from Bonus Block" in loc_name:
                         continue
-                    if self.multiworld.blocksanity[self.player].value == 0 and "Block #" in loc_name:
+                    if self.options.blocksanity.value == 0 and "Block #" in loc_name:
                         continue
 
 
@@ -303,10 +304,10 @@ class SMWWorld(World):
         return created_item
     
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(list(junk_table.keys()))
+        return self.random.choice(list(junk_table.keys()))
 
     def get_filler_item_name(self) -> str:
         return ItemName.one_up_mushroom
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self)

@@ -1,5 +1,6 @@
 
 from BaseClasses import MultiWorld
+from worlds.AutoWorld import World
 
 import math
 
@@ -63,11 +64,11 @@ def generate_text_box(input_string):
     return out_bytes
 
 
-def generate_goal_text(world: MultiWorld, player: int):
+def generate_goal_text(world: World):
     out_array = bytearray()
-    if world.goal[player] == "yoshi_egg_hunt":
+    if world.options.goal == "yoshi_egg_hunt":
         required_yoshi_eggs = max(math.floor(
-                world.number_of_yoshi_eggs[player].value * (world.percentage_of_yoshi_eggs[player].value / 100.0)), 1)
+                world.options.number_of_yoshi_eggs.value * (world.options.percentage_of_yoshi_eggs.value / 100.0)), 1)
         out_array += bytearray([0x9F, 0x9F])
         out_array += string_to_bytes(" You must acquire")
         out_array[-1] += 0x80
@@ -77,7 +78,7 @@ def generate_goal_text(world: MultiWorld, player: int):
         out_array[-1] += 0x80
         out_array += bytearray([0x9F, 0x9F, 0x9F])
     else:
-        bosses_required = world.bosses_required[player].value
+        bosses_required = world.options.bosses_required.value
         out_array += bytearray([0x9F, 0x9F])
         out_array += string_to_bytes(" You must defeat")
         out_array[-1] += 0x80

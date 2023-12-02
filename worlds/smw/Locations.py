@@ -1,6 +1,7 @@
 import typing
 
 from BaseClasses import Location
+from worlds.AutoWorld import World
 from .Names import LocationName
 
 class SMWLocation(Location):
@@ -1051,30 +1052,30 @@ special_zone_blocksanity_names = [
 location_table = {}
 
 
-def setup_locations(world, player: int):
+def setup_locations(world: World):
     location_table = {**level_location_table}
 
     # Dragon Coins here
-    if world.dragon_coin_checks[player].value:
+    if world.options.dragon_coin_checks.value:
         location_table.update({**dragon_coin_location_table})
 
     # 3up Moons here
-    if world.moon_checks[player].value:
+    if world.options.moon_checks.value:
         location_table.update({**moon_location_table})
 
     # Hidden 1-Ups here
-    if world.hidden_1up_checks[player].value:
+    if world.options.hidden_1up_checks.value:
         location_table.update({**hidden_1ups_location_table})
 
     # Green Star Blocks here
-    if world.bonus_block_checks[player].value:
+    if world.options.bonus_block_checks.value:
         location_table.update({**bonus_block_location_table})
 
     # Blocksanity here
-    if world.blocksanity[player].value:
+    if world.options.blocksanity.value:
         location_table.update({**blocksanity_location_table})
 
-    if world.goal[player] == "yoshi_egg_hunt":
+    if world.options.goal == "yoshi_egg_hunt":
         location_table.update({**yoshi_house_location_table})
     else:
         location_table.update({**bowser_location_table})

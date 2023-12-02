@@ -1,6 +1,8 @@
 import json
 import pkgutil
 
+from worlds.AutoWorld import World
+
 tileset_names = [
     "grass_hills",
     "grass_forest",
@@ -490,7 +492,7 @@ game_sfx_calls = [
     0x657D8        # Cutscene: Castle being mopped away
 ]
 
-def generate_shuffled_sfx(rom, world, player):
+def generate_shuffled_sfx(rom, world: World):
     # Adjust "hitting sprites in succession" codes
     rom.write_bytes(0x0A60B, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Thrown sprites combo #1
     rom.write_bytes(0x0A659, bytearray([0x22, 0x47, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE47 : nop #2     # Thrown sprites combo #2
@@ -580,7 +582,7 @@ def generate_shuffled_sfx(rom, world, player):
     rom.write_bytes(0x06D41 + 0x05, bytearray([0xEA, 0xEA, 0xEA, 0xEA]))    # nop #4
 
     # Manually add "Map: Stepping onto a level tile" random SFX
-    random_sfx = world.per_slot_randoms[player].randint(0, len(valid_sfxs)-1)
+    random_sfx = world.random.randint(0, len(valid_sfxs)-1)
     selected_sfx = valid_sfxs[random_sfx]
     rom.write_byte(0x2169F + 0x01, selected_sfx[0])
     rom.write_byte(0x2169F + 0x04, selected_sfx[1] + 0xF9)
@@ -591,44 +593,43 @@ def generate_shuffled_sfx(rom, world, player):
     # Randomize SFX calls
     for address in game_sfx_calls:
         # Get random SFX
-        random_sfx = world.per_slot_randoms[player].randint(0, len(valid_sfxs)-1)
+        random_sfx = world.random.randint(0, len(valid_sfxs)-1)
         selected_sfx = valid_sfxs[random_sfx]
         # Write randomized SFX num
         rom.write_byte(address + 0x01, selected_sfx[0])
         # Write randomized SFX port
         rom.write_byte(address + 0x03, selected_sfx[1] + 0xF9)
 
-
-def generate_shuffled_level_music(world, player):
+def generate_shuffled_level_music(world: World):
     shuffled_level_music = level_music_value_data.copy()
 
-    if world.music_shuffle[player] == "consistent":
-        world.per_slot_randoms[player].shuffle(shuffled_level_music)
-    elif world.music_shuffle[player] == "singularity":
-        single_song = world.per_slot_randoms[player].choice(shuffled_level_music)
+    if world.options.music_shuffle == "consistent":
+        world.random.shuffle(shuffled_level_music)
+    elif world.options.music_shuffle == "singularity":
+        single_song = world.random.choice(shuffled_level_music)
         shuffled_level_music = [single_song for i in range(len(shuffled_level_music))]
 
     return shuffled_level_music
 
-def generate_shuffled_ow_music(world, player):
+def generate_shuffled_ow_music(world: World):
     shuffled_ow_music = ow_music_value_data.copy()
 
-    if world.music_shuffle[player] == "consistent" or world.music_shuffle[player] == "full":
-        world.per_slot_randoms[player].shuffle(shuffled_ow_music)
-    elif world.music_shuffle[player] == "singularity":
-        single_song = world.per_slot_randoms[player].choice(shuffled_ow_music)
+    if world.options.music_shuffle == "consistent" or world.options.music_shuffle == "full":
+        world.random.shuffle(shuffled_ow_music)
+    elif world.options.music_shuffle == "singularity":
+        single_song = world.random.choice(shuffled_ow_music)
         shuffled_ow_music = [single_song for i in range(len(shuffled_ow_music))]
 
     return shuffled_ow_music
 
-def generate_shuffled_ow_palettes(rom, world, player):
-    if world.overworld_palette_shuffle[player]:
+def generate_shuffled_ow_palettes(rom, world: World):
+    if world.options.overworld_palette_shuffle:
         for address, valid_palettes in valid_ow_palettes.items():
-            chosen_palette = world.per_slot_randoms[player].choice(valid_palettes)
+            chosen_palette = world.random.choice(valid_palettes)
             rom.write_byte(address, chosen_palette)
 
-def generate_shuffled_header_data(rom, world, player):
-    if world.music_shuffle[player] != "full" and world.foreground_palette_shuffle[player] == "on_legacy" and world.background_palette_shuffle[player] == "on_legacy" :
+def generate_shuffled_header_data(rom, world: World):
+    if world.options.music_shuffle != "full" and world.options.foreground_palette_shuffle == "on_legacy" and world.options.background_palette_shuffle == "on_legacy" :
         return
 
     for level_id in range(0, 0x200):
@@ -648,29 +649,29 @@ def generate_shuffled_header_data(rom, world, player):
 
         tileset = level_header[4] & 0x0F
 
-        if world.music_shuffle[player] == "full":
+        if world.options.music_shuffle == "full":
             level_header[2] &= 0x8F
-            level_header[2] |= (world.per_slot_randoms[player].randint(0, 7) << 5)
+            level_header[2] |= (world.random.randint(0, 7) << 5)
 
-        if (world.foreground_palette_shuffle[player] == "on_legacy" and tileset in valid_foreground_palettes):
+        if (world.options.foreground_palette_shuffle == "on_legacy" and tileset in valid_foreground_palettes):
             level_header[3] &= 0xF8
-            level_header[3] |= world.per_slot_randoms[player].choice(valid_foreground_palettes[tileset])
+            level_header[3] |= world.random.choice(valid_foreground_palettes[tileset])
 
-        if world.background_palette_shuffle[player] == "on_legacy":
+        if world.options.background_palette_shuffle == "on_legacy":
             layer2_ptr_list = list(rom.read_bytes(0x2E600 + level_id * 3, 3))
             layer2_ptr = (layer2_ptr_list[2] << 16 | layer2_ptr_list[1] << 8 | layer2_ptr_list[0])
 
             if layer2_ptr in valid_background_palettes:
                 level_header[0] &= 0x1F
-                level_header[0] |= (world.per_slot_randoms[player].choice(valid_background_palettes[layer2_ptr]) << 5)
+                level_header[0] |= (world.random.choice(valid_background_palettes[layer2_ptr]) << 5)
 
             if layer2_ptr in valid_background_colors:
                 level_header[1] &= 0x1F
-                level_header[1] |= (world.per_slot_randoms[player].choice(valid_background_colors[layer2_ptr]) << 5)
+                level_header[1] |= (world.random.choice(valid_background_colors[layer2_ptr]) << 5)
 
         rom.write_bytes(layer1_ptr, bytes(level_header))
 
-def generate_curated_level_palette_data(rom, world, player):
+def generate_curated_level_palette_data(rom, world: World):
     PALETTE_LEVEL_CODE_ADDR = 0x88000
     PALETTE_INDEX_ADDR = 0x8F000
     PALETTE_LEVEL_TILESET_ADDR = 0x8F200
@@ -816,7 +817,7 @@ def generate_curated_level_palette_data(rom, world, player):
             tileset = tileset_names[tileset_num]
         else:
             tileset = tileset_names[0x19]
-        palette = world.per_slot_randoms[player].randint(0, len(tilesets[tileset])-1)
+        palette = world.random.randint(0, len(tilesets[tileset])-1)
         rom.write_bytes(PALETTE_INDEX_ADDR + level_id, bytearray([palette]))
         
     # Writes the actual level palette data and pointer to said data to the ROM
@@ -845,7 +846,7 @@ def generate_curated_level_palette_data(rom, world, player):
     rom.write_byte(EATEN_BERRY_ADDR + 0x05, 0x04)
     rom.write_byte(EATEN_BERRY_ADDR + 0x07, 0x04)
 
-def generate_curated_map_palette_data(rom, world, player):
+def generate_curated_map_palette_data(rom, world: World):
     PALETTE_MAP_CODE_ADDR = 0x88200
     PALETTE_UPLOADER_EDIT = 0x88400
     PALETTE_MAP_INDEX_ADDR = 0x8F400
@@ -966,7 +967,7 @@ def generate_curated_map_palette_data(rom, world, player):
 
     for map_id in range(0x07):
         current_map_name = map_names[map_id]
-        palette = world.per_slot_randoms[player].randint(0, len(maps[current_map_name])-1)
+        palette = world.random.randint(0, len(maps[current_map_name])-1)
         rom.write_bytes(PALETTE_MAP_INDEX_ADDR + map_id, bytearray([palette]))
 
     # Writes the actual map palette data and pointer to said data to the ROM
