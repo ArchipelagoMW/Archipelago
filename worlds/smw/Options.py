@@ -52,6 +52,40 @@ class DragonCoinChecks(Toggle):
     display_name = "Dragon Coin Checks"
 
 
+class MoonChecks(Toggle):
+    """
+    Whether collecting a 3-Up Moon in a level will grant a check
+    """
+    display_name = "3up Moon Checks"
+
+
+class Hidden1UpChecks(Toggle):
+    """
+    Whether collecting a hidden 1-Up mushroom in a level will grant a check
+    These checks are considered cryptic as there's no actual indicator that they're in their respective places
+    Enable this option at your own risk
+    """
+    display_name = "Hidden 1-Up Checks"
+
+
+class BonusBlockChecks(Toggle):
+    """
+    Whether collecting a 1-Up mushroom from a Bonus Block in a level will grant a check
+    """
+    display_name = "Bonus Block Checks"
+
+
+class Blocksanity(Toggle):
+    """
+    Whether hitting a block with an item or coin inside will grant a check
+    Note that some blocks are excluded due to how the option and the game works!
+    Exclusion list:
+      * Blocks in Top Secret Area & Front Door/Bowser Castle
+      * Blocks that are unreachable unless you glitch your way in
+    """
+    display_name = "Blocksanity"
+
+
 class BowserCastleDoors(Choice):
     """
     How the doors of Bowser's Castle behave
@@ -239,6 +273,15 @@ class MusicShuffle(Choice):
     default = 0
 
 
+class SFXShuffle(Toggle):
+    """
+    Shuffles almost every instance of sound effect playback
+    Archipelago elements that play sound effects aren't randomized
+    """
+    display_name = "Sound effect shuffle"
+    default = 0
+
+
 class MarioPalette(Choice):
     """
     Mario palette color
@@ -255,25 +298,48 @@ class MarioPalette(Choice):
     default = 0
 
 
-class ForegroundPaletteShuffle(Toggle):
+class ForegroundPaletteShuffle(Choice):
     """
     Whether to shuffle level foreground palettes
+    off: Do not shuffle palettes
+    on_legacy: Uses only the palette sets from the original game
+    on_curated: Uses custom palette sets created by some people
+                Setting this option will also force Backgrounds to use those palettes
     """
     display_name = "Foreground Palette Shuffle"
+    option_off = 0
+    option_on_legacy = 1
+    option_on_curated = 2
+    default = 0
 
 
-class BackgroundPaletteShuffle(Toggle):
+class BackgroundPaletteShuffle(Choice):
     """
     Whether to shuffle level background palettes
+    off: Do not shuffle palettes
+    on_legacy: Uses only the palette sets from the original game
+    on_curated: Uses custom palette sets created by some people
+                Setting this option will also force Foregrounds to use those palettes
     """
     display_name = "Background Palette Shuffle"
+    option_off = 0
+    option_on_legacy = 1
+    option_on_curated = 2
+    default = 0
 
 
-class OverworldPaletteShuffle(Toggle):
+class OverworldPaletteShuffle(Choice):
     """
     Whether to shuffle overworld palettes
+    off: Do not shuffle palettes
+    on_legacy: Uses only the palette sets from the original game
+    on_curated: Uses custom palette sets created by some people
     """
     display_name = "Overworld Palette Shuffle"
+    option_off = 0
+    option_on_legacy = 1
+    option_on_curated = 2
+    default = 0
 
 
 class StartingLifeCount(Range):
@@ -294,6 +360,10 @@ smw_options: typing.Dict[str, type(Option)] = {
     "number_of_yoshi_eggs": NumberOfYoshiEggs,
     "percentage_of_yoshi_eggs": PercentageOfYoshiEggs,
     "dragon_coin_checks": DragonCoinChecks,
+    "moon_checks": MoonChecks,
+    "hidden_1up_checks": Hidden1UpChecks,
+    "bonus_block_checks": BonusBlockChecks,
+    "blocksanity": Blocksanity,
     "bowser_castle_doors": BowserCastleDoors,
     "bowser_castle_rooms": BowserCastleRooms,
     "level_shuffle": LevelShuffle,
@@ -311,6 +381,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "early_climb": EarlyClimb,
     "overworld_speed": OverworldSpeed,
     "music_shuffle": MusicShuffle,
+    "sfx_shuffle": SFXShuffle,
     "mario_palette": MarioPalette,
     "foreground_palette_shuffle": ForegroundPaletteShuffle,
     "background_palette_shuffle": BackgroundPaletteShuffle,

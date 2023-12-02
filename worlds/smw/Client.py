@@ -17,11 +17,18 @@ SRAM_START = 0xE00000
 SMW_ROMHASH_START = 0x7FC0
 ROMHASH_SIZE = 0x15
 
-SMW_PROGRESS_DATA     = WRAM_START + 0x1F02
-SMW_DRAGON_COINS_DATA = WRAM_START + 0x1F2F
-SMW_PATH_DATA         = WRAM_START + 0x1EA2
-SMW_EVENT_ROM_DATA    = ROM_START + 0x2D608
-SMW_ACTIVE_LEVEL_DATA = ROM_START + 0x37F70
+SMW_PROGRESS_DATA       = WRAM_START + 0x1F02
+SMW_DRAGON_COINS_DATA   = WRAM_START + 0x1F2F
+SMW_PATH_DATA           = WRAM_START + 0x1EA2
+SMW_EVENT_ROM_DATA      = ROM_START + 0x2D608
+SMW_ACTIVE_LEVEL_DATA   = ROM_START + 0x37F70
+SMW_MOON_DATA           = WRAM_START + 0x1FEE
+SMW_HIDDEN_1UP_DATA     = WRAM_START + 0x1F3C
+SMW_BONUS_BLOCK_DATA    = WRAM_START + 0x1A000
+SMW_BLOCKSANITY_DATA    = WRAM_START + 0x1A400
+SMW_BLOCKSANITY_FLAGS   = WRAM_START + 0x1A010
+SMW_SPECIAL_WORLD_CLEAR = WRAM_START + 0x1FFF
+
 
 SMW_GOAL_DATA                = ROM_START + 0x01BFA0
 SMW_REQUIRED_BOSSES_DATA     = ROM_START + 0x01BFA1
@@ -31,6 +38,11 @@ SMW_RECEIVE_MSG_DATA         = ROM_START + 0x01BFA4
 SMW_DEATH_LINK_ACTIVE_ADDR   = ROM_START + 0x01BFA5
 SMW_DRAGON_COINS_ACTIVE_ADDR = ROM_START + 0x01BFA6
 SMW_SWAMP_DONUT_GH_ADDR      = ROM_START + 0x01BFA7
+SMW_MOON_ACTIVE_ADDR         = ROM_START + 0x01BFA8
+SMW_HIDDEN_1UP_ACTIVE_ADDR   = ROM_START + 0x01BFA9
+SMW_BONUS_BLOCK_ACTIVE_ADDR  = ROM_START + 0x01BFAA
+SMW_BLOCKSANITY_ACTIVE_ADDR  = ROM_START + 0x01BFAB
+
 
 SMW_GAME_STATE_ADDR    = WRAM_START + 0x100
 SMW_MARIO_STATE_ADDR   = WRAM_START + 0x71
@@ -46,7 +58,9 @@ SMW_SFX_ADDR           = WRAM_START + 0x1DFC
 SMW_PAUSE_ADDR         = WRAM_START + 0x13D4
 SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xC391
 
-SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1F2B
+SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1A00E
+
+SMW_BLOCKSANITY_BLOCK_COUNT = 658
 
 SMW_GOAL_LEVELS          = [0x28, 0x31, 0x32]
 SMW_INVALID_MARIO_STATES = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
@@ -242,6 +256,8 @@ class SMWSNIClient(SNIClient):
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
+        
+        boss_state = await snes_read(ctx, SMW_BOSS_STATE_ADDR, 0x1)
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
         mario_state = await snes_read(ctx, SMW_MARIO_STATE_ADDR, 0x1)
         if game_state is None:
@@ -294,7 +310,7 @@ class SMWSNIClient(SNIClient):
         elif goal[0] == 1 and egg_count[0] > display_count[0]:
             snes_buffered_write(ctx, SMW_BONUS_STAR_ADDR, bytes([egg_count[0]]))
             await snes_flush_writes(ctx)
-
+        
         await self.handle_message_queue(ctx)
         await self.handle_trap_queue(ctx)
 
@@ -303,7 +319,16 @@ class SMWSNIClient(SNIClient):
         progress_data = bytearray(await snes_read(ctx, SMW_PROGRESS_DATA, 0x0F))
         dragon_coins_data = bytearray(await snes_read(ctx, SMW_DRAGON_COINS_DATA, 0x0C))
         dragon_coins_active = await snes_read(ctx, SMW_DRAGON_COINS_ACTIVE_ADDR, 0x1)
-        from worlds.smw.Rom import item_rom_data, ability_rom_data, trap_rom_data
+        moon_data = bytearray(await snes_read(ctx, SMW_MOON_DATA, 0x0C))
+        moon_active = await snes_read(ctx, SMW_MOON_ACTIVE_ADDR, 0x1)
+        hidden_1up_data = bytearray(await snes_read(ctx, SMW_HIDDEN_1UP_DATA, 0x0C))
+        hidden_1up_active = await snes_read(ctx, SMW_HIDDEN_1UP_ACTIVE_ADDR, 0x1)
+        bonus_block_data = bytearray(await snes_read(ctx, SMW_BONUS_BLOCK_DATA, 0x0C))
+        bonus_block_active = await snes_read(ctx, SMW_BONUS_BLOCK_ACTIVE_ADDR, 0x1)
+        blocksanity_data = bytearray(await snes_read(ctx, SMW_BLOCKSANITY_DATA, SMW_BLOCKSANITY_BLOCK_COUNT))
+        blocksanity_flags = bytearray(await snes_read(ctx, SMW_BLOCKSANITY_FLAGS, 0xC))
+        blocksanity_active = await snes_read(ctx, SMW_BLOCKSANITY_ACTIVE_ADDR, 0x1)
+        from worlds.smw.Rom import item_rom_data, ability_rom_data, trap_rom_data, icon_rom_data
         from worlds.smw.Levels import location_id_to_level_id, level_info_dict
         from worlds import AutoWorldRegister
         for loc_name, level_data in location_id_to_level_id.items():
@@ -325,6 +350,54 @@ class SMWSNIClient(SNIClient):
                     bit_set = (masked_data != 0)
 
                     if bit_set:
+                        new_checks.append(loc_id)
+                elif level_data[1] == 3:
+                    # Moon Check
+                    if not moon_active or moon_active[0] == 0:
+                        continue
+
+                    progress_byte = (level_data[0] // 8)
+                    progress_bit  = 7 - (level_data[0] % 8)
+
+                    data = moon_data[progress_byte]
+                    masked_data = data & (1 << progress_bit)
+                    bit_set = (masked_data != 0)
+
+                    if bit_set:
+                        new_checks.append(loc_id)
+                elif level_data[1] == 4:
+                    # Hidden 1-Up Check
+                    if not hidden_1up_active or hidden_1up_active[0] == 0:
+                        continue
+
+                    progress_byte = (level_data[0] // 8)
+                    progress_bit  = 7 - (level_data[0] % 8)
+
+                    data = hidden_1up_data[progress_byte]
+                    masked_data = data & (1 << progress_bit)
+                    bit_set = (masked_data != 0)
+
+                    if bit_set:
+                        new_checks.append(loc_id)
+                elif level_data[1] == 5:
+                    # Bonus Block Check
+                    if not bonus_block_active or bonus_block_active[0] == 0:
+                        continue
+
+                    progress_byte = (level_data[0] // 8)
+                    progress_bit  = 7 - (level_data[0] % 8)
+
+                    data = bonus_block_data[progress_byte]
+                    masked_data = data & (1 << progress_bit)
+                    bit_set = (masked_data != 0)
+
+                    if bit_set:
+                        new_checks.append(loc_id)
+                elif level_data[1] >= 100:
+                    if not blocksanity_active or blocksanity_active[0] == 0:
+                        continue
+                    block_index = level_data[1] - 100
+                    if blocksanity_data[block_index] != 0:
                         new_checks.append(loc_id)
                 else:
                     event_id_value = event_id + level_data[1]
@@ -362,9 +435,13 @@ class SMWSNIClient(SNIClient):
         if game_state[0] != 0x14:
             # Don't receive items or collect locations outside of in-level mode
             return
+        
+        if boss_state[0] in SMW_BOSS_STATES:
+            # Don't receive items or collect locations inside boss battles
+            return
 
-        recv_count = await snes_read(ctx, SMW_RECV_PROGRESS_ADDR, 1)
-        recv_index = recv_count[0]
+        recv_count = await snes_read(ctx, SMW_RECV_PROGRESS_ADDR, 2)
+        recv_index = recv_count[0]+(recv_count[1]<<8)
 
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
@@ -383,7 +460,7 @@ class SMWSNIClient(SNIClient):
                     receive_message = generate_received_text(item_name, player_name)
                     self.add_message_to_queue(receive_message)
 
-            snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index]))
+            snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index&0xFF, (recv_index>>8)&0xFF]))
             if item.item in trap_rom_data:
                 item_name = ctx.item_names[item.item]
                 player_name = ctx.player_names[item.player]
@@ -404,6 +481,14 @@ class SMWSNIClient(SNIClient):
                     snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([item_rom_data[item.item][2]]))
 
                 snes_buffered_write(ctx, WRAM_START + item_rom_data[item.item][0], bytes([new_item_count]))
+            elif item.item in icon_rom_data:
+                if verify_game_state[0] == 0x14:
+                    queue_addr = await snes_read(ctx, WRAM_START + icon_rom_data[item.item][0], 2)
+                    queue_addr = queue_addr[0]+(queue_addr[1]<<8)
+                    queue_addr += 1
+                    snes_buffered_write(ctx, WRAM_START + icon_rom_data[item.item][0], bytes([queue_addr&0xFF, (queue_addr>>8)&0xFF]))
+
+
             elif item.item in ability_rom_data:
                 # Handle Upgrades
                 for rom_data in ability_rom_data[item.item]:
@@ -448,6 +533,11 @@ class SMWSNIClient(SNIClient):
         path_data = bytearray(await snes_read(ctx, SMW_PATH_DATA, 0x60))
         donut_gh_swapped = await snes_read(ctx, SMW_SWAMP_DONUT_GH_ADDR, 0x1)
         new_dragon_coin = False
+        new_moon = False
+        new_hidden_1up = False
+        new_bonus_block = False
+        new_blocksanity = False
+        i = 0
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
                 ctx.locations_checked.add(loc_id)
@@ -455,6 +545,9 @@ class SMWSNIClient(SNIClient):
 
                 if loc_name not in location_id_to_level_id:
                     continue
+
+                logging.info(f"Recovered checks ({i:03}): {loc_name}")
+                i += 1
 
                 level_data = location_id_to_level_id[loc_name]
 
@@ -469,6 +562,42 @@ class SMWSNIClient(SNIClient):
                     dragon_coins_data[progress_byte] = new_data
 
                     new_dragon_coin = True
+                elif level_data[1] == 3:
+                    # Moon Check
+
+                    progress_byte = (level_data[0] // 8)
+                    progress_bit  = 7 - (level_data[0] % 8)
+
+                    data = moon_data[progress_byte]
+                    new_data = data | (1 << progress_bit)
+                    moon_data[progress_byte] = new_data
+
+                    new_moon = True
+                elif level_data[1] == 4:
+                    # Hidden 1-Up Check
+                    progress_byte = (level_data[0] // 8)
+                    progress_bit  = 7 - (level_data[0] % 8)
+
+                    data = hidden_1up_data[progress_byte]
+                    new_data = data | (1 << progress_bit)
+                    hidden_1up_data[progress_byte] = new_data
+
+                    new_hidden_1up = True
+                elif level_data[1] == 5:
+                    # Bonus block prize Check
+
+                    progress_byte = (level_data[0] // 8)
+                    progress_bit  = 7 - (level_data[0] % 8)
+
+                    data = bonus_block_data[progress_byte]
+                    new_data = data | (1 << progress_bit)
+                    bonus_block_data[progress_byte] = new_data
+
+                    new_bonus_block = True
+                elif level_data[1] >= 100:
+                    block_index = level_data[1] - 100
+                    blocksanity_data[block_index] = 1
+                    new_blocksanity = True
                 else:
                     if level_data[0] in SMW_UNCOLLECTABLE_LEVELS:
                         continue
@@ -513,6 +642,14 @@ class SMWSNIClient(SNIClient):
 
         if new_dragon_coin:
             snes_buffered_write(ctx, SMW_DRAGON_COINS_DATA, bytes(dragon_coins_data))
+        if new_moon:
+            snes_buffered_write(ctx, SMW_MOON_DATA, bytes(moon_data))
+        if new_hidden_1up:
+            snes_buffered_write(ctx, SMW_HIDDEN_1UP_DATA, bytes(hidden_1up_data))
+        if new_bonus_block:
+            snes_buffered_write(ctx, SMW_BONUS_BLOCK_DATA, bytes(bonus_block_data))
+        if new_blocksanity:
+            snes_buffered_write(ctx, SMW_BLOCKSANITY_DATA, bytes(blocksanity_data))
         if new_events > 0:
             snes_buffered_write(ctx, SMW_PROGRESS_DATA, bytes(progress_data))
             snes_buffered_write(ctx, SMW_PATH_DATA, bytes(path_data))

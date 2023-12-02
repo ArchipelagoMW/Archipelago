@@ -1,5 +1,9 @@
 # Junk Definitions
 one_up_mushroom  = "1-Up Mushroom"
+one_coin = "1 coin"
+five_coins = "5 coins"
+ten_coins = "10 coins"
+fifty_coins = "50 coins"
 
 # Collectable Definitions
 yoshi_egg = "Yoshi Egg"
@@ -21,6 +25,9 @@ yellow_switch_palace = "Yellow Switch Palace"
 green_switch_palace  = "Green Switch Palace"
 red_switch_palace    = "Red Switch Palace"
 blue_switch_palace   = "Blue Switch Palace"
+
+# Special world clear flag definition
+special_world_clear = "Special World Clear"
 
 # Trap Definitions
 ice_trap        = "Ice Trap"

@@ -5,8 +5,8 @@ import settings
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import SMWItem, ItemData, item_table
-from .Locations import SMWLocation, all_locations, setup_locations, special_zone_level_names, special_zone_dragon_coin_names
+from .Items import SMWItem, ItemData, item_table, junk_table
+from .Locations import SMWLocation, all_locations, setup_locations, special_zone_level_names, special_zone_dragon_coin_names, special_zone_hidden_1up_names, special_zone_blocksanity_names
 from .Options import smw_options
 from .Regions import create_regions, connect_regions
 from .Levels import full_level_list, generate_level_list, location_id_to_level_id
@@ -115,6 +115,8 @@ class SMWWorld(World):
             if self.multiworld.dragon_coin_checks[self.player]:
                 exclusion_pool.update(special_zone_level_names)
                 exclusion_pool.update(special_zone_dragon_coin_names)
+                exclusion_pool.update(special_zone_hidden_1up_names)
+                exclusion_pool.update(special_zone_blocksanity_names)
             elif self.multiworld.number_of_yoshi_eggs[self.player].value <= 72:
                 exclusion_pool.update(special_zone_level_names)
             exclusion_rules(self.multiworld, self.player, exclusion_pool)
@@ -122,6 +124,14 @@ class SMWWorld(World):
         total_required_locations = 96
         if self.multiworld.dragon_coin_checks[self.player]:
             total_required_locations += 49
+        if self.multiworld.moon_checks[self.player]:
+            total_required_locations += 7
+        if self.multiworld.hidden_1up_checks[self.player]:
+            total_required_locations += 14
+        if self.multiworld.bonus_block_checks[self.player]:
+            total_required_locations += 4
+        if self.multiworld.blocksanity[self.player]:
+            total_required_locations += 658
 
         itempool += [self.create_item(ItemName.mario_run)]
         itempool += [self.create_item(ItemName.mario_carry)]
@@ -137,6 +147,7 @@ class SMWWorld(World):
         itempool += [self.create_item(ItemName.green_switch_palace)]
         itempool += [self.create_item(ItemName.red_switch_palace)]
         itempool += [self.create_item(ItemName.blue_switch_palace)]
+        itempool += [self.create_item(ItemName.special_world_clear)]
         
         if self.multiworld.goal[self.player] == "yoshi_egg_hunt":
             itempool += [self.create_item(ItemName.yoshi_egg)
@@ -161,7 +172,19 @@ class SMWWorld(World):
 
         itempool += trap_pool
 
-        itempool += [self.create_item(ItemName.one_up_mushroom) for _ in range(junk_count)]
+        junk_weights = []
+        junk_weights += ([ItemName.one_coin] * 30)
+        junk_weights += ([ItemName.five_coins] * 25)
+        junk_weights += ([ItemName.ten_coins] * 15)
+        junk_weights += ([ItemName.fifty_coins] * 10)
+        junk_weights += ([ItemName.one_up_mushroom] * 20)
+
+        junk_pool = []
+        for i in range(junk_count):
+            junk_item = self.multiworld.random.choice(junk_weights)
+            junk_pool.append(self.create_item(junk_item))
+        
+        itempool += junk_pool
 
         boss_location_names = [LocationName.yoshis_island_koopaling, LocationName.donut_plains_koopaling, LocationName.vanilla_dome_koopaling,
                                LocationName.twin_bridges_koopaling, LocationName.forest_koopaling, LocationName.chocolate_koopaling,
@@ -245,6 +268,15 @@ class SMWWorld(World):
 
                     if self.multiworld.dragon_coin_checks[self.player].value == 0 and "Dragon Coins" in loc_name:
                         continue
+                    if self.multiworld.moon_checks[self.player].value == 0 and "3-Up Moon" in loc_name:
+                        continue
+                    if self.multiworld.hidden_1up_checks[self.player].value == 0 and "Hidden 1-Up" in loc_name:
+                        continue
+                    if self.multiworld.bonus_block_checks[self.player].value == 0 and "1-Up from Bonus Block" in loc_name:
+                        continue
+                    if self.multiworld.blocksanity[self.player].value == 0 and "Block #" in loc_name:
+                        continue
+
 
                     location = self.multiworld.get_location(loc_name, self.player)
                     er_hint_data[location.address] = world_names[i]
@@ -269,6 +301,9 @@ class SMWWorld(World):
         created_item = SMWItem(name, classification, data.code, self.player)
 
         return created_item
+    
+    def get_filler_item_name(self) -> str:
+        return self.multiworld.random.choice(list(junk_table.keys()))
 
     def get_filler_item_name(self) -> str:
         return ItemName.one_up_mushroom

@@ -18,7 +18,11 @@ class SMWItem(Item):
 
 # Separate tables for each type of item.
 junk_table = {
-    ItemName.one_up_mushroom: ItemData(0xBC0001, False),
+    ItemName.one_coin:        ItemData(0xBC0017, False),
+    ItemName.five_coins:      ItemData(0xBC0018, False),
+    ItemName.ten_coins:       ItemData(0xBC0019, False),
+    ItemName.fifty_coins:   ItemData(0xBC001A, False),
+    ItemName.one_up_mushroom: ItemData(0xBC0001, False)
 }
 
 collectable_table = {
@@ -36,6 +40,7 @@ upgrade_table = {
     ItemName.progressive_powerup: ItemData(0xBC000A, True),
     ItemName.p_balloon:           ItemData(0xBC000B, True),
     ItemName.super_star_active:   ItemData(0xBC000D, True),
+    ItemName.special_world_clear: ItemData(0xBC001B, True)
 }
 
 switch_palace_table = {
