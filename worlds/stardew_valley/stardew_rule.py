@@ -360,7 +360,7 @@ class AggregatingStardewRule(StardewRule, ABC):
 
         # Identity is removed from the resulting simplification.
         # TODO check if the in reduces performances
-        if simplified is self.identity or simplified in local_state.simplified_rules:
+        if simplified is self.identity:
             return
 
         # If we find a complement here, we know the rule will always resolve to its value.
