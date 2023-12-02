@@ -184,7 +184,8 @@ class FairyKings(Range):
 
 class FairyChessPieces(OptionSet):
     """
-    Whether to use fairy chess pieces. Most pieces below are from Ralph Betza's Chess with Different Armies.
+    Whether to use fairy chess pieces. Most pieces below are from Ralph Betza's Chess with Different Armies. The default
+    allows for all fairy chess pieces, as well as the standard pieces defined by FIDE.
 
     FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
 

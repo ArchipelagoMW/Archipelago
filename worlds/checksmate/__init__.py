@@ -75,6 +75,10 @@ class CMWorld(World):
     # TODO: this probably can go in some other method now??
     def generate_early(self) -> None:
         which_pieces = self.options.fairy_chess_pieces
+        # TODO: I am not ok with this
+        if (which_pieces.value is None or which_pieces.value == 'None' or
+                None in which_pieces.value or 'None' in which_pieces.value):
+            raise Exception("This ChecksMate YAML is invalid! Add text after fairy_chess_pieces.")
         army_options = []
         # FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
         if "FIDE" in which_pieces.value:
