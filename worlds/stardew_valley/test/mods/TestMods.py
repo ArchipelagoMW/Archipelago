@@ -1,18 +1,18 @@
-from typing import List, Union
-import unittest
 import random
 import sys
+import unittest
+from typing import List, Union
 
 from BaseClasses import MultiWorld
-from ...mods.mod_data import all_mods
 from .. import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods
 from ..TestOptions import basic_checks
 from ... import items, Group, ItemClassification
-from ...regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
 from ...items import item_table, items_by_group
 from ...locations import location_table
+from ...mods.mod_data import all_mods
 from ...options import Mods, EntranceRandomization, Friendsanity, SeasonRandomization, SpecialOrderLocations, ExcludeGingerIsland, TrapItems, Chefsanity, \
     Shipsanity, Craftsanity
+from ...regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
 
 
 def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: unittest.TestCase, multiworld: MultiWorld):
@@ -41,7 +41,7 @@ class TestGenerateModsOptions(SVTestCase):
         for option in EntranceRandomization.options:
             for mod in all_mods:
                 with self.subTest(f"entrance_randomization: {option}, Mod: {mod}"):
-                    multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: option, Mods: mod})
+                    multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: EntranceRandomization.options[option], Mods: mod})
                     basic_checks(self, multiworld)
                     check_stray_mod_items(mod, self, multiworld)
                     # if self.skip_extra_tests:
