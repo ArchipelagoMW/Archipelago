@@ -17,9 +17,29 @@ from ..options import Cropsanity, SkillProgression, SpecialOrderLocations, Frien
 
 
 @cache_argsless
+def disable_5_x_x_options():
+    return {
+        Monstersanity.internal_name: Monstersanity.option_none,
+        Shipsanity.internal_name: Shipsanity.option_none,
+        Cooksanity.internal_name: Cooksanity.option_none,
+        Chefsanity.internal_name: Chefsanity.option_none,
+        Craftsanity.internal_name: Craftsanity.option_none
+    }
+
+
+@cache_argsless
+def default_4_x_x_options():
+    options = default_options()
+    options.update(disable_5_x_x_options())
+    options.update({
+        BundleRandomization.internal_name: BundleRandomization.option_shuffled,
+    })
+    return options
+
+
+@cache_argsless
 def default_options():
-    default = {}
-    return default
+    return {}
 
 
 @cache_argsless
@@ -97,6 +117,41 @@ def minimal_locations_maximal_items_with_island():
     min_max_options = minimal_locations_maximal_items()
     min_max_options.update({ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false})
     return min_max_options
+
+
+@cache_argsless
+def allsanity_4_x_x_options_without_mods():
+    options = {
+        Goal.internal_name: Goal.option_perfection,
+        BundleRandomization.internal_name: BundleRandomization.option_thematic,
+        BundlePrice.internal_name: BundlePrice.option_expensive,
+        SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
+        Cropsanity.internal_name: Cropsanity.option_enabled,
+        BackpackProgression.internal_name: BackpackProgression.option_progressive,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
+        SkillProgression.internal_name: SkillProgression.option_progressive,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        FestivalLocations.internal_name: FestivalLocations.option_hard,
+        ElevatorProgression.internal_name: ElevatorProgression.option_progressive,
+        ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_full_shuffling,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        HelpWantedLocations.internal_name: 56,
+        Fishsanity.internal_name: Fishsanity.option_all,
+        Museumsanity.internal_name: Museumsanity.option_all,
+        Monstersanity.internal_name: Monstersanity.option_progressive_goals,
+        Shipsanity.internal_name: Shipsanity.option_everything,
+        Cooksanity.internal_name: Cooksanity.option_all,
+        Chefsanity.internal_name: Chefsanity.option_all,
+        Craftsanity.internal_name: Craftsanity.option_all,
+        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
+        FriendsanityHeartSize.internal_name: 1,
+        NumberOfMovementBuffs.internal_name: 12,
+        NumberOfLuckBuffs.internal_name: 12,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        TrapItems.internal_name: TrapItems.option_nightmare,
+    }
+    options.update(disable_5_x_x_options())
+    return options
 
 
 @cache_argsless

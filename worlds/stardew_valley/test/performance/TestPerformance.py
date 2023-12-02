@@ -7,7 +7,8 @@ from typing import List
 from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
-from .. import SVTestCase, minimal_locations_maximal_items, allsanity_options_without_mods, setup_multiworld, default_options
+from .. import SVTestCase, minimal_locations_maximal_items, setup_multiworld, default_4_x_x_options, \
+    allsanity_4_x_x_options_without_mods
 
 default_number_generations = 25
 acceptable_deviation = 4
@@ -119,7 +120,7 @@ def size_name(number_players):
 
 class TestDefaultOptions(SVPerformanceTestCase):
     acceptable_time_per_player = 0.04
-    options = default_options()
+    options = default_4_x_x_options()
     results = []
 
     def test_solo(self):
@@ -195,7 +196,7 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
 
 class TestAllsanityWithoutMods(SVPerformanceTestCase):
     acceptable_time_per_player = 0.07
-    options = allsanity_options_without_mods()
+    options = allsanity_4_x_x_options_without_mods()
     results = []
 
     def test_solo(self):
