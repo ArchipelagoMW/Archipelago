@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 
 
 # Rule to see if it has access to the previous stage
-def has_entrance_access_rule(multiworld: MultiWorld, stage: str, entrance: str, player: int) -> None:
-    multiworld.get_entrance(entrance, player).entrances[0].access_rule = \
-        lambda state: state.has(entrance, player) and state.has(stage, player)
+def has_entrance_access_rule(multiworld: MultiWorld, stage: str, region: str, player: int) -> None:
+    for entrance in multiworld.get_region(region, player).entrances:
+        entrance.access_rule = lambda state: state.has(region, player) and state.has(stage, player)
 
 
 def has_all_items(multiworld: MultiWorld, items: Set[str], entrance: str, player: int) -> None:
@@ -45,8 +45,8 @@ def check_location(state, environment: str, player: int, item_number: int, item_
 def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int) -> None:
     if stage_number == 4:
         return
-    multiworld.get_entrance(f"OrderedStage_{stage_number + 1}", player).access_rule = \
-        lambda state: state.has(f"Stage {stage_number + 1}", player)
+    for entrance in multiworld.get_region(f"OrderedStage_{stage_number + 1}", player).entrances:
+        entrance.access_rule = lambda state: state.has(f"Stage {stage_number + 1}", player)
 
 
 def set_rules(ror2_world: "RiskOfRainWorld") -> None:
