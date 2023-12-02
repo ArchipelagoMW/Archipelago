@@ -159,6 +159,7 @@ class WL4Client(BizHawkClient):
         item_sender_address = get_symbol('IncomingItemSender')
         death_link_address = get_symbol('DeathLinkEnabled')
         wario_health_address = get_symbol('WarioHeart')
+        timer_status_address = get_symbol('ucTimeUp')
 
         try:
             read_result = iter(await bizhawk.read(bizhawk_ctx, [
@@ -170,6 +171,7 @@ class WL4Client(BizHawkClient):
                 read16(received_item_count_address),
                 read8(death_link_address),
                 read8(wario_health_address),
+                read8(timer_status_address),
             ]))
         except RequestFailedError:
             return
@@ -182,6 +184,7 @@ class WL4Client(BizHawkClient):
         received_item_count = next_int(read_result)
         death_link_flag = next_int(read_result)
         wario_health = next_int(read_result)
+        timer_status = next_int(read_result)
 
         # Ensure safe state
         gameplay_state = (game_mode, game_state)
@@ -236,11 +239,13 @@ class WL4Client(BizHawkClient):
 
         # Send death link
         if self.death_link.enabled:
-            if gameplay_state == (2, 2) and wario_health == 0:
+            time_up = timer_status in range(4, 11)
+            if gameplay_state == (2, 2) and (wario_health == 0 or time_up):
                 self.death_link.pending = False
                 if not self.death_link.sent_this_death:
                     self.death_link.sent_this_death = True
-                    await client_ctx.send_death()
+                    death_text = f'{client_ctx.auth} timed out' if time_up else ""
+                    await client_ctx.send_death(death_text)
             else:
                 self.death_link.sent_this_death = False
 
@@ -283,6 +288,6 @@ class WL4Client(BizHawkClient):
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
         if cmd == 'Bounced':
             tags = args.get('tags', [])
-            if 'DeathLink' in tags:
+            if 'DeathLink' in tags and args['data']['source'] != ctx.auth:
                 self.death_link.pending = True
                 ctx.on_deathlink(args['data'])
