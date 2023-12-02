@@ -194,9 +194,9 @@ class _SimplificationState:
     def is_simplified(self):
         return self.rules_to_simplify is not None and not self.rules_to_simplify
 
-    def short_circuit(self):
+    def short_circuit(self, complement: LiteralStardewRule):
         self.rules_to_simplify = deque()
-        self.simplified_rules = set()
+        self.simplified_rules = {complement}
 
     def try_popleft(self):
         try:
@@ -295,7 +295,7 @@ class AggregatingStardewRule(StardewRule, ABC):
         raise NotImplementedError
 
     def short_circuit(self):
-        self.simplification_state.short_circuit()
+        self.simplification_state.short_circuit(self.complement)
         self.combinable_rules = frozendict()
         return self.complement, self.complement.value
 

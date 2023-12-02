@@ -136,7 +136,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
         rule.evaluate_while_simplifying(collection_state)
 
-        self.assertFalse(rule.current_rules)
+        self.assertTrue(rule.current_rules)
 
     def test_simplifying_to_complement_propagates_complement(self):
         expected_simplified = true_
@@ -148,7 +148,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
         self.assertEqual(expected_result, actual_result)
         self.assertEqual(expected_simplified, actual_simplified)
-        self.assertFalse(rule.current_rules)
+        self.assertTrue(rule.current_rules)
 
     def test_already_simplified_rules_are_not_simplified_again(self):
         collection_state = MagicMock()
