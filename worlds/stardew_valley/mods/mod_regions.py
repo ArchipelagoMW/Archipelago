@@ -226,7 +226,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.aurora_warp_to_aurora, SVERegion.aurora_vineyard_basement, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.grove_to_farm_warp, SVERegion.grove_farm_warp),
     ConnectionData(SVEEntrance.to_aurora_basement, SVERegion.aurora_vineyard_basement, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(SVEEntrance.farm_warp_to_farm, Region.farm, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.farm_warp_to_farm, Region.farm),
     ConnectionData(SVEEntrance.grove_to_guild_warp, SVERegion.grove_guild_warp),
     ConnectionData(SVEEntrance.guild_warp_to_guild, Region.adventurer_guild, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.grove_to_junimo_warp, SVERegion.grove_junimo_warp),
