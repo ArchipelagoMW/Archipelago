@@ -89,14 +89,18 @@ class ShortHikeWorld(World):
             # Nap
             self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
         elif self.options.goal == 1:
-            # Photo - TODO
-            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
+            # Photo
+            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 12, 12, 12, state)
         elif self.options.goal == 2:
             # Races
             self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
         elif self.options.goal == 3:
-            # Help Everyone - TODO
-            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
+            # Help Everyone
+            self.multiworld.completion_condition[self.player] = lambda state: (get_feather_state(self, 12, 12, 12, state)
+                and state.has("Toy Shovel", self.player) and state.has("Camping Permit", self.player)
+                and state.has("Motorboat Key", self.player) and state.has("Headband", self.player)
+                and state.has("Wristwatch", self.player) and state.has("Seashell", self.player, 15)
+                and state.has("Shell Necklace", self.player))
         elif self.options.goal == 4:
             # Fishmonger
             self.multiworld.completion_condition[self.player] = lambda state: (get_feather_state(self, 6, 8, 7, state)

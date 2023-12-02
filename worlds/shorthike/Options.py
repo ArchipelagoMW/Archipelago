@@ -14,7 +14,7 @@ class Goal(Choice):
     option_races = 2
     option_help_everyone = 3
     option_fishmonger = 4
-    default = 0
+    default = 3
 
 class ShowGoldenChests(DefaultOnToggle):
     """Turns chests that contain items required for progression into golden chests."""
