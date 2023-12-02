@@ -343,7 +343,6 @@ class DarkSouls3World(World):
 
         guaranteed_items = {"Path of the Dragon": 1}
         guaranteed_items.update(self.multiworld.guaranteed_items[self.player].value)
-        print(guaranteed_items)
         if len(removable_items) == 0 and num_required_extra_items == 0:
             raise Exception("Can't add Path of the Dragon to the item pool")
 
