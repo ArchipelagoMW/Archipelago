@@ -141,19 +141,6 @@ class MaximumEnginePenalties(Range):
     default = 5
 
 
-class MaximumKings(Range):
-    """
-    How many Royal pieces (Kings) to place, which must all be captured before one experiences defeat.
-
-    The player always starts with 1 King, but may find Progressive Consuls if this is set higher than 1. Progressive
-    Consuls add additional Kings to the player's starting board.
-    """
-    display_name = "Maximum Kings"
-    range_start = 1
-    range_end = 3
-    default = 1
-
-
 class MaximumPocket(Range):
     """
     The number of Progressive Pocket Pieces the game is allowed to add to the multiworld.
@@ -170,6 +157,29 @@ class MaximumPocket(Range):
     range_start = 0
     range_end = 12
     default = 12
+
+
+class MaximumKings(Range):
+    """
+    How many Royal pieces (Kings) to place, which must all be captured before one experiences defeat.
+
+    The player always starts with 1 King, but may find Progressive Consuls if this is set higher than 1. Progressive
+    Consuls add additional Kings to the player's starting board.
+    """
+    display_name = "Maximum Kings"
+    range_start = 1
+    range_end = 3
+    default = 1
+
+
+class FairyKings(Range):
+    """
+    Whether to use fairy king upgrades, such as the Knight's moves.
+    """
+    display_name = "Fairy Kings"
+    range_start = 0
+    range_end = 2
+    default = 0
 
 
 class FairyChessPieces(OptionSet):
@@ -211,12 +221,14 @@ class FairyChessArmy(Choice):
     Chaos: Chooses random enabled options. (You can disable armies by setting fairy_chess_pieces, which defaults to {
     FIDE, Rookies, Clobberers, Nutty, Cannon, Camel }.)
 
-    Limited: Chooses within one army. (If you want at most 2 Bishops, 2 Knights, 2 Rooks, and 1 Queen, add Piece Type
+    Stable: Chooses within one army. (If you want at most 2 Bishops, 2 Knights, 2 Rooks, and 1 Queen, add Piece Type
     Limits below: 2 Minor, 2 Major, and 1 Queen.)
     """
     display_name = "Fairy Chess Army"
     option_chaos = 0
-    option_limited = 1
+    option_stable = 1
+    # TODO: will select within one army but that army will change between games - clobberers issue with major pieces
+    # option_limited = 2
     default = 0
 
 
@@ -235,16 +247,6 @@ class FairyChessPawns(Choice):
     option_mixed = 1
     option_berolina = 2
     default = 1
-
-
-class FairyKings(Range):
-    """
-    Whether to use fairy king upgrades, such as the Knight's moves.
-    """
-    display_name = "Fairy Kings"
-    range_start = 0
-    range_end = 2
-    default = 0
 
 
 class MinorPieceLimitByType(NamedRange):
