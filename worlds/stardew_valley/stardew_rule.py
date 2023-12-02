@@ -4,7 +4,7 @@ import logging
 from abc import ABC, abstractmethod
 from collections import deque
 from dataclasses import dataclass, field
-from functools import cached_property
+from functools import cached_property, cache
 from itertools import chain
 from threading import Lock
 from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
@@ -86,6 +86,9 @@ class StardewRule(ABC):
 
 class LiteralStardewRule(StardewRule, ABC):
     value: bool
+
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        return self, self.value
 
     def __call__(self, state: CollectionState) -> bool:
         return self.value
@@ -314,8 +317,11 @@ class AggregatingStardewRule(StardewRule, ABC):
         self._last_short_circuiting_rule = rule
         return self, self.complement.value
 
-    # The idea here is the same as short-circuiting operators, applied to evaluation and rule simplification.
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        """
+        The idea here is the same as short-circuiting operators, applied to evaluation and rule simplification.
+        """
+
         # Directly checking last rule that evaluated to complement, in case state has not changed.
         if self._last_short_circuiting_rule:
             if self._last_short_circuiting_rule(state) is self.complement.value:
@@ -506,6 +512,7 @@ class And(AggregatingStardewRule):
 class Count(StardewRule):
     count: int
     rules: List[StardewRule]
+    rules_count: int
     _simplified: bool
 
     def __init__(self, count: int, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
@@ -524,26 +531,31 @@ class Count(StardewRule):
 
         self.rules = rules_list
         self.count = count
+        self.rules_count = len(rules_list)
         self._simplified = False
 
-    def __call__(self, state: CollectionState) -> bool:
-        self.simplify()
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         c = 0
-        for r in self.rules:
-            if r(state):
+        for i in range(self.rules_count):
+            self.rules[i], value = self.rules[i].evaluate_while_simplifying(state)
+            if value:
                 c += 1
-            if c >= self.count:
-                return True
-        return False
 
-    # TODO implement evaluate while simplifying
+            if c >= self.count:
+                return self, True
+            if c + self.rules_count - i < self.count:
+                break
+
+        return self, False
+
+    def __call__(self, state: CollectionState) -> bool:
+        return self.evaluate_while_simplifying(state)[1]
 
     def simplify(self):
         if self._simplified:
             return self
 
-        simplified_rules = [rule.simplify() for rule in self.rules]
-        self.rules = simplified_rules
+        self.rules = [rule.simplify() for rule in self.rules]
         self._simplified = True
         return self
 
@@ -551,9 +563,10 @@ class Count(StardewRule):
         return StardewRuleExplanation(self, state, expected, self.rules)
 
     def get_difficulty(self):
-        rules_sorted_by_difficulty = sorted(self.rules, key=lambda x: x.get_difficulty())
-        easiest_n_rules = rules_sorted_by_difficulty[0:self.count]
-        return max(rule.get_difficulty() for rule in easiest_n_rules)
+        self.rules = sorted(self.rules, key=lambda x: x.get_difficulty())
+        # In an optimal situation, all the simplest rules will be true. Since the rules are sorted, we know that the most difficult rule we might have to do
+        # is the one at the "self.count".
+        return self.rules[self.count - 1].get_difficulty()
 
     def __repr__(self):
         return f"Received {self.count} {repr(self.rules)}"
@@ -634,6 +647,10 @@ class Reach(StardewRule):
     spot: str
     resolution_hint: str
     player: int
+
+    @cache
+    def __new__(cls, *args, **kwargs):
+        return super().__new__(cls)
 
     def __call__(self, state: CollectionState) -> bool:
         return state.can_reach(self.spot, self.resolution_hint, self.player)
