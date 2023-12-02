@@ -192,7 +192,7 @@ class CMWorld(World):
                 self.items_used[self.player][item] = 0
             self.items_used[self.player][item] += yaml_locked_items[item]
             items.extend([self.create_item(item) for i in range(yaml_locked_items[item])])
-            material += progression_items[item].material
+            material += progression_items[item].material * yaml_locked_items[item]
         # TODO(chesslogic): Validate locked items has enough parents
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
