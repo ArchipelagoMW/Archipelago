@@ -22,8 +22,8 @@ class ModNames:
     riley = "Custom NPC - Riley"
     skull_cavern_elevator = "Skull Cavern Elevator"
     sve = "Stardew Valley Expanded"
-    alecto = "Alecto the Witch (New NPC)"
-    distant_lands = "Distant Lands"
+    alecto = "Alecto the Witch"
+    distant_lands = "Distant Lands - Witch Swamp Overhaul"
 
 
 all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,

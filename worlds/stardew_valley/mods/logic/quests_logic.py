@@ -87,7 +87,10 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLog
         if ModNames.distant_lands not in self.options.mods:
             return {}
 
-        rules = {
+        return{
+            ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.region.can_reach(Region.witch_swamp) &
+                                         self.logic.has(Fertilizer.quality),
+            ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.quality),
             ModQuest.ANewPot: self.logic.region.can_reach(Region.witch_swamp) & self.logic.region.can_reach(Region.saloon) &
                               self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_store) &
                               self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron),
@@ -95,12 +98,4 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLog
                                        self.logic.has(ArtisanGood.cloth)
 
         }
-        if ModNames.alecto not in self.options.mods:
-            rules.update({
-                ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.quality),
-            })
-            return rules
-        rules.update({
-            ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.quality),
-        })
-        return rules
+
