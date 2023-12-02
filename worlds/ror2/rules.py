@@ -14,9 +14,9 @@ def has_entrance_access_rule(multiworld: MultiWorld, stage: str, region: str, pl
         entrance.access_rule = lambda state: state.has(region, player) and state.has(stage, player)
 
 
-def has_all_items(multiworld: MultiWorld, items: Set[str], entrance: str, player: int) -> None:
-    multiworld.get_entrance(entrance, player).access_rule = \
-        lambda state: state.has_all(items, player) and state.has(entrance, player)
+def has_all_items(multiworld: MultiWorld, items: Set[str], region: str, player: int) -> None:
+    for entrance in multiworld.get_region(region, player).entrances:
+        entrance.access_rule = lambda state: state.has_all(items, player) and state.has(region, player)
 
 
 # Checks to see if chest/shrine are accessible
