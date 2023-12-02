@@ -20,7 +20,7 @@ import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Main import main as ERmain
 from settings import get_settings
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version, user_path
+from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
@@ -53,6 +53,9 @@ def mystery_argparse():
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
     parser.add_argument("--skip_prog_balancing", action="store_true",
                         help="Skip progression balancing step during generation.")
+    parser.add_argument("--skip_output", action="store_true",
+                        help="Skips generation assertion and output stages and skips multidata and spoiler output. "
+                             "Intended for debugging and testing purposes.")
     args = parser.parse_args()
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
@@ -150,6 +153,7 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
+    erargs.skip_output = args.skip_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
