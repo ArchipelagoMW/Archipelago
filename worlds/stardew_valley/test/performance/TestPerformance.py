@@ -9,8 +9,7 @@ from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
 from .. import SVTestCase, minimal_locations_maximal_items, allsanity_options_without_mods, setup_multiworld, default_options
 
-number_generations = 25
-default_seeds = [87876703343494157696] * number_generations
+default_number_generations = 25
 acceptable_deviation = 4
 
 
@@ -55,6 +54,18 @@ class SVPerformanceTestCase(SVTestCase):
         if fill_tests_key in os.environ:
             cls.skip_fill = not bool(os.environ[fill_tests_key])
 
+        fixed_seed_key = "fixed_seed"
+        if fixed_seed_key in os.environ:
+            cls.fixed_seed = bool(os.environ[fixed_seed_key])
+        else:
+            cls.fixed_seed = False
+
+        number_generations_key = "number_gen"
+        if number_generations_key in os.environ:
+            cls.number_generations = int(os.environ[number_generations_key])
+        else:
+            cls.number_generations = default_number_generations
+
     @classmethod
     def tearDownClass(cls) -> None:
         case = None
@@ -71,7 +82,7 @@ class SVPerformanceTestCase(SVTestCase):
         acceptable_average_time = self.acceptable_time_per_player * amount_of_players
         total_time = 0
         all_times = []
-        seeds = [get_seed() for _ in range(number_generations)] if self.skip_fill else default_seeds
+        seeds = [get_seed() for _ in range(self.number_generations)] if not self.fixed_seed else [87876703343494157696] * self.number_generations
 
         for i, seed in enumerate(seeds):
             with self.subTest(f"Seed: {seed}"):
@@ -89,7 +100,7 @@ class SVPerformanceTestCase(SVTestCase):
                 elapsed_time = time_after - time_before
                 total_time += elapsed_time
                 all_times.append(elapsed_time)
-                print(f"Multiworld {i + 1}/{number_generations} [{seed}] generated in {elapsed_time:.4f} seconds")
+                print(f"Multiworld {i + 1}/{self.number_generations} [{seed}] generated in {elapsed_time:.4f} seconds")
                 # tester.assertLessEqual(elapsed_time, acceptable_average_time * acceptable_deviation)
 
         self.results.append(PerformanceResults(self, amount_of_players, all_times, acceptable_average_time))
