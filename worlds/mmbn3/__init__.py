@@ -15,6 +15,7 @@ from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
+from worlds.generic.Rules import add_item_rule
 
 
 class MMBN3Settings(settings.Group):
@@ -91,6 +92,9 @@ class MMBN3World(World):
                 loc = MMBN3Location(self.player, location, self.location_name_to_id.get(location, None), region)
                 if location in self.excluded_locations:
                     loc.progress_type = LocationProgressType.EXCLUDED
+                # Do not place any progression items on WWW Island
+                if region_info.name == RegionName.WWW_Island:
+                    add_item_rule(loc, lambda item: not item.advancement)
                 region.locations.append(loc)
             self.multiworld.regions.append(region)
         for region_info in regions:
