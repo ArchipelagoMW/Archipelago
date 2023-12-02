@@ -16,8 +16,9 @@ window.addEventListener('load', () => {
     }
 
     if (optionHash !== md5(JSON.stringify(results))) {
-      showUserMessage("Your options are out of date! Click here to update them! Be aware this will reset " +
-        "them all to default.");
+      showUserMessage(
+          'Your options are out of date! Click here to update them! Be aware this will reset them all to default.'
+      );
       document.getElementById('user-message').addEventListener('click', resetOptions);
     }
 
@@ -36,6 +37,17 @@ window.addEventListener('load', () => {
     const nameInput = document.getElementById('player-name');
     nameInput.addEventListener('keyup', (event) => updateBaseOption(event));
     nameInput.value = playerOptions.name;
+
+    // Presets
+    const presetSelect = document.getElementById('game-options-preset');
+    presetSelect.addEventListener('change', (event) => setPresets(results, event.target.value));
+    for (const preset in results['presetOptions']) {
+      const presetOption = document.createElement('option');
+      presetOption.innerText = preset;
+      presetSelect.appendChild(presetOption);
+    }
+    presetSelect.value = localStorage.getItem(`${gameName}-preset`);
+    results['presetOptions']['__default'] = {};
   }).catch((e) => {
     console.error(e);
     const url = new URL(window.location.href);
@@ -45,7 +57,8 @@ window.addEventListener('load', () => {
 
 const resetOptions = () => {
   localStorage.removeItem(gameName);
-  localStorage.removeItem(`${gameName}-hash`)
+  localStorage.removeItem(`${gameName}-hash`);
+  localStorage.removeItem(`${gameName}-preset`);
   window.location.reload();
 };
 
@@ -77,6 +90,10 @@ const createDefaultOptions = (optionData) => {
     }
     localStorage.setItem(gameName, JSON.stringify(newOptions));
   }
+
+  if (!localStorage.getItem(`${gameName}-preset`)) {
+    localStorage.setItem(`${gameName}-preset`, '__default');
+  }
 };
 
 const buildUI = (optionData) => {
@@ -84,8 +101,11 @@ const buildUI = (optionData) => {
   const leftGameOpts = {};
   const rightGameOpts = {};
   Object.keys(optionData.gameOptions).forEach((key, index) => {
-    if (index < Object.keys(optionData.gameOptions).length / 2) { leftGameOpts[key] = optionData.gameOptions[key]; }
-    else { rightGameOpts[key] = optionData.gameOptions[key]; }
+    if (index < Object.keys(optionData.gameOptions).length / 2) {
+      leftGameOpts[key] = optionData.gameOptions[key];
+    } else {
+      rightGameOpts[key] = optionData.gameOptions[key];
+    }
   });
   document.getElementById('game-options-left').appendChild(buildOptionsTable(leftGameOpts));
   document.getElementById('game-options-right').appendChild(buildOptionsTable(rightGameOpts));
@@ -120,7 +140,7 @@ const buildOptionsTable = (options, romOpts = false) => {
 
     const randomButton = document.createElement('button');
 
-    switch(options[option].type){
+    switch(options[option].type) {
       case 'select':
         element = document.createElement('div');
         element.classList.add('select-container');
@@ -129,16 +149,17 @@ const buildOptionsTable = (options, romOpts = false) => {
         select.setAttribute('data-key', option);
         if (romOpts) { select.setAttribute('data-romOpt', '1'); }
         options[option].options.forEach((opt) => {
-          const option = document.createElement('option');
-          option.setAttribute('value', opt.value);
-          option.innerText = opt.name;
+          const optionElement = document.createElement('option');
+          optionElement.setAttribute('value', opt.value);
+          optionElement.innerText = opt.name;
+
           if ((isNaN(currentOptions[gameName][option]) &&
             (parseInt(opt.value, 10) === parseInt(currentOptions[gameName][option]))) ||
             (opt.value === currentOptions[gameName][option]))
           {
-            option.selected = true;
+            optionElement.selected = true;
           }
-          select.appendChild(option);
+          select.appendChild(optionElement);
         });
         select.addEventListener('change', (event) => updateGameOption(event.target));
         element.appendChild(select);
@@ -162,6 +183,7 @@ const buildOptionsTable = (options, romOpts = false) => {
         element.classList.add('range-container');
 
         let range = document.createElement('input');
+        range.setAttribute('id', option);
         range.setAttribute('type', 'range');
         range.setAttribute('data-key', option);
         range.setAttribute('min', options[option].min);
@@ -194,74 +216,74 @@ const buildOptionsTable = (options, romOpts = false) => {
         element.appendChild(randomButton);
         break;
 
-      case 'special_range':
+      case 'named_range':
         element = document.createElement('div');
-        element.classList.add('special-range-container');
+        element.classList.add('named-range-container');
 
         // Build the select element
-        let specialRangeSelect = document.createElement('select');
-        specialRangeSelect.setAttribute('data-key', option);
+        let namedRangeSelect = document.createElement('select');
+        namedRangeSelect.setAttribute('data-key', option);
         Object.keys(options[option].value_names).forEach((presetName) => {
           let presetOption = document.createElement('option');
           presetOption.innerText = presetName;
           presetOption.value = options[option].value_names[presetName];
-          const words = presetOption.innerText.split("_");
+          const words = presetOption.innerText.split('_');
           for (let i = 0; i < words.length; i++) {
             words[i] = words[i][0].toUpperCase() + words[i].substring(1);
           }
-          presetOption.innerText = words.join(" ");
-          specialRangeSelect.appendChild(presetOption);
+          presetOption.innerText = words.join(' ');
+          namedRangeSelect.appendChild(presetOption);
         });
         let customOption = document.createElement('option');
         customOption.innerText = 'Custom';
         customOption.value = 'custom';
         customOption.selected = true;
-        specialRangeSelect.appendChild(customOption);
+        namedRangeSelect.appendChild(customOption);
         if (Object.values(options[option].value_names).includes(Number(currentOptions[gameName][option]))) {
-          specialRangeSelect.value = Number(currentOptions[gameName][option]);
+          namedRangeSelect.value = Number(currentOptions[gameName][option]);
         }
 
         // Build range element
-        let specialRangeWrapper = document.createElement('div');
-        specialRangeWrapper.classList.add('special-range-wrapper');
-        let specialRange = document.createElement('input');
-        specialRange.setAttribute('type', 'range');
-        specialRange.setAttribute('data-key', option);
-        specialRange.setAttribute('min', options[option].min);
-        specialRange.setAttribute('max', options[option].max);
-        specialRange.value = currentOptions[gameName][option];
+        let namedRangeWrapper = document.createElement('div');
+        namedRangeWrapper.classList.add('named-range-wrapper');
+        let namedRange = document.createElement('input');
+        namedRange.setAttribute('type', 'range');
+        namedRange.setAttribute('data-key', option);
+        namedRange.setAttribute('min', options[option].min);
+        namedRange.setAttribute('max', options[option].max);
+        namedRange.value = currentOptions[gameName][option];
 
         // Build rage value element
-        let specialRangeVal = document.createElement('span');
-        specialRangeVal.classList.add('range-value');
-        specialRangeVal.setAttribute('id', `${option}-value`);
-        specialRangeVal.innerText = currentOptions[gameName][option] !== 'random' ?
+        let namedRangeVal = document.createElement('span');
+        namedRangeVal.classList.add('range-value');
+        namedRangeVal.setAttribute('id', `${option}-value`);
+        namedRangeVal.innerText = currentOptions[gameName][option] !== 'random' ?
           currentOptions[gameName][option] : options[option].defaultValue;
 
         // Configure select event listener
-        specialRangeSelect.addEventListener('change', (event) => {
+        namedRangeSelect.addEventListener('change', (event) => {
           if (event.target.value === 'custom') { return; }
 
           // Update range slider
-          specialRange.value = event.target.value;
+          namedRange.value = event.target.value;
           document.getElementById(`${option}-value`).innerText = event.target.value;
           updateGameOption(event.target);
         });
 
         // Configure range event handler
-        specialRange.addEventListener('change', (event) => {
+        namedRange.addEventListener('change', (event) => {
           // Update select element
-          specialRangeSelect.value =
+          namedRangeSelect.value =
             (Object.values(options[option].value_names).includes(parseInt(event.target.value))) ?
             parseInt(event.target.value) : 'custom';
           document.getElementById(`${option}-value`).innerText = event.target.value;
           updateGameOption(event.target);
         });
 
-        element.appendChild(specialRangeSelect);
-        specialRangeWrapper.appendChild(specialRange);
-        specialRangeWrapper.appendChild(specialRangeVal);
-        element.appendChild(specialRangeWrapper);
+        element.appendChild(namedRangeSelect);
+        namedRangeWrapper.appendChild(namedRange);
+        namedRangeWrapper.appendChild(namedRangeVal);
+        element.appendChild(namedRangeWrapper);
 
         // Randomize button
         randomButton.innerText = '🎲';
@@ -269,15 +291,15 @@ const buildOptionsTable = (options, romOpts = false) => {
         randomButton.setAttribute('data-key', option);
         randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
         randomButton.addEventListener('click', (event) => toggleRandomize(
-            event, specialRange, specialRangeSelect)
+            event, namedRange, namedRangeSelect)
         );
         if (currentOptions[gameName][option] === 'random') {
           randomButton.classList.add('active');
-          specialRange.disabled = true;
-          specialRangeSelect.disabled = true;
+          namedRange.disabled = true;
+          namedRangeSelect.disabled = true;
         }
 
-        specialRangeWrapper.appendChild(randomButton);
+        namedRangeWrapper.appendChild(randomButton);
         break;
 
       default:
@@ -292,6 +314,90 @@ const buildOptionsTable = (options, romOpts = false) => {
 
   table.appendChild(tbody);
   return table;
+};
+
+const setPresets = (optionsData, presetName) => {
+  const defaults = optionsData['gameOptions'];
+  const preset = optionsData['presetOptions'][presetName];
+
+  localStorage.setItem(`${gameName}-preset`, presetName);
+
+  if (!preset) {
+    console.error(`No presets defined for preset name: '${presetName}'`);
+    return;
+  }
+
+  const updateOptionElement = (option, presetValue) => {
+    const optionElement = document.querySelector(`#${option}[data-key='${option}']`);
+    const randomElement = document.querySelector(`.randomize-button[data-key='${option}']`);
+
+    if (presetValue === 'random') {
+      randomElement.classList.add('active');
+      optionElement.disabled = true;
+      updateGameOption(randomElement, false);
+    } else {
+      optionElement.value = presetValue;
+      randomElement.classList.remove('active');
+      optionElement.disabled = undefined;
+      updateGameOption(optionElement, false);
+    }
+  };
+
+  for (const option in defaults) {
+    let presetValue = preset[option];
+    if (presetValue === undefined) {
+      // Using the default value if not set in presets.
+      presetValue = defaults[option]['defaultValue'];
+    }
+
+    switch (defaults[option].type) {
+      case 'range':
+        const numberElement = document.querySelector(`#${option}-value`);
+        if (presetValue === 'random') {
+          numberElement.innerText = defaults[option]['defaultValue'] === 'random'
+              ? defaults[option]['min'] // A fallback so we don't print 'random' in the UI.
+              : defaults[option]['defaultValue'];
+        } else {
+          numberElement.innerText = presetValue;
+        }
+
+        updateOptionElement(option, presetValue);
+        break;
+
+      case 'select': {
+        updateOptionElement(option, presetValue);
+        break;
+      }
+
+      case 'named_range': {
+        const selectElement = document.querySelector(`select[data-key='${option}']`);
+        const rangeElement = document.querySelector(`input[data-key='${option}']`);
+        const randomElement = document.querySelector(`.randomize-button[data-key='${option}']`);
+
+        if (presetValue === 'random') {
+          randomElement.classList.add('active');
+          selectElement.disabled = true;
+          rangeElement.disabled = true;
+          updateGameOption(randomElement, false);
+        } else {
+          rangeElement.value = presetValue;
+          selectElement.value = Object.values(defaults[option]['value_names']).includes(parseInt(presetValue)) ?
+              parseInt(presetValue) : 'custom';
+          document.getElementById(`${option}-value`).innerText = presetValue;
+
+          randomElement.classList.remove('active');
+          selectElement.disabled = undefined;
+          rangeElement.disabled = undefined;
+          updateGameOption(rangeElement, false);
+        }
+        break;
+      }
+
+      default:
+        console.warn(`Ignoring preset value for unknown option type: ${defaults[option].type} with name ${option}`);
+        break;
+    }
+  }
 };
 
 const toggleRandomize = (event, inputElement, optionalSelectElement = null) => {
@@ -321,8 +427,15 @@ const updateBaseOption = (event) => {
   localStorage.setItem(gameName, JSON.stringify(options));
 };
 
-const updateGameOption = (optionElement) => {
+const updateGameOption = (optionElement, toggleCustomPreset = true) => {
   const options = JSON.parse(localStorage.getItem(gameName));
+
+  if (toggleCustomPreset) {
+    localStorage.setItem(`${gameName}-preset`, '__custom');
+    const presetElement = document.getElementById('game-options-preset');
+    presetElement.value = '__custom';
+  }
+
   if (optionElement.classList.contains('randomize-button')) {
     // If the event passed in is the randomize button, then we know what we must do.
     options[gameName][optionElement.getAttribute('data-key')] = 'random';
@@ -336,7 +449,21 @@ const updateGameOption = (optionElement) => {
 
 const exportOptions = () => {
   const options = JSON.parse(localStorage.getItem(gameName));
-  if (!options.name || options.name.toLowerCase() === 'player' || options.name.trim().length === 0) {
+  const preset = localStorage.getItem(`${gameName}-preset`);
+  switch (preset) {
+    case '__default':
+      options['description'] = `Generated by https://archipelago.gg with the default preset.`;
+      break;
+
+    case '__custom':
+      options['description'] = `Generated by https://archipelago.gg.`;
+      break;
+
+    default:
+      options['description'] = `Generated by https://archipelago.gg with the ${preset} preset.`;
+  }
+
+  if (!options.name || options.name.toString().trim().length === 0) {
     return showUserMessage('You must enter a player name!');
   }
   const yamlText = jsyaml.safeDump(options, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);

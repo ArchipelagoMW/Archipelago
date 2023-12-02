@@ -63,6 +63,22 @@ For example, if you are fighting Roxas, receive Reflect Element, then die mid-fi
 - Customize the amount and level of progressive movement (Growth Abilities) you start with.
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice.
 
+<h2 style="text-transform:none";>What are Lucky Emblems?</h2>
+Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem Hunt".<br>
+You can think of these as requiring X number of Proofs of Nonexistence to open the final door.
+
+<h2 style="text-transform:none";>What is Hitlist/Bounties?</h2>
+The Hitlist goal adds "bounty" items to select late-game fights and locations, and you need to collect X number of them to win.<br>
+The list of possible locations that can contain a bounty:
+
+- Each of the 13 Data Fights
+- Max level (7) for each Drive Form
+- Sephiroth
+- Lingering Will
+- Starry Hill
+- Transport to Remembrance
+- Godess of Fate cup and Hades Paradox cup
+
 <h2 style="text-transform:none";>Quality of life:</h2>
 
 
