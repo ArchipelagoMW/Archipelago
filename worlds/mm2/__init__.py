@@ -9,8 +9,8 @@ from .Names import *
 from .Items import item_table, item_names, MM2Item, filler_item_table, filler_item_weights, robot_master_weapon_table, \
     stage_access_table, item_item_table
 from .Locations import location_table, MM2Location, mm2_regions
-from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, MM2LCHASH, PROTEUSHASH, MM2DeltaPatch, \
-    extract_mm2
+from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extract_mm2, MM2DeltaPatch, \
+    MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
 from .Options import mm2_options
 from .Client import MegaMan2Client
 from .Rules import set_rules
@@ -32,7 +32,7 @@ class MM2Settings(settings.Group):
         """File name of the MM2 EN rom"""
         description = "Mega Man 2 ROM File"
         copy_to = "Mega Man 2 (USA).nes"
-        md5s = [MM2LCHASH, PROTEUSHASH]
+        md5s = [MM2NESHASH, MM2VCHASH, MM2LCHASH, PROTEUSHASH]
 
         def browse(self: settings.T,
                    filetypes: typing.Optional[typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]] = None,

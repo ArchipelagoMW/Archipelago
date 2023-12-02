@@ -111,7 +111,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData):
 
     # text writing
     # write our font
-    font = pkgutil.get_data(__name__, os.path.join("data", "mm2font.bin"))
+    font = pkgutil.get_data(__name__, os.path.join("data", "mm2font.dat"))
     rom.write_bytes(0x20410, font)
     rom.write_bytes(0x3F540, [
         0x84, 0x00, 0x0A, 0x0A, 0x0A, 0x0A, 0xA8, 0xA5, 0xCB, 0x69, 0x00, 0x85, 0xC8, 0xA9, 0x40, 0x85,
