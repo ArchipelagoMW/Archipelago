@@ -308,8 +308,9 @@ def randomize_entrances(
             for target_entrance in entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
                 # TODO - requiring new regions is a proxy for requiring new entrances to be unlocked, which is
                 #        not quite full fidelity so we may need to revisit this in the future
-                if ((not require_new_regions or target_entrance.connected_region not in er_state.placed_regions)
-                        and source_exit.can_connect_to(target_entrance, er_state)):
+                region_requirement_satisfied = (not require_new_regions
+                                                or target_entrance.connected_region not in er_state.placed_regions)
+                if region_requirement_satisfied and source_exit.can_connect_to(target_entrance, er_state):
                     do_placement(source_exit, target_entrance)
                     return True
         else:
@@ -324,7 +325,7 @@ def randomize_entrances(
                 if all(e.connected_region in er_state.placed_regions for e in lookup):
                     return False
 
-            raise RuntimeError(f"None of the available exits are valid targets for the available entrances.\n"
+            raise RuntimeError(f"None of the available entrances are valid targets for the available exits.\n"
                                f"Available entrances: {lookup}\n"
                                f"Available exits: {er_state.placeable_exits}")
 
