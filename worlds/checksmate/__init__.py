@@ -226,7 +226,8 @@ class CMWorld(World):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
             if (material > min_material_option and
-                    progression_items[chosen_item].material + material > max_material_option):
+                    (progression_items[chosen_item].material + material > max_material_option or
+                     not self.has_prereqs(chosen_item))):
                 my_progression_items.remove(chosen_item)
                 continue
             # add item

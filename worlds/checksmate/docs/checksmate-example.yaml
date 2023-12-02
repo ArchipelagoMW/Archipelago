@@ -10,12 +10,12 @@ ChecksMate:
   early_material:
     pawn: 1 # not counted against locked_items (this may be changed)
   min_material:
-    45: 1
+    41: 1
   max_material:
-    51: 1
+    46: 1 # excludes so many items that it can never get more than 45 material
   max_engine_penalties:
     4: 1
-  max_pockets:
+  max_pocket:
     0: 1
   fairy_chess_pieces:
     - FIDE

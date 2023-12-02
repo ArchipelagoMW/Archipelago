@@ -22,6 +22,9 @@ Some releases of the ChecksMate client include an example YAML file demonstratin
 
 You can customize your settings by visiting the [ChecksMate Player Settings Page](/games/ChecksMate/player-settings)
 
+Some examples of certain outcomes are available in [this valid players file](checksmate-example.yaml), which can be used
+to generate a multiplayer multiworld (but should instead be used for your own inspiration).
+
 #### Warning: Locations Accessibility not supported
 
 It is strongly recommended that you **do not use *Accessibility: Locations***. Most testing is at *Minimal*, although
