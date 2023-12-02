@@ -237,7 +237,7 @@ class AggregatingStardewRule(StardewRule, ABC):
     symbol: str
 
     combinable_rules: frozendict[Hashable, CombinableStardewRule]
-    _simplification_state: _SimplificationState
+    simplification_state: _SimplificationState
 
     def __init__(self, *rules: StardewRule, _combinable_rules=None, _simplification_state=None):
         if _combinable_rules is None:
@@ -271,15 +271,26 @@ class AggregatingStardewRule(StardewRule, ABC):
                     continue
 
                 reduced_rules[key] = cls.combine(reduced_rules[key], rule)
-            else:
-                other_rules.append(rule)
+                continue
+
+            if type(rule) is cls:
+                other_rules.extend(rule.simplification_state.original_simplifiable_rules)  # noqa
+                reduced_rules = cls.merge_mutable(reduced_rules, rule.combinable_rules)  # noqa
+                continue
+
+            other_rules.append(rule)
 
         return tuple(other_rules), frozendict(reduced_rules)
 
     @classmethod
     def merge(cls, left: frozendict[Hashable, CombinableStardewRule], right: frozendict[Hashable, CombinableStardewRule]) \
             -> frozendict[Hashable, CombinableStardewRule]:
-        reduced_rules = dict(left)
+        return frozendict(cls.merge_mutable(dict(left), right))
+
+    @classmethod
+    def merge_mutable(cls, left: Dict[Hashable, CombinableStardewRule], right: frozendict[Hashable, CombinableStardewRule]) \
+            -> Dict[Hashable, CombinableStardewRule]:
+        reduced_rules = left
         for key, rule in right.items():
             if key not in reduced_rules:
                 reduced_rules[key] = rule
@@ -287,7 +298,7 @@ class AggregatingStardewRule(StardewRule, ABC):
 
             reduced_rules[key] = cls.combine(reduced_rules[key], rule)
 
-        return frozendict(reduced_rules)
+        return reduced_rules
 
     @staticmethod
     @abstractmethod
