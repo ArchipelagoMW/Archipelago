@@ -210,7 +210,6 @@ class _SimplificationState:
         return state
 
     def merge(self, other: _SimplificationState):
-        # TODO handle WIP simplification
         return _SimplificationState(self.original_simplifiable_rules + other.original_simplifiable_rules)
 
     def add(self, rule: StardewRule):
@@ -238,6 +237,7 @@ class AggregatingStardewRule(StardewRule, ABC):
 
     combinable_rules: frozendict[Hashable, CombinableStardewRule]
     simplification_state: _SimplificationState
+    _last_complementing_rule: Optional[StardewRule] = None
 
     def __init__(self, *rules: StardewRule, _combinable_rules=None, _simplification_state=None):
         if _combinable_rules is None:
@@ -305,24 +305,33 @@ class AggregatingStardewRule(StardewRule, ABC):
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         raise NotImplementedError
 
-    def short_circuit(self):
+    def short_circuit_simplification(self):
         self.simplification_state.short_circuit(self.complement)
         self.combinable_rules = frozendict()
         return self.complement, self.complement.value
 
+    def short_circuit_evaluation(self, rule):
+        self._last_complementing_rule = rule
+        return self, self.complement.value
+
     # The idea here is the same as short-circuiting operators, applied to evaluation and rule simplification.
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        # TODO test if inverting would speed up
+        # Directly checking last rule that evaluated to complement, in case state has not changed.
+        if self._last_complementing_rule:
+            if self._last_complementing_rule(state) is self.complement.value:
+                return self.short_circuit_evaluation(self._last_complementing_rule)
+            self._last_complementing_rule = None
+
         # Combinable rules are considered already simplified, so we evaluate them right away.
         for rule in self.combinable_rules.values():
             if rule(state) is self.complement.value:
-                return self, self.complement.value
+                return self.short_circuit_evaluation(rule)
 
         if self.simplification_state.is_simplified:
             # The expression is fully simplified, so we can only evaluate.
             for rule in self.simplification_state.simplified_rules:
                 if rule(state) is self.complement.value:
-                    return self, self.complement.value
+                    return self.short_circuit_evaluation(rule)
             return self, self.identity.value
 
         return self.evaluate_while_simplifying_stateful(state)
@@ -331,7 +340,8 @@ class AggregatingStardewRule(StardewRule, ABC):
         local_state = self.simplification_state
         try:
             # Creating a new copy, so we don't modify the rules while we're already evaluating it.
-            # TODO Both copies will need to be merged later when we come back to the parent call.
+            # After investigation, for millions of call to this method, copy were acquired 425 times.
+            # Merging simplification state in parent call was deemed useless.
             if not local_state.acquire():
                 local_state = local_state.acquire_copy()
                 self.simplification_state = local_state
@@ -340,14 +350,14 @@ class AggregatingStardewRule(StardewRule, ABC):
             # The assumption is that the rules that used to evaluate to complement might complement again, so we can leave early.
             for rule in local_state.simplified_rules:
                 if rule(state) is self.complement.value:
-                    return self, self.complement.value
+                    return self.short_circuit_evaluation(rule)
 
             # If the iterator is None, it means we have not start simplifying.
             # Otherwise, we will continue simplification where we left.
             if local_state.rules_to_simplify is None:
                 rules_to_simplify = frozenset(local_state.original_simplifiable_rules)
                 if self.complement in rules_to_simplify:
-                    return self.short_circuit()
+                    return self.short_circuit_simplification()
                 local_state.rules_to_simplify = deque(rules_to_simplify)
 
             # Start simplification where we left.
@@ -370,15 +380,14 @@ class AggregatingStardewRule(StardewRule, ABC):
             return
 
         # If we find a complement here, we know the rule will always resolve to its value.
-        # TODO need to confirm how often it happens, but we could skip evaluating combinables if the rule has resolved to a complement.
         if simplified is self.complement:
-            return self.short_circuit()
+            return self.short_circuit_simplification()
         # Keep the simplified rule to be reused.
         local_state.simplified_rules.add(simplified)
 
         # Now we use the value, to exit early if it evaluates to the complement.
         if value is self.complement.value:
-            return self, self.complement.value
+            return self.short_circuit_evaluation(simplified)
 
     def __str__(self):
         return f"({self.symbol.join(str(rule) for rule in self.original_rules)})"
@@ -404,7 +413,7 @@ class AggregatingStardewRule(StardewRule, ABC):
         if self.simplification_state.rules_to_simplify is None:
             rules_to_simplify = frozenset(self.simplification_state.original_simplifiable_rules)
             if self.complement in rules_to_simplify:
-                return self.short_circuit()[0]
+                return self.short_circuit_simplification()[0]
 
             self.simplification_state.rules_to_simplify = deque(rules_to_simplify)
 
@@ -417,7 +426,7 @@ class AggregatingStardewRule(StardewRule, ABC):
                 continue
 
             if simplified is self.complement:
-                return self.short_circuit()[0]
+                return self.short_circuit_simplification()[0]
 
             self.simplification_state.simplified_rules.add(simplified)
 
