@@ -56,7 +56,7 @@ class PieceTypes(Choice):
     option_chaos = 0
     option_stable = 1
     # option_book = 2
-    default = 0
+    default = 1
 
 
 class EnemyPieceTypes(Choice):

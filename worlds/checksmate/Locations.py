@@ -42,8 +42,8 @@ location_table = {
     # for strategic analysis see: https://en.wikipedia.org/wiki/Bongcloud_Attack
     "Bongcloud Once": CMLocationData(4_902_015, 0),
     "Bongcloud Center": CMLocationData(4_902_016, 50),
-    "Bongcloud A File": CMLocationData(4_902_017, 150),
-    "Bongcloud Capture": CMLocationData(4_902_018, 200),
+    "Bongcloud A File": CMLocationData(4_902_017, 70),
+    "Bongcloud Capture": CMLocationData(4_902_018, 150),
     "Bongcloud Promotion": CMLocationData(4_902_019, 1950),  # requires reaching a rather late-game state
     # capture series of pieces and pawns within 1 game
     "Capture 2 Pawns": CMLocationData(4_902_020, 550),
@@ -71,7 +71,7 @@ location_table = {
     "Threaten Minor": CMLocationData(4_902_041, 200),
     "Threaten Major": CMLocationData(4_902_042, 200),
     "Threaten Queen": CMLocationData(4_902_043, 300),
-    "Threaten King": CMLocationData(4_902_044, 400),
+    "Threaten King": CMLocationData(4_902_044, 1000),
     # special moves and tactics
     # TODO: Getting a french move on the AI occurs seldom - maybe I can tweak the evaluation or something?
     # "French Move": CMLocationData(4_902_050, 0),
