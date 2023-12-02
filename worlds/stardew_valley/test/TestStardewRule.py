@@ -22,8 +22,15 @@ class TestSimplification(unittest.TestCase):
         summer = Received("Summer", 0, 1)
         self.assertEqual(summer, (Has("Wood", rules) | summer | Has("Rock", rules)).simplify())
 
-    def test_simplify_and_in_and(self):
+    def test_simplify_and_and_and(self):
         rule = And(Received('Summer', 0, 1), Received('Fall', 0, 1)) & And(Received('Winter', 0, 1), Received('Spring', 0, 1))
+        self.assertEqual(And(Received('Summer', 0, 1), Received('Fall', 0, 1), Received('Winter', 0, 1), Received('Spring', 0, 1)), rule.simplify())
+
+    def test_simplify_and_in_and(self):
+        """
+        Those feature of simplifying the rules when they are built have proven to improve the fill speed considerably.
+        """
+        rule = And(And(Received('Summer', 0, 1), Received('Fall', 0, 1)), And(Received('Winter', 0, 1), Received('Spring', 0, 1)))
         self.assertEqual(And(Received('Summer', 0, 1), Received('Fall', 0, 1), Received('Winter', 0, 1), Received('Spring', 0, 1)), rule.simplify())
 
     @skip("This feature has been disabled and that seems to save time")
@@ -31,8 +38,12 @@ class TestSimplification(unittest.TestCase):
         rule = And(And(Received('Summer', 0, 1), Received('Fall', 0, 1)), And(Received('Summer', 0, 1), Received('Fall', 0, 1)))
         self.assertEqual(And(Received('Summer', 0, 1), Received('Fall', 0, 1)), rule.simplify())
 
-    def test_simplify_or_in_or(self):
+    def test_simplify_or_or_or(self):
         rule = Or(Received('Summer', 0, 1), Received('Fall', 0, 1)) | Or(Received('Winter', 0, 1), Received('Spring', 0, 1))
+        self.assertEqual(Or(Received('Summer', 0, 1), Received('Fall', 0, 1), Received('Winter', 0, 1), Received('Spring', 0, 1)), rule.simplify())
+
+    def test_simplify_or_in_or(self):
+        rule = Or(Or(Received('Summer', 0, 1), Received('Fall', 0, 1)), Or(Received('Winter', 0, 1), Received('Spring', 0, 1)))
         self.assertEqual(Or(Received('Summer', 0, 1), Received('Fall', 0, 1), Received('Winter', 0, 1), Received('Spring', 0, 1)), rule.simplify())
 
     @skip("This feature has been disabled and that seems to save time")
