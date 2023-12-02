@@ -153,40 +153,6 @@ class CombinableStardewRule(StardewRule, ABC):
     def is_same_rule(self, other: CombinableStardewRule):
         return self.combination_key == other.combination_key
 
-    @staticmethod
-    def split_rules(rules: Union[Iterable[StardewRule]],
-                    reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
-            -> Tuple[Tuple[StardewRule, ...], frozendict[Hashable, CombinableStardewRule]]:
-        other_rules = []
-        reduced_rules = {}
-        for rule in rules:
-            if isinstance(rule, CombinableStardewRule):
-                key = rule.combination_key
-                if key not in reduced_rules:
-                    reduced_rules[key] = rule
-                    continue
-
-                reduced_rules[key] = reducer(reduced_rules[key], rule)
-            else:
-                other_rules.append(rule)
-
-        return tuple(other_rules), frozendict(reduced_rules)
-
-    @staticmethod
-    def merge(left: frozendict[Hashable, CombinableStardewRule],
-              right: frozendict[Hashable, CombinableStardewRule],
-              reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
-            -> frozendict[Hashable, CombinableStardewRule]:
-        reduced_rules = dict(left)
-        for key, rule in right.items():
-            if key not in reduced_rules:
-                reduced_rules[key] = rule
-                continue
-
-            reduced_rules[key] = reducer(reduced_rules[key], rule)
-
-        return frozendict(reduced_rules)
-
     def add_into(self, rules: frozendict[Hashable, CombinableStardewRule],
                  reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
             -> frozendict[Hashable, CombinableStardewRule]:
@@ -276,7 +242,7 @@ class AggregatingStardewRule(StardewRule, ABC):
     def __init__(self, *rules: StardewRule, _combinable_rules=None, _simplification_state=None):
         if _combinable_rules is None:
             assert rules, f"Can't create an aggregating condition without rules"
-            rules, _combinable_rules = CombinableStardewRule.split_rules(rules, self.combine)
+            rules, _combinable_rules = self.split_rules(rules)
             _simplification_state = _SimplificationState(rules)
 
         self.combinable_rules = _combinable_rules
@@ -292,6 +258,36 @@ class AggregatingStardewRule(StardewRule, ABC):
             return self.original_rules
 
         return RepeatableChain(self.combinable_rules.values(), self.simplification_state.simplified_rules, self.simplification_state.rules_to_simplify)
+
+    @classmethod
+    def split_rules(cls, rules: Union[Iterable[StardewRule]]) -> Tuple[Tuple[StardewRule, ...], frozendict[Hashable, CombinableStardewRule]]:
+        other_rules = []
+        reduced_rules = {}
+        for rule in rules:
+            if isinstance(rule, CombinableStardewRule):
+                key = rule.combination_key
+                if key not in reduced_rules:
+                    reduced_rules[key] = rule
+                    continue
+
+                reduced_rules[key] = cls.combine(reduced_rules[key], rule)
+            else:
+                other_rules.append(rule)
+
+        return tuple(other_rules), frozendict(reduced_rules)
+
+    @classmethod
+    def merge(cls, left: frozendict[Hashable, CombinableStardewRule], right: frozendict[Hashable, CombinableStardewRule]) \
+            -> frozendict[Hashable, CombinableStardewRule]:
+        reduced_rules = dict(left)
+        for key, rule in right.items():
+            if key not in reduced_rules:
+                reduced_rules[key] = rule
+                continue
+
+            reduced_rules[key] = cls.combine(reduced_rules[key], rule)
+
+        return frozendict(reduced_rules)
 
     @staticmethod
     @abstractmethod
@@ -359,7 +355,6 @@ class AggregatingStardewRule(StardewRule, ABC):
         simplified, value = local_state.rules_to_simplify[0].evaluate_while_simplifying(state)
 
         # Identity is removed from the resulting simplification.
-        # TODO check if the in reduces performances
         if simplified is self.identity:
             return
 
@@ -446,7 +441,7 @@ class Or(AggregatingStardewRule):
             return Or(_combinable_rules=other.add_into(self.combinable_rules, self.combine), _simplification_state=self.simplification_state)
 
         if type(other) is Or:
-            return Or(_combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine),
+            return Or(_combinable_rules=self.merge(self.combinable_rules, other.combinable_rules),
                       _simplification_state=self.simplification_state.merge(other.simplification_state))
 
         return Or(_combinable_rules=self.combinable_rules, _simplification_state=self.simplification_state.add(other))
@@ -475,7 +470,7 @@ class And(AggregatingStardewRule):
             return And(_combinable_rules=other.add_into(self.combinable_rules, self.combine), _simplification_state=self.simplification_state)
 
         if type(other) is And:
-            return And(_combinable_rules=CombinableStardewRule.merge(self.combinable_rules, other.combinable_rules, self.combine),
+            return And(_combinable_rules=self.merge(self.combinable_rules, other.combinable_rules),
                        _simplification_state=self.simplification_state.merge(other.simplification_state))
 
         return And(_combinable_rules=self.combinable_rules, _simplification_state=self.simplification_state.add(other))
@@ -725,6 +720,10 @@ class HasProgressionPercent(CombinableStardewRule):
 
 
 class RepeatableChain(Iterable, Sized):
+    """
+    Essentially a copy of what's in the core, with proper type hinting
+    """
+
     def __init__(self, *iterable: Union[Iterable, Sized]):
         self.iterables = iterable
 
