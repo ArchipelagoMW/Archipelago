@@ -1,0 +1,167 @@
+description: 'A vanilla army with no pockets'
+name: Traditional
+game:
+  ChecksMate: 15
+ChecksMate:
+  progression_balancing:
+    random-low: 1
+  accessibility:
+    minimal: 1
+  early_material:
+    pawn: 1 # not counted against locked_items (this may be changed)
+  min_material:
+    45: 1
+  max_material:
+    51: 1
+  max_engine_penalties:
+    4: 1
+  max_pockets:
+    0: 1
+  fairy_chess_pieces:
+    - FIDE
+  fairy_chess_pawns:
+    vanilla: 1
+  minor_piece_limit_by_type:
+    2: 1
+  major_piece_limit_by_type:
+    2: 1
+  queen_piece_limit:
+    1: 1
+  locked_items:
+    Progressive Minor Piece: 4
+    Progressive Major Piece: 3
+    Progressive Major To Queen: 1
+  start_hints:
+    - Play as White
+  start_location_hints:
+    - Bongcloud Once
+    - Capture Everything
+    - Fork, True Royal
+
+---
+
+description: 'Chaos and pocket pieces'
+name: SleevedAce
+game:
+  ChecksMate: 15
+ChecksMate:
+  progression_balancing:
+    random-low: 1
+  accessibility:
+    minimal: 1
+  piece_types:
+    chaos: 1
+  early_material:
+    major: 1
+  min_material:
+    45: 1
+  max_material:
+    51: 1
+  fairy_chess_pieces:
+    - FIDE
+    - Rookies
+    - Clobberers
+    - Nutty
+    - Cannon
+  fairy_chess_pawns:
+    vanilla: 1
+    berolina: 1
+  locked_items:
+    Progressive Pocket: 12
+  start_hints:
+    - Play as White
+  start_location_hints:
+    - Bongcloud Once
+    - Capture Everything
+    - Fork, True Royal
+
+---
+
+description: 'Weird Fairy Chess with opportunity to study the opening'
+name: DifferentArmy
+game:
+  ChecksMate: 15
+ChecksMate:
+  progression_balancing:
+    random-low: 1
+  accessibility:
+    minimal: 1
+  piece_locations:
+    stable: 1
+  piece_types:
+    stable: 1
+  early_material:
+    piece: 1
+  min_material:
+    45: 1
+  max_material:
+    51: 1
+  fairy_chess_pieces:
+    - Rookies
+    - Clobberers
+    - Nutty
+    - Camel
+  fairy_chess_army:
+    stable: 1
+  fairy_chess_pawns:
+    vanilla: 3
+    mixed: 1
+    berolina: 2
+  start_hints:
+    - Play as White
+  start_location_hints:
+    - Bongcloud Once
+    - Capture Everything
+    - Fork, True Royal
+
+---
+
+description: 'Many exotic royal pieces'
+name: PowerCouples
+game:
+  ChecksMate: 15
+ChecksMate:
+  progression_balancing:
+    random-high: 1
+  accessibility:
+    minimal: 1
+  piece_types:
+    chaos: 1
+  early_material:
+    major: 1
+  min_material:
+    45: 1
+  max_material:
+    51: 1
+  max_kings:
+    3: 1
+  fairy_kings:
+    2: 1
+  fairy_chess_pieces:
+    - FIDE
+    - Rookies
+    - Clobberers
+    - Nutty
+    - Camel
+  fairy_chess_army:
+    chaos: 1
+  fairy_chess_pawns:
+    vanilla: 1
+    berolina: 1
+  minor_piece_limit_by_type:
+    1: 1
+  major_piece_limit_by_type:
+    1: 1
+  queen_piece_limit_by_type:
+    1: 1
+  locked_items:
+    Progressive Consul: 2
+    Progressive King Promotion: 2
+    Progressive Major Piece: 2 # the 3rd is granted as Early Material!
+    Progressive Major To Queen: 3
+  start_hints:
+    - Play as White
+  start_location_hints:
+    - Bongcloud Once
+    - Capture Everything
+    - Fork, True Royal
