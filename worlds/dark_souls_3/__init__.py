@@ -676,7 +676,9 @@ class DarkSouls3World(World):
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         if self.yhorm_location != default_yhorm_location:
-            spoiler_handle.write(f"Yhorm takes the place of {self.yhorm_location.name}")
+            spoiler_handle.write(
+                f"Yhorm takes the place of {self.yhorm_location.name} in " +
+                f"{self.multiworld.get_player_name(self.player)}'s world")
 
 
     def pre_fill(self) -> None:
