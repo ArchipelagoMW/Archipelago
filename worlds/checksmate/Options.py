@@ -13,9 +13,10 @@ class Goal(Choice):
 
     Progressive: Your goal is to checkmate a full army, but their army is scattered across the multiworld. When you
     deliver checkmate, send a check, and add a sent enemy chessman. Progressively add each enemy pawn and piece by
-    checkmating the opponent 15 times. See also ChecksFinder rows and columns.
+    checkmating the opponent 15 times. See also ChecksFinder rows and columns. NOT IMPLEMENTED.
 
-    Ordered Progressive: As Progressive, but the enemy chessmen are always in the progressive checkmate locations.
+    Ordered Progressive: As Progressive, but the enemy chessmen are always in the progressive checkmate locations. NOT
+    IMPLEMENTED.
     """
     display_name = "Goal"
     option_single = 0
@@ -34,6 +35,7 @@ class PieceLocations(Choice):
     Stable: As Chaos, but doesn't change between matches.
 
     Ordered: Puts pieces as close to king as possible, and pawns as close to center as possible (but never first rank).
+    NOT IMPLEMENTED.
     """
     display_name = "Piece Locations"
     option_chaos = 0
@@ -50,7 +52,7 @@ class PieceTypes(Choice):
 
     Stable: As Chaos, but doesn't change between matches. You'll only ever add or upgrade pieces.
 
-    Book: Uses the standard Chess army. Adds the King's Bishop, then both Knights, then a Bishop.
+    Book: Uses the standard Chess army. Adds the King's Bishop, then both Knights, then a Bishop. NOT IMPLEMENTED.
     """
     display_name = "Piece Types"
     option_chaos = 0
@@ -65,10 +67,10 @@ class EnemyPieceTypes(Choice):
 
     Chaos: Chooses random valid options.
 
-    Stable: As Chaos, but doesn't change between matches. You'll only ever add pieces.
+    Stable: As Chaos, but doesn't change between matches. You'll only ever add pieces. NOT IMPLEMENTED.
 
     Book: Uses the standard Chess army. Adds pieces inward, then kingside. For example, minor pieces are added in order
-    of the King's Bishop, then both Knights, then a Bishop.
+    of the King's Bishop, then both Knights, then a Bishop. NOT IMPLEMENTED.
     """
     display_name = "Enemy Piece Types"
     # option_chaos = 0
@@ -98,7 +100,7 @@ class EarlyMaterial(Choice):
     option_major = 3
     option_piece = 4
     option_any = 5
-    default = 1
+    default = 0
 
 
 class MaterialMinLimit(Range):
@@ -110,7 +112,7 @@ class MaterialMinLimit(Range):
     display_name = "Minimum Material"
     range_start = 39
     range_end = 90
-    default = 39
+    default = 41
 
 
 class MaterialMaxLimit(Range):
