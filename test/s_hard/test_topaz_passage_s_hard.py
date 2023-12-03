@@ -81,15 +81,21 @@ class TestTopazPassageSHard(TestSHard):
         self.run_location_tests([
             ['Domino Row - Racing Box', False, []],
             ['Domino Row - Racing Box', False, [], ['Swim']],
-            ['Domino Row - Racing Box', True, ['Swim']],
+            ['Domino Row - Racing Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Racing Box', True, ['Swim', 'Progressive Ground Pound']],
+            ['Domino Row - Racing Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Rolling Box', False, []],
             ['Domino Row - Rolling Box', False, [], ['Swim']],
-            ['Domino Row - Rolling Box', True, ['Swim']],
+            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Rolling Box', True, ['Swim', 'Progressive Ground Pound']],
+            ['Domino Row - Rolling Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Swimming Room Escape Box', False, []],
             ['Domino Row - Swimming Room Escape Box', False, [], ['Swim']],
-            ['Domino Row - Swimming Room Escape Box', True, ['Swim']],
+            ['Domino Row - Swimming Room Escape Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Swimming Room Escape Box', True, ['Swim', 'Progressive Ground Pound']],
+            ['Domino Row - Swimming Room Escape Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Keyzer Room Box', False, []],
             ['Domino Row - Keyzer Room Box', False, [], ['Swim']],
@@ -98,7 +104,8 @@ class TestTopazPassageSHard(TestSHard):
 
             ['Domino Row - CD Box', False, []],
             ['Domino Row - CD Box', False, [], ['Swim']],
-            ['Domino Row - CD Box', True, ['Swim']],
+            ['Domino Row - CD Box', True, ['Swim', 'Progressive Ground Pound']],
+            ['Domino Row - CD Box', True, ['Swim', 'Head Smash']],
         ])
 
     def test_aerodent(self):

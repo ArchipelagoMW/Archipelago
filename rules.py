@@ -81,7 +81,9 @@ level_rules = {
     'Toy Block Tower':       [['Heavy Grab']],
     'The Big Board':         [['Ground Pound']],
     'Doodle Woods':             None,
-    'Domino Row':            [['Swim']],
+    # Note: You can also open the way to the exit by throwing a Toy Car across
+    # the green room, but that feels obscure enough that I should just ignore it
+    'Domino Row':            [['Swim', 'Ground Pound'], ['Swim', 'Head Smash']],
 
     'Crescent Moon Village': [['Head Smash', 'Dash Attack']],
     'Arabian Night':         [['Swim']],
@@ -139,6 +141,7 @@ location_rules_normal = {
 
     'Mystic Lake - Full Health Item Box': [['Grab']],
     'Doodle Woods - CD Box':              [['Ground Pound'], ['Grab']],
+    'Domino Row - Swimming Detour Box':      [['Head Smash']],
 }
 
 location_rules_hard = {
@@ -147,6 +150,8 @@ location_rules_hard = {
     'Wildflower Fields - 8-Shaped Cave Box': [['Grab']],
     'Mystic Lake - Full Health Item Box':    [['Grab']],
     'Monsoon Jungle - Buried Cave Box':      [['Grab']],
+
+    'Domino Row - Swimming Detour Box':      [['Head Smash']],
 
     'Arabian Night - Onomi Box':             [['Ground Pound'], ['Head Smash']],
     'Arabian Night - Sewer Box':             [['Super Ground Pound']],
