@@ -245,9 +245,13 @@ class DarkSouls3Location(Location):
             data: DS3LocationData,
             parent: Optional[Region] = None, 
             event: bool = False):
-        super().__init__(player, data.name, None if event else data.ap_code, parent)
+        super().__init__(
+            player,
+            data.name + (" Obtained" if event else ""),
+            None if event else data.ap_code,
+            parent)
         self.data = data
-        if data.missable: self.progress_type = LocationProgressType.EXCLUDED
+        if data.missable and not event: self.progress_type = LocationProgressType.EXCLUDED
 
 
 location_tables = {
