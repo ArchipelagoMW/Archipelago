@@ -51,7 +51,7 @@ GiveItemFromChest:
     dw ChestBow          ; CHEST_BOW
     dw ChestWithItem     ; CHEST_HOOKSHOT
     dw ChestWithItem     ; CHEST_MAGIC_ROD
-    dw Boots     ; CHEST_PEGASUS_BOOTS
+    dw Boots             ; CHEST_PEGASUS_BOOTS
     dw ChestWithItem     ; CHEST_OCARINA
     dw ChestWithItem     ; CHEST_FEATHER
     dw ChestWithItem     ; CHEST_SHOVEL

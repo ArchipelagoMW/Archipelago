@@ -302,6 +302,7 @@ class BootsControls(Choice):
     [Press A] Holding down A activates boots
     [Press B] Holding down B activates boots
     """
+    display_name = "Boots Controls"
     option_vanilla = 0
     option_bracelet = 1
     option_press_a = 2
