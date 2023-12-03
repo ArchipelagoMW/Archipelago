@@ -308,12 +308,11 @@ class DarkSouls3World(World):
     def create_items(self):
         dlc_enabled = self.multiworld.enable_dlc[self.player] == Toggle.option_true
 
-        itempool_by_category = {category: [] for category in self.enabled_location_categories}
-
         # Just used to efficiently deduplicate items
-        item_set_by_category = {category: set() for category in self.enabled_location_categories}
+        item_set = set()
 
         # Gather all default items on randomized locations
+        itempool: List[DarkSouls3Item] = []
         num_required_extra_items = 0
         for location in self.multiworld.get_unfilled_locations(self.player):
             if not self.is_location_available(location.name):
@@ -323,20 +322,15 @@ class DarkSouls3World(World):
             if item.category == DS3ItemCategory.SKIP:
                 num_required_extra_items += 1
             elif not item.unique:
-                itempool_by_category[location.data.category].append(location.data.default_item_name)
+                itempool.append(self.create_item(location.data.default_item_name))
             else:
                 # For unique items, make sure there aren't duplicates in the item set even if there
                 # are multiple in-game locations that provide them.
-                item_set = item_set_by_category[location.data.category]
                 if location.data.default_item_name in item_set:
                     num_required_extra_items += 1
                 else:
                     item_set.add(location.data.default_item_name)
-                    itempool_by_category[location.data.category].append(location.data.default_item_name)
-
-        itempool: List[DarkSouls3Item] = []
-        for category in self.enabled_location_categories:
-            itempool.extend(self.create_item(name) for name in itempool_by_category[category])
+                    itempool.append(self.create_item(location.data.default_item_name))
 
         # A list of items we can replace
         removable_items = [item for item in itempool if item.classification == ItemClassification.filler]
