@@ -1,6 +1,15 @@
-from Options import Choice, DefaultOnToggle, Toggle, PerGameCommonOptions
+from Options import Choice, DefaultOnToggle, Toggle, PerGameCommonOptions, Range
 from dataclasses import dataclass
 
+
+class IxupiCapturesNeeded(Range):
+    """
+    Number of Ixupi Captures needed for goal condition.
+    """
+    display_name = "Number of Ixupi Captures Needed"
+    range_start = 1
+    range_end = 10
+    default = 10
 
 class LobbyAccess(Choice):
     """Chooses how keys needed to reach the lobby are placed.
@@ -51,6 +60,7 @@ class LocationPotPieces(Choice):
 
 @dataclass
 class ShiversOptions(PerGameCommonOptions):
+    ixupi_captures_needed: IxupiCapturesNeeded
     lobby_access: LobbyAccess
     puzzle_hints_required: PuzzleHintsRequired
     include_information_plaques: InformationPlaques
