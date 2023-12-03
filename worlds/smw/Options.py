@@ -298,30 +298,15 @@ class MarioPalette(Choice):
     default = 0
 
 
-class ForegroundPaletteShuffle(Choice):
+class LevelPaletteShuffle(Choice):
     """
-    Whether to shuffle level foreground palettes
+    Whether to shuffle level palettes
     off: Do not shuffle palettes
     on_legacy: Uses only the palette sets from the original game
     on_curated: Uses custom palette sets created by some people
                 Setting this option will also force Backgrounds to use those palettes
     """
-    display_name = "Foreground Palette Shuffle"
-    option_off = 0
-    option_on_legacy = 1
-    option_on_curated = 2
-    default = 0
-
-
-class BackgroundPaletteShuffle(Choice):
-    """
-    Whether to shuffle level background palettes
-    off: Do not shuffle palettes
-    on_legacy: Uses only the palette sets from the original game
-    on_curated: Uses custom palette sets created by some people
-                Setting this option will also force Foregrounds to use those palettes
-    """
-    display_name = "Background Palette Shuffle"
+    display_name = "Level Palette Shuffle"
     option_off = 0
     option_on_legacy = 1
     option_on_curated = 2
@@ -383,8 +368,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "music_shuffle": MusicShuffle,
     "sfx_shuffle": SFXShuffle,
     "mario_palette": MarioPalette,
-    "foreground_palette_shuffle": ForegroundPaletteShuffle,
-    "background_palette_shuffle": BackgroundPaletteShuffle,
+    "level_palette_shuffle": LevelPaletteShuffle,
     "overworld_palette_shuffle": OverworldPaletteShuffle,
     "starting_life_count": StartingLifeCount,
 }

@@ -629,7 +629,7 @@ def generate_shuffled_ow_palettes(rom, world: World):
             rom.write_byte(address, chosen_palette)
 
 def generate_shuffled_header_data(rom, world: World):
-    if world.options.music_shuffle != "full" and world.options.foreground_palette_shuffle == "on_legacy" and world.options.background_palette_shuffle == "on_legacy" :
+    if world.options.music_shuffle != "full" and world.options.level_palette_shuffle != "on_curated":
         return
 
     for level_id in range(0, 0x200):
@@ -653,11 +653,11 @@ def generate_shuffled_header_data(rom, world: World):
             level_header[2] &= 0x8F
             level_header[2] |= (world.random.randint(0, 7) << 5)
 
-        if (world.options.foreground_palette_shuffle == "on_legacy" and tileset in valid_foreground_palettes):
-            level_header[3] &= 0xF8
-            level_header[3] |= world.random.choice(valid_foreground_palettes[tileset])
+        if world.options.level_palette_shuffle == "on_legacy":
+            if tileset in valid_foreground_palettes:
+                level_header[3] &= 0xF8
+                level_header[3] |= world.random.choice(valid_foreground_palettes[tileset])
 
-        if world.options.background_palette_shuffle == "on_legacy":
             layer2_ptr_list = list(rom.read_bytes(0x2E600 + level_id * 3, 3))
             layer2_ptr = (layer2_ptr_list[2] << 16 | layer2_ptr_list[1] << 8 | layer2_ptr_list[0])
 

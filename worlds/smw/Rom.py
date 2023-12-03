@@ -2814,7 +2814,7 @@ def patch_rom(world: World, rom, player, active_level_dict):
 
     generate_shuffled_header_data(rom, world)
 
-    if world.options.background_palette_shuffle == "on_curated" or world.options.foreground_palette_shuffle == "on_curated":
+    if world.options.level_palette_shuffle == "on_curated":
         generate_curated_level_palette_data(rom, world)
 
     if world.options.overworld_palette_shuffle == "on_curated":
