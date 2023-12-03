@@ -77,7 +77,33 @@ or if I need a boolean object, such as in my slot_data I can access it as:
 ```python
 start_with_sword = bool(self.options.starting_sword.value)
 ```
+All numeric options (i.e. Toggle, Choice, Range) can be compared to integers, strings that match their attributes,
+strings that match the option attributes after "option_" is stripped, and the attributes themselves.
+```python
+# options.py
+class Logic(Choice):
+    option_normal = 0
+    option_hard = 1
+    option_challenging = 2
+    option_extreme = 3
+    option_insane = 4
+    alias_extra_hard = 2
+    crazy = 4  # won't be listed as an option and only exists as an attribute on the class
 
+# __init__.py
+from .options import Logic
+
+if self.options.logic:
+    do_things_for_all_non_normal_logic()
+if self.options.logic == 1:
+    do_hard_things()
+elif self.options.logic == "challenging":
+    do_challenging_things()
+elif self.options.logic == Logic.option_extreme:
+    do_extreme_things()
+elif self.options.logic == "crazy":
+    do_insane_things()
+```
 ## Generic Option Classes
 These options are generically available to every game automatically, but can be overridden for slightly different
 behavior, if desired. See `worlds/soe/Options.py` for an example.
@@ -144,13 +170,20 @@ A numeric option allowing a variety of integers including the endpoints. Has a d
 `range_end` of 1. Allows for negative values as well. This will always be an integer and has no methods for string
 comparisons.
 
-### SpecialRange
+### NamedRange
 Like range but also allows you to define a dictionary of special names the user can use to equate to a specific value.
+`special_range_names` can be used to
+- give descriptive names to certain values from within the range 
+- add option values above or below the regular range, to be associated with a special meaning 
+
 For example:
 ```python
+range_start = 1
+range_end = 99
 special_range_names: {
     "normal": 20,
     "extreme": 99,
+    "unlimited": -1,
 }
 ```
 

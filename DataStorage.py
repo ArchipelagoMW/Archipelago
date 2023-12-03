@@ -1,6 +1,7 @@
 from typing import Dict, List
 import operator
 import copy
+import math
 
 def remove_from_list(container, value):
     try:
@@ -30,6 +31,8 @@ modify_functions = {
     "replace": lambda old, new: new,
     "default": lambda old, new: old,
     "pow": operator.pow,
+    "floor": lambda value, _: math.floor(value),
+    "ceil": lambda value, _: math.ceil(value),
     # bitwise:
     "xor": operator.xor,
     "or": operator.or_,
