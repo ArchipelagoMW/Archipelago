@@ -349,18 +349,19 @@ class GfxMod(FreeText, LADXROption):
     normal = ''
     default = 'Link'
 
+    __spriteDir: str = Utils.local_path(os.path.join('data', 'sprites','ladx'))
     __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
-    __spriteDir: str = None
 
     extensions = [".bin", ".bdiff", ".png", ".bmp"]
+
+    for file in os.listdir(__spriteDir):
+        name, extension = os.path.splitext(file)
+        if extension in extensions:
+            __spriteFiles[name].append(file)
+            
     def __init__(self, value: str):
         super().__init__(value)
-        if not GfxMod.__spriteDir:
-            GfxMod.__spriteDir = Utils.local_path(os.path.join('data', 'sprites','ladx'))
-            for file in os.listdir(GfxMod.__spriteDir):
-                name, extension = os.path.splitext(file)
-                if extension in self.extensions:
-                    GfxMod.__spriteFiles[name].append(file)
+
                     
     def verify(self, world, player_name: str, plando_options) -> None:
         if self.value == "Link" or self.value in GfxMod.__spriteFiles:
