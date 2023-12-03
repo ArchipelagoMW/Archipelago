@@ -87,37 +87,37 @@ class DarkSouls3World(World):
 
 
     def generate_early(self):
-        if self.multiworld.enable_weapon_locations[self.player] == Toggle.option_true:
+        if self.options.enable_weapon_locations:
             self.enabled_location_categories.add(DS3LocationCategory.WEAPON)
             # Always make this available early because so many items are useless without it.
             self.multiworld.early_items[self.player]['Pyromancy Flame'] = 1
-        if self.multiworld.enable_shield_locations[self.player] == Toggle.option_true:
+        if self.options.enable_shield_locations:
             self.enabled_location_categories.add(DS3LocationCategory.SHIELD)
-        if self.multiworld.enable_armor_locations[self.player] == Toggle.option_true:
+        if self.options.enable_armor_locations:
             self.enabled_location_categories.add(DS3LocationCategory.ARMOR)
-        if self.multiworld.enable_ring_locations[self.player] == Toggle.option_true:
+        if self.options.enable_ring_locations:
             self.enabled_location_categories.add(DS3LocationCategory.RING)
-        if self.multiworld.enable_spell_locations[self.player] == Toggle.option_true:
+        if self.options.enable_spell_locations:
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
-        if self.multiworld.enable_unique_locations[self.player] == Toggle.option_true:
+        if self.options.enable_unique_locations:
             self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
-        if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
+        if self.options.enable_key_locations:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
-            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_global:
+            if self.options.early_banner == "early_global":
                 self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
-            elif self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_local:
+            elif self.options.early_banner == "early_local":
                 self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
-        if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
+        if self.options.enable_misc_locations:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
-        if self.multiworld.enable_health_locations[self.player] == Toggle.option_true:
+        if self.options.enable_health_locations:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
-        if self.multiworld.upgrade_locations[self.player] != UpgradeLocationsOption.option_not_randomized:
+        if self.options.upgrade_locations != "not_randomized":
             self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
-        if self.multiworld.soul_locations[self.player] != SoulLocationsOption.option_not_randomized:
+        if self.options.soul_locations != "not_randomized":
             self.enabled_location_categories.add(DS3LocationCategory.SOUL)
 
         # Randomize Yhorm manually so that we know where to place the Storm Ruler.
-        if self.multiworld.randomize_enemies[self.player]:
+        if self.options.randomize_enemies:
             self.yhorm_location = self.multiworld.random.choice(
                 [boss for boss in all_bosses if self._allow_boss_for_yhorm(boss)])
 
@@ -126,7 +126,7 @@ class DarkSouls3World(World):
                 self.yhorm_location.name == "Iudex Gundyr" or
                 self.yhorm_location.name == "Vordt of the Boreal Valley" or (
                     self.yhorm_location.name == "Dancer of the Boreal Valley" and
-                    self.multiworld.late_basin_of_vows[self.player] == Toggle.option_false
+                    not self.multiworld.late_basin_of_vows
                 )
             ):
                 self.multiworld.early_items[self.player]['Storm Ruler'] = 1
@@ -138,9 +138,9 @@ class DarkSouls3World(World):
     def _allow_boss_for_yhorm(self, boss: DS3BossInfo) -> bool:
         """Returns whether boss is a valid location for Yhorm in this seed."""
 
-        if not self.multiworld.enable_dlc[self.player] and boss.dlc: return False
+        if not self.options.enable_dlc and boss.dlc: return False
 
-        if not self.multiworld.enable_weapon_locations[self.player]:
+        if not self.options.enable_weapon_locations:
             # If weapons aren't randomized, make sure the player can get to the normal Storm Ruler
             # location before they need to get through Yhorm.
             if boss.before_storm_ruler: return False
@@ -148,7 +148,7 @@ class DarkSouls3World(World):
             # If keys also aren't randomized, make sure Yhorm isn't blocking access to the Small
             # Doll or it won't be possible to get into Profaned Capital before beating him.
             if (
-                not self.multiworld.enable_key_locations[self.player]
+                not self.options.enable_key_locations
                 and boss.name in {"Crystal Sage", "Deacons of the Deep"}
             ):
                 return False
@@ -157,11 +157,9 @@ class DarkSouls3World(World):
         # they can't be random don't allow Yhorm in there.
         if (
             boss.name == "Iudex Gundyr"
-            and not self.multiworld.enable_misc_locations[self.player]
-            and self.multiworld.upgrade_locations[self.player] ==
-                UpgradeLocationsOption.option_not_randomized
-            and self.multiworld.soul_locations[self.player] ==
-                SoulLocationsOption.option_not_randomized
+            and not self.options.enable_misc_locations
+            and self.options.upgrade_locations == "not_randomized"
+            and self.options.soul_locations == "not_randomized"
         ):
             return False
 
@@ -198,7 +196,7 @@ class DarkSouls3World(World):
         ]})
 
         # Create DLC Regions
-        if self.multiworld.enable_dlc[self.player]:
+        if self.options.enable_dlc:
             regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
                 "Painted World of Ariandel (Before Contraption)",
                 "Painted World of Ariandel (After Contraption)",
@@ -248,7 +246,7 @@ class DarkSouls3World(World):
         create_connection("Consumed King's Garden", "Untended Graves")
 
         # Connect DLC Regions
-        if self.multiworld.enable_dlc[self.player]:
+        if self.options.enable_dlc:
             create_connection("Cathedral of the Deep", "Painted World of Ariandel (Before Contraption)")
             create_connection("Painted World of Ariandel (Before Contraption)",
                               "Painted World of Ariandel (After Contraption)")
@@ -270,10 +268,7 @@ class DarkSouls3World(World):
 
                 # Mark Red Eye Orb as missable if key locations aren't being randomized, because the
                 # Lift Chamber Key is missable by default.
-                if (
-                    not self.multiworld.enable_key_locations[self.player]
-                    and location.name == "HWL: Red Eye Orb"
-                ):
+                if not self.options.enable_key_locations and location.name == "HWL: Red Eye Orb":
                     new_location.progress_type = LocationProgressType.EXCLUDED
             else:
                 # Replace non-randomized progression items with events if their locations aren't
@@ -306,8 +301,6 @@ class DarkSouls3World(World):
 
 
     def create_items(self):
-        dlc_enabled = self.multiworld.enable_dlc[self.player] == Toggle.option_true
-
         # Just used to efficiently deduplicate items
         item_set = set()
 
@@ -378,7 +371,7 @@ class DarkSouls3World(World):
         injectable_items = [
             item for item
             in item_dictionary.values()
-            if item.inject and (not item.is_dlc or dlc_enabled)
+            if item.inject and (not item.is_dlc or self.options.enable_dlc)
         ]
         number_to_inject = min(num_required_extra_items, len(injectable_items))
         for item in self.multiworld.random.sample(injectable_items, k=number_to_inject):
@@ -395,21 +388,19 @@ class DarkSouls3World(World):
     def create_item(self, item: Union[str, DS3ItemData]) -> Item:
         data = item if isinstance(item, DS3ItemData) else item_dictionary[item]
         classification = None
-        if self.multiworld and ((
-            data.useful_if == UsefulIf.BASE and
-            not self.multiworld.enable_dlc[self.player] and
-            not self.multiworld.enable_ngp[self.player]
-        ) or (
-            data.useful_if == UsefulIf.NO_DLC and
-            not self.multiworld.enable_dlc[self.player]
-        ) or (
-            data.useful_if == UsefulIf.NO_NGP and
-            not self.multiworld.enable_ngp[self.player]
-        )):
+        if self.multiworld and (
+            (
+                data.useful_if == UsefulIf.BASE and
+                not self.options.enable_dlc and
+                not self.options.enable_ngp
+            )
+            or (data.useful_if == UsefulIf.NO_DLC and not self.options.enable_dlc)
+            or (data.useful_if == UsefulIf.NO_NGP and not self.options.enable_ngp)
+        ):
             classification = ItemClassification.useful
 
         if (
-            self.multiworld.randomize_weapon_level[self.player] != RandomizeWeaponLevelOption.option_none
+            self.options.randomize_weapon_level != "none"
             and data.category.upgrade_level
             # Because we require the Pyromancy Flame to be available early, don't upgrade it so it
             # doesn't get shuffled around by weapon smoothing.
@@ -420,7 +411,7 @@ class DarkSouls3World(World):
             min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
             max_10 = self.multiworld.max_levels_in_10[self.player]
             min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
-            weapon_level_percentage = self.multiworld.randomize_weapon_level_percentage[self.player]
+            weapon_level_percentage = self.options.randomize_weapon_level_percentage
 
             if self.multiworld.random.randint(0, 99) < weapon_level_percentage:
                 if data.category.upgrade_level == 5:
@@ -428,8 +419,8 @@ class DarkSouls3World(World):
                 elif data.category.upgrade_level == 10:
                     data = data.upgrade(self.multiworld.random.randint(min_10, max_10))
 
-        if self.multiworld.randomize_infusion[self.player] and data.category.is_infusible:
-            infusion_percentage = self.multiworld.randomize_infusion_percentage[self.player]
+        if self.options.randomize_infusion and data.category.is_infusible:
+            infusion_percentage = self.options.randomize_infusion_percentage
             if self.multiworld.random.randint(0, 99) < infusion_percentage:
                 data = data.infuse(self.multiworld.random.choice(list(Infusion)))
 
@@ -462,21 +453,21 @@ class DarkSouls3World(World):
                           state.has("Cinders of a Lord - Aldrich", self.player) and
                           state.has("Cinders of a Lord - Lothric Prince", self.player))
 
-        if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
+        if self.options.late_basin_of_vows:
             self._add_entrance_rule("Lothric Castle", "Small Lothric Banner")
 
         # DLC Access Rules Below
-        if self.multiworld.enable_dlc[self.player]:
+        if self.options.enable_dlc:
             self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "CD -> PW1")
             self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Contraption Key")
             self._add_entrance_rule("Dreg Heap", "PW2 -> DH")
             self._add_entrance_rule("Ringed City", "Small Envoy Banner")
 
-            if self.multiworld.late_dlc[self.player]:
+            if self.options.late_dlc:
                 self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
 
         # Define the access rules to some specific locations
-        if self.multiworld.enable_key_locations[self.player]:
+        if self.options.enable_key_locations:
             self._add_location_rule("HWL: Red Eye Orb", "Lift Chamber Key")
         self._add_location_rule("ID: Bellowing Dragoncrest Ring", "Jailbreaker's Key")
         self._add_location_rule("ID: Covetous Gold Serpent Ring", "Old Cell Key")
@@ -593,14 +584,14 @@ class DarkSouls3World(World):
         self._add_location_rule("FK: Cinders of a Lord - Abyss Watcher", has_any_scroll)
         self._add_entrance_rule("Catacombs of Carthus", has_any_scroll)
         # Not really necessary but ensures players can decide which way to go
-        if dlc_enabled:
+        if self.options.enable_dlc:
             self._add_entrance_rule("Painted World of Ariandel (After Contraption)", has_any_scroll)
 
         self._add_location_rule("HWL: Soul of the Dancer", "Basin of Vows")
 
         # Lump Soul of the Dancer in with LC for locations that should not be reachable
         # before having access to US. (Prevents requiring getting Basin to fight Dancer to get SLB to go to US)
-        if self.multiworld.late_basin_of_vows[self.player]:
+        if self.options.late_basin_of_vows:
             self._add_location_rule("HWL: Soul of the Dancer", "Small Lothric Banner")
             # This isn't really necessary, but it ensures that the game logic knows players will
             # want to do Lothric Castle after at least being _able_ to access Catacombs. This is
@@ -677,9 +668,9 @@ class DarkSouls3World(World):
 
         return (
             data.category in self.enabled_location_categories and
-            (not data.npc or self.multiworld.enable_npc_locations[self.player] == Toggle.option_true) and
-            (not data.dlc or self.multiworld.enable_dlc[self.player] == Toggle.option_true) and
-            (not data.ngp or self.multiworld.enable_ngp[self.player] == Toggle.option_true)
+            (not data.npc or self.options.enable_npc_locations) and
+            (not data.dlc or self.options.enable_dlc) and
+            (not data.ngp or self.options.enable_ngp)
         )
 
 
@@ -701,7 +692,7 @@ class DarkSouls3World(World):
         self._fill_local_item("Coiled Sword", {"Cemetery of Ash", "Firelink Shrine"})
 
         # If upgrade smoothing is enabled, make sure one raw gem is available early for SL1 players
-        if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_smooth:
+        if self.options.upgrade_locations == "smooth":
             self._fill_local_item("Raw Gem", {
                 "Cemetery of Ash",
                 "Firelink Shrine",
@@ -828,7 +819,7 @@ class DarkSouls3World(World):
                     location.item = new_item
                     new_item.location = location
 
-        if self.multiworld.upgrade_locations[self.player] == UpgradeLocationsOption.option_smooth:
+        if self.options.upgrade_locations == "smooth":
             base_names = {
                 "Titanite Shard", "Large Titanite Shard", "Titanite Chunk", "Titanite Slab",
                 "Titanite Scale", "Twinkling Titanite", "Farron Coal", "Sage's Coal", "Giant's Coal",
@@ -836,7 +827,7 @@ class DarkSouls3World(World):
             }
             smooth_items([item for item in all_item_order if item.base_name in base_names])
 
-        if self.multiworld.soul_locations[self.player] == SoulLocationsOption.option_smooth:
+        if self.options.soul_locations == "smooth":
             # Shuffle larger boss souls among themselves because they're all worth 10-20k souls in
             # no particular order and that's a lot more interesting than getting them in the same
             # order every single run.
@@ -854,7 +845,7 @@ class DarkSouls3World(World):
                     item_order.append(item)
             smooth_items(item_order)
 
-        if self.multiworld.upgraded_weapon_locations[self.player] == UpgradedWeaponLocationsOption.option_smooth:
+        if self.options.upgraded_weapon_locations == "smooth":
             upgraded_weapons = [
                 location.item
                 for location in self.multiworld.get_filled_locations()
@@ -918,31 +909,31 @@ class DarkSouls3World(World):
 
         slot_data = {
             "options": {
-                "random_starting_loadout": self.multiworld.random_starting_loadout[self.player].value,
-                "require_one_handed_starting_weapons": self.multiworld.require_one_handed_starting_weapons[self.player].value,
-                "auto_equip": self.multiworld.auto_equip[self.player].value,
-                "lock_equip": self.multiworld.lock_equip[self.player].value,
-                "no_weapon_requirements": self.multiworld.no_weapon_requirements[self.player].value,
-                "death_link": self.multiworld.death_link[self.player].value,
-                "no_spell_requirements": self.multiworld.no_spell_requirements[self.player].value,
-                "no_equip_load": self.multiworld.no_equip_load[self.player].value,
-                "enable_dlc": self.multiworld.enable_dlc[self.player].value,
-                "enable_ngp": self.multiworld.enable_ngp[self.player].value,
-                "smooth_soul_locations": self.multiworld.soul_locations[self.player].value == SoulLocationsOption.option_smooth,
-                "smooth_upgrade_locations": self.multiworld.upgrade_locations[self.player].value == UpgradeLocationsOption.option_smooth,
-                "randomize_enemies": self.multiworld.randomize_enemies[self.player].value,
-                "randomize_mimics_with_enemies": self.multiworld.randomize_mimics_with_enemies[self.player].value,
-                "randomize_small_crystal_lizards_with_enemies": self.multiworld.randomize_small_crystal_lizards_with_enemies[self.player].value,
-                "reduce_harmless_enemies": self.multiworld.reduce_harmless_enemies[self.player].value,
-                "simple_early_bosses": self.multiworld.simple_early_bosses[self.player].value,
-                "scale_enemies": self.multiworld.scale_enemies[self.player].value,
-                "all_chests_are_mimics": self.multiworld.all_chests_are_mimics[self.player].value,
-                "impatient_mimics": self.multiworld.impatient_mimics[self.player].value,
+                "random_starting_loadout": self.options.random_starting_loadout.value,
+                "require_one_handed_starting_weapons": self.options.require_one_handed_starting_weapons.value,
+                "auto_equip": self.options.auto_equip.value,
+                "lock_equip": self.options.lock_equip.value,
+                "no_weapon_requirements": self.options.no_weapon_requirements.value,
+                "death_link": self.options.death_link.value,
+                "no_spell_requirements": self.options.no_spell_requirements.value,
+                "no_equip_load": self.options.no_equip_load.value,
+                "enable_dlc": self.options.enable_dlc.value,
+                "enable_ngp": self.options.enable_ngp.value,
+                "smooth_soul_locations": self.options.soul_locations == "smooth",
+                "smooth_upgrade_locations": self.options.upgrade_locations == "smooth",
+                "randomize_enemies": self.options.randomize_enemies.value,
+                "randomize_mimics_with_enemies": self.options.randomize_mimics_with_enemies.value,
+                "randomize_small_crystal_lizards_with_enemies": self.options.randomize_small_crystal_lizards_with_enemies.value,
+                "reduce_harmless_enemies": self.options.reduce_harmless_enemies.value,
+                "simple_early_bosses": self.options.simple_early_bosses.value,
+                "scale_enemies": self.options.scale_enemies.value,
+                "all_chests_are_mimics": self.options.all_chests_are_mimics.value,
+                "impatient_mimics": self.options.impatient_mimics.value,
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
             # Reserializing here is silly, but it's easier for the offline randomizer.
-            "random_enemy_preset": json.dumps(self.multiworld.random_enemy_preset[self.player].value),
+            "random_enemy_preset": json.dumps(self.options.random_enemy_preset.value),
             "yhorm": (
                 f"{self.yhorm_location.name} {self.yhorm_location.id}"
                 if self.yhorm_location != default_yhorm_location
