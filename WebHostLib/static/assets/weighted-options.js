@@ -93,9 +93,10 @@ class WeightedSettings {
             });
             break;
           case 'range':
-          case 'special_range':
+          case 'named_range':
             this.current[game][gameSetting]['random'] = 0;
             this.current[game][gameSetting]['random-low'] = 0;
+            this.current[game][gameSetting]['random-middle'] = 0;
             this.current[game][gameSetting]['random-high'] = 0;
             if (setting.hasOwnProperty('defaultValue')) {
               this.current[game][gameSetting][setting.defaultValue] = 25;
@@ -210,7 +211,11 @@ class WeightedSettings {
     let errorMessage = null;
 
     // User must choose a name for their file
-    if (!settings.name || settings.name.trim().length === 0 || settings.name.toLowerCase().trim() === 'player') {
+    if (
+      !settings.name ||
+      settings.name.toString().trim().length === 0 ||
+      settings.name.toString().toLowerCase().trim() === 'player'
+    ) {
       userMessage.innerText = 'You forgot to set your player name at the top of the page!';
       userMessage.classList.add('visible');
       userMessage.scrollIntoView({
@@ -256,7 +261,7 @@ class WeightedSettings {
 
         // Remove empty arrays
         else if (
-          ['exclude_locations', 'priority_locations', 'local_items', 
+          ['exclude_locations', 'priority_locations', 'local_items',
           'non_local_items', 'start_hints', 'start_location_hints'].includes(setting) &&
           settings[game][setting].length === 0
         ) {
@@ -518,178 +523,185 @@ class GameSettings {
           break;
 
         case 'range':
-        case 'special_range':
+        case 'named_range':
           const rangeTable = document.createElement('table');
           const rangeTbody = document.createElement('tbody');
 
-          if (((setting.max - setting.min) + 1) < 11) {
-            for (let i=setting.min; i <= setting.max; ++i) {
-              const tr = document.createElement('tr');
-              const tdLeft = document.createElement('td');
-              tdLeft.classList.add('td-left');
-              tdLeft.innerText = i;
-              tr.appendChild(tdLeft);
+          const hintText = document.createElement('p');
+          hintText.classList.add('hint-text');
+          hintText.innerHTML = 'This is a range option. You may enter a valid numerical value in the text box ' +
+            `below, then press the "Add" button to add a weight for it.<br /><br />Accepted values:<br />` +
+            `Normal range: ${setting.min} - ${setting.max}`;
 
-              const tdMiddle = document.createElement('td');
-              tdMiddle.classList.add('td-middle');
-              const range = document.createElement('input');
-              range.setAttribute('type', 'range');
-              range.setAttribute('id', `${this.name}-${settingName}-${i}-range`);
-              range.setAttribute('data-game', this.name);
-              range.setAttribute('data-setting', settingName);
-              range.setAttribute('data-option', i);
-              range.setAttribute('min', 0);
-              range.setAttribute('max', 50);
-              range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
-              range.value = this.current[settingName][i] || 0;
-              tdMiddle.appendChild(range);
-              tr.appendChild(tdMiddle);
-
-              const tdRight = document.createElement('td');
-              tdRight.setAttribute('id', `${this.name}-${settingName}-${i}`)
-              tdRight.classList.add('td-right');
-              tdRight.innerText = range.value;
-              tr.appendChild(tdRight);
-
-              rangeTbody.appendChild(tr);
-            }
-          } else {
-            const hintText = document.createElement('p');
-            hintText.classList.add('hint-text');
-            hintText.innerHTML = 'This is a range option. You may enter a valid numerical value in the text box ' +
-              `below, then press the "Add" button to add a weight for it.<br />Minimum value: ${setting.min}<br />` +
-              `Maximum value: ${setting.max}`;
-
-            if (setting.hasOwnProperty('value_names')) {
-              hintText.innerHTML += '<br /><br />Certain values have special meaning:';
-              Object.keys(setting.value_names).forEach((specialName) => {
+          const acceptedValuesOutsideRange = [];
+          if (setting.hasOwnProperty('value_names')) {
+            Object.keys(setting.value_names).forEach((specialName) => {
+              if (
+                (setting.value_names[specialName] < setting.min) ||
+                (setting.value_names[specialName] > setting.max)
+              ) {
                 hintText.innerHTML += `<br />${specialName}: ${setting.value_names[specialName]}`;
-              });
-            }
-
-            settingWrapper.appendChild(hintText);
-
-            const addOptionDiv = document.createElement('div');
-            addOptionDiv.classList.add('add-option-div');
-            const optionInput = document.createElement('input');
-            optionInput.setAttribute('id', `${this.name}-${settingName}-option`);
-            optionInput.setAttribute('placeholder', `${setting.min} - ${setting.max}`);
-            addOptionDiv.appendChild(optionInput);
-            const addOptionButton = document.createElement('button');
-            addOptionButton.innerText = 'Add';
-            addOptionDiv.appendChild(addOptionButton);
-            settingWrapper.appendChild(addOptionDiv);
-            optionInput.addEventListener('keydown', (evt) => {
-              if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
+                acceptedValuesOutsideRange.push(setting.value_names[specialName]);
+              }
             });
 
-            addOptionButton.addEventListener('click', () => {
-              const optionInput = document.getElementById(`${this.name}-${settingName}-option`);
-              let option = optionInput.value;
-              if (!option || !option.trim()) { return; }
-              option = parseInt(option, 10);
-              if ((option < setting.min) || (option > setting.max)) { return; }
-              optionInput.value = '';
-              if (document.getElementById(`${this.name}-${settingName}-${option}-range`)) { return; }
-
-              const tr = document.createElement('tr');
-              const tdLeft = document.createElement('td');
-              tdLeft.classList.add('td-left');
-              tdLeft.innerText = option;
-              tr.appendChild(tdLeft);
-
-              const tdMiddle = document.createElement('td');
-              tdMiddle.classList.add('td-middle');
-              const range = document.createElement('input');
-              range.setAttribute('type', 'range');
-              range.setAttribute('id', `${this.name}-${settingName}-${option}-range`);
-              range.setAttribute('data-game', this.name);
-              range.setAttribute('data-setting', settingName);
-              range.setAttribute('data-option', option);
-              range.setAttribute('min', 0);
-              range.setAttribute('max', 50);
-              range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
-              range.value = this.current[settingName][parseInt(option, 10)];
-              tdMiddle.appendChild(range);
-              tr.appendChild(tdMiddle);
-
-              const tdRight = document.createElement('td');
-              tdRight.setAttribute('id', `${this.name}-${settingName}-${option}`)
-              tdRight.classList.add('td-right');
-              tdRight.innerText = range.value;
-              tr.appendChild(tdRight);
-
-              const tdDelete = document.createElement('td');
-              tdDelete.classList.add('td-delete');
-              const deleteButton = document.createElement('span');
-              deleteButton.classList.add('range-option-delete');
-              deleteButton.innerText = '❌';
-              deleteButton.addEventListener('click', () => {
-                range.value = 0;
-                range.dispatchEvent(new Event('change'));
-                rangeTbody.removeChild(tr);
-              });
-              tdDelete.appendChild(deleteButton);
-              tr.appendChild(tdDelete);
-
-              rangeTbody.appendChild(tr);
-
-              // Save new option to settings
-              range.dispatchEvent(new Event('change'));
-            });
-
-            Object.keys(this.current[settingName]).forEach((option) => {
-              // These options are statically generated below, and should always appear even if they are deleted
-              // from localStorage
-              if (['random-low', 'random', 'random-high'].includes(option)) { return; }
-
-              const tr = document.createElement('tr');
-                const tdLeft = document.createElement('td');
-                tdLeft.classList.add('td-left');
-                tdLeft.innerText = option;
-                tr.appendChild(tdLeft);
-
-                const tdMiddle = document.createElement('td');
-                tdMiddle.classList.add('td-middle');
-                const range = document.createElement('input');
-                range.setAttribute('type', 'range');
-                range.setAttribute('id', `${this.name}-${settingName}-${option}-range`);
-                range.setAttribute('data-game', this.name);
-                range.setAttribute('data-setting', settingName);
-                range.setAttribute('data-option', option);
-                range.setAttribute('min', 0);
-                range.setAttribute('max', 50);
-                range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
-                range.value = this.current[settingName][parseInt(option, 10)];
-                tdMiddle.appendChild(range);
-                tr.appendChild(tdMiddle);
-
-                const tdRight = document.createElement('td');
-                tdRight.setAttribute('id', `${this.name}-${settingName}-${option}`)
-                tdRight.classList.add('td-right');
-                tdRight.innerText = range.value;
-                tr.appendChild(tdRight);
-
-                const tdDelete = document.createElement('td');
-                tdDelete.classList.add('td-delete');
-                const deleteButton = document.createElement('span');
-                deleteButton.classList.add('range-option-delete');
-                deleteButton.innerText = '❌';
-                deleteButton.addEventListener('click', () => {
-                  range.value = 0;
-                  const changeEvent = new Event('change');
-                  changeEvent.action = 'rangeDelete';
-                  range.dispatchEvent(changeEvent);
-                  rangeTbody.removeChild(tr);
-                });
-                tdDelete.appendChild(deleteButton);
-                tr.appendChild(tdDelete);
-
-                rangeTbody.appendChild(tr);
+            hintText.innerHTML += '<br /><br />Certain values have special meaning:';
+            Object.keys(setting.value_names).forEach((specialName) => {
+              hintText.innerHTML += `<br />${specialName}: ${setting.value_names[specialName]}`;
             });
           }
 
-          ['random', 'random-low', 'random-high'].forEach((option) => {
+          settingWrapper.appendChild(hintText);
+
+          const addOptionDiv = document.createElement('div');
+          addOptionDiv.classList.add('add-option-div');
+          const optionInput = document.createElement('input');
+          optionInput.setAttribute('id', `${this.name}-${settingName}-option`);
+          let placeholderText = `${setting.min} - ${setting.max}`;
+          acceptedValuesOutsideRange.forEach((aVal) => placeholderText += `, ${aVal}`);
+          optionInput.setAttribute('placeholder', placeholderText);
+          addOptionDiv.appendChild(optionInput);
+          const addOptionButton = document.createElement('button');
+          addOptionButton.innerText = 'Add';
+          addOptionDiv.appendChild(addOptionButton);
+          settingWrapper.appendChild(addOptionDiv);
+          optionInput.addEventListener('keydown', (evt) => {
+            if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
+          });
+
+          addOptionButton.addEventListener('click', () => {
+            const optionInput = document.getElementById(`${this.name}-${settingName}-option`);
+            let option = optionInput.value;
+            if (!option || !option.trim()) { return; }
+            option = parseInt(option, 10);
+
+            let optionAcceptable = false;
+            if ((option >= setting.min) && (option <= setting.max)) {
+              optionAcceptable = true;
+            }
+            if (setting.hasOwnProperty('value_names') && Object.values(setting.value_names).includes(option)){
+              optionAcceptable = true;
+            }
+            if (!optionAcceptable) { return; }
+
+            optionInput.value = '';
+            if (document.getElementById(`${this.name}-${settingName}-${option}-range`)) { return; }
+
+            const tr = document.createElement('tr');
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = option;
+            if (
+              setting.hasOwnProperty('value_names') &&
+              Object.values(setting.value_names).includes(parseInt(option, 10))
+            ) {
+              const optionName = Object.keys(setting.value_names).find(
+                (key) => setting.value_names[key] === parseInt(option, 10)
+              );
+              tdLeft.innerText += ` [${optionName}]`;
+            }
+            tr.appendChild(tdLeft);
+
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${this.name}-${settingName}-${option}-range`);
+            range.setAttribute('data-game', this.name);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', option);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
+            range.value = this.current[settingName][parseInt(option, 10)];
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
+
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${this.name}-${settingName}-${option}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
+
+            const tdDelete = document.createElement('td');
+            tdDelete.classList.add('td-delete');
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('range-option-delete');
+            deleteButton.innerText = '❌';
+            deleteButton.addEventListener('click', () => {
+              range.value = 0;
+              range.dispatchEvent(new Event('change'));
+              rangeTbody.removeChild(tr);
+            });
+            tdDelete.appendChild(deleteButton);
+            tr.appendChild(tdDelete);
+
+            rangeTbody.appendChild(tr);
+
+            // Save new option to settings
+            range.dispatchEvent(new Event('change'));
+          });
+
+          Object.keys(this.current[settingName]).forEach((option) => {
+            // These options are statically generated below, and should always appear even if they are deleted
+            // from localStorage
+            if (['random', 'random-low', 'random-middle', 'random-high'].includes(option)) { return; }
+
+            const tr = document.createElement('tr');
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = option;
+            if (
+              setting.hasOwnProperty('value_names') &&
+              Object.values(setting.value_names).includes(parseInt(option, 10))
+            ) {
+              const optionName = Object.keys(setting.value_names).find(
+                (key) => setting.value_names[key] === parseInt(option, 10)
+              );
+              tdLeft.innerText += ` [${optionName}]`;
+            }
+            tr.appendChild(tdLeft);
+
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${this.name}-${settingName}-${option}-range`);
+            range.setAttribute('data-game', this.name);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', option);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
+            range.value = this.current[settingName][parseInt(option, 10)];
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
+
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${this.name}-${settingName}-${option}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
+
+            const tdDelete = document.createElement('td');
+            tdDelete.classList.add('td-delete');
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('range-option-delete');
+            deleteButton.innerText = '❌';
+            deleteButton.addEventListener('click', () => {
+              range.value = 0;
+              const changeEvent = new Event('change');
+              changeEvent.action = 'rangeDelete';
+              range.dispatchEvent(changeEvent);
+              rangeTbody.removeChild(tr);
+            });
+            tdDelete.appendChild(deleteButton);
+            tr.appendChild(tdDelete);
+
+            rangeTbody.appendChild(tr);
+          });
+
+          ['random', 'random-low', 'random-middle', 'random-high'].forEach((option) => {
             const tr = document.createElement('tr');
               const tdLeft = document.createElement('td');
               tdLeft.classList.add('td-left');
@@ -699,6 +711,9 @@ class GameSettings {
                   break;
                 case 'random-low':
                   tdLeft.innerText = "Random (Low)";
+                  break;
+                case 'random-middle':
+                  tdLeft.innerText = 'Random (Middle)';
                   break;
                 case 'random-high':
                   tdLeft.innerText = "Random (High)";

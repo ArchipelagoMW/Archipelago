@@ -1,6 +1,6 @@
 from typing import Dict, List, NamedTuple, Optional, Set
 
-import yaml
+import Utils
 
 
 class RoomAndDoor(NamedTuple):
@@ -108,9 +108,11 @@ def load_static_data():
     except ImportError:
         from importlib_resources import files
 
+    from . import data
+
     # Load in all item and location IDs. These are broken up into groups based on the type of item/location.
-    with files("worlds.lingo").joinpath("ids.yaml").open() as file:
-        config = yaml.load(file, Loader=yaml.Loader)
+    with files(data).joinpath("ids.yaml").open() as file:
+        config = Utils.parse_yaml(file)
 
         if "special_items" in config:
             for item_name, item_id in config["special_items"].items():
@@ -144,8 +146,8 @@ def load_static_data():
                 PROGRESSIVE_ITEM_IDS[item_name] = item_id
 
     # Process the main world file.
-    with files("worlds.lingo").joinpath("LL1.yaml").open() as file:
-        config = yaml.load(file, Loader=yaml.Loader)
+    with files(data).joinpath("LL1.yaml").open() as file:
+        config = Utils.parse_yaml(file)
 
         for room_name, room_data in config.items():
             process_room(room_name, room_data)

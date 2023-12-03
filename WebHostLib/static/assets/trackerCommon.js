@@ -4,13 +4,20 @@ const adjustTableHeight = () => {
         return;
     const upperDistance = tablesContainer.getBoundingClientRect().top;
 
-    const containerHeight = window.innerHeight - upperDistance;
-    tablesContainer.style.maxHeight = `calc(${containerHeight}px - 1rem)`;
-
     const tableWrappers = document.getElementsByClassName('table-wrapper');
-    for(let i=0; i < tableWrappers.length; i++){
-        const maxHeight = (window.innerHeight - upperDistance) / 2;
-        tableWrappers[i].style.maxHeight = `calc(${maxHeight}px - 1rem)`;
+    for (let i = 0; i < tableWrappers.length; i++) {
+        // Ensure we are starting from maximum size prior to calculation.
+        tableWrappers[i].style.height = null;
+        tableWrappers[i].style.maxHeight = null;
+
+        // Set as a reasonable height, but still allows the user to resize element if they desire.
+        const currentHeight = tableWrappers[i].offsetHeight;
+        const maxHeight = (window.innerHeight - upperDistance) / Math.min(tableWrappers.length, 4);
+        if (currentHeight > maxHeight) {
+            tableWrappers[i].style.height = `calc(${maxHeight}px - 1rem)`;
+        }
+
+        tableWrappers[i].style.maxHeight = `${currentHeight}px`;
     }
 };
 
