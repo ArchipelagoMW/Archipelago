@@ -1,4 +1,18 @@
-description: 'A vanilla army with no pockets'
+description: 'Standard Chess pieces, moving in standard Chess ways, allowing many combinations of material'
+name: NoDumbPieces
+game:
+  ChecksMate: 1
+ChecksMate:
+  early_material:
+    off: 1  # this allows the generator to work out its own logical progression
+  fairy_chess_pieces:
+    - FIDE  # this excludes all fairy chess pieces, although you may see many rooks, or no bishops, etc
+  fairy_chess_pawns:
+    vanilla: 1  # this excludes Berolina pawns, so every pawn will be a traditional pawn
+
+---
+
+description: 'A vanilla army with no pockets, comprising 2 Bishops+Knights+Rooks, and 1 Queen (or Rook until upgraded)'
 name: Traditional
 game:
   ChecksMate: 15

@@ -174,7 +174,8 @@ class MaximumKings(Range):
 
 class FairyKings(Range):
     """
-    Whether to use fairy king upgrades, such as the Knight's moves.
+    Whether to use fairy king upgrades, such as the Knight's moves. Adding multiple upgrades to the pool will allow your
+    King to become a hyper-powerful invented piece if all upgrades are collected.
     """
     display_name = "Fairy Kings"
     range_start = 0
