@@ -10,6 +10,36 @@ from .Locations import get_locations_by_category
 #def has_room_of_truth(state: CollectionState, player: int, floor_num) -> bool:
 #    return state.has_all({"Key of Beginnings F" + floor_num, "Key of Guidance F" + floor_num, "Key to Truth F" + floor_num}, player)
 
+def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
+    locations = 0
+    if has_item(state, player,"World Card Wonderland"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Olympus Coliseum"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Monstro"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Agrabah"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Halloween Town"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Atlantica"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Neverland"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Hollow Bastion"):
+        locations = locations + 1
+    if has_item(state, player,"World Card 100 Acre Wood"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Twilight Town"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Destiny Islands"):
+        locations = locations + 1
+    if has_item(state, player,"World Card Castle Oblivion"):
+        locations = locations + 1
+    if locations > num_of_worlds:
+        return True
+    return False
+
 def has_item(state: CollectionState, player: int, item) -> bool:
     return state.has(item, player)
 
@@ -57,9 +87,9 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Floor 8"                                                            , player).access_rule = lambda state: has_item(state, player,"World Card Neverland")
     multiworld.get_entrance("Floor 9"                                                            , player).access_rule = lambda state: has_item(state, player,"World Card Hollow Bastion")
     multiworld.get_entrance("Floor 10"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card 100 Acre Wood")
-    multiworld.get_entrance("Floor 11"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Twilight Town")
-    multiworld.get_entrance("Floor 12"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Destiny Islands")
-    multiworld.get_entrance("Floor 13"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Castle Oblivion")
+    multiworld.get_entrance("Floor 11"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Twilight Town") and has_x_worlds(state, player, 5)
+    multiworld.get_entrance("Floor 12"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Destiny Islands") and has_x_worlds(state, player, 7)
+    multiworld.get_entrance("Floor 13"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Castle Oblivion") and has_x_worlds(state, player, 9)
     
     # Options
     
