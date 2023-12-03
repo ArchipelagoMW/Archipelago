@@ -33,7 +33,7 @@ class MusicShuffle(Choice):
     None: Music is not shuffled
     Levels only: Only shuffle music between the main levels
     Levels and extras: Shuffle any music that plays in levels, including the 'Hurry up!' and boss themes
-    Full: Shuffle all music (Warning: tends to behave strangely)
+    Full: Shuffle all music
     '''
     display_name = 'Music Shuffle'
     option_none = 0

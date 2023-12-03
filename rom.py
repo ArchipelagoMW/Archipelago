@@ -250,6 +250,7 @@ level_songs = [
 ]
 
 level_adjacent_songs = [  # Play in levels but aren't a level's main theme
+    0x269,  # Wario's workout
     0x280,  # Boss corridor
     0x2A2,  # Bonus Room
     0x2A9,  # Hurry Up!
@@ -257,8 +258,7 @@ level_adjacent_songs = [  # Play in levels but aren't a level's main theme
     0x2B0,  # Golden Diva
 ]
 
-other_songs = [  # Not made to play in levels; these don't play nice
-    0x269,  # Wario's workout (doesn't work quite right for some reason)
+other_songs = [  # Not made to play in levels
     0x26A,  # Sound Room
     0x27C,  # Intro
     0x27F,  # Level select screen
@@ -278,12 +278,13 @@ def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
         music_pool += other_songs
 
     music_table_address = 0x8098028
-    music_info_table = [rom.read_bytes(music_table_address + 8 * i, 8) for i in range(819)]
+    # Only change the header pointers; leave the music player numbers alone
+    music_info_table = [rom.read_word(music_table_address + 8 * i) for i in range(819)]
 
     shuffled_music = list(music_pool)
     random.shuffle(shuffled_music)
     for vanilla, shuffled in zip(music_pool, shuffled_music):
-        rom.write_bytes(music_table_address + 8 * vanilla, music_info_table[shuffled])
+        rom.write_word(music_table_address + 8 * vanilla, music_info_table[shuffled])
 
     # Remove horizontal mixing in Palm Tree Paradise and Mystic Lake
 
@@ -304,6 +305,7 @@ def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
     rom.write_halfword(mystic_lake_doors[23] + 10, 0x28F)
     rom.write_halfword(mystic_lake_doors[25] + 10, 0x28F)
     rom.write_halfword(mystic_lake_doors[26] + 10, 0x2A2)
+
 
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
