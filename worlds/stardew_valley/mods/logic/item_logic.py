@@ -137,7 +137,5 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
     # Items that don't behave enough like a crop but enough to warrant a portion of the cropsanity logic.
     def pseudo_cropsanity_check(self, seed_name: str):
         if self.options.cropsanity == Cropsanity.option_disabled:
-            item_rule = True_()
-        else:
-            item_rule = self.logic.received(seed_name)
-        return item_rule
+            return True_()
+        return self.logic.received(seed_name)
