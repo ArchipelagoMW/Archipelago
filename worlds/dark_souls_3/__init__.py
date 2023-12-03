@@ -786,10 +786,11 @@ class DarkSouls3World(World):
             if self.is_location_available(location)
         ]
 
-        # All DarkSouls3Items that have been assigned anywhere, grouped by name
+        # All DarkSouls3Items for this world that have been assigned anywhere, grouped by name
         full_items_by_name = defaultdict(list)
         for location in self.multiworld.get_filled_locations():
-            full_items_by_name[location.item.name].append(location.item)
+            if location.item.player == self.player:
+                full_items_by_name[location.item.name].append(location.item)
 
         def smooth_items(item_order: List[Union[DS3ItemData, DarkSouls3Item]]) -> None:
             """Rearrange all items in item_order to match that order.
@@ -823,8 +824,7 @@ class DarkSouls3World(World):
                 ]
 
                 # Check the game, not the player, because we know how to sort within regions for DS3
-                offworld = [loc for loc in locations if loc.game != "Dark Souls III"]
-                self.multiworld.random.shuffle(offworld)
+                offworld = self._shuffle(loc for loc in locations if loc.game != "Dark Souls III")
                 onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
                                  key=lambda loc: loc.data.region_value)
 
