@@ -866,6 +866,7 @@ class DarkSouls3World(World):
                 for location in self.multiworld.get_filled_locations()
                 if location.item.player == self.player
                 and location.item.level and location.item.level > 0
+                and location.item.classification != ItemClassification.progression
             ]
             upgraded_weapons.sort(key=lambda item: item.level)
             smooth_items(upgraded_weapons)
