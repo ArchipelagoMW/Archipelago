@@ -3,7 +3,8 @@ from . import LingoTestBase
 
 class TestRequiredRoomLogic(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "complex",
+        "shuffle_colors": "false",
     }
 
     def test_pilgrim_first(self) -> None:
@@ -49,7 +50,8 @@ class TestRequiredRoomLogic(LingoTestBase):
 
 class TestRequiredDoorLogic(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "complex",
+        "shuffle_colors": "false",
     }
 
     def test_through_rhyme(self) -> None:
@@ -76,7 +78,8 @@ class TestRequiredDoorLogic(LingoTestBase):
 
 class TestSimpleDoors(LingoTestBase):
     options = {
-        "shuffle_doors": "simple"
+        "shuffle_doors": "simple",
+        "shuffle_colors": "false",
     }
 
     def test_requirement(self):

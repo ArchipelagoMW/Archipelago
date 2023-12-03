@@ -32,7 +32,7 @@ class LocationChecks(Choice):
     option_insanity = 2
 
 
-class ShuffleColors(Toggle):
+class ShuffleColors(DefaultOnToggle):
     """If on, an item is added to the pool for every puzzle color (besides White).
     You will need to unlock the requisite colors in order to be able to solve puzzles of that color."""
     display_name = "Shuffle Colors"
