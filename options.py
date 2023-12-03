@@ -31,6 +31,7 @@ class SmashThroughHardBlocks(Toggle):
     """
     Break hard, teal blocks with the dash attack and super ground pound without stopping,
     as in Pizza Tower and Wario Land: Shake It!
+    This option does not affect logic.
     """
     display_name = "Smash Hard Blocks Without Stopping"
 

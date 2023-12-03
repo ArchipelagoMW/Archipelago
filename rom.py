@@ -338,8 +338,9 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
 
     # Break hard blocks without stopping
     if (world.smash_through_hard_blocks[player].value):
-        rom.write_halfword(0x806ED5A, 0x46C0)  # nop  ; WarSidePanel_Attack()
+        rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
         rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
+        rom.write_halfword(0x806EE64, 0xE00A)  # b 0x806EE7C    ; WarUpPanel_Attack()
 
     shuffle_music(rom, world, player)
     shuffle_wario_voice_sets(rom, world, player)
