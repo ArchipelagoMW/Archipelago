@@ -307,6 +307,22 @@ def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
     rom.write_halfword(mystic_lake_doors[26] + 10, 0x2A2)
 
 
+def shuffle_wario_voice_sets(rom: LocalRom, multiworld: MultiWorld, player: int):
+    if not multiworld.wario_voice_shuffle[player]:
+        return
+
+    voice_set_pointer_address = 0x86D3648
+    voice_set_pointers = [rom.read_word(voice_set_pointer_address + 4 * i) for i in range(12)]
+    voice_set_length_address = 0x86D3394
+    voice_set_lengths = [rom.read_word(voice_set_length_address + 4 * i) for i in range(12)]
+    voice_sets = list(zip(voice_set_pointers, voice_set_lengths))
+
+    random.shuffle(voice_sets)
+    for i, (pointer, length) in enumerate(voice_sets):
+        rom.write_word(voice_set_pointer_address + 4 * i, pointer)
+        rom.write_word(voice_set_length_address + 4 * i, length)
+
+
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
 
@@ -321,6 +337,7 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     set_difficulty_level(rom, world.difficulty[player].value)
 
     shuffle_music(rom, world, player)
+    shuffle_wario_voice_sets(rom, world, player)
 
 
 def get_base_rom_bytes(file_name: str = '') -> bytes:

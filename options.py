@@ -1,6 +1,6 @@
 from typing import Dict, Type
 
-from Options import Choice, Option, DefaultOnToggle, DeathLink, Range
+from Options import Choice, Option, DefaultOnToggle, DeathLink, Range, Toggle
 
 
 class Difficulty(Choice):
@@ -43,9 +43,17 @@ class MusicShuffle(Choice):
     default = 0
 
 
+class WarioVoiceShuffle(Toggle):
+    '''
+    Randomize the things Wario says.
+    '''
+    display_name = "Shuffle Wario's voices"
+
+
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
     'required_jewels': RequiredJewels,
     'death_link': DeathLink,
     'music_shuffle': MusicShuffle,
+    'wario_voice_shuffle': WarioVoiceShuffle,
 }
