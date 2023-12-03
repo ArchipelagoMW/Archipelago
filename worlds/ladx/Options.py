@@ -96,9 +96,8 @@ class StartShufflePool(OptionList):
         - annoying
         - water        
         - dungeon
-
-    TODO: also allow specifying a specific entrance or list of entrances
     """
+    # TODO: also allow specifying a specific entrance or list of entrances
     valid_keys = [
         "single",
         "dummy",
