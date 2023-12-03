@@ -689,27 +689,27 @@ class DarkSouls3World(World):
         # Fill this manually so that, if very few slots are available in Cemetery of Ash, this
         # doesn't get locked out by bad rolls on the next two fills.
         if self.yhorm_location.name == 'Iudex Gundyr':
-            self._fill_local_item("Storm Ruler", {"Cemetery of Ash"},
+            self._fill_local_item("Storm Ruler", ["Cemetery of Ash"],
                                   lambda location: location.name != "CA: Coiled Sword",
                                   mandatory = True)
 
         # Don't place this in the multiworld because it's necessary almost immediately, and don't
         # mark it as a blocker for HWL because having a miniscule Sphere 1 screws with progression
         # balancing.
-        self._fill_local_item("Coiled Sword", {"Cemetery of Ash", "Firelink Shrine"})
+        self._fill_local_item("Coiled Sword", ["Cemetery of Ash", "Firelink Shrine"])
 
         # If upgrade smoothing is enabled, make sure one raw gem is available early for SL1 players
         if self.options.upgrade_locations == "smooth":
-            self._fill_local_item("Raw Gem", {
+            self._fill_local_item("Raw Gem", [
                 "Cemetery of Ash",
                 "Firelink Shrine",
                 "High Wall of Lothric"
-            })
+            ])
 
 
     def _fill_local_item(
         self, name: str,
-        regions: Set[str],
+        regions: List[str],
         additional_condition: Optional[Callable[[DarkSouls3Location], bool]] = None,
         mandatory = False,
     ) -> None:
@@ -767,7 +767,7 @@ class DarkSouls3World(World):
 
         while len(unchecked_locations) > 0:
             sphere_locations = {loc for loc in unchecked_locations if state.can_reach(loc)}
-            locations_by_sphere.append(self._shuffle(sphere_locations))
+            locations_by_sphere.append(self._shuffle(sorted(sphere_locations)))
 
             old_length = len(unchecked_locations)
             unchecked_locations.difference_update(sphere_locations)
@@ -846,11 +846,11 @@ class DarkSouls3World(World):
             # Shuffle larger boss souls among themselves because they're all worth 10-20k souls in
             # no particular order and that's a lot more interesting than getting them in the same
             # order every single run.
-            shuffled = {
+            shuffled_order = self._shuffle([
                 item.name for item in item_dictionary.values()
                 if item.category == DS3ItemCategory.BOSS and item.souls and item.souls >= 10000
-            }
-            shuffled_order = self._shuffle(shuffled)
+            ])
+            shuffled = set(shuffled_order)
             item_order: List[DS3ItemData] = []
             for item in all_item_order:
                 if not item.souls: continue
@@ -871,7 +871,7 @@ class DarkSouls3World(World):
             smooth_items(upgraded_weapons)
 
 
-    def _shuffle(self, seq: Sequence) -> Sequence:
+    def _shuffle(self, seq: Sequence) -> List:
         """Returns a shuffled copy of a sequence."""
         copy = list(seq)
         self.multiworld.random.shuffle(copy)
