@@ -153,17 +153,17 @@ class DarkSouls3World(World):
             ):
                 return False
 
-        # There are only a few locations before Iudex Gundyr, and none of them are weapons, so if
-        # they can't be random don't allow Yhorm in there.
-        if (
-            boss.name == "Iudex Gundyr"
-            and not self.options.enable_misc_locations
-            and self.options.upgrade_locations == "not_randomized"
-            and self.options.soul_locations == "not_randomized"
-        ):
-            return False
+        if boss.name != "Iudex Gundyr": return True
 
-        return True
+        # Cemetery of Ash has very few locations and all of them are excluded by default, so only
+        # allow Yhorm as Iudex Gundyr if there's at least one available location.
+        excluded = self.multiworld.exclude_locations[self.player].value
+        return any(
+            self.is_location_available(location)
+            and location.name not in excluded
+            and location.name != "CA: Coiled Sword"
+            for location in location_tables["Cemetery of Ash"]
+        )
 
 
     def create_regions(self):
@@ -258,6 +258,10 @@ class DarkSouls3World(World):
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, self.player, self.multiworld)
 
+        # Use this to un-exclude event locations so the fill doesn't complain about items behind
+        # them being unreachable.
+        excluded = self.multiworld.exclude_locations[self.player].value
+
         for location in location_table:
             if self.is_location_available(location):
                 new_location = DarkSouls3Location(
@@ -289,6 +293,7 @@ class DarkSouls3World(World):
                 )
                 event_item.code = None
                 new_location.place_locked_item(event_item)
+                if location.name in excluded: excluded.remove(location.name)
 
             if region_name == "Menu":
                 add_item_rule(new_location, lambda item: not item.advancement)
@@ -685,7 +690,8 @@ class DarkSouls3World(World):
         # doesn't get locked out by bad rolls on the next two fills.
         if self.yhorm_location.name == 'Iudex Gundyr':
             self._fill_local_item("Storm Ruler", {"Cemetery of Ash"},
-                                  lambda location: location.name != "CA: Coiled Sword")
+                                  lambda location: location.name != "CA: Coiled Sword",
+                                  mandatory = True)
 
         # Don't place this in the multiworld because it's necessary almost immediately, and don't
         # mark it as a blocker for HWL because having a miniscule Sphere 1 screws with progression
@@ -704,12 +710,15 @@ class DarkSouls3World(World):
     def _fill_local_item(
         self, name: str,
         regions: Set[str],
-        additional_condition: Optional[Callable[[DarkSouls3Location], bool]] = None
+        additional_condition: Optional[Callable[[DarkSouls3Location], bool]] = None,
+        mandatory = False,
     ) -> None:
         """Chooses a valid location for the item with the given name and places it there.
         
         This always chooses a local location among the given regions. If additional_condition is
         passed, only locations meeting that condition will be considered.
+
+        If mandatory is True, this will throw an error if the item could not be filled in.
         """
         item = next(
             (
@@ -721,19 +730,24 @@ class DarkSouls3World(World):
         if not item: return
 
         candidate_locations = [
-            self.multiworld.get_location(location.name, self.player)
-            for region in regions
-            for location in location_tables[region]
-            if self.is_location_available(location)
-            and not location.missable
-            and not location.conditional
-            and (not additional_condition or additional_condition(location))
-        ]
-        location = self.multiworld.random.choice([
-            location for location in candidate_locations
+            location for location in (
+                self.multiworld.get_location(location.name, self.player)
+                for region in regions
+                for location in location_tables[region]
+                if self.is_location_available(location)
+                and not location.missable
+                and not location.conditional
+                and (not additional_condition or additional_condition(location))
+            )
             if not location.item and location.progress_type != LocationProgressType.EXCLUDED
             and location.item_rule(item)
-        ])
+        ]
+
+        if not candidate_locations:
+            if not mandatory: return
+            raise Exception(f"No valid locations to place {name}")
+
+        location = self.multiworld.random.choice(candidate_locations)
         location.place_locked_item(item)
         self.multiworld.itempool.remove(item)
 
