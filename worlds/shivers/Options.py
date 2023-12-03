@@ -38,6 +38,16 @@ class EarlyLightning(Toggle):
     """Allows lightning to be captured at any point in the game. You will still need to capture all ten Ixupi for victory."""
     display_name = "Early Lightning"
 
+class LocationPotPieces(Choice):
+    """Chooses where pot pieces will be located within the multiworld.
+    - Own World: Pot pieces will be located within your own world
+    - Different World: Pot pieces will be located in another world
+    - Any World: Pot pieces will be located in any world"""
+    display_name = "Location of Pot Pieces"
+    option_own_world = 0
+    option_different_world = 1
+    option_any_world = 2
+
 
 @dataclass
 class ShiversOptions(PerGameCommonOptions):
@@ -48,3 +58,4 @@ class ShiversOptions(PerGameCommonOptions):
     elevators_stay_solved: ElevatorsStaySolved
     early_beth: EarlyBeth
     early_lightning: EarlyLightning
+    location_pot_pieces: LocationPotPieces
