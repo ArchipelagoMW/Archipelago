@@ -97,7 +97,7 @@ class CMWorld(World):
         # Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0).
         if "Camel" in which_pieces.value:
             army_options += [5]
-        # Vanilla: Disables fairy chess pieces completely.
+        # An empty set disables fairy chess pieces completely.
         if not army_options:
             army_options = [0]
         army_constraint = self.options.fairy_chess_army
