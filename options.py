@@ -1,6 +1,6 @@
 from typing import Dict, Type
 
-from Options import Choice, Option, DefaultOnToggle, DeathLink, Range
+from Options import Choice, Option, DefaultOnToggle, DeathLink, Range, Toggle
 
 
 class Difficulty(Choice):
@@ -31,19 +31,29 @@ class MusicShuffle(Choice):
     '''
     Music shuffle type
     None: Music is not shuffled
-    Levels only: Only shuffle music between the main levels besides the Golden Passage
+    Levels only: Only shuffle music between the main levels
+    Levels and extras: Shuffle any music that plays in levels, including the 'Hurry up!' and boss themes
     Full: Shuffle all music
     '''
     display_name = 'Music Shuffle'
     option_none = 0
     option_levels_only = 1
-    option_full = 2
+    option_levels_and_extras = 2
+    option_full = 3
     default = 0
+
+
+class WarioVoiceShuffle(Toggle):
+    '''
+    Randomize the things Wario says.
+    '''
+    display_name = "Shuffle Wario's voices"
 
 
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
     'required_jewels': RequiredJewels,
     'death_link': DeathLink,
-    #'music_shuffle': MusicShuffle,
+    'music_shuffle': MusicShuffle,
+    'wario_voice_shuffle': WarioVoiceShuffle,
 }

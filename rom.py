@@ -1,5 +1,6 @@
 import hashlib
 import itertools
+import random
 from pathlib import Path
 from typing import Dict, NamedTuple, Optional
 
@@ -225,6 +226,103 @@ def set_difficulty_level(rom: LocalRom, difficulty: int):
     rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; Display S-Hard
 
 
+# https://github.com/wario-land/Toge-Docs/blob/master/Steaks/music_and_sound_effects.md#sfx-indices
+
+level_songs = [
+    0x2A0,  # Hall of Hieroglyphs
+    0x28B,  # Palm Tree Paradise
+    0x28E,  # Wildflower Fields
+    0x28F,  # Mystic Lake
+    0x292,  # Monsoon Jungle
+    0x293,  # The Curious Factory
+    0x294,  # The Toxic Landfill
+    0x296,  # 40 Below Fridge
+    0x295,  # Pinball Zone
+    0x297,  # Toy Block Tower
+    0x298,  # The Big Board
+    0x299,  # Doodle Woods
+    0x29A,  # Domino Row
+    0x29B,  # Crescent Moon Village
+    0x29C,  # Arabian Night
+    0x29E,  # Fiery Cavern
+    0x29D,  # Hotel Horror
+    0x29F,  # Golden Passage
+]
+
+level_adjacent_songs = [  # Play in levels but aren't a level's main theme
+    0x269,  # Wario's workout
+    0x280,  # Boss corridor
+    0x2A2,  # Bonus Room
+    0x2A9,  # Hurry Up!
+    0x2AF,  # Passage Boss
+    0x2B0,  # Golden Diva
+]
+
+other_songs = [  # Not made to play in levels
+    0x26A,  # Sound Room
+    0x27C,  # Intro
+    0x27F,  # Level select screen
+    0x2AA,  # Item Shop
+    0x2BD,  # Mini-Game Shop
+]
+
+
+def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
+    music_shuffle = multiworld.music_shuffle[player].value
+    if music_shuffle == 0:
+        return
+    music_pool = [*level_songs]
+    if music_shuffle >= 2:
+        music_pool += level_adjacent_songs
+    if music_shuffle >= 3:
+        music_pool += other_songs
+
+    music_table_address = 0x8098028
+    # Only change the header pointers; leave the music player numbers alone
+    music_info_table = [rom.read_word(music_table_address + 8 * i) for i in range(819)]
+
+    shuffled_music = list(music_pool)
+    random.shuffle(shuffled_music)
+    for vanilla, shuffled in zip(music_pool, shuffled_music):
+        rom.write_word(music_table_address + 8 * vanilla, music_info_table[shuffled])
+
+    # Remove horizontal mixing in Palm Tree Paradise and Mystic Lake
+
+    palm_tree_paradise_doors = range(0x83F30F0, 0x83F3240, 12)
+    # Set most doors' music IDs to 0 (no change)
+    for addr in palm_tree_paradise_doors[1:23]:
+        rom.write_halfword(addr + 10, 0)
+    # Set pink pipes to the same as the portal
+    rom.write_halfword(palm_tree_paradise_doors[23] + 10, 0x28B)
+    rom.write_halfword(palm_tree_paradise_doors[25] + 10, 0x28B)
+    # 2A1 and 2A2 are both the pink room theme, but for some reason it only
+    # crossfades like it should if I change 2A1 to 2A2
+    rom.write_halfword(palm_tree_paradise_doors[24] + 10, 0x2A2)
+
+    mystic_lake_doors = range(0x83F3420, 0x83F3570, 12)
+    for addr in mystic_lake_doors[1:23]:
+        rom.write_halfword(addr + 10, 0)
+    rom.write_halfword(mystic_lake_doors[23] + 10, 0x28F)
+    rom.write_halfword(mystic_lake_doors[25] + 10, 0x28F)
+    rom.write_halfword(mystic_lake_doors[26] + 10, 0x2A2)
+
+
+def shuffle_wario_voice_sets(rom: LocalRom, multiworld: MultiWorld, player: int):
+    if not multiworld.wario_voice_shuffle[player]:
+        return
+
+    voice_set_pointer_address = 0x86D3648
+    voice_set_pointers = [rom.read_word(voice_set_pointer_address + 4 * i) for i in range(12)]
+    voice_set_length_address = 0x86D3394
+    voice_set_lengths = [rom.read_word(voice_set_length_address + 4 * i) for i in range(12)]
+    voice_sets = list(zip(voice_set_pointers, voice_set_lengths))
+
+    random.shuffle(voice_sets)
+    for i, (pointer, length) in enumerate(voice_sets):
+        rom.write_word(voice_set_pointer_address + 4 * i, pointer)
+        rom.write_word(voice_set_length_address + 4 * i, length)
+
+
 def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
 
@@ -237,6 +335,9 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     rom.write_byte(get_symbol('DeathLinkFlag'), world.death_link[player].value)
 
     set_difficulty_level(rom, world.difficulty[player].value)
+
+    shuffle_music(rom, world, player)
+    shuffle_wario_voice_sets(rom, world, player)
 
 
 def get_base_rom_bytes(file_name: str = '') -> bytes:
