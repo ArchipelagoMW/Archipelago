@@ -2820,7 +2820,7 @@ def patch_rom(world: World, rom, player, active_level_dict):
     if world.options.overworld_palette_shuffle == "on_curated":
         generate_curated_map_palette_data(rom, world)
     
-    if world.options.sfx_shuffle:
+    if world.options.sfx_shuffle != "none":
         generate_shuffled_sfx(rom, world)
     
     if world.options.swap_donut_gh_exits:

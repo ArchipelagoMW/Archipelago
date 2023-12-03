@@ -582,8 +582,7 @@ def generate_shuffled_sfx(rom, world: World):
     rom.write_bytes(0x06D41 + 0x05, bytearray([0xEA, 0xEA, 0xEA, 0xEA]))    # nop #4
 
     # Manually add "Map: Stepping onto a level tile" random SFX
-    random_sfx = world.random.randint(0, len(valid_sfxs)-1)
-    selected_sfx = valid_sfxs[random_sfx]
+    selected_sfx = world.random.choice(valid_sfxs)
     rom.write_byte(0x2169F + 0x01, selected_sfx[0])
     rom.write_byte(0x2169F + 0x04, selected_sfx[1] + 0xF9)
 
@@ -593,8 +592,8 @@ def generate_shuffled_sfx(rom, world: World):
     # Randomize SFX calls
     for address in game_sfx_calls:
         # Get random SFX
-        random_sfx = world.random.randint(0, len(valid_sfxs)-1)
-        selected_sfx = valid_sfxs[random_sfx]
+        if world.options.sfx_shuffle != "singularity":
+            selected_sfx = world.random.choice(valid_sfxs)
         # Write randomized SFX num
         rom.write_byte(address + 0x01, selected_sfx[0])
         # Write randomized SFX port
