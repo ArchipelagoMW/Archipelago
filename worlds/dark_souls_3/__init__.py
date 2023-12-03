@@ -593,7 +593,8 @@ class DarkSouls3World(World):
         self._add_location_rule("FK: Cinders of a Lord - Abyss Watcher", has_any_scroll)
         self._add_entrance_rule("Catacombs of Carthus", has_any_scroll)
         # Not really necessary but ensures players can decide which way to go
-        self._add_entrance_rule("Painted World of Ariandel (After Contraption)", has_any_scroll)
+        if dlc_enabled:
+            self._add_entrance_rule("Painted World of Ariandel (After Contraption)", has_any_scroll)
 
         self._add_location_rule("HWL: Soul of the Dancer", "Basin of Vows")
 
