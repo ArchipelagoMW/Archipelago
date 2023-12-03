@@ -187,7 +187,9 @@ class TestEntrancesBasic(TestEntrances):
 
             ['Domino Row Gate', False, []],
             ['Domino Row Gate', False, [], ['Swim']],
-            ['Domino Row Gate', True, ['Swim']],
+            ['Domino Row Gate', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row Gate', True, ['Swim', 'Progressive Ground Pound']],
+            ['Domino Row Gate', True, ['Swim', 'Head Smash']],
         ])
 
     def test_sapphire_levels(self):
