@@ -8,7 +8,7 @@ import hashlib
 import inspect
 import itertools
 import logging
-
+import collections
 import operator
 import pickle
 import random
