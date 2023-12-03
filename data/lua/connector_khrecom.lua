@@ -741,9 +741,9 @@ end
 
 function set_enemy_cards(enemy_card_array)
     enemy_cards_pointer_offset = 0x008793F8
-    enemy_cards_value_offset = -0x914
+    enemy_cards_value_offset = 0x914
     enemy_cards_pointer = GetPointerA(base_address+enemy_cards_pointer_offset, 0x0)
-    WriteArrayA(enemy_cards_pointer+enemy_cards_value_offset, enemy_card_array)
+    WriteArrayA(enemy_cards_pointer-enemy_cards_value_offset, enemy_card_array)
 end
 
 function set_friends(friends_array)
@@ -851,7 +851,7 @@ function receive_items()
             if received_item_id == v then
                 received_item_name = k
                 if string.sub(received_item_name, 1, 10) == "Enemy Card" and not item_found then
-                    card_array = add_enemy_card(card_array, received_item_name:sub(12))
+                    enemy_card_array = add_enemy_card(enemy_card_array, received_item_name:sub(12))
                 elseif string.sub(received_item_name, -3) == "1-3" and not item_found then
                     card_array = add_card(card_array, received_item_name:sub(1, -5), 1)
                     card_array = add_card(card_array, received_item_name:sub(1, -5), 2)
