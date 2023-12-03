@@ -1033,6 +1033,11 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
+class AllowCollect(DefaultOnToggle):
+    """Allows checks in your world to be automatically marked as collected when !collect is run."""
+    display_name = "Allow Collect"
+
+
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     display_name = "Item Links"

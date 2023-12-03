@@ -1,7 +1,8 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, AllowCollect, StartInventoryPool, \
+    PlandoBosses
 
 
 class Logic(Choice):
@@ -424,12 +425,6 @@ class BeemizerTrapChance(BeemizerRange):
     trap; all other replaced items are single bottle-filling bees."""
     default = 60
     display_name = "Beemizer Trap Chance"
-
-
-class AllowCollect(Toggle):
-    """Allows for !collect / co-op to auto-open chests containing items for other players.
-    Off by default, because it currently crashes on real hardware."""
-    display_name = "Allow Collection of checks for other players"
 
 
 alttp_options: typing.Dict[str, type(Option)] = {

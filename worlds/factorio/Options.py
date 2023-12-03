@@ -2,8 +2,8 @@ from __future__ import annotations
 import typing
 import datetime
 
-from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool
+from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, AllowCollect, \
+    Toggle, StartInventoryPool
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -454,6 +454,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "evolution_traps": EvolutionTrapCount,
     "evolution_trap_increase": EvolutionTrapIncrease,
     "death_link": DeathLink,
+    "allow_collect": AllowCollect,
     "energy_link": EnergyLink,
     "start_inventory_from_pool": StartInventoryPool,
 }
