@@ -88,13 +88,12 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLog
             return {}
 
         return{
-            ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.region.can_reach(Region.witch_swamp) &
-                                         self.logic.has(Fertilizer.quality),
-            ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.quality),
-            ModQuest.ANewPot: self.logic.region.can_reach(Region.witch_swamp) & self.logic.region.can_reach(Region.saloon) &
+            ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.has(Fertilizer.deluxe),
+            ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.deluxe),
+            ModQuest.ANewPot: self.logic.region.can_reach(Region.saloon) &
                               self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_store) &
                               self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron),
-            ModQuest.FancyBlanketTask: self.logic.region.can_reach(Region.witch_swamp) & self.logic.region.can_reach(Region.haley_house) & self.logic.has(AnimalProduct.wool) &
+            ModQuest.FancyBlanketTask: self.logic.region.can_reach(Region.haley_house) & self.logic.has(AnimalProduct.wool) &
                                        self.logic.has(ArtisanGood.cloth)
 
         }
