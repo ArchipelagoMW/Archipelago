@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict, NamedTuple, Optional
 
 import bsdiff4
+from Options import PerGameCommonOptions
 
 import Utils
 from BaseClasses import MultiWorld
@@ -240,6 +241,34 @@ def write_multiworld_table(rom: LocalRom,
             entry_address += 8
 
 
+def patch_rom(rom: LocalRom, multiworld: MultiWorld, player: int):
+    fill_items(rom, multiworld, player)
+
+    # Write player name and number
+    player_name = multiworld.player_name[player].encode('utf-8')
+    rom.write_bytes(get_symbol('PlayerName'), player_name)
+    rom.write_byte(get_symbol('PlayerID'), player)
+
+    apply_options(rom, multiworld.worlds[player].options)
+
+
+def apply_options(rom: LocalRom, options: PerGameCommonOptions):
+    rom.write_byte(get_symbol('DeathLinkFlag'), options.death_link.value)
+
+    set_difficulty_level(rom, options.difficulty.value)
+
+    # Break hard blocks without stopping
+    if (options.smash_through_hard_blocks.value):
+        rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
+        rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
+        rom.write_halfword(0x806EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
+
+    shuffle_music(rom, options.music_shuffle.value)
+
+    if (options.wario_voice_shuffle.value):
+        shuffle_wario_voice_sets(rom)
+
+
 def set_difficulty_level(rom: LocalRom, difficulty: int):
     mov_r0 = 0x2000 | difficulty           # mov r0, #difficulty
     cmp_r0 = 0x2800 | difficulty           # cmp r0, #difficulty
@@ -298,8 +327,7 @@ other_songs = [  # Not made to play in levels
 ]
 
 
-def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
-    music_shuffle = multiworld.music_shuffle[player].value
+def shuffle_music(rom: LocalRom, music_shuffle: int):
     if music_shuffle == 0:
         return
     music_pool = [*level_songs]
@@ -338,10 +366,7 @@ def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
     rom.write_halfword(mystic_lake_doors[26] + 10, 0x2A2)
 
 
-def shuffle_wario_voice_sets(rom: LocalRom, multiworld: MultiWorld, player: int):
-    if not multiworld.wario_voice_shuffle[player]:
-        return
-
+def shuffle_wario_voice_sets(rom: LocalRom):
     voice_set_pointer_address = 0x86D3648
     voice_set_pointers = [rom.read_word(voice_set_pointer_address + 4 * i) for i in range(12)]
     voice_set_length_address = 0x86D3394
@@ -352,29 +377,6 @@ def shuffle_wario_voice_sets(rom: LocalRom, multiworld: MultiWorld, player: int)
     for i, (pointer, length) in enumerate(voice_sets):
         rom.write_word(voice_set_pointer_address + 4 * i, pointer)
         rom.write_word(voice_set_length_address + 4 * i, length)
-
-
-def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
-    fill_items(rom, world, player)
-
-    # Write player name and number
-    player_name = world.player_name[player].encode('utf-8')
-    rom.write_bytes(get_symbol('PlayerName'), player_name)
-    rom.write_byte(get_symbol('PlayerID'), player)
-
-    # Set deathlink
-    rom.write_byte(get_symbol('DeathLinkFlag'), world.death_link[player].value)
-
-    set_difficulty_level(rom, world.difficulty[player].value)
-
-    # Break hard blocks without stopping
-    if (world.smash_through_hard_blocks[player].value):
-        rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
-        rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
-        rom.write_halfword(0x806EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
-
-    shuffle_music(rom, world, player)
-    shuffle_wario_voice_sets(rom, world, player)
 
 
 def get_base_rom_bytes(file_name: str = '') -> bytes:
