@@ -60,6 +60,18 @@ class OpenDoors(Choice):
     default = option_off
 
 
+class Portal(Choice):
+    '''
+    Behavior of the portal and item collection.
+    Vanilla: The exit portal closes, and Wario must reopen it with the frog switch
+    Open: The portal stays open, allowing Wario to leave at any time.
+    '''
+    display_name = 'Portal'
+    option_vanilla = 0
+    option_open = 1
+    default = option_vanilla
+
+
 class SmashThroughHardBlocks(Toggle):
     """
     Break hard, teal blocks with the dash attack and super ground pound without stopping,
@@ -98,6 +110,7 @@ wl4_options: Dict[str, Type[Option]] = {
     'golden_jewels': GoldenJewels,
     'required_jewels': RequiredJewels,
     'open_doors': OpenDoors,
+    'portal': Portal,
     'smash_through_hard_blocks': SmashThroughHardBlocks,
     'death_link': DeathLink,
     'music_shuffle': MusicShuffle,

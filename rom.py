@@ -257,6 +257,14 @@ def apply_options(rom: LocalRom, options: PerGameCommonOptions):
 
     set_difficulty_level(rom, options.difficulty.value)
 
+    # TODO: Maybe make it stay open so it looks cleaner
+    if (options.portal.value):
+        rom.write_halfword(0x802AC56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
+        rom.write_halfword(0x802ACB2, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
+        rom.write_halfword(0x802AE56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_mid()
+        rom.write_halfword(0x802B052, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
+        rom.write_halfword(0x802B0BE, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
+
     # Break hard blocks without stopping
     if (options.smash_through_hard_blocks.value):
         rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
