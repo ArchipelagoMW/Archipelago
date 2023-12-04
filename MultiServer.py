@@ -723,18 +723,6 @@ class Context:
         if targets:
             self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.client_game_state[team, slot]}])
 
-    def on_new_location_checks(self, team: int, slot: int, new_locations: typing.Iterable[int]):
-        self.broadcast(self.clients[team][slot], [{
-            "cmd": "RoomUpdate",
-            "hint_points": get_slot_points(self, team, slot),
-            "checked_locations": new_locations,  # send back new checks only
-        }])
-        old_hints = self.hints[team, slot].copy()
-        self.recheck_hints(team, slot)
-        if old_hints != self.hints[team, slot]:
-            self.on_changed_hints(team, slot)
-        self.save()
-
 
 def update_aliases(ctx: Context, team: int):
     cmd = ctx.dumper([{"cmd": "RoomUpdate",
@@ -983,7 +971,16 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
 
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
-        ctx.on_new_location_checks(team, slot, new_locations)
+        ctx.broadcast(ctx.clients[team][slot], [{
+            "cmd": "RoomUpdate",
+            "hint_points": get_slot_points(ctx, team, slot),
+            "checked_locations": new_locations,  # send back new checks only
+        }])
+        old_hints = ctx.hints[team, slot].copy()
+        ctx.recheck_hints(team, slot)
+        if old_hints != ctx.hints[team, slot]:
+            ctx.on_changed_hints(team, slot)
+        ctx.save()
 
 
 def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, str]) -> typing.List[NetUtils.Hint]:
