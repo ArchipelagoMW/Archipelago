@@ -1051,13 +1051,17 @@ item_table = {
                  parent_item=ItemNames.PLANETARY_FORTRESS, origin={"ext"},
                  description="Planetary Fortress can attack air units."),
     ItemNames.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR:
-        ItemData(340 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 8, SC2Race.TERRAN,
+        ItemData(390 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 8, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.VALKYRIE, origin={"ext"},
                  description="Allows Valkyries to shoot air while moving."),
     ItemNames.VALKYRIE_RESOURCE_EFFICIENCY:
-        ItemData(341 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 9, SC2Race.TERRAN,
+        ItemData(391 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 9, SC2Race.TERRAN,
                  parent_item=ItemNames.VALKYRIE, origin={"ext"},
                  description=RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE.format("Valkyrie")),
+    ItemNames.PREDATOR_PREDATOR_S_FURY:
+        ItemData(392 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 10, SC2Race.TERRAN,
+                 parent_item=ItemNames.PREDATOR, origin={"ext"},
+                 description="Predators can use an attack that jumps between targets."),
 
     #Buildings
     ItemNames.BUNKER:

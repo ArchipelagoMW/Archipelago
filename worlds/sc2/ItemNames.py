@@ -196,6 +196,7 @@ PLANETARY_FORTRESS_ADVANCED_TARGETING              = "Advanced Targeting (Planet
 PREDATOR_RESOURCE_EFFICIENCY                       = "Resource Efficiency (Predator)"
 PREDATOR_CLOAK                                     = "Cloak (Predator)"
 PREDATOR_CHARGE                                    = "Charge (Predator)"
+PREDATOR_PREDATOR_S_FURY                           = "Predator's Fury (Predator)"
 RAVEN_ANTI_ARMOR_MISSILE                           = "Anti-Armor Missile (Raven)"
 RAVEN_BIO_MECHANICAL_REPAIR_DRONE                  = "Bio Mechanical Repair Drone (Raven)"
 RAVEN_HUNTER_SEEKER_WEAPON                         = "Hunter-Seeker Weapon (Raven)"
