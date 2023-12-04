@@ -234,17 +234,13 @@ def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptio
     items.extend(item_factory(item) for item in [APWeapon.slingshot] * 2)
     monstersanity = options.monstersanity
     if monstersanity == Monstersanity.option_none:  # Without monstersanity, might not be enough checks to split the weapons
-        items.extend(item_factory(item) for item in [APWeapon.weapon] * 5)
-        if ModNames.sve in options.mods:
-            items.append(APWeapon.weapon)
+        items.extend(item_factory(item) for item in [APWeapon.weapon] * weapons_count(options))
         items.extend(item_factory(item) for item in [APWeapon.footwear] * 3)  # 1-2 | 3-4 | 6-7-8
         return
 
-    items.extend(item_factory(item) for item in [APWeapon.sword] * 5)
-    items.extend(item_factory(item) for item in [APWeapon.club] * 5)
-    items.extend(item_factory(item) for item in [APWeapon.dagger] * 5)
-    if ModNames.sve in options.mods:
-        items.extend(item_factory(item) for item in [APWeapon.sword, APWeapon.club, APWeapon.dagger])
+    items.extend(item_factory(item) for item in [APWeapon.sword] * weapons_count(options))
+    items.extend(item_factory(item) for item in [APWeapon.club] * weapons_count(options))
+    items.extend(item_factory(item) for item in [APWeapon.dagger] * weapons_count(options))
     items.extend(item_factory(item) for item in [APWeapon.footwear] * 4)  # 1-2 | 3-4 | 6-7-8 | 11-13
     if monstersanity == Monstersanity.option_goals or monstersanity == Monstersanity.option_one_per_category or \
             monstersanity == Monstersanity.option_short_goals or monstersanity == Monstersanity.option_very_short_goals:
@@ -600,6 +596,13 @@ def create_unique_filler_items(item_factory: StardewItemFactory, options: Starde
     if len(items) > available_item_slots:
         items = random.sample(items, available_item_slots)
     return items
+
+
+def weapons_count(options: StardewValleyOptions):
+    weapon_count = 5
+    if ModNames.sve in options.mods:
+        weapon_count += 1
+    return weapon_count
 
 
 def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,
