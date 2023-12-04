@@ -30,7 +30,8 @@ class CoinsInShops(Toggle):
     default = False
 
 class GoldenFeathers(Range):
-    """Number of Golden Feathers in the item pool."""
+    """Number of Golden Feathers in the item pool.
+    (Note that for the Photo and Help Everyone goals, a minimum of 12 Golden Feathers is enforced)"""
     display_name = "Golden Feathers"
     range_start = 0
     range_end = 20

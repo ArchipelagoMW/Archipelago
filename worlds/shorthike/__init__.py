@@ -66,9 +66,14 @@ class ShortHikeWorld(World):
                 for i in range(count):
                     self.multiworld.itempool.append(self.create_item(item["name"]))
  
-        junk = 45 - self.options.silver_feathers - self.options.golden_feathers - self.options.buckets
+        feather_count = self.options.golden_feathers
+        if self.options.goal == 1 or self.options.goal == 3:
+            if feather_count < 12:
+                feather_count = 12
+
+        junk = 45 - self.options.silver_feathers - feather_count - self.options.buckets
         self.multiworld.itempool += [self.create_item("13 Coins") for _ in range(junk)]
-        self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(self.options.golden_feathers)]
+        self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(feather_count)]
         self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.options.silver_feathers)]
         self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.options.buckets)]
 
@@ -126,7 +131,7 @@ class ShortHikeWorld(World):
                     "item_name": loc.item.name,
                     "player_name": world.player_name[loc.item.player],
                     "type": int(loc.item.classification),
-                    "chest_angle": self.location_name_to_chest_angle[loc.name],
+                    "chest_angle": self.location_name_to_chest_angle[loc.name]
                 }
 
                 locations[self.location_name_to_game_id[loc.name]] = data
@@ -135,6 +140,7 @@ class ShortHikeWorld(World):
             "goal": int(options.goal),
             "showGoldenChests": bool(options.show_golden_chests),
             "skipCutscenes": bool(options.skip_cutscenes),
+            "logicLevel": int(options.golden_feather_progression),
         }
     
         slot_data = {

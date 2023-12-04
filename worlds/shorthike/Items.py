@@ -34,7 +34,7 @@ item_table: List[ItemDict] = [
     {"name": "Baseball Cap", "id": base_id + 22, "count": 1, "classification": ItemClassification.filler},
     {"name": "Provincial Park Hat", "id": base_id + 23, "count": 1, "classification": ItemClassification.filler},
     {"name": "Headband", "id": base_id + 24, "count": 1, "classification": ItemClassification.progression_skip_balancing},
-    {"name": "Running Shoes", "id": base_id + 25, "count": 1, "classification": ItemClassification.progression},
+    {"name": "Running Shoes", "id": base_id + 25, "count": 1, "classification": ItemClassification.useful},
     {"name": "Camping Permit", "id": base_id + 26, "count": 1, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Walkie Talkie", "id": base_id + 27, "count": 1, "classification": ItemClassification.useful},
     

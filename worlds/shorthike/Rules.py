@@ -63,7 +63,8 @@ def get_feather_state(self, min_golden_feathers, min_golden_feathers_easy, min_g
     if options.golden_feather_progression == 0:
         min_feathers = min_golden_feathers_easy
     if min_feathers > options.golden_feathers:
-        min_feathers = options.golden_feathers
+        if options.goal != 1 and options.goal != 3:
+            min_feathers = options.golden_feathers
 
     if options.golden_feather_progression != 2 and min_feathers != 0:
         if options.buckets > 0 and min_feathers > min_golden_feathers_bucket:
