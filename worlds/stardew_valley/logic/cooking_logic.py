@@ -14,7 +14,7 @@ from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
 from .time_logic import TimeLogicMixin
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, \
-    QueenOfSauceSource, CookingRecipe, \
+    QueenOfSauceSource, CookingRecipe, ShopFriendshipSource, \
     all_cooking_recipes_by_name
 from ..data.recipe_source import CutsceneSource, ShopTradeSource
 from ..locations import locations_by_tag, LocationTags
@@ -66,6 +66,8 @@ BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]
             return self.logic.cooking.received_recipe(meal_name)
         if isinstance(source, QueenOfSauceSource) and self.options.chefsanity & Chefsanity.option_queen_of_sauce:
             return self.logic.cooking.received_recipe(meal_name)
+        if isinstance(source, ShopFriendshipSource) and self.options.chefsanity & Chefsanity.option_friendship:
+            return self.logic.cooking.received_recipe(meal_name)
         return self.logic.cooking.can_learn_recipe(source)
 
     @cache_self1
@@ -84,6 +86,8 @@ BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]
             return self.logic.relationship.has_hearts(source.friend, source.hearts)
         if isinstance(source, QueenOfSauceSource):
             return self.logic.action.can_watch(Channel.queen_of_sauce) & self.logic.season.has(source.season)
+        if isinstance(source, ShopFriendshipSource):
+            return self.logic.money.can_spend_at(source.region, source.price) & self.logic.relationship.has_hearts(source.friend, source.hearts)
         return False_()
 
     @cache_self1

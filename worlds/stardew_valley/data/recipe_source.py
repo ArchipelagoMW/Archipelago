@@ -96,6 +96,22 @@ class ShopSource(RecipeSource):
         return f"ShopSource at {self.region} costing {self.price}g"
 
 
+class ShopFriendshipSource(RecipeSource):
+    friend: str
+    hearts: int
+    region: str
+    price: int
+
+    def __init__(self, friend: str, hearts: int, region: str, price: int):
+        self.friend = friend
+        self.hearts = hearts
+        self.region = region
+        self.price = price
+
+    def __repr__(self):
+        return f"ShopFriendshipSource at {self.region} costing {self.price}g when {self.friend} has {self.hearts} hearts"
+
+
 class FestivalShopSource(ShopSource):
 
     def __init__(self, region: str, price: int):

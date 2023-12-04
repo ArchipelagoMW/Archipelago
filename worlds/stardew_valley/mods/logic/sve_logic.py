@@ -4,7 +4,6 @@ from ..mod_regions import SVERegion
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
-from ...logic.fishing_logic import FishingLogicMixin
 from ...logic.has_logic import HasLogicMixin
 from ...logic.money_logic import MoneyLogicMixin
 from ...logic.quest_logic import QuestLogicMixin
@@ -15,9 +14,7 @@ from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes
-from ...strings.food_names import SVEMeal
-from ...strings.villager_names import NPC, ModNPC
-from ...stardew_rule import Or, True_
+from ...stardew_rule import Or
 
 
 class SVELogicMixin(BaseLogicMixin):
@@ -27,7 +24,7 @@ class SVELogicMixin(BaseLogicMixin):
 
 
 class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixin, RegionLogicMixin, RelationshipLogicMixin, TimeLogicMixin, ToolLogicMixin,
-FishingLogicMixin, CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonLogicMixin]]):
+               CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonLogicMixin]]):
     def initialize_rules(self):
         self.registry.sve_location_rules.update({
             SVELocation.tempered_galaxy_sword: self.logic.money.can_spend_at(SVERegion.alesia_shop, 350000),
@@ -39,14 +36,3 @@ FishingLogicMixin, CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonL
     def has_any_rune(self):
         rune_list = SVERunes.nexus_items
         return Or(*(self.logic.received(rune) for rune in rune_list))
-
-    def append_sve_recipe_rules(self, recipe: str):
-        if recipe == SVEMeal.glazed_butterfish:
-            return self.logic.relationship.has_hearts(NPC.gus, 10)
-        if recipe == SVEMeal.big_bark_burger:
-            return self.logic.relationship.has_hearts(NPC.gus, 5)
-        if recipe == SVEMeal.mushroom_berry_rice:
-            return self.logic.relationship.has_hearts(ModNPC.marlon, 6)
-        if recipe == SVEMeal.void_delight:
-            return self.logic.relationship.has_hearts(NPC.krobus, 10)
-        return True_()
