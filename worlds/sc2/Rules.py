@@ -316,13 +316,14 @@ class SC2Logic:
         return state.has_any(self.basic_zerg_units, self.player)
 
     def zerg_competent_anti_air(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.HYDRALISK, ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) or \
-            state.has_all({ItemNames.SWARM_HOST, ItemNames.SWARM_HOST_PRESSURIZED_GLANDS}, self.player) or \
-            (self.advanced_tactics and state.has(ItemNames.INFESTOR, self.player))
+        return state.has_any({ItemNames.HYDRALISK, ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) \
+            or state.has_all({ItemNames.SWARM_HOST, ItemNames.SWARM_HOST_PRESSURIZED_GLANDS}, self.player) \
+            or state.has_all({ItemNames.SCOURGE, ItemNames.SCOURGE_RESOURCE_EFFICIENCY}, self.player) \
+            or (self.advanced_tactics and state.has(ItemNames.INFESTOR, self.player))
 
     def zerg_basic_anti_air(self, state: CollectionState) -> bool:
         return self.zerg_competent_anti_air(state) or self.kerrigan_unit_available in kerrigan_unit_available or \
-               state.has(ItemNames.SWARM_QUEEN, self.player) or (self.advanced_tactics and state.has(ItemNames.SPORE_CRAWLER, self.player))
+               state.has_any({ItemNames.SWARM_QUEEN, ItemNames.SCOURGE}, self.player) or (self.advanced_tactics and state.has(ItemNames.SPORE_CRAWLER, self.player))
     
     def morph_brood_lord(self, state: CollectionState) -> bool:
         return state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) \

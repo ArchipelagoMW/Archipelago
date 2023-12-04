@@ -282,6 +282,7 @@ SWARM_HOST    = "Swarm Host"
 INFESTOR      = "Infestor"
 ULTRALISK     = "Ultralisk"
 CORRUPTOR     = "Corruptor"
+SCOURGE       = "Scourge"
 
 SPORE_CRAWLER = "Spore Crawler"
 SPINE_CRAWLER = "Spine Crawler"
@@ -325,6 +326,9 @@ ULTRALISK_TISSUE_ANIMATION    = "Tissue Animation (Ultralisk)"
 ULTRALISK_MONARCH_BLADES      = "Monarch Blades (Ultralisk)"
 CORRUPTOR_CORRUPTION          = "Corruption (Corruptor)"
 CORRUPTOR_CAUSTIC_SPRAY       = "Caustic Spray (Corruptor)"
+SCOURGE_VIRULENT_SPORES       = "Virulent Spores (Scourge)"
+SCOURGE_RESOURCE_EFFICIENCY   = "Resource Efficiency (Scourge)"
+SCOURGE_SWARM_SCOURGE         = "Swarm Scourge (Scourge)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"

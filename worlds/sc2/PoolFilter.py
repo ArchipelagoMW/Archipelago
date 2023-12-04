@@ -398,9 +398,10 @@ class ValidInventory:
             and ItemNames.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
         ):
             inventory = [item for item in inventory if item.name != ItemNames.BANELING]
-        if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set:
+        if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR, ItemNames.SCOURGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
             locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
+        if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
 
         # Cull finished, adding locked items back into inventory

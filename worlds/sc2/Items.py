@@ -1253,6 +1253,7 @@ item_table = {
     ItemNames.SPORE_CRAWLER: ItemData(10 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 10, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
     ItemNames.SPINE_CRAWLER: ItemData(11 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 11, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
     ItemNames.CORRUPTOR: ItemData(12 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 12, SC2Race.ZERG, classification=ItemClassification.progression, origin={"ext"}),
+    ItemNames.SCOURGE: ItemData(13 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 12, SC2Race.ZERG, classification=ItemClassification.progression, origin={"ext"}),
 
     ItemNames.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.ZERG, quantity=3, origin={"hots"}),
     ItemNames.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.ZERG, quantity=3, origin={"hots"}),
@@ -1289,6 +1290,9 @@ item_table = {
     ItemNames.ULTRALISK_MONARCH_BLADES: ItemData(220 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 20, SC2Race.ZERG, parent_item="Ultralisk", origin={"hots"}),
     ItemNames.CORRUPTOR_CAUSTIC_SPRAY: ItemData(221 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 21, SC2Race.ZERG, parent_item="Corruptor", origin={"ext"}),
     ItemNames.CORRUPTOR_CORRUPTION: ItemData(222 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 22, SC2Race.ZERG, parent_item="Corruptor", origin={"ext"}),
+    ItemNames.SCOURGE_VIRULENT_SPORES: ItemData(223 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 23, SC2Race.ZERG, parent_item=ItemNames.SCOURGE, origin={"ext"}),
+    ItemNames.SCOURGE_RESOURCE_EFFICIENCY: ItemData(224 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 24, SC2Race.ZERG, parent_item=ItemNames.SCOURGE, origin={"ext"}, classification=ItemClassification.progression),
+    ItemNames.SCOURGE_SWARM_SCOURGE: ItemData(225 + SC2HOTS_ITEM_ID_OFFSET, "Mutation", 25, SC2Race.ZERG, parent_item=ItemNames.SCOURGE, origin={"ext"}),
 
     ItemNames.ZERGLING_RAPTOR_STRAIN: ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 0, SC2Race.ZERG, parent_item="Zergling", origin={"hots"}),
     ItemNames.ZERGLING_SWARMLING_STRAIN: ItemData(301 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 1, SC2Race.ZERG, parent_item="Zergling", origin={"hots"}),
