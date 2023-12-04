@@ -171,7 +171,7 @@ def extend_cropsanity_locations(randomized_locations: List[LocationData], option
     if options.cropsanity == Cropsanity.option_disabled:
         return
 
-    cropsanity_locations = [item for item in locations_by_tag[LocationTags.CROPSANITY] if item.mod_name in options.mods or not item.mod_name]
+    cropsanity_locations = [item for item in locations_by_tag[LocationTags.CROPSANITY] if not item.mod_name or item.mod_name in options.mods]
     cropsanity_locations = filter_ginger_island(options, cropsanity_locations)
     randomized_locations.extend(cropsanity_locations)
 
