@@ -461,25 +461,26 @@ class Context:
                 del data["location_name_groups"]
             del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
         self._init_game_data()
+
+        def _add_public_data_store_key(key: str, retriever: typing.Callable[[], typing.Any]):
+            """Add key to read_data and also public_stored_data_keys, to allow retrieval before auth."""
+            self.public_stored_data_keys.add(key)
+            self.read_data[key] = retriever
+
         for game_name, game_package in self.gamespackage.items():
-            key = f"datapackage_checksum_{game_name}"
-            self.public_stored_data_keys.add(key)
-            self.read_data[key] = lambda lgame=game_name: self.checksums.get(lgame, None)
-
-            key = f"item_name_to_id_{game_name}"
-            self.public_stored_data_keys.add(key)
-            self.read_data[key] = lambda lgame=game_name: self.gamespackage[lgame]["item_name_to_id"]
-
-            key = f"location_name_to_id_{game_name}"
-            self.public_stored_data_keys.add(key)
-            self.read_data[key] = lambda lgame=game_name: self.gamespackage[lgame]["location_name_to_id"]
+            _add_public_data_store_key(f"datapackage_checksum_{game_name}",
+                                       lambda lgame=game_name: self.checksums.get(lgame, None))
+            _add_public_data_store_key(f"item_name_to_id_{game_name}",
+                                       lambda lgame=game_name: self.gamespackage[lgame]["item_name_to_id"])
+            _add_public_data_store_key(f"location_name_to_id_{game_name}",
+                                       lambda lgame=game_name: self.gamespackage[lgame]["location_name_to_id"])
 
         for game_name, data in self.item_name_groups.items():
-            self.read_data[f"item_name_groups_{game_name}"] = \
-                lambda lgame=game_name: self.item_name_groups[lgame]
+            _add_public_data_store_key(f"item_name_groups_{game_name}",
+                                       lambda lgame=game_name: self.item_name_groups[lgame])
         for game_name, data in self.location_name_groups.items():
-            self.read_data[f"location_name_groups_{game_name}"] = \
-                lambda lgame=game_name: self.location_name_groups[lgame]
+            _add_public_data_store_key(f"location_name_groups_{game_name}",
+                                       lambda lgame=game_name: self.location_name_groups[lgame])
 
     # saving
 
