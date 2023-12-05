@@ -84,8 +84,6 @@ class WitnessPlayerLogic:
             else:
                 return frozenset(all_options)
 
-            these_items = all_options
-
         disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_ENTITIES
                         if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
 
