@@ -348,7 +348,6 @@ def create_shops(world, player: int):
                     loc.item = ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player)
                     loc.shop_slot_disabled = True
                 shop.region.locations.append(loc)
-                world.clear_location_cache()
 
 
 class ShopData(NamedTuple):
@@ -619,6 +618,4 @@ def create_dynamic_shop_locations(world, player):
                     if shop.type == ShopType.TakeAny:
                         loc.shop_slot_disabled = True
                     shop.region.locations.append(loc)
-                    world.clear_location_cache()
-
                     loc.shop_slot = i
