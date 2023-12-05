@@ -7,6 +7,25 @@ REQUIRED_JEWELS = 3
 class TestEntrances(WL4TestBase):
     options = {'required_jewels': REQUIRED_JEWELS}
 
+    def test_passage_access(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Menu -> Entry Passage', True, []],
+            ['Menu -> Emerald Passage', True, []],
+            ['Menu -> Ruby Passage', True, []],
+            ['Menu -> Topaz Passage', True, []],
+            ['Menu -> Sapphire Passage', True, []],
+
+            ['Menu -> Golden Pyramid', False, []],
+            ['Menu -> Golden Pyramid', False, ['Emerald Passage Clear']],
+            ['Menu -> Golden Pyramid', False, ['Ruby Passage Clear']],
+            ['Menu -> Golden Pyramid', False, ['Topaz Passage Clear']],
+            ['Menu -> Golden Pyramid', False, ['Sapphire Passage Clear']],
+            ['Menu -> Golden Pyramid', True,
+             ['Emerald Passage Clear', 'Ruby Passage Clear',
+              'Topaz Passage Clear', 'Sapphire Passage Clear']],
+        ])
+
     def test_entry_levels(self):
         self.starting_regions = ['Hall of Hieroglyphs (entrance)']
         self.run_entrance_tests([
@@ -58,11 +77,11 @@ class TestEntrances(WL4TestBase):
             ['40 Below Fridge Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
             ['40 Below Fridge Gate', True, ['Progressive Ground Pound', 'Progressive Ground Pound']],
 
-            ['Pinball Zone', False, []],
-            ['Pinball Zone', False, [], ['Progressive Grab']],
-            ['Pinball Zone', False, [], ['Progressive Ground Pound']],
-            ['Pinball Zone', False, [], ['Head Smash']],
-            ['Pinball Zone', True,
+            ['Pinball Zone Gate', False, []],
+            ['Pinball Zone Gate', False, [], ['Progressive Grab']],
+            ['Pinball Zone Gate', False, [], ['Progressive Ground Pound']],
+            ['Pinball Zone Gate', False, [], ['Head Smash']],
+            ['Pinball Zone Gate', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
         ])
 
@@ -78,11 +97,11 @@ class TestEntrances(WL4TestBase):
             ['The Big Board Gate', False, [], ['Progressive Ground Pound']],
             ['The Big Board Gate', True, ['Progressive Ground Pound']],
 
-            ['Doodle Woods', True, []],
+            ['Doodle Woods Gate', True, []],
 
-            ['Domino Row', False, []],
-            ['Domino Row', False, [], ['Swim']],
-            ['Domino Row', True, ['Swim']],
+            ['Domino Row Gate', False, []],
+            ['Domino Row Gate', False, [], ['Swim']],
+            ['Domino Row Gate', True, ['Swim']],
         ])
 
     def test_sapphire_levels(self):
@@ -103,9 +122,9 @@ class TestEntrances(WL4TestBase):
             ['Fiery Cavern Gate', False, [], ['Progressive Ground Pound']],
             ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound']],
 
-            ['Hotel Horror', False, []],
-            ['Hotel Horror', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Hotel Horror', True, ['Progressive Grab', 'Progressive Grab']],
+            ['Hotel Horror Gate', False, []],
+            ['Hotel Horror Gate', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['Hotel Horror Gate', True, ['Progressive Grab', 'Progressive Grab']],
         ])
 
     def test_golden_pyramid(self):
