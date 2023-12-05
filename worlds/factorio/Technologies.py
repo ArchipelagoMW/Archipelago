@@ -409,7 +409,8 @@ source_target_mapping: Dict[str, str] = {
 }
 
 for source, target in source_target_mapping.items():
-    progressive_rows[target] += progressive_rows[source]
+    if source in progressive_rows:
+        progressive_rows[target] += progressive_rows[source]
 
 base_tech_table = tech_table.copy()  # without progressive techs
 base_technology_table = technology_table.copy()
@@ -419,7 +420,10 @@ progressive_technology_table: Dict[str, Technology] = {}
 
 for root in sorted_rows:
     progressive = progressive_rows[root]
-    assert all(tech in tech_table for tech in progressive), "declared a progressive technology without base technology"
+    progressive = tuple(tech for tech in progressive if tech in tech_table)
+    if not progressive:
+        continue
+    # assert all(tech in tech_table for tech in progressive), "declared a progressive technology without base technology"
     factorio_tech_id += 1
     progressive_technology = Technology(root, technology_table[progressive[0]].ingredients, factorio_tech_id,
                                         progressive,
