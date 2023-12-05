@@ -94,7 +94,8 @@ class GameOptions extends BaseGameOptions {
     document.getElementById('game-options-right')
         .appendChild(this.#buildSmallOptions(rightOptions));
 
-    this.buildBaseUI(document.getElementById('game-options-center'));
+    // Uncomment this to show shared item and location options:
+    // this.buildBaseUI(document.getElementById('game-options-center'));
   }
 
   save() {
@@ -291,17 +292,18 @@ class GameOptions extends BaseGameOptions {
           namedRangeWrapper.appendChild(randomButton);
           break;
 
-        case 'items-list':
-          element = this.buildItemsDiv(option);
-          break;
-
-        case 'locations-list':
-          element = this.buildLocationsDiv(option);
-          break;
-
-        case 'custom-list':
-          element = this.buildListDiv(option, options[option].options);
-          break;
+        // Uncomment the following cases to show list options on this page:
+        // case 'items-list':
+        //   element = this.buildItemsDiv(option);
+        //   break;
+        //
+        // case 'locations-list':
+        //   element = this.buildLocationsDiv(option);
+        //   break;
+        //
+        // case 'custom-list':
+        //   element = this.buildListDiv(option, options[option].options);
+        //   break;
 
         default:
           console.error(`Ignoring unknown option type: ${options[option].type} with name ${option}`);
