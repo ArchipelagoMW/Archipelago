@@ -1257,7 +1257,7 @@ item_table = {
     ItemNames.SPORE_CRAWLER: ItemData(10 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 10, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
     ItemNames.SPINE_CRAWLER: ItemData(11 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 11, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
     ItemNames.CORRUPTOR: ItemData(12 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 12, SC2Race.ZERG, classification=ItemClassification.progression, origin={"ext"}),
-    ItemNames.SCOURGE: ItemData(13 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 12, SC2Race.ZERG, classification=ItemClassification.progression, origin={"ext"}),
+    ItemNames.SCOURGE: ItemData(13 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 12, SC2Race.ZERG, classification=ItemClassification.progression, origin={"bw", "ext"}),
 
     ItemNames.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.ZERG, quantity=3, origin={"hots"}),
     ItemNames.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.ZERG, quantity=3, origin={"hots"}),
