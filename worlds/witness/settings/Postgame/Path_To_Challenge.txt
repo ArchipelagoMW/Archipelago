@@ -28,3 +28,4 @@ Disabled Locations:
 0x034EC (Maze Hidden 2)
 0x1C31A (Dots Pillar)
 0x1C319 (Squares Pillar)
+0x04D75 (Vault Door)
