@@ -231,16 +231,17 @@ def create_backpack_items(item_factory: StardewItemFactory, options: StardewVall
 
 
 def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    weapons = weapons_count(options)
     items.extend(item_factory(item) for item in [APWeapon.slingshot] * 2)
     monstersanity = options.monstersanity
     if monstersanity == Monstersanity.option_none:  # Without monstersanity, might not be enough checks to split the weapons
-        items.extend(item_factory(item) for item in [APWeapon.weapon] * weapons_count(options))
+        items.extend(item_factory(item) for item in [APWeapon.weapon] * weapons)
         items.extend(item_factory(item) for item in [APWeapon.footwear] * 3)  # 1-2 | 3-4 | 6-7-8
         return
 
-    items.extend(item_factory(item) for item in [APWeapon.sword] * weapons_count(options))
-    items.extend(item_factory(item) for item in [APWeapon.club] * weapons_count(options))
-    items.extend(item_factory(item) for item in [APWeapon.dagger] * weapons_count(options))
+    items.extend(item_factory(item) for item in [APWeapon.sword] * weapons)
+    items.extend(item_factory(item) for item in [APWeapon.club] * weapons)
+    items.extend(item_factory(item) for item in [APWeapon.dagger] * weapons)
     items.extend(item_factory(item) for item in [APWeapon.footwear] * 4)  # 1-2 | 3-4 | 6-7-8 | 11-13
     if monstersanity == Monstersanity.option_goals or monstersanity == Monstersanity.option_one_per_category or \
             monstersanity == Monstersanity.option_short_goals or monstersanity == Monstersanity.option_very_short_goals:
