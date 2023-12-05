@@ -104,7 +104,9 @@ class CustomTechnology(Technology):
                 ingredients.add("military-science-pack")
             ingredients = list(ingredients)
             ingredients.sort()  # deterministic sample
-            ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+            if ingredients:
+                ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+
         elif origin.name == "rocket-silo" and military_allowed:
             ingredients.add("military-science-pack")
         super(CustomTechnology, self).__init__(origin.name, ingredients, origin.factorio_id)
