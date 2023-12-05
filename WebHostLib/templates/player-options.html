@@ -3,16 +3,17 @@
 {% block head %}
     <title>{{ game }} Options</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/options.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/player-options.css") }}" />
     <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/player-options.js") }}"></script>
+    <script type="module" src="{{ url_for('static', filename="assets/player-options.js") }}"></script>
 {% endblock %}
 
 {% block body %}
     {% include 'header/'+theme+'Header.html' %}
-    <div id="player-options" class="markdown" data-game="{{ game }}">
+    <div id="player-options" class="markdown options" data-game="{{ game }}">
         <div id="user-message"></div>
         <h1><span id="game-name">Player</span> Options</h1>
         <p>Choose the options you would like to play with! You may generate a single-player game from this page,
@@ -51,6 +52,7 @@
         <div id="game-options">
             <div id="game-options-left" class="left"></div>
             <div id="game-options-right" class="right"></div>
+            <div id="game-options-center"></div>
         </div>
 
         <div id="player-options-button-row">
