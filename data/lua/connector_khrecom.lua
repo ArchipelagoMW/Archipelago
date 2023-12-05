@@ -3,9 +3,9 @@ LUAGUI_AUTH = "Gicu"
 LUAGUI_DESC = "RE: Chain of Memories AP Integration"
 
 if os.getenv('LOCALAPPDATA') ~= nil then
-    client_communication_path = os.getenv('LOCALAPPDATA') .. "\\KHCOM\\"
+    client_communication_path = os.getenv('LOCALAPPDATA') .. "\\KHRECOM\\"
 else
-    client_communication_path = os.getenv('HOME') .. "/KHCOM/"
+    client_communication_path = os.getenv('HOME') .. "/KHRECOM/"
     ok, err, code = os.rename(client_communication_path, client_communication_path)
     if not ok and code ~= 13 then
         os.execute("mkdir " .. path)
@@ -40,35 +40,59 @@ function file_exists(name)
 end
 
 function define_journal_byte_location_ids()
-    journal_byte_location_ids = {2670107, 2670608, 2670907, 2671208, 2670108, 2670209, 2670306, 2670509, 2670607, 2670404, 2670706, 2670806, 2670906, 2671013, 2671102, 2671207, 2671302 --Story
+    journal_byte_location_ids = {nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil     --Story
                                 ,nil    , nil    , nil    , nil    , nil    , nil                                                                                                        --Empty
-                                ,2670007, 2670002, 2670003, 2670004, nil    , 2670006, 2670005                                                                                           --Characters I
-                                ,2671206, 2671205, 2671010, 2670102, 2671301, nil                                                                                                        --Characters II
-                                ,2670109, 2670406, 2671001, 2670908, nil                                                                                                                 --Others
-                                ,2670104, 2670105, 2670101, 2670103                                                                                                                      --Traverse Town
-                                ,2670203, 2670207, 2670208, 2670204, 2670205, 2670206                                                                                                    --Wonderland
-                                ,2670305, 2670304, 2670303, 2670302                                                                                                                      --Olympus Coliseum
-                                ,2670503, 2670504, 2670508, 2670505, 2670506, 2670507                                                                                                    --Agrabah
-                                ,nil    , nil    , nil    , 2670603, 2670605, 2670602, 2670604                                                                                           --Halloween Town
-                                ,2670403, 2670402                                                                                                                                        --Monstro
-                                ,2670702, 2670705, 2670703, 2670704                                                                                                                      --Atlantica
-                                ,2670803, 2670804, 2670805, 2670802                                                                                                                      --Neverland
-                                ,2670905, 2670902, 2670904, 2670903                                                                                                                      --Hollow Bastion
-                                ,2671011, 2671006, 2671005, 2671008, 2671004, 2671009, 2671007                                                                                           --100 Acre Wood
-                                ,2671203, 2671204, 2671202                                                                                                                               --Destiny Island
-                                ,2671424, 2671425, 2671416, 2671420, 2671407, 2671431, 2671415, 2671419, 2671408, 2671402, 2671404, 2671413, 2671405, 2671423, 2671422, 2671421, 2671403 --Heartless 1
-                                ,2671428, 2671414, 2671418, 2671401, 2671411, 2671412, 2671430, 2671429, 2671417, 2671427, 2671406, 2671409 ,2671426, 2671410, 2670112, 2670405, 2670210 --Heartless 2
-                                ,2671209                                                                                                                                                 --Heartless 2
+                                ,nil    , nil    , nil    , nil    , nil    , nil    , nil                                                                                               --Characters I
+                                ,nil    , nil    , nil    , nil    , nil    , nil                                                                                                        --Characters II
+                                ,nil    , nil    , nil    , nil    , nil                                                                                                                 --Others
+                                ,nil    , nil    , nil    , nil                                                                                                                          --Traverse Town
+                                ,nil    , nil    , nil    , nil    , nil    , nil                                                                                                        --Wonderland
+                                ,nil    , nil    , nil    , nil                                                                                                                          --Olympus Coliseum
+                                ,nil    , nil    , nil    , nil    , nil    , nil                                                                                                        --Agrabah
+                                ,nil    , nil    , nil    , nil    , nil    , nil    , nil                                                                                               --Halloween Town
+                                ,nil    , nil                                                                                                                                            --Monstro
+                                ,nil    , nil    , nil    , nil                                                                                                                          --Atlantica
+                                ,nil    , nil    , nil    , nil                                                                                                                          --Neverland
+                                ,nil    , nil    , nil    , nil                                                                                                                          --Hollow Bastion
+                                ,nil    , nil    , nil    , nil    , nil    , nil    , nil                                                                                               --100 Acre Wood
+                                ,nil    , nil    , nil                                                                                                                                   --Destiny Island
+                                ,2691424, 2691425, 2691416, 2691420, 2691407, 2691431, 2691415, 2691419, 2691408, 2691402, 2691404, 2691413, 2691405, 2691423, 2691422, 2691421, 2691403 --Heartless 1
+                                ,2691428, 2691414, 2691418, 2691401, 2691411, 2691412, 2691430, 2691429, 2691417, 2691427, 2691406, 2691409 ,2671426, 2691410, nil    , nil    , nil     --Heartless 2
+                                ,nil                                                                                                                                                     --Heartless 3
                                 ,nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil     --Offset E3 - F3
                                 ,nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil     --Offset F4 - 104
                                 ,nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil     --Offset 105 - 115
                                 ,nil    , nil    , nil    , nil    , nil                                                                                                                 --Offset 116 - 11A
-                                ,2670001, 2670502, 2670701, 2670601, 2670801, 2670401, 2671003, 2670308, 2670301, 2670111, 2670202, 2670901, 2671201, nil    , nil    , 2671303, 2671304 --Keyblades 1
+                                ,2690001, 2690502, 2690701, 2690601, 2690801, 2690401, 2691004, 2690308, 2690301, 2690107, 2690202, 2690901, 2691201, 2691202, nil    , 2691303, 2691304 --Keyblades 1
                                 ,nil    , nil    , nil    , nil    , nil    , nil                                                                                                        --Keyblades 2
-                                ,2670106, 2670009, 2670606, 2670010, 2670501, 2670201, 2670707                                                                                           --Magic Cards
-                                ,2670110, 2670511, 2671002, 2670407, 2670807, 2670909, 2670309                                                                                           --Summon Cards
-                                ,2670008, 2670307, 2671101, 2670510, 2671012, 2671014, 2671211}                                                                                          --Item Cards
+                                ,2690101, 2690003, 2690602, 2690004, 2690501, 2690201, 2690702                                                                                           --Magic Cards
+                                ,2690103, 2690508, 2691001, 2690406, 2690806, 2690906, 2690307                                                                                           --Summon Cards
+                                ,2690002, 2690304, 2691101, 2690505, 2691003, 2691002, 2691208                                                                                           --Item Cards
+                                ,nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil                                                                                      --Friend Cards
+                                ,nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil     --Enemy Cards 1
+                                ,nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , nil    , 2690106, 2690306, 2690207, 2690507 --Enemy Cards 2
+                                ,2690706, 2690606, 2690404, 2690805, 2690905, 2691207, 2691204, 2690204, nil    , nil    , nil    , nil    , 2691103, nil    , nil    , nil    , 2691303 --Enemy Cards 3
+                                ,nil    , nil    , 2691301, 2691203, nil                                                                                                                 --Enemy Cards 4
+                                }
     return journal_byte_location_ids
+end
+
+function define_room_byte_location_ids()
+    room_byte_location_ids = {2690102, 2690104, 2690105
+                             ,2690203, 2690205, 2690207
+                             ,2690302, 2690303, 2690305
+                             ,2690402, 2690403, 2690405
+                             ,2690503, 2690504, 2690506
+                             ,2690603, 2690604, 2690605
+                             ,2690703, 2690704, 2690705
+                             ,2690802, 2690803, 2690804
+                             ,2690902, 2690903, 2690904
+                             ,nil    , nil    , nil    
+                             ,2691102, nil    , nil    
+                             ,2691205, 2691206, nil    
+                             ,2691302, nil    , 123    
+                             }
+    return room_byte_location_ids
 end
 
 function define_card_order()
@@ -252,418 +276,260 @@ function define_enemy_card_order()
     return enemy_card_order
 end
 
-function define_location_lookup()
-    location_lookup = {}
-        location_lookup["Starting Checks (Attack Cards Kingdom Key)"] =                        2670001
-        location_lookup["Starting Checks (Characters I Donald)"] =                             2670002
-        location_lookup["Starting Checks (Characters I Goofy)"] =                              2670003
-        location_lookup["Starting Checks (Characters I Jiminy Cricket)"] =                     2670004
-        location_lookup["Starting Checks (Characters I Kairi)"] =                              2670005
-        location_lookup["Starting Checks (Characters I Riku)"] =                               2670006
-        location_lookup["Starting Checks (Characters I Sora)"] =                               2670007
-        location_lookup["Starting Checks (Item Cards Potion)"] =                               2670008
-        location_lookup["Starting Checks (Magic Cards Blizzard)"] =                            2670009
-        location_lookup["Starting Checks (Magic Cards Cure)"] =                                2670010
-        location_lookup["F01 Traverse Town Post Floor (Characters I Aerith)"] =                2670101
-        location_lookup["F01 Traverse Town Post Floor (Characters I Axel)"] =                  2670102
-        location_lookup["F01 Traverse Town Post Floor (Characters I Cid)"] =                   2670103
-        location_lookup["F01 Traverse Town Post Floor (Characters I Leon)"] =                  2670104
-        location_lookup["F01 Traverse Town Post Floor (Characters I Yuffie)"] =                2670105
-        location_lookup["F01 Traverse Town Post Floor (Magic Cards Fire)"] =                   2670106
-        location_lookup["F01 Traverse Town Post Floor (Story Sora's Tale I)"] =                2670107
-        location_lookup["F01 Traverse Town Post Floor (Story Traverse Town)"] =                2670108
-        location_lookup["F01 Traverse Town Room of Beginnings (Characters I Simba)"] =         2670109
-        location_lookup["F01 Traverse Town Room of Beginnings (Magic Cards Simba)"] =          2670110
-        location_lookup["F01 Traverse Town Room of Rewards (Attack Cards Lionheart)"] =        2670111
-        location_lookup["F01 Traverse Town Room of Truth (The Heartless Guard Armor)"] =       2670112
-        location_lookup["F02 Wonderland Bounty (Magic Cards Stop)"] =                          2670201
-        location_lookup["F02 Wonderland Field (Attack Cards Lady Luck)"] =                     2670202
-        location_lookup["F02 Wonderland Post Floor (Characters II Alice)"] =                   2670203
-        location_lookup["F02 Wonderland Post Floor (Characters II Card of Hearts)"] =          2670204
-        location_lookup["F02 Wonderland Post Floor (Characters II Card of Spades)"] =          2670205
-        location_lookup["F02 Wonderland Post Floor (Characters II The Cheshire Cat)"] =        2670206
-        location_lookup["F02 Wonderland Post Floor (Characters II The Queen of Hearts)"] =     2670207
-        location_lookup["F02 Wonderland Post Floor (Characters II The White Rabbit)"] =        2670208
-        location_lookup["F02 Wonderland Post Floor (Story Wonderland)"] =                      2670209
-        location_lookup["F02 Wonderland Room of Truth (The Heartless Trickmaster)"] =          2670210
-        location_lookup["F03 Olympus Coliseum Field (Attack Cards Olympia)"] =                 2670301
-        location_lookup["F03 Olympus Coliseum Post Floor (Characters I Cloud)"] =              2670302
-        location_lookup["F03 Olympus Coliseum Post Floor (Characters II Hades)"] =             2670303
-        location_lookup["F03 Olympus Coliseum Post Floor (Characters II Philoctetes)"] =       2670304
-        location_lookup["F03 Olympus Coliseum Post Floor (Characters II Hercules)"] =          2670305
-        location_lookup["F03 Olympus Coliseum Post Floor (Story Olympus Coliseum)"] =          2670306
-        location_lookup["F03 Olympus Coliseum Room of Guidance (Item Cards Hi-Potion)"] =      2670307
-        location_lookup["F03 Olympus Coliseum Room of Rewards (Attack Card Metal Chocobo)"] =  2670308
-        location_lookup["F03 Olympus Coliseum Room of Truth (Magic Cards Cloud)"] =            2670309
-        location_lookup["F04 Monstro Field (Wishing Star)"] =                                  2670401
-        location_lookup["F04 Monstro Post Floor (Characters II Geppetto)"] =                   2670402
-        location_lookup["F04 Monstro Post Floor (Characters II Pinocchio)"] =                  2670403
-        location_lookup["F04 Monstro Post Floor (Story Monstro)"] =                            2670404
-        location_lookup["F04 Monstro Room of Guidance (The Heartless Parasite Cage)"] =        2670405
-        location_lookup["F04 Monstro Room of Truth (Characters I Dumbo)"] =                    2670406
-        location_lookup["F04 Monstro Room of Truth (Magic Cards Dumbo)"] =                     2670407
-        location_lookup["F05 Agrabah Bounty (Magic Cards Gravity)"] =                          2670501
-        location_lookup["F05 Agrabah Field (Attack Cards Three Wishes)"] =                     2670502
-        location_lookup["F05 Agrabah Post Floor (Characters II Aladdin)"] =                    2670503
-        location_lookup["F05 Agrabah Post Floor (Characters II Genie)"] =                      2670504
-        location_lookup["F05 Agrabah Post Floor (Characters II Iago)"] =                       2670505
-        location_lookup["F05 Agrabah Post Floor (Characters II Jafar)"] =                      2670506
-        location_lookup["F05 Agrabah Post Floor (Characters II Jafar-Genie)"] =                2670507
-        location_lookup["F05 Agrabah Post Floor (Characters II Jasmine)"] =                    2670508
-        location_lookup["F05 Agrabah Post Floor (Story Agrabah)"] =                            2670509
-        location_lookup["F05 Agrabah Room of Guidance (Item Cards Ether)"] =                   2670510
-        location_lookup["F05 Agrabah Room of Truth (Magic Cards Genie)"] =                     2670511
-        location_lookup["F06 Halloween Town Field (Attack Cards Pumpkinhead)"] =               2670601
-        location_lookup["F06 Halloween Town Post Floor (Characters II Dr. Finkelstein)"] =     2670602
-        location_lookup["F06 Halloween Town Post Floor (Characters II Jack)"] =                2670603
-        location_lookup["F06 Halloween Town Post Floor (Characters II Oogie Boogie)"] =        2670604
-        location_lookup["F06 Halloween Town Post Floor (Characters II Sally)"] =               2670605
-        location_lookup["F06 Halloween Town Post Floor (Magic Cards Thunder)"] =               2670606
-        location_lookup["F06 Halloween Town Post Floor (Story Halloween Town)"] =              2670607
-        location_lookup["F06 Halloween Town Post Floor (Story Sora's Tale II)"] =              2670608
-        location_lookup["F07 Atlantica Field (Crabclaw)"] =                                    2670701
-        location_lookup["F07 Atlantica Post Floor (Characters II Ariel)"] =                    2670702
-        location_lookup["F07 Atlantica Post Floor (Characters II Flounder)"] =                 2670703
-        location_lookup["F07 Atlantica Post Floor (Characters II Ursula)"] =                   2670704
-        location_lookup["F07 Atlantica Post Floor (Characters II Sebastion)"] =                2670705
-        location_lookup["F07 Atlantica Post Floor (Story Atlantica)"] =                        2670706
-        location_lookup["F07 Atlantica Post Floor (Magic Cards Aero)"] =                       2670707
-        location_lookup["F08 Neverland Field (Attack Cards Fairy Harp)"] =                     2670801
-        location_lookup["F08 Neverland Post Floor (Characters II Hook)"] =                     2670802
-        location_lookup["F08 Neverland Post Floor (Characters II Peter Pan)"] =                2670803
-        location_lookup["F08 Neverland Post Floor (Characters II Tinker Bell)"] =              2670804
-        location_lookup["F08 Neverland Post Floor (Characters II Wendy)"] =                    2670805
-        location_lookup["F08 Neverland Post Floor (Story Neverland)"] =                        2670806
-        location_lookup["F08 Neverland Room of Truth (Magic Cards Tinker Bell)"] =             2670807
-        location_lookup["F09 Hollow Bastion Field (Attack Cards Divine Rose)"] =               2670901
-        location_lookup["F09 Hollow Bastion Post Floor (Characters II Belle)"] =               2670902
-        location_lookup["F09 Hollow Bastion Post Floor (Characters II Dragon Maleficent)"] =   2670903
-        location_lookup["F09 Hollow Bastion Post Floor (Characters II Maleficent)"] =          2670904
-        location_lookup["F09 Hollow Bastion Post Floor (Characters II The Beast)"] =           2670905
-        location_lookup["F09 Hollow Bastion Post Floor (Story Hollow Bastion)"] =              2670906
-        location_lookup["F09 Hollow Bastion Post Floor (Story Sora's Tale III)"] =             2670907
-        location_lookup["F09 Hollow Bastion Room of Rewards (Characters I Mushu)"] =           2670908
-        location_lookup["F09 Hollow Bastion Room of Rewards (Magic Cards Mushu)"] =            2670909
-        location_lookup["F10 100 Acre Wood Complete (Characters I Bambi)"] =                   2671001
-        location_lookup["F10 100 Acre Wood Complete (Magic Cards Bambi)"] =                    2671002
-        location_lookup["F10 100 Acre Wood Field Scene Owl (Attack Cards Spellbinder)"] =      2671003
-        location_lookup["F10 100 Acre Wood Field Scene Eeyore (Characters II Eeyore)"] =       2671004
-        location_lookup["F10 100 Acre Wood Field Scene Owl (Characters II Owl)"] =             2671005
-        location_lookup["F10 100 Acre Wood Field Scene Piglet (Characters II Piglet)"] =       2671006
-        location_lookup["F10 100 Acre Wood Field Scene Rabbit (Characters II Rabbit)"] =       2671007
-        location_lookup["F10 100 Acre Wood Field Scene Roo (Characters II Roo)"] =             2671008
-        location_lookup["F10 100 Acre Wood Field Scene Tigger (Characters II Tigger)"] =       2671009
-        location_lookup["F10 100 Acre Wood Post Floor (Characters II Vexen)"] =                2671010
-        location_lookup["F10 100 Acre Wood Post Floor (Characters II Winnie the Pooh)"] =      2671011
-        location_lookup["F10 100 Acre Wood Post Floor (Item Cards Mega-Ether)"] =              2671012
-        location_lookup["F10 100 Acre Wood Post Floor (Story 100 Acre Wood)"] =                2671013
-        location_lookup["F10 100 Acre Wood Field Scene Roo (Item Cards Elixir)"] =             2671014
-        location_lookup["F11 Twilight Town Post Floor (Item Cards Mega-Potion)"] =             2671101
-        location_lookup["F11 Twilight Town Post Floor (Story Twilight Town)"] =                2671102
-        location_lookup["F12 Destiny Islands Post Floor (Attack Cards Oathkeeper)"] =          2671201
-        location_lookup["F12 Destiny Islands Post Floor (Characters I Selphie)"] =             2671202
-        location_lookup["F12 Destiny Islands Post Floor (Characters I Tidus)"] =               2671203
-        location_lookup["F12 Destiny Islands Post Floor (Characters I Wakka)"] =               2671204
-        location_lookup["F12 Destiny Islands Post Floor (Characters I Riku Replica)"] =        2671205
-        location_lookup["F12 Destiny Islands Post Floor (Characters I Namine)"] =              2671206
-        location_lookup["F12 Destiny Islands Post Floor (Story Destiny Islands)"] =            2671207
-        location_lookup["F12 Destiny Islands Post Floor (Story Sora's Tale IV)"] =             2671208
-        location_lookup["F12 Destiny Islands Room of Truth (The Heartless Darkside)"] =        2671209
-        location_lookup["F12 Destiny Islands Post Floor (Attack Cards Oblivion)"] =            2671210
-        location_lookup["F12 Destiny Islands Room of Rewards (Item Cards Megalixir)"] =        2671211
-        location_lookup["F13 Castle Oblivion Event (Characters I Marluxia)"] =                 2671301
-        location_lookup["F13 Castle Oblivion Post Floor (Story Castle Oblivion)"] =            2671302
-        location_lookup["F13 Castle Oblivion Post Marluxia (Attack Cards Diamond Dust)"] =     2671303
-        location_lookup["F13 Castle Oblivion Post Marluxia (Attack Cards One-Winged Angel)"] = 2671304
-        location_lookup["Heartless Air Pirate"] =                                              2671401
-        location_lookup["Heartless Air Soldier"] =                                             2671402
-        location_lookup["Heartless Aquatank"] =                                                2671403
-        location_lookup["Heartless Bandit"] =                                                  2671404
-        location_lookup["Heartless Barrel Spider"] =                                           2671405
-        location_lookup["Heartless Black Fungus"] =                                            2671406
-        location_lookup["Heartless Blue Rhapsody"] =                                           2671407
-        location_lookup["Heartless Bouncywild"] =                                              2671408
-        location_lookup["Heartless Creeper Plant"] =                                           2671409
-        location_lookup["Heartless Crescendo"] =                                               2671410
-        location_lookup["Heartless Darkball"] =                                                2671411
-        location_lookup["Heartless Defender"] =                                                2671412
-        location_lookup["Heartless Fat Bandit"] =                                              2671413
-        location_lookup["Heartless Gargoyle"] =                                                2671414
-        location_lookup["Heartless Green Requiem"] =                                           2671415
-        location_lookup["Heartless Large Body"] =                                              2671416
-        location_lookup["Heartless Neoshadow"] =                                               2671417
-        location_lookup["Heartless Pirate"] =                                                  2671418
-        location_lookup["Heartless Powerwild"] =                                               2671419
-        location_lookup["Heartless Red Nocturne"] =                                            2671420
-        location_lookup["Heartless Screwdiver"] =                                              2671421
-        location_lookup["Heartless Sea Neon"] =                                                2671422
-        location_lookup["Heartless Search Ghost"] =                                            2671423
-        location_lookup["Heartless Shadow"] =                                                  2671424
-        location_lookup["Heartless Soldier"] =                                                 2671425
-        location_lookup["Heartless Tornado Step"] =                                            2671426
-        location_lookup["Heartless White Mushroom"] =                                          2671427
-        location_lookup["Heartless Wight Knight"] =                                            2671428
-        location_lookup["Heartless Wizard"] =                                                  2671429
-        location_lookup["Heartless Wyvern"] =                                                  2671430
-        location_lookup["Heartless Yellow Opera"] =                                            2671431
-    return location_lookup
-end
-
 function define_item_ids()
     item_ids = {}
-    item_ids["Bronze Card Pack"]                 = 2661001
-    item_ids["Silver Card Pack"]                 = 2661002
-    item_ids["Gold Card Pack"]                   = 2661003
-    item_ids["Kingdom Key 1-3"]                  = 2661011
-    item_ids["Kingdom Key 4-6"]                  = 2661012
-    item_ids["Kingdom Key 7-9"]                  = 2661013
-    item_ids["Kingdom Key 0"]                    = 2661014
-    item_ids["Three Wishes 1-3"]                 = 2661021
-    item_ids["Three Wishes 4-6"]                 = 2661022
-    item_ids["Three Wishes 7-9"]                 = 2661023
-    item_ids["Three Wishes 0"]                   = 2661024
-    item_ids["Crabclaw 1-3"]                     = 2661031
-    item_ids["Crabclaw 4-6"]                     = 2661032
-    item_ids["Crabclaw 7-9"]                     = 2661033
-    item_ids["Crabclaw 0"]                       = 2661034
-    item_ids["Pumpkinhead 1-3"]                  = 2661041
-    item_ids["Pumpkinhead 4-6"]                  = 2661042
-    item_ids["Pumpkinhead 7-9"]                  = 2661043
-    item_ids["Pumpkinhead 0"]                    = 2661044
-    item_ids["Fairy Harp 1-3"]                   = 2661051
-    item_ids["Fairy Harp 4-6"]                   = 2661052
-    item_ids["Fairy Harp 7-9"]                   = 2661053
-    item_ids["Fairy Harp 0"]                     = 2661054
-    item_ids["Wishing Star 1-3"]                 = 2661061
-    item_ids["Wishing Star 4-6"]                 = 2661062
-    item_ids["Wishing Star 7-9"]                 = 2661063
-    item_ids["Wishing Star 0"]                   = 2661064
-    item_ids["Spellbinder 1-3"]                  = 2661071
-    item_ids["Spellbinder 4-6"]                  = 2661072
-    item_ids["Spellbinder 7-9"]                  = 2661073
-    item_ids["Spellbinder 0"]                    = 2661074
-    item_ids["Metal Chocobo 1-3"]                = 2661081
-    item_ids["Metal Chocobo 4-6"]                = 2661082
-    item_ids["Metal Chocobo 7-9"]                = 2661083
-    item_ids["Metal Chocobo 0"]                  = 2661084
-    item_ids["Olympia 1-3"]                      = 2661091
-    item_ids["Olympia 4-6"]                      = 2661092
-    item_ids["Olympia 7-9"]                      = 2661093
-    item_ids["Olympia 0"]                        = 2661094
-    item_ids["Lionheart 1-3"]                    = 2661101
-    item_ids["Lionheart 4-6"]                    = 2661102
-    item_ids["Lionheart 7-9"]                    = 2661103
-    item_ids["Lionheart 0"]                      = 2661104
-    item_ids["Lady Luck 1-3"]                    = 2661111
-    item_ids["Lady Luck 4-6"]                    = 2661112
-    item_ids["Lady Luck 7-9"]                    = 2661113
-    item_ids["Lady Luck 0"]                      = 2661114
-    item_ids["Divine Rose 1-3"]                  = 2661121
-    item_ids["Divine Rose 4-6"]                  = 2661122
-    item_ids["Divine Rose 7-9"]                  = 2661123
-    item_ids["Divine Rose 0"]                    = 2661124
-    item_ids["Oathkeeper 1-3"]                   = 2661131
-    item_ids["Oathkeeper 4-6"]                   = 2661132
-    item_ids["Oathkeeper 7-9"]                   = 2661133
-    item_ids["Oathkeeper 0"]                     = 2661134
-    item_ids["Oblivion 1-3"]                     = 2661141
-    item_ids["Oblivion 4-6"]                     = 2661142
-    item_ids["Oblivion 7-9"]                     = 2661143
-    item_ids["Oblivion 0"]                       = 2661144
-    item_ids["Diamond Dust 1-3"]                 = 2661151
-    item_ids["Diamond Dust 4-6"]                 = 2661152
-    item_ids["Diamond Dust 7-9"]                 = 2661153
-    item_ids["Diamond Dust 0"]                   = 2661154
-    item_ids["One Winged Angel 1-3"]             = 2661161
-    item_ids["One Winged Angel 4-6"]             = 2661162
-    item_ids["One Winged Angel 7-9"]             = 2661163
-    item_ids["One Winged Angel 0"]               = 2661164
-    item_ids["Ultima Weapon 1-3"]                = 2661171
-    item_ids["Ultima Weapon 4-6"]                = 2661172
-    item_ids["Ultima Weapon 7-9"]                = 2661173
-    item_ids["Ultima Weapon 0"]                  = 2661174
-    item_ids["Fire 1-3"]                         = 2661181
-    item_ids["Fire 4-6"]                         = 2661182
-    item_ids["Fire 7-9"]                         = 2661183
-    item_ids["Fire 0"]                           = 2661184
-    item_ids["Blizzard 1-3"]                     = 2661191
-    item_ids["Blizzard 4-6"]                     = 2661192
-    item_ids["Blizzard 7-9"]                     = 2661193
-    item_ids["Blizzard 0"]                       = 2661194
-    item_ids["Thunder 1-3"]                      = 2661201
-    item_ids["Thunder 4-6"]                      = 2661202
-    item_ids["Thunder 7-9"]                      = 2661203
-    item_ids["Thunder 0"]                        = 2661204
-    item_ids["Cure 1-3"]                         = 2661211
-    item_ids["Cure 4-6"]                         = 2661212
-    item_ids["Cure 7-9"]                         = 2661213
-    item_ids["Cure 0"]                           = 2661214
-    item_ids["Gravity 1-3"]                      = 2661221
-    item_ids["Gravity 4-6"]                      = 2661222
-    item_ids["Gravity 7-9"]                      = 2661223
-    item_ids["Gravity 0"]                        = 2661224
-    item_ids["Stop 1-3"]                         = 2661231
-    item_ids["Stop 4-6"]                         = 2661232
-    item_ids["Stop 7-9"]                         = 2661233
-    item_ids["Stop 0"]                           = 2661234
-    item_ids["Aero 1-3"]                         = 2661241
-    item_ids["Aero 4-6"]                         = 2661242
-    item_ids["Aero 7-9"]                         = 2661243
-    item_ids["Aero 0"]                           = 2661244
-    item_ids["Simba 1-3"]                        = 2661251
-    item_ids["Simba 4-6"]                        = 2661252
-    item_ids["Simba 7-9"]                        = 2661253
-    item_ids["Simba 0"]                          = 2661254
-    item_ids["Genie 1-3"]                        = 2661261
-    item_ids["Genie 4-6"]                        = 2661262
-    item_ids["Genie 7-9"]                        = 2661263
-    item_ids["Genie 0"]                          = 2661264
-    item_ids["Bambi 1-3"]                        = 2661271
-    item_ids["Bambi 4-6"]                        = 2661272
-    item_ids["Bambi 7-9"]                        = 2661273
-    item_ids["Bambi 0"]                          = 2661274
-    item_ids["Dumbo 1-3"]                        = 2661281
-    item_ids["Dumbo 4-6"]                        = 2661282
-    item_ids["Dumbo 7-9"]                        = 2661283
-    item_ids["Dumbo 0"]                          = 2661284
-    item_ids["Tinker Bell 1-3"]                  = 2661291
-    item_ids["Tinker Bell 4-6"]                  = 2661292
-    item_ids["Tinker Bell 7-9"]                  = 2661293
-    item_ids["Tinker Bell 0"]                    = 2661294
-    item_ids["Mushu 1-3"]                        = 2661301
-    item_ids["Mushu 4-6"]                        = 2661302
-    item_ids["Mushu 7-9"]                        = 2661303
-    item_ids["Mushu 0"]                          = 2661304
-    item_ids["Cloud 1-3"]                        = 2661311
-    item_ids["Cloud 4-6"]                        = 2661312
-    item_ids["Cloud 7-9"]                        = 2661313
-    item_ids["Cloud 0"]                          = 2661314
-    item_ids["Potion 1-3"]                       = 2661321
-    item_ids["Potion 4-6"]                       = 2661322
-    item_ids["Potion 7-9"]                       = 2661323
-    item_ids["Potion 0"]                         = 2661324
-    item_ids["Hi-Potion 1-3"]                    = 2661331
-    item_ids["Hi-Potion 4-6"]                    = 2661332
-    item_ids["Hi-Potion 7-9"]                    = 2661333
-    item_ids["Hi-Potion 0"]                      = 2661334
-    item_ids["Mega-Potion 1-3"]                  = 2661341
-    item_ids["Mega-Potion 4-6"]                  = 2661342
-    item_ids["Mega-Potion 7-9"]                  = 2661343
-    item_ids["Mega-Potion 0"]                    = 2661344
-    item_ids["Ether 1-3"]                        = 2661351
-    item_ids["Ether 4-6"]                        = 2661352
-    item_ids["Ether 7-9"]                        = 2661353
-    item_ids["Ether 0"]                          = 2661354
-    item_ids["Mega-Ether 1-3"]                   = 2661361
-    item_ids["Mega-Ether 4-6"]                   = 2661362
-    item_ids["Mega-Ether 7-9"]                   = 2661363
-    item_ids["Mega-Ether 0"]                     = 2661364
-    item_ids["Elixir 1-3"]                       = 2661371
-    item_ids["Elixir 4-6"]                       = 2661372
-    item_ids["Elixir 7-9"]                       = 2661373
-    item_ids["Elixir 0"]                         = 2661374
-    item_ids["Megalixir 1-3"]                    = 2661381
-    item_ids["Megalixir 4-6"]                    = 2661382
-    item_ids["Megalixir 7-9"]                    = 2661383
-    item_ids["Megalixir 0"]                      = 2661384
-    item_ids["Enemy Card Shadow"]                = 2662001
-    item_ids["Enemy Card Soldier"]               = 2662002
-    item_ids["Enemy Card Large Body"]            = 2662003
-    item_ids["Enemy Card Red Nocturne"]          = 2662004
-    item_ids["Enemy Card Blue Rhapsody"]         = 2662005
-    item_ids["Enemy Card Yellow Opera"]          = 2662006
-    item_ids["Enemy Card Green Requiem"]         = 2662007
-    item_ids["Enemy Card Powerwild"]             = 2662008
-    item_ids["Enemy Card Bouncywild"]            = 2662009
-    item_ids["Enemy Card Air Soldier"]           = 2662010
-    item_ids["Enemy Card Bandit"]                = 2662011
-    item_ids["Enemy Card Fat Bandit"]            = 2662012
-    item_ids["Enemy Card Barrel Spider"]         = 2662013
-    item_ids["Enemy Card Search Ghost"]          = 2662014
-    item_ids["Enemy Card Sea Neon"]              = 2662015
-    item_ids["Enemy Card Screwdiver"]            = 2662016
-    item_ids["Enemy Card Aquatank"]              = 2662017
-    item_ids["Enemy Card Wight Knight"]          = 2662018
-    item_ids["Enemy Card Gargoyle"]              = 2662019
-    item_ids["Enemy Card Pirate"]                = 2662020
-    item_ids["Enemy Card Air Pirate"]            = 2662021
-    item_ids["Enemy Card Darkball"]              = 2662022
-    item_ids["Enemy Card Defender"]              = 2662023
-    item_ids["Enemy Card Wyvern"]                = 2662024
-    item_ids["Enemy Card Neoshadow"]             = 2662025
-    item_ids["Enemy Card White Mushroom"]        = 2662026
-    item_ids["Enemy Card Black Fungus"]          = 2662027
-    item_ids["Enemy Card Creeper Plant"]         = 2662028
-    item_ids["Enemy Card Tornado Step"]          = 2662029
-    item_ids["Enemy Card Crescendo"]             = 2662030
-    item_ids["Enemy Card Guard Armor"]           = 2662031
-    item_ids["Enemy Card Parasite Cage"]         = 2662032
-    item_ids["Enemy Card Trickmaster"]           = 2662033
-    item_ids["Enemy Card Darkside"]              = 2662034
-    item_ids["Enemy Card Card Soldier (Red)"]    = 2662035
-    item_ids["Enemy Card Card Soldier (Black)"]  = 2662036
-    item_ids["Enemy Card Hades"]                 = 2662037
-    item_ids["Enemy Card Jafar"]                 = 2662039
-    item_ids["Enemy Card Oogie Boogie"]          = 2662040
-    item_ids["Enemy Card Ursula"]                = 2662041
-    item_ids["Enemy Card Hook"]                  = 2662042
-    item_ids["Enemy Card Dragon Maleficent"]     = 2662043
-    item_ids["Enemy Card Riku"]                  = 2662044
-    item_ids["Enemy Card Larxene"]               = 2662045
-    item_ids["Enemy Card Vexen"]                 = 2662046
-    item_ids["Enemy Card Marluxia"]              = 2662047
-    item_ids["Enemy Card Lexaeus"]               = 2662048
-    item_ids["Enemy Card Ansem"]                 = 2662049
-    item_ids["Enemy Card Axel"]                  = 2662050
-    item_ids["Wonderland"]                       = 2663002
-    item_ids["Olympus Coliseum"]                 = 2663003
-    item_ids["Monstro"]                          = 2663004
-    item_ids["Agrabah"]                          = 2663005
-    item_ids["Halloween Town"]                   = 2663006
-    item_ids["Atlantica"]                        = 2663007
-    item_ids["Neverland"]                        = 2663008
-    item_ids["Hollow Bastion"]                   = 2663009
-    item_ids["100 Acre Wood"]                    = 2663010
-    item_ids["Twilight Town"]                    = 2663011
-    item_ids["Destiny Islands"]                  = 2663012
-    item_ids["Castle Oblivion"]                  = 2663013
-    item_ids["Key to Rewards F01"]               = 2663301
-    item_ids["Key to Rewards F02"]               = 2663302
-    item_ids["Key to Rewards F03"]               = 2663303
-    item_ids["Key to Rewards F04"]               = 2663304
-    item_ids["Key to Rewards F05"]               = 2663305
-    item_ids["Key to Rewards F06"]               = 2663306
-    item_ids["Key to Rewards F07"]               = 2663307
-    item_ids["Key to Rewards F08"]               = 2663308
-    item_ids["Key to Rewards F09"]               = 2663309
-    item_ids["Key to Rewards F11"]               = 2663311
-    item_ids["Key to Rewards F12"]               = 2663312
-    item_ids["Key to Rewards F13"]               = 2663313
-    item_ids["Donald"]                           = 2665001
-    item_ids["Goofy"]                            = 2665002
-    item_ids["Aladdin"]                          = 2665003
-    item_ids["Ariel"]                            = 2665004
-    item_ids["Beast"]                            = 2665005
-    item_ids["Peter Pan"]                        = 2665006
-    item_ids["Jack"]                             = 2665007
+    item_ids["Bronze Card Pack"]                 = 2681001
+    item_ids["Silver Card Pack"]                 = 2681002
+    item_ids["Gold Card Pack"]                   = 2681003
+    item_ids["Kingdom Key 1-3"]                  = 2681011
+    item_ids["Kingdom Key 4-6"]                  = 2681012
+    item_ids["Kingdom Key 7-9"]                  = 2681013
+    item_ids["Kingdom Key 0"]                    = 2681014
+    item_ids["Three Wishes 1-3"]                 = 2681021
+    item_ids["Three Wishes 4-6"]                 = 2681022
+    item_ids["Three Wishes 7-9"]                 = 2681023
+    item_ids["Three Wishes 0"]                   = 2681024
+    item_ids["Crabclaw 1-3"]                     = 2681031
+    item_ids["Crabclaw 4-6"]                     = 2681032
+    item_ids["Crabclaw 7-9"]                     = 2681033
+    item_ids["Crabclaw 0"]                       = 2681034
+    item_ids["Pumpkinhead 1-3"]                  = 2681041
+    item_ids["Pumpkinhead 4-6"]                  = 2681042
+    item_ids["Pumpkinhead 7-9"]                  = 2681043
+    item_ids["Pumpkinhead 0"]                    = 2681044
+    item_ids["Fairy Harp 1-3"]                   = 2681051
+    item_ids["Fairy Harp 4-6"]                   = 2681052
+    item_ids["Fairy Harp 7-9"]                   = 2681053
+    item_ids["Fairy Harp 0"]                     = 2681054
+    item_ids["Wishing Star 1-3"]                 = 2681061
+    item_ids["Wishing Star 4-6"]                 = 2681062
+    item_ids["Wishing Star 7-9"]                 = 2681063
+    item_ids["Wishing Star 0"]                   = 2681064
+    item_ids["Spellbinder 1-3"]                  = 2681071
+    item_ids["Spellbinder 4-6"]                  = 2681072
+    item_ids["Spellbinder 7-9"]                  = 2681073
+    item_ids["Spellbinder 0"]                    = 2681074
+    item_ids["Metal Chocobo 1-3"]                = 2681081
+    item_ids["Metal Chocobo 4-6"]                = 2681082
+    item_ids["Metal Chocobo 7-9"]                = 2681083
+    item_ids["Metal Chocobo 0"]                  = 2681084
+    item_ids["Olympia 1-3"]                      = 2681091
+    item_ids["Olympia 4-6"]                      = 2681092
+    item_ids["Olympia 7-9"]                      = 2681093
+    item_ids["Olympia 0"]                        = 2681094
+    item_ids["Lionheart 1-3"]                    = 2681101
+    item_ids["Lionheart 4-6"]                    = 2681102
+    item_ids["Lionheart 7-9"]                    = 2681103
+    item_ids["Lionheart 0"]                      = 2681104
+    item_ids["Lady Luck 1-3"]                    = 2681111
+    item_ids["Lady Luck 4-6"]                    = 2681112
+    item_ids["Lady Luck 7-9"]                    = 2681113
+    item_ids["Lady Luck 0"]                      = 2681114
+    item_ids["Divine Rose 1-3"]                  = 2681121
+    item_ids["Divine Rose 4-6"]                  = 2681122
+    item_ids["Divine Rose 7-9"]                  = 2681123
+    item_ids["Divine Rose 0"]                    = 2681124
+    item_ids["Oathkeeper 1-3"]                   = 2681131
+    item_ids["Oathkeeper 4-6"]                   = 2681132
+    item_ids["Oathkeeper 7-9"]                   = 2681133
+    item_ids["Oathkeeper 0"]                     = 2681134
+    item_ids["Oblivion 1-3"]                     = 2681141
+    item_ids["Oblivion 4-6"]                     = 2681142
+    item_ids["Oblivion 7-9"]                     = 2681143
+    item_ids["Oblivion 0"]                       = 2681144
+    item_ids["Diamond Dust 1-3"]                 = 2681151
+    item_ids["Diamond Dust 4-6"]                 = 2681152
+    item_ids["Diamond Dust 7-9"]                 = 2681153
+    item_ids["Diamond Dust 0"]                   = 2681154
+    item_ids["One Winged Angel 1-3"]             = 2681161
+    item_ids["One Winged Angel 4-6"]             = 2681162
+    item_ids["One Winged Angel 7-9"]             = 2681163
+    item_ids["One Winged Angel 0"]               = 2681164
+    item_ids["Ultima Weapon 1-3"]                = 2681171
+    item_ids["Ultima Weapon 4-6"]                = 2681172
+    item_ids["Ultima Weapon 7-9"]                = 2681173
+    item_ids["Ultima Weapon 0"]                  = 2681174
+    item_ids["Fire 1-3"]                         = 2681181
+    item_ids["Fire 4-6"]                         = 2681182
+    item_ids["Fire 7-9"]                         = 2681183
+    item_ids["Fire 0"]                           = 2681184
+    item_ids["Blizzard 1-3"]                     = 2681191
+    item_ids["Blizzard 4-6"]                     = 2681192
+    item_ids["Blizzard 7-9"]                     = 2681193
+    item_ids["Blizzard 0"]                       = 2681194
+    item_ids["Thunder 1-3"]                      = 2681201
+    item_ids["Thunder 4-6"]                      = 2681202
+    item_ids["Thunder 7-9"]                      = 2681203
+    item_ids["Thunder 0"]                        = 2681204
+    item_ids["Cure 1-3"]                         = 2681211
+    item_ids["Cure 4-6"]                         = 2681212
+    item_ids["Cure 7-9"]                         = 2681213
+    item_ids["Cure 0"]                           = 2681214
+    item_ids["Gravity 1-3"]                      = 2681221
+    item_ids["Gravity 4-6"]                      = 2681222
+    item_ids["Gravity 7-9"]                      = 2681223
+    item_ids["Gravity 0"]                        = 2681224
+    item_ids["Stop 1-3"]                         = 2681231
+    item_ids["Stop 4-6"]                         = 2681232
+    item_ids["Stop 7-9"]                         = 2681233
+    item_ids["Stop 0"]                           = 2681234
+    item_ids["Aero 1-3"]                         = 2681241
+    item_ids["Aero 4-6"]                         = 2681242
+    item_ids["Aero 7-9"]                         = 2681243
+    item_ids["Aero 0"]                           = 2681244
+    item_ids["Simba 1-3"]                        = 2681251
+    item_ids["Simba 4-6"]                        = 2681252
+    item_ids["Simba 7-9"]                        = 2681253
+    item_ids["Simba 0"]                          = 2681254
+    item_ids["Genie 1-3"]                        = 2681261
+    item_ids["Genie 4-6"]                        = 2681262
+    item_ids["Genie 7-9"]                        = 2681263
+    item_ids["Genie 0"]                          = 2681264
+    item_ids["Bambi 1-3"]                        = 2681271
+    item_ids["Bambi 4-6"]                        = 2681272
+    item_ids["Bambi 7-9"]                        = 2681273
+    item_ids["Bambi 0"]                          = 2681274
+    item_ids["Dumbo 1-3"]                        = 2681281
+    item_ids["Dumbo 4-6"]                        = 2681282
+    item_ids["Dumbo 7-9"]                        = 2681283
+    item_ids["Dumbo 0"]                          = 2681284
+    item_ids["Tinker Bell 1-3"]                  = 2681291
+    item_ids["Tinker Bell 4-6"]                  = 2681292
+    item_ids["Tinker Bell 7-9"]                  = 2681293
+    item_ids["Tinker Bell 0"]                    = 2681294
+    item_ids["Mushu 1-3"]                        = 2681301
+    item_ids["Mushu 4-6"]                        = 2681302
+    item_ids["Mushu 7-9"]                        = 2681303
+    item_ids["Mushu 0"]                          = 2681304
+    item_ids["Cloud 1-3"]                        = 2681311
+    item_ids["Cloud 4-6"]                        = 2681312
+    item_ids["Cloud 7-9"]                        = 2681313
+    item_ids["Cloud 0"]                          = 2681314
+    item_ids["Potion 1-3"]                       = 2681321
+    item_ids["Potion 4-6"]                       = 2681322
+    item_ids["Potion 7-9"]                       = 2681323
+    item_ids["Potion 0"]                         = 2681324
+    item_ids["Hi-Potion 1-3"]                    = 2681331
+    item_ids["Hi-Potion 4-6"]                    = 2681332
+    item_ids["Hi-Potion 7-9"]                    = 2681333
+    item_ids["Hi-Potion 0"]                      = 2681334
+    item_ids["Mega-Potion 1-3"]                  = 2681341
+    item_ids["Mega-Potion 4-6"]                  = 2681342
+    item_ids["Mega-Potion 7-9"]                  = 2681343
+    item_ids["Mega-Potion 0"]                    = 2681344
+    item_ids["Ether 1-3"]                        = 2681351
+    item_ids["Ether 4-6"]                        = 2681352
+    item_ids["Ether 7-9"]                        = 2681353
+    item_ids["Ether 0"]                          = 2681354
+    item_ids["Mega-Ether 1-3"]                   = 2681361
+    item_ids["Mega-Ether 4-6"]                   = 2681362
+    item_ids["Mega-Ether 7-9"]                   = 2681363
+    item_ids["Mega-Ether 0"]                     = 2681364
+    item_ids["Elixir 1-3"]                       = 2681371
+    item_ids["Elixir 4-6"]                       = 2681372
+    item_ids["Elixir 7-9"]                       = 2681373
+    item_ids["Elixir 0"]                         = 2681374
+    item_ids["Megalixir 1-3"]                    = 2681381
+    item_ids["Megalixir 4-6"]                    = 2681382
+    item_ids["Megalixir 7-9"]                    = 2681383
+    item_ids["Megalixir 0"]                      = 2681384
+    item_ids["Enemy Card Shadow"]                = 2682001
+    item_ids["Enemy Card Soldier"]               = 2682002
+    item_ids["Enemy Card Large Body"]            = 2682003
+    item_ids["Enemy Card Red Nocturne"]          = 2682004
+    item_ids["Enemy Card Blue Rhapsody"]         = 2682005
+    item_ids["Enemy Card Yellow Opera"]          = 2682006
+    item_ids["Enemy Card Green Requiem"]         = 2682007
+    item_ids["Enemy Card Powerwild"]             = 2682008
+    item_ids["Enemy Card Bouncywild"]            = 2682009
+    item_ids["Enemy Card Air Soldier"]           = 2682010
+    item_ids["Enemy Card Bandit"]                = 2682011
+    item_ids["Enemy Card Fat Bandit"]            = 2682012
+    item_ids["Enemy Card Barrel Spider"]         = 2682013
+    item_ids["Enemy Card Search Ghost"]          = 2682014
+    item_ids["Enemy Card Sea Neon"]              = 2682015
+    item_ids["Enemy Card Screwdiver"]            = 2682016
+    item_ids["Enemy Card Aquatank"]              = 2682017
+    item_ids["Enemy Card Wight Knight"]          = 2682018
+    item_ids["Enemy Card Gargoyle"]              = 2682019
+    item_ids["Enemy Card Pirate"]                = 2682020
+    item_ids["Enemy Card Air Pirate"]            = 2682021
+    item_ids["Enemy Card Darkball"]              = 2682022
+    item_ids["Enemy Card Defender"]              = 2682023
+    item_ids["Enemy Card Wyvern"]                = 2682024
+    item_ids["Enemy Card Neoshadow"]             = 2682025
+    item_ids["Enemy Card White Mushroom"]        = 2682026
+    item_ids["Enemy Card Black Fungus"]          = 2682027
+    item_ids["Enemy Card Creeper Plant"]         = 2682028
+    item_ids["Enemy Card Tornado Step"]          = 2682029
+    item_ids["Enemy Card Crescendo"]             = 2682030
+    item_ids["Enemy Card Guard Armor"]           = 2682031
+    item_ids["Enemy Card Parasite Cage"]         = 2682032
+    item_ids["Enemy Card Trickmaster"]           = 2682033
+    item_ids["Enemy Card Darkside"]              = 2682034
+    item_ids["Enemy Card Card Soldier (Red)"]    = 2682035
+    item_ids["Enemy Card Card Soldier (Black)"]  = 2682036
+    item_ids["Enemy Card Hades"]                 = 2682037
+    item_ids["Enemy Card Jafar"]                 = 2682039
+    item_ids["Enemy Card Oogie Boogie"]          = 2682040
+    item_ids["Enemy Card Ursula"]                = 2682041
+    item_ids["Enemy Card Hook"]                  = 2682042
+    item_ids["Enemy Card Dragon Maleficent"]     = 2682043
+    item_ids["Enemy Card Riku"]                  = 2682044
+    item_ids["Enemy Card Larxene"]               = 2682045
+    item_ids["Enemy Card Vexen"]                 = 2682046
+    item_ids["Enemy Card Marluxia"]              = 2682047
+    item_ids["Enemy Card Lexaeus"]               = 2682048
+    item_ids["Enemy Card Ansem"]                 = 2682049
+    item_ids["Enemy Card Axel"]                  = 2682050
+    item_ids["Wonderland"]                       = 2683002
+    item_ids["Olympus Coliseum"]                 = 2683003
+    item_ids["Monstro"]                          = 2683004
+    item_ids["Agrabah"]                          = 2683005
+    item_ids["Halloween Town"]                   = 2683006
+    item_ids["Atlantica"]                        = 2683007
+    item_ids["Neverland"]                        = 2683008
+    item_ids["Hollow Bastion"]                   = 2683009
+    item_ids["100 Acre Wood"]                    = 2683010
+    item_ids["Twilight Town"]                    = 2683011
+    item_ids["Destiny Islands"]                  = 2683012
+    item_ids["Castle Oblivion"]                  = 2683013
+    item_ids["Key to Rewards F01"]               = 2683301
+    item_ids["Key to Rewards F02"]               = 2683302
+    item_ids["Key to Rewards F03"]               = 2683303
+    item_ids["Key to Rewards F04"]               = 2683304
+    item_ids["Key to Rewards F05"]               = 2683305
+    item_ids["Key to Rewards F06"]               = 2683306
+    item_ids["Key to Rewards F07"]               = 2683307
+    item_ids["Key to Rewards F08"]               = 2683308
+    item_ids["Key to Rewards F09"]               = 2683309
+    item_ids["Key to Rewards F11"]               = 2683311
+    item_ids["Key to Rewards F12"]               = 2683312
+    item_ids["Key to Rewards F13"]               = 2683313
+    item_ids["Donald"]                           = 2685001
+    item_ids["Goofy"]                            = 2685002
+    item_ids["Aladdin"]                          = 2685003
+    item_ids["Ariel"]                            = 2685004
+    item_ids["Beast"]                            = 2685005
+    item_ids["Peter Pan"]                        = 2685006
+    item_ids["Jack"]                             = 2685007
     return item_ids
 end
 
 journal_byte_location_ids = define_journal_byte_location_ids()
+room_byte_location_ids = define_room_byte_location_ids()
 card_order = define_card_order()
 enemy_card_order = define_enemy_card_order()
-location_lookup = define_location_lookup()
 item_ids = define_item_ids()
 
-base_address = 0x7FF698380000
 frame_count = 1
 
 
 function get_journal_array()
-    journal_byte_pointer_offset = 0x00879408
+    journal_byte_pointer_offset = 0x394DA8
     journal_byte_value_offset = 0x64
-    journal_byte_pointer = GetPointerA(base_address+journal_byte_pointer_offset, 0x0)
-    return ReadArrayA(journal_byte_pointer + journal_byte_value_offset, #journal_byte_location_ids)
+    journal_byte_pointer = GetPointer(journal_byte_pointer_offset, journal_byte_value_offset)
+    return ReadArray(journal_byte_pointer, #journal_byte_location_ids, true)
 end
 
 function get_checked_journal_location_ids(journal_array)
@@ -676,17 +542,34 @@ function get_checked_journal_location_ids(journal_array)
     return checked_journal_location_ids
 end
 
+function get_room_array()
+    room_byte_pointer_offset = 0x394D38
+    room_byte_value_offset = 0x18
+    room_byte_pointer = GetPointer(room_byte_pointer_offset, room_byte_value_offset)
+    return ReadArray(room_byte_pointer, #room_byte_location_ids, true)
+end
+
+function get_checked_room_location_ids(room_array)
+    checked_room_location_ids = {}
+    for k,v in pairs(room_array) do
+        if v > 0 then
+            checked_room_location_ids[#checked_room_location_ids+1]=room_byte_location_ids[k]
+        end
+    end
+    return checked_room_location_ids
+end
+
 function get_current_floor()
-    return ReadByte(base_address + 0x878044, true)
+    return ReadByte(0x3939E4)
 end
 
 function get_time_played()
-    time_played_pointer_offset = 0x008778E0
+    time_played_pointer_offset = 0x393280
     time_played_offset_1 = 0x8
     time_played_offset_2 = 0x300
-    time_played_pointer_1 = GetPointerA(base_address+time_played_pointer_offset, 0x0)
-    time_played_pointer_2 = GetPointerA(time_played_pointer_1+time_played_offset_1, 0x0)
-    time_played = ReadInt(time_played_pointer_2 + time_played_offset_2, 0x0, true)
+    time_played_pointer_1 = GetPointer(time_played_pointer_offset, time_played_offset_1)
+    time_played_pointer_2 = GetPointer(time_played_pointer_1, time_played_offset_2, true)
+    time_played = ReadInt(time_played_pointer_2, true)
     return time_played
 end
 
@@ -725,39 +608,44 @@ function get_empty_gold_map_cards_array()
     return gold_map_cards_array
 end
 
+function get_empty_cutscene_array()
+    return {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00, 0x08, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x0B, 0x00, 0x0C, 0x00, 0x0D, 0x00, 0x0E, 0x00, 0x0F, 
+            0x00, 0x10, 0x00, 0x11, 0x00, 0x12, 0x00, 0x13, 0x00, 0x14, 0x00, 0x15, 0x00, 0x16, 0x00, 0x17, 0x00, 0x18, 0x00}
+end
+
 function set_gold_map_cards(gold_map_cards_array)
-    gold_map_cards_pointer_offset = 0x00876FF0
+    gold_map_cards_pointer_offset = 0x392990
     gold_map_cards_value_offset = 0x2
-    gold_map_cards_pointer = GetPointerA(base_address+gold_map_cards_pointer_offset, 0x0)
-    WriteArrayA(gold_map_cards_pointer+gold_map_cards_value_offset, gold_map_cards_array)
+    gold_map_cards_pointer = GetPointer(gold_map_cards_pointer_offset, gold_map_cards_value_offset)
+    WriteArray(gold_map_cards_pointer, gold_map_cards_array, true)
 end
 
 function set_cards(card_array)
-    cards_pointer_offset = 0x008793F8
+    cards_pointer_offset = 0x394D98
     card_value_offset = -0xD74
-    cards_pointer = GetPointerA(base_address+cards_pointer_offset, 0x0)
-    WriteArrayA(cards_pointer+card_value_offset, card_array)
+    cards_pointer = GetPointer(cards_pointer_offset, card_value_offset)
+    WriteArray(cards_pointer, card_array, true)
 end
 
 function set_enemy_cards(enemy_card_array)
-    enemy_cards_pointer_offset = 0x008793F8
-    enemy_cards_value_offset = 0x914
-    enemy_cards_pointer = GetPointerA(base_address+enemy_cards_pointer_offset, 0x0)
-    WriteArrayA(enemy_cards_pointer-enemy_cards_value_offset, enemy_card_array)
+    enemy_cards_pointer_offset = 0x394D98
+    enemy_cards_value_offset = -0x914
+    enemy_cards_pointer = GetPointer(enemy_cards_pointer_offset, enemy_cards_value_offset)
+    WriteArray(enemy_cards_pointer, enemy_card_array, true)
 end
 
 function set_friends(friends_array)
-    friend_byte_pointer_offset = 0x00879408
-    friend_byte_value_offset = 0x64 + #journal_byte_location_ids
-    friend_byte_pointer = GetPointerA(base_address+friend_byte_pointer_offset, 0x0)
-    WriteArrayA(friend_byte_pointer + friend_byte_value_offset, friends_array)
+    friend_byte_pointer_offset = 0x394DA8
+    friend_byte_value_offset = 0x147
+    friend_byte_pointer = GetPointer(friend_byte_pointer_offset, friend_byte_value_offset)
+    WriteArray(friend_byte_pointer, friends_array, true)
 end
 
 function set_world_assignment(world_assignment_array)
-    world_assignment_pointer_offset = 0x00879398
+    world_assignment_pointer_offset = 0x394D38
     world_assignment_value_offset = 0x48
-    world_assignment_pointer = GetPointerA(base_address+world_assignment_pointer_offset, 0x0)
-    WriteArrayA(world_assignment_pointer+world_assignment_value_offset, world_assignment_array)
+    world_assignment_pointer = GetPointer(world_assignment_pointer_offset, world_assignment_value_offset)
+    WriteArray(world_assignment_pointer, world_assignment_array, true)
 end
 
 function set_initial_map_cards(card_array)
@@ -802,14 +690,17 @@ function set_initial_battle_cards(card_array)
     return card_array
 end
 
-function set_starting_deck()
-    add_card("Kingdom Key", 8)
-    add_card("Kingdom Key", 7)
-    add_card("Kingdom Key", 6)
-end
-
 function send_checks(friends_array)
     location_ids = get_checked_journal_location_ids(get_journal_array())
+    for k,v in pairs(location_ids) do
+        if not file_exists(client_communication_path .. "send" .. tostring(v)) then
+            file = io.open(client_communication_path .. "send" .. tostring(v), "w")
+            io.output(file)
+            io.write("")
+            io.close(file)
+        end
+    end
+    location_ids = get_checked_room_location_ids(get_room_array())
     for k,v in pairs(location_ids) do
         if not file_exists(client_communication_path .. "send" .. tostring(v)) then
             file = io.open(client_communication_path .. "send" .. tostring(v), "w")
@@ -832,6 +723,13 @@ function send_checks(friends_array)
     end
 end
 
+function set_cutscene_array(cutscene_array)
+    cutscene_array_pointer_offset = 0x394D70
+    cutscene_array_value_offset = 0x272
+    cutscene_array_pointer = GetPointer(cutscene_array_pointer_offset, cutscene_array_value_offset)
+    WriteArray(cutscene_array_pointer, cutscene_array, true)
+end
+
 function receive_items()
     card_array = get_empty_card_array()
     enemy_card_array = get_empty_enemy_card_array()
@@ -839,6 +737,7 @@ function receive_items()
     gold_map_cards_array = get_empty_gold_map_cards_array()
     friends_array = get_empty_friends_array()
     current_floor = get_current_floor()
+    progressive_bosses = 0
     local i = 1
     card_array = set_initial_battle_cards(card_array)
     card_array = set_initial_map_cards(card_array)
@@ -905,7 +804,7 @@ function receive_items()
                 elseif received_item_name == "Beast" then
                     friends_array[7] = 1
                 elseif string.sub(received_item_name, 1, 14)  == "Key to Rewards" and current_floor == tonumber(string.sub(received_item_name, -2)) then
-                        gold_map_cards_array[4] = 1
+                    gold_map_cards_array[4] = 1
                 end
             end
         end
@@ -921,6 +820,7 @@ function receive_items()
     set_world_assignment(world_assignment_array)
     set_friends(friends_array)
     set_gold_map_cards(gold_map_cards_array)
+    set_cutscene_array(calculate_cutscene_array())
     return friends_array
 end
 
@@ -942,7 +842,34 @@ function add_enemy_card(enemy_card_array, card_name)
     return enemy_card_array
 end
 
-
+function calculate_cutscene_array()
+    journal_byte_pointer_offset = 0x394DA8
+    journal_byte_value_offset_axel    = 0x132
+    journal_byte_value_offset_larxene = 0x134
+    journal_byte_value_offset_riku    = 0x138
+    journal_byte_value_offset_vexen   = 0x144
+    
+    
+    journal_byte_pointer = GetPointer(journal_byte_pointer_offset, 0x0)
+    axel_byte    = ReadByte(journal_byte_pointer+journal_byte_value_offset_axel   ,true)
+    larxene_byte = ReadByte(journal_byte_pointer+journal_byte_value_offset_larxene,true)
+    riku_byte    = ReadByte(journal_byte_pointer+journal_byte_value_offset_riku   ,true)
+    
+    if larxene_byte == 1 and riku_byte == 1 and axel_byte == 1 then
+        return {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00, 0x08, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x0B, 0x00, 0x0C, 0x00, 0x0D, 0x00, 0x0E, 0x00, 0x0F, 
+                0x00, 0x10, 0x00, 0x11, 0x00, 0x12, 0x00, 0x13, 0x00, 0x14, 0x00, 0x15, 0x00, 0x16, 0x00, 0x17, 0x00, 0xE8, 0x07}
+    elseif larxene_byte == 1 and axel_byte == 1 then
+        return {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00, 0x08, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x0B, 0x00, 0x0C, 0x00, 0x0D, 0x00, 0xDE, 0x07, 0x0F, 
+                0x00, 0x10, 0x00, 0x11, 0x00, 0x12, 0x00, 0x13, 0x00, 0x14, 0x00, 0x15, 0x00, 0x16, 0x00, 0x17, 0x00, 0x18, 0x00}
+    elseif axel_byte == 1 then
+        return {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00, 0x08, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x0B, 0x00, 0xDC, 0x07, 0x0D, 0x00, 0x0E, 0x00, 0x0F, 
+                0x00, 0x10, 0x00, 0x11, 0x00, 0x12, 0x00, 0x13, 0x00, 0x14, 0x00, 0x15, 0x00, 0x16, 0x00, 0x17, 0x00, 0x18, 0x00}
+    else
+        return {0x01, 0x00, 0xD2, 0x07, 0x03, 0x00, 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00, 0x08, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x0B, 0x00, 0x0C, 0x00, 0x0D, 0x00, 0x0E, 0x00, 0x0F, 
+                0x00, 0x10, 0x00, 0x11, 0x00, 0x12, 0x00, 0x13, 0x00, 0x14, 0x00, 0x15, 0x00, 0x16, 0x00, 0x17, 0x00, 0x18, 0x00}
+    end
+    
+end
 
 function has_key_of_rewards()
     floor_num = get_current_floor()
