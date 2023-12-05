@@ -128,13 +128,13 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
             DistantLandsForageable.swamp_herb: self.logic.region.can_reach(Region.witch_swamp),
             DistantLandsForageable.brown_amanita: self.logic.region.can_reach(Region.witch_swamp),
             DistantLandsFish.purple_algae: self.logic.fishing.can_fish_at(Region.witch_swamp),
-            DistantLandsSeed.vile_ancient_fruit: self.logic.money.can_spend_at(Region.oasis, 50) & self.seed_check_if_usual_source(DistantLandsSeed.vile_ancient_fruit),
-            DistantLandsSeed.void_mint: self.logic.money.can_spend_at(Region.oasis, 80) & self.seed_check_if_usual_source(DistantLandsSeed.void_mint),
+            DistantLandsSeed.vile_ancient_fruit: self.logic.money.can_spend_at(Region.oasis, 50) & self.has_seed_unlocked(DistantLandsSeed.vile_ancient_fruit),
+            DistantLandsSeed.void_mint: self.logic.money.can_spend_at(Region.oasis, 80) & self.has_seed_unlocked(DistantLandsSeed.void_mint),
             DistantLandsCrop.void_mint: self.logic.has(DistantLandsSeed.void_mint) & self.logic.season.has_any_not_winter(),
             DistantLandsCrop.vile_ancient_fruit: self.logic.has(DistantLandsSeed.vile_ancient_fruit) & self.logic.season.has_any_not_winter()
         }
 
-    def seed_check_if_usual_source(self, seed_name: str):
+    def has_seed_unlocked(self, seed_name: str):
         if self.options.cropsanity == Cropsanity.option_disabled:
             return True_()
         return self.logic.received(seed_name)
