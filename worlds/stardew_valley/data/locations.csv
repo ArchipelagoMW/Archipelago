@@ -2531,10 +2531,10 @@ id,region,name,tags,mod_name
 7515,Jenkins' Residence,An Elegant Reception,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 7516,Sophia's House,Fairy Garden,"SPECIAL_ORDER_BOARD,GINGER_ISLAND",Stardew Valley Expanded
 7517,Susan's House,Homemade Fertilizer,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
-7519,Witch's Swamp,Corrupted Crops Task,,Distant Lands - Witch Swamp Overhaul
+7519,Witch's Swamp,Corrupted Crops Task,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
 7520,Witch's Swamp,A New Pot,"MANDATORY,QUEST",Distant Lands - Witch Swamp Overhaul
 7521,Witch's Swamp,Fancy Blanket Task,"MANDATORY,QUEST",Distant Lands - Witch Swamp Overhaul
-7522,Witch's Swamp,Witch's order,,Distant Lands - Witch Swamp Overhaul
+7522,Witch's Swamp,Witch's order,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
 7551,Kitchen,Cook Baked Berry Oatmeal,COOKSANITY,Stardew Valley Expanded
 7552,Kitchen,Cook Flower Cookie,COOKSANITY,Stardew Valley Expanded
 7553,Kitchen,Cook Big Bark Burger,COOKSANITY,Stardew Valley Expanded
