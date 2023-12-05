@@ -1,6 +1,6 @@
 from .Options import inscryption_options
 from .Items import act1_items, act2_items, act3_items, filler_items, base_id, InscryptionItem, ItemDict
-from .Locations import act1_locations, act2_locations, act3_locations, regions_to_locations
+from .Locations import act1_locations, act2_locations, act3_locations, locations_to_progress_type, regions_to_locations
 from .Regions import inscryption_regions_all, inscryption_regions_act_1
 from typing import Dict, Any
 from . import Rules
@@ -90,6 +90,10 @@ class InscryptionWorld(World):
             region.add_locations({
                 location: self.location_name_to_id[location] for location in regions_to_locations[region_name]
             })
+            for name, progress_type in locations_to_progress_type.items():
+                loc = next((x for x in region.locations if x.name == name), None)
+                if loc is not None:
+                    loc.progress_type = progress_type
 
     def set_rules(self) -> None:
         Rules.InscryptionRules(self).set_all_rules()

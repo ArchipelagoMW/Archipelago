@@ -58,21 +58,21 @@ class InscryptionRules:
             "Act 2 - Ancient Obol": self.has_tower_requirements,  # Need money for the pieces? Use the tower mannequin.
             "Act 3 - Boss Photographer": self.has_inspectometer_battery,
             "Act 3 - Boss Archivist": self.has_battery_and_quill,
-            "Act 3 - Boss Unfinished": self.has_drone_and_battery,
-            "Act 3 - Boss G0lly": self.has_drone_and_battery,
+            "Act 3 - Boss Unfinished": self.has_gems_and_battery,
+            "Act 3 - Boss G0lly": self.has_gems_and_battery,
             "Act 3 - Extra Battery": self.has_inspectometer_battery,  # Hard to miss but soft lock still possible.
-            "Act 3 - Nano Armor Generator": self.has_drone_and_battery,  # Costs money, so can need multiple battles.
-            "Act 3 - Shop Holo Pelt": self.has_drone_and_battery,  # Costs money, so can need multiple battles.
+            "Act 3 - Nano Armor Generator": self.has_gems_and_battery,  # Costs money, so can need multiple battles.
+            "Act 3 - Shop Holo Pelt": self.has_gems_and_battery,  # Costs money, so can need multiple battles.
             "Act 3 - Middle Holo Pelt": self.has_inspectometer_battery,  # Can be reached without but possible soft lock
             "Act 3 - Forest Holo Pelt": self.has_inspectometer_battery,
             "Act 3 - Crypt Holo Pelt": self.has_inspectometer_battery,
-            "Act 3 - Tower Holo Pelt": self.has_drone_and_battery,
+            "Act 3 - Tower Holo Pelt": self.has_gems_and_battery,
             "Act 3 - Trader 1": self.has_one_pelt,
             "Act 3 - Trader 2": self.has_two_pelt,
             "Act 3 - Trader 3": self.has_three_pelt,
             "Act 3 - Trader 4": self.has_four_pelt,
             "Act 3 - Trader 5": self.has_five_pelt,
-            "Act 3 - Goobert's Painting": self.has_drone_and_battery,
+            "Act 3 - Goobert's Painting": self.has_gems_and_battery,
             "Act 3 - The Great Transcendence": self.has_transcendence_requirements,
             "Act 3 - Boss Mycologists": self.has_mycologists_boss_requirements,
             "Act 3 - Bone Lord Room": self.has_bone_lord_room_requirements,
@@ -82,6 +82,7 @@ class InscryptionRules:
             "Act 3 - Luke's File Entry 4": self.has_transcendence_requirements,
             "Act 3 - Well": self.has_inspectometer_battery,
             "Act 3 - Gems Drone": self.has_inspectometer_battery,
+            "Act 3 - Clock": self.has_gems_and_battery  # Can be brute-forced, but the solution needs those items.
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
@@ -130,26 +131,26 @@ class InscryptionRules:
     def has_inspectometer_battery(self, state: CollectionState) -> bool:
         return state.has("Inspectometer Battery", self.player)
 
-    def has_drone_and_battery(self, state: CollectionState) -> bool:
+    def has_gems_and_battery(self, state: CollectionState) -> bool:
         return state.has("Gems Module", self.player) and self.has_inspectometer_battery(state)
 
     def has_pelts(self, state: CollectionState, count: int) -> bool:
         return state.has("Holo Pelt", self.player, count)
 
     def has_one_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 1) and self.has_drone_and_battery(state)
+        return self.has_pelts(state, 1) and self.has_gems_and_battery(state)
 
     def has_two_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 2) and self.has_drone_and_battery(state)
+        return self.has_pelts(state, 2) and self.has_gems_and_battery(state)
 
     def has_three_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 3) and self.has_drone_and_battery(state)
+        return self.has_pelts(state, 3) and self.has_gems_and_battery(state)
 
     def has_four_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 4) and self.has_drone_and_battery(state)
+        return self.has_pelts(state, 4) and self.has_gems_and_battery(state)
 
     def has_five_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 5) and self.has_drone_and_battery(state)
+        return self.has_pelts(state, 5) and self.has_gems_and_battery(state)
 
     def has_mycologists_boss_requirements(self, state: CollectionState) -> bool:
         return state.has("Mycologists Holo Key", self.player) and self.has_transcendence_requirements(state)
@@ -161,7 +162,7 @@ class InscryptionRules:
         return state.has("Quill", self.player) and self.has_inspectometer_battery(state)
 
     def has_transcendence_requirements(self, state: CollectionState) -> bool:
-        return state.has("Quill", self.player) and self.has_drone_and_battery(state)
+        return state.has("Quill", self.player) and self.has_gems_and_battery(state)
 
     def has_act2_requirements(self, state: CollectionState) -> bool:
         return state.has("Film Roll", self.player)
