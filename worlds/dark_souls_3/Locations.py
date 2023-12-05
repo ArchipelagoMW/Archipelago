@@ -1508,7 +1508,6 @@ location_tables = {
         DS3LocationData("ID: Xanthous Ashes",                      "Xanthous Ashes",                    DS3LocationCategory.KEY,
                         progression = True),
         DS3LocationData("ID: Rusted Gold Coin",                    "Rusted Gold Coin",                  DS3LocationCategory.MISC),
-        DS3LocationData("ID: Large Titanite Shard #6",             "Large Titanite Shard",              DS3LocationCategory.UPGRADE),
         DS3LocationData("ID: Old Cell Key",                        "Old Cell Key",                      DS3LocationCategory.KEY,
                         key = True),
         DS3LocationData("ID: Covetous Silver Serpent Ring+1",      "Covetous Silver Serpent Ring+1",    DS3LocationCategory.RING,
