@@ -1,5 +1,7 @@
 import itertools
+import logging
 import random
+import time
 from collections import deque
 from typing import Callable, Dict, Iterable, List, Optional, Set, Tuple, Union
 
@@ -284,6 +286,7 @@ def randomize_entrances(
     :param get_target_groups: Method to call that returns the groups that a specific group type is allowed to connect to
     :param preserve_group_order: Whether the order of groupings should be preserved for the returned target_groups
     """
+    start_time = time.perf_counter()
     er_state = ERPlacementState(world, coupled)
     entrance_lookup = EntranceLookup(world.random)
 
@@ -353,5 +356,10 @@ def randomize_entrances(
     # stage 4 - last chance for dead ends
     while entrance_lookup.dead_ends:
         find_pairing(True, False)
+
+    # TODO - gate this behind some condition or debug level or something for production use
+    running_time = time.perf_counter() - start_time
+    logging.info(f"Completed entrance randomization for player {world.player} with "
+                 f"name {world.multiworld.player_name[world.player]} in {running_time:.4f} seconds")
 
     return er_state
