@@ -1,4 +1,6 @@
-from Options import Toggle, Range, Choice, Option
+from dataclasses import dataclass
+
+from Options import Toggle, Choice, Option, PerGameCommonOptions
 import typing
 
 
@@ -93,15 +95,15 @@ class EpitaphPiecesRandomization(Choice):
     option_as_one_item = 2
 
 
-inscryption_options: typing.Dict[str, type(Option)] = {
-    "deathlink": DeathLink,
-    "act1_deathlink_behaviour": Act1DeathLinkBehaviour,
-    "trap": Trap,
-    "goal": Goal,
-    "randomize_codes": RandomizeCodes,
-    "randomize_deck": RandomizeDeck,
-    "randomize_abilities": RandomizeAbilities,
-    "optional_death_card": OptionalDeathCard,
-    "skip_tutorial": SkipTutorial,
-    "epitaph_pieces_randomization": EpitaphPiecesRandomization
-}
+@dataclass
+class InscryptionOptions(PerGameCommonOptions):
+    deathlink: DeathLink
+    act1_deathlink_behaviour: Act1DeathLinkBehaviour
+    trap: Trap
+    goal: Goal
+    randomize_codes: RandomizeCodes
+    randomize_deck: RandomizeDeck
+    randomize_abilities: RandomizeAbilities
+    optional_death_card: OptionalDeathCard
+    skip_tutorial: SkipTutorial
+    epitaph_pieces_randomization: EpitaphPiecesRandomization
