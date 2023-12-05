@@ -248,14 +248,20 @@ class BattlefieldsBattlesQuantities(Choice):
 
 class CompanionLevelingType(Choice):
     """Set how companions gain levels.
-    Quest: Complete each companion's individual quest for them to promote to their second version.
+    Quests: Complete each companion's individual quest for them to promote to their second version.
+    Quests Extended: Each companion has four exclusive quests, leveling each time a quest is completed.
+    Save the Crystals (All): Each time a Crystal is saved, all companions gain levels.
+    Save the Crystals (Individual): Each companion will level to their second version when a specific Crystal is saved.
     Benjamin Level: Companions' level tracks Benjamin's."""
     option_quests = 0
-    option_benjamin_level = 1
-    option_benjamin_level_plus_5 = 2
-    option_benjamin_level_plus_10 = 3
+    option_quests_extended = 1
+    option_save_crystals_individual = 2
+    option_save_crystals_all = 3
+    option_benjamin_level = 4
+    option_benjamin_level_plus_5 = 5
+    option_benjamin_level_plus_10 = 6
     default = 0
-    dislpay_name = "Companion Leveling Type"
+    display_name = "Companion Leveling Type"
 
 
 class CompanionSpellbookType(Choice):

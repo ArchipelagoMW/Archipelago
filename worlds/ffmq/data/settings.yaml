@@ -90,6 +90,9 @@ Final Fantasy Mystic Quest:
     Quadruple: 0
   companion_leveling_type:
     Quests: 0
+    QuestsExtended: 0
+    SaveCrystalsIndividual: 0
+    SaveCrystalsAll: 0
     BenPlus0: 0
     BenPlus5: 0
     BenPlus10: 0

@@ -309,13 +309,13 @@
     location: "WindiaBattlefield01"
     location_slot: "WindiaBattlefield01"
     type: "BattlefieldXp"
-    access: []
+    access: ["SandCoin", "RiverCoin"]
   - name: "South of Windia Battlefield"
     object_id: 0x14
     location: "WindiaBattlefield02"
     location_slot: "WindiaBattlefield02"
     type: "BattlefieldXp"
-    access: []
+    access: ["SandCoin", "RiverCoin"]
   links:
   - target_room: 9   # Focus Tower Windia
     location: "FocusTowerWindia"
