@@ -914,17 +914,17 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.aurora_warp_to_aurora, player),
                              logic.received("Nexus: Aurora Vineyard Runes"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.farm_warp_to_farm, player),
-                             logic.received("Nexus: Farm Runes"))
+                             logic.received("Nexus: Farm and Wizard Runes"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.guild_warp_to_guild, player),
                              logic.received("Nexus: Adventurer's Guild Runes"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.junimo_warp_to_junimo, player),
-                             logic.received("Nexus: Junimo Woods Runes"))
+                             logic.received("Nexus: Junimo and Outpost Runes"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.spring_warp_to_spring, player),
                              logic.received("Nexus: Sprite Spring Runes"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.outpost_warp_to_outpost, player),
-                             logic.received("Nexus: Outpost Runes"))
+                             logic.received("Nexus: Junimo and Outpost Runes"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_warp_to_wizard, player),
-                             logic.received("Nexus: Wizard Runes"))
+                             logic.received("Nexus: Farm and Wizard Runes"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_purple_junimo, player),
                              logic.relationship.has_hearts(ModNPC.apples, 10))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_interior_to_upstairs, player),
