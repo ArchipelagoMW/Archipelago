@@ -63,6 +63,7 @@ class TestBaseItemGeneration(SVTestBase):
         all_created_items = [item.name for item in self.multiworld.itempool]
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
         items_to_ignore = [event.name for event in items.events]
+        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
@@ -90,6 +91,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         all_created_items = [item.name for item in self.multiworld.itempool]
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
         items_to_ignore = [event.name for event in items.events]
+        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
