@@ -1,4 +1,4 @@
-from typing import Iterable, Set
+from typing import Iterable, Sequence, Set
 
 from BaseClasses import MultiWorld, Region, Entrance
 
@@ -15,17 +15,22 @@ class WL4Region(Region):
         self.clear_rule = None
 
 
-def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
+def basic_region_creator(world: MultiWorld, player: int, location_table: Set[str]):
     def basic_region(name, locations=()):
         return create_region(world, player, location_table, name, locations)
+    return basic_region
+
+
+def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
+    create_main_regions(world, player, location_table)
+    create_level_regions(world, player, location_table)
+
+
+def create_main_regions(world: MultiWorld, player: int, location_table: Set[str]):
+    basic_region = basic_region_creator(world, player, location_table)
 
     def passage_region(passage: Passage):
         return basic_region(passage.long_name())
-
-    def level_regions(name: str, passage: Passage, level: int):
-        entrance = basic_region(f'{name} (entrance)')
-        boxes = basic_region(name, get_level_locations(passage, level))
-        return entrance, boxes
 
     def minigame_shop(passage: Passage):
         return basic_region(f'{passage.short_name()} Minigame Shop')
@@ -38,64 +43,77 @@ def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
     passage_regions = (passage_region(passage) for passage in Passage)
     minigame_shops = (minigame_shop(passage) for passage in Passage)
 
-    hall_of_hieroglyphs = level_regions('Hall of Hieroglyphs', Passage.ENTRY, 0)
     spoiled_rotten = boss_region(Passage.ENTRY, 'Spoiled Rotten')
-
-    palm_tree_paradise = level_regions('Palm Tree Paradise', Passage.EMERALD, 0)
-    wildflower_fields = level_regions('Wildflower Fields', Passage.EMERALD, 1)
-    mystic_lake = level_regions('Mystic Lake', Passage.EMERALD, 2)
-    monsoon_jungle = level_regions('Monsoon Jungle', Passage.EMERALD, 3)
     cractus = boss_region(Passage.EMERALD, 'Cractus')
-
-    curious_factory = level_regions('The Curious Factory', Passage.RUBY, 0)
-    toxic_landfill = level_regions('The Toxic Landfill', Passage.RUBY, 1)
-    forty_below_fridge = level_regions('40 Below Fridge', Passage.RUBY, 2)
-    pinball_zone = level_regions('Pinball Zone', Passage.RUBY, 3)
     cuckoo_condor = boss_region(Passage.RUBY, 'Cuckoo Condor')
-
-    toy_block_tower = level_regions('Toy Block Tower', Passage.TOPAZ, 0)
-    big_board = level_regions('The Big Board', Passage.TOPAZ, 1)
-    doodle_woods = level_regions('Doodle Woods', Passage.TOPAZ, 2)
-    domino_row = level_regions('Domino Row', Passage.TOPAZ, 3)
     aerodent = boss_region(Passage.TOPAZ, 'Aerodent')
-
-    crescent_moon_village = level_regions('Crescent Moon Village', Passage.SAPPHIRE, 0)
-    arabian_night = level_regions('Arabian Night', Passage.SAPPHIRE, 1)
-    fiery_cavern = level_regions('Fiery Cavern', Passage.SAPPHIRE, 2)
-    hotel_horror = level_regions('Hotel Horror', Passage.SAPPHIRE, 3)
     catbat = boss_region(Passage.SAPPHIRE, 'Catbat')
-
-    golden_passage = level_regions('Golden Passage', Passage.GOLDEN, 0)
     golden_diva = boss_region(Passage.GOLDEN, 'Golden Diva')
 
     world.regions += [
         menu_region,
         *passage_regions,
         *minigame_shops,
-        *hall_of_hieroglyphs,
         spoiled_rotten,
+        cractus,
+        cuckoo_condor,
+        aerodent,
+        catbat,
+        golden_diva,
+    ]
+
+
+def create_level_regions(world: MultiWorld, player: int, location_table: Set[str]):
+    basic_region = basic_region_creator(world, player, location_table)
+
+    def level_regions(name: str, passage: Passage, level: int):
+        entrance = basic_region(f'{name} (entrance)')
+        boxes = basic_region(name, get_level_locations(passage, level))
+        return entrance, boxes
+
+    hall_of_hieroglyphs = level_regions('Hall of Hieroglyphs', Passage.ENTRY, 0)
+
+    palm_tree_paradise = level_regions('Palm Tree Paradise', Passage.EMERALD, 0)
+    wildflower_fields = level_regions('Wildflower Fields', Passage.EMERALD, 1)
+    mystic_lake = level_regions('Mystic Lake', Passage.EMERALD, 2)
+    monsoon_jungle = level_regions('Monsoon Jungle', Passage.EMERALD, 3)
+
+    curious_factory = level_regions('The Curious Factory', Passage.RUBY, 0)
+    toxic_landfill = level_regions('The Toxic Landfill', Passage.RUBY, 1)
+    forty_below_fridge = level_regions('40 Below Fridge', Passage.RUBY, 2)
+    pinball_zone = level_regions('Pinball Zone', Passage.RUBY, 3)
+
+    toy_block_tower = level_regions('Toy Block Tower', Passage.TOPAZ, 0)
+    big_board = level_regions('The Big Board', Passage.TOPAZ, 1)
+    doodle_woods = level_regions('Doodle Woods', Passage.TOPAZ, 2)
+    domino_row = level_regions('Domino Row', Passage.TOPAZ, 3)
+
+    crescent_moon_village = level_regions('Crescent Moon Village', Passage.SAPPHIRE, 0)
+    arabian_night = level_regions('Arabian Night', Passage.SAPPHIRE, 1)
+    fiery_cavern = level_regions('Fiery Cavern', Passage.SAPPHIRE, 2)
+    hotel_horror = level_regions('Hotel Horror', Passage.SAPPHIRE, 3)
+
+    golden_passage = level_regions('Golden Passage', Passage.GOLDEN, 0)
+
+    world.regions += [
+        *hall_of_hieroglyphs,
         *palm_tree_paradise,
         *wildflower_fields,
         *mystic_lake,
         *monsoon_jungle,
-        cractus,
         *curious_factory,
         *toxic_landfill,
         *forty_below_fridge,
         *pinball_zone,
-        cuckoo_condor,
         *toy_block_tower,
         *big_board,
         *doodle_woods,
         *domino_row,
-        aerodent,
         *crescent_moon_village,
         *arabian_night,
         *fiery_cavern,
         *hotel_horror,
-        catbat,
         *golden_passage,
-        golden_diva,
     ]
 
 
