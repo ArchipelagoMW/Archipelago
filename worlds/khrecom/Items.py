@@ -252,7 +252,7 @@ item_table: Dict[str, KHRECOMItemData] = {
     "Key to Rewards Neverland":          KHRECOMItemData("Gold Map Cards", code = 268_3308, classification = ItemClassification.useful,      max_quantity = 1, weight = 1),
     "Key to Rewards Hollow Bastion":     KHRECOMItemData("Gold Map Cards", code = 268_3309, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Key to Rewards Twilight Town":      KHRECOMItemData("Gold Map Cards", code = 268_3311, classification = ItemClassification.useful,      max_quantity = 1, weight = 1),
-    "Key to Rewards Destiny Island":     KHRECOMItemData("Gold Map Cards", code = 268_3312, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
+    "Key to Rewards Destiny Islands":     KHRECOMItemData("Gold Map Cards", code = 268_3312, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Key to Rewards Castle Oblivion":    KHRECOMItemData("Gold Map Cards", code = 268_3313, classification = ItemClassification.useful,      max_quantity = 1, weight = 1),
 
     #Friend Cards

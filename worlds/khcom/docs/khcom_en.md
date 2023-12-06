@@ -10,7 +10,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-you can customize your settings by visiting the [Kingdom Hearts Chain of Memories Settings Page](/games/Kingdom%20Hearts%20Chain%20of%20Memories/player-settings).
+You can customize your settings by visiting the [Kingdom Hearts Chain of Memories Settings Page](/games/Kingdom%20Hearts%20Chain%20of%20Memories/player-settings).
 
 ### Connect to the MultiServer
 

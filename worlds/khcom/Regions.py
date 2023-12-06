@@ -135,7 +135,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     
     regions["Floor 10"].locations.append("F10 100 Acre Wood Complete (Characters I Bambi)")                   
     regions["Floor 10"].locations.append("F10 100 Acre Wood Complete (Magic Cards Bambi)")                    
-    regions["Floor 10"].locations.append("F10 100 Acre Wood Owl (Attack Cards Spellbinder)")                  
+    regions["Floor 10"].locations.append("F10 100 Acre Wood Field Scene Owl (Attack Cards Spellbinder)")                  
     regions["Floor 10"].locations.append("F10 100 Acre Wood Field Scene Eeyore (Characters II Eeyore)")               
     regions["Floor 10"].locations.append("F10 100 Acre Wood Field Scene Owl (Characters II Owl)")                  
     regions["Floor 10"].locations.append("F10 100 Acre Wood Field Scene Piglet (Characters II Piglet)")               
@@ -163,10 +163,9 @@ def create_regions(multiworld: MultiWorld, player: int):
     #regions["Floor 12"].locations.append("F12 Destiny Islands Post Floor (Attack Cards Oblivion)")           
     regions["Floor 12"].locations.append("F12 Destiny Islands Room of Rewards (Item Cards Megalixir)")        
                                                                          
-    regions["Floor 13"].locations.append("F13 Castle Oblivion Post Floor (Characters I Marluxia)")            
+    regions["Floor 13"].locations.append("F13 Castle Oblivion Event (Characters I Marluxia)")            
     regions["Floor 13"].locations.append("F13 Castle Oblivion Post Floor (Story Castle Oblivion)")            
     regions["Floor 13"].locations.append("F13 Castle Oblivion Post Marluxia (Attack Cards Diamond Dust)")     
-    regions["Floor 13"].locations.append("F13 Castle Oblivion Post Marluxia (Attack Cards One-Winged Angel)") 
     
     regions["Heartless"].locations.append("Heartless Air Pirate")                                              
     regions["Heartless"].locations.append("Heartless Air Soldier")                                             

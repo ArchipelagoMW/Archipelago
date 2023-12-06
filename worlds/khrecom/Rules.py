@@ -96,12 +96,6 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Floor 12"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Destiny Islands") and has_x_worlds(state, player, 7)
     multiworld.get_entrance("Floor 13"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Castle Oblivion") and has_x_worlds(state, player, 9)
     
-    # Options
-    
-    if multiworld.prioritize_bosses[player]:
-        for location in multiworld.get_locations(player):
-            if location.name in get_locations_by_category("Boss").keys():
-                location.progress_type = LocationProgressType.PRIORITY
     
     
     # Win condition.

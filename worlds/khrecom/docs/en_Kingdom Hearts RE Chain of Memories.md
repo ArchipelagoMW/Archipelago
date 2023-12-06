@@ -1,4 +1,4 @@
-# Kingdom Hearts Chain of Memories (GBA)
+# Kingdom Hearts RE Chain of Memories (PC)
 
 ## Where is the settings page?
 
@@ -7,28 +7,25 @@ configure and export a config file.
 
 ## What does randomization do to this game?
 
-The Kingdom Hearts Chain of Memories Randomizer will take removes cards you pick up in the overworld, moogle shops, and as rewards from boss battles.
+The Kingdom Hearts RE Chain of Memories Randomizer will removes cards you pick up in the overworld, moogle shops, and as rewards from boss battles from your inventory.
 
 The entire castle is open from the start after completing Traverse Town.  Floors you haven't unlocked are assigned Traverse Town, otherwise they will be assigned normally.
 
-You start with Key of Beginnings, Key of Guidance, and Key to Truth for Floor 1 in your inventory.
-
-Your goal is find all 7 friend cards (Aladdin, Ariel, Beast, Donald, Goofy, Jack, Peter Pan).
+Your goal is find all 7 friend cards (Aladdin, Ariel, Beast, Donald, Goofy, Jack, Peter Pan).  These are tracked in your journal.
 
 ## What items and locations get shuffled?
 
 ###Items
 
-In addition to the unlocks for each floor, card packs or card sets are shuffled into the item pool. 
+World Unlocks, Key of Rewards for each floor, Enemy Cards, and card sets are shuffled into the item pool.
 
 Card sets are comprised of a card type and a value range.  For example, you might receive Blizzard 4-6, which means you receive Blizzard 4, Blizzard 5, and Blizzard 6.
 
-Card packs are the other way to receive cards in the randomizer and include a predefined number of cards which vary in strength depending on the card pack tier; Bronze, Silver, or Gold.
-
 ###Locations
 
-Journal entries are locations, including story, heartless, and battle card entries discluding enemy cards.
+Journal entries for Attack, Magic, Summon, and Item Cards are locations, as well as the Enemy Card journal entries for boss enemy cards.
 
+Opening each floor's Room of Beginnings, Room of Guidance, and Room of Truth for the first time are also locations.
 
 ## Which items can be in another player's world?
 
