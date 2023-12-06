@@ -39,7 +39,7 @@ suit_upgrade_table = {
     "Varia Suit": ItemData(5031022, ItemClassification.progression),
     "Phazon Suit": ItemData(5031023, ItemClassification.progression),
     "Energy Tank": ItemData(5031024, ItemClassification.useful),
-    # "Placeholder 1": ItemData(5031025, ItemClassification.filler),
+    "Spring Ball": ItemData(5031025, ItemClassification.useful),
     # item 026 is a health refill
     # "Placeholder 2": ItemData(5031027, ItemClassification.filler)
     "Wavebuster": ItemData(5031028, ItemClassification.filler),
