@@ -112,17 +112,23 @@ class BundleRandomization(Choice):
 
 class BundlePrice(Choice):
     """How many items are needed for the community center bundles?
+    Minimum: Every bundle will require only one item
     Very Cheap: Every bundle will require 2 items fewer than usual
     Cheap: Every bundle will require 1 item fewer than usual
     Normal: Every bundle will require the vanilla number of items
-    Expensive: Every bundle will require 1 extra item when applicable"""
+    Expensive: Every bundle will require 1 extra item
+    Very Expensive: Every bundle will require 2 extra items
+    Maximum: Every bundle will require many extra items"""
     internal_name = "bundle_price"
     display_name = "Bundle Price"
     default = 0
+    option_minimum = -8
     option_very_cheap = -2
     option_cheap = -1
     option_normal = 0
     option_expensive = 1
+    option_very_expensive = 2
+    option_maximum = 8
 
 
 class EntranceRandomization(Choice):

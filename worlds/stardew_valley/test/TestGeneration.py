@@ -396,7 +396,7 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 2640
+        expected_locations = 2693
         allsanity_options = allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         real_locations = get_real_locations(self, multiworld)
