@@ -610,8 +610,13 @@ class Reach(StardewRule):
     resolution_hint: str
     player: int
 
-    def __new__(cls, *args, **kwargs):
-        return super().__new__(cls)
+    def __new__(cls, *args, _cache={}, **kwargs):  # noqa
+        try:
+            return _cache[args]
+        except KeyError:
+            instance = super().__new__(cls)
+            _cache[args] = instance
+            return instance
 
     def __call__(self, state: CollectionState) -> bool:
         return state.can_reach(self.spot, self.resolution_hint, self.player)
