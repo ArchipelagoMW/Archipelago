@@ -4,7 +4,7 @@ import logging
 from abc import ABC, abstractmethod
 from collections import deque
 from dataclasses import dataclass, field
-from functools import cached_property, cache
+from functools import cached_property
 from itertools import chain
 from threading import Lock
 from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
@@ -648,7 +648,6 @@ class Reach(StardewRule):
     resolution_hint: str
     player: int
 
-    @cache
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls)
 
