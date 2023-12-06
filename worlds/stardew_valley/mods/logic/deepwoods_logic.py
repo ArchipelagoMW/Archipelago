@@ -7,6 +7,7 @@ from ...logic.has_logic import HasLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.skill_logic import SkillLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
+from ...mods.mod_data import ModNames
 from ...options import SkillProgression, ElevatorProgression
 from ...stardew_rule import StardewRule, True_, And
 from ...strings.ap_names.transport_names import ModTransportation
@@ -53,4 +54,8 @@ CookingLogicMixin]]):
     def can_pull_sword(self) -> StardewRule:
         rules = [self.logic.received("Pendant of Depths") & self.logic.received("Pendant of Community") & self.logic.received("Pendant of Elders"),
                  self.logic.skill.has_total_level(40)]
+        if ModNames.luck_skill in self.options.mods:
+            rules.append(self.logic.received("Luck Level", 7))
+        else:
+            rules.append(self.logic.has("Magic Rock Candy"))  # You need more luck than this, but it'll push the logic down a ways; you can get the rest there.
         return And(*rules)

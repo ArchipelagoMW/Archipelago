@@ -14,6 +14,7 @@ from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes
+from ...strings.quest_names import ModQuest
 from ...stardew_rule import Or
 
 
@@ -30,7 +31,6 @@ class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixi
             SVELocation.tempered_galaxy_sword: self.logic.money.can_spend_at(SVERegion.alesia_shop, 350000),
             SVELocation.tempered_galaxy_dagger: self.logic.money.can_spend_at(SVERegion.isaac_shop, 600000),
             SVELocation.tempered_galaxy_hammer: self.logic.money.can_spend_at(SVERegion.isaac_shop, 400000),
-            SVELocation.diamond_wand: self.logic.quest.can_complete_quest(SVELocation.monster_crops) & self.logic.region.can_reach(SVERegion.lances_house),
         })
 
     def has_any_rune(self):

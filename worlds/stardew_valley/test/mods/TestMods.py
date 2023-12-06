@@ -48,6 +48,26 @@ class TestGenerateModsOptions(SVTestCase):
                     #     return  # assume the rest will work as well
 
 
+class TestBaseLocationDependencies(SVTestBase):
+    options = {
+        Mods.internal_name: all_mods
+    }
+
+    def test_lance_chest_requires_quest(self):
+        item_list = ["Spring", "Summer", "Fall", "Winter", "Marlon's Boat Paddle"]
+        item_list.extend(weapon for weapon in ["Progressive Weapon"]*3)
+        item_list.extend(tool for tool in ["Progressive Axe", "Progressive Pickaxe"]*2)
+        random.shuffle(item_list)
+        world_items = []
+        rule = self.world.logic.region.can_reach_location("Lance's Diamond Wand")
+        for item in item_list:
+            self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state))
+            current_item = self.world.create_item(item)
+            self.multiworld.state.collect(current_item, event=False)
+            world_items.append(current_item)
+        self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
+
+
 class TestBaseItemGeneration(SVTestBase):
     options = {
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,

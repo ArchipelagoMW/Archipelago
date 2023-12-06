@@ -122,6 +122,8 @@ class RelationshipLogic(BaseLogic[Union[
             scarlett_summer = self.logic.season.has(Season.summer) & self.can_meet(ModNPC.susan)
             scarlett_fall = self.logic.season.has(Season.fall) & self.can_meet(ModNPC.sophia)
             rules.append(scarlett_job & (scarlett_spring | scarlett_summer | scarlett_fall))
+        elif npc == ModNPC.morgan:
+            rules.append(self.logic.received("Morgan's Schooling"))
 
         return And(*rules)
 
