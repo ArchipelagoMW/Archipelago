@@ -8,7 +8,7 @@ from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
-from .locations import location_table, create_locations, LocationData
+from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
@@ -63,6 +63,12 @@ class StardewValleyWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
+
+    item_name_groups = {group.name.replace("_", " ").title() + (" Group" if group.name.replace("_", " ").title()
+                                                                in item_table else ""):
+                        [item.name for item in items] for group, items in items_by_group.items()}
+    location_name_groups = {group.name.replace("_", " ").title(): [item.name for item in locations]
+                            for group, locations in locations_by_tag.items()}
 
     data_version = 3
     required_client_version = (0, 4, 0)
