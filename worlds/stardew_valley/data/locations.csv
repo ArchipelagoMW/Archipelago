@@ -2312,20 +2312,20 @@ id,region,name,tags,mod_name
 6150,JojaMart,Friendsanity: Claire 12 <3,FRIENDSANITY,Stardew Valley Expanded
 6151,JojaMart,Friendsanity: Claire 13 <3,FRIENDSANITY,Stardew Valley Expanded
 6152,JojaMart,Friendsanity: Claire 14 <3,FRIENDSANITY,Stardew Valley Expanded
-6153,Highlands,Friendsanity: Lance 1 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6154,Highlands,Friendsanity: Lance 2 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6155,Highlands,Friendsanity: Lance 3 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6156,Highlands,Friendsanity: Lance 4 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6157,Highlands,Friendsanity: Lance 5 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6158,Highlands,Friendsanity: Lance 6 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6159,Highlands,Friendsanity: Lance 7 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6160,Highlands,Friendsanity: Lance 8 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6161,Highlands,Friendsanity: Lance 9 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6162,Highlands,Friendsanity: Lance 10 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6163,Highlands,Friendsanity: Lance 11 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6164,Highlands,Friendsanity: Lance 12 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6165,Highlands,Friendsanity: Lance 13 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
-6166,Highlands,Friendsanity: Lance 14 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6153,Highlands Outside,Friendsanity: Lance 1 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6154,Highlands Outside,Friendsanity: Lance 2 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6155,Highlands Outside,Friendsanity: Lance 3 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6156,Highlands Outside,Friendsanity: Lance 4 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6157,Highlands Outside,Friendsanity: Lance 5 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6158,Highlands Outside,Friendsanity: Lance 6 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6159,Highlands Outside,Friendsanity: Lance 7 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6160,Highlands Outside,Friendsanity: Lance 8 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6161,Highlands Outside,Friendsanity: Lance 9 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6162,Highlands Outside,Friendsanity: Lance 10 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6163,Highlands Outside,Friendsanity: Lance 11 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6164,Highlands Outside,Friendsanity: Lance 12 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6165,Highlands Outside,Friendsanity: Lance 13 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+6166,Highlands Outside,Friendsanity: Lance 14 <3,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
 6167,Jenkins' Residence,Friendsanity: Olivia 1 <3,FRIENDSANITY,Stardew Valley Expanded
 6168,Jenkins' Residence,Friendsanity: Olivia 2 <3,FRIENDSANITY,Stardew Valley Expanded
 6169,Jenkins' Residence,Friendsanity: Olivia 3 <3,FRIENDSANITY,Stardew Valley Expanded
@@ -2574,15 +2574,15 @@ id,region,name,tags,mod_name
 7651,Alesia Shop,Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
 7652,Isaac Shop,Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
 7653,Isaac Shop,Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
-7654,Highlands,Lance's Diamond Wand,"MANDATORY,GINGER_ISLAND",Stardew Valley Expanded
+7654,Lance's House Main,Lance's Diamond Wand,"MANDATORY,GINGER_ISLAND",Stardew Valley Expanded
 7701,Island South,Fishsanity: Baby Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7702,Crimson Badlands,Fishsanity: Bonefish,FISHSANITY,Stardew Valley Expanded
 7703,Forest,Fishsanity: Bull Trout,FISHSANITY,Stardew Valley Expanded
 7704,Forest West,Fishsanity: Butterfish,FISHSANITY,Stardew Valley Expanded
 7705,Island South,Fishsanity: Clownfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
-7706,Highlands,Fishsanity: Daggerfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7706,Highlands Outside,Fishsanity: Daggerfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7707,Mountain,Fishsanity: Frog,FISHSANITY,Stardew Valley Expanded
-7708,Highlands,Fishsanity: Gemfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
+7708,Highlands Outside,Fishsanity: Gemfish,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7709,Sprite Spring,Fishsanity: Goldenfish,FISHSANITY,Stardew Valley Expanded
 7710,Secret Woods,Fishsanity: Grass Carp,FISHSANITY,Stardew Valley Expanded
 7711,Forest West,Fishsanity: King Salmon,FISHSANITY,Stardew Valley Expanded
