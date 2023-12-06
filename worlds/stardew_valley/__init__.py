@@ -181,7 +181,7 @@ class StardewValleyWorld(World):
         self.multiworld.push_precollected(starting_season)
 
     def setup_early_items(self):
-        if self.options.building_progression & BuildingProgression.option_progressive_early_shipping_bin:
+        if self.options.building_progression & BuildingProgression.early_shipping_bin:
             self.multiworld.early_items[self.player]["Shipping Bin"] = 1
 
         if self.options.backpack_progression == BackpackProgression.option_early_progressive:

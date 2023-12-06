@@ -315,7 +315,7 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, options: Starde
     items.append(item_factory("Fish Pond"))
     items.append(item_factory("Stable"))
     items.append(item_factory("Slime Hutch"))
-    needs_early_bin = building_option & BuildingProgression.option_progressive_early_shipping_bin
+    needs_early_bin = building_option & BuildingProgression.early_shipping_bin
     has_shipsanity = options.shipsanity != Shipsanity.option_none
     need_shipping = needs_early_bin or has_shipsanity or world_is_perfection(options)
     items.append(item_factory("Shipping Bin", ItemClassification.progression if need_shipping else ItemClassification.useful))

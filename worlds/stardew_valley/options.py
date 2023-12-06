@@ -263,6 +263,7 @@ class BuildingProgression(Choice):
     option_progressive = 0b0001  # 1
     option_progressive_cheap = 0b0101  # 5
     option_progressive_very_cheap = 0b1001  # 9
+    early_shipping_bin = 0b0010  # 2
     option_progressive_early_shipping_bin = 0b0011  # 3
     option_progressive_early_shipping_bin_cheap = 0b0111  # 7
     option_progressive_early_shipping_bin_very_cheap = 0b1011  # 11
