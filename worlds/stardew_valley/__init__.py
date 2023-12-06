@@ -112,7 +112,6 @@ class StardewValleyWorld(World):
         def add_location(name: str, code: Optional[int], region: str):
             region = world_regions[region]
             location = StardewLocation(self.player, name, code, region)
-            location.access_rule = lambda _: True
             region.locations.append(location)
 
         create_locations(add_location, self.modified_bundles, self.options, self.multiworld.random)
@@ -321,7 +320,6 @@ class StardewValleyWorld(World):
             for player in link_group["players"]:
                 player_options = self.multiworld.worlds[player].options
                 if self.multiworld.game[player] != self.game:
-
                     continue
                 if player_options.trap_items == TrapItems.option_no_traps:
                     include_traps = False
