@@ -1,4 +1,4 @@
-from Options import Choice, FreeText, Toggle
+from Options import Choice, FreeText, Toggle, Range
 
 
 class Logic(Choice):
@@ -131,6 +131,21 @@ class EnemizerAttacks(Choice):
     default = 0
 
 
+class EnemizerGroups(Choice):
+    """Set which enemy groups will be affected by Enemizer."""
+    display_name = "Enemizer Groups"
+    option_mobs_only = 0
+    option_mobs_and_bosses = 1
+    option_mobs_bosses_and_dark_king = 2
+    default = 1
+
+
+class ShuffleResWeakType(Toggle):
+    """Resistance and Weakness types are shuffled for all enemies."""
+    display_name = "Shuffle Resistance/Weakness Types"
+    default = 0
+
+
 class ShuffleEnemiesPositions(Toggle):
     """Instead of their original position in a given map, enemies are randomly placed."""
     display_name = "Shuffle Enemies' Positions"
@@ -231,6 +246,81 @@ class BattlefieldsBattlesQuantities(Choice):
     option_random_one_through_ten = 6
 
 
+class CompanionLevelingType(Choice):
+    """Set how companions gain levels.
+    Quests: Complete each companion's individual quest for them to promote to their second version.
+    Quests Extended: Each companion has four exclusive quests, leveling each time a quest is completed.
+    Save the Crystals (All): Each time a Crystal is saved, all companions gain levels.
+    Save the Crystals (Individual): Each companion will level to their second version when a specific Crystal is saved.
+    Benjamin Level: Companions' level tracks Benjamin's."""
+    option_quests = 0
+    option_quests_extended = 1
+    option_save_crystals_individual = 2
+    option_save_crystals_all = 3
+    option_benjamin_level = 4
+    option_benjamin_level_plus_5 = 5
+    option_benjamin_level_plus_10 = 6
+    default = 0
+    display_name = "Companion Leveling Type"
+
+
+class CompanionSpellbookType(Choice):
+    """Update companions' spellbook.
+    Standard: Original game spellbooks.
+    Standard Extended: Add some extra spells. Tristam gains Exit and Quake and Reuben gets Blizzard.
+    Random Balanced: Randomize the spellbooks with an appropriate mix of spells.
+    Random Chaos: Randomize the spellbooks in total free-for-all."""
+    option_standard = 0
+    option_standard_extended = 1
+    option_random_balanced = 2
+    option_random_chaos = 3
+    default = 0
+    display_name = "Companion Spellbook Type"
+
+
+class StartingCompanion(Choice):
+    """Set a companion to start with.
+    Random Companion: Randomly select one companion.
+    Random Plus None: Randomly select a companion, with the possibility of none selected."""
+    display_name = "Starting Companion"
+    default = 0
+    option_none = 0
+    option_kaeli = 1
+    option_tristam = 2
+    option_phoebe = 3
+    option_reuben = 4
+    option_random_companion = 5
+    option_random_plus_none = 6
+
+
+class AvailableCompanions(Range):
+    """Select randomly which companions will join your party. Unavailable companions can still be reached to get their items and complete their quests if needed.
+    Note: If a Starting Companion is selected, it will always be available, regardless of this setting."""
+    display_name = "Available Companions"
+    default = 4
+    range_start = 0
+    range_end = 4
+
+
+class CompanionsLocations(Choice):
+    """Set the primary location of companions. Their secondary location is always the same.
+    Standard: Companions will be at the same locations as in the original game.
+    Shuffled: Companions' locations are shuffled amongst themselves.
+    Shuffled Extended: Add all the Temples, as well as Phoebe's House and the Rope Bridge as possible locations."""
+    display_name = "Companions' Locations"
+    default = 0
+    option_standard = 0
+    option_shuffled = 1
+    option_shuffled_extended = 2
+
+
+class KaelisMomFightsMinotaur(Toggle):
+    """Transfer Kaeli's requirements (Tree Wither, Elixir) and the two items she's giving to her mom.
+    Kaeli will be available to join the party right away without the Tree Wither."""
+    display_name = "Kaeli's Mom Fights Minotaur"
+    default = 0
+
+
 option_definitions = {
     "logic": Logic,
     "brown_boxes": BrownBoxes,
@@ -238,12 +328,21 @@ option_definitions = {
     "shattered_sky_coin_quantity": ShatteredSkyCoinQuantity,
     "starting_weapon": StartingWeapon,
     "progressive_gear": ProgressiveGear,
+    "leveling_curve": LevelingCurve,
+    "starting_companion": StartingCompanion,
+    "available_companions": AvailableCompanions,
+    "companions_locations": CompanionsLocations,
+    "kaelis_mom_fight_minotaur": KaelisMomFightsMinotaur,
+    "companion_leveling_type": CompanionLevelingType,
+    "companion_spellbook_type": CompanionSpellbookType,
     "enemies_density": EnemiesDensity,
     "enemies_scaling_lower": EnemiesScalingLower,
     "enemies_scaling_upper": EnemiesScalingUpper,
     "bosses_scaling_lower": BossesScalingLower,
     "bosses_scaling_upper": BossesScalingUpper,
     "enemizer_attacks": EnemizerAttacks,
+    "enemizer_groups": EnemizerGroups,
+    "shuffle_res_weak_types": ShuffleResWeakType,
     "shuffle_enemies_position": ShuffleEnemiesPositions,
     "progressive_formations": ProgressiveFormations,
     "doom_castle_mode": DoomCastle,
@@ -253,6 +352,5 @@ option_definitions = {
     "crest_shuffle": CrestShuffle,
     "shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
     "map_shuffle_seed": MapShuffleSeed,
-    "leveling_curve": LevelingCurve,
     "battlefields_battles_quantities": BattlefieldsBattlesQuantities,
 }
