@@ -9,6 +9,7 @@ from .cooking_logic import CookingLogicMixin
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogicMixin
 from .money_logic import MoneyLogicMixin
+from .monster_logic import MonsterLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogicMixin
@@ -30,6 +31,7 @@ from ..strings.machine_names import Machine
 from ..strings.material_names import Material
 from ..strings.metal_names import Mineral
 from ..strings.monster_drop_names import Loot
+from ..strings.monster_names import Monster
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.special_order_names import SpecialOrder
@@ -46,7 +48,7 @@ class SpecialOrderLogicMixin(BaseLogicMixin):
 class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, MoneyLogicMixin,
                                         ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin,
                                         MineLogicMixin, CookingLogicMixin, BuffLogicMixin,
-                                        AbilityLogicMixin, SpecialOrderLogicMixin]]):
+                                        AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
 
     def initialize_rules(self):
         self.update_rules({
@@ -60,7 +62,8 @@ class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, Regio
                                              self.logic.has(Mineral.emerald) & self.logic.has(Mineral.jade) & self.logic.has(Mineral.amethyst) &
                                              self.logic.has(ArtisanGood.cloth),
             SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek),
-            SpecialOrder.fragments_of_the_past: self.logic.region.can_reach(Region.dig_site) & self.logic.tool.has_tool(Tool.pickaxe),
+            SpecialOrder.fragments_of_the_past: self.logic.region.can_reach(Region.dig_site) & self.logic.tool.has_tool(Tool.pickaxe) &
+                                                self.logic.monster.can_kill(Monster.skeleton),
             SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
             SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.received(Event.can_ship_items),
             SpecialOrder.community_cleanup: self.logic.skill.can_crab_pot,
