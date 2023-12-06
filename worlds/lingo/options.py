@@ -32,7 +32,7 @@ class LocationChecks(Choice):
     option_insanity = 2
 
 
-class ShuffleColors(Toggle):
+class ShuffleColors(DefaultOnToggle):
     """If on, an item is added to the pool for every puzzle color (besides White).
     You will need to unlock the requisite colors in order to be able to solve puzzles of that color."""
     display_name = "Shuffle Colors"
@@ -52,7 +52,10 @@ class ShufflePaintings(Toggle):
 
 
 class VictoryCondition(Choice):
-    """Change the victory condition."""
+    """Change the victory condition.
+    On "the_end", the goal is to solve THE END at the top of the tower.
+    On "the_master", the goal is to solve THE MASTER at the top of the tower, after getting the number of achievements specified in the Mastery Achievements option.
+    On "level_2", the goal is to solve LEVEL 2 in the second room, after solving the number of panels specified in the Level 2 Requirement option."""
     display_name = "Victory Condition"
     option_the_end = 0
     option_the_master = 1
@@ -75,9 +78,10 @@ class Level2Requirement(Range):
     """The number of panel solves required to unlock LEVEL 2.
     In the base game, 223 are needed.
     Note that this count includes ANOTHER TRY.
+    When set to 1, the panel hunt is disabled, and you can access LEVEL 2 for free.
     """
     display_name = "Level 2 Requirement"
-    range_start = 2
+    range_start = 1
     range_end = 800
     default = 223
 
