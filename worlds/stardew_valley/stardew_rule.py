@@ -58,8 +58,9 @@ class StardewRule(ABC):
     def __call__(self, state: CollectionState) -> bool:
         raise NotImplementedError
 
+    @abstractmethod
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self.simplify(), self(state)
+        raise NotImplementedError
 
     def __or__(self, other) -> StardewRule:
         if other is true_ or other is false_ or type(other) is Or:
@@ -76,9 +77,6 @@ class StardewRule(ABC):
     @abstractmethod
     def get_difficulty(self):
         raise NotImplementedError
-
-    def simplify(self) -> StardewRule:
-        return self
 
     def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
         return StardewRuleExplanation(self, state, expected)
@@ -413,42 +411,6 @@ class AggregatingStardewRule(StardewRule, ABC):
     def __hash__(self):
         return hash((self.combinable_rules, self.simplification_state.original_simplifiable_rules))
 
-    def simplify(self) -> StardewRule:
-        logger.debug(f"Unoptimized 'simplified' called on {self}")
-        if self.simplification_state.is_simplified:
-            return self
-
-        if self.simplification_state.rules_to_simplify is None:
-            rules_to_simplify = frozenset(self.simplification_state.original_simplifiable_rules)
-            if self.complement in rules_to_simplify:
-                return self.short_circuit_simplification()[0]
-
-            self.simplification_state.rules_to_simplify = deque(rules_to_simplify)
-
-        # TODO this should lock state
-        while self.simplification_state.rules_to_simplify:
-            rule = self.simplification_state.rules_to_simplify.pop()
-            simplified = rule.simplify()
-
-            if simplified is self.identity or simplified in self.simplification_state.simplified_rules:
-                continue
-
-            if simplified is self.complement:
-                return self.short_circuit_simplification()[0]
-
-            self.simplification_state.simplified_rules.add(simplified)
-
-        if not self.simplification_state.simplified_rules and not self.combinable_rules:
-            return self.identity
-
-        if len(self.simplification_state.simplified_rules) == 1 and not self.combinable_rules:
-            return next(iter(self.simplification_state.simplified_rules))
-
-        if not self.simplification_state.simplified_rules and len(self.combinable_rules) == 1:
-            return next(iter(self.combinable_rules.values()))
-
-        return self
-
     def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
         return StardewRuleExplanation(self, state, expected, self.original_rules)
 
@@ -553,14 +515,6 @@ class Count(StardewRule):
     def __call__(self, state: CollectionState) -> bool:
         return self.evaluate_while_simplifying(state)[1]
 
-    def simplify(self):
-        if self._simplified:
-            return self
-
-        self.rules = [rule.simplify() for rule in self.rules]
-        self._simplified = True
-        return self
-
     def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
         return StardewRuleExplanation(self, state, expected, self.rules)
 
@@ -604,6 +558,9 @@ class TotalReceived(StardewRule):
                 return True
         return False
 
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        return self, self(state)
+
     def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
         return StardewRuleExplanation(self, state, expected, [Received(i, self.player, 1) for i in self.items])
 
@@ -635,6 +592,9 @@ class Received(CombinableStardewRule):
     def __call__(self, state: CollectionState) -> bool:
         return state.has(self.item, self.player, self.count)
 
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        return self, self(state)
+
     def __repr__(self):
         if self.count == 1:
             return f"Received {self.item}"
@@ -655,6 +615,9 @@ class Reach(StardewRule):
 
     def __call__(self, state: CollectionState) -> bool:
         return state.can_reach(self.spot, self.resolution_hint, self.player)
+
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        return self, self(state)
 
     def __repr__(self):
         return f"Reach {self.resolution_hint} {self.spot}"
@@ -691,15 +654,10 @@ class Has(StardewRule):
         self.other_rules = other_rules
 
     def __call__(self, state: CollectionState) -> bool:
-        # TODO eval & simplify
-        self.simplify()
-        return self.other_rules[self.item](state)
+        return self.evaluate_while_simplifying(state)[1]
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self.other_rules[self.item].evaluate_while_simplifying(state)
-
-    def simplify(self) -> StardewRule:
-        return self.other_rules[self.item].simplify()
 
     def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
         return StardewRuleExplanation(self, state, expected, [self.other_rules[self.item]])
@@ -749,6 +707,9 @@ class HasProgressionPercent(CombinableStardewRule):
             if total_count >= needed_count:
                 return True
         return False
+
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        return self, self(state)
 
     def __repr__(self):
         return f"HasProgressionPercent {self.percent}"
