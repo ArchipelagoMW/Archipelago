@@ -624,8 +624,8 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
         priority_filler_items.extend(trap_items)
 
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
-    all_filler_packs = get_all_filler_items(include_traps, exclude_ginger_island)
-    priority_filler_items = remove_excluded_items(priority_filler_items, exclude_ginger_island)
+    all_filler_packs = remove_excluded_items(get_all_filler_items(include_traps, exclude_ginger_island), options)
+    priority_filler_items = remove_excluded_items(priority_filler_items, options)
 
     number_priority_items = len(priority_filler_items)
     required_resource_pack = number_locations - len(items_already_added)
@@ -667,9 +667,8 @@ def filter_deprecated_items(items: List[ItemData]) -> List[ItemData]:
     return [item for item in items if Group.DEPRECATED not in item.groups]
 
 
-def filter_ginger_island_items(options: StardewValleyOptions, items: List[ItemData]) -> List[ItemData]:
-    include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    return [item for item in items if include_island or Group.GINGER_ISLAND not in item.groups]
+def filter_ginger_island_items(exclude_island: bool, items: List[ItemData]) -> List[ItemData]:
+    return [item for item in items if not exclude_island or Group.GINGER_ISLAND not in item.groups]
 
 
 def filter_mod_items(options: StardewValleyOptions, items: List[ItemData]) -> List[ItemData]:
@@ -678,7 +677,7 @@ def filter_mod_items(options: StardewValleyOptions, items: List[ItemData]) -> Li
 
 def remove_excluded_items(items, options):
     deprecated_filter = filter_deprecated_items(items)
-    ginger_island_filter = filter_ginger_island_items(options, deprecated_filter)
+    ginger_island_filter = filter_ginger_island_items(options.exclude_ginger_island == ExcludeGingerIsland.option_true, deprecated_filter)
     mod_filter = filter_mod_items(options, ginger_island_filter)
     return mod_filter
 
@@ -692,12 +691,12 @@ def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool):
     all_filler_packs.extend(items_by_group[Group.TRASH])
     if include_traps:
         all_filler_packs.extend(items_by_group[Group.TRAP])
-    all_filler_packs = remove_excluded_packs(all_filler_packs, exclude_ginger_island)
+    all_filler_packs = filter_ginger_island_items(exclude_ginger_island, all_filler_packs)
     return all_filler_packs
 
 
-def get_stardrop_classification(world_options) -> ItemClassification:
-    return ItemClassification.progression_skip_balancing if world_is_perfection(world_options) else ItemClassification.useful
+def get_stardrop_classification(options) -> ItemClassification:
+    return ItemClassification.progression_skip_balancing if world_is_perfection(options) or world_is_stardrops(options) else ItemClassification.useful
 
 
 def world_is_perfection(options) -> bool:

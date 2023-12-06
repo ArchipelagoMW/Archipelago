@@ -649,6 +649,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         reach_west = self.region.can_reach(Region.island_west)
         reach_hut = self.region.can_reach(Region.leo_hut)
         reach_southeast = self.region.can_reach(Region.island_south_east)
+        reach_field_office = self.region.can_reach(Region.field_office)
         reach_pirate_cove = self.region.can_reach(Region.pirate_cove)
         reach_outside_areas = And(reach_south, reach_north, reach_west, reach_hut)
         reach_volcano_regions = [self.region.can_reach(Region.volcano),
@@ -657,13 +658,13 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                                  self.region.can_reach(Region.volcano_floor_10)]
         reach_volcano = Or(*reach_volcano_regions)
         reach_all_volcano = And(*reach_volcano_regions)
-        reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano]
+        reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano, reach_field_office]
         reach_caves = And(self.region.can_reach(Region.qi_walnut_room), self.region.can_reach(Region.dig_site),
                           self.region.can_reach(Region.gourmand_frog_cave),
                           self.region.can_reach(Region.colored_crystals_cave),
                           self.region.can_reach(Region.shipwreck), self.received(APWeapon.slingshot))
         reach_entire_island = And(reach_outside_areas, reach_all_volcano,
-                                  reach_caves, reach_southeast, reach_pirate_cove)
+                                  reach_caves, reach_southeast, reach_field_office, reach_pirate_cove)
         if number <= 5:
             return Or(reach_south, reach_north, reach_west, reach_volcano)
         if number <= 10:
@@ -676,7 +677,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             return reach_entire_island
         gems = (Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
         return reach_entire_island & self.has(Fruit.banana) & self.has(gems) & self.ability.can_mine_perfectly() & \
-            self.ability.can_fish_perfectly() & self.has(Furniture.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic)
+            self.ability.can_fish_perfectly() & self.has(Furniture.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic) & \
+            self.can_complete_field_office()
 
     def has_all_stardrops(self) -> StardewRule:
         other_rules = []
