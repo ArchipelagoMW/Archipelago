@@ -158,7 +158,6 @@ location_table: Dict[str, KHCOMLocationData] = {
     "F13 Castle Oblivion Event (Characters I Marluxia)":                 KHCOMLocationData("Progression",  267_1301),
     "F13 Castle Oblivion Post Floor (Story Castle Oblivion)":            KHCOMLocationData("Boss",         267_1302),
     "F13 Castle Oblivion Post Marluxia (Attack Cards Diamond Dust)":     KHCOMLocationData("Boss",         267_1303),
-    "F13 Castle Oblivion Post Marluxia (Attack Cards One-Winged Angel)": KHCOMLocationData("Boss",         267_1304),
     
     "Heartless Air Pirate":                                              KHCOMLocationData("Progression",  267_1401),
     "Heartless Air Soldier":                                             KHCOMLocationData("Progression",  267_1402),
