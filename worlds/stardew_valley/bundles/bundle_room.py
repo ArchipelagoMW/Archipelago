@@ -2,6 +2,7 @@ from random import Random
 from typing import List
 
 from .bundle import Bundle, BundleTemplate
+from ..options import BundlePrice
 
 
 class BundleRoom:
@@ -23,7 +24,7 @@ class BundleRoomTemplate:
         self.bundles = bundles
         self.number_bundles = number_bundles
 
-    def create_bundle_room(self, price_difference: int, random: Random, allow_island_items: bool):
+    def create_bundle_room(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool):
         filtered_bundles = [bundle for bundle in self.bundles if allow_island_items or not bundle.requires_island]
         chosen_bundles = random.sample(filtered_bundles, self.number_bundles)
-        return BundleRoom(self.name, [bundle.create_bundle(price_difference, random, allow_island_items) for bundle in chosen_bundles])
+        return BundleRoom(self.name, [bundle.create_bundle(bundle_price_option, random, allow_island_items) for bundle in chosen_bundles])

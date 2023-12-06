@@ -512,8 +512,6 @@ def create_special_order_qi_rewards(item_factory: StardewItemFactory, options: S
     if options.bundle_randomization >= BundleRandomization.option_remixed:
         qi_gem_rewards.append("15 Qi Gems")
         qi_gem_rewards.append("15 Qi Gems")
-        if options.bundle_price >= BundlePrice.option_expensive:
-            qi_gem_rewards.append("15 Qi Gems")
 
     if options.special_order_locations == SpecialOrderLocations.option_board_qi:
         qi_gem_rewards.extend(["100 Qi Gems", "10 Qi Gems", "40 Qi Gems", "25 Qi Gems", "25 Qi Gems",

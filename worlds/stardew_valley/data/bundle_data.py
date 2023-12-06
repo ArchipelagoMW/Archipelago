@@ -696,7 +696,7 @@ vault_carnival_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.carnival
 vault_walnut_hunter_items = BundleItem(Currency.golden_walnut, 25)
 vault_walnut_hunter_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.walnut_hunter, vault_walnut_hunter_items)
 
-vault_qi_helper_items = BundleItem(Currency.qi_gem, 25)
+vault_qi_helper_items = IslandBundleItem(Currency.qi_gem, 25)
 vault_qi_helper_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.qi_helper, vault_qi_helper_items)
 
 vault_bundles_vanilla = [vault_2500_bundle, vault_5000_bundle, vault_10000_bundle, vault_25000_bundle]

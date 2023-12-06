@@ -2,6 +2,7 @@ from random import Random
 from typing import List
 
 from .bundle_item import BundleItem
+from ..options import BundlePrice
 from ..strings.currency_names import Currency
 
 
@@ -39,10 +40,13 @@ class BundleTemplate:
     def extend_from(template, items: List[BundleItem]):
         return BundleTemplate(template.room, template.name, items, template.number_possible_items, template.number_required_items)
 
-    def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
-        number_required = self.number_required_items + price_difference
-        if price_difference > 0 and self.number_possible_items > 10:
-            number_required += price_difference
+    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool) -> Bundle:
+        if bundle_price_option == BundlePrice.option_minimum:
+            number_required = 1
+        elif bundle_price_option == BundlePrice.option_maximum:
+            number_required = 8
+        else:
+            number_required = self.number_required_items + bundle_price_option.value
         number_required = max(1, number_required)
         filtered_items = [item for item in self.items if allow_island_items or not item.requires_island]
         number_items = len(filtered_items)
@@ -68,12 +72,18 @@ class CurrencyBundleTemplate(BundleTemplate):
         super().__init__(room, name, [item], 1, 1)
         self.item = item
 
-    def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
-        currency_amount = self.get_currency_amount(price_difference)
+    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool) -> Bundle:
+        currency_amount = self.get_currency_amount(bundle_price_option)
         return Bundle(self.room, self.name, [BundleItem(self.item.item_name, currency_amount)], 1)
 
-    def get_currency_amount(self, price_difference):
-        price_multiplier = round(1 + (price_difference * 0.4), 2)
+    def get_currency_amount(self, bundle_price_option: BundlePrice):
+        if bundle_price_option == BundlePrice.option_minimum:
+            price_multiplier = 0.1
+        elif bundle_price_option == BundlePrice.option_maximum:
+            price_multiplier = 4
+        else:
+            price_multiplier = round(1 + (bundle_price_option.value * 0.4), 2)
+
         currency_amount = int(self.item.amount * price_multiplier)
         return currency_amount
 
@@ -87,8 +97,8 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
     def __init__(self, room: str, item: BundleItem):
         super().__init__(room, "", item)
 
-    def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
-        currency_amount = self.get_currency_amount(price_difference)
+    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool) -> Bundle:
+        currency_amount = self.get_currency_amount(bundle_price_option)
         currency_name = "g"
         if currency_amount >= 1000:
             unit_amount = currency_amount % 1000
@@ -99,8 +109,13 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
         name = f"{currency_display}{currency_name} Bundle"
         return Bundle(self.room, name, [BundleItem(self.item.item_name, currency_amount)], 1)
 
-    def get_currency_amount(self, price_difference):
-        price_multiplier = round(1 + (price_difference * 0.4), 2)
+    def get_currency_amount(self, bundle_price_option: BundlePrice):
+        if bundle_price_option == BundlePrice.option_minimum:
+            price_multiplier = 0.1
+        elif bundle_price_option == BundlePrice.option_maximum:
+            price_multiplier = 4
+        else:
+            price_multiplier = round(1 + (bundle_price_option.value * 0.4), 2)
         currency_amount = int(self.item.amount * price_multiplier)
         return currency_amount
 
@@ -119,8 +134,13 @@ class DeepBundleTemplate(BundleTemplate):
         super().__init__(room, name, [], number_possible_items, number_required_items)
         self.categories = categories
 
-    def create_bundle(self, price_difference: int, random: Random, allow_island_items: bool) -> Bundle:
-        number_required = self.number_required_items + price_difference
+    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool) -> Bundle:
+        if bundle_price_option == BundlePrice.option_minimum:
+            number_required = 1
+        elif bundle_price_option == BundlePrice.option_maximum:
+            number_required = 8
+        else:
+            number_required = self.number_required_items + bundle_price_option.value
         number_categories = len(self.categories)
         number_chosen_categories = self.number_possible_items
         if number_chosen_categories < number_required:
