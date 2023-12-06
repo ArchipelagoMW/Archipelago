@@ -234,6 +234,9 @@ class _SimplificationState:
 
 
 class AggregatingStardewRule(StardewRule, ABC):
+    """
+    Logic for both "And" and "Or" rules.
+    """
     identity: LiteralStardewRule
     complement: LiteralStardewRule
     symbol: str
@@ -408,13 +411,10 @@ class AggregatingStardewRule(StardewRule, ABC):
                 self.simplification_state.original_simplifiable_rules == self.simplification_state.original_simplifiable_rules)
 
     def __hash__(self):
-        # TODO since other_rules will be changed after simplification, a simplified rule will have a different hashcode than its original.
-        # Ideally, two rules with the same simplification would be equal...
         return hash((self.combinable_rules, self.simplification_state.original_simplifiable_rules))
 
     def simplify(self) -> StardewRule:
         logger.debug(f"Unoptimized 'simplified' called on {self}")
-        # TODO is this needed now that we're using an iterator ?
         if self.simplification_state.is_simplified:
             return self
 
