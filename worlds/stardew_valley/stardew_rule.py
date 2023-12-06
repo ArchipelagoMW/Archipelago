@@ -662,11 +662,11 @@ class Reach(StardewRule):
         return 1
 
     def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
-        # FIXME this should be in core
         if self.resolution_hint == 'Location':
             spot = state.multiworld.get_location(self.spot, self.player)
-            # TODO explain virtual reach for room
             access_rule = spot.access_rule
+            if isinstance(access_rule, StardewRule):
+                access_rule = And(access_rule, Reach(spot.parent_region.name, "Region", self.player))
         elif self.resolution_hint == 'Entrance':
             spot = state.multiworld.get_entrance(self.spot, self.player)
             access_rule = spot.access_rule
