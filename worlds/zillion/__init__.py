@@ -33,6 +33,7 @@ class ZillionSettings(settings.Group):
         """File name of the Zillion US rom"""
         description = "Zillion US ROM File"
         copy_to = "Zillion (UE) [!].sms"
+        assert ZillionDeltaPatch.hash
         md5s = [ZillionDeltaPatch.hash]
 
     class RomStart(str):
@@ -70,9 +71,11 @@ class ZillionWorld(World):
     web = ZillionWebWorld()
 
     options_dataclass = ZillionOptions
-    options: ZillionOptions
+    options: ZillionOptions  # type: ignore
 
-    settings: typing.ClassVar[ZillionSettings]
+    settings: typing.ClassVar[ZillionSettings]  # type: ignore
+    # these type: ignore are because of this issue: https://github.com/python/typing/discussions/1486
+
     topology_present = True  # indicate if world type has any meaningful layout/pathing
 
     # map names to their IDs

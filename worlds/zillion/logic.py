@@ -41,7 +41,7 @@ def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
     return tuple((item_name, cs.count(item_name, p)) for item_name in item_name_to_id)
 
 
-LogicCacheType = Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]]
+LogicCacheType = Dict[int, Tuple[Dict[int, _Counter[str]], FrozenSet[Location]]]
 """ { hash: (cs.prog_items, accessible_locations) } """
 
 
