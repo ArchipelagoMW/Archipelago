@@ -190,7 +190,7 @@ class CMWorld(World):
                 (12 - min(self.options.max_pocket.value, 3 * self.options.pocket_limit_by_pocket.value)))
 
         # add items player really wants
-        yaml_locked_items = self.options.locked_items.value
+        yaml_locked_items: dict[str, int] = self.options.locked_items.value
         for item in yaml_locked_items:
             if item not in self.items_used[self.player]:
                 self.items_used[self.player][item] = 0
