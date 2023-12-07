@@ -77,7 +77,7 @@ class WitnessPlayerLogic:
                 these_items = all_options
 
             # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
-            elif panel_hex == 0x18269:
+            elif panel_hex == "0x1C349":
                 these_items = all_options
 
             # For any other door entity, we just return a set with the item that opens it & disregard power dependencies
