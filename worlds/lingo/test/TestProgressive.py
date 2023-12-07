@@ -81,7 +81,8 @@ class TestSimpleHallwayRoom(LingoTestBase):
 
 class TestProgressiveArtGallery(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "complex",
+        "shuffle_colors": "false",
     }
 
     def test_item(self):
