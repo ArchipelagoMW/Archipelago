@@ -278,7 +278,7 @@ class ZillionContext(CommonContext):
                 logger.warning(f"invalid Retrieved packet to ZillionClient: {args}")
                 return
             keys = cast(Dict[str, Optional[str]], args["keys"])
-            doors_b64 = keys[f"zillion-{self.auth}-doors"]
+            doors_b64 = keys.get(f"zillion-{self.auth}-doors", None)
             if doors_b64:
                 logger.info("received door data from server")
                 doors = base64.b64decode(doors_b64)
