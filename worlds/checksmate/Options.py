@@ -105,12 +105,12 @@ class EarlyMaterial(Choice):
 
 class MaterialMinLimit(Range):
     """
-    The minimum material value of your army, once all items are collected. A FIDE army has value 39 (8+6+6+10+9).
+    The minimum material value of your army, once all items are collected. A FIDE army has value 40 (8+6.5+6.5+10+9).
 
     If you want consistent access to material, consider using Starting Inventory or Starting Hints in your YAML.
     """
     display_name = "Minimum Material"
-    range_start = 39
+    range_start = 40
     range_end = 90
     default = 41
 

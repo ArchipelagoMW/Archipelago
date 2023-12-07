@@ -66,7 +66,7 @@ location_table = {
     "Capture 5 Of Each": CMLocationData(4_902_036, 2800),
     "Capture 6 Of Each": CMLocationData(4_902_037, 3350),
     "Capture 7 Of Each": CMLocationData(4_902_038, 3850),
-    "Capture Everything": CMLocationData(4_902_039, 3950),
+    "Capture Everything": CMLocationData(4_902_039, 4050),
     "Threaten Pawn": CMLocationData(4_902_040, 0),
     "Threaten Minor": CMLocationData(4_902_041, 200),
     "Threaten Major": CMLocationData(4_902_042, 200),
