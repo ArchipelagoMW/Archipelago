@@ -576,7 +576,7 @@ class GameSettings {
             option = parseInt(option, 10);
 
             let optionAcceptable = false;
-            if ((option > setting.min) && (option < setting.max)) {
+            if ((option >= setting.min) && (option <= setting.max)) {
               optionAcceptable = true;
             }
             if (setting.hasOwnProperty('value_names') && Object.values(setting.value_names).includes(option)){
