@@ -11,6 +11,7 @@ from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
 
 import Utils
 from . import Options
+from traceback_with_variables import activate_by_import
 
 factorio_tech_id = factorio_base_id = 2 ** 17
 # Factorio technologies are imported from a .json document in /data
