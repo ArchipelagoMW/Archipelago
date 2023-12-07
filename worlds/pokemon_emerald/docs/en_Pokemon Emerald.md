@@ -28,7 +28,7 @@ randomizer. Here are some of the more important ones:
 - You can have both bikes simultaneously
 - You can run or bike (almost) anywhere
 - The Wally catching tutorial is skipped
-- All text is instant, and with an option it can be automatically progressed by holding A
+- All text is instant and, with an option, can be automatically progressed by holding A
 - When a Repel runs out, you will be prompted to use another
 - Many more minor improvements…
 
