@@ -32,7 +32,7 @@ item_table: Dict[str, KHCOMItemData] = {
     "Gold Card Pack":                    KHCOMItemData("Packs",          code = 266_1003, classification = ItemClassification.filler,                        weight = 100),
     
     "Card Set Kingdom Key 1-3":          KHCOMItemData("Sets",           code = 266_1011, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
-    "Card Set Kingdom Key 4-6":          KHCOMItemData("Sets",           code = 266_1012, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
+   #"Card Set Kingdom Key 4-6":          KHCOMItemData("Sets",           code = 266_1012, classification = ItemClassification.filler,      max_quantity = 1, weight = 10), Starting Deck
     "Card Set Kingdom Key 7-9":          KHCOMItemData("Sets",           code = 266_1013, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Kingdom Key 0":            KHCOMItemData("Sets",           code = 266_1014, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Three Wishes 1-3":         KHCOMItemData("Sets",           code = 266_1021, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),

@@ -28,7 +28,7 @@ def get_items_by_category(category: str, disclude: list) -> Dict[str, KHRECOMIte
 item_table: Dict[str, KHRECOMItemData] = {
     #Battle Cards
     "Card Set Kingdom Key 1-3":          KHRECOMItemData("Sets",           code = 268_1011, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
-    "Card Set Kingdom Key 4-6":          KHRECOMItemData("Sets",           code = 268_1012, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
+   #"Card Set Kingdom Key 4-6":          KHRECOMItemData("Sets",           code = 268_1012, classification = ItemClassification.filler,      max_quantity = 1, weight = 10), Starting Deck
     "Card Set Kingdom Key 7-9":          KHRECOMItemData("Sets",           code = 268_1013, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Kingdom Key 0":            KHRECOMItemData("Sets",           code = 268_1014, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Three Wishes 1-3":         KHRECOMItemData("Sets",           code = 268_1021, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),

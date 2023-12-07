@@ -103,6 +103,8 @@ class KHCOMWorld(World):
             disclude.append("0")
         if not self.get_setting("cure"):
             disclude.append("Cure")
+        if self.get_setting("early_cure"):
+            disclude.append("Cure 4-6")
         if self.get_setting("enemy_cards"):
             fillers.update(get_items_by_category("Enemy Cards", disclude))
         if self.get_setting("packs_or_sets") == "packs":

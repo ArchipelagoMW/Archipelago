@@ -691,14 +691,14 @@ function set_deck_pointer(deck_number, offset, value)
 end
 
 function set_starting_deck()
-    memory.write_u16_le(deck_cp_cost_address, 43)
+    memory.write_u16_le(deck_cp_cost_address, 15+14+13)
     memory.write_u16_le(deck_card_count_address, 0x03)
     
-    memory.write_u16_le(battle_cards_address, 0x1008) --Kingdom Key 8
+    memory.write_u16_le(battle_cards_address, 0x1006) --Kingdom Key 6
     set_deck_pointer(1, 0, 0x0000)
-    memory.write_u16_le(battle_cards_address + 2, 0x1007) --Kingdom Key 7
+    memory.write_u16_le(battle_cards_address + 2, 0x1005) --Kingdom Key 5
     set_deck_pointer(1, 1, 0x0001)
-    memory.write_u16_le(battle_cards_address + 4, 0x1006) --Kingdom Key 6
+    memory.write_u16_le(battle_cards_address + 4, 0x1004) --Kingdom Key 4
     set_deck_pointer(1, 2, 0x0002)
     local i = 4
     while i <= 15 do
