@@ -414,7 +414,7 @@ class OpenRCT2World(World):
                             #3 coin flips to determine what, if any, stat prereqs will be used
                             if random.random() < .5: excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             if random.random() < .5: intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
-                            if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
                             unlock["RidePrereq"] = [random.randint(1,7),category,excitement,intensity,nausea,0]
                         elif category == "transport_rides":
                             unlock["RidePrereq"] = [random.randint(1,3),category,0,0,0,0]
@@ -444,6 +444,9 @@ class OpenRCT2World(World):
         print(elligible_rides)
         print("Here's what was chosen:")
         print(self.unique_rides)
+        for ride in self.unique_rides:
+            add_rule(self.multiworld.get_region("Victory", self.player).entrances[0],
+                 lambda state, prereq=ride: state.has(prereq, self.player))
 
     def generate_basic(self) -> None:
         # place "Victory" at the end of the unlock tree and set collection as win condition
