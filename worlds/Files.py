@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import abc
 import json
 import struct
 import zipfile
@@ -17,7 +18,7 @@ del threading
 del os
 
 
-class AutoPatchRegister(type):
+class AutoPatchRegister(abc.ABCMeta):
     patch_types: ClassVar[Dict[str, AutoPatchRegister]] = {}
     file_endings: ClassVar[Dict[str, AutoPatchRegister]] = {}
 
@@ -142,15 +143,26 @@ class APContainer:
         }
 
 
-class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
+class APPatch(APContainer, abc.ABC, metaclass=AutoPatchRegister):
     """
-    An APContainer that defines a procedure to produce the desired file.
+    An abstract `APContainer` that defines the requirements for an object
+    to be used by the `Patch.create_rom_file` function.
+    """
+    result_file_ending: str = ".sfc"
+
+    @abc.abstractmethod
+    def patch(self, target: str) -> None:
+        """ create the output file with the file name `target` """
+
+
+class APProcedurePatch(APPatch):
+    """
+    An APPatch that defines a procedure to produce the desired file.
     """
     procedure: List[Tuple[str, List[Any]]]
     hash: Optional[str]  # base checksum of source file
     source_data: bytes
     patch_file_ending: str = ""
-    result_file_ending: str = ".sfc"
     files: Dict[str, bytes] = {}
 
     @classmethod
