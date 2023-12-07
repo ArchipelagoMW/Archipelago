@@ -131,7 +131,6 @@ def create():
                     logging.debug(f"{option} not exported to Web Options.")
 
         player_options["gameOptionGroups"] = game_option_groups
-        print(player_options)
 
         player_options["presetOptions"] = {}
         for preset_name, preset in world.web.options_presets.items():
