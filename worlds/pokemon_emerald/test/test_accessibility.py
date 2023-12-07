@@ -44,13 +44,17 @@ class TestScorchedSlabPond(PokemonEmeraldTestBase):
 
 class TestSurf(PokemonEmeraldTestBase):
     options = {
-        "npc_gifts": Toggle.option_true
+        "npc_gifts": Toggle.option_true,
+        "hidden_items": Toggle.option_true,
+        "require_itemfinder": Toggle.option_false
     }
 
     def test_inaccessible_with_no_surf(self) -> None:
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_PETALBURG_CITY_ETHER")))
         self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_SOOTHE_BELL")))
         self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_LILYCOVE_CITY_MAX_REPEL")))
+        self.assertFalse(self.can_reach_location(location_name_to_label("HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2")))
+        self.assertFalse(self.can_reach_location(location_name_to_label("ITEM_ROUTE_120_FULL_HEAL")))
         self.assertFalse(self.can_reach_entrance("REGION_ROUTE118/WATER -> REGION_ROUTE118/EAST"))
         self.assertFalse(self.can_reach_entrance("REGION_ROUTE119/UPPER -> REGION_FORTREE_CITY/MAIN"))
         self.assertFalse(self.can_reach_entrance("MAP_FORTREE_CITY:3/MAP_FORTREE_CITY_MART:0"))
@@ -60,6 +64,8 @@ class TestSurf(PokemonEmeraldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_PETALBURG_CITY_ETHER")))
         self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_SOOTHE_BELL")))
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_LILYCOVE_CITY_MAX_REPEL")))
+        self.assertTrue(self.can_reach_location(location_name_to_label("HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2")))
+        self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_120_FULL_HEAL")))
         self.assertTrue(self.can_reach_entrance("REGION_ROUTE118/WATER -> REGION_ROUTE118/EAST"))
         self.assertTrue(self.can_reach_entrance("REGION_ROUTE119/UPPER -> REGION_FORTREE_CITY/MAIN"))
         self.assertTrue(self.can_reach_entrance("MAP_FORTREE_CITY:3/MAP_FORTREE_CITY_MART:0"))

@@ -309,13 +309,13 @@
     location: "WindiaBattlefield01"
     location_slot: "WindiaBattlefield01"
     type: "BattlefieldXp"
-    access: []
+    access: ["SandCoin", "RiverCoin"]
   - name: "South of Windia Battlefield"
     object_id: 0x14
     location: "WindiaBattlefield02"
     location_slot: "WindiaBattlefield02"
     type: "BattlefieldXp"
-    access: []
+    access: ["SandCoin", "RiverCoin"]
   links:
   - target_room: 9   # Focus Tower Windia
     location: "FocusTowerWindia"
@@ -739,7 +739,7 @@
     object_id: 0x2E
     type: "Box"
     access: []
-  - name: "Kaeli 1"
+  - name: "Kaeli Companion"
     object_id: 0
     type: "Trigger"
     on_trigger: ["Kaeli1"]
@@ -838,7 +838,7 @@
 - name: Sand Temple
   id: 24
   game_objects:
-  - name: "Tristam Sand Temple"
+  - name: "Tristam Companion"
     object_id: 0
     type: "Trigger"
     on_trigger: ["Tristam"]
@@ -882,6 +882,11 @@
   - name: "Bone Dungeon B1 - Tristam"
     object_id: 2
     type: "NPC"
+    access: ["Tristam"]
+  - name: "Tristam Bone Dungeon Item Given"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["TristamBoneItemGiven"]
     access: ["Tristam"]
   links:
   - target_room: 25
@@ -1080,7 +1085,7 @@
     object_id: 0x40
     type: "Box"
     access: []
-  - name: "Phoebe"
+  - name: "Phoebe Companion"
     object_id: 0
     type: "Trigger"
     on_trigger: ["Phoebe1"]
@@ -1846,11 +1851,11 @@
     access: []
   - target_room: 77
     entrance: 164
-    teleporter: [16, 2]
+    teleporter: [98, 8] # original value [16, 2]
     access: []
   - target_room: 82
     entrance: 165
-    teleporter: [17, 2]
+    teleporter: [96, 8] # original value [17, 2]
     access: []
   - target_room: 208
     access: ["Claw"]
@@ -1875,7 +1880,7 @@
     object_id: 14
     type: "NPC"
     access: ["ReubenDadSaved"]
-  - name: "Reuben"
+  - name: "Reuben Companion"
     object_id: 0
     type: "Trigger"
     on_trigger: ["Reuben1"]
@@ -1951,12 +1956,7 @@
   - name: "Fireburg - Tristam"
     object_id: 10
     type: "NPC"
-    access: []
-  - name: "Tristam Fireburg"
-    object_id: 0
-    type: "Trigger"
-    on_trigger: ["Tristam"]
-    access: []
+    access: ["Tristam", "TristamBoneItemGiven"]
   links:
   - target_room: 76
     entrance: 177
@@ -3183,7 +3183,7 @@
     access: []
   - target_room: 163
     entrance: 321
-    teleporter: [31, 2]
+    teleporter: [97, 8]
     access: []
   - target_room: 165
     entrance: 322
@@ -3292,7 +3292,7 @@
     access: []
   - target_room: 164
     entrance: 337
-    teleporter: [215, 0]
+    teleporter: [102, 8]
     access: []
 - name: Windia Inn Beds
   id: 164
