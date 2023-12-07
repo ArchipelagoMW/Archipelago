@@ -158,12 +158,15 @@ class Recipe(FactorioElement):
         ingredients = Counter()
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
-                for recipe in all_product_sources[ingredient]:
+                recipes = list(all_product_sources[ingredient])
+                recipes.sort(key=lambda recipe: len(recipe.recursive_unlocking_technologies))
+                for recipe in recipes:
                     if recipe.ingredients:
                         ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
                                             recipe.base_cost.items()})
                     else:
                         ingredients[ingredient] += recipe.energy * cost / recipe.products[ingredient]
+                    continue  # Let's assume the first recipe is the least likely to be recursive
             else:
                 ingredients[ingredient] += cost
         return ingredients
