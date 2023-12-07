@@ -50,9 +50,8 @@ class OpenRCT2World(World):
         self.item_table = {}
         self.item_frequency = {}
         self.location_prices = []#This list is passed to OpenRCT2 to create the unlock shop
-        self.rules = []#self.multiworld.difficult_guest_generation[self.player].value, self.multiworld.difficult_park_rating[self.player].value,\
-        #     self.multiworld.forbid_high_construction[self.player].value,self.multiworld.forbid_landscape_changes[self.player].value,\
-        #     self.multiworld.forbid_marketing_campaigns[self.player].value, self.multiworld.forbid_tree_removal[self.player].value]
+        self.rules = []
+        self.unique_rides = []
 
     #Okay future Colby, listen up. Here's the plan. We're going to take the item_table and shuffle it in the next section. We'll generate the 
     #unlock shop with the item locations and apply our logic to it. Prereqs can only be items one level lower on the tree. We then will set 
@@ -383,7 +382,7 @@ class OpenRCT2World(World):
                     unlock["Lives"] = random.randint(50,1000)
 
             #Handles the selection of a prerequisite and associated stats
-            if number != 0 and unlock["Lives"] == 0: #We'll never have a prereq on the first item or on blood prices
+            if number > 2 and unlock["Lives"] == 0: #We'll never have a prereq on the first 3 items or on blood prices
                 if random.random() < length_modifier: #Determines if we have a prereq
                     if random.random() < difficulty_modifier: #Determines if the prereq is a specific ride
                         chosen_prereq = random.choice(possible_prereqs)
@@ -440,11 +439,11 @@ class OpenRCT2World(World):
 
         #Okay, here's where we're going to take the last elligible rides in the logic table and make them required for completion, if that's required.
         elligible_rides = [index for index, item in enumerate(logic_table) if item in item_info["rides"] and item not in item_info["non_starters"]]
-        unique_rides = [logic_table[i] for i in elligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
+        self.unique_rides = [logic_table[i] for i in elligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
         print("Here's the elligible rides:")
         print(elligible_rides)
         print("Here's what was chosen:")
-        print(unique_rides)
+        print(self.unique_rides)
 
     def generate_basic(self) -> None:
         # place "Victory" at the end of the unlock tree and set collection as win condition
@@ -462,7 +461,8 @@ class OpenRCT2World(World):
         park_rating = self.multiworld.park_rating_objective[self.player].value
         pay_off_loan = self.multiworld.pay_off_loan[self.player].value
         monopoly = self.multiworld.monopoly_mode[self.player].value
-        objectives = {"Guests": [guests, False], "ParkValue":[park_value, False], "RollerCoasters": [roller_coasters,excitement,intensity,nausea,0,False], "RideIncome": [0,False], "ShopIncome": [0,False], "ParkRating": [park_rating, False], "LoanPaidOff": [pay_off_loan, False], "Monopoly": [monopoly, False]}
+        unique_rides = self.unique_rides
+        objectives = {"Guests": [guests, False], "ParkValue":[park_value, False], "RollerCoasters": [roller_coasters,excitement,intensity,nausea,0,False], "RideIncome": [0,False], "ShopIncome": [0,False], "ParkRating": [park_rating, False], "LoanPaidOff": [pay_off_loan, False], "Monopoly": [monopoly, False], "UniqueRides": [unique_rides, False]}
         print(objectives)
         print(self.item_id_to_name)
 
