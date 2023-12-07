@@ -40,11 +40,11 @@ location_table = {
     "Capture Piece H": CMLocationData(4_902_009, 1240),  # rook
     # some first locations
     # for strategic analysis see: https://en.wikipedia.org/wiki/Bongcloud_Attack
-    "Bongcloud Once": CMLocationData(4_902_015, 0),
-    "Bongcloud Center": CMLocationData(4_902_016, 50),
-    "Bongcloud A File": CMLocationData(4_902_017, 70),
-    "Bongcloud Capture": CMLocationData(4_902_018, 150),
-    "Bongcloud Promotion": CMLocationData(4_902_019, 1950),  # requires reaching a rather late-game state
+    "King to E2/E7 Early": CMLocationData(4_902_015, 0),
+    "King to Center": CMLocationData(4_902_016, 50),
+    "King to A File": CMLocationData(4_902_017, 0),
+    "King Captures Anything": CMLocationData(4_902_018, 150),
+    "King to Back Rank": CMLocationData(4_902_019, 1950),  # requires reaching a rather late-game state
     # capture series of pieces and pawns within 1 game
     "Capture 2 Pawns": CMLocationData(4_902_020, 550),
     "Capture 3 Pawns": CMLocationData(4_902_021, 950),

@@ -20,7 +20,7 @@ class TestSimpleMaterial(MaterialStateTestBase):
     If this fails, it's not necessarily the fault of collect(), it might be that the generator isn't adding enough items
     """
     def test_no_options(self):
-        self.assertLessEqual(3950, self.multiworld.state.prog_items[self.player]["Material"])
+        self.assertLessEqual(4150, self.multiworld.state.prog_items[self.player]["Material"])
 
 
 class TestCyclicMaterial(MaterialStateTestBase):
@@ -31,6 +31,21 @@ class TestCyclicMaterial(MaterialStateTestBase):
         self.assertLessEqual(3950, past_material)
 
         for item in list(self.multiworld.state.prog_items[self.player].keys()):
+            self.remove_by_name(item)
+        # self.assertEqual(0, self.multiworld.state.prog_items[self.player])
+        self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
+        self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Material"])
+        self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
+
+        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
+
+    """Same as before, but backward, to test "children" logic"""
+    def test_no_options(self):
+        past_material = self.multiworld.state.prog_items[self.player]["Material"]
+        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
+        self.assertLessEqual(3950, past_material)
+
+        for item in list(list(self.multiworld.state.prog_items[self.player].keys()).reverse()):
             self.remove_by_name(item)
         # self.assertEqual(0, self.multiworld.state.prog_items[self.player])
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
