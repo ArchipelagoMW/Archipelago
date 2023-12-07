@@ -1106,20 +1106,29 @@
     "parent_map": "MAP_ROUTE120",
     "locations": [
       "ITEM_ROUTE_120_NUGGET",
-      "ITEM_ROUTE_120_FULL_HEAL",
       "ITEM_ROUTE_120_REVIVE",
       "ITEM_ROUTE_120_HYPER_POTION",
-      "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2",
       "HIDDEN_ITEM_ROUTE_120_ZINC"
     ],
     "events": [],
     "exits": [
       "REGION_ROUTE120/NORTH",
+      "REGION_ROUTE120/SOUTH_PONDS",
       "REGION_ROUTE121/WEST"
     ],
     "warps": [
       "MAP_ROUTE120:0/MAP_ANCIENT_TOMB:0"
     ]
+  },
+  "REGION_ROUTE120/SOUTH_PONDS": {
+    "parent_map": "MAP_ROUTE120",
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2",
+      "ITEM_ROUTE_120_FULL_HEAL"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
   },
   "REGION_ROUTE121/WEST": {
     "parent_map": "MAP_ROUTE121",
