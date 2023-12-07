@@ -71,7 +71,7 @@ class WitnessRegions:
         source_region.exits.append(connection)
         connection.connect(target_region)
 
-        self.created_entrances[(source, target)].append(connection)
+        self.created_entrances[source, target].append(connection)
 
         # Register any necessary indirect connections
         mentioned_regions = {
