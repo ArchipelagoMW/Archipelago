@@ -42,6 +42,7 @@ character_encoding_map.update({
     "\"": character_encoding_map["”"],
     "_": character_encoding_map[" "]
 })
+character_encoding_map.setdefault(character_encoding_map["?"])
 
 valid_name_characters = {
     " ", "0", "1", "2", "3", "4", "5", "6", "7", "8",
@@ -78,10 +79,7 @@ def encode_string(string: str, length: Optional[int] = None) -> bytearray:
             continue
 
         char = string[i]
-        if char in character_encoding_map:
-            arr.append(character_encoding_map[char])
-        else:
-            arr.append(character_encoding_map["?"])
+        arr.append(character_encoding_map[char])
 
     return bytearray(arr)
 
@@ -95,7 +93,7 @@ def decode_string(string_data: Iterable[int]):
         if code in character_decoding_map:
             string += character_decoding_map[code]
         else:
-            raise KeyError(f"The following value does not correspond to a character for Pokemon Emerald: {code}")
+            raise KeyError(f"The following value does not correspond to a character in Pokemon Emerald: {code}")
 
     return string
 
