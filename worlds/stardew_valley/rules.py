@@ -903,8 +903,6 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
                              logic.quest.can_complete_quest(Quest.magic_ink))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.secret_woods_to_west, player),
                              logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_to_fable_reef, player),
-                             logic.received("Fable Reef Portal"))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_shed_to_interior, player),
                              logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.aurora_warp_to_aurora, player),
@@ -925,8 +923,6 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
                              logic.relationship.has_hearts(ModNPC.apples, 10))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_interior_to_upstairs, player),
                              logic.quest.can_complete_quest(ModQuest.GrandpasShed))
-    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
-                             logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron) & logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_bear_shop, player),
                              (logic.quest.can_complete_quest(Quest.strange_note) & logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
                               logic.tool.has_tool(Tool.pickaxe, ToolMaterial.basic)))
@@ -946,3 +942,5 @@ def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, pla
                              logic.received("Fable Reef Portal"))
     MultiWorldRules.set_rule(multiworld.get_location(SVELocation.diamond_wand, player),
                              logic.quest.can_complete_quest(ModQuest.MonsterCrops) & logic.region.can_reach(SVERegion.lances_house))
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
+                             logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron) & logic.tool.has_tool(Tool.axe, ToolMaterial.iron))

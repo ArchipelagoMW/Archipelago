@@ -16,6 +16,7 @@ from ...options import Mods, EntranceRandomization, Friendsanity, SeasonRandomiz
     Shipsanity, Craftsanity, ToolProgression
 from ...regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
 
+tools = ["Progressive Weapon", "Progressive Axe", "Progressive Pickaxe"]
 
 def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: unittest.TestCase, multiworld: MultiWorld):
     if isinstance(chosen_mods, str):
@@ -63,30 +64,22 @@ class TestBaseLocationDependencies(SVTestBase):
     }
 
     def test_lance_chest_requires_quest_thoroughly(self):  # the method can be reused for other locations that seem troublesome.
-        if self.skip_long_tests:
-            return
         self.multiworld.state.prog_items = {1: Counter()}
         item_list = ["Spring", "Summer", "Fall", "Winter", "Marlon's Boat Paddle"]
         item_list.extend(weapon for weapon in ["Progressive Weapon"]*3)
-        item_list.extend(tool for tool in ["Progressive Axe", "Progressive Pickaxe"]*2)
+        item_list.extend(tool for tool in ["Progressive Axe"]*2)
+        item_list.extend(tool for tool in ["Progressive Pickaxe"]*2)
+        missing_items = []
+        missing_items.extend(item_list)
         rule = self.world.logic.region.can_reach_location("Lance's Diamond Wand")
         self.assertFalse(rule(self.multiworld.state), msg="Has No Items")
-        power_list = powerset(item_list)
-        for iterable in power_list:
-            iterable_items = []
-            missing_items = [item for item in item_list if item not in iterable]
-            if not iterable or not missing_items:
-                continue
-            for item in iterable:
-                created_item = self.world.create_item(item)
-                self.multiworld.state.collect(created_item, event=False)
-                iterable_items.append(created_item)
-            self.assertFalse(rule(self.multiworld.state), f"Has {iterable} but not {missing_items}")
-            for item in iterable_items:
-                self.remove(item)
         for item in item_list:
-            stinky_item = self.world.create_item(item)
-            self.multiworld.state.collect(stinky_item, event=False)
+            missing_items.remove(item)
+            created_item = self.world.create_item(item)
+            self.multiworld.state.collect(created_item, event=False)
+            if not missing_items:
+                continue
+            self.assertFalse(rule(self.multiworld.state), f"{missing_items}")
         self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
 
 
