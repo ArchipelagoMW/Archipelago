@@ -79,7 +79,7 @@ class TestBaseLocationDependencies(SVTestBase):
             self.multiworld.state.collect(created_item, event=False)
             if not missing_items:
                 continue
-            self.assertFalse(rule(self.multiworld.state), f"{missing_items}")
+            self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state))
         self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
 
 
