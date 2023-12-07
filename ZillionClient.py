@@ -1,7 +1,7 @@
 import asyncio
 import base64
 import platform
-from typing import Any, ClassVar, Coroutine, Dict, List, Optional, Protocol, Tuple, Type, cast
+from typing import Any, ClassVar, Coroutine, Dict, List, Optional, Protocol, Tuple, cast
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
@@ -10,7 +10,7 @@ from NetUtils import ClientStatus
 import Utils
 from Utils import async_start
 
-import colorama  # type: ignore
+import colorama
 
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
@@ -45,7 +45,7 @@ class SetRoomCallback(Protocol):
 
 class ZillionContext(CommonContext):
     game = "Zillion"
-    command_processor: Type[ClientCommandProcessor] = ZillionCommandProcessor
+    command_processor = ZillionCommandProcessor
     items_handling = 1  # receive items from other players
 
     known_name: Optional[str]
