@@ -156,6 +156,10 @@ initialize_item_table()
 initialize_groups()
 
 
+def get_too_many_items_error_message(locations_count: int, items_count: int) -> str:
+    return f"There should be at least as many locations [{locations_count}] as there are mandatory items [{items_count}]"
+
+
 def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: List[Item],
                  options: StardewValleyOptions, random: Random) -> List[Item]:
     items = []
@@ -165,8 +169,8 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
         if item in unique_items:
             unique_items.remove(item)
 
-    assert len(
-        unique_items) <= locations_count, f"There should be at least as many locations [{locations_count}] as there are mandatory items [{len(unique_items)}]"
+    remove_items_if_no_room_for_them(unique_items, locations_count, random)
+
     items += unique_items
     logger.debug(f"Created {len(unique_items)} unique items")
 
@@ -179,6 +183,24 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
     logger.debug(f"Created {len(resource_pack_items)} resource packs")
 
     return items
+
+
+def remove_items_if_no_room_for_them(unique_items: List[Item], locations_count: int, random: Random):
+    if len(unique_items) <= locations_count:
+        return
+
+    number_of_items_to_remove = len(unique_items) - locations_count
+    removable_items = [item for item in unique_items if item.classification == ItemClassification.filler or item.classification == ItemClassification.trap]
+    if len(removable_items) < number_of_items_to_remove:
+        logger.debug(f"Player has more items than locations, trying to remove {number_of_items_to_remove} random non-progression items")
+        removable_items = [item for item in unique_items if not item.classification & ItemClassification.progression]
+    else:
+        logger.debug(f"Player has more items than locations, trying to remove {number_of_items_to_remove} random filler items")
+    assert len(removable_items) >= number_of_items_to_remove, get_too_many_items_error_message(locations_count, len(unique_items))
+    items_to_remove = random.sample(removable_items, number_of_items_to_remove)
+    for item in items_to_remove:
+        if item in unique_items:
+            unique_items.remove(item)
 
 
 def create_unique_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random) -> List[Item]:
@@ -327,6 +349,8 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, options: Starde
 
 
 def create_special_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    if options.quest_locations < 0:
+        return
     items.append(item_factory("Adventurer's Guild"))
     items.append(item_factory("Club Card"))
     items.append(item_factory("Magnifying Glass"))
@@ -576,9 +600,9 @@ def create_deepwoods_pendants(item_factory: StardewItemFactory, options: Stardew
 
 
 def create_special_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
-    if ModNames.sve not in options.mods:
+    if options.quest_locations < 0 or ModNames.sve not in options.mods:
         return
+    exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items])
     items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP] if item.mod_name == ModNames.sve])
     if exclude_ginger_island:

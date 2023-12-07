@@ -315,7 +315,7 @@ class SpecialOrderLocations(Choice):
     option_board_qi = 2
 
 
-class QuestLocations(SpecialRange):
+class QuestLocations(NamedRange):
     """Include location checks for quests
     None: No quests are checks
     Story: Only story quests are checks
@@ -443,7 +443,7 @@ class Cooksanity(Choice):
     option_all = 2
 
 
-class Chefsanity(Choice):
+class Chefsanity(NamedRange):
     """Locations for leaning cooking recipes?
     Vanilla: All cooking recipes are learned normally
     Queen of Sauce: Every Queen of sauce episode is a check, all queen of sauce recipes are items
@@ -455,6 +455,9 @@ class Chefsanity(Choice):
     internal_name = "chefsanity"
     display_name = "Chefsanity"
     default = 0
+    range_start = 0
+    range_end = 15
+
     option_none = 0b0000  # 0
     option_queen_of_sauce = 0b0001  # 1
     option_purchases = 0b0010  # 2
@@ -462,6 +465,16 @@ class Chefsanity(Choice):
     option_skills = 0b0100  # 4
     option_friendship = 0b1000  # 8
     option_all = 0b1111  # 15
+
+    special_range_names = {
+        "none": 0b0000,  # 0
+        "queen_of_sauce": 0b0001,  # 1
+        "purchases": 0b0010,  # 2
+        "qos_and_purchases": 0b0011,  # 3
+        "skills": 0b0100,  # 4
+        "friendship": 0b1000,  # 8
+        "all": 0b1111,  # 15
+    }
 
 
 class Craftsanity(Choice):

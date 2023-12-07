@@ -180,8 +180,8 @@ def extend_quests_locations(randomized_locations: List[LocationData], options: S
     if options.quest_locations < 0:
         return
 
-    story_quest_locations = locations_by_tag[LocationTags.CROPSANITY]
-    story_quest_locations = filter_ginger_island(options, story_quest_locations)
+    story_quest_locations = locations_by_tag[LocationTags.STORY_QUEST]
+    story_quest_locations = filter_disabled_locations(options, story_quest_locations)
     randomized_locations.extend(story_quest_locations)
 
     for i in range(0, options.quest_locations.value):
