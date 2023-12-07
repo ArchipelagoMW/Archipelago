@@ -10,7 +10,7 @@
 ## Optional Software
 
 - [PopTracker](https://github.com/black-sliver/PopTracker/)
-  - [Chandler's A Short Hike Poptracker Pack](https://github.com/chandler05/shorthike-archipelago-poptracker/releases)
+  - [Chandler's A Short Hike PopTracker Pack](https://github.com/chandler05/shorthike-archipelago-poptracker/releases)
 
 ## Installation
 
