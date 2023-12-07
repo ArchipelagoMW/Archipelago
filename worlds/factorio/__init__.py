@@ -202,9 +202,18 @@ class Factorio(World):
                                                     want_progressives(self.multiworld.random))
 
         cost_sorted_locations = sorted(self.science_locations, key=lambda location: location.name)
-        special_index = {"automation": 0,
-                         "logistics": 1,
-                         "rocket-silo": -1}
+        special_index = {"rocket-silo": -1}
+        i = 0
+        priority_techs = []
+        priority_techs.extend(base_technology_table["automation"].recursive_unlocking_technologies)
+        priority_techs.append("automation")
+        priority_techs.extend(base_technology_table["logistics"].recursive_unlocking_technologies)
+        priority_techs.append("logistics")
+        for tech_name in priority_techs:
+            if tech_name not in special_index:
+                special_index[tech_name] = i
+                i += 1
+
         loc: FactorioScienceLocation
         if self.multiworld.tech_tree_information[player] == TechTreeInformation.option_full:
             # mark all locations as pre-hinted
