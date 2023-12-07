@@ -44,6 +44,12 @@ class KHRECOMContext(CommonContext):
             self.game_communication_path = os.path.expandvars(r"%localappdata%/KHRECOM")
         else:
             self.game_communication_path = os.path.expandvars(r"$HOME/KHRECOM")
+        if not os.path.exists(self.game_communication_path):
+            os.makedirs(self.game_communication_path)
+        for root, dirs, files in os.walk(self.game_communication_path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root+"/"+file)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
