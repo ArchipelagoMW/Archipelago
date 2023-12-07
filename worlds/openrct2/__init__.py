@@ -370,7 +370,7 @@ class OpenRCT2World(World):
             unlock = {"LocationID": number, "Price": 0, "Lives": 0, "RidePrereq": []}
 
             #Handles the price of each location
-            if random.random() < 0.95 or number == 0: #95 perecnt of locations will have a cash price
+            if random.random() < 0.9 or number == 0: #90 perecnt of locations will have a cash price
                 current_price = base_price + increment * number
                 unlock["Price"] = int(current_price)
                 # print(unlock["Price"])
@@ -418,9 +418,9 @@ class OpenRCT2World(World):
                             if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             unlock["RidePrereq"] = [random.randint(1,7),category,excitement,intensity,nausea,0]
                         elif category == "transport_rides":
-                            unlock["RidePrereq"] = [random.randint(1,3),category,excitement,intensity,nausea,0]
+                            unlock["RidePrereq"] = [random.randint(1,3),category,0,0,0,0]
                         elif category == "water_rides":
-                            unlock["RidePrereq"] = [random.randint(1,3),category,excitement,intensity,nausea,0]
+                            unlock["RidePrereq"] = [random.randint(1,3),category,0,0,0,0]
                         else:
                             unlock["RidePrereq"] = [random.randint(1,10),category,0,0,0,0]
             #Add the shop item to the shop prices
@@ -437,6 +437,14 @@ class OpenRCT2World(World):
             prereq_counter += 1
         print("OpenRCT2 will make the shop will the following:")
         print(self.location_prices)
+
+        #Okay, here's where we're going to take the last elligible rides in the logic table and make them required for completion, if that's required.
+        elligible_rides = [index for index, item in enumerate(logic_table) if item in item_info["rides"] and item not in item_info["non_starters"]]
+        unique_rides = [logic_table[i] for i in elligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
+        print("Here's the elligible rides:")
+        print(elligible_rides)
+        print("Here's what was chosen:")
+        print(unique_rides)
 
     def generate_basic(self) -> None:
         # place "Victory" at the end of the unlock tree and set collection as win condition

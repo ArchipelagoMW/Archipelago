@@ -422,7 +422,7 @@ class DeathLink(Choice):
 
     - Disabled: No changes to base game.
 
-    - Enabled: When any ride crashes, the signal will be sent out, killing any player in the game. Inversely, any received deathlink will instantly cause a random ride to crash.
+    - Enabled: When any ride crashes, everybody (with DeathLink enabled) dies. Inversely, when anybody (again, with DeathLink enabled) dies, a random ride will explode.
 
     When enabled, there is a 20 second rest period between any deathlink event. Fix that coaster quickly!
     """
@@ -615,6 +615,13 @@ class Roller_Coaster_Nausea(Range):
 #     """Include an objective to require a minimum park rating for completion. Multiple objectives can be enabled!"""
 #     display_name = "Include Park Rating Objective"
 
+class Required_Unique_Rides(Range):
+    """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game."""
+    display_name = "Nausea Requirement"
+    range_start = 0
+    range_end = 10
+    default = 5
+
 class Park_Rating_Objective(Range):
     """If enabled, choose the minimum park rating needed to beat the scenario."""
     display_name = "Park Rating Objective"
@@ -626,7 +633,7 @@ class Pay_Off_Loan(OpenRCT2OnToggle):
     """Require Loan to be paid off before scenario completion is awarded. Multiple objectives can be enabled!"""
     display_name = "Pay Off Loan"
 
-class Monopoly_Mode(OpenRCT2OnToggle):
+class Monopoly_Mode(OpenRCT2Toggle):
     """Monopoly Mode is a new objective type. Every unowned tile will be set to purchasable (Or purchasable construction rights for any unowned tile with a grounded path. Elevated paths will not be purchasable). To complete the objective, all tiles on the map must be purchased. Multiple Objectives can be enabled!"""
     display_name = "Monopoly Mode"
 
@@ -690,6 +697,7 @@ openRCT2_options = {
     "roller_coaster_excitement": Roller_Coaster_Excitement,
     "roller_coaster_intensity": Roller_Coaster_Intensity,
     "roller_coaster_nausea": Roller_Coaster_Nausea,
+    "required_unique_rides": Required_Unique_Rides,
     # "include_park_rating_objective": Include_Park_Rating_Objective,
     "park_rating_objective": Park_Rating_Objective,
     "pay_off_loan": Pay_Off_Loan,
