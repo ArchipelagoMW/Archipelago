@@ -45,7 +45,10 @@ requires:
 {% endmacro %}
 
 {{ game }}:
-  {%- for option_key, option in options.items() %}
+  {%- for group_name, group_options in option_groups.items() %}
+  # {{ group_name }}
+
+  {%- for option_key, option in group_options.items() %}
   {{ option_key }}:
     {%- if option.__doc__ %}
     # {{ option.__doc__
@@ -82,4 +85,5 @@ requires:
     {{ yaml_dump(option.default) | trim | indent(4, first=false) }}
     {%- endif -%}
     {{ "\n" }}
+  {%- endfor %}
   {%- endfor %}

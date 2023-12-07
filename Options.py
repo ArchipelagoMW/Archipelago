@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import abc
+import collections
 import logging
 from copy import deepcopy
 from dataclasses import dataclass
@@ -951,7 +952,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     def as_dict(self, *option_names: str, casing: str = "snake") -> typing.Dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
-        
+
         :param option_names: names of the options to return
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
         """
@@ -1150,10 +1151,14 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if not world.hidden or generate_hidden:
             all_options: typing.Dict[str, AssembleOptions] = world.options_dataclass.type_hints
 
+            grouped_options = collections.defaultdict(dict)
+            for option_name, option in all_options.items():
+                grouped_options[getattr(option, "group_name", "Game Options")][option_name] = option
+
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
             res = Template(file_data).render(
-                options=all_options,
+                option_groups=grouped_options,
                 __version__=__version__, game=game_name, yaml_dump=yaml.dump,
                 dictify_range=dictify_range,
             )
