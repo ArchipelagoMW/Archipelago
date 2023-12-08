@@ -693,14 +693,18 @@ def filter_ginger_island_items(exclude_island: bool, items: List[ItemData]) -> L
     return [item for item in items if not exclude_island or Group.GINGER_ISLAND not in item.groups]
 
 
-def filter_mod_items(options: StardewValleyOptions, items: List[ItemData]) -> List[ItemData]:
-    return [item for item in items if item.mod_name is None or item.mod_name in options.mods]
+def filter_mod_items(mods: Set[str], items: List[ItemData]) -> List[ItemData]:
+    return [item for item in items if item.mod_name is None or item.mod_name in mods]
 
 
-def remove_excluded_items(items, options):
+def remove_excluded_items(items, options: StardewValleyOptions):
+    return remove_excluded_items_island_mods(items, options.exclude_ginger_island == ExcludeGingerIsland.option_true, options.mods.value)
+
+
+def remove_excluded_items_island_mods(items, exclude_ginger_island: bool, mods: Set[str]):
     deprecated_filter = filter_deprecated_items(items)
-    ginger_island_filter = filter_ginger_island_items(options.exclude_ginger_island == ExcludeGingerIsland.option_true, deprecated_filter)
-    mod_filter = filter_mod_items(options, ginger_island_filter)
+    ginger_island_filter = filter_ginger_island_items(exclude_ginger_island, deprecated_filter)
+    mod_filter = filter_mod_items(mods, ginger_island_filter)
     return mod_filter
 
 
@@ -709,12 +713,12 @@ def remove_limited_amount_packs(packs):
 
 
 def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool):
-    all_filler_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
-    all_filler_packs.extend(items_by_group[Group.TRASH])
+    all_filler_items = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
+    all_filler_items.extend(items_by_group[Group.TRASH])
     if include_traps:
-        all_filler_packs.extend(items_by_group[Group.TRAP])
-    all_filler_packs = filter_ginger_island_items(exclude_ginger_island, all_filler_packs)
-    return all_filler_packs
+        all_filler_items.extend(items_by_group[Group.TRAP])
+    all_filler_items = remove_excluded_items_island_mods(all_filler_items, exclude_ginger_island, set())
+    return all_filler_items
 
 
 def get_stardrop_classification(options) -> ItemClassification:
