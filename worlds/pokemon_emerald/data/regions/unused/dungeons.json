@@ -1,0 +1,52 @@
+{
+  "REGION_TERRA_CAVE_ENTRANCE/MAIN": {
+    "parent_map": "MAP_TERRA_CAVE_ENTRANCE",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_TERRA_CAVE_ENTRANCE:0/MAP_DYNAMIC:-1!",
+      "MAP_TERRA_CAVE_ENTRANCE:1/MAP_TERRA_CAVE_END:0"
+    ]
+  },
+  "REGION_TERRA_CAVE_END/MAIN": {
+    "parent_map": "MAP_TERRA_CAVE_END",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_TERRA_CAVE_END:0/MAP_TERRA_CAVE_ENTRANCE:1"
+    ]
+  },
+  "REGION_UNDERWATER_MARINE_CAVE/MAIN": {
+    "parent_map": "MAP_UNDERWATER_MARINE_CAVE",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_MARINE_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": [
+      "MAP_UNDERWATER_MARINE_CAVE:0/MAP_DYNAMIC:-1!"
+    ]
+  },
+  "REGION_MARINE_CAVE_ENTRANCE/MAIN": {
+    "parent_map": "MAP_MARINE_CAVE_ENTRANCE",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": [
+      "MAP_MARINE_CAVE_ENTRANCE:0/MAP_MARINE_CAVE_END:0"
+    ]
+  },
+  "REGION_MARINE_CAVE_END/MAIN": {
+    "parent_map": "MAP_MARINE_CAVE_END",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_MARINE_CAVE_END:0/MAP_MARINE_CAVE_ENTRANCE:0"
+    ]
+  }
+}
