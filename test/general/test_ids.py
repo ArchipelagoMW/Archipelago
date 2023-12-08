@@ -1,5 +1,8 @@
 import unittest
-from worlds.AutoWorld import AutoWorldRegister
+
+from Fill import distribute_items_restrictive
+from test.general import setup_solo_multiworld
+from worlds.AutoWorld import AutoWorldRegister, call_all
 
 
 class TestIDs(unittest.TestCase):
@@ -66,3 +69,26 @@ class TestIDs(unittest.TestCase):
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
                 self.assertEqual(len(world_type.location_id_to_name), len(world_type.location_name_to_id))
+
+    def test_postgen_datapackage(self):
+        """Generates a solo multiworld and checks that the datapackage is still valid"""
+        for gamename, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest(game=gamename):
+                multiworld = setup_solo_multiworld(world_type)
+                distribute_items_restrictive(multiworld)
+                call_all(multiworld, "post_fill")
+                datapackage = world_type.get_data_package_data()
+                for item_group, item_names in datapackage["item_name_groups"].items():
+                    self.assertIsInstance(item_group, str, f"{item_group} should be a string")
+                    for item_name in item_names:
+                        self.assertIsInstance(item_name, str, f"{item_name} should be a string")
+                for loc_group, loc_names in datapackage["location_name_groups"].items():
+                    self.assertIsInstance(loc_group, str, f"{loc_group} should be a string")
+                    for loc_name in loc_names:
+                        self.assertIsInstance(loc_name, str, f"{loc_name} should be a string")
+                for item_name, item_id in datapackage["item_name_to_id"].items():
+                    self.assertIsInstance(item_name, str, f"{item_name} should be a string")
+                    self.assertIsInstance(item_id, int, f"{item_id} should be an int")
+                for loc_name, loc_id in datapackage["location_name_to_id"].items():
+                    self.assertIsInstance(loc_name, str, f"{loc_name} should be a string")
+                    self.assertIsInstance(loc_id, int, f"{loc_id} should be an int")
