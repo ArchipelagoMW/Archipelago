@@ -721,6 +721,7 @@ id,name,classification,groups,mod_name
 5263,Slime Egg-Press,useful,RESOURCE_PACK,
 5264,Crystalarium,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5265,Ostrich Incubator,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5266,Resource Pack: 5 Staircase,filler,"RESOURCE_PACK",
 10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
 10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
 10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
