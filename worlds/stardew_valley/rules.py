@@ -19,6 +19,7 @@ from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, 
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
 from .stardew_rule import And
 from .strings.ap_names.event_names import Event
+from .strings.ap_names.mods.mod_items import SVEQuestItem
 from .strings.ap_names.transport_names import Transportation
 from .strings.ap_names.mods.mod_items import SVELocation
 from .strings.artisan_good_names import ArtisanGood
@@ -894,7 +895,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.forest_to_lost_woods, player),
                              logic.bundle.can_complete_community_center)
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.enter_summit, player),
-                             logic.received("Iridium Bomb"))
+                             logic.mod.sve.has_iridium_bomb())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.backwoods_to_grove, player),
                              logic.mod.sve.has_any_rune())
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.badlands_to_cave, player),

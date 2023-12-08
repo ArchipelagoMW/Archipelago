@@ -7,7 +7,7 @@ from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule, HasProgressionPercent, True_
 
 MAX_MONTHS = 12
-MONTH_COEFFICIENT = 100 // MAX_MONTHS
+MONTH_COEFFICIENT = 50 // MAX_MONTHS
 
 
 class TimeLogicMixin(BaseLogicMixin):

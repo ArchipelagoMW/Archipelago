@@ -7,6 +7,7 @@ from worlds.AutoWorld import World, WebWorld
 from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
+from .early_items import setup_early_items
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.bundle_logic import BundleLogic
@@ -146,7 +147,7 @@ class StardewValleyWorld(World):
 
         self.multiworld.itempool += created_items
 
-        self.setup_early_items()
+        setup_early_items(self.multiworld, self.options, self.player, self.multiworld.random)
         self.setup_player_events()
         self.setup_victory()
 
@@ -186,13 +187,6 @@ class StardewValleyWorld(World):
 
         starting_season = self.create_starting_item(self.multiworld.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
-
-    def setup_early_items(self):
-        if self.options.building_progression & BuildingProgression.option_progressive:
-            self.multiworld.early_items[self.player]["Shipping Bin"] = 1
-
-        if self.options.backpack_progression == BackpackProgression.option_early_progressive:
-            self.multiworld.early_items[self.player]["Progressive Backpack"] = 1
 
     def setup_player_events(self):
         self.setup_construction_events()

@@ -28,14 +28,20 @@ class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogic
 
     @cache_self1
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
-        region_rule = self.logic.region.can_reach_all_except_one(item.locations)
-        geodes_rule = And(*(self.logic.action.can_open_geode(geode) for geode in item.geodes)) if item.geodes else true_
+        if item.locations:
+            region_rule = self.logic.region.can_reach_all_except_one(item.locations)
+        else:
+            region_rule = False_()
+        if item.geodes:
+            geodes_rule = And(*(self.logic.action.can_open_geode(geode) for geode in item.geodes))
+        else:
+            geodes_rule = False_()
         # monster_rule = self.can_farm_monster(item.monsters)
         # extra_rule = True_()
         pan_rule = False_()
         if item.item_name == "Earth Crystal" or item.item_name == "Fire Quartz" or item.item_name == "Frozen Tear":
             pan_rule = self.logic.action.can_pan()
-        return pan_rule | (region_rule & geodes_rule)  # & monster_rule & extra_rule
+        return pan_rule | region_rule | geodes_rule  # & monster_rule & extra_rule
 
     def can_find_museum_artifacts(self, number: int) -> StardewRule:
         rules = []

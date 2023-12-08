@@ -13,9 +13,10 @@ from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
-from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes
+from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes, SVEQuestItem
 from ...strings.quest_names import ModQuest
 from ...stardew_rule import Or
+from ...strings.quest_names import ModQuest
 
 
 class SVELogicMixin(BaseLogicMixin):
@@ -25,7 +26,7 @@ class SVELogicMixin(BaseLogicMixin):
 
 
 class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixin, RegionLogicMixin, RelationshipLogicMixin, TimeLogicMixin, ToolLogicMixin,
-               CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonLogicMixin]]):
+               CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonLogicMixin, QuestLogicMixin]]):
     def initialize_rules(self):
         self.registry.sve_location_rules.update({
             SVELocation.tempered_galaxy_sword: self.logic.money.can_spend_at(SVERegion.alesia_shop, 350000),
@@ -36,3 +37,8 @@ class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixi
     def has_any_rune(self):
         rune_list = SVERunes.nexus_items
         return Or(*(self.logic.received(rune) for rune in rune_list))
+
+    def has_iridium_bomb(self):
+        if self.options.quest_locations < 0:
+            return self.logic.quest.can_complete_quest(ModQuest.RailroadBoulder)
+        return self.logic.received(SVEQuestItem.iridium_bomb)

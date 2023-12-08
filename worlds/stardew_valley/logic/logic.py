@@ -54,11 +54,11 @@ from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
-from ..strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting
+from ..strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting, WildSeeds
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.decoration_names import Decoration
-from ..strings.fertilizer_names import Fertilizer
+from ..strings.fertilizer_names import Fertilizer, SpeedGro, RetainingSoil
 from ..strings.festival_check_names import FestivalCheck
 from ..strings.fish_names import Fish, Trash, WaterItem, WaterChest
 from ..strings.flower_names import Flower
@@ -239,9 +239,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
             Decoration.rotten_plant: self.has(Lighting.jack_o_lantern) & self.season.has(Season.winter),
-            Fertilizer.basic: (self.has(Material.sap) & self.skill.has_farming_level(1)) | (self.time.has_lived_months(1) & self.money.can_spend_at(Region.pierre_store, 100)),
-            Fertilizer.deluxe: False_(),
-            Fertilizer.quality: (self.skill.has_farming_level(9) & self.has(Material.sap) & self.has(Fish.any)) | (self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150)),
+            Fertilizer.basic: self.money.can_spend_at(Region.pierre_store, 100),
+            Fertilizer.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Fertilizer.tree: self.skill.has_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
             Fish.any: Or(*(self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value))),
             Fish.crab: self.skill.can_crab_pot_at(Region.beach),
@@ -366,8 +365,12 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Ore.iridium: self.mine.can_mine_in_the_skull_cavern(),
             Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.action.can_pan(),
             Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
+            RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
+            RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Sapling.tea: self.relationship.has_hearts(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
             Seed.mixed: self.tool.has_tool(Tool.scythe) & self.region.can_reach_all((Region.farm, Region.forest, Region.town)),
+            SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
+            SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.skill.can_crab_pot,
             Trash.broken_glasses: self.skill.can_crab_pot,
             Trash.driftwood: self.skill.can_crab_pot,
@@ -388,6 +391,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             WaterItem.sea_urchin: self.tool.can_forage(Generic.any, Region.tide_pools),
             WaterItem.seaweed: self.skill.can_fish(Region.beach) | self.region.can_reach(Region.tide_pools),
             WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20),
+            WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),
         })
         # @formatter:on
         self.registry.item_rules.update(self.registry.fish_rules)
