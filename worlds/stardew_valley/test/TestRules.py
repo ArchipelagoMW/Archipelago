@@ -106,7 +106,7 @@ class TestBundlesLogic(SVTestBase):
 
 class TestBuildingLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive_early_shipping_bin
+        BuildingProgression.internal_name: BuildingProgression.option_progressive
     }
 
     def test_coop_blueprint(self):
