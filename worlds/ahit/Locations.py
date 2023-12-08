@@ -3,9 +3,7 @@ from .Types import HatDLC, HatType, LocData, Difficulty
 from typing import Dict
 from .Options import TasksanityCheckCount
 
-
 TASKSANITY_START_ID = 2000300204
-
 
 def get_total_locations(world: World) -> int:
     total: int = 0
@@ -15,20 +13,20 @@ def get_total_locations(world: World) -> int:
             if is_location_valid(world, name):
                 total += 1
 
-        if world.is_dlc1() and world.multiworld.Tasksanity[world.player].value > 0:
-            total += world.multiworld.TasksanityCheckCount[world.player].value
+        if world.is_dlc1() and world.options.Tasksanity.value > 0:
+            total += world.options.TasksanityCheckCount.value
 
     if world.is_dw():
-        if world.multiworld.DWShuffle[world.player].value > 0:
+        if world.options.DWShuffle.value > 0:
             total += len(world.get_dw_shuffle())
-            if world.multiworld.DWEnableBonus[world.player].value > 0:
+            if world.options.DWEnableBonus.value > 0:
                 total += len(world.get_dw_shuffle())
         else:
             total += 37
             if world.is_dlc2():
                 total += 1
 
-            if world.multiworld.DWEnableBonus[world.player].value > 0:
+            if world.options.DWEnableBonus.value > 0:
                 total += 37
                 if world.is_dlc2():
                     total += 1
@@ -59,11 +57,11 @@ def is_location_valid(world: World, location: str) -> bool:
     if not location_dlc_enabled(world, location):
         return False
 
-    if world.multiworld.ShuffleStorybookPages[world.player].value == 0 \
+    if world.options.ShuffleStorybookPages.value == 0 \
        and location in storybook_pages.keys():
         return False
 
-    if world.multiworld.ShuffleActContracts[world.player].value == 0 \
+    if world.options.ShuffleActContracts.value == 0 \
        and location in contract_locations.keys():
         return False
 
@@ -71,23 +69,23 @@ def is_location_valid(world: World, location: str) -> bool:
         return False
 
     data = location_table.get(location) or event_locs.get(location)
-    if world.multiworld.ExcludeTour[world.player].value > 0 and data.region == "Time Rift - Tour":
+    if world.options.ExcludeTour.value > 0 and data.region == "Time Rift - Tour":
         return False
 
     # No need for all those event items if we're not doing candles
     if data.dlc_flags & HatDLC.death_wish:
-        if world.multiworld.DWExcludeCandles[world.player].value > 0 and location in event_locs.keys():
+        if world.options.DWExcludeCandles.value > 0 and location in event_locs.keys():
             return False
 
-        if world.multiworld.DWShuffle[world.player].value > 0 \
+        if world.options.DWShuffle.value > 0 \
            and data.region in death_wishes and data.region not in world.get_dw_shuffle():
             return False
 
         if location in zero_jumps:
-            if world.multiworld.DWShuffle[world.player].value > 0 and "Zero Jumps" not in world.get_dw_shuffle():
+            if world.options.DWShuffle.value > 0 and "Zero Jumps" not in world.get_dw_shuffle():
                 return False
 
-            difficulty: int = world.multiworld.LogicDifficulty[world.player].value
+            difficulty: int = world.options.LogicDifficulty.value
             if location in zero_jumps_hard and difficulty < int(Difficulty.HARD):
                 return False
 

@@ -4,7 +4,7 @@ from .Regions import create_regions, randomize_act_entrances, chapter_act_info, 
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
     get_total_locations
 from .Rules import set_rules
-from .Options import ahit_options, slot_data_options, adjust_options
+from .Options import AHITOptions, slot_data_options, adjust_options
 from .Types import HatType, ChapterIndex, HatInTimeItem
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events
@@ -50,7 +50,8 @@ class HatInTimeWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = get_location_names()
 
-    option_definitions = ahit_options
+    options_dataclass = AHITOptions
+    options: AHITOptions
     act_connections: Dict[str, str] = {}
     shop_locs: List[str] = []
     item_name_groups = relic_groups
@@ -59,7 +60,7 @@ class HatInTimeWorld(World):
     def generate_early(self):
         adjust_options(self)
 
-        if self.multiworld.StartWithCompassBadge[self.player].value > 0:
+        if self.options.StartWithCompassBadge.value > 0:
             self.multiworld.push_precollected(self.create_item("Compass Badge"))
 
         if self.is_dw_only():
@@ -67,14 +68,14 @@ class HatInTimeWorld(World):
 
         # If our starting chapter is 4 and act rando isn't on, force hookshot into inventory
         # If starting chapter is 3 and painting shuffle is enabled, and act rando isn't, give one free painting unlock
-        start_chapter: int = self.multiworld.StartingChapter[self.player].value
+        start_chapter: int = self.options.StartingChapter.value
 
         if start_chapter == 4 or start_chapter == 3:
-            if self.multiworld.ActRandomizer[self.player].value == 0:
+            if self.options.ActRandomizer.value == 0:
                 if start_chapter == 4:
                     self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
 
-                if start_chapter == 3 and self.multiworld.ShuffleSubconPaintings[self.player].value > 0:
+                if start_chapter == 3 and self.options.ShuffleSubconPaintings.value > 0:
                     self.multiworld.push_precollected(self.create_item("Progressive Painting Unlock"))
 
     def create_regions(self):
@@ -84,11 +85,10 @@ class HatInTimeWorld(World):
         nyakuza_thug_items[self.player] = {}
         badge_seller_count[self.player] = 0
         self.shop_locs = []
-        self.topology_present = self.multiworld.ActRandomizer[self.player].value
+        self.topology_present = self.options.ActRandomizer.value
 
         create_regions(self)
-
-        if self.multiworld.EnableDeathWish[self.player].value > 0:
+        if self.options.EnableDeathWish.value > 0:
             create_dw_regions(self)
 
         if self.is_dw_only():
@@ -101,7 +101,7 @@ class HatInTimeWorld(World):
                 create_enemy_events(self)
 
         # place vanilla contract locations if contract shuffle is off
-        if self.multiworld.ShuffleActContracts[self.player].value == 0:
+        if self.options.ShuffleActContracts.value == 0:
             for name in contract_locations.keys():
                 self.multiworld.get_location(name, self.player).place_locked_item(create_item(self, name))
 
@@ -112,9 +112,9 @@ class HatInTimeWorld(World):
         hat_craft_order[self.player] = [HatType.SPRINT, HatType.BREWING, HatType.ICE,
                                         HatType.DWELLER, HatType.TIME_STOP]
 
-        if self.multiworld.HatItems[self.player].value == 0 and self.multiworld.RandomizeHatOrder[self.player].value > 0:
+        if self.options.HatItems.value == 0 and self.options.RandomizeHatOrder.value > 0:
             self.random.shuffle(hat_craft_order[self.player])
-            if self.multiworld.RandomizeHatOrder[self.player].value == 2:
+            if self.options.RandomizeHatOrder.value == 2:
                 hat_craft_order[self.player].remove(HatType.TIME_STOP)
                 hat_craft_order[self.player].append(HatType.TIME_STOP)
 
@@ -138,12 +138,12 @@ class HatInTimeWorld(World):
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Death Wish Only Mode",
                                                                                         self.player)
 
-            if self.multiworld.DWEnableBonus[self.player].value == 0:
+            if self.options.DWEnableBonus.value == 0:
                 for name in death_wishes:
                     if name == "Snatcher Coins in Nyakuza Metro" and not self.is_dlc2():
                         continue
 
-                    if self.multiworld.DWShuffle[self.player].value > 0 and name not in self.get_dw_shuffle():
+                    if self.options.DWShuffle.value > 0 and name not in self.get_dw_shuffle():
                         continue
 
                     full_clear = self.multiworld.get_location(f"{name} - All Clear", self.player)
@@ -153,7 +153,7 @@ class HatInTimeWorld(World):
 
             return
 
-        if self.multiworld.ActRandomizer[self.player].value > 0:
+        if self.options.ActRandomizer.value > 0:
             randomize_act_entrances(self)
 
         set_rules(self)
@@ -177,7 +177,7 @@ class HatInTimeWorld(World):
                            "SeedName": self.multiworld.seed_name,
                            "TotalLocations": get_total_locations(self)}
 
-        if self.multiworld.HatItems[self.player].value == 0:
+        if self.options.HatItems.value == 0:
             slot_data.setdefault("SprintYarnCost", hat_yarn_costs[self.player][HatType.SPRINT])
             slot_data.setdefault("BrewingYarnCost", hat_yarn_costs[self.player][HatType.BREWING])
             slot_data.setdefault("IceYarnCost", hat_yarn_costs[self.player][HatType.ICE])
@@ -189,7 +189,7 @@ class HatInTimeWorld(World):
             slot_data.setdefault("Hat4", int(hat_craft_order[self.player][3]))
             slot_data.setdefault("Hat5", int(hat_craft_order[self.player][4]))
 
-        if self.multiworld.ActRandomizer[self.player].value > 0:
+        if self.options.ActRandomizer.value > 0:
             for name in self.act_connections.keys():
                 slot_data[name] = self.act_connections[name]
 
@@ -200,14 +200,14 @@ class HatInTimeWorld(World):
         if self.is_dw():
             i: int = 0
             for name in excluded_dws[self.player]:
-                if self.multiworld.EndGoal[self.player].value == 3 and name == "Seal the Deal":
+                if self.options.EndGoal.value == 3 and name == "Seal the Deal":
                     continue
 
                 slot_data[f"excluded_dw{i}"] = dw_classes[name]
                 i += 1
 
             i = 0
-            if self.multiworld.DWAutoCompleteBonuses[self.player].value == 0:
+            if self.options.DWAutoCompleteBonuses.value == 0:
                 for name in excluded_bonuses[self.player]:
                     if name in excluded_dws[self.player]:
                         continue
@@ -215,19 +215,19 @@ class HatInTimeWorld(World):
                     slot_data[f"excluded_bonus{i}"] = dw_classes[name]
                     i += 1
 
-            if self.multiworld.DWShuffle[self.player].value > 0:
+            if self.options.DWShuffle.value > 0:
                 shuffled_dws = self.get_dw_shuffle()
                 for i in range(len(shuffled_dws)):
                     slot_data[f"dw_{i}"] = dw_classes[shuffled_dws[i]]
 
-        for option_name in slot_data_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = option.value
+        for name, value in self.options.as_dict(*self.options_dataclass.type_hints).items():
+            if name in slot_data_options:
+                slot_data[name] = value
 
         return slot_data
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
-        if self.is_dw_only() or self.multiworld.ActRandomizer[self.player].value == 0:
+        if self.is_dw_only() or self.options.ActRandomizer.value == 0:
             return
 
         new_hint_data = {}
@@ -252,10 +252,10 @@ class HatInTimeWorld(World):
 
             new_hint_data[location.address] = get_shuffled_region(self, region_name)
 
-        if self.is_dlc1() and self.multiworld.Tasksanity[self.player].value > 0:
+        if self.is_dlc1() and self.options.Tasksanity.value > 0:
             ship_shape_region = get_shuffled_region(self, "Ship Shape")
             id_start: int = TASKSANITY_START_ID
-            for i in range(self.multiworld.TasksanityCheckCount[self.player].value):
+            for i in range(self.options.TasksanityCheckCount.value):
                 new_hint_data[id_start+i] = ship_shape_region
 
         hint_data[self.player] = new_hint_data
@@ -283,16 +283,16 @@ class HatInTimeWorld(World):
         return chapter_timepiece_costs[self.player]
 
     def is_dlc1(self) -> bool:
-        return self.multiworld.EnableDLC1[self.player].value > 0
+        return self.options.EnableDLC1.value > 0
 
     def is_dlc2(self) -> bool:
-        return self.multiworld.EnableDLC2[self.player].value > 0
+        return self.options.EnableDLC2.value > 0
 
     def is_dw(self) -> bool:
-        return self.multiworld.EnableDeathWish[self.player].value > 0
+        return self.options.EnableDeathWish.value > 0
 
     def is_dw_only(self) -> bool:
-        return self.is_dw() and self.multiworld.DeathWishOnly[self.player].value > 0
+        return self.is_dw() and self.options.DeathWishOnly.value > 0
 
     def get_excluded_dws(self):
         return excluded_dws[self.player]
@@ -302,7 +302,7 @@ class HatInTimeWorld(World):
 
     def is_dw_excluded(self, name: str) -> bool:
         # don't exclude Seal the Deal if it's our goal
-        if self.multiworld.EndGoal[self.player].value == 3 and name == "Seal the Deal" \
+        if self.options.EndGoal.value == 3 and name == "Seal the Deal" \
            and f"{name} - Main Objective" not in self.multiworld.exclude_locations[self.player]:
             return False
 

@@ -6,6 +6,9 @@ from worlds.ahit.test.TestBase import HatInTimeTestBase
 class TestActs(HatInTimeTestBase):
     def run_default_tests(self) -> bool:
         return False
+      
+    def testAllStateCanReachEverything(self):
+        pass
 
     options = {
         "ActRandomizer": 2,

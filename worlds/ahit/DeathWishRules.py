@@ -105,7 +105,7 @@ def set_dw_rules(world: World):
         set_enemy_rules(world)
 
     dw_list: List[str] = []
-    if world.multiworld.DWShuffle[world.player].value > 0:
+    if world.options.DWShuffle.value > 0:
         dw_list = world.get_dw_shuffle()
     else:
         for name in death_wishes.keys():
@@ -124,12 +124,12 @@ def set_dw_rules(world: World):
         temp_list.append(main_objective)
         temp_list.append(full_clear)
 
-        if world.multiworld.DWShuffle[world.player].value == 0:
+        if world.options.DWShuffle.value == 0:
             if name in dw_stamp_costs.keys():
                 for entrance in dw.entrances:
                     add_rule(entrance, lambda state, n=name: get_total_dw_stamps(state, world) >= dw_stamp_costs[n])
 
-        if world.multiworld.DWEnableBonus[world.player].value == 0:
+        if world.options.DWEnableBonus.value == 0:
             # place nothing, but let the locations exist still, so we can use them for bonus stamp rules
             full_clear.address = None
             full_clear.place_locked_item(HatInTimeItem("Nothing", ItemClassification.filler, None, world.player))
@@ -165,10 +165,10 @@ def set_dw_rules(world: World):
             for misc in data.misc_required:
                 add_rule(loc, lambda state, item=misc: state.has(item, world.player))
 
-            if data.umbrella and world.multiworld.UmbrellaLogic[world.player].value > 0:
+            if data.umbrella and world.options.UmbrellaLogic.value > 0:
                 add_rule(loc, lambda state: state.has("Umbrella", world.player))
 
-            if data.paintings > 0 and world.multiworld.ShuffleSubconPaintings[world.player].value > 0:
+            if data.paintings > 0 and world.options.ShuffleSubconPaintings.value > 0:
                 add_rule(loc, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
 
             if data.hit_requirement > 0:
@@ -184,11 +184,11 @@ def set_dw_rules(world: World):
             elif loc.name == full_clear.name:
                 add_rule(loc, main_rule)
                 # Only set bonus stamp rules if we don't auto complete bonuses
-                if world.multiworld.DWAutoCompleteBonuses[world.player].value == 0 \
+                if world.options.DWAutoCompleteBonuses.value == 0 \
                    and not world.is_bonus_excluded(loc.name):
                     add_rule(bonus_stamps, loc.access_rule)
 
-    if world.multiworld.DWShuffle[world.player].value > 0:
+    if world.options.DWShuffle.value > 0:
         dw_shuffle = world.get_dw_shuffle()
         for i in range(len(dw_shuffle)):
             if i == 0:
@@ -217,7 +217,7 @@ def set_dw_rules(world: World):
                 for rule in access_rules:
                     add_rule(entrance, rule)
 
-    if world.multiworld.EndGoal[world.player].value == 3:
+    if world.options.EndGoal.value == 3:
         world.multiworld.completion_condition[world.player] = lambda state: state.has("1 Stamp - Seal the Deal",
                                                                                       world.player)
 
@@ -269,7 +269,7 @@ def modify_dw_rules(world: World, name: str):
 
 
 def get_total_dw_stamps(state: CollectionState, world: World) -> int:
-    if world.multiworld.DWShuffle[world.player].value > 0:
+    if world.options.DWShuffle.value > 0:
         return 999  # no stamp costs in death wish shuffle
 
     count: int = 0
@@ -303,7 +303,7 @@ def set_candle_dw_rules(name: str, world: World):
 
         # No Ice Hat/painting required in Expert for Toilet Zero Jumps
         # This painting wall can only be skipped via cherry hover.
-        if get_difficulty(world) < Difficulty.EXPERT or world.multiworld.NoPaintingSkips[world.player].value == 1:
+        if get_difficulty(world) < Difficulty.EXPERT or world.options.NoPaintingSkips.value == 1:
             set_rule(world.multiworld.get_location("Toilet of Doom (Zero Jumps)", world.player),
                      lambda state: can_use_hookshot(state, world) and can_hit(state, world)
                      and has_paintings(state, world, 1, False))
@@ -321,7 +321,7 @@ def set_candle_dw_rules(name: str, world: World):
     elif name == "Camera Tourist":
         add_rule(main_objective, lambda state: get_reachable_enemy_count(state, world) >= 8)
         add_rule(full_clear, lambda state: can_reach_all_bosses(state, world)
-                 and state.has("Triple Enemy Photo", world.player))
+                 and state.has("Triple Enemy Picture", world.player))
 
     elif "Snatcher Coins" in name:
         for coin in required_snatcher_coins[name]:
@@ -383,13 +383,12 @@ def create_enemy_events(world: World):
                 continue
 
             if area == "Time Rift - Tour" and (not world.is_dlc1()
-               or world.multiworld.ExcludeTour[world.player].value > 0):
+               or world.options.ExcludeTour.value > 0):
                 continue
 
             if area == "Bluefin Tunnel" and not world.is_dlc2():
                 continue
-
-            if world.multiworld.DWShuffle[world.player].value > 0 and area in death_wishes.keys() \
+            if world.options.DWShuffle.value > 0 and area in death_wishes.keys() \
                and area not in world.get_dw_shuffle():
                 continue
 
@@ -400,16 +399,16 @@ def create_enemy_events(world: World):
             event.show_in_spoiler = False
 
     for name in triple_enemy_locations:
-        if name == "Time Rift - Tour" and (not world.is_dlc1() or world.multiworld.ExcludeTour[world.player].value > 0):
+        if name == "Time Rift - Tour" and (not world.is_dlc1() or world.options.ExcludeTour.value > 0):
             continue
 
-        if world.multiworld.DWShuffle[world.player].value > 0 and name in death_wishes.keys() \
+        if world.options.DWShuffle.value > 0 and name in death_wishes.keys() \
            and name not in world.get_dw_shuffle():
             continue
 
         region = world.multiworld.get_region(name, world.player)
-        event = HatInTimeLocation(world.player, f"Triple Enemy Photo - {name}", None, region)
-        event.place_locked_item(HatInTimeItem("Triple Enemy Photo", ItemClassification.progression, None, world.player))
+        event = HatInTimeLocation(world.player, f"Triple Enemy Picture - {name}", None, region)
+        event.place_locked_item(HatInTimeItem("Triple Enemy Picture", ItemClassification.progression, None, world.player))
         region.locations.append(event)
         event.show_in_spoiler = False
         if name == "The Mustache Gauntlet":
@@ -428,13 +427,13 @@ def set_enemy_rules(world: World):
                 continue
 
             if area == "Time Rift - Tour" and (not world.is_dlc1()
-               or world.multiworld.ExcludeTour[world.player].value > 0):
+               or world.options.ExcludeTour.value > 0):
                 continue
 
             if area == "Bluefin Tunnel" and not world.is_dlc2():
                 continue
 
-            if world.multiworld.DWShuffle[world.player].value > 0 and area in death_wishes \
+            if world.options.DWShuffle.value > 0 and area in death_wishes \
                and area not in world.get_dw_shuffle():
                 continue
 
