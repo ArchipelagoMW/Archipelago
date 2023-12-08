@@ -45,6 +45,7 @@ class CMWorld(World):
 
     item_name_groups = item_name_groups
     items_used: Dict[int, Dict[str, int]] = {}
+    items_remaining: Dict[int, Dict[str, int]] = {}
     armies: Dict[int, List[int]] = {}
     army_piece_types_by_player: Dict[int, Dict[str, int]] = {}
 
@@ -153,9 +154,7 @@ class CMWorld(World):
             self.items_used[self.player][item_name] += excluded_items[item_name]
         starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
         for item in starter_items:
-            if item.name not in self.items_used[self.player]:
-                self.items_used[self.player][item.name] = 0
-            self.items_used[self.player][item.name] += 1
+            self.consume_item(item.name, {})
 
         # determine how many items we need to add to the custom item_pool
         user_location_count = len(starter_items)
@@ -170,6 +169,7 @@ class CMWorld(World):
         max_material_option = self.options.max_material.value * 100
         if max_material_option < min_material_option:
             max_material_option = min_material_option
+        # TODO: set min_material_option to max(opt, the highest material location) when accessibility != minimal
         max_material_actual = (
                 self.random.random() * (max_material_option - min_material_option) + max_material_option)
         max_material_actual += progression_items["Play as White"].material
@@ -191,12 +191,7 @@ class CMWorld(World):
 
         # add items player really wants
         yaml_locked_items: dict[str, int] = self.options.locked_items.value
-        for item in yaml_locked_items:
-            if item not in self.items_used[self.player]:
-                self.items_used[self.player][item] = 0
-            self.items_used[self.player][item] += yaml_locked_items[item]
-            items.extend([self.create_item(item) for i in range(yaml_locked_items[item])])
-            material += progression_items[item].material * yaml_locked_items[item]
+        locked_items = dict(yaml_locked_items)
         # TODO(chesslogic): Validate locked items has enough parents
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
@@ -206,6 +201,8 @@ class CMWorld(World):
                       " having set " + str(starter_items) + " and generated " + str(Counter(items)))
 
         my_progression_items = list(progression_items.keys())
+        self.items_remaining[self.player] = {
+            name: progression_items[name].quantity - self.items_used.get(name, 0) for name in my_progression_items}
 
         # prevent victory event from being added to general pool
         my_progression_items.remove("Victory")
@@ -225,8 +222,8 @@ class CMWorld(World):
         # items are now in a distribution of 1 queen:1 major:3 minor:7 pawn:6 pocket (material 9 + 5 + 9 + 7 + 6 = 36)
         # note that queens require that a major precede them, which increases the likelihood of the other types
 
-        while (len(items) + user_location_count) < len(location_table) and material < max_material_actual and len(
-                my_progression_items) > 0:
+        while ((len(items) + user_location_count + sum(locked_items.values())) < len(location_table) and
+                material < max_material_actual and len(my_progression_items) > 0):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
             if (material > min_material_option and
@@ -239,11 +236,11 @@ class CMWorld(World):
                 continue
             if self.can_add_more(chosen_item):
                 try_item = self.create_item(chosen_item)
-                if chosen_item not in self.items_used[self.player]:
-                    self.items_used[self.player][chosen_item] = 0
-                self.items_used[self.player][chosen_item] += 1
+                was_locked = self.consume_item(chosen_item, locked_items)
                 items.append(try_item)
                 material += progression_items[chosen_item].material
+                if not was_locked:
+                    self.lock_new_items(chosen_item, material, max_material_actual, locked_items)
             else:
                 my_progression_items.remove(chosen_item)
         logging.debug(str(self.player) + " granted total material of " + str(material) +
@@ -262,33 +259,60 @@ class CMWorld(World):
                 self.multiworld.exclude_locations[self.player].value.add(location)
 
         my_useful_items = list(useful_items.keys())
-        while (len(items) + user_location_count) < len(location_table) and len(my_useful_items) > 0:
+        while ((len(items) + user_location_count + sum(locked_items.values())) < len(location_table) and
+               len(my_useful_items) > 0):
             chosen_item = self.random.choice(my_useful_items)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
-                if chosen_item not in self.items_used[self.player]:
-                    self.items_used[self.player][chosen_item] = 0
-                self.items_used[self.player][chosen_item] += 1
+                self.consume_item(chosen_item, locked_items)
                 try_item = self.create_item(chosen_item)
                 items.append(try_item)
             else:
                 my_useful_items.remove(chosen_item)
 
         my_filler_items = list(filler_items.keys())
-        while (len(items) + user_location_count) < len(location_table):
+        while (len(items) + user_location_count + sum(locked_items.values())) < len(location_table):
             chosen_item = self.random.choice(my_filler_items)
             if not self.has_prereqs(chosen_item):
                 continue
             if self.can_add_more(chosen_item):
-                if chosen_item not in self.items_used[self.player]:
-                    self.items_used[self.player][chosen_item] = 0
-                self.items_used[self.player][chosen_item] += 1
+                self.consume_item(chosen_item, locked_items)
                 try_item = self.create_item(chosen_item)
                 items.append(try_item)
             else:
                 my_filler_items.remove(chosen_item)
+
+        for item in locked_items:
+            if item not in self.items_used[self.player]:
+                self.items_used[self.player][item] = 0
+            self.items_used[self.player][item] += locked_items[item]
+            items.extend([self.create_item(item) for i in range(locked_items[item])])
+            material += progression_items[item].material * locked_items[item]
+
         self.multiworld.itempool += items
+
+    def consume_item(self, chosen_item: str, locked_items: dict[str, int]):
+        if chosen_item not in self.items_used[self.player]:
+            self.items_used[self.player][chosen_item] = 0
+        self.items_used[self.player][chosen_item] += 1
+        if chosen_item in self.items_remaining[self.player]:
+            self.items_remaining[self.player][chosen_item] -= 1
+            if self.items_remaining[self.player][chosen_item] <= 0:
+                del (self.items_remaining[self.player][chosen_item])
+        if chosen_item in locked_items and locked_items[chosen_item] > 0:
+            locked_items[chosen_item] -= 1
+            if locked_items[chosen_item] <= 0:
+                del (locked_items[chosen_item])
+            return True
+        return False
+
+    def lock_new_items(self, chosen_item: str, material: int, max_material: float, locked_items: dict[str, int]):
+        # TODO: if accessibility == minimal, return
+
+        remaining_material = {
+            item: self.items_remaining[self.player][item] * progression_items[item].material for
+            item in self.items_remaining[self.player]}
 
     def create_regions(self):
         region = Region("Menu", self.player, self.multiworld)

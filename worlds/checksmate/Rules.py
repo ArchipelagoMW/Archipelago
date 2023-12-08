@@ -15,10 +15,10 @@ def has_piece_material(state: CollectionState, player: int, amount: int) -> bool
     return total_piece_material(state, player) >= amount
 
 
-def has_chessmen(state: CollectionState, player: int) -> int:
+def has_chessmen(state: CollectionState, player: int, amount: int) -> int:
     cmoptions: CMOptions = state.multiworld.worlds[player].options  # this is safe. trust me I'm a doctor
-    return state.count_group("Chessmen", player) + ceil(
-        state.count("Progressive Pocket", player) / cmoptions.pocket_limit_by_pocket)
+    return (state.count_group("Chessmen", player) + ceil(
+        state.count("Progressive Pocket", player) / cmoptions.pocket_limit_by_pocket)) >= amount
 
 
 def has_french_move(state: CollectionState, player: int) -> bool:
@@ -87,6 +87,9 @@ def set_rules(multiworld: MultiWorld, player: int):
     for name, item in checksmate.Locations.location_table.items():
         set_rule(multiworld.get_location(name, player),
                  lambda state, v=item.material_expectations: has_piece_material(state, player, v))
+    for name, item in checksmate.Locations.location_table.items():
+        set_rule(multiworld.get_location(name, player),
+                 lambda state, v=item.chessmen_expectations: has_chessmen(state, player, v))
 
     ###
     # inelegance is malleable
