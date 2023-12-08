@@ -85,7 +85,7 @@ html{
     background-color: #ffffff;
 }
 
-#player-options #game-options, #player-options #rom-options{
+#player-options .game-options, #player-options #rom-options{
     display: flex;
     flex-direction: row;
 }
@@ -95,11 +95,6 @@ html{
     justify-content: space-between;
     gap: 20px;
     padding: 3px;
-}
-
-#player-options div {
-    display: flex;
-    flex-grow: 1;
 }
 
 #player-options #meta-options label {
@@ -219,7 +214,7 @@ html{
         gap: 6px;
     }
 
-    #player-options #game-options{
+    #player-options .game-options{
         justify-content: flex-start;
         flex-wrap: wrap;
     }
@@ -229,16 +224,16 @@ html{
         margin: 0;
     }
 
-    #game-options table {
+    .game-options table {
         margin-bottom: 0;
     }
 
-    #game-options table label{
+    .game-options table label{
         display: block;
         min-width: 200px;
     }
 
-    #game-options table tr td {
+    .game-options table tr td {
         width: 50%;
     }
 }

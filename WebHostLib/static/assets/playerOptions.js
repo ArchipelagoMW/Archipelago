@@ -50,8 +50,10 @@ window.addEventListener('load', () => {
     results['presetOptions']['__default'] = {};
   }).catch((e) => {
     console.error(e);
-    const url = new URL(window.location.href);
-    window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
+
+    // TODO Re-enable the redirect when the page is ready
+    // const url = new URL(window.location.href);
+    // window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
   })
 });
 

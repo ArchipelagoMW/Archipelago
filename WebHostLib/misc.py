@@ -1,12 +1,14 @@
 import datetime
 import os
 from typing import List, Dict, Union
+import collections
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
 from pony.orm import count, commit, db_session
 
 from worlds.AutoWorld import AutoWorldRegister
+import Options
 from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
 
@@ -59,7 +61,19 @@ def player_settings(game: str):
 @app.route("/games/<string:game>/player-options")
 @cache.cached()
 def player_options(game: str):
-    return render_template("player-options.html", game=game, theme=get_world_theme(game))
+    all_options: Dict[str, Options.AssembleOptions] = AutoWorldRegister.world_types[game].options_dataclass.type_hints
+    grouped_options = collections.defaultdict(dict)
+    for option_name, option in all_options.items():
+        grouped_options[getattr(option, "group_name", "Game Options")][option_name] = option
+
+    return render_template(
+        "playerOptions/playerOptions.html",
+        game=game,
+        option_groups=grouped_options,
+        issubclass=issubclass,
+        Options=Options,
+        theme=get_world_theme(game),
+    )
 
 
 # Game Info Pages

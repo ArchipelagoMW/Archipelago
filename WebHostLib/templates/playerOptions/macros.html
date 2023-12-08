@@ -1,0 +1,52 @@
+{% macro Toggle(option_name) %}
+    <span>Toggle Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro DefaultOnToggle(option_name) %}
+    <span>Default-On Toggle Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro Choice(option_name, choices) %}
+    <span>Toggle Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro Range(option_name, min, max) %}
+    <span>Range Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro NamedRange(option_name, choices, min, max) %}
+    <span>Named Range Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro FreeText(option_name) %}
+    <span>Free Text Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro TextChoice(option_name) %}
+    <span>Text Choice Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro PlandoBosses(option_name) %}
+    <!-- PlandoBosses is handled by its parent, TextChoice -->
+    {{ TextChoice(option_name) }}
+{% endmacro %}
+
+{% macro OptionDict(option_name) %}
+    <!-- OptionDict is not supported -->
+{% endmacro %}
+
+{% macro ItemDict(option_name) %}
+    <span>Item Dict Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro OptionList(option_name) %}
+    <span>Option List Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro OptionSet(option_name) %}
+    <span>Option Set Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro ItemSet(option_name) %}
+    <span>ItemSet Input Coming Soon™</span>
+{% endmacro %}
