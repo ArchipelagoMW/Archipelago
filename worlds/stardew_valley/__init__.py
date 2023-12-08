@@ -321,7 +321,7 @@ class StardewValleyWorld(World):
 
     def get_filler_item_rules(self):
         if self.player in self.multiworld.groups:
-            link_group: ItemLinkGroup = self.multiworld.groups[self.player]
+            link_group = self.multiworld.groups[self.player]
             include_traps = True
             exclude_island = False
             for player in link_group["players"]:
