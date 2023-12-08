@@ -163,8 +163,8 @@ class StardewValleyWorld(World):
         if not chosen_farm_types:
             chosen_farm_types = all_farm_type_names
 
-        starting_season = self.create_item(self.multiworld.random.choice(chosen_farm_types))
-        self.multiworld.push_precollected(starting_season)
+        starting_farm = self.create_starting_item(self.multiworld.random.choice(chosen_farm_types))
+        self.multiworld.push_precollected(starting_farm)
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:
@@ -174,7 +174,7 @@ class StardewValleyWorld(World):
 
         if self.options.season_randomization == SeasonRandomization.option_disabled:
             for season in season_pool:
-                self.multiworld.push_precollected(self.create_item(season))
+                self.multiworld.push_precollected(self.create_starting_item(season))
             return
 
         if [item for item in self.multiworld.precollected_items[self.player]
@@ -184,7 +184,7 @@ class StardewValleyWorld(World):
         if self.options.season_randomization == SeasonRandomization.option_randomized_not_winter:
             season_pool = [season for season in season_pool if season.name != "Winter"]
 
-        starting_season = self.create_item(self.multiworld.random.choice(season_pool))
+        starting_season = self.create_starting_item(self.multiworld.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
 
     def setup_early_items(self):
@@ -289,6 +289,12 @@ class StardewValleyWorld(World):
         if override_classification == ItemClassification.progression:
             self.total_progression_items += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
+
+    def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
+        if isinstance(item, str):
+            item = item_table[item]
+
+        return StardewItem(item.name, item.classification, item.code, self.player)
 
     def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
         if rule is None:
