@@ -107,7 +107,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Twilight Town Room of Beginnings":                                  KHRECOMLocationData("Progression",  269_1102),
     "Twilight Town Room of Beginnings (Enemy Cards Vexen)":              KHRECOMLocationData("Progression",  269_1103),
     
-   #"Destiny Islands Post Floor (Attack Cards Oathkeeper)":              KHRECOMLocationData("Progression",  269_1201), --Can't be reached without more cutscene manipulation
+    "Destiny Islands Post Floor (Attack Cards Oathkeeper)":              KHRECOMLocationData("Progression",  269_1201),
     "Destiny Islands Post Floor (Attack Cards Oblivion)":                KHRECOMLocationData("Progression",  269_1202),
     "Destiny Islands Post Floor (Enemy Cards Larxene)":                  KHRECOMLocationData("Progression",  269_1203),
     "Destiny Islands Post Floor (Enemy Cards Riku)":                     KHRECOMLocationData("Progression",  269_1204),
