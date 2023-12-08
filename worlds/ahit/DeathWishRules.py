@@ -406,7 +406,7 @@ def create_enemy_events(world: World):
            and name not in world.get_dw_shuffle():
             continue
 
-        region = world.options.get_region(name, world.player)
+        region = world.multiworld.get_region(name, world.player)
         event = HatInTimeLocation(world.player, f"Triple Enemy Picture - {name}", None, region)
         event.place_locked_item(HatInTimeItem("Triple Enemy Picture", ItemClassification.progression, None, world.player))
         region.locations.append(event)

@@ -666,6 +666,7 @@ class AHITOptions(PerGameCommonOptions):
     MetroMaxPonCost:          MetroMaxPonCost
     NyakuzaThugMinShopItems:  NyakuzaThugMinShopItems
     NyakuzaThugMaxShopItems:  NyakuzaThugMaxShopItems
+    NoTicketSkips:            NoTicketSkips
 
     LowestChapterCost:        LowestChapterCost
     HighestChapterCost:       HighestChapterCost
@@ -729,6 +730,7 @@ slot_data_options: List[str] = [
     "MetroMinPonCost",
     "MetroMaxPonCost",
     "BaseballBat",
+    "NoTicketSkips",
 
     "MinPonCost",
     "MaxPonCost",

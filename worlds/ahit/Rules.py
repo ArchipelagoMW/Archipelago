@@ -483,7 +483,7 @@ def set_moderate_rules(world: World):
                  and can_use_hat(state, world, HatType.BREWING))
 
         # Moderate: Bluefin Tunnel + Pink Paw Station without tickets
-        if world.multiworld.NoTicketSkips[world.player].value == 0:
+        if world.options.NoTicketSkips.value == 0:
             set_rule(world.multiworld.get_entrance("-> Pink Paw Station", world.player), lambda state: True)
             set_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", world.player), lambda state: True)
 
