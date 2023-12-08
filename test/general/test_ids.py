@@ -1,8 +1,8 @@
 import unittest
 
 from Fill import distribute_items_restrictive
-from test.general import setup_solo_multiworld
 from worlds.AutoWorld import AutoWorldRegister, call_all
+from . import setup_solo_multiworld
 
 
 class TestIDs(unittest.TestCase):
