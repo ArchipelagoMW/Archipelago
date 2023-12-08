@@ -119,9 +119,13 @@ class KH2World(World):
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
-
         created_item = KH2Item(name, item_classification, self.item_name_to_id[name], self.player)
 
+        return created_item
+
+    def create_event_item(self, name: str) -> Item:
+        item_classification = ItemClassification.progression
+        created_item = KH2Item(name, item_classification, None, self.player)
         return created_item
 
     def create_items(self) -> None:
