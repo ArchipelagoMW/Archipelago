@@ -1,17 +1,10 @@
-import unittest
 from random import random
 from typing import Dict
 
-from BaseClasses import MultiWorld
 from Options import NamedRange
 from .option_names import options_to_include
-from worlds.stardew_valley.test.checks.world_checks import assert_can_win, assert_same_number_items_locations
+from ..checks.world_checks import basic_checks
 from .. import setup_solo_multiworld, SVTestCase, SVTestBase
-
-
-def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):
-    assert_can_win(tester, multiworld)
-    assert_same_number_items_locations(tester, multiworld)
 
 
 def get_option_choices(option) -> Dict[str, int]:

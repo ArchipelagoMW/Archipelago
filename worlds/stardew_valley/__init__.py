@@ -205,7 +205,7 @@ class StardewValleyWorld(World):
 
     def setup_quest_events(self):
         start_dark_talisman_quest = LocationData(None, RegionName.railroad, Event.start_dark_talisman_quest)
-        self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key, Event.start_dark_talisman_quest)
+        self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key(), Event.start_dark_talisman_quest)
 
     def setup_action_events(self):
         can_ship_event = LocationData(None, RegionName.shipping, Event.can_ship_items)

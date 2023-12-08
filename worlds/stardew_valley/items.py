@@ -348,11 +348,11 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, options: Starde
 def create_special_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     if options.quest_locations < 0:
         return
-    items.append(item_factory("Adventurer's Guild"))
-    items.append(item_factory("Club Card"))
-    items.append(item_factory("Magnifying Glass"))
-    items.append(item_factory("Bear's Knowledge"))
-    items.append(item_factory("Iridium Snake Milk"))
+    # items.append(item_factory("Adventurer's Guild")) # Now unlocked always!
+    items.append(item_factory(Wallet.club_card))
+    items.append(item_factory(Wallet.magnifying_glass))
+    items.append(item_factory(Wallet.bears_knowledge))
+    items.append(item_factory(Wallet.iridium_snake_milk))
     items.append(item_factory("Fairy Dust Recipe"))
     if ModNames.sve in options.mods:
         create_special_quest_rewards_sve(item_factory, options, items)

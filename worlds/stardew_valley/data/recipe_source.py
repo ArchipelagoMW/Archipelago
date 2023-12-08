@@ -49,6 +49,16 @@ class QueenOfSauceSource(RecipeSource):
         return f"QueenOfSauceSource at year {self.year} {self.season} {self.day}"
 
 
+class QuestSource(RecipeSource):
+    quest: str
+
+    def __init__(self, quest: str):
+        self.quest = quest
+
+    def __repr__(self):
+        return f"QuestSource at quest {self.quest}"
+
+
 class FriendshipSource(RecipeSource):
     friend: str
     hearts: int

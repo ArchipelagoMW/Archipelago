@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 
 from ..mods.mod_data import ModNames
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource
+    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, Craftable, \
     ModEdible, ModCraftable, ModMachine, ModFloor, ModConsumable
@@ -18,6 +18,7 @@ from ..strings.machine_names import Machine
 from ..strings.material_names import Material
 from ..strings.metal_names import Ore, MetalBar, Fossil, Artifact, Mineral
 from ..strings.monster_drop_names import Loot
+from ..strings.quest_names import Quest
 from ..strings.region_names import Region, SVERegion
 from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill, ModSkill
@@ -77,6 +78,11 @@ def shop_trade_recipe(name: str, region: str, currency: str, price: int, ingredi
 
 def queen_of_sauce_recipe(name: str, year: int, season: str, day: int, ingredients: Dict[str, int]) -> CraftingRecipe:
     source = QueenOfSauceSource(year, season, day)
+    return create_recipe(name, ingredients, source)
+
+
+def quest_recipe(name: str, quest: str, ingredients: Dict[str, int]) -> CraftingRecipe:
+    source = QuestSource(quest)
     return create_recipe(name, ingredients, source)
 
 
@@ -193,7 +199,7 @@ life_elixir = skill_recipe(Edible.life_elixir, Skill.combat, 2, {Forageable.red_
 oil_of_garlic = skill_recipe(Edible.oil_of_garlic, Skill.combat, 6, {Vegetable.garlic: 10, Ingredient.oil: 1})
 
 monster_musk = special_order_recipe(Consumable.monster_musk, SpecialOrder.prismatic_jelly, {Loot.bat_wing: 30, Loot.slime: 30})
-fairy_dust = ap_recipe(Consumable.fairy_dust, {Mineral.diamond: 1, Flower.fairy_rose: 1})
+fairy_dust = quest_recipe(Consumable.fairy_dust, Quest.the_pirates_wife, {Mineral.diamond: 1, Flower.fairy_rose: 1})
 warp_totem_beach = skill_recipe(Consumable.warp_totem_beach, Skill.foraging, 6, {Material.hardwood: 1, WaterItem.coral: 2, Material.fiber: 10})
 warp_totem_mountains = skill_recipe(Consumable.warp_totem_mountains, Skill.foraging, 7, {Material.hardwood: 1, MetalBar.iron: 1, Material.stone: 25})
 warp_totem_farm = skill_recipe(Consumable.warp_totem_farm, Skill.foraging, 8, {Material.hardwood: 1, ArtisanGood.honey: 1, Material.fiber: 20})

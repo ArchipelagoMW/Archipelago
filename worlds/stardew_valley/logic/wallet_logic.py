@@ -1,5 +1,3 @@
-from functools import cached_property
-
 from .base_logic import BaseLogic, BaseLogicMixin
 from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule
@@ -13,10 +11,9 @@ class WalletLogicMixin(BaseLogicMixin):
 
 
 class WalletLogic(BaseLogic[ReceivedLogicMixin]):
-    @cached_property
+
     def can_speak_dwarf(self) -> StardewRule:
         return self.logic.received(Wallet.dwarvish_translation_guide)
 
-    @cached_property
     def has_rusty_key(self) -> StardewRule:
         return self.logic.received(Wallet.rusty_key)

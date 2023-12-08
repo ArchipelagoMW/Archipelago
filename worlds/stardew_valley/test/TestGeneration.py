@@ -37,6 +37,7 @@ class TestBaseItemGeneration(SVTestBase):
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
         items_to_ignore = [event.name for event in items.events]
         items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
+        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
@@ -88,6 +89,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
         items_to_ignore = [event.name for event in items.events]
         items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
+        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
@@ -247,8 +249,7 @@ class TestProgressiveElevator(SVTestBase):
         swords = [self.get_item_by_name("Progressive Sword")] * 3
         combat_levels = [self.get_item_by_name("Combat Level")] * 4
         mining_levels = [self.get_item_by_name("Mining Level")] * 4
-        guild = self.get_item_by_name("Adventurer's Guild")
-        return [*combat_levels, *mining_levels, *elevators, guild, *pickaxes, *swords]
+        return [*combat_levels, *mining_levels, *elevators, *pickaxes, *swords]
 
     def generate_items_for_extra_mine_levels(self, weapon_name: str) -> List[Item]:
         last_pickaxe = self.get_item_by_name("Progressive Pickaxe")
@@ -299,30 +300,27 @@ class TestSkullCavernLogic(SVTestBase):
         swords = [self.get_item_by_name("Progressive Sword")] * 3
         combat_levels = [self.get_item_by_name("Combat Level")] * 4
         mining_levels = [self.get_item_by_name("Mining Level")] * 4
-        guild = self.get_item_by_name("Adventurer's Guild")
         bus = self.get_item_by_name("Bus Repair")
         skull_key = self.get_item_by_name("Skull Key")
-        return [*combat_levels, *mining_levels, guild, *pickaxes, *swords, bus, skull_key]
+        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
 
     def generate_items_for_skull_50(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 3
         swords = [self.get_item_by_name("Progressive Sword")] * 4
         combat_levels = [self.get_item_by_name("Combat Level")] * 6
         mining_levels = [self.get_item_by_name("Mining Level")] * 6
-        guild = self.get_item_by_name("Adventurer's Guild")
         bus = self.get_item_by_name("Bus Repair")
         skull_key = self.get_item_by_name("Skull Key")
-        return [*combat_levels, *mining_levels, guild, *pickaxes, *swords, bus, skull_key]
+        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
 
     def generate_items_for_skull_100(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 4
         swords = [self.get_item_by_name("Progressive Sword")] * 5
         combat_levels = [self.get_item_by_name("Combat Level")] * 8
         mining_levels = [self.get_item_by_name("Mining Level")] * 8
-        guild = self.get_item_by_name("Adventurer's Guild")
         bus = self.get_item_by_name("Bus Repair")
         skull_key = self.get_item_by_name("Skull Key")
-        return [*combat_levels, *mining_levels, guild, *pickaxes, *swords, bus, skull_key]
+        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
 
 
 class TestLocationGeneration(SVTestBase):

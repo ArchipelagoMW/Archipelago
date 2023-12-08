@@ -271,7 +271,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_tool(Tool.scythe),
             Forageable.hazelnut: self.tool.can_forage(Season.fall),
             Forageable.holly: self.tool.can_forage(Season.winter),
-            Forageable.journal_scrap: self.region.can_reach_all((Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10)) & self.received(Wallet.magnifying_glass) & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),
+            Forageable.journal_scrap: self.region.can_reach_all((Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10)) & self.quest.has_magnifying_glass() & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),
             Forageable.leek: self.tool.can_forage(Season.spring),
             Forageable.magma_cap: self.tool.can_forage(Generic.any, Region.volcano_floor_5),
             Forageable.morel: self.tool.can_forage(Season.spring, Region.secret_woods),
@@ -279,7 +279,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Forageable.rainbow_shell: self.tool.can_forage(Season.summer, Region.beach),
             Forageable.red_mushroom: self.tool.can_forage(Season.summer, Region.secret_woods) | self.tool.can_forage(Season.fall, Region.secret_woods),
             Forageable.salmonberry: self.tool.can_forage(Season.spring),
-            Forageable.secret_note: self.received(Wallet.magnifying_glass) & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),
+            Forageable.secret_note: self.quest.has_magnifying_glass() & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),
             Forageable.snow_yam: self.tool.can_forage(Season.winter, Region.beach, True),
             Forageable.spice_berry: self.tool.can_forage(Season.summer),
             Forageable.spring_onion: self.tool.can_forage(Season.spring),
@@ -524,7 +524,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                                self.bundle.can_complete_community_center,  # CC Ceremony first point
                                self.bundle.can_complete_community_center,  # CC Ceremony second point
                                self.received(Wallet.skull_key),  # Skull Key obtained
-                               self.wallet.has_rusty_key,  # Rusty key obtained
+                               self.wallet.has_rusty_key(),  # Rusty key obtained
                                ]
         return Count(12, rules_worth_a_point)
 

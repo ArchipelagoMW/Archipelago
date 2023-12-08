@@ -265,7 +265,6 @@ class TestWeaponsLogic(SVTestBase):
     }
 
     def test_mine(self):
-        self.collect(self.world.create_item("Adventurer's Guild"))
         self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=True)
         self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=True)
         self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=True)
@@ -328,30 +327,6 @@ class TestWeaponsLogic(SVTestBase):
             self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
         else:
             self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state, expected=False))
-
-
-class TestMonstersanityProgressiveRules(SVTestBase):
-    options = {
-        options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals,
-    }
-
-    def test_has_rules(self):
-        for location in self.multiworld.get_locations(self.player):
-            if "Monster Eradication: " not in location.name:
-                continue
-            self.assertFalse(self.world.logic.region.can_reach_location(location)(self.multiworld.state))
-
-
-class TestMonstersanitySplitRules(SVTestBase):
-    options = {
-        options.Monstersanity.internal_name: options.Monstersanity.option_split_goals,
-    }
-
-    def test_has_rules(self):
-        for location in self.multiworld.get_locations(self.player):
-            if "Monster Eradication: " not in location.name:
-                continue
-            self.assertFalse(self.world.logic.region.can_reach_location(location)(self.multiworld.state))
 
 
 class TestRecipeLearnLogic(SVTestBase):
@@ -453,7 +428,6 @@ class TestCraftsanityLogic(SVTestBase):
         self.collect([self.world.create_item("Combat Level")] * 10)
         self.collect([self.world.create_item("Fishing Level")] * 10)
         self.collect_all_the_money()
-        self.multiworld.state.collect(self.world.create_item("Adventurer's Guild"), event=False)
         self.assertFalse(rule(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item("Marble Brazier Recipe"), event=False)
@@ -560,14 +534,14 @@ class TestDonationLogicAll(SVTestBase):
     }
 
     def test_cannot_make_any_donation_without_museum_access(self):
-        guild_item = "Adventurer's Guild"
-        swap_museum_and_guild(self.multiworld, self.player)
-        collect_all_except(self.multiworld, guild_item)
+        railroad_item = "Railroad Boulder Removed"
+        swap_museum_and_bathhouse(self.multiworld, self.player)
+        collect_all_except(self.multiworld, railroad_item)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
             self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
-        self.multiworld.state.collect(self.world.create_item(guild_item), event=False)
+        self.multiworld.state.collect(self.world.create_item(railroad_item), event=False)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
             self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
@@ -579,16 +553,16 @@ class TestDonationLogicRandomized(SVTestBase):
     }
 
     def test_cannot_make_any_donation_without_museum_access(self):
-        guild_item = "Adventurer's Guild"
-        swap_museum_and_guild(self.multiworld, self.player)
-        collect_all_except(self.multiworld, guild_item)
+        railroad_item = "Railroad Boulder Removed"
+        swap_museum_and_bathhouse(self.multiworld, self.player)
+        collect_all_except(self.multiworld, railroad_item)
         donation_locations = [location for location in self.multiworld.get_locations() if
                               not location.event and LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
 
         for donation in donation_locations:
             self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
-        self.multiworld.state.collect(self.world.create_item(guild_item), event=False)
+        self.multiworld.state.collect(self.world.create_item(railroad_item), event=False)
 
         for donation in donation_locations:
             self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
@@ -600,26 +574,26 @@ class TestDonationLogicMilestones(SVTestBase):
     }
 
     def test_cannot_make_any_donation_without_museum_access(self):
-        guild_item = "Adventurer's Guild"
-        swap_museum_and_guild(self.multiworld, self.player)
-        collect_all_except(self.multiworld, guild_item)
+        railroad_item = "Railroad Boulder Removed"
+        swap_museum_and_bathhouse(self.multiworld, self.player)
+        collect_all_except(self.multiworld, railroad_item)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
             self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
-        self.multiworld.state.collect(self.world.create_item(guild_item), event=False)
+        self.multiworld.state.collect(self.world.create_item(railroad_item), event=False)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
             self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
 
-def swap_museum_and_guild(multiworld, player):
+def swap_museum_and_bathhouse(multiworld, player):
     museum_region = multiworld.get_region(Region.museum, player)
-    guild_region = multiworld.get_region(Region.adventurer_guild, player)
+    bathhouse_region = multiworld.get_region(Region.bathhouse_entrance, player)
     museum_entrance = multiworld.get_entrance(Entrance.town_to_museum, player)
-    guild_entrance = multiworld.get_entrance(Entrance.mountain_to_adventurer_guild, player)
-    museum_entrance.connect(guild_region)
-    guild_entrance.connect(museum_region)
+    bathhouse_entrance = multiworld.get_entrance(Entrance.enter_bathhouse_entrance, player)
+    museum_entrance.connect(bathhouse_region)
+    bathhouse_entrance.connect(museum_region)
 
 
 def collect_all_except(multiworld, item_to_not_collect: str):
@@ -640,7 +614,6 @@ class TestFriendsanityDatingRules(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
         self.multiworld.state.collect(self.world.create_item("Beach Bridge"), event=False)
         self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)
-        self.multiworld.state.collect(self.world.create_item("Adventurer's Guild"), event=False)
         for i in range(3):
             self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=False)
             self.multiworld.state.collect(self.world.create_item("Progressive Weapon"), event=False)

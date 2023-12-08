@@ -39,7 +39,7 @@ RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
             special_orders.update({
                 ModSpecialOrder.junas_monster_mash: self.logic.relationship.has_hearts(ModNPC.juna, 4) &
                                                     self.registry.special_order_rules[SpecialOrder.a_curious_substance] &
-                                                    self.logic.wallet.has_rusty_key &
+                                                    self.logic.wallet.has_rusty_key() &
                                                     self.logic.region.can_reach(Region.forest) & self.logic.has(Consumable.monster_musk) &
                                                     self.logic.has("Energy Tonic") & self.logic.has(Material.sap) & self.logic.has(Loot.bug_meat) &
                                                     self.logic.has(Edible.oil_of_garlic) & self.logic.has(Meal.strange_bun)

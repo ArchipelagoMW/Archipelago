@@ -98,7 +98,7 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.grannys_gift: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek) & self.logic.relationship.can_meet(NPC.evelyn),
             Quest.exotic_spirits: self.logic.season.has(Season.winter) & self.logic.has(Forageable.coconut) & self.logic.relationship.can_meet(NPC.gus),
             Quest.catch_a_lingcod: self.logic.season.has(Season.winter) & self.logic.has(Fish.lingcod) & self.logic.relationship.can_meet(NPC.willy),
-            Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key & self.logic.relationship.can_meet(NPC.krobus),
+            Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(NPC.krobus),
             Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp),
             Quest.magic_ink: self.logic.relationship.can_meet(NPC.wizard),
             Quest.the_pirates_wife: self.logic.relationship.can_meet(NPC.kent) & self.logic.relationship.can_meet(NPC.gus) &
@@ -111,3 +111,13 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
 
     def can_complete_quest(self, quest: str) -> StardewRule:
         return Has(quest, self.registry.quest_rules)
+
+    def has_club_card(self) -> StardewRule:
+        if self.options.quest_locations < 0:
+            return self.logic.quest.can_complete_quest(Quest.the_mysterious_qi)
+        return self.logic.received(Wallet.club_card)
+
+    def has_magnifying_glass(self) -> StardewRule:
+        if self.options.quest_locations < 0:
+            return self.logic.quest.can_complete_quest(Quest.a_winter_mystery)
+        return self.logic.received(Wallet.magnifying_glass)

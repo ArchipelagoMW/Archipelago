@@ -5,6 +5,7 @@ from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
+from .quest_logic import QuestLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogicMixin
@@ -15,7 +16,7 @@ from .. import options
 from ..data.craftable_data import CraftingRecipe, all_crafting_recipes_by_name
 from ..data.recipe_data import StarterSource, ShopSource, SkillSource, FriendshipSource
 from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
-    FestivalShopSource
+    FestivalShopSource, QuestSource
 from ..locations import locations_by_tag, LocationTags
 from ..options import Craftsanity, SpecialOrderLocations, ExcludeGingerIsland
 from ..stardew_rule import StardewRule, True_, False_, And
@@ -29,7 +30,7 @@ class CraftingLogicMixin(BaseLogicMixin):
 
 
 class CraftingLogic(BaseLogic[Union[TimeLogicMixin, ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, RelationshipLogicMixin,
-SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin]]):
+SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
     @cache_self1
     def can_craft(self, recipe: CraftingRecipe = None) -> StardewRule:
         if recipe is None:
@@ -45,6 +46,11 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin]]):
             return self.logic.received(recipe.source.ap_item, len(recipe.source.ap_item))
         if isinstance(recipe.source, FestivalShopSource):
             if self.options.festival_locations == options.FestivalLocations.option_disabled:
+                return self.logic.crafting.can_learn_recipe(recipe)
+            else:
+                return self.logic.crafting.received_recipe(recipe.item)
+        if isinstance(recipe.source, QuestSource):
+            if self.options.quest_locations < 0:
                 return self.logic.crafting.can_learn_recipe(recipe)
             else:
                 return self.logic.crafting.received_recipe(recipe.item)
@@ -73,6 +79,8 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin]]):
             return self.logic.region.can_reach(recipe.source.region) & self.logic.relationship.has_hearts(recipe.source.friend, recipe.source.hearts)
         if isinstance(recipe.source, FriendshipSource):
             return self.logic.relationship.has_hearts(recipe.source.friend, recipe.source.hearts)
+        if isinstance(recipe.source, QuestSource):
+            return self.logic.quest.can_complete_quest(recipe.source.quest)
         if isinstance(recipe.source, SpecialOrderSource):
             if self.options.special_order_locations == SpecialOrderLocations.option_disabled:
                 return self.logic.special_order.can_complete_special_order(recipe.source.special_order)

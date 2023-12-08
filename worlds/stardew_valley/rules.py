@@ -202,9 +202,9 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_secret_woods, player),
                              logic.tool.has_tool(Tool.axe, "Iron") | (logic.mod.magic.can_blink()))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.forest_to_sewer, player),
-                             logic.wallet.has_rusty_key)
+                             logic.wallet.has_rusty_key())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.town_to_sewer, player),
-                             logic.wallet.has_rusty_key)
+                             logic.wallet.has_rusty_key())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_abandoned_jojamart, player),
                              logic.has_abandoned_jojamart())
     movie_theater_rule = logic.has_movie_theater()
@@ -219,13 +219,12 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_dangerous_skull_cavern, player),
                              (logic.received(Wallet.skull_key) & logic.region.can_reach(Region.qi_walnut_room)))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.talk_to_mines_dwarf, player),
-                             logic.wallet.can_speak_dwarf & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
+                             logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.buy_from_traveling_merchant, player),
                              logic.traveling_merchant.has_days())
 
     set_farm_buildings_entrance_rules(logic, multiworld, player)
 
-    set_adventure_guild_entrance_rules(logic, multiworld, player, world_options)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.mountain_to_railroad, player),
                              logic.received("Railroad Boulder Removed"))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_witch_warp_cave, player),
@@ -235,7 +234,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_mutant_bug_lair, player),
                              (logic.received(Event.start_dark_talisman_quest) & logic.relationship.can_meet(NPC.krobus)) | logic.mod.magic.can_blink())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_casino, player),
-                             logic.received("Club Card"))
+                             logic.quest.has_club_card())
 
     set_bedroom_entrance_rules(logic, multiworld, player, world_options)
     set_festival_entrance_rules(logic, multiworld, player)
@@ -243,14 +242,6 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.farmhouse_cooking, player), logic.cooking.can_cook_in_kitchen)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.shipping, player), logic.shipping.can_use_shipping_bin)
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.watch_queen_of_sauce, player), logic.action.can_watch(Channel.queen_of_sauce))
-
-
-def set_adventure_guild_entrance_rules(logic, multiworld, player, world_options):
-    if ModNames.sve in world_options.mods:
-        entrance = multiworld.get_entrance(SVEEntrance.guild_to_interior, player)
-    else:
-        entrance = multiworld.get_entrance(Entrance.mountain_to_adventurer_guild, player)
-    MultiWorldRules.set_rule(entrance, logic.received("Adventurer's Guild"))
 
 
 def set_farm_buildings_entrance_rules(logic, multiworld, player):
@@ -388,7 +379,7 @@ def set_island_entrances_rules(logic: StardewLogic, multiworld, player):
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.climb_to_volcano_5, player),
                              (logic.ability.can_mine_perfectly() & logic.tool.can_water(1)))
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.talk_to_volcano_dwarf, player),
-                             logic.wallet.can_speak_dwarf)
+                             logic.wallet.can_speak_dwarf())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.climb_to_volcano_10, player),
                              (logic.ability.can_mine_perfectly() & logic.tool.can_water(1)))
     parrots = [Entrance.parrot_express_docks_to_volcano, Entrance.parrot_express_jungle_to_volcano,
