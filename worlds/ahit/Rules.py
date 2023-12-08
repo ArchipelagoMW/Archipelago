@@ -187,7 +187,6 @@ def set_rules(world: World):
 
     lowest_cost: int = world.options.LowestChapterCost.value
     highest_cost: int = world.options.HighestChapterCost.value
-
     cost_increment: int = world.options.ChapterCostIncrement.value
     min_difference: int = world.options.ChapterCostMinDifference.value
     last_cost: int = 0
@@ -317,9 +316,25 @@ def set_rules(world: World):
     for loc in world.multiworld.get_region("Alpine Skyline Area (TIHS)", world.player).locations:
         if "Goat Village" in loc.name:
             continue
+        # This needs some special handling
+        if loc.name == "Alpine Skyline - Goat Refinery":
+            add_rule(loc, lambda state: state.has("AFR Access", world.player)
+                     and can_use_hookshot(state, world)
+                     and can_hit(state, world, True))
+
+            difficulty: Difficulty = Difficulty(world.multiworld.LogicDifficulty[world.player].value)
+            if difficulty >= Difficulty.MODERATE:
+                add_rule(loc, lambda state: state.has("TIHS Access", world.player)
+                         and can_use_hat(state, world, HatType.SPRINT), "or")
+            elif difficulty >= Difficulty.HARD:
+                add_rule(loc, lambda state: state.has("TIHS Access", world.player, "or"))
+
+            continue
 
         add_rule(loc, lambda state: can_use_hookshot(state, world))
 
+    dummy_entrances: typing.List[Entrance] = []
+      
     for (key, acts) in act_connections.items():
         if "Arctic Cruise" in key and not world.is_dlc1():
             continue
@@ -328,7 +343,7 @@ def set_rules(world: World):
         entrance: Entrance = world.multiworld.get_entrance(key, world.player)
         region: Region = entrance.connected_region
         access_rules: typing.List[typing.Callable[[CollectionState], bool]] = []
-        entrance.parent_region.exits.remove(entrance)
+        dummy_entrances.append(entrance)
 
         # Entrances to this act that we have to set access_rules on
         entrances: typing.List[Entrance] = []
@@ -353,6 +368,9 @@ def set_rules(world: World):
         for e in entrances:
             for rules in access_rules:
                 add_rule(e, rules)
+
+    for e in dummy_entrances:
+        set_rule(e, lambda state: False)
 
     set_event_rules(world)
 
@@ -448,13 +466,12 @@ def set_moderate_rules(world: World):
     # There is a glitched fall damage volume near the Yellow Overpass time piece that warps the player to Pink Paw.
     # Yellow Overpass time piece can also be reached without Hookshot quite easily.
     if world.is_dlc2():
-        set_rule(world.multiworld.get_entrance("-> Pink Paw Station", world.player), lambda state: True)
+        # No Hookshot
         set_rule(world.multiworld.get_location("Act Completion (Yellow Overpass Station)", world.player),
                  lambda state: True)
 
+        # No Dweller, Hookshot, or Time Stop for these
         set_rule(world.multiworld.get_location("Pink Paw Station - Cat Vacuum", world.player), lambda state: True)
-
-        # The player can quite literally walk past the fan from the side without Time Stop.
         set_rule(world.multiworld.get_location("Pink Paw Station - Behind Fan", world.player), lambda state: True)
 
         # Moderate: clear Rush Hour without Hookshot
@@ -465,8 +482,10 @@ def set_moderate_rules(world: World):
                  and can_use_hat(state, world, HatType.ICE)
                  and can_use_hat(state, world, HatType.BREWING))
 
-        # Moderate: Bluefin Tunnel without tickets
-        set_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", world.player), lambda state: True)
+        # Moderate: Bluefin Tunnel + Pink Paw Station without tickets
+        if world.multiworld.NoTicketSkips[world.player].value == 0:
+            set_rule(world.multiworld.get_entrance("-> Pink Paw Station", world.player), lambda state: True)
+            set_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", world.player), lambda state: True)
 
 
 def set_hard_rules(world: World):
@@ -482,6 +501,13 @@ def set_hard_rules(world: World):
     # Cherry bridge over boss arena gap (painting still expected)
     set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
              lambda state: has_paintings(state, world, 1, False) or state.has("YCHE Access", world.player))
+
+    set_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player),
+             lambda state: has_paintings(state, world, 2, True))
+    set_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
+             lambda state: has_paintings(state, world, 2, True))
+    set_rule(world.multiworld.get_location("Subcon Forest - Tall Tree Hookshot Swing", world.player),
+             lambda state: has_paintings(state, world, 3, True))
 
     # SDJ
     add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
@@ -508,8 +534,15 @@ def set_hard_rules(world: World):
                  lambda state: can_use_hat(state, world, HatType.ICE))
 
         # Hard: clear Rush Hour with Brewing Hat only
-        set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
-                 lambda state: can_use_hat(state, world, HatType.BREWING))
+        if world.multiworld.NoTicketSkips[world.player].value != 1:
+            set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
+                     lambda state: can_use_hat(state, world, HatType.BREWING))
+        else:
+            set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
+                     lambda state: can_use_hat(state, world, HatType.BREWING)
+                     and state.has("Metro Ticket - Yellow", world.player)
+                     and state.has("Metro Ticket - Blue", world.player)
+                     and state.has("Metro Ticket - Pink", world.player))
 
 
 def set_expert_rules(world: World):
@@ -517,8 +550,10 @@ def set_expert_rules(world: World):
     set_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
              lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.FINALE)))
 
-    # Expert: Mafia Town - Above Boats with nothing
+    # Expert: Mafia Town - Above Boats, Top of Lighthouse, and Hot Air Balloon with nothing
     set_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Mafia Town - Top of Lighthouse", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Mafia Town - Hot Air Balloon", world.player), lambda state: True)
 
     # Expert: Clear Dead Bird Studio with nothing
     for loc in world.multiworld.get_region("Dead Bird Studio - Post Elevator Area", world.player).locations:
@@ -561,13 +596,9 @@ def set_expert_rules(world: World):
     # Set painting rules only. Skipping paintings is determined in has_paintings
     set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
              lambda state: has_paintings(state, world, 1, True))
-    set_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player),
-             lambda state: has_paintings(state, world, 2, True))
-    set_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
-             lambda state: has_paintings(state, world, 2, True))
     set_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
              lambda state: has_paintings(state, world, 3, True))
-    set_rule(world.multiworld.get_location("Subcon Forest - Tall Tree Hookshot Swing", world.player),
+    set_rule(world.multiworld.get_location("Subcon Forest - Magnet Badge Bush", world.player),
              lambda state: has_paintings(state, world, 3, True))
 
     # You can cherry hover to Snatcher's post-fight cutscene, which completes the level without having to fight him
@@ -579,7 +610,13 @@ def set_expert_rules(world: World):
 
     if world.is_dlc2():
         # Expert: clear Rush Hour with nothing
-        set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player), lambda state: True)
+        if world.multiworld.NoTicketSkips[world.player].value == 0:
+            set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player), lambda state: True)
+        else:
+            set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
+                     lambda state: state.has("Metro Ticket - Yellow", world.player)
+                     and state.has("Metro Ticket - Blue", world.player)
+                     and state.has("Metro Ticket - Pink", world.player))
 
 
 def set_mafia_town_rules(world: World):

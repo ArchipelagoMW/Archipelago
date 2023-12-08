@@ -2,7 +2,7 @@ from worlds.AutoWorld import World
 from BaseClasses import Region, Entrance, ItemClassification, Location
 from .Types import ChapterIndex, Difficulty, HatInTimeLocation, HatInTimeItem
 from .Locations import location_table, storybook_pages, event_locs, is_location_valid, \
-    shop_locations, get_tasksanity_start_id, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
+    shop_locations, TASKSANITY_START_ID, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
 import typing
 from .Rules import set_rift_rules, get_difficulty
 
@@ -438,8 +438,8 @@ def create_rift_connections(world: World, region: Region):
 
 def create_tasksanity_locations(world: World):
     ship_shape: Region = world.multiworld.get_region("Ship Shape", world.player)
-    id_start: int = get_tasksanity_start_id()
-    for i in range(world.options.TasksanityCheckCount.value):
+    id_start: int = TASKSANITY_START_ID
+    for i in range(world.multiworld.TasksanityCheckCount[world.player].value):
         location = HatInTimeLocation(world.player, f"Tasksanity Check {i+1}", id_start+i, ship_shape)
         ship_shape.locations.append(location)
 
@@ -500,12 +500,12 @@ def randomize_act_entrances(world: World):
             region_list.append(region)
 
     for region in region_list.copy():
-        if "Time Rift" in region.name:
+        if region.name in chapter_finales:
             region_list.remove(region)
             region_list.append(region)
 
     for region in region_list.copy():
-        if region.name in chapter_finales:
+        if "Time Rift" in region.name:
             region_list.remove(region)
             region_list.append(region)
 
@@ -630,8 +630,8 @@ def randomize_act_entrances(world: World):
                     candidate = c
                     break
 
+        # noinspection PyUnboundLocalVariable
         shuffled_list.append(candidate)
-        # print(region, candidate)
 
         # Vanilla
         if candidate.name == region.name:
@@ -825,11 +825,8 @@ def get_shuffled_region(self, region: str) -> str:
 
 
 def create_thug_shops(world: World):
-    min_items: int = min(world.options.NyakuzaThugMinShopItems.value,
-                         world.options.NyakuzaThugMaxShopItems.value)
-
-    max_items: int = max(world.options.NyakuzaThugMaxShopItems.value,
-                         world.options.NyakuzaThugMinShopItems.value)
+    min_items: int = min(world.options.NyakuzaThugMinShopItems.value, world.options.NyakuzaThugMaxShopItems.value)
+    max_items: int = max(world.options.NyakuzaThugMaxShopItems.value, world.options.NyakuzaThugMinShopItems.value)
     count: int = -1
     step: int = 0
     old_name: str = ""
@@ -876,6 +873,7 @@ def create_events(world: World) -> int:
         if not is_location_valid(world, name):
             continue
 
+        item_name: str = name
         if world.is_dw():
             if name in snatcher_coins.keys():
                 name = f"{name} ({data.region})"
@@ -886,15 +884,15 @@ def create_events(world: World) -> int:
                 if get_difficulty(world) < Difficulty.EXPERT and name in zero_jumps_expert:
                     continue
 
-        event: Location = create_event(name, world.multiworld.get_region(data.region, world.player), world)
+        event: Location = create_event(name, item_name, world.multiworld.get_region(data.region, world.player), world)
         event.show_in_spoiler = False
         count += 1
 
     return count
 
 
-def create_event(name: str, region: Region, world: World) -> Location:
+def create_event(name: str, item_name: str, region: Region, world: World) -> Location:
     event = HatInTimeLocation(world.player, name, None, region)
     region.locations.append(event)
-    event.place_locked_item(HatInTimeItem(name, ItemClassification.progression, None, world.player))
+    event.place_locked_item(HatInTimeItem(item_name, ItemClassification.progression, None, world.player))
     return event

@@ -160,9 +160,7 @@ def create_dw_regions(world: World):
     spaceship = world.multiworld.get_region("Spaceship", world.player)
     dw_map: Region = create_region(world, "Death Wish Map")
     entrance = connect_regions(spaceship, dw_map, "-> Death Wish Map", world.player)
-
-    add_rule(entrance, lambda state: state.has("Time Piece", world.player,
-                                               world.options.DWTimePieceRequirement.value))
+    add_rule(entrance, lambda state: state.has("Time Piece", world.player, world.options.DWTimePieceRequirement.value))
 
     if world.options.DWShuffle.value > 0:
         dw_list: List[str] = []
@@ -173,8 +171,7 @@ def create_dw_regions(world: World):
             dw_list.append(name)
 
         world.random.shuffle(dw_list)
-        count = world.random.randint(world.options.DWShuffleCountMin.value,
-                                     world.options.DWShuffleCountMax.value)
+        count = world.random.randint(world.options.DWShuffleCountMin.value, world.options.DWShuffleCountMax.value)
 
         dw_shuffle: List[str] = []
         total = min(len(dw_list), count)
@@ -197,6 +194,7 @@ def create_dw_regions(world: World):
             if i == 0:
                 connect_regions(dw_map, dw, f"-> {name}", world.player)
             else:
+                # noinspection PyUnboundLocalVariable
                 connect_regions(prev_dw, dw, f"{prev_dw.name} -> {name}", world.player)
 
             loc_id = death_wishes[name]

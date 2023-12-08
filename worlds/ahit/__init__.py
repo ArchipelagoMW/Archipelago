@@ -1,7 +1,8 @@
 from BaseClasses import Item, ItemClassification, Tutorial
 from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
-from .Locations import location_table, contract_locations, is_location_valid, get_location_names, get_tasksanity_start_id
+from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
+    get_total_locations
 from .Rules import set_rules
 from .Options import AHITOptions, slot_data_options, adjust_options
 from .Types import HatType, ChapterIndex, HatInTimeItem
@@ -87,7 +88,6 @@ class HatInTimeWorld(World):
         self.topology_present = self.options.ActRandomizer.value
 
         create_regions(self)
-
         if self.options.EnableDeathWish.value > 0:
             create_dw_regions(self)
 
@@ -174,7 +174,8 @@ class HatInTimeWorld(World):
                            "Chapter7Cost": chapter_timepiece_costs[self.player][ChapterIndex.METRO],
                            "BadgeSellerItemCount": badge_seller_count[self.player],
                            "SeedNumber": str(self.multiworld.seed),  # For shop prices
-                           "SeedName": self.multiworld.seed_name}
+                           "SeedName": self.multiworld.seed_name,
+                           "TotalLocations": get_total_locations(self)}
 
         if self.options.HatItems.value == 0:
             slot_data.setdefault("SprintYarnCost", hat_yarn_costs[self.player][HatType.SPRINT])
@@ -253,7 +254,7 @@ class HatInTimeWorld(World):
 
         if self.is_dlc1() and self.options.Tasksanity.value > 0:
             ship_shape_region = get_shuffled_region(self, "Ship Shape")
-            id_start: int = get_tasksanity_start_id()
+            id_start: int = TASKSANITY_START_ID
             for i in range(self.options.TasksanityCheckCount.value):
                 new_hint_data[id_start+i] = ship_shape_region
 

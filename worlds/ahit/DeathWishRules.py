@@ -388,7 +388,6 @@ def create_enemy_events(world: World):
 
             if area == "Bluefin Tunnel" and not world.is_dlc2():
                 continue
-
             if world.options.DWShuffle.value > 0 and area in death_wishes.keys() \
                and area not in world.get_dw_shuffle():
                 continue

@@ -3,6 +3,7 @@ from .Types import HatDLC, HatType, LocData, Difficulty
 from typing import Dict
 from .Options import TasksanityCheckCount
 
+TASKSANITY_START_ID = 2000300204
 
 def get_total_locations(world: World) -> int:
     total: int = 0
@@ -96,7 +97,7 @@ def is_location_valid(world: World, location: str) -> bool:
 
 def get_location_names() -> Dict[str, int]:
     names = {name: data.id for name, data in location_table.items()}
-    id_start: int = get_tasksanity_start_id()
+    id_start: int = TASKSANITY_START_ID
     for i in range(TasksanityCheckCount.range_end):
         names.setdefault(f"Tasksanity Check {i+1}", id_start+i)
 
@@ -105,10 +106,6 @@ def get_location_names() -> Dict[str, int]:
         names.setdefault(f"{key} - All Clear", loc_id+1)
 
     return names
-
-
-def get_tasksanity_start_id() -> int:
-    return 2000300204
 
 
 ahit_locations = {
@@ -284,7 +281,7 @@ ahit_locations = {
     # Alpine Skyline
     "Alpine Skyline - Goat Village: Below Hookpoint": LocData(2000334856, "Alpine Skyline Area (TIHS)"),
     "Alpine Skyline - Goat Village: Hidden Branch": LocData(2000334855, "Alpine Skyline Area (TIHS)"),
-    "Alpine Skyline - Goat Refinery": LocData(2000333635, "Alpine Skyline Area"),
+    "Alpine Skyline - Goat Refinery": LocData(2000333635, "Alpine Skyline Area (TIHS)"),
     "Alpine Skyline - Bird Pass Fork": LocData(2000335911, "Alpine Skyline Area (TIHS)"),
 
     "Alpine Skyline - Yellow Band Hills": LocData(2000335756, "Alpine Skyline Area (TIHS)",
@@ -848,6 +845,7 @@ zero_jumps = {
                                                 dlc_flags=HatDLC.dlc2_dw),
 }
 
+# noinspection PyDictDuplicateKeys
 snatcher_coins = {
     "Snatcher Coin - Top of HQ": LocData(0, "Down with the Mafia!", dlc_flags=HatDLC.death_wish),
     "Snatcher Coin - Top of HQ": LocData(0, "Cheating the Race", dlc_flags=HatDLC.death_wish),
@@ -900,6 +898,8 @@ event_locs = {
     "HUMT Access": LocData(0, "Heating Up Mafia Town"),
     "TOD Access": LocData(0, "Toilet of Doom"),
     "YCHE Access": LocData(0, "Your Contract has Expired"),
+    "AFR Access": LocData(0, "Alpine Free Roam"),
+    "TIHS Access": LocData(0, "The Illness has Spread"),
 
     "Birdhouse Cleared": LocData(0, "The Birdhouse", act_event=True),
     "Lava Cake Cleared": LocData(0, "The Lava Cake", act_event=True),
