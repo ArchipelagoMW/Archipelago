@@ -67,7 +67,7 @@ class MetroidPrimeLogic(LogicMixin):
         # through early magmoor
         return ((self._prime_can_heat(world, player) and self._prime_has_missiles(world, player)
                  and self._prime_can_spider(world, player) and self.has({'Wave Beam', 'Space Jump Boots'}))
-                # from tallon elevator past frigate
+                # from mines via tallon
                 or (self._prime_frigate(world, player) and self._prime_can_bomb(world, player) and
                     self._prime_can_pb(world, player) and self._prime_can_spider(world, player)))
 
