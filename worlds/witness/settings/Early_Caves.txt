@@ -1,0 +1,6 @@
+Items:
+Caves Shortcuts
+
+Remove Items:
+Caves Mountain Shortcut (Door)
+Caves Swamp Shortcut (Door)

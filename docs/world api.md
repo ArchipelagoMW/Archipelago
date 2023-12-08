@@ -73,6 +73,53 @@ for your world specifically on the webhost:
 `game_info_languages` (optional) List of strings for defining the existing gameinfo pages your game supports. The documents must be
 prefixed with the same string as defined here. Default already has 'en'.
 
+`options_presets` (optional) A `Dict[str, Dict[str, Any]]` where the keys are the names of the presets and the values 
+are the options to be set for that preset. The options are defined as a `Dict[str, Any]` where the keys are the names of
+the options and the values are the values to be set for that option. These presets will be available for users to select from on the game's options page.
+
+Note: The values must be a non-aliased value for the option type and can only include the following option types:
+
+  - If you have a `Range`/`NamedRange` option, the value should be an `int` between the `range_start` and `range_end`
+    values.
+    - If you have a `NamedRange` option, the value can alternatively be a `str` that is one of the 
+      `special_range_names` keys.
+  - If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values. 
+  - If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
+  - `random` is also a valid value for any of these option types.
+
+`OptionDict`, `OptionList`, `OptionSet`, `FreeText`, or custom `Option`-derived classes are not supported for presets on the webhost at this time.
+
+Here is an example of a defined preset:
+```python
+# presets.py
+options_presets = {
+    "Limited Potential": {
+        "progression_balancing":    0,
+        "fairy_chests_per_zone":    2,
+        "starting_class":           "random",
+        "chests_per_zone":          30,
+        "vendors":                  "normal",
+        "architect":                "disabled",
+        "gold_gain_multiplier":     "half",
+        "number_of_children":       2,
+        "free_diary_on_generation": False,
+        "health_pool":              10,
+        "mana_pool":                10,
+        "attack_pool":              10,
+        "magic_damage_pool":        10,
+        "armor_pool":               5,
+        "equip_pool":               10,
+        "crit_chance_pool":         5,
+        "crit_damage_pool":         5,
+    }
+}
+
+# __init__.py
+class RLWeb(WebWorld):
+    options_presets = options_presets
+    # ...
+```
+
 ### MultiWorld Object
 
 The `MultiWorld` object references the whole multiworld (all items and locations
@@ -644,7 +691,7 @@ def generate_basic(self) -> None:
 ### Setting Rules
 
 ```python
-from worlds.generic.Rules import add_rule, set_rule, forbid_item
+from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 from .items import get_item_type
 
 
@@ -671,7 +718,7 @@ def set_rules(self) -> None:
     # require one item from an item group
     add_rule(self.multiworld.get_location("Chest3", self.player),
              lambda state: state.has_group("weapons", self.player))
-    # state also has .item_count() for items, .has_any() and .has_all() for sets
+    # state also has .count() for items, .has_any() and .has_all() for multiple
     # and .count_group() for groups
     # set_rule is likely to be a bit faster than add_rule
 
@@ -823,7 +870,7 @@ TestBase, and can then define options to test in the class body, and run tests i
 Example `__init__.py`
 
 ```python
-from test.test_base import WorldTestBase
+from test.bases import WorldTestBase
 
 
 class MyGameTestBase(WorldTestBase):
@@ -832,7 +879,7 @@ class MyGameTestBase(WorldTestBase):
 
 Next using the rules defined in the above `set_rules` we can test that the chests have the correct access rules.
 
-Example `testChestAccess.py`
+Example `test_chest_access.py`
 ```python
 from . import MyGameTestBase
 
@@ -852,3 +899,5 @@ class TestChestAccess(MyGameTestBase):
         # this will test that chests 3-5 can't be accessed without any weapon, but can be with just one of them.
         self.assertAccessDependency(locations, items)
 ```
+
+For more information on tests check the [tests doc](tests.md).
