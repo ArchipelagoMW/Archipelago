@@ -1,64 +1,105 @@
-{% macro Toggle(option_name) %}
+{% macro Toggle(option_name, option) %}
     <div class="select-container">
         <select id="{{ option_name }}" name="{{ option_name }}">
-            <option value="false">No</option>
-            <option value="true">Yes</option>
+            {% if option.default == 1 %}
+                <option value="false">No</option>
+                <option value="true" selected>Yes</option>
+            {% else %}
+                <option value="false" selected>No</option>
+                <option value="true">Yes</option>
+            {% endif %}
         </select>
         {{ RandomizeButton(option_name) }}
     </div>
 {% endmacro %}
 
-{% macro DefaultOnToggle(option_name) %}
-    <span>Default-On Toggle Input Coming Soon™</span>
+{% macro DefaultOnToggle(option_name, option) %}
+    <!-- Toggle handles defaults properly, so we just reuse that -->
+    {{ Toggle(option_name, option) }}
 {% endmacro %}
 
-{% macro Choice(option_name, choices) %}
-    <span>Choice Input Coming Soon™</span>
+{% macro Choice(option_name, option) %}
+    <div class="select-container">
+        <select id="{{ option_name }}" name="{{ option_name }}">
+            {% for id, name in option.name_lookup.items() %}
+                {% if name != "random" %}
+                    {% if option.default == id %}
+                        <option value="{{ name }}" selected>{{ option.get_option_name(id) }}</option>
+                    {% else %}
+                        <option value="{{ name }}">{{ option.get_option_name(id) }}</option>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </select>
+        {{ RandomizeButton(option_name) }}
+    </div>
 {% endmacro %}
 
-{% macro Range(option_name, min, max) %}
-    <span>Range Input Coming Soon™</span>
+{% macro Range(option_name, option) %}
+    <div class="range-container">
+        <input type="range" id="{{ option_name }}" name="{{ option_name }}" min="{{ option.range_start }}" max="{{ option.range_end }}" value="{{ option.default | default(option.range_start) }}" />
+        <span id="{{ option_name }}-value" class="range-value">{{ option.default | default(option.range_start) }}</span>
+        {{ RandomizeButton(option_name) }}
+    </div>
 {% endmacro %}
 
-{% macro NamedRange(option_name, choices, min, max) %}
-    <span>Named Range Input Coming Soon™</span>
+{% macro NamedRange(option_name, option) %}
+    <div class="named-range-container">
+        <select data-option-name="{{ option_name }}">
+            {% for key, val in option.special_range_names.items() %}
+                {% if option.default == val %}
+                    <option value="{{ val }}" selected>{{ key }} ({{ val }})</option>
+                {% else %}
+                    <option value="{{ val }}">{{ key }} ({{ val }})</option>
+                {% endif %}
+            {% endfor %}
+            <option value="custom" hidden>Custom</option>
+        </select>
+        <div class="named-range-wrapper">
+            <input type="range" id="{{ option_name }}" name="{{ option_name }}" min="{{ option.range_start }}" max="{{ option.range_end }}" value="{{ option.default | default(option.range_start) }}" />
+            <span id="{{ option_name }}-value" class="range-value">{{ option.default | default(option.range_start) }}</span>
+            {{ RandomizeButton(option_name) }}
+        </div>
+    </div>
 {% endmacro %}
 
-{% macro FreeText(option_name) %}
-    <span>Free Text Input Coming Soon™</span>
+{% macro FreeText(option_name, option) %}
+    <div class="free-text-container">
+        <input type="text" id="{{ option_name }}" name="{{ option_name }}" value="{{ option.default }}" />
+    </div>
 {% endmacro %}
 
-{% macro TextChoice(option_name) %}
+{% macro TextChoice(option_name, option) %}
     <span>Text Choice Input Coming Soon™</span>
 {% endmacro %}
 
-{% macro PlandoBosses(option_name) %}
+{% macro PlandoBosses(option_name, option) %}
     <!-- PlandoBosses is handled by its parent, TextChoice -->
-    {{ TextChoice(option_name) }}
+    {{ TextChoice(option_name, option) }}
 {% endmacro %}
 
-{% macro OptionDict(option_name) %}
+{% macro OptionDict(option_name, option) %}
     <!-- OptionDict is not supported -->
 {% endmacro %}
 
-{% macro ItemDict(option_name) %}
+{% macro ItemDict(option_name, option) %}
     <span>Item Dict Input Coming Soon™</span>
 {% endmacro %}
 
-{% macro OptionList(option_name) %}
+{% macro OptionList(option_name, option) %}
     <span>Option List Input Coming Soon™</span>
 {% endmacro %}
 
-{% macro OptionSet(option_name) %}
+{% macro OptionSet(option_name, option) %}
     <span>Option Set Input Coming Soon™</span>
 {% endmacro %}
 
-{% macro ItemSet(option_name) %}
+{% macro ItemSet(option_name, option) %}
     <span>ItemSet Input Coming Soon™</span>
 {% endmacro %}
 
 {% macro RandomizeButton(option_name) %}
-    <div class="randomize-button">
+    <div class="randomize-button" data-tooltip="Toggle randomization for this option!">
         <label>
             <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" />
             🎲

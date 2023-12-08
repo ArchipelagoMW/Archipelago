@@ -984,17 +984,20 @@ class CommonOptions(metaclass=OptionsMetaProperty):
 class LocalItems(ItemSet):
     """Forces these items to be in their native world."""
     display_name = "Local Items"
+    group_name = "Item & Location Options"
 
 
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
     display_name = "Not Local Items"
+    group_name = "Item & Location Options"
 
 
 class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
     display_name = "Start Inventory"
+    group_name = "Item & Location Options"
 
 
 class StartInventoryPool(StartInventory):
@@ -1002,31 +1005,37 @@ class StartInventoryPool(StartInventory):
     The game decides what the replacement items will be."""
     verify_item_name = True
     display_name = "Start Inventory from Pool"
+    group_name = "Item & Location Options"
 
 
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
     display_name = "Start Hints"
+    group_name = "Item & Location Options"
 
 
 class LocationSet(OptionSet):
     verify_location_name = True
     convert_name_groups = True
+    group_name = "Item & Location Options"
 
 
 class StartLocationHints(LocationSet):
     """Start with these locations and their item prefilled into the !hint command"""
     display_name = "Start Location Hints"
+    group_name = "Item & Location Options"
 
 
 class ExcludeLocations(LocationSet):
     """Prevent these locations from having an important item"""
     display_name = "Excluded Locations"
+    group_name = "Item & Location Options"
 
 
 class PriorityLocations(LocationSet):
     """Prevent these locations from having an unimportant item"""
     display_name = "Priority Locations"
+    group_name = "Item & Location Options"
 
 
 class DeathLink(Toggle):
@@ -1037,6 +1046,7 @@ class DeathLink(Toggle):
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     display_name = "Item Links"
+    group_name = "Item & Location Options"
     default = []
     schema = Schema([
         {
