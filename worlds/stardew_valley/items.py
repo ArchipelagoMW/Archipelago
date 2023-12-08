@@ -202,7 +202,7 @@ def remove_items_if_no_room_for_them(unique_items: List[Item], locations_count: 
         logger.debug(f"Player has more items than locations, trying to remove {number_of_items_to_remove} random filler items")
     assert len(removable_items) >= number_of_items_to_remove, get_too_many_items_error_message(locations_count, len(unique_items))
     items_to_remove = random.sample(removable_items, number_of_items_to_remove)
-    remove_items(item_deleter, items_to_remove, unique_items)
+    remove_items(items_to_remove, unique_items)
 
 
 def create_unique_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random) -> List[Item]:
