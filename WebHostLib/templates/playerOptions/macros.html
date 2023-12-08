@@ -1,5 +1,11 @@
 {% macro Toggle(option_name) %}
-    <span>Toggle Input Coming Soon™</span>
+    <div class="select-container">
+        <select id="{{ option_name }}" name="{{ option_name }}">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+        </select>
+        {{ RandomizeButton(option_name) }}
+    </div>
 {% endmacro %}
 
 {% macro DefaultOnToggle(option_name) %}
@@ -7,7 +13,7 @@
 {% endmacro %}
 
 {% macro Choice(option_name, choices) %}
-    <span>Toggle Input Coming Soon™</span>
+    <span>Choice Input Coming Soon™</span>
 {% endmacro %}
 
 {% macro Range(option_name, min, max) %}
@@ -49,4 +55,13 @@
 
 {% macro ItemSet(option_name) %}
     <span>ItemSet Input Coming Soon™</span>
+{% endmacro %}
+
+{% macro RandomizeButton(option_name) %}
+    <div class="randomize-button">
+        <label>
+            <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" />
+            🎲
+        </label>
+    </div>
 {% endmacro %}

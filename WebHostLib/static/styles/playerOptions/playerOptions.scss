@@ -1,0 +1,267 @@
+@import "../markdown.css";
+
+html{
+    background-image: url('../../static/backgrounds/grass.png');
+    background-repeat: repeat;
+    background-size: 650px 650px;
+}
+
+#player-options{
+    box-sizing: border-box;
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #eeffeb;
+
+    #player-options-button-row{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+    code{
+        background-color: #d9cd8e;
+        border-radius: 4px;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        color: #000000;
+    }
+
+    #user-message{
+        display: none;
+        width: calc(100% - 8px);
+        background-color: #ffe86b;
+        border-radius: 4px;
+        color: #000000;
+        padding: 4px;
+        text-align: center;
+
+        &.visible{
+            display: block;
+            cursor: pointer;
+        }
+    }
+
+    h1{
+        font-size: 2.5rem;
+        font-weight: normal;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        text-shadow: 1px 1px 4px #000000;
+    }
+
+    h2{
+        font-size: 40px;
+        font-weight: normal;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        text-transform: lowercase;
+        text-shadow: 1px 1px 2px #000000;
+    }
+
+    h3, h4, h5, h6{
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    }
+
+    input:not([type]){
+        border: 1px solid #000000;
+        padding: 3px;
+        border-radius: 3px;
+        min-width: 150px;
+
+        &:focus{
+            border: 1px solid #ffffff;
+        }
+    }
+
+    select{
+        border: 1px solid #000000;
+        padding: 3px;
+        border-radius: 3px;
+        min-width: 150px;
+        background-color: #ffffff;
+    }
+
+    .game-options, #rom-options{
+        display: flex;
+        flex-direction: row;
+    }
+
+    #meta-options{
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 3px;
+
+        label{
+            display: inline-block;
+            min-width: 180px;
+            flex-grow: 1;
+        }
+
+        input, select{
+            box-sizing: border-box;
+            min-width: 150px;
+            width: 50%;
+        }
+    }
+
+    .left, .right{
+        flex-grow: 1;
+    }
+
+    .left{
+        margin-right: 10px;
+    }
+
+    .right{
+        margin-left: 10px;
+    }
+
+    table{
+        margin-bottom: 30px;
+        width: 100%;
+
+        .select-container{
+            display: flex;
+            flex-direction: row;
+
+            select{
+                min-width: 200px;
+                flex-grow: 1;
+
+                &:disabled{
+                    background-color: lightgray;
+                }
+            }
+        }
+
+        .range-container{
+            display: flex;
+            flex-direction: row;
+
+            input[type=range]{
+                flex-grow: 1;
+            }
+
+            .range-value{
+                min-width: 20px;
+                margin-left: 0.25rem;
+            }
+        }
+
+        .named-range-container{
+            display: flex;
+            flex-direction: column;
+
+            .named-range-wrapper{
+                display: flex;
+                flex-direction: row;
+                margin-top: 0.25rem;
+
+                input[type=range]{
+                    flex-grow: 1;
+                }
+            }
+        }
+
+        .randomize-button{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 22px;
+            margin: 0 0 0 0.25rem;
+            font-size: 14px;
+            border: 1px solid black;
+            border-radius: 3px;
+            background-color: #d3d3d3;
+            user-select: none;
+
+            &:hover{
+                background-color: #c0c0c0;
+                cursor: pointer;
+            }
+
+            label{
+                line-height: 22px;
+                padding-left: 5px;
+                padding-right: 2px;
+                width: 100%;
+                height: 100%;
+                min-width: unset;
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+
+            input[type=checkbox]{
+                display: none;
+            }
+
+            &:has(input[type=checkbox]:checked){
+                background-color: #ffef00; /* Same as .interactive in globalStyles.css */
+
+                &:hover{
+                    background-color: #eedd27;
+                }
+            }
+
+            &[data-tooltip]::after{
+                left: unset;
+                right: 0;
+            }
+        }
+
+        label{
+            display: block;
+            min-width: 200px;
+            margin-right: 4px;
+            cursor: default;
+        }
+
+        th, td{
+            border: none;
+            padding: 3px;
+            font-size: 17px;
+            vertical-align: top;
+        }
+    }
+}
+
+@media all and (max-width: 1024px) {
+    #player-options {
+        border-radius: 0;
+
+        #meta-options {
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 6px;
+        }
+
+        .game-options{
+            justify-content: flex-start;
+            flex-wrap: wrap;
+
+            table{
+                margin-bottom: 0;
+
+                label{
+                    display: block;
+                    min-width: 200px;
+                }
+
+                tr td{
+                    width: 50%;
+                }
+            }
+        }
+
+        .left, .right{
+            margin: 0;
+        }
+    }
+}
