@@ -1,6 +1,17 @@
 from typing import List
 
 
+class DeepWoodsItem:
+    pendant_community = "Pendant of Community"
+    pendant_elder = "Pendant of Elders"
+    pendant_depths = "Pendant of Depths"
+    obelisk_sigil = "Progressive Woods Obelisk Sigils"
+
+
+class SkillItem:
+    luck_skill = "Luck Level"
+
+
 class SVEQuestItem:
     aurora_vineyard_tablet = "Aurora Vineyard Tablet"
     iridium_bomb = "Iridium Bomb"

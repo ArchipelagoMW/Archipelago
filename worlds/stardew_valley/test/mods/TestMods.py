@@ -16,7 +16,6 @@ from ...options import Mods, EntranceRandomization, Friendsanity, SeasonRandomiz
     Shipsanity, Craftsanity, ToolProgression
 from ...regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
 
-tools = ["Progressive Weapon", "Progressive Axe", "Progressive Pickaxe"]
 
 def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: unittest.TestCase, multiworld: MultiWorld):
     if isinstance(chosen_mods, str):
@@ -29,11 +28,6 @@ def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: unittest.T
             continue
         location = location_table[multiworld_location.name]
         tester.assertTrue(location.mod_name is None or location.mod_name in chosen_mods)
-
-
-def powerset(iterable):
-    s = list(iterable)
-    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 
 
 class TestGenerateModsOptions(SVTestCase):
@@ -64,7 +58,6 @@ class TestBaseLocationDependencies(SVTestBase):
     }
 
     def test_lance_chest_requires_quest_thoroughly(self):  # the method can be reused for other locations that seem troublesome.
-        self.multiworld.state.prog_items = {1: Counter()}
         item_list = ["Spring", "Summer", "Fall", "Winter", "Marlon's Boat Paddle"]
         item_list.extend(weapon for weapon in ["Progressive Weapon"]*3)
         item_list.extend(tool for tool in ["Progressive Axe"]*2)

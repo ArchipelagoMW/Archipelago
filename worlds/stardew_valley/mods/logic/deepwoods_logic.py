@@ -11,7 +11,9 @@ from ...mods.mod_data import ModNames
 from ...options import SkillProgression, ElevatorProgression
 from ...stardew_rule import StardewRule, True_, And
 from ...strings.ap_names.transport_names import ModTransportation
+from ...strings.ap_names.mods.mod_items import DeepWoodsItem, SkillItem
 from ...strings.craftable_names import Bomb
+from ...strings.food_names import Meal
 from ...strings.performance_names import Performance
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
@@ -44,7 +46,7 @@ CookingLogicMixin]]):
     def has_woods_rune_to_depth(self, floor: int) -> StardewRule:
         if self.options.skill_progression == ElevatorProgression.option_vanilla:
             return True_()
-        return self.logic.received("Progressive Woods Obelisk Sigils", int(floor / 10))
+        return self.logic.received(DeepWoodsItem.obelisk_sigil, int(floor / 10))
 
     def can_chop_to_depth(self, floor: int) -> StardewRule:
         previous_elevator = max(floor - 10, 0)
@@ -52,10 +54,11 @@ CookingLogicMixin]]):
                 self.can_reach_woods_depth(previous_elevator))
 
     def can_pull_sword(self) -> StardewRule:
-        rules = [self.logic.received("Pendant of Depths") & self.logic.received("Pendant of Community") & self.logic.received("Pendant of Elders"),
+        rules = [self.logic.received(DeepWoodsItem.pendant_depths) & self.logic.received(DeepWoodsItem.pendant_community) &
+                 self.logic.received(DeepWoodsItem.pendant_elder),
                  self.logic.skill.has_total_level(40)]
         if ModNames.luck_skill in self.options.mods:
-            rules.append(self.logic.received("Luck Level", 7))
+            rules.append(self.logic.received(SkillItem.luck_skill, 7))
         else:
-            rules.append(self.logic.has("Magic Rock Candy"))  # You need more luck than this, but it'll push the logic down a ways; you can get the rest there.
+            rules.append(self.logic.has(Meal.magic_rock_candy))  # You need more luck than this, but it'll push the logic down a ways; you can get the rest there.
         return And(*rules)

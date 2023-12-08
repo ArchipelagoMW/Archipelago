@@ -13,6 +13,7 @@ from .time_logic import TimeLogicMixin
 from ..data.villagers_data import all_villagers_by_name, Villager
 from ..options import Friendsanity
 from ..stardew_rule import StardewRule, True_, And, Or, Count
+from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.crop_names import Fruit
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
@@ -117,13 +118,13 @@ class RelationshipLogic(BaseLogic[Union[
         elif npc == ModNPC.apples:
             rules.append(self.logic.has(Fruit.starfruit))
         elif npc == ModNPC.scarlett:
-            scarlett_job = self.logic.received("Scarlett's Job Offer")
+            scarlett_job = self.logic.received(SVEQuestItem.scarlett_job_offer)
             scarlett_spring = self.logic.season.has(Season.spring) & self.can_meet(ModNPC.andy)
             scarlett_summer = self.logic.season.has(Season.summer) & self.can_meet(ModNPC.susan)
             scarlett_fall = self.logic.season.has(Season.fall) & self.can_meet(ModNPC.sophia)
             rules.append(scarlett_job & (scarlett_spring | scarlett_summer | scarlett_fall))
         elif npc == ModNPC.morgan:
-            rules.append(self.logic.received("Morgan's Schooling"))
+            rules.append(self.logic.received(SVEQuestItem.morgan_schooling))
 
         return And(*rules)
 

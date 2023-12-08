@@ -77,6 +77,7 @@ class Meal:
     tropical_curry = "Tropical Curry"
     trout_soup = "Trout Soup"
     vegetable_medley = "Vegetable Medley"
+    magic_rock_candy = "Magic Rock Candy"
 
 
 class Beverage:
