@@ -70,14 +70,16 @@ class SMCollectionState(metaclass=AutoLogicRegister):
 
 
 class SMWeb(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Super Metroid Client on your computer. This guide covers single-player, multiworld, and related software.",
         "English",
         "multiworld_en.md",
         "multiworld/en",
         ["Farrak Kilhn"]
-    )]
+    )
+    
+    tutorials = [setup_en]
 
 
 class ByteEdit(TypedDict):
