@@ -101,8 +101,11 @@ def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
 
 def connect_regions(world, player):
     def connect_level(level_name):
-        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name,
-                         rules.get_access_rule(player, level_name))
+        if level_name == 'Hotel Horror' and world.difficulty[player].value == 2:
+            rule = None
+        else:
+            rule = rules.get_access_rule(player, level_name)
+        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name, rule)
 
     connect_level('Hall of Hieroglyphs')
     connect_level('Palm Tree Paradise')

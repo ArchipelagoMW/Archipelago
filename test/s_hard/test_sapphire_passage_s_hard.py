@@ -99,25 +99,11 @@ class TestSapphirePassageSHard(TestSHard):
     def test_hotel_horror(self):
         self.starting_regions = ['Hotel Horror (entrance)']
         self.run_location_tests([
-            ['Hotel Horror - Room 102 Box', False, []],
-            ['Hotel Horror - Room 102 Box', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Hotel Horror - Room 102 Box', True, ['Progressive Grab', 'Progressive Grab']],
-
-            ['Hotel Horror - Room 303 Box', False, []],
-            ['Hotel Horror - Room 303 Box', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Hotel Horror - Room 303 Box', True, ['Progressive Grab', 'Progressive Grab']],
-
-            ['Hotel Horror - Room 402 Box', False, []],
-            ['Hotel Horror - Room 402 Box', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Hotel Horror - Room 402 Box', True, ['Progressive Grab', 'Progressive Grab']],
-
-            ['Hotel Horror - Exterior Box', False, []],
-            ['Hotel Horror - Exterior Box', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Hotel Horror - Exterior Box', True, ['Progressive Grab', 'Progressive Grab']],
-
-            ['Hotel Horror - CD Box', False, []],
-            ['Hotel Horror - CD Box', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Hotel Horror - CD Box', True, ['Progressive Grab', 'Progressive Grab']],
+            ['Hotel Horror - Room 102 Box', True, []],
+            ['Hotel Horror - Room 303 Box', True, []],
+            ['Hotel Horror - Room 402 Box', True, []],
+            ['Hotel Horror - Exterior Box', True, []],
+            ['Hotel Horror - CD Box', True, []],
         ])
 
     def test_catbat(self):
