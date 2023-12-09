@@ -52,14 +52,16 @@ If this file does exist, then it will be used.
 
 
 class FactorioWeb(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up the Archipelago Factorio software on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Berserker, Farrak Kilhn"]
-    )]
+    )
+    
+    tutorials = [setup_en]
 
 
 class FactorioItem(Item):
