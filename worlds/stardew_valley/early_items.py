@@ -1,10 +1,10 @@
 from random import Random
 
 from .options import BuildingProgression, StardewValleyOptions, BackpackProgression, ExcludeGingerIsland, SeasonRandomization, SpecialOrderLocations, \
-    Monstersanity
+    Monstersanity, ToolProgression, SkillProgression
 
-early_candidate_rate = 4
-always_early_candidates = ["Greenhouse", "Desert Obelisk", "Rusty Key", "Progressive Fishing Rod", "Progressive Pickaxe", "Fishing Level"]
+early_candidate_rate = 2
+always_early_candidates = ["Greenhouse", "Desert Obelisk", "Rusty Key"]
 seasons = ["Spring", "Summer", "Fall", "Winter"]
 
 
@@ -22,6 +22,13 @@ def setup_early_items(multiworld, options: StardewValleyOptions, player: int, ra
 
     if options.backpack_progression == BackpackProgression.option_early_progressive:
         early_forced.append("Progressive Backpack")
+
+    if options.tool_progression & ToolProgression.option_progressive:
+        early_forced.append("Progressive Fishing Rod")
+        early_forced.append("Progressive Pickaxe")
+
+    if options.skill_progression == SkillProgression.option_progressive:
+        early_forced.append("Fishing Level")
 
     if options.quest_locations >= 0:
         early_candidates.append("Magnifying Glass")
