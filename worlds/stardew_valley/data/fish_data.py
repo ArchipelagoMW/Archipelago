@@ -45,7 +45,7 @@ pirate_cove = (Region.pirate_cove,)
 
 crimson_badlands = (SVERegion.crimson_badlands,)
 shearwater = (SVERegion.shearwater,)
-highlands = (SVERegion.highlands,)
+highlands = (SVERegion.highlands_outside,)
 sprite_spring = (SVERegion.sprite_spring,)
 fable_reef = (SVERegion.fable_reef,)
 vineyard = (SVERegion.blue_moon_vineyard,)

@@ -45,7 +45,7 @@ wizard_tower = (Region.wizard_tower,)
 
 # Stardew Valley Expanded Locations
 adventurer = (Region.adventurer_guild,)
-highlands = (SVERegion.highlands,)
+highlands = (SVERegion.highlands_outside,)
 bluemoon = (SVERegion.blue_moon_vineyard,)
 aurora = (SVERegion.aurora_vineyard,)
 museum = (Region.museum,)

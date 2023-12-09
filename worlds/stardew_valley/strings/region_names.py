@@ -241,7 +241,7 @@ class SVERegion:
     guild_summit = "Guild Summit"
     fable_reef = "Fable Reef"
     first_slash_guild = "First Slash Guild"
-    highlands = "Highlands Outside"
+    highlands_outside = "Highlands Outside"
     highlands_cavern = "Highlands Cavern"
     dwarf_prison = "Highlands Cavern Prison"
     lances_house = "Lance's House Main"

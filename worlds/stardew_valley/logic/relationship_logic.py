@@ -101,7 +101,9 @@ class RelationshipLogic(BaseLogic[Union[
 
     # Should be cached
     def received_hearts(self, npc: str, hearts: int) -> StardewRule:
-        return self.logic.received(self.heart(npc), math.ceil(hearts / self.options.friendsanity_heart_size))
+        heart_item = self.heart(npc)
+        number_required = math.ceil(hearts / self.options.friendsanity_heart_size)
+        return self.logic.received(heart_item, number_required)
 
     @cache_self1
     def can_meet(self, npc: str) -> StardewRule:

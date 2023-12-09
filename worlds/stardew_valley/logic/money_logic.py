@@ -10,6 +10,7 @@ from .time_logic import TimeLogicMixin
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_
 from ..strings.currency_names import Currency
+from ..strings.machine_names import Machine
 from ..strings.region_names import Region
 from ..strings.ap_names.event_names import Event
 
@@ -27,14 +28,32 @@ class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMix
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
-        if amount < 2000:
+        if amount < 1000:
             return True_()
+
+        pierre_rule = self.logic.region.can_reach_all((Region.pierre_store, Region.forest))
+        willy_rule = self.logic.region.can_reach_all((Region.fish_shop, Region.fishing))
+        clint_rule = self.logic.region.can_reach_all((Region.blacksmith, Region.mines_floor_5))
+        robin_rule = self.logic.region.can_reach_all((Region.carpenter, Region.secret_woods))
         shipping_rule = self.logic.received(Event.can_ship_items)
+
+        if amount < 2000:
+            selling_any_rule = pierre_rule | willy_rule | clint_rule | robin_rule | shipping_rule
+            return selling_any_rule
+
+        if amount < 5000:
+            selling_all_rule = (pierre_rule & willy_rule & clint_rule & robin_rule) | shipping_rule
+            return selling_all_rule
+
         if amount < 10000:
             return shipping_rule
 
-        percent_progression_items_needed = min(100, amount // 10000)
-        return shipping_rule & HasProgressionPercent(self.player, percent_progression_items_needed)
+        seed_rules = self.logic.region.can_reach_any((Region.pierre_store, Region.oasis))
+        if amount < 40000:
+            return shipping_rule & seed_rules
+
+        percent_progression_items_needed = min(90, amount // 20000)
+        return shipping_rule & seed_rules & HasProgressionPercent(self.player, percent_progression_items_needed)
 
     @cache_self1
     def can_spend(self, amount: int) -> StardewRule:

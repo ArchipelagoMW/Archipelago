@@ -59,14 +59,14 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
         return {SVEGift.aged_blue_moon_wine: self.logic.money.can_spend_at(SVERegion.sophias_house, 28000),
                 SVEGift.blue_moon_wine: self.logic.money.can_spend_at(SVERegion.sophias_house, 3000),
                 SVESeed.fungus_seed: self.logic.region.can_reach(SVERegion.highlands_cavern) & self.logic.combat.has_good_weapon,
-                ModLoot.green_mushroom: self.logic.region.can_reach(SVERegion.highlands) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron),
+                ModLoot.green_mushroom: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron),
                 SVEFruit.monster_fruit: self.logic.season.has(Season.summer) & self.logic.has(SVESeed.stalk_seed),
                 SVEVegetable.monster_mushroom: self.logic.season.has(Season.fall) & self.logic.has(SVESeed.fungus_seed),
-                SVEForage.ornate_treasure_chest: self.logic.region.can_reach(SVERegion.highlands) & self.logic.combat.has_galaxy_weapon &
+                SVEForage.ornate_treasure_chest: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_galaxy_weapon &
                                                  self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron),
                 SVEFruit.slime_berry: self.logic.season.has(Season.spring) & self.logic.has(SVESeed.slime_seed),
-                SVESeed.slime_seed: self.logic.region.can_reach(SVERegion.highlands) & self.logic.combat.has_good_weapon,
-                SVESeed.stalk_seed: self.logic.region.can_reach(SVERegion.highlands) & self.logic.combat.has_good_weapon,
+                SVESeed.slime_seed: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_good_weapon,
+                SVESeed.stalk_seed: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_good_weapon,
                 SVEForage.swirl_stone: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
                 SVEVegetable.void_root: self.logic.season.has(Season.winter) & self.logic.has(SVESeed.void_seed),
                 SVESeed.void_seed: self.logic.region.can_reach(SVERegion.highlands_cavern) & self.logic.combat.has_good_weapon,
