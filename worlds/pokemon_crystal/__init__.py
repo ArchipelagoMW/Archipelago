@@ -89,10 +89,11 @@ class PokemonCrystalWorld(World):
             move_pool = []
             if type is None:
                 move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
-                             move_data.id > 0 and not move_data.is_hm]
+                             move_data.id > 0 and not move_data.is_hm and move_name not in ["STRUGGLE", "BEAT_UP"]]
             else:
                 move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
-                             move_data.id > 0 and not move_data.is_hm and move_data.type == type]
+                             move_data.id > 0 and not move_data.is_hm and move_data.type == type and move_name not in [
+                                 "STRUGGLE", "BEAT_UP"]]
             return self.random.choice(move_pool)
 
         def get_random_move_from_learnset(pokemon, level):
