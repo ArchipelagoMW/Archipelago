@@ -29,16 +29,16 @@ from .Options import options
 
 
 class TerrariaWeb(WebWorld):
-    tutorials = [
-        Tutorial(
-            "Multiworld Setup Guide",
-            "A guide to setting up the Terraria randomizer connected to an Archipelago Multiworld.",
-            "English",
-            "setup_en.md",
-            "setup/en",
-            ["Seldom"],
-        )
-    ]
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Terraria randomizer connected to an Archipelago Multiworld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Seldom"],
+    )
+    
+    tutorials = [setup_en]
 
 
 class TerrariaWorld(World):
