@@ -73,6 +73,13 @@ Final Fantasy Mystic Quest:
     Chaos: 0
     SelfDestruct: 0
     SimpleShuffle: 0
+  enemizer_groups:
+    MobsOnly: 0
+    MobsBosses: 0
+    MobsBossesDK: 0
+  shuffle_res_weak_type:
+    true: 0
+    false: 0
   leveling_curve:
     Half: 0
     Normal: 0
@@ -81,6 +88,42 @@ Final Fantasy Mystic Quest:
     DoubleHalf: 0
     Triple: 0
     Quadruple: 0
+  companion_leveling_type:
+    Quests: 0
+    QuestsExtended: 0
+    SaveCrystalsIndividual: 0
+    SaveCrystalsAll: 0
+    BenPlus0: 0
+    BenPlus5: 0
+    BenPlus10: 0
+  companion_spellbook_type:
+    Standard: 0
+    StandardExtended: 0
+    RandomBalanced: 0
+    RandomChaos: 0
+  starting_companion:
+    None: 0
+    Kaeli: 0
+    Tristam: 0
+    Phoebe: 0
+    Reuben: 0
+    Random: 0
+    RandomPlusNone: 0
+  available_companions:
+    Zero: 0
+    One: 0
+    Two: 0
+    Three: 0
+    Four: 0
+    Random14: 0
+    Random04: 0
+  companions_locations:
+    Standard: 0
+    Shuffled: 0
+    ShuffledExtended: 0
+  kaelis_mom_fight_minotaur:
+    true: 0
+    false: 0
   battles_quantity:
     Ten: 0
     Seven: 0

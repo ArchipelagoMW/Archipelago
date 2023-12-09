@@ -1020,10 +1020,9 @@ def create_regions(self):
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
                            KH2REGIONS.items()]
     # fill the event locations with events
-    multiworld.worlds[player].item_name_to_id.update({event_name: None for event_name in Events_Table})
     for location, item in event_location_to_item.items():
         multiworld.get_location(location, player).place_locked_item(
-                multiworld.worlds[player].create_item(item))
+                multiworld.worlds[player].create_event_item(item))
 
 
 def connect_regions(self):
