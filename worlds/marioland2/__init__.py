@@ -108,28 +108,28 @@ locations = {
     'Turtle Zone 3 - Whale Course': {'ram_index': 23, 'clear_condition': ("Turtle Coin", 1)},
     'Turtle Zone - Secret Course': {'ram_index': 37}}
 
-items = [
-    "Progressive Space Zone",
-    "Progressive Tree Zone",
-    "Progressive Macro Zone",
-    "Macro Zone Secret",
-    "Progressive Pumpkin Zone",
-    "Progressive Mario Zone",
-    "Progressive Turtle Zone",
-    "Tree Coin",
-    "Space Coin",
-    "Macro Coin",
-    "Pumpkin Coin",
-    "Mario Coin",
-    "Turtle Coin",
-    "Mushroom",
-    "Fire Flower",
-    "Carrot",
-    "Progressive Invincibility Star",
-    "Space Physics",
-    "Easy Mode",
-    "Normal Mode",
-]
+items = {
+    "Progressive Space Zone": ItemClassification.progression,
+    "Progressive Tree Zone": ItemClassification.progression,
+    "Progressive Macro Zone": ItemClassification.progression,
+    "Macro Zone Secret": ItemClassification.progression_skip_balancing,
+    "Progressive Pumpkin Zone": ItemClassification.progression,
+    "Progressive Mario Zone": ItemClassification.progression,
+    "Progressive Turtle Zone": ItemClassification.progression,
+    "Tree Coin": ItemClassification.progression_skip_balancing,
+    "Space Coin": ItemClassification.progression_skip_balancing,
+    "Macro Coin": ItemClassification.progression_skip_balancing,
+    "Pumpkin Coin": ItemClassification.progression_skip_balancing,
+    "Mario Coin": ItemClassification.progression_skip_balancing,
+    "Turtle Coin": ItemClassification.progression_skip_balancing,
+    "Mushroom": ItemClassification.progression,
+    "Fire Flower": ItemClassification.progression,
+    "Carrot": ItemClassification.progression,
+    "Progressive Invincibility Star": ItemClassification.filler,
+    "Space Physics": ItemClassification.progression,
+    "Easy Mode": ItemClassification.useful,
+    "Normal Mode": ItemClassification.trap,
+}
 START_IDS = 7770000
 class MarioLand2World(World):
     game = "Super Mario Land 2"

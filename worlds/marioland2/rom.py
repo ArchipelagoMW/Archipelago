@@ -23,15 +23,15 @@ def sprite_insert(a, b, s):
     z = ((s & 0b00000111) << 5)
     return [(a & 0b00001111) | x | y, (b & 0b00011111) | z]
 
+def copy_sprite(data, arr, pos):
+    for i in range(2):
+        data[pos + i] = arr[i]
+
+def randomize_sprite(data, random, arr, i):
+    selected_sprite = sprite_insert(data[i], data[i + 1], random.choice(arr))
+    copy_sprite(data, selected_sprite, i)
+
 def randomize_enemies(data, random):
-
-    def copy_sprite(arr, pos):
-        for i in range(2):
-            data[pos + i] = arr[i]
-
-    def randomize_sprite(arr, i):
-        selected_sprite = sprite_insert(data[i], data[i + 1], random.choice(arr))
-        copy_sprite(selected_sprite, i)
 
     level_list = [
         {"enemies": [0x01, 0x08, 0x09, 0x3A], "start": 0xE077, "end": 0xE0BC}, # lv00
@@ -64,48 +64,48 @@ def randomize_enemies(data, random):
             if data[i] == 0xFF:
                 i -= 2
             elif sprite in level["enemies"]:
-                randomize_sprite(level["enemies"], i)
+                randomize_sprite(data, random, level["enemies"], i)
             i += 3
     for i in range(0xE2A2, 0xE30B, 3): # lvl06
         sprite = sprite_extract(data[i], data[i+1])
         if sprite == 0x4E:
-            randomize_sprite([0x4D, 0x4E, 0x51, 0x53], i)
+            randomize_sprite(data, random, [0x4D, 0x4E, 0x51, 0x53], i)
         elif sprite == 0x4F:
-            randomize_sprite([0x4D, 0x4F, 0x51, 0x53], i)
+            randomize_sprite(data, random, [0x4D, 0x4F, 0x51, 0x53], i)
         elif sprite in (0x4D, 0x51, 0x53):
-            randomize_sprite([0x4D, 0x51, 0x53], i)
+            randomize_sprite(data, random, [0x4D, 0x51, 0x53], i)
     for i in range(0xE3D4, 0xE431, 3): # lvl09
         sprite = sprite_extract(data[i], data[i + 1])
         if sprite == 0x4F:
-            randomize_sprite([0x4D, 0x4F, 0x53, 0x5A, 0x5C], i)
+            randomize_sprite(data, random, [0x4D, 0x4F, 0x53, 0x5A, 0x5C], i)
         elif sprite in (0x4D, 0x53, 0x5a, 0x5C):
-            randomize_sprite([0x4D, 0x53, 0x5A, 0x5C], i)
+            randomize_sprite(data, random, [0x4D, 0x53, 0x5A, 0x5C], i)
     for i in range(0xE4FA, 0xE560, 3): # lvl0c
         sprite = sprite_extract(data[i], data[i + 1])
         if sprite == 0x49:
-            randomize_sprite([0x01, 0x47, 0x48, 0x49, 0x53], i)
+            randomize_sprite(data, random, [0x01, 0x47, 0x48, 0x49, 0x53], i)
         elif sprite in (0x01, 0x47, 0x48):
-            randomize_sprite([0x01, 0x47, 0x48, 0x53], i)
+            randomize_sprite(data, random, [0x01, 0x47, 0x48, 0x53], i)
     for i in range(0xE561, 0xE5C1, 3): # lvl0D
         sprite = sprite_extract(data[i], data[i + 1])
         if sprite == 0x43:
-            randomize_sprite([0x09, 0x43, 0x4D, 0x53], i)
+            randomize_sprite(data, random, [0x09, 0x43, 0x4D, 0x53], i)
         elif sprite == 0x4C:
-            randomize_sprite([0x09, 0x4C, 0x4D, 0x53], i)
+            randomize_sprite(data, random, [0x09, 0x4C, 0x4D, 0x53], i)
         elif sprite in (0x09, 0x4D):
-            randomize_sprite([0x09, 0x4D, 0x53], i)
+            randomize_sprite(data, random, [0x09, 0x4D, 0x53], i)
     for i in range(0xE6C0, 0xE705, 3): # lvl10
         sprite = sprite_extract(data[i], data[i + 1])
         if sprite == 0x21:
-            randomize_sprite([0x01, 0x08, 0x20, 0x21, 0x3A, 0x55], i)
+            randomize_sprite(data, random, [0x01, 0x08, 0x20, 0x21, 0x3A, 0x55], i)
         elif sprite in (0x01, 0x08, 0x20, 0x3A, 0x55):
-            randomize_sprite([0x01, 0x08, 0x20, 0x3A, 0x55], i)
+            randomize_sprite(data, random, [0x01, 0x08, 0x20, 0x3A, 0x55], i)
     for i in range(0xE77C, 0xE7C7, 3): # lvl12
         sprite = sprite_extract(data[i], data[i + 1])
         if sprite == 0x4D:
-            randomize_sprite([0x4D, 0x58], i)
+            randomize_sprite(data, random, [0x4D, 0x58], i)
         elif sprite in (0x58, 0x5A):
-            randomize_sprite([0x4D, 0x58, 0x5A], i)
+            randomize_sprite(data, random, [0x4D, 0x58, 0x5A], i)
     # Thwomps in Wario's Castle
     for i in [0xE9D6, 0xE9D9, 0xE9DF, 0xE9E2, 0xE9E5]:
         data[i] = 0x34 if random.randint(0, 9) else 0x35
@@ -117,16 +117,30 @@ def randomize_enemies(data, random):
             if sprite == 0xFF:
                 i -= 2
             elif sprite in (0x0C,0x0D):
-                copy_sprite(sprite_insert(data[i], data[i+1], random.choice([0x0C, 0x0D])), i)
+                copy_sprite(data, sprite_insert(data[i], data[i+1], random.choice([0x0C, 0x0D])), i)
         i += 3
 
+def randomize_auto_scroll_levels(data, random):
+    for i in random.sample([0, 1, 2, 3, 5, 8, 9, 10, 11, 13, 14, 16, 17, 18, 19, 20, 23, 25, 30, 31], 3):
+        data[0x1F71 + i] = 1 #int(random.randint(0, 99) < (8 if data[0x1F71 +1] == 0 else 25))
 
 
-
-
-
-
-
+def randomize_platforms(data, random):
+    level_list = [
+        {"platforms": [0x28, 0x29, 0x2A, 0x2B, 0x2D, 0x2E], "start": 0xE1EF, "end": 0xE249},
+        {"platforms": [0x38, 0x3D], "start": 0xE24A, "end": 0xE2A1},
+        {"platforms": [0x60, 0x61, 0x67], "start": 0xE99E, "end": 0xEA2E}
+    ]
+    for level in level_list:
+        i = level["start"]
+        while i < level["end"]:
+            sprite = sprite_extract(data[i], data[i + 1])
+            if sprite == 0xFF:
+                i -= 2
+            elif sprite in level["platforms"]:
+                randomize_sprite(data, random, level["platforms"], i)
+        for i in range(0xE9A3, 0xE9CE, 3):
+            data[i] = (0x57 if data[i] == 0x5E else 0x38) + random.randint(0, 7)
 
 def generate_output(self, output_directory: str):
     data = get_base_rom_bytes()
@@ -134,7 +148,14 @@ def generate_output(self, output_directory: str):
 
     data = bytearray(bsdiff4.patch(data, base_patch))
 
-    randomize_enemies(data, self.multiworld.per_slot_randoms[self.player])
+    random = self.multiworld.per_slot_randoms[self.player]
+
+    if self.multiworld.randomize_enemies[self.player]:
+        randomize_enemies(data, random)
+    if self.multiworld.randomize_platforms[self.player]:
+        randomize_platforms(data, random)
+    if self.multiworld.randomize_auto_scroll_levels[self.player]:
+        randomize_auto_scroll_levels(data, random)
 
     rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
                          'utf8')[:21]
