@@ -24,8 +24,10 @@ class KeysBehindBosses(Toggle):
 
 class AbilityShuffling(Toggle):
     """Locks the usage of Prayer, Holy Cross*, and Ice Rod until the relevant pages of the manual have been found.
-        If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
-        *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
+    If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required
+    Hexagon goal amount.
+    *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other
+    player-facing codes.
     """
     internal_name = "ability_shuffling"
     display_name = "Ability Shuffling"
@@ -44,8 +46,8 @@ class FoolTraps(Choice):
 
 
 class HexagonQuest(Toggle):
-    """An alternate goal that shuffles Gold "Questagon" items into the item pool and allows the game to be completed after
-    collecting the required number of them."""
+    """An alternate goal that shuffles Gold "Questagon" items into the item pool and allows the game to be completed
+    after collecting the required number of them."""
     internal_name = "hexagon_quest"
     display_name = "Hexagon Quest"
 
@@ -68,12 +70,28 @@ class ExtraHexagonPercentage(Range):
     default = 50
 
 
+class EntranceRando(Toggle):
+    """Randomize the connections between scenes.
+    A small, very lost fox on a big adventure."""
+    internal_name = "entrance_rando"
+    display_name = "Entrance Rando"
+
+
+class FixedShop(Toggle):
+    """Forces the Windmill entrance to lead to a shop, and places only one other shop in the pool.
+    Has no effect if Entrance Rando is not enabled."""
+    internal_name = "fixed_shop"
+    display_name = "ER Fixed Shop"
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
+    entrance_rando: EntranceRando
+    fixed_shop: FixedShop
     fool_traps: FoolTraps
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
