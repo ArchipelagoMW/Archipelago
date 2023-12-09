@@ -696,7 +696,7 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
                                 if p < threshold_percentages[player]:
                                     items_to_replace.append(testing)
 
-                    replaced_items = False
+                    old_moved_item_count = moved_item_count
 
                     # sort then shuffle to maintain deterministic behaviour,
                     # while allowing use of set for better algorithm growth behaviour elsewhere
@@ -708,21 +708,20 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
                     # Start swapping items. Since we swap into earlier spheres, no need for accessibility checks. 
                     while replacement_locations and items_to_replace:
                         old_location = items_to_replace.pop()
-                        for new_location in replacement_locations:
+                        for i, new_location in enumerate(replacement_locations):
                             if new_location.can_fill(state, old_location.item, False) and \
                                     old_location.can_fill(state, new_location.item, False):
-                                replacement_locations.remove(new_location)
+                                replacement_locations.pop(i)
                                 swap_location_item(old_location, new_location)
                                 logging.debug(f"Progression balancing moved {new_location.item} to {new_location}, "
                                               f"displacing {old_location.item} into {old_location}")
                                 moved_item_count += 1
                                 state.collect(new_location.item, True, new_location)
-                                replaced_items = True
                                 break
                         else:
                             logging.warning(f"Could not Progression Balance {old_location.item}")
 
-                    if replaced_items:
+                    if old_moved_item_count < moved_item_count:
                         logging.debug(f"Moved {moved_item_count} items so far\n")
                         unlocked = {fresh for player in balancing_players for fresh in unlocked_locations[player]}
                         for location in get_sphere_locations(state, unlocked):
