@@ -457,7 +457,7 @@ fish_farmer_bundle = BundleTemplate(CCRoom.pantry, BundleName.fish_farmer, fish_
 garden_items = [tulip, blue_jazz, summer_spangle, sunflower, fairy_rose]
 garden_bundle = BundleTemplate(CCRoom.pantry, BundleName.garden, garden_items, 5, 4)
 
-brewer_items = [mead, pale_ale, wine, juice, green_tea]
+brewer_items = [mead, pale_ale, wine, juice, green_tea, beer]
 brewer_bundle = BundleTemplate(CCRoom.pantry, BundleName.brewer, brewer_items, 5, 4)
 
 orchard_items = [apple, apricot, orange, peach, pomegranate, cherry, banana, mango]
@@ -651,7 +651,7 @@ home_cook_items = [egg.as_amount(10), milk.as_amount(10), wheat_flour.as_amount(
                    chocolate_cake, pancakes, rhubarb_pie]
 home_cook_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.home_cook, home_cook_items, 3, 3)
 
-bartender_items = [shrimp_cocktail, triple_shot_espresso, ginger_ale, green_tea, cranberry_candy]
+bartender_items = [shrimp_cocktail, triple_shot_espresso, ginger_ale, cranberry_candy, beer, pale_ale]
 bartender_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.bartender, bartender_items, 3, 3)
 
 bulletin_board_bundles_vanilla = [chef_bundle_vanilla, dye_bundle_vanilla, field_research_bundle_vanilla, fodder_bundle_vanilla, enchanter_bundle_vanilla]
