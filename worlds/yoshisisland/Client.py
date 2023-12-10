@@ -79,7 +79,6 @@ class YISNIClient(SNIClient):
 
 
         game_mode = await snes_read(ctx, GAME_MODE, 0x1)
-        yoshi_state = await snes_read(ctx, YOSHI_STATE, 0x1)
         item_received = await snes_read(ctx, ITEM_RECEIVED, 0x1)
         game_music = await snes_read(ctx, DEATHMUSIC_FLAG, 0x1)
         death_flag = await snes_read(ctx, DEATHFLAG, 0x1)

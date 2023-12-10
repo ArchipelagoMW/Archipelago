@@ -346,6 +346,6 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
         )
     if not world or world.options.goal.value == 0:
         location_table += ( 
-            LocationData("Bowser's Room", "King Bowser's Castle: Level Clear", None, 0x43, lambda state: logic._17Game(state)),
+            LocationData("Bowser's Room", "King Bowser's Castle: Level Clear", None, 0x43, lambda state: logic._68Clear(state)),
         )
     return list(location_table)

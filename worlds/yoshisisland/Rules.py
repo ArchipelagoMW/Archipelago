@@ -265,7 +265,6 @@ def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
         set_rule(multiworld.get_location("Castles - Masterpiece Set: Flowers", player), lambda state: (state.has('Egg Capacity Upgrade', player, 2) or logic.combat_item(state)) and state.has(('Large Spring Ball'), player))
         set_rule(multiworld.get_location("Castles - Masterpiece Set: Stars", player), lambda state: logic.has_midring(state) and state.has(('Large Spring Ball'), player))
         set_rule(multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: (state.has('Egg Capacity Upgrade', player, 2) or logic.combat_item(state)) and state.has(('Large Spring Ball'), player))
-    
 def set_normal_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces, world)
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Red Coins", player), lambda state: state.has('Dashed Stairs', player))
@@ -788,4 +787,3 @@ def set_hard_rules(world, multiworld, player: int, boss_order, luigi_pieces):
         set_rule(multiworld.get_location("Castles - Masterpiece Set: Flowers", player), lambda state: state.has(('Large Spring Ball'), player))
         set_rule(multiworld.get_location("Castles - Masterpiece Set: Stars", player), lambda state: True)
         set_rule(multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: state.has(('Large Spring Ball'), player))
-    
