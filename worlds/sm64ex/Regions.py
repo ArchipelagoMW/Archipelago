@@ -1,4 +1,7 @@
 import typing
+
+from enum import Enum
+
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import SM64Location, location_table, locBoB_table, locWhomp_table, locJRB_table, locCCM_table, \
     locBBH_table, \
@@ -7,36 +10,63 @@ from .Locations import SM64Location, location_table, locBoB_table, locWhomp_tabl
     locPSS_table, locSA_table, locBitDW_table, locTotWC_table, locCotMC_table, \
     locVCutM_table, locBitFS_table, locWMotR_table, locBitS_table, locSS_table    
 
-# sm64paintings is dict of entrances, format LEVEL | AREA
-sm64_level_to_paintings = {
-     91: "Bob-omb Battlefield",
-    241: "Whomp's Fortress",
-    121: "Jolly Roger Bay",
-     51: "Cool, Cool Mountain",
-     41: "Big Boo's Haunt",
-     71: "Hazy Maze Cave",
-    221: "Lethal Lava Land",
-     81: "Shifting Sand Land",
-    231: "Dire, Dire Docks",
-    101: "Snowman's Land",
-    111: "Wet-Dry World",
-    361: "Tall, Tall Mountain",
-    132: "Tiny-Huge Island (Tiny)",
-    131: "Tiny-Huge Island (Huge)",
-    141: "Tick Tock Clock",
-    151: "Rainbow Ride"
+class SM64Levels(int, Enum):
+    BOB_OMB_BATTLEFIELD = 91
+    WHOMPS_FORTRESS = 241
+    JOLLY_ROGER_BAY = 121
+    COOL_COOL_MOUNTAIN = 51
+    BIG_BOOS_HAUNT = 41
+    HAZY_MAZE_CAVE = 71
+    LETHAL_LAVA_LAND = 221
+    SHIFTING_SAND_LAND = 81
+    DIRE_DIRE_DOCKS = 231
+    SNOWMANS_LAND = 101
+    WET_DRY_WORLD = 111
+    TALL_TALL_MOUNTAIN = 361
+    TINY_HUGE_ISLAND_TINY = 132
+    TINY_HUGE_ISLAND_HUGE = 131
+    TICK_TOCK_CLOCK = 141
+    RAINBOW_RIDE = 151
+    THE_PRINCESS_SECRET_SLIDE = 271
+    THE_SECRET_AQUARIUM = 201
+    BOWSER_IN_THE_DARK_WORLD = 171
+    TOWER_OF_THE_WING_CAP = 291
+    CAVERN_OF_THE_METAL_CAP = 281
+    VANISH_CAP_UNDER_THE_MOAT = 181
+    BOWSER_IN_THE_FIRE_SEA = 191
+    WING_MARIO_OVER_THE_RAINBOW = 311
+
+# sm64paintings is a dict of entrances, format LEVEL | AREA
+sm64_level_to_paintings: typing.Dict[SM64Levels, str] = {
+    SM64Levels.BOB_OMB_BATTLEFIELD: "Bob-omb Battlefield",
+    SM64Levels.WHOMPS_FORTRESS: "Whomp's Fortress",
+    SM64Levels.JOLLY_ROGER_BAY: "Jolly Roger Bay",
+    SM64Levels.COOL_COOL_MOUNTAIN: "Cool, Cool Mountain",
+    SM64Levels.BIG_BOOS_HAUNT: "Big Boo's Haunt",
+    SM64Levels.HAZY_MAZE_CAVE: "Hazy Maze Cave",
+    SM64Levels.LETHAL_LAVA_LAND: "Lethal Lava Land",
+    SM64Levels.SHIFTING_SAND_LAND: "Shifting Sand Land",
+    SM64Levels.DIRE_DIRE_DOCKS: "Dire, Dire Docks",
+    SM64Levels.SNOWMANS_LAND: "Snowman's Land",
+    SM64Levels.WET_DRY_WORLD: "Wet-Dry World",
+    SM64Levels.TALL_TALL_MOUNTAIN: "Tall, Tall Mountain",
+    SM64Levels.TINY_HUGE_ISLAND_TINY: "Tiny-Huge Island (Tiny)",
+    SM64Levels.TINY_HUGE_ISLAND_HUGE: "Tiny-Huge Island (Huge)",
+    SM64Levels.TICK_TOCK_CLOCK: "Tick Tock Clock",
+    SM64Levels.RAINBOW_RIDE: "Rainbow Ride"
 }
 sm64_paintings_to_level = { painting: level for (level,painting) in sm64_level_to_paintings.items() }
-# sm64secrets is list of secret areas, same format
-sm64_level_to_secrets = {
-    271: "The Princess's Secret Slide",
-    201: "The Secret Aquarium",
-    171: "Bowser in the Dark World",
-    291: "Tower of the Wing Cap",
-    281: "Cavern of the Metal Cap",
-    181: "Vanish Cap under the Moat",
-    191: "Bowser in the Fire Sea",
-    311: "Wing Mario over the Rainbow"
+
+# sm64secrets is a dict of secret areas, same format as sm64paintings
+sm64_level_to_secrets: typing.Dict[SM64Levels, str] = {
+    SM64Levels.THE_PRINCESS_SECRET_SLIDE: "The Princess's Secret Slide",
+    SM64Levels.THE_SECRET_AQUARIUM: "The Secret Aquarium",
+    SM64Levels.BOWSER_IN_THE_DARK_WORLD: "Bowser in the Dark World",
+    SM64Levels.TOWER_OF_THE_WING_CAP: "Tower of the Wing Cap",
+    SM64Levels.CAVERN_OF_THE_METAL_CAP: "Cavern of the Metal Cap",
+    SM64Levels.VANISH_CAP_UNDER_THE_MOAT: "Vanish Cap under the Moat",
+    SM64Levels.BOWSER_IN_THE_FIRE_SEA: "Bowser in the Fire Sea",
+    SM64Levels.WING_MARIO_OVER_THE_RAINBOW: "Wing Mario over the Rainbow"
 }
 sm64_secrets_to_level = { secret: level for (level,secret) in sm64_level_to_secrets.items() }
 
