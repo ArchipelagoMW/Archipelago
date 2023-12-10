@@ -319,7 +319,7 @@ class Patch:
     def WriteZ3Locations(self, locations: List[Location]):
         for location in locations:
             if (location.Type == LocationType.HeraStandingKey):
-                self.patches.append((Snes(0x9E3BB), [0xE4] if location.APLocation.item.game == "SMZ3" and location.APLocation.item.item.Type == ItemType.KeyTH else [0xEB]))
+                self.patches.append((Snes(0x9E3BB), [0xEB]))
             elif (location.Type in [LocationType.Pedestal, LocationType.Ether, LocationType.Bombos]):
                 text = Texts.ItemTextbox(location.APLocation.item.item if location.APLocation.item.game == "SMZ3" else Item(ItemType.Something))
                 if (location.Type == LocationType.Pedestal):
