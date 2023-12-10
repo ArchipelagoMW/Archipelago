@@ -200,6 +200,18 @@ class TunicWorld(World):
                 for i in range(0, self.options.start_inventory_from_pool[start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
 
+        for plando_item in self.multiworld.plando_items[self.player]:
+            if plando_item["from_pool"]:
+                items_to_find = set()
+                for item_type in [key for key in ["item", "items"] if key in plando_item]:
+                    for item in plando_item[item_type]:
+                        items_to_find.add(item)
+                for item in items_to_find:
+                    if item in slot_data_item_names:
+                        slot_data[item] = []
+                        for item_location in self.multiworld.find_item_locations(item, self.player):
+                            slot_data[item].extend([item_location.name, item_location.player])
+
         return slot_data
 
     # for the universal tracker, doesn't get called in standard gen
