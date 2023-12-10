@@ -805,6 +805,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default: typing.Dict[str, typing.Any] = {}
     supports_weighting = False
+    group_name = "Item & Location Options"
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         self.value = deepcopy(value)
@@ -846,6 +847,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     default: typing.List[typing.Any] = []
     supports_weighting = False
+    group_name = "Item & Location Options"
 
     def __init__(self, value: typing.List[typing.Any]):
         self.value = deepcopy(value)
@@ -872,6 +874,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
     supports_weighting = False
+    group_name = "Item & Location Options"
 
     def __init__(self, value: typing.Iterable[str]):
         self.value = set(deepcopy(value))
@@ -997,7 +1000,6 @@ class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
     display_name = "Start Inventory"
-    group_name = "Item & Location Options"
 
 
 class StartInventoryPool(StartInventory):
@@ -1005,7 +1007,6 @@ class StartInventoryPool(StartInventory):
     The game decides what the replacement items will be."""
     verify_item_name = True
     display_name = "Start Inventory from Pool"
-    group_name = "Item & Location Options"
 
 
 class StartHints(ItemSet):
@@ -1017,25 +1018,21 @@ class StartHints(ItemSet):
 class LocationSet(OptionSet):
     verify_location_name = True
     convert_name_groups = True
-    group_name = "Item & Location Options"
 
 
 class StartLocationHints(LocationSet):
     """Start with these locations and their item prefilled into the !hint command"""
     display_name = "Start Location Hints"
-    group_name = "Item & Location Options"
 
 
 class ExcludeLocations(LocationSet):
     """Prevent these locations from having an important item"""
     display_name = "Excluded Locations"
-    group_name = "Item & Location Options"
 
 
 class PriorityLocations(LocationSet):
     """Prevent these locations from having an unimportant item"""
     display_name = "Priority Locations"
-    group_name = "Item & Location Options"
 
 
 class DeathLink(Toggle):

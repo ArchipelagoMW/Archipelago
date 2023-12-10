@@ -65,6 +65,21 @@ def player_options(game: str):
     all_options: Dict[str, Options.AssembleOptions] = world.options_dataclass.type_hints
     grouped_options = collections.defaultdict(dict)
     for option_name, option in all_options.items():
+        if issubclass(option, Options.ItemDict) and not option.verify_item_name:
+            continue
+
+        if issubclass(option, Options.OptionList) and not hasattr(option, "valid_keys"):
+            continue
+
+        if issubclass(option, Options.LocationSet) and not option.verify_location_name:
+            continue
+
+        if issubclass(option, Options.ItemSet) and not option.verify_item_name:
+            continue
+
+        if issubclass(option, Options.OptionSet) and not hasattr(option, "valid_keys"):
+            continue
+
         grouped_options[getattr(option, "group_name", "Game Options")][option_name] = option
 
     return render_template(

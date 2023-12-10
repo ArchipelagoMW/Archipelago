@@ -52,7 +52,7 @@
                     <table class="left">
                         <tbody>
                             {% for option_name, option in group_options.items() %}
-                                {% if loop.index >= loop.length / 2 %}
+                                {% if loop.index < loop.length / 2 %}
                                     {% if issubclass(option, Options.Toggle) %}
                                         {{ inputs.Toggle(option_name, option) }}
 
@@ -77,16 +77,16 @@
                                     {% elif issubclass(option, Options.FreeText) %}
                                         {{ inputs.FreeText(option_name, option) }}
 
-                                    {% elif issubclass(option, Options.ItemDict) %}
+                                    {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
                                         {{ inputs.ItemDict(option_name, option, world) }}
 
                                     {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                         {{ inputs.OptionList(option_name, option) }}
 
-                                    {% elif issubclass(option, Options.LocationSet) %}
+                                    {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
                                         {{ inputs.LocationSet(option_name, option, world) }}
 
-                                    {% elif issubclass(option, Options.ItemSet) %}
+                                    {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
                                         {{ inputs.ItemSet(option_name, option, world) }}
 
                                     {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
@@ -100,7 +100,7 @@
                     <table class="right">
                         <tbody>
                             {% for option_name, option in group_options.items() %}
-                                {% if loop.index >= loop.length / 2 %}
+                                {% if loop.index > loop.length / 2 %}
                                     {% if issubclass(option, Options.Toggle) %}
                                         {{ inputs.Toggle(option_name, option) }}
 
@@ -125,16 +125,16 @@
                                     {% elif issubclass(option, Options.FreeText) %}
                                         {{ inputs.FreeText(option_name, option) }}
 
-                                    {% elif issubclass(option, Options.ItemDict) %}
+                                    {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
                                         {{ inputs.ItemDict(option_name, option, world) }}
 
                                     {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                         {{ inputs.OptionList(option_name, option) }}
 
-                                    {% elif issubclass(option, Options.LocationSet) %}
+                                    {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
                                         {{ inputs.LocationSet(option_name, option, world) }}
 
-                                    {% elif issubclass(option, Options.ItemSet) %}
+                                    {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
                                         {{ inputs.ItemSet(option_name, option, world) }}
 
                                     {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}

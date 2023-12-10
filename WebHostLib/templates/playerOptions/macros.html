@@ -101,7 +101,7 @@
             <div class="text-choice-container">
                 <div class="text-choice-wrapper">
                     <select id="{{ option_name }}" name="{{ option_name }}">
-                    {% for id, name in option.name_lookup.items() %}
+                    {% for id, name in option.name_lookup.items()|sort %}
                         {% if name != "random" %}
                             {% if option.default == id %}
                                 <option value="{{ name }}" selected>{{ option.get_option_name(id) }}</option>
@@ -125,23 +125,99 @@
 {% endmacro %}
 
 {% macro ItemDict(option_name, option, world) %}
-    <span>Item Dict Input Coming Soon™</span>
+    <tr>
+        <td>{{ OptionTitle(option_name, option) }}</td>
+        <td>
+            <div class="option-container">
+                {% for item_name in world.item_names|sort %}
+                    <div class="option-entry">
+                        <span>{{ item_name }}</span>
+                        <input type="number" id="{{ option_name }}-{{ item_name }}-qty" name="{{ option_name }}-qty" value="{{ option.default[item_name]|default("0") }}" />
+                    </div>
+                {% endfor %}
+            </div>
+        </td>
+    </tr>
 {% endmacro %}
 
 {% macro OptionList(option_name, option) %}
-    <span>Option List Input Coming Soon™</span>
+    <tr>
+        <td>{{ OptionTitle(option_name, option) }}</td>
+        <td>
+            <div class="option-container">
+                {% for key in option.valid_keys|sort %}
+                    <div class="option-entry">
+                        <span>{{ key }}</span>
+                        <input type="number" id="{{ option_name }}-{{ key }}-qty" name="{{ option_name }}-{{ key }}-qty" value="{{ option.default.count(key) }}" />
+                    </div>
+                {% endfor %}
+            </div>
+        </td>
+    </tr>
 {% endmacro %}
 
 {% macro LocationSet(option_name, option, world) %}
-    <span>Location Set Input Coming Soon™</span>
+    <tr>
+        <td>{{ OptionTitle(option_name, option) }}</td>
+        <td>
+            <div class="option-container">
+                {% for group_name in world.location_name_groups.keys()|sort %}
+                    {% if group_name != "Everywhere" %}
+                        <div class="option-entry">
+                            <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}-{{ group_name }}" {{ "checked" if grop_name in option.default }} />
+                            <span>{{ group_name }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% for location_name in world.location_names|sort %}
+                    <div class="option-entry">
+                        <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}-{{ location_name }}" {{ "checked" if location_name in option.default }} />
+                        <span>{{ location_name }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </td>
+    </tr>
 {% endmacro %}
 
 {% macro ItemSet(option_name, option, world) %}
-    <span>Item Set Input Coming Soon™</span>
+    <tr>
+        <td>{{ OptionTitle(option_name, option) }}</td>
+        <td>
+            <div class="option-container">
+                {% for group_name in world.item_name_groups.keys()|sort %}
+                    {% if group_name != "Everything" %}
+                        <div class="option-entry">
+                            <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}-{{ group_name }}" {{ "checked" if group_name in option.default }} />
+                            <span>{{ group_name }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% for item_name in world.item_names|sort %}
+                    <div class="option-entry">
+                        <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}-{{ item_name }}" {{ "checked" if item_name in option.default }} />
+                        <span>{{ item_name }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </td>
+    </tr>
 {% endmacro %}
 
 {% macro OptionSet(option_name, option) %}
-    <span>Option Set Input Coming Soon™</span>
+    <tr>
+        <td>{{ OptionTitle(option_name, option) }}</td>
+        <td>
+            <div class="option-container">
+                {% for key in option.valid_keys %}
+                    <div class="option-entry">
+                        <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}-{{ key }}" {{ "checked" if key in option.default }} />
+                        <span>{{ key }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </td>
+    </tr>
 {% endmacro %}
 
 {% macro OptionTitle(option_name, option) %}

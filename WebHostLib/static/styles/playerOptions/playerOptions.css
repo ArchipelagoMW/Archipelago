@@ -161,6 +161,45 @@ html {
 #player-options table .text-choice-container .text-choice-wrapper select {
   flex-grow: 1;
 }
+#player-options table .option-container {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.125);
+  border: 1px solid rgba(20, 20, 20, 0.125);
+  border-radius: 3px;
+  color: #ffffff;
+  max-height: 10rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  padding-left: 0.25rem;
+}
+#player-options table .option-container .option-entry {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.125rem;
+  margin-top: 0.125rem;
+}
+#player-options table .option-container .option-entry:hover {
+  background-color: rgba(20, 20, 20, 0.125);
+}
+#player-options table .option-container .option-entry input[type=checkbox] {
+  margin-right: 0.25rem;
+}
+#player-options table .option-container .option-entry input[type=number] {
+  max-width: 1.5rem;
+  max-height: 1rem;
+  margin-left: 0.125rem;
+  text-align: center;
+  /* Hide arrows on input[type=number] fields */
+  -moz-appearance: textfield;
+}
+#player-options table .option-container .option-entry input[type=number]::-webkit-outer-spin-button, #player-options table .option-container .option-entry input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#player-options table .option-container .option-entry span {
+  flex-grow: 1;
+}
 #player-options table .randomize-button {
   display: flex;
   flex-direction: column;
