@@ -131,7 +131,7 @@
             <div class="option-container">
                 {% for item_name in world.item_names|sort %}
                     <div class="option-entry">
-                        <span>{{ item_name }}</span>
+                        <label for="{{ option_name }}-{{ item_name }}">{{ item_name }}</label>
                         <input type="number" id="{{ option_name }}-{{ item_name }}-qty" name="{{ option_name }}-qty" value="{{ option.default[item_name]|default("0") }}" />
                     </div>
                 {% endfor %}
@@ -147,8 +147,8 @@
             <div class="option-container">
                 {% for key in option.valid_keys|sort %}
                     <div class="option-entry">
-                        <span>{{ key }}</span>
-                        <input type="number" id="{{ option_name }}-{{ key }}-qty" name="{{ option_name }}-{{ key }}-qty" value="{{ option.default.count(key) }}" />
+                        <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}-{{ key }}-qty" {{ "checked" if key in option.default }} />
+                        <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
                     </div>
                 {% endfor %}
             </div>
@@ -165,14 +165,14 @@
                     {% if group_name != "Everywhere" %}
                         <div class="option-entry">
                             <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}-{{ group_name }}" {{ "checked" if grop_name in option.default }} />
-                            <span>{{ group_name }}</span>
+                            <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                         </div>
                     {% endif %}
                 {% endfor %}
                 {% for location_name in world.location_names|sort %}
                     <div class="option-entry">
                         <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}-{{ location_name }}" {{ "checked" if location_name in option.default }} />
-                        <span>{{ location_name }}</span>
+                        <label for="{{ option_name }}-{{ location_name }}">{{ location_name }}</label>
                     </div>
                 {% endfor %}
             </div>
@@ -189,14 +189,14 @@
                     {% if group_name != "Everything" %}
                         <div class="option-entry">
                             <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}-{{ group_name }}" {{ "checked" if group_name in option.default }} />
-                            <span>{{ group_name }}</span>
+                            <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                         </div>
                     {% endif %}
                 {% endfor %}
                 {% for item_name in world.item_names|sort %}
                     <div class="option-entry">
                         <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}-{{ item_name }}" {{ "checked" if item_name in option.default }} />
-                        <span>{{ item_name }}</span>
+                        <label for="{{ option_name }}-{{ item_name }}">{{ item_name }}</label>
                     </div>
                 {% endfor %}
             </div>
@@ -212,7 +212,7 @@
                 {% for key in option.valid_keys %}
                     <div class="option-entry">
                         <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}-{{ key }}" {{ "checked" if key in option.default }} />
-                        <span>{{ key }}</span>
+                        <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
                     </div>
                 {% endfor %}
             </div>
@@ -230,7 +230,7 @@
 {% macro RandomizeButton(option_name) %}
     <div class="randomize-button" data-tooltip="Toggle randomization for this option!">
         <label>
-            <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" />
+            <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" />
             🎲
         </label>
     </div>

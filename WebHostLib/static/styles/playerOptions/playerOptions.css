@@ -176,8 +176,10 @@ html {
 #player-options table .option-container .option-entry {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   margin-bottom: 0.125rem;
   margin-top: 0.125rem;
+  user-select: none;
 }
 #player-options table .option-container .option-entry:hover {
   background-color: rgba(20, 20, 20, 0.125);
@@ -197,8 +199,11 @@ html {
   -webkit-appearance: none;
   margin: 0;
 }
-#player-options table .option-container .option-entry span {
+#player-options table .option-container .option-entry label {
   flex-grow: 1;
+  margin-right: 0;
+  min-width: unset;
+  display: unset;
 }
 #player-options table .randomize-button {
   display: flex;
