@@ -211,7 +211,7 @@ class FactorioStartItems(ItemDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "Starting Items"
     verify_item_name = False
-    default = {"burner-mining-drill": 19, "stone-furnace": 19}
+    default = {"burner-mining-drill": 4, "stone-furnace": 4,  "raw-fish": 50}
 
 
 class FactorioFreeSampleBlacklist(OptionSet):
