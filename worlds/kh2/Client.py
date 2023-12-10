@@ -29,6 +29,7 @@ class KH2Context(CommonContext):
         self.kh2_local_items = None
         self.growthlevel = None
         self.kh2connected = False
+        self.kh2_finished_game = False
         self.serverconneced = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
@@ -833,9 +834,9 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.verifyItems())
                 await asyncio.create_task(ctx.verifyLevel())
                 message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
-                if finishedGame(ctx, message):
+                if finishedGame(ctx, message) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                    ctx.finished_game = True
+                    ctx.kh2_finished_game = True
                 await ctx.send_msgs(message)
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
