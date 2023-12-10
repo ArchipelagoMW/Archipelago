@@ -3,7 +3,7 @@ import logging
 import random
 import time
 from collections import deque
-from typing import Callable, Dict, Iterable, List, Optional, Set, Tuple, Union
+from typing import Callable, Dict, Iterable, List, Tuple, Union, Set
 
 from BaseClasses import CollectionState, Entrance, Region
 from worlds.AutoWorld import World
@@ -108,13 +108,6 @@ class EntranceLookup:
 
 
 class ERPlacementState:
-    placeable_exits: List[Entrance]
-    """candidate exits to try and place right now"""
-    _pending_exits: List[Entrance]
-    """exits that are gated by some unmet requirement"""
-    # (either they are not valid source transitions yet or they are static connections with unmet logic restrictions)
-
-    placed_regions: Set[Region]
     placements: List[Entrance]
     pairings: List[Tuple[str, str]]
     world: World
@@ -122,10 +115,6 @@ class ERPlacementState:
     coupled: bool
 
     def __init__(self, world: World, coupled: bool):
-        self.placeable_exits = []
-        self._pending_exits = []
-
-        self.placed_regions = set()
         self.placements = []
         self.pairings = []
         self.world = world
@@ -133,68 +122,16 @@ class ERPlacementState:
         self.coupled = coupled
 
     @property
-    def has_placeable_exits(self) -> bool:
-        return bool(self.placeable_exits)
+    def placed_regions(self) -> Set[Region]:
+        return self.collection_state.reachable_regions[self.world.player]
 
-    def place(self, start: Union[Region, Entrance]) -> None:
-        """
-        Traverses a region's connected exits to find any newly available randomizable
-        exits which stem from that region.
-
-        :param start: The starting region or entrance to traverse from.
-        """
-
-        q = deque()
-        starting_entrance_name = None
-        if isinstance(start, Entrance):
-            starting_entrance_name = start.name
-            q.append(start.connected_region)
-        else:
-            q.append(start)
-
-        while q:
-            region = q.popleft()
-            if region in self.placed_regions:
-                continue
-            self.placed_regions.add(region)
-            # collect events
-            local_locations = self.world.multiworld.get_locations(self.world.player)
-            self.collection_state.sweep_for_events(locations=local_locations)
-            # traverse exits
-            for exit_ in region.exits:
-                # if the exit is unconnected, it's a candidate for randomization
-                if not exit_.connected_region:
-                    # in coupled, the reverse transition will be handled specially;
-                    # don't add it as a candidate. in uncoupled it's fair game.
-                    if not self.coupled or exit_.name != starting_entrance_name:
-                        if exit_.is_valid_source_transition(self):
-                            self.placeable_exits.append(exit_)
-                        else:
-                            self._pending_exits.append(exit_)
-                elif exit_.connected_region not in self.placed_regions:
-                    # traverse unseen static connections
-                    if exit_.can_reach(self.collection_state):
-                        q.append(exit_.connected_region)
-                    else:
-                        self._pending_exits.append(exit_)
-
-    def sweep_pending_exits(self) -> None:
-        """
-        Checks if any exits which previously had unmet restrictions now have those restrictions met,
-        and marks them for placement or places them depending on whether they are randomized or not.
-        """
-        size = len(self._pending_exits)
-        # iterate backwards so that removing items doesn't mess with indices of unprocessed items
-        for j, exit_ in enumerate(reversed(self._pending_exits)):
-            i = size - j - 1
-            if exit_.connected_region and exit_.can_reach(self.collection_state):
-                # this is an unrandomized entrance, so place it and propagate
-                self.place(exit_.connected_region)
-                self._pending_exits.pop(i)
-            elif not exit_.connected_region and exit_.is_valid_source_transition(self):
-                # this is randomized so mark it eligible for placement
-                self.placeable_exits.append(exit_)
-                self._pending_exits.pop(i)
+    def find_placeable_exits(self) -> List[Entrance]:
+        blocked_connections = self.collection_state.blocked_connections[self.world.player]
+        placeable_randomized_exits = [connection for connection in blocked_connections
+                                      if not connection.connected_region
+                                      and connection.is_valid_source_transition(self)]
+        self.world.random.shuffle(placeable_randomized_exits)
+        return placeable_randomized_exits
 
     def _connect_one_way(self, source_exit: Entrance, target_entrance: Entrance) -> None:
         target_region = target_entrance.connected_region
@@ -206,7 +143,11 @@ class ERPlacementState:
         self.placements.append(source_exit)
         self.pairings.append((source_exit.name, target_entrance.name))
 
-    def connect(self, source_exit: Entrance, target_entrance: Entrance) -> Union[Tuple[Entrance], Tuple[Entrance, Entrance]]:
+    def connect(
+            self,
+            source_exit: Entrance,
+            target_entrance: Entrance
+    ) -> Union[Tuple[Entrance], Tuple[Entrance, Entrance]]:
         """
         Connects a source exit to a target entrance in the graph, accounting for coupling
 
@@ -236,11 +177,6 @@ class ERPlacementState:
                 raise RuntimeError(f"Two way entrance {target_entrance.name} had no corresponding exit in "
                                    f"{target_region.name}")
             self._connect_one_way(reverse_exit, reverse_entrance)
-            # the reverse exit might be in the placeable list so clear that to prevent re-randomization
-            try:
-                self.placeable_exits.remove(reverse_exit)
-            except ValueError:
-                pass
             return target_entrance, reverse_entrance
         return target_entrance,
 
@@ -292,17 +228,15 @@ def randomize_entrances(
 
     def do_placement(source_exit: Entrance, target_entrance: Entrance):
         removed_entrances = er_state.connect(source_exit, target_entrance)
-        # remove the paired items from consideration
-        er_state.placeable_exits.remove(source_exit)
+        # remove the placed targets from consideration
         for entrance in removed_entrances:
             entrance_lookup.remove(entrance)
-        # place and propagate
-        er_state.place(target_entrance)
-        er_state.sweep_pending_exits()
+        # propagate new connections
+        er_state.collection_state.update_reachable_regions(world.player)
 
     def find_pairing(dead_end: bool, require_new_regions: bool) -> bool:
-        world.random.shuffle(er_state.placeable_exits)
-        for source_exit in er_state.placeable_exits:
+        placeable_exits = er_state.find_placeable_exits()
+        for source_exit in placeable_exits:
             target_groups = get_target_groups(source_exit.er_group)
             # anything can connect to the default group - if people don't like it the fix is to
             # assign a non-default group
@@ -330,7 +264,7 @@ def randomize_entrances(
 
             raise RuntimeError(f"None of the available entrances are valid targets for the available exits.\n"
                                f"Available entrances: {lookup}\n"
-                               f"Available exits: {er_state.placeable_exits}")
+                               f"Available exits: {placeable_exits}")
 
     for region in regions:
         for entrance in region.entrances:
@@ -338,7 +272,7 @@ def randomize_entrances(
                 entrance_lookup.add(entrance)
 
     # place the menu region and connected start region(s)
-    er_state.place(world.multiworld.get_region("Menu", world.player))
+    er_state.collection_state.update_reachable_regions(world.player)
 
     # stage 1 - try to place all the non-dead-end entrances
     while entrance_lookup.others:
