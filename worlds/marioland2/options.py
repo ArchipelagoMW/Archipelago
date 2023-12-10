@@ -1,12 +1,28 @@
 from Options import Toggle, Choice, Range, NamedRange, TextChoice, DeathLink
 
 
+class GoldenCoins(Choice):
+    """Vanilla: The coins are found in their original locations.
+    Shuffled: The coins are shuffled into the item pool.
+    Progressive: The coins are at the end of the Progressive Level item chains. For example, there will be a third
+    Progressive Space Zone item, and the final one received will grant the Space Coin.
+
+    You will see a Golden Coin being received when defeating bosses regardless of whether you are actually getting a coin."""
+    display_name = "Golden Coins"
+    option_vanilla = 0
+    option_shuffled = 1
+    option_progressive = 2
+    default = 0
+
+
 class DifficultyMode(Choice):
-    """Start in Normal Mode with an "upgrade" to Easy Mode in the item pool,
+    """Play in normal or easy mode. You can also start in Normal Mode with an "upgrade" to Easy Mode in the item pool,
     or start in Easy Mode with a Normal Mode "Trap" in the item pool."""
     display_name = "Difficulty Mode"
-    option_normal_to_easy = 0
-    option_easy_to_normal = 1
+    option_normal = 0
+    option_easy = 1
+    option_normal_to_easy = 2
+    option_easy_to_normal = 3
     default = 0
 
 class ShuffleSpacePhysics(Toggle):
@@ -25,15 +41,26 @@ class RandomizePlatforms(Toggle):
     display_name = "Randomize Platforms"
 
 
-class RandomizeAutoScrollLevels(Toggle):
-    """Randomize which three levels have auto-scrolling."""
-    display_name = "Randomize Auto Scroll Levels"
+class AutoScrollLevels(Toggle):
+    """Keep auto scroll levels vanilla or choose a number of levels to be randomly selected to have auto-scrolling.
+    Certain levels are excluded."""
+    display_name = "Auto Scroll Levels"
+    range_start = -1
+    range_end = 20
+    special_range_names = {"vanilla": -1}
+
+
+class RandomizeMusic(Toggle):
+    """Randomize the music that plays in levels and overworld areas."""
+    display_name = "Randomize Music"
 
 
 sml2options = {
+    "golden_coins": GoldenCoins,
     "difficulty_mode": DifficultyMode,
     "shuffle_space_physics": ShuffleSpacePhysics,
     "randomize_enemies": RandomizeEnemies,
     "randomize_platforms": RandomizePlatforms,
-    "randomize_auto_scroll_levels": RandomizeAutoScrollLevels,
+    "auto_scroll_levels": AutoScrollLevels,
+    "randomize_music": RandomizeMusic
 }

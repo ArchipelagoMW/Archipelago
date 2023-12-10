@@ -1,5 +1,4 @@
 import base64
-from typing import Dict, Any
 
 import Utils
 from worlds.AutoWorld import World, WebWorld
@@ -9,72 +8,6 @@ from . import client
 from .rom import generate_output
 from .options import sml2options
 
-locations = [
-    "Mushroom Zone", #A848
-    "Scenic Course", #A870
-    "Tree Zone 1 - Invincibility!", #A849
-    "Tree Zone 2 - In the Trees", #A84A
-    "Tree Zone 3 - The Exit", #A84C
-    "Tree Zone 4 - Honeybees", #A84B
-    "Tree Zone 5 - The Big Bird", #A84D
-    "Tree Zone - Secret Course", #A84B
-    "Hippo Zone", #A867
-    "Space Zone 1 - Moon Stage", #A858
-    "Space Zone 2 - Star Stage", #A859
-    "Space Zone - Secret Course", #A871
-    "Macro Zone 1 - The Ant Monsters", #A853
-    "Macro Zone 2 - In the Syrup Sea", #A854
-    "Macro Zone 3 - Fiery Mario-Special Agent", #A855
-    "Macro Zone 4 - One Mighty Mouse", #A856
-    "Macro Zone - Secret Course", #A86B
-    "Pumpkin Zone 1 - Bat Course", #A84E
-    "Pumpkin Zone 2 - Cyclops Course", #A84F
-    "Pumpkin Zone 3 - Ghost House", #A850
-    "Pumpkin Zone 4 - Witch's Mansion", #A851
-    "Pumpkin Zone - Secret Course 1", #A86E
-    "Pumpkin Zone - Secret Course 2", #A86F
-    "Mario Zone 1 - Fiery Blocks", #A862
-    "Mario Zone 2 - Mario the Circus Star!", #A863
-    "Mario Zone 3 - Beware: Jagged Spikes", #A864
-    "Mario Zone 4 - Three Mean Pigs!", #A865
-    "Turtle Zone 1 - Cheep Cheep Course", #A85D
-    "Turtle Zone 2 - Turtle Zone", #A85E
-    "Turtle Zone 3 - Whale Course", #A85F
-    "Turtle Zone - Secret Course", #A86D
-]
-locations = {
-    "Mushroom Zone": 0,
-    "Scenic Course": 40,
-    "Tree Zone 1 - Invincibility!": 1,
-    "Tree Zone 2 - In the Trees": 2,
-    "Tree Zone 3 - The Exit": 4,
-    "Tree Zone 4 - Honeybees": 3,
-    "Tree Zone 5 - The Big Bird": 5,
-    "Tree Zone - Secret Course": 3,
-    "Hippo Zone": 31,
-    "Space Zone 1 - Moon Stage": 16,
-    "Space Zone 2 - Star Stage": 17,
-    "Space Zone - Secret Course": 41,
-    "Macro Zone 1 - The Ant Monsters": 11,
-    "Macro Zone 2 - In the Syrup Sea": 12,
-    "Macro Zone 3 - Fiery Mario-Special Agent": 13,
-    "Macro Zone 4 - One Mighty Mouse": 14,
-    "Macro Zone - Secret Course": 35,
-    "Pumpkin Zone 1 - Bat Course": 6,
-    "Pumpkin Zone 2 - Cyclops Course": 7,
-    "Pumpkin Zone 3 - Ghost House": 8,
-    "Pumpkin Zone 4 - Witch's Mansion": 9,
-    "Pumpkin Zone - Secret Course 1": 38,
-    "Pumpkin Zone - Secret Course 2": 39,
-    "Mario Zone 1 - Fiery Blocks": 26,
-    "Mario Zone 2 - Mario the Circus Star!": 27,
-    "Mario Zone 3 - Beware: Jagged Spikes": 28,
-    "Mario Zone 4 - Three Mean Pigs!": 29,
-    "Turtle Zone 1 - Cheep Cheep Course": 21,
-    "Turtle Zone 2 - Turtle Zone": 22,
-    "Turtle Zone 3 - Whale Course": 23,
-    "Turtle Zone - Secret Course": 37,
-}
 locations = {
     'Mushroom Zone': {'ram_index': 0},
     'Scenic Course': {'ram_index': 40},
@@ -83,7 +16,7 @@ locations = {
     'Tree Zone 3 - The Exit': {'ram_index': 4, 'clear_condition': ("Progressive Tree Zone", 3)},
     'Tree Zone 4 - Honeybees': {'ram_index': 3, 'clear_condition': ("Progressive Tree Zone", 3)},
     'Tree Zone 5 - The Big Bird': {'ram_index': 5, 'clear_condition': ("Tree Coin", 1)},
-    'Tree Zone - Secret Course': {'ram_index': 3},
+    'Tree Zone - Secret Course': {'ram_index': 36},
     'Hippo Zone': {'ram_index': 31},
     'Space Zone 1 - Moon Stage': {'ram_index': 16, 'clear_condition': ("Progressive Space Zone", 2)},
     'Space Zone 2 - Star Stage': {'ram_index': 17, 'clear_condition': ("Space Coin", 1)},
@@ -137,6 +70,12 @@ class MarioLand2World(World):
     location_name_to_id = {location_name: ID for ID, location_name in enumerate(locations, START_IDS)}
     item_name_to_id = {item_name: ID for ID, item_name in enumerate(items, START_IDS)}
 
+    item_name_groups = {
+        "Coins": {item_name for item_name in items if "Coin" in item_name},
+        "Powerups": {"Mushroom", "Fire Flower", "Carrot"},
+        "Difficulties": {"Easy Mode", "Normal Mode"}
+    }
+
     option_definitions = sml2options
 
     generate_output = generate_output
@@ -157,7 +96,8 @@ class MarioLand2World(World):
             "Tree Zone 3 - The Exit": lambda state: state.has("Progressive Tree Zone", self.player, 2),
             "Tree Zone 4 - Honeybees": lambda state: state.has("Progressive Tree Zone", self.player, 2),
             "Tree Zone 5 - The Big Bird": lambda state: state.has("Progressive Tree Zone", self.player, 3),
-            # You can use a Fire Flower to get here from Macro Zone 1, or if you have every Progressive Macro Zone and the Macro Zone Secret paths, you can get here from the boss levl
+            # You can use a Fire Flower to get here from Macro Zone 1, or if you have every Progressive Macro Zone and
+            # the Macro Zone Secret paths, you can get here from the boss level
             "Macro Zone - Secret Course": lambda state: state.has("Fire Flower", self.player) or (state.has("Macro Zone Secret", self.player) and state.has("Progressive Macro Zone", self.player, 3)),
             "Macro Zone 2 - In the Syrup Sea": lambda state: state.has("Progressive Macro Zone", self.player),
             "Macro Zone 3 - Fiery Mario-Special Agent": lambda state: state.has("Progressive Macro Zone", self.player, 2),
@@ -180,8 +120,14 @@ class MarioLand2World(World):
         for level, rule in rules.items():
             self.multiworld.get_location(level, self.player).access_rule = rule
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has_all(["Tree Coin", "Space Coin",
-            "Macro Coin", "Pumpkin Coin", "Mario Coin", "Turtle Coin",], self.player)
+        if self.multiworld.golden_coins[self.player] == "progressive":
+            self.multiworld.completion_condition[self.player] = lambda state: (
+                state.has("Progressive Space Zone", self.player, 3) and state.has("Progressive Tree Zone", self.player, 4)
+                and state.has("Progressive Macro Zone", self.player, 4) and state.has("Progressive Pumpkin Zone", self.player, 4)
+                and state.has("Progressive Mario Zone", self.player, 4) and state.has("Progressive Turtle Zone", self.player, 3))
+        else:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has_all(["Tree Coin", "Space Coin",
+                "Macro Coin", "Pumpkin Coin", "Mario Coin", "Turtle Coin"], self.player)
 
     def create_items(self):
         item_counts = {
@@ -192,36 +138,58 @@ class MarioLand2World(World):
             "Progressive Pumpkin Zone": 3,
             "Progressive Mario Zone": 3,
             "Progressive Turtle Zone": 2,
-            "Tree Coin": 1,
-            "Space Coin": 1,
-            "Macro Coin": 1,
-            "Pumpkin Coin": 1,
-            "Mario Coin": 1,
-            "Turtle Coin": 1,
             "Mushroom": 1,
             "Fire Flower": 1,
             "Carrot": 1,
-            "Progressive Invincibility Star": 3,
-            "Space Physics": 1,
+            "Progressive Invincibility Star": 4,
         }
+
+        if self.multiworld.golden_coins[self.player] == "vanilla":
+            for item, location_name in (
+                    ("Macro Coin", "Mario Zone 4 - Three Mean Pigs!"),
+                    ("Mario Coin", "Tree Zone 5 - The Big Bird"),
+                    ("Space Coin", "Space Zone 2 - Star Stage"),
+                    ("Pumpkin Coin", "Macro Zone 4 - One Mighty Mouse"),
+                    ("Turtle Coin", "Pumpkin Zone 4 - Witch's Mansion"),
+                    ("Tree Coin", "Turtle Zone 3 - Whale Course")
+            ):
+                location = self.multiworld.get_location(location_name, self.player)
+                location.place_locked_item(self.create_item(item))
+                location.address = None
+                location.item.code = None
+        elif self.multiworld.golden_coins[self.player] == "shuffled":
+            for item in self.item_name_groups["Coins"]:
+                item_counts[item] = 1
+        elif self.multiworld.golden_coins[self.player] == "progressive":
+            for item in [item for item in items if "Progressive" in item and "Zone" in item]:
+                item_counts[item] += 1
 
         if self.multiworld.difficulty_mode[self.player] == "easy_to_normal":
             item_counts["Normal Mode"] = 1
-        else:
+        elif self.multiworld.difficulty_mode[self.player] == "normal_to_easy":
             item_counts["Easy Mode"] = 1
+        else:
+            item_counts["Progressive Invincibility Star"] += 1
+
+        if self.multiworld.shuffle_space_physics[self.player]:
+            item_counts["Progressive Invincibility Star"] -= 1
+            item_counts["Space Physics"] = 1
+        else:
+            self.multiworld.push_precollected(self.create_item("Space Physics"))
 
         for item_name, count in item_counts.items():
-            for _ in range(count):
-                classification = (ItemClassification.trap if item_name == "Normal Mode"
-                                  else ItemClassification.useful if item_name == "Easy Mode"
-                                  else ItemClassification.filler if item_name == "Progressive Invincibility Star"
-                                  else ItemClassification.progression)
-                self.multiworld.itempool.append(MarioLand2Item(item_name, classification, self.item_name_to_id[item_name], self.player))
+            self.multiworld.itempool += [self.create_item(item_name) for _ in range(count)]
 
     def fill_slot_data(self):
         return {
-            "mode": self.multiworld.difficulty_mode[self.player].value
+            "mode": self.multiworld.difficulty_mode[self.player].value,
+            "vanilla_coins": self.multiworld.golden_coins[self.player] == "vanilla",
+            "stars": max(len([loc for loc in self.multiworld.get_filled_locations() if loc.item.player == self.player
+                              and loc.item.name == "Progressive Invincibility Star"]), 1)
         }
+
+    def create_item(self, name: str) -> Item:
+        return MarioLand2Item(name, items[name], self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self):
         return "Progressive Invincibility Star"

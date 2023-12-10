@@ -120,9 +120,12 @@ def randomize_enemies(data, random):
                 copy_sprite(data, sprite_insert(data[i], data[i+1], random.choice([0x0C, 0x0D])), i)
         i += 3
 
-def randomize_auto_scroll_levels(data, random):
-    for i in random.sample([0, 1, 2, 3, 5, 8, 9, 10, 11, 13, 14, 16, 17, 18, 19, 20, 23, 25, 30, 31], 3):
-        data[0x1F71 + i] = 1 #int(random.randint(0, 99) < (8 if data[0x1F71 +1] == 0 else 25))
+
+def randomize_auto_scroll_levels(data, random, n):
+    eligible_levels = [0, 1, 2, 3, 5, 8, 9, 10, 11, 13, 14, 16, 17, 18, 19, 20, 23, 25, 30, 31]
+    auto_scroll_levels = random.sample(eligible_levels, n)
+    for i in eligible_levels:
+        data[0x1F71 + i] = 1 if i in auto_scroll_levels else 0
 
 
 def randomize_platforms(data, random):
@@ -139,8 +142,21 @@ def randomize_platforms(data, random):
                 i -= 2
             elif sprite in level["platforms"]:
                 randomize_sprite(data, random, level["platforms"], i)
-        for i in range(0xE9A3, 0xE9CE, 3):
-            data[i] = (0x57 if data[i] == 0x5E else 0x38) + random.randint(0, 7)
+            i += 3
+    for i in range(0xE9A3, 0xE9CE, 3):
+        data[i] = (0x57 if data[i] == 0x5E else 0x38) + random.randint(0, 7)
+
+def randomize_music(data, random):
+    # overworld
+    overworld_music_tracks = [0x05, 0x06, 0x0D, 0x0E, 0x10, 0x12, 0x1B, 0x1C, 0x1E]
+    random.shuffle(overworld_music_tracks)
+    for i, track in zip([0x3004F, 0x3EA9B, 0x3D186, 0x3D52B, 0x3D401, 0x3D297, 0x3D840, 0x3D694, 0x3D758],
+                        overworld_music_tracks):
+        data[i] = track
+    # levels
+    for i in range(0x5619, 0x5899, 0x14):
+        data[i] = random.choice([0x01, 0x0B, 0x11, 0x13, 0x14, 0x17, 0x1D, 0x1F, 0x28])
+
 
 def generate_output(self, output_directory: str):
     data = get_base_rom_bytes()
@@ -154,8 +170,10 @@ def generate_output(self, output_directory: str):
         randomize_enemies(data, random)
     if self.multiworld.randomize_platforms[self.player]:
         randomize_platforms(data, random)
-    if self.multiworld.randomize_auto_scroll_levels[self.player]:
-        randomize_auto_scroll_levels(data, random)
+    if self.multiworld.randomize_auto_scroll_levels[self.player] > -1:
+        randomize_auto_scroll_levels(data, random, self.multiworld.randomize_auto_scroll_levels[self.player].value)
+    if self.multiworld.randomize_music[self.player]:
+        randomize_music(data, random)
 
     rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
                          'utf8')[:21]
