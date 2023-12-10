@@ -123,9 +123,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 world.early_items[player][item_name] = max(0, early-count)
                 remaining_count = count-early
                 if remaining_count > 0:
-                    early = world.early_local_items[player].get(item_name, 0)
-                    if early:
-                        world.early_items[player][item_name] = max(0, early - remaining_count)
+                    local_early = world.early_local_items[player].get(item_name, 0)
+                    if local_early:
+                        world.early_items[player][item_name] = max(0, local_early - remaining_count)
+                    del local_early
+            del early
 
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
