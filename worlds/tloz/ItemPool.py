@@ -117,6 +117,9 @@ def get_pool_core(world):
     else:
         possible_level_locations = [location for location in standard_level_locations
                                     if location not in level_locations[8]]
+    for location in placed_items.keys():
+        if location in possible_level_locations:
+            possible_level_locations.remove(location)
     for level in range(1, 9):
         if world.multiworld.TriforceLocations[world.player] == TriforceLocations.option_vanilla:
             placed_items[f"Level {level} Triforce"] = fragment
