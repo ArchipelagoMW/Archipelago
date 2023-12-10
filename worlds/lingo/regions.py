@@ -4,7 +4,7 @@ from BaseClasses import Entrance, ItemClassification, Region
 from .items import LingoItem
 from .locations import LingoLocation
 from .player_logic import LingoPlayerLogic
-from .rules import lingo_can_use_entrance, lingo_can_use_pilgrimage, make_location_lambda
+from .rules import lingo_can_use_entrance, make_location_lambda
 from .static_logic import ALL_ROOMS, PAINTINGS, Room, RoomAndDoor
 
 if TYPE_CHECKING:
@@ -23,15 +23,6 @@ def create_region(room: Room, world: "LingoWorld", player_logic: LingoPlayerLogi
             new_location.place_locked_item(event_item)
 
     return new_region
-
-
-def handle_pilgrim_room(regions: Dict[str, Region], world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
-    target_region = regions["Pilgrim Antechamber"]
-    source_region = regions["Outside The Agreeable"]
-    source_region.connect(
-        target_region,
-        "Pilgrimage",
-        lambda state: lingo_can_use_pilgrimage(state, world, player_logic))
 
 
 def connect_entrance(regions: Dict[str, Region], source_region: Region, target_region: Region, description: str,
@@ -91,7 +82,9 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
             connect_entrance(regions, regions[entrance.room], regions[room.name], entrance_name, entrance.door, world,
                              player_logic)
 
-    handle_pilgrim_room(regions, world, player_logic)
+    # Add the fake pilgrimage.
+    connect_entrance(regions, regions["Outside The Agreeable"], regions["Pilgrim Antechamber"], "Pilgrimage",
+                     RoomAndDoor("Pilgrim Antechamber", "Pilgrimage"), world, player_logic)
 
     if early_color_hallways:
         regions["Starting Room"].connect(regions["Outside The Undeterred"], "Early Color Hallways")
