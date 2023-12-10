@@ -6,6 +6,7 @@ from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
+from .presets import witness_option_presets
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_hints, generate_joke_hints
 from worlds.AutoWorld import World, WebWorld
@@ -30,6 +31,8 @@ class WitnessWebWorld(WebWorld):
         "setup/en",
         ["NewSoupVi", "Jarno"]
     )]
+
+    options_presets = witness_option_presets
 
 
 class WitnessWorld(World):
