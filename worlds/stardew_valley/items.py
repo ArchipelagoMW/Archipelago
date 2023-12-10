@@ -16,6 +16,7 @@ from .options import StardewValleyOptions, TrapItems, FestivalLocations, Exclude
     Shipsanity, Chefsanity, Craftsanity, BundleRandomization, BundlePrice
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
+from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem
 from .strings.villager_names import NPC, ModNPC
@@ -209,7 +210,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items = []
 
     items.extend(item_factory(item) for item in items_by_group[Group.COMMUNITY_REWARD])
-    items.append(item_factory("Progressive Movie Theater"))  # It is a community reward, but we need two of them
+    items.append(item_factory(CommunityUpgrade.movie_theater))  # It is a community reward, but we need two of them
 
     create_backpack_items(item_factory, options, items)
     create_weapons(item_factory, options, items)
@@ -220,6 +221,8 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_wizard_buildings(item_factory, options, items)
     create_carpenter_buildings(item_factory, options, items)
     items.append(item_factory("Railroad Boulder Removed"))
+    items.append(item_factory(CommunityUpgrade.fruit_bats))
+    items.append(item_factory(CommunityUpgrade.mushroom_boxes))
     items.append(item_factory("Beach Bridge"))
     items.append(item_factory("Dark Talisman"))
     create_tv_channels(item_factory, items)

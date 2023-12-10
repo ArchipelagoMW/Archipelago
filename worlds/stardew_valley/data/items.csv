@@ -445,6 +445,8 @@ id,name,classification,groups,mod_name
 467,Four Corners Farm,progression,FARM_TYPE,
 468,Beach Farm,progression,FARM_TYPE,
 469,Railroad Boulder Removed,progression,,
+470,Fruit Bats,progression,,
+471,Mushroom Boxes,progression,,
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,
