@@ -12,6 +12,7 @@ from .Options import CMOptions, piece_type_limit_options, piece_limit_options
 from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
                     useful_items, item_name_groups)
 from .Locations import CMLocation, location_table
+from .Presets import checksmate_option_presets
 from .Rules import set_rules
 
 
@@ -25,6 +26,9 @@ class CMWeb(WebWorld):
         "checks-mate/en",
         ["roty", "rft50"]
     )]
+
+    options_presets = checksmate_option_presets
+
 
 
 class CMWorld(World):
