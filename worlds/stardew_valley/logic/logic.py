@@ -362,7 +362,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             MetalBar.radioactive: self.can_smelt(Ore.radioactive),
             Ore.copper: self.mine.can_mine_in_the_mines_floor_1_40() | self.mine.can_mine_in_the_skull_cavern() | self.action.can_pan(),
             Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.action.can_pan(),
-            Ore.iridium: self.mine.can_mine_in_the_skull_cavern(),
+            Ore.iridium: self.mine.can_mine_in_the_skull_cavern() | self.can_fish_pond(Fish.super_cucumber),
             Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.action.can_pan(),
             Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
@@ -740,3 +740,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
 
     def has_mushroom_cave(self) -> StardewRule:
         return self.region.can_reach(Region.farm_cave) & self.received(CommunityUpgrade.mushroom_boxes)
+
+    def can_fish_pond(self, fish: str) -> StardewRule:
+        return self.building.has_building(Building.fish_pond) & self.has(fish)
