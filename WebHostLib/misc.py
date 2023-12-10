@@ -61,7 +61,8 @@ def player_settings(game: str):
 @app.route("/games/<string:game>/player-options")
 @cache.cached()
 def player_options(game: str):
-    all_options: Dict[str, Options.AssembleOptions] = AutoWorldRegister.world_types[game].options_dataclass.type_hints
+    world = AutoWorldRegister.world_types[game]
+    all_options: Dict[str, Options.AssembleOptions] = world.options_dataclass.type_hints
     grouped_options = collections.defaultdict(dict)
     for option_name, option in all_options.items():
         grouped_options[getattr(option, "group_name", "Game Options")][option_name] = option
@@ -69,6 +70,7 @@ def player_options(game: str):
     return render_template(
         "playerOptions/playerOptions.html",
         game=game,
+        world=world,
         option_groups=grouped_options,
         issubclass=issubclass,
         Options=Options,

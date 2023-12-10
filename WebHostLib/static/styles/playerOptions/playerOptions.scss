@@ -178,6 +178,21 @@ html{
             }
         }
 
+        .text-choice-container{
+            display: flex;
+            flex-direction: column;
+
+            .text-choice-wrapper{
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 0.25rem;
+
+                select{
+                    flex-grow: 1;
+                }
+            }
+        }
+
         .randomize-button{
             display: flex;
             flex-direction: column;

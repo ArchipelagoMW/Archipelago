@@ -149,6 +149,18 @@ html {
 #player-options table .free-text-container input[type=text] {
   flex-grow: 1;
 }
+#player-options table .text-choice-container {
+  display: flex;
+  flex-direction: column;
+}
+#player-options table .text-choice-container .text-choice-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.25rem;
+}
+#player-options table .text-choice-container .text-choice-wrapper select {
+  flex-grow: 1;
+}
 #player-options table .randomize-button {
   display: flex;
   flex-direction: column;
