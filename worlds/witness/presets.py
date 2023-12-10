@@ -13,7 +13,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "shuffle_doors": ShuffleDoors.option_panels,
         "door_groupings": DoorGroupings.option_off,
         "shuffle_boat": True,
-        "shuffle_lasers": False,
+        "shuffle_lasers": ShuffleLasers.option_local,
 
         "disable_non_randomized_puzzles": True,
         "shuffle_discarded_panels": False,
@@ -45,7 +45,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "shuffle_doors": ShuffleDoors.option_doors,
         "door_groupings": DoorGroupings.option_regional,
         "shuffle_boat": True,
-        "shuffle_lasers": False,
+        "shuffle_lasers": ShuffleLasers.option_off,
 
         "disable_non_randomized_puzzles": False,
         "shuffle_discarded_panels": True,
@@ -77,7 +77,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "shuffle_doors": ShuffleDoors.option_mixed,
         "door_groupings": DoorGroupings.option_off,
         "shuffle_boat": True,
-        "shuffle_lasers": True,
+        "shuffle_lasers": ShuffleLasers.option_anywhere,
 
         "disable_non_randomized_puzzles": False,
         "shuffle_discarded_panels": True,
