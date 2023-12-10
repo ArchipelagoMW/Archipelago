@@ -7,7 +7,13 @@ from typing import List
 from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
-from .. import SVTestCase, minimal_locations_maximal_items, setup_multiworld, allsanity_options_without_mods, default_options
+from .. import SVTestCase, minimal_locations_maximal_items, setup_multiworld, default_4_x_x_options, \
+    allsanity_4_x_x_options_without_mods, default_options, allsanity_options_without_mods
+
+assert default_4_x_x_options
+assert allsanity_4_x_x_options_without_mods
+assert default_options
+assert allsanity_options_without_mods
 
 default_number_generations = 25
 acceptable_deviation = 4

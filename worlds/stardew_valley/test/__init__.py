@@ -135,7 +135,7 @@ def allsanity_4_x_x_options_without_mods():
         ElevatorProgression.internal_name: ElevatorProgression.option_progressive,
         ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_full_shuffling,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-        HelpWantedLocations.internal_name: 56,
+        QuestLocations.internal_name: 56,
         Fishsanity.internal_name: Fishsanity.option_all,
         Museumsanity.internal_name: Museumsanity.option_all,
         Monstersanity.internal_name: Monstersanity.option_progressive_goals,
