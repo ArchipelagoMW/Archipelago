@@ -3,7 +3,7 @@ from random import Random
 from .options import BuildingProgression, StardewValleyOptions, BackpackProgression, ExcludeGingerIsland, SeasonRandomization, SpecialOrderLocations, \
     Monstersanity, ToolProgression, SkillProgression
 
-early_candidate_rate = 2
+early_candidate_rate = 4
 always_early_candidates = ["Greenhouse", "Desert Obelisk", "Rusty Key"]
 seasons = ["Spring", "Summer", "Fall", "Winter"]
 

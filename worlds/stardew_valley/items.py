@@ -224,7 +224,6 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory(CommunityUpgrade.fruit_bats))
     items.append(item_factory(CommunityUpgrade.mushroom_boxes))
     items.append(item_factory("Beach Bridge"))
-    items.append(item_factory("Dark Talisman"))
     create_tv_channels(item_factory, items)
     create_special_quest_rewards(item_factory, options, items)
     create_stardrops(item_factory, options, items)
@@ -359,6 +358,7 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     items.append(item_factory(Wallet.bears_knowledge))
     items.append(item_factory(Wallet.iridium_snake_milk))
     items.append(item_factory("Fairy Dust Recipe"))
+    items.append(item_factory("Dark Talisman"))
     if ModNames.sve in options.mods:
         create_special_quest_rewards_sve(item_factory, options, items)
 

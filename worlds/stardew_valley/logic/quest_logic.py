@@ -121,3 +121,8 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
         if self.options.quest_locations < 0:
             return self.logic.quest.can_complete_quest(Quest.a_winter_mystery)
         return self.logic.received(Wallet.magnifying_glass)
+
+    def has_dark_talisman(self) -> StardewRule:
+        if self.options.quest_locations < 0:
+            return self.logic.quest.can_complete_quest(Quest.dark_talisman)
+        return self.logic.received(Wallet.dark_talisman)
