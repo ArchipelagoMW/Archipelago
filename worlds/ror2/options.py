@@ -142,14 +142,6 @@ class FinalStageDeath(Toggle):
     display_name = "Final Stage Death is Win"
 
 
-class BeginWithLoop(Toggle):
-    """
-    Enable to precollect a full loop of environments.
-    Only has an effect with Explore Mode.
-    """
-    display_name = "Begin With Loop"
-
-
 class DLC_SOTV(Toggle):
     """
      Enable if you are using SOTV DLC.
@@ -385,7 +377,6 @@ class ROR2Options(PerGameCommonOptions):
     total_revivals: TotalRevivals
     start_with_revive: StartWithRevive
     final_stage_death: FinalStageDeath
-    begin_with_loop: BeginWithLoop
     dlc_sotv: DLC_SOTV
     death_link: DeathLink
     item_pickup_step: ItemPickupStep
