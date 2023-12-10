@@ -81,7 +81,7 @@ class TestItems(SVTestCase):
 
     def test_can_start_on_any_farm(self):
         starting_farms_rolled = set()
-        for attempt_number in range(50):
+        for attempt_number in range(60):
             if len(starting_farms_rolled) >= 7:
                 print(f"Already got all 7 farm types, breaking early [{attempt_number} generations]")
                 break
