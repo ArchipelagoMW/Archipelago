@@ -593,6 +593,9 @@ engineer_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.engineer, engine
 demolition_items = [cherry_bomb, bomb, mega_bomb, explosive_ammo]
 demolition_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.demolition, demolition_items, 3, 3)
 
+# recycling_items = [stone, coal, iron_ore, wood, torch, cloth, refined_quartz]
+# recycling_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.recycling, recycling_items, 4, 4)
+
 boiler_room_bundles_vanilla = [blacksmith_bundle_vanilla, geologist_bundle_vanilla, adventurer_bundle_vanilla]
 boiler_room_bundles_thematic = [blacksmith_bundle_thematic, geologist_bundle_thematic, adventurer_bundle_thematic]
 boiler_room_bundles_remixed = [*boiler_room_bundles_thematic, treasure_hunter_bundle, engineer_bundle, demolition_bundle]
