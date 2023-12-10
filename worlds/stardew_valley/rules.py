@@ -927,6 +927,8 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_bear_shop, player),
                              (logic.quest.can_complete_quest(Quest.strange_note) & logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
                               logic.tool.has_tool(Tool.pickaxe, ToolMaterial.basic)))
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.railroad_to_grampleton_station, player),
+                             logic.received(SVEQuestItem.scarlett_job_offer))
     logic.mod.sve.initialize_rules()
     for location in logic.registry.sve_location_rules:
         MultiWorldRules.set_rule(multiworld.get_location(location, player),
