@@ -8,6 +8,8 @@ import Utils
 from Patch import APDeltaPatch
 from settings import get_settings
 
+from .rom_addresses import rom_addresses
+
 # Enemy randomizer ported directly from SML2R
 # https://github.com/slashinfty/sml2r-node/blob/862128c73d336d6cbfbf6290c09f3eff103688e8/src/index.ts#L284
 
@@ -174,6 +176,9 @@ def generate_output(self, output_directory: str):
         randomize_auto_scroll_levels(data, random, self.multiworld.auto_scroll_levels[self.player].value)
     if self.multiworld.randomize_music[self.player]:
         randomize_music(data, random)
+
+    if self.multiworld.golden_coins[self.player] != "vanilla":
+        data[rom_addresses["Coin_Shuffle"]] = 0x40
 
     rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
                          'utf8')[:21]

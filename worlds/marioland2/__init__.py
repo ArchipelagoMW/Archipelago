@@ -96,7 +96,7 @@ class MarioLand2World(World):
             "Tree Zone 3 - The Exit": lambda state: state.has("Progressive Tree Zone", self.player, 2),
             "Tree Zone 4 - Honeybees": lambda state: state.has("Progressive Tree Zone", self.player, 2),
             "Tree Zone 5 - The Big Bird": lambda state: state.has("Progressive Tree Zone", self.player, 3),
-            # You can use a Fire Flower to get here from Macro Zone 1, or if you have every Progressive Macro Zone and
+            # You can use a Fire Flower to get the Secret Course from Macro Zone 1, or if you have every Progressive Macro Zone and
             # the Macro Zone Secret paths, you can get here from the boss level
             "Macro Zone - Secret Course": lambda state: state.has("Fire Flower", self.player) or (state.has("Macro Zone Secret", self.player) and state.has("Progressive Macro Zone", self.player, 3)),
             "Macro Zone 2 - In the Syrup Sea": lambda state: state.has("Progressive Macro Zone", self.player),
@@ -183,7 +183,6 @@ class MarioLand2World(World):
     def fill_slot_data(self):
         return {
             "mode": self.multiworld.difficulty_mode[self.player].value,
-            "vanilla_coins": self.multiworld.golden_coins[self.player] == "vanilla",
             "stars": max(len([loc for loc in self.multiworld.get_filled_locations() if loc.item.player == self.player
                               and loc.item.name == "Progressive Invincibility Star"]), 1)
         }

@@ -1,4 +1,4 @@
-from Options import Toggle, Choice, Range, NamedRange, TextChoice, DeathLink
+from Options import Toggle, Choice, NamedRange
 
 
 class GoldenCoins(Choice):
@@ -24,6 +24,7 @@ class DifficultyMode(Choice):
     option_normal_to_easy = 2
     option_easy_to_normal = 3
     default = 0
+
 
 class ShuffleSpacePhysics(Toggle):
     """Oh, no! There is Earth gravity on the moon and in space! Find the missing Space Physics item to restore

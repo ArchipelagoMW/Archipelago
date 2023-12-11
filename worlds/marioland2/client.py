@@ -60,9 +60,6 @@ class MarioLand2Client(BizHawkClient):
             if "clear_condition" in data:
                 if items_received.count(data["clear_condition"][0]) >= data["clear_condition"][1]:
                     modified_level_data[data["ram_index"]] |= 0x80
-                elif (ctx.slot_data and ctx.slot_data["vanilla_coins"] and "Coin" in data["clear_condition"][0]
-                      and modified_level_data[data["ram_index"]] & 0x40):
-                    modified_level_data[data["ram_index"]] |= 0x80
 
             if level_data[data["ram_index"]] & 0x41:
                 locations_checked.append(ID)
