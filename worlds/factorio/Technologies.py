@@ -7,7 +7,7 @@ import string
 import pkgutil
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
+from typing import Dict, Optional, Set, FrozenSet, Tuple, Union, List, Any
 
 import Utils
 from . import Options
@@ -120,6 +120,9 @@ class Recipe(FactorioElement):
     products: Dict[str, int]
     energy: float
 
+    _cached_base_cost: Optional[Dict[str, int]] = None
+    _cached_energy: Optional[float] = None
+
     def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int], energy: float):
         self.name = name
         self.category = category
@@ -153,8 +156,11 @@ class Recipe(FactorioElement):
         ingredients = sum(self.ingredients.values())
         return min(ingredients / amount for product, amount in self.products.items())
 
-    @property
-    def base_cost(self) -> Dict[str, int]:
+    def base_cost(self, calculated: Optional[set[str]] = None) -> Dict[str, int]:
+        if self._cached_base_cost is not None:
+            return self._cached_base_cost
+        if calculated is None:
+            calculated = set()  # Some modpacks have recursive byproduct loops, so this will stop us going down rabbit holes
         ingredients = Counter()
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
@@ -162,28 +168,41 @@ class Recipe(FactorioElement):
                 recipes.sort(key=lambda recipe: len(recipe.recursive_unlocking_technologies))
                 for recipe in recipes:
                     if recipe.ingredients:
+                        if recipe.name in calculated:
+                            break
+                        calculated.add(recipe.name)
                         ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
-                                            recipe.base_cost.items()})
+                                            recipe.base_cost(calculated).items()})
                     else:
                         ingredients[ingredient] += recipe.energy * cost / recipe.products[ingredient]
-                    continue  # Let's assume the first recipe is the least likely to be recursive
+                    break  # Let's assume the first recipe is the least likely to be recursive
             else:
                 ingredients[ingredient] += cost
+        self._cached_base_cost = ingredients
         return ingredients
 
-    @property
-    def total_energy(self) -> float:
+    def total_energy(self, calculated: Optional[set[str]] = None) -> float:
         """Total required energy (crafting time) for single craft"""
         # TODO: multiply mining energy by 2 since drill has 0.5 speed
+        if self._cached_energy is not None:
+            return self._cached_energy
+
+        if calculated is None:
+            calculated = set()  # Some modpacks have recursive byproduct loops, so this will stop us going down rabbit holes
+
         total_energy = self.energy
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
                 selected_recipe_energy = float('inf')
                 for ingredient_recipe in all_product_sources[ingredient]:
+                    if ingredient_recipe.name in calculated:
+                        break
+                    calculated.add(ingredient_recipe.name)
                     craft_count = max((n for name, n in ingredient_recipe.products.items() if name == ingredient))
-                    recipe_energy = ingredient_recipe.total_energy / craft_count * cost
+                    recipe_energy = ingredient_recipe.total_energy(calculated) / craft_count * cost
                     if recipe_energy < selected_recipe_energy:
                         selected_recipe_energy = recipe_energy
+                    break
                 total_energy += selected_recipe_energy
         return total_energy
 
@@ -473,7 +492,7 @@ del fluids_future
 @Utils.cache_argsless
 def get_science_pack_pools() -> Dict[str, Set[str]]:
     def get_estimated_difficulty(recipe: Recipe):
-        base_ingredients = recipe.base_cost
+        base_ingredients = recipe.base_cost()
         cost = 0
 
         for ingredient_name, amount in base_ingredients.items():

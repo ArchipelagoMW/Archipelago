@@ -205,9 +205,9 @@ class Factorio(World):
         special_index = {"rocket-silo": -1}
         i = 0
         priority_techs = []
-        priority_techs.extend(base_technology_table["automation"].recursive_unlocking_technologies)
+        priority_techs.extend(base_technology_table["automation"].get_prior_technologies())
         priority_techs.append("automation")
-        priority_techs.extend(base_technology_table["logistics"].recursive_unlocking_technologies)
+        priority_techs.extend(base_technology_table["logistics"].get_prior_technologies())
         priority_techs.append("logistics")
         for tech_name in priority_techs:
             if tech_name not in special_index:
@@ -358,8 +358,8 @@ class Factorio(World):
         pool: typing.List[str] = sorted(pool & valid_ingredients)
         # then sort with random data to shuffle
         self.multiworld.random.shuffle(pool)
-        target_raw = int(sum((count for ingredient, count in original.base_cost.items())) * factor)
-        target_energy = original.total_energy * factor
+        target_raw = int(sum((count for ingredient, count in original.base_cost().items())) * factor)
+        target_energy = original.total_energy() * factor
         target_num_ingredients = len(original.ingredients) + ingredients_offset
         remaining_raw = target_raw
         remaining_energy = target_energy
@@ -375,8 +375,8 @@ class Factorio(World):
             ingredient_raw = 0
             if ingredient in all_product_sources:
                 ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
-                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
-                ingredient_energy = ingredient_recipe.total_energy
+                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost().items()))
+                ingredient_energy = ingredient_recipe.total_energy()
             else:
                 # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
                 ingredient_energy = 2
@@ -422,7 +422,7 @@ class Factorio(World):
             if not ingredient_recipe:
                 logging.warning(f"missing recipe for {ingredient}")
                 continue
-            ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
+            ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost().items()))
             ingredient_energy = ingredient_recipe.total_energy
             num_raw = remaining_raw / ingredient_raw / remaining_num_ingredients
             num_energy = remaining_energy / ingredient_energy / remaining_num_ingredients
