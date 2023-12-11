@@ -55,6 +55,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("Destiny Islands Post Floor (Enemy Cards Larxene)"                   , player).access_rule = lambda state: has_item(state, player,"World Card Halloween Town") and has_item(state, player,"World Card Atlantica")
     multiworld.get_location("Destiny Islands Post Floor (Enemy Cards Riku)"                      , player).access_rule = lambda state: has_item(state, player,"World Card Halloween Town") and has_item(state, player,"World Card Atlantica")
     multiworld.get_location("Destiny Islands Post Floor (Attack Cards Oblivion)"                 , player).access_rule = lambda state: has_item(state, player,"World Card Halloween Town") and has_item(state, player,"World Card Atlantica")
+    multiworld.get_location("100 Acre Wood Tigger's Playground (Attack Cards Spellbinder)"       , player).access_rule = lambda state: has_item(state, player,"World Card Neverland") and has_item(state, player,"World Card Monstro")
     
     multiworld.get_location("Heartless Air Pirate"                                               , player).access_rule = lambda state: has_item(state, player,"World Card Neverland")
     multiworld.get_location("Heartless Air Soldier"                                              , player).access_rule = lambda state: has_item(state, player,"World Card Monstro") or has_item(state, player,"World Card Agrabah") or has_item(state, player,"World Card Halloween Town") or has_item(state, player,"World Card Destiny Islands")
