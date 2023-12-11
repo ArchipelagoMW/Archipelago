@@ -19,8 +19,8 @@ locations = {
     'Tree Zone - Secret Course': {'ram_index': 36},
     'Hippo Zone': {'ram_index': 31},
     'Space Zone 1 - Moon Stage': {'ram_index': 16, 'clear_condition': ("Progressive Space Zone", 2)},
-    'Space Zone 2 - Star Stage': {'ram_index': 17, 'clear_condition': ("Space Coin", 1)},
     'Space Zone - Secret Course': {'ram_index': 41},
+    'Space Zone 2 - Star Stage': {'ram_index': 17, 'clear_condition': ("Space Coin", 1)},
     'Macro Zone 1 - The Ant Monsters': {'ram_index': 11, 'clear_condition': ("Progressive Macro Zone", 1)},
     'Macro Zone 2 - In the Syrup Sea': {'ram_index': 12, 'clear_condition': ("Progressive Macro Zone", 2)},
     'Macro Zone 3 - Fiery Mario-Special Agent': {'ram_index': 13, 'clear_condition': ("Progressive Macro Zone", 3)},
@@ -74,6 +74,13 @@ class MarioLand2World(World):
         "Coins": {item_name for item_name in items if "Coin" in item_name},
         "Powerups": {"Mushroom", "Fire Flower", "Carrot"},
         "Difficulties": {"Easy Mode", "Normal Mode"}
+    }
+
+    location_name_groups = {
+        "Bosses": {
+            "Tree Zone 5 - The Big Bird", "Space Zone 2 - Star Stage", "Macro Zone 4 - One Mighty Mouse",
+            "Pumpkin Zone 4 - Witch's Mansion", "Mario Zone 4 - Three Mean Pigs!", "Turtle Zone 3 - Whale Course"
+                   }
     }
 
     option_definitions = sml2options
