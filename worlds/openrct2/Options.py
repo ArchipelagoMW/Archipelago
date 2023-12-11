@@ -566,7 +566,7 @@ class Guest_Objective(Range):
     display_name = "Guest Objective"
     range_start = 1
     range_end = 7500
-    default = 2000
+    default = 1000
 
 # class Include_Park_Value_Objective(OpenRCT2OnToggle):
 #     """Include an objective to achive a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
@@ -577,7 +577,7 @@ class Park_Value_Objective(Range):
     display_name = "Park Value Objective"
     range_start = 0
     range_end = 1000000
-    default = 300000
+    default = 200000
 
 # class Include_Roller_Coaster_Objective(OpenRCT2OnToggle):
 #     """Include an objective to build a certain number of Roller Coasters with optional Paramaters. Multiple objectives can be enabled!"""
@@ -588,7 +588,7 @@ class Roller_Coaster_Objective(Range):
     display_name = "Roller Coaster Objective"
     range_start = 0
     range_end = 20
-    default = 10
+    default = 5
 
 class Roller_Coaster_Excitement(Range):
     """Select the minimum excitement 😀 for a coaster to count towards your objective. 0 will disable a minimum excitement rating."""
@@ -663,7 +663,7 @@ class Filler(Range):
     display_name = "Filler"
     range_start = 1
     range_end = 50
-    default = 20
+    default = 10
 
 
 openRCT2_options = {

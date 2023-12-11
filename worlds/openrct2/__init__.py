@@ -395,7 +395,7 @@ class OpenRCT2World(World):
                             if random.random() < .5: excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             if random.random() < .5: intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
-                            unlock["RidePrereq"] = [random.randint(1,5),chosen_prereq,excitement,intensity,nausea,0]
+                            unlock["RidePrereq"] = [random.randint(1,3),chosen_prereq,excitement,intensity,nausea,0]
                         else:
                             unlock["RidePrereq"] = [random.randint(1,7),chosen_prereq,0,0,0,0]
                     else: #Prereq is not a specific ride
@@ -415,7 +415,7 @@ class OpenRCT2World(World):
                             if random.random() < .5: excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             if random.random() < .5: intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
                             if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
-                            unlock["RidePrereq"] = [random.randint(1,7),category,excitement,intensity,nausea,0]
+                            unlock["RidePrereq"] = [random.randint(1,4),category,excitement,intensity,nausea,0]
                         elif category == "transport_rides":
                             unlock["RidePrereq"] = [random.randint(1,3),category,0,0,0,0]
                         elif category == "water_rides":
