@@ -53,6 +53,12 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
 
     @cache_self1
     def has_building(self, building: str) -> StardewRule:
+        # Shipping bin is special. The mod auto-builds it when received, no need to go to Robin.
+        if building is Building.shipping_bin:
+            if not self.options.building_progression & BuildingProgression.option_progressive:
+                return True_()
+            return self.logic.received(f"{building}")
+
         carpenter_rule = self.logic.received(Event.can_construct_buildings)
         if not self.options.building_progression & BuildingProgression.option_progressive:
             return Has(building, self.registry.building_rules) & carpenter_rule
