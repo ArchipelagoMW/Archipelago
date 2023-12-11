@@ -23,8 +23,12 @@ class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLo
         combat_rule = self.logic.combat.can_fight_at_level(monster.difficulty)
         if amount_tier <= 0:
             amount_tier = 0
-        time_rule = self.logic.time.has_lived_months(amount_tier * 2)
+        time_rule = self.logic.time.has_lived_months(amount_tier)
         return region_rule & combat_rule & time_rule
+
+    @cache_self1
+    def can_kill_many(self, monster: StardewMonster) -> StardewRule:
+        return self.logic.monster.can_kill(monster, MAX_MONTHS / 3)
 
     @cache_self1
     def can_kill_max(self, monster: StardewMonster) -> StardewRule:

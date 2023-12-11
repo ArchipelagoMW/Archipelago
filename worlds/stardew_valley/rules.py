@@ -641,7 +641,7 @@ def set_monstersanity_monster_rules(all_location_names: List[str], logic: Starde
             continue
         location = multiworld.get_location(location_name, player)
         if monstersanity_option == Monstersanity.option_split_goals:
-            rule = logic.monster.can_kill_max(all_monsters_by_name[monster_name])
+            rule = logic.monster.can_kill_many(all_monsters_by_name[monster_name])
         else:
             rule = logic.monster.can_kill(all_monsters_by_name[monster_name])
         MultiWorldRules.set_rule(location, rule)
@@ -691,7 +691,7 @@ def set_monstersanity_category_rules(all_location_names: List[str], logic: Stard
         if monstersanity_option == Monstersanity.option_one_per_category:
             rule = logic.monster.can_kill_any(all_monsters_by_category[monster_category])
         else:
-            rule = logic.monster.can_kill_all(all_monsters_by_category[monster_category], 8)
+            rule = logic.monster.can_kill_all(all_monsters_by_category[monster_category], 4)
         MultiWorldRules.set_rule(location, rule)
 
 

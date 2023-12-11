@@ -1,7 +1,7 @@
 from random import Random
 
 from .options import BuildingProgression, StardewValleyOptions, BackpackProgression, ExcludeGingerIsland, SeasonRandomization, SpecialOrderLocations, \
-    Monstersanity, ToolProgression, SkillProgression
+    Monstersanity, ToolProgression, SkillProgression, Cooksanity, Chefsanity
 
 early_candidate_rate = 4
 always_early_candidates = ["Greenhouse", "Desert Obelisk", "Rusty Key"]
@@ -35,6 +35,9 @@ def setup_early_items(multiworld, options: StardewValleyOptions, player: int, ra
 
     if options.special_order_locations != SpecialOrderLocations.option_disabled:
         early_candidates.append("Special Order Board")
+
+    if options.cooksanity != Cooksanity.option_none | options.chefsanity & Chefsanity.option_queen_of_sauce:
+        early_candidates.append("The Queen of Sauce")
 
     if options.monstersanity == Monstersanity.option_none:
         early_candidates.append("Progressive Weapon")

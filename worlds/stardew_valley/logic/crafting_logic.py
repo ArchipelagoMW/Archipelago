@@ -11,7 +11,6 @@ from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogicMixin
 from .skill_logic import SkillLogicMixin
 from .special_order_logic import SpecialOrderLogicMixin
-from .time_logic import TimeLogicMixin
 from .. import options
 from ..data.craftable_data import CraftingRecipe, all_crafting_recipes_by_name
 from ..data.recipe_data import StarterSource, ShopSource, SkillSource, FriendshipSource
@@ -29,7 +28,7 @@ class CraftingLogicMixin(BaseLogicMixin):
         self.crafting = CraftingLogic(*args, **kwargs)
 
 
-class CraftingLogic(BaseLogic[Union[TimeLogicMixin, ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, RelationshipLogicMixin,
+class CraftingLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, RelationshipLogicMixin,
 SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
     @cache_self1
     def can_craft(self, recipe: CraftingRecipe = None) -> StardewRule:

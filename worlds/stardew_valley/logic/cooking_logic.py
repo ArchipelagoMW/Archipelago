@@ -12,7 +12,6 @@ from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
-from .time_logic import TimeLogicMixin
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, \
     QueenOfSauceSource, CookingRecipe, ShopFriendshipSource, \
     all_cooking_recipes_by_name
@@ -32,7 +31,7 @@ class CookingLogicMixin(BaseLogicMixin):
         self.cooking = CookingLogic(*args, **kwargs)
 
 
-class CookingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, MoneyLogicMixin, ActionLogicMixin,
+class CookingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, MoneyLogicMixin, ActionLogicMixin,
 BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]):
     @cached_property
     def can_cook_in_kitchen(self) -> StardewRule:
