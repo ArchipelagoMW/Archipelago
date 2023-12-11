@@ -3,7 +3,7 @@
         <td>{{ OptionTitle(option_nae, option) }}</td>
         <td>
             <div class="select-container">
-                <select id="{{ option_name }}" name="{{ option_name }}">
+                <select id="{{ option_name }}" name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
                     {% if option.default == 1 %}
                         <option value="false">No</option>
                         <option value="true" selected>Yes</option>
@@ -12,7 +12,7 @@
                         <option value="true">Yes</option>
                     {% endif %}
                 </select>
-                {{ RandomizeButton(option_name) }}
+                {{ RandomizeButton(option_name, option) }}
             </div>
         </td>
     </tr>
@@ -28,7 +28,7 @@
         <td>{{ OptionTitle(option_nae, option) }}</td>
         <td>
             <div class="select-container">
-                <select id="{{ option_name }}" name="{{ option_name }}">
+                <select id="{{ option_name }}" name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
                     {% for id, name in option.name_lookup.items() %}
                         {% if name != "random" %}
                             {% if option.default == id %}
@@ -39,7 +39,7 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-                {{ RandomizeButton(option_name) }}
+                {{ RandomizeButton(option_name, option) }}
             </div>
         </td>
     </tr>
@@ -50,9 +50,9 @@
         <td>{{ OptionTitle(option_nae, option) }}</td>
         <td>
             <div class="range-container">
-                <input type="range" id="{{ option_name }}" name="{{ option_name }}" min="{{ option.range_start }}" max="{{ option.range_end }}" value="{{ option.default | default(option.range_start) }}" />
+                <input type="range" id="{{ option_name }}" name="{{ option_name }}" min="{{ option.range_start }}" max="{{ option.range_end }}" value="{{ option.default | default(option.range_start) }}" {{ "disabled" if option.default == "random" }} />
                 <span id="{{ option_name }}-value" class="range-value">{{ option.default | default(option.range_start) }}</span>
-                {{ RandomizeButton(option_name) }}
+                {{ RandomizeButton(option_name, option) }}
             </div>
         </td>
     </tr>
@@ -63,7 +63,7 @@
         <td>{{ OptionTitle(option_nae, option) }}</td>
         <td>
             <div class="named-range-container">
-                <select data-option-name="{{ option_name }}">
+                <select data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
                     {% for key, val in option.special_range_names.items() %}
                         {% if option.default == val %}
                             <option value="{{ val }}" selected>{{ key }} ({{ val }})</option>
@@ -74,9 +74,9 @@
                     <option value="custom" hidden>Custom</option>
                 </select>
                 <div class="named-range-wrapper">
-                    <input type="range" id="{{ option_name }}" name="{{ option_name }}" min="{{ option.range_start }}" max="{{ option.range_end }}" value="{{ option.default | default(option.range_start) }}" />
+                    <input type="range" id="{{ option_name }}" name="{{ option_name }}" min="{{ option.range_start }}" max="{{ option.range_end }}" value="{{ option.default | default(option.range_start) }}" {{ "disabled" if option.default == "random" }} />
                     <span id="{{ option_name }}-value" class="range-value">{{ option.default | default(option.range_start) }}</span>
-                    {{ RandomizeButton(option_name) }}
+                    {{ RandomizeButton(option_name, option) }}
                 </div>
             </div>
         </td>
@@ -100,7 +100,7 @@
         <td>
             <div class="text-choice-container">
                 <div class="text-choice-wrapper">
-                    <select id="{{ option_name }}" name="{{ option_name }}">
+                    <select id="{{ option_name }}" name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
                     {% for id, name in option.name_lookup.items()|sort %}
                         {% if name != "random" %}
                             {% if option.default == id %}
@@ -111,7 +111,7 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-                {{ RandomizeButton(option_name) }}
+                {{ RandomizeButton(option_name, option) }}
                 </div>
                 <input type="text" id="{{ option_name }}-custom" name="{{ option_name }}-custom" placeholder="Custom value..." />
             </div>
@@ -227,10 +227,10 @@
     </label>
 {% endmacro %}
 
-{% macro RandomizeButton(option_name) %}
+{% macro RandomizeButton(option_name, option) %}
     <div class="randomize-button" data-tooltip="Toggle randomization for this option!">
         <label>
-            <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" />
+            <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" {{ "checked" if option.default == "random" }} />
             🎲
         </label>
     </div>

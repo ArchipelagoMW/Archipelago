@@ -27,131 +27,133 @@
             <a href="/static/generated/configs/{{ game }}.yaml">template file for this game</a>.
         </p>
 
-        <div id="meta-options">
-            <div>
-                <label for="player-name">
-                    Player Name: <span class="interactive" data-tooltip="This is the name you use to connect with your game. This is also known as your 'slot name'.">(?)</span>
-                </label>
-                <input id="player-name" placeholder="Player" data-key="name" maxlength="16" />
-            </div>
-            <div>
-                <label for="game-options-preset">
-                    Options Preset: <span class="interactive" data-tooltip="Select from a list of developer-curated presets (if any) or reset all options to their defaults.">(?)</span>
-                </label>
-                <select id="game-options-preset">
-                    <option value="__default">Defaults</option>
-                    <option value="__custom" hidden>Custom</option>
-                </select>
-            </div>
-        </div>
-
-        <div id="option-groups">
-            {% for group_name, group_options in option_groups | dictsort %}
-                <h2>{{ group_name }}</h2>
-                <div class="game-options">
-                    <table class="left">
-                        <tbody>
-                            {% for option_name, option in group_options.items() %}
-                                {% if loop.index < loop.length / 2 %}
-                                    {% if issubclass(option, Options.Toggle) %}
-                                        {{ inputs.Toggle(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.DefaultOnToggle) %}
-                                        {{ inputs.DefaultOnToggle(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.PlandoBosses) %}
-                                        {{ inputs.PlandoBosses(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.TextChoice) %}
-                                        {{ inputs.TextChoice(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.Choice) %}
-                                        {{ inputs.Choice(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.NamedRange) %}
-                                        {{ inputs.NamedRange(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.Range) %}
-                                        {{ inputs.Range(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.FreeText) %}
-                                        {{ inputs.FreeText(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                        {{ inputs.ItemDict(option_name, option, world) }}
-
-                                    {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
-                                        {{ inputs.OptionList(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
-                                        {{ inputs.LocationSet(option_name, option, world) }}
-
-                                    {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
-                                        {{ inputs.ItemSet(option_name, option, world) }}
-
-                                    {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
-                                        {{ inputs.OptionSet(option_name, option) }}
-
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <table class="right">
-                        <tbody>
-                            {% for option_name, option in group_options.items() %}
-                                {% if loop.index > loop.length / 2 %}
-                                    {% if issubclass(option, Options.Toggle) %}
-                                        {{ inputs.Toggle(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.DefaultOnToggle) %}
-                                        {{ inputs.DefaultOnToggle(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.PlandoBosses) %}
-                                        {{ inputs.PlandoBosses(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.TextChoice) %}
-                                        {{ inputs.TextChoice(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.Choice) %}
-                                        {{ inputs.Choice(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.NamedRange) %}
-                                        {{ inputs.NamedRange(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.Range) %}
-                                        {{ inputs.Range(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.FreeText) %}
-                                        {{ inputs.FreeText(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                        {{ inputs.ItemDict(option_name, option, world) }}
-
-                                    {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
-                                        {{ inputs.OptionList(option_name, option) }}
-
-                                    {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
-                                        {{ inputs.LocationSet(option_name, option, world) }}
-
-                                    {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
-                                        {{ inputs.ItemSet(option_name, option, world) }}
-
-                                    {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
-                                        {{ inputs.OptionSet(option_name, option) }}
-
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
+        <form method="post">
+            <div id="meta-options">
+                <div>
+                    <label for="player-name">
+                        Player Name: <span class="interactive" data-tooltip="This is the name you use to connect with your game. This is also known as your 'slot name'.">(?)</span>
+                    </label>
+                    <input id="player-name" placeholder="Player" data-key="name" maxlength="16" />
                 </div>
-            {% endfor %}
-        </div>
+                <div>
+                    <label for="game-options-preset">
+                        Options Preset: <span class="interactive" data-tooltip="Select from a list of developer-curated presets (if any) or reset all options to their defaults.">(?)</span>
+                    </label>
+                    <select id="game-options-preset">
+                        <option value="__default">Defaults</option>
+                        <option value="__custom" hidden>Custom</option>
+                    </select>
+                </div>
+            </div>
 
-        <div id="player-options-button-row">
-            <button id="generate-game">Generate Single-Player Game</button>
-            <button id="export-options">Export YAML</button>
-        </div>
+            <div id="option-groups">
+                {% for group_name, group_options in option_groups | dictsort %}
+                    <h2>{{ group_name }}</h2>
+                    <div class="game-options">
+                        <table class="left">
+                            <tbody>
+                                {% for option_name, option in group_options.items() %}
+                                    {% if loop.index < loop.length / 2 %}
+                                        {% if issubclass(option, Options.Toggle) %}
+                                            {{ inputs.Toggle(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.DefaultOnToggle) %}
+                                            {{ inputs.DefaultOnToggle(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.PlandoBosses) %}
+                                            {{ inputs.PlandoBosses(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.TextChoice) %}
+                                            {{ inputs.TextChoice(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.Choice) %}
+                                            {{ inputs.Choice(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.NamedRange) %}
+                                            {{ inputs.NamedRange(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.Range) %}
+                                            {{ inputs.Range(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.FreeText) %}
+                                            {{ inputs.FreeText(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                            {{ inputs.ItemDict(option_name, option, world) }}
+
+                                        {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                            {{ inputs.OptionList(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                            {{ inputs.LocationSet(option_name, option, world) }}
+
+                                        {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                            {{ inputs.ItemSet(option_name, option, world) }}
+
+                                        {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                            {{ inputs.OptionSet(option_name, option) }}
+
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <table class="right">
+                            <tbody>
+                                {% for option_name, option in group_options.items() %}
+                                    {% if loop.index > loop.length / 2 %}
+                                        {% if issubclass(option, Options.Toggle) %}
+                                            {{ inputs.Toggle(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.DefaultOnToggle) %}
+                                            {{ inputs.DefaultOnToggle(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.PlandoBosses) %}
+                                            {{ inputs.PlandoBosses(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.TextChoice) %}
+                                            {{ inputs.TextChoice(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.Choice) %}
+                                            {{ inputs.Choice(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.NamedRange) %}
+                                            {{ inputs.NamedRange(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.Range) %}
+                                            {{ inputs.Range(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.FreeText) %}
+                                            {{ inputs.FreeText(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                            {{ inputs.ItemDict(option_name, option, world) }}
+
+                                        {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                            {{ inputs.OptionList(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                            {{ inputs.LocationSet(option_name, option, world) }}
+
+                                        {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                            {{ inputs.ItemSet(option_name, option, world) }}
+
+                                        {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                            {{ inputs.OptionSet(option_name, option) }}
+
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div id="player-options-button-row">
+                <input type="submit" name="generate" value="Generate Single-Player Game">
+                <input type="submit" name="export" value="Export YAML" />
+            </div>
+        </form>
     </div>
 {% endblock %}
