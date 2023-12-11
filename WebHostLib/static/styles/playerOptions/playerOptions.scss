@@ -196,11 +196,12 @@ html{
         .option-container{
             display: flex;
             flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.125);
-            border: 1px solid rgba(20, 20, 20, 0.125);
+            background-color: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(20, 20, 20, 0.25);
             border-radius: 3px;
             color: #ffffff;
             max-height: 10rem;
+            min-width: 14.5rem;
             overflow-y: auto;
             padding-right: 0.25rem;
             padding-left: 0.25rem;
@@ -214,7 +215,7 @@ html{
                 user-select: none;
 
                 &:hover{
-                    background-color: rgba(20, 20, 20, 0.125);
+                    background-color: rgba(20, 20, 20, 0.25);
                 }
 
                 input[type=checkbox]{
