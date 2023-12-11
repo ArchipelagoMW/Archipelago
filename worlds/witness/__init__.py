@@ -121,7 +121,7 @@ class WitnessWorld(World):
         if not has_progression and self.multiworld.players == 1:
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
                     f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
-        if not interacts_with_multiworld and self.multiworld.players > 1:
+        elif not interacts_with_multiworld and self.multiworld.players > 1:
             raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
                             f" progression items that can be placed in other players' worlds. Please turn on Symbol"
                             f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
