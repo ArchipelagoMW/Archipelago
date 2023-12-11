@@ -45,7 +45,9 @@ class TestCyclicMaterial(MaterialStateTestBase):
         self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
         self.assertLessEqual(3950, past_material)
 
-        for item in list(list(self.multiworld.state.prog_items[self.player].keys()).reverse()):
+        items = list(self.multiworld.state.prog_items[self.player].keys())
+        items.reverse()
+        for item in items:
             self.remove_by_name(item)
         # self.assertEqual(0, self.multiworld.state.prog_items[self.player])
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
