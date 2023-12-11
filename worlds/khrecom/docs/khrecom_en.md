@@ -25,9 +25,9 @@
 
 3. Click the drop down menu at the top-right and choose "Re:Chain of Memories"
 
-4. Click Mods>Install a New Mod
+4. Click `Mods>Install a New Mod`
 
-5. In "Add a new mod from GitHub" paste "gaithern/KH-RECOM-AP-LUA"
+5. In "Add a new mod from GitHub" paste `gaithern/KH-RECOM-AP-LUA`
 
 6. Click Install
 
