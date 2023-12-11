@@ -562,7 +562,7 @@ class Randomize_Park_Values(OpenRCT2OnToggle):
 #     display_name = "Include Guest Objective"
 
 class Guest_Objective(Range):
-    """If enabled, choose how many guests are required to win the scenario"""
+    """Choose how many guests are required to win the scenario"""
     display_name = "Guest Objective"
     range_start = 1
     range_end = 7500
@@ -575,7 +575,7 @@ class Guest_Objective(Range):
 class Park_Value_Objective(Range):
     """If enabled, choose what park value (In USD) is required to win the scenario."""
     display_name = "Park Value Objective"
-    range_start = 1
+    range_start = 0
     range_end = 1000000
     default = 300000
 
@@ -586,7 +586,7 @@ class Park_Value_Objective(Range):
 class Roller_Coaster_Objective(Range):
     """If enabled, choose how many coasters, and what prerequisites they need to beat the scenario."""
     display_name = "Roller Coaster Objective"
-    range_start = 1
+    range_start = 0
     range_end = 20
     default = 10
 
