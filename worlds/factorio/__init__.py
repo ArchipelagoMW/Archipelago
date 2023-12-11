@@ -423,7 +423,7 @@ class Factorio(World):
                 logging.warning(f"missing recipe for {ingredient}")
                 continue
             ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost().items()))
-            ingredient_energy = ingredient_recipe.total_energy
+            ingredient_energy = ingredient_recipe.total_energy()
             num_raw = remaining_raw / ingredient_raw / remaining_num_ingredients
             num_energy = remaining_energy / ingredient_energy / remaining_num_ingredients
             num = int(min(num_raw, num_energy))

@@ -204,6 +204,7 @@ class Recipe(FactorioElement):
                         selected_recipe_energy = recipe_energy
                     break
                 total_energy += selected_recipe_energy
+        self._cached_energy = total_energy
         return total_energy
 
 
