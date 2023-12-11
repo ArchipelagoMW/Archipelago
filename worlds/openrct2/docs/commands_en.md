@@ -4,46 +4,8 @@ Commands are split into two types: client commands and server commands. Client c
 by the client and do not affect the Archipelago remote session. Server commands are commands which are executed by the
 Archipelago server and affect the Archipelago session or otherwise provide feedback from the server.
 
-In clients which have their own commands the commands are typically prepended by a forward slash:`/`. Remote commands
-are always submitted to the server prepended with an exclamation point: `!`.
-
-#### Local Commands
-
-The following list is a list of client commands which may be available to you through your Archipelago client. You
-execute these commands in your client window.
-
-The following commands are available in these clients: SNIClient, FactorioClient, FF1Client.
-
-- `/connect <address:port>` Connect to the multiworld server.
-- `/disconnect` Disconnects you from your current session.
-- `/received` Displays all the items you have found or been sent.
-- `/missing` Displays all the locations along with their current status (checked/missing).
-- `/items` Lists all the item names for the current game.
-- `/locations` Lists all the location names for the current game.
-- `/ready` Sends ready status to the server.
-- `/help` Returns a list of available commands.
-- `/license` Returns the software licensing information.
-- Just typing anything will broadcast a message to all players
-
-##### FF1Client Only
-
-The following command is only available when using the FF1Client for the Final Fantasy Randomizer.
-
-- `/nes` Shows the current status of the NES connection.
-
-##### SNIClient Only
-
-The following command is only available when using the SNIClient for SNES based games.
-
-- `/snes` Attempts to connect to your SNES device via SNI.
-- `/snes_close` Closes the current SNES connection.
-- `/slow_mode` Toggles on or off slow mode, which limits the rate in which you receive items.
-
-##### FactorioClient Only
-
-The following command is only available when using the FactorioClient to play Factorio with Archipelago.
-
-- `/factorio <command text>` Sends the command argument to the Factorio server as a command.
+OpenRCT2 commands are started with two exclamation points: `!!`. They must be run from within the game, in the chat window
+of the unlock shop. Remote commands are always submitted to the server prepended with an exclamation point: `!`.
 
 #### Remote Commands
 
