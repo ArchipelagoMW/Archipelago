@@ -246,7 +246,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.forest_to_west, SVERegion.forest_west),
     ConnectionData(SVEEntrance.secret_woods_to_west, SVERegion.forest_west),
     ConnectionData(SVEEntrance.west_to_aurora, SVERegion.aurora_vineyard, flag=RandomizationFlag.NON_PROGRESSION),
-    ConnectionData(SVEEntrance.forest_to_lost_woods, SVERegion.lost_woods, flag=RandomizationFlag.NON_PROGRESSION),
+    ConnectionData(SVEEntrance.forest_to_lost_woods, SVERegion.lost_woods),
     ConnectionData(SVEEntrance.lost_woods_to_junimo_woods, SVERegion.junimo_woods),
     ConnectionData(SVEEntrance.forest_to_marnie_shed, SVERegion.marnies_shed, flag=RandomizationFlag.NON_PROGRESSION),
     ConnectionData(SVEEntrance.forest_west_to_spring, SVERegion.sprite_spring, flag=RandomizationFlag.NON_PROGRESSION),
