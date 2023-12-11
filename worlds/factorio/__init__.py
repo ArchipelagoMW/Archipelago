@@ -491,11 +491,15 @@ class Factorio(World):
                     ingredients_offset=ingredients_offset)
                 self.custom_recipes["satellite"] = new_recipe
         bridge = "ap-energy-bridge"
+        red_pool = science_pack_pools[self.multiworld.max_science_pack[self.player].get_ordered_science_packs()[0]]
+        if len(red_pool) < 6:
+            # Some mods (seablock) make an excessively cheap first science pack, so we move the bridge to the second pool instead
+            red_pool = science_pack_pools[self.multiworld.max_science_pack[self.player].get_ordered_science_packs()[1]]
         new_recipe = self.make_quick_recipe(
             Recipe(bridge, "crafting", {"replace_1": 1, "replace_2": 1, "replace_3": 1,
                                         "replace_4": 1, "replace_5": 1, "replace_6": 1},
                    {bridge: 1}, 10),
-            sorted(science_pack_pools[self.multiworld.max_science_pack[self.player].get_ordered_science_packs()[0]]),
+            sorted(red_pool),
             ingredients_offset=ingredients_offset)
         for ingredient_name in new_recipe.ingredients:
             new_recipe.ingredients[ingredient_name] = self.multiworld.random.randint(50, 500)
