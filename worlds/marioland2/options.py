@@ -41,11 +41,11 @@ class RandomizePlatforms(Toggle):
     display_name = "Randomize Platforms"
 
 
-class AutoScrollLevels(Toggle):
+class AutoScrollLevels(NamedRange):
     """Keep auto scroll levels vanilla or choose a number of levels to be randomly selected to have auto-scrolling.
     Certain levels are excluded."""
     display_name = "Auto Scroll Levels"
-    range_start = -1
+    range_start = 0
     range_end = 20
     special_range_names = {"vanilla": -1}
 

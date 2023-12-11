@@ -170,8 +170,8 @@ def generate_output(self, output_directory: str):
         randomize_enemies(data, random)
     if self.multiworld.randomize_platforms[self.player]:
         randomize_platforms(data, random)
-    if self.multiworld.randomize_auto_scroll_levels[self.player] > -1:
-        randomize_auto_scroll_levels(data, random, self.multiworld.randomize_auto_scroll_levels[self.player].value)
+    if self.multiworld.auto_scroll_levels[self.player] > -1:
+        randomize_auto_scroll_levels(data, random, self.multiworld.auto_scroll_levels[self.player].value)
     if self.multiworld.randomize_music[self.player]:
         randomize_music(data, random)
 
