@@ -30,7 +30,6 @@ class CMWeb(WebWorld):
     options_presets = checksmate_option_presets
 
 
-
 class CMWorld(World):
     """
     ChecksMate is a game where you play chess, but all of your pieces were scattered across the multiworld.
