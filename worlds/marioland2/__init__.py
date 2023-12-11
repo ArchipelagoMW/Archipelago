@@ -1,12 +1,15 @@
 import base64
 
 import Utils
+import settings
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Region, Location, Item, ItemClassification
 
 from . import client
-from .rom import generate_output
+from .rom import generate_output, SuperMarioLand2DeltaPatch
 from .options import sml2options
+
+START_IDS = 7770000
 
 locations = {
     'Mushroom Zone': {'ram_index': 0},
@@ -63,9 +66,22 @@ items = {
     "Easy Mode": ItemClassification.useful,
     "Normal Mode": ItemClassification.trap,
 }
-START_IDS = 7770000
+
+class MarioLand2Settings(settings.Group):
+    class SML2RomFile(settings.UserFilePath):
+        """File name of the Super Mario Land 2 1.0 ROM"""
+        description = "Super Mario Land 2 - 6 Golden Coins (USA, Europe) 1.0 ROM File"
+        copy_to = "Super Mario Land 2 - 6 Golden Coins (USA, Europe).gb"
+        md5s = [SuperMarioLand2DeltaPatch.hash]
+
+    rom_file: SML2RomFile = SML2RomFile(SML2RomFile.copy_to)
+
+
 class MarioLand2World(World):
     game = "Super Mario Land 2"
+
+    settings_key = "sml2_options"
+    settings: MarioLand2Settings
 
     location_name_to_id = {location_name: ID for ID, location_name in enumerate(locations, START_IDS)}
     item_name_to_id = {item_name: ID for ID, item_name in enumerate(items, START_IDS)}

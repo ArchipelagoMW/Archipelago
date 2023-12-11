@@ -219,9 +219,7 @@ def get_base_rom_bytes():
     return base_rom_bytes
 
 def get_base_rom_path():
-    file_name = "C:\\src\\marioland2\\baserom.gb"
-    if not file_name:
-        file_name = get_settings()["sml2_options"]["rom_file"]
+    file_name = get_settings()["sml2_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
