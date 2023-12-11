@@ -111,15 +111,16 @@ class WitnessWorld(World):
                 self.options.shuffle_lasers == "anywhere"
         )
 
-        if not interacts_with_multiworld:
-            if self.multiworld.players == 1 and self.options.shuffle_lasers != "local":
-                warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
-                        f" items. Please turn on Symbol Shuffle, Door Shuffle or non-local Laser Shuffle if that"
-                        f" doesn't seem right.")
-            else:
-                raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any"
-                                f" progression items that can be placed in other players' worlds. Please turn on Symbol"
-                                f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
+        has_progression = interacts_with_multiworld or self.options.shuffle_lasers == "local"
+
+        if not has_progression and self.multiworld.players == 1:
+            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
+                    f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that"
+                    f" doesn't seem right.")
+        if not interacts_with_multiworld and self.multiworld.players > 1
+            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any"
+                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                            f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
 
         if self.options.shuffle_lasers == "local":
             self.multiworld.local_items[self.player].value |= self.item_name_groups["Lasers"]
