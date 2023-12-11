@@ -34,7 +34,7 @@ location_table = {
     "Capture Piece B": CMLocationData(4_902_010, 700),  # knight
     "Capture Piece C": CMLocationData(4_902_012, 700),  # bishop
     "Capture Piece D": CMLocationData(4_902_014, 1300),  # queen
-    "Checkmate Maxima": CMLocationData(4_902_099, 3920),  # king (this is the game's goal / completion condition)
+    "Checkmate Maxima": CMLocationData(4_902_099, 4020),  # king (this is the game's goal / completion condition)
     # AI prefers not to open kingside as developing queen has more tempo
     "Capture Piece F": CMLocationData(4_902_013, 1040),  # bishop
     "Capture Piece G": CMLocationData(4_902_011, 1040),  # knight
@@ -67,7 +67,7 @@ location_table = {
     "Capture 5 Of Each": CMLocationData(4_902_036, 2800, 9),
     "Capture 6 Of Each": CMLocationData(4_902_037, 3350, 11),
     "Capture 7 Of Each": CMLocationData(4_902_038, 3850, 13),
-    "Capture Everything": CMLocationData(4_902_039, 4050, 14),
+    "Capture Everything": CMLocationData(4_902_039, 4020, 14),
     "Threaten Pawn": CMLocationData(4_902_040, 0),
     "Threaten Minor": CMLocationData(4_902_041, 200),
     "Threaten Major": CMLocationData(4_902_042, 200),
@@ -81,7 +81,7 @@ location_table = {
     "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200),  # AI really hates getting royal forked
     "Fork, True": CMLocationData(4_902_055, 2550),
     "Fork, True Triple": CMLocationData(4_902_056, 3450),
-    "Fork, True Royal": CMLocationData(4_902_057, 4150),  # I sincerely believe this should be filler
+    "Fork, True Royal": CMLocationData(4_902_057, 4020),  # I sincerely believe this should be filler
     # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
     "O-O Castle": CMLocationData(4_902_058, 0),
     "O-O-O Castle": CMLocationData(4_902_059, 0),
