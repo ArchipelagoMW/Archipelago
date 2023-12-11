@@ -152,14 +152,16 @@ class CombinableStardewRule(StardewRule, ABC):
     def is_same_rule(self, other: CombinableStardewRule):
         return self.combination_key == other.combination_key
 
-    def add_into(self, rules: Dict[Hashable, CombinableStardewRule],
-                 reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
+    def add_into(self, rules: Dict[Hashable, CombinableStardewRule], reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
             -> Dict[Hashable, CombinableStardewRule]:
-        if self.combination_key not in rules:
-            return rules | {self.combination_key: self}
+        rules = dict(rules)
 
-        other = rules[self.combination_key]
-        return rules | {self.combination_key: reducer(self, other)}
+        if self.combination_key in rules:
+            rules[self.combination_key] = reducer(self, rules[self.combination_key])
+        else:
+            rules[self.combination_key] = self
+
+        return rules
 
     def __and__(self, other):
         if isinstance(other, CombinableStardewRule) and self.is_same_rule(other):
