@@ -273,53 +273,68 @@ class ALTTPWorld(World):
     def generate_early(self):
 
         player = self.player
-        world = self.multiworld
+        multiworld = self.multiworld
 
-        if world.mode[player] == 'standard' \
-                and world.small_key_shuffle[player] \
-                and world.small_key_shuffle[player] != small_key_shuffle.option_universal \
-                and world.small_key_shuffle[player] != small_key_shuffle.option_own_dungeons \
-                and world.small_key_shuffle[player] != small_key_shuffle.option_start_with:
-            self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
+        # fairy bottle fills
+        bottle_options = [
+            "Bottle (Red Potion)", "Bottle (Green Potion)", "Bottle (Blue Potion)",
+            "Bottle (Bee)", "Bottle (Good Bee)"
+        ]
+        if multiworld.difficulty[player] not in ["hard", "expert"]:
+            bottle_options.append("Bottle (Fairy)")
+        self.waterfall_fairy_bottle_fill = self.random.choice(bottle_options)
+        self.pyramid_fairy_bottle_fill = self.random.choice(bottle_options)
+
+        if multiworld.mode[player] == 'standard':
+            if multiworld.small_key_shuffle[player]:
+                if (multiworld.small_key_shuffle[player] not in
+                   (small_key_shuffle.option_universal, small_key_shuffle.option_own_dungeons,
+                    small_key_shuffle.option_start_with)):
+                    self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
+                self.multiworld.local_items[self.player].value.add("Small Key (Hyrule Castle)")
+                self.multiworld.non_local_items[self.player].value.discard("Small Key (Hyrule Castle)")
+            if multiworld.big_key_shuffle[player]:
+                self.multiworld.local_items[self.player].value.add("Big Key (Hyrule Castle)")
+                self.multiworld.non_local_items[self.player].value.discard("Big Key (Hyrule Castle)")
 
         # system for sharing ER layouts
-        self.er_seed = str(world.random.randint(0, 2 ** 64))
+        self.er_seed = str(multiworld.random.randint(0, 2 ** 64))
 
-        if world.entrance_shuffle[player] != "vanilla" and world.entrance_shuffle_seed[player] != "random":
-            shuffle = world.entrance_shuffle[player]
+        if multiworld.entrance_shuffle[player] != "vanilla" and multiworld.entrance_shuffle_seed[player] != "random":
+            shuffle = multiworld.entrance_shuffle[player]
             if shuffle == "vanilla":
                 self.er_seed = "vanilla"
-            elif (not world.entrance_shuffle_seed[player].value.isdigit()) or world.is_race:
-                self.er_seed = get_same_seed(world, (
-                    shuffle, world.entrance_shuffle_seed[player].value, world.retro_caves[player], world.mode[player],
-                    world.glitches_required[player]))
+            elif (not multiworld.entrance_shuffle_seed[player].value.isdigit()) or multiworld.is_race:
+                self.er_seed = get_same_seed(multiworld, (
+                    shuffle, multiworld.entrance_shuffle_seed[player].value, multiworld.retro_caves[player], multiworld.mode[player],
+                    multiworld.glitches_required[player]))
             else:  # not a race or group seed, use set seed as is.
-                self.er_seed = int(world.entrance_shuffle_seed[player].value)
-        elif world.entrance_shuffle[player] == "vanilla":
+                self.er_seed = int(multiworld.entrance_shuffle_seed[player].value)
+        elif multiworld.entrance_shuffle[player] == "vanilla":
             self.er_seed = "vanilla"
 
         for dungeon_item in ["small_key_shuffle", "big_key_shuffle", "compass_shuffle", "map_shuffle"]:
-            option = getattr(world, dungeon_item)[player]
+            option = getattr(multiworld, dungeon_item)[player]
             if option == "own_world":
-                world.local_items[player].value |= self.item_name_groups[option.item_name_group]
+                multiworld.local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option == "different_world":
-                world.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
-                if world.mode[player] == "standard":
-                    world.non_local_items[player].value -= {"Small Key (Hyrule Castle)"}
+                multiworld.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
+                if multiworld.mode[player] == "standard":
+                    multiworld.non_local_items[player].value -= {"Small Key (Hyrule Castle)"}
             elif option.in_dungeon:
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
 
-        world.difficulty_requirements[player] = difficulties[world.item_pool[player].current_key]
+        multiworld.difficulty_requirements[player] = difficulties[multiworld.item_pool[player].current_key]
 
         # enforce pre-defined local items.
-        if world.goal[player] in ["local_triforce_hunt", "local_ganon_triforce_hunt"]:
-            world.local_items[player].value.add('Triforce Piece')
+        if multiworld.goal[player] in ["local_triforce_hunt", "local_ganon_triforce_hunt"]:
+            multiworld.local_items[player].value.add('Triforce Piece')
 
         # Not possible to place crystals outside boss prizes yet (might as well make it consistent with pendants too).
-        world.non_local_items[player].value -= item_name_groups['Pendants']
-        world.non_local_items[player].value -= item_name_groups['Crystals']
+        multiworld.non_local_items[player].value -= item_name_groups['Pendants']
+        multiworld.non_local_items[player].value -= item_name_groups['Crystals']
 
     create_dungeons = create_dungeons
 
