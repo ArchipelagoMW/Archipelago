@@ -112,7 +112,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 10"].locations.append("100 Acre Wood Mini Game Whirlwind Plunge (Item Cards Mega-Ether)")
     regions["Floor 10"].locations.append("100 Acre Wood Tigger's Playground (Attack Cards Spellbinder)")
     
-    regions["Floor 11"].locations.append("Twilight Town Post Floor (Item Cards Mega-Potion)")
+   #regions["Floor 11"].locations.append("Twilight Town Post Floor (Item Cards Mega-Potion)") Bugged because of the post floor scene?
     regions["Floor 11"].locations.append("Twilight Town Room of Beginnings")
     regions["Floor 11"].locations.append("Twilight Town Room of Beginnings (Enemy Cards Vexen)")
     

@@ -103,7 +103,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "100 Acre Wood Mini Game Whirlwind Plunge (Item Cards Mega-Ether)":  KHRECOMLocationData("Progression",  269_1003),
     "100 Acre Wood Tigger's Playground (Attack Cards Spellbinder)":      KHRECOMLocationData("Progression",  269_1004),
     
-    "Twilight Town Post Floor (Item Cards Mega-Potion)":                 KHRECOMLocationData("Progression",  269_1101),
+   #"Twilight Town Post Floor (Item Cards Mega-Potion)":                 KHRECOMLocationData("Progression",  269_1101), Bugged because of the post floor scene?
     "Twilight Town Room of Beginnings":                                  KHRECOMLocationData("Progression",  269_1102),
     "Twilight Town Room of Beginnings (Enemy Cards Vexen)":              KHRECOMLocationData("Progression",  269_1103),
     

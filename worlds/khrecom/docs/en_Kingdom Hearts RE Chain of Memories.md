@@ -7,7 +7,7 @@ configure and export a config file.
 
 ## What does randomization do to this game?
 
-The Kingdom Hearts RE Chain of Memories Randomizer will removes cards you pick up in the overworld, moogle shops, and as rewards from boss battles from your inventory.
+The Kingdom Hearts RE Chain of Memories Randomizer will remove cards you pick up in the overworld, moogle shops, and as rewards from boss battles from your inventory.
 
 The entire castle is open from the start after completing Traverse Town.  Floors you haven't unlocked are assigned Traverse Town, otherwise they will be assigned normally.
 
