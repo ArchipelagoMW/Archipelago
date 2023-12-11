@@ -9,8 +9,6 @@ from itertools import chain
 from threading import Lock
 from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
 
-from frozendict import frozendict
-
 from BaseClasses import CollectionState, ItemClassification
 from .items import item_table
 
@@ -154,9 +152,9 @@ class CombinableStardewRule(StardewRule, ABC):
     def is_same_rule(self, other: CombinableStardewRule):
         return self.combination_key == other.combination_key
 
-    def add_into(self, rules: frozendict[Hashable, CombinableStardewRule],
+    def add_into(self, rules: Dict[Hashable, CombinableStardewRule],
                  reducer: Callable[[CombinableStardewRule, CombinableStardewRule], CombinableStardewRule]) \
-            -> frozendict[Hashable, CombinableStardewRule]:
+            -> Dict[Hashable, CombinableStardewRule]:
         if self.combination_key not in rules:
             return rules | {self.combination_key: self}
 
@@ -239,7 +237,7 @@ class AggregatingStardewRule(StardewRule, ABC):
     complement: LiteralStardewRule
     symbol: str
 
-    combinable_rules: frozendict[Hashable, CombinableStardewRule]
+    combinable_rules: Dict[Hashable, CombinableStardewRule]
     simplification_state: _SimplificationState
     _last_short_circuiting_rule: Optional[StardewRule] = None
 
@@ -264,7 +262,7 @@ class AggregatingStardewRule(StardewRule, ABC):
         return RepeatableChain(self.combinable_rules.values(), self.simplification_state.simplified_rules, self.simplification_state.rules_to_simplify)
 
     @classmethod
-    def split_rules(cls, rules: Union[Iterable[StardewRule]]) -> Tuple[Tuple[StardewRule, ...], frozendict[Hashable, CombinableStardewRule]]:
+    def split_rules(cls, rules: Union[Iterable[StardewRule]]) -> Tuple[Tuple[StardewRule, ...], Dict[Hashable, CombinableStardewRule]]:
         other_rules = []
         reduced_rules = {}
         for rule in rules:
@@ -279,22 +277,16 @@ class AggregatingStardewRule(StardewRule, ABC):
 
             if type(rule) is cls:
                 other_rules.extend(rule.simplification_state.original_simplifiable_rules)  # noqa
-                reduced_rules = cls.merge_mutable(reduced_rules, rule.combinable_rules)  # noqa
+                reduced_rules = cls.merge(reduced_rules, rule.combinable_rules)  # noqa
                 continue
 
             other_rules.append(rule)
 
-        return tuple(other_rules), frozendict(reduced_rules)
+        return tuple(other_rules), reduced_rules
 
     @classmethod
-    def merge(cls, left: frozendict[Hashable, CombinableStardewRule], right: frozendict[Hashable, CombinableStardewRule]) \
-            -> frozendict[Hashable, CombinableStardewRule]:
-        return frozendict(cls.merge_mutable(dict(left), right))
-
-    @classmethod
-    def merge_mutable(cls, left: Dict[Hashable, CombinableStardewRule], right: frozendict[Hashable, CombinableStardewRule]) \
-            -> Dict[Hashable, CombinableStardewRule]:
-        reduced_rules = left
+    def merge(cls, left: Dict[Hashable, CombinableStardewRule], right: Dict[Hashable, CombinableStardewRule]) -> Dict[Hashable, CombinableStardewRule]:
+        reduced_rules = dict(left)
         for key, rule in right.items():
             if key not in reduced_rules:
                 reduced_rules[key] = rule
@@ -311,7 +303,7 @@ class AggregatingStardewRule(StardewRule, ABC):
 
     def short_circuit_simplification(self):
         self.simplification_state.short_circuit(self.complement)
-        self.combinable_rules = frozendict()
+        self.combinable_rules = {}
         return self.complement, self.complement.value
 
     def short_circuit_evaluation(self, rule):
@@ -409,7 +401,7 @@ class AggregatingStardewRule(StardewRule, ABC):
                 self.simplification_state.original_simplifiable_rules == self.simplification_state.original_simplifiable_rules)
 
     def __hash__(self):
-        return hash((self.combinable_rules, self.simplification_state.original_simplifiable_rules))
+        return hash((id(self.combinable_rules), self.simplification_state.original_simplifiable_rules))
 
     def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
         return StardewRuleExplanation(self, state, expected, self.original_rules)
