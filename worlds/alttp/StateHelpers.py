@@ -31,7 +31,7 @@ def can_shoot_arrows(state: CollectionState, player: int) -> bool:
 
 def has_triforce_pieces(state: CollectionState, player: int) -> bool:
     count = state.multiworld.treasure_hunt_count[player]
-    return state.item_count('Triforce Piece', player) + state.item_count('Power Star', player) >= count
+    return state.count('Triforce Piece', player) + state.count('Power Star', player) >= count
 
 
 def has_crystals(state: CollectionState, count: int, player: int) -> bool:
@@ -60,9 +60,9 @@ def has_hearts(state: CollectionState, player: int, count: int) -> int:
 def heart_count(state: CollectionState, player: int) -> int:
     # Warning: This only considers items that are marked as advancement items
     diff = state.multiworld.difficulty_requirements[player]
-    return min(state.item_count('Boss Heart Container', player), diff.boss_heart_container_limit) \
-            + state.item_count('Sanctuary Heart Container', player) \
-            + min(state.item_count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
+    return min(state.count('Boss Heart Container', player), diff.boss_heart_container_limit) \
+            + state.count('Sanctuary Heart Container', player) \
+        + min(state.count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
             + 3  # starting hearts
 
 

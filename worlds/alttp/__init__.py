@@ -195,7 +195,7 @@ class ALTTPWorld(World):
         "Ganons Tower": {"Ganons Tower - Bob's Torch", "Ganons Tower - Hope Room - Left",
                          "Ganons Tower - Hope Room - Right", "Ganons Tower - Tile Room",
                          "Ganons Tower - Compass Room - Top Left", "Ganons Tower - Compass Room - Top Right",
-                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Left",
+                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Right",
                          "Ganons Tower - DMs Room - Top Left", "Ganons Tower - DMs Room - Top Right",
                          "Ganons Tower - DMs Room - Bottom Left", "Ganons Tower - DMs Room - Bottom Right",
                          "Ganons Tower - Map Chest", "Ganons Tower - Firesnake Room",
@@ -249,6 +249,8 @@ class ALTTPWorld(World):
     rom_name_available_event: threading.Event
     has_progressive_bows: bool
     dungeons: typing.Dict[str, Dungeon]
+    waterfall_fairy_bottle_fill: str
+    pyramid_fairy_bottle_fill: str
 
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
@@ -256,6 +258,8 @@ class ALTTPWorld(World):
         self.rom_name_available_event = threading.Event()
         self.has_progressive_bows = False
         self.dungeons = {}
+        self.waterfall_fairy_bottle_fill = "Bottle"
+        self.pyramid_fairy_bottle_fill = "Bottle"
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -301,7 +305,7 @@ class ALTTPWorld(World):
         self.er_seed = str(multiworld.random.randint(0, 2 ** 64))
 
         if multiworld.entrance_shuffle[player] != "vanilla" and multiworld.entrance_shuffle_seed[player] != "random":
-            shuffle = multiworld.entrance_shuffle[player]
+            shuffle = multiworld.entrance_shuffle[player].current_key
             if shuffle == "vanilla":
                 self.er_seed = "vanilla"
             elif (not multiworld.entrance_shuffle_seed[player].value.isdigit()) or multiworld.is_race:
@@ -379,7 +383,6 @@ class ALTTPWorld(World):
         for region_name, entrance_name in indirect_connections.items():
             world.register_indirect_condition(world.get_region(region_name, player),
                                               world.get_entrance(entrance_name, player))
-
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
@@ -679,13 +682,18 @@ class ALTTPWorld(World):
             return "Yes" if variable else "No"
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        player_name = self.multiworld.get_player_name(self.player)
         spoiler_handle.write("\n\nMedallions:\n")
-        spoiler_handle.write(f"\nMisery Mire ({self.multiworld.get_player_name(self.player)}):"
+        spoiler_handle.write(f"\nMisery Mire ({player_name}):"
                              f" {self.multiworld.required_medallions[self.player][0]}")
         spoiler_handle.write(
-            f"\nTurtle Rock ({self.multiworld.get_player_name(self.player)}):"
+            f"\nTurtle Rock ({player_name}):"
             f" {self.multiworld.required_medallions[self.player][1]}")
-
+        spoiler_handle.write("\n\nFairy Fountain Bottle Fill:\n")
+        spoiler_handle.write(f"\nPyramid Fairy ({player_name}):"
+                             f" {self.pyramid_fairy_bottle_fill}")
+        spoiler_handle.write(f"\nWaterfall Fairy ({player_name}):"
+                             f" {self.waterfall_fairy_bottle_fill}")
         if self.multiworld.boss_shuffle[self.player] != "none":
             def create_boss_map() -> typing.Dict:
                 boss_map = {

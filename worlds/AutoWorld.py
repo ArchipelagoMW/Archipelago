@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
+import re
 import sys
 import time
 from dataclasses import make_dataclass
@@ -51,11 +52,17 @@ class AutoWorldRegister(type):
         dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
                                    in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
+        dct["item_descriptions"] = {name: _normalize_description(description) for name, description
+                                    in dct.get("item_descriptions", {}).items()}
+        dct["item_descriptions"]["Everything"] = "All items in the entire game."
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
                                        in dct.get("location_name_groups", {}).items()}
         dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
+        dct["location_descriptions"] = {name: _normalize_description(description) for name, description
+                                    in dct.get("location_descriptions", {}).items()}
+        dct["location_descriptions"]["Everywhere"] = "All locations in the entire game."
 
         # move away from get_required_client_version function
         if "game" in dct:
@@ -113,10 +120,10 @@ def _timed_call(method: Callable[..., Any], *args: Any,
     taken = time.perf_counter() - start
     if taken > 1.0:
         if player and multiworld:
-            perf_logger.info(f"Took {taken} seconds in {method.__qualname__} for player {player}, "
+            perf_logger.info(f"Took {taken:.4f} seconds in {method.__qualname__} for player {player}, "
                              f"named {multiworld.player_name[player]}.")
         else:
-            perf_logger.info(f"Took {taken} seconds in {method.__qualname__}.")
+            perf_logger.info(f"Took {taken:.4f} seconds in {method.__qualname__}.")
     return ret
 
 
@@ -179,6 +186,9 @@ class WebWorld:
     bug_report_page: Optional[str]
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
+    options_presets: Dict[str, Dict[str, Any]] = {}
+    """A dictionary containing a collection of developer-defined game option presets."""
+
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
@@ -205,8 +215,22 @@ class World(metaclass=AutoWorldRegister):
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps item group names to sets of items. Example: {"Weapons": {"Sword", "Bow"}}"""
 
+    item_descriptions: ClassVar[Dict[str, str]] = {}
+    """An optional map from item names (or item group names) to brief descriptions for users.
+
+    Individual newlines and indentation will be collapsed into spaces before these descriptions are
+    displayed. This may cover only a subset of items.
+    """
+
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
+
+    location_descriptions: ClassVar[Dict[str, str]] = {}
+    """An optional map from location names (or location group names) to brief descriptions for users.
+
+    Individual newlines and indentation will be collapsed into spaces before these descriptions are
+    displayed. This may cover only a subset of locations.
+    """
 
     data_version: ClassVar[int] = 0
     """
@@ -462,3 +486,17 @@ def data_package_checksum(data: "GamesPackage") -> str:
     assert sorted(data) == list(data), "Data not ordered"
     from NetUtils import encode
     return hashlib.sha1(encode(data).encode()).hexdigest()
+
+
+def _normalize_description(description):
+    """Normalizes a description in item_descriptions or location_descriptions.
+
+    This allows authors to write descritions with nice indentation and line lengths in their world
+    definitions without having it affect the rendered format.
+    """
+    # First, collapse the whitespace around newlines and the ends of the description.
+    description = re.sub(r' *\n *', '\n', description.strip())
+    # Next, condense individual newlines into spaces.
+    description = re.sub(r'(?<!\n)\n(?!\n)', ' ', description)
+    return description
+

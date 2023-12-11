@@ -112,7 +112,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
                         location.item = None
                         placed_item.location = None
-                        swap_state = sweep_from_pool(base_state, [placed_item] if unsafe else [])
+                        swap_state = sweep_from_pool(base_state, [placed_item, *item_pool] if unsafe else item_pool)
                         # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
                         # by continuing to swap, which is not guaranteed. This is unsafe because there is no mechanic
                         # to clean that up later, so there is a chance generation fails.
@@ -471,7 +471,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         raise FillError(
             f"Not enough filler items for excluded locations. There are {len(excludedlocations)} more locations than items")
 
-    restitempool = usefulitempool + filleritempool
+    restitempool = filleritempool + usefulitempool
 
     remaining_fill(world, defaultlocations, restitempool)
 
@@ -792,6 +792,9 @@ def distribute_planned(world: MultiWorld) -> None:
                 block['force'] = 'silent'
             if 'from_pool' not in block:
                 block['from_pool'] = True
+            elif not isinstance(block['from_pool'], bool):
+                from_pool_type = type(block['from_pool'])
+                raise Exception(f'Plando "from_pool" has to be boolean, not {from_pool_type} for player {player}.')
             if 'world' not in block:
                 target_world = False
             else:

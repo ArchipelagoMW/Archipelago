@@ -783,6 +783,7 @@ def get_nonnative_item_sprite(code: int) -> int:
 
 def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     local_random = world.per_slot_randoms[player]
+    local_world = world.worlds[player]
 
     # patch items
 
@@ -863,7 +864,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                                           'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit',
                                           'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
                                           'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'} and \
-                            (world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic'] or 
+                            (world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic'] or
                                 exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
@@ -1192,12 +1193,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     ])
 
     # set Fountain bottle exchange items
-    if world.item_pool[player] in ['hard', 'expert']:
-        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][local_random.randint(0, 5)])
-        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][local_random.randint(0, 5)])
-    else:
-        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][local_random.randint(0, 6)])
-        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][local_random.randint(0, 6)])
+    rom.write_byte(0x348FF, item_table[local_world.waterfall_fairy_bottle_fill].item_code)
+    rom.write_byte(0x3493B, item_table[local_world.pyramid_fairy_bottle_fill].item_code)
 
     # enable Fat Fairy Chests
     rom.write_bytes(0x1FC16, [0xB1, 0xC6, 0xF9, 0xC9, 0xC6, 0xF9])
