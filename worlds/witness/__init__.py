@@ -115,6 +115,7 @@ class WitnessWorld(World):
                 interacts_with_multiworld
                 or self.options.shuffle_lasers == "local"
                 or self.options.shuffle_boat
+                or self.options.early_caves == "add_to_pool"
         )
 
         if not has_progression and self.multiworld.players == 1:
