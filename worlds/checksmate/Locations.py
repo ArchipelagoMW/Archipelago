@@ -14,6 +14,7 @@ class CMLocationData(NamedTuple):
     # b. capture series of pieces and pawns within 1 game
     # c. fork/pin
     material_expectations: int
+    chessmen_expectations: int = 0
 
 
 location_table = {
@@ -46,27 +47,27 @@ location_table = {
     "King Captures Anything": CMLocationData(4_902_018, 150),
     "King to Back Rank": CMLocationData(4_902_019, 1950),  # requires reaching a rather late-game state
     # capture series of pieces and pawns within 1 game
-    "Capture 2 Pawns": CMLocationData(4_902_020, 550),
-    "Capture 3 Pawns": CMLocationData(4_902_021, 950),
-    "Capture 4 Pawns": CMLocationData(4_902_022, 1240),
-    "Capture 5 Pawns": CMLocationData(4_902_023, 1520),
-    "Capture 6 Pawns": CMLocationData(4_902_024, 1875),
-    "Capture 7 Pawns": CMLocationData(4_902_025, 2225),
-    "Capture 8 Pawns": CMLocationData(4_902_026, 2575),
+    "Capture 2 Pawns": CMLocationData(4_902_020, 550, 1),
+    "Capture 3 Pawns": CMLocationData(4_902_021, 950, 2),
+    "Capture 4 Pawns": CMLocationData(4_902_022, 1240, 3),
+    "Capture 5 Pawns": CMLocationData(4_902_023, 1520, 4),
+    "Capture 6 Pawns": CMLocationData(4_902_024, 1875, 5),
+    "Capture 7 Pawns": CMLocationData(4_902_025, 2225, 6),
+    "Capture 8 Pawns": CMLocationData(4_902_026, 2575, 7),
     # Specific pieces should not be guaranteed to be accessible early, so we add +4 material (1piece+1pawn more)
-    "Capture 2 Pieces": CMLocationData(4_902_027, 1300),
-    "Capture 3 Pieces": CMLocationData(4_902_028, 1600),
-    "Capture 4 Pieces": CMLocationData(4_902_029, 1950),
-    "Capture 5 Pieces": CMLocationData(4_902_030, 2350),
-    "Capture 6 Pieces": CMLocationData(4_902_031, 2800),
-    "Capture 7 Pieces": CMLocationData(4_902_032, 3600),
-    "Capture 2 Of Each": CMLocationData(4_902_033, 1600),
-    "Capture 3 Of Each": CMLocationData(4_902_034, 1950),
-    "Capture 4 Of Each": CMLocationData(4_902_035, 2350),
-    "Capture 5 Of Each": CMLocationData(4_902_036, 2800),
-    "Capture 6 Of Each": CMLocationData(4_902_037, 3350),
-    "Capture 7 Of Each": CMLocationData(4_902_038, 3850),
-    "Capture Everything": CMLocationData(4_902_039, 4050),
+    "Capture 2 Pieces": CMLocationData(4_902_027, 1300, 1),
+    "Capture 3 Pieces": CMLocationData(4_902_028, 1600, 2),
+    "Capture 4 Pieces": CMLocationData(4_902_029, 1950, 3),
+    "Capture 5 Pieces": CMLocationData(4_902_030, 2350, 4),
+    "Capture 6 Pieces": CMLocationData(4_902_031, 2800, 5),
+    "Capture 7 Pieces": CMLocationData(4_902_032, 3600, 6),
+    "Capture 2 Of Each": CMLocationData(4_902_033, 1600, 3),
+    "Capture 3 Of Each": CMLocationData(4_902_034, 1950, 5),
+    "Capture 4 Of Each": CMLocationData(4_902_035, 2350, 7),
+    "Capture 5 Of Each": CMLocationData(4_902_036, 2800, 9),
+    "Capture 6 Of Each": CMLocationData(4_902_037, 3350, 11),
+    "Capture 7 Of Each": CMLocationData(4_902_038, 3850, 13),
+    "Capture Everything": CMLocationData(4_902_039, 4050, 14),
     "Threaten Pawn": CMLocationData(4_902_040, 0),
     "Threaten Minor": CMLocationData(4_902_041, 200),
     "Threaten Major": CMLocationData(4_902_042, 200),

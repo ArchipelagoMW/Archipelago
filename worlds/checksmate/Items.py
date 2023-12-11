@@ -12,7 +12,7 @@ class CMItemData(NamedTuple):
     code: Optional[int]
     classification: ItemClassification
     quantity: float = 1  # maximum, not guaranteed
-    material: int = 0  # pawns=2, minor=6, major=10, queen=18 - doubled to account for 0.5 values
+    material: int = 0  # pawns=100, minor=300, major=500, queen=900
     parents: list[str] = []
 
 
