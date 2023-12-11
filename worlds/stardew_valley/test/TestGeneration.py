@@ -354,7 +354,7 @@ class TestLocationAndItemCount(SVTestCase):
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND INCLUDED]")
 
     def test_minsanity_has_fewer_than_locations(self):
-        expected_locations = 122
+        expected_locations = 76
         minsanity_options = get_minsanity_options()
         multiworld = setup_solo_multiworld(minsanity_options)
         real_locations = get_real_locations(self, multiworld)
@@ -368,7 +368,7 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_default_settings_has_exactly_locations(self):
-        expected_locations = 420
+        expected_locations = 421
         multiworld = setup_solo_multiworld(default_options())
         real_locations = get_real_locations(self, multiworld)
         number_locations = len(real_locations)
@@ -380,7 +380,7 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_without_mods_has_at_least_locations(self):
-        expected_locations = 1952
+        expected_locations = 1954
         allsanity_options = allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         real_locations = get_real_locations(self, multiworld)
@@ -394,7 +394,7 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 2693
+        expected_locations = 2695
         allsanity_options = allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         real_locations = get_real_locations(self, multiworld)
