@@ -251,15 +251,27 @@ class CMWorld(World):
                       " having generated " + str(Counter(items)))
 
         # exclude inaccessible locations
-        # castle
-        if (len([item for item in items if item.name == "Progressive Major Piece"]) < 2 +
-                len([item for item in items if item.name == "Progressive Major To Queen"])):
-            self.multiworld.exclude_locations[self.player].value.add("O-O Castle")
-            self.multiworld.exclude_locations[self.player].value.add("O-O-O Castle")
-        # material
-        for location in location_table:
-            if material < location_table[location].material_expectations:
-                self.multiworld.exclude_locations[self.player].value.add(location)
+        # (all locations should be accessible if accessibility != minimal)
+        if self.options.accessibility.value == self.options.accessibility.option_minimal:
+            # castle
+            if (len([item for item in items if item.name == "Progressive Major Piece"]) < 2 +
+                    len([item for item in items if item.name == "Progressive Major To Queen"])):
+                for location in ["O-O-O Castle", "O-O Castle"]:
+                    if location not in self.multiworld.exclude_locations[self.player].value:
+                        self.multiworld.exclude_locations[self.player].value.add(location)
+            # material
+            for location in location_table:
+                if location not in self.multiworld.exclude_locations[self.player].value:
+                    if material < location_table[location].material_expectations:
+                        self.multiworld.exclude_locations[self.player].value.add(location)
+            # chessmen
+            chessmen = len([item for item in items if item.name in item_name_groups["Chessmen"]]) +\
+                (len([item for item in items if item.name == "Progressive Pocket"]) /
+                 self.options.pocket_limit_by_pocket.value)
+            for location in location_table:
+                if location not in self.multiworld.exclude_locations[self.player].value:
+                    if chessmen < location_table[location].chessmen_expectations:
+                        self.multiworld.exclude_locations[self.player].value.add(location)
 
         my_useful_items = list(useful_items.keys())
         while ((len(items) + user_location_count + sum(locked_items.values())) < len(location_table) and
