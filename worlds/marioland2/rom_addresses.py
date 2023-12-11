@@ -1,5 +1,7 @@
 rom_addresses = {
+    "Auto_Scroll_Disable": 0x4c0,
     "Space_Physics": 0x4e8,
+    "Auto_Scroll_Levels": 0x1f71,
     "Get_Hurt_To_Big_Mario": 0x31c7,
     "Get_Mushroom_A": 0x345c,
     "Get_Fire_Flower_A": 0x346d,

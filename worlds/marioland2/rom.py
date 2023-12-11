@@ -127,7 +127,7 @@ def randomize_auto_scroll_levels(data, random, n):
     eligible_levels = [0, 1, 2, 3, 5, 8, 9, 10, 11, 13, 14, 16, 17, 18, 19, 20, 23, 25, 30, 31]
     auto_scroll_levels = random.sample(eligible_levels, n)
     for i in eligible_levels:
-        data[0x1F71 + i] = 1 if i in auto_scroll_levels else 0
+        data[rom_addresses["Auto_Scroll_Levels"] + i] = 1 if i in auto_scroll_levels else 0
 
 
 def randomize_platforms(data, random):
@@ -177,6 +177,8 @@ def generate_output(self, output_directory: str):
     if self.multiworld.randomize_music[self.player]:
         randomize_music(data, random)
 
+    if self.multiworld.auto_scroll_trap[self.player]:
+        data[rom_addresses["Auto_Scroll_Disable"]] = 0xAF
     if self.multiworld.golden_coins[self.player] != "vanilla":
         data[rom_addresses["Coin_Shuffle"]] = 0x40
 

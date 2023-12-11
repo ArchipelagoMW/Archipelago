@@ -34,7 +34,11 @@ class MarioLand2Client(BizHawkClient):
 
     async def game_watcher(self, ctx: BizHawkClientContext):
         from . import locations, items, START_IDS
-        game_loaded_check, level_data, music = await read(ctx.bizhawk_ctx, [(0x0046, 10, "CartRAM"), (0x0848, 42, "CartRAM"), (0x0469, 1, "CartRAM")])
+        game_loaded_check, level_data, music, auto_scroll_enabled, auto_scroll_levels, current_level = \
+            await read(ctx.bizhawk_ctx, [(0x0046, 10, "CartRAM"), (0x0848, 42, "CartRAM"), (0x0469, 1, "CartRAM"),
+                                         (rom_addresses["Auto_Scroll_Disable"], 1, "ROM"),
+                                         (rom_addresses["Auto_Scroll_Levels"], 32, "ROM"),
+                                         (0x0269, 1, "CartRAM")])
         if game_loaded_check != b'\x124Vx\xff\xff\xff\xff\xff\xff':
             return
 
@@ -100,7 +104,15 @@ class MarioLand2Client(BizHawkClient):
             (0x0848, modified_level_data, "CartRAM")
         ]
 
-        success = await guarded_write(ctx.bizhawk_ctx, data_writes, [(0x0848, level_data, "CartRAM")])
+        if "Auto Scroll" in items_received:
+            if auto_scroll_enabled == 0xaf:
+                # auto scroll has not yet been enabled
+                data_writes.append((rom_addresses["Auto_Scroll_Disable"], [0x7e], "ROM"))
+                # if the current level is an auto scroll level, turn on auto scrolling now
+                if auto_scroll_levels[current_level] == 1:
+                    data_writes.append((0x02C8, [0x01], "CartRAM"))
+
+        await guarded_write(ctx.bizhawk_ctx, data_writes, [(0x0848, level_data, "CartRAM")])
 
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed:
             return

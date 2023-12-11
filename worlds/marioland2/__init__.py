@@ -65,6 +65,7 @@ items = {
     "Space Physics": ItemClassification.progression,
     "Easy Mode": ItemClassification.useful,
     "Normal Mode": ItemClassification.trap,
+    "Auto Scroll": ItemClassification.trap
 }
 
 class MarioLand2Settings(settings.Group):
@@ -199,6 +200,10 @@ class MarioLand2World(World):
             item_counts["Space Physics"] = 1
         else:
             self.multiworld.push_precollected(self.create_item("Space Physics"))
+
+        if self.multiworld.auto_scroll_trap[self.player]:
+            item_counts["Progressive Invincibility Star"] -= 1
+            item_counts["Auto Scroll"] = 1
 
         for item_name, count in item_counts.items():
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(count)]

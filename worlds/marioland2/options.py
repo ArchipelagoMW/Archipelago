@@ -51,6 +51,11 @@ class AutoScrollLevels(NamedRange):
     special_range_names = {"vanilla": -1}
 
 
+class AutoScrollTrap(Toggle):
+    """If on, auto scroll levels will not auto scroll until you've received the Auto Scroll trap item."""
+    display_name = "Auto Scroll Trap"
+
+
 class RandomizeMusic(Toggle):
     """Randomize the music that plays in levels and overworld areas."""
     display_name = "Randomize Music"
@@ -63,5 +68,6 @@ sml2options = {
     "randomize_enemies": RandomizeEnemies,
     "randomize_platforms": RandomizePlatforms,
     "auto_scroll_levels": AutoScrollLevels,
+    "auto_scroll_trap": AutoScrollTrap,
     "randomize_music": RandomizeMusic
 }
