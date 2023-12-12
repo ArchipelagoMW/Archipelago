@@ -172,7 +172,6 @@ class CMWorld(World):
         max_material_option = self.options.max_material.value * 100
         if max_material_option < min_material_option:
             max_material_option = min_material_option
-        # TODO: set min_material_option to max(opt, the highest material location) when accessibility != minimal
         max_material_actual = (
                 self.random.random() * (max_material_option - min_material_option) + max_material_option)
         max_material_actual += progression_items["Play as White"].material
@@ -243,7 +242,7 @@ class CMWorld(World):
                 items.append(try_item)
                 material += progression_items[chosen_item].material
                 if not was_locked:
-                    self.lock_new_items(chosen_item, material, max_material_actual, locked_items)
+                    self.lock_new_items(chosen_item, material, max_material_actual, items, locked_items)
             else:
                 my_progression_items.remove(chosen_item)
         logging.debug(str(self.player) + " granted total material of " + str(material) +
@@ -265,9 +264,7 @@ class CMWorld(World):
                     if material < location_table[location].material_expectations:
                         self.multiworld.exclude_locations[self.player].value.add(location)
             # chessmen
-            chessmen = len([item for item in items if item.name in item_name_groups["Chessmen"]]) +\
-                (len([item for item in items if item.name == "Progressive Pocket"]) /
-                 self.options.pocket_limit_by_pocket.value)
+            chessmen = chessmen_count(items, self.options.pocket_limit_by_pocket.value)
             for location in location_table:
                 if location not in self.multiworld.exclude_locations[self.player].value:
                     if chessmen < location_table[location].chessmen_expectations:
@@ -322,12 +319,22 @@ class CMWorld(World):
             return True
         return False
 
-    def lock_new_items(self, chosen_item: str, material: int, max_material: float, locked_items: dict[str, int]):
-        # TODO: if accessibility == minimal, return
+    # this method assumes we cannot run out of pawns... we don't support excluded_items{pawn}
+    # there is no maximum number of chessmen... just minimum chessmen and maximum material.
+    def lock_new_items(self,
+                       chosen_item: str,
+                       material: int,
+                       max_material: float,
+                       items: list[CMItem],
+                       locked_items: dict[str, int]):
+        if self.options.accessibility.value == self.options.accessibility.option_minimal:
+            return
+        chessmen = chessmen_count(items, self.options.pocket_limit_by_pocket.value)
 
         remaining_material = {
             item: self.items_remaining[self.player][item] * progression_items[item].material for
             item in self.items_remaining[self.player]}
+
 
     def create_regions(self):
         region = Region("Menu", self.player, self.multiworld)
@@ -492,6 +499,11 @@ def get_parents(chosen_item: str) -> list[str]:
 def get_children(chosen_item: str) -> list[str]:
     return [item for item in item_table
             if item_table[item].parents is not None and chosen_item in item_table[item].parents]
+
+
+def chessmen_count(items: list[CMItem], pocket_limit: int) -> int:
+    return len([item for item in items if item.name in item_name_groups["Chessmen"]]) + \
+        math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit)
 
 
 def get_excluded_items(multiworld: MultiWorld, player: int) -> Dict[str, int]:

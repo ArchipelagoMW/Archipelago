@@ -110,3 +110,6 @@ location_table = {
 }
 
 lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
+
+# unused because we can never run out of pawn locations
+highest_chessmen_requirement = max([location_table[location].chessmen_expectations for location in location_table])

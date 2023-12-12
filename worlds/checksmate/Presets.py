@@ -11,7 +11,8 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
         "fairy_chess_pieces": ['FIDE'],
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
 
-        # TODO: Set the rest to defaults. Is this necessary? I feel like they should just be... defaults.
+        # TODO: Set the rest to defaults. Is this necessary? I feel like they should just be... defaults, unless the
+        #   player changes them.
     },
 
     # A vanilla army with no pockets, comprising 2 Bishops+Knights+Rooks, and 1 Queen (or Rook until upgraded)
@@ -75,7 +76,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
         "max_engine_penalties": 5,
         "max_pocket": 12,
         "fairy_chess_pieces": ["Rookies", "Clobberers", "Nutty", "Camel"],
-        "fairy_chess_pawns": FairyChessPawns.option_berolina,
+        "fairy_chess_pawns": FairyChessPawns.option_vanilla,
         "fairy_chess_army": FairyChessArmy.option_stable,
 
         "minor_piece_limit_by_type": 2,
