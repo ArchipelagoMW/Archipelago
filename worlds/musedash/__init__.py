@@ -8,6 +8,7 @@ from .Options import MuseDashOptions
 from .Items import MuseDashSongItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
 from .MuseDashCollection import MuseDashCollections
+from .Presets import MuseDashPresets
 
 
 class MuseDashWebWorld(WebWorld):
@@ -33,6 +34,7 @@ class MuseDashWebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_es]
+    options_presets = MuseDashPresets
 
 
 class MuseDashWorld(World):
@@ -48,8 +50,9 @@ class MuseDashWorld(World):
     # World Options
     game = "Muse Dash"
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = MuseDashOptions
+    options: MuseDashOptions
+
     topology_present = False
-    data_version = 10
     web = MuseDashWebWorld()
 
     # Necessary Data

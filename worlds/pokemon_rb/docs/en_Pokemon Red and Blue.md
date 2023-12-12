@@ -80,3 +80,12 @@ All items for other games will display simply as "AP ITEM," including those for 
 A "received item" sound effect will play. Currently, there is no in-game message informing you of what the item is.
 If you are in battle, have menus or text boxes opened, or scripted events are occurring, the items will not be given to
 you until these have ended.
+
+## Unique Local Commands
+
+You can use `/bank` commands to deposit and withdraw money from the server's EnergyLink storage. This can be accessed by
+any players playing games that use the EnergyLink feature.
+
+- `/bank` - check the amount of money available on the server.
+- `/bank withdraw #` - withdraw money from the server.
+- `/bank deposit #` - deposit money into the server. 25% of the amount will be lost to taxation.

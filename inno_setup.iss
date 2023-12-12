@@ -80,7 +80,10 @@ Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringC
 Type: dirifempty; Name: "{app}"
 
 [InstallDelete]
+Type: files; Name: "{app}\lib\worlds\_bizhawk.apworld"
 Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
+Type: files; Name: "{app}\ArchipelagoPokemonClient.exe"
+Type: files; Name: "{app}\data\lua\connector_pkmn_rb.lua"
 Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy*"
 Type: filesandordirs; Name: "{app}\SNI\lua*"
 Type: filesandordirs; Name: "{app}\EnemizerCLI*"
@@ -140,18 +143,23 @@ Root: HKCR; Subkey: "{#MyAppName}n64zpf\shell\open\command";     ValueData: """{
 
 Root: HKCR; Subkey: ".apred";                                    ValueData: "{#MyAppName}pkmnrpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch";                    ValueData: "Archipelago Pokemon Red Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\DefaultIcon";        ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\shell\open\command"; ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\DefaultIcon";        ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\shell\open\command"; ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
 Root: HKCR; Subkey: ".apblue";                                   ValueData: "{#MyAppName}pkmnbpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch";                    ValueData: "Archipelago Pokemon Blue Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\DefaultIcon";        ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\shell\open\command"; ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\DefaultIcon";        ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\shell\open\command"; ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
 Root: HKCR; Subkey: ".apbn3";                                    ValueData: "{#MyAppName}bn3bpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}bn3bpatch";                     ValueData: "Archipelago MegaMan Battle Network 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}bn3bpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoMMBN3Client.exe,0";                           ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}bn3bpatch\shell\open\command";  ValueData: """{app}\ArchipelagoMMBN3Client.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+
+Root: HKCR; Subkey: ".apemerald";                                 ValueData: "{#MyAppName}pkmnepatch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}pkmnepatch";                     ValueData: "Archipelago Pokemon Emerald Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}pkmnepatch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}pkmnepatch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
 
 Root: HKCR; Subkey: ".apladx";                                   ValueData: "{#MyAppName}ladxpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}ladxpatch";                     ValueData: "Archipelago Links Awakening DX Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";

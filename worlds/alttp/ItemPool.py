@@ -293,7 +293,6 @@ def generate_itempool(world):
         loc.access_rule = lambda state: has_triforce_pieces(state, player)
 
         region.locations.append(loc)
-        multiworld.clear_location_cache()
 
         multiworld.push_item(loc, ItemFactory('Triforce', player), False)
         loc.event = True
@@ -683,8 +682,6 @@ def get_pool_core(world, player: int):
                 key_location = world.random.choice(key_locations)
                 place_item(key_location, "Small Key (Universal)")
                 pool = pool[:-3]
-        if world.key_drop_shuffle[player]:
-            pass # pool.extend([item_to_place] * (len(key_drop_data) - 1))
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
             additional_pieces_to_place)
