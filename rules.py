@@ -42,12 +42,7 @@ def get_access_rule(player: int, level: str):
     return needs_items(player, level_rules[level])
 
 
-def make_boss_access_rule(player: int, passage: Passage):
-    if passage in (Passage.ENTRY, Passage.GOLDEN):
-        jewels_needed = 1
-    else:
-        jewels_needed = 4
-
+def make_boss_access_rule(player: int, passage: Passage, jewels_needed: int):
     jewel_list = [[(name, jewels_needed)
                   for name in items.filter_item_names(type=ItemType.JEWEL, passage=passage)]]
     return needs_items(player, jewel_list)
@@ -87,7 +82,7 @@ level_rules = {
 
     'Crescent Moon Village': [['Head Smash', 'Dash Attack']],
     'Arabian Night':         [['Swim']],
-    'Fiery Cavern':          [['Ground Pound', 'Dash Attack']],
+    'Fiery Cavern':          [['Ground Pound', 'Dash Attack', 'Head Smash']],
     'Hotel Horror':          [['Heavy Grab']],
 
     # This one's weird. You need swim to get anything, but Keyzer also requires
@@ -124,7 +119,7 @@ location_rules_all = {
     'The Big Board - Full Health Item Box':           [['Grab', 'Enemy Jump']],
     'Doodle Woods - Blue Circle Box':                 [['Enemy Jump']],
     'Doodle Woods - Pink Circle Box':                 [['Ground Pound']],
-    'Doodle Woods - Gray Square Box':                 [['Ground Pound'], ['Grab']],
+    'Doodle Woods - Gray Square Box':                 [['Ground Pound']],
     'Domino Row - Keyzer Room Box':                   [['Ground Pound']],
 
     'Crescent Moon Village - Agile Bat Hidden Box':   [['Ground Pound', 'Grab']],
@@ -140,7 +135,7 @@ location_rules_normal = {
     **location_rules_all,
 
     'Mystic Lake - Full Health Item Box': [['Grab']],
-    'Doodle Woods - CD Box':              [['Ground Pound'], ['Grab']],
+    'Doodle Woods - CD Box':              [['Ground Pound']],
     'Domino Row - Swimming Detour Box':      [['Head Smash']],
 }
 

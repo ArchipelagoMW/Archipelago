@@ -106,24 +106,18 @@ class WL4World(World):
 
         itempool = []
 
-        required_jewels = self.multiworld.required_jewels[self.player]
-        required_jewels_entry = min(1, required_jewels)
-        pool_jewels = self.multiworld.pool_jewels[self.player]
+        required_jewels = self.multiworld.required_jewels[self.player].value
+        pool_jewels = self.multiworld.pool_jewels[self.player].value
         for name, item in filter_items(type=ItemType.JEWEL):
             if item.passage() == Passage.ENTRY:
                 copies = min(pool_jewels, 1)
-                start = 1 - required_jewels_entry
             elif item.passage() == Passage.GOLDEN:
                 copies = self.multiworld.golden_jewels[self.player]
-                start = 1 - required_jewels_entry
             else:
                 copies = pool_jewels
-                start = 4 - required_jewels
 
             for _ in range(copies):
                 itempool.append(self.create_item(name, required_jewels == 0))
-            for _ in range(start):
-                self.multiworld.push_precollected(self.create_item(name))
 
         for name in filter_item_names(type=ItemType.CD):
             itempool.append(self.create_item(name))
@@ -180,9 +174,7 @@ class WL4World(World):
                 rompath.unlink()
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
-        data = item_table[name]
-        created_item = WL4Item(name, self.player, data, force_non_progression)
-        return created_item
+        return WL4Item.from_name(name, self.player, force_non_progression)
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (

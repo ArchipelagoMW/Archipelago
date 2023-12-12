@@ -99,10 +99,13 @@ def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
     ]
 
 
-def connect_regions(world, player):
+def connect_regions(world: MultiWorld, player: int):
     def connect_level(level_name):
-        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name,
-                         rules.get_access_rule(player, level_name))
+        if level_name == 'Hotel Horror' and world.difficulty[player].value == 2:
+            rule = None
+        else:
+            rule = rules.get_access_rule(player, level_name)
+        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name, rule)
 
     connect_level('Hall of Hieroglyphs')
     connect_level('Palm Tree Paradise')
@@ -130,13 +133,21 @@ def connect_regions(world, player):
         connect_with_name(source, destination, f'{source} -> {destination}', rule)
 
     def connect_level_exit(source, destination, rule: AccessRule = None):
-        connect_with_name(source, destination, f'{source} Gate', rule)
+        level = source
+        # No Keyzer means you can just walk past the actual entrance to the next level
+        open_doors = world.open_doors[player].value
+        if open_doors == 2 or (open_doors == 1 and level != 'Golden Passage'):
+            source += ' (entrance)'
+        connect_with_name(source, destination, f'{level} Gate', rule)
+
+    required_jewels = world.required_jewels[player].value
+    required_jewels_entry = min(1, required_jewels)
 
     connect('Menu', 'Entry Passage')
     connect('Entry Passage', 'Hall of Hieroglyphs (entrance)')
     connect_level_exit('Hall of Hieroglyphs', 'Entry Minigame Shop')
     connect('Entry Minigame Shop', 'Entry Passage Boss',
-            rules.make_boss_access_rule(player, Passage.ENTRY))
+            rules.make_boss_access_rule(player, Passage.ENTRY, required_jewels_entry))
 
     connect('Menu', 'Emerald Passage')
     connect('Emerald Passage', 'Palm Tree Paradise (entrance)')
@@ -145,7 +156,7 @@ def connect_regions(world, player):
     connect_level_exit('Mystic Lake', 'Monsoon Jungle (entrance)')
     connect_level_exit('Monsoon Jungle', 'Emerald Minigame Shop')
     connect('Emerald Minigame Shop', 'Emerald Passage Boss',
-            rules.make_boss_access_rule(player, Passage.EMERALD))
+            rules.make_boss_access_rule(player, Passage.EMERALD, required_jewels))
 
     connect('Menu', 'Ruby Passage')
     connect('Ruby Passage', 'The Curious Factory (entrance)')
@@ -154,7 +165,7 @@ def connect_regions(world, player):
     connect_level_exit('40 Below Fridge', 'Pinball Zone (entrance)')
     connect_level_exit('Pinball Zone', 'Ruby Minigame Shop')
     connect('Ruby Minigame Shop', 'Ruby Passage Boss',
-            rules.make_boss_access_rule(player, Passage.RUBY))
+            rules.make_boss_access_rule(player, Passage.RUBY, required_jewels))
 
     connect('Menu', 'Topaz Passage')
     connect('Topaz Passage', 'Toy Block Tower (entrance)')
@@ -163,7 +174,7 @@ def connect_regions(world, player):
     connect_level_exit('Doodle Woods', 'Domino Row (entrance)')
     connect_level_exit('Domino Row', 'Topaz Minigame Shop')
     connect('Topaz Minigame Shop', 'Topaz Passage Boss',
-            rules.make_boss_access_rule(player, Passage.TOPAZ))
+            rules.make_boss_access_rule(player, Passage.TOPAZ, required_jewels))
 
     connect('Menu', 'Sapphire Passage')
     connect('Sapphire Passage', 'Crescent Moon Village (entrance)')
@@ -172,7 +183,7 @@ def connect_regions(world, player):
     connect_level_exit('Fiery Cavern', 'Hotel Horror (entrance)')
     connect_level_exit('Hotel Horror', 'Sapphire Minigame Shop')
     connect('Sapphire Minigame Shop', 'Sapphire Passage Boss',
-            rules.make_boss_access_rule(player, Passage.SAPPHIRE))
+            rules.make_boss_access_rule(player, Passage.SAPPHIRE, required_jewels))
 
     connect('Menu', 'Golden Pyramid',
             lambda state: state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
@@ -180,10 +191,11 @@ def connect_regions(world, player):
     connect('Golden Pyramid', 'Golden Passage (entrance)')
     # Golden Passage is the only level where escaping has different requirements from getting Keyzer
     connect_level_exit('Golden Passage', 'Golden Minigame Shop',
-            lambda state: state.has('Progressive Grab', player) and
-                          state.has('Progressive Ground Pound', player))
+            lambda state: world.open_doors[player].value == 2 or
+                          (state.has('Progressive Grab', player) and
+                           state.has('Progressive Ground Pound', player)))
     connect('Golden Minigame Shop', 'Golden Pyramid Boss',
-            rules.make_boss_access_rule(player, Passage.GOLDEN))
+            rules.make_boss_access_rule(player, Passage.GOLDEN, required_jewels_entry))
 
 
 def create_region(world: MultiWorld, player: int, location_table: Set[str],

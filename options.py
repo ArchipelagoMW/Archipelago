@@ -1,6 +1,6 @@
 from typing import Dict, Type
 
-from Options import Choice, Option, DefaultOnToggle, DeathLink, Range, Toggle
+from Options import Choice, Option, Toggle, DeathLink, Range
 
 
 class Difficulty(Choice):
@@ -48,6 +48,18 @@ class RequiredJewels(Range):
     display_name = 'Required Jewels'
 
 
+class OpenDoors(Choice):
+    '''
+    Start with all doors in the passages unlocked. This skips the requirement
+    to find Keyzer in each level, opening more locations earlier.
+    '''
+    display_name = 'Open Level Doors'
+    option_off = 0
+    option_closed_diva = 1
+    option_open = 2
+    default = option_off
+
+
 class SmashThroughHardBlocks(Toggle):
     """
     Break hard, teal blocks with the dash attack and super ground pound without stopping,
@@ -85,6 +97,7 @@ wl4_options: Dict[str, Type[Option]] = {
     'pool_jewels': PoolJewels,
     'golden_jewels': GoldenJewels,
     'required_jewels': RequiredJewels,
+    'open_doors': OpenDoors,
     'smash_through_hard_blocks': SmashThroughHardBlocks,
     'death_link': DeathLink,
     'music_shuffle': MusicShuffle,

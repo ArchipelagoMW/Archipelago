@@ -1,15 +1,8 @@
+from .. import options
 from . import WL4TestBase
 
 
-REQUIRED_JEWELS = 3
-
-
 class TestEntrances(WL4TestBase):
-    options = {
-        'required_jewels': REQUIRED_JEWELS,
-        'pool_jewels': REQUIRED_JEWELS,
-    }
-
     def test_passage_access(self):
         self.starting_regions = []
         self.run_entrance_tests([
@@ -28,6 +21,10 @@ class TestEntrances(WL4TestBase):
              ['Emerald Passage Clear', 'Ruby Passage Clear',
               'Topaz Passage Clear', 'Sapphire Passage Clear']],
         ])
+
+
+class TestEntrancesBasic(TestEntrances):
+    options = {'open_doors': options.OpenDoors.option_off}
 
     def test_entry_levels(self):
         self.starting_regions = ['Hall of Hieroglyphs (entrance)']
@@ -123,9 +120,10 @@ class TestEntrances(WL4TestBase):
             ['Arabian Night Gate', True, ['Swim']],
 
             ['Fiery Cavern Gate', False, []],
+            ['Fiery Cavern Gate', False, [], ['Head Smash']],
             ['Fiery Cavern Gate', False, [], ['Dash Attack']],
             ['Fiery Cavern Gate', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound']],
+            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
 
             ['Hotel Horror Gate', False, []],
             ['Hotel Horror Gate', False, ['Progressive Grab'], ['Progressive Grab']],
@@ -141,6 +139,79 @@ class TestEntrances(WL4TestBase):
             ['Golden Passage Gate', False, [], ['Progressive Grab']],
             ['Golden Passage Gate', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
         ])
+
+
+class TestEntrancesOpenDoors(TestEntrances):
+    options = {'open_doors': options.OpenDoors.option_open}
+
+    def test_entry_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Hall of Hieroglyphs Gate', True, []],
+        ])
+
+    def test_emerald_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Palm Tree Paradise Gate', True, []],
+            ['Wildflower Fields Gate', True, []],
+            ['Mystic Lake Gate', True, []],
+            ['Monsoon Jungle Gate', True, []],
+        ])
+
+    def test_ruby_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['The Curious Factory Gate', True, []],
+            ['The Toxic Landfill Gate', True, []],
+            ['40 Below Fridge Gate', True, []],
+            ['Pinball Zone Gate', True, []],
+        ])
+
+    def test_topaz_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Toy Block Tower Gate', True, []],
+            ['The Big Board Gate', True, []],
+            ['Doodle Woods Gate', True, []],
+            ['Domino Row Gate', True, []],
+        ])
+
+    def test_sapphire_levels(self):
+        self.starting_regions = []
+        self.run_entrance_tests([
+            ['Crescent Moon Village Gate', True, []],
+            ['Arabian Night Gate', True, []],
+            ['Fiery Cavern Gate', True, []],
+            ['Hotel Horror Gate', True, []],
+        ])
+
+    def test_golden_pyramid(self):
+        self.starting_regions = ['Golden Pyramid']
+        self.run_entrance_tests([
+            ['Golden Passage Gate', True, []],
+        ])
+
+
+class TestEntrancesOpenDoorsExceptPyramid(TestEntrancesOpenDoors):
+    options = {'open_doors': options.OpenDoors.option_closed_diva}
+
+    def test_golden_pyramid(self):
+        self.starting_regions = ['Golden Passage (entrance)']
+        self.run_entrance_tests([
+            ['Golden Passage Gate', False, []],
+            ['Golden Passage Gate', False, [], ['Swim']],
+            ['Golden Passage Gate', False, [], ['Progressive Ground Pound']],
+            ['Golden Passage Gate', False, [], ['Progressive Grab']],
+            ['Golden Passage Gate', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
+        ])
+
+
+REQUIRED_JEWELS = options.RequiredJewels.default
+
+
+class TestBossAccess(TestEntrances):
+    options = {}
 
     def test_bosses(self):
         self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
@@ -224,4 +295,38 @@ class TestEntrances(WL4TestBase):
             ['Golden Minigame Shop -> Golden Pyramid Boss', True,
              ['Top Right Golden Jewel Piece', 'Top Left Golden Jewel Piece',
               'Bottom Right Golden Jewel Piece', 'Bottom Left Golden Jewel Piece']],
+        ])
+
+
+class TestBossAccessNoJewels(TestEntrances):
+    options = {'required_jewels': 0}
+
+    def test_bosses(self):
+        self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
+                                 'Ruby Minigame Shop', 'Topaz Minigame Shop',
+                                 'Sapphire Minigame Shop', 'Golden Minigame Shop']
+        self.run_entrance_tests([
+            ['Entry Minigame Shop -> Entry Passage Boss', True, []],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', True, []],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', True, []],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', True, []],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True, []],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', True, []],
+        ])
+
+
+class TestBossAccessNoJewelsKeysy(TestEntrances):
+    options = {
+        'required_jewels': 0,
+        'open_doors': options.OpenDoors.option_open,
+    }
+    def test_bosses(self):
+        self.starting_regions = ['Golden Pyramid']
+        self.run_entrance_tests([
+            ['Entry Minigame Shop -> Entry Passage Boss', True, []],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', True, []],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', True, []],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', True, []],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True, []],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', True, []],
         ])
