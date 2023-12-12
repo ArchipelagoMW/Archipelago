@@ -251,7 +251,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.forest_to_marnie_shed, SVERegion.marnies_shed, flag=RandomizationFlag.NON_PROGRESSION),
     ConnectionData(SVEEntrance.forest_west_to_spring, SVERegion.sprite_spring, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.to_susan_house, SVERegion.susans_house, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(SVEEntrance.enter_summit, SVERegion.summit, flag=RandomizationFlag.NON_PROGRESSION),
+    ConnectionData(SVEEntrance.enter_summit, SVERegion.summit, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.forest_to_fairhaven, SVERegion.fairhaven_farm, flag=RandomizationFlag.NON_PROGRESSION),
     ConnectionData(SVEEntrance.highlands_to_lance, SVERegion.lances_house, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.lance_to_ladder, SVERegion.lances_ladder),
