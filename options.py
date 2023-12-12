@@ -15,6 +15,27 @@ class Difficulty(Choice):
     default = 0
 
 
+class PoolJewels(Range):
+    '''
+    Number of jewels in the item pool per passage for the main four.
+    The number of pieces will be four times this number.
+    '''
+    range_start = 0
+    range_end = 4
+    default = 3
+    display_name = 'Jewels in Pool'
+
+
+class GoldenJewels(Range):
+    '''
+    Number of copies of the golden pyramid jewel in the item pool.
+    '''
+    range_start = 0
+    range_end = 2
+    default = 1
+    display_name = 'Golden Pyramid Jewels'
+
+
 class RequiredJewels(Range):
     '''
     Number of jewels required to fight the bosses.
@@ -23,7 +44,7 @@ class RequiredJewels(Range):
     '''
     range_start = 0
     range_end = 4
-    default = 3
+    default = 2
     display_name = 'Required Jewels'
 
 
@@ -61,6 +82,8 @@ class WarioVoiceShuffle(Toggle):
 
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
+    'pool_jewels': PoolJewels,
+    'golden_jewels': GoldenJewels,
     'required_jewels': RequiredJewels,
     'smash_through_hard_blocks': SmashThroughHardBlocks,
     'death_link': DeathLink,

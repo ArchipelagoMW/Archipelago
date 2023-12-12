@@ -72,6 +72,15 @@ class WL4World(World):
 
     web = WL4Web()
 
+    def generate_early(self):
+        options = self.multiworld.worlds[self.player].options
+        if options.required_jewels > options.pool_jewels:
+            options.pool_jewels = options.required_jewels
+            self.multiworld.pool_jewels[self.player] = options.required_jewels
+        if options.required_jewels >= 1 and options.golden_jewels == 0:
+            options.golden_jewels = 1
+            self.multiworld.golden_jewels[self.player] = options.golden_jewels
+
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
@@ -99,16 +108,20 @@ class WL4World(World):
 
         required_jewels = self.multiworld.required_jewels[self.player]
         required_jewels_entry = min(1, required_jewels)
+        pool_jewels = self.multiworld.pool_jewels[self.player]
         for name, item in filter_items(type=ItemType.JEWEL):
-            if item.passage() in (Passage.ENTRY, Passage.GOLDEN):
-                copies = required_jewels_entry
+            if item.passage() == Passage.ENTRY:
+                copies = min(pool_jewels, 1)
+                start = 1 - required_jewels_entry
+            elif item.passage() == Passage.GOLDEN:
+                copies = self.multiworld.golden_jewels[self.player]
                 start = 1 - required_jewels_entry
             else:
-                copies = required_jewels
+                copies = pool_jewels
                 start = 4 - required_jewels
 
             for _ in range(copies):
-                itempool.append(self.create_item(name))
+                itempool.append(self.create_item(name, required_jewels == 0))
             for _ in range(start):
                 self.multiworld.push_precollected(self.create_item(name))
 

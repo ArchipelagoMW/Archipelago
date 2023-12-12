@@ -5,7 +5,10 @@ REQUIRED_JEWELS = 3
 
 
 class TestEntrances(WL4TestBase):
-    options = {'required_jewels': REQUIRED_JEWELS}
+    options = {
+        'required_jewels': REQUIRED_JEWELS,
+        'pool_jewels': REQUIRED_JEWELS,
+    }
 
     def test_passage_access(self):
         self.starting_regions = []
