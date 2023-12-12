@@ -373,6 +373,7 @@
       ANOTHER TRY:
         id: Entry Room/Panel_advance
         tag: topwhite
+        non_counting: True # This is a counting panel in-game, but it can never count towards the LEVEL 2 panel hunt.
       LEVEL 2:
         # We will set up special rules for this in code.
         id: EndPanel/Panel_level_2
@@ -1033,6 +1034,8 @@
       Hallway Room (3): True
       Hallway Room (4): True
       Hedge Maze: True # through the door to the sectioned-off part of the hedge maze
+      Cellar:
+        door: Lookout Entrance
     panels:
       MASSACRED:
         id: Palindrome Room/Panel_massacred_sacred
@@ -1168,11 +1171,21 @@
           - KEEP
           - BAILEY
           - TOWER
+      Lookout Entrance:
+        id: Cross Room Doors/Door_missing
+        location_name: Outside The Agreeable - Lookout Panels
+        panels:
+          - NORTH
+          - WINTER
+          - DIAMONDS
+          - FIRE
     paintings:
       - id: panda_painting
         orientation: south
       - id: eyes_yellow_painting
         orientation: east
+      - id: pencil_painting7
+        orientation: north
     progression:
       Progressive Hallway Room:
         - Hallway Door
@@ -2043,7 +2056,7 @@
         door: Sixth Floor
       Cellar:
         room: Room Room
-        door: Shortcut to Fifth Floor
+        door: Cellar Exit
       Welcome Back Area:
         door: Welcome Back
       Art Gallery:
@@ -2302,9 +2315,6 @@
         id: Master Room/Panel_mastery_mastery3
         tag: midwhite
         hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
       THE LIBRARY:
         id: EndPanel/Panel_library
         check: True
@@ -2675,6 +2685,10 @@
       Outside The Undeterred: True
       Outside The Agreeable: True
       Outside The Wanderer: True
+      The Observant: True
+      Art Gallery: True
+      The Scientific: True
+      Cellar: True
       Orange Tower Fifth Floor:
         room: Orange Tower Fifth Floor
         door: Welcome Back
@@ -2991,8 +3005,7 @@
       PATS:
         id: Rhyme Room/Panel_wrath_path
         colors: purple
-        tag: midpurp and rhyme
-        copy_to_sign: sign15
+        tag: forbid
       KNIGHT:
         id: Rhyme Room/Panel_knight_write
         colors: purple
@@ -3158,6 +3171,8 @@
         door: Painting Shortcut
         painting: True
       Room Room: True # trapdoor
+      Outside The Agreeable:
+        painting: True
     panels:
       UNOPEN:
         id: Truncate Room/Panel_unopened_open
@@ -6299,17 +6314,22 @@
       SKELETON:
         id: Double Room/Panel_bones_syn
         tag: syn rhyme
+        colors: purple
         subtag: bot
         link: rhyme BONES
       REPENTANCE:
         id: Double Room/Panel_sentence_rhyme
-        colors: purple
+        colors:
+          - purple
+          - blue
         tag: whole rhyme
         subtag: top
         link: rhyme SENTENCE
       WORD:
         id: Double Room/Panel_sentence_whole
-        colors: blue
+        colors:
+          - purple
+          - blue
         tag: whole rhyme
         subtag: bot
         link: rhyme SENTENCE
@@ -6321,6 +6341,7 @@
         link: rhyme DREAM
       FANTASY:
         id: Double Room/Panel_dream_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme DREAM
@@ -6332,6 +6353,7 @@
         link: rhyme MYSTERY
       SECRET:
         id: Double Room/Panel_mystery_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme MYSTERY
@@ -6386,25 +6408,33 @@
           door: Nines
       FERN:
         id: Double Room/Panel_return_rhyme
-        colors: purple
+        colors:
+          - purple
+          - black
         tag: ant rhyme
         subtag: top
         link: rhyme RETURN
       STAY:
         id: Double Room/Panel_return_ant
-        colors: black
+        colors:
+          - purple
+          - black
         tag: ant rhyme
         subtag: bot
         link: rhyme RETURN
       FRIEND:
         id: Double Room/Panel_descend_rhyme
-        colors: purple
+        colors:
+          - purple
+          - black
         tag: ant rhyme
         subtag: top
         link: rhyme DESCEND
       RISE:
         id: Double Room/Panel_descend_ant
-        colors: black
+        colors:
+          - purple
+          - black
         tag: ant rhyme
         subtag: bot
         link: rhyme DESCEND
@@ -6416,6 +6446,7 @@
         link: rhyme JUMP
       BOUNCE:
         id: Double Room/Panel_jump_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme JUMP
@@ -6427,6 +6458,7 @@
         link: rhyme FALL
       PLUNGE:
         id: Double Room/Panel_fall_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme FALL
@@ -6456,13 +6488,17 @@
     panels:
       BIRD:
         id: Double Room/Panel_word_rhyme
-        colors: purple
+        colors:
+          - purple
+          - blue
         tag: whole rhyme
         subtag: top
         link: rhyme WORD
       LETTER:
         id: Double Room/Panel_word_whole
-        colors: blue
+        colors:
+          - purple
+          - blue
         tag: whole rhyme
         subtag: bot
         link: rhyme WORD
@@ -6474,6 +6510,7 @@
         link: rhyme HIDDEN
       CONCEALED:
         id: Double Room/Panel_hidden_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme HIDDEN
@@ -6485,6 +6522,7 @@
         link: rhyme SILENT
       MUTE:
         id: Double Room/Panel_silent_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme SILENT
@@ -6531,6 +6569,7 @@
         link: rhyme BLOCKED
       OBSTRUCTED:
         id: Double Room/Panel_blocked_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme BLOCKED
@@ -6542,6 +6581,7 @@
         link: rhyme RISE
       SWELL:
         id: Double Room/Panel_rise_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme RISE
@@ -6553,6 +6593,7 @@
         link: rhyme ASCEND
       CLIMB:
         id: Double Room/Panel_ascend_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme ASCEND
@@ -6564,6 +6605,7 @@
         link: rhyme DOUBLE
       DUPLICATE:
         id: Double Room/Panel_double_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme DOUBLE
@@ -6642,6 +6684,7 @@
         link: rhyme CHILD
       KID:
         id: Double Room/Panel_child_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme CHILD
@@ -6653,6 +6696,7 @@
         link: rhyme CRYSTAL
       QUARTZ:
         id: Double Room/Panel_crystal_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme CRYSTAL
@@ -6664,6 +6708,7 @@
         link: rhyme CREATIVE
       INNOVATIVE (Bottom):
         id: Double Room/Panel_creative_syn
+        colors: purple
         tag: syn rhyme
         subtag: bot
         link: rhyme CREATIVE
@@ -6882,7 +6927,7 @@
         event: True
         panels:
           - WALL (1)
-      Shortcut to Fifth Floor:
+      Cellar Exit:
         id:
           - Tower Room Area Doors/Door_panel_basement
           - Tower Room Area Doors/Door_panel_basement2
@@ -6895,7 +6940,10 @@
         door: Excavation
       Orange Tower Fifth Floor:
         room: Room Room
-        door: Shortcut to Fifth Floor
+        door: Cellar Exit
+      Outside The Agreeable:
+        room: Outside The Agreeable
+        door: Lookout Entrance
   Outside The Wise:
     entrances:
       Orange Tower Sixth Floor:
@@ -7319,49 +7367,65 @@
         link: change GRAVITY
       PART:
         id: Chemistry Room/Panel_physics_2
-        colors: blue
+        colors:
+          - blue
+          - red
         tag: blue mid red bot
         subtag: mid
         link: xur PARTICLE
       MATTER:
         id: Chemistry Room/Panel_physics_1
-        colors: red
+        colors:
+          - blue
+          - red
         tag: blue mid red bot
         subtag: bot
         link: xur PARTICLE
       ELECTRIC:
         id: Chemistry Room/Panel_physics_6
-        colors: purple
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: mid
         link: xpr ELECTRON
       ATOM (1):
         id: Chemistry Room/Panel_physics_3
-        colors: red
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: bot
         link: xpr ELECTRON
       NEUTRAL:
         id: Chemistry Room/Panel_physics_7
-        colors: purple
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: mid
         link: xpr NEUTRON
       ATOM (2):
         id: Chemistry Room/Panel_physics_4
-        colors: red
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: bot
         link: xpr NEUTRON
       PROPEL:
         id: Chemistry Room/Panel_physics_8
-        colors: purple
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: mid
         link: xpr PROTON
       ATOM (3):
         id: Chemistry Room/Panel_physics_5
-        colors: red
+        colors:
+          - purple
+          - red
         tag: purple mid red bot
         subtag: bot
         link: xpr PROTON
