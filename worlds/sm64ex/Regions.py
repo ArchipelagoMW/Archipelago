@@ -216,10 +216,10 @@ def create_regions(world: MultiWorld, player: int):
     world.regions.append(regBitS)
 
 
-def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule=None, name: str = None):
+def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule=None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
-    sourceRegion.connect(targetRegion, name, rule)
+    sourceRegion.connect(targetRegion, rule=rule)
 
 def create_region(name: str, player: int, world: MultiWorld) -> Region:
     return Region(name, player, world)
