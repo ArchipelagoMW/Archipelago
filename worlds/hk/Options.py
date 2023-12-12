@@ -411,9 +411,11 @@ class DeathLinkShade(Choice):
 
     vanilla: DeathLink deaths function like any other death and overrides your existing shade (including geo), if any.
     shadeless: DeathLink deaths do not spawn shades. Your existing shade (including geo), if any, is untouched.
-    shade: DeathLink deaths spawn a shade if you do not have an existing shade. Otherwise, acts like shadeless.
+    shade: DeathLink deaths spawn a shade if you do not have an existing shade. Otherwise, it acts like shadeless.
 
     * This option has no effect if DeathLink is disabled.
+    ** Self-death shade behavior is not changed; if a self-death normally creates a shade in vanilla, it will override
+        your existing shade, if any.
     """
     option_vanilla = 0
     option_shadeless = 1
@@ -422,9 +424,11 @@ class DeathLinkShade(Choice):
 
 
 class DeathLinkBreaksFragileCharms(Toggle):
-    """Sets if fragile charms break when you are killed by a DeathLink. All other deaths still break fragile charms.
+    """Sets if fragile charms break when you are killed by a DeathLink.
 
     * This option has no effect if DeathLink is disabled.
+    ** Self-death fragile charm behavior is not changed; if a self-death normally breaks fragile charms in vanilla, it
+        will continue to do so.
     """
 
 
