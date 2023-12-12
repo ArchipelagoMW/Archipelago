@@ -48,7 +48,7 @@ ChecksMate:
   start_hints:
     - Play as White
   start_location_hints:
-    - Bongcloud Once
+    - King to E2/E7 Early
     - Capture Everything
     - Fork, True Royal
 
@@ -85,7 +85,7 @@ ChecksMate:
   start_hints:
     - Play as White
   start_location_hints:
-    - Bongcloud Once
+    - King to E2/E7 Early
     - Capture Everything
     - Fork, True Royal
 
@@ -124,7 +124,7 @@ ChecksMate:
   start_hints:
     - Play as White
   start_location_hints:
-    - Bongcloud Once
+    - King to E2/E7 Early
     - Capture Everything
     - Fork, True Royal
 
@@ -176,6 +176,6 @@ ChecksMate:
   start_hints:
     - Play as White
   start_location_hints:
-    - Bongcloud Once
+    - King to E2/E7 Early
     - Capture Everything
     - Fork, True Royal

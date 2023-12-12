@@ -149,6 +149,7 @@ class CMWorld(World):
         #                             for item, item_data in progression_items]0
         excluded_items = get_excluded_items(self.multiworld, self.player)
         self.items_used[self.player] = {}
+        self.items_remaining[self.player] = {}
 
         # setup for starting_inventory generic collection and then for early_material custom option
         for item_name in excluded_items:
@@ -196,11 +197,11 @@ class CMWorld(World):
         locked_items = dict(yaml_locked_items)
         # ensure castling
         if self.options.accessibility.value != self.options.accessibility.option_minimal:
-            player_queens: int = (locked_items.get("Progressive Major To Queen") +
-                             self.items_used[self.player].get("Progressive Major To Queen"))
+            player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
+                                  self.items_used[self.player].get("Progressive Major To Queen", 0))
             locked_items["Progressive Major Piece"] = max(
                 locked_items.get("Progressive Major Piece"),
-                2 - self.items_used[self.player].get("Progressive Major Piece") + player_queens)
+                2 - self.items_used[self.player].get("Progressive Major Piece", 0) + player_queens)
         # TODO(chesslogic): Validate locked items has enough parents
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
@@ -338,32 +339,40 @@ class CMWorld(World):
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             return False
 
-        remaining_chessmen = (highest_chessmen_requirement -
+        necessary_chessmen = (highest_chessmen_requirement -
                               chessmen_count(items, self.options.pocket_limit_by_pocket.value))
-        if remaining_chessmen > 0 and progression_items[chosen_item].material + material + (
-                item_table["Progressive Pawn"].material * remaining_chessmen) > max_material:
+        if necessary_chessmen > 0 and material + self.lockable_material_value(chosen_item, items, locked_items) + (
+                item_table["Progressive Pawn"].material * necessary_chessmen) > max_material:
             return True
 
         remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
 
         return material + remaining_material + progression_items[chosen_item].material > max_material
 
-    def lockable_material_value(self, chosen_item: str):
+    # if this piece was added, it might add more than its own material to the locked pool
+    def lockable_material_value(self, chosen_item: str, items: list[CMItem], locked_items: dict[str, int]):
+        material = progression_items[chosen_item].material
+        if self.options.accessibility.value == self.options.accessibility.option_minimal:
+            return material
+        if chosen_item == "Progressive Major Piece" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
+            material += progression_items["Progressive Major To Queen"].material
+        return material
 
-    def lock_new_items(self,
-                 chosen_item: str,
-                 items: list[CMItem],
-                 locked_items: dict[str, int]):
+    # ensures the Castling location is reachable
+    def lock_new_items(self, chosen_item: str, items: list[CMItem], locked_items: dict[str, int]):
+        if self.options.accessibility.value == self.options.accessibility.option_minimal:
+            return
         if chosen_item == "Progressive Major To Queen":
-            locked_items["Progressive Major Piece"] += 1
+            if self.unupgraded_majors_in_pool(items, locked_items) < 2:
+                locked_items["Progressive Major Piece"] += 1
 
-    def enough_majors_to_castle(self, items: list[CMItem], locked_items: dict[str, int]):
+    def unupgraded_majors_in_pool(self, items: list[CMItem], locked_items: dict[str, int]) -> int:
         total_majors = len([item for item in items if item.name == "Progressive Major Piece"]) + len(
             [item for item in locked_items if item == "Progressive Major Piece"])
         total_upgrades = len([item for item in items if item.name == "Progressive Major To Queen"]) + len(
             [item for item in locked_items if item == "Progressive Major To Queen"])
 
-        return total_majors - total_upgrades > 2
+        return total_majors - total_upgrades
 
     def create_regions(self):
         region = Region("Menu", self.player, self.multiworld)
@@ -571,8 +580,8 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Di
             raise Exception("At least one early chessman must be local")
 
         item = create_item_with_correct_settings(player, multiworld.per_slot_randoms[player].choice(local_basic_unit))
-        multiworld.get_location("Bongcloud Once", player).place_locked_item(item)
-        locked_locations.append("Bongcloud Once")
+        multiworld.get_location("King to E2/E7 Early", player).place_locked_item(item)
+        locked_locations.append("King to E2/E7 Early")
 
         return [item]
     else:
