@@ -79,16 +79,24 @@ class TestIDs(unittest.TestCase):
                 call_all(multiworld, "post_fill")
                 datapackage = world_type.get_data_package_data()
                 for item_group, item_names in datapackage["item_name_groups"].items():
-                    self.assertIsInstance(item_group, str, f"{item_group} should be a string")
+                    self.assertIsInstance(item_group, str,
+                                          f"item_name_group names should be strings: {item_group}")
                     for item_name in item_names:
-                        self.assertIsInstance(item_name, str, f"{item_name} should be a string")
+                        self.assertIsInstance(item_name, str,
+                                              f"{item_name}, in group {item_group} is not a string")
                 for loc_group, loc_names in datapackage["location_name_groups"].items():
-                    self.assertIsInstance(loc_group, str, f"{loc_group} should be a string")
+                    self.assertIsInstance(loc_group, str,
+                                          f"location_name_group names should be strings: {loc_group}")
                     for loc_name in loc_names:
-                        self.assertIsInstance(loc_name, str, f"{loc_name} should be a string")
+                        self.assertIsInstance(loc_name, str,
+                                              f"{loc_name}, in group {loc_group} is not a string")
                 for item_name, item_id in datapackage["item_name_to_id"].items():
-                    self.assertIsInstance(item_name, str, f"{item_name} should be a string")
-                    self.assertIsInstance(item_id, int, f"{item_id} should be an int")
+                    self.assertIsInstance(item_name, str,
+                                          f"{item_name} is not a valid item name for item_name_to_id")
+                    self.assertIsInstance(item_id, int,
+                                          f"{item_id} for {item_name} should be an int")
                 for loc_name, loc_id in datapackage["location_name_to_id"].items():
-                    self.assertIsInstance(loc_name, str, f"{loc_name} should be a string")
-                    self.assertIsInstance(loc_id, int, f"{loc_id} should be an int")
+                    self.assertIsInstance(loc_name, str,
+                                          f"{loc_name} is not a valid item name for location_name_to_id")
+                    self.assertIsInstance(loc_id, int,
+                                          f"{loc_id} for {loc_name} should be an int")
