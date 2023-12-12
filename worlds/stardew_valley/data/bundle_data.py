@@ -388,7 +388,8 @@ mines_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.mines_fora
 desert_foraging_items = [cactus_fruit.as_quality(ForageQuality.gold), cactus_fruit.as_amount(5), coconut.as_quality(ForageQuality.gold), coconut.as_amount(5)]
 desert_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.desert_foraging, desert_foraging_items, 2, 2)
 
-island_foraging_items = [ginger.as_amount(5), magma_cap.as_quality(ForageQuality.gold), magma_cap.as_amount(5)]
+island_foraging_items = [ginger.as_amount(5), magma_cap.as_quality(ForageQuality.gold), magma_cap.as_amount(5),
+                         fiddlehead_fern.as_quality(ForageQuality.gold), fiddlehead_fern.as_amount(5)]
 island_foraging_bundle = IslandBundleTemplate(CCRoom.crafts_room, BundleName.island_foraging, island_foraging_items, 2, 2)
 
 sticky_items = [sap.as_amount(500), sap.as_amount(500)]
@@ -400,7 +401,7 @@ wild_medicine_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.wild_medici
 quality_foraging_items = list({item.as_quality(ForageQuality.gold).as_amount(1)
                                for item in
                                [*spring_foraging_items_thematic, *summer_foraging_items_thematic, *fall_foraging_items_thematic,
-                                *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, *island_foraging_items]})
+                                *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, magma_cap]})
 quality_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.quality_foraging, quality_foraging_items, 4, 3)
 
 crafts_room_bundles_vanilla = [spring_foraging_bundle_vanilla, summer_foraging_bundle_vanilla, fall_foraging_bundle_vanilla,
@@ -454,7 +455,7 @@ rare_crops_bundle = BundleTemplate(CCRoom.pantry, BundleName.rare_crops, rare_cr
 fish_farmer_items = [roe.as_amount(15), aged_roe.as_amount(15), squid_ink]
 fish_farmer_bundle = BundleTemplate(CCRoom.pantry, BundleName.fish_farmer, fish_farmer_items, 3, 2)
 
-garden_items = [tulip, blue_jazz, summer_spangle, sunflower, fairy_rose]
+garden_items = [tulip, blue_jazz, summer_spangle, sunflower, fairy_rose, poppy, crocus, sweet_pea]
 garden_bundle = BundleTemplate(CCRoom.pantry, BundleName.garden, garden_items, 5, 4)
 
 brewer_items = [mead, pale_ale, wine, juice, green_tea, beer]
