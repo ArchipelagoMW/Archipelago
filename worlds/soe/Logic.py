@@ -3,7 +3,7 @@ from typing import Protocol, Set
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
 from . import pyevermizer
-from .Options import EnergyCore
+from .Options import EnergyCore, OutOfBounds, SequenceBreaks
 
 # TODO: Options may preset certain progress steps (i.e. P_ROCK_SKIP), set in generate_early?
 
@@ -18,7 +18,7 @@ items = [item for item in filter(lambda item: item.progression, pyevermizer.get_
 
 class LogicProtocol(Protocol):
     def has(self, name: str, player: int) -> bool: ...
-    def item_count(self, name: str, player: int) -> int: ...
+    def count(self, name: str, player: int) -> int: ...
     def soe_has(self, progress: int, world: MultiWorld, player: int, count: int) -> bool: ...
     def _soe_count(self, progress: int, world: MultiWorld, player: int, max_count: int) -> int: ...
 
@@ -35,7 +35,7 @@ class SecretOfEvermoreLogic(LogicMixin):
             for pvd in item.provides:
                 if pvd[1] == progress:
                     if self.has(item.name, player):
-                        n += self.item_count(item.name, player) * pvd[0]
+                        n += self.count(item.name, player) * pvd[0]
                         if n >= max_count > 0:
                             return n
         for rule in rules:
@@ -61,4 +61,10 @@ class SecretOfEvermoreLogic(LogicMixin):
             if w.energy_core == EnergyCore.option_fragments:
                 progress = pyevermizer.P_CORE_FRAGMENT
                 count = w.required_fragments
+        elif progress == pyevermizer.P_ALLOW_OOB:
+            if world.worlds[player].out_of_bounds == OutOfBounds.option_logic:
+                return True
+        elif progress == pyevermizer.P_ALLOW_SEQUENCE_BREAKS:
+            if world.worlds[player].sequence_breaks == SequenceBreaks.option_logic:
+                return True
         return self._soe_count(progress, world, player, count) >= count

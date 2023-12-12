@@ -1,34 +1,35 @@
 Added Locations:
-0xFFE00
-0xFFE01
-0xFFE02
-0xFFE03
-0xFFE04
-0xFFE10
-0xFFE11
-0xFFE12
-0xFFE13
-0xFFE14
-0xFFE15
-0xFFE20
-0xFFE21
-0xFFE22
-0xFFE23
-0xFFE24
-0xFFE25
-0xFFE30
-0xFFE31
-0xFFE32
-0xFFE33
-0xFFE34
-0xFFE35
-0xFFE40
-0xFFE41
-0xFFE42
-0xFFE43
-0xFFE50
-0xFFE51
-0xFFE52
-0xFFE53
-0xFFE54
-0xFFE55
+0xFFE00 (Desert Obelisk Side 1)
+0xFFE01 (Desert Obelisk Side 2)
+0xFFE02 (Desert Obelisk Side 3)
+0xFFE03 (Desert Obelisk Side 4)
+0xFFE04 (Desert Obelisk Side 5)
+0xFFE10 (Monastery Obelisk Side 1)
+0xFFE11 (Monastery Obelisk Side 2)
+0xFFE12 (Monastery Obelisk Side 3)
+0xFFE13 (Monastery Obelisk Side 4)
+0xFFE14 (Monastery Obelisk Side 5)
+0xFFE15 (Monastery Obelisk Side 6)
+0xFFE20 (Treehouse Obelisk Side 1)
+0xFFE21 (Treehouse Obelisk Side 2)
+0xFFE22 (Treehouse Obelisk Side 3)
+0xFFE23 (Treehouse Obelisk Side 4)
+0xFFE24 (Treehouse Obelisk Side 5)
+0xFFE25 (Treehouse Obelisk Side 6)
+0xFFE30 (River Obelisk Side 1)
+0xFFE31 (River Obelisk Side 2)
+0xFFE32 (River Obelisk Side 3)
+0xFFE33 (River Obelisk Side 4)
+0xFFE34 (River Obelisk Side 5)
+0xFFE35 (River Obelisk Side 6)
+0xFFE40 (Quarry Obelisk Side 1)
+0xFFE41 (Quarry Obelisk Side 2)
+0xFFE42 (Quarry Obelisk Side 3)
+0xFFE43 (Quarry Obelisk Side 4)
+0xFFE44 (Quarry Obelisk Side 5)
+0xFFE50 (Town Obelisk Side 1)
+0xFFE51 (Town Obelisk Side 2)
+0xFFE52 (Town Obelisk Side 3)
+0xFFE53 (Town Obelisk Side 4)
+0xFFE54 (Town Obelisk Side 5)
+0xFFE55 (Town Obelisk Side 6)

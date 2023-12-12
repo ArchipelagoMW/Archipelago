@@ -1,4 +1,4 @@
-from typing import Tuple, Dict, Union
+from typing import Tuple, Dict, Union, List
 from BaseClasses import MultiWorld
 from .Options import timespinner_options, is_option_enabled, get_option_value
 
@@ -17,7 +17,9 @@ class PreCalculatedWeights:
     flood_moat: bool
     flood_courtyard: bool
     flood_lake_desolation: bool
-    dry_lake_serene: bool
+    flood_lake_serene: bool
+    flood_lake_serene_bridge: bool
+    flood_lab: bool
 
     def __init__(self, world: MultiWorld, player: int):
         if world and is_option_enabled(world, player, "RisingTides"):
@@ -32,8 +34,9 @@ class PreCalculatedWeights:
             self.flood_moat, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleMoat")
             self.flood_courtyard, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleCourtyard")
             self.flood_lake_desolation, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeDesolation")
-            flood_lake_serene, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")
-            self.dry_lake_serene = not flood_lake_serene 
+            self.flood_lake_serene, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")
+            self.flood_lake_serene_bridge, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSereneBridge")
+            self.flood_lab, _ = self.roll_flood_setting(world, player, weights_overrrides, "Lab")
         else:
             self.flood_basement = False
             self.flood_basement_high = False
@@ -44,30 +47,32 @@ class PreCalculatedWeights:
             self.flood_moat = False
             self.flood_courtyard = False
             self.flood_lake_desolation = False
-            self.dry_lake_serene = False 
+            self.flood_lake_serene = True 
+            self.flood_lake_serene_bridge = False
+            self.flood_lab = False
 
         self.pyramid_keys_unlock, self.present_key_unlock, self.past_key_unlock, self.time_key_unlock = \
-            self.get_pyramid_keys_unlocks(world, player, self.flood_maw)
+            self.get_pyramid_keys_unlocks(world, player, self.flood_maw, self.flood_xarion)
 
     @staticmethod
-    def get_pyramid_keys_unlocks(world: MultiWorld, player: int, is_maw_flooded: bool) -> Tuple[str, str, str, str]:
-        present_teleportation_gates: Tuple[str, ...] = (
+    def get_pyramid_keys_unlocks(world: MultiWorld, player: int, is_maw_flooded: bool, is_xarion_flooded: bool) -> Tuple[str, str, str, str]:
+        present_teleportation_gates: List[str] = [
             "GateKittyBoss",
             "GateLeftLibrary",
             "GateMilitaryGate",
             "GateSealedCaves",
             "GateSealedSirensCave",
             "GateLakeDesolation"
-        )
+        ]
 
-        past_teleportation_gates: Tuple[str, ...] = (
+        past_teleportation_gates: List[str] = [
             "GateLakeSereneRight",
             "GateAccessToPast",
             "GateCastleRamparts",
             "GateCastleKeep",
             "GateRoyalTowers",
             "GateCavesOfBanishment"
-        )
+        ]
 
         ancient_pyramid_teleportation_gates: Tuple[str, ...] = (
             "GateGyre",
@@ -84,7 +89,10 @@ class PreCalculatedWeights:
             )
 
         if not is_maw_flooded:
-            past_teleportation_gates += ("GateMaw", )
+            past_teleportation_gates.append("GateMaw")
+
+        if not is_xarion_flooded:
+            present_teleportation_gates.append("GateXarion")
 
         if is_option_enabled(world, player, "Inverted"):
             all_gates: Tuple[str, ...] = present_teleportation_gates

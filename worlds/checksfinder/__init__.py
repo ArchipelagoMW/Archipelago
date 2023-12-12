@@ -14,8 +14,8 @@ class ChecksFinderWeb(WebWorld):
         "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers "
         "single-player, multiworld, and related software.",
         "English",
-        "checksfinder_en.md",
-        "checksfinder/en",
+        "setup_en.md",
+        "setup/en",
         ["Mewlif"]
     )]
 
@@ -69,8 +69,8 @@ class ChecksFinderWorld(World):
     def create_regions(self):
         menu = Region("Menu", self.player, self.multiworld)
         board = Region("Board", self.player, self.multiworld)
-        board.locations = [ChecksFinderAdvancement(self.player, loc_name, loc_data.id, board)
-                           for loc_name, loc_data in advancement_table.items() if loc_data.region == board.name]
+        board.locations += [ChecksFinderAdvancement(self.player, loc_name, loc_data.id, board)
+                            for loc_name, loc_data in advancement_table.items() if loc_data.region == board.name]
 
         connection = Entrance(self.player, "New Board", menu)
         menu.exits.append(connection)
