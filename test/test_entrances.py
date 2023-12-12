@@ -1,99 +1,8 @@
+from .. import options
 from . import WL4TestBase
 
 
-REQUIRED_JEWELS = 3
-
-
 class TestEntrances(WL4TestBase):
-    options = {
-        'required_jewels': REQUIRED_JEWELS,
-        'pool_jewels': REQUIRED_JEWELS,
-    }
-
-    def test_bosses(self):
-        self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
-                                 'Ruby Minigame Shop', 'Topaz Minigame Shop',
-                                 'Sapphire Minigame Shop', 'Golden Minigame Shop']
-        self.run_entrance_tests([
-            ['Entry Minigame Shop -> Entry Passage Boss', False, []],
-            ['Entry Minigame Shop -> Entry Passage Boss', False,
-             [], ['Top Right Entry Jewel Piece']],
-            ['Entry Minigame Shop -> Entry Passage Boss', False,
-             [], ['Top Left Entry Jewel Piece']],
-            ['Entry Minigame Shop -> Entry Passage Boss', False,
-             [], ['Bottom Right Entry Jewel Piece']],
-            ['Entry Minigame Shop -> Entry Passage Boss', False,
-             [], ['Bottom Left Entry Jewel Piece']],
-            ['Entry Minigame Shop -> Entry Passage Boss', True,
-             ['Top Right Entry Jewel Piece', 'Top Left Entry Jewel Piece',
-              'Bottom Right Entry Jewel Piece', 'Bottom Left Entry Jewel Piece']],
-
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False, []],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Top Right Emerald Piece'], ['Top Right Emerald Piece']],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Top Left Emerald Piece'], ['Top Left Emerald Piece']],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Bottom Right Emerald Piece'], ['Bottom Right Emerald Piece']],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Bottom Left Emerald Piece'], ['Bottom Left Emerald Piece']],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', True,
-             REQUIRED_JEWELS * ['Top Right Emerald Piece', 'Top Left Emerald Piece',
-                  'Bottom Right Emerald Piece', 'Bottom Left Emerald Piece']],
-
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False, []],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Top Right Ruby Piece'], ['Top Right Ruby Piece']],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Top Left Ruby Piece'], ['Top Left Ruby Piece']],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Bottom Right Ruby Piece'], ['Bottom Right Ruby Piece']],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Bottom Left Ruby Piece'], ['Bottom Left Ruby Piece']],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', True,
-             REQUIRED_JEWELS * ['Top Right Ruby Piece', 'Top Left Ruby Piece',
-                  'Bottom Right Ruby Piece', 'Bottom Left Ruby Piece']],
-
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False, []],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Top Right Topaz Piece'], ['Top Right Topaz Piece']],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Top Left Topaz Piece'], ['Top Left Topaz Piece']],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Bottom Right Topaz Piece'], ['Bottom Right Topaz Piece']],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Bottom Left Topaz Piece'], ['Bottom Left Topaz Piece']],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', True,
-             REQUIRED_JEWELS * ['Top Right Topaz Piece', 'Top Left Topaz Piece',
-                  'Bottom Right Topaz Piece', 'Bottom Left Topaz Piece']],
-
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False, []],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Top Right Sapphire Piece'], ['Top Right Sapphire Piece']],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Top Left Sapphire Piece'], ['Top Left Sapphire Piece']],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Bottom Right Sapphire Piece'], ['Bottom Right Sapphire Piece']],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
-             (REQUIRED_JEWELS - 1) * ['Bottom Left Sapphire Piece'], ['Bottom Left Sapphire Piece']],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True,
-             REQUIRED_JEWELS * ['Top Right Sapphire Piece', 'Top Left Sapphire Piece',
-                  'Bottom Right Sapphire Piece', 'Bottom Left Sapphire Piece']],
-
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False, []],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
-             [], ['Top Right Golden Jewel Piece']],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
-             [], ['Top Left Golden Jewel Piece']],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
-             [], ['Bottom Right Golden Jewel Piece']],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
-             [], ['Bottom Left Golden Jewel Piece']],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', True,
-             ['Top Right Golden Jewel Piece', 'Top Left Golden Jewel Piece',
-              'Bottom Right Golden Jewel Piece', 'Bottom Left Golden Jewel Piece']],
-        ])
-
     def test_passage_access(self):
         self.starting_regions = []
         self.run_entrance_tests([
@@ -115,11 +24,7 @@ class TestEntrances(WL4TestBase):
 
 
 class TestEntrancesBasic(TestEntrances):
-    options = {
-        'required_jewels': REQUIRED_JEWELS,
-        'pool_jewels': REQUIRED_JEWELS,
-        'open_doors': False,
-    }
+    options = {'open_doors': False}
 
     def test_entry_levels(self):
         self.starting_regions = ['Hall of Hieroglyphs (entrance)']
@@ -236,11 +141,7 @@ class TestEntrancesBasic(TestEntrances):
 
 
 class TestEntrancesOpenDoors(TestEntrances):
-    options = {
-        'required_jewels': REQUIRED_JEWELS,
-        'pool_jewels': REQUIRED_JEWELS,
-        'open_doors': True,
-    }
+    options = {'open_doors': True}
 
     def test_entry_levels(self):
         self.starting_regions = []
@@ -288,4 +189,129 @@ class TestEntrancesOpenDoors(TestEntrances):
         self.starting_regions = ['Golden Pyramid']
         self.run_entrance_tests([
             ['Golden Passage Gate', True, []],
+        ])
+
+
+REQUIRED_JEWELS = options.RequiredJewels.default
+
+
+class TestBossAccess(TestEntrances):
+    options = {}
+
+    def test_bosses(self):
+        self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
+                                 'Ruby Minigame Shop', 'Topaz Minigame Shop',
+                                 'Sapphire Minigame Shop', 'Golden Minigame Shop']
+        self.run_entrance_tests([
+            ['Entry Minigame Shop -> Entry Passage Boss', False, []],
+            ['Entry Minigame Shop -> Entry Passage Boss', False,
+             [], ['Top Right Entry Jewel Piece']],
+            ['Entry Minigame Shop -> Entry Passage Boss', False,
+             [], ['Top Left Entry Jewel Piece']],
+            ['Entry Minigame Shop -> Entry Passage Boss', False,
+             [], ['Bottom Right Entry Jewel Piece']],
+            ['Entry Minigame Shop -> Entry Passage Boss', False,
+             [], ['Bottom Left Entry Jewel Piece']],
+            ['Entry Minigame Shop -> Entry Passage Boss', True,
+             ['Top Right Entry Jewel Piece', 'Top Left Entry Jewel Piece',
+              'Bottom Right Entry Jewel Piece', 'Bottom Left Entry Jewel Piece']],
+
+            ['Emerald Minigame Shop -> Emerald Passage Boss', False, []],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Top Right Emerald Piece'], ['Top Right Emerald Piece']],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Top Left Emerald Piece'], ['Top Left Emerald Piece']],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Bottom Right Emerald Piece'], ['Bottom Right Emerald Piece']],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Bottom Left Emerald Piece'], ['Bottom Left Emerald Piece']],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', True,
+             REQUIRED_JEWELS * ['Top Right Emerald Piece', 'Top Left Emerald Piece',
+                  'Bottom Right Emerald Piece', 'Bottom Left Emerald Piece']],
+
+            ['Ruby Minigame Shop -> Ruby Passage Boss', False, []],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Top Right Ruby Piece'], ['Top Right Ruby Piece']],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Top Left Ruby Piece'], ['Top Left Ruby Piece']],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Bottom Right Ruby Piece'], ['Bottom Right Ruby Piece']],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Bottom Left Ruby Piece'], ['Bottom Left Ruby Piece']],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', True,
+             REQUIRED_JEWELS * ['Top Right Ruby Piece', 'Top Left Ruby Piece',
+                  'Bottom Right Ruby Piece', 'Bottom Left Ruby Piece']],
+
+            ['Topaz Minigame Shop -> Topaz Passage Boss', False, []],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Top Right Topaz Piece'], ['Top Right Topaz Piece']],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Top Left Topaz Piece'], ['Top Left Topaz Piece']],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Bottom Right Topaz Piece'], ['Bottom Right Topaz Piece']],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Bottom Left Topaz Piece'], ['Bottom Left Topaz Piece']],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', True,
+             REQUIRED_JEWELS * ['Top Right Topaz Piece', 'Top Left Topaz Piece',
+                  'Bottom Right Topaz Piece', 'Bottom Left Topaz Piece']],
+
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False, []],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Top Right Sapphire Piece'], ['Top Right Sapphire Piece']],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Top Left Sapphire Piece'], ['Top Left Sapphire Piece']],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Bottom Right Sapphire Piece'], ['Bottom Right Sapphire Piece']],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
+             (REQUIRED_JEWELS - 1) * ['Bottom Left Sapphire Piece'], ['Bottom Left Sapphire Piece']],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True,
+             REQUIRED_JEWELS * ['Top Right Sapphire Piece', 'Top Left Sapphire Piece',
+                  'Bottom Right Sapphire Piece', 'Bottom Left Sapphire Piece']],
+
+            ['Golden Minigame Shop -> Golden Pyramid Boss', False, []],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
+             [], ['Top Right Golden Jewel Piece']],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
+             [], ['Top Left Golden Jewel Piece']],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
+             [], ['Bottom Right Golden Jewel Piece']],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
+             [], ['Bottom Left Golden Jewel Piece']],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', True,
+             ['Top Right Golden Jewel Piece', 'Top Left Golden Jewel Piece',
+              'Bottom Right Golden Jewel Piece', 'Bottom Left Golden Jewel Piece']],
+        ])
+
+
+class TestBossAccessNoJewels(TestEntrances):
+    options = {'required_jewels': 0}
+
+    def test_bosses(self):
+        self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
+                                 'Ruby Minigame Shop', 'Topaz Minigame Shop',
+                                 'Sapphire Minigame Shop', 'Golden Minigame Shop']
+        self.run_entrance_tests([
+            ['Entry Minigame Shop -> Entry Passage Boss', True, []],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', True, []],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', True, []],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', True, []],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True, []],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', True, []],
+        ])
+
+
+class TestBossAccessNoJewelsKeysy(TestEntrances):
+    options = {
+        'required_jewels': 0,
+        'open_doors': True,
+    }
+    def test_bosses(self):
+        self.starting_regions = ['Golden Pyramid']
+        self.run_entrance_tests([
+            ['Entry Minigame Shop -> Entry Passage Boss', True, []],
+            ['Emerald Minigame Shop -> Emerald Passage Boss', True, []],
+            ['Ruby Minigame Shop -> Ruby Passage Boss', True, []],
+            ['Topaz Minigame Shop -> Topaz Passage Boss', True, []],
+            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True, []],
+            ['Golden Minigame Shop -> Golden Pyramid Boss', True, []],
         ])
