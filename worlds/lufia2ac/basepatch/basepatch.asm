@@ -170,6 +170,9 @@ pullpc
 
 ScriptTX:
     STA $7FD4F1             ; (overwritten instruction)
+    LDA $05AC               ; load map number
+    CMP.b #$F1              ; check if ancient cave final floor
+    BNE +
     REP #$20
     LDA $7FD4EF             ; read script item id
     CMP.w #$01C2            ; test for ancient key
@@ -261,6 +264,9 @@ SpecialItemGet:
     BRA ++
 +:  CMP.w #$01C2            ; ancient key
     BNE +
+    LDA.w #$0008
+    ORA $0796
+    STA $0796               ; set ancient key EV flag ($C3)
     LDA.w #$0200
     ORA $0797
     STA $0797               ; set boss item EV flag ($D1)

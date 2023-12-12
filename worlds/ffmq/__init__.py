@@ -108,8 +108,10 @@ class FFMQWorld(World):
                 map_shuffle = multiworld.map_shuffle[world.player].value
                 crest_shuffle = multiworld.crest_shuffle[world.player].current_key
                 battlefield_shuffle = multiworld.shuffle_battlefield_rewards[world.player].current_key
+                companion_shuffle = multiworld.companions_locations[world.player].value
+                kaeli_mom = multiworld.kaelis_mom_fight_minotaur[world.player].current_key
 
-                query = f"s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}"
+                query = f"s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}&cs={companion_shuffle}&km={kaeli_mom}"
 
                 if query in rooms_data:
                     world.rooms = rooms_data[query]
