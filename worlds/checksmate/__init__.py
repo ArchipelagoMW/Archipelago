@@ -359,8 +359,8 @@ class CMWorld(World):
         material = progression_items[chosen_item].material
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             return material
-        if chosen_item == "Progressive Major Piece" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
-            material += progression_items["Progressive Major To Queen"].material
+        if chosen_item == "Progressive Major To Queen" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
+            material += progression_items["Progressive Major Piece"].material
         return material
 
     # ensures the Castling location is reachable
