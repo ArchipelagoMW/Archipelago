@@ -24,7 +24,7 @@ class TestEntrances(WL4TestBase):
 
 
 class TestEntrancesBasic(TestEntrances):
-    options = {'open_doors': False}
+    options = {'open_doors': options.OpenDoors.option_off}
 
     def test_entry_levels(self):
         self.starting_regions = ['Hall of Hieroglyphs (entrance)']
@@ -142,7 +142,7 @@ class TestEntrancesBasic(TestEntrances):
 
 
 class TestEntrancesOpenDoors(TestEntrances):
-    options = {'open_doors': True}
+    options = {'open_doors': options.OpenDoors.option_open}
 
     def test_entry_levels(self):
         self.starting_regions = []
@@ -190,6 +190,20 @@ class TestEntrancesOpenDoors(TestEntrances):
         self.starting_regions = ['Golden Pyramid']
         self.run_entrance_tests([
             ['Golden Passage Gate', True, []],
+        ])
+
+
+class TestEntrancesOpenDoorsExceptPyramid(TestEntrancesOpenDoors):
+    options = {'open_doors': options.OpenDoors.option_closed_diva}
+
+    def test_golden_pyramid(self):
+        self.starting_regions = ['Golden Passage (entrance)']
+        self.run_entrance_tests([
+            ['Golden Passage Gate', False, []],
+            ['Golden Passage Gate', False, [], ['Swim']],
+            ['Golden Passage Gate', False, [], ['Progressive Ground Pound']],
+            ['Golden Passage Gate', False, [], ['Progressive Grab']],
+            ['Golden Passage Gate', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
         ])
 
 
@@ -304,7 +318,7 @@ class TestBossAccessNoJewels(TestEntrances):
 class TestBossAccessNoJewelsKeysy(TestEntrances):
     options = {
         'required_jewels': 0,
-        'open_doors': True,
+        'open_doors': options.OpenDoors.option_open,
     }
     def test_bosses(self):
         self.starting_regions = ['Golden Pyramid']

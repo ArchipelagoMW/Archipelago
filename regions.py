@@ -99,7 +99,7 @@ def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
     ]
 
 
-def connect_regions(world, player):
+def connect_regions(world: MultiWorld, player: int):
     def connect_level(level_name):
         if level_name == 'Hotel Horror' and world.difficulty[player].value == 2:
             rule = None
@@ -135,7 +135,8 @@ def connect_regions(world, player):
     def connect_level_exit(source, destination, rule: AccessRule = None):
         level = source
         # No Keyzer means you can just walk past the actual entrance to the next level
-        if world.open_doors[player].value:
+        open_doors = world.open_doors[player].value
+        if open_doors == 2 or (open_doors == 1 and level != 'Golden Passage'):
             source += ' (entrance)'
         connect_with_name(source, destination, f'{level} Gate', rule)
 
@@ -190,7 +191,7 @@ def connect_regions(world, player):
     connect('Golden Pyramid', 'Golden Passage (entrance)')
     # Golden Passage is the only level where escaping has different requirements from getting Keyzer
     connect_level_exit('Golden Passage', 'Golden Minigame Shop',
-            lambda state: world.open_doors[player] or
+            lambda state: world.open_doors[player].value == 2 or
                           (state.has('Progressive Grab', player) and
                            state.has('Progressive Ground Pound', player)))
     connect('Golden Minigame Shop', 'Golden Pyramid Boss',

@@ -48,12 +48,16 @@ class RequiredJewels(Range):
     display_name = 'Required Jewels'
 
 
-class OpenDoors(Toggle):
+class OpenDoors(Choice):
     '''
     Start with all doors in the passages unlocked. This skips the requirement
     to find Keyzer in each level, opening more locations earlier.
     '''
     display_name = 'Open Level Doors'
+    option_off = 0
+    option_closed_diva = 1
+    option_open = 2
+    default = option_off
 
 
 class SmashThroughHardBlocks(Toggle):

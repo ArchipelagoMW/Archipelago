@@ -166,6 +166,8 @@ def create_starting_inventory(rom: LocalRom, multiworld: MultiWorld, player: int
         set_keyzer(Passage.ENTRY, 0)
         for passage, level in itertools.product(range(1, 5), range(4)):
             set_keyzer(passage, level)
+
+    if multiworld.open_doors[player].value == 2:
         set_keyzer(Passage.GOLDEN, 0)
 
 
