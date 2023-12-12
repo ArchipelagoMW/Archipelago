@@ -5,6 +5,11 @@ REQUIRED_JEWELS = 3
 
 
 class TestEntrances(WL4TestBase):
+    options = {
+        'required_jewels': REQUIRED_JEWELS,
+        'pool_jewels': REQUIRED_JEWELS,
+    }
+
     def test_bosses(self):
         self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
                                  'Ruby Minigame Shop', 'Topaz Minigame Shop',
@@ -110,7 +115,11 @@ class TestEntrances(WL4TestBase):
 
 
 class TestEntrancesBasic(TestEntrances):
-    options = {'required_jewels': REQUIRED_JEWELS}
+    options = {
+        'required_jewels': REQUIRED_JEWELS,
+        'pool_jewels': REQUIRED_JEWELS,
+        'open_doors': False,
+    }
 
     def test_entry_levels(self):
         self.starting_regions = ['Hall of Hieroglyphs (entrance)']
@@ -227,8 +236,11 @@ class TestEntrancesBasic(TestEntrances):
 
 
 class TestEntrancesOpenDoors(TestEntrances):
-    options = {'required_jewels': REQUIRED_JEWELS,
-               'open_doors': True,}
+    options = {
+        'required_jewels': REQUIRED_JEWELS,
+        'pool_jewels': REQUIRED_JEWELS,
+        'open_doors': True,
+    }
 
     def test_entry_levels(self):
         self.starting_regions = []

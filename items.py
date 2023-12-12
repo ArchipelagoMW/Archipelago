@@ -189,7 +189,7 @@ item_table = {
     'Heart':                            ItemData(ItemType.ITEM,    0x82,                              IC.filler),
     'Lightning Trap':                   ItemData(ItemType.ITEM,    0x83,                              IC.trap),
     'Minigame Coin':                    ItemData(ItemType.ITEM,    0x84,                              IC.filler),
-    'Entry Passage Clear':              ItemData(ItemType.EVENT,   None,                              IC.progression),
+    'Entry Passage Clear':              ItemData(ItemType.EVENT,   None,                              IC.filler),
     'Emerald Passage Clear':            ItemData(ItemType.EVENT,   None,                              IC.progression),
     'Ruby Passage Clear':               ItemData(ItemType.EVENT,   None,                              IC.progression),
     'Topaz Passage Clear':              ItemData(ItemType.EVENT,   None,                              IC.progression),

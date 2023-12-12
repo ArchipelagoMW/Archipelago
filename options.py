@@ -15,6 +15,27 @@ class Difficulty(Choice):
     default = 0
 
 
+class PoolJewels(Range):
+    '''
+    Number of jewels in the item pool per passage for the main four.
+    The number of pieces will be four times this number.
+    '''
+    range_start = 0
+    range_end = 4
+    default = 3
+    display_name = 'Jewels in Pool'
+
+
+class GoldenJewels(Range):
+    '''
+    Number of copies of the golden pyramid jewel in the item pool.
+    '''
+    range_start = 0
+    range_end = 2
+    default = 1
+    display_name = 'Golden Pyramid Jewels'
+
+
 class RequiredJewels(Range):
     '''
     Number of jewels required to fight the bosses.
@@ -23,7 +44,7 @@ class RequiredJewels(Range):
     '''
     range_start = 0
     range_end = 4
-    default = 3
+    default = 2
     display_name = 'Required Jewels'
 
 
@@ -35,24 +56,46 @@ class OpenDoors(Toggle):
     display_name = 'Open Level Doors'
 
 
+class SmashThroughHardBlocks(Toggle):
+    """
+    Break hard, teal blocks with the dash attack and super ground pound without stopping,
+    as in Pizza Tower and Wario Land: Shake It!
+    This option does not affect logic.
+    """
+    display_name = "Smash Hard Blocks Without Stopping"
+
+
 class MusicShuffle(Choice):
     '''
     Music shuffle type
     None: Music is not shuffled
-    Levels only: Only shuffle music between the main levels besides the Golden Passage
+    Levels only: Only shuffle music between the main levels
+    Levels and extras: Shuffle any music that plays in levels, including the 'Hurry up!' and boss themes
     Full: Shuffle all music
     '''
     display_name = 'Music Shuffle'
     option_none = 0
     option_levels_only = 1
-    option_full = 2
+    option_levels_and_extras = 2
+    option_full = 3
     default = 0
+
+
+class WarioVoiceShuffle(Toggle):
+    '''
+    Randomize the things Wario says.
+    '''
+    display_name = "Shuffle Wario's voices"
 
 
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
+    'pool_jewels': PoolJewels,
+    'golden_jewels': GoldenJewels,
     'required_jewels': RequiredJewels,
     'open_doors': OpenDoors,
+    'smash_through_hard_blocks': SmashThroughHardBlocks,
     'death_link': DeathLink,
-    #'music_shuffle': MusicShuffle,
+    'music_shuffle': MusicShuffle,
+    'wario_voice_shuffle': WarioVoiceShuffle,
 }
