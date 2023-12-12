@@ -199,9 +199,9 @@ class CMWorld(World):
         if self.options.accessibility.value != self.options.accessibility.option_minimal:
             player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
                                   self.items_used[self.player].get("Progressive Major To Queen", 0))
+            required_majors: int = 2 - self.items_used[self.player].get("Progressive Major Piece", 0) + player_queens
             locked_items["Progressive Major Piece"] = max(
-                locked_items.get("Progressive Major Piece", 0),
-                2 - self.items_used[self.player].get("Progressive Major Piece", 0) + player_queens)
+                required_majors, locked_items.get("Progressive Major Piece", 0))
         # TODO(chesslogic): Validate locked items has enough parents
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
@@ -237,9 +237,7 @@ class CMWorld(World):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
             if (self.wont_fit(chosen_item, material, max_material_actual, items, my_progression_items, locked_items) or
-                    (material > min_material_option and
-                     (progression_items[chosen_item].material + material > max_material_option or
-                      not self.has_prereqs(chosen_item)))):
+                    not self.has_prereqs(chosen_item)):
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
@@ -304,6 +302,7 @@ class CMWorld(World):
             else:
                 my_filler_items.remove(chosen_item)
 
+        # TODO: Check that there are enough chessmen. (Player may have locked too much material.)
         for item in locked_items:
             if item not in self.items_used[self.player]:
                 self.items_used[self.player][item] = 0
@@ -341,18 +340,17 @@ class CMWorld(World):
             # TODO: there is a better way, probably next step is a "one strike" mechanism
             return True
 
+        remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
+        if material + remaining_material + progression_items[chosen_item].material > max_material:
+            return True
+
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             return False
 
         necessary_chessmen = (highest_chessmen_requirement -
                               chessmen_count(items, self.options.pocket_limit_by_pocket.value))
-        if necessary_chessmen > 0 and material + self.lockable_material_value(chosen_item, items, locked_items) + (
-                item_table["Progressive Pawn"].material * necessary_chessmen) > max_material:
-            return True
-
-        remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
-
-        return material + remaining_material + progression_items[chosen_item].material > max_material
+        return necessary_chessmen > 0 and material + self.lockable_material_value(chosen_item, items, locked_items) + (
+                item_table["Progressive Pawn"].material * necessary_chessmen) > max_material
 
     # if this piece was added, it might add more than its own material to the locked pool
     def lockable_material_value(self, chosen_item: str, items: list[CMItem], locked_items: dict[str, int]):
