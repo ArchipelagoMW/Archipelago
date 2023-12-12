@@ -224,7 +224,7 @@ class KH2WorldRules(KH2Rules):
             RegionName.Pl2:                lambda state: self.pl_unlocked(state, 2),
 
             RegionName.Ag:                 lambda state: self.ag_unlocked(state, 1),
-            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2),
+            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2) and self.kh2_has_all([ItemName.FireElement,ItemName.BlizzardElement,ItemName.ThunderElement],state),
 
             RegionName.Bc:                 lambda state: self.bc_unlocked(state, 1),
             RegionName.Bc2:                lambda state: self.bc_unlocked(state, 2),
