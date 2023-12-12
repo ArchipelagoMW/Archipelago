@@ -10,7 +10,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 from .Options import CMOptions, piece_type_limit_options, piece_limit_options
 from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
-                    useful_items, item_name_groups)
+                    useful_items, item_name_groups, CMItemData)
 from .Locations import CMLocation, location_table, highest_chessmen_requirement
 from .Presets import checksmate_option_presets
 from .Rules import set_rules
@@ -173,8 +173,8 @@ class CMWorld(World):
         max_material_option = self.options.max_material.value * 100
         if max_material_option < min_material_option:
             max_material_option = min_material_option
-        max_material_actual = (
-                self.random.random() * (max_material_option - min_material_option) + max_material_option)
+        max_material_interval = self.random.random() * (max_material_option - min_material_option)
+        max_material_actual = max_material_interval + min_material_option
         max_material_actual += progression_items["Play as White"].material
 
         # remove items player does not want
@@ -200,7 +200,7 @@ class CMWorld(World):
             player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
                                   self.items_used[self.player].get("Progressive Major To Queen", 0))
             locked_items["Progressive Major Piece"] = max(
-                locked_items.get("Progressive Major Piece"),
+                locked_items.get("Progressive Major Piece", 0),
                 2 - self.items_used[self.player].get("Progressive Major Piece", 0) + player_queens)
         # TODO(chesslogic): Validate locked items has enough parents
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
@@ -236,7 +236,7 @@ class CMWorld(World):
                material < max_material_actual and len(my_progression_items) > 0):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
-            if (self.wont_fit(chosen_item, material, max_material_actual, items, locked_items) or
+            if (self.wont_fit(chosen_item, material, max_material_actual, items, my_progression_items, locked_items) or
                     (material > min_material_option and
                      (progression_items[chosen_item].material + material > max_material_option or
                       not self.has_prereqs(chosen_item)))):
@@ -335,7 +335,12 @@ class CMWorld(World):
                  material: int,
                  max_material: float,
                  items: list[CMItem],
+                 my_progression_items: list[str | CMItemData],
                  locked_items: dict[str, int]) -> bool:
+        if chosen_item == "Progressive Major To Queen" and "Progressive Major Piece" not in my_progression_items:
+            # TODO: there is a better way, probably next step is a "one strike" mechanism
+            return True
+
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             return False
 
@@ -364,6 +369,8 @@ class CMWorld(World):
             return
         if chosen_item == "Progressive Major To Queen":
             if self.unupgraded_majors_in_pool(items, locked_items) < 2:
+                if "Progressive Major Piece" not in locked_items:
+                    locked_items["Progressive Major Piece"] = 0
                 locked_items["Progressive Major Piece"] += 1
 
     def unupgraded_majors_in_pool(self, items: list[CMItem], locked_items: dict[str, int]) -> int:
