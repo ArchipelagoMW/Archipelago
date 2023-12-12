@@ -71,29 +71,34 @@ class TestSapphirePassageSHard(TestSHard):
         self.starting_regions = ['Fiery Cavern (entrance)']
         self.run_location_tests([
             ['Fiery Cavern - Ice Beyond Door Box', False, []],
+            ['Fiery Cavern - Ice Beyond Door Box', False, [], ['Head Smash']],
             ['Fiery Cavern - Ice Beyond Door Box', False, [], ['Dash Attack']],
             ['Fiery Cavern - Ice Beyond Door Box', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern - Ice Beyond Door Box', True, ['Dash Attack', 'Progressive Ground Pound']],
+            ['Fiery Cavern - Ice Beyond Door Box', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
 
             ['Fiery Cavern - Long Lava Geyser Box', False, []],
+            ['Fiery Cavern - Long Lava Geyser Box', False, [], ['Head Smash']],
             ['Fiery Cavern - Long Lava Geyser Box', False, [], ['Dash Attack']],
             ['Fiery Cavern - Long Lava Geyser Box', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern - Long Lava Geyser Box', True, ['Dash Attack', 'Progressive Ground Pound']],
+            ['Fiery Cavern - Long Lava Geyser Box', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
 
             ['Fiery Cavern - Ice Detour Box', False, []],
+            ['Fiery Cavern - Ice Detour Box', False, [], ['Head Smash']],
             ['Fiery Cavern - Ice Detour Box', False, [], ['Dash Attack']],
             ['Fiery Cavern - Ice Detour Box', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern - Ice Detour Box', True, ['Dash Attack', 'Progressive Ground Pound']],
+            ['Fiery Cavern - Ice Detour Box', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
 
             ['Fiery Cavern - Snowman Box', False, []],
+            ['Fiery Cavern - Snowman Box', False, [], ['Head Smash']],
             ['Fiery Cavern - Snowman Box', False, [], ['Dash Attack']],
             ['Fiery Cavern - Snowman Box', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern - Snowman Box', True, ['Dash Attack', 'Progressive Ground Pound']],
+            ['Fiery Cavern - Snowman Box', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
 
             ['Fiery Cavern - CD Box', False, []],
+            ['Fiery Cavern - CD Box', False, [], ['Head Smash']],
             ['Fiery Cavern - CD Box', False, [], ['Dash Attack']],
             ['Fiery Cavern - CD Box', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern - CD Box', True, ['Dash Attack', 'Progressive Ground Pound']],
+            ['Fiery Cavern - CD Box', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
         ])
 
     def test_hotel_horror(self):

@@ -59,9 +59,8 @@ class TestTopazPassageSHard(TestSHard):
         self.starting_regions = ['Doodle Woods (entrance)']
         self.run_location_tests([
             ['Doodle Woods - Gray Square Box', False, []],
-            ['Doodle Woods - Gray Square Box', False, [], ['Progressive Ground Pound', 'Progressive Grab']],
+            ['Doodle Woods - Gray Square Box', False, [], ['Progressive Ground Pound']],
             ['Doodle Woods - Gray Square Box', True, ['Progressive Ground Pound']],
-            ['Doodle Woods - Gray Square Box', True, ['Progressive Grab']],
 
             ['Doodle Woods - Pink Circle Box', False, []],
             ['Doodle Woods - Pink Circle Box', False, [], ['Progressive Ground Pound']],

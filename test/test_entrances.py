@@ -120,9 +120,10 @@ class TestEntrancesBasic(TestEntrances):
             ['Arabian Night Gate', True, ['Swim']],
 
             ['Fiery Cavern Gate', False, []],
+            ['Fiery Cavern Gate', False, [], ['Head Smash']],
             ['Fiery Cavern Gate', False, [], ['Dash Attack']],
             ['Fiery Cavern Gate', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound']],
+            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
 
             ['Hotel Horror Gate', False, []],
             ['Hotel Horror Gate', False, ['Progressive Grab'], ['Progressive Grab']],

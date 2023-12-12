@@ -82,7 +82,7 @@ level_rules = {
 
     'Crescent Moon Village': [['Head Smash', 'Dash Attack']],
     'Arabian Night':         [['Swim']],
-    'Fiery Cavern':          [['Ground Pound', 'Dash Attack']],
+    'Fiery Cavern':          [['Ground Pound', 'Dash Attack', 'Head Smash']],
     'Hotel Horror':          [['Heavy Grab']],
 
     # This one's weird. You need swim to get anything, but Keyzer also requires
@@ -119,7 +119,7 @@ location_rules_all = {
     'The Big Board - Full Health Item Box':           [['Grab', 'Enemy Jump']],
     'Doodle Woods - Blue Circle Box':                 [['Enemy Jump']],
     'Doodle Woods - Pink Circle Box':                 [['Ground Pound']],
-    'Doodle Woods - Gray Square Box':                 [['Ground Pound'], ['Grab']],
+    'Doodle Woods - Gray Square Box':                 [['Ground Pound']],
     'Domino Row - Keyzer Room Box':                   [['Ground Pound']],
 
     'Crescent Moon Village - Agile Bat Hidden Box':   [['Ground Pound', 'Grab']],
@@ -135,7 +135,7 @@ location_rules_normal = {
     **location_rules_all,
 
     'Mystic Lake - Full Health Item Box': [['Grab']],
-    'Doodle Woods - CD Box':              [['Ground Pound'], ['Grab']],
+    'Doodle Woods - CD Box':              [['Ground Pound']],
     'Domino Row - Swimming Detour Box':      [['Head Smash']],
 }
 
