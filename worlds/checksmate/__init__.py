@@ -11,7 +11,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Options import CMOptions, piece_type_limit_options, piece_limit_options
 from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
                     useful_items, item_name_groups)
-from .Locations import CMLocation, location_table
+from .Locations import CMLocation, location_table, highest_chessmen_requirement
 from .Presets import checksmate_option_presets
 from .Rules import set_rules
 
@@ -194,6 +194,13 @@ class CMWorld(World):
         # add items player really wants
         yaml_locked_items: dict[str, int] = self.options.locked_items.value
         locked_items = dict(yaml_locked_items)
+        # ensure castling
+        if self.options.accessibility.value != self.options.accessibility.option_minimal:
+            player_queens: int = (locked_items.get("Progressive Major To Queen") +
+                             self.items_used[self.player].get("Progressive Major To Queen"))
+            locked_items["Progressive Major Piece"] = max(
+                locked_items.get("Progressive Major Piece"),
+                2 - self.items_used[self.player].get("Progressive Major Piece") + player_queens)
         # TODO(chesslogic): Validate locked items has enough parents
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
@@ -225,12 +232,13 @@ class CMWorld(World):
         # note that queens require that a major precede them, which increases the likelihood of the other types
 
         while ((len(items) + user_location_count + sum(locked_items.values())) < len(location_table) and
-                material < max_material_actual and len(my_progression_items) > 0):
+               material < max_material_actual and len(my_progression_items) > 0):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
-            if (material > min_material_option and
-                    (progression_items[chosen_item].material + material > max_material_option or
-                     not self.has_prereqs(chosen_item))):
+            if (self.wont_fit(chosen_item, material, max_material_actual, items, locked_items) or
+                    (material > min_material_option and
+                     (progression_items[chosen_item].material + material > max_material_option or
+                      not self.has_prereqs(chosen_item)))):
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
@@ -242,7 +250,7 @@ class CMWorld(World):
                 items.append(try_item)
                 material += progression_items[chosen_item].material
                 if not was_locked:
-                    self.lock_new_items(chosen_item, material, max_material_actual, items, locked_items)
+                    self.lock_new_items(chosen_item, items, locked_items)
             else:
                 my_progression_items.remove(chosen_item)
         logging.debug(str(self.player) + " granted total material of " + str(material) +
@@ -321,20 +329,41 @@ class CMWorld(World):
 
     # this method assumes we cannot run out of pawns... we don't support excluded_items{pawn}
     # there is no maximum number of chessmen... just minimum chessmen and maximum material.
-    def lock_new_items(self,
-                       chosen_item: str,
-                       material: int,
-                       max_material: float,
-                       items: list[CMItem],
-                       locked_items: dict[str, int]):
+    def wont_fit(self,
+                 chosen_item: str,
+                 material: int,
+                 max_material: float,
+                 items: list[CMItem],
+                 locked_items: dict[str, int]) -> bool:
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
-            return
-        chessmen = chessmen_count(items, self.options.pocket_limit_by_pocket.value)
+            return False
 
-        remaining_material = {
-            item: self.items_remaining[self.player][item] * progression_items[item].material for
-            item in self.items_remaining[self.player]}
+        remaining_chessmen = (highest_chessmen_requirement -
+                              chessmen_count(items, self.options.pocket_limit_by_pocket.value))
+        if remaining_chessmen > 0 and progression_items[chosen_item].material + material + (
+                item_table["Progressive Pawn"].material * remaining_chessmen) > max_material:
+            return True
 
+        remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
+
+        return material + remaining_material + progression_items[chosen_item].material > max_material
+
+    def lockable_material_value(self, chosen_item: str):
+
+    def lock_new_items(self,
+                 chosen_item: str,
+                 items: list[CMItem],
+                 locked_items: dict[str, int]):
+        if chosen_item == "Progressive Major To Queen":
+            locked_items["Progressive Major Piece"] += 1
+
+    def enough_majors_to_castle(self, items: list[CMItem], locked_items: dict[str, int]):
+        total_majors = len([item for item in items if item.name == "Progressive Major Piece"]) + len(
+            [item for item in locked_items if item == "Progressive Major Piece"])
+        total_upgrades = len([item for item in items if item.name == "Progressive Major To Queen"]) + len(
+            [item for item in locked_items if item == "Progressive Major To Queen"])
+
+        return total_majors - total_upgrades > 2
 
     def create_regions(self):
         region = Region("Menu", self.player, self.multiworld)
@@ -398,9 +427,9 @@ class CMWorld(World):
 
         piece_limit: int = self.piece_limit_of(chosen_item)
         if self.player not in self.army_piece_types_by_player:
-            self.army_piece_types_by_player[self.player] =\
+            self.army_piece_types_by_player[self.player] = \
                 {piece: sum([self.piece_types_by_army[army][piece] for army in self.armies[self.player]])
-                    for piece in set().union(*self.piece_types_by_army.values())}
+                 for piece in set().union(*self.piece_types_by_army.values())}
         limit_multiplier = get_limit_multiplier_for_item(self.army_piece_types_by_player[self.player])
         piece_limit = piece_limit * limit_multiplier(chosen_item)
         if piece_limit > 0 and with_children != self.PieceLimitCascade.NO_CHILDREN:
