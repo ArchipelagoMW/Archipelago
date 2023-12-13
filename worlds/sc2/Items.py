@@ -17,6 +17,8 @@ class ItemData(typing.NamedTuple):
     parent_item: typing.Optional[str] = None
     origin: typing.Set[str] = {"wol"}
     description: typing.Optional[str] = None
+    important_for_filtering: bool = classification == ItemClassification.progression \
+                                    or classification == ItemClassification.progression_skip_balancing
 
 
 class StarcraftItem(Item):
@@ -481,6 +483,7 @@ item_table = {
     ItemNames.REAPER_SPIDER_MINES:
         ItemData(253 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 19, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.REAPER, origin={"nco"},
+                 important_for_filtering=True,
                  description="Allows Reapers to lay Spider Mines. 3 charges per Reaper."),
     ItemNames.REAPER_COMBAT_DRUGS:
         ItemData(254 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 20, SC2Race.TERRAN,
@@ -560,6 +563,7 @@ item_table = {
     ItemNames.SIEGE_TANK_SPIDER_MINES:
         ItemData(269 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 4, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.SIEGE_TANK, origin={"nco"},
+                 important_for_filtering=True,
                  description=inspect.cleandoc(
                      """
                      Allows Sige Tanks to lay Spider Mines. 
@@ -714,7 +718,7 @@ item_table = {
                  description="Spell. Missile Pods do damage to air targets in a target area."),
     ItemNames.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX:
         ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 20, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent_item=ItemNames.BATTLECRUISER, quantity=2,
+                 parent_item=ItemNames.BATTLECRUISER, quantity=2,
                  description=inspect.cleandoc(
                      """
                      Level 1: Spell. For 20 seconds the Battlecruiser gains a shield that can absorb up to 200 damage.
@@ -919,7 +923,7 @@ item_table = {
                  description="Spell. Deploys a drone that can heal biological or mechanical units."),
     ItemNames.RAVEN_SPIDER_MINES:
         ItemData(364 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 13, SC2Race.TERRAN,
-                 parent_item=ItemNames.RAVEN, origin={"nco"},
+                 parent_item=ItemNames.RAVEN, origin={"nco"}, important_for_filtering=True,
                  description="Spell. Deploys 3 Spider Mines to a target location."),
     ItemNames.RAVEN_RAILGUN_TURRET:
         ItemData(365 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 14, SC2Race.TERRAN,
@@ -1365,7 +1369,7 @@ item_table = {
     ItemNames.SLAYER: ItemData(5 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 14, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.SENTRY: ItemData(6 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 15, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.ENERGIZER: ItemData(7 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 16, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
-    ItemNames.HAVOC: ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 17, SC2Race.PROTOSS, classification=ItemClassification.useful, origin={"lotv"}),
+    ItemNames.HAVOC: ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 17, SC2Race.PROTOSS, origin={"lotv"}, important_for_filtering=True),
     ItemNames.SIGNIFIER: ItemData(9 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 18, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.ASCENDANT: ItemData(10 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 19, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.AVENGER: ItemData(11 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 20, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
@@ -1406,6 +1410,86 @@ item_table = {
     ItemNames.KHAYDARIN_MONOLITH: ItemData(201 + SC2LOTV_ITEM_ID_OFFSET, "Building", 1, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.SHIELD_BATTERY: ItemData(202 + SC2LOTV_ITEM_ID_OFFSET, "Building", 2, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
 
+    # Protoss Unit Upgrades
+    ItemNames.SUPPLICANT_BLOOD_SHIELD: ItemData(300 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 0, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.SUPPLICANT),
+    ItemNames.SUPPLICANT_SOUL_AUGMENTATION: ItemData(301 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 1, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.SUPPLICANT),
+    ItemNames.SUPPLICANT_SHIELD_REGENERATION: ItemData(302 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 2, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.SUPPLICANT),
+    ItemNames.ADEPT_SHOCKWAVE: ItemData(303 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 3, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ADEPT),
+    ItemNames.ADEPT_RESONATING_GLAIVES: ItemData(304 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 4, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ADEPT),
+    ItemNames.ADEPT_PHASE_BULWARK: ItemData(305 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 5, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ADEPT),
+    ItemNames.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES: ItemData(306 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 6, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION: ItemData(307 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 7, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.DRAGOON_HIGH_IMPACT_PHASE_DISRUPTORS: ItemData(308 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 8, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.DRAGOON),
+    ItemNames.DRAGOON_TRILLIC_COMPRESSION_SYSTEM: ItemData(309 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 9, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.DRAGOON),
+    ItemNames.DRAGOON_SINGULARITY_CHARGE: ItemData(310 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 10, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.DRAGOON),
+    ItemNames.DRAGOON_ENHANCED_STRIDER_SERVOS: ItemData(311 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 11, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.DRAGOON),
+    ItemNames.SCOUT_COMBAT_SENSOR_ARRAY: ItemData(312 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 12, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.SCOUT),
+    ItemNames.SCOUT_APIAL_SENSORS: ItemData(313 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 13, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.SCOUT),
+    ItemNames.SCOUT_GRAVITIC_THRUSTERS: ItemData(314 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 14, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.SCOUT),
+    ItemNames.SCOUT_ADVANCED_PHOTON_BLASTERS: ItemData(315 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 15, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.SCOUT),
+    ItemNames.TEMPEST_TECTONIC_DESTABIlIZERS: ItemData(316 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 16, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.TEMPEST),
+    ItemNames.TEMPEST_QUANTIC_REACTOR: ItemData(317 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 17, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.TEMPEST),
+    ItemNames.TEMPEST_GRAVITY_SLING: ItemData(318 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 18, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.TEMPEST),
+    ItemNames.PHOENIX_MIRAGE_IONIC_WAVELENGTH_FLUX: ItemData(319 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 19, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.PHOENIX_MIRAGE_ANION_PULSE_CRYSTALS: ItemData(320 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 20, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.CORSAIR_STEALTH_DRIVE: ItemData(321 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 21, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.CORSAIR),
+    ItemNames.CORSAIR_ARGUS_JEWEL: ItemData(322 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 22, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.CORSAIR),
+    ItemNames.CORSAIR_SUSTAINING_DISRUPTION: ItemData(323 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 23, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.CORSAIR),
+    ItemNames.CORSAIR_NEUTRON_SHIELDS: ItemData(324 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 24, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.CORSAIR),
+    ItemNames.ORACLE_STEALTH_DRIVE: ItemData(325 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 25, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ORACLE),
+    ItemNames.ORACLE_STASIS_CALIBRATION: ItemData(326 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 26, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ORACLE),
+    ItemNames.ORACLE_TEMPORAL_ACCELERATION_BEAM: ItemData(327 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 27, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ORACLE),
+    ItemNames.ARBITER_CHRONOSTATIC_REINFORCEMENT: ItemData(328 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 28, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.ARBITER),
+    ItemNames.ARBITER_KHAYDARIN_CORE: ItemData(329 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 29, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.ARBITER),
+    ItemNames.ARBITER_SPACETIME_ANCHOR: ItemData(330 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 0, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.ARBITER),
+    ItemNames.ARBITER_RESOURCE_EFFICIENCY: ItemData(331 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 1, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.ARBITER),
+    ItemNames.ARBITER_ENHANCED_CLOAK_FIELD: ItemData(332 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 2, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.ARBITER),
+    ItemNames.CARRIER_GRAVITON_CATAPULT: ItemData(333 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 3, SC2Race.PROTOSS, origin={"wol"}, parent_item=ItemNames.CARRIER),
+    ItemNames.CARRIER_HULL_OF_PAST_GLORIES: ItemData(334 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 4, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.CARRIER),
+    ItemNames.VOID_RAY_DESTROYER_FLUX_VANES: ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 5, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}),
+    ItemNames.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 6, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.DESTROYER),
+    ItemNames.WARP_PRISM_GRAVITIC_DRIVE: ItemData(337 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 7, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
+    ItemNames.WARP_PRISM_PHASE_BLASTER: ItemData(338 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
+    ItemNames.WARP_PRISM_WAR_CONFIGURATION: ItemData(339 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 9, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
+    ItemNames.OBSERVER_GRAVITIC_BOOSTERS: ItemData(340 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 10, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.OBSERVER),
+    ItemNames.OBSERVER_SENSOR_ARRAY: ItemData(341 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 11, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.OBSERVER),
+    ItemNames.REAVER_SCARAB_DAMAGE: ItemData(342 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 12, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.REAVER),
+    ItemNames.REAVER_SOLARITE_PAYLOAD: ItemData(343 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 13, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.REAVER),
+    ItemNames.REAVER_REAVER_CAPACITY: ItemData(344 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 14, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.REAVER),
+    ItemNames.REAVER_RESOURCE_EFFICIENCY: ItemData(345 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 15, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.REAVER),
+    ItemNames.VANGUARD_AGONY_LAUNCHERS: ItemData(346 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 16, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.VANGUARD),
+    ItemNames.VANGUARD_MATTER_DISPERSION: ItemData(347 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 17, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.VANGUARD),
+    ItemNames.IMMORTAL_ANNIHILATOR_SINGULARITY_CHARGE: ItemData(348 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 18, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS: ItemData(349 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 19, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
+    ItemNames.COLOSSUS_PACIFICATION_PROTOCOL: ItemData(350 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 20, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.COLOSSUS),
+    ItemNames.WRATHWALKER_RAPID_POWER_CYCLING: ItemData(351 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 21, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.WRATHWALKER),
+    ItemNames.WRATHWALKER_EYE_OF_WRATH: ItemData(352 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 22, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.WRATHWALKER),
+    ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_SHROUD_OF_ADUN: ItemData(353 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 23, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_SHADOW_GUARD_TRAINING: ItemData(354 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 24, SC2Race.PROTOSS, origin={"bw"}),
+    ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK: ItemData(355 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 25, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_RESOURCE_EFFICIENCY: ItemData(356 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 26, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD: ItemData(357 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 27, SC2Race.PROTOSS, origin={"bw"}, important_for_filtering=True ,parent_item=ItemNames.DARK_TEMPLAR),
+    ItemNames.HIGH_TEMPLAR_SIGNIFIER_UNSHACKLED_PSIONIC_STORM: ItemData(358 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 28, SC2Race.PROTOSS, origin={"bw"}),
+    ItemNames.HIGH_TEMPLAR_SIGNIFIER_HALLUCINATION: ItemData(359 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 29, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}),
+    ItemNames.HIGH_TEMPLAR_SIGNIFIER_KHAYDARIN_AMULET: ItemData(360 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 0, SC2Race.PROTOSS, origin={"bw"}),
+    ItemNames.ARCHON_HIGH_ARCHON: ItemData(361 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 1, SC2Race.PROTOSS, origin={"ext"}, important_for_filtering=True),
+    ItemNames.DARK_ARCHON_FEEDBACK: ItemData(362 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 2, SC2Race.PROTOSS, origin={"bw"}),
+    ItemNames.DARK_ARCHON_MAELSTROM: ItemData(363 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 3, SC2Race.PROTOSS, origin={"bw"}),
+    ItemNames.DARK_ARCHON_ARGUS_TALISMAN: ItemData(364 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 4, SC2Race.PROTOSS, origin={"bw"}),
+    ItemNames.ASCENDANT_POWER_OVERWHELMING: ItemData(365 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 5, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ASCENDANT),
+    ItemNames.ASCENDANT_CHAOTIC_ATTUNEMENT: ItemData(366 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 6, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ASCENDANT),
+    ItemNames.ASCENDANT_BLOOD_AMULET: ItemData(367 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 7, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ASCENDANT),
+    ItemNames.SENTRY_ENERGIZER_HAVOC_CLOAKING_MODULE: ItemData(368 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 8, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.SENTRY_ENERGIZER_HAVOC_SHIELD_BATTERY_RAPID_RECHARGING: ItemData(369 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 9, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.SENTRY_FORCE_FIELD: ItemData(370 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 10, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.SENTRY),
+    ItemNames.SENTRY_HALLUCINATION: ItemData(371 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 11, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.SENTRY),
+    ItemNames.ENERGIZER_RECLAMATION: ItemData(372 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 12, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ENERGIZER),
+    ItemNames.ENERGIZER_FORGED_CHASSIS: ItemData(373 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 13, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.ENERGIZER),
+    ItemNames.HAVOC_DETECT_WEAKNESS: ItemData(374 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 14, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.HAVOC),
+    ItemNames.HAVOC_BLOODSHARD_RESONANCE: ItemData(375 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 15, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.HAVOC),
+    ItemNames.ZEALOT_SENTINEL_CENTURION_LEG_ENHANCEMENTS: ItemData(376 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 16, SC2Race.PROTOSS, origin={"bw"}),
+    ItemNames.ZEALOT_SENTINEL_CENTURION_SHIELD_CAPACITY: ItemData(377 + SC2LOTV_ITEM_ID_OFFSET, "Forge 3", 17, SC2Race.PROTOSS, origin={"bw"}),
+
     # SoA Calldown powers
     ItemNames.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 0, SC2Race.PROTOSS, origin={"lotv"}),
     ItemNames.SOA_PROGRESSIVE_PROXY_PYLON: ItemData(701 + SC2LOTV_ITEM_ID_OFFSET, "Progressive Upgrade", 0, SC2Race.PROTOSS, origin={"lotv"}, quantity=2),
@@ -1421,15 +1505,19 @@ item_table = {
     ItemNames.SOA_SOLAR_BOBMARDMENT: ItemData(711 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 10, SC2Race.PROTOSS, origin={"lotv"}),
 
     # Generic Protoss Upgrades
-    ItemNames.MATRIX_OVERLOAD: ItemData(800 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 0, SC2Race.PROTOSS, origin={"lotv"}),
-    ItemNames.QUATRO: ItemData(801 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 1, SC2Race.PROTOSS, origin={"ext"}),
-    ItemNames.NEXUS_OVERCHARGE: ItemData(802 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 2, SC2Race.PROTOSS, origin={"lotv"}),
-    ItemNames.ORBITAL_ASSIMILATORS: ItemData(803 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 3, SC2Race.PROTOSS, origin={"lotv"}),
-    ItemNames.WARP_HARMONIZATION: ItemData(804 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 4, SC2Race.PROTOSS, origin={"lotv"}),
-    ItemNames.GUARDIAN_SHELL: ItemData(805 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 5, SC2Race.PROTOSS, origin={"lotv"}),
-    ItemNames.RECONSTRUCTION_BEAM: ItemData(806 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 6, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
-    ItemNames.OVERWATCH: ItemData(807 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 7, SC2Race.PROTOSS, origin={"ext"}),
-    ItemNames.SUPERIOR_WARP_GATES: ItemData(808 + SC2LOTV_ITEM_ID_OFFSET, "Forge", 8, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.MATRIX_OVERLOAD: ItemData(800 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 0, SC2Race.PROTOSS, origin={"lotv"}),
+    ItemNames.QUATRO: ItemData(801 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 1, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.NEXUS_OVERCHARGE: ItemData(802 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 2, SC2Race.PROTOSS, origin={"lotv"}, important_for_filtering=True),
+    ItemNames.ORBITAL_ASSIMILATORS: ItemData(803 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 3, SC2Race.PROTOSS, origin={"lotv"}),
+    ItemNames.WARP_HARMONIZATION: ItemData(804 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 4, SC2Race.PROTOSS, origin={"lotv"}),
+    ItemNames.GUARDIAN_SHELL: ItemData(805 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 5, SC2Race.PROTOSS, origin={"lotv"}),
+    ItemNames.RECONSTRUCTION_BEAM: ItemData(806 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 6, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
+    ItemNames.OVERWATCH: ItemData(807 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 7, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.SUPERIOR_WARP_GATES: ItemData(808 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 8, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.ENHANCED_TARGETING: ItemData(809 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 9, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.OPTIMIZED_ORDNANCE: ItemData(810 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 10, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.KHALAI_INGENUITY: ItemData(811 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 11, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.AMPLIFIED_ASSIMILATORS: ItemData(812 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 12, SC2Race.PROTOSS, origin={"ext"}),
 }
 
 
@@ -1602,6 +1690,7 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     ItemNames.SOA_PURIFIER_BEAM,
     ItemNames.SOA_TIME_STOP,
     ItemNames.SOA_SOLAR_BOBMARDMENT,
+    # Protoss generic upgrades
     ItemNames.MATRIX_OVERLOAD,
     ItemNames.QUATRO,
     ItemNames.NEXUS_OVERCHARGE,
@@ -1611,6 +1700,8 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     ItemNames.RECONSTRUCTION_BEAM,
     ItemNames.OVERWATCH,
     ItemNames.SUPERIOR_WARP_GATES,
+    ItemNames.KHALAI_INGENUITY,
+    ItemNames.AMPLIFIED_ASSIMILATORS,
     # Protoss static defenses
     ItemNames.PHOTON_CANNON,
     ItemNames.KHAYDARIN_MONOLITH,
@@ -1833,6 +1924,9 @@ type_flaggroups: typing.Dict[SC2Race, typing.Dict[str, int]] = {
         "Building": 3,
         "Progressive Upgrade": 4,
         "Spear of Adun": 5,
-        "Forge": 6,
+        "Solarite Core": 6,
+        "Forge 1": 7,
+        "Forge 2": 8,
+        "Forge 3": 9,
     }
 }

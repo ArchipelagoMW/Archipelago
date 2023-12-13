@@ -866,9 +866,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
     async def updateProtossTech(self, current_items):
         protoss_items = current_items[SC2Race.PROTOSS]
-        await self.chat_send("?GiveProtossTech {} {} {} {} {} {} {}".format(
+        await self.chat_send("?GiveProtossTech {} {} {} {} {} {} {} {} {} {}".format(
             protoss_items[0], protoss_items[1], protoss_items[2], protoss_items[3], protoss_items[4],
-            protoss_items[5], protoss_items[6]
+            protoss_items[5], protoss_items[6], protoss_items[7], protoss_items[8], protoss_items[9]
         ))
 
 

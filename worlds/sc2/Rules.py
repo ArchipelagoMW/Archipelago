@@ -421,13 +421,16 @@ class SC2Logic:
         return self.protoss_competent_anti_air(state) \
             or state.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER, ItemNames.SCOUT,
                              ItemNames.DARK_ARCHON, ItemNames.WRATHWALKER, ItemNames.MOTHERSHIP}, self.player) \
+            or state.has_all({ItemNames.WARP_PRISM, ItemNames.WARP_PRISM_PHASE_BLASTER}, self.player) \
             or self.advanced_tactics and state.has_any(
                 {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT, ItemNames.DARK_TEMPLAR,
                  ItemNames.SENTRY, ItemNames.ENERGIZER}, self.player)
 
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
-            or state.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, self.player)
+            or state.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, self.player) \
+            or (state.has_any({ItemNames.IMMORTAL, ItemNames.ANNIHILATOR}, self.player)
+                and state.has(ItemNames.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
 
     def protoss_anti_light_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
@@ -439,13 +442,16 @@ class SC2Logic:
              ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.TEMPEST}, self.player) \
             or (state.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER}, self.player)
                 and state.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, self.player)) \
-            or self.advanced_tactics and state.has(ItemNames.DARK_ARCHON, self.player)
+            or (self.advanced_tactics
+                and state.has_any({ItemNames.IMMORTAL, ItemNames.ANNIHILATOR}, self.player)
+                and state.has(ItemNames.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
 
     def protoss_can_attack_behind_chasm(self, state: CollectionState) -> bool:
         return state.has_any(
             {ItemNames.STALKER, ItemNames.SLAYER, ItemNames.INSTIGATOR, ItemNames.SCOUT, ItemNames.TEMPEST,
              ItemNames.CARRIER, ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.MOTHERSHIP}, self.player) \
-            or state.has(ItemNames.WARP_PRISM, self.player) and self.protoss_common_unit(state) \
+            or (state.has(ItemNames.WARP_PRISM, self.player)
+                and (self.protoss_common_unit(state) or state.has(ItemNames.WARP_PRISM_PHASE_BLASTER, self.player))) \
             or (self.advanced_tactics
                 and state.has_any({ItemNames.ORACLE, ItemNames.ARBITER}, self.player))
 

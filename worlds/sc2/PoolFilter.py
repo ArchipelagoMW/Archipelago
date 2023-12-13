@@ -227,7 +227,7 @@ class ValidInventory:
         locked_items = list(self.locked_items)
         self.logical_inventory = [
             item.name for item in inventory + locked_items + self.existing_items
-            if item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing)
+            if get_full_item_list()[item.name].important_for_filtering  # Track all Progression items and those with complex rules for filtering
         ]
         requirements = mission_requirements
         parent_items = self.item_children.keys()
@@ -403,6 +403,35 @@ class ValidInventory:
             locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
         if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
+        # LotV
+        # Shared unit upgrades between several units
+        if not {ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Stalker/Instigator/Slayer)")]
+        if not {ItemNames.PHOENIX, ItemNames.MIRAGE} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Phoenix/Mirage)")]
+        if not {ItemNames.VOID_RAY, ItemNames.DESTROYER} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer)")]
+        if not {ItemNames.IMMORTAL, ItemNames.ANNIHILATOR} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator)")]
+        if not {ItemNames.DARK_TEMPLAR, ItemNames.AVENGER, ItemNames.BLOOD_HUNTER} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
+        if not {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT, ItemNames.DARK_TEMPLAR} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Archon)")]
+        if not {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ARCHON_HIGH_ARCHON} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(High Templar/Signifier)")]
+        if not {ItemNames.DARK_ARCHON, ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Dark Archon)")]
+        if not {ItemNames.SENTRY, ItemNames.ENERGIZER, ItemNames.HAVOC} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Sentry/Energizer/Havoc)")]
+        if not {ItemNames.SENTRY, ItemNames.ENERGIZER, ItemNames.HAVOC, ItemNames.SHIELD_BATTERY} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Sentry/Energizer/Havoc/Shield Battery)")]
+        if not {ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Zealot/Sentinel/Centurion)")]
+        # Static defense upgrades only if static defense present
+        if not {ItemNames.PHOTON_CANNON, ItemNames.KHAYDARIN_MONOLITH, ItemNames.NEXUS_OVERCHARGE, ItemNames.SHIELD_BATTERY} & logical_inventory_set:
+            inventory = [item for item in inventory if item.name != ItemNames.ENHANCED_TARGETING]
+        if not {ItemNames.PHOTON_CANNON, ItemNames.KHAYDARIN_MONOLITH, ItemNames.NEXUS_OVERCHARGE} & logical_inventory_set:
+            inventory = [item for item in inventory if item.name != ItemNames.OPTIMIZED_ORDNANCE]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items

@@ -258,17 +258,18 @@ class GenericUpgradeItems(Choice):
     Does nothing if upgrades are unlocked by completed mission counts.
 
     Individual Items:  All weapon and armor upgrades are each an item,
-    resulting in 18 total upgrade items for Terran and 15 total items for Zerg.
+    resulting in 18 total upgrade items for Terran and 15 total items for Zerg and Protoss each.
     Bundle Weapon And Armor:  All types of weapon upgrades are one item per race,
     and all types of armor upgrades are one item per race,
-    resulting in 12 total items.
+    resulting in 18 total items.
     Bundle Unit Class:  Weapon and armor upgrades are merged,
     but upgrades are bundled separately for each race:
     Infantry, Vehicle, and Starship upgrades for Terran (9 items),
     Ground and Flyer upgrades for Zerg (6 items),
-    resulting in 15 total items.
+    Ground and Air upgrades for Protoss (6 items),
+    resulting in 21 total items.
     Bundle All:  All weapon and armor upgrades are one item per race,
-    resulting in 6 total items."""
+    resulting in 9 total items."""
     display_name = "Generic Upgrade Items"
     option_individual_items = 0
     option_bundle_weapon_and_armor = 1
@@ -316,6 +317,8 @@ class MinNumberOfUpgrades(Range):
     Set a minimum to the number of upgrades a unit/structure can have.
     Note that most units have 4 or 6 upgrades.
     If a unit has fewer upgrades than the minimum, it will have all of its upgrades.
+
+    Doesn't affect shared unit upgrades.
     """
     display_name = "Minimum number of upgrades per unit/structure"
     range_start = 0
@@ -326,7 +329,9 @@ class MinNumberOfUpgrades(Range):
 class MaxNumberOfUpgrades(Range):
     """
     Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited.
-    Note that most unit have 4 or 6 upgrades.
+    Note that most unit have 4 to 6 upgrades.
+
+    Doesn't affect shared unit upgrades.
     """
     display_name = "Maximum number of upgrades per unit/structure"
     range_start = -1
@@ -340,15 +345,19 @@ class IncludeMutations(Range):
     display_name = "Include Mutations"
     range_start = 0
     range_end = 3
-    default = 1
+    default = 3
 
 
 class IncludeStrains(Range):
-    """Determines how many of the 2 strains for the 7 units that have them can appear."""
+    """
+    Determines how many of the 2 strains for the 7 units that have them can appear.
+
+    Doesn't affect morphs (Lurker, Impaler, Brood Lord, Viper).
+    """
     display_name = "Include Strains"
     range_start = 0
     range_end = 2
-    default = 1
+    default = 2
 
 
 class KerriganPresence(Choice):
