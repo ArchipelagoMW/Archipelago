@@ -585,7 +585,7 @@ else
     -- misaligned, so for GB and GBC we explicitly set the callback on
     -- vblank instead.
     -- https://github.com/TASEmulators/BizHawk/issues/3711
-    if emu.getsystemid() == "GB" or emu.getsystemid() == "GBC" then
+    if emu.getsystemid() == "GB" or emu.getsystemid() == "GBC" or emu.getsystemid() == "SGB" then
         event.onmemoryexecute(tick, 0x40, "tick", "System Bus")
     else
         event.onframeend(tick)
