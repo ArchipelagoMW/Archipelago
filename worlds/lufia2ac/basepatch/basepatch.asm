@@ -309,6 +309,12 @@ org $8EFD2E  ; unused region at the end of bank $8E
     DB $1E,$0B,$01,$2B,$05,$1A,$05,$00  ; add dekar
     DB $1E,$0B,$01,$2B,$04,$1A,$06,$00  ; add tia
     DB $1E,$0B,$01,$2B,$06,$1A,$07,$00  ; add lexis
+    DB $1F,$0B,$01,$2C,$01,$1B,$02,$00  ; remove selan
+    DB $1F,$0B,$01,$2C,$02,$1B,$03,$00  ; remove guy
+    DB $1F,$0B,$01,$2C,$03,$1B,$04,$00  ; remove arty
+    DB $1F,$0B,$01,$2C,$05,$1B,$05,$00  ; remove dekar
+    DB $1F,$0B,$01,$2C,$04,$1B,$06,$00  ; remove tia
+    DB $1F,$0B,$01,$2C,$06,$1B,$07,$00  ; remove lexis
 pullpc
 
 SpecialItemUse:
@@ -328,11 +334,15 @@ SpecialItemUse:
     SEP #$20
     LDA $8ED8C7,X           ; load predefined bitmask with a single bit set
     BIT $077E               ; check against EV flags $02 to $07 (party member flags)
-    BNE +                   ; abort if character already present
-    LDA $07A9               ; load EV register $11 (party counter)
+    BEQ ++
+    LDA.b #$30              ; character already present; modify pointer to point to L2SASM leave script
+    ADC $09B7
+    STA $09B7
+    BRA +++
+++: LDA $07A9               ; character not present; load EV register $0B (party counter)
     CMP.b #$03
     BPL +                   ; abort if party full
-    LDA.b #$8E
++++ LDA.b #$8E
     STA $09B9
     PHK
     PEA ++
@@ -340,7 +350,6 @@ SpecialItemUse:
     JML $83BB76             ; initialize parser variables
 ++: NOP
     JSL $809CB8             ; call L2SASM parser
-    JSL $81F034             ; consume the item
     TSX
     INX #13
     TXS
