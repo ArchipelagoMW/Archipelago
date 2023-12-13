@@ -10,6 +10,7 @@ class DeepWoodsItem:
 
 class SkillItem:
     luck_skill = "Luck Level"
+    archaeology_level = "Archaeology Level"
 
 
 class SVEQuestItem:
