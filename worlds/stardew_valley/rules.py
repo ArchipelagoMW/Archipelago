@@ -833,9 +833,6 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     if ModNames.magic not in world_options.mods:
         return
 
-    MultiWorldRules.set_rule(multiworld.get_entrance(MagicEntrance.store_to_altar, player),
-                             (logic.relationship.has_hearts(NPC.wizard, 3) &
-                              logic.region.can_reach(Region.wizard_tower)))
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Clear Debris", player),
                              (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")))
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Till", player),
