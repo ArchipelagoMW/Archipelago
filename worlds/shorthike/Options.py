@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, PerGameCommonOptions, Range, Toggle, DefaultOnToggle
+from Options import Choice, PerGameCommonOptions, Range, Toggle
 
 class Goal(Choice):
     """Choose the end goal.
@@ -15,14 +15,6 @@ class Goal(Choice):
     option_help_everyone = 3
     option_fishmonger = 4
     default = 3
-
-class ShowGoldenChests(DefaultOnToggle):
-    """Turns chests that contain items required for progression into golden chests."""
-    display_name = "Progression Items in Golden Chests"
-
-class SkipCutscenes(DefaultOnToggle):
-    """Skip major cutscenes."""
-    display_name = "Skip Cutscenes"
 
 class CoinsInShops(Toggle):
     """When enabled, the randomizer can place coins into locations that are purchased, such as shops."""
@@ -65,8 +57,6 @@ class GoldenFeatherProgression(Choice):
 @dataclass
 class ShortHikeOptions(PerGameCommonOptions):
     goal: Goal
-    show_golden_chests: ShowGoldenChests
-    skip_cutscenes: SkipCutscenes
     coins_in_shops: CoinsInShops
     golden_feathers: GoldenFeathers
     silver_feathers: SilverFeathers

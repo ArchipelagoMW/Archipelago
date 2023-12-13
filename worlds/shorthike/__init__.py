@@ -149,8 +149,6 @@ class ShortHikeWorld(World):
 
         settings = {
             "goal": int(options.goal),
-            "showGoldenChests": bool(options.show_golden_chests),
-            "skipCutscenes": bool(options.skip_cutscenes),
             "logicLevel": int(options.golden_feather_progression),
         }
     
