@@ -1,6 +1,6 @@
 import unittest
 
-from worlds import AutoWorldRegister
+from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestWebDescriptions(unittest.TestCase):

@@ -184,40 +184,11 @@ class WebWorld:
     options_presets: Dict[str, Dict[str, Any]] = {}
     """A dictionary containing a collection of developer-defined game option presets."""
 
-    _location_descriptions: Dict[str, str] = {"Everywhere": "All possible locations in the entire game."}
-    _item_descriptions: Dict[str, str] = {"Everything": "All possible items in the entire game."}
+    location_descriptions: Dict[str, str] = {}
+    """An optional map from location names (or location group names) to brief descriptions for users."""
 
-    @property
-    def location_descriptions(self):
-        """An optional map from location names (or location group names) to brief descriptions for users.
-
-        Individual newlines and indentation will be collapsed into spaces before these descriptions are displayed.
-        This may cover only a subset of locations.
-        """
-        return self._location_descriptions
-
-    @location_descriptions.setter
-    def location_descriptions(self, dct: Dict[str, str]):
-        self._location_descriptions = {
-            "Everywhere": "All possible locations in the entire game.",
-            **{key: inspect.cleandoc(value) for key, value in dct.items()}
-        }
-
-    @property
-    def item_descriptions(self):
-        """An optional map from item names (or item group names) to brief descriptions for users.
-
-        Individual newlines and indentation will be collapsed into spaces before these descriptions are displayed.
-        This may cover only a subset of items.
-        """
-        return self._item_descriptions
-
-    @item_descriptions.setter
-    def item_descriptions(self, dct: Dict[str, str]):
-        self._location_descriptions = {
-            "Everything": "All possible items in the entire game.",
-            **{key: inspect.cleandoc(value) for key, value in dct.items()}
-        }
+    item_descriptions: Dict[str, str] = {}
+    """An optional map from item names (or item group names) to brief descriptions for users."""
 
 
 class World(metaclass=AutoWorldRegister):

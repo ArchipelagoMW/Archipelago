@@ -185,4 +185,3 @@ def create():
 
     with open(os.path.join(target_folder, 'weighted-options.json'), "w") as f:
         json.dump(weighted_options, f, indent=2, separators=(',', ': '))
-

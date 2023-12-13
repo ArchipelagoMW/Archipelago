@@ -121,7 +121,7 @@ indentation and single newlines will be collapsed into spaces.
         The group of all items in the spaceship in Level 2.
   
         This doesn't include the item on the spaceship door, since it can be
-        accessed without the Spaeship Key.
+        accessed without the Spaceship Key.
       """
   }
   
