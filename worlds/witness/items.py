@@ -115,6 +115,7 @@ class WitnessPlayerItems:
         # Adjust item classifications based on game settings.
         eps_shuffled = self._world.options.shuffle_EPs
         come_to_you = self._world.options.elevators_come_to_you
+        difficulty = self._world.options.puzzle_randomization
         for item_name, item_data in self.item_data.items():
             if not eps_shuffled and item_name in {"Monastery Garden Entry (Door)",
                                                   "Monastery Shortcuts",
@@ -130,9 +131,11 @@ class WitnessPlayerItems:
                                "Monastery Laser Shortcut (Door)",
                                "Orchard Second Gate (Door)",
                                "Jungle Bamboo Laser Shortcut (Door)",
-                               "Keep Pressure Plates 2 Exit (Door)",
                                "Caves Elevator Controls (Panel)"}:
                 # Downgrade doors that don't gate progress.
+                item_data.classification = ItemClassification.useful
+            elif item_name == "Keep Pressure Plates 2 Exit (Door)" and not (difficulty == "none" and eps_shuffled):
+                # PP2EP requires the door in vanilla puzzles, otherwise it's unnecessary
                 item_data.classification = ItemClassification.useful
 
         # Build the mandatory item list.
