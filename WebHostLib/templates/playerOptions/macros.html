@@ -50,8 +50,18 @@
         <td>{{ OptionTitle(option_nae, option) }}</td>
         <td>
             <div class="range-container">
-                <input type="range" id="{{ option_name }}" name="{{ option_name }}" min="{{ option.range_start }}" max="{{ option.range_end }}" value="{{ option.default | default(option.range_start) }}" {{ "disabled" if option.default == "random" }} />
-                <span id="{{ option_name }}-value" class="range-value">{{ option.default | default(option.range_start) }}</span>
+                <input
+                        type="range"
+                        id="{{ option_name }}"
+                        name="{{ option_name }}"
+                        min="{{ option.range_start }}"
+                        max="{{ option.range_end }}"
+                        value="{{ option.default | default(option.range_start) if option.default != "random" else option.range_start }}"
+                        {{ "disabled" if option.default == "random" }}
+                />
+                <span id="{{ option_name }}-value" class="range-value js-required">
+                    {{ option.default | default(option.range_start) if option.default != "random" else option.range_start }}
+                </span>
                 {{ RandomizeButton(option_name, option) }}
             </div>
         </td>
@@ -74,8 +84,18 @@
                     <option value="custom" hidden>Custom</option>
                 </select>
                 <div class="named-range-wrapper">
-                    <input type="range" id="{{ option_name }}" name="{{ option_name }}" min="{{ option.range_start }}" max="{{ option.range_end }}" value="{{ option.default | default(option.range_start) }}" {{ "disabled" if option.default == "random" }} />
-                    <span id="{{ option_name }}-value" class="range-value">{{ option.default | default(option.range_start) }}</span>
+                    <input
+                            type="range"
+                            id="{{ option_name }}"
+                            name="{{ option_name }}"
+                            min="{{ option.range_start }}"
+                            max="{{ option.range_end }}"
+                            value="{{ option.default | default(option.range_start) if option.default != "random" else option.range_start }}"
+                            {{ "disabled" if option.default == "random" }}
+                    />
+                    <span id="{{ option_name }}-value" class="range-value js-required">
+                        {{ option.default | default(option.range_start) if option.default != "random" else option.range_start }}
+                    </span>
                     {{ RandomizeButton(option_name, option) }}
                 </div>
             </div>
@@ -230,7 +250,7 @@
 {% macro RandomizeButton(option_name, option) %}
     <div class="randomize-button" data-tooltip="Toggle randomization for this option!">
         <label>
-            <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" {{ "checked" if option.default == "random" }} />
+            <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" data-option-name="{{ option_name }}" {{ "checked" if option.default == "random" }} />
             🎲
         </label>
     </div>

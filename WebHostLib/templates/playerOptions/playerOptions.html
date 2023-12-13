@@ -7,6 +7,14 @@
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/playerOptions.js") }}"></script>
+
+    <noscript>
+        <style>
+            .js-required{
+                display: none;
+            }
+        </style>
+    </noscript>
 {% endblock %}
 
 {% block body %}
@@ -35,7 +43,7 @@
                     </label>
                     <input id="player-name" placeholder="Player" data-key="name" maxlength="16" />
                 </div>
-                <div>
+                <div class="js-required">
                     <label for="game-options-preset">
                         Options Preset: <span class="interactive" data-tooltip="Select from a list of developer-curated presets (if any) or reset all options to their defaults.">(?)</span>
                     </label>
