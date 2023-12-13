@@ -175,12 +175,18 @@ def create():
                 "gameItemGroups": [
                     group for group in world.item_name_groups.keys() if group != "Everything"
                 ],
-                "gameItemDescriptions": world.web.item_descriptions,
                 "gameLocations": tuple(world.location_names),
                 "gameLocationGroups": [
                     group for group in world.location_name_groups.keys() if group != "Everywhere"
                 ],
-                "gameLocationDescriptions": world.web.location_descriptions,
+                "gameItemDescriptions": {
+                    "Everything": "All possible items in the entire game.",
+                    **world.web.item_descriptions,
+                },
+                "gameLocationDescriptions": {
+                    "Everywhere": "All possible locations in the entire game.",
+                    **world.web.location_descriptions,
+                },
             }
 
     with open(os.path.join(target_folder, 'weighted-options.json'), "w") as f:
