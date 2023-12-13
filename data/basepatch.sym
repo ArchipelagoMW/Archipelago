@@ -21,6 +21,7 @@
 03000C0A has4thgempiece
 03000C0B hascd
 03000C0C haskeyzer
+03000C3A globalgamemode
 03000C3C sgameseq
 03000C41 globaltimer
 03001444 oambuf
