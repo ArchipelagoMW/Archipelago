@@ -88,9 +88,9 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, MagicLogicMixin]]):
             shifter_rule = self.logic.received(SkillItem.archaeology_level, 4)
             preservation_rule = self.logic.received(SkillItem.archaeology_level, 7)
         if level >= 8:
-            return (self.logic.action.can_pan() | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)) & shifter_rule & preservation_rule
+            return (self.logic.action.can_pan() & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)) & shifter_rule & preservation_rule
         if level >= 5:
-            return (self.logic.action.can_pan() | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)) & shifter_rule
+            return (self.logic.action.can_pan() & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)) & shifter_rule
         if level >= 3:
             return self.logic.action.can_pan() | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.copper)
         else:
