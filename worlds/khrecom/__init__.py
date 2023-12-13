@@ -104,6 +104,9 @@ class KHRECOMWorld(World):
             disclude.append("Cure 4-6")
         if self.get_setting("enemy_cards"):
             fillers.update(get_items_by_category("Enemy Cards", disclude))
+        if self.get_setting("days_items"):
+            fillers.update(get_items_by_category("Days Sets", disclude))
+            fillers.update(get_items_by_category("Days Enemy Cards", disclude))
         fillers.update(get_items_by_category("Sets", disclude))
         weights = [data.weight for data in fillers.values()]
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
@@ -117,7 +120,7 @@ class KHRECOMWorld(World):
         return KHRECOMItem(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self.multiworld, self.player, self.get_setting("days_locations"))
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, self.get_setting("days_locations"))

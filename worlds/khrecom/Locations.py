@@ -36,6 +36,8 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Traverse Town Room of Truth":                                       KHRECOMLocationData("Progression",  269_0105),
     "Traverse Town Room of Truth (Enemy Cards Guard Armor)":             KHRECOMLocationData("Progression",  269_0106),
     "Traverse Town Room of Rewards (Attack Cards Lionheart)":            KHRECOMLocationData("Progression",  269_0107),
+    "Traverse Town Bounty (Attack Cards Maverick Flare)":                KHRECOMLocationData("Days"       ,  269_0108), #Days Location
+    "Traverse Town Room of Rewards (Enemy Cards Saix)":                  KHRECOMLocationData("Days"       ,  269_0109), #Days Location
     
     "Wonderland Bounty (Magic Cards Stop)":                              KHRECOMLocationData("Progression",  269_0201),
     "Wonderland Field (Attack Cards Lady Luck)":                         KHRECOMLocationData("Progression",  269_0202),
@@ -44,6 +46,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Wonderland Room of Guidance":                                       KHRECOMLocationData("Progression",  269_0205),
     "Wonderland Room of Truth":                                          KHRECOMLocationData("Progression",  269_0206),
     "Wonderland Room of Truth (Enemy Cards Trickmaster)":                KHRECOMLocationData("Progression",  269_0207),
+    "Wonderland Room of Rewards (Enemy Cards Xemnas)":                   KHRECOMLocationData("Days"       ,  269_0208), #Days Location
     
     "Olympus Coliseum Field (Attack Card Olympia)":                      KHRECOMLocationData("Progression",  269_0301),
     "Olympus Coliseum Room of Beginnings":                               KHRECOMLocationData("Progression",  269_0302),
@@ -53,6 +56,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Olympus Coliseum Room of Truth (Enemy Cards Hades)":                KHRECOMLocationData("Progression",  269_0306),
     "Olympus Coliseum Room of Truth (Summon Cards Cloud)":               KHRECOMLocationData("Progression",  269_0307),
     "Olympus Coliseum Room of Rewards (Attack Cards Metal Chocobo)":     KHRECOMLocationData("Progression",  269_0308),
+    "Olympus Coliseum Room of Rewards (Attack Cards Total Eclipse)":     KHRECOMLocationData("Days"       ,  269_0309), #Days Location
     
     "Monstro Field (Attack Cards Wishing Star)":                         KHRECOMLocationData("Progression",  269_0401),
     "Monstro Room of Beginnings":                                        KHRECOMLocationData("Progression",  269_0402),
@@ -60,6 +64,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Monstro Room of Guidance (Enemy Cards Parasite Cage)":              KHRECOMLocationData("Progression",  269_0404),
     "Monstro Room of Truth":                                             KHRECOMLocationData("Progression",  269_0405),
     "Monstro Room of Truth (Summon Cards Dumbo)":                        KHRECOMLocationData("Progression",  269_0406),
+    "Monstro Room of Rewards (Enemy Cards Xaldin)":                      KHRECOMLocationData("Days"       ,  269_0407), #Days Location
     
     "Agrabah Bounty (Magic Cards Gravity)":                              KHRECOMLocationData("Progression",  269_0501),
     "Agrabah Field (Attack Cards Three Wishes)":                         KHRECOMLocationData("Progression",  269_0502),
@@ -69,6 +74,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Agrabah Room of Truth":                                             KHRECOMLocationData("Progression",  269_0506),
     "Agrabah Room of Truth (Enemy Cards Jafar)":                         KHRECOMLocationData("Progression",  269_0507),
     "Agrabah Room of Truth (Summon Cards Genie)":                        KHRECOMLocationData("Progression",  269_0508),
+    "Agrabah Room of Rewards (Enemy Cards Luxord)":                      KHRECOMLocationData("Days"       ,  269_0509), #Days Location
     
     "Halloween Town Field (Attack Cards Pumpkinhead)":                   KHRECOMLocationData("Progression",  269_0601),
     "Halloween Town Post Floor (Magic Cards Thunder)":                   KHRECOMLocationData("Progression",  269_0602),
@@ -76,6 +82,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Halloween Town Room of Guidance":                                   KHRECOMLocationData("Progression",  269_0604),
     "Halloween Town Room of Truth":                                      KHRECOMLocationData("Progression",  269_0605),
     "Halloween Town Room of Truth (Enemy Cards Oogie Boogie)":           KHRECOMLocationData("Progression",  269_0606),
+    "Halloween Town Room of Rewards (Attack Cards Bond of Flame)":       KHRECOMLocationData("Days"       ,  269_0607), #Days Location
     
     "Atlantica Field (Attack Cards Crabclaw)":                           KHRECOMLocationData("Progression",  269_0701),
     "Atlantica Post Floor (Magic Cards Aero)":                           KHRECOMLocationData("Progression",  269_0702),
@@ -83,6 +90,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Atlantica Room of Guidance":                                        KHRECOMLocationData("Progression",  269_0704),
     "Atlantica Room of Truth":                                           KHRECOMLocationData("Progression",  269_0705),
     "Atlantica Room of Truth (Enemy Cards Ursula)":                      KHRECOMLocationData("Progression",  269_0706),
+    "Atlantica Room of Rewards (Enemy Cards Demyx)":                     KHRECOMLocationData("Days"       ,  269_0707), #Days Location
     
     "Neverland Field (Attack Cards Fairy Harp)":                         KHRECOMLocationData("Progression",  269_0801),
     "Neverland Room of Beginnings":                                      KHRECOMLocationData("Progression",  269_0802),
@@ -90,6 +98,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Neverland Room of Truth":                                           KHRECOMLocationData("Progression",  269_0804),
     "Neverland Room of Truth (Enemy Cards Hook)":                        KHRECOMLocationData("Progression",  269_0805),
     "Neverland Room of Truth (Summon Cards Tinker Bell)":                KHRECOMLocationData("Progression",  269_0806),
+    "Neverland Room of Rewards (Attack Cards Midnight Roar)":            KHRECOMLocationData("Days"       ,  269_0807), #Days Location
     
     "Hollow Bastion Field (Attack Cards Divine Rose)":                   KHRECOMLocationData("Progression",  269_0901),
     "Hollow Bastion Room of Beginnings":                                 KHRECOMLocationData("Progression",  269_0902),
@@ -97,6 +106,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Hollow Bastion Room of Truth":                                      KHRECOMLocationData("Progression",  269_0904),
     "Hollow Bastion Room of Truth (Enemy Cards Dragon Maleficent)":      KHRECOMLocationData("Progression",  269_0905),
     "Hollow Bastion Room of Rewards (Summon Cards Mushu)":               KHRECOMLocationData("Progression",  269_0906),
+    "Hollow Bastion Room of Rewards (Enemy Cards Xigbar)":               KHRECOMLocationData("Days"       ,  269_0907), #Days Location
     
     "100 Acre Wood Clear (Summon Cards Bambi)":                          KHRECOMLocationData("Progression",  269_1001),
     "100 Acre Wood Mini Game Bumble Rumble (Item Cards Elixir)":         KHRECOMLocationData("Progression",  269_1002),
@@ -106,6 +116,8 @@ location_table: Dict[str, KHRECOMLocationData] = {
    #"Twilight Town Post Floor (Item Cards Mega-Potion)":                 KHRECOMLocationData("Progression",  269_1101), Bugged because of the post floor scene?
     "Twilight Town Room of Beginnings":                                  KHRECOMLocationData("Progression",  269_1102),
     "Twilight Town Room of Beginnings (Enemy Cards Vexen)":              KHRECOMLocationData("Progression",  269_1103),
+    "Twilight Town Room of Rewards (Enemy Cards Roxas)":                 KHRECOMLocationData("Days"       ,  269_1104), #Days Location
+    "Twilight Town Bounty (Enemy Cards Ansem)":                          KHRECOMLocationData("Days"       ,  269_1105), #Days Location
     
     "Destiny Islands Post Floor (Attack Cards Oathkeeper)":              KHRECOMLocationData("Progression",  269_1201),
     "Destiny Islands Post Floor (Attack Cards Oblivion)":                KHRECOMLocationData("Progression",  269_1202),
@@ -115,10 +127,14 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Destiny Islands Room of Guidance":                                  KHRECOMLocationData("Progression",  269_1206),
     "Destiny Islands Room of Guidance (Enemy Cards Darkside)":           KHRECOMLocationData("Progression",  269_1207),
     "Destiny Islands Room of Rewards (Item Cards Megalixir)":            KHRECOMLocationData("Progression",  269_1208),
+    "Destiny Islands Bounty (Enemy Cards Zexion)":                       KHRECOMLocationData("Days"       ,  269_1209), #Days Location
+    "Destiny Islands Room of Rewards (Attack Cards Two Become One)":     KHRECOMLocationData("Days"       ,  269_1210), #Days Location
     
     "Castle Oblivion Field Marluxia":                                    KHRECOMLocationData("Progression",  269_1301),
     "Castle Oblivion Room of Beginnings":                                KHRECOMLocationData("Progression",  269_1302),
     "Castle Oblivion Room of Beginnings (Enemy Cards Axel)":             KHRECOMLocationData("Progression",  269_1303),
+    "Castle Oblivion Bounty (Enemy Cards Lexaeus)":                      KHRECOMLocationData("Days"       ,  269_1304), #Days Location
+    "Castle Oblivion Room of Rewards (Attack Cards Star Seeker)":        KHRECOMLocationData("Days"       ,  269_1305), #Days Location
     
     "Heartless Air Pirate":                                              KHRECOMLocationData("Progression",  269_1401),
     "Heartless Air Soldier":                                             KHRECOMLocationData("Progression",  269_1402),

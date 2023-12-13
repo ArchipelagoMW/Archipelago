@@ -43,7 +43,7 @@ def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
 def has_item(state: CollectionState, player: int, item) -> bool:
     return state.has(item, player)
 
-def set_rules(multiworld: MultiWorld, player: int):
+def set_rules(multiworld: MultiWorld, player: int, days: bool):
     #Location rules.
     #Keys
     multiworld.get_location("Traverse Town Room of Rewards (Attack Cards Lionheart)"             , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Traverse Town")
@@ -56,6 +56,22 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("Destiny Islands Post Floor (Enemy Cards Riku)"                      , player).access_rule = lambda state: has_item(state, player,"World Card Halloween Town") and has_item(state, player,"World Card Atlantica")
     multiworld.get_location("Destiny Islands Post Floor (Attack Cards Oblivion)"                 , player).access_rule = lambda state: has_item(state, player,"World Card Halloween Town") and has_item(state, player,"World Card Atlantica")
     multiworld.get_location("100 Acre Wood Tigger's Playground (Attack Cards Spellbinder)"       , player).access_rule = lambda state: has_item(state, player,"World Card Neverland") and has_item(state, player,"World Card Monstro")
+    
+    #Days Rules
+    if days:
+        multiworld.get_location("Traverse Town Room of Rewards (Enemy Cards Saix)"                   , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Traverse Town")
+        multiworld.get_location("Wonderland Room of Rewards (Enemy Cards Xemnas)"                    , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Wonderland")
+        multiworld.get_location("Olympus Coliseum Room of Rewards (Attack Cards Total Eclipse)"      , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Olympus Coliseum")
+        multiworld.get_location("Monstro Room of Rewards (Enemy Cards Xaldin)"                       , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Monstro")
+        multiworld.get_location("Agrabah Room of Rewards (Enemy Cards Luxord)"                       , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Agrabah")
+        multiworld.get_location("Halloween Town Room of Rewards (Attack Cards Bond of Flame)"        , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Halloween Town")
+        multiworld.get_location("Atlantica Room of Rewards (Enemy Cards Demyx)"                      , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Atlantica")
+        multiworld.get_location("Neverland Room of Rewards (Attack Cards Midnight Roar)"             , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Neverland")
+        multiworld.get_location("Hollow Bastion Room of Rewards (Enemy Cards Xigbar)"                , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Hollow Bastion")
+        multiworld.get_location("Twilight Town Room of Rewards (Enemy Cards Roxas)"                  , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Twilight Town")
+        multiworld.get_location("Destiny Islands Room of Rewards (Attack Cards Two Become One)"      , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Destiny Islands")
+        multiworld.get_location("Castle Oblivion Room of Rewards (Attack Cards Star Seeker)"         , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Castle Oblivion")
+
     
     multiworld.get_location("Heartless Air Pirate"                                               , player).access_rule = lambda state: has_item(state, player,"World Card Neverland")
     multiworld.get_location("Heartless Air Soldier"                                              , player).access_rule = lambda state: has_item(state, player,"World Card Monstro") or has_item(state, player,"World Card Agrabah") or has_item(state, player,"World Card Halloween Town") or has_item(state, player,"World Card Destiny Islands")

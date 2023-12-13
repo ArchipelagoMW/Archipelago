@@ -26,9 +26,23 @@ class EnemyCards(DefaultOnToggle):
     """
     display_name = "Enemy Cards"
 
+class DaysItems(Toggle):
+    """
+    Toggle whether items not available to the player until they watch 358/2 Days are included in the item pool.
+    """
+    display_name = "Days Items"
+
+class DaysLocations(Toggle):
+    """
+    Toggle whether locations not available to the player until they watch 358/2 Days are included in the locations list.
+    """
+    display_name = "Days Locations"
+
 khrecom_options: Dict[str, type(Option)] = {
     "zeroes": Zeroes,
     "cure": Cure,
     "early_cure": EarlyCure,
     "enemy_cards": EnemyCards,
+    "days_items": DaysItems,
+    "days_locations": DaysLocations,
 }

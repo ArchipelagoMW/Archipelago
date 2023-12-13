@@ -9,7 +9,7 @@ class KHRECOMRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int):
+def create_regions(multiworld: MultiWorld, player: int, days: bool):
     regions: Dict[str, RLRegionData] = {
         "Menu":     KHRECOMRegionData(None, ["Floor 1"]),
         "Floor 1":  KHRECOMRegionData([], ["Warp"]),
@@ -45,6 +45,9 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 1"].locations.append("Traverse Town Room of Truth")
     regions["Floor 1"].locations.append("Traverse Town Room of Truth (Enemy Cards Guard Armor)")
     regions["Floor 1"].locations.append("Traverse Town Room of Rewards (Attack Cards Lionheart)")
+    if days:
+        regions["Floor 1"].locations.append("Traverse Town Bounty (Attack Cards Maverick Flare)")
+        regions["Floor 1"].locations.append("Traverse Town Room of Rewards (Enemy Cards Saix)")
     
     regions["Floor 2"].locations.append("Wonderland Bounty (Magic Cards Stop)")
     regions["Floor 2"].locations.append("Wonderland Field (Attack Cards Lady Luck)")
@@ -53,6 +56,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 2"].locations.append("Wonderland Room of Guidance")
     regions["Floor 2"].locations.append("Wonderland Room of Truth")
     regions["Floor 2"].locations.append("Wonderland Room of Truth (Enemy Cards Trickmaster)")
+    if days:
+        regions["Floor 2"].locations.append("Wonderland Room of Rewards (Enemy Cards Xemnas)")
     
     regions["Floor 3"].locations.append("Olympus Coliseum Field (Attack Card Olympia)")
     regions["Floor 3"].locations.append("Olympus Coliseum Room of Beginnings")
@@ -62,6 +67,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 3"].locations.append("Olympus Coliseum Room of Truth (Enemy Cards Hades)")
     regions["Floor 3"].locations.append("Olympus Coliseum Room of Truth (Summon Cards Cloud)")
     regions["Floor 3"].locations.append("Olympus Coliseum Room of Rewards (Attack Cards Metal Chocobo)")
+    if days:
+        regions["Floor 3"].locations.append("Olympus Coliseum Room of Rewards (Attack Cards Total Eclipse)")
     
     regions["Floor 4"].locations.append("Monstro Field (Attack Cards Wishing Star)")
     regions["Floor 4"].locations.append("Monstro Room of Beginnings")
@@ -69,6 +76,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 4"].locations.append("Monstro Room of Guidance (Enemy Cards Parasite Cage)")
     regions["Floor 4"].locations.append("Monstro Room of Truth")
     regions["Floor 4"].locations.append("Monstro Room of Truth (Summon Cards Dumbo)")
+    if days:
+        regions["Floor 4"].locations.append("Monstro Room of Rewards (Enemy Cards Xaldin)")
     
     regions["Floor 5"].locations.append("Agrabah Bounty (Magic Cards Gravity)")
     regions["Floor 5"].locations.append("Agrabah Field (Attack Cards Three Wishes)")
@@ -78,6 +87,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 5"].locations.append("Agrabah Room of Truth")
     regions["Floor 5"].locations.append("Agrabah Room of Truth (Enemy Cards Jafar)")
     regions["Floor 5"].locations.append("Agrabah Room of Truth (Summon Cards Genie)")
+    if days:
+        regions["Floor 5"].locations.append("Agrabah Room of Rewards (Enemy Cards Luxord)")
     
     regions["Floor 6"].locations.append("Halloween Town Field (Attack Cards Pumpkinhead)")
     regions["Floor 6"].locations.append("Halloween Town Post Floor (Magic Cards Thunder)")
@@ -85,6 +96,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 6"].locations.append("Halloween Town Room of Guidance")
     regions["Floor 6"].locations.append("Halloween Town Room of Truth")
     regions["Floor 6"].locations.append("Halloween Town Room of Truth (Enemy Cards Oogie Boogie)")
+    if days:
+        regions["Floor 6"].locations.append("Halloween Town Room of Rewards (Attack Cards Bond of Flame)")
     
     regions["Floor 7"].locations.append("Atlantica Field (Attack Cards Crabclaw)")
     regions["Floor 7"].locations.append("Atlantica Post Floor (Magic Cards Aero)")
@@ -92,6 +105,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 7"].locations.append("Atlantica Room of Guidance")
     regions["Floor 7"].locations.append("Atlantica Room of Truth")
     regions["Floor 7"].locations.append("Atlantica Room of Truth (Enemy Cards Ursula)")
+    if days:
+        regions["Floor 7"].locations.append("Atlantica Room of Rewards (Enemy Cards Demyx)")
     
     regions["Floor 8"].locations.append("Neverland Field (Attack Cards Fairy Harp)")
     regions["Floor 8"].locations.append("Neverland Room of Beginnings")
@@ -99,6 +114,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 8"].locations.append("Neverland Room of Truth")
     regions["Floor 8"].locations.append("Neverland Room of Truth (Enemy Cards Hook)")
     regions["Floor 8"].locations.append("Neverland Room of Truth (Summon Cards Tinker Bell)")
+    if days:
+        regions["Floor 8"].locations.append("Neverland Room of Rewards (Attack Cards Midnight Roar)")
     
     regions["Floor 9"].locations.append("Hollow Bastion Field (Attack Cards Divine Rose)")
     regions["Floor 9"].locations.append("Hollow Bastion Room of Beginnings")
@@ -106,6 +123,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 9"].locations.append("Hollow Bastion Room of Truth")
     regions["Floor 9"].locations.append("Hollow Bastion Room of Truth (Enemy Cards Dragon Maleficent)")
     regions["Floor 9"].locations.append("Hollow Bastion Room of Rewards (Summon Cards Mushu)")
+    if days:
+        regions["Floor 9"].locations.append("Hollow Bastion Room of Rewards (Enemy Cards Xigbar)")
     
     regions["Floor 10"].locations.append("100 Acre Wood Clear (Summon Cards Bambi)")
     regions["Floor 10"].locations.append("100 Acre Wood Mini Game Bumble Rumble (Item Cards Elixir)")
@@ -115,6 +134,9 @@ def create_regions(multiworld: MultiWorld, player: int):
    #regions["Floor 11"].locations.append("Twilight Town Post Floor (Item Cards Mega-Potion)") Bugged because of the post floor scene?
     regions["Floor 11"].locations.append("Twilight Town Room of Beginnings")
     regions["Floor 11"].locations.append("Twilight Town Room of Beginnings (Enemy Cards Vexen)")
+    if days:
+        regions["Floor 11"].locations.append("Twilight Town Room of Rewards (Enemy Cards Roxas)")
+        regions["Floor 11"].locations.append("Twilight Town Bounty (Enemy Cards Ansem)")
     
     regions["Floor 12"].locations.append("Destiny Islands Post Floor (Attack Cards Oathkeeper)")
     regions["Floor 12"].locations.append("Destiny Islands Post Floor (Attack Cards Oblivion)")
@@ -124,10 +146,16 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 12"].locations.append("Destiny Islands Room of Guidance")
     regions["Floor 12"].locations.append("Destiny Islands Room of Guidance (Enemy Cards Darkside)")
     regions["Floor 12"].locations.append("Destiny Islands Room of Rewards (Item Cards Megalixir)")
+    if days:
+        regions["Floor 12"].locations.append("Destiny Islands Bounty (Enemy Cards Zexion)")
+        regions["Floor 12"].locations.append("Destiny Islands Room of Rewards (Attack Cards Two Become One)")
     
     regions["Floor 13"].locations.append("Castle Oblivion Field Marluxia")
     regions["Floor 13"].locations.append("Castle Oblivion Room of Beginnings")
     regions["Floor 13"].locations.append("Castle Oblivion Room of Beginnings (Enemy Cards Axel)")
+    if days:
+        regions["Floor 13"].locations.append("Castle Oblivion Bounty (Enemy Cards Lexaeus)")
+        regions["Floor 13"].locations.append("Castle Oblivion Room of Rewards (Attack Cards Star Seeker)")
     
     regions["Heartless"].locations.append("Heartless Air Pirate")                                              
     regions["Heartless"].locations.append("Heartless Air Soldier")                                             
