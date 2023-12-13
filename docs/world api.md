@@ -109,7 +109,7 @@ the options and the values are the values to be set for that option. These prese
       # ...
   ```
 
-* `location_descriptions` (optional) WebWorlds can provide a map which contains human-friendly descriptions of locations 
+* `location_descriptions` (optional) WebWorlds can provide a map that contains human-friendly descriptions of locations 
 or location groups. These descriptions will show up in location-selection options in the Weighted Options page. Extra
 indentation and single newlines will be collapsed into spaces.
 
@@ -134,7 +134,7 @@ indentation and single newlines will be collapsed into spaces.
       location_descriptions = location_descriptions
   ```
 
-* `item_descriptions` (optional) WebWorlds can provide map which contains human-friendly descriptions of items or item 
+* `item_descriptions` (optional) WebWorlds can provide a map that contains human-friendly descriptions of items or item 
 groups. These descriptions will show up in item-selection options in the Weighted Options page. Extra indentation and 
 single newlines will be collapsed into spaces.
 
