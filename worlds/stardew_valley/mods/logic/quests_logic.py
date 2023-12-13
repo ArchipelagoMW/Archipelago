@@ -3,6 +3,7 @@ from typing import Dict, Union
 from ..mod_data import ModNames
 from ...logic.base_logic import BaseLogic, BaseLogicMixin
 from ...logic.has_logic import HasLogicMixin
+from ...logic.quest_logic import QuestLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogicMixin
@@ -18,7 +19,7 @@ from ...strings.forageable_names import SVEForage
 from ...strings.material_names import Material
 from ...strings.metal_names import Ore, MetalBar
 from ...strings.monster_drop_names import Loot
-from ...strings.quest_names import ModQuest
+from ...strings.quest_names import Quest, ModQuest
 from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
 from ...strings.villager_names import ModNPC
@@ -31,7 +32,7 @@ class ModQuestLogicMixin(BaseLogicMixin):
         self.quest = ModQuestLogic(*args, **kwargs)
 
 
-class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin]]):
+class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogicMixin, RegionLogicMixin, TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin]]):
     def get_modded_quest_rules(self) -> Dict[str, StardewRule]:
         quests = dict()
         quests.update(self._get_juna_quest_rules())
@@ -72,14 +73,14 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLog
             return {}
 
         return {
-            ModQuest.RailroadBoulder: (self.logic.received(Wallet.skull_key) & self.logic.has_all(Ore.iridium, Material.coal) &
-                                       self.logic.region.can_reach(Region.blacksmith) & self.logic.region.can_reach(Region.railroad)),
-            ModQuest.GrandpasShed: (self.logic.has_all(Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone) &
-                                    self.logic.region.can_reach(SVERegion.grandpas_shed)),
-            ModQuest.MarlonsBoat: (self.logic.has_all(Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat) &
-                                   self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit)),
+            ModQuest.RailroadBoulder: self.logic.received(Wallet.skull_key) & self.logic.has((Ore.iridium, Material.coal)) &
+                                      self.logic.region.can_reach(Region.blacksmith) & self.logic.region.can_reach(Region.railroad),
+            ModQuest.GrandpasShed: self.logic.has((Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone)) &
+                                   self.logic.region.can_reach(SVERegion.grandpas_shed),
+            ModQuest.MarlonsBoat: self.logic.has((Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
+                                  self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit),
             ModQuest.AuroraVineyard: self.logic.has(Fruit.starfruit) & self.logic.region.can_reach(SVERegion.aurora_vineyard),
-            ModQuest.MonsterCrops: self.logic.has_all(SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root),
+            ModQuest.MonsterCrops: self.logic.has((SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
             ModQuest.VoidSoul: self.logic.region.can_reach(Region.sewer) & self.logic.has(SVEForage.void_soul),
         }
 
@@ -87,13 +88,15 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLog
         if ModNames.distant_lands not in self.options.mods:
             return {}
 
-        return {
-            ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.has(Fertilizer.deluxe),
-            ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.deluxe),
+        return{
+            ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.has(Fertilizer.deluxe) &
+                                         self.logic.quest.can_complete_quest(Quest.magic_ink),
+            ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.deluxe) &
+                                 self.logic.quest.can_complete_quest(Quest.magic_ink),
             ModQuest.ANewPot: self.logic.region.can_reach(Region.saloon) &
                               self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_store) &
-                              self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron),
+                              self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin, 6),
             ModQuest.FancyBlanketTask: self.logic.region.can_reach(Region.haley_house) & self.logic.has(AnimalProduct.wool) &
-                                       self.logic.has(ArtisanGood.cloth)
+                                       self.logic.has(ArtisanGood.cloth) & self.logic.relationship.has_hearts(ModNPC.goblin, 10)
 
         }
