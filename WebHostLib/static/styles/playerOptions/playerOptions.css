@@ -15,6 +15,33 @@ html {
   padding: 1rem;
   color: #eeffeb;
 }
+#player-options .group-container {
+  padding: 0;
+  margin: 0;
+}
+#player-options .group-container h2 {
+  user-select: none;
+  cursor: unset;
+}
+#player-options .group-container h2 label {
+  cursor: pointer;
+}
+#player-options .group-container .group-toggle {
+  display: none;
+}
+#player-options .group-container .arrow {
+  display: inline-block;
+  font-size: 1.5rem;
+}
+#player-options .group-container .game-options {
+  display: none;
+}
+#player-options .group-container:has(input[type=checkbox].group-toggle:checked) .game-options {
+  display: flex;
+}
+#player-options .group-container:has(input[type=checkbox].group-toggle:checked) .arrow {
+  transform: rotate(90deg);
+}
 #player-options #player-options-button-row {
   display: flex;
   flex-direction: row;

@@ -16,6 +16,43 @@ html{
     padding: 1rem;
     color: #eeffeb;
 
+    .group-container{
+        padding: 0;
+        margin: 0;
+
+        h2{
+            user-select: none;
+            cursor: unset;
+
+            label{
+                cursor: pointer;
+            }
+        }
+
+        .group-toggle{
+            display: none;
+        }
+
+        .arrow{
+            display: inline-block;
+            font-size: 1.5rem;
+        }
+
+        .game-options{
+            display: none;
+        }
+
+        &:has(input[type=checkbox].group-toggle:checked){
+            .game-options{
+                display: flex;
+            }
+
+            .arrow{
+                transform: rotate(90deg);
+            }
+        }
+    }
+
     #player-options-button-row{
         display: flex;
         flex-direction: row;

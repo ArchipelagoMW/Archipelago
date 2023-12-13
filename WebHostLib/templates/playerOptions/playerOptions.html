@@ -56,104 +56,113 @@
 
             <div id="option-groups">
                 {% for group_name, group_options in option_groups | dictsort %}
-                    <h2>{{ group_name }}</h2>
-                    <div class="game-options">
-                        <table class="left">
-                            <tbody>
-                                {% for option_name, option in group_options.items() %}
-                                    {% if loop.index < loop.length / 2 %}
-                                        {% if issubclass(option, Options.Toggle) %}
-                                            {{ inputs.Toggle(option_name, option) }}
+                    <div class="group-container">
+                        <h2>
+                            <label for="{{ group_name }}-toggle">
+                                <span class="arrow">▶</span>
+                                {{ group_name }}
+                            </label>
+                        </h2>
+                        <input type="checkbox" id="{{ group_name }}-toggle" class="group-toggle" />
 
-                                        {% elif issubclass(option, Options.DefaultOnToggle) %}
-                                            {{ inputs.DefaultOnToggle(option_name, option) }}
+                        <div class="game-options">
+                            <table class="left">
+                                <tbody>
+                                    {% for option_name, option in group_options.items() %}
+                                        {% if loop.index < loop.length / 2 %}
+                                            {% if issubclass(option, Options.Toggle) %}
+                                                {{ inputs.Toggle(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.PlandoBosses) %}
-                                            {{ inputs.PlandoBosses(option_name, option) }}
+                                            {% elif issubclass(option, Options.DefaultOnToggle) %}
+                                                {{ inputs.DefaultOnToggle(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.TextChoice) %}
-                                            {{ inputs.TextChoice(option_name, option) }}
+                                            {% elif issubclass(option, Options.PlandoBosses) %}
+                                                {{ inputs.PlandoBosses(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.Choice) %}
-                                            {{ inputs.Choice(option_name, option) }}
+                                            {% elif issubclass(option, Options.TextChoice) %}
+                                                {{ inputs.TextChoice(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.NamedRange) %}
-                                            {{ inputs.NamedRange(option_name, option) }}
+                                            {% elif issubclass(option, Options.Choice) %}
+                                                {{ inputs.Choice(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.Range) %}
-                                            {{ inputs.Range(option_name, option) }}
+                                            {% elif issubclass(option, Options.NamedRange) %}
+                                                {{ inputs.NamedRange(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.FreeText) %}
-                                            {{ inputs.FreeText(option_name, option) }}
+                                            {% elif issubclass(option, Options.Range) %}
+                                                {{ inputs.Range(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                            {{ inputs.ItemDict(option_name, option, world) }}
+                                            {% elif issubclass(option, Options.FreeText) %}
+                                                {{ inputs.FreeText(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
-                                            {{ inputs.OptionList(option_name, option) }}
+                                            {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                                {{ inputs.ItemDict(option_name, option, world) }}
 
-                                        {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
-                                            {{ inputs.LocationSet(option_name, option, world) }}
+                                            {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                                {{ inputs.OptionList(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
-                                            {{ inputs.ItemSet(option_name, option, world) }}
+                                            {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                                {{ inputs.LocationSet(option_name, option, world) }}
 
-                                        {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
-                                            {{ inputs.OptionSet(option_name, option) }}
+                                            {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                                {{ inputs.ItemSet(option_name, option, world) }}
 
+                                            {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                                {{ inputs.OptionSet(option_name, option) }}
+
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <table class="right">
-                            <tbody>
-                                {% for option_name, option in group_options.items() %}
-                                    {% if loop.index > loop.length / 2 %}
-                                        {% if issubclass(option, Options.Toggle) %}
-                                            {{ inputs.Toggle(option_name, option) }}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <table class="right">
+                                <tbody>
+                                    {% for option_name, option in group_options.items() %}
+                                        {% if loop.index > loop.length / 2 %}
+                                            {% if issubclass(option, Options.Toggle) %}
+                                                {{ inputs.Toggle(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.DefaultOnToggle) %}
-                                            {{ inputs.DefaultOnToggle(option_name, option) }}
+                                            {% elif issubclass(option, Options.DefaultOnToggle) %}
+                                                {{ inputs.DefaultOnToggle(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.PlandoBosses) %}
-                                            {{ inputs.PlandoBosses(option_name, option) }}
+                                            {% elif issubclass(option, Options.PlandoBosses) %}
+                                                {{ inputs.PlandoBosses(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.TextChoice) %}
-                                            {{ inputs.TextChoice(option_name, option) }}
+                                            {% elif issubclass(option, Options.TextChoice) %}
+                                                {{ inputs.TextChoice(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.Choice) %}
-                                            {{ inputs.Choice(option_name, option) }}
+                                            {% elif issubclass(option, Options.Choice) %}
+                                                {{ inputs.Choice(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.NamedRange) %}
-                                            {{ inputs.NamedRange(option_name, option) }}
+                                            {% elif issubclass(option, Options.NamedRange) %}
+                                                {{ inputs.NamedRange(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.Range) %}
-                                            {{ inputs.Range(option_name, option) }}
+                                            {% elif issubclass(option, Options.Range) %}
+                                                {{ inputs.Range(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.FreeText) %}
-                                            {{ inputs.FreeText(option_name, option) }}
+                                            {% elif issubclass(option, Options.FreeText) %}
+                                                {{ inputs.FreeText(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                            {{ inputs.ItemDict(option_name, option, world) }}
+                                            {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                                {{ inputs.ItemDict(option_name, option, world) }}
 
-                                        {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
-                                            {{ inputs.OptionList(option_name, option) }}
+                                            {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                                {{ inputs.OptionList(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
-                                            {{ inputs.LocationSet(option_name, option, world) }}
+                                            {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                                {{ inputs.LocationSet(option_name, option, world) }}
 
-                                        {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
-                                            {{ inputs.ItemSet(option_name, option, world) }}
+                                            {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                                {{ inputs.ItemSet(option_name, option, world) }}
 
-                                        {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
-                                            {{ inputs.OptionSet(option_name, option) }}
+                                            {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                                {{ inputs.OptionSet(option_name, option) }}
 
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
