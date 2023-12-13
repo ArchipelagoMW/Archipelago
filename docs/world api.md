@@ -26,8 +26,7 @@ When in doubt use an IDE with coding style linter, for example PyCharm Community
 
 Docstrings are strings attached to an object in Python that describe what the object is supposed to be. Certain
 docstrings will be picked up and used by AP. They are assigned by writing a string without any assignment right below a
-definition. The string must be a triple-quoted string, and should
-follow [reST style](https://peps.python.org/pep-0287/).
+definition. The string must be a triple-quoted string, and should follow [reST style](https://peps.python.org/pep-0287/).
 
 Example:
 
