@@ -136,7 +136,8 @@ def mirrorless_path_to_castle_courtyard(world, player):
 
 def set_defeat_dungeon_boss_rule(location):
     # Lambda required to defer evaluation of dungeon.boss since it will change later if boss shuffle is used
-    set_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
+    add_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
+
 
 def set_always_allow(spot, rule):
     spot.always_allow = rule
