@@ -1,6 +1,6 @@
 {% macro Toggle(option_name, option) %}
     <tr>
-        <td>{{ OptionTitle(option_nae, option) }}</td>
+        <td>{{ OptionTitle(option_name, option) }}</td>
         <td>
             <div class="select-container">
                 <select id="{{ option_name }}" name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
@@ -25,7 +25,7 @@
 
 {% macro Choice(option_name, option) %}
     <tr>
-        <td>{{ OptionTitle(option_nae, option) }}</td>
+        <td>{{ OptionTitle(option_name, option) }}</td>
         <td>
             <div class="select-container">
                 <select id="{{ option_name }}" name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
@@ -47,7 +47,7 @@
 
 {% macro Range(option_name, option) %}
     <tr>
-        <td>{{ OptionTitle(option_nae, option) }}</td>
+        <td>{{ OptionTitle(option_name, option) }}</td>
         <td>
             <div class="range-container">
                 <input
@@ -70,7 +70,7 @@
 
 {% macro NamedRange(option_name, option) %}
     <tr>
-        <td>{{ OptionTitle(option_nae, option) }}</td>
+        <td>{{ OptionTitle(option_name, option) }}</td>
         <td>
             <div class="named-range-container">
                 <select data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
@@ -105,7 +105,7 @@
 
 {% macro FreeText(option_name, option) %}
     <tr>
-        <td>{{ OptionTitle(option_nae, option) }}</td>
+        <td>{{ OptionTitle(option_name, option) }}</td>
         <td>
             <div class="free-text-container">
                 <input type="text" id="{{ option_name }}" name="{{ option_name }}" value="{{ option.default }}" />
@@ -116,7 +116,7 @@
 
 {% macro TextChoice(option_name, option) %}
     <tr>
-        <td>{{ OptionTitle(option_nae, option) }}</td>
+        <td>{{ OptionTitle(option_name, option) }}</td>
         <td>
             <div class="text-choice-container">
                 <div class="text-choice-wrapper">
@@ -130,10 +130,11 @@
                             {% endif %}
                         {% endif %}
                     {% endfor %}
+                        <option value="custom" hidden>Custom</option>
                 </select>
                 {{ RandomizeButton(option_name, option) }}
                 </div>
-                <input type="text" id="{{ option_name }}-custom" name="{{ option_name }}-custom" placeholder="Custom value..." />
+                <input type="text" id="{{ option_name }}-custom" name="{{ option_name }}-custom" data-option-name="{{ option_name }}" placeholder="Custom value..." />
             </div>
         </td>
     </tr>
@@ -249,7 +250,7 @@
 
 {% macro RandomizeButton(option_name, option) %}
     <div class="randomize-button" data-tooltip="Toggle randomization for this option!">
-        <label>
+        <label for="random-{{ option_name }}">
             <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" data-option-name="{{ option_name }}" {{ "checked" if option.default == "random" }} />
             🎲
         </label>
