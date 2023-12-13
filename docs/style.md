@@ -6,7 +6,6 @@
 * 120 character per line for all source files.
 * Avoid white space errors like trailing spaces.
 
-
 ## Python Code
 
 * We mostly follow [PEP8](https://peps.python.org/pep-0008/). Read below to see the differences.
@@ -20,7 +19,6 @@
   type is hard or impossible to deduce.) Clear annotations help developers look up and validate API calls.
 * Worlds that do not follow PEP8 should still have a consistent style across its files to make reading easier.
 
-
 ## Markdown
 
 * We almost follow [Google's styleguide](https://google.github.io/styleguide/docguide/style.html).
@@ -30,19 +28,16 @@
 * One space between bullet/number and text.
 * No lazy numbering.
 
-
 ## HTML
 
 * Indent with 2 spaces for new code.
 * kebab-case for ids and classes.
-
 
 ## CSS
 
 * Indent with 2 spaces for new code.
 * `{` on the same line as the selector.
 * No space between selector and `{`.
-
 
 ## JS
 
