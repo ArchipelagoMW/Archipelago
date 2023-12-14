@@ -684,6 +684,10 @@ class Range(NumericOption):
             return cls(data)
         return cls.from_text(str(data))
 
+    @property
+    def current_key(self) -> str:
+        return str(self.value)
+
     @classmethod
     def get_option_name(cls, value: int) -> str:
         return str(value)

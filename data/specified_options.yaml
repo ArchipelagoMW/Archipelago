@@ -1,0 +1,11 @@
+name: {{ name }}
+game: {{ game }}
+requires:
+  version: {{ __version__ }}
+{% if description %}
+description: {{ description }}
+{% endif %}
+{{ game }}:
+  {%- for option_key, value in options.items() %}
+  {{ option_key }}: {{ value }}
+  {%- endfor %}

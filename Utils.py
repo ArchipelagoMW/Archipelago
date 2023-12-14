@@ -23,7 +23,6 @@ from yaml import load, load_all, dump, SafeLoader
 
 if typing.TYPE_CHECKING:
     from worlds.AutoWorld import World
-    from Options import Range
 
 try:
     from yaml import CLoader as UnsafeLoader
@@ -1188,52 +1187,44 @@ def visualize_regions(
         f.write("\n".join(uml))
 
 
-def generate_world_template(world: typing.Union[World, typing.Type[World]],
-                            target_folder: typing.Optional[typing.Union[str, "pathlib.Path"]] = None) -> None:
+def generate_world_template(
+    world: World,
+    target_folder: typing.Optional[typing.Union[str, "pathlib.Path"]] = None,
+) -> None:
     """
     Generates a single YAML template for the provided world instance with its options
     :param world: world to generate a template for. If an instance is passed will use the options currently set on that
      world
     :param target_folder: directory to output the YAML template to
     """
-    import yaml
+    from Options import NumericOption
     from jinja2 import Template
-
-    def dictify_range(option: Range):
-        data = {option.default: 50}
-        for sub_option in ["random", "random-low", "random-high"]:
-            if sub_option != option.default:
-                data[sub_option] = 0
-
-        notes = {}
-        for name, number in getattr(option, "special_range_names", {}).items():
-            notes[name] = f"equivalent to {number}"
-            if number in data:
-                data[name] = data[number]
-                del data[number]
-            else:
-                data[name] = 0
-
-        return data, notes
 
     if not target_folder:
         target_folder = user_path("Players", "Templates")
-    game_name = world.game
-    
-    if isinstance(world, type):
-        all_options = world.options_dataclass.type_hints
-    else:
-        all_options = world.options.as_dict(*world.options_dataclass.type_hints.keys())
-        os.makedirs(target_folder, exist_ok=True)
 
-    with open(local_path("data", "options.yaml")) as f:
+    game_name = world.game
+    all_options = {}
+    for option_name, option in world.options_dataclass.type_hints.items():
+        option_result = getattr(world.options, option_name)
+        if isinstance(option_result, NumericOption):
+            value = option_result.current_key
+        elif isinstance(option_result.value, set):
+            value = sorted(option_result.value)
+        else:
+            value = option_result.value
+        all_options[option_name] = value
+
+    os.makedirs(target_folder, exist_ok=True)
+    with open(local_path("data", "specified_options.yaml")) as f:
         file_data = f.read()
+
     res = Template(file_data).render(
         options=all_options,
         __version__=__version__,
         game=game_name,
-        yaml_dump=yaml.dump,
-        dictify_range=dictify_range,
+        name=f"Player{world.player}",
+        description="Test",
     )
 
     del file_data
