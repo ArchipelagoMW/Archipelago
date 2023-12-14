@@ -55,9 +55,10 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     ingredients: Set[str]
     progressive: Tuple[str]
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
+    requires: Set[str]
 
     def __init__(self, name: str, ingredients: Set[str], factorio_id: int, progressive: Tuple[str] = (),
-                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None):
+                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None, requires: list[str] = None):
         self.name = name
         self.factorio_id = factorio_id
         self.ingredients = ingredients
@@ -67,6 +68,10 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
             self.unlocks = unlocks
         else:
             self.unlocks = set()
+        if requires:
+            self.requires = set(requires)
+        else:
+            self.requires = set()
 
     def build_rule(self, player: int):
         logging.debug(f"Building rules for {self.name}")
@@ -79,6 +84,15 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
         technologies = set()
         for ingredient in self.ingredients:
             technologies |= required_technologies[ingredient]  # technologies that unlock the recipes
+        return technologies
+
+    def get_vanilla_prerequisites(self) -> Set[str]:
+        """Get Technologies that are vanilla requirements of this one."""
+        # Modded technologies might offer better recipes for getting the early game resources, so use this when you don't want the above method to yield half the tech tree
+        technologies = set()
+        for tech in self.requires:
+            technologies.add(technology_table[tech].name)
+            technologies |= technology_table[tech].get_vanilla_prerequisites()
         return technologies
 
     def __hash__(self):
@@ -220,7 +234,7 @@ recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 for technology_name, data in sorted(techs_future.result().items()):
     current_ingredients = set(data["ingredients"])
     technology = Technology(technology_name, current_ingredients, factorio_tech_id,
-                            has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]))
+                            has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]), requires=data["requires"])
     factorio_tech_id += 1
     tech_table[technology_name] = technology.factorio_id
     technology_table[technology_name] = technology
@@ -464,6 +478,9 @@ for technology in progressive_technology_table.values():
 
 tech_table.update(progressive_tech_table)
 technology_table.update(progressive_technology_table)
+
+for pre_automation in base_technology_table["automation"].get_vanilla_prerequisites():
+    del base_tech_table[pre_automation]
 
 # techs that are never progressive
 common_tech_table: Dict[str, int] = {tech_name: tech_id for tech_name, tech_id in base_tech_table.items()
