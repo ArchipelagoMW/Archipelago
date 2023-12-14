@@ -17,8 +17,7 @@ class ItemData(typing.NamedTuple):
     parent_item: typing.Optional[str] = None
     origin: typing.Set[str] = {"wol"}
     description: typing.Optional[str] = None
-    important_for_filtering: bool = classification == ItemClassification.progression \
-                                    or classification == ItemClassification.progression_skip_balancing
+    important_for_filtering: bool = False
 
 
 class StarcraftItem(Item):

@@ -225,9 +225,11 @@ class ValidInventory:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory = list(self.item_pool)
         locked_items = list(self.locked_items)
+        item_list = get_full_item_list()
         self.logical_inventory = [
             item.name for item in inventory + locked_items + self.existing_items
-            if get_full_item_list()[item.name].important_for_filtering  # Track all Progression items and those with complex rules for filtering
+            if item_list[item.name].classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing)
+            or item_list[item.name].important_for_filtering  # Track all Progression items and those with complex rules for filtering
         ]
         requirements = mission_requirements
         parent_items = self.item_children.keys()
