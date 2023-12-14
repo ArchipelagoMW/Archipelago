@@ -136,7 +136,8 @@ def mirrorless_path_to_castle_courtyard(world, player):
 
 def set_defeat_dungeon_boss_rule(location):
     # Lambda required to defer evaluation of dungeon.boss since it will change later if boss shuffle is used
-    set_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
+    add_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
+
 
 def set_always_allow(spot, rule):
     spot.always_allow = rule
@@ -197,8 +198,13 @@ def global_rules(world, player):
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
     for exit in world.get_region('Menu', player).exits:
         exit.hide_path = True
-
-    set_rule(world.get_entrance('Old Man S&Q', player), lambda state: state.can_reach('Old Man', 'Location', player))
+    try:
+        old_man_sq = world.get_entrance('Old Man S&Q', player)
+    except KeyError:
+        pass  # it doesn't exist, should be dungeon-only unittests
+    else:
+        old_man = world.get_location("Old Man", player)
+        set_rule(old_man_sq, lambda state: old_man.can_reach(state))
 
     set_rule(world.get_location('Sunken Treasure', player), lambda state: state.has('Open Floodgate', player))
     set_rule(world.get_location('Dark Blacksmith Ruins', player), lambda state: state.has('Return Smith', player))
@@ -1526,16 +1532,16 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     # Helper functions to determine if the moon pearl is required
     if inverted:
         def is_bunny(region):
-            return region.is_light_world
+            return region and region.is_light_world
 
         def is_link(region):
-            return region.is_dark_world
+            return region and region.is_dark_world
     else:
         def is_bunny(region):
-            return region.is_dark_world
+            return region and region.is_dark_world
 
         def is_link(region):
-            return region.is_light_world
+            return region and region.is_light_world
 
     def get_rule_to_add(region, location = None, connecting_entrance = None):
         # In OWG, a location can potentially be superbunny-mirror accessible or
@@ -1603,21 +1609,20 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
         return options_to_access_rule(possible_options)
 
     # Add requirements for bunny-impassible caves if link is a bunny in them
-    for region in [world.get_region(name, player) for name in bunny_impassable_caves]:
-
+    for region in (world.get_region(name, player) for name in bunny_impassable_caves):
         if not is_bunny(region):
             continue
         rule = get_rule_to_add(region)
-        for exit in region.exits:
-            add_rule(exit, rule)
+        for region_exit in region.exits:
+            add_rule(region_exit, rule)
 
     paradox_shop = world.get_region('Light World Death Mountain Shop', player)
     if is_bunny(paradox_shop):
         add_rule(paradox_shop.entrances[0], get_rule_to_add(paradox_shop))
 
     # Add requirements for all locations that are actually in the dark world, except those available to the bunny, including dungeon revival
-    for entrance in world.get_entrances():
-        if entrance.player == player and is_bunny(entrance.connected_region):
+    for entrance in world.get_entrances(player):
+        if is_bunny(entrance.connected_region):
             if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] :
                 if entrance.connected_region.type == LTTPRegionType.Dungeon:
                     if entrance.parent_region.type != LTTPRegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
