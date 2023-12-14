@@ -7,6 +7,7 @@ from .Options import get_option_value, RequiredTactics
 from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 from . import ItemNames
 
+
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     type: str
@@ -17,8 +18,12 @@ class ItemData(typing.NamedTuple):
     parent_item: typing.Optional[str] = None
     origin: typing.Set[str] = {"wol"}
     description: typing.Optional[str] = None
-    important_for_filtering: bool = classification == ItemClassification.progression \
-                                    or classification == ItemClassification.progression_skip_balancing
+    important_for_filtering: bool = False
+
+    def is_important_for_filtering(self):
+        return self.important_for_filtering \
+            or self.classification == ItemClassification.progression \
+            or self.classification == ItemClassification.progression_skip_balancing
 
 
 class StarcraftItem(Item):

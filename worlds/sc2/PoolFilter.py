@@ -225,15 +225,15 @@ class ValidInventory:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory = list(self.item_pool)
         locked_items = list(self.locked_items)
+        item_list = get_full_item_list()
         self.logical_inventory = [
             item.name for item in inventory + locked_items + self.existing_items
-            if get_full_item_list()[item.name].important_for_filtering  # Track all Progression items and those with complex rules for filtering
+            if item_list[item.name].is_important_for_filtering()  # Track all Progression items and those with complex rules for filtering
         ]
         requirements = mission_requirements
         parent_items = self.item_children.keys()
         parent_lookup = {child: parent for parent, children in self.item_children.items() for child in children}
         minimum_upgrades = get_option_value(self.multiworld, self.player, "min_number_of_upgrades")
-        item_list = get_full_item_list()
 
         def attempt_removal(item: Item) -> bool:
             inventory.remove(item)
