@@ -2642,7 +2642,7 @@ id,region,name,tags,mod_name
 8010,Shipping,Shipsanity: Barbarian Elixir,SHIPSANITY,Stardew Valley Expanded
 8011,Shipping,Shipsanity: Bearberrys,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8012,Shipping,Shipsanity: Big Bark Burger,SHIPSANITY,Stardew Valley Expanded
-8013,Shipping,Shipsanity: Big Conch,SHIPSANITY,Stardew Valley Expanded
+8013,Shipping,Shipsanity: Big Conch,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8014,Shipping,Shipsanity: Blue Moon Wine,SHIPSANITY,Stardew Valley Expanded
 8015,Shipping,Shipsanity: Bonefish,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8016,Shipping,Shipsanity: Bull Trout,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
@@ -2650,7 +2650,7 @@ id,region,name,tags,mod_name
 8018,Shipping,Shipsanity: Clownfish,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8019,Shipping,Shipsanity: Daggerfish,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8020,Shipping,Shipsanity: Dewdrop Berry,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
-8021,Shipping,Shipsanity: Dried Sand Dollar,SHIPSANITY,Stardew Valley Expanded
+8021,Shipping,Shipsanity: Dried Sand Dollar,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8022,Shipping,Shipsanity: Dulse Seaweed,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8023,Shipping,Shipsanity: Ferngill Primrose,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8024,Shipping,Shipsanity: Flower Cookie,SHIPSANITY,Stardew Valley Expanded
