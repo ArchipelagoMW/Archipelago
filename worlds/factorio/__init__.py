@@ -241,7 +241,9 @@ class Factorio(World):
         for ingredient in self.multiworld.max_science_pack[self.player].get_allowed_packs():
             location = world.get_location(f"Automate {ingredient}", player)
 
-            if self.multiworld.recipe_ingredients[self.player]:
+            if self.multiworld.recipe_ingredients[self.player] == 1 or \
+                    (self.multiworld.recipe_ingredients[self.player] == 2 and ingredient != "automation-science-pack"):
+
                 custom_recipe = self.custom_recipes[ingredient]
 
                 location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
@@ -456,6 +458,8 @@ class Factorio(World):
         if self.multiworld.recipe_ingredients[self.player]:
             valid_pool = []
             for pack in self.multiworld.max_science_pack[self.player].get_ordered_science_packs():
+                if pack == "automation-science-pack" and self.multiworld.recipe_ingredients[self.player] == 2:
+                    continue
                 valid_pool += sorted(science_pack_pools[pack])
                 self.multiworld.random.shuffle(valid_pool)
                 if pack in recipes:  # skips over space science pack
