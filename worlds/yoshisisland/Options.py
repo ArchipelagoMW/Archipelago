@@ -15,7 +15,7 @@ class SplitBonus(Toggle):
 
 class ObjectVis(Choice):
     """This will determine the default visibility of objects revealed by the Magnifying Glass.
-    Strict Logic will expect the Secret Lens or a Magnifying Glass to interact with hidden clouds if they are not set to visible by default."""
+    Strict Logic will expect the Secret Lens or a Magnifying Glass to interact with hidden clouds containing stars if they are not set to visible by default."""
     display_name = "Hidden Object Visibility"
     option_none = 0
     option_coins_only = 1
@@ -24,13 +24,13 @@ class ObjectVis(Choice):
     default = 1
 
 class SoftlockPrevention(DefaultOnToggle):
-    """If enabled, holding R + X to warp to the last used Middle Ring, or the start of the level if none have been activated."""
+    """If enabled, hold R + X to warp to the last used Middle Ring, or the start of the level if none have been activated."""
     display_name = "Softlock Prevention Code"
 
 class StageLogic(Choice):
     """This determines what logic mode the stages will use.
-    Strict: Best for casual players or those new to the AP implementation. Requirements won't be too demanding.
-    Loose: Recommended for veterans of the original. Won't expect anything too difficult, but may expect unusual platforming or egg throws.
+    Strict: Best for casual players or those new to playing Yoshi's Island in AP. Level requirements won't expect anything too difficult of the player.
+    Loose: Recommended for veterans of the original game. Won't expect anything too difficult, but may expect unusual platforming or egg throws.
     Expert: Logic may expect advanced knowledge or memorization of level layouts, as well as jumps the player may only have one chance to make without restarting."""
     display_name = "Stage Logic"
     option_strict = 0
@@ -55,7 +55,8 @@ class DisableAutoScrollers(Toggle):
 class ItemLogic(Toggle):
     """This will enable logic to expect consumables to be used from the inventory in place of some major items.
     Logic will expect you to have access to an Overworld bonus game, or a bandit game to get the necessary items.
-    Logic will NOT expect grinding end-of-level bonus games, or any inventory consumables received from checks."""
+    Logic will NOT expect grinding end-of-level bonus games, or any inventory consumables received from checks.
+    Casual logic will only expect consumables from Overworld games; Loose and Expert may expect them from bandit games."""
     display_name = "Items in Logic"
 
 class MinigameChecks(Choice):

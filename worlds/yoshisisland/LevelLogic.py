@@ -289,9 +289,9 @@ class YoshiLogic:
         if self.game_logic == "Easy":
             return state.has_all({'Giant Eggs'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Giant Eggs'}, self.player)
+            return True
         else:
-            return state.has_all({'Giant Eggs'}, self.player)
+            return True
 
     def _34CanFightBoss(self, state: CollectionState) -> bool:
         if state.can_reach(self.boss_order[4], 'Location', self.player):
@@ -444,7 +444,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Dashed Platform', 'Key', 'Beanstalk'}, self.player)
         else:
-            return state.has_all({'Dashed Platform', 'Key', 'Beanstalk'}, self.player)
+            return state.has_all({'Key'}, self.player)
 ##############################################################################
     def _64Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
