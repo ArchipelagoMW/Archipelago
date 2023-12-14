@@ -40,7 +40,8 @@ def set_rules(world, player: int, area_connections: dict):
             fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave"}, swapdict, world)
 
     # Destination Format: LVL | AREA with LVL = LEVEL_x, AREA = Area as used in sm64 code
-    area_connections.update({entrance_lvl: sm64_entrances_to_level[destination] for (entrance_lvl,destination) in randomized_entrances.items()})
+    # Cast to int to not rely on availability of SM64Levels enum. Will cause crash in MultiServer otherwise
+    area_connections.update({int(entrance_lvl): int(sm64_entrances_to_level[destination]) for (entrance_lvl,destination) in randomized_entrances.items()})
     randomized_entrances_s = {sm64_level_to_entrances[entrance_lvl]: destination for (entrance_lvl,destination) in randomized_entrances.items()}
     
     connect_regions(world, player, "Menu", randomized_entrances_s["Bob-omb Battlefield"])
