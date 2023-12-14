@@ -1004,8 +1004,6 @@ item_table = {
                      When killed, Widow Mines will launch several missiles at random enemy targets.
                      """
                  )),
-
-    # Just lazy to create a new group for one unit
     ItemNames.VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS:
         ItemData(379 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 28,
                  SC2Race.TERRAN, parent_item=ItemNames.VALKYRIE, origin={"ext"},
