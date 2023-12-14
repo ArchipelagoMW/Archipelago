@@ -583,11 +583,12 @@ class LocationInclusion(Choice):
     option_disabled = 2
 
 
-class MissionProgressLocations(LocationInclusion):
+class VanillaLocations(LocationInclusion):
     """
-    Enables or disables item rewards for progressing (not finishing) a mission.
-    Progressing a mission is usually a task of completing or progressing into a main objective.
-    Clearing an expansion base also counts here.
+    Enables or disables item rewards for completing vanilla objectives.
+    Vanilla objectives are bonus objectives from the vanilla game,
+    along with some additional objectives to balance the missions.
+    Enable these locations for a balanced experience.
 
     Enabled: All locations fitting into this do their normal rewards
     Resources: Forces these locations to contain Starting Resources
@@ -596,14 +597,15 @@ class MissionProgressLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-    display_name = "Mission Progress Locations"
+    display_name = "Vanilla Locations"
 
 
-class BonusLocations(LocationInclusion):
+class ExtraLocations(LocationInclusion):
     """
-    Enables or disables item rewards for completing bonus tasks.
-    Bonus tasks are those giving you a campaign-wide or mission-wide bonus in vanilla game:
-    Research, credits, bonus units or resources, etc.
+    Enables or disables item rewards for mission progress and minor objectives.
+    This includes mandatory mission objectives, collecting reinforcements,
+    destroying structures, and overcoming minor challenges.
+    Enables these locations to add more checks and items to your world.
 
     Enabled: All locations fitting into this do their normal rewards
     Resources: Forces these locations to contain Starting Resources
@@ -612,15 +614,16 @@ class BonusLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-    display_name = "Bonus Locations"
+    display_name = "Extra Locations"
+    default = LocationInclusion.option_disabled
 
 
 class ChallengeLocations(LocationInclusion):
     """
     Enables or disables item rewards for completing challenge tasks.
-    Challenges are tasks that have usually higher requirements to be completed
-    than to complete the mission they're in successfully.
-    You might be required to visit the same mission later when getting stronger in order to finish these tasks.
+    Challenges are tasks that are more difficult than completing the mission, and are often based on achievements.
+    You might be required to visit the same mission later after getting stronger in order to finish these tasks.
+    Enable these locations to increase the difficulty of completing the multiworld.
 
     Enabled: All locations fitting into this do their normal rewards
     Resources: Forces these locations to contain Starting Resources
@@ -630,13 +633,14 @@ class ChallengeLocations(LocationInclusion):
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Challenge Locations"
+    default = LocationInclusion.option_disabled
 
 
-class OptionalBossLocations(LocationInclusion):
+class MasteryLocations(LocationInclusion):
     """
-    Enables or disables item rewards for defeating optional bosses.
-    An optional boss is any boss that's not required to kill in order to finish the mission successfully.
-    All Brutalisks, Loki, etc. belongs here.
+    Enables or disables item rewards for overcoming especially difficult challenges.
+    These challenges are often based on Mastery achievements and Feats of Strength.
+    Enable these locations to
 
     Enabled: All locations fitting into this do their normal rewards
     Resources: Forces these locations to contain Starting Resources
@@ -645,7 +649,8 @@ class OptionalBossLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-    display_name = "Optional Boss Locations"
+    display_name = "Mastery Locations"
+    default = LocationInclusion.option_disabled
 
 
 # noinspection PyTypeChecker
@@ -700,10 +705,10 @@ sc2_options: Dict[str, Option] = {
     "nco_items": NovaCovertOpsItems,
     "bw_items": BroodWarItems,
     "ext_items": ExtendedItems,
-    "mission_progress_locations": MissionProgressLocations,
-    "bonus_locations": BonusLocations,
+    "vanilla_locations": VanillaLocations,
+    "extra_locations": ExtraLocations,
     "challenge_locations": ChallengeLocations,
-    "optional_boss_locations": OptionalBossLocations
+    "mastery_locations": MasteryLocations
 }
 
 
