@@ -1110,14 +1110,17 @@ class PerGameCommonOptions(CommonOptions):
     item_links: ItemLinks
 
 
-def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
+def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True) -> None:
+    """
+    Generates YAML templates for all worlds.
+    
+    :param target_folder: The directory to output the YAML templates to
+    :param generate_hidden: Whether hidden worlds should have their YAML templates generated
+    """
     import os
 
-    import yaml
-    from jinja2 import Template
-
     from worlds import AutoWorldRegister
-    from Utils import local_path, __version__
+    from Utils import generate_world_template
 
     full_path: str
 
@@ -1129,39 +1132,9 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if os.path.isfile(full_path) and full_path.endswith(".yaml"):
             os.unlink(full_path)
 
-    def dictify_range(option: Range):
-        data = {option.default: 50}
-        for sub_option in ["random", "random-low", "random-high"]:
-            if sub_option != option.default:
-                data[sub_option] = 0
-
-        notes = {}
-        for name, number in getattr(option, "special_range_names", {}).items():
-            notes[name] = f"equivalent to {number}"
-            if number in data:
-                data[name] = data[number]
-                del data[number]
-            else:
-                data[name] = 0
-
-        return data, notes
-
-    for game_name, world in AutoWorldRegister.world_types.items():
+    for world in AutoWorldRegister.world_types.values():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = world.options_dataclass.type_hints
-
-            with open(local_path("data", "options.yaml")) as f:
-                file_data = f.read()
-            res = Template(file_data).render(
-                options=all_options,
-                __version__=__version__, game=game_name, yaml_dump=yaml.dump,
-                dictify_range=dictify_range,
-            )
-
-            del file_data
-
-            with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
-                f.write(res)
+            generate_world_template(world, target_folder)
 
 
 if __name__ == "__main__":
