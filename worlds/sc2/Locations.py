@@ -408,7 +408,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Engine of Destruction", "Engine of Destruction: Odin", SC2WOL_LOC_ID_OFFSET + 1901, LocationType.EXTRA,
                      lambda state: logic.marine_medic_upgrade(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Loki", SC2WOL_LOC_ID_OFFSET + 1902,
-                     LocationType.VANILLA,
+                     LocationType.CHALLENGE,
                      lambda state: logic.marine_medic_upgrade(state) and
                                    logic.terran_competent_anti_air(state) and
                                    logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
@@ -526,10 +526,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Gates of Hell", "Gates of Hell: Large Army", SC2WOL_LOC_ID_OFFSET + 2601, LocationType.VANILLA,
                      lambda state: logic.terran_competent_comp(state) and
                                    logic.terran_defense_rating(state, True) > 6),
-        LocationData("Gates of Hell", "Gates of Hell: 2 Drop Pods", SC2WOL_LOC_ID_OFFSET + 2602, LocationType.EXTRA,
+        LocationData("Gates of Hell", "Gates of Hell: 2 Drop Pods", SC2WOL_LOC_ID_OFFSET + 2602, LocationType.VANILLA,
                      lambda state: logic.terran_competent_comp(state) and
                                    logic.terran_defense_rating(state, True) > 6),
-        LocationData("Gates of Hell", "Gates of Hell: 4 Drop Pods", SC2WOL_LOC_ID_OFFSET + 2603, LocationType.EXTRA,
+        LocationData("Gates of Hell", "Gates of Hell: 4 Drop Pods", SC2WOL_LOC_ID_OFFSET + 2603, LocationType.VANILLA,
                      lambda state: logic.terran_competent_comp(state) and
                                    logic.terran_defense_rating(state, True) > 6),
         LocationData("Gates of Hell", "Gates of Hell: 6 Drop Pods", SC2WOL_LOC_ID_OFFSET + 2604, LocationType.EXTRA,
