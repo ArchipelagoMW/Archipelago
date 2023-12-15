@@ -479,8 +479,10 @@ for technology in progressive_technology_table.values():
 tech_table.update(progressive_tech_table)
 technology_table.update(progressive_technology_table)
 
-for pre_automation in base_technology_table["automation"].get_vanilla_prerequisites():
-    del base_tech_table[pre_automation]
+# vanilla_techs = base_technology_table["automation"].get_vanilla_prerequisites()
+# for pre_automation in vanilla_techs:
+#     del base_tech_table[pre_automation]  # don't mark the vanilla techs as hidden
+    # del technology_table[pre_automation]
 
 # techs that are never progressive
 common_tech_table: Dict[str, int] = {tech_name: tech_id for tech_name, tech_id in base_tech_table.items()
