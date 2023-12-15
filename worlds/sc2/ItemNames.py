@@ -564,7 +564,7 @@ KHALAI_INGENUITY            = "Khalai Ingenuity"
 AMPLIFIED_ASSIMILATORS      = "Amplified Assimilators"
 
 # Filler items
-STARTING_MINERALS = "+15 Starting Minerals"
-STARTING_VESPENE  = "+15 Starting Vespene"
-STARTING_SUPPLY   = "+2 Starting Supply"
+STARTING_MINERALS = "Additional Starting Minerals"
+STARTING_VESPENE  = "Additional Starting Vespene"
+STARTING_SUPPLY   = "Additional Starting Supply"
 NOTHING           = "Nothing"
