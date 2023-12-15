@@ -340,8 +340,9 @@ class CMWorld(World):
             # TODO: there is a better way, probably next step is a "one strike" mechanism
             return True
 
+        chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
         remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
-        if material + remaining_material + progression_items[chosen_item].material > max_material:
+        if material + remaining_material + chosen_material > max_material:
             return True
 
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
@@ -349,7 +350,9 @@ class CMWorld(World):
 
         necessary_chessmen = (highest_chessmen_requirement -
                               chessmen_count(items, self.options.pocket_limit_by_pocket.value))
-        return necessary_chessmen > 0 and material + self.lockable_material_value(chosen_item, items, locked_items) + (
+        if chosen_item in item_name_groups["Chessmen"]:
+            necessary_chessmen -= 1
+        return necessary_chessmen > 0 and material + chosen_material + (
                 item_table["Progressive Pawn"].material * necessary_chessmen) > max_material
 
     # if this piece was added, it might add more than its own material to the locked pool
