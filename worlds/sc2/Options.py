@@ -640,7 +640,7 @@ class MasteryLocations(LocationInclusion):
     """
     Enables or disables item rewards for overcoming especially difficult challenges.
     These challenges are often based on Mastery achievements and Feats of Strength.
-    Enable these locations to
+    Enable these locations to add the most difficult checks to the world.
 
     Enabled: All locations fitting into this do their normal rewards
     Resources: Forces these locations to contain Starting Resources
