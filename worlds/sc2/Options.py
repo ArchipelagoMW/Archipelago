@@ -654,6 +654,33 @@ class MasteryLocations(LocationInclusion):
     default = LocationInclusion.option_disabled
 
 
+class MineralsPerItem(Range):
+    """
+    Configures how many minerals per resource item are given.
+    """
+    range_start = 0
+    range_end = 500
+    default = 25
+
+
+class VespenePerItem(Range):
+    """
+    Configures how many vespene per resource item is given.
+    """
+    range_start = 0
+    range_end = 500
+    default = 25
+
+
+class StartingSupplyPerItem(Range):
+    """
+    Configures how many starting supply per item is given.
+    """
+    range_start = 0
+    range_end = 200
+    default = 5
+
+
 # noinspection PyTypeChecker
 sc2_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
@@ -709,7 +736,10 @@ sc2_options: Dict[str, Option] = {
     "vanilla_locations": VanillaLocations,
     "extra_locations": ExtraLocations,
     "challenge_locations": ChallengeLocations,
-    "mastery_locations": MasteryLocations
+    "mastery_locations": MasteryLocations,
+    "minerals_per_item": MineralsPerItem,
+    "vespene_per_item": VespenePerItem,
+    "starting_supply_per_item": StartingSupplyPerItem
 }
 
 

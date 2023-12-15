@@ -318,6 +318,9 @@ class SC2Context(CommonContext):
     spear_of_adun_present_in_no_build = SpearOfAdunPresentInNoBuild.option_false
     spear_of_adun_autonomously_cast_ability_presence = SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
     spear_of_adun_autonomously_cast_present_in_no_build = SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false
+    minerals_per_item = 15
+    vespene_per_item = 15
+    starting_supply_per_item = 2
 
     def __init__(self, *args, **kwargs) -> None:
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -378,6 +381,9 @@ class SC2Context(CommonContext):
             self.spear_of_adun_present_in_no_build = args["slot_data"].get("spear_of_adun_present_in_no_build", SpearOfAdunPresentInNoBuild.option_false)
             self.spear_of_adun_autonomously_cast_ability_presence = args["slot_data"].get("spear_of_adun_autonomously_cast_ability_presence", SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present)
             self.spear_of_adun_autonomously_cast_present_in_no_build = args["slot_data"].get("spear_of_adun_autonomously_cast_present_in_no_build", SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false)
+            self.minerals_per_item = args["slot_data"].get("minerals_per_item", 15)
+            self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
+            self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech if no logic
@@ -584,7 +590,14 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                     accumulators[item_data.race][flaggroup] += 1 << item_data.number
         # sum
         else:
-            accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += item_data.number
+            if name == ItemNames.STARTING_MINERALS:
+                accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += ctx.minerals_per_item
+            elif name == ItemNames.STARTING_VESPENE:
+                accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += ctx.vespene_per_item
+            elif name == ItemNames.STARTING_SUPPLY:
+                accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += ctx.starting_supply_per_item
+            else:
+                accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += item_data.number
 
     # Fix Shields from generic upgrades by unit class (Maximum of ground/air upgrades)
     if shields_from_ground_upgrade > 0 or shields_from_air_upgrade > 0:
