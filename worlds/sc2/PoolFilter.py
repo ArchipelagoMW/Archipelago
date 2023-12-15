@@ -420,6 +420,8 @@ class ValidInventory:
             logical_inventory_set.difference_update((item for item in logical_inventory_set if item.name.endswith("(Archon)")))
         if not {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ARCHON_HIGH_ARCHON} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(High Templar/Signifier)")]
+        if ItemNames.SUPPLICANT not in logical_inventory_set:
+            inventory = [item for item in inventory if item.name != ItemNames.ASCENDANT_POWER_OVERWHELMING]
         if not {ItemNames.DARK_ARCHON, ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Dark Archon)")]
         if not {ItemNames.SENTRY, ItemNames.ENERGIZER, ItemNames.HAVOC} & logical_inventory_set:

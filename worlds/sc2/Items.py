@@ -1367,7 +1367,7 @@ item_table = {
     ItemNames.OBSERVER: ItemData(0 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 9, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"wol"}),
     ItemNames.CENTURION: ItemData(1 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 10, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.SENTINEL: ItemData(2 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 11, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
-    ItemNames.SUPPLICANT: ItemData(3 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 12, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}),
+    ItemNames.SUPPLICANT: ItemData(3 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 12, SC2Race.PROTOSS, classification=ItemClassification.filler, important_for_filtering=True, origin={"ext"}),
     ItemNames.INSTIGATOR: ItemData(4 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 13, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.SLAYER: ItemData(5 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 14, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.SENTRY: ItemData(6 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 15, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
