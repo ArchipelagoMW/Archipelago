@@ -23,7 +23,7 @@ from worlds.sc2 import ItemNames
 from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed, \
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
     KerriganChecksPerLevelPack, \
-    LocationInclusion, MissionProgressLocations, OptionalBossLocations, ChallengeLocations, BonusLocations, \
+    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations, \
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence, \
     SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, SpearOfAdunAutonomouslyCastPresentInNoBuild
 
@@ -391,10 +391,10 @@ class SC2Context(CommonContext):
 
             self.location_inclusions = {
                 LocationType.VICTORY: LocationInclusion.option_enabled, # Victory checks are always enabled
-                LocationType.MISSION_PROGRESS: args["slot_data"].get("mission_progress_locations", MissionProgressLocations.default),
-                LocationType.BONUS: args["slot_data"].get("bonus_locations", BonusLocations.default),
+                LocationType.VANILLA: args["slot_data"].get("vanilla_locations", VanillaLocations.default),
+                LocationType.EXTRA: args["slot_data"].get("extra_locations", ExtraLocations.default),
                 LocationType.CHALLENGE: args["slot_data"].get("challenge_locations", ChallengeLocations.default),
-                LocationType.OPTIONAL_BOSS: args["slot_data"].get("optional_boss_locations", OptionalBossLocations.default),
+                LocationType.MASTERY: args["slot_data"].get("mastery_locations", MasteryLocations.default),
             }
             self.plando_locations = args["slot_data"].get("plando_locations", [])
 
