@@ -88,4 +88,63 @@ def set_rules(multiworld, player):
         'CR Antechamber': lambda state: (logic.prime_reflecting_pool(state, multiworld, player) and
                                          logic.prime_has_missiles(state, multiworld, player) and
                                          state.has({'Ice Beam'}, player)),
+
+        # phendrana drifts locations
+        'PD Phendrana Shorelines - Behind Ice': lambda state: (logic.prime_front_phen(state, multiworld, player) and
+                                                               state.has({'Plasma Beam'}, player)),
+        'PD Phendrana Shorelines - Spider Track': lambda state: (logic.prime_front_phen(state, multiworld, player) and
+                                                                 logic.prime_can_super(state, multiworld, player) and
+                                                                 logic.prime_can_spider(state, multiworld, player) and
+                                                                 state.has({'Space Jump Boots'}, player)),
+        'PD Chozo Ice Temple': lambda state: (logic.prime_front_phen(state, multiworld, player) and
+                                              state.has({'Plasma Beam', 'Space Jump Boots'}, player)),
+        'PD Ice Ruins West': lambda state: (logic.prime_front_phen(state, multiworld, player) and
+                                            state.has({'Plasma Beam', 'Space Jump Boots'}, player)),
+        'PD Ice Ruins East - Behind Ice': lambda state: (logic.prime_front_phen(state, multiworld, player) and
+                                                         state.has({'Plasma Beam'}, player)),
+        'PD Ice Ruins East - Spider Track': lambda state: (logic.prime_front_phen(state, multiworld, player) and
+                                                           logic.prime_can_spider(state, multiworld, player)),
+        'PD Chapel of the Elders': lambda state: (logic.prime_front_phen(state, multiworld, player) and
+                                                  logic.prime_can_bomb(state, multiworld, player) and
+                                                  state.has({'Space Jump Boots', 'Wave Beam'}, player)),
+        'PD Ruined Courtyard': lambda state: (logic.prime_middle_phen(state, multiworld, player) and
+                                              state.has({'Space Jump Boots', 'Wave Beam'}, player) and
+                                              ((logic.prime_can_bomb(state, multiworld, player) and
+                                               logic.prime_can_boost(state, multiworld, player)) or
+                                               logic.prime_can_spider(state, multiworld, player))),
+        'PD Phendrana Canyon': lambda state: (logic.prime_front_phen(state, multiworld, player) and
+                                              (logic.prime_can_boost(state, multiworld, player) or
+                                               state.has({'Space Jump Boots'}, player))),
+        'PD Quarantine Cave': lambda state: (logic.prime_quarantine_cave(state, multiworld, player) and
+                                             logic.prime_can_spider(state, multiworld, player) and
+                                             state.has({'Thermal Visor'}, player)),
+        'PD Research Lab Hydra': lambda state: (logic.prime_labs(state, multiworld, player) and
+                                                logic.prime_can_super(state, multiworld, player)),
+        'PD Quarantine Monitor': lambda state: (logic.prime_quarantine_cave(state, multiworld, player) and
+                                                logic.prime_can_spider(state, multiworld, player) and
+                                                state.has({'Thermal Visor', 'Grapple Beam'}, player)),
+        'PD Observatory': lambda state: (logic.prime_labs(state, multiworld, player) and
+                                         logic.prime_can_bomb(state, multiworld, player) and
+                                         logic.prime_can_boost(state, multiworld. player)),
+        'PD Transport Access': lambda state: (logic.prime_far_phen(state, multiworld, player) and
+                                              state.has({'Plasma Beam'}, player)),
+        'PD Control Tower': lambda state: (logic.prime_labs(state, multiworld, player) and
+                                           logic.prime_can_bomb(state, multiworld, player) and
+                                           state.has({'Plasma Beam'}, player)),
+        'PD Research Core': lambda state: logic.prime_labs(state, multiworld, player),
+        'PD Frost Cave': lambda state: (logic.prime_far_phen(state, multiworld, player) and
+                                        state.has({'Grapple Beam'}, player)),
+        'PD Research Lab Aether - Tank': lambda state: logic.prime_labs(state, multiworld, player),
+        'PD Research Lab Aether - Morph Track': lambda state: logic.prime_labs(state, multiworld. player),
+        'PD Gravity Chamber - Underwater': lambda state: (logic.prime_far_phen(state, multiworld. player) and
+                                                          state.has({'Gravity Suit'}, player)),
+        'PD Gravity Chamber - Grapple Ledge': lambda state: (logic.prime_far_phen(state, multiworld, player) and
+                                                             state.has({'Gravity Suit', 'Plasma Beam',
+                                                                        'Grapple Beam'}, player)),
+        'PD Storage Cave': lambda state: (logic.prime_far_phen(state, multiworld, player) and
+                                          logic.prime_can_pb(state, multiworld, player) and
+                                          state.has({'Plasma Beam', 'Grapple Beam'}, player)),
+        'PD Security Cave': lambda state: (logic.prime_far_phen(state, multiworld, player) and
+                                           logic.prime_can_pb(state, multiworld, player) and
+                                           state.has({'Plasma Beam', 'Grapple Beam'}, player)),
     }
