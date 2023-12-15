@@ -20,8 +20,8 @@ class SC2Location(Location):
 class LocationType(IntEnum):
     VICTORY = 0  # Winning a mission
     VANILLA = 1  # Objectives that provided metaprogression in the original campaign, along with a few other locations for a balanced experience
-    EXTRA = 2  # All tasks done for progressing the mission normally towards victory. All cleaning of expansion bases falls here
-    CHALLENGE = 3  # Challenging objectives, often harder than just completing a mission, often associated with Achievements
+    EXTRA = 2  # Additional locations based on mission progression, collecting in-mission rewards, etc. that do not significantly increase the challenge.
+    CHALLENGE = 3  # Challenging objectives, often harder than just completing a mission, and often associated with Achievements
     MASTERY = 4  # Extremely challenging objectives often associated with Masteries and Feats of Strength in the original campaign
 
 

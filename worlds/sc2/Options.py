@@ -603,7 +603,8 @@ class VanillaLocations(LocationInclusion):
 class ExtraLocations(LocationInclusion):
     """
     Enables or disables item rewards for mission progress and minor objectives.
-    This includes mandatory mission objectives, collecting reinforcements,
+    This includes mandatory mission objectives,
+    collecting reinforcements and resource pickups,
     destroying structures, and overcoming minor challenges.
     Enables these locations to add more checks and items to your world.
 
