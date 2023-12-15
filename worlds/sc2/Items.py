@@ -7,6 +7,7 @@ from .Options import get_option_value, RequiredTactics
 from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 from . import ItemNames
 
+
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     type: str
@@ -17,8 +18,12 @@ class ItemData(typing.NamedTuple):
     parent_item: typing.Optional[str] = None
     origin: typing.Set[str] = {"wol"}
     description: typing.Optional[str] = None
-    important_for_filtering: bool = classification == ItemClassification.progression \
-                                    or classification == ItemClassification.progression_skip_balancing
+    important_for_filtering: bool = False
+
+    def is_important_for_filtering(self):
+        return self.important_for_filtering \
+            or self.classification == ItemClassification.progression \
+            or self.classification == ItemClassification.progression_skip_balancing
 
 
 class StarcraftItem(Item):
@@ -999,8 +1004,6 @@ item_table = {
                      When killed, Widow Mines will launch several missiles at random enemy targets.
                      """
                  )),
-
-    # Just lazy to create a new group for one unit
     ItemNames.VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS:
         ItemData(379 + SC2WOL_ITEM_ID_OFFSET, "Armory 5", 28,
                  SC2Race.TERRAN, parent_item=ItemNames.VALKYRIE, origin={"ext"},
@@ -1364,7 +1367,7 @@ item_table = {
     ItemNames.OBSERVER: ItemData(0 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 9, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"wol"}),
     ItemNames.CENTURION: ItemData(1 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 10, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.SENTINEL: ItemData(2 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 11, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
-    ItemNames.SUPPLICANT: ItemData(3 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 12, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}),
+    ItemNames.SUPPLICANT: ItemData(3 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 12, SC2Race.PROTOSS, classification=ItemClassification.filler, important_for_filtering=True, origin={"ext"}),
     ItemNames.INSTIGATOR: ItemData(4 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 13, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.SLAYER: ItemData(5 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 14, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.SENTRY: ItemData(6 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 15, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
