@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import abc
-import collections
 import logging
-from copy import deepcopy
 from dataclasses import dataclass
 import functools
 import math
@@ -109,6 +107,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     # filled by AssembleOptions:
     name_lookup: typing.Dict[T, str]
     options: typing.Dict[str, int]
+
+    group_name: typing.ClassVar[str] = "Game Options"
+    """Name of the group to categorize this option in for display on the WebHost and in generated YAMLS."""
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.current_option_name})"
@@ -805,7 +806,6 @@ class VerifyKeys(metaclass=FreezeValidKeys):
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default: typing.Dict[str, typing.Any] = {}
     supports_weighting = False
-    group_name = "Item & Location Options"
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         self.value = deepcopy(value)
@@ -847,7 +847,6 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     default: typing.List[typing.Any] = []
     supports_weighting = False
-    group_name = "Item & Location Options"
 
     def __init__(self, value: typing.List[typing.Any]):
         self.value = deepcopy(value)
@@ -874,7 +873,6 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
     supports_weighting = False
-    group_name = "Item & Location Options"
 
     def __init__(self, value: typing.Iterable[str]):
         self.value = set(deepcopy(value))
@@ -1000,6 +998,7 @@ class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
     display_name = "Start Inventory"
+    group_name = "Item & Location Options"
 
 
 class StartInventoryPool(StartInventory):
@@ -1007,6 +1006,7 @@ class StartInventoryPool(StartInventory):
     The game decides what the replacement items will be."""
     verify_item_name = True
     display_name = "Start Inventory from Pool"
+    group_name = "Item & Location Options"
 
 
 class StartHints(ItemSet):
@@ -1018,21 +1018,25 @@ class StartHints(ItemSet):
 class LocationSet(OptionSet):
     verify_location_name = True
     convert_name_groups = True
+    group_name = "Item & Location Options"
 
 
 class StartLocationHints(LocationSet):
     """Start with these locations and their item prefilled into the !hint command"""
     display_name = "Start Location Hints"
+    group_name = "Item & Location Options"
 
 
 class ExcludeLocations(LocationSet):
     """Prevent these locations from having an important item"""
     display_name = "Excluded Locations"
+    group_name = "Item & Location Options"
 
 
 class PriorityLocations(LocationSet):
     """Prevent these locations from having an unimportant item"""
     display_name = "Priority Locations"
+    group_name = "Item & Location Options"
 
 
 class DeathLink(Toggle):
@@ -1156,11 +1160,11 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = world.options_dataclass.type_hints
+            all_options = world.options_dataclass.type_hints
 
-            grouped_options = collections.defaultdict(dict)
+            grouped_options = {}
             for option_name, option in all_options.items():
-                grouped_options[getattr(option, "group_name", "Game Options")][option_name] = option
+                grouped_options.setdefault(option.group_name, {})[option_name] = option
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()

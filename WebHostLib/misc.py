@@ -1,7 +1,6 @@
 import datetime
 import os
 from typing import List, Dict, Union
-import collections
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
@@ -63,24 +62,18 @@ def player_settings(game: str):
 def player_options(game: str):
     world = AutoWorldRegister.world_types[game]
     all_options: Dict[str, Options.AssembleOptions] = world.options_dataclass.type_hints
-    grouped_options = collections.defaultdict(dict)
+    grouped_options = {}
     for option_name, option in all_options.items():
-        if issubclass(option, Options.ItemDict) and not option.verify_item_name:
-            continue
-
-        if issubclass(option, Options.OptionList) and not hasattr(option, "valid_keys"):
+        if issubclass(option, (Options.ItemDict, Options.ItemSet)) and not option.verify_item_name:
             continue
 
         if issubclass(option, Options.LocationSet) and not option.verify_location_name:
             continue
 
-        if issubclass(option, Options.ItemSet) and not option.verify_item_name:
+        if issubclass(option, (Options.OptionList, Options.OptionSet)) and not hasattr(option, "valid_keys"):
             continue
 
-        if issubclass(option, Options.OptionSet) and not hasattr(option, "valid_keys"):
-            continue
-
-        grouped_options[getattr(option, "group_name", "Game Options")][option_name] = option
+        grouped_options.setdefault(getattr(option, "group_name", "Game Options"), {})[option_name] = option
 
     return render_template(
         "playerOptions/playerOptions.html",
