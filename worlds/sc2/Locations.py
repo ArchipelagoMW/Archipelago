@@ -950,7 +950,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Last Stand", "Last Stand: 1 Billion Zerg", SC2LOTV_LOC_ID_OFFSET + 1004, LocationType.MISSION_PROGRESS,
                      lambda state: logic.last_stand_requirement(state)),
         LocationData("Last Stand", "Last Stand: 1.5 Billion Zerg", SC2LOTV_LOC_ID_OFFSET + 1005, LocationType.BONUS,
-                     lambda state: state.has(ItemNames.KHAYDARIN_MONOLITH, player) and logic.last_stand_requirement(state)), # TODO: Look into another ways around when Protoss unit upgrades land
+                     lambda state: logic.last_stand_requirement(state) and (
+                         state.has_all({ItemNames.KHAYDARIN_MONOLITH, ItemNames.PHOTON_CANNON, ItemNames.SHIELD_BATTERY}, player)
+                         or state.has_any({ItemNames.SOA_SOLAR_LANCE, ItemNames.SOA_DEPLOY_FENIX}, player)
+                     )),
         LocationData("Forbidden Weapon", "Forbidden Weapon: Victory", SC2LOTV_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_anti_armor_anti_air(state)),
