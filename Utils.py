@@ -940,10 +940,8 @@ def visualize_regions(root_region: Region, file_name: str, *,
         f.write("\n".join(uml))
 
 
-def generate_world_template(
-    world: World,
-    target_folder: typing.Optional[typing.Union[str, "pathlib.Path"]] = None,
-) -> None:
+def generate_world_template(world: World,
+                            target_folder: typing.Optional[typing.Union[str, "pathlib.Path"]] = None) -> None:
     """
     Generates a single YAML template for the provided world instance with its options
     :param world: world to generate a template for. If an instance is passed will use the options currently set on that
@@ -976,15 +974,12 @@ def generate_world_template(
         options=all_options,
         __version__=__version__,
         game=game_name,
-        name=f"Player{world.player}",
-        description="Test",
+        name=world.multiworld.get_player_name(world.player),
     )
 
     del file_data
 
-    with open(
-        os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig"
-    ) as f:
+    with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
         f.write(res)
 
 
