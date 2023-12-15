@@ -1018,7 +1018,6 @@ class StartHints(ItemSet):
 class LocationSet(OptionSet):
     verify_location_name = True
     convert_name_groups = True
-    group_name = "Item & Location Options"
 
 
 class StartLocationHints(LocationSet):
