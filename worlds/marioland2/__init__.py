@@ -12,37 +12,60 @@ from .options import sml2options
 START_IDS = 7770000
 
 locations = {
-    'Mushroom Zone': {'ram_index': 0},
-    'Scenic Course': {'ram_index': 40},
-    'Tree Zone 1 - Invincibility!': {'ram_index': 1, 'clear_condition': ("Progressive Tree Zone", 1)},
-    'Tree Zone 2 - In the Trees': {'ram_index': 2, 'clear_condition': ("Progressive Tree Zone", 2)},
-    'Tree Zone 3 - The Exit': {'ram_index': 4, 'clear_condition': ("Progressive Tree Zone", 3)},
-    'Tree Zone 4 - Honeybees': {'ram_index': 3, 'clear_condition': ("Progressive Tree Zone", 3)},
-    'Tree Zone 5 - The Big Bird': {'ram_index': 5, 'clear_condition': ("Tree Coin", 1)},
-    'Tree Zone - Secret Course': {'ram_index': 36},
-    'Hippo Zone': {'ram_index': 31},
-    'Space Zone 1 - Moon Stage': {'ram_index': 16, 'clear_condition': ("Progressive Space Zone", 2)},
-    'Space Zone - Secret Course': {'ram_index': 41},
-    'Space Zone 2 - Star Stage': {'ram_index': 17, 'clear_condition': ("Space Coin", 1)},
-    'Macro Zone 1 - The Ant Monsters': {'ram_index': 11, 'clear_condition': ("Progressive Macro Zone", 1)},
-    'Macro Zone 2 - In the Syrup Sea': {'ram_index': 12, 'clear_condition': ("Progressive Macro Zone", 2)},
-    'Macro Zone 3 - Fiery Mario-Special Agent': {'ram_index': 13, 'clear_condition': ("Progressive Macro Zone", 3)},
-    'Macro Zone 4 - One Mighty Mouse': {'ram_index': 14, 'clear_condition': ("Macro Coin", 1)},
-    'Macro Zone - Secret Course': {'ram_index': 35, 'clear_condition': ("Macro Zone Secret", 1)},
-    'Pumpkin Zone 1 - Bat Course': {'ram_index': 6, 'clear_condition': ("Progressive Pumpkin Zone", 1)},
-    'Pumpkin Zone 2 - Cyclops Course': {'ram_index': 7, 'clear_condition': ("Progressive Pumpkin Zone", 2)},
-    'Pumpkin Zone 3 - Ghost House': {'ram_index': 8, 'clear_condition': ("Progressive Pumpkin Zone", 3)},
-    "Pumpkin Zone 4 - Witch's Mansion": {'ram_index': 9, 'clear_condition': ("Pumpkin Coin", 1)},
-    'Pumpkin Zone - Secret Course 1': {'ram_index': 38},
-    'Pumpkin Zone - Secret Course 2': {'ram_index': 39},
-    'Mario Zone 1 - Fiery Blocks': {'ram_index': 26, 'clear_condition': ("Progressive Mario Zone", 1)},
-    'Mario Zone 2 - Mario the Circus Star!': {'ram_index': 27, 'clear_condition': ("Progressive Mario Zone", 2)},
-    'Mario Zone 3 - Beware: Jagged Spikes': {'ram_index': 28, 'clear_condition': ("Progressive Mario Zone", 3)},
-    'Mario Zone 4 - Three Mean Pigs!': {'ram_index': 29, 'clear_condition': ("Mario Coin", 1)},
-    'Turtle Zone 1 - Cheep Cheep Course': {'ram_index': 21, 'clear_condition': ("Progressive Turtle Zone", 1)},
-    'Turtle Zone 2 - Turtle Zone': {'ram_index': 22, 'clear_condition': ("Progressive Turtle Zone", 2)},
-    'Turtle Zone 3 - Whale Course': {'ram_index': 23, 'clear_condition': ("Turtle Coin", 1)},
-    'Turtle Zone - Secret Course': {'ram_index': 37}}
+    'Mushroom Zone': {'id': 0x00, 'ram_index': 0, 'type': 'level'},
+    'Mushroom Zone Midway Bell': {'id': 0x00, 'ram_index': 0, 'clear_condition': ("Mushroom Zone Midway Bell", 1), 'type': 'bell'},
+    'Scenic Course': {'id': 0x19, 'ram_index': 40, 'type': 'level'},
+    'Tree Zone 1 - Invincibility!': {'id': 0x01, 'ram_index': 1, 'clear_condition': ("Progressive Tree Zone", 1), 'type': 'level'},
+    'Tree Zone 1 - Invincibility! Midway Bell': {'id': 0x01, 'ram_index': 1,  'clear_condition': ("Tree Zone 1 - Invincibility! Midway Bell", 1), 'type': 'bell'},
+    'Tree Zone 2 - In the Trees': {'id': 0x02, 'ram_index': 2, 'clear_condition': ("Progressive Tree Zone", 2), 'type': 'level'},
+    'Tree Zone 2 - In the Trees Midway Bell': {'id': 0x02, 'ram_index': 2, 'clear_condition': ("Progressive Tree Zone", 2), 'type': 'bell'},
+    'Tree Zone 3 - The Exit': {'id': 0x04, 'ram_index': 4, 'clear_condition': ("Progressive Tree Zone", 3), 'type': 'level'},
+    'Tree Zone 4 - Honeybees': {'id': 0x03, 'ram_index': 3, 'clear_condition': ("Progressive Tree Zone", 3), 'type': 'level'},
+    'Tree Zone 4 - Honeybees Midway Bell': {'id': 0x03, 'ram_index': 3, 'clear_condition': ("Tree Zone 4 - Honeybees Midway Bell", 1), 'type': 'bell'},
+    'Tree Zone 5 - The Big Bird': {'id': 0x05, 'ram_index': 5, 'clear_condition': ("Tree Coin", 1), 'type': 'level'},
+    'Tree Zone 5 - The Big Bird Midway Bell': {'id': 0x05, 'ram_index': 5, 'clear_condition': ("Tree Zone 5 - The Big Bird Midway Bell", 1), 'type': 'bell'},
+    'Tree Zone - Secret Course': {'id': 0x1D, 'ram_index': 36, 'type': 'level'},
+    'Hippo Zone': {'id': 0x11, 'ram_index': 31, 'type': 'level'},
+    'Space Zone 1 - Moon Stage': {'id': 0x12, 'ram_index': 16, 'clear_condition': ("Progressive Space Zone", 2), 'type': 'level'},
+    'Space Zone 1 - Moon Stage Midway Bell': {'id': 0x12, 'ram_index': 16, 'clear_condition': ("Space Zone 1 - Moon Stage Midway Bell", 1), 'type': 'bell'},
+    'Space Zone - Secret Course': {'id': 0x1C, 'ram_index': 41, 'type': 'level'},
+    'Space Zone 2 - Star Stage': {'id': 0x13, 'ram_index': 17, 'clear_condition': ("Space Coin", 1), 'type': 'level'},
+    'Space Zone 2 - Star Stage Midway Bell': {'id': 0x13, 'ram_index': 17, 'clear_condition': ("Space Zone 2 - Star Stage Midway Bell", 1), 'type': 'bell'},
+    'Macro Zone 1 - The Ant Monsters': {'id': 0x14, 'ram_index': 11, 'clear_condition': ("Progressive Macro Zone", 1), 'type': 'level'},
+    'Macro Zone 1 - The Ant Monsters Midway Bell': {'id': 0x14, 'ram_index': 11, 'clear_condition': ("Macro Zone 1 - The Ant Monsters Midway Bell", 1), 'type': 'bell'},
+    'Macro Zone 2 - In the Syrup Sea': {'id': 0x15, 'ram_index': 12, 'clear_condition': ("Progressive Macro Zone", 2), 'type': 'level'},
+    'Macro Zone 2 - In the Syrup Sea Midway Bell': {'id': 0x15, 'ram_index': 12, 'clear_condition': ("Macro Zone 2 - In the Syrup Sea Midway Bell", 1), 'type': 'bell'},
+    'Macro Zone 3 - Fiery Mario-Special Agent': {'id': 0x16, 'ram_index': 13, 'clear_condition': ("Progressive Macro Zone", 3), 'type': 'level'},
+    'Macro Zone 3 - Fiery Mario-Special Agent Midway Bell': {'id': 0x16, 'ram_index': 13, 'clear_condition': ("Macro Zone 3 - Fiery Mario-Special Agent Midway Bell", 1), 'type': 'bell'},
+    'Macro Zone 4 - One Mighty Mouse': {'id': 0x17, 'ram_index': 14, 'clear_condition': ("Macro Coin", 1), 'type': 'level'},
+    'Macro Zone 4 - One Mighty Mouse Midway Bell': {'id': 0x17, 'ram_index': 14, 'clear_condition': ("Macro Zone 4 - One Mighty Mouse Midway Bell", 1), 'type': 'bell'},
+    'Macro Zone - Secret Course': {'id': 0x1E, 'ram_index': 35, 'clear_condition': ("Macro Zone Secret", 1), 'type': 'level'},
+    'Pumpkin Zone 1 - Bat Course': {'id': 0x06, 'ram_index': 6, 'clear_condition': ("Progressive Pumpkin Zone", 1), 'type': 'level'},
+    'Pumpkin Zone 1 - Bat Course Midway Bell': {'id': 0x06, 'ram_index': 6, 'clear_condition': ("Pumpkin Zone 1 - Bat Course Midway Bell", 1), 'type': 'bell'},
+    'Pumpkin Zone 2 - Cyclops Course': {'id': 0x07, 'ram_index': 7, 'clear_condition': ("Progressive Pumpkin Zone", 2), 'type': 'level'},
+    'Pumpkin Zone 2 - Cyclops Course Midway Bell': {'id': 0x07, 'ram_index': 7, 'clear_condition': ("Progressive Pumpkin Zone", 2), 'type': 'bell'},
+    'Pumpkin Zone 3 - Ghost House': {'id': 0x08, 'ram_index': 8, 'clear_condition': ("Progressive Pumpkin Zone", 3), 'type': 'level'},
+    'Pumpkin Zone 3 - Ghost House Midway Bell': {'id': 0x08, 'ram_index': 8, 'clear_condition': ("Progressive Pumpkin Zone", 3), 'type': 'bell'},
+    "Pumpkin Zone 4 - Witch's Mansion": {'id': 0x09, 'ram_index': 9, 'clear_condition': ("Pumpkin Coin", 1), 'type': 'level'},
+    "Pumpkin Zone 4 - Witch's Mansion Midway Bell": {'id': 0x09, 'ram_index': 9, 'clear_condition': ("Pumpkin Coin", 1), 'type': 'bell'},
+    'Pumpkin Zone - Secret Course 1': {'id': 0x1B, 'ram_index': 38, 'type': 'level'},
+    'Pumpkin Zone - Secret Course 2': {'id': 0x1F, 'ram_index': 39, 'type': 'level'},
+    'Mario Zone 1 - Fiery Blocks': {'id': 0x0A, 'ram_index': 26, 'clear_condition': ("Progressive Mario Zone", 1), 'type': 'level'},
+    'Mario Zone 1 - Fiery Blocks Midway Bell': {'id': 0x0A, 'ram_index': 26, 'clear_condition': ("Mario Zone 1 - Fiery Blocks Midway Bell", 1), 'type': 'bell'},
+    'Mario Zone 2 - Mario the Circus Star!': {'id': 0x0B, 'ram_index': 27, 'clear_condition': ("Progressive Mario Zone", 2), 'type': 'level'},
+    'Mario Zone 2 - Mario the Circus Star! Midway Bell': {'id': 0x0B, 'ram_index': 27, 'clear_condition': ("Mario Zone 2 - Mario the Circus Star! Midway Bell", 1), 'type': 'bell'},
+    'Mario Zone 3 - Beware: Jagged Spikes': {'id': 0x0C, 'ram_index': 28, 'clear_condition': ("Progressive Mario Zone", 3), 'type': 'level'},
+    'Mario Zone 3 - Beware: Jagged Spikes Midway Bell': {'id': 0x0C, 'ram_index': 28, 'clear_condition': ("Mario Zone 3 - Beware: Jagged Spikes Midway Bell", 1), 'type': 'bell'},
+    'Mario Zone 4 - Three Mean Pigs!': {'id': 0x0D, 'ram_index': 29, 'clear_condition': ("Mario Coin", 1), 'type': 'level'},
+    'Mario Zone 4 - Three Mean Pigs! Midway Bell': {'id': 0x0D, 'ram_index': 29, 'clear_condition': ("Mario Zone 4 - Three Mean Pigs! Midway Bell", 1), 'type': 'bell'},
+    'Turtle Zone 1 - Cheep Cheep Course': {'id': 0x0E, 'ram_index': 21, 'clear_condition': ("Progressive Turtle Zone", 1), 'type': 'level'},
+    'Turtle Zone 1 - Cheep Cheep Course Midway Bell': {'id': 0x0E, 'ram_index': 21, 'clear_condition': ("Turtle Zone 1 - Cheep Cheep Course Midway Bell", 1), 'type': 'bell'},
+    'Turtle Zone 2 - Turtle Zone': {'id': 0x0F, 'ram_index': 22, 'clear_condition': ("Progressive Turtle Zone", 2), 'type': 'level'},
+    'Turtle Zone 2 - Turtle Zone Midway Bell': {'id': 0x0F, 'ram_index': 22, 'clear_condition': ("Turtle Zone 2 - Turtle Zone Midway Bell", 1), 'type': 'bell'},
+    'Turtle Zone 3 - Whale Course': {'id': 0x10, 'ram_index': 23, 'clear_condition': ("Turtle Coin", 1), 'type': 'level'},
+    'Turtle Zone 3 - Whale Course Midway Bell': {'id': 0x10, 'ram_index': 23, 'clear_condition': ("Turtle Zone 3 - Whale Course Midway Bell", 1), 'type': 'bell'},
+    'Turtle Zone - Secret Course': {'id': 0x1A, 'ram_index': 37, 'type': 'level'}
+}
 
 items = {
     "Progressive Space Zone": ItemClassification.progression,
@@ -65,8 +88,31 @@ items = {
     "Space Physics": ItemClassification.progression,
     "Easy Mode": ItemClassification.useful,
     "Normal Mode": ItemClassification.trap,
-    "Auto Scroll": ItemClassification.trap
+    "Auto Scroll": ItemClassification.trap,
+    "Mushroom Zone Midway Bell": ItemClassification.filler,
+    "Tree Zone 1 - Invincibility! Midway Bell": ItemClassification.filler,
+    "Tree Zone 3 - The Exit Midway Bell": ItemClassification.filler,
+    "Tree Zone 4 - Honeybees Midway Bell": ItemClassification.filler,
+    "Tree Zone 5 - The Big Bird Midway Bell": ItemClassification.filler,
+    "Space Zone 1 - Moon Stage Midway Bell": ItemClassification.filler,
+    "Space Zone 2 - Star Stage Midway Bell": ItemClassification.filler,
+    "Macro Zone 1 - The Ant Monsters Midway Bell": ItemClassification.filler,
+    "Macro Zone 2 - In the Syrup Sea Midway Bell": ItemClassification.filler,
+    "Macro Zone 3 - Fiery Mario-Special Agent Midway Bell": ItemClassification.filler,
+    "Macro Zone 4 - One Mighty Mouse Midway Bell": ItemClassification.filler,
+    "Pumpkin Zone 1 - Bat Course Midway Bell": ItemClassification.filler,
+    "Pumpkin Zone 2 - Cyclops Course Midway Bell": ItemClassification.filler,
+    "Pumpkin Zone 3 - Ghost House Midway Bell": ItemClassification.filler,
+    "Pumpkin Zone 4 - Witch's Mansion Midway Bell": ItemClassification.filler,
+    "Mario Zone 1 - Fiery Blocks Midway Bell": ItemClassification.filler,
+    "Mario Zone 2 - Mario the Circus Star! Midway Bell": ItemClassification.filler,
+    "Mario Zone 3 - Beware: Jagged Spikes Midway Bell": ItemClassification.filler,
+    "Mario Zone 4 - Three Mean Pigs! Midway Bell": ItemClassification.filler,
+    "Turtle Zone 1 - Cheep Cheep Course Midway Bell": ItemClassification.filler,
+    "Turtle Zone 2 - Turtle Zone Midway Bell": ItemClassification.filler,
+    "Turtle Zone 3 - Whale Course Midway Bell": ItemClassification.filler,
 }
+
 
 class MarioLand2Settings(settings.Group):
     class SML2RomFile(settings.UserFilePath):
@@ -108,6 +154,8 @@ class MarioLand2World(World):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
         for location_name in locations:
+            if "Midway Bell" in location_name and not self.multiworld.shuffle_midway_bells[self.player]:
+                continue
             menu_region.locations.append(Location(self.player, location_name, self.location_name_to_id[location_name], menu_region))
 
     def set_rules(self):
@@ -120,8 +168,8 @@ class MarioLand2World(World):
             "Tree Zone 3 - The Exit": lambda state: state.has("Progressive Tree Zone", self.player, 2),
             "Tree Zone 4 - Honeybees": lambda state: state.has("Progressive Tree Zone", self.player, 2),
             "Tree Zone 5 - The Big Bird": lambda state: state.has("Progressive Tree Zone", self.player, 3),
-            # You can use a Fire Flower to get the Secret Course from Macro Zone 1, or if you have every Progressive Macro Zone and
-            # the Macro Zone Secret paths, you can get here from the boss level
+            # You can use a Fire Flower to get the Secret Course from Macro Zone 1, or if you have every Progressive
+            # Macro Zone and the Macro Zone Secret paths, you can get here from the boss level
             "Macro Zone - Secret Course": lambda state: state.has("Fire Flower", self.player) or (state.has("Macro Zone Secret", self.player) and state.has("Progressive Macro Zone", self.player, 3)),
             "Macro Zone 2 - In the Syrup Sea": lambda state: state.has("Progressive Macro Zone", self.player),
             "Macro Zone 3 - Fiery Mario-Special Agent": lambda state: state.has("Progressive Macro Zone", self.player, 2),
@@ -136,10 +184,18 @@ class MarioLand2World(World):
             "Mario Zone 3 - Beware: Jagged Spikes": lambda state: state.has("Progressive Mario Zone", self.player, 2),
             "Mario Zone 4 - Three Mean Pigs!": lambda state: state.has("Progressive Mario Zone", self.player, 3),
             "Turtle Zone 2 - Turtle Zone": lambda state: state.has("Progressive Turtle Zone", self.player),
-            # The powerups are needed not for the secret exit in Turtle Zone 2, but to fly over or take damage in the spikes in the secret course
+            # The powerups are needed not for the secret exit in Turtle Zone 2, but to fly over or take damage in the
+            # spikes in the secret course
             "Turtle Zone - Secret Course": lambda state: state.has("Progressive Turtle Zone", self.player) and state.has_any(["Mushroom", "Fire Flower", "Carrot"], self.player),
             "Turtle Zone 3 - Whale Course": lambda state: state.has("Progressive Turtle Zone", self.player, 2),
         }
+
+        if self.multiworld.shuffle_midway_bells[self.player]:
+            # copy level access rules onto midway point rules
+            for midway_loc in [loc for loc in locations if "Midway Bell" in loc]:
+                level_loc = midway_loc[:-12]
+                if level_loc in rules:
+                    rules[midway_loc] = rules[level_loc]
 
         for level, rule in rules.items():
             self.multiworld.get_location(level, self.player).access_rule = rule
@@ -187,6 +243,10 @@ class MarioLand2World(World):
         elif self.multiworld.golden_coins[self.player] == "progressive":
             for item in [item for item in items if "Progressive" in item and "Zone" in item]:
                 item_counts[item] += 1
+
+        if self.multiworld.shuffle_midway_bells[self.player]:
+            for item in [item for item in items if "Midway Bell" in item]:
+                item_counts[item] = 1
 
         if self.multiworld.difficulty_mode[self.player] == "easy_to_normal":
             item_counts["Normal Mode"] = 1

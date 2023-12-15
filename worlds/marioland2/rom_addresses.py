@@ -1,6 +1,6 @@
 rom_addresses = {
     "Auto_Scroll_Disable": 0x4c0,
-    "Space_Physics": 0x4e8,
+    "Space_Physics": 0x4e7,
     "Auto_Scroll_Levels": 0x1f71,
     "Get_Hurt_To_Big_Mario": 0x31c7,
     "Get_Mushroom_A": 0x345c,
@@ -11,6 +11,7 @@ rom_addresses = {
     "Invincibility_Star_C": 0x34a8,
     "Enable_Bubble": 0x34e5,
     "Coin_Shuffle": 0x304ce,
+    "Disable_Midway_Bell": 0x3ef1e,
     "Get_Carrot_C": 0x6092f,
     "Get_Mushroom_C": 0x60930,
     "Get_Fire_Flower_C": 0x60933,

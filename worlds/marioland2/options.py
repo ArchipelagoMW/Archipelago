@@ -1,4 +1,4 @@
-from Options import Toggle, Choice, NamedRange
+from Options import Toggle, Choice, NamedRange, Range
 
 
 class GoldenCoins(Choice):
@@ -15,6 +15,14 @@ class GoldenCoins(Choice):
     default = 0
 
 
+class GoldenCoinsRequired(Range):
+    """Number of Golden Coins required to enter Wario's Castle."""
+    display_name = "Golden Coins Required"
+    range_start = 0
+    range_end = 6
+    default = 6
+
+
 class DifficultyMode(Choice):
     """Play in normal or easy mode. You can also start in Normal Mode with an "upgrade" to Easy Mode in the item pool,
     or start in Easy Mode with a Normal Mode "Trap" in the item pool."""
@@ -24,6 +32,13 @@ class DifficultyMode(Choice):
     option_normal_to_easy = 2
     option_easy_to_normal = 3
     default = 0
+
+
+class ShuffleMidwayBells(Toggle):
+    """Shuffle the Midway Bells into the item pool. Ringing a bell will trigger a location check.
+    Obtaining a Midway Bell will be permanent, and some levels will require backtracking from the midway point to reach
+    secret exits."""
+    display_name = "Shuffle Midway Bells"
 
 
 class ShuffleSpacePhysics(Toggle):
@@ -49,6 +64,7 @@ class AutoScrollLevels(NamedRange):
     range_start = 0
     range_end = 19
     special_range_names = {"vanilla": -1}
+    default = -1
 
 
 class AutoScrollTrap(Toggle):
@@ -64,6 +80,7 @@ class RandomizeMusic(Toggle):
 sml2options = {
     "golden_coins": GoldenCoins,
     "difficulty_mode": DifficultyMode,
+    "shuffle_midway_bells":ShuffleMidwayBells,
     "shuffle_space_physics": ShuffleSpacePhysics,
     "randomize_enemies": RandomizeEnemies,
     "randomize_platforms": RandomizePlatforms,

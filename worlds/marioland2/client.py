@@ -5,9 +5,10 @@ from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient, BizHawkClientContext
 from worlds._bizhawk import read, write, guarded_write
 
+from .rom_addresses import rom_addresses
+
 logger = logging.getLogger("Client")
 
-from .rom_addresses import rom_addresses
 
 class MarioLand2Client(BizHawkClient):
     system = ("GB", "SGB")
@@ -34,13 +35,20 @@ class MarioLand2Client(BizHawkClient):
 
     async def game_watcher(self, ctx: BizHawkClientContext):
         from . import locations, items, START_IDS
-        game_loaded_check, level_data, music, auto_scroll_enabled, auto_scroll_levels, current_level = \
+        game_loaded_check, level_data, music, auto_scroll_enabled, auto_scroll_levels, current_level, midway_point = \
             await read(ctx.bizhawk_ctx, [(0x0046, 10, "CartRAM"), (0x0848, 42, "CartRAM"), (0x0469, 1, "CartRAM"),
                                          (rom_addresses["Auto_Scroll_Disable"], 1, "ROM"),
                                          (rom_addresses["Auto_Scroll_Levels"], 32, "ROM"),
-                                         (0x0269, 1, "CartRAM")])
+                                         (0x0269, 1, "CartRAM"),
+                                         (0x02A0, 1, "CartRAM")])
+
         if game_loaded_check != b'\x124Vx\xff\xff\xff\xff\xff\xff':
             return
+
+        current_level = int.from_bytes(current_level)
+        midway_point = int.from_bytes(midway_point)
+        music = int.from_bytes(music)
+        auto_scroll_enabled = int.from_bytes(auto_scroll_enabled)
 
         level_data = list(level_data)
 
@@ -63,9 +71,11 @@ class MarioLand2Client(BizHawkClient):
         for ID, (location, data) in enumerate(locations.items(), START_IDS):
             if "clear_condition" in data:
                 if items_received.count(data["clear_condition"][0]) >= data["clear_condition"][1]:
-                    modified_level_data[data["ram_index"]] |= 0x80
+                    modified_level_data[data["ram_index"]] |= 0x08 if data["type"] == "bell" else 0x80
 
-            if level_data[data["ram_index"]] & 0x41:
+            if data["type"] == "level" and level_data[data["ram_index"]] & 0x41:
+                locations_checked.append(ID)
+            elif data["type"] == "bell" and data["id"] == current_level and midway_point == 0xFF:
                 locations_checked.append(ID)
 
         if ctx.slot_data:
@@ -85,7 +95,7 @@ class MarioLand2Client(BizHawkClient):
             difficulty_mode = 0
 
         data_writes = [
-            (rom_addresses["Space_Physics"], [0xea, 0x87, 0xa2] if "Space Physics" in items_received else [0, 0, 0], "ROM"),
+            (rom_addresses["Space_Physics"], [0x7e] if "Space Physics" in items_received else [0xaf], "ROM"),
             (rom_addresses["Get_Hurt_To_Big_Mario"], [1] if "Mushroom" in items_received else [0], "ROM"),
             (rom_addresses["Get_Mushroom_A"], [0xea, 0x16, 0xa2] if "Mushroom" in items_received else [0, 0, 0], "ROM"),
             (rom_addresses["Get_Mushroom_B"], [0xea, 0x16, 0xa2] if "Mushroom" in items_received else [0, 0, 0], "ROM"),
@@ -121,6 +131,6 @@ class MarioLand2Client(BizHawkClient):
             self.locations_array = locations_checked
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
-        if music == b'\x18':
+        if music == 0x18:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
