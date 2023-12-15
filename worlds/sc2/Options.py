@@ -616,7 +616,6 @@ class ExtraLocations(LocationInclusion):
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Extra Locations"
-    default = LocationInclusion.option_disabled
 
 
 class ChallengeLocations(LocationInclusion):
@@ -634,7 +633,6 @@ class ChallengeLocations(LocationInclusion):
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Challenge Locations"
-    default = LocationInclusion.option_disabled
 
 
 class MasteryLocations(LocationInclusion):
@@ -651,7 +649,6 @@ class MasteryLocations(LocationInclusion):
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
     display_name = "Mastery Locations"
-    default = LocationInclusion.option_disabled
 
 
 class MineralsPerItem(Range):
