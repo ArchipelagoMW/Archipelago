@@ -125,7 +125,7 @@ def set_rules(multiworld, player):
                                                 state.has({'Thermal Visor', 'Grapple Beam'}, player)),
         'PD Observatory': lambda state: (logic.prime_labs(state, multiworld, player) and
                                          logic.prime_can_bomb(state, multiworld, player) and
-                                         logic.prime_can_boost(state, multiworld. player)),
+                                         logic.prime_can_boost(state, multiworld, player)),
         'PD Transport Access': lambda state: (logic.prime_far_phen(state, multiworld, player) and
                                               state.has({'Plasma Beam'}, player)),
         'PD Control Tower': lambda state: (logic.prime_labs(state, multiworld, player) and
@@ -135,8 +135,8 @@ def set_rules(multiworld, player):
         'PD Frost Cave': lambda state: (logic.prime_far_phen(state, multiworld, player) and
                                         state.has({'Grapple Beam'}, player)),
         'PD Research Lab Aether - Tank': lambda state: logic.prime_labs(state, multiworld, player),
-        'PD Research Lab Aether - Morph Track': lambda state: logic.prime_labs(state, multiworld. player),
-        'PD Gravity Chamber - Underwater': lambda state: (logic.prime_far_phen(state, multiworld. player) and
+        'PD Research Lab Aether - Morph Track': lambda state: logic.prime_labs(state, multiworld, player),
+        'PD Gravity Chamber - Underwater': lambda state: (logic.prime_far_phen(state, multiworld, player) and
                                                           state.has({'Gravity Suit'}, player)),
         'PD Gravity Chamber - Grapple Ledge': lambda state: (logic.prime_far_phen(state, multiworld, player) and
                                                              state.has({'Gravity Suit', 'Plasma Beam',
@@ -147,4 +147,150 @@ def set_rules(multiworld, player):
         'PD Security Cave': lambda state: (logic.prime_far_phen(state, multiworld, player) and
                                            logic.prime_can_pb(state, multiworld, player) and
                                            state.has({'Plasma Beam', 'Grapple Beam'}, player)),
+
+        # tallon overworld locations
+        'TO Landing Site': lambda state: state.has({'Morph Ball'}, player),
+        'TO Alcove': lambda state: ((logic.prime_can_bomb(state, multiworld, player) and
+                                     logic.prime_can_boost(state, multiworld, player)) or
+                                    state.has({'Space Jump Boots'}, player)),
+        'TO Frigate Crash Site': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
+                                                state.has({'Space Jump Boots', 'Morph Ball', 'Gravity Suit'}, player)),
+        'TO Overgrown Cavern': lambda state: (logic.prime_reflecting_pool(state, multiworld, player) and
+                                              state.has({'Ice Beam', 'Morph Ball'}, player)),
+
+        'TO Root Cave': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
+                                       state.has({'Grapple Beam', 'Space Jump Boots', 'X-Ray Visor'}, player)),
+        'TO Artifact Temple': lambda state: logic.prime_has_missiles(state, multiworld, player),
+        'TO Transport Tunnel B': lambda state: logic.prime_has_missiles(state, multiworld, player),
+        'TO Arbor Chamber': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
+                                           state.has({'Grapple Beam', 'Space Jump Boots', 'X-Ray Visor',
+                                                      'Plasma Beam'}, player)),
+        'TO Cargo Freight Lift to Deck Gamma': lambda state: logic.prime_frigate(state, multiworld, player),
+        'TO Biohazard Containment': lambda state: (logic.prime_frigate(state, multiworld, player) and
+                                                   logic.prime_can_super(state, multiworld, player)),
+        'TO Hydro Access Tunnel': lambda state: (logic.prime_frigate(state, multiworld, player) and
+                                                 logic.prime_can_bomb(state, multiworld, player)),
+        'TO Great Tree Chamber': lambda state: (state.has({'X-Ray Visor', 'Ice Beam', 'Space Jump Boots'}, player) and
+                                                (logic.prime_reflecting_pool(state, multiworld, player) or
+                                                 (logic.prime_frigate(state, multiworld, player) and
+                                                  logic.prime_can_bomb(state, multiworld, player) and
+                                                  logic.prime_can_boost(state, multiworld, player)))),
+        'TO Life Grove Tunnel': lambda state: (logic.prime_can_bomb(state, multiworld, player) and
+                                               logic.prime_can_boost(state, multiworld, player) and
+                                               logic.prime_can_spider(state, multiworld, player) and
+                                               logic.prime_can_pb(state, multiworld, player) and
+                                               state.has({'Ice Beam', 'Space Jump Boots'}, player) and
+                                               (logic.prime_frigate(state, multiworld, player) or
+                                                logic.prime_reflecting_pool(state, multiworld, player))),
+        'TO Life Grove - Start': lambda state: (logic.prime_can_bomb(state, multiworld, player) and
+                                                logic.prime_can_boost(state, multiworld, player) and
+                                                logic.prime_can_spider(state, multiworld, player) and
+                                                logic.prime_can_pb(state, multiworld, player) and
+                                                state.has({'Ice Beam', 'Space Jump Boots'}, player) and
+                                                (logic.prime_frigate(state, multiworld, player) or
+                                                 logic.prime_reflecting_pool(state, multiworld, player))),
+        'TO Life Grove - Underwater Spinner': lambda state: (logic.prime_can_bomb(state, multiworld, player) and
+                                                             logic.prime_can_boost(state, multiworld, player) and
+                                                             logic.prime_can_spider(state, multiworld, player) and
+                                                             logic.prime_can_pb(state, multiworld, player) and
+                                                             state.has({'Ice Beam', 'Space Jump Boots'}, player) and
+                                                             (logic.prime_frigate(state, multiworld, player) or
+                                                              logic.prime_reflecting_pool(state, multiworld, player))),
+
+        # phazon mines locations
+        'PM Main Quarry': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                         logic.prime_can_bomb(state, multiworld, player) and
+                                         logic.prime_can_spider(state, multiworld, player) and
+                                         state.has({'Thermal Visor'}, player)),
+        'PM Security Access A': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                               logic.prime_can_pb(state, multiworld, player)),
+        'PM Storage Depot B': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                             logic.prime_can_bomb(state, multiworld, player) and
+                                             logic.prime_can_pb(state, multiworld, player) and
+                                             logic.prime_can_spider(state, multiworld, player) and
+                                             state.has({'Grapple Beam'}, player)),
+        'PM Storage Depot A': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                             logic.prime_can_pb(state, multiworld, player) and
+                                             state.has({'Plasma Beam'}, player)),
+        'PM Elite Research - Phazon Elite': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                                           logic.prime_can_pb(state, multiworld, player)),
+        'PM Elite Research - Laser': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                                    logic.prime_can_bomb(state, multiworld, player) and
+                                                    logic.prime_can_boost(state, multiworld, player)),
+        'PM Elite Control Access': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                                  logic.prime_can_bomb(state, multiworld, player) and
+                                                  logic.prime_can_pb(state, multiworld, player) and
+                                                  logic.prime_can_spider(state, multiworld, player) and
+                                                  state.has({'Grapple Beam'}, player)),
+        'PM Ventilation Shaft': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                               logic.prime_can_bomb(state, multiworld, player) and
+                                               logic.prime_can_pb(state, multiworld, player) and
+                                               logic.prime_can_spider(state, multiworld, player) and
+                                               logic.prime_can_boost(state, multiworld, player) and
+                                               state.has({'Grapple Beam'}, player)),
+        'PM Phazon Processing Center': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                                      logic.prime_can_bomb(state, multiworld, player) and
+                                                      logic.prime_can_pb(state, multiworld, player) and
+                                                      logic.prime_can_spider(state, multiworld, player) and
+                                                      state.has({'Grapple Beam'}, player)),
+        'PM Processing Center Access': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
+                                                      state.has({'X-Ray Visor'}, player)),
+        'PM Elite Quarters': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
+                                            state.has({'X-Ray Visor'}, player)),
+        'PM Central Dynamo': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                            logic.prime_can_bomb(state, multiworld, player) and
+                                            logic.prime_can_pb(state, multiworld, player) and
+                                            logic.prime_can_spider(state, multiworld, player) and
+                                            state.has({'Grapple Beam', 'X-Ray Visor'}, player)),
+        'PM Metroid Quarantine B': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
+                                                  logic.prime_can_super(state, multiworld, player)),
+        'PM Metroid Quarantine A': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                                  logic.prime_can_bomb(state, multiworld, player) and
+                                                  logic.prime_can_pb(state, multiworld, player) and
+                                                  logic.prime_can_spider(state, multiworld, player) and
+                                                  logic.prime_can_boost(state, multiworld, player) and
+                                                  state.has({'Grapple Beam', 'X-Ray Visor'}, player)),
+        'PM Fungal Hall B': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
+                                           state.has_any({'Thermal Visor', 'X-Ray Visor'}, player)),
+        'PM Phazon Mining Tunnel': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
+                                                  state.has({'Phazon Suit'}, player)),
+        'PM Fungal Hall Access': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
+                                                logic.prime_can_bomb(state, multiworld, player) and
+                                                logic.prime_can_pb(state, multiworld, player) and
+                                                logic.prime_can_boost(state, multiworld, player) and
+                                                state.has({'Grapple Beam', 'X-Ray Visor', 'Plasma Beam'}, player)),
+
+        # magmoor caverns locations
+        'MC Lava Lake': lambda state: (logic.prime_can_heat(state, multiworld, player) and
+                                       logic.prime_has_missiles(state, multiworld, player) and
+                                       state.has({'Morph Ball', 'Space Jump Boots'}, player)),
+        'MC Triclops Pit': lambda state: (logic.prime_early_magmoor(state, multiworld, player) and
+                                          logic.prime_has_missiles(state, multiworld, player) and
+                                          state.has({'Space Jump Boots'}, player)),
+        'MC Storage Cavern': lambda state: (logic.prime_early_magmoor(state, multiworld, player) and
+                                            state.has({'Morph Ball'}, player)),
+        'MC Transport Tunnel A': lambda state: (logic.prime_early_magmoor(state, multiworld, player) and
+                                                logic.prime_can_bomb(state, multiworld, player)),
+        'MC Warrior Shrine': lambda state: (logic.prime_early_magmoor(state, multiworld, player) and
+                                            logic.prime_can_bomb(state, multiworld, player) and
+                                            logic.prime_can_boost(state, multiworld, player) and
+                                            state.has({'Space Jump Boots'}, player)),
+        'MC Shore Tunnel': lambda state: (logic.prime_early_magmoor(state, multiworld, player) and
+                                          logic.prime_can_pb(state, multiworld, player) and
+                                          state.has({'Space Jump Boots'}, player)),
+        'MC Fiery Shores - Morph Track': lambda state: (logic.prime_can_heat(state, multiworld, player) and
+                                                        logic.prime_has_missiles(state, multiworld, player) and
+                                                        logic.prime_can_bomb(state, multiworld, player)),
+        'MC Fiery Shores - Warrior Shrine Tunnel': lambda state: (logic.prime_early_magmoor(state, multiworld, player)
+                                                                  and logic.prime_can_bomb(state, multiworld, player)
+                                                                  and logic.prime_can_boost(state, multiworld, player)
+                                                                  and logic.prime_can_pb(state, multiworld, player)
+                                                                  and state.has({'Space Jump Boots'}, player)),
+        'MC Plasma Processing': lambda state: (logic.prime_late_magmoor(state, multiworld, player) and
+                                               logic.prime_can_bomb(state, multiworld, player) and
+                                               logic.prime_can_boost(state, multiworld, player) and
+                                               logic.prime_can_spider(state, multiworld, player) and
+                                               state.has({'Ice Beam', 'Plasma Beam', 'Grapple Beam'}, player)),
+        'MC Magmoor Workstation': lambda state: (logic.prime_late_magmoor(state, multiworld, player) and
+                                                 state.has({'Morph Ball', 'Wave Beam', 'Thermal Visor'}, player))
     }
