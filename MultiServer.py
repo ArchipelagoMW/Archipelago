@@ -1425,7 +1425,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         points_available = get_client_points(self.ctx, self.client)
         cost = self.ctx.get_hint_cost(self.client.slot)
 
-        if not input_text:
+        if self.ctx.hint_cost > 100:
+            self.output(f"Sorry, hints are disabled.")
+            hints = []
+            return True
+        elif not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
