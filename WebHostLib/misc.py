@@ -1,6 +1,10 @@
 import datetime
 import os
+import tempfile
 from typing import List, Dict, Union
+
+import flask
+import yaml
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
@@ -59,7 +63,7 @@ def player_settings(game: str):
 # Player options pages
 @app.route("/games/<string:game>/player-options")
 @cache.cached()
-def player_options(game: str):
+def player_options(game: str, message: str = None):
     world = AutoWorldRegister.world_types[game]
     all_options: Dict[str, Options.AssembleOptions] = world.options_dataclass.type_hints
     grouped_options = {}
@@ -77,6 +81,7 @@ def player_options(game: str):
 
     return render_template(
         "playerOptions/playerOptions.html",
+        message=message,
         game=game,
         world=world,
         option_groups=grouped_options,
@@ -84,6 +89,44 @@ def player_options(game: str):
         Options=Options,
         theme=get_world_theme(game),
     )
+
+
+# YAML generator for player-options
+@app.route("/games/<string:game>/generate-yaml", methods=["POST"])
+def generate_yaml(game):
+    if request.method == "POST":
+        options = {"game": game}
+        for key, val in request.form.items(multi=True):
+            if key in options:
+                if not isinstance(options[key], list):
+                    options[key] = [options[key]]
+                options[key].append(val)
+            else:
+                options[key] = val
+
+        # Detect and build ItemDict options from their name pattern
+        for key, val in options.copy().items():
+            key_parts = key.rsplit("||", 2)
+            if key_parts[-1] == "qty":
+                if key_parts[0] not in options:
+                    options[key_parts[0]] = {}
+                options[key_parts[0]][key_parts[1]] = val
+                del options[key]
+
+        # Error checking
+        if not options["name"]:
+            return "Player name is required."
+
+        # Remove POST data irrelevant to YAML
+        if "intent-generate" in options:
+            del options["intent-generate"]
+        if "intent-export" in options:
+            del options["intent-export"]
+
+        response = flask.Response(yaml.dump(options))
+        response.headers["Content-Type"] = "text/yaml"
+        response.headers["Content-Disposition"] = f"attachment; filename={options['name']}"
+        return response
 
 
 # Game Info Pages

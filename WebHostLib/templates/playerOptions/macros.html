@@ -152,8 +152,8 @@
             <div class="option-container">
                 {% for item_name in world.item_names|sort %}
                     <div class="option-entry">
-                        <label for="{{ option_name }}-{{ item_name }}">{{ item_name }}</label>
-                        <input type="number" id="{{ option_name }}-{{ item_name }}-qty" name="{{ option_name }}-qty" value="{{ option.default[item_name]|default("0") }}" />
+                        <label for="{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
+                        <input type="number" id="{{ option_name }}-{{ item_name }}-qty" name="{{ option_name }}||{{ item_name }}||qty" value="{{ option.default[item_name]|default("0") }}" />
                     </div>
                 {% endfor %}
             </div>
@@ -168,7 +168,7 @@
             <div class="option-container">
                 {% for key in option.valid_keys|sort %}
                     <div class="option-entry">
-                        <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}-{{ key }}-qty" {{ "checked" if key in option.default }} />
+                        <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}" value="{{ key }}" {{ "checked" if key in option.default }} />
                         <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
                     </div>
                 {% endfor %}
@@ -185,14 +185,14 @@
                 {% for group_name in world.location_name_groups.keys()|sort %}
                     {% if group_name != "Everywhere" %}
                         <div class="option-entry">
-                            <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}-{{ group_name }}" {{ "checked" if grop_name in option.default }} />
+                            <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}" value="{{ group_name }}" {{ "checked" if grop_name in option.default }} />
                             <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                         </div>
                     {% endif %}
                 {% endfor %}
                 {% for location_name in world.location_names|sort %}
                     <div class="option-entry">
-                        <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}-{{ location_name }}" {{ "checked" if location_name in option.default }} />
+                        <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}" value="{{ location_name }}" {{ "checked" if location_name in option.default }} />
                         <label for="{{ option_name }}-{{ location_name }}">{{ location_name }}</label>
                     </div>
                 {% endfor %}
@@ -209,14 +209,14 @@
                 {% for group_name in world.item_name_groups.keys()|sort %}
                     {% if group_name != "Everything" %}
                         <div class="option-entry">
-                            <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}-{{ group_name }}" {{ "checked" if group_name in option.default }} />
+                            <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}" value="{{ group_name }}" {{ "checked" if group_name in option.default }} />
                             <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                         </div>
                     {% endif %}
                 {% endfor %}
                 {% for item_name in world.item_names|sort %}
                     <div class="option-entry">
-                        <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}-{{ item_name }}" {{ "checked" if item_name in option.default }} />
+                        <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}" value="{{ item_name }}" {{ "checked" if item_name in option.default }} />
                         <label for="{{ option_name }}-{{ item_name }}">{{ item_name }}</label>
                     </div>
                 {% endfor %}
@@ -232,7 +232,7 @@
             <div class="option-container">
                 {% for key in option.valid_keys %}
                     <div class="option-entry">
-                        <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}-{{ key }}" {{ "checked" if key in option.default }} />
+                        <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}" value="{{ key }}" {{ "checked" if key in option.default }} />
                         <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
                     </div>
                 {% endfor %}
