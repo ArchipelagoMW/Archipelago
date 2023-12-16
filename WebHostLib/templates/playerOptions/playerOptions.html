@@ -72,7 +72,7 @@
                             <table class="left">
                                 <tbody>
                                     {% for option_name, option in group_options.items() %}
-                                        {% if loop.index < loop.length / 2 %}
+                                        {% if loop.index <= (loop.length / 2)|round(0,"ceil") %}
                                             {% if issubclass(option, Options.Toggle) %}
                                                 {{ inputs.Toggle(option_name, option) }}
 
@@ -120,7 +120,7 @@
                             <table class="right">
                                 <tbody>
                                     {% for option_name, option in group_options.items() %}
-                                        {% if loop.index > loop.length / 2 %}
+                                        {% if loop.index > (loop.length / 2)|round(0,"ceil") %}
                                             {% if issubclass(option, Options.Toggle) %}
                                                 {{ inputs.Toggle(option_name, option) }}
 
